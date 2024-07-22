@@ -2,11 +2,16 @@
 	<div>
 		<permission-error-svg
 			v-if="isPermissionError"
-			:svg-width="$vuetify.breakpoint.xs ? 200 : undefined"
-			fill="var(--v-primary-base)"
+			:svg-width="$vuetify.display.xs ? 200 : undefined"
+			fill="rgba(var(--v-theme-primary))"
 			data-testid="img-permission"
 		/>
-
+		<not-found-svg
+			v-else-if="isNotFoundError"
+			:svg-width="$vuetify.display.xs ? 200 : undefined"
+			fill="rgba(var(--v-theme-primary))"
+			data-testid="img-notfound"
+		/>
 		<img
 			v-else
 			:alt="errorText"
@@ -24,14 +29,15 @@
 <script lang="ts">
 import { computed, defineComponent } from "vue";
 import PermissionErrorSvg from "@/assets/img/PermissionErrorSvg.vue";
+import NotFoundSvg from "@/assets/img/NotFoundSvg.vue";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useTitle } from "@vueuse/core";
-import { useI18n } from "@/composables/i18n.composable";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "ErrorContent",
-	components: { PermissionErrorSvg },
+	components: { PermissionErrorSvg, NotFoundSvg },
 	props: {
 		errorText: String,
 		statusCode: {
@@ -54,8 +60,13 @@ export default defineComponent({
 			permissionErrorStatusCodes.includes(props.statusCode)
 		);
 
+		const isNotFoundError = computed(
+			() => props.statusCode === HttpStatusCode.NotFound
+		);
+
 		return {
 			isPermissionError,
+			isNotFoundError,
 		};
 	},
 });

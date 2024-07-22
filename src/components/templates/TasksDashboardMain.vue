@@ -1,63 +1,77 @@
 <template>
 	<default-wireframe
 		:headline="$t('common.words.tasks')"
-		:full-width="false"
+		max-width="short"
 		:fab-items="fabItems"
 	>
-		<div slot="header">
-			<div>
-				<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
-				<div v-if="showSubstituteFilter">
-					<v-custom-switch
-						:value="isSubstituteFilterEnabled"
-						:label="
-							$t('components.organisms.TasksDashboardMain.filter.substitute')
-						"
-						:aria-label="
-							$t('components.organisms.TasksDashboardMain.filter.substitute')
-						"
-						@input-changed="setSubstituteFilter"
-					/>
-				</div>
-				<div v-else class="substitute-filter-placeholder" />
-				<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-					<v-tabs v-model="tab" class="tabs-max-width" grow>
-						<v-tab :href="tabOneHeader.route">
-							<v-icon class="tab-icon mr-sm-3">{{ tabOneHeader.icon }}</v-icon>
-							<span class="d-none d-sm-inline" data-testid="openTasks">{{
-								tabOneHeader.title
-							}}</span>
-						</v-tab>
-						<v-tab :href="tabTwoHeader.route">
-							<v-icon class="tab-icon mr-sm-3">{{ tabTwoHeader.icon }}</v-icon>
-							<span
-								class="d-none d-sm-inline"
-								:data-testid="tabTwoHeader.dataTestId"
-								>{{ tabTwoHeader.title }}</span
-							>
-						</v-tab>
-						<v-tab :href="tabThreeHeader.route">
-							<v-icon class="tab-icon mr-sm-3">{{
-								tabThreeHeader.icon
-							}}</v-icon>
-							<span class="d-none d-sm-inline" data-testid="finishedTasks">{{
-								tabThreeHeader.title
-							}}</span>
-						</v-tab>
-					</v-tabs>
-				</div>
+		<template #header>
+			<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
+			<div v-if="showSubstituteFilter">
+				<v-switch
+					v-model="isSubstituteFilterEnabled"
+					:label="
+						$t('components.organisms.TasksDashboardMain.filter.substitute')
+					"
+					:aria-label="
+						$t('components.organisms.TasksDashboardMain.filter.substitute')
+					"
+					:true-icon="mdiCheck"
+				/>
 			</div>
-		</div>
+			<div v-else class="substitute-filter-placeholder" />
+			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
+				<v-tabs v-model="tab" class="tabs-max-width" grow>
+					<v-tab :value="tabRoutes[0]">
+						<v-icon size="large" class="tab-icon mr-sm-3">
+							{{ tabOneHeader.icon }}
+						</v-icon>
+						<span class="d-none d-sm-inline" data-testid="openTasks">
+							{{ tabOneHeader.title }}
+						</span>
+					</v-tab>
+					<v-tab :value="tabRoutes[1]">
+						<v-icon size="large" class="tab-icon mr-sm-3">
+							{{ tabTwoHeader.icon }}
+						</v-icon>
+						<span
+							class="d-none d-sm-inline"
+							:data-testid="tabTwoHeader.dataTestId"
+						>
+							{{ tabTwoHeader.title }}
+						</span>
+					</v-tab>
+					<v-tab :value="tabRoutes[2]"
+						><v-icon size="large" class="tab-icon mr-sm-3">
+							{{ tabThreeHeader.icon }}
+						</v-icon>
+						<span class="d-none d-sm-inline" data-testid="finishedTasks">
+							{{ tabThreeHeader.title }}
+						</span>
+					</v-tab>
+				</v-tabs>
+			</div>
+		</template>
 		<div class="content-max-width mx-auto mt-5 mb-14">
-			<v-custom-autocomplete
+			<v-autocomplete
 				v-if="showCourseFilter"
-				:value="selectedCourseFilters"
+				v-model="selectedCourseFilters"
+				closable-chips
+				multiple
+				clearable
+				variant="solo"
+				rounded
+				chips
+				data-testid="courseFilter"
+				item-title="text"
+				item-value="value"
+				:menu-props="{ closeOnContentClick: false, zIndex: 30 }"
 				:items="getSortedCoursesFilters"
 				:label="$t('pages.tasks.labels.filter')"
 				:aria-label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isCourseFilterDisabled"
-				@selected-item="setCourseFilters"
+				@update:model-value="setCourseFilters"
+				class="mb-4"
 			/>
 			<div v-else class="course-filter-placeholder" />
 			<tasks-dashboard-student
@@ -76,7 +90,7 @@
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
-			@dialog-closed="onCopyResultModalClosed"
+			@copy-dialog-closed="onCopyResultModalClosed"
 		/>
 	</default-wireframe>
 </template>
@@ -85,19 +99,19 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { authModule } from "@/store";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import vCustomAutocomplete from "@/components/atoms/vCustomAutocomplete";
-import vCustomSwitch from "@/components/atoms/vCustomSwitch";
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
 import {
-	mdiPlus,
-	mdiFormatListChecks,
 	mdiArchiveOutline,
+	mdiCheck,
 	mdiCheckCircleOutline,
+	mdiFormatListChecks,
 	mdiPlaylistEdit,
+	mdiPlus,
 } from "@mdi/js";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";
+import { COPY_MODULE_KEY } from "@/utils/inject";
 
 const roleBasedRoutes = {
 	[Roles.Teacher]: ["current", "drafts", "finished"],
@@ -107,10 +121,8 @@ const roleBasedRoutes = {
 export default {
 	components: {
 		DefaultWireframe,
-		vCustomAutocomplete,
 		TasksDashboardStudent,
 		TasksDashboardTeacher,
-		vCustomSwitch,
 		CopyResultModal,
 	},
 	props: {
@@ -123,14 +135,15 @@ export default {
 	data() {
 		return {
 			mdiPlus,
+			mdiCheck,
 		};
 	},
-	inject: [
-		"tasksModule",
-		"copyModule",
-		"finishedTasksModule",
-		"loadingStateModule",
-	],
+	inject: {
+		tasksModule: "tasksModule",
+		copyModule: { from: COPY_MODULE_KEY },
+		finishedTasksModule: "finishedTasksModule",
+		loadingStateModule: "loadingStateModule",
+	},
 	computed: {
 		hasTasks() {
 			return this.tasksModule.hasTasks;
@@ -153,8 +166,13 @@ export default {
 		tasksCountTeacher() {
 			return this.tasksModule.getTasksCountPerCourseForTeacher;
 		},
-		isSubstituteFilterEnabled() {
-			return this.tasksModule.isSubstituteFilterEnabled;
+		isSubstituteFilterEnabled: {
+			get() {
+				return this.tasksModule.isSubstituteFilterEnabled;
+			},
+			set(enabled) {
+				this.tasksModule.setSubstituteFilter(enabled);
+			},
 		},
 		courseFilters() {
 			return this.tasksModule.getCourseFilters;
@@ -218,7 +236,6 @@ export default {
 					? `${this.$t("common.words.substitute")} `
 					: "";
 				filter.text = `${substitution}${name} (${count})`;
-
 				return filter;
 			});
 
@@ -230,7 +247,7 @@ export default {
 		tabOneHeader() {
 			return {
 				icon: mdiFormatListChecks,
-				route: `#${this.tabRoutes[0]}`,
+				route: `?tab=${this.tabRoutes[0]}`,
 				title: this.isStudent
 					? this.$t("components.organisms.TasksDashboardMain.tab.open")
 					: this.$t("components.organisms.TasksDashboardMain.tab.current"),
@@ -239,7 +256,7 @@ export default {
 		tabTwoHeader() {
 			return {
 				icon: this.isStudent ? mdiCheckCircleOutline : mdiPlaylistEdit,
-				route: `#${this.tabRoutes[1]}`,
+				route: `?tab=${this.tabRoutes[1]}`,
 				title: this.isStudent
 					? this.$t("components.organisms.TasksDashboardMain.tab.completed")
 					: this.$t("components.organisms.TasksDashboardMain.tab.drafts"),
@@ -250,7 +267,7 @@ export default {
 			return {
 				icon: mdiArchiveOutline,
 				title: this.$t("components.organisms.TasksDashboardMain.tab.finished"),
-				route: `#${this.tabRoutes[2]}`,
+				route: `?tab=${this.tabRoutes[2]}`,
 			};
 		},
 		fabItems() {
@@ -272,7 +289,7 @@ export default {
 			let title = "";
 			let subtitle = undefined;
 
-			if (this.hasFilterSelected) {
+			if (this.tasksModule.hasFilterSelected) {
 				title = this.$t("pages.tasks.emptyStateOnFilter.title");
 			} else {
 				if (this.tab === this.tabRoutes[0]) {
@@ -310,7 +327,7 @@ export default {
 	watch: {
 		tab(tab, oldTab) {
 			if (oldTab !== "") {
-				this.$router.replace({ query: { ...this.$route.query, tab } });
+				this.$router.push({ query: { ...this.$route.query, tab } });
 			}
 			if (tab === "finished") {
 				this.finishedTasksModule.fetchFinishedTasks();
@@ -323,9 +340,6 @@ export default {
 	methods: {
 		setCourseFilters(courseNames) {
 			this.tasksModule.setCourseFilters(courseNames);
-		},
-		setSubstituteFilter(enabled) {
-			this.tasksModule.setSubstituteFilter(enabled);
 		},
 		getTaskCount(courseName) {
 			if (this.tab === this.tabRoutes[0]) {
@@ -357,7 +371,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-@import "~vuetify/src/styles/styles.sass";
+@import "~vuetify/settings";
 
 .substitute-filter-placeholder {
 	min-height: 46px;
@@ -373,29 +387,26 @@ export default {
 	}
 }
 
-.tab-icon {
-	fill: currentColor;
-}
 // even out border
 .v-tabs {
-	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
-	font-family: var(--heading-font-family);
+	margin-bottom: -2px;
 }
 
-.v-tab {
-	font-size: var(--text-base-size);
-	text-transform: none !important;
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+// remove background color from expansion panel title
+:deep(
+		.v-expansion-panel-title[aria-haspopup="menu"][aria-expanded="true"]
+			> .v-expansion-panel-title__overlay
+	) {
+	opacity: 0;
 }
 
-::v-deep .v-slide-group__prev,
-::v-deep .v-slide-group__next {
-	display: none !important;
+:deep(.v-expansion-panel--disabled .v-expansion-panel-title) {
+	.v-expansion-panel-title__overlay {
+		opacity: 0;
+	}
 }
 
-.border-bottom {
-	margin-right: calc(-1 * var(--space-lg));
-	margin-left: calc(-1 * var(--space-lg));
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+:deep(.v-expansion-panel::after) {
+	border: none;
 }
 </style>

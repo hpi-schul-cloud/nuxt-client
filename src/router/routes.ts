@@ -1,22 +1,22 @@
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { Multiguard, validateQueryParameters } from "@/router/guards";
+import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
-	isEnum,
-	isMongoId,
-	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_H5P_ID,
 	REGEX_ID,
 	REGEX_UUID,
+	isEnum,
+	isMongoId,
+	isOfficialSchoolNumber,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
-import { Route, RouteConfig } from "vue-router";
-import { H5PContentParentType } from "@/h5pEditorApi/v3";
+import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
 // routes configuration sorted in alphabetical order
-export const routes: Array<RouteConfig> = [
+export const routes: Readonly<RouteRecordRaw[]> = [
 	{
 		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
 		component: () => import("../pages/ActivationCode.page.vue"),
@@ -61,10 +61,14 @@ export const routes: Array<RouteConfig> = [
 			{
 				path: ":configId",
 				name: "administration-tool-config-edit",
+				component: () =>
+					import(
+						"@/pages/administration/school-external-tool/SchoolExternalToolConfigurator.page.vue"
+					),
 			},
 		],
-		props: (route: Route) => ({
-			configId: route.params.configId,
+		props: (to: RouteLocationNormalized) => ({
+			configId: to.params.configId,
 		}),
 	},
 	{
@@ -76,8 +80,8 @@ export const routes: Array<RouteConfig> = [
 			"school_system_view",
 			"school_system_edit",
 		]),
-		props: (route: Route) => ({
-			systemId: route.query.systemId,
+		props: (to: RouteLocationNormalized) => ({
+			systemId: to.query.systemId,
 		}),
 	},
 	{
@@ -115,7 +119,7 @@ export const routes: Array<RouteConfig> = [
 		component: () => import("@/pages/administration/ClassOverview.page.vue"),
 		name: "administration-groups-classes",
 		beforeEnter: createPermissionGuard(["class_list", "group_list"]),
-		props: (route: Route) => ({
+		props: (route: RouteLocationNormalized) => ({
 			tab: route.query.tab,
 		}),
 	},
@@ -125,21 +129,9 @@ export const routes: Array<RouteConfig> = [
 		component: async () =>
 			(await import("@page-class-members")).ClassMembersPage,
 		beforeEnter: createPermissionGuard(["group_view"]),
-		props: (route: Route) => ({
-			groupId: route.params.groupId,
+		props: (to: RouteLocationNormalized) => ({
+			groupId: to.params.groupId,
 		}),
-	},
-	{
-		path: "/cfiles",
-		component: () => import("@/pages/files/FilesOverview.page.vue"),
-		name: "files",
-		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
-	},
-	{
-		path: "/cfiles/teams/:catchAll(.*)",
-		component: () => import("@/pages/files/FilesOverview.page.vue"),
-		name: "teamfiles",
-		beforeEnter: createPermissionGuard(["collaborative_files"], "/tasks"),
 	},
 	{
 		path: "/content",
@@ -200,9 +192,10 @@ export const routes: Array<RouteConfig> = [
 			targetSchoolNumber: (value: unknown) =>
 				!isDefined(value) || isOfficialSchoolNumber(value),
 		}),
-		props: (route: Route) => ({
-			sourceSchoolNumber: route.query.sourceSchoolNumber,
-			targetSchoolNumber: route.query.targetSchoolNumber,
+		props: (to: RouteLocationNormalized) => ({
+			sourceSchoolNumber: to.query.sourceSchoolNumber,
+			targetSchoolNumber: to.query.targetSchoolNumber,
+			multipleUsersFound: to.query.multipleUsersFound,
 		}),
 		meta: {
 			isPublic: true,
@@ -217,8 +210,8 @@ export const routes: Array<RouteConfig> = [
 		beforeEnter: validateQueryParameters({
 			targetSystem: isMongoId,
 		}),
-		props: (route: Route) => ({
-			targetSystem: route.query.targetSystem,
+		props: (to: RouteLocationNormalized) => ({
+			targetSystem: to.query.targetSystem,
 		}),
 		meta: {
 			isPublic: true,
@@ -243,10 +236,15 @@ export const routes: Array<RouteConfig> = [
 		name: "rooms-id",
 	},
 	{
+		path: `/rooms`,
+		redirect: { name: "rooms-overview" },
+		name: "rooms",
+	},
+	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
 		component: async () => (await import("@page-board")).ColumnBoardPage,
 		name: "rooms-board",
-		props: (route: Route) => ({
+		props: (route: RouteLocationNormalized) => ({
 			boardId: route.params.id,
 		}),
 	},
@@ -269,7 +267,7 @@ export const routes: Array<RouteConfig> = [
 		path: `/tools/context/tool-configuration`,
 		component: () =>
 			import(
-				"@/pages/context-external-tool/ContextExternalToolConfigurator.page.vue"
+				"@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"
 			),
 		name: "context-external-tool-configuration",
 		beforeEnter: Multiguard([
@@ -283,12 +281,16 @@ export const routes: Array<RouteConfig> = [
 			{
 				path: ":configId",
 				name: "context-external-tool-configuration-edit",
+				component: () =>
+					import(
+						"@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"
+					),
 			},
 		],
-		props: (route: Route) => ({
-			contextId: route.query.contextId,
-			contextType: route.query.contextType,
-			configId: route.params.configId,
+		props: (to: RouteLocationNormalized) => ({
+			contextId: to.query.contextId,
+			contextType: to.query.contextType,
+			configId: to.params.configId,
 		}),
 	},
 	{
@@ -305,9 +307,14 @@ export const routes: Array<RouteConfig> = [
 			parentType: isEnum(H5PContentParentType),
 			parentId: isMongoId,
 		}),
-		props: (route: Route) => ({
-			parentId: route.query.parentId,
-			parentType: route.query.parentType,
+		props: (to: RouteLocationNormalized) => ({
+			parentId: to.query.parentId,
+			parentType: to.query.parentType,
 		}),
+	},
+	{
+		path: `/media-shelf`,
+		component: async () => (await import("@page-media-shelf")).MediaShelfPage,
+		name: "media-shelf",
 	},
 ];

@@ -1,15 +1,13 @@
-// NUXT_REMOVAL change how global components are handled
-import "@/components/base/_globals";
-import "@/plugins/directives";
+import { mountBaseComponents } from "@/components/base/components";
 import "@/plugins/polyfills";
 import {
 	accountsModule,
 	applicationErrorModule,
 	authModule,
 	autoLogoutModule,
-	collaborativeFilesModule,
+	commonCartridgeExportModule,
+	commonCartridgeImportModule,
 	contentModule,
-	contextExternalToolsModule,
 	copyModule,
 	envConfigModule,
 	filePathsModule,
@@ -32,20 +30,19 @@ import {
 	userLoginMigrationModule,
 	videoConferenceModule,
 } from "@/store";
-
-import "@/styles/global.scss";
-// NUXT_REMOVAL set this based on the tenant theme
 import themeConfig from "@/theme.config";
 import { htmlConfig } from "@feature-render-html";
 import axios from "axios";
+import { createPinia } from "pinia";
 import Cookies from "universal-cookie";
-import Vue from "vue";
+import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
-// NUXT_REMOVAL try to solve without vue-mq dependency
+
+import "@/styles/global.scss";
+// TODO solve without vue-mq dependency
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import VueMq from "vue-mq";
-import Vuelidate from "vuelidate";
+import { Vue3Mq } from "vue3-mq";
 import App from "./App.vue";
 import { handleApplicationError } from "./plugins/application-error-handler";
 import { createI18n } from "./plugins/i18n";
@@ -57,50 +54,63 @@ import { initializeAxios } from "./utils/api";
 import {
 	APPLICATION_ERROR_KEY,
 	AUTH_MODULE_KEY,
-	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
+	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
+	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
+	CONTENT_MODULE_KEY,
+	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
+	FILE_PATHS_MODULE_KEY,
 	GROUP_MODULE_KEY,
-	I18N_KEY,
+	LOADING_STATE_MODULE_KEY,
+	NEWS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	ROOM_MODULE_KEY,
+	ROOMS_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
+	SHARE_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
 	SYSTEMS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
+	THEME_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
 
-Vue.config.productionTip = false;
+export const app = createApp(App);
 
-Vue.config.errorHandler = handleApplicationError;
+const pinia = createPinia();
+app.use(pinia);
 
-Vue.prototype.$theme = themeConfig;
+mountBaseComponents(app);
 
-Vue.use(VueMq, {
+// app.config.productionTip = false;
+
+app.config.errorHandler = handleApplicationError;
+
+app.config.globalProperties.$theme = themeConfig;
+
+app.use(Vue3Mq, {
 	breakpoints: {
-		mobile: 750,
-		tabletPortrait: 770,
-		tablet: 991,
-		desktop: 1200,
-		large: Infinity,
+		mobile: 0,
+		tabletPortrait: 750,
+		tablet: 770,
+		desktop: 991,
+		large: 1200,
 	},
 	defaultBreakpoint: "mobile",
 });
 
-Vue.use(Vuelidate);
-
-Vue.mixin({
+app.mixin({
 	computed: {
-		$user() {
-			return authModule.getUser;
+		$me() {
+			return authModule.getMe;
 		},
 	},
 });
 
-Vue.use(VueDOMPurifyHTML, {
+app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
 });
 
@@ -112,7 +122,7 @@ Vue.use(VueDOMPurifyHTML, {
 
 	initializeAxios(axios);
 
-	await envConfigModule.findEnvs();
+	await envConfigModule.loadConfiguration();
 
 	const cookies = new Cookies();
 	const jwt = cookies.get("jwt");
@@ -133,44 +143,53 @@ Vue.use(VueDOMPurifyHTML, {
 	// creation of i18n relies on envConfigModule authModule
 	const i18n = createI18n();
 
-	new Vue({
-		router,
-		store,
-		vuetify,
-		i18n,
-		// NUXT_REMOVAL get rid of store DI
-		provide: {
-			accountsModule,
-			[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModule,
-			authModule,
-			[AUTH_MODULE_KEY.valueOf()]: authModule,
-			autoLogoutModule,
-			collaborativeFilesModule,
-			contentModule,
-			[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: contextExternalToolsModule,
-			copyModule,
-			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-			filePathsModule,
-			finishedTasksModule,
-			[GROUP_MODULE_KEY.valueOf()]: groupModule,
-			importUsersModule,
-			loadingStateModule,
-			newsModule,
-			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-			[PRIVACY_POLICY_MODULE_KEY.valueOf()]: privacyPolicyModule,
-			[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
-			[ROOM_MODULE_KEY.valueOf()]: roomModule,
-			roomsModule,
-			[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
-			[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
-			shareModule,
-			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
-			[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-			tasksModule,
-			[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
-			[I18N_KEY.valueOf()]: i18n,
-			[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
-		},
-		render: (h) => h(App),
-	}).$mount("#app");
+	app.use(router).use(store).use(vuetify).use(i18n);
+
+	// NUXT_REMOVAL get rid of store DI
+	app.provide("accountsModule", accountsModule);
+	app.provide(APPLICATION_ERROR_KEY.valueOf(), applicationErrorModule);
+	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
+	app.provide("autoLogoutModule", autoLogoutModule);
+	app.provide(CONTENT_MODULE_KEY, contentModule);
+	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
+	app.provide(ENV_CONFIG_MODULE_KEY.valueOf(), envConfigModule);
+	app.provide("filePathsModule", filePathsModule);
+	app.provide(FILE_PATHS_MODULE_KEY, filePathsModule);
+	app.provide("finishedTasksModule", finishedTasksModule);
+	app.provide(GROUP_MODULE_KEY.valueOf(), groupModule);
+	app.provide("importUsersModule", importUsersModule);
+	app.provide("loadingStateModule", loadingStateModule);
+	app.provide(NEWS_MODULE_KEY.valueOf(), newsModule);
+	app.provide(NOTIFIER_MODULE_KEY.valueOf(), notifierModule);
+	app.provide(PRIVACY_POLICY_MODULE_KEY.valueOf(), privacyPolicyModule);
+	app.provide(TERMS_OF_USE_MODULE_KEY.valueOf(), termsOfUseModule);
+	app.provide(ROOM_MODULE_KEY.valueOf(), roomModule);
+	app.provide("roomsModule", roomsModule);
+	app.provide(
+		SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),
+		schoolExternalToolsModule
+	);
+	app.provide(SCHOOLS_MODULE_KEY.valueOf(), schoolsModule);
+	app.provide(SHARE_MODULE_KEY.valueOf(), shareModule);
+	app.provide(
+		COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf(),
+		commonCartridgeExportModule
+	);
+	app.provide(STATUS_ALERTS_MODULE_KEY.valueOf(), statusAlertsModule);
+	app.provide(SYSTEMS_MODULE_KEY.valueOf(), systemsModule);
+	app.provide("tasksModule", tasksModule);
+	app.provide(
+		USER_LOGIN_MIGRATION_MODULE_KEY.valueOf(),
+		userLoginMigrationModule
+	);
+	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
+	app.provide(LOADING_STATE_MODULE_KEY.valueOf(), loadingStateModule);
+	app.provide(ROOMS_MODULE_KEY.valueOf(), roomsModule);
+	app.provide(
+		COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf(),
+		commonCartridgeImportModule
+	);
+	app.provide(THEME_KEY.valueOf(), themeConfig);
+
+	app.mount("#app");
 })();

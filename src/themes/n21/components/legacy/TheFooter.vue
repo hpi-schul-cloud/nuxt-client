@@ -104,7 +104,6 @@ export default {
 	width: 100%;
 	padding: 0 var(--space-md);
 	margin: var(--space-lg) 0 var(--space-md);
-	color: var(--v-secondary-darken1);
 	text-align: center;
 }
 
@@ -115,17 +114,17 @@ export default {
 }
 
 .footer-link {
-	color: var(--v-primary-base);
+	color: rgba(var(--v-theme-primary));
 	border: none;
 
 	&:focus,
 	&:hover {
-		color: var(--v-primary-darken1);
+		color: rgba(var(--v-theme-primary-darken-1));
 		text-decoration: underline;
 	}
 
 	&:visited {
-		color: var(--v-primary-base);
+		color: rgba(var(--v-theme-primary));
 	}
 }
 </style>

@@ -1,8 +1,8 @@
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
 import axios, { isAxiosError } from "axios";
-import Vue from "vue";
 import { $axios, initializeAxios, mapAxiosErrorToResponseError } from "./api";
+import { mount } from "@vue/test-utils";
 
 jest.mock("axios");
 const mockedIsAxiosError = jest.mocked(isAxiosError);
@@ -16,9 +16,14 @@ describe("AxiosInstance", () => {
 		});
 
 		it("should set Vue.prototype.$axios", () => {
-			initializeAxios(axios);
+			const wrapper = mount({
+				setup() {
+					initializeAxios(axios);
+				},
+				template: `<div></div>`,
+			});
 
-			expect(Vue.prototype.$axios).toBe(axios);
+			expect(wrapper.vm.$axios).toBe(axios);
 		});
 	});
 

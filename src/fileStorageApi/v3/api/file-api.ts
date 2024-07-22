@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * HPI Schul-Cloud Server API
- * This is v3 of HPI Schul-Cloud Server. Checkout /docs for v1.
+ * Schulcloud-Verbund-Software Server API
+ * This is v3 of Schulcloud-Verbund-Software Server. Checkout /docs for v1.
  *
  * The version of the OpenAPI document: 3.0
  * 
@@ -42,6 +42,8 @@ import { PreviewOutputMimeTypes } from '../models';
 import { PreviewWidth } from '../models';
 // @ts-ignore
 import { RenameFileParams } from '../models';
+// @ts-ignore
+import { StorageLocation } from '../models';
 /**
  * FileApi - axios parameter creator
  * @export
@@ -51,24 +53,28 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Copy all files of a parent entityId to a target entitId
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        copy: async (schoolId: string, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'schoolId' is not null or undefined
-            assertParamExists('copy', 'schoolId', schoolId)
+        copy: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'storageLocationId' is not null or undefined
+            assertParamExists('copy', 'storageLocationId', storageLocationId)
+            // verify required parameter 'storageLocation' is not null or undefined
+            assertParamExists('copy', 'storageLocation', storageLocation)
             // verify required parameter 'parentId' is not null or undefined
             assertParamExists('copy', 'parentId', parentId)
             // verify required parameter 'parentType' is not null or undefined
             assertParamExists('copy', 'parentType', parentType)
             // verify required parameter 'copyFilesOfParentParams' is not null or undefined
             assertParamExists('copy', 'copyFilesOfParentParams', copyFilesOfParentParams)
-            const localVarPath = `/file/copy/{schoolId}/{parentType}/{parentId}`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
+            const localVarPath = `/file/copy/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
+                .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
+                .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)))
                 .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
                 .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -147,21 +153,25 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Mark all files of a parent entityId for deletion. The files are permanently deleted after a certain time.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteByParent: async (schoolId: string, parentId: string, parentType: FileRecordParentType, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'schoolId' is not null or undefined
-            assertParamExists('deleteByParent', 'schoolId', schoolId)
+        deleteByParent: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'storageLocationId' is not null or undefined
+            assertParamExists('deleteByParent', 'storageLocationId', storageLocationId)
+            // verify required parameter 'storageLocation' is not null or undefined
+            assertParamExists('deleteByParent', 'storageLocation', storageLocation)
             // verify required parameter 'parentId' is not null or undefined
             assertParamExists('deleteByParent', 'parentId', parentId)
             // verify required parameter 'parentType' is not null or undefined
             assertParamExists('deleteByParent', 'parentType', parentType)
-            const localVarPath = `/file/delete/{schoolId}/{parentType}/{parentId}`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
+            const localVarPath = `/file/delete/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
+                .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
+                .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)))
                 .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
                 .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -345,7 +355,8 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get a list of file meta data of a parent entityId.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -353,15 +364,18 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list: async (schoolId: string, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'schoolId' is not null or undefined
-            assertParamExists('list', 'schoolId', schoolId)
+        list: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'storageLocationId' is not null or undefined
+            assertParamExists('list', 'storageLocationId', storageLocationId)
+            // verify required parameter 'storageLocation' is not null or undefined
+            assertParamExists('list', 'storageLocation', storageLocation)
             // verify required parameter 'parentId' is not null or undefined
             assertParamExists('list', 'parentId', parentId)
             // verify required parameter 'parentType' is not null or undefined
             assertParamExists('list', 'parentType', parentType)
-            const localVarPath = `/file/list/{schoolId}/{parentType}/{parentId}`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
+            const localVarPath = `/file/list/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
+                .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
+                .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)))
                 .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
                 .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -445,21 +459,25 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Restore all files of a parent entityId that are marked for deletion.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        restore: async (schoolId: string, parentId: string, parentType: FileRecordParentType, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'schoolId' is not null or undefined
-            assertParamExists('restore', 'schoolId', schoolId)
+        restore: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'storageLocationId' is not null or undefined
+            assertParamExists('restore', 'storageLocationId', storageLocationId)
+            // verify required parameter 'storageLocation' is not null or undefined
+            assertParamExists('restore', 'storageLocation', storageLocation)
             // verify required parameter 'parentId' is not null or undefined
             assertParamExists('restore', 'parentId', parentId)
             // verify required parameter 'parentType' is not null or undefined
             assertParamExists('restore', 'parentType', parentType)
-            const localVarPath = `/file/restore/{schoolId}/{parentType}/{parentId}`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
+            const localVarPath = `/file/restore/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
+                .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
+                .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)))
                 .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
                 .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -529,24 +547,28 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Streamable upload of a binary file.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {any} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        upload: async (schoolId: string, parentId: string, parentType: FileRecordParentType, file: any, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'schoolId' is not null or undefined
-            assertParamExists('upload', 'schoolId', schoolId)
+        upload: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, file: any, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'storageLocationId' is not null or undefined
+            assertParamExists('upload', 'storageLocationId', storageLocationId)
+            // verify required parameter 'storageLocation' is not null or undefined
+            assertParamExists('upload', 'storageLocation', storageLocation)
             // verify required parameter 'parentId' is not null or undefined
             assertParamExists('upload', 'parentId', parentId)
             // verify required parameter 'parentType' is not null or undefined
             assertParamExists('upload', 'parentType', parentType)
             // verify required parameter 'file' is not null or undefined
             assertParamExists('upload', 'file', file)
-            const localVarPath = `/file/upload/{schoolId}/{parentType}/{parentId}`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
+            const localVarPath = `/file/upload/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
+                .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
+                .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)))
                 .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
                 .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -586,24 +608,28 @@ export const FileApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Upload file from url
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {FileUrlParams} fileUrlParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadFromUrl: async (schoolId: string, parentId: string, parentType: FileRecordParentType, fileUrlParams: FileUrlParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'schoolId' is not null or undefined
-            assertParamExists('uploadFromUrl', 'schoolId', schoolId)
+        uploadFromUrl: async (storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, fileUrlParams: FileUrlParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'storageLocationId' is not null or undefined
+            assertParamExists('uploadFromUrl', 'storageLocationId', storageLocationId)
+            // verify required parameter 'storageLocation' is not null or undefined
+            assertParamExists('uploadFromUrl', 'storageLocation', storageLocation)
             // verify required parameter 'parentId' is not null or undefined
             assertParamExists('uploadFromUrl', 'parentId', parentId)
             // verify required parameter 'parentType' is not null or undefined
             assertParamExists('uploadFromUrl', 'parentType', parentType)
             // verify required parameter 'fileUrlParams' is not null or undefined
             assertParamExists('uploadFromUrl', 'fileUrlParams', fileUrlParams)
-            const localVarPath = `/file/upload-from-url/{schoolId}/{parentType}/{parentId}`
-                .replace(`{${"schoolId"}}`, encodeURIComponent(String(schoolId)))
+            const localVarPath = `/file/upload-from-url/{storageLocation}/{storageLocationId}/{parentType}/{parentId}`
+                .replace(`{${"storageLocationId"}}`, encodeURIComponent(String(storageLocationId)))
+                .replace(`{${"storageLocation"}}`, encodeURIComponent(String(storageLocation)))
                 .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)))
                 .replace(`{${"parentType"}}`, encodeURIComponent(String(parentType)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -648,15 +674,16 @@ export const FileApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Copy all files of a parent entityId to a target entitId
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async copy(schoolId: string, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyFileListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.copy(schoolId, parentId, parentType, copyFilesOfParentParams, options);
+        async copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyFileListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.copy(storageLocationId, storageLocation, parentId, parentType, copyFilesOfParentParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -674,14 +701,15 @@ export const FileApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Mark all files of a parent entityId for deletion. The files are permanently deleted after a certain time.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteByParent(schoolId: string, parentId: string, parentType: FileRecordParentType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteByParent(schoolId, parentId, parentType, options);
+        async deleteByParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteByParent(storageLocationId, storageLocation, parentId, parentType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -728,7 +756,8 @@ export const FileApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get a list of file meta data of a parent entityId.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -736,8 +765,8 @@ export const FileApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async list(schoolId: string, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.list(schoolId, parentId, parentType, skip, limit, options);
+        async list(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.list(storageLocationId, storageLocation, parentId, parentType, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -755,14 +784,15 @@ export const FileApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Restore all files of a parent entityId that are marked for deletion.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async restore(schoolId: string, parentId: string, parentType: FileRecordParentType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.restore(schoolId, parentId, parentType, options);
+        async restore(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.restore(storageLocationId, storageLocation, parentId, parentType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -779,29 +809,31 @@ export const FileApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Streamable upload of a binary file.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {any} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async upload(schoolId: string, parentId: string, parentType: FileRecordParentType, file: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.upload(schoolId, parentId, parentType, file, options);
+        async upload(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, file: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.upload(storageLocationId, storageLocation, parentId, parentType, file, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
          * 
          * @summary Upload file from url
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {FileUrlParams} fileUrlParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async uploadFromUrl(schoolId: string, parentId: string, parentType: FileRecordParentType, fileUrlParams: FileUrlParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadFromUrl(schoolId, parentId, parentType, fileUrlParams, options);
+        async uploadFromUrl(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, fileUrlParams: FileUrlParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileRecordResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadFromUrl(storageLocationId, storageLocation, parentId, parentType, fileUrlParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -817,15 +849,16 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Copy all files of a parent entityId to a target entitId
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        copy(schoolId: string, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): AxiosPromise<CopyFileListResponse> {
-            return localVarFp.copy(schoolId, parentId, parentType, copyFilesOfParentParams, options).then((request) => request(axios, basePath));
+        copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): AxiosPromise<CopyFileListResponse> {
+            return localVarFp.copy(storageLocationId, storageLocation, parentId, parentType, copyFilesOfParentParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -841,14 +874,15 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Mark all files of a parent entityId for deletion. The files are permanently deleted after a certain time.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteByParent(schoolId: string, parentId: string, parentType: FileRecordParentType, options?: any): AxiosPromise<FileRecordListResponse> {
-            return localVarFp.deleteByParent(schoolId, parentId, parentType, options).then((request) => request(axios, basePath));
+        deleteByParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, options?: any): AxiosPromise<FileRecordListResponse> {
+            return localVarFp.deleteByParent(storageLocationId, storageLocation, parentId, parentType, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -891,7 +925,8 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get a list of file meta data of a parent entityId.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -899,8 +934,8 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        list(schoolId: string, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any): AxiosPromise<FileRecordListResponse> {
-            return localVarFp.list(schoolId, parentId, parentType, skip, limit, options).then((request) => request(axios, basePath));
+        list(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any): AxiosPromise<FileRecordListResponse> {
+            return localVarFp.list(storageLocationId, storageLocation, parentId, parentType, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -916,14 +951,15 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Restore all files of a parent entityId that are marked for deletion.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        restore(schoolId: string, parentId: string, parentType: FileRecordParentType, options?: any): AxiosPromise<FileRecordListResponse> {
-            return localVarFp.restore(schoolId, parentId, parentType, options).then((request) => request(axios, basePath));
+        restore(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, options?: any): AxiosPromise<FileRecordListResponse> {
+            return localVarFp.restore(storageLocationId, storageLocation, parentId, parentType, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -938,28 +974,30 @@ export const FileApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Streamable upload of a binary file.
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {any} file 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        upload(schoolId: string, parentId: string, parentType: FileRecordParentType, file: any, options?: any): AxiosPromise<FileRecordResponse> {
-            return localVarFp.upload(schoolId, parentId, parentType, file, options).then((request) => request(axios, basePath));
+        upload(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, file: any, options?: any): AxiosPromise<FileRecordResponse> {
+            return localVarFp.upload(storageLocationId, storageLocation, parentId, parentType, file, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Upload file from url
-         * @param {string} schoolId 
+         * @param {string} storageLocationId 
+         * @param {StorageLocation} storageLocation 
          * @param {string} parentId 
          * @param {FileRecordParentType} parentType 
          * @param {FileUrlParams} fileUrlParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        uploadFromUrl(schoolId: string, parentId: string, parentType: FileRecordParentType, fileUrlParams: FileUrlParams, options?: any): AxiosPromise<FileRecordResponse> {
-            return localVarFp.uploadFromUrl(schoolId, parentId, parentType, fileUrlParams, options).then((request) => request(axios, basePath));
+        uploadFromUrl(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, fileUrlParams: FileUrlParams, options?: any): AxiosPromise<FileRecordResponse> {
+            return localVarFp.uploadFromUrl(storageLocationId, storageLocation, parentId, parentType, fileUrlParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -973,7 +1011,8 @@ export interface FileApiInterface {
     /**
      * 
      * @summary Copy all files of a parent entityId to a target entitId
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
@@ -981,7 +1020,7 @@ export interface FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    copy(schoolId: string, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): AxiosPromise<CopyFileListResponse>;
+    copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any): AxiosPromise<CopyFileListResponse>;
 
     /**
      * 
@@ -997,14 +1036,15 @@ export interface FileApiInterface {
     /**
      * 
      * @summary Mark all files of a parent entityId for deletion. The files are permanently deleted after a certain time.
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    deleteByParent(schoolId: string, parentId: string, parentType: FileRecordParentType, options?: any): AxiosPromise<FileRecordListResponse>;
+    deleteByParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, options?: any): AxiosPromise<FileRecordListResponse>;
 
     /**
      * 
@@ -1047,7 +1087,8 @@ export interface FileApiInterface {
     /**
      * 
      * @summary Get a list of file meta data of a parent entityId.
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -1056,7 +1097,7 @@ export interface FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    list(schoolId: string, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any): AxiosPromise<FileRecordListResponse>;
+    list(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any): AxiosPromise<FileRecordListResponse>;
 
     /**
      * 
@@ -1072,14 +1113,15 @@ export interface FileApiInterface {
     /**
      * 
      * @summary Restore all files of a parent entityId that are marked for deletion.
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    restore(schoolId: string, parentId: string, parentType: FileRecordParentType, options?: any): AxiosPromise<FileRecordListResponse>;
+    restore(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, options?: any): AxiosPromise<FileRecordListResponse>;
 
     /**
      * 
@@ -1094,7 +1136,8 @@ export interface FileApiInterface {
     /**
      * 
      * @summary Streamable upload of a binary file.
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {any} file 
@@ -1102,12 +1145,13 @@ export interface FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    upload(schoolId: string, parentId: string, parentType: FileRecordParentType, file: any, options?: any): AxiosPromise<FileRecordResponse>;
+    upload(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, file: any, options?: any): AxiosPromise<FileRecordResponse>;
 
     /**
      * 
      * @summary Upload file from url
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {FileUrlParams} fileUrlParams 
@@ -1115,7 +1159,7 @@ export interface FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApiInterface
      */
-    uploadFromUrl(schoolId: string, parentId: string, parentType: FileRecordParentType, fileUrlParams: FileUrlParams, options?: any): AxiosPromise<FileRecordResponse>;
+    uploadFromUrl(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, fileUrlParams: FileUrlParams, options?: any): AxiosPromise<FileRecordResponse>;
 
 }
 
@@ -1129,7 +1173,8 @@ export class FileApi extends BaseAPI implements FileApiInterface {
     /**
      * 
      * @summary Copy all files of a parent entityId to a target entitId
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {CopyFilesOfParentParams} copyFilesOfParentParams 
@@ -1137,8 +1182,8 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public copy(schoolId: string, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any) {
-        return FileApiFp(this.configuration).copy(schoolId, parentId, parentType, copyFilesOfParentParams, options).then((request) => request(this.axios, this.basePath));
+    public copy(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, copyFilesOfParentParams: CopyFilesOfParentParams, options?: any) {
+        return FileApiFp(this.configuration).copy(storageLocationId, storageLocation, parentId, parentType, copyFilesOfParentParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1157,15 +1202,16 @@ export class FileApi extends BaseAPI implements FileApiInterface {
     /**
      * 
      * @summary Mark all files of a parent entityId for deletion. The files are permanently deleted after a certain time.
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public deleteByParent(schoolId: string, parentId: string, parentType: FileRecordParentType, options?: any) {
-        return FileApiFp(this.configuration).deleteByParent(schoolId, parentId, parentType, options).then((request) => request(this.axios, this.basePath));
+    public deleteByParent(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, options?: any) {
+        return FileApiFp(this.configuration).deleteByParent(storageLocationId, storageLocation, parentId, parentType, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1215,7 +1261,8 @@ export class FileApi extends BaseAPI implements FileApiInterface {
     /**
      * 
      * @summary Get a list of file meta data of a parent entityId.
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {number} [skip] Number of elements (not pages) to be skipped
@@ -1224,8 +1271,8 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public list(schoolId: string, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any) {
-        return FileApiFp(this.configuration).list(schoolId, parentId, parentType, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public list(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, skip?: number, limit?: number, options?: any) {
+        return FileApiFp(this.configuration).list(storageLocationId, storageLocation, parentId, parentType, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1244,15 +1291,16 @@ export class FileApi extends BaseAPI implements FileApiInterface {
     /**
      * 
      * @summary Restore all files of a parent entityId that are marked for deletion.
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public restore(schoolId: string, parentId: string, parentType: FileRecordParentType, options?: any) {
-        return FileApiFp(this.configuration).restore(schoolId, parentId, parentType, options).then((request) => request(this.axios, this.basePath));
+    public restore(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, options?: any) {
+        return FileApiFp(this.configuration).restore(storageLocationId, storageLocation, parentId, parentType, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -1270,7 +1318,8 @@ export class FileApi extends BaseAPI implements FileApiInterface {
     /**
      * 
      * @summary Streamable upload of a binary file.
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {any} file 
@@ -1278,14 +1327,15 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public upload(schoolId: string, parentId: string, parentType: FileRecordParentType, file: any, options?: any) {
-        return FileApiFp(this.configuration).upload(schoolId, parentId, parentType, file, options).then((request) => request(this.axios, this.basePath));
+    public upload(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, file: any, options?: any) {
+        return FileApiFp(this.configuration).upload(storageLocationId, storageLocation, parentId, parentType, file, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
      * 
      * @summary Upload file from url
-     * @param {string} schoolId 
+     * @param {string} storageLocationId 
+     * @param {StorageLocation} storageLocation 
      * @param {string} parentId 
      * @param {FileRecordParentType} parentType 
      * @param {FileUrlParams} fileUrlParams 
@@ -1293,7 +1343,7 @@ export class FileApi extends BaseAPI implements FileApiInterface {
      * @throws {RequiredError}
      * @memberof FileApi
      */
-    public uploadFromUrl(schoolId: string, parentId: string, parentType: FileRecordParentType, fileUrlParams: FileUrlParams, options?: any) {
-        return FileApiFp(this.configuration).uploadFromUrl(schoolId, parentId, parentType, fileUrlParams, options).then((request) => request(this.axios, this.basePath));
+    public uploadFromUrl(storageLocationId: string, storageLocation: StorageLocation, parentId: string, parentType: FileRecordParentType, fileUrlParams: FileUrlParams, options?: any) {
+        return FileApiFp(this.configuration).uploadFromUrl(storageLocationId, storageLocation, parentId, parentType, fileUrlParams, options).then((request) => request(this.axios, this.basePath));
     }
 }

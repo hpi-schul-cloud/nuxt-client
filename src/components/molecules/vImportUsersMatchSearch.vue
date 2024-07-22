@@ -1,108 +1,125 @@
 <template>
 	<div>
-		<v-card :ripple="false" min-height="550px">
-			<v-toolbar dark color="primary">
-				<v-toolbar-title>
+		<VCard :ripple="false">
+			<VToolbar dark color="primary">
+				<VToolbarTitle>
 					{{
 						$t("components.molecules.importUsersMatch.title", {
-							instance: $theme.name,
+							instance: theme.name,
 							source: ldapSource,
 						})
 					}}
-				</v-toolbar-title>
-				<v-spacer />
-				<v-toolbar-items>
-					<v-btn v-if="isDialog" icon dark @click="closeEdit">
-						<v-icon>{{ mdiClose }}</v-icon>
-					</v-btn>
-				</v-toolbar-items>
-			</v-toolbar>
+				</VToolbarTitle>
+				<VToolbarItems>
+					<VBtn
+						v-if="isDialog"
+						:aria-label="$t('common.labels.close')"
+						:icon="mdiClose"
+						@click="closeEdit"
+					/>
+				</VToolbarItems>
+			</VToolbar>
 
-			<v-card-text class="mt-5">
+			<VCardText class="mt-5">
 				{{
-					$t("components.molecules.importUsersMatch.subtitle", {
-						instance: $theme.name,
-						source: ldapSource,
-					})
+					$t(
+						isNbc
+							? "components.molecules.importUsersMatch.subtitle.nbc"
+							: "components.molecules.importUsersMatch.subtitle",
+						{
+							instance: theme.name,
+							source: ldapSource,
+						}
+					)
 				}}
-			</v-card-text>
-			<v-card-text class="px-5">
-				<v-row>
-					<v-col class="md-6">
-						<v-card-title>{{ ldapSource }}</v-card-title>
-						<v-list-item>
-							<v-list-item-content data-testid="edited-item">
-								<v-list-item-title data-testid="edited-item-fullname"
-									>{{ `${editedItem.firstName} ${editedItem.lastName}` }}
-								</v-list-item-title>
-								<v-list-item-subtitle>
+			</VCardText>
+			<VCardText class="px-5">
+				<VRow>
+					<VCol class="md-6">
+						<VCardTitle>{{ ldapSource }}</VCardTitle>
+						<VListItem>
+							<div data-testid="edited-item">
+								<VListItemTitle data-testid="edited-item-fullname">
+									{{ `${editedItem.firstName} ${editedItem.lastName}` }}
+								</VListItemTitle>
+								<VListItemSubtitle>
 									{{ mapRoleNames(editedItem.roleNames) }}
-								</v-list-item-subtitle>
-								<v-list-item-subtitle
-									>{{
-										`${$t("components.organisms.importUsers.tableClasses")}: ${
-											editedItem.classNames
-												? editedItem.classNames.join(", ")
-												: ""
-										}`
+								</VListItemSubtitle>
+								<VListItemSubtitle
+									v-if="editedItem.classNames && editedItem.classNames.length"
+								>
+									{{
+										`${$t(
+											"components.organisms.importUsers.tableClasses"
+										)}: ${editedItem.classNames.join(", ")}`
 									}}
-								</v-list-item-subtitle>
-								<v-list-item-subtitle
+								</VListItemSubtitle>
+								<VListItemSubtitle
+									v-if="!isNbc"
+									data-testid="edited-item-username"
 									>{{
 										`${$t("components.organisms.importUsers.tableUserName")}: ${
 											editedItem.loginName
 										}`
 									}}
-								</v-list-item-subtitle>
-							</v-list-item-content>
-						</v-list-item>
-					</v-col>
-					<v-col class="md-6">
-						<v-card-title>{{ $theme.name }}</v-card-title>
-						<v-list-item>
-							<v-list-item-content v-if="selectedItem">
-								<v-list-item-title>
+								</VListItemSubtitle>
+							</div>
+						</VListItem>
+					</VCol>
+					<VCol class="md-6">
+						<VCardTitle>{{ theme.name }}</VCardTitle>
+						<VListItem>
+							<div v-if="selectedItem">
+								<VListItemTitle>
 									{{ `${selectedItem.firstName} ${selectedItem.lastName}` }}
-								</v-list-item-title>
-								<v-list-item-subtitle>
+								</VListItemTitle>
+								<VListItemSubtitle>
 									{{ mapRoleNames(selectedItem.roleNames) }}
-								</v-list-item-subtitle>
-								<v-list-item-subtitle>
+								</VListItemSubtitle>
+								<VListItemSubtitle v-if="!isNbc">
 									{{
 										`${$t("components.organisms.importUsers.tableUserName")}: ${
 											selectedItem.loginName
 										}`
 									}}
-								</v-list-item-subtitle>
-							</v-list-item-content>
-							<v-list-item-content v-else-if="editedItem.match">
-								<v-list-item-title>
+								</VListItemSubtitle>
+							</div>
+							<div v-else-if="editedItem.match">
+								<VListItemTitle>
 									{{
 										`${editedItem.match.firstName} ${editedItem.match.lastName}`
 									}}
-								</v-list-item-title>
-								<v-list-item-subtitle>
+								</VListItemTitle>
+								<VListItemSubtitle>
 									{{ mapRoleNames(editedItem.match.roleNames) }}
-								</v-list-item-subtitle>
-								<v-list-item-subtitle>
+								</VListItemSubtitle>
+								<VListItemSubtitle v-if="!isNbc">
 									{{
 										`${$t("components.organisms.importUsers.tableUserName")}: ${
 											editedItem.match.loginName
 										}`
 									}}
-								</v-list-item-subtitle>
-							</v-list-item-content>
-							<v-list-item-content v-else>{{
-								$t("components.molecules.importUsersMatch.unMatched")
-							}}</v-list-item-content>
-						</v-list-item>
-						<v-autocomplete
+								</VListItemSubtitle>
+							</div>
+							<div v-else>
+								<template v-if="!isNbc">
+									{{ $t("components.molecules.importUsersMatch.unMatched") }}
+								</template>
+								<template v-else>
+									{{
+										$t("components.molecules.importUsersMatch.unMatched.nbc")
+									}}
+								</template>
+							</div>
+						</VListItem>
+						<VAutocomplete
 							v-model="selectedItem"
-							class="px-4"
+							class="px-4 mt-2"
 							item-value="userId"
-							:items="items"
+							:item-title="(user) => `${user.firstName} ${user.lastName}`"
+							:items="entries"
 							:loading="loading"
-							:search-input.sync="searchUser"
+							v-model:search="searchUser"
 							hide-no-data
 							hide-selected
 							:prepend-inner-icon="mdiAccountSearch"
@@ -115,49 +132,34 @@
 								$t('components.molecules.importUsersMatch.notFound')
 							"
 							no-filter
-							solo
+							variant="solo"
 							rounded
-							small-chips
 						>
-							<template #selection="{ attr, on, item, selected }">
-								<v-chip
-									v-bind="attr"
-									:input-value="selected"
-									color="blue-grey"
-									class="white--text"
-									v-on="on"
-								>
-									<span>{{ `${item.firstName} ${item.lastName}` }}</span>
-								</v-chip>
-							</template>
-							<template #item="{ item }">
-								<v-list-item-content max-width="450px">
-									<v-list-item-title>
-										{{ item.firstName }} {{ item.lastName }}
-									</v-list-item-title>
-									<v-list-item-subtitle>
-										{{ mapRoleNames(item.roleNames) }}
-									</v-list-item-subtitle>
-									<v-list-item-subtitle>
+							<template #item="{ item, props }">
+								<VListItem style="max-width: 450px" v-bind="props">
+									<VListItemSubtitle>
+										{{ mapRoleNames(item.raw.roleNames) }}
+									</VListItemSubtitle>
+									<VListItemSubtitle v-if="!isNbc">
 										{{
 											`${$t(
 												"components.organisms.importUsers.tableUserName"
-											)}: ${item.loginName}`
+											)}: ${item.raw.loginName}`
 										}}
-									</v-list-item-subtitle>
-								</v-list-item-content>
+									</VListItemSubtitle>
+								</VListItem>
 							</template>
 							<template #append-item>
 								<div v-intersect="endIntersect" class="pa-2" />
 							</template>
-						</v-autocomplete>
-					</v-col>
-				</v-row>
-			</v-card-text>
-			<v-card-actions class="px-4">
-				<v-col class="col-6 pa-0"
-					>{{ $t("components.molecules.importUsersMatch.flag")
-					}}<v-btn
+						</VAutocomplete>
+					</VCol>
+				</VRow>
+			</VCardText>
+			<VCardActions class="px-4">
+				<VCol class="col-6 pa-0"
+					>{{ $t("components.molecules.importUsersMatch.flag") }}
+					<VBtn
 						v-model="flagged"
 						icon
 						:color="flagged ? 'primary' : ''"
@@ -165,40 +167,42 @@
 						data-testid="flag-button"
 						@click="saveFlag"
 					>
-						<v-icon color="primary"
-							>{{ flagged ? mdiFlag : mdiFlagOutline }}
-						</v-icon>
-					</v-btn>
-				</v-col>
-				<v-col class="col-6 text-right pa-0">
-					<v-btn
-						text
+						<VIcon color="primary">
+							{{ flagged ? mdiFlag : mdiFlagOutline }}
+						</VIcon>
+					</VBtn>
+				</VCol>
+				<VCol class="col-6 text-right pa-0">
+					<VBtn
+						variant="text"
 						:class="canSave ? 'primary' : ''"
 						class="m-2"
 						:disabled="!canSave"
 						data-testid="save-match-btn"
 						@click="saveMatch"
 					>
-						<v-icon small>{{ mdiContentSave }}</v-icon>
+						<VIcon size="small">{{ mdiContentSave }}</VIcon>
 						{{ $t("components.molecules.importUsersMatch.saveMatch") }}
-					</v-btn>
-					<v-btn
-						text
-						:class="canDelete ? 'secondary' : ''"
+					</VBtn>
+					<VBtn
+						variant="text"
 						class="m-2"
 						:disabled="!canDelete"
 						data-testid="delete-match-btn"
 						@click="deleteMatch"
 					>
-						<v-icon small>{{ mdiDelete }}</v-icon>
+						<VIcon size="small">{{ mdiDelete }}</VIcon>
 						{{ $t("components.molecules.importUsersMatch.deleteMatch") }}
-					</v-btn>
-				</v-col>
-			</v-card-actions>
-		</v-card>
+					</VBtn>
+				</VCol>
+			</VCardActions>
+		</VCard>
 	</div>
 </template>
-<script>
+<script setup lang="ts">
+import { UserMatchResponse } from "@/serverApi/v3";
+import { importUsersModule } from "@/store";
+import { injectStrict, THEME_KEY } from "@/utils/inject";
 import {
 	mdiAccountSearch,
 	mdiClose,
@@ -207,202 +211,215 @@ import {
 	mdiFlag,
 	mdiFlagOutline,
 } from "@mdi/js";
-import { importUsersModule } from "@/store";
+import { useDebounceFn } from "@vueuse/core";
+import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
-export default {
-	components: {},
-	props: {
-		isDialog: {
+const props = defineProps({
+	isDialog: {
+		type: Boolean,
+	},
+	ldapSource: {
+		type: String,
+		required: true,
+	},
+	editedItem: {
+		type: Object,
+		default: () => ({
+			firstName: "",
+			lastName: "",
+			loginName: "",
+			roleNames: [],
+			classNames: [],
+			match: {},
+			flagged: false,
+		}),
+		firstName: {
+			type: String,
+		},
+		lastName: {
+			type: String,
+		},
+		loginName: {
+			type: String,
+		},
+		roleNames: {
+			type: Array,
+		},
+		classNames: {
+			type: Array,
+			default: [],
+		},
+		match: {
+			type: Object,
+		},
+		flagged: {
 			type: Boolean,
 		},
-		ldapSource: {
-			type: String,
-			required: true,
-		},
-		editedItem: {
-			type: Object,
-			default: () => ({
-				firstName: "",
-				lastName: "",
-				loginName: "",
-				roleNames: [],
-				classNames: [],
-				match: {},
-				flagged: false,
-			}),
-			firstName: {
-				type: String,
-			},
-			lastName: {
-				type: String,
-			},
-			loginName: {
-				type: String,
-			},
-			roleNames: {
-				type: Array,
-			},
-			classNames: {
-				type: Array,
-				default: [],
-			},
-			match: {
-				type: Object,
-			},
-			flagged: {
-				type: Boolean,
-			},
-		},
 	},
-	data() {
-		return {
-			mdiAccountSearch,
-			mdiClose,
-			mdiContentSave,
-			mdiDelete,
-			mdiFlag,
-			mdiFlagOutline,
-			entries: [],
-			loading: false,
-			flagged: false,
-			searchUser: null,
-			selectedItem: null,
-			total: 0,
-			limit: 10,
-			skip: 0,
-		};
+	isNbc: {
+		type: Boolean,
+		default: false,
 	},
-	computed: {
-		items() {
-			return this.entries.map((user) => {
-				user.text = `${user.firstName} ${user.lastName}`;
-				return user;
-			});
-		},
-		canSave() {
-			if (this.selectedItem === null) {
-				return false;
-			}
-			if (
-				this.editedItem.match &&
-				this.editedItem.match.userId === this.selectedItem.userId
-			) {
-				return false;
-			}
-			return true;
-		},
-		canDelete() {
-			return this.editedItem.match && this.selectedItem === null;
-		},
-	},
-	watch: {
-		async searchUser() {
-			this.skip = 0;
-			await this.getDataFromApi();
-		},
-	},
-	created() {
-		this.flagged = this.editedItem.flagged;
-		this.getDataFromApi();
-	},
-	methods: {
-		async endIntersect(entries, observer, isIntersecting) {
-			if (isIntersecting) {
-				if (this.total > this.items.length) {
-					this.skip += this.limit;
-					await this.getDataFromApi();
-				}
-			}
-		},
-		async getDataFromApi() {
-			this.loading = true;
-			importUsersModule.setUsersLimit(this.limit);
-			importUsersModule.setUsersSkip(this.skip);
-			if (this.searchUser !== importUsersModule.getUserSearch) {
-				this.entries = [];
-				importUsersModule.setUserSearch(this.searchUser);
-			}
-			importUsersModule.fetchAllUsers().then(() => {
-				this.total = importUsersModule.getUserList.total;
+});
 
-				this.entries = [...this.entries, ...importUsersModule.getUserList.data];
-				this.loading = false;
-			});
-		},
-		closeEdit() {
-			this.selectedItem = null;
-			this.$emit("close");
-		},
-		async saveMatch() {
-			if (!this.selectedItem) {
-				return false;
-			}
-			const importUser = await importUsersModule.saveMatch({
-				importUserId: this.editedItem.importUserId,
-				userId: this.selectedItem.userId,
-			});
-			if (
-				!importUsersModule.getBusinessError &&
-				importUser.match &&
-				importUser.match.userId === this.selectedItem.userId
-			) {
-				this.$emit("saved-match");
-				this.closeEdit();
-			}
-		},
-		async deleteMatch() {
-			if (!this.editedItem.match || !this.editedItem.match.userId) {
-				return false;
-			}
-			const importUser = await importUsersModule.deleteMatch(
-				this.editedItem.importUserId
-			);
-			if (
-				!importUsersModule.getBusinessError &&
-				importUser.match === undefined
-			) {
-				this.$emit("deleted-match");
-				this.closeEdit();
-			}
-		},
-		async saveFlag() {
-			const importUser = await importUsersModule.saveFlag({
-				importUserId: this.editedItem.importUserId,
-				flagged: !this.flagged,
-			});
-			if (
-				!importUsersModule.getBusinessError &&
-				importUser.flagged === !this.flagged
-			) {
-				this.flagged = !this.flagged;
-				this.$emit("saved-flag");
-			}
-		},
-		mapRoleNames(roleNames) {
-			if (!roleNames) {
-				return "";
-			}
-			return roleNames
-				.map((role) => {
-					switch (role) {
-						case "student":
-							return this.$t("common.roleName.student");
-						case "teacher":
-							return this.$t("common.roleName.teacher");
-						case "admin":
-							return this.$t("common.roleName.administrator");
-						case "expert":
-							return this.$t("common.roleName.expert");
-						case "superhero":
-							return this.$t("common.roleName.superhero");
-						default:
-							return role;
-					}
-				})
-				.join(", ");
-		},
-	},
+const emit = defineEmits<{
+	(e: "close"): void;
+	(e: "saved-match"): void;
+	(e: "saved-flag"): void;
+	(e: "deleted-match"): void;
+}>();
+
+const { t } = useI18n();
+
+const theme = injectStrict(THEME_KEY);
+
+const entries: Ref<UserMatchResponse[]> = ref([]);
+const loading: Ref<boolean> = ref(false);
+const flagged = ref(false);
+const searchUser: Ref<string | undefined> = ref();
+const selectedItem: Ref<UserMatchResponse | null> = ref(null);
+const total: Ref<number> = ref(0);
+const limit: Ref<number> = ref(10);
+const skip: Ref<number> = ref(0);
+
+const canSave: ComputedRef<boolean> = computed(() => {
+	if (selectedItem.value === null) {
+		return false;
+	}
+
+	if (
+		props.editedItem.match &&
+		props.editedItem.match.userId === selectedItem.value?.userId
+	) {
+		return false;
+	}
+
+	return true;
+});
+
+const canDelete = computed(() => {
+	return props.editedItem.match && selectedItem.value === null;
+});
+
+const getDataFromApi = async () => {
+	loading.value = true;
+
+	importUsersModule.setUsersLimit(limit.value);
+	importUsersModule.setUsersSkip(skip.value);
+	if (searchUser.value !== importUsersModule.getUserSearch) {
+		entries.value = [];
+		importUsersModule.setUserSearch(searchUser.value || "");
+	}
+	await importUsersModule.fetchAllUsers();
+
+	total.value = importUsersModule.getUserList.total;
+
+	entries.value.push(...importUsersModule.getUserList.data);
+
+	loading.value = false;
 };
+
+const getDataFromApiThrottled = useDebounceFn(() => getDataFromApi(), 1000, {
+	maxWait: 1000,
+});
+
+watch(searchUser, () => {
+	skip.value = 0;
+
+	getDataFromApiThrottled();
+});
+
+const endIntersect = async (isIntersecting: boolean) => {
+	if (isIntersecting) {
+		if (total.value > entries.value.length) {
+			skip.value += limit.value;
+
+			await getDataFromApi();
+		}
+	}
+};
+
+const closeEdit = () => {
+	selectedItem.value = null;
+	emit("close");
+};
+
+const saveMatch = async () => {
+	if (!selectedItem.value) {
+		return false;
+	}
+	const importUser = await importUsersModule.saveMatch({
+		importUserId: props.editedItem.importUserId,
+		userId: selectedItem.value.userId,
+	});
+	if (
+		!importUsersModule.getBusinessError &&
+		importUser?.match &&
+		importUser.match.userId === selectedItem.value.userId
+	) {
+		emit("saved-match");
+		closeEdit();
+	}
+};
+
+const deleteMatch = async () => {
+	if (!props.editedItem.match || !props.editedItem.match.userId) {
+		return false;
+	}
+	const importUser = await importUsersModule.deleteMatch(
+		props.editedItem.importUserId
+	);
+	if (!importUsersModule.getBusinessError && importUser?.match === undefined) {
+		emit("deleted-match");
+		closeEdit();
+	}
+};
+
+const saveFlag = async () => {
+	const importUser = await importUsersModule.saveFlag({
+		importUserId: props.editedItem.importUserId,
+		flagged: !flagged.value,
+	});
+
+	if (
+		!importUsersModule.getBusinessError &&
+		importUser?.flagged === !flagged.value
+	) {
+		flagged.value = !flagged.value;
+		emit("saved-flag");
+	}
+};
+
+const mapRoleNames = (roleNames: unknown[]) => {
+	if (!roleNames) {
+		return "";
+	}
+	return roleNames
+		.map((role) => {
+			switch (role) {
+				case "student":
+					return t("common.roleName.student");
+				case "teacher":
+					return t("common.roleName.teacher");
+				case "admin":
+					return t("common.roleName.administrator");
+				case "expert":
+					return t("common.roleName.expert");
+				case "superhero":
+					return t("common.roleName.superhero");
+				default:
+					return role;
+			}
+		})
+		.join(", ");
+};
+
+onMounted(async () => {
+	flagged.value = props.editedItem.flagged;
+
+	await getDataFromApi();
+});
 </script>
 <style scoped>
 .v-dialog--active {

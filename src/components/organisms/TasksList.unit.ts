@@ -4,13 +4,15 @@ import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { Task } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { mount } from "@vue/test-utils";
 import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
 import TasksList from "./TasksList.vue";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 const { tasks } = mocks;
 
@@ -19,28 +21,26 @@ describe("@/components/organisms/TasksList", () => {
 	let finishedTasksModuleMock: FinishedTasksModule;
 	let copyModuleMock: CopyModule;
 	let notifierModuleMock: NotifierModule;
-	let wrapper: Wrapper<Vue>;
 
-	const mountComponent = (attrs = {}) => {
-		const wrapper = mount(TasksList as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				copyModule: copyModuleMock,
-				tasksModule: tasksModuleMock,
-				finishedTasksModule: finishedTasksModuleMock,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+	const mountComponent = (options = {}) => {
+		const wrapper = mount(TasksList, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+					tasksModule: tasksModuleMock,
+					finishedTasksModule: finishedTasksModuleMock,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+				},
 			},
-			...attrs,
+			...options,
 		});
 
 		return wrapper;
 	};
 
 	const tasksModuleGetters: Partial<TasksModule> = {
-		getTasks: tasks as unknown as Task[],
+		getTasks: tasks as Task[],
 		getStatus: "completed",
 		hasTasks: true,
 	};
@@ -57,11 +57,7 @@ describe("@/components/organisms/TasksList", () => {
 
 	describe("props", () => {
 		it("should accept valid type & role props", () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			const typeValidator = TasksList.props.type.validator;
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			const roleValidator = TasksList.props.userRole.validator;
 			const validTypes = ["current", "finished"];
 			const validRoles = ["student", "teacher"];
@@ -87,7 +83,7 @@ describe("@/components/organisms/TasksList", () => {
 
 	describe("subheader rendering", () => {
 		it("Should render no subheader if title prop is not set", () => {
-			wrapper = mountComponent({
+			const wrapper = mountComponent({
 				propsData: {
 					tasks,
 					userRole: "student",
@@ -95,11 +91,11 @@ describe("@/components/organisms/TasksList", () => {
 			});
 
 			const subHeader = wrapper.findAll(".v-subheader");
-			expect(subHeader.exists()).toBe(false);
+			expect(subHeader.length).toStrictEqual(0);
 		});
 
 		it("Should render a subheader if title prop is set", () => {
-			wrapper = mountComponent({
+			const wrapper = mountComponent({
 				propsData: {
 					tasks,
 					userRole: "student",
@@ -108,12 +104,12 @@ describe("@/components/organisms/TasksList", () => {
 			});
 
 			const subHeader = wrapper.findAll(".v-subheader");
-			expect(subHeader.exists()).toBe(true);
+			expect(subHeader.length).toStrictEqual(0);
 		});
 	});
 
 	it("Should render complete task items list", () => {
-		wrapper = mountComponent({
+		const wrapper = mountComponent({
 			propsData: {
 				tasks,
 				userRole: "student",
@@ -123,18 +119,13 @@ describe("@/components/organisms/TasksList", () => {
 		const dueDateLabels = wrapper.findAll("[data-test-id='dueDateLabel']");
 		expect(dueDateLabels).toHaveLength(tasks.length);
 
-		dueDateLabels.wrappers.forEach((dateLabel, index) => {
+		dueDateLabels.forEach((dateLabel, index) => {
 			expect(dateLabel.exists()).toBe(true);
-			if (
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				tasks[index].dueDate === null ||
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
-				tasks[index].dueDate === undefined
-			)
+			if (tasks[index].dueDate === null || tasks[index].dueDate === undefined) {
 				expect(dateLabel.text()).toBe("");
-			else expect(dateLabel.text()).toContain("Abgabe ");
+			} else {
+				expect(dateLabel.text()).toContain("pages.tasks.labels.due ");
+			}
 		});
 	});
 
@@ -145,13 +136,19 @@ describe("@/components/organisms/TasksList", () => {
 			hasTasks: false,
 		});
 
-		wrapper = mountComponent({
+		const wrapper = mountComponent({
 			propsData: {
 				userRole: "student",
 			},
 		});
 
-		expect(wrapper.props("tasks")).toStrictEqual([]);
+		expect(wrapper.props()).toStrictEqual({
+			userRole: "student",
+			tasks: [],
+			title: null,
+			type: "current",
+			hasPagination: false,
+		});
 		expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
 	});
 
@@ -163,7 +160,7 @@ describe("@/components/organisms/TasksList", () => {
 				getStatus: "pending",
 			});
 
-			wrapper = mountComponent({
+			const wrapper = mountComponent({
 				propsData: {
 					tasks: [],
 					userRole: "student",
@@ -175,8 +172,14 @@ describe("@/components/organisms/TasksList", () => {
 				wrapper.find(".v-skeleton-loader__list-item-avatar-two-line").exists()
 			).toBe(true);
 			expect(wrapper.find(".v-progress-circular").exists()).toBe(false);
-			expect(wrapper.props("tasks")).toStrictEqual([]);
 			expect(wrapper.findAllComponents({ name: "VListItem" })).toHaveLength(0);
+			expect(wrapper.props()).toStrictEqual({
+				userRole: "student",
+				tasks: [],
+				title: null,
+				type: "current",
+				hasPagination: false,
+			});
 		});
 
 		it("Should render loading state while fetching more tasks", () => {
@@ -189,7 +192,7 @@ describe("@/components/organisms/TasksList", () => {
 				getIsInitialized: true,
 			});
 
-			wrapper = mountComponent({
+			const wrapper = mountComponent({
 				propsData: {
 					tasks,
 					userRole: "student",
@@ -214,21 +217,19 @@ describe("@/components/organisms/TasksList", () => {
 				getStatus: "pending",
 			});
 
-			wrapper = mountComponent({
+			const wrapper = mountComponent({
 				propsData: {
 					tasks,
 					userRole: "student",
 				},
 			});
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
 			expect(wrapper.vm.status).toBe("completed");
 		});
 	});
 
 	it("should passthrough copy-task event", async () => {
-		wrapper = mountComponent({
+		const wrapper = mountComponent({
 			propsData: {
 				tasks,
 				userRole: "teacher",

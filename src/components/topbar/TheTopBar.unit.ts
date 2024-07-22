@@ -1,17 +1,21 @@
-import Vue from "vue";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { mockStatusAlerts } from "@@/tests/test-utils/mockStatusAlerts";
-import { MountOptions, mount, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount } from "@vue/test-utils";
 import AuthModule from "@/store/auth";
 import StatusAlertsModule from "@/store/status-alerts";
 import {
-	I18N_KEY,
 	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
 } from "@/utils/inject";
 import TheTopBar from "./TheTopBar.vue";
 import { StatusAlert } from "@/store/types/status-alert";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import EnvConfigModule from "@/store/env-config";
+import { LanguageType } from "@/serverApi/v3";
 
 const getWrapper = (props?: object, statusAlerts: StatusAlert[] = []) => {
 	const authModule = createModuleMocks(AuthModule, {
@@ -25,26 +29,29 @@ const getWrapper = (props?: object, statusAlerts: StatusAlert[] = []) => {
 		getStatusAlerts: statusAlerts,
 	});
 
-	return mount(TheTopBar as MountOptions<Vue>, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		provide: {
-			[I18N_KEY as symbol]: { t: (key: string) => key },
-			[AUTH_MODULE_KEY.valueOf()]: authModule,
-			[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
-		},
-		propsData: props,
-		attachTo: document.body,
+	const envConfigModule = createModuleMocks(EnvConfigModule, {
+		getAvailableLanguages: [LanguageType.De, LanguageType.En],
 	});
+
+	const wrapper = mount(TheTopBar, {
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				[AUTH_MODULE_KEY.valueOf()]: authModule,
+				[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
+				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+			},
+		},
+		props,
+	});
+
+	return wrapper;
 };
 
 describe("@/components/topbar/TheTopBar", () => {
 	describe("when user is logged in with no status alerts", () => {
-		let wrapper: Wrapper<Vue>;
-
-		beforeEach(() => {
-			wrapper = getWrapper({
+		const setup = () => {
+			const wrapper = getWrapper({
 				user: {
 					firstName: "Arthur",
 					lastName: "Dent",
@@ -54,9 +61,12 @@ describe("@/components/topbar/TheTopBar", () => {
 					name: "dummy school",
 				},
 			});
-		});
+
+			return { wrapper };
+		};
 
 		it("should render action buttons correctly", () => {
+			const { wrapper } = setup();
 			expect(wrapper.find("[data-testid='top-menu-btn']").exists()).toBe(true);
 			expect(wrapper.find("[data-testid='status-alerts-icon']").exists()).toBe(
 				false
@@ -69,6 +79,7 @@ describe("@/components/topbar/TheTopBar", () => {
 		});
 
 		it("should not render status alert icon", () => {
+			const { wrapper } = setup();
 			expect(wrapper.find("[data-testid='status-alerts-icon']").exists()).toBe(
 				false
 			);
@@ -76,7 +87,7 @@ describe("@/components/topbar/TheTopBar", () => {
 	});
 
 	describe("when status alerts exist", () => {
-		it("should render status alerts icon", async () => {
+		const setup = () => {
 			const wrapper = getWrapper(
 				{
 					user: {
@@ -90,8 +101,12 @@ describe("@/components/topbar/TheTopBar", () => {
 				},
 				mockStatusAlerts
 			);
-			await wrapper.vm.$nextTick();
 
+			return { wrapper };
+		};
+
+		it("should render status alerts icon", async () => {
+			const { wrapper } = setup();
 			expect(
 				wrapper.findAll('[data-testid="status-alerts-icon"]')
 			).toHaveLength(1);
@@ -101,11 +116,17 @@ describe("@/components/topbar/TheTopBar", () => {
 		});
 	});
 
-	describe("when enabling/disabling fullscreen mode", () => {
-		it("should emit fullscreen event when enabling", async () => {
+	describe("when fullscreen mode is disabled", () => {
+		const setup = () => {
 			const wrapper = getWrapper({
 				fullscreenMode: false,
 			});
+
+			return { wrapper };
+		};
+
+		it("should emit fullscreen event", async () => {
+			const { wrapper } = setup();
 
 			const expandBtn = wrapper.find('[data-testid="fullscreen-btn"]');
 			expect(expandBtn.exists()).toBe(true);
@@ -114,15 +135,22 @@ describe("@/components/topbar/TheTopBar", () => {
 
 			expect(wrapper.emitted("action")).toBeTruthy();
 			expect(wrapper.emitted("action")).toHaveLength(1);
-			const action = wrapper.emitted("action") as any[][];
 
-			expect(action[0]).toStrictEqual(["fullscreen"]);
+			expect(wrapper.emitted("action")).toStrictEqual([["fullscreen"]]);
 		});
+	});
 
-		it("should emit fullcreen event", async () => {
+	describe("when fullscreen mode is enabled", () => {
+		const setup = () => {
 			const wrapper = getWrapper({
 				fullscreenMode: true,
 			});
+
+			return { wrapper };
+		};
+
+		it("should emit fullcreen event", async () => {
+			const { wrapper } = setup();
 
 			const collapseBtn = wrapper.find(".fullscreen-button-active");
 			expect(collapseBtn.exists()).toBe(true);
@@ -131,37 +159,41 @@ describe("@/components/topbar/TheTopBar", () => {
 
 			expect(wrapper.emitted("action")).toBeTruthy();
 			expect(wrapper.emitted("action")).toHaveLength(1);
-			const action = wrapper.emitted("action") as any[][];
 
-			expect(action[0]).toStrictEqual(["fullscreen"]);
+			expect(wrapper.emitted("action")).toStrictEqual([["fullscreen"]]);
 		});
 	});
 
-	it("should emit logout event", async () => {
-		const wrapper = getWrapper({
-			user: {
-				firstName: "Arthur",
-				lastName: "Dent",
-				roles: [{ name: "administrator" }],
-			},
-			school: {
-				name: "dummy school",
-			},
+	describe("when a user logs out", () => {
+		const setup = () => {
+			const wrapper = getWrapper({
+				user: {
+					firstName: "Arthur",
+					lastName: "Dent",
+					roles: [{ name: "administrator" }],
+				},
+				school: {
+					name: "dummy school",
+				},
+			});
+
+			return { wrapper };
+		};
+
+		it("should emit logout event", async () => {
+			const { wrapper } = setup();
+			const initials = wrapper.find("[data-testid='initials']");
+			await initials.trigger("click");
+
+			const logoutBtn = wrapper.find("[data-testid='logout']");
+			expect(wrapper.find("[data-testid='logout']").exists()).toBe(true);
+
+			await logoutBtn.trigger("click");
+
+			expect(wrapper.emitted("action")).toBeTruthy();
+			expect(wrapper.emitted("action")).toHaveLength(1);
+
+			expect(wrapper.emitted("action")).toStrictEqual([["logout"]]);
 		});
-		await wrapper.vm.$nextTick();
-
-		const initials = wrapper.find("[data-testid='initials']");
-		await initials.trigger("click");
-
-		const logoutBtn = wrapper.find("[data-testid='logout']");
-		expect(wrapper.find("[data-testid='logout']").exists()).toBe(true);
-
-		await logoutBtn.trigger("click");
-
-		expect(wrapper.emitted("action")).toBeTruthy();
-		expect(wrapper.emitted("action")).toHaveLength(1);
-		const action = wrapper.emitted("action") as any[][];
-
-		expect(action[0]).toStrictEqual(["logout"]);
 	});
 });

@@ -1,12 +1,15 @@
 <template>
 	<nav class="pagination d-flex" role="navigation" aria-label="pagination">
 		<v-select
-			return-object
-			:value="perPageSelected"
+			:model-value="perPageSelected"
 			:items="perPageOptions"
+			item-title="text"
 			:aria-label="$t('components.organisms.Pagination.recordsPerPage')"
 			class="select-input-width"
-			@change="setPagination"
+			item-value="value"
+			return-object
+			active
+			@update:modelValue="setPagination"
 		/>
 		<div v-if="perPage > 0" class="d-flex align-items-center">
 			<p class="total">
@@ -27,8 +30,7 @@
 				<li v-if="currentPage > 1" class="pagination-link-wrapper">
 					<v-btn
 						min-width="35"
-						color="secondary"
-						depressed
+						variant="outlined"
 						class="pagination-link"
 						aria-label="Go to previous page"
 						@click="previousPage"
@@ -39,8 +41,7 @@
 				<li v-if="currentPage < lastPage" class="pagination-link-wrapper">
 					<v-btn
 						min-width="35"
-						color="secondary"
-						depressed
+						variant="outlined"
 						class="pagination-link"
 						aria-label="Go to next page"
 						@click="nextPage"
@@ -59,9 +60,6 @@
 <script>
 import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
 export default {
-	model: {
-		event: "update",
-	},
 	props: {
 		currentPage: {
 			type: Number,
@@ -120,7 +118,7 @@ export default {
 	},
 	methods: {
 		setPagination(val) {
-			this.$emit("update:per-page", val);
+			this.$emit("update:per-page", val.value);
 			this.$emit("update:current-page", 1);
 		},
 		previousPage() {
@@ -152,10 +150,6 @@ export default {
 .pagination-link-wrapper .pagination-link {
 	padding: var(--space-xs);
 	margin-left: var(--space-sm);
-	color: var(--v-white-base);
-	cursor: pointer;
-	background-color: var(--v-secondary-base);
-	border-radius: var(--radius-sm);
 }
 
 .total {
@@ -163,7 +157,7 @@ export default {
 	margin-bottom: 0;
 }
 
-::v-deep .v-input__icon .v-icon {
+:deep(.v-input__icon .v-icon) {
 	font-size: var(--text-base-size);
 }
 

@@ -1,48 +1,47 @@
 <template>
 	<div>
-		<v-dialog
+		<VDialog
 			v-model="dialogEdit"
 			large
 			max-width="900px"
 			@click:outside="closeEdit"
 		>
-			<v-import-users-match-search
+			<vImportUsersMatchSearch
 				v-if="dialogEdit"
 				:edited-item="editedItem"
 				:is-dialog="true"
-				:ldap-source="ldapSourceTranslation"
+				:ldap-source="sourceSystemName"
 				@close="closeEdit"
 				@saved-match="savedMatch"
 				@saved-flag="savedFlag"
+				:is-nbc="isNbc"
 			/>
-		</v-dialog>
+		</VDialog>
 
-		<v-alert
+		<VAlert
 			v-if="!canStartMigration"
-			colored-border
 			type="error"
+			:icon="mdiAlertCircle"
 			elevation="2"
 		>
 			{{ $t("pages.administration.migration.cannotStart") }}
-		</v-alert>
+		</VAlert>
 
 		<div v-else>
-			<v-data-table
+			<VDataTableServer
 				v-if="canStartMigration"
 				:headers="tableHead"
 				:items="importUsers"
-				:options.sync="options"
-				:server-items-length="totalImportUsers"
+				:items-length="totalImportUsers"
 				:loading="loading"
 				class="table"
-				:footer-props="{
-					itemsPerPageOptions: [5, 10, 25, 50, 100],
-					itemsPerPageText: '',
-					pageText: '{0}-{1} von {2}',
-				}"
+				:items-per-page="25"
+				:items-per-page-options="[5, 10, 25, 50, 100]"
+				page-text="{0}-{1} von {2}"
+				@update:options="onUpdateOptions"
 			>
 				<template #loading>
-					<v-skeleton-loader
+					<VSkeletonLoader
 						class="mx-auto"
 						width="100%"
 						type="table-thead, table-tbody"
@@ -51,39 +50,41 @@
 				<template #[`body.prepend`]>
 					<tr class="head">
 						<td class="col-2">
-							<v-text-field
+							<VTextField
 								v-model="searchFirstName"
 								type="string"
 								:label="$t('components.organisms.importUsers.searchFirstName')"
 								clearable
-								class="searchFirstName"
+								data-testid="search-first-name"
 							/>
 						</td>
 						<td class="col-2">
-							<v-text-field
+							<VTextField
 								v-model="searchLastName"
 								type="string"
 								:label="$t('components.organisms.importUsers.searchLastName')"
 								clearable
-								class="searchLastName"
+								data-testid="search-last-name"
 							/>
 						</td>
-						<td>
-							<v-text-field
+						<td v-if="!isNbc">
+							<VTextField
 								v-model="searchLoginName"
 								type="string"
 								:label="$t('components.organisms.importUsers.searchUserName')"
 								clearable
-								class="searchLoginName"
+								data-testid="search-login-name"
 							/>
 						</td>
 						<td>
-							<v-select
+							<VSelect
 								v-model="searchRole"
 								:items="roles"
+								item-title="text"
+								item-value="value"
 								:label="$t('components.organisms.importUsers.searchRole')"
 								clearable
-								class="searchRole"
+								data-testid="search-role"
 							/>
 						</td>
 						<td>
@@ -92,77 +93,91 @@
 								type="string"
 								:label="$t('components.organisms.importUsers.searchClass')"
 								clearable
-								class="searchClasses"
+								data-testid="search-classes"
 							/>
 						</td>
 						<td class="col-2">
-							<v-btn-toggle v-model="searchMatchedBy" multiple borderless group>
-								<v-btn
+							<VBtnToggle v-model="searchMatchedBy" multiple>
+								<VBtn
 									icon
+									variant="text"
 									:value="MatchedBy.None"
 									:title="
 										$t('components.organisms.importUsers.searchUnMatched')
 									"
-									class="searchMatchedByNone"
+									data-testid="search-matched-by-none"
 								>
-									<v-icon
+									<VIcon
 										:color="
 											searchMatchedBy.includes(MatchedBy.None)
 												? 'primary'
-												: 'secondary'
+												: 'rgba(var(--v-theme-on-background))'
 										"
-										>{{ mdiAccountPlus }}</v-icon
 									>
-								</v-btn>
-								<v-btn
+										{{ mdiAccountPlus }}
+									</VIcon>
+								</VBtn>
+								<VBtn
 									icon
+									variant="text"
 									:value="MatchedBy.Admin"
 									:title="
 										$t('components.organisms.importUsers.searchAdminMatched')
 									"
-									class="searchMatchedByAdmin"
+									data-testid="search-matched-by-admin"
 								>
-									<v-icon
+									<VIcon
 										:color="
 											searchMatchedBy.includes(MatchedBy.Admin)
 												? 'primary'
-												: 'secondary'
+												: 'rgba(var(--v-theme-on-background))'
 										"
-										>{{ mdiAccountSwitch }}</v-icon
 									>
-								</v-btn>
-								<v-btn
+										{{ mdiAccountSwitch }}
+									</VIcon>
+								</VBtn>
+								<VBtn
 									icon
+									variant="text"
 									:value="MatchedBy.Auto"
 									:title="
 										$t('components.organisms.importUsers.searchAutoMatched')
 									"
-									class="searchMatchedByAuto"
+									data-testid="search-matched-by-auto"
 								>
-									<v-icon
+									<VIcon
 										:color="
 											searchMatchedBy.includes(MatchedBy.Auto)
 												? 'primary'
-												: 'secondary'
+												: 'rgba(var(--v-theme-on-background))'
 										"
-										>{{ mdiAccountSwitchOutline }}</v-icon
 									>
-								</v-btn>
-							</v-btn-toggle>
+										{{ mdiAccountSwitchOutline }}
+									</VIcon>
+								</VBtn>
+							</VBtnToggle>
 						</td>
 						<td>
-							<v-btn-toggle v-model="searchFlagged" borderless group>
-								<v-btn
+							<VBtnToggle v-model="searchFlagged" class="w-100">
+								<VBtn
 									icon
+									variant="text"
 									value="true"
 									:title="$t('components.organisms.importUsers.searchFlagged')"
-									class="searchFlagged"
+									class="mx-auto"
+									data-testid="search-flagged"
 								>
-									<v-icon :color="searchFlagged ? 'primary' : 'secondary'"
-										>{{ searchFlagged ? mdiFlag : mdiFlagOutline }}
-									</v-icon>
-								</v-btn>
-							</v-btn-toggle>
+									<VIcon
+										:color="
+											searchFlagged
+												? 'primary'
+												: 'rgba(var(--v-theme-on-background))'
+										"
+									>
+										{{ searchFlagged ? mdiFlag : mdiFlagOutline }}
+									</VIcon>
+								</VBtn>
+							</VBtnToggle>
 						</td>
 					</tr>
 				</template>
@@ -173,97 +188,105 @@
 					</div>
 				</template>
 
+				<template #[`item.classNames`]="{ item }">
+					{{ item.classNames?.join(", ") }}
+				</template>
+
 				<template #[`item.match`]="{ item }">
 					<div class="text-no-wrap md">
-						<v-icon small>{{ getMatchedByIcon(item.match) }}</v-icon>
+						<VIcon size="small">{{ getMatchedByIcon(item.match) }}</VIcon>
 						{{
 							item.match
 								? `${item.match.firstName} ${item.match.lastName}`
 								: $t("components.organisms.importUsers.createNew")
 						}}
-						<v-btn
+						<VBtn
 							class="ma-2"
-							text
+							variant="text"
 							icon
 							:title="$t('components.organisms.importUsers.editImportUser')"
 							@click="editItem(item)"
 						>
-							<v-icon small>{{ mdiPencilOutline }}</v-icon>
-						</v-btn>
+							<VIcon size="small">{{ mdiPencilOutline }}</VIcon>
+						</VBtn>
 					</div>
 				</template>
 
 				<template #[`item.flagged`]="{ item }">
-					<v-btn
+					<VBtn
 						icon
+						variant="text"
 						:color="item.flagged ? 'primary' : ''"
-						class="ma-2"
+						class="d-block mx-auto my-2"
 						:title="$t('components.organisms.importUsers.flagImportUser')"
 						@click="saveFlag(item)"
 					>
-						<v-icon small :color="item.flagged ? 'primary' : ''">{{
-							item.flagged ? mdiFlag : mdiFlagOutline
-						}}</v-icon>
-					</v-btn>
+						<VIcon size="small" :color="item.flagged ? 'primary' : ''">
+							{{ item.flagged ? mdiFlag : mdiFlagOutline }}
+						</VIcon>
+					</VBtn>
 				</template>
-			</v-data-table>
+			</VDataTableServer>
 
 			<p class="text-sm">
 				<b>{{ $t("components.organisms.importUsers.legend") }}</b>
 				<br />
-				<v-icon color="secondary">{{ mdiAccountPlus }}</v-icon>
+				<VIcon>{{ mdiAccountPlus }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendUnMatched", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 
 				<br />
-				<v-icon color="secondary">{{ mdiAccountSwitch }}</v-icon>
+				<VIcon>{{ mdiAccountSwitch }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendAdminMatched", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 				<br />
-				<v-icon color="secondary">{{ mdiAccountSwitchOutline }}</v-icon>
+				<VIcon>{{ mdiAccountSwitchOutline }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendAutoMatched", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 				<br />
-				<v-icon color="secondary">{{ mdiFlagOutline }}</v-icon>
+				<VIcon>{{ mdiFlagOutline }}</VIcon>
 				{{
 					$t("components.organisms.importUsers.legendFlag", {
 						instance: $theme.name,
-						source: ldapSourceTranslation,
+						source: sourceSystemName,
 					})
 				}}
 			</p>
-			<v-divider />
+			<VDivider />
 			<br />
 		</div>
 	</div>
 </template>
 
 <script>
-/* eslint-disable max-lines */
-import { importUsersModule, schoolsModule, envConfigModule } from "@/store";
-import { MatchedBy } from "@/store/import-users";
-import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch";
 import {
 	mdiAccountPlus,
 	mdiAccountSwitch,
 	mdiAccountSwitchOutline,
+	mdiAlertCircle,
 	mdiFlag,
 	mdiFlagOutline,
 	mdiPencilOutline,
-} from "@mdi/js";
-import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
+} from "@/components/icons/material";
+import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch";
+import {
+	ImportUserResponseRoleNamesEnum,
+	SchulcloudTheme,
+} from "@/serverApi/v3";
+import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
+import { MatchedBy } from "@/store/import-users";
 
 export default {
 	components: {
@@ -274,6 +297,7 @@ export default {
 			mdiAccountPlus,
 			mdiAccountSwitch,
 			mdiAccountSwitchOutline,
+			mdiAlertCircle,
 			mdiFlag,
 			mdiFlagOutline,
 			mdiPencilOutline,
@@ -296,7 +320,7 @@ export default {
 			searchFirstName: "",
 			searchLastName: "",
 			searchLoginName: "",
-			searchRole: "",
+			searchRole: null,
 			searchClasses: "",
 			searchMatchedBy: [MatchedBy.None],
 			searchFlagged: false,
@@ -319,57 +343,73 @@ export default {
 	},
 	computed: {
 		tableHead() {
-			return [
+			const tableHeaders = [
 				{
-					text: this.$t("components.organisms.importUsers.tableFirstName"),
+					title: this.$t("components.organisms.importUsers.tableFirstName"),
 					value: "firstName",
 					sortable: true,
-					class: "head_firstName",
+					headerProps: {
+						"data-testid": "head-first-name",
+					},
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableLastName"),
+					title: this.$t("components.organisms.importUsers.tableLastName"),
 					value: "lastName",
 					sortable: true,
-					class: "head_lastName",
+					headerProps: {
+						"data-testid": "head-last-name",
+					},
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableUserName"),
+					title: this.$t("components.organisms.importUsers.tableUserName"),
 					value: "loginName",
 					sortable: false,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableRoles"),
+					title: this.$t("components.organisms.importUsers.tableRoles"),
 					value: "roleNames",
 					sortable: false,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableClasses"),
+					title: this.$t("components.organisms.importUsers.tableClasses"),
 					value: "classNames",
 					sortable: false,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableMatch", {
+					title: this.$t("components.organisms.importUsers.tableMatch", {
 						instance: this.$theme.name,
 					}),
 					value: "match",
 					sortable: false,
 				},
 				{
-					text: this.$t("components.organisms.importUsers.tableFlag"),
+					title: this.$t("components.organisms.importUsers.tableFlag"),
 					value: "flagged",
 					sortable: false,
 				},
 			];
+			if (this.isNbc) {
+				return tableHeaders.filter((header) => header.value !== "loginName");
+			}
+			return tableHeaders;
+		},
+		isNbc() {
+			return (
+				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.N21
+			);
 		},
 		canStartMigration() {
 			return this.school.inUserMigration && this.school.inMaintenance;
 		},
-		canFinishMigration() {
-			return false;
-		},
-		ldapSourceTranslation() {
-			if (envConfigModule.getEnv.SC_THEME.toLowerCase() === "brb") {
+		sourceSystemName() {
+			if (
+				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.Brb
+			) {
 				return this.$t("pages.administration.migration.brbSchulportal");
+			} else if (
+				envConfigModule.getEnv.SC_THEME.toLowerCase() === SchulcloudTheme.N21
+			) {
+				return "moin.schule";
 			} else {
 				return this.$t("pages.administration.migration.ldapSource");
 			}
@@ -402,12 +442,6 @@ export default {
 	watch: {
 		dialogEdit(val) {
 			val || this.closeEdit();
-		},
-		options: {
-			handler() {
-				this.getDataFromApi();
-			},
-			deep: true,
 		},
 		searchFirstName() {
 			this.searchApi();
@@ -510,6 +544,11 @@ export default {
 			this.options.page = 1;
 			this.getDataFromApi();
 		},
+		async onUpdateOptions(options) {
+			this.options = options;
+
+			await this.getDataFromApi();
+		},
 		async getDataFromApi() {
 			this.loading = true;
 
@@ -525,12 +564,14 @@ export default {
 			importUsersModule.setSkip(
 				(this.options.page - 1) * this.options.itemsPerPage
 			);
-			if (this.options.sortBy) {
-				importUsersModule.setSortBy(this.options.sortBy[0]);
-				importUsersModule.setSortOrder(
-					this.options.sortDesc[0] ? "desc" : "asc"
-				);
-			}
+
+			const sortBy = this.options.sortBy?.length
+				? this.options.sortBy[0]
+				: { key: "", order: "" };
+
+			importUsersModule.setSortBy(sortBy.key);
+			importUsersModule.setSortOrder(sortBy.order);
+
 			await importUsersModule.fetchAllImportUsers();
 
 			this.loading = false;
@@ -543,7 +584,8 @@ export default {
 $rounded: 50%;
 
 tr.head td {
-	border-bottom: calc(2 * var(--border-width)) solid var(--v-secondary-base) !important;
+	border-bottom: calc(2 * var(--border-width)) solid
+		rgba(var(--v-theme-on-background)) !important;
 }
 
 .v-btn--round {

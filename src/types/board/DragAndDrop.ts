@@ -1,18 +1,10 @@
 import { BoardColumn, BoardSkeletonCard } from "./Board";
 import { AnyContentElement } from "./ContentElement";
 
-export interface CardMove {
-	removedIndex: number | null;
-	addedIndex: number | null;
-	payload: BoardSkeletonCard;
-	columnId?: string;
-	columnIndex?: number;
-}
-
 export interface ColumnMove {
 	addedIndex: number;
-	removedIndex: number;
-	payload: BoardColumn["id"];
+	removedIndex?: number | null;
+	columnId: BoardColumn["id"];
 }
 
 export interface ElementMove {
@@ -49,9 +41,4 @@ export const columnDropPlaceholderOptions = {
 export const verticalCursorKeys: (DragAndDropKey | string)[] = [
 	"ArrowUp",
 	"ArrowDown",
-];
-
-export const horizontalCursorKeys: (DragAndDropKey | string)[] = [
-	"ArrowLeft",
-	"ArrowRight",
 ];

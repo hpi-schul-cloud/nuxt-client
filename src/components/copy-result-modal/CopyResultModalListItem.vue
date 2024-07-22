@@ -1,14 +1,21 @@
 <template>
 	<div v-if="item !== undefined">
-		<div class="d-flex flex-row align-items-center black--text">
+		<div class="d-flex flex-row align-items-center">
 			{{ elementTypeName }} &middot;&nbsp;
 			<a :href="item.url" target="_blank">{{ breadcrumbTitle }}</a>
 		</div>
 		<ul class="ml-4 mb-4 pl-1">
-			<li v-for="(e, index) of elements" :key="index" class="element-info">
-				<span class="black--text"
-					>{{ getElementType(e) }}&nbsp;·&nbsp;{{ getElementTitle(e) }}</span
-				>
+			<li
+				v-for="element in aggregatedElements()"
+				:key="element.type"
+				class="element-info"
+			>
+				<span>
+					{{ element.count }} {{ element.type }}
+					<span v-if="element.count === 1 && element.title">
+						&middot;&nbsp;{{ element.title }}</span
+					>
+				</span>
 			</li>
 		</ul>
 	</div>
@@ -37,7 +44,9 @@ export default {
 			return this.item?.elements || [];
 		},
 		breadcrumbTitle() {
-			return this.item.title ?? "";
+			return (
+				this.item.title || this.$t("components.molecules.copyResult.label.link")
+			);
 		},
 		elementTypeName() {
 			return this.getElementTypeName(this.item.type);
@@ -80,6 +89,8 @@ export default {
 					return this.$t("components.molecules.copyResult.label.geogebra");
 				case CopyApiResponseTypeEnum.LessonContentEtherpad:
 					return this.$t("components.molecules.copyResult.label.etherpad");
+				case CopyApiResponseTypeEnum.CollaborativeTextEditorElement:
+					return this.$t("components.molecules.copyResult.label.etherpad");
 				case CopyApiResponseTypeEnum.LessonContentText:
 					return this.$t("components.molecules.copyResult.label.text");
 				case CopyApiResponseTypeEnum.LessonContentNexboard:
@@ -106,9 +117,32 @@ export default {
 					return this.$t("components.molecules.copyResult.label.timeGroup");
 				case CopyApiResponseTypeEnum.UserGroup:
 					return this.$t("components.molecules.copyResult.label.userGroup");
+				case CopyApiResponseTypeEnum.Columnboard:
+					return this.$t("components.molecules.copyResult.label.columnBoard");
+				case CopyApiResponseTypeEnum.DrawingElement:
+					return this.$t("components.molecules.copyResult.label.tldraw");
 				default:
 					return this.$t("components.molecules.copyResult.label.unknown");
 			}
+		},
+		aggregatedElements() {
+			const elementMap = new Map();
+			for (const element of this.elements) {
+				const typeName = this.getElementType(element);
+				if (elementMap.has(typeName)) {
+					const data = elementMap.get(typeName);
+					data.count++;
+					data.title = "";
+					elementMap.set(typeName, data);
+				} else {
+					elementMap.set(typeName, { count: 1, title: element.title });
+				}
+			}
+			return Array.from(elementMap).map(([type, { count, title }]) => ({
+				type,
+				count,
+				title,
+			}));
 		},
 	},
 };

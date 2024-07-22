@@ -1,24 +1,20 @@
-import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
-import { GlobalFiles, SpecificFiles } from "./types/filePaths";
-import { BusinessError } from "./types/commons";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
+import { BusinessError } from "./types/commons";
+import { GlobalFiles, SpecificFiles } from "./types/filePaths";
 
 const specificFiles = {
 	accessibilityStatement:
 		"Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
-	privacyExemplary:
+	privacy:
 		"Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
-	privacy: "Onlineeinwilligung/Datenschutzerklaerung-Onlineeinwilligung.pdf",
-
-	termsOfUseExemplary:
-		"Onlineeinwilligung/Nutzungsordnung-HPI-Schule-Schueler-Onlineeinwilligung.pdf",
-	termsOfUse: "Onlineeinwilligung/Nutzungsordnung-Onlineeinwilligung.pdf",
-	termsOfUseSchool:
+	termsOfUse:
 		"Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
 	analogConsent: "Dokumente/Einwilligungserklaerung_analog.pdf",
 };
 
-const termsOfUseSchoolThr = "Willkommensordner/Datenschutz/Nutzungsordnung.pdf";
+const termsOfUseThr = "Willkommensordner/Datenschutz/Nutzungsordnung.pdf";
 const privacyThr = "Onlineeinwilligung/Datenschutzhinweise.pdf";
 
 const globalFiles = {
@@ -46,11 +42,8 @@ export default class FilePathsModule extends VuexModule {
 	documentBaseDir = "";
 	specificFiles: SpecificFiles = {
 		accessibilityStatement: "",
-		privacyExemplary: "",
 		privacy: "",
-		termsOfUseExemplary: "",
 		termsOfUse: "",
-		termsOfUseSchool: "",
 		analogConsent: "",
 	};
 	globalFiles: GlobalFiles = {
@@ -114,13 +107,11 @@ export default class FilePathsModule extends VuexModule {
 	init() {
 		try {
 			const theme = envConfigModule.getTheme;
-			if (theme === "thr") {
-				specificFiles.termsOfUseSchool = termsOfUseSchoolThr;
+			if (theme === SchulcloudTheme.Thr) {
+				specificFiles.termsOfUse = termsOfUseThr;
 				specificFiles.privacy = privacyThr;
 			}
-			const baseDir =
-				envConfigModule.getEnv.DOCUMENT_BASE_DIR ||
-				"https://s3.hidrive.strato.com/cloud-instances/";
+			const baseDir = envConfigModule.getEnv.DOCUMENT_BASE_DIR;
 			const documentBaseDirThemed = String(new URL(`${theme}/`, baseDir));
 
 			this.setDocumentBaseDir({ baseDir, theme });

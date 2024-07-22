@@ -5,29 +5,30 @@
 		</h3>
 		<v-switch
 			v-model="checked"
-			inset
 			:label="$t('pages.administration.ldap.classes.activate.import')"
-			dense
+			:true-icon="mdiCheck"
 		/>
 		<p class="title-class">
 			{{ $t("pages.administration.ldap.classes.path.subtitle") }}
 		</p>
 		<base-input
 			data-testid="ldapDataClassesPath"
-			:vmodel="classPathValue"
+			:modelValue="classPathValue"
 			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
 			:placeholder="$t('pages.administration.ldap.classes.path.title')"
 			:label="$t('pages.administration.ldap.classes.path.title')"
 			:info="$t('pages.administration.ldap.classes.path.info')"
-			:validation-model="$v.value.classPath"
+			:validation-model="v$.modelValue.classPath"
 			:validation-messages="classPathValidationMessage"
 			datatest-id="ldapDataClassesclassPath"
-			@update:vmodel="$emit('input', { ...value, classPath: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, classPath: $event })
+			"
 		>
 			<template #icon>
-				<v-icon :color="classesActivatedColor">$mdiFileTreeOutline</v-icon>
+				<v-icon>$mdiFileTreeOutline</v-icon>
 			</template>
 		</base-input>
 		<p class="title-class">
@@ -35,50 +36,59 @@
 		</p>
 		<base-input
 			data-testid="ldapDataClassesNameAttribute"
-			:vmodel="value.nameAttribute"
+			:modelValue="modelValue.nameAttribute"
 			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.notice.title')"
-			:validation-model="$v.value.nameAttribute"
+			:validation-model="v$.modelValue.nameAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesNameAttribute"
-			@update:vmodel="$emit('input', { ...value, nameAttribute: $event })"
+			@update:modelValue="
+				$emit('update:modelValue', { ...modelValue, nameAttribute: $event })
+			"
 		>
 			<template #icon>
-				<v-icon :color="classesActivatedColor" class="custom-icon"
-					>$class</v-icon
-				>
+				<v-icon class="custom-icon">$class</v-icon>
 			</template>
 		</base-input>
 		<base-input
 			data-testid="ldapDataClassesNameparticipantAttribute"
-			:vmodel="value.participantAttribute"
+			:modelValue="modelValue.participantAttribute"
 			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.classes.participant.title')"
-			:validation-model="$v.value.participantAttribute"
+			:validation-model="v$.modelValue.participantAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesParticipantsAttribute"
-			@update:vmodel="
-				$emit('input', { ...value, participantAttribute: $event })
+			@update:modelValue="
+				$emit('update:modelValue', {
+					...modelValue,
+					participantAttribute: $event,
+				})
 			"
 		>
 			<template #icon>
-				<v-icon :color="classesActivatedColor">$mdiAccountGroupOutline</v-icon>
+				<v-icon>$mdiAccountGroupOutline</v-icon>
 			</template>
 		</base-input>
 	</div>
 </template>
 
 <script>
-import { required } from "vuelidate/lib/validators";
+import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
+import { defineComponent } from "vue";
+import useVuelidate from "@vuelidate/core";
+import { mdiCheck } from "@mdi/js";
 
-export default {
+export default defineComponent({
+	setup() {
+		return { v$: useVuelidate() };
+	},
 	props: {
-		value: {
+		modelValue: {
 			type: Object,
 			default() {
 				return {};
@@ -90,7 +100,6 @@ export default {
 	},
 	data() {
 		return {
-			classesActivatedColor: "currentColor",
 			checked: false,
 			classesValidationMessage: [
 				{ key: "required", message: this.$t("common.validation.required") },
@@ -102,6 +111,7 @@ export default {
 				},
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
+			mdiCheck,
 		};
 	},
 	computed: {
@@ -109,37 +119,34 @@ export default {
 			if (this.checked === false) {
 				return "";
 			}
-			return this.value.classPath;
+			return this.modelValue.classPath;
 		},
 		classPathChanged() {
-			return this.value.classPath;
+			return this.modelValue.classPath;
 		},
 	},
 	watch: {
 		validate: function () {
-			this.$v.$touch();
-			this.$emit("update:errors", this.$v.$invalid, "classes");
+			this.v$.$touch();
+			this.$emit("update:errors", this.v$.$invalid, "classes");
 		},
 		checked: function () {
-			this.$emit("update:errors", this.$v.$invalid, "classes");
+			this.$emit("update:errors", this.v$.$invalid, "classes");
 			if (this.checked === false) {
-				this.classesActivatedColor = "currentColor";
 				this.$emit("update:inputs");
-			} else {
-				this.classesActivatedColor = "var(--v-black-base)";
 			}
 		},
 		classPathChanged: function () {
-			this.checked = !!this.value.classPath;
+			this.checked = !!this.modelValue.classPath;
 		},
 	},
 	beforeMount() {
-		if (this.value.classPath) this.checked = true;
+		if (this.modelValue.classPath) this.checked = true;
 	},
 	validations() {
 		if (this.checked === true) {
 			return {
-				value: {
+				modelValue: {
 					classPath: {
 						required,
 						ldapPathRegexValidator: ldapPathRegexValidator,
@@ -150,10 +157,10 @@ export default {
 			};
 		}
 		return {
-			value: {},
+			modelValue: {},
 		};
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>

@@ -3,19 +3,20 @@
 		<v-text-field
 			v-if="customLoginLinkEnabled && !hasSystems"
 			id="school-login-link-0"
-			:value="generateLoginLink()"
+			:model-value="generateLoginLink()"
 			class="school-login-link"
 			:color="getCopyStatus(0) ? 'success' : 'primary'"
 			:label="
 				$t('pages.administration.school.index.authSystems.loginLinkLabel')
 			"
 			readonly
-			dense
+			density="compact"
 			@blur="linkCopyFinished(0)"
 		>
 			<template #append>
 				<v-btn
 					icon
+					variant="text"
 					@click="copyLoginLink(0)"
 					:aria-label="
 						$t('pages.administration.school.index.authSystems.copyLink')
@@ -27,11 +28,7 @@
 				</v-btn>
 			</template>
 		</v-text-field>
-		<v-simple-table
-			v-if="hasSystems"
-			data-testid="system-table"
-			class="table-system"
-		>
+		<v-table v-if="hasSystems" class="table-system" data-testid="system-table">
 			<template #default>
 				<thead>
 					<tr>
@@ -52,35 +49,37 @@
 					</tr>
 				</thead>
 				<tbody>
-					<tr v-for="system in systems" :key="system._id">
+					<tr v-for="system in systems" :key="system.id">
 						<td>{{ system.alias }}</td>
 						<td>{{ system.type }}</td>
 						<td v-if="customLoginLinkEnabled">
 							<v-text-field
 								v-if="isLoginSystem(system)"
-								:id="`school-login-link-${system._id}`"
-								:value="generateLoginLink(system)"
+								:id="`school-login-link-${system.id}`"
+								:model-value="generateLoginLink(system)"
 								class="school-login-link"
-								:color="getCopyStatus(system._id) ? 'success' : 'primary'"
+								:color="getCopyStatus(system.id) ? 'success' : 'primary'"
 								readonly
-								dense
 								@blur="linkCopyFinished"
 							>
 								<template #append>
 									<v-btn
 										icon
-										@click="copyLoginLink(system._id)"
+										variant="text"
+										@click="copyLoginLink(system.id)"
 										:aria-label="
 											$t(
 												'pages.administration.school.index.authSystems.copyLink'
 											)
 										"
 									>
-										<v-icon>{{
-											getCopyStatus(system._id)
-												? iconMdiCheckCircle
-												: iconMdiContentCopy
-										}}</v-icon>
+										<v-icon
+											>{{
+												getCopyStatus(system.id)
+													? iconMdiCheckCircle
+													: iconMdiContentCopy
+											}}
+										</v-icon>
 									</v-btn>
 								</template>
 							</v-text-field>
@@ -90,6 +89,7 @@
 								v-if="isEditable(system) && hasSystemEditPermission"
 								class="edit-system-btn"
 								icon
+								variant="text"
 								:to="redirectTo(system)"
 								:aria-label="ariaLabels(system).edit"
 							>
@@ -99,8 +99,9 @@
 								v-if="isRemovable(system) && hasSystemCreatePermission"
 								class="delete-system-btn"
 								icon
+								variant="text"
 								:aria-label="ariaLabels(system).delete"
-								@click.stop="openConfirmDeleteDialog(system._id)"
+								@click.stop="openConfirmDeleteDialog(system.id)"
 							>
 								<v-icon>{{ iconMdiTrashCanOutline }}</v-icon>
 							</v-btn>
@@ -108,28 +109,30 @@
 					</tr>
 				</tbody>
 			</template>
-		</v-simple-table>
+		</v-table>
 		<v-btn
 			v-if="hasSystemCreatePermission"
 			color="primary"
 			class="mt-8 mb-4 add-ldap float-right"
-			depressed
+			variant="flat"
 			to="/administration/ldap/config"
 		>
 			{{ $t("pages.administration.school.index.authSystems.addLdap") }}
 		</v-btn>
 		<v-custom-dialog
-			v-model="confirmDeleteDialog.isOpen"
+			v-model:isOpen="confirmDeleteDialog.isOpen"
 			class="custom-dialog"
 			:size="375"
 			has-buttons
 			@dialog-confirmed="removeSystem(confirmDeleteDialog.systemId)"
 		>
-			<h2 slot="title" class="text-h4 my-2">
-				{{
-					$t("pages.administration.school.index.authSystems.deleteAuthSystem")
-				}}
-			</h2>
+			<template #title>
+				<h2 class="text-h4 my-2">
+					{{
+						$t("pages.administration.school.index.authSystems.deleteAuthSystem")
+					}}
+				</h2>
+			</template>
 			<template #content>
 				<p class="text-md mt-2">
 					{{
@@ -144,6 +147,7 @@
 </template>
 
 <script>
+import vCustomDialog from "@/components/organisms/vCustomDialog";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import {
 	mdiCheckCircle,
@@ -151,7 +155,6 @@ import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import vCustomDialog from "@/components/organisms/vCustomDialog";
 
 export default {
 	components: {
@@ -180,7 +183,8 @@ export default {
 		hasSystems() {
 			return this.systems.length > 0;
 		},
-		customLoginLinkEnabled: () => envConfigModule.getLoginLinkEnabled,
+		customLoginLinkEnabled: () =>
+			envConfigModule.getEnv.FEATURE_LOGIN_LINK_ENABLED,
 		hasSystemCreatePermission: () => {
 			return authModule.getUserPermissions.includes("system_create");
 		},
@@ -214,9 +218,9 @@ export default {
 		},
 		redirectTo(system) {
 			if (system.alias === "SANIS") {
-				return `/administration/school-settings/provisioning-options?systemId=${system._id}`;
+				return `/administration/school-settings/provisioning-options?systemId=${system.id}`;
 			}
-			return `/administration/ldap/config?id=${system._id}`;
+			return `/administration/ldap/config?id=${system.id}`;
 		},
 		openConfirmDeleteDialog(systemId) {
 			this.confirmDeleteDialog = {
@@ -263,3 +267,9 @@ export default {
 	},
 };
 </script>
+
+<style scoped lang="scss">
+.school-login-link {
+	align-items: center;
+}
+</style>

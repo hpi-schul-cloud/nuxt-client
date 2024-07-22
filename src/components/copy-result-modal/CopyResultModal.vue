@@ -7,15 +7,15 @@
 		:buttons="['close']"
 		@dialog-closed="onDialogClosed"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2 wordbreak-normal">
-			{{ $t("components.molecules.copyResult.title.partial") }}
-		</div>
+		<template #title>
+			<div ref="textTitle" class="text-h4 my-2 wordbreak-normal">
+				{{ $t("components.molecules.copyResult.title.partial") }}
+			</div>
+		</template>
 
-		<template slot="content">
+		<template #content>
 			<div ref="copy-dialog-content" data-testid="copy-result-notifications">
-				<div
-					class="d-flex flex-row pa-2 mb-4 rounded orange lighten-5 background"
-				>
+				<div class="d-flex flex-row pa-2 mb-4 rounded bg-orange-lighten-5">
 					<div class="mx-2">
 						<v-icon color="warning">{{ mdiAlert }}</v-icon>
 					</div>
@@ -24,7 +24,7 @@
 							<p
 								v-if="warning.isShow"
 								:key="index"
-								class="black--text mb-0 aligned-with-icon"
+								class="mb-0 aligned-with-icon"
 								data-testid="warning-title"
 							>
 								<strong>{{ warning.title }}</strong>
@@ -35,26 +35,27 @@
 					</div>
 				</div>
 			</div>
-
-			<div v-if="hasErrors" class="black--text">
-				<p>{{ $t("components.molecules.copyResult.information") }}</p>
-			</div>
-			<copy-result-modal-list :items="items" />
+			<template v-if="hasErrors && isCourse">
+				<div>
+					<p>{{ $t("components.molecules.copyResult.information") }}</p>
+				</div>
+				<copy-result-modal-list :items="filteredItems" />
+			</template>
 		</template>
 	</v-custom-dialog>
 </template>
 
 <script>
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
+import { envConfigModule } from "@/store";
 import {
 	mdiAlert,
 	mdiCheckCircle,
 	mdiCloseCircle,
 	mdiInformation,
 } from "@mdi/js";
-import { envConfigModule } from "@/store";
 
 export default {
 	name: "CopyResultModal",
@@ -84,6 +85,21 @@ export default {
 		items() {
 			return this.copyResultItems;
 		},
+
+		filteredItems() {
+			if (envConfigModule.getEnv.FEATURE_NEXBOARD_COPY_ENABLED) {
+				return this.copyResultItems;
+			}
+
+			return this.copyResultItems.map((item) => {
+				const filteredElements = item.elements.filter(
+					(element) =>
+						element.type !== CopyApiResponseTypeEnum.LessonContentNexboard
+				);
+				return { ...item, elements: filteredElements };
+			});
+		},
+
 		copyResultWarnings() {
 			return [
 				{
@@ -100,6 +116,11 @@ export default {
 					isShow: this.hasNexboardElement,
 					text: this.nexboardInfoText,
 					title: this.$t("components.molecules.copyResult.label.nexboard"),
+				},
+				{
+					isShow: this.hasDrawingElement,
+					text: this.$t("components.molecules.copyResult.tldrawCopy.info"),
+					title: this.$t("components.molecules.copyResult.label.tldraw"),
 				},
 				{
 					isShow: this.hasFileElement || this.isCourse,
@@ -125,15 +146,27 @@ export default {
 			);
 		},
 		hasEtherpadElement() {
-			return this.hasElementOfType(
-				this.items,
-				CopyApiResponseTypeEnum.LessonContentEtherpad
+			return (
+				this.hasElementOfType(
+					this.items,
+					CopyApiResponseTypeEnum.CollaborativeTextEditorElement
+				) ||
+				this.hasElementOfType(
+					this.items,
+					CopyApiResponseTypeEnum.LessonContentEtherpad
+				)
 			);
 		},
 		hasNexboardElement() {
 			return this.hasElementOfType(
 				this.items,
 				CopyApiResponseTypeEnum.LessonContentNexboard
+			);
+		},
+		hasDrawingElement() {
+			return this.hasElementOfType(
+				this.items,
+				CopyApiResponseTypeEnum.DrawingElement
 			);
 		},
 		hasFileElement() {
@@ -169,7 +202,7 @@ export default {
 				: this.$t("components.molecules.copyResult.nexboardCopy.infoTldraw");
 		},
 		externalToolsInfoText() {
-			return envConfigModule.getCtlToolsCopyEnabled
+			return envConfigModule.getEnv.FEATURE_CTL_TOOLS_COPY_ENABLED
 				? this.$t("components.molecules.copyResult.ctlTools.withFeature.info")
 				: this.$t("components.molecules.copyResult.ctlTools.info");
 		},
@@ -186,7 +219,7 @@ export default {
 			return found;
 		},
 		onDialogClosed() {
-			this.$emit("dialog-closed");
+			this.$emit("copy-dialog-closed");
 		},
 	},
 };

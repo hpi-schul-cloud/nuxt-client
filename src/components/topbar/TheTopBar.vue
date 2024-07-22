@@ -6,19 +6,17 @@
 			:class="{ 'expanded-menu': expandedMenu }"
 		>
 			<v-btn
-				icon
+				icon="$mdiMenu"
 				height="60"
 				width="60"
-				color="secondary darken-1"
+				variant="text"
 				:ripple="false"
 				:class="{ 'menu-button': true, 'expanded-menu': expandedMenu }"
 				data-testid="top-menu-btn"
 				:aria-label="$t('global.topbar.mobileMenu.ariaLabel')"
 				role="menu"
-				@click.native="sendEvent('expandMenu')"
-			>
-				<v-icon>$mdiMenu</v-icon>
-			</v-btn>
+				@click="sendEvent('expandMenu')"
+			/>
 			<div class="top-bar-actions">
 				<popup-icon
 					v-if="showStatusAlertIcon"
@@ -34,15 +32,14 @@
 				</popup-icon>
 				<v-btn
 					class="item"
-					icon
-					color="secondary darken-1"
+					icon="$mdiArrowExpand"
+					variant="text"
+					density="comfortable"
 					:title="$t('global.topbar.actions.fullscreen')"
 					:aria-label="$t('global.topbar.actions.fullscreen')"
 					data-testid="fullscreen-btn"
-					@click.native="sendEvent('fullscreen')"
-				>
-					<v-icon>$mdiArrowExpand</v-icon>
-				</v-btn>
+					@click="sendEvent('fullscreen')"
+				/>
 				<popup-icon
 					class="item"
 					icon="$mdiQrcode"
@@ -65,9 +62,9 @@
 					{{ school.name }}
 				</div>
 				<img
-					v-if="school && school.logo_dataUrl"
+					v-if="school?.logo?.url"
 					class="school-logo"
-					:src="school.logo_dataUrl"
+					:src="school.logo.url"
 					ref="image"
 					alt=""
 				/>
@@ -79,58 +76,54 @@
 					class="item"
 					data-testid="item"
 				>
-					<language-menu />
-					<a
-						href="/account"
-						class="account-link"
-						role="menuitem"
-						:aria-label="$t('global.topbar.settings').toString()"
-						data-testid="account-link"
-					>
-						{{ $t("global.topbar.settings") }}
-					</a>
-					<button
-						class="logout-button"
-						data-testid="logout"
-						role="menuitem"
-						:aria-label="$t('common.labels.logout').toString()"
-						@click="sendEvent('logout')"
-					>
-						{{ $t("common.labels.logout") }}
-					</button>
+					<v-list class="my-0 py-0" density="compact">
+						<language-menu class="pl-6" />
+						<v-list-item
+							href="/account"
+							role="menuitem"
+							class="account-link pl-6"
+							:aria-label="$t('global.topbar.settings').toString()"
+							data-testid="account-link"
+						>
+							{{ $t("global.topbar.settings") }}
+						</v-list-item>
+						<v-list-item
+							class="logout-button pl-6"
+							role="menuitem"
+							data-testid="logout"
+							:aria-label="$t('common.labels.logout').toString()"
+							@click="sendEvent('logout')"
+						>
+							{{ $t("common.labels.logout") }}
+						</v-list-item>
+					</v-list>
 				</popup-icon-initials>
 			</div>
 		</div>
 		<v-btn
 			v-else
-			color="secondary darken-1"
-			fab
-			dark
-			depressed
+			icon="$mdiArrowCollapse"
+			variant="flat"
 			width="40"
 			height="40"
 			class="fullscreen-button-active"
-			@click.native="sendEvent('fullscreen')"
-		>
-			<v-icon>$mdiArrowCollapse</v-icon>
-		</v-btn>
+			@click="sendEvent('fullscreen')"
+		/>
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, onMounted, computed } from "vue";
-import {
-	I18N_KEY,
-	STATUS_ALERTS_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
-import { User } from "@/store/types/auth";
+import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import LanguageMenu from "@/modules/ui/layout/topbar/LanguageMenu.vue";
+import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
 import PopupIcon from "@/components/topbar/PopupIcon.vue";
 import PopupIconInitials from "@/components/topbar/PopupIconInitials.vue";
-import HelpDropdown from "@/components/topbar/HelpDropdown.vue";
-import MenuQrCode from "@/components/topbar/MenuQrCode.vue";
 import StatusAlerts from "@/components/topbar/StatusAlerts.vue";
-import LanguageMenu from "@/components/topbar/LanguageMenu.vue";
+import { MeSchoolResponse, MeUserResponse } from "@/serverApi/v3";
+import { STATUS_ALERTS_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { PropType, computed, defineComponent, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: {
@@ -149,18 +142,22 @@ export default defineComponent({
 			type: Boolean,
 		},
 		school: {
-			type: Object,
+			type: Object as PropType<MeSchoolResponse>,
 			default: () => ({
 				name: "",
 			}),
 		},
 		user: {
-			type: Object as PropType<User>,
+			type: Object as PropType<MeUserResponse>,
 			default: null,
+		},
+		roleNames: {
+			type: Array as PropType<string[]>,
+			default: () => [],
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
+		const { t } = useI18n();
 		const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
 
 		onMounted(() => {
@@ -173,9 +170,8 @@ export default defineComponent({
 			emit("action", eventName);
 		};
 
-		const role = computed(() => {
-			const roleName = props.user.roles.map((r) => r.name);
-			return i18n.t(`common.roleName.${roleName[0]}`).toString();
+		const translatedRoleName = computed(() => {
+			return t(`common.roleName.${props.roleNames[0]}`).toString();
 		});
 
 		const statusAlerts = computed(() => {
@@ -192,13 +188,13 @@ export default defineComponent({
 					.length !== 0;
 
 			return statusAlertsIncludeDanger
-				? "var(--v-error-base)"
-				: "var(--v-info-base)";
+				? "rgba(var(--v-theme-error))"
+				: "rgba(var(--v-theme-info))";
 		});
 
 		return {
 			sendEvent,
-			role,
+			role: translatedRoleName,
 			statusAlerts,
 			showStatusAlertIcon,
 			statusAlertColor,
@@ -215,6 +211,14 @@ export default defineComponent({
 	display: flex;
 	align-items: center;
 	height: var(--sidebar-item-height);
+
+	@include breakpoint(tablet) {
+		max-width: calc(100vw - var(--sidebar-width-tablet));
+	}
+
+	@include breakpoint(desktop) {
+		max-width: calc(100vw - var(--sidebar-width));
+	}
 
 	.top-main {
 		display: flex;
@@ -298,26 +302,24 @@ export default defineComponent({
 
 .logout-button,
 .account-link {
-	--hover-color: #f5f5f5;
-
 	width: 100%;
 	padding: 8px 27px;
-	color: var(--v-secondary-base);
 	text-align: left;
 	text-decoration: none;
 	cursor: pointer;
 	background-color: transparent;
 	border-color: transparent;
 	outline: none;
+}
 
-	&:hover,
-	&:focus {
-		background-color: var(--hover-color);
-	}
+.account-link {
+	color: rgba(var(--v-theme-on-surface));
 }
 
 .school-logo {
 	max-height: 100%;
+	// Without max-width Firefox calculates the width of the surrounding flexbox wrongly for large images. Thus it must be set here.
+	max-width: 100%;
 	margin-left: 1rem;
 }
 </style>

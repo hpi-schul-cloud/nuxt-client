@@ -1,19 +1,22 @@
 import * as useExternalToolUtilsComposable from "@/composables/external-tool-mappings.composable";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import Vue from "vue";
+import { ToolParameterLocation } from "@/store/external-tool";
+import NotifierModule from "@/store/notifier";
+import { ComponentProps } from "@/types/vue";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	schoolExternalToolConfigurationTemplateFactory,
 	schoolExternalToolFactory,
+	toolParameterFactory,
 } from "@@/tests/test-utils/factory";
 import {
-	ExternalToolConfigurationTemplate,
-	SchoolExternalTool,
-} from "@/store/external-tool";
-import { ContextExternalTool } from "@/store/external-tool/context-external-tool";
-import { BusinessError } from "@/store/types/commons";
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
+import { flushPromises, mount } from "@vue/test-utils";
+import { VAutocomplete, VBtn } from "vuetify/lib/components/index.mjs";
+import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 
 describe("ExternalToolConfigurator", () => {
@@ -24,28 +27,20 @@ describe("ExternalToolConfigurator", () => {
 			getBusinessErrorTranslationKey: () => "",
 		});
 
-	const getWrapper = (propsData: {
-		templates: ExternalToolConfigurationTemplate[];
-		configuration?: SchoolExternalTool | ContextExternalTool;
-		error?: BusinessError;
-		loading?: boolean;
-	}) => {
-		document.body.setAttribute("data-app", "true");
+	const getWrapper = (
+		props: ComponentProps<typeof ExternalToolConfigurator>
+	) => {
+		const notifierModule = createModuleMocks(NotifierModule);
 
-		const wrapper: Wrapper<Vue> = mount(
-			ExternalToolConfigurator as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
+		const wrapper = mount(ExternalToolConfigurator, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
-				propsData: {
-					...propsData,
-				},
-			}
-		);
+			},
+			props,
+		});
 
 		return {
 			wrapper,
@@ -56,62 +51,7 @@ describe("ExternalToolConfigurator", () => {
 		jest.clearAllMocks();
 	});
 
-	describe("autocomplete", () => {
-		describe("when selecting a new configuration", () => {
-			const setup = () => {
-				const template = schoolExternalToolConfigurationTemplateFactory.build({
-					logoUrl: "some logo",
-				});
-
-				const { wrapper } = getWrapper({
-					templates: [template],
-				});
-
-				const openSelect = async (wrapper: Wrapper<Vue>) => {
-					await wrapper
-						.find('[data-testId="configuration-select"]')
-						.trigger("click");
-
-					await wrapper
-						.find(".menuable__content__active")
-						.findAll(".v-list-item")
-						.at(0)
-						.trigger("click");
-				};
-
-				return {
-					wrapper,
-					template,
-					openSelect,
-				};
-			};
-
-			// TODO: comment in the test when https://github.com/vuetifyjs/vuetify/pull/16272 is merged
-			it.skip("should display name and logo of an tool configuration in selection list", async () => {
-				const { wrapper, template, openSelect } = setup();
-
-				await openSelect(wrapper);
-
-				const selectionRow = wrapper.find(".row");
-
-				expect(selectionRow.find(".v-image__image").exists()).toBeTruthy();
-				expect(selectionRow.find("span").text()).toEqual(
-					expect.stringContaining(template.name)
-				);
-			});
-
-			// TODO: comment in the test when https://github.com/vuetifyjs/vuetify/pull/16272 is merged
-			it.skip("should set enable the save button", async () => {
-				const { wrapper, openSelect } = setup();
-
-				await openSelect(wrapper);
-
-				const button = wrapper.find('[data-testId="save-button"]');
-
-				expect(button.attributes("disabled")).toBeUndefined();
-			});
-		});
-
+	describe("Search box", () => {
 		describe("when editing a configuration", () => {
 			const setup = () => {
 				const template = schoolExternalToolConfigurationTemplateFactory.build();
@@ -130,7 +70,9 @@ describe("ExternalToolConfigurator", () => {
 			it("should disable the selection", async () => {
 				const { wrapper } = setup();
 
-				const select = wrapper.find('[data-testId="configuration-select"]');
+				const select = wrapper
+					.findComponent('[data-testId="configuration-select"]')
+					.get("input");
 
 				expect(select.attributes("disabled")).toBeDefined();
 			});
@@ -138,11 +80,129 @@ describe("ExternalToolConfigurator", () => {
 			it("should display the edited tool in the selection", async () => {
 				const { wrapper, template } = setup();
 
-				const selectionRow = wrapper.find(".row");
+				const selectionRow = wrapper.find(".v-autocomplete .v-list-item-title");
 
-				expect(selectionRow.find("span").text()).toEqual(
-					expect.stringContaining(template.name)
+				expect(selectionRow.text()).toEqual(template.name);
+			});
+		});
+
+		describe("when clicking on the 'paste' icon", () => {
+			const setup = () => {
+				const clipboardText = "https://google.de";
+				const template = schoolExternalToolConfigurationTemplateFactory.build();
+
+				const clipboardMock = createMock<Clipboard>();
+				Object.assign(navigator, { clipboard: clipboardMock });
+
+				const { wrapper } = getWrapper({
+					templates: [template],
+				});
+
+				clipboardMock.readText.mockResolvedValue(clipboardText);
+
+				return {
+					wrapper,
+					template,
+					clipboardMock,
+					clipboardText,
+				};
+			};
+
+			it("should paste the text from the clipboard into the input field", async () => {
+				const { wrapper, clipboardMock, clipboardText } = setup();
+
+				const icon = wrapper
+					.find(".v-input__append")
+					.find(".v-icon--clickable");
+				await icon.trigger("click");
+				await flushPromises();
+
+				const autocomplete = wrapper.findComponent(VAutocomplete);
+
+				expect(clipboardMock.readText).toHaveBeenCalled();
+				expect(autocomplete.props().search).toEqual(clipboardText);
+			});
+		});
+
+		describe("when pasting a url for an existing tool into the search box", () => {
+			beforeEach(() => {
+				const vueTeleportDiv = document.createElement("div");
+				vueTeleportDiv.className = "v-overlay-container";
+				document.body.appendChild(vueTeleportDiv);
+			});
+
+			afterEach(() => {
+				document.body.innerHTML = "";
+			});
+
+			const setup = () => {
+				const template = schoolExternalToolConfigurationTemplateFactory.build({
+					baseUrl: "https://test.com/:pathParam1/spacer/:pathParam2",
+					parameters: [
+						toolParameterFactory.build({
+							name: "pathParam1",
+							location: ToolParameterLocation.PATH,
+						}),
+						toolParameterFactory.build({
+							name: "queryParam1",
+							location: ToolParameterLocation.QUERY,
+						}),
+						toolParameterFactory.build({
+							name: "pathParam2",
+							location: ToolParameterLocation.PATH,
+						}),
+					],
+				});
+
+				const { wrapper } = getWrapper({
+					templates: [
+						template,
+						schoolExternalToolConfigurationTemplateFactory.build(),
+					],
+				});
+
+				return {
+					wrapper,
+					template,
+				};
+			};
+
+			it("should only show the matched tool in the selection list", async () => {
+				const { wrapper, template } = setup();
+
+				await wrapper.find(".v-field__input").trigger("click");
+
+				const searchInput = wrapper
+					.find('[data-testId="configuration-select"]')
+					.find("input");
+				await searchInput.setValue(
+					"https://test.com/pathParamValue1/spacer/pathParamValue2?queryParam1=queryParamValue1"
 				);
+
+				const selectionItems = wrapper.findAllComponents(
+					'[data-testid="configuration-select-item"]'
+				);
+
+				expect(selectionItems.length).toEqual(1);
+				expect(selectionItems[0].text()).toEqual(template.name);
+			});
+
+			it("should automatically fill the parameters", async () => {
+				const { wrapper, template } = setup();
+
+				const autocomplete = wrapper.findComponent(VAutocomplete);
+				await autocomplete.setValue(
+					"https://test.com/pathParamValue1/spacer/pathParamValue2?queryParam1=queryParamValue1",
+					"search"
+				);
+				await autocomplete.setValue(template);
+
+				const settings = wrapper.getComponent(ExternalToolConfigSettings);
+				expect(settings.props().modelValue).toEqual([
+					"pathParamValue1",
+					"queryParamValue1",
+					"pathParamValue2",
+				]);
 			});
 		});
 	});
@@ -155,7 +215,9 @@ describe("ExternalToolConfigurator", () => {
 						schoolExternalToolConfigurationTemplateFactory.buildList(1),
 				});
 
-				await wrapper.find('[data-testId="cancel-button"]').vm.$emit("click");
+				await wrapper
+					.findComponent<typeof VBtn>('[data-testId="cancel-button"]')
+					.trigger("click");
 
 				expect(wrapper.emitted("cancel")).toBeDefined();
 			});
@@ -171,8 +233,9 @@ describe("ExternalToolConfigurator", () => {
 					configuration: schoolExternalToolFactory.build(),
 				});
 
-				wrapper.find('[data-testId="save-button"]').vm.$emit("click");
-				await Vue.nextTick();
+				await wrapper
+					.findComponent<typeof VBtn>('[data-testId="save-button"]')
+					.trigger("click");
 
 				expect(wrapper.emitted("save")).toBeDefined();
 			});

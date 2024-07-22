@@ -1,29 +1,40 @@
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { User } from "@/store/types/auth";
 import {
 	AUTH_MODULE_KEY,
-	I18N_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { i18nMock } from "@@/tests/test-utils/i18nMock";
-import { mdiAlert, mdiCheckCircle } from "@mdi/js";
-import { mount, Wrapper } from "@vue/test-utils";
-import Vue, { ref } from "vue";
-import ExternalToolSection from "./ExternalToolSection.vue";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
 import {
+	envsFactory,
+	meResponseFactory,
 	schoolExternalToolFactory,
 	schoolExternalToolMetadataFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils/factory";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { mdiAlert, mdiCheckCircle } from "@mdi/js";
+import { mount, VueWrapper } from "@vue/test-utils";
+import { nextTick, ref } from "vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Router, useRouter } from "vue-router";
+import ExternalToolSection from "./ExternalToolSection.vue";
+import { SchoolExternalToolMetadata } from "@/store/external-tool";
+import { ConfigResponse } from "@/serverApi/v3";
 
 jest.mock("@data-external-tool");
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 describe("ExternalToolSection", () => {
 	let el: HTMLDivElement;
@@ -32,7 +43,12 @@ describe("ExternalToolSection", () => {
 		ReturnType<typeof useSchoolExternalToolUsage>
 	>;
 
-	const getWrapper = (getters: Partial<SchoolExternalToolsModule> = {}) => {
+	const createDatasheetButtonIndex = 1;
+
+	const getWrapper = (
+		getters: Partial<SchoolExternalToolsModule> = {},
+		envs: Partial<ConfigResponse> = {}
+	) => {
 		el = document.createElement("div");
 		el.setAttribute("data-app", "true");
 		document.body.appendChild(el);
@@ -47,22 +63,35 @@ describe("ExternalToolSection", () => {
 
 		const notifierModule = createModuleMocks(NotifierModule);
 
+		const mockMe = meResponseFactory.build({ school: { id: "schoolId" } });
 		const authModule = createModuleMocks(AuthModule, {
-			getUser: {
-				schoolId: "schoolId",
-			} as User,
+			getSchool: mockMe.school,
 		});
 
-		const wrapper: Wrapper<Vue> = mount(ExternalToolSection, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				[I18N_KEY.valueOf()]: i18nMock,
-				[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]: schoolExternalToolsModule,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-				[AUTH_MODULE_KEY.valueOf()]: authModule,
+		const envConfigModule = createModuleMocks(EnvConfigModule, {
+			getEnv: envsFactory.build(envs),
+		});
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
+
+		const wrapper = mount(ExternalToolSection, {
+			global: {
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					vueDompurifyHTMLPlugin,
+				],
+
+				provide: {
+					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
+						schoolExternalToolsModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+				},
 			},
+
 			stubs: {
 				VIcon: true,
 			},
@@ -111,18 +140,19 @@ describe("ExternalToolSection", () => {
 		const setupItems = () => {
 			const firstToolName = "Test";
 			const secondToolName = "Test2";
+			const schoolExternalTool = schoolExternalToolFactory.build({
+				id: "testId",
+				toolId: "toolId",
+				schoolId: "schoolId",
+				parameters: [],
+				name: firstToolName,
+				status: schoolToolConfigurationStatusFactory.build(),
+				isDeactivated: false,
+			});
+
 			const { wrapper, schoolExternalToolsModule } = getWrapper({
 				getSchoolExternalTools: [
-					{
-						id: "testId",
-						toolId: "toolId",
-						schoolId: "schoolId",
-						parameters: [],
-						name: firstToolName,
-						status: schoolToolConfigurationStatusFactory.build(),
-						version: 1,
-						isDeactivated: false,
-					},
+					schoolExternalTool,
 					{
 						id: "testId2",
 						toolId: "toolId",
@@ -132,7 +162,6 @@ describe("ExternalToolSection", () => {
 						status: schoolToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 						}),
-						version: 1,
 						isDeactivated: false,
 					},
 					{
@@ -142,18 +171,22 @@ describe("ExternalToolSection", () => {
 						parameters: [],
 						name: "Test3",
 						status: schoolToolConfigurationStatusFactory.build({
-							isDeactivated: true,
+							isGloballyDeactivated: true,
 						}),
-						version: 1,
 						isDeactivated: true,
 					},
 				],
 			});
+
+			const windowMock = createMock<Window>();
+			jest.spyOn(window, "open").mockImplementation(() => windowMock);
+
 			return {
 				wrapper,
 				schoolExternalToolsModule,
 				firstToolName,
 				secondToolName,
+				schoolExternalTool,
 			};
 		};
 
@@ -162,16 +195,18 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setupItems();
 
 				const vueWrapperArray = wrapper
-					.find(".v-data-table-header")
+					.findComponent({
+						name: "v-data-table",
+					})
 					.findAll("th");
 
-				expect(vueWrapperArray.at(0).find("span").text()).toEqual(
+				expect(vueWrapperArray[0].find("span").text()).toEqual(
 					"common.labels.name"
 				);
-				expect(vueWrapperArray.at(1).find("span").text()).toEqual(
+				expect(vueWrapperArray[1].find("span").text()).toEqual(
 					"components.administration.externalToolsSection.table.header.status"
 				);
-				expect(vueWrapperArray.at(2).find("span").text()).toEqual("");
+				expect(vueWrapperArray[2].find("span").text()).toEqual("");
 			});
 		});
 
@@ -179,41 +214,41 @@ describe("ExternalToolSection", () => {
 			it("names should be rendered in the datatable", () => {
 				const { wrapper, firstToolName, secondToolName } = setupItems();
 
-				const tableRows = wrapper.find("tbody").findAll("tr");
-				const firstRow = tableRows.at(0).findAll("td");
-				const secondRow = tableRows.at(1).findAll("td");
+				const tableRows = wrapper
+					.findComponent({
+						name: "v-data-table",
+					})
+					.findAll("tr");
+				const firstRow = tableRows[1].findAll("td");
+				const secondRow = tableRows[2].findAll("td");
 
-				expect(firstRow.at(0).text()).toEqual(firstToolName);
-				expect(secondRow.at(0).text()).toEqual(secondToolName);
+				expect(firstRow[0].text()).toEqual(firstToolName);
+				expect(secondRow[0].text()).toEqual(secondToolName);
 			});
 
 			it("status should be rendered in the datatable", () => {
 				const { wrapper } = setupItems();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
-				const firstRow = tableRows.at(0).findAll("td");
-				const secondRow = tableRows.at(1).findAll("td");
-				const thirdRow = tableRows.at(2).findAll("td");
 
-				expect(firstRow.at(1).find("span").text()).toEqual(
+				const firstRow = tableRows[0].findAll("td");
+				const secondRow = tableRows[1].findAll("td");
+				const thirdRow = tableRows[2].findAll("td");
+
+				expect(true).toBeTruthy();
+				expect(firstRow[1].find("span").text()).toEqual(
 					"components.externalTools.status.latest"
 				);
-				expect(firstRow.at(1).findComponent({ name: "v-icon" }).text()).toEqual(
-					mdiCheckCircle
-				);
-				expect(secondRow.at(1).find("span").text()).toEqual(
+				expect(firstRow[1].html()).toContain(mdiCheckCircle);
+				expect(secondRow[1].find("span").text()).toEqual(
 					"components.externalTools.status.outdated"
 				);
-				expect(
-					secondRow.at(1).findComponent({ name: "v-icon" }).text()
-				).toEqual(mdiAlert);
-				expect(secondRow.at(1).find("span").text()).toEqual(
+				expect(secondRow[1].html()).toContain(mdiAlert);
+				expect(secondRow[1].find("span").text()).toEqual(
 					"components.externalTools.status.outdated"
 				);
-				expect(thirdRow.at(1).findComponent({ name: "v-icon" }).text()).toEqual(
-					mdiAlert
-				);
-				expect(thirdRow.at(1).find("span").text()).toEqual(
+				expect(thirdRow[1].html()).toContain(mdiAlert);
+				expect(thirdRow[1].find("span").text()).toEqual(
 					"components.externalTools.status.deactivated"
 				);
 			});
@@ -224,41 +259,62 @@ describe("ExternalToolSection", () => {
 
 					const tableRows = wrapper.find("tbody").findAll("tr");
 
-					const firstRowButtons = tableRows.at(1).findAll("button");
+					const firstRowButtons = tableRows[1].findAll("button");
 					expect(
-						firstRowButtons.at(0).classes().includes("v-btn--icon")
+						firstRowButtons[0].classes().includes("v-btn--icon")
 					).toBeTruthy();
 					expect(
-						firstRowButtons.at(1).classes().includes("v-btn--icon")
+						firstRowButtons[1].classes().includes("v-btn--icon")
 					).toBeTruthy();
+					expect(
+						firstRowButtons.at(2)?.classes().includes("v-btn--icon")
+					).toBeTruthy();
+				});
+
+				it("should open a new tab with click on create datasheet", async () => {
+					const { wrapper, schoolExternalTool } = setupItems();
+					const toolId = schoolExternalTool.toolId;
+
+					const tableRows = wrapper.find("tbody").findAll("tr");
+					const firstRowButtons = tableRows.at(0)?.findAll("button");
+					const datasheetButton = firstRowButtons?.at(
+						createDatasheetButtonIndex
+					);
+
+					await datasheetButton!.trigger("click");
+					await nextTick();
+
+					expect(window.open).toHaveBeenCalledWith(
+						`/api/v3/tools/external-tools/${toolId}/datasheet`
+					);
 				});
 
 				it("a dialog should be displayed with click on delete", async () => {
 					const { wrapper } = setupItems();
 
 					const tableRows = wrapper.find("tbody").findAll("tr");
-					const firstRowButtons = tableRows.at(0).findAll("button");
-					const deleteButton = firstRowButtons.at(1);
+					const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
 					await deleteButton.trigger("click");
 
-					expect(wrapper.find('div[role="dialog"]')).toBeDefined();
-					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-					//@ts-ignore
+					expect(wrapper.findComponent({ name: "v-dialog" })).toBeDefined();
 					expect(wrapper.vm.isDeleteDialogOpen).toBeTruthy();
 				});
 
 				describe("when dialog is rendered", () => {
 					it("should have tool name in text", async () => {
-						const { wrapper, firstToolName } = setupItems();
+						const { wrapper } = setupItems();
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
-						const firstRowButtons = tableRows.at(0).findAll("button");
-						const deleteButton = firstRowButtons.at(1);
+						const deleteButton = tableRows[0].get(
+							'[data-testid="deleteAction"]'
+						);
 
 						await deleteButton.trigger("click");
 
-						expect(wrapper.findAll("p").at(1).text()).toContain(firstToolName);
+						expect(wrapper.find("p").html()).toContain(
+							"components.administration.externalToolsSection.info"
+						);
 					});
 				});
 
@@ -273,20 +329,19 @@ describe("ExternalToolSection", () => {
 									parameters: [],
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),
-									version: 1,
 									isDeactivated: false,
 								},
 							],
 						});
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
+						const deleteButton = tableRows[0].get(
+							'[data-testid="deleteAction"]'
+						);
 
-						const firstRowButtons = tableRows.at(0).findAll("button");
-
-						const deleteButton = firstRowButtons.at(1);
 						await deleteButton.trigger("click");
 
-						const confirmButton = wrapper.find(
+						const confirmButton = wrapper.getComponent(
 							"[data-testId=delete-dialog-confirm]"
 						);
 						await confirmButton.trigger("click");
@@ -306,21 +361,20 @@ describe("ExternalToolSection", () => {
 									parameters: [],
 									name: "firstToolName",
 									status: schoolToolConfigurationStatusFactory.build(),
-									version: 1,
 									isDeactivated: false,
 								},
 							],
 						});
 
 						const tableRows = wrapper.find("tbody").findAll("tr");
+						const deleteButton = tableRows[0].get(
+							'[data-testid="deleteAction"]'
+						);
 
-						const firstRowButtons = tableRows.at(0).findAll("button");
-
-						const deleteButton = firstRowButtons.at(1);
 						await deleteButton.trigger("click");
 
-						const confirmButton = wrapper.find(
-							"[data-testId=delete-dialog-confirm]"
+						const confirmButton = wrapper.findComponent(
+							"[data-testId='delete-dialog-confirm']"
 						);
 						await confirmButton.trigger("click");
 
@@ -337,16 +391,16 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = getWrapper();
 
 				const expectedName = "Name";
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				//@ts-ignore
+
 				wrapper.vm.itemToDelete = {
+					id: "id",
 					name: expectedName,
-					status: schoolToolConfigurationStatusFactory.build(),
-					outdated: false,
+					externalToolId: "externalToolId",
+					statusText: "statusText",
+					isOutdated: false,
+					isDeactivated: false,
 				};
 
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 
 				expect(itemName).toEqual(expectedName);
@@ -357,12 +411,8 @@ describe("ExternalToolSection", () => {
 			it("should return an empty string", () => {
 				const { wrapper } = getWrapper();
 
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				//@ts-ignore
 				wrapper.vm.itemToDelete = undefined;
 
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				//@ts-ignore
 				const itemName: string = wrapper.vm.getItemName;
 
 				expect(itemName).toEqual("");
@@ -398,47 +448,227 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows.at(0).findAll("button");
-
-				const deleteButton = firstRowButtons.at(1);
 				await deleteButton.trigger("click");
 
-				const dialog = wrapper.find('[data-testid="delete-dialog"]');
+				const dialog = wrapper.findComponent({ name: "v-dialog" });
 
 				expect(dialog.isVisible()).toBeTruthy();
 			});
 
-			it("should display tool usage count", async () => {
+			it("should display tool usage count for courses and board elements", async () => {
 				const { wrapper, schoolExternalToolMetadata } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows.at(0).findAll("button");
-
-				const deleteButton = firstRowButtons.at(1);
 				await deleteButton.trigger("click");
 
-				const dialogContent = wrapper.find(
-					'[data-testid="delete-dialog-content"]'
-				);
+				const expectedDialogContents = [
+					"components.administration.externalToolsSection.dialog.content.header",
+					"components.administration.externalToolsSection.dialog.content.courses",
+					"components.administration.externalToolsSection.dialog.content.boardElements",
+					"components.administration.externalToolsSection.dialog.content.warning",
+				];
+				const dialogContents = wrapper.findAllComponents({
+					name: "renderHTML",
+				});
 
-				expect(dialogContent.text()).toEqual(
-					`components.administration.externalToolsSection.dialog.content {"itemName":"name","courseCount":${schoolExternalToolMetadata.course},"boardElementCount":${schoolExternalToolMetadata.boardElement}}`
+				expect(dialogContents.length).toBeGreaterThanOrEqual(
+					expectedDialogContents.length
 				);
+				for (const content of dialogContents) {
+					expect(expectedDialogContents).toContain(content.props().html);
+				}
+
+				expect(wrapper.vm.getItemName).toEqual("name");
+				expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
 			});
 
 			it("should not display notification", async () => {
 				const { wrapper, notifierModule } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows.at(0).findAll("button");
-
-				const deleteButton = firstRowButtons.at(1);
 				await deleteButton.trigger("click");
 
 				expect(notifierModule.show).not.toHaveBeenCalled();
+			});
+		});
+
+		const setupMediaBoardMetadataAndEnv = (
+			toolUsageMetadata: SchoolExternalToolMetadata,
+			enableMediaShelf: boolean
+		) => {
+			const schoolExternalToolMetadata =
+				schoolExternalToolMetadataFactory.build(toolUsageMetadata);
+
+			useSchoolExternalToolUsageMock.metadata = ref(schoolExternalToolMetadata);
+
+			const envs: Partial<ConfigResponse> = {
+				FEATURE_MEDIA_SHELF_ENABLED: enableMediaShelf,
+			};
+			const { wrapper } = getWrapper(
+				{
+					getSchoolExternalTools: [
+						schoolExternalToolFactory.build(),
+						schoolExternalToolFactory.build(),
+					],
+				},
+				envs
+			);
+
+			return {
+				wrapper,
+				schoolExternalToolMetadata,
+			};
+		};
+
+		const expectMediaBoardDialogIsShown = (deleteDialogWrapper: VueWrapper) => {
+			const dialogContents = deleteDialogWrapper.findAllComponents({
+				name: "renderHTML",
+			});
+
+			const mediaBoardDialogContentIndex = dialogContents.findIndex(
+				(content) =>
+					content.attributes()["data-testid"] ===
+					"delete-dialog-content-media-shelves"
+			);
+			expect(mediaBoardDialogContentIndex).toBeGreaterThan(0);
+
+			const mediaBoardDialogContent =
+				dialogContents[mediaBoardDialogContentIndex];
+			const dialogContentBeforeMediaBoard =
+				dialogContents[mediaBoardDialogContentIndex - 1];
+
+			expect(mediaBoardDialogContent.text()).toEqual(
+				"components.administration.externalToolsSection.dialog.content.mediaShelves"
+			);
+
+			expect(dialogContentBeforeMediaBoard.classes()).toContain("mb-0");
+		};
+
+		const expectMediaBoardDialogIsHidden = (
+			deleteDialogWrapper: VueWrapper
+		) => {
+			const dialogContents = deleteDialogWrapper.findAllComponents({
+				name: "renderHTML",
+			});
+
+			const mediaBoardDialogContentIndex = dialogContents.findIndex(
+				(content) =>
+					content.attributes()["data-testid"] ===
+					"delete-dialog-content-media-shelves"
+			);
+			expect(mediaBoardDialogContentIndex).toEqual(-1);
+
+			const dialogContentBeforeWarning =
+				dialogContents[dialogContents.length - 2];
+
+			expect(dialogContentBeforeWarning.classes()).not.toContain("mb-0");
+		};
+
+		describe("when metadata with media board > 0 is given", () => {
+			const setup = (enabledMediaShelf: boolean) => {
+				const metadataWithNonZeroMediaBoard: SchoolExternalToolMetadata = {
+					course: 3,
+					boardElement: 2,
+					mediaBoard: 1,
+				};
+				const { wrapper, schoolExternalToolMetadata } =
+					setupMediaBoardMetadataAndEnv(
+						metadataWithNonZeroMediaBoard,
+						enabledMediaShelf
+					);
+				return {
+					wrapper,
+					schoolExternalToolMetadata,
+				};
+			};
+
+			describe("when FEATURE_MEDIA_SHELF_ENABLED is true", () => {
+				it("should show tool usage count for media board", async () => {
+					const { wrapper, schoolExternalToolMetadata } = setup(true);
+
+					const tableRows = wrapper.find("tbody").findAll("tr");
+					const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
+
+					await deleteButton.trigger("click");
+
+					expectMediaBoardDialogIsShown(wrapper);
+
+					expect(wrapper.vm.getItemName).toEqual("name");
+					expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
+				});
+			});
+
+			describe("when FEATURE_MEDIA_SHELF_ENABLED is false", () => {
+				it("should show tool usage count for media board", async () => {
+					const { wrapper, schoolExternalToolMetadata } = setup(false);
+
+					const tableRows = wrapper.find("tbody").findAll("tr");
+					const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
+
+					await deleteButton.trigger("click");
+
+					expectMediaBoardDialogIsShown(wrapper);
+
+					expect(wrapper.vm.getItemName).toEqual("name");
+					expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
+				});
+			});
+		});
+
+		describe("when metadata with 0 media board is given", () => {
+			const setup = (enabledMediaShelf: boolean) => {
+				const metadataWithNonZeroMediaBoard: SchoolExternalToolMetadata = {
+					course: 3,
+					boardElement: 2,
+					mediaBoard: 0,
+				};
+				const { wrapper, schoolExternalToolMetadata } =
+					setupMediaBoardMetadataAndEnv(
+						metadataWithNonZeroMediaBoard,
+						enabledMediaShelf
+					);
+				return {
+					wrapper,
+					schoolExternalToolMetadata,
+				};
+			};
+
+			describe("when FEATURE_MEDIA_SHELF_ENABLED is true", () => {
+				it("should show tool usage count for media board", async () => {
+					const { wrapper, schoolExternalToolMetadata } = setup(true);
+
+					const tableRows = wrapper.find("tbody").findAll("tr");
+					const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
+
+					await deleteButton.trigger("click");
+
+					expectMediaBoardDialogIsShown(wrapper);
+
+					expect(wrapper.vm.getItemName).toEqual("name");
+					expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
+				});
+			});
+
+			describe("when FEATURE_MEDIA_SHELF_ENABLED is false", () => {
+				it("should not show tool usage count for media board", async () => {
+					const { wrapper, schoolExternalToolMetadata } = setup(false);
+
+					const tableRows = wrapper.find("tbody").findAll("tr");
+					const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
+
+					await deleteButton.trigger("click");
+
+					expectMediaBoardDialogIsHidden(wrapper);
+
+					expect(wrapper.vm.getItemName).toEqual("name");
+					expect(wrapper.vm.metadata).toEqual(schoolExternalToolMetadata);
+				});
 			});
 		});
 
@@ -463,10 +693,8 @@ describe("ExternalToolSection", () => {
 				const { wrapper } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows.at(0).findAll("button");
-
-				const deleteButton = firstRowButtons.at(1);
 				await deleteButton.trigger("click");
 
 				const dialog = wrapper.find('[data-testid="delete-dialog"]');
@@ -478,10 +706,8 @@ describe("ExternalToolSection", () => {
 				const { wrapper, notifierModule } = setup();
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
+				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
 
-				const firstRowButtons = tableRows.at(0).findAll("button");
-
-				const deleteButton = firstRowButtons.at(1);
 				await deleteButton.trigger("click");
 
 				expect(notifierModule.show).toHaveBeenCalledWith({

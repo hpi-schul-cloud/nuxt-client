@@ -1,76 +1,60 @@
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, MountOptions } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import BaseQrCode from "@/components/base/BaseQrCode.vue";
-import Vue from "vue";
-import { I18N_KEY } from "@/utils/inject";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
 
 describe("@/components/share/ShareModalResult", () => {
-	const getWrapper = (attrs = {}) => {
-		const wrapper = mount(ShareModalResult as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
+	const setup = () => {
+		const shareUrl = "http://example.com";
+
+		const wrapper = mount(ShareModalResult, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: ["QRCode"],
 			},
-			...attrs,
+			props: {
+				type: "courses",
+				shareUrl,
+			},
 		});
 
-		return wrapper;
+		return { wrapper, shareUrl };
 	};
 
-	beforeEach(() => {
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		document.body.setAttribute("data-app", "true");
-	});
-
-	it("should not render without required props", () => {
-		console.error = jest.fn();
-
-		getWrapper();
-
-		expect(console.error).toBeCalledWith(
-			expect.stringContaining('Missing required prop: "shareUrl"')
-		);
-	});
-
 	it("should render with required props", () => {
-		const shareUrl = "http://example.com";
-		const type = "course";
-		const wrapper = getWrapper({ propsData: { shareUrl, type } });
-		expect(wrapper.props("shareUrl")).toStrictEqual(shareUrl);
+		const { wrapper, shareUrl } = setup();
+
+		expect(wrapper.props()).toEqual({ shareUrl: shareUrl, type: "courses" });
 	});
 
 	it("should render QR-Code if onShowQrCode is called", async () => {
-		const shareUrl = "http://example.com";
-		const type = "course";
-		const wrapper = getWrapper({ propsData: { shareUrl, type } });
+		const { wrapper, shareUrl } = setup();
 
-		expect(wrapper.findAllComponents(BaseQrCode)).toHaveLength(0);
+		expect(wrapper.findAllComponents({ name: "QRCode" })).toHaveLength(0);
 
 		const actionButton = wrapper.find("[data-testid=qrCodeAction]");
 		await actionButton.trigger("click");
 
-		const qrCodeComponent = wrapper.findAllComponents(BaseQrCode);
+		const qrCodeComponent = wrapper.findAllComponents({ name: "QRCode" });
 		expect(qrCodeComponent).toHaveLength(1);
-		expect(qrCodeComponent.at(0).props("url")).toStrictEqual(shareUrl);
+		expect(qrCodeComponent[0].props("url")).toStrictEqual(shareUrl);
 	});
 
 	it("should hide buttons if qrCode is visible", async () => {
-		const shareUrl = "http://example.com";
-		const type = "course";
-		const wrapper = getWrapper({ propsData: { shareUrl, type } });
+		const { wrapper, shareUrl } = setup();
 
 		expect(wrapper.findAll("[data-testid*=Action]")).not.toHaveLength(0);
 
 		const actionButton = wrapper.find("[data-testid=qrCodeAction]");
 		await actionButton.trigger("click");
 
-		const qrCodeComponents = wrapper.findAllComponents(BaseQrCode);
+		const qrCodeComponents = wrapper.findAllComponents({ name: "QRCode" });
 
 		expect(qrCodeComponents).toHaveLength(1);
-		expect(qrCodeComponents.at(0).props("url")).toStrictEqual(shareUrl);
+		expect(qrCodeComponents[0].props("url")).toStrictEqual(shareUrl);
 		expect(wrapper.findAll("[data-testid*=Action]")).toHaveLength(0);
 	});
 
@@ -80,9 +64,7 @@ describe("@/components/share/ShareModalResult", () => {
 		};
 		Object.assign(navigator, { clipboard: mockClipboard });
 
-		const shareUrl = "http://example.com";
-		const type = "course";
-		const wrapper = getWrapper({ propsData: { shareUrl, type } });
+		const { wrapper, shareUrl } = setup();
 
 		const actionButton = wrapper.find("[data-testid=copyAction]");
 		await actionButton.trigger("click");
@@ -93,22 +75,24 @@ describe("@/components/share/ShareModalResult", () => {
 	});
 
 	it("should follow href and emit done onMailShareUrl()", async () => {
-		const mockLocation = {
-			assign: jest.fn(),
-		};
-		Object.assign(window.location, mockLocation);
+		const assignSpy = jest.fn();
+		Object.defineProperty(window, "location", {
+			set: () => createMock<Location>(),
+			get: () =>
+				createMock<Location>({
+					assign: assignSpy,
+				}),
+		});
 
-		const shareUrl = "http://example.com";
-		const type = "course";
-		const wrapper = getWrapper({ propsData: { shareUrl, type } });
+		const { wrapper, shareUrl } = setup();
 
 		const actionButton = wrapper.find("[data-testid=shareMailAction]");
 		await actionButton.trigger("click");
 
-		const result: string = mockLocation.assign.mock.calls[0][0];
+		const result = assignSpy.mock.calls[0][0];
 
 		expect(result).toContain(encodeURIComponent(shareUrl));
-		expect(mockLocation.assign).toHaveBeenCalled();
+		expect(assignSpy).toHaveBeenCalled();
 		expect(wrapper.emitted("done")).toHaveLength(1);
 	});
 
@@ -116,9 +100,7 @@ describe("@/components/share/ShareModalResult", () => {
 		const mockSharePromise = jest.fn().mockReturnValue(Promise.resolve());
 		Object.assign(navigator, { share: mockSharePromise });
 
-		const shareUrl = "http://example.com";
-		const type = "course";
-		const wrapper = getWrapper({ propsData: { shareUrl, type } });
+		const { wrapper, shareUrl } = setup();
 
 		const actionButton = wrapper.find("[data-testid=mobilePlatformAction]");
 		await actionButton.trigger("click");

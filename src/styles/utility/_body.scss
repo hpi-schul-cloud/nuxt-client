@@ -9,6 +9,10 @@ body.is-noscroll {
 	display: flex;
 }
 
+textarea.v-field__input {
+	height: var(--text-base-size);
+}
+
 .justify-content-space-between {
 	justify-content: space-between;
 }
@@ -42,8 +46,7 @@ body.is-noscroll {
 }
 
 :focus {
-	outline: 2px solid var(--v-secondary-lighten1);
-	outline-offset: 3px;
+	outline-offset: 2px;
 }
 
 /* width */

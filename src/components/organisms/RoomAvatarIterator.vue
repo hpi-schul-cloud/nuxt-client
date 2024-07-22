@@ -1,23 +1,23 @@
 <template>
 	<v-data-iterator
-		:items="items"
+		:items="avatars"
 		:items-per-page="maxItems"
 		hide-default-footer
 		no-data-text=""
 	>
-		<template #default="props">
+		<template #default="{ items }">
 			<v-container>
 				<v-row align="center">
 					<v-col
-						v-for="item in props.items"
-						:key="item.id"
+						v-for="(item, i) in items"
+						:key="`${item.raw.title}-${i}`"
 						class="d-flex justify-center ma-0 mt-1 mb-0.5 pa-0"
 						:cols="colCount"
 					>
 						<vRoomAvatar
 							:draggable="canDraggable"
 							class="room-avatar"
-							:item="item"
+							:item="item.raw"
 							:size="itemSize"
 							:show-badge="true"
 							:condense-layout="condenseLayout"
@@ -30,38 +30,42 @@
 	</v-data-iterator>
 </template>
 
-<script lang="ts">
-import Vue from "vue";
+<script setup lang="ts">
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 
-// eslint-disable-next-line vue/require-direct-export
-export default Vue.extend({
-	components: {
-		vRoomAvatar,
+type ItemType = {
+	id: string;
+	title: string;
+	shortTitle: string;
+	displayColor: string;
+	xPosition: number;
+	yPosition: number;
+	to: string;
+};
+
+defineProps({
+	avatars: {
+		type: Array<ItemType>,
+		default: () => [{}],
 	},
-	props: {
-		items: {
-			type: Array,
-			default: () => [{}],
-		},
-		colCount: {
-			type: Number,
-			default: 4,
-		},
-		condenseLayout: {
-			type: Boolean,
-		},
-		itemSize: {
-			type: String,
-			default: "3em",
-		},
-		maxItems: {
-			type: Number,
-			default: 9,
-		},
-		canDraggable: {
-			type: Boolean,
-		},
+	colCount: {
+		type: Number,
+		default: 4,
+	},
+	condenseLayout: {
+		type: Boolean,
+	},
+	itemSize: {
+		type: String,
+		default: "3em",
+	},
+	maxItems: {
+		type: Number,
+		default: 9,
+	},
+	canDraggable: {
+		type: Boolean,
 	},
 });
+defineEmits(["startDrag"]);
 </script>

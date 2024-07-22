@@ -1,0 +1,133 @@
+<template>
+	<v-card
+		class="mb-4"
+		data-testid="board-submission-element"
+		dense
+		elevation="0"
+		variant="outlined"
+		ref="submissionContentElement"
+		:ripple="false"
+		tabindex="0"
+		@keydown.up.down="onKeydownArrow"
+	>
+		<div>
+			<SubmissionContentElementDisplay
+				v-if="!isEditMode"
+				:dueDate="modelValue.dueDate"
+				:loading="loading"
+				:submissions="submissions"
+				:studentSubmission="studentSubmission"
+				:isOverdue="isOverdue"
+				@update:completed="onUpdateCompleted"
+			/>
+			<SubmissionContentElementEdit
+				v-if="isEditMode"
+				:dueDate="modelValue.dueDate"
+				:loading="loading"
+				:submissions="submissions"
+				:isOverdue="isOverdue"
+				@update:dueDate="($event) => (modelValue.dueDate = $event)"
+			>
+				<BoardMenu scope="element">
+					<BoardMenuActionMoveUp @click="onMoveElementUp" />
+					<BoardMenuActionMoveDown @click="onMoveElementDown" />
+					<BoardMenuActionDelete @click="onDeleteElement" />
+				</BoardMenu>
+			</SubmissionContentElementEdit>
+		</div>
+	</v-card>
+</template>
+
+<script lang="ts">
+import { defineComponent, PropType, ref, toRef } from "vue";
+import { SubmissionContainerElementResponse } from "@/serverApi/v3";
+import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
+import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
+import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useI18n } from "vue-i18n";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
+
+export default defineComponent({
+	name: "SubmissionContentElement",
+	components: {
+		BoardMenu,
+		BoardMenuActionMoveUp,
+		BoardMenuActionMoveDown,
+		BoardMenuActionDelete,
+		SubmissionContentElementDisplay,
+		SubmissionContentElementEdit,
+	},
+	props: {
+		element: {
+			type: Object as PropType<SubmissionContainerElementResponse>,
+			required: true,
+		},
+		isEditMode: { type: Boolean, required: true },
+	},
+	emits: [
+		"move-keyboard:edit",
+		"move-down:edit",
+		"move-up:edit",
+		"delete:element",
+	],
+	setup(props, { emit }) {
+		const { t } = useI18n();
+		const submissionContentElement = ref(null);
+		const element = toRef(props, "element");
+		useBoardFocusHandler(element.value.id, submissionContentElement);
+
+		const { modelValue } = useContentElementState(props);
+
+		const {
+			loading,
+			submissions,
+			studentSubmission,
+			isOverdue,
+			updateSubmissionItem,
+		} = useSubmissionContentElementState(element.value.id, modelValue);
+
+		const onKeydownArrow = (event: KeyboardEvent) => {
+			if (props.isEditMode) {
+				event.preventDefault();
+				emit("move-keyboard:edit", event);
+			}
+		};
+
+		const onMoveElementDown = () => emit("move-down:edit");
+
+		const onMoveElementUp = () => emit("move-up:edit");
+
+		const onDeleteElement = async (confirmation: Promise<boolean>) => {
+			const shouldDelete = await confirmation;
+			if (shouldDelete) {
+				emit("delete:element", element.value.id);
+			}
+		};
+
+		const onUpdateCompleted = (completed: boolean) => {
+			updateSubmissionItem(completed);
+		};
+
+		return {
+			modelValue,
+			submissionContentElement,
+			submissions,
+			studentSubmission,
+			loading,
+			isOverdue,
+			onKeydownArrow,
+			onMoveElementDown,
+			onMoveElementUp,
+			onDeleteElement,
+			onUpdateCompleted,
+			t,
+		};
+	},
+});
+</script>

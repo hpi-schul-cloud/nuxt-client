@@ -1,6 +1,6 @@
 import { SubmissionItemResponse } from "@/serverApi/v3";
 import { Factory } from "fishery";
-import { timestampsResponseFactory } from "@@/tests/test-utils/factory";
+import { timestampsResponseFactory } from "./timestampsResponseFactory";
 
 export const submissionItemResponseFactory =
 	Factory.define<SubmissionItemResponse>(({ sequence }) => ({

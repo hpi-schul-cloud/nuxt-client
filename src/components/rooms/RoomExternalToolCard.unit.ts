@@ -1,17 +1,20 @@
-import EnvConfigModule from "@/store/env-config";
-import { ExternalToolDisplayData } from "@/store/external-tool/external-tool-display-data";
-import { ENV_CONFIG_MODULE_KEY, I18N_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 import { externalToolDisplayDataFactory } from "@@/tests/test-utils/factory/externalToolDisplayDataFactory";
 import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
-import { useExternalToolLaunchState } from "@data-external-tool";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import {
+	ExternalToolDisplayData,
+	useContextExternalToolConfigurationStatus,
+	useExternalToolLaunchState,
+} from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import flushPromises from "flush-promises";
-import Vue from "vue";
+import { RoomDotMenu } from "@ui-room-details";
+import { flushPromises, mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
-import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
 
 jest.mock("@data-external-tool");
 
@@ -20,45 +23,43 @@ describe("RoomExternalToolCard", () => {
 		ReturnType<typeof useExternalToolLaunchState>
 	>;
 
+	let useContextExternalToolConfigurationStatusMock: DeepMocked<
+		ReturnType<typeof useContextExternalToolConfigurationStatus>
+	>;
+
 	beforeEach(() => {
 		useExternalToolLaunchStateMock =
 			createMock<ReturnType<typeof useExternalToolLaunchState>>();
 
+		useContextExternalToolConfigurationStatusMock =
+			createMock<
+				ReturnType<typeof useContextExternalToolConfigurationStatus>
+			>();
+
 		jest
 			.mocked(useExternalToolLaunchState)
 			.mockReturnValue(useExternalToolLaunchStateMock);
+
+		jest
+			.mocked(useContextExternalToolConfigurationStatus)
+			.mockReturnValue(useContextExternalToolConfigurationStatusMock);
 	});
 
 	afterEach(() => {
 		jest.resetAllMocks();
+		jest.clearAllMocks();
 	});
 
 	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
-		document.body.setAttribute("data-app", "true");
-
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getCtlContextConfigurationEnabled: true,
+		const wrapper = mount(RoomExternalToolCard, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				tool,
+				canEdit,
+			},
 		});
-
-		const wrapper: Wrapper<Vue> = mount(
-			RoomExternalToolCard as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				propsData: {
-					tool,
-					canEdit,
-				},
-				provide: {
-					[I18N_KEY.valueOf()]: {
-						$t: (key: string): string => key,
-						tc: (key: string): string => key,
-					},
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-				},
-			}
-		);
 
 		return {
 			wrapper,
@@ -69,15 +70,15 @@ describe("RoomExternalToolCard", () => {
 		it("should load the launch request", async () => {
 			getWrapper(
 				externalToolDisplayDataFactory.build({
-					status: ContextExternalToolConfigurationStatusFactory.build(),
+					status: contextExternalToolConfigurationStatusFactory.build(),
 				}),
 				false
 			);
 
-			await Vue.nextTick();
+			await nextTick();
 
 			expect(
-				useExternalToolLaunchStateMock.fetchLaunchRequest
+				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalled();
 		});
 	});
@@ -87,7 +88,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isDeactivated: true,
 						}),
 					});
@@ -115,7 +116,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build(),
+						status: contextExternalToolConfigurationStatusFactory.build(),
 					});
 
 				const { wrapper } = getWrapper(tool, false);
@@ -130,7 +131,61 @@ describe("RoomExternalToolCard", () => {
 				const { wrapper } = setup();
 
 				const statusChip = wrapper.find(
-					'[data-testId="tool-card-status-text"]'
+					'[data-testId="tool-card-status-deactivated"]'
+				);
+
+				expect(statusChip.exists()).toEqual(false);
+			});
+		});
+
+		describe("when tool status is not licensed", () => {
+			const setup = () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
+							isNotLicensed: true,
+						}),
+					});
+
+				const { wrapper } = getWrapper(tool, false);
+
+				return {
+					wrapper,
+					tool,
+				};
+			};
+
+			it("should display not licensed chip", () => {
+				const { wrapper } = setup();
+
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-not-licensed"]'
+				);
+
+				expect(statusChip.text()).toEqual("common.medium.chip.notLicensed");
+			});
+		});
+
+		describe("when tool status is licensed", () => {
+			const setup = () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build(),
+					});
+
+				const { wrapper } = getWrapper(tool, false);
+
+				return {
+					wrapper,
+					tool,
+				};
+			};
+
+			it("should display no chip", () => {
+				const { wrapper } = setup();
+
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-not-licensed"]'
 				);
 
 				expect(statusChip.exists()).toEqual(false);
@@ -141,12 +196,12 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeContext: true,
 						}),
 					});
 
-				const { wrapper } = getWrapper(tool, false);
+				const { wrapper } = getWrapper(tool, true);
 
 				return {
 					wrapper,
@@ -157,9 +212,7 @@ describe("RoomExternalToolCard", () => {
 			it("should display outdated chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find(
-					'[data-testId="tool-card-status-outdated"]'
-				);
+				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
 
 				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
 			});
@@ -169,7 +222,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 						}),
 					});
@@ -185,9 +238,7 @@ describe("RoomExternalToolCard", () => {
 			it("should display outdated chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find(
-					'[data-testId="tool-card-status-outdated"]'
-				);
+				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
 
 				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
 			});
@@ -197,7 +248,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isOutdatedOnScopeSchool: true,
 							isOutdatedOnScopeContext: true,
 						}),
@@ -214,9 +265,7 @@ describe("RoomExternalToolCard", () => {
 			it("should display outdated chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find(
-					'[data-testId="tool-card-status-outdated"]'
-				);
+				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
 
 				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
 			});
@@ -226,7 +275,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build(),
+						status: contextExternalToolConfigurationStatusFactory.build(),
 					});
 
 				const { wrapper } = getWrapper(tool, false);
@@ -240,9 +289,7 @@ describe("RoomExternalToolCard", () => {
 			it("should display no chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find(
-					'[data-testId="tool-card-status-text"]'
-				);
+				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
 
 				expect(statusChip.exists()).toEqual(false);
 			});
@@ -252,7 +299,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
 							isIncompleteOnScopeContext: true,
 						}),
 					});
@@ -268,11 +315,9 @@ describe("RoomExternalToolCard", () => {
 			it("should display incomplete chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find(
-					'[data-testId="tool-card-status-incomplete"]'
-				);
+				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
 
-				expect(statusChip.text()).toEqual("pages.rooms.tools.incomplete");
+				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
 			});
 		});
 
@@ -280,7 +325,7 @@ describe("RoomExternalToolCard", () => {
 			const setup = () => {
 				const tool: ExternalToolDisplayData =
 					externalToolDisplayDataFactory.build({
-						status: ContextExternalToolConfigurationStatusFactory.build(),
+						status: contextExternalToolConfigurationStatusFactory.build(),
 					});
 
 				const { wrapper } = getWrapper(tool, false);
@@ -294,11 +339,37 @@ describe("RoomExternalToolCard", () => {
 			it("should display no chip", () => {
 				const { wrapper } = setup();
 
-				const statusChip = wrapper.find(
-					'[data-testId="tool-card-status-text"]'
-				);
+				const statusChip = wrapper.find('[data-testId="tool-card-status"]');
 
 				expect(statusChip.exists()).toEqual(false);
+			});
+		});
+
+		describe("when tool status is incomplete operational", () => {
+			const setup = () => {
+				const tool: ExternalToolDisplayData =
+					externalToolDisplayDataFactory.build({
+						status: contextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOperationalOnScopeContext: true,
+						}),
+					});
+
+				const { wrapper } = getWrapper(tool, false);
+
+				return {
+					wrapper,
+					tool,
+				};
+			};
+
+			it("should display incomplete operational chip", () => {
+				const { wrapper } = setup();
+
+				const statusChip = wrapper.find(
+					'[data-testId="tool-card-status-incompleteOperational"]'
+				);
+
+				expect(statusChip.text()).toEqual("pages.rooms.tools.outdated");
 			});
 		});
 
@@ -307,7 +378,7 @@ describe("RoomExternalToolCard", () => {
 				const setup = async () => {
 					const toolDisplayData: ExternalToolDisplayData =
 						externalToolDisplayDataFactory.build({
-							status: ContextExternalToolConfigurationStatusFactory.build({
+							status: contextExternalToolConfigurationStatusFactory.build({
 								isOutdatedOnScopeSchool: true,
 							}),
 						});
@@ -335,7 +406,7 @@ describe("RoomExternalToolCard", () => {
 				const setup = async () => {
 					const toolDisplayData: ExternalToolDisplayData =
 						externalToolDisplayDataFactory.build({
-							status: ContextExternalToolConfigurationStatusFactory.build({
+							status: contextExternalToolConfigurationStatusFactory.build({
 								isOutdatedOnScopeContext: true,
 							}),
 						});
@@ -363,7 +434,7 @@ describe("RoomExternalToolCard", () => {
 				const setup = async () => {
 					const toolDisplayData: ExternalToolDisplayData =
 						externalToolDisplayDataFactory.build({
-							status: ContextExternalToolConfigurationStatusFactory.build({
+							status: contextExternalToolConfigurationStatusFactory.build({
 								isOutdatedOnScopeSchool: true,
 								isOutdatedOnScopeContext: true,
 							}),
@@ -392,7 +463,7 @@ describe("RoomExternalToolCard", () => {
 				const setup = async () => {
 					const toolDisplayData: ExternalToolDisplayData =
 						externalToolDisplayDataFactory.build({
-							status: ContextExternalToolConfigurationStatusFactory.build({
+							status: contextExternalToolConfigurationStatusFactory.build({
 								isIncompleteOnScopeContext: true,
 							}),
 						});
@@ -440,6 +511,16 @@ describe("RoomExternalToolCard", () => {
 				await wrapper.trigger("click");
 
 				expect(useExternalToolLaunchStateMock.launchTool).toHaveBeenCalled();
+			});
+
+			it("should fetch launch request after launch", async () => {
+				const { wrapper } = await setup();
+
+				await wrapper.trigger("click");
+
+				expect(
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
+				).toHaveBeenCalled();
 			});
 		});
 
@@ -489,7 +570,7 @@ describe("RoomExternalToolCard", () => {
 		it("should display the item menu", () => {
 			const { wrapper } = setup();
 
-			const itemMenu = wrapper.find('[data-testId="tool-card-menu"]');
+			const itemMenu = wrapper.findComponent(RoomDotMenu);
 
 			expect(itemMenu.isVisible()).toEqual(true);
 		});
@@ -497,12 +578,14 @@ describe("RoomExternalToolCard", () => {
 		it("should display the edit menu item", async () => {
 			const { wrapper } = setup();
 
-			const itemMenu = wrapper.find(
-				'[data-testId="tool-card-menu"] > .three-dot-button'
-			);
-			await itemMenu.trigger("click");
+			const menuButton = wrapper
+				.findComponent(RoomDotMenu)
+				.get('[data-testid="room-tool-three-dot-button"]');
+			await menuButton.trigger("click");
 
-			const toolEditMenuItem = wrapper.find('[data-testId="tool-edit"]');
+			const toolEditMenuItem = wrapper.findComponent(
+				'[data-testid="tool-edit"]'
+			);
 
 			expect(toolEditMenuItem.exists()).toEqual(true);
 		});
@@ -510,12 +593,15 @@ describe("RoomExternalToolCard", () => {
 		it("should display the delete menu item", async () => {
 			const { wrapper } = setup();
 
-			const itemMenu = wrapper.find(
-				'[data-testId="tool-card-menu"] > .three-dot-button'
-			);
-			await itemMenu.trigger("click");
+			const menuButton = wrapper
+				.findComponent(RoomDotMenu)
+				.get('[data-testid="room-tool-three-dot-button"]');
 
-			const toolDeleteMenuItem = wrapper.find('[data-testId="tool-delete"]');
+			await menuButton.trigger("click");
+
+			const toolDeleteMenuItem = wrapper.findComponent(
+				'[data-testId="tool-delete"]'
+			);
 
 			expect(toolDeleteMenuItem.exists()).toEqual(true);
 		});
@@ -524,12 +610,15 @@ describe("RoomExternalToolCard", () => {
 			it("should emit the edit event", async () => {
 				const { wrapper, tool } = setup();
 
-				const itemMenu = wrapper.find(
-					'[data-testId="tool-card-menu"] > .three-dot-button'
-				);
-				await itemMenu.trigger("click");
+				const menuButton = wrapper
+					.findComponent(RoomDotMenu)
+					.get('[data-testid="room-tool-three-dot-button"]');
+				await menuButton.trigger("click");
 
-				const toolDeleteMenuItem = wrapper.find('[data-testId="tool-edit"]');
+				const toolDeleteMenuItem = wrapper.findComponent(
+					'[data-testId="tool-edit"]'
+				);
+
 				await toolDeleteMenuItem.trigger("click");
 
 				expect(wrapper.emitted("edit")).toContainEqual([tool]);
@@ -540,12 +629,15 @@ describe("RoomExternalToolCard", () => {
 			it("should emit the delete event", async () => {
 				const { wrapper, tool } = setup();
 
-				const itemMenu = wrapper.find(
-					'[data-testId="tool-card-menu"] > .three-dot-button'
-				);
-				await itemMenu.trigger("click");
+				const menuButton = wrapper
+					.findComponent(RoomDotMenu)
+					.get('[data-testid="room-tool-three-dot-button"]');
+				await menuButton.trigger("click");
 
-				const toolDeleteMenuItem = wrapper.find('[data-testId="tool-delete"]');
+				const toolDeleteMenuItem = wrapper.findComponent(
+					'[data-testId="tool-delete"]'
+				);
+
 				await toolDeleteMenuItem.trigger("click");
 
 				expect(wrapper.emitted("delete")).toContainEqual([tool]);
@@ -566,7 +658,9 @@ describe("RoomExternalToolCard", () => {
 		it("should not display the item menu", () => {
 			const { wrapper } = setup();
 
-			const itemMenu = wrapper.find('[data-testId="tool-card-menu"]');
+			const itemMenu = wrapper.find(
+				'[data-testid="room-tool-three-dot-button"]'
+			);
 
 			expect(itemMenu.exists()).toEqual(false);
 		});

@@ -1,33 +1,32 @@
-import Vue from "vue";
-import { MountOptions, mount } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount } from "@vue/test-utils";
 import PopupIcon from "./PopupIcon.vue";
-
-const testProps = {
-	icon: "qrcode",
-	color: "red",
-	centered: true,
-};
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("@/components/topbar/PopupIcon", () => {
-	it("contains an icon", () => {
-		const wrapper = mount(PopupIcon as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			propsData: testProps,
+	const setup = () => {
+		const wrapper = mount(PopupIcon, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				icon: "qrcode",
+				color: "red",
+				centered: true,
+			},
 		});
+
+		return { wrapper };
+	};
+	it("contains an icon", () => {
+		const { wrapper } = setup();
 		expect(wrapper.find(".popup .v-icon").exists()).toBe(true);
 	});
 
 	it("it pops up when it is clicked", async () => {
-		const wrapper = mount(PopupIcon, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			propsData: testProps,
-		});
-
+		const { wrapper } = setup();
 		wrapper.find(".popup .icon-button").trigger("click");
 		await wrapper.vm.$nextTick();
 		expect(wrapper.find(".popup-content").classes()).toContain("visible");

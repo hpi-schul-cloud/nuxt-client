@@ -1,17 +1,25 @@
-import { I18N_KEY } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { provisioningOptionsDataFactory } from "@@/tests/test-utils/factory";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { ConfigResponse } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
+import { ComponentProps } from "@/types/vue";
+import { ENV_CONFIG_MODULE_KEY, THEME_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import {
+	envsFactory,
+	provisioningOptionsDataFactory,
+} from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import {
 	ProvisioningOptions,
 	useProvisioningOptionsState,
 } from "@data-provisioning-options";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import flushPromises from "flush-promises";
-import Vue, { ref } from "vue";
-import VueRouter, { Route } from "vue-router";
-import * as routerComposables from "vue-router/composables";
+import { flushPromises, mount } from "@vue/test-utils";
+import { nextTick, ref } from "vue";
+import { Router, useRouter } from "vue-router";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 
 jest.mock("@data-provisioning-options");
@@ -20,55 +28,62 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-const $theme = {
-	name: "instance name",
-};
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
-describe(ProvisioningOptionsPage.name, () => {
+jest
+	.spyOn(window, "scrollTo")
+	.mockImplementation(() => ({ top: 0, behavior: "smooth" }));
+
+describe("ProvisioningOptionsPage", () => {
 	let useProvisioningOptionsStateMock: DeepMocked<
 		ReturnType<typeof useProvisioningOptionsState>
 	>;
-	let router: DeepMocked<VueRouter>;
+	const router = createMock<Router>();
 
 	const getWrapper = (
-		propsData: { systemId: string } = { systemId: "systemId" },
-		provisioningOptions: ProvisioningOptions = provisioningOptionsDataFactory.build()
+		props: ComponentProps<typeof ProvisioningOptionsPage> = {
+			systemId: "systemId",
+		},
+		envConfig: ConfigResponse = envsFactory.build({
+			FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
+		})
 	) => {
-		document.body.setAttribute("data-app", "true");
+		useRouterMock.mockReturnValue(router);
 
-		useProvisioningOptionsStateMock.isLoading = ref(false);
-		useProvisioningOptionsStateMock.provisioningOptionsData =
-			ref(provisioningOptions);
+		const envConfigModule = createModuleMocks(EnvConfigModule, {
+			getEnv: envConfig,
+		});
 
-		router = createMock<VueRouter>();
-		jest.spyOn(routerComposables, "useRouter").mockReturnValue(router);
-
-		const wrapper: Wrapper<Vue> = mount(
-			ProvisioningOptionsPage as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
+		const wrapper = mount(ProvisioningOptionsPage, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[THEME_KEY.valueOf()]: {
+						name: "instance name",
+					},
 				},
-				propsData: {
-					...propsData,
-				},
-				mocks: {
-					$theme,
-				},
-			}
-		);
+			},
+			props: {
+				...props,
+			},
+		});
 
 		return {
 			wrapper,
+			envConfigModule,
 		};
 	};
 
 	beforeEach(() => {
-		useProvisioningOptionsStateMock =
-			createMock<ReturnType<typeof useProvisioningOptionsState>>();
+		useProvisioningOptionsStateMock = createMock<
+			ReturnType<typeof useProvisioningOptionsState>
+		>({
+			isLoading: ref(false),
+			provisioningOptionsData: ref(provisioningOptionsDataFactory.build()),
+			error: ref(),
+		});
 
 		jest
 			.mocked(useProvisioningOptionsState)
@@ -85,13 +100,11 @@ describe(ProvisioningOptionsPage.name, () => {
 
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
-			expect(breadcrumbs.at(0).text()).toEqual(
-				"pages.administration.index.title"
-			);
-			expect(breadcrumbs.at(1).text()).toEqual(
+			expect(breadcrumbs[0].text()).toEqual("pages.administration.index.title");
+			expect(breadcrumbs[1].text()).toEqual(
 				"pages.administration.school.index.title"
 			);
-			expect(breadcrumbs.at(2).text()).toEqual(
+			expect(breadcrumbs[2].text()).toEqual(
 				"components.administration.provisioningOptions.page.title"
 			);
 		});
@@ -114,7 +127,7 @@ describe(ProvisioningOptionsPage.name, () => {
 			it("should load provisioning options", async () => {
 				getWrapper({ systemId: "systemId" });
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					useProvisioningOptionsStateMock.fetchProvisioningOptionsData
@@ -124,41 +137,98 @@ describe(ProvisioningOptionsPage.name, () => {
 	});
 
 	describe("checkboxes", () => {
-		it("should render 3 checkboxes", () => {
-			const provisioningOptions = provisioningOptionsDataFactory.build();
-			const { wrapper } = getWrapper(
-				{
-					systemId: "systemId",
-				},
-				provisioningOptions
-			);
+		describe("when the licensing is disabled", () => {
+			const setup = () => {
+				const provisioningOptions = provisioningOptionsDataFactory.build();
 
-			const checkboxes = wrapper.findAllComponents({
-				name: "v-checkbox",
-			}).wrappers;
+				useProvisioningOptionsStateMock.provisioningOptionsData.value =
+					provisioningOptions;
 
-			expect(checkboxes.length).toEqual(3);
-			expect(checkboxes[0].find("input").attributes("aria-checked")).toEqual(
-				provisioningOptions.class.toString()
-			);
-			expect(checkboxes[1].find("input").attributes("aria-checked")).toEqual(
-				provisioningOptions.course.toString()
-			);
-			expect(checkboxes[2].find("input").attributes("aria-checked")).toEqual(
-				provisioningOptions.others.toString()
-			);
+				const { wrapper } = getWrapper(
+					{ systemId: "systemId" },
+					envsFactory.build({
+						FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
+					})
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render 3 checkboxes", () => {
+				const { wrapper } = setup();
+
+				const classCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-class]"
+				);
+				const courseCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-course]"
+				);
+				const othersCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-others]"
+				);
+				const schoolExternalToolCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-school-external-tools]"
+				);
+
+				expect(classCheckbox.isVisible()).toEqual(true);
+				expect(courseCheckbox.isVisible()).toEqual(true);
+				expect(othersCheckbox.isVisible()).toEqual(true);
+				expect(schoolExternalToolCheckbox.exists()).toEqual(false);
+			});
+		});
+
+		describe("when the licensing is enabled", () => {
+			const setup = () => {
+				const provisioningOptions = provisioningOptionsDataFactory.build();
+
+				useProvisioningOptionsStateMock.provisioningOptionsData.value =
+					provisioningOptions;
+
+				const { wrapper } = getWrapper(
+					{ systemId: "systemId" },
+					envsFactory.build({
+						FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true,
+					})
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render 4 checkboxes", () => {
+				const { wrapper } = setup();
+
+				const classCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-class]"
+				);
+				const courseCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-course]"
+				);
+				const othersCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-others]"
+				);
+				const schoolExternalToolCheckbox = wrapper.find(
+					"[data-testid=checkbox-option-school-external-tools]"
+				);
+
+				expect(classCheckbox.isVisible()).toEqual(true);
+				expect(courseCheckbox.isVisible()).toEqual(true);
+				expect(othersCheckbox.isVisible()).toEqual(true);
+				expect(schoolExternalToolCheckbox.isVisible()).toEqual(true);
+			});
 		});
 	});
 
 	describe("buttons", () => {
 		describe("when clicking the cancel button", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper(
-					{
-						systemId: "systemId",
-					},
-					provisioningOptionsDataFactory.build()
-				);
+				useProvisioningOptionsStateMock.provisioningOptionsData.value =
+					provisioningOptionsDataFactory.build();
+
+				const { wrapper } = getWrapper();
 
 				const cancelButton = wrapper.find(
 					'[data-testid="provisioning-options-cancel-button"]'
@@ -197,24 +267,19 @@ describe(ProvisioningOptionsPage.name, () => {
 		describe("when clicking the save", () => {
 			describe("when enabling options", () => {
 				const setup = () => {
-					const { wrapper } = getWrapper(
-						{
-							systemId: "systemId",
-						},
-						provisioningOptionsDataFactory.build()
-					);
+					useProvisioningOptionsStateMock.provisioningOptionsData.value =
+						provisioningOptionsDataFactory.build();
+
+					const { wrapper } = getWrapper();
 
 					const saveButton = wrapper.find(
 						'[data-testid="provisioning-options-save-button"]'
 					);
 
-					const redirect: Partial<Route> = {
+					const redirect = {
 						path: "/administration/school-settings",
 						query: { openPanels: "authentication" },
 					};
-
-					useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
-					useProvisioningOptionsStateMock.error.value = undefined;
 
 					return {
 						saveButton,
@@ -229,10 +294,11 @@ describe(ProvisioningOptionsPage.name, () => {
 
 					expect(
 						useProvisioningOptionsStateMock.updateProvisioningOptionsData
-					).toHaveBeenCalledWith("systemId", {
+					).toHaveBeenCalledWith<[string, ProvisioningOptions]>("systemId", {
 						class: true,
 						course: false,
 						others: false,
+						schoolExternalTools: false,
 					});
 				});
 
@@ -247,30 +313,27 @@ describe(ProvisioningOptionsPage.name, () => {
 			});
 
 			describe("when disabling options", () => {
+				beforeEach(() => {
+					jest.clearAllMocks();
+				});
 				const setup = async () => {
-					const { wrapper } = getWrapper(
-						{
-							systemId: "systemId",
-						},
+					useProvisioningOptionsStateMock.provisioningOptionsData.value =
 						provisioningOptionsDataFactory.build({
 							class: true,
-						})
-					);
+						});
+
+					const { wrapper } = getWrapper();
 
 					const saveButton = wrapper.find(
 						'[data-testid="provisioning-options-save-button"]'
 					);
 
-					useProvisioningOptionsStateMock.updateProvisioningOptionsData.mockResolvedValue();
-					useProvisioningOptionsStateMock.error.value = undefined;
-
-					// await OnMounted
 					await flushPromises();
 
-					const checkbox = wrapper.find(
-						'[data-testid="checkbox-option-class"]'
-					);
-					await checkbox.setChecked(false);
+					const checkBoxes = wrapper.findAllComponents({ name: "v-checkbox" });
+
+					const classCheckbox = checkBoxes[0];
+					await classCheckbox.vm.$emit("update:modelValue", false);
 
 					return {
 						wrapper,
@@ -292,9 +355,8 @@ describe(ProvisioningOptionsPage.name, () => {
 					const { saveButton, wrapper } = await setup();
 
 					await saveButton.trigger("click");
-					await flushPromises();
 
-					const dialog = wrapper.find('[data-testId="warning-dialog"]');
+					const dialog = wrapper.findComponent(VCustomDialog);
 
 					expect(dialog.props("isOpen")).toEqual(true);
 				});
@@ -302,12 +364,10 @@ describe(ProvisioningOptionsPage.name, () => {
 
 			describe("when an error occurs", () => {
 				const setup = () => {
-					const { wrapper } = getWrapper(
-						{
-							systemId: "systemId",
-						},
-						provisioningOptionsDataFactory.build()
-					);
+					useProvisioningOptionsStateMock.provisioningOptionsData.value =
+						provisioningOptionsDataFactory.build();
+
+					const { wrapper } = getWrapper();
 
 					const saveButton = wrapper.find(
 						'[data-testid="provisioning-options-save-button"]'
@@ -332,10 +392,11 @@ describe(ProvisioningOptionsPage.name, () => {
 
 					expect(
 						useProvisioningOptionsStateMock.updateProvisioningOptionsData
-					).toHaveBeenCalledWith("systemId", {
+					).toHaveBeenCalledWith<[string, ProvisioningOptions]>("systemId", {
 						class: true,
 						course: false,
 						others: false,
+						schoolExternalTools: false,
 					});
 				});
 

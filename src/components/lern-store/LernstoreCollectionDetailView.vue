@@ -83,7 +83,7 @@
 							{{ $t("pages.content._id.collection.selectElements") }}
 						</h4>
 						<transition name="fade">
-							<div class="content__container">
+							<div class="content__container" v-if="true">
 								<lern-store-grid
 									v-if="elements.data && elements.data.length"
 									column-width="14rem"
@@ -103,7 +103,6 @@
 					<v-progress-circular
 						v-show="loading"
 						indeterminate
-						color="secondary"
 						size="115"
 						class="spinner mt-16"
 					/>
@@ -138,9 +137,9 @@ import { printDateFromTimestamp } from "@/plugins/datetime";
 import contentMeta from "@/mixins/contentMeta";
 import infiniteScrolling from "@/mixins/infiniteScrolling";
 import { contentModule, notifierModule } from "@/store";
-import AddContentButton from "@/components/organisms/AddContentButton";
-import ContentCard from "@/components/organisms/ContentCard";
-import ContentEduSharingFooter from "@/components/molecules/ContentEduSharingFooter";
+import AddContentButton from "@/components/lern-store/AddContentButton";
+import ContentCard from "@/components/lern-store/ContentCard";
+import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter";
 import UserHasRole from "@/components/helpers/UserHasRole";
 import BaseLink from "../base/BaseLink";
 import { RenderHTML } from "@feature-render-html";
@@ -268,7 +267,7 @@ export default defineComponent({
 				notifierModule.show({
 					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
 					status: "error",
-					timeout: 10000,
+					timeout: 5000,
 				});
 			}
 		},
@@ -303,14 +302,9 @@ $tablet-portrait-width: 768px;
 	.arrow__back {
 		margin-top: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: var(--v-secondary-base);
 		text-decoration: none;
 		cursor: pointer;
 		border: none;
-
-		&:visited {
-			color: var(--v-secondary-base);
-		}
 	}
 
 	.content {
@@ -319,6 +313,7 @@ $tablet-portrait-width: 768px;
 		justify-content: space-between;
 		width: 100%;
 		padding: 0 var(--space-lg);
+		height: calc(100vh - 122px);
 
 		.wrapper {
 			display: grid;
@@ -355,7 +350,7 @@ $tablet-portrait-width: 768px;
 		}
 
 		.external-content-warning {
-			color: var(--v-error-base);
+			color: rgba(var(--v-theme-error));
 
 			.external-content-title {
 				margin-top: var(--space-md);
@@ -383,11 +378,6 @@ $tablet-portrait-width: 768px;
 		.author-provider {
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
-
-			.content-link {
-				color: var(--v-secondary-base);
-				text-decoration: underline;
-			}
 		}
 
 		.description {
@@ -425,16 +415,6 @@ $tablet-portrait-width: 768px;
 
 			.link {
 				margin-right: var(--space-xs);
-				color: var(--v-secondary-base);
-			}
-
-			.tertiary-color {
-				color: var(--v-black-base);
-				text-decoration: none;
-
-				:hover {
-					color: var(--v-black-base);
-				}
 			}
 		}
 	}

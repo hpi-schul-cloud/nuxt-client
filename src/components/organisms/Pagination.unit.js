@@ -1,63 +1,63 @@
 import Pagination from "./Pagination";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
-function getFirstPageWrapper() {
-	return shallowMount(Pagination, {
-		...createComponentMocks({ i18n: true }),
-		propsData: {
-			perPage: 5,
-			currentPage: 1,
-			total: 40,
+const getWrapper = (props = {}) => {
+	return mount(Pagination, {
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
+		props,
 	});
-}
+};
 
-function getLastPageWrapper() {
-	return shallowMount(Pagination, {
-		...createComponentMocks({ i18n: true }),
-		propsData: {
+describe("@/components/organisms/Pagination", () => {
+	it("should only render a next page link on the first page", () => {
+		const wrapper = getWrapper({ perPage: 5, currentPage: 1, total: 40 });
+
+		const btns = wrapper.findAllComponents(".pagination-link");
+		expect(btns).toHaveLength(1);
+		expect(btns[0].find(".v-icon").exists()).toBe(true);
+	});
+
+	it("should only render a previous page link on the last page", () => {
+		const wrapper = getWrapper({
 			perPage: 5,
 			currentPage: 2,
 			total: 10,
-		},
-	});
-}
+		});
 
-describe("@/components/organisms/Pagination", () => {
-	it("renders only a next page link on the first page", () => {
-		const wrapper = getFirstPageWrapper();
-		expect(wrapper.findAll(".pagination-link")).toHaveLength(1);
-		expect(wrapper.get(".pagination-link v-icon-stub").exists()).toBe(true);
+		const btns = wrapper.findAllComponents(".pagination-link");
+		expect(btns).toHaveLength(1);
+		expect(btns[0].find(".v-icon").exists()).toBe(true);
 	});
 
-	it("renders only a previous page link on the last page", () => {
-		const wrapper = getLastPageWrapper();
+	it("should render both page links on second page", () => {
+		const wrapper = getWrapper({ perPage: 5, currentPage: 2, total: 40 });
 
-		expect(wrapper.findAll(".pagination-link")).toHaveLength(1);
-		expect(wrapper.get(".pagination-link v-icon-stub").exists()).toBe(true);
+		const btns = wrapper.findAllComponents(".pagination-link");
+		expect(btns).toHaveLength(2);
 	});
 
 	it("emits update:current-page when next page link is clicked", async () => {
-		const wrapper = mount(Pagination, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				perPage: 5,
-				currentPage: 1,
-				total: 40,
-			},
+		const wrapper = getWrapper({
+			perPage: 5,
+			currentPage: 1,
+			total: 40,
 		});
+
 		const nextPageLink = wrapper.get(".pagination-link");
 		nextPageLink.trigger("click");
 		expect(wrapper.emitted("update:current-page")).toStrictEqual([[2]]);
 	});
 
 	it("emits update:current-page when previous page link is clicked", () => {
-		const wrapper = mount(Pagination, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				perPage: 5,
-				currentPage: 2,
-				total: 40,
-			},
+		const wrapper = getWrapper({
+			perPage: 5,
+			currentPage: 2,
+			total: 40,
 		});
 		const previousPageLink = wrapper.find(".pagination-link");
 		previousPageLink.trigger("click");
@@ -65,14 +65,12 @@ describe("@/components/organisms/Pagination", () => {
 	});
 
 	it("emits update:per-page when new perPage value is selected", () => {
-		const wrapper = shallowMount(Pagination, {
-			...createComponentMocks({ i18n: true }),
-			propsData: {
-				perPage: 5,
-			},
+		const wrapper = getWrapper({
+			perPage: 5,
 		});
-		const secondOption = wrapper.vm.perPageOptions[2].value;
-		wrapper.vm.setPagination(secondOption);
-		expect(wrapper.emitted("update:per-page")).toStrictEqual([[secondOption]]);
+		const select = wrapper.findComponent({ name: "v-select" });
+		select.vm.$emit("update:modelValue", { text: "", value: 10 });
+
+		expect(wrapper.emitted("update:per-page")).toStrictEqual([[10]]);
 	});
 });

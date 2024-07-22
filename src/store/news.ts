@@ -1,10 +1,8 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { NewsApiFactory } from "../serverApi/v3/api";
+import { CreateNewsParams, NewsApiFactory } from "../serverApi/v3/api";
 import { $axios } from "../utils/api";
 import { BusinessError, Pagination, Status } from "./types/commons";
-import { CreateNewsPayload, News, PatchNewsPayload } from "./types/news";
-
-// const newsUri = "/v3/news";
+import { News, PatchNewsPayload } from "./types/news";
 
 @Module({
 	name: "newsModule",
@@ -20,9 +18,10 @@ export default class NewsModule extends VuexModule {
 		creator: { id: "" },
 		displayAt: "",
 		school: { id: "" },
-		// source: "",
 		title: "",
 		updater: { id: "" },
+		targetId: "",
+		targetModel: "",
 	};
 	current: News | null = null;
 	pagination: Pagination = {
@@ -135,7 +134,7 @@ export default class NewsModule extends VuexModule {
 	}
 
 	@Action
-	async createNews(payload: CreateNewsPayload): Promise<void> {
+	async createNews(payload: CreateNewsParams): Promise<void> {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");

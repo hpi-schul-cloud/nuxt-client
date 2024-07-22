@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="$t('pages.administration.students.new.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 	>
 		<form-create-user @create-user="createStudent">
 			<template #inputs>
@@ -59,15 +59,15 @@ export default {
 			sendRegistration: false,
 			breadcrumbs: [
 				{
-					text: this.$t("pages.administration.index.title"),
+					title: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 				},
 				{
-					text: this.$t("pages.administration.students.index.title"),
+					title: this.$t("pages.administration.students.index.title"),
 					to: "/administration/students",
 				},
 				{
-					text: this.$t("pages.administration.students.new.title"),
+					title: this.$t("pages.administration.students.new.title"),
 					to: "/administration/students/new",
 					disabled: true,
 				},
@@ -90,14 +90,14 @@ export default {
 				email: userData.email,
 				birthday: this.date,
 				roles: ["student"],
-				schoolId: this.$user.schoolId,
+				schoolId: this.$me.school.id,
 				sendRegistration: this.sendRegistration,
 			});
 			if (!this.businessError) {
 				notifierModule.show({
 					text: this.$t("pages.administration.students.new.success"),
 					status: "success",
-					timeout: 10000,
+					timeout: 5000,
 				});
 				this.$router.push({
 					path: `/administration/students`,
@@ -115,7 +115,7 @@ export default {
 
 <style lang="scss" scoped>
 // hide default current date in MacOS/Safari if input date is indeed empty
-::v-deep {
+:deep() {
 	.hideCurrentDate {
 		input[type="date"]::-webkit-datetime-edit-day-field,
 		input[type="date"]::-webkit-datetime-edit-month-field,

@@ -1,49 +1,41 @@
 <template>
 	<div>
 		<v-icon>{{ mdiChevronLeft }}</v-icon>
-		<v-breadcrumbs
-			color="secondary"
-			:items="breadcrumbs"
-			class="custom-breadcrumb px-0 py-0"
-		>
+		<v-breadcrumbs :items="breadcrumbs" class="custom-breadcrumb px-0 py-0">
 			<template #divider>
 				<v-icon>{{ mdiChevronLeft }}</v-icon>
 			</template>
-			<template #item="{ item }">
+			<template #item="{ item, index }">
 				<v-breadcrumbs-item
 					:href="item.href"
 					:to="item.to"
 					:disabled="item.disabled"
 					:exact="true"
 					class="breadcrumbs-item"
+					color="primary"
+					:data-testid="`breadcrumb-${index}`"
 				>
-					{{ item.text }}
+					{{ item.title }}
 				</v-breadcrumbs-item>
 			</template>
 		</v-breadcrumbs>
 	</div>
 </template>
 
-<script>
+<script setup lang="ts">
 import { mdiChevronLeft } from "@mdi/js";
 
-export default {
-	props: {
-		breadcrumbs: {
-			type: Array,
-			required: true,
-		},
+defineProps({
+	breadcrumbs: {
+		type: Array,
+		required: true,
 	},
-	data() {
-		return {
-			mdiChevronLeft: mdiChevronLeft,
-		};
-	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
 .custom-breadcrumb {
 	display: inline-flex;
+	font-size: 14px;
 }
 </style>

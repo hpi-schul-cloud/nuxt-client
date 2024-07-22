@@ -2,13 +2,14 @@
 	<div class="resource">
 		<div ref="icons" class="icons">
 			<v-btn
-				fab
-				small
+				icon
+				size="small"
 				:class="[
 					closeButtonStyleSelector ? 'close-transparent' : 'close-icon',
 					'icon',
 				]"
 				aria-label="close detail view"
+				data-testid="learningstore-close-details-icon"
 				@click="goBack"
 			>
 				<v-icon size="20">{{ mdiClose }}</v-icon>
@@ -34,13 +35,13 @@
 						:alt="$t('pages.content.preview_img.alt')"
 						role="img"
 					/>
-					<div class="preview-background-color" />
 				</div>
 			</div>
 		</div>
 		<div ref="sidebar" class="sidebar elevation-6">
 			<div class="content-container">
 				<div class="actions" />
+				<!--eslint-disable-next-line vuetify/no-deprecated-classes -->
 				<div class="title">
 					<span>
 						{{ resource.title || resource.name }}
@@ -72,9 +73,9 @@
 				<div v-else>
 					<v-btn
 						v-if="isMerlin"
-						outlined
-						color="secondary"
+						variant="outlined"
 						class="content-button"
+						data-testid="learningstore-to-content-link"
 						@click="
 							() => {
 								goToMerlinContent(merlinTokenReference);
@@ -86,11 +87,11 @@
 					</v-btn>
 					<v-btn
 						v-else
-						outlined
-						color="secondary"
+						variant="outlined"
 						:href="downloadUrl"
 						class="content-button"
 						target="_blank"
+						data-testid="learningstore-to-content-link"
 					>
 						<v-icon size="20" class="mr-1">{{ mdiOpenInNew }}</v-icon>
 						{{ $t("pages.content.material.toMaterial") }}
@@ -166,6 +167,7 @@
 					btn-color="primary"
 					:btn-label="$t('pages.content._id.addToTopic')"
 					:multiple="false"
+					data-testid="learningstore-add-content-button"
 				/>
 			</user-has-role>
 		</div>
@@ -174,13 +176,12 @@
 
 <script>
 /* eslint-disable max-lines */
-import AddContentButton from "@/components/organisms/AddContentButton";
 import UserHasRole from "@/components/helpers/UserHasRole";
-import contentMeta from "@/mixins/contentMeta";
+import AddContentButton from "@/components/lern-store/AddContentButton";
 import LernStorePlayer from "@/components/lern-store/LernStorePlayer";
-import BaseLink from "../base/BaseLink";
+import contentMeta from "@/mixins/contentMeta";
 import { printDateFromTimestamp } from "@/plugins/datetime";
-import { mdiClose, mdiOpenInNew } from "@mdi/js";
+import { SchulcloudTheme } from "@/serverApi/v3";
 import {
 	getAuthor,
 	getDescription,
@@ -188,11 +189,13 @@ import {
 	getMetadataAttribute,
 	getProvider,
 	getTags,
-	isVideoContent,
 	isMerlinContent,
+	isVideoContent,
 } from "@/utils/helpers";
-import { RenderHTML } from "@feature-render-html";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { RenderHTML } from "@feature-render-html";
+import { mdiClose, mdiOpenInNew } from "@mdi/js";
+import BaseLink from "../base/BaseLink";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -225,6 +228,7 @@ export default {
 			},
 		};
 	},
+	inject: ["mq"],
 	computed: {
 		author() {
 			return getAuthor(this.resource.properties);
@@ -233,7 +237,9 @@ export default {
 			return this.resource.preview.url;
 		},
 		closeButtonStyleSelector() {
-			return this.$mq === "tabletPortrait" || this.$mq === "mobile";
+			return (
+				this.mq.current === "tabletPortrait" || this.mq.current === "mobile"
+			);
 		},
 		collectionLink() {
 			let relation = getMetadataAttribute(
@@ -274,7 +280,7 @@ export default {
 			return this.author && this.author !== DEFAULT_AUTHOR;
 		},
 		isBrandenburg() {
-			return process.env.SC_THEME === "brb";
+			return process.env.SC_THEME === SchulcloudTheme.Brb;
 		},
 		isInline() {
 			return !!this.$route.query.inline;
@@ -306,7 +312,7 @@ export default {
 		window.addEventListener("resize", this.handleResize);
 		this.handleResize();
 	},
-	destroyed() {
+	unmounted() {
 		window.removeEventListener("resize", this.handleResize);
 	},
 	methods: {
@@ -347,6 +353,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 @import "@/styles/mixins";
 $tablet-portrait-width: 768px;
 
@@ -379,13 +386,12 @@ $tablet-portrait-width: 768px;
 		padding: var(--space-md);
 
 		.close-icon {
-			color: var(--v-white-base);
+			color: rgba(var(--v-theme-white));
 			background-color: map-get($grey, darken-3);
 		}
 
 		.close-transparent {
-			color: var(--v-black-base);
-			background-color: var(--v-white-base);
+			background-color: rgba(var(--v-theme-white));
 		}
 	}
 
@@ -418,18 +424,6 @@ $tablet-portrait-width: 768px;
 				margin: auto;
 				/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 				color: white;
-			}
-
-			.preview-background-color {
-				position: absolute;
-				top: 0;
-				right: 0;
-				bottom: 0;
-				left: 0;
-				z-index: var(--layer-behind);
-				width: 100%;
-				height: 100%;
-				background-color: var(--v-secondary-base);
 			}
 
 			.preview-background {
@@ -479,7 +473,7 @@ $tablet-portrait-width: 768px;
 		max-height: 100vh;
 		padding-bottom: var(--space-sm);
 		overflow-y: scroll;
-		background-color: var(--v-white-base);
+		background-color: rgba(var(--v-theme-white));
 
 		@media (max-width: $tablet-portrait-width) {
 			max-height: none;
@@ -502,7 +496,7 @@ $tablet-portrait-width: 768px;
 		}
 
 		.external-content-warning {
-			color: var(--v-error-base);
+			color: rgba(var(--v-theme-error));
 
 			.external-content-title {
 				margin-top: var(--space-md);
@@ -528,11 +522,6 @@ $tablet-portrait-width: 768px;
 		.author-provider {
 			font-size: var(--text-xs);
 			font-weight: var(--font-weight-bold);
-
-			.content-link {
-				color: var(--v-secondary-base);
-				text-decoration: underline;
-			}
 		}
 
 		.description {
@@ -577,16 +566,6 @@ $tablet-portrait-width: 768px;
 
 				.link {
 					margin-right: var(--space-xs);
-					color: var(--v-secondary-base);
-				}
-
-				.tertiary-color {
-					color: var(--v-black-base);
-					text-decoration: none;
-
-					:hover {
-						color: var(--v-black-base);
-					}
 				}
 			}
 		}

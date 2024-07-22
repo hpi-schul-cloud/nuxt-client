@@ -9,7 +9,6 @@
 					:label-hidden="true"
 					class="select"
 					:show-undefined-state="true"
-					style="color: var(--v-secondary-base)"
 				/>
 			</div>
 		</th>
@@ -31,11 +30,9 @@
 					<span class="info-slot">
 						<v-btn
 							icon
-							plain
+							variant="text"
 							color="info"
 							class="info-button"
-							style="background-color: transparent"
-							design="info text icon"
 							:aria-label="
 								$t(
 									'pages.administration.students.infobox.registrationOnly.headline'
@@ -49,7 +46,7 @@
 					<info-box
 						v-if="isConsentNecessary"
 						class="info-box"
-						:active.sync="infoBoxActive"
+						v-model:active="infoBoxActive"
 					>
 						<template #header>{{
 							$t("pages.administration.students.infobox.headline")
@@ -66,7 +63,7 @@
 								}}
 								<br />
 								<br />
-								<v-icon color="var(--v-error-base)">$mdiAlert</v-icon>
+								<v-icon color="rgba(var(--v-theme-error))">$mdiAlert</v-icon>
 								{{
 									$t("pages.administration.students.infobox.LDAP.paragraph-3")
 								}}
@@ -77,7 +74,10 @@
 								}}
 								<base-link
 									class="link-style"
-									style="color: var(--v-white-base); text-decoration: underline"
+									style="
+										color: rgba(var(--v-theme-white));
+										text-decoration: underline;
+									"
 									to="/"
 									href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=36700189"
 									target="_blank"
@@ -106,7 +106,7 @@
 									<base-link
 										class="link-style"
 										style="
-											color: var(--v-white-base);
+											color: rgba(var(--v-theme-white));
 											text-decoration: underline;
 										"
 										to="/"
@@ -124,12 +124,12 @@
 								{{ $t("pages.administration.students.infobox.paragraph-3") }}
 								<br />
 								<br />
-								<v-icon color="var(--v-error-base)">$mdiAlert</v-icon>
+								<v-icon color="rgba(var(--v-theme-error))">$mdiAlert</v-icon>
 								{{ $t("pages.administration.students.infobox.paragraph-4") }}
 							</div>
 						</template>
 					</info-box>
-					<info-box v-else class="info-box" :active.sync="infoBoxActive">
+					<info-box v-else class="info-box" v-model:active="infoBoxActive">
 						<template #header>{{
 							$t(
 								"pages.administration.students.infobox.registrationOnly.headline"
@@ -194,8 +194,7 @@
 				</span>
 				<v-btn
 					v-if="column.sortable"
-					text
-					plain
+					variant="text"
 					:ripple="false"
 					:class="{
 						'is-current-sort': sortBy === column.field,
@@ -347,13 +346,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 @import "@/styles/mixins";
 
 .table__row {
 	font-weight: var(--font-weight-bold);
 
 	th {
-		border-bottom: calc(2 * var(--border-width)) solid var(--v-secondary-base);
+		border-bottom: calc(2 * var(--border-width)) solid;
 
 		&.is-current-sort {
 			opacity: 1;
@@ -367,11 +367,6 @@ export default {
 			padding: var(--space-xs);
 			font-size: var(--text-md);
 			font-weight: var(--font-weight-normal);
-
-			svg {
-				font-size: calc(1.5 * var(--text-lg));
-				color: var(--v-secondary-base);
-			}
 		}
 
 		.select-wrap {
@@ -413,7 +408,7 @@ export default {
 		z-index: var(--layer-fab);
 		outline: none;
 		box-shadow:
-			0 0 0 0 var(--v-white-base),
+			0 0 0 0 rgba(var(--v-theme-white)),
 			0 0 0 3px var(--button-background);
 	}
 }
@@ -428,9 +423,12 @@ export default {
 	left: 56%;
 }
 
-::v-deep
-	.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(:hover)
-	.v-btn__content {
+:deep(
+		.v-btn--plain:not(.v-btn--active):not(.v-btn--loading):not(:focus):not(
+				:hover
+			)
+			.v-btn__content
+	) {
 	opacity: 1;
 }
 

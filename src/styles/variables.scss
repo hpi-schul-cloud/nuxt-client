@@ -52,7 +52,7 @@ $btn-focus-opacity: 0;
 
 .v-btn.primary {
 	&:hover {
-		background-color: var(--v-primary-darken1) !important;
+		background-color: rgba(var(--v-theme-primary-darken-1)) !important;
 	}
 }
 

@@ -9,9 +9,8 @@ import AccountsModule from "@/store/accounts";
 import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import AutoLogoutModule from "@/store/autoLogout";
-import CollaborativeFilesModule from "@/store/collaborative-files";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import ContentModule from "@/store/content";
-import ContextExternalToolsModule from "@/store/context-external-tools";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import FilePaths from "@/store/filePaths";
@@ -35,6 +34,7 @@ import UserLoginMigrationModule from "@/store/user-login-migrations";
 import VideoConferenceModule from "@/store/video-conference";
 import { Store } from "vuex";
 import { getModule } from "vuex-module-decorators";
+import CommonCartridgeExportModule from "./common-cartridge-export";
 
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
@@ -43,9 +43,7 @@ export let accountsModule: AccountsModule;
 export let applicationErrorModule: ApplicationErrorModule;
 export let authModule: AuthModule;
 export let autoLogoutModule: AutoLogoutModule;
-export let collaborativeFilesModule: CollaborativeFilesModule;
 export let contentModule: ContentModule;
-export let contextExternalToolsModule: ContextExternalToolsModule;
 export let copyModule: CopyModule;
 export let envConfigModule: EnvConfigModule;
 export let filePathsModule: FilePaths;
@@ -67,6 +65,8 @@ export let systemsModule: SystemsModule;
 export let tasksModule: TasksModule;
 export let userLoginMigrationModule: UserLoginMigrationModule;
 export let videoConferenceModule: VideoConferenceModule;
+export let commonCartridgeExportModule: CommonCartridgeExportModule;
+export let commonCartridgeImportModule: CommonCartridgeImportModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<any>): void {
@@ -74,9 +74,7 @@ export function initializeStores(store: Store<any>): void {
 	applicationErrorModule = getModule(ApplicationErrorModule, store);
 	authModule = getModule(AuthModule, store);
 	autoLogoutModule = getModule(AutoLogoutModule, store);
-	collaborativeFilesModule = getModule(CollaborativeFilesModule, store);
 	contentModule = getModule(ContentModule, store);
-	contextExternalToolsModule = getModule(ContextExternalToolsModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
 	filePathsModule = getModule(FilePaths, store);
@@ -98,6 +96,8 @@ export function initializeStores(store: Store<any>): void {
 	tasksModule = getModule(TasksModule, store);
 	userLoginMigrationModule = getModule(UserLoginMigrationModule, store);
 	videoConferenceModule = getModule(VideoConferenceModule, store);
+	commonCartridgeExportModule = getModule(CommonCartridgeExportModule, store);
+	commonCartridgeImportModule = getModule(CommonCartridgeImportModule, store);
 }
 
 // for use in 'modules' store init (see store/index.ts), so each module
@@ -108,9 +108,7 @@ export const modules = {
 	applicationErrorModule: ApplicationErrorModule,
 	authModule: AuthModule,
 	autoLogoutModule: AutoLogoutModule,
-	collaborativeFilesModule: CollaborativeFilesModule,
 	contentModule: ContentModule,
-	contextExternalToolsModule: ContextExternalToolsModule,
 	copyModule: CopyModule,
 	envConfigModule: EnvConfigModule,
 	filePathsModule: FilePaths,
@@ -132,4 +130,6 @@ export const modules = {
 	tasksModule: TasksModule,
 	userLoginMigrationModule: UserLoginMigrationModule,
 	videoConferenceModule: VideoConferenceModule,
+	commonCartridgeExportModule: CommonCartridgeExportModule,
+	commonCartridgeImportModule: CommonCartridgeImportModule,
 };

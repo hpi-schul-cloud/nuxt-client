@@ -47,11 +47,7 @@ export default {
 	display: flex;
 	justify-content: space-between;
 	padding: var(--space-sm) var(--space-md);
-	border-top: 1px solid var(--v-white-base);
-
-	:not(:first-child) {
-		margin-left: var(--space-sm);
-	}
+	border-top: 1px solid rgba(var(--v-theme-white));
 
 	@include breakpoint(tablet) {
 		padding: 0;

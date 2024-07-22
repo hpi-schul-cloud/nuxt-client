@@ -1,4 +1,5 @@
 import { envConfigModule } from "@/store";
+import { envsFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "./env-config";
 import FilePathsModule from "./filePaths";
@@ -6,13 +7,9 @@ import FilePathsModule from "./filePaths";
 const specificFiles = {
 	accessibilityStatement:
 		"Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
-	privacyExemplary:
+	privacy:
 		"Onlineeinwilligung/Datenschutzerklaerung-Muster-Schulen-Onlineeinwilligung.pdf",
-	privacy: "Onlineeinwilligung/Datenschutzerklaerung-Onlineeinwilligung.pdf",
-	termsOfUseExemplary:
-		"Onlineeinwilligung/Nutzungsordnung-HPI-Schule-Schueler-Onlineeinwilligung.pdf",
-	termsOfUse: "Onlineeinwilligung/Nutzungsordnung-Onlineeinwilligung.pdf",
-	termsOfUseSchool:
+	termsOfUse:
 		"Willkommensordner/Datenschutz/Nutzungsordnung_Schueler-innen.pdf",
 	analogConsent: "Dokumente/Einwilligungserklaerung_analog.pdf",
 };
@@ -31,35 +28,6 @@ const globalFiles = {
 		"Dokumente/Schulrechner-wandern-in-die-Cloud-2017.pdf",
 	SCKonzeptPilotierung2017:
 		"Dokumente/Konzept-und-Pilotierung-der-Schul-Cloud-2017.pdf",
-};
-
-const requiredVars = {
-	NOT_AUTHENTICATED_REDIRECT_URL: "/login",
-	JWT_SHOW_TIMEOUT_WARNING_SECONDS: 3600,
-	JWT_TIMEOUT_SECONDS: 7200,
-	SC_THEME: process.env.SC_THEME || "default", // currently not loaded from server, but inserted at build time
-};
-
-const configsFromEnvironmentVars = {
-	LERNSTORE_MODE: "",
-	ALERT_STATUS_URL: "",
-	MIGRATION_END_GRACE_PERIOD_MS: 1,
-};
-
-const envs = {
-	...requiredVars,
-	...configsFromEnvironmentVars,
-	FALLBACK_DISABLED: false,
-	ADMIN_TABLES_DISPLAY_CONSENT_COLUMN: true,
-	I18N__AVAILABLE_LANGUAGES: "",
-	I18N__DEFAULT_LANGUAGE: "",
-	I18N__DEFAULT_TIMEZONE: "",
-	I18N__FALLBACK_LANGUAGE: "",
-	DOCUMENT_BASE_DIR: "",
-	SC_TITLE: "",
-	GHOST_BASE_URL: "",
-	FEATURE_CONSENT_NECESSARY: true,
-	FILES_STORAGE__MAX_FILE_SIZE: 0,
 };
 
 const mockSetSpecificFiles = (payload: string) =>
@@ -82,6 +50,11 @@ describe("filePaths module", () => {
 
 		it("init should call the setDocumentBaseDir, setSpecificFiles, and setGlobalFiles mutations", async () => {
 			const filePathsModule = new FilePathsModule({});
+			const mockURL = "http://mock.url/";
+			const envs = envsFactory.build({
+				DOCUMENT_BASE_DIR: mockURL,
+			});
+			envConfigModule.setEnvs(envs);
 			const spyBaseDir = jest.fn();
 			const spySpecificFiles = jest.fn();
 			const spyGlobalFiles = jest.fn();
@@ -103,10 +76,11 @@ describe("filePaths module", () => {
 		it("sets baseDir to DOCUMENT_BASE_DIR env if it is defined", async () => {
 			const filePathsModule = new FilePathsModule({});
 			const mockURL = "http://mock.url/";
-			envConfigModule.setEnvs({ ...envs, DOCUMENT_BASE_DIR: mockURL });
+			const envs = envsFactory.build({ DOCUMENT_BASE_DIR: mockURL });
+			envConfigModule.setEnvs(envs);
 			await filePathsModule.init();
 			expect(filePathsModule.getDocumentBaseDir).toBe(
-				`${mockURL}${requiredVars.SC_THEME}/`
+				`${mockURL}${envs.SC_THEME}/`
 			);
 		});
 	});
@@ -152,11 +126,8 @@ describe("filePaths module", () => {
 			const filePathsModule = new FilePathsModule({});
 			const mockSpecificFiles = {
 				accessibilityStatement: "mockValue",
-				privacyExemplary: "mockValue",
 				privacy: "mockValue",
-				termsOfUseExemplary: "mockValue",
 				termsOfUse: "mockValue",
-				termsOfUseSchool: "mockValue",
 				analogConsent: "mockValue",
 			};
 			filePathsModule.specificFiles = mockSpecificFiles;

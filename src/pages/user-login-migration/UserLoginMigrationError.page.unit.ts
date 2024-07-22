@@ -3,18 +3,19 @@ import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import {
 	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
 	SYSTEMS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { i18nMock } from "@@/tests/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
+import { shallowMount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
 import { userLoginMigrationFactory } from "@@/tests/test-utils/factory/userLoginMigration.factory";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -28,6 +29,7 @@ describe("UserLoginMigrationError", () => {
 	const setup = (props: {
 		sourceSchoolNumber?: string;
 		targetSchoolNumber?: string;
+		multipleUsersFound?: boolean;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 		const systemsMock: System[] = [
@@ -51,19 +53,14 @@ describe("UserLoginMigrationError", () => {
 			getUserLoginMigration: userLoginMigrationFactory.build(),
 		});
 
-		const wrapper: Wrapper<Vue> = mount(
-			UserLoginMigrationError as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
+		const wrapper = shallowMount(UserLoginMigrationError, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					[I18N_KEY.valueOf()]: i18nMock,
 					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 				},
-				propsData: props,
 				mocks: {
 					$t: (key: string, dynamic?: object): string =>
 						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
@@ -71,8 +68,9 @@ describe("UserLoginMigrationError", () => {
 						name: "Testcloud",
 					},
 				},
-			}
-		);
+			},
+			props,
+		});
 
 		return {
 			wrapper,
@@ -85,8 +83,8 @@ describe("UserLoginMigrationError", () => {
 				const { wrapper } = setup({});
 
 				const descriptionText = wrapper
-					.find("[data-testId=text-description]")
-					.text();
+					.findComponent("[data-testId=text-description]")
+					.attributes("html");
 
 				expect(descriptionText).toEqual(
 					'pages.userMigration.error.description {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
@@ -99,7 +97,7 @@ describe("UserLoginMigrationError", () => {
 				const button = wrapper.find("[data-testId=btn-proceed]");
 
 				expect(button.text()).toEqual("pages.userMigration.backToLogin");
-				expect(button.props().to).toEqual("/logout");
+				expect(button.attributes().to).toEqual("/logout");
 			});
 		});
 
@@ -110,12 +108,27 @@ describe("UserLoginMigrationError", () => {
 					targetSchoolNumber: "22222",
 				});
 
-				const schoolNumberMismatchText: string = wrapper
-					.find("[data-testId=text-schoolnumber-mismatch]")
-					.text();
+				const schoolNumberMismatchText = wrapper
+					.findComponent("[data-testId=text-schoolnumber-mismatch]")
+					.attributes("html");
 
 				expect(schoolNumberMismatchText).toEqual(
 					'pages.userMigration.error.schoolNumberMismatch {"targetSystem":"targetSystem","targetSchoolNumber":"22222","sourceSchoolNumber":"11111"}'
+				);
+			});
+		});
+		describe("when mutliple users are found", () => {
+			it("should show the multipleUsersFound text", () => {
+				const { wrapper } = setup({
+					multipleUsersFound: true,
+				});
+
+				const multipleUsersFoundText = wrapper
+					.findComponent("[data-testId=text-multiple-users-found]")
+					.attributes("html");
+
+				expect(multipleUsersFoundText).toEqual(
+					'pages.userMigration.error.multipleUsersFound {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
 				);
 			});
 		});
@@ -126,9 +139,9 @@ describe("UserLoginMigrationError", () => {
 				targetSchoolNumber: "22222",
 			});
 
-			const descriptionText: string = wrapper
-				.find("[data-testId=text-description]")
-				.text();
+			const descriptionText = wrapper
+				.findComponent("[data-testId=text-description]")
+				.attributes("html");
 
 			expect(descriptionText).toEqual(
 				'pages.userMigration.error.description {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Schulnummer%20nicht%20korrekt"}'
@@ -141,7 +154,7 @@ describe("UserLoginMigrationError", () => {
 			it("should fetch the systems", async () => {
 				setup({});
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(systemsModule.fetchSystems).toHaveBeenCalledWith();
 			});
@@ -149,7 +162,7 @@ describe("UserLoginMigrationError", () => {
 			it("should fetch the user login migration", async () => {
 				setup({});
 
-				await Vue.nextTick();
+				await nextTick();
 
 				expect(
 					userLoginMigrationModule.fetchLatestUserLoginMigrationForCurrentUser

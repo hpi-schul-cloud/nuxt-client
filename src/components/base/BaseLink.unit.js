@@ -1,83 +1,93 @@
 import BaseLink from "./BaseLink";
+import { RouterLinkStub } from "@vue/test-utils";
 
 describe("@/components/base/BaseLink", () => {
-	it(
-		...rendersSlotContent(BaseLink, ["default"], {
-			...createComponentMocks({ router: true }),
-			propsData: {
+	const createWrapper = (options = {}) => {
+		const wrapper = shallowMount(BaseLink, {
+			global: {
+				stubs: { RouterLink: RouterLinkStub },
+			},
+			...options,
+		});
+
+		return wrapper;
+	};
+
+	it("as link: renders its default slot content", () => {
+		const wrapper = createWrapper({
+			props: {
 				href: "https://dbildungscloud.de",
 			},
-		})
-	);
-	it(
-		...rendersSlotContent(BaseLink, ["default"], {
-			...createComponentMocks({ router: true }),
-			propsData: {
+			slots: {
+				default: "as link",
+			},
+		});
+
+		expect(wrapper.html()).toContain("as link");
+	});
+
+	it("as 'router to': renders its default slot content", () => {
+		const wrapper = createWrapper({
+			props: {
 				to: "/news",
 			},
-		})
-	);
-	it(
-		...rendersSlotContent(BaseLink, ["default"], {
-			...createComponentMocks({ router: true }),
-			propsData: {
+			slots: {
+				default: "as 'router to'",
+			},
+		});
+
+		expect(wrapper.html()).toContain("as 'router to'");
+	});
+
+	it("as 'route name': renders its default slot content", () => {
+		const wrapper = createWrapper({
+			props: {
 				name: "news",
 			},
-		})
-	);
+			slots: {
+				default: "as 'route name'",
+			},
+		});
+
+		expect(wrapper.html()).toContain("as 'route name'");
+	});
 
 	it("renders a-tag for external links", () => {
-		const { element } = shallowMount(BaseLink, {
-			propsData: {
+		const wrapper = createWrapper({
+			props: {
 				href: "https://dbildungscloud.de",
 			},
 		});
-		expect(element.outerHTML).toContain("https://dbildungscloud.de");
-		expect(element.tagName).toStrictEqual("A");
+
+		expect(wrapper.find("a").element.href).toContain(
+			"https://dbildungscloud.de"
+		);
 	});
 
-	it("renders NuxtLink-tag for internal :to links", () => {
-		const { element } = shallowMount(BaseLink, {
-			...createComponentMocks({ router: true }),
-			propsData: {
+	it("renders router link for internal :to links", () => {
+		const wrapper = createWrapper({
+			props: {
 				to: "/news",
 			},
 		});
-		expect(element.getAttribute("to")).toStrictEqual("/news");
-		expect(element.tagName).not.toStrictEqual("A");
+		expect(wrapper.findComponent(RouterLinkStub).props().to).toBe("/news");
+		expect(wrapper.element.tagName).not.toStrictEqual("A");
 	});
 
-	it("renders NuxtLink-tag for internal links by name", () => {
-		const { element } = shallowMount(BaseLink, {
-			...createComponentMocks({ router: true }),
-			propsData: {
+	it("renders router link for internal links by name", () => {
+		const wrapper = createWrapper({
+			props: {
 				name: "news",
 			},
 		});
-		expect(element.tagName).not.toStrictEqual("A");
-	});
-
-	// disabled for legacy fallback
-	it.skip("log warning for internal href links", () => {
-		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
-
-		shallowMount(BaseLink, {
-			...createComponentMocks({ router: true }),
-			propsData: {
-				href: "/news",
-			},
-		});
-		expect(consoleWarn).toHaveBeenCalledWith(
-			expect.stringContaining("Invalid href")
-		);
+		expect(wrapper.findComponent(RouterLinkStub).props().to.name).toBe("news");
 	});
 
 	it("log warning for insecure external urls", () => {
 		// use .mockImplementation() to prevent output to console
 		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
-		shallowMount(BaseLink, {
-			...createComponentMocks({ router: true }),
-			propsData: {
+		createWrapper({
+			props: {
 				href: "http://dbildungscloud.de",
 			},
 		});
@@ -90,9 +100,8 @@ describe("@/components/base/BaseLink", () => {
 		// use .mockImplementation() to prevent output to console
 		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
 
-		shallowMount(BaseLink, {
-			...createComponentMocks({ router: true }),
-		});
+		createWrapper();
+
 		expect(consoleWarn).toHaveBeenCalledWith(
 			expect.stringContaining("Invalid props")
 		);

@@ -15,7 +15,7 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: setup node
         uses: actions/setup-node@v4
         with:
@@ -26,28 +26,29 @@ jobs:
         run: npm run test:unit:ci
         env:
           NODE_OPTIONS: "--unhandled-rejections=warn"
-      - uses: actions/setup-java@v3
+      - uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
       - name: SonarCloud upload coverage
-        uses: SonarSource/sonarcloud-github-action@v2.0.2
+        uses: SonarSource/sonarcloud-github-action@v2.1.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
         with:
           args: >
-            -Dsonar.sources=.
             -Dsonar.organization=schulcloud-verbund
             -Dsonar.projectKey=hpi-schul-cloud_nuxt-client
+            -Dsonar.sources=.
             -Dsonar.exclusions=src/serverApi/**/*.*,src/fileStorageApi/**/*.*,src/h5pEditorApi/**/*.*
-            -Dsonar.cpd.exclusions=**/*.test.ts,**/tests/**/*.*,**/*.unit.ts
+            -Dsonar.coverage.exclusions=tests/**/*.*,**/*.unit.ts,**/*.unit.js
+            -Dsonar.cpd.exclusions=tests/**/*.*,**/*.unit.ts,**/*.unit.js,**/locales/*.ts
             -Dsonar.javascript.lcov.reportPaths=./coverage/lcov.info
 
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: npm ci
         run: npm ci --prefer-offline --no-audit
       - name: npm run lint

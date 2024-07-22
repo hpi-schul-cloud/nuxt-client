@@ -1,10 +1,10 @@
 <template>
 	<div>
 		<v-text-field
-			filled
-			:value="shareUrl"
+			variant="filled"
+			:model-value="shareUrl"
 			readonly
-			:label="`${$t(`components.molecules.share.${type}.result.linkLabel`)}`"
+			:label="`${t(`components.molecules.share.${type}.result.linkLabel`)}`"
 		/>
 		<div class="mb-4">
 			<div
@@ -12,8 +12,8 @@
 				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
 			>
 				<v-btn
-					plain
-					large
+					variant="text"
+					size="large"
 					class="d-sm-none d-flex button-alignment-top mb-2"
 					:height="84"
 					data-testid="mobilePlatformAction"
@@ -23,14 +23,14 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiShareVariantOutline }}</v-icon></span
+							<v-icon size="large">{{ mdiShareVariantOutline }}</v-icon></span
 						>
-						<span class="subtitle">{{ $t("common.actions.share") }}</span>
+						<span class="subtitle">{{ t("common.actions.share") }}</span>
 					</span>
 				</v-btn>
 				<v-btn
-					plain
-					large
+					variant="text"
+					size="large"
 					:height="84"
 					class="d-sm-flex d-none button-alignment-top"
 					data-testid="shareMailAction"
@@ -40,17 +40,17 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiEmailOutline }}</v-icon></span
+							<v-icon size="large">{{ mdiEmailOutline }}</v-icon></span
 						>
 						<span class="subtitle">{{
-							$t("components.molecules.share.result.mailShare")
+							t("components.molecules.share.result.mailShare")
 						}}</span>
 					</span>
 				</v-btn>
 
 				<v-btn
-					plain
-					large
+					variant="text"
+					size="large"
 					:height="84"
 					class="d-sm-flex d-none button-alignment-top"
 					data-testid="copyAction"
@@ -60,17 +60,17 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiContentCopy }}</v-icon></span
+							<v-icon size="large">{{ mdiContentCopy }}</v-icon></span
 						>
 						<span class="subtitle">{{
-							$t("components.molecules.share.result.copyClipboard")
+							t("components.molecules.share.result.copyClipboard")
 						}}</span>
 					</span>
 				</v-btn>
 
 				<v-btn
-					plain
-					large
+					variant="text"
+					size="large"
 					:height="84"
 					data-testid="qrCodeAction"
 					class="button-alignment-top"
@@ -80,10 +80,10 @@
 						class="d-flex flex-column justify-content-center button-max-width"
 					>
 						<span class="mb-2">
-							<v-icon large>{{ mdiQrcode }}</v-icon></span
+							<v-icon size="large">{{ mdiQrcode }}</v-icon></span
 						>
 						<span class="subtitle">{{
-							$t("components.molecules.share.result.qrCodeScan")
+							t("components.molecules.share.result.qrCodeScan")
 						}}</span>
 					</span>
 				</v-btn>
@@ -93,104 +93,73 @@
 			v-if="isShowQrCode"
 			class="d-flex justify-content-center overflow-hidden"
 		>
-			<base-qr-code :url="shareUrl" data-testid="qrCode" />
+			<QRCode :url="shareUrl" data-testid="qrCode" />
 		</div>
 	</div>
 </template>
 
-<script>
-import BaseQrCode from "@/components/base/BaseQrCode";
+<script setup>
+import { QRCode } from "@ui-qr-code";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiContentCopy,
 	mdiEmailOutline,
 	mdiQrcode,
 	mdiShareVariantOutline,
-} from "@mdi/js";
-import { defineComponent, ref } from "vue";
+} from "@/components/icons/material";
+import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-// eslint-disable-next-line vue/require-direct-export
-export default defineComponent({
-	name: "ShareModalResult",
-	components: {
-		BaseQrCode,
+defineProps({
+	shareUrl: {
+		type: String,
+		required: true,
 	},
-	props: {
-		shareUrl: {
-			type: String,
-			required: true,
-		},
-		type: {
-			type: String,
-			required: true,
-			validator: (type) =>
-				Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
-		},
-	},
-	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
-		const t = (key) => {
-			const translateResult = i18n.t(key);
-			if (typeof translateResult === "string") {
-				return translateResult;
-			}
-			return "unknown translation-key:" + key;
-		};
-
-		const onMailShareUrl = (shareUrl, type) => {
-			const subject = encodeURIComponent(
-				t(`components.molecules.share.${type}.mail.subject`)
-			);
-			const body = encodeURIComponent(
-				t(`components.molecules.share.${type}.mail.body`) + shareUrl
-			);
-			window.location.assign(`mailto:?subject=${subject}&body=${body}`);
-			emit("done");
-		};
-
-		const onCopy = (shareUrl) => {
-			navigator.clipboard.writeText(shareUrl);
-			emit("done");
-			emit("copied");
-		};
-
-		const onShareMobilePlatflorm = (shareUrl) => {
-			if (navigator.share) {
-				navigator
-					.share({
-						url: shareUrl,
-					})
-					.then(() => emit("done"))
-					.catch();
-			}
-		};
-
-		const isShowQrCode = ref(false);
-		const onShowQrCode = () => {
-			isShowQrCode.value = true;
-		};
-
-		return {
-			onMailShareUrl,
-			onCopy,
-			onShowQrCode,
-			onShareMobilePlatflorm,
-			isShowQrCode,
-			mdiEmailOutline,
-			mdiContentCopy,
-			mdiQrcode,
-			mdiShareVariantOutline,
-		};
+	type: {
+		type: String,
+		required: true,
+		validator: (type) =>
+			Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
 	},
 });
+const emit = defineEmits(["copied", "done"]);
+const { t } = useI18n();
+
+const onMailShareUrl = (shareUrl, type) => {
+	const subject = encodeURIComponent(
+		t(`components.molecules.share.${type}.mail.subject`)
+	);
+	const body = encodeURIComponent(
+		t(`components.molecules.share.${type}.mail.body`) + shareUrl
+	);
+	window.location.assign(`mailto:?subject=${subject}&body=${body}`);
+	emit("done");
+};
+
+const onCopy = (shareUrl) => {
+	navigator.clipboard.writeText(shareUrl);
+	emit("done");
+	emit("copied");
+};
+
+const onShareMobilePlatflorm = (shareUrl) => {
+	if (navigator.share) {
+		navigator
+			.share({
+				url: shareUrl,
+			})
+			.then(() => emit("done"))
+			.catch();
+	}
+};
+
+const isShowQrCode = ref(false);
+const onShowQrCode = () => {
+	isShowQrCode.value = true;
+};
 </script>
 
 <style lang="scss" scoped>
-@import "@/utils/multiline-ellipsis.scss";
-@import "~vuetify/src/styles/styles.sass";
-
 .subtitle {
 	overflow-wrap: break-word;
 	white-space: normal;

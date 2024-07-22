@@ -1,11 +1,11 @@
 import { ToolParameter, ToolParameterType } from "@/store/external-tool";
-import { I18N_KEY } from "@/utils/inject";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import { toolParameterFactory } from "@@/tests/test-utils/factory";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
-import { i18nMock } from "@@/tests/test-utils";
+import { mount } from "@vue/test-utils";
 import ExternalToolConfigParameter from "./ExternalToolConfigParameter.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("ExternalToolConfigParameter", () => {
 	const getWrapper = (
@@ -14,22 +14,15 @@ describe("ExternalToolConfigParameter", () => {
 			value?: string;
 		} = { parameter: toolParameterFactory.build() }
 	) => {
-		document.body.setAttribute("data-app", "true");
-
-		const wrapper: Wrapper<Vue> = mount(
-			ExternalToolConfigParameter as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
-				},
-				propsData: {
-					...props,
-				},
-			}
-		);
+		const wrapper = mount(ExternalToolConfigParameter, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				...props,
+				modelValue: props.parameter.defaultValue,
+			},
+		});
 
 		return {
 			wrapper,
@@ -73,9 +66,11 @@ describe("ExternalToolConfigParameter", () => {
 		it("should watch selectItem and emit event when select input value changes", async () => {
 			const { wrapper, parameter } = setup();
 
-			await wrapper.find(`[data-testId=${parameter.name}]`).setValue(true);
+			await wrapper
+				.findComponent(`[data-testId=${parameter.name}]`)
+				.setValue(true);
 
-			expect(wrapper.emitted("input")).toEqual([["true"]]);
+			expect(wrapper.emitted("update:modelValue")).toEqual([[true]]);
 		});
 	});
 
@@ -107,10 +102,10 @@ describe("ExternalToolConfigParameter", () => {
 			const { wrapper, parameter } = setup();
 
 			await wrapper
-				.find(`[data-testId=${parameter.name}]`)
+				.findComponent(`[data-testId=${parameter.name}]`)
 				.setValue("newValue");
 
-			expect(wrapper.emitted("input")).toEqual([["newValue"]]);
+			expect(wrapper.emitted("update:modelValue")).toEqual([["newValue"]]);
 		});
 	});
 
@@ -136,17 +131,23 @@ describe("ExternalToolConfigParameter", () => {
 			expect(wrapper.findComponent({ name: "v-text-field" }).exists()).toEqual(
 				true
 			);
+
 			expect(
-				wrapper.find(`[data-testId=${parameter.name}]`).attributes("type")
+				wrapper
+					.findComponent(`[data-testId=${parameter.name}]`)
+					.get("input")
+					.attributes("type")
 			).toEqual("number");
 		});
 
 		it("should emit event when parameter value changes", async () => {
 			const { wrapper, parameter } = setup();
 
-			await wrapper.find(`[data-testId=${parameter.name}]`).setValue("1234");
+			await wrapper
+				.findComponent(`[data-testId=${parameter.name}]`)
+				.setValue("1234");
 
-			expect(wrapper.emitted("input")).toEqual([["1234"]]);
+			expect(wrapper.emitted("update:modelValue")).toEqual([["1234"]]);
 		});
 	});
 });

@@ -9,12 +9,14 @@
 		:confirm-btn-disabled="!isValid"
 		@dialog-confirmed="submit"
 	>
-		<h4 class="text-h4 mt-0" slot="title">
-			{{ t("common.words.termsOfUse") }}
-		</h4>
+		<template #title>
+			<h4 class="text-h4 mt-0">
+				{{ t("common.words.termsOfUse") }}
+			</h4>
+		</template>
 		<template #content>
 			<v-form ref="termsForm" v-model="isValid">
-				<v-alert light text type="warning" class="mb-10" icon="$mdiAlert">
+				<v-alert type="warning" class="mb-10" icon="$mdiAlert">
 					<div class="alert-text">
 						{{
 							t(
@@ -27,8 +29,9 @@
 					ref="input-file"
 					class="input-file mb-2"
 					data-testid="input-file"
-					v-model="file"
-					dense
+					v-model="files"
+					:multiple="false"
+					density="compact"
 					accept="application/pdf"
 					truncate-length="30"
 					:label="
@@ -41,10 +44,10 @@
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
 					@blur="onBlur"
 				>
-					<template #append>
+					<template v-slot:append-inner>
 						<v-icon
 							v-if="!isValid && isTouched"
-							color="var(--v-error-base)"
+							color="rgba(var(--v-theme-error))"
 							data-testid="warning-icon"
 							>$mdiAlert</v-icon
 						>
@@ -68,7 +71,7 @@ import { School } from "@/store/types/schools";
 import { currentDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SchoolTermsFormDialog",
@@ -88,22 +91,23 @@ export default defineComponent({
 		const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const schoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 
-		const termsForm: Ref = ref(null);
+		const termsForm: Ref<File[]> = ref([]);
 		const isFormValid: Ref<boolean> = ref(false);
 		const isFormTouched: Ref<boolean> = ref(false);
-		const termsFile: Ref<File | null> = ref(null);
+		const files: Ref<File[]> = ref([]);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
 		const validationRules = {
-			required: (value: string) => !!value || t("common.validation.required"),
-			mustBePdf: (value: File) =>
-				!value ||
-				value.type === "application/pdf" ||
+			required: (value: File[]) =>
+				!(value.length === 0) || t("common.validation.required"),
+			mustBePdf: (value: File[]) =>
+				!(value.length === 0) ||
+				value[0].type === "application/pdf" ||
 				t("pages.administration.school.index.termsOfUse.validation.notPdf"),
-			maxSize: (bytes: number) => (value: File) =>
-				!value ||
-				value.size <= bytes ||
+			maxSize: (bytes: number) => (value: File[]) =>
+				!(value.length === 0) ||
+				value[0].size <= bytes ||
 				t("pages.administration.school.index.termsOfUse.validation.fileTooBig"),
 		};
 
@@ -112,7 +116,7 @@ export default defineComponent({
 		};
 
 		const resetForm = () => {
-			termsForm.value.reset();
+			termsForm.value = [];
 			isFormValid.value = false;
 			isFormTouched.value = false;
 		};
@@ -130,7 +134,7 @@ export default defineComponent({
 					consentText: "",
 					consentTypes: ["termsOfUse"],
 					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(termsFile.value as File)) as string,
+					consentData: (await toBase64(files.value[0])) as string,
 				};
 
 				emit("close");
@@ -139,7 +143,7 @@ export default defineComponent({
 				notifierModule.show({
 					text: t("pages.administration.school.index.termsOfUse.success"),
 					status: "success",
-					timeout: 10000,
+					timeout: 5000,
 				});
 
 				resetForm();
@@ -148,7 +152,7 @@ export default defineComponent({
 
 		return {
 			t,
-			file: termsFile,
+			files,
 			rules: validationRules,
 			cancel,
 			submit,
@@ -164,7 +168,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .alert-text {
-	color: var(--v-black-base) !important;
+	color: rgba(var(--v-theme-on-background)) !important;
 	line-height: var(--line-height-lg) !important;
 }
 

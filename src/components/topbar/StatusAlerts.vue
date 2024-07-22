@@ -10,37 +10,38 @@
 			v-for="(item, index) in statusAlerts"
 			:key="index"
 			:data-test-id="`alert-item-${index}`"
-			class="alert-item"
+			class="alert-item py-2"
 		>
-			<v-list-item-icon class="mt-3 mr-3">
-				<v-icon :color="`var(--v-${getIconTag(item.status).color}-base)`">
+			<template v-slot:prepend>
+				<v-icon
+					:color="`rgba(var(--v-theme-${getIconTag(item.status).color}))`"
+					class="item-icon"
+				>
 					{{ getIconTag(item.status).icon }}
 				</v-icon>
-			</v-list-item-icon>
-			<v-list-item-content>
-				<v-list-item-title
-					:data-testid="`alert-title-${index}`"
-					class="subtitle-1 ma-0"
-				>
-					{{ item.title }}
-				</v-list-item-title>
-				<v-list-item-subtitle
-					:data-testid="`alert-text-${index}`"
-					class="subtitle-2 text--primary ma-0 mt-1"
-				>
-					{{ item.text }}
-				</v-list-item-subtitle>
-				<v-list-item-subtitle
-					class="text-left text-caption d-flex flex-row alert-date text--secondary mt-0 mt-2"
-					:data-testid="`alert-date-${index}`"
-				>
-					<template v-if="item.timestamp !== item.createdAt">
-						{{ $t("common.labels.updateAt") }}
-						{{ formatDate(item.timestamp) }} |
-					</template>
-					{{ $t("common.labels.createAt") }} {{ formatDate(item.createdAt) }}
-				</v-list-item-subtitle>
-			</v-list-item-content>
+			</template>
+			<v-list-item-title
+				:data-testid="`alert-title-${index}`"
+				class="item-title ma-0"
+			>
+				{{ item.title }}
+			</v-list-item-title>
+			<v-list-item-subtitle
+				:data-testid="`alert-text-${index}`"
+				class="item-subtitle ma-0 mt-1"
+			>
+				{{ item.text }}
+			</v-list-item-subtitle>
+			<v-list-item-subtitle
+				class="text-left text-caption d-flex flex-row alert-date mt-0 mt-2"
+				:data-testid="`alert-date-${index}`"
+			>
+				<template v-if="item.timestamp !== item.createdAt">
+					{{ $t("common.labels.updateAt") }}
+					{{ formatDate(item.timestamp) }} |
+				</template>
+				{{ $t("common.labels.createAt") }} {{ formatDate(item.createdAt) }}
+			</v-list-item-subtitle>
 		</v-list-item>
 	</v-list>
 </template>
@@ -76,7 +77,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "../../../node_modules/vuetify/src/styles/styles";
+@import "~vuetify/settings";
 @import "@/styles/mixins";
 
 .alerts {
@@ -93,19 +94,30 @@ export default defineComponent({
 		&:first-child {
 			border-top: none;
 		}
+
+		:deep(.v-list-item__prepend) {
+			align-self: start;
+		}
 	}
 
-	.subtitle-1 {
+	.item-icon {
+		opacity: unset;
+	}
+
+	.item-title {
 		overflow: visible;
 		text-overflow: clip;
 		white-space: normal;
+		word-break: break-word;
+		line-height: 1rem;
 	}
-	.subtitle-2 {
+	.item-subtitle {
 		overflow: unset;
 		text-overflow: unset;
 		white-space: unset;
 		display: flex;
 		flex-wrap: wrap;
+		word-break: break-word;
 	}
 }
 </style>

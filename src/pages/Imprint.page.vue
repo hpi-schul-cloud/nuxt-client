@@ -6,8 +6,8 @@
 import Impressum from "@/components/templates/impressum.vue";
 import { defineComponent } from "vue";
 import { useTitle } from "@vueuse/core";
-import { useI18n } from "@/composables/i18n.composable";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "ImpressumPage",

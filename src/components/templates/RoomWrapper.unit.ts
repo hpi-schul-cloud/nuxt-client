@@ -1,36 +1,45 @@
-import { authModule, envConfigModule, roomsModule } from "@/store";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, Wrapper } from "@vue/test-utils";
-import RoomWrapper from "./RoomWrapper.vue";
-import setupStores from "@@/tests/test-utils/setupStores";
-import RoomsModule from "@/store/rooms";
+import {
+	authModule,
+	commonCartridgeImportModule,
+	envConfigModule,
+	roomsModule,
+} from "@/store";
 import AuthModule from "@/store/auth";
+import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import EnvConfigModule from "@/store/env-config";
-import Vue from "vue";
-import { Envs } from "@/store/types/env-config";
+import RoomsModule from "@/store/rooms";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { SpeedDialMenu } from "@ui-speed-dial-menu";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import { FabAction } from "./default-wireframe.types";
+import DefaultWireframe from "./DefaultWireframe.vue";
+import RoomWrapper from "./RoomWrapper.vue";
 
 const getWrapper = (
-	options: any = {
-		propsData: { hasRooms: true },
-		computed: { $mq: () => "desktop", isLoading: () => false },
+	options: ComponentMountingOptions<typeof RoomWrapper> = {
+		props: { hasRooms: true },
 	}
 ) => {
 	return mount(RoomWrapper, {
-		...createComponentMocks({
-			i18n: true,
-		}),
+		global: {
+			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				mq: () => ({
+					current: "desktop",
+				}),
+			},
+			stubs: {
+				GroupSelectionDialog: true,
+				CommonCartridgeImportModal: true,
+			},
+		},
 		...options,
 	});
-};
-
-const mockAuthStoreData = {
-	_id: "asdf",
-	id: "asdf",
-	firstName: "Arthur",
-	lastName: "Dent",
-	email: "arthur.dent@hitchhiker.org",
-	roles: ["student"],
-	permissions: ["COURSE_CREATE", "COURSE_EDIT"],
 };
 
 const mockData = [
@@ -72,170 +81,152 @@ const mockData = [
 ];
 
 describe("@templates/RoomWrapper.vue", () => {
-	let wrapper: Wrapper<Vue>;
-
 	beforeEach(() => {
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		document.body.setAttribute("data-app", "true");
 		setupStores({
 			roomsModule: RoomsModule,
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
+			commonCartridgeImportModule: CommonCartridgeImportModule,
 		});
-		roomsModule.setAllElements(mockData as any);
+		roomsModule.setAllElements(mockData);
 	});
 
 	describe("when data is not loaded yet", () => {
 		it("should display skeleton loader", () => {
-			wrapper = getWrapper({
+			roomsModule.setLoading(true);
+
+			const wrapper = getWrapper({
 				props: { hasRooms: false },
-				computed: { $mq: () => "desktop", isLoading: () => true },
 			});
 
 			expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(
 				true
 			);
-
-			wrapper.destroy();
 		});
 	});
 
 	describe("when data is loaded", () => {
 		describe("when data is empty", () => {
-			it("should display empty state", () => {
-				wrapper = getWrapper({
+			it("should display empty state", async () => {
+				const wrapper = getWrapper({
 					props: { hasRooms: false },
-					computed: { $mq: () => "desktop", isLoading: () => false },
 				});
 
 				expect(
 					wrapper.findComponent({ ref: "rooms-empty-state" }).exists()
 				).toBe(true);
-
-				wrapper.destroy();
 			});
 		});
 
 		describe("when data is not empty", () => {
 			it("should render page content slot", () => {
-				wrapper = getWrapper({
-					propsData: { hasRooms: true },
-					computed: { $mq: () => "desktop", isLoading: () => false },
+				const wrapper = getWrapper({
+					props: { hasRooms: true },
 					slots: {
 						"page-content": "<div>Page Content</div>",
 					},
 				});
 
 				expect(wrapper.html()).toContain("<div>Page Content</div>");
-
-				wrapper.destroy();
 			});
 		});
 	});
 
 	describe("when user has course create permission", () => {
 		beforeEach(() => {
-			authModule.setUser({
-				...mockAuthStoreData,
-				updatedAt: "",
-				birthday: "",
-				createdAt: "",
-				preferences: {},
-				schoolId: "",
-				emailSearchValues: [],
-				firstNameSearchValues: [],
-				lastNameSearchValues: [],
-				consent: {},
-				forcePasswordChange: false,
-				language: "",
-				fullName: "",
-				avatarInitials: "",
-				avatarBackgroundColor: "",
-				age: 0,
-				displayName: "",
-				accountId: "",
-				schoolName: "",
-				externallyManaged: false,
+			const mockMe = meResponseFactory.build({
+				permissions: ["COURSE_CREATE"],
 			});
+			authModule.setMe(mockMe);
 		});
 
 		it("should display fab", () => {
 			const wrapper = getWrapper();
 
-			const fabComponent = wrapper.find(".wireframe-fab");
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(true);
 		});
 
-		it("should open the import-modal", async () => {
-			envConfigModule.setEnvs({ FEATURE_COURSE_SHARE: true } as Envs);
-			const wrapper = getWrapper();
+		describe("when course synchronization is active", () => {
+			beforeEach(() => {
+				envConfigModule.setEnvs(
+					envsFactory.build({ FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true })
+				);
+			});
 
-			const importModalComponent = wrapper.find(".import-modal");
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(importModalComponent.vm.isOpen).toBe(false);
+			it("should have the course sync sub menu action", async () => {
+				const wrapper = getWrapper();
 
-			const fab = wrapper.find(".wireframe-fab");
-			await fab.trigger("click");
+				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+				const fabActions: FabAction[] | undefined =
+					defaultWireframe.props().fabItems?.actions;
 
-			const importBtn = wrapper.find(
-				'[data-testid="fab_button_import_course"]'
-			);
-			await importBtn.trigger("click");
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(importModalComponent.vm.isOpen).toBe(true);
+				expect(
+					fabActions?.some(
+						(action: FabAction) =>
+							action.dataTestId === "fab_button_add_synced_course"
+					)
+				).toEqual(true);
+			});
 		});
 
-		it("should call the updateRooms method if import-modal component emits 'update-rooms' event", async () => {
-			const updateRoomsMock = jest.fn();
-			const wrapper = getWrapper();
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			wrapper.vm.updateRooms = updateRoomsMock;
-			await wrapper.setData({ importDialog: { isOpen: true } });
+		describe("when course synchronization is active", () => {
+			beforeEach(() => {
+				envConfigModule.setEnvs(
+					envsFactory.build({
+						FEATURE_COMMON_CARTRIDGE_COURSE_IMPORT_ENABLED: true,
+					})
+				);
+			});
 
-			const importModalComponent = wrapper.find(".import-modal");
-			await importModalComponent.vm.$emit("update-rooms");
-			await wrapper.vm.$nextTick();
-			await wrapper.vm.$nextTick();
-			expect(updateRoomsMock).toHaveBeenCalled();
+			it("should have the common cartridge sub menu action", async () => {
+				const wrapper = getWrapper();
+
+				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+				const fabActions: FabAction[] | undefined =
+					defaultWireframe.props().fabItems?.actions;
+
+				expect(
+					fabActions?.some(
+						(action: FabAction) =>
+							action.dataTestId === "fab_button_import_course"
+					)
+				).toEqual(true);
+			});
 		});
 	});
 
 	describe("when user does not have course create permission", () => {
 		it("should not display fab", () => {
-			authModule.setUser({
-				...mockAuthStoreData,
-				permissions: ["aksjdhf", "poikln"],
-				updatedAt: "",
-				birthday: "",
-				createdAt: "",
-				preferences: {},
-				schoolId: "",
-				emailSearchValues: [],
-				firstNameSearchValues: [],
-				lastNameSearchValues: [],
-				consent: {},
-				forcePasswordChange: false,
-				language: "",
-				fullName: "",
-				avatarInitials: "",
-				avatarBackgroundColor: "",
-				age: 0,
-				displayName: "",
-				accountId: "",
-				schoolName: "",
-				externallyManaged: false,
-			});
+			const mockMe = meResponseFactory.build();
+			authModule.setMe(mockMe);
 
 			const wrapper = getWrapper();
 
-			const fabComponent = wrapper.find(".wireframe-fab");
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.exists()).toBe(false);
+		});
+	});
 
-			wrapper.destroy();
+	describe("when clicking on the course sync fab action", () => {
+		it("should open the course sync dialog", async () => {
+			const wrapper = getWrapper();
+
+			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+			defaultWireframe.vm.$emit("onFabItemClick", "syncedCourse");
+
+			expect(wrapper.vm.isCourseSyncDialogOpen).toEqual(true);
+		});
+	});
+
+	describe("when clicking on the common cartridge fab action", () => {
+		it("should open the common cartridge dialog", async () => {
+			const wrapper = getWrapper();
+
+			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+			defaultWireframe.vm.$emit("onFabItemClick", "import");
+
+			expect(commonCartridgeImportModule.isOpen).toEqual(true);
 		});
 	});
 });

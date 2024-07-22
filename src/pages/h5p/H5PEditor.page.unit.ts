@@ -1,10 +1,8 @@
 import { mount } from "@vue/test-utils";
 import H5pEditorPage from "./H5PEditor.page.vue";
-import { I18N_KEY } from "@/utils/inject";
-import VueI18n from "vue-i18n";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 
-jest.mock("vue-router/composables", () => ({
+jest.mock("vue-router", () => ({
 	useRoute: () => ({ params: { id: "test-id" }, query: {} }),
 }));
 
@@ -12,22 +10,15 @@ describe("H5PEditorPage", () => {
 	const parentType = "test-parent-type";
 	const parentId = "test-parent-id";
 
-	const i18nMock = new VueI18n({
-		locale: "en",
-	});
-
-	const createWrapper = (propsData = {}) => {
+	const createWrapper = (props = {}) => {
 		return mount(H5pEditorPage, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			propsData: {
+			global: {
+				plugins: [createTestingI18n()],
+			},
+			props: {
 				parentType,
 				parentId,
-				...propsData,
-			},
-			provide: {
-				[I18N_KEY as any]: i18nMock,
+				...props,
 			},
 		});
 	};

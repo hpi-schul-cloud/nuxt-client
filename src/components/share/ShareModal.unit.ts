@@ -1,7 +1,6 @@
 import ShareModule from "@/store/share";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
-import { mount, MountOptions } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
@@ -9,45 +8,41 @@ import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import {
 	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import NotifierModule from "@/store/notifier";
-import Vue from "vue";
 import EnvConfigModule from "@/store/env-config";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("@/components/share/ShareModal", () => {
 	let shareModuleMock: ShareModule;
 	let notifierModuleMock: NotifierModule;
 
-	const getWrapper = (
-		attrs = { propsData: { type: "courses" } },
-		envConfigModuleGetter?: Partial<EnvConfigModule>
-	) => {
+	const setup = (envConfigModuleGetter?: Partial<EnvConfigModule>) => {
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 			...envConfigModuleGetter,
 		});
-
-		const wrapper = mount(ShareModal as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				shareModule: shareModuleMock,
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+		const wrapper = mount(ShareModal, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
 			},
-			...attrs,
+			props: {
+				type: "courses",
+			},
 		});
-
-		return wrapper;
+		return { wrapper };
 	};
 
 	beforeEach(() => {
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		document.body.setAttribute("data-app", "true");
-
 		shareModuleMock = createModuleMocks(ShareModule, {
 			getIsShareModalOpen: true,
 			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
@@ -59,15 +54,15 @@ describe("@/components/share/ShareModal", () => {
 	});
 
 	it("should start with step 1", () => {
-		const wrapper = getWrapper();
+		const { wrapper } = setup();
 
-		const switches = wrapper.findAllComponents({ name: "v-switch" });
+		const switches = wrapper.findAllComponents({ name: "v-checkbox" });
 
 		expect(switches.length).toBe(2);
 	});
 
 	it("should have the correct title", () => {
-		const wrapper = getWrapper();
+		const { wrapper } = setup();
 		const title = wrapper.vm.$refs.textTitle as HTMLElement;
 
 		expect(title.textContent).toContain(
@@ -76,7 +71,7 @@ describe("@/components/share/ShareModal", () => {
 	});
 
 	it("should call 'createShareUrl' store method when next button clicked", () => {
-		const wrapper = getWrapper();
+		const { wrapper } = setup();
 		const dialog = wrapper.findComponent(vCustomDialog);
 
 		dialog.vm.$emit("next");
@@ -85,7 +80,7 @@ describe("@/components/share/ShareModal", () => {
 	});
 
 	it("should call 'resetShareFlow' store method when dialog closed", () => {
-		const wrapper = getWrapper();
+		const { wrapper } = setup();
 		const dialog = wrapper.findComponent(vCustomDialog);
 
 		dialog.vm.$emit("dialog-closed");
@@ -99,7 +94,7 @@ describe("@/components/share/ShareModal", () => {
 			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 			getShareUrl: "http://example.com",
 		});
-		const wrapper = getWrapper();
+		const { wrapper } = setup();
 		const form = wrapper.findComponent(ShareModalResult);
 
 		form.vm.$emit("done");
@@ -108,14 +103,12 @@ describe("@/components/share/ShareModal", () => {
 	});
 
 	it("should call 'onShareOptionsChange' method when sub component emits 'share-options-change'", () => {
-		const wrapper = getWrapper();
+		const { wrapper } = setup();
 		const form = wrapper.findComponent(ShareModalOptionsForm);
 		const payload = { isSchoolInternal: true, hasExpiryDate: false };
 
 		form.vm.$emit("share-options-change", payload);
 
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
 		expect(wrapper.vm.shareOptions).toStrictEqual(payload);
 	});
 
@@ -125,7 +118,7 @@ describe("@/components/share/ShareModal", () => {
 			getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
 			getShareUrl: "http://example.com",
 		});
-		const wrapper = getWrapper();
+		const { wrapper } = setup();
 		const form = wrapper.findComponent(ShareModalResult);
 
 		form.vm.$emit("copied");
@@ -135,25 +128,17 @@ describe("@/components/share/ShareModal", () => {
 	describe("ctl tool info", () => {
 		describe("ctl tools are enabled", () => {
 			it("should have the correct title", () => {
-				const wrapper = getWrapper(
-					{
-						propsData: {
-							type: "courses",
-						},
-					},
-					{
-						getCtlToolsTabEnabled: true,
-					}
-				);
+				const { wrapper } = setup({ getCtlToolsTabEnabled: true });
 
-				const infotext = wrapper.find(
+				const dialog = wrapper.findComponent(vCustomDialog);
+				const cardText = dialog.findComponent({ name: "v-card-text" });
+
+				const infotext = cardText.find(
 					`[data-testid="share-modal-external-tools-info"]`
 				);
 
 				expect(infotext.text()).toEqual(
-					wrapper.vm.$i18n.t(
-						"components.molecules.share.courses.options.ctlTools.infotext"
-					)
+					"components.molecules.share.courses.options.ctlTools.infotext"
 				);
 
 				expect(infotext.isVisible()).toBe(true);
@@ -162,16 +147,7 @@ describe("@/components/share/ShareModal", () => {
 
 		describe("when ctl tools are disabled", () => {
 			it("should have the correct title", () => {
-				const wrapper = getWrapper(
-					{
-						propsData: {
-							type: "courses",
-						},
-					},
-					{
-						getCtlToolsTabEnabled: false,
-					}
-				);
+				const { wrapper } = setup({ getCtlToolsTabEnabled: false });
 
 				const infotext = wrapper.find(
 					`[data-testid="share-modal-external-tools-info"]`

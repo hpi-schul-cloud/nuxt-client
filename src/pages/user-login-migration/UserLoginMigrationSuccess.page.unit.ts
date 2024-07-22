@@ -1,12 +1,13 @@
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { shallowMount } from "@vue/test-utils";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import Vue from "vue";
 import UserLoginMigrationSuccessPage from "./UserLoginMigrationSuccess.page.vue";
-import { i18nMock } from "@@/tests/test-utils";
-import { I18N_KEY, SYSTEMS_MODULE_KEY } from "@/utils/inject";
+import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -32,23 +33,19 @@ describe("UserLoginMigrationSuccess", () => {
 			getSystems: systemsMock,
 		});
 
-		const wrapper: Wrapper<Vue> = mount(
-			UserLoginMigrationSuccessPage as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
+		const wrapper = shallowMount(UserLoginMigrationSuccessPage, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-					[I18N_KEY.valueOf()]: i18nMock,
 				},
-				propsData: props,
 				mocks: {
 					$t: (key: string, dynamic?: object): string =>
 						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 				},
-			}
-		);
+			},
+			props,
+		});
 
 		return {
 			wrapper,
@@ -76,9 +73,9 @@ describe("UserLoginMigrationSuccess", () => {
 					targetSystem: "targetSystemId",
 				});
 
-				const descriptionText: string = wrapper
-					.find('[data-testid="text-description"]')
-					.text();
+				const descriptionText = wrapper
+					.findComponent('[data-testid="text-description"]')
+					.attributes("html");
 
 				expect(descriptionText).toEqual(
 					'pages.userMigration.success.description {"targetSystem":"targetSystem"}'
@@ -95,7 +92,7 @@ describe("UserLoginMigrationSuccess", () => {
 				expect(button.text()).toEqual(
 					'pages.userMigration.success.login {"targetSystem":"targetSystem"}'
 				);
-				expect(button.props().to).toEqual("/logout");
+				expect(button.attributes().to).toEqual("/logout");
 			});
 		});
 	});

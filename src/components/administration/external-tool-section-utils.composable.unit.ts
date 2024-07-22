@@ -1,32 +1,16 @@
-import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
-import { DataTableHeader } from "vuetify";
-import { schoolExternalToolsModule } from "@/store";
 import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { DataTableHeader } from "@/store/types/data-table-header";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import {
+	schoolExternalToolFactory,
+	schoolExternalToolResponseFactory,
+} from "@@/tests/test-utils";
+import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { ContextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
-
-const schoolExternalToolsModuleMock = () => {
-	return {
-		getSchoolExternalTools: [
-			{
-				id: "id",
-				name: "toolName",
-				version: 1,
-				status: {
-					isOutdatedOnScopeSchool: false,
-					isDeactivated: false,
-				},
-			},
-		],
-	};
-};
-
-jest.mock("@/store", () => ({
-	schoolExternalToolsModule: schoolExternalToolsModuleMock(),
-}));
 
 describe("useSchoolExternalToolUtils", () => {
 	const setup = () => {
@@ -35,35 +19,19 @@ describe("useSchoolExternalToolUtils", () => {
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(tMock);
 
-		const toolResponse: SchoolExternalToolResponse = {
-			id: "id",
-			name: "toolName",
-			toolId: "toolId",
-			toolVersion: 1,
-			schoolId: "schoolId",
-			parameters: [
-				{
-					name: "name",
-					value: "value",
-				},
-			],
-			status: ContextExternalToolConfigurationStatusFactory.build({
-				isOutdatedOnScopeSchool: false,
-				isDeactivated: false,
-			}),
-		};
+		const schoolExternalTool = schoolExternalToolFactory.build();
+		const schoolExternalToolsModule = createModuleMocks(
+			SchoolExternalToolsModule,
+			{
+				getSchoolExternalTools: [schoolExternalTool],
+			}
+		);
+
+		const toolResponse: SchoolExternalToolResponse =
+			schoolExternalToolResponseFactory.build();
 		const listResponse: SchoolExternalToolSearchListResponse = {
 			data: [toolResponse],
 		};
-
-		const schoolExternaToolItem: SchoolExternalToolItem =
-			new SchoolExternalToolItem({
-				name: toolResponse.name,
-				id: toolResponse.id,
-				statusText: "translationKey",
-				isOutdated: false,
-				isDeactivated: false,
-			});
 
 		return {
 			getHeaders,
@@ -72,7 +40,8 @@ describe("useSchoolExternalToolUtils", () => {
 			toolResponse,
 			tMock,
 			expectedTranslation,
-			schoolExternaToolItem,
+			schoolExternalToolsModule,
+			schoolExternalTool,
 		};
 	};
 
@@ -87,17 +56,13 @@ describe("useSchoolExternalToolUtils", () => {
 
 		describe("when translate the headers", () => {
 			it("should call the translation function for name", () => {
-				const { getHeaders, tMock } = setup();
-
-				getHeaders;
+				const { tMock } = setup();
 
 				expect(tMock).toHaveBeenCalledWith("common.labels.name");
 			});
 
 			it("should call the translation function for value", () => {
-				const { getHeaders, tMock } = setup();
-
-				getHeaders;
+				const { tMock } = setup();
 
 				expect(tMock).toHaveBeenCalledWith(
 					"components.administration.externalToolsSection.table.header.status"
@@ -110,39 +75,40 @@ describe("useSchoolExternalToolUtils", () => {
 
 			const headers: DataTableHeader[] = getHeaders;
 
-			expect(headers[0]).toEqual({
-				text: expectedTranslation,
-				value: "name",
-			});
-			expect(headers[1]).toEqual({
-				text: expectedTranslation,
-				value: "status",
-			});
-			expect(headers[2]).toEqual({
-				text: "",
-				value: "actions",
-				sortable: false,
-				align: "end",
-			});
+			expect(headers[0].title).toEqual(expectedTranslation);
+			expect(headers[0].value).toEqual("name");
+
+			expect(headers[1].title).toEqual(expectedTranslation);
+			expect(headers[1].value).toEqual("statusText");
+
+			expect(headers[2].title).toEqual("");
+			expect(headers[2].value).toEqual("actions");
+			expect(headers[2].sortable).toBe(false);
+			expect(headers[2].align).toEqual("end");
 		});
 	});
 
 	describe("getItems is called", () => {
 		it("should return schoolExternalToolItems", () => {
-			const { getItems } = setup();
+			const {
+				getItems,
+				schoolExternalToolsModule,
+				schoolExternalTool,
+				expectedTranslation,
+			} = setup();
 
 			const items: SchoolExternalToolItem[] = getItems(
 				schoolExternalToolsModule
 			);
 
-			expect(items).toEqual([
+			expect(items).toEqual<SchoolExternalToolItem[]>([
 				{
-					id: "id",
-					name: "toolName",
-					statusText: "translated",
-					isOutdated: false,
+					id: schoolExternalTool.id,
+					externalToolId: schoolExternalTool.toolId,
+					name: schoolExternalTool.name,
+					statusText: expectedTranslation,
+					isOutdated: schoolExternalTool.status.isOutdatedOnScopeSchool,
 					isDeactivated: false,
-					version: undefined,
 				},
 			]);
 		});

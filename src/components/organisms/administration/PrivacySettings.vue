@@ -1,13 +1,10 @@
 <template>
 	<div>
-		<v-row
-			class="student-visibility-switch"
-			v-if="isTeacherStudentVisibilityVisible"
-		>
+		<v-row v-if="isTeacherStudentVisibilityVisible">
 			<v-col>
-				<v-custom-switch
+				<v-switch
 					:disabled="!isTeacherStudentVisibilityConfigurable"
-					:value="studentVisibility"
+					:model-value="studentVisibility"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.studentVisibility'
@@ -18,8 +15,10 @@
 							'pages.administration.school.index.privacySettings.labels.studentVisibility'
 						)
 					"
+					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
-					@input-changed="
+					data-testid="admin-school-toggle-student-visibility"
+					@update:modelValue="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
 					"
@@ -36,10 +35,10 @@
 				</p>
 			</v-col>
 		</v-row>
-		<v-row v-if="toggleStudentLernstoreViewEnabled" class="learnstore-switch">
+		<v-row v-if="toggleStudentLernstoreViewEnabled">
 			<v-col>
-				<v-custom-switch
-					:value="lernStoreVisibility"
+				<v-switch
+					:model-value="lernStoreVisibility"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.lernStore'
@@ -51,10 +50,12 @@
 						)
 					"
 					class="ml-1 mt-0"
-					@input-changed="
+					data-testid="admin-school-toggle-learning-store"
+					@update:modelValue="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
 					"
+					:true-icon="mdiCheck"
 				/>
 				<p class="switch-hint">
 					{{
@@ -65,10 +66,10 @@
 				</p>
 			</v-col>
 		</v-row>
-		<v-row v-if="rocketChatEnabled" class="rocketchat-switch">
+		<v-row v-if="rocketChatEnabled">
 			<v-col>
-				<v-custom-switch
-					:value="features.rocketChat"
+				<v-switch
+					:model-value="features.rocketChat"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.chatFunction'
@@ -79,9 +80,10 @@
 							'pages.administration.school.index.privacySettings.labels.chatFunction'
 						)
 					"
+					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_chat"
-					@input-changed="
+					@update:modelValue="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
 				/>
@@ -94,10 +96,10 @@
 				</p>
 			</v-col>
 		</v-row>
-		<v-row v-if="videoConferenceEnabled" class="videoconference-switch">
+		<v-row v-if="videoConferenceEnabled">
 			<v-col>
-				<v-custom-switch
-					:value="features.videoconference"
+				<v-switch
+					:model-value="features.videoconference"
 					:label="
 						$t(
 							'pages.administration.school.index.privacySettings.labels.videoConference'
@@ -108,9 +110,10 @@
 							'pages.administration.school.index.privacySettings.labels.videoConference'
 						)
 					"
+					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_video_conference"
-					@input-changed="
+					@update:modelValue="
 						($event) =>
 							$emit('update-feature-settings', $event, 'videoconference')
 					"
@@ -127,60 +130,73 @@
 	</div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import vCustomSwitch from "@/components/atoms/vCustomSwitch";
+import { mdiCheck } from "@mdi/js";
+import { computed } from "vue";
 
-export default {
-	components: {
-		vCustomSwitch,
+const props = defineProps({
+	permissions: {
+		type: Object,
+		required: true,
 	},
-	props: {
-		permissions: {
-			type: Object,
-			required: true,
-		},
-		features: {
-			type: Object,
-			required: true,
-		},
+	features: {
+		type: Object,
+		required: true,
 	},
-	computed: {
-		toggleStudentLernstoreViewEnabled: () =>
-			envConfigModule.getAdminToggleStudentLernstoreViewEnabled,
-		isTeacherStudentVisibilityConfigurable: () =>
-			envConfigModule.getTeacherStudentVisibilityIsConfigurable,
-		isTeacherStudentVisibilityVisible: () =>
-			envConfigModule.getTeacherStudentVisibilityIsVisible,
-		videoConferenceEnabled: () => envConfigModule.getVideoConferenceEnabled,
-		rocketChatEnabled: () => envConfigModule.getRocketChatEnabled,
-		theme: () => envConfigModule.getTheme,
-		studentVisibility() {
-			if (this.isTeacherStudentVisibilityConfigurable) {
-				return this.permissions?.teacher
-					? this.permissions.teacher.STUDENT_LIST
-					: false;
-			} else {
-				return envConfigModule.getTeacherStudentVisibilityIsEnabledByDefault;
-			}
-		},
-		studentVisibilityTextKey() {
-			switch (this.theme) {
-				case "n21":
-					return "pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen";
-				case "brb":
-					return "pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg";
-				default:
-					return "pages.administration.school.index.privacySettings.longText.studentVisibility";
-			}
-		},
-		lernStoreVisibility() {
-			return this.permissions.student
-				? this.permissions.student.LERNSTORE_VIEW
-				: true;
-		},
-	},
-};
+});
+
+const toggleStudentLernstoreViewEnabled = computed(
+	() =>
+		envConfigModule.getEnv.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED
+);
+
+const isTeacherStudentVisibilityConfigurable = computed(
+	() => envConfigModule.getEnv.TEACHER_STUDENT_VISIBILITY__IS_CONFIGURABLE
+);
+
+const isTeacherStudentVisibilityVisible = computed(
+	() => envConfigModule.getEnv.TEACHER_STUDENT_VISIBILITY__IS_VISIBLE
+);
+
+const videoConferenceEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_VIDEOCONFERENCE_ENABLED
+);
+
+const rocketChatEnabled = computed(
+	() => envConfigModule.getEnv.ROCKETCHAT_SERVICE_ENABLED
+);
+
+const theme = computed(() => envConfigModule.getTheme);
+
+const studentVisibility = computed(() => {
+	if (isTeacherStudentVisibilityConfigurable.value) {
+		return props.permissions?.teacher
+			? props.permissions.teacher.STUDENT_LIST
+			: false;
+	} else {
+		return envConfigModule.getEnv
+			.TEACHER_STUDENT_VISIBILITY__IS_ENABLED_BY_DEFAULT;
+	}
+});
+
+const studentVisibilityTextKey = computed(() => {
+	switch (theme.value) {
+		case SchulcloudTheme.N21:
+			return "pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen";
+		case SchulcloudTheme.Brb:
+			return "pages.administration.school.index.privacySettings.longText.studentVisibilityBrandenburg";
+		default:
+			return "pages.administration.school.index.privacySettings.longText.studentVisibility";
+	}
+});
+
+const lernStoreVisibility = computed(() => {
+	return props.permissions.student
+		? props.permissions.student.LERNSTORE_VIEW
+		: true;
+});
 </script>
 
 <style lang="scss" scoped>

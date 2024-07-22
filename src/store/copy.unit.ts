@@ -167,6 +167,28 @@ describe("copy module", () => {
 					).toHaveBeenCalledWith("testLessonId", { courseId: "testCourseId" });
 				});
 			});
+
+			describe("copy a board", () => {
+				it("should make a 'POST' request to the backend", async () => {
+					const boardCopyMockApi = {
+						boardControllerCopyBoard: jest.fn(async () => ({ data: {} })),
+					};
+					jest
+						.spyOn(serverApi, "BoardApiFactory")
+						.mockReturnValue(
+							boardCopyMockApi as unknown as serverApi.BoardApiInterface
+						);
+					const copyModule = new CopyModule({});
+					await copyModule.copy({
+						id: "testBoardId",
+						type: CopyParamsTypeEnum.ColumnBoard,
+						courseId: "testCourseId",
+					});
+					expect(
+						boardCopyMockApi.boardControllerCopyBoard
+					).toHaveBeenCalledWith("testBoardId");
+				});
+			});
 		});
 
 		describe("validate share token", () => {
@@ -353,6 +375,46 @@ describe("copy module", () => {
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
 
+			describe("setCopyResultFailedItems", () => {
+				it("should set filteredResult for failed columnBoard copy", () => {
+					const serverData = {
+						title: "ColumnBoard",
+						type: CopyApiResponseTypeEnum.Columnboard,
+						destinationCourseId: "testCourseId",
+						status: CopyApiResponseStatusEnum.Failure,
+						id: "123",
+						elements: [
+							{
+								type: CopyApiResponseTypeEnum.DrawingElement,
+								status: CopyApiResponseStatusEnum.Failure,
+							},
+						],
+					};
+					const expectedData = [
+						{
+							title: "ColumnBoard",
+							type: CopyApiResponseTypeEnum.Columnboard,
+							elementId: "123",
+							url: "/rooms/123/board",
+							elements: [
+								{
+									type: CopyApiResponseTypeEnum.DrawingElement,
+									title: "",
+								},
+							],
+						},
+					];
+					const copyModule = new CopyModule({});
+					copyModule.reset();
+					copyModule.setCopyResultFailedItems({
+						payload: serverData,
+					});
+					expect(copyModule.getCopyResultFailedItems).toStrictEqual(
+						expectedData
+					);
+				});
+			});
+
 			it("should set filteredResult for failed lesson copy", () => {
 				const serverData = {
 					title: "Thema",
@@ -443,6 +505,7 @@ describe("copy module", () => {
 				expect(copyModule.getCopyResultFailedItems).toStrictEqual(expectedData);
 			});
 
+			// TODO - Why is this being skipped? Test should be fixed or deleted
 			it.skip("should set the state and change the statusses 'success'", () => {
 				const payload = {
 					payload: {
@@ -510,6 +573,7 @@ describe("copy module", () => {
 			const copyModule = new CopyModule({});
 			copyModule.setCopyResult(serverDataPartial);
 			copyModule.setResultModalOpen(true);
+			copyModule.setHasDrawingChild(true);
 			expect(copyModule.getId).toBe("123");
 			expect(copyModule.getTitle).toBe("Aufgabe");
 			expect(copyModule.getIsResultModalOpen).toBe(true);

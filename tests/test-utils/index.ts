@@ -1,6 +1,5 @@
 export * from "./ObjectIdMock";
 export * from "./api-mocks";
-export * from "./componentMocks";
 export * from "./composable-mocks";
 export * from "./factory";
 export * from "./i18nMock";
@@ -16,3 +15,4 @@ export * from "./mockStatusAlerts";
 export * from "./mountComposable";
 export * from "./pageStubs";
 export * from "./setupStores";
+export * from "./mockedPiniaStoreTyping";

@@ -1,8 +1,13 @@
 <template>
 	<div v-outside-click="removePopup" class="popup">
-		<v-btn icon class="icon-button" @click="popup">
-			<v-icon :color="color">{{ icon }}</v-icon>
-		</v-btn>
+		<v-btn
+			:icon="icon"
+			:color="color"
+			class="icon-button"
+			variant="text"
+			density="comfortable"
+			@click="popup"
+		/>
 		<div
 			ref="popupContent"
 			class="popup-content"
@@ -13,57 +18,47 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
-export default defineComponent({
-	name: "PopupIcon",
-	props: {
-		icon: {
-			type: String,
-			required: true,
-		},
-		color: {
-			type: String,
-			default: "var(--v-secondary-darken1)",
-		},
-		centered: {
-			type: Boolean,
-		},
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { vOnClickOutside } from "@vueuse/components";
+
+const vOutsideClick = vOnClickOutside;
+
+defineProps({
+	icon: {
+		type: String,
+		required: true,
 	},
-	setup() {
-		const visible = ref(false);
-		const expandToLeft = ref(false);
-		const popupContent = ref<HTMLDivElement | null>(null);
-
-		onMounted(() => {
-			if (popupContent.value !== null) {
-				expandToLeft.value =
-					popupContent.value.getBoundingClientRect().right >
-					window.innerWidth + 10;
-			}
-		});
-
-		const popup = () => {
-			visible.value = !visible.value;
-		};
-
-		const removePopup = () => {
-			visible.value = false;
-		};
-
-		return {
-			visible,
-			expandToLeft,
-			popupContent,
-			popup,
-			removePopup,
-		};
+	color: {
+		type: String,
+	},
+	centered: {
+		type: Boolean,
 	},
 });
+
+const visible = ref(false);
+const expandToLeft = ref(false);
+const popupContent = ref<HTMLDivElement | null>(null);
+
+onMounted(() => {
+	if (popupContent.value !== null) {
+		expandToLeft.value =
+			popupContent.value.getBoundingClientRect().right > window.innerWidth + 10;
+	}
+});
+
+const popup = () => {
+	visible.value = !visible.value;
+};
+
+const removePopup = () => {
+	visible.value = false;
+};
 </script>
 
 <style lang="scss" scoped>
-/* stylelint-disable sh-waqar/declaration-use-variable */
+@import "~vuetify/settings";
 @import "@/styles/mixins";
 
 .popup {
@@ -75,17 +70,13 @@ export default defineComponent({
 	--arrow-offset: 1em;
 	--outer-arrow-size: calc(var(--arrow-size) + 1px);
 
-	.icon-button {
-		font-size: 20px;
-	}
-
 	.popup-content {
 		position: absolute;
 		top: 100%;
 		right: 0%;
 		z-index: var(--layer-popover);
 		visibility: hidden;
-		background-color: var(--v-white-base);
+		background-color: rgba(var(--v-theme-white));
 		border: 1px solid map-get($grey, lighten-3);
 		border-radius: var(--radius-sm);
 
@@ -144,7 +135,7 @@ export default defineComponent({
 		right: var(--arrow-offset);
 		margin-left: calc(-0.5 * var(--arrow-size));
 		content: "";
-		border-color: transparent transparent var(--v-white-base) transparent;
+		border-color: transparent transparent rgba(var(--v-theme-white)) transparent;
 		border-style: solid;
 		border-width: var(--arrow-size);
 

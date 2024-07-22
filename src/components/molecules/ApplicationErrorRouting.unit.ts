@@ -1,26 +1,37 @@
-import ApplicationErrorRouting from "./ApplicationErrorRouting.vue";
-import { mount } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import ApplicationErrorModule from "@/store/application-error";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import VueRouter from "vue-router";
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { createMock } from "@golevelup/ts-jest";
+import { mount } from "@vue/test-utils";
+import { ref } from "vue";
+import { Router, useRouter } from "vue-router";
+import ApplicationErrorRouting from "./ApplicationErrorRouting.vue";
+
+jest.mock("vue-router", () => ({
+	useRoute: jest.fn(),
+	useRouter: jest.fn(),
+}));
 
 describe("@/components/molecules/ApplicationErrorRouting.vue", () => {
-	let router: VueRouter;
+	const router = createMock<Router>({
+		currentRoute: ref({ path: "/" }),
+	});
+	const useRouterMock = <jest.Mock>useRouter;
+
+	useRouterMock.mockReturnValue(router);
 	let applicationErrorModuleMock: ApplicationErrorModule;
 
-	const mountComponent: any = () => {
-		const componentOptions = createComponentMocks({ i18n: true });
-		const { localVue } = componentOptions;
-		localVue.use(VueRouter);
-		router = new VueRouter({ routes: [{ path: "home" }] });
-		jest.spyOn(router, "replace");
-
+	const mountComponent = () => {
 		return mount(ApplicationErrorRouting, {
-			...componentOptions,
-			provide: {
-				[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModuleMock,
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModuleMock,
+				},
 			},
 			router,
 		});

@@ -1,29 +1,31 @@
 <template>
 	<div ref="dialog" data-testid="dialog" class="v-application base-dialog">
-		<base-modal :active="active" @update:active="clickOutside">
+		<base-modal v-model:active="isActive">
 			<template #body>
 				<modal-body-info :title="message">
 					<template #icon>
-						<v-icon v-if="icon" :color="currentIconColor">{{ icon }}</v-icon>
+						<v-icon
+							v-if="icon"
+							:color="currentIconColor"
+							class="pb-6"
+							size="85"
+							>{{ icon }}</v-icon
+						>
 					</template>
 				</modal-body-info>
 			</template>
 			<template #footerRight>
 				<v-btn
-					depressed
-					:text="!invertedDesign"
-					:dark="invertedDesign"
-					:color="!invertedDesign ? 'secondary' : 'success'"
+					variant="text"
 					data-testid="btn-dialog-cancel"
 					@click="cancel"
+					class="mr-3"
 				>
 					{{ cancelText }}
 				</v-btn>
 				<v-btn
-					depressed
-					:color="invertedDesign ? 'secondary' : 'success'"
-					:text="invertedDesign"
-					:dark="!invertedDesign"
+					variant="flat"
+					color="primary"
 					data-testid="btn-dialog-confirm"
 					@click="confirm"
 				>
@@ -59,10 +61,6 @@ export default {
 			type: String,
 			default: undefined,
 		},
-		actionDesign: {
-			type: String,
-			default: "primary",
-		},
 		confirmText: {
 			type: String,
 			default: "Bestätigen",
@@ -83,18 +81,23 @@ export default {
 			type: Function,
 			default: () => ({}),
 		},
-		invertedDesign: {
-			type: Boolean,
-		},
 	},
 	data() {
 		return {};
 	},
 	computed: {
 		currentIconColor() {
-			return this.iconColor
-				? this.iconColor
-				: `var(--v-${this.actionDesign}-base)`;
+			return this.iconColor ? this.iconColor : "rgba(var(--v-theme-primary))";
+		},
+		isActive: {
+			get() {
+				return this.active;
+			},
+			set(value) {
+				if (!value) {
+					this.clickOutside();
+				}
+			},
 		},
 	},
 	methods: {

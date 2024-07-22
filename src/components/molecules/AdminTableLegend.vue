@@ -13,33 +13,39 @@
 				</li>
 			</ul>
 		</span>
-
-		<span v-if="showExternalSyncHint" class="wrapper">
-			<strong class="external-sync-hint">
-				{{ $t("components.molecules.admintablelegend.externalSync") }}
-				<base-link
-					class="link-style"
-					to="/"
-					href="https://docs.dbildungscloud.de/x/PgBVAw"
-					target="_blank"
-					:no-styles="true"
-					traget="_blank"
-				>
-					{{ $t("components.molecules.admintablelegend.help") }}.
-				</base-link>
-			</strong>
-		</span>
-		<p class="grey--text mt-6">
-			{{
-				$t("components.molecules.admintablelegend.hint", {
-					institute_title: setInstituteTitle,
-				})
-			}}
+		<p v-if="isThr" class="mt-6">
+			{{ $t("components.molecules.admintablelegend.thr") }}
 		</p>
+		<template v-else>
+			<span v-if="showExternalSyncHint" class="wrapper">
+				<strong class="external-sync-hint">
+					{{ $t("components.molecules.admintablelegend.externalSync") }}
+					<base-link
+						class="link-style"
+						to="/"
+						href="https://docs.dbildungscloud.de/x/PgBVAw"
+						target="_blank"
+						:no-styles="true"
+						traget="_blank"
+					>
+						{{ $t("components.molecules.admintablelegend.help") }}.
+					</base-link>
+				</strong>
+			</span>
+			<p class="mt-6">
+				{{
+					$t("components.molecules.admintablelegend.hint", {
+						institute_title: setInstituteTitle,
+					})
+				}}
+			</p>
+		</template>
 	</div>
 </template>
 
 <script>
+import { SchulcloudTheme } from "@/serverApi/v3";
+import { envConfigModule } from "@/store";
 export default {
 	props: {
 		icons: {
@@ -56,20 +62,23 @@ export default {
 	},
 	data() {
 		// This solely exists to appear in the coverage report
-		return {};
+		return { theme: envConfigModule.getTheme };
 	},
 	computed: {
 		setInstituteTitle() {
-			switch (process.env.SC_THEME) {
-				case "n21":
+			switch (envConfigModule.getTheme) {
+				case SchulcloudTheme.N21:
 					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
-				case "thr":
+				case SchulcloudTheme.Thr:
 					return "Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien";
-				case "brb":
-					return "Dataport";
+				case SchulcloudTheme.Brb:
+					return "Ministerium für Bildung, Jugend und Sport des Landes Brandenburg";
 				default:
 					return "Dataport";
 			}
+		},
+		isThr() {
+			return this.theme === SchulcloudTheme.Thr;
 		},
 	},
 };
@@ -104,11 +113,6 @@ $vertically-center: auto 0;
 .wrapper {
 	display: flex;
 	justify-content: left;
-}
-
-.link-style {
-	color: var(--v-black-base);
-	text-decoration: underline;
 }
 
 .external-sync-hint {

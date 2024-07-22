@@ -1,8 +1,9 @@
-import RoomsModule from "./rooms";
+import { AxiosInstance } from "axios";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
+import RoomsModule from "./rooms";
+import { AlertPayload } from "./types/alert-payload";
 import { RoomsData } from "./types/rooms";
-import { AxiosInstance } from "axios";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};
@@ -189,6 +190,7 @@ describe("rooms module", () => {
 					xPosition: 3,
 					yPosition: 3,
 					displayColor: "#FF0000",
+					isSynchronized: false,
 				};
 				roomsModule.setRoomDataId(roomsData.id);
 				await roomsModule.update(roomsData);
@@ -222,6 +224,7 @@ describe("rooms module", () => {
 					xPosition: 3,
 					yPosition: 3,
 					displayColor: "#FF0000",
+					isSynchronized: false,
 				};
 				roomsModule.setRoomDataId(roomsData.id);
 				await roomsModule.update(roomsData);
@@ -277,24 +280,6 @@ describe("rooms module", () => {
 
 				expect(roomsModule.getLoading).toBe(true);
 			});
-		});
-		describe("getSharedCourseData", () => {
-			it("should call the backend", async () => {
-				const roomsModule = new RoomsModule({});
-				const getSharedCourseDataSpy = jest.spyOn(
-					roomsModule,
-					"getSharedCourseData"
-				);
-				await roomsModule.getSharedCourseData("sampleCode");
-
-				expect(receivedRequests[0].path).toStrictEqual("/v1/courses-share");
-				expect(receivedRequests[1].data.params.shareToken).toStrictEqual(
-					"sampleCode"
-				);
-				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(
-					"sampleCode"
-				);
-			}, 1000);
 		});
 
 		describe("confirmSharedCourseData", () => {
@@ -757,6 +742,20 @@ describe("rooms module", () => {
 				expect(roomsModule.hasCurrentRooms).toStrictEqual(false);
 				roomsModule.setRoomData(itemsToBeSet as any);
 				expect(roomsModule.hasCurrentRooms).toStrictEqual(true);
+			});
+		});
+
+		describe("getAlertData", () => {
+			it("should return alert data", () => {
+				const roomsModule = new RoomsModule({});
+				const alertData: AlertPayload = {
+					status: "success",
+					text: "pages.rooms.uploadCourse.success",
+					autoClose: true,
+				};
+
+				roomsModule.setAlertData(alertData);
+				expect(roomsModule.getAlertData).toStrictEqual(alertData);
 			});
 		});
 	});

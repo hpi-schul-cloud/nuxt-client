@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="$t('pages.administration.ldap.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 	>
 		<section class="section">
 			<p class="subtitle-text">
@@ -64,8 +64,7 @@
 			</div>
 			<div class="buttons-container">
 				<v-btn
-					text
-					color="secondary"
+					variant="text"
 					data-testid="ldapResetInputsButton"
 					@click="clearInputsHandler"
 				>
@@ -73,7 +72,7 @@
 				</v-btn>
 				<v-btn
 					color="primary"
-					depressed
+					variant="flat"
 					data-testid="ldapVerifyButton"
 					:disabled="status === 'pending'"
 					@click="validateHandler"
@@ -95,7 +94,7 @@ import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection
 import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
 import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
 import InfoMessage from "@/components/atoms/InfoMessage";
-import { notifierModule, envConfigModule } from "@/store";
+import { envConfigModule, notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
@@ -111,17 +110,17 @@ export default {
 		return {
 			breadcrumbs: [
 				{
-					text: this.$t("pages.administration.index.title"),
+					title: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 				},
 				{
-					text: this.$t("pages.administration.school.index.title"),
+					title: this.$t("pages.administration.school.index.title"),
 					href: envConfigModule.getNewSchoolAdminPageAsDefault
 						? "/administration/school-settings"
 						: "/administration/school",
 				},
 				{
-					text: this.$t("pages.administration.ldap.index.title"),
+					title: this.$t("pages.administration.ldap.index.title"),
 					disabled: true,
 				},
 			],
@@ -204,7 +203,7 @@ export default {
 						notifierModule.show({
 							text: this.$t("pages.administration.ldap.index.verified"),
 							status: "success",
-							timeout: 10000,
+							timeout: 5000,
 						});
 						if (systemId) {
 							this.$router.push({
@@ -252,7 +251,7 @@ export default {
 @import "@/styles/mixins";
 
 .link-style {
-	color: var(--v-primary-base);
+	color: rgba(var(--v-theme-primary));
 	text-decoration: none;
 }
 

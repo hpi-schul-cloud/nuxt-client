@@ -13,42 +13,44 @@
 		<v-badge
 			class="ma-0 badge-component rounded avatar-badge"
 			bordered
-			color="var(--v-primary-base)"
-			icon="$mdiLock"
-			overlap
-			:value="displayBadge"
+			color="rgba(var(--v-theme-primary))"
+			:model-value="!!badgeIcon"
+			:icon="badgeIcon"
 		>
 			<v-avatar
 				:color="avatarColor"
 				:class="avatarClass"
 				:aria-label="avatarAriaLabel"
+				:rounded="condenseLayout ? 0 : 'lg'"
 				:size="size"
-				:tile="condenseLayout"
 				:tabindex="condenseLayout ? '-1' : '0'"
 				@click="onClick"
-				@dragleave="dragLeave"
 				@dragenter.prevent.stop="dragEnter"
 				@keypress.enter="onClick"
 				role="button"
 				data-testid="course-icon"
 			>
-				<span :class="avatarTextClass" data-testid="course-short-title">{{
-					item.shortTitle
-				}}</span>
+				<span :class="avatarTextClass" data-testid="course-short-title">
+					{{ item.shortTitle }}
+				</span>
 			</v-avatar>
-			<div
-				v-if="!condenseLayout"
-				aria-hidden="true"
-				:class="titleClasses"
-				data-testid="course-title"
-			>
-				{{ title }}
-			</div>
 		</v-badge>
+		<div
+			v-if="!condenseLayout"
+			aria-hidden="true"
+			:class="titleClasses"
+			data-testid="course-title"
+		>
+			{{ title }}
+		</div>
 	</div>
 </template>
 <script>
-export default {
+import { mdiLock } from "@/components/icons/material";
+import { defineComponent } from "vue";
+import { mdiSync } from "@mdi/js";
+
+export default defineComponent({
 	props: {
 		item: {
 			type: Object,
@@ -70,13 +72,21 @@ export default {
 	},
 	data() {
 		return {
-			hovered: false,
 			isDragging: false,
+			mdiLock,
 		};
 	},
 	computed: {
-		displayBadge() {
-			return this.showBadge === true && this.item.notification === true;
+		badgeIcon() {
+			if (this.showBadge && this.item.notification === true) {
+				return mdiLock;
+			}
+
+			if (this.item.isSynchronized) {
+				return mdiSync;
+			}
+
+			return null;
 		},
 		stillBeingCopied() {
 			return this.item.copyingSince !== undefined;
@@ -99,14 +109,14 @@ export default {
 				classes.push("single-avatar", "text-h3");
 			}
 			if (this.stillBeingCopied) {
-				classes.push("grey--text", "text--darken-1");
+				classes.push("text-grey", "text-darken-1");
 			} else {
-				classes.push("white--text");
+				classes.push("text-white");
 			}
 			return classes;
 		},
 		avatarClass() {
-			return this.stillBeingCopied ? ["grey lighten-2"] : [];
+			return this.stillBeingCopied ? ["grey-lighten-2"] : [];
 		},
 		avatarColor() {
 			return this.stillBeingCopied ? undefined : this.item.displayColor;
@@ -123,7 +133,7 @@ export default {
 		titleClasses() {
 			const marginClass = this.item.titleDate ? "mb-5" : "mb-7";
 			const copyingClass = this.stillBeingCopied
-				? ["grey--text", "text--darken-1"]
+				? ["text-grey", "text-darken-1"]
 				: [];
 			return [
 				"justify-center",
@@ -154,27 +164,23 @@ export default {
 				this.$emit("startDrag", this.item);
 			}
 		},
-		dragLeave() {
-			this.hovered = false;
-		},
 		dragEnter() {
-			this.hovered = true;
 			this.isDragging = false;
 		},
 		dragend() {
 			this.isDragging = false;
-			this.$emit("dragend");
+			this.$emit("dragendAvatar");
 		},
 		dropAvatar() {
-			this.$emit("drop");
+			this.$emit("dropAvatar");
 		},
 	},
-};
+});
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 @import "@/utils/multiline-ellipsis.scss";
-@import "~vuetify/src/styles/styles.sass";
 
 .v-avatar {
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
@@ -197,7 +203,6 @@ export default {
 .subtitle {
 	margin-right: calc(var(--space-base-vuetify) * -5);
 	margin-left: calc(var(--space-base-vuetify) * -5);
-	color: var(--v-black-base);
 	text-align: center;
 	overflow-wrap: break-word;
 	white-space: pre-wrap;
@@ -209,7 +214,7 @@ export default {
 	);
 }
 
-@media #{map-get($display-breakpoints, 'xs-only')} {
+@media #{map-get($display-breakpoints, 'xs')} {
 	.subtitle {
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin-right: unset;
@@ -217,7 +222,6 @@ export default {
 		margin-left: unset;
 		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		font-size: 14px;
-		color: var(--v-black-base);
 	}
 }
 

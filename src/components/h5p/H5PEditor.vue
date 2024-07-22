@@ -13,7 +13,6 @@ import {
 	defineElements,
 	H5PEditorComponent,
 } from "@lumieducation/h5p-webcomponents";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { defineComponent, ref, watch, PropType } from "vue";
 import {
 	H5PContentParentType,
@@ -22,6 +21,7 @@ import {
 	PostH5PContentCreateParams,
 } from "@/h5pEditorApi/v3";
 import { $axios } from "@/utils/api";
+import { useI18n } from "vue-i18n";
 
 defineElements("h5p-editor");
 
@@ -46,8 +46,8 @@ export default defineComponent({
 		const h5pEditorRef = ref<H5PEditorComponent>();
 
 		const h5pEditorApi = H5pEditorApiFactory(undefined, "v3", $axios);
-		const i18n = injectStrict(I18N_KEY);
-		const language = i18n.locale as LanguageType;
+		const i18n = useI18n();
+		const language = i18n.locale.value as LanguageType;
 
 		const loadContent = async (id?: string) => {
 			try {

@@ -2,19 +2,20 @@ import * as serverApi from "@/serverApi/v3/api";
 import { SystemsApiInterface } from "@/serverApi/v3/api";
 import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
-import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import { schoolResponseFactory } from "@@/tests/test-utils/factory/schoolResponseFactory";
-import { mockSchool, mockUser } from "@@/tests/test-utils/mockObjects";
+import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolSystemResponseFactory";
+import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
 import SchoolsModule from "./schools";
-import { Envs } from "./types/env-config";
 
 let receivedRequests: any[] = [];
-let getRequestReturn: any = {};
+const getRequestReturn: any = {};
 
 const axiosInitializer = () => {
 	initializeAxios({
@@ -40,6 +41,8 @@ describe("schools module", () => {
 
 		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApi);
 		jest.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemsApi);
+
+		setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 	});
 
 	afterEach(() => {
@@ -58,12 +61,12 @@ describe("schools module", () => {
 					return getRequestReturn;
 				},
 			} as AxiosInstance);
-			setupStores({ authModule: AuthModule, envConfigModule: EnvConfigModule });
 		});
 
 		describe("fetchSchool", () => {
-			it("should call backend and set state correctly", async () => {
-				authModule.setUser({ ...mockUser, schoolId: "sampleSchoolId" });
+			it("should call mutations correctly", async () => {
+				const mockMe = meResponseFactory.build();
+				authModule.setMe(mockMe);
 				const mockSchoolResponse = schoolResponseFactory.build();
 				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
 					mockApiResponse({ data: mockSchoolResponse })
@@ -73,27 +76,44 @@ describe("schools module", () => {
 				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 
+				await schoolsModule.fetchSchool();
+
+				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
+				expect(setSchoolSpy).toHaveBeenCalled();
+				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual(mockSchoolResponse);
+				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
+			});
+
+			it("should set school state correctly", async () => {
+				const mockMe = meResponseFactory.build();
+				authModule.setMe(mockMe);
+				const mockSchoolResponse = schoolResponseFactory.build({
+					features: [
+						serverApi.SchoolFeature.RocketChat,
+						serverApi.SchoolFeature.Videoconference,
+					],
+				});
+				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
+					mockApiResponse({ data: mockSchoolResponse })
+				);
+				const schoolsModule = new SchoolsModule({});
+
 				const expectedFeatureObject = {
-					rocketChat: false,
-					videoconference: false,
+					rocketChat: true,
+					videoconference: true,
 					studentVisibility: false,
 					ldapUniventionMigrationSchool: false,
 					showOutdatedUsers: false,
 					enableLdapSyncDuringMigration: false,
-					isTeamCreationByStudentsEnabled: false,
 					oauthProvisioningEnabled: false,
 					nextcloud: false,
 				};
 
 				await schoolsModule.fetchSchool();
 
-				expect(setLoadingSpy).toHaveBeenCalledTimes(2);
-				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setSchoolSpy).toHaveBeenCalled();
-				expect(setSchoolSpy.mock.calls[0][0]).toStrictEqual({
-					...mockSchoolResponse,
-					features: expectedFeatureObject,
-				});
+				const school = schoolsModule.getSchool;
+				expect(school.featureObject).toStrictEqual(expectedFeatureObject);
 			});
 
 			it("should set error if api client throws error", async () => {
@@ -104,34 +124,10 @@ describe("schools module", () => {
 				const schoolsModule = new SchoolsModule({});
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-				authModule.setUser({
-					schoolId: "4711",
-					_id: "",
-					firstName: "",
-					lastName: "",
-					email: "",
-					updatedAt: "",
-					birthday: "",
-					createdAt: "",
-					preferences: {},
-					roles: [],
-					emailSearchValues: [],
-					firstNameSearchValues: [],
-					lastNameSearchValues: [],
-					consent: {},
-					forcePasswordChange: false,
-					language: "",
-					fullName: "",
-					id: "",
-					avatarInitials: "",
-					avatarBackgroundColor: "",
-					age: 0,
-					displayName: "",
-					permissions: [],
-					accountId: "",
-					schoolName: "",
-					externallyManaged: false,
+				const mockMe = meResponseFactory.build({
+					school: { id: "4711" },
 				});
+				authModule.setMe(mockMe);
 
 				await schoolsModule.fetchSchool();
 
@@ -148,39 +144,36 @@ describe("schools module", () => {
 			});
 
 			it("should call backend and sets state correctly", async () => {
-				axiosInitializer();
-				getRequestReturn = { data: "dummy response" };
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
 					...mockSchool,
 					systemIds: ["mockSystemId"],
 				});
 
+				const mockSchoolSystemResponse =
+					schoolSystemResponseFactory.buildList(1);
+				schoolApi.schoolControllerGetSchoolSystems.mockResolvedValueOnce(
+					mockApiResponse({ data: mockSchoolSystemResponse })
+				);
+
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				const setSystemsSpy = jest.spyOn(schoolsModule, "setSystems");
 
 				await schoolsModule.fetchSystems();
 
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual(
-					"v1/systems/mockSystemId"
-				);
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setSystemsSpy).toHaveBeenCalled();
-				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual([
-					"dummy response",
-				]);
+				expect(setSystemsSpy.mock.calls[0][0]).toStrictEqual(
+					mockSchoolSystemResponse
+				);
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
-				initializeAxios({
-					get: async (path: string) => {
-						throw new AxiosError(path);
-						return;
-					},
-				} as AxiosInstance);
+				schoolApi.schoolControllerGetSchoolSystems.mockRejectedValueOnce(
+					new AxiosError()
+				);
 
 				const schoolsModule = new SchoolsModule({});
 				schoolsModule.setSchool({
@@ -208,35 +201,12 @@ describe("schools module", () => {
 
 			it("should call backend and set state correctly", async () => {
 				const uploadData = {
-					id: "id_123",
 					name: "Paul Newname Gymnasium",
-					features: {
-						rocketChat: true,
-						studentVisibility: false,
-						videoconference: false,
-						ldapUniventionMigrationSchool: false,
-						showOutdatedUsers: false,
-						enableLdapSyncDuringMigration: false,
-						isTeamCreationByStudentsEnabled: false,
-						nextcloud: false,
-						oauthProvisioningEnabled: false,
-					},
+					features: [serverApi.SchoolFeature.RocketChat],
 				};
-				initializeAxios({
-					patch: async (path: string) => {
-						receivedRequests.push({ path });
-						return {
-							data: {
-								id: "id_123",
-								name: "Paul Newname Gymnasium",
-								features: ["rocketChat"],
-							},
-						};
-					},
-				} as unknown as AxiosInstance);
 
 				const mockSchoolResponse = schoolResponseFactory.build();
-				schoolApi.schoolControllerGetSchoolById.mockResolvedValueOnce(
+				schoolApi.schoolControllerUpdateSchool.mockResolvedValueOnce(
 					mockApiResponse({ data: mockSchoolResponse })
 				);
 
@@ -245,48 +215,39 @@ describe("schools module", () => {
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				const setSchoolSpy = jest.spyOn(schoolsModule, "setSchool");
 
-				await schoolsModule.update(uploadData);
+				await schoolsModule.update({ id: "111", props: uploadData });
 
-				expect(receivedRequests.length).toBeGreaterThan(0);
-				expect(receivedRequests[0].path).toStrictEqual("/v1/schools/id_123");
+				expect(schoolApi.schoolControllerUpdateSchool).toHaveBeenCalledWith(
+					"111",
+					{
+						features: ["rocketChat"],
+						name: "Paul Newname Gymnasium",
+					}
+				);
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(schoolApi.schoolControllerGetSchoolById).toHaveBeenCalled();
 				expect(setSchoolSpy).toHaveBeenCalled();
+				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
 			});
 
 			it("should trigger error and goes into the catch block", async () => {
-				initializeAxios({
-					patch: async (path: string) => {
-						throw new AxiosError(path);
-						return;
-					},
-				} as AxiosInstance);
-
 				const uploadData = {
-					id: "id_123",
 					data: "some data to be updated",
-					features: {
-						rocketChat: true,
-						studentVisibility: false,
-						videoconference: false,
-						ldapUniventionMigrationSchool: false,
-						showOutdatedUsers: false,
-						enableLdapSyncDuringMigration: false,
-						isTeamCreationByStudentsEnabled: false,
-						nextcloud: false,
-						oauthProvisioningEnabled: false,
-					},
+					features: [serverApi.SchoolFeature.RocketChat],
 				};
 				const schoolsModule = new SchoolsModule({});
+				schoolApi.schoolControllerUpdateSchool.mockRejectedValueOnce(
+					new AxiosError()
+				);
 
 				const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 				const setErrorSpy = jest.spyOn(schoolsModule, "setError");
 
-				await schoolsModule.update(uploadData);
+				await schoolsModule.update({ id: "111", props: uploadData });
 
-				expect(receivedRequests).toHaveLength(0);
+				expect(setLoadingSpy).toHaveBeenCalled();
+				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 				expect(setErrorSpy).toHaveBeenCalled();
 				expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(expect.any(Object));
 				expect(setLoadingSpy).toHaveBeenCalled();
@@ -295,48 +256,31 @@ describe("schools module", () => {
 		});
 
 		describe("deleteSystem", () => {
-			beforeEach(() => {
-				receivedRequests = [];
-			});
-
 			describe("when using the nest api", () => {
 				it("should call backend and sets state correctly", async () => {
-					envConfigModule.setEnvs({
-						FEATURE_NEST_SYSTEMS_API_ENABLED: true,
-					} as Envs);
 					const systemId = "id_1";
 					const schoolsModule = new SchoolsModule({});
-					const systems = [
-						{ id: "id_1", type: "itslearning" },
-						{
-							id: "id_2",
-							type: "moodle",
-						},
-						{
-							id: "id_3",
-							type: "ldap",
-						},
-					];
-					schoolsModule.setSystems(systems);
+
+					const school = schoolResponseFactory.build();
+					schoolsModule.setSchool(school);
 
 					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
 					const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
+					const fetchSystemsSpy = jest.spyOn(schoolsModule, "fetchSystems");
 
 					await schoolsModule.deleteSystem(systemId);
-					expect(systemsApi.systemControllerDeleteSystem).toHaveBeenCalledWith(
-						systemId
-					);
+					expect(
+						schoolApi.schoolControllerRemoveSystemFromSchool
+					).toHaveBeenCalledWith(school.id, systemId);
 					expect(setLoadingSpy).toHaveBeenCalled();
 					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
 					expect(fetchSchoolSpy).toHaveBeenCalled();
+					expect(fetchSystemsSpy).toHaveBeenCalled();
 				});
 
 				it("should trigger error and goes into the catch block", async () => {
-					envConfigModule.setEnvs({
-						FEATURE_NEST_SYSTEMS_API_ENABLED: true,
-					} as Envs);
 					const systemId = "id_1";
-					systemsApi.systemControllerDeleteSystem.mockRejectedValueOnce(
+					schoolApi.schoolControllerRemoveSystemFromSchool.mockRejectedValueOnce(
 						new AxiosError()
 					);
 					const schoolsModule = new SchoolsModule({});
@@ -346,71 +290,6 @@ describe("schools module", () => {
 
 					await schoolsModule.deleteSystem(systemId);
 
-					expect(setErrorSpy).toHaveBeenCalled();
-					expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(
-						expect.any(Object)
-					);
-					expect(setLoadingSpy).toHaveBeenCalled();
-					expect(setLoadingSpy.mock.calls[1][0]).toBe(false);
-				});
-			});
-
-			describe("when using the feathers api", () => {
-				it("should call backend and sets state correctly", async () => {
-					envConfigModule.setEnvs({
-						FEATURE_NEST_SYSTEMS_API_ENABLED: false,
-					} as Envs);
-					const systemId = "id_1";
-					initializeAxios({
-						delete: async (path: string) => {
-							receivedRequests.push({ path });
-							return { data: "some data" };
-						},
-					} as AxiosInstance);
-					const schoolsModule = new SchoolsModule({});
-					const systems = [
-						{ id: "id_1", type: "itslearning" },
-						{
-							id: "id_2",
-							type: "moodle",
-						},
-						{
-							id: "id_3",
-							type: "ldap",
-						},
-					];
-					schoolsModule.setSystems(systems);
-
-					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-					const fetchSchoolSpy = jest.spyOn(schoolsModule, "fetchSchool");
-
-					await schoolsModule.deleteSystem(systemId);
-					expect(receivedRequests.length).toBeGreaterThan(0);
-					expect(receivedRequests[0].path).toStrictEqual("v1/systems/id_1");
-					expect(setLoadingSpy).toHaveBeenCalled();
-					expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-					expect(fetchSchoolSpy).toHaveBeenCalled();
-				});
-
-				it("should trigger error and goes into the catch block", async () => {
-					envConfigModule.setEnvs({
-						FEATURE_NEST_SYSTEMS_API_ENABLED: false,
-					} as Envs);
-					const systemId = "id_1";
-					initializeAxios({
-						delete: async (path: string) => {
-							throw new AxiosError(path);
-							return "";
-						},
-					} as AxiosInstance);
-					const schoolsModule = new SchoolsModule({});
-
-					const setLoadingSpy = jest.spyOn(schoolsModule, "setLoading");
-					const setErrorSpy = jest.spyOn(schoolsModule, "setError");
-
-					await schoolsModule.deleteSystem(systemId);
-
-					expect(receivedRequests).toHaveLength(0);
 					expect(setErrorSpy).toHaveBeenCalled();
 					expect(setErrorSpy.mock.calls[0][0]).toStrictEqual(
 						expect.any(Object)
@@ -632,7 +511,7 @@ describe("schools module", () => {
 		describe("setSystems", () => {
 			it("should set systems data", () => {
 				const schoolsModule = new SchoolsModule({});
-				const expectedSystemState = [{ id: "id_1", type: "ldap" }];
+				const expectedSystemState = [schoolSystemResponseFactory.build()];
 				expect(schoolsModule.getSystems).not.toStrictEqual(expectedSystemState);
 				schoolsModule.setSystems(expectedSystemState);
 				expect(schoolsModule.getSystems).toStrictEqual(expectedSystemState);
@@ -685,7 +564,7 @@ describe("schools module", () => {
 		describe("getSystems", () => {
 			it("should return systems state", () => {
 				const schoolsModule = new SchoolsModule({});
-				const systems = [{ id: "id_1", type: "ldap" }];
+				const systems = schoolSystemResponseFactory.buildList(1);
 				expect(schoolsModule.getSystems).not.toStrictEqual(systems);
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.getSystems).toStrictEqual(systems);
@@ -705,13 +584,13 @@ describe("schools module", () => {
 			it("should return correct sync status for iserv-idm schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "ldap",
 						ldapConfig: {
 							provider: "iserv-idm",
 						},
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
@@ -719,13 +598,13 @@ describe("schools module", () => {
 			it("should return correct sync status for univention schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "ldap",
 						ldapConfig: {
 							provider: "univention",
 						},
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
@@ -733,10 +612,10 @@ describe("schools module", () => {
 			it("should return correct sync status for TSP schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "tsp-school",
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
@@ -744,13 +623,13 @@ describe("schools module", () => {
 			it("should return correct sync status for ldap general schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "ldap",
 						ldapConfig: {
 							provider: "general",
 						},
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
@@ -758,10 +637,10 @@ describe("schools module", () => {
 			it("should return correct sync status for moodle schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "moodle",
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
@@ -769,13 +648,86 @@ describe("schools module", () => {
 			it("should return correct sync status for itslearning schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [
-					{
+					schoolSystemResponseFactory.build({
 						id: "id_1",
 						type: "itslearning",
-					},
+					}),
 				];
 				schoolsModule.setSystems(systems);
 				expect(schoolsModule.schoolIsSynced).toStrictEqual(false);
+			});
+		});
+
+		describe("schoolIsExternallyManaged", () => {
+			describe("when theme is thr", () => {
+				const setup = () => {
+					const envs = envsFactory.build({
+						SC_THEME: serverApi.SchulcloudTheme.Thr,
+					});
+					envConfigModule.setEnvs(envs);
+				};
+
+				it("should return true", () => {
+					setup();
+					const schoolsModule = new SchoolsModule({});
+
+					const result = schoolsModule.schoolIsExternallyManaged;
+
+					expect(result).toBe(true);
+				});
+			});
+
+			describe("when theme is not thr", () => {
+				const setupTheme = () => {
+					const envs = envsFactory.build({
+						SC_THEME: serverApi.SchulcloudTheme.Default,
+					});
+					envConfigModule.setEnvs(envs);
+				};
+
+				describe("when school is external", () => {
+					const setup = () => {
+						setupTheme();
+
+						const schoolsModule = new SchoolsModule({});
+						schoolsModule.setSchool({
+							...mockSchool,
+							isExternal: true,
+						});
+
+						return { schoolsModule };
+					};
+
+					it("should return true", () => {
+						const { schoolsModule } = setup();
+
+						const result = schoolsModule.schoolIsExternallyManaged;
+
+						expect(result).toBe(true);
+					});
+				});
+
+				describe("when school is not external", () => {
+					const setup = () => {
+						setupTheme();
+
+						const schoolsModule = new SchoolsModule({});
+						schoolsModule.setSchool({
+							...mockSchool,
+							isExternal: false,
+						});
+
+						return { schoolsModule };
+					};
+
+					it("should return false", () => {
+						const { schoolsModule } = setup();
+
+						const result = schoolsModule.schoolIsExternallyManaged;
+
+						expect(result).toBe(false);
+					});
+				});
 			});
 		});
 	});

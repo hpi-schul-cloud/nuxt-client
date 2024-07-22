@@ -5,24 +5,24 @@
 		:size="480"
 		has-buttons
 		:buttons="['cancel', 'next']"
-		@next="onNext(selectedCourse)"
+		@next="onNext()"
 		@dialog-canceled="onCancel"
 	>
-		<div slot="title" ref="textTitle" class="text-h4 my-2">
-			{{ $t(`components.molecules.import.${parentType}.options.title`) }}
-		</div>
+		<template #title>
+			<div ref="textTitle" class="text-h4 my-2">
+				{{ t(`components.molecules.import.${parentType}.options.title`) }}
+			</div>
+		</template>
 
-		<template slot="content">
+		<template #content>
 			<div>
-				<div
-					class="d-flex flex-row pa-2 mb-4 rounded blue lighten-5 background"
-				>
+				<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 					<div class="mx-2">
 						<v-icon color="info">{{ mdiInformation }}</v-icon>
 					</div>
 					<div>
 						{{
-							$t(
+							t(
 								`components.molecules.import.${parentType}.options.selectCourse.infoText`
 							)
 						}}
@@ -32,72 +32,53 @@
 					v-model="selectedCourse"
 					return-object
 					item-value="id"
-					item-text="title"
+					item-title="title"
 					:items="courses"
 					:placeholder="
-						$t(`components.molecules.import.${parentType}.options.selectCourse`)
+						t(`components.molecules.import.${parentType}.options.selectCourse`)
 					"
 					:rules="[rules.required]"
 					:error="showError()"
-					:hint="$t('common.labels.course')"
+					:hint="t('common.labels.course')"
 					persistent-hint
-					:append-icon="mdiTriangleSmallDown"
-					:menu-props="{ bottom: true, offsetY: true, nudgeBottom: 28 }"
 				/>
 			</div>
 		</template>
 	</v-custom-dialog>
 </template>
 
-<script type="ts">
+<script setup lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { I18N_KEY, injectStrict } from "@/utils/inject";
-import { mdiInformation, mdiTriangleSmallDown } from "@mdi/js";
-import { defineComponent, reactive, ref } from "vue";
+import { mdiInformation } from "@/components/icons/material";
+import { PropType, reactive, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { AllItems, ListItemsObject } from "@/store/types/rooms";
 
-// eslint-disable-next-line vue/require-direct-export
-export default defineComponent({
-	name: "SelectCourseModal",
-	components: {
-		vCustomDialog,
-	},
-	emits: ["import", "cancel"],
-	props: {
-		isOpen: { type: Boolean },
-		parentName: { type: String, required: true },
-		parentType: { type: String, required: true },
-		courses: { type:Array, required: true }
-	},
-	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
-		const selectedCourse = ref(undefined);
-
-		const showErrorOnEmpty = ref(false);
-		const showError = () => !(selectedCourse.value) && showErrorOnEmpty.value;
-
-		const rules = reactive({
-          required: value => !!value || i18n.t("common.validation.required"),
-		});
-
-		const onNext = () => {
-			showErrorOnEmpty.value = true;
-			const id = selectedCourse.value?.id;
-			if (rules.required(id) === true) {
-				emit('next', id);
-			}
-		}
-		const onCancel = () => emit('cancel')
-
-		return {
-			onNext,
-			onCancel,
-			mdiInformation,
-			mdiTriangleSmallDown,
-			rules,
-			showError,
-			selectedCourse
-		};
-	},
+const emit = defineEmits(["import", "cancel", "next"]);
+defineProps({
+	isOpen: { type: Boolean },
+	parentName: { type: String, required: true },
+	parentType: { type: String, required: true },
+	courses: { type: Array as PropType<AllItems>, required: true },
 });
+const { t } = useI18n();
+
+const selectedCourse = ref<ListItemsObject | undefined>(undefined);
+
+const showErrorOnEmpty = ref(false);
+const showError = () => !selectedCourse.value && showErrorOnEmpty.value;
+
+const rules = reactive({
+	required: (value: string | undefined) =>
+		!!value || t("common.validation.required"),
+});
+
+const onNext = () => {
+	showErrorOnEmpty.value = true;
+	const id = selectedCourse.value?.id;
+	if (rules.required(id) === true) {
+		emit("next", id);
+	}
+};
+const onCancel = () => emit("cancel");
 </script>

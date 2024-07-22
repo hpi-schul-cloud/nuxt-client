@@ -2,14 +2,14 @@
 	<div>
 		<v-alert
 			v-if="status === 'error'"
-			light
-			text
 			type="error"
 			class="mb-6"
 			data-testid="error-alert"
+			:icon="mdiAlertCircle"
+			:text="$t('pages.administration.school.index.schoolPolicy.error')"
 		>
 			<div class="alert-text">
-				{{ t("pages.administration.school.index.schoolPolicy.error") }}
+				{{ $t("pages.administration.school.index.schoolPolicy.error") }}
 			</div>
 		</v-alert>
 		<template v-else>
@@ -21,66 +21,69 @@
 			/>
 			<v-list-item
 				v-else
-				two-line
-				dense
+				lines="two"
 				class="mb-6"
 				data-testid="policy-item"
 				@click="downloadPolicy"
 				:class="{ 'item-no-action': !privacyPolicy }"
 				:ripple="privacyPolicy !== null"
 			>
-				<v-list-item-icon class="me-4">
+				<template v-slot:prepend>
 					<v-icon>$file_pdf_outline</v-icon>
-				</v-list-item-icon>
-				<v-list-item-content>
-					<v-list-item-title class="text-body-1 black--text mb-2">
-						{{ t("pages.administration.school.index.schoolPolicy.fileName") }}
-					</v-list-item-title>
-					<v-list-item-subtitle class="text-body-2">
-						<template v-if="privacyPolicy">
-							{{
-								t("pages.administration.school.index.schoolPolicy.uploadedOn", {
-									date: formatDate(privacyPolicy.publishedAt),
-								})
-							}}
-						</template>
-						<template v-else>
-							{{
-								t(
-									"pages.administration.school.index.schoolPolicy.notUploadedYet"
+				</template>
+				<v-list-item-title class="text-body-1 mb-2">
+					{{ $t("pages.administration.school.index.schoolPolicy.fileName") }}
+				</v-list-item-title>
+				<v-list-item-subtitle class="text-body-2">
+					<template v-if="privacyPolicy">
+						{{
+							$t("pages.administration.school.index.schoolPolicy.uploadedOn", {
+								date: formatDate(privacyPolicy.publishedAt),
+							})
+						}}
+					</template>
+					<template v-else>
+						{{
+							$t(
+								"pages.administration.school.index.schoolPolicy.notUploadedYet"
+							)
+						}}
+					</template>
+				</v-list-item-subtitle>
+				<template v-slot:append>
+					<v-list-item-action
+						v-if="hasSchoolEditPermission"
+						data-testid="edit-button"
+						@click.stop="isSchoolPolicyFormDialogOpen = true"
+					>
+						<v-btn
+							icon
+							variant="text"
+							:aria-label="
+								$t('pages.administration.school.index.schoolPolicy.edit')
+							"
+						>
+							<v-icon>$mdiTrayArrowUp</v-icon>
+						</v-btn>
+					</v-list-item-action>
+					<v-list-item-action
+						v-if="privacyPolicy"
+						data-testid="delete-button"
+						@click.stop="isDeletePolicyDialogOpen = true"
+					>
+						<v-btn
+							icon
+							variant="text"
+							:aria-label="
+								$t(
+									'pages.administration.school.index.schoolPolicy.delete.title'
 								)
-							}}
-						</template>
-					</v-list-item-subtitle>
-				</v-list-item-content>
-				<v-list-item-action
-					v-if="hasSchoolEditPermission"
-					data-testid="edit-button"
-					@click.stop="isSchoolPolicyFormDialogOpen = true"
-				>
-					<v-btn
-						icon
-						:aria-label="
-							t('pages.administration.school.index.schoolPolicy.edit')
-						"
-					>
-						<v-icon>$mdiTrayArrowUp</v-icon>
-					</v-btn>
-				</v-list-item-action>
-				<v-list-item-action
-					v-if="privacyPolicy"
-					data-testid="delete-button"
-					@click.stop="isDeletePolicyDialogOpen = true"
-				>
-					<v-btn
-						icon
-						:aria-label="
-							t('pages.administration.school.index.schoolPolicy.delete.title')
-						"
-					>
-						<v-icon>$mdiTrashCanOutline</v-icon>
-					</v-btn>
-				</v-list-item-action>
+							"
+						>
+							<v-icon>$mdiTrashCanOutline</v-icon>
+						</v-btn>
+					</v-list-item-action>
+				</template>
 			</v-list-item>
 			<school-policy-form-dialog
 				v-if="hasSchoolEditPermission"
@@ -89,7 +92,7 @@
 				data-testid="form-dialog"
 			/>
 			<v-custom-dialog
-				v-model="isDeletePolicyDialogOpen"
+				v-model:isOpen="isDeletePolicyDialogOpen"
 				:size="430"
 				has-buttons
 				confirm-btn-title-key="common.actions.delete"
@@ -97,14 +100,18 @@
 				@dialog-confirmed="deleteFile"
 				data-testid="delete-dialog"
 			>
-				<h4 class="text-h4 mt-0" slot="title">
-					{{ t("pages.administration.school.index.schoolPolicy.delete.title") }}
-				</h4>
+				<template #title>
+					<h4 class="text-h4 mt-0">
+						{{
+							$t("pages.administration.school.index.schoolPolicy.delete.title")
+						}}
+					</h4>
+				</template>
 				<template #content>
-					<v-alert light text type="info" class="mb-0">
+					<v-alert type="info" class="mb-0">
 						<div class="alert-text">
 							{{
-								t("pages.administration.school.index.schoolPolicy.delete.text")
+								$t("pages.administration.school.index.schoolPolicy.delete.text")
 							}}
 						</div>
 					</v-alert>
@@ -120,7 +127,7 @@ import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { School } from "@/store/types/schools";
 import { ConsentVersion } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
-import { useI18n } from "@/composables/i18n.composable";
+import { useI18n } from "vue-i18n";
 import {
 	AUTH_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
@@ -131,6 +138,7 @@ import {
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { downloadFile } from "@/utils/fileHelper";
 import { formatDateForAlerts } from "@/plugins/datetime";
+import { mdiAlertCircle } from "@/components/icons/material";
 
 export default defineComponent({
 	name: "SchoolPolicy",
@@ -190,7 +198,7 @@ export default defineComponent({
 					"pages.administration.school.index.schoolPolicy.delete.success"
 				),
 				status: "success",
-				timeout: 10000,
+				timeout: 5000,
 			});
 		};
 
@@ -199,7 +207,6 @@ export default defineComponent({
 		};
 
 		return {
-			t,
 			isSchoolPolicyFormDialogOpen,
 			isDeletePolicyDialogOpen,
 			hasSchoolEditPermission,
@@ -210,6 +217,7 @@ export default defineComponent({
 			deleteFile,
 			formatDate,
 			closeDialog,
+			mdiAlertCircle,
 		};
 	},
 });
@@ -217,7 +225,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .alert-text {
-	color: var(--v-black-base) !important;
+	color: rgba(var(--v-theme-on-background)) !important;
 	line-height: var(--line-height-lg) !important;
 }
 

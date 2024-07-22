@@ -2,21 +2,19 @@
 	<default-wireframe
 		:headline="t('components.administration.provisioningOptions.page.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 	>
 		<v-checkbox
 			:label="t('components.administration.provisioningOptions.class.label')"
 			:loading="isLoading"
 			v-model="provisioningOptions.class"
-			inset
-			dense
 			data-testid="checkbox-option-class"
 			class="ml-1"
 		/>
 		<p>
 			{{
 				t("components.administration.provisioningOptions.class.description", {
-					instance: $theme.name,
+					instance: theme.name,
 				})
 			}}
 		</p>
@@ -25,15 +23,13 @@
 			:label="t('components.administration.provisioningOptions.course.label')"
 			:loading="isLoading"
 			v-model="provisioningOptions.course"
-			inset
-			dense
 			data-testid="checkbox-option-course"
 			class="ml-1"
 		/>
 		<p>
 			{{
 				t("components.administration.provisioningOptions.course.description", {
-					instance: $theme.name,
+					instance: theme.name,
 				})
 			}}
 		</p>
@@ -44,8 +40,6 @@
 			"
 			:loading="isLoading"
 			v-model="provisioningOptions.others"
-			inset
-			dense
 			data-testid="checkbox-option-others"
 			class="ml-1"
 		/>
@@ -54,31 +48,55 @@
 				t(
 					"components.administration.provisioningOptions.otherGroups.description",
 					{
-						instance: $theme.name,
+						instance: theme.name,
 					}
 				)
 			}}
 		</p>
+		<div v-if="isMediaLicensingEnabled">
+			<v-checkbox
+				:label="
+					t(
+						'components.administration.provisioningOptions.schoolExternalTools.label'
+					)
+				"
+				:loading="isLoading"
+				v-model="provisioningOptions.schoolExternalTools"
+				data-testid="checkbox-option-school-external-tools"
+				class="ml-1"
+			/>
+			<p>
+				{{
+					t(
+						"components.administration.provisioningOptions.schoolExternalTools.description",
+						{
+							instance: theme.name,
+						}
+					)
+				}}
+			</p>
+		</div>
 
 		<v-row class="justify-end mt-10">
 			<v-btn
 				class="mr-2"
 				data-testid="provisioning-options-cancel-button"
-				color="secondary"
-				outlined
+				variant="outlined"
 				@click="onCancel"
-				>{{ t("common.actions.cancel") }}</v-btn
 			>
+				{{ t("common.actions.cancel") }}
+			</v-btn>
 
 			<v-btn
 				class="mr-2"
 				data-testid="provisioning-options-save-button"
 				color="primary"
-				depressed
+				variant="flat"
 				@click="onSaveButtonClick"
 				:disabled="isLoading"
-				>{{ t("common.actions.save") }}</v-btn
 			>
+				{{ t("common.actions.save") }}
+			</v-btn>
 		</v-row>
 
 		<v-custom-dialog
@@ -89,9 +107,11 @@
 			@dialog-closed="isWarningDialogOpen = false"
 			@dialog-confirmed="saveOptions"
 		>
-			<h2 slot="title" class="text-h4 my-2">
-				{{ t("components.administration.provisioningOptions.warning.title") }}
-			</h2>
+			<template #title>
+				<h2 class="text-h4 my-2">
+					{{ t("components.administration.provisioningOptions.warning.title") }}
+				</h2>
+			</template>
 			<template #content>
 				<span class="text-md mt-2">
 					{{
@@ -105,7 +125,7 @@
 						)
 					}}
 				</span>
-				<v-alert light text type="warning" class="mt-4 mb-0">
+				<v-alert type="warning" class="mt-4 mb-0">
 					{{
 						t(
 							"components.administration.provisioningOptions.warning.consequence",
@@ -123,7 +143,10 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "@/composables/i18n.composable";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { ENV_CONFIG_MODULE_KEY, injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import {
 	ProvisioningOptions,
@@ -139,15 +162,14 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import { useRouter } from "vue-router/composables";
-import VCustomDialog from "../organisms/vCustomDialog.vue";
-import { Breadcrumb } from "../templates/default-wireframe.types";
-import DefaultWireframe from "../templates/DefaultWireframe.vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 const provisioningOptionTranslations = {
 	[ProvisioningOptionsEnum.COURSE]: "common.words.courses",
 	[ProvisioningOptionsEnum.CLASS]: "common.words.classes",
 	[ProvisioningOptionsEnum.OTHERS]: "common.words.otherGroups",
+	[ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS]: "common.words.externalTools",
 };
 
 export default defineComponent({
@@ -166,6 +188,7 @@ export default defineComponent({
 			error,
 		} = useProvisioningOptionsState();
 		const router = useRouter();
+		const theme = injectStrict(THEME_KEY);
 
 		const pageTitle = buildPageTitle(
 			t("components.administration.provisioningOptions.page.title")
@@ -173,17 +196,17 @@ export default defineComponent({
 		useTitle(pageTitle);
 
 		const schoolSettingsPage: Breadcrumb = {
-			text: t("pages.administration.school.index.title"),
+			title: t("pages.administration.school.index.title"),
 			to: "/administration/school-settings",
 		};
 		const breadcrumbs: Breadcrumb[] = [
 			{
-				text: t("pages.administration.index.title"),
+				title: t("pages.administration.index.title"),
 				href: "/administration/",
 			},
 			schoolSettingsPage,
 			{
-				text: t("components.administration.provisioningOptions.page.title"),
+				title: t("components.administration.provisioningOptions.page.title"),
 				disabled: true,
 			},
 		];
@@ -195,6 +218,10 @@ export default defineComponent({
 		const initialProvisioningOptions: Ref<ProvisioningOptions> = ref({
 			...provisioningOptionsData.value,
 		});
+
+		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+		const isMediaLicensingEnabled =
+			envConfigModule.getEnv.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED;
 
 		const wasOptionTurnedOff = (
 			provisioningOption: ProvisioningOptionsEnum
@@ -218,6 +245,9 @@ export default defineComponent({
 			});
 
 		const translateProvisioningOption = (option: ProvisioningOptionsEnum) => {
+			if (option === ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS) {
+				return;
+			}
 			return t(provisioningOptionTranslations[option]);
 		};
 
@@ -232,6 +262,14 @@ export default defineComponent({
 
 		const onSaveButtonClick = async () => {
 			if (newlyTurnedOffOptions.value.length) {
+				if (
+					newlyTurnedOffOptions.value.length === 1 &&
+					newlyTurnedOffOptions.value[0] ===
+						ProvisioningOptionsEnum.SCHOOL_EXTERNAL_TOOLS
+				) {
+					await saveOptions();
+				}
+
 				isWarningDialogOpen.value = true;
 			} else {
 				await saveOptions();
@@ -268,9 +306,11 @@ export default defineComponent({
 			isWarningDialogOpen,
 			saveOptions,
 			onCancel,
+			theme,
 			onSaveButtonClick,
 			newlyTurnedOffOptions,
 			translateProvisioningOption,
+			isMediaLicensingEnabled,
 		};
 	},
 });

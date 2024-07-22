@@ -8,7 +8,7 @@
 			@update:active="buttonHandler"
 		>
 			<template #icon>
-				<v-icon class="material-icon" color="var(--v-secondary-base)">{{
+				<v-icon class="material-icon">{{
 					activated ? "$mdiEmailCheckOutline" : "$mdiEmailRemoveOutline"
 				}}</v-icon>
 			</template>

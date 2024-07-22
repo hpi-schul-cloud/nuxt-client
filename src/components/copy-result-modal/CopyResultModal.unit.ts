@@ -1,42 +1,45 @@
-import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { mount, MountOptions } from "@vue/test-utils";
-import CopyResultModal from "./CopyResultModal.vue";
-import Vue from "vue";
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
-import { Envs } from "@/store/types/env-config";
+import { envsFactory } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount } from "@vue/test-utils";
+import CopyResultModal from "./CopyResultModal.vue";
+import CopyResultModalList from "./CopyResultModalList.vue";
 
-const geoGebraItem = {
+const mockGeoGebraItem = {
 	title: "GeoGebra Element Title",
 	type: CopyApiResponseTypeEnum.LessonContentGeogebra,
 };
-const etherpadItem = {
+const mockEtherpadItem = {
 	title: "Etherpad Element Title",
 	type: CopyApiResponseTypeEnum.LessonContentEtherpad,
 };
-const nexboardItem = {
+const mockNexboardItem = {
 	title: "Nexboard Element Title",
 	type: CopyApiResponseTypeEnum.LessonContentNexboard,
 };
-const courseGroupItem = {
+const mockCourseGroupItem = {
 	title: "CourseGroup Group Example",
 	type: CopyApiResponseTypeEnum.CoursegroupGroup,
 };
-const fileItem = {
+const mockFileItem = {
 	title: "File Error Example",
 	type: CopyApiResponseTypeEnum.File,
 };
 
-const mockResultItems = (
+const mockLessonResultItems = (
 	elements = [
-		geoGebraItem,
-		etherpadItem,
-		nexboardItem,
-		courseGroupItem,
-		fileItem,
+		mockGeoGebraItem,
+		mockEtherpadItem,
+		mockNexboardItem,
+		mockCourseGroupItem,
+		mockFileItem,
 	]
 ) => {
 	return [
@@ -50,25 +53,23 @@ const mockResultItems = (
 	];
 };
 
-const getWrapper = (props?: any) => {
-	const wrapper = mount<any>(CopyResultModal as MountOptions<Vue>, {
-		...createComponentMocks({
-			i18n: true,
-		}),
-		propsData: {
-			isLoading: false,
-			copyResultItems: mockResultItems(),
-			...props,
-		},
-	});
-
-	return wrapper;
-};
-
 describe("@/components/copy-result-modal/CopyResultModal", () => {
+	const createWrapper = (options = {}) => {
+		const wrapper = mount(CopyResultModal, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
+				isOpen: false,
+				copyResultItems: mockLessonResultItems(),
+				...options,
+			},
+		});
+
+		return wrapper;
+	};
+
 	beforeAll(() => {
-		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
-		document.body.setAttribute("data-app", "true");
 		setupStores({
 			envConfigModule: EnvConfigModule,
 		});
@@ -80,7 +81,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 
 	describe("basic functions", () => {
 		it("Should render component", () => {
-			const wrapper = getWrapper();
+			const wrapper = createWrapper();
 
 			expect(wrapper.findComponent(CopyResultModal).exists()).toBe(true);
 		});
@@ -88,78 +89,93 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 
 	describe("isOpen", () => {
 		it("should be closed by default", () => {
-			const wrapper = getWrapper();
+			const wrapper = createWrapper();
 
-			expect(wrapper.find(".v-dialog__content").exists()).toBe(false);
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const title = dialog.findComponent('[data-testid="dialog-title"');
+
+			expect(dialog.vm.isOpen).toBe(false);
+			expect(title.exists()).toBe(false);
 		});
 
 		it("should be open when is-open property is true", () => {
-			const wrapper = getWrapper({ isOpen: true });
+			const wrapper = createWrapper({ isOpen: true });
 
-			expect(wrapper.find(".v-dialog__content").exists()).toBe(true);
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const title = dialog.findComponent('[data-testid="dialog-title"');
+
+			expect(dialog.vm.isOpen).toBe(true);
+			expect(title.exists()).toBe(true);
 		});
 	});
 
 	describe("title", () => {
 		it("should show partial-title when copy was partially successful", () => {
-			const wrapper = getWrapper({ isOpen: true });
+			const wrapper = createWrapper({ isOpen: true });
 
-			const headline = wrapper.find('[data-testid="dialog-title"]').text();
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const headline = dialog
+				.findComponent('[data-testid="dialog-title"]')
+				.text();
 
-			expect(headline).toContain(
-				wrapper.vm.$i18n.t("components.molecules.copyResult.title.partial")
-			);
+			expect(headline).toBe("components.molecules.copyResult.title.partial");
 		});
 	});
 
 	describe("dialog-closed", () => {
-		it("should forward the dialog-closed event of the wrapped dialog", async () => {
-			const wrapper = getWrapper({ isOpen: true });
+		it("should forward the dialog-closed event of the wrapped dialog", () => {
+			const wrapper = createWrapper({ isOpen: true });
 
 			const dialog = wrapper.findComponent(vCustomDialog);
 			dialog.vm.$emit("dialog-closed");
 
-			expect(wrapper.emitted("dialog-closed")).toHaveLength(1);
+			expect(wrapper.emitted("copy-dialog-closed")).toHaveLength(1);
 		});
 	});
 
 	describe("copy result notifications", () => {
 		it("should render coursefiles info if root item is a Course and has no failed file ", () => {
-			const copyResultItems = mockResultItems([]);
+			const copyResultItems = mockLessonResultItems([]);
 
-			const wrapper = getWrapper({
+			const wrapper = createWrapper({
 				isOpen: true,
 				copyResultItems,
 				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
 			});
 
-			expect(
-				wrapper.find('[data-testid="copy-result-notifications"]').text()
-			).toContain(
-				wrapper.vm.$i18n.t("components.molecules.copyResult.courseFiles.info")
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).toContain(
+				"components.molecules.copyResult.courseFiles.info"
 			);
 		});
 
 		it("should render ctl tools info if root item is a Course and has no failed file ", () => {
-			const copyResultItems = mockResultItems([]);
-			envConfigModule.setEnvs({ FEATURE_CTL_TOOLS_TAB_ENABLED: true } as Envs);
-			const wrapper = getWrapper({
+			const copyResultItems = mockLessonResultItems([]);
+
+			const envs = envsFactory.build({
+				FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+			});
+			envConfigModule.setEnvs(envs);
+			const wrapper = createWrapper({
 				isOpen: true,
 				copyResultItems,
 				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
 			});
 
-			expect(
-				wrapper.find('[data-testid="copy-result-notifications"]').text()
-			).toContain(
-				wrapper.vm.$i18n.t("components.molecules.copyResult.ctlTools.info")
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).toContain(
+				"components.molecules.copyResult.ctlTools.info"
 			);
 		});
 
 		describe("when root item is a Course, has no failed file and CTL_TOOLS_COPY feature flag is enabled", () => {
 			const setup = () => {
-				const copyResultItems = mockResultItems([]);
-				const wrapper = getWrapper({
+				const copyResultItems = mockLessonResultItems([]);
+				const wrapper = createWrapper({
 					isOpen: true,
 					copyResultItems,
 					copyResultRootItemType: CopyApiResponseTypeEnum.Course,
@@ -169,67 +185,83 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			};
 
 			it("should render ctl tools copy info ", () => {
-				envConfigModule.setEnvs({
+				const envs = envsFactory.build({
 					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
 					FEATURE_CTL_TOOLS_COPY_ENABLED: true,
-				} as Envs);
+				});
+				envConfigModule.setEnvs(envs);
 				const { wrapper } = setup();
 
-				expect(
-					wrapper.find('[data-testid="copy-result-notifications"]').text()
-				).toContain(
-					wrapper.vm.$i18n.t(
-						"components.molecules.copyResult.ctlTools.withFeature.info"
-					)
+				const dialog = wrapper.findComponent(vCustomDialog);
+				const content = dialog.findComponent(".v-card-text").text();
+
+				expect(content).toContain(
+					"components.molecules.copyResult.ctlTools.withFeature.info"
 				);
 			});
 		});
 
 		it("should merge file error and coursefiles info if root item is a Course and has a failed file ", () => {
-			const copyResultItems = mockResultItems([fileItem]);
+			const copyResultItems = mockLessonResultItems([mockFileItem]);
 
-			const wrapper = getWrapper({
+			const wrapper = createWrapper({
 				isOpen: true,
 				copyResultItems,
 				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
 			});
 
-			expect(
-				wrapper.find('[data-testid="copy-result-notifications"]').text()
-			).toContain(
-				wrapper.vm.$i18n.t("components.molecules.copyResult.courseFiles.info") +
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).toContain(
+				"components.molecules.copyResult.courseFiles.info" +
 					" " +
-					wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
+					"components.molecules.copyResult.fileCopy.error"
 			);
 		});
 
 		it.each([[CopyApiResponseTypeEnum.Lesson], [CopyApiResponseTypeEnum.Task]])(
 			"should render file error info if root item is a %s and has a failed file",
 			(copyResultRootItemType) => {
-				const copyResultItems = mockResultItems([fileItem]);
+				const copyResultItems = mockLessonResultItems([mockFileItem]);
 
-				const wrapper = getWrapper({
+				const wrapper = createWrapper({
 					isOpen: true,
 					copyResultItems,
 					copyResultRootItemType,
 				});
 
-				expect(
-					wrapper.find('[data-testid="copy-result-notifications"]').text()
-				).toContain(
-					wrapper.vm.$i18n.t("components.molecules.copyResult.fileCopy.error")
+				const dialog = wrapper.findComponent(vCustomDialog);
+				const content = dialog.findComponent(".v-card-text").text();
+
+				expect(content).toContain(
+					"components.molecules.copyResult.fileCopy.error"
 				);
 			}
 		);
 
 		it.each([
-			["GeoGebra", CopyApiResponseTypeEnum.LessonContentGeogebra],
-			["Etherpad", CopyApiResponseTypeEnum.LessonContentEtherpad],
-			["NeXboard", CopyApiResponseTypeEnum.LessonContentNexboard],
-			["Kursgruppen", CopyApiResponseTypeEnum.CoursegroupGroup],
-			["Dateien", CopyApiResponseTypeEnum.File],
+			[
+				"components.molecules.copyResult.label.geogebra",
+				CopyApiResponseTypeEnum.LessonContentGeogebra,
+			],
+			[
+				"components.molecules.copyResult.label.etherpad",
+				CopyApiResponseTypeEnum.LessonContentEtherpad,
+			],
+			[
+				"components.molecules.copyResult.label.nexboard",
+				CopyApiResponseTypeEnum.LessonContentNexboard,
+			],
+			["common.words.courseGroups", CopyApiResponseTypeEnum.CoursegroupGroup],
+			[
+				"components.molecules.copyResult.label.files",
+				CopyApiResponseTypeEnum.File,
+			],
 		])("should render if there is a %s item", (title, type) => {
-			const copyResultItems = mockResultItems();
+			const envs = envsFactory.build({ FEATURE_NEXBOARD_COPY_ENABLED: true });
+			envConfigModule.setEnvs(envs);
+			const copyResultItems = mockLessonResultItems();
 			copyResultItems[0].elements = [
 				{
 					title,
@@ -237,11 +269,111 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				},
 			];
 
-			const wrapper = getWrapper({ isOpen: true, copyResultItems });
+			const wrapper = createWrapper({ isOpen: true, copyResultItems });
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
 
-			expect(
-				wrapper.find('[data-testid="copy-result-notifications"]').text()
-			).toContain(title);
+			expect(content).toContain(title);
+		});
+	});
+
+	describe("when root element is course", () => {
+		const setup = () => {
+			const wrapper = mount(CopyResultModal, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					isOpen: true,
+					copyResultItems: [
+						{
+							type: CopyApiResponseTypeEnum.Course,
+							title: "Lesson Title",
+							elementId: "mockId",
+							elements: [
+								mockGeoGebraItem,
+								mockEtherpadItem,
+								mockNexboardItem,
+								mockCourseGroupItem,
+								mockFileItem,
+							],
+							url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
+						},
+					],
+					copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+				},
+			});
+
+			return wrapper;
+		};
+
+		it("should render copy result modal list", () => {
+			const wrapper = setup();
+			const dialog = wrapper.findComponent(vCustomDialog);
+
+			const copyResultModal = dialog.findComponent(CopyResultModalList);
+
+			expect(copyResultModal.exists()).toBe(true);
+		});
+
+		it("should render copy information message", () => {
+			const wrapper = setup();
+
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).toContain("components.molecules.copyResult.information");
+		});
+	});
+
+	describe("when root element is column board", () => {
+		const setup = () => {
+			const wrapper = mount(CopyResultModal, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+				},
+				props: {
+					isOpen: true,
+					copyResultItems: [
+						{
+							type: CopyApiResponseTypeEnum.Columnboard,
+							title: "Lesson Title",
+							elementId: "mockId",
+							elements: [
+								mockGeoGebraItem,
+								mockEtherpadItem,
+								mockNexboardItem,
+								mockCourseGroupItem,
+								mockFileItem,
+							],
+							url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
+						},
+					],
+					copyResultRootItemType: CopyApiResponseTypeEnum.Columnboard,
+				},
+			});
+
+			return wrapper;
+		};
+
+		it("should not render copy result modal list", () => {
+			const wrapper = setup();
+			const dialog = wrapper.findComponent(vCustomDialog);
+
+			const copyResultModal = dialog.findComponent(CopyResultModalList);
+
+			expect(copyResultModal.exists()).toBe(false);
+		});
+
+		it("should not render copy information message", () => {
+			const wrapper = setup();
+
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const content = dialog.findComponent(".v-card-text").text();
+
+			expect(content).not.toContain(
+				"components.molecules.copyResult.information"
+			);
 		});
 	});
 });

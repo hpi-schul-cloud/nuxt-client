@@ -8,8 +8,6 @@ export interface SchoolExternalToolSave {
 
 	parameters: ToolParameterEntry[];
 
-	version: number;
-
 	isDeactivated: boolean;
 }
 

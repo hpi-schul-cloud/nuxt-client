@@ -1,6 +1,8 @@
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
+import { envsFactory } from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import TheFooter from "./TheFooter";
 
@@ -12,6 +14,18 @@ describe("@/components/legacy/TheFooter.vue", () => {
 		});
 	});
 
+	const setup = () => {
+		const wrapper = shallowMount(TheFooter, {
+			global: {
+				plugins: [createTestingI18n()],
+				mocks: { $theme },
+				stubs: ["base-link"],
+			},
+		});
+
+		return { wrapper };
+	};
+
 	const $theme = {
 		name: "test",
 	};
@@ -21,15 +35,11 @@ describe("@/components/legacy/TheFooter.vue", () => {
 	});
 
 	it("Env-Variable sets the status page link correctly", () => {
-		envConfigModule.setEnvs({ ALERT_STATUS_URL: "dummy-url.org" });
-		const wrapper = shallowMount(TheFooter, {
-			...createComponentMocks({
-				mocks: {
-					$theme,
-				},
-				i18n: true,
-			}),
-		});
+		const envs = envsFactory.build({ ALERT_STATUS_URL: "dummy-url.org" });
+		envConfigModule.setEnvs(envs);
+
+		const { wrapper } = setup();
+
 		expect(wrapper.vm.links[5].href).toStrictEqual("dummy-url.org");
 	});
 
@@ -38,18 +48,14 @@ describe("@/components/legacy/TheFooter.vue", () => {
 	});
 
 	it("check that all links are rendered in the footer", () => {
-		envConfigModule.setEnvs({
+		const envs = envsFactory.build({
 			ACCESSIBILITY_REPORT_EMAIL: "dummy-email@org.de",
 			ALERT_STATUS_URL: "dummy-url.org",
 		});
-		const wrapper = shallowMount(TheFooter, {
-			...createComponentMocks({
-				mocks: {
-					$theme,
-				},
-				i18n: true,
-			}),
-		});
+		envConfigModule.setEnvs(envs);
+
+		const { wrapper } = setup();
+
 		expect(wrapper.vm.links).toHaveLength(7);
 		expect(wrapper.find(".bottom-line span").text()).toBe(
 			"©" + new Date().getFullYear() + " " + $theme.name

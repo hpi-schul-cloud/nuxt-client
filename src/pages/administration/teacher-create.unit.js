@@ -1,128 +1,170 @@
-import { default as NewTeacher } from "./TeacherCreate.page.vue";
-import mock$objects from "../../../tests/test-utils/pageStubs";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { notifierModule } from "@/store";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
-import { notifierModule } from "@/store";
+import { delay } from "@/utils/helpers";
+import { meResponseFactory } from "@@/tests/test-utils";
+import mock$objects from "@@/tests/test-utils/pageStubs";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { createStore } from "vuex";
+import { default as NewTeacher } from "./TeacherCreate.page.vue";
 
 jest.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-describe("teachers/new", () => {
-	const createTeacherStub = jest.fn();
-	const mockStore = {
-		auth: {
-			getters: {
-				getUser: () => ({
-					permissions: ["TEACHER_CREATE"],
-				}),
+const createMockStore = (createTeacherStub) => {
+	const mockStore = createStore({
+		modules: {
+			auth: {
+				namespaced: true,
+				getters: {
+					getUser: () => ({
+						permissions: ["TEACHER_CREATE"],
+					}),
+				},
+			},
+			users: {
+				namespaced: true,
+				actions: {
+					createTeacher: createTeacherStub,
+				},
+				state: () => ({}),
 			},
 		},
-		users: {
-			actions: {
-				createTeacher: createTeacherStub,
-			},
-			state: () => ({}),
-		},
-	};
+	});
+	return mockStore;
+};
 
+describe("teachers/new", () => {
 	beforeEach(() => {
 		setupStores({ authModule: AuthModule, notifierModule: NotifierModule });
 	});
 
 	it("should call 'createTeacher' action", async () => {
+		const createTeacherStub = jest.fn();
+		const mockStore = createMockStore(createTeacherStub);
+		const mockMe = meResponseFactory.build();
+
 		const wrapper = mount(NewTeacher, {
-			...createComponentMocks({ i18n: true, store: mockStore }),
-			mocks: {
-				$user: { schoolId: "123" },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$me: mockMe,
+					$store: mockStore,
+				},
 			},
 		});
 		mock$objects(wrapper);
-		const inputFirstName = wrapper.find(
-			'input[data-testid="input_create-user_firstname"]'
-		);
-		const inputLastName = wrapper.find(
-			'input[data-testid="input_create-user_lastname"]'
-		);
-		const inputEmail = wrapper.find(
-			'input[data-testid="input_create-user_email"]'
-		);
+
+		const inputFirstName = wrapper
+			.find('[data-testid="input_create-user_firstname"]')
+			.get("input");
+		const inputLastName = wrapper
+			.find('[data-testid="input_create-user_lastname"]')
+			.get("input");
+		const inputEmail = wrapper
+			.find('[data-testid="input_create-user_email"]')
+			.get("input");
 
 		inputFirstName.setValue("Klara");
 		inputLastName.setValue("Fall");
 		inputEmail.setValue("klara.fall@mail.de");
-		wrapper.find("form").trigger("submit");
+		await wrapper
+			.find('[data-testid="button_create-user_submit"]')
+			.trigger("click");
 
-		await wrapper.vm.$nextTick();
+		// we need to wait until everything is settled
+		await delay(10);
+
 		expect(createTeacherStub).toHaveBeenCalled();
 	});
 
 	it("should call notifier successful", async () => {
+		const createTeacherStub = jest.fn();
+		const mockStore = createMockStore(createTeacherStub);
+		const mockMe = meResponseFactory.build();
+
 		const notifierModuleMock = jest.spyOn(notifierModule, "show");
 		const wrapper = mount(NewTeacher, {
-			...createComponentMocks({ i18n: true, store: mockStore }),
-			mocks: {
-				$user: { schoolId: "123" },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$me: mockMe,
+					$store: mockStore,
+				},
 			},
 		});
 		mock$objects(wrapper);
-		const inputFirstName = wrapper.find(
-			'input[data-testid="input_create-user_firstname"]'
-		);
-		const inputLastName = wrapper.find(
-			'input[data-testid="input_create-user_lastname"]'
-		);
-		const inputEmail = wrapper.find(
-			'input[data-testid="input_create-user_email"]'
-		);
+		const inputFirstName = wrapper
+			.find('[data-testid="input_create-user_firstname"]')
+			.get("input");
+		const inputLastName = wrapper
+			.find('[data-testid="input_create-user_lastname"]')
+			.get("input");
+		const inputEmail = wrapper
+			.find('[data-testid="input_create-user_email"]')
+			.get("input");
 
 		inputFirstName.setValue("Klara");
 		inputLastName.setValue("Fall");
 		inputEmail.setValue("klara.fall@mail.de");
-		wrapper.find("form").trigger("submit");
+		await wrapper
+			.find('[data-testid="button_create-user_submit"]')
+			.trigger("click");
 
-		await wrapper.vm.$nextTick(); // trigger dispatch
-		await wrapper.vm.$nextTick(); // trigger then clause of dispatch
+		// we need to wait until everything is settled
+		await delay(10);
+
 		expect(notifierModuleMock).toHaveBeenCalled();
 	});
 
 	it("should show error", async () => {
 		const failingCreateAction = jest.fn(() => Promise.reject());
-		const customMockStore = { ...mockStore };
-		customMockStore.users = {
+		const mockStore = createMockStore(failingCreateAction);
+		const mockMe = meResponseFactory.build();
+
+		mockStore.users = {
 			actions: {
 				createTeacher: failingCreateAction,
 			},
 			state: () => ({}),
 		};
 		const wrapper = mount(NewTeacher, {
-			...createComponentMocks({ i18n: true, store: customMockStore }),
-			mocks: {
-				$user: { schoolId: "123" },
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$me: mockMe,
+					$store: mockStore,
+				},
 			},
 		});
 		mock$objects(wrapper);
-		const inputFirstName = wrapper.find(
-			'input[data-testid="input_create-user_firstname"]'
-		);
-		const inputLastName = wrapper.find(
-			'input[data-testid="input_create-user_lastname"]'
-		);
-		const inputEmail = wrapper.find(
-			'input[data-testid="input_create-user_email"]'
-		);
+		const inputFirstName = wrapper
+			.find('[data-testid="input_create-user_firstname"]')
+			.get("input");
+		const inputLastName = wrapper
+			.find('[data-testid="input_create-user_lastname"]')
+			.get("input");
+		const inputEmail = wrapper
+			.find('[data-testid="input_create-user_email"]')
+			.get("input");
 		let errorMessageComponent = wrapper.find(".info-message.bc-error");
 		expect(errorMessageComponent.exists()).toBeFalsy();
 
 		inputFirstName.setValue("Klara");
 		inputLastName.setValue("Fall");
 		inputEmail.setValue("klara.fall@mail.de");
-		wrapper.find("form").trigger("submit");
+		await wrapper
+			.find('[data-testid="button_create-user_submit"]')
+			.trigger("click");
 
-		await wrapper.vm.$nextTick(); // trigger dispatch
-		await wrapper.vm.$nextTick(); // trigger catch clause of dispatch
-		await wrapper.vm.$nextTick(); // display error component
+		// we need to wait until everything is settled
+		await delay(10);
+
 		errorMessageComponent = wrapper.find(".info-message.bc-error");
 		expect(errorMessageComponent.exists()).toBeTruthy();
 	});

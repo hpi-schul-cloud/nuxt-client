@@ -8,7 +8,7 @@ export const schoolExternalToolResponseFactory =
 		schoolId: `school-${sequence}`,
 		toolId: `tool-${sequence}`,
 		name: `SchoolExternalTool${sequence}`,
+		isDeactivated: false,
 		status: schoolExternalToolConfigurationStatusResponseFactory.build(),
 		parameters: [],
-		toolVersion: 1,
 	}));

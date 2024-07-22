@@ -1,13 +1,12 @@
-import Vue from "vue";
-import { MountOptions, mount } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount } from "@vue/test-utils";
 import LernStoreGrid from "./LernStoreGrid.vue";
+import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("@/components/lern-store/LernStoreGrid", () => {
-	const wrapper = mount(LernStoreGrid as MountOptions<Vue>, {
-		...createComponentMocks({
-			i18n: true,
-		}),
+	const wrapper = mount(LernStoreGrid, {
+		global: {
+			plugins: [createTestingVuetify()],
+		},
 	});
 
 	it("should render component", () => {

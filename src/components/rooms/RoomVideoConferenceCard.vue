@@ -14,7 +14,12 @@
 				class="mt-2"
 				data-testId="vc-info-box-show"
 			>
-				<v-alert dense text class="ma-0" type="info" data-testId="vc-info-box">
+				<v-alert
+					density="compact"
+					class="ma-0"
+					type="info"
+					data-testId="vc-info-box"
+				>
 					<div class="d-flex flex-wrap gap-4">
 						<span class="flex-1 my-auto">
 							{{
@@ -25,14 +30,13 @@
 						</span>
 						<v-btn
 							class="my-auto"
-							outlined
-							color="secondary"
+							variant="outlined"
 							:disabled="isRefreshing"
 							@click.stop="refreshVideoConferenceStatus"
 							data-testId="refresh-btn"
 							:aria-label="t('pages.videoConference.action.refresh')"
 						>
-							<v-icon dense class="mr-1">{{ mdiReload }}</v-icon>
+							<v-icon size="small" class="mr-1">{{ mdiReload }}</v-icon>
 							{{ t("pages.videoConference.action.refresh") }}
 						</v-btn>
 					</div>
@@ -43,10 +47,10 @@
 </template>
 
 <script lang="ts">
-import { I18N_KEY, injectStrict } from "@/utils/inject";
 import { mdiReload } from "@mdi/js";
 import { computed, ComputedRef, defineComponent } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: { RoomBaseCard },
@@ -70,9 +74,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const i18n = injectStrict(I18N_KEY);
-
-		const t = (key: string): string => i18n.tc(key, 0);
+		const { t } = useI18n();
 
 		const refreshVideoConferenceStatus = () => {
 			emit("refresh");
@@ -105,7 +107,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .v-alert {
-	::v-deep .v-icon {
+	:deep(.v-icon) {
 		margin-top: auto;
 		margin-bottom: auto;
 	}

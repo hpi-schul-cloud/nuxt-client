@@ -17,47 +17,54 @@
 		"baseUrl": ".",
 		"types": ["webpack-env", "jest"],
 		"paths": {
-			"@data-board": ["src/components/data-board"],
-			"@data-external-tool": ["src/components/data-external-tool"],
-			"@data-group": ["src/components/data-group"],
-			"@data-system": ["src/components/data-system"],
-			"@data-provisioning-options": [
-				"src/components/data-provisioning-options"
-			],
-			"@feature-board-file-element": [
-				"src/components/feature-board-file-element"
-			],
+			"@data-board": ["src/modules/data/board"],
+			"@data-external-tool": ["src/modules/data/external-tool"],
+			"@data-group": ["src/modules/data/group"],
+			"@data-system": ["src/modules/data/system"],
+			"@data-provisioning-options": ["src/modules/data/provisioning-options"],
+			"@data-room": ["src/modules/data/room"],
+			"@feature-board-file-element": ["src/modules/feature/board-file-element"],
 			"@feature-board-submission-element": [
-				"src/components/feature-board-submission-element"
+				"src/modules/feature/board-submission-element"
 			],
-			"@feature-board-text-element": [
-				"src/components/feature-board-text-element"
-			],
-			"@feature-board-link-element": [
-				"src/components/feature-board-link-element"
-			],
+			"@feature-board-text-element": ["src/modules/feature/board-text-element"],
+			"@feature-board-link-element": ["src/modules/feature/board-link-element"],
 			"@feature-board-external-tool-element": [
-				"src/components/feature-board-external-tool-element"
+				"src/modules/feature/board-external-tool-element"
 			],
 			"@feature-board-drawing-element": [
-				"src/components/feature-board-drawing-element"
+				"src/modules/feature/board-drawing-element"
 			],
-			"@feature-board": ["src/components/feature-board"],
-			"@feature-editor": ["src/components/feature-editor"],
-			"@feature-render-html": ["src/components/feature-render-html"],
-			"@ui-alert": ["src/components/ui-alert"],
-			"@ui-board": ["src/components/ui-board"],
-			"@ui-color-overlay": ["src/components/ui-color-overlay"],
-			"@ui-preview-image": ["src/components/ui-preview-image"],
-			"@ui-confirmation-dialog": ["src/components/ui-confirmation-dialog"],
-			"@ui-date-time-picker": ["src/components/ui-date-time-picker"],
-			"@ui-light-box": ["src/components/ui-light-box"],
-			"@util-board": ["src/components/util-board"],
-			"@util-validators": ["src/components/util-validators"],
-			"@util-input-masks": ["src/components/util-input-masks"],
-			"@util-device-detection": ["src/components/util-device-detection"],
-			"@page-board": ["src/components/page-board"],
-			"@page-class-members": ["src/components/page-class-members"],
+			"@feature-board-collaborative-text-editor-element": [
+				"src/modules/feature/board-collaborative-text-editor-element"
+			],
+			"@feature-board": ["src/modules/feature/board"],
+			"@feature-course-sync": ["src/modules/feature/course-sync"],
+			"@feature-editor": ["src/modules/feature/editor"],
+			"@feature-render-html": ["src/modules/feature/render-html"],
+			"@feature-news-form": ["src/modules/feature/news-form"],
+			"@feature-media-shelf": ["src/modules/feature/media-shelf"],
+			"@ui-alert": ["src/modules/ui/alert"],
+			"@ui-board": ["src/modules/ui/board"],
+			"@ui-chip": ["src/modules/ui/chip"],
+			"@ui-confirmation-dialog": ["src/modules/ui/confirmation-dialog"],
+			"@ui-date-time-picker": ["src/modules/ui/date-time-picker"],
+			"@ui-layout": ["src/modules/ui/layout"],
+			"@ui-light-box": ["src/modules/ui/light-box"],
+			"@ui-preview-image": ["src/modules/ui/preview-image"],
+			"@ui-room-details": ["src/modules/ui/room-details"],
+			"@ui-skip-link": ["src/modules/ui/skip-link"],
+			"@ui-speed-dial-menu": ["src/modules/ui/speed-dial-menu"],
+			"@ui-qr-code": ["src/modules/ui/qr-code"],
+			"@util-board": ["src/modules/util/board"],
+			"@util-validators": ["src/modules/util/validators"],
+			"@util-vue": ["src/modules/util/vue"],
+			"@util-input-masks": ["src/modules/util/input-masks"],
+			"@util-device-detection": ["src/modules/util/device-detection"],
+			"@util-error-notification": ["src/modules/util/error-notification"],
+			"@page-board": ["src/modules/page/board"],
+			"@page-class-members": ["src/modules/page/class-members"],
+			"@page-media-shelf": ["src/modules/page/media-shelf"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},
@@ -70,8 +77,5 @@
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 	],
-	"exclude": ["node_modules", "./src/components/base/_globals.js"],
-	"vueCompilerOptions": {
-		"target": 2.7
-	}
+	"exclude": ["node_modules", "./src/components/base/components.js"]
 }

@@ -3,12 +3,12 @@
 		<v-dialog
 			v-model="isDialogOpen"
 			width="300"
-			:hide-overlay="!loadingState.hasOverlay"
+			:scrim="!loadingState.hasOverlay"
 			:persistent="loadingState.isPersistent"
 		>
 			<v-card class="px-2 py-3">
 				<v-card-text class="pb-0">
-					<div class="mb-2 text-center black--text" data-testid="dialog-text">
+					<div class="mb-2 text-center" data-testid="dialog-text">
 						{{ loadingState.text }}
 					</div>
 					<v-progress-linear indeterminate color="primary" class="mb-2" />

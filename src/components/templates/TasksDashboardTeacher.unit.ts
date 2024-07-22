@@ -5,20 +5,23 @@ import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { OpenTasksForTeacher } from "@/store/types/tasks";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import Vue from "vue";
 import ShareModule from "@/store/share";
 import {
+	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
+	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import EnvConfigModule from "../../store/env-config";
+import EnvConfigModule from "@/store/env-config";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -33,26 +36,23 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 	let notifierModuleMock: NotifierModule;
 	let shareModuleMock: ShareModule;
 
-	let wrapper: Wrapper<Vue>;
-
 	const mountComponent = (attrs = {}) => {
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 			getCtlToolsTabEnabled: false,
 		});
 
-		const wrapper = mount(TasksDashboardTeacher as MountOptions<Vue>, {
-			...createComponentMocks({
-				i18n: true,
-			}),
-			provide: {
-				tasksModule: tasksModuleMock,
-				copyModule: copyModuleMock,
-				finishedTasksModule: finishedTasksModuleMock,
-				loadingStateModule: loadingStateModuleMock,
-				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-				shareModule: shareModuleMock,
-				[I18N_KEY.valueOf()]: { t: (key: string) => key },
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+		const wrapper = mount(TasksDashboardTeacher, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					tasksModule: tasksModuleMock,
+					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
+					finishedTasksModule: finishedTasksModuleMock,
+					loadingStateModule: loadingStateModuleMock,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
+					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
 			},
 			...attrs,
 		});
@@ -89,11 +89,13 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		copyModuleMock = createModuleMocks(CopyModule);
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		notifierModuleMock = createModuleMocks(NotifierModule);
-		shareModuleMock = createModuleMocks(ShareModule);
+		shareModuleMock = createModuleMocks(ShareModule, {
+			getIsShareModalOpen: false,
+		});
 	});
 
 	it("Should render tasks list component, with second panel expanded per default", () => {
-		wrapper = mountComponent({
+		const wrapper = mountComponent({
 			propsData: {
 				emptyState,
 				tabRoutes,
@@ -103,11 +105,11 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 		const expansionPanels = wrapper.findAll(".v-expansion-panel");
 
 		expect(wrapper.findComponent(TasksList).exists()).toBe(true);
-		expect(expansionPanels.exists()).toBe(true);
-		expect(expansionPanels.at(0).classes()).not.toContain(
+		expect(expansionPanels.length).toBeGreaterThan(0);
+		expect(expansionPanels.at(0)?.classes()).not.toContain(
 			"v-expansion-panel--active"
 		);
-		expect(expansionPanels.at(1).classes()).toContain(
+		expect(expansionPanels.at(1)?.classes()).toContain(
 			"v-expansion-panel--active"
 		);
 	});
@@ -119,7 +121,7 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 			draftsForTeacherIsEmpty: true,
 		});
 
-		wrapper = mountComponent({
+		const wrapper = mountComponent({
 			propsData: {
 				emptyState,
 				tabRoutes,
@@ -131,20 +133,20 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 	});
 
 	it("Should update store when tab changes", async () => {
-		wrapper = mountComponent({
+		const wrapper = mountComponent({
 			propsData: {
 				emptyState,
 				tabRoutes,
 			},
 		});
 
-		await wrapper.setData({ tab: tabRoutes[1] });
+		wrapper.vm.tab = tabRoutes[1];
 
 		expect(tasksModuleMock.setActiveTab).toHaveBeenCalled();
 	});
 
 	it("Should handle copy-task event", async () => {
-		wrapper = mountComponent({
+		const wrapper = mountComponent({
 			propsData: {
 				emptyState,
 				tabRoutes,

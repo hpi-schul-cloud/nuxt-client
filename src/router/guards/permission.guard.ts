@@ -1,6 +1,9 @@
-import { NavigationGuardNext, Route } from "vue-router/types/router";
 import { applicationErrorModule, authModule } from "@/store";
-import { NavigationGuard } from "vue-router";
+import {
+	NavigationGuard,
+	NavigationGuardNext,
+	RouteLocationNormalized,
+} from "vue-router";
 import { useApplicationError } from "@/composables/application-error.composable";
 
 const { createApplicationError } = useApplicationError();
@@ -8,7 +11,11 @@ export function createPermissionGuard(
 	permissions: string[],
 	fallbackRoute?: string
 ): NavigationGuard {
-	return (to: Route, from: Route, next: NavigationGuardNext) => {
+	return (
+		to: RouteLocationNormalized,
+		from: RouteLocationNormalized,
+		next: NavigationGuardNext
+	) => {
 		if (permissions.every((p) => authModule.getUserPermissions.includes(p))) {
 			return next();
 		}

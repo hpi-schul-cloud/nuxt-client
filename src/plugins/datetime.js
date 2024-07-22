@@ -1,19 +1,17 @@
+import { authModule, envConfigModule } from "@/store";
 import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc"; // dependent on utc plugin
-import timezone from "dayjs/plugin/timezone";
-import relativeTime from "dayjs/plugin/relativeTime";
-import customParseFormat from "dayjs/plugin/customParseFormat";
 import "dayjs/locale/de";
 import "dayjs/locale/es";
 import "dayjs/locale/uk";
-import { authModule, envConfigModule } from "@/store";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import relativeTime from "dayjs/plugin/relativeTime";
+import timezone from "dayjs/plugin/timezone";
+import utc from "dayjs/plugin/utc"; // dependent on utc plugin
 
 dayjs.extend(customParseFormat);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.extend(relativeTime);
-
-const DEFAULT_TIMEZONE = "Europe/Berlin";
 
 let currentTimezone;
 let schoolTimezone;
@@ -86,7 +84,7 @@ const initDefaultTimezone = (app, store) => {
 	schoolTimezone = store?.state?.schools?.school?.timezone;
 	instanceTimezone = envConfigModule.getDefaultTimezone;
 	userTimezone = getUserTimezone(app) || app.$datetime.currentTimezone;
-	currentTimezone = schoolTimezone || instanceTimezone || DEFAULT_TIMEZONE;
+	currentTimezone = schoolTimezone || instanceTimezone;
 	userHasSchoolTimezone = !schoolTimezone || currentTimezone === userTimezone;
 	setDefaultTimezone(currentTimezone);
 
@@ -102,7 +100,10 @@ const initDefaultTimezone = (app, store) => {
  * @return {dayjs} Date object based on current timezone
  */
 export const fromUTC = (date) => {
-	return dayjs.tz(date, "UTC");
+	// Date object is needed for firefox bug if date is before 1970
+	const dateObject = new Date(date);
+
+	return dayjs.tz(dateObject, "UTC");
 };
 
 /**
@@ -152,7 +153,11 @@ export const inputDateFormat = (date) => {
  * @return {String} Date string based on current timezone using locale date formating
  */
 export const printDate = (date) => {
-	return fromUTC(date).format(DATETIME_FORMAT.date);
+	if (date) {
+		const result = fromUTC(date).format(DATETIME_FORMAT.date);
+		return result;
+	}
+	return null;
 };
 
 /**
@@ -298,7 +303,19 @@ export const currentDate = () => {
 };
 
 export const isDateTimeInPast = (dateTime) => {
+	if (!dateTime) return false;
+
 	return new Date(dateTime) < new Date();
+};
+
+export const getTimeFromISOString = (dateIsoString) => {
+	if (!dateIsoString) return "";
+
+	const locale = authModule?.getLocale || "de";
+	return new Date(dateIsoString).toLocaleTimeString(locale.value, {
+		timeStyle: "short",
+		hourCycle: "h23",
+	});
 };
 
 export const isToday = (date) => {

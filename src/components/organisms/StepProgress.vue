@@ -59,6 +59,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
+@import "~vuetify/settings";
+
 .wrapper {
 	position: relative;
 	width: 100%;
@@ -91,10 +93,9 @@ ul.progressbar {
 		margin: 0 auto;
 		margin-bottom: var(--space-xs);
 		font-weight: var(--font-weight-bold);
-		color: var(--v-black-base);
 		content: counter(step);
 		counter-increment: step;
-		background: var(--v-white-base);
+		background: rgba(var(--v-theme-white));
 		border-color: map-get($grey, darken-3);
 		border-style: dotted;
 		border-radius: var(--radius-round);
@@ -120,23 +121,23 @@ ul.progressbar {
 	&::before {
 		color: map-get($grey, base);
 		text-decoration: underline;
-		background: var(--v-white-base);
-		border-color: var(--v-primary-base);
+		background: rgba(var(--v-theme-white));
+		border-color: rgba(var(--v-theme-primary));
 		border-style: solid;
 	}
 }
 
 .progressbar li.done {
 	&::before {
-		color: var(--v-white-base);
-		background: var(--v-success-base);
-		border-color: var(--v-success-base);
+		color: rgba(var(--v-theme-white));
+		background: rgba(var(--v-theme-success));
+		border-color: rgba(var(--v-theme-success));
 		border-style: solid;
 		border-radius: var(--radius-round);
 	}
 
 	&::after {
-		color: var(--v-white-base);
+		color: rgba(var(--v-theme-white));
 		background: map-get($grey, base);
 	}
 }

@@ -1,134 +1,126 @@
 <template>
-	<div>
-		<v-menu
-			bottom
-			left
-			offset-y
-			attach
-			@update:return-value="toggleMenu(false)"
-		>
-			<template #activator="{ on, attrs, value }">
-				<v-btn
-					id="task-menu-btn"
-					v-bind="attrs"
-					icon
-					data-testid="task-menu"
-					v-on="on"
-					@click.prevent="toggleMenu(!value)"
-					@keydown.space.stop="toggleMenu(!value)"
-					@focus="handleFocus(true)"
-					@blur="handleFocus(false)"
-				>
-					<v-icon>{{ mdiDotsVertical }}</v-icon>
-				</v-btn>
-			</template>
-			<v-list>
-				<v-list-item
-					v-if="isTeacher"
-					id="task-action-edit"
-					:href="editLink"
-					class="task-action"
-					data-testId="task-edit"
-				>
-					<v-list-item-title>
-						<v-icon class="task-action-icon">
-							{{ mdiPencilOutline }}
-						</v-icon>
-						{{ $t("common.actions.edit") }}
-					</v-list-item-title>
-				</v-list-item>
-				<v-list-item
-					v-if="isTeacher && copyServiceEnabled"
-					id="task-action-copy"
-					class="task-action"
-					data-testId="task-copy"
-					@click.stop.prevent="onCopyTask"
-				>
-					<v-list-item-title>
-						<v-icon class="task-action-icon"> {{ mdiContentCopy }} </v-icon>
-						{{ $t("common.actions.copy") }}
-					</v-list-item-title>
-				</v-list-item>
-				<v-list-item
-					v-if="isTeacher && shareTaskEnabled"
-					id="task-action-share"
-					class="task-action"
-					data-testId="task-share"
-					@click.stop.prevent="onShareTask"
-				>
-					<v-list-item-title>
-						<v-icon class="task-action-icon">
-							{{ mdiShareVariantOutline }}
-						</v-icon>
-						{{ $t("pages.room.taskCard.label.shareTask") }}
-					</v-list-item-title>
-				</v-list-item>
-				<v-list-item
-					v-if="isTeacher && taskIsPublished"
-					id="task-action-revert"
-					class="task-action"
-					data-testId="task-revert"
-					@click.stop.prevent="handleRevertPublished"
-				>
-					<v-list-item-title>
-						<v-icon class="task-action-icon"> {{ mdiUndoVariant }} </v-icon>
-						{{ $t("pages.room.cards.label.revert") }}
-					</v-list-item-title>
-				</v-list-item>
-				<v-list-item
-					id="task-action-finish"
-					class="task-action"
-					data-testId="task-finish"
-					@click.stop.prevent="handleFinish"
-				>
-					<v-list-item-title>
-						<template v-if="taskIsFinished">
-							<v-icon class="task-action-icon">{{ mdiUndoVariant }}</v-icon>
-							{{ $t("common.labels.restore") }}
-						</template>
-						<template v-else>
-							<v-icon class="task-action-icon">{{ mdiArchiveOutline }}</v-icon>
-							{{ $t("components.molecules.TaskItemMenu.finish") }}
-						</template>
-					</v-list-item-title>
-				</v-list-item>
-				<v-list-item
-					v-if="isTeacher"
-					id="task-action-delete"
-					class="task-action"
-					data-testId="task-delete"
-					@click.stop.prevent="() => (confirmDeleteDialogIsOpen = true)"
-				>
-					<v-list-item-title>
-						<v-icon class="task-action-icon">
-							{{ mdiTrashCanOutline }}
-						</v-icon>
-						{{ $t("common.actions.remove") }}
-					</v-list-item-title>
-				</v-list-item>
-			</v-list>
-		</v-menu>
-		<v-custom-dialog
-			v-model="confirmDeleteDialogIsOpen"
-			:size="375"
-			has-buttons
-			confirm-btn-title-key="common.actions.remove"
-			@dialog-confirmed="handleDelete"
-		>
-			<h2 slot="title" class="text-h4 my-2">
+	<v-menu location="bottom end">
+		<template v-slot:activator="{ props }">
+			<v-btn
+				v-bind="props"
+				:icon="mdiDotsVertical"
+				variant="text"
+				density="comfortable"
+				:aria-label="ariaLabel"
+				@keydown.space.stop
+				@keydown.left.right.up.down.stop
+			/>
+			<!-- for later refactoring: @keydown needed for a11y - perhaps because of nested v-lists -->
+		</template>
+		<v-list role="menu">
+			<v-list-item
+				v-if="isTeacher"
+				id="task-action-edit"
+				:href="editLink"
+				class="task-action"
+				data-testId="task-edit"
+				role="menuitem"
+				:draggable="false"
+			>
+				<v-list-item-title>
+					<v-icon :icon="mdiPencilOutline" class="task-action-icon" />
+					{{ $t("common.actions.edit") }}
+				</v-list-item-title>
+			</v-list-item>
+			<v-list-item
+				v-if="isTeacher && copyServiceEnabled"
+				id="task-action-copy"
+				class="task-action"
+				data-testId="task-copy"
+				@click="onCopyTask"
+				role="menuitem"
+			>
+				<v-list-item-title>
+					<v-icon :icon="mdiContentCopy" class="task-action-icon" />
+					{{ $t("common.actions.copy") }}
+				</v-list-item-title>
+			</v-list-item>
+			<v-list-item
+				v-if="isTeacher && shareTaskEnabled"
+				id="task-action-share"
+				class="task-action"
+				data-testId="task-share"
+				@click="onShareTask"
+				role="menuitem"
+			>
+				<v-list-item-title>
+					<v-icon :icon="mdiShareVariantOutline" class="task-action-icon" />
+					{{ $t("common.actions.shareCopy") }}
+				</v-list-item-title>
+			</v-list-item>
+			<v-list-item
+				v-if="isTeacher && taskIsPublished"
+				id="task-action-revert"
+				class="task-action"
+				data-testId="task-revert"
+				@click="handleRevertPublished"
+				role="menuitem"
+			>
+				<v-list-item-title>
+					<v-icon :icon="mdiUndoVariant" class="task-action-icon" />
+					{{ $t("pages.room.cards.label.revert") }}
+				</v-list-item-title>
+			</v-list-item>
+			<v-list-item
+				id="task-action-finish"
+				class="task-action"
+				data-testId="task-finish"
+				@click="handleFinish"
+				role="menuitem"
+			>
+				<v-list-item-title>
+					<template v-if="taskIsFinished">
+						<v-icon :icon="mdiUndoVariant" class="task-action-icon" />
+						{{ $t("common.labels.restore") }}
+					</template>
+					<template v-else>
+						<v-icon :icon="mdiArchiveOutline" class="task-action-icon" />
+						{{ $t("components.molecules.TaskItemMenu.finish") }}
+					</template>
+				</v-list-item-title>
+			</v-list-item>
+			<v-list-item
+				v-if="isTeacher"
+				id="task-action-delete"
+				class="task-action"
+				data-testId="task-delete"
+				@click="() => (confirmDeleteDialogIsOpen = true)"
+				role="menuitem"
+			>
+				<v-list-item-title>
+					<v-icon :icon="mdiTrashCanOutline" class="task-action-icon" />
+					{{ $t("common.actions.remove") }}
+				</v-list-item-title>
+			</v-list-item>
+		</v-list>
+	</v-menu>
+	<v-custom-dialog
+		v-model:isOpen="confirmDeleteDialogIsOpen"
+		:size="375"
+		has-buttons
+		confirm-btn-title-key="common.actions.remove"
+		@dialog-confirmed="handleDelete"
+	>
+		<template #title>
+			<h2 class="text-h4 my-2">
 				{{ $t("components.molecules.TaskItemMenu.confirmDelete.title") }}
 			</h2>
-			<template slot="content">
-				<p class="text-md mt-2">
-					{{
-						$t("components.molecules.TaskItemMenu.confirmDelete.text", {
-							taskTitle,
-						})
-					}}
-				</p>
-			</template>
-		</v-custom-dialog>
-	</div>
+		</template>
+		<template #content>
+			<p class="text-md mt-2">
+				{{
+					$t("components.molecules.TaskItemMenu.confirmDelete.text", {
+						taskTitle,
+					})
+				}}
+			</p>
+		</template>
+	</v-custom-dialog>
 </template>
 
 <script>
@@ -145,16 +137,9 @@ import {
 	mdiUndoVariant,
 } from "@mdi/js";
 import { defineComponent } from "vue";
-import { useCopy } from "../../composables/copy";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
-	setup() {
-		const { copy } = useCopy();
-		return {
-			copy,
-		};
-	},
+	emits: ["toggledMenu", "focusChanged", "copyTask", "shareTask"],
 	components: { vCustomDialog },
 	props: {
 		taskId: {
@@ -167,7 +152,6 @@ export default defineComponent({
 		},
 		taskIsPublished: {
 			type: Boolean,
-			required: true,
 		},
 		taskTitle: {
 			type: String,
@@ -213,14 +197,12 @@ export default defineComponent({
 		shareTaskEnabled() {
 			return envConfigModule?.getEnv.FEATURE_TASK_SHARE;
 		},
+		ariaLabel() {
+			// VUE3_UPGRADE we need a proper label here. was missing before.
+			return `${this.$t("common.words.task")}`;
+		},
 	},
 	methods: {
-		toggleMenu(value) {
-			this.$emit("toggled-menu", value);
-		},
-		handleFocus(value) {
-			this.$emit("focus-changed", value);
-		},
 		handleFinish() {
 			if (this.taskIsFinished) {
 				finishedTasksModule.restoreTask(this.taskId);
@@ -269,6 +251,5 @@ export default defineComponent({
 	margin-top: -2px;
 	margin-right: 4px;
 	font-size: 1rem;
-	color: rgba(0, 0, 0, 0.87);
 }
 </style>

@@ -1,1 +1,2 @@
-export * from "../../../src/components/feature-board/test-utils/sharedElementTypeSelectionMock";
+export * from "./setupConfirmationComposableMock";
+export * from "./setupDeleteConfirmationComposableMock";

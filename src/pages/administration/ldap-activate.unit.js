@@ -1,7 +1,16 @@
-import SchoolsModule from "@/store/schools";
-import EnvConfigModule from "@/store/env-config";
+import BaseInput from "@/components/base/BaseInput/BaseInput.vue";
+import BaseModal from "@/components/base/BaseModal.vue";
 import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
+import SchoolsModule from "@/store/schools";
+import { envsFactory } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { createStore } from "vuex";
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
 
 const mockResponseData = {
@@ -31,151 +40,151 @@ const mockResponseData = {
 		},
 	},
 };
-const $route = {
-	query: {
-		id: "mockId",
-	},
-};
 
-describe("ldap/activate", () => {
-	const routerPushStub = jest.fn();
+const getStoreOptions = () => {
 	const submitStub = jest.fn();
 	const patchStub = jest.fn();
 
-	const mockStore = {
-		auth: {
-			state: () => ({
-				user: {
-					permissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
-				},
-			}),
-		},
-		"ldap-config": {
-			actions: {
-				submitData: submitStub,
-				patchData: patchStub,
+	const storeOptions = {
+		modules: {
+			auth: {
+				namespaced: true,
+				state: () => ({
+					user: {
+						permissions: ["ADMIN_VIEW", "SCHOOL_EDIT"],
+					},
+				}),
 			},
-			state: () => ({
-				verified: { ...mockResponseData },
-				submitted: { ...mockResponseData },
-			}),
-			getters: {
-				getVerified: () => ({ ...mockResponseData }),
-				getSubmitted: () => ({ ...mockResponseData }),
-				getTemp: () => ({}),
-				getStatus: () => "completed",
-				getData: () => ({}),
+			"ldap-config": {
+				namespaced: true,
+				actions: {
+					submitData: submitStub,
+					patchData: patchStub,
+				},
+				state: () => ({
+					verified: { ...mockResponseData },
+					submitted: { ...mockResponseData },
+				}),
+				getters: {
+					getVerified: () => ({ ...mockResponseData }),
+					getSubmitted: () => ({ ...mockResponseData }),
+					getTemp: () => ({}),
+					getStatus: () => "completed",
+					getData: () => ({}),
+				},
 			},
 		},
 	};
 
+	return { storeOptions, submitStub, patchStub };
+};
+
+describe("ldap/activate", () => {
+	const setup = ({ route, storeOptions }) => {
+		const routerPushStub = jest.fn();
+
+		const wrapper = mount(ldapActivate, {
+			global: {
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					vueDompurifyHTMLPlugin,
+				],
+				mocks: {
+					$router: { push: routerPushStub },
+					$route: route,
+					$store: createStore(storeOptions),
+				},
+				components: {
+					"base-input": BaseInput,
+					"base-modal": BaseModal,
+				},
+			},
+		});
+
+		return { wrapper, routerPushStub };
+	};
+
 	beforeEach(() => {
-		document.body.setAttribute("data-app", "true");
 		setupStores({
 			envConfigModule: EnvConfigModule,
 			schoolsModule: SchoolsModule,
 		});
-		envConfigModule.setEnvs({ FEATURE_USER_MIGRATION_ENABLED: false });
+		const envs = envsFactory.build({ FEATURE_USER_MIGRATION_ENABLED: false });
+		envConfigModule.setEnvs(envs);
 	});
 
 	it("should call 'submitaData' action when submit button is clicked and this.$route.query.id is not defined", async () => {
-		const wrapper = mount(ldapActivate, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-			mocks: {
-				$router: { push: routerPushStub },
-				$route: { query: {} },
-			},
-		});
+		const { storeOptions, submitStub } = getStoreOptions();
+		const { wrapper } = setup({ route: { query: {} }, storeOptions });
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
-		submitBtn.trigger("click");
-		await wrapper.vm.$nextTick();
+		await submitBtn.trigger("click");
 
 		expect(submitStub).toHaveBeenCalled();
 	});
 
 	it("should call 'patchData' action when submit button is clicked and this.$route.query.id is defined", async () => {
-		const wrapper = mount(ldapActivate, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-			mocks: {
-				$router: { push: routerPushStub },
-				$route,
-			},
+		const { storeOptions, patchStub } = getStoreOptions();
+		const { wrapper } = setup({
+			route: { query: { id: "mockId" } },
+			storeOptions,
 		});
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
-		submitBtn.trigger("click");
-		await wrapper.vm.$nextTick();
+		await submitBtn.trigger("click");
 
 		expect(patchStub).toHaveBeenCalled();
 	});
 
 	it(" should push to router if submitted.ok is false", async () => {
-		const customMockStore = { ...mockStore };
-		customMockStore["ldap-config"].state = () => ({
+		const { storeOptions } = getStoreOptions();
+		storeOptions.modules["ldap-config"].state = () => ({
 			verified: mockResponseData,
 			submitted: { ...mockResponseData, ok: false },
 		});
-		const wrapper = mount(ldapActivate, {
-			...createComponentMocks({
-				i18n: true,
-				store: customMockStore,
-			}),
-			mocks: {
-				$router: { push: routerPushStub },
-				$route,
-			},
+
+		const { wrapper } = setup({
+			route: { query: { id: "mockId" } },
+			storeOptions,
 		});
-		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
+
+		const submitBtn = wrapper.findComponent(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
-		submitBtn.trigger("click");
-		await wrapper.vm.$nextTick();
+		await submitBtn.trigger("click");
 
 		// TODO make sure that route is pushed in the component
 		// expect(routerPushStub).toHaveBeenCalled();
 	});
 
-	it("should render confirm modal component", async () => {
-		const wrapper = mount(ldapActivate, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-			mocks: {
-				$router: { push: routerPushStub },
-				$route,
-			},
+	it("should render confirm modal component", () => {
+		const { storeOptions } = getStoreOptions();
+
+		const { wrapper } = setup({
+			route: { query: { id: "mockId" } },
+			storeOptions,
 		});
-		const confirmModal = wrapper.find(`[data-testid="confirmModal"]`);
+
+		const confirmModal = wrapper.findComponent({ name: "v-dialog" });
 		expect(confirmModal.exists()).toBe(true);
 	});
 
 	it("should push to router when clicking the ok button in the modal ", async () => {
-		const customMockStore = { ...mockStore };
-		customMockStore["ldap-config"].state = () => ({
-			verified: mockResponseData,
-			submitted: { ...mockResponseData, ok: true },
-		});
-		const wrapper = mount(ldapActivate, {
-			...createComponentMocks({
-				i18n: true,
-				store: customMockStore,
-			}),
-			mocks: {
-				$router: { push: routerPushStub },
-				$route,
-			},
+		const { storeOptions } = getStoreOptions();
+		storeOptions.modules["ldap-config"].getters.getSubmitted = () => ({
+			...mockResponseData,
+			ok: true,
 		});
 
-		const confirmBtn = wrapper.find(
-			`[data-testid="ldapOkButton"] .btn-confirm`
-		);
+		const { wrapper, routerPushStub } = setup({
+			route: { query: { id: "mockId" } },
+			storeOptions,
+		});
+
+		const confirmModal = wrapper.findComponent({ name: "v-dialog" });
+		const confirmBtn = confirmModal
+			.findComponent({ name: "v-card" })
+			.find('[data-testid="ldapOkButton"]');
 		expect(confirmBtn.exists()).toBe(true);
 		await confirmBtn.trigger("click");
 
@@ -183,28 +192,18 @@ describe("ldap/activate", () => {
 	});
 
 	it("should render 'infoMessage' component if 'submitted' has an errors key", async () => {
-		const customMockStore = { ...mockStore };
-		customMockStore["ldap-config"].getters = {
-			getVerified: () => mockResponseData,
-			getSubmitted: () => ({
-				...mockResponseData,
-				ok: false,
-				errors: [{ type: "CONNECTION_ERROR", message: "testError" }],
-			}),
-			getTemp: () => ({}),
-			getStatus: () => "completed",
-			getData: () => ({}),
-		};
-		const wrapper = mount(ldapActivate, {
-			...createComponentMocks({
-				i18n: true,
-				store: customMockStore,
-			}),
-			mocks: {
-				$router: { push: routerPushStub },
-				$route,
-			},
+		const { storeOptions } = getStoreOptions();
+		storeOptions.modules["ldap-config"].getters.getSubmitted = () => ({
+			...mockResponseData,
+			ok: false,
+			errors: [{ type: "CONNECTION_ERROR", message: "testError" }],
 		});
+
+		const { wrapper } = setup({
+			route: { query: { id: "mockId" } },
+			storeOptions,
+		});
+
 		const submitBtn = wrapper.find(`[data-testid="ldapSubmitButton"]`);
 		expect(submitBtn.exists()).toBe(true);
 		submitBtn.trigger("click");
@@ -215,16 +214,13 @@ describe("ldap/activate", () => {
 	});
 
 	it("should not show checkbox for user migration", async () => {
-		const wrapper = mount(ldapActivate, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-			mocks: {
-				$router: { push: routerPushStub },
-				$route,
-			},
+		const { storeOptions } = getStoreOptions();
+
+		const { wrapper } = setup({
+			route: { query: { id: "mockId" } },
+			storeOptions,
 		});
+
 		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
 		expect(section.exists()).toBe(false);
 		const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);
@@ -232,17 +228,16 @@ describe("ldap/activate", () => {
 	});
 
 	it("should show checkbox for user migration", async () => {
-		envConfigModule.setEnvs({ FEATURE_USER_MIGRATION_ENABLED: true });
-		const wrapper = mount(ldapActivate, {
-			...createComponentMocks({
-				i18n: true,
-				store: mockStore,
-			}),
-			mocks: {
-				$router: { push: routerPushStub },
-				$route: { query: {} },
-			},
+		const envs = envsFactory.build({ FEATURE_USER_MIGRATION_ENABLED: true });
+		envConfigModule.setEnvs(envs);
+
+		const { storeOptions } = getStoreOptions();
+
+		const { wrapper } = setup({
+			route: { query: {} },
+			storeOptions,
 		});
+
 		const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
 		expect(section.exists()).toBe(true);
 		const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);

@@ -2,9 +2,9 @@
 	<v-card data-testid="migration-warning-card">
 		<v-card-title
 			data-testid="migration-warning-card-title"
-			class="card-title"
-			>{{ $t(title) }}</v-card-title
-		>
+			class="card-title text-wrap"
+			>{{ $t(title) }}
+		</v-card-title>
 		<v-card-text>
 			<RenderHTML
 				data-testid="migration-warning-card-info-text"
@@ -29,7 +29,7 @@
 		<v-card-actions>
 			<v-btn
 				data-testid="disagree-btn"
-				color="secondary"
+				variant="flat"
 				@click="$emit(eventName)"
 			>
 				{{ $t(disagree) }}
@@ -37,7 +37,8 @@
 			<v-btn
 				color="primary"
 				data-testid="agree-btn"
-				:disabled="check && !isConfirmed"
+				:disabled="!!check && !isConfirmed"
+				variant="flat"
 				@click="
 					$emit('set');
 					$emit(eventName);
@@ -51,7 +52,7 @@
 <script lang="ts">
 import { RenderHTML } from "@feature-render-html";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { ComputedRef, Ref, computed, defineComponent, ref, toRef } from "vue";
+import { computed, ComputedRef, defineComponent, Ref, ref, toRef } from "vue";
 
 export enum MigrationWarningCardTypeEnum {
 	START = "start",
@@ -88,7 +89,8 @@ export default defineComponent({
 			"components.administration.adminMigrationSection.startWarningCard.agree";
 		let disagree =
 			"components.administration.adminMigrationSection.startWarningCard.disagree";
-		let eventName = "start";
+		let eventName: MigrationWarningCardTypeEnum =
+			MigrationWarningCardTypeEnum.START;
 		let check: string | undefined;
 
 		if (type.value === MigrationWarningCardTypeEnum.END) {
@@ -102,7 +104,7 @@ export default defineComponent({
 				"components.administration.adminMigrationSection.endWarningCard.disagree";
 			check =
 				"components.administration.adminMigrationSection.endWarningCard.check";
-			eventName = "end";
+			eventName = MigrationWarningCardTypeEnum.END;
 		}
 
 		const gracePeriodInDays: ComputedRef<number | undefined> = computed(() => {

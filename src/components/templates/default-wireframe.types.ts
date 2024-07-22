@@ -1,19 +1,20 @@
 export type Breadcrumb = {
-	text: string;
+	title: string;
 	href?: string;
 	to?: string;
 	disabled?: boolean;
 };
 
-type FabAction = {
+export type FabAction = {
 	icon: string;
 	label: string;
 	href?: string;
 	to?: string;
-	dataTestid?: string;
+	dataTestId?: string;
 	class?: string;
 	testId?: string;
 	ariaLabel?: string;
+	customEvent?: any;
 };
 
 export type Fab = {
@@ -21,4 +22,6 @@ export type Fab = {
 	icon: string;
 	title: string;
 	href?: string;
+	ariaLabel?: string;
+	dataTestId?: string;
 };

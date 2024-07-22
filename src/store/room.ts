@@ -1,19 +1,22 @@
-import { applicationErrorModule } from "@/store";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
-	SingleColumnBoardResponse,
+	BoardApiFactory,
 	CoursesApiFactory,
+	CreateBoardBodyParams,
+	CreateBoardResponse,
 	LessonApiFactory,
 	LessonApiInterface,
 	PatchOrderParams,
 	PatchVisibilityParams,
 	RoomsApiFactory,
 	RoomsApiInterface,
+	SingleColumnBoardResponse,
 	TaskApiFactory,
 	TaskApiInterface,
 } from "@/serverApi/v3";
+import { applicationErrorModule } from "@/store";
 import { $axios } from "@/utils/api";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
@@ -30,6 +33,7 @@ export default class RoomModule extends VuexModule {
 		displayColor: "",
 		elements: [],
 		isArchived: false,
+		isSynchronized: false,
 	};
 	scopePermissions: string[] = [];
 	loading = false;
@@ -126,53 +130,10 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async confirmImportLesson(shareToken: string): Promise<void> {
-		try {
-			this.resetBusinessError();
-			const lesson = await $axios.get("/v1/lessons", {
-				params: { shareToken },
-			});
-
-			if (!lesson.data.data.length) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-found",
-				});
-				return;
-			}
-
-			const copiedLesson = (
-				await $axios.post("/v1/lessons/copy", {
-					lessonId: lesson.data.data[0]._id,
-					newCourseId: this.roomData.roomId,
-					shareToken,
-				})
-			)?.data;
-
-			if (!copiedLesson) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-created",
-				});
-				return;
-			}
-			await this.fetchContent(this.roomData.roomId);
-		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
 	async deleteLesson(lessonId: string): Promise<void> {
 		this.resetBusinessError();
 		try {
 			await this.lessonApi.lessonControllerDelete(lessonId);
-
-			await this.fetchContent(this.roomData.roomId);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -183,16 +144,76 @@ export default class RoomModule extends VuexModule {
 	}
 
 	@Action
-	async downloadImsccCourse(version: "1.1.0" | "1.3.0"): Promise<void> {
+	async deleteTask(taskId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			await this.taskApi.taskControllerDelete(taskId);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async deleteBoard(boardId: string): Promise<void> {
+		this.resetBusinessError();
+		try {
+			await this.boardApi.boardControllerDeleteBoard(boardId);
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async createBoard(
+		prams: CreateBoardBodyParams
+	): Promise<CreateBoardResponse | undefined> {
+		this.resetBusinessError();
+		try {
+			const { data } = await this.boardApi.boardControllerCreateBoard(prams);
+
+			return data;
+		} catch (error: any) {
+			this.setBusinessError({
+				statusCode: error?.response?.status,
+				message: error?.response?.statusText,
+				...error,
+			});
+		}
+	}
+
+	@Action
+	async downloadCommonCartridgeCourse(exportSettings: {
+		version: "1.1.0" | "1.3.0";
+		topics: string[];
+		tasks: string[];
+		columnBoards: string[];
+	}): Promise<void> {
 		this.resetBusinessError();
 		try {
 			const response = await CoursesApiFactory(
 				undefined,
 				"v3",
 				$axios
-			).courseControllerExportCourse(this.roomData.roomId, version, {
-				responseType: "blob",
-			});
+			).courseControllerExportCourse(
+				this.roomData.roomId,
+				exportSettings.version,
+				{
+					topics: exportSettings.topics,
+					tasks: exportSettings.tasks,
+					columnBoards: exportSettings.columnBoards,
+				},
+				{
+					responseType: "blob",
+				}
+			);
 			const link = document.createElement("a");
 			link.href = URL.createObjectURL(
 				new Blob([response.data as unknown as Blob])
@@ -202,27 +223,6 @@ export default class RoomModule extends VuexModule {
 			}-${new Date().toISOString()}.imscc`;
 			link.click();
 			URL.revokeObjectURL(link.href);
-		} catch (error: any) {
-			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
-			});
-		}
-	}
-
-	@Action
-	async createCourseShareToken(courseId: string): Promise<void> {
-		this.resetBusinessError();
-		try {
-			const data = (await $axios.get(`/v1/courses-share/${courseId}`)).data;
-			if (!data.shareToken) {
-				this.setBusinessError({
-					statusCode: "400",
-					message: "not-generated",
-				});
-			}
-			this.setCourseShareToken(data.shareToken);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -256,7 +256,7 @@ export default class RoomModule extends VuexModule {
 		courseId: string;
 		userId: string;
 	}): Promise<void> {
-		const requestUrl = `/v1/courses/${payload.courseId}/userPermissions?userId=${payload.userId}`;
+		const requestUrl = `/v3/courses/${payload.courseId}/user-permissions`;
 		const ret_val = (await $axios.get(requestUrl)).data;
 		this.setPermissionData(ret_val[payload.userId]);
 	}
@@ -356,5 +356,9 @@ export default class RoomModule extends VuexModule {
 
 	private get taskApi(): TaskApiInterface {
 		return TaskApiFactory(undefined, "/v3", $axios);
+	}
+
+	private get boardApi() {
+		return BoardApiFactory(undefined, "/v3", $axios);
 	}
 }

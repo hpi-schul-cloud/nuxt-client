@@ -35,13 +35,8 @@
 							:no-styles="true"
 							:aria-label="$t(route.title)"
 						>
-							<v-icon
-								v-if="route.icon"
-								class="icon"
-								:color="getIconColor(route)"
-							>
-								{{ route.icon }}
-							</v-icon>
+							<v-icon v-if="route.icon" class="icon" :icon="route.icon" />
+
 							<span class="side-bar-title">{{ $t(route.title) }}</span>
 						</base-link>
 					</li>
@@ -66,16 +61,7 @@
 								:no-styles="true"
 								:aria-label="$t(child.title)"
 							>
-								<v-icon
-									v-if="child.icon"
-									class="icon"
-									:color="
-										isActive(child.title)
-											? 'var(--v-primary-base)'
-											: 'var(--v-secondary-base)'
-									"
-									>{{ child.icon }}
-								</v-icon>
+								<v-icon v-if="child.icon" class="icon" :icon="child.icon" />
 								<span class="side-bar-title">{{ $t(child.title) }}</span>
 							</base-link>
 						</li>
@@ -96,7 +82,7 @@ import {
 	SidebarItemList,
 	SidebarItemRouterLink,
 } from "@/utils/sidebar-base-items";
-import { useRoute } from "vue-router/composables";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
 	name: "TheSidebar",
@@ -150,12 +136,6 @@ export default defineComponent({
 			return title === activeParent.value;
 		};
 
-		const getIconColor = (route: SidebarItem | SidebarCategoryItem) => {
-			return isActive(route.title) || isChildActive(route.title)
-				? "var(--v-primary-base)"
-				: "var(--v-secondary-base)";
-		};
-
 		const hasChildren = (
 			route: SidebarItem | SidebarCategoryItem
 		): route is SidebarCategoryItem => {
@@ -181,7 +161,6 @@ export default defineComponent({
 		return {
 			isActive,
 			isChildActive,
-			getIconColor,
 			isExternalLink,
 			getRouteLocation,
 			hasChildren,
@@ -191,7 +170,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-/* stylelint-disable sh-waqar/declaration-use-variable */
+@import "~vuetify/settings";
 @import "@/styles/mixins";
 
 @keyframes menu-expand {
@@ -213,7 +192,7 @@ export default defineComponent({
 	display: none;
 	height: calc(100vh - 55px);
 	overflow-y: auto;
-	background-color: var(--v-white-base);
+	background-color: rgba(var(--v-theme-white));
 	box-shadow: 0 5px 5px map-get($grey, lighten-3);
 	transition: display 2s;
 
@@ -311,7 +290,7 @@ export default defineComponent({
 					padding: 0 16px;
 					font-size: 16px;
 					line-height: 100%;
-					color: var(--v-secondary-base);
+					color: rgba(var(--v-theme-on-surface));
 					border-bottom: none;
 
 					.icon {
@@ -342,14 +321,14 @@ export default defineComponent({
 
 				&:hover,
 				&.active {
-					color: var(--v-primary-base);
+					color: rgba(var(--v-theme-primary));
 					cursor: pointer;
 					background-color: map-get($grey, lighten-3);
 				}
 
 				&.active .list-content,
 				&.child-active .list-content {
-					color: var(--v-primary-base);
+					color: rgba(var(--v-theme-primary));
 				}
 			}
 		}

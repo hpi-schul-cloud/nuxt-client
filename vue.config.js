@@ -4,6 +4,7 @@ const { createDevServerConfig } = require("./webpack-config/dev-server-config");
 const generateAliases = require("./webpack-config/theme-aliases");
 const ThemeResolverPlugin = require("./webpack-config/theme-resolver-plugin");
 const NoncePlaceholderPlugin = require("./webpack-config/nonce-placeholder-plugin");
+const { VuetifyPlugin } = require("webpack-plugin-vuetify");
 
 const TSCONFIG_PATH = path.resolve(__dirname, "./tsconfig.build.json");
 
@@ -14,60 +15,88 @@ const getDir = (subPath) => path.resolve(__dirname, subPath);
 module.exports = defineConfig({
 	assetsDir: "_nuxt",
 
+	runtimeCompiler: true,
+
 	transpileDependencies: ["vuetify"],
 
 	configureWebpack: {
-		plugins: [new NoncePlaceholderPlugin()],
+		plugins: [
+			new VuetifyPlugin({ styles: { configFile: "src/styles/settings.scss" } }),
+			new NoncePlaceholderPlugin(),
+		],
 		resolve: {
 			alias: {
-				"@data-board": getDir("src/components/data-board"),
-				"@data-external-tool": getDir("src/components/data-external-tool"),
-				"@data-group": getDir("src/components/data-group"),
-				"@data-system": getDir("src/components/data-system"),
+				"@data-board": getDir("src/modules/data/board"),
+				"@data-external-tool": getDir("src/modules/data/external-tool"),
+				"@data-group": getDir("src/modules/data/group"),
+				"@data-system": getDir("src/modules/data/system"),
 				"@data-provisioning-options": getDir(
-					"src/components/data-provisioning-options"
+					"src/modules/data/provisioning-options"
 				),
+				"@data-room": getDir("src/modules/data/room"),
 				"@feature-board-file-element": getDir(
-					"src/components/feature-board-file-element"
+					"src/modules/feature/board-file-element"
 				),
 				"@feature-board-submission-element": getDir(
-					"src/components/feature-board-submission-element"
+					"src/modules/feature/board-submission-element"
 				),
 				"@feature-board-text-element": getDir(
-					"src/components/feature-board-text-element"
+					"src/modules/feature/board-text-element"
 				),
 				"@feature-board-link-element": getDir(
-					"src/components/feature-board-link-element"
+					"src/modules/feature/board-link-element"
 				),
 				"@feature-board-external-tool-element": getDir(
-					"src/components/feature-board-external-tool-element"
+					"src/modules/feature/board-external-tool-element"
 				),
 				"@feature-board-drawing-element": getDir(
-					"src/components/feature-board-drawing-element"
+					"src/modules/feature/board-drawing-element"
 				),
-				"@feature-board": getDir("src/components/feature-board"),
-				"@feature-editor": getDir("src/components/feature-editor"),
-				"@feature-render-html": getDir("src/components/feature-render-html"),
-				"@ui-alert": getDir("src/components/ui-alert"),
-				"@ui-board": getDir("src/components/ui-board"),
-				"@ui-color-overlay": getDir("src/components/ui-color-overlay"),
-				"@ui-preview-image": getDir("src/components/ui-preview-image"),
-				"@ui-confirmation-dialog": getDir(
-					"src/components/ui-confirmation-dialog"
+				"@feature-board-collaborative-text-editor-element": getDir(
+					"src/modules/feature/board-collaborative-text-editor-element"
 				),
-				"@ui-date-time-picker": getDir("src/components/ui-date-time-picker"),
-				"@ui-light-box": getDir("src/components/ui-light-box"),
-				"@util-board": getDir("src/components/util-board"),
-				"@util-validators": getDir("src/components/util-validators"),
-				"@util-input-masks": getDir("src/components/util-input-masks"),
-				"@util-device-detection": getDir(
-					"src/components/util-device-detection"
+				"@feature-course-sync": getDir("src/modules/feature/course-sync"),
+				"@feature-board": getDir("src/modules/feature/board"),
+				"@feature-editor": getDir("src/modules/feature/editor"),
+				"@feature-render-html": getDir("src/modules/feature/render-html"),
+				"@feature-news-form": getDir("src/modules/feature/news-form"),
+				"@feature-media-shelf": getDir("src/modules/feature/media-shelf"),
+				"@ui-alert": getDir("src/modules/ui/alert"),
+				"@ui-board": getDir("src/modules/ui/board"),
+				"@ui-chip": getDir("src/modules/ui/chip"),
+				"@ui-confirmation-dialog": getDir("src/modules/ui/confirmation-dialog"),
+				"@ui-date-time-picker": getDir("src/modules/ui/date-time-picker"),
+				"@ui-layout": getDir("src/modules/ui/layout"),
+				"@ui-light-box": getDir("src/modules/ui/light-box"),
+				"@ui-preview-image": getDir("src/modules/ui/preview-image"),
+				"@ui-room-details": getDir("src/modules/ui/room-details"),
+				"@ui-skip-link": getDir("src/modules/ui/skip-link"),
+				"@ui-speed-dial-menu": getDir("src/modules/ui/speed-dial-menu"),
+				"@ui-qr-code": getDir("src/modules/ui/qr-code"),
+				"@util-board": getDir("src/modules/util/board"),
+				"@util-validators": getDir("src/modules/util/validators"),
+				"@util-vue": getDir("src/modules/util/vue"),
+				"@util-input-masks": getDir("src/modules/util/input-masks"),
+				"@util-device-detection": getDir("src/modules/util/device-detection"),
+				"@util-error-notification": getDir(
+					"src/modules/util/error-notification"
 				),
-				"@page-board": getDir("src/components/page-board"),
-				"@page-class-members": getDir("src/components/page-class-members"),
+				"@page-board": getDir("src/modules/page/board"),
+				"@page-class-members": getDir("src/modules/page/class-members"),
+				"@page-media-shelf": getDir("src/modules/page/media-shelf"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],
 			plugins: [new ThemeResolverPlugin(__dirname, replacements)],
+		},
+		module: {
+			rules: [
+				{
+					test: /\.ts$/,
+					type: "javascript/auto",
+					loader: path.resolve(__dirname, "webpack-config/vue-i18n-loader.js"),
+					include: [path.resolve(__dirname, "src/locales")],
+				},
+			],
 		},
 	},
 
@@ -89,6 +118,10 @@ module.exports = defineConfig({
 			.use("vue-loader")
 			.tap((options) => {
 				options.prettify = false;
+				options.compilerOptions = {
+					...(options.compilerOptions || {}),
+					isCustomElement: (tag) => tag.startsWith("h5p-"),
+				};
 				return options;
 			});
 		config.plugin("fork-ts-checker").tap((args) => {

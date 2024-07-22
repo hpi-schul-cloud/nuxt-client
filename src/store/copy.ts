@@ -2,6 +2,8 @@ import { CopyResultItem } from "@/components/copy-result-modal/types/CopyResultI
 import { AxiosStatic } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
+	BoardApiFactory,
+	BoardApiInterface,
 	CopyApiResponse,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
@@ -26,6 +28,7 @@ export enum CopyParamsTypeEnum {
 	Task = "task",
 	Lesson = "lesson",
 	Course = "course",
+	ColumnBoard = "columnBoard",
 }
 
 interface CopyByShareTokenPayload {
@@ -44,6 +47,7 @@ export default class CopyModule extends VuexModule {
 	private copyResult: CopyApiResponse | undefined = undefined;
 	private copyResultFailedItems: CopyResultItem[] = [];
 	private isResultModalOpen = false;
+	private hasDrawingChild = false;
 
 	private get roomsApi(): RoomsApiInterface {
 		return RoomsApiFactory(undefined, "/v3", $axios);
@@ -51,6 +55,10 @@ export default class CopyModule extends VuexModule {
 
 	private get taskApi(): TaskApiInterface {
 		return TaskApiFactory(undefined, "/v3", $axios);
+	}
+
+	private get boardApi(): BoardApiInterface {
+		return BoardApiFactory(undefined, "/v3", $axios);
 	}
 
 	private get shareApi(): ShareTokenApiInterface {
@@ -82,6 +90,16 @@ export default class CopyModule extends VuexModule {
 			copyResult = await this.roomsApi
 				.roomsControllerCopyCourse(id)
 				.then((response) => response.data);
+
+			if (copyResult && copyResult.elements) {
+				this.checkDrawingChildren(copyResult.elements);
+			}
+		}
+
+		if (type === CopyParamsTypeEnum.ColumnBoard) {
+			copyResult = await this.boardApi
+				.boardControllerCopyBoard(id)
+				.then((response) => response.data);
 		}
 
 		if (copyResult === undefined) {
@@ -93,6 +111,19 @@ export default class CopyModule extends VuexModule {
 		this.setCopyResult(copyResult);
 		this.setCopyResultFailedItems({ payload: copyResult });
 		return copyResult;
+	}
+
+	@Action
+	checkDrawingChildren(copyResultElementsTypes: CopyApiResponse[]): void {
+		for (const element of copyResultElementsTypes) {
+			if (element.type === CopyApiResponseTypeEnum.DrawingElement) {
+				this.setHasDrawingChild(true);
+				return;
+			}
+			if (element.elements) {
+				this.checkDrawingChildren(element.elements);
+			}
+		}
 	}
 
 	@Action({ rawError: true })
@@ -120,6 +151,7 @@ export default class CopyModule extends VuexModule {
 				.then((response) => response.data);
 		}
 		if (
+			type === ShareTokenBodyParamsParentTypeEnum.ColumnBoard ||
 			type === ShareTokenBodyParamsParentTypeEnum.Lessons ||
 			type === ShareTokenBodyParamsParentTypeEnum.Tasks
 		) {
@@ -129,6 +161,10 @@ export default class CopyModule extends VuexModule {
 					destinationCourseId,
 				})
 				.then((response) => response.data);
+		}
+
+		if (copyResult && copyResult.elements) {
+			this.checkDrawingChildren(copyResult.elements);
 		}
 
 		if (copyResult === undefined) {
@@ -164,6 +200,7 @@ export default class CopyModule extends VuexModule {
 			if (type === CopyApiResponseTypeEnum.Lesson) return true;
 			if (type === CopyApiResponseTypeEnum.Task) return true;
 			if (type === CopyApiResponseTypeEnum.LernstoreMaterialGroup) return true;
+			if (type === CopyApiResponseTypeEnum.Columnboard) return true;
 			return false;
 		};
 
@@ -179,6 +216,9 @@ export default class CopyModule extends VuexModule {
 			if (type === CopyApiResponseTypeEnum.LernstoreMaterial) return true;
 			if (type === CopyApiResponseTypeEnum.File) return true;
 			if (type === CopyApiResponseTypeEnum.CoursegroupGroup) return true;
+			if (type === CopyApiResponseTypeEnum.DrawingElement) return true;
+			if (type === CopyApiResponseTypeEnum.CollaborativeTextEditorElement)
+				return true;
 			return false;
 		};
 
@@ -190,6 +230,8 @@ export default class CopyModule extends VuexModule {
 					return `/courses/${element.destinationCourseId}/topics/${element.id}/edit?returnUrl=rooms/${element.destinationCourseId}`;
 				case CopyApiResponseTypeEnum.Course:
 					return `/courses/${element.id}/edit`;
+				case CopyApiResponseTypeEnum.Columnboard:
+					return `/rooms/${element.id}/board`;
 			}
 			return undefined;
 		};
@@ -250,10 +292,16 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Mutation
+	setHasDrawingChild(hasDrawingChild: boolean): void {
+		this.hasDrawingChild = hasDrawingChild;
+	}
+
+	@Mutation
 	reset(): void {
 		this.copyResultFailedItems = [];
 		this.copyResult = undefined;
 		this.isResultModalOpen = false;
+		this.hasDrawingChild = false;
 	}
 
 	get getCopyResult(): CopyApiResponse | undefined {

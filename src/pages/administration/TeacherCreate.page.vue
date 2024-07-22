@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="$t('pages.administration.teachers.new.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 	>
 		<form-create-user role-name="teacher" @create-user="createTeacher">
 			<template #inputs>
@@ -43,15 +43,15 @@ export default {
 			sendRegistration: false,
 			breadcrumbs: [
 				{
-					text: this.$t("pages.administration.index.title"),
+					title: this.$t("pages.administration.index.title"),
 					href: "/administration/",
 				},
 				{
-					text: this.$t("pages.administration.teachers.index.title"),
+					title: this.$t("pages.administration.teachers.index.title"),
 					to: "/administration/teachers",
 				},
 				{
-					text: this.$t("pages.administration.teachers.new.title"),
+					title: this.$t("pages.administration.teachers.new.title"),
 					disabled: true,
 				},
 			],
@@ -66,7 +66,7 @@ export default {
 					lastName: teacherData.lastName,
 					email: teacherData.email,
 					roles: ["teacher"],
-					schoolId: this.$user.schoolId,
+					schoolId: this.$me.school.id,
 					sendRegistration: this.sendRegistration,
 					generateRegistrationLink: true,
 				})
@@ -74,7 +74,7 @@ export default {
 					notifierModule.show({
 						text: this.$t("pages.administration.teachers.new.success"),
 						status: "success",
-						timeout: 10000,
+						timeout: 5000,
 					});
 					this.$router.push({
 						path: `/administration/teachers`,

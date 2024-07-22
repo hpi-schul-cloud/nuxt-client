@@ -1,5 +1,6 @@
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
+import { meResponseFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import UserHasRole from "./UserHasRole";
 
@@ -46,20 +47,27 @@ describe("@/components/helpers/UserHasRole", () => {
 	});
 
 	it("view true-slot if user has role", () => {
-		authModule.setUser({ roles: [{ name: "admin" }] });
+		const mockMe = meResponseFactory.build({ roles: [{ name: "admin" }] });
+		authModule.setMe(mockMe);
+
 		checkCorrectView("ADMIN", ["admin"], true);
 	});
 	it("view false-slot if user does not have role", () => {
-		authModule.setUser({ roles: [{ name: "user" }] });
+		const mockMe = meResponseFactory.build({ roles: [{ name: "user" }] });
+		authModule.setMe(mockMe);
 
 		checkCorrectView("ADMIN", ["user"], false);
 	});
 	it("defaults to view rejected", () => {
-		authModule.setUser({ roles: [{ name: "user" }] });
+		const mockMe = meResponseFactory.build({ roles: [{ name: "user" }] });
+		authModule.setMe(mockMe);
+
 		checkCorrectView(undefined, ["user"], false);
 	});
 	it("defaults to false when user has no roles", () => {
-		authModule.setUser({ roles: [] });
+		const mockMe = meResponseFactory.build();
+		authModule.setMe(mockMe);
+
 		checkCorrectView("ADMIN", [], false);
 	});
 });

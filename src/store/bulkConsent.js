@@ -1,30 +1,57 @@
 import generatePassword from "@/mixins/generatePassword";
 import { $axios } from "@/utils/api";
+import { inputDateFormat } from "@/plugins/datetime";
 
 export const actions = {
+	/**
+	 * The register method is disabled and re-implemented simply below.
+	 * The promiseResult.forEach is not working as expected and the errors are not being caught.
+	 */
+	// async register({ commit }, payload) {
+	// 	const registered = [];
+
+	// 	if (Array.isArray(payload)) {
+	// 		const errors = [];
+	// 		const promiseResult = await Promise.allSettled(
+	// 			payload.forEach((user) => {
+	// 				registered.push(user._id);
+	// 				$axios
+	// 					.patch("/v1/users/admin/students/" + user._id, {
+	// 						...user,
+	// 						createAccount: true,
+	// 					})
+	// 					.catch((error) => errors.push({ updateError: error }));
+	// 			})
+	// 		);
+
+	// 		promiseResult.forEach((promise) => {
+	// 			if (promise.status !== "fulfilled") {
+	// 				errors.push(promise);
+	// 			}
+	// 			if (errors.length)
+	// 				commit("setRegisterError", { promiseErrors: errors });
+	// 		});
+
+	// 		commit("setRegisteredStudents", registered);
+	// 	} else {
+	// 		commit("setRegisterError", { mapError: true });
+	// 	}
+	// },
+
 	async register({ commit }, payload) {
 		const registered = [];
 
 		if (Array.isArray(payload)) {
 			const errors = [];
-			const promiseResult = await Promise.allSettled(
-				payload.forEach((user) => {
-					registered.push(user._id);
-					$axios
-						.patch("/v1/users/admin/students/" + user._id, {
-							...user,
-							createAccount: true,
-						})
-						.catch((error) => errors.push({ updateError: error }));
-				})
-			);
 
-			promiseResult.forEach((promise) => {
-				if (promise.status !== "fulfilled") {
-					errors.push(promise);
-				}
-				if (errors.length)
-					commit("setRegisterError", { promiseErrors: errors });
+			payload.forEach(async (user) => {
+				registered.push(user._id);
+				await $axios
+					.patch("/v1/users/admin/students/" + user._id, {
+						...user,
+						createAccount: true,
+					})
+					.catch((error) => errors.push({ updateError: error }));
 			});
 
 			commit("setRegisteredStudents", registered);
@@ -36,11 +63,8 @@ export const actions = {
 	async findConsentUsers({ commit, state }, query) {
 		query.users = state.selectedStudents;
 		const response = (
-			await $axios.get(`/v1/users/admin/students`, {
+			await $axios.get(`/v3/users/admin/students`, {
 				params: query,
-				// paramsSerializer: (params) => {
-				// 	return qs.stringify(params);
-				// },
 			})
 		).data;
 
@@ -54,6 +78,7 @@ export const actions = {
 			.map((student) => {
 				student.fullName = student.firstName + " " + student.lastName;
 				student.password = generatePassword();
+				student.birthday = inputDateFormat(student.birthday);
 				return student;
 			});
 		commit("setStudentsData", data);

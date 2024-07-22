@@ -24,12 +24,8 @@
 export const supportedTypes = ["checkbox"];
 
 export default {
-	model: {
-		prop: "vmodel",
-		event: "input",
-	},
 	props: {
-		vmodel: {
+		modelValue: {
 			type: [Array, Boolean, undefined],
 			default: undefined,
 		},
@@ -46,7 +42,6 @@ export default {
 		},
 		color: {
 			type: String,
-			default: `var(--v-secondary-base)`,
 		},
 		label: {
 			type: String,
@@ -61,12 +56,12 @@ export default {
 	},
 	computed: {
 		isChecked() {
-			return Array.isArray(this.vmodel)
-				? this.vmodel.includes(this.value)
-				: Boolean(this.vmodel);
+			return Array.isArray(this.modelValue)
+				? this.modelValue.includes(this.value)
+				: Boolean(this.modelValue);
 		},
 		visibleIcon() {
-			if (this.showUndefinedState && this.vmodel === undefined) {
+			if (this.showUndefinedState && this.modelValue === undefined) {
 				return { name: "$mdiCheckboxIntermediate" };
 			}
 			return this.isChecked
@@ -89,7 +84,7 @@ export default {
 						"showUndefinedState is only allowed on type=checkbox."
 					);
 				}
-				if (Array.isArray(this.vmodel)) {
+				if (Array.isArray(this.modelValue)) {
 					throw new Error(
 						"showUndefinedState is not allowed if v-model is of type Array."
 					);
@@ -97,11 +92,11 @@ export default {
 			}
 		},
 		updateVModel() {
-			let newModel = this.vmodel;
+			let newModel = this.modelValue;
 			const isChecked = this.$refs.hiddenInput.checked;
 			if (
-				typeof this.vmodel === "boolean" ||
-				(this.showUndefinedState && this.vmodel === undefined)
+				typeof this.modelValue === "boolean" ||
+				(this.showUndefinedState && this.modelValue === undefined)
 			) {
 				newModel = isChecked;
 			} else if (isChecked && !newModel.includes(this.value)) {
@@ -109,7 +104,7 @@ export default {
 			} else if (!isChecked && newModel.includes(this.value)) {
 				newModel = newModel.filter((entry) => entry !== this.value);
 			}
-			this.$emit("input", newModel);
+			this.$emit("update:modelValue", newModel);
 		},
 	},
 };

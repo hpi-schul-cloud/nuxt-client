@@ -1,13 +1,13 @@
 <template>
 	<v-dialog
 		ref="vDialog"
-		:value="isOpen"
+		v-model="isOpen"
 		:max-width="size"
-		@click:outside="$emit('dialog-closed', false)"
-		@keydown.esc="$emit('dialog-closed', false)"
+		@click:outside="closeDialog"
+		@keydown.esc="closeDialog"
 	>
 		<v-card :ripple="false">
-			<v-card-title data-testid="dialog-title">
+			<v-card-title data-testid="dialog-title" class="dialog-title px-6 pt-4">
 				<slot name="title" />
 			</v-card-title>
 			<v-card-text class="text--primary">
@@ -18,17 +18,16 @@
 				<div class="button-section button-left">
 					<v-btn
 						v-if="checkButtons('back')"
-						data-testId="dialog-back"
-						depressed
-						outlined
+						data-testid="dialog-back"
+						variant="outlined"
 						@click="$emit('back')"
 					>
 						{{ $t("common.actions.back") }}
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('edit')"
-						data-testId="dialog-edit"
-						depressed
+						data-testid="dialog-edit"
+						variant="flat"
 						@click="$emit('dialog-edit')"
 					>
 						{{ $t("common.actions.edit") }}
@@ -37,42 +36,40 @@
 				<div class="button-section button-right">
 					<v-btn
 						v-if="checkButtons('cancel')"
-						data-testId="dialog-cancel"
+						data-testid="dialog-cancel"
 						class="dialog-closed"
-						depressed
-						text
+						variant="text"
 						@click="cancelDialog"
 					>
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('confirm')"
-						data-testId="dialog-confirm"
+						data-testid="dialog-confirm"
 						class="dialog-confirmed px-6"
 						color="primary"
-						depressed
+						variant="flat"
 						:disabled="confirmBtnDisabled"
 						@click="confirmDialog"
 					>
-						<v-icon v-if="confirmBtnIcon" dense class="mr-1">
+						<v-icon v-if="confirmBtnIcon" size="small" class="mr-1">
 							{{ confirmBtnIcon }}
 						</v-icon>
 						{{ $t(confirmBtnTitleKey) }}
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('close')"
-						data-testId="dialog-close"
-						depressed
-						outlined
+						data-testid="dialog-close"
+						variant="outlined"
 						@click="closeDialog"
 					>
 						{{ $t("common.labels.close") }}
 					</v-btn>
 					<v-btn
 						v-if="checkButtons('next')"
-						data-testId="dialog-next"
+						data-testid="dialog-next"
 						color="primary"
-						depressed
+						variant="flat"
 						:disabled="nextBtnDisabled"
 						@click="$emit('next')"
 						>{{ $t(nextBtnTitleKey) }}
@@ -83,64 +80,76 @@
 	</v-dialog>
 </template>
 
-<script>
-export default {
-	model: {
-		prop: "isOpen",
-		event: "dialog-closed",
+<script setup lang="ts">
+import { ModelRef, PropType } from "vue";
+
+const props = defineProps({
+	size: {
+		type: Number,
+		default: 480,
 	},
-	props: {
-		isOpen: {
-			type: Boolean,
-			required: true,
-		},
-		size: {
-			type: Number,
-			default: 480,
-		},
-		hasButtons: {
-			type: Boolean,
-		},
-		confirmBtnTitleKey: {
-			type: String,
-			default: "common.actions.confirm",
-		},
-		confirmBtnIcon: {
-			type: String,
-		},
-		confirmBtnDisabled: {
-			type: Boolean,
-		},
-		nextBtnTitleKey: {
-			type: String,
-			default: "common.actions.continue",
-		},
-		nextBtnDisabled: {
-			type: Boolean,
-		},
-		buttons: {
-			type: Array,
-			default: () => ["cancel", "confirm"],
-		},
+	hasButtons: {
+		type: Boolean,
 	},
-	methods: {
-		confirmDialog() {
-			this.$emit("dialog-confirmed");
-			this.$emit("dialog-closed", false);
-		},
-		cancelDialog() {
-			this.$emit("dialog-canceled");
-			this.$emit("dialog-closed", false);
-		},
-		closeDialog(event) {
-			this.$emit("dialog-closed", false, event);
-		},
-		checkButtons(buttonName) {
-			return this.buttons.some((button) => button == buttonName);
-		},
+	confirmBtnTitleKey: {
+		type: String,
+		default: "common.actions.confirm",
 	},
+	confirmBtnIcon: {
+		type: String,
+	},
+	confirmBtnDisabled: {
+		type: Boolean,
+	},
+	nextBtnTitleKey: {
+		type: String,
+		default: "common.actions.continue",
+	},
+	nextBtnDisabled: {
+		type: Boolean,
+	},
+	buttons: {
+		type: Array as PropType<
+			("back" | "edit" | "cancel" | "confirm" | "close" | "next")[]
+		>,
+		default: () => ["cancel", "confirm"],
+	},
+});
+
+const emit = defineEmits([
+	"dialog-closed",
+	"dialog-confirmed",
+	"dialog-canceled",
+	"next",
+	"back",
+	"dialog-edit",
+]);
+
+const isOpen: ModelRef<boolean> = defineModel("isOpen", {
+	type: Boolean,
+	required: true,
+});
+
+const confirmDialog = () => {
+	emit("dialog-confirmed");
+	closeDialog();
+};
+
+const cancelDialog = () => {
+	emit("dialog-canceled");
+	closeDialog();
+};
+
+const closeDialog = () => {
+	isOpen.value = false;
+	emit("dialog-closed");
+};
+
+const checkButtons = (buttonName: string) => {
+	return props.buttons.some((button) => button == buttonName);
 };
 </script>
+
 <style lang="scss" scoped>
 .button-left {
 	width: 25%;
@@ -158,5 +167,10 @@ export default {
 
 .button-section > button {
 	margin-left: calc(var(--space-base-vuetify) * 2);
+}
+
+.dialog-title {
+	white-space: normal;
+	hyphens: none;
 }
 </style>

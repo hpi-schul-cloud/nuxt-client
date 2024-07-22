@@ -5,9 +5,6 @@
 		</p>
 		<v-data-table
 			data-testid="external-tool-section-table"
-			v-if="items.length"
-			:disable-pagination="true"
-			:hide-default-footer="true"
 			:items="items"
 			:headers="headers"
 			:loading="isLoading"
@@ -19,28 +16,36 @@
 					{{ item.name }}
 				</span>
 			</template>
-			<template #[`item.status`]="{ item }">
-				<v-icon v-if="item.isOutdated || item.isDeactivated" color="warning">
-					{{ mdiAlert }}
-				</v-icon>
-				<v-icon v-else color="success">
-					{{ mdiCheckCircle }}
-				</v-icon>
-				<span>
-					{{ item.statusText }}
-				</span>
+			<template #[`item.statusText`]="{ item }">
+				<div class="text-no-wrap">
+					<v-icon
+						v-if="item.isOutdated || item.isDeactivated"
+						color="warning"
+						start
+					>
+						{{ mdiAlert }}
+					</v-icon>
+					<v-icon v-else color="success" start>
+						{{ mdiCheckCircle }}
+					</v-icon>
+					<span>
+						{{ item.statusText }}
+					</span>
+				</div>
 			</template>
 			<template #[`item.actions`]="{ item }">
 				<external-tool-toolbar
-					@delete="openDeleteDialog(item)"
+					class="text-no-wrap"
 					@edit="editTool(item)"
+					@datasheet="showDatasheet(item)"
+					@delete="openDeleteDialog(item)"
 				/>
 			</template>
 		</v-data-table>
 		<v-btn
 			class="mt-8 mb-4 button-save float-right"
 			color="primary"
-			depressed
+			variant="flat"
 			data-testid="add-external-tool-button"
 			:to="{ name: 'administration-tool-config-overview' }"
 		>
@@ -63,16 +68,64 @@
 				</v-card-title>
 				<v-card-text class="text--primary">
 					<RenderHTML
-						data-testid="delete-dialog-content"
-						class="text-md mt-2"
+						data-testid="delete-dialog-content-header"
+						class="text-md mt-2 mb-0"
 						:html="
 							t(
-								'components.administration.externalToolsSection.dialog.content',
+								'components.administration.externalToolsSection.dialog.content.header',
 								{
 									itemName: getItemName,
+								}
+							)
+						"
+						component="p"
+					/>
+					<RenderHTML
+						data-testid="delete-dialog-content-courses"
+						class="text-md mb-0"
+						:html="
+							t(
+								'components.administration.externalToolsSection.dialog.content.courses',
+								{
 									courseCount: metadata.course,
+								}
+							)
+						"
+						component="p"
+					/>
+					<RenderHTML
+						data-testid="delete-dialog-content-board-elements"
+						:class="isMediaBoardUsageVisible ? 'text-md mb-0' : 'text-md'"
+						:html="
+							t(
+								'components.administration.externalToolsSection.dialog.content.boardElements',
+								{
 									boardElementCount: metadata.boardElement,
 								}
+							)
+						"
+						component="p"
+					/>
+					<RenderHTML
+						v-if="isMediaBoardUsageVisible"
+						data-testid="delete-dialog-content-media-shelves"
+						class="text-md"
+						:html="
+							t(
+								'components.administration.externalToolsSection.dialog.content.mediaShelves',
+								{
+									mediaBoardCount: metadata.mediaBoard,
+								}
+							)
+						"
+						component="p"
+					/>
+					<RenderHTML
+						data-testid="delete-dialog-content-media-warning"
+						class="text-md mb-0"
+						:html="
+							t(
+								'components.administration.externalToolsSection.dialog.content.warning'
 							)
 						"
 						component="p"
@@ -83,8 +136,7 @@
 					<v-btn
 						data-testId="delete-dialog-cancel"
 						class="dialog-closed"
-						depressed
-						text
+						variant="text"
 						@click="onCloseDeleteDialog"
 					>
 						{{ t("common.actions.cancel") }}
@@ -93,7 +145,7 @@
 						data-testId="delete-dialog-confirm"
 						class="dialog-confirmed px-6"
 						color="primary"
-						depressed
+						variant="flat"
 						@click="onDeleteTool"
 					>
 						{{ t("common.actions.confirm") }}
@@ -105,17 +157,21 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
+import { ToolApiAxiosParamCreator } from "@/serverApi/v3";
+import { RequestArgs } from "@/serverApi/v3/base";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { DataTableHeader } from "@/store/types/data-table-header";
 import {
 	AUTH_MODULE_KEY,
-	I18N_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 } from "@/utils/inject";
+import { useSchoolExternalToolUsage } from "@data-external-tool";
+import { RenderHTML } from "@feature-render-html";
 import { mdiAlert, mdiCheckCircle } from "@mdi/js";
 import {
 	computed,
@@ -125,39 +181,37 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import VueI18n from "vue-i18n";
-import { default as VueRouter } from "vue-router";
-import { useRouter } from "vue-router/composables";
-import { DataTableHeader } from "vuetify";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { useSchoolExternalToolUsage } from "@data-external-tool";
+import EnvConfigModule from "@/store/env-config";
 
 export default defineComponent({
 	name: "ExternalToolSection",
 	components: { ExternalToolToolbar, RenderHTML },
 	setup() {
-		const i18n = injectStrict(I18N_KEY);
 		const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 			SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
+		);
+		const envConfigModule: EnvConfigModule = injectStrict(
+			ENV_CONFIG_MODULE_KEY
 		);
 		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
-		const router: VueRouter = useRouter();
+		const router = useRouter();
 
 		onMounted(async () => {
-			if (authModule.getUser) {
+			if (authModule.getSchool) {
 				await schoolExternalToolsModule.loadSchoolExternalTools(
-					authModule.getUser.schoolId
+					authModule.getSchool.id
 				);
 			}
 		});
 
-		// TODO: https://ticketsystem.dbildungscloud.de/browse/BC-443
-		const t = (key: string, values?: VueI18n.Values): string =>
-			i18n.tc(key, 0, values);
+		const { t } = useI18n();
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
 		const { fetchSchoolExternalToolUsage, metadata } =
@@ -178,6 +232,15 @@ export default defineComponent({
 				name: "administration-tool-config-edit",
 				params: { configId: item.id },
 			});
+		};
+
+		const showDatasheet = async (item: SchoolExternalToolItem) => {
+			const requestArgs: RequestArgs =
+				await ToolApiAxiosParamCreator().toolControllerGetDatasheet(
+					item.externalToolId
+				);
+
+			window.open("/api/v3" + requestArgs.url);
 		};
 
 		const onDeleteTool = async () => {
@@ -225,6 +288,16 @@ export default defineComponent({
 			isDeleteDialogOpen.value = false;
 		};
 
+		const isMediaBoardUsageVisible: ComputedRef<boolean> = computed(() => {
+			if (!metadata.value) {
+				return false;
+			}
+			const isVisible =
+				metadata.value.mediaBoard > 0 ||
+				envConfigModule.getEnv.FEATURE_MEDIA_SHELF_ENABLED;
+			return isVisible;
+		});
+
 		return {
 			t,
 			headers,
@@ -232,6 +305,7 @@ export default defineComponent({
 			isLoading,
 			editTool,
 			onDeleteTool,
+			showDatasheet,
 			isDeleteDialogOpen,
 			openDeleteDialog,
 			onCloseDeleteDialog,
@@ -240,6 +314,7 @@ export default defineComponent({
 			mdiAlert,
 			mdiCheckCircle,
 			metadata,
+			isMediaBoardUsageVisible,
 		};
 	},
 });
@@ -248,11 +323,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 $arrow-offset: 8px;
 
-.v-data-table ::v-deep th i {
+.v-data-table :deep(th i) {
 	margin-left: $arrow-offset;
 }
 
-.v-data-table ::v-deep td {
+.v-data-table :deep(td) {
 	cursor: pointer;
 }
 </style>

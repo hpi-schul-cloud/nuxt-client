@@ -1,12 +1,13 @@
 <template>
-	<default-wireframe ref="main" :full-width="true" :breadcrumbs="breadcrumbs">
-		<template slot="header">
+	<default-wireframe ref="main" max-width="short" :breadcrumbs="breadcrumbs">
+		<template #header>
 			<h1 class="mb--md h3">
 				{{ title }}
 			</h1>
-			<i18n
+			<i18n-t
 				v-if="isConsentNecessary"
-				path="pages.administration.students.consent.info"
+				keypath="pages.administration.students.consent.info"
+				scope="global"
 				tag="p"
 			>
 				<template #dataProtection>
@@ -24,7 +25,7 @@
 						$t("pages.administration.students.consent.handout")
 					}}</a>
 				</template>
-			</i18n>
+			</i18n-t>
 		</template>
 		<section class="section">
 			<div class="mt--lg">
@@ -46,8 +47,8 @@
 					:columns="tableColumns"
 					:data="tableData"
 					track-by="_id"
-					:sort-by.sync="sortBy"
-					:sort-order.sync="sortOrder"
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					data-testid="consent_table_1"
 					@update:sort="onUpdateSort"
 				>
@@ -55,12 +56,12 @@
 						<base-input
 							:error="birthdayWarning && !slotProps.data ? inputError : null"
 							class="date base-input"
-							:vmodel="inputDateFromDeUTC(slotProps.data)"
+							:modelValue="inputDateFromDeUTC(slotProps.data)"
 							type="date"
 							label=""
 							data-testid="birthday-input"
 							:birth-date="true"
-							@input="
+							@update:modelValue="
 								inputDate({
 									id: tableData[slotProps.rowindex]._id,
 									birthDate: inputDateFormat($event),
@@ -70,12 +71,12 @@
 					</template>
 					<template #datacolumn-password="slotProps">
 						<base-input
-							:vmodel="slotProps.data"
+							:modelValue="slotProps.data"
 							type="text"
 							label=""
 							data-testid="password-input"
 							class="base-input"
-							@input="
+							@update:modelValue="
 								inputPass({
 									id: tableData[slotProps.rowindex]._id,
 									pass: $event,
@@ -85,18 +86,18 @@
 					</template>
 				</backend-data-table>
 
-				<p v-if="birthdayWarning" class="error--text" data-testid="error-text">
+				<p v-if="birthdayWarning" class="text-error" data-testid="error-text">
 					<v-icon color="error">{{ mdiAlert }} </v-icon>
 					{{ $t("pages.administration.students.consent.steps.complete.warn") }}
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn text color="secondary" @click="cancelWarning = true">
+					<v-btn variant="text" @click="cancelWarning = true">
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
 						color="primary"
-						depressed
+						variant="flat"
 						data-testid="button-next"
 						@click="next"
 					>
@@ -119,8 +120,8 @@
 					:data="tableData"
 					track-by="id"
 					:paginated="false"
-					:sort-by.sync="sortBy"
-					:sort-order.sync="sortOrder"
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					data-testid="consent_table_2"
 					@update:sort="onUpdateSort"
 				>
@@ -140,8 +141,9 @@
 						data-testid="check-confirm"
 					/>
 					<label @click="check = !check">
-						<i18n
-							path="pages.administration.students.consent.steps.register.confirm"
+						<i18n-t
+							keypath="pages.administration.students.consent.steps.register.confirm"
+							scope="global"
 						>
 							<template #analogConsent>
 								<a class="link" :href="fileLinks.analogConsent" target="_">{{
@@ -150,11 +152,11 @@
 									)
 								}}</a>
 							</template>
-						</i18n>
+						</i18n-t>
 					</label>
 				</div>
 
-				<p v-if="checkWarning" class="error--text" data-testid="confirm-error">
+				<p v-if="checkWarning" class="text-error" data-testid="confirm-error">
 					<v-icon color="error">{{ mdiAlert }} </v-icon>
 					{{
 						$t(
@@ -164,12 +166,12 @@
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn text color="secondary" @click="cancelWarning = true">
+					<v-btn variant="text" @click="cancelWarning = true">
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
 					<v-btn
 						color="primary"
-						depressed
+						variant="flat"
 						data-testid="button-next-2"
 						@click="register"
 					>
@@ -190,8 +192,8 @@
 					:data="tableData"
 					track-by="_id"
 					:paginated="false"
-					:sort-by.sync="sortBy"
-					:sort-order.sync="sortOrder"
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					data-testid="consent_table_3"
 					@update:sort="onUpdateSort"
 				>
@@ -204,10 +206,10 @@
 				</p>
 
 				<div class="d-flex justify-end">
-					<v-btn color="secondary" text @click="cancelWarning = true">
+					<v-btn variant="text" @click="cancelWarning = true">
 						{{ $t("common.actions.cancel") }}
 					</v-btn>
-					<v-btn color="primary" depressed @click="download">
+					<v-btn color="primary" variant="flat" @click="download">
 						{{
 							$t("pages.administration.students.consent.steps.download.next")
 						}}
@@ -220,7 +222,7 @@
 					{{ successMessage }}
 				</h4>
 				<img
-					class="mb--md"
+					class="mb--md success-image mb-4"
 					:src="image"
 					:alt="
 						$t('pages.administration.students.consent.steps.success.image.alt')
@@ -228,13 +230,13 @@
 				/>
 
 				<div class="d-flex justify-end">
-					<v-btn color="primary" outlined @click="success">{{
+					<v-btn color="primary" variant="outlined" @click="success">{{
 						$t("pages.administration.students.consent.steps.success.back")
 					}}</v-btn>
 				</div>
 			</section>
 
-			<base-modal :active.sync="cancelWarning">
+			<base-modal v-model:active="cancelWarning">
 				<template #header />
 				<template #body>
 					<modal-body-info
@@ -258,7 +260,7 @@
 					</span>
 				</template>
 				<template #footerRight>
-					<v-btn color="error" text @click="cancel">
+					<v-btn variant="text" @click="cancel">
 						{{
 							$t("pages.administration.students.consent.cancel.modal.confirm")
 						}}
@@ -266,7 +268,7 @@
 					<v-btn
 						v-if="currentStep === 2"
 						color="error"
-						depressed
+						variant="flat"
 						@click="download"
 					>
 						{{
@@ -275,7 +277,12 @@
 							)
 						}}
 					</v-btn>
-					<v-btn v-else color="error" depressed @click="cancelWarning = false">
+					<v-btn
+						v-else
+						color="primary"
+						variant="flat"
+						@click="cancelWarning = false"
+					>
 						{{
 							$t("pages.administration.students.consent.cancel.modal.continue")
 						}}
@@ -409,15 +416,15 @@ export default {
 		breadcrumbs() {
 			return [
 				{
-					text: this.$t("pages.administration.index.title"),
+					title: this.$t("pages.administration.index.title"),
 					to: "/administration/",
 				},
 				{
-					text: this.$t("pages.administration.students.index.title"),
+					title: this.$t("pages.administration.students.index.title"),
 					to: "/administration/students",
 				},
 				{
-					text: this.title,
+					title: this.title,
 					disabled: true,
 				},
 			];
@@ -454,7 +461,7 @@ export default {
 		await this.find();
 		window.addEventListener("beforeunload", this.warningEventHandler);
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener("beforeunload", this.warningEventHandler);
 		clearTimeout(this.tableTimeOut);
 		clearTimeout(this.printTimeOut);
@@ -535,7 +542,7 @@ export default {
 						"pages.administration.students.consent.steps.register.success"
 					),
 					status: "success",
-					timeout: 10000,
+					timeout: 5000,
 				});
 				this.next();
 			}
@@ -596,7 +603,7 @@ export default {
 					notifierModule.show({
 						text: this.$t("pages.administration.students.consent.table.empty"),
 						status: "error",
-						timeout: 10000,
+						timeout: 5000,
 					});
 
 					this.$router.push({
@@ -642,21 +649,21 @@ export default {
 	margin-bottom: var(--space-md);
 }
 
-.print-title {
-	color: var(--v-primary-base);
-	border: none;
-}
-
 .warning {
-	color: var(--v-error-base);
+	color: rgba(var(--v-theme-error));
+}
+.success-image {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin: 0 auto;
 }
 
-::v-deep .link {
-	color: var(--v-primary-base);
+:deep(.link) {
 	text-decoration: none;
 }
 
-::v-deep .table {
+:deep(.table) {
 	margin-top: var(--space-lg);
 
 	.table__row {
@@ -664,11 +671,11 @@ export default {
 	}
 }
 
-::v-deep .toolbelt {
+:deep(.toolbelt) {
 	display: none;
 }
 
-::v-deep .calendar-input {
+:deep(.calendar-input) {
 	max-width: 5em;
 	margin-bottom: 0;
 
@@ -683,7 +690,7 @@ export default {
 	}
 }
 
-::v-deep .base-input {
+:deep(.base-input) {
 	max-width: 10em;
 	margin-bottom: var(--space-md);
 	margin-left: var(--space-xs);

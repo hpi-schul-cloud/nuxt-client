@@ -1,66 +1,45 @@
 <template>
-	<div class="black--text">
-		<div class="d-flex justify-space-between">
-			<div class="mt-1">
-				{{ $t("components.molecules.share.options.schoolInternally") }}
-			</div>
-			<v-switch
-				v-model="shareOptions.isSchoolInternal"
-				data-testid="isSchoolInternal"
-				color="primary"
-				input-value="true"
-				class="my-0 mr-n3"
-				inset
-				dense
-			/>
-		</div>
-		<div class="d-flex justify-space-between">
-			<div class="mt-1">
-				{{ $t("components.molecules.share.options.expiresInDays") }}
-			</div>
-			<v-switch
-				v-model="shareOptions.hasExpiryDate"
-				data-testid="hasExpiryDate"
-				color="primary"
-				input-value="true"
-				class="my-0 mr-n3"
-				inset
-				dense
-			/>
-		</div>
-	</div>
+	<v-checkbox
+		v-model="shareOptions.isSchoolInternal"
+		data-testid="isSchoolInternal"
+		:label="t('components.molecules.share.options.schoolInternally')"
+		:hide-details="true"
+		density="comfortable"
+	/>
+	<v-checkbox
+		v-model="shareOptions.hasExpiryDate"
+		data-testid="hasExpiryDate"
+		:label="t('components.molecules.share.options.expiresInDays')"
+		:hide-details="true"
+		density="comfortable"
+	/>
 </template>
 
-<script>
-import { defineComponent, reactive, watch } from "vue";
+<script setup>
+import { reactive, watch } from "vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
+import { useI18n } from "vue-i18n";
 
-// eslint-disable-next-line vue/require-direct-export
-export default defineComponent({
-	name: "ShareModalOptionsForm",
-	emits: ["shareOptionsChange"],
-	props: {
-		type: {
-			type: String,
-			required: true,
-			validator: (type) =>
-				Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
-		},
-	},
-	setup(props, { emit }) {
-		const shareOptions = reactive({
-			isSchoolInternal: true,
-			hasExpiryDate: true,
-		});
-
-		watch(shareOptions, (newValue) => {
-			emit("share-options-change", newValue);
-		});
-
-		emit("share-options-change", shareOptions);
-		return {
-			shareOptions,
-		};
+const emit = defineEmits(["share-options-change"]);
+defineProps({
+	type: {
+		type: String,
+		required: true,
+		validator: (type) =>
+			Object.values(ShareTokenBodyParamsParentTypeEnum).includes(type),
 	},
 });
+
+const { t } = useI18n();
+
+const shareOptions = reactive({
+	isSchoolInternal: true,
+	hasExpiryDate: true,
+});
+
+watch(shareOptions, (newValue) => {
+	emit("share-options-change", newValue);
+});
+
+emit("share-options-change", shareOptions);
 </script>

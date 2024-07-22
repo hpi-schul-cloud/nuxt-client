@@ -5,7 +5,7 @@
 				<row-selection-bar
 					ref="rowSelectionBar"
 					:actions="actions"
-					:all-rows-of-all-pages-selected.sync="allRowsOfAllPagesSelected"
+					v-model:all-rows-of-all-pages-selected="allRowsOfAllPagesSelected"
 					:number-of-selected-items="numberOfSelectedItems"
 					:total-number-of-items="total"
 					@fire-action="fireAction"
@@ -17,10 +17,10 @@
 						<component
 							:is="componentHeaderRow"
 							:all-rows-selectable="rowsSelectable"
-							:current-page-selection-state.sync="currentPageSelectionState"
+							v-model:current-page-selection-state="currentPageSelectionState"
 							:columns="columns"
-							:sort-by.sync="$_controllableDataSortBy"
-							:sort-order.sync="$_controllableDataSortOrder"
+							v-model:sort-by="$_controllableDataSortBy"
+							v-model:sort-order="$_controllableDataSortOrder"
 							data-testid="table-data-head"
 							:show-external-text="showExternalText"
 							@update:sort="onUpdateSort"
@@ -64,7 +64,7 @@
 			:current-page="currentPage"
 			:total="total"
 			:per-page="rowsPerPage"
-			@update:per-page="$emit('update:rows-per-page', $event.value)"
+			@update:per-page="$emit('update:rows-per-page', $event)"
 			@update:current-page="$emit('update:current-page', $event)"
 		/>
 	</div>
@@ -214,14 +214,14 @@ export default {
 		},
 		dataRowSlots() {
 			return Object.fromEntries(
-				Object.entries(this.$scopedSlots).filter(([name]) =>
+				Object.entries(this.$slots).filter(([name]) =>
 					name.startsWith("datacolumn")
 				)
 			);
 		},
 		dataHeadSlots() {
 			return Object.fromEntries(
-				Object.entries(this.$scopedSlots).filter(([name]) =>
+				Object.entries(this.$slots).filter(([name]) =>
 					name.startsWith("headcolumn")
 				)
 			);
@@ -296,25 +296,28 @@ export default {
 		},
 	},
 	watch: {
-		selectionKeys(to) {
-			/**
-			 * toggle whenever the selection changes
-			 *
-			 * @event update:selection
-			 * @property {array} selectedRowIds identifiers (trackBy value) of all selected items
-			 * @property {string} selectionType is the selection Array "inclusive" or "exclusive".
-			 * Inclusive means all items in the passed array are selected.
-			 * Exclusive means all items not in the passed array are selected.
-			 */
-			this.$emit(
-				"update:selection",
-				Object.keys(to),
-				this.$_controllableDataSelectionType
-			);
-			/**
-			 * helper event for the selectedRowIds .sync modifier
-			 */
-			this.$emit("update:selectedRowIds", Object.keys(to));
+		selectionKeys: {
+			handler(to) {
+				/**
+				 * toggle whenever the selection changes
+				 *
+				 * @event update:selection
+				 * @property {array} selectedRowIds identifiers (trackBy value) of all selected items
+				 * @property {string} selectionType is the selection Array "inclusive" or "exclusive".
+				 * Inclusive means all items in the passed array are selected.
+				 * Exclusive means all items not in the passed array are selected.
+				 */
+				this.$emit(
+					"update:selection",
+					Object.keys(to),
+					this.$_controllableDataSelectionType
+				);
+				/**
+				 * helper event for the selectedRowIds .sync modifier
+				 */
+				this.$emit("update:selectedRowIds", Object.keys(to));
+			},
+			deep: true,
 		},
 		selectedRowIds: {
 			handler(to) {
@@ -328,8 +331,7 @@ export default {
 					obj[key] = true;
 					return obj;
 				}, {});
-				this.$set(this, "selectionKeys", newSelectionKeys);
-				this.$forceUpdate();
+				this.selectionKeys = newSelectionKeys;
 			},
 			immediate: true,
 		},
@@ -342,20 +344,25 @@ export default {
 	methods: {
 		getValueByPath,
 		selectAllRowsOfAllPages() {
-			this.$set(this, "selectionKeys", {});
+			this.selectionKeys = {};
 			this.$_controllableDataSelectionType = "exclusive";
 		},
 		unselectAllRowsOfAllPages() {
-			this.$set(this, "selectionKeys", {});
+			this.selectionKeys = {};
 			this.$_controllableDataSelectionType = "inclusive";
 		},
 		setRowSelection(row, state) {
-			const method = (newState) => (newState ? "$set" : "$delete");
-			this[
-				method(
-					this.$_controllableDataSelectionType === "inclusive" ? state : !state
-				)
-			](this.selectionKeys, getValueByPath(row, this.trackBy), true);
+			const newState =
+				this.$_controllableDataSelectionType === "inclusive" ? state : !state;
+
+			if (newState) {
+				this.selectionKeys = {
+					...this.selectionKeys,
+					[getValueByPath(row, this.trackBy)]: true,
+				};
+			} else {
+				delete this.selectionKeys[getValueByPath(row, this.trackBy)];
+			}
 		},
 		isRowSelected(row) {
 			const rowId = getValueByPath(row, this.trackBy);

@@ -11,7 +11,7 @@
 				component="p"
 			/>
 			<div v-if="isStartButtonVisible">
-				<v-alert light text type="info">
+				<v-alert type="info">
 					<div class="alert-text">
 						<RenderHTML
 							data-testid="migration-info-text"
@@ -24,7 +24,7 @@
 				</v-alert>
 			</div>
 			<div v-else-if="isMigrationActive">
-				<v-alert light text type="info">
+				<v-alert type="info">
 					<div class="alert-text">
 						<RenderHTML
 							data-testid="migration-active-status"
@@ -42,7 +42,7 @@
 				v-if="isStartButtonVisible"
 				class="my-4 button-start"
 				color="primary"
-				depressed
+				variant="flat"
 				:disabled="!officialSchoolNumber"
 				data-testid="migration-start-button"
 				@click="onToggleShowStartWarning"
@@ -57,7 +57,7 @@
 				v-if="isEndButtonVisible"
 				class="my-4 button-end"
 				color="primary"
-				depressed
+				variant="flat"
 				:disabled="!isMigrationActive"
 				data-testid="migration-end-button"
 				@click="onToggleShowEndWarning"
@@ -68,6 +68,20 @@
 					)
 				}}
 			</v-btn>
+			<v-alert
+				v-if="error && error.message"
+				type="error"
+				:icon="mdiAlertCircle"
+				data-testid="error-alert"
+			>
+				<div class="alert-text">
+					<RenderHTML
+						data-testid="migration-error-text"
+						:html="$t(getBusinessErrorTranslationKey(error)!)"
+						component="span"
+					/>
+				</div>
+			</v-alert>
 			<v-switch
 				v-show="isShowMandatorySwitch"
 				:label="
@@ -78,12 +92,11 @@
 				:disabled="!isMigrationActive"
 				:true-value="true"
 				:false-value="false"
-				:value="isMigrationMandatory"
-				inset
-				dense
+				:true-icon="mdiCheck"
+				:model-value="isMigrationMandatory"
 				class="ml-1"
 				data-testid="migration-mandatory-switch"
-				@change="setMigrationMandatory(!isMigrationMandatory)"
+				@update:model-value="setMigrationMandatory(!isMigrationMandatory)"
 			/>
 		</div>
 
@@ -123,20 +136,44 @@
 		/>
 
 		<v-switch
-			v-if="!isGracePeriodExpired & globalFeatureEnableLdapSyncDuringMigration"
+			v-if="!isGracePeriodExpired && globalFeatureEnableLdapSyncDuringMigration"
 			:label="
 				t(
 					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
 				)
 			"
 			:disabled="!isMigrationActive"
-			v-model="school.features.enableLdapSyncDuringMigration"
-			inset
-			dense
+			v-model="school.featureObject.enableLdapSyncDuringMigration"
 			class="ml-1"
+			:true-icon="mdiCheck"
 			data-testid="enable-sync-during-migration-switch"
-			@change="setSchoolFeatures"
+			@update:model-value="setSchoolFeatures"
 		/>
+
+		<template v-if="showMigrationWizard && !isMigrationFinished">
+			<v-btn
+				:disabled="!isMigrationActive || !isSchoolMigrated"
+				class="my-4"
+				color="primary"
+				variant="flat"
+				data-testid="migration-wizard-button"
+				:to="{ name: 'administration-migration' }"
+			>
+				{{
+					t(
+						"components.administration.adminMigrationSection.migrationWizardButton.label"
+					)
+				}}
+			</v-btn>
+			<p>
+				{{
+					t(
+						"components.administration.adminMigrationSection.migrationWizardButton.description"
+					)
+				}}
+			</p>
+		</template>
+
 		<v-switch
 			v-if="globalFeatureShowOutdatedUsers"
 			:label="
@@ -144,12 +181,11 @@
 					'components.administration.adminMigrationSection.showOutdatedUsers.label'
 				)
 			"
-			v-model="school.features.showOutdatedUsers"
-			inset
-			dense
+			v-model="school.featureObject.showOutdatedUsers"
 			class="ml-1"
+			:true-icon="mdiCheck"
 			data-testid="show-outdated-users-switch"
-			@change="setSchoolFeatures"
+			@update:model-value="setSchoolFeatures"
 		/>
 		<p
 			v-if="globalFeatureShowOutdatedUsers"
@@ -165,7 +201,9 @@
 </template>
 
 <script lang="ts">
-import { useI18n } from "@/composables/i18n.composable";
+import { mdiAlertCircle, mdiCheck } from "@/components/icons/material";
+import { useUserLoginMigrationMappings } from "@/composables/user-login-migration-mappings.composable";
+import { BusinessError } from "@/store/types/commons";
 import { School } from "@/store/types/schools";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import {
@@ -174,6 +212,7 @@ import {
 	SCHOOLS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
+import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
 import { RenderHTML } from "@feature-render-html";
 import dayjs from "dayjs";
 import {
@@ -184,6 +223,7 @@ import {
 	ref,
 	Ref,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 
 export default defineComponent({
@@ -216,6 +256,14 @@ export default defineComponent({
 		const isMigrationMandatory: ComputedRef<boolean> = computed(
 			() => !!userLoginMigration.value?.mandatorySince
 		);
+
+		const error: ComputedRef<BusinessError | undefined> = computed(() =>
+			userLoginMigrationModule.getBusinessError.message
+				? userLoginMigrationModule.getBusinessError
+				: undefined
+		);
+
+		const { getBusinessErrorTranslationKey } = useUserLoginMigrationMappings();
 
 		const onStartMigration = () => {
 			if (userLoginMigration.value) {
@@ -311,10 +359,32 @@ export default defineComponent({
 			() => envConfigModule.getShowOutdatedUsers
 		);
 
+		const isSchoolMigrated: ComputedRef<boolean> = computed(() => {
+			let hasTargetSystem = false;
+
+			if (userLoginMigration.value?.targetSystemId) {
+				hasTargetSystem = schoolsModule.getSchool.systemIds.includes(
+					userLoginMigration.value.targetSystemId
+				);
+			}
+
+			return hasTargetSystem;
+		});
+
+		const showMigrationWizard: ComputedRef<boolean> = computed(
+			() => !!envConfigModule.getEnv.FEATURE_SHOW_MIGRATION_WIZARD
+		);
+
+		const isMigrationFinished: ComputedRef<boolean> = computed(
+			() => !!userLoginMigration.value?.finishedAt
+		);
+
 		const setSchoolFeatures = async () => {
 			await schoolsModule.update({
 				id: school.value.id,
-				features: school.value.features,
+				props: {
+					features: mapSchoolFeatureObjectToArray(school.value.featureObject),
+				},
 			});
 		};
 
@@ -342,6 +412,13 @@ export default defineComponent({
 			officialSchoolNumber,
 			isMigrationActive,
 			isMigrationMandatory,
+			mdiCheck,
+			showMigrationWizard,
+			isMigrationFinished,
+			isSchoolMigrated,
+			error,
+			getBusinessErrorTranslationKey,
+			mdiAlertCircle,
 		};
 	},
 });
@@ -349,7 +426,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .alert-text {
-	color: var(--v-black-base) !important;
+	color: rgba(var(--v-theme-on-background)) !important;
 	line-height: var(--line-height-lg) !important;
 }
 </style>

@@ -2,18 +2,18 @@ import TermsOfUseModule from "@/store/terms-of-use";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import SchoolsModule from "@/store/schools";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
+import { mount } from "@vue/test-utils";
 import NotifierModule from "@/store/notifier";
 import SchoolTermsFormDialog from "./SchoolTermsFormDialog.vue";
-import Vue from "vue";
 import {
-	I18N_KEY,
 	NOTIFIER_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	TERMS_OF_USE_MODULE_KEY,
 } from "@/utils/inject";
-import { i18nMock } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 describe("SchoolPolicyFormDialog", () => {
 	let notifierModule: jest.Mocked<NotifierModule>;
@@ -48,21 +48,17 @@ describe("SchoolPolicyFormDialog", () => {
 
 		notifierModule = createModuleMocks(NotifierModule);
 
-		const wrapper: Wrapper<any> = mount(
-			SchoolTermsFormDialog as MountOptions<Vue>,
-			{
-				...createComponentMocks({
-					i18n: true,
-				}),
+		const wrapper = mount(SchoolTermsFormDialog, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[I18N_KEY.valueOf()]: i18nMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[TERMS_OF_USE_MODULE_KEY.valueOf()]: termsOfUseModule,
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 				},
-				propsData: mockProps,
-			}
-		);
+			},
+			props: mockProps,
+		});
 
 		return wrapper;
 	};
@@ -72,23 +68,29 @@ describe("SchoolPolicyFormDialog", () => {
 			const wrapper = setup();
 
 			expect(
-				wrapper.find('[data-testid="dialog-confirm"]').attributes().disabled
+				wrapper.findComponent('[data-testid="dialog-confirm"]').attributes()
+					.disabled
 			).toBeDefined();
 		});
 
 		it("should render warning icon", async () => {
 			const wrapper = setup();
-			wrapper.vm.isTouched = true;
-			await Vue.nextTick();
-			expect(wrapper.find('[data-testid="warning-icon"]').exists()).toBe(true);
+			const fileInput = wrapper.findComponent({ name: "v-file-input" });
+			await fileInput.trigger("blur");
+
+			expect(
+				wrapper.findComponent('[data-testid="warning-icon"]').exists()
+			).toBe(true);
 		});
 	});
 
 	describe("when cancel button is clicked", () => {
-		it("should emit 'close'", () => {
+		it("should emit 'close'", async () => {
 			const wrapper = setup();
 
-			wrapper.find('[data-testid="dialog-cancel"]').trigger("click");
+			await wrapper
+				.findComponent('[data-testid="dialog-cancel"]')
+				.trigger("click");
 			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 	});

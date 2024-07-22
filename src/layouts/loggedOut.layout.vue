@@ -1,27 +1,25 @@
 <template>
-	<v-app>
-		<div class="page">
-			<div class="topbar" data-testid="logged-out-top-bar">
-				<navigation-bar
-					:buttons="true"
-					:img="require('@/assets/img/logo/logo-image-mono.svg')"
-					:links="navbarItems"
-				/>
-			</div>
-			<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
-				<slot />
-			</div>
-			<the-footer class="footer" />
-			<application-error-routing />
+	<div class="page">
+		<div class="topbar" data-testid="logged-out-top-bar">
+			<navigation-bar
+				:buttons="true"
+				:img="require('@/assets/img/logo/logo-image-mono.svg')"
+				:links="navbarItems"
+			/>
 		</div>
-	</v-app>
+		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
+			<slot />
+		</div>
+		<the-footer class="footer" />
+		<application-error-routing />
+	</div>
 </template>
 
 <script>
 import NavigationBar from "@/components/legacy/NavigationBar";
 import TheFooter from "@/components/legacy/TheFooter.vue";
 import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { envConfigModule } from "@/store";
 
 export default {
 	name: "LoggedOutLayout",
@@ -32,11 +30,11 @@ export default {
 		TheFooter,
 	},
 
-	inject: { envConfigModule: { from: ENV_CONFIG_MODULE_KEY } },
+	inject: { mq: "mq" },
 
 	computed: {
 		ghostBaseUrl() {
-			return this.envConfigModule.getGhostBaseUrl;
+			return envConfigModule.getEnv.GHOST_BASE_URL;
 		},
 		navbarItems() {
 			return [
@@ -58,7 +56,7 @@ export default {
 			];
 		},
 		isMobile() {
-			return this.$mq === "mobile";
+			return this.mq.current === "mobile";
 		},
 	},
 };

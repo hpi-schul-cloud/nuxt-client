@@ -11,9 +11,9 @@
 			<v-btn
 				v-for="(action, index) of actions"
 				:key="action.text"
-				text
-				tile
+				variant="text"
 				height="50"
+				rounded="0"
 				:ripple="false"
 				class="context-menu__button"
 				role="menuitem"
@@ -41,7 +41,12 @@
 </template>
 
 <script>
+import { vOnClickOutside } from "@vueuse/components";
+
 export default {
+	directives: {
+		outsideClick: vOnClickOutside,
+	},
 	props: {
 		/**
 		 * defines whether the menu is visible or not. Should be used with the .sync modifier
@@ -143,7 +148,7 @@ export default {
 				this.$nextTick(() => {
 					const menu = this.$refs["context-menu"];
 					if (to && menu) {
-						menu.querySelector("button").focus();
+						menu.querySelector("button")?.focus();
 					}
 				});
 			},
@@ -153,7 +158,7 @@ export default {
 	mounted() {
 		window.addEventListener("keydown", this.escKeyHandler);
 	},
-	beforeDestroy() {
+	beforeUnmount() {
 		window.removeEventListener("keydown", this.escKeyHandler);
 	},
 	methods: {
@@ -207,6 +212,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "~vuetify/settings";
 @import "@/styles/mixins";
 
 .context-menu {
@@ -218,7 +224,7 @@ export default {
 	flex-direction: column;
 	min-width: 150px;
 	max-width: 350px;
-	background-color: var(--v-white-base);
+	background-color: rgba(var(--v-theme-white));
 	border-radius: var(--radius-sm);
 
 	> :hover {
@@ -236,13 +242,11 @@ export default {
 
 		&-icon {
 			margin: var(--space-md) !important;
-			color: var(--v-secondary-base);
 		}
 
 		&-text {
 			width: max-content;
 			font-size: var(--text-md);
-			color: var(--v-black-base);
 			text-align: left;
 			white-space: normal;
 

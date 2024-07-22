@@ -1,82 +1,73 @@
 import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import ContextExternalToolsModule from "@/store/context-external-tools";
-import EnvConfigModule from "@/store/env-config";
-import { ExternalToolDisplayData } from "@/store/external-tool";
-import {
-	AUTH_MODULE_KEY,
-	CONTEXT_EXTERNAL_TOOLS_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	I18N_KEY,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 import {
-	ContextExternalToolConfigurationStatusFactory,
+	contextExternalToolConfigurationStatusFactory,
 	externalToolDisplayDataFactory,
 } from "@@/tests/test-utils/factory";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mount, MountOptions, Wrapper } from "@vue/test-utils";
-import Vue from "vue";
-import VueRouter from "vue-router";
-import * as routerComposables from "vue-router/composables";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { ExternalToolDisplayData } from "@data-external-tool";
+import { createMock } from "@golevelup/ts-jest";
+import { mount, MountingOptions } from "@vue/test-utils";
+import { nextTick } from "vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Router, useRouter } from "vue-router";
+import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 
-describe("RoomExternalToolsSection", () => {
-	let router: DeepMocked<VueRouter>;
+jest.mock("vue-router", () => ({
+	useRoute: jest.fn(),
+	useRouter: jest.fn(),
+}));
+const useRouterMock = <jest.Mock>useRouter;
 
+describe("RoomExternalToolsSection", () => {
 	const getWrapper = (props: {
 		tools: ExternalToolDisplayData[];
 		roomId: string;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
-		const contextExternalToolsModule = createModuleMocks(
-			ContextExternalToolsModule
-		);
-
 		const authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
 			getUserRoles: ["teacher"],
 		});
 
-		const envConfigModule = createModuleMocks(EnvConfigModule, {
-			getCtlContextConfigurationEnabled: true,
-		});
-
-		router = createMock<VueRouter>();
-		jest.spyOn(routerComposables, "useRouter").mockReturnValue(router);
-
-		const wrapper: Wrapper<any> = mount(
-			RoomExternalToolsSection as MountOptions<Vue>,
+		const wrapper = mount(
+			RoomExternalToolsSection as MountingOptions<
+				typeof RoomExternalToolsSection
+			>,
 			{
-				...createComponentMocks({
-					i18n: true,
-				}),
-				propsData: {
-					...props,
-				},
-				provide: {
-					[I18N_KEY.valueOf()]: {
-						tc: (key: string): string => key,
+				global: {
+					plugins: [
+						createTestingVuetify(),
+						createTestingI18n(),
+						vueDompurifyHTMLPlugin,
+					],
+					provide: {
+						[AUTH_MODULE_KEY.valueOf()]: authModule,
 					},
-					[CONTEXT_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
-						contextExternalToolsModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					stubs: {
+						RoomExternalToolCard: true,
+						RoomExternalToolsErrorDialog: true,
+					},
+				},
+				props: {
+					...props,
 				},
 			}
 		);
 
 		return {
 			wrapper,
-			contextExternalToolsModule,
 			authModule,
 		};
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		jest.clearAllMocks();
 	});
 
 	describe("when there are tools in the list", () => {
@@ -124,7 +115,7 @@ describe("RoomExternalToolsSection", () => {
 
 			await card.vm.$emit("delete", tool);
 
-			const deleteDialog = wrapper.find('[data-testid="delete-dialog"]');
+			const deleteDialog = wrapper.getComponent({ name: "v-dialog" });
 
 			expect(deleteDialog.element.childNodes.length).toBeGreaterThanOrEqual(1);
 		});
@@ -137,17 +128,21 @@ describe("RoomExternalToolsSection", () => {
 
 			const roomId = "roomId";
 
+			const router = createMock<Router>();
+			useRouterMock.mockReturnValue(router);
+
 			const { wrapper } = getWrapper({ tools: [tool], roomId });
 
 			return {
 				wrapper,
+				router,
 				roomId,
 				tool,
 			};
 		};
 
 		it("should redirect to the edit page", async () => {
-			const { wrapper, tool, roomId } = setup();
+			const { wrapper, router, tool, roomId } = setup();
 
 			const card = wrapper.findComponent({
 				name: "room-external-tool-card",
@@ -171,7 +166,7 @@ describe("RoomExternalToolsSection", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const { wrapper, contextExternalToolsModule } = getWrapper({
+			const { wrapper } = getWrapper({
 				tools: [tool],
 				roomId: "roomId",
 			});
@@ -179,25 +174,25 @@ describe("RoomExternalToolsSection", () => {
 			return {
 				tool,
 				wrapper,
-				contextExternalToolsModule,
 			};
 		};
 
 		it("should call delete function of store", async () => {
-			const { wrapper, tool, contextExternalToolsModule } = await setup();
+			const { wrapper, tool } = await setup();
 
-			const card = wrapper.find('[data-testId="external-tool-card-0"]');
+			const card = wrapper.findComponent({
+				name: "room-external-tool-card",
+			});
+
 			await card.vm.$emit("delete", tool);
 
-			const deleteDialog = wrapper.find('[data-testId="delete-dialog"]');
+			const confirmBtn = wrapper.findComponent(
+				'[data-testId="dialog-confirm"]'
+			);
 
-			const confirmBtn = deleteDialog.find('[data-testId="dialog-confirm"]');
 			await confirmBtn.trigger("click");
 
-			expect(
-				contextExternalToolsModule.deleteContextExternalTool
-			).toHaveBeenCalledWith(tool.contextExternalToolId);
-			expect(deleteDialog.element.childNodes.length).toEqual(0);
+			expect(wrapper.emitted("delete")).toEqual([[tool]]);
 		});
 	});
 
@@ -206,7 +201,7 @@ describe("RoomExternalToolsSection", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const { wrapper, contextExternalToolsModule } = getWrapper({
+			const { wrapper } = getWrapper({
 				tools: [tool],
 				roomId: "roomId",
 			});
@@ -214,27 +209,21 @@ describe("RoomExternalToolsSection", () => {
 			return {
 				tool,
 				wrapper,
-				contextExternalToolsModule,
 			};
 		};
 
 		it("should close dialog", async () => {
-			const { wrapper, tool, contextExternalToolsModule } = await setup();
+			const { wrapper, tool } = await setup();
 
 			const card = wrapper.findComponent({
 				name: "room-external-tool-card",
 			});
 			await card.vm.$emit("delete", tool);
 
-			const deleteDialog = wrapper.find("[data-testId=delete-dialog]");
-
-			const cancelBtn = wrapper.find("[data-testId=dialog-cancel]");
+			const cancelBtn = wrapper.findComponent('[data-testId="dialog-cancel"]');
 			await cancelBtn.trigger("click");
 
-			expect(
-				contextExternalToolsModule.deleteContextExternalTool
-			).not.toHaveBeenCalled();
-			expect(deleteDialog.element.childNodes.length).toEqual(0);
+			expect(wrapper.emitted("delete")).toBeUndefined();
 		});
 	});
 
@@ -242,7 +231,7 @@ describe("RoomExternalToolsSection", () => {
 		const setup = async () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build({
-					status: ContextExternalToolConfigurationStatusFactory.build(),
+					status: contextExternalToolConfigurationStatusFactory.build(),
 				});
 
 			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });
@@ -261,10 +250,10 @@ describe("RoomExternalToolsSection", () => {
 			});
 
 			card.vm.$emit("error", tool);
-			await Vue.nextTick();
+			await nextTick();
 
-			const dialog = wrapper.find('[data-testId="error-dialog"]');
-			expect(dialog.exists()).toBeTruthy();
+			const dialog = wrapper.findComponent(RoomExternalToolsErrorDialog);
+			expect(dialog.exists()).toBe(true);
 			expect(dialog.props("isOpen")).toEqual(true);
 		});
 	});

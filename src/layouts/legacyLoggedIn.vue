@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<skip-links />
+		<SkipLink />
 		<div class="page" :style="style" :class="{ inline: isInline }">
 			<div class="topbar">
 				<the-top-bar
@@ -9,6 +9,7 @@
 					:expanded-menu="expandedMenu"
 					:user="user"
 					:school="school"
+					:roleNames="roleNames"
 					@action="handleTopAction"
 				/>
 			</div>
@@ -28,19 +29,20 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from "vue";
-import { useRoute } from "vue-router/composables";
-import { authModule, envConfigModule, schoolsModule } from "@/store";
+import TheFooter from "@/components/legacy/TheFooter.vue";
+import TheSidebar from "@/components/legacy/TheSidebar.vue";
+import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
+import TheTopBar from "@/components/topbar/TheTopBar.vue";
+import toastsFromQueryString from "@/mixins/toastsFromQueryString";
+import { authModule, envConfigModule } from "@/store";
 import getSidebarItems, {
 	SidebarCategoryItem,
 	SidebarItem,
+	SidebarItemBase,
 } from "@/utils/sidebar-base-items";
-import toastsFromQueryString from "@/mixins/toastsFromQueryString";
-import TheTopBar from "@/components/topbar/TheTopBar.vue";
-import TheSidebar from "@/components/legacy/TheSidebar.vue";
-import TheFooter from "@/components/legacy/TheFooter.vue";
-import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
-import SkipLinks from "../components/molecules/SkipLinks.vue";
+import { computed, defineComponent, ref } from "vue";
+import { useRoute } from "vue-router";
+import { SkipLink } from "@ui-skip-link";
 
 export default defineComponent({
 	components: {
@@ -48,7 +50,7 @@ export default defineComponent({
 		TheSidebar,
 		TheFooter,
 		autoLogoutWarning,
-		SkipLinks,
+		SkipLink,
 	},
 	mixins: [toastsFromQueryString],
 	setup() {
@@ -72,7 +74,10 @@ export default defineComponent({
 			return authModule.getUser;
 		});
 		const school = computed(() => {
-			return schoolsModule.getSchool;
+			return authModule.getSchool;
+		});
+		const roleNames = computed(() => {
+			return authModule.getUserRoles;
 		});
 		const authenticated = computed(() => {
 			return authModule.getAuthenticated;
@@ -84,10 +89,17 @@ export default defineComponent({
 			return !!route.query.inline;
 		});
 
-		const sidebarItems = computed(() => {
-			let sidebarItems = getSidebarItems(
-				envConfigModule.getNewSchoolAdminPageAsDefault
+		const hasFeatureEnabled = (item: SidebarItemBase) => {
+			if (!item.feature) {
+				return true;
+			}
+
+			return (
+				envConfigModule.getEnv[item.feature] === (item.featureValue ?? true)
 			);
+		};
+		const sidebarItems = computed(() => {
+			let sidebarItems = getSidebarItems();
 
 			const isSidebarCategoryItem = (
 				item: SidebarItem | SidebarCategoryItem
@@ -102,12 +114,13 @@ export default defineComponent({
 					if (sidebarCategoryItem.children.length >= 1) {
 						sidebarCategoryItem.children = sidebarCategoryItem.children.filter(
 							(child) => {
-								const hasFeature =
-									!!child.feature && !!envConfigModule.getEnv[child.feature];
+								const hasFeature = hasFeatureEnabled(child);
 
 								return (
 									(!child.permission ||
-										user.value?.permissions?.includes?.(child.permission)) &&
+										authModule.getUserPermissions.includes(
+											child.permission.toLowerCase()
+										)) &&
 									(!child.feature || hasFeature)
 								);
 							}
@@ -116,10 +129,14 @@ export default defineComponent({
 				}
 
 				const hasRequiredPermission = item.permission
-					? user.value?.permissions?.includes?.(item.permission)
+					? authModule.getUserPermissions.includes(
+							item.permission.toLowerCase()
+						)
 					: false;
 				const hasExcludedPermission = item.excludedPermission
-					? user.value?.permissions?.includes?.(item.excludedPermission)
+					? authModule.getUserPermissions.includes(
+							item.excludedPermission.toLowerCase()
+						)
 					: false;
 
 				const hasFeatureFlag =
@@ -141,6 +158,7 @@ export default defineComponent({
 			handleTopAction,
 			user,
 			school,
+			roleNames,
 			authenticated,
 			style,
 			isInline,

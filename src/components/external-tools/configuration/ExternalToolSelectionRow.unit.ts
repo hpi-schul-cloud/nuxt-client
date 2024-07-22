@@ -1,28 +1,35 @@
-import { shallowMount, Wrapper } from "@vue/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 import ExternalToolSelectionRow from "./ExternalToolSelectionRow.vue";
-import createComponentMocks from "@@/tests/test-utils/componentMocks";
 
 describe("ExternalToolSelectionRow", () => {
-	let wrapper: Wrapper<any>;
-
 	const setup = (maxHeight?: number, maxWidth?: number) => {
-		document.body.setAttribute("data-app", "true");
-		wrapper = shallowMount(ExternalToolSelectionRow, {
-			...createComponentMocks({}),
-			propsData: {
+		const wrapper = mount(ExternalToolSelectionRow, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+			},
+			props: {
 				item: {
 					logoUrl: "expectedLogoUrl",
 					name: "expectedName",
+					externalToolId: "expectedExternalToolId",
+					parameters: [],
+					baseUrl: "https://epxected-url.com",
 				},
 				maxHeight: maxHeight,
 				maxWidth: maxWidth,
 			},
 		});
+
+		return { wrapper };
 	};
 
 	describe("when component is used", () => {
 		it("should be found in the dom", () => {
-			setup();
+			const { wrapper } = setup();
 			expect(
 				wrapper.findComponent(ExternalToolSelectionRow).exists()
 			).toBeTruthy();
@@ -31,32 +38,30 @@ describe("ExternalToolSelectionRow", () => {
 
 	describe("component is rendered", () => {
 		it("should have a span with name from props", () => {
-			setup();
+			const { wrapper } = setup();
 
-			const span = wrapper.find("span");
+			const span = wrapper.findComponent({ name: "v-list-item" });
 
 			expect(span.text()).toEqual("expectedName");
 		});
 
 		it("should have to v-image with url from props", () => {
-			setup();
+			const { wrapper } = setup();
 
-			const image = wrapper.find("v-img-stub");
+			const image = wrapper.findComponent({ name: "v-img" });
 
-			expect(image.attributes("src")).toEqual("expectedLogoUrl");
+			expect(image.props("src")).toEqual("expectedLogoUrl");
 		});
 
 		it("should have sizes from props", () => {
 			const expectedMaxHeight = 10;
 			const expectedMaxWidth = 15;
-			setup(expectedMaxHeight, expectedMaxWidth);
+			const { wrapper } = setup(expectedMaxHeight, expectedMaxWidth);
 
-			const image = wrapper.find("v-img-stub");
+			const image = wrapper.findComponent({ name: "v-img" });
 
-			expect(image.attributes("maxheight")).toEqual(
-				expectedMaxHeight.toString()
-			);
-			expect(image.attributes("maxwidth")).toEqual(expectedMaxWidth.toString());
+			expect(image.props("maxHeight")).toEqual(expectedMaxHeight);
+			expect(image.props("maxWidth")).toEqual(expectedMaxWidth);
 		});
 	});
 });

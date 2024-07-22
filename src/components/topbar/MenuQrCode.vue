@@ -1,11 +1,10 @@
 <template>
 	<div class="pa-4">
-		<base-qr-code ref="qrCode" :url="url" />
+		<QRCode ref="qrCode" :url="url" />
 		<div class="pb-2">
 			{{ $t("global.topbar.MenuQrCode.qrHintText") }}
 		</div>
-		<v-btn outlined color="secondary" @click="openPrintMenu">
-			<v-icon left>{{ mdiPrinter }}</v-icon>
+		<v-btn variant="outlined" :prepend-icon="mdiPrinter" @click="openPrintMenu">
 			{{ $t("global.topbar.MenuQrCode.print") }}
 		</v-btn>
 	</div>
@@ -14,9 +13,11 @@
 <script lang="ts">
 import { ComponentPublicInstance, defineComponent, ref } from "vue";
 import { mdiPrinter } from "@mdi/js";
+import { QRCode } from "@ui-qr-code";
 
 export default defineComponent({
 	name: "MenuQrCode",
+	components: { QRCode },
 	props: {
 		url: {
 			type: String,

@@ -2,11 +2,13 @@
 	<default-wireframe
 		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
+		data-testid="school-external-tool-configurator-title"
 	>
 		<RenderHTML
 			:html="t('components.administration.externalToolsSection.description')"
 			component="p"
+			data-testId="tool-configuration-infotext"
 		/>
 		<v-spacer class="mt-10" />
 		<external-tool-configurator
@@ -33,11 +35,9 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { useI18n } from "@/composables/i18n.composable";
 import AuthModule from "@/store/auth";
 import {
 	SchoolExternalTool,
-	SchoolExternalToolConfigurationTemplate,
 	SchoolExternalToolSave,
 	ToolParameterEntry,
 } from "@/store/external-tool";
@@ -52,6 +52,7 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import { RenderHTML } from "@feature-render-html";
 import { useTitle } from "@vueuse/core";
 import {
@@ -62,8 +63,8 @@ import {
 	Ref,
 	ref,
 } from "vue";
-import VueRouter from "vue-router";
-import { useRouter } from "vue-router/composables";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
 	components: {
@@ -89,17 +90,17 @@ export default defineComponent({
 		useTitle(pageTitle);
 
 		const schoolSetting: Breadcrumb = {
-			text: t("pages.administration.school.index.title"),
+			title: t("pages.administration.school.index.title"),
 			to: "/administration/school-settings",
 		};
 		const breadcrumbs: Breadcrumb[] = [
 			{
-				text: t("pages.administration.index.title"),
+				title: t("pages.administration.index.title"),
 				to: "/administration/",
 			},
 			schoolSetting,
 			{
-				text: t("pages.tool.title"),
+				title: t("pages.tool.title"),
 				disabled: true,
 			},
 		];
@@ -124,9 +125,9 @@ export default defineComponent({
 				: undefined
 		);
 
-		const router: VueRouter = useRouter();
+		const router = useRouter();
 		const onCancel = () => {
-			router.push({ path: schoolSetting.to });
+			router.push({ path: schoolSetting.to! });
 		};
 
 		const isDeactivated: Ref<boolean> = ref(false);
@@ -135,12 +136,12 @@ export default defineComponent({
 			template: SchoolExternalToolConfigurationTemplate,
 			configuredParameterValues: ToolParameterEntry[]
 		) => {
-			if (authModule.getUser) {
+			if (authModule.getSchool) {
 				const schoolExternalTool: SchoolExternalToolSave =
 					SchoolExternalToolMapper.mapTemplateToSchoolExternalToolSave(
 						template,
 						configuredParameterValues,
-						authModule.getUser.schoolId,
+						authModule.getSchool.id,
 						isDeactivated.value
 					);
 
@@ -189,11 +190,10 @@ export default defineComponent({
 						props.configId
 					);
 
-				isDeactivated.value =
-					configuration.value?.status.isDeactivated ?? false;
-			} else if (authModule.getUser) {
+				isDeactivated.value = configuration.value?.isDeactivated ?? false;
+			} else if (authModule.getSchool) {
 				await schoolExternalToolsModule.loadAvailableToolsForSchool(
-					authModule.getUser?.schoolId
+					authModule.getSchool.id
 				);
 			}
 

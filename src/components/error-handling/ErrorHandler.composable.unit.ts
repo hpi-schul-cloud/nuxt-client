@@ -1,14 +1,13 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useBoardNotifier } from "@util-board";
-import { nextTick } from "vue";
-
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardNotifier } from "@util-board";
 import { isAxiosError } from "axios";
+import { nextTick } from "vue";
 
-import { useErrorHandler } from "./ErrorHandler.composable";
+import { ErrorType, useErrorHandler } from "./ErrorHandler.composable";
 import { mountComposable } from "@@/tests/test-utils";
-import { I18N_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { notifierModule } from "@/store";
 
 jest.mock("axios");
@@ -16,16 +15,36 @@ const mockedIsAxiosError = jest.mocked(isAxiosError);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-let translationMap: Record<string, string> = {};
+const keys = [
+	"components.board.notifications.errors.notCreated",
+	"components.board.notifications.errors.notLoaded",
+	"components.board.notifications.errors.notUpdated",
+	"components.board.notifications.errors.notDeleted",
+];
+const translationMap: Record<string, string> = {};
+
+keys.forEach((key) => (translationMap[key] = key));
+
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn().mockReturnValue({
+			t: (key: string) => {
+				return translationMap[key] || "error.generic";
+			},
+			tc: (key: string) => key,
+			te: (key: string) => translationMap[key] !== undefined,
+		}),
+	};
+});
 
 const mountErrorComposable = () => {
 	return mountComposable(() => useErrorHandler(), {
-		[I18N_KEY.valueOf()]: {
-			t: (key: string) => key,
-			tc: (key: string) => key,
-			te: (key: string) => translationMap[key] !== undefined,
+		global: {
+			provide: {
+				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+			},
 		},
-		[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 	});
 };
 
@@ -50,13 +69,6 @@ describe("ErrorHandler.Composable", () => {
 	};
 
 	beforeEach(() => {
-		const keys = [
-			"components.board.notifications.errors.notCreated",
-			"components.board.notifications.errors.notLoaded",
-			"components.board.notifications.errors.notUpdated",
-			"components.board.notifications.errors.notDeleted",
-		];
-		translationMap = {};
 		keys.forEach((key) => (translationMap[key] = key));
 	});
 
@@ -91,6 +103,23 @@ describe("ErrorHandler.Composable", () => {
 				expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
 
 				consoleErrorSpy.mockRestore();
+			});
+		});
+	});
+
+	describe("handleAnyError", () => {
+		describe("when an error is handled", () => {
+			it("should execute the callback for any error", async () => {
+				const { handleAnyError } = setup();
+
+				mockedIsAxiosError.mockReturnValueOnce(true);
+				const errorResponse = mockErrorResponse();
+
+				const handleCallbackMock = jest.fn();
+
+				handleAnyError(errorResponse, handleCallbackMock);
+
+				expect(handleCallbackMock).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
@@ -163,5 +192,32 @@ describe("ErrorHandler.Composable", () => {
 				"components.board.notifications.errors.notDeleted"
 			);
 		});
+	});
+
+	describe("notifySocketError", () => {
+		it("should show a notification", async () => {
+			const { notifySocketError } = setup();
+
+			notifySocketError("notCreated", "board", "error", 5000);
+			await nextTick();
+
+			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
+		});
+
+		it.each(["notCreated", "notUpdated", "notDeleted", "notLoaded"])(
+			"should return i18n keys of %s",
+			(key) => {
+				const { notifySocketError } = setup();
+				notifySocketError(key as ErrorType, "board");
+
+				expect(
+					mockedBoardNotifierCalls.showCustomNotifier
+				).toHaveBeenCalledWith(
+					`components.board.notifications.errors.${key}`,
+					"error",
+					undefined
+				);
+			}
+		);
 	});
 });
