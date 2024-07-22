@@ -56,7 +56,12 @@ defineProps({
 });
 </script>
 
-<style>
+<style scoped>
+.subtitle {
+	overflow-wrap: break-word;
+	white-space: normal;
+}
+
 .button-max-width {
 	max-width: 100px;
 }
