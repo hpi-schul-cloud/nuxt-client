@@ -67,9 +67,6 @@ export default defineComponent({
 			closeDialog();
 		};
 
-		const onAddElement = (eventType: string, type: ContentElementType) =>
-			emit(eventType, type);
-
 		const submissionsEnabled =
 			envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED;
 
