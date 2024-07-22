@@ -96,12 +96,12 @@
 		/>
 		<SelectBoardLayoutDialog
 			v-if="boardLayoutsEnabled"
-			v-model="boardTypePickerDialogIsOpen"
+			v-model="boardLayoutDialogIsOpen"
 			:title="$t('pages.room.dialog.boardType.title')"
-			:options="boardTypes"
+			:options="boardLayouts"
 			@select:multi-column="onMultiColumnLayoutSelected"
 			@select:single-column="onSingleColumnLayoutSelected"
-			@dialog-closed="boardTypePickerDialogIsOpen = false"
+			@dialog-closed="boardLayoutDialogIsOpen = false"
 		/>
 	</default-wireframe>
 </template>
@@ -208,8 +208,8 @@ export default defineComponent({
 			isShareModalOpen: false,
 			isEndSyncDialogOpen: false,
 			tabIndex: 0,
-			boardTypePickerDialogIsOpen: false,
-			boardTypes: [
+			boardLayoutDialogIsOpen: false,
+			boardLayouts: [
 				{
 					label: this.$t("pages.room.dialog.boardType.multiColumn"),
 					icon: "$mdiViewDashboardOutline",
@@ -495,7 +495,7 @@ export default defineComponent({
 			}
 
 			if (event === "board-type-dialog-open") {
-				this.boardTypePickerDialogIsOpen = true;
+				this.boardLayoutDialogIsOpen = true;
 			}
 		},
 		setActiveTabIfPageCached(event) {
