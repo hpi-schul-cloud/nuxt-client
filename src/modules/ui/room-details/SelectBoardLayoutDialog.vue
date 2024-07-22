@@ -1,12 +1,12 @@
 <template>
-	<VDialog :data-testid="dataTestId" width="360">
+	<VDialog data-testid="board-layout-dialog" width="360">
 		<VCard>
 			<VCardTitle class="text-h4 text-break px-6 pt-4">
-				{{ title }}
+				{{ $t("pages.room.dialog.boardType.title") }}
 			</VCardTitle>
 			<VCardText class="d-flex justify-center">
 				<v-btn
-					v-for="(item, key) in options"
+					v-for="(item, key) in boardLayouts"
 					:key="key"
 					variant="text"
 					size="large"
@@ -37,23 +37,27 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
 import { PickerOption } from "./types";
+import { useI18n } from "vue-i18n";
 
-defineProps({
-	title: {
-		type: String,
-		required: true,
+const { t } = useI18n();
+
+const boardLayouts: PickerOption[] = [
+	{
+		label: t("pages.room.dialog.boardType.multiColumn"),
+		icon: "$mdiViewDashboardOutline",
+		eventName: "select:multi-column",
+		dataTestId: "dialog-add-multi-column-board",
+		ariaLabel: t("pages.room.dialog.boardType.multiColumn"),
 	},
-	options: {
-		type: Array as PropType<PickerOption[]>,
-		required: true,
+	{
+		label: t("pages.room.dialog.boardType.singleColumn"),
+		icon: "$mdiCustomGridOutline",
+		eventName: "select:single-column",
+		dataTestId: "dialog-add-single-column-board",
+		ariaLabel: t("pages.room.dialog.boardType.singleColumn"),
 	},
-	dataTestId: {
-		type: String,
-		default: "picker-dialog",
-	},
-});
+];
 </script>
 
 <style scoped>

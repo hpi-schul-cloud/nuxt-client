@@ -97,8 +97,6 @@
 		<SelectBoardLayoutDialog
 			v-if="boardLayoutsEnabled"
 			v-model="boardLayoutDialogIsOpen"
-			:title="$t('pages.room.dialog.boardType.title')"
-			:options="boardLayouts"
 			@select:multi-column="onMultiColumnLayoutSelected"
 			@select:single-column="onSingleColumnLayoutSelected"
 			@dialog-closed="boardLayoutDialogIsOpen = false"
@@ -209,22 +207,6 @@ export default defineComponent({
 			isEndSyncDialogOpen: false,
 			tabIndex: 0,
 			boardLayoutDialogIsOpen: false,
-			boardLayouts: [
-				{
-					label: this.$t("pages.room.dialog.boardType.multiColumn"),
-					icon: "$mdiViewDashboardOutline",
-					eventName: "select:multi-column",
-					dataTestId: "dialog-add-multi-column-board",
-					ariaLabel: this.$t("pages.room.dialog.boardType.multiColumn"),
-				},
-				{
-					label: this.$t("pages.room.dialog.boardType.singleColumn"),
-					icon: "$mdiCustomGridOutline",
-					eventName: "select:single-column",
-					dataTestId: "dialog-add-single-column-board",
-					ariaLabel: this.$t("pages.room.dialog.boardType.singleColumn"),
-				},
-			],
 		};
 	},
 	computed: {
