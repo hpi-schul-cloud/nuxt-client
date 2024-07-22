@@ -46,15 +46,14 @@ describe("MediaShelfPage", () => {
 	};
 
 	beforeEach(() => {
-		useSharedMediaBoardStateMock =
-			createMock<ReturnType<typeof useSharedMediaBoardState>>();
-
-		useSharedMediaBoardStateMock.mediaBoard = ref(
-			mediaBoardResponseFactory.build()
-		);
-		useSharedMediaBoardStateMock.availableMediaLine = ref(
-			mediaAvailableLineResponseFactory.build()
-		);
+		useSharedMediaBoardStateMock = createMock<
+			ReturnType<typeof useSharedMediaBoardState>
+		>({
+			isLoading: ref(false),
+			isBoardOperationLoading: ref(false),
+			mediaBoard: ref(mediaBoardResponseFactory.build()),
+			availableMediaLine: ref(mediaAvailableLineResponseFactory.build()),
+		});
 
 		jest
 			.mocked(useSharedMediaBoardState)
@@ -63,6 +62,28 @@ describe("MediaShelfPage", () => {
 
 	afterEach(() => {
 		jest.resetAllMocks();
+	});
+
+	describe("when the page is loading", () => {
+		const setup = async () => {
+			useSharedMediaBoardStateMock.mediaBoard.value = undefined;
+			useSharedMediaBoardStateMock.availableMediaLine.value = undefined;
+			useSharedMediaBoardStateMock.isLoading.value = true;
+
+			const { wrapper } = getWrapper();
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should display skeleton loader", async () => {
+			const { wrapper } = await setup();
+
+			const skeletonLoader = wrapper.find("[data-testid=skeleton-loader]");
+
+			expect(skeletonLoader.exists()).toBe(true);
+		});
 	});
 
 	describe("when the page is loaded", () => {
@@ -98,6 +119,31 @@ describe("MediaShelfPage", () => {
 			const board = wrapper.findComponent(MediaBoard);
 
 			expect(board.isVisible()).toEqual(true);
+		});
+	});
+
+	describe("when the page is loaded and there are no media elements", () => {
+		const setup = async () => {
+			useSharedMediaBoardStateMock.availableMediaLine.value =
+				mediaAvailableLineResponseFactory.build({ elements: [] });
+			useSharedMediaBoardStateMock.mediaBoard.value =
+				mediaBoardResponseFactory.build({
+					lines: [],
+				});
+
+			const { wrapper } = getWrapper();
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should display empty state", async () => {
+			const { wrapper } = await setup();
+
+			const emptyState = wrapper.find("[data-testid=empty-state]");
+
+			expect(emptyState.exists()).toBe(true);
 		});
 	});
 
