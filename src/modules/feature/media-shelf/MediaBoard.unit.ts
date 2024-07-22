@@ -1,5 +1,4 @@
 import { MediaBoardColors } from "@/serverApi/v3";
-import { ComponentProps } from "@/types/vue";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
@@ -15,6 +14,7 @@ import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick, ref } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import {
 	ElementCreate,
 	ElementMove,

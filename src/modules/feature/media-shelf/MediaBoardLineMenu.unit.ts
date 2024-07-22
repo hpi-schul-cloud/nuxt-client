@@ -1,15 +1,15 @@
 import { MediaBoardColors } from "@/serverApi/v3";
-import { ComponentProps } from "@/types/vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import { VColorPicker, VListItem } from "vuetify/lib/components/index.mjs";
 import colors from "vuetify/lib/util/colors.mjs";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 
 describe("MediaBoardLineMenu", () => {
 	const getWrapper = (
