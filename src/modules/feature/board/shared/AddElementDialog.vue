@@ -1,61 +1,61 @@
 <template>
-	<vCustomDialog
+	<VDialog
+		v-model="isDialogOpen"
 		data-testid="element-type-selection"
-		:size="dialogWidth"
-		:has-buttons="true"
-		:is-open="isDialogOpen"
-		@dialog-closed="onCloseDialog"
-		:buttons="actionButtons"
+		:width="dialogWidth"
 	>
-		<template #title>
-			<div class="text-h4 my-2 text-break">
+		<VCard>
+			<VCardTitle class="text-h4 text-break px-6 pt-4">
 				{{ $t("components.elementTypeSelection.dialog.title") }}
-			</div>
-		</template>
-
-		<template #content>
-			<div
-				class="d-flex flex-sm-row flex-wrap align-items-center"
-				:class="{ 'justify-content-space-between': submissionsEnabled }"
-			>
-				<v-btn
-					v-for="(item, key) in elementTypeOptions"
-					:key="key"
-					variant="text"
-					size="large"
-					:height="84"
-					:width="126"
-					class="d-sm-flex button-alignment-center"
-					:data-testid="item.testId"
-					@click.stop="item.action"
+			</VCardTitle>
+			<VCardText class="d-flex justify-center">
+				<div
+					class="d-flex flex-sm-row flex-wrap align-items-center"
+					:class="{ 'justify-content-space-between': submissionsEnabled }"
 				>
-					<span
-						class="d-flex flex-column justify-content-center button-max-width"
+					<v-btn
+						v-for="(item, key) in elementTypeOptions"
+						:key="key"
+						variant="text"
+						size="large"
+						:height="84"
+						:width="126"
+						class="d-sm-flex button-alignment-center"
+						:data-testid="item.testId"
+						@click.stop="item.action"
 					>
-						<span>
-							<v-icon size="x-large">{{ item.icon }}</v-icon>
+						<span
+							class="d-flex flex-column justify-content-center button-max-width"
+						>
+							<span>
+								<v-icon size="x-large">{{ item.icon }}</v-icon>
+							</span>
+							<span class="subtitle">{{ $t(item.label) }}</span>
 						</span>
-						<span class="subtitle">{{ $t(item.label) }}</span>
-					</span>
-				</v-btn>
-			</div>
-		</template>
-	</vCustomDialog>
+					</v-btn>
+				</div>
+			</VCardText>
+			<VCardActions class="mb-2 px-6">
+				<VBtn
+					data-testid="dialog-close"
+					variant="outlined"
+					@click="onCloseDialog"
+				>
+					{{ $t("common.labels.close") }}
+				</VBtn>
+			</VCardActions>
+		</VCard>
+	</VDialog>
 </template>
 
 <script lang="ts">
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ContentElementType } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { mdiEmailOutline } from "@mdi/js";
 import { computed, ComputedRef, defineComponent } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
 export default defineComponent({
 	name: "AddElementDialog",
-	components: {
-		vCustomDialog,
-	},
 	setup(props, { emit }) {
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
@@ -70,12 +70,8 @@ export default defineComponent({
 		const onAddElement = (eventType: string, type: ContentElementType) =>
 			emit(eventType, type);
 
-		const actionButtons = ["close"];
-
 		const submissionsEnabled =
 			envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED;
-
-		const drawingEnabled = envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED;
 
 		const dialogWidth: ComputedRef<number> = computed(() =>
 			elementTypeOptions.value.length >= 3 ? 426 : 320
@@ -84,28 +80,22 @@ export default defineComponent({
 		return {
 			onAddElement,
 			onCloseDialog,
-			mdiEmailOutline,
 			elementTypeOptions,
 			isDialogOpen,
-			actionButtons,
 			submissionsEnabled,
-			drawingEnabled,
 			dialogWidth,
 		};
 	},
 });
 </script>
-<style lang="scss" scoped>
+
+<style scoped>
 .subtitle {
 	overflow-wrap: break-word;
 	white-space: normal;
 }
 
 .button-max-width {
-	max-width: calc(var(--topbar-height) * 2);
-}
-
-.button-alignment-center {
-	align-items: center;
+	max-width: 100px;
 }
 </style>
