@@ -1,8 +1,5 @@
 <template>
 	<v-form>
-		<v-overlay :model-value="loading" :absolute="true">
-			<v-progress-circular color="primary" indeterminate />
-		</v-overlay>
 		<v-row>
 			<v-col>
 				<v-text-field
