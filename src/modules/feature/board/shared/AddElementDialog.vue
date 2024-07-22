@@ -48,40 +48,27 @@
 	</VDialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { computed, ComputedRef, defineComponent } from "vue";
+import { computed, ComputedRef } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
-export default defineComponent({
-	name: "AddElementDialog",
-	setup() {
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
-		const { isDialogOpen, closeDialog, elementTypeOptions } =
-			useSharedElementTypeSelection();
+const { isDialogOpen, closeDialog, elementTypeOptions } =
+	useSharedElementTypeSelection();
 
-		const onCloseDialog = (_: boolean, event: Event) => {
-			event?.stopPropagation();
-			closeDialog();
-		};
+const onCloseDialog = (_: boolean, event: Event) => {
+	event?.stopPropagation();
+	closeDialog();
+};
 
-		const submissionsEnabled =
-			envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED;
+const submissionsEnabled =
+	envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED;
 
-		const dialogWidth: ComputedRef<number> = computed(() =>
-			elementTypeOptions.value.length >= 3 ? 426 : 320
-		);
-
-		return {
-			onCloseDialog,
-			elementTypeOptions,
-			isDialogOpen,
-			submissionsEnabled,
-			dialogWidth,
-		};
-	},
-});
+const dialogWidth: ComputedRef<number> = computed(() =>
+	elementTypeOptions.value.length >= 3 ? 426 : 320
+);
 </script>
 
 <style scoped>
