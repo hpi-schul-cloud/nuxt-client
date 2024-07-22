@@ -1,6 +1,5 @@
 import { importUsersModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
-import { ComponentProps } from "@/types/vue";
 import { THEME_KEY } from "@/utils/inject";
 import {
 	createTestingI18n,
@@ -10,6 +9,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { mdiFlag, mdiFlagOutline } from "@mdi/js";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import {
 	VAutocomplete,
 	VBtn,
