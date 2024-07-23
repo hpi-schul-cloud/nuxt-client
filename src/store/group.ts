@@ -1,7 +1,7 @@
 import {
 	ClassInfoSearchListResponse,
 	ClassRequestContext,
-	ClassSortBy,
+	ClassSortQueryType,
 	GroupApiFactory,
 	GroupApiInterface,
 	SchoolYearQueryType,
@@ -31,7 +31,7 @@ export default class GroupModule extends VuexModule {
 		total: 0,
 	};
 
-	private sortBy?: ClassSortBy = ClassSortBy.Name;
+	private sortBy?: ClassSortQueryType = ClassSortQueryType.Name;
 	private sortOrder: SortOrder = SortOrder.ASC;
 	private page = 1;
 
@@ -55,7 +55,7 @@ export default class GroupModule extends VuexModule {
 		return this.pagination;
 	}
 
-	get getSortBy(): ClassSortBy | undefined {
+	get getSortBy(): ClassSortQueryType | undefined {
 		return this.sortBy;
 	}
 
@@ -93,7 +93,7 @@ export default class GroupModule extends VuexModule {
 	}
 
 	@Mutation
-	setSortBy(sortBy: ClassSortBy | undefined): void {
+	setSortBy(sortBy: ClassSortQueryType | undefined): void {
 		this.sortBy = sortBy;
 	}
 
