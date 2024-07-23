@@ -56,6 +56,7 @@ export class ExternalToolMapper {
 				response.status
 			),
 			logoUrl: response.logoUrl,
+			thumbnailUrl: response.thumbnailUrl,
 			openInNewTab: response.openInNewTab,
 		};
 
