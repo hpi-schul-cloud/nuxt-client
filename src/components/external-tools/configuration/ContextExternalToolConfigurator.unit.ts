@@ -1,6 +1,8 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { ToolContextType } from "@/serverApi/v3";
-import { ComponentProps } from "@/types/vue";
+import NotifierModule from "@/store/notifier";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	businessErrorFactory,
 	contextExternalToolFactory,
@@ -21,10 +23,8 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import ContextExternalToolConfigurator from "./ContextExternalToolConfigurator.vue";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 jest.mock(
 	"@data-external-tool/contextExternalToolConfigurationState.composable"
