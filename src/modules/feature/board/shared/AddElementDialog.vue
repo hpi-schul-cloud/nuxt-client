@@ -39,7 +39,7 @@
 				<VBtn
 					data-testid="dialog-close"
 					variant="outlined"
-					@click="onCloseDialog"
+					@click.stop="closeDialog"
 				>
 					{{ $t("common.labels.close") }}
 				</VBtn>
@@ -58,13 +58,9 @@ const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const { isDialogOpen, closeDialog, elementTypeOptions } =
 	useSharedElementTypeSelection();
 
-const onCloseDialog = (_: boolean, event: Event) => {
-	event?.stopPropagation();
-	closeDialog();
-};
-
-const submissionsEnabled =
-	envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED;
+const submissionsEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED
+);
 
 const dialogWidth: ComputedRef<number> = computed(() =>
 	elementTypeOptions.value.length >= 3 ? 426 : 320
