@@ -5,23 +5,14 @@
 				{{ $t("pages.room.dialog.boardType.title") }}
 			</VCardTitle>
 			<VCardText class="d-flex justify-center">
-				<v-btn
+				<ExtendedIconBtn
 					v-for="(item, key) in boardLayouts"
 					:key="key"
-					variant="text"
-					size="large"
-					:height="85"
-					:width="125"
 					:data-testid="item.dataTestId"
+					:icon="item.icon"
+					:label="item.label"
 					@click.stop="$emit(item.eventName)"
-				>
-					<span class="d-flex flex-column justify-center button-max-width">
-						<span>
-							<v-icon size="x-large">{{ item.icon }}</v-icon>
-						</span>
-						<span class="subtitle mt-1">{{ $t(item.label) }}</span>
-					</span>
-				</v-btn>
+				/>
 			</VCardText>
 			<VCardActions class="mb-2 px-6">
 				<VBtn
@@ -37,8 +28,9 @@
 </template>
 
 <script setup lang="ts">
-import { PickerOption } from "./types";
 import { useI18n } from "vue-i18n";
+import { PickerOption } from "./types";
+import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 
 const { t } = useI18n();
 

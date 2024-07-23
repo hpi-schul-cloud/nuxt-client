@@ -13,26 +13,14 @@
 					class="d-flex flex-sm-row flex-wrap align-items-center"
 					:class="{ 'justify-content-space-between': submissionsEnabled }"
 				>
-					<v-btn
+					<ExtendedIconBtn
 						v-for="(item, key) in elementTypeOptions"
 						:key="key"
-						variant="text"
-						size="large"
-						:height="84"
-						:width="126"
-						class="d-sm-flex button-alignment-center"
 						:data-testid="item.testId"
+						:icon="item.icon"
+						:label="item.label"
 						@click.stop="item.action"
-					>
-						<span
-							class="d-flex flex-column justify-content-center button-max-width"
-						>
-							<span>
-								<v-icon size="x-large">{{ item.icon }}</v-icon>
-							</span>
-							<span class="subtitle">{{ $t(item.label) }}</span>
-						</span>
-					</v-btn>
+					/>
 				</div>
 			</VCardText>
 			<VCardActions class="mb-2 px-6">
@@ -52,6 +40,7 @@
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, ComputedRef } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
