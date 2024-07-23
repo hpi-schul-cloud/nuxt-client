@@ -99,7 +99,6 @@
 			v-model="boardLayoutDialogIsOpen"
 			@select:multi-column="onMultiColumnLayoutSelected"
 			@select:single-column="onSingleColumnLayoutSelected"
-			@dialog-closed="boardLayoutDialogIsOpen = false"
 		/>
 	</default-wireframe>
 </template>

@@ -27,7 +27,7 @@
 				<VBtn
 					data-testid="dialog-close"
 					variant="outlined"
-					@click="$emit('dialog-closed')"
+					@click="$emit('update:modelValue', false)"
 				>
 					{{ $t("common.labels.close") }}
 				</VBtn>
