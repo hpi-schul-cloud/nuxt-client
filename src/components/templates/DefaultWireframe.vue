@@ -10,10 +10,7 @@
 			id="notify-screen-reader-assertive"
 			class="d-sr-only"
 		/>
-		<div
-			class="wireframe-header sticky"
-			:class="{ 'old-layout': oldLayoutEnabled }"
-		>
+		<div class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -74,7 +71,6 @@
 
 <script setup lang="ts">
 import VCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
-import EnvConfigModule from "@/store/env-config";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
 import { computed, PropType, useSlots } from "vue";
@@ -113,10 +109,6 @@ const props = defineProps({
 		type: String as PropType<string | null>,
 		default: null,
 	},
-	// TODO - remove this when new layout is released
-	envConfigModule: {
-		type: EnvConfigModule,
-	},
 });
 
 defineEmits({
@@ -129,10 +121,6 @@ defineOptions({
 const slots = useSlots();
 
 const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
-
-const oldLayoutEnabled = computed(() => {
-	return !props.envConfigModule?.getEnv.FEATURE_NEW_LAYOUT_ENABLED;
-});
 
 const showBorder = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);
@@ -189,10 +177,6 @@ const showBorder = computed(() => {
 	top: 64px;
 	z-index: var(--layer-sticky-header);
 	background-color: rgb(var(--v-theme-white));
-}
-
-.old-layout {
-	top: 0;
 }
 
 @media #{map-get($display-breakpoints, 'lg-and-up')} {

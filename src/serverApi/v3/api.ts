@@ -1137,12 +1137,6 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_NEW_LAYOUT_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
     FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: boolean;
 }
 /**

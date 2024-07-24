@@ -1,5 +1,5 @@
 <template>
-	<newLoggedIn v-if="isCollection" />
+	<LoggedIn v-if="isCollection" />
 	<router-view v-else />
 </template>
 
@@ -7,7 +7,7 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { injectStrict, CONTENT_MODULE_KEY } from "@/utils/inject";
-import newLoggedIn from "./newLoggedIn.layout.vue";
+import LoggedIn from "./LoggedIn.layout.vue";
 
 const contentModule = injectStrict(CONTENT_MODULE_KEY);
 const route = useRoute();
