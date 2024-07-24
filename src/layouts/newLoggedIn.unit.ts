@@ -100,7 +100,7 @@ describe("newLoggedIn", () => {
 		await nextTick();
 		const sidebar = wrapper.find("nav");
 
-		if (sidebarExpanded)
+		if (!sidebarExpanded)
 			expect(sidebar.classes()).toContain("v-navigation-drawer--active");
 	});
 
