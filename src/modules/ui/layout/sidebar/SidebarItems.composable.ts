@@ -213,7 +213,6 @@ export const useSidebarItems = () => {
 					to: "/administration/groups/classes",
 					testId: "Klassen",
 					permissions: ["ADMIN_VIEW", "TEACHER_LIST"],
-					feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
 				},
 				// {
 				// 	title: "global.sidebar.item.classes",

@@ -181,7 +181,6 @@ const getSidebarItems = (): SidebarItemList => [
 				to: "/administration/groups/classes",
 				testId: "Klassen",
 				activeForUrls: ["^/administration/groups/classes($|/.*)"],
-				feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
 			},
 			// {
 			// 	title: "global.sidebar.item.classes",
