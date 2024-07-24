@@ -3,6 +3,8 @@
 		:isEditMode="isEditMode"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
+		@keydown.enter="onKeydownEnter"
+		:tabindex="0"
 	>
 		<div
 			data-testid="event-handle"
