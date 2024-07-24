@@ -215,14 +215,14 @@ export const useSidebarItems = () => {
 					permissions: ["ADMIN_VIEW", "TEACHER_LIST"],
 					feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
 				},
-				{
-					title: "global.sidebar.item.classes",
-					href: "/administration/classes",
-					testId: "Klassen",
-					permissions: ["ADMIN_VIEW", "TEACHER_LIST"],
-					feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
-					featureValue: false,
-				},
+				// {
+				// 	title: "global.sidebar.item.classes",
+				// 	href: "/administration/classes",
+				// 	testId: "Klassen",
+				// 	permissions: ["ADMIN_VIEW", "TEACHER_LIST"],
+				// 	feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
+				// 	featureValue: false,
+				// },
 				{
 					title: "global.sidebar.item.teams",
 					href: "/administration/teams",
