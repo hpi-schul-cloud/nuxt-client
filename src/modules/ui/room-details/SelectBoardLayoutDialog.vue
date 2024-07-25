@@ -2,9 +2,11 @@
 	<VDialog data-testid="board-layout-dialog" width="360">
 		<VCard>
 			<VCardTitle class="text-h4 text-break px-6 pt-4">
-				{{ $t("pages.room.dialog.boardType.title") }}
+				{{ $t("pages.room.dialog.boardLayout.title") }}
 			</VCardTitle>
-			<VCardText class="d-flex justify-center">
+			<VCardText
+				class="d-flex flex-column flex-sm-row align-items-center justify-sm-space-around"
+			>
 				<ExtendedIconBtn
 					v-for="(item, key) in boardLayouts"
 					:key="key"
@@ -36,18 +38,18 @@ const { t } = useI18n();
 
 const boardLayouts: PickerOption[] = [
 	{
-		label: t("pages.room.dialog.boardType.multiColumn"),
+		label: t("pages.room.dialog.boardLayout.multiColumn"),
 		icon: "$mdiViewDashboardOutline",
 		eventName: "select:multi-column",
 		dataTestId: "dialog-add-multi-column-board",
-		ariaLabel: t("pages.room.dialog.boardType.multiColumn"),
+		ariaLabel: t("pages.room.dialog.boardLayout.multiColumn"),
 	},
 	{
-		label: t("pages.room.dialog.boardType.singleColumn"),
+		label: t("pages.room.dialog.boardLayout.singleColumn"),
 		icon: "$mdiCustomGridOutline",
 		eventName: "select:single-column",
 		dataTestId: "dialog-add-single-column-board",
-		ariaLabel: t("pages.room.dialog.boardType.singleColumn"),
+		ariaLabel: t("pages.room.dialog.boardLayout.singleColumn"),
 	},
 ];
 </script>

@@ -9,7 +9,7 @@
 		<div class="mb-4">
 			<div
 				v-if="!isShowQrCode"
-				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
+				class="d-flex flex-sm-row flex-sm-wrap flex-column align-items-center justify-space-around"
 			>
 				<ExtendedIconBtn
 					class="d-sm-none d-flex"
