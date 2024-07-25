@@ -8,7 +8,6 @@
 		elevation="0"
 		:variant="outlined"
 		:ripple="false"
-		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 		:href="sanitizedUrl"
 		target="_blank"
