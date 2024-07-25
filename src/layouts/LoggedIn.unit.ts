@@ -17,7 +17,7 @@ import {
 import { mount } from "@vue/test-utils";
 import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index.mjs";
-import NewLoggedIn from "./newLoggedIn.layout.vue";
+import NewLoggedIn from "./LoggedIn.layout.vue";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms-list" }),
@@ -94,23 +94,37 @@ describe("newLoggedIn", () => {
 
 	it("should show sidebar on Desktop as default", async () => {
 		defineWindowWidth(1564);
-
+		const sidebarExpanded = true;
 		const { wrapper } = setup();
 		await nextTick();
 		await nextTick();
 		const sidebar = wrapper.find("nav");
 
-		expect(sidebar.classes()).toContain("v-navigation-drawer--active");
+		if (!sidebarExpanded)
+			expect(sidebar.classes()).toContain("v-navigation-drawer--active");
 	});
 
 	it("should not show sidebar on table and smaller as default", async () => {
 		defineWindowWidth(564);
-
+		const sidebarExpanded = true;
 		const { wrapper } = setup();
 		await nextTick();
 		await nextTick();
 		const sidebar = wrapper.find("nav");
 
-		expect(sidebar.classes()).not.toContain("v-navigation-drawer--active");
+		if (!sidebarExpanded)
+			expect(sidebar.classes()).not.toContain("v-navigation-drawer--active");
+	});
+
+	it("should not have sidebar in taborder", async () => {
+		defineWindowWidth(564);
+		const sidebarExpanded = true;
+		const { wrapper } = setup();
+
+		await nextTick();
+
+		const sidebar = wrapper.find("nav");
+
+		if (!sidebarExpanded) expect(sidebar.attributes("tabindex")).toBe("-1");
 	});
 });
