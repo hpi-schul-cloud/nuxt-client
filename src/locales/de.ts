@@ -1470,9 +1470,9 @@ export default {
 		"Das Thema wurde erfolgreich kopiert.",
 	"pages.room.copy.task.message.copied":
 		"Die Aufgabe wurde erfolgreich kopiert.",
-	"pages.room.dialog.boardType.title": "Ansicht wählen",
-	"pages.room.dialog.boardType.singleColumn": "einspaltig",
-	"pages.room.dialog.boardType.multiColumn": "mehrspaltig",
+	"pages.room.dialog.boardLayout.title": "Ansicht wählen",
+	"pages.room.dialog.boardLayout.singleColumn": "einspaltig",
+	"pages.room.dialog.boardLayout.multiColumn": "mehrspaltig",
 	"pages.room.fab.add.lesson": "Neues Thema",
 	"pages.room.fab.add.board": "Neuer Bereich",
 	"pages.room.fab.add.columnBoard": "Neuer Bereich {'|'} mehrspaltig",

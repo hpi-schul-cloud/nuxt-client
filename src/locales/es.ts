@@ -1486,9 +1486,9 @@ export default {
 	"pages.room.copy.lesson.message.copied":
 		"El tema se ha copiado correctamente.",
 	"pages.room.copy.task.message.copied": "La tarea se copió con éxito.",
-	"pages.room.dialog.boardType.title": "Seleccionar vista",
-	"pages.room.dialog.boardType.singleColumn": "monocolumna",
-	"pages.room.dialog.boardType.multiColumn": "multicolumna",
+	"pages.room.dialog.boardLayout.title": "Seleccionar vista",
+	"pages.room.dialog.boardLayout.singleColumn": "monocolumna",
+	"pages.room.dialog.boardLayout.multiColumn": "multicolumna",
 	"pages.room.fab.add.lesson": "Nuevo tema",
 	"pages.room.fab.add.board": "Nuevo tablero",
 	"pages.room.fab.add.columnBoard": "Nuevo tablero de columna",
