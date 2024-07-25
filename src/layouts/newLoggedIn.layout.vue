@@ -1,12 +1,7 @@
 <template>
 	<div>
 		<SkipLink />
-		<Sidebar
-			v-model="sidebarExpanded"
-			v-if="sidebarExpanded"
-			tabindex="-1"
-			aria-hidden="true"
-		/>
+		<Sidebar v-model="sidebarExpanded" v-if="sidebarExpanded" />
 		<Topbar
 			:sidebar-expanded="sidebarExpanded"
 			@sidebar-toggled="onToggleSidebar"
