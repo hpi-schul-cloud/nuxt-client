@@ -11,8 +11,8 @@
 					<BoardHeader
 						:boardId="board.id"
 						:title="board.title"
-						:titlePlaceholder="t('pages.room.boardCard.label.courseBoard')"
 						:isDraft="!board.isVisible"
+						class="mb-1"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"

@@ -8,9 +8,6 @@
 			scope="card"
 			:value="modelValue"
 			:isEditMode="isEditMode"
-			:placeholder="
-				$t('components.cardElement.titleElement.placeholder').toString()
-			"
 			:isFocused="isFocused"
 			@update:value="onUpdateValue"
 			@enter="onEnter"

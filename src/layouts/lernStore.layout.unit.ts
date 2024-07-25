@@ -61,7 +61,7 @@ describe("layouts/lernStoreLayout", () => {
 		it("should render 'logged-in' layout if feature flag set true", async () => {
 			const { wrapper } = setup({ collectionEnabled: true });
 
-			const layout = wrapper.findComponent({ name: "newLoggedIn" });
+			const layout = wrapper.findComponent({ name: "LoggedIn" });
 			const routerView = wrapper.find(".router-view");
 
 			expect(layout.exists()).toBe(true);
@@ -71,7 +71,7 @@ describe("layouts/lernStoreLayout", () => {
 		it("should not render 'logged-in' layout if feature flag set false", async () => {
 			const { wrapper } = setup({ collectionEnabled: false });
 
-			const layout = wrapper.findComponent({ name: "newLoggedIn" });
+			const layout = wrapper.findComponent({ name: "LoggedIn" });
 			const routerView = wrapper.find(".router-view");
 
 			expect(layout.exists()).toBe(false);
@@ -83,7 +83,7 @@ describe("layouts/lernStoreLayout", () => {
 		it("should render any layout if 'isCollection' queryString is set true", async () => {
 			const { wrapper } = setup({ collectionEnabled: true });
 
-			const layout = wrapper.findComponent({ name: "newLoggedIn" });
+			const layout = wrapper.findComponent({ name: "LoggedIn" });
 			expect(layout.exists()).toBe(true);
 		});
 
@@ -98,7 +98,7 @@ describe("layouts/lernStoreLayout", () => {
 				},
 			});
 
-			const layout = wrapper.findComponent({ name: "newLoggedIn" });
+			const layout = wrapper.findComponent({ name: "LoggedIn" });
 			expect(layout.exists()).toBe(false);
 		});
 	});
