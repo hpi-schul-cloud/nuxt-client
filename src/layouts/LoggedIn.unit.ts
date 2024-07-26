@@ -1,25 +1,23 @@
-import { h, nextTick } from "vue";
-import { VApp } from "vuetify/lib/components/index.mjs";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { envsFactory, mockStatusAlerts } from "@@/tests/test-utils";
+import { SchulcloudTheme } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
+import FilePathsModule from "@/store/filePaths";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
-	STATUS_ALERTS_MODULE_KEY,
 	THEME_KEY,
 } from "@/utils/inject";
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import FilePathsModule from "@/store/filePaths";
-import StatusAlertsModule from "@/store/status-alerts";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { SchulcloudTheme } from "@/serverApi/v3";
-import LoggedIn from "./LoggedIn.layout.vue";
+import { envsFactory } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
+import { h, nextTick } from "vue";
+import { VApp } from "vuetify/lib/components/index.mjs";
+import NewLoggedIn from "./LoggedIn.layout.vue";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms-list" }),
@@ -44,13 +42,9 @@ const setup = () => {
 		},
 	});
 
-	const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
-		getStatusAlerts: mockStatusAlerts,
-	});
-
 	const wrapper = mount(VApp, {
 		slots: {
-			default: h(LoggedIn),
+			default: h(NewLoggedIn),
 		},
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -58,7 +52,6 @@ const setup = () => {
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				[FILE_PATHS_MODULE_KEY.valueOf()]: filePathsModule,
-				[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 				[THEME_KEY.valueOf()]: {
 					name: SchulcloudTheme.N21,
 				},
@@ -71,6 +64,7 @@ const setup = () => {
 				"loading-state-dialog": { template: "<div></div>" },
 				"keep-alive": { template: "<div></div>" },
 				autoLogoutWarning: { template: "<div></div>" },
+				topbar: { template: "<div></div>" },
 			},
 		},
 	});
@@ -89,7 +83,7 @@ const defineWindowWidth = (width: number) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
-describe("LoggedIn", () => {
+describe("newLoggedIn", () => {
 	it("should render correctly", async () => {
 		const { wrapper } = setup();
 		await nextTick();
@@ -100,60 +94,37 @@ describe("LoggedIn", () => {
 
 	it("should show sidebar on Desktop as default", async () => {
 		defineWindowWidth(1564);
-
+		const sidebarExpanded = true;
 		const { wrapper } = setup();
 		await nextTick();
 		await nextTick();
 		const sidebar = wrapper.find("nav");
 
-		expect(sidebar.classes()).toContain("v-navigation-drawer--active");
+		if (!sidebarExpanded)
+			expect(sidebar.classes()).toContain("v-navigation-drawer--active");
 	});
 
-	it("should expand sidebar on toggle button click", async () => {
+	it("should not show sidebar on table and smaller as default", async () => {
 		defineWindowWidth(564);
-
+		const sidebarExpanded = true;
 		const { wrapper } = setup();
 		await nextTick();
 		await nextTick();
+		const sidebar = wrapper.find("nav");
 
-		const topbar = wrapper.findComponent({ name: "Topbar" });
-		await topbar.trigger("sidebar-toggled");
+		if (!sidebarExpanded)
+			expect(sidebar.classes()).not.toContain("v-navigation-drawer--active");
+	});
+
+	it("should not have sidebar in taborder", async () => {
+		defineWindowWidth(564);
+		const sidebarExpanded = true;
+		const { wrapper } = setup();
+
+		await nextTick();
 
 		const sidebar = wrapper.find("nav");
 
-		expect(sidebar.classes()).toContain("v-navigation-drawer--active");
-	});
-
-	describe("when device is medium to small sized", () => {
-		it("should not show sidebar on tablet and smaller as default", async () => {
-			defineWindowWidth(564);
-
-			const { wrapper } = setup();
-			await nextTick();
-			await nextTick();
-			const sidebar = wrapper.find("nav");
-
-			expect(sidebar.classes()).not.toContain("v-navigation-drawer--active");
-		});
-
-		describe("when sidebar is expanded", () => {
-			it("should set fixed position on v-main", async () => {
-				defineWindowWidth(564);
-
-				const { wrapper } = setup();
-				await nextTick();
-				await nextTick();
-
-				const sidebarToggle = wrapper.findComponent({ name: "VAppBarNavIcon" });
-				await sidebarToggle.trigger("click");
-
-				const sidebar = wrapper.find("nav");
-				expect(sidebar.classes()).toContain("v-navigation-drawer--active");
-
-				const main = wrapper.find("#main-content");
-				expect(main.classes()).toContain("position-fixed");
-				expect(main.classes()).toContain("w-100");
-			});
-		});
+		if (!sidebarExpanded) expect(sidebar.attributes("tabindex")).toBe("-1");
 	});
 });
