@@ -5,12 +5,12 @@
 		variant="outlined"
 		ref="drawingElement"
 		:ripple="false"
+		tabindex="0"
 		elevation="0"
-		:href="sanitizedUrl"
-		target="_blank"
 		@keydown.up.down="onKeydownArrow"
+		role="button"
 	>
-		<div class="drawing-element-content">
+		<div class="drawing-element-content" @click="redirectToSanitizedUrl">
 			<InnerContent
 				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
 				:docName="element.id"
@@ -74,6 +74,9 @@ export default defineComponent({
 			sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
 		);
 
+		const redirectToSanitizedUrl = () => {
+			window.open(sanitizedUrl.value, "_blank");
+		};
 		useBoardFocusHandler(element.value.id, drawingElement);
 
 		const onKeydownArrow = (event: KeyboardEvent) => {
@@ -96,12 +99,12 @@ export default defineComponent({
 		});
 		return {
 			drawingElement,
+			redirectToSanitizedUrl,
 			onDeleteElement,
 			onKeydownArrow,
 			onMoveDrawingElementEditDown,
 			onMoveDrawingElementEditUp,
 			isTeacher,
-			sanitizedUrl,
 		};
 	},
 });
