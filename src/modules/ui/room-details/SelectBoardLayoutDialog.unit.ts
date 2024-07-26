@@ -42,6 +42,6 @@ describe("@ui-room-details/SelectBoardLayoutDialog", () => {
 		const closeBtn = wrapper.findComponent("[data-testid=dialog-close]");
 		await closeBtn.trigger("click");
 
-		expect(wrapper.emitted("dialog-closed")).toHaveLength(1);
+		expect(wrapper.emitted("update:modelValue")).toEqual([[false]]);
 	});
 });
