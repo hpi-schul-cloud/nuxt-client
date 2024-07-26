@@ -10,6 +10,7 @@
 		@keydown.up.down="onKeydownArrow"
 		role="button"
 		@click="redirectToEditorUrl"
+		@keydown.enter.space="redirectToEditorUrl"
 	>
 		<ContentElementBar :hasGreyBackground="true" :icon="mdiTextBoxEditOutline">
 			<template #display>
@@ -17,7 +18,7 @@
 					:src="image"
 					:alt="$t('components.cardElement.collaborativeTextEditorElement')"
 					cover
-					class="rounded-t"
+					class="text-editor-image rounded-t"
 				/>
 			</template>
 			<template #title>
@@ -93,3 +94,9 @@ const onDelete = () => emit("delete:element", props.element.id);
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
 </script>
+
+<style scoped lang="scss">
+.text-editor-image {
+	z-index: unset;
+}
+</style>
