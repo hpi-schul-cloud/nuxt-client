@@ -37,6 +37,7 @@ import { VBtn } from "vuetify/lib/components/index.mjs";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
+import DefaultWireframe from "../../components/templates/DefaultWireframe.vue";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -332,21 +333,16 @@ describe("@/pages/RoomDetails.page.vue", () => {
 					const wrapper = getWrapper(["course_edit"]);
 					const wrapperData: any = wrapper.vm.$data;
 
-					expect(wrapperData.boardLayoutDialogIsOpen).toBe(false);
-
-					const fabComponent = wrapper.findComponent(SpeedDialMenu);
-
-					// open menu
-					await fabComponent.findComponent(VBtn).trigger("click");
-
-					// const boardBtn = wrapper.findComponent(
-					// 	`[data-testid="fab_button_add_board"]`
-					// );
-					// await boardBtn.trigger("click");
-
 					const layoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 					expect(layoutDialog.exists()).toBe(true);
-					// expect(wrapperData.boardLayoutDialogIsOpen).toBe(true);
+
+					expect(wrapperData.boardLayoutDialogIsOpen).toBe(false);
+
+					// open menu
+					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+					defaultWireframe.vm.$emit("onFabItemClick", "board-type-dialog-open");
+
+					expect(wrapperData.boardLayoutDialogIsOpen).toBe(true);
 				});
 			});
 		});
