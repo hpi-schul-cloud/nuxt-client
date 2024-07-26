@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="$t('pages.administration.ldap.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 	>
 		<section class="section">
 			<p class="subtitle-text">
@@ -94,7 +94,7 @@ import ConnectionSection from "@/components/organisms/Ldap/LdapConnectionSection
 import UsersSection from "@/components/organisms/Ldap/LdapUsersSection.vue";
 import ClassesSection from "@/components/organisms/Ldap/LdapClassesSection.vue";
 import InfoMessage from "@/components/atoms/InfoMessage";
-import { notifierModule, envConfigModule } from "@/store";
+import { envConfigModule, notifierModule } from "@/store";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {

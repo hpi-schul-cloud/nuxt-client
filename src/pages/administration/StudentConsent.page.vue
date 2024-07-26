@@ -1,5 +1,5 @@
 <template>
-	<default-wireframe ref="main" :full-width="false" :breadcrumbs="breadcrumbs">
+	<default-wireframe ref="main" max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
 			<h1 class="mb--md h3">
 				{{ title }}

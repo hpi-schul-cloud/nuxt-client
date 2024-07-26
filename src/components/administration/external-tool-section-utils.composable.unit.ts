@@ -2,36 +2,15 @@ import {
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 } from "@/serverApi/v3";
-import { schoolExternalToolsModule } from "@/store";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { DataTableHeader } from "@/store/types/data-table-header";
-import { contextExternalToolConfigurationStatusFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@/utils/mock-store-module";
+import {
+	schoolExternalToolFactory,
+	schoolExternalToolResponseFactory,
+} from "@@/tests/test-utils";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-
-const schoolExternalToolsModuleMock =
-	(): Partial<SchoolExternalToolsModule> => {
-		return {
-			getSchoolExternalTools: [
-				{
-					id: "id",
-					name: "toolName",
-					isDeactivated: false,
-					toolId: "toolId",
-					schoolId: "schoolId",
-					parameters: [],
-					status: {
-						isOutdatedOnScopeSchool: false,
-						isDeactivated: false,
-					},
-				},
-			],
-		};
-	};
-
-jest.mock("@/store", () => ({
-	schoolExternalToolsModule: schoolExternalToolsModuleMock(),
-}));
 
 describe("useSchoolExternalToolUtils", () => {
 	const setup = () => {
@@ -40,35 +19,19 @@ describe("useSchoolExternalToolUtils", () => {
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(tMock);
 
-		const toolResponse: SchoolExternalToolResponse = {
-			id: "id",
-			name: "toolName",
-			toolId: "toolId",
-			schoolId: "schoolId",
-			parameters: [
-				{
-					name: "name",
-					value: "value",
-				},
-			],
-			status: contextExternalToolConfigurationStatusFactory.build({
-				isOutdatedOnScopeSchool: false,
-				isDeactivated: false,
-			}),
-		};
+		const schoolExternalTool = schoolExternalToolFactory.build();
+		const schoolExternalToolsModule = createModuleMocks(
+			SchoolExternalToolsModule,
+			{
+				getSchoolExternalTools: [schoolExternalTool],
+			}
+		);
+
+		const toolResponse: SchoolExternalToolResponse =
+			schoolExternalToolResponseFactory.build();
 		const listResponse: SchoolExternalToolSearchListResponse = {
 			data: [toolResponse],
 		};
-
-		const schoolExternaToolItem: SchoolExternalToolItem =
-			new SchoolExternalToolItem({
-				name: toolResponse.name,
-				id: toolResponse.id,
-				externalToolId: toolResponse.toolId,
-				statusText: "translationKey",
-				isOutdated: false,
-				isDeactivated: false,
-			});
 
 		return {
 			getHeaders,
@@ -77,7 +40,8 @@ describe("useSchoolExternalToolUtils", () => {
 			toolResponse,
 			tMock,
 			expectedTranslation,
-			schoolExternaToolItem,
+			schoolExternalToolsModule,
+			schoolExternalTool,
 		};
 	};
 
@@ -115,7 +79,7 @@ describe("useSchoolExternalToolUtils", () => {
 			expect(headers[0].value).toEqual("name");
 
 			expect(headers[1].title).toEqual(expectedTranslation);
-			expect(headers[1].value).toEqual("status");
+			expect(headers[1].value).toEqual("statusText");
 
 			expect(headers[2].title).toEqual("");
 			expect(headers[2].value).toEqual("actions");
@@ -126,7 +90,12 @@ describe("useSchoolExternalToolUtils", () => {
 
 	describe("getItems is called", () => {
 		it("should return schoolExternalToolItems", () => {
-			const { getItems } = setup();
+			const {
+				getItems,
+				schoolExternalToolsModule,
+				schoolExternalTool,
+				expectedTranslation,
+			} = setup();
 
 			const items: SchoolExternalToolItem[] = getItems(
 				schoolExternalToolsModule
@@ -134,11 +103,11 @@ describe("useSchoolExternalToolUtils", () => {
 
 			expect(items).toEqual<SchoolExternalToolItem[]>([
 				{
-					id: "id",
-					externalToolId: "toolId",
-					name: "toolName",
-					statusText: "translated",
-					isOutdated: false,
+					id: schoolExternalTool.id,
+					externalToolId: schoolExternalTool.toolId,
+					name: schoolExternalTool.name,
+					statusText: expectedTranslation,
+					isOutdated: schoolExternalTool.status.isOutdatedOnScopeSchool,
 					isDeactivated: false,
 				},
 			]);

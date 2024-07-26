@@ -3,7 +3,7 @@
 		v-show="true"
 		variant="text"
 		:ripple="false"
-		:icon="collapsed ? mdiChevronUp : mdiChevronDown"
+		:icon="collapsed ? mdiChevronDown : mdiChevronUp"
 		size="small"
 		style="height: 36px; width: 36px"
 		@click="collapsed = !collapsed"

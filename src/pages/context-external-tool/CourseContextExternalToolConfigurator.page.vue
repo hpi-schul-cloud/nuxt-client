@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="t('pages.tool.title')"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="short"
 		data-testid="context-external-tool-configurator-title"
 	>
 		<RenderHTML :html="t('pages.tool.description')" component="p" />
@@ -46,7 +46,7 @@ const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
 
 const { t } = useI18n();
 
-const contextRoute = `/rooms/${props.contextId}`;
+const contextRoute = computed(() => `/rooms/${props.contextId}`);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	const crumbs = [{ title: t("common.words.courses"), to: "/rooms-overview/" }];

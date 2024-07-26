@@ -102,6 +102,8 @@ export default {
 		"Please contact the school administrator.",
 	"common.nodata": "No data available",
 	"common.notification.error": "An error has occurred.",
+	"common.notification.connection.restored":
+		"The connection has been restored.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.YYYY",
 	"common.placeholder.email.confirmation": "Repeat e-mail address",
@@ -241,8 +243,16 @@ export default {
 		'The school-specific parameters for the external tool are configured here. After saving the configuration, the tool will be available within the school.<br><br>\nFurther information is available in our <a href="https://docs.dbildungscloud.de/x/uoKqDg" target="_blank">Help section on external tools</a>.',
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"The usage of the tool could not be determined.",
-	"components.administration.externalToolsSection.dialog.content":
-		"Are you sure you want to delete the <b>{itemName}</b> tool? <br><br>Currently the tool is used as follows: <br><b>{courseCount}</b> Course(s) <br><b>{boardElementCount}</b> Column board(s) <br><br>Attention: If the tool is removed, it can no longer be used for this school.",
+	"components.administration.externalToolsSection.dialog.content.header":
+		"Are you sure you want to delete the <b>{itemName}</b> tool? <br><br>Currently, the tool is used as follows:",
+	"components.administration.externalToolsSection.dialog.content.courses":
+		"<b>{courseCount}</b> Course(s)",
+	"components.administration.externalToolsSection.dialog.content.boardElements":
+		"<b>{boardElementCount}</b> Column board(s)",
+	"components.administration.externalToolsSection.dialog.content.mediaShelves":
+		"<b>{mediaBoardCount}</b> Media shelf(s)",
+	"components.administration.externalToolsSection.dialog.content.warning":
+		"Attention: If the tool is removed, it can no longer be used for this school.",
 	"components.administration.externalToolsSection.dialog.title":
 		"Remove External Tool",
 	"components.administration.externalToolsSection.header": "External Tools",
@@ -775,32 +785,29 @@ export default {
 	"format.dateYY": "MM/DD/YY",
 	"format.time": "HH:mm",
 	"global.cloudLogo": "Logo",
-	"global.sidebar.item.accessibility": "Accessibility",
 	"global.sidebar.item.addons": "Add-ons",
 	"global.sidebar.item.calendar": "Calendar",
 	"global.sidebar.item.classes": "Classes",
+	"global.sidebar.item.contactSupport": "Contact",
 	"global.sidebar.item.courses": "Courses",
 	"global.sidebar.item.files-old": "Files",
 	"global.sidebar.item.filesPersonal": "Personal Files",
 	"global.sidebar.item.filesShared": "Shared Files",
 	"global.sidebar.item.helpArea": "Help section",
-	"global.sidebar.item.helpDesk": "Help desk",
+	"global.sidebar.item.helpSection": "Help section",
 	"global.sidebar.item.management": "Management",
 	"global.sidebar.item.overview": "Dashboard",
+	"global.sidebar.item.releaseNotes": "What's new?",
 	"global.sidebar.item.school": "School",
 	"global.sidebar.item.student": "Students",
 	"global.sidebar.item.system": "System",
 	"global.sidebar.item.tasks": "Tasks",
 	"global.sidebar.item.teacher": "Teachers",
 	"global.sidebar.item.teams": "Teams",
+	"global.sidebar.item.training": "Advanced trainings",
 	"global.skipLink.mainContent": "Skip to main content",
 	"global.topbar.actions.alerts": "Status alert",
-	"global.topbar.actions.contactSupport": "Contact",
-	"global.topbar.actions.fullscreen": "Full Screen",
-	"global.topbar.actions.helpSection": "Help section",
 	"global.topbar.actions.qrCode": "Share page link via QR-Code",
-	"global.topbar.actions.releaseNotes": "What's new?",
-	"global.topbar.actions.training": "Advanced trainings",
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
@@ -1593,7 +1600,12 @@ export default {
 	"pages.tool.deactivate.label": "Deactivate tool at school",
 	"pages.tool.description":
 		'The course-specific parameters for the external tool are configured here. After saving the configuration, the tool is available inside the course.<br><br>\nDeleting a configuration removes the tool from the course.<br><br>\nMore information can be found in our <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Help section on external tools</a>.',
-	"pages.tool.select.label": "Tool selection",
+	"pages.tool.select.label": "Tool selection / Tool-URL",
+	"pages.tool.select.description":
+		"Type the address, or use the button to paste it from the clipboard",
+	"pages.tool.select.nodata": "No tool available",
+	"pages.tool.select.clipboard.error":
+		"An error had occurred when pasting the text from the clipboard. Please paste the text manually.",
 	"pages.tool.settings": "Settings",
 	"pages.tool.title": "External Tools Configuration",
 	"pages.userMigration.backToLogin": "Return to login page",
@@ -1660,6 +1672,8 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Created between 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
 	"feature.media-shelf.title": "Media shelf",
+	"feature.media-shelf.emptyState":
+		"No media has currently been activated for use.",
 	"feature.media-shelf.createLine": "Add line",
 	"feature.media-shelf.line.title": "Line",
 	"feature.media-shelf.availableLine.title": "Available media",

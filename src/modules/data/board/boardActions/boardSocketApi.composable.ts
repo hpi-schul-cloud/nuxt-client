@@ -17,6 +17,7 @@ import {
 import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
+import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
@@ -74,7 +75,7 @@ export const useBoardSocketApi = () => {
 			),
 		];
 
-		const ariaLiveNotification = [
+		const ariaLiveNotifications = [
 			on(BoardActions.createCardSuccess, notifyCreateCardSuccess),
 			on(CardActions.deleteCardSuccess, notifyDeleteCardSuccess),
 			on(BoardActions.createColumnSuccess, notifyCreateColumnSuccess),
@@ -93,7 +94,7 @@ export const useBoardSocketApi = () => {
 			action,
 			...successActions,
 			...failureActions,
-			...ariaLiveNotification,
+			...ariaLiveNotifications,
 			on(BoardActions.disconnectSocket, disconnectSocketRequest)
 		);
 	};
@@ -102,7 +103,12 @@ export const useBoardSocketApi = () => {
 		useSocketConnection(dispatch);
 
 	const createCardRequest = async (payload: CreateCardRequestPayload) => {
-		emitOnSocket("create-card-request", payload);
+		emitOnSocket("create-card-request", {
+			...payload,
+			requiredEmptyElements: [
+				CreateCardBodyParamsRequiredEmptyElementsEnum.RichText,
+			],
+		});
 	};
 
 	const fetchBoardRequest = async (

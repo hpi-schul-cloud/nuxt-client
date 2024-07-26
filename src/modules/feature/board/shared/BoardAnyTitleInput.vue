@@ -6,11 +6,11 @@
 		variant="solo"
 		density="compact"
 		flat
-		:placeholder="placeholder"
+		:placeholder="placeholderText"
 		bg-color="transparent"
 		ref="titleInput"
 		:readonly="!isEditMode"
-		role="heading"
+		:role="isEditMode ? 'input' : 'heading'"
 		:aria-level="ariaLevel"
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
@@ -26,22 +26,25 @@
 		:rows="1"
 		auto-grow
 		flat
-		class="mx-n4 mb-n2 mt-n2"
-		:placeholder="placeholder"
+		class="mx-n4 mb-n2"
+		:placeholder="placeholderText"
 		bg-color="transparent"
 		ref="titleInput"
 		:readonly="!isEditMode"
-		role="heading"
+		:role="isEditMode ? 'input' : 'heading'"
 		:aria-level="ariaLevel"
 		@keydown.enter="onEnter"
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
-	/>
+	>
+		<template v-slot:append-inner>
+			<slot />
+		</template>
+	</VTextarea>
 </template>
 
 <script lang="ts">
-import { useVModel } from "@vueuse/core";
 import {
 	computed,
 	defineComponent,
@@ -51,6 +54,7 @@ import {
 	ref,
 	watch,
 } from "vue";
+import { useI18n } from "vue-i18n";
 import { VTextarea } from "vuetify/lib/components/index.mjs";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
@@ -84,27 +88,54 @@ export default defineComponent({
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
-		const modelValue = useVModel(props, "value", emit);
+		const { t } = useI18n();
+		const modelValue = ref("");
 
 		const internalIsFocused = ref(false);
 
-		const titleInput = ref<typeof VTextarea | null>(null);
+		const titleInput = ref(null);
 
 		useInlineEditInteractionHandler(async () => {
 			setFocusOnEdit();
 		});
+
 		const setFocusOnEdit = async () => {
 			await nextTick();
 			internalIsFocused.value = true;
 
 			if (titleInput.value) {
-				titleInput.value.focus();
+				(titleInput.value as VTextarea).focus();
 			}
 		};
 
+		watch(modelValue, (newValue) => {
+			if (newValue !== props.value) {
+				emit("update:value", newValue);
+			}
+		});
+
+		watch(
+			() => props.value,
+			(newVal) => {
+				if (!(props.isFocused && props.isEditMode)) {
+					modelValue.value = newVal;
+				}
+			}
+		);
+
 		onMounted(() => {
 			if (props.isFocused && props.isEditMode) setFocusOnEdit();
+			modelValue.value = props.value;
 		});
+
+		watch(
+			() => props.value,
+			async (newVal, oldVal) => {
+				if (newVal !== oldVal) {
+					modelValue.value = newVal;
+				}
+			}
+		);
 
 		watch(
 			() => props.isEditMode,
@@ -128,8 +159,6 @@ export default defineComponent({
 
 		const ariaLevel = computed(() => {
 			switch (props.scope) {
-				case "board":
-					return 1;
 				case "column":
 					return 2;
 				case "card":
@@ -144,6 +173,16 @@ export default defineComponent({
 			emit("enter");
 		};
 
+		const placeholderText = computed(() => {
+			if (props.placeholder) {
+				return props.placeholder;
+			}
+			if (props.isEditMode) {
+				return t("components.cardElement.titleElement.placeholder").toString();
+			}
+			return "";
+		});
+
 		return {
 			ariaLevel,
 			modelValue,
@@ -151,6 +190,7 @@ export default defineComponent({
 			onEnter,
 			internalIsFocused,
 			titleInput,
+			placeholderText,
 		};
 	},
 });
@@ -166,13 +206,18 @@ export default defineComponent({
 	background: transparent !important;
 	opacity: 1;
 	font-size: var(--heading-5) !important;
+	overflow: hidden;
 }
 
 :deep(textarea[readonly]) {
 	cursor: pointer;
 }
 
-:deep(textarea)::placeholder {
+:deep(input[readonly]) {
+	cursor: pointer;
+}
+
+:deep(textarea[readonly])::placeholder {
 	opacity: 1;
 }
 
@@ -181,7 +226,9 @@ export default defineComponent({
 	background: transparent !important;
 }
 
-:deep(input)::placeholder {
-	opacity: 1;
+:deep(.v-field__append-inner, .v-field__clearable, .v-field__prepend-inner) {
+	display: flex;
+	align-items: flex-start;
+	padding-top: 8px !important;
 }
 </style>

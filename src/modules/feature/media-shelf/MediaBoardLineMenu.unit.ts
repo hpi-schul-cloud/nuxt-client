@@ -1,11 +1,12 @@
 import { MediaBoardColors } from "@/serverApi/v3";
-import { ComponentProps } from "@/types/vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import { VColorPicker, VListItem } from "vuetify/lib/components/index.mjs";
 import colors from "vuetify/lib/util/colors.mjs";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
@@ -129,6 +130,24 @@ describe("MediaBoardLineMenu", () => {
 			await colorListItem.trigger("click");
 
 			expect(wrapper.emitted("update:collapsed")).toEqual([[true]]);
+		});
+
+		it("should use the correct icon", async () => {
+			const { wrapper } = getWrapper();
+
+			const svg = wrapper
+				.findComponent("[data-testid=collapse-line-btn]")
+				.find("svg");
+			const path = svg.find("path");
+
+			expect(path.attributes("d")).toEqual(mdiChevronUp);
+
+			const colorListItem = wrapper.findComponent(
+				"[data-testid=collapse-line-btn]"
+			);
+			await colorListItem.trigger("click");
+
+			expect(path.attributes("d")).toEqual(mdiChevronDown);
 		});
 	});
 });

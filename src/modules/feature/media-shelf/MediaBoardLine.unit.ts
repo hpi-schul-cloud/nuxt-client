@@ -1,5 +1,4 @@
 import { MediaBoardLayoutType } from "@/serverApi/v3";
-import { ComponentProps } from "@/types/vue";
 import { mediaLineResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -11,6 +10,7 @@ import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick, ref } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import { useDragAndDrop } from "../board/shared/DragAndDrop.composable";
 import { availableMediaLineId, ElementMove } from "./data";
 import { useEditMode } from "./editMode.composable";

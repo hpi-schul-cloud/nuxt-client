@@ -21,7 +21,7 @@ COPY .git ./.git
 RUN echo "{\"sha\": \"$(git rev-parse HEAD)\", \"version\": \"$(git describe --tags --abbrev=0)\", \"commitDate\": \"$(git log -1 --format=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ')\", \"birthdate\": \"$(date +%Y-%m-%dT%H:%M:%SZ)\"}" > ./dist/nuxtversion
 
 # run stage
-FROM docker.io/nginx:1.25
+FROM docker.io/nginx:1.27
 RUN mkdir /etc/nginx/templates
 COPY config/docker/nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build-stage /app/dist /usr/share/nginx/html/frontend

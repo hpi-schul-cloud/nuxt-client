@@ -1,7 +1,7 @@
 <template>
 	<div>
-		<SkipLinks />
-		<Sidebar v-model="sidebarExpanded" />
+		<SkipLink />
+		<Sidebar v-model="sidebarExpanded" v-if="sidebarExpanded" />
 		<Topbar
 			:sidebar-expanded="sidebarExpanded"
 			@sidebar-toggled="onToggleSidebar"
@@ -23,14 +23,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useDisplay } from "vuetify";
-import SkipLinks from "@/components/molecules/SkipLinks.vue";
-import { Sidebar, Topbar } from "@ui-layout";
 import AlertContainer from "@/components/molecules/AlertContainer.vue";
-import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
+import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
+import { Sidebar, Topbar } from "@ui-layout";
+import { SkipLink } from "@ui-skip-link";
+import { computed, ref } from "vue";
+import { useDisplay } from "vuetify";
 
 const { lgAndUp } = useDisplay();
 

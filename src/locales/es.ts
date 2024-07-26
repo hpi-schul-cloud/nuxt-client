@@ -102,6 +102,7 @@ export default {
 		"Por favor comuníquese con el administrador de la escuela.",
 	"common.nodata": "Datos no disponibles",
 	"common.notification.error": "Se ha producido un error.",
+	"common.notification.connection.restored": "La conexión se ha reestablecido.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.AAAA",
 	"common.placeholder.email.confirmation":
@@ -246,8 +247,16 @@ export default {
 		'Los parámetros específicos de la escuela para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta estará disponible dentro de la escuela.<br><br>\nMás información está disponible en nuestro <a href="https://docs.dbildungscloud.de/x/uoKqDg" target=" _blank">Sección de ayuda sobre herramientas externas</a>.',
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"No se pudo determinar el uso de la herramienta.",
-	"components.administration.externalToolsSection.dialog.content":
-		"¿Está seguro de que desea eliminar la herramienta <b>{itemName}</b>? <br><br>Actualmente la herramienta se utiliza de la siguiente manera: <br><b>{courseCount}</b> Curso(s) <br><b>{boardElementCount}</b> Tablero(s) de columnas <br><br>Atención: Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
+	"components.administration.externalToolsSection.dialog.content.header":
+		"¿Está seguro de que desea eliminar la herramienta <b>{itemName}</b>? <br><br>Actualmente la herramienta se utiliza de la siguiente manera:",
+	"components.administration.externalToolsSection.dialog.content.courses":
+		"<b>{courseCount}</b> Curso(s)",
+	"components.administration.externalToolsSection.dialog.content.boardElements":
+		"<b>{boardElementCount}</b> Tablero(s) de columnas",
+	"components.administration.externalToolsSection.dialog.content.mediaShelves":
+		"<b>{mediaBoardCount}</b> Estante(s) multimedia",
+	"components.administration.externalToolsSection.dialog.content.warning":
+		"Atención: Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
 	"components.administration.externalToolsSection.dialog.title":
 		"Quitar Herramienta Externa",
 	"components.administration.externalToolsSection.header":
@@ -798,32 +807,29 @@ export default {
 	"format.dateYY": "DD/MM/YY",
 	"format.time": "HH:mm",
 	"global.cloudLogo": "Logo",
-	"global.sidebar.item.accessibility": "Accesibilidad",
 	"global.sidebar.item.addons": "Complementos",
 	"global.sidebar.item.calendar": "Calendario",
 	"global.sidebar.item.classes": "Clases",
+	"global.sidebar.item.contactSupport": "Contacto",
 	"global.sidebar.item.courses": "Cursos",
 	"global.sidebar.item.files-old": "Archivos",
 	"global.sidebar.item.filesPersonal": "Archivos personales",
 	"global.sidebar.item.filesShared": "Archivos compartidos",
 	"global.sidebar.item.helpArea": "Sección de ayuda",
-	"global.sidebar.item.helpDesk": "Servicio de ayuda",
+	"global.sidebar.item.helpSection": "Sección de ayuda",
 	"global.sidebar.item.management": "Administración",
 	"global.sidebar.item.overview": "Panel",
+	"global.sidebar.item.releaseNotes": "¿Qué hay de nuevo?",
 	"global.sidebar.item.school": "Escuela",
 	"global.sidebar.item.student": "Estudiantes",
 	"global.sidebar.item.system": "Sistema",
 	"global.sidebar.item.tasks": "Tareas",
 	"global.sidebar.item.teacher": "Profesores",
 	"global.sidebar.item.teams": "Equipos",
+	"global.sidebar.item.training": "Formaciones avanzadas",
 	"global.skipLink.mainContent": "Saltar al contenido principal",
 	"global.topbar.actions.alerts": "Alerta de estado",
-	"global.topbar.actions.contactSupport": "Contacto",
-	"global.topbar.actions.fullscreen": "Pantalla completa",
-	"global.topbar.actions.helpSection": "Sección de ayuda",
 	"global.topbar.actions.qrCode": "Compartir el código QR de la página",
-	"global.topbar.actions.releaseNotes": "¿Qué hay de nuevo?",
-	"global.topbar.actions.training": "Formaciones avanzadas",
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
@@ -1638,7 +1644,12 @@ export default {
 	"pages.tool.deactivate.label": "Desactivar herramienta en la escuela",
 	"pages.tool.description":
 		'Los parámetros específicos del curso para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta está disponible dentro del curso.<br><br>\nEliminar una configuración elimina la herramienta de el curso.<br><br>\nPuede encontrar más información en nuestro <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Sección de ayuda sobre herramientas externas</a>.',
-	"pages.tool.select.label": "Selección de Herramientas",
+	"pages.tool.select.label": "Selección de Herramientas / URL de herramienta",
+	"pages.tool.select.description":
+		"Busque herramientas o ingrese la URL de una herramienta o insértela desde el caché manualmente o con un botón",
+	"pages.tool.select.nodata": "No hay herramienta disponible",
+	"pages.tool.select.clipboard.error":
+		"Se ha producido un error al pegar el texto desde el portapapeles. Por favor, pegue el texto manualmente.",
 	"pages.tool.settings": "Configuración",
 	"pages.tool.title": "Configuración de herramientas externas",
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",
@@ -1710,6 +1721,8 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
 	"feature.media-shelf.title": "Estante multimedia",
+	"feature.media-shelf.emptyState":
+		"Actualmente no se ha activado ningún medio para su uso.",
 	"feature.media-shelf.createLine": "Añadir línea",
 	"feature.media-shelf.line.title": "Línea",
 	"feature.media-shelf.availableLine.title": "Medios disponibles",

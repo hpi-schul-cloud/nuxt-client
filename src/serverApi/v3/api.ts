@@ -624,7 +624,7 @@ export interface ClassResponse {
  * @export
  * @enum {string}
  */
-export enum ClassSortBy {
+export enum ClassSortQueryType {
     Name = 'name',
     ExternalSourceName = 'externalSourceName',
     SynchronizedCourses = 'synchronizedCourses',
@@ -1137,12 +1137,6 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_NEW_LAYOUT_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
     FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: boolean;
 }
 /**
@@ -1220,10 +1214,10 @@ export interface ConsentResponse {
     amr?: Array<string>;
     /**
      * Is the id/authorization challenge of the consent authorization request. It is used to identify the session.
-     * @type {object}
+     * @type {string}
      * @memberof ConsentResponse
      */
-    challenge: object;
+    challenge: string;
     /**
      * 
      * @type {OauthClientResponse}
@@ -1448,6 +1442,12 @@ export interface ContextExternalToolConfigurationTemplateResponse {
      * @type {string}
      * @memberof ContextExternalToolConfigurationTemplateResponse
      */
+    baseUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ContextExternalToolConfigurationTemplateResponse
+     */
     logoUrl?: string;
     /**
      * 
@@ -1474,6 +1474,12 @@ export interface ContextExternalToolCountPerContextResponse {
      * @memberof ContextExternalToolCountPerContextResponse
      */
     boardElement: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ContextExternalToolCountPerContextResponse
+     */
+    mediaBoard: number;
 }
 /**
  * 
@@ -3079,6 +3085,31 @@ export interface ForbiddenOperationError {
 /**
  * 
  * @export
+ * @interface ForceMigrationParams
+ */
+export interface ForceMigrationParams {
+    /**
+     * Email of the administrator
+     * @type {string}
+     * @memberof ForceMigrationParams
+     */
+    email: string;
+    /**
+     * Target externalId to link it with an external account
+     * @type {string}
+     * @memberof ForceMigrationParams
+     */
+    externalUserId: string;
+    /**
+     * Target externalId to link it with an external school
+     * @type {string}
+     * @memberof ForceMigrationParams
+     */
+    externalSchoolId: string;
+}
+/**
+ * 
+ * @export
  * @interface GetMetaTagDataBody
  */
 export interface GetMetaTagDataBody {
@@ -3744,16 +3775,16 @@ export interface LoginResponse {
     client_id: string;
     /**
      * The id/challenge of the consent login request.
-     * @type {object}
+     * @type {string}
      * @memberof LoginResponse
      */
-    challenge: object;
+    challenge: string;
     /**
      * 
-     * @type {object}
+     * @type {OauthClientResponse}
      * @memberof LoginResponse
      */
-    client: object;
+    client: OauthClientResponse;
     /**
      * 
      * @type {OidcContextResponse}
@@ -3786,16 +3817,16 @@ export interface LoginResponse {
     session_id: string;
     /**
      * Skip, if true, implies that the client has requested the same scopes from the same user previously.
-     * @type {object}
+     * @type {boolean}
      * @memberof LoginResponse
      */
-    skip: object;
+    skip: boolean;
     /**
      * User id of the end-user that is authenticated.
-     * @type {object}
+     * @type {string}
      * @memberof LoginResponse
      */
-    subject: object;
+    subject: string;
 }
 /**
  * 
@@ -4915,67 +4946,67 @@ export interface Oauth2ToolConfigUpdateParams {
 /**
  * 
  * @export
- * @interface OauthClientBody
+ * @interface OauthClientCreateBody
  */
-export interface OauthClientBody {
+export interface OauthClientCreateBody {
     /**
      * The Oauth2 client id.
      * @type {string}
-     * @memberof OauthClientBody
+     * @memberof OauthClientCreateBody
      */
-    client_id?: string;
+    client_id: string;
     /**
      * The Oauth2 client name.
      * @type {string}
-     * @memberof OauthClientBody
+     * @memberof OauthClientCreateBody
      */
-    client_name?: string;
+    client_name: string;
     /**
      * The Oauth2 client secret.
      * @type {string}
-     * @memberof OauthClientBody
+     * @memberof OauthClientCreateBody
      */
-    client_secret?: string;
+    client_secret: string;
     /**
      * The allowed redirect urls of the Oauth2 client.
      * @type {Array<string>}
-     * @memberof OauthClientBody
+     * @memberof OauthClientCreateBody
      */
     redirect_uris?: Array<string>;
     /**
      * Requested Client Authentication method for the Token Endpoint. The options are client_secret_post, client_secret_basic, private_key_jwt, and none.
      * @type {string}
-     * @memberof OauthClientBody
+     * @memberof OauthClientCreateBody
      */
-    token_endpoint_auth_method?: string;
+    token_endpoint_auth_method: string;
     /**
      * SubjectType requested for responses to this Client. The subject_types_supported Discovery parameter contains a list of the supported subject_type values for this server. Valid types include pairwise and public.
      * @type {string}
-     * @memberof OauthClientBody
+     * @memberof OauthClientCreateBody
      */
-    subject_type?: string;
+    subject_type: string;
     /**
      * Scope is a string containing a space-separated list of scope values (as described in Section 3.3 of OAuth 2.0 [RFC6749]) that the client can use when requesting access tokens.
      * @type {string}
-     * @memberof OauthClientBody
+     * @memberof OauthClientCreateBody
      */
     scope?: string;
     /**
      * Thr frontchannel logout uri.
      * @type {string}
-     * @memberof OauthClientBody
+     * @memberof OauthClientCreateBody
      */
     frontchannel_logout_uri?: string;
     /**
      * The grant types of the Oauth2 client.
      * @type {Array<string>}
-     * @memberof OauthClientBody
+     * @memberof OauthClientCreateBody
      */
     grant_types?: Array<string>;
     /**
      * The response types of the Oauth2 client.
      * @type {Array<string>}
-     * @memberof OauthClientBody
+     * @memberof OauthClientCreateBody
      */
     response_types?: Array<string>;
 }
@@ -5261,6 +5292,67 @@ export interface OauthClientResponse {
      * @memberof OauthClientResponse
      */
     userinfo_signed_response_alg: string;
+}
+/**
+ * 
+ * @export
+ * @interface OauthClientUpdateBody
+ */
+export interface OauthClientUpdateBody {
+    /**
+     * The Oauth2 client name.
+     * @type {string}
+     * @memberof OauthClientUpdateBody
+     */
+    client_name: string;
+    /**
+     * The Oauth2 client secret.
+     * @type {string}
+     * @memberof OauthClientUpdateBody
+     */
+    client_secret?: string;
+    /**
+     * The allowed redirect urls of the Oauth2 client.
+     * @type {Array<string>}
+     * @memberof OauthClientUpdateBody
+     */
+    redirect_uris?: Array<string>;
+    /**
+     * Requested Client Authentication method for the Token Endpoint. The options are client_secret_post, client_secret_basic, private_key_jwt, and none.
+     * @type {string}
+     * @memberof OauthClientUpdateBody
+     */
+    token_endpoint_auth_method: string;
+    /**
+     * SubjectType requested for responses to this Client. The subject_types_supported Discovery parameter contains a list of the supported subject_type values for this server. Valid types include pairwise and public.
+     * @type {string}
+     * @memberof OauthClientUpdateBody
+     */
+    subject_type: string;
+    /**
+     * Scope is a string containing a space-separated list of scope values (as described in Section 3.3 of OAuth 2.0 [RFC6749]) that the client can use when requesting access tokens.
+     * @type {string}
+     * @memberof OauthClientUpdateBody
+     */
+    scope?: string;
+    /**
+     * Thr frontchannel logout uri.
+     * @type {string}
+     * @memberof OauthClientUpdateBody
+     */
+    frontchannel_logout_uri?: string;
+    /**
+     * The grant types of the Oauth2 client.
+     * @type {Array<string>}
+     * @memberof OauthClientUpdateBody
+     */
+    grant_types?: Array<string>;
+    /**
+     * The response types of the Oauth2 client.
+     * @type {Array<string>}
+     * @memberof OauthClientUpdateBody
+     */
+    response_types?: Array<string>;
 }
 /**
  * 
@@ -5678,6 +5770,7 @@ export enum Permission {
     UserCreate = 'USER_CREATE',
     UserLoginMigrationAdmin = 'USER_LOGIN_MIGRATION_ADMIN',
     UserLoginMigrationRollback = 'USER_LOGIN_MIGRATION_ROLLBACK',
+    UserLoginMigrationForce = 'USER_LOGIN_MIGRATION_FORCE',
     UserMigrate = 'USER_MIGRATE',
     UserUpdate = 'USER_UPDATE',
     YearsEdit = 'YEARS_EDIT'
@@ -6024,11 +6117,11 @@ export interface SchoolExternalToolConfigurationStatusResponse {
      */
     isOutdatedOnScopeSchool: boolean;
     /**
-     * Is the tool deactivated, because of school administrator?
+     * Is the tool deactivated, because of instance administrator?
      * @type {boolean}
      * @memberof SchoolExternalToolConfigurationStatusResponse
      */
-    isDeactivated: boolean;
+    isGloballyDeactivated: boolean;
 }
 /**
  * 
@@ -6061,6 +6154,12 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
      * @memberof SchoolExternalToolConfigurationTemplateResponse
      */
     name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolExternalToolConfigurationTemplateResponse
+     */
+    baseUrl: string;
     /**
      * 
      * @type {string}
@@ -6150,6 +6249,12 @@ export interface SchoolExternalToolResponse {
     schoolId: string;
     /**
      * 
+     * @type {boolean}
+     * @memberof SchoolExternalToolResponse
+     */
+    isDeactivated: boolean;
+    /**
+     * 
      * @type {Array<CustomParameterEntryResponse>}
      * @memberof SchoolExternalToolResponse
      */
@@ -6160,12 +6265,6 @@ export interface SchoolExternalToolResponse {
      * @memberof SchoolExternalToolResponse
      */
     status: SchoolExternalToolConfigurationStatusResponse;
-    /**
-     * 
-     * @type {string}
-     * @memberof SchoolExternalToolResponse
-     */
-    logoUrl?: string;
 }
 /**
  * 
@@ -7116,6 +7215,24 @@ export interface SystemForLdapLoginResponse {
      */
     alias: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum SystemType {
+    Oauth = 'oauth',
+    Ldap = 'ldap',
+    Oidc = 'oidc',
+    TspBase = 'tsp-base',
+    TspSchool = 'tsp-school',
+    Local = 'local',
+    Iserv = 'iserv',
+    Lernsax = 'lernsax',
+    Itslearning = 'itslearning',
+    Moodle = 'moodle'
+}
+
 /**
  * 
  * @export
@@ -13734,13 +13851,13 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {ClassSortBy} [sortBy] 
+         * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
          * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options: any = {}): Promise<RequestArgs> => {
+        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/groups/class`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13900,13 +14017,13 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {ClassSortBy} [sortBy] 
+         * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
          * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
+        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -13951,13 +14068,13 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {ClassSortBy} [sortBy] 
+         * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
          * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
+        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
             return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(axios, basePath));
         },
         /**
@@ -13998,14 +14115,14 @@ export interface GroupApiInterface {
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
-     * @param {ClassSortBy} [sortBy] 
+     * @param {ClassSortQueryType} [sortBy] 
      * @param {SchoolYearQueryType} [type] 
      * @param {ClassRequestContext} [calledFrom] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApiInterface
      */
-    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse>;
+    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse>;
 
     /**
      * 
@@ -14045,14 +14162,14 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
-     * @param {ClassSortBy} [sortBy] 
+     * @param {ClassSortQueryType} [sortBy] 
      * @param {SchoolYearQueryType} [type] 
      * @param {ClassRequestContext} [calledFrom] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApi
      */
-    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any) {
+    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any) {
         return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -16594,13 +16711,13 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
         },
         /**
          * 
-         * @param {OauthClientBody} oauthClientBody 
+         * @param {OauthClientCreateBody} oauthClientCreateBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerCreateOAuth2Client: async (oauthClientBody: OauthClientBody, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'oauthClientBody' is not null or undefined
-            assertParamExists('oauthProviderControllerCreateOAuth2Client', 'oauthClientBody', oauthClientBody)
+        oauthProviderControllerCreateOAuth2Client: async (oauthClientCreateBody: OauthClientCreateBody, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'oauthClientCreateBody' is not null or undefined
+            assertParamExists('oauthProviderControllerCreateOAuth2Client', 'oauthClientCreateBody', oauthClientCreateBody)
             const localVarPath = `/oauth2/clients`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -16624,7 +16741,7 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(oauthClientBody, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(oauthClientCreateBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -16763,35 +16880,6 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        oauthProviderControllerGetUrl: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/oauth2/baseUrl`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
 
 
     
@@ -16991,8 +17079,7 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
         oauthProviderControllerRevokeConsentSession: async (client: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'client' is not null or undefined
             assertParamExists('oauthProviderControllerRevokeConsentSession', 'client', client)
-            const localVarPath = `/oauth2/auth/sessions/consent`
-                .replace(`{${"client"}}`, encodeURIComponent(String(client)));
+            const localVarPath = `/oauth2/auth/sessions/consent`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -17008,6 +17095,10 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
+            if (client !== undefined) {
+                localVarQueryParameter['client'] = client;
+            }
+
 
     
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -17022,15 +17113,15 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @param {string} id The Oauth Client Id.
-         * @param {OauthClientBody} oauthClientBody 
+         * @param {OauthClientUpdateBody} oauthClientUpdateBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerUpdateOAuth2Client: async (id: string, oauthClientBody: OauthClientBody, options: any = {}): Promise<RequestArgs> => {
+        oauthProviderControllerUpdateOAuth2Client: async (id: string, oauthClientUpdateBody: OauthClientUpdateBody, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             assertParamExists('oauthProviderControllerUpdateOAuth2Client', 'id', id)
-            // verify required parameter 'oauthClientBody' is not null or undefined
-            assertParamExists('oauthProviderControllerUpdateOAuth2Client', 'oauthClientBody', oauthClientBody)
+            // verify required parameter 'oauthClientUpdateBody' is not null or undefined
+            assertParamExists('oauthProviderControllerUpdateOAuth2Client', 'oauthClientUpdateBody', oauthClientUpdateBody)
             const localVarPath = `/oauth2/clients/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -17055,7 +17146,7 @@ export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuratio
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(oauthClientBody, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(oauthClientUpdateBody, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -17084,12 +17175,12 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {OauthClientBody} oauthClientBody 
+         * @param {OauthClientCreateBody} oauthClientCreateBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerCreateOAuth2Client(oauthClientBody, options);
+        async oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -17130,15 +17221,6 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          */
         async oauthProviderControllerGetOAuth2Client(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetOAuth2Client(id, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async oauthProviderControllerGetUrl(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetUrl(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -17200,12 +17282,12 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} id The Oauth Client Id.
-         * @param {OauthClientBody} oauthClientBody 
+         * @param {OauthClientUpdateBody} oauthClientUpdateBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerUpdateOAuth2Client(id, oauthClientBody, options);
+        async oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthClientResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerUpdateOAuth2Client(id, oauthClientUpdateBody, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -17229,12 +17311,12 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
         },
         /**
          * 
-         * @param {OauthClientBody} oauthClientBody 
+         * @param {OauthClientCreateBody} oauthClientCreateBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): AxiosPromise<OauthClientResponse> {
-            return localVarFp.oauthProviderControllerCreateOAuth2Client(oauthClientBody, options).then((request) => request(axios, basePath));
+        oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: any): AxiosPromise<OauthClientResponse> {
+            return localVarFp.oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -17271,14 +17353,6 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          */
         oauthProviderControllerGetOAuth2Client(id: string, options?: any): AxiosPromise<OauthClientResponse> {
             return localVarFp.oauthProviderControllerGetOAuth2Client(id, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        oauthProviderControllerGetUrl(options?: any): AxiosPromise<string> {
-            return localVarFp.oauthProviderControllerGetUrl(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -17334,12 +17408,12 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
         /**
          * 
          * @param {string} id The Oauth Client Id.
-         * @param {OauthClientBody} oauthClientBody 
+         * @param {OauthClientUpdateBody} oauthClientUpdateBody 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): AxiosPromise<OauthClientResponse> {
-            return localVarFp.oauthProviderControllerUpdateOAuth2Client(id, oauthClientBody, options).then((request) => request(axios, basePath));
+        oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: any): AxiosPromise<OauthClientResponse> {
+            return localVarFp.oauthProviderControllerUpdateOAuth2Client(id, oauthClientUpdateBody, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -17361,12 +17435,12 @@ export interface Oauth2ApiInterface {
 
     /**
      * 
-     * @param {OauthClientBody} oauthClientBody 
+     * @param {OauthClientCreateBody} oauthClientCreateBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any): AxiosPromise<OauthClientResponse>;
+    oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: any): AxiosPromise<OauthClientResponse>;
 
     /**
      * 
@@ -17403,14 +17477,6 @@ export interface Oauth2ApiInterface {
      * @memberof Oauth2ApiInterface
      */
     oauthProviderControllerGetOAuth2Client(id: string, options?: any): AxiosPromise<OauthClientResponse>;
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof Oauth2ApiInterface
-     */
-    oauthProviderControllerGetUrl(options?: any): AxiosPromise<string>;
 
     /**
      * 
@@ -17466,12 +17532,12 @@ export interface Oauth2ApiInterface {
     /**
      * 
      * @param {string} id The Oauth Client Id.
-     * @param {OauthClientBody} oauthClientBody 
+     * @param {OauthClientUpdateBody} oauthClientUpdateBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any): AxiosPromise<OauthClientResponse>;
+    oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: any): AxiosPromise<OauthClientResponse>;
 
 }
 
@@ -17495,13 +17561,13 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
 
     /**
      * 
-     * @param {OauthClientBody} oauthClientBody 
+     * @param {OauthClientCreateBody} oauthClientCreateBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof Oauth2Api
      */
-    public oauthProviderControllerCreateOAuth2Client(oauthClientBody: OauthClientBody, options?: any) {
-        return Oauth2ApiFp(this.configuration).oauthProviderControllerCreateOAuth2Client(oauthClientBody, options).then((request) => request(this.axios, this.basePath));
+    public oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody: OauthClientCreateBody, options?: any) {
+        return Oauth2ApiFp(this.configuration).oauthProviderControllerCreateOAuth2Client(oauthClientCreateBody, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -17546,16 +17612,6 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
      */
     public oauthProviderControllerGetOAuth2Client(id: string, options?: any) {
         return Oauth2ApiFp(this.configuration).oauthProviderControllerGetOAuth2Client(id, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof Oauth2Api
-     */
-    public oauthProviderControllerGetUrl(options?: any) {
-        return Oauth2ApiFp(this.configuration).oauthProviderControllerGetUrl(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -17622,13 +17678,13 @@ export class Oauth2Api extends BaseAPI implements Oauth2ApiInterface {
     /**
      * 
      * @param {string} id The Oauth Client Id.
-     * @param {OauthClientBody} oauthClientBody 
+     * @param {OauthClientUpdateBody} oauthClientUpdateBody 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof Oauth2Api
      */
-    public oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientBody: OauthClientBody, options?: any) {
-        return Oauth2ApiFp(this.configuration).oauthProviderControllerUpdateOAuth2Client(id, oauthClientBody, options).then((request) => request(this.axios, this.basePath));
+    public oauthProviderControllerUpdateOAuth2Client(id: string, oauthClientUpdateBody: OauthClientUpdateBody, options?: any) {
+        return Oauth2ApiFp(this.configuration).oauthProviderControllerUpdateOAuth2Client(id, oauthClientUpdateBody, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -19737,12 +19793,11 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
         /**
          * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
          * @summary Finds all publicly available systems.
-         * @param {string} [type] The type of the system.
-         * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+         * @param {SystemType} [types] The type of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerFind: async (type?: string, onlyOauth?: boolean, options: any = {}): Promise<RequestArgs> => {
+        systemControllerFind: async (types?: SystemType, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/systems/public`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -19755,12 +19810,8 @@ export const SystemsApiAxiosParamCreator = function (configuration?: Configurati
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            if (type !== undefined) {
-                localVarQueryParameter['type'] = type;
-            }
-
-            if (onlyOauth !== undefined) {
-                localVarQueryParameter['onlyOauth'] = onlyOauth;
+            if (types !== undefined) {
+                localVarQueryParameter['types'] = types;
             }
 
 
@@ -19832,13 +19883,12 @@ export const SystemsApiFp = function(configuration?: Configuration) {
         /**
          * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
          * @summary Finds all publicly available systems.
-         * @param {string} [type] The type of the system.
-         * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+         * @param {SystemType} [types] The type of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerFind(type, onlyOauth, options);
+        async systemControllerFind(types?: SystemType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PublicSystemListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.systemControllerFind(types, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -19875,13 +19925,12 @@ export const SystemsApiFactory = function (configuration?: Configuration, basePa
         /**
          * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
          * @summary Finds all publicly available systems.
-         * @param {string} [type] The type of the system.
-         * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+         * @param {SystemType} [types] The type of the system.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse> {
-            return localVarFp.systemControllerFind(type, onlyOauth, options).then((request) => request(axios, basePath));
+        systemControllerFind(types?: SystemType, options?: any): AxiosPromise<PublicSystemListResponse> {
+            return localVarFp.systemControllerFind(types, options).then((request) => request(axios, basePath));
         },
         /**
          * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
@@ -19915,13 +19964,12 @@ export interface SystemsApiInterface {
     /**
      * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
      * @summary Finds all publicly available systems.
-     * @param {string} [type] The type of the system.
-     * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+     * @param {SystemType} [types] The type of the system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SystemsApiInterface
      */
-    systemControllerFind(type?: string, onlyOauth?: boolean, options?: any): AxiosPromise<PublicSystemListResponse>;
+    systemControllerFind(types?: SystemType, options?: any): AxiosPromise<PublicSystemListResponse>;
 
     /**
      * This endpoint is used to get information about a possible login systems. No sensible data should be returned!
@@ -19957,14 +20005,13 @@ export class SystemsApi extends BaseAPI implements SystemsApiInterface {
     /**
      * This endpoint is used to show users the possible login systems that exist. No sensible data should be returned!
      * @summary Finds all publicly available systems.
-     * @param {string} [type] The type of the system.
-     * @param {boolean} [onlyOauth] Flag to request only systems with oauth-config.
+     * @param {SystemType} [types] The type of the system.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SystemsApi
      */
-    public systemControllerFind(type?: string, onlyOauth?: boolean, options?: any) {
-        return SystemsApiFp(this.configuration).systemControllerFind(type, onlyOauth, options).then((request) => request(this.axios, this.basePath));
+    public systemControllerFind(types?: SystemType, options?: any) {
+        return SystemsApiFp(this.configuration).systemControllerFind(types, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -24283,6 +24330,46 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             };
         },
         /**
+         * 
+         * @summary Force migrate an administrator account and its school
+         * @param {ForceMigrationParams} forceMigrationParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerForceMigration: async (forceMigrationParams: ForceMigrationParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'forceMigrationParams' is not null or undefined
+            assertParamExists('userLoginMigrationControllerForceMigration', 'forceMigrationParams', forceMigrationParams)
+            const localVarPath = `/user-login-migrations/force-migration`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(forceMigrationParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Currently there can only be one migration for a user. Therefore only one migration is returned.
          * @summary Get UserLoginMigrations
          * @param {string} [userId] 
@@ -24495,6 +24582,17 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * 
+         * @summary Force migrate an administrator account and its school
+         * @param {ForceMigrationParams} forceMigrationParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerForceMigration(forceMigrationParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Currently there can only be one migration for a user. Therefore only one migration is returned.
          * @summary Get UserLoginMigrations
          * @param {string} [userId] 
@@ -24571,6 +24669,16 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
             return localVarFp.userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @summary Force migrate an administrator account and its school
+         * @param {ForceMigrationParams} forceMigrationParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): AxiosPromise<void> {
+            return localVarFp.userLoginMigrationControllerForceMigration(forceMigrationParams, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Currently there can only be one migration for a user. Therefore only one migration is returned.
          * @summary Get UserLoginMigrations
          * @param {string} [userId] 
@@ -24639,6 +24747,16 @@ export interface UserLoginMigrationApiInterface {
      * @memberof UserLoginMigrationApiInterface
      */
     userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationResponse>;
+
+    /**
+     * 
+     * @summary Force migrate an administrator account and its school
+     * @param {ForceMigrationParams} forceMigrationParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApiInterface
+     */
+    userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): AxiosPromise<void>;
 
     /**
      * Currently there can only be one migration for a user. Therefore only one migration is returned.
@@ -24712,6 +24830,18 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      */
     public userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Force migrate an administrator account and its school
+     * @param {ForceMigrationParams} forceMigrationParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApi
+     */
+    public userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any) {
+        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerForceMigration(forceMigrationParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

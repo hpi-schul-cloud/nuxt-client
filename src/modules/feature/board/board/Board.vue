@@ -4,15 +4,15 @@
 			<DefaultWireframe
 				ref="main"
 				:breadcrumbs="breadcrumbs"
-				full-width
+				max-width="full"
 				hide-border
 			>
 				<template #header>
 					<BoardHeader
 						:boardId="board.id"
 						:title="board.title"
-						:titlePlaceholder="t('pages.room.boardCard.label.courseBoard')"
 						:isDraft="!board.isVisible"
+						class="mb-1"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
@@ -93,6 +93,7 @@
 <script setup lang="ts">
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
@@ -114,6 +115,7 @@ import {
 	useCardStore,
 	useSharedBoardPageInformation,
 	useSharedEditMode,
+	useBoardInactivity,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -130,7 +132,6 @@ import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -253,6 +254,7 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 
 onMounted(() => {
 	setAlert();
+	useBoardInactivity();
 	boardStore.fetchBoardRequest({ boardId: props.boardId });
 });
 

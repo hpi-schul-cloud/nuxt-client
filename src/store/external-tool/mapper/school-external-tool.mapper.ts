@@ -28,6 +28,7 @@ export class SchoolExternalToolMapper {
 			externalToolId: response.externalToolId,
 			logoUrl: response.logoUrl,
 			name: response.name,
+			baseUrl: response.baseUrl,
 			parameters: response.parameters.map(
 				(parameter): ToolParameter =>
 					ExternalToolMapper.mapToToolParameter(parameter)
@@ -79,7 +80,7 @@ export class SchoolExternalToolMapper {
 				(parameter): ToolParameterEntry =>
 					CommonToolMapper.mapToToolParameterEntry(parameter)
 			),
-			isDeactivated: response.status.isDeactivated,
+			isDeactivated: response.isDeactivated,
 		};
 
 		return mapped;
@@ -118,6 +119,7 @@ export class SchoolExternalToolMapper {
 		const mapped: SchoolExternalToolMetadata = {
 			course: response.contextExternalToolCountPerContext.course,
 			boardElement: response.contextExternalToolCountPerContext.boardElement,
+			mediaBoard: response.contextExternalToolCountPerContext.mediaBoard,
 		};
 
 		return mapped;
@@ -128,7 +130,7 @@ export class SchoolExternalToolMapper {
 	): SchoolExternalToolConfigurationStatus {
 		const mapped: SchoolExternalToolConfigurationStatus = {
 			isOutdatedOnScopeSchool: schoolToolStatus.isOutdatedOnScopeSchool,
-			isDeactivated: schoolToolStatus.isDeactivated,
+			isGloballyDeactivated: schoolToolStatus.isGloballyDeactivated,
 		};
 
 		return mapped;

@@ -102,6 +102,7 @@ export default {
 		"Будь ласка, зверніться до адміністратора школи.",
 	"common.nodata": "Немає даних",
 	"common.notification.error": "Сталася помилка.",
+	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
 	"common.placeholder.email.confirmation":
@@ -247,8 +248,16 @@ export default {
 		'Тут налаштовуються спеціальні параметри зовнішнього інструменту для школи. Після збереження конфігурації інструмент буде доступний у школі.<br><br>\nДодаткову інформацію можна знайти на нашому сайті <a href="https://docs.dbildungscloud.de/x/uoKqDg" target=" _blank">Розділ довідки щодо зовнішніх інструментів</a>.',
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
-	"components.administration.externalToolsSection.dialog.content":
-		"Ви впевнені, що хочете видалити інструмент <b>{itemName}</b>? <br><br>Наразі інструмент використовується таким чином: <br><b>{courseCount}</b> Курс(и) <br><b>{boardElementCount}</b> Дошка(и) стовпців <br><br>Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
+	"components.administration.externalToolsSection.dialog.content.header":
+		"Ви впевнені, що хочете видалити інструмент <b>{itemName}</b>? <br><br>Наразі інструмент використовується таким чином:",
+	"components.administration.externalToolsSection.dialog.content.courses":
+		"<b>{courseCount}</b> Курс(и)",
+	"components.administration.externalToolsSection.dialog.content.boardElements":
+		"<b>{boardElementCount}</b> Дошка(и) стовпців",
+	"components.administration.externalToolsSection.dialog.content.mediaShelves":
+		"<b>{mediaBoardCount}</b> Медіаполичка(и)",
+	"components.administration.externalToolsSection.dialog.content.warning":
+		"Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
 	"components.administration.externalToolsSection.dialog.title":
 		"Видаліть зовнішній інструмент",
 	"components.administration.externalToolsSection.header":
@@ -787,32 +796,29 @@ export default {
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
 	"global.cloudLogo": "Логотип",
-	"global.sidebar.item.accessibility": "Доступність",
 	"global.sidebar.item.addons": "Додаткові компоненти",
 	"global.sidebar.item.calendar": "Календар",
 	"global.sidebar.item.classes": "Класи",
+	"global.sidebar.item.contactSupport": "Зв'язатися",
 	"global.sidebar.item.courses": "Курси",
 	"global.sidebar.item.files-old": "Файли",
 	"global.sidebar.item.filesPersonal": "Особисті файли",
 	"global.sidebar.item.filesShared": "Спільні файли",
 	"global.sidebar.item.helpArea": "Розділ довідки",
-	"global.sidebar.item.helpDesk": "Служба підтримки",
+	"global.sidebar.item.helpSection": "Розділ довідки",
 	"global.sidebar.item.management": "Управління",
 	"global.sidebar.item.overview": "Панель керування",
+	"global.sidebar.item.releaseNotes": "Що нового?",
 	"global.sidebar.item.school": "Школа",
 	"global.sidebar.item.student": "Учні",
 	"global.sidebar.item.system": "Cистема",
 	"global.sidebar.item.tasks": "Завдання",
 	"global.sidebar.item.teacher": "Викладачі",
 	"global.sidebar.item.teams": "Команди",
+	"global.sidebar.item.training": "Поглиблене навчання",
 	"global.skipLink.mainContent": "Перейти до основного вмісту",
 	"global.topbar.actions.alerts": "Сповіщення про стан",
-	"global.topbar.actions.contactSupport": "Зв'язатися",
-	"global.topbar.actions.fullscreen": "Повний екран",
-	"global.topbar.actions.helpSection": "Розділ довідки",
 	"global.topbar.actions.qrCode": "Поділіться QR-кодом веб-сторінки",
-	"global.topbar.actions.releaseNotes": "Що нового?",
-	"global.topbar.actions.training": "Поглиблене навчання",
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
@@ -1614,7 +1620,12 @@ export default {
 	"pages.tool.deactivate.label": "Деактивуйте інструмент у школі",
 	"pages.tool.description":
 		'Тут налаштовуються специфічні для курсу параметри зовнішнього інструменту. Після збереження конфігурації інструмент стає доступним у курсі.<br><br>\nВидалення конфігурації видаляє інструмент із курс.<br><br>\nБільше інформації можна знайти в нашому <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Розділ довідки щодо зовнішніх інструментів</a>.',
-	"pages.tool.select.label": "вибір інструменту",
+	"pages.tool.select.label": "вибір інструменту / Інструмент-URL",
+	"pages.tool.select.description":
+		"Знайдіть інструменти або введіть URL-адресу інструменту або вставте його з кешу вручну або за допомогою кнопки",
+	"pages.tool.select.clipboard.error":
+		"Виникла помилка при вставці тексту з буфера обміну. Будь ласка, вставте текст вручну.",
+	"pages.tool.select.nodata": "Інструмент відсутній",
 	"pages.tool.settings": "Параметри",
 	"pages.tool.title": "Конфігурація зовнішніх інструментів",
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",
@@ -1681,6 +1692,8 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Створено між 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
 	"feature.media-shelf.title": "Полиця для медіа",
+	"feature.media-shelf.emptyState":
+		"Жоден носій не активовано для використання.",
 	"feature.media-shelf.createLine": "Додайте лінію",
 	"feature.media-shelf.line.title": "лінія",
 	"feature.media-shelf.availableLine.title": "Доступні медіа",

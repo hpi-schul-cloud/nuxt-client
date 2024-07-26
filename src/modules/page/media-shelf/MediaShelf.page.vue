@@ -1,11 +1,11 @@
 <template>
-	<DefaultWireframe ref="main" :full-width="true">
+	<DefaultWireframe ref="main" max-width="full">
 		<div class="ml-1 d-flex">
 			<h3 aria-level="1" class="mt-0 me-auto" data-testid="page-title">
 				{{ $t("feature.media-shelf.title") }}
 			</h3>
 			<VBtnToggle
-				v-if="mediaBoard"
+				v-if="mediaBoard && !isEmptyState"
 				variant="outlined"
 				divided
 				rounded="xl"
@@ -32,11 +32,34 @@
 				/>
 			</VBtnToggle>
 		</div>
-		<MediaBoard
-			v-if="mediaBoard && availableMediaLine"
-			:board="mediaBoard"
-			:available-media-line="availableMediaLine"
-		/>
+		<template v-if="isLoading && (!mediaBoard || !availableMediaLine)">
+			<VContainer class="loader" data-testid="skeleton-loader">
+				<v-skeleton-loader type="list-item" width="100%" height="50px" />
+				<div class="d-flex py-4 ga-6">
+					<v-skeleton-loader type="image, article" width="20%" height="5%" />
+					<v-skeleton-loader type="image, article" width="20%" height="5%" />
+				</div>
+				<v-skeleton-loader type="list-item" width="100%" height="50px" />
+				<v-skeleton-loader type="image, article" width="20%" height="5%" />
+			</VContainer>
+		</template>
+		<template v-else-if="isEmptyState">
+			<VCustomEmptyState
+				ref="media-shelf-empty-state"
+				image="media-shelf-empty-state"
+				:title="$t('feature.media-shelf.emptyState')"
+				class="mt-16"
+				imgHeight="273px"
+				data-testid="empty-state"
+			/>
+		</template>
+		<template v-else>
+			<MediaBoard
+				v-if="mediaBoard && availableMediaLine"
+				:board="mediaBoard"
+				:available-media-line="availableMediaLine"
+			/>
+		</template>
 	</DefaultWireframe>
 </template>
 
@@ -48,8 +71,9 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
 import { mdiViewGridOutline } from "@mdi/js";
 import { useTitle } from "@vueuse/core";
-import { onMounted } from "vue";
+import { computed, ComputedRef, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
+import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 
 const { t } = useI18n();
 
@@ -61,7 +85,24 @@ const {
 	fetchMediaBoardForUser,
 	fetchAvailableMedia,
 	updateMediaBoardLayout,
+	isLoading,
+	isBoardOperationLoading,
 } = useSharedMediaBoardState();
+
+const isEmptyState: ComputedRef<boolean> = computed(() => {
+	const isMediaBoardEmpty =
+		!mediaBoard.value ||
+		mediaBoard.value.lines.every((line) => line.elements.length === 0);
+
+	const isAvailableMediaLineEmpty = !availableMediaLine.value?.elements.length;
+
+	return (
+		isMediaBoardEmpty &&
+		isAvailableMediaLineEmpty &&
+		!isLoading.value &&
+		!isBoardOperationLoading.value
+	);
+});
 
 onMounted(async () => {
 	await fetchMediaBoardForUser();

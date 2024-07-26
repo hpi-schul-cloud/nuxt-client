@@ -76,13 +76,8 @@ const createDevServerConfig = () => {
 			return middlewares;
 		},
 		allowedHosts: "all",
-
 		client: {
-			overlay: {
-				errors: true,
-				warnings: false,
-				runtimeErrors: true,
-			},
+			overlay: false,
 		},
 	};
 

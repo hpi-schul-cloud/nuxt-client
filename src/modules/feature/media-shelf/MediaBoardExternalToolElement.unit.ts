@@ -1,7 +1,6 @@
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { AlertPayload } from "@/store/types/alert-payload";
-import { ComponentProps } from "@/types/vue";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -23,6 +22,7 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import { useDragAndDrop } from "../board/shared/DragAndDrop.composable";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";

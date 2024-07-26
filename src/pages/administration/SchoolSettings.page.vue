@@ -2,7 +2,7 @@
 	<default-wireframe
 		:headline="headline"
 		:breadcrumbs="breadcrumbs"
-		:full-width="false"
+		max-width="nativ"
 	>
 		<v-alert
 			v-if="error"
@@ -29,7 +29,7 @@
 				</div>
 			</v-alert>
 
-			<v-expansion-panels multiple class="mb-9" :model-value="openedPanels">
+			<v-expansion-panels multiple class="pb-9" :model-value="openedPanels">
 				<v-expansion-panel data-testid="general-settings-panel" value="general">
 					<v-expansion-panel-title>
 						<div class="text-h4">

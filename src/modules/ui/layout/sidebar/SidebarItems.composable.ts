@@ -1,13 +1,13 @@
+import { SchulcloudTheme } from "@/serverApi/v3";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
-import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
-import { SchulcloudTheme } from "@/serverApi/v3";
-import { ComputedRef, computed } from "vue";
 import { mdiBookshelf } from "@mdi/js";
+import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
 
 export const useSidebarItems = () => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -90,7 +90,7 @@ export const useSidebarItems = () => {
 		},
 		{
 			title: "feature.media-shelf.title",
-			href: "/media-shelf",
+			to: "/media-shelf",
 			icon: mdiBookshelf,
 			feature: "FEATURE_MEDIA_SHELF_ENABLED",
 			testId: "Media-shelf",
@@ -104,6 +104,7 @@ export const useSidebarItems = () => {
 		},
 	]);
 
+	// TODO - adjust language keys, when old footer is removed
 	const legalLinks: ComputedRef<SidebarSingleItem[]> = computed(() => [
 		{
 			href:
@@ -151,12 +152,6 @@ export const useSidebarItems = () => {
 			featureValue: `${envConfigModule.getEnv.ALERT_STATUS_URL}`,
 		},
 		{
-			title: "global.topbar.actions.releaseNotes",
-			href: "/help/releases",
-			target: "_self",
-			testId: "releases",
-		},
-		{
 			href: filePathsModule.getSpecificFiles.accessibilityStatement as string,
 			title: "components.legacy.footer.accessibility.statement",
 			testId: "accessibility-statement",
@@ -165,10 +160,21 @@ export const useSidebarItems = () => {
 			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
 		},
 		{
+			title: "global.sidebar.item.releaseNotes",
+			href: "/system/releases",
+			target: "_self",
+			testId: "releases",
+		},
+		{
 			title: "components.legacy.footer.github",
 			href: "https://github.com/hpi-schul-cloud",
 			testId: "github",
 			target: "_blank",
+			theme: [
+				SchulcloudTheme.Brb,
+				SchulcloudTheme.Default,
+				SchulcloudTheme.Thr,
+			],
 		},
 		{
 			href: "/security",
@@ -204,7 +210,7 @@ export const useSidebarItems = () => {
 				},
 				{
 					title: "global.sidebar.item.classes",
-					href: "/administration/groups/classes",
+					to: "/administration/groups/classes",
 					testId: "Klassen",
 					permissions: ["ADMIN_VIEW", "TEACHER_LIST"],
 					feature: "FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED",
@@ -244,22 +250,21 @@ export const useSidebarItems = () => {
 			title: "global.sidebar.item.helpArea",
 			icon: "$mdiHelpCircleOutline",
 			testId: "Hilfebereich",
-			// TODO - adjust language keys, when old components are removed
 			children: [
 				{
-					title: "global.topbar.actions.helpSection",
+					title: "global.sidebar.item.helpSection",
 					href: "/help",
 					target: "_self",
 					testId: "help-articles",
 				},
 				{
-					title: "global.topbar.actions.contactSupport",
+					title: "global.sidebar.item.contactSupport",
 					href: "/help/contact",
 					target: "_self",
 					testId: "contact",
 				},
 				{
-					title: "global.topbar.actions.training",
+					title: "global.sidebar.item.training",
 					href: "https://www.lernen.cloud/",
 					target: "_blank",
 					testId: "training",

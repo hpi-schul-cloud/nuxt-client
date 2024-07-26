@@ -1,23 +1,23 @@
-import { h, nextTick } from "vue";
-import { VApp } from "vuetify/lib/components/index.mjs";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { envsFactory } from "@@/tests/test-utils";
+import { SchulcloudTheme } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
+import FilePathsModule from "@/store/filePaths";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
 	THEME_KEY,
 } from "@/utils/inject";
-import AuthModule from "@/store/auth";
-import EnvConfigModule from "@/store/env-config";
-import FilePathsModule from "@/store/filePaths";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { SchulcloudTheme } from "@/serverApi/v3";
-import NewLoggedIn from "./newLoggedIn.layout.vue";
+import { envsFactory } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
+import { h, nextTick } from "vue";
+import { VApp } from "vuetify/lib/components/index.mjs";
+import NewLoggedIn from "./LoggedIn.layout.vue";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms-list" }),
@@ -57,7 +57,7 @@ const setup = () => {
 				},
 			},
 			stubs: {
-				SkipLinks: { template: "<div></div>" },
+				SkipLink: { template: "<div></div>" },
 				"application-error-wrapper": { template: "<div></div>" },
 				snackbar: { template: "<div></div>" },
 				"router-view": { template: "<div></div>" },
@@ -94,23 +94,37 @@ describe("newLoggedIn", () => {
 
 	it("should show sidebar on Desktop as default", async () => {
 		defineWindowWidth(1564);
-
+		const sidebarExpanded = true;
 		const { wrapper } = setup();
 		await nextTick();
 		await nextTick();
 		const sidebar = wrapper.find("nav");
 
-		expect(sidebar.classes()).toContain("v-navigation-drawer--active");
+		if (!sidebarExpanded)
+			expect(sidebar.classes()).toContain("v-navigation-drawer--active");
 	});
 
 	it("should not show sidebar on table and smaller as default", async () => {
 		defineWindowWidth(564);
-
+		const sidebarExpanded = true;
 		const { wrapper } = setup();
 		await nextTick();
 		await nextTick();
 		const sidebar = wrapper.find("nav");
 
-		expect(sidebar.classes()).not.toContain("v-navigation-drawer--active");
+		if (!sidebarExpanded)
+			expect(sidebar.classes()).not.toContain("v-navigation-drawer--active");
+	});
+
+	it("should not have sidebar in taborder", async () => {
+		defineWindowWidth(564);
+		const sidebarExpanded = true;
+		const { wrapper } = setup();
+
+		await nextTick();
+
+		const sidebar = wrapper.find("nav");
+
+		if (!sidebarExpanded) expect(sidebar.attributes("tabindex")).toBe("-1");
 	});
 });

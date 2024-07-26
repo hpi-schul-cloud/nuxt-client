@@ -10,10 +10,7 @@
 			id="notify-screen-reader-assertive"
 			class="d-sr-only"
 		/>
-		<div
-			class="wireframe-header sticky"
-			:class="{ 'old-layout': oldLayoutEnabled }"
-		>
+		<div class="wireframe-header sticky">
 			<v-custom-breadcrumbs
 				v-if="breadcrumbs.length"
 				:breadcrumbs="breadcrumbs"
@@ -59,11 +56,11 @@
 			<div v-if="showBorder" class="border" />
 		</div>
 		<v-container
-			fluid
+			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
 			:class="{
-				'container-max-width': !fullWidth,
-				'container-full-width': fullWidth,
+				'container-short-width': maxWidth === 'short',
+				'container-full-width': maxWidth === 'full',
 				'overflow-x-auto': allowOverflowX,
 			}"
 		>
@@ -73,12 +70,11 @@
 </template>
 
 <script setup lang="ts">
-import vCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
+import VCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
-import { PropType, computed, useSlots } from "vue";
+import { computed, PropType, useSlots } from "vue";
 import { Fab } from "./default-wireframe.types";
-import EnvConfigModule from "@/store/env-config";
 
 const props = defineProps({
 	breadcrumbs: {
@@ -91,8 +87,10 @@ const props = defineProps({
 		required: false,
 		default: null,
 	},
-	fullWidth: {
-		type: Boolean,
+	maxWidth: {
+		type: String as PropType<"full" | "short" | "nativ">,
+		required: true,
+		default: "short",
 	},
 	fabItems: {
 		type: Object as PropType<Fab>,
@@ -111,10 +109,6 @@ const props = defineProps({
 		type: String as PropType<string | null>,
 		default: null,
 	},
-	// TODO - remove this when new layout is released
-	envConfigModule: {
-		type: EnvConfigModule,
-	},
 });
 
 defineEmits({
@@ -127,10 +121,6 @@ defineOptions({
 const slots = useSlots();
 
 const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
-
-const oldLayoutEnabled = computed(() => {
-	return !props.envConfigModule?.getEnv.FEATURE_NEW_LAYOUT_ENABLED;
-});
 
 const showBorder = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);
@@ -160,7 +150,7 @@ const showBorder = computed(() => {
 	padding: 0 var(--space-lg);
 }
 
-.container-max-width {
+.container-short-width {
 	max-width: var(--size-content-width-max);
 }
 
@@ -187,10 +177,6 @@ const showBorder = computed(() => {
 	top: 64px;
 	z-index: var(--layer-sticky-header);
 	background-color: rgb(var(--v-theme-white));
-}
-
-.old-layout {
-	top: 0;
 }
 
 @media #{map-get($display-breakpoints, 'lg-and-up')} {

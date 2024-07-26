@@ -1,13 +1,13 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
-import DefaultWireframe from "../templates/DefaultWireframe.vue";
+import { ConfigResponse } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import EnvConfigModule from "@/store/env-config";
-import { ConfigResponse } from "@/serverApi/v3";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import DefaultWireframe from "../templates/DefaultWireframe.vue";
 
 describe("DefaultWireframe", () => {
 	const setup = (
@@ -32,7 +32,7 @@ describe("DefaultWireframe", () => {
 
 	it("shows title", () => {
 		const wrapper = setup({
-			props: { fullWidth: true, headline: "dummy title" },
+			props: { maxWidth: "full", headline: "dummy title" },
 		});
 
 		const h1 = wrapper.find("h1");
@@ -67,27 +67,37 @@ describe("DefaultWireframe", () => {
 
 	it("has full width", () => {
 		const wrapper = setup({
-			props: { fullWidth: true, headline: "dummy title" },
+			props: { maxWidth: "full", headline: "dummy title" },
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
 		expect(contentWrapper.classes("container-full-width")).toBeTruthy();
-		expect(contentWrapper.classes("container-max-width")).toBeFalsy();
+		expect(contentWrapper.classes("container-short-width")).toBeFalsy();
 	});
 
 	it("has small width", () => {
 		const wrapper = setup({
-			props: { headline: "dummy title" },
+			props: { maxWidth: "short", headline: "dummy title" },
 		});
 
 		const contentWrapper = wrapper.find(".main-content");
 		expect(contentWrapper.classes("container-full-width")).toBeFalsy();
-		expect(contentWrapper.classes("container-max-width")).toBeTruthy();
+		expect(contentWrapper.classes("container-short-width")).toBeTruthy();
+	});
+
+	it("has nativ width", () => {
+		const wrapper = setup({
+			props: { maxWidth: "nativ", headline: "dummy title" },
+		});
+
+		const contentWrapper = wrapper.find(".main-content");
+		expect(contentWrapper.classes("container-full-width")).toBeFalsy();
+		expect(contentWrapper.classes("container-short-width")).toBeFalsy();
 	});
 
 	it("displays content in slot", () => {
 		const wrapper = setup({
-			props: { fullWidth: true, headline: "dummy title" },
+			props: { maxWidth: "full", headline: "dummy title" },
 			slots: {
 				default: ["<p>some stuff</p>", "text"],
 			},

@@ -29,7 +29,7 @@
 						scope="card"
 						@update:value="onUpdateCardTitle($event, cardId)"
 						:isFocused="isFocusedById"
-						@enter="addTextAfterTitle"
+						@enter="onEnter"
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
@@ -46,16 +46,18 @@
 						</BoardMenu>
 					</div>
 
-					<ContentElementList
-						:elements="card.elements"
-						:isEditMode="isEditMode"
-						:isDetailView="isDetailView"
-						@delete:element="onDeleteElement"
-						@move-down:element="onMoveContentElementDown"
-						@move-up:element="onMoveContentElementUp"
-						@move-keyboard:element="onMoveContentElementKeyboard"
-					/>
-					<CardAddElementMenu @add-element="onAddElement" v-if="isEditMode" />
+					<div :class="{ 'mt-n2': hasCardTitle }">
+						<ContentElementList
+							:elements="card.elements"
+							:isEditMode="isEditMode"
+							:isDetailView="isDetailView"
+							@delete:element="onDeleteElement"
+							@move-down:element="onMoveContentElementDown"
+							@move-up:element="onMoveContentElementUp"
+							@move-keyboard:element="onMoveContentElementKeyboard"
+						/>
+						<CardAddElementMenu @add-element="onAddElement" v-if="isEditMode" />
+					</div>
 				</template>
 			</VCard>
 		</CardHostInteractionHandler>
@@ -69,7 +71,7 @@
 			@move-up:element="onMoveContentElementUp"
 			@move-keyboard:element="onMoveContentElementKeyboard"
 			@add:element="onAddElement"
-			@enter:title="addTextAfterTitle"
+			@enter:title="onEnter"
 			@update:title="onUpdateCardTitle"
 			@close:detail-view="onCloseDetailView"
 			@delete:card="onDeleteCard"
@@ -139,6 +141,8 @@ export default defineComponent({
 
 		const card = computed(() => cardStore.getCard(cardId.value));
 		const isLoadingCard = computed(() => card.value === undefined);
+
+		const hasCardTitle = computed(() => card.value?.title);
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
@@ -215,6 +219,10 @@ export default defineComponent({
 			);
 		};
 
+		const onEnter = () => {
+			cardStore.addTextAfterTitle(props.cardId);
+		};
+
 		const boardMenuClasses = computed(() => {
 			if (isFocusContained.value === true || isHovered.value === true) {
 				return "";
@@ -230,6 +238,7 @@ export default defineComponent({
 			boardMenuClasses,
 			card,
 			hasDeletePermission,
+			hasCardTitle,
 			isLoadingCard,
 			isHovered,
 			isFocusedById,
@@ -245,7 +254,7 @@ export default defineComponent({
 			onMoveContentElementKeyboard,
 			cardHost,
 			isEditMode,
-			addTextAfterTitle: cardStore.addTextAfterTitle,
+			onEnter,
 			onOpenDetailView,
 			onCloseDetailView,
 			isDetailView,
