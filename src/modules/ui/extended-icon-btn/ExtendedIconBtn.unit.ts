@@ -5,7 +5,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import ExtendedIconBtn from "./ExtendedIconBtn.vue";
 
-describe("@components/DataFilter/filterComponents/FilterActionButtons.vue", () => {
+describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
 	const mountComponent = (
 		options: ComponentMountingOptions<typeof ExtendedIconBtn> = {}
 	) => {
@@ -16,10 +16,35 @@ describe("@components/DataFilter/filterComponents/FilterActionButtons.vue", () =
 			...options,
 		});
 	};
+
 	it("should render component", () => {
 		const wrapper = mountComponent({
 			props: { icon: "example-icon", label: "example-label" },
 		});
 		expect(wrapper.findComponent(ExtendedIconBtn).exists()).toEqual(true);
+	});
+
+	it("should render the icon", () => {
+		const wrapper = mountComponent({
+			props: { icon: "example-icon", label: "example-label" },
+		});
+		expect(wrapper.get(".v-icon path").html()).toContain("example-icon");
+	});
+
+	it("should render the label", () => {
+		const wrapper = mountComponent({
+			props: { icon: "example-icon", label: "example-label" },
+		});
+		expect(wrapper.html()).toContain("example-label");
+	});
+
+	it("should render a clickable button", async () => {
+		const wrapper = mountComponent({
+			props: { icon: "example-icon", label: "example-label" },
+		});
+
+		await wrapper.get("button").trigger("click");
+
+		expect(wrapper.emitted("click")).toBeDefined();
 	});
 });
