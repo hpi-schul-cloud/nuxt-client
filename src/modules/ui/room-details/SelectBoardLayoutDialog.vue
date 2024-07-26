@@ -5,7 +5,7 @@
 				{{ $t("pages.room.dialog.boardLayout.title") }}
 			</VCardTitle>
 			<VCardText
-				class="d-flex flex-column flex-sm-row align-items-center justify-sm-space-around"
+				class="d-flex flex-row flex-wrap align-items-center justify-space-around"
 			>
 				<ExtendedIconBtn
 					v-for="(item, key) in boardLayouts"

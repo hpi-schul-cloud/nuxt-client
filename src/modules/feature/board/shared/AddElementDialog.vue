@@ -10,9 +10,9 @@
 			</VCardTitle>
 			<VCardText class="d-flex justify-center">
 				<div
-					class="d-flex flex-sm-row flex-sm-wrap flex-column align-items-center"
+					class="d-flex flex-row flex-wrap align-items-center"
 					:class="{
-						'justify-space-around justify-sm-start': submissionsEnabled,
+						'justify-space-between': submissionsEnabled,
 					}"
 				>
 					<ExtendedIconBtn
