@@ -120,7 +120,7 @@ defineOptions({
 });
 const slots = useSlots();
 
-const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+const isMobile = useVuetifyBreakpoints().smallerOrEqual("lg");
 
 const showBorder = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);

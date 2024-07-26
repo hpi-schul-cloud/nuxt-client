@@ -97,7 +97,7 @@ const actions = computed(() => {
 const isMenu = computed(() => actions.value.length > 0);
 const isMenuOpen = ref(false);
 
-const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+const isMobile = useVuetifyBreakpoints().smallerOrEqual("lg");
 const { y: scrollOffsetY } = useWindowScroll();
 
 const isForceCollapseOnMobileScroll = ref(false);
