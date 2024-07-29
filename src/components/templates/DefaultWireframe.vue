@@ -25,7 +25,7 @@
 				<slot name="fab">
 					<speed-dial-menu
 						class="wireframe-fab"
-						:direction="isMobile ? 'top' : 'bottom'"
+						:direction="isBelowLarge ? 'top' : 'bottom'"
 						:orientation="'right'"
 						:icon="fabItems.icon"
 						:href="fabItems.href"
@@ -120,7 +120,7 @@ defineOptions({
 });
 const slots = useSlots();
 
-const isMobile = useVuetifyBreakpoints().smallerOrEqual("lg");
+const isBelowLarge = useVuetifyBreakpoints().smallerOrEqual("lg");
 
 const showBorder = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);
