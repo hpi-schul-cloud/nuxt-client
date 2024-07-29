@@ -3085,31 +3085,6 @@ export interface ForbiddenOperationError {
 /**
  * 
  * @export
- * @interface ForceMigrationParams
- */
-export interface ForceMigrationParams {
-    /**
-     * Email of the administrator
-     * @type {string}
-     * @memberof ForceMigrationParams
-     */
-    email: string;
-    /**
-     * Target externalId to link it with an external account
-     * @type {string}
-     * @memberof ForceMigrationParams
-     */
-    externalUserId: string;
-    /**
-     * Target externalId to link it with an external school
-     * @type {string}
-     * @memberof ForceMigrationParams
-     */
-    externalSchoolId: string;
-}
-/**
- * 
- * @export
  * @interface GetMetaTagDataBody
  */
 export interface GetMetaTagDataBody {
@@ -5770,7 +5745,6 @@ export enum Permission {
     UserCreate = 'USER_CREATE',
     UserLoginMigrationAdmin = 'USER_LOGIN_MIGRATION_ADMIN',
     UserLoginMigrationRollback = 'USER_LOGIN_MIGRATION_ROLLBACK',
-    UserLoginMigrationForce = 'USER_LOGIN_MIGRATION_FORCE',
     UserMigrate = 'USER_MIGRATE',
     UserUpdate = 'USER_UPDATE',
     YearsEdit = 'YEARS_EDIT'
@@ -24330,46 +24304,6 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             };
         },
         /**
-         * 
-         * @summary Force migrate an administrator account and its school
-         * @param {ForceMigrationParams} forceMigrationParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userLoginMigrationControllerForceMigration: async (forceMigrationParams: ForceMigrationParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'forceMigrationParams' is not null or undefined
-            assertParamExists('userLoginMigrationControllerForceMigration', 'forceMigrationParams', forceMigrationParams)
-            const localVarPath = `/user-login-migrations/force-migration`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(forceMigrationParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
          * Currently there can only be one migration for a user. Therefore only one migration is returned.
          * @summary Get UserLoginMigrations
          * @param {string} [userId] 
@@ -24582,17 +24516,6 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
-         * 
-         * @summary Force migrate an administrator account and its school
-         * @param {ForceMigrationParams} forceMigrationParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerForceMigration(forceMigrationParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
          * Currently there can only be one migration for a user. Therefore only one migration is returned.
          * @summary Get UserLoginMigrations
          * @param {string} [userId] 
@@ -24669,16 +24592,6 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
             return localVarFp.userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary Force migrate an administrator account and its school
-         * @param {ForceMigrationParams} forceMigrationParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): AxiosPromise<void> {
-            return localVarFp.userLoginMigrationControllerForceMigration(forceMigrationParams, options).then((request) => request(axios, basePath));
-        },
-        /**
          * Currently there can only be one migration for a user. Therefore only one migration is returned.
          * @summary Get UserLoginMigrations
          * @param {string} [userId] 
@@ -24747,16 +24660,6 @@ export interface UserLoginMigrationApiInterface {
      * @memberof UserLoginMigrationApiInterface
      */
     userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationResponse>;
-
-    /**
-     * 
-     * @summary Force migrate an administrator account and its school
-     * @param {ForceMigrationParams} forceMigrationParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserLoginMigrationApiInterface
-     */
-    userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): AxiosPromise<void>;
 
     /**
      * Currently there can only be one migration for a user. Therefore only one migration is returned.
@@ -24830,18 +24733,6 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      */
     public userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Force migrate an administrator account and its school
-     * @param {ForceMigrationParams} forceMigrationParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserLoginMigrationApi
-     */
-    public userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any) {
-        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerForceMigration(forceMigrationParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
