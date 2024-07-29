@@ -2,7 +2,6 @@ import * as BoardActions from "./boardActions";
 import * as CardActions from "../cardActions/cardActions";
 import { useSocketConnection } from "@data-board";
 import { useBoardStore } from "../Board.store";
-import { useCardStore } from "../Card.store";
 import {
 	CreateCardRequestPayload,
 	CreateColumnRequestPayload,
@@ -22,7 +21,6 @@ import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
-	const cardStore = useCardStore();
 	const { notifySocketError } = useErrorHandler();
 	const {
 		notifyCreateCardSuccess,
@@ -41,7 +39,6 @@ export const useBoardSocketApi = () => {
 	) => {
 		const successActions = [
 			on(BoardActions.createCardSuccess, boardStore.createCardSuccess),
-			on(BoardActions.createCardSuccess, cardStore.createCardSuccess),
 			on(BoardActions.createColumnSuccess, boardStore.createColumnSuccess),
 			on(CardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
 			on(BoardActions.deleteColumnSuccess, boardStore.deleteColumnSuccess),
