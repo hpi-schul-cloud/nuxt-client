@@ -6,10 +6,6 @@
 		<template #title>
 			{{ $t("components.cardElement.drawingElement") }}
 		</template>
-		<template #subtitle>
-			{{ $t("components.cardElement.lastUpdatedAt") }}
-			{{ formattedLastUpdatedAt }}
-		</template>
 		<template #menu>
 			<slot />
 		</template>
@@ -20,31 +16,16 @@
 import image from "@/assets/img/tldraw.svg";
 import { mdiPresentation } from "@mdi/js";
 import { ContentElementBar } from "@ui-board";
-import dayjs from "dayjs";
-import { computed, defineComponent } from "vue";
-import { useI18n } from "vue-i18n";
+import { defineComponent } from "vue";
 
 export default defineComponent({
 	name: "InnerContent",
 	components: { ContentElementBar },
-	props: {
-		lastUpdatedAt: {
-			type: String,
-			required: true,
-		},
-	},
-	setup(props) {
-		const { t } = useI18n();
+	setup() {
 		const imageSrc = image;
-
-		const formattedLastUpdatedAt = computed(() => {
-			const format = t("format.dateTime");
-			return dayjs(props.lastUpdatedAt).format(format);
-		});
 
 		return {
 			imageSrc,
-			formattedLastUpdatedAt,
 			mdiPresentation,
 		};
 	},
