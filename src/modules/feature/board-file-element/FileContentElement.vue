@@ -1,12 +1,11 @@
 <template>
 	<v-card
-		class="mb-4"
+		class="board-file-element-card mb-4"
 		data-testid="board-file-element"
 		elevation="0"
 		:variant="isOutlined ? 'outlined' : 'elevated'"
 		ref="fileContentElement"
 		:ripple="false"
-		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 	>
 		<FileContent
@@ -218,3 +217,8 @@ export default defineComponent({
 	},
 });
 </script>
+<style lang="scss" scoped>
+.board-file-element-card {
+	overflow: visible;
+}
+</style>

@@ -4,7 +4,10 @@
 			<div
 				class="d-flex align-center"
 				style="min-height: 52px"
+				tabindex="0"
+				role="button"
 				@click="openLightBox"
+				@keydown.enter.space="openLightBox"
 			>
 				<div class="w-100 h-100">
 					<PreviewImage
@@ -86,8 +89,3 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped lang="scss">
-.image-display:focus {
-	outline: none;
-}
-</style>
