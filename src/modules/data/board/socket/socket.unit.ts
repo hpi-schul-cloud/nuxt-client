@@ -91,7 +91,7 @@ describe("socket.ts", () => {
 	};
 
 	describe("connect event", () => {
-		it("should showInfo when socket is connected", () => {
+		it("should showSuccess when socket is connected", () => {
 			useSocketConnection(dispatchMock);
 
 			const eventCallbacks = getEventCallbacks();
@@ -102,7 +102,7 @@ describe("socket.ts", () => {
 
 			eventCallbacks.connect();
 
-			expect(mockBoardNotifierCalls.showInfo).toHaveBeenCalledWith(
+			expect(mockBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
 				"common.notification.connection.restored"
 			);
 		});

@@ -7,6 +7,7 @@
 				:icon="mdiMenu"
 				@click="() => $emit('sidebar-toggled')"
 				size="default"
+				data-test-id="sidebar-toggle"
 			/>
 		</template>
 		<VSpacer />
