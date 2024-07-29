@@ -36,6 +36,8 @@ import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import RoomDetailsPage from "./RoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
+import DefaultWireframe from "../../components/templates/DefaultWireframe.vue";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -283,12 +285,30 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				.findAllComponents(SpeedDialMenuAction)
 				.map((btn) => btn.props("dataTestId"));
 
-			expect(btnDataTestIds.includes("fab_button_add_board")).toBe(true);
+			expect(btnDataTestIds.includes("fab_button_add_column_board")).toBe(true);
 		});
 
 		describe("'add list board' button", () => {
+			describe("when user doesn't have course edit permission", () => {
+				it("should not render any board creation button", async () => {
+					const wrapper = getWrapper(["homework_create", "topic_create"]);
+					const fabComponent = wrapper.findComponent(SpeedDialMenu);
+
+					// open menu
+					await fabComponent.findComponent(VBtn).trigger("click");
+					const btnDataTestIds = wrapper
+						.findAllComponents(SpeedDialMenuAction)
+						.map((btn) => btn.props("dataTestId"));
+
+					expect(btnDataTestIds.includes("fab_button_add_column_board")).toBe(
+						false
+					);
+					expect(btnDataTestIds.includes("fab_button_add_board")).toBe(false);
+				});
+			});
+
 			describe("when feature is enabled", () => {
-				it("should render the button", async () => {
+				it("should render the button to open dialog", async () => {
 					const envs = envsFactory.build({
 						FEATURE_BOARD_LAYOUT_ENABLED: true,
 					});
@@ -302,30 +322,27 @@ describe("@/pages/RoomDetails.page.vue", () => {
 						.findAllComponents(SpeedDialMenuAction)
 						.map((btn) => btn.props("dataTestId"));
 
-					expect(btnDataTestIds.includes("fab_button_add_list_board")).toBe(
-						true
-					);
+					expect(btnDataTestIds.includes("fab_button_add_board")).toBe(true);
 				});
-			});
 
-			describe("when user doesn't have course edit permission", () => {
-				it("should not render the button", async () => {
+				it("should open layout dialog when button is clicked", async () => {
 					const envs = envsFactory.build({
-						FEATURE_BOARD_LAYOUT_ENABLED: false,
+						FEATURE_BOARD_LAYOUT_ENABLED: true,
 					});
 					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper(["course_edit"]);
-					const fabComponent = wrapper.findComponent(SpeedDialMenu);
+					const wrapperData: any = wrapper.vm.$data;
+
+					const layoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
+					expect(layoutDialog.exists()).toBe(true);
+
+					expect(wrapperData.boardLayoutDialogIsOpen).toBe(false);
 
 					// open menu
-					await fabComponent.findComponent(VBtn).trigger("click");
-					const btnDataTestIds = wrapper
-						.findAllComponents(SpeedDialMenuAction)
-						.map((btn) => btn.props("dataTestId"));
+					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+					defaultWireframe.vm.$emit("onFabItemClick", "board-type-dialog-open");
 
-					expect(btnDataTestIds.includes("fab_button_add_list_board")).toBe(
-						false
-					);
+					expect(wrapperData.boardLayoutDialogIsOpen).toBe(true);
 				});
 			});
 		});
