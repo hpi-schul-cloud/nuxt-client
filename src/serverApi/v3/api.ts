@@ -2548,6 +2548,12 @@ export interface ExternalToolCreateParams {
      */
     logoUrl?: string;
     /**
+     * URL of the thumbnail of the external tool
+     * @type {string}
+     * @memberof ExternalToolCreateParams
+     */
+    thumbnailUrl?: string;
+    /**
      * Configuration of the external tool
      * @type {BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams}
      * @memberof ExternalToolCreateParams
@@ -2759,6 +2765,12 @@ export interface ExternalToolResponse {
      */
     logoUrl?: string;
     /**
+     * URL of the thumbnail of the external tool
+     * @type {string}
+     * @memberof ExternalToolResponse
+     */
+    thumbnailUrl?: string;
+    /**
      * Configuration of the external tool
      * @type {BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams}
      * @memberof ExternalToolResponse
@@ -2868,6 +2880,12 @@ export interface ExternalToolUpdateParams {
      * @memberof ExternalToolUpdateParams
      */
     logoUrl?: string;
+    /**
+     * URL of the thumbnail of the external tool
+     * @type {string}
+     * @memberof ExternalToolUpdateParams
+     */
+    thumbnailUrl?: string;
     /**
      * Configuration of the external tool
      * @type {BasicToolConfigParams | Lti11ToolConfigUpdateParams | Oauth2ToolConfigUpdateParams}
@@ -4183,6 +4201,12 @@ export interface MediaAvailableLineElementResponse {
      * @memberof MediaAvailableLineElementResponse
      */
     logoUrl?: string;
+    /**
+     * Thumbnail url of the media available line element
+     * @type {string}
+     * @memberof MediaAvailableLineElementResponse
+     */
+    thumbnailUrl?: string;
 }
 /**
  * 
@@ -7627,6 +7651,12 @@ export interface ToolReferenceResponse {
      * @memberof ToolReferenceResponse
      */
     logoUrl?: string;
+    /**
+     * The url of the thumbnail which is stored in the db
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    thumbnailUrl?: string;
     /**
      * The display name of the tool
      * @type {string}
