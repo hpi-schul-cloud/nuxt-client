@@ -11,10 +11,7 @@
 		role="button"
 	>
 		<div class="drawing-element-content" @click="redirectToSanitizedUrl">
-			<InnerContent
-				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
-				:docName="element.id"
-			>
+			<InnerContent :docName="element.id">
 				<template v-if="isEditMode">
 					<BoardMenu scope="element">
 						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />

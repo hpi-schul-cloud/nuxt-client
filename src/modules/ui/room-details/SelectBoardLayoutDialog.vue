@@ -1,7 +1,10 @@
 <template>
 	<VDialog data-testid="board-layout-dialog" width="360">
 		<VCard>
-			<VCardTitle class="text-h4 text-break px-6 pt-4">
+			<VCardTitle
+				class="text-h4 text-break px-6 pt-4"
+				data-testid="board-layout-dialog-title"
+			>
 				{{ $t("pages.room.dialog.boardLayout.title") }}
 			</VCardTitle>
 			<VCardText
