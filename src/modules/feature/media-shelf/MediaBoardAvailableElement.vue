@@ -48,7 +48,7 @@ useErrorNotification(launchError);
 const displayData: ComputedRef<MediaElementDisplay> = computed(() => ({
 	title: props.element.name,
 	description: props.element.description,
-	thumbnail: props.element?.logoUrl,
+	thumbnail: props.element.thumbnailUrl || props.element.logoUrl,
 }));
 
 const loadAvailableLineElementData = async (

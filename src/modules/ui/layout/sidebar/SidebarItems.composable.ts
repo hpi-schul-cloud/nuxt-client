@@ -104,6 +104,7 @@ export const useSidebarItems = () => {
 		},
 	]);
 
+	// TODO - adjust language keys, when old footer is removed
 	const legalLinks: ComputedRef<SidebarSingleItem[]> = computed(() => [
 		{
 			href:
@@ -159,7 +160,7 @@ export const useSidebarItems = () => {
 			theme: [SchulcloudTheme.Brb, SchulcloudTheme.N21, SchulcloudTheme.Thr],
 		},
 		{
-			title: "global.topbar.actions.releaseNotes",
+			title: "global.sidebar.item.releaseNotes",
 			href: "/system/releases",
 			target: "_self",
 			testId: "releases",
@@ -249,22 +250,21 @@ export const useSidebarItems = () => {
 			title: "global.sidebar.item.helpArea",
 			icon: "$mdiHelpCircleOutline",
 			testId: "Hilfebereich",
-			// TODO - adjust language keys, when old components are removed
 			children: [
 				{
-					title: "global.topbar.actions.helpSection",
+					title: "global.sidebar.item.helpSection",
 					href: "/help",
 					target: "_self",
 					testId: "help-articles",
 				},
 				{
-					title: "global.topbar.actions.contactSupport",
+					title: "global.sidebar.item.contactSupport",
 					href: "/help/contact",
 					target: "_self",
 					testId: "contact",
 				},
 				{
-					title: "global.topbar.actions.training",
+					title: "global.sidebar.item.training",
 					href: "https://www.lernen.cloud/",
 					target: "_blank",
 					testId: "training",

@@ -624,7 +624,7 @@ export interface ClassResponse {
  * @export
  * @enum {string}
  */
-export enum ClassSortBy {
+export enum ClassSortQueryType {
     Name = 'name',
     ExternalSourceName = 'externalSourceName',
     SynchronizedCourses = 'synchronizedCourses',
@@ -1132,12 +1132,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     BOARD_COLLABORATION_URI: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_NEW_LAYOUT_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -2554,6 +2548,12 @@ export interface ExternalToolCreateParams {
      */
     logoUrl?: string;
     /**
+     * URL of the thumbnail of the external tool
+     * @type {string}
+     * @memberof ExternalToolCreateParams
+     */
+    thumbnailUrl?: string;
+    /**
      * Configuration of the external tool
      * @type {BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams}
      * @memberof ExternalToolCreateParams
@@ -2765,6 +2765,12 @@ export interface ExternalToolResponse {
      */
     logoUrl?: string;
     /**
+     * URL of the thumbnail of the external tool
+     * @type {string}
+     * @memberof ExternalToolResponse
+     */
+    thumbnailUrl?: string;
+    /**
      * Configuration of the external tool
      * @type {BasicToolConfigParams | Lti11ToolConfigCreateParams | Oauth2ToolConfigCreateParams}
      * @memberof ExternalToolResponse
@@ -2874,6 +2880,12 @@ export interface ExternalToolUpdateParams {
      * @memberof ExternalToolUpdateParams
      */
     logoUrl?: string;
+    /**
+     * URL of the thumbnail of the external tool
+     * @type {string}
+     * @memberof ExternalToolUpdateParams
+     */
+    thumbnailUrl?: string;
     /**
      * Configuration of the external tool
      * @type {BasicToolConfigParams | Lti11ToolConfigUpdateParams | Oauth2ToolConfigUpdateParams}
@@ -3087,6 +3099,31 @@ export interface ForbiddenOperationError {
      * @memberof ForbiddenOperationError
      */
     details?: object;
+}
+/**
+ * 
+ * @export
+ * @interface ForceMigrationParams
+ */
+export interface ForceMigrationParams {
+    /**
+     * Email of the administrator
+     * @type {string}
+     * @memberof ForceMigrationParams
+     */
+    email: string;
+    /**
+     * Target externalId to link it with an external account
+     * @type {string}
+     * @memberof ForceMigrationParams
+     */
+    externalUserId: string;
+    /**
+     * Target externalId to link it with an external school
+     * @type {string}
+     * @memberof ForceMigrationParams
+     */
+    externalSchoolId: string;
 }
 /**
  * 
@@ -4164,6 +4201,12 @@ export interface MediaAvailableLineElementResponse {
      * @memberof MediaAvailableLineElementResponse
      */
     logoUrl?: string;
+    /**
+     * Thumbnail url of the media available line element
+     * @type {string}
+     * @memberof MediaAvailableLineElementResponse
+     */
+    thumbnailUrl?: string;
 }
 /**
  * 
@@ -5751,6 +5794,7 @@ export enum Permission {
     UserCreate = 'USER_CREATE',
     UserLoginMigrationAdmin = 'USER_LOGIN_MIGRATION_ADMIN',
     UserLoginMigrationRollback = 'USER_LOGIN_MIGRATION_ROLLBACK',
+    UserLoginMigrationForce = 'USER_LOGIN_MIGRATION_FORCE',
     UserMigrate = 'USER_MIGRATE',
     UserUpdate = 'USER_UPDATE',
     YearsEdit = 'YEARS_EDIT'
@@ -7607,6 +7651,12 @@ export interface ToolReferenceResponse {
      * @memberof ToolReferenceResponse
      */
     logoUrl?: string;
+    /**
+     * The url of the thumbnail which is stored in the db
+     * @type {string}
+     * @memberof ToolReferenceResponse
+     */
+    thumbnailUrl?: string;
     /**
      * The display name of the tool
      * @type {string}
@@ -13831,13 +13881,13 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {ClassSortBy} [sortBy] 
+         * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
          * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options: any = {}): Promise<RequestArgs> => {
+        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/groups/class`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -13997,13 +14047,13 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {ClassSortBy} [sortBy] 
+         * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
          * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
+        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14048,13 +14098,13 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {ClassSortBy} [sortBy] 
+         * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
          * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
+        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
             return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(axios, basePath));
         },
         /**
@@ -14095,14 +14145,14 @@ export interface GroupApiInterface {
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
-     * @param {ClassSortBy} [sortBy] 
+     * @param {ClassSortQueryType} [sortBy] 
      * @param {SchoolYearQueryType} [type] 
      * @param {ClassRequestContext} [calledFrom] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApiInterface
      */
-    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse>;
+    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse>;
 
     /**
      * 
@@ -14142,14 +14192,14 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {'asc' | 'desc'} [sortOrder] 
-     * @param {ClassSortBy} [sortBy] 
+     * @param {ClassSortQueryType} [sortBy] 
      * @param {SchoolYearQueryType} [type] 
      * @param {ClassRequestContext} [calledFrom] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApi
      */
-    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortBy, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any) {
+    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any) {
         return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(this.axios, this.basePath));
     }
 
@@ -24310,6 +24360,46 @@ export const UserLoginMigrationApiAxiosParamCreator = function (configuration?: 
             };
         },
         /**
+         * 
+         * @summary Force migrate an administrator account and its school
+         * @param {ForceMigrationParams} forceMigrationParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerForceMigration: async (forceMigrationParams: ForceMigrationParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'forceMigrationParams' is not null or undefined
+            assertParamExists('userLoginMigrationControllerForceMigration', 'forceMigrationParams', forceMigrationParams)
+            const localVarPath = `/user-login-migrations/force-migration`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(forceMigrationParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Currently there can only be one migration for a user. Therefore only one migration is returned.
          * @summary Get UserLoginMigrations
          * @param {string} [userId] 
@@ -24522,6 +24612,17 @@ export const UserLoginMigrationApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * 
+         * @summary Force migrate an administrator account and its school
+         * @param {ForceMigrationParams} forceMigrationParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.userLoginMigrationControllerForceMigration(forceMigrationParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * Currently there can only be one migration for a user. Therefore only one migration is returned.
          * @summary Get UserLoginMigrations
          * @param {string} [userId] 
@@ -24598,6 +24699,16 @@ export const UserLoginMigrationApiFactory = function (configuration?: Configurat
             return localVarFp.userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
+         * 
+         * @summary Force migrate an administrator account and its school
+         * @param {ForceMigrationParams} forceMigrationParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): AxiosPromise<void> {
+            return localVarFp.userLoginMigrationControllerForceMigration(forceMigrationParams, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Currently there can only be one migration for a user. Therefore only one migration is returned.
          * @summary Get UserLoginMigrations
          * @param {string} [userId] 
@@ -24666,6 +24777,16 @@ export interface UserLoginMigrationApiInterface {
      * @memberof UserLoginMigrationApiInterface
      */
     userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any): AxiosPromise<UserLoginMigrationResponse>;
+
+    /**
+     * 
+     * @summary Force migrate an administrator account and its school
+     * @param {ForceMigrationParams} forceMigrationParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApiInterface
+     */
+    userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any): AxiosPromise<void>;
 
     /**
      * Currently there can only be one migration for a user. Therefore only one migration is returned.
@@ -24739,6 +24860,18 @@ export class UserLoginMigrationApi extends BaseAPI implements UserLoginMigration
      */
     public userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId: string, options?: any) {
         return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerFindUserLoginMigrationBySchool(schoolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Force migrate an administrator account and its school
+     * @param {ForceMigrationParams} forceMigrationParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserLoginMigrationApi
+     */
+    public userLoginMigrationControllerForceMigration(forceMigrationParams: ForceMigrationParams, options?: any) {
+        return UserLoginMigrationApiFp(this.configuration).userLoginMigrationControllerForceMigration(forceMigrationParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

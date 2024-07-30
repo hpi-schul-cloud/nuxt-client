@@ -93,6 +93,7 @@ import {
 	mdiRedo,
 	mdiRefreshCircle,
 	mdiReload,
+	mdiRenameOutline,
 	mdiSchoolOutline,
 	mdiShareVariantOutline,
 	mdiShieldAccountVariantOutline,
@@ -107,6 +108,7 @@ import {
 	mdiViewDashboard,
 	mdiViewDashboardOutline,
 	mdiViewGridOutline,
+	mdiViewGridPlusOutline,
 	mdiViewListOutline,
 } from "@mdi/js";
 
@@ -205,6 +207,7 @@ export {
 	mdiRedo,
 	mdiRefreshCircle,
 	mdiReload,
+	mdiRenameOutline,
 	mdiSchoolOutline,
 	mdiShareVariantOutline,
 	mdiShieldAccountVariantOutline,
@@ -219,5 +222,6 @@ export {
 	mdiViewDashboard,
 	mdiViewDashboardOutline,
 	mdiViewGridOutline,
+	mdiViewGridPlusOutline,
 	mdiViewListOutline,
 };

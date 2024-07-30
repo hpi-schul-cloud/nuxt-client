@@ -15,7 +15,7 @@ const connectionOptions = {
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
-	const { showFailure, showInfo } = useBoardNotifier();
+	const { showFailure, showSuccess } = useBoardNotifier();
 	const { t } = useI18n();
 
 	if (instance === null) {
@@ -27,7 +27,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		instance.on("connect", async function () {
 			console.log("connected");
 			if (connectionOptions.socketConnectionLost) {
-				showInfo(t("common.notification.connection.restored"));
+				showSuccess(t("common.notification.connection.restored"));
 				connectionOptions.socketConnectionLost = false;
 
 				if (!(boardStore.board && cardStore.cards)) return;

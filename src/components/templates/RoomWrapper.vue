@@ -3,7 +3,6 @@
 		ref="main"
 		max-width="short"
 		:fab-items="fabItems"
-		:env-config-module="envConfigModule"
 		@onFabItemClick="fabItemClickHandler"
 	>
 		<template #header>
