@@ -84,6 +84,7 @@ const props = defineProps({
 		text-decoration: underline;
 	}
 }
+
 .content-element-bar-texts {
 	position: relative;
 	z-index: -1;

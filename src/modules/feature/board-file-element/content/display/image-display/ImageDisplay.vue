@@ -89,3 +89,8 @@ export default defineComponent({
 	},
 });
 </script>
+<style scoped lang="scss">
+.image-display {
+	z-index: 1;
+}
+</style>

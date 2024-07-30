@@ -1,5 +1,5 @@
 <template>
-	<ContentElementBar v-if="isEditMode">
+	<ContentElementBar v-if="isEditMode" class="file-upload-element-bar">
 		<template #element>
 			<div
 				v-if="isUploading || fileWasPicked"
@@ -83,3 +83,8 @@ export default defineComponent({
 	},
 });
 </script>
+<style lang="scss" scoped>
+.file-upload-element-bar {
+	z-index: 1; // To make sure the file picker is on top of the other elements
+}
+</style>
