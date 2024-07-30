@@ -9,84 +9,39 @@
 		<div class="mb-4">
 			<div
 				v-if="!isShowQrCode"
-				class="d-flex flex-sm-row flex-column justify-content-space-between align-items-center"
+				class="d-flex flex-row flex-wrap align-items-center justify-space-around"
 			>
-				<v-btn
-					variant="text"
-					size="large"
-					class="d-sm-none d-flex button-alignment-top mb-2"
-					:height="84"
+				<ExtendedIconBtn
+					class="d-sm-none d-flex"
 					data-testid="mobilePlatformAction"
-					@click="onShareMobilePlatflorm(shareUrl)"
-				>
-					<span
-						class="d-flex flex-column justify-content-center button-max-width"
-					>
-						<span class="mb-2">
-							<v-icon size="large">{{ mdiShareVariantOutline }}</v-icon></span
-						>
-						<span class="subtitle">{{ t("common.actions.share") }}</span>
-					</span>
-				</v-btn>
-				<v-btn
-					variant="text"
-					size="large"
-					:height="84"
-					class="d-sm-flex d-none button-alignment-top"
+					:icon="mdiShareVariantOutline"
+					label="common.actions.share"
+					@click.stop="onShareMobilePlatflorm(shareUrl)"
+				/>
+
+				<ExtendedIconBtn
+					class="d-sm-flex d-none"
 					data-testid="shareMailAction"
-					@click="onMailShareUrl(shareUrl, type)"
-				>
-					<span
-						class="d-flex flex-column justify-content-center button-max-width"
-					>
-						<span class="mb-2">
-							<v-icon size="large">{{ mdiEmailOutline }}</v-icon></span
-						>
-						<span class="subtitle">{{
-							t("components.molecules.share.result.mailShare")
-						}}</span>
-					</span>
-				</v-btn>
+					:icon="mdiEmailOutline"
+					label="components.molecules.share.result.mailShare"
+					@click.stop="onMailShareUrl(shareUrl, type)"
+				/>
 
-				<v-btn
-					variant="text"
-					size="large"
-					:height="84"
-					class="d-sm-flex d-none button-alignment-top"
+				<ExtendedIconBtn
+					class="d-sm-flex d-none"
 					data-testid="copyAction"
-					@click="onCopy(shareUrl)"
-				>
-					<span
-						class="d-flex flex-column justify-content-center button-max-width"
-					>
-						<span class="mb-2">
-							<v-icon size="large">{{ mdiContentCopy }}</v-icon></span
-						>
-						<span class="subtitle">{{
-							t("components.molecules.share.result.copyClipboard")
-						}}</span>
-					</span>
-				</v-btn>
+					:icon="mdiContentCopy"
+					label="components.molecules.share.result.copyClipboard"
+					@click.stop="onCopy(shareUrl)"
+				/>
 
-				<v-btn
-					variant="text"
-					size="large"
-					:height="84"
+				<ExtendedIconBtn
+					class="d-flex"
 					data-testid="qrCodeAction"
-					class="button-alignment-top"
-					@click="onShowQrCode"
-				>
-					<span
-						class="d-flex flex-column justify-content-center button-max-width"
-					>
-						<span class="mb-2">
-							<v-icon size="large">{{ mdiQrcode }}</v-icon></span
-						>
-						<span class="subtitle">{{
-							t("components.molecules.share.result.qrCodeScan")
-						}}</span>
-					</span>
-				</v-btn>
+					:icon="mdiQrcode"
+					label="components.molecules.share.result.qrCodeScan"
+					@click.stop="onShowQrCode"
+				/>
 			</div>
 		</div>
 		<div
@@ -100,6 +55,7 @@
 
 <script setup>
 import { QRCode } from "@ui-qr-code";
+import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
 	mdiContentCopy,

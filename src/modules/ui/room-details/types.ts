@@ -12,3 +12,11 @@ export type LessonData = Lesson & {
 	numberOfPlannedTasks: number;
 	numberOfPublishedTasks: number;
 };
+
+export type PickerOption = {
+	icon: string;
+	label: string;
+	eventName: string;
+	dataTestId: string;
+	ariaLabel: string;
+};

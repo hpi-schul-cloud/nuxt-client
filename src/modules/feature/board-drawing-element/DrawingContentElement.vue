@@ -11,10 +11,7 @@
 		@keydown.up.down="onKeydownArrow"
 	>
 		<div class="drawing-element-content">
-			<InnerContent
-				:lastUpdatedAt="element.timestamps.lastUpdatedAt"
-				:docName="element.id"
-			>
+			<InnerContent :docName="element.id">
 				<template v-if="isEditMode">
 					<BoardMenu scope="element">
 						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
