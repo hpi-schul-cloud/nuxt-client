@@ -24,6 +24,7 @@ export default {
 	"common.actions.share": "Compartir",
 	"common.actions.shareCopy": "Compartir copia",
 	"common.actions.update": "Actualizar",
+	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
