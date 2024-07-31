@@ -172,19 +172,7 @@ module.exports = {
 			"@page-class-members": getDir("src/modules/page/class-members"),
 			"@page-media-shelf": getDir("src/modules/page/media-shelf"),
 		},
-		extensions: [
-			".tsx",
-			".ts",
-			".mjs",
-			".js",
-			".jsx",
-			".vue",
-			".json",
-			".js",
-			".ts",
-			".vue",
-			".json",
-		],
+		extensions: [".tsx", ".ts", ".mjs", ".js", ".jsx", ".vue", ".json"],
 		plugins: [new ThemeResolverPlugin(__base, replacements)],
 	},
 
@@ -219,8 +207,9 @@ module.exports = {
 			// I18n - TS
 			{
 				test: /\.ts$/,
-				loader: "@intlify/vue-i18n-loader",
-				include: [path.resolve(__src, "/locales")],
+				type: "javascript/auto",
+				loader: path.resolve(__dirname, "vue-i18n-loader.js"),
+				include: [path.resolve(__src, "locales")],
 			},
 			// Vue
 			{
