@@ -42,8 +42,15 @@ const fileExtension = computed(() => getFileExtension(props.name));
 
 const ariaLabel = computed(() => {
 	const { caption, name } = props;
-	const label = caption ? `${caption}, ${fileExtension.value}` : name;
+	const label = caption?.trim() ? `${caption}, ${fileExtension.value}` : name;
 
 	return `${label}, ${t("common.ariaLabel.newTab")}`;
 });
 </script>
+
+<style scoped>
+/* a:focus {
+	outline: -webkit-focus-ring-color auto 1px; /* Ensures default focus ring is visible in Safari
+}
+*/
+</style>
