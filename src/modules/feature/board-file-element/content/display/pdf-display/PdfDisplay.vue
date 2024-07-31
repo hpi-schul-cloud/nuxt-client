@@ -1,5 +1,5 @@
 <template>
-	<ContentElementBar class="pdf-display">
+	<ContentElementBar>
 		<template #display>
 			<div @click="openPdf">
 				<PreviewImage
@@ -8,6 +8,7 @@
 					:aspect-ratio="1.77777"
 					position="top"
 					:cover="true"
+					:is-aria-hidden="true"
 				/>
 			</div>
 		</template>
@@ -50,8 +51,3 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped lang="scss">
-.pdf-display:focus {
-	outline: none;
-}
-</style>

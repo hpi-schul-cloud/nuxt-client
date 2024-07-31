@@ -15,6 +15,7 @@
 		@error="setError"
 		:max-width="imageWidth"
 		:max-height="maxHeight"
+		:aria-hidden="isAriaHidden"
 	>
 		<template v-slot:placeholder>
 			<v-row class="fill-height ma-0" align="center" justify="center">
@@ -38,6 +39,7 @@ export default defineComponent({
 		aspectRatio: { type: Number, required: false },
 		position: { type: String, required: false },
 		maxHeight: { type: Number, required: false },
+		isAriaHidden: { type: Boolean, required: false, default: false },
 	},
 	components: { WarningAlert },
 	emits: ["error"],
