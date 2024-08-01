@@ -4,11 +4,10 @@
 			<div @click="openPdf">
 				<PreviewImage
 					:src="previewSrc"
-					:alt="altText"
+					alt=""
 					:aspect-ratio="1.77777"
 					position="top"
 					:cover="true"
-					:is-aria-hidden="true"
 				/>
 			</div>
 		</template>
