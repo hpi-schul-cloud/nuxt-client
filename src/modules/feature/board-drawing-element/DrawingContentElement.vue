@@ -5,9 +5,9 @@
 		variant="outlined"
 		ref="drawingElement"
 		:ripple="false"
-		elevation="0"
 		:href="sanitizedUrl"
 		target="_blank"
+		:aria-label="ariaLabel"
 		@keydown.up.down="onKeydownArrow"
 	>
 		<div class="drawing-element-content">
@@ -38,6 +38,7 @@ import {
 } from "@ui-board";
 import { computed, defineComponent, PropType, ref, toRef } from "vue";
 import InnerContent from "./InnerContent.vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "DrawingContentElement",
@@ -62,6 +63,7 @@ export default defineComponent({
 		"move-keyboard:edit",
 	],
 	setup(props, { emit }) {
+		const { t } = useI18n();
 		const drawingElement = ref<HTMLElement | null>(null);
 		const element = toRef(props, "element");
 		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
@@ -91,6 +93,13 @@ export default defineComponent({
 		const isTeacher = computed(() => {
 			return userRoles.value.includes("teacher");
 		});
+
+		const ariaLabel = computed(() => {
+			return `${t("components.cardElement.drawingElement")}, ${t(
+				"common.ariaLabel.newTab"
+			)}`;
+		});
+
 		return {
 			drawingElement,
 			onDeleteElement,
@@ -99,6 +108,8 @@ export default defineComponent({
 			onMoveDrawingElementEditUp,
 			isTeacher,
 			sanitizedUrl,
+			t,
+			ariaLabel,
 		};
 	},
 });

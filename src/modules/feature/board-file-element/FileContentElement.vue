@@ -220,6 +220,6 @@ export default defineComponent({
 </script>
 <style lang="scss" scoped>
 .board-file-element-card {
-	overflow: visible;
+	overflow: initial;
 }
 </style>
