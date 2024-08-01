@@ -4,11 +4,10 @@
 		:class="{ 'd-none': isHidden }"
 		data-testid="board-link-element"
 		ref="linkContentElement"
-		dense
-		elevation="0"
 		:variant="outlined"
 		:ripple="false"
 		@keydown.up.down="onKeydownArrow"
+		:aria-label="ariaLabel"
 		:href="sanitizedUrl"
 		target="_blank"
 		:loading="isLoading ? 'primary' : false"
@@ -51,6 +50,7 @@ import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.compo
 import { ensureProtocolIncluded } from "../util/url.util";
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
 import { sanitizeUrl } from "@braintree/sanitize-url";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	element: {
@@ -67,6 +67,7 @@ const emit = defineEmits<{
 	(e: "move-up:edit"): void;
 }>();
 
+const { t } = useI18n();
 const linkContentElement = ref(null);
 const isLoading = ref(false);
 const element = toRef(props, "element");
@@ -119,6 +120,14 @@ const onCreateUrl = async (originalUrl: string) => {
 	}
 };
 
+const ariaLabel = computed(() => {
+	const contentUrl = computedElement.value.content.url;
+
+	return contentUrl
+		? `${contentUrl}, ${t("common.ariaLabel.newTab")}`
+		: undefined;
+});
+
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (isCreating.value === false) {
 		event.preventDefault();
@@ -136,4 +145,6 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 		emit("delete:element", element.value.id);
 	}
 };
+
+console.log("computed element: ", computedElement.value.content.url);
 </script>
