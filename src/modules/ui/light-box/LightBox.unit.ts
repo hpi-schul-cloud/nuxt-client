@@ -1,5 +1,8 @@
 import { downloadFile } from "@/utils/fileHelper";
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { mdiClose, mdiTrayArrowDown } from "@mdi/js";
 import { PreviewImage } from "@ui-preview-image";
 import { shallowMount } from "@vue/test-utils";
@@ -47,7 +50,7 @@ describe("LightBox", () => {
 		});
 
 		const wrapper = shallowMount(LightBox, {
-			global: { plugins: [createTestingVuetify()] },
+			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
 		return {
@@ -91,7 +94,10 @@ describe("LightBox", () => {
 				"[data-testid=light-box-close-btn]"
 			);
 
-			expect(closeButton.text()).toEqual(mdiClose);
+			expect(closeButton.attributes().icon).toEqual(mdiClose);
+			expect(closeButton.attributes("aria-label")).toEqual(
+				"common.labels.close"
+			);
 		});
 
 		describe("when close button is clicked", () => {
@@ -151,7 +157,10 @@ describe("LightBox", () => {
 					"[data-testid=light-box-download-btn]"
 				);
 
-				expect(downloadButton.text()).toEqual(mdiTrayArrowDown);
+				expect(downloadButton.attributes().icon).toEqual(mdiTrayArrowDown);
+				expect(downloadButton.attributes("aria-label")).toEqual(
+					"components.board.action.download"
+				);
 			});
 
 			describe("when download button is clicked", () => {

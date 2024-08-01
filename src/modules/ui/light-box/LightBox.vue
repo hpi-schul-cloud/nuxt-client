@@ -1,9 +1,12 @@
 <template>
 	<v-dialog fullscreen v-model="isLightBoxOpen">
 		<v-toolbar>
-			<v-btn icon @click="close" data-testid="light-box-close-btn">
-				<v-icon>{{ mdiClose }}</v-icon>
-			</v-btn>
+			<v-btn
+				:aria-label="t('common.labels.close')"
+				:icon="mdiClose"
+				@click="close"
+				data-testid="light-box-close-btn"
+			/>
 
 			<v-icon size="20" class="mr-1">{{ mdiFileDocumentOutline }}</v-icon>
 
@@ -13,12 +16,11 @@
 			<v-spacer />
 			<v-btn
 				v-if="lightBoxOptions.downloadUrl !== ''"
-				icon
+				:aria-label="t('components.board.action.download')"
+				:icon="mdiTrayArrowDown"
 				@click="download"
 				data-testid="light-box-download-btn"
-			>
-				<v-icon>{{ mdiTrayArrowDown }}</v-icon>
-			</v-btn>
+			/>
 		</v-toolbar>
 		<v-row class="ma-0" style="overflow: auto" @click="close">
 			<v-col class="d-flex align-items-center" style="height: 100%">
@@ -31,46 +33,30 @@
 	</v-dialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
 import { mdiClose, mdiFileDocumentOutline, mdiTrayArrowDown } from "@mdi/js";
 import { onKeyStroke } from "@vueuse/core";
-import { defineComponent, ref, watch } from "vue";
+import { ref, watch } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";
 import { PreviewImage } from "@ui-preview-image";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "LightBox",
-	components: {
-		PreviewImage,
-	},
-	setup() {
-		const { close, isLightBoxOpen, lightBoxOptions } = useInternalLightBox();
-		const isImageLoading = ref(true);
+const { t } = useI18n();
 
-		onKeyStroke("Escape", () => close(), { eventName: "keydown" });
+const { close, isLightBoxOpen, lightBoxOptions } = useInternalLightBox();
+const isImageLoading = ref(true);
 
-		const download = async () => {
-			await downloadFile(
-				lightBoxOptions.value.downloadUrl,
-				lightBoxOptions.value.name
-			);
-		};
+onKeyStroke("Escape", () => close(), { eventName: "keydown" });
 
-		watch(isLightBoxOpen, () => {
-			isImageLoading.value = true;
-		});
+const download = async () => {
+	await downloadFile(
+		lightBoxOptions.value.downloadUrl,
+		lightBoxOptions.value.name
+	);
+};
 
-		return {
-			close,
-			download,
-			isLightBoxOpen,
-			lightBoxOptions,
-			mdiClose,
-			mdiFileDocumentOutline,
-			mdiTrayArrowDown,
-			isImageLoading,
-		};
-	},
+watch(isLightBoxOpen, () => {
+	isImageLoading.value = true;
 });
 </script>
