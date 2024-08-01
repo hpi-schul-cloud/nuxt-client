@@ -1,9 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { createMock } from "@golevelup/ts-jest";
 import { ContentElementType, DrawingElementResponse } from "@/serverApi/v3";
@@ -12,7 +8,6 @@ import NotifierModule from "@/store/notifier";
 import EnvConfigModule from "@/store/env-config";
 import { ConfigResponse } from "@/serverApi/v3/api";
 import InnerContent from "./InnerContent.vue";
-import AuthModule from "@/store/auth";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -51,19 +46,12 @@ describe("DrawingContentElement", () => {
 		element: DrawingElementResponse;
 		isEditMode: boolean;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
-		const authModule = createModuleMocks(AuthModule, {
-			getUserRoles: ["teacher"],
-		});
-
 		const wrapper = shallowMount(DrawingContentElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			},
 			propsData: props,
