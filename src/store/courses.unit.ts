@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
-import RoomsModule from "./rooms";
+import RoomsModule from "./courses";
 import { AlertPayload } from "./types/alert-payload";
 import { RoomsData } from "./types/rooms";
 

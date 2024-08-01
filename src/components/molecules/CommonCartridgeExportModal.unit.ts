@@ -1,7 +1,7 @@
 import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/room";
+import RoomModule from "@/store/course";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,

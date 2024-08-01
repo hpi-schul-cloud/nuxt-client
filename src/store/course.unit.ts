@@ -8,7 +8,7 @@ import { meResponseFactory } from "@@/tests/test-utils";
 import { courseFactory } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosError, AxiosInstance } from "axios";
-import RoomModule from "./room";
+import RoomModule from "./course";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
 

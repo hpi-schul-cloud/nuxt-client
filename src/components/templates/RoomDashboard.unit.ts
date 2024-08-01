@@ -6,7 +6,7 @@ import { envConfigModule, roomModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/room";
+import RoomModule from "@/store/course";
 import ShareModule from "@/store/share";
 import {
 	ENV_CONFIG_MODULE_KEY,

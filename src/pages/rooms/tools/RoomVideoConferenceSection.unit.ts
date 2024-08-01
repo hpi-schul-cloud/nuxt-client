@@ -1,6 +1,6 @@
 import { VideoConferenceScope } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import RoomModule from "@/store/room";
+import RoomModule from "@/store/course";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import {

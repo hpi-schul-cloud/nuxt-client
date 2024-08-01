@@ -1,7 +1,7 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { roomsModule } from "@/store";
-import RoomsModule from "@/store/rooms";
+import RoomsModule from "@/store/courses";
 import {
 	createTestingI18n,
 	createTestingVuetify,
