@@ -47,7 +47,7 @@ export default defineComponent({
 	outline: none;
 
 	&:focus {
-		outline: 2px;
+		outline: auto;
 	}
 }
 
