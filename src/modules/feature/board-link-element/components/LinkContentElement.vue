@@ -145,6 +145,4 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 		emit("delete:element", element.value.id);
 	}
 };
-
-console.log("computed element: ", computedElement.value.content.url);
 </script>
