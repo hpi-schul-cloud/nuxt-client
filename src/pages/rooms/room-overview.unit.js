@@ -5,7 +5,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import RoomsModule from "@/store/rooms";
+import RoomsModule from "@/store/courses";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import {
 	ENV_CONFIG_MODULE_KEY,
