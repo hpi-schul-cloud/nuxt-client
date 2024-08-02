@@ -49,8 +49,7 @@ const ariaLabel = computed(() => {
 </script>
 
 <style scoped>
-/* a:focus {
-	outline: -webkit-focus-ring-color auto 1px; /* Ensures default focus ring is visible in Safari
+a:focus {
+	outline: auto; /* Ensures that default focus ring is visible (esp. in Safari) */
 }
-*/
 </style>
