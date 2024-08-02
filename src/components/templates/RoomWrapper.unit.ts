@@ -7,7 +7,7 @@ import {
 import AuthModule from "@/store/auth";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import EnvConfigModule from "@/store/env-config";
-import RoomsModule from "@/store/courses";
+import CoursesModule from "@/store/courses";
 import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -83,7 +83,7 @@ const mockData = [
 describe("@templates/RoomWrapper.vue", () => {
 	beforeEach(() => {
 		setupStores({
-			roomsModule: RoomsModule,
+			roomsModule: CoursesModule,
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
 			commonCartridgeImportModule: CommonCartridgeImportModule,

@@ -5,7 +5,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import RoomsModule from "@/store/courses";
+import CoursesModule from "@/store/courses";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -99,7 +99,7 @@ const mockAuthStoreData = {
 setupStores({
 	authModule: AuthModule,
 	envConfigModule: EnvConfigModule,
-	roomsModule: RoomsModule,
+	roomsModule: CoursesModule,
 });
 
 const spyMocks = {
@@ -132,7 +132,7 @@ const getWrapper = (device = "desktop", options = {}) => {
 	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 		getCtlToolsTabEnabled: false,
 	});
-	const roomsModuleMock = createModuleMocks(RoomsModule);
+	const roomsModuleMock = createModuleMocks(CoursesModule);
 	return mount(RoomOverview, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],

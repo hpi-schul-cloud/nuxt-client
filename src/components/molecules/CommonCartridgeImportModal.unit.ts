@@ -1,4 +1,4 @@
-import RoomsModule from "@/store/courses";
+import CoursesModule from "@/store/courses";
 import CommonCartridgeImportModal from "./CommonCartridgeImportModal.vue";
 import { mount } from "@vue/test-utils";
 import LoadingStateModule from "@/store/loading-state";
@@ -21,7 +21,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 		document.body.setAttribute("data-app", "true");
 
 		const notifierModuleMock = createModuleMocks(NotifierModule);
-		const roomsModuleMock = createModuleMocks(RoomsModule, {
+		const roomsModuleMock = createModuleMocks(CoursesModule, {
 			getAllElements: [],
 		});
 		const commonCartridgeImportModule = createModuleMocks(

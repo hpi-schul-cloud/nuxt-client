@@ -12,7 +12,7 @@ import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
 import CourseModule from "@/store/course";
-import RoomsModule from "@/store/courses";
+import CoursesModule from "@/store/courses";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
@@ -53,7 +53,7 @@ export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
 	Symbol("schoolsModule");
 export const COMMON_CARTRIDGE_EXPORT_MODULE_KEY: InjectionKey<CommonCartridgeExportModule> =
 	Symbol("commonCartridgeExportModule");
-export const ROOMS_MODULE_KEY: InjectionKey<RoomsModule> =
+export const ROOMS_MODULE_KEY: InjectionKey<CoursesModule> =
 	Symbol("roomsModule");
 export const LOADING_STATE_MODULE_KEY: InjectionKey<LoadingStateModule> =
 	Symbol("loadingStateModule");

@@ -1,7 +1,7 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { roomsModule } from "@/store";
-import RoomsModule from "@/store/courses";
+import CoursesModule from "@/store/courses";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -13,7 +13,7 @@ import RoomModal from "./RoomModal.vue";
 describe("RoomModal", () => {
 	const getWrapper = (props: { isOpen: boolean }) => {
 		const { isOpen } = props;
-		setupStores({ roomsModule: RoomsModule });
+		setupStores({ roomsModule: CoursesModule });
 
 		const wrapper = mount(RoomModal, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },

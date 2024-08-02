@@ -2,7 +2,7 @@ import { roomsModule } from "@/store";
 import { mount } from "@vue/test-utils";
 import RoomList from "./RoomList.page.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
-import RoomsModule from "@/store/courses";
+import CoursesModule from "@/store/courses";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import {
@@ -33,7 +33,7 @@ const getWrapper = (device = "desktop") => {
 			[LOADING_STATE_MODULE_KEY.valueOf()]:
 				createModuleMocks(LoadingStateModule),
 			[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-			[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
+			[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(CoursesModule),
 			[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
 				CommonCartridgeImportModule
 			),
@@ -82,7 +82,7 @@ const mockData = [
 describe("@/pages/room-list.vue", () => {
 	beforeEach(() => {
 		setupStores({
-			roomsModule: RoomsModule,
+			roomsModule: CoursesModule,
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
 		});

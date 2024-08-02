@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
-import RoomsModule from "./courses";
+import CoursesModule from "./courses";
 import { AlertPayload } from "./types/alert-payload";
 import { RoomsData } from "./types/rooms";
 
@@ -99,7 +99,7 @@ describe("rooms module", () => {
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
 
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 
 				roomsModule
 					.fetch({
@@ -129,7 +129,7 @@ describe("rooms module", () => {
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
 
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 
 				const payload = {
 					from: { x: 1, y: 1 },
@@ -156,7 +156,7 @@ describe("rooms module", () => {
 		describe("delete", () => {
 			it("should call 'setPosition' mutation", async () => {
 				// TODO: call server will be here when server ready
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 
 				const setRoomDataSpy = jest.spyOn(roomsModule, "setRoomData");
 				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
@@ -182,7 +182,7 @@ describe("rooms module", () => {
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
 
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const roomsData: RoomsData = {
 					id: "dummyId",
 					title: "dummy title",
@@ -216,7 +216,7 @@ describe("rooms module", () => {
 					.mockReturnValue(
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const roomsData: RoomsData = {
 					id: "dummyId",
 					title: "dummy title",
@@ -246,7 +246,7 @@ describe("rooms module", () => {
 				jest
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				await roomsModule.fetchAllElements();
 
 				expect(roomsModule.getLoading).toBe(false);
@@ -270,7 +270,7 @@ describe("rooms module", () => {
 				jest
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 
 				roomsModule.fetchAllElements().then(() => {
 					expect(roomsModule.getLoading).toBe(false);
@@ -290,7 +290,7 @@ describe("rooms module", () => {
 					status: "success",
 					message: "",
 				};
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const getSharedCourseDataSpy = jest.spyOn(
 					roomsModule,
 					"confirmSharedCourseData"
@@ -311,7 +311,7 @@ describe("rooms module", () => {
 					message: "",
 				};
 				const setBusinessErrorMock = jest.fn();
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				roomsModule.setBusinessError = setBusinessErrorMock;
 
 				await roomsModule.confirmSharedCourseData(sharedCourseData);
@@ -323,7 +323,7 @@ describe("rooms module", () => {
 	describe("mutations", () => {
 		describe("setRoomData", () => {
 			it("should set the room data", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const roomsDataToBeChanged = [
 					{
 						id: "someId",
@@ -356,7 +356,7 @@ describe("rooms module", () => {
 
 		describe("setRoomDataId", () => {
 			it("should set the room data id", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const id = "sample_id";
 
 				roomsModule.setRoomDataId(id);
@@ -366,7 +366,7 @@ describe("rooms module", () => {
 
 		describe("setLoading", () => {
 			it("should set loading", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const loadingValue = true;
 				expect(roomsModule.getLoading).not.toBe(loadingValue);
 				roomsModule.setLoading(loadingValue);
@@ -376,7 +376,7 @@ describe("rooms module", () => {
 
 		describe("setError", () => {
 			it("should set error", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const errorData = { message: "some error" };
 				expect(roomsModule.getError).not.toBe(errorData);
 				roomsModule.setError(errorData);
@@ -386,7 +386,7 @@ describe("rooms module", () => {
 
 		describe("setPosition", () => {
 			it("should re-position the state", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const draggedObject = {
 					from: { x: 6, y: 1 },
 					item: {
@@ -416,7 +416,7 @@ describe("rooms module", () => {
 
 		describe("setAllElements", () => {
 			it("should set the all elements data", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const itemsToBeSet = [
 					{
 						id: "123",
@@ -468,7 +468,7 @@ describe("rooms module", () => {
 
 		describe("setSharedCourseData, setImportedCourseId", () => {
 			it("should set the state and imported course id", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const sharedCourseData = {
 					code: "123",
 					courseName: "Mathe",
@@ -486,7 +486,7 @@ describe("rooms module", () => {
 
 		describe("setBusinessError", () => {
 			it("should set businessError", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const businessErrorData = {
 					statusCode: "400",
 					message: "error",
@@ -497,7 +497,7 @@ describe("rooms module", () => {
 				expect(roomsModule.businessError).toBe(businessErrorData);
 			});
 			it("should reset businessError", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				roomsModule.businessError = {
 					statusCode: "400",
 					message: "error",
@@ -514,7 +514,7 @@ describe("rooms module", () => {
 	describe("getters", () => {
 		describe("getRoomsData", () => {
 			it("should return rooms state", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const itemsToBeSet = [
 					{
 						id: "123",
@@ -562,7 +562,7 @@ describe("rooms module", () => {
 
 		describe("getLoading", () => {
 			it("should return loading state", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 
 				expect(roomsModule.getLoading).not.toStrictEqual(true);
 				roomsModule.setLoading(true);
@@ -572,7 +572,7 @@ describe("rooms module", () => {
 
 		describe("getError", () => {
 			it("should return error state", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const errorData = { message: "some error" };
 				expect(roomsModule.getError).toStrictEqual(null);
 				roomsModule.setError(errorData);
@@ -582,7 +582,7 @@ describe("rooms module", () => {
 
 		describe("getRoomsId", () => {
 			it("should return rooms id state", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const sampleId = "sample_id";
 				expect(roomsModule.getRoomsId).toStrictEqual("");
 				roomsModule.setRoomDataId(sampleId);
@@ -592,7 +592,7 @@ describe("rooms module", () => {
 
 		describe("getCourseSharingStatus", () => {
 			it("should return shared course data", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const sharedCourseData = {
 					code: "123",
 					courseName: "Mathe",
@@ -609,7 +609,7 @@ describe("rooms module", () => {
 
 		describe("getImportedCourseId", () => {
 			it("should return imported course id", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const sampleId = "sample_id";
 				expect(roomsModule.getImportedCourseId).toStrictEqual("");
 				roomsModule.setImportedCourseId(sampleId);
@@ -619,7 +619,7 @@ describe("rooms module", () => {
 
 		describe("getAllElements", () => {
 			it("should return rooms-list AllElements", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const itemsToBeSet = [
 					{
 						id: "123",
@@ -673,7 +673,7 @@ describe("rooms module", () => {
 
 		describe("hasRooms", () => {
 			it("should return true if rooms is empty", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 
 				expect(roomsModule.hasRooms).toStrictEqual(false);
 				roomsModule.setAllElements([]);
@@ -700,7 +700,7 @@ describe("rooms module", () => {
 					},
 				];
 
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 
 				expect(roomsModule.hasRooms).toStrictEqual(false);
 				roomsModule.setAllElements(itemsToBeSet);
@@ -710,7 +710,7 @@ describe("rooms module", () => {
 
 		describe("hasCurrentRooms", () => {
 			it("should return true if rooms is empty", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 
 				expect(roomsModule.hasCurrentRooms).toStrictEqual(false);
 				roomsModule.setRoomData([]);
@@ -737,7 +737,7 @@ describe("rooms module", () => {
 					},
 				];
 
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 
 				expect(roomsModule.hasCurrentRooms).toStrictEqual(false);
 				roomsModule.setRoomData(itemsToBeSet as any);
@@ -747,7 +747,7 @@ describe("rooms module", () => {
 
 		describe("getAlertData", () => {
 			it("should return alert data", () => {
-				const roomsModule = new RoomsModule({});
+				const roomsModule = new CoursesModule({});
 				const alertData: AlertPayload = {
 					status: "success",
 					text: "pages.rooms.uploadCourse.success",

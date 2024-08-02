@@ -14,7 +14,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import RoomsModule from "@/store/courses";
+import CoursesModule from "@/store/courses";
 import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -82,7 +82,7 @@ describe("@components/share/ImportFlow", () => {
 		});
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		setupStores({
-			rooms: RoomsModule,
+			rooms: CoursesModule,
 			envConfigModule: EnvConfigModule,
 		});
 		jest.spyOn(roomsModule, "fetchAllElements").mockImplementation();
