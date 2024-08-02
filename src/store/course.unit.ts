@@ -152,7 +152,10 @@ describe("room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
 
 				const courseModule = new CourseModule({});
-				await courseModule.publishCard({ elementId: "54321", visibility: true });
+				await courseModule.publishCard({
+					elementId: "54321",
+					visibility: true,
+				});
 
 				expect(courseModule.getLoading).toBe(false);
 				expect(
@@ -448,7 +451,10 @@ describe("room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
 				const courseModule = new CourseModule({});
-				const setBusinessErrorSpy = jest.spyOn(courseModule, "setBusinessError");
+				const setBusinessErrorSpy = jest.spyOn(
+					courseModule,
+					"setBusinessError"
+				);
 				const resetBusinessErrorSpy = jest.spyOn(
 					courseModule,
 					"resetBusinessError"
@@ -487,7 +493,10 @@ describe("room module", () => {
 
 				const courseModule = new CourseModule({});
 				const finishTaskSpy = jest.spyOn(courseModule, "finishTask");
-				const setBusinessErrorSpy = jest.spyOn(courseModule, "setBusinessError");
+				const setBusinessErrorSpy = jest.spyOn(
+					courseModule,
+					"setBusinessError"
+				);
 				const resetBusinessErrorSpy = jest.spyOn(
 					courseModule,
 					"resetBusinessError"
@@ -662,7 +671,9 @@ describe("room module", () => {
 
 				expect(courseModule.getPermissionData).toStrictEqual([]);
 				courseModule.setPermissionData(expectedPermissions);
-				expect(courseModule.getPermissionData).toStrictEqual(expectedPermissions);
+				expect(courseModule.getPermissionData).toStrictEqual(
+					expectedPermissions
+				);
 			});
 		});
 	});
@@ -780,7 +791,9 @@ describe("room module", () => {
 				const expectedPermissions = ["THREE", "FOUR"];
 
 				courseModule.setPermissionData(expectedPermissions);
-				expect(courseModule.getPermissionData).toStrictEqual(expectedPermissions);
+				expect(courseModule.getPermissionData).toStrictEqual(
+					expectedPermissions
+				);
 			});
 		});
 	});
