@@ -65,7 +65,7 @@ import {
 } from "@/utils/inject";
 
 const i18n = useI18n();
-const roomsModule = injectStrict(ROOMS_MODULE_KEY);
+const coursesModule = injectStrict(ROOMS_MODULE_KEY);
 const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const commonCartridgeImportModule = injectStrict(
@@ -109,11 +109,11 @@ async function onConfirm(): Promise<void> {
 
 	if (commonCartridgeImportModule.isSuccess) {
 		await Promise.allSettled([
-			roomsModule.fetch(),
-			roomsModule.fetchAllElements(),
+			coursesModule.fetch(),
+			coursesModule.fetchAllElements(),
 		]);
 		loadingStateModule.close();
-		const title = roomsModule.getAllElements[0]?.title;
+		const title = coursesModule.getAllElements[0]?.title;
 		notifierModule.show({
 			status: "success",
 			text: i18n.t("pages.rooms.ccImportCourse.success", { name: title }),

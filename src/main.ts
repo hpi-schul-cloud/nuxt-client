@@ -19,7 +19,7 @@ import {
 	notifierModule,
 	privacyPolicyModule,
 	courseModule,
-	roomsModule,
+	coursesModule,
 	schoolExternalToolsModule,
 	schoolsModule,
 	shareModule,
@@ -164,7 +164,7 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(PRIVACY_POLICY_MODULE_KEY.valueOf(), privacyPolicyModule);
 	app.provide(TERMS_OF_USE_MODULE_KEY.valueOf(), termsOfUseModule);
 	app.provide(ROOM_MODULE_KEY.valueOf(), courseModule);
-	app.provide("roomsModule", roomsModule);
+	app.provide("coursesModule", coursesModule);
 	app.provide(
 		SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),
 		schoolExternalToolsModule
@@ -184,7 +184,7 @@ app.use(VueDOMPurifyHTML, {
 	);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
 	app.provide(LOADING_STATE_MODULE_KEY.valueOf(), loadingStateModule);
-	app.provide(ROOMS_MODULE_KEY.valueOf(), roomsModule);
+	app.provide(ROOMS_MODULE_KEY.valueOf(), coursesModule);
 	app.provide(
 		COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf(),
 		commonCartridgeImportModule

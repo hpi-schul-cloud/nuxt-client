@@ -1,4 +1,4 @@
-import { roomsModule } from "@/store";
+import { coursesModule } from "@/store";
 import { mount } from "@vue/test-utils";
 import RoomList from "./RoomList.page.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -82,11 +82,11 @@ const mockData = [
 describe("@/pages/room-list.vue", () => {
 	beforeEach(() => {
 		setupStores({
-			roomsModule: CoursesModule,
+			coursesModule: CoursesModule,
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
 		});
-		roomsModule.setAllElements(mockData);
+		coursesModule.setAllElements(mockData);
 	});
 
 	describe("when data is not loaded yet", () => {

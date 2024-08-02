@@ -61,7 +61,7 @@
 <script lang="ts">
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
-import { roomsModule } from "@/store";
+import { coursesModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -80,7 +80,7 @@ export default defineComponent({
 	},
 	computed: {
 		rooms(): Array<ListItemsObject> {
-			return JSON.parse(JSON.stringify(roomsModule.getAllElements)).filter(
+			return JSON.parse(JSON.stringify(coursesModule.getAllElements)).filter(
 				(room: ListItemsObject | any) =>
 					room.searchText
 						.toLowerCase()
@@ -88,14 +88,14 @@ export default defineComponent({
 			);
 		},
 		hasRooms(): boolean {
-			return roomsModule.hasRooms;
+			return coursesModule.hasRooms;
 		},
 	},
 	async mounted() {
 		document.title = buildPageTitle(
 			this.$t("pages.rooms.index.courses.all").toString()
 		);
-		await roomsModule.fetchAllElements();
+		await coursesModule.fetchAllElements();
 	},
 });
 </script>

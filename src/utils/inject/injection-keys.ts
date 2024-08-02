@@ -54,7 +54,7 @@ export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
 export const COMMON_CARTRIDGE_EXPORT_MODULE_KEY: InjectionKey<CommonCartridgeExportModule> =
 	Symbol("commonCartridgeExportModule");
 export const ROOMS_MODULE_KEY: InjectionKey<CoursesModule> =
-	Symbol("roomsModule");
+	Symbol("coursesModule");
 export const LOADING_STATE_MODULE_KEY: InjectionKey<LoadingStateModule> =
 	Symbol("loadingStateModule");
 export const NEWS_MODULE_KEY: InjectionKey<NewsModule> = Symbol("newsModule");

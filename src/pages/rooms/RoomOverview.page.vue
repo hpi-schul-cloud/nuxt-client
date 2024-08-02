@@ -129,7 +129,7 @@ import RoomModal from "@/components/molecules/RoomModal";
 import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
-import { roomsModule } from "@/store";
+import { coursesModule } from "@/store";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiCheck, mdiMagnify } from "@mdi/js";
@@ -192,10 +192,10 @@ export default defineComponent({
 	},
 	computed: {
 		hasCurrentRooms() {
-			return roomsModule.hasCurrentRooms;
+			return coursesModule.hasCurrentRooms;
 		},
 		rooms() {
-			return JSON.parse(JSON.stringify(roomsModule.getRoomsData)).filter(
+			return JSON.parse(JSON.stringify(coursesModule.getRoomsData)).filter(
 				(item) => {
 					if (item.groupElements) {
 						const groupElements = item.groupElements.filter((groupItem) => {
@@ -213,7 +213,7 @@ export default defineComponent({
 			);
 		},
 		courses() {
-			return roomsModule.getAllElements;
+			return coursesModule.getAllElements;
 		},
 		hasRoomsBeingCopied() {
 			return this.rooms.some((item) => item.copyingSince !== undefined);
@@ -229,8 +229,8 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
-		await roomsModule.fetchAllElements();
+		await coursesModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		await coursesModule.fetchAllElements();
 		this.getDeviceDims();
 		if (this.hasRoomsBeingCopied) {
 			this.initCoursePolling(0, new Date());
@@ -266,7 +266,7 @@ export default defineComponent({
 					this.dimensions.colCount = 6;
 					break;
 			}
-			const lastItem = roomsModule.getRoomsData.reduce((prev, current) => {
+			const lastItem = coursesModule.getRoomsData.reduce((prev, current) => {
 				return prev.yPosition > current.yPosition ? prev : current;
 			}, {});
 
@@ -358,7 +358,7 @@ export default defineComponent({
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
-				groupIndex: roomsModule.roomsData
+				groupIndex: coursesModule.roomsData
 					.find((item) => item.groupId == this.groupDialog.groupData.groupId)
 					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
 			};
@@ -372,7 +372,7 @@ export default defineComponent({
 			this.dragging = true;
 		},
 		async savePosition() {
-			await roomsModule.align(this.draggedElement);
+			await coursesModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
 		},
 		defaultNaming(pos) {
@@ -382,7 +382,7 @@ export default defineComponent({
 				xPosition: pos.x,
 				yPosition: pos.y,
 			};
-			roomsModule.update(payload);
+			coursesModule.update(payload);
 		},
 		onImportSuccess(name, id) {
 			this.showImportSuccess(name);
@@ -390,7 +390,7 @@ export default defineComponent({
 				this.$router.replace({ name: "rooms-id", params: { id } });
 			} else {
 				this.$router.replace({ name: "rooms-overview" });
-				roomsModule.fetch();
+				coursesModule.fetch();
 			}
 		},
 		showImportSuccess(name) {
@@ -406,7 +406,7 @@ export default defineComponent({
 			const nextTimeout = count * count * 1000 + 5000;
 			setTimeout(
 				async () => {
-					await roomsModule.fetch({ indicateLoading: false });
+					await coursesModule.fetch({ indicateLoading: false });
 					if (this.hasRoomsBeingCopied) {
 						this.initCoursePolling(count + 1, started ?? new Date());
 					} else {

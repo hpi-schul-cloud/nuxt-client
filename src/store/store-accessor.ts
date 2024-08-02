@@ -56,7 +56,7 @@ export let notifierModule: NotifierModule;
 export let privacyPolicyModule: PrivacyPolicyModule;
 export let termsOfUseModule: TermsOfUseModule;
 export let courseModule: CourseModule;
-export let roomsModule: CoursesModule;
+export let coursesModule: CoursesModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
@@ -87,7 +87,7 @@ export function initializeStores(store: Store<any>): void {
 	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	termsOfUseModule = getModule(TermsOfUseModule, store);
 	courseModule = getModule(CourseModule, store);
-	roomsModule = getModule(CoursesModule, store);
+	coursesModule = getModule(CoursesModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
@@ -121,7 +121,7 @@ export const modules = {
 	privacyPolicyModule: PrivacyPolicyModule,
 	termsOfUseModule: TermsOfUseModule,
 	courseModule: CourseModule,
-	roomsModule: CoursesModule,
+	coursesModule: CoursesModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,

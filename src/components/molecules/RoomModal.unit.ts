@@ -1,6 +1,6 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { roomsModule } from "@/store";
+import { coursesModule } from "@/store";
 import CoursesModule from "@/store/courses";
 import {
 	createTestingI18n,
@@ -13,7 +13,7 @@ import RoomModal from "./RoomModal.vue";
 describe("RoomModal", () => {
 	const getWrapper = (props: { isOpen: boolean }) => {
 		const { isOpen } = props;
-		setupStores({ roomsModule: CoursesModule });
+		setupStores({ coursesModule: CoursesModule });
 
 		const wrapper = mount(RoomModal, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
@@ -105,7 +105,7 @@ describe("RoomModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(roomsModule, "update");
+				const storeRoomUpdateMock = jest.spyOn(coursesModule, "update");
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
@@ -140,7 +140,7 @@ describe("RoomModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(roomsModule, "update");
+				const storeRoomUpdateMock = jest.spyOn(coursesModule, "update");
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
@@ -181,7 +181,7 @@ describe("RoomModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(roomsModule, "update");
+				const storeRoomUpdateMock = jest.spyOn(coursesModule, "update");
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
