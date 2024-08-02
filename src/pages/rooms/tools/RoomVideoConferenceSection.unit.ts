@@ -51,7 +51,7 @@ describe("RoomVideoConferenceSection", () => {
 			...videoConferenceModuleGetter,
 		});
 
-		const roomModule = createModuleMocks(CourseModule, {
+		const courseModule = createModuleMocks(CourseModule, {
 			getRoomData: {
 				roomId: props.roomId,
 				title: "roomName",
@@ -68,7 +68,7 @@ describe("RoomVideoConferenceSection", () => {
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[ROOM_MODULE_KEY.valueOf()]: courseModule,
 				},
 				mocks: {
 					$t: (key: string, dynamic?: object): string =>
@@ -82,7 +82,7 @@ describe("RoomVideoConferenceSection", () => {
 			wrapper,
 			authModule,
 			videoConferenceModule,
-			roomModule,
+			courseModule,
 		};
 	};
 
@@ -518,7 +518,7 @@ describe("RoomVideoConferenceSection", () => {
 
 	describe("when open videoconference configuration dialog", () => {
 		const setup = () => {
-			const { wrapper, videoConferenceModule, roomModule } = getWrapper(
+			const { wrapper, videoConferenceModule, courseModule } = getWrapper(
 				{
 					roomId: "roomId",
 				},
@@ -540,7 +540,7 @@ describe("RoomVideoConferenceSection", () => {
 			return {
 				wrapper,
 				videoConferenceModule,
-				roomModule,
+				courseModule,
 			};
 		};
 

@@ -358,9 +358,9 @@ const onShareBoard = () => {
 	}
 };
 
-const roomModule = injectStrict(ROOM_MODULE_KEY);
+const courseModule = injectStrict(ROOM_MODULE_KEY);
 const openDeleteBoardDialog = async (id: string) => {
-	await roomModule.deleteBoard(id);
+	await courseModule.deleteBoard(id);
 	router.push({ path: "/rooms/" + roomId.value });
 };
 </script>

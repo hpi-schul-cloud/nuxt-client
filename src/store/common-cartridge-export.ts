@@ -1,5 +1,5 @@
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
-import { roomModule } from "./store-accessor";
+import { courseModule } from "./store-accessor";
 
 @Module({
 	name: "commonCartridgeExportModule",
@@ -19,7 +19,7 @@ export default class CommonCartridgeExportModule extends VuexModule {
 			return;
 		}
 
-		await roomModule.downloadCommonCartridgeCourse({
+		await courseModule.downloadCommonCartridgeCourse({
 			version: this.getVersion,
 			topics: this.getTopics,
 			tasks: this.getTasks,

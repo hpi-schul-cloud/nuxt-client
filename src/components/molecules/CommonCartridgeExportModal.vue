@@ -181,7 +181,7 @@ const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 const commonCartridgeExportModule = injectStrict(
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY
 );
-const roomModule = injectStrict(ROOM_MODULE_KEY);
+const courseModule = injectStrict(ROOM_MODULE_KEY);
 
 const emit = defineEmits([
 	"update:isExportModalOpen",
@@ -220,7 +220,7 @@ const allColumnBoardsSelected = computed(() => {
 });
 
 watch(
-	() => roomModule.getRoomData.elements,
+	() => courseModule.getRoomData.elements,
 	(newValue) => {
 		allTopics.value = [];
 		allTasks.value = [];

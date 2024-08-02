@@ -34,7 +34,7 @@ export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsM
 	Symbol("schoolExternalToolsModule");
 export const APPLICATION_ERROR_KEY: InjectionKey<ApplicationErrorModule> =
 	Symbol("applicationError");
-export const ROOM_MODULE_KEY: InjectionKey<CourseModule> = Symbol("roomModule");
+export const ROOM_MODULE_KEY: InjectionKey<CourseModule> = Symbol("courseModule");
 export const VIDEO_CONFERENCE_MODULE_KEY: InjectionKey<VideoConferenceModule> =
 	Symbol("videoConferenceModule");
 export const STATUS_ALERTS_MODULE_KEY: InjectionKey<StatusAlertsModule> =

@@ -22,7 +22,7 @@ const expectedServerPayload = {
 describe("share module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
-			setupStores({ roomModule: CourseModule });
+			setupStores({ courseModule: CourseModule });
 		});
 
 		describe("createShareUrl", () => {

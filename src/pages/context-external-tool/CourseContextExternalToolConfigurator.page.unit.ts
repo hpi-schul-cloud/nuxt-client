@@ -33,7 +33,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		const notifierModule = createModuleMocks(NotifierModule);
 
 		const roomTitle = "Room Title";
-		const roomModule = createModuleMocks(CourseModule, {
+		const courseModule = createModuleMocks(CourseModule, {
 			getRoomData: {
 				title: roomTitle,
 				roomId: "contextId",
@@ -53,7 +53,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 				],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[ROOM_MODULE_KEY.valueOf()]: courseModule,
 				},
 				stubs: {
 					ContextExternalToolConfigurator: {
@@ -73,7 +73,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 		return {
 			wrapper,
-			roomModule,
+			courseModule,
 			notifierModule,
 			roomTitle,
 		};

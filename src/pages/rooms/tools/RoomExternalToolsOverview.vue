@@ -70,7 +70,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const roomModule: CourseModule = injectStrict(ROOM_MODULE_KEY);
+const courseModule: CourseModule = injectStrict(ROOM_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const {
@@ -92,7 +92,7 @@ const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
 onMounted(async () => {
 	await fetchDisplayData(props.roomId, ToolContextType.Course);
 
-	course.value = await roomModule.fetchCourse(props.roomId);
+	course.value = await courseModule.fetchCourse(props.roomId);
 });
 
 const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
@@ -106,7 +106,7 @@ onUnmounted(() => {
 });
 
 const loading: ComputedRef<boolean> = computed(
-	() => isDisplayDataLoading.value || roomModule.getLoading
+	() => isDisplayDataLoading.value || courseModule.getLoading
 );
 
 const onDeleteTool = async (displayData: ExternalToolDisplayData) => {

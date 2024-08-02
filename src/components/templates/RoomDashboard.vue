@@ -198,7 +198,7 @@ import {
 	ImportUserResponseRoleNamesEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { envConfigModule, roomModule } from "@/store";
+import { envConfigModule, courseModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
@@ -256,7 +256,7 @@ export default {
 		touchDelay() {
 			return this.isTouchDevice ? 200 : 20;
 		},
-		roomIsEmpty: () => roomModule.roomIsEmpty,
+		roomIsEmpty: () => courseModule.roomIsEmpty,
 		emptyState() {
 			const image = "topics-empty-state";
 			const title = this.$t(`pages.room.${this.role}.emptyState`);
@@ -278,7 +278,7 @@ export default {
 	},
 	methods: {
 		async updateCardVisibility(elementId, visibility) {
-			await roomModule.publishCard({ elementId, visibility });
+			await courseModule.publishCard({ elementId, visibility });
 		},
 		async onSort(items) {
 			const idList = {};
@@ -286,7 +286,7 @@ export default {
 				return item.content.id;
 			});
 
-			await roomModule.sortElements(idList);
+			await courseModule.sortElements(idList);
 		},
 		async moveByKeyboard(e) {
 			if (this.role === this.Roles.Student) return;
@@ -304,7 +304,7 @@ export default {
 				items[itemIndex],
 			];
 
-			await roomModule.sortElements({ elements: items });
+			await courseModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`].$el.focus();
 		},
 		boardLayoutAriaLabel(itemLayout) {
@@ -356,21 +356,21 @@ export default {
 		},
 		async deleteItem() {
 			if (this.itemDelete.itemType === this.cardTypes.Task) {
-				await roomModule.deleteTask(this.itemDelete.itemData.id);
+				await courseModule.deleteTask(this.itemDelete.itemData.id);
 			} else if (this.itemDelete.itemType === this.cardTypes.Lesson) {
-				await roomModule.deleteLesson(this.itemDelete.itemData.id);
+				await courseModule.deleteLesson(this.itemDelete.itemData.id);
 			} else if (this.itemDelete.itemType === this.cardTypes.ColumnBoard) {
-				await roomModule.deleteBoard(this.itemDelete.itemData.columnBoardId);
+				await courseModule.deleteBoard(this.itemDelete.itemData.columnBoardId);
 			} else {
 				return;
 			}
-			await roomModule.fetchContent(this.roomData.roomId);
+			await courseModule.fetchContent(this.roomData.roomId);
 		},
 		async finishTask(itemId) {
-			await roomModule.finishTask({ itemId, action: "finish" });
+			await courseModule.finishTask({ itemId, action: "finish" });
 		},
 		async restoreTask(itemId) {
-			await roomModule.finishTask({ itemId, action: "restore" });
+			await courseModule.finishTask({ itemId, action: "restore" });
 		},
 		copyTask(taskId) {
 			this.$emit("copy-board-element", {

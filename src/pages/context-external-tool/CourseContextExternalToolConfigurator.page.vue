@@ -42,7 +42,7 @@ const props = defineProps({
 });
 
 const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const roomModule: CourseModule = injectStrict(ROOM_MODULE_KEY);
+const courseModule: CourseModule = injectStrict(ROOM_MODULE_KEY);
 
 const { t } = useI18n();
 
@@ -59,7 +59,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const courseTitle: ComputedRef<string> = computed(
-	() => roomModule.getRoomData.title
+	() => courseModule.getRoomData.title
 );
 
 const router: Router = useRouter();
@@ -85,6 +85,6 @@ const contextExternalToolConfigurator: Ref<InstanceType<
 onMounted(async () => {
 	await contextExternalToolConfigurator.value?.fetchData();
 
-	await roomModule.fetchContent(props.contextId);
+	await courseModule.fetchContent(props.contextId);
 });
 </script>

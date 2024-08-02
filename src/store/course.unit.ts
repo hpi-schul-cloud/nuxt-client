@@ -63,7 +63,7 @@ describe("room module", () => {
 		describe("fetchCourse", () => {
 			describe("when the api returns a response", () => {
 				const setup = () => {
-					const roomModule = new CourseModule({});
+					const courseModule = new CourseModule({});
 
 					const course: Course = courseFactory.build();
 
@@ -72,24 +72,24 @@ describe("room module", () => {
 					});
 
 					return {
-						roomModule,
+						courseModule,
 						course,
 					};
 				};
 
 				it("should call backend", async () => {
-					const { roomModule } = setup();
+					const { courseModule } = setup();
 
-					await roomModule.fetchCourse("courseId");
+					await courseModule.fetchCourse("courseId");
 
 					expect(receivedRequests[0].path).toEqual("/v1/courses/courseId");
 				});
 
 				it("should return a course", async () => {
-					const { roomModule, course } = setup();
+					const { courseModule, course } = setup();
 
 					const result: Course | null =
-						await roomModule.fetchCourse("courseId");
+						await courseModule.fetchCourse("courseId");
 
 					expect(result).toEqual(course);
 				});
@@ -97,31 +97,31 @@ describe("room module", () => {
 
 			describe("when the api returns an error", () => {
 				const setup = () => {
-					const roomModule = new CourseModule({});
+					const courseModule = new CourseModule({});
 
 					const error: AxiosError = new AxiosError();
 
 					getRequestReturn = Promise.reject(error);
 
 					return {
-						roomModule,
+						courseModule,
 						error,
 					};
 				};
 
 				it("should set an error", async () => {
-					const { roomModule, error } = setup();
+					const { courseModule, error } = setup();
 
-					await roomModule.fetchCourse("courseId");
+					await courseModule.fetchCourse("courseId");
 
-					expect(roomModule.getError).toEqual(error);
+					expect(courseModule.getError).toEqual(error);
 				});
 
 				it("should return null", async () => {
-					const { roomModule } = setup();
+					const { courseModule } = setup();
 
 					const result: Course | null =
-						await roomModule.fetchCourse("courseId");
+						await courseModule.fetchCourse("courseId");
 
 					expect(result).toBeNull();
 				});
@@ -134,10 +134,10 @@ describe("room module", () => {
 					.spyOn(serverApi, "RoomsApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
 
-				const roomModule = new CourseModule({});
-				await roomModule.fetchContent("123");
+				const courseModule = new CourseModule({});
+				await courseModule.fetchContent("123");
 
-				expect(roomModule.getLoading).toBe(false);
+				expect(courseModule.getLoading).toBe(false);
 				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
 				expect(
 					mockApi.roomsControllerGetRoomBoard.mock.calls[0][0]
@@ -151,10 +151,10 @@ describe("room module", () => {
 					.spyOn(serverApi, "RoomsApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
 
-				const roomModule = new CourseModule({});
-				await roomModule.publishCard({ elementId: "54321", visibility: true });
+				const courseModule = new CourseModule({});
+				await courseModule.publishCard({ elementId: "54321", visibility: true });
 
-				expect(roomModule.getLoading).toBe(false);
+				expect(courseModule.getLoading).toBe(false);
 				expect(
 					mockApi.roomsControllerPatchElementVisibility
 				).toHaveBeenCalled();
@@ -171,13 +171,13 @@ describe("room module", () => {
 					.spyOn(serverApi, "RoomsApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
 
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const payload = {
 					elements: ["1234", "2345", "3456", "4567"],
 				};
-				await roomModule.sortElements(payload);
+				await courseModule.sortElements(payload);
 
-				expect(roomModule.getLoading).toBe(false);
+				expect(courseModule.getLoading).toBe(false);
 				expect(
 					mockApi.roomsControllerPatchOrderingOfElements
 				).toHaveBeenCalled();
@@ -197,9 +197,9 @@ describe("room module", () => {
 					.spyOn(serverApi, "LessonApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.LessonApiInterface);
 
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 
-				await roomModule.deleteLesson("id");
+				await courseModule.deleteLesson("id");
 
 				expect(mockApi.lessonControllerDelete).toHaveBeenCalledTimes(1);
 				expect(mockApi.lessonControllerDelete).toHaveBeenCalledWith("id");
@@ -216,11 +216,11 @@ describe("room module", () => {
 					.spyOn(serverApi, "LessonApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.LessonApiInterface);
 
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 
-				await roomModule.deleteLesson("id");
+				await courseModule.deleteLesson("id");
 
-				expect(roomModule.businessError).toStrictEqual(error);
+				expect(courseModule.businessError).toStrictEqual(error);
 
 				spy.mockRestore();
 			});
@@ -235,9 +235,9 @@ describe("room module", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 
-				await roomModule.deleteTask("id");
+				await courseModule.deleteTask("id");
 
 				expect(mockApi.taskControllerDelete).toHaveBeenCalledTimes(1);
 				expect(mockApi.taskControllerDelete).toHaveBeenCalledWith("id");
@@ -254,11 +254,11 @@ describe("room module", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 
-				await roomModule.deleteTask("id");
+				await courseModule.deleteTask("id");
 
-				expect(roomModule.businessError).toStrictEqual(error);
+				expect(courseModule.businessError).toStrictEqual(error);
 
 				spy.mockRestore();
 			});
@@ -273,14 +273,14 @@ describe("room module", () => {
 					.spyOn(serverApi, "BoardApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const params = {
 					title: "title",
 					parentId: "parentId",
 					parentType: BoardParentType.Course,
 					layout: serverApi.BoardLayout.Columns,
 				};
-				await roomModule.createBoard(params);
+				await courseModule.createBoard(params);
 
 				expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
 				expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledWith(params);
@@ -296,14 +296,14 @@ describe("room module", () => {
 					.spyOn(serverApi, "BoardApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const params = {
 					title: "title",
 					parentId: "parentId",
 					parentType: BoardParentType.Course,
 					layout: serverApi.BoardLayout.List,
 				};
-				await roomModule.createBoard(params);
+				await courseModule.createBoard(params);
 
 				expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
 				expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledWith(params);
@@ -320,7 +320,7 @@ describe("room module", () => {
 					.spyOn(serverApi, "BoardApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 
 				const params = {
 					title: "title",
@@ -328,9 +328,9 @@ describe("room module", () => {
 					parentType: BoardParentType.Course,
 					layout: serverApi.BoardLayout.Columns,
 				};
-				await roomModule.createBoard(params);
+				await courseModule.createBoard(params);
 
-				expect(roomModule.businessError).toStrictEqual(error);
+				expect(courseModule.businessError).toStrictEqual(error);
 
 				spy.mockRestore();
 			});
@@ -345,9 +345,9 @@ describe("room module", () => {
 					.spyOn(serverApi, "BoardApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 
-				await roomModule.deleteBoard("id");
+				await courseModule.deleteBoard("id");
 
 				expect(mockApi.boardControllerDeleteBoard).toHaveBeenCalledTimes(1);
 				expect(mockApi.boardControllerDeleteBoard).toHaveBeenCalledWith("id");
@@ -364,11 +364,11 @@ describe("room module", () => {
 					.spyOn(serverApi, "BoardApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 
-				await roomModule.deleteBoard("id");
+				await courseModule.deleteBoard("id");
 
-				expect(roomModule.businessError).toStrictEqual(error);
+				expect(courseModule.businessError).toStrictEqual(error);
 
 				spy.mockRestore();
 			});
@@ -376,7 +376,7 @@ describe("room module", () => {
 
 		describe("downloadCommonCartridgeCourse", () => {
 			it("should call backend api", async () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const mockApi = {
 					lessonControllerDelete: jest.fn(() => Promise.resolve()),
 				};
@@ -385,7 +385,7 @@ describe("room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 
 				await expect(
-					roomModule.downloadCommonCartridgeCourse({
+					courseModule.downloadCommonCartridgeCourse({
 						version: "1.1.0",
 						topics: [],
 						tasks: [],
@@ -396,7 +396,7 @@ describe("room module", () => {
 				spy.mockRestore();
 			});
 			it("should catch error in catch block", async () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi = {
 					courseControllerExportCourse: jest.fn(() =>
@@ -407,14 +407,14 @@ describe("room module", () => {
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
 
-				await roomModule.downloadCommonCartridgeCourse({
+				await courseModule.downloadCommonCartridgeCourse({
 					version: "1.1.0",
 					topics: [],
 					tasks: [],
 					columnBoards: [],
 				});
 
-				expect(roomModule.businessError).toStrictEqual(error);
+				expect(courseModule.businessError).toStrictEqual(error);
 
 				spy.mockRestore();
 			});
@@ -447,13 +447,13 @@ describe("room module", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				const roomModule = new CourseModule({});
-				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
+				const courseModule = new CourseModule({});
+				const setBusinessErrorSpy = jest.spyOn(courseModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
-					roomModule,
+					courseModule,
 					"resetBusinessError"
 				);
-				await roomModule.finishTask({ itemId: "finishId", action: "finish" });
+				await courseModule.finishTask({ itemId: "finishId", action: "finish" });
 
 				expect(resetBusinessErrorSpy).toHaveBeenCalled();
 				expect(setBusinessErrorSpy).not.toHaveBeenCalled();
@@ -485,20 +485,20 @@ describe("room module", () => {
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
-				const roomModule = new CourseModule({});
-				const finishTaskSpy = jest.spyOn(roomModule, "finishTask");
-				const setBusinessErrorSpy = jest.spyOn(roomModule, "setBusinessError");
+				const courseModule = new CourseModule({});
+				const finishTaskSpy = jest.spyOn(courseModule, "finishTask");
+				const setBusinessErrorSpy = jest.spyOn(courseModule, "setBusinessError");
 				const resetBusinessErrorSpy = jest.spyOn(
-					roomModule,
+					courseModule,
 					"resetBusinessError"
 				);
-				await roomModule.finishTask({ itemId: "finishId", action: "finish" });
+				await courseModule.finishTask({ itemId: "finishId", action: "finish" });
 
 				expect(resetBusinessErrorSpy).toHaveBeenCalled();
 				expect(finishTaskSpy).toHaveBeenCalled();
 				expect(setBusinessErrorSpy).toHaveBeenCalled();
-				expect(roomModule.businessError.statusCode).toStrictEqual(404);
-				expect(roomModule.businessError.message).toStrictEqual(
+				expect(courseModule.businessError.statusCode).toStrictEqual(404);
+				expect(courseModule.businessError.message).toStrictEqual(
 					"friendly error"
 				);
 			});
@@ -524,12 +524,12 @@ describe("room module", () => {
 						},
 					} as AxiosInstance);
 				})();
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const fetchScopePermissionSpy = jest.spyOn(
-					roomModule,
+					courseModule,
 					"fetchScopePermission"
 				);
-				await roomModule.fetchScopePermission({
+				await courseModule.fetchScopePermission({
 					courseId: "courseId",
 					userId: "userId",
 				});
@@ -548,7 +548,7 @@ describe("room module", () => {
 	describe("mutations", () => {
 		describe("setRoomData", () => {
 			it("should set the room data", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const expectedData = {
 					id: "123",
 					courseName: "Sample Course",
@@ -578,29 +578,29 @@ describe("room module", () => {
 					],
 				};
 
-				expect(roomModule.getRoomData).not.toStrictEqual(expectedData);
-				roomModule.setRoomData(expectedData as any);
-				expect(roomModule.roomData).toStrictEqual(expectedData);
+				expect(courseModule.getRoomData).not.toStrictEqual(expectedData);
+				courseModule.setRoomData(expectedData as any);
+				expect(courseModule.roomData).toStrictEqual(expectedData);
 			});
 		});
 
 		describe("setLoading", () => {
 			it("should set loading", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const loadingValue = true;
-				expect(roomModule.getLoading).not.toBe(loadingValue);
-				roomModule.setLoading(loadingValue);
-				expect(roomModule.loading).toBe(loadingValue);
+				expect(courseModule.getLoading).not.toBe(loadingValue);
+				courseModule.setLoading(loadingValue);
+				expect(courseModule.loading).toBe(loadingValue);
 			});
 		});
 
 		describe("setError", () => {
 			it("should set error", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const errorData = { message: "some error" };
-				expect(roomModule.getError).not.toBe(errorData);
-				roomModule.setError(errorData);
-				expect(roomModule.error).toBe(errorData);
+				expect(courseModule.getError).not.toBe(errorData);
+				courseModule.setError(errorData);
+				expect(courseModule.error).toBe(errorData);
 			});
 
 			it.each([
@@ -612,57 +612,57 @@ describe("room module", () => {
 				HttpStatusCode.InternalServerError,
 			])("should create an application-error for http-error(%p)", (code) => {
 				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const errorData = { response: { data: { code } } };
-				roomModule.setError(errorData);
+				courseModule.setError(errorData);
 				expect(setErrorSpy).toHaveBeenCalled();
 			});
 		});
 
 		describe("setBusinessError", () => {
 			it("should set businessError", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const businessErrorData = {
 					statusCode: "400",
 					message: "error",
 					error: { type: "BadRequest" },
 				};
-				expect(roomModule.getBusinessError).not.toBe(businessErrorData);
-				roomModule.setBusinessError(businessErrorData);
-				expect(roomModule.businessError).toBe(businessErrorData);
+				expect(courseModule.getBusinessError).not.toBe(businessErrorData);
+				courseModule.setBusinessError(businessErrorData);
+				expect(courseModule.businessError).toBe(businessErrorData);
 			});
 			it("should reset businessError", () => {
-				const roomModule = new CourseModule({});
-				roomModule.businessError = {
+				const courseModule = new CourseModule({});
+				courseModule.businessError = {
 					statusCode: "400",
 					message: "error",
 					error: {},
 				};
 
-				roomModule.resetBusinessError();
-				expect(roomModule.businessError.statusCode).toStrictEqual("");
-				expect(roomModule.businessError.message).toStrictEqual("");
+				courseModule.resetBusinessError();
+				expect(courseModule.businessError.statusCode).toStrictEqual("");
+				expect(courseModule.businessError.message).toStrictEqual("");
 			});
 		});
 
 		describe("setCourseShareToken", () => {
 			it("should set the state", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const payload = "token_test";
 
-				roomModule.setCourseShareToken(payload);
-				expect(roomModule.getCourseShareToken).toStrictEqual(payload);
+				courseModule.setCourseShareToken(payload);
+				expect(courseModule.getCourseShareToken).toStrictEqual(payload);
 			});
 		});
 
 		describe("setPermissionData", () => {
 			it("should set the permission data", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const expectedPermissions = ["PERMISSION_ONE", "PERMISSION_TWO"];
 
-				expect(roomModule.getPermissionData).toStrictEqual([]);
-				roomModule.setPermissionData(expectedPermissions);
-				expect(roomModule.getPermissionData).toStrictEqual(expectedPermissions);
+				expect(courseModule.getPermissionData).toStrictEqual([]);
+				courseModule.setPermissionData(expectedPermissions);
+				expect(courseModule.getPermissionData).toStrictEqual(expectedPermissions);
 			});
 		});
 	});
@@ -670,7 +670,7 @@ describe("room module", () => {
 	describe("getters", () => {
 		describe("getRoomsData", () => {
 			it("should return rooms state", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const expectedData = {
 					id: "123",
 					courseName: "Sample Course",
@@ -700,34 +700,34 @@ describe("room module", () => {
 					],
 				};
 
-				roomModule.setRoomData(expectedData as any);
-				expect(roomModule.getRoomData).toStrictEqual(expectedData);
+				courseModule.setRoomData(expectedData as any);
+				expect(courseModule.getRoomData).toStrictEqual(expectedData);
 			});
 		});
 
 		describe("getLoading", () => {
 			it("should return loading state", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 
-				expect(roomModule.getLoading).not.toStrictEqual(true);
-				roomModule.setLoading(true);
-				expect(roomModule.getLoading).toStrictEqual(true);
+				expect(courseModule.getLoading).not.toStrictEqual(true);
+				courseModule.setLoading(true);
+				expect(courseModule.getLoading).toStrictEqual(true);
 			});
 		});
 
 		describe("getError", () => {
 			it("should return error state", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const errorData = { message: "some error" };
-				expect(roomModule.getError).toStrictEqual(null);
-				roomModule.setError(errorData);
-				expect(roomModule.getError).toStrictEqual(errorData);
+				expect(courseModule.getError).toStrictEqual(null);
+				courseModule.setError(errorData);
+				expect(courseModule.getError).toStrictEqual(errorData);
 			});
 		});
 
 		describe("roomIsEmpty", () => {
 			it("should return false if there are any elements in the room", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const testData = {
 					id: "123",
 					courseName: "Sample Course",
@@ -756,31 +756,31 @@ describe("room module", () => {
 						},
 					],
 				};
-				roomModule.setRoomData(testData as any);
-				const result = roomModule.roomIsEmpty;
+				courseModule.setRoomData(testData as any);
+				const result = courseModule.roomIsEmpty;
 				expect(result).toStrictEqual(false);
 			});
 			it("should return true if there are no elements in the room", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const testData = {
 					id: "123",
 					courseName: "Sample Course",
 					displayColor: "black",
 					elements: [],
 				};
-				roomModule.setRoomData(testData as any);
-				const result = roomModule.roomIsEmpty;
+				courseModule.setRoomData(testData as any);
+				const result = courseModule.roomIsEmpty;
 				expect(result).toStrictEqual(true);
 			});
 		});
 
 		describe("getPermissionData", () => {
 			it("should return the permission data", () => {
-				const roomModule = new CourseModule({});
+				const courseModule = new CourseModule({});
 				const expectedPermissions = ["THREE", "FOUR"];
 
-				roomModule.setPermissionData(expectedPermissions);
-				expect(roomModule.getPermissionData).toStrictEqual(expectedPermissions);
+				courseModule.setPermissionData(expectedPermissions);
+				expect(courseModule.getPermissionData).toStrictEqual(expectedPermissions);
 			});
 		});
 	});

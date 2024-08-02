@@ -31,7 +31,7 @@ describe("RoomExternalToolOverview", () => {
 	>;
 
 	const getWrapper = () => {
-		const roomModule = createModuleMocks(CourseModule, {
+		const courseModule = createModuleMocks(CourseModule, {
 			getLoading: false,
 		});
 
@@ -40,14 +40,14 @@ describe("RoomExternalToolOverview", () => {
 			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as ConfigResponse,
 		});
 
-		roomModule.fetchCourse.mockResolvedValue(null);
+		courseModule.fetchCourse.mockResolvedValue(null);
 
 		const wrapper = shallowMount(RoomExternalToolsOverview, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[ROOM_MODULE_KEY.valueOf()]: courseModule,
 				},
 			},
 			props: {
@@ -57,7 +57,7 @@ describe("RoomExternalToolOverview", () => {
 
 		return {
 			wrapper,
-			roomModule,
+			courseModule,
 			refreshTime,
 		};
 	};
@@ -141,9 +141,9 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when video conferences are enabled", () => {
 		const setup = async () => {
-			const { wrapper, roomModule } = getWrapper();
+			const { wrapper, courseModule } = getWrapper();
 
-			roomModule.fetchCourse.mockResolvedValue(
+			courseModule.fetchCourse.mockResolvedValue(
 				courseFactory.build({ features: [CourseFeatures.VIDEOCONFERENCE] })
 			);
 

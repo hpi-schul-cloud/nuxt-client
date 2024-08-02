@@ -18,7 +18,7 @@ import {
 	newsModule,
 	notifierModule,
 	privacyPolicyModule,
-	roomModule,
+	courseModule,
 	roomsModule,
 	schoolExternalToolsModule,
 	schoolsModule,
@@ -163,7 +163,7 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(NOTIFIER_MODULE_KEY.valueOf(), notifierModule);
 	app.provide(PRIVACY_POLICY_MODULE_KEY.valueOf(), privacyPolicyModule);
 	app.provide(TERMS_OF_USE_MODULE_KEY.valueOf(), termsOfUseModule);
-	app.provide(ROOM_MODULE_KEY.valueOf(), roomModule);
+	app.provide(ROOM_MODULE_KEY.valueOf(), courseModule);
 	app.provide("roomsModule", roomsModule);
 	app.provide(
 		SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),

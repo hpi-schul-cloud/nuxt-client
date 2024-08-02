@@ -117,7 +117,7 @@ let loadingStateModuleMock: LoadingStateModule;
 let notifierModule: NotifierModule;
 let shareModule: ShareModule;
 let downloadModule: CommonCartridgeExportModule;
-let roomModule: CourseModule;
+let courseModule: CourseModule;
 let authModule: AuthModule;
 
 const getWrapper = (
@@ -148,7 +148,7 @@ const getWrapper = (
 		startShareFlow: jest.fn(),
 		resetShareFlow: jest.fn(),
 	});
-	roomModule = createModuleMocks(CourseModule, {
+	courseModule = createModuleMocks(CourseModule, {
 		fetchContent: jest.fn(),
 		getRoomData: mockData,
 		getPermissionData: permissionData,
@@ -184,7 +184,7 @@ const getWrapper = (
 				[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModule,
-				[ROOM_MODULE_KEY.valueOf()]: roomModule,
+				[ROOM_MODULE_KEY.valueOf()]: courseModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
 			stubs: {
@@ -220,7 +220,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	it("should fetch data", async () => {
 		getWrapper();
 
-		expect(roomModule.fetchContent).toHaveBeenCalled();
+		expect(courseModule.fetchContent).toHaveBeenCalled();
 	});
 
 	it("'to course files' button should have correct path", () => {

@@ -17,7 +17,7 @@ import { VDialog } from "vuetify/lib/components/index.mjs";
 
 describe("@/components/molecules/CommonCartridgeExportModal", () => {
 	let exportModuleMock: CommonCartridgeExportModule;
-	let roomModuleMock: CourseModule;
+	let courseModuleMock: CourseModule;
 
 	const setup = () => {
 		exportModuleMock = createModuleMocks(CommonCartridgeExportModule, {
@@ -29,7 +29,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			startExport: jest.fn(),
 			resetExportFlow: jest.fn(),
 		});
-		roomModuleMock = createModuleMocks(CourseModule, {
+		courseModuleMock = createModuleMocks(CourseModule, {
 			getRoomData: {
 				roomId: "1",
 				title: "title",
@@ -46,7 +46,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 				provide: {
 					[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: exportModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-					[ROOM_MODULE_KEY.valueOf()]: roomModuleMock,
+					[ROOM_MODULE_KEY.valueOf()]: courseModuleMock,
 				},
 			},
 		});

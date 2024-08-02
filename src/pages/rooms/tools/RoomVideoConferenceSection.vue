@@ -141,9 +141,9 @@ export default defineComponent({
 		const videoConferenceModule: VideoConferenceModule = injectStrict(
 			VIDEO_CONFERENCE_MODULE_KEY
 		);
-		const roomModule: CourseModule = injectStrict(ROOM_MODULE_KEY);
+		const courseModule: CourseModule = injectStrict(ROOM_MODULE_KEY);
 
-		const roomName = computed(() => roomModule.getRoomData.title ?? "");
+		const roomName = computed(() => courseModule.getRoomData.title ?? "");
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 			() => videoConferenceModule.getVideoConferenceInfo

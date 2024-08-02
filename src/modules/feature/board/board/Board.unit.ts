@@ -209,7 +209,7 @@ describe("Board", () => {
 
 		const loadingStateModule = createModuleMocks(LoadingStateModule);
 		const shareModule = createModuleMocks(ShareModule);
-		const roomModule = createModuleMocks(CourseModule, {
+		const courseModule = createModuleMocks(CourseModule, {
 			getRoomId: "room1",
 		});
 		return {
@@ -218,7 +218,7 @@ describe("Board", () => {
 			copyModule,
 			loadingStateModule,
 			shareModule,
-			roomModule,
+			courseModule,
 			copyResultId,
 		};
 	};
@@ -234,7 +234,7 @@ describe("Board", () => {
 			copyModule,
 			loadingStateModule,
 			shareModule,
-			roomModule,
+			courseModule,
 			copyResultId,
 		} = setupProvideModules(options?.envs);
 
@@ -266,7 +266,7 @@ describe("Board", () => {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					loadingStateModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[ROOM_MODULE_KEY.valueOf()]: courseModule,
 				},
 			},
 			propsData: { boardId: board.id },
@@ -282,7 +282,7 @@ describe("Board", () => {
 			board,
 			copyResultId,
 			shareModule,
-			roomModule,
+			courseModule,
 		};
 	};
 
@@ -888,14 +888,14 @@ describe("Board", () => {
 				mockedBoardPermissions.hasDeletePermission = true;
 				const mockRoomId = mockedUseSharedBoardPageInformation().roomId.value;
 
-				const { wrapper, roomModule, board } = setup();
+				const { wrapper, courseModule, board } = setup();
 
 				const columnComponent = wrapper.findComponent({
 					name: "BoardHeader",
 				});
 				await columnComponent.vm.$emit("delete:board");
 
-				expect(roomModule.deleteBoard).toBeCalledWith(board.id);
+				expect(courseModule.deleteBoard).toBeCalledWith(board.id);
 
 				expect(router.push).toHaveBeenCalledTimes(1);
 				expect(router.push).toHaveBeenCalledWith({
