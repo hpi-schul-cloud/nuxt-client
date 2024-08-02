@@ -8,6 +8,7 @@ module.exports = {
 		"eslint:recommended",
 		"@vue/typescript/recommended",
 		"plugin:prettier/recommended",
+		"plugin:@intlify/vue-i18n/recommended",
 	],
 	parserOptions: {
 		ecmaVersion: 2020,
@@ -98,4 +99,10 @@ module.exports = {
 			},
 		},
 	],
+	settings: {
+		"vue-i18n": {
+			localeDir: "./src/locales/*.{json,json5,yaml,yml,ts}", // extension is glob formatting!
+			messageSyntaxVersion: "^9.0.0",
+		},
+	},
 };
