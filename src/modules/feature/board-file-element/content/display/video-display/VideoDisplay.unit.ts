@@ -37,7 +37,7 @@ describe("VideoDisplay", () => {
 
 		const video = wrapper.find("video");
 		expect(video.attributes("src")).toBe(src);
-		expect(video.attributes("alt")).toBe(name);
+		expect(video.attributes("aria-label")).toBe(name);
 		expect(video.attributes("controls")).toBe("");
 		expect(video.attributes("controlslist")).toBe("nodownload");
 		expect(video.attributes("loading")).toBe("lazy");

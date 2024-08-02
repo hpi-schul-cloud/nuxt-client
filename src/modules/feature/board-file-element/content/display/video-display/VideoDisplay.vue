@@ -7,7 +7,7 @@
 			class="video"
 			loading="lazy"
 			:src="src"
-			:alt="name"
+			:aria-label="name"
 			v-on:error="onError"
 		/>
 		<ContentElementBar class="menu">
@@ -40,11 +40,15 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped>
+<style lang="scss" scoped>
 .video {
 	width: 100%;
 	display: block;
 	outline: none;
+
+	&:focus {
+		outline: 2px;
+	}
 }
 
 .menu {
