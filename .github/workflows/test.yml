@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 env:
-  node: 18
+  node: 20
 jobs:
   unit:
     runs-on: ubuntu-latest

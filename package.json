@@ -86,7 +86,7 @@
 		"webpack-plugin-vuetify": "^2.0.1"
 	},
 	"engines": {
-		"node": "18",
-		"npm": ">=9"
+		"node": "20",
+		"npm": ">=10"
 	}
 }
