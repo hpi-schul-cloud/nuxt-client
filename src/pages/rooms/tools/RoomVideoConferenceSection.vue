@@ -124,7 +124,7 @@ import {
 	Ref,
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import RoomModule from "@/store/room";
+import RoomModule from "@/store/course";
 import { mdiCheck } from "@mdi/js";
 
 export default defineComponent({
