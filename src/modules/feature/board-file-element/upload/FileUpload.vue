@@ -83,8 +83,3 @@ export default defineComponent({
 	},
 });
 </script>
-<style lang="scss" scoped>
-.file-upload-element-bar {
-	z-index: 1; // To make sure the file picker is on top of the other elements
-}
-</style>

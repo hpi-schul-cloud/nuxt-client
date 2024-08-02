@@ -85,11 +85,6 @@ const props = defineProps({
 	}
 }
 
-.content-element-bar-texts {
-	position: relative;
-	z-index: -1;
-}
-
 .content-element-bar-texts > div ~ div {
 	padding-top: 8px;
 }

@@ -1,6 +1,6 @@
 <template>
 	<v-card
-		class="mb-4"
+		class="text-editor-card mb-4"
 		data-testid="collaborative-text-editor-element"
 		variant="outlined"
 		ref="collaborativetextEditorElement"
@@ -14,7 +14,7 @@
 	>
 		<ContentElementBar :hasGreyBackground="true" :icon="mdiTextBoxEditOutline">
 			<template #display>
-				<v-img :src="image" alt="" cover class="text-editor-image rounded-t" />
+				<v-img :src="image" alt="" cover class="rounded-t" />
 			</template>
 			<template #title>
 				{{ $t("components.cardElement.collaborativeTextEditorElement") }}
@@ -100,7 +100,7 @@ const onMoveDown = () => emit("move-down:edit");
 </script>
 
 <style scoped lang="scss">
-.text-editor-image {
-	z-index: unset;
+.text-editor-card {
+	outline-offset: 1px;
 }
 </style>

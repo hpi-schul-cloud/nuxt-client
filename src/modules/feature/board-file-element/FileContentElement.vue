@@ -221,5 +221,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 .board-file-element-card {
 	overflow: initial;
+
+	&:focus {
+		outline-offset: 1px;
+	}
 }
 </style>
