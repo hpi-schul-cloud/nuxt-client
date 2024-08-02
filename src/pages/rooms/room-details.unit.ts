@@ -10,7 +10,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/course";
+import CourseModule from "@/store/course";
 import ShareModule from "@/store/share";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -117,7 +117,7 @@ let loadingStateModuleMock: LoadingStateModule;
 let notifierModule: NotifierModule;
 let shareModule: ShareModule;
 let downloadModule: CommonCartridgeExportModule;
-let roomModule: RoomModule;
+let roomModule: CourseModule;
 let authModule: AuthModule;
 
 const getWrapper = (
@@ -148,7 +148,7 @@ const getWrapper = (
 		startShareFlow: jest.fn(),
 		resetShareFlow: jest.fn(),
 	});
-	roomModule = createModuleMocks(RoomModule, {
+	roomModule = createModuleMocks(CourseModule, {
 		fetchContent: jest.fn(),
 		getRoomData: mockData,
 		getPermissionData: permissionData,

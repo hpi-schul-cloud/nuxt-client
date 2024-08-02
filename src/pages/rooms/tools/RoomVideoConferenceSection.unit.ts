@@ -1,6 +1,6 @@
 import { VideoConferenceScope } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import RoomModule from "@/store/course";
+import CourseModule from "@/store/course";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import {
@@ -51,7 +51,7 @@ describe("RoomVideoConferenceSection", () => {
 			...videoConferenceModuleGetter,
 		});
 
-		const roomModule = createModuleMocks(RoomModule, {
+		const roomModule = createModuleMocks(CourseModule, {
 			getRoomData: {
 				roomId: props.roomId,
 				title: "roomName",

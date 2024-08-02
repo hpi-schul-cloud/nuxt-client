@@ -26,7 +26,7 @@ import { Course } from "./types/room";
 	namespaced: true,
 	stateFactory: true,
 })
-export default class RoomModule extends VuexModule {
+export default class CourseModule extends VuexModule {
 	roomData: SingleColumnBoardResponse = {
 		roomId: "",
 		title: "",

@@ -11,7 +11,7 @@ import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
-import RoomModule from "@/store/course";
+import CourseModule from "@/store/course";
 import RoomsModule from "@/store/courses";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
@@ -34,7 +34,7 @@ export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsM
 	Symbol("schoolExternalToolsModule");
 export const APPLICATION_ERROR_KEY: InjectionKey<ApplicationErrorModule> =
 	Symbol("applicationError");
-export const ROOM_MODULE_KEY: InjectionKey<RoomModule> = Symbol("roomModule");
+export const ROOM_MODULE_KEY: InjectionKey<CourseModule> = Symbol("roomModule");
 export const VIDEO_CONFERENCE_MODULE_KEY: InjectionKey<VideoConferenceModule> =
 	Symbol("videoConferenceModule");
 export const STATUS_ALERTS_MODULE_KEY: InjectionKey<StatusAlertsModule> =

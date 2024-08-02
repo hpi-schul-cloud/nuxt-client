@@ -11,7 +11,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/course";
+import CourseModule from "@/store/course";
 import ShareModule from "@/store/share";
 import { Board } from "@/types/board/Board";
 import {
@@ -209,7 +209,7 @@ describe("Board", () => {
 
 		const loadingStateModule = createModuleMocks(LoadingStateModule);
 		const shareModule = createModuleMocks(ShareModule);
-		const roomModule = createModuleMocks(RoomModule, {
+		const roomModule = createModuleMocks(CourseModule, {
 			getRoomId: "room1",
 		});
 		return {

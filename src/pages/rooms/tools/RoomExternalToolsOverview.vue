@@ -46,7 +46,7 @@
 import { mdiAlertCircle } from "@/components/icons/material";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/serverApi/v3";
-import RoomModule from "@/store/room";
+import CourseModule from "@/store/room";
 import { Course, CourseFeatures } from "@/store/types/room";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -70,7 +70,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+const roomModule: CourseModule = injectStrict(ROOM_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const {
