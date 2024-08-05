@@ -17,12 +17,14 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
 import { ConfigResponse } from "@/serverApi/v3/api";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
+import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { VCard } from "vuetify/lib/components/index.mjs";
 
 jest.mock("@data-board/ContentElementState.composable");
 
@@ -106,7 +108,6 @@ describe("LinkContentElement", () => {
 				...options.content,
 			}),
 		};
-		document.body.setAttribute("data-app", "true");
 
 		mockedUseContentElementState.mockReturnValue({
 			modelValue: ref(element.content),
@@ -129,7 +130,7 @@ describe("LinkContentElement", () => {
 
 		const { wrapper } = getWrapper({
 			element,
-			isEditMode: true,
+			isEditMode: options.isEditMode,
 			isDetailView: false,
 		});
 
@@ -139,129 +140,212 @@ describe("LinkContentElement", () => {
 		};
 	};
 
-	describe("onCreateUrl", () => {
-		it("should request meta tags for the given url", async () => {
-			const { wrapper } = setup({ isEditMode: true, isDetailView: false });
+	describe("when link element is displayed", () => {
+		describe("when content url is undefined", () => {
+			it("should not render display of link content", () => {
+				const { wrapper } = setup({
+					isEditMode: true,
+				});
 
-			const component = wrapper.getComponent(LinkContentElementCreate);
-			component.vm.$emit(
-				"create:url",
-				"https://abc.de/bravo-fox-delta-ohhh-mega"
-			);
-
-			expect(useMetaTagExtractorApiMock.getMetaTags).toHaveBeenCalled();
-		});
-
-		describe("when no protocol was provided", () => {
-			it("should add https-protocol", async () => {
-				const { wrapper } = setup({ isEditMode: true, isDetailView: false });
-				const url = "abc.de/my-article";
-
-				const component = wrapper.getComponent(LinkContentElementCreate);
-				component.vm.$emit("create:url", url);
-
-				const expected = `https://${url}`;
-				expect(useMetaTagExtractorApiMock.getMetaTags).toHaveBeenCalledWith(
-					expected
+				const linkElementDisplay = wrapper.findComponent(
+					LinkContentElementDisplay
 				);
+
+				expect(linkElementDisplay.exists()).toBe(false);
+			});
+
+			it("should not have an aria-label", () => {
+				const { wrapper } = setup({
+					isEditMode: true,
+				});
+
+				const linkElement = wrapper.findComponent(VCard);
+
+				expect(linkElement.attributes("aria-label")).toBeUndefined();
 			});
 		});
 
-		describe("when url was provided", () => {
-			describe("when imageUrl was in metaTags", () => {
-				it("should create a preview image", async () => {
-					const { wrapper } = setup({ isEditMode: true, isDetailView: false });
-					const url = "https://abc.de/my-article";
-					const fakeMetaTags: MetaTagExtractorResponse = {
-						url,
-						title: "my title",
-						description: "",
-						imageUrl: "https://abc.de/foto.png",
-						type: "unknown",
-						parentTitle: "",
-						parentType: "unknown",
-					};
-
-					useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(
-						fakeMetaTags
-					);
-
-					const component = wrapper.getComponent(LinkContentElementCreate);
-					component.vm.$emit("create:url", url);
-					await nextTick();
-					await nextTick();
-					await nextTick();
-
-					expect(
-						usePreviewGeneratorMock.createPreviewImage
-					).toHaveBeenCalledWith(fakeMetaTags.imageUrl);
+		describe("when content url is defined", () => {
+			it("should render display of link content with correct props", () => {
+				const linkElementContent = linkElementContentFactory.build();
+				const { wrapper, element } = setup({
+					content: linkElementContent,
+					isEditMode: true,
 				});
+
+				const linkElementDisplay = wrapper.findComponent(
+					LinkContentElementDisplay
+				);
+
+				expect(linkElementDisplay.props().url).toEqual(element.content.url);
+				expect(linkElementDisplay.props().title).toEqual(element.content.title);
+				expect(linkElementDisplay.props().isEditMode).toEqual(true);
 			});
 
-			it("should sanitize the url", async () => {
-				const VALID_UNSANITIZED_URL =
-					"&#104;&#116;&#116;&#112;&#115;&#0000058//&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;";
-				const { wrapper } = setup({
-					content: linkElementContentFactory.build({
-						url: VALID_UNSANITIZED_URL,
-					}),
-					isEditMode: false,
-					isDetailView: false,
+			it("should have the correct aria-label", () => {
+				const linkElementContent = linkElementContentFactory.build();
+				const { wrapper, element } = setup({
+					content: linkElementContent,
+					isEditMode: true,
 				});
 
-				const expectedUrl = "https://example.com";
-				expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
-			});
+				const linkElement = wrapper.findComponent(VCard);
 
-			it("should sanitize a javascript-url", async () => {
-				const INVALID_UNSANITIZED_URL =
-					"javascript" + ":" + "alert(document.domain)";
-				const { wrapper } = setup({
-					content: linkElementContentFactory.build({
-						url: INVALID_UNSANITIZED_URL,
-					}),
-					isEditMode: false,
-					isDetailView: false,
-				});
-
-				const expectedUrl = "about:blank";
-				expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
-			});
-
-			it("should display the hostname ", async () => {
-				const INVALID_UNSANITIZED_URL = "https://de.wikipedia.org/dachs";
-				const { wrapper } = setup({
-					content: linkElementContentFactory.build({
-						url: INVALID_UNSANITIZED_URL,
-					}),
-					isEditMode: false,
-					isDetailView: false,
-				});
-
-				const expectedUrl = "de.wikipedia.org";
-				expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
+				expect(linkElement.attributes("aria-label")).toEqual(
+					`${element.content.url}, common.ariaLabel.newTab`
+				);
 			});
 		});
 	});
 
-	describe("when arrow key up is pressed", () => {
-		describe("when component is in edit-mode", () => {
-			it("should NOT emit 'move-keyboard:edit'", async () => {
-				const { wrapper } = setup({
-					isEditMode: true,
-					isDetailView: false,
-				});
+	describe("when link element is being created", () => {
+		it("should render LinkContentElementCreate component when in editmode", () => {
+			const { wrapper } = setup({ isEditMode: true });
 
-				const element = wrapper.findComponent({ ref: "linkContentElement" });
-				element.vm.$emit(
-					"keydown",
-					new KeyboardEvent("keydown", {
-						key: "ArrowUp",
-						keyCode: 38,
-					})
+			const linkCreateComponent = wrapper.findComponent(
+				LinkContentElementCreate
+			);
+
+			expect(linkCreateComponent.exists()).toBe(true);
+		});
+
+		it("should hide link element in view mode when no url was entered", () => {
+			const { wrapper } = setup({
+				isEditMode: false,
+			});
+
+			const linkElement = wrapper.findComponent(VCard);
+
+			expect(linkElement.attributes("class")).toContain("d-none");
+		});
+
+		describe("onCreateUrl", () => {
+			it("should request meta tags for the given url", async () => {
+				const { wrapper } = setup({ isEditMode: true, isDetailView: false });
+
+				const component = wrapper.getComponent(LinkContentElementCreate);
+				component.vm.$emit(
+					"create:url",
+					"https://abc.de/bravo-fox-delta-ohhh-mega"
 				);
 
-				expect(element.emitted("move-keyboard:edit")).toBeUndefined();
+				expect(useMetaTagExtractorApiMock.getMetaTags).toHaveBeenCalled();
+			});
+
+			describe("when no protocol was provided", () => {
+				it("should add https-protocol", async () => {
+					const { wrapper } = setup({ isEditMode: true, isDetailView: false });
+					const url = "abc.de/my-article";
+
+					const component = wrapper.getComponent(LinkContentElementCreate);
+					component.vm.$emit("create:url", url);
+
+					const expected = `https://${url}`;
+					expect(useMetaTagExtractorApiMock.getMetaTags).toHaveBeenCalledWith(
+						expected
+					);
+				});
+			});
+
+			describe("when url was provided", () => {
+				describe("when imageUrl was in metaTags", () => {
+					it("should create a preview image", async () => {
+						const { wrapper } = setup({
+							isEditMode: true,
+							isDetailView: false,
+						});
+						const url = "https://abc.de/my-article";
+						const fakeMetaTags: MetaTagExtractorResponse = {
+							url,
+							title: "my title",
+							description: "",
+							imageUrl: "https://abc.de/foto.png",
+							type: "unknown",
+							parentTitle: "",
+							parentType: "unknown",
+						};
+
+						useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(
+							fakeMetaTags
+						);
+
+						const component = wrapper.getComponent(LinkContentElementCreate);
+						component.vm.$emit("create:url", url);
+						await nextTick();
+						await nextTick();
+						await nextTick();
+
+						expect(
+							usePreviewGeneratorMock.createPreviewImage
+						).toHaveBeenCalledWith(fakeMetaTags.imageUrl);
+					});
+				});
+
+				it("should sanitize the url", async () => {
+					const VALID_UNSANITIZED_URL =
+						"&#104;&#116;&#116;&#112;&#115;&#0000058//&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;";
+					const { wrapper } = setup({
+						content: linkElementContentFactory.build({
+							url: VALID_UNSANITIZED_URL,
+						}),
+						isEditMode: false,
+						isDetailView: false,
+					});
+
+					const expectedUrl = "https://example.com";
+					expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
+				});
+
+				it("should sanitize a javascript-url", async () => {
+					const INVALID_UNSANITIZED_URL =
+						"javascript" + ":" + "alert(document.domain)";
+					const { wrapper } = setup({
+						content: linkElementContentFactory.build({
+							url: INVALID_UNSANITIZED_URL,
+						}),
+						isEditMode: false,
+						isDetailView: false,
+					});
+
+					const expectedUrl = "about:blank";
+					expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
+				});
+
+				it("should display the hostname ", async () => {
+					const INVALID_UNSANITIZED_URL = "https://de.wikipedia.org/dachs";
+					const { wrapper } = setup({
+						content: linkElementContentFactory.build({
+							url: INVALID_UNSANITIZED_URL,
+						}),
+						isEditMode: false,
+						isDetailView: false,
+					});
+
+					const expectedUrl = "de.wikipedia.org";
+					expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
+				});
+			});
+		});
+
+		describe("when arrow key up is pressed", () => {
+			describe("when component is in edit-mode", () => {
+				it("should NOT emit 'move-keyboard:edit'", async () => {
+					const { wrapper } = setup({
+						isEditMode: true,
+						isDetailView: false,
+					});
+
+					const element = wrapper.findComponent({ ref: "linkContentElement" });
+					element.vm.$emit(
+						"keydown",
+						new KeyboardEvent("keydown", {
+							key: "ArrowUp",
+							keyCode: 38,
+						})
+					);
+
+					expect(element.emitted("move-keyboard:edit")).toBeUndefined();
+				});
 			});
 		});
 	});
