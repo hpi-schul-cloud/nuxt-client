@@ -232,7 +232,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})`,
-		component: () => import("@/pages/rooms/RoomDetails.page.vue"),
+		component: () => import("@/pages/rooms/CourseDetails.page.vue"),
 		name: "rooms-id",
 	},
 	{

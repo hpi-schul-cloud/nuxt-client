@@ -1,5 +1,8 @@
 <template>
-	<room-wrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
+	<course-wrapper
+		:has-rooms="hasCurrentRooms"
+		:has-import-token="!!importToken"
+	>
 		<template #header>
 			<h1 class="text-h3 py-2 mb-4">
 				{{ $t("pages.rooms.index.courses.active") }}
@@ -104,8 +107,8 @@
 				</div>
 			</div>
 		</template>
-	</room-wrapper>
-	<room-modal
+	</course-wrapper>
+	<course-modal
 		v-model:isOpen="groupDialog.isOpen"
 		aria-describedby="folder open"
 		:group-data="groupDialog.groupData"
@@ -125,10 +128,10 @@
 <script>
 import vRoomAvatar from "@/components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
-import RoomModal from "@/components/molecules/RoomModal";
+import CourseModal from "@/components/molecules/CourseModal";
 import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import RoomWrapper from "@/components/templates/RoomWrapper.vue";
+import CourseWrapper from "@/components/templates/CourseWrapper.vue";
 import { coursesModule } from "@/store";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -150,11 +153,11 @@ export default defineComponent({
 		return { setElementRef, getElementNameByRef };
 	},
 	components: {
-		RoomWrapper,
+		CourseWrapper,
 		vRoomAvatar,
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
-		RoomModal,
+		CourseModal,
 		ImportFlow,
 	},
 	inject: {
