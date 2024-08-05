@@ -43,7 +43,7 @@
 							md="3"
 							sm="3"
 						>
-							<vRoomAvatar
+							<vCourseAvatar
 								:ref="`${room.id}-avatar`"
 								class="room-avatar"
 								:item="room"
@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import CourseWrapper from "@/components/templates/CourseWrapper.vue";
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import vCourseAvatar from "@/components/atoms/vCourseAvatar.vue";
 import { coursesModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
 import { mdiMagnify } from "@mdi/js";
@@ -70,7 +70,7 @@ import { defineComponent } from "vue";
 export default defineComponent({
 	components: {
 		CourseWrapper,
-		vRoomAvatar,
+		vCourseAvatar,
 	},
 	data() {
 		return {

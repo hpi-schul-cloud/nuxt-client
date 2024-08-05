@@ -126,8 +126,8 @@
 </template>
 
 <script>
-import vRoomAvatar from "@/components/atoms/vRoomAvatar";
-import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
+import vRoomAvatar from "@/components/atoms/vCourseAvatar";
+import vRoomEmptyAvatar from "@/components/atoms/vCourseEmptyAvatar";
 import CourseModal from "@/components/molecules/CourseModal";
 import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
 import ImportFlow from "@/components/share/ImportFlow.vue";
