@@ -50,18 +50,9 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	const createCardSuccess = (payload: CreateCardSuccessPayload) => {
-		const card = {
-			id: payload.newCard.id,
-			height: 117,
-			elements: [],
-			visibilitySettings: {},
-			title: "",
-			timestamps: {
-				lastUpdatedAt: "2024-07-19T15:02:11.550Z",
-				createdAt: "2024-07-19T15:02:11.550Z",
-			},
-		};
-		cards.value[payload.newCard.id] = card;
+		if (payload.newCard) {
+			cards.value[payload.newCard.id] = payload.newCard;
+		}
 	};
 
 	const updateCardTitleRequest = socketOrRest.updateCardTitleRequest;
