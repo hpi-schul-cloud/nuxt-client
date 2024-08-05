@@ -232,7 +232,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})`,
-		component: () => import("@/pages/rooms/CourseDetails.page.vue"),
+		component: () => import("@/pages/courses/CourseDetails.page.vue"),
 		name: "rooms-id",
 	},
 	{
@@ -250,12 +250,12 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: "/rooms-list",
-		component: () => import("@/pages/rooms/CourseList.page.vue"),
+		component: () => import("@/pages/courses/CourseList.page.vue"),
 		name: "rooms-list",
 	},
 	{
 		path: "/rooms-overview",
-		component: () => import("@/pages/rooms/CourseOverview.page.vue"),
+		component: () => import("@/pages/courses/CourseOverview.page.vue"),
 		name: "rooms-overview",
 	},
 	{
