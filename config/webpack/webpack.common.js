@@ -155,6 +155,7 @@ module.exports = {
 			"@ui-chip": getDir("src/modules/ui/chip"),
 			"@ui-confirmation-dialog": getDir("src/modules/ui/confirmation-dialog"),
 			"@ui-date-time-picker": getDir("src/modules/ui/date-time-picker"),
+			"@ui-extended-icon-btn": getDir("src/modules/ui/extended-icon-btn"),
 			"@ui-layout": getDir("src/modules/ui/layout"),
 			"@ui-light-box": getDir("src/modules/ui/light-box"),
 			"@ui-preview-image": getDir("src/modules/ui/preview-image"),
