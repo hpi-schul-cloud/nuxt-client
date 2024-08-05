@@ -170,7 +170,7 @@ describe("CardStore", () => {
 				const newCard = cardResponseFactory.build({ id: newCardId });
 				await cardStore.createCardSuccess({
 					newCard,
-					columnId: "any-column",
+					columnId: "any-column-id",
 					isOwnAction: true,
 				});
 
