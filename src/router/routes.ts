@@ -255,7 +255,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: "/rooms-overview",
-		component: () => import("@/pages/rooms/RoomOverview.page.vue"),
+		component: () => import("@/pages/rooms/CourseOverview.page.vue"),
 		name: "rooms-overview",
 	},
 	{

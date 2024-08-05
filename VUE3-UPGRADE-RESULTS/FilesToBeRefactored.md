@@ -17,7 +17,7 @@
 - **Potantial Effort:** depending on selected solution
 - **Estimation time for refactoring:** _TBD depending on selected solution_
 
-### `src/pages/rooms/RoomOverview.page.vue`
+### `src/pages/rooms/CourseOverview.page.vue`
 
 - The moving avatar components are based on the `this.$refs` selector. The `$refs` object's properties have been changed in vue-3. So we need to find another way to spot the dragging object properties instead of using `$refs`. This whole page refactoring might be necessary.
 - **Recommended Solution:** Find another way to spot the dragging component properties. Especially `getElementNameByRef` method should be replaced.

@@ -18,7 +18,7 @@ import {
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import RoomOverview from "./RoomOverview.page.vue";
+import RoomOverview from "./CourseOverview.page.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
