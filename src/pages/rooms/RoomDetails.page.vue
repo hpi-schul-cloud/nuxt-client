@@ -541,7 +541,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 
 .course-title {
 	overflow: hidden;

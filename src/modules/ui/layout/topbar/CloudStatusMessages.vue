@@ -66,7 +66,7 @@ const formatDate = (dateTime: string) => {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 @import "@/styles/mixins";
 
 .alerts {

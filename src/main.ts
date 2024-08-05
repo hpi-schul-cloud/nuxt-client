@@ -38,7 +38,6 @@ import Cookies from "universal-cookie";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 
-import "@/styles/global.scss";
 // TODO solve without vue-mq dependency
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
@@ -48,7 +47,6 @@ import { handleApplicationError } from "./plugins/application-error-handler";
 import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
 import vuetify from "./plugins/vuetify";
-import "./styles/vuetify-settings.scss";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
 

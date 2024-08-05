@@ -241,7 +241,7 @@ watchDebounced(
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 
 :deep {
 	.v-infinite-scroll--vertical {
