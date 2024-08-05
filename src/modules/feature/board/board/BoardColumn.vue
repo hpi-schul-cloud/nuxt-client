@@ -31,7 +31,7 @@
 					easing: 'cubic-bezier(1, 0, 0, 1)',
 					filter: '.v-input, v-btn',
 					preventOnFilter: false,
-					forceFallback: true,
+					forceFallback: false,
 					ghostClass: sortableGhostClasses,
 					scroll: true,
 				}"
