@@ -265,9 +265,12 @@ export const useSidebarItems = () => {
 				},
 				{
 					title: "global.sidebar.item.training",
-					href: "https://www.lernen.cloud/",
+					href: `${envConfigModule.getEnv.TRAINING_URL}`,
 					target: "_blank",
+					rel: "noopener",
 					testId: "training",
+					feature: "TRAINING_URL",
+					featureValue: `${envConfigModule.getEnv.TRAINING_URL}`,
 				},
 			],
 		},
