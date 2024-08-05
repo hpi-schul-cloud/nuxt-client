@@ -9,6 +9,8 @@ export type ExternalToolDisplayData = {
 
 	logoUrl?: string;
 
+	thumbnailUrl?: string;
+
 	openInNewTab: boolean;
 
 	status: ContextExternalToolConfigurationStatus;

@@ -94,12 +94,18 @@
 			:course-id="roomData.roomId"
 			@success="refreshRoom"
 		/>
+		<SelectBoardLayoutDialog
+			v-if="boardLayoutsEnabled"
+			v-model="boardLayoutDialogIsOpen"
+			@select:multi-column="onMultiColumnLayoutSelected"
+			@select:single-column="onSingleColumnLayoutSelected"
+		/>
 	</default-wireframe>
 </template>
 
 <script>
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import { RoomDotMenu } from "@ui-room-details";
+import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
@@ -169,6 +175,7 @@ export default defineComponent({
 		CopyResultModal,
 		ShareModal,
 		commonCartridgeExportModal,
+		SelectBoardLayoutDialog,
 	},
 	inject: {
 		copyModule: { from: COPY_MODULE_KEY },
@@ -198,9 +205,13 @@ export default defineComponent({
 			isShareModalOpen: false,
 			isEndSyncDialogOpen: false,
 			tabIndex: 0,
+			boardLayoutDialogIsOpen: false,
 		};
 	},
 	computed: {
+		boardLayoutsEnabled() {
+			return envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED;
+		},
 		getCurrentFabItems() {
 			return this.currentTab?.fabItems;
 		},
@@ -273,65 +284,64 @@ export default defineComponent({
 		},
 		learnContentFabItems() {
 			const actions = [];
+
 			if (
 				this.authModule.getUserPermissions.includes(
 					"HOMEWORK_CREATE".toLowerCase()
 				)
 			) {
 				actions.push({
-					label: this.$t("pages.rooms.fab.add.task"),
+					label: this.$t("pages.room.fab.add.task"),
 					icon: mdiFormatListChecks,
 					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_task",
-					ariaLabel: this.$t("pages.rooms.fab.add.task"),
+					ariaLabel: this.$t("pages.room.fab.add.task"),
 				});
 			}
+
 			if (
 				this.authModule.getUserPermissions.includes(
 					"TOPIC_CREATE".toLowerCase()
 				)
 			) {
 				actions.push({
-					label: this.$t("pages.rooms.fab.add.lesson"),
+					label: this.$t("pages.room.fab.add.lesson"),
 					icon: mdiViewListOutline,
 					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_lesson",
-					ariaLabel: this.$t("pages.rooms.fab.add.lesson"),
+					ariaLabel: this.$t("pages.room.fab.add.lesson"),
 				});
 			}
+
 			if (
 				this.authModule.getUserPermissions.includes(
 					"COURSE_EDIT".toLowerCase()
 				) &&
 				this.authModule.getUserRoles.includes(Roles.Teacher)
 			) {
-				actions.push({
-					label: this.$t("pages.rooms.fab.add.board"),
-					icon: mdiViewDashboardOutline,
-					customEvent: "board-create",
-					dataTestId: "fab_button_add_board",
-					ariaLabel: this.$t("pages.rooms.fab.add.board"),
-				});
-			}
-			if (
-				envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
-				this.authModule.getUserPermissions.includes(
-					"COURSE_EDIT".toLowerCase()
-				) &&
-				this.authModule.getUserRoles.includes(Roles.Teacher)
-			) {
-				actions.push({
-					label: this.$t("pages.rooms.fab.add.listBoard"),
-					icon: "$mdiCustomGridOutline",
-					customEvent: "list-board-create",
-					dataTestId: "fab_button_add_list_board",
-					ariaLabel: this.$t("pages.rooms.fab.add.listBoard"),
-				});
+				if (this.boardLayoutsEnabled) {
+					actions.push({
+						label: this.$t("pages.room.fab.add.board"),
+						icon: "$mdiViewGridPlusOutline",
+						customEvent: "board-type-dialog-open",
+						dataTestId: "fab_button_add_board",
+						ariaLabel: this.$t("pages.room.fab.add.board"),
+					});
+				} else {
+					actions.push({
+						label: this.$t("pages.room.fab.add.columnBoard"),
+						icon: mdiViewDashboardOutline,
+						customEvent: "board-create",
+						dataTestId: "fab_button_add_column_board",
+						ariaLabel: this.$t("pages.room.fab.add.columnBoard"),
+					});
+				}
 			}
 
 			if (actions.length === 0) {
 				return null;
 			}
+
 			const items = {
 				icon: mdiPlus,
 				title: this.$t("common.actions.create"),
@@ -339,6 +349,7 @@ export default defineComponent({
 				dataTestId: "add-content-button",
 				actions: actions,
 			};
+
 			return items;
 		},
 		roomData() {
@@ -453,12 +464,19 @@ export default defineComponent({
 		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	methods: {
+		onSingleColumnLayoutSelected() {
+			this.onCreateBoard(this.roomData.roomId, BoardLayout.List);
+		},
+		onMultiColumnLayoutSelected() {
+			this.onCreateBoard(this.roomData.roomId, BoardLayout.Columns);
+		},
 		fabItemClickHandler(event) {
 			if (event === "board-create") {
 				this.onCreateBoard(this.roomData.roomId, BoardLayout.Columns);
 			}
-			if (event === "list-board-create") {
-				this.onCreateBoard(this.roomData.roomId, BoardLayout.List);
+
+			if (event === "board-type-dialog-open") {
+				this.boardLayoutDialogIsOpen = true;
 			}
 		},
 		setActiveTabIfPageCached(event) {
@@ -560,7 +578,7 @@ export default defineComponent({
 
 // even out border
 .v-tabs {
-	margin-bottom: -2px; // stylelint-disable sh-waqar/declaration-use-variable
+	margin-bottom: -2px;
 }
 
 .v-tab {

@@ -1,13 +1,12 @@
-import { mount } from "@vue/test-utils";
-import InnerContent from "./InnerContent.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import InnerContent from "./InnerContent.vue";
 
 describe("InnerContent", () => {
 	const propsData = {
-		lastUpdatedAt: "2023-12-15 17:30:00",
 		isFirstElement: false,
 		isLastElement: false,
 		hasMultipleElements: false,

@@ -31,7 +31,7 @@
 							:aria-label="
 								$t(
 									'pages.room.cards.aria',
-									boardTypeAriaLabel(item.content.layout)
+									boardLayoutAriaLabel(item.content.layout)
 								)
 							"
 							@move-element="moveByKeyboard"
@@ -307,7 +307,7 @@ export default {
 			await roomModule.sortElements({ elements: items });
 			this.$refs[`item_${position}`].$el.focus();
 		},
-		boardTypeAriaLabel(itemLayout) {
+		boardLayoutAriaLabel(itemLayout) {
 			const columnBoardInfo = {
 				itemType: this.$t("pages.room.boardCard.label.columnBoard"),
 			};
