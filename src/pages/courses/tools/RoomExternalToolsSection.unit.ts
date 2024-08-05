@@ -16,7 +16,7 @@ import { mount, MountingOptions } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
-import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
+import RoomExternalToolsErrorDialog from "./CourseExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 
 jest.mock("vue-router", () => ({

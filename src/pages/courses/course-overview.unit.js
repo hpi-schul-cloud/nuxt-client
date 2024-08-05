@@ -1,4 +1,3 @@
-import CourseModal from "@/components/molecules/CourseModal";
 import { authModule, coursesModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
