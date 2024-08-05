@@ -1,4 +1,4 @@
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import vCourseAvatar from "@/components/atoms/vCourseAvatar.vue";
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import {
 	createTestingI18n,
@@ -118,7 +118,7 @@ describe("vRoomGroupAvatar", () => {
 
 	it("should have correct amount of items", () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponents = wrapper.findAllComponents(vRoomAvatar);
+		const avatarComponents = wrapper.findAllComponents(vCourseAvatar);
 
 		expect(avatarComponents).toBeTruthy();
 		expect(avatarComponents).toHaveLength(3);
@@ -126,7 +126,7 @@ describe("vRoomGroupAvatar", () => {
 
 	it("should contain the correct item", () => {
 		const wrapper = getWrapper(propsData);
-		const avatarComponents = wrapper.findAllComponents(vRoomAvatar);
+		const avatarComponents = wrapper.findAllComponents(vCourseAvatar);
 
 		expect(avatarComponents[0].props("item").id).toStrictEqual("5");
 	});
@@ -162,7 +162,7 @@ describe("vRoomGroupAvatar", () => {
 			maxItems: 4,
 			draggable: true,
 		});
-		const avatarComponent = wrapper.findComponent(vRoomAvatar);
+		const avatarComponent = wrapper.findComponent(vCourseAvatar);
 
 		avatarComponent.trigger("dragstart");
 		await Promise.resolve();
@@ -179,7 +179,7 @@ describe("vRoomGroupAvatar", () => {
 			maxItems: 4,
 			draggable: false,
 		});
-		const avatarComponent = wrapper.findComponent(vRoomAvatar);
+		const avatarComponent = wrapper.findComponent(vCourseAvatar);
 
 		avatarComponent.trigger("dragstart");
 		await Promise.resolve();

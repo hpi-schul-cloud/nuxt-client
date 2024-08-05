@@ -6,7 +6,7 @@ import { createMock } from "@golevelup/ts-jest";
 import { mdiSync } from "@mdi/js";
 import { mount } from "@vue/test-utils";
 import { VBadge } from "vuetify/lib/components/index.mjs";
-import vRoomAvatar from "./vRoomAvatar.vue";
+import vCourseAvatar from "./vCourseAvatar.vue";
 
 const mockData = {
 	id: "456",
@@ -22,9 +22,9 @@ const mockData = {
 	isSynchronized: false,
 };
 
-describe("vRoomAvatar", () => {
+describe("vCourseAvatar", () => {
 	const setup = (optionalProps: object = {}) => {
-		const wrapper = mount(vRoomAvatar, {
+		const wrapper = mount(vCourseAvatar, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

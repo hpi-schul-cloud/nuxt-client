@@ -1,6 +1,6 @@
 import { coursesModule } from "@/store";
 import { mount } from "@vue/test-utils";
-import RoomList from "./RoomList.page.vue";
+import CourseList from "./CourseList.page.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import CoursesModule from "@/store/courses";
 import AuthModule from "@/store/auth";
@@ -22,7 +22,7 @@ import {
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 
 const getWrapper = (device = "desktop") => {
-	return mount(RoomList, {
+	return mount(CourseList, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {

@@ -18,14 +18,14 @@ import { SpeedDialMenu } from "@ui-speed-dial-menu";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import { FabAction } from "./default-wireframe.types";
 import DefaultWireframe from "./DefaultWireframe.vue";
-import RoomWrapper from "./RoomWrapper.vue";
+import CourseWrapper from "./CourseWrapper.vue";
 
 const getWrapper = (
-	options: ComponentMountingOptions<typeof RoomWrapper> = {
+	options: ComponentMountingOptions<typeof CourseWrapper> = {
 		props: { hasRooms: true },
 	}
 ) => {
-	return mount(RoomWrapper, {
+	return mount(CourseWrapper, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -80,7 +80,7 @@ const mockData = [
 	},
 ];
 
-describe("@templates/RoomWrapper.vue", () => {
+describe("@templates/CourseWrapper.vue", () => {
 	beforeEach(() => {
 		setupStores({
 			coursesModule: CoursesModule,

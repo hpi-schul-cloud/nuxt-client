@@ -1,4 +1,4 @@
-import RoomModal from "@/components/molecules/RoomModal";
+import CourseModal from "@/components/molecules/CourseModal";
 import { authModule, coursesModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
@@ -243,7 +243,7 @@ describe("@/pages/RoomOverview", () => {
 		await nextTick();
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
-		const customDialog = wrapper.findComponent({ name: "room-modal" });
+		const customDialog = wrapper.findComponent({ name: "course-modal" });
 		expect(customDialog.props("isOpen")).toBe(true);
 	});
 
@@ -254,7 +254,7 @@ describe("@/pages/RoomOverview", () => {
 		const cardComponent = wrapper.find(".card-component");
 		await cardComponent.trigger("click");
 		await nextTick();
-		const customDialog = wrapper.findComponent({ name: "room-modal" });
+		const customDialog = wrapper.findComponent({ name: "course-modal" });
 		await nextTick();
 		const input = customDialog.findComponent({ name: "v-text-field" });
 		expect(customDialog.props("isOpen")).toBe(true);
@@ -439,8 +439,8 @@ describe("@/pages/RoomOverview", () => {
 			},
 		});
 
-		const roomModal = wrapper.findComponent(RoomModal);
-		roomModal.vm.$emit(
+		const CourseModal = wrapper.findComponent({ name: "course-modal" });
+		CourseModal.vm.$emit(
 			"drag-from-group",
 			wrapper.vm.groupDialog.groupData.groupElements[0]
 		);

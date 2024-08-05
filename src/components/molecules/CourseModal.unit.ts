@@ -8,14 +8,14 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import RoomModal from "./RoomModal.vue";
+import CourseModal from "./CourseModal.vue";
 
-describe("RoomModal", () => {
+describe("CourseModal", () => {
 	const getWrapper = (props: { isOpen: boolean }) => {
 		const { isOpen } = props;
 		setupStores({ coursesModule: CoursesModule });
 
-		const wrapper = mount(RoomModal, {
+		const wrapper = mount(CourseModal, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 			props: {
 				isOpen,

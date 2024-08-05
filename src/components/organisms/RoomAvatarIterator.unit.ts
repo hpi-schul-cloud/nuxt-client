@@ -1,6 +1,6 @@
 import { VueWrapper, mount } from "@vue/test-utils";
 import RoomAvatarIterator from "./RoomAvatarIterator.vue";
-import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import vCourseAvatar from "@/components/atoms/vCourseAvatar.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 const propsData = {
@@ -40,7 +40,7 @@ const getWrapper = () => {
 		global: {
 			plugins: [createTestingVuetify()],
 			stubs: {
-				VRoomAvatar: {
+				VCourseAvatar: {
 					template: '<div class="room-avatar" />',
 					props: ["item", "draggable"],
 				},
@@ -68,7 +68,7 @@ describe("RoomAvatarIterator", () => {
 		expect(avatarComponents).toHaveLength(2);
 
 		const avatarComponentOne = avatarComponents[0] as VueWrapper<
-			typeof vRoomAvatar
+			typeof vCourseAvatar
 		>;
 
 		expect(avatarComponentOne.props()).toEqual({
