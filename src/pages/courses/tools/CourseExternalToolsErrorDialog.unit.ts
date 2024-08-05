@@ -1,4 +1,4 @@
-import RoomExternalToolsErrorDialog from "@/pages/courses/tools/RoomExternalToolsErrorDialog.vue";
+import CourseExternalToolsErrorDialog from "@/pages/courses/tools/CourseExternalToolsErrorDialog.vue";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -14,7 +14,7 @@ import {
 import { mount } from "@vue/test-utils";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
-describe("RoomExternalToolsErrorDialog", () => {
+describe("CourseExternalToolsErrorDialog", () => {
 	const getWrapper = (props: {
 		selectedItem: ExternalToolDisplayData;
 		isOpen?: boolean;
@@ -24,7 +24,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			getUserRoles: ["teacher"],
 		});
 
-		const wrapper = mount(RoomExternalToolsErrorDialog, {
+		const wrapper = mount(CourseExternalToolsErrorDialog, {
 			global: {
 				plugins: [
 					createTestingVuetify(),

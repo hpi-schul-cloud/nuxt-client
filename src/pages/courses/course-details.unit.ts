@@ -35,11 +35,11 @@ import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import CourseDetailsPage from "./CourseDetails.page.vue";
-import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import CourseExternalToolsOverview from "./tools/CourseExternalToolsOverview.vue";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import DefaultWireframe from "../../components/templates/DefaultWireframe.vue";
 
-jest.mock("./tools/RoomExternalToolsOverview.vue");
+jest.mock("./tools/CourseExternalToolsOverview.vue");
 
 const mockData: SingleColumnBoardResponse = {
 	roomId: "123",
@@ -189,14 +189,14 @@ const getWrapper = (
 			},
 			stubs: {
 				RoomDashboard: true,
-				RoomExternalToolsOverview: true,
+				CourseExternalToolsOverview: true,
 				EndCourseSyncDialog: true,
 			},
 		},
 	});
 };
 
-describe("@/pages/RoomDetails.page.vue", () => {
+describe("@/pages/CourseDetails.page.vue", () => {
 	beforeEach(() => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
@@ -648,7 +648,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 				const toolsTab = wrapper.find('[data-testid="tools-tab"]');
 				await toolsTab.trigger("click");
 
-				const toolsContent = wrapper.findComponent(RoomExternalToolsOverview);
+				const toolsContent = wrapper.findComponent(CourseExternalToolsOverview);
 
 				expect(toolsContent.exists()).toBe(true);
 			});

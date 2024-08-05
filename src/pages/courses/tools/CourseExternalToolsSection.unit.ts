@@ -16,8 +16,8 @@ import { mount, MountingOptions } from "@vue/test-utils";
 import { nextTick } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
-import RoomExternalToolsErrorDialog from "./CourseExternalToolsErrorDialog.vue";
-import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
+import CourseExternalToolsErrorDialog from "./CourseExternalToolsErrorDialog.vue";
+import CourseExternalToolsSection from "./CourseExternalToolsSection.vue";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),
@@ -25,7 +25,7 @@ jest.mock("vue-router", () => ({
 }));
 const useRouterMock = <jest.Mock>useRouter;
 
-describe("RoomExternalToolsSection", () => {
+describe("CourseExternalToolsSection", () => {
 	const getWrapper = (props: {
 		tools: ExternalToolDisplayData[];
 		roomId: string;
@@ -36,8 +36,8 @@ describe("RoomExternalToolsSection", () => {
 		});
 
 		const wrapper = mount(
-			RoomExternalToolsSection as MountingOptions<
-				typeof RoomExternalToolsSection
+			CourseExternalToolsSection as MountingOptions<
+				typeof CourseExternalToolsSection
 			>,
 			{
 				global: {
@@ -51,7 +51,7 @@ describe("RoomExternalToolsSection", () => {
 					},
 					stubs: {
 						RoomExternalToolCard: true,
-						RoomExternalToolsErrorDialog: true,
+						CourseExternalToolsErrorDialog: true,
 					},
 				},
 				props: {
@@ -252,7 +252,7 @@ describe("RoomExternalToolsSection", () => {
 			card.vm.$emit("error", tool);
 			await nextTick();
 
-			const dialog = wrapper.findComponent(RoomExternalToolsErrorDialog);
+			const dialog = wrapper.findComponent(CourseExternalToolsErrorDialog);
 			expect(dialog.exists()).toBe(true);
 			expect(dialog.props("isOpen")).toEqual(true);
 		});

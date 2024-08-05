@@ -14,7 +14,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { RoomDotMenu } from "@ui-room-details";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import RoomExternalToolCard from "./RoomExternalToolCard.vue";
+import RoomExternalToolCard from "./CourseExternalToolCard.vue";
 
 jest.mock("@data-external-tool");
 

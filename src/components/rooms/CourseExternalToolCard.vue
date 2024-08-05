@@ -59,7 +59,7 @@ import { InfoChip, WarningChip } from "@ui-chip";
 import { RoomDotMenu } from "@ui-room-details";
 import { computed, ComputedRef, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import RoomBaseCard from "./RoomBaseCard.vue";
+import RoomBaseCard from "./CourseBaseCard.vue";
 
 const props = defineProps({
 	tool: {

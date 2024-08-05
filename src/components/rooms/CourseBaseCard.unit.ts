@@ -3,7 +3,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import RoomBaseCard from "./RoomBaseCard.vue";
+import RoomBaseCard from "./CourseBaseCard.vue";
 
 describe("RoomBaseCard", () => {
 	const getWrapper = (propsData: {

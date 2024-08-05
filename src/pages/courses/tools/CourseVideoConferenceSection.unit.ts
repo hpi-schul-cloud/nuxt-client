@@ -119,7 +119,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 
 			expect(card.props("isRunning")).toEqual(false);
@@ -155,7 +155,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 
 			expect(card.props("isRunning")).toEqual(true);
@@ -192,7 +192,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 
 			expect(card.props("isRefreshing")).toEqual(true);
@@ -229,7 +229,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 
 			expect(card.props("hasPermission")).toEqual(false);
@@ -266,7 +266,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 
 			expect(card.props("hasPermission")).toEqual(true);
@@ -303,7 +303,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 
 			expect(card.props("hasPermission")).toEqual(true);
@@ -340,7 +340,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 
 			expect(card.props("hasPermission")).toEqual(true);
@@ -377,7 +377,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 
 			expect(card.props("hasPermission")).toEqual(false);
@@ -415,7 +415,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper, videoConferenceModule } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 
 			await card.vm.$emit("refresh");
@@ -461,7 +461,7 @@ describe("RoomVideoConferenceSection", () => {
 				const { wrapper, videoConferenceModule } = setup();
 
 				const card = wrapper.findComponent({
-					name: "room-video-conference-card",
+					name: "course-video-conference-card",
 				});
 
 				await card.vm.$emit("click");
@@ -503,7 +503,7 @@ describe("RoomVideoConferenceSection", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.findComponent({
-					name: "room-video-conference-card",
+					name: "course-video-conference-card",
 				});
 				await card.vm.$emit("click");
 
@@ -548,7 +548,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 
 			await card.vm.$emit("click");
@@ -607,7 +607,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper, videoConferenceModule, params, roomId } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 			await card.vm.$emit("click");
 
@@ -644,7 +644,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper, videoConferenceModule, params, roomId } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 			await card.vm.$emit("click");
 
@@ -681,7 +681,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper, videoConferenceModule, params, roomId } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 			await card.vm.$emit("click");
 
@@ -738,7 +738,7 @@ describe("RoomVideoConferenceSection", () => {
 			const { wrapper, videoConferenceModule } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-video-conference-card",
+				name: "course-video-conference-card",
 			});
 			await card.vm.$emit("click");
 
@@ -793,7 +793,7 @@ describe("RoomVideoConferenceSection", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.findComponent({
-					name: "room-video-conference-card",
+					name: "course-video-conference-card",
 				});
 				await card.vm.$emit("click");
 
@@ -834,7 +834,7 @@ describe("RoomVideoConferenceSection", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.findComponent({
-					name: "room-video-conference-card",
+					name: "course-video-conference-card",
 				});
 				await card.vm.$emit("click");
 

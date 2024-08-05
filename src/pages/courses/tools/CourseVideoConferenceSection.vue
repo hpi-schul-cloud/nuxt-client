@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<room-video-conference-card
+		<course-video-conference-card
 			:has-permission="hasPermission"
 			:can-start="canStart"
 			:is-running="isRunning"
@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
+import CourseVideoConferenceCard from "@/components/rooms/CourseVideoConferenceCard.vue";
 import {
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
@@ -128,8 +128,8 @@ import CourseModule from "@/store/course";
 import { mdiCheck } from "@mdi/js";
 
 export default defineComponent({
-	name: "RoomVideoConferenceSection",
-	components: { RoomVideoConferenceCard, VCustomDialog },
+	name: "CourseVideoConferenceSection",
+	components: { CourseVideoConferenceCard, VCustomDialog },
 	props: {
 		roomId: {
 			type: String,

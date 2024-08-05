@@ -3,20 +3,20 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import RoomVideoConferenceCard from "./RoomVideoConferenceCard.vue";
+import CourseVideoConferenceCard from "./CourseVideoConferenceCard.vue";
 
 jest.mock("@/assets/img/bbb/no_permission.png", () => "noPermissionImagePath");
 jest.mock("@/assets/img/bbb/not_started.png", () => "notStartetImagePath");
 jest.mock("@/assets/img/bbb/available.png", () => "availableImagePath");
 
-describe("RoomVideoConferenceCard", () => {
+describe("CourseVideoConferenceCard", () => {
 	const getWrapper = (propsData: {
 		isRunning: boolean;
 		hasPermission: boolean;
 		canStart: boolean;
 		isRefreshing: boolean;
 	}) => {
-		const wrapper = mount(RoomVideoConferenceCard, {
+		const wrapper = mount(CourseVideoConferenceCard, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

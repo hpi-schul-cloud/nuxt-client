@@ -20,12 +20,12 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { ref } from "vue";
-import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
-import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
+import CourseExternalToolsOverview from "./CourseExternalToolsOverview.vue";
+import CourseExternalToolsSection from "./CourseExternalToolsSection.vue";
 
 jest.mock("@data-external-tool");
 
-describe("RoomExternalToolOverview", () => {
+describe("CourseExternalToolOverview", () => {
 	let useExternalToolDisplayListStateMock: DeepMocked<
 		ReturnType<typeof useExternalToolDisplayListState>
 	>;
@@ -42,7 +42,7 @@ describe("RoomExternalToolOverview", () => {
 
 		courseModule.fetchCourse.mockResolvedValue(null);
 
-		const wrapper = shallowMount(RoomExternalToolsOverview, {
+		const wrapper = shallowMount(CourseExternalToolsOverview, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -158,9 +158,8 @@ describe("RoomExternalToolOverview", () => {
 			const { wrapper } = await setup();
 
 			const vcSection = wrapper.findComponent({
-				name: "room-video-conference-section",
+				name: "course-video-conference-section",
 			});
-
 			expect(vcSection.exists()).toEqual(true);
 		});
 	});
@@ -178,7 +177,7 @@ describe("RoomExternalToolOverview", () => {
 			const { wrapper } = setup();
 
 			const vcSection = wrapper.findComponent({
-				name: "room-video-conference-section",
+				name: "course-video-conference-section",
 			});
 
 			expect(vcSection.exists()).toEqual(false);
@@ -229,7 +228,7 @@ describe("RoomExternalToolOverview", () => {
 		it("should call tool reference endpoint again", () => {
 			const { wrapper, displayData } = setup();
 
-			const section = wrapper.findComponent(RoomExternalToolsSection);
+			const section = wrapper.findComponent(CourseExternalToolsSection);
 			section.vm.$emit("delete", displayData);
 
 			expect(

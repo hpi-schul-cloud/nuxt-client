@@ -49,7 +49,7 @@
 <script lang="ts">
 import { mdiReload } from "@mdi/js";
 import { computed, ComputedRef, defineComponent } from "vue";
-import RoomBaseCard from "./RoomBaseCard.vue";
+import RoomBaseCard from "./CourseBaseCard.vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
