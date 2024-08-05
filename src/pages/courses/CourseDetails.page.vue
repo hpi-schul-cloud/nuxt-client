@@ -140,7 +140,7 @@ import {
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
-import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import RoomExternalToolsOverview from "./tools/CourseExternalToolsOverview.vue";
 import {
 	AUTH_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,

@@ -46,7 +46,7 @@
 import { mdiAlertCircle } from "@/components/icons/material";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/serverApi/v3";
-import CourseModule from "@/store/room";
+import CourseModule from "@/store/course";
 import { Course, CourseFeatures } from "@/store/types/room";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -59,8 +59,7 @@ import {
 } from "@data-external-tool";
 import { computed, ComputedRef, onMounted, onUnmounted, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
-import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
-import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
+import RoomVideoConferenceSection from "./CourseVideoConferenceSection.vue";
 
 const props = defineProps({
 	roomId: {

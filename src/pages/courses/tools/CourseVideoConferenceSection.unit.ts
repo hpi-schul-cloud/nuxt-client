@@ -15,7 +15,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 import { VDialog, VSwitch } from "vuetify/lib/components/index.mjs";
-import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
+import RoomVideoConferenceSection from "./CourseVideoConferenceSection.vue";
 
 describe("RoomVideoConferenceSection", () => {
 	const mockUrl = "https://mock.com";
