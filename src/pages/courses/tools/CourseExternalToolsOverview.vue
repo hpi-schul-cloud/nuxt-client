@@ -27,13 +27,13 @@
 			indeterminate
 		/>
 
-		<room-video-conference-section
+		<course-video-conference-section
 			v-if="isVideoConferenceAvailable"
 			class="mb-4"
 			:room-id="roomId"
 		/>
 
-		<room-external-tools-section
+		<course-external-tools-section
 			:tools="tools"
 			:room-id="roomId"
 			data-testid="room-external-tool-section"

@@ -140,7 +140,7 @@ import {
 } from "@mdi/js";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
-import RoomExternalToolsOverview from "./tools/CourseExternalToolsOverview.vue";
+import CourseExternalToolsOverview from "./tools/CourseExternalToolsOverview.vue";
 import {
 	AUTH_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
@@ -247,7 +247,7 @@ export default defineComponent({
 					label: this.$t("pages.rooms.tabLabel.tools"),
 					icon: mdiPuzzleOutline,
 					dataTestId: "tools-tab",
-					component: RoomExternalToolsOverview,
+					component: CourseExternalToolsOverview,
 					fabItems: this.canEditTools ? ctlToolFabItems : undefined,
 				});
 			}
