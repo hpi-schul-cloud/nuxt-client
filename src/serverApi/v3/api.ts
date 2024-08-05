@@ -1850,6 +1850,19 @@ export interface CourseMetadataResponse {
 /**
  * 
  * @export
+ * @interface CourseSyncBodyParams
+ */
+export interface CourseSyncBodyParams {
+    /**
+     * The id of the group
+     * @type {string}
+     * @memberof CourseSyncBodyParams
+     */
+    groupId: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateBoardBodyParams
  */
 export interface CreateBoardBodyParams {
@@ -13082,6 +13095,50 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Start the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {CourseSyncBodyParams} courseSyncBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerStartSynchronization: async (courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('courseControllerStartSynchronization', 'courseId', courseId)
+            // verify required parameter 'courseSyncBodyParams' is not null or undefined
+            assertParamExists('courseControllerStartSynchronization', 'courseSyncBodyParams', courseSyncBodyParams)
+            const localVarPath = `/courses/{courseId}/start-sync`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(courseSyncBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Stop the synchronization of a course with a group.
          * @param {string} courseId The id of the course
          * @param {*} [options] Override http request option.
@@ -13175,6 +13232,18 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Start the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {CourseSyncBodyParams} courseSyncBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerStartSynchronization(courseId, courseSyncBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Stop the synchronization of a course with a group.
          * @param {string} courseId The id of the course
          * @param {*} [options] Override http request option.
@@ -13237,6 +13306,17 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Start the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {CourseSyncBodyParams} courseSyncBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerStartSynchronization(courseId, courseSyncBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Stop the synchronization of a course with a group.
          * @param {string} courseId The id of the course
          * @param {*} [options] Override http request option.
@@ -13294,6 +13374,17 @@ export interface CoursesApiInterface {
      * @memberof CoursesApiInterface
      */
     courseControllerImportCourse(file: any, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Start the synchronization of a course with a group.
+     * @param {string} courseId The id of the course
+     * @param {CourseSyncBodyParams} courseSyncBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -13361,6 +13452,19 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      */
     public courseControllerImportCourse(file: any, options?: any) {
         return CoursesApiFp(this.configuration).courseControllerImportCourse(file, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Start the synchronization of a course with a group.
+     * @param {string} courseId The id of the course
+     * @param {CourseSyncBodyParams} courseSyncBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerStartSynchronization(courseId, courseSyncBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
