@@ -76,7 +76,7 @@
 <script setup lang="ts">
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { CourseData } from "@/store/types/coursese";
+import { CourseData } from "@/store/types/course";
 import {
 	mdiContentCopy,
 	mdiPencilOutline,
@@ -97,7 +97,7 @@ const props = defineProps({
 			["createdAt", "id", "name"].every((key) => key in lesson),
 	},
 	room: {
-		type: Object as PropType<Partial<RoomData>>,
+		type: Object as PropType<Partial<CourseData>>,
 		required: true,
 	},
 	userRole: { type: String as PropType<Roles>, required: true },
