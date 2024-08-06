@@ -75,13 +75,25 @@
 								data-avatar-type="vRoomGroupAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 							/>
-							<vRoomAvatar
+							<!-- <vRoomAvatar
 								v-else
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								class="room-avatar"
 								:item="getDataObject(rowIndex, colIndex)"
 								:size="dimensions.cellWidth"
 								:show-badge="true"
+								:draggable="allowDragging"
+								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+								@dragendAvatar="onDragend"
+								@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
+								data-avatar-type="vRoomAvatar"
+								:data-test-position="`${rowIndex}-${colIndex}`"
+							/> -->
+							<RoomTile
+								v-else
+								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
+								class="room-avatar"
+								:item="getDataObject(rowIndex, colIndex)"
 								:draggable="allowDragging"
 								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 								@dragendAvatar="onDragend"
@@ -123,7 +135,7 @@
 </template>
 
 <script>
-import vRoomAvatar from "@/components/atoms/vRoomAvatar";
+// import vRoomAvatar from "@/components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
 import RoomModal from "@/components/molecules/RoomModal";
 import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
@@ -134,6 +146,7 @@ import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiCheck, mdiMagnify } from "@mdi/js";
 import { defineComponent, reactive } from "vue";
+import { RoomTile } from "@ui-rooms";
 
 export default defineComponent({
 	setup() {
@@ -151,11 +164,12 @@ export default defineComponent({
 	},
 	components: {
 		RoomWrapper,
-		vRoomAvatar,
+		// vRoomAvatar,
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		RoomModal,
 		ImportFlow,
+		RoomTile,
 	},
 	inject: {
 		notifierModule: { from: NOTIFIER_MODULE_KEY },
