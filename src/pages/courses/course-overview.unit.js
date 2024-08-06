@@ -10,7 +10,7 @@ import {
 	ENV_CONFIG_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOMS_MODULE_KEY,
+	COURSES_MODULE_KEY,
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
 } from "@/utils/inject";
@@ -155,7 +155,7 @@ const getWrapper = (device = "desktop", options = {}) => {
 			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 			[LOADING_STATE_MODULE_KEY.valueOf()]: loadingStateModuleMock,
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-			[ROOMS_MODULE_KEY.valueOf()]: coursesModuleMock,
+			[COURSES_MODULE_KEY.valueOf()]: coursesModuleMock,
 		},
 		props: {
 			role: "student",

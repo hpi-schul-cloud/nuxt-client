@@ -66,7 +66,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	ROOM_MODULE_KEY,
-	ROOMS_MODULE_KEY,
+	COURSES_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
@@ -184,7 +184,7 @@ app.use(VueDOMPurifyHTML, {
 	);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
 	app.provide(LOADING_STATE_MODULE_KEY.valueOf(), loadingStateModule);
-	app.provide(ROOMS_MODULE_KEY.valueOf(), coursesModule);
+	app.provide(COURSES_MODULE_KEY.valueOf(), coursesModule);
 	app.provide(
 		COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf(),
 		commonCartridgeImportModule

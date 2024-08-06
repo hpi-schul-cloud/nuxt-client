@@ -7,7 +7,7 @@ import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOMS_MODULE_KEY,
+	COURSES_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -36,7 +36,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 					[LOADING_STATE_MODULE_KEY.valueOf()]:
 						createModuleMocks(LoadingStateModule),
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-					[ROOMS_MODULE_KEY.valueOf()]: coursesModuleMock,
+					[COURSES_MODULE_KEY.valueOf()]: coursesModuleMock,
 					[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]:
 						commonCartridgeImportModule,
 				},

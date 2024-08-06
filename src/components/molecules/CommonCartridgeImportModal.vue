@@ -60,12 +60,12 @@ import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOMS_MODULE_KEY,
+	COURSES_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
 
 const i18n = useI18n();
-const coursesModule = injectStrict(ROOMS_MODULE_KEY);
+const coursesModule = injectStrict(COURSES_MODULE_KEY);
 const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const commonCartridgeImportModule = injectStrict(
