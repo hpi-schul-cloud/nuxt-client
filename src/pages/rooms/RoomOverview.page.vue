@@ -269,13 +269,13 @@ export default defineComponent({
 					this.dimensions.cellWidth = "4em";
 					break;
 				case "desktop":
-					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "5em";
+					this.dimensions.colCount = 3;
+					this.dimensions.cellWidth = "222px";
 					this.allowDragging = true;
 					break;
 				case "large":
-					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "5em";
+					this.dimensions.colCount = 3;
+					this.dimensions.cellWidth = "222px";
 					this.allowDragging = true;
 					break;
 				case "mobile":

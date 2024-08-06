@@ -23,11 +23,11 @@
 			:rounded="condenseLayout ? 0 : 'lg'"
 			size="5em"
 			:tabindex="condenseLayout ? '-1' : '0'"
+			role="button"
+			data-testid="course-icon"
 			@click="onClick"
 			@dragenter.prevent.stop="dragEnter"
 			@keypress.enter="onClick"
-			role="button"
-			data-testid="course-icon"
 		>
 			<span
 				:class="avatarTextClass"
