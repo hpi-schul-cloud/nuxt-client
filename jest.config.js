@@ -1,5 +1,6 @@
 const config = {
 	verbose: true,
+	coverageProvider: "v8",
 
 	testEnvironment: "jsdom",
 	testEnvironmentOptions: {
