@@ -44,7 +44,7 @@ export enum CourseFeatures {
 	VIDEOCONFERENCE = "videoconference",
 }
 
-export type RoomData = {
+export type CourseData = {
 	roomId: string;
 	title: string;
 	displayColor: string;

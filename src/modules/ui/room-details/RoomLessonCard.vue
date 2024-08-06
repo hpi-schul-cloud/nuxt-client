@@ -76,7 +76,7 @@
 <script setup lang="ts">
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { RoomData } from "@/store/types/coursese";
+import { CourseData } from "@/store/types/coursese";
 import {
 	mdiContentCopy,
 	mdiPencilOutline,
