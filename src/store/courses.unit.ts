@@ -3,7 +3,7 @@ import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import CoursesModule from "./courses";
 import { AlertPayload } from "./types/alert-payload";
-import { CoursesData } from "./types/rooms";
+import { CoursesData } from "./types/courses";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};

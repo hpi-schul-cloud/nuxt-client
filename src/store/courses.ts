@@ -16,7 +16,7 @@ import {
 	DroppedObject,
 	CoursesData,
 	SharingCourseObject,
-} from "./types/rooms";
+} from "./types/courses";
 import { AlertPayload } from "./types/alert-payload";
 
 @Module({

@@ -62,7 +62,7 @@
 import CourseWrapper from "@/components/templates/CourseWrapper.vue";
 import vCourseAvatar from "@/components/atoms/vCourseAvatar.vue";
 import { coursesModule } from "@/store";
-import { ListItemsObject } from "@/store/types/rooms";
+import { ListItemsObject } from "@/store/types/courses";
 import { mdiMagnify } from "@mdi/js";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { defineComponent } from "vue";
