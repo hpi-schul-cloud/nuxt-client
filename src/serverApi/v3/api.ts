@@ -1138,6 +1138,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_AI_TUTOR_ENABLED: boolean;
 }
 /**
  * 
@@ -2239,7 +2245,8 @@ export enum CustomParameterResponseTypeEnum {
     AutoContextname = 'auto_contextname',
     AutoSchoolid = 'auto_schoolid',
     AutoSchoolnumber = 'auto_schoolnumber',
-    AutoMediumid = 'auto_mediumid'
+    AutoMediumid = 'auto_mediumid',
+    AutoGroupExternaluuid = 'auto_group_externaluuid'
 }
 
 /**
@@ -6316,7 +6323,8 @@ export enum SchoolFeature {
     LdapUniventionMigrationSchool = 'ldapUniventionMigrationSchool',
     OauthProvisioningEnabled = 'oauthProvisioningEnabled',
     ShowOutdatedUsers = 'showOutdatedUsers',
-    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration'
+    EnableLdapSyncDuringMigration = 'enableLdapSyncDuringMigration',
+    AiTutor = 'aiTutor'
 }
 
 /**

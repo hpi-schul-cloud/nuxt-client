@@ -1,3 +1,4 @@
+import { SchoolFeature } from "@/serverApi/v3";
 import { School } from "@/store/types/schools";
 
 export const mockSchool: School = {
@@ -33,14 +34,15 @@ export const mockSchool: School = {
 	purpose: undefined,
 	features: [],
 	featureObject: {
-		rocketChat: false,
-		videoconference: false,
-		studentVisibility: false,
-		ldapUniventionMigrationSchool: false,
-		showOutdatedUsers: false,
-		enableLdapSyncDuringMigration: false,
-		nextcloud: false,
-		oauthProvisioningEnabled: false,
+		[SchoolFeature.RocketChat]: false,
+		[SchoolFeature.Videoconference]: false,
+		[SchoolFeature.StudentVisibility]: false,
+		[SchoolFeature.LdapUniventionMigrationSchool]: false,
+		[SchoolFeature.ShowOutdatedUsers]: false,
+		[SchoolFeature.EnableLdapSyncDuringMigration]: false,
+		[SchoolFeature.OauthProvisioningEnabled]: false,
+		[SchoolFeature.Nextcloud]: false,
+		[SchoolFeature.AiTutor]: false,
 	},
 	instanceFeatures: [],
 	permissions: {},
