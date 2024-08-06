@@ -20,8 +20,8 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { ref } from "vue";
-import CourseExternalToolsOverview from "./CourseExternalToolsOverview.vue";
-import CourseExternalToolsSection from "./CourseExternalToolsSection.vue";
+import CourseExternalToolsOverview from "@/pages/courses/tools/CourseExternalToolsOverview.vue";
+import CourseExternalToolsSection from "@/pages/courses/tools/CourseExternalToolsSection.vue";
 
 jest.mock("@data-external-tool");
 

@@ -59,7 +59,8 @@ import {
 } from "@data-external-tool";
 import { computed, ComputedRef, onMounted, onUnmounted, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
-import RoomVideoConferenceSection from "./CourseVideoConferenceSection.vue";
+import CourseVideoConferenceSection from "@/pages/courses/tools/CourseVideoConferenceSection.vue";
+import CourseExternalToolsSection from "@/pages/courses/tools/CourseExternalToolsSection.vue";
 
 const props = defineProps({
 	roomId: {
