@@ -7,7 +7,7 @@
 		"serve": "vue-cli-service serve",
 		"build": "vue-cli-service build --mode production",
 		"test": "npm run test:unit",
-		"test:unit": "vue-cli-service test:unit src/pages/courses/tools/CourseExternalToolsOverview.unit.ts",
+		"test:unit": "vue-cli-service test:unit",
 		"test:unit:ci": "npm run test:unit -- --coverage --ci --maxWorkers=4",
 		"lint": "vue-cli-service lint",
 		"generate-client:server": "node generate-client.js -c openapitools-for-server.json",
