@@ -75,32 +75,34 @@
 								data-avatar-type="vRoomGroupAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 							/>
-							<!-- <vRoomAvatar
-								v-else
-								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
-								class="room-avatar"
-								:item="getDataObject(rowIndex, colIndex)"
-								:size="dimensions.cellWidth"
-								:show-badge="true"
-								:draggable="allowDragging"
-								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-								@dragendAvatar="onDragend"
-								@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
-								data-avatar-type="vRoomAvatar"
-								:data-test-position="`${rowIndex}-${colIndex}`"
-							/> -->
-							<RoomTile
-								v-else
-								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
-								class="room-avatar"
-								:item="getDataObject(rowIndex, colIndex)"
-								:draggable="allowDragging"
-								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-								@dragendAvatar="onDragend"
-								@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
-								data-avatar-type="vRoomAvatar"
-								:data-test-position="`${rowIndex}-${colIndex}`"
-							/>
+							<template v-else>
+								<RoomTile
+									v-if="roomsFeatureEnabled"
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
+									class="room-avatar"
+									:item="getDataObject(rowIndex, colIndex)"
+									:draggable="allowDragging"
+									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+									@dragendAvatar="onDragend"
+									@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
+									data-avatar-type="vRoomAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
+								/>
+								<vRoomAvatar
+									v-else
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
+									class="room-avatar"
+									:item="getDataObject(rowIndex, colIndex)"
+									:size="dimensions.cellWidth"
+									:show-badge="true"
+									:draggable="allowDragging"
+									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+									@dragendAvatar="onDragend"
+									@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
+									data-avatar-type="vRoomAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
+								/>
+							</template>
 						</template>
 						<template v-else>
 							<vRoomEmptyAvatar
@@ -141,8 +143,8 @@ import RoomModal from "@/components/molecules/RoomModal";
 import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
-import { roomsModule } from "@/store";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { envConfigModule, roomsModule } from "@/store";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiCheck, mdiMagnify } from "@mdi/js";
 import { defineComponent, reactive } from "vue";
@@ -173,6 +175,7 @@ export default defineComponent({
 	},
 	inject: {
 		notifierModule: { from: NOTIFIER_MODULE_KEY },
+		envConfigModule: { from: ENV_CONFIG_MODULE_KEY },
 		mq: "mq",
 	},
 	layout: "defaultVuetify",
@@ -205,6 +208,9 @@ export default defineComponent({
 		};
 	},
 	computed: {
+		roomsFeatureEnabled() {
+			return envConfigModule.getEnv.FEATURE_ROOMS_ENABLED;
+		},
 		hasCurrentRooms() {
 			return roomsModule.hasCurrentRooms;
 		},

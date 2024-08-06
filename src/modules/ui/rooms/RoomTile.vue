@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="d-flex align-center"
+		class="d-flex"
 		:class="{ dragging: isDragging }"
 		:data-testid="item.id"
 		:draggable="draggable"
@@ -38,9 +38,17 @@
 			</span>
 		</v-avatar>
 		<!-- </v-badge> -->
-		<div v-if="!condenseLayout" aria-hidden="true" data-testid="course-title">
-			<span> schulübergreifend </span>
-			{{ title }}
+		<div
+			v-if="!condenseLayout"
+			aria-hidden="true"
+			data-testid="course-title"
+			class="mx-4 py-1"
+		>
+			<div class="d-flex text-body-2 mb-2">
+				<VIcon :icon="roomTypeIcon" class="mr-2" />
+				<span>schulübergreifend</span>
+			</div>
+			<span class="text-body-1">{{ title }}</span>
 		</div>
 	</div>
 </template>
@@ -48,6 +56,7 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 // import { mdiLock, mdiSync } from "@/components/icons/material";
+import { mdiAccountSupervisorCircleOutline } from "@/components/icons/material";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -146,6 +155,10 @@ const title = computed(() => {
 
 // 	return ["justify-center", "mt-2", "subtitle", marginClass, ...copyingClass];
 // });
+
+const roomTypeIcon = computed(() => {
+	return mdiAccountSupervisorCircleOutline;
+});
 
 const isDragging = ref(false);
 
