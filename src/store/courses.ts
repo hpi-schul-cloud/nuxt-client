@@ -25,7 +25,7 @@ import { AlertPayload } from "./types/alert-payload";
 	stateFactory: true,
 })
 export default class CoursesModule extends VuexModule {
-	roomsData: DashboardGridElementResponse[] = [];
+	coursesData: DashboardGridElementResponse[] = [];
 	gridElementsId = "";
 	allElements: CourseMetadataResponse[] = [];
 	sharedCourseData: SharingCourseObject = {
@@ -50,7 +50,7 @@ export default class CoursesModule extends VuexModule {
 
 	@Mutation
 	setRoomData(data: DashboardGridElementResponse[]): void {
-		this.roomsData = data.map((item) => {
+		this.coursesData = data.map((item) => {
 			let to = "";
 			if (item.groupElements) {
 				item.groupElements = item.groupElements.map((groupItem) => {
@@ -121,7 +121,7 @@ export default class CoursesModule extends VuexModule {
 	@Mutation
 	setPosition(droppedComponent: DroppedObject | any): void {
 		const { to } = droppedComponent;
-		const itemToBeChanged = this.roomsData.find(
+		const itemToBeChanged = this.coursesData.find(
 			(item) => item.id == droppedComponent.item.id
 		);
 
@@ -161,7 +161,7 @@ export default class CoursesModule extends VuexModule {
 	}
 
 	get getCoursesData(): Array<CoursesData> {
-		return this.roomsData;
+		return this.coursesData;
 	}
 
 	get getAllElements(): AllItems {
@@ -197,7 +197,7 @@ export default class CoursesModule extends VuexModule {
 	}
 
 	get hasCurrentRooms(): boolean {
-		return this.roomsData.length > 0;
+		return this.coursesData.length > 0;
 	}
 
 	get getAlertData(): AlertPayload {
@@ -266,17 +266,17 @@ export default class CoursesModule extends VuexModule {
 				payload.yPosition,
 				{ title: payload.title }
 			);
-			const roomIndex = this.roomsData.findIndex(
+			const roomIndex = this.coursesData.findIndex(
 				(room) =>
 					room.xPosition === payload.xPosition &&
 					room.yPosition === payload.yPosition
 			);
-			const roomsData = [...this.roomsData];
-			roomsData[roomIndex] = {
-				...this.roomsData[roomIndex],
+			const coursesData = [...this.coursesData];
+			coursesData[roomIndex] = {
+				...this.coursesData[roomIndex],
 				title: payload.title,
 			};
-			this.setRoomData(roomsData);
+			this.setRoomData(coursesData);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -289,7 +289,7 @@ export default class CoursesModule extends VuexModule {
 		this.setLoading(true);
 		try {
 			// TODO: delete call to to server
-			const tempData = this.roomsData.filter((item) => item.id !== id);
+			const tempData = this.coursesData.filter((item) => item.id !== id);
 			this.setRoomData(tempData);
 			this.setLoading(false);
 		} catch (error: any) {

@@ -361,7 +361,7 @@ export default defineComponent({
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
-				groupIndex: coursesModule.roomsData
+				groupIndex: coursesModule.coursesData
 					.find((item) => item.groupId == this.groupDialog.groupData.groupId)
 					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
 			};

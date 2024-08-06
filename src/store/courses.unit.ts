@@ -183,7 +183,7 @@ describe("rooms module", () => {
 					);
 
 				const coursesModule = new CoursesModule({});
-				const roomsData: CoursesData = {
+				const coursesData: CoursesData = {
 					id: "dummyId",
 					title: "dummy title",
 					shortTitle: "dummy short title",
@@ -192,15 +192,15 @@ describe("rooms module", () => {
 					displayColor: "#FF0000",
 					isSynchronized: false,
 				};
-				coursesModule.setRoomDataId(roomsData.id);
-				await coursesModule.update(roomsData);
+				coursesModule.setRoomDataId(coursesData.id);
+				await coursesModule.update(coursesData);
 
 				expect(coursesModule.getLoading).toBe(false);
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
-					roomsData.id,
-					roomsData.xPosition,
-					roomsData.yPosition,
-					{ title: roomsData.title }
+					coursesData.id,
+					coursesData.xPosition,
+					coursesData.yPosition,
+					{ title: coursesData.title }
 				);
 			});
 
@@ -217,7 +217,7 @@ describe("rooms module", () => {
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
 				const coursesModule = new CoursesModule({});
-				const roomsData: CoursesData = {
+				const coursesData: CoursesData = {
 					id: "dummyId",
 					title: "dummy title",
 					shortTitle: "dummy short title",
@@ -226,16 +226,16 @@ describe("rooms module", () => {
 					displayColor: "#FF0000",
 					isSynchronized: false,
 				};
-				coursesModule.setRoomDataId(roomsData.id);
-				await coursesModule.update(roomsData);
+				coursesModule.setRoomDataId(coursesData.id);
+				await coursesModule.update(coursesData);
 
 				expect(coursesModule.getLoading).toBe(false);
 				expect(coursesModule.getError).toStrictEqual({ ...error });
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
-					roomsData.id,
-					roomsData.xPosition,
-					roomsData.yPosition,
-					{ title: roomsData.title }
+					coursesData.id,
+					coursesData.xPosition,
+					coursesData.yPosition,
+					{ title: coursesData.title }
 				);
 			});
 		});
@@ -324,7 +324,7 @@ describe("rooms module", () => {
 		describe("setRoomData", () => {
 			it("should set the room data", () => {
 				const coursesModule = new CoursesModule({});
-				const roomsDataToBeChanged = [
+				const coursesDataToBeChanged = [
 					{
 						id: "someId",
 						title: "exampletitle",
@@ -347,10 +347,10 @@ describe("rooms module", () => {
 					},
 				];
 				expect(coursesModule.getCoursesData).not.toStrictEqual(
-					roomsDataToBeChanged
+					coursesDataToBeChanged
 				);
-				coursesModule.setRoomData(roomsDataToBeChanged as any);
-				expect(coursesModule.roomsData).toStrictEqual(expectedData);
+				coursesModule.setRoomData(coursesDataToBeChanged as any);
+				expect(coursesModule.coursesData).toStrictEqual(expectedData);
 			});
 		});
 
@@ -410,7 +410,7 @@ describe("rooms module", () => {
 				};
 				coursesModule.setRoomData(mockData.gridElements as any);
 				coursesModule.setPosition(draggedObject);
-				expect(coursesModule.roomsData[0]).toStrictEqual(expectedObject);
+				expect(coursesModule.coursesData[0]).toStrictEqual(expectedObject);
 			});
 		});
 
