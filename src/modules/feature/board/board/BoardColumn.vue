@@ -31,7 +31,7 @@
 					easing: 'cubic-bezier(1, 0, 0, 1)',
 					filter: '.v-input, v-btn',
 					preventOnFilter: false,
-					forceFallback: false,
+					forceFallback: true,
 					ghostClass: sortableGhostClasses,
 					scroll: true,
 				}"
@@ -195,6 +195,10 @@ export default defineComponent({
 
 			if (toColumnId !== fromColumnId) {
 				item?.parentNode?.removeChild(item);
+			}
+
+			if (toColumnId === fromColumnId && props.column.cards.length === 1) {
+				return;
 			}
 
 			boardStore.moveCardRequest({
