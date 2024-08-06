@@ -164,7 +164,7 @@ import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, ref, watch } from "vue";
@@ -181,7 +181,7 @@ const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 const commonCartridgeExportModule = injectStrict(
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY
 );
-const courseModule = injectStrict(ROOM_MODULE_KEY);
+const courseModule = injectStrict(COURSE_MODULE_KEY);
 
 const emit = defineEmits([
 	"update:isExportModalOpen",

@@ -14,7 +14,7 @@ import { BusinessError } from "./types/commons";
 import {
 	AllItems,
 	DroppedObject,
-	RoomsData,
+	CoursesData,
 	SharingCourseObject,
 } from "./types/rooms";
 import { AlertPayload } from "./types/alert-payload";
@@ -160,7 +160,7 @@ export default class CoursesModule extends VuexModule {
 		this.alertData = payload;
 	}
 
-	get getRoomsData(): Array<RoomsData> {
+	get getCoursesData(): Array<CoursesData> {
 		return this.roomsData;
 	}
 
@@ -257,7 +257,7 @@ export default class CoursesModule extends VuexModule {
 	}
 
 	@Action
-	async update(payload: RoomsData): Promise<void> {
+	async update(payload: CoursesData): Promise<void> {
 		this.setLoading(true);
 		try {
 			await this.dashboardApi.dashboardControllerPatchGroup(

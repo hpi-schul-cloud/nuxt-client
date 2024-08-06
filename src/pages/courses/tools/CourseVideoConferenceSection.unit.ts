@@ -5,7 +5,7 @@ import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -68,7 +68,7 @@ describe("RoomVideoConferenceSection", () => {
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
-					[ROOM_MODULE_KEY.valueOf()]: courseModule,
+					[COURSE_MODULE_KEY.valueOf()]: courseModule,
 				},
 				mocks: {
 					$t: (key: string, dynamic?: object): string =>

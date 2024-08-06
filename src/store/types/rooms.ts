@@ -1,4 +1,4 @@
-export type RoomsData = {
+export type CoursesData = {
 	id: string;
 	title: string;
 	shortTitle: string;

@@ -679,7 +679,7 @@ describe("room module", () => {
 	});
 
 	describe("getters", () => {
-		describe("getRoomsData", () => {
+		describe("getCoursesData", () => {
 			it("should return rooms state", () => {
 				const courseModule = new CourseModule({});
 				const expectedData = {

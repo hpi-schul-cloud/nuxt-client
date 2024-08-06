@@ -106,7 +106,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
-	ROOM_MODULE_KEY,
+	COURSE_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import {
@@ -358,7 +358,7 @@ const onShareBoard = () => {
 	}
 };
 
-const courseModule = injectStrict(ROOM_MODULE_KEY);
+const courseModule = injectStrict(COURSE_MODULE_KEY);
 const openDeleteBoardDialog = async (id: string) => {
 	await courseModule.deleteBoard(id);
 	router.push({ path: "/rooms/" + roomId.value });

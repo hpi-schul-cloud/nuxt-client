@@ -112,7 +112,7 @@ import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE_KEY,
 	injectStrict,
-	ROOM_MODULE_KEY,
+	COURSE_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import {
@@ -141,7 +141,7 @@ export default defineComponent({
 		const videoConferenceModule: VideoConferenceModule = injectStrict(
 			VIDEO_CONFERENCE_MODULE_KEY
 		);
-		const courseModule: CourseModule = injectStrict(ROOM_MODULE_KEY);
+		const courseModule: CourseModule = injectStrict(COURSE_MODULE_KEY);
 
 		const roomName = computed(() => courseModule.getRoomData.title ?? "");
 

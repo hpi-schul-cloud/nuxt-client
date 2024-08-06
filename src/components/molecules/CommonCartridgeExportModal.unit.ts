@@ -5,7 +5,7 @@ import CourseModule from "@/store/course";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -46,7 +46,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 				provide: {
 					[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: exportModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-					[ROOM_MODULE_KEY.valueOf()]: courseModuleMock,
+					[COURSE_MODULE_KEY.valueOf()]: courseModuleMock,
 				},
 			},
 		});

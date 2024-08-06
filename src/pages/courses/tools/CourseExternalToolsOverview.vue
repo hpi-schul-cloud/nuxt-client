@@ -51,7 +51,7 @@ import { Course, CourseFeatures } from "@/store/types/room";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
-	ROOM_MODULE_KEY,
+	COURSE_MODULE_KEY,
 } from "@/utils/inject";
 import {
 	ExternalToolDisplayData,
@@ -70,7 +70,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const courseModule: CourseModule = injectStrict(ROOM_MODULE_KEY);
+const courseModule: CourseModule = injectStrict(COURSE_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const {

@@ -145,7 +145,7 @@ import {
 	AUTH_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 
@@ -181,7 +181,7 @@ export default defineComponent({
 		copyModule: { from: COPY_MODULE_KEY },
 		shareModule: { from: SHARE_MODULE_KEY },
 		commonCartridgeExportModule: { from: COMMON_CARTRIDGE_EXPORT_MODULE_KEY },
-		courseModule: { from: ROOM_MODULE_KEY },
+		courseModule: { from: COURSE_MODULE_KEY },
 		authModule: { from: AUTH_MODULE_KEY },
 	},
 	data() {

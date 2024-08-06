@@ -22,7 +22,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -266,7 +266,7 @@ describe("Board", () => {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					loadingStateModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-					[ROOM_MODULE_KEY.valueOf()]: courseModule,
+					[COURSE_MODULE_KEY.valueOf()]: courseModule,
 				},
 			},
 			propsData: { boardId: board.id },

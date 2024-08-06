@@ -2,7 +2,7 @@ import ContextExternalToolConfigurator from "@/components/external-tools/configu
 import { ToolContextType } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import CourseModule from "@/store/course";
-import { NOTIFIER_MODULE_KEY, ROOM_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY, COURSE_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { contextExternalToolFactory } from "@@/tests/test-utils/factory";
 import {
@@ -53,7 +53,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 				],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ROOM_MODULE_KEY.valueOf()]: courseModule,
+					[COURSE_MODULE_KEY.valueOf()]: courseModule,
 				},
 				stubs: {
 					ContextExternalToolConfigurator: {

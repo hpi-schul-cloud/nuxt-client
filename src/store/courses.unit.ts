@@ -3,7 +3,7 @@ import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import CoursesModule from "./courses";
 import { AlertPayload } from "./types/alert-payload";
-import { RoomsData } from "./types/rooms";
+import { CoursesData } from "./types/rooms";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};
@@ -183,7 +183,7 @@ describe("rooms module", () => {
 					);
 
 				const coursesModule = new CoursesModule({});
-				const roomsData: RoomsData = {
+				const roomsData: CoursesData = {
 					id: "dummyId",
 					title: "dummy title",
 					shortTitle: "dummy short title",
@@ -217,7 +217,7 @@ describe("rooms module", () => {
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
 				const coursesModule = new CoursesModule({});
-				const roomsData: RoomsData = {
+				const roomsData: CoursesData = {
 					id: "dummyId",
 					title: "dummy title",
 					shortTitle: "dummy short title",
@@ -346,7 +346,7 @@ describe("rooms module", () => {
 						to: "/rooms/someId",
 					},
 				];
-				expect(coursesModule.getRoomsData).not.toStrictEqual(
+				expect(coursesModule.getCoursesData).not.toStrictEqual(
 					roomsDataToBeChanged
 				);
 				coursesModule.setRoomData(roomsDataToBeChanged as any);
@@ -512,7 +512,7 @@ describe("rooms module", () => {
 	});
 
 	describe("getters", () => {
-		describe("getRoomsData", () => {
+		describe("getCoursesData", () => {
 			it("should return rooms state", () => {
 				const coursesModule = new CoursesModule({});
 				const itemsToBeSet = [
@@ -556,7 +556,7 @@ describe("rooms module", () => {
 				];
 
 				coursesModule.setRoomData(itemsToBeSet as any);
-				expect(coursesModule.getRoomsData).toStrictEqual(expectedData);
+				expect(coursesModule.getCoursesData).toStrictEqual(expectedData);
 			});
 		});
 

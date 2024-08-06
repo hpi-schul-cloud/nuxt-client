@@ -198,7 +198,7 @@ export default defineComponent({
 			return coursesModule.hasCurrentRooms;
 		},
 		rooms() {
-			return JSON.parse(JSON.stringify(coursesModule.getRoomsData)).filter(
+			return JSON.parse(JSON.stringify(coursesModule.getCoursesData)).filter(
 				(item) => {
 					if (item.groupElements) {
 						const groupElements = item.groupElements.filter((groupItem) => {
@@ -269,7 +269,7 @@ export default defineComponent({
 					this.dimensions.colCount = 6;
 					break;
 			}
-			const lastItem = coursesModule.getRoomsData.reduce((prev, current) => {
+			const lastItem = coursesModule.getCoursesData.reduce((prev, current) => {
 				return prev.yPosition > current.yPosition ? prev : current;
 			}, {});
 

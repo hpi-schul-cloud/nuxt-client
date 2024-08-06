@@ -28,7 +28,7 @@ import CourseModule from "@/store/room";
 import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_MODULE_KEY,
 } from "@/utils/inject";
 import { RenderHTML } from "@feature-render-html";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
@@ -42,7 +42,7 @@ const props = defineProps({
 });
 
 const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const courseModule: CourseModule = injectStrict(ROOM_MODULE_KEY);
+const courseModule: CourseModule = injectStrict(COURSE_MODULE_KEY);
 
 const { t } = useI18n();
 
