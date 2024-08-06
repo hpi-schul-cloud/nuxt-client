@@ -1113,6 +1113,8 @@ export default {
 		"Activate student visibility for teachers",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
 		"Activate video conferencing for courses and teams",
+	"pages.administration.school.index.privacySettings.labels.aiTutor":
+		"Activate AI tutor at school",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"If chats are enabled at your school, team administrators can selectively unlock the chat function respectively for their team.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1127,6 +1129,8 @@ export default {
 		"If this option is not enabled, teachers can only see the classes and their students in which they are members.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
 		"If video conferencing is enabled at your school, teachers can add the video conferencing tool to their course in the Tools section and then start video conferencing for all course participants from there. Team administrators can activate the video conference function in the respective team. Team leaders and team admins can then add and start video conferences for appointments.",
+	"pages.administration.school.index.privacySettings.longText.aiTutor":
+		"If AI Tutor is activated at your school, teachers can add the AI Tutor in their areas.",
 	"pages.administration.school.index.privacySettings": "Privacy Settings",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing":
 		"Your school is currently getting",

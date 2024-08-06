@@ -1128,6 +1128,8 @@ export default {
 		"Активувати видимість учнів для вчителів",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
 		"Активувати відеоконференції для курсів і команд",
+	"pages.administration.school.index.privacySettings.labels.aiTutor":
+		"Активуйте репетитора ШІ в школі",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"Якщо у вашому навчальному закладі увімкнені чати, адміністратори команд можуть вибірково увімкнути функцію чату для своєї команди.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1142,6 +1144,8 @@ export default {
 		"Якщо цю опцію не ввімкнено, вчителі бачитимуть лише ті класи та учнів, учасниками яких вони є.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
 		"Якщо у вашій школі увімкнено відеоконференцію, викладачі можуть додати інструмент для відеоконференцій до свого курсу у розділі «Інструменти», а потім запустити відеоконференцію для всіх учасників курсу. Адміністратори команд можуть активувати функцію відеоконференції у відповідній команді. Після цього керівники команд та адміністратори команд зможуть додавати та розпочинати відеоконференції для зустрічей.",
+	"pages.administration.school.index.privacySettings.longText.aiTutor":
+		"Якщо AI Tutor активовано у вашій школі, вчителі можуть додати AI Tutor у своїх областях.",
 	"pages.administration.school.index.privacySettings":
 		"Параметри конфіденційності",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing":

@@ -1144,6 +1144,8 @@ export default {
 		"Activar la visibilidad de los estudiantes para los profesores",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
 		"Activar videoconferencias para cursos y equipos",
+	"pages.administration.school.index.privacySettings.labels.aiTutor":
+		"Activar tutor de IA en la escuela",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"Si los chats están habilitados en tu escuela, los administradores del equipo pueden desbloquear la función de chat de manera selectiva y respectivamente para su equipo.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1158,6 +1160,8 @@ export default {
 		"Si esta opción no está activada, los profesores sólo podrán ver las clases y sus alumnos de las que son miembros.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
 		"Si la videoconferencia está habilitada en tu escuela, los profesores pueden añadir la herramienta de videoconferencia a su curso en la sección Herramientas y entonces podrán iniciar desde allí videoconferencias para todos los participantes del curso. Los administradores del equipo pueden activar la función de videoconferencia en el equipo respectivo. Los líderes de equipo y los administradores de equipo pueden añadir e iniciar videoconferencias para citas.",
+	"pages.administration.school.index.privacySettings.longText.aiTutor":
+		"Si AI Tutor está activado en tu escuela, los profesores pueden agregar AI Tutor en sus áreas.",
 	"pages.administration.school.index.privacySettings":
 		"Configuración de la privacidad",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing":
