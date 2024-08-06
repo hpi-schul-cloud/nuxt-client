@@ -1,7 +1,7 @@
 import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import CourseModule from "@/store/course";
-import { CourseFeatures } from "@/store/types/room";
+import { CourseFeatures } from "@/store/types/course";
 import { ENV_CONFIG_MODULE_KEY, COURSE_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
