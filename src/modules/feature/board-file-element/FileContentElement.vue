@@ -6,7 +6,7 @@
 		:variant="isOutlined ? 'outlined' : 'elevated'"
 		ref="fileContentElement"
 		:ripple="false"
-		:tabindex="fileProperties || isEditMode ? 0 : undefined"
+		:tabindex="isEditMode ? 0 : undefined"
 		@keydown.up.down="onKeydownArrow"
 	>
 		<FileContent

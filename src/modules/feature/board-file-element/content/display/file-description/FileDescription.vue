@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { getFileExtension } from "@/utils/fileHelper";
 import { mdiFileDocumentOutline } from "@mdi/js";
 import { ContentElementBar } from "@ui-board";
 import { computed } from "vue";
@@ -38,13 +37,8 @@ const props = defineProps({
 
 const { t } = useI18n();
 
-const fileExtension = computed(() => getFileExtension(props.name));
-
 const ariaLabel = computed(() => {
-	const { caption, name } = props;
-	const label = caption?.trim() ? `${caption}, ${fileExtension.value}` : name;
-
-	return `${label}, ${t("common.ariaLabel.newTab")}`;
+	return `${props.name}, ${t("common.ariaLabel.newTab")}`;
 });
 </script>
 
