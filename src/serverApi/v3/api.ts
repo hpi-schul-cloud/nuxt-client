@@ -807,6 +807,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_CTL_TOOLS_COPY_ENABLED: boolean;
     /**
      * 
@@ -1846,6 +1852,12 @@ export interface CourseMetadataResponse {
      * @memberof CourseMetadataResponse
      */
     copyingSince?: string;
+    /**
+     * Synchronized with group
+     * @type {string}
+     * @memberof CourseMetadataResponse
+     */
+    syncedWithGroup?: string;
 }
 /**
  * 
