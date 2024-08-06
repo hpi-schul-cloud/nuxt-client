@@ -180,6 +180,10 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED;
 	}
 
+	public getShowNewRoomsViewEnabled(): boolean {
+		return this.env.FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED;
+	}
+
 	private get serverApi(): DefaultApiInterface {
 		const serverApi = DefaultApiFactory(undefined, "/v3", $axios);
 
