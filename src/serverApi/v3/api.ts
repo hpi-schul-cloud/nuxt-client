@@ -2239,7 +2239,8 @@ export enum CustomParameterResponseTypeEnum {
     AutoContextname = 'auto_contextname',
     AutoSchoolid = 'auto_schoolid',
     AutoSchoolnumber = 'auto_schoolnumber',
-    AutoMediumid = 'auto_mediumid'
+    AutoMediumid = 'auto_mediumid',
+    AutoGroupExternaluuid = 'auto_group_externaluuid'
 }
 
 /**
