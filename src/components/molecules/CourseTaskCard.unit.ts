@@ -198,7 +198,7 @@ const getWrapper = (
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
 		props: {
-			room: {
+			course: {
 				roomId: "456",
 			},
 			taskCardIndex: 0,
