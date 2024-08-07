@@ -22,7 +22,7 @@ import CourseWrapper from "./CourseWrapper.vue";
 
 const getWrapper = (
 	options: ComponentMountingOptions<typeof CourseWrapper> = {
-		props: { hasRooms: true },
+		props: { hasCourses: true },
 	}
 ) => {
 	return mount(CourseWrapper, {
@@ -96,7 +96,7 @@ describe("@templates/CourseWrapper.vue", () => {
 			coursesModule.setLoading(true);
 
 			const wrapper = getWrapper({
-				props: { hasRooms: false },
+				props: { hasCourses: false },
 			});
 
 			expect(wrapper.findComponent({ ref: "skeleton-loader" }).exists()).toBe(
@@ -109,7 +109,7 @@ describe("@templates/CourseWrapper.vue", () => {
 		describe("when data is empty", () => {
 			it("should display empty state", async () => {
 				const wrapper = getWrapper({
-					props: { hasRooms: false },
+					props: { hasCourses: false },
 				});
 
 				expect(
@@ -121,7 +121,7 @@ describe("@templates/CourseWrapper.vue", () => {
 		describe("when data is not empty", () => {
 			it("should render page content slot", () => {
 				const wrapper = getWrapper({
-					props: { hasRooms: true },
+					props: { hasCourses: true },
 					slots: {
 						"page-content": "<div>Page Content</div>",
 					},

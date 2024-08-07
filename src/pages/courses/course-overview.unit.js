@@ -17,7 +17,7 @@ import {
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import RoomOverview from "./CourseOverview.page.vue";
+import CourseOverview from "./CourseOverview.page.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -132,7 +132,7 @@ const getWrapper = (device = "desktop", options = {}) => {
 		getCtlToolsTabEnabled: false,
 	});
 	const coursesModuleMock = createModuleMocks(CoursesModule);
-	return mount(RoomOverview, {
+	return mount(CourseOverview, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -164,7 +164,7 @@ const getWrapper = (device = "desktop", options = {}) => {
 	});
 };
 
-describe("@/pages/RoomOverview", () => {
+describe("@/pages/CourseOverview", () => {
 	beforeEach(() => {
 		coursesModule.setCourseData(mockRoomStoreData);
 		coursesModule.setAllElements(mockCourseData);

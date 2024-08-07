@@ -57,7 +57,7 @@ enum CourseFabEvent {
 const { t } = useI18n();
 
 const props = defineProps({
-	hasRooms: {
+	hasCourses: {
 		type: Boolean,
 		required: true,
 	},
@@ -125,7 +125,9 @@ const isLoading: ComputedRef<boolean> = computed(() => {
 });
 
 const isEmptyState: ComputedRef<boolean> = computed(() => {
-	return !coursesModule.getLoading && !props.hasRooms && !props.hasImportToken;
+	return (
+		!coursesModule.getLoading && !props.hasCourses && !props.hasImportToken
+	);
 });
 
 const fabItemClickHandler = (event: CourseFabEvent): void => {

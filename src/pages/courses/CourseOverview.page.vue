@@ -1,6 +1,6 @@
 <template>
 	<course-wrapper
-		:has-rooms="hasCurrentCourses"
+		:has-courses="hasCurrentCourses"
 		:has-import-token="!!importToken"
 	>
 		<template #header>

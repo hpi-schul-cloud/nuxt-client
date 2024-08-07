@@ -671,13 +671,13 @@ describe("rooms module", () => {
 			});
 		});
 
-		describe("hasRooms", () => {
+		describe("hasCourses", () => {
 			it("should return true if rooms is empty", () => {
 				const coursesModule = new CoursesModule({});
 
-				expect(coursesModule.hasRooms).toStrictEqual(false);
+				expect(coursesModule.hasCourses).toStrictEqual(false);
 				coursesModule.setAllElements([]);
-				expect(coursesModule.hasRooms).toStrictEqual(false);
+				expect(coursesModule.hasCourses).toStrictEqual(false);
 			});
 
 			it("should return false if rooms is not empty", () => {
@@ -702,9 +702,9 @@ describe("rooms module", () => {
 
 				const coursesModule = new CoursesModule({});
 
-				expect(coursesModule.hasRooms).toStrictEqual(false);
+				expect(coursesModule.hasCourses).toStrictEqual(false);
 				coursesModule.setAllElements(itemsToBeSet);
-				expect(coursesModule.hasRooms).toStrictEqual(true);
+				expect(coursesModule.hasCourses).toStrictEqual(true);
 			});
 		});
 

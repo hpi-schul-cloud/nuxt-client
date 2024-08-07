@@ -1,5 +1,5 @@
 <template>
-	<course-wrapper :has-rooms="hasRooms">
+	<course-wrapper :has-courses="hasCourses">
 		<template #header>
 			<h1 class="text-h3 py-2 mb-4">
 				{{ $t("pages.rooms.index.courses.all") }}
@@ -87,8 +87,8 @@ export default defineComponent({
 						.includes(this.$data.searchText.toLowerCase())
 			);
 		},
-		hasRooms(): boolean {
-			return coursesModule.hasRooms;
+		hasCourses(): boolean {
+			return coursesModule.hasCourses;
 		},
 	},
 	async mounted() {

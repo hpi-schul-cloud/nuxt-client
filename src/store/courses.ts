@@ -192,7 +192,7 @@ export default class CoursesModule extends VuexModule {
 		return this.businessError;
 	}
 
-	get hasRooms(): boolean {
+	get hasCourses(): boolean {
 		return this.allElements.length > 0;
 	}
 
