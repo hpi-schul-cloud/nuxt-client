@@ -1,5 +1,5 @@
 <template>
-	<ContentElementBar v-if="isEditMode" class="file-upload-element-bar">
+	<ContentElementBar v-if="isEditMode">
 		<template #element>
 			<div
 				v-if="isUploading || fileWasPicked"

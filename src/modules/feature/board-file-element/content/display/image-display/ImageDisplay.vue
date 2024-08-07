@@ -90,7 +90,7 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-/* how focus indicator in Safari properly */
+/* show focus indicator in Safari properly */
 .focusable-container:focus {
 	outline: 2px solid -webkit-focus-ring-color;
 	outline-offset: -2px;

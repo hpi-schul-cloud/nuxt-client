@@ -84,7 +84,6 @@ const props = defineProps({
 		text-decoration: underline;
 	}
 }
-
 .content-element-bar-texts > div ~ div {
 	padding-top: 8px;
 }
