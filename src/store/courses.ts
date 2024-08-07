@@ -49,7 +49,7 @@ export default class CoursesModule extends VuexModule {
 	};
 
 	@Mutation
-	setRoomData(data: DashboardGridElementResponse[]): void {
+	setCourseData(data: DashboardGridElementResponse[]): void {
 		this.coursesData = data.map((item) => {
 			let to = "";
 			if (item.groupElements) {
@@ -104,7 +104,7 @@ export default class CoursesModule extends VuexModule {
 	}
 
 	@Mutation
-	setRoomDataId(id: string): void {
+	setCourseDataId(id: string): void {
 		this.gridElementsId = id;
 	}
 
@@ -223,8 +223,8 @@ export default class CoursesModule extends VuexModule {
 		if (indicateLoading) this.setLoading(true);
 		try {
 			const { data } = await this.dashboardApi.dashboardControllerFindForUser();
-			this.setRoomDataId(data.id || "");
-			this.setRoomData(data.gridElements || []);
+			this.setCourseDataId(data.id || "");
+			this.setCourseData(data.gridElements || []);
 			if (indicateLoading) this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -248,7 +248,7 @@ export default class CoursesModule extends VuexModule {
 			);
 
 			this.setPosition(payload);
-			this.setRoomData(response.data.gridElements);
+			this.setCourseData(response.data.gridElements);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -276,7 +276,7 @@ export default class CoursesModule extends VuexModule {
 				...this.coursesData[roomIndex],
 				title: payload.title,
 			};
-			this.setRoomData(coursesData);
+			this.setCourseData(coursesData);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -290,7 +290,7 @@ export default class CoursesModule extends VuexModule {
 		try {
 			// TODO: delete call to to server
 			const tempData = this.coursesData.filter((item) => item.id !== id);
-			this.setRoomData(tempData);
+			this.setCourseData(tempData);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);

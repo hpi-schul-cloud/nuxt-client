@@ -555,7 +555,7 @@ describe("room module", () => {
 	});
 
 	describe("mutations", () => {
-		describe("setRoomData", () => {
+		describe("setCourseData", () => {
 			it("should set the room data", () => {
 				const courseModule = new CourseModule({});
 				const expectedData = {
@@ -588,7 +588,7 @@ describe("room module", () => {
 				};
 
 				expect(courseModule.getRoomData).not.toStrictEqual(expectedData);
-				courseModule.setRoomData(expectedData as any);
+				courseModule.setCourseData(expectedData as any);
 				expect(courseModule.roomData).toStrictEqual(expectedData);
 			});
 		});
@@ -711,7 +711,7 @@ describe("room module", () => {
 					],
 				};
 
-				courseModule.setRoomData(expectedData as any);
+				courseModule.setCourseData(expectedData as any);
 				expect(courseModule.getRoomData).toStrictEqual(expectedData);
 			});
 		});
@@ -767,7 +767,7 @@ describe("room module", () => {
 						},
 					],
 				};
-				courseModule.setRoomData(testData as any);
+				courseModule.setCourseData(testData as any);
 				const result = courseModule.roomIsEmpty;
 				expect(result).toStrictEqual(false);
 			});
@@ -779,7 +779,7 @@ describe("room module", () => {
 					displayColor: "black",
 					elements: [],
 				};
-				courseModule.setRoomData(testData as any);
+				courseModule.setCourseData(testData as any);
 				const result = courseModule.roomIsEmpty;
 				expect(result).toStrictEqual(true);
 			});

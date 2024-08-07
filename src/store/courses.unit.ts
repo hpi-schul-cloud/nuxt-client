@@ -158,14 +158,14 @@ describe("rooms module", () => {
 				// TODO: call server will be here when server ready
 				const coursesModule = new CoursesModule({});
 
-				const setRoomDataSpy = jest.spyOn(coursesModule, "setRoomData");
+				const setCourseDataSpy = jest.spyOn(coursesModule, "setCourseData");
 				const setLoadingSpy = jest.spyOn(coursesModule, "setLoading");
 
 				await coursesModule.delete("id");
 
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
-				expect(setRoomDataSpy).toHaveBeenCalled();
+				expect(setCourseDataSpy).toHaveBeenCalled();
 			});
 		});
 
@@ -192,7 +192,7 @@ describe("rooms module", () => {
 					displayColor: "#FF0000",
 					isSynchronized: false,
 				};
-				coursesModule.setRoomDataId(coursesData.id);
+				coursesModule.setCourseDataId(coursesData.id);
 				await coursesModule.update(coursesData);
 
 				expect(coursesModule.getLoading).toBe(false);
@@ -226,7 +226,7 @@ describe("rooms module", () => {
 					displayColor: "#FF0000",
 					isSynchronized: false,
 				};
-				coursesModule.setRoomDataId(coursesData.id);
+				coursesModule.setCourseDataId(coursesData.id);
 				await coursesModule.update(coursesData);
 
 				expect(coursesModule.getLoading).toBe(false);
@@ -321,7 +321,7 @@ describe("rooms module", () => {
 	});
 
 	describe("mutations", () => {
-		describe("setRoomData", () => {
+		describe("setCourseData", () => {
 			it("should set the room data", () => {
 				const coursesModule = new CoursesModule({});
 				const coursesDataToBeChanged = [
@@ -349,17 +349,17 @@ describe("rooms module", () => {
 				expect(coursesModule.getCoursesData).not.toStrictEqual(
 					coursesDataToBeChanged
 				);
-				coursesModule.setRoomData(coursesDataToBeChanged as any);
+				coursesModule.setCourseData(coursesDataToBeChanged as any);
 				expect(coursesModule.coursesData).toStrictEqual(expectedData);
 			});
 		});
 
-		describe("setRoomDataId", () => {
+		describe("setCourseDataId", () => {
 			it("should set the room data id", () => {
 				const coursesModule = new CoursesModule({});
 				const id = "sample_id";
 
-				coursesModule.setRoomDataId(id);
+				coursesModule.setCourseDataId(id);
 				expect(coursesModule.gridElementsId).toStrictEqual(id);
 			});
 		});
@@ -408,7 +408,7 @@ describe("rooms module", () => {
 					yPosition: 2,
 					to: "/rooms/123",
 				};
-				coursesModule.setRoomData(mockData.gridElements as any);
+				coursesModule.setCourseData(mockData.gridElements as any);
 				coursesModule.setPosition(draggedObject);
 				expect(coursesModule.coursesData[0]).toStrictEqual(expectedObject);
 			});
@@ -555,7 +555,7 @@ describe("rooms module", () => {
 					},
 				];
 
-				coursesModule.setRoomData(itemsToBeSet as any);
+				coursesModule.setCourseData(itemsToBeSet as any);
 				expect(coursesModule.getCoursesData).toStrictEqual(expectedData);
 			});
 		});
@@ -585,7 +585,7 @@ describe("rooms module", () => {
 				const coursesModule = new CoursesModule({});
 				const sampleId = "sample_id";
 				expect(coursesModule.getRoomsId).toStrictEqual("");
-				coursesModule.setRoomDataId(sampleId);
+				coursesModule.setCourseDataId(sampleId);
 				expect(coursesModule.getRoomsId).toStrictEqual(sampleId);
 			});
 		});
@@ -713,7 +713,7 @@ describe("rooms module", () => {
 				const coursesModule = new CoursesModule({});
 
 				expect(coursesModule.hasCurrentRooms).toStrictEqual(false);
-				coursesModule.setRoomData([]);
+				coursesModule.setCourseData([]);
 				expect(coursesModule.hasCurrentRooms).toStrictEqual(false);
 			});
 
@@ -740,7 +740,7 @@ describe("rooms module", () => {
 				const coursesModule = new CoursesModule({});
 
 				expect(coursesModule.hasCurrentRooms).toStrictEqual(false);
-				coursesModule.setRoomData(itemsToBeSet as any);
+				coursesModule.setCourseData(itemsToBeSet as any);
 				expect(coursesModule.hasCurrentRooms).toStrictEqual(true);
 			});
 		});

@@ -166,7 +166,7 @@ const getWrapper = (device = "desktop", options = {}) => {
 
 describe("@/pages/RoomOverview", () => {
 	beforeEach(() => {
-		coursesModule.setRoomData(mockRoomStoreData);
+		coursesModule.setCourseData(mockRoomStoreData);
 		coursesModule.setAllElements(mockCourseData);
 		authModule.setMe(mockAuthStoreData);
 	});
@@ -576,7 +576,7 @@ describe("@/pages/RoomOverview", () => {
 			},
 		];
 
-		coursesModule.setRoomData(roomData);
+		coursesModule.setCourseData(roomData);
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent('[data-test-position="8-0"]').exists()).toBe(
 			false

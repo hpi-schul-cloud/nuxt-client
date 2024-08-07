@@ -77,7 +77,7 @@ export default class CourseModule extends VuexModule {
 		this.setLoading(true);
 		try {
 			const { data } = await this.roomsApi.roomsControllerGetRoomBoard(id);
-			this.setRoomData(data);
+			this.setCourseData(data);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setError(error);
@@ -262,7 +262,7 @@ export default class CourseModule extends VuexModule {
 	}
 
 	@Mutation
-	setRoomData(payload: SingleColumnBoardResponse): void {
+	setCourseData(payload: SingleColumnBoardResponse): void {
 		this.roomData = payload;
 	}
 
