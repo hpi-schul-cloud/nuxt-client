@@ -6,7 +6,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
 
-describe("vRoomEmptyAvatar", () => {
+describe("vCourseEmptyAvatar", () => {
 	const setup = () => {
 		const wrapper = mount(vCourseEmptyAvatar, {
 			global: {

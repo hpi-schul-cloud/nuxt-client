@@ -3,11 +3,11 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import vRoomDeleteAvatar from "./vRoomDeleteAvatar.vue";
+import vCourseDeleteAvatar from "./vCourseDeleteAvatar.vue";
 
-describe("vRoomDeleteAvatar", () => {
+describe("vCourseDeleteAvatar", () => {
 	const setup = () => {
-		const wrapper = mount(vRoomDeleteAvatar, {
+		const wrapper = mount(vCourseDeleteAvatar, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

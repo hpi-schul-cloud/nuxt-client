@@ -53,7 +53,7 @@
 						:style="{ width: dimensions.cellWidth }"
 					>
 						<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
-							<vRoomEmptyAvatar
+							<vCourseEmptyAvatar
 								v-if="isEmptyGroup(rowIndex, colIndex)"
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
@@ -61,7 +61,7 @@
 								data-avatar-type="vRoomEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 							/>
-							<vRoomGroupAvatar
+							<vCourseGroupAvatar
 								v-else-if="hasGroup(rowIndex, colIndex)"
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								class="room-group-avatar"
@@ -75,10 +75,10 @@
 								@dropGroupAvatar="
 									addGroupElements({ x: colIndex, y: rowIndex })
 								"
-								data-avatar-type="vRoomGroupAvatar"
+								data-avatar-type="vCourseGroupAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 							/>
-							<vRoomAvatar
+							<vCourseAvatar
 								v-else
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								class="room-avatar"
@@ -89,17 +89,17 @@
 								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
 								@dragendAvatar="onDragend"
 								@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
-								data-avatar-type="vRoomAvatar"
+								data-avatar-type="vCourseAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 							/>
 						</template>
 						<template v-else>
-							<vRoomEmptyAvatar
+							<vCourseEmptyAvatar
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
 								:show-outline="dragging"
 								@dropEmptyAvatar="setDropElement({ x: colIndex, y: rowIndex })"
-								data-avatar-type="vRoomEmptyAvatar"
+								data-avatar-type="vCourseEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 							/>
 						</template>
@@ -126,10 +126,10 @@
 </template>
 
 <script>
-import vRoomAvatar from "@/components/atoms/vCourseAvatar";
-import vRoomEmptyAvatar from "@/components/atoms/vCourseEmptyAvatar";
+import vCourseAvatar from "@/components/atoms/vCourseAvatar";
+import vCourseEmptyAvatar from "@/components/atoms/vCourseEmptyAvatar";
 import CourseModal from "@/components/molecules/CourseModal";
-import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
+import vCourseGroupAvatar from "@/components/molecules/vCourseGroupAvatar";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import CourseWrapper from "@/components/templates/CourseWrapper.vue";
 import { coursesModule } from "@/store";
@@ -154,9 +154,9 @@ export default defineComponent({
 	},
 	components: {
 		CourseWrapper,
-		vRoomAvatar,
-		vRoomGroupAvatar,
-		vRoomEmptyAvatar,
+		vCourseAvatar,
+		vCourseGroupAvatar,
+		vCourseEmptyAvatar,
 		CourseModal,
 		ImportFlow,
 	},
@@ -316,7 +316,7 @@ export default defineComponent({
 			if (JSON.stringify(this.draggedElement.from) == JSON.stringify(pos))
 				return;
 
-			if (toElementName == "vRoomEmptyAvatar") {
+			if (toElementName == "vCourseEmptyAvatar") {
 				this.savePosition();
 			}
 			this.showDeleteSection = false;
@@ -333,9 +333,9 @@ export default defineComponent({
 				return;
 
 			if (
-				(this.draggedElementName == "vRoomAvatar" ||
+				(this.draggedElementName == "vCourseAvatar" ||
 					this.draggedElementName == "groupItem") &&
-				toElementName == "vRoomAvatar"
+				toElementName == "vCourseAvatar"
 			) {
 				await this.savePosition();
 				this.defaultNaming(pos);
@@ -349,9 +349,9 @@ export default defineComponent({
 				return;
 
 			if (
-				(this.draggedElementName == "vRoomAvatar" ||
+				(this.draggedElementName == "vCourseAvatar" ||
 					this.draggedElementName == "groupItem") &&
-				toElementName == "vRoomGroupAvatar"
+				toElementName == "vCourseGroupAvatar"
 			) {
 				this.savePosition();
 			}
