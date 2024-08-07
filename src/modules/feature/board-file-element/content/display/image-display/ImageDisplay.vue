@@ -2,7 +2,7 @@
 	<ContentElementBar class="image-display menu">
 		<template #display>
 			<div
-				class="d-flex align-center"
+				class="d-flex align-center focusable-container"
 				style="min-height: 52px"
 				tabindex="0"
 				role="button"
@@ -90,7 +90,9 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-.image-display {
-	z-index: 1;
+/* how focus indicator in Safari properly */
+.focusable-container:focus {
+	outline: 2px solid -webkit-focus-ring-color;
+	outline-offset: -2px;
 }
 </style>

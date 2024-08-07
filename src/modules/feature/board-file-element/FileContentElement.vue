@@ -220,11 +220,8 @@ export default defineComponent({
 });
 </script>
 <style lang="scss" scoped>
-.board-file-element-card {
-	overflow: initial;
-
-	&:focus {
-		outline-offset: 1px;
-	}
+/* show focus indicatator properly on all browsers */
+.board-file-element-card:focus {
+	outline-offset: 1px;
 }
 </style>
