@@ -9,6 +9,7 @@
 		target="_blank"
 		:aria-label="ariaLabel"
 		@keydown.up.down="onKeydownArrow"
+		@keydown.stop
 	>
 		<div class="drawing-element-content">
 			<InnerContent :docName="element.id">

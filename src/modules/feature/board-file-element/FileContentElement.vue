@@ -158,7 +158,6 @@ export default defineComponent({
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();
-				console.log("emit move-keyboard:edit");
 				emit("move-keyboard:edit", event);
 			}
 		};

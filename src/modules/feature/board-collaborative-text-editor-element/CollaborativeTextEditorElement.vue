@@ -11,6 +11,7 @@
 		:aria-label="ariaLabel"
 		@click="redirectToEditorUrl"
 		@keydown.enter.space="redirectToEditorUrl"
+		@keydown.stop
 	>
 		<ContentElementBar :hasGreyBackground="true" :icon="mdiTextBoxEditOutline">
 			<template #display>

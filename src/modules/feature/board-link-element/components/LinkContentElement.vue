@@ -7,6 +7,7 @@
 		:variant="outlined"
 		:ripple="false"
 		@keydown.up.down="onKeydownArrow"
+		@keydown.stop
 		:aria-label="ariaLabel"
 		:href="sanitizedUrl"
 		target="_blank"
