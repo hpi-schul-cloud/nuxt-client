@@ -580,13 +580,13 @@ describe("rooms module", () => {
 			});
 		});
 
-		describe("getRoomsId", () => {
+		describe("getCoursesId", () => {
 			it("should return rooms id state", () => {
 				const coursesModule = new CoursesModule({});
 				const sampleId = "sample_id";
-				expect(coursesModule.getRoomsId).toStrictEqual("");
+				expect(coursesModule.getCoursesId).toStrictEqual("");
 				coursesModule.setCourseDataId(sampleId);
-				expect(coursesModule.getRoomsId).toStrictEqual(sampleId);
+				expect(coursesModule.getCoursesId).toStrictEqual(sampleId);
 			});
 		});
 

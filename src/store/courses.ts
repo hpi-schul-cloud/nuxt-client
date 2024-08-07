@@ -176,7 +176,7 @@ export default class CoursesModule extends VuexModule {
 		return this.error;
 	}
 
-	get getRoomsId(): string {
+	get getCoursesId(): string {
 		return this.gridElementsId;
 	}
 
@@ -243,7 +243,7 @@ export default class CoursesModule extends VuexModule {
 		this.setLoading(true);
 		try {
 			const response = await this.dashboardApi.dashboardControllerMoveElement(
-				this.getRoomsId,
+				this.getCoursesId,
 				reqObject
 			);
 
@@ -261,7 +261,7 @@ export default class CoursesModule extends VuexModule {
 		this.setLoading(true);
 		try {
 			await this.dashboardApi.dashboardControllerPatchGroup(
-				this.getRoomsId,
+				this.getCoursesId,
 				payload.xPosition,
 				payload.yPosition,
 				{ title: payload.title }
