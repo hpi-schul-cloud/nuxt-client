@@ -1,6 +1,6 @@
 <template>
 	<course-wrapper
-		:has-rooms="hasCurrentRooms"
+		:has-rooms="hasCurrentCourses"
 		:has-import-token="!!importToken"
 	>
 		<template #header>
@@ -194,8 +194,8 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		hasCurrentRooms() {
-			return coursesModule.hasCurrentRooms;
+		hasCurrentCourses() {
+			return coursesModule.hasCurrentCourses;
 		},
 		rooms() {
 			return JSON.parse(JSON.stringify(coursesModule.getCoursesData)).filter(
@@ -218,7 +218,7 @@ export default defineComponent({
 		courses() {
 			return coursesModule.getAllElements;
 		},
-		hasRoomsBeingCopied() {
+		hasCoursesBeingCopied() {
 			return this.rooms.some((item) => item.copyingSince !== undefined);
 		},
 		isTouchDevice() {
@@ -235,7 +235,7 @@ export default defineComponent({
 		await coursesModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
 		await coursesModule.fetchAllElements();
 		this.getDeviceDims();
-		if (this.hasRoomsBeingCopied) {
+		if (this.hasCoursesBeingCopied) {
 			this.initCoursePolling(0, new Date());
 		}
 	},
@@ -410,7 +410,7 @@ export default defineComponent({
 			setTimeout(
 				async () => {
 					await coursesModule.fetch({ indicateLoading: false });
-					if (this.hasRoomsBeingCopied) {
+					if (this.hasCoursesBeingCopied) {
 						this.initCoursePolling(count + 1, started ?? new Date());
 					} else {
 						this.notifierModule?.show({
