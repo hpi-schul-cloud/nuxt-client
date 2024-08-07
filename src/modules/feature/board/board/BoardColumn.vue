@@ -159,15 +159,6 @@ export default defineComponent({
 			return columnLayout;
 		});
 
-		const { elementIdToRender } = storeToRefs(boardStore);
-		const componentKey = ref(0);
-
-		watch(elementIdToRender, async (newVal) => {
-			if (newVal == props.column.id) {
-				componentKey.value++;
-			}
-		});
-
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 		const { isTouchDetected } = useTouchDetection();
 		const showAddButton = computed(
@@ -323,6 +314,15 @@ export default defineComponent({
 				classes.push("column-layout");
 			}
 			return classes;
+		});
+
+		const { elementIdToRender } = storeToRefs(boardStore);
+		const componentKey = ref(0);
+
+		watch(elementIdToRender, async (newVal) => {
+			if (newVal == props.column.id) {
+				componentKey.value++;
+			}
 		});
 
 		return {
