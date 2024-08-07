@@ -1,5 +1,5 @@
 <template>
-	<div :style="columnStyle" :class="columnClasses">
+	<div :style="columnStyle" :class="columnClasses" :key="componentKey">
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
@@ -69,7 +69,15 @@
 
 <script lang="ts">
 import { useDebounceFn } from "@vueuse/core";
-import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
+import {
+	PropType,
+	computed,
+	defineComponent,
+	provide,
+	ref,
+	toRef,
+	watch,
+} from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 import { useBoardPermissions, useBoardStore } from "@data-board";
@@ -90,6 +98,7 @@ import {
 
 import { Sortable } from "sortablejs-vue3";
 import { SortableEvent } from "sortablejs";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
 	name: "BoardColumn",
@@ -148,6 +157,15 @@ export default defineComponent({
 				"max-width": `${colWidth.value}px`,
 			};
 			return columnLayout;
+		});
+
+		const { elementIdToRender } = storeToRefs(boardStore);
+		const componentKey = ref(0);
+
+		watch(elementIdToRender, async (newVal) => {
+			if (newVal == props.column.id) {
+				componentKey.value++;
+			}
 		});
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
@@ -312,6 +330,7 @@ export default defineComponent({
 			columnClasses,
 			columnStyle,
 			colWidth,
+			componentKey,
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,

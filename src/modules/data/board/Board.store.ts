@@ -33,6 +33,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
 	const { setFocus } = useBoardFocusHandler();
+	const elementIdToRender = ref<string>("");
 
 	const restApi = useBoardRestApi();
 	const isSocketEnabled =
@@ -266,6 +267,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 			await nextTick();
 		}
 
+		if (fromColumnIndex !== toColumnIndex) {
+			const fromColumnId = board.value.columns[fromColumnIndex].id;
+			elementIdToRender.value = fromColumnId;
+		}
 		const toColumn = board.value.columns[toColumnIndex];
 		toColumn.cards.splice(newIndex, 0, item);
 	};
@@ -290,6 +295,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	return {
 		board,
+		elementIdToRender,
 		isLoading,
 		getCardLocation,
 		getColumnIndex,
