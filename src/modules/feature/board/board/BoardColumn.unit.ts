@@ -125,7 +125,7 @@ describe("BoardColumn", () => {
 			expect(store.moveCardRequest).toHaveBeenCalled();
 		});
 
-		describe("when card is the same column and the same position", () => {
+		describe("when a card is moved to its column and the same position", () => {
 			it("should not call 'moveCardRequest' method", async () => {
 				const { wrapper, store } = setup({ cardsCount: 1 });
 
