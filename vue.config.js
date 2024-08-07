@@ -84,6 +84,9 @@ module.exports = defineConfig({
 				),
 				"@page-board": getDir("src/modules/page/board"),
 				"@page-class-members": getDir("src/modules/page/class-members"),
+				"@page-rooms-view": getDir(
+					"src/pages/administration/RoomsOverview.page.vue"
+				),
 				"@page-media-shelf": getDir("src/modules/page/media-shelf"),
 			},
 			extensions: [".js", ".ts", ".vue", ".json"],

@@ -781,6 +781,7 @@ export default {
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Gruppen-Auswahl",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Folgende Daten zur Erstellung eines neuen Kurses sind in Nutzergruppe {groupName} nicht vorhanden:<li>Lehrkraft</li><br/>Bitte in moin.schule überprüfen und Kurs-Erstellung erneut starten.",
+	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -1066,6 +1067,8 @@ export default {
 		"Die Registrierungslinks konnten auf Grund eines Problems nicht generiert werden",
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",
 	"pages.administration.remove.success": "Ausgewählte(r) Nutzer gelöscht",
+	"pages.administration.rooms.index.title": "Kurse verwalten",
+	"pages.administration.rooms.manage": "Klasse verwalten",
 	"pages.administration.school.index.authSystems.addLdap":
 		"LDAP-System hinzufügen",
 	"pages.administration.school.index.authSystems.alias": "Alias",

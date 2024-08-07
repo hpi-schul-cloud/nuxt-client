@@ -787,6 +787,7 @@ export default {
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Вибір групи",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Наступні дані для створення нового курсу недоступні в групі користувачів {groupName}:<li>Викладач</li><br/>Перевірте moin.schule і почніть створення курсу знову.",
+	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -1073,6 +1074,8 @@ export default {
 		"Не вдалося згенерувати посилання для реєстрації",
 	"pages.administration.remove.error": "Не вдалося видалити користувачів",
 	"pages.administration.remove.success": "Вибраних користувачів видалено",
+	"pages.administration.rooms.index.title": "Kurse verwalten",
+	"pages.administration.rooms.manage": "Klasse verwalten",
 	"pages.administration.school.index.authSystems.addLdap":
 		"Додати систему LDAP",
 	"pages.administration.school.index.authSystems.alias": "Псевдонім",

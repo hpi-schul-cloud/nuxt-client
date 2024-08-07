@@ -1,4 +1,4 @@
-import { CoursesApiFactory } from "@/serverApi/v3";
+import { CoursesApiFactory, SchoolYearQueryType } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
 export const useCourseApi = () => {
@@ -8,7 +8,48 @@ export const useCourseApi = () => {
 		await courseApi.courseControllerStopSynchronization(courseId);
 	};
 
+	const buildArchiveQuery = (schoolyear: SchoolYearQueryType) => {
+		const yesterday = new Date();
+		yesterday.setDate(yesterday.getDate() - 1);
+		let archiveQuery = {};
+		if (schoolyear === SchoolYearQueryType.CurrentYear) {
+			archiveQuery = {
+				$or: [
+					{ untilDate: { $exists: false } },
+					{ untilDate: null },
+					{ untilDate: { $gte: yesterday } },
+				],
+			};
+		}
+		if (schoolyear === SchoolYearQueryType.PreviousYears) {
+			archiveQuery = { untilDate: { $lt: yesterday } };
+		}
+		return archiveQuery;
+	};
+
+	const loadCoursesForSchool = async (
+		schoolYear: SchoolYearQueryType,
+		limit: number,
+		skip: number,
+		sortItem: { key: string; order: number }
+	) => {
+		const archiveQuery = buildArchiveQuery(schoolYear);
+
+		const query = {
+			$and: [archiveQuery],
+			$populate: ["classIds", "teacherIds"],
+			$limit: limit,
+			$skip: skip,
+			$sort: sortItem,
+		};
+
+		const response = await $axios.get("/v1/courses", { params: { qs: query } });
+
+		return response;
+	};
+
 	return {
 		stopSynchronization,
+		loadCoursesForSchool,
 	};
 };

@@ -798,6 +798,7 @@ export default {
 		"Selección de grupo",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Los siguientes datos para crear un nuevo curso no están disponibles en el grupo de usuarios {groupName}:<li>Profesor</li><br/>Por favor, regístrese en moin.schule y comience la creación del curso nuevamente.",
+	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD/MM/YYYY HH:mm",
@@ -1090,6 +1091,8 @@ export default {
 		"No se han podido generar los enlaces de registro",
 	"pages.administration.remove.error": "Error al eliminar usuarios",
 	"pages.administration.remove.success": "Usuarios seleccionados eliminados",
+	"pages.administration.rooms.index.title": "Kurse verwalten",
+	"pages.administration.rooms.manage": "Klasse verwalten",
 	"pages.administration.school.index.authSystems.addLdap":
 		"Añadir sistema LDAP",
 	"pages.administration.school.index.authSystems.alias": "Alias",
