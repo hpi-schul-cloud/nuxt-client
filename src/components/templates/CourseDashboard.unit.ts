@@ -178,7 +178,7 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 		it("should list board card", async () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
-			const boardCard = wrapper.findAllComponents({ name: "RoomBoardCard" });
+			const boardCard = wrapper.findAllComponents({ name: "CourseBoardCard" });
 			expect(boardCard).toHaveLength(1);
 		});
 
@@ -574,7 +574,7 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 				roomDataObject: mockData,
 				role: "teacher",
 			});
-			const boardCard = wrapper.findComponent({ name: "room-board-card" });
+			const boardCard = wrapper.findComponent({ name: "course-board-card" });
 			courseModule.publishCard = publishCardMock;
 
 			boardCard.vm.$emit("update-visibility", true);
@@ -675,7 +675,9 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 			wrapper.vm.copyBoard = copyBoardMock;
 
-			const boardCard = wrapper.findComponent<VCard>({ name: "RoomBoardCard" });
+			const boardCard = wrapper.findComponent<VCard>({
+				name: "CourseBoardCard",
+			});
 			boardCard.vm.$emit("copy-board");
 
 			expect(copyBoardMock).toHaveBeenCalled();
@@ -684,7 +686,9 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 		it("should emit 'copy-board-element' with correct board-related payload", () => {
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
 
-			const boardCard = wrapper.findComponent<VCard>({ name: "RoomBoardCard" });
+			const boardCard = wrapper.findComponent<VCard>({
+				name: "CourseBoardCard",
+			});
 			boardCard.vm.$emit("copy-board");
 
 			expect(wrapper.emitted()).toHaveProperty("copy-board-element");

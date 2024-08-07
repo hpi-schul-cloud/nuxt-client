@@ -7,7 +7,7 @@
 		tabindex="0"
 		role="link"
 		:variant="isDraft ? 'outlined' : 'elevated'"
-		:data-testid="`room-board-card-${boardCardIndex}`"
+		:data-testid="`course-board-card-${boardCardIndex}`"
 		@click="openBoard"
 		@keydown.enter.self="openBoard"
 		@keydown.space.prevent="$emit('on-drag')"

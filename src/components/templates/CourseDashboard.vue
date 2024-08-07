@@ -16,7 +16,7 @@
 			>
 				<template #item="{ element: item, index }">
 					<div>
-						<RoomBoardCard
+						<CourseBoardCard
 							v-if="item.type === cardTypes.ColumnBoard"
 							:ref="`item_${index}`"
 							:board-card-index="index"
@@ -98,7 +98,7 @@
 		</div>
 		<div v-if="role === Roles.Student">
 			<div v-for="(item, index) of roomData.elements" :key="index">
-				<RoomBoardCard
+				<CourseBoardCard
 					v-if="boardCardIsVisibleToStudent(item)"
 					:ref="`item_${index}`"
 					:board-card-index="index"
@@ -201,12 +201,12 @@ import {
 import { envConfigModule, courseModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
-import { RoomBoardCard, RoomLessonCard } from "@ui-course-details";
+import { CourseBoardCard, RoomLessonCard } from "@ui-course-details";
 import draggable from "vuedraggable";
 
 export default {
 	components: {
-		RoomBoardCard,
+		CourseBoardCard,
 		CourseTaskCard,
 		RoomLessonCard,
 		vCustomDialog,

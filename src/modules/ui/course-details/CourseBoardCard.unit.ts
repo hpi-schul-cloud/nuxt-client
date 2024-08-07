@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount, VueWrapper } from "@vue/test-utils";
-import RoomBoardCard from "./RoomBoardCard.vue";
+import CourseBoardCard from "./CourseBoardCard.vue";
 
 import {
 	BoardLayout,
@@ -74,7 +74,7 @@ const mockCourseData = {
 	courseName: "test-course-name",
 };
 
-describe("RoomBoardCard", () => {
+describe("CourseBoardCard", () => {
 	const setup = (
 		props: { boardData: BoardData; userRole: ImportUserResponseRoleNamesEnum },
 		options?: object,
@@ -87,7 +87,7 @@ describe("RoomBoardCard", () => {
 			getEnv: { ...envs } as ConfigResponse,
 		});
 
-		const wrapper = mount(RoomBoardCard, {
+		const wrapper = mount(CourseBoardCard, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: { [ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock },
@@ -117,7 +117,7 @@ describe("RoomBoardCard", () => {
 
 		it("should be found in dom", () => {
 			const { wrapper } = setup({ boardData: mockDraftBoardData, userRole });
-			expect(wrapper.findComponent(RoomBoardCard).exists()).toBe(true);
+			expect(wrapper.findComponent(CourseBoardCard).exists()).toBe(true);
 		});
 
 		describe("when board title is defined and not empty", () => {
