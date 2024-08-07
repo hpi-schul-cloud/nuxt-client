@@ -1122,6 +1122,12 @@ export interface ConfigResponse {
     SC_TITLE: string;
     /**
      * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    TRAINING_URL: string;
+    /**
+     * 
      * @type {boolean}
      * @memberof ConfigResponse
      */
