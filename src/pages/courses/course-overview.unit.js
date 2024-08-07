@@ -268,27 +268,27 @@ describe("@/pages/RoomOverview", () => {
 			wrapper
 				.findComponent('[data-test-position="1-1"]')
 				.attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		).toStrictEqual("vCourseAvatar");
 		expect(
 			wrapper
 				.findComponent('[data-test-position="2-2"]')
 				.attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		).toStrictEqual("vCourseAvatar");
 		expect(
 			wrapper
 				.findComponent('[data-test-position="0-0"]')
 				.attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		).toStrictEqual("vCourseAvatar");
 		expect(
 			wrapper
 				.findComponent('[data-test-position="3-2"]')
 				.attributes("data-avatar-type")
-		).toStrictEqual("vRoomGroupAvatar");
+		).toStrictEqual("vCourseGroupAvatar");
 		expect(
 			wrapper
 				.findComponent('[data-test-position="3-3"]')
 				.attributes("data-avatar-type")
-		).toStrictEqual("vRoomEmptyAvatar");
+		).toStrictEqual("vCourseEmptyAvatar");
 	});
 
 	it("should set the column count '4' if the device is 'mobile'", async () => {
@@ -459,17 +459,17 @@ describe("@/pages/RoomOverview", () => {
 
 		expect(
 			wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		).toStrictEqual("vCourseAvatar");
 
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "thi");
 
 		expect(
 			wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomEmptyAvatar");
+		).toStrictEqual("vCourseEmptyAvatar");
 		expect(
 			wrapper.find('[data-test-position="0-0"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		).toStrictEqual("vCourseAvatar");
 
 		const avatarComponents = wrapper.findAll(".room-avatar");
 		expect(avatarComponents).toHaveLength(1);
@@ -482,7 +482,7 @@ describe("@/pages/RoomOverview", () => {
 
 		expect(
 			wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		).toStrictEqual("vCourseAvatar");
 
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "thi");
@@ -523,10 +523,10 @@ describe("@/pages/RoomOverview", () => {
 		await nextTick();
 		expect(
 			wrapper.find('[data-test-position="1-1"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		).toStrictEqual("vCourseAvatar");
 		expect(
 			wrapper.find('[data-test-position="2-2"]').attributes("data-avatar-type")
-		).toStrictEqual("vRoomAvatar");
+		).toStrictEqual("vCourseAvatar");
 
 		const fromAvatarComponent = wrapper.findComponent(
 			'[data-test-position="1-1"]'

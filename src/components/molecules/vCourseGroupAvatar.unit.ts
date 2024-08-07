@@ -6,7 +6,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { VBadge, VCard } from "vuetify/lib/components/index.mjs";
-import vRoomGroupAvatar from "./vRoomGroupAvatar.vue";
+import vCourseGroupAvatar from "./vCourseGroupAvatar.vue";
 
 const mockData = {
 	id: "4",
@@ -70,14 +70,14 @@ const propsData = {
 };
 
 const getWrapper = (props: object, options?: object) => {
-	return mount(vRoomGroupAvatar, {
+	return mount(vCourseGroupAvatar, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		propsData: props,
 		...options,
 	});
 };
 
-describe("vRoomGroupAvatar", () => {
+describe("vCourseGroupAvatar", () => {
 	it("should display the title", () => {
 		const wrapper = getWrapper(propsData);
 		const labelElement = wrapper.find(".subtitle").element as HTMLElement;
