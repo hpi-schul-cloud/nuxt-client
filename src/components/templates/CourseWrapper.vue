@@ -18,7 +18,7 @@
 			</VContainer>
 		</template>
 		<template v-else-if="isEmptyState">
-			<vCustomEmptyState
+			<v-custom-empty-state
 				ref="rooms-empty-state"
 				image="rooms-empty-state"
 				:title="$t('pages.rooms.allRooms.emptyState.title')"
@@ -49,7 +49,7 @@ import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Fab, FabAction } from "./default-wireframe.types";
 
-enum RoomFabEvent {
+enum CourseFabEvent {
 	COMMON_CARTRIDGE_IMPORT = "import",
 	SYNCHRONIZED_COURSE = "syncedCourse",
 }
@@ -87,7 +87,7 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 				label: t("pages.rooms.fab.add.syncedCourse"),
 				ariaLabel: t("pages.rooms.fab.add.syncedCourse"),
 				dataTestId: "fab_button_add_synced_course",
-				customEvent: RoomFabEvent.SYNCHRONIZED_COURSE,
+				customEvent: CourseFabEvent.SYNCHRONIZED_COURSE,
 			});
 		}
 
@@ -97,7 +97,7 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 				label: t("pages.rooms.fab.import.course"),
 				ariaLabel: t("pages.rooms.fab.import.course"),
 				dataTestId: "fab_button_import_course",
-				customEvent: RoomFabEvent.COMMON_CARTRIDGE_IMPORT,
+				customEvent: CourseFabEvent.COMMON_CARTRIDGE_IMPORT,
 			});
 		}
 
@@ -128,10 +128,10 @@ const isEmptyState: ComputedRef<boolean> = computed(() => {
 	return !coursesModule.getLoading && !props.hasRooms && !props.hasImportToken;
 });
 
-const fabItemClickHandler = (event: RoomFabEvent): void => {
-	if (event === RoomFabEvent.SYNCHRONIZED_COURSE) {
+const fabItemClickHandler = (event: CourseFabEvent): void => {
+	if (event === CourseFabEvent.SYNCHRONIZED_COURSE) {
 		isCourseSyncDialogOpen.value = true;
-	} else if (event === RoomFabEvent.COMMON_CARTRIDGE_IMPORT) {
+	} else if (event === CourseFabEvent.COMMON_CARTRIDGE_IMPORT) {
 		commonCartridgeImportModule.setIsOpen(true);
 	}
 };
