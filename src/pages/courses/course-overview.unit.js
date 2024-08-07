@@ -232,7 +232,7 @@ describe("@/pages/CourseOverview", () => {
 		const wrapper = getWrapper();
 		await nextTick();
 		await nextTick();
-		const groupAvatarComponents = wrapper.findAll(".room-group-avatar");
+		const groupAvatarComponents = wrapper.findAll(".course-group-avatar");
 		expect(groupAvatarComponents).toHaveLength(1);
 	});
 

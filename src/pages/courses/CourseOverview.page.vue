@@ -32,7 +32,7 @@
 				<v-text-field
 					ref="search"
 					v-model="searchText"
-					class="room-search px-1"
+					class="course-search px-1"
 					variant="solo"
 					rounded
 					single-line
@@ -44,7 +44,7 @@
 				<div
 					v-for="(row, rowIndex) in dimensions.rowCount"
 					:key="rowIndex"
-					class="room-overview-row"
+					class="course-overview-row"
 				>
 					<div
 						v-for="(col, colIndex) in dimensions.colCount"
@@ -58,13 +58,13 @@
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
 								@dropEmptyAvatar="setDropElement({ x: colIndex, y: rowIndex })"
-								data-avatar-type="vRoomEmptyAvatar"
+								data-avatar-type="vCourseEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 							/>
 							<vCourseGroupAvatar
 								v-else-if="hasGroup(rowIndex, colIndex)"
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
-								class="room-group-avatar"
+								class="course-group-avatar"
 								:data="getDataObject(rowIndex, colIndex)"
 								:size="dimensions.cellWidth"
 								:device="device"
@@ -442,7 +442,7 @@ export default defineComponent({
 	justify-content: space-between;
 }
 
-.room-overview-row {
+.course-overview-row {
 	display: flex;
 	justify-content: space-between;
 }

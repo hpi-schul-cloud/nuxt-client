@@ -79,21 +79,21 @@ describe("CourseModal", () => {
 				return { wrapper };
 			};
 
-			it("should pass 'draggable' prop to room-avatar-iterator", () => {
+			it("should pass 'draggable' prop to course-avatar-iterator", () => {
 				const { wrapper } = setup();
 
 				const iterator = wrapper.findComponent(RoomAvatarIterator);
 				expect(iterator.props("canDraggable")).toBe(true);
 			});
 
-			it("should pass itemsize prop to room-avatar-iterator", () => {
+			it("should pass itemsize prop to course-avatar-iterator", () => {
 				const { wrapper } = setup();
 
 				const iterator = wrapper.findComponent(RoomAvatarIterator);
 				expect(iterator.props("itemSize")).toBe("5em");
 			});
 
-			it("should pass groupElements prop to room-avatar-iterator", () => {
+			it("should pass groupElements prop to course-avatar-iterator", () => {
 				const { wrapper } = setup();
 
 				const iterator = wrapper.findComponent(RoomAvatarIterator);
@@ -210,7 +210,7 @@ describe("CourseModal", () => {
 			});
 		});
 
-		describe("when room-avatar-iterator emits 'startDrag'", () => {
+		describe("when course-avatar-iterator emits 'startDrag'", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 				const iterator = wrapper.findComponent(RoomAvatarIterator);

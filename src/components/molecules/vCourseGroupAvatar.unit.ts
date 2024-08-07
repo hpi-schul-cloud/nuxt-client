@@ -1,5 +1,5 @@
 import vCourseAvatar from "@/components/atoms/vCourseAvatar.vue";
-import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
+import CourseAvatarIterator from "@/components/organisms/CourseAvatarIterator.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -108,7 +108,7 @@ describe("vCourseGroupAvatar", () => {
 
 	it("should display the correct size and group-avatar property", () => {
 		const wrapper = getWrapper(propsData);
-		const iterator = wrapper.findComponent(RoomAvatarIterator);
+		const iterator = wrapper.findComponent(CourseAvatarIterator);
 
 		expect(iterator).toBeTruthy();
 		expect(iterator.props("itemSize")).toStrictEqual("0.8em");

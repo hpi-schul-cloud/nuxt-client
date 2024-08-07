@@ -1,5 +1,5 @@
 import { VueWrapper, mount } from "@vue/test-utils";
-import RoomAvatarIterator from "./RoomAvatarIterator.vue";
+import CourseAvatarIterator from "./CourseAvatarIterator.vue";
 import vCourseAvatar from "@/components/atoms/vCourseAvatar.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
@@ -36,7 +36,7 @@ const propsData = {
 };
 
 const getWrapper = () => {
-	return mount(RoomAvatarIterator, {
+	return mount(CourseAvatarIterator, {
 		global: {
 			plugins: [createTestingVuetify()],
 			stubs: {
@@ -50,7 +50,7 @@ const getWrapper = () => {
 	});
 };
 
-describe("RoomAvatarIterator", () => {
+describe("CourseAvatarIterator", () => {
 	it("should have props", async () => {
 		const wrapper = getWrapper();
 

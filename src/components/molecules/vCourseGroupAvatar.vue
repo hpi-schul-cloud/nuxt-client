@@ -34,7 +34,7 @@
 				role="button"
 				tabindex="0"
 			>
-				<room-avatar-iterator
+				<course-avatar-iterator
 					ref="avatar-iterator"
 					:avatars="data.groupElements"
 					condense-layout
@@ -53,10 +53,10 @@
 </template>
 
 <script>
-import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
+import CourseAvatarIterator from "@/components/organisms/CourseAvatarIterator.vue";
 export default {
 	components: {
-		RoomAvatarIterator,
+		CourseAvatarIterator,
 	},
 	props: {
 		data: {
