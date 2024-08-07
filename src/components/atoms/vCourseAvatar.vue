@@ -1,8 +1,8 @@
 <template>
 	<div
-		class="room-avatar"
+		class="course-avatar"
 		:data-testid="item.id"
-		:class="isDragging ? 'dragging' : 'room-avatar'"
+		:class="isDragging ? 'dragging' : 'course-avatar'"
 		:draggable="draggable"
 		:style="{ width: size }"
 		@dragstart="startDragAvatar"

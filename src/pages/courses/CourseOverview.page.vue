@@ -49,7 +49,7 @@
 					<div
 						v-for="(col, colIndex) in dimensions.colCount"
 						:key="colIndex"
-						class="room-overview-col"
+						class="course-overview-col"
 						:style="{ width: dimensions.cellWidth }"
 					>
 						<template v-if="getDataObject(rowIndex, colIndex) !== undefined">
@@ -81,7 +81,7 @@
 							<vCourseAvatar
 								v-else
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
-								class="room-avatar"
+								class="course-avatar"
 								:item="getDataObject(rowIndex, colIndex)"
 								:size="dimensions.cellWidth"
 								:show-badge="true"
@@ -184,7 +184,7 @@ export default defineComponent({
 				to: null,
 			},
 			showDeleteSection: false,
-			roomNameEditMode: false,
+			courseNameEditMode: false,
 			draggedElementName: "",
 			mdiMagnify,
 			searchText: "",
@@ -283,8 +283,8 @@ export default defineComponent({
 			return this.findDataByPos(row, col);
 		},
 		hasGroup(row, col) {
-			const roomObject = this.findDataByPos(row, col);
-			return roomObject.groupElements !== undefined;
+			const courseObject = this.findDataByPos(row, col);
+			return courseObject.groupElements !== undefined;
 		},
 		isEmptyGroup(row, col) {
 			return this.findDataByPos(row, col).groupElements?.length == 0;

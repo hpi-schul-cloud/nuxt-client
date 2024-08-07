@@ -216,7 +216,7 @@ describe("@/pages/CourseOverview", () => {
 		const wrapper = getWrapper();
 		await nextTick();
 		await nextTick();
-		const avatarComponents = wrapper.findAll(".room-avatar");
+		const avatarComponents = wrapper.findAll(".course-avatar");
 		expect(avatarComponents).toHaveLength(6);
 	});
 
@@ -224,7 +224,7 @@ describe("@/pages/CourseOverview", () => {
 		const wrapper = getWrapper("mobile");
 		await nextTick();
 		await nextTick();
-		const avatarComponents = wrapper.findAll(".room-avatar");
+		const avatarComponents = wrapper.findAll(".course-avatar");
 		expect(avatarComponents).toHaveLength(6);
 	});
 
@@ -471,7 +471,7 @@ describe("@/pages/CourseOverview", () => {
 			wrapper.find('[data-test-position="0-0"]').attributes("data-avatar-type")
 		).toStrictEqual("vCourseAvatar");
 
-		const avatarComponents = wrapper.findAll(".room-avatar");
+		const avatarComponents = wrapper.findAll(".course-avatar");
 		expect(avatarComponents).toHaveLength(1);
 	});
 
@@ -487,13 +487,13 @@ describe("@/pages/CourseOverview", () => {
 		const searchInput = wrapper.findComponent({ ref: "search" });
 		await searchInput.vm.$emit("update:modelValue", "thi");
 
-		const avatarComponents = wrapper.findAll(".room-avatar");
+		const avatarComponents = wrapper.findAll(".course-avatar");
 		expect(avatarComponents).toHaveLength(1);
 
 		const avatarComponent = wrapper.findComponent('[data-test-position="0-0"]');
 		await avatarComponent.trigger("dragstart");
 
-		const avatarComponentsAfterDragging = wrapper.findAll(".room-avatar");
+		const avatarComponentsAfterDragging = wrapper.findAll(".course-avatar");
 		expect(avatarComponentsAfterDragging).toHaveLength(6);
 		expect(wrapper.vm.$data.searchText).toStrictEqual("");
 	});

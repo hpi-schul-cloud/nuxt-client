@@ -16,7 +16,7 @@
 					>
 						<vCourseAvatar
 							:draggable="canDraggable"
-							class="room-avatar"
+							class="course-avatar"
 							:item="item.raw"
 							:size="itemSize"
 							:show-badge="true"

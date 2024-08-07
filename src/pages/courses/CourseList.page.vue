@@ -45,7 +45,7 @@
 						>
 							<vCourseAvatar
 								:ref="`${room.id}-avatar`"
-								class="room-avatar"
+								class="course-avatar"
 								:item="room"
 								size="5em"
 								:show-badge="true"

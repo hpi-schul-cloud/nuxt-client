@@ -41,7 +41,7 @@ const getWrapper = () => {
 			plugins: [createTestingVuetify()],
 			stubs: {
 				VCourseAvatar: {
-					template: '<div class="room-avatar" />',
+					template: '<div class="course-avatar" />',
 					props: ["item", "draggable"],
 				},
 			},
@@ -63,7 +63,7 @@ describe("CourseAvatarIterator", () => {
 
 	it("should iterate 2 avatar components", async () => {
 		const wrapper = getWrapper();
-		const avatarComponents = wrapper.findAllComponents(".room-avatar");
+		const avatarComponents = wrapper.findAllComponents(".course-avatar");
 
 		expect(avatarComponents).toHaveLength(2);
 

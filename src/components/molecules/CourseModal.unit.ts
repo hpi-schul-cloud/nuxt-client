@@ -1,4 +1,4 @@
-import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
+import CourseAvatarIterator from "@/components/organisms/CourseAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { coursesModule } from "@/store";
 import CoursesModule from "@/store/courses";
@@ -82,21 +82,21 @@ describe("CourseModal", () => {
 			it("should pass 'draggable' prop to course-avatar-iterator", () => {
 				const { wrapper } = setup();
 
-				const iterator = wrapper.findComponent(RoomAvatarIterator);
+				const iterator = wrapper.findComponent(CourseAvatarIterator);
 				expect(iterator.props("canDraggable")).toBe(true);
 			});
 
 			it("should pass itemsize prop to course-avatar-iterator", () => {
 				const { wrapper } = setup();
 
-				const iterator = wrapper.findComponent(RoomAvatarIterator);
+				const iterator = wrapper.findComponent(CourseAvatarIterator);
 				expect(iterator.props("itemSize")).toBe("5em");
 			});
 
 			it("should pass groupElements prop to course-avatar-iterator", () => {
 				const { wrapper } = setup();
 
-				const iterator = wrapper.findComponent(RoomAvatarIterator);
+				const iterator = wrapper.findComponent(CourseAvatarIterator);
 				expect(iterator.props("avatars")).toEqual([]);
 			});
 		});
@@ -213,7 +213,7 @@ describe("CourseModal", () => {
 		describe("when course-avatar-iterator emits 'startDrag'", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
-				const iterator = wrapper.findComponent(RoomAvatarIterator);
+				const iterator = wrapper.findComponent(CourseAvatarIterator);
 				const roomItem = {
 					id: "dummy id",
 					title: "dummy title",
