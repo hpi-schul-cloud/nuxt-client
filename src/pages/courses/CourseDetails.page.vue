@@ -29,7 +29,7 @@
 					{{ $t("pages.rooms.headerSection.archived") }}
 				</VChip>
 				<div class="mx-2">
-					<room-dot-menu
+					<course-dot-menu
 						:menu-items="headlineMenuItems"
 						data-testid="room-menu"
 						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
@@ -105,7 +105,7 @@
 
 <script>
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-course-details";
+import { CourseDotMenu, SelectBoardLayoutDialog } from "@ui-course-details";
 import ShareModal from "@/components/share/ShareModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
@@ -171,7 +171,7 @@ export default defineComponent({
 		vCustomDialog,
 		DefaultWireframe,
 		CourseDashboard,
-		RoomDotMenu,
+		CourseDotMenu,
 		CopyResultModal,
 		ShareModal,
 		commonCartridgeExportModal,

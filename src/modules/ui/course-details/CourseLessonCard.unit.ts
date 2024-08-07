@@ -10,7 +10,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { VCard } from "vuetify/lib/components/index.mjs";
-import RoomLessonCard from "./RoomLessonCard.vue";
+import CourseLessonCard from "./CourseLessonCard.vue";
 import { LessonData } from "./types";
 
 const baseTestLesson = {
@@ -53,7 +53,7 @@ const setup = (
 	const ariaLabel =
 		"lesson, Link, Test Thema (Mathe) - zum Öffnen die Eingabetaste drücken";
 
-	const wrapper = mount(RoomLessonCard, {
+	const wrapper = mount(CourseLessonCard, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		props: {
 			room,
@@ -70,7 +70,7 @@ const setup = (
 	return { wrapper, room, ariaLabel };
 };
 
-describe("@/components/molecules/RoomLessonCard", () => {
+describe("@/components/molecules/CourseLessonCard", () => {
 	beforeEach(() => {
 		window.location.pathname = "";
 		setupStores({ envConfigModule: EnvConfigModule });

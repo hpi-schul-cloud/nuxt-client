@@ -22,7 +22,7 @@
 					{{ cardTitle(task.dueDate) }}
 				</div>
 				<div class="dot-menu-section">
-					<room-dot-menu
+					<course-dot-menu
 						:menu-items="moreActionsMenuItems[userRole]"
 						:data-testid="`task-card-menu-${taskCardIndex}`"
 						:aria-label="$t('pages.room.taskCard.menu.ariaLabel')"
@@ -110,12 +110,12 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@mdi/js";
-import { RoomDotMenu } from "@ui-course-details";
+import { CourseDotMenu } from "@ui-course-details";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
 export default {
-	components: { RoomDotMenu, VCustomChipTimeRemaining, RenderHTML },
+	components: { CourseDotMenu, VCustomChipTimeRemaining, RenderHTML },
 	props: {
 		task: {
 			type: Object,

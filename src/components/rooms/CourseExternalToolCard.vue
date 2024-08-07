@@ -38,7 +38,7 @@
 		</template>
 		<template #right>
 			<div v-if="canEdit" class="ml-1 my-auto">
-				<room-dot-menu
+				<CourseDotMenu
 					:menu-items="menuItems"
 					data-testid="room-tool-three-dot-button"
 					:aria-label="t('pages.rooms.tools.menu.ariaLabel')"
@@ -56,7 +56,7 @@ import {
 } from "@data-external-tool";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { InfoChip, WarningChip } from "@ui-chip";
-import { RoomDotMenu } from "@ui-course-details";
+import { CourseDotMenu } from "@ui-course-details";
 import { computed, ComputedRef, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomBaseCard from "./CourseBaseCard.vue";

@@ -1,11 +1,11 @@
 import CourseBoardCard from "./CourseBoardCard.vue";
-import RoomLessonCard from "./RoomLessonCard.vue";
-import RoomDotMenu from "./RoomDotMenu.vue";
+import CourseLessonCard from "./CourseLessonCard.vue";
+import CourseDotMenu from "./CourseDotMenu.vue";
 import SelectBoardLayoutDialog from "./SelectBoardLayoutDialog.vue";
 
 export {
 	CourseBoardCard,
-	RoomLessonCard,
-	RoomDotMenu,
+	CourseLessonCard,
+	CourseDotMenu,
 	SelectBoardLayoutDialog,
 };

@@ -21,7 +21,7 @@
 					{{ $t("common.words.topic") }}
 				</div>
 				<div class="dot-menu-section">
-					<RoomDotMenu
+					<CourseDotMenu
 						v-if="userRole === Roles.Teacher"
 						:menu-items="moreActionsMenuItems"
 						:data-testid="`lesson-card-menu-${lessonCardIndex}`"
@@ -84,7 +84,7 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@mdi/js";
-import { RoomDotMenu } from "@ui-course-details";
+import { CourseDotMenu } from "@ui-course-details";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { LessonData } from "./types";

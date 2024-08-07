@@ -9,7 +9,7 @@ import {
 	VListItem,
 	VMenu,
 } from "vuetify/lib/components/index.mjs";
-import RoomDotMenu from "./RoomDotMenu.vue";
+import CourseDotMenu from "./CourseDotMenu.vue";
 
 const action = jest.fn();
 const testProps = {
@@ -25,7 +25,7 @@ const testProps = {
 };
 
 const getWrapper = (props: object, options?: object) => {
-	return mount(RoomDotMenu, {
+	return mount(CourseDotMenu, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		props,
 		...options,
@@ -33,14 +33,14 @@ const getWrapper = (props: object, options?: object) => {
 };
 
 const getShallowWrapper = (props: object, options?: object) => {
-	return shallowMount(RoomDotMenu, {
+	return shallowMount(CourseDotMenu, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		props,
 		...options,
 	});
 };
 
-describe("@/components/molecules/RoomDotMenu", () => {
+describe("@/components/molecules/CourseDotMenu", () => {
 	it("should render with correct props", () => {
 		const wrapper = getWrapper(testProps);
 

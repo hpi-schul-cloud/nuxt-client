@@ -68,7 +68,7 @@
 							@copy-task="copyTask(item.content.id)"
 							@share-task="getSharedTask(item.content.id)"
 						/>
-						<RoomLessonCard
+						<CourseLessonCard
 							v-if="item.type === cardTypes.Lesson"
 							:ref="`item_${index}`"
 							:lesson-card-index="index"
@@ -135,7 +135,7 @@
 					@finish-task="finishTask(item.content.id)"
 					@restore-task="restoreTask(item.content.id)"
 				/>
-				<RoomLessonCard
+				<CourseLessonCard
 					v-if="item.type === cardTypes.Lesson"
 					:ref="`item_${index}`"
 					:lesson-card-index="index"
@@ -201,14 +201,14 @@ import {
 import { envConfigModule, courseModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
-import { CourseBoardCard, RoomLessonCard } from "@ui-course-details";
+import { CourseBoardCard, CourseLessonCard } from "@ui-course-details";
 import draggable from "vuedraggable";
 
 export default {
 	components: {
 		CourseBoardCard,
 		CourseTaskCard,
-		RoomLessonCard,
+		CourseLessonCard,
 		vCustomDialog,
 		draggable,
 		vCustomEmptyState,

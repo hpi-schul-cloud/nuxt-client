@@ -11,7 +11,7 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { RoomDotMenu } from "@ui-course-details";
+import { CourseDotMenu } from "@ui-course-details";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import RoomExternalToolCard from "./CourseExternalToolCard.vue";
@@ -570,7 +570,7 @@ describe("RoomExternalToolCard", () => {
 		it("should display the item menu", () => {
 			const { wrapper } = setup();
 
-			const itemMenu = wrapper.findComponent(RoomDotMenu);
+			const itemMenu = wrapper.findComponent(CourseDotMenu);
 
 			expect(itemMenu.isVisible()).toEqual(true);
 		});
@@ -579,7 +579,7 @@ describe("RoomExternalToolCard", () => {
 			const { wrapper } = setup();
 
 			const menuButton = wrapper
-				.findComponent(RoomDotMenu)
+				.findComponent(CourseDotMenu)
 				.get('[data-testid="room-tool-three-dot-button"]');
 			await menuButton.trigger("click");
 
@@ -594,7 +594,7 @@ describe("RoomExternalToolCard", () => {
 			const { wrapper } = setup();
 
 			const menuButton = wrapper
-				.findComponent(RoomDotMenu)
+				.findComponent(CourseDotMenu)
 				.get('[data-testid="room-tool-three-dot-button"]');
 
 			await menuButton.trigger("click");
@@ -611,7 +611,7 @@ describe("RoomExternalToolCard", () => {
 				const { wrapper, tool } = setup();
 
 				const menuButton = wrapper
-					.findComponent(RoomDotMenu)
+					.findComponent(CourseDotMenu)
 					.get('[data-testid="room-tool-three-dot-button"]');
 				await menuButton.trigger("click");
 
@@ -630,7 +630,7 @@ describe("RoomExternalToolCard", () => {
 				const { wrapper, tool } = setup();
 
 				const menuButton = wrapper
-					.findComponent(RoomDotMenu)
+					.findComponent(CourseDotMenu)
 					.get('[data-testid="room-tool-three-dot-button"]');
 				await menuButton.trigger("click");
 

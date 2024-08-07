@@ -27,7 +27,7 @@
 					</span>
 				</div>
 				<div v-if="userRole === Roles.Teacher" class="dot-menu-section">
-					<RoomDotMenu
+					<CourseDotMenu
 						:menu-items="actionsMenuItems"
 						:data-testid="`board-card-menu-${boardCardIndex}`"
 						:aria-label="$t('pages.room.boardCard.menu.ariaLabel')"
@@ -77,7 +77,7 @@ import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
-import RoomDotMenu from "./RoomDotMenu.vue";
+import CourseDotMenu from "./CourseDotMenu.vue";
 
 const props = defineProps({
 	columnBoardItem: { type: Object, required: true },
