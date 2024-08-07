@@ -5,7 +5,7 @@ import {
 import { mount } from "@vue/test-utils";
 import SelectBoardLayoutDialog from "./SelectBoardLayoutDialog.vue";
 
-describe("@ui-room-details/SelectBoardLayoutDialog", () => {
+describe("@ui-course-details/SelectBoardLayoutDialog", () => {
 	const setup = () => {
 		const wrapper = mount(SelectBoardLayoutDialog, {
 			global: {

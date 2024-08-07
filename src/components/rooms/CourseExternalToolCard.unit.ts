@@ -11,7 +11,7 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { RoomDotMenu } from "@ui-room-details";
+import { RoomDotMenu } from "@ui-course-details";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import RoomExternalToolCard from "./CourseExternalToolCard.vue";

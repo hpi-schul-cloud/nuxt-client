@@ -105,7 +105,7 @@
 
 <script>
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
-import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
+import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-course-details";
 import ShareModal from "@/components/share/ShareModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";

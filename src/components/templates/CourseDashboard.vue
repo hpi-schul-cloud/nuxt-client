@@ -201,7 +201,7 @@ import {
 import { envConfigModule, courseModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
-import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
+import { RoomBoardCard, RoomLessonCard } from "@ui-course-details";
 import draggable from "vuedraggable";
 
 export default {

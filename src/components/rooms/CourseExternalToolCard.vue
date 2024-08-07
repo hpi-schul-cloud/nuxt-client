@@ -56,7 +56,7 @@ import {
 } from "@data-external-tool";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
 import { InfoChip, WarningChip } from "@ui-chip";
-import { RoomDotMenu } from "@ui-room-details";
+import { RoomDotMenu } from "@ui-course-details";
 import { computed, ComputedRef, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomBaseCard from "./CourseBaseCard.vue";

@@ -36,7 +36,7 @@ import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import CourseDetailsPage from "./CourseDetails.page.vue";
 import CourseExternalToolsOverview from "./tools/CourseExternalToolsOverview.vue";
-import { SelectBoardLayoutDialog } from "@ui-room-details";
+import { SelectBoardLayoutDialog } from "@ui-course-details";
 import DefaultWireframe from "../../components/templates/DefaultWireframe.vue";
 
 jest.mock("./tools/CourseExternalToolsOverview.vue");

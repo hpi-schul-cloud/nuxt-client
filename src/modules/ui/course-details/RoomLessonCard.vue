@@ -84,7 +84,7 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@mdi/js";
-import { RoomDotMenu } from "@ui-room-details";
+import { RoomDotMenu } from "@ui-course-details";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { LessonData } from "./types";

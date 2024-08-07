@@ -110,7 +110,7 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 } from "@mdi/js";
-import { RoomDotMenu } from "@ui-room-details";
+import { RoomDotMenu } from "@ui-course-details";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];
 
