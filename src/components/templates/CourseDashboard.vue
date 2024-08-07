@@ -47,7 +47,7 @@
 							:ref="`item_${index}`"
 							:task-card-index="index"
 							:user-role="role"
-							:room="taskData"
+							:course="taskData"
 							:task="item.content"
 							:aria-label="
 								$t('pages.room.cards.aria', {

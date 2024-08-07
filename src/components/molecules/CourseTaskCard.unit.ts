@@ -410,7 +410,7 @@ describe("@/components/molecules/CourseTaskCard", () => {
 				await threeDotButton.trigger("click");
 
 				const moreActionButton = wrapper.findComponent(
-					`[data-testid="room-task-card-menu-edit-0"]`
+					`[data-testid="course-task-card-menu-edit-0"]`
 				);
 				await moreActionButton.trigger("click");
 
@@ -429,7 +429,7 @@ describe("@/components/molecules/CourseTaskCard", () => {
 				await threeDotButton.trigger("click");
 
 				const moreActionButton = wrapper.findComponent(
-					`[data-testid="room-task-card-menu-revert-0"]`
+					`[data-testid="course-task-card-menu-revert-0"]`
 				);
 				await moreActionButton.trigger("click");
 
@@ -445,7 +445,7 @@ describe("@/components/molecules/CourseTaskCard", () => {
 				await threeDotButton.trigger("click");
 
 				const moreActionButton = wrapper.findComponent(
-					`[data-testid="room-task-card-menu-restore-0"]`
+					`[data-testid="course-task-card-menu-restore-0"]`
 				);
 				await moreActionButton.trigger("click");
 
@@ -458,7 +458,7 @@ describe("@/components/molecules/CourseTaskCard", () => {
 				await threeDotButton.trigger("click");
 
 				const moreActionButton = wrapper.findComponent(
-					`[data-testid="room-task-card-menu-remove-0"]`
+					`[data-testid="course-task-card-menu-remove-0"]`
 				);
 				await moreActionButton.trigger("click");
 
@@ -587,7 +587,7 @@ describe("@/components/molecules/CourseTaskCard", () => {
 						await threeDotButton.trigger("click");
 
 						const moreActionButton = wrapper.findComponent(
-							`[data-testid="room-task-card-menu-copy-0"]`
+							`[data-testid="course-task-card-menu-copy-0"]`
 						);
 						await moreActionButton.trigger("click");
 
@@ -607,7 +607,7 @@ describe("@/components/molecules/CourseTaskCard", () => {
 						await threeDotButton.trigger("click");
 
 						const moreActionButton = wrapper.findAll(
-							`[data-testid="room-task-card-menu-copy-0"]`
+							`[data-testid="course-task-card-menu-copy-0"]`
 						);
 
 						expect(moreActionButton).toHaveLength(0);
@@ -650,7 +650,7 @@ describe("@/components/molecules/CourseTaskCard", () => {
 				await threeDotButton.trigger("click");
 
 				const moreActionButton = wrapper.findComponent(
-					`[data-testid="room-task-card-menu-restore-0"]`
+					`[data-testid="course-task-card-menu-restore-0"]`
 				);
 				await moreActionButton.trigger("click");
 

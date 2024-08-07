@@ -2,7 +2,7 @@
 	<vCustomDialog
 		ref="customDialog"
 		:is-open="isOpen"
-		class="room-dialog"
+		class="course-dialog"
 		@dialog-closed="$emit('update:isOpen', false)"
 	>
 		<template #title>

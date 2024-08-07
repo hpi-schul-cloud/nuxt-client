@@ -7,7 +7,7 @@
 		tabindex="0"
 		:variant="isDraft ? 'outlined' : 'elevated'"
 		hover
-		:data-testid="`room-task-card-${taskCardIndex}`"
+		:data-testid="`course-task-card-${taskCardIndex}`"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -122,7 +122,7 @@ export default {
 			required: true,
 			validator: (task) => taskRequiredKeys.every((key) => key in task),
 		},
-		room: {
+		course: {
 			type: Object,
 			default: () => ({}),
 		},
@@ -235,14 +235,14 @@ export default {
 					name: `${this.task.status.submitted}/${
 						this.task.status.maxSubmissions
 					} ${this.$t("pages.room.taskCard.teacher.label.submitted")}`,
-					testid: `room-task-card-chip-submitted-${this.taskCardIndex}`,
+					testid: `course-task-card-chip-submitted-${this.taskCardIndex}`,
 				});
 
 				roleBasedChips[Roles.Teacher].push({
 					name: `${this.task.status.graded}/${
 						this.task.status.maxSubmissions
 					} ${this.$t("pages.room.taskCard.label.graded")}`,
-					testid: `room-task-card-chip-graded-${this.taskCardIndex}`,
+					testid: `course-task-card-chip-graded-${this.taskCardIndex}`,
 				});
 
 				if (this.isOverDue) {
@@ -250,7 +250,7 @@ export default {
 						icon: "$taskMissed",
 						name: this.$t(`pages.room.taskCard.teacher.label.overdue`),
 						class: "overdue",
-						testid: `room-task-card-chip-overdue-${this.taskCardIndex}`,
+						testid: `course-task-card-chip-overdue-${this.taskCardIndex}`,
 					});
 				}
 			}
@@ -261,7 +261,7 @@ export default {
 						icon: "$taskDone",
 						name: this.$t(`pages.room.taskCard.student.label.submitted`),
 						class: "submitted",
-						testid: `room-task-card-chip-submitted-${this.taskCardIndex}`,
+						testid: `course-task-card-chip-submitted-${this.taskCardIndex}`,
 					});
 				}
 
@@ -270,13 +270,13 @@ export default {
 						icon: "$taskDone",
 						name: this.$t(`pages.room.taskCard.student.label.submitted`),
 						class: "submitted",
-						testid: `room-task-card-chip-submitted-${this.taskCardIndex}`,
+						testid: `course-task-card-chip-submitted-${this.taskCardIndex}`,
 					});
 					roleBasedChips[Roles.Student].push({
 						icon: this.icons.mdiTextBoxCheckOutline,
 						name: this.$t(`pages.room.taskCard.label.graded`),
 						class: "graded",
-						testid: `room-task-card-chip-graded-${this.taskCardIndex}`,
+						testid: `course-task-card-chip-graded-${this.taskCardIndex}`,
 					});
 				}
 
@@ -302,10 +302,10 @@ export default {
 					icon: this.icons.mdiPencilOutline,
 					action: () =>
 						this.redirectAction(
-							`/homework/${this.task.id}/edit?returnUrl=rooms/${this.room.roomId}`
+							`/homework/${this.task.id}/edit?returnUrl=rooms/${this.course.roomId}`
 						),
 					name: this.$t("pages.room.taskCard.label.edit"),
-					dataTestId: `room-task-card-menu-edit-${this.taskCardIndex}`,
+					dataTestId: `course-task-card-menu-edit-${this.taskCardIndex}`,
 				});
 
 				if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
@@ -313,7 +313,7 @@ export default {
 						icon: this.icons.mdiContentCopy,
 						action: () => this.copyCard(),
 						name: this.$t("common.actions.copy"),
-						dataTestId: `room-task-card-menu-copy-${this.taskCardIndex}`,
+						dataTestId: `course-task-card-menu-copy-${this.taskCardIndex}`,
 					});
 				}
 
@@ -322,7 +322,7 @@ export default {
 						icon: this.icons.mdiShareVariantOutline,
 						action: () => this.$emit("share-task", this.task.id),
 						name: this.$t("common.actions.shareCopy"),
-						dataTestId: `room-task-card-menu-share-${this.taskCardIndex}`,
+						dataTestId: `course-task-card-menu-share-${this.taskCardIndex}`,
 					});
 				}
 
@@ -331,7 +331,7 @@ export default {
 						icon: this.icons.mdiUndoVariant,
 						action: () => this.unPublishCard(),
 						name: this.$t("pages.room.cards.label.revert"),
-						dataTestId: `room-task-card-menu-revert-${this.taskCardIndex}`,
+						dataTestId: `course-task-card-menu-revert-${this.taskCardIndex}`,
 					});
 				}
 
@@ -339,7 +339,7 @@ export default {
 					icon: this.icons.mdiTrashCanOutline,
 					action: () => this.$emit("delete-task"),
 					name: this.$t("common.actions.delete"),
-					dataTestId: `room-task-card-menu-remove-${this.taskCardIndex}`,
+					dataTestId: `course-task-card-menu-remove-${this.taskCardIndex}`,
 				});
 			}
 
@@ -348,13 +348,13 @@ export default {
 					icon: this.icons.mdiUndoVariant,
 					action: () => this.restoreCard(),
 					name: this.$t("common.labels.restore"),
-					dataTestId: `room-task-card-menu-restore-${this.taskCardIndex}`,
+					dataTestId: `course-task-card-menu-restore-${this.taskCardIndex}`,
 				});
 				roleBasedMoreActions[Roles.Student].push({
 					icon: this.icons.mdiUndoVariant,
 					action: () => this.restoreCard(),
 					name: this.$t("common.labels.restore"),
-					dataTestId: `room-task-card-menu-restore-${this.taskCardIndex}`,
+					dataTestId: `course-task-card-menu-restore-${this.taskCardIndex}`,
 				});
 			}
 			return roleBasedMoreActions;
