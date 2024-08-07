@@ -8,6 +8,7 @@
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
 		@keydown.up.down="onKeydownArrow"
+		@keydown.stop
 	>
 		<FileContent
 			v-if="fileProperties && isUploading !== true"
@@ -157,6 +158,7 @@ export default defineComponent({
 		const onKeydownArrow = (event: KeyboardEvent) => {
 			if (props.isEditMode) {
 				event.preventDefault();
+				console.log("emit move-keyboard:edit");
 				emit("move-keyboard:edit", event);
 			}
 		};
