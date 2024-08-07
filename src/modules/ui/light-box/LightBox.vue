@@ -8,8 +8,6 @@
 				data-testid="light-box-close-btn"
 			/>
 
-			<v-icon size="20" class="mr-1">{{ mdiFileDocumentOutline }}</v-icon>
-
 			<v-toolbar-title v-if="lightBoxOptions.name !== ''">
 				{{ lightBoxOptions.name }}
 			</v-toolbar-title>
@@ -35,7 +33,7 @@
 
 <script setup lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
-import { mdiClose, mdiFileDocumentOutline, mdiTrayArrowDown } from "@mdi/js";
+import { mdiClose, mdiTrayArrowDown } from "@mdi/js";
 import { onKeyStroke } from "@vueuse/core";
 import { ref, watch } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";
