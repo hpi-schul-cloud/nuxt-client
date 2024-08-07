@@ -20,7 +20,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount, VueWrapper } from "@vue/test-utils";
-import RoomDashboard from "./RoomDashboard.vue";
+import CourseDashboard from "./CourseDashboard.vue";
 
 import { envsFactory } from "@@/tests/test-utils";
 import { createMock } from "@golevelup/ts-jest";
@@ -136,7 +136,7 @@ const getWrapper = (props: any, options?: object) => {
 	const router = createMock<Router>();
 	useRouterMock.mockReturnValue(router);
 
-	const wrapper = mount(RoomDashboard, {
+	const wrapper = mount(CourseDashboard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -152,7 +152,7 @@ const getWrapper = (props: any, options?: object) => {
 	return wrapper;
 };
 
-describe("@/components/templates/RoomDashboard.vue", () => {
+describe("@/components/templates/CourseDashboard.vue", () => {
 	beforeEach(() => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");

@@ -10,7 +10,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
-import RoomTaskCard from "./RoomTaskCard.vue";
+import CourseTaskCard from "./CourseTaskCard.vue";
 
 const testTask = {
 	id: "123",
@@ -193,7 +193,7 @@ const getWrapper = (
 	},
 	options?: object
 ) => {
-	return mount(RoomTaskCard, {
+	return mount(CourseTaskCard, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
@@ -215,7 +215,7 @@ const getWrapper = (
 	});
 };
 
-describe("@/components/molecules/RoomTaskCard", () => {
+describe("@/components/molecules/CourseTaskCard", () => {
 	beforeEach(() => {
 		window.location.pathname = "";
 		setupStores({ envConfigModule: EnvConfigModule });

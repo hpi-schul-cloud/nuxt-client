@@ -188,7 +188,7 @@ const getWrapper = (
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
 			stubs: {
-				RoomDashboard: true,
+				CourseDashboard: true,
 				CourseExternalToolsOverview: true,
 				EndCourseSyncDialog: true,
 			},

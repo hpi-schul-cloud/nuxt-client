@@ -214,7 +214,7 @@ describe("CourseModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 				const iterator = wrapper.findComponent(CourseAvatarIterator);
-				const roomItem = {
+				const courseItem = {
 					id: "dummy id",
 					title: "dummy title",
 					shortTitle: "dummy short title",
@@ -222,17 +222,17 @@ describe("CourseModal", () => {
 					xPosition: 0,
 					yPosition: 0,
 				};
-				iterator.vm.$emit("startDrag", roomItem);
+				iterator.vm.$emit("startDrag", courseItem);
 
-				return { wrapper, roomItem };
+				return { wrapper, courseItem };
 			};
 
 			it("should emit 'drag-from-group'", async () => {
-				const { wrapper, roomItem } = await setup();
+				const { wrapper, courseItem } = await setup();
 
 				const emitted = wrapper.emitted("drag-from-group");
 				expect(emitted).toHaveLength(1);
-				expect(emitted && emitted[0][0]).toEqual(roomItem);
+				expect(emitted && emitted[0][0]).toEqual(courseItem);
 			});
 		});
 	});

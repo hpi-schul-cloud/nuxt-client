@@ -110,7 +110,7 @@ import ShareModal from "@/components/share/ShareModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe";
-import RoomDashboard from "@/components/templates/RoomDashboard";
+import CourseDashboard from "@/components/templates/CourseDashboard";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {
@@ -170,7 +170,7 @@ export default defineComponent({
 		EndCourseSyncDialog,
 		vCustomDialog,
 		DefaultWireframe,
-		RoomDashboard,
+		CourseDashboard,
 		RoomDotMenu,
 		CopyResultModal,
 		ShareModal,
@@ -228,7 +228,7 @@ export default defineComponent({
 					label: this.$t("common.words.learnContent"),
 					icon: mdiFileDocumentOutline,
 					dataTestId: "learnContent-tab",
-					component: RoomDashboard,
+					component: CourseDashboard,
 					fabItems: this.learnContentFabItems,
 				},
 			];
