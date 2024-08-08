@@ -47,7 +47,7 @@ const setup = (
 	options?: object
 ) => {
 	const room = {
-		roomId: "456",
+		courseId: "456",
 		displayColor: "#54616e",
 	};
 	const ariaLabel =
@@ -187,7 +187,7 @@ describe("@/components/molecules/CourseLessonCard", () => {
 				});
 
 				const { wrapper, room } = setup({ lesson: baseTestLesson, userRole });
-				const url = `/courses/${room.roomId}/topics/${baseTestLesson.id}/edit?returnUrl=rooms/${room.roomId}`;
+				const url = `/courses/${room.courseId}/topics/${baseTestLesson.id}/edit?returnUrl=rooms/${room.courseId}`;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");

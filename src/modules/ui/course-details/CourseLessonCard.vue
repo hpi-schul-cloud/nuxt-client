@@ -7,7 +7,7 @@
 		tabindex="0"
 		:variant="isHidden ? 'outlined' : 'elevated'"
 		hover
-		:data-testid="`room-lesson-card-${lessonCardIndex}`"
+		:data-testid="`course-lesson-card-${lessonCardIndex}`"
 		@click="handleClick"
 		@keydown.enter.self="handleClick"
 		@keydown.up.prevent="onKeyPress"
@@ -147,7 +147,7 @@ const moreActionsMenuItems = computed(() => {
 		icon: mdiPencilOutline,
 		action: () =>
 			redirectAction(
-				`/courses/${props.room.roomId}/topics/${props.lesson.id}/edit?returnUrl=rooms/${props.room.roomId}`
+				`/courses/${props.room.courseId}/topics/${props.lesson.id}/edit?returnUrl=rooms/${props.room.courseId}`
 			),
 		name: t("pages.room.taskCard.label.edit"),
 		dataTestId: `lesson-card-menu-action-edit-${
@@ -251,7 +251,7 @@ const taskChipValue = computed(() => {
 
 const handleClick = () => {
 	if (!props.dragInProgress) {
-		window.location.href = `/courses/${props.room.roomId}/topics/${props.lesson.id}`;
+		window.location.href = `/courses/${props.room.courseId}/topics/${props.lesson.id}`;
 	}
 };
 
