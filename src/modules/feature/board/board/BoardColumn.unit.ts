@@ -47,14 +47,16 @@ describe("BoardColumn", () => {
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 	});
 
-	const cards = cardSkeletonResponseFactory.buildList(3);
-	const column = columnResponseFactory.build({
-		cards,
-	});
-
 	const setup = (options?: {
 		permissions?: Partial<BoardPermissionChecks>;
+		cardsCount?: number;
 	}) => {
+		const cards = cardSkeletonResponseFactory.buildList(
+			options?.cardsCount ?? 3
+		);
+		const column = columnResponseFactory.build({
+			cards,
+		});
 		document.body.setAttribute("data-app", "true");
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
@@ -121,6 +123,35 @@ describe("BoardColumn", () => {
 			containerComponent.vm.$emit("end", emitObject);
 
 			expect(store.moveCardRequest).toHaveBeenCalled();
+		});
+
+		describe("when a card is moved to its column and the same position", () => {
+			it("should not call 'moveCardRequest' method", async () => {
+				const { wrapper, store } = setup({ cardsCount: 1 });
+
+				const emitObject = {
+					item: {
+						dataset: {
+							cardId: "card-id",
+						},
+					},
+					to: {
+						dataset: {
+							columnId: "same-column-id",
+						},
+					},
+					from: {
+						dataset: {
+							columnId: "same-column-id",
+						},
+					},
+				};
+
+				const containerComponent = wrapper.findComponent({ name: "Sortable" });
+				containerComponent.vm.$emit("end", emitObject);
+
+				expect(store.moveCardRequest).not.toHaveBeenCalled();
+			});
 		});
 	});
 
