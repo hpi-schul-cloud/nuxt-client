@@ -150,7 +150,7 @@ const getWrapper = (
 	});
 	courseModule = createModuleMocks(CourseModule, {
 		fetchContent: jest.fn(),
-		getRoomData: mockData,
+		getCourseData: mockData,
 		getPermissionData: permissionData,
 	});
 

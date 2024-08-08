@@ -587,7 +587,7 @@ describe("room module", () => {
 					],
 				};
 
-				expect(courseModule.getRoomData).not.toStrictEqual(expectedData);
+				expect(courseModule.getCourseData).not.toStrictEqual(expectedData);
 				courseModule.setCourseData(expectedData as any);
 				expect(courseModule.roomData).toStrictEqual(expectedData);
 			});
@@ -712,7 +712,7 @@ describe("room module", () => {
 				};
 
 				courseModule.setCourseData(expectedData as any);
-				expect(courseModule.getRoomData).toStrictEqual(expectedData);
+				expect(courseModule.getCourseData).toStrictEqual(expectedData);
 			});
 		});
 

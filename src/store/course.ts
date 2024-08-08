@@ -326,7 +326,7 @@ export default class CourseModule extends VuexModule {
 		return this.error;
 	}
 
-	get getRoomData(): SingleColumnBoardResponse {
+	get getCourseData(): SingleColumnBoardResponse {
 		return this.roomData;
 	}
 

@@ -34,7 +34,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 		const roomTitle = "Room Title";
 		const courseModule = createModuleMocks(CourseModule, {
-			getRoomData: {
+			getCourseData: {
 				title: roomTitle,
 				roomId: "contextId",
 				displayColor: "#ffffff",

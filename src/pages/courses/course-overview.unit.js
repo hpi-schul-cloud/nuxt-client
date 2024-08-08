@@ -175,7 +175,7 @@ describe("@/pages/CourseOverview", () => {
 		jest.clearAllMocks();
 	});
 
-	it("should fetch the room data", async () => {
+	it("should fetch the course data", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
 

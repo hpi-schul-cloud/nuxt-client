@@ -52,7 +52,7 @@ describe("RoomVideoConferenceSection", () => {
 		});
 
 		const courseModule = createModuleMocks(CourseModule, {
-			getRoomData: {
+			getCourseData: {
 				roomId: props.roomId,
 				title: "roomName",
 				displayColor: "displayColor",

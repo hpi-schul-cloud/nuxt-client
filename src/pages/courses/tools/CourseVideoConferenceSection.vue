@@ -143,7 +143,7 @@ export default defineComponent({
 		);
 		const courseModule: CourseModule = injectStrict(COURSE_MODULE_KEY);
 
-		const roomName = computed(() => courseModule.getRoomData.title ?? "");
+		const roomName = computed(() => courseModule.getCourseData.title ?? "");
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 			() => videoConferenceModule.getVideoConferenceInfo

@@ -59,7 +59,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const courseTitle: ComputedRef<string> = computed(
-	() => courseModule.getRoomData.title
+	() => courseModule.getCourseData.title
 );
 
 const router: Router = useRouter();

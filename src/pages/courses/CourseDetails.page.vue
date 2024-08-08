@@ -353,7 +353,7 @@ export default defineComponent({
 			return items;
 		},
 		roomData() {
-			return this.courseModule.getRoomData;
+			return this.courseModule.getCourseData;
 		},
 		scopedPermissions() {
 			return this.courseModule.getPermissionData || [];

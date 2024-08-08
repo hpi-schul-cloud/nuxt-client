@@ -220,7 +220,7 @@ const allColumnBoardsSelected = computed(() => {
 });
 
 watch(
-	() => courseModule.getRoomData.elements,
+	() => courseModule.getCourseData.elements,
 	(newValue) => {
 		allTopics.value = [];
 		allTasks.value = [];

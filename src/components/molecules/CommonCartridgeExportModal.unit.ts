@@ -30,7 +30,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			resetExportFlow: jest.fn(),
 		});
 		courseModuleMock = createModuleMocks(CourseModule, {
-			getRoomData: {
+			getCourseData: {
 				roomId: "1",
 				title: "title",
 				displayColor: "color",
