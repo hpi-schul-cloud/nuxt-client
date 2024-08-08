@@ -76,7 +76,6 @@ import {
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
-import { delay } from "./utils/helpers";
 
 export const app = createApp(App);
 
@@ -190,10 +189,6 @@ app.use(VueDOMPurifyHTML, {
 		commonCartridgeImportModule
 	);
 	app.provide(THEME_KEY.valueOf(), themeConfig);
-
-	// FIXME wait for a small period of time to make sure vue-router is initialized
-	// otherwise it is trying to match the '/' route and not the provided web history route
-	await delay(500);
 
 	app.mount("#app");
 })();
