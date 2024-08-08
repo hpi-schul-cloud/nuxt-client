@@ -282,7 +282,7 @@ describe("BoardColumn", () => {
 		it("'componentKey' value should be changed", async () => {
 			const { wrapper, store } = setup();
 			expect(wrapper.vm.componentKey).toBe(0);
-			store.elementIdToRender = column.id;
+			store.elementIdToRender = wrapper.vm.column.id;
 			await nextTick();
 			expect(wrapper.vm.componentKey).toBe(1);
 		});
