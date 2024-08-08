@@ -107,7 +107,7 @@
 						<template v-else>
 							<vRoomEmptyAvatar
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
-								:size="dimensions.cellWidth"
+								:size="emptyAvatarSize"
 								:show-outline="dragging"
 								@dropEmptyAvatar="setDropElement({ x: colIndex, y: rowIndex })"
 								data-avatar-type="vRoomEmptyAvatar"
@@ -247,6 +247,9 @@ export default defineComponent({
 		importToken() {
 			return this.$route.query.import;
 		},
+		emptyAvatarSize() {
+			return this.roomsFeatureEnabled ? "5em" : this.dimensions.cellWidth;
+		},
 	},
 	async created() {
 		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
@@ -269,13 +272,13 @@ export default defineComponent({
 					this.dimensions.cellWidth = "4em";
 					break;
 				case "desktop":
-					this.dimensions.colCount = 3;
-					this.dimensions.cellWidth = "222px";
+					this.dimensions.colCount = this.roomsFeatureEnabled ? 3 : 4;
+					this.dimensions.cellWidth = this.roomsFeatureEnabled ? "15em" : "5em";
 					this.allowDragging = true;
 					break;
 				case "large":
-					this.dimensions.colCount = 3;
-					this.dimensions.cellWidth = "222px";
+					this.dimensions.colCount = this.roomsFeatureEnabled ? 3 : 4;
+					this.dimensions.cellWidth = this.roomsFeatureEnabled ? "15em" : "5em";
 					this.allowDragging = true;
 					break;
 				case "mobile":
