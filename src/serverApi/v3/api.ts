@@ -1852,12 +1852,6 @@ export interface CourseMetadataResponse {
      * @memberof CourseMetadataResponse
      */
     copyingSince?: string;
-    /**
-     * Synchronized with group
-     * @type {string}
-     * @memberof CourseMetadataResponse
-     */
-    syncedWithGroup?: string;
 }
 /**
  * 

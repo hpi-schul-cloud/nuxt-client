@@ -1,5 +1,5 @@
 import { SchoolYearQueryType } from "@/serverApi/v3";
-import { BusinessError } from "@/store/types/commons";
+import { BusinessError, Pagination } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ref, Ref } from "vue";
@@ -14,34 +14,43 @@ export const useCourseList = () => {
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 	const courses: Ref<CourseInfo[]> = ref([]);
-	const total: Ref<number> = ref(0);
-	const limit: Ref<number> = ref(10);
-	const skip: Ref<number> = ref(0);
+	const pagination: Ref<Pagination> = ref({ total: 0, limit: 10, skip: 0 });
+	const page: Ref<number> = ref(1);
+	const key: Ref<string | undefined> = ref();
+	const sortOrder: Ref<boolean | "asc" | "desc"> = ref("asc");
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 
+	const setSortBy = (sortBy: string | undefined) => {
+		key.value = sortBy;
+	};
+
+	const setSortOrder = (order: boolean | "asc" | "desc") => {
+		sortOrder.value = order;
+	};
+
 	const fetchCourses = async (
-		schoolYear: SchoolYearQueryType,
-		sortItem: { key: string; order: any }
+		schoolYear: SchoolYearQueryType
 	): Promise<void> => {
 		isLoading.value = true;
 
-		sortItem.order = sortItem.order === "desc" ? -1 : 1;
+		const order: number = sortOrder.value === "desc" ? -1 : 1;
 
 		try {
 			const response = await loadCoursesForSchool(
 				schoolYear,
-				limit.value,
-				skip.value,
-				sortItem
+				pagination.value.limit,
+				pagination.value.skip,
+				key.value,
+				order
 			);
 
 			courses.value = response.data.data.map((course: any) => {
 				return CourseInfoMapper.mapToCourseInfo(course);
 			});
 
-			total.value = response.data.total;
+			pagination.value.total = response.data.total;
 		} catch (errorResponse) {
 			handleError(errorResponse);
 		}
@@ -66,9 +75,11 @@ export const useCourseList = () => {
 
 	return {
 		isLoading,
-		total,
-		skip,
-		limit,
+		pagination,
+		page,
+		courses,
+		setSortBy,
+		setSortOrder,
 		fetchCourses,
 	};
 };

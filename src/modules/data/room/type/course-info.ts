@@ -1,11 +1,9 @@
-import { ClassInfoResponse } from "../../../../serverApi/v3";
-
 export interface CourseInfoProps {
 	id: string;
 	name: string;
 	teacherNames: string[];
 	classes: ClassInfo[];
-	syncedGroup?: ClassInfoResponse;
+	syncedWithGroup?: ClassInfo;
 }
 
 export class CourseInfo implements CourseInfoProps {
@@ -13,18 +11,22 @@ export class CourseInfo implements CourseInfoProps {
 	name: string;
 	classes: ClassInfo[];
 	teacherNames: string[];
-	syncedGroup?: ClassInfoResponse;
+	syncedWithGroup?: ClassInfo;
 
 	constructor(props: CourseInfoProps) {
 		this.id = props.id;
 		this.name = props.name;
 		this.teacherNames = props.teacherNames;
 		this.classes = props.classes;
-		this.syncedGroup = props.syncedGroup;
+		this.syncedWithGroup = props.syncedWithGroup;
 	}
 }
 
 export interface ClassInfo {
 	id: string;
+	name: string;
+}
+
+export interface teacherName {
 	name: string;
 }

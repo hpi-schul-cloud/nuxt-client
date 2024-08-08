@@ -6,8 +6,8 @@ export class CourseInfoMapper {
 			id: courseInfoResponse.id,
 			name: courseInfoResponse.name,
 			classes: this.mapToClassesInfos(courseInfoResponse.classIds),
-			syncedGroup: courseInfoResponse.syncedGroup,
-			teacherNames: courseInfoResponse.teacherNames,
+			syncedWithGroup: this.mapToClassInfo(courseInfoResponse.syncedWithGroup),
+			teacherNames: this.mapToTeacherNames(courseInfoResponse.teacherNames),
 		};
 
 		return mapped;
@@ -26,6 +26,14 @@ export class CourseInfoMapper {
 			id: clazz.id,
 			name: clazz.name,
 		};
+
+		return mapped;
+	}
+
+	private static mapToTeacherNames(teachers: any[]): string[] {
+		const mapped = teachers.map((teacher: any) => {
+			return teacher.name;
+		});
 
 		return mapped;
 	}

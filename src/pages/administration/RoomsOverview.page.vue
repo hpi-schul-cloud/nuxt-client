@@ -22,7 +22,7 @@
 		</template>
 		<v-data-table-server
 			:headers="headers"
-			:items="rooms"
+			:items="courses"
 			v-model:items-per-page="pagination.limit"
 			:items-length="pagination.total"
 			:page="page"
@@ -93,7 +93,7 @@
 					</v-btn>
 
 					<v-btn
-						v-if="item.isSynchronized"
+						v-if="courseSyncEnabled && item.syncedWithGroup"
 						:title="t('feature-course-sync.startRoomSyncDialog.title')"
 						:aria-label="t('feature-course-sync.startRoomSyncDialog.title')"
 						data-testid="class-table-start-room-sync-btn"
@@ -160,30 +160,20 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import {
-	ClassRequestContext,
-	SchoolYearQueryType,
-	SchulcloudTheme,
-} from "@/serverApi/v3";
+import { SchoolYearQueryType, SchulcloudTheme } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
-import GroupModule from "@/store/group";
-import SchoolsModule from "@/store/schools";
-import { ClassInfo, CourseInfo } from "@/store/types/class-info";
-import { Pagination } from "@/store/types/commons";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import {
-  AUTH_MODULE_KEY,
-  ENV_CONFIG_MODULE_KEY,
-  injectStrict, ROOMS_MODULE_KEY,
-  SCHOOLS_MODULE_KEY
+	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { EndCourseSyncDialog, GroupSelectionDialog } from "@feature-course-sync";
+import { GroupSelectionDialog } from "@feature-course-sync";
 import { RenderHTML } from "@feature-render-html";
 import {
 	mdiAccountGroupOutline,
-	mdiArrowUp,
 	mdiPencilOutline,
 	mdiSyncOff,
 	mdiTrashCanOutline,
@@ -192,14 +182,12 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { RoomsData } from "@/store/types/rooms";
-import RoomsModule from "../../store/rooms";
+import { CourseInfo, useCourseList } from "@data-room";
 import { groupModule } from "../../store";
-import { useCourseList, useCourseApi } from "@data-room";
 
 type Tab = "current" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
-type CourseSortItem = { key: 'name'; order?: boolean | "asc" | "desc" };
+export type CourseSortItem = { key: string; order?: boolean | "asc" | "desc" };
 
 const props = defineProps({
 	tab: {
@@ -208,15 +196,23 @@ const props = defineProps({
 	},
 });
 
-const roomsModule: RoomsModule = injectStrict(ROOMS_MODULE_KEY);
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-const schoolsModule: SchoolsModule = injectStrict(SCHOOLS_MODULE_KEY);
 const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
 
 const { t } = useI18n();
+
+const {
+	fetchCourses,
+	pagination,
+	page,
+	isLoading,
+	courses,
+	setSortBy,
+	setSortOrder,
+} = useCourseList();
 
 const activeTab = computed({
 	get() {
@@ -256,72 +252,37 @@ const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
 	}
 });
 
-const currentYear: ComputedRef<string> = computed(
-	() => schoolsModule.getSchool.years.activeYear.name
-);
-
-const classes: ComputedRef<CourseInfo[]> = computed(
-	() => groupModule.getClasses
-);
-
-const rooms: ComputedRef<RoomsData[]> = computed(() => {
-    const elements = roomsModule.getAllElements;
-
-  }
-
-);
-
-const isLoading: ComputedRef<boolean> = computed(() => groupModule.getLoading);
+//const courses: ComputedRef<CourseInfo[]> = computed(() => {
+//  fetchCourses(schoolYearQueryType.value, {key: "name",order: "asc"});
+//  }
+//);
 
 const hasPermission: ComputedRef<boolean> = computed(() =>
 	authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
 );
 
-const showRoomAction = (item: RoomsData) => hasPermission.value && item.id;
+const showRoomAction = (item: CourseInfo) => hasPermission.value && item.id;
 
-const showGroupAction = (item: RoomsData) =>
-	hasPermission.value && item.isSynchronized;
+const showGroupAction = (item: CourseInfo) =>
+	hasPermission.value && item.syncedWithGroup;
 
 const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
 const isStartSyncDialogOpen: Ref<boolean> = ref(false);
 
-const selectedItem: Ref<RoomsData | undefined> = ref();
+const selectedItem: Ref<CourseInfo | undefined> = ref();
 
 const selectedItemName: ComputedRef<string> = computed(
-	() => selectedItem.value?.title || "???"
+	() => selectedItem.value?.name || "???"
 );
 
-let sort: CourseSortItem;
-
-
-const selectedItemForSync: ComputedRef<{
-	courseName: string;
-	groupName: string;
-  roomId: string;
-}> = computed(() => {
-
-  const groups = groupModule.getClasses;
-
-  groups.filter(group.synchronizedCourse === roomId)
-
-	const synchronizedCourse: CourseInfo | undefined =
-		selectedItem.value?.;
-
-	return {
-		courseId: synchronizedCourse?.id,
-		courseName: synchronizedCourse?.name ?? "",
-		groupName: selectedItem.value?.name ?? "",
-	};
-});
-
-const onClickStartSyncIcon = (selectedClass: RoomsData) => {
-	selectedItem.value = selectedClass;
+const onClickStartSyncIcon = (selectedCourse: CourseInfo) => {
+	selectedItem.value = selectedCourse;
 	isStartSyncDialogOpen.value = true;
 };
 
-const onClickDeleteIcon = (selectedClass: RoomsData) => {
-	selectedItem.value = selectedClass;
+const onClickDeleteIcon = (selectedCourse: CourseInfo) => {
+	selectedItem.value = selectedCourse;
 	isDeleteDialogOpen.value = true;
 };
 
@@ -330,20 +291,12 @@ const onCancelClassDeletion = () => {
 	isDeleteDialogOpen.value = false;
 };
 
-const pagination: ComputedRef<Pagination> = computed(
-	() => groupModule.getPagination
-);
-
-
-
-const page: ComputedRef<number> = computed(() => groupModule.getPage);
-
 const courseSyncEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED
 );
 
 const headers = computed(() => {
-	const headerList = [
+	const headerList: unknown[] = [
 		{
 			value: "name",
 			title: t("common.labels.course"),
@@ -352,19 +305,14 @@ const headers = computed(() => {
 	];
 	headerList.push(
 		{
-			value: "externalSourceName",
-			title: t("common.labels.externalsource"),
+			value: "classes",
+			title: t("common.labels.classes"),
 			sortable: true,
 		},
 		{
 			key: "teacherNames",
-			value: (item: ClassInfo) => item.teacherNames.join(", "),
+			value: (item: CourseInfo) => item.teacherNames.join(", "),
 			title: t("common.labels.teacher"),
-			sortable: true,
-		},
-		{
-			value: "studentCount",
-			title: t("common.labels.students"),
 			sortable: true,
 		},
 		{
@@ -386,15 +334,8 @@ const onConfirmClassDeletion = async () => {
 	}
 };
 
-const onConfirmSyncCourseWithGroup = async () => {
-  if (selectedItem.value) {
-    isCourseSyncDialogOpen.value = true;
-  }
-};
-
 const loadCourseList = async () => {
-	await useCourseList.({
-		schoolYearQuery: schoolYearQueryType.value});
+	await fetchCourses(schoolYearQueryType.value);
 };
 
 const onTabsChange = async (tab: string) => {
@@ -407,14 +348,12 @@ const onTabsChange = async (tab: string) => {
 
 const onUpdateSortBy = async (sortBy: CourseSortItem[]) => {
 	const fieldToSortBy: CourseSortItem = sortBy[0];
-	const key = fieldToSortBy
-		? fieldToSortBy.key
-		: 'name';
+	const key: string | undefined = fieldToSortBy ? fieldToSortBy.key : undefined;
+	setSortBy(key);
 
-	const order =
+	const sortOrder =
 		fieldToSortBy?.order === "desc" ? SortOrder.DESC : SortOrder.ASC;
-
-  sort = {key, order}
+	setSortOrder(sortOrder);
 
 	await loadCourseList();
 };
@@ -424,17 +363,17 @@ const onUpdateCurrentPage = async (currentPage: number) => {
 	const skip = (currentPage - 1) * groupModule.getPagination.limit;
 	groupModule.setPagination({ ...pagination.value, skip });
 
-	await loadClassList();
+	await loadCourseList();
 };
 const onUpdateItemsPerPage = async (itemsPerPage: number) => {
 	groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
 
-	await loadClassList();
+	await loadCourseList();
 };
 
 onMounted(() => {
-  await roomsModule.fetchAllElements();
-  onTabsChange(activeTab.value);
+	loadCourseList();
+	onTabsChange(activeTab.value);
 });
 
 const getInstituteTitle: ComputedRef<string> = computed(() => {
