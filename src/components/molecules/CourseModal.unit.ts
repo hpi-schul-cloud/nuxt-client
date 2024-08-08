@@ -105,7 +105,7 @@ describe("CourseModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(coursesModule, "update");
+				const storeCourseUpdateMock = jest.spyOn(coursesModule, "update");
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
@@ -116,11 +116,11 @@ describe("CourseModal", () => {
 				await titleInput.trigger("keyup.enter");
 				await wrapper.vm.$nextTick();
 
-				return { storeRoomUpdateMock, newTitle, wrapper };
+				return { storeCourseUpdateMock, newTitle, wrapper };
 			};
 
 			it("should change name on enter", async () => {
-				const { storeRoomUpdateMock, newTitle } = await setup();
+				const { storeCourseUpdateMock, newTitle } = await setup();
 
 				const expectedGroupData = {
 					id: "",
@@ -131,8 +131,8 @@ describe("CourseModal", () => {
 					yPosition: -1,
 				};
 
-				expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
-				expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
+				expect(storeCourseUpdateMock).toHaveBeenCalledTimes(1);
+				expect(storeCourseUpdateMock).toHaveBeenCalledWith(expectedGroupData);
 			});
 		});
 
@@ -140,7 +140,7 @@ describe("CourseModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(coursesModule, "update");
+				const storeCourseUpdateMock = jest.spyOn(coursesModule, "update");
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
@@ -157,11 +157,11 @@ describe("CourseModal", () => {
 				await titleInput.trigger("keyup.enter");
 				await wrapper.vm.$nextTick();
 
-				return { storeRoomUpdateMock, newTitle2, wrapper };
+				return { storeCourseUpdateMock, newTitle2, wrapper };
 			};
 
 			it("should change name on second enter again", async () => {
-				const { storeRoomUpdateMock, newTitle2 } = await setup();
+				const { storeCourseUpdateMock, newTitle2 } = await setup();
 
 				const expectedGroupData = {
 					id: "",
@@ -172,8 +172,8 @@ describe("CourseModal", () => {
 					yPosition: -1,
 				};
 
-				expect(storeRoomUpdateMock).toHaveBeenCalledTimes(2);
-				expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
+				expect(storeCourseUpdateMock).toHaveBeenCalledTimes(2);
+				expect(storeCourseUpdateMock).toHaveBeenCalledWith(expectedGroupData);
 			});
 		});
 
@@ -181,7 +181,7 @@ describe("CourseModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(coursesModule, "update");
+				const storeCourseUpdateMock = jest.spyOn(coursesModule, "update");
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
@@ -191,11 +191,11 @@ describe("CourseModal", () => {
 				await titleInput.trigger("blur");
 				await wrapper.vm.$nextTick();
 
-				return { storeRoomUpdateMock, newTitle, wrapper };
+				return { storeCourseUpdateMock, newTitle, wrapper };
 			};
 
 			it("should change name on blur", async () => {
-				const { storeRoomUpdateMock, newTitle } = await setup();
+				const { storeCourseUpdateMock, newTitle } = await setup();
 				const expectedGroupData = {
 					id: "",
 					title: newTitle,
@@ -205,8 +205,8 @@ describe("CourseModal", () => {
 					yPosition: -1,
 				};
 
-				expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
-				expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
+				expect(storeCourseUpdateMock).toHaveBeenCalledTimes(1);
+				expect(storeCourseUpdateMock).toHaveBeenCalledWith(expectedGroupData);
 			});
 		});
 

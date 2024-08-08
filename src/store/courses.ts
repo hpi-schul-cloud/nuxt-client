@@ -266,14 +266,14 @@ export default class CoursesModule extends VuexModule {
 				payload.yPosition,
 				{ title: payload.title }
 			);
-			const roomIndex = this.coursesData.findIndex(
-				(room) =>
-					room.xPosition === payload.xPosition &&
-					room.yPosition === payload.yPosition
+			const courseIndex = this.coursesData.findIndex(
+				(course) =>
+					course.xPosition === payload.xPosition &&
+					course.yPosition === payload.yPosition
 			);
 			const coursesData = [...this.coursesData];
-			coursesData[roomIndex] = {
-				...this.coursesData[roomIndex],
+			coursesData[courseIndex] = {
+				...this.coursesData[courseIndex],
 				title: payload.title,
 			};
 			this.setCourseData(coursesData);

@@ -342,7 +342,7 @@ export default class CourseModule extends VuexModule {
 		return this.courseShareToken;
 	}
 
-	get roomIsEmpty(): boolean {
+	get courseIsEmpty(): boolean {
 		return this.finishedLoading && this.courseData.elements.length === 0;
 	}
 

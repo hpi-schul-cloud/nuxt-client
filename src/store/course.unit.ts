@@ -40,7 +40,7 @@ const axiosInitializer = () => {
 
 axiosInitializer();
 
-describe("room module", () => {
+describe("course module", () => {
 	beforeEach(() => {
 		setupStores({
 			authModule: AuthModule,
@@ -556,7 +556,7 @@ describe("room module", () => {
 
 	describe("mutations", () => {
 		describe("setCourseData", () => {
-			it("should set the room data", () => {
+			it("should set the course data", () => {
 				const courseModule = new CourseModule({});
 				const expectedData = {
 					id: "123",
@@ -680,7 +680,7 @@ describe("room module", () => {
 
 	describe("getters", () => {
 		describe("getCoursesData", () => {
-			it("should return rooms state", () => {
+			it("should return courses state", () => {
 				const courseModule = new CourseModule({});
 				const expectedData = {
 					id: "123",
@@ -736,8 +736,8 @@ describe("room module", () => {
 			});
 		});
 
-		describe("roomIsEmpty", () => {
-			it("should return false if there are any elements in the room", () => {
+		describe("courseIsEmpty", () => {
+			it("should return false if there are any elements in the course", () => {
 				const courseModule = new CourseModule({});
 				const testData = {
 					id: "123",
@@ -768,7 +768,7 @@ describe("room module", () => {
 					],
 				};
 				courseModule.setCourseData(testData as any);
-				const result = courseModule.roomIsEmpty;
+				const result = courseModule.courseIsEmpty;
 				expect(result).toStrictEqual(false);
 			});
 			it("should return true if there are no elements in the room", () => {
@@ -780,7 +780,7 @@ describe("room module", () => {
 					elements: [],
 				};
 				courseModule.setCourseData(testData as any);
-				const result = courseModule.roomIsEmpty;
+				const result = courseModule.courseIsEmpty;
 				expect(result).toStrictEqual(true);
 			});
 		});

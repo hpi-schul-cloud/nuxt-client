@@ -95,7 +95,7 @@ describe("vCourseAvatar", () => {
 		expect(avatarComponent.props().size).toStrictEqual("4em");
 	});
 
-	it("should redirect to room page", async () => {
+	it("should redirect to course page", async () => {
 		Object.defineProperty(window, "location", {
 			set: jest.fn(),
 			get: () => createMock<Location>(),
@@ -110,7 +110,7 @@ describe("vCourseAvatar", () => {
 		expect(locationSpy).toHaveBeenCalledWith(mockData.href);
 	});
 
-	it("should redirect to room page if keyboard event triggered", async () => {
+	it("should redirect to course page if keyboard event triggered", async () => {
 		Object.defineProperty(window, "location", {
 			set: jest.fn(),
 			get: () => createMock<Location>(),
@@ -125,7 +125,7 @@ describe("vCourseAvatar", () => {
 		expect(locationSpy).toHaveBeenCalledWith(mockData.href);
 	});
 
-	it("should not redirect to room page if condenseLayout props is true", async () => {
+	it("should not redirect to course page if condenseLayout props is true", async () => {
 		Object.defineProperty(window, "location", {
 			set: jest.fn(),
 			get: () => createMock<Location>(),

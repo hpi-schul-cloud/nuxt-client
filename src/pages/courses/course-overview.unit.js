@@ -102,7 +102,7 @@ setupStores({
 });
 
 const spyMocks = {
-	storeRoomAlignMock: jest
+	storeCourseAlignMock: jest
 		.spyOn(coursesModule, "align")
 		.mockImplementation(async () => ({})),
 	storeModuleFetchMock: jest
@@ -342,7 +342,7 @@ describe("@/pages/CourseOverview", () => {
 		);
 		await emptyAvatarComponent.trigger("drop");
 
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
+		expect(spyMocks.storeCourseAlignMock.mock.calls[0][0]).toStrictEqual(
 			expectedPayload
 		);
 	});
@@ -381,7 +381,7 @@ describe("@/pages/CourseOverview", () => {
 		);
 		await toAvatarComponent.trigger("drop");
 
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
+		expect(spyMocks.storeCourseAlignMock.mock.calls[0][0]).toStrictEqual(
 			expectedPayload
 		);
 	});
@@ -449,7 +449,7 @@ describe("@/pages/CourseOverview", () => {
 		);
 		await emptyAvatarComponent.trigger("drop");
 
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
+		expect(spyMocks.storeCourseAlignMock.mock.calls[0][0]).toStrictEqual(
 			expectedPayload
 		);
 	});
@@ -539,7 +539,7 @@ describe("@/pages/CourseOverview", () => {
 		await toAvatarComponent.trigger("drop");
 
 		await nextTick();
-		expect(spyMocks.storeRoomAlignMock.mock.calls[0][0]).toStrictEqual(
+		expect(spyMocks.storeCourseAlignMock.mock.calls[0][0]).toStrictEqual(
 			expectedPayload
 		);
 	});

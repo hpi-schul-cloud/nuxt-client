@@ -155,7 +155,7 @@
 			</div>
 		</div>
 		<v-custom-empty-state
-			v-if="roomIsEmpty"
+			v-if="courseIsEmpty"
 			:image="emptyState.image"
 			:title="emptyState.title"
 			:img-height="emptyState.maxHeight"
@@ -256,7 +256,7 @@ export default {
 		touchDelay() {
 			return this.isTouchDevice ? 200 : 20;
 		},
-		roomIsEmpty: () => courseModule.roomIsEmpty,
+		courseIsEmpty: () => courseModule.courseIsEmpty,
 		emptyState() {
 			const image = "topics-empty-state";
 			const title = this.$t(`pages.room.${this.role}.emptyState`);
