@@ -215,7 +215,7 @@ export default {
 		ShareModal,
 	},
 	props: {
-		roomDataObject: {
+		courseDataObject: {
 			type: Object,
 			required: true,
 			default: () => ({}),
@@ -268,7 +268,7 @@ export default {
 			};
 		},
 		roomData() {
-			return { ...this.roomDataObject };
+			return { ...this.courseDataObject };
 		},
 	},
 	created() {
