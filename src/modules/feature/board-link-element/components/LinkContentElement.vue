@@ -130,7 +130,7 @@ const ariaLabel = computed(() => {
 });
 
 const onKeydownArrow = (event: KeyboardEvent) => {
-	if (isCreating.value === false) {
+	if (isCreating.value === false && props.isEditMode) {
 		event.preventDefault();
 		emit("move-keyboard:edit", event);
 	}
