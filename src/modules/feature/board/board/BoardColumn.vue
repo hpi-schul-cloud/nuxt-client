@@ -1,5 +1,6 @@
 <template>
-	<div :style="columnStyle" :class="columnClasses" :key="componentKey">
+	<div :style="columnStyle" :class="columnClasses" :key="renderKey">
+		{{ renderKey }}
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
@@ -69,18 +70,14 @@
 
 <script lang="ts">
 import { useDebounceFn } from "@vueuse/core";
-import {
-	PropType,
-	computed,
-	defineComponent,
-	provide,
-	ref,
-	toRef,
-	watch,
-} from "vue";
+import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { useBoardPermissions, useBoardStore } from "@data-board";
+import {
+	useBoardPermissions,
+	useBoardStore,
+	useForceRender,
+} from "@data-board";
 import { useTouchDetection } from "@util-device-detection";
 import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
@@ -98,7 +95,6 @@ import {
 
 import { Sortable } from "sortablejs-vue3";
 import { SortableEvent } from "sortablejs";
-import { storeToRefs } from "pinia";
 
 export default defineComponent({
 	name: "BoardColumn",
@@ -320,21 +316,15 @@ export default defineComponent({
 			return classes;
 		});
 
-		const { elementIdToRender } = storeToRefs(boardStore);
-		const componentKey = ref(0);
-
-		watch(elementIdToRender, async (newVal) => {
-			if (newVal == props.column.id) {
-				componentKey.value++;
-			}
-		});
+		const { getRenderKey } = useForceRender();
+		const renderKey = computed(() => getRenderKey(props.column.id));
 
 		return {
 			cardDropPlaceholderOptions,
 			columnClasses,
 			columnStyle,
 			colWidth,
-			componentKey,
+			renderKey,
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
