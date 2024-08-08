@@ -79,7 +79,7 @@ const mockData = [
 	},
 ];
 
-describe("@/pages/room-list.vue", () => {
+describe("@/pages/course-list.vue", () => {
 	beforeEach(() => {
 		setupStores({
 			coursesModule: CoursesModule,

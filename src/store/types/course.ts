@@ -45,7 +45,7 @@ export enum CourseFeatures {
 }
 
 export type CourseData = {
-	roomId: string;
+	courseId: string;
 	title: string;
 	displayColor: string;
 	elements: [
