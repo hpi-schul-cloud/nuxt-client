@@ -96,7 +96,7 @@ const props = defineProps({
 		validator: (lesson: LessonData) =>
 			["createdAt", "id", "name"].every((key) => key in lesson),
 	},
-	room: {
+	course: {
 		type: Object as PropType<Partial<CourseData>>,
 		required: true,
 	},
@@ -147,7 +147,7 @@ const moreActionsMenuItems = computed(() => {
 		icon: mdiPencilOutline,
 		action: () =>
 			redirectAction(
-				`/courses/${props.room.courseId}/topics/${props.lesson.id}/edit?returnUrl=rooms/${props.room.courseId}`
+				`/courses/${props.course.courseId}/topics/${props.lesson.id}/edit?returnUrl=rooms/${props.course.courseId}`
 			),
 		name: t("pages.room.taskCard.label.edit"),
 		dataTestId: `lesson-card-menu-action-edit-${
@@ -251,7 +251,7 @@ const taskChipValue = computed(() => {
 
 const handleClick = () => {
 	if (!props.dragInProgress) {
-		window.location.href = `/courses/${props.room.courseId}/topics/${props.lesson.id}`;
+		window.location.href = `/courses/${props.course.courseId}/topics/${props.lesson.id}`;
 	}
 };
 

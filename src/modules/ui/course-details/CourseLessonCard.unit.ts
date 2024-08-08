@@ -46,7 +46,7 @@ const setup = (
 	},
 	options?: object
 ) => {
-	const room = {
+	const course = {
 		courseId: "456",
 		displayColor: "#54616e",
 	};
@@ -56,7 +56,7 @@ const setup = (
 	const wrapper = mount(CourseLessonCard, {
 		global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		props: {
-			room,
+			course,
 			lesson: props.lesson,
 			ariaLabel,
 			keyDrag: props.keyDrag || false,
@@ -67,7 +67,7 @@ const setup = (
 		...options,
 	});
 
-	return { wrapper, room, ariaLabel };
+	return { wrapper, course, ariaLabel };
 };
 
 describe("@/components/molecules/CourseLessonCard", () => {
@@ -80,14 +80,14 @@ describe("@/components/molecules/CourseLessonCard", () => {
 		const userRole = Roles.Teacher;
 
 		it("should have correct props", () => {
-			const { wrapper, room, ariaLabel } = setup({
+			const { wrapper, course, ariaLabel } = setup({
 				lesson: baseTestLesson,
 				userRole,
 			});
 
 			expect(wrapper.vm.ariaLabel).toStrictEqual(ariaLabel);
 			expect(wrapper.vm.lesson).toStrictEqual(baseTestLesson);
-			expect(wrapper.vm.room).toStrictEqual(room);
+			expect(wrapper.vm.course).toStrictEqual(course);
 		});
 
 		it("should redirect to lesson page", async () => {
@@ -186,8 +186,8 @@ describe("@/components/molecules/CourseLessonCard", () => {
 					writable: true,
 				});
 
-				const { wrapper, room } = setup({ lesson: baseTestLesson, userRole });
-				const url = `/courses/${room.courseId}/topics/${baseTestLesson.id}/edit?returnUrl=rooms/${room.courseId}`;
+				const { wrapper, course } = setup({ lesson: baseTestLesson, userRole });
+				const url = `/courses/${course.courseId}/topics/${baseTestLesson.id}/edit?returnUrl=rooms/${course.courseId}`;
 
 				const threeDotButton = wrapper.find(".three-dot-button");
 				await threeDotButton.trigger("click");
