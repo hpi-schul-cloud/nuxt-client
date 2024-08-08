@@ -40,7 +40,7 @@
 			<div v-if="canEdit" class="ml-1 my-auto">
 				<CourseDotMenu
 					:menu-items="menuItems"
-					data-testid="room-tool-three-dot-button"
+					data-testid="course-tool-three-dot-button"
 					:aria-label="t('pages.rooms.tools.menu.ariaLabel')"
 				/>
 			</div>

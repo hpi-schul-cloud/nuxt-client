@@ -6,7 +6,7 @@
 		@dialog-closed="$emit('update:isOpen', false)"
 	>
 		<template #title>
-			<div class="pt-2 room-title">
+			<div class="pt-2 course-title">
 				<v-text-field
 					v-model="data.title"
 					density="compact"
@@ -96,7 +96,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.room-title {
+.course-title {
 	width: 100%;
 }
 </style>
