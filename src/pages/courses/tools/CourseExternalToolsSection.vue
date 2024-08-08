@@ -13,7 +13,7 @@
 			:data-testid="`external-tool-card-${index}`"
 		/>
 
-		<RoomExternalToolsErrorDialog
+		<CourseExternalToolsErrorDialog
 			v-if="selectedItem"
 			:selected-item="selectedItem"
 			:is-open="isErrorDialogOpen"
@@ -53,7 +53,7 @@
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import CourseExternalToolCard from "@/components/rooms/CourseExternalToolCard.vue";
-import RoomExternalToolsErrorDialog from "@/pages/courses/tools/CourseExternalToolsErrorDialog.vue";
+import CourseExternalToolsErrorDialog from "@/pages/courses/tools/CourseExternalToolsErrorDialog.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
@@ -68,7 +68,7 @@ const props = defineProps({
 		type: Array as PropType<ExternalToolDisplayData[]>,
 		required: true,
 	},
-	roomId: {
+	courseId: {
 		type: String,
 		required: true,
 	},
@@ -118,7 +118,7 @@ const onEditTool = (tool: ExternalToolDisplayData) => {
 		name: "context-external-tool-configuration-edit",
 		params: { configId: tool.contextExternalToolId },
 		query: {
-			contextId: props.roomId,
+			contextId: props.courseId,
 			contextType: ToolContextType.Course,
 		},
 	});

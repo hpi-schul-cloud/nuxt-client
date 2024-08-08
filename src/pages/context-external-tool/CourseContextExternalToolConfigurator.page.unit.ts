@@ -32,10 +32,10 @@ describe("CourseContextExternalToolConfigurator", () => {
 	) => {
 		const notifierModule = createModuleMocks(NotifierModule);
 
-		const roomTitle = "Room Title";
+		const courseTitle = "Room Title";
 		const courseModule = createModuleMocks(CourseModule, {
 			getCourseData: {
-				title: roomTitle,
+				title: courseTitle,
 				roomId: "contextId",
 				displayColor: "#ffffff",
 				elements: [],
@@ -75,7 +75,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			wrapper,
 			courseModule,
 			notifierModule,
-			roomTitle,
+			courseTitle,
 		};
 	};
 
@@ -85,7 +85,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 	describe("breadcrumbs", () => {
 		it("should render static breadcrumbs", () => {
-			const { wrapper, roomTitle } = getWrapper({
+			const { wrapper, courseTitle } = getWrapper({
 				contextId: "contextId",
 				contextType: ToolContextType.Course,
 			});
@@ -93,7 +93,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
 			expect(breadcrumbs.at(0)?.text()).toEqual("common.words.courses");
-			expect(breadcrumbs.at(1)?.text()).toEqual(roomTitle);
+			expect(breadcrumbs.at(1)?.text()).toEqual(courseTitle);
 		});
 	});
 

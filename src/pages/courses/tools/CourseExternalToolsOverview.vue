@@ -30,12 +30,12 @@
 		<course-video-conference-section
 			v-if="isVideoConferenceAvailable"
 			class="mb-4"
-			:room-id="roomId"
+			:room-id="courseId"
 		/>
 
 		<course-external-tools-section
 			:tools="tools"
-			:room-id="roomId"
+			:room-id="courseId"
 			data-testid="room-external-tool-section"
 			@delete="onDeleteTool"
 		/>
@@ -63,7 +63,7 @@ import CourseVideoConferenceSection from "@/pages/courses/tools/CourseVideoConfe
 import CourseExternalToolsSection from "@/pages/courses/tools/CourseExternalToolsSection.vue";
 
 const props = defineProps({
-	roomId: {
+	courseId: {
 		type: String,
 		required: true,
 	},
@@ -90,15 +90,15 @@ const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
 });
 
 onMounted(async () => {
-	await fetchDisplayData(props.roomId, ToolContextType.Course);
+	await fetchDisplayData(props.courseId, ToolContextType.Course);
 
-	course.value = await courseModule.fetchCourse(props.roomId);
+	course.value = await courseModule.fetchCourse(props.courseId);
 });
 
 const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
 const timer = setInterval(async () => {
-	await fetchDisplayData(props.roomId, ToolContextType.Course);
+	await fetchDisplayData(props.courseId, ToolContextType.Course);
 }, refreshTimeInMs);
 
 onUnmounted(() => {

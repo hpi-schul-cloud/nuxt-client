@@ -28,7 +28,7 @@ const useRouterMock = <jest.Mock>useRouter;
 describe("CourseExternalToolsSection", () => {
 	const getWrapper = (props: {
 		tools: ExternalToolDisplayData[];
-		roomId: string;
+		courseId: string;
 	}) => {
 		const authModule = createModuleMocks(AuthModule, {
 			getUserPermissions: ["CONTEXT_TOOL_ADMIN"],
@@ -75,7 +75,7 @@ describe("CourseExternalToolsSection", () => {
 			const tools: ExternalToolDisplayData[] =
 				externalToolDisplayDataFactory.buildList(2);
 
-			const { wrapper } = getWrapper({ tools, roomId: "roomId" });
+			const { wrapper } = getWrapper({ tools, courseId: "courseId" });
 
 			return {
 				wrapper,
@@ -98,7 +98,7 @@ describe("CourseExternalToolsSection", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });
+			const { wrapper } = getWrapper({ tools: [tool], courseId: "courseId" });
 
 			return {
 				wrapper,
@@ -126,23 +126,23 @@ describe("CourseExternalToolsSection", () => {
 			const tool: ExternalToolDisplayData =
 				externalToolDisplayDataFactory.build();
 
-			const roomId = "roomId";
+			const courseId = "courseId";
 
 			const router = createMock<Router>();
 			useRouterMock.mockReturnValue(router);
 
-			const { wrapper } = getWrapper({ tools: [tool], roomId });
+			const { wrapper } = getWrapper({ tools: [tool], courseId });
 
 			return {
 				wrapper,
 				router,
-				roomId,
+				courseId,
 				tool,
 			};
 		};
 
 		it("should redirect to the edit page", async () => {
-			const { wrapper, router, tool, roomId } = setup();
+			const { wrapper, router, tool, courseId } = setup();
 
 			const card = wrapper.findComponent({
 				name: "course-external-tool-card",
@@ -154,7 +154,7 @@ describe("CourseExternalToolsSection", () => {
 				name: "context-external-tool-configuration-edit",
 				params: { configId: tool.contextExternalToolId },
 				query: {
-					contextId: roomId,
+					contextId: courseId,
 					contextType: ToolContextType.Course,
 				},
 			});
@@ -168,7 +168,7 @@ describe("CourseExternalToolsSection", () => {
 
 			const { wrapper } = getWrapper({
 				tools: [tool],
-				roomId: "roomId",
+				courseId: "courseId",
 			});
 
 			return {
@@ -203,7 +203,7 @@ describe("CourseExternalToolsSection", () => {
 
 			const { wrapper } = getWrapper({
 				tools: [tool],
-				roomId: "roomId",
+				courseId: "courseId",
 			});
 
 			return {
@@ -234,7 +234,7 @@ describe("CourseExternalToolsSection", () => {
 					status: contextExternalToolConfigurationStatusFactory.build(),
 				});
 
-			const { wrapper } = getWrapper({ tools: [tool], roomId: "roomId" });
+			const { wrapper } = getWrapper({ tools: [tool], courseId: "courseId" });
 
 			return {
 				wrapper,
