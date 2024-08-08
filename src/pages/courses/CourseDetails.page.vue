@@ -92,7 +92,7 @@
 			group-name=""
 			:course-name="courseData.title"
 			:course-id="courseData.roomId"
-			@success="refreshRoom"
+			@success="refreshCourse"
 		/>
 		<SelectBoardLayoutDialog
 			v-if="boardLayoutsEnabled"
@@ -506,7 +506,7 @@ export default defineComponent({
 		onExport() {
 			this.commonCartridgeExportModule.startExportFlow();
 		},
-		async refreshRoom() {
+		async refreshCourse() {
 			await this.courseModule.fetchContent(this.courseId);
 		},
 		async onCopyRoom(courseId) {

@@ -238,13 +238,13 @@ export default {
 	computed: {
 		lessonData() {
 			return {
-				roomId: this.courseData.roomId,
+				courseId: this.courseData.roomId,
 				displayColor: this.courseData.displayColor,
 			};
 		},
 		taskData() {
 			return {
-				roomId: this.courseData.roomId,
+				courseId: this.courseData.roomId,
 			};
 		},
 		isTouchDevice() {

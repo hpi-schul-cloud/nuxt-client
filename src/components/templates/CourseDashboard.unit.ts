@@ -214,7 +214,7 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 				role: "teacher",
 			});
 			const expectedObject = {
-				roomId: "123",
+				courseId: "123",
 				displayColor: "black",
 			};
 
@@ -227,7 +227,7 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 				role: "teacher",
 			});
 			const expectedObject = {
-				roomId: "123",
+				courseId: "123",
 			};
 
 			expect(wrapper.vm.taskData).toStrictEqual(expectedObject);
