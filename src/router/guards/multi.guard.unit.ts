@@ -1,16 +1,16 @@
 import {
 	NavigationGuard,
-	RouteLocation,
+	RouteLocationNormalized,
 	RouteLocationRaw,
 	RouteMeta,
 } from "vue-router";
 import { Multiguard } from "@/router/guards/multi.guard";
 
-const createRoute = (name: string, path: string): RouteLocation => {
+const createRoute = (name: string, path: string): RouteLocationNormalized => {
 	return {
 		matched: [],
 		meta: {} as RouteMeta,
-		redirectedFrom: {} as RouteLocation,
+		redirectedFrom: {} as RouteLocationNormalized,
 		name,
 		path,
 		fullPath: path,
@@ -39,8 +39,8 @@ describe("Multiguard", () => {
 
 	describe("when the argument is an empty array", () => {
 		const setup = () => {
-			const to: RouteLocation = createRoute("to", "/to");
-			const from: RouteLocation = createRoute("from", "/from");
+			const to: RouteLocationNormalized = createRoute("to", "/to");
+			const from: RouteLocationNormalized = createRoute("from", "/from");
 			const next = jest.fn();
 
 			const multiguard = Multiguard([]);
@@ -62,8 +62,8 @@ describe("Multiguard", () => {
 			const expected: RouteLocationRaw = {
 				path: "/path",
 			};
-			const to: RouteLocation = createRoute("to", "/to");
-			const from: RouteLocation = createRoute("from", "/from");
+			const to = createRoute("to", "/to");
+			const from = createRoute("from", "/from");
 			const next = jest.fn();
 
 			const multiguard = Multiguard([(to, from, next) => next(expected)]);
@@ -82,8 +82,8 @@ describe("Multiguard", () => {
 
 	describe("when all guards pass", () => {
 		const setup = () => {
-			const to: RouteLocation = createRoute("to", "/to");
-			const from: RouteLocation = createRoute("from", "/from");
+			const to = createRoute("to", "/to");
+			const from = createRoute("from", "/from");
 			const next = jest.fn();
 
 			const multiguard = Multiguard([
@@ -108,8 +108,8 @@ describe("Multiguard", () => {
 			const expected: RouteLocationRaw = {
 				path: "/path",
 			};
-			const to: RouteLocation = createRoute("to", "/to");
-			const from: RouteLocation = createRoute("from", "/from");
+			const to = createRoute("to", "/to");
+			const from = createRoute("from", "/from");
 			const next = jest.fn();
 
 			const multiguard = Multiguard([
@@ -134,8 +134,8 @@ describe("Multiguard", () => {
 			const expected: RouteLocationRaw = {
 				path: "/path",
 			};
-			const to: RouteLocation = createRoute("to", "/to");
-			const from: RouteLocation = createRoute("from", "/from");
+			const to = createRoute("to", "/to");
+			const from = createRoute("from", "/from");
 			const next = jest.fn();
 
 			const multiguard = Multiguard([

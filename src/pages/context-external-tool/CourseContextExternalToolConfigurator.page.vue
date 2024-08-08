@@ -65,7 +65,7 @@ const courseTitle: ComputedRef<string> = computed(
 const router: Router = useRouter();
 
 const onCancel = async () => {
-	await router.push({ path: contextRoute, query: { tab: "tools" } });
+	await router.push({ path: contextRoute.value, query: { tab: "tools" } });
 };
 
 const onSuccess = async () => {
@@ -75,7 +75,7 @@ const onSuccess = async () => {
 
 	notifierModule.show({ text: message, status: "success" });
 
-	await router.push({ path: contextRoute, query: { tab: "tools" } });
+	await router.push({ path: contextRoute.value, query: { tab: "tools" } });
 };
 
 const contextExternalToolConfigurator: Ref<InstanceType<
