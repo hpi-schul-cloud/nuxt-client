@@ -24,7 +24,12 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { VCard } from "vuetify/lib/components/index.mjs";
+import {
+	BoardMenu,
+	BoardMenuActionDelete,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
+} from "@ui-board";
 
 jest.mock("@data-board/ContentElementState.composable");
 
@@ -154,12 +159,24 @@ describe("LinkContentElement", () => {
 				expect(linkElementDisplay.exists()).toBe(false);
 			});
 
+			it("should not render link element menu", () => {
+				const { wrapper } = setup({
+					isEditMode: false,
+				});
+
+				const linkElementMenu = wrapper.findComponent(BoardMenu);
+
+				expect(linkElementMenu.exists()).toBe(false);
+			});
+
 			it("should not have an aria-label", () => {
 				const { wrapper } = setup({
 					isEditMode: true,
 				});
 
-				const linkElement = wrapper.findComponent(VCard);
+				const linkElement = wrapper.findComponent({
+					ref: "linkContentElement",
+				});
 
 				expect(linkElement.attributes("aria-label")).toBeUndefined();
 			});
@@ -189,34 +206,209 @@ describe("LinkContentElement", () => {
 					isEditMode: true,
 				});
 
-				const linkElement = wrapper.findComponent(VCard);
+				const linkElement = wrapper.findComponent({
+					ref: "linkContentElement",
+				});
 
 				expect(linkElement.attributes("aria-label")).toEqual(
 					`${element.content.url}, common.ariaLabel.newTab`
 				);
 			});
+
+			describe("when element is in edit mode", () => {
+				it.each(["up", "down"])(
+					"should 'emit move-keyboard:edit' when arrow key %s is pressed",
+					async (key) => {
+						const linkElementContent = linkElementContentFactory.build();
+						const { wrapper } = setup({
+							content: linkElementContent,
+							isEditMode: true,
+						});
+
+						const linkElement = wrapper.findComponent({
+							ref: "linkContentElement",
+						});
+
+						await linkElement.trigger(`keydown.${key}`);
+
+						expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
+					}
+				);
+			});
+
+			describe("when element is in view mode", () => {
+				it.each(["up", "down"])(
+					"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in view mode",
+					async (key) => {
+						const linkElementContent = linkElementContentFactory.build();
+						const { wrapper } = setup({
+							content: linkElementContent,
+							isEditMode: false,
+						});
+
+						const linkElement = wrapper.findComponent({
+							ref: "linkContentElement",
+						});
+
+						await linkElement.trigger(`keydown.${key}`);
+
+						expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
+					}
+				);
+			});
+
+			describe("link element menu", () => {
+				it("should render link element menu", () => {
+					const linkElementContent = linkElementContentFactory.build();
+					const { wrapper } = setup({
+						content: linkElementContent,
+						isEditMode: true,
+					});
+
+					const linkElementMenu = wrapper.findComponent(BoardMenu);
+
+					expect(linkElementMenu.exists()).toBe(true);
+				});
+
+				it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
+					const linkElementContent = linkElementContentFactory.build();
+					const { wrapper } = setup({
+						content: linkElementContent,
+						isEditMode: true,
+					});
+
+					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+					await menuItem.trigger("click");
+
+					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
+				});
+
+				it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
+					const linkElementContent = linkElementContentFactory.build();
+					const { wrapper } = setup({
+						content: linkElementContent,
+						isEditMode: true,
+					});
+
+					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+					await menuItem.trigger("click");
+
+					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+				});
+
+				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
+					const linkElementContent = linkElementContentFactory.build();
+					const { wrapper } = setup({
+						content: linkElementContent,
+						isEditMode: true,
+					});
+
+					const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+					await menuItem.trigger("click");
+
+					expect(wrapper.emitted()).toHaveProperty("delete:element");
+				});
+			});
 		});
 	});
 
 	describe("when link element is being created", () => {
-		it("should render LinkContentElementCreate component when in editmode", () => {
-			const { wrapper } = setup({ isEditMode: true });
+		describe("when element is in view mode", () => {
+			it("should hide link element in view mode when no url was entered", () => {
+				const { wrapper } = setup({
+					isEditMode: false,
+				});
 
-			const linkCreateComponent = wrapper.findComponent(
-				LinkContentElementCreate
-			);
+				const linkElement = wrapper.findComponent({
+					ref: "linkContentElement",
+				});
 
-			expect(linkCreateComponent.exists()).toBe(true);
-		});
-
-		it("should hide link element in view mode when no url was entered", () => {
-			const { wrapper } = setup({
-				isEditMode: false,
+				expect(linkElement.attributes("class")).toContain("d-none");
 			});
 
-			const linkElement = wrapper.findComponent(VCard);
+			it("should not render link element menu in view mode", () => {
+				const { wrapper } = setup({
+					isEditMode: false,
+				});
 
-			expect(linkElement.attributes("class")).toContain("d-none");
+				const linkElementMenu = wrapper.findComponent(BoardMenu);
+
+				expect(linkElementMenu.exists()).toBe(false);
+			});
+		});
+
+		describe("when element is in edit mode", () => {
+			it("should render LinkContentElementCreate component when in editmode", () => {
+				const { wrapper } = setup({ isEditMode: true });
+
+				const linkCreateComponent = wrapper.findComponent(
+					LinkContentElementCreate
+				);
+
+				expect(linkCreateComponent.exists()).toBe(true);
+			});
+
+			it.each(["up", "down"])(
+				"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in edit mode",
+				async (key) => {
+					const { wrapper } = setup({
+						isEditMode: true,
+					});
+
+					const linkElement = wrapper.findComponent({
+						ref: "linkContentElement",
+					});
+
+					await linkElement.trigger(`keydown.${key}`);
+
+					expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
+				}
+			);
+
+			describe("link element menu", () => {
+				it("should render link element menu", () => {
+					const { wrapper } = setup({
+						isEditMode: true,
+					});
+
+					const linkElementMenu = wrapper.findComponent(BoardMenu);
+
+					expect(linkElementMenu.exists()).toBe(true);
+				});
+
+				it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
+					const { wrapper } = setup({
+						isEditMode: true,
+					});
+
+					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+					await menuItem.trigger("click");
+
+					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
+				});
+
+				it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
+					const { wrapper } = setup({
+						isEditMode: true,
+					});
+
+					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+					await menuItem.trigger("click");
+
+					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+				});
+
+				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
+					const { wrapper } = setup({
+						isEditMode: true,
+					});
+
+					const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+					await menuItem.trigger("click");
+
+					expect(wrapper.emitted()).toHaveProperty("delete:element");
+				});
+			});
 		});
 
 		describe("onCreateUrl", () => {
@@ -323,28 +515,6 @@ describe("LinkContentElement", () => {
 
 					const expectedUrl = "de.wikipedia.org";
 					expect(wrapper.html()).toEqual(expect.stringContaining(expectedUrl));
-				});
-			});
-		});
-
-		describe("when arrow key up is pressed", () => {
-			describe("when component is in edit-mode", () => {
-				it("should NOT emit 'move-keyboard:edit'", async () => {
-					const { wrapper } = setup({
-						isEditMode: true,
-						isDetailView: false,
-					});
-
-					const element = wrapper.findComponent({ ref: "linkContentElement" });
-					element.vm.$emit(
-						"keydown",
-						new KeyboardEvent("keydown", {
-							key: "ArrowUp",
-							keyCode: 38,
-						})
-					);
-
-					expect(element.emitted("move-keyboard:edit")).toBeUndefined();
 				});
 			});
 		});
