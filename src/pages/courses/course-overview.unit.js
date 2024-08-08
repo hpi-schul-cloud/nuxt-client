@@ -545,7 +545,7 @@ describe("@/pages/CourseOverview", () => {
 	});
 
 	it("should set rowCount while loading", async () => {
-		const roomData = [
+		const courseData = [
 			{
 				id: "1",
 				title: "First",
@@ -576,7 +576,7 @@ describe("@/pages/CourseOverview", () => {
 			},
 		];
 
-		coursesModule.setCourseData(roomData);
+		coursesModule.setCourseData(courseData);
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent('[data-test-position="8-0"]').exists()).toBe(
 			false

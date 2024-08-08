@@ -27,7 +27,7 @@ import { Course } from "./types/course";
 	stateFactory: true,
 })
 export default class CourseModule extends VuexModule {
-	roomData: SingleColumnBoardResponse = {
+	courseData: SingleColumnBoardResponse = {
 		roomId: "",
 		title: "",
 		displayColor: "",
@@ -96,11 +96,11 @@ export default class CourseModule extends VuexModule {
 		};
 		try {
 			await this.roomsApi.roomsControllerPatchElementVisibility(
-				this.roomData.roomId,
+				this.courseData.roomId,
 				payload.elementId,
 				visibilityParam
 			);
-			await this.fetchContent(this.roomData.roomId);
+			await this.fetchContent(this.courseData.roomId);
 
 			this.setLoading(false);
 		} catch (error: any) {
@@ -114,10 +114,10 @@ export default class CourseModule extends VuexModule {
 		this.setLoading(true);
 		try {
 			await this.roomsApi.roomsControllerPatchOrderingOfElements(
-				this.roomData.roomId,
+				this.courseData.roomId,
 				payload
 			);
-			await this.fetchContent(this.roomData.roomId);
+			await this.fetchContent(this.courseData.roomId);
 			this.setLoading(false);
 		} catch (error: any) {
 			this.setBusinessError({
@@ -203,7 +203,7 @@ export default class CourseModule extends VuexModule {
 				"v3",
 				$axios
 			).courseControllerExportCourse(
-				this.roomData.roomId,
+				this.courseData.roomId,
 				exportSettings.version,
 				{
 					topics: exportSettings.topics,
@@ -219,7 +219,7 @@ export default class CourseModule extends VuexModule {
 				new Blob([response.data as unknown as Blob])
 			);
 			link.download = `${
-				this.roomData.title
+				this.courseData.title
 			}-${new Date().toISOString()}.imscc`;
 			link.click();
 			URL.revokeObjectURL(link.href);
@@ -241,7 +241,7 @@ export default class CourseModule extends VuexModule {
 			} else if (payload.action === "restore") {
 				await this.taskApi.taskControllerRestore(payload.itemId);
 			}
-			await this.fetchContent(this.roomData.roomId);
+			await this.fetchContent(this.courseData.roomId);
 		} catch (error: any) {
 			this.setBusinessError({
 				statusCode: error?.response?.status,
@@ -263,7 +263,7 @@ export default class CourseModule extends VuexModule {
 
 	@Mutation
 	setCourseData(payload: SingleColumnBoardResponse): void {
-		this.roomData = payload;
+		this.courseData = payload;
 	}
 
 	@Mutation
@@ -327,7 +327,7 @@ export default class CourseModule extends VuexModule {
 	}
 
 	get getCourseData(): SingleColumnBoardResponse {
-		return this.roomData;
+		return this.courseData;
 	}
 
 	get getPermissionData(): string[] {
@@ -343,11 +343,11 @@ export default class CourseModule extends VuexModule {
 	}
 
 	get roomIsEmpty(): boolean {
-		return this.finishedLoading && this.roomData.elements.length === 0;
+		return this.finishedLoading && this.courseData.elements.length === 0;
 	}
 
 	get getRoomId(): string {
-		return this.roomData.roomId;
+		return this.courseData.roomId;
 	}
 
 	private get finishedLoading(): boolean {

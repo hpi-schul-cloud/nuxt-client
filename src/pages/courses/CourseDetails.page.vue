@@ -10,22 +10,22 @@
 			<div class="d-flex ma-2 mt-3">
 				<div
 					class="text-h3 pb-2 course-title"
-					:class="{ 'pr-5': roomData.isArchived }"
+					:class="{ 'pr-5': courseData.isArchived }"
 					data-testid="courses-course-title"
 					role="heading"
 					aria-level="1"
 				>
-					{{ roomData.title }}
+					{{ courseData.title }}
 				</div>
 				<VChip
-					v-if="roomData.isSynchronized"
+					v-if="courseData.isSynchronized"
 					size="small"
 					class="mt-1 ml-2"
 					data-testid="synced-course-chip"
 				>
 					{{ $t("pages.rooms.headerSection.synchronized") }}
 				</VChip>
-				<VChip v-if="roomData.isArchived" size="small" class="mt-1 ml-2">
+				<VChip v-if="courseData.isArchived" size="small" class="mt-1 ml-2">
 					{{ $t("pages.rooms.headerSection.archived") }}
 				</VChip>
 				<div class="mx-2">
@@ -42,8 +42,8 @@
 						class="back-button"
 						variant="outlined"
 						size="small"
-						:href="`/files/courses/${roomData.roomId}`"
-						:data-testid="`room-${roomData.roomId}-files`"
+						:href="`/files/courses/${courseData.roomId}`"
+						:data-testid="`room-${courseData.roomId}-files`"
 					>
 						{{ $t("pages.rooms.headerSection.toCourseFiles") }}
 					</v-btn>
@@ -73,7 +73,7 @@
 		<component
 			v-if="getCurrentComponent"
 			:is="getCurrentComponent"
-			:room-data-object="roomData"
+			:room-data-object="courseData"
 			:role="dashBoardRole"
 			:roomId="courseId"
 			@copy-board-element="onCopyBoardElement"
@@ -90,8 +90,8 @@
 		<end-course-sync-dialog
 			v-model:is-open="isEndSyncDialogOpen"
 			group-name=""
-			:course-name="roomData.title"
-			:course-id="roomData.roomId"
+			:course-name="courseData.title"
+			:course-id="courseData.roomId"
 			@success="refreshRoom"
 		/>
 		<SelectBoardLayoutDialog
@@ -258,7 +258,7 @@ export default defineComponent({
 					label: this.$t("pages.rooms.tabLabel.toolsOld"),
 					icon: mdiPuzzleOutline,
 					dataTestId: "old-tools-tab",
-					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
+					href: `/courses/${this.courseData.roomId}/?activeTab=tools`,
 				});
 			}
 
@@ -266,7 +266,7 @@ export default defineComponent({
 				name: "groups",
 				label: this.$t("pages.rooms.tabLabel.groups"),
 				icon: mdiAccountGroupOutline,
-				href: `/courses/${this.roomData.roomId}/?activeTab=groups`,
+				href: `/courses/${this.courseData.roomId}/?activeTab=groups`,
 				dataTestId: "groups-tab",
 			});
 
@@ -293,7 +293,7 @@ export default defineComponent({
 				actions.push({
 					label: this.$t("pages.room.fab.add.task"),
 					icon: mdiFormatListChecks,
-					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
+					href: `/homework/new?course=${this.courseData.roomId}&returnUrl=rooms/${this.courseData.roomId}`,
 					dataTestId: "fab_button_add_task",
 					ariaLabel: this.$t("pages.room.fab.add.task"),
 				});
@@ -307,7 +307,7 @@ export default defineComponent({
 				actions.push({
 					label: this.$t("pages.room.fab.add.lesson"),
 					icon: mdiViewListOutline,
-					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
+					href: `/courses/${this.courseData.roomId}/topics/add?returnUrl=rooms/${this.courseData.roomId}`,
 					dataTestId: "fab_button_add_lesson",
 					ariaLabel: this.$t("pages.room.fab.add.lesson"),
 				});
@@ -352,7 +352,7 @@ export default defineComponent({
 
 			return items;
 		},
-		roomData() {
+		courseData() {
 			return this.courseModule.getCourseData;
 		},
 		scopedPermissions() {
@@ -389,7 +389,7 @@ export default defineComponent({
 			if (envConfigModule.getEnv.FEATURE_COPY_SERVICE_ENABLED) {
 				items.push({
 					icon: this.icons.mdiContentCopy,
-					action: () => this.onCopyRoom(this.roomData.roomId),
+					action: () => this.onCopyRoom(this.courseData.roomId),
 					name: this.$t("common.actions.copy"),
 					dataTestId: "room-menu-copy",
 				});
@@ -415,7 +415,7 @@ export default defineComponent({
 				});
 			}
 
-			if (this.roomData.isSynchronized) {
+			if (this.courseData.isSynchronized) {
 				items.push({
 					icon: this.icons.mdiSyncOff,
 					action: () => {
@@ -455,7 +455,7 @@ export default defineComponent({
 			userId: this.authModule.getUser?.id,
 		});
 
-		document.title = buildPageTitle(this.roomData.title);
+		document.title = buildPageTitle(this.courseData.title);
 	},
 	mounted() {
 		window.addEventListener("pageshow", this.setActiveTabIfPageCached);
@@ -465,14 +465,14 @@ export default defineComponent({
 	},
 	methods: {
 		onSingleColumnLayoutSelected() {
-			this.onCreateBoard(this.roomData.roomId, BoardLayout.List);
+			this.onCreateBoard(this.courseData.roomId, BoardLayout.List);
 		},
 		onMultiColumnLayoutSelected() {
-			this.onCreateBoard(this.roomData.roomId, BoardLayout.Columns);
+			this.onCreateBoard(this.courseData.roomId, BoardLayout.Columns);
 		},
 		fabItemClickHandler(event) {
 			if (event === "board-create") {
-				this.onCreateBoard(this.roomData.roomId, BoardLayout.Columns);
+				this.onCreateBoard(this.courseData.roomId, BoardLayout.Columns);
 			}
 
 			if (event === "board-type-dialog-open") {

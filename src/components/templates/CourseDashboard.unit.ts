@@ -169,35 +169,50 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 	});
 	describe("common features", () => {
 		it("should have props", async () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 
-			expect(wrapper.vm.roomData).toStrictEqual(mockData);
+			expect(wrapper.vm.courseData).toStrictEqual(mockData);
 			expect(wrapper.vm.role).toStrictEqual("teacher");
 		});
 
 		it("should list board card", async () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 
 			const boardCard = wrapper.findAllComponents({ name: "CourseBoardCard" });
 			expect(boardCard).toHaveLength(1);
 		});
 
 		it("should list task cards", async () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 
 			const taskCards = wrapper.findAll(".task-card");
 			expect(taskCards).toHaveLength(2);
 		});
 
 		it("should list lesson cards", async () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "student" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "student",
+			});
 
 			const lessonCards = wrapper.findAll(".lesson-card");
 			expect(lessonCards).toHaveLength(2);
 		});
 
 		it("should have lessonData object", async () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			const expectedObject = {
 				roomId: "123",
 				displayColor: "black",
@@ -207,7 +222,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 		});
 
 		it("should have taskData object", async () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			const expectedObject = {
 				roomId: "123",
 			};
@@ -248,17 +266,26 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 
 	describe("Drag & Drop operations", () => {
 		it("should sortable value 'true' if user is a 'teacher'", () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			expect(wrapper.vm.sortable).toBe(true);
 		});
 
 		it("should sortable value 'false' if user is NOT a 'teacher'", () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "student" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "student",
+			});
 			expect(wrapper.vm.sortable).toBe(false);
 		});
 
 		it("should set 'touchDelay' and 'isTouchDevice' values if device is NOT mobile", () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			expect(wrapper.vm.isTouchDevice).toBe(false);
 			expect(wrapper.vm.touchDelay).toStrictEqual(20);
 		});
@@ -266,14 +293,20 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 		it("should set 'touchDelay' and 'isTouchDevice' values if device is mobile", () => {
 			const tempOntouchstart = window.ontouchstart;
 			window.ontouchstart = () => null;
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			expect(wrapper.vm.isTouchDevice).toBe(true);
 			expect(wrapper.vm.touchDelay).toStrictEqual(200);
 			window.ontouchstart = tempOntouchstart;
 		});
 
 		it("should set 'dragInProgress' when dragging is started", async () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			const timeDuration = wrapper.vm.dragInProgressDelay;
 			expect(wrapper.vm.dragInProgress).toBe(false);
 			const element = wrapper.findComponent({ name: "draggable" });
@@ -285,35 +318,44 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 		});
 
 		it("should sort elements after Drag&Drop", async () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
-			const items = JSON.parse(JSON.stringify(wrapper.vm.roomData.elements));
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
+			const items = JSON.parse(JSON.stringify(wrapper.vm.courseData.elements));
 			items.splice(1, 0, items.splice(0, 1)[0]);
 
-			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual(
-				"Mathe"
-			);
-			expect(wrapper.vm.roomData.elements[1].content.courseName).toStrictEqual(
-				"Mathe_2"
-			);
+			expect(
+				wrapper.vm.courseData.elements[0].content.courseName
+			).toStrictEqual("Mathe");
+			expect(
+				wrapper.vm.courseData.elements[1].content.courseName
+			).toStrictEqual("Mathe_2");
 
 			const draggableElement = wrapper.findComponent({ name: "draggable" });
 			await draggableElement.vm.$emit("update:modelValue", items);
-			expect(wrapper.vm.roomData.elements[0].content.courseName).toStrictEqual(
-				"Mathe_2"
-			);
-			expect(wrapper.vm.roomData.elements[1].content.courseName).toStrictEqual(
-				"Mathe"
-			);
+			expect(
+				wrapper.vm.courseData.elements[0].content.courseName
+			).toStrictEqual("Mathe_2");
+			expect(
+				wrapper.vm.courseData.elements[1].content.courseName
+			).toStrictEqual("Mathe");
 		});
 
 		it("sortable option should not true if the user is 'student'", () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "student" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "student",
+			});
 			expect(wrapper.vm.sortable).toBe(false);
 		});
 
 		it("should be sorted the elements by keyboard'", async () => {
 			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
 			const cardElement = wrapper.findComponent({ ref: "item_1" });
@@ -331,7 +373,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 
 		it("should NOT be sorted the elements by keyboard for students'", async () => {
 			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "student" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "student",
+			});
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
 			const cardElement = wrapper.findComponent({ ref: "item_1" });
@@ -349,7 +394,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 
 		it("should set 'isDragging' false if 'tab' key is pressed", async () => {
 			const moveByKeyboardMock = jest.fn().mockImplementation(() => ({}));
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 
 			wrapper.vm.moveByKeyboard = moveByKeyboardMock;
 			const cardElement = wrapper.findComponent({ ref: "item_1" });
@@ -414,7 +462,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 
 		it("should call the openItemDeleteDialog method when lesson should be deleted", async () => {
 			const openDeleteDialogMock = jest.fn();
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 
@@ -426,7 +477,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 
 		it("should call the openItemDeleteDialog method when task should be deleted", async () => {
 			const openDeleteDialogMock = jest.fn();
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			wrapper.vm.openItemDeleteDialog = openDeleteDialogMock;
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
 
@@ -438,7 +492,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 
 		it("should call deleteItem method after modal emits 'dialog-confirmed'", async () => {
 			const deleteItemMock = jest.fn();
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			wrapper.vm.deleteItem = deleteItemMock;
 			wrapper.vm.itemDelete.isOpen = true;
 			await nextTick();
@@ -452,7 +509,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 			const deleteTaskMock = jest.fn();
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn();
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			courseModule.deleteTask = deleteTaskMock;
 			courseModule.fetchContent = fetchContentMock;
 			courseModule.deleteLesson = deleteLessonMock;
@@ -473,7 +533,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 			const deleteTaskMock = jest.fn();
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn().mockResolvedValue(true);
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			courseModule.deleteTask = deleteTaskMock;
 			courseModule.fetchContent = fetchContentMock;
 			courseModule.deleteLesson = deleteLessonMock;
@@ -491,7 +554,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 		});
 
 		it("should close the modal view after clicking the 'cancel' button", async () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			wrapper.vm.itemDelete.isOpen = true;
 			await nextTick();
 			const cancelButton = wrapper.findComponent(
@@ -594,7 +660,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 
 		it("should call the copyTask method when a task component emits 'copy-task' custom event", async () => {
 			const copyTaskMock = jest.fn();
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			wrapper.vm.copyTask = copyTaskMock;
 
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
@@ -604,7 +673,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 		});
 
 		it("should emit 'copy-board-element' with correct task-related payload", async () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
 			taskCard.vm.$emit("copy-task");
@@ -633,7 +705,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 
 		it("should call the copyLesson method when a lesson component emits 'copy-lesson' custom event", async () => {
 			const copyLessonMock = jest.fn();
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			wrapper.vm.copyLesson = copyLessonMock;
 
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
@@ -643,7 +718,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 		});
 
 		it("should emit 'copy-board-element' with correct lesson-related payload", async () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 			lessonCard.vm.$emit("copy-lesson");
@@ -672,7 +750,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 
 		it("should call the copyBoard method when a board component emits 'copy-board' custom event", async () => {
 			const copyBoardMock = jest.fn();
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 			wrapper.vm.copyBoard = copyBoardMock;
 
 			const boardCard = wrapper.findComponent<VCard>({
@@ -684,7 +765,10 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 		});
 
 		it("should emit 'copy-board-element' with correct board-related payload", () => {
-			const wrapper = getWrapper({ courseDataObject: mockData, role: "teacher" });
+			const wrapper = getWrapper({
+				courseDataObject: mockData,
+				role: "teacher",
+			});
 
 			const boardCard = wrapper.findComponent<VCard>({
 				name: "CourseBoardCard",

@@ -2,7 +2,7 @@
 	<div>
 		<div v-if="role === Roles.Teacher">
 			<draggable
-				v-model="roomData.elements"
+				v-model="courseData.elements"
 				item-key="id"
 				:animation="400"
 				:delay="touchDelay"
@@ -25,8 +25,8 @@
 							:drag-in-progress="dragInProgress"
 							:column-board-item="item.content"
 							:course-data="{
-								courseName: roomData.title,
-								courseId: roomData.roomId,
+								courseName: courseData.title,
+								courseId: courseData.roomId,
 							}"
 							:aria-label="
 								$t(
@@ -97,7 +97,7 @@
 			</draggable>
 		</div>
 		<div v-if="role === Roles.Student">
-			<div v-for="(item, index) of roomData.elements" :key="index">
+			<div v-for="(item, index) of courseData.elements" :key="index">
 				<CourseBoardCard
 					v-if="boardCardIsVisibleToStudent(item)"
 					:ref="`item_${index}`"
@@ -107,8 +107,8 @@
 					:drag-in-progress="dragInProgress"
 					:column-board-item="item.content"
 					:course-data="{
-						courseName: roomData.title,
-						courseId: roomData.roomId,
+						courseName: courseData.title,
+						courseId: courseData.roomId,
 					}"
 					:aria-label="
 						$t('pages.room.cards.aria', {
@@ -238,13 +238,13 @@ export default {
 	computed: {
 		lessonData() {
 			return {
-				roomId: this.roomData.roomId,
-				displayColor: this.roomData.displayColor,
+				roomId: this.courseData.roomId,
+				displayColor: this.courseData.displayColor,
 			};
 		},
 		taskData() {
 			return {
-				roomId: this.roomData.roomId,
+				roomId: this.courseData.roomId,
 			};
 		},
 		isTouchDevice() {
@@ -267,7 +267,7 @@ export default {
 				maxHeight,
 			};
 		},
-		roomData() {
+		courseData() {
 			return { ...this.courseDataObject };
 		},
 	},
@@ -290,7 +290,7 @@ export default {
 		},
 		async moveByKeyboard(e) {
 			if (this.role === this.Roles.Student) return;
-			const items = this.roomData.elements.map((item) => {
+			const items = this.courseData.elements.map((item) => {
 				return item.content.id;
 			});
 			const itemIndex = items.findIndex((item) => item === e.id);
@@ -364,7 +364,7 @@ export default {
 			} else {
 				return;
 			}
-			await courseModule.fetchContent(this.roomData.roomId);
+			await courseModule.fetchContent(this.courseData.roomId);
 		},
 		async finishTask(itemId) {
 			await courseModule.finishTask({ itemId, action: "finish" });
@@ -376,21 +376,21 @@ export default {
 			this.$emit("copy-board-element", {
 				id: taskId,
 				type: CopyParamsTypeEnum.Task,
-				courseId: this.roomData.roomId,
+				courseId: this.courseData.roomId,
 			});
 		},
 		copyLesson(lessonId) {
 			this.$emit("copy-board-element", {
 				id: lessonId,
 				type: CopyParamsTypeEnum.Lesson,
-				courseId: this.roomData.roomId,
+				courseId: this.courseData.roomId,
 			});
 		},
 		copyBoard(columnBoardId) {
 			this.$emit("copy-board-element", {
 				id: columnBoardId,
 				type: CopyParamsTypeEnum.ColumnBoard,
-				courseId: this.roomData.roomId,
+				courseId: this.courseData.roomId,
 			});
 		},
 		boardCardIsVisibleToStudent(card) {
