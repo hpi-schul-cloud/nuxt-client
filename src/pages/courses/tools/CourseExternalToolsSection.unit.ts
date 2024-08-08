@@ -50,7 +50,7 @@ describe("CourseExternalToolsSection", () => {
 						[AUTH_MODULE_KEY.valueOf()]: authModule,
 					},
 					stubs: {
-						RoomExternalToolCard: true,
+						CourseExternalToolCard: true,
 						CourseExternalToolsErrorDialog: true,
 					},
 				},
@@ -86,7 +86,7 @@ describe("CourseExternalToolsSection", () => {
 			const { wrapper } = setup();
 
 			const cards = wrapper.findAllComponents({
-				name: "room-external-tool-card",
+				name: "course-external-tool-card",
 			});
 
 			expect(cards.length).toEqual(2);
@@ -110,7 +110,7 @@ describe("CourseExternalToolsSection", () => {
 			const { wrapper, tool } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
+				name: "course-external-tool-card",
 			});
 
 			await card.vm.$emit("delete", tool);
@@ -145,7 +145,7 @@ describe("CourseExternalToolsSection", () => {
 			const { wrapper, router, tool, roomId } = setup();
 
 			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
+				name: "course-external-tool-card",
 			});
 
 			await card.vm.$emit("edit", tool);
@@ -181,7 +181,7 @@ describe("CourseExternalToolsSection", () => {
 			const { wrapper, tool } = await setup();
 
 			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
+				name: "course-external-tool-card",
 			});
 
 			await card.vm.$emit("delete", tool);
@@ -216,7 +216,7 @@ describe("CourseExternalToolsSection", () => {
 			const { wrapper, tool } = await setup();
 
 			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
+				name: "course-external-tool-card",
 			});
 			await card.vm.$emit("delete", tool);
 
@@ -246,7 +246,7 @@ describe("CourseExternalToolsSection", () => {
 			const { wrapper, tool } = await setup();
 
 			const card = wrapper.findComponent({
-				name: "room-external-tool-card",
+				name: "course-external-tool-card",
 			});
 
 			card.vm.$emit("error", tool);

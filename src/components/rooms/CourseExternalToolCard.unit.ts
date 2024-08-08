@@ -14,11 +14,11 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { CourseDotMenu } from "@ui-course-details";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import RoomExternalToolCard from "./CourseExternalToolCard.vue";
+import CourseExternalToolCard from "./CourseExternalToolCard.vue";
 
 jest.mock("@data-external-tool");
 
-describe("RoomExternalToolCard", () => {
+describe("CourseExternalToolCard", () => {
 	let useExternalToolLaunchStateMock: DeepMocked<
 		ReturnType<typeof useExternalToolLaunchState>
 	>;
@@ -51,7 +51,7 @@ describe("RoomExternalToolCard", () => {
 	});
 
 	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {
-		const wrapper = mount(RoomExternalToolCard, {
+		const wrapper = mount(CourseExternalToolCard, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

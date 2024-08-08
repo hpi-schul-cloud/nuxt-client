@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<room-external-tool-card
+		<course-external-tool-card
 			v-for="(tool, index) in tools"
 			size="360"
 			:key="index"
@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import RoomExternalToolCard from "@/components/rooms/CourseExternalToolCard.vue";
+import CourseExternalToolCard from "@/components/rooms/CourseExternalToolCard.vue";
 import RoomExternalToolsErrorDialog from "@/pages/courses/tools/CourseExternalToolsErrorDialog.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
