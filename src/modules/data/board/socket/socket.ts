@@ -8,9 +8,8 @@ import { nextTick } from "vue";
 
 let instance: Socket | null = null;
 
-const connectionOptions = {
-	socketConnectionLost: false,
-};
+let shouldShowFailure = false;
+let isInitialConnection = true;
 
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	const boardStore = useBoardStore();
@@ -26,9 +25,10 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 		instance.on("connect", async function () {
 			console.log("connected");
-			if (connectionOptions.socketConnectionLost) {
-				showSuccess(t("common.notification.connection.restored"));
-				connectionOptions.socketConnectionLost = false;
+			if (isInitialConnection === false) {
+				if (shouldShowFailure === false) {
+					showSuccess(t("common.notification.connection.restored"));
+				}
 
 				if (!(boardStore.board && cardStore.cards)) return;
 
@@ -37,13 +37,20 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 					cardIds: Object.keys(cardStore.cards),
 				});
 				await nextTick();
+				shouldShowFailure = false;
 			}
 		});
 
 		instance.on("disconnect", () => {
 			console.log("disconnected");
-			connectionOptions.socketConnectionLost = true;
-			showFailure(t("error.4500"));
+			isInitialConnection = false;
+			shouldShowFailure = true;
+			setTimeout(() => {
+				if (shouldShowFailure === true) {
+					showFailure(t("error.4500"));
+					shouldShowFailure = false;
+				}
+			}, 500);
 		});
 	}
 
@@ -69,8 +76,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 	const disconnectSocket = () => {
 		socket.disconnect();
-		if (connectionOptions.socketConnectionLost)
-			connectionOptions.socketConnectionLost = false;
+		isInitialConnection = true;
 	};
 
 	return {
