@@ -118,7 +118,7 @@ describe("@/pages/room-list.vue", () => {
 
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			// @ts-ignore
-			expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
+			expect(wrapper.vm.courses[0]).toStrictEqual(expectedItem);
 		});
 	});
 
@@ -136,22 +136,22 @@ describe("@/pages/room-list.vue", () => {
 
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				expect(wrapper.vm.rooms.length).toEqual(4);
+				expect(wrapper.vm.courses.length).toEqual(4);
 				wrapper.vm.searchText = "math";
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				expect(wrapper.vm.rooms.length).toEqual(1);
+				expect(wrapper.vm.courses.length).toEqual(1);
 				wrapper.vm.searchText = "";
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				expect(wrapper.vm.rooms.length).toEqual(4);
+				expect(wrapper.vm.courses.length).toEqual(4);
 				wrapper.vm.searchText = "15";
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				expect(wrapper.vm.rooms.length).toEqual(1);
+				expect(wrapper.vm.courses.length).toEqual(1);
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
-				expect(wrapper.vm.rooms[0]).toEqual({
+				expect(wrapper.vm.courses[0]).toEqual({
 					id: "234",
 					title: "History",
 					shortTitle: "Hi",

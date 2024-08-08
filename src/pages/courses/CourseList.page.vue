@@ -34,8 +34,8 @@
 				<v-container fluid>
 					<v-row>
 						<v-col
-							v-for="room in rooms"
-							:key="room.title"
+							v-for="course in courses"
+							:key="course.title"
 							class="d-flex justify-center cols-12 xs-6 sm-6 lg-4 xl-2"
 							cols="4"
 							xl="2"
@@ -44,9 +44,9 @@
 							sm="3"
 						>
 							<vCourseAvatar
-								:ref="`${room.id}-avatar`"
+								:ref="`${course.id}-avatar`"
 								class="course-avatar"
-								:item="room"
+								:item="course"
 								size="5em"
 								:show-badge="true"
 							/>
@@ -79,10 +79,10 @@ export default defineComponent({
 		};
 	},
 	computed: {
-		rooms(): Array<ListItemsObject> {
+		courses(): Array<ListItemsObject> {
 			return JSON.parse(JSON.stringify(coursesModule.getAllElements)).filter(
-				(room: ListItemsObject | any) =>
-					room.searchText
+				(course: ListItemsObject | any) =>
+					course.searchText
 						.toLowerCase()
 						.includes(this.$data.searchText.toLowerCase())
 			);
