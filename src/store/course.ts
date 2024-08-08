@@ -346,7 +346,7 @@ export default class CourseModule extends VuexModule {
 		return this.finishedLoading && this.courseData.elements.length === 0;
 	}
 
-	get getRoomId(): string {
+	get getCourseId(): string {
 		return this.courseData.roomId;
 	}
 

@@ -210,7 +210,7 @@ describe("Board", () => {
 		const loadingStateModule = createModuleMocks(LoadingStateModule);
 		const shareModule = createModuleMocks(ShareModule);
 		const courseModule = createModuleMocks(CourseModule, {
-			getRoomId: "room1",
+			getCourseId: "room1",
 		});
 		return {
 			notifierModule,

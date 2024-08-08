@@ -31,7 +31,7 @@
 				<div class="mx-2">
 					<course-dot-menu
 						:menu-items="headlineMenuItems"
-						data-testid="room-menu"
+						data-testid="course-menu"
 						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
 					/>
 				</div>
@@ -73,11 +73,11 @@
 		<component
 			v-if="getCurrentComponent"
 			:is="getCurrentComponent"
-			:room-data-object="courseData"
+			:course-data-object="courseData"
 			:role="dashBoardRole"
 			:courseId="courseId"
 			@copy-board-element="onCopyBoardElement"
-			data-testid="room-content"
+			data-testid="course-content"
 		/>
 		<share-modal type="courses" />
 		<copy-result-modal
@@ -382,7 +382,7 @@ export default defineComponent({
 						this.$t("common.actions.edit") +
 						"/" +
 						this.$t("common.actions.remove"),
-					dataTestId: "room-menu-edit-delete",
+					dataTestId: "course-menu-edit-delete",
 				},
 			];
 
@@ -391,7 +391,7 @@ export default defineComponent({
 					icon: this.icons.mdiContentCopy,
 					action: () => this.onCopyRoom(this.courseData.roomId),
 					name: this.$t("common.actions.copy"),
-					dataTestId: "room-menu-copy",
+					dataTestId: "course-menu-copy",
 				});
 			}
 
@@ -400,7 +400,7 @@ export default defineComponent({
 					icon: this.icons.mdiShareVariantOutline,
 					action: () => this.shareCourse(),
 					name: this.$t("common.actions.shareCopy"),
-					dataTestId: "room-menu-share",
+					dataTestId: "course-menu-share",
 				});
 			}
 
@@ -411,7 +411,7 @@ export default defineComponent({
 					icon: this.icons.mdiExport,
 					action: () => this.onExport(),
 					name: this.$t("common.actions.export"),
-					dataTestId: "room-menu-common-cartridge-download",
+					dataTestId: "course-menu-common-cartridge-download",
 				});
 			}
 

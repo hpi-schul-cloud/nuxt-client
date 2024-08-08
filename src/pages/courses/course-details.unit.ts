@@ -352,7 +352,7 @@ describe("@/pages/CourseDetails.page.vue", () => {
 		describe("students", () => {
 			it("should not have the menu button for students", () => {
 				const wrapper = getWrapper(mockPermissionsStudent);
-				const menuButton = wrapper.find('[data-testid="room-menu"]');
+				const menuButton = wrapper.find('[data-testid="course-menu"]');
 
 				expect(menuButton.exists()).toBe(false);
 			});
@@ -361,14 +361,14 @@ describe("@/pages/CourseDetails.page.vue", () => {
 		describe("teachers", () => {
 			it("should have the menu button for course teachers", () => {
 				const wrapper = getWrapper();
-				const menuButton = wrapper.find('[data-testid="room-menu"]');
+				const menuButton = wrapper.find('[data-testid="course-menu"]');
 
 				expect(menuButton.exists()).toBe(true);
 			});
 
 			it("should not have the menu button for substitution course teachers", () => {
 				const wrapper = getWrapper(mockPermissionsCourseSubstitutionTeacher);
-				const menuButton = wrapper.find('[data-testid="room-menu"]');
+				const menuButton = wrapper.find('[data-testid="course-menu"]');
 
 				expect(menuButton.exists()).toBe(false);
 			});
@@ -377,19 +377,21 @@ describe("@/pages/CourseDetails.page.vue", () => {
 				it("should only display 'edit/remove' action", async () => {
 					const wrapper = getWrapper();
 
-					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
+					const menuButton = wrapper.findComponent(
+						'[data-testid="course-menu"]'
+					);
 					await menuButton.trigger("click");
 
 					expect(
 						wrapper
-							.findComponent("[data-testid=room-menu-edit-delete]")
+							.findComponent("[data-testid=course-menu-edit-delete]")
 							.exists()
 					).toBe(true);
 					expect(
-						wrapper.findComponent("[data-testid=room-menu-copy]").exists()
+						wrapper.findComponent("[data-testid=course-menu-copy]").exists()
 					).toBe(false);
 					expect(
-						wrapper.findComponent("[data-testid=room-menu-share]").exists()
+						wrapper.findComponent("[data-testid=course-menu-share]").exists()
 					).toBe(false);
 				});
 			});
@@ -402,19 +404,21 @@ describe("@/pages/CourseDetails.page.vue", () => {
 					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper();
 
-					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
+					const menuButton = wrapper.findComponent(
+						'[data-testid="course-menu"]'
+					);
 					await menuButton.trigger("click");
 
 					expect(
 						wrapper
-							.findComponent("[data-testid=room-menu-edit-delete]")
+							.findComponent("[data-testid=course-menu-edit-delete]")
 							.exists()
 					).toBe(true);
 					expect(
-						wrapper.findComponent("[data-testid=room-menu-copy]").exists()
+						wrapper.findComponent("[data-testid=course-menu-copy]").exists()
 					).toBe(true);
 					expect(
-						wrapper.findComponent("[data-testid=room-menu-share]").exists()
+						wrapper.findComponent("[data-testid=course-menu-share]").exists()
 					).toBe(false);
 				});
 			});
@@ -427,19 +431,21 @@ describe("@/pages/CourseDetails.page.vue", () => {
 					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper();
 
-					const menuButton = wrapper.findComponent('[data-testid="room-menu"]');
+					const menuButton = wrapper.findComponent(
+						'[data-testid="course-menu"]'
+					);
 					await menuButton.trigger("click");
 
 					expect(
 						wrapper
-							.findComponent("[data-testid=room-menu-edit-delete]")
+							.findComponent("[data-testid=course-menu-edit-delete]")
 							.exists()
 					).toBe(true);
 					expect(
-						wrapper.findComponent("[data-testid=room-menu-copy]").exists()
+						wrapper.findComponent("[data-testid=course-menu-copy]").exists()
 					).toBe(false);
 					expect(
-						wrapper.findComponent("[data-testid=room-menu-share]").exists()
+						wrapper.findComponent("[data-testid=course-menu-share]").exists()
 					).toBe(true);
 				});
 			});
@@ -453,12 +459,12 @@ describe("@/pages/CourseDetails.page.vue", () => {
 				const wrapper = getWrapper();
 
 				const threeDotButton = wrapper.findComponent(
-					'[data-testid="room-menu"]'
+					'[data-testid="course-menu"]'
 				);
 				await threeDotButton.trigger("click");
 
 				const moreActionButton = wrapper.findComponent(
-					`[data-testid=room-menu-edit-delete]`
+					`[data-testid=course-menu-edit-delete]`
 				);
 				await moreActionButton.trigger("click");
 
@@ -475,12 +481,12 @@ describe("@/pages/CourseDetails.page.vue", () => {
 					const wrapper = getWrapper();
 
 					const threeDotButton = wrapper.findComponent(
-						'[data-testid="room-menu"]'
+						'[data-testid="course-menu"]'
 					);
 					await threeDotButton.trigger("click");
 
 					const moreActionButton = wrapper.findComponent(
-						`[data-testid=room-menu-copy]`
+						`[data-testid=course-menu-copy]`
 					);
 					await moreActionButton.trigger("click");
 
@@ -498,15 +504,15 @@ describe("@/pages/CourseDetails.page.vue", () => {
 					const wrapper = getWrapper();
 
 					const threeDotButton = wrapper.findComponent(
-						'[data-testid="room-menu"]'
+						'[data-testid="course-menu"]'
 					);
 					await threeDotButton.trigger("click");
 					const moreActionButton = wrapper.findAll(
-						`[data-testid=room-menu-common-cartridge-download]`
+						`[data-testid=course-menu-common-cartridge-download]`
 					);
 
 					expect(moreActionButton).not.toContain(
-						`[data-testid=room-menu-common-cartridge-download]`
+						`[data-testid=course-menu-common-cartridge-download]`
 					);
 				});
 
@@ -518,11 +524,11 @@ describe("@/pages/CourseDetails.page.vue", () => {
 					const wrapper = getWrapper();
 
 					const threeDotButton = wrapper.findComponent(
-						'[data-testid="room-menu"]'
+						'[data-testid="course-menu"]'
 					);
 					await threeDotButton.trigger("click");
 					const moreActionButton = wrapper.findComponent(
-						`[data-testid=room-menu-common-cartridge-download]`
+						`[data-testid=course-menu-common-cartridge-download]`
 					);
 					await moreActionButton.trigger("click");
 
@@ -538,12 +544,12 @@ describe("@/pages/CourseDetails.page.vue", () => {
 				const wrapper = getWrapper();
 
 				const threeDotButton = wrapper.findComponent(
-					'[data-testid="room-menu"]'
+					'[data-testid="course-menu"]'
 				);
 				await threeDotButton.trigger("click");
 
 				const moreActionButton = wrapper.findComponent(
-					`[data-testid=room-menu-share]`
+					`[data-testid=course-menu-share]`
 				);
 				await moreActionButton.trigger("click");
 
@@ -558,12 +564,12 @@ describe("@/pages/CourseDetails.page.vue", () => {
 				const wrapper = getWrapper();
 
 				const threeDotButton = wrapper.findComponent(
-					'[data-testid="room-menu"]'
+					'[data-testid="course-menu"]'
 				);
 				await threeDotButton.trigger("click");
 
 				const moreActionButton = wrapper.findComponent(
-					`[data-testid=room-menu-share]`
+					`[data-testid=course-menu-share]`
 				);
 				await moreActionButton.trigger("click");
 
