@@ -19,8 +19,8 @@
 		</template>
 		<template v-else-if="isEmptyState">
 			<v-custom-empty-state
-				ref="rooms-empty-state"
-				image="rooms-empty-state"
+				ref="course-empty-state"
+				image="course-empty-state"
 				:title="$t('pages.rooms.allRooms.emptyState.title')"
 				class="mt-16"
 			/>

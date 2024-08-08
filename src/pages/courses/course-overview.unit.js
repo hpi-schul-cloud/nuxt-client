@@ -438,8 +438,8 @@ describe("@/pages/CourseOverview", () => {
 			},
 		});
 
-		const CourseModal = wrapper.findComponent({ name: "course-modal" });
-		CourseModal.vm.$emit(
+		const courseModal = wrapper.findComponent({ name: "course-modal" });
+		courseModal.vm.$emit(
 			"drag-from-group",
 			wrapper.vm.groupDialog.groupData.groupElements[0]
 		);

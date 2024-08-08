@@ -113,7 +113,7 @@ describe("@templates/CourseWrapper.vue", () => {
 				});
 
 				expect(
-					wrapper.findComponent({ ref: "rooms-empty-state" }).exists()
+					wrapper.findComponent({ ref: "course-empty-state" }).exists()
 				).toBe(true);
 			});
 		});
