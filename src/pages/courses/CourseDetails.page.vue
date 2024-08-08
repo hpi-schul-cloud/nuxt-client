@@ -75,7 +75,7 @@
 			:is="getCurrentComponent"
 			:room-data-object="courseData"
 			:role="dashBoardRole"
-			:roomId="courseId"
+			:courseId="courseId"
 			@copy-board-element="onCopyBoardElement"
 			data-testid="room-content"
 		/>
