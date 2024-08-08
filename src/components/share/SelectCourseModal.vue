@@ -52,7 +52,7 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiInformation } from "@/components/icons/material";
 import { PropType, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { AllItems, ListItemsObject } from "@/store/types/courseses";
+import { AllItems, ListItemsObject } from "@/store/types/courses";
 
 const emit = defineEmits(["import", "cancel", "next"]);
 defineProps({
