@@ -1121,6 +1121,8 @@ export default {
 		"Sichtbarkeit von Schüler:innen für Lehrkräfte aktivieren",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
 		"Videokonferenzen für Kurse und Teams aktivieren",
+	"pages.administration.school.index.privacySettings.labels.aiTutor":
+		"KI-Tutor an Schule aktivieren",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"Sind Chats an deiner Schule aktiviert, können Team-Admins im jeweiligen Team die Chatfunktion gezielt freischalten.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1135,6 +1137,8 @@ export default {
 		"Wenn diese Option nicht aktiviert ist, können die Lehrkräfte ausschließlich die Klassen sowie deren Schülerinnen und Schüler sehen, in denen sie Mitglied sind.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
 		"Sind Videokonferenzen an deiner Schule aktiviert, können Lehrkräfte ihrem Kurs im Bereich Tools das Videokonferenz-Tool hinzufügen und dann von dort aus Videokonferenzen für alle Kursteilnehmer:innen starten. Team-Admins können die Videokonferenzfunktion im jeweiligen Team aktivieren. Team-Leiter:innen und Team-Admins können dann Videokonferenzen zu Terminen hinzufügen und starten.",
+	"pages.administration.school.index.privacySettings.longText.aiTutor":
+		"Ist der KI-Tutor an deiner Schule aktiviert, können Lehrkräfte in ihren Bereichen den KI-Tutor hinzufügen.",
 	"pages.administration.school.index.privacySettings":
 		"Datenschutzeinstellungen",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing":

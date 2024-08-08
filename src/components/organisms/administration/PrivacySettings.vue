@@ -127,6 +127,36 @@
 				</p>
 			</v-col>
 		</v-row>
+		<v-row v-if="aiTutorEnabled">
+			<v-col>
+				<v-switch
+					:model-value="features.aiTutor"
+					:label="
+						$t(
+							'pages.administration.school.index.privacySettings.labels.aiTutor'
+						)
+					"
+					:aria-label="
+						$t(
+							'pages.administration.school.index.privacySettings.labels.aiTutor'
+						)
+					"
+					:true-icon="mdiCheck"
+					class="ml-1 mt-0"
+					data-testid="toggle_ai_tutor"
+					@update:modelValue="
+						($event) => $emit('update-feature-settings', $event, 'aiTutor')
+					"
+				/>
+				<p class="switch-hint">
+					{{
+						$t(
+							"pages.administration.school.index.privacySettings.longText.aiTutor"
+						)
+					}}
+				</p>
+			</v-col>
+		</v-row>
 	</div>
 </template>
 
@@ -162,6 +192,10 @@ const isTeacherStudentVisibilityVisible = computed(
 
 const videoConferenceEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_VIDEOCONFERENCE_ENABLED
+);
+
+const aiTutorEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_AI_TUTOR_ENABLED
 );
 
 const rocketChatEnabled = computed(

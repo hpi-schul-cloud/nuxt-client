@@ -28,6 +28,7 @@ const searchStrings = {
 	learnStore: "admin-school-toggle-learning-store",
 	rocketChat: "toggle_chat",
 	videoconference: "toggle_video_conference",
+	aiTutor: "toggle_ai_tutor",
 };
 
 const getWrapper = (props = generateProps()) => {
@@ -167,6 +168,34 @@ describe("PrivacySettings", () => {
 
 				expect(
 					wrapper.findAll(`[data-testid=${searchStrings.videoconference}]`)
+				).toHaveLength(0);
+			});
+		});
+
+		describe("when env var for aiTutor is true", () => {
+			it("should display aiTutor feature switch", () => {
+				const envs = envsFactory.build({
+					FEATURE_AI_TUTOR_ENABLED: true,
+				});
+				envConfigModule.setEnvs(envs);
+				const wrapper = getWrapper();
+
+				expect(
+					wrapper.findAll(`[data-testid=${searchStrings.aiTutor}]`)
+				).toHaveLength(1);
+			});
+		});
+
+		describe("when env var for aiTutor is false", () => {
+			it("should hide aiTutor feature switch", () => {
+				const envs = envsFactory.build({
+					FEATURE_AI_TUTOR_ENABLED: false,
+				});
+				envConfigModule.setEnvs(envs);
+				const wrapper = getWrapper();
+
+				expect(
+					wrapper.findAll(`[data-testid=${searchStrings.aiTutor}]`)
 				).toHaveLength(0);
 			});
 		});
