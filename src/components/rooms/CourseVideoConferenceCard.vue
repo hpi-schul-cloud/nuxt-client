@@ -1,5 +1,5 @@
 <template>
-	<room-base-card
+	<course-base-card
 		:title="t('pages.videoConference.title')"
 		:logo-url="logoUrl"
 		test-id="vc-card"
@@ -43,17 +43,17 @@
 				</v-alert>
 			</div>
 		</template>
-	</room-base-card>
+	</course-base-card>
 </template>
 
 <script lang="ts">
 import { mdiReload } from "@mdi/js";
 import { computed, ComputedRef, defineComponent } from "vue";
-import RoomBaseCard from "./CourseBaseCard.vue";
+import CourseBaseCard from "./CourseBaseCard.vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
-	components: { RoomBaseCard },
+	components: { CourseBaseCard },
 	emits: ["click", "refresh"],
 	props: {
 		isRunning: {

@@ -3,9 +3,9 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import RoomBaseCard from "./CourseBaseCard.vue";
+import CourseBaseCard from "./CourseBaseCard.vue";
 
-describe("RoomBaseCard", () => {
+describe("CourseBaseCard", () => {
 	const getWrapper = (propsData: {
 		logoUrl?: string;
 		openInNewTab?: boolean;
@@ -13,7 +13,7 @@ describe("RoomBaseCard", () => {
 		const title = "Test Card Title";
 		const testId = "test-card";
 
-		const wrapper = mount(RoomBaseCard, {
+		const wrapper = mount(CourseBaseCard, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

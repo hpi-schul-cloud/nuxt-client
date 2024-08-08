@@ -1,5 +1,5 @@
 <template>
-	<room-base-card
+	<course-base-card
 		:title="tool.name"
 		:logo-url="tool.logoUrl"
 		:open-in-new-tab="tool.openInNewTab"
@@ -45,7 +45,7 @@
 				/>
 			</div>
 		</template>
-	</room-base-card>
+	</course-base-card>
 </template>
 
 <script setup lang="ts">
@@ -59,7 +59,7 @@ import { InfoChip, WarningChip } from "@ui-chip";
 import { CourseDotMenu } from "@ui-course-details";
 import { computed, ComputedRef, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import RoomBaseCard from "./CourseBaseCard.vue";
+import CourseBaseCard from "./CourseBaseCard.vue";
 
 const props = defineProps({
 	tool: {
