@@ -17872,11 +17872,11 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerCopyCourse: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+        roomsControllerCopyCourse: async (courseId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'roomId' is not null or undefined
-            assertParamExists('roomsControllerCopyCourse', 'roomId', roomId)
-            const localVarPath = `/rooms/{roomId}/copy`
-                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            assertParamExists('roomsControllerCopyCourse', 'courseId', courseId)
+            const localVarPath = `/rooms/{courseId}/copy`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
