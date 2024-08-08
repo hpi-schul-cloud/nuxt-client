@@ -29,8 +29,6 @@ describe("CollaborativeTextEditorElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 
 	const setup = (props: { isEditMode: boolean; getUrlHasError?: boolean }) => {
-		document.body.setAttribute("data-app", "true");
-
 		const element = collaborativeTextEditorElementResponseFactory.build();
 
 		const resolvedValue = props.getUrlHasError
@@ -131,7 +129,7 @@ describe("CollaborativeTextEditorElement", () => {
 			);
 
 			it.each(["enter", "space"])(
-				"should not open element in new tab when %s is pressed getUrl is undefined",
+				"should not open element in new tab when %s is pressed and getUrl is undefined",
 				async (key) => {
 					const { wrapper, windowMock, element } = setup({
 						isEditMode: false,
