@@ -74,7 +74,7 @@
 							:lesson-card-index="index"
 							:user-role="role"
 							:lesson="item.content"
-							:room="lessonData"
+							:course="lessonData"
 							:aria-label="
 								$t('pages.room.cards.aria', {
 									itemType: $t('common.words.topic'),
@@ -141,7 +141,7 @@
 					:lesson-card-index="index"
 					:user-role="role"
 					:lesson="item.content"
-					:room="lessonData"
+					:course="lessonData"
 					:aria-label="
 						$t('pages.room.cards.aria', {
 							itemType: $t('common.words.topic'),

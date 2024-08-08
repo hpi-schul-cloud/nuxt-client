@@ -82,7 +82,7 @@ describe("@components/share/ImportFlow", () => {
 		});
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		setupStores({
-			rooms: CoursesModule,
+			course: CoursesModule,
 			envConfigModule: EnvConfigModule,
 		});
 		jest.spyOn(coursesModule, "fetchAllElements").mockImplementation();
