@@ -118,7 +118,10 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		path: "/administration/rooms/new",
 		component: () => import("@/pages/administration/RoomsOverview.page.vue"),
 		name: "administration-rooms-new",
-		beforeEnter: createPermissionGuard(["teacher_create"]),
+		beforeEnter: createPermissionGuard(["class_list"]),
+		props: (route: RouteLocationNormalized) => ({
+			tab: route.query.tab,
+		}),
 	},
 	{
 		path: "/administration/groups/classes",
