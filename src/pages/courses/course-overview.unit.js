@@ -24,7 +24,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
 
-const mockRoomStoreData = [
+const mockCourseStoreData = [
 	{
 		id: "1",
 		title: "First",
@@ -166,7 +166,7 @@ const getWrapper = (device = "desktop", options = {}) => {
 
 describe("@/pages/CourseOverview", () => {
 	beforeEach(() => {
-		coursesModule.setCourseData(mockRoomStoreData);
+		coursesModule.setCourseData(mockCourseStoreData);
 		coursesModule.setAllElements(mockCourseData);
 		authModule.setMe(mockAuthStoreData);
 	});
