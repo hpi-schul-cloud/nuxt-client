@@ -792,12 +792,20 @@ export default {
 		"Sincronización completada exitosamente",
 	"feature-course-sync.GroupSelectionDialog.title":
 		"Seleccionar grupo de usuarios",
-	"feature-course-sync.GroupSelectionDialog.text":
-		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
 	"feature-course-sync.GroupSelectionDialog.selection.label":
 		"Selección de grupo",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Los siguientes datos para crear un nuevo curso no están disponibles en el grupo de usuarios {groupName}:<li>Profesor</li><br/>Por favor, regístrese en moin.schule y comience la creación del curso nuevamente.",
+	"feature-course-sync.StartNewCourseSyncDialog.text":
+		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
+	"feature-course-sync.StartExistingCourseSyncDialog.text":
+		"El grupo de usuarios seleccionado se sincronizará con el curso seleccionado en el siguiente paso.",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
+		"Una sincronización con {systemName} sobrescribe a las personas del curso (profesores y estudiantes).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
+		"¿Debería realmente iniciarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
+	"feature-course-sync.StartExistingCourseSyncDialog.success":
+		"Grupo de usuarios sincronizado exitosamente",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
@@ -1529,6 +1537,7 @@ export default {
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
 	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
 	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
+	"pages.rooms.menuItems.startSync": "Iniciar sincronización",
 	"pages.rooms.importCourse.btn.continue": "Continuar",
 	"pages.rooms.importCourse.codeError": "El código del curso no está en uso.",
 	"pages.rooms.importCourse.importError":

@@ -34,7 +34,7 @@ const getWrapper = (
 				}),
 			},
 			stubs: {
-				GroupSelectionDialog: true,
+				StartNewCourseSyncDialog: true,
 				CommonCartridgeImportModal: true,
 			},
 		},

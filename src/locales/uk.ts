@@ -782,11 +782,19 @@ export default {
 		"Синхронізацію успішно завершено",
 	"feature-course-sync.GroupSelectionDialog.title":
 		"Виберіть групу користувачів",
-	"feature-course-sync.GroupSelectionDialog.text":
-		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Вибір групи",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Наступні дані для створення нового курсу недоступні в групі користувачів {groupName}:<li>Викладач</li><br/>Перевірте moin.schule і почніть створення курсу знову.",
+	"feature-course-sync.StartNewCourseSyncDialog.text":
+		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
+	"feature-course-sync.StartExistingCourseSyncDialog.text":
+		"Вибрана група користувачів буде синхронізована з вибраним курсом на наступному кроці.",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
+		"Синхронізація з {systemName} перезаписує людей у курсі (викладачі та студенти).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
+		"Чи дійсно слід починати синхронізацію групи користувачів {groupName} у курсі {courseName}?",
+	"feature-course-sync.StartExistingCourseSyncDialog.success":
+		"Групу користувачів успішно синхронізовано",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
@@ -1509,6 +1517,7 @@ export default {
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
 	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
 	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
+	"pages.rooms.menuItems.startSync": "Почніть синхронізацію",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",
 	"pages.rooms.importCourse.codeError": "Код курсу не використовується.",
 	"pages.rooms.importCourse.importError":

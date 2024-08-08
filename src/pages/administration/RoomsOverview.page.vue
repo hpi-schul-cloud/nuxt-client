@@ -134,7 +134,7 @@
 				/>
 			</template>
 		</v-custom-dialog>
-		<GroupSelectionDialog v-model:is-open="isCourseSyncDialogOpen" />
+		<StartNewCourseSyncDialog v-model:is-open="isCourseSyncDialogOpen" />
 
 		<v-btn
 			class="my-5 button-start"
@@ -170,7 +170,8 @@ import {
 	injectStrict,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { GroupSelectionDialog } from "@feature-course-sync";
+import { CourseInfo, useCourseList } from "@data-room";
+import { StartNewCourseSyncDialog } from "@feature-course-sync";
 import { RenderHTML } from "@feature-render-html";
 import {
 	mdiAccountGroupOutline,
@@ -182,7 +183,6 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { CourseInfo, useCourseList } from "@data-room";
 import { groupModule } from "../../store";
 
 type Tab = "current" | "archive";

@@ -771,11 +771,19 @@ export default {
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronization completed successfully",
 	"feature-course-sync.GroupSelectionDialog.title": "Select user group",
-	"feature-course-sync.GroupSelectionDialog.text":
-		"In the next step, the selected user group will be synchronized with the newly created course.",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Group selection",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"The following data for creating a new course is not available in the user group {groupName}:<li>Teacher</li><br/>Please check in moin.schule and start course creation again.",
+	"feature-course-sync.StartNewCourseSyncDialog.text":
+		"In the next step, the selected user group will be synchronized with the newly created course.",
+	"feature-course-sync.StartExistingCourseSyncDialog.text":
+		"The selected user group will be synchronized with the selected course in the next step.",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
+		"A synchronization with {systemName} overwrites the members in the course (teachers and students).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
+		"Should the synchronization of the user group {groupName} in the course {courseName} really be started?",
+	"feature-course-sync.StartExistingCourseSyncDialog.success":
+		"User group successfully synchronized",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
 	"format.date": "MM/DD/YYYY",
 	"format.dateLong": "dddd, MMMM DD. YYYY",
@@ -1487,6 +1495,7 @@ export default {
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
 	"pages.rooms.headerSection.toCourseFiles": "To the course files",
 	"pages.rooms.menuItems.endSync": "End synchronization",
+	"pages.rooms.menuItems.startSync": "Start synchronization",
 	"pages.rooms.importCourse.btn.continue": "Continue",
 	"pages.rooms.importCourse.codeError": "The course code is not in use.",
 	"pages.rooms.importCourse.importError":

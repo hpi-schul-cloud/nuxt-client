@@ -776,11 +776,19 @@ export default {
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronisation erfolgreich beendet",
 	"feature-course-sync.GroupSelectionDialog.title": "Nutzendengruppe auswählen",
-	"feature-course-sync.GroupSelectionDialog.text":
-		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem neu erstellten Kurs synchronisiert.",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Gruppen-Auswahl",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Folgende Daten zur Erstellung eines neuen Kurses sind in Nutzergruppe {groupName} nicht vorhanden:<li>Lehrkraft</li><br/>Bitte in moin.schule überprüfen und Kurs-Erstellung erneut starten.",
+	"feature-course-sync.StartNewCourseSyncDialog.text":
+		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem neu erstellten Kurs synchronisiert.",
+	"feature-course-sync.StartExistingCourseSyncDialog.text":
+		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem ausgewählten Kurs synchronisiert.",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
+		"Eine Synchronisation mit {systemName} überschreibt die Personen des Kurses (Lehrkräft und Schüler*innen).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
+		"Soll die Synchronisation der Nutzergruppe {groupName} im Kurs {courseName} wirklich gestartet werden?",
+	"feature-course-sync.StartExistingCourseSyncDialog.success":
+		"Nutzendengruppe erfolgreich synchronisiert",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
@@ -1514,6 +1522,7 @@ export default {
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
 	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
 	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
+	"pages.rooms.menuItems.startSync": "Synchronisation starten",
 	"pages.rooms.importCourse.btn.continue": "Weiter",
 	"pages.rooms.importCourse.codeError": "Der Kurs-Code wird nicht verwendet.",
 	"pages.rooms.importCourse.importError":
