@@ -197,6 +197,10 @@ export default defineComponent({
 				item?.parentNode?.removeChild(item);
 			}
 
+			if (toColumnId === fromColumnId && props.column.cards.length === 1) {
+				return;
+			}
+
 			boardStore.moveCardRequest({
 				cardId,
 				oldIndex: oldIndex!,
