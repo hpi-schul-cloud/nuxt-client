@@ -15,9 +15,9 @@ import {
 } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 import { VDialog, VSwitch } from "vuetify/lib/components/index.mjs";
-import RoomVideoConferenceSection from "./CourseVideoConferenceSection.vue";
+import CourseVideoConferenceSection from "./CourseVideoConferenceSection.vue";
 
-describe("RoomVideoConferenceSection", () => {
+describe("CourseVideoConferenceSection", () => {
 	const mockUrl = "https://mock.com";
 
 	const getWrapper = (
@@ -62,7 +62,7 @@ describe("RoomVideoConferenceSection", () => {
 			},
 		});
 
-		const wrapper = shallowMount(RoomVideoConferenceSection, {
+		const wrapper = shallowMount(CourseVideoConferenceSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
