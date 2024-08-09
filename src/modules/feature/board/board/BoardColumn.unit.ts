@@ -23,7 +23,6 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
-import { nextTick } from "vue";
 
 const { isDragging, dragEnd } = useDragAndDrop();
 
@@ -275,16 +274,6 @@ describe("BoardColumn", () => {
 				const emitted = wrapper.emitted("move:column-up");
 				expect(emitted).toHaveLength(1);
 			});
-		});
-	});
-
-	describe("when 'elementIdToRender' value is set in store", () => {
-		it("'componentKey' value should be changed", async () => {
-			const { wrapper, store } = setup();
-			expect(wrapper.vm.componentKey).toBe(0);
-			store.elementIdToRender = wrapper.vm.column.id;
-			await nextTick();
-			expect(wrapper.vm.componentKey).toBe(1);
 		});
 	});
 });

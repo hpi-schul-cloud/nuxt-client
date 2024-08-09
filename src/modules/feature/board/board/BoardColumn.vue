@@ -319,7 +319,7 @@ export default defineComponent({
 		});
 
 		const columnId = toRef(props, "column").value.id;
-		const { getRenderKey, renderKeyList } = useForceRender(columnId);
+		const { getRenderKey, renderKeyList } = useForceRender(columnId); // TODO: remove renderKeyList
 		const renderKey = computed(() => getRenderKey());
 
 		return {
