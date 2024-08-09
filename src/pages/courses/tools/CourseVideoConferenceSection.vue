@@ -97,7 +97,7 @@
 </template>
 
 <script lang="ts">
-import CourseVideoConferenceCard from "@/components/rooms/CourseVideoConferenceCard.vue";
+import CourseVideoConferenceCard from "@/components/courses/CourseVideoConferenceCard.vue";
 import {
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
