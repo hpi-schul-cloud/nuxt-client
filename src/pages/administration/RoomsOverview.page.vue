@@ -39,24 +39,12 @@
 			<template #[`item.actions`]="{ item }">
 				<template v-if="showRoomAction(item)">
 					<v-btn
-						:title="t('pages.administration.rooms.manage')"
-						:aria-label="t('pages.administration.rooms.manage')"
-						data-testid="legacy-class-table-manage-btn"
+						:title="t('pages.administration.courses.edit')"
+						:aria-label="t('pages.administration.courses.edit')"
+						data-testid="course-table-edit-btn"
 						variant="outlined"
 						size="small"
-						:href="`/administration/rooms/${item.id}/manage`"
-						class="mx-1 px-1"
-						min-width="0"
-					>
-						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
-					</v-btn>
-					<v-btn
-						:title="t('pages.administration.classes.edit')"
-						:aria-label="t('pages.administration.classes.edit')"
-						data-testid="class-table-edit-btn"
-						variant="outlined"
-						size="small"
-						:href="`/administration/rooms/${item.id}/edit`"
+						:href="`/courses/${item.id}/edit`"
 						class="mx-1 px-1"
 						min-width="0"
 					>
@@ -114,8 +102,8 @@
 			data-testid="delete-dialog"
 			has-buttons
 			:buttons="['cancel', 'confirm']"
-			@dialog-closed="onCancelClassDeletion"
-			@dialog-confirmed="onConfirmClassDeletion"
+			@dialog-closed="onCancelCourseDeletion"
+			@dialog-confirmed="onConfirmCourseDeletion"
 		>
 			<template #title>
 				<h2 class="text-h4 my-2">
@@ -140,10 +128,10 @@
 			class="my-5 button-start"
 			color="primary"
 			variant="flat"
-			data-testid="admin-class-add-button"
-			href="/administration/classes/create"
+			data-testid="admin-courses-add-button"
+			href=""
 		>
-			{{ t("pages.administration.classes.index.add") }}
+			{{ t("pages.administration.courses.index.add") }}
 		</v-btn>
 
 		<p class="text-muted">
@@ -173,17 +161,17 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { CourseInfo, useCourseList } from "@data-room";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
 import { RenderHTML } from "@feature-render-html";
+import { useTitle } from "@vueuse/core";
+import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRoute, useRouter } from "vue-router";
+import { roomsModule } from "@/store";
 import {
 	mdiAccountGroupOutline,
 	mdiPencilOutline,
 	mdiSyncOff,
 	mdiTrashCanOutline,
 } from "@mdi/js";
-import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
-import { groupModule } from "../../store";
 
 type Tab = "current" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -212,6 +200,8 @@ const {
 	courses,
 	setSortBy,
 	setSortOrder,
+	setCurrentPage,
+	setPagination,
 } = useCourseList();
 
 const activeTab = computed({
@@ -234,7 +224,7 @@ const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
 		href: "/administration/",
 	},
 	{
-		title: t("pages.administration.classes.index.title"),
+		title: t("pages.administration.rooms.index.title"),
 		disabled: true,
 	},
 ]);
@@ -258,7 +248,7 @@ const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
 //);
 
 const hasPermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("CLASS_EDIT".toLowerCase())
+	authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())
 );
 
 const showRoomAction = (item: CourseInfo) => hasPermission.value && item.id;
@@ -286,7 +276,7 @@ const onClickDeleteIcon = (selectedCourse: CourseInfo) => {
 	isDeleteDialogOpen.value = true;
 };
 
-const onCancelClassDeletion = () => {
+const onCancelCourseDeletion = () => {
 	selectedItem.value = undefined;
 	isDeleteDialogOpen.value = false;
 };
@@ -325,12 +315,9 @@ const headers = computed(() => {
 	return headerList;
 });
 
-const onConfirmClassDeletion = async () => {
+const onConfirmCourseDeletion = async () => {
 	if (selectedItem.value) {
-		await groupModule.deleteClass({
-			classId: selectedItem.value.id,
-			query: schoolYearQueryType.value,
-		});
+		await roomsModule.delete(selectedItem.value.id);
 	}
 };
 
@@ -359,20 +346,19 @@ const onUpdateSortBy = async (sortBy: CourseSortItem[]) => {
 };
 
 const onUpdateCurrentPage = async (currentPage: number) => {
-	groupModule.setPage(currentPage);
-	const skip = (currentPage - 1) * groupModule.getPagination.limit;
-	groupModule.setPagination({ ...pagination.value, skip });
+	setCurrentPage(currentPage);
+	const skip = (currentPage - 1) * pagination.value.limit;
+	setPagination({ ...pagination.value, skip });
 
 	await loadCourseList();
 };
 const onUpdateItemsPerPage = async (itemsPerPage: number) => {
-	groupModule.setPagination({ ...pagination.value, limit: itemsPerPage });
+	setPagination({ ...pagination.value, limit: itemsPerPage });
 
 	await loadCourseList();
 };
 
 onMounted(() => {
-	loadCourseList();
 	onTabsChange(activeTab.value);
 });
 

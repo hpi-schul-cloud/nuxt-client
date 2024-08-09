@@ -18,6 +18,7 @@ export const useCourseList = () => {
 	const page: Ref<number> = ref(1);
 	const key: Ref<string | undefined> = ref();
 	const sortOrder: Ref<boolean | "asc" | "desc"> = ref("asc");
+	const currentPage: Ref<number> = ref(1);
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
@@ -28,6 +29,14 @@ export const useCourseList = () => {
 
 	const setSortOrder = (order: boolean | "asc" | "desc") => {
 		sortOrder.value = order;
+	};
+
+	const setCurrentPage = (page: number) => {
+		currentPage.value = page;
+	};
+
+	const setPagination = (paginationData: Pagination) => {
+		pagination.value = paginationData;
 	};
 
 	const fetchCourses = async (
@@ -46,9 +55,13 @@ export const useCourseList = () => {
 				order
 			);
 
-			courses.value = response.data.data.map((course: any) => {
+			console.log(response);
+
+			courses.value = response.data.map((course: any) => {
 				return CourseInfoMapper.mapToCourseInfo(course);
 			});
+
+			console.log(courses.value);
 
 			pagination.value.total = response.data.total;
 		} catch (errorResponse) {
@@ -78,6 +91,9 @@ export const useCourseList = () => {
 		pagination,
 		page,
 		courses,
+		currentPage,
+		setPagination,
+		setCurrentPage,
 		setSortBy,
 		setSortOrder,
 		fetchCourses,

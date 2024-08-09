@@ -863,6 +863,9 @@ export default {
 	"pages.administration.classes.label.archive": "Archive",
 	"pages.administration.classes.manage": "Manage class",
 	"pages.administration.classes.header.sync": "Synchronized with",
+	"pages.administration.courses.index.add": "Add course",
+
+	"pages.administration.courses.edit": "Edit course",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronization",
 	"pages.administration.ldap.activate.className": "Name",
@@ -1069,7 +1072,7 @@ export default {
 		"The registration links could not be generated",
 	"pages.administration.remove.error": "Failed to delete users",
 	"pages.administration.remove.success": "Selected users deleted",
-	"pages.administration.rooms.index.title": "Kurse verwalten",
+	"pages.administration.rooms.index.title": "Manage courses",
 	"pages.administration.rooms.manage": "Klasse verwalten",
 	"pages.administration.school.index.authSystems.addLdap": "Add LDAP System",
 	"pages.administration.school.index.authSystems.alias": "Alias",

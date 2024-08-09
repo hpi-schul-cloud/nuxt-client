@@ -869,6 +869,8 @@ export default {
 	"pages.administration.classes.label.archive": "Archiv",
 	"pages.administration.classes.manage": "Klasse verwalten",
 	"pages.administration.classes.header.sync": "Synchronisiert mit",
+	"pages.administration.courses.index.add": "Kurs hinzufügen",
+	"pages.administration.courses.edit": "Kurs bearbeiten",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronisation",
 	"pages.administration.ldap.activate.className": "Name",

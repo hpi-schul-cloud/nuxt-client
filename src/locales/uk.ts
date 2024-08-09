@@ -875,6 +875,8 @@ export default {
 	"pages.administration.classes.label.archive": "Архів",
 	"pages.administration.classes.manage": "Керувати класом",
 	"pages.administration.classes.header.sync": "Синхронізовано з",
+	"pages.administration.courses.index.add": "Додати курс",
+	"pages.administration.courses.edit": "Редагувати курс",
 	"pages.administration.index.title": "Адміністрування",
 	"pages.administration.ldap.activate.breadcrumb": "Cинхронізація",
 	"pages.administration.ldap.activate.className": "Ім'я",
@@ -1082,7 +1084,7 @@ export default {
 		"Не вдалося згенерувати посилання для реєстрації",
 	"pages.administration.remove.error": "Не вдалося видалити користувачів",
 	"pages.administration.remove.success": "Вибраних користувачів видалено",
-	"pages.administration.rooms.index.title": "Kurse verwalten",
+	"pages.administration.rooms.index.title": "Керувати курсами",
 	"pages.administration.rooms.manage": "Klasse verwalten",
 	"pages.administration.school.index.authSystems.addLdap":
 		"Додати систему LDAP",

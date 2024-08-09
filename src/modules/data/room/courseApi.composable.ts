@@ -34,19 +34,24 @@ export const useCourseApi = () => {
 		key: string | undefined,
 		order: number
 	) => {
-		const archiveQuery = buildArchiveQuery(schoolYear);
+		//const archiveQuery =
+		buildArchiveQuery(schoolYear);
 
 		const query = {
-			$and: [archiveQuery],
-			$populate: ["classIds", "teacherIds", "syncedWithGroup"],
+			//$and: [archiveQuery],
+			$populate: ["classIds", "teacherIds"],
 			$limit: limit,
 			$skip: skip,
 			$sort: { key, order },
 		};
 
-		const response = await $axios.get("/v1/courses", { params: { qs: query } });
+		const response = await $axios.get("/v1/courses", {
+			params: query,
+		});
 
-		return response;
+		console.log(response);
+
+		return response.data;
 	};
 
 	return {

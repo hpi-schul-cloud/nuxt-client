@@ -6,14 +6,15 @@ export class CourseInfoMapper {
 			id: courseInfoResponse.id,
 			name: courseInfoResponse.name,
 			classes: this.mapToClassesInfos(courseInfoResponse.classIds),
-			syncedWithGroup: this.mapToClassInfo(courseInfoResponse.syncedWithGroup),
-			teacherNames: this.mapToTeacherNames(courseInfoResponse.teacherNames),
+			syncedWithGroup: courseInfoResponse.syncedWithGroup ?? undefined,
+			teacherNames: this.mapToTeacherNames(courseInfoResponse.teacherIds),
+			isArchived: courseInfoResponse.isArchived,
 		};
 
 		return mapped;
 	}
 
-	private static mapToClassesInfos(classes: any[]): ClassInfo[] {
+	private static mapToClassesInfos(classes: any[]): ClassInfo[] | undefined {
 		const mapped = classes.map((clazz: any) => {
 			return this.mapToClassInfo(clazz);
 		});
@@ -24,16 +25,17 @@ export class CourseInfoMapper {
 	private static mapToClassInfo(clazz: any): ClassInfo {
 		const mapped = {
 			id: clazz.id,
-			name: clazz.name,
 		};
 
 		return mapped;
 	}
 
-	private static mapToTeacherNames(teachers: any[]): string[] {
-		const mapped = teachers.map((teacher: any) => {
-			return teacher.name;
+	private static mapToTeacherNames(teacherIds: any[]): string[] {
+		const mapped = teacherIds.map((teacher: any) => {
+			return teacher.firstName + " " + teacher.lastName;
 		});
+
+		console.log(mapped);
 
 		return mapped;
 	}
