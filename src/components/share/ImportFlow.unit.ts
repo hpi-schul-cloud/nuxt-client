@@ -9,12 +9,12 @@ import {
 	ShareTokenBodyParamsParentTypeEnum,
 	ShareTokenInfoResponseParentTypeEnum,
 } from "@/serverApi/v3";
-import { roomsModule } from "@/store";
+import { coursesModule } from "@/store";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import RoomsModule from "@/store/rooms";
+import CoursesModule from "@/store/courses";
 import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -82,10 +82,10 @@ describe("@components/share/ImportFlow", () => {
 		});
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 		setupStores({
-			rooms: RoomsModule,
+			course: CoursesModule,
 			envConfigModule: EnvConfigModule,
 		});
-		jest.spyOn(roomsModule, "fetchAllElements").mockImplementation();
+		jest.spyOn(coursesModule, "fetchAllElements").mockImplementation();
 	});
 
 	describe("token is provided", () => {

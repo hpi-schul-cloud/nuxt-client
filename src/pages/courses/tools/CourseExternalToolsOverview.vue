@@ -1,0 +1,122 @@
+<template>
+	<div class="centered-container">
+		<div
+			v-if="tools.length === 0 && !isVideoConferenceAvailable && !loading"
+			class="mt-16 text-center"
+			data-testid="tools-empty-state"
+		>
+			<v-custom-empty-state
+				ref="tools-empty-state"
+				image="tools-empty-state"
+				:title="t('pages.rooms.tools.emptyState')"
+				class="mt-16"
+				imgHeight="200px"
+			/>
+		</div>
+		<v-alert
+			v-if="error && error.message"
+			type="error"
+			data-testId="context-tool-error"
+			:icon="mdiAlertCircle"
+			:text="error.message"
+		/>
+
+		<v-progress-linear
+			:active="loading"
+			data-testId="progress-bar"
+			indeterminate
+		/>
+
+		<course-video-conference-section
+			v-if="isVideoConferenceAvailable"
+			class="mb-4"
+			:room-id="courseId"
+		/>
+
+		<course-external-tools-section
+			:tools="tools"
+			:room-id="courseId"
+			data-testid="room-external-tool-section"
+			@delete="onDeleteTool"
+		/>
+	</div>
+</template>
+
+<script setup lang="ts">
+import { mdiAlertCircle } from "@/components/icons/material";
+import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import { ToolContextType } from "@/serverApi/v3";
+import CourseModule from "@/store/course";
+import { Course, CourseFeatures } from "@/store/types/course";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+	COURSE_MODULE_KEY,
+} from "@/utils/inject";
+import {
+	ExternalToolDisplayData,
+	useExternalToolDisplayListState,
+} from "@data-external-tool";
+import { computed, ComputedRef, onMounted, onUnmounted, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import CourseVideoConferenceSection from "@/pages/courses/tools/CourseVideoConferenceSection.vue";
+import CourseExternalToolsSection from "@/pages/courses/tools/CourseExternalToolsSection.vue";
+
+const props = defineProps({
+	courseId: {
+		type: String,
+		required: true,
+	},
+});
+
+const { t } = useI18n();
+const courseModule: CourseModule = injectStrict(COURSE_MODULE_KEY);
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
+const {
+	fetchDisplayData,
+	deleteContextExternalTool,
+	displayData: tools,
+	error,
+	isLoading: isDisplayDataLoading,
+} = useExternalToolDisplayListState();
+
+const course: Ref<Course | null> = ref(null);
+
+const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
+	return (
+		course.value?.features?.includes(CourseFeatures.VIDEOCONFERENCE) ?? false
+	);
+});
+
+onMounted(async () => {
+	await fetchDisplayData(props.courseId, ToolContextType.Course);
+
+	course.value = await courseModule.fetchCourse(props.courseId);
+});
+
+const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
+
+const timer = setInterval(async () => {
+	await fetchDisplayData(props.courseId, ToolContextType.Course);
+}, refreshTimeInMs);
+
+onUnmounted(() => {
+	clearInterval(timer);
+});
+
+const loading: ComputedRef<boolean> = computed(
+	() => isDisplayDataLoading.value || courseModule.getLoading
+);
+
+const onDeleteTool = async (displayData: ExternalToolDisplayData) => {
+	await deleteContextExternalTool(displayData.contextExternalToolId);
+};
+</script>
+
+<style lang="scss" scoped>
+.centered-container {
+	max-width: var(--size-content-width-max);
+	margin: 0 auto;
+}
+</style>

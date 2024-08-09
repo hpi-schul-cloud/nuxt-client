@@ -11,7 +11,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/room";
+import CourseModule from "@/store/course";
 import ShareModule from "@/store/share";
 import { Board } from "@/types/board/Board";
 import {
@@ -22,7 +22,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -209,8 +209,8 @@ describe("Board", () => {
 
 		const loadingStateModule = createModuleMocks(LoadingStateModule);
 		const shareModule = createModuleMocks(ShareModule);
-		const roomModule = createModuleMocks(RoomModule, {
-			getRoomId: "room1",
+		const courseModule = createModuleMocks(CourseModule, {
+			getCourseId: "room1",
 		});
 		return {
 			notifierModule,
@@ -218,7 +218,7 @@ describe("Board", () => {
 			copyModule,
 			loadingStateModule,
 			shareModule,
-			roomModule,
+			courseModule,
 			copyResultId,
 		};
 	};
@@ -234,7 +234,7 @@ describe("Board", () => {
 			copyModule,
 			loadingStateModule,
 			shareModule,
-			roomModule,
+			courseModule,
 			copyResultId,
 		} = setupProvideModules(options?.envs);
 
@@ -266,7 +266,7 @@ describe("Board", () => {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					loadingStateModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[COURSE_MODULE_KEY.valueOf()]: courseModule,
 				},
 			},
 			propsData: { boardId: board.id },
@@ -282,7 +282,7 @@ describe("Board", () => {
 			board,
 			copyResultId,
 			shareModule,
-			roomModule,
+			courseModule,
 		};
 	};
 
@@ -888,14 +888,14 @@ describe("Board", () => {
 				mockedBoardPermissions.hasDeletePermission = true;
 				const mockRoomId = mockedUseSharedBoardPageInformation().roomId.value;
 
-				const { wrapper, roomModule, board } = setup();
+				const { wrapper, courseModule, board } = setup();
 
 				const columnComponent = wrapper.findComponent({
 					name: "BoardHeader",
 				});
 				await columnComponent.vm.$emit("delete:board");
 
-				expect(roomModule.deleteBoard).toBeCalledWith(board.id);
+				expect(courseModule.deleteBoard).toBeCalledWith(board.id);
 
 				expect(router.push).toHaveBeenCalledTimes(1);
 				expect(router.push).toHaveBeenCalledWith({

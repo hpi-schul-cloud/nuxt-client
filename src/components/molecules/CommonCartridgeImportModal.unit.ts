@@ -1,4 +1,4 @@
-import RoomsModule from "@/store/rooms";
+import CoursesModule from "@/store/courses";
 import CommonCartridgeImportModal from "./CommonCartridgeImportModal.vue";
 import { mount } from "@vue/test-utils";
 import LoadingStateModule from "@/store/loading-state";
@@ -7,7 +7,7 @@ import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOMS_MODULE_KEY,
+	COURSES_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -21,7 +21,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 		document.body.setAttribute("data-app", "true");
 
 		const notifierModuleMock = createModuleMocks(NotifierModule);
-		const roomsModuleMock = createModuleMocks(RoomsModule, {
+		const coursesModuleMock = createModuleMocks(CoursesModule, {
 			getAllElements: [],
 		});
 		const commonCartridgeImportModule = createModuleMocks(
@@ -36,7 +36,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 					[LOADING_STATE_MODULE_KEY.valueOf()]:
 						createModuleMocks(LoadingStateModule),
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-					[ROOMS_MODULE_KEY.valueOf()]: roomsModuleMock,
+					[COURSES_MODULE_KEY.valueOf()]: coursesModuleMock,
 					[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]:
 						commonCartridgeImportModule,
 				},
@@ -45,7 +45,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 
 		return {
 			wrapper,
-			roomsModuleMock,
+			coursesModuleMock,
 			notifierModuleMock,
 			commonCartridgeImportModule,
 		};
@@ -114,15 +114,15 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 			});
 
 		it("should show success message", async () => {
-			const { wrapper, roomsModuleMock, notifierModuleMock } = setup();
+			const { wrapper, coursesModuleMock, notifierModuleMock } = setup();
 			const confirmBtn = wrapper.findComponent(
 				"[data-testId='dialog-confirm-btn']"
 			);
 
 			await confirmBtn.trigger("click");
 
-			expect(roomsModuleMock.fetch).toHaveBeenCalledTimes(1);
-			expect(roomsModuleMock.fetchAllElements).toHaveBeenCalledTimes(1);
+			expect(coursesModuleMock.fetch).toHaveBeenCalledTimes(1);
+			expect(coursesModuleMock.fetchAllElements).toHaveBeenCalledTimes(1);
 			expect(notifierModuleMock.show).toHaveBeenCalledWith({
 				status: "success",
 				text: expect.any(String),
@@ -140,15 +140,15 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 			});
 
 		it("should show error message", async () => {
-			const { wrapper, notifierModuleMock, roomsModuleMock } = setup();
+			const { wrapper, notifierModuleMock, coursesModuleMock } = setup();
 			const confirmBtn = wrapper.findComponent(
 				"[data-testId='dialog-confirm-btn']"
 			);
 
 			await confirmBtn.trigger("click");
 
-			expect(roomsModuleMock.fetch).not.toHaveBeenCalled();
-			expect(roomsModuleMock.fetchAllElements).not.toHaveBeenCalled();
+			expect(coursesModuleMock.fetch).not.toHaveBeenCalled();
+			expect(coursesModuleMock.fetchAllElements).not.toHaveBeenCalled();
 			expect(notifierModuleMock.show).toHaveBeenCalledWith({
 				status: "error",
 				text: expect.any(String),

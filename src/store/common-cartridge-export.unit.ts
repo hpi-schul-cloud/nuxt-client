@@ -1,18 +1,18 @@
 import setupStores from "@@/tests/test-utils/setupStores";
 import CommonCartridgeExportModule from "./common-cartridge-export";
-import RoomModule from "./room";
-import { roomModule } from "./store-accessor";
+import CourseModule from "./course";
+import { courseModule } from "./store-accessor";
 
 describe("commonCartridgeExportModule", () => {
 	describe("actions", () => {
 		beforeEach(() => {
-			setupStores({ roomModule: RoomModule });
+			setupStores({ courseModule: CourseModule });
 		});
 		describe("startExport", () => {
-			it("should call roomModule.downloadCommonCartridgeCourse with the correct version and topic", () => {
+			it("should call courseModule.downloadCommonCartridgeCourse with the correct version and topic", () => {
 				const commonCartridgeExportModule = new CommonCartridgeExportModule({});
-				const roomModuleMock = jest.spyOn(
-					roomModule,
+				const courseModuleMock = jest.spyOn(
+					courseModule,
 					"downloadCommonCartridgeCourse"
 				);
 
@@ -23,7 +23,7 @@ describe("commonCartridgeExportModule", () => {
 
 				commonCartridgeExportModule.startExport();
 
-				expect(roomModuleMock).toHaveBeenCalledWith({
+				expect(courseModuleMock).toHaveBeenCalledWith({
 					version: "1.1.0",
 					topics: ["topic"],
 					tasks: ["task"],

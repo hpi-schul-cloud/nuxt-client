@@ -21,8 +21,8 @@ import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
-import RoomModule from "@/store/room";
-import RoomsModule from "@/store/rooms";
+import CourseModule from "@/store/course";
+import CoursesModule from "@/store/courses";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
@@ -55,8 +55,8 @@ export let newsModule: NewsModule;
 export let notifierModule: NotifierModule;
 export let privacyPolicyModule: PrivacyPolicyModule;
 export let termsOfUseModule: TermsOfUseModule;
-export let roomModule: RoomModule;
-export let roomsModule: RoomsModule;
+export let courseModule: CourseModule;
+export let coursesModule: CoursesModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
@@ -86,8 +86,8 @@ export function initializeStores(store: Store<any>): void {
 	notifierModule = getModule(NotifierModule, store);
 	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	termsOfUseModule = getModule(TermsOfUseModule, store);
-	roomModule = getModule(RoomModule, store);
-	roomsModule = getModule(RoomsModule, store);
+	courseModule = getModule(CourseModule, store);
+	coursesModule = getModule(CoursesModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
@@ -120,8 +120,8 @@ export const modules = {
 	notifierModule: NotifierModule,
 	privacyPolicyModule: PrivacyPolicyModule,
 	termsOfUseModule: TermsOfUseModule,
-	roomModule: RoomModule,
-	roomsModule: RoomsModule,
+	courseModule: CourseModule,
+	coursesModule: CoursesModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,

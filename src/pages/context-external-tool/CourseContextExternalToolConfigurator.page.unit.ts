@@ -1,8 +1,8 @@
 import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/room";
-import { NOTIFIER_MODULE_KEY, ROOM_MODULE_KEY } from "@/utils/inject";
+import CourseModule from "@/store/course";
+import { NOTIFIER_MODULE_KEY, COURSE_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { contextExternalToolFactory } from "@@/tests/test-utils/factory";
 import {
@@ -32,10 +32,10 @@ describe("CourseContextExternalToolConfigurator", () => {
 	) => {
 		const notifierModule = createModuleMocks(NotifierModule);
 
-		const roomTitle = "Room Title";
-		const roomModule = createModuleMocks(RoomModule, {
-			getRoomData: {
-				title: roomTitle,
+		const courseTitle = "Room Title";
+		const courseModule = createModuleMocks(CourseModule, {
+			getCourseData: {
+				title: courseTitle,
 				roomId: "contextId",
 				displayColor: "#ffffff",
 				elements: [],
@@ -53,7 +53,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 				],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[COURSE_MODULE_KEY.valueOf()]: courseModule,
 				},
 				stubs: {
 					ContextExternalToolConfigurator: {
@@ -73,9 +73,9 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 		return {
 			wrapper,
-			roomModule,
+			courseModule,
 			notifierModule,
-			roomTitle,
+			courseTitle,
 		};
 	};
 
@@ -85,7 +85,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 	describe("breadcrumbs", () => {
 		it("should render static breadcrumbs", () => {
-			const { wrapper, roomTitle } = getWrapper({
+			const { wrapper, courseTitle } = getWrapper({
 				contextId: "contextId",
 				contextType: ToolContextType.Course,
 			});
@@ -93,7 +93,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 			const breadcrumbs = wrapper.findAll(".breadcrumbs-item");
 
 			expect(breadcrumbs.at(0)?.text()).toEqual("common.words.courses");
-			expect(breadcrumbs.at(1)?.text()).toEqual(roomTitle);
+			expect(breadcrumbs.at(1)?.text()).toEqual(courseTitle);
 		});
 	});
 

@@ -31,7 +31,7 @@
 					</g>
 				</svg>
 			</template>
-			<template v-else-if="image === 'rooms-empty-state'">
+			<template v-else-if="image === 'course-empty-state'">
 				<svg
 					height="200"
 					viewBox="0 0 1200 780"
@@ -1656,7 +1656,7 @@ export default {
 			validate(value) {
 				return [
 					"topics-empty-state",
-					"rooms-empty-state",
+					"course-empty-state",
 					"tasks-empty-state",
 					"tools-empty-state",
 					"media-shelf-empty-state",
