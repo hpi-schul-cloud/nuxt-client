@@ -18,3 +18,6 @@
 
 // we need the path alias here to enable theme override
 @import "@/styles/legacy.scss";
+
+@import "@/styles/settings.scss";
+@import "vuetify";

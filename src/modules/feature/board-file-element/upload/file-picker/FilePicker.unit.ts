@@ -33,11 +33,8 @@ describe("FilePicker", () => {
 
 	describe("when isFilePickerOpen is changed from false to true", () => {
 		const setup = () => {
-			document.body.setAttribute("data-app", "true");
-
 			const wrapper = mount(FilePicker, {
 				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-				attachTo: document.body,
 				props: {
 					isFilePickerOpen: false,
 					maxFileSizeInByte: 100,

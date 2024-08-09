@@ -542,7 +542,8 @@ const errorTimeout: Ref<number> = ref(7500);
 
 const isLoading: Ref<boolean> = ref(false);
 
-const checkTotal: Ref<NodeJS.Timeout | undefined> = ref(undefined);
+const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> =
+	ref(undefined);
 
 const isCancelDialogOpen: Ref<boolean> = ref(false);
 
@@ -719,7 +720,7 @@ const endMaintenance = async () => {
 			message: schoolsModule.getError.message,
 		});
 	} else {
-		school.value.inMaintenance = isNbc.value ? undefined : false;
+		school.value.inMaintenance = isNbc.value;
 		migrationStep.value = 5;
 	}
 	isLoading.value = false;

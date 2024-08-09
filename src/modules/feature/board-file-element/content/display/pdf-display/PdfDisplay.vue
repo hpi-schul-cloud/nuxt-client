@@ -19,7 +19,7 @@
 import { FileElementResponse } from "@/serverApi/v3";
 import { ContentElementBar } from "@ui-board";
 import { PreviewImage } from "@ui-preview-image";
-import { PropType, defineComponent } from "vue";
+import { PropType, computed, defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 
 export default defineComponent({
@@ -39,9 +39,9 @@ export default defineComponent({
 			window.open(props.src, "_blank");
 		};
 
-		const altText = `${t("components.cardElement.fileElement.pdfAlt")} ${
-			props.name
-		}`;
+		const altText = computed(
+			() => `${t("components.cardElement.fileElement.pdfAlt")} ${props.name}`
+		);
 
 		return {
 			openPdf,

@@ -1,5 +1,5 @@
 import { watchDebounced } from "@vueuse/core";
-import { computed, ComputedRef, Ref, ref, toRef, unref } from "vue";
+import { computed, ComputedRef, Ref, ref, toRef } from "vue";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { useCardStore } from "./Card.store";
 
@@ -13,7 +13,7 @@ export const useContentElementState = <T extends AnyContentElement>(
 	const cardStore = useCardStore();
 	const _elementRef: Ref<T> = toRef(props, "element");
 
-	const modelValue = ref<T["content"]>(unref<T>(_elementRef).content);
+	const modelValue = ref(_elementRef.value.content);
 
 	const computedElement: ComputedRef<T> = computed(() => _elementRef.value);
 

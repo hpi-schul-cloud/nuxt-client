@@ -94,7 +94,7 @@ describe("MediaBoardExternalToolElement", () => {
 			.mocked(useContextExternalToolConfigurationStatus)
 			.mockReturnValue(useContextExternalToolConfigurationStatusMock);
 
-		jest.useFakeTimers("legacy");
+		jest.useFakeTimers({ legacyFakeTimers: true });
 	});
 
 	afterEach(() => {
