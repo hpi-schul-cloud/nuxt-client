@@ -580,7 +580,7 @@ describe("CourseExternalToolCard", () => {
 
 			const menuButton = wrapper
 				.findComponent(CourseDotMenu)
-				.get('[data-testid="course-tool-three-dot-button"]');
+				.get('[data-testid="room-tool-three-dot-button"]');
 			await menuButton.trigger("click");
 
 			const toolEditMenuItem = wrapper.findComponent(
@@ -595,7 +595,7 @@ describe("CourseExternalToolCard", () => {
 
 			const menuButton = wrapper
 				.findComponent(CourseDotMenu)
-				.get('[data-testid="course-tool-three-dot-button"]');
+				.get('[data-testid="room-tool-three-dot-button"]');
 
 			await menuButton.trigger("click");
 
@@ -612,7 +612,7 @@ describe("CourseExternalToolCard", () => {
 
 				const menuButton = wrapper
 					.findComponent(CourseDotMenu)
-					.get('[data-testid="course-tool-three-dot-button"]');
+					.get('[data-testid="room-tool-three-dot-button"]');
 				await menuButton.trigger("click");
 
 				const toolDeleteMenuItem = wrapper.findComponent(
@@ -631,7 +631,7 @@ describe("CourseExternalToolCard", () => {
 
 				const menuButton = wrapper
 					.findComponent(CourseDotMenu)
-					.get('[data-testid="course-tool-three-dot-button"]');
+					.get('[data-testid="room-tool-three-dot-button"]');
 				await menuButton.trigger("click");
 
 				const toolDeleteMenuItem = wrapper.findComponent(
@@ -659,7 +659,7 @@ describe("CourseExternalToolCard", () => {
 			const { wrapper } = setup();
 
 			const itemMenu = wrapper.find(
-				'[data-testid="course-tool-three-dot-button"]'
+				'[data-testid="room-tool-three-dot-button"]'
 			);
 
 			expect(itemMenu.exists()).toEqual(false);
