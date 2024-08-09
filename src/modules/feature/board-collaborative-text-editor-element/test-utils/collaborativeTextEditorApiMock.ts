@@ -1,4 +1,4 @@
-import { jest } from "@jest/globals";
+import { Jest as jest } from "@jest/environment";
 import { useCollaborativeTextEditorApi } from "../composables/CollaborativeTextEditorApi.composable";
 
 interface Props {

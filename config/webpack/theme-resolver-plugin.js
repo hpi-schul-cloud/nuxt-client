@@ -19,7 +19,7 @@ class ThemeResolverPlugin {
 
 				if (foundReplace) {
 					console.log(
-						`replace "${foundReplace.find}" with "${foundReplace.replacement}"\n`
+						`\nreplace "${foundReplace.find}" with "${foundReplace.replacement}"`
 					);
 
 					const customRequest = {

@@ -74,7 +74,7 @@ describe("LinkContentElement", () => {
 	const getWrapper = (props: {
 		element: LinkElementResponse;
 		isEditMode: boolean;
-		isDetailView?: boolean;
+		isDetailView: boolean;
 	}) => {
 		const notifierModule = createModuleMocks(NotifierModule);
 		const wrapper = shallowMount(LinkContentElement, {

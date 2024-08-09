@@ -140,7 +140,7 @@ const fabItemClickHandler = (event: CourseFabEvent): void => {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 
 :deep(.v-skeleton-loader__date-picker-days) {
 	justify-content: space-between;

@@ -38,7 +38,6 @@ import Cookies from "universal-cookie";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 
-import "@/styles/global.scss";
 // TODO solve without vue-mq dependency
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore

@@ -550,7 +550,7 @@ describe("@/components/templates/CourseDashboard.vue", () => {
 			await nextTick();
 			expect(deleteTaskMock).not.toHaveBeenCalled();
 			expect(deleteLessonMock).toHaveBeenCalled();
-			expect(fetchContentMock).not.toHaveBeenCalled();
+			expect(fetchContentMock).toHaveBeenCalled();
 		});
 
 		it("should close the modal view after clicking the 'cancel' button", async () => {

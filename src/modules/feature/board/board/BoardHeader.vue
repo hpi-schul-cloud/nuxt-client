@@ -189,7 +189,7 @@ watchEffect(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 
 .v-chip {
 	cursor: pointer;
