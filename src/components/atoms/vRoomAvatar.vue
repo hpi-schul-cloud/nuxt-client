@@ -186,7 +186,7 @@ const dropAvatar = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 @import "@/utils/multiline-ellipsis.scss";
 
 .v-avatar {

@@ -17,7 +17,7 @@ const setupUseSharedLastCreatedElementMock = () => {
 		.mockReturnValue(mockedUse);
 };
 
-describe(FileUpload.name, () => {
+describe("FileUpload", () => {
 	afterEach(() => {
 		jest.resetAllMocks();
 	});

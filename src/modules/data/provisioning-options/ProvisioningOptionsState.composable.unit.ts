@@ -11,10 +11,10 @@ import {
 	provisioningOptionsDataFactory,
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { DeepMocked, createMock } from "@golevelup/ts-jest";
 import { useProvisioningOptionsApi } from "./ProvisioningOptionsApi.composable";
 import { useProvisioningOptionsState } from "./ProvisioningOptionsState.composable";
-import { ProvisioningOptions } from "./type";
+import { ProvisioningOptions } from "./type/ProvisioningOptions";
 
 jest.mock("@data-provisioning-options/ProvisioningOptionsApi.composable");
 

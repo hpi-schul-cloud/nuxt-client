@@ -22,6 +22,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	I18N__DEFAULT_LANGUAGE: LanguageType.De,
 	I18N__DEFAULT_TIMEZONE: Timezone.EuropeBerlin,
 	SC_TITLE: "",
+	TRAINING_URL: "https://lernen.dbildungscloud.de",
 	FEATURE_SHOW_OUTDATED_USERS: false,
 	FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: false,
 	FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: false,

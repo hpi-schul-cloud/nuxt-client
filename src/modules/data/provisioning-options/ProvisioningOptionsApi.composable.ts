@@ -5,7 +5,7 @@ import {
 import { schoolsModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
-import { ProvisioningOptions } from "./type";
+import { ProvisioningOptions } from "./type/ProvisioningOptions";
 
 export const useProvisioningOptionsApi = () => {
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
