@@ -37,7 +37,7 @@
 						"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text",
 						{
 							groupName: selectedGroup?.name || "",
-							courseName: courseName,
+							courseName: courseName || "",
 						}
 					)
 				}}
@@ -50,6 +50,7 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { GroupResponse } from "@/serverApi/v3";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { useCourseApi } from "@data-room";
 import { RenderHTML } from "@feature-render-html";
 import { WarningAlert } from "@ui-alert";
 import { ModelRef, Ref, ref } from "vue";
@@ -59,14 +60,12 @@ import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
-defineProps({
+const props = defineProps({
 	courseName: {
 		type: String,
-		required: true,
 	},
 	courseId: {
 		type: String,
-		required: true,
 	},
 });
 
@@ -87,27 +86,36 @@ const onConfirmGroupSelection = async (group: GroupResponse) => {
 	step.value = 1;
 };
 
+const { startSynchronization } = useCourseApi();
+
 const onConfirmWarning = async () => {
-	if (selectedGroup.value) {
-		try {
-			// TODO API call goes here
+	if (!selectedGroup.value || !props.courseId) {
+		notifierModule.show({
+			text: t("common.notification.error"),
+			status: "error",
+		});
 
-			closeDialog();
+		return;
+	}
 
-			notifierModule.show({
-				text: t("feature-course-sync.StartExistingCourseSyncDialog.success"),
-				status: "success",
-			});
+	try {
+		await startSynchronization(props.courseId, selectedGroup.value.id);
 
-			emit("success");
-		} catch (errorResponse) {
-			notifierModule.show({
-				text: t("common.notification.error"),
-				status: "error",
-			});
+		closeDialog();
 
-			return;
-		}
+		notifierModule.show({
+			text: t("feature-course-sync.StartExistingCourseSyncDialog.success"),
+			status: "success",
+		});
+
+		emit("success");
+	} catch (errorResponse) {
+		notifierModule.show({
+			text: t("common.notification.error"),
+			status: "error",
+		});
+
+		return;
 	}
 
 	closeDialog();

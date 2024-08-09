@@ -134,7 +134,11 @@
 				/>
 			</template>
 		</v-custom-dialog>
-		<StartNewCourseSyncDialog v-model:is-open="isCourseSyncDialogOpen" />
+		<StartExistingCourseSyncDialog
+			v-model:is-open="isCourseSyncDialogOpen"
+			:course-id="selectedItem?.id"
+			:course-name="selectedItem?.name"
+		/>
 
 		<v-btn
 			class="my-5 button-start"
@@ -171,7 +175,7 @@ import {
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { CourseInfo, useCourseList } from "@data-room";
-import { StartNewCourseSyncDialog } from "@feature-course-sync";
+import { StartExistingCourseSyncDialog } from "@feature-course-sync";
 import { RenderHTML } from "@feature-render-html";
 import {
 	mdiAccountGroupOutline,
