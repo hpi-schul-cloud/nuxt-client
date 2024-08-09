@@ -136,6 +136,21 @@ describe("FileDescription", () => {
 					expect(link.attributes("href")).toBe(src);
 					expect(link.text()).toBe(name);
 				});
+
+				it("should have correct aria-label", () => {
+					const src = "testSrc";
+					const { wrapper, name } = mountSetup({
+						isEditMode: false,
+						showTitle: true,
+						showMenu: true,
+						src,
+					});
+					const link = wrapper.find("a");
+
+					expect(link.attributes("aria-label")).toBe(
+						`${name}, common.ariaLabel.newTab`
+					);
+				});
 			});
 
 			describe("when src is undefined", () => {

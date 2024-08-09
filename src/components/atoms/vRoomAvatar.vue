@@ -188,6 +188,10 @@ export default defineComponent({
 	cursor: pointer;
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 0.5em;
+
+	&:focus {
+		outline-offset: 2px;
+	}
 }
 
 .single-avatar {

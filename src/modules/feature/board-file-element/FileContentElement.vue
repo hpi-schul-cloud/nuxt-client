@@ -1,13 +1,14 @@
 <template>
 	<v-card
-		class="mb-4"
+		class="board-file-element-card mb-4"
 		data-testid="board-file-element"
 		elevation="0"
 		:variant="isOutlined ? 'outlined' : 'elevated'"
 		ref="fileContentElement"
 		:ripple="false"
-		tabindex="0"
+		:tabindex="isEditMode ? 0 : undefined"
 		@keydown.up.down="onKeydownArrow"
+		@keydown.stop
 	>
 		<FileContent
 			v-if="fileProperties && isUploading !== true"
@@ -218,3 +219,9 @@ export default defineComponent({
 	},
 });
 </script>
+<style lang="scss" scoped>
+/* show focus indicatator properly on all browsers */
+.board-file-element-card:focus {
+	outline-offset: 1px;
+}
+</style>

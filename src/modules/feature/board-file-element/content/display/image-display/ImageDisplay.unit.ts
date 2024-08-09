@@ -128,6 +128,32 @@ describe("ImageDisplay", () => {
 				expect(open).toHaveBeenCalledWith(options);
 			});
 		});
+
+		describe("when div emits keydown", () => {
+			it.each(["space", "enter"])(
+				"should call open function when pressing %s",
+				async (key) => {
+					const alternativeText = "alternative text";
+					const { wrapper, src, nameProp, open } = setup({
+						isEditMode: false,
+						alternativeText,
+					});
+					const options: LightBoxOptions = {
+						downloadUrl: src,
+						previewUrl: src,
+						alt: alternativeText,
+						name: nameProp,
+					};
+
+					const image = wrapper.find(imageSelektor);
+					expect(image.exists()).toBe(true);
+					image.trigger(`keydown.${key}`);
+
+					expect(open).toHaveBeenCalledTimes(1);
+					expect(open).toHaveBeenCalledWith(options);
+				}
+			);
+		});
 	});
 
 	describe("when isEditMode is true", () => {

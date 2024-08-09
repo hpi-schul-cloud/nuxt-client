@@ -1,12 +1,12 @@
 import { ContentElementType, DrawingElementResponse } from "@/serverApi/v3";
 import { Factory } from "fishery";
 import { timestampsResponseFactory } from "./timestampsResponseFactory";
-import { drawingContentElementFactory } from "./drawingContentElementFactory";
+import { drawingElementContentFactory } from "./drawingElementContentFactory";
 
-export const drawingContentElementResponseFactory =
+export const drawingElementResponseFactory =
 	Factory.define<DrawingElementResponse>(({ sequence }) => ({
 		id: `drawingElementResponse${sequence}`,
 		type: ContentElementType.Drawing,
-		content: drawingContentElementFactory.build(),
+		content: drawingElementContentFactory.build(),
 		timestamps: timestampsResponseFactory.build(),
 	}));

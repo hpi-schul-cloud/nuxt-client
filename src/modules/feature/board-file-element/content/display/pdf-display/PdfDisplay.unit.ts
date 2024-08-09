@@ -36,15 +36,13 @@ describe("PdfDisplay", () => {
 	};
 
 	it("should display image with correct props", () => {
-		const { wrapper, previewSrc, nameProp } = setup({ isEditMode: false });
+		const { wrapper, previewSrc } = setup({ isEditMode: false });
 
 		const image = wrapper.find("preview-image-stub");
 
 		expect(image.exists()).toBe(true);
 		expect(image.attributes("src")).toBe(previewSrc);
-		expect(image.attributes("alt")).toBe(
-			"components.cardElement.fileElement.pdfAlt " + nameProp
-		);
+		expect(image.attributes("alt")).toBe("");
 		expect(image.attributes("aspectratio")).toBe("1.77777");
 	});
 
