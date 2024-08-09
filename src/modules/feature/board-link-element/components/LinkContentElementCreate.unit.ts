@@ -13,7 +13,7 @@ import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 const VALID_URL = "https://www.abc.de/my-article";
 const INVALID_URL = "my-article";
 
-describe(LinkContentElementCreate.name, () => {
+describe("LinkContentElementCreate", () => {
 	beforeEach(() => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
