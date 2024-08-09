@@ -72,4 +72,5 @@ export const defaultConfigEnvs: ConfigResponse = {
 	BOARD_COLLABORATION_URI: "ws://localhost:4450",
 	FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
 	FEATURE_AI_TUTOR_ENABLED: false,
+	FEATURE_ROOMS_ENABLED: false,
 };

@@ -1,54 +1,62 @@
 <template>
 	<div
-		class="room-avatar"
+		class="d-flex"
+		:class="{ dragging: isDragging }"
 		:data-testid="item.id"
-		:class="isDragging ? 'dragging' : 'room-avatar'"
 		:draggable="draggable"
-		:style="{ width: size }"
 		@dragstart="startDragAvatar"
 		@drop.prevent="dropAvatar"
 		@dragover.prevent
 		@dragend="dragend"
 	>
-		<v-badge
+		<!-- <v-badge
 			class="ma-0 badge-component rounded avatar-badge"
 			bordered
 			color="rgba(var(--v-theme-primary))"
 			:model-value="!!badgeIcon"
 			:icon="badgeIcon"
+		> -->
+		<v-avatar
+			:color="avatarColor"
+			:class="avatarClass"
+			:aria-label="avatarAriaLabel"
+			:rounded="condenseLayout ? 0 : 'lg'"
+			size="5em"
+			:tabindex="condenseLayout ? '-1' : '0'"
+			role="button"
+			data-testid="course-icon"
+			@click="onClick"
+			@dragenter.prevent.stop="dragEnter"
+			@keypress.enter="onClick"
 		>
-			<v-avatar
-				:color="avatarColor"
-				:class="avatarClass"
-				:aria-label="avatarAriaLabel"
-				:rounded="condenseLayout ? 0 : 'lg'"
-				:size="size"
-				:tabindex="condenseLayout ? '-1' : '0'"
-				@click="onClick"
-				@dragenter.prevent.stop="dragEnter"
-				@keypress.enter="onClick"
-				role="button"
-				data-testid="course-icon"
+			<span
+				:class="avatarTextClass"
+				data-testid="course-short-title"
+				aria-hidden="true"
 			>
-				<span :class="avatarTextClass" data-testid="course-short-title">
-					{{ item.shortTitle }}
-				</span>
-			</v-avatar>
-		</v-badge>
+				{{ item.shortTitle }}
+			</span>
+		</v-avatar>
+		<!-- </v-badge> -->
 		<div
 			v-if="!condenseLayout"
 			aria-hidden="true"
-			:class="titleClasses"
 			data-testid="course-title"
+			class="mx-4 py-1"
 		>
-			{{ title }}
+			<div class="d-flex text-body-2 mb-2">
+				<VIcon :icon="roomTypeIcon" class="mr-2" />
+				<span>schulübergreifend</span>
+			</div>
+			<span class="text-body-1">{{ title }}</span>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { mdiLock, mdiSync } from "@/components/icons/material";
+// import { mdiLock, mdiSync } from "@/components/icons/material";
+import { mdiAccountSupervisorCircleOutline } from "@/components/icons/material";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 
@@ -77,17 +85,17 @@ const emit = defineEmits(["startDrag", "dragendAvatar", "dropAvatar"]);
 const { t } = useI18n();
 const router = useRouter();
 
-const badgeIcon = computed(() => {
-	if (props.showBadge && props.item.notification === true) {
-		return mdiLock;
-	}
+// const badgeIcon = computed(() => {
+// 	if (props.showBadge && props.item.notification === true) {
+// 		return mdiLock;
+// 	}
 
-	if (props.item.isSynchronized) {
-		return mdiSync;
-	}
+// 	if (props.item.isSynchronized) {
+// 		return mdiSync;
+// 	}
 
-	return null;
-});
+// 	return null;
+// });
 
 const stillBeingCopied = computed(() => props.item.copyingSince !== undefined);
 
@@ -139,13 +147,17 @@ const title = computed(() => {
 	return props.item.title;
 });
 
-const titleClasses = computed(() => {
-	const marginClass = props.item.titleDate ? "mb-5" : "mb-7";
-	const copyingClass = stillBeingCopied.value
-		? ["text-grey", "text-darken-1"]
-		: [];
+// const titleClasses = computed(() => {
+// 	const marginClass = props.item.titleDate ? "mb-5" : "mb-7";
+// 	const copyingClass = stillBeingCopied.value
+// 		? ["text-grey", "text-darken-1"]
+// 		: [];
 
-	return ["justify-center", "mt-2", "subtitle", marginClass, ...copyingClass];
+// 	return ["justify-center", "mt-2", "subtitle", marginClass, ...copyingClass];
+// });
+
+const roomTypeIcon = computed(() => {
+	return mdiAccountSupervisorCircleOutline;
 });
 
 const isDragging = ref(false);
@@ -186,7 +198,7 @@ const dropAvatar = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/styles/settings.scss";
+@import "~vuetify/settings";
 @import "@/utils/multiline-ellipsis.scss";
 
 .v-avatar {

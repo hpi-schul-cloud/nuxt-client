@@ -75,25 +75,39 @@
 								data-avatar-type="vRoomGroupAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 							/>
-							<vRoomAvatar
-								v-else
-								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
-								class="room-avatar"
-								:item="getDataObject(rowIndex, colIndex)"
-								:size="dimensions.cellWidth"
-								:show-badge="true"
-								:draggable="allowDragging"
-								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-								@dragendAvatar="onDragend"
-								@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
-								data-avatar-type="vRoomAvatar"
-								:data-test-position="`${rowIndex}-${colIndex}`"
-							/>
+							<template v-else>
+								<RoomTile
+									v-if="roomsFeatureEnabled"
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
+									class="room-avatar"
+									:item="getDataObject(rowIndex, colIndex)"
+									:draggable="allowDragging"
+									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+									@dragendAvatar="onDragend"
+									@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
+									data-avatar-type="vRoomAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
+								/>
+								<vRoomAvatar
+									v-else
+									:ref="(el) => setElementRef(rowIndex, colIndex, el)"
+									class="room-avatar"
+									:item="getDataObject(rowIndex, colIndex)"
+									:size="dimensions.cellWidth"
+									:show-badge="true"
+									:draggable="allowDragging"
+									@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+									@dragendAvatar="onDragend"
+									@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
+									data-avatar-type="vRoomAvatar"
+									:data-test-position="`${rowIndex}-${colIndex}`"
+								/>
+							</template>
 						</template>
 						<template v-else>
 							<vRoomEmptyAvatar
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
-								:size="dimensions.cellWidth"
+								:size="emptyAvatarSize"
 								:show-outline="dragging"
 								@dropEmptyAvatar="setDropElement({ x: colIndex, y: rowIndex })"
 								data-avatar-type="vRoomEmptyAvatar"
@@ -123,17 +137,18 @@
 </template>
 
 <script>
-import vRoomAvatar from "@/components/atoms/vRoomAvatar";
+// import vRoomAvatar from "@/components/atoms/vRoomAvatar";
 import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
 import RoomModal from "@/components/molecules/RoomModal";
 import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
-import { roomsModule } from "@/store";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { envConfigModule, roomsModule } from "@/store";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiCheck, mdiMagnify } from "@mdi/js";
 import { defineComponent, reactive } from "vue";
+import { RoomTile } from "@ui-rooms";
 
 export default defineComponent({
 	setup() {
@@ -151,14 +166,16 @@ export default defineComponent({
 	},
 	components: {
 		RoomWrapper,
-		vRoomAvatar,
+		// vRoomAvatar,
 		vRoomGroupAvatar,
 		vRoomEmptyAvatar,
 		RoomModal,
 		ImportFlow,
+		RoomTile,
 	},
 	inject: {
 		notifierModule: { from: NOTIFIER_MODULE_KEY },
+		envConfigModule: { from: ENV_CONFIG_MODULE_KEY },
 		mq: "mq",
 	},
 	layout: "defaultVuetify",
@@ -191,6 +208,9 @@ export default defineComponent({
 		};
 	},
 	computed: {
+		roomsFeatureEnabled() {
+			return envConfigModule.getEnv.FEATURE_ROOMS_ENABLED;
+		},
 		hasCurrentRooms() {
 			return roomsModule.hasCurrentRooms;
 		},
@@ -227,6 +247,9 @@ export default defineComponent({
 		importToken() {
 			return this.$route.query.import;
 		},
+		emptyAvatarSize() {
+			return this.roomsFeatureEnabled ? "5em" : this.dimensions.cellWidth;
+		},
 	},
 	async created() {
 		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
@@ -249,13 +272,13 @@ export default defineComponent({
 					this.dimensions.cellWidth = "4em";
 					break;
 				case "desktop":
-					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "5em";
+					this.dimensions.colCount = this.roomsFeatureEnabled ? 3 : 4;
+					this.dimensions.cellWidth = this.roomsFeatureEnabled ? "15em" : "5em";
 					this.allowDragging = true;
 					break;
 				case "large":
-					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "5em";
+					this.dimensions.colCount = this.roomsFeatureEnabled ? 3 : 4;
+					this.dimensions.cellWidth = this.roomsFeatureEnabled ? "15em" : "5em";
 					this.allowDragging = true;
 					break;
 				case "mobile":

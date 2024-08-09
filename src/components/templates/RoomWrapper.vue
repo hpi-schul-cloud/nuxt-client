@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe
 		ref="main"
-		max-width="short"
+		max-width="nativ"
 		:fab-items="fabItems"
 		@onFabItemClick="fabItemClickHandler"
 	>
