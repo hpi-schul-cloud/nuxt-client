@@ -1,5 +1,8 @@
 <template>
-	<div :style="columnStyle" :class="columnClasses">
+	<div :style="columnStyle" :class="columnClasses" :key="renderKey">
+		{{ renderKey }}
+		<br />
+		{{ renderKeyList }}
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
@@ -72,7 +75,11 @@ import { useDebounceFn } from "@vueuse/core";
 import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { useBoardPermissions, useBoardStore } from "@data-board";
+import {
+	useBoardPermissions,
+	useBoardStore,
+	useForceRender,
+} from "@data-board";
 import { useTouchDetection } from "@util-device-detection";
 import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
@@ -311,7 +318,12 @@ export default defineComponent({
 			return classes;
 		});
 
+		const columnId = toRef(props, "column").value.id;
+		const { getRenderKey, renderKeyList } = useForceRender(columnId); // TODO: remove renderKeyList
+		const renderKey = computed(() => getRenderKey());
+
 		return {
+			renderKeyList,
 			cardDropPlaceholderOptions,
 			columnClasses,
 			columnStyle,
@@ -335,6 +347,7 @@ export default defineComponent({
 			onUpdateTitle,
 			getChildPayload,
 			reactiveIndex,
+			renderKey,
 			showAddButton,
 			sortableGhostClasses,
 		};

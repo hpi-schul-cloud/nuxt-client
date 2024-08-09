@@ -9,6 +9,7 @@ import * as cardActions from "./cardActions/cardActions";
 import { useSocketConnection } from "./socket/socket";
 import { useCardStore } from "./Card.store";
 import { useBoardInactivity } from "./boardInactivity.composable";
+import { useForceRender } from "./fixSamePositionDnD.composable";
 
 export {
 	boardActions,
@@ -20,6 +21,7 @@ export {
 	useCardStore,
 	useContentElementState,
 	useEditMode,
+	useForceRender,
 	useSharedEditMode,
 	useSharedBoardPageInformation,
 	useSocketConnection,
