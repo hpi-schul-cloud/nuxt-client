@@ -141,7 +141,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 @import "@/utils/multiline-ellipsis.scss";
 
 .card-tag {
