@@ -33,4 +33,22 @@ describe("courseApi.composable", () => {
 			).toHaveBeenCalledWith("courseId");
 		});
 	});
+
+	describe("startSynchronization", () => {
+		const setup = () => {
+			courseApi.courseControllerStartSynchronization.mockResolvedValueOnce(
+				mockApiResponse({ data: undefined })
+			);
+		};
+
+		it("should call the api to start a course sync", async () => {
+			setup();
+
+			await useCourseApi().startSynchronization("courseId", "groupId");
+
+			expect(
+				courseApi.courseControllerStartSynchronization
+			).toHaveBeenCalledWith("courseId", { groupId: "groupId" });
+		});
+	});
 });
