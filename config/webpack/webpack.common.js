@@ -159,7 +159,7 @@ module.exports = {
 			"@ui-layout": getDir("src/modules/ui/layout"),
 			"@ui-light-box": getDir("src/modules/ui/light-box"),
 			"@ui-preview-image": getDir("src/modules/ui/preview-image"),
-			"@ui-room-details": getDir("src/modules/ui/room-details"),
+			"@ui-course-details": getDir("src/modules/ui/course-details"),
 			"@ui-skip-link": getDir("src/modules/ui/skip-link"),
 			"@ui-speed-dial-menu": getDir("src/modules/ui/speed-dial-menu"),
 			"@ui-qr-code": getDir("src/modules/ui/qr-code"),
