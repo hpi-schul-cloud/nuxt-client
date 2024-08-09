@@ -4,6 +4,7 @@ import { envConfigModule } from "@/store";
 
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { CardResponse, ContentElementType } from "@/serverApi/v3";
+import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload";
 import {
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
@@ -46,6 +47,12 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const getCard = (cardId: string): CardResponse | undefined => {
 		return cards.value[cardId];
+	};
+
+	const createCardSuccess = (payload: CreateCardSuccessPayload) => {
+		if (payload.newCard) {
+			cards.value[payload.newCard.id] = payload.newCard;
+		}
 	};
 
 	const updateCardTitleRequest = socketOrRest.updateCardTitleRequest;
@@ -184,6 +191,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	return {
+		createCardSuccess,
 		createElementRequest,
 		createElementSuccess,
 		deleteElementRequest,

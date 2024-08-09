@@ -161,6 +161,27 @@ describe("CardStore", () => {
 		});
 	});
 
+	describe("createCardSuccess", () => {
+		describe("when card is provided", () => {
+			it("should add the card to the store", async () => {
+				const { cardStore } = setup();
+
+				const newCardId = "idNewCard";
+				const newCard = cardResponseFactory.build({ id: newCardId });
+				await cardStore.createCardSuccess({
+					newCard,
+					columnId: "any-column-id",
+					isOwnAction: true,
+				});
+
+				expect(cardStore.cards[newCardId]).toBeDefined();
+				expect(cardStore.cards[newCardId]).toEqual(
+					expect.objectContaining({ id: newCardId, elements: [] })
+				);
+			});
+		});
+	});
+
 	describe("deleteCardRequest", () => {
 		it("should call socket Api if feature flag is enabled", () => {
 			const { cardStore, cardId } = setup(true);
