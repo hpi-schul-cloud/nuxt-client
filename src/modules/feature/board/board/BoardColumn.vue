@@ -1,6 +1,8 @@
 <template>
 	<div :style="columnStyle" :class="columnClasses" :key="renderKey">
 		{{ renderKey }}
+		<br />
+		{{ renderKeyList }}
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
@@ -316,15 +318,16 @@ export default defineComponent({
 			return classes;
 		});
 
-		const { getRenderKey } = useForceRender();
-		const renderKey = computed(() => getRenderKey(props.column.id));
+		const columnId = toRef(props, "column").value.id;
+		const { getRenderKey, renderKeyList } = useForceRender(columnId);
+		const renderKey = computed(() => getRenderKey());
 
 		return {
+			renderKeyList,
 			cardDropPlaceholderOptions,
 			columnClasses,
 			columnStyle,
 			colWidth,
-			renderKey,
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
@@ -344,6 +347,7 @@ export default defineComponent({
 			onUpdateTitle,
 			getChildPayload,
 			reactiveIndex,
+			renderKey,
 			showAddButton,
 			sortableGhostClasses,
 		};

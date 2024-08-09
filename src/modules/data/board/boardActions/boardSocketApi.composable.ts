@@ -9,6 +9,7 @@ import {
 	DisconnectSocketRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
+	MoveCardSuccessPayload,
 	MoveColumnRequestPayload,
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
@@ -18,7 +19,7 @@ import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
-import { useForceRender } from "../forceRenderComponent.composable";
+import { useForceRender } from "../fixSamePositionDnD.composable";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
@@ -34,7 +35,6 @@ export const useBoardSocketApi = () => {
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateColumnTitleSuccess,
 	} = useBoardAriaNotification();
-	const { setRenderKeyAfterMoveCard } = useForceRender();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
@@ -172,6 +172,11 @@ export const useBoardSocketApi = () => {
 		payload: UpdateBoardVisibilityRequestPayload
 	) => {
 		emitOnSocket("update-board-visibility-request", payload);
+	};
+
+	const setRenderKeyAfterMoveCard = (payload: MoveCardSuccessPayload) => {
+		const { generateRenderKey } = useForceRender(payload.fromColumnId);
+		generateRenderKey();
 	};
 
 	const createCardFailure = () => notifySocketError("notCreated", "boardCard");

@@ -653,8 +653,6 @@ describe("BoardStore", () => {
 				toColumnIndex: 1,
 			};
 
-			expect(boardStore.elementIdToRender).toEqual(undefined);
-
 			await boardStore.moveCardSuccess({ ...cardPayload, isOwnAction: true });
 
 			const firstColumnCardsAfterMove = boardStore.board?.columns[0].cards;
@@ -667,7 +665,6 @@ describe("BoardStore", () => {
 				firstCardId,
 				thirdCardId,
 			]);
-			expect(boardStore.elementIdToRender).toEqual(firstColumn.id);
 		});
 	});
 
