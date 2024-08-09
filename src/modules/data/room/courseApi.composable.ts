@@ -8,6 +8,13 @@ export const useCourseApi = () => {
 		await courseApi.courseControllerStopSynchronization(courseId);
 	};
 
+	const startSynchronization = async (
+		courseId: string,
+		groupId: string
+	): Promise<void> => {
+		await courseApi.courseControllerStartSynchronization(courseId, { groupId });
+	};
+
 	const buildArchiveQuery = (schoolyear: SchoolYearQueryType) => {
 		const yesterday = new Date();
 		yesterday.setDate(yesterday.getDate() - 1);
@@ -56,6 +63,7 @@ export const useCourseApi = () => {
 
 	return {
 		stopSynchronization,
+		startSynchronization,
 		loadCoursesForSchool,
 	};
 };
