@@ -8,6 +8,7 @@
 		ref="externalToolElement"
 		:ripple="false"
 		tabindex="0"
+		role="button"
 		:loading="isLoading"
 		@keyup.enter="onClickElement"
 		@keydown.up.down="onKeydownArrow"
