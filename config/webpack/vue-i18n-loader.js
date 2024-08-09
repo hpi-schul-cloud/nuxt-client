@@ -1,4 +1,4 @@
-const { generateJavaScript } = require("@intlify/bundle-utils");
+const { generateJSON, generateJavaScript } = require("@intlify/bundle-utils");
 
 const loader = function (source, sourceMap) {
 	// eslint-disable-next-line @typescript-eslint/no-this-alias

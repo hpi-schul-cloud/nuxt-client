@@ -86,7 +86,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 
 .table__row {
 	border-top: 1px solid rgba(var(--v-theme-white));
