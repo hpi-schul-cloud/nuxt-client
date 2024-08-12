@@ -24,6 +24,7 @@ export default {
 	"common.actions.share": "Поділіться",
 	"common.actions.shareCopy": "Поділитися копією",
 	"common.actions.update": "Оновити",
+	"common.ariaLabel.newTab": "відкривається в новій вкладці",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
