@@ -820,6 +820,7 @@ export default {
 	"global.sidebar.item.overview": "Panel",
 	"global.sidebar.item.releaseNotes": "¿Qué hay de nuevo?",
 	"global.sidebar.item.school": "Escuela",
+	"global.sidebar.item.spaces": "Salas",
 	"global.sidebar.item.student": "Estudiantes",
 	"global.sidebar.item.system": "Sistema",
 	"global.sidebar.item.tasks": "Tareas",

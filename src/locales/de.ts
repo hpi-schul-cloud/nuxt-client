@@ -803,6 +803,7 @@ export default {
 	"global.sidebar.item.overview": "Übersicht",
 	"global.sidebar.item.releaseNotes": "Was ist neu?",
 	"global.sidebar.item.school": "Schule",
+	"global.sidebar.item.spaces": "Räume",
 	"global.sidebar.item.student": "Schüler:innen",
 	"global.sidebar.item.system": "System",
 	"global.sidebar.item.tasks": "Aufgaben",

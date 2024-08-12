@@ -809,6 +809,7 @@ export default {
 	"global.sidebar.item.overview": "Панель керування",
 	"global.sidebar.item.releaseNotes": "Що нового?",
 	"global.sidebar.item.school": "Школа",
+	"global.sidebar.item.spaces": "Номери",
 	"global.sidebar.item.student": "Учні",
 	"global.sidebar.item.system": "Cистема",
 	"global.sidebar.item.tasks": "Завдання",
