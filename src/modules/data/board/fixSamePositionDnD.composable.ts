@@ -17,7 +17,6 @@ export const useForceRender = (id: string) => {
 	};
 
 	return {
-		renderKeyList, // TODO: remove
 		generateRenderKey,
 		getRenderKey,
 	};

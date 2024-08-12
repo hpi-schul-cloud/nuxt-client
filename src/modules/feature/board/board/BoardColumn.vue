@@ -1,8 +1,5 @@
 <template>
 	<div :style="columnStyle" :class="columnClasses" :key="renderKey">
-		{{ renderKey }}
-		<br />
-		{{ renderKeyList }}
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
@@ -319,11 +316,10 @@ export default defineComponent({
 		});
 
 		const columnId = toRef(props, "column").value.id;
-		const { getRenderKey, renderKeyList } = useForceRender(columnId); // TODO: remove renderKeyList
+		const { getRenderKey } = useForceRender(columnId);
 		const renderKey = computed(() => getRenderKey());
 
 		return {
-			renderKeyList,
 			cardDropPlaceholderOptions,
 			columnClasses,
 			columnStyle,
