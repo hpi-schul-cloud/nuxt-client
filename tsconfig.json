@@ -69,7 +69,8 @@
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},
-		"lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+		"lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+		"outDir": "dist"
 	},
 	"include": [
 		"src/**/*.ts",
@@ -78,5 +79,5 @@
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 	],
-	"exclude": ["node_modules", "./src/components/base/components.js"]
+	"exclude": ["node_modules", "dist", "./src/components/base/components.js"]
 }
