@@ -2,11 +2,14 @@
 	<ContentElementBar class="image-display menu">
 		<template #display>
 			<div
-				class="d-flex align-center"
+				class="d-flex align-center focusable-container"
 				style="min-height: 52px"
+				tabindex="0"
+				role="button"
 				@click="openLightBox"
+				@keydown.enter.space="openLightBox"
 			>
-				<div class="w-100 h-100">
+				<div class="w-100 h-100 image-container">
 					<PreviewImage
 						:src="previewSrc"
 						:alt="alternativeText"
@@ -87,7 +90,15 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-.image-display:focus {
-	outline: none;
+/* show focus indicator in Safari properly */
+.focusable-container:focus {
+	outline: 2px solid -webkit-focus-ring-color;
+	outline-offset: -2px;
+}
+
+/* Ensure the focus indicator is visible and not obscured by the image */
+.image-container {
+	position: relative;
+	z-index: -1;
 }
 </style>

@@ -22,6 +22,7 @@ export * from "./contextExternalToolTemplateListItemFactory";
 export * from "./courseFactory";
 export * from "./courseMetadataResponseFactory";
 export * from "./customParameterResponseFactory";
+export * from "./drawingElementResponseFactory";
 export * from "./envsFactory";
 export * from "./externalToolDisplayDataFactory";
 export * from "./fileElementContentFactory";
