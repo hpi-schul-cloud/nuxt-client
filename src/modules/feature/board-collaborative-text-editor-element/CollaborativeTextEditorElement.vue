@@ -1,24 +1,21 @@
 <template>
 	<v-card
-		class="mb-4"
+		class="text-editor-card mb-4"
 		data-testid="collaborative-text-editor-element"
 		variant="outlined"
 		ref="collaborativetextEditorElement"
 		:ripple="false"
 		tabindex="0"
-		elevation="0"
 		@keydown.up.down="onKeydownArrow"
 		role="button"
+		:aria-label="ariaLabel"
 		@click="redirectToEditorUrl"
+		@keydown.enter.space="redirectToEditorUrl"
+		@keydown.stop
 	>
 		<ContentElementBar :hasGreyBackground="true" :icon="mdiTextBoxEditOutline">
 			<template #display>
-				<v-img
-					:src="image"
-					:alt="$t('components.cardElement.collaborativeTextEditorElement')"
-					cover
-					class="rounded-t"
-				/>
+				<v-img :src="image" alt="" cover class="rounded-t" />
 			</template>
 			<template #title>
 				{{ $t("components.cardElement.collaborativeTextEditorElement") }}
@@ -44,7 +41,8 @@ import {
 import { useBoardFocusHandler } from "@data-board";
 import { mdiTextBoxEditOutline } from "@mdi/js";
 import { ContentElementBar } from "@ui-board";
-import { PropType, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
 
@@ -62,6 +60,8 @@ const emit = defineEmits([
 	"move-up:edit",
 	"move-keyboard:edit",
 ]);
+
+const { t } = useI18n();
 
 const collaborativeTextEditorElement = ref<HTMLElement | null>(null);
 const element = toRef(props, "element");
@@ -82,6 +82,12 @@ const redirectToEditorUrl = async () => {
 	});
 };
 
+const ariaLabel = computed(() => {
+	return `${t("components.cardElement.collaborativeTextEditorElement")}, ${t(
+		"common.ariaLabel.newTab"
+	)}`;
+});
+
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (props.isEditMode) {
 		event.preventDefault();
@@ -93,3 +99,9 @@ const onDelete = () => emit("delete:element", props.element.id);
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
 </script>
+
+<style scoped lang="scss">
+.text-editor-card {
+	outline-offset: 1px;
+}
+</style>
