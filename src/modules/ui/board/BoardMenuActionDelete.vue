@@ -31,13 +31,13 @@ const getLanguageKeyTypeName = (scope: BoardMenuScope) => {
 		board: "components.board",
 		column: "components.boardColumn",
 		card: "components.boardCard",
-		element: "components.boardElement",
 		collaborativeTextEditorElement:
 			"components.cardElement.collaborativeTextEditorElement",
 		drawingElement: "components.cardElement.drawingElement",
 		externalToolElement: "components.cardElement.externalToolElement",
 		fileElement: "components.cardElement.fileElement",
 		linkElement: "components.cardElement.LinkElement",
+		submissionElement: "components.cardElement.submissionElement",
 	};
 
 	return languageKeyMap[scope];

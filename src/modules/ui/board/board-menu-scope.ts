@@ -1,5 +1,4 @@
 export type BoardMenuScope =
-	| "element"
 	| "card"
 	| "column"
 	| "board"
@@ -7,4 +6,5 @@ export type BoardMenuScope =
 	| "drawingElement"
 	| "externalToolElement"
 	| "fileElement"
-	| "linkElement";
+	| "linkElement"
+	| "submissionElement";
