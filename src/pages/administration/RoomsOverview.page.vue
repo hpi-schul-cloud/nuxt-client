@@ -12,10 +12,10 @@
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs class="tabs-max-width" grow v-model="activeTab">
 					<v-tab value="current" data-testid="admin-course-current-year-tab">
-						<span>{{ "Aktuell" }}</span>
+						<span>{{ t("pages.administration.common.label.active") }}</span>
 					</v-tab>
 					<v-tab value="archive" data-testid="admin-course-previous-years-tab">
-						<span>{{ "Archiv" }}</span>
+						<span>{{ t("pages.administration.common.label.archive") }}</span>
 					</v-tab>
 				</v-tabs>
 			</div>
@@ -44,16 +44,16 @@
 						data-testid="course-table-edit-btn"
 						variant="outlined"
 						size="small"
-						:href="`/courses/${item.id}/edit`"
+						:href="`/courses/${item.id}/edit?redirectUrl=/administration/rooms/new`"
 						class="mx-1 px-1"
 						min-width="0"
 					>
 						<v-icon>{{ mdiPencilOutline }}</v-icon>
 					</v-btn>
 					<v-btn
-						:title="$t('pages.administration.classes.delete')"
-						:aria-label="$t('pages.administration.classes.delete')"
-						data-testid="class-table-delete-btn"
+						:title="$t('pages.administration.courses.delete')"
+						:aria-label="$t('pages.administration.courses.delete')"
+						data-testid="course-table-delete-btn"
 						variant="outlined"
 						size="small"
 						@click="onClickDeleteIcon(item)"
@@ -63,23 +63,7 @@
 						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
 					</v-btn>
 				</template>
-				<template v-else-if="showGroupAction(item)">
-					<v-btn
-						:title="t('pages.administration.classes.manage')"
-						:aria-label="t('pages.administration.classes.manage')"
-						data-testid="class-table-members-manage-btn"
-						variant="outlined"
-						size="small"
-						:to="{
-							name: 'administration-groups-classes-members',
-							params: { groupId: item.id },
-						}"
-						class="mx-1 px-1"
-						min-width="0"
-					>
-						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
-					</v-btn>
-
+				<template v-else-if="showSyncAction(item)">
 					<v-btn
 						v-if="courseSyncEnabled && item.syncedWithGroup"
 						:title="t('feature-course-sync.startRoomSyncDialog.title')"
@@ -107,14 +91,14 @@
 		>
 			<template #title>
 				<h2 class="text-h4 my-2">
-					{{ t("pages.administration.classes.deleteDialog.title") }}
+					{{ t("pages.administration.courses.deleteDialog.title") }}
 				</h2>
 			</template>
 			<template #content>
 				<RenderHTML
 					class="text-md mt-2"
 					:html="
-						t('pages.administration.classes.deleteDialog.content', {
+						t('pages.administration.courses.deleteDialog.content', {
 							itemName: selectedItemName,
 						})
 					"
@@ -133,14 +117,14 @@
 			color="primary"
 			variant="flat"
 			data-testid="admin-courses-add-button"
-			href=""
+			href="/courses/add?redirectUrl=/administration/rooms/new"
 		>
 			{{ t("pages.administration.courses.index.add") }}
 		</v-btn>
 
 		<p class="text-muted">
 			{{
-				t("pages.administration.classes.hint", {
+				t("pages.administration.courses.hint", {
 					institute_title: getInstituteTitle,
 				})
 			}}
@@ -152,7 +136,7 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { SchoolYearQueryType, SchulcloudTheme } from "@/serverApi/v3";
+import { CourseStatusQueryType, SchulcloudTheme } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { SortOrder } from "@/store/types/sort-order.enum";
@@ -160,6 +144,7 @@ import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
+	ROOMS_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { CourseInfo, useCourseList } from "@data-room";
@@ -169,13 +154,8 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { roomsModule } from "@/store";
-import {
-	mdiAccountGroupOutline,
-	mdiPencilOutline,
-	mdiSyncOff,
-	mdiTrashCanOutline,
-} from "@mdi/js";
+import { mdiPencilOutline, mdiSyncOff, mdiTrashCanOutline } from "@mdi/js";
+import RoomsModule from "@/store/rooms";
 
 type Tab = "current" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -190,6 +170,7 @@ const props = defineProps({
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const roomsModul: RoomsModule = injectStrict(ROOMS_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -235,21 +216,18 @@ const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
 
 useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
 
-const schoolYearQueryType: ComputedRef<SchoolYearQueryType> = computed(() => {
-	switch (props.tab) {
-		case "current":
-			return SchoolYearQueryType.CurrentYear;
-		case "archive":
-			return SchoolYearQueryType.PreviousYears;
-		default:
-			return SchoolYearQueryType.CurrentYear;
+const courseStatusQueryType: ComputedRef<CourseStatusQueryType> = computed(
+	() => {
+		switch (props.tab) {
+			case "current":
+				return CourseStatusQueryType.CURRENT;
+			case "archive":
+				return CourseStatusQueryType.ARCHIVE;
+			default:
+				return CourseStatusQueryType.CURRENT;
+		}
 	}
-});
-
-//const courses: ComputedRef<CourseInfo[]> = computed(() => {
-//  fetchCourses(schoolYearQueryType.value, {key: "name",order: "asc"});
-//  }
-//);
+);
 
 const hasPermission: ComputedRef<boolean> = computed(() =>
 	authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())
@@ -257,7 +235,7 @@ const hasPermission: ComputedRef<boolean> = computed(() =>
 
 const showRoomAction = (item: CourseInfo) => hasPermission.value && item.id;
 
-const showGroupAction = (item: CourseInfo) =>
+const showSyncAction = (item: CourseInfo) =>
 	hasPermission.value && item.syncedWithGroup;
 
 const isDeleteDialogOpen: Ref<boolean> = ref(false);
@@ -305,7 +283,7 @@ const headers = computed(() => {
 		},
 		{
 			key: "teacherNames",
-			value: (item: CourseInfo) => item.teacherNames.join(", "),
+			value: (item: CourseInfo) => item.teacherNames?.join(", "),
 			title: t("common.labels.teacher"),
 			sortable: true,
 		},
@@ -321,12 +299,12 @@ const headers = computed(() => {
 
 const onConfirmCourseDeletion = async () => {
 	if (selectedItem.value) {
-		await roomsModule.delete(selectedItem.value.id);
+		await roomsModul.delete(selectedItem.value.id);
 	}
 };
 
 const loadCourseList = async () => {
-	await fetchCourses(schoolYearQueryType.value);
+	await fetchCourses(courseStatusQueryType.value);
 };
 
 const onTabsChange = async (tab: string) => {

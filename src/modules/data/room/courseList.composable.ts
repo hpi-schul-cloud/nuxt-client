@@ -1,4 +1,4 @@
-import { SchoolYearQueryType } from "@/serverApi/v3";
+import { CourseStatusQueryType } from "@/serverApi/v3";
 import { BusinessError, Pagination } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
@@ -6,7 +6,6 @@ import { ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useCourseApi } from "./courseApi.composable";
 import { CourseInfo } from "./type/course-info";
-import { CourseInfoMapper } from "./course-info.mapper";
 
 export const useCourseList = () => {
 	const { loadCoursesForSchool } = useCourseApi();
@@ -40,7 +39,7 @@ export const useCourseList = () => {
 	};
 
 	const fetchCourses = async (
-		schoolYear: SchoolYearQueryType
+		courseStatusQueryType: CourseStatusQueryType
 	): Promise<void> => {
 		isLoading.value = true;
 
@@ -48,7 +47,7 @@ export const useCourseList = () => {
 
 		try {
 			const response = await loadCoursesForSchool(
-				schoolYear,
+				courseStatusQueryType,
 				pagination.value.limit,
 				pagination.value.skip,
 				key.value,
@@ -57,13 +56,35 @@ export const useCourseList = () => {
 
 			console.log(response);
 
-			courses.value = response.data.map((course: any) => {
+			/*courses.value = response.data.map((course: any) => {
 				return CourseInfoMapper.mapToCourseInfo(course);
-			});
+			});*/
 
-			console.log(courses.value);
+			courses.value.push(
+				new CourseInfo({
+					id: "3243433",
+					name: "mathe",
+					teacherNames: ["Hans", "Wurst", "Greta", "Tuna"],
+					classNames: ["class1", "class2", "class3"],
+					syncedWithGroup: "Group",
+				}),
+				new CourseInfo({
+					id: "222223243433",
+					name: "mathe1",
+					teacherNames: ["Hansss", "Wurstttt", "Gretaaaa", "Tunaaaaa"],
+					classNames: ["class1", "class2", "class3"],
+					syncedWithGroup: "Group",
+				}),
+				new CourseInfo({
+					id: "0000dcfbfb5c7a3f00bf21ab",
+					name: "Matheerdfyg",
+					teacherNames: ["Lehrer", "Lehrer 1", "Lehrer 2"],
+					classNames: ["Klasse1", "Klasse2"],
+				})
+			);
 
-			pagination.value.total = response.data.total;
+			//	pagination.value.total = response.data.total;
+			pagination.value.total = courses.value.length;
 		} catch (errorResponse) {
 			handleError(errorResponse);
 		}

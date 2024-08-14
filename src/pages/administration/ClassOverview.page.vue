@@ -18,7 +18,7 @@
 						<span>{{ currentYear }}</span>
 					</v-tab>
 					<v-tab value="archive" data-testid="admin-class-previous-years-tab">
-						<span>{{ t("pages.administration.classes.label.archive") }}</span>
+						<span>{{ t("pages.administration.common.label.archive") }}</span>
 					</v-tab>
 				</v-tabs>
 			</div>

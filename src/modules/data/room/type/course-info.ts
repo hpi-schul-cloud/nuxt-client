@@ -2,26 +2,23 @@ export interface CourseInfoProps {
 	id: string;
 	name: string;
 	teacherNames?: string[];
-	classes?: ClassInfo[];
-	syncedWithGroup?: ClassInfo;
-	isArchived: boolean;
+	classNames?: string[];
+	syncedWithGroup?: string;
 }
 
 export class CourseInfo implements CourseInfoProps {
 	id: string;
 	name: string;
-	classes?: ClassInfo[];
+	classNames?: string[];
 	teacherNames?: string[];
-	syncedWithGroup?: ClassInfo;
-	isArchived: boolean;
+	syncedWithGroup?: string;
 
 	constructor(props: CourseInfoProps) {
 		this.id = props.id;
 		this.name = props.name;
 		this.teacherNames = props.teacherNames;
-		this.classes = props.classes;
+		this.classNames = props.classNames;
 		this.syncedWithGroup = props.syncedWithGroup;
-		this.isArchived = props.isArchived;
 	}
 }
 

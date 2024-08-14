@@ -1,7 +1,7 @@
-import { ClassInfo, CourseInfo } from "./type/course-info";
+import { ClassInfo } from "./type/course-info";
 
 export class CourseInfoMapper {
-	static mapToCourseInfo(courseInfoResponse: any): CourseInfo {
+	/*static mapToCourseInfo(courseInfoResponse: CourseInfoResponse): CourseInfo {
 		const mapped = {
 			id: courseInfoResponse.id,
 			name: courseInfoResponse.name,
@@ -12,7 +12,7 @@ export class CourseInfoMapper {
 		};
 
 		return mapped;
-	}
+	}*/
 
 	private static mapToClassesInfos(classes: any[]): ClassInfo[] | undefined {
 		const mapped = classes.map((clazz: any) => {

@@ -1,4 +1,4 @@
-import { CoursesApiFactory, SchoolYearQueryType } from "@/serverApi/v3";
+import { CoursesApiFactory, CourseStatusQueryType } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
 export const useCourseApi = () => {
@@ -15,11 +15,11 @@ export const useCourseApi = () => {
 		await courseApi.courseControllerStartSynchronization(courseId, { groupId });
 	};
 
-	const buildArchiveQuery = (schoolyear: SchoolYearQueryType) => {
+	const buildArchiveQuery = (courseStatusQueryType: CourseStatusQueryType) => {
 		const yesterday = new Date();
 		yesterday.setDate(yesterday.getDate() - 1);
 		let archiveQuery = {};
-		if (schoolyear === SchoolYearQueryType.CurrentYear) {
+		if (courseStatusQueryType === CourseStatusQueryType.CURRENT) {
 			archiveQuery = {
 				$or: [
 					{ untilDate: { $exists: false } },
@@ -28,21 +28,21 @@ export const useCourseApi = () => {
 				],
 			};
 		}
-		if (schoolyear === SchoolYearQueryType.PreviousYears) {
+		if (courseStatusQueryType === CourseStatusQueryType.ARCHIVE) {
 			archiveQuery = { untilDate: { $lt: yesterday } };
 		}
 		return archiveQuery;
 	};
 
 	const loadCoursesForSchool = async (
-		schoolYear: SchoolYearQueryType,
+		courseStatusQueryType: CourseStatusQueryType,
 		limit: number,
 		skip: number,
 		key: string | undefined,
 		order: number
 	) => {
 		//const archiveQuery =
-		buildArchiveQuery(schoolYear);
+		buildArchiveQuery(courseStatusQueryType);
 
 		const query = {
 			//$and: [archiveQuery],
@@ -52,13 +52,15 @@ export const useCourseApi = () => {
 			$sort: { key, order },
 		};
 
-		const response = await $axios.get("/v1/courses", {
-			params: query,
-		});
+		//const response = await $axios.get("/v1/courses", {
+		//	params: query,
+		//});
 
-		console.log(response);
+		console.log(query);
 
-		return response.data;
+		//return response.data;
+
+		return {};
 	};
 
 	return {
