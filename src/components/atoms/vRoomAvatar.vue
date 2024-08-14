@@ -193,6 +193,10 @@ const dropAvatar = () => {
 	width: 500px;
 	cursor: pointer;
 	border-radius: 0.5em;
+
+	&:focus {
+		outline-offset: 2px;
+	}
 }
 
 .single-avatar {

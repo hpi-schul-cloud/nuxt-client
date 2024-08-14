@@ -41,14 +41,6 @@ textarea.v-field__input {
 	@include visually-hidden;
 }
 
-::-moz-focus-inner {
-	border: 0;
-}
-
-:focus {
-	outline-offset: 2px;
-}
-
 /* width */
 
 .w-100 {
