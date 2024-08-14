@@ -4,8 +4,8 @@
 	"author": "Dataport Bildungscloud",
 	"private": true,
 	"scripts": {
-		"serve": "NODE_ENV=development webpack serve --config config/webpack/webpack.dev.js",
-		"build": "NODE_ENV=production webpack --config config/webpack/webpack.prod.js",
+		"serve": "webpack serve --config config/webpack/webpack.dev.js",
+		"build": "webpack --config config/webpack/webpack.prod.js",
 		"test": "npm run test:unit",
 		"test:unit": "npx jest",
 		"test:unit:ci": "npm run test:unit -- --coverage --ci --maxWorkers=4",
