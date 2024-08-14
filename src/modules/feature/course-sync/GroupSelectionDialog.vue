@@ -1,6 +1,6 @@
 <template>
 	<vCustomDialog
-		:is-open="isOpen"
+		v-model:is-open="isOpen"
 		has-buttons
 		:buttons="['close', 'next']"
 		:next-btn-disabled="!selectedGroup || !hasTeacher(selectedGroup)"

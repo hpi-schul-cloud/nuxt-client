@@ -24,7 +24,10 @@ describe("GroupSelectionDialog", () => {
 	let useGroupListStateMock: DeepMocked<ReturnType<typeof useGroupListState>>;
 
 	const getWrapper = (
-		props: ComponentProps<typeof GroupSelectionDialog> = { isOpen: true }
+		props: ComponentProps<typeof GroupSelectionDialog> = {
+			isOpen: true,
+			description: "",
+		}
 	) => {
 		useGroupListStateMock.isLoading = ref(false);
 		useGroupListStateMock.groups = ref([]);
@@ -39,7 +42,6 @@ describe("GroupSelectionDialog", () => {
 					createTestingI18n(),
 					vueDompurifyHTMLPlugin,
 				],
-				provide: {},
 			},
 			props,
 		});
@@ -61,7 +63,7 @@ describe("GroupSelectionDialog", () => {
 
 	describe("when the dialog is open", () => {
 		it("should load groups", async () => {
-			const { wrapper } = getWrapper({ isOpen: false });
+			const { wrapper } = getWrapper({ isOpen: false, description: "" });
 
 			await wrapper.setProps({ isOpen: true });
 
@@ -112,11 +114,6 @@ describe("GroupSelectionDialog", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper();
 
-			Object.defineProperty(window, "location", {
-				configurable: true,
-				value: { assign: jest.fn() },
-			});
-
 			const group = groupResponseFactory.build({
 				users: [
 					{
@@ -136,7 +133,7 @@ describe("GroupSelectionDialog", () => {
 			};
 		};
 
-		it("should redirect to the course creation", async () => {
+		it("should emit the confirm event", async () => {
 			const { wrapper, group } = setup();
 
 			const autocomplete = wrapper.findComponent(VAutocomplete);
@@ -145,9 +142,7 @@ describe("GroupSelectionDialog", () => {
 			const nextBtn = wrapper.findComponent("[data-testid=dialog-next]");
 			await nextBtn.trigger("click");
 
-			expect(window.location.assign).toHaveBeenCalledWith(
-				`/courses/add?syncedGroupId=${group.id}`
-			);
+			expect(wrapper.emitted("confirm")).toEqual([[group]]);
 		});
 	});
 
@@ -160,6 +155,7 @@ describe("GroupSelectionDialog", () => {
 
 			expect(wrapper.vm.isOpen).toEqual(false);
 			expect(wrapper.emitted("update:isOpen")).toBeDefined();
+			expect(wrapper.emitted("cancel")).toEqual([[]]);
 		});
 	});
 
