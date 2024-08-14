@@ -1155,7 +1155,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_SPACES_ENABLED: boolean;
+    FEATURE_ROOMS_ENABLED: boolean;
 }
 /**
  * 

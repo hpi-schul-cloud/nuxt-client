@@ -22,10 +22,10 @@ export const useSidebarItems = () => {
 			testId: "Übersicht",
 		},
 		{
-			title: "global.sidebar.item.spaces",
-			to: "/spaces",
+			title: "global.sidebar.item.rooms",
+			to: "/rooms",
 			icon: "$mdiAccountSupervisorCircleOutline",
-			feature: "FEATURE_SPACES_ENABLED",
+			feature: "FEATURE_ROOMS_ENABLED",
 			testId: "Räume",
 		},
 		{
