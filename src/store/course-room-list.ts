@@ -24,7 +24,7 @@ import { AlertPayload } from "./types/alert-payload";
 	namespaced: true,
 	stateFactory: true,
 })
-export default class CourseRoomsModule extends VuexModule {
+export default class CourseRoomListModule extends VuexModule {
 	roomsData: DashboardGridElementResponse[] = [];
 	gridElementsId = "";
 	allElements: CourseMetadataResponse[] = [];
