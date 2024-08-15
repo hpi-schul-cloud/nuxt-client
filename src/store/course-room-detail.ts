@@ -22,11 +22,11 @@ import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
 
 @Module({
-	name: "roomModule",
+	name: "roomDetailModule",
 	namespaced: true,
 	stateFactory: true,
 })
-export default class RoomModule extends VuexModule {
+export default class CourseRoomDetailModule extends VuexModule {
 	roomData: SingleColumnBoardResponse = {
 		roomId: "",
 		title: "",
