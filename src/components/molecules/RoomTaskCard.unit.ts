@@ -1,7 +1,7 @@
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import { Task } from "@/store/types/room";
+import { Task } from "@/store/types/course-room-detail";
 import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,

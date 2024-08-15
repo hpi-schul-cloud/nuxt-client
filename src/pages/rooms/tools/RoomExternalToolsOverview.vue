@@ -47,7 +47,7 @@ import { mdiAlertCircle } from "@/components/icons/material";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import CourseRoomDetailModule from "@/store/course-room-detail";
-import { Course, CourseFeatures } from "@/store/types/room";
+import { Course, CourseFeatures } from "@/store/types/course-room-detail";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,

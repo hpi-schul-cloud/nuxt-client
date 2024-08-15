@@ -10,7 +10,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { AxiosError, AxiosInstance } from "axios";
 import CourseRoomDetailModule from "./course-room-detail";
 import { HttpStatusCode } from "./types/http-status-code.enum";
-import { Course } from "./types/room";
+import { Course } from "./types/course-room-detail";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
