@@ -1,6 +1,6 @@
 import setupStores from "@@/tests/test-utils/setupStores";
 import CommonCartridgeExportModule from "./common-cartridge-export";
-import RoomModule from "./room";
+import RoomModule from "./course-room-detail";
 import { roomModule } from "./store-accessor";
 
 describe("commonCartridgeExportModule", () => {

@@ -5,7 +5,7 @@ import {
 	ShareTokenBodyParamsParentTypeEnum,
 } from "../serverApi/v3/api";
 import setupStores from "@@/tests/test-utils/setupStores";
-import RoomModule from "@/store/room";
+import RoomModule from "@/store/course-room-detail";
 
 const sharePayload: SharePayload = {
 	id: "sampleCourseId",
