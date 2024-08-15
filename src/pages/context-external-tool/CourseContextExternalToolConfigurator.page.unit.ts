@@ -16,6 +16,7 @@ import { ComponentProps } from "vue-component-type-helpers";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
+import CourseRoomDetailModule from "@/store/course-room-detail";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),
@@ -33,7 +34,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		const notifierModule = createModuleMocks(NotifierModule);
 
 		const roomTitle = "Room Title";
-		const courseRoomDetailModule = createModuleMocks(courseRoomDetailModule, {
+		const courseRoomDetailModule = createModuleMocks(CourseRoomDetailModule, {
 			getRoomData: {
 				title: roomTitle,
 				roomId: "contextId",
