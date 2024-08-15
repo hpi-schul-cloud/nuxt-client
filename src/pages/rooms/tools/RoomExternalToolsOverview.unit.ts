@@ -1,6 +1,6 @@
 import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
-import courseRoomDetailModule from "@/store/course-room-detail";
+import CourseRoomDetailModule from "@/store/course-room-detail";
 import { CourseFeatures } from "@/store/types/course-room-detail";
 import { ENV_CONFIG_MODULE_KEY, ROOM_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -31,7 +31,7 @@ describe("RoomExternalToolOverview", () => {
 	>;
 
 	const getWrapper = () => {
-		const courseRoomDetailModule = createModuleMocks(courseRoomDetailModule, {
+		const courseRoomDetailModule = createModuleMocks(CourseRoomDetailModule, {
 			getLoading: false,
 		});
 
