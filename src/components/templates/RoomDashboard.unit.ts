@@ -6,7 +6,7 @@ import { envConfigModule, courseRoomDetailModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
-import courseRoomDetailModule from "@/store/course-room-detail";
+import CourseRoomDetailModule from "@/store/course-room-detail";
 import ShareModule from "@/store/share";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -157,7 +157,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			courseRoomDetailModule: courseRoomDetailModule,
+			courseRoomDetailModule: CourseRoomDetailModule,
 			envConfigModule: EnvConfigModule,
 			copyModule: CopyModule,
 		});
