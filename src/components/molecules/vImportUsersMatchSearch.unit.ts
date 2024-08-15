@@ -17,6 +17,7 @@ import {
 } from "vuetify/lib/components/index.mjs";
 import vImportUsersMatchSearch from "./vImportUsersMatchSearch.vue";
 
+// TODO: moin.schule test case
 const testProps = {
 	editedItem: {
 		flagged: false,
@@ -26,6 +27,7 @@ const testProps = {
 		lastName: "Mustermann",
 		roleNames: ["student"],
 		classNames: ["6a"],
+		externalRoleNames: ["student-a"],
 	},
 	isDialog: true,
 	ldapSource: "LDAP",
@@ -63,6 +65,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		expect(editedItemElement).toContain("common.roleName.student");
 		expect(editedItemElement).toContain("max_mus");
 		expect(editedItemElement).toContain("6a");
+		expect(editedItemElement).toContain("(LDAP: student-a)");
 	});
 
 	it("should set 'flagged' property true when flag-button clicked", async () => {
@@ -192,7 +195,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		expect(deleteMatchButton.props("disabled")).toBe(true);
 	});
 
-	it("should disable save button when no no item was selected", () => {
+	it("should disable save button when no item was selected", () => {
 		const wrapper = getWrapper(testProps);
 
 		const saveMatchButton = wrapper
