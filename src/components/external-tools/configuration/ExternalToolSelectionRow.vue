@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { ExternalToolConfigurationTemplate } from "@data-external-tool";
-import { defineProps, PropType } from "vue";
+import { PropType } from "vue";
 
 defineProps({
 	item: {

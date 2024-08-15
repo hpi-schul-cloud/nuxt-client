@@ -9,6 +9,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
+import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
@@ -87,6 +88,10 @@ describe("ContentElementList", () => {
 			{
 				elementType: ContentElementType.CollaborativeTextEditor,
 				component: CollaborativeTextEditorElement,
+			},
+			{
+				elementType: ContentElementType.Deleted,
+				component: DeletedElement,
 			},
 		];
 

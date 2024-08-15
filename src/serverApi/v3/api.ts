@@ -439,10 +439,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -1347,7 +1347,8 @@ export enum ContentElementType {
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
     ExternalTool = 'externalTool',
-    CollaborativeTextEditor = 'collaborativeTextEditor'
+    CollaborativeTextEditor = 'collaborativeTextEditor',
+    Deleted = 'deleted'
 }
 
 /**
@@ -1660,6 +1661,7 @@ export enum CopyApiResponseTypeEnum {
     Content = 'CONTENT',
     Course = 'COURSE',
     CoursegroupGroup = 'COURSEGROUP_GROUP',
+    DeletedElement = 'DELETED_ELEMENT',
     ExternalTool = 'EXTERNAL_TOOL',
     ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
     File = 'FILE',
@@ -1928,7 +1930,8 @@ export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
     ExternalTool = 'externalTool',
-    CollaborativeTextEditor = 'collaborativeTextEditor'
+    CollaborativeTextEditor = 'collaborativeTextEditor',
+    Deleted = 'deleted'
 }
 
 /**
@@ -2371,6 +2374,56 @@ export interface DashboardResponse {
      * @memberof DashboardResponse
      */
     gridElements: Array<DashboardGridElementResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface DeletedElementContent
+ */
+export interface DeletedElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof DeletedElementContent
+     */
+    title: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof DeletedElementContent
+     */
+    deletedElementType: ContentElementType;
+}
+/**
+ * 
+ * @export
+ * @interface DeletedElementResponse
+ */
+export interface DeletedElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof DeletedElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof DeletedElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {DeletedElementContent}
+     * @memberof DeletedElementResponse
+     */
+    content: DeletedElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof DeletedElementResponse
+     */
+    timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -10999,7 +11052,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -11079,7 +11132,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11153,7 +11206,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse>;
 
     /**
      * 
