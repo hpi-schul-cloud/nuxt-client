@@ -231,14 +231,38 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		beforeEnter: createPermissionGuard(["news_edit"]),
 	},
 	{
+		// TODO BC-7822, BC-7823 target this route at new rooms page
+		path: `/rooms`,
+		redirect: { name: "course-room-overview" },
+		name: "rooms",
+	},
+	// TODO Is this redirect really necessary? How likely is it that there are bookmarks?
+	{
+		path: "/rooms-list",
+		redirect: { name: "course-room-list" },
+		name: "rooms-list",
+	},
+	{
+		path: "/rooms/courses-list",
+		component: () => import("@/pages/rooms/CourseRoomList.page.vue"),
+		name: "course-room-list",
+	},
+	{
+		path: "/rooms-overview",
+		redirect: { name: "course-room-overview" },
+		name: "rooms-overview",
+	},
+	{
+		path: "/rooms/courses-overview",
+		component: () => import("@/pages/rooms/CourseRoomOverview.page.vue"),
+		name: "course-room-overview",
+	},
+	{
+		// TODO BC-7822, BC-7823 target this route at new room details page
+		// and decide on that page which sub-component (page) has to be rendered
 		path: `/rooms/:id(${REGEX_ID})`,
 		component: () => import("@/pages/rooms/CourseRoomDetails.page.vue"),
 		name: "rooms-id",
-	},
-	{
-		path: `/rooms`,
-		redirect: { name: "rooms-overview" },
-		name: "rooms",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
@@ -247,16 +271,6 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		props: (route: RouteLocationNormalized) => ({
 			boardId: route.params.id,
 		}),
-	},
-	{
-		path: "/rooms-list",
-		component: () => import("@/pages/rooms/CourseRoomList.page.vue"),
-		name: "rooms-list",
-	},
-	{
-		path: "/rooms-overview",
-		component: () => import("@/pages/rooms/CourseRoomOverview.page.vue"),
-		name: "rooms-overview",
 	},
 	{
 		path: "/tasks",

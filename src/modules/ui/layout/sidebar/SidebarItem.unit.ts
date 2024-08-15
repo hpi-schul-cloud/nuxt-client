@@ -20,7 +20,7 @@ const childItem: SidebarSingleItem = {
 };
 
 jest.mock("vue-router", () => ({
-	useRoute: () => ({ path: "rooms-list" }),
+	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 
 describe("@ui-layout/SidebarItem", () => {
@@ -56,7 +56,7 @@ describe("@ui-layout/SidebarItem", () => {
 			icon: "mdiOpen",
 			title: "title",
 			testId: "testId",
-			to: "/rooms-overview",
+			to: "/rooms/courses-overview",
 		});
 
 		expect(wrapper.classes()).toContain("v-list-item--active");

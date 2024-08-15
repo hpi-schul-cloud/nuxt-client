@@ -42,14 +42,10 @@ const getSidebarItems = (): SidebarItemList => [
 	},
 	{
 		title: "global.sidebar.item.courses",
-		to: "/rooms-overview",
+		to: "/rooms/courses-overview",
 		icon: "$mdiSchoolOutline",
 		testId: "Course-Overview",
-		activeForUrls: [
-			"^/rooms-overview($|/.*)",
-			"^/rooms($|/.*)",
-			"^/rooms-list($|/.*)",
-		],
+		activeForUrls: ["^/rooms($|/.*)"],
 	},
 	{
 		title: "global.sidebar.item.teams",

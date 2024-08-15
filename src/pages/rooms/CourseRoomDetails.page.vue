@@ -197,7 +197,7 @@ export default defineComponent({
 			breadcrumbs: [
 				{
 					title: this.$t("common.words.courses"),
-					to: "/rooms-overview",
+					to: "/rooms/courses-overview",
 					disabled: false,
 				},
 			],
@@ -525,7 +525,7 @@ export default defineComponent({
 					"/rooms/" + copyResult.id.replace(/[^a-z\d]/g, "")
 				);
 			} else {
-				await this.$router.push("/rooms-overview");
+				await this.$router.push("/rooms/courses-overview");
 			}
 		},
 		async onCopyBoardElement(payload) {

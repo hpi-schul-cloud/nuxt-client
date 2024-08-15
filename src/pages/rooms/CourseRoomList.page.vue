@@ -8,7 +8,7 @@
 				<v-btn
 					variant="outlined"
 					size="small"
-					to="/rooms-overview"
+					to="/rooms/courses-overview"
 					data-testid="go-to-active-courses"
 				>
 					{{ $t("pages.rooms.index.courses.active") }}
