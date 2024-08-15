@@ -10,7 +10,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import CourseRoomDetailModule from "@/store/course-room-detail";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -19,7 +19,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -117,7 +117,7 @@ let loadingStateModuleMock: LoadingStateModule;
 let notifierModule: NotifierModule;
 let shareModule: ShareModule;
 let downloadModule: CommonCartridgeExportModule;
-let courseRoomDetailModule: CourseRoomDetailModule;
+let courseRoomDetailsModule: CourseRoomDetailsModule;
 let authModule: AuthModule;
 
 const getWrapper = (
@@ -148,7 +148,7 @@ const getWrapper = (
 		startShareFlow: jest.fn(),
 		resetShareFlow: jest.fn(),
 	});
-	courseRoomDetailModule = createModuleMocks(CourseRoomDetailModule, {
+	courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 		fetchContent: jest.fn(),
 		getRoomData: mockData,
 		getPermissionData: permissionData,
@@ -184,7 +184,7 @@ const getWrapper = (
 				[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModule,
-				[ROOM_MODULE_KEY.valueOf()]: courseRoomDetailModule,
+				[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
 			stubs: {
@@ -220,7 +220,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 	it("should fetch data", async () => {
 		getWrapper();
 
-		expect(courseRoomDetailModule.fetchContent).toHaveBeenCalled();
+		expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalled();
 	});
 
 	it("'to course files' button should have correct path", () => {

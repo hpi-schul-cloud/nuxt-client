@@ -1,7 +1,7 @@
 import { AxiosInstance } from "axios";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
-import RoomsModule from "./course-room-list";
+import CourseRoomListModule from "./course-room-list";
 import { AlertPayload } from "./types/alert-payload";
 import { RoomsData } from "./types/rooms";
 
@@ -99,18 +99,18 @@ describe("rooms module", () => {
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
 
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 
-				roomsModule
+				courseRoomListModule
 					.fetch({
 						indicateLoading: true,
 						device: "mobile",
 					})
 					.then(() => {
-						expect(roomsModule.getLoading).toBe(false);
+						expect(courseRoomListModule.getLoading).toBe(false);
 					});
 
-				expect(roomsModule.getLoading).toBe(true);
+				expect(courseRoomListModule.getLoading).toBe(true);
 				expect(mockApi.dashboardControllerFindForUser).toHaveBeenCalled();
 			});
 		});
@@ -129,7 +129,7 @@ describe("rooms module", () => {
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
 
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 
 				const payload = {
 					from: { x: 1, y: 1 },
@@ -141,11 +141,11 @@ describe("rooms module", () => {
 					to: { x: 2, y: 2 },
 				};
 
-				roomsModule.align(payload).then(() => {
-					expect(roomsModule.getLoading).toBe(false);
+				courseRoomListModule.align(payload).then(() => {
+					expect(courseRoomListModule.getLoading).toBe(false);
 				});
 
-				expect(roomsModule.getLoading).toBe(true);
+				expect(courseRoomListModule.getLoading).toBe(true);
 				expect(mockApi.dashboardControllerMoveElement).toHaveBeenLastCalledWith(
 					"",
 					expectedParam
@@ -156,12 +156,12 @@ describe("rooms module", () => {
 		describe("delete", () => {
 			it("should call 'setPosition' mutation", async () => {
 				// TODO: call server will be here when server ready
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 
-				const setRoomDataSpy = jest.spyOn(roomsModule, "setRoomData");
-				const setLoadingSpy = jest.spyOn(roomsModule, "setLoading");
+				const setRoomDataSpy = jest.spyOn(courseRoomListModule, "setRoomData");
+				const setLoadingSpy = jest.spyOn(courseRoomListModule, "setLoading");
 
-				await roomsModule.delete("id");
+				await courseRoomListModule.delete("id");
 
 				expect(setLoadingSpy).toHaveBeenCalled();
 				expect(setLoadingSpy.mock.calls[0][0]).toBe(true);
@@ -182,7 +182,7 @@ describe("rooms module", () => {
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
 
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const roomsData: RoomsData = {
 					id: "dummyId",
 					title: "dummy title",
@@ -192,10 +192,10 @@ describe("rooms module", () => {
 					displayColor: "#FF0000",
 					isSynchronized: false,
 				};
-				roomsModule.setRoomDataId(roomsData.id);
-				await roomsModule.update(roomsData);
+				courseRoomListModule.setRoomDataId(roomsData.id);
+				await courseRoomListModule.update(roomsData);
 
-				expect(roomsModule.getLoading).toBe(false);
+				expect(courseRoomListModule.getLoading).toBe(false);
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
 					roomsData.id,
 					roomsData.xPosition,
@@ -216,7 +216,7 @@ describe("rooms module", () => {
 					.mockReturnValue(
 						mockApi as unknown as serverApi.DashboardApiInterface
 					);
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const roomsData: RoomsData = {
 					id: "dummyId",
 					title: "dummy title",
@@ -226,11 +226,11 @@ describe("rooms module", () => {
 					displayColor: "#FF0000",
 					isSynchronized: false,
 				};
-				roomsModule.setRoomDataId(roomsData.id);
-				await roomsModule.update(roomsData);
+				courseRoomListModule.setRoomDataId(roomsData.id);
+				await courseRoomListModule.update(roomsData);
 
-				expect(roomsModule.getLoading).toBe(false);
-				expect(roomsModule.getError).toStrictEqual({ ...error });
+				expect(courseRoomListModule.getLoading).toBe(false);
+				expect(courseRoomListModule.getError).toStrictEqual({ ...error });
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
 					roomsData.id,
 					roomsData.xPosition,
@@ -246,10 +246,10 @@ describe("rooms module", () => {
 				jest
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
-				const roomsModule = new RoomsModule({});
-				await roomsModule.fetchAllElements();
+				const courseRoomListModule = new CourseRoomListModule({});
+				await courseRoomListModule.fetchAllElements();
 
-				expect(roomsModule.getLoading).toBe(false);
+				expect(courseRoomListModule.getLoading).toBe(false);
 				expect(mockApi.courseControllerFindForUser).toHaveBeenCalledTimes(1);
 
 				expect(
@@ -270,15 +270,15 @@ describe("rooms module", () => {
 				jest
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 
-				roomsModule.fetchAllElements().then(() => {
-					expect(roomsModule.getLoading).toBe(false);
-					expect(roomsModule.getError).toStrictEqual({ ...error });
+				courseRoomListModule.fetchAllElements().then(() => {
+					expect(courseRoomListModule.getLoading).toBe(false);
+					expect(courseRoomListModule.getError).toStrictEqual({ ...error });
 					done();
 				});
 
-				expect(roomsModule.getLoading).toBe(true);
+				expect(courseRoomListModule.getLoading).toBe(true);
 			});
 		});
 
@@ -290,14 +290,14 @@ describe("rooms module", () => {
 					status: "success",
 					message: "",
 				};
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const getSharedCourseDataSpy = jest.spyOn(
-					roomsModule,
+					courseRoomListModule,
 					"confirmSharedCourseData"
 				);
 				getSharedCourseDataSpy.mockImplementation();
 
-				await roomsModule.confirmSharedCourseData(sharedCourseData);
+				await courseRoomListModule.confirmSharedCourseData(sharedCourseData);
 				expect(getSharedCourseDataSpy.mock.calls[0][0]).toStrictEqual(
 					sharedCourseData
 				);
@@ -311,10 +311,10 @@ describe("rooms module", () => {
 					message: "",
 				};
 				const setBusinessErrorMock = jest.fn();
-				const roomsModule = new RoomsModule({});
-				roomsModule.setBusinessError = setBusinessErrorMock;
+				const courseRoomListModule = new CourseRoomListModule({});
+				courseRoomListModule.setBusinessError = setBusinessErrorMock;
 
-				await roomsModule.confirmSharedCourseData(sharedCourseData);
+				await courseRoomListModule.confirmSharedCourseData(sharedCourseData);
 				expect(setBusinessErrorMock).toHaveBeenCalled();
 			});
 		});
@@ -323,7 +323,7 @@ describe("rooms module", () => {
 	describe("mutations", () => {
 		describe("setRoomData", () => {
 			it("should set the room data", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const roomsDataToBeChanged = [
 					{
 						id: "someId",
@@ -346,47 +346,47 @@ describe("rooms module", () => {
 						to: "/rooms/someId",
 					},
 				];
-				expect(roomsModule.getRoomsData).not.toStrictEqual(
+				expect(courseRoomListModule.getRoomsData).not.toStrictEqual(
 					roomsDataToBeChanged
 				);
-				roomsModule.setRoomData(roomsDataToBeChanged as any);
-				expect(roomsModule.roomsData).toStrictEqual(expectedData);
+				courseRoomListModule.setRoomData(roomsDataToBeChanged as any);
+				expect(courseRoomListModule.roomsData).toStrictEqual(expectedData);
 			});
 		});
 
 		describe("setRoomDataId", () => {
 			it("should set the room data id", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const id = "sample_id";
 
-				roomsModule.setRoomDataId(id);
-				expect(roomsModule.gridElementsId).toStrictEqual(id);
+				courseRoomListModule.setRoomDataId(id);
+				expect(courseRoomListModule.gridElementsId).toStrictEqual(id);
 			});
 		});
 
 		describe("setLoading", () => {
 			it("should set loading", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const loadingValue = true;
-				expect(roomsModule.getLoading).not.toBe(loadingValue);
-				roomsModule.setLoading(loadingValue);
-				expect(roomsModule.loading).toBe(loadingValue);
+				expect(courseRoomListModule.getLoading).not.toBe(loadingValue);
+				courseRoomListModule.setLoading(loadingValue);
+				expect(courseRoomListModule.loading).toBe(loadingValue);
 			});
 		});
 
 		describe("setError", () => {
 			it("should set error", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const errorData = { message: "some error" };
-				expect(roomsModule.getError).not.toBe(errorData);
-				roomsModule.setError(errorData);
-				expect(roomsModule.error).toBe(errorData);
+				expect(courseRoomListModule.getError).not.toBe(errorData);
+				courseRoomListModule.setError(errorData);
+				expect(courseRoomListModule.error).toBe(errorData);
 			});
 		});
 
 		describe("setPosition", () => {
 			it("should re-position the state", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const draggedObject = {
 					from: { x: 6, y: 1 },
 					item: {
@@ -408,15 +408,15 @@ describe("rooms module", () => {
 					yPosition: 2,
 					to: "/rooms/123",
 				};
-				roomsModule.setRoomData(mockData.gridElements as any);
-				roomsModule.setPosition(draggedObject);
-				expect(roomsModule.roomsData[0]).toStrictEqual(expectedObject);
+				courseRoomListModule.setRoomData(mockData.gridElements as any);
+				courseRoomListModule.setPosition(draggedObject);
+				expect(courseRoomListModule.roomsData[0]).toStrictEqual(expectedObject);
 			});
 		});
 
 		describe("setAllElements", () => {
 			it("should set the all elements data", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const itemsToBeSet = [
 					{
 						id: "123",
@@ -461,14 +461,14 @@ describe("rooms module", () => {
 						to: "/rooms/234",
 					},
 				];
-				roomsModule.setAllElements(itemsToBeSet);
-				expect(roomsModule.allElements).toStrictEqual(expectedData);
+				courseRoomListModule.setAllElements(itemsToBeSet);
+				expect(courseRoomListModule.allElements).toStrictEqual(expectedData);
 			});
 		});
 
 		describe("setSharedCourseData, setImportedCourseId", () => {
 			it("should set the state and imported course id", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const sharedCourseData = {
 					code: "123",
 					courseName: "Mathe",
@@ -477,36 +477,42 @@ describe("rooms module", () => {
 				};
 				const importedCourseId = "456789";
 
-				roomsModule.setSharedCourseData(sharedCourseData);
-				roomsModule.setImportedCourseId(importedCourseId);
-				expect(roomsModule.sharedCourseData).toStrictEqual(sharedCourseData);
-				expect(roomsModule.importedCourseId).toStrictEqual(importedCourseId);
+				courseRoomListModule.setSharedCourseData(sharedCourseData);
+				courseRoomListModule.setImportedCourseId(importedCourseId);
+				expect(courseRoomListModule.sharedCourseData).toStrictEqual(
+					sharedCourseData
+				);
+				expect(courseRoomListModule.importedCourseId).toStrictEqual(
+					importedCourseId
+				);
 			});
 		});
 
 		describe("setBusinessError", () => {
 			it("should set businessError", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const businessErrorData = {
 					statusCode: "400",
 					message: "error",
 					error: { type: "BadRequest" },
 				};
-				expect(roomsModule.getBusinessError).not.toBe(businessErrorData);
-				roomsModule.setBusinessError(businessErrorData);
-				expect(roomsModule.businessError).toBe(businessErrorData);
+				expect(courseRoomListModule.getBusinessError).not.toBe(
+					businessErrorData
+				);
+				courseRoomListModule.setBusinessError(businessErrorData);
+				expect(courseRoomListModule.businessError).toBe(businessErrorData);
 			});
 			it("should reset businessError", () => {
-				const roomsModule = new RoomsModule({});
-				roomsModule.businessError = {
+				const courseRoomListModule = new CourseRoomListModule({});
+				courseRoomListModule.businessError = {
 					statusCode: "400",
 					message: "error",
 					error: {},
 				};
 
-				roomsModule.resetBusinessError();
-				expect(roomsModule.businessError.statusCode).toStrictEqual("");
-				expect(roomsModule.businessError.message).toStrictEqual("");
+				courseRoomListModule.resetBusinessError();
+				expect(courseRoomListModule.businessError.statusCode).toStrictEqual("");
+				expect(courseRoomListModule.businessError.message).toStrictEqual("");
 			});
 		});
 	});
@@ -514,7 +520,7 @@ describe("rooms module", () => {
 	describe("getters", () => {
 		describe("getRoomsData", () => {
 			it("should return rooms state", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const itemsToBeSet = [
 					{
 						id: "123",
@@ -555,44 +561,44 @@ describe("rooms module", () => {
 					},
 				];
 
-				roomsModule.setRoomData(itemsToBeSet as any);
-				expect(roomsModule.getRoomsData).toStrictEqual(expectedData);
+				courseRoomListModule.setRoomData(itemsToBeSet as any);
+				expect(courseRoomListModule.getRoomsData).toStrictEqual(expectedData);
 			});
 		});
 
 		describe("getLoading", () => {
 			it("should return loading state", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 
-				expect(roomsModule.getLoading).not.toStrictEqual(true);
-				roomsModule.setLoading(true);
-				expect(roomsModule.getLoading).toStrictEqual(true);
+				expect(courseRoomListModule.getLoading).not.toStrictEqual(true);
+				courseRoomListModule.setLoading(true);
+				expect(courseRoomListModule.getLoading).toStrictEqual(true);
 			});
 		});
 
 		describe("getError", () => {
 			it("should return error state", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const errorData = { message: "some error" };
-				expect(roomsModule.getError).toStrictEqual(null);
-				roomsModule.setError(errorData);
-				expect(roomsModule.getError).toStrictEqual(errorData);
+				expect(courseRoomListModule.getError).toStrictEqual(null);
+				courseRoomListModule.setError(errorData);
+				expect(courseRoomListModule.getError).toStrictEqual(errorData);
 			});
 		});
 
 		describe("getRoomsId", () => {
 			it("should return rooms id state", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const sampleId = "sample_id";
-				expect(roomsModule.getRoomsId).toStrictEqual("");
-				roomsModule.setRoomDataId(sampleId);
-				expect(roomsModule.getRoomsId).toStrictEqual(sampleId);
+				expect(courseRoomListModule.getRoomsId).toStrictEqual("");
+				courseRoomListModule.setRoomDataId(sampleId);
+				expect(courseRoomListModule.getRoomsId).toStrictEqual(sampleId);
 			});
 		});
 
 		describe("getCourseSharingStatus", () => {
 			it("should return shared course data", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const sharedCourseData = {
 					code: "123",
 					courseName: "Mathe",
@@ -600,8 +606,8 @@ describe("rooms module", () => {
 					message: "",
 				};
 
-				roomsModule.setSharedCourseData(sharedCourseData);
-				expect(roomsModule.getCourseSharingStatus).toStrictEqual(
+				courseRoomListModule.setSharedCourseData(sharedCourseData);
+				expect(courseRoomListModule.getCourseSharingStatus).toStrictEqual(
 					sharedCourseData
 				);
 			});
@@ -609,17 +615,19 @@ describe("rooms module", () => {
 
 		describe("getImportedCourseId", () => {
 			it("should return imported course id", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const sampleId = "sample_id";
-				expect(roomsModule.getImportedCourseId).toStrictEqual("");
-				roomsModule.setImportedCourseId(sampleId);
-				expect(roomsModule.getImportedCourseId).toStrictEqual(sampleId);
+				expect(courseRoomListModule.getImportedCourseId).toStrictEqual("");
+				courseRoomListModule.setImportedCourseId(sampleId);
+				expect(courseRoomListModule.getImportedCourseId).toStrictEqual(
+					sampleId
+				);
 			});
 		});
 
 		describe("getAllElements", () => {
 			it("should return rooms-list AllElements", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const itemsToBeSet = [
 					{
 						id: "123",
@@ -665,19 +673,19 @@ describe("rooms module", () => {
 						to: "/rooms/234",
 					},
 				];
-				expect(roomsModule.getAllElements).toStrictEqual([]);
-				roomsModule.setAllElements(itemsToBeSet);
-				expect(roomsModule.getAllElements).toStrictEqual(expectedData);
+				expect(courseRoomListModule.getAllElements).toStrictEqual([]);
+				courseRoomListModule.setAllElements(itemsToBeSet);
+				expect(courseRoomListModule.getAllElements).toStrictEqual(expectedData);
 			});
 		});
 
 		describe("hasRooms", () => {
 			it("should return true if rooms is empty", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 
-				expect(roomsModule.hasRooms).toStrictEqual(false);
-				roomsModule.setAllElements([]);
-				expect(roomsModule.hasRooms).toStrictEqual(false);
+				expect(courseRoomListModule.hasRooms).toStrictEqual(false);
+				courseRoomListModule.setAllElements([]);
+				expect(courseRoomListModule.hasRooms).toStrictEqual(false);
 			});
 
 			it("should return false if rooms is not empty", () => {
@@ -700,21 +708,21 @@ describe("rooms module", () => {
 					},
 				];
 
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 
-				expect(roomsModule.hasRooms).toStrictEqual(false);
-				roomsModule.setAllElements(itemsToBeSet);
-				expect(roomsModule.hasRooms).toStrictEqual(true);
+				expect(courseRoomListModule.hasRooms).toStrictEqual(false);
+				courseRoomListModule.setAllElements(itemsToBeSet);
+				expect(courseRoomListModule.hasRooms).toStrictEqual(true);
 			});
 		});
 
 		describe("hasCurrentRooms", () => {
 			it("should return true if rooms is empty", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 
-				expect(roomsModule.hasCurrentRooms).toStrictEqual(false);
-				roomsModule.setRoomData([]);
-				expect(roomsModule.hasCurrentRooms).toStrictEqual(false);
+				expect(courseRoomListModule.hasCurrentRooms).toStrictEqual(false);
+				courseRoomListModule.setRoomData([]);
+				expect(courseRoomListModule.hasCurrentRooms).toStrictEqual(false);
 			});
 
 			it("should return false if rooms is not empty", () => {
@@ -737,25 +745,25 @@ describe("rooms module", () => {
 					},
 				];
 
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 
-				expect(roomsModule.hasCurrentRooms).toStrictEqual(false);
-				roomsModule.setRoomData(itemsToBeSet as any);
-				expect(roomsModule.hasCurrentRooms).toStrictEqual(true);
+				expect(courseRoomListModule.hasCurrentRooms).toStrictEqual(false);
+				courseRoomListModule.setRoomData(itemsToBeSet as any);
+				expect(courseRoomListModule.hasCurrentRooms).toStrictEqual(true);
 			});
 		});
 
 		describe("getAlertData", () => {
 			it("should return alert data", () => {
-				const roomsModule = new RoomsModule({});
+				const courseRoomListModule = new CourseRoomListModule({});
 				const alertData: AlertPayload = {
 					status: "success",
 					text: "pages.rooms.uploadCourse.success",
 					autoClose: true,
 				};
 
-				roomsModule.setAlertData(alertData);
-				expect(roomsModule.getAlertData).toStrictEqual(alertData);
+				courseRoomListModule.setAlertData(alertData);
+				expect(courseRoomListModule.getAlertData).toStrictEqual(alertData);
 			});
 		});
 	});

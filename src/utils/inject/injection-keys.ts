@@ -11,8 +11,8 @@ import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
-import courseRoomDetailModule from "@/store/course-room-detail";
-import RoomsModule from "@/store/course-room-list";
+import CourseRoomDetailsModule from "@/store/course-room-details";
+import CourseRoomListModule from "@/store/course-room-list";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
@@ -34,9 +34,8 @@ export const SCHOOL_EXTERNAL_TOOLS_MODULE_KEY: InjectionKey<SchoolExternalToolsM
 	Symbol("schoolExternalToolsModule");
 export const APPLICATION_ERROR_KEY: InjectionKey<ApplicationErrorModule> =
 	Symbol("applicationError");
-export const ROOM_MODULE_KEY: InjectionKey<courseRoomDetailModule> = Symbol(
-	"courseRoomDetailModule"
-);
+export const COURSE_ROOM_DETAILS_MODULE_KEY: InjectionKey<CourseRoomDetailsModule> =
+	Symbol("courseRoomDetailsModule");
 export const VIDEO_CONFERENCE_MODULE_KEY: InjectionKey<VideoConferenceModule> =
 	Symbol("videoConferenceModule");
 export const STATUS_ALERTS_MODULE_KEY: InjectionKey<StatusAlertsModule> =
@@ -55,8 +54,8 @@ export const SCHOOLS_MODULE_KEY: InjectionKey<SchoolsModule> =
 	Symbol("schoolsModule");
 export const COMMON_CARTRIDGE_EXPORT_MODULE_KEY: InjectionKey<CommonCartridgeExportModule> =
 	Symbol("commonCartridgeExportModule");
-export const ROOMS_MODULE_KEY: InjectionKey<RoomsModule> =
-	Symbol("roomsModule");
+export const COURSE_ROOM_LIST_MODULE_KEY: InjectionKey<CourseRoomListModule> =
+	Symbol("courseRoomListModule");
 export const LOADING_STATE_MODULE_KEY: InjectionKey<LoadingStateModule> =
 	Symbol("loadingStateModule");
 export const NEWS_MODULE_KEY: InjectionKey<NewsModule> = Symbol("newsModule");

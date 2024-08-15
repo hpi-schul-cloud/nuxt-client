@@ -2,12 +2,12 @@ import {
 	authModule,
 	commonCartridgeImportModule,
 	envConfigModule,
-	roomsModule,
+	courseRoomListModule,
 } from "@/store";
 import AuthModule from "@/store/auth";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import EnvConfigModule from "@/store/env-config";
-import RoomsModule from "@/store/course-room-list";
+import CourseRoomListModule from "@/store/course-room-list";
 import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -83,17 +83,17 @@ const mockData = [
 describe("@templates/RoomWrapper.vue", () => {
 	beforeEach(() => {
 		setupStores({
-			roomsModule: RoomsModule,
+			courseRoomListModule: CourseRoomListModule,
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
 			commonCartridgeImportModule: CommonCartridgeImportModule,
 		});
-		roomsModule.setAllElements(mockData);
+		courseRoomListModule.setAllElements(mockData);
 	});
 
 	describe("when data is not loaded yet", () => {
 		it("should display skeleton loader", () => {
-			roomsModule.setLoading(true);
+			courseRoomListModule.setLoading(true);
 
 			const wrapper = getWrapper({
 				props: { hasRooms: false },
