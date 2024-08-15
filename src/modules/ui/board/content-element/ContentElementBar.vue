@@ -3,8 +3,8 @@
 		tabindex="-1"
 		class="content-element-bar d-flex"
 		:class="{
-			'flex-row': isSmallorLargerListBoard,
-			'flex-column': !isSmallorLargerListBoard,
+			'flex-row': hasRowStyle,
+			'flex-column': !hasRowStyle,
 		}"
 	>
 		<div v-if="$slots.menu" class="three-dot-menu">
@@ -15,7 +15,7 @@
 			v-if="$slots.display"
 			class="content-element-display"
 			:class="{
-				'flex-fill': isSmallorLargerListBoard,
+				'flex-fill': hasRowStyle,
 			}"
 		>
 			<slot name="display" />
@@ -27,7 +27,7 @@
 			"
 			:class="{
 				'bg-surface-light': props.hasGreyBackground === true,
-				'content-element-bar-texts-listboard': isSmallorLargerListBoard,
+				'content-element-bar-texts-listboard': hasRowStyle,
 			}"
 			class="content-element-bar-texts rounded-b py-4"
 		>
@@ -71,7 +71,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import LineClamp from "../LineClamp.vue";
-import { IconProps, useDisplay } from "vuetify";
+import { IconProps } from "vuetify";
 import { hasSlotContent } from "@util-vue";
 
 const props = defineProps({
@@ -79,17 +79,15 @@ const props = defineProps({
 		type: Boolean,
 		required: false,
 	},
+	hasRowStyle: {
+		type: Boolean,
+		default: false,
+	},
 	icon: {
 		type: String as PropType<IconProps["icon"]>,
 		required: false,
 	},
 });
-const { smAndUp } = useDisplay();
-
-// TODO: add listboard condition
-const isSmallorLargerListBoard = () => {
-	return smAndUp.value;
-};
 </script>
 
 <style scoped lang="scss">
@@ -115,7 +113,7 @@ const isSmallorLargerListBoard = () => {
 }
 
 .content-element-bar-texts-listboard {
-	flex: 2 1 auto;
+	flex: 0 0 67%;
 }
 
 .content-element-bar:hover {
