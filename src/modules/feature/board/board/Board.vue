@@ -119,12 +119,16 @@ import {
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
-import { extractDataAttribute, useBoardNotifier } from "@util-board";
+import {
+	extractDataAttribute,
+	useBoardNotifier,
+	BOARD_IS_LIST_LAYOUT,
+} from "@util-board";
 import { useTouchDetection } from "@util-device-detection";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, onUnmounted, watch } from "vue";
+import { computed, onMounted, onUnmounted, provide, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
@@ -299,6 +303,8 @@ const isListBoard = computed(
 		envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED &&
 		board.value?.layout === BoardLayout.List
 );
+
+provide(BOARD_IS_LIST_LAYOUT, isListBoard);
 
 const copyResultModalItems = computed(
 	() => copyModule.getCopyResultFailedItems
