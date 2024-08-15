@@ -135,7 +135,11 @@ const { smAndUp } = useDisplay();
 const hasRowStyle = computed(() => {
 	const isSmallorLargerListBoard = smAndUp.value && isListLayout.value;
 
-	return isSmallorLargerListBoard && hasPdfMimeType.value;
+	return (
+		isSmallorLargerListBoard &&
+		hasPdfMimeType.value &&
+		props.fileProperties.previewUrl
+	);
 });
 </script>
 <style lang="scss" scoped>
