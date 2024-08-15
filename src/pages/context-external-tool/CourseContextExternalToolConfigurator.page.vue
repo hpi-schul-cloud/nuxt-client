@@ -24,11 +24,11 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import CourseRoomDetailModule from "@/store/course-room-detail";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 } from "@/utils/inject";
 import { RenderHTML } from "@feature-render-html";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
@@ -42,8 +42,9 @@ const props = defineProps({
 });
 
 const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const courseRoomDetailModule: CourseRoomDetailModule =
-	injectStrict(ROOM_MODULE_KEY);
+const courseRoomDetailsModule: CourseRoomDetailsModule = injectStrict(
+	COURSE_ROOM_DETAILS_MODULE_KEY
+);
 
 const { t } = useI18n();
 
@@ -60,7 +61,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const courseTitle: ComputedRef<string> = computed(
-	() => courseRoomDetailModule.getRoomData.title
+	() => courseRoomDetailsModule.getRoomData.title
 );
 
 const router: Router = useRouter();
@@ -86,6 +87,6 @@ const contextExternalToolConfigurator: Ref<InstanceType<
 onMounted(async () => {
 	await contextExternalToolConfigurator.value?.fetchData();
 
-	await courseRoomDetailModule.fetchContent(props.contextId);
+	await courseRoomDetailsModule.fetchContent(props.contextId);
 });
 </script>

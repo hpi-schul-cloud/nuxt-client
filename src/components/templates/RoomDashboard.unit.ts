@@ -2,11 +2,11 @@ import {
 	ConfigResponse,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { envConfigModule, courseRoomDetailModule } from "@/store";
+import { envConfigModule, courseRoomDetailsModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
-import CourseRoomDetailModule from "@/store/course-room-detail";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -157,7 +157,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 		// Avoids console warnings "[Vuetify] Unable to locate target [data-app]"
 		document.body.setAttribute("data-app", "true");
 		setupStores({
-			courseRoomDetailModule: CourseRoomDetailModule,
+			courseRoomDetailsModule: CourseRoomDetailsModule,
 			envConfigModule: EnvConfigModule,
 			copyModule: CopyModule,
 		});
@@ -453,9 +453,9 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn();
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			courseRoomDetailModule.deleteTask = deleteTaskMock;
-			courseRoomDetailModule.fetchContent = fetchContentMock;
-			courseRoomDetailModule.deleteLesson = deleteLessonMock;
+			courseRoomDetailsModule.deleteTask = deleteTaskMock;
+			courseRoomDetailsModule.fetchContent = fetchContentMock;
+			courseRoomDetailsModule.deleteLesson = deleteLessonMock;
 			const taskCard = wrapper.findComponent<VCard>(".task-card");
 
 			taskCard.vm.$emit("delete-task");
@@ -474,9 +474,9 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			const fetchContentMock = jest.fn();
 			const deleteLessonMock = jest.fn().mockResolvedValue(true);
 			const wrapper = getWrapper({ roomDataObject: mockData, role: "teacher" });
-			courseRoomDetailModule.deleteTask = deleteTaskMock;
-			courseRoomDetailModule.fetchContent = fetchContentMock;
-			courseRoomDetailModule.deleteLesson = deleteLessonMock;
+			courseRoomDetailsModule.deleteTask = deleteTaskMock;
+			courseRoomDetailsModule.fetchContent = fetchContentMock;
+			courseRoomDetailsModule.deleteLesson = deleteLessonMock;
 			const lessonCard = wrapper.findComponent<VCard>(".lesson-card");
 
 			lessonCard.vm.$emit("delete-lesson");
@@ -511,7 +511,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 					role: "teacher",
 				});
 				const taskCard = wrapper.findComponent<VCard>(".task-card");
-				courseRoomDetailModule.finishTask = finishTaskMock;
+				courseRoomDetailsModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("finish-task");
 
@@ -526,7 +526,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 					role: "teacher",
 				});
 				const taskCard = wrapper.findComponent<VCard>(".task-card");
-				courseRoomDetailModule.finishTask = finishTaskMock;
+				courseRoomDetailsModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("restore-task");
 
@@ -543,7 +543,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 					role: "student",
 				});
 				const taskCard = wrapper.findComponent<VCard>(".task-card");
-				courseRoomDetailModule.finishTask = finishTaskMock;
+				courseRoomDetailsModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("finish-task");
 
@@ -558,7 +558,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 					role: "student",
 				});
 				const taskCard = wrapper.findComponent<VCard>(".task-card");
-				courseRoomDetailModule.finishTask = finishTaskMock;
+				courseRoomDetailsModule.finishTask = finishTaskMock;
 
 				taskCard.vm.$emit("restore-task");
 				expect(finishTaskMock).toHaveBeenCalled();
@@ -575,7 +575,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 				role: "teacher",
 			});
 			const boardCard = wrapper.findComponent({ name: "room-board-card" });
-			courseRoomDetailModule.publishCard = publishCardMock;
+			courseRoomDetailsModule.publishCard = publishCardMock;
 
 			boardCard.vm.$emit("update-visibility", true);
 

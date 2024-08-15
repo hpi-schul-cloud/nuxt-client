@@ -18,7 +18,7 @@ import {
 	newsModule,
 	notifierModule,
 	privacyPolicyModule,
-	courseRoomDetailModule,
+	courseRoomDetailsModule,
 	courseRoomListModule,
 	schoolExternalToolsModule,
 	schoolsModule,
@@ -64,8 +64,8 @@ import {
 	NEWS_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
-	ROOM_MODULE_KEY,
-	ROOMS_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
+	COURSE_ROOM_LIST_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
@@ -162,7 +162,10 @@ app.use(VueDOMPurifyHTML, {
 	app.provide(NOTIFIER_MODULE_KEY.valueOf(), notifierModule);
 	app.provide(PRIVACY_POLICY_MODULE_KEY.valueOf(), privacyPolicyModule);
 	app.provide(TERMS_OF_USE_MODULE_KEY.valueOf(), termsOfUseModule);
-	app.provide(ROOM_MODULE_KEY.valueOf(), courseRoomDetailModule);
+	app.provide(
+		COURSE_ROOM_DETAILS_MODULE_KEY.valueOf(),
+		courseRoomDetailsModule
+	);
 	app.provide("CourseRoomListModule", courseRoomListModule);
 	app.provide(
 		SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf(),
@@ -183,7 +186,7 @@ app.use(VueDOMPurifyHTML, {
 	);
 	app.provide(VIDEO_CONFERENCE_MODULE_KEY.valueOf(), videoConferenceModule);
 	app.provide(LOADING_STATE_MODULE_KEY.valueOf(), loadingStateModule);
-	app.provide(ROOMS_MODULE_KEY.valueOf(), courseRoomListModule);
+	app.provide(COURSE_ROOM_LIST_MODULE_KEY.valueOf(), courseRoomListModule);
 	app.provide(
 		COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf(),
 		commonCartridgeImportModule

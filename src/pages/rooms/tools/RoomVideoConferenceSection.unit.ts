@@ -1,11 +1,11 @@
 import { VideoConferenceScope } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import CourseRoomDetailModule from "@/store/course-room-detail";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -51,7 +51,7 @@ describe("RoomVideoConferenceSection", () => {
 			...videoConferenceModuleGetter,
 		});
 
-		const courseRoomDetailModule = createModuleMocks(CourseRoomDetailModule, {
+		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomData: {
 				roomId: props.roomId,
 				title: "roomName",
@@ -68,7 +68,7 @@ describe("RoomVideoConferenceSection", () => {
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
-					[ROOM_MODULE_KEY.valueOf()]: courseRoomDetailModule,
+					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
 				mocks: {
 					$t: (key: string, dynamic?: object): string =>
@@ -82,7 +82,7 @@ describe("RoomVideoConferenceSection", () => {
 			wrapper,
 			authModule,
 			videoConferenceModule,
-			courseRoomDetailModule,
+			courseRoomDetailsModule,
 		};
 	};
 
@@ -518,7 +518,7 @@ describe("RoomVideoConferenceSection", () => {
 
 	describe("when open videoconference configuration dialog", () => {
 		const setup = () => {
-			const { wrapper, videoConferenceModule, courseRoomDetailModule } =
+			const { wrapper, videoConferenceModule, courseRoomDetailsModule } =
 				getWrapper(
 					{
 						roomId: "roomId",
@@ -541,7 +541,7 @@ describe("RoomVideoConferenceSection", () => {
 			return {
 				wrapper,
 				videoConferenceModule,
-				courseRoomDetailModule,
+				courseRoomDetailsModule,
 			};
 		};
 

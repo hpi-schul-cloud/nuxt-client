@@ -9,7 +9,7 @@ import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOMS_MODULE_KEY,
+	COURSE_ROOM_LIST_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import LoadingStateModule from "@/store/loading-state";
@@ -33,7 +33,8 @@ const getWrapper = (device = "desktop") => {
 			[LOADING_STATE_MODULE_KEY.valueOf()]:
 				createModuleMocks(LoadingStateModule),
 			[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-			[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(CourseRoomListModule),
+			[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]:
+				createModuleMocks(CourseRoomListModule),
 			[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
 				CommonCartridgeImportModule
 			),

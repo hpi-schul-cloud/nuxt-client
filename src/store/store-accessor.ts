@@ -21,7 +21,7 @@ import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
-import CourseRoomDetailModule from "@/store/course-room-detail";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import CourseRoomListModule from "@/store/course-room-list";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
@@ -55,7 +55,7 @@ export let newsModule: NewsModule;
 export let notifierModule: NotifierModule;
 export let privacyPolicyModule: PrivacyPolicyModule;
 export let termsOfUseModule: TermsOfUseModule;
-export let courseRoomDetailModule: CourseRoomDetailModule;
+export let courseRoomDetailsModule: CourseRoomDetailsModule;
 export let courseRoomListModule: CourseRoomListModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
@@ -86,7 +86,7 @@ export function initializeStores(store: Store<any>): void {
 	notifierModule = getModule(NotifierModule, store);
 	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	termsOfUseModule = getModule(TermsOfUseModule, store);
-	courseRoomDetailModule = getModule(CourseRoomDetailModule, store);
+	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
 	courseRoomListModule = getModule(CourseRoomListModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
@@ -120,7 +120,7 @@ export const modules = {
 	notifierModule: NotifierModule,
 	privacyPolicyModule: PrivacyPolicyModule,
 	termsOfUseModule: TermsOfUseModule,
-	courseRoomDetailModule: CourseRoomDetailModule,
+	courseRoomDetailsModule: CourseRoomDetailsModule,
 	courseRoomListModule: CourseRoomListModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,

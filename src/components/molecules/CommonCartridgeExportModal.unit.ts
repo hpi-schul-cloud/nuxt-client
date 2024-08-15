@@ -1,11 +1,11 @@
 import CommonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import NotifierModule from "@/store/notifier";
-import courseRoomDetailModule from "@/store/course-room-detail";
+import courseRoomDetailsModule from "@/store/course-room-details";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -17,7 +17,7 @@ import { VDialog } from "vuetify/lib/components/index.mjs";
 
 describe("@/components/molecules/CommonCartridgeExportModal", () => {
 	let exportModuleMock: CommonCartridgeExportModule;
-	let courseRoomDetailModuleMock: courseRoomDetailModule;
+	let courseRoomDetailsModuleMock: courseRoomDetailsModule;
 
 	const setup = () => {
 		exportModuleMock = createModuleMocks(CommonCartridgeExportModule, {
@@ -29,7 +29,7 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 			startExport: jest.fn(),
 			resetExportFlow: jest.fn(),
 		});
-		courseRoomDetailModuleMock = createModuleMocks(courseRoomDetailModule, {
+		courseRoomDetailsModuleMock = createModuleMocks(courseRoomDetailsModule, {
 			getRoomData: {
 				roomId: "1",
 				title: "title",
@@ -46,7 +46,8 @@ describe("@/components/molecules/CommonCartridgeExportModal", () => {
 				provide: {
 					[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: exportModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-					[ROOM_MODULE_KEY.valueOf()]: courseRoomDetailModuleMock,
+					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]:
+						courseRoomDetailsModuleMock,
 				},
 			},
 		});

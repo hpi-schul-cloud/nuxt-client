@@ -1,8 +1,11 @@
 import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
-import CourseRoomDetailModule from "@/store/course-room-detail";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import { CourseFeatures } from "@/store/types/room";
-import { ENV_CONFIG_MODULE_KEY, ROOM_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	businessErrorFactory,
@@ -31,7 +34,7 @@ describe("RoomExternalToolOverview", () => {
 	>;
 
 	const getWrapper = () => {
-		const courseRoomDetailModule = createModuleMocks(CourseRoomDetailModule, {
+		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getLoading: false,
 		});
 
@@ -40,14 +43,14 @@ describe("RoomExternalToolOverview", () => {
 			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as ConfigResponse,
 		});
 
-		courseRoomDetailModule.fetchCourse.mockResolvedValue(null);
+		courseRoomDetailsModule.fetchCourse.mockResolvedValue(null);
 
 		const wrapper = shallowMount(RoomExternalToolsOverview, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-					[ROOM_MODULE_KEY.valueOf()]: courseRoomDetailModule,
+					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
 			},
 			props: {
@@ -57,7 +60,7 @@ describe("RoomExternalToolOverview", () => {
 
 		return {
 			wrapper,
-			courseRoomDetailModule,
+			courseRoomDetailsModule,
 			refreshTime,
 		};
 	};
@@ -141,9 +144,9 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when video conferences are enabled", () => {
 		const setup = async () => {
-			const { wrapper, courseRoomDetailModule } = getWrapper();
+			const { wrapper, courseRoomDetailsModule } = getWrapper();
 
-			courseRoomDetailModule.fetchCourse.mockResolvedValue(
+			courseRoomDetailsModule.fetchCourse.mockResolvedValue(
 				courseFactory.build({ features: [CourseFeatures.VIDEOCONFERENCE] })
 			);
 
