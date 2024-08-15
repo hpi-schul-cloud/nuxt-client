@@ -8,7 +8,7 @@
 				<v-btn
 					variant="outlined"
 					size="small"
-					to="/rooms-list"
+					to="/rooms/courses-list"
 					data-testid="go-to-all-courses"
 				>
 					{{ $t("pages.rooms.index.courses.all") }}
@@ -390,7 +390,7 @@ export default defineComponent({
 			if (id) {
 				this.$router.replace({ name: "rooms-id", params: { id } });
 			} else {
-				this.$router.replace({ name: "rooms-overview" });
+				this.$router.replace({ name: "course-room-overview" });
 				courseRoomListModule.fetch();
 			}
 		},
