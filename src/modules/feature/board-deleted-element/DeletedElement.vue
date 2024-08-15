@@ -1,5 +1,5 @@
 <template>
-	<v-card
+	<VCard
 		v-if="isTeacher"
 		class="mb-4"
 		data-testid="board-deleted-element"
@@ -7,8 +7,6 @@
 		variant="outlined"
 		ref="deletedElement"
 		:ripple="false"
-		tabindex="0"
-		role="button"
 	>
 		<WarningAlert
 			v-if="
@@ -35,7 +33,7 @@
 				/>
 			</template>
 		</ContentElementBar>
-	</v-card>
+	</VCard>
 </template>
 
 <script setup lang="ts">
