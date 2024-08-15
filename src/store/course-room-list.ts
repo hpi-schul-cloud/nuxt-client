@@ -20,7 +20,7 @@ import {
 import { AlertPayload } from "./types/alert-payload";
 
 @Module({
-	name: "courseRoomsModule",
+	name: "courseRoomListModule",
 	namespaced: true,
 	stateFactory: true,
 })
