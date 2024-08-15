@@ -1,4 +1,4 @@
-import { CourseStatusQueryType } from "@/serverApi/v3";
+import { CourseSortQueryType, CourseStatusQueryType } from "@/serverApi/v3";
 import { BusinessError, Pagination } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
@@ -6,6 +6,7 @@ import { ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useCourseApi } from "./courseApi.composable";
 import { CourseInfo } from "./type/course-info";
+import { CourseInfoMapper } from "./course-info.mapper";
 
 export const useCourseList = () => {
 	const { loadCoursesForSchool } = useCourseApi();
@@ -15,23 +16,22 @@ export const useCourseList = () => {
 	const courses: Ref<CourseInfo[]> = ref([]);
 	const pagination: Ref<Pagination> = ref({ total: 0, limit: 10, skip: 0 });
 	const page: Ref<number> = ref(1);
-	const key: Ref<string | undefined> = ref();
-	const sortOrder: Ref<boolean | "asc" | "desc"> = ref("asc");
-	const currentPage: Ref<number> = ref(1);
+	const key: Ref<CourseSortQueryType | undefined> = ref();
+	const sortOrder: Ref<"asc" | "desc"> = ref("asc");
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 
-	const setSortBy = (sortBy: string | undefined) => {
+	const setSortBy = (sortBy: CourseSortQueryType | undefined) => {
 		key.value = sortBy;
 	};
 
-	const setSortOrder = (order: boolean | "asc" | "desc") => {
+	const setSortOrder = (order: "asc" | "desc") => {
 		sortOrder.value = order;
 	};
 
-	const setCurrentPage = (page: number) => {
-		currentPage.value = page;
+	const setPage = (currentPage: number) => {
+		page.value = currentPage;
 	};
 
 	const setPagination = (paginationData: Pagination) => {
@@ -43,24 +43,20 @@ export const useCourseList = () => {
 	): Promise<void> => {
 		isLoading.value = true;
 
-		const order: number = sortOrder.value === "desc" ? -1 : 1;
-
 		try {
 			const response = await loadCoursesForSchool(
 				courseStatusQueryType,
 				pagination.value.limit,
 				pagination.value.skip,
 				key.value,
-				order
+				sortOrder.value
 			);
 
-			console.log(response);
-
-			/*courses.value = response.data.map((course: any) => {
+			courses.value = response.data.data.map((course: any) => {
 				return CourseInfoMapper.mapToCourseInfo(course);
-			});*/
+			});
 
-			courses.value.push(
+			/*courses.value.push(
 				new CourseInfo({
 					id: "3243433",
 					name: "mathe",
@@ -81,10 +77,12 @@ export const useCourseList = () => {
 					teacherNames: ["Lehrer", "Lehrer 1", "Lehrer 2"],
 					classNames: ["Klasse1", "Klasse2"],
 				})
-			);
+			);*/
 
-			//	pagination.value.total = response.data.total;
-			pagination.value.total = courses.value.length;
+			pagination.value.limit = response.data.limit;
+			pagination.value.skip = response.data.skip;
+			pagination.value.total = response.data.total;
+			//pagination.value.total = courses.value.length;
 		} catch (errorResponse) {
 			handleError(errorResponse);
 		}
@@ -112,9 +110,8 @@ export const useCourseList = () => {
 		pagination,
 		page,
 		courses,
-		currentPage,
 		setPagination,
-		setCurrentPage,
+		setPage,
 		setSortBy,
 		setSortOrder,
 		fetchCourses,

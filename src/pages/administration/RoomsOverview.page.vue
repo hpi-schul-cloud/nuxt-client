@@ -136,7 +136,11 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { CourseStatusQueryType, SchulcloudTheme } from "@/serverApi/v3";
+import {
+	CourseSortQueryType,
+	CourseStatusQueryType,
+	SchulcloudTheme,
+} from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { SortOrder } from "@/store/types/sort-order.enum";
@@ -154,12 +158,14 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { mdiPencilOutline, mdiSyncOff, mdiTrashCanOutline } from "@mdi/js";
 import RoomsModule from "@/store/rooms";
 
 type Tab = "current" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
-export type CourseSortItem = { key: string; order?: boolean | "asc" | "desc" };
+export type CourseSortItem = {
+	key: CourseSortQueryType;
+	order?: boolean | "asc" | "desc";
+};
 
 const props = defineProps({
 	tab: {
@@ -185,7 +191,7 @@ const {
 	courses,
 	setSortBy,
 	setSortOrder,
-	setCurrentPage,
+	setPage,
 	setPagination,
 } = useCourseList();
 
@@ -220,11 +226,11 @@ const courseStatusQueryType: ComputedRef<CourseStatusQueryType> = computed(
 	() => {
 		switch (props.tab) {
 			case "current":
-				return CourseStatusQueryType.CURRENT;
+				return CourseStatusQueryType.Current;
 			case "archive":
-				return CourseStatusQueryType.ARCHIVE;
+				return CourseStatusQueryType.Archive;
 			default:
-				return CourseStatusQueryType.CURRENT;
+				return CourseStatusQueryType.Current;
 		}
 	}
 );
@@ -277,7 +283,8 @@ const headers = computed(() => {
 	];
 	headerList.push(
 		{
-			value: "classes",
+			key: "classNames",
+			value: (item: CourseInfo) => item.classNames?.join(", "),
 			title: t("common.labels.classes"),
 			sortable: true,
 		},
@@ -317,7 +324,9 @@ const onTabsChange = async (tab: string) => {
 
 const onUpdateSortBy = async (sortBy: CourseSortItem[]) => {
 	const fieldToSortBy: CourseSortItem = sortBy[0];
-	const key: string | undefined = fieldToSortBy ? fieldToSortBy.key : undefined;
+	const key: CourseSortQueryType | undefined = fieldToSortBy
+		? fieldToSortBy.key
+		: undefined;
 	setSortBy(key);
 
 	const sortOrder =
@@ -328,7 +337,7 @@ const onUpdateSortBy = async (sortBy: CourseSortItem[]) => {
 };
 
 const onUpdateCurrentPage = async (currentPage: number) => {
-	setCurrentPage(currentPage);
+	setPage(currentPage);
 	const skip = (currentPage - 1) * pagination.value.limit;
 	setPagination({ ...pagination.value, skip });
 
