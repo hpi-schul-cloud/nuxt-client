@@ -12,7 +12,7 @@ import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
 import RoomModule from "@/store/course-room-detail";
-import RoomsModule from "@/store/rooms";
+import RoomsModule from "@/store/course-room-list";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";

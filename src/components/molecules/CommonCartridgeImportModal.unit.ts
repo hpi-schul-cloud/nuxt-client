@@ -1,4 +1,4 @@
-import RoomsModule from "@/store/rooms";
+import RoomsModule from "@/store/course-room-list";
 import CommonCartridgeImportModal from "./CommonCartridgeImportModal.vue";
 import { mount } from "@vue/test-utils";
 import LoadingStateModule from "@/store/loading-state";
