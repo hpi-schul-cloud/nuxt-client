@@ -43,7 +43,9 @@
 									{{ `${editedItem.firstName} ${editedItem.lastName}` }}
 								</VListItemTitle>
 								<VListItemSubtitle>
-									{{ mapRoleNames(editedItem.roleNames) }}
+									{{
+										`${mapRoleNames(editedItem.roleNames)} ${externalRoleLabel}`
+									}}
 								</VListItemSubtitle>
 								<VListItemSubtitle
 									v-if="editedItem.classNames && editedItem.classNames.length"
@@ -233,6 +235,7 @@ const props = defineProps({
 			classNames: [],
 			match: {},
 			flagged: false,
+			externalRoleNames: [],
 		}),
 		firstName: {
 			type: String,
@@ -300,6 +303,16 @@ const canSave: ComputedRef<boolean> = computed(() => {
 
 const canDelete = computed(() => {
 	return props.editedItem.match && selectedItem.value === null;
+});
+
+const externalRoleLabel = computed(() => {
+	if (
+		props.editedItem.externalRoleNames &&
+		props.editedItem.externalRoleNames.length
+	) {
+		return `(${props.ldapSource}: ${mapExternalRoleNames(props.editedItem.externalRoleNames)})`;
+	}
+	return "";
 });
 
 const getDataFromApi = async (append = false) => {
@@ -415,6 +428,42 @@ const mapRoleNames = (roleNames: unknown[]) => {
 			}
 		})
 		.join(", ");
+};
+
+const mapExternalRoleNames = (externalRoleNames: string[]) => {
+	return externalRoleNames
+		.map((role) => {
+			switch (props.ldapSource) {
+				case "moin.schule":
+					return mapSchulconnexExternalRoleNames(role);
+				default:
+					return role;
+			}
+		})
+		.join(", ");
+};
+
+const mapSchulconnexExternalRoleNames = (externalRoleName: string) => {
+	switch (externalRoleName) {
+		case "Lehr":
+			return t(
+				"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher"
+			);
+		case "Lern":
+			return t(
+				"components.molecules.importUsersMatch.externalRoleName.schulconnex.student"
+			);
+		case "Leit":
+			return t(
+				"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager"
+			);
+		case "OrgAdmin":
+			return t(
+				"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin"
+			);
+		default:
+			return externalRoleName;
+	}
 };
 
 onMounted(async () => {

@@ -601,6 +601,14 @@ export default {
 		"Keiner. Benutzer wird neu erstellt.",
 	"components.molecules.importUsersMatch.write":
 		"Vornamen oder Nachnamen eingeben",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Lehrende/r",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Lernende/r",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Organisationsadministrator",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Organisationsleitung",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
