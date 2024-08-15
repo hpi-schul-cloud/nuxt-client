@@ -124,7 +124,7 @@ import {
 	Ref,
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import RoomModule from "@/store/room";
+import courseRoomDetailModule from "@/store/room";
 import { mdiCheck } from "@mdi/js";
 
 export default defineComponent({
@@ -141,9 +141,12 @@ export default defineComponent({
 		const videoConferenceModule: VideoConferenceModule = injectStrict(
 			VIDEO_CONFERENCE_MODULE_KEY
 		);
-		const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+		const courseRoomDetailModule: courseRoomDetailModule =
+			injectStrict(ROOM_MODULE_KEY);
 
-		const roomName = computed(() => roomModule.getRoomData.title ?? "");
+		const roomName = computed(
+			() => courseRoomDetailModule.getRoomData.title ?? ""
+		);
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 			() => videoConferenceModule.getVideoConferenceInfo

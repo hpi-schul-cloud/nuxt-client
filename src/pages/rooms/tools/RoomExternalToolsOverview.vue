@@ -46,7 +46,7 @@
 import { mdiAlertCircle } from "@/components/icons/material";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/serverApi/v3";
-import RoomModule from "@/store/room";
+import CourseRoomDetailModule from "@/store/course-room-detail";
 import { Course, CourseFeatures } from "@/store/types/room";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -70,7 +70,8 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+const courseRoomDetailModule: CourseRoomDetailModule =
+	injectStrict(ROOM_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const {
@@ -92,7 +93,7 @@ const isVideoConferenceAvailable: ComputedRef<boolean> = computed(() => {
 onMounted(async () => {
 	await fetchDisplayData(props.roomId, ToolContextType.Course);
 
-	course.value = await roomModule.fetchCourse(props.roomId);
+	course.value = await courseRoomDetailModule.fetchCourse(props.roomId);
 });
 
 const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
@@ -106,7 +107,7 @@ onUnmounted(() => {
 });
 
 const loading: ComputedRef<boolean> = computed(
-	() => isDisplayDataLoading.value || roomModule.getLoading
+	() => isDisplayDataLoading.value || courseRoomDetailModule.getLoading
 );
 
 const onDeleteTool = async (displayData: ExternalToolDisplayData) => {

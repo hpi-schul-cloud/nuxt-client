@@ -1,7 +1,7 @@
 import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/course-room-detail";
+import courseRoomDetailModule from "@/store/course-room-detail";
 import { NOTIFIER_MODULE_KEY, ROOM_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { contextExternalToolFactory } from "@@/tests/test-utils/factory";
@@ -33,7 +33,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		const notifierModule = createModuleMocks(NotifierModule);
 
 		const roomTitle = "Room Title";
-		const roomModule = createModuleMocks(RoomModule, {
+		const courseRoomDetailModule = createModuleMocks(courseRoomDetailModule, {
 			getRoomData: {
 				title: roomTitle,
 				roomId: "contextId",
@@ -53,7 +53,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 				],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[ROOM_MODULE_KEY.valueOf()]: courseRoomDetailModule,
 				},
 				stubs: {
 					ContextExternalToolConfigurator: {
@@ -73,7 +73,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 		return {
 			wrapper,
-			roomModule,
+			courseRoomDetailModule,
 			notifierModule,
 			roomTitle,
 		};

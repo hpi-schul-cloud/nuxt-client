@@ -181,7 +181,7 @@ export default defineComponent({
 		copyModule: { from: COPY_MODULE_KEY },
 		shareModule: { from: SHARE_MODULE_KEY },
 		commonCartridgeExportModule: { from: COMMON_CARTRIDGE_EXPORT_MODULE_KEY },
-		roomModule: { from: ROOM_MODULE_KEY },
+		courseRoomDetailModule: { from: ROOM_MODULE_KEY },
 		authModule: { from: AUTH_MODULE_KEY },
 	},
 	data() {
@@ -353,10 +353,10 @@ export default defineComponent({
 			return items;
 		},
 		roomData() {
-			return this.roomModule.getRoomData;
+			return this.courseRoomDetailModule.getRoomData;
 		},
 		scopedPermissions() {
-			return this.roomModule.getPermissionData || [];
+			return this.courseRoomDetailModule.getPermissionData || [];
 		},
 		roles() {
 			return this.authModule.getUserRoles;
@@ -449,8 +449,8 @@ export default defineComponent({
 			this.setActiveTab(this.$route.query.tab);
 		}
 
-		await this.roomModule.fetchContent(this.courseId);
-		await this.roomModule.fetchScopePermission({
+		await this.courseRoomDetailModule.fetchContent(this.courseId);
+		await this.courseRoomDetailModule.fetchScopePermission({
 			courseId: this.courseId,
 			userId: this.authModule.getUser?.id,
 		});
@@ -507,7 +507,7 @@ export default defineComponent({
 			this.commonCartridgeExportModule.startExportFlow();
 		},
 		async refreshRoom() {
-			await this.roomModule.fetchContent(this.courseId);
+			await this.courseRoomDetailModule.fetchContent(this.courseId);
 		},
 		async onCopyRoom(courseId) {
 			const copyParams = {
@@ -530,7 +530,7 @@ export default defineComponent({
 		},
 		async onCopyBoardElement(payload) {
 			await this.copy(payload);
-			await this.roomModule.fetchContent(payload.courseId);
+			await this.courseRoomDetailModule.fetchContent(payload.courseId);
 		},
 		onCopyResultModalClosed() {
 			this.copyModule.reset();
@@ -542,7 +542,7 @@ export default defineComponent({
 				parentId: courseId,
 				layout,
 			};
-			const board = await this.roomModule.createBoard(params);
+			const board = await this.courseRoomDetailModule.createBoard(params);
 			await this.$router.push(`/rooms/${board.id}/board`);
 		},
 	},
