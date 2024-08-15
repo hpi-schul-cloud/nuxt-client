@@ -14,7 +14,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import RoomsModule from "@/store/rooms";
+import RoomsModule from "@/store/course-room-list";
 import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,

@@ -2,7 +2,7 @@ import { roomsModule } from "@/store";
 import { mount } from "@vue/test-utils";
 import RoomList from "./RoomList.page.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
-import RoomsModule from "@/store/rooms";
+import RoomsModule from "@/store/course-room-list";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import {
