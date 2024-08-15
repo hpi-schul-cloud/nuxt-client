@@ -4,9 +4,9 @@
 	"author": "Dataport Bildungscloud",
 	"private": true,
 	"scripts": {
-		"serve": "NODE_ENV=development webpack serve --config config/webpack/webpack.dev.js",
-		"build": "NODE_ENV=production webpack --config config/webpack/webpack.prod.js",
-		"test": "npm run test:unit",
+		"serve": "cross-env NODE_ENV=development webpack serve --config config/webpack/webpack.dev.js",
+		"build": "cross-env NODE_ENV=production webpack --config config/webpack/webpack.prod.js",
+		"test": "cross-env NODE_ENV=test npm run test:unit",
 		"test:unit": "npx jest",
 		"test:unit:ci": "npm run test:unit -- --coverage --ci --maxWorkers=4",
 		"lint": "npx eslint 'src/**/*.{ts,js,vue}'",
@@ -23,7 +23,8 @@
 		"@vuelidate/validators": "^2.0.4",
 		"@vueuse/components": "^10.11.0",
 		"@vueuse/core": "^10.11.0",
-		"axios": "^1.6.2",
+		"axios": "^1.7.4",
+		"cross-env": "^7.0.3",
 		"dayjs": "^1.11.10",
 		"kjua": "^0.9.0",
 		"maska": "^2.1.10",
@@ -94,6 +95,11 @@
 		"webpack-dev-server": "^5.0.4",
 		"webpack-merge": "^5.10.0",
 		"webpack-plugin-vuetify": "^3.0.3"
+	},
+	"overrides": {
+		"@openapitools/openapi-generator-cli": {
+			"axios": "$axios"
+		}
 	},
 	"engines": {
 		"node": "20",
