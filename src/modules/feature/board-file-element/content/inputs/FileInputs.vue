@@ -6,7 +6,7 @@
 			@update:caption="onUpdateCaption"
 		/>
 		<AlternativeText
-			v-if="fileProperties.previewUrl && !hasPdfMimeType"
+			v-if="fileProperties.previewUrl && !isPdfMimeType"
 			:alternativeText="fileProperties.element.content.alternativeText"
 			:isEditMode="isEditMode"
 			@update:alternativeText="onUpdateText"
@@ -14,38 +14,26 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { isPdfMimeType } from "@/utils/fileHelper";
-import { computed, defineComponent, PropType } from "vue";
+<script setup lang="ts">
+import { computed, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
+import { useMimeType } from "@/composables/mime-type.composable";
 
-export default defineComponent({
-	name: "FileInputs",
-	components: {
-		AlternativeText,
-		CaptionText,
+const props = defineProps({
+	fileProperties: {
+		type: Object as PropType<FileProperties>,
+		required: true,
 	},
-	props: {
-		fileProperties: {
-			type: Object as PropType<FileProperties>,
-			required: true,
-		},
-		isEditMode: { type: Boolean, required: true },
-	},
-	emits: ["update:alternativeText", "update:caption"],
-	setup(props, { emit }) {
-		const onUpdateCaption = (value: string) => emit("update:caption", value);
-
-		const onUpdateText = (value: string) =>
-			emit("update:alternativeText", value);
-
-		const hasPdfMimeType = computed(() =>
-			isPdfMimeType(props.fileProperties.mimeType)
-		);
-
-		return { onUpdateText, onUpdateCaption, hasPdfMimeType };
-	},
+	isEditMode: { type: Boolean, required: true },
 });
+const emit = defineEmits(["update:alternativeText", "update:caption"]);
+
+const onUpdateCaption = (value: string) => emit("update:caption", value);
+
+const onUpdateText = (value: string) => emit("update:alternativeText", value);
+
+const mimeType = computed(() => props.fileProperties.mimeType);
+const { isPdfMimeType } = useMimeType(mimeType.value);
 </script>

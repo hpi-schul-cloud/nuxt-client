@@ -72,23 +72,6 @@ export function isPreviewPossible(previewStatus: PreviewStatus): boolean {
 	return previewStatus === PreviewStatus.PREVIEW_POSSIBLE;
 }
 
-export function isVideoMimeType(mimeType: string): boolean {
-	return (
-		mimeType.startsWith("video/") ||
-		mimeType === "application/x-mpegURL" ||
-		mimeType === "application/vnd.ms-asf" ||
-		mimeType === "application/ogg"
-	);
-}
-
-export function isPdfMimeType(mimeType: string): boolean {
-	return mimeType === "application/pdf";
-}
-
-export function isAudioMimeType(mimeType: string): boolean {
-	return mimeType.startsWith("audio/");
-}
-
 export function formatSecondsToHourMinSec(seconds: number) {
 	const isoString = new Date(1000 * seconds).toISOString();
 	let formattedString = isoString.slice(14, 19);

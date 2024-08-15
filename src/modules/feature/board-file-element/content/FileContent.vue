@@ -55,14 +55,10 @@ import FileInputs from "././inputs/FileInputs.vue";
 import ContentElementFooter from "./footer/ContentElementFooter.vue";
 import { FileAlert } from "../shared/types/FileAlert.enum";
 import { useDebounceFn } from "@vueuse/core";
-import {
-	isAudioMimeType,
-	isVideoMimeType,
-	isPdfMimeType,
-} from "@/utils/fileHelper";
 import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useDisplay } from "vuetify/lib/framework.mjs";
+import { useMimeType } from "@/composables/mime-type.composable";
 
 const props = defineProps({
 	fileProperties: {
@@ -95,37 +91,30 @@ const onAddAlert = (alert: FileAlert) => {
 	emit("add:alert", alert);
 };
 
-const hasVideoMimeType = computed(() => {
-	return isVideoMimeType(props.fileProperties.mimeType);
-});
-
-const hasPdfMimeType = computed(() =>
-	isPdfMimeType(props.fileProperties.mimeType)
+const mimeType = computed(() => props.fileProperties.mimeType);
+const { isVideoMimeType, isPdfMimeType, isAudioMimeType } = useMimeType(
+	mimeType.value
 );
 
-const hasAudioMimeType = computed(() => {
-	return isAudioMimeType(props.fileProperties.mimeType);
-});
-
 const fileDescriptionSrc = computed(() => {
-	return hasPdfMimeType.value ? props.fileProperties.url : undefined;
+	return isPdfMimeType.value ? props.fileProperties.url : undefined;
 });
 
 const showTitle = computed(() => {
 	return (
-		hasPdfMimeType.value ||
+		isPdfMimeType.value ||
 		(!props.fileProperties.previewUrl &&
-			!hasVideoMimeType.value &&
-			!hasAudioMimeType.value)
+			!isVideoMimeType.value &&
+			!isAudioMimeType.value)
 	);
 });
 
 const showMenu = computed(() => {
 	return (
-		!hasPdfMimeType.value &&
+		!isPdfMimeType.value &&
 		!props.fileProperties.previewUrl &&
-		!hasVideoMimeType.value &&
-		!hasAudioMimeType.value
+		!isVideoMimeType.value &&
+		!isAudioMimeType.value
 	);
 });
 
@@ -137,7 +126,7 @@ const hasRowStyle = computed(() => {
 
 	return (
 		isSmallorLargerListBoard &&
-		hasPdfMimeType.value &&
+		isPdfMimeType.value &&
 		props.fileProperties.previewUrl
 	);
 });
