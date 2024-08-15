@@ -3352,6 +3352,12 @@ export interface ImportUserResponse {
      * @memberof ImportUserResponse
      */
     flagged: boolean;
+    /**
+     * exact user roles from the external system
+     * @type {Array<string>}
+     * @memberof ImportUserResponse
+     */
+    externalRoleNames: Array<string>;
 }
 
 /**
