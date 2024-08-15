@@ -58,7 +58,7 @@ import { useDebounceFn } from "@vueuse/core";
 import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useDisplay } from "vuetify/lib/framework.mjs";
-import { useMimeType } from "@/composables/mime-type.composable";
+import { useMimeType } from "@/composables/mimeType.composable";
 
 const props = defineProps({
 	fileProperties: {

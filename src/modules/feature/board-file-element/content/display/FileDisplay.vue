@@ -44,7 +44,7 @@ import AudioDisplay from "./audio-display/AudioDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
-import { useMimeType } from "@/composables/mime-type.composable";
+import { useMimeType } from "@/composables/mimeType.composable";
 
 const props = defineProps({
 	fileProperties: {

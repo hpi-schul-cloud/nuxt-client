@@ -19,7 +19,7 @@ import { computed, PropType } from "vue";
 import { FileProperties } from "../../shared/types/file-properties";
 import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
-import { useMimeType } from "@/composables/mime-type.composable";
+import { useMimeType } from "@/composables/mimeType.composable";
 
 const props = defineProps({
 	fileProperties: {
