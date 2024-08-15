@@ -22,7 +22,7 @@ import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
 
 @Module({
-	name: "roomDetailModule",
+	name: "courseRoomDetailModule",
 	namespaced: true,
 	stateFactory: true,
 })
