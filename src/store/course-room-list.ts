@@ -20,11 +20,11 @@ import {
 import { AlertPayload } from "./types/alert-payload";
 
 @Module({
-	name: "roomsModule",
+	name: "courseRoomsModule",
 	namespaced: true,
 	stateFactory: true,
 })
-export default class RoomsModule extends VuexModule {
+export default class CourseRoomsModule extends VuexModule {
 	roomsData: DashboardGridElementResponse[] = [];
 	gridElementsId = "";
 	allElements: CourseMetadataResponse[] = [];
