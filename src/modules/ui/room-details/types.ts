@@ -1,4 +1,4 @@
-import { Lesson } from "@/store/types/course-room-detail";
+import { Lesson } from "@/store/types/room";
 
 export type MenuItem = {
 	icon: string;
