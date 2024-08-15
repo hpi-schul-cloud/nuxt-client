@@ -11,7 +11,7 @@ import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
-import RoomModule from "@/store/room";
+import RoomModule from "@/store/course-room-detail";
 import RoomsModule from "@/store/rooms";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";

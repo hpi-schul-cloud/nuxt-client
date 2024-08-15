@@ -10,7 +10,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/room";
+import RoomModule from "@/store/course-room-detail";
 import ShareModule from "@/store/share";
 import { initializeAxios } from "@/utils/api";
 import {
