@@ -8,6 +8,7 @@ import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import DeletedElement from "./DeletedElement.vue";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
@@ -113,6 +114,7 @@ describe("DeletedElement", () => {
 				expect(threeDotMenu.isVisible()).toEqual(true);
 			});
 		});
+
 		describe("when not in edit mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
@@ -131,6 +133,30 @@ describe("DeletedElement", () => {
 				const threeDotMenu = wrapper.findComponent(DeletedElementMenu);
 
 				expect(threeDotMenu.exists()).toEqual(false);
+			});
+		});
+
+		describe("when deleting the element", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: DELETED_ELEMENT,
+					isEditMode: true,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should emit an event", async () => {
+				const { wrapper } = setup();
+
+				wrapper.findComponent(DeletedElementMenu).vm.$emit("delete:element");
+				await nextTick();
+
+				expect(wrapper.emitted("delete:element")).toEqual([
+					[DELETED_ELEMENT.id],
+				]);
 			});
 		});
 	});
