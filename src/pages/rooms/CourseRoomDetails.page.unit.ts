@@ -10,7 +10,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import courseRoomDetailModule from "@/store/course-room-detail";
+import CourseRoomDetailModule from "@/store/course-room-detail";
 import ShareModule from "@/store/share";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -34,7 +34,7 @@ import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
-import RoomDetailsPage from "./RoomDetails.page.vue";
+import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import DefaultWireframe from "../../components/templates/DefaultWireframe.vue";
@@ -117,7 +117,7 @@ let loadingStateModuleMock: LoadingStateModule;
 let notifierModule: NotifierModule;
 let shareModule: ShareModule;
 let downloadModule: CommonCartridgeExportModule;
-let courseRoomDetailModule: courseRoomDetailModule;
+let courseRoomDetailModule: CourseRoomDetailModule;
 let authModule: AuthModule;
 
 const getWrapper = (
@@ -148,7 +148,7 @@ const getWrapper = (
 		startShareFlow: jest.fn(),
 		resetShareFlow: jest.fn(),
 	});
-	courseRoomDetailModule = createModuleMocks(courseRoomDetailModule, {
+	courseRoomDetailModule = createModuleMocks(CourseRoomDetailModule, {
 		fetchContent: jest.fn(),
 		getRoomData: mockData,
 		getPermissionData: permissionData,
@@ -170,7 +170,7 @@ const getWrapper = (
 		.spyOn(window, "matchMedia")
 		.mockReturnValue(createMock<MediaQueryList>());
 
-	return mount(RoomDetailsPage, {
+	return mount(CourseRoomDetailsPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			mocks: {
@@ -196,7 +196,7 @@ const getWrapper = (
 	});
 };
 
-describe("@/pages/RoomDetails.page.vue", () => {
+describe("@/pages/CourseRoomDetails.page.vue", () => {
 	beforeEach(() => {
 		setupStores({
 			envConfigModule: EnvConfigModule,

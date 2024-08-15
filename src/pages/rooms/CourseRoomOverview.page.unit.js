@@ -1,5 +1,5 @@
 import RoomModal from "@/components/molecules/RoomModal";
-import { authModule, roomsModule } from "@/store";
+import { authModule, courseRoomListModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
@@ -18,7 +18,7 @@ import {
 import { createModuleMocks } from "@/utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
-import RoomOverview from "./RoomOverview.page.vue";
+import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -99,18 +99,18 @@ const mockAuthStoreData = {
 setupStores({
 	authModule: AuthModule,
 	envConfigModule: EnvConfigModule,
-	roomsModule: RoomsModule,
+	courseRoomListModule: CourseRoomListModule,
 });
 
 const spyMocks = {
 	storeRoomAlignMock: jest
-		.spyOn(roomsModule, "align")
+		.spyOn(courseRoomListModule, "align")
 		.mockImplementation(async () => ({})),
 	storeModuleFetchMock: jest
-		.spyOn(roomsModule, "fetch")
+		.spyOn(courseRoomListModule, "fetch")
 		.mockImplementation(async () => ({})),
 	storeModuleFetchAllMock: jest
-		.spyOn(roomsModule, "fetchAllElements")
+		.spyOn(courseRoomListModule, "fetchAllElements")
 		.mockImplementation(async () => ({})),
 };
 
@@ -132,8 +132,8 @@ const getWrapper = (device = "desktop", options = {}) => {
 	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 		getCtlToolsTabEnabled: false,
 	});
-	const roomsModuleMock = createModuleMocks(RoomsModule);
-	return mount(RoomOverview, {
+	const courseRoomListModuleMock = createModuleMocks(courseRoomListModule);
+	return mount(CourseRoomOverviewPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -156,7 +156,7 @@ const getWrapper = (device = "desktop", options = {}) => {
 			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 			[LOADING_STATE_MODULE_KEY.valueOf()]: loadingStateModuleMock,
 			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-			[ROOMS_MODULE_KEY.valueOf()]: roomsModuleMock,
+			[ROOMS_MODULE_KEY.valueOf()]: courseRoomListModuleMock,
 		},
 		props: {
 			role: "student",
@@ -165,10 +165,10 @@ const getWrapper = (device = "desktop", options = {}) => {
 	});
 };
 
-describe("@/pages/RoomOverview", () => {
+describe("@/pages/CourseRoomOverview.page", () => {
 	beforeEach(() => {
-		roomsModule.setRoomData(mockRoomStoreData);
-		roomsModule.setAllElements(mockCourseData);
+		courseRoomListModule.setRoomData(mockRoomStoreData);
+		courseRoomListModule.setAllElements(mockCourseData);
 		authModule.setMe(mockAuthStoreData);
 	});
 
@@ -577,7 +577,7 @@ describe("@/pages/RoomOverview", () => {
 			},
 		];
 
-		roomsModule.setRoomData(roomData);
+		courseRoomListModule.setRoomData(roomData);
 		const wrapper = getWrapper();
 		expect(wrapper.findComponent('[data-test-position="8-0"]').exists()).toBe(
 			false

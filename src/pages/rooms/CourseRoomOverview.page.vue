@@ -129,7 +129,7 @@ import RoomModal from "@/components/molecules/RoomModal";
 import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
-import { roomsModule } from "@/store";
+import { courseRoomListModule } from "@/store";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiCheck, mdiMagnify } from "@mdi/js";
@@ -192,28 +192,26 @@ export default defineComponent({
 	},
 	computed: {
 		hasCurrentRooms() {
-			return roomsModule.hasCurrentRooms;
+			return courseRoomListModule.hasCurrentRooms;
 		},
 		rooms() {
-			return JSON.parse(JSON.stringify(roomsModule.getRoomsData)).filter(
-				(item) => {
-					if (item.groupElements) {
-						const groupElements = item.groupElements.filter((groupItem) => {
-							return groupItem.title
-								.toLowerCase()
-								.includes(this.searchText.toLowerCase());
-						});
-						item.groupElements = groupElements;
-						return groupElements;
-					}
-					return item.title
-						.toLowerCase()
-						.includes(this.searchText.toLowerCase());
+			return JSON.parse(
+				JSON.stringify(courseRoomListModule.getRoomsData)
+			).filter((item) => {
+				if (item.groupElements) {
+					const groupElements = item.groupElements.filter((groupItem) => {
+						return groupItem.title
+							.toLowerCase()
+							.includes(this.searchText.toLowerCase());
+					});
+					item.groupElements = groupElements;
+					return groupElements;
 				}
-			);
+				return item.title.toLowerCase().includes(this.searchText.toLowerCase());
+			});
 		},
 		courses() {
-			return roomsModule.getAllElements;
+			return courseRoomListModule.getAllElements;
 		},
 		hasRoomsBeingCopied() {
 			return this.rooms.some((item) => item.copyingSince !== undefined);
@@ -229,8 +227,8 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		await roomsModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
-		await roomsModule.fetchAllElements();
+		await courseRoomListModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		await courseRoomListModule.fetchAllElements();
 		this.getDeviceDims();
 		if (this.hasRoomsBeingCopied) {
 			this.initCoursePolling(0, new Date());
@@ -266,9 +264,12 @@ export default defineComponent({
 					this.dimensions.colCount = 6;
 					break;
 			}
-			const lastItem = roomsModule.getRoomsData.reduce((prev, current) => {
-				return prev.yPosition > current.yPosition ? prev : current;
-			}, {});
+			const lastItem = courseRoomListModule.getRoomsData.reduce(
+				(prev, current) => {
+					return prev.yPosition > current.yPosition ? prev : current;
+				},
+				{}
+			);
 
 			this.dimensions.rowCount =
 				lastItem.yPosition &&
@@ -358,7 +359,7 @@ export default defineComponent({
 			this.draggedElement.from = {
 				x: this.groupDialog.groupData.xPosition,
 				y: this.groupDialog.groupData.yPosition,
-				groupIndex: roomsModule.roomsData
+				groupIndex: courseRoomListModule.roomsData
 					.find((item) => item.groupId == this.groupDialog.groupData.groupId)
 					.groupElements.findIndex((groupItem) => groupItem.id == element.id),
 			};
@@ -372,7 +373,7 @@ export default defineComponent({
 			this.dragging = true;
 		},
 		async savePosition() {
-			await roomsModule.align(this.draggedElement);
+			await courseRoomListModule.align(this.draggedElement);
 			this.groupDialog.groupData = {};
 		},
 		defaultNaming(pos) {
@@ -382,7 +383,7 @@ export default defineComponent({
 				xPosition: pos.x,
 				yPosition: pos.y,
 			};
-			roomsModule.update(payload);
+			courseRoomListModule.update(payload);
 		},
 		onImportSuccess(name, id) {
 			this.showImportSuccess(name);
@@ -390,7 +391,7 @@ export default defineComponent({
 				this.$router.replace({ name: "rooms-id", params: { id } });
 			} else {
 				this.$router.replace({ name: "rooms-overview" });
-				roomsModule.fetch();
+				courseRoomListModule.fetch();
 			}
 		},
 		showImportSuccess(name) {
@@ -406,7 +407,7 @@ export default defineComponent({
 			const nextTimeout = count * count * 1000 + 5000;
 			setTimeout(
 				async () => {
-					await roomsModule.fetch({ indicateLoading: false });
+					await courseRoomListModule.fetch({ indicateLoading: false });
 					if (this.hasRoomsBeingCopied) {
 						this.initCoursePolling(count + 1, started ?? new Date());
 					} else {
