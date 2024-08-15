@@ -1,12 +1,12 @@
 import setupStores from "@@/tests/test-utils/setupStores";
 import CommonCartridgeExportModule from "./common-cartridge-export";
-import courseRoomDetailModule from "./course-room-detail";
+import CourseRoomDetailModule from "./course-room-detail";
 import { courseRoomDetailModule } from "./store-accessor";
 
 describe("commonCartridgeExportModule", () => {
 	describe("actions", () => {
 		beforeEach(() => {
-			setupStores({ courseRoomDetailModule: courseRoomDetailModule });
+			setupStores({ courseRoomDetailModule: CourseRoomDetailModule });
 		});
 		describe("startExport", () => {
 			it("should call courseRoomDetailModule.downloadCommonCartridgeCourse with the correct version and topic", () => {
