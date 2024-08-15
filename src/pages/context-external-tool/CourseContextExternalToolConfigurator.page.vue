@@ -24,7 +24,7 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/room";
+import CourseRoomDetailModule from "@/store/course-room-detail";
 import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
@@ -42,7 +42,8 @@ const props = defineProps({
 });
 
 const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+const courseRoomDetailModule: CourseRoomDetailModule =
+	injectStrict(ROOM_MODULE_KEY);
 
 const { t } = useI18n();
 
@@ -59,7 +60,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const courseTitle: ComputedRef<string> = computed(
-	() => roomModule.getRoomData.title
+	() => courseRoomDetailModule.getRoomData.title
 );
 
 const router: Router = useRouter();
@@ -85,6 +86,6 @@ const contextExternalToolConfigurator: Ref<InstanceType<
 onMounted(async () => {
 	await contextExternalToolConfigurator.value?.fetchData();
 
-	await roomModule.fetchContent(props.contextId);
+	await courseRoomDetailModule.fetchContent(props.contextId);
 });
 </script>

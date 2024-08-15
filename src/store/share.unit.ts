@@ -5,7 +5,7 @@ import {
 	ShareTokenBodyParamsParentTypeEnum,
 } from "../serverApi/v3/api";
 import setupStores from "@@/tests/test-utils/setupStores";
-import RoomModule from "@/store/course-room-detail";
+import courseRoomDetailModule from "@/store/course-room-detail";
 
 const sharePayload: SharePayload = {
 	id: "sampleCourseId",
@@ -22,7 +22,7 @@ const expectedServerPayload = {
 describe("share module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
-			setupStores({ roomModule: RoomModule });
+			setupStores({ courseRoomDetailModule: courseRoomDetailModule });
 		});
 
 		describe("createShareUrl", () => {

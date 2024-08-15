@@ -1,6 +1,6 @@
 import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
-import RoomModule from "@/store/course-room-detail";
+import courseRoomDetailModule from "@/store/course-room-detail";
 import { CourseFeatures } from "@/store/types/room";
 import { ENV_CONFIG_MODULE_KEY, ROOM_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -31,7 +31,7 @@ describe("RoomExternalToolOverview", () => {
 	>;
 
 	const getWrapper = () => {
-		const roomModule = createModuleMocks(RoomModule, {
+		const courseRoomDetailModule = createModuleMocks(courseRoomDetailModule, {
 			getLoading: false,
 		});
 
@@ -40,14 +40,14 @@ describe("RoomExternalToolOverview", () => {
 			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as ConfigResponse,
 		});
 
-		roomModule.fetchCourse.mockResolvedValue(null);
+		courseRoomDetailModule.fetchCourse.mockResolvedValue(null);
 
 		const wrapper = shallowMount(RoomExternalToolsOverview, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[ROOM_MODULE_KEY.valueOf()]: courseRoomDetailModule,
 				},
 			},
 			props: {
@@ -57,7 +57,7 @@ describe("RoomExternalToolOverview", () => {
 
 		return {
 			wrapper,
-			roomModule,
+			courseRoomDetailModule,
 			refreshTime,
 		};
 	};
@@ -141,9 +141,9 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when video conferences are enabled", () => {
 		const setup = async () => {
-			const { wrapper, roomModule } = getWrapper();
+			const { wrapper, courseRoomDetailModule } = getWrapper();
 
-			roomModule.fetchCourse.mockResolvedValue(
+			courseRoomDetailModule.fetchCourse.mockResolvedValue(
 				courseFactory.build({ features: [CourseFeatures.VIDEOCONFERENCE] })
 			);
 
