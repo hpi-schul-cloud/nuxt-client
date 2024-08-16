@@ -89,7 +89,7 @@ describe("DeletedElement", () => {
 
 			const deletedElement = wrapper.findComponent({ ref: "deletedElement" });
 
-			expect(deletedElement.exists()).toEqual(false);
+			expect(deletedElement.isVisible()).toEqual(false);
 		});
 	});
 
