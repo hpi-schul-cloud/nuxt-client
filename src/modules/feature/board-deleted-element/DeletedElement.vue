@@ -1,6 +1,6 @@
 <template>
 	<VCard
-		v-if="isTeacher"
+		v-show="isTeacher"
 		class="mb-4"
 		data-testid="board-deleted-element"
 		elevation="0"
