@@ -1,5 +1,5 @@
 <template>
-	<a href="/">
+	<a href="/dashboard">
 		<img src="@/assets/img/logo/nav-cloud-logo.svg" :alt="altText" />
 	</a>
 </template>
