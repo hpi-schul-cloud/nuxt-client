@@ -437,12 +437,10 @@ const mapRoleNames = (roleNames: unknown[]) => {
 const mapExternalRoleNames = (externalRoleNames: string[]) => {
 	return externalRoleNames
 		.map((role) => {
-			switch (props.ldapSource) {
-				case "moin.schule":
-					return mapSchulconnexExternalRoleNames(role);
-				default:
-					return role;
+			if (props.ldapSource === "moin.schule") {
+				return mapSchulconnexExternalRoleNames(role);
 			}
+			return role;
 		})
 		.join(", ");
 };
