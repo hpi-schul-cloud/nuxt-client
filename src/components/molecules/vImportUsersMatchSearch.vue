@@ -43,9 +43,8 @@
 									{{ `${editedItem.firstName} ${editedItem.lastName}` }}
 								</VListItemTitle>
 								<VListItemSubtitle>
-									{{
-										`${mapRoleNames(editedItem.roleNames)} ${externalRoleLabel}`
-									}}
+									{{ mapRoleNames(editedItem.roleNames) }}
+									{{ externalRoleText }}
 								</VListItemSubtitle>
 								<VListItemSubtitle
 									v-if="editedItem.classNames && editedItem.classNames.length"
@@ -305,12 +304,17 @@ const canDelete = computed(() => {
 	return props.editedItem.match && selectedItem.value === null;
 });
 
-const externalRoleLabel = computed(() => {
+const externalRoleText = computed(() => {
 	if (
 		props.editedItem.externalRoleNames &&
 		props.editedItem.externalRoleNames.length
 	) {
-		return `(${props.ldapSource}: ${mapExternalRoleNames(props.editedItem.externalRoleNames)})`;
+		return `(${t(
+			"components.molecules.importUsersMatch.externalRoleName.label",
+			{
+				source: props.ldapSource,
+			}
+		)}: ${mapExternalRoleNames(props.editedItem.externalRoleNames)})`;
 	}
 	return "";
 });
