@@ -1,8 +1,3 @@
-import {
-	isAudioMimeType,
-	isPdfMimeType,
-	isVideoMimeType,
-} from "@/utils/fileHelper";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -10,16 +5,11 @@ import {
 } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 import AudioDisplay from "./audio-display/AudioDisplay.vue";
-import FileDescription from "./file-description/FileDescription.vue";
 import FileDisplay from "./FileDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
-
-jest.mock("@/utils/fileHelper");
-const isVideoMimeTypeMock = jest.mocked(isVideoMimeType);
-const isAudioMimeTypeMock = jest.mocked(isAudioMimeType);
-const isPdfMimeTypeMock = jest.mocked(isPdfMimeType);
+import { PreviewStatus } from "@/fileStorageApi/v3";
 
 describe("FileDisplay", () => {
 	describe("when previewUrl is defined", () => {
@@ -32,15 +22,13 @@ describe("FileDisplay", () => {
 						size: 100,
 						url: "test",
 						previewUrl: "test",
-						previewStatus: "test",
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 						isDownloadAllowed: true,
 						element,
+						mimeType: "test",
 					},
 					isEditMode: true,
 				};
-
-				isVideoMimeTypeMock.mockReset();
-				isVideoMimeTypeMock.mockReturnValueOnce(false);
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
@@ -73,14 +61,6 @@ describe("FileDisplay", () => {
 				expect(props.iseditmode).toBe("true");
 				expect(props.element).toBeDefined();
 			});
-
-			it("should pass showTitle true to file description", () => {
-				const { wrapper } = setup();
-
-				const props = wrapper.findComponent(FileDescription).attributes();
-
-				expect(props.showtitle).toBe("false");
-			});
 		});
 
 		describe("when mimeType is a video type", () => {
@@ -92,18 +72,13 @@ describe("FileDisplay", () => {
 						size: 100,
 						url: "test",
 						previewUrl: "test",
-						previewStatus: "test",
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 						isDownloadAllowed: true,
 						element,
+						mimeType: "video/mp4",
 					},
 					isEditMode: true,
 				};
-
-				isVideoMimeTypeMock.mockReset();
-				isVideoMimeTypeMock.mockReturnValueOnce(true);
-
-				isAudioMimeTypeMock.mockReset();
-				isAudioMimeTypeMock.mockReturnValueOnce(false);
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
@@ -137,22 +112,6 @@ describe("FileDisplay", () => {
 				expect(props.iseditmode).toBe("true");
 				expect(props.element).toBeDefined();
 			});
-
-			it("should render file description display component", () => {
-				const { wrapper } = setup();
-
-				const fileDescription = wrapper.findComponent(FileDescription);
-
-				expect(fileDescription.exists()).toBe(true);
-			});
-
-			it("should pass showTitle true to file description", () => {
-				const { wrapper } = setup();
-
-				const props = wrapper.findComponent(FileDescription).attributes();
-
-				expect(props.showtitle).toBe("false");
-			});
 		});
 
 		describe("when mimeType is pdf type", () => {
@@ -164,21 +123,13 @@ describe("FileDisplay", () => {
 						size: 100,
 						url: "test",
 						previewUrl: "previewUrl",
-						previewStatus: "test",
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 						isDownloadAllowed: true,
 						element,
+						mimeType: "application/pdf",
 					},
 					isEditMode: true,
 				};
-
-				isAudioMimeTypeMock.mockReset();
-				isAudioMimeTypeMock.mockReturnValueOnce(false);
-
-				isVideoMimeTypeMock.mockReset();
-				isVideoMimeTypeMock.mockReturnValueOnce(false);
-
-				isPdfMimeTypeMock.mockReset();
-				isPdfMimeTypeMock.mockReturnValueOnce(true);
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
@@ -193,15 +144,6 @@ describe("FileDisplay", () => {
 					srcProp: props.fileProperties.url,
 				};
 			};
-
-			it("should pass correct props to file description", () => {
-				const { wrapper, url } = setup();
-
-				const props = wrapper.findComponent(FileDescription).attributes();
-
-				expect(props.src).toBe(url);
-				expect(props.showtitle).toBeTruthy();
-			});
 
 			it("should pass correct props to pdf display component", () => {
 				const { wrapper, fileNameProp, previewUrlProp, srcProp } = setup();
@@ -226,18 +168,13 @@ describe("FileDisplay", () => {
 						size: 100,
 						url: "test",
 						previewUrl: undefined,
-						previewStatus: "test",
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 						isDownloadAllowed: true,
 						element,
+						mimeType: "video/mp4",
 					},
 					isEditMode: true,
 				};
-
-				isVideoMimeTypeMock.mockReset();
-				isVideoMimeTypeMock.mockReturnValueOnce(true);
-
-				isAudioMimeTypeMock.mockReset();
-				isAudioMimeTypeMock.mockReturnValueOnce(false);
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
@@ -268,14 +205,6 @@ describe("FileDisplay", () => {
 				expect(props.src).toBe(url);
 				expect(props.name).toBe(fileNameProp);
 			});
-
-			it("should pass showTitle false to file description", () => {
-				const { wrapper } = setup();
-
-				const props = wrapper.findComponent(FileDescription).attributes();
-
-				expect(props.showtitle).toBe("false");
-			});
 		});
 
 		describe("when mimeType is a audio type", () => {
@@ -286,18 +215,13 @@ describe("FileDisplay", () => {
 						name: "test",
 						size: 100,
 						url: "test",
-						previewStatus: "test",
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 						isDownloadAllowed: true,
 						element,
+						mimeType: "audio/mp3",
 					},
 					isEditMode: true,
 				};
-
-				isVideoMimeTypeMock.mockReset();
-				isVideoMimeTypeMock.mockReturnValueOnce(false);
-
-				isAudioMimeTypeMock.mockReset();
-				isAudioMimeTypeMock.mockReturnValueOnce(true);
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
@@ -326,14 +250,6 @@ describe("FileDisplay", () => {
 
 				expect(props.src).toBe(srcProp);
 			});
-
-			it("should pass showTitle false to file description", () => {
-				const { wrapper } = setup();
-
-				const props = wrapper.findComponent(FileDescription).attributes();
-
-				expect(props.showtitle).toBe("false");
-			});
 		});
 
 		describe("when mimeType is pdf type", () => {
@@ -345,21 +261,13 @@ describe("FileDisplay", () => {
 						size: 100,
 						url: "test",
 						previewUrl: undefined,
-						previewStatus: "test",
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 						isDownloadAllowed: true,
 						element,
+						mimeType: "application/pdf",
 					},
 					isEditMode: true,
 				};
-
-				isAudioMimeTypeMock.mockReset();
-				isAudioMimeTypeMock.mockReturnValueOnce(false);
-
-				isVideoMimeTypeMock.mockReset();
-				isVideoMimeTypeMock.mockReturnValueOnce(false);
-
-				isPdfMimeTypeMock.mockReset();
-				isPdfMimeTypeMock.mockReturnValueOnce(true);
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
@@ -374,14 +282,6 @@ describe("FileDisplay", () => {
 					srcProp: props.fileProperties.url,
 				};
 			};
-
-			it("should pass correct props to file description", () => {
-				const { wrapper, url } = setup();
-
-				const props = wrapper.findComponent(FileDescription).attributes();
-
-				expect(props.src).toBe(url);
-			});
 
 			it("should not render pdf display", () => {
 				const { wrapper } = setup();
@@ -401,21 +301,13 @@ describe("FileDisplay", () => {
 						size: 100,
 						url: "test",
 						previewUrl: undefined,
-						previewStatus: "test",
+						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 						isDownloadAllowed: true,
 						element,
+						mimeType: "test",
 					},
 					isEditMode: true,
 				};
-
-				isVideoMimeTypeMock.mockReset();
-				isVideoMimeTypeMock.mockReturnValueOnce(false);
-
-				isAudioMimeTypeMock.mockReset();
-				isAudioMimeTypeMock.mockReturnValueOnce(false);
-
-				isPdfMimeTypeMock.mockReset();
-				isPdfMimeTypeMock.mockReturnValueOnce(false);
 
 				const wrapper = shallowMount(FileDisplay, {
 					props,
@@ -426,22 +318,6 @@ describe("FileDisplay", () => {
 					wrapper,
 				};
 			};
-
-			it("should pass showTitle true to file description", () => {
-				const { wrapper } = setup();
-
-				const props = wrapper.findComponent(FileDescription).attributes();
-
-				expect(props.showtitle).toBeTruthy();
-			});
-
-			it("should pass src to file description", () => {
-				const { wrapper } = setup();
-
-				const props = wrapper.findComponent(FileDescription).attributes();
-
-				expect(props.src).toBe(undefined);
-			});
 
 			it("should not render image display component", () => {
 				const { wrapper } = setup();
