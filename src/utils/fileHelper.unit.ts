@@ -9,11 +9,8 @@ import {
 	downloadFile,
 	formatSecondsToHourMinSec,
 	getFileExtension,
-	isAudioMimeType,
 	isDownloadAllowed,
-	isPdfMimeType,
 	isPreviewPossible,
-	isVideoMimeType,
 } from "./fileHelper";
 
 describe("@/utils/fileHelper", () => {
@@ -311,8 +308,6 @@ describe("@/utils/fileHelper", () => {
 			});
 		});
 	});
-
-
 
 	describe("formatSecondsToHourMinSec", () => {
 		describe("when file has duration 0", () => {
