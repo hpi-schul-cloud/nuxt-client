@@ -57,7 +57,7 @@ import { FileAlert } from "../shared/types/FileAlert.enum";
 import { useDebounceFn } from "@vueuse/core";
 import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { useDisplay } from "vuetify/lib/framework.mjs";
+import { useDisplay } from "vuetify";
 import { useMimeType } from "@/composables/mimeType.composable";
 
 const props = defineProps({

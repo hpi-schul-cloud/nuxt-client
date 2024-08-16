@@ -30,7 +30,7 @@ import { ComputedRef, computed, ref } from "vue";
 import { mdiLink } from "@mdi/js";
 import { ContentElementBar } from "@ui-board";
 import { injectStrict } from "@/utils/inject";
-import { useDisplay } from "vuetify/lib/framework.mjs";
+import { useDisplay } from "vuetify";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 const props = defineProps({
