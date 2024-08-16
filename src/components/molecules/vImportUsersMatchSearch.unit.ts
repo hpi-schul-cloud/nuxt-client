@@ -220,41 +220,157 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 	});
 
 	describe("when the source is from moin.schule", () => {
-		const setup = () => {
-			const adminTestProps = {
-				editedItem: {
-					flagged: false,
-					importUserId: "123",
-					loginName: "max_mus",
-					firstName: "Max",
-					lastName: "Mustermann",
-					roleNames: [ImportUserResponseRoleNamesEnum.Student],
-					classNames: ["6a"],
-					externalRoleNames: ["Lern"],
-				},
-				isDialog: true,
-				ldapSource: "moin.schule",
+		describe("when the external role is 'Lern' (Student)", () => {
+			const setup = () => {
+				const adminTestProps = {
+					editedItem: {
+						flagged: false,
+						importUserId: "123",
+						loginName: "max_mus",
+						firstName: "Max",
+						lastName: "Mustermann",
+						roleNames: [ImportUserResponseRoleNamesEnum.Student],
+						classNames: ["6a"],
+						externalRoleNames: ["Lern"],
+					},
+					isDialog: true,
+					ldapSource: "moin.schule",
+				};
+				return {
+					adminTestProps,
+				};
 			};
-			return {
-				adminTestProps,
+
+			it("should correctly show the external role of the user", () => {
+				const { adminTestProps } = setup();
+				const wrapper = getWrapper(adminTestProps);
+
+				const editedItemElement = wrapper
+					.find("[data-testid=edited-item]")
+					.html();
+
+				expect(editedItemElement).toContain("Max");
+				expect(editedItemElement).toContain("Mustermann");
+				expect(editedItemElement).toContain("common.roleName.student");
+				expect(editedItemElement).toContain(
+					"(components.molecules.importUsersMatch.externalRoleName.label: " +
+						"components.molecules.importUsersMatch.externalRoleName.schulconnex.student)"
+				);
+			});
+		});
+		describe("when the external role is 'Lehr' (Teacher)", () => {
+			const setup = () => {
+				const adminTestProps = {
+					editedItem: {
+						flagged: false,
+						importUserId: "123",
+						loginName: "max_mus",
+						firstName: "Max",
+						lastName: "Mustermann",
+						roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
+						classNames: ["6a"],
+						externalRoleNames: ["Lehr"],
+					},
+					isDialog: true,
+					ldapSource: "moin.schule",
+				};
+				return {
+					adminTestProps,
+				};
 			};
-		};
 
-		it("should correctly show the external role of the user", () => {
-			const { adminTestProps } = setup();
-			const wrapper = getWrapper(adminTestProps);
+			it("should correctly show the external role of the user", () => {
+				const { adminTestProps } = setup();
+				const wrapper = getWrapper(adminTestProps);
 
-			const editedItemElement = wrapper
-				.find("[data-testid=edited-item]")
-				.html();
+				const editedItemElement = wrapper
+					.find("[data-testid=edited-item]")
+					.html();
 
-			expect(editedItemElement).toContain("Max");
-			expect(editedItemElement).toContain("Mustermann");
-			expect(editedItemElement).toContain("common.roleName.student");
-			expect(editedItemElement).toContain(
-				"(components.molecules.importUsersMatch.externalRoleName.label: " +
-					"components.molecules.importUsersMatch.externalRoleName.schulconnex.student)"
-			);
+				expect(editedItemElement).toContain("Max");
+				expect(editedItemElement).toContain("Mustermann");
+				expect(editedItemElement).toContain("common.roleName.teacher");
+				expect(editedItemElement).toContain(
+					"(components.molecules.importUsersMatch.externalRoleName.label: " +
+						"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher)"
+				);
+			});
+		});
+		describe("when the external role is 'Leit' (Management)", () => {
+			const setup = () => {
+				const adminTestProps = {
+					editedItem: {
+						flagged: false,
+						importUserId: "123",
+						loginName: "max_mus",
+						firstName: "Max",
+						lastName: "Mustermann",
+						roleNames: [ImportUserResponseRoleNamesEnum.Admin],
+						classNames: ["6a"],
+						externalRoleNames: ["Leit"],
+					},
+					isDialog: true,
+					ldapSource: "moin.schule",
+				};
+				return {
+					adminTestProps,
+				};
+			};
+
+			it("should correctly show the external role of the user", () => {
+				const { adminTestProps } = setup();
+				const wrapper = getWrapper(adminTestProps);
+
+				const editedItemElement = wrapper
+					.find("[data-testid=edited-item]")
+					.html();
+
+				expect(editedItemElement).toContain("Max");
+				expect(editedItemElement).toContain("Mustermann");
+				expect(editedItemElement).toContain("common.roleName.administrator");
+				expect(editedItemElement).toContain(
+					"(components.molecules.importUsersMatch.externalRoleName.label: " +
+						"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager)"
+				);
+			});
+		});
+		describe("when the external role is 'OrgAdmin' (Admin)", () => {
+			const setup = () => {
+				const adminTestProps = {
+					editedItem: {
+						flagged: false,
+						importUserId: "123",
+						loginName: "max_mus",
+						firstName: "Max",
+						lastName: "Mustermann",
+						roleNames: [ImportUserResponseRoleNamesEnum.Admin],
+						classNames: ["6a"],
+						externalRoleNames: ["OrgAdmin"],
+					},
+					isDialog: true,
+					ldapSource: "moin.schule",
+				};
+				return {
+					adminTestProps,
+				};
+			};
+
+			it("should correctly show the external role of the user", () => {
+				const { adminTestProps } = setup();
+				const wrapper = getWrapper(adminTestProps);
+
+				const editedItemElement = wrapper
+					.find("[data-testid=edited-item]")
+					.html();
+
+				expect(editedItemElement).toContain("Max");
+				expect(editedItemElement).toContain("Mustermann");
+				expect(editedItemElement).toContain("common.roleName.administrator");
+				expect(editedItemElement).toContain(
+					"(components.molecules.importUsersMatch.externalRoleName.label: " +
+						"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin)"
+				);
+			});
 		});
 	});
 
