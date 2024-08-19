@@ -231,9 +231,8 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		beforeEnter: createPermissionGuard(["news_edit"]),
 	},
 	{
-		// TODO BC-7822, BC-7823 target this route at new rooms page
 		path: `/rooms`,
-		redirect: { name: "course-room-overview" },
+		component: async () => (await import("@page-room")).RoomOverviewPage,
 		name: "rooms",
 	},
 	// TODO Is this redirect really necessary? How likely is it that there are bookmarks?
