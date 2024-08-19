@@ -590,7 +590,9 @@ export default {
 		"None. Account will be newly created.",
 	"components.molecules.importUsersMatch.write": "Input first and last name",
 	"components.molecules.importUsersMatch.externalRoleName.label":
-		"{source} role",
+		"Role {source}",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Not available",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
 		"Teacher",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":

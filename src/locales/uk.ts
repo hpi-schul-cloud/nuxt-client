@@ -599,7 +599,9 @@ export default {
 		"немає. Обліковий запис буде створено знову.",
 	"components.molecules.importUsersMatch.write": "Введіть ім'я та прізвище",
 	"components.molecules.importUsersMatch.externalRoleName.label":
-		"{source} роль",
+		"роль {source}",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Немає в наявності",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
 		"Учитель",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":

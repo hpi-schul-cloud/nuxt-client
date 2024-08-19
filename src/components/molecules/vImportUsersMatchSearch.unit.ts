@@ -27,7 +27,7 @@ const testProps = {
 		lastName: "Mustermann",
 		roleNames: [ImportUserResponseRoleNamesEnum.Student],
 		classNames: ["6a"],
-		externalRoleNames: ["student-ext"],
+		externalRoleNames: [],
 	},
 	isDialog: true,
 	ldapSource: "LDAP",
@@ -65,9 +65,6 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		expect(editedItemElement).toContain("common.roleName.student");
 		expect(editedItemElement).toContain("max_mus");
 		expect(editedItemElement).toContain("6a");
-		expect(editedItemElement).toContain(
-			"(components.molecules.importUsersMatch.externalRoleName.label: student-ext)"
-		);
 	});
 
 	it("should set 'flagged' property true when flag-button clicked", async () => {
@@ -217,6 +214,41 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		);
 
 		expect(editedItemUsername.exists()).toBe(false);
+	});
+
+	describe("when the source is not from moin.schule", () => {
+		const setup = () => {
+			const setupTestProps = {
+				editedItem: {
+					flagged: false,
+					importUserId: "123",
+					loginName: "max_mus",
+					firstName: "Max",
+					lastName: "Mustermann",
+					roleNames: [ImportUserResponseRoleNamesEnum.Student],
+					classNames: ["6a"],
+					externalRoleNames: ["student-external"],
+				},
+				isDialog: true,
+				ldapSource: "ldap-external",
+			};
+			return {
+				setupTestProps,
+			};
+		};
+
+		it("should not contain any text for external role", () => {
+			const { setupTestProps } = setup();
+			const wrapper = getWrapper(setupTestProps);
+
+			const editedItemElement = wrapper
+				.find("[data-testid=edited-item]")
+				.html();
+
+			expect(editedItemElement).not.toContain(
+				"components.molecules.importUsersMatch.externalRoleName.label"
+			);
+		});
 	});
 
 	describe("when the source is from moin.schule", () => {
@@ -372,43 +404,42 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				);
 			});
 		});
-	});
-
-	describe("when externalRoleNames prop is empty", () => {
-		const setup = () => {
-			const setupTestProps = {
-				editedItem: {
-					flagged: false,
-					importUserId: "123",
-					loginName: "max_mus",
-					firstName: "Max",
-					lastName: "Mustermann",
-					roleNames: [ImportUserResponseRoleNamesEnum.Student],
-					classNames: ["6a"],
-					externalRoleNames: [],
-				},
-				isDialog: true,
-				ldapSource: "moin.schule",
+		describe("when externalRoleNames prop is empty", () => {
+			const setup = () => {
+				const setupTestProps = {
+					editedItem: {
+						flagged: false,
+						importUserId: "123",
+						loginName: "max_mus",
+						firstName: "Max",
+						lastName: "Mustermann",
+						roleNames: [ImportUserResponseRoleNamesEnum.Student],
+						classNames: ["6a"],
+						externalRoleNames: [],
+					},
+					isDialog: true,
+					ldapSource: "moin.schule",
+				};
+				return {
+					setupTestProps,
+				};
 			};
-			return {
-				setupTestProps,
-			};
-		};
 
-		it("should not show the external role label", () => {
-			const { setupTestProps } = setup();
-			const wrapper = getWrapper(setupTestProps);
+			it("should show that the role is not available", () => {
+				const { setupTestProps } = setup();
+				const wrapper = getWrapper(setupTestProps);
 
-			const editedItemElement = wrapper
-				.find("[data-testid=edited-item]")
-				.html();
+				const editedItemElement = wrapper
+					.find("[data-testid=edited-item]")
+					.html();
 
-			expect(editedItemElement).toContain("Max");
-			expect(editedItemElement).toContain("Mustermann");
-			expect(editedItemElement).toContain("common.roleName.student");
-			expect(editedItemElement).not.toContain(
-				"components.molecules.importUsersMatch.externalRoleName.label"
-			);
+				expect(editedItemElement).toContain("Max");
+				expect(editedItemElement).toContain("Mustermann");
+				expect(editedItemElement).toContain("common.roleName.student");
+				expect(editedItemElement).toContain(
+					"components.molecules.importUsersMatch.externalRoleName.none"
+				);
+			});
 		});
 	});
 });

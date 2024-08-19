@@ -602,7 +602,9 @@ export default {
 	"components.molecules.importUsersMatch.write":
 		"Vornamen oder Nachnamen eingeben",
 	"components.molecules.importUsersMatch.externalRoleName.label":
-		"{source} Rolle",
+		"Rolle {source}",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Nicht verfügbar",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
 		"Lehrende/r",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":

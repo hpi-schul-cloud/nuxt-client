@@ -44,7 +44,9 @@
 								</VListItemTitle>
 								<VListItemSubtitle>
 									{{ mapRoleNames(editedItem.roleNames) }}
-									{{ externalRoleText }}
+									{{
+										props.ldapSource === "moin.schule" ? externalRoleText : ""
+									}}
 								</VListItemSubtitle>
 								<VListItemSubtitle
 									v-if="editedItem.classNames && editedItem.classNames.length"
@@ -305,18 +307,16 @@ const canDelete = computed(() => {
 });
 
 const externalRoleText = computed(() => {
+	let role = t("components.molecules.importUsersMatch.externalRoleName.none");
 	if (
 		props.editedItem.externalRoleNames &&
 		props.editedItem.externalRoleNames.length
 	) {
-		return `(${t(
-			"components.molecules.importUsersMatch.externalRoleName.label",
-			{
-				source: props.ldapSource,
-			}
-		)}: ${mapExternalRoleNames(props.editedItem.externalRoleNames)})`;
+		role = mapExternalRoleNames(props.editedItem.externalRoleNames);
 	}
-	return "";
+
+	const text = `(${t("components.molecules.importUsersMatch.externalRoleName.label", { source: props.ldapSource })}: ${role})`;
+	return text;
 });
 
 const getDataFromApi = async (append = false) => {
