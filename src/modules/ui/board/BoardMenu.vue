@@ -64,7 +64,7 @@ const ariaLabelForScope: Record<BoardMenuScope, string> = {
 };
 
 const boardMenuAriaLabel = computed(() => {
-	return ariaLabelForScope[scope.value] || "";
+	return ariaLabelForScope[scope.value];
 });
 
 const BOARD_SCOPES_WITH_BACKGROUND: Array<BoardMenuScope> = [
