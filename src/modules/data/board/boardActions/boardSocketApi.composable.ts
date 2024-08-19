@@ -1,6 +1,6 @@
 import * as BoardActions from "./boardActions";
 import * as CardActions from "../cardActions/cardActions";
-import { useSocketConnection } from "@data-board";
+import { useSocketConnection, useForceRender } from "@data-board";
 import { useBoardStore } from "../Board.store";
 import {
 	CreateCardRequestPayload,
@@ -19,7 +19,6 @@ import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
-import { useForceRender } from "../fixSamePositionDnD.composable";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
