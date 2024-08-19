@@ -21,7 +21,7 @@
 		</div>
 		<div
 			class="d-flex flex-column"
-			:class="{ ' file-information': hasRowStyle }"
+			:class="{ 'file-information': hasRowStyle }"
 		>
 			<FileDescription
 				:name="fileProperties.name"

@@ -25,13 +25,21 @@ describe("FileContent", () => {
 		isListBoard?: boolean;
 		mimeType?: string;
 		previewUrl?: string;
+		windowWidth?: number;
 	}) => {
-		const { isListBoard, mimeType, previewUrl } = {
+		const { isListBoard, mimeType, previewUrl, windowWidth } = {
 			isListBoard: false,
 			mimeType: "testMimeType",
 			previewUrl: "testPreviewUrl",
+			windowWidth: 1280,
 			...options,
 		};
+
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: windowWidth,
+		});
 
 		const element = fileElementResponseFactory.build();
 
@@ -67,6 +75,236 @@ describe("FileContent", () => {
 			alerts,
 		};
 	};
+
+	describe("when board is a list board", () => {
+		describe("when file content is a pdf", () => {
+			it.each`
+				screenSize  | px
+				${"small"}  | ${600}
+				${"medium"} | ${960}
+				${"large"}  | ${1280}
+			`(
+				"content should have row style for $screenSize display sizes",
+				({ px: windowWidth }) => {
+					const { wrapper } = setup({
+						mimeType: "application/pdf",
+						isListBoard: true,
+						windowWidth,
+					});
+
+					expect(wrapper.classes()).toContain("flex-row");
+				}
+			);
+
+			it("content should have column style when display size is smaller than 600px", () => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+					isListBoard: true,
+					windowWidth: 599,
+				});
+
+				expect(wrapper.classes()).toContain("flex-column");
+			});
+
+			it.each`
+				screenSize  | px
+				${"small"}  | ${600}
+				${"medium"} | ${960}
+				${"large"}  | ${1280}
+			`(
+				"file display container should have a width of 33% for $screenSize display sizes",
+				({ px: windowWidth }) => {
+					const { wrapper } = setup({
+						mimeType: "application/pdf",
+						isListBoard: true,
+						windowWidth,
+					});
+
+					const fileDisplayContainer =
+						wrapper.getComponent(FileDisplay).element.parentElement;
+
+					expect(fileDisplayContainer.classList).toContain("w-33");
+				}
+			);
+
+			it("file display container should not have a width of 33% when display size is smaller than 600px", () => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+					isListBoard: true,
+					windowWidth: 599,
+				});
+
+				const fileDisplayContainer =
+					wrapper.getComponent(FileDisplay).element.parentElement;
+
+				expect(fileDisplayContainer.classList).not.toContain("w-33");
+			});
+
+			it.each`
+				screenSize  | px
+				${"small"}  | ${600}
+				${"medium"} | ${960}
+				${"large"}  | ${1280}
+			`(
+				"should have class 'file-information' for $screenSize display sizes",
+				({ px: windowWidth }) => {
+					const { wrapper } = setup({
+						mimeType: "application/pdf",
+						isListBoard: true,
+						windowWidth,
+					});
+
+					const fileDisplayContainer =
+						wrapper.getComponent(FileDescription).element.parentElement;
+
+					expect(fileDisplayContainer.classList).toContain("file-information");
+				}
+			);
+
+			it("should not have class 'file-information' when display size is smaller than 600px", () => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+					isListBoard: true,
+					windowWidth: 599,
+				});
+
+				const fileDisplayContainer =
+					wrapper.getComponent(FileDescription).element.parentElement;
+
+				expect(fileDisplayContainer.classList).not.toContain(
+					"file-information"
+				);
+			});
+		});
+
+		describe("when file content is not a pdf", () => {
+			it.each`
+				screenSize       | px
+				${"extra small"} | ${599}
+				${"small"}       | ${600}
+				${"medium"}      | ${960}
+				${"large"}       | ${1280}
+			`(
+				"content should have column style for $screenSize display sizes",
+				({ px: windowWidth }) => {
+					const { wrapper } = setup({
+						isListBoard: true,
+						windowWidth,
+					});
+
+					expect(wrapper.classes()).toContain("flex-column");
+				}
+			);
+
+			it.each`
+				screenSize       | px
+				${"extra small"} | ${599}
+				${"small"}       | ${600}
+				${"medium"}      | ${960}
+				${"large"}       | ${1280}
+			`(
+				"file display container should not have a width of 33% for $screenSize display sizes",
+				({ px: windowWidth }) => {
+					const { wrapper } = setup({
+						isListBoard: true,
+						windowWidth,
+					});
+
+					const fileDisplayContainer =
+						wrapper.getComponent(FileDisplay).element.parentElement;
+
+					expect(fileDisplayContainer.classList).not.toContain("w-33");
+				}
+			);
+
+			it.each`
+				screenSize       | px
+				${"extra small"} | ${599}
+				${"small"}       | ${600}
+				${"medium"}      | ${960}
+				${"large"}       | ${1280}
+			`(
+				"should not have class file-information for $screenSize display sizes",
+				({ px: windowWidth }) => {
+					const { wrapper } = setup({
+						isListBoard: true,
+						windowWidth,
+					});
+
+					const fileDisplayContainer =
+						wrapper.getComponent(FileDescription).element.parentElement;
+
+					expect(fileDisplayContainer.classList).not.toContain(
+						"file-information"
+					);
+				}
+			);
+		});
+	});
+
+	describe("when board is not a list board", () => {
+		it.each`
+			screenSize       | px
+			${"extra small"} | ${599}
+			${"small"}       | ${600}
+			${"medium"}      | ${960}
+			${"large"}       | ${1280}
+		`(
+			"content should have column style for $screenSize display sizes",
+			({ px: windowWidth }) => {
+				const { wrapper } = setup({
+					isListBoard: false,
+					windowWidth,
+				});
+
+				expect(wrapper.classes()).toContain("flex-column");
+			}
+		);
+
+		it.each`
+			screenSize       | px
+			${"extra small"} | ${599}
+			${"small"}       | ${600}
+			${"medium"}      | ${960}
+			${"large"}       | ${1280}
+		`(
+			"file display container should not have a width of 33% for $screenSize display sizes",
+			({ px: windowWidth }) => {
+				const { wrapper } = setup({
+					isListBoard: false,
+					windowWidth,
+				});
+
+				const fileDisplayContainer =
+					wrapper.getComponent(FileDisplay).element.parentElement;
+
+				expect(fileDisplayContainer.classList).not.toContain("w-33");
+			}
+		);
+
+		it.each`
+			screenSize       | px
+			${"extra small"} | ${599}
+			${"small"}       | ${600}
+			${"medium"}      | ${960}
+			${"large"}       | ${1280}
+		`(
+			"should not have class file-information for $screenSize display sizes",
+			({ px: windowWidth }) => {
+				const { wrapper } = setup({
+					isListBoard: false,
+					windowWidth,
+				});
+
+				const fileDisplayContainer =
+					wrapper.getComponent(FileDescription).element.parentElement;
+
+				expect(fileDisplayContainer.classList).not.toContain(
+					"file-information"
+				);
+			}
+		);
+	});
 
 	describe("file display", () => {
 		it("should render file display component", () => {
@@ -150,6 +388,60 @@ describe("FileContent", () => {
 			});
 		});
 
+		describe("show menu", () => {
+			it("should pass true when not a pdf, video or audio file and preview url is not defined", () => {
+				const { wrapper } = setup({
+					mimeType: "test",
+					previewUrl: undefined,
+				});
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.showmenu).toBe("true");
+			});
+
+			it("should pass false when preview url is defined", () => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+					previewUrl: undefined,
+				});
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
+
+			it("should pass false when pdf file", () => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+				});
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
+
+			it("should pass false when video file", () => {
+				const { wrapper } = setup({
+					mimeType: "video/mp4",
+				});
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
+
+			it("should pass false when audio file", () => {
+				const { wrapper } = setup({
+					mimeType: "audio/mp4",
+				});
+
+				const props = wrapper.findComponent(FileDescription).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
+		});
+
 		describe("file description src", () => {
 			it("should be undefined when not a pdf file", () => {
 				const { wrapper } = setup();
@@ -169,17 +461,7 @@ describe("FileContent", () => {
 		});
 	});
 
-	it("should pass props to ContentElementFooter", () => {
-		const { wrapper, fileProperties } = setup();
-
-		const contentElementFooter = wrapper.findComponent(ContentElementFooter);
-
-		expect(contentElementFooter.props()).toEqual({
-			fileProperties,
-		});
-	});
-
-	describe(" file inputs", () => {
+	describe("file inputs", () => {
 		it("should pass props to FileInputs", () => {
 			const { wrapper, fileProperties } = setup();
 
@@ -214,6 +496,18 @@ describe("FileContent", () => {
 		});
 	});
 
+	describe("content element footer", () => {
+		it("should pass props to ContentElementFooter", () => {
+			const { wrapper, fileProperties } = setup();
+
+			const contentElementFooter = wrapper.findComponent(ContentElementFooter);
+
+			expect(contentElementFooter.props()).toEqual({
+				fileProperties,
+			});
+		});
+	});
+
 	describe("file alerts", () => {
 		it("should pass props to FileAlert", () => {
 			const { wrapper, alerts } = setup();
@@ -238,5 +532,3 @@ describe("FileContent", () => {
 		});
 	});
 });
-
-// TODO: add test for row style
