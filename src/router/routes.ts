@@ -231,7 +231,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		beforeEnter: createPermissionGuard(["news_edit"]),
 	},
 	{
-		// TODO BC-7822, BC-7823 target this route at new rooms page
+		// TODO BC-7822, BC-7823 target this route at new rooms page and replace the redirect with the new component used
 		path: `/rooms`,
 		redirect: { name: "course-room-overview" },
 		name: "rooms",
