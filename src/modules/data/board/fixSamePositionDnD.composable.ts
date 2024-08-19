@@ -12,7 +12,7 @@ export const useForceRender = (id: string) => {
 	};
 
 	const getRenderKey = (): number => {
-		renderKeyList[id] = renderKeyList[id] || getMaxRenderKey() + 1;
+		if (!renderKeyList[id]) generateRenderKey();
 		return renderKeyList[id];
 	};
 
