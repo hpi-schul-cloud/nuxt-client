@@ -1,5 +1,5 @@
 <template>
-	<BoardMenu scope="element">
+	<BoardMenu scope="element" data-testid="deleted-element-menu-btn">
 		<BoardMenuActionDelete @click="onDelete" />
 	</BoardMenu>
 </template>
