@@ -17,23 +17,25 @@
 			:model-value="!!badgeIcon"
 			:icon="badgeIcon"
 		>
-			<v-avatar
-				:color="avatarColor"
-				:class="avatarClass"
-				:aria-label="avatarAriaLabel"
-				:rounded="condenseLayout ? 0 : 'lg'"
-				:size="size"
-				:tabindex="condenseLayout ? '-1' : '0'"
-				@click="onClick"
-				@dragenter.prevent.stop="dragEnter"
-				@keypress.enter="onClick"
-				role="button"
-				data-testid="course-icon"
-			>
-				<span :class="avatarTextClass" data-testid="course-short-title">
-					{{ item.shortTitle }}
-				</span>
-			</v-avatar>
+			<a :href="roomAddress" class="room-link">
+				<v-avatar
+					:color="avatarColor"
+					:class="avatarClass"
+					:aria-label="avatarAriaLabel"
+					:rounded="condenseLayout ? 0 : 'lg'"
+					:size="size"
+					:tabindex="condenseLayout ? '-1' : '0'"
+					@click="onClick"
+					@dragenter.prevent.stop="dragEnter"
+					@keypress.enter="onClick"
+					role="button"
+					data-testid="course-icon"
+				>
+					<span :class="avatarTextClass" data-testid="course-short-title">
+						{{ item.shortTitle }}
+					</span>
+				</v-avatar>
+			</a>
 		</v-badge>
 		<div
 			v-if="!condenseLayout"
@@ -47,14 +49,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, PropType, ref } from "vue";
 import { mdiLock, mdiSync } from "@/components/icons/material";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { ItemType } from "../organisms/RoomAvatarIterator.vue";
 
 const props = defineProps({
 	item: {
-		type: Object,
+		type: Object as PropType<ItemType>,
 		required: true,
 	},
 	size: {
@@ -127,6 +130,10 @@ const avatarColor = computed(() =>
 	stillBeingCopied.value ? undefined : props.item.displayColor
 );
 
+const roomAddress = computed(() => {
+	return `/rooms/${props.item.id}`;
+});
+
 const title = computed(() => {
 	if (props.item.copyingSince) {
 		return t("components.molecules.copyResult.courseCopy.info");
@@ -152,15 +159,10 @@ const isDragging = ref(false);
 
 const onClick = () => {
 	if (!props.condenseLayout && stillBeingCopied.value === false) {
-		if (props.item.to) {
-			router.push({
-				path: `/rooms/${props.item.id}`,
-			});
-			return;
-		}
-		if (props.item.href) {
-			window.location.href = `/rooms/${props.item.id}`;
-		}
+		router.push({
+			path: roomAddress.value,
+		});
+		return;
 	}
 };
 
@@ -197,6 +199,10 @@ const dropAvatar = () => {
 	&:focus {
 		outline-offset: 2px;
 	}
+}
+
+.room-link {
+	text-decoration: none;
 }
 
 .single-avatar {
