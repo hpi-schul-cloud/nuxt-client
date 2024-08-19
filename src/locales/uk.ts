@@ -325,7 +325,14 @@ export default {
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
-	"components.board.menu.element": "Налаштування елемента",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Налаштування спільного текстового редактора",
+	"components.board.menu.drawingElement": "Налаштування дошки",
+	"components.board.menu.externalToolElement":
+		"Налаштування зовнішнього інструменту",
+	"components.board.menu.fileElement": "Налаштування файлу",
+	"components.board.menu.linkElement": "Налаштування посилання",
+	"components.board.menu.submissionElement": "Налаштування Подання",
 	"components.board.notifications.errors.fileNameExists":
 		"Файл з такою назвою вже існує.",
 	"components.board.notifications.errors.fileServiceNotAvailable":

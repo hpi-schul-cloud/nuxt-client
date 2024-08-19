@@ -324,7 +324,14 @@ export default {
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
-	"components.board.menu.element": "Configuración del elemento",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Configuración del etherpad",
+	"components.board.menu.drawingElement": "Configuración de la pizarra",
+	"components.board.menu.externalToolElement":
+		"Configuración de la herramienta externa",
+	"components.board.menu.fileElement": "Configuración del archivo",
+	"components.board.menu.linkElement": "Configuración del enlace",
+	"components.board.menu.submissionElement": "Configuración del envío",
 	"components.board.notifications.errors.fileNameExists":
 		"Ya existe un archivo con este nombre.",
 	"components.board.notifications.errors.fileServiceNotAvailable":

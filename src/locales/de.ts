@@ -321,7 +321,13 @@ export default {
 	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
-	"components.board.menu.element": "Element-Einstellungen",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Etherpad-Einstellungen",
+	"components.board.menu.drawingElement": "Whiteboard-Einstellungen",
+	"components.board.menu.externalToolElement": "Externes Tool-Einstellungen",
+	"components.board.menu.fileElement": "Datei-Einstellungen",
+	"components.board.menu.linkElement": "Link-Einstellungen",
+	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
 	"components.board.notifications.errors.fileNameExists":
 		"Es existiert bereits eine Datei mit diesem Namen.",
 	"components.board.notifications.errors.fileServiceNotAvailable":

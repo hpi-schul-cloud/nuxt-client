@@ -50,7 +50,6 @@ provide(MENU_SCOPE, scope.value);
 
 const { t } = useI18n();
 
-// TODO: Decide with UX if elements should have components.board.menu.element or own language keys
 const ariaLabelForScope: Record<BoardMenuScope, string> = {
 	board: "components.board.menu.board",
 	column: "components.board.menu.column",

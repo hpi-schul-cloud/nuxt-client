@@ -319,7 +319,12 @@ export default {
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
-	"components.board.menu.element": "Element settings",
+	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",
+	"components.board.menu.drawingElement": "Whiteboard settings",
+	"components.board.menu.externalToolElement": "Externeal tool settings",
+	"components.board.menu.fileElement": "File settings",
+	"components.board.menu.linkElement": "Link settings",
+	"components.board.menu.submissionElement": "Submission settings",
 	"components.board.notifications.errors.fileNameExists":
 		"A file with this name already exists.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
