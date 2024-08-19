@@ -1,10 +1,10 @@
 import { useForceRender } from "./fixSamePositionDnD.composable";
 
 describe("fixSamePositionDnD", () => {
-	it("should add 'id' to the list", () => {
+	it("should set render key to the list", () => {
 		const { getRenderKey } = useForceRender("test-id-#1");
-		getRenderKey();
-		expect(getRenderKey()).toBe(1);
+		const renderKey = getRenderKey();
+		expect(renderKey).toBe(1);
 	});
 
 	it('should increase the render key when "generateRenderKey" is called', () => {
