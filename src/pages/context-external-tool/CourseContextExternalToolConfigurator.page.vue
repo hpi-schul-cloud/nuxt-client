@@ -24,11 +24,11 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/room";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 } from "@/utils/inject";
 import { RenderHTML } from "@feature-render-html";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
@@ -42,14 +42,18 @@ const props = defineProps({
 });
 
 const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const roomModule: RoomModule = injectStrict(ROOM_MODULE_KEY);
+const courseRoomDetailsModule: CourseRoomDetailsModule = injectStrict(
+	COURSE_ROOM_DETAILS_MODULE_KEY
+);
 
 const { t } = useI18n();
 
 const contextRoute = computed(() => `/rooms/${props.contextId}`);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	const crumbs = [{ title: t("common.words.courses"), to: "/rooms-overview/" }];
+	const crumbs = [
+		{ title: t("common.words.courses"), to: "/rooms/courses-overview/" },
+	];
 
 	if (courseTitle.value) {
 		crumbs.push({ title: courseTitle.value, to: contextRoute });
@@ -59,7 +63,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const courseTitle: ComputedRef<string> = computed(
-	() => roomModule.getRoomData.title
+	() => courseRoomDetailsModule.getRoomData.title
 );
 
 const router: Router = useRouter();
@@ -85,6 +89,6 @@ const contextExternalToolConfigurator: Ref<InstanceType<
 onMounted(async () => {
 	await contextExternalToolConfigurator.value?.fetchData();
 
-	await roomModule.fetchContent(props.contextId);
+	await courseRoomDetailsModule.fetchContent(props.contextId);
 });
 </script>

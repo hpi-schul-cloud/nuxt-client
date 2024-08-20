@@ -53,7 +53,7 @@ export default class ShareModule extends VuexModule {
 					shareTokenPayload
 				);
 			if (!shareTokenResult) return undefined;
-			const shareUrl = `${window.location.origin}/rooms-overview?import=${shareTokenResult.data.token}`;
+			const shareUrl = `${window.location.origin}/rooms/courses-overview?import=${shareTokenResult.data.token}`;
 			this.setShareUrl(shareUrl);
 			return shareTokenResult.data;
 		} catch {
