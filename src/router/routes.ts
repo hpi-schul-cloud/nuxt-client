@@ -236,7 +236,8 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		redirect: { name: "course-room-overview" },
 		name: "rooms",
 	},
-	// TODO Is this redirect really necessary? How likely is it that there are bookmarks?
+	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
+	// So we have to replace the reference there by "course-room-list" path.
 	{
 		path: "/rooms-list",
 		redirect: { name: "course-room-list" },
