@@ -5,12 +5,17 @@
 		tabindex="-1"
 	>
 		<ContentElementBar
-			:hasGreyBackground="true"
+			:has-grey-background="true"
 			:icon="mdiLink"
-			:hasRowStyle="!!imageUrl && isSmallorLargerListBoard"
+			:has-row-style="!!imageUrl && isSmallOrLargerListBoard"
 		>
 			<template #display v-if="imageUrl">
-				<v-img :src="imageUrl" alt="" class="rounded-t" />
+				<v-img
+					:src="imageUrl"
+					alt=""
+					:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
+					:cover="isSmallOrLargerListBoard"
+				/>
 			</template>
 			<template #title>
 				{{ title }}
@@ -63,7 +68,7 @@ const linkContentElementDisplay = ref(null);
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallorLargerListBoard = computed(() => {
+const isSmallOrLargerListBoard = computed(() => {
 	return smAndUp.value && isListLayout.value;
 });
 </script>

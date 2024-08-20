@@ -29,7 +29,7 @@
 				'bg-surface-light': props.hasGreyBackground === true,
 				'content-element-bar-texts-listboard': hasRowStyle,
 			}"
-			class="content-element-bar-texts rounded-b py-4"
+			class="content-element-bar-texts py-4"
 		>
 			<div
 				v-if="$slots.title"

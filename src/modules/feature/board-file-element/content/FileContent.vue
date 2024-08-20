@@ -132,10 +132,10 @@ const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
 const hasRowStyle = computed(() => {
-	const isSmallorLargerListBoard = smAndUp.value && isListLayout.value;
+	const isSmallOrLargerListBoard = smAndUp.value && isListLayout.value;
 
 	return (
-		isSmallorLargerListBoard &&
+		isSmallOrLargerListBoard &&
 		hasPdfMimeType.value &&
 		props.fileProperties.previewUrl
 	);
