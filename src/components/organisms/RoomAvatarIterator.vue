@@ -33,7 +33,7 @@
 <script setup lang="ts">
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 
-export type ItemType = {
+type ItemType = {
 	id: string;
 	title: string;
 	shortTitle: string;
@@ -41,13 +41,6 @@ export type ItemType = {
 	xPosition: number;
 	yPosition: number;
 	to: string;
-	startDate: string;
-	untilDate: string;
-	titleDate: string;
-	href: string;
-	isSynchronized: boolean;
-	notification: boolean;
-	copyingSince: string;
 };
 
 defineProps({
