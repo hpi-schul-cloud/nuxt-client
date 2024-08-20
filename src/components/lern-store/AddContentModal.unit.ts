@@ -219,7 +219,7 @@ describe("AddContentModal with real Vuex course-store", () => {
 
 		const wrapper = mount(AddContentModal, {
 			global: {
-				plugins: [store, createTestingVuetify(), createTestingI18n()],
+				plugins: [store, createTestingVuetify()],
 			},
 		});
 
