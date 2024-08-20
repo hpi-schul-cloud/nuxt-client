@@ -294,16 +294,16 @@ const limit: Ref<number> = ref(10);
 const skip: Ref<number> = ref(0);
 
 const schulconnexExternalRoleNamesMapping: Record<string, string> = {
-	["Lehr"]: t(
+	Lehr: t(
 		"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher"
 	),
-	["Lern"]: t(
+	Lern: t(
 		"components.molecules.importUsersMatch.externalRoleName.schulconnex.student"
 	),
-	["Leit"]: t(
+	Leit: t(
 		"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager"
 	),
-	["OrgAdmin"]: t(
+	OrgAdmin: t(
 		"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin"
 	),
 };
