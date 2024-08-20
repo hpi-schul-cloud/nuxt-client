@@ -9,7 +9,11 @@ import {
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useBoardStore, useSocketConnection } from "@data-board";
+import {
+	useBoardStore,
+	useSocketConnection,
+	useForceRender,
+} from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
@@ -36,6 +40,9 @@ import { useBoardSocketApi } from "./boardSocketApi.composable";
 jest.mock("../socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
+jest.mock("../fixSamePositionDnD.composable");
+const mockedUseForceRender = jest.mocked(useForceRender);
+
 jest.mock("./boardRestApi.composable");
 const mockedUseBoardRestApi = jest.mocked(useBoardRestApi);
 
@@ -59,6 +66,7 @@ describe("useBoardSocketApi", () => {
 	let mockedSharedLastCreatedElementActions: DeepMocked<
 		ReturnType<typeof useSharedLastCreatedElement>
 	>;
+	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -89,6 +97,9 @@ describe("useBoardSocketApi", () => {
 		mockedSharedLastCreatedElement.mockReturnValue(
 			mockedSharedLastCreatedElementActions
 		);
+		mockedUseForceRenderHandler =
+			createMock<ReturnType<typeof useForceRender>>();
+		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
 	});
 
 	it("should be defined", () => {
@@ -176,6 +187,7 @@ describe("useBoardSocketApi", () => {
 			dispatch(BoardActions.moveCardSuccess(payload));
 
 			expect(boardStore.moveCardSuccess).toHaveBeenCalledWith(payload);
+			expect(mockedUseForceRenderHandler.generateRenderKey).toHaveBeenCalled();
 		});
 
 		it("should call moveColumnSuccess for corresponding action", () => {

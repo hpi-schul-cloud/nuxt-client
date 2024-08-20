@@ -1,11 +1,11 @@
 import { VideoConferenceScope } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
-import RoomModule from "@/store/room";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import VideoConferenceModule from "@/store/video-conference";
 import {
 	AUTH_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -51,7 +51,7 @@ describe("RoomVideoConferenceSection", () => {
 			...videoConferenceModuleGetter,
 		});
 
-		const roomModule = createModuleMocks(RoomModule, {
+		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomData: {
 				roomId: props.roomId,
 				title: "roomName",
@@ -68,7 +68,7 @@ describe("RoomVideoConferenceSection", () => {
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
 				mocks: {
 					$t: (key: string, dynamic?: object): string =>
@@ -82,7 +82,7 @@ describe("RoomVideoConferenceSection", () => {
 			wrapper,
 			authModule,
 			videoConferenceModule,
-			roomModule,
+			courseRoomDetailsModule,
 		};
 	};
 
@@ -518,29 +518,30 @@ describe("RoomVideoConferenceSection", () => {
 
 	describe("when open videoconference configuration dialog", () => {
 		const setup = () => {
-			const { wrapper, videoConferenceModule, roomModule } = getWrapper(
-				{
-					roomId: "roomId",
-				},
-				["start_meeting"],
-				false,
-				{
-					getVideoConferenceInfo: {
-						state: VideoConferenceState.NOT_STARTED,
-						options: {
-							everyAttendeeJoinsMuted: false,
-							moderatorMustApproveJoinRequests: true,
-							everybodyJoinsAsModerator: false,
-						},
+			const { wrapper, videoConferenceModule, courseRoomDetailsModule } =
+				getWrapper(
+					{
+						roomId: "roomId",
 					},
-					getLoading: true,
-				}
-			);
+					["start_meeting"],
+					false,
+					{
+						getVideoConferenceInfo: {
+							state: VideoConferenceState.NOT_STARTED,
+							options: {
+								everyAttendeeJoinsMuted: false,
+								moderatorMustApproveJoinRequests: true,
+								everybodyJoinsAsModerator: false,
+							},
+						},
+						getLoading: true,
+					}
+				);
 
 			return {
 				wrapper,
 				videoConferenceModule,
-				roomModule,
+				courseRoomDetailsModule,
 			};
 		};
 

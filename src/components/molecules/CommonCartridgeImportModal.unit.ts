@@ -1,4 +1,4 @@
-import RoomsModule from "@/store/rooms";
+import CourseRoomListModule from "@/store/course-room-list";
 import CommonCartridgeImportModal from "./CommonCartridgeImportModal.vue";
 import { mount } from "@vue/test-utils";
 import LoadingStateModule from "@/store/loading-state";
@@ -7,7 +7,7 @@ import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOMS_MODULE_KEY,
+	COURSE_ROOM_LIST_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -21,7 +21,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 		document.body.setAttribute("data-app", "true");
 
 		const notifierModuleMock = createModuleMocks(NotifierModule);
-		const roomsModuleMock = createModuleMocks(RoomsModule, {
+		const roomsModuleMock = createModuleMocks(CourseRoomListModule, {
 			getAllElements: [],
 		});
 		const commonCartridgeImportModule = createModuleMocks(
@@ -36,7 +36,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 					[LOADING_STATE_MODULE_KEY.valueOf()]:
 						createModuleMocks(LoadingStateModule),
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-					[ROOMS_MODULE_KEY.valueOf()]: roomsModuleMock,
+					[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: roomsModuleMock,
 					[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]:
 						commonCartridgeImportModule,
 				},
