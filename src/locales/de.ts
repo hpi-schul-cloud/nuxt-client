@@ -991,6 +991,8 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Bitte verwenden Sie ein valides URL Format",
 	"pages.administration.migration.back": "Zurück",
+	"pages.administration.migration.clearAutoMatches":
+		"Automatische Verknüpfungen zurücksetzen",
 	"pages.administration.migration.backToAdministration":
 		"Zurück zu Administration",
 	"pages.administration.migration.brbSchulportal": "Schulportal",

@@ -183,12 +183,22 @@
 					<VStepperWindowItem :value="2" data-testid="migration_importUsers">
 						<ImportUsers />
 						<div class="d-flex justify-space-between pa-3">
-							<VBtn
-								@click="cancelMigration()"
-								data-testid="import-users-cancel-migration-btn"
-							>
-								{{ t("common.actions.cancel") }}
-							</VBtn>
+							<div>
+								<VBtn
+									@click="cancelMigration()"
+									data-testid="import-users-cancel-migration-btn"
+								>
+									{{ t("common.actions.cancel") }}
+								</VBtn>
+								<VBtn
+									class="ml-2"
+									@click="showClearAutoMatchesModal()"
+									data-testid="import-users-clear-auto-matches-btn"
+								>
+									{{ t("pages.administration.migration.clearAutoMatches") }}
+								</VBtn>
+							</div>
+
 							<div>
 								<VBtn @click="migrationStep = 1">
 									{{ t("pages.administration.migration.back") }}
@@ -773,6 +783,16 @@ const redirectToAdminPage = async () => {
 		path: "/administration/school-settings",
 		query: { openPanels: "migration" },
 	});
+};
+
+const showClearAutoMatchesModal = async () => {
+	// TODO: logic for showing modal
+	return;
+};
+
+const clearAllAutoMatches = async () => {
+	// TODO: API call
+	return;
 };
 
 watch(migrationStep, async (val) => {

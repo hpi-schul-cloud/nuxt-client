@@ -1015,6 +1015,8 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Por favor, utilice un formato de URL válido",
 	"pages.administration.migration.back": "Paso anterior",
+	"pages.administration.migration.clearAutoMatches":
+		"Restablecer accesos directos automáticos",
 	"pages.administration.migration.backToAdministration":
 		"Volver a Administración",
 	"pages.administration.migration.brbSchulportal": "weBBSchule",

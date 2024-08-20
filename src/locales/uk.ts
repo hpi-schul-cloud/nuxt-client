@@ -999,6 +999,8 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Має відповідати дійсному формату URL-адреси",
 	"pages.administration.migration.back": "Назад",
+	"pages.administration.migration.clearAutoMatches":
+		"Скинути автоматичні ярлики",
 	"pages.administration.migration.backToAdministration":
 		"Повернутися до адміністрації",
 	"pages.administration.migration.brbSchulportal": "weBBSchule",

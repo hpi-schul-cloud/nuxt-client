@@ -988,6 +988,7 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Please match a valid URL format",
 	"pages.administration.migration.back": "Back",
+	"pages.administration.migration.clearAutoMatches": "Reset automatic bindings",
 	"pages.administration.migration.backToAdministration":
 		"Back to administration",
 	"pages.administration.migration.brbSchulportal": "weBBSchule",
