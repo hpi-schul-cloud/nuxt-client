@@ -10,7 +10,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/room";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -19,7 +19,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -34,7 +34,7 @@ import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
-import RoomDetailsPage from "./RoomDetails.page.vue";
+import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import DefaultWireframe from "../../components/templates/DefaultWireframe.vue";
@@ -117,7 +117,7 @@ let loadingStateModuleMock: LoadingStateModule;
 let notifierModule: NotifierModule;
 let shareModule: ShareModule;
 let downloadModule: CommonCartridgeExportModule;
-let roomModule: RoomModule;
+let courseRoomDetailsModule: CourseRoomDetailsModule;
 let authModule: AuthModule;
 
 const getWrapper = (
@@ -148,7 +148,7 @@ const getWrapper = (
 		startShareFlow: jest.fn(),
 		resetShareFlow: jest.fn(),
 	});
-	roomModule = createModuleMocks(RoomModule, {
+	courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 		fetchContent: jest.fn(),
 		getRoomData: mockData,
 		getPermissionData: permissionData,
@@ -170,7 +170,7 @@ const getWrapper = (
 		.spyOn(window, "matchMedia")
 		.mockReturnValue(createMock<MediaQueryList>());
 
-	return mount(RoomDetailsPage, {
+	return mount(CourseRoomDetailsPage, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			mocks: {
@@ -184,7 +184,7 @@ const getWrapper = (
 				[SHARE_MODULE_KEY.valueOf()]: shareModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModule,
-				[ROOM_MODULE_KEY.valueOf()]: roomModule,
+				[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 			},
 			stubs: {
@@ -196,7 +196,7 @@ const getWrapper = (
 	});
 };
 
-describe("@/pages/RoomDetails.page.vue", () => {
+describe("@/pages/CourseRoomDetails.page.vue", () => {
 	beforeEach(() => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
@@ -220,7 +220,7 @@ describe("@/pages/RoomDetails.page.vue", () => {
 	it("should fetch data", async () => {
 		getWrapper();
 
-		expect(roomModule.fetchContent).toHaveBeenCalled();
+		expect(courseRoomDetailsModule.fetchContent).toHaveBeenCalled();
 	});
 
 	it("'to course files' button should have correct path", () => {
