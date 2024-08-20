@@ -457,6 +457,9 @@ const mapExternalRoleNames = (externalRoleNames: string[]) => {
 		.map((role) => {
 			if (props.isNbc) {
 				const userFriendlyRoleName = schulconnexExternalRoleNamesMapping[role];
+				if (!userFriendlyRoleName) {
+					return role;
+				}
 				return userFriendlyRoleName;
 			}
 			return role;
