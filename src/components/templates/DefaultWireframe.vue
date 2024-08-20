@@ -128,7 +128,7 @@ const showBorder = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);

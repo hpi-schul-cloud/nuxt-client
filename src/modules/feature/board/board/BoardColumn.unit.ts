@@ -4,7 +4,11 @@ import {
 	envsFactory,
 } from "@@/tests/test-utils/factory";
 import { shallowMount } from "@vue/test-utils";
-import { useBoardPermissions, useBoardStore } from "@data-board";
+import {
+	useBoardPermissions,
+	useBoardStore,
+	useForceRender,
+} from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
@@ -32,8 +36,12 @@ const mockedUserPermissions = jest.mocked(useBoardPermissions);
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
+jest.mock("@data-board/fixSamePositionDnD.composable");
+const mockedUseForceRender = jest.mocked(useForceRender);
+
 describe("BoardColumn", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
 
 	beforeEach(() => {
 		setupStores({ envConfigModule: EnvConfigModule });
@@ -45,16 +53,22 @@ describe("BoardColumn", () => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-	});
 
-	const cards = cardSkeletonResponseFactory.buildList(3);
-	const column = columnResponseFactory.build({
-		cards,
+		mockedUseForceRenderHandler =
+			createMock<ReturnType<typeof useForceRender>>();
+		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
 	});
 
 	const setup = (options?: {
 		permissions?: Partial<BoardPermissionChecks>;
+		cardsCount?: number;
 	}) => {
+		const cards = cardSkeletonResponseFactory.buildList(
+			options?.cardsCount ?? 3
+		);
+		const column = columnResponseFactory.build({
+			cards,
+		});
 		document.body.setAttribute("data-app", "true");
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
@@ -91,6 +105,11 @@ describe("BoardColumn", () => {
 			const { wrapper } = setup();
 			expect(wrapper.findComponent(BoardColumnVue).exists()).toBe(true);
 		});
+
+		it("should trigger 'getRenderKey' method", () => {
+			setup();
+			expect(mockedUseForceRenderHandler.getRenderKey).toHaveBeenCalled();
+		});
 	});
 
 	describe("when a card moved ", () => {
@@ -121,6 +140,35 @@ describe("BoardColumn", () => {
 			containerComponent.vm.$emit("end", emitObject);
 
 			expect(store.moveCardRequest).toHaveBeenCalled();
+		});
+
+		describe("when a card is moved to its column and the same position", () => {
+			it("should not call 'moveCardRequest' method", async () => {
+				const { wrapper, store } = setup({ cardsCount: 1 });
+
+				const emitObject = {
+					item: {
+						dataset: {
+							cardId: "card-id",
+						},
+					},
+					to: {
+						dataset: {
+							columnId: "same-column-id",
+						},
+					},
+					from: {
+						dataset: {
+							columnId: "same-column-id",
+						},
+					},
+				};
+
+				const containerComponent = wrapper.findComponent({ name: "Sortable" });
+				containerComponent.vm.$emit("end", emitObject);
+
+				expect(store.moveCardRequest).not.toHaveBeenCalled();
+			});
 		});
 	});
 

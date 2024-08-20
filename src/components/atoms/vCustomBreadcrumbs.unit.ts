@@ -12,7 +12,9 @@ describe("@/components/atoms/vCustomBreadcrumbs", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				breadcrumbs: [{ title: "Cursos actuales", to: "/rooms-overview" }],
+				breadcrumbs: [
+					{ title: "Cursos actuales", to: "/rooms/courses-overview" },
+				],
 			},
 		});
 
@@ -26,7 +28,7 @@ describe("@/components/atoms/vCustomBreadcrumbs", () => {
 			name: "v-breadcrumbs-item",
 		});
 
-		expect(breadcrumbsItem.props().to).toStrictEqual("/rooms-overview");
+		expect(breadcrumbsItem.props().to).toStrictEqual("/rooms/courses-overview");
 		expect(breadcrumbsItem.element.innerHTML).toContain("Cursos actuales");
 	});
 });

@@ -5,7 +5,9 @@ import ProgressModal from "./ProgressModal.vue";
 describe("@/components/molecules/ProgressModal", () => {
 	it(`check props are set correctly `, () => {
 		const wrapper = mount(ProgressModal, {
-			plugins: [createTestingVuetify()],
+			global: {
+				plugins: [createTestingVuetify()],
+			},
 			props: {
 				title: "title",
 				description: "description",
@@ -14,7 +16,11 @@ describe("@/components/molecules/ProgressModal", () => {
 			},
 		});
 
-		expect(wrapper.text()).toContain("title");
-		expect(wrapper.text()).toContain("description");
+		const dialogCard = wrapper
+			.findComponent({ name: "v-dialog" })
+			.getComponent({ name: "v-card" });
+
+		expect(dialogCard.text()).toContain("title");
+		expect(dialogCard.text()).toContain("description");
 	});
 });

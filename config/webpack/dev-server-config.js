@@ -1,10 +1,10 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
-const { isVueClient } = require("../src/router/vue-client-route");
+const { isVueClient } = require("../../src/router/vue-client-route");
 const {
 	isServer,
 	isFileStorage,
 	isH5pEditor,
-} = require("../src/router/server-route");
+} = require("../../src/router/server-route");
 const url = require("url");
 
 const createLegacyClientProxy = () => {
@@ -47,6 +47,8 @@ const createDevServerConfig = () => {
 
 	const devServerConfig = {
 		port: 4000,
+		historyApiFallback: true,
+
 		setupMiddlewares: (middlewares, devServer) => {
 			if (!devServer) {
 				throw new Error("webpack-dev-server is not defined");

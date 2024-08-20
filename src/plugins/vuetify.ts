@@ -1,4 +1,4 @@
-import "vuetify/styles";
+import "@/styles/global.scss";
 import { createVuetify } from "vuetify";
 
 import theme from "@/vuetify.options";

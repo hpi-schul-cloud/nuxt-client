@@ -179,7 +179,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 @import "@/utils/multiline-ellipsis.scss";
 
 .v-avatar {
@@ -188,6 +188,10 @@ export default defineComponent({
 	cursor: pointer;
 	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 0.5em;
+
+	&:focus {
+		outline-offset: 2px;
+	}
 }
 
 .single-avatar {

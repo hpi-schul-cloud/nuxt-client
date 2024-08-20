@@ -1,5 +1,5 @@
 <template>
-	<div :style="columnStyle" :class="columnClasses">
+	<div :style="columnStyle" :class="columnClasses" :key="renderKey">
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
@@ -72,7 +72,11 @@ import { useDebounceFn } from "@vueuse/core";
 import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { useBoardPermissions, useBoardStore } from "@data-board";
+import {
+	useBoardPermissions,
+	useBoardStore,
+	useForceRender,
+} from "@data-board";
 import { useTouchDetection } from "@util-device-detection";
 import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
@@ -197,6 +201,10 @@ export default defineComponent({
 				item?.parentNode?.removeChild(item);
 			}
 
+			if (toColumnId === fromColumnId && props.column.cards.length === 1) {
+				return;
+			}
+
 			boardStore.moveCardRequest({
 				cardId,
 				oldIndex: oldIndex!,
@@ -307,6 +315,10 @@ export default defineComponent({
 			return classes;
 		});
 
+		const columnId = toRef(props, "column").value.id;
+		const { getRenderKey } = useForceRender(columnId);
+		const renderKey = computed(() => getRenderKey());
+
 		return {
 			cardDropPlaceholderOptions,
 			columnClasses,
@@ -331,6 +343,7 @@ export default defineComponent({
 			onUpdateTitle,
 			getChildPayload,
 			reactiveIndex,
+			renderKey,
 			showAddButton,
 			sortableGhostClasses,
 		};

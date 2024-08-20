@@ -28,7 +28,7 @@ const useBoardPageInformation = () => {
 			? [
 					{
 						title: t("common.words.courses"),
-						to: "/rooms-overview",
+						to: "/rooms/courses-overview",
 						disabled: false,
 					},
 					{

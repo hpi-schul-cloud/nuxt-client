@@ -661,7 +661,6 @@ describe("BoardStore", () => {
 			expect(secondColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
 				secondCardId,
 			]);
-
 			expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
 				firstCardId,
 				thirdCardId,

@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, toRef, PropType } from "vue";
+import { computed, PropType } from "vue";
 import { SidebarSingleItem } from "../types";
 import { useRoute } from "vue-router";
 
@@ -34,22 +34,22 @@ const props = defineProps({
 const route = useRoute();
 
 const isActive = computed(() => {
-	const sidebarItem = toRef(props.item);
-
 	const anyCoursePageIsActive =
-		route.path.includes("room") && sidebarItem.value.to === "/rooms-overview";
+		route.path.includes("room") && props.item.to === "/rooms/courses-overview";
 
 	if (anyCoursePageIsActive) {
 		return true;
 	}
 
 	return (
-		route.path.includes(sidebarItem.value.to as string) ||
-		route.path.includes(sidebarItem.value.href as string)
+		route.path.includes(props.item.to as string) ||
+		route.path.includes(props.item.href as string)
 	);
 });
 
-const density = (props.item as SidebarSingleItem).icon ? "default" : "compact";
+const density = computed(() => {
+	return props.item.icon ? "default" : "compact";
+});
 
 const hasIcon = (item: SidebarSingleItem) => {
 	return item.icon !== undefined && item.icon !== "";

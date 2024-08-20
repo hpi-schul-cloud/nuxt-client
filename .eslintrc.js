@@ -95,6 +95,7 @@ module.exports = {
 			globals: {
 				mount: false,
 				shallowMount: false,
+				fail: false,
 			},
 		},
 	],

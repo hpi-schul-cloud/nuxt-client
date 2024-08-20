@@ -145,7 +145,7 @@ import {
 	AUTH_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 
@@ -181,7 +181,7 @@ export default defineComponent({
 		copyModule: { from: COPY_MODULE_KEY },
 		shareModule: { from: SHARE_MODULE_KEY },
 		commonCartridgeExportModule: { from: COMMON_CARTRIDGE_EXPORT_MODULE_KEY },
-		roomModule: { from: ROOM_MODULE_KEY },
+		courseRoomDetailsModule: { from: COURSE_ROOM_DETAILS_MODULE_KEY },
 		authModule: { from: AUTH_MODULE_KEY },
 	},
 	data() {
@@ -197,7 +197,7 @@ export default defineComponent({
 			breadcrumbs: [
 				{
 					title: this.$t("common.words.courses"),
-					to: "/rooms-overview",
+					to: "/rooms/courses-overview",
 					disabled: false,
 				},
 			],
@@ -353,10 +353,10 @@ export default defineComponent({
 			return items;
 		},
 		roomData() {
-			return this.roomModule.getRoomData;
+			return this.courseRoomDetailsModule.getRoomData;
 		},
 		scopedPermissions() {
-			return this.roomModule.getPermissionData || [];
+			return this.courseRoomDetailsModule.getPermissionData || [];
 		},
 		roles() {
 			return this.authModule.getUserRoles;
@@ -449,8 +449,8 @@ export default defineComponent({
 			this.setActiveTab(this.$route.query.tab);
 		}
 
-		await this.roomModule.fetchContent(this.courseId);
-		await this.roomModule.fetchScopePermission({
+		await this.courseRoomDetailsModule.fetchContent(this.courseId);
+		await this.courseRoomDetailsModule.fetchScopePermission({
 			courseId: this.courseId,
 			userId: this.authModule.getUser?.id,
 		});
@@ -507,7 +507,7 @@ export default defineComponent({
 			this.commonCartridgeExportModule.startExportFlow();
 		},
 		async refreshRoom() {
-			await this.roomModule.fetchContent(this.courseId);
+			await this.courseRoomDetailsModule.fetchContent(this.courseId);
 		},
 		async onCopyRoom(courseId) {
 			const copyParams = {
@@ -525,12 +525,12 @@ export default defineComponent({
 					"/rooms/" + copyResult.id.replace(/[^a-z\d]/g, "")
 				);
 			} else {
-				await this.$router.push("/rooms-overview");
+				await this.$router.push("/rooms/courses-overview");
 			}
 		},
 		async onCopyBoardElement(payload) {
 			await this.copy(payload);
-			await this.roomModule.fetchContent(payload.courseId);
+			await this.courseRoomDetailsModule.fetchContent(payload.courseId);
 		},
 		onCopyResultModalClosed() {
 			this.copyModule.reset();
@@ -542,7 +542,7 @@ export default defineComponent({
 				parentId: courseId,
 				layout,
 			};
-			const board = await this.roomModule.createBoard(params);
+			const board = await this.courseRoomDetailsModule.createBoard(params);
 			await this.$router.push(`/rooms/${board.id}/board`);
 		},
 	},
@@ -559,7 +559,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 
 .course-title {
 	overflow: hidden;

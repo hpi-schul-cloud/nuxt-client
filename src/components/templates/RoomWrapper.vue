@@ -41,7 +41,7 @@ import {
 	authModule,
 	commonCartridgeImportModule,
 	envConfigModule,
-	roomsModule,
+	courseRoomListModule,
 } from "@/store";
 import { GroupSelectionDialog } from "@feature-course-sync";
 import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@mdi/js";
@@ -121,11 +121,13 @@ const fabItems: ComputedRef<Fab | undefined> = computed(() => {
 });
 
 const isLoading: ComputedRef<boolean> = computed(() => {
-	return roomsModule.getLoading;
+	return courseRoomListModule.getLoading;
 });
 
 const isEmptyState: ComputedRef<boolean> = computed(() => {
-	return !roomsModule.getLoading && !props.hasRooms && !props.hasImportToken;
+	return (
+		!courseRoomListModule.getLoading && !props.hasRooms && !props.hasImportToken
+	);
 });
 
 const fabItemClickHandler = (event: RoomFabEvent): void => {
@@ -138,7 +140,7 @@ const fabItemClickHandler = (event: RoomFabEvent): void => {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 
 :deep(.v-skeleton-loader__date-picker-days) {
 	justify-content: space-between;
