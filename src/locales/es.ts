@@ -601,8 +601,6 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"Ninguno. El usuario es recién creado.",
 	"components.molecules.importUsersMatch.write": "Introduzca nombre o apellido",
-	"components.molecules.importUsersMatch.externalRoleName.label":
-		"Papel {source}",
 	"components.molecules.importUsersMatch.externalRoleName.none":
 		"No disponible",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":

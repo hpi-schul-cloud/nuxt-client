@@ -598,8 +598,6 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"немає. Обліковий запис буде створено знову.",
 	"components.molecules.importUsersMatch.write": "Введіть ім'я та прізвище",
-	"components.molecules.importUsersMatch.externalRoleName.label":
-		"роль {source}",
 	"components.molecules.importUsersMatch.externalRoleName.none":
 		"Немає в наявності",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":

@@ -44,9 +44,7 @@
 								</VListItemTitle>
 								<VListItemSubtitle>
 									{{ mapRoleNames(editedItem.roleNames) }}
-									{{
-										props.ldapSource === "moin.schule" ? externalRoleText : ""
-									}}
+									{{ isNbc ? externalRoleText : "" }}
 								</VListItemSubtitle>
 								<VListItemSubtitle
 									v-if="editedItem.classNames && editedItem.classNames.length"
@@ -302,22 +300,38 @@ const canSave: ComputedRef<boolean> = computed(() => {
 	return true;
 });
 
-const canDelete = computed(() => {
+const canDelete: ComputedRef<boolean> = computed(() => {
 	return props.editedItem.match && selectedItem.value === null;
 });
 
-const externalRoleText = computed(() => {
+const externalRoleText: ComputedRef<string> = computed(() => {
 	let role = t("components.molecules.importUsersMatch.externalRoleName.none");
-	if (
-		props.editedItem.externalRoleNames &&
-		props.editedItem.externalRoleNames.length
-	) {
+	if (props.editedItem.externalRoleNames?.length) {
 		role = mapExternalRoleNames(props.editedItem.externalRoleNames);
 	}
 
-	const text = `(${t("components.molecules.importUsersMatch.externalRoleName.label", { source: props.ldapSource })}: ${role})`;
+	const text = `(${t("common.labels.role")} ${props.ldapSource}: ${role})`;
 	return text;
 });
+
+const schulconnexExternalRoleNamesMapping: ComputedRef<Record<string, string>> =
+	computed(() => {
+		const roleMapping = {
+			["Lehr"]: t(
+				"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher"
+			),
+			["Lern"]: t(
+				"components.molecules.importUsersMatch.externalRoleName.schulconnex.student"
+			),
+			["Leit"]: t(
+				"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager"
+			),
+			["OrgAdmin"]: t(
+				"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin"
+			),
+		};
+		return roleMapping;
+	});
 
 const getDataFromApi = async (append = false) => {
 	loading.value = true;
@@ -437,35 +451,14 @@ const mapRoleNames = (roleNames: unknown[]) => {
 const mapExternalRoleNames = (externalRoleNames: string[]) => {
 	return externalRoleNames
 		.map((role) => {
-			if (props.ldapSource === "moin.schule") {
-				return mapSchulconnexExternalRoleNames(role);
+			if (props.isNbc) {
+				const userFriendlyRoleName =
+					schulconnexExternalRoleNamesMapping.value[role];
+				return userFriendlyRoleName;
 			}
 			return role;
 		})
 		.join(", ");
-};
-
-const mapSchulconnexExternalRoleNames = (externalRoleName: string) => {
-	switch (externalRoleName) {
-		case "Lehr":
-			return t(
-				"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher"
-			);
-		case "Lern":
-			return t(
-				"components.molecules.importUsersMatch.externalRoleName.schulconnex.student"
-			);
-		case "Leit":
-			return t(
-				"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager"
-			);
-		case "OrgAdmin":
-			return t(
-				"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin"
-			);
-		default:
-			return externalRoleName;
-	}
 };
 
 onMounted(async () => {

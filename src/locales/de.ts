@@ -601,8 +601,6 @@ export default {
 		"Keiner. Benutzer wird neu erstellt.",
 	"components.molecules.importUsersMatch.write":
 		"Vornamen oder Nachnamen eingeben",
-	"components.molecules.importUsersMatch.externalRoleName.label":
-		"Rolle {source}",
 	"components.molecules.importUsersMatch.externalRoleName.none":
 		"Nicht verfügbar",
 	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":

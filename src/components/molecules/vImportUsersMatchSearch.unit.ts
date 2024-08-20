@@ -216,7 +216,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		expect(editedItemUsername.exists()).toBe(false);
 	});
 
-	describe("when the source is not from moin.schule", () => {
+	describe("when the theme is not NBC", () => {
 		const setup = () => {
 			const setupTestProps = {
 				editedItem: {
@@ -231,6 +231,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				},
 				isDialog: true,
 				ldapSource: "ldap-external",
+				isNbc: false,
 			};
 			return {
 				setupTestProps,
@@ -246,12 +247,12 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				.html();
 
 			expect(editedItemElement).not.toContain(
-				"components.molecules.importUsersMatch.externalRoleName.label"
+				`common.labels.role ${setupTestProps.ldapSource}`
 			);
 		});
 	});
 
-	describe("when the source is from moin.schule", () => {
+	describe("when the theme is NBC", () => {
 		describe("when the external role is 'Lern' (Student)", () => {
 			const setup = () => {
 				const adminTestProps = {
@@ -267,6 +268,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 					},
 					isDialog: true,
 					ldapSource: "moin.schule",
+					isNbc: true,
 				};
 				return {
 					adminTestProps,
@@ -285,7 +287,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				expect(editedItemElement).toContain("Mustermann");
 				expect(editedItemElement).toContain("common.roleName.student");
 				expect(editedItemElement).toContain(
-					"(components.molecules.importUsersMatch.externalRoleName.label: " +
+					`common.labels.role ${adminTestProps.ldapSource}: ` +
 						"components.molecules.importUsersMatch.externalRoleName.schulconnex.student)"
 				);
 			});
@@ -305,6 +307,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 					},
 					isDialog: true,
 					ldapSource: "moin.schule",
+					isNbc: true,
 				};
 				return {
 					adminTestProps,
@@ -323,7 +326,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				expect(editedItemElement).toContain("Mustermann");
 				expect(editedItemElement).toContain("common.roleName.teacher");
 				expect(editedItemElement).toContain(
-					"(components.molecules.importUsersMatch.externalRoleName.label: " +
+					`common.labels.role ${adminTestProps.ldapSource}: ` +
 						"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher)"
 				);
 			});
@@ -343,6 +346,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 					},
 					isDialog: true,
 					ldapSource: "moin.schule",
+					isNbc: true,
 				};
 				return {
 					adminTestProps,
@@ -361,7 +365,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				expect(editedItemElement).toContain("Mustermann");
 				expect(editedItemElement).toContain("common.roleName.administrator");
 				expect(editedItemElement).toContain(
-					"(components.molecules.importUsersMatch.externalRoleName.label: " +
+					`common.labels.role ${adminTestProps.ldapSource}: ` +
 						"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager)"
 				);
 			});
@@ -381,6 +385,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 					},
 					isDialog: true,
 					ldapSource: "moin.schule",
+					isNbc: true,
 				};
 				return {
 					adminTestProps,
@@ -399,11 +404,12 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				expect(editedItemElement).toContain("Mustermann");
 				expect(editedItemElement).toContain("common.roleName.administrator");
 				expect(editedItemElement).toContain(
-					"(components.molecules.importUsersMatch.externalRoleName.label: " +
+					`common.labels.role ${adminTestProps.ldapSource}: ` +
 						"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin)"
 				);
 			});
 		});
+
 		describe("when externalRoleNames prop is empty", () => {
 			const setup = () => {
 				const setupTestProps = {
@@ -419,6 +425,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 					},
 					isDialog: true,
 					ldapSource: "moin.schule",
+					isNbc: true,
 				};
 				return {
 					setupTestProps,
