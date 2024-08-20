@@ -230,16 +230,41 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		name: "news-id-edit",
 		beforeEnter: createPermissionGuard(["news_edit"]),
 	},
-	{
-		path: `/rooms/:id(${REGEX_ID})`,
-		component: () => import("@/pages/rooms/RoomDetails.page.vue"),
-		name: "rooms-id",
-	},
 	/* 	{
+		// TODO BC-7822, BC-7823 target this route at new rooms page and replace the redirect with the new component used
 		path: `/rooms`,
-		redirect: { name: "rooms-overview" },
+		redirect: { name: "course-room-overview" },
 		name: "rooms",
 	}, */
+	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
+	// So we have to replace the reference there by "course-room-list" path.
+	{
+		path: "/rooms-list",
+		redirect: { name: "course-room-list" },
+		name: "rooms-list",
+	},
+	{
+		path: "/rooms/courses-list",
+		component: () => import("@/pages/rooms/CourseRoomList.page.vue"),
+		name: "course-room-list",
+	},
+	{
+		path: "/rooms-overview",
+		redirect: { name: "course-room-overview" },
+		name: "rooms-overview",
+	},
+	{
+		path: "/rooms/courses-overview",
+		component: () => import("@/pages/rooms/CourseRoomOverview.page.vue"),
+		name: "course-room-overview",
+	},
+	{
+		// TODO BC-7822, BC-7823 target this route at new room details page
+		// and decide on that page which sub-component (page) has to be rendered
+		path: `/rooms/:id(${REGEX_ID})`,
+		component: () => import("@/pages/rooms/CourseRoomDetails.page.vue"),
+		name: "rooms-id",
+	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
 		component: async () => (await import("@page-board")).ColumnBoardPage,
@@ -247,16 +272,6 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		props: (route: RouteLocationNormalized) => ({
 			boardId: route.params.id,
 		}),
-	},
-	{
-		path: "/rooms-list",
-		component: () => import("@/pages/rooms/RoomList.page.vue"),
-		name: "rooms-list",
-	},
-	{
-		path: "/rooms-overview",
-		component: () => import("@/pages/rooms/RoomOverview.page.vue"),
-		name: "rooms-overview",
 	},
 	{
 		path: "/tasks",

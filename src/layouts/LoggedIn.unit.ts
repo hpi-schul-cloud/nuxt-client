@@ -20,7 +20,7 @@ import { VApp } from "vuetify/lib/components/index.mjs";
 import NewLoggedIn from "./LoggedIn.layout.vue";
 
 jest.mock("vue-router", () => ({
-	useRoute: () => ({ path: "rooms-list" }),
+	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 
 const setup = () => {
