@@ -31,7 +31,6 @@ const mockImportUsers: ImportUserListResponse = {
 			lastName: "Bruns",
 			roleNames: [ImportUserResponseRoleNamesEnum.Student],
 			classNames: ["6a"],
-			externalRoleNames: [],
 		},
 		{
 			flagged: false,
@@ -41,7 +40,6 @@ const mockImportUsers: ImportUserListResponse = {
 			lastName: "Cordes",
 			roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
 			classNames: [],
-			externalRoleNames: [],
 		},
 		{
 			flagged: false,
@@ -54,7 +52,6 @@ const mockImportUsers: ImportUserListResponse = {
 				ImportUserResponseRoleNamesEnum.Teacher,
 			],
 			classNames: ["1c"],
-			externalRoleNames: [],
 		},
 	],
 };

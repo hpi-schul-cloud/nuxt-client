@@ -573,7 +573,6 @@ describe("import-users store actions", () => {
 							importUserId: "abc",
 							loginName: "asdf.asdf",
 							roleNames: [],
-							externalRoleNames: [],
 						},
 						{
 							firstName: "qwer",
@@ -583,7 +582,6 @@ describe("import-users store actions", () => {
 							importUserId: "qwer",
 							loginName: "qwer.qwer",
 							roleNames: [],
-							externalRoleNames: [],
 						},
 					],
 				});
@@ -752,7 +750,6 @@ describe("import-users store actions", () => {
 					importUserId: "extern.1234",
 					loginName: "samuel.vimes",
 					roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
-					externalRoleNames: ["teacher"],
 					match: {
 						firstName: "Samuel",
 						lastName: "Vimes",
@@ -770,7 +767,6 @@ describe("import-users store actions", () => {
 					importUserId: "extern.5678",
 					loginName: "samuel.vimes",
 					roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
-					externalRoleNames: ["teacher"],
 					match: {
 						firstName: "Samuel",
 						lastName: "Vimes",
