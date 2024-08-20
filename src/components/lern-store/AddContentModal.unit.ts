@@ -1,4 +1,5 @@
 import { contentModule } from "@/store";
+import courses from "@/store/courses";
 import ContentModule from "@/store/content";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -203,5 +204,25 @@ describe("@/components/molecules/AddContentModal", () => {
 		expect(wrapper.emitted("update:show-copy-modal", false)).toHaveLength(1);
 		expect(lessonSelection.props("modelValue")).toBeNull();
 		expect(courseSelection.props("modelValue")).toBeNull();
+	});
+});
+
+// This test is necessary to ensure that the real Vuex course-store is functioning correctly.
+// The course-store is only invoked at this point, making it crucial to test it here.
+describe("AddContentModal with real Vuex course-store", () => {
+	it("course options should be defined", () => {
+		const store = createStore({
+			modules: {
+				courses,
+			},
+		});
+
+		const wrapper = mount(AddContentModal, {
+			global: {
+				plugins: [store, createTestingVuetify(), createTestingI18n()],
+			},
+		});
+
+		expect(wrapper.vm.coursesOptions).toBeDefined();
 	});
 });
