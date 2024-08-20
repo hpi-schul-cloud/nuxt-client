@@ -58,7 +58,11 @@ import { useDebounceFn } from "@vueuse/core";
 import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useDisplay } from "vuetify";
-import { useMimeType } from "@/composables/mimeType.composable";
+import {
+	isAudioMimeType,
+	isPdfMimeType,
+	isVideoMimeType,
+} from "@/utils/fileHelper";
 
 const props = defineProps({
 	fileProperties: {
@@ -91,30 +95,36 @@ const onAddAlert = (alert: FileAlert) => {
 	emit("add:alert", alert);
 };
 
-const mimeType = computed(() => props.fileProperties.mimeType);
-const { isVideoMimeType, isPdfMimeType, isAudioMimeType } = useMimeType(
-	mimeType.value
+const hasVideoMimeType = computed(() => {
+	return isVideoMimeType(props.fileProperties.mimeType);
+});
+
+const hasPdfMimeType = computed(() =>
+	isPdfMimeType(props.fileProperties.mimeType)
 );
 
+const hasAudioMimeType = computed(() => {
+	return isAudioMimeType(props.fileProperties.mimeType);
+});
+
 const fileDescriptionSrc = computed(() => {
-	return isPdfMimeType.value ? props.fileProperties.url : undefined;
+	return hasPdfMimeType.value ? props.fileProperties.url : undefined;
 });
 
 const showTitle = computed(() => {
 	return (
-		isPdfMimeType.value ||
+		hasPdfMimeType.value ||
 		(!props.fileProperties.previewUrl &&
-			!isVideoMimeType.value &&
-			!isAudioMimeType.value)
+			!hasVideoMimeType.value &&
+			!hasAudioMimeType.value)
 	);
 });
-
 const showMenu = computed(() => {
 	return (
-		!isPdfMimeType.value &&
+		!hasPdfMimeType.value &&
 		!props.fileProperties.previewUrl &&
-		!isVideoMimeType.value &&
-		!isAudioMimeType.value
+		!hasVideoMimeType.value &&
+		!hasAudioMimeType.value
 	);
 });
 
@@ -126,7 +136,7 @@ const hasRowStyle = computed(() => {
 
 	return (
 		isSmallorLargerListBoard &&
-		isPdfMimeType.value &&
+		hasPdfMimeType.value &&
 		props.fileProperties.previewUrl
 	);
 });
