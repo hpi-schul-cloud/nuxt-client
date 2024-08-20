@@ -201,7 +201,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { UserMatchResponse } from "@/serverApi/v3";
+import { ImportUserResponse, UserMatchResponse } from "@/serverApi/v3";
 import { importUsersModule } from "@/store";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import {
@@ -213,7 +213,15 @@ import {
 	mdiFlagOutline,
 } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
+import {
+	computed,
+	ComputedRef,
+	onMounted,
+	PropType,
+	Ref,
+	ref,
+	watch,
+} from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -225,7 +233,7 @@ const props = defineProps({
 		required: true,
 	},
 	editedItem: {
-		type: Object,
+		type: Object as PropType<ImportUserResponse>,
 		default: () => ({
 			firstName: "",
 			lastName: "",
@@ -285,6 +293,21 @@ const total: Ref<number> = ref(0);
 const limit: Ref<number> = ref(10);
 const skip: Ref<number> = ref(0);
 
+const schulconnexExternalRoleNamesMapping: Record<string, string> = {
+	["Lehr"]: t(
+		"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher"
+	),
+	["Lern"]: t(
+		"components.molecules.importUsersMatch.externalRoleName.schulconnex.student"
+	),
+	["Leit"]: t(
+		"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager"
+	),
+	["OrgAdmin"]: t(
+		"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin"
+	),
+};
+
 const canSave: ComputedRef<boolean> = computed(() => {
 	if (selectedItem.value === null) {
 		return false;
@@ -300,7 +323,7 @@ const canSave: ComputedRef<boolean> = computed(() => {
 	return true;
 });
 
-const canDelete: ComputedRef<boolean> = computed(() => {
+const canDelete: ComputedRef<boolean | undefined> = computed(() => {
 	return props.editedItem.match && selectedItem.value === null;
 });
 
@@ -313,25 +336,6 @@ const externalRoleText: ComputedRef<string> = computed(() => {
 	const text = `(${t("common.labels.role")} ${props.ldapSource}: ${role})`;
 	return text;
 });
-
-const schulconnexExternalRoleNamesMapping: ComputedRef<Record<string, string>> =
-	computed(() => {
-		const roleMapping = {
-			["Lehr"]: t(
-				"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher"
-			),
-			["Lern"]: t(
-				"components.molecules.importUsersMatch.externalRoleName.schulconnex.student"
-			),
-			["Leit"]: t(
-				"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager"
-			),
-			["OrgAdmin"]: t(
-				"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin"
-			),
-		};
-		return roleMapping;
-	});
 
 const getDataFromApi = async (append = false) => {
 	loading.value = true;
@@ -452,8 +456,7 @@ const mapExternalRoleNames = (externalRoleNames: string[]) => {
 	return externalRoleNames
 		.map((role) => {
 			if (props.isNbc) {
-				const userFriendlyRoleName =
-					schulconnexExternalRoleNamesMapping.value[role];
+				const userFriendlyRoleName = schulconnexExternalRoleNamesMapping[role];
 				return userFriendlyRoleName;
 			}
 			return role;
