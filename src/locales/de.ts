@@ -324,7 +324,7 @@ export default {
 	"components.board.menu.collaborativeTextEditorElement":
 		"Etherpad-Einstellungen",
 	"components.board.menu.drawingElement": "Whiteboard-Einstellungen",
-	"components.board.menu.externalToolElement": "Externes Tool-Einstellungen",
+	"components.board.menu.externalToolElement": "Externes-Tool-Einstellungen",
 	"components.board.menu.fileElement": "Datei-Einstellungen",
 	"components.board.menu.linkElement": "Link-Einstellungen",
 	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
