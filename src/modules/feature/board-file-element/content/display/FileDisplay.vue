@@ -1,6 +1,6 @@
 <template>
 	<PdfDisplay
-		v-if="isPdfMimeType && fileProperties.previewUrl"
+		v-if="hasPdfMimeType && fileProperties.previewUrl"
 		:src="fileProperties.url"
 		:preview-src="fileProperties.previewUrl"
 		:name="fileProperties.name"
@@ -20,7 +20,7 @@
 		<slot />
 	</ImageDisplay>
 	<VideoDisplay
-		v-else-if="isVideoMimeType"
+		v-else-if="hasVideoMimeType"
 		:src="fileProperties.url"
 		:name="fileProperties.name"
 		@error="onAddAlert"
@@ -28,7 +28,7 @@
 		<slot />
 	</VideoDisplay>
 	<AudioDisplay
-		v-else-if="isAudioMimeType"
+		v-else-if="hasAudioMimeType"
 		:src="fileProperties.url"
 		@error="onAddAlert"
 	>
@@ -44,7 +44,11 @@ import AudioDisplay from "./audio-display/AudioDisplay.vue";
 import ImageDisplay from "./image-display/ImageDisplay.vue";
 import VideoDisplay from "./video-display/VideoDisplay.vue";
 import PdfDisplay from "./pdf-display/PdfDisplay.vue";
-import { useMimeType } from "@/composables/mimeType.composable";
+import {
+	isAudioMimeType,
+	isPdfMimeType,
+	isVideoMimeType,
+} from "@/utils/fileHelper";
 
 const props = defineProps({
 	fileProperties: {
@@ -55,10 +59,15 @@ const props = defineProps({
 });
 const emit = defineEmits(["video-error", "add:alert"]);
 
-const mimeType = computed(() => props.fileProperties.mimeType);
-const { isVideoMimeType, isPdfMimeType, isAudioMimeType } = useMimeType(
-	mimeType.value
+const hasVideoMimeType = computed(() => {
+	return isVideoMimeType(props.fileProperties.mimeType);
+});
+const hasPdfMimeType = computed(() =>
+	isPdfMimeType(props.fileProperties.mimeType)
 );
+const hasAudioMimeType = computed(() => {
+	return isAudioMimeType(props.fileProperties.mimeType);
+});
 
 const onAddAlert = (alert: FileAlert) => {
 	emit("add:alert", alert);
