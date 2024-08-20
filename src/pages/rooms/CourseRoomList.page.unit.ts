@@ -1,15 +1,15 @@
-import { roomsModule } from "@/store";
+import { courseRoomListModule } from "@/store";
 import { mount } from "@vue/test-utils";
-import RoomList from "./RoomList.page.vue";
+import CourseRoomList from "./CourseRoomList.page.vue";
 import setupStores from "@@/tests/test-utils/setupStores";
-import RoomsModule from "@/store/rooms";
+import CourseRoomListModule from "@/store/course-room-list";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOMS_MODULE_KEY,
+	COURSE_ROOM_LIST_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import LoadingStateModule from "@/store/loading-state";
@@ -22,7 +22,7 @@ import {
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 
 const getWrapper = (device = "desktop") => {
-	return mount(RoomList, {
+	return mount(CourseRoomList, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
@@ -33,7 +33,8 @@ const getWrapper = (device = "desktop") => {
 			[LOADING_STATE_MODULE_KEY.valueOf()]:
 				createModuleMocks(LoadingStateModule),
 			[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-			[ROOMS_MODULE_KEY.valueOf()]: createModuleMocks(RoomsModule),
+			[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]:
+				createModuleMocks(CourseRoomListModule),
 			[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
 				CommonCartridgeImportModule
 			),
@@ -79,14 +80,14 @@ const mockData = [
 	},
 ];
 
-describe("@/pages/room-list.vue", () => {
+describe("@/pages/CourseRoomListPage", () => {
 	beforeEach(() => {
 		setupStores({
-			roomsModule: RoomsModule,
+			courseRoomListModule: CourseRoomListModule,
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
 		});
-		roomsModule.setAllElements(mockData);
+		courseRoomListModule.setAllElements(mockData);
 	});
 
 	describe("when data is not loaded yet", () => {

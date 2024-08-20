@@ -20,7 +20,7 @@ import { SchulcloudTheme } from "@/serverApi/v3";
 import { envsFactory } from "@@/tests/test-utils";
 
 jest.mock("vue-router", () => ({
-	useRoute: () => ({ path: "rooms-list" }),
+	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 
 const setup = (permissions?: string[]) => {
