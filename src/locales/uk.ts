@@ -598,6 +598,16 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"немає. Обліковий запис буде створено знову.",
 	"components.molecules.importUsersMatch.write": "Введіть ім'я та прізвище",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Немає в наявності",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Учитель",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Студент",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Організаційний адміністратор",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Організаційний менеджмент",
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
