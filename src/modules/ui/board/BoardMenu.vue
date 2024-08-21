@@ -67,7 +67,7 @@ const boardMenuAriaLabel = computed(() => {
 	return ariaLabelForScope[scope.value];
 });
 
-const BOARD_SCOPES_WITH_BACKGROUND: Array<BoardMenuScope> = [
+const boardScopesWithBackground: Array<BoardMenuScope> = [
 	"card",
 	"collaborativeTextEditorElement",
 	"drawingElement",
@@ -78,7 +78,7 @@ const BOARD_SCOPES_WITH_BACKGROUND: Array<BoardMenuScope> = [
 ];
 
 const hasBackground = computed<boolean>(() =>
-	BOARD_SCOPES_WITH_BACKGROUND.includes(scope.value)
+	boardScopesWithBackground.includes(scope.value)
 );
 </script>
 
