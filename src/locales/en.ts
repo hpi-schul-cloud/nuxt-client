@@ -589,6 +589,16 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"None. Account will be newly created.",
 	"components.molecules.importUsersMatch.write": "Input first and last name",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Not available",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Teacher",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Student",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Organizational Administrator",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Organizational Management",
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
 	"components.molecules.share.courses.mail.body": "Link to the course:",
 	"components.molecules.share.courses.mail.subject": "Course you can import",

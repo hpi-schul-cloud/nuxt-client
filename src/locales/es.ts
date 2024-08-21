@@ -601,6 +601,16 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"Ninguno. El usuario es recién creado.",
 	"components.molecules.importUsersMatch.write": "Introduzca nombre o apellido",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"No disponible",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Profesor",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Estudiante",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Administrador de organización",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Gestión organizativa",
 	"components.molecules.MintEcFooter.chapters": "Resumen del capítulo",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
