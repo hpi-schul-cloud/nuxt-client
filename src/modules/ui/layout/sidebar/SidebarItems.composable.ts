@@ -23,7 +23,7 @@ export const useSidebarItems = () => {
 		},
 		{
 			title: "global.sidebar.item.courses",
-			to: "/rooms-overview",
+			to: "/rooms/courses-overview",
 			icon: "$mdiSchoolOutline",
 			testId: "Course-Overview",
 		},

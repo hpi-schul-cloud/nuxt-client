@@ -325,7 +325,14 @@ export default {
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
-	"components.board.menu.element": "Налаштування елемента",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Налаштування спільного текстового редактора",
+	"components.board.menu.drawingElement": "Налаштування дошки",
+	"components.board.menu.externalToolElement":
+		"Налаштування зовнішнього інструменту",
+	"components.board.menu.fileElement": "Налаштування файлу",
+	"components.board.menu.linkElement": "Налаштування посилання",
+	"components.board.menu.submissionElement": "Налаштування Подання",
 	"components.board.notifications.errors.fileNameExists":
 		"Файл з такою назвою вже існує.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -378,6 +385,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Цей Etherpad є видимою і доступною для редагування для всіх учасників курсу.",
+	"components.cardElement.externalToolElement": "Зовнішній інструмент",
+	"components.cardElement.fileElement": "Файл",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
@@ -401,6 +410,7 @@ export default {
 		"Формат відео не підтримується цим браузером / операційною системою.",
 	"components.cardElement.fileElement.virusDetected":
 		"Файл було заблоковано через підозру на вірус.",
+	"components.cardElement.LinkElement": "Посилання",
 	"components.cardElement.LinkElement.label": "Вставити адресу посилання",
 	"components.cardElement.notification.visibleAndEditable":
 		"Ця дошка є видимою і доступною для редагування для всіх учасників курсу.",
@@ -598,6 +608,16 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"немає. Обліковий запис буде створено знову.",
 	"components.molecules.importUsersMatch.write": "Введіть ім'я та прізвище",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Немає в наявності",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Учитель",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Студент",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Організаційний адміністратор",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Організаційний менеджмент",
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",

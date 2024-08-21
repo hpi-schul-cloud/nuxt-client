@@ -30,6 +30,7 @@
 				<ExternalToolElementMenu
 					v-if="isEditMode"
 					ref="externalToolElementMenu"
+					:display-name="displayData?.name"
 					@move-down:element="onMoveElementDown"
 					@move-up:element="onMoveElementUp"
 					@delete:element="onDeleteElement"

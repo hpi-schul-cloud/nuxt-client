@@ -3,6 +3,8 @@
     kubeconfig: ~/.kube/config
     namespace: "{{ NAMESPACE }}"
     template: svc.yml.j2
+  tags:
+    - service
 
 - name: Configmap
   kubernetes.core.k8s:
@@ -10,9 +12,13 @@
     namespace: "{{ NAMESPACE }}"
     template: configmap.yml.j2
     apply: yes
+  tags:
+    - configmap
 
 - name: Deployment
   kubernetes.core.k8s:
     kubeconfig: ~/.kube/config
     namespace: "{{ NAMESPACE }}"
     template: deployment.yml.j2
+  tags:
+    - deployment
