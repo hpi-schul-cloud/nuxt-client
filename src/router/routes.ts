@@ -232,7 +232,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: `/rooms`,
-		component: async () => (await import("@page-room")).RoomOverviewPage,
+		component: async () => (await import("@page-room")).RoomsPage,
 		name: "rooms",
 	},
 	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
