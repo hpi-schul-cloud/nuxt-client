@@ -1,3 +1,3 @@
-import RoomOverviewPage from "./RoomOverview.page.vue";
+import RoomsPage from "./Rooms.page.vue";
 
-export { RoomOverviewPage };
+export { RoomsPage };
