@@ -210,7 +210,7 @@ describe("@/components/molecules/AddContentModal", () => {
 // This test is necessary to ensure that the real Vuex course-store is functioning correctly.
 // The course-store is only invoked at this point, making it crucial to test it here.
 describe("AddContentModal with real Vuex course-store", () => {
-	it("course options should be defined", () => {
+	it("course options should be defined", async () => {
 		const store = createStore({
 			modules: {
 				courses,
@@ -226,6 +226,6 @@ describe("AddContentModal with real Vuex course-store", () => {
 		};
 		const wrapper = getWrapper(testProps);
 		const selection = wrapper.findComponent('[data-testid="courseSelector"]');
-		expect(selection).toBeDefined();
+		expect(selection.vm.$options.name).toBe("VSelect");
 	});
 });
