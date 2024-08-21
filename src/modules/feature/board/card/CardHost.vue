@@ -231,7 +231,9 @@ export default defineComponent({
 		});
 
 		onMounted(async () => {
-			await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
+			if (card.value === undefined) {
+				await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
+			}
 		});
 
 		return {
