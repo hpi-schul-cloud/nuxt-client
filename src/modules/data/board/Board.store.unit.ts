@@ -20,7 +20,6 @@ import { useCardStore, useSocketConnection } from "@data-board";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
-// import { useBoardAriaNotification } from "./ariaNotification/ariaLiveNotificationHandler";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 jest.mock("./boardActions/boardSocketApi.composable");
