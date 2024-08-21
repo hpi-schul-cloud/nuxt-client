@@ -15,7 +15,7 @@
 			v-if="$slots.display"
 			class="content-element-display"
 			:class="{
-				'flex-fill': hasRowStyle,
+				'content-element-display-listboard': hasRowStyle,
 			}"
 		>
 			<slot name="display" />
@@ -114,6 +114,10 @@ const props = defineProps({
 
 .content-element-bar-texts-listboard {
 	flex: 0 0 67%;
+}
+
+.content-element-display-listboard {
+	flex: 0 0 33%;
 }
 
 .content-element-bar:hover {
