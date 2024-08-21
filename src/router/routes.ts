@@ -230,12 +230,11 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		name: "news-id-edit",
 		beforeEnter: createPermissionGuard(["news_edit"]),
 	},
-	/* 	{
-		// TODO BC-7822, BC-7823 target this route at new rooms page and replace the redirect with the new component used
+	{
 		path: `/rooms`,
-		redirect: { name: "course-room-overview" },
+		component: async () => (await import("@page-room")).RoomsPage,
 		name: "rooms",
-	}, */
+	},
 	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
 	// So we have to replace the reference there by "course-room-list" path.
 	{
