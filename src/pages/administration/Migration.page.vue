@@ -207,7 +207,7 @@
 					</VStepperWindowItem>
 
 					<VStepperWindowItem :value="2" data-testid="migration_importUsers">
-						<ImportUsers />
+						<ImportUsers ref="importUsersRef" />
 						<div class="d-flex justify-space-between pa-3">
 							<div>
 								<VBtn
@@ -585,6 +585,8 @@ const isCancelDialogOpen: Ref<boolean> = ref(false);
 
 const isClearAutoMatchesDialogOpen: Ref<boolean> = ref(false);
 
+const importUsersRef: Ref<InstanceType<typeof ImportUsers> | null> = ref(null);
+
 const isMigrationNotStarted = computed(() => {
 	return school.value.inUserMigration === undefined;
 });
@@ -820,9 +822,9 @@ const showClearAutoMatchesDialog = async () => {
 const clearAllAutoMatches = async () => {
 	isLoading.value = true;
 
-	await new Promise((resolve) => setTimeout(resolve, 2000));
+	await importUsersModule.clearAllAutoMatches();
 
-	isClearAutoMatchesDialogOpen.value = false;
+	importUsersRef.value?.reloadData();
 
 	isLoading.value = false;
 };

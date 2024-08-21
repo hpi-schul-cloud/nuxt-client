@@ -23539,6 +23539,40 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
             };
         },
         /**
+         * Clear all auto matches from imported users of a school
+         * @summary Clear all auto matches
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerClearAllAutoMatches: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/import/clear-all-auto-matches`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -23958,6 +23992,16 @@ export const UserImportApiFp = function(configuration?: Configuration) {
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
+         * Clear all auto matches from imported users of a school
+         * @summary Clear all auto matches
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async importUserControllerClearAllAutoMatches(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerClearAllAutoMatches(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -24079,6 +24123,15 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
             return localVarFp.importUserControllerCancelMigration(options).then((request) => request(axios, basePath));
         },
         /**
+         * Clear all auto matches from imported users of a school
+         * @summary Clear all auto matches
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        importUserControllerClearAllAutoMatches(options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerClearAllAutoMatches(options).then((request) => request(axios, basePath));
+        },
+        /**
          * 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -24188,6 +24241,15 @@ export interface UserImportApiInterface {
      * @memberof UserImportApiInterface
      */
     importUserControllerCancelMigration(options?: any): AxiosPromise<void>;
+
+    /**
+     * Clear all auto matches from imported users of a school
+     * @summary Clear all auto matches
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApiInterface
+     */
+    importUserControllerClearAllAutoMatches(options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -24300,6 +24362,17 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
      */
     public importUserControllerCancelMigration(options?: any) {
         return UserImportApiFp(this.configuration).importUserControllerCancelMigration(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * Clear all auto matches from imported users of a school
+     * @summary Clear all auto matches
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof UserImportApi
+     */
+    public importUserControllerClearAllAutoMatches(options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerClearAllAutoMatches(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
