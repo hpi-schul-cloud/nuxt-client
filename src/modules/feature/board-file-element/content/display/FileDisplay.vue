@@ -6,6 +6,7 @@
 		:name="fileProperties.name"
 		:is-edit-mode="isEditMode"
 		:element="fileProperties.element"
+		:show-menu="showMenu"
 	>
 		<slot />
 	</PdfDisplay>
@@ -16,6 +17,7 @@
 		:name="fileProperties.name"
 		:is-edit-mode="isEditMode"
 		:element="fileProperties.element"
+		:show-menu="showMenu"
 	>
 		<slot />
 	</ImageDisplay>
@@ -23,6 +25,7 @@
 		v-else-if="hasVideoMimeType"
 		:src="fileProperties.url"
 		:name="fileProperties.name"
+		:show-menu="showMenu"
 		@error="onAddAlert"
 	>
 		<slot />
@@ -30,6 +33,7 @@
 	<AudioDisplay
 		v-else-if="hasAudioMimeType"
 		:src="fileProperties.url"
+		:show-menu="showMenu"
 		@error="onAddAlert"
 	>
 		<slot />
@@ -56,6 +60,7 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	showMenu: { type: Boolean, required: true },
 });
 const emit = defineEmits(["video-error", "add:alert"]);
 

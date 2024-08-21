@@ -14,6 +14,7 @@
 			<FileDisplay
 				:file-properties="fileProperties"
 				:is-edit-mode="isEditMode"
+				:show-menu="isMenuShownOnFileDisplay"
 				@add:alert="onAddAlert"
 			>
 				<slot />
@@ -27,7 +28,7 @@
 				:name="fileProperties.name"
 				:caption="fileProperties.element.content.caption"
 				:show-title="showTitle"
-				:show-menu="showMenu"
+				:show-menu="!isMenuShownOnFileDisplay"
 				:is-edit-mode="isEditMode"
 				:src="fileDescriptionSrc"
 			>
@@ -119,26 +120,29 @@ const showTitle = computed(() => {
 			!hasAudioMimeType.value)
 	);
 });
-const showMenu = computed(() => {
-	return (
-		!hasPdfMimeType.value &&
-		!props.fileProperties.previewUrl &&
-		!hasVideoMimeType.value &&
-		!hasAudioMimeType.value
-	);
-});
 
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const hasRowStyle = computed(() => {
-	const isSmallOrLargerListBoard = smAndUp.value && isListLayout.value;
+const isSmallOrLargerListBoard = smAndUp.value && isListLayout.value;
 
-	return (
+const hasRowStyle = computed(
+	() =>
 		isSmallOrLargerListBoard &&
 		hasPdfMimeType.value &&
 		props.fileProperties.previewUrl
-	);
+);
+
+const isMenuShownOnFileDisplay = computed(() => {
+	const isFileDisplayRendered =
+		!!props.fileProperties.previewUrl ||
+		hasVideoMimeType.value ||
+		hasAudioMimeType.value;
+
+	const isPdfOnSmallOrLargerListBoard =
+		isSmallOrLargerListBoard && hasPdfMimeType.value;
+
+	return isFileDisplayRendered && !isPdfOnSmallOrLargerListBoard;
 });
 </script>
 <style lang="scss" scoped>
