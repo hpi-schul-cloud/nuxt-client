@@ -4,12 +4,11 @@ import { envConfigModule } from "@/store";
 import { useBoardStore, useCardStore } from "@data-board";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
-import { nextTick } from "vue";
+import { useTimeoutFn } from "@vueuse/shared";
 
 let instance: Socket | null = null;
-
-let shouldShowFailure = false;
 let isInitialConnection = true;
+let timeoutFn: ReturnType<typeof useTimeoutFn>;
 
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	const boardStore = useBoardStore();
@@ -25,31 +24,25 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 		instance.on("connect", async function () {
 			console.log("connected");
-			if (isInitialConnection === false) {
-				if (shouldShowFailure === false) {
-					showSuccess(t("common.notification.connection.restored"));
-				}
-
-				if (!(boardStore.board && cardStore.cards)) return;
-
-				await boardStore.reloadBoard();
-				await cardStore.fetchCardRequest({
-					cardIds: Object.keys(cardStore.cards),
-				});
-				await nextTick();
-				shouldShowFailure = false;
+			if (isInitialConnection) return;
+			if (timeoutFn.isPending.value) {
+				timeoutFn.stop();
+				return;
 			}
+			showSuccess(t("common.notification.connection.restored"));
+
+			if (!(boardStore.board && cardStore.cards)) return;
+			await boardStore.reloadBoard();
+			await cardStore.fetchCardRequest({
+				cardIds: Object.keys(cardStore.cards),
+			});
 		});
 
 		instance.on("disconnect", () => {
 			console.log("disconnected");
 			isInitialConnection = false;
-			shouldShowFailure = true;
-			setTimeout(() => {
-				if (shouldShowFailure === true) {
-					showFailure(t("error.4500"));
-					shouldShowFailure = false;
-				}
+			timeoutFn = useTimeoutFn(() => {
+				showFailure(t("error.4500"));
 			}, 500);
 		});
 	}
@@ -77,6 +70,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	const disconnectSocket = () => {
 		socket.disconnect();
 		isInitialConnection = true;
+		if (timeoutFn.isPending.value) timeoutFn.stop();
 	};
 
 	return {
