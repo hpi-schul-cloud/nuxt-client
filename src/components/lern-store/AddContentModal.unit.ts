@@ -216,13 +216,16 @@ describe("AddContentModal with real Vuex course-store", () => {
 				courses,
 			},
 		});
-
-		const wrapper = mount(AddContentModal, {
-			global: {
-				plugins: [store, createTestingVuetify()],
-			},
-		});
-
-		expect(wrapper.vm.coursesOptions).toBeDefined();
+		const getWrapper: any = (props: object) => {
+			return mount(AddContentModal, {
+				global: {
+					plugins: [store, createTestingVuetify(), createTestingI18n()],
+				},
+				props,
+			});
+		};
+		const wrapper = getWrapper(testProps);
+		const selection = wrapper.findComponent('[data-testid="courseSelector"]');
+		expect(selection).toBeDefined();
 	});
 });
