@@ -170,7 +170,7 @@
 
 		<p class="text-muted">
 			{{
-				t("pages.administration.classes.hint", {
+				t("pages.administration.common.hint", {
 					institute_title: getInstituteTitle,
 				})
 			}}

@@ -868,7 +868,7 @@ export default {
 		'Ви впевнені, що хочете видалити клас "<i>{itemName}<i>"?',
 	"pages.administration.classes.deleteDialog.title": "Видалити клас?",
 	"pages.administration.classes.edit": "Редагувати клас",
-	"pages.administration.classes.hint":
+	"pages.administration.common.hint":
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",
 	"pages.administration.classes.index.add": "Додати клас",
 	"pages.administration.classes.index.title": "Керувати заняттями",

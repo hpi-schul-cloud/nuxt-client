@@ -856,7 +856,7 @@ export default {
 		'Are you sure you want to delete class "<i>{itemName}<i>"?',
 	"pages.administration.classes.deleteDialog.title": "Delete class?",
 	"pages.administration.classes.edit": "Edit class",
-	"pages.administration.classes.hint":
+	"pages.administration.common.hint":
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {institute_title}.",
 	"pages.administration.classes.index.add": "Add class",
 	"pages.administration.classes.index.title": "Manage classes",

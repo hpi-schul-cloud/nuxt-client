@@ -1941,7 +1941,7 @@ export enum CourseSortQueryType {
 	Name = "name",
 	SynchronizedGroup = "synchronizedGroup",
 	TeacherNames = "teacherNames",
-	ClassName = "className",
+	ClassNames = "classNames",
 }
 
 /**

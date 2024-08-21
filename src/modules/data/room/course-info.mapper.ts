@@ -7,7 +7,7 @@ export class CourseInfoMapper {
 			id: courseInfoResponse.id,
 			name: courseInfoResponse.name,
 			classNames: courseInfoResponse.classNames,
-			syncedWithGroup: courseInfoResponse.syncedGroup ?? undefined,
+			syncedWithGroup: courseInfoResponse.syncedGroup,
 			teacherNames: courseInfoResponse.teacherNames,
 		};
 

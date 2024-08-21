@@ -7,7 +7,7 @@
 	>
 		<template #header>
 			<h1 class="text-h3 pl-2">
-				{{ "pages.administration.rooms.index.title" }}
+				{{ t("pages.administration.rooms.index.title") }}
 			</h1>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs class="tabs-max-width" grow v-model="activeTab">
@@ -63,9 +63,9 @@
 						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
 					</v-btn>
 				</template>
-				<template v-else-if="showSyncAction(item)">
+				<template v-if="showSyncAction(item)">
 					<v-btn
-						v-if="courseSyncEnabled && item.syncedWithGroup"
+						v-if="courseSyncEnabled"
 						:title="t('feature-course-sync.startRoomSyncDialog.title')"
 						:aria-label="t('feature-course-sync.startRoomSyncDialog.title')"
 						data-testid="class-table-start-room-sync-btn"
@@ -75,7 +75,7 @@
 						min-width="0"
 						@click="onClickStartSyncIcon(item)"
 					>
-						<v-icon>{{ mdiSyncOff }}</v-icon>
+						<v-icon>{{ mdiSync }}</v-icon>
 					</v-btn>
 				</template>
 			</template>
@@ -124,7 +124,7 @@
 
 		<p class="text-muted">
 			{{
-				t("pages.administration.courses.hint", {
+				t("pages.administration.common.hint", {
 					institute_title: getInstituteTitle,
 				})
 			}}
@@ -159,6 +159,7 @@ import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import RoomsModule from "@/store/rooms";
+import { mdiPencilOutline, mdiSync, mdiTrashCanOutline } from "@mdi/js";
 
 type Tab = "current" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -220,7 +221,7 @@ const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
 	},
 ]);
 
-useTitle(buildPageTitle(t("pages.administration.classes.index.title")));
+useTitle(buildPageTitle(t("pages.administration.rooms.index.title")));
 
 const courseStatusQueryType: ComputedRef<CourseStatusQueryType> = computed(
 	() => {
@@ -242,7 +243,7 @@ const hasPermission: ComputedRef<boolean> = computed(() =>
 const showRoomAction = (item: CourseInfo) => hasPermission.value && item.id;
 
 const showSyncAction = (item: CourseInfo) =>
-	hasPermission.value && item.syncedWithGroup;
+	hasPermission.value && !item.syncedWithGroup;
 
 const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
@@ -257,6 +258,7 @@ const selectedItemName: ComputedRef<string> = computed(
 const onClickStartSyncIcon = (selectedCourse: CourseInfo) => {
 	selectedItem.value = selectedCourse;
 	isStartSyncDialogOpen.value = true;
+	isCourseSyncDialogOpen.value = true;
 };
 
 const onClickDeleteIcon = (selectedCourse: CourseInfo) => {

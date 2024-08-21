@@ -56,33 +56,9 @@ export const useCourseList = () => {
 				return CourseInfoMapper.mapToCourseInfo(course);
 			});
 
-			/*courses.value.push(
-				new CourseInfo({
-					id: "3243433",
-					name: "mathe",
-					teacherNames: ["Hans", "Wurst", "Greta", "Tuna"],
-					classNames: ["class1", "class2", "class3"],
-					syncedWithGroup: "Group",
-				}),
-				new CourseInfo({
-					id: "222223243433",
-					name: "mathe1",
-					teacherNames: ["Hansss", "Wurstttt", "Gretaaaa", "Tunaaaaa"],
-					classNames: ["class1", "class2", "class3"],
-					syncedWithGroup: "Group",
-				}),
-				new CourseInfo({
-					id: "0000dcfbfb5c7a3f00bf21ab",
-					name: "Matheerdfyg",
-					teacherNames: ["Lehrer", "Lehrer 1", "Lehrer 2"],
-					classNames: ["Klasse1", "Klasse2"],
-				})
-			);*/
-
 			pagination.value.limit = response.data.limit;
 			pagination.value.skip = response.data.skip;
 			pagination.value.total = response.data.total;
-			//pagination.value.total = courses.value.length;
 		} catch (errorResponse) {
 			handleError(errorResponse);
 		}

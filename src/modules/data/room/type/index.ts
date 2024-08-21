@@ -1,1 +1,1 @@
-export { CourseInfo, ClassInfo } from "./course-info";
+export { CourseInfo } from "./course-info";

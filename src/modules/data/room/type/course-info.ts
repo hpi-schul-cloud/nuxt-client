@@ -21,11 +21,3 @@ export class CourseInfo implements CourseInfoProps {
 		this.syncedWithGroup = props.syncedWithGroup;
 	}
 }
-
-export interface ClassInfo {
-	id: string;
-}
-
-export interface teacherName {
-	name: string;
-}

@@ -862,7 +862,7 @@ export default {
 		'Möchten Sie wirklich die Klasse "<i>{itemName}</i>" löschen?',
 	"pages.administration.classes.deleteDialog.title": "Klasse löschen?",
 	"pages.administration.classes.edit": "Klasse bearbeiten",
-	"pages.administration.classes.hint":
+	"pages.administration.common.hint":
 		"Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {institute_title}.",
 	"pages.administration.classes.index.add": "Klasse hinzufügen",
 	"pages.administration.classes.index.title": "Klassen verwalten",

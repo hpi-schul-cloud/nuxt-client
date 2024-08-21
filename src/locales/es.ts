@@ -878,7 +878,7 @@ export default {
 		'¿Está seguro de que desea eliminar la clase "<i>{itemName}<i>"?',
 	"pages.administration.classes.deleteDialog.title": "¿Eliminar clase?",
 	"pages.administration.classes.edit": "Editar clase",
-	"pages.administration.classes.hint":
+	"pages.administration.common.hint":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
 	"pages.administration.classes.index.add": "Agregar clase",
 	"pages.administration.classes.index.title": "Administrar clases",
