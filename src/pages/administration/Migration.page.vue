@@ -74,7 +74,8 @@
 						{{ t("pages.administration.migration.step5") }}
 					</VStepperItem>
 				</VStepperHeader>
-				<vCustomDialog
+
+				<VCustomDialog
 					v-model:is-open="isCancelDialogOpen"
 					has-buttons
 					:buttons="['cancel', 'confirm']"
@@ -95,7 +96,32 @@
 							)
 						}}
 					</template>
-				</vCustomDialog>
+				</VCustomDialog>
+
+				<VCustomDialog
+					v-model:is-open="isClearAutoMatchesDialogOpen"
+					has-buttons
+					:buttons="['cancel', 'confirm']"
+					@dialog-confirmed="clearAllAutoMatches()"
+					data-testid="clear-auto-matches-dialog"
+				>
+					<template #title>
+						{{
+							t(
+								"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
+							)
+						}}
+					</template>
+					<template #content>
+						<RenderHTML
+							:html="
+								t(
+									'components.administration.adminMigrationSection.clearAutoMatchesDialog.description'
+								)
+							"
+						/>
+					</template>
+				</VCustomDialog>
 			</VStepper>
 		</template>
 
@@ -192,7 +218,7 @@
 								</VBtn>
 								<VBtn
 									class="ml-2"
-									@click="showClearAutoMatchesModal()"
+									@click="showClearAutoMatchesDialog()"
 									data-testid="import-users-clear-auto-matches-btn"
 								>
 									{{ t("pages.administration.migration.clearAutoMatches") }}
@@ -557,6 +583,8 @@ const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> =
 
 const isCancelDialogOpen: Ref<boolean> = ref(false);
 
+const isClearAutoMatchesDialogOpen: Ref<boolean> = ref(false);
+
 const isMigrationNotStarted = computed(() => {
 	return school.value.inUserMigration === undefined;
 });
@@ -785,14 +813,18 @@ const redirectToAdminPage = async () => {
 	});
 };
 
-const showClearAutoMatchesModal = async () => {
-	// TODO: logic for showing modal
-	return;
+const showClearAutoMatchesDialog = async () => {
+	isClearAutoMatchesDialogOpen.value = true;
 };
 
 const clearAllAutoMatches = async () => {
-	// TODO: API call
-	return;
+	isLoading.value = true;
+
+	await new Promise((resolve) => setTimeout(resolve, 2000));
+
+	isClearAutoMatchesDialogOpen.value = false;
+
+	isLoading.value = false;
 };
 
 watch(migrationStep, async (val) => {

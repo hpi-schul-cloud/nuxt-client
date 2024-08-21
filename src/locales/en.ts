@@ -234,6 +234,10 @@ export default {
 		"With the start of the migration, all students and teachers at your school will be able to switch the registration system to moin.schule. Users who have changed the login system can then only log in via moin.schule.",
 	"components.administration.adminMigrationSection.startWarningCard.title":
 		"Do you really want to start the account migration to moin.schule now?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
+		"Are you sure you want to remove the accounts links that are found automatically?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"The migration assistant had automatically found account links based on the usernames.<br><br>Do you want to remove the accounts links that are found automatically now?",
 	"components.administration.externalToolsSection.action.add":
 		"Add External Tool",
 	"components.administration.externalToolsSection.action.delete": "Delete Tool",
@@ -1006,7 +1010,8 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Please match a valid URL format",
 	"pages.administration.migration.back": "Back",
-	"pages.administration.migration.clearAutoMatches": "Reset automatic bindings",
+	"pages.administration.migration.clearAutoMatches":
+		"Reset automatic accounts links",
 	"pages.administration.migration.backToAdministration":
 		"Back to administration",
 	"pages.administration.migration.brbSchulportal": "weBBSchule",
@@ -1019,11 +1024,11 @@ export default {
 	"pages.administration.migration.finishTransferPhase": "Finish Transfer phase",
 	"pages.administration.migration.finishWizard": "Complete Migration Wizard",
 	"pages.administration.migration.ldapSource": "LDAP",
-	"pages.administration.migration.migrate": "Save accounts binding",
+	"pages.administration.migration.migrate": "Save accounts link",
 	"pages.administration.migration.nbc.migrate": "Perform migration",
 	"pages.administration.migration.next": "Next",
 	"pages.administration.migration.performingMigration":
-		"Saving the accounts binding...",
+		"Saving the accounts link...",
 	"pages.administration.migration.startUserMigration":
 		"Start accounts migration",
 	"pages.administration.migration.step1": "Introduction",

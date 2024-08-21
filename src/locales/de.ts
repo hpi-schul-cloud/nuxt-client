@@ -234,6 +234,10 @@ export default {
 		"Mit dem Start der Migration wird allen Schüler:innen und Lehrkräften Ihrer Schule der Wechsel des Anmeldesystems zu moin.schule ermöglicht. Anwender, die den Wechsel des Anmeldesystems durchgeführt haben, können sich anschließend nur noch über moin.schule anmelden.",
 	"components.administration.adminMigrationSection.startWarningCard.title":
 		"Möchten Sie die Account-Migration zu moin.schule jetzt wirklich starten?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
+		"Sind Sie sicher, dass Sie die automatischen gefundenen Verknüpfungen zurücksetzen wollen?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"Der Migrationsassistent hat Konten-Verknüpfungen anhand der Nutzer-Namen automatisch gefunden.<br><br>Möchten Sie die automatisch gefundenen Verknüpfungen jetzt zurücksetzen?",
 	"components.administration.externalToolsSection.action.add":
 		"Externes Tool hinzufügen",
 	"components.administration.externalToolsSection.action.delete":

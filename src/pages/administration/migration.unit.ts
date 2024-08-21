@@ -487,4 +487,66 @@ describe("User Migration / Index", () => {
 			});
 		});
 	});
+
+	describe("clear auto matches", () => {
+		describe("when in step migration_importUsers", () => {
+			beforeEach(() => {
+				const vueTeleportDiv = document.createElement("div");
+				vueTeleportDiv.className = "v-overlay-container";
+				document.body.appendChild(vueTeleportDiv);
+			});
+
+			afterEach(() => {
+				document.body.innerHTML = "";
+			});
+
+			const setup = async () => {
+				schoolsModule.setSchool(
+					schoolFactory.build({
+						inUserMigration: true,
+						inMaintenance: true,
+					})
+				);
+
+				importUsersModule.setTotal(10);
+				importUsersModule.setTotalUnmatched(5);
+				importUsersModule.setTotalMatched(5);
+
+				const wrapper = getWrapper();
+
+				wrapper.vm.migrationStep = 2;
+				wrapper.vm.t("pages.administration.migration.title", {
+					source: "LDAP",
+					instance: $theme.name,
+				});
+
+				await nextTick();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show the clear auto matches button", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					'[data-testid="import-users-clear-auto-matches-btn"]'
+				);
+
+				expect(button.exists()).toBe(true);
+			});
+
+			it("should show the dialog on click of the clear auto matches button", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					'[data-testid="import-users-clear-auto-matches-btn"]'
+				);
+
+				await button.trigger("click");
+				await nextTick();
+			});
+		});
+	});
 });
