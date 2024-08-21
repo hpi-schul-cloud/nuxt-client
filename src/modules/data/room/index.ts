@@ -1,2 +1,2 @@
 export { useCourseApi } from "./courseApi.composable";
-export { useRoomListStore } from "./RoomList.store";
+export { useRoomsState } from "./Rooms.state";

@@ -1,9 +1,9 @@
 import { Room } from "@/types/room/Room";
 import { delay } from "@/utils/helpers";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
 // TODO replace with API call
-const roomListData: Room[] = [
+const roomsData: Room[] = [
 	{
 		id: "0000dcfbfb5c7a3f00bf21cd",
 		title: "Room #1",
@@ -18,16 +18,20 @@ const roomListData: Room[] = [
 	},
 ];
 
-export const useRoomListStore = () => {
-	const roomList = ref<Room[]>([]);
+export const useRoomsState = () => {
+	const rooms = ref<Room[]>([]);
 	const isLoading = ref(true);
 
-	const fetchRoomList = async () => {
+	const fetchRooms = async () => {
 		await delay(2000);
 		// TODO call API
-		roomList.value = roomListData;
+		rooms.value = roomsData;
 		isLoading.value = false;
 	};
 
-	return { roomList, isLoading, fetchRoomList };
+	const isEmpty = computed(() => {
+		return rooms.value.length === 0;
+	});
+
+	return { rooms, isLoading, isEmpty, fetchRooms };
 };

@@ -232,7 +232,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: `/rooms`,
-		component: async () => (await import("@page-room")).RoomOverviewPage,
+		component: async () => (await import("@page-room")).RoomsPage,
 		name: "rooms",
 	},
 	// TODO Is this redirect really necessary? How likely is it that there are bookmarks?
