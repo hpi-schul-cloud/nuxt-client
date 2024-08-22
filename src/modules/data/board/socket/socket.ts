@@ -5,9 +5,10 @@ import { useBoardStore, useCardStore } from "@data-board";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useTimeoutFn } from "@vueuse/shared";
+import { ref } from "vue";
 
 let instance: Socket | null = null;
-let isInitialConnection = true;
+export const isInitialConnection = ref(true);
 let timeoutFn: ReturnType<typeof useTimeoutFn>;
 
 export const useSocketConnection = (dispatch: (action: Action) => void) => {
@@ -24,7 +25,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 		instance.on("connect", async function () {
 			console.log("connected");
-			if (isInitialConnection) return;
+			if (isInitialConnection.value) return;
 			if (timeoutFn.isPending.value) {
 				timeoutFn.stop();
 				return;
@@ -40,7 +41,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 		instance.on("disconnect", () => {
 			console.log("disconnected");
-			isInitialConnection = false;
+			isInitialConnection.value = false;
 			timeoutFn = useTimeoutFn(() => {
 				showFailure(t("error.4500"));
 			}, 500);
@@ -69,7 +70,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 	const disconnectSocket = () => {
 		socket.disconnect();
-		isInitialConnection = true;
+		isInitialConnection.value = true;
 		if (timeoutFn.isPending.value) timeoutFn.stop();
 	};
 

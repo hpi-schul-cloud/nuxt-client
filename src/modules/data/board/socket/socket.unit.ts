@@ -6,13 +6,14 @@ import {
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useBoardStore, useSocketConnection } from "@data-board";
+import { useBoardStore, useSocketConnection, useCardStore } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier } from "@util-board";
 import { setActivePinia } from "pinia";
 import * as socketModule from "socket.io-client";
 import { useI18n } from "vue-i18n";
+import { isInitialConnection } from "./socket";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -49,6 +50,7 @@ describe("socket.ts", () => {
 	// values are created only once when the module is loaded and initially used.
 	let socketHandlers: Record<string, () => void> | undefined = undefined;
 	let boardStore: ReturnType<typeof useBoardStore>;
+	let cardStore: ReturnType<typeof useCardStore>;
 
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
@@ -103,7 +105,8 @@ describe("socket.ts", () => {
 
 	const getOrInitialiseBoardStore = () => {
 		boardStore = boardStore ?? mockedPiniaStoreTyping(useBoardStore);
-		return boardStore;
+		cardStore = cardStore ?? mockedPiniaStoreTyping(useCardStore);
+		return { boardStore, cardStore };
 	};
 
 	describe("connect event", () => {
@@ -123,13 +126,31 @@ describe("socket.ts", () => {
 			);
 		});
 
+		describe("when 'isInitialConnection' is true", () => {
+			it("should not show connection restored notification ", () => {
+				getOrInitialiseBoardStore();
+				isInitialConnection.value = true;
+				jest.clearAllMocks();
+				useSocketConnection(dispatchMock);
+
+				const eventCallbacks = getEventCallbacks();
+
+				eventCallbacks.connect();
+
+				expect(mockBoardNotifierCalls.showSuccess).not.toHaveBeenCalled();
+				expect(boardStore.reloadBoard).not.toHaveBeenCalled();
+				expect(cardStore.fetchCardRequest).not.toHaveBeenCalled();
+			});
+		});
+
 		describe("when board exists", () => {
 			beforeEach(() => {
-				getOrInitialiseBoardStore().board = boardResponseFactory.build();
+				getOrInitialiseBoardStore().boardStore.board =
+					boardResponseFactory.build();
 			});
 
 			afterEach(() => {
-				getOrInitialiseBoardStore().board = undefined;
+				getOrInitialiseBoardStore().boardStore.board = undefined;
 			});
 			it("should reloadBoard when socket is connected", () => {
 				useSocketConnection(dispatchMock);
