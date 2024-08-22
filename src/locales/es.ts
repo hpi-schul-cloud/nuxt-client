@@ -843,6 +843,7 @@ export default {
 	"global.sidebar.item.management": "Administración",
 	"global.sidebar.item.overview": "Panel",
 	"global.sidebar.item.releaseNotes": "¿Qué hay de nuevo?",
+	"global.sidebar.item.rooms": "Salas",
 	"global.sidebar.item.school": "Escuela",
 	"global.sidebar.item.student": "Estudiantes",
 	"global.sidebar.item.system": "Sistema",

@@ -819,6 +819,7 @@ export default {
 	"global.sidebar.item.management": "Management",
 	"global.sidebar.item.overview": "Dashboard",
 	"global.sidebar.item.releaseNotes": "What's new?",
+	"global.sidebar.item.rooms": "Rooms",
 	"global.sidebar.item.school": "School",
 	"global.sidebar.item.student": "Students",
 	"global.sidebar.item.system": "System",

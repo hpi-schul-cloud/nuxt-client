@@ -1150,6 +1150,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_AI_TUTOR_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_ROOMS_ENABLED: boolean;
 }
 /**
  * 
