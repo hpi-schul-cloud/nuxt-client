@@ -1455,6 +1455,7 @@ export default {
 	"pages.courseRoom.index.courses.arrangeCourses": "Arrange courses",
 	"pages.courseRoom.index.search.label": "Search course",
 	"pages.courseRoom.tabLabel.tools": "Tools",
+	"pages.courseRoom.tabLabel.toolsOld": "Tools",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",
@@ -1542,7 +1543,6 @@ export default {
 		"An error occurred while importing the course.",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",
 	"pages.rooms.tabLabel.groups": "Groups",
-	"pages.rooms.tabLabel.toolsOld": "Tools",
 	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"All users participate as moderators",
 	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":

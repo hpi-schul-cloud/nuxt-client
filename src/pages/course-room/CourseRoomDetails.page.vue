@@ -255,7 +255,7 @@ export default defineComponent({
 			if (ltiToolsTabEnabled) {
 				tabs.push({
 					name: "old-tools",
-					label: this.$t("pages.rooms.tabLabel.toolsOld"),
+					label: this.$t("pages.courseRoom.tabLabel.toolsOld"),
 					icon: mdiPuzzleOutline,
 					dataTestId: "old-tools-tab",
 					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
