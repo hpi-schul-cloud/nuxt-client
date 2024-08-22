@@ -35,10 +35,18 @@ const route = useRoute();
 
 const isActive = computed(() => {
 	const anyCoursePageIsActive =
-		route.path.includes("room") && props.item.to === "/rooms/courses-overview";
+		route.path.includes("rooms") &&
+		route.path !== "/rooms" &&
+		props.item.to === "/rooms/courses-overview";
 
 	if (anyCoursePageIsActive) {
 		return true;
+	}
+
+	const roomsSidebarItem = props.item.to === "/rooms";
+	const isRoomsPageActive = route.path === "/rooms";
+	if (roomsSidebarItem) {
+		return isRoomsPageActive;
 	}
 
 	return (
