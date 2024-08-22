@@ -1,9 +1,10 @@
+import { computed } from "vue";
+import { shallowMount } from "@vue/test-utils";
 import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 	envsFactory,
 } from "@@/tests/test-utils/factory";
-import { shallowMount } from "@vue/test-utils";
 import {
 	useBoardPermissions,
 	useBoardStore,
@@ -24,7 +25,7 @@ import { envConfigModule, notifierModule } from "@/store";
 import { createTestingPinia } from "@pinia/testing";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useBoardNotifier } from "@util-board";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 
@@ -35,9 +36,17 @@ const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = jest.mocked(
+	useSharedLastCreatedElement
+);
 
 jest.mock("@data-board/fixSamePositionDnD.composable");
 const mockedUseForceRender = jest.mocked(useForceRender);
+
+mockUseSharedLastCreatedElement.mockReturnValue({
+	lastCreatedElementId: computed(() => "element-id"),
+	resetLastCreatedElementId: jest.fn(),
+});
 
 describe("BoardColumn", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
