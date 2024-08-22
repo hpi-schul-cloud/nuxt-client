@@ -329,11 +329,11 @@ export default defineComponent({
 					});
 				} else {
 					actions.push({
-						label: this.$t("pages.room.fab.add.columnBoard"),
+						label: this.$t("pages.courseRoom.fab.add.columnBoard"),
 						icon: mdiViewDashboardOutline,
 						customEvent: "board-create",
 						dataTestId: "fab_button_add_column_board",
-						ariaLabel: this.$t("pages.room.fab.add.columnBoard"),
+						ariaLabel: this.$t("pages.courseRoom.fab.add.columnBoard"),
 					});
 				}
 			}
