@@ -832,6 +832,7 @@ export default {
 	"global.sidebar.item.management": "Управління",
 	"global.sidebar.item.overview": "Панель керування",
 	"global.sidebar.item.releaseNotes": "Що нового?",
+	"global.sidebar.item.rooms": "Номери",
 	"global.sidebar.item.school": "Школа",
 	"global.sidebar.item.student": "Учні",
 	"global.sidebar.item.system": "Cистема",
