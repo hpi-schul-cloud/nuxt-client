@@ -264,7 +264,7 @@ export default defineComponent({
 
 			tabs.push({
 				name: "groups",
-				label: this.$t("pages.rooms.tabLabel.groups"),
+				label: this.$t("pages.courseRoom.tabLabel.groups"),
 				icon: mdiAccountGroupOutline,
 				href: `/courses/${this.roomData.roomId}/?activeTab=groups`,
 				dataTestId: "groups-tab",

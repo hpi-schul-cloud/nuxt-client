@@ -1478,6 +1478,7 @@ export default {
 	"pages.courseRoom.index.courses.all": "Alle Kurse",
 	"pages.courseRoom.index.courses.arrangeCourses": "Kurse umordnen",
 	"pages.courseRoom.index.search.label": "Kurs suchen",
+	"pages.courseRoom.tabLabel.groups": "Gruppen",
 	"pages.courseRoom.tabLabel.tools": "Tools",
 	"pages.courseRoom.tabLabel.toolsOld": "Tools",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
@@ -1570,7 +1571,6 @@ export default {
 	"pages.rooms.ccImportCourse.error":
 		"Beim importieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
-	"pages.rooms.tabLabel.groups": "Gruppen",
 	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Alle Nutzer:innen nehmen als Moderator:in teil",
 	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
