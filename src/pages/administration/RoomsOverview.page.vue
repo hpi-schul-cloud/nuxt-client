@@ -148,7 +148,6 @@ import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
-	ROOMS_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { CourseInfo, useCourseList } from "@data-room";
@@ -158,7 +157,6 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import RoomsModule from "@/store/rooms";
 import { mdiPencilOutline, mdiSync, mdiTrashCanOutline } from "@mdi/js";
 
 type Tab = "current" | "archive";
@@ -177,7 +175,6 @@ const props = defineProps({
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-const roomsModul: RoomsModule = injectStrict(ROOMS_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -194,6 +191,7 @@ const {
 	setSortOrder,
 	setPage,
 	setPagination,
+	deleteCourse,
 } = useCourseList();
 
 const activeTab = computed({
@@ -237,7 +235,7 @@ const courseStatusQueryType: ComputedRef<CourseStatusQueryType> = computed(
 );
 
 const hasPermission: ComputedRef<boolean> = computed(() =>
-	authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase())
+	authModule.getUserPermissions.includes("COURSE_ADMINISTRATION".toLowerCase())
 );
 
 const showRoomAction = (item: CourseInfo) => hasPermission.value && item.id;
@@ -288,13 +286,13 @@ const headers = computed(() => {
 			key: "classNames",
 			value: (item: CourseInfo) => item.classNames?.join(", "),
 			title: t("common.labels.classes"),
-			sortable: true,
+			sortable: false,
 		},
 		{
 			key: "teacherNames",
 			value: (item: CourseInfo) => item.teacherNames?.join(", "),
 			title: t("common.labels.teacher"),
-			sortable: true,
+			sortable: false,
 		},
 		{
 			value: "actions",
@@ -308,8 +306,9 @@ const headers = computed(() => {
 
 const onConfirmCourseDeletion = async () => {
 	if (selectedItem.value) {
-		await roomsModul.delete(selectedItem.value.id);
+		await deleteCourse(selectedItem.value.id);
 	}
+	loadCourseList();
 };
 
 const loadCourseList = async () => {

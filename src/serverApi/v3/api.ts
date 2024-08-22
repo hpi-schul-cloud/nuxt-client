@@ -1041,6 +1041,12 @@ export interface ConfigResponse {
 	 * @type {boolean}
 	 * @memberof ConfigResponse
 	 */
+	CALENDAR_SERVICE_ENABLED: boolean;
+	/**
+	 *
+	 * @type {boolean}
+	 * @memberof ConfigResponse
+	 */
 	FEATURE_COPY_SERVICE_ENABLED: boolean;
 	/**
 	 *
@@ -1150,6 +1156,12 @@ export interface ConfigResponse {
 	 * @memberof ConfigResponse
 	 */
 	SC_TITLE: string;
+	/**
+	 *
+	 * @type {string}
+	 * @memberof ConfigResponse
+	 */
+	TRAINING_URL: string;
 	/**
 	 *
 	 * @type {boolean}
@@ -5794,6 +5806,7 @@ export enum Permission {
 	ContextToolUser = "CONTEXT_TOOL_USER",
 	CoursegroupCreate = "COURSEGROUP_CREATE",
 	CoursegroupEdit = "COURSEGROUP_EDIT",
+	CourseAdministration = "COURSE_ADMINISTRATION",
 	CourseCreate = "COURSE_CREATE",
 	CourseDelete = "COURSE_DELETE",
 	CourseEdit = "COURSE_EDIT",

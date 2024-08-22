@@ -71,4 +71,5 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_MEDIA_SHELF_ENABLED: false,
 	BOARD_COLLABORATION_URI: "ws://localhost:4450",
 	FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
+	CALENDAR_SERVICE_ENABLED: false,
 };

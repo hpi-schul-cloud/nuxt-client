@@ -9,7 +9,7 @@ import { CourseInfo } from "./type/course-info";
 import { CourseInfoMapper } from "./course-info.mapper";
 
 export const useCourseList = () => {
-	const { loadCoursesForSchool } = useCourseApi();
+	const { loadCoursesForSchool, deleteCourseById } = useCourseApi();
 	const { t } = useI18n();
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
@@ -66,6 +66,12 @@ export const useCourseList = () => {
 		isLoading.value = false;
 	};
 
+	const deleteCourse = async (id: string) => {
+		const deletedCourse = await deleteCourseById(id);
+
+		return deletedCourse;
+	};
+
 	const handleError = (errorResponse: unknown) => {
 		const apiError = mapAxiosErrorToResponseError(errorResponse);
 
@@ -91,5 +97,6 @@ export const useCourseList = () => {
 		setSortBy,
 		setSortOrder,
 		fetchCourses,
+		deleteCourse,
 	};
 };
