@@ -575,6 +575,7 @@ describe("User Migration / Index", () => {
 				);
 				const dialog = dialogParent.findComponent(VCustomDialog);
 
+				expect(wrapper.vm.isClearAutoMatchesDialogOpen).toBe(true);
 				expect(dialog.exists()).toBe(true);
 				expect(dialog.vm.isOpen).toBeTruthy();
 			});
@@ -616,6 +617,7 @@ describe("User Migration / Index", () => {
 				dialog.vm.cancelDialog();
 				await nextTick();
 
+				expect(wrapper.vm.isClearAutoMatchesDialogOpen).toBe(false);
 				expect(dialog.exists()).toBe(true);
 				expect(dialog.vm.isOpen).toBeFalsy();
 			});
