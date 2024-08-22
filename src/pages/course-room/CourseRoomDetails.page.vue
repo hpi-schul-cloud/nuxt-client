@@ -45,7 +45,7 @@
 						:href="`/files/courses/${roomData.roomId}`"
 						:data-testid="`room-${roomData.roomId}-files`"
 					>
-						{{ $t("pages.rooms.headerSection.toCourseFiles") }}
+						{{ $t("pages.courseRoom.headerSection.toCourseFiles") }}
 					</v-btn>
 				</div>
 			</div>
