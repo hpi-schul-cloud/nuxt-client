@@ -1505,6 +1505,8 @@ export default {
 	"pages.courseRoom.tabLabel.groups": "Grupos",
 	"pages.courseRoom.tabLabel.tools": "Herramientas",
 	"pages.courseRoom.tabLabel.toolsOld": "Herramientas",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.title":
+		"Crear videoconferencia {roomName}",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",
@@ -1593,8 +1595,6 @@ export default {
 		"Silenciar a las participantes al entrar",
 	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
 		"Aprobación del moderador antes de poder ingresar a la sala",
-	"pages.rooms.tools.configureVideoconferenceDialog.title":
-		"Crear videoconferencia {roomName}",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Herramienta {toolName}“ desactivada",

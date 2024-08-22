@@ -1486,6 +1486,8 @@ export default {
 	"pages.courseRoom.tabLabel.groups": "Gruppen",
 	"pages.courseRoom.tabLabel.tools": "Tools",
 	"pages.courseRoom.tabLabel.toolsOld": "Tools",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.title":
+		"Videokonferenz {roomName} erstellen",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",
@@ -1577,8 +1579,6 @@ export default {
 		"Teilnehmer:innen beim Betreten stummschalten",
 	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
 		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
-	"pages.rooms.tools.configureVideoconferenceDialog.title":
-		"Videokonferenz {roomName} erstellen",
 	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
 	"pages.rooms.tools.notLicensedDialog.title":

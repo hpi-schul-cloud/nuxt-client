@@ -1462,6 +1462,8 @@ export default {
 	"pages.courseRoom.tabLabel.groups": "Groups",
 	"pages.courseRoom.tabLabel.tools": "Tools",
 	"pages.courseRoom.tabLabel.toolsOld": "Tools",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.title":
+		"Create video conference {roomName}",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",
@@ -1549,8 +1551,6 @@ export default {
 		"Mute participants when entering",
 	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
 		"Approval by the moderator before the room can be entered",
-	"pages.rooms.tools.configureVideoconferenceDialog.title":
-		"Create video conference {roomName}",
 	"pages.rooms.tools.deactivated": "Tool deactivated",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deactivated",
 	"pages.rooms.tools.notLicensedDialog.title":

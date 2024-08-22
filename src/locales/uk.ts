@@ -1484,6 +1484,8 @@ export default {
 	"pages.courseRoom.tabLabel.groups": "Групи",
 	"pages.courseRoom.tabLabel.tools": "Інструмент",
 	"pages.courseRoom.tabLabel.toolsOld": "Інструмент",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.title":
+		"Створити відеоконференцію {roomName}",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",
@@ -1571,8 +1573,6 @@ export default {
 		"Вимкнення звуку учасників при вході",
 	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
 		"Схвалення модератором перед входом до кімнати",
-	"pages.rooms.tools.configureVideoconferenceDialog.title":
-		"Створити відеоконференцію {roomName}",
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Інструмент „{toolName}“ вимкнено",

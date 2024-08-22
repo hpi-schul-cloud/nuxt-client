@@ -36,9 +36,12 @@
 						data-testId="videoconference-config-dialog-title"
 					>
 						{{
-							$t("pages.rooms.tools.configureVideoconferenceDialog.title", {
-								roomName: roomName,
-							})
+							$t(
+								"pages.courseRoom.tools.configureVideoconferenceDialog.title",
+								{
+									roomName: roomName,
+								}
+							)
 						}}
 					</h2>
 				</v-card-title>
