@@ -26,7 +26,7 @@
 					{{ $t("pages.courseRoom.headerSection.synchronized") }}
 				</VChip>
 				<VChip v-if="roomData.isArchived" size="small" class="mt-1 ml-2">
-					{{ $t("pages.rooms.headerSection.archived") }}
+					{{ $t("pages.courseRoom.headerSection.archived") }}
 				</VChip>
 				<div class="mx-2">
 					<room-dot-menu
