@@ -19,14 +19,14 @@
 			:title="computedElement.content.title"
 			:imageUrl="computedElement.content.imageUrl"
 			:isEditMode="isEditMode"
-			><BoardMenu scope="element">
+			><BoardMenu scope="linkElement">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
 		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
-			><BoardMenu scope="element">
+			><BoardMenu scope="linkElement">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete @click="onDelete" />

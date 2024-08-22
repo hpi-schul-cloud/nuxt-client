@@ -26,23 +26,23 @@ const emit = defineEmits(["click"]);
 const scope = injectStrict<BoardMenuScope>(MENU_SCOPE);
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
-const getLanguageKeyTypeName = (scope: string) => {
-	switch (scope) {
-		case "column":
-			return "components.boardColumn";
-		case "card":
-			return "components.boardCard";
-		case "element":
-			return "components.boardElement";
-		default:
-			return "components.board";
-	}
+const languageKeyForScopeType: Record<BoardMenuScope, string> = {
+	board: "components.board",
+	column: "components.boardColumn",
+	card: "components.boardCard",
+	collaborativeTextEditorElement:
+		"components.cardElement.collaborativeTextEditorElement",
+	drawingElement: "components.cardElement.drawingElement",
+	externalToolElement: "components.cardElement.externalToolElement",
+	fileElement: "components.cardElement.fileElement",
+	linkElement: "components.cardElement.LinkElement",
+	submissionElement: "components.cardElement.submissionElement",
 };
 
 const onClick = (): void => {
 	const promise = askDeleteConfirmation(
 		props.name,
-		getLanguageKeyTypeName(scope)
+		languageKeyForScopeType[scope]
 	);
 
 	emit("click", promise);
