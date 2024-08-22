@@ -7,22 +7,20 @@ import {
 	envsFactory,
 } from "@@/tests/test-utils/factory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useBoardNotifier } from "@util-board";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { createPinia, setActivePinia } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useBoardStore } from "./Board.store";
 import { useSharedEditMode } from "./EditMode.composable";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useSocketConnection } from "@data-board";
-import { useI18n } from "vue-i18n";
+import { useCardStore, useSocketConnection } from "@data-board";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
-
-jest.mock("vue-i18n");
-(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 jest.mock("./boardActions/boardSocketApi.composable");
 const mockedUseBoardSocketApi = jest.mocked(useBoardSocketApi);
@@ -35,12 +33,18 @@ const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = jest.mocked(
+	useSharedLastCreatedElement
+);
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
 jest.mock("@data-board/socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+
+jest.mock("./cardActions/cardSocketApi.composable");
+const mockedUseCardSocketApi = jest.mocked(useCardSocketApi);
 
 describe("BoardStore", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -50,6 +54,9 @@ describe("BoardStore", () => {
 	>;
 	let mockedSocketApiActions: DeepMocked<ReturnType<typeof useBoardSocketApi>>;
 	let mockedBoardRestApiActions: DeepMocked<ReturnType<typeof useBoardRestApi>>;
+	let mockedCardSocketApiActions: DeepMocked<
+		ReturnType<typeof useCardSocketApi>
+	>;
 	let setEditModeId: jest.Mock;
 
 	beforeEach(() => {
@@ -74,10 +81,19 @@ describe("BoardStore", () => {
 			createMock<ReturnType<typeof useBoardRestApi>>();
 		mockedUseBoardRestApi.mockReturnValue(mockedBoardRestApiActions);
 
+		mockedCardSocketApiActions =
+			createMock<ReturnType<typeof useCardSocketApi>>();
+		mockedUseCardSocketApi.mockReturnValue(mockedCardSocketApiActions);
+
 		setEditModeId = jest.fn();
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
+		});
+
+		mockUseSharedLastCreatedElement.mockReturnValue({
+			lastCreatedElementId: computed(() => "element-id"),
+			resetLastCreatedElementId: jest.fn(),
 		});
 	});
 
@@ -106,6 +122,8 @@ describe("BoardStore", () => {
 		if (createBoard) {
 			boardStore.board = board;
 		}
+
+		mockedPiniaStoreTyping(useCardStore);
 
 		return { boardStore, board, firstColumn, secondColumn, cards };
 	};
@@ -661,7 +679,6 @@ describe("BoardStore", () => {
 			expect(secondColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
 				secondCardId,
 			]);
-
 			expect(firstColumnCardsAfterMove?.map((card) => card.cardId)).toEqual([
 				firstCardId,
 				thirdCardId,

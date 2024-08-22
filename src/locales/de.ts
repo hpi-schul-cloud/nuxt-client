@@ -321,7 +321,13 @@ export default {
 	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
-	"components.board.menu.element": "Element-Einstellungen",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Etherpad-Einstellungen",
+	"components.board.menu.drawingElement": "Whiteboard-Einstellungen",
+	"components.board.menu.externalToolElement": "Externes-Tool-Einstellungen",
+	"components.board.menu.fileElement": "Datei-Einstellungen",
+	"components.board.menu.linkElement": "Link-Einstellungen",
+	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
 	"components.board.notifications.errors.fileNameExists":
 		"Es existiert bereits eine Datei mit diesem Namen.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -374,6 +380,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
+	"components.cardElement.externalToolElement": "Externes Tool",
+	"components.cardElement.fileElement": "Datei",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
@@ -396,6 +404,7 @@ export default {
 		"Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
 	"components.cardElement.fileElement.virusDetected":
 		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
+	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Link-Adresse einfügen",
 	"components.cardElement.notification.visibleAndEditable":
 		"Dieses Whiteboard ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
@@ -603,6 +612,16 @@ export default {
 		"Keiner. Benutzer wird neu erstellt.",
 	"components.molecules.importUsersMatch.write":
 		"Vornamen oder Nachnamen eingeben",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Nicht verfügbar",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Lehrende/r",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Lernende/r",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Organisationsadministrator",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Organisationsleitung",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",

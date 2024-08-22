@@ -1,10 +1,15 @@
+import { computed } from "vue";
+import { shallowMount } from "@vue/test-utils";
 import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 	envsFactory,
 } from "@@/tests/test-utils/factory";
-import { shallowMount } from "@vue/test-utils";
-import { useBoardPermissions, useBoardStore } from "@data-board";
+import {
+	useBoardPermissions,
+	useBoardStore,
+	useForceRender,
+} from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
@@ -20,7 +25,7 @@ import { envConfigModule, notifierModule } from "@/store";
 import { createTestingPinia } from "@pinia/testing";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useBoardNotifier } from "@util-board";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
 
@@ -31,9 +36,21 @@ const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = jest.mocked(
+	useSharedLastCreatedElement
+);
+
+jest.mock("@data-board/fixSamePositionDnD.composable");
+const mockedUseForceRender = jest.mocked(useForceRender);
+
+mockUseSharedLastCreatedElement.mockReturnValue({
+	lastCreatedElementId: computed(() => "element-id"),
+	resetLastCreatedElementId: jest.fn(),
+});
 
 describe("BoardColumn", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let mockedUseForceRenderHandler: ReturnType<typeof useForceRender>;
 
 	beforeEach(() => {
 		setupStores({ envConfigModule: EnvConfigModule });
@@ -45,6 +62,10 @@ describe("BoardColumn", () => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+		mockedUseForceRenderHandler =
+			createMock<ReturnType<typeof useForceRender>>();
+		mockedUseForceRender.mockReturnValue(mockedUseForceRenderHandler);
 	});
 
 	const setup = (options?: {
@@ -92,6 +113,11 @@ describe("BoardColumn", () => {
 		it("should be found in dom", () => {
 			const { wrapper } = setup();
 			expect(wrapper.findComponent(BoardColumnVue).exists()).toBe(true);
+		});
+
+		it("should trigger 'getRenderKey' method", () => {
+			setup();
+			expect(mockedUseForceRenderHandler.getRenderKey).toHaveBeenCalled();
 		});
 	});
 

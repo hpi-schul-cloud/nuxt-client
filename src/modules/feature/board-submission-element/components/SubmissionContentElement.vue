@@ -28,7 +28,7 @@
 				:isOverdue="isOverdue"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
 			>
-				<BoardMenu scope="element">
+				<BoardMenu scope="submissionElement">
 					<BoardMenuActionMoveUp @click="onMoveElementUp" />
 					<BoardMenuActionMoveDown @click="onMoveElementDown" />
 					<BoardMenuActionDelete @click="onDeleteElement" />

@@ -5,7 +5,7 @@ import {
 	ShareTokenBodyParamsParentTypeEnum,
 } from "../serverApi/v3/api";
 import setupStores from "@@/tests/test-utils/setupStores";
-import RoomModule from "@/store/room";
+import courseRoomDetailsModule from "@/store/course-room-details";
 
 const sharePayload: SharePayload = {
 	id: "sampleCourseId",
@@ -22,7 +22,7 @@ const expectedServerPayload = {
 describe("share module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
-			setupStores({ roomModule: RoomModule });
+			setupStores({ courseRoomDetailsModule: courseRoomDetailsModule });
 		});
 
 		describe("createShareUrl", () => {
@@ -69,7 +69,7 @@ describe("share module", () => {
 					await shareModule.createShareUrl(sharePayload);
 					const result = setShareUrlMock.mock.calls[0][0];
 
-					expect(result).toContain("rooms-overview?import=sampleToken");
+					expect(result).toContain("rooms/courses-overview?import=sampleToken");
 				});
 
 				it("should return undefined on error", async () => {
