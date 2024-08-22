@@ -32,7 +32,7 @@
 					<room-dot-menu
 						:menu-items="headlineMenuItems"
 						data-testid="room-menu"
-						:aria-label="$t('pages.rooms.headerSection.menu.ariaLabel')"
+						:aria-label="$t('pages.courseRoom.headerSection.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
