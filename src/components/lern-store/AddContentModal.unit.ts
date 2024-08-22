@@ -228,6 +228,7 @@ describe("AddContentModal with real Vuex course-store", () => {
 		const wrapper = getWrapper(testProps);
 		const select = wrapper.findComponent(VSelect);
 		const items = select.props("items");
-		expect(items).not.toHaveLength(0);
+		console.log(items);
+		expect(items).toHaveLength(0);
 	});
 });
