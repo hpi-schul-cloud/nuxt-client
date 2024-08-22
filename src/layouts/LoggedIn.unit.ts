@@ -17,7 +17,7 @@ import {
 import { mount } from "@vue/test-utils";
 import { h } from "vue";
 import { VApp } from "vuetify/lib/components/index.mjs";
-import NewLoggedIn from "./LoggedIn.layout.vue";
+import NewLoggedIn from "./loggedIn.layout.vue";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
