@@ -67,6 +67,7 @@
 			"@page-board": ["src/modules/page/board"],
 			"@page-class-members": ["src/modules/page/class-members"],
 			"@page-media-shelf": ["src/modules/page/media-shelf"],
+			"@page-room": ["src/modules/page/room"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},
