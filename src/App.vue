@@ -1,15 +1,8 @@
 <template>
 	<v-app>
-		<Suspense>
-			<template #default>
-				<component :is="layout">
-					<router-view />
-				</component>
-			</template>
-			<template #fallback>
-				<p>Loading...</p>
-			</template>
-		</Suspense>
+		<component :is="layout">
+			<router-view />
+		</component>
 	</v-app>
 </template>
 
