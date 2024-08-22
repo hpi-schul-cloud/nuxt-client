@@ -377,7 +377,7 @@ export default defineComponent({
 			this.groupDialog.groupData = {};
 		},
 		defaultNaming(pos) {
-			const title = this.$t("pages.rooms.groupName");
+			const title = this.$t("pages.courseRoom.groupName");
 			const payload = {
 				title,
 				xPosition: pos.x,
