@@ -11,14 +11,14 @@
 					to="/rooms/courses-list"
 					data-testid="go-to-all-courses"
 				>
-					{{ $t("pages.rooms.index.courses.all") }}
+					{{ $t("pages.courseRoom.index.courses.all") }}
 				</v-btn>
 				<v-switch
 					v-if="isTouchDevice"
 					v-model="allowDragging"
 					class="enable-disable"
-					:label="$t('pages.rooms.index.courses.arrangeCourses')"
-					:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
+					:label="$t('pages.courseRoom.index.courses.arrangeCourses')"
+					:aria-label="$t('pages.courseRoom.index.courses.arrangeCourses')"
 					:true-icon="mdiCheck"
 					hide-details
 				/>

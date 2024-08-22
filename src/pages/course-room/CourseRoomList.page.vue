@@ -2,7 +2,7 @@
 	<room-wrapper :has-rooms="hasRooms">
 		<template #header>
 			<h1 class="text-h3 py-2 mb-4">
-				{{ $t("pages.rooms.index.courses.all") }}
+				{{ $t("pages.courseRoom.index.courses.all") }}
 			</h1>
 			<div class="header-actions-section mb-5">
 				<v-btn
@@ -94,7 +94,7 @@ export default defineComponent({
 	},
 	async mounted() {
 		document.title = buildPageTitle(
-			this.$t("pages.rooms.index.courses.all").toString()
+			this.$t("pages.courseRoom.index.courses.all").toString()
 		);
 		await courseRoomListModule.fetchAllElements();
 	},
