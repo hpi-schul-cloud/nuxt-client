@@ -73,15 +73,22 @@
 					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
 				/>
+				<DeletedElement
+					v-else-if="isDeletedElementResponse(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					@delete:element="onDeleteElement"
+				/>
 			</ContentElement>
 		</template>
 	</VCardText>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
 	CollaborativeTextEditorElementResponse,
 	ContentElementType,
+	DeletedElementResponse,
 	DrawingElementResponse,
 	ExternalToolElementResponse,
 	FileElementResponse,
@@ -93,210 +100,177 @@ import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
+import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
 import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
-import { computed, defineComponent, PropType } from "vue";
+import { computed, PropType } from "vue";
 import ContentElement from "./ContentElement.vue";
 
-export default defineComponent({
-	name: "ContentElementList",
-	components: {
-		ContentElement,
-		ExternalToolElement,
-		FileContentElement,
-		RichTextContentElement,
-		SubmissionContentElement,
-		LinkContentElement,
-		DrawingContentElement,
-		CollaborativeTextEditorElement,
+const props = defineProps({
+	elements: {
+		type: Array as PropType<AnyContentElement[]>,
+		required: true,
 	},
-	props: {
-		elements: {
-			type: Array as PropType<AnyContentElement[]>,
-			required: true,
-		},
-		isEditMode: {
-			type: Boolean,
-			required: true,
-		},
-		isDetailView: {
-			type: Boolean,
-			required: true,
-		},
+	isEditMode: {
+		type: Boolean,
+		required: true,
 	},
-	emits: [
-		"delete:element",
-		"move-down:element",
-		"move-up:element",
-		"move-keyboard:element",
-	],
-	setup(props, { emit }) {
-		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-
-		const onDeleteElement = (elementId: string) => {
-			emit("delete:element", elementId);
-		};
-
-		const isRichTextElementResponse = (
-			element: AnyContentElement
-		): element is RichTextElementResponse => {
-			return element.type === ContentElementType.RichText;
-		};
-
-		const isFileElementResponse = (
-			element: AnyContentElement
-		): element is FileElementResponse => {
-			return element.type === ContentElementType.File;
-		};
-
-		const isSubmissionContainerElementResponse = (
-			element: AnyContentElement
-		): element is SubmissionContainerElementResponse => {
-			return element.type === ContentElementType.SubmissionContainer;
-		};
-
-		const showSubmissionContainerElement = (
-			element: AnyContentElement
-		): element is SubmissionContainerElementResponse => {
-			return (
-				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
-				isSubmissionContainerElementResponse(element)
-			);
-		};
-
-		const isLinkElementResponse = (
-			element: AnyContentElement
-		): element is LinkElementResponse => {
-			return element.type === ContentElementType.Link;
-		};
-
-		const showLinkElement = (
-			element: AnyContentElement
-		): element is LinkElementResponse => {
-			return (
-				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED &&
-				isLinkElementResponse(element)
-			);
-		};
-
-		const isExternalToolElementResponse = (
-			element: AnyContentElement
-		): element is ExternalToolElementResponse => {
-			return element.type === ContentElementType.ExternalTool;
-		};
-
-		const showExternalToolElement = (
-			element: AnyContentElement
-		): element is ExternalToolElementResponse => {
-			return (
-				!!envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED &&
-				isExternalToolElementResponse(element)
-			);
-		};
-
-		const isDrawingElementResponse = (
-			element: AnyContentElement
-		): element is DrawingElementResponse => {
-			return element.type === ContentElementType.Drawing;
-		};
-
-		const showDrawingElement = (
-			element: AnyContentElement
-		): element is DrawingElementResponse => {
-			return (
-				!!envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED &&
-				isDrawingElementResponse(element)
-			);
-		};
-
-		const isCollaborativeTextEditorResponse = (
-			element: AnyContentElement
-		): element is CollaborativeTextEditorElementResponse => {
-			return element.type === ContentElementType.CollaborativeTextEditor;
-		};
-
-		const showCollaborativeTextEditorElement = (
-			element: AnyContentElement
-		): element is CollaborativeTextEditorElementResponse => {
-			return (
-				!!envConfigModule.getEnv
-					.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED &&
-				isCollaborativeTextEditorResponse(element)
-			);
-		};
-
-		const onMoveElementDown = (
-			elementIndex: number,
-			element: AnyContentElement
-		) => {
-			const elementMove: ElementMove = {
-				elementIndex,
-				payload: element.id,
-			};
-			emit("move-down:element", elementMove);
-		};
-
-		const onMoveElementUp = (
-			elementIndex: number,
-			element: AnyContentElement
-		) => {
-			const elementMove: ElementMove = {
-				elementIndex,
-				payload: element.id,
-			};
-			emit("move-up:element", elementMove);
-		};
-
-		const onMoveElementKeyboard = (
-			elementIndex: number,
-			element: AnyContentElement,
-			event: KeyboardEvent
-		) => {
-			const elementMove: ElementMove = {
-				elementIndex,
-				payload: element.id,
-			};
-			emit("move-keyboard:element", elementMove, event.code);
-		};
-
-		const hasMultipleElements = computed(() => props.elements.length > 1);
-
-		const firstElementId = computed<Element["id"] | null>(() =>
-			props.elements.length > 0 ? props.elements[0].id : null
-		);
-
-		const lastElementId = computed<Element["id"] | null>(() => {
-			const lastElementIndex = props.elements.length - 1;
-			return props.elements.length > 0
-				? props.elements[lastElementIndex].id
-				: null;
-		});
-
-		return {
-			firstElementId,
-			hasMultipleElements,
-			isFileElementResponse,
-			isRichTextElementResponse,
-			isSubmissionContainerElementResponse,
-			isLinkElementResponse,
-			showSubmissionContainerElement,
-			isExternalToolElementResponse,
-			showExternalToolElement,
-			showDrawingElement,
-			showCollaborativeTextEditorElement,
-			isDrawingElementResponse,
-			isCollaborativeTextEditorResponse,
-			showLinkElement,
-			lastElementId,
-			onDeleteElement,
-			onMoveElementDown,
-			onMoveElementUp,
-			onMoveElementKeyboard,
-		};
+	isDetailView: {
+		type: Boolean,
+		required: true,
 	},
+});
+
+const emit = defineEmits<{
+	(e: "delete:element", elementId: string): void;
+	(e: "move-down:element", elementMove: ElementMove): void;
+	(e: "move-up:element", elementMove: ElementMove): void;
+	(e: "move-keyboard:element", elementMove: ElementMove, code: string): void;
+}>();
+
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
+const onDeleteElement = (elementId: string) => {
+	emit("delete:element", elementId);
+};
+
+const isRichTextElementResponse = (
+	element: AnyContentElement
+): element is RichTextElementResponse => {
+	return element.type === ContentElementType.RichText;
+};
+
+const isFileElementResponse = (
+	element: AnyContentElement
+): element is FileElementResponse => {
+	return element.type === ContentElementType.File;
+};
+
+const isSubmissionContainerElementResponse = (
+	element: AnyContentElement
+): element is SubmissionContainerElementResponse => {
+	return element.type === ContentElementType.SubmissionContainer;
+};
+
+const showSubmissionContainerElement = (
+	element: AnyContentElement
+): element is SubmissionContainerElementResponse => {
+	return (
+		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
+		isSubmissionContainerElementResponse(element)
+	);
+};
+
+const isLinkElementResponse = (
+	element: AnyContentElement
+): element is LinkElementResponse => {
+	return element.type === ContentElementType.Link;
+};
+
+const showLinkElement = (
+	element: AnyContentElement
+): element is LinkElementResponse => {
+	return (
+		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED &&
+		isLinkElementResponse(element)
+	);
+};
+
+const isExternalToolElementResponse = (
+	element: AnyContentElement
+): element is ExternalToolElementResponse => {
+	return element.type === ContentElementType.ExternalTool;
+};
+
+const showExternalToolElement = (
+	element: AnyContentElement
+): element is ExternalToolElementResponse => {
+	return (
+		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED &&
+		isExternalToolElementResponse(element)
+	);
+};
+
+const isDrawingElementResponse = (
+	element: AnyContentElement
+): element is DrawingElementResponse => {
+	return element.type === ContentElementType.Drawing;
+};
+
+const showDrawingElement = (
+	element: AnyContentElement
+): element is DrawingElementResponse => {
+	return (
+		envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED &&
+		isDrawingElementResponse(element)
+	);
+};
+
+const isCollaborativeTextEditorResponse = (
+	element: AnyContentElement
+): element is CollaborativeTextEditorElementResponse => {
+	return element.type === ContentElementType.CollaborativeTextEditor;
+};
+
+const showCollaborativeTextEditorElement = (
+	element: AnyContentElement
+): element is CollaborativeTextEditorElementResponse => {
+	return (
+		envConfigModule.getEnv
+			.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED &&
+		isCollaborativeTextEditorResponse(element)
+	);
+};
+
+const isDeletedElementResponse = (
+	element: AnyContentElement
+): element is DeletedElementResponse => {
+	return element.type === ContentElementType.Deleted;
+};
+
+const onMoveElementDown = (
+	elementIndex: number,
+	element: AnyContentElement
+) => {
+	const elementMove: ElementMove = {
+		elementIndex,
+		payload: element.id,
+	};
+	emit("move-down:element", elementMove);
+};
+
+const onMoveElementUp = (elementIndex: number, element: AnyContentElement) => {
+	const elementMove: ElementMove = {
+		elementIndex,
+		payload: element.id,
+	};
+	emit("move-up:element", elementMove);
+};
+
+const onMoveElementKeyboard = (
+	elementIndex: number,
+	element: AnyContentElement,
+	event: KeyboardEvent
+) => {
+	const elementMove: ElementMove = {
+		elementIndex,
+		payload: element.id,
+	};
+	emit("move-keyboard:element", elementMove, event.code);
+};
+
+const hasMultipleElements = computed(() => props.elements.length > 1);
+
+const firstElementId = computed<Element["id"] | null>(() =>
+	props.elements.length > 0 ? props.elements[0].id : null
+);
+
+const lastElementId = computed<Element["id"] | null>(() => {
+	const lastElementIndex = props.elements.length - 1;
+	return props.elements.length > 0 ? props.elements[lastElementIndex].id : null;
 });
 </script>

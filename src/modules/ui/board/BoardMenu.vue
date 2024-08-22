@@ -17,7 +17,7 @@
 			>
 				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
-					{{ t(boardMenuAriaLabel) }}
+					{{ $t(boardMenuAriaLabel) }}
 				</span>
 			</VBtn>
 		</template>
@@ -32,7 +32,6 @@ import { mdiDotsVertical } from "@mdi/js";
 import { computed, PropType, provide, toRef } from "vue";
 import { BoardMenuScope } from "./board-menu-scope";
 import { MENU_SCOPE } from "./injection-tokens";
-import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	scope: {
@@ -48,8 +47,6 @@ const props = defineProps({
 const scope = toRef(props, "scope");
 provide(MENU_SCOPE, scope.value);
 
-const { t } = useI18n();
-
 const ariaLabelForScope: Record<BoardMenuScope, string> = {
 	board: "components.board.menu.board",
 	column: "components.board.menu.column",
@@ -61,6 +58,7 @@ const ariaLabelForScope: Record<BoardMenuScope, string> = {
 	fileElement: "components.board.menu.fileElement",
 	linkElement: "components.board.menu.linkElement",
 	submissionElement: "components.board.menu.submissionElement",
+	deletedElement: "components.board.menu.deletedElement",
 };
 
 const boardMenuAriaLabel = computed(() => {
@@ -75,6 +73,7 @@ const boardScopesWithBackground: Array<BoardMenuScope> = [
 	"fileElement",
 	"linkElement",
 	"submissionElement",
+	"deletedElement",
 ];
 
 const hasBackground = computed<boolean>(() =>

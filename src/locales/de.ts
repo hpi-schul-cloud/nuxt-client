@@ -328,6 +328,7 @@ export default {
 	"components.board.menu.fileElement": "Datei-Einstellungen",
 	"components.board.menu.linkElement": "Link-Einstellungen",
 	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
+	"components.board.menu.deletedElement": "Gelöschter-Inhalt-Einstellungen",
 	"components.board.notifications.errors.fileNameExists":
 		"Es existiert bereits eine Datei mit diesem Namen.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -421,6 +422,8 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Bitte Titel angeben.",
 	"components.cardElement.titleElement": "Titelelement",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
 	"components.datePicker.validation.format":
 		"Bitte Format DD.MM.YYYY verwenden.",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
@@ -822,6 +825,7 @@ export default {
 	"global.sidebar.item.management": "Verwaltung",
 	"global.sidebar.item.overview": "Übersicht",
 	"global.sidebar.item.releaseNotes": "Was ist neu?",
+	"global.sidebar.item.rooms": "Räume",
 	"global.sidebar.item.school": "Schule",
 	"global.sidebar.item.student": "Schüler:innen",
 	"global.sidebar.item.system": "System",
