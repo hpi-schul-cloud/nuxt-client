@@ -24,9 +24,9 @@
 					variant="solo"
 					rounded
 					single-line
-					:label="$t('pages.rooms.index.search.label')"
+					:label="$t('pages.courseRoom.index.search.label')"
 					:append-inner-icon="mdiMagnify"
-					:aria-label="$t('pages.rooms.index.search.label')"
+					:aria-label="$t('pages.courseRoom.index.search.label')"
 					data-testid="search-field-course"
 				/>
 			</v-row>

@@ -1472,6 +1472,7 @@ export default {
 	"pages.courseRoom.index.courses.active": "Aktuelle Kurse",
 	"pages.courseRoom.index.courses.all": "Alle Kurse",
 	"pages.courseRoom.index.courses.arrangeCourses": "Kurse umordnen",
+	"pages.courseRoom.index.search.label": "Kurs suchen",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",
@@ -1566,7 +1567,6 @@ export default {
 		"Kurs {name} wurde erfolgreich importiert.",
 	"pages.rooms.ccImportCourse.error":
 		"Beim importieren des Kurses ist ein Fehler aufgetreten.",
-	"pages.rooms.index.search.label": "Kurs suchen",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
 	"pages.rooms.tabLabel.groups": "Gruppen",
 	"pages.rooms.tabLabel.tools": "Tools",
