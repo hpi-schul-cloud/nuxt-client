@@ -144,6 +144,9 @@ module.exports = {
 			"@feature-board-collaborative-text-editor-element": getDir(
 				"src/modules/feature/board-collaborative-text-editor-element"
 			),
+			"@feature-board-deleted-element": getDir(
+				"src/modules/feature/board-deleted-element"
+			),
 			"@feature-course-sync": getDir("src/modules/feature/course-sync"),
 			"@feature-board": getDir("src/modules/feature/board"),
 			"@feature-editor": getDir("src/modules/feature/editor"),
@@ -172,6 +175,7 @@ module.exports = {
 			"@page-board": getDir("src/modules/page/board"),
 			"@page-class-members": getDir("src/modules/page/class-members"),
 			"@page-media-shelf": getDir("src/modules/page/media-shelf"),
+			"@page-room": getDir("src/modules/page/room"),
 		},
 		extensions: [".tsx", ".ts", ".mjs", ".js", ".jsx", ".vue", ".json"],
 		plugins: [new ThemeResolverPlugin(__base, replacements)],
