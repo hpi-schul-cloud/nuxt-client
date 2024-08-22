@@ -291,11 +291,11 @@ export default defineComponent({
 				)
 			) {
 				actions.push({
-					label: this.$t("pages.room.fab.add.task"),
+					label: this.$t("pages.courseRoom.fab.add.task"),
 					icon: mdiFormatListChecks,
 					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_task",
-					ariaLabel: this.$t("pages.room.fab.add.task"),
+					ariaLabel: this.$t("pages.courseRoom.fab.add.task"),
 				});
 			}
 

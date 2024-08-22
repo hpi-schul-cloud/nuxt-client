@@ -1445,6 +1445,7 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Choose a course / subject",
 	"pages.content.placeholder.noLessonTopic": "Create a topic in the course",
 	"pages.content.preview_img.alt": "Image preview",
+	"pages.courseRoom.fab.add.task": "New task",
 	"pages.courseRoom.groupName": "Courses",
 	"pages.courseRoom.headerSection.archived": "Archive",
 	"pages.courseRoom.headerSection.menu.ariaLabel": "Course menu",
@@ -1487,7 +1488,7 @@ export default {
 	"pages.room.fab.add.lesson": "New topic",
 	"pages.room.fab.add.board": "New board",
 	"pages.room.fab.add.columnBoard": "New column board",
-	"pages.room.fab.add.task": "New task",
+
 	"pages.room.itemDelete.text": 'Delete {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
