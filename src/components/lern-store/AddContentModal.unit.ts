@@ -105,7 +105,7 @@ const createMockStore = () => {
 	return { mockStore, createStudentStub };
 };
 
-const getWrapper: any = (props: object) => {
+const getWrapper = (props: object) => {
 	const { mockStore } = createMockStore();
 	return mount(AddContentModal, {
 		global: {
@@ -170,7 +170,7 @@ describe("@/components/molecules/AddContentModal", () => {
 		const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalsy();
+		expect(wrapper.emitted("update:show-copy-modal")?.[0][0]).toBeFalsy();
 	});
 
 	it("submit modal action multiple items", async () => {
@@ -183,7 +183,7 @@ describe("@/components/molecules/AddContentModal", () => {
 		const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBe(false);
+		expect(wrapper.emitted("update:show-copy-modal")?.[0][0]).toBe(false);
 	});
 
 	it("cancel modal action", async () => {
@@ -201,7 +201,7 @@ describe("@/components/molecules/AddContentModal", () => {
 
 		await cancelBtn.trigger("click");
 
-		expect(wrapper.emitted("update:show-copy-modal", false)).toHaveLength(1);
+		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
 		expect(lessonSelection.props("modelValue")).toBeNull();
 		expect(courseSelection.props("modelValue")).toBeNull();
 	});
@@ -210,13 +210,14 @@ describe("@/components/molecules/AddContentModal", () => {
 // This test is necessary to ensure that the real Vuex course-store is functioning correctly.
 // The course-store is only invoked at this point, making it crucial to test it here.
 describe("AddContentModal with real Vuex course-store", () => {
+	// const setup = () => {}; //TODO ....
 	it("course options should be defined", async () => {
 		const store = createStore({
 			modules: {
 				courses,
 			},
 		});
-		const getWrapper: any = (props: object) => {
+		const getWrapper = (props: object) => {
 			return mount(AddContentModal, {
 				global: {
 					plugins: [store, createTestingVuetify(), createTestingI18n()],
@@ -225,7 +226,8 @@ describe("AddContentModal with real Vuex course-store", () => {
 			});
 		};
 		const wrapper = getWrapper(testProps);
-		const selection = wrapper.findComponent('[data-testid="courseSelector"]');
-		expect(selection.vm.$options.name).toBe("VSelect");
+		const select = wrapper.findComponent(VSelect);
+		const items = select.props("items");
+		expect(items).not.toHaveLength(0);
 	});
 });
