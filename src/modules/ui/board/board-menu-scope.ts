@@ -7,4 +7,5 @@ export type BoardMenuScope =
 	| "externalToolElement"
 	| "fileElement"
 	| "linkElement"
-	| "submissionElement";
+	| "submissionElement"
+	| "deletedElement";
