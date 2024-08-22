@@ -22,6 +22,13 @@ export const useSidebarItems = () => {
 			testId: "Übersicht",
 		},
 		{
+			title: "global.sidebar.item.rooms",
+			to: "/rooms",
+			icon: "$mdiAccountSupervisorCircleOutline",
+			feature: "FEATURE_ROOMS_ENABLED",
+			testId: "Räume",
+		},
+		{
 			title: "global.sidebar.item.courses",
 			to: "/rooms/courses-overview",
 			icon: "$mdiSchoolOutline",
