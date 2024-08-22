@@ -26,6 +26,20 @@ const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
 jest.mock("../boardActions/boardSocketApi.composable");
 jest.mock("../boardActions/boardRestApi.composable");
 
+jest.mock("@vueuse/shared", () => {
+	return {
+		...jest.requireActual("@vueuse/shared"),
+		useTimeoutFn: jest.fn().mockImplementation((cb) => {
+			cb();
+			return {
+				isPending: false,
+				start: jest.fn(),
+				stop: jest.fn(),
+			};
+		}),
+	};
+});
+
 describe("socket.ts", () => {
 	let dispatchMock: jest.Mock;
 	let mockSocket: Partial<socketModule.Socket>;
@@ -60,6 +74,8 @@ describe("socket.ts", () => {
 		mockBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockUseBoardNotifier.mockReturnValue(mockBoardNotifierCalls);
 	});
+
+	jest.useFakeTimers();
 
 	beforeEach(() => {
 		dispatchMock = jest.fn();
