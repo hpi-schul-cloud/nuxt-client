@@ -20,7 +20,7 @@
 			@update:caption="onUpdateCaption"
 			@add:alert="onAddAlert"
 		>
-			<BoardMenu scope="element" v-if="isEditMode">
+			<BoardMenu scope="fileElement" v-if="isEditMode">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
@@ -33,7 +33,7 @@
 			@upload:file="onUploadFile"
 			:isUploading="isUploading"
 		>
-			<BoardMenu scope="element">
+			<BoardMenu scope="fileElement">
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete @click="onDelete" />

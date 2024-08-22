@@ -14,7 +14,7 @@
 		<div class="drawing-element-content">
 			<InnerContent :docName="element.id">
 				<template v-if="isEditMode">
-					<BoardMenu scope="element">
+					<BoardMenu scope="drawingElement">
 						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
 						<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
 						<BoardMenuActionDelete @click="onDeleteElement" />

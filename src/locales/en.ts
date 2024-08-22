@@ -319,7 +319,12 @@ export default {
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
-	"components.board.menu.element": "Element settings",
+	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",
+	"components.board.menu.drawingElement": "Whiteboard settings",
+	"components.board.menu.externalToolElement": "Externeal tool settings",
+	"components.board.menu.fileElement": "File settings",
+	"components.board.menu.linkElement": "Link settings",
+	"components.board.menu.submissionElement": "Submission settings",
 	"components.board.notifications.errors.fileNameExists":
 		"A file with this name already exists.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -372,6 +377,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"This Etherpad is visible and editable for all course participants.",
+	"components.cardElement.externalToolElement": "External tool",
+	"components.cardElement.fileElement": "File",
 	"components.cardElement.fileElement.altDescription":
 		"A short description helps people who cannot see the picture.",
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
@@ -394,6 +401,7 @@ export default {
 		"The video format is not supported by this browser/operating system.",
 	"components.cardElement.fileElement.virusDetected":
 		"File has been locked due to a suspected virus.",
+	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Insert link address",
 	"components.cardElement.notification.visibleAndEditable":
 		"This whiteboard is visible and editable for all course participants.",

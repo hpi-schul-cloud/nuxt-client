@@ -1,11 +1,11 @@
 <template>
-	<BoardMenu scope="element">
+	<BoardMenu scope="externalToolElement">
 		<BoardMenuActionMoveUp @click="onMoveUp" />
 		<BoardMenuActionMoveDown @click="onMoveDown" />
 		<BoardMenuAction :icon="mdiCogOutline" @click="onEdit">
 			{{ $t("common.labels.settings") }}
 		</BoardMenuAction>
-		<BoardMenuActionDelete @click="onDelete" />
+		<BoardMenuActionDelete :name="displayName" @click="onDelete" />
 	</BoardMenu>
 </template>
 
@@ -32,6 +32,11 @@ export default defineComponent({
 		BoardMenuAction,
 		BoardMenuActionMoveUp,
 		BoardMenuActionMoveDown,
+	},
+	props: {
+		displayName: {
+			type: String,
+		},
 	},
 	emits: [
 		"edit:element",
