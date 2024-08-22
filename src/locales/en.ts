@@ -1441,6 +1441,7 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Choose a course / subject",
 	"pages.content.placeholder.noLessonTopic": "Create a topic in the course",
 	"pages.content.preview_img.alt": "Image preview",
+	"pages.courseRoom.index.courses.active": "Current courses",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",
@@ -1531,7 +1532,6 @@ export default {
 		"Course {name} was successfully imported.",
 	"pages.rooms.ccImportCourse.error":
 		"An error occurred while importing the course.",
-	"pages.rooms.index.courses.active": "Current courses",
 	"pages.rooms.index.courses.all": "All courses",
 	"pages.rooms.index.courses.arrangeCourses": "Arrange courses",
 	"pages.rooms.index.search.label": "Search course",

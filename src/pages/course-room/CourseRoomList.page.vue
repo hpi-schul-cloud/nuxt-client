@@ -11,7 +11,7 @@
 					to="/rooms/courses-overview"
 					data-testid="go-to-active-courses"
 				>
-					{{ $t("pages.rooms.index.courses.active") }}
+					{{ $t("pages.courseRoom.index.courses.active") }}
 				</v-btn>
 			</div>
 		</template>

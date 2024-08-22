@@ -2,7 +2,7 @@
 	<room-wrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
 		<template #header>
 			<h1 class="text-h3 py-2 mb-4">
-				{{ $t("pages.rooms.index.courses.active") }}
+				{{ $t("pages.courseRoom.index.courses.active") }}
 			</h1>
 			<div class="mb-5 header-actions-section">
 				<v-btn
@@ -425,7 +425,7 @@ export default defineComponent({
 	},
 	mounted() {
 		document.title = buildPageTitle(
-			this.$t("pages.rooms.index.courses.active")
+			this.$t("pages.courseRoom.index.courses.active")
 		);
 	},
 });
