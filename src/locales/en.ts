@@ -1445,6 +1445,7 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Choose a course / subject",
 	"pages.content.placeholder.noLessonTopic": "Create a topic in the course",
 	"pages.content.preview_img.alt": "Image preview",
+	"pages.courseRoom.fab.add.lesson": "New topic",
 	"pages.courseRoom.fab.add.task": "New task",
 	"pages.courseRoom.groupName": "Courses",
 	"pages.courseRoom.headerSection.archived": "Archive",
@@ -1485,7 +1486,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Select view",
 	"pages.room.dialog.boardLayout.singleColumn": "single-column",
 	"pages.room.dialog.boardLayout.multiColumn": "multi-column",
-	"pages.room.fab.add.lesson": "New topic",
 	"pages.room.fab.add.board": "New board",
 	"pages.room.fab.add.columnBoard": "New column board",
 

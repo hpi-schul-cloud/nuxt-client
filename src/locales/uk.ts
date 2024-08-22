@@ -1469,6 +1469,7 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Вибрати курс/предмет",
 	"pages.content.placeholder.noLessonTopic": "Створити тему в курсі",
 	"pages.content.preview_img.alt": "Попередній перегляд зображення",
+	"pages.courseRoom.fab.add.lesson": "Створити тему",
 	"pages.courseRoom.fab.add.task": "Створити завдання",
 	"pages.courseRoom.groupName": "Курси",
 	"pages.courseRoom.headerSection.archived": "Архів",
@@ -1510,7 +1511,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Виберіть вид",
 	"pages.room.dialog.boardLayout.singleColumn": "одноколонкові",
 	"pages.room.dialog.boardLayout.multiColumn": "багатоколонкові",
-	"pages.room.fab.add.lesson": "Створити тему",
 	"pages.room.fab.add.board": "Нова дошка",
 	"pages.room.fab.add.columnBoard": "Нова дошка",
 	"pages.room.itemDelete.text":

@@ -305,11 +305,11 @@ export default defineComponent({
 				)
 			) {
 				actions.push({
-					label: this.$t("pages.room.fab.add.lesson"),
+					label: this.$t("pages.courseRoom.fab.add.lesson"),
 					icon: mdiViewListOutline,
 					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_lesson",
-					ariaLabel: this.$t("pages.room.fab.add.lesson"),
+					ariaLabel: this.$t("pages.courseRoom.fab.add.lesson"),
 				});
 			}
 
