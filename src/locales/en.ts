@@ -325,6 +325,7 @@ export default {
 	"components.board.menu.fileElement": "File settings",
 	"components.board.menu.linkElement": "Link settings",
 	"components.board.menu.submissionElement": "Submission settings",
+	"components.board.menu.deletedElement": "Deleted content settings",
 	"components.board.notifications.errors.fileNameExists":
 		"A file with this name already exists.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -418,6 +419,8 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Please enter a title.",
 	"components.cardElement.titleElement": "Title element",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"Tool {toolName} not available. Please contact the school administrator.",
 	"components.datePicker.validation.format": "Please use format DD.MM.YYYY",
 	"components.datePicker.validation.required": "Please enter a date.",
 	"components.dateTimePicker.messages.dateInPast":
