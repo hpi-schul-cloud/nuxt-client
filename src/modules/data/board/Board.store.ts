@@ -6,6 +6,7 @@ import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useSharedEditMode } from "./EditMode.composable";
 import { envConfigModule } from "@/store";
+import { useCardStore } from "./Card.store";
 import {
 	CreateCardRequestPayload,
 	CreateCardSuccessPayload,
@@ -30,6 +31,7 @@ import {
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
 
 export const useBoardStore = defineStore("boardStore", () => {
+	const cardStore = useCardStore();
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
 	const { setFocus } = useBoardFocusHandler();
@@ -93,6 +95,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 
 		const { newCard } = payload;
+
+		cardStore.createCardSuccess(payload);
 
 		const columnIndex = board.value.columns.findIndex(
 			(column) => column.id === payload.columnId
