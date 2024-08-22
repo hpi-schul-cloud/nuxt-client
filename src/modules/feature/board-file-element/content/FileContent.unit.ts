@@ -323,6 +323,81 @@ describe("FileContent", () => {
 			expect(fileContent.props()).toEqual({
 				fileProperties,
 				isEditMode: true,
+				showMenu: true,
+			});
+		});
+
+		describe("show menu", () => {
+			it("should pass false when preview file is undefined", () => {
+				const { wrapper } = setup({
+					previewUrl: undefined,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("false");
+			});
+			it("should pass true when preview file is defined", () => {
+				const { wrapper } = setup();
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("true");
+			});
+
+			it("should pass true when video file", () => {
+				const { wrapper } = setup({
+					mimeType: "video/mp4",
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("true");
+			});
+
+			it("should pass true when audio file", () => {
+				const { wrapper } = setup({
+					mimeType: "audio/mp4",
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("true");
+			});
+
+			it("should pass true when pdf file is not on a listboard", () => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+					isListBoard: false,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("true");
+			});
+
+			it("should pass true when pdf file is on a listboard with a screensize smaller than 600 px", () => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+					isListBoard: true,
+					windowWidth: 599,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("true");
+			});
+
+			it("should pass false when pdf file is on a listboard with small or larger screensize", () => {
+				const { wrapper } = setup({
+					mimeType: "application/pdf",
+					isListBoard: true,
+					windowWidth: 900,
+				});
+
+				const props = wrapper.findComponent(FileDisplay).attributes();
+
+				expect(props.showmenu).toBe("false");
 			});
 		});
 
@@ -389,9 +464,8 @@ describe("FileContent", () => {
 		});
 
 		describe("show menu", () => {
-			it("should pass true when not a pdf, video or audio file and preview url is not defined", () => {
+			it("should pass true when preview url is not defined", () => {
 				const { wrapper } = setup({
-					mimeType: "test",
 					previewUrl: undefined,
 				});
 
@@ -400,20 +474,23 @@ describe("FileContent", () => {
 				expect(props.showmenu).toBe("true");
 			});
 
-			it("should pass false when preview url is defined", () => {
+			it("should pass true when the file is a PDF and on a listboard with a screensize small or larger", () => {
 				const { wrapper } = setup({
 					mimeType: "application/pdf",
-					previewUrl: undefined,
+					isListBoard: true,
+					windowWidth: 600,
 				});
 
 				const props = wrapper.findComponent(FileDescription).attributes();
 
-				expect(props.showmenu).toBe("false");
+				expect(props.showmenu).toBe("true");
 			});
 
-			it("should pass false when pdf file", () => {
+			it("should pass false when the file is a PDF and on a listboard with a xs screensize", () => {
 				const { wrapper } = setup({
 					mimeType: "application/pdf",
+					isListBoard: true,
+					windowWidth: 599,
 				});
 
 				const props = wrapper.findComponent(FileDescription).attributes();
@@ -421,19 +498,18 @@ describe("FileContent", () => {
 				expect(props.showmenu).toBe("false");
 			});
 
-			it("should pass false when video file", () => {
-				const { wrapper } = setup({
-					mimeType: "video/mp4",
-				});
+			it("should pass false when preview url is defined and file is not a pdf on a listbaord", () => {
+				const { wrapper } = setup();
 
 				const props = wrapper.findComponent(FileDescription).attributes();
 
 				expect(props.showmenu).toBe("false");
 			});
 
-			it("should pass false when audio file", () => {
+			it("should pass false when pdf file is not on a listboard", () => {
 				const { wrapper } = setup({
-					mimeType: "audio/mp4",
+					mimeType: "application/pdf",
+					isListBoard: false,
 				});
 
 				const props = wrapper.findComponent(FileDescription).attributes();

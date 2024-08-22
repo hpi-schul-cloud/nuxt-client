@@ -28,6 +28,7 @@ describe("FileDisplay", () => {
 						mimeType: "test",
 					},
 					isEditMode: true,
+					showMenu: true,
 				};
 
 				const wrapper = shallowMount(FileDisplay, {
@@ -78,6 +79,7 @@ describe("FileDisplay", () => {
 						mimeType: "video/mp4",
 					},
 					isEditMode: true,
+					showMenu: true,
 				};
 
 				const wrapper = shallowMount(FileDisplay, {
@@ -129,6 +131,7 @@ describe("FileDisplay", () => {
 						mimeType: "application/pdf",
 					},
 					isEditMode: true,
+					showMenu: true,
 				};
 
 				const wrapper = shallowMount(FileDisplay, {
@@ -174,6 +177,7 @@ describe("FileDisplay", () => {
 						mimeType: "video/mp4",
 					},
 					isEditMode: true,
+					showMenu: true,
 				};
 
 				const wrapper = shallowMount(FileDisplay, {
@@ -221,6 +225,7 @@ describe("FileDisplay", () => {
 						mimeType: "audio/mp3",
 					},
 					isEditMode: true,
+					showMenu: true,
 				};
 
 				const wrapper = shallowMount(FileDisplay, {
@@ -267,6 +272,7 @@ describe("FileDisplay", () => {
 						mimeType: "application/pdf",
 					},
 					isEditMode: true,
+					showMenu: true,
 				};
 
 				const wrapper = shallowMount(FileDisplay, {
@@ -307,6 +313,7 @@ describe("FileDisplay", () => {
 						mimeType: "test",
 					},
 					isEditMode: true,
+					showMenu: true,
 				};
 
 				const wrapper = shallowMount(FileDisplay, {
