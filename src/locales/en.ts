@@ -1464,6 +1464,12 @@ export default {
 	"pages.courseRoom.tabLabel.toolsOld": "Tools",
 	"pages.courseRoom.tools.configureVideoconferenceDialog.title":
 		"Create video conference {roomName}",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"All users participate as moderators",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.mute":
+		"Mute participants when entering",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Approval by the moderator before the room can be entered",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",
@@ -1545,12 +1551,6 @@ export default {
 	"pages.rooms.ccImportCourse.error":
 		"An error occurred while importing the course.",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"All users participate as moderators",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
-		"Mute participants when entering",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Approval by the moderator before the room can be entered",
 	"pages.rooms.tools.deactivated": "Tool deactivated",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deactivated",
 	"pages.rooms.tools.notLicensedDialog.title":

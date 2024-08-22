@@ -1507,6 +1507,12 @@ export default {
 	"pages.courseRoom.tabLabel.toolsOld": "Herramientas",
 	"pages.courseRoom.tools.configureVideoconferenceDialog.title":
 		"Crear videoconferencia {roomName}",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Todas las usuarias participan como moderadoras",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.mute":
+		"Silenciar a las participantes al entrar",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Aprobación del moderador antes de poder ingresar a la sala",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",
@@ -1589,12 +1595,6 @@ export default {
 	"pages.rooms.ccImportCourse.error":
 		"Se ha producido un error al importar el curso.",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Todas las usuarias participan como moderadoras",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
-		"Silenciar a las participantes al entrar",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Aprobación del moderador antes de poder ingresar a la sala",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Herramienta {toolName}“ desactivada",

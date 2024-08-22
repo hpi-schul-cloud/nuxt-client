@@ -1488,6 +1488,12 @@ export default {
 	"pages.courseRoom.tabLabel.toolsOld": "Tools",
 	"pages.courseRoom.tools.configureVideoconferenceDialog.title":
 		"Videokonferenz {roomName} erstellen",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Alle Nutzer:innen nehmen als Moderator:in teil",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.mute":
+		"Teilnehmer:innen beim Betreten stummschalten",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",
@@ -1573,12 +1579,6 @@ export default {
 	"pages.rooms.ccImportCourse.error":
 		"Beim importieren des Kurses ist ein Fehler aufgetreten.",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Alle Nutzer:innen nehmen als Moderator:in teil",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
-		"Teilnehmer:innen beim Betreten stummschalten",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
 	"pages.rooms.tools.notLicensedDialog.title":

@@ -50,7 +50,9 @@
 						v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
 						data-testId="every-attendee-joins-muted"
 						:label="
-							$t('pages.rooms.tools.configureVideoconferenceDialog.text.mute')
+							$t(
+								'pages.courseRoom.tools.configureVideoconferenceDialog.text.mute'
+							)
 						"
 						:hide-details="true"
 					/>
@@ -59,7 +61,7 @@
 						data-testId="moderator-must-approve-join-requests"
 						:label="
 							$t(
-								'pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom'
+								'pages.courseRoom.tools.configureVideoconferenceDialog.text.waitingRoom'
 							)
 						"
 						:hide-details="true"
@@ -69,7 +71,7 @@
 						data-testId="everybody-joins-as-moderator"
 						:label="
 							$t(
-								'pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission'
+								'pages.courseRoom.tools.configureVideoconferenceDialog.text.allModeratorPermission'
 							)
 						"
 						:hide-details="true"

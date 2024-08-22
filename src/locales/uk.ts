@@ -1471,6 +1471,8 @@ export default {
 	"pages.content.preview_img.alt": "Попередній перегляд зображення",
 	"pages.courseRoom.fab.add.lesson": "Створити тему",
 	"pages.courseRoom.fab.add.task": "Створити завдання",
+	"pages.courseRoom.fab.add.board": "Нова дошка",
+	"pages.courseRoom.fab.add.columnBoard": "Нова дошка",
 	"pages.courseRoom.groupName": "Курси",
 	"pages.courseRoom.headerSection.archived": "Архів",
 	"pages.courseRoom.headerSection.menu.ariaLabel": "Меню курсу",
@@ -1486,6 +1488,12 @@ export default {
 	"pages.courseRoom.tabLabel.toolsOld": "Інструмент",
 	"pages.courseRoom.tools.configureVideoconferenceDialog.title":
 		"Створити відеоконференцію {roomName}",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Усі користувачі беруть участь як модератори",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.mute":
+		"Вимкнення звуку учасників при вході",
+	"pages.courseRoom.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Схвалення модератором перед входом до кімнати",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",
@@ -1514,8 +1522,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Виберіть вид",
 	"pages.room.dialog.boardLayout.singleColumn": "одноколонкові",
 	"pages.room.dialog.boardLayout.multiColumn": "багатоколонкові",
-	"pages.courseRoom.fab.add.board": "Нова дошка",
-	"pages.courseRoom.fab.add.columnBoard": "Нова дошка",
 	"pages.room.itemDelete.text":
 		'{itemType} "{itemTitle}" буде видалена. Ви впевнені, що хочете видалити?',
 	"pages.room.itemDelete.title": "Видалити елемент",
@@ -1567,12 +1573,6 @@ export default {
 	"pages.rooms.ccImportCourse.success": "Курс {name} успішно імпортовано.",
 	"pages.rooms.ccImportCourse.error": "Виникла помилка під час імпорту курсу.",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Усі користувачі беруть участь як модератори",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
-		"Вимкнення звуку учасників при вході",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Схвалення модератором перед входом до кімнати",
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Інструмент „{toolName}“ вимкнено",
