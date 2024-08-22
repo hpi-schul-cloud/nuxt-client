@@ -1,21 +1,22 @@
-import MigrationWizard from "@/pages/administration/Migration.page.vue";
+import { nextTick } from "vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Router, useRouter } from "vue-router";
+import { ComponentMountingOptions, mount, shallowMount } from "@vue/test-utils";
+import { createMock } from "@golevelup/ts-jest";
+import { THEME_KEY } from "@/utils/inject";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import ImportUsersModule from "@/store/import-users";
 import SchoolsModule from "@/store/schools";
-import { THEME_KEY } from "@/utils/inject";
+import MigrationWizard from "@/pages/administration/Migration.page.vue";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { schoolFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { ComponentMountingOptions, mount, shallowMount } from "@vue/test-utils";
-import { nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import { Router, useRouter } from "vue-router";
-import { createMock } from "@golevelup/ts-jest";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -28,6 +29,13 @@ const router = createMock<Router>();
 
 const $theme = {
 	name: "instance name",
+};
+
+const importUsersStub = {
+	template: "<div></div>",
+	methods: {
+		reloadData: async () => Promise.resolve(),
+	},
 };
 
 const getWrapper = (
@@ -48,7 +56,7 @@ const getWrapper = (
 				[THEME_KEY.valueOf()]: $theme,
 			},
 			stubs: {
-				ImportUsers: true,
+				ImportUsers: importUsersStub,
 			},
 		},
 		...options,
@@ -378,7 +386,10 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+				const dialogParent = wrapper.find(
+					'[data-testid="cancel-migration-dialog-wrapper"]'
+				);
+				const dialog = dialogParent.findComponent(VCustomDialog);
 
 				dialog.vm.$emit("update:isOpen", false);
 				await nextTick();
@@ -412,7 +423,10 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+				const dialogParent = wrapper.find(
+					'[data-testid="cancel-migration-dialog-wrapper"]'
+				);
+				const dialog = dialogParent.findComponent(VCustomDialog);
 
 				dialog.vm.$emit("dialog-confirmed");
 
@@ -444,7 +458,10 @@ describe("User Migration / Index", () => {
 
 				await button.trigger("click");
 
-				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+				const dialogParent = wrapper.find(
+					'[data-testid="cancel-migration-dialog-wrapper"]'
+				);
+				const dialog = dialogParent.findComponent(VCustomDialog);
 
 				dialog.vm.$emit("dialog-confirmed");
 				await nextTick();
@@ -491,13 +508,14 @@ describe("User Migration / Index", () => {
 	describe("clear auto matches", () => {
 		describe("when in step migration_importUsers", () => {
 			beforeEach(() => {
-				const vueTeleportDiv = document.createElement("div");
-				vueTeleportDiv.className = "v-overlay-container";
-				document.body.appendChild(vueTeleportDiv);
+				const dialogTeleportDiv = document.createElement("div");
+				dialogTeleportDiv.className = "v-overlay-container";
+				document.body.appendChild(dialogTeleportDiv);
 			});
 
 			afterEach(() => {
 				document.body.innerHTML = "";
+				jest.clearAllMocks();
 			});
 
 			const setup = async () => {
@@ -511,6 +529,12 @@ describe("User Migration / Index", () => {
 				importUsersModule.setTotal(10);
 				importUsersModule.setTotalUnmatched(5);
 				importUsersModule.setTotalMatched(5);
+
+				jest
+					.spyOn(importUsersModule, "clearAllAutoMatches")
+					.mockResolvedValueOnce(Promise.resolve());
+
+				jest.spyOn(importUsersStub.methods, "reloadData");
 
 				const wrapper = getWrapper();
 
@@ -537,7 +561,7 @@ describe("User Migration / Index", () => {
 				expect(button.exists()).toBe(true);
 			});
 
-			it("should show the dialog on click of the clear auto matches button", async () => {
+			it("should show the dialog on button click", async () => {
 				const { wrapper } = await setup();
 
 				const button = wrapper.findComponent(
@@ -545,7 +569,77 @@ describe("User Migration / Index", () => {
 				);
 
 				await button.trigger("click");
+
+				const dialogParent = wrapper.find(
+					'[data-testid="clear-auto-matches-dialog-wrapper"]'
+				);
+				const dialog = dialogParent.findComponent(VCustomDialog);
+
+				expect(dialog.exists()).toBe(true);
+				expect(dialog.vm.isOpen).toBeTruthy();
+			});
+
+			it("should display the correct dialog content and text", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					'[data-testid="import-users-clear-auto-matches-btn"]'
+				);
+
+				await button.trigger("click");
+
+				expect(document.body.innerHTML).toContain(
+					'data-testid="clear-auto-matches-dialog"'
+				);
+				expect(document.body.innerHTML).toContain(
+					"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
+				);
+				expect(document.body.innerHTML).toContain(
+					"components.administration.adminMigrationSection.clearAutoMatchesDialog.description"
+				);
+			});
+
+			it("should close the dialog upon clicking on the cancel button", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					'[data-testid="import-users-clear-auto-matches-btn"]'
+				);
+
+				await button.trigger("click");
+
+				const dialogParent = wrapper.find(
+					'[data-testid="clear-auto-matches-dialog-wrapper"]'
+				);
+				const dialog = dialogParent.findComponent(VCustomDialog);
+
+				dialog.vm.cancelDialog();
 				await nextTick();
+
+				expect(dialog.exists()).toBe(true);
+				expect(dialog.vm.isOpen).toBeFalsy();
+			});
+
+			it("should call stores, reload data & close dialog upon clicking on the confirm button", async () => {
+				const { wrapper } = await setup();
+
+				const button = wrapper.findComponent(
+					'[data-testid="import-users-clear-auto-matches-btn"]'
+				);
+
+				await button.trigger("click");
+
+				const dialogParent = wrapper.find(
+					'[data-testid="clear-auto-matches-dialog-wrapper"]'
+				);
+				const dialog = dialogParent.findComponent(VCustomDialog);
+
+				dialog.vm.confirmDialog();
+				await nextTick();
+
+				expect(importUsersModule.clearAllAutoMatches).toHaveBeenCalled();
+				expect(importUsersStub.methods.reloadData).toHaveBeenCalled();
+				expect(dialog.vm.isOpen).toBeFalsy();
 			});
 		});
 	});

@@ -75,53 +75,57 @@
 					</VStepperItem>
 				</VStepperHeader>
 
-				<VCustomDialog
-					v-model:is-open="isCancelDialogOpen"
-					has-buttons
-					:buttons="['cancel', 'confirm']"
-					@dialog-confirmed="confirmCancelMigration()"
-					data-testid="cancel-migration-dialog"
-				>
-					<template #title>
-						{{
-							t(
-								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
-							)
-						}}
-					</template>
-					<template #content>
-						{{
-							t(
-								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
-							)
-						}}
-					</template>
-				</VCustomDialog>
-
-				<VCustomDialog
-					v-model:is-open="isClearAutoMatchesDialogOpen"
-					has-buttons
-					:buttons="['cancel', 'confirm']"
-					@dialog-confirmed="clearAllAutoMatches()"
-					data-testid="clear-auto-matches-dialog"
-				>
-					<template #title>
-						{{
-							t(
-								"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
-							)
-						}}
-					</template>
-					<template #content>
-						<RenderHTML
-							:html="
+				<div data-testid="cancel-migration-dialog-wrapper">
+					<VCustomDialog
+						v-model:is-open="isCancelDialogOpen"
+						has-buttons
+						:buttons="['cancel', 'confirm']"
+						@dialog-confirmed="confirmCancelMigration()"
+						data-testid="cancel-migration-dialog"
+					>
+						<template #title>
+							{{
 								t(
-									'components.administration.adminMigrationSection.clearAutoMatchesDialog.description'
+									"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
 								)
-							"
-						/>
-					</template>
-				</VCustomDialog>
+							}}
+						</template>
+						<template #content>
+							{{
+								t(
+									"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
+								)
+							}}
+						</template>
+					</VCustomDialog>
+				</div>
+
+				<div data-testid="clear-auto-matches-dialog-wrapper">
+					<VCustomDialog
+						v-model:is-open="isClearAutoMatchesDialogOpen"
+						has-buttons
+						:buttons="['cancel', 'confirm']"
+						@dialog-confirmed="clearAllAutoMatches()"
+						data-testid="clear-auto-matches-dialog"
+					>
+						<template #title>
+							{{
+								t(
+									"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
+								)
+							}}
+						</template>
+						<template #content>
+							<RenderHTML
+								:html="
+									t(
+										'components.administration.adminMigrationSection.clearAutoMatchesDialog.description'
+									)
+								"
+							/>
+						</template>
+					</VCustomDialog>
+				</div>
 			</VStepper>
 		</template>
 
