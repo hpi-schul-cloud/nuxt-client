@@ -1,1 +1,11 @@
-export type BoardMenuScope = "element" | "card" | "column" | "board";
+export type BoardMenuScope =
+	| "card"
+	| "column"
+	| "board"
+	| "collaborativeTextEditorElement"
+	| "drawingElement"
+	| "externalToolElement"
+	| "fileElement"
+	| "linkElement"
+	| "submissionElement"
+	| "deletedElement";

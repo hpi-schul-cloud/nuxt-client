@@ -321,7 +321,14 @@ export default {
 	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
-	"components.board.menu.element": "Element-Einstellungen",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Etherpad-Einstellungen",
+	"components.board.menu.drawingElement": "Whiteboard-Einstellungen",
+	"components.board.menu.externalToolElement": "Externes-Tool-Einstellungen",
+	"components.board.menu.fileElement": "Datei-Einstellungen",
+	"components.board.menu.linkElement": "Link-Einstellungen",
+	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
+	"components.board.menu.deletedElement": "Gelöschter-Inhalt-Einstellungen",
 	"components.board.notifications.errors.fileNameExists":
 		"Es existiert bereits eine Datei mit diesem Namen.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -374,6 +381,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
+	"components.cardElement.externalToolElement": "Externes Tool",
+	"components.cardElement.fileElement": "Datei",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
@@ -396,6 +405,7 @@ export default {
 		"Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
 	"components.cardElement.fileElement.virusDetected":
 		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
+	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Link-Adresse einfügen",
 	"components.cardElement.notification.visibleAndEditable":
 		"Dieses Whiteboard ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
@@ -412,6 +422,8 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Bitte Titel angeben.",
 	"components.cardElement.titleElement": "Titelelement",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
 	"components.datePicker.validation.format":
 		"Bitte Format DD.MM.YYYY verwenden.",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
@@ -813,6 +825,7 @@ export default {
 	"global.sidebar.item.management": "Verwaltung",
 	"global.sidebar.item.overview": "Übersicht",
 	"global.sidebar.item.releaseNotes": "Was ist neu?",
+	"global.sidebar.item.rooms": "Räume",
 	"global.sidebar.item.school": "Schule",
 	"global.sidebar.item.student": "Schüler:innen",
 	"global.sidebar.item.system": "System",

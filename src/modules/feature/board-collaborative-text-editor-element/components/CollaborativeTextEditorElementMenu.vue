@@ -1,5 +1,5 @@
 <template>
-	<BoardMenu scope="element">
+	<BoardMenu scope="collaborativeTextEditorElement">
 		<BoardMenuActionMoveUp @click="onMoveUp" />
 		<BoardMenuActionMoveDown @click="onMoveDown" />
 		<BoardMenuActionDelete @click="onDelete" />

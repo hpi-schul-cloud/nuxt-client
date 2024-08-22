@@ -324,7 +324,16 @@ export default {
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
-	"components.board.menu.element": "Configuración del elemento",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Configuración del etherpad",
+	"components.board.menu.drawingElement": "Configuración de la pizarra",
+	"components.board.menu.externalToolElement":
+		"Configuración de la herramienta externa",
+	"components.board.menu.fileElement": "Configuración del archivo",
+	"components.board.menu.linkElement": "Configuración del enlace",
+	"components.board.menu.submissionElement": "Configuración del envío",
+	"components.board.menu.deletedElement":
+		"Configuración de contenido eliminado",
 	"components.board.notifications.errors.fileNameExists":
 		"Ya existe un archivo con este nombre.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -377,6 +386,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Este Etherpad es visible y editable para todos los participantes en el curso.",
+	"components.cardElement.externalToolElement": "Herramienta externa",
+	"components.cardElement.fileElement": "Archivo",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
@@ -399,6 +410,7 @@ export default {
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
 	"components.cardElement.fileElement.virusDetected":
 		"Se ha bloqueado el archivo debido a un virus sospechoso.",
+	"components.cardElement.LinkElement": "Enlace",
 	"components.cardElement.LinkElement.label": "Inserte la dirección del enlace",
 	"components.cardElement.notification.visibleAndEditable":
 		"Esta pizarra es visible y editable para todos los participantes en el curso.",
@@ -415,6 +427,8 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Por favor ingrese un título.",
 	"components.cardElement.titleElement": "Elemento título",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.datePicker.validation.format":
 		"Por favor utilice el formato DD.MM.YYYY",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
@@ -429,8 +443,7 @@ export default {
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
-	"components.elementTypeSelection.elements.fileElement.subtitle":
-		"Editor de texto",
+	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
 		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
@@ -830,6 +843,7 @@ export default {
 	"global.sidebar.item.management": "Administración",
 	"global.sidebar.item.overview": "Panel",
 	"global.sidebar.item.releaseNotes": "¿Qué hay de nuevo?",
+	"global.sidebar.item.rooms": "Salas",
 	"global.sidebar.item.school": "Escuela",
 	"global.sidebar.item.student": "Estudiantes",
 	"global.sidebar.item.system": "Sistema",

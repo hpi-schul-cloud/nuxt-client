@@ -144,6 +144,9 @@ module.exports = {
 			"@feature-board-collaborative-text-editor-element": getDir(
 				"src/modules/feature/board-collaborative-text-editor-element"
 			),
+			"@feature-board-deleted-element": getDir(
+				"src/modules/feature/board-deleted-element"
+			),
 			"@feature-course-sync": getDir("src/modules/feature/course-sync"),
 			"@feature-board": getDir("src/modules/feature/board"),
 			"@feature-editor": getDir("src/modules/feature/editor"),
