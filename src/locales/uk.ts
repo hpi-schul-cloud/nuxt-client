@@ -1511,7 +1511,7 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Виберіть вид",
 	"pages.room.dialog.boardLayout.singleColumn": "одноколонкові",
 	"pages.room.dialog.boardLayout.multiColumn": "багатоколонкові",
-	"pages.room.fab.add.board": "Нова дошка",
+	"pages.courseRoom.fab.add.board": "Нова дошка",
 	"pages.room.fab.add.columnBoard": "Нова дошка",
 	"pages.room.itemDelete.text":
 		'{itemType} "{itemTitle}" буде видалена. Ви впевнені, що хочете видалити?',

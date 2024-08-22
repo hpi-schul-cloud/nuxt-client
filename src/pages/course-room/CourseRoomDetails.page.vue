@@ -321,11 +321,11 @@ export default defineComponent({
 			) {
 				if (this.boardLayoutsEnabled) {
 					actions.push({
-						label: this.$t("pages.room.fab.add.board"),
+						label: this.$t("pages.courseRoom.fab.add.board"),
 						icon: "$mdiViewGridPlusOutline",
 						customEvent: "board-type-dialog-open",
 						dataTestId: "fab_button_add_board",
-						ariaLabel: this.$t("pages.room.fab.add.board"),
+						ariaLabel: this.$t("pages.courseRoom.fab.add.board"),
 					});
 				} else {
 					actions.push({
