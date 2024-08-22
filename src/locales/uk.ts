@@ -333,6 +333,7 @@ export default {
 	"components.board.menu.fileElement": "Налаштування файлу",
 	"components.board.menu.linkElement": "Налаштування посилання",
 	"components.board.menu.submissionElement": "Налаштування Подання",
+	"components.board.menu.deletedElement": "Видалені налаштування вмісту",
 	"components.board.notifications.errors.fileNameExists":
 		"Файл з такою назвою вже існує.",
 	"components.board.notifications.errors.fileServiceNotAvailable":

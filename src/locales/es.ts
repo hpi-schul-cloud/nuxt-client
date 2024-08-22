@@ -332,6 +332,8 @@ export default {
 	"components.board.menu.fileElement": "Configuración del archivo",
 	"components.board.menu.linkElement": "Configuración del enlace",
 	"components.board.menu.submissionElement": "Configuración del envío",
+	"components.board.menu.deletedElement":
+		"Configuración de contenido eliminado",
 	"components.board.notifications.errors.fileNameExists":
 		"Ya existe un archivo con este nombre.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
