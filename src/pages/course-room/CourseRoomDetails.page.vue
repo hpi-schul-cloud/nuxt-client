@@ -244,7 +244,7 @@ export default defineComponent({
 
 				tabs.push({
 					name: "tools",
-					label: this.$t("pages.rooms.tabLabel.tools"),
+					label: this.$t("pages.courseRoom.tabLabel.tools"),
 					icon: mdiPuzzleOutline,
 					dataTestId: "tools-tab",
 					component: RoomExternalToolsOverview,

@@ -1478,6 +1478,7 @@ export default {
 	"pages.courseRoom.index.courses.all": "Всі курси",
 	"pages.courseRoom.index.courses.arrangeCourses": "Упорядкувати курси",
 	"pages.courseRoom.index.search.label": "Пошук курсу",
+	"pages.courseRoom.tabLabel.tools": "Інструмент",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",
@@ -1563,7 +1564,6 @@ export default {
 	"pages.rooms.ccImportCourse.error": "Виникла помилка під час імпорту курсу.",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
 	"pages.rooms.tabLabel.groups": "Групи",
-	"pages.rooms.tabLabel.tools": "Інструмент",
 	"pages.rooms.tabLabel.toolsOld": "Інструмент",
 	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Усі користувачі беруть участь як модератори",
