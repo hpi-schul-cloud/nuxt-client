@@ -1458,6 +1458,7 @@ export default {
 	"pages.courseRoom.index.courses.all": "All courses",
 	"pages.courseRoom.index.courses.arrangeCourses": "Arrange courses",
 	"pages.courseRoom.index.search.label": "Search course",
+	"pages.courseRooms.menuItems.endSync": "End synchronization",
 	"pages.courseRoom.tabLabel.groups": "Groups",
 	"pages.courseRoom.tabLabel.tools": "Tools",
 	"pages.courseRoom.tabLabel.toolsOld": "Tools",
@@ -1517,7 +1518,6 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
 	"pages.rooms.fab.ariaLabel": "Create new course",
 	"pages.rooms.fab.import.course": "Import course",
-	"pages.rooms.menuItems.endSync": "End synchronization",
 	"pages.rooms.importCourse.btn.continue": "Continue",
 	"pages.rooms.importCourse.codeError": "The course code is not in use.",
 	"pages.rooms.importCourse.importError":

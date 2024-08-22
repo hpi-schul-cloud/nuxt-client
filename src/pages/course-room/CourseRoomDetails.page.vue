@@ -421,7 +421,7 @@ export default defineComponent({
 					action: () => {
 						this.isEndSyncDialogOpen = true;
 					},
-					name: this.$t("pages.rooms.menuItems.endSync"),
+					name: this.$t("pages.courseRooms.menuItems.endSync"),
 					dataTestId: "title-menu-end-sync",
 				});
 			}

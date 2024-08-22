@@ -1501,6 +1501,7 @@ export default {
 	"pages.courseRoom.index.courses.all": "Todos los cursos",
 	"pages.courseRoom.index.courses.arrangeCourses": "Organizar cursos",
 	"pages.courseRoom.index.search.label": "Buscar curso",
+	"pages.courseRooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.courseRoom.tabLabel.groups": "Grupos",
 	"pages.courseRoom.tabLabel.tools": "Herramientas",
 	"pages.courseRoom.tabLabel.toolsOld": "Herramientas",
@@ -1561,7 +1562,6 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
 	"pages.rooms.fab.import.course": "Importar curso",
-	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.rooms.importCourse.btn.continue": "Continuar",
 	"pages.rooms.importCourse.codeError": "El código del curso no está en uso.",
 	"pages.rooms.importCourse.importError":

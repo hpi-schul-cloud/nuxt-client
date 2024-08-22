@@ -1480,6 +1480,7 @@ export default {
 	"pages.courseRoom.index.courses.all": "Всі курси",
 	"pages.courseRoom.index.courses.arrangeCourses": "Упорядкувати курси",
 	"pages.courseRoom.index.search.label": "Пошук курсу",
+	"pages.courseRooms.menuItems.endSync": "Завершити синхронізацію",
 	"pages.courseRoom.tabLabel.groups": "Групи",
 	"pages.courseRoom.tabLabel.tools": "Інструмент",
 	"pages.courseRoom.tabLabel.toolsOld": "Інструмент",
@@ -1541,7 +1542,6 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
 	"pages.rooms.fab.import.course": "Імпортувати курс",
-	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",
 	"pages.rooms.importCourse.codeError": "Код курсу не використовується.",
 	"pages.rooms.importCourse.importError":
