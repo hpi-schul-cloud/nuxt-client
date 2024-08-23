@@ -145,6 +145,7 @@ const isMenuShownOnFileDisplay = computed(() => {
 	return isFileDisplayRendered && !isPdfOnSmallOrLargerListBoard;
 });
 </script>
+
 <style lang="scss" scoped>
 .file-information {
 	flex: 2 1 auto;
