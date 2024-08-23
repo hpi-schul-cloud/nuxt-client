@@ -530,13 +530,13 @@ describe("User Migration / Index", () => {
 				importUsersModule.setTotalUnmatched(5);
 				importUsersModule.setTotalMatched(5);
 
+				const wrapper = getWrapper();
+
 				jest
 					.spyOn(importUsersModule, "clearAllAutoMatches")
 					.mockResolvedValueOnce(Promise.resolve());
 
 				jest.spyOn(importUsersStub.methods, "reloadData");
-
-				const wrapper = getWrapper();
 
 				wrapper.vm.migrationStep = 2;
 				wrapper.vm.t("pages.administration.migration.title", {
@@ -562,6 +562,19 @@ describe("User Migration / Index", () => {
 				expect(button.text()).toBe(
 					"pages.administration.migration.clearAutoMatches"
 				);
+			});
+
+			it("should call 'showClearAutoMatchesDialog' on button click", async () => {
+				const { wrapper } = await setup();
+				const dialogSpy = jest.spyOn(wrapper.vm, "showClearAutoMatchesDialog");
+
+				const button = wrapper.findComponent(
+					'[data-testid="import-users-clear-auto-matches-btn"]'
+				);
+
+				await button.trigger("click");
+
+				expect(dialogSpy).toHaveBeenCalled();
 			});
 
 			it("should show the dialog on button click", async () => {
@@ -623,6 +636,27 @@ describe("User Migration / Index", () => {
 				expect(wrapper.vm.isClearAutoMatchesDialogOpen).toBe(false);
 				expect(dialog.exists()).toBe(true);
 				expect(dialog.vm.isOpen).toBeFalsy();
+			});
+
+			it("should call 'clearAllAutoMatches' upon clicking confirm button", async () => {
+				const { wrapper } = await setup();
+				const clearMatchesSpy = jest.spyOn(wrapper.vm, "clearAllAutoMatches");
+
+				const button = wrapper.findComponent(
+					'[data-testid="import-users-clear-auto-matches-btn"]'
+				);
+
+				await button.trigger("click");
+
+				const dialogParent = wrapper.find(
+					'[data-testid="clear-auto-matches-dialog-wrapper"]'
+				);
+				const dialog = dialogParent.findComponent(VCustomDialog);
+
+				dialog.vm.confirmDialog();
+				await nextTick();
+
+				expect(clearMatchesSpy).toHaveBeenCalled();
 			});
 
 			it("should call stores, reload data & close dialog upon clicking on the confirm button", async () => {
