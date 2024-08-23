@@ -105,27 +105,28 @@ const createMockStore = () => {
 	return { mockStore, createStudentStub };
 };
 
-const getWrapper = (props: object) => {
-	const { mockStore } = createMockStore();
-	return mount(AddContentModal, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-			mocks: {
-				$store: mockStore,
-			},
-		},
-		props,
-	});
-};
-
 describe("@/components/molecules/AddContentModal", () => {
-	beforeEach(() => {
+	const setup = () => {
 		setupStores({
 			contentModule: ContentModule,
 		});
-	});
+		const getWrapper = (props: object) => {
+			const { mockStore } = createMockStore();
+			return mount(AddContentModal, {
+				global: {
+					plugins: [createTestingVuetify(), createTestingI18n()],
+					mocks: {
+						$store: mockStore,
+					},
+				},
+				props,
+			});
+		};
+		return { getWrapper };
+	};
 
 	it("nothing selected submit should be disabled", async () => {
+		const { getWrapper } = setup();
 		const wrapper = getWrapper(testProps);
 		const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
 		expect(wrapper.vm.isSendEnabled).toBe(false);
@@ -134,6 +135,7 @@ describe("@/components/molecules/AddContentModal", () => {
 	});
 
 	it("selected submit should be enabled", async () => {
+		const { getWrapper } = setup();
 		const wrapper = getWrapper(testProps);
 		expect(wrapper.vm.isSendEnabled).toBe(false);
 		wrapper.setData({
@@ -146,12 +148,14 @@ describe("@/components/molecules/AddContentModal", () => {
 	});
 
 	it("create coursesOptions", async () => {
+		const { getWrapper } = setup();
 		const wrapper = getWrapper(testProps);
 		const selection = wrapper.findComponent(VSelect);
 		expect(selection.props("items")).toBe(courseOptions);
 	});
 
 	it("create lessonsOptions", async () => {
+		const { getWrapper } = setup();
 		const wrapper = getWrapper(testProps);
 		contentModule.setLessons(lessons);
 		const lo = wrapper.vm.lessonsOptions;
@@ -161,6 +165,7 @@ describe("@/components/molecules/AddContentModal", () => {
 	});
 
 	it("submit modal action", async () => {
+		const { getWrapper } = setup();
 		const wrapper = getWrapper(testProps);
 		wrapper.setData({
 			selectedLesson: lessonsMock[0],
@@ -174,6 +179,7 @@ describe("@/components/molecules/AddContentModal", () => {
 	});
 
 	it("submit modal action multiple items", async () => {
+		const { getWrapper } = setup();
 		const wrapper = getWrapper(testPropsMultiple);
 		wrapper.setData({
 			selectedLesson: lessonsMock[0],
@@ -187,6 +193,7 @@ describe("@/components/molecules/AddContentModal", () => {
 	});
 
 	it("cancel modal action", async () => {
+		const { getWrapper } = setup();
 		const wrapper = getWrapper(testProps);
 		const cancelBtn = wrapper.findComponent(VBtn);
 		const courseSelection = wrapper.findAllComponents(VSelect)[0];
