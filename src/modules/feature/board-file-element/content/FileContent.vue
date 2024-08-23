@@ -124,11 +124,13 @@ const showTitle = computed(() => {
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = smAndUp.value && isListLayout.value;
+const isSmallOrLargerListBoard = computed(() => {
+	return smAndUp.value && isListLayout.value;
+});
 
 const hasRowStyle = computed(
 	() =>
-		isSmallOrLargerListBoard &&
+		isSmallOrLargerListBoard.value &&
 		hasPdfMimeType.value &&
 		props.fileProperties.previewUrl
 );
@@ -140,7 +142,7 @@ const isMenuShownOnFileDisplay = computed(() => {
 		hasAudioMimeType.value;
 
 	const isPdfOnSmallOrLargerListBoard =
-		isSmallOrLargerListBoard && hasPdfMimeType.value;
+		isSmallOrLargerListBoard.value && hasPdfMimeType.value;
 
 	return isFileDisplayRendered && !isPdfOnSmallOrLargerListBoard;
 });
