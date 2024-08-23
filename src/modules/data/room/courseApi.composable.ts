@@ -27,7 +27,7 @@ export const useCourseApi = () => {
 		key: CourseSortQueryType | undefined,
 		order: "asc" | "desc"
 	) => {
-		const response = courseApi.courseControllerGetAllCourses(
+		const response = await courseApi.courseControllerGetAllCourses(
 			skip,
 			limit,
 			order,

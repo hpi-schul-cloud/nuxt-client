@@ -11,10 +11,10 @@
 			</h1>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs class="tabs-max-width" grow v-model="activeTab">
-					<v-tab value="current" data-testid="admin-course-current-year-tab">
+					<v-tab value="current" data-testid="admin-course-current-tab">
 						<span>{{ t("pages.administration.common.label.active") }}</span>
 					</v-tab>
-					<v-tab value="archive" data-testid="admin-course-previous-years-tab">
+					<v-tab value="archive" data-testid="admin-course-archive-tab">
 						<span>{{ t("pages.administration.common.label.archive") }}</span>
 					</v-tab>
 				</v-tabs>
@@ -68,7 +68,7 @@
 						v-if="courseSyncEnabled"
 						:title="t('feature-course-sync.startRoomSyncDialog.title')"
 						:aria-label="t('feature-course-sync.startRoomSyncDialog.title')"
-						data-testid="class-table-start-room-sync-btn"
+						data-testid="course-table-start-course-sync-btn"
 						variant="outlined"
 						size="small"
 						class="mx-1 px-1"
