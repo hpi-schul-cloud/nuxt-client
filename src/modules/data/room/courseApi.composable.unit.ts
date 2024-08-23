@@ -8,31 +8,22 @@ import { envsFactory, mockApiResponse } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useCourseApi } from "./courseApi.composable";
 import { courseInfoResponseFactory } from "@@/tests/test-utils/factory/courseInfoResponseFactory";
-import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { envConfigModule } from "@/store";
+import { initializeAxios } from "@/utils/api";
 
 describe("courseApi.composable", () => {
 	let courseApi: DeepMocked<serverApi.CoursesApiInterface>;
-
-	const receivedRequests: any[] = [];
-	const getRequestReturn: any = {};
-
-	const axiosInitializer = () => {
-		return initializeAxios({
-			delete: async (path: string) => {
-				receivedRequests.push({ path });
-				return getRequestReturn;
-			},
-		} as AxiosInstance);
-	};
+	let axiosMock: DeepMocked<AxiosInstance>;
 
 	beforeEach(() => {
 		courseApi = createMock<serverApi.CoursesApiInterface>();
+		axiosMock = createMock<AxiosInstance>();
 
 		jest.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(courseApi);
+		initializeAxios(axiosMock);
 	});
 
 	afterEach(() => {
@@ -116,24 +107,48 @@ describe("courseApi.composable", () => {
 	});
 
 	describe("deleteCourseById", () => {
-		const setup = () => {
-			axiosInitializer();
+		describe("when calender service is enabled", () => {
+			const setup = () => {
+				setupStores({ envConfigModule: EnvConfigModule });
 
-			setupStores({ envConfigModule: EnvConfigModule });
+				const env = envsFactory.build({
+					CALENDAR_SERVICE_ENABLED: true,
+				});
 
-			const env = envsFactory.build({
-				CALENDAR_SERVICE_ENABLED: true,
+				envConfigModule.setEnvs(env);
+			};
+
+			it("should call the api to delete calender and Course", async () => {
+				setup();
+
+				await useCourseApi().deleteCourseById("id");
+
+				expect(axiosMock.delete).toHaveBeenNthCalledWith(
+					1,
+					"v1/calendar/courses/id"
+				);
+				expect(axiosMock.delete).toHaveBeenNthCalledWith(2, "v1/courses/id");
 			});
+		});
 
-			envConfigModule.setEnvs(env);
-		};
+		describe("when calender service is not enabled", () => {
+			const setup = () => {
+				setupStores({ envConfigModule: EnvConfigModule });
 
-		it("should call the api to deleteCourse", async () => {
-			setup();
+				const env = envsFactory.build({
+					CALENDAR_SERVICE_ENABLED: false,
+				});
 
-			await useCourseApi().deleteCourseById("id");
+				envConfigModule.setEnvs(env);
+			};
 
-			expect(receivedRequests[0].delete).toHaveBeenCalledWith("id");
+			it("should call the api to delete Course", async () => {
+				setup();
+
+				await useCourseApi().deleteCourseById("id");
+
+				expect(axiosMock.delete).toHaveBeenCalledWith("v1/courses/id");
+			});
 		});
 	});
 });

@@ -110,6 +110,7 @@
 			v-model:is-open="isCourseSyncDialogOpen"
 			:course-id="selectedItem?.id"
 			:course-name="selectedItem?.name"
+			@dialog-confirmed="onConfirmSynchronizeCourse"
 		/>
 
 		<v-btn
@@ -303,6 +304,10 @@ const headers = computed(() => {
 
 	return headerList;
 });
+
+const onConfirmSynchronizeCourse = async () => {
+	loadCourseList();
+};
 
 const onConfirmCourseDeletion = async () => {
 	if (selectedItem.value) {
