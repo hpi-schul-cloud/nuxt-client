@@ -40,7 +40,7 @@ const axiosInitializer = () => {
 
 axiosInitializer();
 
-describe("room module", () => {
+describe("course-room module", () => {
 	beforeEach(() => {
 		setupStores({
 			authModule: AuthModule,
@@ -131,8 +131,10 @@ describe("room module", () => {
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
 				jest
-					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
+					.spyOn(serverApi, "CourseRoomsApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.CourseRoomsApiInterface
+					);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				await courseRoomDetailsModule.fetchContent("123");
@@ -148,8 +150,10 @@ describe("room module", () => {
 		describe("publishCard", () => {
 			it("'publishCard' action should call backend and 'fetchContent' method", async () => {
 				jest
-					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
+					.spyOn(serverApi, "CourseRoomsApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.CourseRoomsApiInterface
+					);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				await courseRoomDetailsModule.publishCard({
@@ -171,8 +175,10 @@ describe("room module", () => {
 		describe("sortElements", () => {
 			it("'sortElements' action should call backend and 'fetchContent' method", async () => {
 				jest
-					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
+					.spyOn(serverApi, "CourseRoomsApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.CourseRoomsApiInterface
+					);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const payload = {
