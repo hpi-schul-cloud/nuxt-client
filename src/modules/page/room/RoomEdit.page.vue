@@ -5,7 +5,7 @@
 		</template>
 
 		<div>
-			<!-- <RoomColorPickerSwatch /> -->
+			<RoomColorPicker />
 			Hallo
 		</div>
 	</DefaultWireframe>
@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-// import RoomColorPickerSwatch from "@/modules/ui/room/RoomColorPickerSwatch.vue";
+import RoomColorPicker from "@/modules/ui/room/RoomColorPicker.vue";
 // import { useI18n } from "vue-i18n";
 
 // const { t } = useI18n();
