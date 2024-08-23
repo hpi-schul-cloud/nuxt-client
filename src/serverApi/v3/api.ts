@@ -807,6 +807,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_CTL_TOOLS_COPY_ENABLED: boolean;
     /**
      * 
@@ -1006,6 +1012,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_USER_MIGRATION_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    CALENDAR_SERVICE_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -1802,6 +1814,37 @@ export interface CourseExportBodyParams {
 /**
  * 
  * @export
+ * @interface CourseInfoListResponse
+ */
+export interface CourseInfoListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<CourseInfoResponse>}
+     * @memberof CourseInfoListResponse
+     */
+    data: Array<CourseInfoResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof CourseInfoListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof CourseInfoListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof CourseInfoListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
  * @interface CourseInfoResponse
  */
 export interface CourseInfoResponse {
@@ -1817,6 +1860,24 @@ export interface CourseInfoResponse {
      * @memberof CourseInfoResponse
      */
     name: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CourseInfoResponse
+     */
+    teacherNames: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CourseInfoResponse
+     */
+    classNames: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseInfoResponse
+     */
+    syncedGroup?: string;
 }
 /**
  * 
@@ -1897,6 +1958,38 @@ export interface CourseMetadataResponse {
      * @memberof CourseMetadataResponse
      */
     copyingSince?: string;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum CourseSortQueryType {
+    Name = 'name'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum CourseStatusQueryType {
+    Archive = 'archive',
+    Current = 'current'
+}
+
+/**
+ * 
+ * @export
+ * @interface CourseSyncBodyParams
+ */
+export interface CourseSyncBodyParams {
+    /**
+     * The id of the group
+     * @type {string}
+     * @memberof CourseSyncBodyParams
+     */
+    groupId: string;
 }
 /**
  * 
@@ -5774,6 +5867,7 @@ export enum Permission {
     ContextToolUser = 'CONTEXT_TOOL_USER',
     CoursegroupCreate = 'COURSEGROUP_CREATE',
     CoursegroupEdit = 'COURSEGROUP_EDIT',
+    CourseAdministration = 'COURSE_ADMINISTRATION',
     CourseCreate = 'COURSE_CREATE',
     CourseDelete = 'COURSE_DELETE',
     CourseEdit = 'COURSE_EDIT',
@@ -13109,6 +13203,65 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Get a list of all courses.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {CourseSortQueryType} [sortBy] 
+         * @param {CourseStatusQueryType} [type] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerGetAllCourses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/courses/all`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (sortOrder !== undefined) {
+                localVarQueryParameter['sortOrder'] = sortOrder;
+            }
+
+            if (sortBy !== undefined) {
+                localVarQueryParameter['sortBy'] = sortBy;
+            }
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get common cartridge metadata of a course by Id.
          * @param {string} courseId The id of the course
          * @param {*} [options] Override http request option.
@@ -13230,6 +13383,50 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
         },
         /**
          * 
+         * @summary Start the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {CourseSyncBodyParams} courseSyncBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerStartSynchronization: async (courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('courseControllerStartSynchronization', 'courseId', courseId)
+            // verify required parameter 'courseSyncBodyParams' is not null or undefined
+            assertParamExists('courseControllerStartSynchronization', 'courseSyncBodyParams', courseSyncBodyParams)
+            const localVarPath = `/courses/{courseId}/start-sync`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(courseSyncBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Stop the synchronization of a course with a group.
          * @param {string} courseId The id of the course
          * @param {*} [options] Override http request option.
@@ -13301,6 +13498,21 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get a list of all courses.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {CourseSortQueryType} [sortBy] 
+         * @param {CourseStatusQueryType} [type] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerGetAllCourses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseInfoListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerGetAllCourses(skip, limit, sortOrder, sortBy, type, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get common cartridge metadata of a course by Id.
          * @param {string} courseId The id of the course
          * @param {*} [options] Override http request option.
@@ -13330,6 +13542,18 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          */
         async courseControllerImportCourse(file: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerImportCourse(file, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Start the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {CourseSyncBodyParams} courseSyncBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerStartSynchronization(courseId, courseSyncBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -13376,6 +13600,20 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
+         * @summary Get a list of all courses.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {CourseSortQueryType} [sortBy] 
+         * @param {CourseStatusQueryType} [type] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerGetAllCourses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any): AxiosPromise<CourseInfoListResponse> {
+            return localVarFp.courseControllerGetAllCourses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get common cartridge metadata of a course by Id.
          * @param {string} courseId The id of the course
          * @param {*} [options] Override http request option.
@@ -13403,6 +13641,17 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          */
         courseControllerImportCourse(file: any, options?: any): AxiosPromise<void> {
             return localVarFp.courseControllerImportCourse(file, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Start the synchronization of a course with a group.
+         * @param {string} courseId The id of the course
+         * @param {CourseSyncBodyParams} courseSyncBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.courseControllerStartSynchronization(courseId, courseSyncBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -13446,6 +13695,20 @@ export interface CoursesApiInterface {
 
     /**
      * 
+     * @summary Get a list of all courses.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {CourseSortQueryType} [sortBy] 
+     * @param {CourseStatusQueryType} [type] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerGetAllCourses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any): AxiosPromise<CourseInfoListResponse>;
+
+    /**
+     * 
      * @summary Get common cartridge metadata of a course by Id.
      * @param {string} courseId The id of the course
      * @param {*} [options] Override http request option.
@@ -13473,6 +13736,17 @@ export interface CoursesApiInterface {
      * @memberof CoursesApiInterface
      */
     courseControllerImportCourse(file: any, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Start the synchronization of a course with a group.
+     * @param {string} courseId The id of the course
+     * @param {CourseSyncBodyParams} courseSyncBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApiInterface
+     */
+    courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -13520,6 +13794,22 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
 
     /**
      * 
+     * @summary Get a list of all courses.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {CourseSortQueryType} [sortBy] 
+     * @param {CourseStatusQueryType} [type] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerGetAllCourses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerGetAllCourses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Get common cartridge metadata of a course by Id.
      * @param {string} courseId The id of the course
      * @param {*} [options] Override http request option.
@@ -13552,6 +13842,19 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      */
     public courseControllerImportCourse(file: any, options?: any) {
         return CoursesApiFp(this.configuration).courseControllerImportCourse(file, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Start the synchronization of a course with a group.
+     * @param {string} courseId The id of the course
+     * @param {CourseSyncBodyParams} courseSyncBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CoursesApi
+     */
+    public courseControllerStartSynchronization(courseId: string, courseSyncBodyParams: CourseSyncBodyParams, options?: any) {
+        return CoursesApiFp(this.configuration).courseControllerStartSynchronization(courseId, courseSyncBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
