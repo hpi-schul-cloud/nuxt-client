@@ -37,8 +37,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const { setFocus } = useBoardFocusHandler();
 
 	const restApi = useBoardRestApi();
-	const isSocketEnabled =
-		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
+	const isSocketEnabled = true;
+	console.log(envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED);
 
 	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
 

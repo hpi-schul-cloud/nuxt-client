@@ -25,8 +25,8 @@ export const useCardStore = defineStore("cardStore", () => {
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const restApi = useCardRestApi();
-	const isSocketEnabled =
-		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
+	const isSocketEnabled = true;
+	console.log(envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED);
 
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 

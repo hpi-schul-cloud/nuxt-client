@@ -25,7 +25,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		});
 
 		instance.on("connect", async function () {
-			console.log("connected");
+			console.trace("connected");
 			if (connectionOptions.socketConnectionLost) {
 				showSuccess(t("common.notification.connection.restored"));
 				connectionOptions.socketConnectionLost = false;
@@ -42,6 +42,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 		instance.on("disconnect", () => {
 			console.log("disconnected");
+
 			connectionOptions.socketConnectionLost = true;
 			showFailure(t("error.4500"));
 		});
@@ -68,6 +69,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 	};
 
 	const disconnectSocket = () => {
+		console.trace("disconnectSocket called");
 		socket.disconnect();
 		if (connectionOptions.socketConnectionLost)
 			connectionOptions.socketConnectionLost = false;
