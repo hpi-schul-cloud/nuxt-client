@@ -1,6 +1,11 @@
 <template>
 	<Suspense>
-		<Board :board-id="boardId" :breadcrumbs="breadcrumbs" />
+		<template #default>
+			<Board :board-id="boardId" :breadcrumbs="breadcrumbs" />
+		</template>
+		<template #fallback>
+			<p>Loading...</p>
+		</template>
 	</Suspense>
 </template>
 
