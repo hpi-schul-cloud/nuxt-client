@@ -15,8 +15,7 @@ import {
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
-// routes configuration sorted in alphabetical order
-export const routes: Readonly<RouteRecordRaw[]> = [
+export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
 		component: () => import("@/pages/ActivationCode.page.vue"),
@@ -234,6 +233,11 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
 		name: "rooms",
+	},
+	{
+		path: `/rooms/edit`,
+		component: async () => (await import("@page-room")).RoomEditPage,
+		name: "room-edit",
 	},
 	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
 	// So we have to replace the reference there by "course-room-list" path.
