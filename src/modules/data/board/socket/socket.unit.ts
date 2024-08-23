@@ -27,13 +27,15 @@ const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
 jest.mock("../boardActions/boardSocketApi.composable");
 jest.mock("../boardActions/boardRestApi.composable");
 
+jest.mock("@vueuse/shared");
+
 jest.mock("@vueuse/shared", () => {
 	return {
 		...jest.requireActual("@vueuse/shared"),
 		useTimeoutFn: jest.fn().mockImplementation((cb) => {
 			cb();
 			return {
-				isPending: false,
+				isPending: { value: false },
 				start: jest.fn(),
 				stop: jest.fn(),
 			};
@@ -46,8 +48,6 @@ describe("socket.ts", () => {
 	let mockSocket: Partial<socketModule.Socket>;
 	let timeoutResponseMock: { emitWithAck: jest.Mock };
 	let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-	// We need to set these two things in the outmost describe level since the socket event handlers that set and use these
-	// values are created only once when the module is loaded and initially used.
 	let socketHandlers: Record<string, () => void> | undefined = undefined;
 	let boardStore: ReturnType<typeof useBoardStore>;
 	let cardStore: ReturnType<typeof useCardStore>;
@@ -115,7 +115,6 @@ describe("socket.ts", () => {
 
 			const eventCallbacks = getEventCallbacks();
 
-			// calling disconnect to set connectionOptions.isSocketConnectionLost to true
 			eventCallbacks.disconnect();
 			jest.clearAllMocks();
 
@@ -126,21 +125,34 @@ describe("socket.ts", () => {
 			);
 		});
 
-		describe("when 'isInitialConnection' is true", () => {
-			it("should not show connection restored notification ", () => {
-				getOrInitialiseBoardStore();
-				isInitialConnection.value = true;
-				jest.clearAllMocks();
-				useSocketConnection(dispatchMock);
+		it("should not show connection restored notification when 'isInitialConnection' is true", () => {
+			getOrInitialiseBoardStore();
+			isInitialConnection.value = true;
+			jest.clearAllMocks();
+			useSocketConnection(dispatchMock);
 
-				const eventCallbacks = getEventCallbacks();
+			const eventCallbacks = getEventCallbacks();
 
-				eventCallbacks.connect();
+			eventCallbacks.connect();
 
-				expect(mockBoardNotifierCalls.showSuccess).not.toHaveBeenCalled();
-				expect(boardStore.reloadBoard).not.toHaveBeenCalled();
-				expect(cardStore.fetchCardRequest).not.toHaveBeenCalled();
-			});
+			expect(mockBoardNotifierCalls.showSuccess).not.toHaveBeenCalled();
+			expect(boardStore.reloadBoard).not.toHaveBeenCalled();
+			expect(cardStore.fetchCardRequest).not.toHaveBeenCalled();
+		});
+
+		it("should show connection restored notification when 'isInitialConnection' is false", () => {
+			getOrInitialiseBoardStore();
+			isInitialConnection.value = false;
+			jest.clearAllMocks();
+			useSocketConnection(dispatchMock);
+
+			const eventCallbacks = getEventCallbacks();
+
+			eventCallbacks.connect();
+
+			expect(mockBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
+				"common.notification.connection.restored"
+			);
 		});
 
 		describe("when board exists", () => {
@@ -152,12 +164,12 @@ describe("socket.ts", () => {
 			afterEach(() => {
 				getOrInitialiseBoardStore().boardStore.board = undefined;
 			});
+
 			it("should reloadBoard when socket is connected", () => {
 				useSocketConnection(dispatchMock);
 
 				const eventCallbacks = getEventCallbacks();
 
-				// calling disconnect to set connectionOptions.isSocketConnectionLost to true
 				eventCallbacks.disconnect();
 				jest.clearAllMocks();
 
@@ -173,7 +185,6 @@ describe("socket.ts", () => {
 
 			const eventCallbacks = getEventCallbacks();
 
-			// calling disconnect to set connectionOptions.isSocketConnectionLost to true
 			eventCallbacks.disconnect();
 			jest.clearAllMocks();
 
@@ -237,6 +248,7 @@ describe("socket.ts", () => {
 				{}
 			);
 		});
+
 		it("should not call connect if connected already", () => {
 			mockSocket.connected = true;
 			const { emitWithAck } = useSocketConnection(dispatchMock);
