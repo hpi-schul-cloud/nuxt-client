@@ -22,6 +22,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	I18N__DEFAULT_LANGUAGE: LanguageType.De,
 	I18N__DEFAULT_TIMEZONE: Timezone.EuropeBerlin,
 	SC_TITLE: "",
+	TRAINING_URL: "https://lernen.dbildungscloud.de",
 	FEATURE_SHOW_OUTDATED_USERS: false,
 	FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION: false,
 	FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: false,
@@ -71,5 +72,7 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_MEDIA_SHELF_ENABLED: false,
 	BOARD_COLLABORATION_URI: "ws://localhost:4450",
 	FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: false,
+	FEATURE_AI_TUTOR_ENABLED: false,
+	FEATURE_ROOMS_ENABLED: false,
 	CALENDAR_SERVICE_ENABLED: false,
 };

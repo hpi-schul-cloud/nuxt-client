@@ -5,11 +5,16 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import ContentInitialState from "./ContentInitialState.vue";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("@/components/molecules/ContentInitialState", () => {
 	const wrapper = mount(ContentInitialState, {
 		global: {
-			plugins: [createTestingI18n(), createTestingVuetify()],
+			plugins: [
+				createTestingI18n(),
+				createTestingVuetify(),
+				vueDompurifyHTMLPlugin,
+			],
 		},
 		data: () => ({}),
 	});

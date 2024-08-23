@@ -35,7 +35,7 @@
 <script>
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { roomsModule } from "@/store";
+import { courseRoomListModule } from "@/store";
 import { mdiKeyboardReturn, mdiPencilOutline } from "@mdi/js";
 import { defineComponent } from "vue";
 
@@ -83,7 +83,7 @@ export default defineComponent({
 	},
 	methods: {
 		async updateCourseGroupName() {
-			await roomsModule.update(this.data);
+			await courseRoomListModule.update(this.data);
 		},
 		async onBlur() {
 			await this.updateCourseGroupName();

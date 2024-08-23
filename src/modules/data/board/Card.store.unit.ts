@@ -19,7 +19,7 @@ import {
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { ContentElementType } from "@/serverApi/v3";
-import { drawingContentElementResponseFactory } from "@@/tests/test-utils/factory/drawingContentElementResponseFactory";
+import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
 import { cloneDeep } from "lodash";
 
 jest.mock("vue-i18n");
@@ -158,6 +158,27 @@ describe("CardStore", () => {
 			cardStore.fetchCardSuccess({ cards, isOwnAction: true });
 
 			expect(cardStore.getCard(cards[0].id)).toEqual(cards[0]);
+		});
+	});
+
+	describe("createCardSuccess", () => {
+		describe("when card is provided", () => {
+			it("should add the card to the store", async () => {
+				const { cardStore } = setup();
+
+				const newCardId = "idNewCard";
+				const newCard = cardResponseFactory.build({ id: newCardId });
+				await cardStore.createCardSuccess({
+					newCard,
+					columnId: "any-column-id",
+					isOwnAction: true,
+				});
+
+				expect(cardStore.cards[newCardId]).toBeDefined();
+				expect(cardStore.cards[newCardId]).toEqual(
+					expect.objectContaining({ id: newCardId, elements: [] })
+				);
+			});
 		});
 	});
 
@@ -396,7 +417,7 @@ describe("CardStore", () => {
 		describe("when element is provided", () => {
 			it("should add element to specified position", async () => {
 				const { cardStore, cardId } = setup();
-				const newElement = drawingContentElementResponseFactory.build();
+				const newElement = drawingElementResponseFactory.build();
 				const toPosition = 1;
 
 				await cardStore.createElementSuccess({
@@ -414,7 +435,7 @@ describe("CardStore", () => {
 			});
 			it("should add element to last position if toPosition is undefined", async () => {
 				const { cardStore, cardId } = setup();
-				const newElement = drawingContentElementResponseFactory.build();
+				const newElement = drawingElementResponseFactory.build();
 
 				expect(cardStore.cards[cardId].elements.length).toEqual(3);
 				await cardStore.createElementSuccess({
@@ -432,7 +453,7 @@ describe("CardStore", () => {
 		describe("when cardId is invalid", () => {
 			it("should not add element", async () => {
 				const { cardStore } = setup();
-				const newElement = drawingContentElementResponseFactory.build();
+				const newElement = drawingElementResponseFactory.build();
 
 				expect(Object.keys(cardStore.cards).length).toEqual(3);
 				await cardStore.createElementSuccess({
@@ -449,7 +470,7 @@ describe("CardStore", () => {
 		describe("when new position is invalid", () => {
 			it("should not add element", async () => {
 				const { cardStore, cardId } = setup();
-				const newElement = drawingContentElementResponseFactory.build();
+				const newElement = drawingElementResponseFactory.build();
 
 				expect(Object.keys(cardStore.cards).length).toEqual(3);
 				await cardStore.createElementSuccess({

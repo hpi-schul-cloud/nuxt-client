@@ -24,6 +24,7 @@ export default {
 	"common.actions.share": "Share",
 	"common.actions.shareCopy": "Share copy",
 	"common.actions.update": "Update",
+	"common.ariaLabel.newTab": "opens in a new tab",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
@@ -318,7 +319,13 @@ export default {
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
-	"components.board.menu.element": "Element settings",
+	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",
+	"components.board.menu.drawingElement": "Whiteboard settings",
+	"components.board.menu.externalToolElement": "Externeal tool settings",
+	"components.board.menu.fileElement": "File settings",
+	"components.board.menu.linkElement": "Link settings",
+	"components.board.menu.submissionElement": "Submission settings",
+	"components.board.menu.deletedElement": "Deleted content settings",
 	"components.board.notifications.errors.fileNameExists":
 		"A file with this name already exists.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -371,6 +378,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"This Etherpad is visible and editable for all course participants.",
+	"components.cardElement.externalToolElement": "External tool",
+	"components.cardElement.fileElement": "File",
 	"components.cardElement.fileElement.altDescription":
 		"A short description helps people who cannot see the picture.",
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
@@ -393,6 +402,7 @@ export default {
 		"The video format is not supported by this browser/operating system.",
 	"components.cardElement.fileElement.virusDetected":
 		"File has been locked due to a suspected virus.",
+	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Insert link address",
 	"components.cardElement.notification.visibleAndEditable":
 		"This whiteboard is visible and editable for all course participants.",
@@ -409,6 +419,8 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Please enter a title.",
 	"components.cardElement.titleElement": "Title element",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"Tool {toolName} not available. Please contact the school administrator.",
 	"components.datePicker.validation.format": "Please use format DD.MM.YYYY",
 	"components.datePicker.validation.required": "Please enter a date.",
 	"components.dateTimePicker.messages.dateInPast":
@@ -588,6 +600,16 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"None. Account will be newly created.",
 	"components.molecules.importUsersMatch.write": "Input first and last name",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Not available",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Teacher",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Student",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Organizational Administrator",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Organizational Management",
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
 	"components.molecules.share.courses.mail.body": "Link to the course:",
 	"components.molecules.share.courses.mail.subject": "Course you can import",
@@ -806,6 +828,7 @@ export default {
 	"global.sidebar.item.management": "Management",
 	"global.sidebar.item.overview": "Dashboard",
 	"global.sidebar.item.releaseNotes": "What's new?",
+	"global.sidebar.item.rooms": "Rooms",
 	"global.sidebar.item.school": "School",
 	"global.sidebar.item.student": "Students",
 	"global.sidebar.item.system": "System",
@@ -1127,6 +1150,8 @@ export default {
 		"Activate student visibility for teachers",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
 		"Activate video conferencing for courses and teams",
+	"pages.administration.school.index.privacySettings.labels.aiTutor":
+		"Activate AI tutor at school",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"If chats are enabled at your school, team administrators can selectively unlock the chat function respectively for their team.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1141,6 +1166,8 @@ export default {
 		"If this option is not enabled, teachers can only see the classes and their students in which they are members.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
 		"If video conferencing is enabled at your school, teachers can add the video conferencing tool to their course in the Tools section and then start video conferencing for all course participants from there. Team administrators can activate the video conference function in the respective team. Team leaders and team admins can then add and start video conferences for appointments.",
+	"pages.administration.school.index.privacySettings.longText.aiTutor":
+		"If AI Tutor is activated at your school, teachers can add the AI Tutor in their areas.",
 	"pages.administration.school.index.privacySettings": "Privacy Settings",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing":
 		"Your school is currently getting",

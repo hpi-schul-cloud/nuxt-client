@@ -1,7 +1,7 @@
 import { DrawingElementContent } from "@/serverApi/v3";
 import { Factory } from "fishery";
 
-export const drawingContentElementFactory =
+export const drawingElementContentFactory =
 	Factory.define<DrawingElementContent>(() => ({
 		description: "Some description for Board1234",
 		timestamps: {

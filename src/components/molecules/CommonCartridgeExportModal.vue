@@ -164,7 +164,7 @@ import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiInformation } from "@mdi/js";
 import { computed, ref, watch } from "vue";
@@ -181,7 +181,7 @@ const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 const commonCartridgeExportModule = injectStrict(
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY
 );
-const roomModule = injectStrict(ROOM_MODULE_KEY);
+const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
 
 const emit = defineEmits([
 	"update:isExportModalOpen",
@@ -220,7 +220,7 @@ const allColumnBoardsSelected = computed(() => {
 });
 
 watch(
-	() => roomModule.getRoomData.elements,
+	() => courseRoomDetailsModule.getRoomData.elements,
 	(newValue) => {
 		allTopics.value = [];
 		allTasks.value = [];

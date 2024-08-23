@@ -1,8 +1,11 @@
 import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
-import RoomModule from "@/store/room";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import { CourseFeatures } from "@/store/types/room";
-import { ENV_CONFIG_MODULE_KEY, ROOM_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	businessErrorFactory,
@@ -31,7 +34,7 @@ describe("RoomExternalToolOverview", () => {
 	>;
 
 	const getWrapper = () => {
-		const roomModule = createModuleMocks(RoomModule, {
+		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getLoading: false,
 		});
 
@@ -40,14 +43,14 @@ describe("RoomExternalToolOverview", () => {
 			getEnv: { CTL_TOOLS_RELOAD_TIME_MS: refreshTime } as ConfigResponse,
 		});
 
-		roomModule.fetchCourse.mockResolvedValue(null);
+		courseRoomDetailsModule.fetchCourse.mockResolvedValue(null);
 
 		const wrapper = shallowMount(RoomExternalToolsOverview, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
 			},
 			props: {
@@ -57,7 +60,7 @@ describe("RoomExternalToolOverview", () => {
 
 		return {
 			wrapper,
-			roomModule,
+			courseRoomDetailsModule,
 			refreshTime,
 		};
 	};
@@ -141,9 +144,9 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when video conferences are enabled", () => {
 		const setup = async () => {
-			const { wrapper, roomModule } = getWrapper();
+			const { wrapper, courseRoomDetailsModule } = getWrapper();
 
-			roomModule.fetchCourse.mockResolvedValue(
+			courseRoomDetailsModule.fetchCourse.mockResolvedValue(
 				courseFactory.build({ features: [CourseFeatures.VIDEOCONFERENCE] })
 			);
 
@@ -190,7 +193,7 @@ describe("RoomExternalToolOverview", () => {
 			jest.useRealTimers();
 		});
 		const setup = () => {
-			jest.useFakeTimers("legacy");
+			jest.useFakeTimers({ legacyFakeTimers: true });
 			const { refreshTime } = getWrapper();
 
 			return {

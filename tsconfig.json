@@ -44,6 +44,7 @@
 			"@feature-render-html": ["src/modules/feature/render-html"],
 			"@feature-news-form": ["src/modules/feature/news-form"],
 			"@feature-media-shelf": ["src/modules/feature/media-shelf"],
+			"@feature-board-deleted-element": ["src/modules/feature/board-deleted-element"],
 			"@ui-alert": ["src/modules/ui/alert"],
 			"@ui-board": ["src/modules/ui/board"],
 			"@ui-chip": ["src/modules/ui/chip"],
@@ -66,10 +67,12 @@
 			"@page-board": ["src/modules/page/board"],
 			"@page-class-members": ["src/modules/page/class-members"],
 			"@page-media-shelf": ["src/modules/page/media-shelf"],
+			"@page-room": ["src/modules/page/room"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},
-		"lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+		"lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+		"outDir": "dist"
 	},
 	"include": [
 		"src/**/*.ts",
@@ -78,5 +81,5 @@
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 	],
-	"exclude": ["node_modules", "./src/components/base/components.js"]
+	"exclude": ["node_modules", "dist", "./src/components/base/components.js"]
 }

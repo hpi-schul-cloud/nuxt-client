@@ -24,6 +24,7 @@ export default {
 	"common.actions.share": "Поділіться",
 	"common.actions.shareCopy": "Поділитися копією",
 	"common.actions.update": "Оновити",
+	"common.ariaLabel.newTab": "відкривається в новій вкладці",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
@@ -324,7 +325,15 @@ export default {
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
-	"components.board.menu.element": "Налаштування елемента",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Налаштування спільного текстового редактора",
+	"components.board.menu.drawingElement": "Налаштування дошки",
+	"components.board.menu.externalToolElement":
+		"Налаштування зовнішнього інструменту",
+	"components.board.menu.fileElement": "Налаштування файлу",
+	"components.board.menu.linkElement": "Налаштування посилання",
+	"components.board.menu.submissionElement": "Налаштування Подання",
+	"components.board.menu.deletedElement": "Видалені налаштування вмісту",
 	"components.board.notifications.errors.fileNameExists":
 		"Файл з такою назвою вже існує.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -377,6 +386,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Цей Etherpad є видимою і доступною для редагування для всіх учасників курсу.",
+	"components.cardElement.externalToolElement": "Зовнішній інструмент",
+	"components.cardElement.fileElement": "Файл",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
@@ -400,6 +411,7 @@ export default {
 		"Формат відео не підтримується цим браузером / операційною системою.",
 	"components.cardElement.fileElement.virusDetected":
 		"Файл було заблоковано через підозру на вірус.",
+	"components.cardElement.LinkElement": "Посилання",
 	"components.cardElement.LinkElement.label": "Вставити адресу посилання",
 	"components.cardElement.notification.visibleAndEditable":
 		"Ця дошка є видимою і доступною для редагування для всіх учасників курсу.",
@@ -416,6 +428,8 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Будь ласка, введіть назву.",
 	"components.cardElement.titleElement": "Елемент заголовка",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
 	"components.datePicker.validation.required": "Будь ласка, введіть дату.",
 	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
@@ -597,6 +611,16 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"немає. Обліковий запис буде створено знову.",
 	"components.molecules.importUsersMatch.write": "Введіть ім'я та прізвище",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Немає в наявності",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Учитель",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Студент",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Організаційний адміністратор",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Організаційний менеджмент",
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
@@ -817,6 +841,7 @@ export default {
 	"global.sidebar.item.management": "Управління",
 	"global.sidebar.item.overview": "Панель керування",
 	"global.sidebar.item.releaseNotes": "Що нового?",
+	"global.sidebar.item.rooms": "Номери",
 	"global.sidebar.item.school": "Школа",
 	"global.sidebar.item.student": "Учні",
 	"global.sidebar.item.system": "Cистема",
@@ -1141,6 +1166,8 @@ export default {
 		"Активувати видимість учнів для вчителів",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
 		"Активувати відеоконференції для курсів і команд",
+	"pages.administration.school.index.privacySettings.labels.aiTutor":
+		"Активуйте репетитора ШІ в школі",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"Якщо у вашому навчальному закладі увімкнені чати, адміністратори команд можуть вибірково увімкнути функцію чату для своєї команди.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1155,6 +1182,8 @@ export default {
 		"Якщо цю опцію не ввімкнено, вчителі бачитимуть лише ті класи та учнів, учасниками яких вони є.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
 		"Якщо у вашій школі увімкнено відеоконференцію, викладачі можуть додати інструмент для відеоконференцій до свого курсу у розділі «Інструменти», а потім запустити відеоконференцію для всіх учасників курсу. Адміністратори команд можуть активувати функцію відеоконференції у відповідній команді. Після цього керівники команд та адміністратори команд зможуть додавати та розпочинати відеоконференції для зустрічей.",
+	"pages.administration.school.index.privacySettings.longText.aiTutor":
+		"Якщо AI Tutor активовано у вашій школі, вчителі можуть додати AI Tutor у своїх областях.",
 	"pages.administration.school.index.privacySettings":
 		"Параметри конфіденційності",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing":

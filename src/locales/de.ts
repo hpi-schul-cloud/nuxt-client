@@ -24,6 +24,7 @@ export default {
 	"common.actions.export": "Exportieren",
 	"common.actions.shareCopy": "Kopie teilen",
 	"common.actions.update": "Aktualisieren",
+	"common.ariaLabel.newTab": "öffnet in einem neuen Tab",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
@@ -320,7 +321,14 @@ export default {
 	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
-	"components.board.menu.element": "Element-Einstellungen",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Etherpad-Einstellungen",
+	"components.board.menu.drawingElement": "Whiteboard-Einstellungen",
+	"components.board.menu.externalToolElement": "Externes-Tool-Einstellungen",
+	"components.board.menu.fileElement": "Datei-Einstellungen",
+	"components.board.menu.linkElement": "Link-Einstellungen",
+	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
+	"components.board.menu.deletedElement": "Gelöschter-Inhalt-Einstellungen",
 	"components.board.notifications.errors.fileNameExists":
 		"Es existiert bereits eine Datei mit diesem Namen.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -373,6 +381,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
+	"components.cardElement.externalToolElement": "Externes Tool",
+	"components.cardElement.fileElement": "Datei",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
@@ -395,6 +405,7 @@ export default {
 		"Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
 	"components.cardElement.fileElement.virusDetected":
 		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
+	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Link-Adresse einfügen",
 	"components.cardElement.notification.visibleAndEditable":
 		"Dieses Whiteboard ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
@@ -411,6 +422,8 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Bitte Titel angeben.",
 	"components.cardElement.titleElement": "Titelelement",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
 	"components.datePicker.validation.format":
 		"Bitte Format DD.MM.YYYY verwenden.",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
@@ -600,6 +613,16 @@ export default {
 		"Keiner. Benutzer wird neu erstellt.",
 	"components.molecules.importUsersMatch.write":
 		"Vornamen oder Nachnamen eingeben",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Nicht verfügbar",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Lehrende/r",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Lernende/r",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Organisationsadministrator",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Organisationsleitung",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
@@ -811,6 +834,7 @@ export default {
 	"global.sidebar.item.management": "Verwaltung",
 	"global.sidebar.item.overview": "Übersicht",
 	"global.sidebar.item.releaseNotes": "Was ist neu?",
+	"global.sidebar.item.rooms": "Räume",
 	"global.sidebar.item.school": "Schule",
 	"global.sidebar.item.student": "Schüler:innen",
 	"global.sidebar.item.system": "System",
@@ -1135,6 +1159,8 @@ export default {
 		"Sichtbarkeit von Schüler:innen für Lehrkräfte aktivieren",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
 		"Videokonferenzen für Kurse und Teams aktivieren",
+	"pages.administration.school.index.privacySettings.labels.aiTutor":
+		"KI-Tutor an Schule aktivieren",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"Sind Chats an deiner Schule aktiviert, können Team-Admins im jeweiligen Team die Chatfunktion gezielt freischalten.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1149,6 +1175,8 @@ export default {
 		"Wenn diese Option nicht aktiviert ist, können die Lehrkräfte ausschließlich die Klassen sowie deren Schülerinnen und Schüler sehen, in denen sie Mitglied sind.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
 		"Sind Videokonferenzen an deiner Schule aktiviert, können Lehrkräfte ihrem Kurs im Bereich Tools das Videokonferenz-Tool hinzufügen und dann von dort aus Videokonferenzen für alle Kursteilnehmer:innen starten. Team-Admins können die Videokonferenzfunktion im jeweiligen Team aktivieren. Team-Leiter:innen und Team-Admins können dann Videokonferenzen zu Terminen hinzufügen und starten.",
+	"pages.administration.school.index.privacySettings.longText.aiTutor":
+		"Ist der KI-Tutor an deiner Schule aktiviert, können Lehrkräfte in ihren Bereichen den KI-Tutor hinzufügen.",
 	"pages.administration.school.index.privacySettings":
 		"Datenschutzeinstellungen",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing":

@@ -21,8 +21,8 @@ import LoadingStateModule from "@/store/loading-state";
 import NewsModule from "@/store/news";
 import NotifierModule from "@/store/notifier";
 import PrivacyPolicyModule from "@/store/privacy-policy";
-import RoomModule from "@/store/room";
-import RoomsModule from "@/store/rooms";
+import CourseRoomDetailsModule from "@/store/course-room-details";
+import CourseRoomListModule from "@/store/course-room-list";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import SchoolsModule from "@/store/schools";
 import ShareModule from "@/store/share";
@@ -55,8 +55,8 @@ export let newsModule: NewsModule;
 export let notifierModule: NotifierModule;
 export let privacyPolicyModule: PrivacyPolicyModule;
 export let termsOfUseModule: TermsOfUseModule;
-export let roomModule: RoomModule;
-export let roomsModule: RoomsModule;
+export let courseRoomDetailsModule: CourseRoomDetailsModule;
+export let courseRoomListModule: CourseRoomListModule;
 export let schoolExternalToolsModule: SchoolExternalToolsModule;
 export let schoolsModule: SchoolsModule;
 export let shareModule: ShareModule;
@@ -86,8 +86,8 @@ export function initializeStores(store: Store<any>): void {
 	notifierModule = getModule(NotifierModule, store);
 	privacyPolicyModule = getModule(PrivacyPolicyModule, store);
 	termsOfUseModule = getModule(TermsOfUseModule, store);
-	roomModule = getModule(RoomModule, store);
-	roomsModule = getModule(RoomsModule, store);
+	courseRoomDetailsModule = getModule(CourseRoomDetailsModule, store);
+	courseRoomListModule = getModule(CourseRoomListModule, store);
 	schoolExternalToolsModule = getModule(SchoolExternalToolsModule, store);
 	schoolsModule = getModule(SchoolsModule, store);
 	shareModule = getModule(ShareModule, store);
@@ -120,8 +120,8 @@ export const modules = {
 	notifierModule: NotifierModule,
 	privacyPolicyModule: PrivacyPolicyModule,
 	termsOfUseModule: TermsOfUseModule,
-	roomModule: RoomModule,
-	roomsModule: RoomsModule,
+	courseRoomDetailsModule: CourseRoomDetailsModule,
+	courseRoomListModule: CourseRoomListModule,
 	schoolExternalToolsModule: SchoolExternalToolsModule,
 	schoolsModule: SchoolsModule,
 	shareModule: ShareModule,

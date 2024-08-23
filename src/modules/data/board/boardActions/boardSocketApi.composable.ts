@@ -1,6 +1,6 @@
 import * as BoardActions from "./boardActions";
 import * as CardActions from "../cardActions/cardActions";
-import { useSocketConnection } from "@data-board";
+import { useSocketConnection, useForceRender } from "@data-board";
 import { useBoardStore } from "../Board.store";
 import {
 	CreateCardRequestPayload,
@@ -9,6 +9,7 @@ import {
 	DisconnectSocketRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
+	MoveCardSuccessPayload,
 	MoveColumnRequestPayload,
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
@@ -95,7 +96,8 @@ export const useBoardSocketApi = () => {
 			...successActions,
 			...failureActions,
 			...ariaLiveNotifications,
-			on(BoardActions.disconnectSocket, disconnectSocketRequest)
+			on(BoardActions.disconnectSocket, disconnectSocketRequest),
+			on(BoardActions.moveCardSuccess, setRenderKeyAfterMoveCard)
 		);
 	};
 
@@ -169,6 +171,11 @@ export const useBoardSocketApi = () => {
 		payload: UpdateBoardVisibilityRequestPayload
 	) => {
 		emitOnSocket("update-board-visibility-request", payload);
+	};
+
+	const setRenderKeyAfterMoveCard = (payload: MoveCardSuccessPayload) => {
+		const { generateRenderKey } = useForceRender(payload.fromColumnId);
+		generateRenderKey();
 	};
 
 	const createCardFailure = () => notifySocketError("notCreated", "boardCard");

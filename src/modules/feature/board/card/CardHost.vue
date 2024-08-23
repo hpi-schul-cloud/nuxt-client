@@ -33,7 +33,11 @@
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
-						<BoardMenu v-if="hasDeletePermission" scope="card">
+						<BoardMenu
+							v-if="hasDeletePermission"
+							scope="card"
+							data-testid="card-menu-btn"
+						>
 							<BoardMenuActionEdit
 								v-if="!isEditMode"
 								@click="onStartEditMode"
@@ -89,8 +93,8 @@ import { delay } from "@/utils/helpers";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
-	useEditMode,
 	useCardStore,
+	useEditMode,
 } from "@data-board";
 import { mdiArrowExpand } from "@mdi/js";
 import {
@@ -231,7 +235,9 @@ export default defineComponent({
 		});
 
 		onMounted(async () => {
-			await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
+			if (card.value === undefined) {
+				await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
+			}
 		});
 
 		return {

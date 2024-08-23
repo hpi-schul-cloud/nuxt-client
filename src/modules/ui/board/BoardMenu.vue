@@ -17,18 +17,7 @@
 			>
 				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
-					<template v-if="scope === 'board'">
-						{{ $t("components.board.menu.board") }}
-					</template>
-					<template v-if="scope === 'column'">
-						{{ $t("components.board.menu.column") }}
-					</template>
-					<template v-if="scope === 'card'">
-						{{ $t("components.board.menu.card") }}
-					</template>
-					<template v-if="scope === 'element'">
-						{{ $t("components.board.menu.element") }}
-					</template>
+					{{ $t(boardMenuAriaLabel) }}
 				</span>
 			</VBtn>
 		</template>
@@ -58,8 +47,37 @@ const props = defineProps({
 const scope = toRef(props, "scope");
 provide(MENU_SCOPE, scope.value);
 
-const hasBackground = computed<boolean>(
-	() => scope.value === "card" || scope.value === "element"
+const ariaLabelForScope: Record<BoardMenuScope, string> = {
+	board: "components.board.menu.board",
+	column: "components.board.menu.column",
+	card: "components.board.menu.card",
+	collaborativeTextEditorElement:
+		"components.board.menu.collaborativeTextEditorElement",
+	drawingElement: "components.board.menu.drawingElement",
+	externalToolElement: "components.board.menu.externalToolElement",
+	fileElement: "components.board.menu.fileElement",
+	linkElement: "components.board.menu.linkElement",
+	submissionElement: "components.board.menu.submissionElement",
+	deletedElement: "components.board.menu.deletedElement",
+};
+
+const boardMenuAriaLabel = computed(() => {
+	return ariaLabelForScope[scope.value];
+});
+
+const boardScopesWithBackground: Array<BoardMenuScope> = [
+	"card",
+	"collaborativeTextEditorElement",
+	"drawingElement",
+	"externalToolElement",
+	"fileElement",
+	"linkElement",
+	"submissionElement",
+	"deletedElement",
+];
+
+const hasBackground = computed<boolean>(() =>
+	boardScopesWithBackground.includes(scope.value)
 );
 </script>
 

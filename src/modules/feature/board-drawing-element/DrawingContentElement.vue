@@ -5,15 +5,16 @@
 		variant="outlined"
 		ref="drawingElement"
 		:ripple="false"
-		tabindex="0"
-		elevation="0"
+		:href="sanitizedUrl"
+		target="_blank"
+		:aria-label="ariaLabel"
 		@keydown.up.down="onKeydownArrow"
-		role="button"
+		@keydown.stop
 	>
-		<div class="drawing-element-content" @click="redirectToSanitizedUrl">
+		<div class="drawing-element-content">
 			<InnerContent :docName="element.id">
 				<template v-if="isEditMode">
-					<BoardMenu scope="element">
+					<BoardMenu scope="drawingElement">
 						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
 						<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
 						<BoardMenuActionDelete @click="onDeleteElement" />
@@ -24,10 +25,8 @@
 	</v-card>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { DrawingElementResponse } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
 import {
@@ -36,73 +35,52 @@ import {
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
-import { computed, defineComponent, PropType, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef } from "vue";
 import InnerContent from "./InnerContent.vue";
+import { useI18n } from "vue-i18n";
 
-export default defineComponent({
-	name: "DrawingContentElement",
-	components: {
-		BoardMenu,
-		BoardMenuActionMoveUp,
-		BoardMenuActionMoveDown,
-		BoardMenuActionDelete,
-		InnerContent,
+const props = defineProps({
+	element: {
+		type: Object as PropType<DrawingElementResponse>,
+		required: true,
 	},
-	props: {
-		element: {
-			type: Object as PropType<DrawingElementResponse>,
-			required: true,
-		},
-		isEditMode: { type: Boolean, required: true },
-	},
-	emits: [
-		"delete:element",
-		"move-down:edit",
-		"move-up:edit",
-		"move-keyboard:edit",
-	],
-	setup(props, { emit }) {
-		const drawingElement = ref<HTMLElement | null>(null);
-		const element = toRef(props, "element");
-		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-		const userRoles = ref(authModule.getUserRoles);
+	isEditMode: { type: Boolean, required: true },
+});
+const emit = defineEmits([
+	"delete:element",
+	"move-down:edit",
+	"move-up:edit",
+	"move-keyboard:edit",
+]);
 
-		const sanitizedUrl = computed(() =>
-			sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
-		);
+const { t } = useI18n();
+const drawingElement = ref<HTMLElement | null>(null);
+const element = toRef(props, "element");
 
-		const redirectToSanitizedUrl = () => {
-			window.open(sanitizedUrl.value, "_blank");
-		};
-		useBoardFocusHandler(element.value.id, drawingElement);
+const sanitizedUrl = computed(() =>
+	sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
+);
 
-		const onKeydownArrow = (event: KeyboardEvent) => {
-			if (props.isEditMode) {
-				event.preventDefault();
-				emit("move-keyboard:edit", event);
-			}
-		};
-		const onMoveDrawingElementEditDown = () => emit("move-down:edit");
-		const onMoveDrawingElementEditUp = () => emit("move-up:edit");
-		const onDeleteElement = async (confirmation: Promise<boolean>) => {
-			const shouldDelete = await confirmation;
-			if (shouldDelete) {
-				emit("delete:element", props.element.id);
-			}
-		};
+useBoardFocusHandler(element.value.id, drawingElement);
 
-		const isTeacher = computed(() => {
-			return userRoles.value.includes("teacher");
-		});
-		return {
-			drawingElement,
-			redirectToSanitizedUrl,
-			onDeleteElement,
-			onKeydownArrow,
-			onMoveDrawingElementEditDown,
-			onMoveDrawingElementEditUp,
-			isTeacher,
-		};
-	},
+const onKeydownArrow = (event: KeyboardEvent) => {
+	if (props.isEditMode) {
+		event.preventDefault();
+		emit("move-keyboard:edit", event);
+	}
+};
+const onMoveDrawingElementEditDown = () => emit("move-down:edit");
+const onMoveDrawingElementEditUp = () => emit("move-up:edit");
+const onDeleteElement = async (confirmation: Promise<boolean>) => {
+	const shouldDelete = await confirmation;
+	if (shouldDelete) {
+		emit("delete:element", props.element.id);
+	}
+};
+
+const ariaLabel = computed(() => {
+	return `${t("components.cardElement.drawingElement")}, ${t(
+		"common.ariaLabel.newTab"
+	)}`;
 });
 </script>
