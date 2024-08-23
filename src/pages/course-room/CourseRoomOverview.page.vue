@@ -2,7 +2,7 @@
 	<room-wrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
 		<template #header>
 			<h1 class="text-h3 py-2 mb-4">
-				{{ $t("pages.courseRoom.index.courses.active") }}
+				{{ $t("pages.courseRooms.index.courses.active") }}
 			</h1>
 			<div class="mb-5 header-actions-section">
 				<v-btn
@@ -11,14 +11,14 @@
 					to="/rooms/courses-list"
 					data-testid="go-to-all-courses"
 				>
-					{{ $t("pages.courseRoom.index.courses.all") }}
+					{{ $t("pages.courseRooms.index.courses.all") }}
 				</v-btn>
 				<v-switch
 					v-if="isTouchDevice"
 					v-model="allowDragging"
 					class="enable-disable"
-					:label="$t('pages.courseRoom.index.courses.arrangeCourses')"
-					:aria-label="$t('pages.courseRoom.index.courses.arrangeCourses')"
+					:label="$t('pages.courseRooms.index.courses.arrangeCourses')"
+					:aria-label="$t('pages.courseRooms.index.courses.arrangeCourses')"
 					:true-icon="mdiCheck"
 					hide-details
 				/>
@@ -33,9 +33,9 @@
 					variant="solo"
 					rounded
 					single-line
-					:label="$t('pages.courseRoom.index.search.label')"
+					:label="$t('pages.courseRooms.index.search.label')"
 					:append-inner-icon="mdiMagnify"
-					:aria-label="$t('pages.courseRoom.index.search.label')"
+					:aria-label="$t('pages.courseRooms.index.search.label')"
 					data-testid="search-field-course"
 				/>
 				<div
@@ -377,7 +377,7 @@ export default defineComponent({
 			this.groupDialog.groupData = {};
 		},
 		defaultNaming(pos) {
-			const title = this.$t("pages.courseRoom.groupName");
+			const title = this.$t("pages.courseRooms.groupName");
 			const payload = {
 				title,
 				xPosition: pos.x,
@@ -425,7 +425,7 @@ export default defineComponent({
 	},
 	mounted() {
 		document.title = buildPageTitle(
-			this.$t("pages.courseRoom.index.courses.active")
+			this.$t("pages.courseRooms.index.courses.active")
 		);
 	},
 });

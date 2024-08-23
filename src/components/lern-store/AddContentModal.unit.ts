@@ -170,7 +170,7 @@ describe("@/components/molecules/AddContentModal", () => {
 		const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
 		await submitBtn.trigger("click");
 		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")?.[0][0]).toBeFalsy();
+		expect(wrapper.emitted("update:show-copy-modal")?.[0][0]).toBe(false);
 	});
 
 	it("submit modal action multiple items", async () => {
@@ -228,7 +228,6 @@ describe("AddContentModal with real Vuex course-store", () => {
 		const wrapper = getWrapper(testProps);
 		const select = wrapper.findComponent(VSelect);
 		const items = select.props("items");
-		console.log(items);
 		expect(items).toHaveLength(0);
 	});
 });

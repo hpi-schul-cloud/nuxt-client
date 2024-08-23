@@ -2,7 +2,7 @@
 	<room-wrapper :has-rooms="hasRooms">
 		<template #header>
 			<h1 class="text-h3 py-2 mb-4">
-				{{ $t("pages.courseRoom.index.courses.all") }}
+				{{ $t("pages.courseRooms.index.courses.all") }}
 			</h1>
 			<div class="header-actions-section mb-5">
 				<v-btn
@@ -11,7 +11,7 @@
 					to="/rooms/courses-overview"
 					data-testid="go-to-active-courses"
 				>
-					{{ $t("pages.courseRoom.index.courses.active") }}
+					{{ $t("pages.courseRooms.index.courses.active") }}
 				</v-btn>
 			</div>
 		</template>
@@ -24,9 +24,9 @@
 					variant="solo"
 					rounded
 					single-line
-					:label="$t('pages.courseRoom.index.search.label')"
+					:label="$t('pages.courseRooms.index.search.label')"
 					:append-inner-icon="mdiMagnify"
-					:aria-label="$t('pages.courseRoom.index.search.label')"
+					:aria-label="$t('pages.courseRooms.index.search.label')"
 					data-testid="search-field-course"
 				/>
 			</v-row>
@@ -94,7 +94,7 @@ export default defineComponent({
 	},
 	async mounted() {
 		document.title = buildPageTitle(
-			this.$t("pages.courseRoom.index.courses.all").toString()
+			this.$t("pages.courseRooms.index.courses.all").toString()
 		);
 		await courseRoomListModule.fetchAllElements();
 	},

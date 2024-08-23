@@ -23,16 +23,16 @@
 					class="mt-1 ml-2"
 					data-testid="synced-course-chip"
 				>
-					{{ $t("pages.courseRoom.headerSection.synchronized") }}
+					{{ $t("pages.courseRooms.headerSection.synchronized") }}
 				</VChip>
 				<VChip v-if="roomData.isArchived" size="small" class="mt-1 ml-2">
-					{{ $t("pages.courseRoom.headerSection.archived") }}
+					{{ $t("pages.courseRooms.headerSection.archived") }}
 				</VChip>
 				<div class="mx-2">
 					<room-dot-menu
 						:menu-items="headlineMenuItems"
 						data-testid="room-menu"
-						:aria-label="$t('pages.courseRoom.headerSection.menu.ariaLabel')"
+						:aria-label="$t('pages.courseRooms.headerSection.menu.ariaLabel')"
 					/>
 				</div>
 			</div>
@@ -45,7 +45,7 @@
 						:href="`/files/courses/${roomData.roomId}`"
 						:data-testid="`room-${roomData.roomId}-files`"
 					>
-						{{ $t("pages.courseRoom.headerSection.toCourseFiles") }}
+						{{ $t("pages.courseRooms.headerSection.toCourseFiles") }}
 					</v-btn>
 				</div>
 			</div>
@@ -244,7 +244,7 @@ export default defineComponent({
 
 				tabs.push({
 					name: "tools",
-					label: this.$t("pages.courseRoom.tabLabel.tools"),
+					label: this.$t("pages.courseRooms.tabLabel.tools"),
 					icon: mdiPuzzleOutline,
 					dataTestId: "tools-tab",
 					component: RoomExternalToolsOverview,
@@ -255,7 +255,7 @@ export default defineComponent({
 			if (ltiToolsTabEnabled) {
 				tabs.push({
 					name: "old-tools",
-					label: this.$t("pages.courseRoom.tabLabel.toolsOld"),
+					label: this.$t("pages.courseRooms.tabLabel.toolsOld"),
 					icon: mdiPuzzleOutline,
 					dataTestId: "old-tools-tab",
 					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
@@ -264,7 +264,7 @@ export default defineComponent({
 
 			tabs.push({
 				name: "groups",
-				label: this.$t("pages.courseRoom.tabLabel.groups"),
+				label: this.$t("pages.courseRooms.tabLabel.groups"),
 				icon: mdiAccountGroupOutline,
 				href: `/courses/${this.roomData.roomId}/?activeTab=groups`,
 				dataTestId: "groups-tab",
@@ -291,11 +291,11 @@ export default defineComponent({
 				)
 			) {
 				actions.push({
-					label: this.$t("pages.courseRoom.fab.add.task"),
+					label: this.$t("pages.courseRoomDetails.fab.add.task"),
 					icon: mdiFormatListChecks,
 					href: `/homework/new?course=${this.roomData.roomId}&returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_task",
-					ariaLabel: this.$t("pages.courseRoom.fab.add.task"),
+					ariaLabel: this.$t("pages.courseRoomDetails.fab.add.task"),
 				});
 			}
 
@@ -305,11 +305,11 @@ export default defineComponent({
 				)
 			) {
 				actions.push({
-					label: this.$t("pages.courseRoom.fab.add.lesson"),
+					label: this.$t("pages.courseRoomDetails.fab.add.lesson"),
 					icon: mdiViewListOutline,
 					href: `/courses/${this.roomData.roomId}/topics/add?returnUrl=rooms/${this.roomData.roomId}`,
 					dataTestId: "fab_button_add_lesson",
-					ariaLabel: this.$t("pages.courseRoom.fab.add.lesson"),
+					ariaLabel: this.$t("pages.courseRoomDetails.fab.add.lesson"),
 				});
 			}
 
@@ -321,19 +321,19 @@ export default defineComponent({
 			) {
 				if (this.boardLayoutsEnabled) {
 					actions.push({
-						label: this.$t("pages.courseRoom.fab.add.board"),
+						label: this.$t("pages.courseRoomDetails.fab.add.board"),
 						icon: "$mdiViewGridPlusOutline",
 						customEvent: "board-type-dialog-open",
 						dataTestId: "fab_button_add_board",
-						ariaLabel: this.$t("pages.courseRoom.fab.add.board"),
+						ariaLabel: this.$t("pages.courseRoomDetails.fab.add.board"),
 					});
 				} else {
 					actions.push({
-						label: this.$t("pages.courseRoom.fab.add.columnBoard"),
+						label: this.$t("pages.courseRoomDetails.fab.add.columnBoard"),
 						icon: mdiViewDashboardOutline,
 						customEvent: "board-create",
 						dataTestId: "fab_button_add_column_board",
-						ariaLabel: this.$t("pages.courseRoom.fab.add.columnBoard"),
+						ariaLabel: this.$t("pages.courseRoomDetails.fab.add.columnBoard"),
 					});
 				}
 			}

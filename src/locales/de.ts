@@ -1469,30 +1469,31 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Wähle einen Kurs / Fach",
 	"pages.content.placeholder.noLessonTopic": "Lege ein Thema im Kurs an",
 	"pages.content.preview_img.alt": "Bildvorschau",
-	"pages.courseRoom.fab.add.board": "Neuer Bereich",
-	"pages.courseRoom.fab.add.columnBoard": "Neuer Bereich {'|'} mehrspaltig",
-	"pages.courseRoom.fab.add.lesson": "Neues Thema",
-	"pages.courseRoom.fab.add.task": "Neue Aufgabe",
-	"pages.courseRoom.groupName": "Kurse",
-	"pages.courseRoom.headerSection.archived": "Archiv",
-	"pages.courseRoom.headerSection.menu.ariaLabel": "Kursmenü",
-	"pages.courseRoom.headerSection.synchronized": "Synchronisiert",
-	"pages.courseRoom.headerSection.toCourseFiles": "Zu den Kursdateien",
-	"pages.courseRoom.index.courses.active": "Aktuelle Kurse",
-	"pages.courseRoom.index.courses.all": "Alle Kurse",
-	"pages.courseRoom.index.courses.arrangeCourses": "Kurse umordnen",
-	"pages.courseRoom.index.search.label": "Kurs suchen",
+	"pages.courseRoomDetails.fab.add.board": "Neuer Bereich",
+	"pages.courseRoomDetails.fab.add.columnBoard":
+		"Neuer Bereich {'|'} mehrspaltig",
+	"pages.courseRoomDetails.fab.add.lesson": "Neues Thema",
+	"pages.courseRoomDetails.fab.add.task": "Neue Aufgabe",
+	"pages.courseRooms.groupName": "Kurse",
+	"pages.courseRooms.headerSection.archived": "Archiv",
+	"pages.courseRooms.headerSection.menu.ariaLabel": "Kursmenü",
+	"pages.courseRooms.headerSection.synchronized": "Synchronisiert",
+	"pages.courseRooms.headerSection.toCourseFiles": "Zu den Kursdateien",
+	"pages.courseRooms.index.courses.active": "Aktuelle Kurse",
+	"pages.courseRooms.index.courses.all": "Alle Kurse",
+	"pages.courseRooms.index.courses.arrangeCourses": "Kurse umordnen",
+	"pages.courseRooms.index.search.label": "Kurs suchen",
 	"pages.courseRooms.menuItems.endSync": "Synchronisation beenden",
-	"pages.courseRoom.tabLabel.groups": "Gruppen",
-	"pages.courseRoom.tabLabel.tools": "Tools",
-	"pages.courseRoom.tabLabel.toolsOld": "Tools",
-	"pages.courseRoom.tools.configureVideoconferenceDialog.title":
+	"pages.courseRooms.tabLabel.groups": "Gruppen",
+	"pages.courseRooms.tabLabel.tools": "Tools",
+	"pages.courseRooms.tabLabel.toolsOld": "Tools",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
 		"Videokonferenz {roomName} erstellen",
-	"pages.courseRoom.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Alle Nutzer:innen nehmen als Moderator:in teil",
-	"pages.courseRoom.tools.configureVideoconferenceDialog.text.mute":
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
 		"Teilnehmer:innen beim Betreten stummschalten",
-	"pages.courseRoom.tools.configureVideoconferenceDialog.text.waitingRoom":
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
 		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",

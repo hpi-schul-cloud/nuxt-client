@@ -606,7 +606,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 
 				const tabTitle = wrapper.find('[data-testid="tools-tab"]');
 
-				expect(tabTitle.text()).toEqual("pages.courseRoom.tabLabel.tools");
+				expect(tabTitle.text()).toEqual("pages.courseRooms.tabLabel.tools");
 			});
 		});
 
