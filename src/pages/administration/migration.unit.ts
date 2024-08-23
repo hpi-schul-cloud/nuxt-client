@@ -559,6 +559,9 @@ describe("User Migration / Index", () => {
 				);
 
 				expect(button.exists()).toBe(true);
+				expect(button.text()).toBe(
+					"pages.administration.migration.clearAutoMatches"
+				);
 			});
 
 			it("should show the dialog on button click", async () => {
