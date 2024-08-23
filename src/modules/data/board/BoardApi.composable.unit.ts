@@ -471,7 +471,7 @@ describe("BoardApi.composable", () => {
 				FAKE_BOARD_ID
 			);
 
-			expect(roomsApi.roomsControllerGetRoomBoard).toHaveBeenCalledWith(
+			expect(roomsApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalledWith(
 				FAKE_RESPONSE.data.id
 			);
 		});
@@ -498,7 +498,7 @@ describe("BoardApi.composable", () => {
 			boardApi.boardControllerGetBoardContext = jest
 				.fn()
 				.mockResolvedValueOnce(FAKE_RESPONSE);
-			roomsApi.roomsControllerGetRoomBoard = jest
+			roomsApi.courseRoomsControllerGetRoomBoard = jest
 				.fn()
 				.mockResolvedValueOnce(FAKE_ROOM_RESPONSE);
 
@@ -508,7 +508,7 @@ describe("BoardApi.composable", () => {
 				FAKE_BOARD_ID
 			);
 
-			expect(roomsApi.roomsControllerGetRoomBoard).toHaveBeenCalledWith(
+			expect(roomsApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalledWith(
 				FAKE_RESPONSE.data.id
 			);
 
