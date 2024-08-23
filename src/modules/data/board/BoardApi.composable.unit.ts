@@ -15,7 +15,7 @@ let boardApi: DeepMocked<serverApi.BoardApiInterface>;
 let columnApi: DeepMocked<serverApi.BoardColumnApiInterface>;
 let cardApi: DeepMocked<serverApi.BoardCardApiInterface>;
 let elementApi: DeepMocked<serverApi.BoardElementApiInterface>;
-let roomsApi: DeepMocked<serverApi.RoomsApiInterface>;
+let roomsApi: DeepMocked<serverApi.CourseRoomsApiInterface>;
 
 describe("BoardApi.composable", () => {
 	beforeEach(() => {
@@ -23,13 +23,13 @@ describe("BoardApi.composable", () => {
 		columnApi = createMock<serverApi.BoardColumnApiInterface>();
 		cardApi = createMock<serverApi.BoardCardApiInterface>();
 		elementApi = createMock<serverApi.BoardElementApiInterface>();
-		roomsApi = createMock<serverApi.RoomsApiInterface>();
+		roomsApi = createMock<serverApi.CourseRoomsApiInterface>();
 
 		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApi);
 		jest.spyOn(serverApi, "BoardColumnApiFactory").mockReturnValue(columnApi);
 		jest.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(cardApi);
 		jest.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
-		jest.spyOn(serverApi, "RoomsApiFactory").mockReturnValue(roomsApi);
+		jest.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(roomsApi);
 	});
 
 	afterEach(() => {

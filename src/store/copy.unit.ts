@@ -61,9 +61,9 @@ describe("copy module", () => {
 					courseRoomsControllerCopyCourse: jest.fn(async () => ({})),
 				};
 				jest
-					.spyOn(serverApi, "RoomsApiFactory")
+					.spyOn(serverApi, "CourseRoomsApiFactory")
 					.mockReturnValue(
-						roomCopyMockApi as unknown as serverApi.RoomsApiInterface
+						roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
 					);
 
 				const copyModule = new CopyModule({});
@@ -128,9 +128,9 @@ describe("copy module", () => {
 						})),
 					};
 					jest
-						.spyOn(serverApi, "RoomsApiFactory")
+						.spyOn(serverApi, "CourseRoomsApiFactory")
 						.mockReturnValue(
-							roomCopyMockApi as unknown as serverApi.RoomsApiInterface
+							roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
 						);
 
 					const copyModule = new CopyModule({});
@@ -156,9 +156,9 @@ describe("copy module", () => {
 						})),
 					};
 					jest
-						.spyOn(serverApi, "RoomsApiFactory")
+						.spyOn(serverApi, "CourseRoomsApiFactory")
 						.mockReturnValue(
-							roomCopyMockApi as unknown as serverApi.RoomsApiInterface
+							roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
 						);
 					const copyModule = new CopyModule({});
 					await copyModule.copy({
