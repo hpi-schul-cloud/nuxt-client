@@ -232,7 +232,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: `/rooms`,
-		component: () => import("@page-room/Rooms.page.vue"),
+		component: async () => (await import("@page-room")).RoomsPage,
 		name: "rooms",
 	},
 	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
@@ -266,7 +266,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
-		component: () => import("@page-board/ColumnBoard.page.vue"),
+		component: async () => (await import("@page-board")).ColumnBoardPage,
 		name: "rooms-board",
 		props: (route: RouteLocationNormalized) => ({
 			boardId: route.params.id,
