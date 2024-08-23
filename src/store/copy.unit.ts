@@ -58,7 +58,7 @@ describe("copy module", () => {
 		describe("copy", () => {
 			it("should throw an error if copyResult is undefined", async () => {
 				const roomCopyMockApi = {
-					roomsControllerCopyCourse: jest.fn(async () => ({})),
+					courseRoomsControllerCopyCourse: jest.fn(async () => ({})),
 				};
 				jest
 					.spyOn(serverApi, "RoomsApiFactory")
@@ -123,7 +123,9 @@ describe("copy module", () => {
 			describe("copy a course", () => {
 				it("should make a 'POST' request to the backend", async () => {
 					const roomCopyMockApi = {
-						roomsControllerCopyCourse: jest.fn(async () => ({ data: {} })),
+						courseRoomsControllerCopyCourse: jest.fn(async () => ({
+							data: {},
+						})),
 					};
 					jest
 						.spyOn(serverApi, "RoomsApiFactory")
@@ -141,7 +143,7 @@ describe("copy module", () => {
 					await copyModule.copy(payload);
 
 					expect(
-						roomCopyMockApi.roomsControllerCopyCourse
+						roomCopyMockApi.courseRoomsControllerCopyCourse
 					).toHaveBeenCalledWith("courseId-value");
 				});
 			});
@@ -149,7 +151,9 @@ describe("copy module", () => {
 			describe("copy a lesson", () => {
 				it("should make a 'POST' request to the backend", async () => {
 					const roomCopyMockApi = {
-						roomsControllerCopyLesson: jest.fn(async () => ({ data: {} })),
+						courseRoomsControllerCopyLesson: jest.fn(async () => ({
+							data: {},
+						})),
 					};
 					jest
 						.spyOn(serverApi, "RoomsApiFactory")
@@ -163,7 +167,7 @@ describe("copy module", () => {
 						courseId: "testCourseId",
 					});
 					expect(
-						roomCopyMockApi.roomsControllerCopyLesson
+						roomCopyMockApi.courseRoomsControllerCopyLesson
 					).toHaveBeenCalledWith("testLessonId", { courseId: "testCourseId" });
 				});
 			});

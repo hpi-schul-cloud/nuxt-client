@@ -7,8 +7,8 @@ import {
 	LessonApiInterface,
 	PatchOrderParams,
 	PatchVisibilityParams,
-	RoomsApiFactory,
-	RoomsApiInterface,
+	CourseRoomsApiFactory,
+	CourseRoomsApiInterface,
 	SingleColumnBoardResponse,
 	TaskApiFactory,
 	TaskApiInterface,
@@ -45,8 +45,8 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	};
 	private courseShareToken = "";
 
-	private get roomsApi(): RoomsApiInterface {
-		return RoomsApiFactory(undefined, "/v3", $axios);
+	private get roomsApi(): CourseRoomsApiInterface {
+		return CourseRoomsApiFactory(undefined, "/v3", $axios);
 	}
 
 	private get lessonApi(): LessonApiInterface {
@@ -76,7 +76,8 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	async fetchContent(id: string): Promise<void> {
 		this.setLoading(true);
 		try {
-			const { data } = await this.roomsApi.roomsControllerGetRoomBoard(id);
+			const { data } =
+				await this.roomsApi.courseRoomsControllerGetRoomBoard(id);
 			this.setRoomData(data);
 			this.setLoading(false);
 		} catch (error: any) {
@@ -95,7 +96,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			visibility: payload.visibility,
 		};
 		try {
-			await this.roomsApi.roomsControllerPatchElementVisibility(
+			await this.roomsApi.courseRoomsControllerPatchElementVisibility(
 				this.roomData.roomId,
 				payload.elementId,
 				visibilityParam
@@ -113,7 +114,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	async sortElements(payload: PatchOrderParams): Promise<void> {
 		this.setLoading(true);
 		try {
-			await this.roomsApi.roomsControllerPatchOrderingOfElements(
+			await this.roomsApi.courseRoomsControllerPatchOrderingOfElements(
 				this.roomData.roomId,
 				payload
 			);

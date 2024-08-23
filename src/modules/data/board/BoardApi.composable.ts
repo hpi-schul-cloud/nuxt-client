@@ -14,7 +14,7 @@ import {
 	FileElementContentBody,
 	LinkElementContentBody,
 	RichTextElementContentBody,
-	RoomsApiFactory,
+	CourseRoomsApiFactory,
 	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
@@ -28,7 +28,7 @@ export const useBoardApi = () => {
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
 
-	const roomApi = RoomsApiFactory(undefined, "/v3", $axios);
+	const roomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
 
 	const fetchBoardCall = async (id: string): Promise<BoardResponse> => {
 		try {
@@ -196,7 +196,9 @@ export const useBoardApi = () => {
 			return undefined;
 		}
 		const context = contextResponse.data;
-		const roomResponse = await roomApi.roomsControllerGetRoomBoard(context.id);
+		const roomResponse = await roomApi.courseRoomsControllerGetRoomBoard(
+			context.id
+		);
 
 		if (roomResponse.status !== 200) {
 			return undefined;

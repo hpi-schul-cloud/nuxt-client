@@ -55,9 +55,9 @@ describe("room module", () => {
 			jest.clearAllMocks();
 		});
 		const mockApi = {
-			roomsControllerGetRoomBoard: jest.fn(),
-			roomsControllerPatchElementVisibility: jest.fn(),
-			roomsControllerPatchOrderingOfElements: jest.fn(),
+			courseRoomsControllerGetRoomBoard: jest.fn(),
+			courseRoomsControllerPatchElementVisibility: jest.fn(),
+			courseRoomsControllerPatchOrderingOfElements: jest.fn(),
 		};
 
 		describe("fetchCourse", () => {
@@ -138,9 +138,9 @@ describe("room module", () => {
 				await courseRoomDetailsModule.fetchContent("123");
 
 				expect(courseRoomDetailsModule.getLoading).toBe(false);
-				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
+				expect(mockApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalled();
 				expect(
-					mockApi.roomsControllerGetRoomBoard.mock.calls[0][0]
+					mockApi.courseRoomsControllerGetRoomBoard.mock.calls[0][0]
 				).toStrictEqual("123");
 			});
 		});
@@ -159,12 +159,12 @@ describe("room module", () => {
 
 				expect(courseRoomDetailsModule.getLoading).toBe(false);
 				expect(
-					mockApi.roomsControllerPatchElementVisibility
+					mockApi.courseRoomsControllerPatchElementVisibility
 				).toHaveBeenCalled();
 				expect(
-					mockApi.roomsControllerPatchElementVisibility.mock.calls[0]
+					mockApi.courseRoomsControllerPatchElementVisibility.mock.calls[0]
 				).toContain("54321");
-				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
+				expect(mockApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalled();
 			});
 		});
 
@@ -182,12 +182,12 @@ describe("room module", () => {
 
 				expect(courseRoomDetailsModule.getLoading).toBe(false);
 				expect(
-					mockApi.roomsControllerPatchOrderingOfElements
+					mockApi.courseRoomsControllerPatchOrderingOfElements
 				).toHaveBeenCalled();
 				expect(
-					mockApi.roomsControllerPatchOrderingOfElements.mock.calls[0][1]
+					mockApi.courseRoomsControllerPatchOrderingOfElements.mock.calls[0][1]
 				).toStrictEqual(payload);
-				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
+				expect(mockApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalled();
 			});
 		});
 
