@@ -1,11 +1,13 @@
 <template>
-	<Board :board-id="boardId" :breadcrumbs="breadcrumbs" />
+	<Suspense>
+		<Board :board-id="boardId" :breadcrumbs="breadcrumbs" />
+	</Suspense>
 </template>
 
 <script setup lang="ts">
 import { useSharedBoardPageInformation } from "@data-board";
-import { Board } from "@feature-board";
 import { useTitle } from "@vueuse/core";
+import { defineAsyncComponent } from "vue";
 
 defineProps({
 	boardId: {
@@ -13,6 +15,9 @@ defineProps({
 		required: true,
 	},
 });
+const Board = defineAsyncComponent(
+	() => import("../../feature/board/board/Board.vue")
+);
 
 const { breadcrumbs, pageTitle } = useSharedBoardPageInformation();
 
