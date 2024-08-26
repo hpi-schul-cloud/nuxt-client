@@ -44,7 +44,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 			isInitialConnection.value = false;
 			timeoutFn = useTimeoutFn(() => {
 				showFailure(t("error.4500"));
-			}, 500);
+			}, 1000);
 		});
 	}
 
