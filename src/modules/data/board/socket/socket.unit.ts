@@ -27,8 +27,6 @@ const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
 jest.mock("../boardActions/boardSocketApi.composable");
 jest.mock("../boardActions/boardRestApi.composable");
 
-jest.mock("@vueuse/shared");
-
 jest.mock("@vueuse/shared", () => {
 	return {
 		...jest.requireActual("@vueuse/shared"),
@@ -51,6 +49,20 @@ describe("socket.ts", () => {
 	let socketHandlers: Record<string, () => void> | undefined = undefined;
 	let boardStore: ReturnType<typeof useBoardStore>;
 	let cardStore: ReturnType<typeof useCardStore>;
+
+	const startMock = jest.fn();
+	const stopMock = jest.fn();
+	const initializeTimeout = (isPending = false) => {
+		const { useTimeoutFn } = jest.requireMock("@vueuse/shared");
+		useTimeoutFn.mockImplementation((cb: any) => {
+			cb();
+			return {
+				isPending: { value: isPending },
+				start: startMock,
+				stop: stopMock,
+			};
+		});
+	};
 
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
@@ -82,6 +94,7 @@ describe("socket.ts", () => {
 	beforeEach(() => {
 		dispatchMock = jest.fn();
 		mockSocket.connected = true;
+		initializeTimeout();
 	});
 
 	afterEach(() => {
@@ -151,6 +164,24 @@ describe("socket.ts", () => {
 			eventCallbacks.connect();
 
 			expect(mockBoardNotifierCalls.showSuccess).toHaveBeenCalledWith(
+				"common.notification.connection.restored"
+			);
+		});
+
+		it("should not show connection restored notification and should call 'timeout.stop'", () => {
+			initializeTimeout(true);
+
+			useSocketConnection(dispatchMock);
+
+			const eventCallbacks = getEventCallbacks();
+
+			eventCallbacks.disconnect();
+			jest.clearAllMocks();
+
+			eventCallbacks.connect();
+
+			expect(stopMock).toHaveBeenCalled();
+			expect(mockBoardNotifierCalls.showSuccess).not.toHaveBeenCalledWith(
 				"common.notification.connection.restored"
 			);
 		});
@@ -277,4 +308,28 @@ describe("socket.ts", () => {
 			expect(mockSocket.disconnect).toHaveBeenCalled();
 		});
 	});
+
+	// describe("useTimeoutFn", () => {
+	// 	it("should stop timeout if 'isPending' value true", () => {
+	// 		const startMock = jest.fn();
+	// 		const stopMock = jest.fn();
+	// 		const { useTimeoutFn } = jest.requireMock("@vueuse/shared");
+	// 		useTimeoutFn.mockReturnValue({
+	// 			isPending: { value: true },
+	// 			start: startMock,
+	// 			stop: stopMock,
+	// 		})();
+
+	// 		useSocketConnection(dispatchMock);
+
+	// 		const eventCallbacks = getEventCallbacks();
+
+	// 		eventCallbacks.disconnect();
+	// 		jest.clearAllMocks();
+
+	// 		eventCallbacks.connect();
+
+	// 		expect(stopMock).toHaveBeenCalled();
+	// 	});
+	// });
 });
