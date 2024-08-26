@@ -7,7 +7,7 @@ import { mount } from "@vue/test-utils";
 import PdfDisplay from "./PdfDisplay.vue";
 
 describe("PdfDisplay", () => {
-	const setup = (props: { isEditMode: boolean }) => {
+	const setup = (props: { isEditMode: boolean; showMenu?: boolean }) => {
 		const element = fileElementResponseFactory.build();
 		const propsData = {
 			src: "url/1/file-record #1.txt",
@@ -15,6 +15,7 @@ describe("PdfDisplay", () => {
 			name: "file-record #1.txt",
 			element,
 			isEditMode: props.isEditMode,
+			showMenu: props.showMenu ?? true,
 		};
 
 		const wrapper = mount(PdfDisplay, {
@@ -46,11 +47,28 @@ describe("PdfDisplay", () => {
 		expect(image.attributes("aspectratio")).toBe("1.77777");
 	});
 
+	it("should display menu when showMenu is true", () => {
+		const { wrapper } = setup({ isEditMode: true, showMenu: true });
+
+		const menu = wrapper.find(".three-dot-menu");
+
+		expect(menu.exists()).toBe(true);
+	});
+
+	it("should not display menu when isEditMode is true", () => {
+		const { wrapper } = setup({ isEditMode: true, showMenu: false });
+
+		const menu = wrapper.find(".three-dot-menu");
+
+		expect(menu.exists()).toBe(false);
+	});
+
 	describe("when div emits click", () => {
 		it("should call open function", () => {
 			const { wrapper, src } = setup({ isEditMode: false });
 
-			const windowOpenSpy = jest.spyOn(window, "open");
+			const windowOpenSpy = jest.fn();
+			window.open = windowOpenSpy;
 
 			const image = wrapper.find("preview-image-stub");
 			expect(image.exists()).toBe(true);
