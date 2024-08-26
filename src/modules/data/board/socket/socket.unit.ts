@@ -30,16 +30,28 @@ jest.mock("../boardActions/boardRestApi.composable");
 jest.mock("@vueuse/shared", () => {
 	return {
 		...jest.requireActual("@vueuse/shared"),
-		useTimeoutFn: jest.fn().mockImplementation((cb) => {
+		useTimeoutFn: jest.fn().mockImplementation((cb: () => void) => {
 			cb();
 			return {
 				isPending: { value: false },
-				start: jest.fn(),
-				stop: jest.fn(),
 			};
 		}),
 	};
 });
+
+const startMock = jest.fn();
+const stopMock = jest.fn();
+const initializeTimeout = (isPending = false) => {
+	const { useTimeoutFn } = jest.requireMock("@vueuse/shared");
+	useTimeoutFn.mockImplementation((cb: () => void) => {
+		cb();
+		return {
+			isPending: { value: isPending },
+			start: startMock,
+			stop: stopMock,
+		};
+	});
+};
 
 describe("socket.ts", () => {
 	let dispatchMock: jest.Mock;
@@ -49,20 +61,6 @@ describe("socket.ts", () => {
 	let socketHandlers: Record<string, () => void> | undefined = undefined;
 	let boardStore: ReturnType<typeof useBoardStore>;
 	let cardStore: ReturnType<typeof useCardStore>;
-
-	const startMock = jest.fn();
-	const stopMock = jest.fn();
-	const initializeTimeout = (isPending = false) => {
-		const { useTimeoutFn } = jest.requireMock("@vueuse/shared");
-		useTimeoutFn.mockImplementation((cb: any) => {
-			cb();
-			return {
-				isPending: { value: isPending },
-				start: startMock,
-				stop: stopMock,
-			};
-		});
-	};
 
 	beforeAll(() => {
 		setActivePinia(createTestingPinia());
