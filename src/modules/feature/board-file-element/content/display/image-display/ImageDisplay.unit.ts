@@ -28,6 +28,7 @@ describe("ImageDisplay", () => {
 			name: "file-record #1.txt",
 			isEditMode: props.isEditMode,
 			element,
+			showMenu: true,
 		};
 
 		const isLightBoxOpen = ref(false);
