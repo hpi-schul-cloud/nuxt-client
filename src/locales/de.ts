@@ -217,7 +217,7 @@ export default {
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description":
 		"Wenn Sie die Ausführung des Migrationsassistenten jetzt abbrechen, werden die in der aktuellen Sitzung durchgeführten Konten-Verknüpfungen zurückgesetzt. Möchten Sie die Ausführung des Assistenten jetzt wirklich abbrechen?",
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
-		"Sind Sie sich sicher, dass sie die Migration abbrechen wollen?",
+		"Sind Sie sich sicher, dass Sie die Migration abbrechen wollen?",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
 		"Die Account-Migration wurde am {date} um {time} Uhr abgeschlossen.<br>Die Wartefrist nach Abschluss der Migration endet endgültig am {finishDate} um {finishTime} Uhr!",
 	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
@@ -234,6 +234,10 @@ export default {
 		"Mit dem Start der Migration wird allen Schüler:innen und Lehrkräften Ihrer Schule der Wechsel des Anmeldesystems zu moin.schule ermöglicht. Anwender, die den Wechsel des Anmeldesystems durchgeführt haben, können sich anschließend nur noch über moin.schule anmelden.",
 	"components.administration.adminMigrationSection.startWarningCard.title":
 		"Möchten Sie die Account-Migration zu moin.schule jetzt wirklich starten?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
+		"Sind Sie sicher, dass Sie die automatisch gefundenen Verknüpfungen zurücksetzen wollen?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"Der Migrationsassistent hat Konten-Verknüpfungen anhand der Nutzer-Namen automatisch gefunden.<br><br>Möchten Sie die automatisch gefundenen Verknüpfungen jetzt zurücksetzen?",
 	"components.administration.externalToolsSection.action.add":
 		"Externes Tool hinzufügen",
 	"components.administration.externalToolsSection.action.delete":
@@ -422,6 +426,7 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Bitte Titel angeben.",
 	"components.cardElement.titleElement": "Titelelement",
+	"components.cardElement.deletedElement": "Gelöschter Inhalt",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
 	"components.datePicker.validation.format":
@@ -1014,6 +1019,8 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Bitte verwenden Sie ein valides URL Format",
 	"pages.administration.migration.back": "Zurück",
+	"pages.administration.migration.clearAutoMatches":
+		"Automatische Verknüpfungen zurücksetzen",
 	"pages.administration.migration.backToAdministration":
 		"Zurück zu Administration",
 	"pages.administration.migration.brbSchulportal": "Schulportal",
