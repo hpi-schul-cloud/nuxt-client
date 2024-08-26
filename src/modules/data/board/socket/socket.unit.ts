@@ -307,29 +307,19 @@ describe("socket.ts", () => {
 
 			expect(mockSocket.disconnect).toHaveBeenCalled();
 		});
+
+		it("should call stop if timeout is pending", () => {
+			initializeTimeout(true);
+			useSocketConnection(dispatchMock);
+			const eventCallbacks = getEventCallbacks();
+			eventCallbacks.disconnect();
+			jest.clearAllMocks();
+
+			eventCallbacks.connect();
+			const { disconnectSocket } = useSocketConnection(dispatchMock);
+			disconnectSocket();
+
+			expect(stopMock).toHaveBeenCalled();
+		});
 	});
-
-	// describe("useTimeoutFn", () => {
-	// 	it("should stop timeout if 'isPending' value true", () => {
-	// 		const startMock = jest.fn();
-	// 		const stopMock = jest.fn();
-	// 		const { useTimeoutFn } = jest.requireMock("@vueuse/shared");
-	// 		useTimeoutFn.mockReturnValue({
-	// 			isPending: { value: true },
-	// 			start: startMock,
-	// 			stop: stopMock,
-	// 		})();
-
-	// 		useSocketConnection(dispatchMock);
-
-	// 		const eventCallbacks = getEventCallbacks();
-
-	// 		eventCallbacks.disconnect();
-	// 		jest.clearAllMocks();
-
-	// 		eventCallbacks.connect();
-
-	// 		expect(stopMock).toHaveBeenCalled();
-	// 	});
-	// });
 });
