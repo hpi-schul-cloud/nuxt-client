@@ -1,10 +1,23 @@
 <template>
-	<div tabindex="-1" class="content-element-bar">
+	<div
+		tabindex="-1"
+		class="content-element-bar d-flex"
+		:class="{
+			'flex-row': hasRowStyle,
+			'flex-column': !hasRowStyle,
+		}"
+	>
 		<div v-if="$slots.menu" class="three-dot-menu">
 			<slot name="menu" />
 		</div>
 
-		<div v-if="$slots.display" class="content-element-display">
+		<div
+			v-if="$slots.display"
+			class="content-element-display"
+			:class="{
+				'content-element-display-listboard': hasRowStyle,
+			}"
+		>
 			<slot name="display" />
 		</div>
 
@@ -12,8 +25,11 @@
 			v-if="
 				$slots.title || $slots.element || $slots.subtitle || $slots.description
 			"
-			:class="{ 'bg-surface-light': props.hasGreyBackground === true }"
-			class="content-element-bar-texts rounded-b py-4"
+			:class="{
+				'bg-surface-light': props.hasGreyBackground === true,
+				'content-element-bar-texts-listboard': hasRowStyle,
+			}"
+			class="content-element-bar-texts py-4"
 		>
 			<div
 				v-if="$slots.title"
@@ -63,6 +79,10 @@ const props = defineProps({
 		type: Boolean,
 		required: false,
 	},
+	hasRowStyle: {
+		type: Boolean,
+		default: false,
+	},
 	icon: {
 		type: String as PropType<IconProps["icon"]>,
 		required: false,
@@ -91,6 +111,15 @@ const props = defineProps({
 .content-element-bar {
 	position: relative;
 }
+
+.content-element-bar-texts-listboard {
+	flex: 0 0 67%;
+}
+
+.content-element-display-listboard {
+	flex: 0 0 33%;
+}
+
 .content-element-bar:hover {
 	.content-element-title {
 		text-decoration: underline;

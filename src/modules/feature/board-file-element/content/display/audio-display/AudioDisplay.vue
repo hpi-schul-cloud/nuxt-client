@@ -51,7 +51,7 @@
 				</div>
 			</div>
 		</template>
-		<template #menu><slot /></template>
+		<template v-if="showMenu" #menu><slot /></template>
 	</ContentElementBar>
 </template>
 
@@ -69,6 +69,7 @@ export default defineComponent({
 	components: { ContentElementBar, SpeedMenu },
 	props: {
 		src: { type: String, required: true },
+		showMenu: { type: Boolean, required: true },
 	},
 	emits: ["error"],
 	setup(props, { emit }) {
