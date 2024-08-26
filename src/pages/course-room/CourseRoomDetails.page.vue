@@ -8,7 +8,7 @@
 	>
 		<template #header>
 			<div class="d-flex ma-2 mt-3">
-				<div
+				<h1
 					class="text-h3 pb-2 course-title"
 					:class="{ 'pr-5': roomData.isArchived }"
 					data-testid="courses-course-title"
@@ -16,7 +16,7 @@
 					aria-level="1"
 				>
 					{{ roomData.title }}
-				</div>
+				</h1>
 				<VChip
 					v-if="roomData.isSynchronized"
 					size="small"

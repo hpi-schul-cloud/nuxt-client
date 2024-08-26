@@ -239,18 +239,11 @@ export default defineComponent({
 			this.device = this.mq.current;
 			switch (this.device) {
 				case "tablet":
-					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "4em";
-					break;
 				case "tabletPortrait":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "4em";
 					break;
 				case "desktop":
-					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "5em";
-					this.allowDragging = true;
-					break;
 				case "large":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "5em";
