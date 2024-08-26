@@ -1,31 +1,16 @@
 import { Room } from "@/types/room/Room";
 import { delay } from "@/utils/helpers";
 import { computed, ref } from "vue";
-
-// TODO replace with API call
-const roomsData: Room[] = [
-	{
-		id: "0000dcfbfb5c7a3f00bf21cd",
-		title: "Room #1",
-	},
-	{
-		id: "0000dcfbfb5c7a3f00bf21ce",
-		title: "Room #2",
-	},
-	{
-		id: "0000dcfbfb5c7a3f00bf21cf",
-		title: "Room #3",
-	},
-];
+import { roomsData } from "./rooms-mock-data";
 
 export const useRoomsState = () => {
 	const rooms = ref<Room[]>([]);
 	const isLoading = ref(true);
 
 	const fetchRooms = async () => {
-		await delay(2000);
-		// TODO call API
-		rooms.value = roomsData;
+		await delay(1000);
+		// TODO call API + do sorting there
+		rooms.value = roomsData.sort((r1, r2) => (r1.title > r2.title ? 1 : -1));
 		isLoading.value = false;
 	};
 
