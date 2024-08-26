@@ -20,7 +20,7 @@
 				</div>
 			</div>
 		</template>
-		<template #menu>
+		<template v-if="showMenu" #menu>
 			<slot />
 		</template>
 	</ContentElementBar>
@@ -43,6 +43,7 @@ export default defineComponent({
 		name: { type: String, required: true },
 		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
+		showMenu: { type: Boolean, required: true },
 	},
 	components: {
 		ContentElementBar,

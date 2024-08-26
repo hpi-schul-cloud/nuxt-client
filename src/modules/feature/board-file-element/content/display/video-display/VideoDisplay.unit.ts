@@ -3,13 +3,14 @@ import VideoDisplay from "./VideoDisplay.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("VideoDisplay", () => {
-	const setup = () => {
+	const setup = (options?: { showMenu?: boolean }) => {
 		const src = "test-source";
 		const name = "test-name";
 		const slotContent = "test-slot-content";
 		const props = {
 			src,
 			name,
+			showMenu: options?.showMenu ?? true,
 		};
 
 		const wrapper = mount(VideoDisplay, {
@@ -26,6 +27,7 @@ describe("VideoDisplay", () => {
 			wrapper,
 			src,
 			name,
+			slotContent,
 		};
 	};
 
@@ -47,10 +49,16 @@ describe("VideoDisplay", () => {
 		expect(video.attributes("loading")).toBe("lazy");
 	});
 
-	it("should render with slot content", () => {
-		const { wrapper } = setup();
+	it("should render with slot content if showMenu is true", () => {
+		const { wrapper, slotContent } = setup({ showMenu: true });
 
-		expect(wrapper.text()).toContain("test-slot-content");
+		expect(wrapper.text()).toContain(slotContent);
+	});
+
+	it("should not render with slot content if showMenu is false", () => {
+		const { wrapper, slotContent } = setup({ showMenu: false });
+
+		expect(wrapper.text()).not.toContain(slotContent);
 	});
 
 	describe("when video dispatches error event", () => {
