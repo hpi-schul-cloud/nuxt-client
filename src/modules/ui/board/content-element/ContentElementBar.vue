@@ -12,7 +12,7 @@
 			v-if="
 				$slots.title || $slots.element || $slots.subtitle || $slots.description
 			"
-			:class="{ 'bg-grey-lighten-4': props.hasGreyBackground === true }"
+			:class="{ 'bg-surface-light': props.hasGreyBackground === true }"
 			class="content-element-bar-texts rounded-b py-4"
 		>
 			<div

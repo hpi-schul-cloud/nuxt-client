@@ -1,4 +1,3 @@
-import { jest } from "@jest/globals";
 import { config, mount, shallowMount } from "@vue/test-utils";
 
 // enable rendering of default slot on stubbed components
@@ -9,20 +8,32 @@ global.mount = mount;
 global.shallowMount = shallowMount;
 
 /**
- * matchMedia is used by useBreakpoints from VueUse to distinguish breakpoints.
+ * matchMedia is used by
+ * - useBreakpoints from VueUse to distinguish breakpoints
+ * - VProgressLinear from vuetify with ('forced-colors: active')
  * We need to mock it to run tests that rely on useBreakpoints
  * @see https://jestjs.io/docs/manual-mocks#mocking-methods-which-are-not-implemented-in-jsdom
  */
 Object.defineProperty(window, "matchMedia", {
 	writable: true,
-	value: jest.fn().mockImplementation((query) => ({
+	value: (query) => ({
 		matches: false,
 		media: query,
 		onchange: null,
-		addListener: jest.fn(), // deprecated
-		removeListener: jest.fn(), // deprecated
-		addEventListener: jest.fn(),
-		removeEventListener: jest.fn(),
-		dispatchEvent: jest.fn(),
-	})),
+		addListener: () => {
+			return;
+		}, // deprecated
+		removeListener: () => {
+			return;
+		}, // deprecated
+		addEventListener: () => {
+			return;
+		},
+		removeEventListener: () => {
+			return;
+		},
+		dispatchEvent: () => {
+			return;
+		},
+	}),
 });

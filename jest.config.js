@@ -1,22 +1,17 @@
-// process.env.TZ = "Europe/Berlin";
-const deepmerge = require("deepmerge");
-// NUXT_REMOVAL we have to remove babel later.
-// we have to keep it for now as a migration path for compatibility with legacy js components / tests
-// dependencies that can be removed later after fully moving to typescript:
-// @vue/cli-plugin-babel, babel-jest
-// (do not forget to remove babel.config.js as well)
-const defaultPreset = require("@vue/cli-plugin-unit-jest/presets/typescript-and-babel/jest-preset.js");
+const config = {
+	verbose: true,
+	coverageProvider: "v8",
 
-const config = deepmerge(defaultPreset, {
-	testMatch: ["**/*.unit.{j,t}s?(x)"],
-
-	moduleFileExtensions: ["mjs"],
-	transform: {
-		"^.+\\.mjs$": "babel-jest",
+	testEnvironment: "jsdom",
+	testEnvironmentOptions: {
+		customExportConditions: ["node", "node-addons"],
 	},
 
+	injectGlobals: true,
+	moduleDirectories: ["node_modules"],
+	moduleFileExtensions: ["js", "jsx", "json", "vue", "ts", "tsx", "mjs"],
+
 	moduleNameMapper: {
-		"^axios$": require.resolve("axios"),
 		"\\.(jpg|ico|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$":
 			"<rootDir>/tests/test-utils/mediaFileMock.js",
 		"^@data-(.*)$": "<rootDir>/src/modules/data/$1",
@@ -28,7 +23,27 @@ const config = deepmerge(defaultPreset, {
 		"^@@/(.*)$": "<rootDir>/$1",
 	},
 
+	testPathIgnorePatterns: ["/node_modules/"],
+	testMatch: ["**/*.unit.{j,t}s?(x)"],
+	preset: "ts-jest",
 	setupFiles: ["./tests/setup.js"],
+
+	transform: {
+		"^.+\\.vue$": "@vue/vue3-jest",
+
+		".+\\.(css|styl|less|sass|scss|jpg|jpeg|png|svg|gif|eot|otf|webp|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|avif)$":
+			"jest-transform-stub",
+
+		"^.+\\.mjs$": "babel-jest",
+		"^.+\\.jsx?$": "babel-jest",
+		"^.+\\.tsx?$": [
+			"ts-jest",
+			{
+				babelConfig: true,
+			},
+		],
+	},
+	transformIgnorePatterns: ["/node_modules/(?!vuetify)/"],
 
 	collectCoverageFrom: [
 		// Include
@@ -42,7 +57,7 @@ const config = deepmerge(defaultPreset, {
 		"<rootDir>/src/composables/**/*.(js|ts)",
 		"<rootDir>/src/layouts/**/*.{js,ts,vue}",
 		// Exclude
-		"!<rootDir>/src/components/base/components.js",
+		"!<rootDir>/src/components/base/**/*",
 		"!<rootDir>/src/components/icons/**/*",
 		"!<rootDir>/src/pages/ActivationCode.page.vue",
 		"!<rootDir>/src/pages/Imprint.page.vue",
@@ -51,21 +66,20 @@ const config = deepmerge(defaultPreset, {
 		"!<rootDir>/src/pages/NewsCreate.page.vue",
 		"!<rootDir>/src/pages/NewsEdit.page.vue",
 		"!<rootDir>/src/pages/ProxyError.page.vue",
+		"!<rootDir>/src/components/organisms/administration/ImportUsers.vue",
+		"!<rootDir>/src/pages/administration/Migration.page.vue",
 	],
 
 	globals: {
 		"vue-jest": {
 			compilerOptions: {
-				isCustomElement: (tag) => tag.startsWith("h5p-"),
+				isCustomElement: (tag) =>
+					tag.startsWith("h5p-") || tag === "edu-sharing-app",
 			},
 		},
 	},
 
 	// maxWorkers: 2, // limited for not taking all workers within of a single github action
-});
-
-// we have to overwrite(!) config.transformIgnorePatterns here
-// otherwise the rule would be added and have no effect
-config.transformIgnorePatterns = ["/node_modules/(?!vuetify)/"];
+};
 
 module.exports = config;

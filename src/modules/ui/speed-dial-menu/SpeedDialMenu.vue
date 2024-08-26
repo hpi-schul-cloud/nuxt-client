@@ -7,7 +7,7 @@
 		>
 			<v-btn
 				id="fab"
-				:rounded="!isCollapsed"
+				:rounded="!isCollapsed ? 'xl' : 'circle'"
 				class="size-transition"
 				:class="!isCollapsed ? 'default-width' : ''"
 				:icon="isCollapsed"
@@ -34,7 +34,7 @@
 		<div v-else>
 			<v-btn
 				id="fab"
-				:rounded="!isCollapsed"
+				:rounded="!isCollapsed ? 'xl' : 'circle'"
 				class="size-transition"
 				:class="!isCollapsed ? 'default-width' : ''"
 				:icon="isCollapsed"
@@ -97,7 +97,7 @@ const actions = computed(() => {
 const isMenu = computed(() => actions.value.length > 0);
 const isMenuOpen = ref(false);
 
-const isMobile = useVuetifyBreakpoints().smallerOrEqual("md");
+const isBelowLarge = useVuetifyBreakpoints().smallerOrEqual("lg");
 const { y: scrollOffsetY } = useWindowScroll();
 
 const isForceCollapseOnMobileScroll = ref(false);
@@ -105,7 +105,7 @@ const isForceCollapseOnMobileScroll = ref(false);
 watchThrottled(
 	scrollOffsetY,
 	(newVal, oldVal) => {
-		if (!isMobile.value) {
+		if (!isBelowLarge.value) {
 			isForceCollapseOnMobileScroll.value = false;
 			return;
 		}

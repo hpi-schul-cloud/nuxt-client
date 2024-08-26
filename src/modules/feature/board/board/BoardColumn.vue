@@ -1,9 +1,8 @@
 <template>
-	<div :style="columnStyle" :class="columnClasses">
+	<div :style="columnStyle" :class="columnClasses" :key="renderKey">
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
-			:titlePlaceholder="titlePlaceholder"
 			:index="index"
 			:isListBoard="isListBoard"
 			@delete:column="onColumnDelete"
@@ -73,7 +72,11 @@ import { useDebounceFn } from "@vueuse/core";
 import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import { useBoardPermissions, useBoardStore } from "@data-board";
+import {
+	useBoardPermissions,
+	useBoardStore,
+	useForceRender,
+} from "@data-board";
 import { useTouchDetection } from "@util-device-detection";
 import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
 import {
@@ -82,7 +85,6 @@ import {
 } from "@/types/board/DragAndDrop";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
-import { useI18n } from "vue-i18n";
 import {
 	BOARD_HAS_MULTIPLE_COLUMNS,
 	BOARD_IS_FIRST_COLUMN,
@@ -125,7 +127,6 @@ export default defineComponent({
 		"update:column-title",
 	],
 	setup(props, { emit }) {
-		const { t } = useI18n();
 		const boardStore = useBoardStore();
 		const reactiveIndex = toRef(props, "index");
 		const colWidth = ref<number>(400);
@@ -198,6 +199,10 @@ export default defineComponent({
 
 			if (toColumnId !== fromColumnId) {
 				item?.parentNode?.removeChild(item);
+			}
+
+			if (toColumnId === fromColumnId && props.column.cards.length === 1) {
+				return;
 			}
 
 			boardStore.moveCardRequest({
@@ -291,14 +296,6 @@ export default defineComponent({
 			return props.column.cards[index];
 		};
 
-		const titlePlaceholder = computed(() => {
-			const type = props.isListBoard
-				? t("components.boardSection")
-				: t("components.boardColumn");
-
-			return `${type} ${props.index + 1}`;
-		});
-
 		const sortableClasses = computed(() => {
 			const classes = [];
 			if (!props.isListBoard) {
@@ -318,6 +315,10 @@ export default defineComponent({
 			return classes;
 		});
 
+		const columnId = toRef(props, "column").value.id;
+		const { getRenderKey } = useForceRender(columnId);
+		const renderKey = computed(() => getRenderKey());
+
 		return {
 			cardDropPlaceholderOptions,
 			columnClasses,
@@ -328,7 +329,6 @@ export default defineComponent({
 			isDragging,
 			isTouchDetected,
 			sortableClasses,
-			titlePlaceholder,
 			onCreateCard,
 			onDeleteCard,
 			onColumnDelete,
@@ -343,6 +343,7 @@ export default defineComponent({
 			onUpdateTitle,
 			getChildPayload,
 			reactiveIndex,
+			renderKey,
 			showAddButton,
 			sortableGhostClasses,
 		};

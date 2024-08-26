@@ -148,7 +148,7 @@ describe("ContentElementBar", () => {
 	});
 
 	describe("when hasGreyBackground prop is true", () => {
-		it("should render grey background", () => {
+		it("should render surface-light background", () => {
 			const { wrapper } = setup(
 				{
 					hasGreyBackground: true,
@@ -158,17 +158,17 @@ describe("ContentElementBar", () => {
 				}
 			);
 
-			const divWithBackgroundClass = wrapper.find("div.bg-grey-lighten-4");
+			const divWithBackgroundClass = wrapper.find("div.bg-surface-light");
 
 			expect(divWithBackgroundClass.exists()).toBe(true);
 		});
 	});
 
 	describe("when hasGreyBackground prop is false", () => {
-		it("should not render grey background", () => {
+		it("should not render surface-light background", () => {
 			const { wrapper } = setup({});
 
-			const divWithBackgroundClass = wrapper.find("div.bg-grey-lighten-4");
+			const divWithBackgroundClass = wrapper.find("div.bg-surface-light");
 
 			expect(divWithBackgroundClass.exists()).toBe(false);
 		});

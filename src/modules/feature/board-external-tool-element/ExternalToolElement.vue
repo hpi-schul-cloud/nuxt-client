@@ -8,9 +8,11 @@
 		ref="externalToolElement"
 		:ripple="false"
 		tabindex="0"
+		role="button"
 		:loading="isLoading"
 		@keyup.enter="onClickElement"
 		@keydown.up.down="onKeydownArrow"
+		@keydown.stop
 		@click="onClickElement"
 	>
 		<ContentElementBar :has-grey-background="true" :icon="getIcon">
@@ -28,6 +30,7 @@
 				<ExternalToolElementMenu
 					v-if="isEditMode"
 					ref="externalToolElementMenu"
+					:display-name="displayData?.name"
 					@move-down:element="onMoveElementDown"
 					@move-up:element="onMoveElementUp"
 					@delete:element="onDeleteElement"

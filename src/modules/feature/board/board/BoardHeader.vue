@@ -4,8 +4,10 @@
 			:isEditMode="isEditMode"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
+			@keydown.enter="onStartEditMode"
+			tabindex="0"
 		>
-			<div class="board-header" tabindex="0" ref="boardHeader">
+			<div ref="boardHeader">
 				<BoardAnyTitleInput
 					class="ml-n2"
 					ref="boardHeader"
@@ -13,7 +15,6 @@
 					:value="boardTitle"
 					data-testid="board-title"
 					:isEditMode="isEditMode"
-					:placeholder="titlePlaceholder"
 					:isFocused="isFocusedById"
 					:maxLength="100"
 					:style="{ width: `${fieldWidth}px` }"
@@ -81,10 +82,6 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
-	titlePlaceholder: {
-		type: String,
-		required: true,
-	},
 	isDraft: {
 		type: Boolean,
 		required: true,
@@ -144,6 +141,7 @@ const onUnpublishBoard = () => {
 };
 
 const onBoardTitleBlur = () => {
+	stopEditMode();
 	if (boardTitle.value.length < 1) {
 		updateBoardTitle(t("pages.room.boardCard.label.courseBoard"));
 	}
@@ -170,7 +168,8 @@ const emitTitle = useDebounceFn((newTitle: string) => {
 
 const calculateWidth = () => {
 	if (!inputWidthCalcSpan.value) return;
-	const title = boardTitle.value || t("pages.room.boardCard.label.courseBoard");
+	const title =
+		boardTitle.value || t("components.cardElement.titleElement.placeholder");
 
 	inputWidthCalcSpan.value.innerHTML = title.replace(/\s/g, "&nbsp;");
 
@@ -190,10 +189,10 @@ watchEffect(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 
-.board-header:focus {
-	outline: none;
+.v-chip {
+	cursor: pointer;
 }
 
 .input-width-calc-span {

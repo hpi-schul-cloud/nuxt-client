@@ -3,7 +3,6 @@ import { ToolContextType } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { AlertPayload } from "@/store/types/alert-payload";
-import { ComponentProps } from "@/types/vue";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -17,6 +16,7 @@ import { useExternalToolLaunchState } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { flushPromises, shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
@@ -85,7 +85,7 @@ describe("MediaBoardAvailableElement", () => {
 			.mocked(useSharedMediaBoardState)
 			.mockReturnValue(useSharedMediaBoardStateMock);
 
-		jest.useFakeTimers("legacy");
+		jest.useFakeTimers({ legacyFakeTimers: true });
 	});
 
 	afterEach(() => {

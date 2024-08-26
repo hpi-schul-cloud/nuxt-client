@@ -24,6 +24,7 @@ export default {
 	"common.actions.share": "Compartir",
 	"common.actions.shareCopy": "Compartir copia",
 	"common.actions.update": "Actualizar",
+	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
@@ -102,6 +103,7 @@ export default {
 		"Por favor comuníquese con el administrador de la escuela.",
 	"common.nodata": "Datos no disponibles",
 	"common.notification.error": "Se ha producido un error.",
+	"common.notification.connection.restored": "La conexión se ha reestablecido.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.AAAA",
 	"common.placeholder.email.confirmation":
@@ -322,7 +324,16 @@ export default {
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
-	"components.board.menu.element": "Configuración del elemento",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Configuración del etherpad",
+	"components.board.menu.drawingElement": "Configuración de la pizarra",
+	"components.board.menu.externalToolElement":
+		"Configuración de la herramienta externa",
+	"components.board.menu.fileElement": "Configuración del archivo",
+	"components.board.menu.linkElement": "Configuración del enlace",
+	"components.board.menu.submissionElement": "Configuración del envío",
+	"components.board.menu.deletedElement":
+		"Configuración de contenido eliminado",
 	"components.board.notifications.errors.fileNameExists":
 		"Ya existe un archivo con este nombre.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -375,6 +386,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Este Etherpad es visible y editable para todos los participantes en el curso.",
+	"components.cardElement.externalToolElement": "Herramienta externa",
+	"components.cardElement.fileElement": "Archivo",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
@@ -397,7 +410,7 @@ export default {
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
 	"components.cardElement.fileElement.virusDetected":
 		"Se ha bloqueado el archivo debido a un virus sospechoso.",
-	"components.cardElement.lastUpdatedAt": "Editado:",
+	"components.cardElement.LinkElement": "Enlace",
 	"components.cardElement.LinkElement.label": "Inserte la dirección del enlace",
 	"components.cardElement.notification.visibleAndEditable":
 		"Esta pizarra es visible y editable para todos los participantes en el curso.",
@@ -414,6 +427,8 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Por favor ingrese un título.",
 	"components.cardElement.titleElement": "Elemento título",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.datePicker.validation.format":
 		"Por favor utilice el formato DD.MM.YYYY",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
@@ -428,8 +443,7 @@ export default {
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
-	"components.elementTypeSelection.elements.fileElement.subtitle":
-		"Editor de texto",
+	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
 		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
@@ -600,6 +614,16 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"Ninguno. El usuario es recién creado.",
 	"components.molecules.importUsersMatch.write": "Introduzca nombre o apellido",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"No disponible",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Profesor",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Estudiante",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Administrador de organización",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Gestión organizativa",
 	"components.molecules.MintEcFooter.chapters": "Resumen del capítulo",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
@@ -806,32 +830,30 @@ export default {
 	"format.dateYY": "DD/MM/YY",
 	"format.time": "HH:mm",
 	"global.cloudLogo": "Logo",
-	"global.sidebar.item.accessibility": "Accesibilidad",
 	"global.sidebar.item.addons": "Complementos",
 	"global.sidebar.item.calendar": "Calendario",
 	"global.sidebar.item.classes": "Clases",
+	"global.sidebar.item.contactSupport": "Contacto",
 	"global.sidebar.item.courses": "Cursos",
 	"global.sidebar.item.files-old": "Archivos",
 	"global.sidebar.item.filesPersonal": "Archivos personales",
 	"global.sidebar.item.filesShared": "Archivos compartidos",
 	"global.sidebar.item.helpArea": "Sección de ayuda",
-	"global.sidebar.item.helpDesk": "Servicio de ayuda",
+	"global.sidebar.item.helpSection": "Sección de ayuda",
 	"global.sidebar.item.management": "Administración",
 	"global.sidebar.item.overview": "Panel",
+	"global.sidebar.item.releaseNotes": "¿Qué hay de nuevo?",
+	"global.sidebar.item.rooms": "Salas",
 	"global.sidebar.item.school": "Escuela",
 	"global.sidebar.item.student": "Estudiantes",
 	"global.sidebar.item.system": "Sistema",
 	"global.sidebar.item.tasks": "Tareas",
 	"global.sidebar.item.teacher": "Profesores",
 	"global.sidebar.item.teams": "Equipos",
+	"global.sidebar.item.training": "Formaciones avanzadas",
 	"global.skipLink.mainContent": "Saltar al contenido principal",
 	"global.topbar.actions.alerts": "Alerta de estado",
-	"global.topbar.actions.contactSupport": "Contacto",
-	"global.topbar.actions.fullscreen": "Pantalla completa",
-	"global.topbar.actions.helpSection": "Sección de ayuda",
 	"global.topbar.actions.qrCode": "Compartir el código QR de la página",
-	"global.topbar.actions.releaseNotes": "¿Qué hay de nuevo?",
-	"global.topbar.actions.training": "Formaciones avanzadas",
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
@@ -1146,6 +1168,8 @@ export default {
 		"Activar la visibilidad de los estudiantes para los profesores",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
 		"Activar videoconferencias para cursos y equipos",
+	"pages.administration.school.index.privacySettings.labels.aiTutor":
+		"Activar tutor de IA en la escuela",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"Si los chats están habilitados en tu escuela, los administradores del equipo pueden desbloquear la función de chat de manera selectiva y respectivamente para su equipo.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1160,6 +1184,8 @@ export default {
 		"Si esta opción no está activada, los profesores sólo podrán ver las clases y sus alumnos de las que son miembros.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
 		"Si la videoconferencia está habilitada en tu escuela, los profesores pueden añadir la herramienta de videoconferencia a su curso en la sección Herramientas y entonces podrán iniciar desde allí videoconferencias para todos los participantes del curso. Los administradores del equipo pueden activar la función de videoconferencia en el equipo respectivo. Los líderes de equipo y los administradores de equipo pueden añadir e iniciar videoconferencias para citas.",
+	"pages.administration.school.index.privacySettings.longText.aiTutor":
+		"Si AI Tutor está activado en tu escuela, los profesores pueden agregar AI Tutor en sus áreas.",
 	"pages.administration.school.index.privacySettings":
 		"Configuración de la privacidad",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing":
@@ -1488,6 +1514,13 @@ export default {
 	"pages.room.copy.lesson.message.copied":
 		"El tema se ha copiado correctamente.",
 	"pages.room.copy.task.message.copied": "La tarea se copió con éxito.",
+	"pages.room.dialog.boardLayout.title": "Seleccionar vista",
+	"pages.room.dialog.boardLayout.singleColumn": "monocolumna",
+	"pages.room.dialog.boardLayout.multiColumn": "multicolumna",
+	"pages.room.fab.add.lesson": "Nuevo tema",
+	"pages.room.fab.add.board": "Nuevo tablero",
+	"pages.room.fab.add.columnBoard": "Nuevo tablero de columna",
+	"pages.room.fab.add.task": "Nuevo tarea",
 	"pages.room.itemDelete.text": '¿Eliminar {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
@@ -1514,10 +1547,6 @@ export default {
 		"Actualmente no hay cursos aquí.",
 	"pages.rooms.fab.add.course": "Nuevo curso",
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
-	"pages.rooms.fab.add.lesson": "Nuevo tema",
-	"pages.rooms.fab.add.board": "Nuevo tablero de columna",
-	"pages.rooms.fab.add.listBoard": "Nuevo tablero de listas",
-	"pages.rooms.fab.add.task": "Nuevo tarea",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
 	"pages.rooms.fab.import.course": "Importar curso",
 	"pages.rooms.groupName": "Cursos",
@@ -1646,7 +1675,12 @@ export default {
 	"pages.tool.deactivate.label": "Desactivar herramienta en la escuela",
 	"pages.tool.description":
 		'Los parámetros específicos del curso para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta está disponible dentro del curso.<br><br>\nEliminar una configuración elimina la herramienta de el curso.<br><br>\nPuede encontrar más información en nuestro <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Sección de ayuda sobre herramientas externas</a>.',
-	"pages.tool.select.label": "Selección de Herramientas",
+	"pages.tool.select.label": "Selección de Herramientas / URL de herramienta",
+	"pages.tool.select.description":
+		"Busque herramientas o ingrese la URL de una herramienta o insértela desde el caché manualmente o con un botón",
+	"pages.tool.select.nodata": "No hay herramienta disponible",
+	"pages.tool.select.clipboard.error":
+		"Se ha producido un error al pegar el texto desde el portapapeles. Por favor, pegue el texto manualmente.",
 	"pages.tool.settings": "Configuración",
 	"pages.tool.title": "Configuración de herramientas externas",
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",
@@ -1718,6 +1752,8 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Creado entre el 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
 	"feature.media-shelf.title": "Estante multimedia",
+	"feature.media-shelf.emptyState":
+		"Actualmente no se ha activado ningún medio para su uso.",
 	"feature.media-shelf.createLine": "Añadir línea",
 	"feature.media-shelf.line.title": "Línea",
 	"feature.media-shelf.availableLine.title": "Medios disponibles",

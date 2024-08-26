@@ -11,7 +11,7 @@ import CopyModule from "@/store/copy";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/room";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import { Board } from "@/types/board/Board";
 import {
@@ -22,7 +22,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	ROOM_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -45,6 +45,7 @@ import {
 	useEditMode,
 	useSharedBoardPageInformation,
 	useSharedEditMode,
+	useBoardInactivity,
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
@@ -91,6 +92,9 @@ const mockedUseEditMode = jest.mocked(useEditMode);
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
+jest.mock("@data-board/boardInactivity.composable");
+const mockUseBoardInactivity = <jest.Mock>useBoardInactivity;
+
 describe("Board", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
@@ -99,6 +103,9 @@ describe("Board", () => {
 	>;
 	let router: DeepMocked<Router>;
 	let mockedBoardPermissions: BoardPermissionChecks;
+	let mockedUsePageInactivity: DeepMocked<
+		ReturnType<typeof useBoardInactivity>
+	>;
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
@@ -141,6 +148,7 @@ describe("Board", () => {
 
 		mockedBoardPermissions = { ...defaultPermissions };
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissions);
+		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
 	});
 
 	afterEach(() => {
@@ -201,7 +209,7 @@ describe("Board", () => {
 
 		const loadingStateModule = createModuleMocks(LoadingStateModule);
 		const shareModule = createModuleMocks(ShareModule);
-		const roomModule = createModuleMocks(RoomModule, {
+		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomId: "room1",
 		});
 		return {
@@ -210,7 +218,7 @@ describe("Board", () => {
 			copyModule,
 			loadingStateModule,
 			shareModule,
-			roomModule,
+			courseRoomDetailsModule,
 			copyResultId,
 		};
 	};
@@ -226,7 +234,7 @@ describe("Board", () => {
 			copyModule,
 			loadingStateModule,
 			shareModule,
-			roomModule,
+			courseRoomDetailsModule,
 			copyResultId,
 		} = setupProvideModules(options?.envs);
 
@@ -258,7 +266,7 @@ describe("Board", () => {
 					[COPY_MODULE_KEY.valueOf()]: copyModule,
 					loadingStateModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
 			},
 			propsData: { boardId: board.id },
@@ -274,7 +282,7 @@ describe("Board", () => {
 			board,
 			copyResultId,
 			shareModule,
-			roomModule,
+			courseRoomDetailsModule,
 		};
 	};
 
@@ -293,6 +301,12 @@ describe("Board", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.findComponent(BoardVue).exists()).toBeTruthy();
+		});
+
+		it("should call 'useBoardInactivity' composable", async () => {
+			setup();
+			await nextTick();
+			expect(mockUseBoardInactivity).toHaveBeenCalled();
 		});
 
 		describe("BoardHeader component", () => {
@@ -874,14 +888,14 @@ describe("Board", () => {
 				mockedBoardPermissions.hasDeletePermission = true;
 				const mockRoomId = mockedUseSharedBoardPageInformation().roomId.value;
 
-				const { wrapper, roomModule, board } = setup();
+				const { wrapper, courseRoomDetailsModule, board } = setup();
 
 				const columnComponent = wrapper.findComponent({
 					name: "BoardHeader",
 				});
 				await columnComponent.vm.$emit("delete:board");
 
-				expect(roomModule.deleteBoard).toBeCalledWith(board.id);
+				expect(courseRoomDetailsModule.deleteBoard).toBeCalledWith(board.id);
 
 				expect(router.push).toHaveBeenCalledTimes(1);
 				expect(router.push).toHaveBeenCalledWith({

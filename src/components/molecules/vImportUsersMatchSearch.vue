@@ -44,6 +44,7 @@
 								</VListItemTitle>
 								<VListItemSubtitle>
 									{{ mapRoleNames(editedItem.roleNames) }}
+									{{ isNbc ? externalRoleText : "" }}
 								</VListItemSubtitle>
 								<VListItemSubtitle
 									v-if="editedItem.classNames && editedItem.classNames.length"
@@ -200,7 +201,7 @@
 	</div>
 </template>
 <script setup lang="ts">
-import { UserMatchResponse } from "@/serverApi/v3";
+import { ImportUserResponse, UserMatchResponse } from "@/serverApi/v3";
 import { importUsersModule } from "@/store";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import {
@@ -212,7 +213,15 @@ import {
 	mdiFlagOutline,
 } from "@mdi/js";
 import { useDebounceFn } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
+import {
+	computed,
+	ComputedRef,
+	onMounted,
+	PropType,
+	Ref,
+	ref,
+	watch,
+} from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
@@ -224,7 +233,7 @@ const props = defineProps({
 		required: true,
 	},
 	editedItem: {
-		type: Object,
+		type: Object as PropType<ImportUserResponse>,
 		default: () => ({
 			firstName: "",
 			lastName: "",
@@ -233,6 +242,7 @@ const props = defineProps({
 			classNames: [],
 			match: {},
 			flagged: false,
+			externalRoleNames: [],
 		}),
 		firstName: {
 			type: String,
@@ -277,11 +287,26 @@ const theme = injectStrict(THEME_KEY);
 const entries: Ref<UserMatchResponse[]> = ref([]);
 const loading: Ref<boolean> = ref(false);
 const flagged = ref(false);
-const searchUser: Ref<string | undefined> = ref();
+const searchUser: Ref<string> = ref("");
 const selectedItem: Ref<UserMatchResponse | null> = ref(null);
 const total: Ref<number> = ref(0);
 const limit: Ref<number> = ref(10);
 const skip: Ref<number> = ref(0);
+
+const schulconnexExternalRoleNamesMapping: Record<string, string> = {
+	Lehr: t(
+		"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher"
+	),
+	Lern: t(
+		"components.molecules.importUsersMatch.externalRoleName.schulconnex.student"
+	),
+	Leit: t(
+		"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager"
+	),
+	OrgAdmin: t(
+		"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin"
+	),
+};
 
 const canSave: ComputedRef<boolean> = computed(() => {
 	if (selectedItem.value === null) {
@@ -298,24 +323,36 @@ const canSave: ComputedRef<boolean> = computed(() => {
 	return true;
 });
 
-const canDelete = computed(() => {
+const canDelete: ComputedRef<boolean | undefined> = computed(() => {
 	return props.editedItem.match && selectedItem.value === null;
 });
 
-const getDataFromApi = async () => {
+const externalRoleText: ComputedRef<string> = computed(() => {
+	let role = t("components.molecules.importUsersMatch.externalRoleName.none");
+	if (props.editedItem.externalRoleNames?.length) {
+		role = mapExternalRoleNames(props.editedItem.externalRoleNames);
+	}
+
+	const text = `(${t("common.labels.role")} ${props.ldapSource}: ${role})`;
+	return text;
+});
+
+const getDataFromApi = async (append = false) => {
 	loading.value = true;
 
 	importUsersModule.setUsersLimit(limit.value);
 	importUsersModule.setUsersSkip(skip.value);
-	if (searchUser.value !== importUsersModule.getUserSearch) {
-		entries.value = [];
-		importUsersModule.setUserSearch(searchUser.value || "");
-	}
+	importUsersModule.setUserSearch(searchUser.value);
+
 	await importUsersModule.fetchAllUsers();
 
 	total.value = importUsersModule.getUserList.total;
 
-	entries.value.push(...importUsersModule.getUserList.data);
+	if (append) {
+		entries.value.push(...importUsersModule.getUserList.data);
+	} else {
+		entries.value = importUsersModule.getUserList.data;
+	}
 
 	loading.value = false;
 };
@@ -324,19 +361,19 @@ const getDataFromApiThrottled = useDebounceFn(() => getDataFromApi(), 1000, {
 	maxWait: 1000,
 });
 
-watch(searchUser, () => {
-	skip.value = 0;
+watch(searchUser, (newValue: string, oldValue: string) => {
+	if (newValue !== oldValue) {
+		skip.value = 0;
 
-	getDataFromApiThrottled();
+		getDataFromApiThrottled();
+	}
 });
 
 const endIntersect = async (isIntersecting: boolean) => {
-	if (isIntersecting) {
-		if (total.value > entries.value.length) {
-			skip.value += limit.value;
+	if (isIntersecting && total.value > entries.value.length) {
+		skip.value += limit.value;
 
-			await getDataFromApi();
-		}
+		await getDataFromApi(true);
 	}
 };
 
@@ -411,6 +448,21 @@ const mapRoleNames = (roleNames: unknown[]) => {
 				default:
 					return role;
 			}
+		})
+		.join(", ");
+};
+
+const mapExternalRoleNames = (externalRoleNames: string[]) => {
+	return externalRoleNames
+		.map((role) => {
+			if (props.isNbc) {
+				const userFriendlyRoleName = schulconnexExternalRoleNamesMapping[role];
+				if (!userFriendlyRoleName) {
+					return role;
+				}
+				return userFriendlyRoleName;
+			}
+			return role;
 		})
 		.join(", ");
 };

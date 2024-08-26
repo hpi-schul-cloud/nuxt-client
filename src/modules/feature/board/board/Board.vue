@@ -11,8 +11,8 @@
 					<BoardHeader
 						:boardId="board.id"
 						:title="board.title"
-						:titlePlaceholder="t('pages.room.boardCard.label.courseBoard')"
 						:isDraft="!board.isVisible"
+						class="mb-1"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
@@ -106,7 +106,7 @@ import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
-	ROOM_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import {
@@ -115,6 +115,7 @@ import {
 	useCardStore,
 	useSharedBoardPageInformation,
 	useSharedEditMode,
+	useBoardInactivity,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
@@ -253,6 +254,7 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 
 onMounted(() => {
 	setAlert();
+	useBoardInactivity();
 	boardStore.fetchBoardRequest({ boardId: props.boardId });
 });
 
@@ -356,9 +358,9 @@ const onShareBoard = () => {
 	}
 };
 
-const roomModule = injectStrict(ROOM_MODULE_KEY);
+const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
 const openDeleteBoardDialog = async (id: string) => {
-	await roomModule.deleteBoard(id);
+	await courseRoomDetailsModule.deleteBoard(id);
 	router.push({ path: "/rooms/" + roomId.value });
 };
 </script>

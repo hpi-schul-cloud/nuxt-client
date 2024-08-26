@@ -1,6 +1,6 @@
 import { createPermissionGuard } from "@/router/guards/permission.guard";
-import { NavigationGuard } from "vue-router";
-import { NavigationGuardNext, RouteLocation } from "vue-router";
+import { NavigationGuard, RouteLocationNormalized } from "vue-router";
+import { NavigationGuardNext } from "vue-router";
 import Mock = jest.Mock;
 
 const mockError = jest.fn();
@@ -20,7 +20,7 @@ describe("PermissionGuard", () => {
 	});
 
 	function setup() {
-		const route: RouteLocation = {} as RouteLocation;
+		const route: RouteLocationNormalized = {} as RouteLocationNormalized;
 		const next: Mock<NavigationGuardNext> = jest.fn();
 		return { to: route, from: route, next };
 	}

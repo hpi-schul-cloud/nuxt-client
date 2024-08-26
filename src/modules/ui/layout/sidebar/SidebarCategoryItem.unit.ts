@@ -30,7 +30,7 @@ const groupItem: SidebarGroupItem = {
 };
 
 jest.mock("vue-router", () => ({
-	useRoute: () => ({ path: "rooms-list" }),
+	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 
 describe("@ui-layout/SidebarCategoryItem", () => {

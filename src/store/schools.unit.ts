@@ -1,5 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { SystemsApiInterface } from "@/serverApi/v3/api";
+import { SchoolFeature, SystemsApiInterface } from "@/serverApi/v3/api";
 import { authModule, envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
@@ -8,7 +8,7 @@ import { schoolSystemResponseFactory } from "@@/tests/test-utils/factory/schoolS
 import { mockApiResponse } from "@@/tests/test-utils/mockApiResponse";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
@@ -99,7 +99,7 @@ describe("schools module", () => {
 				);
 				const schoolsModule = new SchoolsModule({});
 
-				const expectedFeatureObject = {
+				const expectedFeatureObject: Record<SchoolFeature, boolean> = {
 					rocketChat: true,
 					videoconference: true,
 					studentVisibility: false,
@@ -108,6 +108,7 @@ describe("schools module", () => {
 					enableLdapSyncDuringMigration: false,
 					oauthProvisioningEnabled: false,
 					nextcloud: false,
+					aiTutor: false,
 				};
 
 				await schoolsModule.fetchSchool();

@@ -24,6 +24,7 @@ export default {
 	"common.actions.share": "Share",
 	"common.actions.shareCopy": "Share copy",
 	"common.actions.update": "Update",
+	"common.ariaLabel.newTab": "opens in a new tab",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
@@ -102,6 +103,8 @@ export default {
 		"Please contact the school administrator.",
 	"common.nodata": "No data available",
 	"common.notification.error": "An error has occurred.",
+	"common.notification.connection.restored":
+		"The connection has been restored.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "DD.MM.YYYY",
 	"common.placeholder.email.confirmation": "Repeat e-mail address",
@@ -316,7 +319,13 @@ export default {
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",
-	"components.board.menu.element": "Element settings",
+	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",
+	"components.board.menu.drawingElement": "Whiteboard settings",
+	"components.board.menu.externalToolElement": "Externeal tool settings",
+	"components.board.menu.fileElement": "File settings",
+	"components.board.menu.linkElement": "Link settings",
+	"components.board.menu.submissionElement": "Submission settings",
+	"components.board.menu.deletedElement": "Deleted content settings",
 	"components.board.notifications.errors.fileNameExists":
 		"A file with this name already exists.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -369,6 +378,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"This Etherpad is visible and editable for all course participants.",
+	"components.cardElement.externalToolElement": "External tool",
+	"components.cardElement.fileElement": "File",
 	"components.cardElement.fileElement.altDescription":
 		"A short description helps people who cannot see the picture.",
 	"components.cardElement.fileElement.alternativeText": "Alternative Text",
@@ -391,7 +402,7 @@ export default {
 		"The video format is not supported by this browser/operating system.",
 	"components.cardElement.fileElement.virusDetected":
 		"File has been locked due to a suspected virus.",
-	"components.cardElement.lastUpdatedAt": "Edited by:",
+	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Insert link address",
 	"components.cardElement.notification.visibleAndEditable":
 		"This whiteboard is visible and editable for all course participants.",
@@ -408,6 +419,8 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Please enter a title.",
 	"components.cardElement.titleElement": "Title element",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"Tool {toolName} not available. Please contact the school administrator.",
 	"components.datePicker.validation.format": "Please use format DD.MM.YYYY",
 	"components.datePicker.validation.required": "Please enter a date.",
 	"components.dateTimePicker.messages.dateInPast":
@@ -587,6 +600,16 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"None. Account will be newly created.",
 	"components.molecules.importUsersMatch.write": "Input first and last name",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Not available",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Teacher",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Student",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Organizational Administrator",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Organizational Management",
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
 	"components.molecules.share.courses.mail.body": "Link to the course:",
 	"components.molecules.share.courses.mail.subject": "Course you can import",
@@ -783,32 +806,30 @@ export default {
 	"format.dateYY": "MM/DD/YY",
 	"format.time": "HH:mm",
 	"global.cloudLogo": "Logo",
-	"global.sidebar.item.accessibility": "Accessibility",
 	"global.sidebar.item.addons": "Add-ons",
 	"global.sidebar.item.calendar": "Calendar",
 	"global.sidebar.item.classes": "Classes",
+	"global.sidebar.item.contactSupport": "Contact",
 	"global.sidebar.item.courses": "Courses",
 	"global.sidebar.item.files-old": "Files",
 	"global.sidebar.item.filesPersonal": "Personal Files",
 	"global.sidebar.item.filesShared": "Shared Files",
 	"global.sidebar.item.helpArea": "Help section",
-	"global.sidebar.item.helpDesk": "Help desk",
+	"global.sidebar.item.helpSection": "Help section",
 	"global.sidebar.item.management": "Management",
 	"global.sidebar.item.overview": "Dashboard",
+	"global.sidebar.item.releaseNotes": "What's new?",
+	"global.sidebar.item.rooms": "Rooms",
 	"global.sidebar.item.school": "School",
 	"global.sidebar.item.student": "Students",
 	"global.sidebar.item.system": "System",
 	"global.sidebar.item.tasks": "Tasks",
 	"global.sidebar.item.teacher": "Teachers",
 	"global.sidebar.item.teams": "Teams",
+	"global.sidebar.item.training": "Advanced trainings",
 	"global.skipLink.mainContent": "Skip to main content",
 	"global.topbar.actions.alerts": "Status alert",
-	"global.topbar.actions.contactSupport": "Contact",
-	"global.topbar.actions.fullscreen": "Full Screen",
-	"global.topbar.actions.helpSection": "Help section",
 	"global.topbar.actions.qrCode": "Share page link via QR-Code",
-	"global.topbar.actions.releaseNotes": "What's new?",
-	"global.topbar.actions.training": "Advanced trainings",
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
@@ -1114,6 +1135,8 @@ export default {
 		"Activate student visibility for teachers",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
 		"Activate video conferencing for courses and teams",
+	"pages.administration.school.index.privacySettings.labels.aiTutor":
+		"Activate AI tutor at school",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"If chats are enabled at your school, team administrators can selectively unlock the chat function respectively for their team.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1128,6 +1151,8 @@ export default {
 		"If this option is not enabled, teachers can only see the classes and their students in which they are members.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
 		"If video conferencing is enabled at your school, teachers can add the video conferencing tool to their course in the Tools section and then start video conferencing for all course participants from there. Team administrators can activate the video conference function in the respective team. Team leaders and team admins can then add and start video conferences for appointments.",
+	"pages.administration.school.index.privacySettings.longText.aiTutor":
+		"If AI Tutor is activated at your school, teachers can add the AI Tutor in their areas.",
 	"pages.administration.school.index.privacySettings": "Privacy Settings",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing":
 		"Your school is currently getting",
@@ -1444,6 +1469,13 @@ export default {
 		"The course could not be copied completely.",
 	"pages.room.copy.lesson.message.copied": "Topic was successfully copied.",
 	"pages.room.copy.task.message.copied": "Task was successfully copied.",
+	"pages.room.dialog.boardLayout.title": "Select view",
+	"pages.room.dialog.boardLayout.singleColumn": "single-column",
+	"pages.room.dialog.boardLayout.multiColumn": "multi-column",
+	"pages.room.fab.add.lesson": "New topic",
+	"pages.room.fab.add.board": "New board",
+	"pages.room.fab.add.columnBoard": "New column board",
+	"pages.room.fab.add.task": "New task",
 	"pages.room.itemDelete.text": 'Delete {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
@@ -1471,10 +1503,6 @@ export default {
 		"Currently, there are no courses here.",
 	"pages.rooms.fab.add.course": "New course",
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
-	"pages.rooms.fab.add.lesson": "New topic",
-	"pages.rooms.fab.add.board": "New column board",
-	"pages.rooms.fab.add.listBoard": "New list board",
-	"pages.rooms.fab.add.task": "New task",
 	"pages.rooms.fab.ariaLabel": "Create new course",
 	"pages.rooms.fab.import.course": "Import course",
 	"pages.rooms.groupName": "Courses",
@@ -1601,7 +1629,12 @@ export default {
 	"pages.tool.deactivate.label": "Deactivate tool at school",
 	"pages.tool.description":
 		'The course-specific parameters for the external tool are configured here. After saving the configuration, the tool is available inside the course.<br><br>\nDeleting a configuration removes the tool from the course.<br><br>\nMore information can be found in our <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Help section on external tools</a>.',
-	"pages.tool.select.label": "Tool selection",
+	"pages.tool.select.label": "Tool selection / Tool-URL",
+	"pages.tool.select.description":
+		"Type the address, or use the button to paste it from the clipboard",
+	"pages.tool.select.nodata": "No tool available",
+	"pages.tool.select.clipboard.error":
+		"An error had occurred when pasting the text from the clipboard. Please paste the text manually.",
 	"pages.tool.settings": "Settings",
 	"pages.tool.title": "External Tools Configuration",
 	"pages.userMigration.backToLogin": "Return to login page",
@@ -1668,6 +1701,8 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Created between 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
 	"feature.media-shelf.title": "Media shelf",
+	"feature.media-shelf.emptyState":
+		"No media has currently been activated for use.",
 	"feature.media-shelf.createLine": "Add line",
 	"feature.media-shelf.line.title": "Line",
 	"feature.media-shelf.availableLine.title": "Available media",

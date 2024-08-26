@@ -1,6 +1,5 @@
 import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { ComponentProps } from "@/types/vue";
 import { contextExternalToolFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -10,6 +9,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 
 jest.mock("@util-board");

@@ -24,6 +24,7 @@ export default {
 	"common.actions.export": "Exportieren",
 	"common.actions.shareCopy": "Kopie teilen",
 	"common.actions.update": "Aktualisieren",
+	"common.ariaLabel.newTab": "öffnet in einem neuen Tab",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
@@ -101,6 +102,8 @@ export default {
 	"common.medium.information.teacher": "Bitte an Schuladministrator:in wenden.",
 	"common.nodata": "Keine Daten vorhanden",
 	"common.notification.error": "Es ist ein Fehler aufgetreten.",
+	"common.notification.connection.restored":
+		"Die Verbindung wurde wieder hergestellt.",
 	"common.placeholder.birthdate": "20.2.2002",
 	"common.placeholder.dateformat": "TT.MM.JJJJ",
 	"common.placeholder.email.confirmation": "E-Mail-Adresse wiederholen",
@@ -248,7 +251,7 @@ export default {
 	"components.administration.externalToolsSection.dialog.content.courses":
 		"<b>{courseCount}</b> Kurs(e)",
 	"components.administration.externalToolsSection.dialog.content.boardElements":
-		"<b>{boardElementCount}</b> Spalten-Board(s)",
+		"<b>{boardElementCount}</b> Bereich(e)",
 	"components.administration.externalToolsSection.dialog.content.mediaShelves":
 		"<b>{mediaBoardCount}</b> Medienregal(e)",
 	"components.administration.externalToolsSection.dialog.content.warning":
@@ -309,16 +312,23 @@ export default {
 	"components.board.action.moveRight": "Nach rechts verschieben",
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.alert.info.teacher":
-		"Dieses Board ist sichtbar für alle Kursteilnehmenden.",
+		"Dieser Bereich ist sichtbar für alle Kursteilnehmenden.",
 	"components.board.alert.info.draft":
-		"Dieses Board ist nicht für die Kursteilnehmenden sichtbar.",
-	"components.board.column.defaultTitle": "Neue Spalte",
-	"components.board.column.ghost.column.placeholder": "Spalte hinzufügen",
+		"Dieser Bereich ist nicht für die Kursteilnehmenden sichtbar.",
+	"components.board.column.defaultTitle": "Neuer Abschnitt",
+	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
-	"components.board.menu.board": "Board-Einstellungen",
+	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
-	"components.board.menu.column": "Spalten-Einstellungen",
-	"components.board.menu.element": "Element-Einstellungen",
+	"components.board.menu.column": "Abschnitt-Einstellungen",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Etherpad-Einstellungen",
+	"components.board.menu.drawingElement": "Whiteboard-Einstellungen",
+	"components.board.menu.externalToolElement": "Externes-Tool-Einstellungen",
+	"components.board.menu.fileElement": "Datei-Einstellungen",
+	"components.board.menu.linkElement": "Link-Einstellungen",
+	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
+	"components.board.menu.deletedElement": "Gelöschter-Inhalt-Einstellungen",
 	"components.board.notifications.errors.fileNameExists":
 		"Es existiert bereits eine Datei mit diesem Namen.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -334,34 +344,34 @@ export default {
 	"components.board.notifications.errors.notUpdated":
 		"Die Änderungen konnten nicht gespeichert werden.",
 	"components.board.screenReader.notification.cardCreated.success":
-		"Eine Karte wurde von einem anderen Benutzer in Spalte {columnPosition} erstellt.",
+		"Eine Karte wurde von einem anderen Benutzer in Abschnitt {columnPosition} erstellt.",
 	"components.board.screenReader.notification.columnCreated.success":
-		"Eine Spalte wurde von einem anderen Benutzer erstellt.",
+		"Ein Abschnitt wurde von einem anderen Benutzer erstellt.",
 	"components.board.screenReader.notification.cardDeleted.success":
 		"Eine Karte wurde von einem anderen Benutzer gelöscht.",
 	"components.board.screenReader.notification.columnDeleted.success":
-		"Eine Spalte wurde von einem anderen Benutzer gelöscht.",
+		"Ein Abschnitt wurde von einem anderen Benutzer gelöscht.",
 	"components.board.screenReader.notification.cardMovedInSameColumn.success":
-		"In Spalte {columnPosition} wurde eine Karte an Position {newPosition} verschoben.",
+		"In Abschnitt {columnPosition} wurde eine Karte an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.cardMovedToAnotherColumn.success":
-		"Eine Karte wurde von Spalte {fromColumnPosition} in Spalte {toColumnPosition} verschoben.",
+		"Eine Karte wurde von Abschnitt {fromColumnPosition} in Abschnitt {toColumnPosition} verschoben.",
 	"components.board.screenReader.notification.columnMoved.success":
-		"Eine Spalte wurde von Position {oldPosition} an Position {newPosition} verschoben.",
+		"Ein Abschnitt wurde von Position {oldPosition} an Position {newPosition} verschoben.",
 	"components.board.screenReader.notification.boardTitleUpdated.success":
-		"Der Boardtitel wurde von einem anderen Benutzer in {newTitle} geändert",
+		"Der Titel des Bereichs wurde von einem anderen Benutzer in {newTitle} geändert",
 	"components.board.screenReader.notification.boardVisibilityUpdated.published":
-		"Das Board wurde von einem anderen Benutzer veröffentlicht",
+		"Der Bereich wurde von einem anderen Benutzer veröffentlicht",
 	"components.board.screenReader.notification.boardVisibilityUpdated.draft":
-		"Das Board wurde von einem anderen Benutzer auf den Entwurfsstatus zurückgesetzt.",
+		"Der Bereich wurde von einem anderen Benutzer auf den Entwurfsstatus zurückgesetzt.",
 	"components.board.screenReader.notification.columnTitleUpdated.success":
-		"Titel von Spalte {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
+		"Titel von Abschnitt {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
 	"components.board.screenReader.notification.cardTitleUpdated.success":
-		"Titel von Karte {cardPosition} in Spalte {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
+		"Titel von Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
 	"components.board.screenReader.notification.cardUpdated.success":
-		"Karte {cardPosition} in Spalte {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
-	"components.board": "Board",
+		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
+	"components.board": "Bereich",
 	"components.boardCard": "Karte",
-	"components.boardColumn": "Spalte",
+	"components.boardColumn": "Abschnitt",
 	"components.boardElement": "Element",
 	"components.boardRow": "Abschnitt",
 	"components.boardSection": "Abschnitt",
@@ -371,6 +381,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
+	"components.cardElement.externalToolElement": "Externes Tool",
+	"components.cardElement.fileElement": "Datei",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.fileElement.alternativeText": "Alternativtext",
@@ -393,7 +405,7 @@ export default {
 		"Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
 	"components.cardElement.fileElement.virusDetected":
 		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
-	"components.cardElement.lastUpdatedAt": "Bearbeitet:",
+	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Link-Adresse einfügen",
 	"components.cardElement.notification.visibleAndEditable":
 		"Dieses Whiteboard ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
@@ -410,6 +422,8 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Bitte Titel angeben.",
 	"components.cardElement.titleElement": "Titelelement",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
 	"components.datePicker.validation.format":
 		"Bitte Format DD.MM.YYYY verwenden.",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
@@ -478,7 +492,7 @@ export default {
 	"components.molecules.copyResult.courseGroupCopy.info":
 		"Gruppen und deren Inhalte werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.ctlTools.info":
-		"Dem Kurs und den Boardkarten zugeordnete externe Tools werden nicht kopiert.",
+		"Externe Tools, die dem Kurs oder Karten im Bereich zugeordnet sind, werden nicht kopiert.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
 		"Geschützte Teile der Tool-Konfigurationen werden nicht kopiert.",
 	"components.molecules.copyResult.etherpadCopy.info":
@@ -491,7 +505,7 @@ export default {
 		"Material-IDs werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.information":
 		"Nachfolgend können die fehlenden Inhalte mit Hilfe der Quick-Links ergänzt werden. Die Links öffnen sich in einem separatem Tab.",
-	"components.molecules.copyResult.label.columnBoard": "Spalten-Board",
+	"components.molecules.copyResult.label.columnBoard": "Bereich",
 	"components.molecules.copyResult.label.content": "Inhalt",
 	"components.molecules.copyResult.label.etherpad": "Etherpad",
 	"components.molecules.copyResult.label.externalTools": "Externe Tools",
@@ -517,13 +531,13 @@ export default {
 	"components.molecules.copyResult.nexboardCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Alte neXboard-Abschnitte wurden nicht kopiert, da das Tool von unserer Plattform entfernt wird. Als Ersatz steht nun das innovative Whiteboard-Tool tldraw im Spaltenboard zur Verfügung.",
+		"Alte neXboard-Abschnitte wurden nicht kopiert, da das Tool von unserer Plattform entfernt wird. Als Ersatz steht nun das innovative Whiteboard-Tool zur Verfügung.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.board.successfullyCopied":
-		"Board erfolgreich kopiert.",
+		"Bereich erfolgreich kopiert.",
 	"components.molecules.copyResult.task.successfullyCopied":
 		"Aufgabe erfolgreich kopiert.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
@@ -540,13 +554,14 @@ export default {
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
-	"components.molecules.import.columnBoard.label": "Board-Titel",
+	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
 	"components.molecules.import.columnBoard.options.infoText":
-		"Das Board kann im Folgenden umbenannt werden. ",
-	"components.molecules.import.columnBoard.options.title": "Board importieren",
+		"Der Bereich kann im Folgenden umbenannt werden. ",
+	"components.molecules.import.columnBoard.options.title":
+		"Bereich importieren",
 	"components.molecules.import.columnBoard.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
-		"Der Kurs, in den das Board importiert werden soll, muss im Folgenden ausgewählt werden.",
+		"Der Kurs, in den der Bereich importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.courses.label": "Kurs",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Es wird eine Kopie erstellt.<br>Personenbezogene Daten werden nicht importiert.<br>Externe Tools werden nicht kopiert. <br>Der Kurs kann im Folgenden umbenannt werden.",
@@ -598,14 +613,25 @@ export default {
 		"Keiner. Benutzer wird neu erstellt.",
 	"components.molecules.importUsersMatch.write":
 		"Vornamen oder Nachnamen eingeben",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Nicht verfügbar",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Lehrende/r",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Lernende/r",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Organisationsadministrator",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Organisationsleitung",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.share.columnBoard.options.infoText":
-		"Mit dem folgenden Link kann das Board als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
-	"components.molecules.share.columnBoard.result.linkLabel": "Link Board-Kopie",
+		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+	"components.molecules.share.columnBoard.result.linkLabel":
+		"Link Bereich-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
 	"components.molecules.share.courses.options.ctlTools.infotext":
-		"Externe Tools, die dem Kurs oder Boardkarten zugeordnet sind, werden nicht kopiert.",
+		"Externe Tools, die dem Kurs oder Karten im Bereich zugeordnet sind, werden nicht kopiert.",
 	"components.molecules.share.courses.options.infoText":
 		"Mit dem folgenden Link kann der Kurs als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
 	"components.molecules.share.courses.result.linkLabel": "Link Kurskopie",
@@ -758,9 +784,9 @@ export default {
 	"error.proxy.description":
 		"Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
 	"feature-board-external-tool-element.alert.error.student":
-		"Das Tool kann aktuell nicht gestartet werden. Bitte Board aktualisieren oder an die Lehrkraft oder Kursleiter:in wenden.",
+		"Das Tool kann aktuell nicht gestartet werden. Bitte Bereich aktualisieren oder an die Lehrkraft oder Kursleiter:in wenden.",
 	"feature-board-external-tool-element.alert.error.teacher":
-		"Das Tool kann aktuell nicht gestartet werden. Bitte Board aktualisieren oder an die Schuladministrator:in wenden.",
+		"Das Tool kann aktuell nicht gestartet werden. Bitte Bereich aktualisieren oder an die Schuladministrator:in wenden.",
 	"feature-board-external-tool-element.dialog.title": "Auswahl & Einstellungen",
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Tool auswählen...",
@@ -786,32 +812,30 @@ export default {
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
 	"global.cloudLogo": "Logo",
-	"global.sidebar.item.accessibility": "Barrierefreiheit",
 	"global.sidebar.item.addons": "Add-ons",
 	"global.sidebar.item.calendar": "Termine",
 	"global.sidebar.item.classes": "Klassen",
+	"global.sidebar.item.contactSupport": "Kontakt",
 	"global.sidebar.item.courses": "Kurse",
 	"global.sidebar.item.files-old": "Dateien",
 	"global.sidebar.item.filesPersonal": "Persönliche Dateien",
 	"global.sidebar.item.filesShared": "Geteilte Dateien",
 	"global.sidebar.item.helpArea": "Hilfebereich",
-	"global.sidebar.item.helpDesk": "Helpdesk",
+	"global.sidebar.item.helpSection": "Hilfeartikel",
 	"global.sidebar.item.management": "Verwaltung",
 	"global.sidebar.item.overview": "Übersicht",
+	"global.sidebar.item.releaseNotes": "Was ist neu?",
+	"global.sidebar.item.rooms": "Räume",
 	"global.sidebar.item.school": "Schule",
 	"global.sidebar.item.student": "Schüler:innen",
 	"global.sidebar.item.system": "System",
 	"global.sidebar.item.tasks": "Aufgaben",
 	"global.sidebar.item.teacher": "Lehrkräfte",
 	"global.sidebar.item.teams": "Teams",
+	"global.sidebar.item.training": "Fortbildungen",
 	"global.skipLink.mainContent": "Zum Hauptinhalt wechseln",
 	"global.topbar.actions.alerts": "Status-Warnung",
-	"global.topbar.actions.contactSupport": "Kontakt",
-	"global.topbar.actions.fullscreen": "Vollbildmodus",
-	"global.topbar.actions.helpSection": "Hilfeartikel",
 	"global.topbar.actions.qrCode": "Seitenlink per QR-Code teilen",
-	"global.topbar.actions.releaseNotes": "Was ist neu?",
-	"global.topbar.actions.training": "Fortbildungen",
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
@@ -1121,6 +1145,8 @@ export default {
 		"Sichtbarkeit von Schüler:innen für Lehrkräfte aktivieren",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
 		"Videokonferenzen für Kurse und Teams aktivieren",
+	"pages.administration.school.index.privacySettings.labels.aiTutor":
+		"KI-Tutor an Schule aktivieren",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"Sind Chats an deiner Schule aktiviert, können Team-Admins im jeweiligen Team die Chatfunktion gezielt freischalten.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1135,6 +1161,8 @@ export default {
 		"Wenn diese Option nicht aktiviert ist, können die Lehrkräfte ausschließlich die Klassen sowie deren Schülerinnen und Schüler sehen, in denen sie Mitglied sind.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
 		"Sind Videokonferenzen an deiner Schule aktiviert, können Lehrkräfte ihrem Kurs im Bereich Tools das Videokonferenz-Tool hinzufügen und dann von dort aus Videokonferenzen für alle Kursteilnehmer:innen starten. Team-Admins können die Videokonferenzfunktion im jeweiligen Team aktivieren. Team-Leiter:innen und Team-Admins können dann Videokonferenzen zu Terminen hinzufügen und starten.",
+	"pages.administration.school.index.privacySettings.longText.aiTutor":
+		"Ist der KI-Tutor an deiner Schule aktiviert, können Lehrkräfte in ihren Bereichen den KI-Tutor hinzufügen.",
 	"pages.administration.school.index.privacySettings":
 		"Datenschutzeinstellungen",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing":
@@ -1454,10 +1482,10 @@ export default {
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
-	"pages.room.boardCard.label.columnBoard": "Spalten-Board",
-	"pages.room.boardCard.label.courseBoard": "Kurs-Board",
-	"pages.room.boardCard.label.listBoard": "Listen-Board",
-	"pages.room.boardCard.menu.ariaLabel": "Board-Menü",
+	"pages.room.boardCard.label.columnBoard": "Bereich {'|'} mehrspaltig",
+	"pages.room.boardCard.label.courseBoard": "Kurs-Bereich",
+	"pages.room.boardCard.label.listBoard": "Bereich {'|'} einspaltig",
+	"pages.room.boardCard.menu.ariaLabel": "Bereich-Menü",
 	"pages.room.cards.aria":
 		"{itemType}, Link, zum Öffnen die Eingabetaste drücken",
 	"pages.room.cards.label.revert": "Zurück auf Entwurf",
@@ -1469,6 +1497,13 @@ export default {
 		"Das Thema wurde erfolgreich kopiert.",
 	"pages.room.copy.task.message.copied":
 		"Die Aufgabe wurde erfolgreich kopiert.",
+	"pages.room.dialog.boardLayout.title": "Ansicht wählen",
+	"pages.room.dialog.boardLayout.singleColumn": "einspaltig",
+	"pages.room.dialog.boardLayout.multiColumn": "mehrspaltig",
+	"pages.room.fab.add.lesson": "Neues Thema",
+	"pages.room.fab.add.board": "Neuer Bereich",
+	"pages.room.fab.add.columnBoard": "Neuer Bereich {'|'} mehrspaltig",
+	"pages.room.fab.add.task": "Neue Aufgabe",
 	"pages.room.itemDelete.text": '{itemType} "{itemTitle}" wirklich löschen?',
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
@@ -1496,10 +1531,6 @@ export default {
 		"Aktuell gibt es hier noch keine Kurse.",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
-	"pages.rooms.fab.add.lesson": "Neues Thema",
-	"pages.rooms.fab.add.board": "Neues Spalten-Board",
-	"pages.rooms.fab.add.listBoard": "Neues Listen-Board",
-	"pages.rooms.fab.add.task": "Neue Aufgabe",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
 	"pages.rooms.fab.import.course": "Kurs importieren",
 	"pages.rooms.groupName": "Kurse",
@@ -1566,7 +1597,7 @@ export default {
 	"pages.room.modal.course.export.options.header": "Export-Einstellung",
 	"pages.room.modal.course.export.options.topics": "Themen",
 	"pages.room.modal.course.export.options.tasks": "Aufgaben ohne Themen",
-	"pages.room.modal.course.export.options.columnBoards": "Boards",
+	"pages.room.modal.course.export.options.columnBoards": "Bereiche",
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
@@ -1628,7 +1659,12 @@ export default {
 	"pages.tool.deactivate.label": "Tool in der Schule deaktivieren",
 	"pages.tool.description":
 		'Die kursspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb des Kurses verfügbar.<br><br>\nDurch das Löschen einer Konfiguration wird das Tool dem Kurs wieder entzogen.<br><br>\nWeitere Informationen sind in unserem <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Hilfebereich zu externen Tools</a> zu finden.',
-	"pages.tool.select.label": "Tool-Auswahl",
+	"pages.tool.select.label": "Tool-Auswahl / Tool-URL",
+	"pages.tool.select.description":
+		"Nach Tools suchen oder eine Tool-URL eingeben bzw. aus dem Zwischenspeicher manuell oder per Knopf einfügen",
+	"pages.tool.select.nodata": "Kein Tool vorhanden",
+	"pages.tool.select.clipboard.error":
+		"Beim Einfügen des Textes aus dem Zwischenspeicher ist ein Fehler aufgetreten. Bitte fügen Sie den Text manuell ein.",
 	"pages.tool.settings": "Einstellungen",
 	"pages.tool.title": "Konfiguration externer Tools",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
@@ -1695,6 +1731,8 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Erstellt zwischen 02/02/2020",
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
 	"feature.media-shelf.title": "Medienregal",
+	"feature.media-shelf.emptyState":
+		"Aktuell sind noch keine Medien zur Verwendung freigeschaltet.",
 	"feature.media-shelf.createLine": "Abschnitt hinzufügen",
 	"feature.media-shelf.line.title": "Abschnitt",
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",

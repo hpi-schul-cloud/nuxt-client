@@ -24,6 +24,7 @@ export default {
 	"common.actions.share": "Поділіться",
 	"common.actions.shareCopy": "Поділитися копією",
 	"common.actions.update": "Оновити",
+	"common.ariaLabel.newTab": "відкривається в новій вкладці",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
@@ -102,6 +103,7 @@ export default {
 		"Будь ласка, зверніться до адміністратора школи.",
 	"common.nodata": "Немає даних",
 	"common.notification.error": "Сталася помилка.",
+	"common.notification.connection.restored": "Зв'язок відновлено.",
 	"common.placeholder.birthdate": "20.02.2002",
 	"common.placeholder.dateformat": "ДД.ММ.РРРР",
 	"common.placeholder.email.confirmation":
@@ -323,7 +325,15 @@ export default {
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
-	"components.board.menu.element": "Налаштування елемента",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Налаштування спільного текстового редактора",
+	"components.board.menu.drawingElement": "Налаштування дошки",
+	"components.board.menu.externalToolElement":
+		"Налаштування зовнішнього інструменту",
+	"components.board.menu.fileElement": "Налаштування файлу",
+	"components.board.menu.linkElement": "Налаштування посилання",
+	"components.board.menu.submissionElement": "Налаштування Подання",
+	"components.board.menu.deletedElement": "Видалені налаштування вмісту",
 	"components.board.notifications.errors.fileNameExists":
 		"Файл з такою назвою вже існує.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -376,6 +386,8 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Цей Etherpad є видимою і доступною для редагування для всіх учасників курсу.",
+	"components.cardElement.externalToolElement": "Зовнішній інструмент",
+	"components.cardElement.fileElement": "Файл",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
@@ -399,7 +411,7 @@ export default {
 		"Формат відео не підтримується цим браузером / операційною системою.",
 	"components.cardElement.fileElement.virusDetected":
 		"Файл було заблоковано через підозру на вірус.",
-	"components.cardElement.lastUpdatedAt": "Відредаговано:",
+	"components.cardElement.LinkElement": "Посилання",
 	"components.cardElement.LinkElement.label": "Вставити адресу посилання",
 	"components.cardElement.notification.visibleAndEditable":
 		"Ця дошка є видимою і доступною для редагування для всіх учасників курсу.",
@@ -416,6 +428,8 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Будь ласка, введіть назву.",
 	"components.cardElement.titleElement": "Елемент заголовка",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
 	"components.datePicker.validation.required": "Будь ласка, введіть дату.",
 	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
@@ -597,6 +611,16 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"немає. Обліковий запис буде створено знову.",
 	"components.molecules.importUsersMatch.write": "Введіть ім'я та прізвище",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Немає в наявності",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Учитель",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Студент",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Організаційний адміністратор",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Організаційний менеджмент",
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
@@ -795,32 +819,30 @@ export default {
 	"format.dateYY": "DD.MM.YY",
 	"format.time": "HH:mm",
 	"global.cloudLogo": "Логотип",
-	"global.sidebar.item.accessibility": "Доступність",
 	"global.sidebar.item.addons": "Додаткові компоненти",
 	"global.sidebar.item.calendar": "Календар",
 	"global.sidebar.item.classes": "Класи",
+	"global.sidebar.item.contactSupport": "Зв'язатися",
 	"global.sidebar.item.courses": "Курси",
 	"global.sidebar.item.files-old": "Файли",
 	"global.sidebar.item.filesPersonal": "Особисті файли",
 	"global.sidebar.item.filesShared": "Спільні файли",
 	"global.sidebar.item.helpArea": "Розділ довідки",
-	"global.sidebar.item.helpDesk": "Служба підтримки",
+	"global.sidebar.item.helpSection": "Розділ довідки",
 	"global.sidebar.item.management": "Управління",
 	"global.sidebar.item.overview": "Панель керування",
+	"global.sidebar.item.releaseNotes": "Що нового?",
+	"global.sidebar.item.rooms": "Номери",
 	"global.sidebar.item.school": "Школа",
 	"global.sidebar.item.student": "Учні",
 	"global.sidebar.item.system": "Cистема",
 	"global.sidebar.item.tasks": "Завдання",
 	"global.sidebar.item.teacher": "Викладачі",
 	"global.sidebar.item.teams": "Команди",
+	"global.sidebar.item.training": "Поглиблене навчання",
 	"global.skipLink.mainContent": "Перейти до основного вмісту",
 	"global.topbar.actions.alerts": "Сповіщення про стан",
-	"global.topbar.actions.contactSupport": "Зв'язатися",
-	"global.topbar.actions.fullscreen": "Повний екран",
-	"global.topbar.actions.helpSection": "Розділ довідки",
 	"global.topbar.actions.qrCode": "Поділіться QR-кодом веб-сторінки",
-	"global.topbar.actions.releaseNotes": "Що нового?",
-	"global.topbar.actions.training": "Поглиблене навчання",
 	"global.topbar.language.longName.de": "Deutsch",
 	"global.topbar.language.longName.en": "English",
 	"global.topbar.language.longName.es": "Español",
@@ -1130,6 +1152,8 @@ export default {
 		"Активувати видимість учнів для вчителів",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
 		"Активувати відеоконференції для курсів і команд",
+	"pages.administration.school.index.privacySettings.labels.aiTutor":
+		"Активуйте репетитора ШІ в школі",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
 		"Якщо у вашому навчальному закладі увімкнені чати, адміністратори команд можуть вибірково увімкнути функцію чату для своєї команди.",
 	"pages.administration.school.index.privacySettings.longText.configurabilityInfoText":
@@ -1144,6 +1168,8 @@ export default {
 		"Якщо цю опцію не ввімкнено, вчителі бачитимуть лише ті класи та учнів, учасниками яких вони є.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
 		"Якщо у вашій школі увімкнено відеоконференцію, викладачі можуть додати інструмент для відеоконференцій до свого курсу у розділі «Інструменти», а потім запустити відеоконференцію для всіх учасників курсу. Адміністратори команд можуть активувати функцію відеоконференції у відповідній команді. Після цього керівники команд та адміністратори команд зможуть додавати та розпочинати відеоконференції для зустрічей.",
+	"pages.administration.school.index.privacySettings.longText.aiTutor":
+		"Якщо AI Tutor активовано у вашій школі, вчителі можуть додати AI Tutor у своїх областях.",
 	"pages.administration.school.index.privacySettings":
 		"Параметри конфіденційності",
 	"pages.administration.school.index.schoolIsCurrentlyDrawing":
@@ -1468,6 +1494,13 @@ export default {
 		"Повністю скопіювати курс не вдалося.",
 	"pages.room.copy.lesson.message.copied": "Тему успішно скопійовано.",
 	"pages.room.copy.task.message.copied": "Завдання успішно скопійовано.",
+	"pages.room.dialog.boardLayout.title": "Виберіть вид",
+	"pages.room.dialog.boardLayout.singleColumn": "одноколонкові",
+	"pages.room.dialog.boardLayout.multiColumn": "багатоколонкові",
+	"pages.room.fab.add.lesson": "Створити тему",
+	"pages.room.fab.add.board": "Нова дошка",
+	"pages.room.fab.add.columnBoard": "Нова дошка",
+	"pages.room.fab.add.task": "Створити завдання",
 	"pages.room.itemDelete.text":
 		'{itemType} "{itemTitle}" буде видалена. Ви впевнені, що хочете видалити?',
 	"pages.room.itemDelete.title": "Видалити елемент",
@@ -1494,10 +1527,6 @@ export default {
 	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.fab.add.course": "Новий курс",
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
-	"pages.rooms.fab.add.lesson": "Створити тему",
-	"pages.rooms.fab.add.board": "Нова дошка",
-	"pages.rooms.fab.add.listBoard": "Нова дошка оголошень",
-	"pages.rooms.fab.add.task": "Створити завдання",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
 	"pages.rooms.fab.import.course": "Імпортувати курс",
 	"pages.rooms.groupName": "Курси",
@@ -1622,7 +1651,12 @@ export default {
 	"pages.tool.deactivate.label": "Деактивуйте інструмент у школі",
 	"pages.tool.description":
 		'Тут налаштовуються специфічні для курсу параметри зовнішнього інструменту. Після збереження конфігурації інструмент стає доступним у курсі.<br><br>\nВидалення конфігурації видаляє інструмент із курс.<br><br>\nБільше інформації можна знайти в нашому <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Розділ довідки щодо зовнішніх інструментів</a>.',
-	"pages.tool.select.label": "вибір інструменту",
+	"pages.tool.select.label": "вибір інструменту / Інструмент-URL",
+	"pages.tool.select.description":
+		"Знайдіть інструменти або введіть URL-адресу інструменту або вставте його з кешу вручну або за допомогою кнопки",
+	"pages.tool.select.clipboard.error":
+		"Виникла помилка при вставці тексту з буфера обміну. Будь ласка, вставте текст вручну.",
+	"pages.tool.select.nodata": "Інструмент відсутній",
 	"pages.tool.settings": "Параметри",
 	"pages.tool.title": "Конфігурація зовнішніх інструментів",
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",
@@ -1689,6 +1723,8 @@ export default {
 	"utils.adminFilter.placeholder.date.from": "Створено між 02.02.2020",
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
 	"feature.media-shelf.title": "Полиця для медіа",
+	"feature.media-shelf.emptyState":
+		"Жоден носій не активовано для використання.",
 	"feature.media-shelf.createLine": "Додайте лінію",
 	"feature.media-shelf.line.title": "лінія",
 	"feature.media-shelf.availableLine.title": "Доступні медіа",

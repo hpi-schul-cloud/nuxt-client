@@ -44,15 +44,20 @@
 			"@feature-render-html": ["src/modules/feature/render-html"],
 			"@feature-news-form": ["src/modules/feature/news-form"],
 			"@feature-media-shelf": ["src/modules/feature/media-shelf"],
+			"@feature-board-deleted-element": [
+				"src/modules/feature/board-deleted-element"
+			],
 			"@ui-alert": ["src/modules/ui/alert"],
 			"@ui-board": ["src/modules/ui/board"],
 			"@ui-chip": ["src/modules/ui/chip"],
 			"@ui-confirmation-dialog": ["src/modules/ui/confirmation-dialog"],
 			"@ui-date-time-picker": ["src/modules/ui/date-time-picker"],
+			"@ui-extended-icon-btn": ["src/modules/ui/extended-icon-btn"],
 			"@ui-layout": ["src/modules/ui/layout"],
 			"@ui-light-box": ["src/modules/ui/light-box"],
 			"@ui-preview-image": ["src/modules/ui/preview-image"],
 			"@ui-room-details": ["src/modules/ui/room-details"],
+			"@ui-skip-link": ["src/modules/ui/skip-link"],
 			"@ui-speed-dial-menu": ["src/modules/ui/speed-dial-menu"],
 			"@ui-qr-code": ["src/modules/ui/qr-code"],
 			"@util-board": ["src/modules/util/board"],
@@ -64,10 +69,12 @@
 			"@page-board": ["src/modules/page/board"],
 			"@page-class-members": ["src/modules/page/class-members"],
 			"@page-media-shelf": ["src/modules/page/media-shelf"],
+			"@page-room": ["src/modules/page/room"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},
-		"lib": ["esnext", "dom", "dom.iterable", "scripthost"]
+		"lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+		"outDir": "dist"
 	},
 	"include": [
 		"src/**/*.ts",
@@ -76,8 +83,10 @@
 		"tests/**/*.ts",
 		"tests/**/*.tsx"
 	],
+
 	"exclude": [
 		"node_modules",
+		"dist",
 		"./src/components/base/components.js",
 		"vendor",
 		"public/content/vendor"

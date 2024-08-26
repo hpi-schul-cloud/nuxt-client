@@ -11,6 +11,7 @@ const setup = (envs?: Partial<ConfigResponse>, theme = SchulcloudTheme.Brb) => {
 	const defaultEnvs = envsFactory.build({
 		ALERT_STATUS_URL: "https://status.dbildungscloud.de",
 		ACCESSIBILITY_REPORT_EMAIL: "email",
+		TRAINING_URL: "https://lernen.dbildungscloud.de",
 		FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: true,
 		FEATURE_MEDIA_SHELF_ENABLED: true,
 	});
@@ -46,7 +47,7 @@ describe("SidebarItems Composable", () => {
 	it("should have correct amount of page links", () => {
 		const { pageLinks } = setup();
 
-		expect(pageLinks.value).toHaveLength(10);
+		expect(pageLinks.value).toHaveLength(11);
 	});
 
 	it("should have correct amount of legal links", () => {

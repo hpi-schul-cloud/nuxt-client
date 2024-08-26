@@ -353,7 +353,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~vuetify/settings";
+@import "@/styles/settings.scss";
 @import "@/styles/mixins";
 $tablet-portrait-width: 768px;
 

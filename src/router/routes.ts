@@ -19,7 +19,7 @@ import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 export const routes: Readonly<RouteRecordRaw[]> = [
 	{
 		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
-		component: () => import("../pages/ActivationCode.page.vue"),
+		component: () => import("@/pages/ActivationCode.page.vue"),
 		name: "activation-activationCode",
 		meta: {
 			isPublic: true,
@@ -231,14 +231,38 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		beforeEnter: createPermissionGuard(["news_edit"]),
 	},
 	{
-		path: `/rooms/:id(${REGEX_ID})`,
-		component: () => import("@/pages/rooms/RoomDetails.page.vue"),
-		name: "rooms-id",
+		path: `/rooms`,
+		component: async () => (await import("@page-room")).RoomsPage,
+		name: "rooms",
+	},
+	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
+	// So we have to replace the reference there by "course-room-list" path.
+	{
+		path: "/rooms-list",
+		redirect: { name: "course-room-list" },
+		name: "rooms-list",
 	},
 	{
-		path: `/rooms`,
-		redirect: { name: "rooms-overview" },
-		name: "rooms",
+		path: "/rooms/courses-list",
+		component: () => import("@/pages/rooms/CourseRoomList.page.vue"),
+		name: "course-room-list",
+	},
+	{
+		path: "/rooms-overview",
+		redirect: { name: "course-room-overview" },
+		name: "rooms-overview",
+	},
+	{
+		path: "/rooms/courses-overview",
+		component: () => import("@/pages/rooms/CourseRoomOverview.page.vue"),
+		name: "course-room-overview",
+	},
+	{
+		// TODO BC-7822, BC-7823 target this route at new room details page
+		// and decide on that page which sub-component (page) has to be rendered
+		path: `/rooms/:id(${REGEX_ID})`,
+		component: () => import("@/pages/rooms/CourseRoomDetails.page.vue"),
+		name: "rooms-id",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
@@ -249,18 +273,8 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		}),
 	},
 	{
-		path: "/rooms-list",
-		component: () => import("@/pages/rooms/RoomList.page.vue"),
-		name: "rooms-list",
-	},
-	{
-		path: "/rooms-overview",
-		component: () => import("@/pages/rooms/RoomOverview.page.vue"),
-		name: "rooms-overview",
-	},
-	{
 		path: "/tasks",
-		component: () => import("../pages/tasks/TaskOverview.page.vue"),
+		component: () => import("@/pages/tasks/TaskOverview.page.vue"),
 		name: "tasks",
 	},
 	{
@@ -295,13 +309,13 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: `/h5p/player/:id(${REGEX_H5P_ID})`,
-		component: () => import("../pages/h5p/H5PPlayer.page.vue"),
+		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
 		name: "h5pPlayer",
 		//beforeEnter: createPermissionGuard(["H5P"]),
 	},
 	{
 		path: `/h5p/editor/:id(${REGEX_H5P_ID})?`,
-		component: () => import("../pages/h5p/H5PEditor.page.vue"),
+		component: () => import("@/pages/h5p/H5PEditor.page.vue"),
 		name: "h5pEditor",
 		beforeEnter: validateQueryParameters({
 			parentType: isEnum(H5PContentParentType),

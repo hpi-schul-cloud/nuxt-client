@@ -1,13 +1,12 @@
 <template>
-	<ContentElementBar class="pdf-display">
+	<ContentElementBar>
 		<template #display>
 			<div @click="openPdf">
 				<PreviewImage
 					:src="previewSrc"
-					:alt="altText"
+					alt=""
 					:aspect-ratio="1.77777"
 					position="top"
-					class="rounded-t"
 					:cover="true"
 				/>
 			</div>
@@ -21,7 +20,6 @@ import { FileElementResponse } from "@/serverApi/v3";
 import { ContentElementBar } from "@ui-board";
 import { PreviewImage } from "@ui-preview-image";
 import { PropType, defineComponent } from "vue";
-import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "PdfDisplay",
@@ -34,25 +32,13 @@ export default defineComponent({
 	},
 	components: { ContentElementBar, PreviewImage },
 	setup(props) {
-		const { t } = useI18n();
-
 		const openPdf = () => {
 			window.open(props.src, "_blank");
 		};
 
-		const altText = `${t("components.cardElement.fileElement.pdfAlt")} ${
-			props.name
-		}`;
-
 		return {
 			openPdf,
-			altText,
 		};
 	},
 });
 </script>
-<style scoped lang="scss">
-.pdf-display:focus {
-	outline: none;
-}
-</style>

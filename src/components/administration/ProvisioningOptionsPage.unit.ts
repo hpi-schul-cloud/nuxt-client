@@ -1,7 +1,6 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ConfigResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
-import { ComponentProps } from "@/types/vue";
 import { ENV_CONFIG_MODULE_KEY, THEME_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import {
@@ -19,7 +18,9 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import { Router, useRouter } from "vue-router";
+import { VCheckboxBtn } from "vuetify/lib/components/index.mjs";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 
 jest.mock("@data-provisioning-options");
@@ -65,9 +66,7 @@ describe("ProvisioningOptionsPage", () => {
 					},
 				},
 			},
-			props: {
-				...props,
-			},
+			props,
 		});
 
 		return {
@@ -330,7 +329,7 @@ describe("ProvisioningOptionsPage", () => {
 
 					await flushPromises();
 
-					const checkBoxes = wrapper.findAllComponents({ name: "v-checkbox" });
+					const checkBoxes = wrapper.findAllComponents(VCheckboxBtn);
 
 					const classCheckbox = checkBoxes[0];
 					await classCheckbox.vm.$emit("update:modelValue", false);

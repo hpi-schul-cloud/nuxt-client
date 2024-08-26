@@ -1,9 +1,11 @@
 import ContextExternalToolConfigurator from "@/components/external-tools/configuration/ContextExternalToolConfigurator.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import RoomModule from "@/store/room";
-import { ComponentProps } from "@/types/vue";
-import { NOTIFIER_MODULE_KEY, ROOM_MODULE_KEY } from "@/utils/inject";
+import CourseRoomDetailsModule from "@/store/course-room-details";
+import {
+	NOTIFIER_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
+} from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { contextExternalToolFactory } from "@@/tests/test-utils/factory";
 import {
@@ -13,6 +15,7 @@ import {
 import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
+import { ComponentProps } from "vue-component-type-helpers";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
@@ -33,7 +36,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 		const notifierModule = createModuleMocks(NotifierModule);
 
 		const roomTitle = "Room Title";
-		const roomModule = createModuleMocks(RoomModule, {
+		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomData: {
 				title: roomTitle,
 				roomId: "contextId",
@@ -53,7 +56,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 				],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ROOM_MODULE_KEY.valueOf()]: roomModule,
+					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				},
 				stubs: {
 					ContextExternalToolConfigurator: {
@@ -73,7 +76,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 
 		return {
 			wrapper,
-			roomModule,
+			courseRoomDetailsModule,
 			notifierModule,
 			roomTitle,
 		};
