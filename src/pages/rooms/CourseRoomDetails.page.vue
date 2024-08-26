@@ -445,17 +445,7 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		if (this.$route.query?.tab) {
-			this.setActiveTab(this.$route.query.tab);
-		}
-
-		await this.courseRoomDetailsModule.fetchContent(this.courseId);
-		await this.courseRoomDetailsModule.fetchScopePermission({
-			courseId: this.courseId,
-			userId: this.authModule.getUser?.id,
-		});
-
-		document.title = buildPageTitle(this.roomData.title);
+		await this.initialize(this.courseId, this.$route.query?.tab);
 	},
 	mounted() {
 		window.addEventListener("pageshow", this.setActiveTabIfPageCached);
@@ -464,6 +454,17 @@ export default defineComponent({
 		window.removeEventListener("pageshow", this.setActiveTabIfPageCached);
 	},
 	methods: {
+		async initialize(courseId, activeTab = 0) {
+			this.setActiveTab(activeTab);
+
+			await this.courseRoomDetailsModule.fetchContent(courseId);
+			await this.courseRoomDetailsModule.fetchScopePermission({
+				courseId,
+				userId: this.authModule.getUser?.id,
+			});
+
+			document.title = buildPageTitle(this.roomData.title);
+		},
 		onSingleColumnLayoutSelected() {
 			this.onCreateBoard(this.roomData.roomId, BoardLayout.List);
 		},
@@ -521,9 +522,9 @@ export default defineComponent({
 			const copyResult = this.copyModule.getCopyResult;
 
 			if (copyResult?.id !== undefined) {
-				await this.$router.push(
-					"/rooms/" + copyResult.id.replace(/[^a-z\d]/g, "")
-				);
+				const copyId = copyResult.id.replace(/[^a-z\d]/g, "");
+				await this.$router.push({ path: "/rooms/" + copyId, replace: true });
+				await this.initialize(copyId);
 			} else {
 				await this.$router.push("/rooms/courses-overview");
 			}
