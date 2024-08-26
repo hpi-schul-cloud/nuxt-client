@@ -11,7 +11,7 @@
 			v-on:error="onError"
 		/>
 		<ContentElementBar class="menu">
-			<template #menu><slot /></template>
+			<template v-if="showMenu" #menu><slot /></template>
 		</ContentElementBar>
 	</div>
 </template>
@@ -26,6 +26,7 @@ export default defineComponent({
 	props: {
 		src: { type: String, required: true },
 		name: { type: String, required: true },
+		showMenu: { type: Boolean, required: true },
 	},
 	components: { ContentElementBar },
 	emits: ["error"],

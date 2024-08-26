@@ -11,7 +11,7 @@
 				/>
 			</div>
 		</template>
-		<template #menu><slot /></template>
+		<template v-if="showMenu" #menu><slot /></template>
 	</ContentElementBar>
 </template>
 
@@ -29,6 +29,7 @@ export default defineComponent({
 		name: { type: String, required: true },
 		previewSrc: { type: String, required: true },
 		src: { type: String, required: true },
+		showMenu: { type: Boolean, required: true },
 	},
 	components: { ContentElementBar, PreviewImage },
 	setup(props) {
