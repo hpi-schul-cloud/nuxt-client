@@ -1,6 +1,8 @@
 import { createSharedComposable } from "@vueuse/core";
 import { computed, ComputedRef, ref, Ref } from "vue";
 
+// TODO: Combine with useEditMode in Board.
+
 export const useEditMode = (id: string) => {
 	const { editModeId, setEditModeId } = useSharedEditMode();
 

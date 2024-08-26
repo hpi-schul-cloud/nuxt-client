@@ -58,6 +58,7 @@
 </template>
 
 <script setup lang="ts">
+// TODO: fix restricted import
 import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
 import { useElementHover } from "@vueuse/core";
 import { PropType, ref } from "vue";

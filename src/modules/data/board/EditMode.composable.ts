@@ -2,12 +2,17 @@ import { createSharedComposable } from "@vueuse/core";
 import { computed, ref, Ref } from "vue";
 import { useBoardPermissions } from "./BoardPermissions.composable";
 
+/* const useBoardEditMode = (id: string) => {
+
+	const base = useEditMode(id, useBoardPermissions());
+} */
+
 /**
  * Handles EditMode for a specific card.
  *
  * Use this to set a card to edit mode from **inside** a card scope.
  */
-export const useEditMode = (id: string) => {
+export const useEditMode = (id: string, /* permissionComposable: */ ) => {
 	const { hasEditPermission } = useBoardPermissions();
 	const { editModeId, setEditModeId } = useSharedEditMode();
 

@@ -73,6 +73,7 @@ import {
 	MediaLineResponse,
 } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
+// TODO: restricted import
 import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
 import { extractDataAttribute } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";

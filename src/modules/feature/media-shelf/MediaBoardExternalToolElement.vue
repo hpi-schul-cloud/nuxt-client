@@ -41,6 +41,7 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
+// fix restricted import
 import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
 import { WarningChip } from "@ui-chip";
 import { useErrorNotification } from "@util-error-notification";
@@ -135,6 +136,7 @@ onUnmounted(() => {
 const { isDragging } = useDragAndDrop();
 
 const onClick = async () => {
+	// TODO: you would positively take a lead lead towards a better future for the client if you would rewrite this to more readable function names in order to not require comments to explain this function :)
 	// Loading the launch request has failed
 	if (launchError.value) {
 		notifierModule.show({

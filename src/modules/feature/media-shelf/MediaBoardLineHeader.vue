@@ -25,7 +25,9 @@
 
 <script setup lang="ts">
 import { useBoardFocusHandler } from "@data-board";
+// TODO: fix deep import
 import BoardColumnInteractionHandler from "@feature-board/board/BoardColumnInteractionHandler.vue";
+// TODO: fix deep import
 import BoardAnyTitleInput from "@feature-board/shared/BoardAnyTitleInput.vue";
 import { ref, toRef } from "vue";
 import { useEditMode } from "./editMode.composable";

@@ -7,6 +7,7 @@
 </template>
 
 <script setup lang="ts">
+// TODO: solve import by moving composable out of board module
 import { useDragAndDrop } from "@/modules/feature/board/shared/DragAndDrop.composable";
 import {
 	MediaAvailableLineElementResponse,

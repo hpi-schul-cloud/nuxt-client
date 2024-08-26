@@ -136,6 +136,7 @@ const onElementDragEnd = async (event: SortableEvent) => {
 	const toLineId: string | undefined = extractDataAttribute(to, "lineId");
 
 	if (
+		// TODO: give it a name
 		fromLineId === toLineId ||
 		newIndex === undefined ||
 		oldIndex === undefined ||

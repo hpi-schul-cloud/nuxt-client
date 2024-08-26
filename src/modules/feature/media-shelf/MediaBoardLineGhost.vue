@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+// TODO: shouldnt reuse BoardColumnGhost. instead, make both of the reuse a common component, or move out of module and rename (SectionCreationHeader????) talk to frontend arc maybe
 import BoardColumnGhostHeader from "@feature-board/board/BoardColumnGhostHeader.vue";
 import { Sortable } from "sortablejs-vue3";
 
