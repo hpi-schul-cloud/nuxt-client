@@ -9,12 +9,12 @@
 </template>
 
 <script setup lang="ts">
-import { MENU_SCOPE } from "./injection-tokens";
 import { injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@mdi/js";
 import { BoardMenuAction } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { BoardMenuScope } from "./board-menu-scope";
+import { MENU_SCOPE } from "./injection-tokens";
 
 const props = defineProps({
 	name: { type: String, required: false },
@@ -37,6 +37,7 @@ const languageKeyForScopeType: Record<BoardMenuScope, string> = {
 	fileElement: "components.cardElement.fileElement",
 	linkElement: "components.cardElement.LinkElement",
 	submissionElement: "components.cardElement.submissionElement",
+	deletedElement: "components.cardElement.deletedElement",
 };
 
 const onClick = (): void => {
