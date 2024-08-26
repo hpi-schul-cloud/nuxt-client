@@ -237,6 +237,10 @@ export default {
 		"З початком міграції всі учні та вчителі вашої школи зможуть перейти з системи реєстрації на moin.schule. Користувачі, які змінили систему входу, зможуть увійти лише через moin.schule.",
 	"components.administration.adminMigrationSection.startWarningCard.title":
 		"Ви справді хочете розпочати міграцію облікового запису до moin.schule зараз?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
+		"Ви впевнені, що хочете скинути автоматично знайдені ярлики?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів.<br><br>Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
 	"components.administration.externalToolsSection.action.add":
 		"Додати зовнішній інструмент",
 	"components.administration.externalToolsSection.action.delete":
@@ -1024,6 +1028,8 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Має відповідати дійсному формату URL-адреси",
 	"pages.administration.migration.back": "Назад",
+	"pages.administration.migration.clearAutoMatches":
+		"Скинути автоматичні ярлики",
 	"pages.administration.migration.backToAdministration":
 		"Повернутися до адміністрації",
 	"pages.administration.migration.brbSchulportal": "weBBSchule",

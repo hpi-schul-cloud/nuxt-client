@@ -74,28 +74,58 @@
 						{{ t("pages.administration.migration.step5") }}
 					</VStepperItem>
 				</VStepperHeader>
-				<vCustomDialog
-					v-model:is-open="isCancelDialogOpen"
-					has-buttons
-					:buttons="['cancel', 'confirm']"
-					@dialog-confirmed="confirmCancelMigration()"
-					data-testid="cancel-migration-dialog"
-				>
-					<template #title>
-						{{
-							t(
-								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
-							)
-						}}
-					</template>
-					<template #content>
-						{{
-							t(
-								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
-							)
-						}}
-					</template>
-				</vCustomDialog>
+
+				<div data-testid="cancel-migration-dialog-wrapper">
+					<VCustomDialog
+						v-model:is-open="isCancelDialogOpen"
+						has-buttons
+						:buttons="['cancel', 'confirm']"
+						@dialog-confirmed="confirmCancelMigration()"
+						data-testid="cancel-migration-dialog"
+					>
+						<template #title>
+							{{
+								t(
+									"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
+								)
+							}}
+						</template>
+						<template #content>
+							{{
+								t(
+									"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
+								)
+							}}
+						</template>
+					</VCustomDialog>
+				</div>
+
+				<div data-testid="clear-auto-matches-dialog-wrapper">
+					<VCustomDialog
+						v-model:is-open="isClearAutoMatchesDialogOpen"
+						has-buttons
+						:buttons="['cancel', 'confirm']"
+						@dialog-confirmed="clearAllAutoMatches()"
+						data-testid="clear-auto-matches-dialog"
+					>
+						<template #title>
+							{{
+								t(
+									"components.administration.adminMigrationSection.clearAutoMatchesDialog.title"
+								)
+							}}
+						</template>
+						<template #content>
+							<RenderHTML
+								:html="
+									t(
+										'components.administration.adminMigrationSection.clearAutoMatchesDialog.description'
+									)
+								"
+							/>
+						</template>
+					</VCustomDialog>
+				</div>
 			</VStepper>
 		</template>
 
@@ -181,14 +211,24 @@
 					</VStepperWindowItem>
 
 					<VStepperWindowItem :value="2" data-testid="migration_importUsers">
-						<ImportUsers />
+						<ImportUsers ref="importUsersRef" />
 						<div class="d-flex justify-space-between pa-3">
-							<VBtn
-								@click="cancelMigration()"
-								data-testid="import-users-cancel-migration-btn"
-							>
-								{{ t("common.actions.cancel") }}
-							</VBtn>
+							<div>
+								<VBtn
+									@click="cancelMigration()"
+									data-testid="import-users-cancel-migration-btn"
+								>
+									{{ t("common.actions.cancel") }}
+								</VBtn>
+								<VBtn
+									class="ml-2"
+									@click="showClearAutoMatchesDialog()"
+									data-testid="import-users-clear-auto-matches-btn"
+								>
+									{{ t("pages.administration.migration.clearAutoMatches") }}
+								</VBtn>
+							</div>
+
 							<div>
 								<VBtn @click="migrationStep = 1">
 									{{ t("pages.administration.migration.back") }}
@@ -547,6 +587,10 @@ const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> =
 
 const isCancelDialogOpen: Ref<boolean> = ref(false);
 
+const isClearAutoMatchesDialogOpen: Ref<boolean> = ref(false);
+
+const importUsersRef: Ref<InstanceType<typeof ImportUsers> | null> = ref(null);
+
 const isMigrationNotStarted = computed(() => {
 	return school.value.inUserMigration === undefined;
 });
@@ -773,6 +817,20 @@ const redirectToAdminPage = async () => {
 		path: "/administration/school-settings",
 		query: { openPanels: "migration" },
 	});
+};
+
+const showClearAutoMatchesDialog = async () => {
+	isClearAutoMatchesDialogOpen.value = true;
+};
+
+const clearAllAutoMatches = async () => {
+	isLoading.value = true;
+
+	await importUsersModule.clearAllAutoMatches();
+
+	importUsersRef.value?.reloadData();
+
+	isLoading.value = false;
 };
 
 watch(migrationStep, async (val) => {
