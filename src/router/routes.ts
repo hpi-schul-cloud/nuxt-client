@@ -244,7 +244,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: "/rooms/courses-list",
-		component: () => import("@/pages/course-room/CourseRoomList.page.vue"),
+		component: () => import("@/pages/course-rooms/CourseRoomList.page.vue"),
 		name: "course-room-list",
 	},
 	{
@@ -254,14 +254,14 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: "/rooms/courses-overview",
-		component: () => import("@/pages/course-room/CourseRoomOverview.page.vue"),
+		component: () => import("@/pages/course-rooms/CourseRoomOverview.page.vue"),
 		name: "course-room-overview",
 	},
 	{
 		// TODO BC-7822, BC-7823 target this route at new room details page
 		// and decide on that page which sub-component (page) has to be rendered
 		path: `/rooms/:id(${REGEX_ID})`,
-		component: () => import("@/pages/course-room/CourseRoomDetails.page.vue"),
+		component: () => import("@/pages/course-rooms/CourseRoomDetails.page.vue"),
 		name: "rooms-id",
 	},
 	{

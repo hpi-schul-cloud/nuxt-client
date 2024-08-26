@@ -1,4 +1,4 @@
-import RoomExternalToolsErrorDialog from "@/pages/course-room/tools/RoomExternalToolsErrorDialog.vue";
+import RoomExternalToolsErrorDialog from "@/pages/course-rooms/tools/RoomExternalToolsErrorDialog.vue";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
