@@ -107,7 +107,20 @@ const createMockStore = () => {
 };
 
 describe("@/components/molecules/AddContentModal", () => {
-	const setup = (props: any) => {
+	const setup = (props: {
+		showCopyModal: boolean;
+		resource: {
+			title: string;
+			url: string;
+			client: string;
+		};
+		contentId: string;
+		items?: Array<{
+			title: string;
+			url: string;
+			client: string;
+		}>;
+	}) => {
 		setupStores({
 			contentModule: ContentModule,
 		});
