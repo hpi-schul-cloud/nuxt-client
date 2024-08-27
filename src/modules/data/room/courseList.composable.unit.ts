@@ -18,6 +18,7 @@ import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
 
 jest.mock("@data-room/CourseApi.composable");
+jest.mock("@data-room/CourseInfoApi.composable");
 
 describe("courseList.composable", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
