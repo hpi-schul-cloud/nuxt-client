@@ -9,11 +9,9 @@
 		<template #header>
 			<div class="d-flex ma-2 mt-3">
 				<h1
-					class="text-h3 pb-2 course-title"
+					class="text-h3 pb-2 ma-0 course-title"
 					:class="{ 'pr-5': roomData.isArchived }"
 					data-testid="courses-course-title"
-					role="heading"
-					aria-level="1"
 				>
 					{{ roomData.title }}
 				</h1>
