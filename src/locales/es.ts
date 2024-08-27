@@ -1495,6 +1495,31 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Elige un curso / asignatura",
 	"pages.content.placeholder.noLessonTopic": "Crear un tema en el curso",
 	"pages.content.preview_img.alt": "Vista previa de la imagen",
+	"pages.courseRoomDetails.fab.add.board": "Nuevo tablero",
+	"pages.courseRoomDetails.fab.add.columnBoard": "Nuevo tablero de columna",
+	"pages.courseRoomDetails.fab.add.lesson": "Nuevo tema",
+	"pages.courseRoomDetails.fab.add.task": "Nuevo tarea",
+	"pages.courseRooms.groupName": "Cursos",
+	"pages.courseRooms.headerSection.archived": "Archivo",
+	"pages.courseRooms.headerSection.menu.ariaLabel": "Menú del curso",
+	"pages.courseRooms.headerSection.synchronized": "Sincronizado",
+	"pages.courseRooms.headerSection.toCourseFiles": "A los archivos del curso",
+	"pages.courseRooms.index.courses.active": "Cursos actuales",
+	"pages.courseRooms.index.courses.all": "Todos los cursos",
+	"pages.courseRooms.index.courses.arrangeCourses": "Organizar cursos",
+	"pages.courseRooms.index.search.label": "Buscar curso",
+	"pages.courseRooms.menuItems.endSync": "Finalizar sincronización",
+	"pages.courseRooms.tabLabel.groups": "Grupos",
+	"pages.courseRooms.tabLabel.tools": "Herramientas",
+	"pages.courseRooms.tabLabel.toolsOld": "Herramientas",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
+		"Crear videoconferencia {roomName}",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Todas las usuarias participan como moderadoras",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
+		"Silenciar a las participantes al entrar",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Aprobación del moderador antes de poder ingresar a la sala",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",
@@ -1524,10 +1549,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Seleccionar vista",
 	"pages.room.dialog.boardLayout.singleColumn": "monocolumna",
 	"pages.room.dialog.boardLayout.multiColumn": "multicolumna",
-	"pages.room.fab.add.lesson": "Nuevo tema",
-	"pages.room.fab.add.board": "Nuevo tablero",
-	"pages.room.fab.add.columnBoard": "Nuevo tablero de columna",
-	"pages.room.fab.add.task": "Nuevo tarea",
 	"pages.room.itemDelete.text": '¿Eliminar {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
@@ -1556,12 +1577,6 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",
 	"pages.rooms.fab.import.course": "Importar curso",
-	"pages.rooms.groupName": "Cursos",
-	"pages.rooms.headerSection.archived": "Archivo",
-	"pages.rooms.headerSection.synchronized": "Sincronizado",
-	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
-	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
-	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.rooms.importCourse.btn.continue": "Continuar",
 	"pages.rooms.importCourse.codeError": "El código del curso no está en uso.",
 	"pages.rooms.importCourse.importError":
@@ -1586,22 +1601,7 @@ export default {
 		"El curso {name} se ha importado correctamente.",
 	"pages.rooms.ccImportCourse.error":
 		"Se ha producido un error al importar el curso.",
-	"pages.rooms.index.courses.active": "Cursos actuales",
-	"pages.rooms.index.courses.all": "Todos los cursos",
-	"pages.rooms.index.courses.arrangeCourses": "Organizar cursos",
-	"pages.rooms.index.search.label": "Buscar curso",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
-	"pages.rooms.tabLabel.groups": "Grupos",
-	"pages.rooms.tabLabel.tools": "Herramientas",
-	"pages.rooms.tabLabel.toolsOld": "Herramientas",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Todas las usuarias participan como moderadoras",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
-		"Silenciar a las participantes al entrar",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Aprobación del moderador antes de poder ingresar a la sala",
-	"pages.rooms.tools.configureVideoconferenceDialog.title":
-		"Crear videoconferencia {roomName}",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Herramienta {toolName}“ desactivada",
