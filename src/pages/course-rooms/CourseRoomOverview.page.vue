@@ -231,7 +231,7 @@ export default defineComponent({
 		await courseRoomListModule.fetchAllElements();
 		this.getDeviceDims();
 		if (this.hasRoomsBeingCopied) {
-			this.initCoursePolling(0, new Date());
+			this.initCoursePolling(new Date());
 		}
 	},
 	methods: {
@@ -396,13 +396,13 @@ export default defineComponent({
 				timeout: 5000,
 			});
 		},
-		initCoursePolling(count = 0, started) {
+		initCoursePolling(started, count = 0) {
 			const nextTimeout = count * count * 1000 + 5000;
 			setTimeout(
 				async () => {
 					await courseRoomListModule.fetch({ indicateLoading: false });
 					if (this.hasRoomsBeingCopied) {
-						this.initCoursePolling(count + 1, started ?? new Date());
+						this.initCoursePolling(started ?? new Date(), count + 1);
 					} else {
 						this.notifierModule?.show({
 							text: this.$t("components.molecules.copyResult.timeoutSuccess"),
