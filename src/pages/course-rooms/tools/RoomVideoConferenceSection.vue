@@ -36,9 +36,12 @@
 						data-testId="videoconference-config-dialog-title"
 					>
 						{{
-							$t("pages.rooms.tools.configureVideoconferenceDialog.title", {
-								roomName: roomName,
-							})
+							$t(
+								"pages.courseRooms.tools.configureVideoconferenceDialog.title",
+								{
+									roomName: roomName,
+								}
+							)
 						}}
 					</h2>
 				</v-card-title>
@@ -47,7 +50,9 @@
 						v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
 						data-testId="every-attendee-joins-muted"
 						:label="
-							$t('pages.rooms.tools.configureVideoconferenceDialog.text.mute')
+							$t(
+								'pages.courseRooms.tools.configureVideoconferenceDialog.text.mute'
+							)
 						"
 						:hide-details="true"
 					/>
@@ -56,7 +61,7 @@
 						data-testId="moderator-must-approve-join-requests"
 						:label="
 							$t(
-								'pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom'
+								'pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom'
 							)
 						"
 						:hide-details="true"
@@ -66,7 +71,7 @@
 						data-testId="everybody-joins-as-moderator"
 						:label="
 							$t(
-								'pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission'
+								'pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission'
 							)
 						"
 						:hide-details="true"
