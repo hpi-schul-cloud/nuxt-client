@@ -61,6 +61,7 @@ const { isTeacher } = useBoardPermissions();
 
 const autofocus: Ref<boolean> = ref(false);
 const element: Ref<DeletedElementResponse> = toRef(props, "element");
+
 useBoardFocusHandler(element.value.id, ref(null), () => {
 	autofocus.value = true;
 });
