@@ -27,6 +27,7 @@
 		</div>
 	</template>
 </template>
+
 <script setup lang="ts">
 import { useRoomsState } from "@data-room";
 import { onMounted } from "vue";
@@ -41,12 +42,11 @@ onMounted(() => {
 	fetchRooms();
 });
 </script>
+
 <style lang="scss">
 @import "@/styles/settings.scss";
 
 .room-tile-grid {
-	// display: block;
-
 	@media #{map-get($display-breakpoints, "sm-and-up")} {
 		display: flex;
 		flex-wrap: wrap;
