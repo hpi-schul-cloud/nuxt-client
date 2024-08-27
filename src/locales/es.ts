@@ -236,6 +236,10 @@ export default {
 		"Con el inicio de la migración, todos los estudiantes y profesores de su escuela podrán cambiar el sistema de registro a moin.schule. Los usuarios que hayan cambiado el sistema de inicio de sesión solo podrán iniciar sesión a través de moin.schule.",
 	"components.administration.adminMigrationSection.startWarningCard.title":
 		"¿Realmente desea iniciar la migración de la cuenta a moin.schule ahora?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
+		"¿Estás seguro de que quieres restablecer los accesos directos encontrados automáticamente?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"El asistente de migración ha encontrado automáticamente los enlaces de las cuentas basándose en los nombres de usuario.<br><br>¿Desea restablecer ahora los enlaces encontrados automáticamente?",
 	"components.administration.externalToolsSection.action.add":
 		"Añadir Herramienta Externa",
 	"components.administration.externalToolsSection.action.delete":
@@ -427,6 +431,7 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Por favor ingrese un título.",
 	"components.cardElement.titleElement": "Elemento título",
+	"components.cardElement.deletedElement": "Contenido eliminado",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.datePicker.validation.format":
@@ -1051,6 +1056,8 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Por favor, utilice un formato de URL válido",
 	"pages.administration.migration.back": "Paso anterior",
+	"pages.administration.migration.clearAutoMatches":
+		"Restablecer accesos directos automáticos",
 	"pages.administration.migration.backToAdministration":
 		"Volver a Administración",
 	"pages.administration.migration.brbSchulportal": "weBBSchule",

@@ -433,6 +433,21 @@ export default class ImportUsersModule extends VuexModule {
 		}
 	}
 
+	@Action
+	async clearAllAutoMatches(): Promise<void> {
+		try {
+			await this.importUserApi.importUserControllerClearAllAutoMatches();
+		} catch (error: unknown) {
+			const apiError: ApiResponseError | ApiValidationError =
+				mapAxiosErrorToResponseError(error);
+
+			this.setBusinessError({
+				statusCode: apiError.code,
+				message: apiError.message,
+			});
+		}
+	}
+
 	private get importUserApi(): UserImportApiInterface {
 		return UserImportApiFactory(undefined, "/v3", $axios);
 	}
