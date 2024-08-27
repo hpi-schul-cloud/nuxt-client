@@ -5,11 +5,14 @@ import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useCourseApi } from "./courseApi.composable";
-import { CourseInfo } from "./type/course-info";
+import { CourseInfo } from "./type";
 import { CourseInfoMapper } from "./course-info.mapper";
+import { useCourseInfoApi } from "./courseInfoApi.composable";
 
 export const useCourseList = () => {
-	const { loadCoursesForSchool, deleteCourseById } = useCourseApi();
+	const { deleteCourseById } = useCourseApi();
+	const { loadCoursesForSchool } = useCourseInfoApi();
+
 	const { t } = useI18n();
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 

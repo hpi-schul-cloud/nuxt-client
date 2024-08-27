@@ -11,22 +11,27 @@ import {
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { CourseInfo, useCourseApi, useCourseList } from "./index";
-import { courseInfoResponseFactory } from "@@/tests/test-utils/factory/courseInfoResponseFactory";
+import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory/courseInfoDataResponseFactory";
 import { Pagination } from "@/store/types/commons";
 import { courseInfoFactory } from "@@/tests/test-utils/factory/courseInfoFactory";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { useCourseInfoApi } from "./courseInfoApi.composable";
 
 jest.mock("@data-room/CourseApi.composable");
 
 describe("courseList.composable", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
+	let useCourseInfoApiMock: DeepMocked<ReturnType<typeof useCourseInfoApi>>;
+
 	const notifierModule: jest.Mocked<NotifierModule> =
 		createModuleMocks(NotifierModule);
 
 	beforeEach(() => {
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>();
+		useCourseInfoApiMock = createMock<ReturnType<typeof useCourseInfoApi>>();
 
 		jest.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
+		jest.mocked(useCourseInfoApi).mockReturnValue(useCourseInfoApiMock);
 	});
 
 	afterEach(() => {
@@ -75,7 +80,7 @@ describe("courseList.composable", () => {
 			const setup = () => {
 				const courseList: CourseInfoListResponse = {
 					data: [
-						courseInfoResponseFactory.build({
+						courseInfoDataResponseFactory.build({
 							syncedGroup: "",
 							teacherNames: [],
 							classNames: [],
@@ -86,7 +91,7 @@ describe("courseList.composable", () => {
 					skip: 0,
 					total: 10,
 				};
-				useCourseApiMock.loadCoursesForSchool.mockResolvedValue(
+				useCourseInfoApiMock.loadCoursesForSchool.mockResolvedValue(
 					mockApiResponse({ data: courseList })
 				);
 
@@ -110,7 +115,7 @@ describe("courseList.composable", () => {
 
 				await composable.fetchCourses(CourseStatusQueryType.Current);
 
-				expect(useCourseApiMock.loadCoursesForSchool).toHaveBeenCalledWith(
+				expect(useCourseInfoApiMock.loadCoursesForSchool).toHaveBeenCalledWith(
 					"current",
 					10,
 					0,
@@ -155,7 +160,7 @@ describe("courseList.composable", () => {
 				const errorResponse = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(errorResponse);
 
-				useCourseApiMock.loadCoursesForSchool.mockRejectedValue(apiError);
+				useCourseInfoApiMock.loadCoursesForSchool.mockRejectedValue(apiError);
 
 				const composable = mountComposable(() => useCourseList(), {
 					global: {

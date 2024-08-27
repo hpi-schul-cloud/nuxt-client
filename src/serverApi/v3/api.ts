@@ -1814,15 +1814,52 @@ export interface CourseExportBodyParams {
 /**
  * 
  * @export
+ * @interface CourseInfoDataResponse
+ */
+export interface CourseInfoDataResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseInfoDataResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseInfoDataResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CourseInfoDataResponse
+     */
+    teacherNames: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CourseInfoDataResponse
+     */
+    classNames: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof CourseInfoDataResponse
+     */
+    syncedGroup?: string;
+}
+/**
+ * 
+ * @export
  * @interface CourseInfoListResponse
  */
 export interface CourseInfoListResponse {
     /**
      * The items for the current page.
-     * @type {Array<CourseInfoResponse>}
+     * @type {Array<CourseInfoDataResponse>}
      * @memberof CourseInfoListResponse
      */
-    data: Array<CourseInfoResponse>;
+    data: Array<CourseInfoDataResponse>;
     /**
      * The total amount of items.
      * @type {number}
@@ -1860,24 +1897,6 @@ export interface CourseInfoResponse {
      * @memberof CourseInfoResponse
      */
     name: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof CourseInfoResponse
-     */
-    teacherNames: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof CourseInfoResponse
-     */
-    classNames: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof CourseInfoResponse
-     */
-    syncedGroup?: string;
 }
 /**
  * 
@@ -13103,6 +13122,170 @@ export class CollaborativeTextEditorApi extends BaseAPI implements Collaborative
 
 
 /**
+ * CourseInfoApi - axios parameter creator
+ * @export
+ */
+export const CourseInfoApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get a list of courses for school.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {CourseSortQueryType} [sortBy] 
+         * @param {CourseStatusQueryType} [type] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseInfoControllerGetCoursesForSchool: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/course-info`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (sortOrder !== undefined) {
+                localVarQueryParameter['sortOrder'] = sortOrder;
+            }
+
+            if (sortBy !== undefined) {
+                localVarQueryParameter['sortBy'] = sortBy;
+            }
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * CourseInfoApi - functional programming interface
+ * @export
+ */
+export const CourseInfoApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = CourseInfoApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of courses for school.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {CourseSortQueryType} [sortBy] 
+         * @param {CourseStatusQueryType} [type] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async courseInfoControllerGetCoursesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseInfoListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.courseInfoControllerGetCoursesForSchool(skip, limit, sortOrder, sortBy, type, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * CourseInfoApi - factory interface
+ * @export
+ */
+export const CourseInfoApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = CourseInfoApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of courses for school.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {'asc' | 'desc'} [sortOrder] 
+         * @param {CourseSortQueryType} [sortBy] 
+         * @param {CourseStatusQueryType} [type] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        courseInfoControllerGetCoursesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any): AxiosPromise<CourseInfoListResponse> {
+            return localVarFp.courseInfoControllerGetCoursesForSchool(skip, limit, sortOrder, sortBy, type, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * CourseInfoApi - interface
+ * @export
+ * @interface CourseInfoApi
+ */
+export interface CourseInfoApiInterface {
+    /**
+     * 
+     * @summary Get a list of courses for school.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {CourseSortQueryType} [sortBy] 
+     * @param {CourseStatusQueryType} [type] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseInfoApiInterface
+     */
+    courseInfoControllerGetCoursesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any): AxiosPromise<CourseInfoListResponse>;
+
+}
+
+/**
+ * CourseInfoApi - object-oriented interface
+ * @export
+ * @class CourseInfoApi
+ * @extends {BaseAPI}
+ */
+export class CourseInfoApi extends BaseAPI implements CourseInfoApiInterface {
+    /**
+     * 
+     * @summary Get a list of courses for school.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {'asc' | 'desc'} [sortOrder] 
+     * @param {CourseSortQueryType} [sortBy] 
+     * @param {CourseStatusQueryType} [type] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CourseInfoApi
+     */
+    public courseInfoControllerGetCoursesForSchool(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any) {
+        return CourseInfoApiFp(this.configuration).courseInfoControllerGetCoursesForSchool(skip, limit, sortOrder, sortBy, type, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * CoursesApi - axios parameter creator
  * @export
  */
@@ -13188,65 +13371,6 @@ export const CoursesApiAxiosParamCreator = function (configuration?: Configurati
 
             if (limit !== undefined) {
                 localVarQueryParameter['limit'] = limit;
-            }
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Get a list of all courses.
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
-         * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {CourseSortQueryType} [sortBy] 
-         * @param {CourseStatusQueryType} [type] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        courseControllerGetAllCourses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/courses/all`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (skip !== undefined) {
-                localVarQueryParameter['skip'] = skip;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
-
-            if (sortOrder !== undefined) {
-                localVarQueryParameter['sortOrder'] = sortOrder;
-            }
-
-            if (sortBy !== undefined) {
-                localVarQueryParameter['sortBy'] = sortBy;
-            }
-
-            if (type !== undefined) {
-                localVarQueryParameter['type'] = type;
             }
 
 
@@ -13498,21 +13622,6 @@ export const CoursesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get a list of all courses.
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
-         * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {CourseSortQueryType} [sortBy] 
-         * @param {CourseStatusQueryType} [type] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async courseControllerGetAllCourses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CourseInfoListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerGetAllCourses(skip, limit, sortOrder, sortBy, type, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Get common cartridge metadata of a course by Id.
          * @param {string} courseId The id of the course
          * @param {*} [options] Override http request option.
@@ -13600,20 +13709,6 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
         },
         /**
          * 
-         * @summary Get a list of all courses.
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
-         * @param {'asc' | 'desc'} [sortOrder] 
-         * @param {CourseSortQueryType} [sortBy] 
-         * @param {CourseStatusQueryType} [type] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        courseControllerGetAllCourses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any): AxiosPromise<CourseInfoListResponse> {
-            return localVarFp.courseControllerGetAllCourses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Get common cartridge metadata of a course by Id.
          * @param {string} courseId The id of the course
          * @param {*} [options] Override http request option.
@@ -13692,20 +13787,6 @@ export interface CoursesApiInterface {
      * @memberof CoursesApiInterface
      */
     courseControllerFindForUser(skip?: number, limit?: number, options?: any): AxiosPromise<CourseMetadataListResponse>;
-
-    /**
-     * 
-     * @summary Get a list of all courses.
-     * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 10.
-     * @param {'asc' | 'desc'} [sortOrder] 
-     * @param {CourseSortQueryType} [sortBy] 
-     * @param {CourseStatusQueryType} [type] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CoursesApiInterface
-     */
-    courseControllerGetAllCourses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any): AxiosPromise<CourseInfoListResponse>;
 
     /**
      * 
@@ -13790,22 +13871,6 @@ export class CoursesApi extends BaseAPI implements CoursesApiInterface {
      */
     public courseControllerFindForUser(skip?: number, limit?: number, options?: any) {
         return CoursesApiFp(this.configuration).courseControllerFindForUser(skip, limit, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Get a list of all courses.
-     * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 10.
-     * @param {'asc' | 'desc'} [sortOrder] 
-     * @param {CourseSortQueryType} [sortBy] 
-     * @param {CourseStatusQueryType} [type] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CoursesApi
-     */
-    public courseControllerGetAllCourses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: CourseSortQueryType, type?: CourseStatusQueryType, options?: any) {
-        return CoursesApiFp(this.configuration).courseControllerGetAllCourses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

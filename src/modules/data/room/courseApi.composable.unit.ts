@@ -1,13 +1,7 @@
 import * as serverApi from "@/serverApi/v3/api";
-import {
-	CourseInfoListResponse,
-	CourseSortQueryType,
-	CourseStatusQueryType,
-} from "@/serverApi/v3/api";
 import { envsFactory, mockApiResponse } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useCourseApi } from "./courseApi.composable";
-import { courseInfoResponseFactory } from "@@/tests/test-utils/factory/courseInfoResponseFactory";
 import { AxiosInstance } from "axios";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -63,46 +57,6 @@ describe("courseApi.composable", () => {
 			expect(
 				courseApi.courseControllerStartSynchronization
 			).toHaveBeenCalledWith("courseId", { groupId: "groupId" });
-		});
-	});
-
-	describe("loadCoursesForSchool", () => {
-		const setup = () => {
-			const infoResponse: CourseInfoListResponse = {
-				data: [courseInfoResponseFactory.build()],
-				limit: 10,
-				skip: 0,
-				total: 1,
-			};
-			courseApi.courseControllerGetAllCourses.mockResolvedValueOnce(
-				mockApiResponse({
-					data: infoResponse,
-				})
-			);
-
-			return {
-				infoResponse,
-			};
-		};
-
-		it("should call the api to find courses by school", async () => {
-			setup();
-
-			await useCourseApi().loadCoursesForSchool(
-				CourseStatusQueryType.Current,
-				10,
-				0,
-				CourseSortQueryType.Name,
-				"asc"
-			);
-
-			expect(courseApi.courseControllerGetAllCourses).toHaveBeenCalledWith(
-				0,
-				10,
-				"asc",
-				"name",
-				"current"
-			);
 		});
 	});
 
