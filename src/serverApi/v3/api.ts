@@ -4007,65 +4007,11 @@ export interface LoginRequestBody {
  */
 export interface LoginResponse {
     /**
-     * Id of the corresponding client.
-     * @type {string}
-     * @memberof LoginResponse
-     */
-    client_id: string;
-    /**
-     * The id/challenge of the consent login request.
-     * @type {string}
-     * @memberof LoginResponse
-     */
-    challenge: string;
-    /**
      * 
-     * @type {OauthClientResponse}
-     * @memberof LoginResponse
-     */
-    client: OauthClientResponse;
-    /**
-     * 
-     * @type {OidcContextResponse}
-     * @memberof LoginResponse
-     */
-    oidc_context: OidcContextResponse;
-    /**
-     * The original oauth2.0 authorization url request by the client.
      * @type {string}
      * @memberof LoginResponse
      */
-    request_url: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof LoginResponse
-     */
-    requested_access_token_audience: Array<string>;
-    /**
-     * The request scopes of the login request.
-     * @type {Array<string>}
-     * @memberof LoginResponse
-     */
-    requested_scope?: Array<string>;
-    /**
-     * The login session id. This parameter is used as sid for the oidc front-/backchannel logout.
-     * @type {string}
-     * @memberof LoginResponse
-     */
-    session_id: string;
-    /**
-     * Skip, if true, implies that the client has requested the same scopes from the same user previously.
-     * @type {boolean}
-     * @memberof LoginResponse
-     */
-    skip: boolean;
-    /**
-     * User id of the end-user that is authenticated.
-     * @type {string}
-     * @memberof LoginResponse
-     */
-    subject: string;
+    accessToken: string;
 }
 /**
  * 
@@ -5677,6 +5623,73 @@ export interface OauthConfigResponse {
      * @memberof OauthConfigResponse
      */
     jwksEndpoint: string;
+}
+/**
+ * 
+ * @export
+ * @interface OauthProviderLoginResponse
+ */
+export interface OauthProviderLoginResponse {
+    /**
+     * Id of the corresponding client.
+     * @type {string}
+     * @memberof OauthProviderLoginResponse
+     */
+    client_id: string;
+    /**
+     * The id/challenge of the consent login request.
+     * @type {string}
+     * @memberof OauthProviderLoginResponse
+     */
+    challenge: string;
+    /**
+     * 
+     * @type {OauthClientResponse}
+     * @memberof OauthProviderLoginResponse
+     */
+    client: OauthClientResponse;
+    /**
+     * 
+     * @type {OidcContextResponse}
+     * @memberof OauthProviderLoginResponse
+     */
+    oidc_context: OidcContextResponse;
+    /**
+     * The original oauth2.0 authorization url request by the client.
+     * @type {string}
+     * @memberof OauthProviderLoginResponse
+     */
+    request_url: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OauthProviderLoginResponse
+     */
+    requested_access_token_audience: Array<string>;
+    /**
+     * The request scopes of the login request.
+     * @type {Array<string>}
+     * @memberof OauthProviderLoginResponse
+     */
+    requested_scope?: Array<string>;
+    /**
+     * The login session id. This parameter is used as sid for the oidc front-/backchannel logout.
+     * @type {string}
+     * @memberof OauthProviderLoginResponse
+     */
+    session_id: string;
+    /**
+     * Skip, if true, implies that the client has requested the same scopes from the same user previously.
+     * @type {boolean}
+     * @memberof OauthProviderLoginResponse
+     */
+    skip: boolean;
+    /**
+     * User id of the end-user that is authenticated.
+     * @type {string}
+     * @memberof OauthProviderLoginResponse
+     */
+    subject: string;
 }
 /**
  * 
@@ -17798,7 +17811,7 @@ export const Oauth2ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async oauthProviderControllerGetLoginRequest(challenge: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<LoginResponse>> {
+        async oauthProviderControllerGetLoginRequest(challenge: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OauthProviderLoginResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.oauthProviderControllerGetLoginRequest(challenge, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -17931,7 +17944,7 @@ export const Oauth2ApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        oauthProviderControllerGetLoginRequest(challenge: string, options?: any): AxiosPromise<LoginResponse> {
+        oauthProviderControllerGetLoginRequest(challenge: string, options?: any): AxiosPromise<OauthProviderLoginResponse> {
             return localVarFp.oauthProviderControllerGetLoginRequest(challenge, options).then((request) => request(axios, basePath));
         },
         /**
@@ -18056,7 +18069,7 @@ export interface Oauth2ApiInterface {
      * @throws {RequiredError}
      * @memberof Oauth2ApiInterface
      */
-    oauthProviderControllerGetLoginRequest(challenge: string, options?: any): AxiosPromise<LoginResponse>;
+    oauthProviderControllerGetLoginRequest(challenge: string, options?: any): AxiosPromise<OauthProviderLoginResponse>;
 
     /**
      * 
