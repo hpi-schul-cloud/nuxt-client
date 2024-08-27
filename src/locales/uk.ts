@@ -1476,6 +1476,31 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Вибрати курс/предмет",
 	"pages.content.placeholder.noLessonTopic": "Створити тему в курсі",
 	"pages.content.preview_img.alt": "Попередній перегляд зображення",
+	"pages.courseRoomDetails.fab.add.lesson": "Створити тему",
+	"pages.courseRoomDetails.fab.add.task": "Створити завдання",
+	"pages.courseRoomDetails.fab.add.board": "Нова дошка",
+	"pages.courseRoomDetails.fab.add.columnBoard": "Нова дошка",
+	"pages.courseRooms.groupName": "Курси",
+	"pages.courseRooms.headerSection.archived": "Архів",
+	"pages.courseRooms.headerSection.menu.ariaLabel": "Меню курсу",
+	"pages.courseRooms.headerSection.synchronized": "Синхронізовано",
+	"pages.courseRooms.headerSection.toCourseFiles": "До файлів курсу",
+	"pages.courseRooms.index.courses.active": "Поточні курси",
+	"pages.courseRooms.index.courses.all": "Всі курси",
+	"pages.courseRooms.index.courses.arrangeCourses": "Упорядкувати курси",
+	"pages.courseRooms.index.search.label": "Пошук курсу",
+	"pages.courseRooms.menuItems.endSync": "Завершити синхронізацію",
+	"pages.courseRooms.tabLabel.groups": "Групи",
+	"pages.courseRooms.tabLabel.tools": "Інструмент",
+	"pages.courseRooms.tabLabel.toolsOld": "Інструмент",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
+		"Створити відеоконференцію {roomName}",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Усі користувачі беруть участь як модератори",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
+		"Вимкнення звуку учасників при вході",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Схвалення модератором перед входом до кімнати",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",
@@ -1504,10 +1529,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Виберіть вид",
 	"pages.room.dialog.boardLayout.singleColumn": "одноколонкові",
 	"pages.room.dialog.boardLayout.multiColumn": "багатоколонкові",
-	"pages.room.fab.add.lesson": "Створити тему",
-	"pages.room.fab.add.board": "Нова дошка",
-	"pages.room.fab.add.columnBoard": "Нова дошка",
-	"pages.room.fab.add.task": "Створити завдання",
 	"pages.room.itemDelete.text":
 		'{itemType} "{itemTitle}" буде видалена. Ви впевнені, що хочете видалити?',
 	"pages.room.itemDelete.title": "Видалити елемент",
@@ -1536,12 +1557,6 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
 	"pages.rooms.fab.import.course": "Імпортувати курс",
-	"pages.rooms.groupName": "Курси",
-	"pages.rooms.headerSection.archived": "Архів",
-	"pages.rooms.headerSection.synchronized": "Синхронізовано",
-	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
-	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
-	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",
 	"pages.rooms.importCourse.codeError": "Код курсу не використовується.",
 	"pages.rooms.importCourse.importError":
@@ -1564,22 +1579,7 @@ export default {
 	"pages.rooms.ccImportCourse.loading": "Імпорт виконується...",
 	"pages.rooms.ccImportCourse.success": "Курс {name} успішно імпортовано.",
 	"pages.rooms.ccImportCourse.error": "Виникла помилка під час імпорту курсу.",
-	"pages.rooms.index.courses.active": "Поточні курси",
-	"pages.rooms.index.courses.all": "Всі курси",
-	"pages.rooms.index.courses.arrangeCourses": "Упорядкувати курси",
-	"pages.rooms.index.search.label": "Пошук курсу",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
-	"pages.rooms.tabLabel.groups": "Групи",
-	"pages.rooms.tabLabel.tools": "Інструмент",
-	"pages.rooms.tabLabel.toolsOld": "Інструмент",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Усі користувачі беруть участь як модератори",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
-		"Вимкнення звуку учасників при вході",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Схвалення модератором перед входом до кімнати",
-	"pages.rooms.tools.configureVideoconferenceDialog.title":
-		"Створити відеоконференцію {roomName}",
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Інструмент „{toolName}“ вимкнено",
