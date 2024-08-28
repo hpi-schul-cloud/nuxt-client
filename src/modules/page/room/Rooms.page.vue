@@ -8,7 +8,7 @@
 </template>
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { RoomGrid } from "@feature-room-directory";
+import { RoomGrid } from "@feature-room";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();

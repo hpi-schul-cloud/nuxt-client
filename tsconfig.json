@@ -45,7 +45,7 @@
 			"@feature-news-form": ["src/modules/feature/news-form"],
 			"@feature-media-shelf": ["src/modules/feature/media-shelf"],
 			"@feature-board-deleted-element": ["src/modules/feature/board-deleted-element"],
-			"@feature-room-directory": ["src/modules/feature/room-directory"],
+			"@feature-room": ["src/modules/feature/room"],
 			"@ui-alert": ["src/modules/ui/alert"],
 			"@ui-board": ["src/modules/ui/board"],
 			"@ui-chip": ["src/modules/ui/chip"],
