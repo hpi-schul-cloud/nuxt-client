@@ -27,13 +27,7 @@
 			</div>
 		</template>
 		<template #menu>
-			<BoardMenu
-				:scope="BoardMenuScope.MEDIA_EXTERNAL_TOOL_ELEMENT"
-				has-background
-				data-testid="deleted-element-menu-btn"
-			>
-				<BoardMenuActionDelete @click="onDelete" />
-			</BoardMenu>
+			<MediaBoardExternalToolElementMenu @delete:element="onDelete" />
 		</template>
 	</MediaBoardElementDisplay>
 </template>
@@ -51,13 +45,13 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
-import { BoardMenu, BoardMenuActionDelete, BoardMenuScope } from "@ui-board";
 import { WarningChip } from "@ui-chip";
 import { useErrorNotification } from "@util-error-notification";
 import { computed, ComputedRef, onUnmounted, PropType, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
+import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 
 const props = defineProps({
 	element: {
@@ -148,11 +142,8 @@ onUnmounted(() => {
 
 const { isDragging } = useDragAndDrop();
 
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
-	if (shouldDelete) {
-		emit("delete:element", props.element.id);
-	}
+const onDelete = async () => {
+	emit("delete:element", props.element.id);
 };
 
 const onClick = async () => {
