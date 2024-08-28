@@ -916,6 +916,9 @@ export default {
 	"pages.administration.common.label.active": "Actual",
 	"pages.administration.classes.manage": "Administrar clase",
 	"pages.administration.classes.header.sync": "Sincronizado con",
+	"pages.administration.courses.delete": "Eliminar curso",
+	"pages.administration.courses.deleteDialog.content":
+		'¿Realmente quieres este curso? "<i>{itemName}</i>" borrar?',
 	"pages.administration.courses.index.add": "Agregar curso",
 	"pages.administration.courses.edit": "Editar curso",
 	"pages.administration.index.title": "Administración",

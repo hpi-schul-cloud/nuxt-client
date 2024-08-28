@@ -892,6 +892,9 @@ export default {
 	"pages.administration.common.label.active": "Current",
 	"pages.administration.classes.manage": "Manage class",
 	"pages.administration.classes.header.sync": "Synchronized with",
+	"pages.administration.courses.delete": "Delete course",
+	"pages.administration.courses.deleteDialog.content":
+		'Do you really want this course "<i>{itemName}</i>" to delete?',
 	"pages.administration.courses.index.add": "Add course",
 
 	"pages.administration.courses.edit": "Edit course",

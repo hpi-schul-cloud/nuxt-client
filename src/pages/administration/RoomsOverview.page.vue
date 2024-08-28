@@ -91,7 +91,7 @@
 		>
 			<template #title>
 				<h2 class="text-h4 my-2">
-					{{ t("pages.administration.courses.deleteDialog.title") }}
+					{{ t("pages.administration.courses.delete") }}
 				</h2>
 			</template>
 			<template #content>
