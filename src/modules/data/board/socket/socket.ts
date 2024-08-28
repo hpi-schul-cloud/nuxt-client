@@ -26,7 +26,7 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 		instance.on("connect", async function () {
 			console.log("connected");
 			if (isInitialConnection.value) return;
-			if (timeoutFn.isPending.value) {
+			if (timeoutFn.isPending?.value) {
 				timeoutFn.stop();
 				return;
 			}
