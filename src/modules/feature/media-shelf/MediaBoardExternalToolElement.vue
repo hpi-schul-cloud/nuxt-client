@@ -26,6 +26,15 @@
 				</WarningChip>
 			</div>
 		</template>
+		<template #menu>
+			<BoardMenu
+				:scope="BoardMenuScope.MEDIA_EXTERNAL_TOOL_ELEMENT"
+				has-background
+				data-testid="deleted-element-menu-btn"
+			>
+				<BoardMenuActionDelete @click="onDelete" />
+			</BoardMenu>
+		</template>
 	</MediaBoardElementDisplay>
 </template>
 
@@ -42,6 +51,7 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
+import { BoardMenu, BoardMenuActionDelete, BoardMenuScope } from "@ui-board";
 import { WarningChip } from "@ui-chip";
 import { useErrorNotification } from "@util-error-notification";
 import { computed, ComputedRef, onUnmounted, PropType, Ref, watch } from "vue";
@@ -55,6 +65,10 @@ const props = defineProps({
 		required: true,
 	},
 });
+
+const emit = defineEmits<{
+	(e: "delete:element", elementId: string): void;
+}>();
 
 const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -133,6 +147,13 @@ onUnmounted(() => {
 });
 
 const { isDragging } = useDragAndDrop();
+
+const onDelete = async (confirmation: Promise<boolean>) => {
+	const shouldDelete = await confirmation;
+	if (shouldDelete) {
+		emit("delete:element", props.element.id);
+	}
+};
 
 const onClick = async () => {
 	// Loading the launch request has failed

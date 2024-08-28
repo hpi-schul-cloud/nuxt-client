@@ -1,5 +1,5 @@
 <template>
-	<BoardMenu scope="externalToolElement">
+	<BoardMenu :scope="BoardMenuScope.EXTERNAL_TOOL_ELEMENT" has-background>
 		<BoardMenuActionMoveUp @click="onMoveUp" />
 		<BoardMenuActionMoveDown @click="onMoveDown" />
 		<BoardMenuAction :icon="mdiCogOutline" @click="onEdit">
@@ -22,10 +22,16 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	BoardMenuScope,
 } from "@ui-board";
 import { defineComponent } from "vue";
 
 export default defineComponent({
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
+	},
 	components: {
 		BoardMenu,
 		BoardMenuActionDelete,

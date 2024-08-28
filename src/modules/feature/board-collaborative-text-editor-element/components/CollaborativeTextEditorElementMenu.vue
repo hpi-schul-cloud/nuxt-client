@@ -1,5 +1,8 @@
 <template>
-	<BoardMenu scope="collaborativeTextEditorElement">
+	<BoardMenu
+		:scope="BoardMenuScope.COLLABORATIVE_TEXT_EDITOR_ELEMENT"
+		has-background
+	>
 		<BoardMenuActionMoveUp @click="onMoveUp" />
 		<BoardMenuActionMoveDown @click="onMoveDown" />
 		<BoardMenuActionDelete @click="onDelete" />

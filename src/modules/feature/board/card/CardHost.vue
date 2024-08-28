@@ -35,7 +35,8 @@
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu
 							v-if="hasDeletePermission"
-							scope="card"
+							:scope="BoardMenuScope.CARD"
+							has-background
 							data-testid="card-menu-btn"
 						>
 							<BoardMenuActionEdit

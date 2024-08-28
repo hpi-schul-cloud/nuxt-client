@@ -36,7 +36,7 @@
 			<div class="mx-2">
 				<BoardMenu
 					v-if="hasEditPermission"
-					scope="board"
+					:scope="BoardMenuScope.BOARD"
 					data-testid="board-menu-btn"
 				>
 					<BoardMenuActionEdit @click="onStartEditMode" />
@@ -66,6 +66,7 @@ import {
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
 	BoardMenuActionShare,
+	BoardMenuScope,
 } from "@ui-board";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";

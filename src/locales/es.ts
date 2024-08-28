@@ -333,6 +333,7 @@ export default {
 	"components.board.menu.drawingElement": "Configuración de la pizarra",
 	"components.board.menu.externalToolElement":
 		"Configuración de la herramienta externa",
+	"components.board.menu.mediaExternalToolElement": "Configuraciones medias",
 	"components.board.menu.fileElement": "Configuración del archivo",
 	"components.board.menu.linkElement": "Configuración del enlace",
 	"components.board.menu.submissionElement": "Configuración del envío",
@@ -391,6 +392,7 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Este Etherpad es visible y editable para todos los participantes en el curso.",
 	"components.cardElement.externalToolElement": "Herramienta externa",
+	"components.cardElement.mediaExternalToolElement": "Medio",
 	"components.cardElement.fileElement": "Archivo",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",

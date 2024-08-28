@@ -50,6 +50,9 @@
 							{{ element.description }}
 						</div>
 					</template>
+					<template #menu>
+						<slot name="menu" />
+					</template>
 				</ContentElementBar>
 			</VCard>
 			<VSkeletonLoader v-else class="element border" type="image, article" />
@@ -58,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import ContentElementBar from "@ui-board/content-element/ContentElementBar.vue";
+import { ContentElementBar } from "@ui-board";
 import { useElementHover } from "@vueuse/core";
 import { PropType, ref } from "vue";
 import { MediaElementDisplay } from "./data";
