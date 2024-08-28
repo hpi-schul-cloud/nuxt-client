@@ -13,7 +13,6 @@ import { useBoardNotifier } from "@util-board";
 import { setActivePinia } from "pinia";
 import * as socketModule from "socket.io-client";
 import { useI18n } from "vue-i18n";
-import { isInitialConnection } from "./socket";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -115,23 +114,26 @@ describe("socket.ts", () => {
 	};
 
 	const setup = (
-		options: { isInitialConnection?: boolean; initializeTimeout?: boolean } = {
-			isInitialConnection: true,
-			initializeTimeout: false,
-		}
+		options: {
+			isInitialConnection?: boolean;
+			doInitializeTimeout?: boolean;
+		} = {}
 	) => {
+		const { isInitialConnection, doInitializeTimeout } = {
+			isInitialConnection: true,
+			doInitializeTimeout: false,
+			...options,
+		};
 		getOrInitialiseBoardStore().boardStore.board = boardResponseFactory.build();
 
-		useSocketConnection(dispatchMock);
-		if (options.isInitialConnection)
-			isInitialConnection.value = options.isInitialConnection;
+		useSocketConnection(dispatchMock, { isInitialConnection });
 
 		const eventCallbacks = getEventCallbacks();
 		const { emitOnSocket, emitWithAck, disconnectSocket } =
 			useSocketConnection(dispatchMock);
 
-		if (options.initializeTimeout !== undefined) {
-			initializeTimeout(options.initializeTimeout);
+		if (options.doInitializeTimeout !== undefined) {
+			initializeTimeout(doInitializeTimeout);
 		}
 		return { eventCallbacks, emitOnSocket, emitWithAck, disconnectSocket };
 	};
@@ -175,7 +177,7 @@ describe("socket.ts", () => {
 
 		it("should not show connection restored notification and call 'timeout.stop'", () => {
 			const { eventCallbacks } = setup({
-				initializeTimeout: true,
+				doInitializeTimeout: true,
 			});
 
 			eventCallbacks.disconnect();
@@ -188,7 +190,7 @@ describe("socket.ts", () => {
 		});
 
 		describe("when board exists", () => {
-			it("should reloadBoard when socket is connected", () => {
+			it("should reloadBoard when socket is reconnected", () => {
 				const { eventCallbacks } = setup();
 				eventCallbacks.disconnect();
 				eventCallbacks.connect();
@@ -289,7 +291,7 @@ describe("socket.ts", () => {
 
 		it("should call stop if timeout is pending", () => {
 			const { eventCallbacks, disconnectSocket } = setup({
-				initializeTimeout: true,
+				doInitializeTimeout: true,
 			});
 
 			eventCallbacks.disconnect();

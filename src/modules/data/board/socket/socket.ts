@@ -7,15 +7,23 @@ import { useI18n } from "vue-i18n";
 import { useTimeoutFn } from "@vueuse/shared";
 import { ref } from "vue";
 
+const isInitialConnection = ref(true);
 let instance: Socket | null = null;
-export const isInitialConnection = ref(true);
 let timeoutFn: ReturnType<typeof useTimeoutFn>;
 
-export const useSocketConnection = (dispatch: (action: Action) => void) => {
+export const useSocketConnection = (
+	dispatch: (action: Action) => void,
+	options?: { isInitialConnection: boolean }
+) => {
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
 	const { showFailure, showSuccess } = useBoardNotifier();
 	const { t } = useI18n();
+
+	isInitialConnection.value =
+		options?.isInitialConnection !== undefined
+			? options.isInitialConnection
+			: true;
 
 	if (instance === null) {
 		instance = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
