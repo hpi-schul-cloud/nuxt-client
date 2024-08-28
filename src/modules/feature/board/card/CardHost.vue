@@ -102,6 +102,7 @@ import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
+	BoardMenuScope,
 } from "@ui-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, onMounted, ref, toRef } from "vue";
@@ -115,6 +116,11 @@ import ContentElementList from "./ContentElementList.vue";
 
 export default defineComponent({
 	name: "CardHost",
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
+	},
 	components: {
 		CardSkeleton,
 		CardTitle,
@@ -216,7 +222,7 @@ export default defineComponent({
 
 			const delta = keyString === "ArrowUp" ? -1 : 1;
 
-			cardStore.moveElementRequest(
+			await cardStore.moveElementRequest(
 				props.cardId,
 				elementId,
 				elementIndex,

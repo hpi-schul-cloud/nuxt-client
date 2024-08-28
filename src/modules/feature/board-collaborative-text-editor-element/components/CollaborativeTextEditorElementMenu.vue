@@ -9,40 +9,29 @@
 	</BoardMenu>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	BoardMenuScope,
 } from "@ui-board";
-import { defineComponent } from "vue";
 
-export default defineComponent({
-	components: {
-		BoardMenu,
-		BoardMenuActionDelete,
-		BoardMenuActionMoveUp,
-		BoardMenuActionMoveDown,
-	},
-	emits: ["delete:element", "move-down:element", "move-up:element"],
-	setup(_, { emit }) {
-		const onDelete = async (confirmation: Promise<boolean>) => {
-			const shouldDelete = await confirmation;
-			if (shouldDelete) {
-				emit("delete:element");
-			}
-		};
+const emit = defineEmits<{
+	(e: "delete:element"): void;
+	(e: "move-down:element"): void;
+	(e: "move-up:element"): void;
+}>();
 
-		const onMoveDown = () => emit("move-down:element");
+const onDelete = async (confirmation: Promise<boolean>) => {
+	const shouldDelete = await confirmation;
+	if (shouldDelete) {
+		emit("delete:element");
+	}
+};
 
-		const onMoveUp = () => emit("move-up:element");
+const onMoveDown = () => emit("move-down:element");
 
-		return {
-			onDelete,
-			onMoveDown,
-			onMoveUp,
-		};
-	},
-});
+const onMoveUp = () => emit("move-up:element");
 </script>
