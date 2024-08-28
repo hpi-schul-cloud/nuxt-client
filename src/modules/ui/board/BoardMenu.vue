@@ -2,7 +2,7 @@
 	<VMenu location="bottom end" min-width="250">
 		<template v-slot:activator="{ props }">
 			<VBtn
-				variant="text"
+				:variant="variant"
 				:data-testid="dataTestid"
 				v-bind="props"
 				:ripple="false"
@@ -35,6 +35,10 @@ import { BoardMenuScope } from "./board-menu-scope";
 import { MENU_SCOPE } from "./injection-tokens";
 
 const props = defineProps({
+	variant: {
+		type: String as PropType<"text" | "outlined">,
+		default: "text",
+	},
 	scope: {
 		type: String as PropType<BoardMenuScope>,
 		required: true,

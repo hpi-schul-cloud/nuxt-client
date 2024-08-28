@@ -32,8 +32,11 @@
 						src="@/assets/img/media-board/default_img_media_shelf.png"
 						data-testid="media-element-default-thumbnail"
 					/>
-					<div class="chip-position">
+					<div v-if="$slots.imageOverlay" class="chip-position">
 						<slot name="imageOverlay" />
+					</div>
+					<div v-if="$slots.menu" class="three-dot-menu">
+						<slot name="menu" />
 					</div>
 				</div>
 				<ContentElementBar :has-grey-background="true">
@@ -49,9 +52,6 @@
 						>
 							{{ element.description }}
 						</div>
-					</template>
-					<template #menu>
-						<slot name="menu" />
 					</template>
 				</ContentElementBar>
 			</VCard>
@@ -97,5 +97,12 @@ $card-width: 288px;
 	position: absolute;
 	bottom: 0;
 	left: 0;
+}
+
+.three-dot-menu {
+	position: absolute;
+	right: 0.75rem;
+	top: 0.75rem;
+	z-index: 100;
 }
 </style>
