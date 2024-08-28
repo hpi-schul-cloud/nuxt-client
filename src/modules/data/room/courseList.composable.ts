@@ -70,9 +70,13 @@ export const useCourseList = () => {
 	};
 
 	const deleteCourse = async (id: string) => {
-		const deletedCourse = await deleteCourseById(id);
+		try {
+			const deletedCourse = await deleteCourseById(id);
 
-		return deletedCourse;
+			return deletedCourse;
+		} catch (errorResponse) {
+			handleError(errorResponse);
+		}
 	};
 
 	const handleError = (errorResponse: unknown) => {

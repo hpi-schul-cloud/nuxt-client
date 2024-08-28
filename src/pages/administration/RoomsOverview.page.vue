@@ -111,6 +111,7 @@
 			:course-id="selectedItem?.id"
 			:course-name="selectedItem?.name"
 			@dialog-confirmed="onConfirmSynchronizeCourse"
+			data-testid="start-sync-dialog"
 		/>
 
 		<v-btn
