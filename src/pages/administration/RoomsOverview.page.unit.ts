@@ -14,7 +14,7 @@ import { nextTick, ref } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VDataTableServer } from "vuetify/lib/components/index.mjs";
-import { useCourseList } from "@data-room";
+import { useCourseApi, useCourseList } from "@data-room";
 import { courseInfoFactory } from "@@/tests/test-utils/factory/courseInfoFactory";
 import { groupModule } from "@/store";
 import RoomsOverview from "./RoomsOverview.page.vue";
@@ -24,12 +24,11 @@ jest.mock("vue-router", () => ({
 	useRouter: jest.fn(),
 }));
 
-jest.mock("@data-room");
-
 jest.mock("@data-room", () => {
 	return {
 		...jest.requireActual("@data-room"),
 		useCourseList: jest.fn(),
+		useCourseApi: jest.fn(),
 	};
 });
 
@@ -42,6 +41,7 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 
 describe("RoomsOverview", () => {
 	let useCourseListMock: DeepMocked<ReturnType<typeof useCourseList>>;
+	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
 
 	const createWrapper = (tab: "current" | "archive" = "current") => {
 		const route = { query: { tab } };
@@ -104,7 +104,13 @@ describe("RoomsOverview", () => {
 			courses: ref(),
 		});
 
-		jest.mocked(useCourseList).mockReturnValueOnce(useCourseListMock);
+		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>({
+			startSynchronization: jest.fn(),
+			stopSynchronization: jest.fn(),
+		});
+
+		jest.mocked(useCourseList).mockReturnValue(useCourseListMock);
+		jest.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
 	});
 
 	afterEach(() => {
@@ -417,6 +423,41 @@ describe("RoomsOverview", () => {
 				await nextTick();
 
 				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+				expect(dialog.vm.isOpen).toBe(true);
+			});
+		});
+
+		describe("when clicking on the sync course button", () => {
+			const setup = () => {
+				useCourseListMock.courses.value = [
+					courseInfoFactory.build({
+						classNames: ["1A, 1B, 1C"],
+						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+					}),
+				];
+
+				const { wrapper } = createWrapper("archive");
+
+				const courseId: string = useCourseListMock.courses.value[0].id;
+
+				return {
+					wrapper,
+					courseId,
+				};
+			};
+
+			it("should open the StartExistingCourseSyncDialog ", async () => {
+				const { wrapper, courseId } = setup();
+
+				const syncButton = wrapper
+					.find('[data-testid="course-table-start-course-sync-btn"]')
+					.trigger("click");
+				await nextTick();
+
+				const dialog = wrapper.findComponent({
+					name: "StartExistingCourseSyncDialog",
+				});
+
 				expect(dialog.vm.isOpen).toBe(true);
 			});
 		});

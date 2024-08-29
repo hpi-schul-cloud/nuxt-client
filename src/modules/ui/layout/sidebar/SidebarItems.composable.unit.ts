@@ -14,7 +14,6 @@ const setup = (envs?: Partial<ConfigResponse>, theme = SchulcloudTheme.Brb) => {
 		TRAINING_URL: "https://lernen.dbildungscloud.de",
 		FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED: true,
 		FEATURE_MEDIA_SHELF_ENABLED: true,
-		FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
 	});
 
 	const envConfigModule = createModuleMocks(EnvConfigModule, {

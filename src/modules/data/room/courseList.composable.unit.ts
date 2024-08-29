@@ -1,4 +1,8 @@
-import { CourseInfoListResponse, CourseStatusQueryType } from "@/serverApi/v3";
+import {
+	CourseInfoListResponse,
+	CourseSortQueryType,
+	CourseStatusQueryType,
+} from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -12,7 +16,7 @@ import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { CourseInfo, useCourseApi, useCourseList } from "./index";
 import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory/courseInfoDataResponseFactory";
-import { Pagination } from "@/store/types/commons";
+import { BusinessError, Pagination } from "@/store/types/commons";
 import { courseInfoFactory } from "@@/tests/test-utils/factory/courseInfoFactory";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
@@ -37,6 +41,111 @@ describe("courseList.composable", () => {
 
 	afterEach(() => {
 		jest.clearAllMocks();
+	});
+
+	describe("setSortBy", () => {
+		const setup = () => {
+			const composable = mountComposable(() => useCourseList(), {
+				global: {
+					provide: {
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					},
+					plugins: [createTestingI18n()],
+					mocks: i18nMock,
+				},
+			});
+
+			return {
+				composable,
+			};
+		};
+		it("should set value", () => {
+			const { composable } = setup();
+
+			composable.setSortBy(CourseSortQueryType.Name);
+
+			expect(composable.key.value).toEqual<CourseSortQueryType>(
+				CourseSortQueryType.Name
+			);
+		});
+	});
+
+	describe("setSortOrder", () => {
+		const setup = () => {
+			const composable = mountComposable(() => useCourseList(), {
+				global: {
+					provide: {
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					},
+					plugins: [createTestingI18n()],
+					mocks: i18nMock,
+				},
+			});
+
+			return {
+				composable,
+			};
+		};
+		it("should set value", () => {
+			const { composable } = setup();
+
+			composable.setSortOrder("desc");
+
+			expect(composable.sortOrder.value).toEqual<"asc" | "desc">("desc");
+		});
+	});
+
+	describe("setPage", () => {
+		const setup = () => {
+			const composable = mountComposable(() => useCourseList(), {
+				global: {
+					provide: {
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					},
+					plugins: [createTestingI18n()],
+					mocks: i18nMock,
+				},
+			});
+
+			return {
+				composable,
+			};
+		};
+		it("should set value", () => {
+			const { composable } = setup();
+
+			composable.setPage(5);
+
+			expect(composable.page.value).toEqual<number>(5);
+		});
+	});
+
+	describe("setPagination", () => {
+		const setup = () => {
+			const composable = mountComposable(() => useCourseList(), {
+				global: {
+					provide: {
+						[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					},
+					plugins: [createTestingI18n()],
+					mocks: i18nMock,
+				},
+			});
+			return {
+				composable,
+			};
+		};
+		it("should set value", () => {
+			const { composable } = setup();
+
+			composable.setPagination({ limit: 5, total: 5, skip: 1 });
+
+			expect(composable.pagination.value).toEqual<Pagination>({
+				limit: 5,
+				total: 5,
+				skip: 1,
+			});
+		});
 	});
 
 	describe("fetchCourses", () => {
@@ -161,7 +270,9 @@ describe("courseList.composable", () => {
 				const errorResponse = axiosErrorFactory.build();
 				const apiError = mapAxiosErrorToResponseError(errorResponse);
 
-				useCourseInfoApiMock.loadCoursesForSchool.mockRejectedValue(apiError);
+				useCourseInfoApiMock.loadCoursesForSchool.mockRejectedValue(
+					errorResponse
+				);
 
 				const composable = mountComposable(() => useCourseList(), {
 					global: {
@@ -174,6 +285,7 @@ describe("courseList.composable", () => {
 				});
 				return {
 					composable,
+					apiError,
 				};
 			};
 
@@ -189,6 +301,80 @@ describe("courseList.composable", () => {
 				const { composable } = setup();
 
 				await composable.fetchCourses(CourseStatusQueryType.Current);
+
+				expect(notifierModule.show).toHaveBeenCalledWith({
+					text: "error.load",
+					status: "error",
+				});
+			});
+		});
+	});
+
+	describe("deleteCourse", () => {
+		describe("when deleting course", () => {
+			const setup = () => {
+				const composable = mountComposable(() => useCourseList(), {
+					global: {
+						provide: {
+							[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+						},
+						plugins: [createTestingI18n()],
+						mocks: i18nMock,
+					},
+				});
+
+				return {
+					composable,
+				};
+			};
+
+			it("should call useCourseApi", async () => {
+				const { composable } = setup();
+
+				await composable.deleteCourse("id");
+
+				expect(useCourseApiMock.deleteCourseById).toHaveBeenCalledWith("id");
+			});
+		});
+
+		describe("when error occur during delete course", () => {
+			const setup = () => {
+				const errorResponse = axiosErrorFactory.build();
+				const apiError = mapAxiosErrorToResponseError(errorResponse);
+
+				useCourseApiMock.deleteCourseById.mockRejectedValueOnce(errorResponse);
+
+				const composable = mountComposable(() => useCourseList(), {
+					global: {
+						provide: {
+							[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+						},
+						plugins: [createTestingI18n()],
+						mocks: i18nMock,
+					},
+				});
+
+				return {
+					composable,
+					apiError,
+				};
+			};
+			it("should set the error", async () => {
+				const { composable, apiError } = setup();
+
+				await composable.deleteCourse("id");
+
+				expect(composable.error.value).toEqual<BusinessError>({
+					error: apiError,
+					statusCode: apiError.code,
+					message: apiError.message,
+				});
+			});
+
+			it("should show notification", async () => {
+				const { composable } = setup();
+
+				await composable.deleteCourse("id");
 
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					text: "error.load",

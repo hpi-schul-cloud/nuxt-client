@@ -226,8 +226,6 @@ useTitle(buildPageTitle(t("pages.administration.rooms.index.title")));
 const courseStatusQueryType: ComputedRef<CourseStatusQueryType> = computed(
 	() => {
 		switch (props.tab) {
-			case "current":
-				return CourseStatusQueryType.Current;
 			case "archive":
 				return CourseStatusQueryType.Archive;
 			default:
