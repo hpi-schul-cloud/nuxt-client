@@ -1476,6 +1476,32 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Wähle einen Kurs / Fach",
 	"pages.content.placeholder.noLessonTopic": "Lege ein Thema im Kurs an",
 	"pages.content.preview_img.alt": "Bildvorschau",
+	"pages.courseRoomDetails.fab.add.board": "Neuer Bereich",
+	"pages.courseRoomDetails.fab.add.columnBoard":
+		"Neuer Bereich {'|'} mehrspaltig",
+	"pages.courseRoomDetails.fab.add.lesson": "Neues Thema",
+	"pages.courseRoomDetails.fab.add.task": "Neue Aufgabe",
+	"pages.courseRooms.groupName": "Kurse",
+	"pages.courseRooms.headerSection.archived": "Archiv",
+	"pages.courseRooms.headerSection.menu.ariaLabel": "Kursmenü",
+	"pages.courseRooms.headerSection.synchronized": "Synchronisiert",
+	"pages.courseRooms.headerSection.toCourseFiles": "Zu den Kursdateien",
+	"pages.courseRooms.index.courses.active": "Aktuelle Kurse",
+	"pages.courseRooms.index.courses.all": "Alle Kurse",
+	"pages.courseRooms.index.courses.arrangeCourses": "Kurse umordnen",
+	"pages.courseRooms.index.search.label": "Kurs suchen",
+	"pages.courseRooms.menuItems.endSync": "Synchronisation beenden",
+	"pages.courseRooms.tabLabel.groups": "Gruppen",
+	"pages.courseRooms.tabLabel.tools": "Tools",
+	"pages.courseRooms.tabLabel.toolsOld": "Tools",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
+		"Videokonferenz {roomName} erstellen",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Alle Nutzer:innen nehmen als Moderator:in teil",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
+		"Teilnehmer:innen beim Betreten stummschalten",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",
@@ -1507,10 +1533,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Ansicht wählen",
 	"pages.room.dialog.boardLayout.singleColumn": "einspaltig",
 	"pages.room.dialog.boardLayout.multiColumn": "mehrspaltig",
-	"pages.room.fab.add.lesson": "Neues Thema",
-	"pages.room.fab.add.board": "Neuer Bereich",
-	"pages.room.fab.add.columnBoard": "Neuer Bereich {'|'} mehrspaltig",
-	"pages.room.fab.add.task": "Neue Aufgabe",
 	"pages.room.itemDelete.text": '{itemType} "{itemTitle}" wirklich löschen?',
 	"pages.room.itemDelete.title": "Element löschen",
 	"pages.room.lessonCard.label.notVisible": "noch nicht sichtbar",
@@ -1540,12 +1562,6 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
 	"pages.rooms.fab.import.course": "Kurs importieren",
-	"pages.rooms.groupName": "Kurse",
-	"pages.rooms.headerSection.archived": "Archiv",
-	"pages.rooms.headerSection.synchronized": "Synchronisiert",
-	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
-	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
-	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.importCourse.btn.continue": "Weiter",
 	"pages.rooms.importCourse.codeError": "Der Kurs-Code wird nicht verwendet.",
 	"pages.rooms.importCourse.importError":
@@ -1570,22 +1586,7 @@ export default {
 		"Kurs {name} wurde erfolgreich importiert.",
 	"pages.rooms.ccImportCourse.error":
 		"Beim importieren des Kurses ist ein Fehler aufgetreten.",
-	"pages.rooms.index.courses.active": "Aktuelle Kurse",
-	"pages.rooms.index.courses.all": "Alle Kurse",
-	"pages.rooms.index.courses.arrangeCourses": "Kurse umordnen",
-	"pages.rooms.index.search.label": "Kurs suchen",
 	"pages.rooms.roomModal.courseGroupTitle": "Kursgruppentitel",
-	"pages.rooms.tabLabel.groups": "Gruppen",
-	"pages.rooms.tabLabel.tools": "Tools",
-	"pages.rooms.tabLabel.toolsOld": "Tools",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Alle Nutzer:innen nehmen als Moderator:in teil",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
-		"Teilnehmer:innen beim Betreten stummschalten",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
-	"pages.rooms.tools.configureVideoconferenceDialog.title":
-		"Videokonferenz {roomName} erstellen",
 	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
 	"pages.rooms.tools.notLicensedDialog.title":
