@@ -835,7 +835,7 @@ export default {
 		"¿Debería realmente iniciarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Grupo de usuarios sincronizado exitosamente",
-	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
+	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD/MM/YYYY HH:mm",

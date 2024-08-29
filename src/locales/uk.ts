@@ -824,7 +824,7 @@ export default {
 		"Чи дійсно слід починати синхронізацію групи користувачів {groupName} у курсі {courseName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Групу користувачів успішно синхронізовано",
-	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
+	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
