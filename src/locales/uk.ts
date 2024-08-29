@@ -1731,7 +1731,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
 	"feature.media-shelf.title": "Полиця для медіа",
 	"feature.media-shelf.emptyState":
-		"Жоден носій не активовано для використання.",
+		"Наразі немає медіафайлів, доступних для використання",
 	"feature.media-shelf.createLine": "Додайте лінію",
 	"feature.media-shelf.line.title": "лінія",
 	"feature.media-shelf.availableLine.title": "Доступні медіа",
