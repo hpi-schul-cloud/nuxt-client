@@ -63,3 +63,5 @@ export * from "./videoConferenceJoinResponseFactory";
 export * from "./envsFactory";
 export * from "./media-board";
 export * from "./contextExternalToolResponseFactory";
+export * from "./courseInfoDataResponseFactory";
+export * from "./courseInfoFactory";

@@ -14,15 +14,19 @@ import {
 } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { CourseInfo, useCourseApi, useCourseList } from "./index";
-import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory/courseInfoDataResponseFactory";
 import { BusinessError, Pagination } from "@/store/types/commons";
-import { courseInfoFactory } from "@@/tests/test-utils/factory/courseInfoFactory";
+import {
+	courseInfoDataResponseFactory,
+	courseInfoFactory,
+} from "@@/tests/test-utils/factory";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
+import { useCourseApi } from "./courseApi.composable";
+import { useCourseList } from "./courseList.composable";
+import { CourseInfo } from "./type";
 
-jest.mock("@data-room/courseApi.composable");
-jest.mock("@data-room/courseInfoApi.composable");
+jest.mock("./courseApi.composable");
+jest.mock("./courseInfoApi.composable");
 
 describe("courseList.composable", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
