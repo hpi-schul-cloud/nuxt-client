@@ -44,7 +44,7 @@
 						data-testid="course-table-edit-btn"
 						variant="outlined"
 						size="small"
-						:href="`/courses/${item.id}/edit?redirectUrl=/administration/rooms/new`"
+						:href="sanitizedUrl"
 						class="mx-1 px-1"
 						min-width="0"
 					>
@@ -119,7 +119,7 @@
 			color="primary"
 			variant="flat"
 			data-testid="admin-courses-add-button"
-			:href="sanitizedUrl"
+			href="/courses/add?redirectUrl=/administration/rooms/new"
 		>
 			{{ t("pages.administration.courses.index.add") }}
 		</v-btn>
@@ -331,11 +331,11 @@ const loadCourseList = async () => {
 };
 
 const onTabsChange = async (tab: string) => {
-	await loadCourseList();
-
 	await router.replace({
 		query: { ...route.query, tab },
 	});
+
+	await loadCourseList();
 };
 
 const onUpdateSortBy = async (sortBy: CourseSortItem[]) => {
