@@ -1,17 +1,15 @@
 <template>
 	<div>
 		<RouterLink :to="roomPath" class="room-link">
-			<v-avatar
-				:color="avatarColor"
-				:aria-label="avatarAriaLabel"
-				rounded="lg"
-				size="5em"
-				data-testid="room-icon"
+			<div
+				class="room-icon"
+				:aria-label="iconAriaLabel"
+				:style="{ 'background-color': iconColor }"
 			>
 				<span class="text-h3 text-white" data-testid="room-short-title">
 					{{ room.shortTitle }}
 				</span>
-			</v-avatar>
+			</div>
 			<div class="room-title mb-2 mt-2">{{ room.title }}</div>
 		</RouterLink>
 	</div>
@@ -32,9 +30,9 @@ const { t } = useI18n();
 
 const roomPath = computed(() => `/rooms/${props.room.id}`);
 
-const avatarColor = computed(() => props.room.displayColor);
+const iconColor = computed(() => props.room.displayColor);
 
-const avatarAriaLabel = computed(() => {
+const iconAriaLabel = computed(() => {
 	return `${t("common.labels.room")} ${props.room.title}`;
 });
 </script>
@@ -47,6 +45,25 @@ a.room-link {
 	text-decoration: none;
 	text-align: center;
 	color: rgba(var(--v-theme-primary));
+}
+
+.room-icon {
+	width: 5em;
+	height: 5em;
+	border-radius: 8px;
+	user-select: none;
+	// taken from VAvatar.sass
+	flex: none;
+	align-items: center;
+	display: inline-flex;
+	justify-content: center;
+	line-height: normal;
+	overflow: hidden;
+	position: relative;
+	text-align: center;
+	transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+	transition-property: width, height;
+	vertical-align: middle;
 }
 
 .room-title {
