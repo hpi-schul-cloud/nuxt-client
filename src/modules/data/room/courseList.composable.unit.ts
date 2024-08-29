@@ -21,8 +21,8 @@ import { courseInfoFactory } from "@@/tests/test-utils/factory/courseInfoFactory
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
 
-jest.mock("@data-room/CourseApi.composable");
-jest.mock("@data-room/CourseInfoApi.composable");
+jest.mock("@data-room/courseApi.composable");
+jest.mock("@data-room/courseInfoApi.composable");
 
 describe("courseList.composable", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
