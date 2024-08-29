@@ -15,7 +15,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { h, nextTick } from "vue";
+import { h } from "vue";
 import { VApp } from "vuetify/lib/components/index.mjs";
 import NewLoggedIn from "./LoggedIn.layout.vue";
 
@@ -86,8 +86,6 @@ const defineWindowWidth = (width: number) => {
 describe("newLoggedIn", () => {
 	it("should render correctly", async () => {
 		const { wrapper } = setup();
-		await nextTick();
-		await nextTick();
 
 		expect(wrapper.exists()).toBe(true);
 	});
@@ -96,8 +94,6 @@ describe("newLoggedIn", () => {
 		defineWindowWidth(1564);
 		const sidebarExpanded = true;
 		const { wrapper } = setup();
-		await nextTick();
-		await nextTick();
 		const sidebar = wrapper.find("nav");
 
 		if (!sidebarExpanded)
@@ -108,8 +104,6 @@ describe("newLoggedIn", () => {
 		defineWindowWidth(564);
 		const sidebarExpanded = true;
 		const { wrapper } = setup();
-		await nextTick();
-		await nextTick();
 		const sidebar = wrapper.find("nav");
 
 		if (!sidebarExpanded)
@@ -120,8 +114,6 @@ describe("newLoggedIn", () => {
 		defineWindowWidth(564);
 		const sidebarExpanded = true;
 		const { wrapper } = setup();
-
-		await nextTick();
 
 		const sidebar = wrapper.find("nav");
 
