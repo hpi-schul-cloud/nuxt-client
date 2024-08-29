@@ -44,7 +44,7 @@
 						data-testid="course-table-edit-btn"
 						variant="outlined"
 						size="small"
-						:href="sanitizedUrl"
+						:href="`/courses/${item.id}/edit?redirectUrl=/administration/rooms/new`"
 						class="mx-1 px-1"
 						min-width="0"
 					>
@@ -161,7 +161,6 @@ import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { mdiPencilOutline, mdiSync, mdiTrashCanOutline } from "@mdi/js";
-import { sanitizeUrl } from "@braintree/sanitize-url";
 
 type Tab = "current" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -240,12 +239,6 @@ const courseStatusQueryType: ComputedRef<CourseStatusQueryType> = computed(
 
 const hasPermission: ComputedRef<boolean> = computed(() =>
 	authModule.getUserPermissions.includes("COURSE_ADMINISTRATION".toLowerCase())
-);
-
-const sanitizedUrl = computed(() =>
-	sanitizeUrl(
-		`/courses/${selectedItem.value?.id}/edit?redirectUrl=/administration/rooms/new`
-	)
 );
 
 const showRoomAction = (item: CourseInfoDataResponse) =>
