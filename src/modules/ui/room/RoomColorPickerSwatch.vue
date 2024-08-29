@@ -1,27 +1,36 @@
 <template>
 	<div
-		class="color-swatch rounded-circle elevation-3 ma-1"
+		class="color-swatch rounded-circle elevation-3 ma-1 d-flex justify-center align-items-center cursor-pointer"
 		:class="`color-swatch--color-${color}`"
 		:data-testid="`color-swatch-${color}`"
-	/>
+		@click="() => $emit('update:color', color)"
+	>
+		<VIcon v-if="isSelected" :icon="mdiCheckCircleOutline" color="white" />
+	</div>
 </template>
 
 <script setup lang="ts">
 import { PropType } from "vue";
 import { RoomColorEnum } from "./types";
+import { mdiCheckCircleOutline } from "@/components/icons/material";
 
 defineProps({
 	color: {
 		type: String as PropType<RoomColorEnum>,
 		default: RoomColorEnum.BLUE_GREY,
 	},
+	isSelected: {
+		type: Boolean,
+	},
 });
+
+defineEmits(["update:color"]);
 </script>
 
 <style scoped>
 .color-swatch {
-	width: 32px;
-	height: 32px;
+	width: 40px;
+	height: 40px;
 }
 
 .color-swatch--color-blue-grey {
