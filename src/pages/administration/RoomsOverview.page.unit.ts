@@ -20,6 +20,7 @@ import { VDataTableServer } from "vuetify/lib/components/index.mjs";
 import { useCourseApi, useCourseList } from "@data-room";
 import { groupModule } from "@/store";
 import RoomsOverview from "./RoomsOverview.page.vue";
+import { StartExistingCourseSyncDialog } from "@feature-course-sync";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),
@@ -519,6 +520,38 @@ describe("RoomsOverview", () => {
 				});
 			});
 		});
+
+		describe("when start sync dialog emit succeed", () => {
+			const setup = () => {
+				useCourseListMock.courses.value = [
+					courseInfoDataResponseFactory.build({
+						classNames: ["1A, 1B, 1C"],
+						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+					}),
+				];
+
+				const { wrapper } = createWrapper();
+
+				return {
+					wrapper,
+					useCourseListMock,
+				};
+			};
+
+			it("should fetch courses", async () => {
+				const { wrapper } = setup();
+
+				await wrapper
+					.find('[data-testid="course-table-start-course-sync-btn"]')
+					.trigger("click");
+				await nextTick();
+
+				wrapper.getComponent(StartExistingCourseSyncDialog).emitted("success");
+				await nextTick();
+
+				expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
+			});
+		});
 	});
 
 	describe("tabs", () => {
@@ -584,7 +617,7 @@ describe("RoomsOverview", () => {
 
 		describe("when clicking on archive tab", () => {
 			const setup = () => {
-				const { wrapper, router } = createWrapper();
+				const { wrapper, router } = createWrapper("archive");
 				useCourseListMock.fetchCourses.mockResolvedValue();
 
 				return {
@@ -601,7 +634,7 @@ describe("RoomsOverview", () => {
 					.trigger("click");
 				await nextTick();
 
-				//	expect(useCourseListMock.fetchCourses).toHaveBeenCalledWith("archive");
+				expect(useCourseListMock.fetchCourses).toHaveBeenCalledWith("archive");
 			});
 		});
 
