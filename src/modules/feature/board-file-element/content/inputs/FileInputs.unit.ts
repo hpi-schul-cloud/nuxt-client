@@ -1,14 +1,10 @@
 import { PreviewStatus } from "@/fileStorageApi/v3";
-import { isPdfMimeType } from "@/utils/fileHelper";
 import { fileElementResponseFactory } from "@@/tests/test-utils";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
 import FileInputs from "./FileInputs.vue";
 import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
-
-jest.mock("@/utils/fileHelper");
-const isPdfMimeTypeMock = jest.mocked(isPdfMimeType);
 
 describe("FileInputs", () => {
 	const setup = (props: {
@@ -25,10 +21,8 @@ describe("FileInputs", () => {
 			previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 			isDownloadAllowed: true,
 			element,
+			mimeType: props.isPdf ? "application/pdf" : "image/png",
 		};
-
-		isPdfMimeTypeMock.mockReset();
-		isPdfMimeTypeMock.mockReturnValueOnce(props.isPdf ?? false);
 
 		const wrapper = shallowMount(FileInputs, {
 			props: { fileProperties, isEditMode: props.isEditMode },

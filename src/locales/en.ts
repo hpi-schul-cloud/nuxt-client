@@ -234,6 +234,10 @@ export default {
 		"With the start of the migration, all students and teachers at your school will be able to switch the registration system to moin.schule. Users who have changed the login system can then only log in via moin.schule.",
 	"components.administration.adminMigrationSection.startWarningCard.title":
 		"Do you really want to start the account migration to moin.schule now?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
+		"Are you sure you want to remove the accounts links that are found automatically?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"The migration assistant had automatically found account links based on the usernames.<br><br>Do you want to remove the accounts links that are found automatically now?",
 	"components.administration.externalToolsSection.action.add":
 		"Add External Tool",
 	"components.administration.externalToolsSection.action.delete": "Delete Tool",
@@ -419,6 +423,7 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Please enter a title.",
 	"components.cardElement.titleElement": "Title element",
+	"components.cardElement.deletedElement": "Deleted content",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",
 	"components.datePicker.validation.format": "Please use format DD.MM.YYYY",
@@ -1010,6 +1015,8 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Please match a valid URL format",
 	"pages.administration.migration.back": "Back",
+	"pages.administration.migration.clearAutoMatches":
+		"Reset automatic accounts links",
 	"pages.administration.migration.backToAdministration":
 		"Back to administration",
 	"pages.administration.migration.brbSchulportal": "weBBSchule",
@@ -1022,11 +1029,11 @@ export default {
 	"pages.administration.migration.finishTransferPhase": "Finish Transfer phase",
 	"pages.administration.migration.finishWizard": "Complete Migration Wizard",
 	"pages.administration.migration.ldapSource": "LDAP",
-	"pages.administration.migration.migrate": "Save accounts binding",
+	"pages.administration.migration.migrate": "Save accounts link",
 	"pages.administration.migration.nbc.migrate": "Perform migration",
 	"pages.administration.migration.next": "Next",
 	"pages.administration.migration.performingMigration":
-		"Saving the accounts binding...",
+		"Saving the accounts link...",
 	"pages.administration.migration.startUserMigration":
 		"Start accounts migration",
 	"pages.administration.migration.step1": "Introduction",
@@ -1445,6 +1452,31 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Choose a course / subject",
 	"pages.content.placeholder.noLessonTopic": "Create a topic in the course",
 	"pages.content.preview_img.alt": "Image preview",
+	"pages.courseRoomDetails.fab.add.board": "New board",
+	"pages.courseRoomDetails.fab.add.columnBoard": "New column board",
+	"pages.courseRoomDetails.fab.add.lesson": "New topic",
+	"pages.courseRoomDetails.fab.add.task": "New task",
+	"pages.courseRooms.groupName": "Courses",
+	"pages.courseRooms.headerSection.archived": "Archive",
+	"pages.courseRooms.headerSection.menu.ariaLabel": "Course menu",
+	"pages.courseRooms.headerSection.synchronized": "Synchronized",
+	"pages.courseRooms.headerSection.toCourseFiles": "To the course files",
+	"pages.courseRooms.index.courses.active": "Current courses",
+	"pages.courseRooms.index.courses.all": "All courses",
+	"pages.courseRooms.index.courses.arrangeCourses": "Arrange courses",
+	"pages.courseRooms.index.search.label": "Search course",
+	"pages.courseRooms.menuItems.endSync": "End synchronization",
+	"pages.courseRooms.tabLabel.groups": "Groups",
+	"pages.courseRooms.tabLabel.tools": "Tools",
+	"pages.courseRooms.tabLabel.toolsOld": "Tools",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
+		"Create video conference {roomName}",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"All users participate as moderators",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
+		"Mute participants when entering",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Approval by the moderator before the room can be entered",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",
@@ -1472,10 +1504,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Select view",
 	"pages.room.dialog.boardLayout.singleColumn": "single-column",
 	"pages.room.dialog.boardLayout.multiColumn": "multi-column",
-	"pages.room.fab.add.lesson": "New topic",
-	"pages.room.fab.add.board": "New board",
-	"pages.room.fab.add.columnBoard": "New column board",
-	"pages.room.fab.add.task": "New task",
 	"pages.room.itemDelete.text": 'Delete {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
@@ -1505,12 +1533,6 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
 	"pages.rooms.fab.ariaLabel": "Create new course",
 	"pages.rooms.fab.import.course": "Import course",
-	"pages.rooms.groupName": "Courses",
-	"pages.rooms.headerSection.archived": "Archive",
-	"pages.rooms.headerSection.synchronized": "Synchronized",
-	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
-	"pages.rooms.headerSection.toCourseFiles": "To the course files",
-	"pages.rooms.menuItems.endSync": "End synchronization",
 	"pages.rooms.importCourse.btn.continue": "Continue",
 	"pages.rooms.importCourse.codeError": "The course code is not in use.",
 	"pages.rooms.importCourse.importError":
@@ -1535,22 +1557,7 @@ export default {
 		"Course {name} was successfully imported.",
 	"pages.rooms.ccImportCourse.error":
 		"An error occurred while importing the course.",
-	"pages.rooms.index.courses.active": "Current courses",
-	"pages.rooms.index.courses.all": "All courses",
-	"pages.rooms.index.courses.arrangeCourses": "Arrange courses",
-	"pages.rooms.index.search.label": "Search course",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",
-	"pages.rooms.tabLabel.groups": "Groups",
-	"pages.rooms.tabLabel.tools": "Tools",
-	"pages.rooms.tabLabel.toolsOld": "Tools",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"All users participate as moderators",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
-		"Mute participants when entering",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Approval by the moderator before the room can be entered",
-	"pages.rooms.tools.configureVideoconferenceDialog.title":
-		"Create video conference {roomName}",
 	"pages.rooms.tools.deactivated": "Tool deactivated",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deactivated",
 	"pages.rooms.tools.notLicensedDialog.title":

@@ -20,3 +20,6 @@ export const BOARD_CARD_IS_FIRST_ELEMENT: InjectionKey<Ref<boolean>> = Symbol(
 export const BOARD_CARD_IS_LAST_ELEMENT: InjectionKey<Ref<boolean>> = Symbol(
 	"BoardCardIsLastElement"
 );
+
+export const BOARD_IS_LIST_LAYOUT: InjectionKey<Ref<boolean>> =
+	Symbol("BoardHasListLayout");

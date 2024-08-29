@@ -14,7 +14,6 @@ import { VBtn, VSelect } from "vuetify/lib/components/index.mjs";
 import { createStore } from "vuex";
 import AddContentModal from "./AddContentModal.vue";
 
-initializeAxios(createMock<AxiosInstance>());
 const testProps = {
 	showCopyModal: true,
 	resource: {
@@ -25,6 +24,7 @@ const testProps = {
 	contentId: "Test content",
 	items: [],
 };
+
 const testPropsMultiple = {
 	showCopyModal: true,
 	resource: {
@@ -89,6 +89,8 @@ const lessons = {
 	],
 };
 
+initializeAxios(createMock<AxiosInstance>());
+
 const createMockStore = () => {
 	const createStudentStub = jest.fn();
 	const mockStore = createStore({
@@ -104,104 +106,139 @@ const createMockStore = () => {
 	return { mockStore, createStudentStub };
 };
 
-const getWrapper: any = (props: object) => {
-	const { mockStore } = createMockStore();
-	return mount(AddContentModal, {
-		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
-			mocks: {
-				$store: mockStore,
-			},
-		},
-		props,
-	});
-};
-
 describe("@/components/molecules/AddContentModal", () => {
-	beforeEach(() => {
+	const setup = (props: {
+		showCopyModal: boolean;
+		resource: {
+			title: string;
+			url: string;
+			client: string;
+		};
+		contentId: string;
+		items?: Array<{
+			title: string;
+			url: string;
+			client: string;
+		}>;
+	}) => {
 		setupStores({
 			contentModule: ContentModule,
 		});
-	});
+		const { mockStore } = createMockStore();
 
-	it("nothing selected submit should be disabled", async () => {
-		const wrapper = getWrapper(testProps);
-		const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
-		expect(wrapper.vm.isSendEnabled).toBe(false);
-		expect(submitBtn.exists()).toBe(true);
-		expect(submitBtn.attributes().disabled).toBe("");
-	});
-
-	it("selected submit should be enabled", async () => {
-		const wrapper = getWrapper(testProps);
-		expect(wrapper.vm.isSendEnabled).toBe(false);
-		wrapper.setData({
-			selectedLesson: lessonsMock[0],
+		const wrapper = mount(AddContentModal, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					$store: mockStore,
+				},
+			},
+			props,
 		});
-		await wrapper.vm.$nextTick();
-		const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
-		expect(wrapper.vm.isSendEnabled).toBe(true);
-		expect(submitBtn.attributes().disabled).toBeUndefined();
-	});
 
-	it("create coursesOptions", async () => {
-		const wrapper = getWrapper(testProps);
-		const selection = wrapper.findComponent(VSelect);
-		expect(selection.props("items")).toBe(courseOptions);
-	});
+		return { wrapper };
+	};
 
-	it("create lessonsOptions", async () => {
-		const wrapper = getWrapper(testProps);
-		contentModule.setLessons(lessons);
-		const lo = wrapper.vm.lessonsOptions;
-		expect(lo).toHaveLength(1);
-		expect(lo[0]._id).toBe(lessonsMock[0]._id);
-		expect(lo[0].name).toBe(lessonsMock[0].name);
-	});
+	describe("Component Initialization", () => {
+		it("nothing selected submit should be disabled", async () => {
+			const { wrapper } = setup(testProps);
+			const submitBtn = wrapper.findComponent(
+				'[data-testid="modal_submit_btn"]'
+			);
 
-	it("submit modal action", async () => {
-		const wrapper = getWrapper(testProps);
-		wrapper.setData({
-			selectedLesson: lessonsMock[0],
+			expect(wrapper.vm.isSendEnabled).toBe(false);
+			expect(submitBtn.exists()).toBe(true);
+			expect(submitBtn.attributes().disabled).toBe("");
 		});
-		expect(wrapper.vm.isSendEnabled).toBe(true);
-		await nextTick();
-		const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
-		await submitBtn.trigger("click");
-		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBeFalsy();
-	});
 
-	it("submit modal action multiple items", async () => {
-		const wrapper = getWrapper(testPropsMultiple);
-		wrapper.setData({
-			selectedLesson: lessonsMock[0],
+		it("selected submit should be enabled", async () => {
+			const { wrapper } = setup(testProps);
+			expect(wrapper.vm.isSendEnabled).toBe(false);
+
+			wrapper.setData({
+				selectedLesson: lessonsMock[0],
+			});
+			await nextTick();
+			const submitBtn = wrapper.findComponent(
+				'[data-testid="modal_submit_btn"]'
+			);
+
+			expect(wrapper.vm.isSendEnabled).toBe(true);
+			expect(submitBtn.attributes().disabled).toBeUndefined();
 		});
-		expect(wrapper.vm.isSendEnabled).toBe(true);
-		await nextTick();
-		const submitBtn = wrapper.findComponent('[data-testid="modal_submit_btn"]');
-		await submitBtn.trigger("click");
-		expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
-		expect(wrapper.emitted("update:show-copy-modal")[0][0]).toBe(false);
-	});
 
-	it("cancel modal action", async () => {
-		const wrapper = getWrapper(testProps);
-		const cancelBtn = wrapper.findComponent(VBtn);
-		const courseSelection = wrapper.findAllComponents(VSelect)[0];
-		const lessonSelection = wrapper.findAllComponents(VSelect)[1];
+		it("create coursesOptions", async () => {
+			const { wrapper } = setup(testProps);
+			const selection = wrapper.findComponent(VSelect);
 
-		courseSelection.vm.$emit("update:modelValue", courseOptions[0]);
-		await nextTick();
-		lessonSelection.vm.$emit("update:modelValue", lessonsMock[0]);
-		await nextTick();
-		expect(lessonSelection.props("modelValue")).toEqual(lessonsMock[0]);
-		expect(courseSelection.props("modelValue")).toEqual(courseOptions[0]);
+			expect(selection.props("items")).toBe(courseOptions);
+		});
 
-		await cancelBtn.trigger("click");
+		it("create lessonsOptions", async () => {
+			const { wrapper } = setup(testProps);
+			contentModule.setLessons(lessons);
+			const lo = wrapper.vm.lessonsOptions;
 
-		expect(wrapper.emitted("update:show-copy-modal", false)).toHaveLength(1);
-		expect(lessonSelection.props("modelValue")).toBeNull();
-		expect(courseSelection.props("modelValue")).toBeNull();
+			expect(lo).toHaveLength(1);
+			expect(lo[0]._id).toBe(lessonsMock[0]._id);
+			expect(lo[0].name).toBe(lessonsMock[0].name);
+		});
+
+		it("submit modal action", async () => {
+			const { wrapper } = setup(testProps);
+			wrapper.setData({
+				selectedLesson: lessonsMock[0],
+			});
+
+			expect(wrapper.vm.isSendEnabled).toBe(true);
+
+			await nextTick();
+			const submitBtn = wrapper.findComponent(
+				'[data-testid="modal_submit_btn"]'
+			);
+			await submitBtn.trigger("click");
+
+			expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
+			expect(wrapper.emitted("update:show-copy-modal")?.[0][0]).toBe(false);
+		});
+
+		it("submit modal action multiple items", async () => {
+			const { wrapper } = setup(testPropsMultiple);
+			wrapper.setData({
+				selectedLesson: lessonsMock[0],
+			});
+
+			expect(wrapper.vm.isSendEnabled).toBe(true);
+
+			await nextTick();
+			const submitBtn = wrapper.findComponent(
+				'[data-testid="modal_submit_btn"]'
+			);
+			await submitBtn.trigger("click");
+
+			expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
+			expect(wrapper.emitted("update:show-copy-modal")?.[0][0]).toBe(false);
+		});
+
+		it("cancel modal action", async () => {
+			const { wrapper } = setup(testProps);
+			const cancelBtn = wrapper.findComponent(VBtn);
+			const courseSelection = wrapper.findAllComponents(VSelect)[0];
+			const lessonSelection = wrapper.findAllComponents(VSelect)[1];
+
+			courseSelection.vm.$emit("update:modelValue", courseOptions[0]);
+			await nextTick();
+			lessonSelection.vm.$emit("update:modelValue", lessonsMock[0]);
+			await nextTick();
+
+			expect(lessonSelection.props("modelValue")).toEqual(lessonsMock[0]);
+			expect(courseSelection.props("modelValue")).toEqual(courseOptions[0]);
+
+			await cancelBtn.trigger("click");
+
+			expect(wrapper.emitted("update:show-copy-modal")).toHaveLength(1);
+			expect(lessonSelection.props("modelValue")).toBeNull();
+			expect(courseSelection.props("modelValue")).toBeNull();
+		});
 	});
 });

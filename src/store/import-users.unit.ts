@@ -734,6 +734,62 @@ describe("import-users store actions", () => {
 				});
 			});
 		});
+
+		describe("clearAllAutoMatches", () => {
+			describe("when action is called", () => {
+				const setup = () => {
+					mockApi = {
+						importUserControllerClearAllAutoMatches: jest.fn(),
+					};
+
+					spy.mockReturnValue(
+						mockApi as unknown as serverApi.UserImportApiInterface
+					);
+				};
+
+				it("should call the api", async () => {
+					setup();
+
+					await importUserModule.clearAllAutoMatches();
+
+					expect(
+						mockApi.importUserControllerClearAllAutoMatches
+					).toHaveBeenCalled();
+				});
+			});
+
+			describe("when an error occurs", () => {
+				const setup = () => {
+					const error = axiosErrorFactory.build();
+					const apiError = mapAxiosErrorToResponseError(error);
+					mockApi = {
+						importUserControllerClearAllAutoMatches: jest.fn(() =>
+							Promise.reject(error)
+						),
+					};
+
+					spy.mockReturnValue(
+						mockApi as unknown as serverApi.UserImportApiInterface
+					);
+
+					return {
+						error,
+						apiError,
+					};
+				};
+
+				it("should set a business error", async () => {
+					const { apiError } = setup();
+
+					await importUserModule.clearAllAutoMatches();
+
+					expect(importUserModule.getBusinessError).toEqual<BusinessError>({
+						statusCode: apiError.code,
+						message: apiError.message,
+					});
+				});
+			});
+		});
 	});
 
 	describe("mutations", () => {

@@ -5,7 +5,7 @@
 
 	<v-img
 		ref="imageRef"
-		class="image rounded-t-sm mx-auto"
+		class="image mx-auto"
 		loading="lazy"
 		:src="imageSrc"
 		:alt="alt"

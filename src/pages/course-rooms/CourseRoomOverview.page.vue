@@ -2,7 +2,7 @@
 	<room-wrapper :has-rooms="hasCurrentRooms" :has-import-token="!!importToken">
 		<template #header>
 			<h1 class="text-h3 py-2 mb-4">
-				{{ $t("pages.rooms.index.courses.active") }}
+				{{ $t("pages.courseRooms.index.courses.active") }}
 			</h1>
 			<div class="mb-5 header-actions-section">
 				<v-btn
@@ -11,14 +11,14 @@
 					to="/rooms/courses-list"
 					data-testid="go-to-all-courses"
 				>
-					{{ $t("pages.rooms.index.courses.all") }}
+					{{ $t("pages.courseRooms.index.courses.all") }}
 				</v-btn>
 				<v-switch
 					v-if="isTouchDevice"
 					v-model="allowDragging"
 					class="enable-disable"
-					:label="$t('pages.rooms.index.courses.arrangeCourses')"
-					:aria-label="$t('pages.rooms.index.courses.arrangeCourses')"
+					:label="$t('pages.courseRooms.index.courses.arrangeCourses')"
+					:aria-label="$t('pages.courseRooms.index.courses.arrangeCourses')"
 					:true-icon="mdiCheck"
 					hide-details
 				/>
@@ -33,9 +33,9 @@
 					variant="solo"
 					rounded
 					single-line
-					:label="$t('pages.rooms.index.search.label')"
+					:label="$t('pages.courseRooms.index.search.label')"
 					:append-inner-icon="mdiMagnify"
-					:aria-label="$t('pages.rooms.index.search.label')"
+					:aria-label="$t('pages.courseRooms.index.search.label')"
 					data-testid="search-field-course"
 				/>
 				<div
@@ -231,7 +231,7 @@ export default defineComponent({
 		await courseRoomListModule.fetchAllElements();
 		this.getDeviceDims();
 		if (this.hasRoomsBeingCopied) {
-			this.initCoursePolling(0, new Date());
+			this.initCoursePolling(new Date());
 		}
 	},
 	methods: {
@@ -239,18 +239,11 @@ export default defineComponent({
 			this.device = this.mq.current;
 			switch (this.device) {
 				case "tablet":
-					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "4em";
-					break;
 				case "tabletPortrait":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "4em";
 					break;
 				case "desktop":
-					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "5em";
-					this.allowDragging = true;
-					break;
 				case "large":
 					this.dimensions.colCount = 4;
 					this.dimensions.cellWidth = "5em";
@@ -377,7 +370,7 @@ export default defineComponent({
 			this.groupDialog.groupData = {};
 		},
 		defaultNaming(pos) {
-			const title = this.$t("pages.rooms.groupName");
+			const title = this.$t("pages.courseRooms.groupName");
 			const payload = {
 				title,
 				xPosition: pos.x,
@@ -403,13 +396,13 @@ export default defineComponent({
 				timeout: 5000,
 			});
 		},
-		initCoursePolling(count = 0, started) {
+		initCoursePolling(started, count = 0) {
 			const nextTimeout = count * count * 1000 + 5000;
 			setTimeout(
 				async () => {
 					await courseRoomListModule.fetch({ indicateLoading: false });
 					if (this.hasRoomsBeingCopied) {
-						this.initCoursePolling(count + 1, started ?? new Date());
+						this.initCoursePolling(started ?? new Date(), count + 1);
 					} else {
 						this.notifierModule?.show({
 							text: this.$t("components.molecules.copyResult.timeoutSuccess"),
@@ -425,7 +418,7 @@ export default defineComponent({
 	},
 	mounted() {
 		document.title = buildPageTitle(
-			this.$t("pages.rooms.index.courses.active")
+			this.$t("pages.courseRooms.index.courses.active")
 		);
 	},
 });
