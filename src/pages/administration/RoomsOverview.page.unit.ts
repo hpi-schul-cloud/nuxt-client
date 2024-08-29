@@ -447,9 +447,9 @@ describe("RoomsOverview", () => {
 			};
 
 			it("should open the StartExistingCourseSyncDialog ", async () => {
-				const { wrapper, courseId } = setup();
+				const { wrapper } = setup();
 
-				const syncButton = wrapper
+				await wrapper
 					.find('[data-testid="course-table-start-course-sync-btn"]')
 					.trigger("click");
 				await nextTick();
