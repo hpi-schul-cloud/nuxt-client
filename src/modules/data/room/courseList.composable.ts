@@ -1,12 +1,14 @@
-import { CourseSortQueryType, CourseStatusQueryType } from "@/serverApi/v3";
+import {
+	CourseInfoDataResponse,
+	CourseSortQueryType,
+	CourseStatusQueryType,
+} from "@/serverApi/v3";
 import { BusinessError, Pagination } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useCourseApi } from "./courseApi.composable";
-import { CourseInfo } from "./type";
-import { CourseInfoMapper } from "./course-info.mapper";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
 
 export const useCourseList = () => {
@@ -16,7 +18,7 @@ export const useCourseList = () => {
 	const { t } = useI18n();
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
-	const courses: Ref<CourseInfo[]> = ref([]);
+	const courses: Ref<CourseInfoDataResponse[]> = ref([]);
 	const pagination: Ref<Pagination> = ref({ total: 0, limit: 10, skip: 0 });
 	const page: Ref<number> = ref(1);
 	const key: Ref<CourseSortQueryType | undefined> = ref();
@@ -55,9 +57,7 @@ export const useCourseList = () => {
 				sortOrder.value
 			);
 
-			courses.value = response.data.data.map((course: any) => {
-				return CourseInfoMapper.mapToCourseInfo(course);
-			});
+			courses.value = response.data.data;
 
 			pagination.value.limit = response.data.limit;
 			pagination.value.skip = response.data.skip;

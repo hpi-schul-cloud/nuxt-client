@@ -119,7 +119,7 @@
 			color="primary"
 			variant="flat"
 			data-testid="admin-courses-add-button"
-			href="/courses/add?redirectUrl=/administration/rooms/new"
+			:href="sanitizedUrl"
 		>
 			{{ t("pages.administration.courses.index.add") }}
 		</v-btn>
@@ -139,6 +139,7 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
+	CourseInfoDataResponse,
 	CourseSortQueryType,
 	CourseStatusQueryType,
 	SchulcloudTheme,
@@ -152,7 +153,7 @@ import {
 	injectStrict,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { CourseInfo, useCourseList } from "@data-room";
+import { useCourseList } from "@data-room";
 import { StartExistingCourseSyncDialog } from "@feature-course-sync";
 import { RenderHTML } from "@feature-render-html";
 import { useTitle } from "@vueuse/core";
@@ -160,6 +161,7 @@ import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { mdiPencilOutline, mdiSync, mdiTrashCanOutline } from "@mdi/js";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 
 type Tab = "current" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -226,6 +228,8 @@ useTitle(buildPageTitle(t("pages.administration.rooms.index.title")));
 const courseStatusQueryType: ComputedRef<CourseStatusQueryType> = computed(
 	() => {
 		switch (props.tab) {
+			case "current":
+				return CourseStatusQueryType.Current;
 			case "archive":
 				return CourseStatusQueryType.Archive;
 			default:
@@ -238,28 +242,35 @@ const hasPermission: ComputedRef<boolean> = computed(() =>
 	authModule.getUserPermissions.includes("COURSE_ADMINISTRATION".toLowerCase())
 );
 
-const showRoomAction = (item: CourseInfo) => hasPermission.value && item.id;
+const sanitizedUrl = computed(() =>
+	sanitizeUrl(
+		`/courses/${selectedItem.value?.id}/edit?redirectUrl=/administration/rooms/new`
+	)
+);
 
-const showSyncAction = (item: CourseInfo) =>
-	hasPermission.value && !item.syncedWithGroup;
+const showRoomAction = (item: CourseInfoDataResponse) =>
+	hasPermission.value && item.id;
+
+const showSyncAction = (item: CourseInfoDataResponse) =>
+	hasPermission.value && !item.syncedGroup;
 
 const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
 const isStartSyncDialogOpen: Ref<boolean> = ref(false);
 
-const selectedItem: Ref<CourseInfo | undefined> = ref();
+const selectedItem: Ref<CourseInfoDataResponse | undefined> = ref();
 
 const selectedItemName: ComputedRef<string> = computed(
 	() => selectedItem.value?.name || "???"
 );
 
-const onClickStartSyncIcon = (selectedCourse: CourseInfo) => {
+const onClickStartSyncIcon = (selectedCourse: CourseInfoDataResponse) => {
 	selectedItem.value = selectedCourse;
 	isStartSyncDialogOpen.value = true;
 	isCourseSyncDialogOpen.value = true;
 };
 
-const onClickDeleteIcon = (selectedCourse: CourseInfo) => {
+const onClickDeleteIcon = (selectedCourse: CourseInfoDataResponse) => {
 	selectedItem.value = selectedCourse;
 	isDeleteDialogOpen.value = true;
 };
@@ -284,13 +295,13 @@ const headers = computed(() => {
 	headerList.push(
 		{
 			key: "classNames",
-			value: (item: CourseInfo) => item.classNames?.join(", "),
+			value: (item: CourseInfoDataResponse) => item.classNames?.join(", "),
 			title: t("common.labels.classes"),
 			sortable: false,
 		},
 		{
 			key: "teacherNames",
-			value: (item: CourseInfo) => item.teacherNames?.join(", "),
+			value: (item: CourseInfoDataResponse) => item.teacherNames?.join(", "),
 			title: t("common.labels.teacher"),
 			sortable: false,
 		},
@@ -305,14 +316,14 @@ const headers = computed(() => {
 });
 
 const onConfirmSynchronizeCourse = async () => {
-	loadCourseList();
+	await loadCourseList();
 };
 
 const onConfirmCourseDeletion = async () => {
 	if (selectedItem.value) {
 		await deleteCourse(selectedItem.value.id);
 	}
-	loadCourseList();
+	await loadCourseList();
 };
 
 const loadCourseList = async () => {

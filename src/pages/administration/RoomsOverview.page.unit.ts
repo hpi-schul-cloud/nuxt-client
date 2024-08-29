@@ -3,7 +3,10 @@ import EnvConfigModule from "@/store/env-config";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { envsFactory } from "@@/tests/test-utils";
+import {
+	courseInfoDataResponseFactory,
+	envsFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -15,7 +18,6 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VDataTableServer } from "vuetify/lib/components/index.mjs";
 import { useCourseApi, useCourseList } from "@data-room";
-import { courseInfoFactory } from "@@/tests/test-utils/factory/courseInfoFactory";
 import { groupModule } from "@/store";
 import RoomsOverview from "./RoomsOverview.page.vue";
 
@@ -156,11 +158,12 @@ describe("RoomsOverview", () => {
 	describe("when there are courses to display", () => {
 		describe("courses", () => {
 			const setup = () => {
-				useCourseListMock.courses.value = courseInfoFactory.buildList(10, {
-					syncedWithGroup: "group",
-					classNames: ["1A, 1B, 1C"],
-					teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
-				});
+				useCourseListMock.courses.value =
+					courseInfoDataResponseFactory.buildList(10, {
+						syncedGroup: "group",
+						classNames: ["1A, 1B, 1C"],
+						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+					});
 
 				useCourseListMock.page.value = 1;
 
@@ -315,10 +318,11 @@ describe("RoomsOverview", () => {
 	describe("action buttons", () => {
 		describe("when courses are available", () => {
 			const setup = () => {
-				useCourseListMock.courses.value = courseInfoFactory.buildList(10, {
-					classNames: ["1A, 1B, 1C"],
-					teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
-				});
+				useCourseListMock.courses.value =
+					courseInfoDataResponseFactory.buildList(10, {
+						classNames: ["1A, 1B, 1C"],
+						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+					});
 
 				const { wrapper } = createWrapper();
 
@@ -371,7 +375,7 @@ describe("RoomsOverview", () => {
 		describe("when clicking on the edit course button", () => {
 			const setup = () => {
 				useCourseListMock.courses.value = [
-					courseInfoFactory.build({
+					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 					}),
@@ -401,7 +405,7 @@ describe("RoomsOverview", () => {
 		describe("when clicking on the delete course button", () => {
 			const setup = () => {
 				useCourseListMock.courses.value = [
-					courseInfoFactory.build({
+					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 					}),
@@ -430,7 +434,7 @@ describe("RoomsOverview", () => {
 		describe("when clicking on the sync course button", () => {
 			const setup = () => {
 				useCourseListMock.courses.value = [
-					courseInfoFactory.build({
+					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 					}),
@@ -465,7 +469,7 @@ describe("RoomsOverview", () => {
 		describe("when delete dialog is open", () => {
 			const setup = () => {
 				useCourseListMock.courses.value = [
-					courseInfoFactory.build({
+					courseInfoDataResponseFactory.build({
 						classNames: ["1A, 1B, 1C"],
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 					}),

@@ -1,4 +1,5 @@
 import {
+	CourseInfoDataResponse,
 	CourseInfoListResponse,
 	CourseSortQueryType,
 	CourseStatusQueryType,
@@ -15,15 +16,11 @@ import {
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { BusinessError, Pagination } from "@/store/types/commons";
-import {
-	courseInfoDataResponseFactory,
-	courseInfoFactory,
-} from "@@/tests/test-utils/factory";
+import { courseInfoDataResponseFactory } from "@@/tests/test-utils/factory";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useCourseInfoApi } from "./courseInfoApi.composable";
 import { useCourseApi } from "./courseApi.composable";
 import { useCourseList } from "./courseList.composable";
-import { CourseInfo } from "./type";
 
 jest.mock("./courseApi.composable");
 jest.mock("./courseInfoApi.composable");
@@ -255,17 +252,19 @@ describe("courseList.composable", () => {
 
 				const course = courseList.data[0];
 
-				const courseInfo = courseInfoFactory.build({
+				const courseInfo = courseInfoDataResponseFactory.build({
 					id: course.id,
 					name: course.name,
 					classNames: course.classNames,
 					teacherNames: course.teacherNames,
-					syncedWithGroup: course.syncedGroup,
+					syncedGroup: course.syncedGroup,
 				});
 
 				await composable.fetchCourses(CourseStatusQueryType.Current);
 
-				expect(composable.courses.value).toEqual<CourseInfo[]>([courseInfo]);
+				expect(composable.courses.value).toEqual<CourseInfoDataResponse[]>([
+					courseInfo,
+				]);
 			});
 		});
 
