@@ -44,7 +44,7 @@
 						data-testid="course-table-edit-btn"
 						variant="outlined"
 						size="small"
-						:href="`/courses/${item.id}/edit?redirectUrl=/administration/rooms/new`"
+						:href="sanitizedUrl(item)"
 						class="mx-1 px-1"
 						min-width="0"
 					>
@@ -110,7 +110,7 @@
 			v-model:is-open="isCourseSyncDialogOpen"
 			:course-id="selectedItem?.id"
 			:course-name="selectedItem?.name"
-			@dialog-confirmed="onConfirmSynchronizeCourse"
+			@success="onConfirmSynchronizeCourse"
 			data-testid="start-sync-dialog"
 		/>
 
@@ -161,6 +161,7 @@ import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { mdiPencilOutline, mdiSync, mdiTrashCanOutline } from "@mdi/js";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 
 type Tab = "current" | "archive";
 // vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
@@ -236,6 +237,9 @@ const courseStatusQueryType: ComputedRef<CourseStatusQueryType> = computed(
 		}
 	}
 );
+
+const sanitizedUrl = (item: CourseInfoDataResponse) =>
+	sanitizeUrl(`/courses/${item.id}/edit?redirectUrl=/administration/rooms/new`);
 
 const hasPermission: ComputedRef<boolean> = computed(() =>
 	authModule.getUserPermissions.includes("COURSE_ADMINISTRATION".toLowerCase())
