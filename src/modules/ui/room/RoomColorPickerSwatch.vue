@@ -1,12 +1,12 @@
 <template>
-	<div
+	<VBtn
 		class="color-swatch rounded-circle elevation-3 ma-1 d-flex justify-center align-items-center cursor-pointer"
 		:class="`color-swatch--color-${color}`"
 		:data-testid="`color-swatch-${color}`"
 		@click="() => $emit('update:color', color)"
 	>
 		<VIcon v-if="isSelected" :icon="mdiCheckCircleOutline" color="white" />
-	</div>
+	</VBtn>
 </template>
 
 <script setup lang="ts">
@@ -30,6 +30,7 @@ defineEmits(["update:color"]);
 <style scoped>
 .color-swatch {
 	width: 40px;
+	min-width: 40px;
 	height: 40px;
 }
 
