@@ -162,7 +162,10 @@ const route = useRoute();
 watch(
 	() => route.params.id,
 	() => {
-		boardStore.fetchBoardRequest({ boardId: route.params.id });
+		const boardId = Array.isArray(route.params.id)
+			? route.params.id[0]
+			: route.params.id;
+		boardStore.fetchBoardRequest({ boardId });
 	},
 	{ immediate: true }
 );
