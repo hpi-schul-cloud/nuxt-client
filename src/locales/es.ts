@@ -1626,6 +1626,7 @@ export default {
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
 	"pages.rooms.title": "Habitaciones",
+	"pages.rooms.fab.title": "Crear habitación",
 	"pages.rooms.active.emptyState": "Actualmente no hay habitaciones aquí.",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

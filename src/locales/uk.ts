@@ -1604,6 +1604,7 @@ export default {
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
 	"pages.rooms.title": "Кімнати",
+	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.active.emptyState": "Зараз тут немає кімнат",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
