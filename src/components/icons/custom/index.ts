@@ -29,6 +29,7 @@ import langIconEs from "./lang-icon-es.vue";
 import langIconUk from "./lang-icon-uk.vue";
 import lernstoreOutline from "./lernstore_outline.vue";
 import mdiCustomGridOutline from "./mdi_custom_grid_outline.vue";
+import MdiCustomShelfOutline from "./MdiCustomShelfOutline.vue";
 import n21 from "./n21.vue";
 import schoolOutline from "./school_outline.vue";
 import taskDoneFilled from "./task-done-filled.vue";
@@ -73,6 +74,7 @@ const customAliases: Record<string, any> = {
 	langIconUk: langIconUk,
 	lernstore_outline: lernstoreOutline,
 	mdiCustomGridOutline: mdiCustomGridOutline,
+	mdiCustomShelfOutline: MdiCustomShelfOutline,
 	n21: n21,
 	school_outline: schoolOutline,
 	taskDoneFilled: taskDoneFilled,
@@ -94,5 +96,4 @@ const customAliases: Record<string, any> = {
 // 			}),
 // 		]),
 // };
-
 export { customAliases };
