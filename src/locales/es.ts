@@ -1625,6 +1625,8 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
+	"pages.rooms.active.title": "Habitaciones actuales",
+	"pages.rooms.active.emptyState": "Actualmente no hay habitaciones aquí.",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
