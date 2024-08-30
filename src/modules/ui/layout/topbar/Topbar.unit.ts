@@ -70,7 +70,6 @@ describe("@ui-layout/Topbar", () => {
 		});
 
 		await nextTick();
-		await nextTick();
 		const topbar = wrapper.findComponent({ name: "Topbar" });
 		return { wrapper, topbar };
 	};

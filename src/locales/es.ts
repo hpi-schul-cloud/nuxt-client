@@ -1625,6 +1625,8 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
+	"pages.rooms.active.title": "Habitaciones actuales",
+	"pages.rooms.active.emptyState": "Actualmente no hay habitaciones aquí.",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
@@ -1760,7 +1762,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
 	"feature.media-shelf.title": "Estante multimedia",
 	"feature.media-shelf.emptyState":
-		"Actualmente no se ha activado ningún medio para su uso.",
+		"Actualmente no hay medios disponibles para su uso",
 	"feature.media-shelf.createLine": "Añadir línea",
 	"feature.media-shelf.line.title": "Línea",
 	"feature.media-shelf.availableLine.title": "Medios disponibles",
