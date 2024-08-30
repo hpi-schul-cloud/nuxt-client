@@ -1121,7 +1121,6 @@ export default {
 	"pages.administration.remove.error": "Не вдалося видалити користувачів",
 	"pages.administration.remove.success": "Вибраних користувачів видалено",
 	"pages.administration.rooms.index.title": "Керувати курсами",
-	"pages.administration.rooms.manage": "Klasse verwalten",
 	"pages.administration.school.index.authSystems.addLdap":
 		"Додати систему LDAP",
 	"pages.administration.school.index.authSystems.alias": "Псевдонім",

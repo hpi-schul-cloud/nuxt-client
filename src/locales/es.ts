@@ -1138,7 +1138,6 @@ export default {
 	"pages.administration.remove.error": "Error al eliminar usuarios",
 	"pages.administration.remove.success": "Usuarios seleccionados eliminados",
 	"pages.administration.rooms.index.title": "Administrar cursos",
-	"pages.administration.rooms.manage": "Klasse verwalten",
 	"pages.administration.school.index.authSystems.addLdap":
 		"Añadir sistema LDAP",
 	"pages.administration.school.index.authSystems.alias": "Alias",

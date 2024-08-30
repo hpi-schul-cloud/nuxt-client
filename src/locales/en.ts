@@ -1107,7 +1107,6 @@ export default {
 	"pages.administration.remove.error": "Failed to delete users",
 	"pages.administration.remove.success": "Selected users deleted",
 	"pages.administration.rooms.index.title": "Manage courses",
-	"pages.administration.rooms.manage": "Klasse verwalten",
 	"pages.administration.school.index.authSystems.addLdap": "Add LDAP System",
 	"pages.administration.school.index.authSystems.alias": "Alias",
 	"pages.administration.school.index.authSystems.confirmDeleteText":

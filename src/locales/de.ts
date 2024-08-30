@@ -812,7 +812,7 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
 		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem ausgewählten Kurs synchronisiert.",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
-		"Eine Synchronisation mit {systemName} überschreibt die Personen des Kurses (Lehrkräft und Schüler*innen).",
+		"Eine Synchronisation mit {systemName} überschreibt die Personen des Kurses (Lehrkräfte und Schüler*innen).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
 		"Soll die Synchronisation der Nutzergruppe {groupName} im Kurs {courseName} wirklich gestartet werden?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
@@ -1113,7 +1113,6 @@ export default {
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",
 	"pages.administration.remove.success": "Ausgewählte(r) Nutzer gelöscht",
 	"pages.administration.rooms.index.title": "Kurse verwalten",
-	"pages.administration.rooms.manage": "Klasse verwalten",
 	"pages.administration.school.index.authSystems.addLdap":
 		"LDAP-System hinzufügen",
 	"pages.administration.school.index.authSystems.alias": "Alias",
