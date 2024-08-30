@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe max-width="short">
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4">{{ t("pages.rooms.active.title") }}</h1>
+			<h1 class="text-h3 py-2 mb-4">{{ t("pages.rooms.title") }}</h1>
 		</template>
 		<RoomGrid />
 	</DefaultWireframe>
