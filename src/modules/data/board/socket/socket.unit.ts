@@ -160,8 +160,8 @@ describe("socket.ts", () => {
 			});
 		});
 
-		describe("when the client connects for the first time", () => {
-			it("should not show 'connection restored' notification", () => {
+		describe("when the client reconnects", () => {
+			it("should show 'connection restored' notification", () => {
 				const { eventCallbacks } = setup({
 					isInitialConnection: false,
 				});
@@ -190,8 +190,10 @@ describe("socket.ts", () => {
 		});
 
 		describe("when board exists", () => {
-			it("should reloadBoard when socket is reconnected", () => {
-				const { eventCallbacks } = setup();
+			it("should call reloadBoard", () => {
+				const { eventCallbacks } = setup({
+					doInitializeTimeout: false,
+				});
 				eventCallbacks.disconnect();
 				eventCallbacks.connect();
 
@@ -199,14 +201,16 @@ describe("socket.ts", () => {
 			});
 		});
 
-		it("should not reloadBoard when socket is connected and board not exists", () => {
-			const { eventCallbacks } = setup();
+		describe("when board doesn't exist", () => {
+			it("should not call reloadBoard", () => {
+				const { eventCallbacks } = setup();
 
-			getOrInitialiseBoardStore().boardStore.board = undefined;
-			eventCallbacks.disconnect();
-			eventCallbacks.connect();
+				getOrInitialiseBoardStore().boardStore.board = undefined;
+				eventCallbacks.disconnect();
+				eventCallbacks.connect();
 
-			expect(boardStore.reloadBoard).not.toHaveBeenCalled();
+				expect(boardStore.reloadBoard).not.toHaveBeenCalled();
+			});
 		});
 	});
 
