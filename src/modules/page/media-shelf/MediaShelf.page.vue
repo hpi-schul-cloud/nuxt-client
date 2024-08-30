@@ -15,7 +15,7 @@
 				@update:model-value="updateMediaBoardLayout"
 			>
 				<VBtn
-					:icon="mdiCustomGridOutline"
+					icon="$mdiCustomShelfOutline"
 					size="x-small"
 					width="48px"
 					:value="MediaBoardLayoutType.List"
@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import mdiCustomGridOutline from "@/components/icons/custom/mdi_custom_grid_outline.vue";
+import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { MediaBoardLayoutType } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -73,7 +73,6 @@ import { mdiViewGridOutline } from "@mdi/js";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
-import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 
 const { t } = useI18n();
 
