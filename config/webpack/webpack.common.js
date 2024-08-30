@@ -156,6 +156,7 @@ module.exports = {
 			"@feature-room": getDir("src/modules/feature/room"),
 			"@ui-alert": getDir("src/modules/ui/alert"),
 			"@ui-board": getDir("src/modules/ui/board"),
+			"@ui-breadcrumbs": getDir("src/modules/ui/breadcrumbs"),
 			"@ui-chip": getDir("src/modules/ui/chip"),
 			"@ui-confirmation-dialog": getDir("src/modules/ui/confirmation-dialog"),
 			"@ui-date-time-picker": getDir("src/modules/ui/date-time-picker"),
