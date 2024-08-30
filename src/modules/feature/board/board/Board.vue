@@ -130,7 +130,7 @@ import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { computed, onMounted, onUnmounted, provide, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
@@ -156,6 +156,19 @@ const { createPageInformation, roomId } = useSharedBoardPageInformation();
 watch(board, async () => {
 	await createPageInformation(props.boardId);
 });
+
+const route = useRoute();
+
+watch(
+	() => route.params.id,
+	() => {
+		const boardId = Array.isArray(route.params.id)
+			? route.params.id[0]
+			: route.params.id;
+		boardStore.fetchBoardRequest({ boardId });
+	},
+	{ immediate: true }
+);
 
 useBodyScrolling();
 const { isTouchDetected } = useTouchDetection();
