@@ -67,7 +67,7 @@
 <script lang="ts" setup>
 import { delay } from "@/utils/helpers";
 import { injectStrict } from "@/utils/inject";
-import { computed, onMounted, Ref, ref, unref, withDefaults } from "vue";
+import { computed, onMounted, Ref, ref, unref } from "vue";
 import {
 	INJECT_SPEED_DIAL_ACTION_CLICKED,
 	INJECT_SPEED_DIAL_DIRECTION,

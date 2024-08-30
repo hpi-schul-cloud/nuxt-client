@@ -55,15 +55,7 @@ import { mdiClose } from "@mdi/js";
 import { useVuetifyBreakpoints } from "@util-device-detection";
 import { OnClickOutside } from "@vueuse/components";
 import { useWindowScroll, watchThrottled } from "@vueuse/core";
-import {
-	computed,
-	provide,
-	ref,
-	toRef,
-	useSlots,
-	VNode,
-	withDefaults,
-} from "vue";
+import { computed, provide, ref, toRef, useSlots, VNode } from "vue";
 import {
 	INJECT_SPEED_DIAL_ACTION_CLICKED,
 	INJECT_SPEED_DIAL_DIRECTION,
