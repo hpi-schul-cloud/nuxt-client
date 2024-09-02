@@ -23,6 +23,8 @@
 import { computed, PropType } from "vue";
 import { SidebarSingleItem } from "../types";
 import { useRoute } from "vue-router";
+import { useRoomDetailsStore } from "@data-room";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
 	item: {
@@ -34,19 +36,28 @@ const props = defineProps({
 const route = useRoute();
 
 const isActive = computed(() => {
-	const anyCoursePageIsActive =
-		route.path.includes("rooms") &&
-		route.path !== "/rooms" &&
-		props.item.to === "/rooms/courses-overview";
-
-	if (anyCoursePageIsActive) {
-		return true;
+	// Rooms
+	if (route.name === "rooms") {
+		return props.item.to === "/rooms";
 	}
 
-	const roomsSidebarItem = props.item.to === "/rooms";
-	const isRoomsPageActive = route.path === "/rooms";
-	if (roomsSidebarItem) {
-		return isRoomsPageActive;
+	// RoomDetails, CourseRoomDetails
+	if (route.name === "rooms-id") {
+		const { isRoom } = storeToRefs(useRoomDetailsStore());
+		if (isRoom.value === true) {
+			return props.item.to === "/rooms";
+		} else {
+			return props.item.to === "/rooms/courses-overview";
+		}
+	}
+
+	// Courses
+	if (
+		route.name === "course-room-list" ||
+		route.name === "course-room-overview" ||
+		route.name === "rooms-id"
+	) {
+		return props.item.to === "/rooms/courses-overview";
 	}
 
 	return (

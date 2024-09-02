@@ -2,8 +2,9 @@ import { Room } from "@/types/room/Room";
 import { delay } from "@/utils/helpers";
 import { ref } from "vue";
 import { roomsData } from "./rooms-mock-data";
+import { defineStore } from "pinia";
 
-export const useRoomDetailsState = () => {
+export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	const room = ref<Room | undefined>();
 	const isLoading = ref(true);
 	const isRoom = ref(false);
@@ -16,10 +17,16 @@ export const useRoomDetailsState = () => {
 		isLoading.value = false;
 	};
 
+	const deactivateRoom = () => {
+		isLoading.value = false;
+		isRoom.value = false;
+	};
+
 	return {
+		deactivateRoom,
 		fetchRoom,
 		isLoading,
 		isRoom,
 		room,
 	};
-};
+});
