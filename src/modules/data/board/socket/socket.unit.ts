@@ -58,6 +58,8 @@ describe("socket.ts", () => {
 	let mockSocket: Partial<socketModule.Socket>;
 	let timeoutResponseMock: { emitWithAck: jest.Mock };
 	let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	// We need to set following lines in the outmost describe level since the socket event handlers that set and use these
+	// values are created only once when the module is loaded and initially used.
 	let socketHandlers: Record<string, () => void> | undefined = undefined;
 	let boardStore: ReturnType<typeof useBoardStore>;
 	let cardStore: ReturnType<typeof useCardStore>;
