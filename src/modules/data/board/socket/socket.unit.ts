@@ -52,8 +52,9 @@ const initializeTimeout = (isPending = false) => {
 	});
 };
 
+const dispatchMock = jest.fn();
+
 describe("socket.ts", () => {
-	let dispatchMock: jest.Mock;
 	let mockSocket: Partial<socketModule.Socket>;
 	let timeoutResponseMock: { emitWithAck: jest.Mock };
 	let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -84,7 +85,9 @@ describe("socket.ts", () => {
 
 		mockBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockUseBoardNotifier.mockReturnValue(mockBoardNotifierCalls);
-		dispatchMock = jest.fn();
+	});
+
+	beforeEach(() => {
 		mockSocket.connected = true;
 	});
 
