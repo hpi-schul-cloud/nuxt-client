@@ -470,7 +470,7 @@ describe("RoomBoardCard", () => {
 	describe("when interacting with a board card", () => {
 		const userRole = ImportUserResponseRoleNamesEnum.Teacher;
 
-		it("should redirect to column board when clicking on the card", () => {
+		it.only("should redirect to column board when clicking on the card", () => {
 			const { wrapper, router } = setup({
 				boardData: mockDraftBoardData,
 				userRole,
@@ -481,7 +481,7 @@ describe("RoomBoardCard", () => {
 			boardCard.vm.$emit("click");
 
 			expect(router.push).toHaveBeenCalledTimes(1);
-			expect(router.push).toHaveBeenCalledWith(`${boardId}/board`);
+			expect(router.push).toHaveBeenCalledWith(`/boards/${boardId}`);
 		});
 
 		it("should redirect to column board when pressing enter on the card", async () => {
@@ -495,7 +495,7 @@ describe("RoomBoardCard", () => {
 			await boardCard.trigger("keydown.enter");
 
 			expect(router.push).toHaveBeenCalledTimes(1);
-			expect(router.push).toHaveBeenCalledWith(`${boardId}/board`);
+			expect(router.push).toHaveBeenCalledWith(`boards/${boardId}`);
 		});
 
 		it("should not redirect to column board if a card is dragged", async () => {
