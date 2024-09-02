@@ -4,19 +4,26 @@ import { envConfigModule } from "@/store";
 import { useBoardStore, useCardStore } from "@data-board";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
-import { nextTick } from "vue";
+import { useTimeoutFn } from "@vueuse/shared";
+import { ref } from "vue";
 
+const isInitialConnection = ref(true);
 let instance: Socket | null = null;
+let timeoutFn: ReturnType<typeof useTimeoutFn>;
 
-const connectionOptions = {
-	socketConnectionLost: false,
-};
-
-export const useSocketConnection = (dispatch: (action: Action) => void) => {
+export const useSocketConnection = (
+	dispatch: (action: Action) => void,
+	options?: { isInitialConnection: boolean }
+) => {
 	const boardStore = useBoardStore();
 	const cardStore = useCardStore();
 	const { showFailure, showSuccess } = useBoardNotifier();
 	const { t } = useI18n();
+
+	isInitialConnection.value =
+		options?.isInitialConnection !== undefined
+			? options.isInitialConnection
+			: true;
 
 	if (instance === null) {
 		instance = io(envConfigModule.getEnv.BOARD_COLLABORATION_URI, {
@@ -26,24 +33,26 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 		instance.on("connect", async function () {
 			console.log("connected");
-			if (connectionOptions.socketConnectionLost) {
-				showSuccess(t("common.notification.connection.restored"));
-				connectionOptions.socketConnectionLost = false;
-
-				if (!(boardStore.board && cardStore.cards)) return;
-
-				await boardStore.reloadBoard();
-				await cardStore.fetchCardRequest({
-					cardIds: Object.keys(cardStore.cards),
-				});
-				await nextTick();
+			if (isInitialConnection.value) return;
+			if (timeoutFn.isPending?.value) {
+				timeoutFn.stop();
+				return;
 			}
+			showSuccess(t("common.notification.connection.restored"));
+
+			if (!(boardStore.board && cardStore.cards)) return;
+			await boardStore.reloadBoard();
+			await cardStore.fetchCardRequest({
+				cardIds: Object.keys(cardStore.cards),
+			});
 		});
 
 		instance.on("disconnect", () => {
 			console.log("disconnected");
-			connectionOptions.socketConnectionLost = true;
-			showFailure(t("error.4500"));
+			isInitialConnection.value = false;
+			timeoutFn = useTimeoutFn(() => {
+				showFailure(t("error.4500"));
+			}, 1000);
 		});
 	}
 
@@ -69,8 +78,8 @@ export const useSocketConnection = (dispatch: (action: Action) => void) => {
 
 	const disconnectSocket = () => {
 		socket.disconnect();
-		if (connectionOptions.socketConnectionLost)
-			connectionOptions.socketConnectionLost = false;
+		isInitialConnection.value = true;
+		if (timeoutFn.isPending.value) timeoutFn.stop();
 	};
 
 	return {

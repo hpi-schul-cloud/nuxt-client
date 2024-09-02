@@ -8,7 +8,7 @@ export const useRoomsState = () => {
 	const isLoading = ref(true);
 
 	const fetchRooms = async () => {
-		await delay(1000);
+		await delay(500);
 		// TODO call API + do sorting there
 		rooms.value = roomsData.sort((r1, r2) => (r1.title > r2.title ? 1 : -1));
 		isLoading.value = false;
