@@ -1,8 +1,8 @@
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	CourseInfoListResponse,
-	CourseSortQueryType,
-	CourseStatusQueryType,
+	CourseSortProps,
+	CourseStatus,
 } from "@/serverApi/v3/api";
 import { mockApiResponse } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
@@ -37,7 +37,7 @@ describe("courseInfoApi.composable", () => {
 				skip: 0,
 				total: 1,
 			};
-			courseInfoApi.courseInfoControllerGetCoursesForSchool.mockResolvedValueOnce(
+			courseInfoApi.courseInfoControllerGetCourseInfo.mockResolvedValueOnce(
 				mockApiResponse({
 					data: infoResponse,
 				})
@@ -52,15 +52,15 @@ describe("courseInfoApi.composable", () => {
 			setup();
 
 			await useCourseInfoApi().loadCoursesForSchool(
-				CourseStatusQueryType.Current,
+				CourseStatus.Current,
 				10,
 				0,
-				CourseSortQueryType.Name,
+				CourseSortProps.Name,
 				"asc"
 			);
 
 			expect(
-				courseInfoApi.courseInfoControllerGetCoursesForSchool
+				courseInfoApi.courseInfoControllerGetCourseInfo
 			).toHaveBeenCalledWith(0, 10, "asc", "name", "current");
 		});
 	});

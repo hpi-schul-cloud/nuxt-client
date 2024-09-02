@@ -1,7 +1,7 @@
 import {
 	CourseInfoDataResponse,
-	CourseSortQueryType,
-	CourseStatusQueryType,
+	CourseSortProps,
+	CourseStatus,
 } from "@/serverApi/v3";
 import { BusinessError, Pagination } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
@@ -21,13 +21,13 @@ export const useCourseList = () => {
 	const courses: Ref<CourseInfoDataResponse[]> = ref([]);
 	const pagination: Ref<Pagination> = ref({ total: 0, limit: 10, skip: 0 });
 	const page: Ref<number> = ref(1);
-	const key: Ref<CourseSortQueryType | undefined> = ref();
+	const key: Ref<CourseSortProps | undefined> = ref();
 	const sortOrder: Ref<"asc" | "desc"> = ref("asc");
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 
-	const setSortBy = (sortBy: CourseSortQueryType | undefined) => {
+	const setSortBy = (sortBy: CourseSortProps | undefined) => {
 		key.value = sortBy;
 	};
 
@@ -44,7 +44,7 @@ export const useCourseList = () => {
 	};
 
 	const fetchCourses = async (
-		courseStatusQueryType: CourseStatusQueryType
+		courseStatusQueryType: CourseStatus
 	): Promise<void> => {
 		isLoading.value = true;
 
@@ -70,9 +70,12 @@ export const useCourseList = () => {
 	};
 
 	const deleteCourse = async (id: string) => {
+		isLoading.value = true;
+
 		try {
 			const deletedCourse = await deleteCourseById(id);
 
+			isLoading.value = false;
 			return deletedCourse;
 		} catch (errorResponse) {
 			handleError(errorResponse);

@@ -1,7 +1,7 @@
 import {
 	CourseInfoApiFactory,
-	CourseSortQueryType,
-	CourseStatusQueryType,
+	CourseSortProps,
+	CourseStatus,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
@@ -9,20 +9,19 @@ export const useCourseInfoApi = () => {
 	const courseInfoApi = CourseInfoApiFactory(undefined, "/v3", $axios);
 
 	const loadCoursesForSchool = async (
-		courseStatusQueryType: CourseStatusQueryType,
+		courseStatusQueryType: CourseStatus,
 		limit: number,
 		skip: number,
-		key: CourseSortQueryType | undefined,
+		key: CourseSortProps | undefined,
 		order: "asc" | "desc"
 	) => {
-		const response =
-			await courseInfoApi.courseInfoControllerGetCoursesForSchool(
-				skip,
-				limit,
-				order,
-				key,
-				courseStatusQueryType
-			);
+		const response = await courseInfoApi.courseInfoControllerGetCourseInfo(
+			skip,
+			limit,
+			order,
+			key,
+			courseStatusQueryType
+		);
 
 		return response;
 	};

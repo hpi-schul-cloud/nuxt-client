@@ -140,8 +140,8 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
 	CourseInfoDataResponse,
-	CourseSortQueryType,
-	CourseStatusQueryType,
+	CourseSortProps,
+	CourseStatus,
 	SchulcloudTheme,
 } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
@@ -163,9 +163,9 @@ import { useRoute, useRouter } from "vue-router";
 import { mdiPencilOutline, mdiSync, mdiTrashCanOutline } from "@mdi/js";
 
 type Tab = "current" | "archive";
-// vuetify typing: https://github.com/vuetifyjs/vuetify/blob/master/packages/vuetify/src/components/VDataTable/composables/sort.ts#L29-L29
+
 export type CourseSortItem = {
-	key: CourseSortQueryType;
+	key: CourseSortProps;
 	order?: boolean | "asc" | "desc";
 };
 
@@ -224,18 +224,16 @@ const breadcrumbs: Ref<Breadcrumb[]> = computed(() => [
 
 useTitle(buildPageTitle(t("pages.administration.rooms.index.title")));
 
-const courseStatusQueryType: ComputedRef<CourseStatusQueryType> = computed(
-	() => {
-		switch (props.tab) {
-			case "current":
-				return CourseStatusQueryType.Current;
-			case "archive":
-				return CourseStatusQueryType.Archive;
-			default:
-				return CourseStatusQueryType.Current;
-		}
+const courseStatus: ComputedRef<CourseStatus> = computed(() => {
+	switch (props.tab) {
+		case "current":
+			return CourseStatus.Current;
+		case "archive":
+			return CourseStatus.Archive;
+		default:
+			return CourseStatus.Current;
 	}
-);
+});
 
 const hasPermission: ComputedRef<boolean> = computed(() =>
 	authModule.getUserPermissions.includes("COURSE_ADMINISTRATION".toLowerCase())
@@ -320,7 +318,7 @@ const onConfirmCourseDeletion = async () => {
 };
 
 const loadCourseList = async () => {
-	await fetchCourses(courseStatusQueryType.value);
+	await fetchCourses(courseStatus.value);
 };
 
 const onTabsChange = async (tab: string) => {
@@ -333,7 +331,7 @@ const onTabsChange = async (tab: string) => {
 
 const onUpdateSortBy = async (sortBy: CourseSortItem[]) => {
 	const fieldToSortBy: CourseSortItem = sortBy[0];
-	const key: CourseSortQueryType | undefined = fieldToSortBy
+	const key: CourseSortProps | undefined = fieldToSortBy
 		? fieldToSortBy.key
 		: undefined;
 	setSortBy(key);

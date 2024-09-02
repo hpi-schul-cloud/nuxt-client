@@ -74,4 +74,28 @@ describe("StartNewCourseSyncDialog", () => {
 			);
 		});
 	});
+
+	describe("when cancel the group dialog", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper();
+
+			const group = groupResponseFactory.build();
+
+			return {
+				wrapper,
+				group,
+			};
+		};
+
+		it("should be closed", async () => {
+			const { wrapper } = setup();
+
+			const dialog = wrapper.getComponent(GroupSelectionDialog);
+
+			dialog.vm.$emit("cancel");
+			await nextTick();
+
+			expect(dialog.props().isOpen).toBe(false);
+		});
+	});
 });

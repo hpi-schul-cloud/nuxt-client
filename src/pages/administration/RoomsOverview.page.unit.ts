@@ -46,7 +46,10 @@ describe("RoomsOverview", () => {
 	let useCourseListMock: DeepMocked<ReturnType<typeof useCourseList>>;
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
 
-	const createWrapper = (tab: "current" | "archive" = "current") => {
+	const createWrapper = (
+		tab: "current" | "archive" = "current",
+		envModuleGetters: Partial<EnvConfigModule> = {}
+	) => {
 		const route = { query: { tab } };
 		useRouteMock.mockReturnValue(route);
 		const router = createMock<Router>();
@@ -61,6 +64,7 @@ describe("RoomsOverview", () => {
 				FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
 				FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
 			}),
+			...envModuleGetters,
 		});
 
 		const wrapper = mount(RoomsOverview, {
@@ -86,10 +90,11 @@ describe("RoomsOverview", () => {
 			wrapper,
 			route,
 			router,
+			envConfigModule,
 		};
 	};
 
-	const findTableComponen = (wrapper: VueWrapper) => {
+	const findTableComponent = (wrapper: VueWrapper) => {
 		return wrapper.findComponent<typeof VDataTableServer>(
 			'[data-testid="admin-rooms-table"]'
 		);
@@ -206,7 +211,7 @@ describe("RoomsOverview", () => {
 				it("should call composable to change sort by", async () => {
 					const { sortBy, wrapper } = setup();
 
-					findTableComponen(wrapper).vm.$emit("update:sortBy", [sortBy]);
+					findTableComponent(wrapper).vm.$emit("update:sortBy", [sortBy]);
 					await nextTick();
 
 					expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
@@ -232,7 +237,7 @@ describe("RoomsOverview", () => {
 				it("should call composable to change sort order", async () => {
 					const { sortBy, wrapper } = setup();
 
-					findTableComponen(wrapper).vm.$emit("update:sortBy", [sortBy]);
+					findTableComponent(wrapper).vm.$emit("update:sortBy", [sortBy]);
 					await nextTick();
 
 					expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
@@ -265,7 +270,7 @@ describe("RoomsOverview", () => {
 				it("should call composable to change the limit in pagination", async () => {
 					const { itemsPerPage, wrapper, useCourseListMock } = setup();
 
-					findTableComponen(wrapper).vm.$emit(
+					findTableComponent(wrapper).vm.$emit(
 						"update:itemsPerPage",
 						itemsPerPage
 					);
@@ -302,7 +307,7 @@ describe("RoomsOverview", () => {
 				it("should call composable to update current page", async () => {
 					const { page, wrapper, useCourseListMock } = setup();
 
-					findTableComponen(wrapper).vm.$emit("update:page", page);
+					findTableComponent(wrapper).vm.$emit("update:page", page);
 					await nextTick();
 
 					expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
@@ -325,7 +330,14 @@ describe("RoomsOverview", () => {
 						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
 					});
 
-				const { wrapper } = createWrapper();
+				const envConfigModule = createModuleMocks(EnvConfigModule, {
+					getEnv: envsFactory.build({
+						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+						FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
+					}),
+				});
+
+				const { wrapper } = createWrapper("current", envConfigModule);
 
 				return {
 					wrapper,
@@ -370,6 +382,47 @@ describe("RoomsOverview", () => {
 				expect(editBtn.exists()).toBeFalsy();
 				expect(deleteBtn.exists()).toBeFalsy();
 				expect(startSyncButton.exists()).toBeFalsy();
+			});
+		});
+
+		describe("when feature Schulconnex Sync is enabled", () => {
+			const setup = () => {
+				useCourseListMock.courses.value =
+					courseInfoDataResponseFactory.buildList(10, {
+						classNames: ["1A, 1B, 1C"],
+						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+					});
+
+				const envConfigModule = createModuleMocks(EnvConfigModule, {
+					getEnv: envsFactory.build({
+						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: false,
+						FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
+					}),
+				});
+
+				const { wrapper } = createWrapper("current", envConfigModule);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render 2 buttons", () => {
+				const { wrapper } = setup();
+
+				const editBtn = wrapper.find('[data-testid="course-table-edit-btn"]');
+
+				const deleteBtn = wrapper.find(
+					'[data-testid="course-table-delete-btn"]'
+				);
+
+				const startSyncButton = wrapper.find(
+					'[data-testid="course-table-start-course-sync-btn"]'
+				);
+
+				expect(startSyncButton.element.id).toBeFalsy();
+				expect(editBtn.exists()).toBeTruthy();
+				expect(deleteBtn.exists()).toBeTruthy();
 			});
 		});
 
