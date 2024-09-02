@@ -1,0 +1,38 @@
+<template>
+	<div v-if="isLoading" />
+	<template v-else>
+		<template v-if="isRoom">
+			<RoomDetails :room="room" />
+		</template>
+		<template v-else>
+			<CourseRoomDetailsPage />
+		</template>
+	</template>
+</template>
+
+<script setup lang="ts">
+import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useRoomDetailsState } from "@data-room";
+import { RoomDetails } from "@feature-room";
+import { watch } from "vue";
+import { useRoute } from "vue-router";
+
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
+const route = useRoute();
+const { fetchRoom, isLoading, isRoom, room } = useRoomDetailsState();
+
+watch(
+	() => route.params.id,
+	async () => {
+		if (envConfigModule.getEnv["FEATURE_ROOMS_ENABLED"]) {
+			await fetchRoom(route.params.id as string);
+		} else {
+			isLoading.value = false;
+			isRoom.value = false;
+		}
+	},
+	{ immediate: true }
+);
+</script>

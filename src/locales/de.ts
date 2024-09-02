@@ -1632,6 +1632,8 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
+	"pages.rooms.active.title": "Aktuelle Räume",
+	"pages.rooms.active.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
@@ -1763,7 +1765,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... und 03/03/2020",
 	"feature.media-shelf.title": "Medienregal",
 	"feature.media-shelf.emptyState":
-		"Aktuell sind noch keine Medien zur Verwendung freigeschaltet.",
+		"Aktuell sind keine Medien zur Verwendung vorhanden",
 	"feature.media-shelf.createLine": "Abschnitt hinzufügen",
 	"feature.media-shelf.line.title": "Abschnitt",
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
