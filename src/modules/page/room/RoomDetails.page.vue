@@ -14,18 +14,16 @@
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { RoomDetails } from "@feature-room";
 import { useRoomDetailsState } from "@data-room";
-import { ref, watch } from "vue";
+import { watch } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
-const isRoom = ref(true);
-const { fetchRoom, isLoading, room } = useRoomDetailsState();
+const { fetchRoom, isLoading, isRoom, room } = useRoomDetailsState();
 
 watch(
 	() => route.params.id,
 	async () => {
 		await fetchRoom(route.params.id as string);
-		isRoom.value = room.value != null;
 	},
 	{ immediate: true }
 );
