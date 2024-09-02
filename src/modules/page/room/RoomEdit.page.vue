@@ -18,8 +18,8 @@
 import { ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import RoomColorPicker from "@/modules/ui/room/RoomColorPicker.vue";
-import { RoomColorEnum } from "@/modules/ui/room/types";
+import RoomColorPicker from "@/modules/feature/room/RoomColorPicker/RoomColorPicker.vue";
+import { RoomColorEnum } from "@/modules/feature/room/RoomColorPicker/types";
 // import { useI18n } from "vue-i18n";
 
 // const { t } = useI18n();

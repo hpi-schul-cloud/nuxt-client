@@ -1,6 +1,10 @@
 <template>
-	Farbe
-	<div class="d-flex flex-wrap">
+	<label id="room-color-label" class="d-flex mb-2">Farbe</label>
+	<div
+		class="d-flex flex-wrap"
+		role="radiogroup"
+		aria-labelledby="room-color-label"
+	>
 		<template v-for="color in RoomColorEnum" :key="color">
 			<RoomColorPickerSwatch
 				:color="color"
@@ -12,10 +16,10 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
-import RoomColorPickerSwatch from "@/modules/ui/room/RoomColorPickerSwatch.vue";
-import { RoomColorEnum } from "./types";
 import { useVModel } from "@vueuse/core";
+import { PropType } from "vue";
+import RoomColorPickerSwatch from "./RoomColorPickerSwatch.vue";
+import { RoomColorEnum } from "./types";
 
 const props = defineProps({
 	selectedColor: {
@@ -37,5 +41,3 @@ const onUpdateColor = (color: RoomColorEnum) => {
 	emit("update:selectedColor", color);
 };
 </script>
-
-<style lang=""></style>
