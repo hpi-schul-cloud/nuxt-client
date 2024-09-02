@@ -73,4 +73,3 @@ onMounted(() => {
 	}
 }
 </style>
-../../data/room/Rooms.state../../data/room/Rooms.state
