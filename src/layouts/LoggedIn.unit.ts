@@ -15,9 +15,10 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { h } from "vue";
+import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index.mjs";
 import NewLoggedIn from "./LoggedIn.layout.vue";
+import { Topbar } from "@ui-layout";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
@@ -118,5 +119,26 @@ describe("newLoggedIn", () => {
 		const sidebar = wrapper.find("nav");
 
 		if (!sidebarExpanded) expect(sidebar.attributes("tabindex")).toBe("-1");
+	});
+
+	it("should set localStorage key 'sidebarExpanded' to 'false' on sidebar click", async () => {
+		defineWindowWidth(1564);
+		const { wrapper } = setup();
+		const sidebar = wrapper.find("nav");
+
+		await sidebar.trigger("click");
+		await nextTick();
+
+		expect(localStorage.getItem("sidebarExpanded")).toBe("false");
+	});
+
+	it("should set localStorage key 'sidebarExpanded' to 'true' on topbar click", async () => {
+		defineWindowWidth(564);
+		const { wrapper } = setup();
+		const topbarComponent = wrapper.findComponent(Topbar);
+		topbarComponent.vm.$emit("sidebar-toggled");
+		await nextTick();
+
+		expect(localStorage.getItem("sidebarExpanded")).toBe("true");
 	});
 });
