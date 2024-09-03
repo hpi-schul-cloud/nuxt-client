@@ -331,6 +331,7 @@ export default defineComponent({
 				await this.savePosition();
 				this.defaultNaming(pos);
 			}
+			this.dragging = false;
 		},
 		addGroupElements(pos) {
 			this.draggedElement.to = pos;

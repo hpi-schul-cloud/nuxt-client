@@ -153,6 +153,7 @@ module.exports = {
 			"@feature-render-html": getDir("src/modules/feature/render-html"),
 			"@feature-news-form": getDir("src/modules/feature/news-form"),
 			"@feature-media-shelf": getDir("src/modules/feature/media-shelf"),
+			"@feature-room": getDir("src/modules/feature/room"),
 			"@ui-alert": getDir("src/modules/ui/alert"),
 			"@ui-board": getDir("src/modules/ui/board"),
 			"@ui-chip": getDir("src/modules/ui/chip"),
