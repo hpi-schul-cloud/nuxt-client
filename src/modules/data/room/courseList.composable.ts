@@ -75,11 +75,12 @@ export const useCourseList = () => {
 		try {
 			const deletedCourse = await deleteCourseById(id);
 
-			isLoading.value = false;
 			return deletedCourse;
 		} catch (errorResponse) {
 			handleError(errorResponse);
 		}
+
+		isLoading.value = false;
 	};
 
 	const handleError = (errorResponse: unknown) => {
