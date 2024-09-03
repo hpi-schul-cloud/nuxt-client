@@ -14,6 +14,7 @@ import { ComponentProps } from "vue-component-type-helpers";
 import { useDragAndDrop } from "../board/shared/DragAndDrop.composable";
 import { availableMediaLineId, ElementMove } from "./data";
 import { useEditMode } from "./editMode.composable";
+import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
@@ -492,6 +493,30 @@ describe("MediaBoardLine", () => {
 			const sortable = wrapper.findComponent(Sortable);
 
 			expect(sortable.classes()).not.toContain("flex-wrap");
+		});
+	});
+
+	describe("when a MediaBoardExternalToolElement gets deleted", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper({
+				line: mediaLineResponseFactory.build(),
+				layout: MediaBoardLayoutType.List,
+				index: 0,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should emit a delete event", async () => {
+			const { wrapper } = setup();
+
+			const element = wrapper.findComponent(MediaBoardExternalToolElement);
+			element.vm.$emit("delete:element", "elementId");
+			await nextTick();
+
+			expect(wrapper.emitted("delete:element")).toEqual([["elementId"]]);
 		});
 	});
 });

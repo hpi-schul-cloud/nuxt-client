@@ -20,7 +20,11 @@
 			@update:caption="onUpdateCaption"
 			@add:alert="onAddAlert"
 		>
-			<BoardMenu scope="fileElement" v-if="isEditMode">
+			<BoardMenu
+				:scope="BoardMenuScope.FILE_ELEMENT"
+				has-background
+				v-if="isEditMode"
+			>
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
@@ -33,7 +37,7 @@
 			@upload:file="onUploadFile"
 			:isUploading="isUploading"
 		>
-			<BoardMenu scope="fileElement">
+			<BoardMenu :scope="BoardMenuScope.FILE_ELEMENT" has-background>
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete @click="onDelete" />
@@ -56,6 +60,7 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	BoardMenuScope,
 } from "@ui-board";
 import {
 	computed,
@@ -74,6 +79,11 @@ import FileUpload from "./upload/FileUpload.vue";
 
 export default defineComponent({
 	name: "FileContentElement",
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
+	},
 	components: {
 		FileUpload,
 		FileContent,
