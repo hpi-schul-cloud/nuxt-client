@@ -470,7 +470,7 @@ describe("RoomBoardCard", () => {
 	describe("when interacting with a board card", () => {
 		const userRole = ImportUserResponseRoleNamesEnum.Teacher;
 
-		it.only("should redirect to column board when clicking on the card", () => {
+		it("should redirect to column board when clicking on the card", () => {
 			const { wrapper, router } = setup({
 				boardData: mockDraftBoardData,
 				userRole,
