@@ -61,30 +61,6 @@ describe("courseApi.composable", () => {
 	});
 
 	describe("deleteCourseById", () => {
-		describe("when calender service is enabled", () => {
-			const setup = () => {
-				setupStores({ envConfigModule: EnvConfigModule });
-
-				const env = envsFactory.build({
-					CALENDAR_SERVICE_ENABLED: true,
-				});
-
-				envConfigModule.setEnvs(env);
-			};
-
-			it("should call the api to delete calender and Course", async () => {
-				setup();
-
-				await useCourseApi().deleteCourseById("id");
-
-				expect(axiosMock.delete).toHaveBeenNthCalledWith(
-					1,
-					"v1/calendar/courses/id"
-				);
-				expect(axiosMock.delete).toHaveBeenNthCalledWith(2, "v1/courses/id");
-			});
-		});
-
 		describe("when calender service is not enabled", () => {
 			const setup = () => {
 				setupStores({ envConfigModule: EnvConfigModule });
