@@ -15,6 +15,9 @@ ruleTester.run("material-icon-imports", rule, {
 		{
 			code: `import { useI18n } from "vue-i18n";`,
 		},
+		{
+			code: `import { mdi } from "vuetify/iconsets/mdi-svg";`,
+		},
 	],
 	invalid: [
 		{

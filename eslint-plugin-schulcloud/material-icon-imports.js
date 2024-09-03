@@ -20,7 +20,7 @@ module.exports = {
 				node.specifiers.forEach((specifier) => {
 					const isMaterialIconImport =
 						specifier.type === "ImportSpecifier" &&
-						specifier.imported.name.startsWith("mdi");
+						/^mdi[A-Z]/.test(specifier.imported.name); // match 'mdi' followed by a capital letter
 
 					if (isMaterialIconImport && importPath !== "@icons/material") {
 						context.report({
