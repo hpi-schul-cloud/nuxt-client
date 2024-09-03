@@ -195,7 +195,7 @@ import { unchangedPassword } from "@/utils/ldapConstants";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
 import InfoMessage from "@/components/atoms/InfoMessage";
-import { mdiChevronLeft } from "@mdi/js";
+import { mdiChevronLeft } from "@icons/material";
 import { RenderHTML } from "@feature-render-html";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";

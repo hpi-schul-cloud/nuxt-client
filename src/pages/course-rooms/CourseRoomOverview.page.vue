@@ -132,7 +132,7 @@ import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { mdiCheck, mdiMagnify } from "@mdi/js";
+import { mdiCheck, mdiMagnify } from "@icons/material";
 import { defineComponent, reactive } from "vue";
 
 export default defineComponent({

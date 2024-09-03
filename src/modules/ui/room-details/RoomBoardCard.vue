@@ -68,7 +68,7 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 	mdiViewDashboardOutline,
-} from "@/components/icons/material";
+} from "@icons/material";
 import {
 	BoardLayout,
 	ImportUserResponseRoleNamesEnum as Roles,

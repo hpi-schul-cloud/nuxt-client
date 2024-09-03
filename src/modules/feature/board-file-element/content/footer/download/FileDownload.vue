@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
-import { mdiTrayArrowDown } from "@mdi/js";
+import { mdiTrayArrowDown } from "@icons/material";
 import { defineComponent } from "vue";
 
 export default defineComponent({

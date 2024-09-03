@@ -144,7 +144,7 @@ import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
-import { mdiAccountPlus, mdiCloudDownload } from "@mdi/js";
+import { mdiAccountPlus, mdiCloudDownload } from "@icons/material";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";

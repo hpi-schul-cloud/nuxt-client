@@ -94,7 +94,7 @@ import { fromInputDateTime, createInputDateTime } from "@/plugins/datetime";
 import { newsModule, notifierModule } from "@/store";
 import TitleInput from "./TitleInput.vue";
 import FormActions from "./FormActions.vue";
-import { mdiClose, mdiCheck, mdiDelete } from "@mdi/js";
+import { mdiClose, mdiCheck, mdiDelete } from "@icons/material";
 import { CkEditor } from "@feature-editor";
 
 export default defineComponent({

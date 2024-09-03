@@ -57,7 +57,7 @@
 
 <script lang="ts">
 import { formatSecondsToHourMinSec } from "@/utils/fileHelper";
-import { mdiPause, mdiPlay, mdiPlaySpeed } from "@mdi/js";
+import { mdiPause, mdiPlay, mdiPlaySpeed } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";

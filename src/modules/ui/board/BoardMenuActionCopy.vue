@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { BoardMenuAction } from "@ui-board";
-import { mdiContentCopy } from "@/components/icons/material";
+import { mdiContentCopy } from "@icons/material";
 
 const emit = defineEmits(["click"]);
 

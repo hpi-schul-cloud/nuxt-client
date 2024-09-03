@@ -10,6 +10,7 @@
 		"test:unit": "npx jest",
 		"test:unit:ci": "npm run test:unit -- --coverage --ci --maxWorkers=4",
 		"lint": "npx eslint 'src/**/*.{ts,js,vue}'",
+		"lint:fix": "npx eslint 'src/**/*.{ts,js,vue}' --fix",
 		"generate-client:server": "node generate-client.js -c openapitools-for-server.json",
 		"generate-client:filestorage": "node generate-client.js -u 'http://localhost:4444/api/v3/docs-json/' -p 'src/fileStorageApi/v3' -c 'openapitools-for-file-storage.json'",
 		"generate-client:h5p-editor": "node generate-client.js -u 'http://localhost:4448/api/v3/docs-json/' -p 'src/h5pEditorApi/v3' -c 'openapitools-for-h5p-editor.json'"

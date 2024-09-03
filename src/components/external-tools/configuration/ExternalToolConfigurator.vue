@@ -100,7 +100,7 @@
 
 <script setup lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
-import { mdiAlertCircle } from "@/components/icons/material";
+import { mdiAlertCircle } from "@icons/material";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import {
 	SchoolExternalTool,
@@ -114,7 +114,7 @@ import {
 	ContextExternalTool,
 	ExternalToolConfigurationTemplate,
 } from "@data-external-tool";
-import { mdiContentPaste } from "@mdi/js";
+import { mdiContentPaste } from "@icons/material";
 import {
 	computed,
 	ComputedRef,

@@ -194,7 +194,7 @@ import {
 } from "@/utils/helpers";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
-import { mdiClose, mdiOpenInNew } from "@mdi/js";
+import { mdiClose, mdiOpenInNew } from "@icons/material";
 import BaseLink from "../base/BaseLink";
 
 const DEFAULT_AUTHOR = "admin";

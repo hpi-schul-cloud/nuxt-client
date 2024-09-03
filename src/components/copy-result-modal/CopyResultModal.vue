@@ -55,7 +55,7 @@ import {
 	mdiCheckCircle,
 	mdiCloseCircle,
 	mdiInformation,
-} from "@mdi/js";
+} from "@icons/material";
 
 export default {
 	name: "CopyResultModal",

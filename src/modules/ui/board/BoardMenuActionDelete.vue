@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { injectStrict } from "@/utils/inject";
-import { mdiTrashCanOutline } from "@mdi/js";
+import { mdiTrashCanOutline } from "@icons/material";
 import { BoardMenuAction } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { BoardMenuScope } from "./board-menu-scope";

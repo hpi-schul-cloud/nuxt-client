@@ -138,7 +138,7 @@ import {
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { downloadFile } from "@/utils/fileHelper";
 import { formatDateForAlerts } from "@/plugins/datetime";
-import { mdiAlertCircle } from "@/components/icons/material";
+import { mdiAlertCircle } from "@icons/material";
 
 export default defineComponent({
 	name: "SchoolPolicy",

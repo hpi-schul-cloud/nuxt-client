@@ -211,7 +211,7 @@ import {
 	mdiPencilOutline,
 	mdiSyncOff,
 	mdiTrashCanOutline,
-} from "@mdi/js";
+} from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";

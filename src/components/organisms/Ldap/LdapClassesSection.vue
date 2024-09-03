@@ -81,7 +81,7 @@ import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
 import { defineComponent } from "vue";
 import useVuelidate from "@vuelidate/core";
-import { mdiCheck } from "@mdi/js";
+import { mdiCheck } from "@icons/material";
 
 export default defineComponent({
 	setup() {

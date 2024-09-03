@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { mdiTrayArrowUp } from "@mdi/js";
+import { mdiTrayArrowUp } from "@icons/material";
 import { useVModel } from "@vueuse/core";
 import { defineComponent, onMounted, ref, watch } from "vue";
 

@@ -96,7 +96,7 @@ import {
 	useCardStore,
 	useEditMode,
 } from "@data-board";
-import { mdiArrowExpand } from "@mdi/js";
+import { mdiArrowExpand } from "@icons/material";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,

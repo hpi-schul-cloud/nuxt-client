@@ -7,10 +7,7 @@ import {
 import { BoardMenuActionEdit } from "@ui-board";
 import { mount } from "@vue/test-utils";
 import BoardMenuAction from "./BoardMenuAction.vue";
-import {
-	mdiPencilOutline,
-	mdiRenameOutline,
-} from "@/components/icons/material";
+import { mdiPencilOutline, mdiRenameOutline } from "@icons/material";
 
 describe("BoardMenuActionEdit Component", () => {
 	const setup = (options: { scope: BoardMenuScope }) => {

@@ -9,10 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-	mdiPencilOutline,
-	mdiRenameOutline,
-} from "@/components/icons/material";
+import { mdiPencilOutline, mdiRenameOutline } from "@icons/material";
 import { injectStrict } from "@/utils/inject";
 import { MENU_SCOPE } from "./injection-tokens";
 import { BoardMenuAction } from "@ui-board";

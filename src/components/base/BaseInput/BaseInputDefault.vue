@@ -88,7 +88,7 @@
 </template>
 <script>
 import { inputRangeDate } from "@/plugins/datetime";
-import { mdiEyeOffOutline, mdiEyeOutline } from "@mdi/js";
+import { mdiEyeOffOutline, mdiEyeOutline } from "@icons/material";
 import { defineComponent } from "vue";
 import { useUid } from "@/utils/uid";
 

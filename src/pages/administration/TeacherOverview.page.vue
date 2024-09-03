@@ -141,7 +141,7 @@ import {
 	mdiCloudDownload,
 	mdiPencilOutline,
 	mdiPlus,
-} from "@mdi/js";
+} from "@icons/material";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";

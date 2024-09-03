@@ -58,7 +58,7 @@ import {
 	STATUS_ALERTS_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
-import { mdiMenu, mdiAlert, mdiQrcode } from "@/components/icons/material";
+import { mdiMenu, mdiAlert, mdiQrcode } from "@icons/material";
 import TopbarItem from "./TopbarItem.vue";
 import PageShare from "./PageShare.vue";
 import CloudStatusMessages from "./CloudStatusMessages.vue";

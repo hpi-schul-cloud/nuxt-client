@@ -15,7 +15,7 @@ import {
 	mdiArrowCollapseUp,
 	mdiCogOutline,
 	mdiTrashCanOutline,
-} from "@mdi/js";
+} from "@icons/material";
 import {
 	BoardMenu,
 	BoardMenuAction,

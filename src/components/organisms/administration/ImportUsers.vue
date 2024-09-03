@@ -279,7 +279,7 @@ import {
 	mdiFlag,
 	mdiFlagOutline,
 	mdiPencilOutline,
-} from "@/components/icons/material";
+} from "@icons/material";
 import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch";
 import {
 	ImportUserResponseRoleNamesEnum,

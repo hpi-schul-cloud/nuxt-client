@@ -3,7 +3,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { mdiClose, mdiTrayArrowDown } from "@mdi/js";
+import { mdiClose, mdiTrayArrowDown } from "@icons/material";
 import { PreviewImage } from "@ui-preview-image";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";

@@ -4,7 +4,7 @@ import {
 	FILE_PATHS_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
-import { mdiBookshelf } from "@mdi/js";
+import { mdiBookshelf } from "@icons/material";
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";

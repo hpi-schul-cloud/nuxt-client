@@ -135,7 +135,7 @@ import {
 	mdiSyncOff,
 	mdiViewDashboardOutline,
 	mdiViewListOutline,
-} from "@mdi/js";
+} from "@icons/material";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";

@@ -230,7 +230,7 @@
 <script>
 import InfoBox from "@/components/molecules/InfoBox";
 import { envConfigModule } from "@/store";
-import { mdiInformation } from "@mdi/js";
+import { mdiInformation } from "@icons/material";
 
 const selectionStateMap = new Map([
 	[true, "all"],
