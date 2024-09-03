@@ -388,7 +388,7 @@ describe("courseList.composable", () => {
 
 				await composable.deleteCourse("id");
 
-				expect(composable.isLoading.value).toBe(true);
+				expect(composable.isLoading.value).toBe(false);
 			});
 
 			it("should set the error", async () => {
