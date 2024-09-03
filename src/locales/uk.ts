@@ -334,6 +334,7 @@ export default {
 	"components.board.menu.drawingElement": "Налаштування дошки",
 	"components.board.menu.externalToolElement":
 		"Налаштування зовнішнього інструменту",
+	"components.board.menu.mediaExternalToolElement": "Середні налаштування",
 	"components.board.menu.fileElement": "Налаштування файлу",
 	"components.board.menu.linkElement": "Налаштування посилання",
 	"components.board.menu.submissionElement": "Налаштування Подання",
@@ -391,6 +392,7 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Цей Etherpad є видимою і доступною для редагування для всіх учасників курсу.",
 	"components.cardElement.externalToolElement": "Зовнішній інструмент",
+	"components.cardElement.mediaExternalToolElement": "Середній",
 	"components.cardElement.fileElement": "Файл",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",

@@ -14,11 +14,10 @@ import {
 	mdiRenameOutline,
 } from "@/components/icons/material";
 import { injectStrict } from "@/utils/inject";
-import { MENU_SCOPE } from "./injection-tokens";
-import { BoardMenuAction } from "@ui-board";
+import { BoardMenuAction, BoardMenuScope } from "@ui-board";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { BoardMenuScope } from "./board-menu-scope";
+import { MENU_SCOPE } from "./injection-tokens";
 
 defineProps({
 	skipDeleteConfirmation: { type: Boolean, default: () => false },
@@ -32,10 +31,12 @@ const scope = injectStrict<BoardMenuScope>(MENU_SCOPE);
 const onClick = ($event: Event) => emit("click", $event);
 
 const editIcon = computed(() =>
-	scope === "card" ? mdiPencilOutline : mdiRenameOutline
+	scope === BoardMenuScope.CARD ? mdiPencilOutline : mdiRenameOutline
 );
 
 const actionName = computed(() =>
-	scope === "card" ? t("common.actions.edit") : t("common.actions.rename")
+	scope === BoardMenuScope.CARD
+		? t("common.actions.edit")
+		: t("common.actions.rename")
 );
 </script>

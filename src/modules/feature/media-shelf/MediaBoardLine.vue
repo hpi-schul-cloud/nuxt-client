@@ -57,6 +57,7 @@
 								:data-element-id="element.id"
 								:key="element.id"
 								:element="element"
+								@delete:element="onElementDelete"
 							/>
 						</template>
 					</Sortable>
@@ -151,6 +152,10 @@ const lineBackgroundColorHex: Ref<string> = computed(() =>
 
 const onRenameTitle = () => {
 	startEditMode();
+};
+
+const onElementDelete = (elementId: string) => {
+	emit("delete:element", elementId);
 };
 
 const onElementDragEnd = async (event: SortableEvent) => {

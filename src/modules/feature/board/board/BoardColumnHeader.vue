@@ -20,7 +20,7 @@
 				>
 					<BoardMenu
 						v-if="hasDeletePermission"
-						scope="column"
+						:scope="BoardMenuScope.COLUMN"
 						:data-testid="`column-menu-btn-${index}`"
 					>
 						<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
@@ -63,6 +63,7 @@ import {
 	BoardMenuActionMoveColumnUp,
 	BoardMenuActionMoveLeft,
 	BoardMenuActionMoveRight,
+	BoardMenuScope,
 } from "@ui-board";
 import { ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";

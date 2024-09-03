@@ -2,24 +2,24 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { shallowMount } from "@vue/test-utils";
-import BoardMenu from "./BoardMenu.vue";
+import { mount, shallowMount } from "@vue/test-utils";
 import { BoardMenuScope } from "./board-menu-scope";
+import BoardMenu from "./BoardMenu.vue";
 
 describe("BoardMenu Component", () => {
-	const setup = () => {
-		const wrapper = shallowMount(BoardMenu, {
-			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
-			slots: {
-				default: "<div>Delete Card</div>",
-			},
-			props: { scope: "card" },
-		});
-
-		return wrapper;
-	};
-
 	describe("when component is mounted", () => {
+		const setup = () => {
+			const wrapper = shallowMount(BoardMenu, {
+				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
+				slots: {
+					default: "<div>Delete Card</div>",
+				},
+				props: { scope: BoardMenuScope.CARD },
+			});
+
+			return wrapper;
+		};
+
 		it("should be found in dom", () => {
 			const wrapper = setup();
 			expect(wrapper).toBeDefined();
@@ -43,114 +43,19 @@ describe("BoardMenu Component", () => {
 			return { wrapper };
 		};
 
-		it("should have correct aria-label for board scope", () => {
-			const { wrapper } = setupScreenreader({ scope: "board" });
-			wrapper.setProps({ scope: "board" });
+		it.each<BoardMenuScope>(Object.values(BoardMenuScope))(
+			"should have correct aria-label for %s scope",
+			(scope: BoardMenuScope) => {
+				const { wrapper } = setupScreenreader({ scope });
 
-			const screenreaderOnlySpan = wrapper.find(
-				'[data-testid="board-menu-screen-reader-only"]'
-			);
+				const screenreaderOnlySpan = wrapper.find(
+					'[data-testid="board-menu-screen-reader-only"]'
+				);
 
-			expect(screenreaderOnlySpan.text()).toEqual(
-				"components.board.menu.board"
-			);
-		});
-
-		it("should have correct aria-label for column scope", () => {
-			const { wrapper } = setupScreenreader({ scope: "column" });
-			wrapper.setProps({ scope: "column" });
-
-			const screenreaderOnlySpan = wrapper.find(
-				'[data-testid="board-menu-screen-reader-only"]'
-			);
-
-			expect(screenreaderOnlySpan.text()).toEqual(
-				"components.board.menu.column"
-			);
-		});
-
-		it("should have correct aria-label for card scope", () => {
-			const { wrapper } = setupScreenreader({ scope: "card" });
-
-			const screenreaderOnlySpan = wrapper.find(
-				'[data-testid="board-menu-screen-reader-only"]'
-			);
-
-			expect(screenreaderOnlySpan.text()).toEqual("components.board.menu.card");
-		});
-
-		it("should have correct aria-label for collobrativeTextEditorElement scope", () => {
-			const { wrapper } = setupScreenreader({
-				scope: "collaborativeTextEditorElement",
-			});
-
-			const screenreaderOnlySpan = wrapper.find(
-				'[data-testid="board-menu-screen-reader-only"]'
-			);
-
-			expect(screenreaderOnlySpan.text()).toEqual(
-				"components.board.menu.collaborativeTextEditorElement"
-			);
-		});
-
-		it("should have correct aria-label for drawingElement scope", () => {
-			const { wrapper } = setupScreenreader({ scope: "drawingElement" });
-
-			const screenreaderOnlySpan = wrapper.find(
-				'[data-testid="board-menu-screen-reader-only"]'
-			);
-
-			expect(screenreaderOnlySpan.text()).toEqual(
-				"components.board.menu.drawingElement"
-			);
-		});
-
-		it("should have correct aria-label for externalToolElement scope", () => {
-			const { wrapper } = setupScreenreader({ scope: "externalToolElement" });
-
-			const screenreaderOnlySpan = wrapper.find(
-				'[data-testid="board-menu-screen-reader-only"]'
-			);
-
-			expect(screenreaderOnlySpan.text()).toEqual(
-				"components.board.menu.externalToolElement"
-			);
-		});
-
-		it("should have correct aria-label for fileElement scope", () => {
-			const { wrapper } = setupScreenreader({ scope: "fileElement" });
-
-			const screenreaderOnlySpan = wrapper.find(
-				'[data-testid="board-menu-screen-reader-only"]'
-			);
-
-			expect(screenreaderOnlySpan.text()).toEqual(
-				"components.board.menu.fileElement"
-			);
-		});
-
-		it("should have correct aria-label for linkElement scope", () => {
-			const { wrapper } = setupScreenreader({ scope: "linkElement" });
-
-			const screenreaderOnlySpan = wrapper.find(
-				'[data-testid="board-menu-screen-reader-only"]'
-			);
-
-			expect(screenreaderOnlySpan.text()).toEqual(
-				"components.board.menu.linkElement"
-			);
-		});
-
-		it("should have correct aria-label for submissionElement scope", () => {
-			const { wrapper } = setupScreenreader({ scope: "submissionElement" });
-
-			const screenreaderOnlySpan = wrapper.find(
-				'[data-testid="board-menu-screen-reader-only"]'
-			);
-
-			expect(screenreaderOnlySpan.text()).toEqual(
-				"components.board.menu.submissionElement"
-			);
-		});
+				expect(screenreaderOnlySpan.text()).toEqual(
+					`components.board.menu.${scope}`
+				);
+			}
+		);
 	});
 });
