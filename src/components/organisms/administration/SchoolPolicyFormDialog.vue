@@ -5,7 +5,7 @@
 		@dialog-closed="cancel"
 		has-buttons
 		confirm-btn-title-key="pages.administration.school.index.schoolPolicy.replace"
-		confirm-btn-icon="$mdiFileReplaceOutline"
+		:confirm-btn-icon="mdiFileReplaceOutline"
 		:confirm-btn-disabled="!isValid"
 		@dialog-confirmed="submit"
 	>
