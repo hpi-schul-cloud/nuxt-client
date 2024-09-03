@@ -1,6 +1,7 @@
 <template>
 	<BoardMenu
-		:scope="BoardMenuScope.DELETED_ELEMENT"
+		variant="outlined"
+		:scope="BoardMenuScope.MEDIA_EXTERNAL_TOOL_ELEMENT"
 		has-background
 		data-testid="deleted-element-menu-btn"
 	>

@@ -26,6 +26,9 @@
 				</WarningChip>
 			</div>
 		</template>
+		<template #menu>
+			<MediaBoardExternalToolElementMenu @delete:element="onDelete" />
+		</template>
 	</MediaBoardElementDisplay>
 </template>
 
@@ -48,6 +51,7 @@ import { computed, ComputedRef, onUnmounted, PropType, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
+import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 
 const props = defineProps({
 	element: {
@@ -55,6 +59,10 @@ const props = defineProps({
 		required: true,
 	},
 });
+
+const emit = defineEmits<{
+	(e: "delete:element", elementId: string): void;
+}>();
 
 const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -133,6 +141,10 @@ onUnmounted(() => {
 });
 
 const { isDragging } = useDragAndDrop();
+
+const onDelete = async () => {
+	emit("delete:element", props.element.id);
+};
 
 const onClick = async () => {
 	// Loading the launch request has failed

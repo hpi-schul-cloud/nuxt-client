@@ -1,25 +1,38 @@
 <template>
-	<DefaultWireframe max-width="short" :breadcrumbs="breadcrumbs">
-		<template #header>
-			<h1 class="text-h3 py-2 mb-4">Room Details [TODO translation]</h1>
+	<div v-if="isLoading" />
+	<template v-else>
+		<template v-if="isRoom">
+			<RoomDetails :room="room" />
 		</template>
-		<div>Hallo</div>
-	</DefaultWireframe>
+		<template v-else>
+			<CourseRoomDetailsPage />
+		</template>
+	</template>
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useRoomDetailsState } from "@data-room";
+import { RoomDetails } from "@feature-room";
+import { watch } from "vue";
+import { useRoute } from "vue-router";
 
-const breadcrumbs: Breadcrumb[] = [
-	{
-		title: "Räume",
-		to: "/rooms/courses-overview",
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+
+const route = useRoute();
+const { fetchRoom, isLoading, isRoom, room } = useRoomDetailsState();
+
+watch(
+	() => route.params.id,
+	async () => {
+		if (envConfigModule.getEnv["FEATURE_ROOMS_ENABLED"]) {
+			await fetchRoom(route.params.id as string);
+		} else {
+			isLoading.value = false;
+			isRoom.value = false;
+		}
 	},
-	{
-		title: "<Raumtitel>",
-		to: "/rooms/courses-overview",
-		disabled: true,
-	},
-];
+	{ immediate: true }
+);
 </script>
