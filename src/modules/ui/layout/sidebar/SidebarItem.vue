@@ -36,6 +36,8 @@ const props = defineProps({
 const route = useRoute();
 
 const isActive = computed(() => {
+	const { isLoading, isRoom } = storeToRefs(useRoomDetailsStore());
+
 	// Rooms
 	if (route.name === "rooms") {
 		return props.item.to === "/rooms";
@@ -43,19 +45,19 @@ const isActive = computed(() => {
 
 	// RoomDetails, CourseRoomDetails
 	if (route.name === "rooms-id") {
-		const { isRoom } = storeToRefs(useRoomDetailsStore());
 		if (isRoom.value === true) {
 			return props.item.to === "/rooms";
 		} else {
-			return props.item.to === "/rooms/courses-overview";
+			return (
+				props.item.to === "/rooms/courses-overview" && isLoading.value === false
+			);
 		}
 	}
 
 	// Courses
 	if (
 		route.name === "course-room-list" ||
-		route.name === "course-room-overview" ||
-		route.name === "rooms-id"
+		route.name === "course-room-overview"
 	) {
 		return props.item.to === "/rooms/courses-overview";
 	}
