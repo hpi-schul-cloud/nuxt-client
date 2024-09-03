@@ -270,7 +270,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	{
 		path: `/boards/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-board")).ColumnBoardPage,
-		name: "board",
+		name: "boards-id",
 		props: (route: RouteLocationNormalized) => ({
 			boardId: route.params.id,
 		}),

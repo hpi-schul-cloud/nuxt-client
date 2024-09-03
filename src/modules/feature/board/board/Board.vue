@@ -362,7 +362,7 @@ const router = useRouter();
 const onCopyBoard = async () => {
 	await copy({ id: props.boardId, type: CopyParamsTypeEnum.ColumnBoard });
 	const copyId = copyModule.getCopyResult?.id;
-	router.push({ name: "board", params: { id: copyId } });
+	router.push({ name: "boards-id", params: { id: copyId } });
 };
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
