@@ -569,7 +569,7 @@ export default defineComponent({
 				layout,
 			};
 			const board = await this.courseRoomDetailsModule.createBoard(params);
-			await this.$router.push(`/rooms/${board.id}/board`);
+			await this.$router.push(`/boards/${board.id}`);
 		},
 	},
 	watch: {
