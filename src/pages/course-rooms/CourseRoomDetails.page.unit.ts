@@ -1,3 +1,4 @@
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
 	BoardElementResponseTypeEnum as BoardTypes,
 	ShareTokenBodyParamsParentTypeEnum,
@@ -30,14 +31,13 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-jest";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import { SelectBoardLayoutDialog } from "@ui-room-details";
-import DefaultWireframe from "../../components/templates/DefaultWireframe.vue";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -191,6 +191,7 @@ const getWrapper = (
 				RoomDashboard: true,
 				RoomExternalToolsOverview: true,
 				EndCourseSyncDialog: true,
+				StartExistingCourseSyncDialog: true,
 			},
 		},
 	});

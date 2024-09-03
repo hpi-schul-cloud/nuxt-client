@@ -8,7 +8,20 @@ export const useCourseApi = () => {
 		await courseApi.courseControllerStopSynchronization(courseId);
 	};
 
+	const startSynchronization = async (
+		courseId: string,
+		groupId: string
+	): Promise<void> => {
+		await courseApi.courseControllerStartSynchronization(courseId, { groupId });
+	};
+
+	const deleteCourseById = async (id: string) => {
+		await $axios.delete(`v1/courses/${id}`);
+	};
+
 	return {
 		stopSynchronization,
+		startSynchronization,
+		deleteCourseById,
 	};
 };
