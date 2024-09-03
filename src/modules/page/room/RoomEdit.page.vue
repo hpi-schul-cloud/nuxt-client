@@ -3,23 +3,14 @@
 		<template #header>
 			<h1 class="text-h3 py-2 mb-4">Edit Room [TODO translation]</h1>
 		</template>
-
-		<div>
-			<RoomColorPicker
-				:selected-color="roomColor"
-				@update:selected-color="onColorSelect($event)"
-			/>
-			Hallo
-		</div>
+		<RoomForm />
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import RoomColorPicker from "@/modules/feature/room/RoomColorPicker/RoomColorPicker.vue";
-import { RoomColorEnum } from "@/modules/feature/room/RoomColorPicker/types";
+import { RoomForm } from "@feature-room";
 // import { useI18n } from "vue-i18n";
 
 // const { t } = useI18n();
@@ -39,11 +30,4 @@ const breadcrumbs: Breadcrumb[] = [
 		disabled: true,
 	},
 ];
-
-const roomColor = ref(RoomColorEnum.BLUE_GREY);
-
-const onColorSelect = (color: RoomColorEnum) => {
-	console.log(color);
-	roomColor.value = color;
-};
 </script>
