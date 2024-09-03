@@ -135,6 +135,7 @@ import {
 	mdiSyncOff,
 	mdiViewDashboardOutline,
 	mdiViewListOutline,
+	mdiViewGridPlusOutline,
 } from "@icons/material";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
@@ -191,6 +192,7 @@ export default defineComponent({
 				mdiContentCopy,
 				mdiExport,
 				mdiSyncOff,
+				mdiViewGridPlusOutline,
 			},
 			breadcrumbs: [
 				{
@@ -320,7 +322,7 @@ export default defineComponent({
 				if (this.boardLayoutsEnabled) {
 					actions.push({
 						label: this.$t("pages.courseRoomDetails.fab.add.board"),
-						icon: "$mdiViewGridPlusOutline",
+						icon: mdiViewGridPlusOutline,
 						customEvent: "board-type-dialog-open",
 						dataTestId: "fab_button_add_board",
 						ariaLabel: this.$t("pages.courseRoomDetails.fab.add.board"),
