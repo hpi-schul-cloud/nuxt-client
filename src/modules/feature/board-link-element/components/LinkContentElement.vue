@@ -19,14 +19,14 @@
 			:title="computedElement.content.title"
 			:imageUrl="computedElement.content.imageUrl"
 			:isEditMode="isEditMode"
-			><BoardMenu scope="linkElement">
+			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</LinkContentElementDisplay>
 		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
-			><BoardMenu scope="linkElement">
+			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
 				<BoardMenuActionMoveUp @click="onMoveUp" />
 				<BoardMenuActionMoveDown @click="onMoveDown" />
 				<BoardMenuActionDelete @click="onDelete" />
@@ -37,21 +37,22 @@
 
 <script setup lang="ts">
 import { LinkElementResponse } from "@/serverApi/v3";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { computed, PropType, ref, toRef } from "vue";
-import LinkContentElementCreate from "./LinkContentElementCreate.vue";
-import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	BoardMenuScope,
 } from "@ui-board";
-import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
-import { ensureProtocolIncluded } from "../util/url.util";
-import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
-import { sanitizeUrl } from "@braintree/sanitize-url";
+import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
+import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
+import { ensureProtocolIncluded } from "../util/url.util";
+import LinkContentElementCreate from "./LinkContentElementCreate.vue";
+import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 
 const props = defineProps({
 	element: {

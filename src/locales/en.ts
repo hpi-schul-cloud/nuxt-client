@@ -325,7 +325,8 @@ export default {
 	"components.board.menu.column": "Column settings",
 	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",
 	"components.board.menu.drawingElement": "Whiteboard settings",
-	"components.board.menu.externalToolElement": "Externeal tool settings",
+	"components.board.menu.externalToolElement": "External tool settings",
+	"components.board.menu.mediaExternalToolElement": "Medium settings",
 	"components.board.menu.fileElement": "File settings",
 	"components.board.menu.linkElement": "Link settings",
 	"components.board.menu.submissionElement": "Submission settings",
@@ -383,6 +384,7 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"This Etherpad is visible and editable for all course participants.",
 	"components.cardElement.externalToolElement": "External tool",
+	"components.cardElement.mediaExternalToolElement": "Medium",
 	"components.cardElement.fileElement": "File",
 	"components.cardElement.fileElement.altDescription":
 		"A short description helps people who cannot see the picture.",

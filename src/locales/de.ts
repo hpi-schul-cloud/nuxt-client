@@ -329,6 +329,7 @@ export default {
 		"Etherpad-Einstellungen",
 	"components.board.menu.drawingElement": "Whiteboard-Einstellungen",
 	"components.board.menu.externalToolElement": "Externes-Tool-Einstellungen",
+	"components.board.menu.mediaExternalToolElement": "Medium-Einstellungen",
 	"components.board.menu.fileElement": "Datei-Einstellungen",
 	"components.board.menu.linkElement": "Link-Einstellungen",
 	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
@@ -386,6 +387,7 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.externalToolElement": "Externes Tool",
+	"components.cardElement.mediaExternalToolElement": "Medium",
 	"components.cardElement.fileElement": "Datei",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
