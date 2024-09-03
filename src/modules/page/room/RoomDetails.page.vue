@@ -16,7 +16,7 @@ import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useRoomDetailsStore } from "@data-room";
 import { RoomDetails } from "@feature-room";
 import { storeToRefs } from "pinia";
-import { watch } from "vue";
+import { onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -24,7 +24,7 @@ const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const route = useRoute();
 const roomDetailsStore = useRoomDetailsStore();
 const { isLoading, isRoom, room } = storeToRefs(roomDetailsStore);
-const { deactivateRoom, fetchRoom } = roomDetailsStore;
+const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 
 watch(
 	() => route.params.id,
@@ -37,4 +37,8 @@ watch(
 	},
 	{ immediate: true }
 );
+
+onUnmounted(() => {
+	resetState();
+});
 </script>

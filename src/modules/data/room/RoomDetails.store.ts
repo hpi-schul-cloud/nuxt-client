@@ -5,9 +5,9 @@ import { roomsData } from "./rooms-mock-data";
 import { defineStore } from "pinia";
 
 export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
-	const room = ref<Room | undefined>();
 	const isLoading = ref(true);
 	const isRoom = ref(false);
+	const room = ref<Room | undefined>();
 
 	const fetchRoom = async (id: string) => {
 		await delay(100);
@@ -22,11 +22,18 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		isRoom.value = false;
 	};
 
+	const resetState = () => {
+		isLoading.value = true;
+		isRoom.value = false;
+		room.value = undefined;
+	};
+
 	return {
 		deactivateRoom,
 		fetchRoom,
 		isLoading,
 		isRoom,
+		resetState,
 		room,
 	};
 });
