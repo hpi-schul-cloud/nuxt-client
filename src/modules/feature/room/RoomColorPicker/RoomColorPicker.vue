@@ -37,7 +37,6 @@ const isSelected = (color: RoomColorEnum) => {
 };
 
 const onUpdateColor = (color: RoomColorEnum) => {
-	currentColor.value = color;
 	emit("update:selectedColor", color);
 };
 </script>
