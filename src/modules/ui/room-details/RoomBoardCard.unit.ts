@@ -495,7 +495,7 @@ describe("RoomBoardCard", () => {
 			await boardCard.trigger("keydown.enter");
 
 			expect(router.push).toHaveBeenCalledTimes(1);
-			expect(router.push).toHaveBeenCalledWith(`boards/${boardId}`);
+			expect(router.push).toHaveBeenCalledWith(`/boards/${boardId}`);
 		});
 
 		it("should not redirect to column board if a card is dragged", async () => {

@@ -829,7 +829,7 @@ describe("Board", () => {
 				await boardHeader.vm.$emit("copy:board");
 
 				expect(router.push).toHaveBeenCalledWith({
-					name: "rooms-board",
+					name: "board",
 					params: { id: copyResultId },
 				});
 			});
