@@ -264,7 +264,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
-		redirect: { name: "board" },
+		redirect: { name: "boards-id" },
 		name: "rooms-board",
 	},
 	{
