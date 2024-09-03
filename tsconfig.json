@@ -44,10 +44,13 @@
 			"@feature-render-html": ["src/modules/feature/render-html"],
 			"@feature-news-form": ["src/modules/feature/news-form"],
 			"@feature-media-shelf": ["src/modules/feature/media-shelf"],
-			"@feature-board-deleted-element": ["src/modules/feature/board-deleted-element"],
+			"@feature-board-deleted-element": [
+				"src/modules/feature/board-deleted-element"
+			],
 			"@feature-room": ["src/modules/feature/room"],
 			"@ui-alert": ["src/modules/ui/alert"],
 			"@ui-board": ["src/modules/ui/board"],
+			"@ui-breadcrumbs": ["src/modules/ui/breadcrumbs"],
 			"@ui-chip": ["src/modules/ui/chip"],
 			"@ui-confirmation-dialog": ["src/modules/ui/confirmation-dialog"],
 			"@ui-date-time-picker": ["src/modules/ui/date-time-picker"],
