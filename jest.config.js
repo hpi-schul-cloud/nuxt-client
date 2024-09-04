@@ -56,6 +56,7 @@ const config = {
 		"<rootDir>/src/utils/**/*.(js|ts)",
 		"<rootDir>/src/composables/**/*.(js|ts)",
 		"<rootDir>/src/layouts/**/*.{js,ts,vue}",
+		"<rootDir>/eslint-plugin-schulcloud/**/*.{js,ts,vue}",
 		// Exclude
 		"!<rootDir>/src/components/base/**/*",
 		"!<rootDir>/src/components/icons/**/*",
