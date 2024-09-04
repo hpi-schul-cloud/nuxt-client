@@ -7,9 +7,10 @@ RUN apt update && apt install -y g++ libcairo2-dev libpango1.0-dev libjpeg-dev l
 WORKDIR /app
 
 COPY package.json package-lock.json ./
+COPY eslint-plugin-schulcloud ./eslint-plugin-schulcloud
 RUN npm ci
 
-COPY babel.config.js .eslintrc.js eslint-plugin-schulcloud LICENSE.md .prettierrc.js tsconfig.json tsconfig.build.json .eslintignore .prettierignore ./
+COPY babel.config.js .eslintrc.js LICENSE.md .prettierrc.js tsconfig.json tsconfig.build.json .eslintignore .prettierignore ./
 COPY public ./public
 COPY src ./src
 COPY config/webpack ./config/webpack
