@@ -48,8 +48,16 @@ watch(sidebarExpanded, (value) => {
 	localStorage.setItem("sidebarExpanded", value.toString());
 });
 
+watch(isDesktop, (value) => {
+	sidebarExpanded.value = value;
+});
+
 onMounted(() => {
 	const sidebarExpandedValue = localStorage.getItem("sidebarExpanded");
-	sidebarExpanded.value = sidebarExpandedValue === "true" || false;
+	if (!sidebarExpandedValue) {
+		localStorage.setItem("sidebarExpanded", "true");
+	}
+	sidebarExpanded.value =
+		localStorage.getItem("sidebarExpanded") === "true" || false;
 });
 </script>
