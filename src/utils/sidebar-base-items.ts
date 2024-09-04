@@ -215,9 +215,19 @@ const getSidebarItems = (): SidebarItemList => [
 			{
 				title: "global.sidebar.item.courses",
 				icon: "$mdiSchoolOutline",
+				to: "/administration/rooms/new",
+				testId: "Kurse",
+				activeForUrls: ["^/administration/rooms/new($|/.*)"],
+				feature: "FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED",
+			},
+			{
+				title: "global.sidebar.item.courses",
+				icon: "$mdiSchoolOutline",
 				href: "/administration/courses",
 				testId: "Kurse",
 				activeForUrls: ["^/administration/courses($|/.*)"],
+				feature: "FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED",
+				featureValue: false,
 			},
 			{
 				title: "global.sidebar.item.classes",
