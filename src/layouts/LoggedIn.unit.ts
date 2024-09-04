@@ -84,7 +84,23 @@ const defineWindowWidth = (width: number) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
+const mockGetLocalStorage = jest.fn();
+const mockSetLocalStorage = jest.fn();
+
 describe("newLoggedIn", () => {
+	beforeEach(() => {
+		Object.defineProperty(window, "localStorage", {
+			value: {
+				getItem: mockGetLocalStorage,
+				setItem: mockSetLocalStorage,
+			},
+		});
+	});
+
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
 	it("should render correctly", async () => {
 		const { wrapper } = setup();
 
@@ -129,7 +145,10 @@ describe("newLoggedIn", () => {
 		await sidebar.trigger("click");
 		await nextTick();
 
-		expect(localStorage.getItem("sidebarExpanded")).toBe("false");
+		expect(mockSetLocalStorage).toHaveBeenCalledWith(
+			"sidebarExpanded",
+			"false"
+		);
 	});
 
 	it("should set localStorage key 'sidebarExpanded' to 'true' on topbar click", async () => {
@@ -139,6 +158,11 @@ describe("newLoggedIn", () => {
 		topbarComponent.vm.$emit("sidebar-toggled");
 		await nextTick();
 
-		expect(localStorage.getItem("sidebarExpanded")).toBe("true");
+		expect(mockSetLocalStorage).toHaveBeenCalledWith("sidebarExpanded", "true");
+	});
+
+	it("should call 'localStorage.getItem' on mounted", async () => {
+		setup();
+		expect(mockGetLocalStorage).toHaveBeenCalledWith("sidebarExpanded");
 	});
 });
