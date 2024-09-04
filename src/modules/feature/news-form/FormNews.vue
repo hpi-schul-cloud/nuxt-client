@@ -94,7 +94,7 @@ import { fromInputDateTime, createInputDateTime } from "@/plugins/datetime";
 import { newsModule, notifierModule } from "@/store";
 import TitleInput from "./TitleInput.vue";
 import FormActions from "./FormActions.vue";
-import { mdiClose, mdiCheck, mdiDelete } from "@icons/material";
+import { mdiAlert, mdiClose, mdiCheck, mdiDelete } from "@icons/material";
 import { CkEditor } from "@feature-editor";
 
 export default defineComponent({
@@ -226,7 +226,7 @@ export default defineComponent({
 		},
 		async remove() {
 			this.dialogConfirm({
-				icon: "$mdiAlert",
+				icon: mdiAlert,
 				iconColor: "rgba(var(--v-theme-error))",
 				message: this.$t(
 					"components.organisms.FormNews.remove.confirm.message"
@@ -245,7 +245,7 @@ export default defineComponent({
 				message: this.$t(
 					"components.organisms.FormNews.cancel.confirm.message"
 				),
-				icon: "$mdiAlert",
+				icon: mdiAlert,
 				cancelText: this.$t("common.actions.cancel"),
 				confirmText: this.$t(
 					"components.organisms.FormNews.cancel.confirm.confirm"

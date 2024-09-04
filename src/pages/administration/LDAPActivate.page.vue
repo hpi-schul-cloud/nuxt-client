@@ -7,7 +7,7 @@
 		<section class="section">
 			<div class="icon-text">
 				<div class="icon-text-unit">
-					<v-icon class="material-icon">$mdiAccountSchoolOutline</v-icon>
+					<v-icon class="material-icon" :icon="mdiAccountSchoolOutline" />
 					<span>{{ verified.users && verified.users.student }}</span>
 					<span>{{ $t("common.labels.students") }}</span>
 				</div>
@@ -17,7 +17,10 @@
 					<span>{{ $t("common.labels.teacher.plural") }}</span>
 				</div>
 				<div class="icon-text-unit">
-					<v-icon class="material-icon">$mdiShieldAccountVariantOutline</v-icon>
+					<v-icon
+						class="material-icon"
+						:icon="mdiShieldAccountVariantOutline"
+					/>
 					<span>{{ verified.users && verified.users.admin }}</span>
 					<span>{{ $t("common.labels.admin") }}</span>
 				</div>
@@ -169,9 +172,11 @@
 					:title="$t('pages.administration.ldap.activate.message')"
 				>
 					<template #icon>
-						<v-icon color="rgba(var(--v-theme-success))" class="material-icon">
-							$mdiCheckCircle
-						</v-icon>
+						<v-icon
+							color="rgba(var(--v-theme-success))"
+							class="material-icon"
+							:icon="mdiCheckCircle"
+						/>
 					</template>
 				</modal-body-info>
 			</template>
@@ -195,7 +200,12 @@ import { unchangedPassword } from "@/utils/ldapConstants";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
 import InfoMessage from "@/components/atoms/InfoMessage";
-import { mdiChevronLeft } from "@icons/material";
+import {
+	mdiAccountSchoolOutline,
+	mdiCheckCircle,
+	mdiChevronLeft,
+	mdiShieldAccountVariantOutline,
+} from "@icons/material";
 import { RenderHTML } from "@feature-render-html";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -220,7 +230,10 @@ export default {
 	data() {
 		return {
 			migrateUsersCheckbox: false,
+			mdiAccountSchoolOutline,
+			mdiCheckCircle,
 			mdiChevronLeft,
+			mdiShieldAccountVariantOutline,
 		};
 	},
 	computed: {
