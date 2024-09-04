@@ -15,7 +15,7 @@
 				@update:model-value="updateMediaBoardLayout"
 			>
 				<VBtn
-					icon="$mdiCustomShelfOutline"
+					icon="$shelfOutline"
 					size="x-small"
 					width="48px"
 					:value="MediaBoardLayoutType.List"

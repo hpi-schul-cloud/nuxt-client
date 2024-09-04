@@ -49,7 +49,7 @@ const boardLayouts: PickerOption[] = [
 	},
 	{
 		label: t("pages.room.dialog.boardLayout.singleColumn"),
-		icon: "$mdiCustomGridOutline",
+		icon: "gridOutline",
 		eventName: "select:single-column",
 		dataTestId: "dialog-add-single-column-board",
 		ariaLabel: t("pages.room.dialog.boardLayout.singleColumn"),

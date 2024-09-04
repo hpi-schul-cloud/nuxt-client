@@ -129,9 +129,7 @@ const isListBoard = computed(() => {
 });
 
 const titleIcon = computed(() => {
-	const icon = isListBoard.value
-		? "$mdiCustomGridOutline"
-		: mdiViewDashboardOutline;
+	const icon = isListBoard.value ? "$gridOutline" : mdiViewDashboardOutline;
 	return icon;
 });
 
