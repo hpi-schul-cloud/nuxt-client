@@ -231,7 +231,7 @@ export default class CopyModule extends VuexModule {
 				case CopyApiResponseTypeEnum.Course:
 					return `/courses/${element.id}/edit`;
 				case CopyApiResponseTypeEnum.Columnboard:
-					return `/rooms/${element.id}/board`;
+					return `/boards/${element.id}`;
 			}
 			return undefined;
 		};

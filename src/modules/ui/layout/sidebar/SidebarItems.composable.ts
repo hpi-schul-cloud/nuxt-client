@@ -211,9 +211,18 @@ export const useSidebarItems = () => {
 				},
 				{
 					title: "global.sidebar.item.courses",
-					href: "/administration/courses",
-					permissions: ["ADMIN_VIEW"],
+					to: "/administration/rooms/new",
 					testId: "Kurse",
+					permissions: ["ADMIN_VIEW"],
+					feature: "FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED",
+				},
+				{
+					title: "global.sidebar.item.courses",
+					href: "/administration/courses",
+					testId: "Kurse",
+					permissions: ["ADMIN_VIEW"],
+					feature: "FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED",
+					featureValue: false,
 				},
 				{
 					title: "global.sidebar.item.classes",
