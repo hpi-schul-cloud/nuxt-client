@@ -1,11 +1,17 @@
 <template>
 	<main class="main-container">
 		<form class="search-form" :onsubmit="onSubmit">
-			<input
-				name="searchString"
+			<v-text-field
 				class="search-input"
-				type="text"
+				density="comfortable"
+				flat
+				:hide-details="true"
+				name="searchString"
+				single-line
+				type="outlined"
 				placeholder="Search"
+				:prepend-inner-icon="mdiMagnify"
+				variant="solo"
 			/>
 		</form>
 		<edu-sharing-app />
@@ -14,11 +20,17 @@
 
 <script>
 import { envConfigModule } from "@/store";
+import { mdiMagnify } from "@mdi/js";
 import { useEduSharingApi } from "../../composables/edu-sharing-api.composable";
 
 export default {
 	name: "EduSharingWrapper",
 	components: {},
+	data() {
+		return {
+			mdiMagnify,
+		};
+	},
 	mounted() {
 		// Provide the backend URL for edu-sharing to the web component.
 		window.__env = {
@@ -82,9 +94,21 @@ export default {
 	gap: 20px;
 }
 .search-form {
+	height: 64px;
 	flex-shrink: 0;
+	padding: 10px 16px;
+	background: #f3f5f7;
+}
+.search-input {
+	width: 500px;
+	border-radius: 2px;
+	border: 1px solid var(--Secondary-v-secondary-base, #54616e);
+	background: var(--shades---v-white-base, #fff);
 }
 edu-sharing-app {
 	flex-grow: 1;
+}
+:deep(.v-field) {
+	height: 44px;
 }
 </style>
