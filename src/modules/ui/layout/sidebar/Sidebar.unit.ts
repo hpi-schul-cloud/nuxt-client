@@ -75,8 +75,6 @@ describe("@ui-layout/Sidebar", () => {
 	describe("when user does not have needed permission", () => {
 		it("should filter items correctly", async () => {
 			const { wrapper } = setup([]);
-			await nextTick();
-			await nextTick();
 
 			expect(wrapper.find("[data-testid='Teams']").exists()).toBe(false);
 		});

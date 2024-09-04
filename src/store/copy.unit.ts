@@ -58,12 +58,12 @@ describe("copy module", () => {
 		describe("copy", () => {
 			it("should throw an error if copyResult is undefined", async () => {
 				const roomCopyMockApi = {
-					roomsControllerCopyCourse: jest.fn(async () => ({})),
+					courseRoomsControllerCopyCourse: jest.fn(async () => ({})),
 				};
 				jest
-					.spyOn(serverApi, "RoomsApiFactory")
+					.spyOn(serverApi, "CourseRoomsApiFactory")
 					.mockReturnValue(
-						roomCopyMockApi as unknown as serverApi.RoomsApiInterface
+						roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
 					);
 
 				const copyModule = new CopyModule({});
@@ -123,12 +123,14 @@ describe("copy module", () => {
 			describe("copy a course", () => {
 				it("should make a 'POST' request to the backend", async () => {
 					const roomCopyMockApi = {
-						roomsControllerCopyCourse: jest.fn(async () => ({ data: {} })),
+						courseRoomsControllerCopyCourse: jest.fn(async () => ({
+							data: {},
+						})),
 					};
 					jest
-						.spyOn(serverApi, "RoomsApiFactory")
+						.spyOn(serverApi, "CourseRoomsApiFactory")
 						.mockReturnValue(
-							roomCopyMockApi as unknown as serverApi.RoomsApiInterface
+							roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
 						);
 
 					const copyModule = new CopyModule({});
@@ -141,7 +143,7 @@ describe("copy module", () => {
 					await copyModule.copy(payload);
 
 					expect(
-						roomCopyMockApi.roomsControllerCopyCourse
+						roomCopyMockApi.courseRoomsControllerCopyCourse
 					).toHaveBeenCalledWith("courseId-value");
 				});
 			});
@@ -149,12 +151,14 @@ describe("copy module", () => {
 			describe("copy a lesson", () => {
 				it("should make a 'POST' request to the backend", async () => {
 					const roomCopyMockApi = {
-						roomsControllerCopyLesson: jest.fn(async () => ({ data: {} })),
+						courseRoomsControllerCopyLesson: jest.fn(async () => ({
+							data: {},
+						})),
 					};
 					jest
-						.spyOn(serverApi, "RoomsApiFactory")
+						.spyOn(serverApi, "CourseRoomsApiFactory")
 						.mockReturnValue(
-							roomCopyMockApi as unknown as serverApi.RoomsApiInterface
+							roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
 						);
 					const copyModule = new CopyModule({});
 					await copyModule.copy({
@@ -163,7 +167,7 @@ describe("copy module", () => {
 						courseId: "testCourseId",
 					});
 					expect(
-						roomCopyMockApi.roomsControllerCopyLesson
+						roomCopyMockApi.courseRoomsControllerCopyLesson
 					).toHaveBeenCalledWith("testLessonId", { courseId: "testCourseId" });
 				});
 			});
@@ -395,7 +399,7 @@ describe("copy module", () => {
 							title: "ColumnBoard",
 							type: CopyApiResponseTypeEnum.Columnboard,
 							elementId: "123",
-							url: "/rooms/123/board",
+							url: "/boards/123",
 							elements: [
 								{
 									type: CopyApiResponseTypeEnum.DrawingElement,

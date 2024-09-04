@@ -9,12 +9,13 @@
 </template>
 
 <script setup lang="ts">
-import { MENU_SCOPE } from "./injection-tokens";
+import type { MessageSchema } from "@/locales/schema";
 import { injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@mdi/js";
 import { BoardMenuAction } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { BoardMenuScope } from "./board-menu-scope";
+import { MENU_SCOPE } from "./injection-tokens";
 
 const props = defineProps({
 	name: { type: String, required: false },
@@ -26,17 +27,22 @@ const emit = defineEmits(["click"]);
 const scope = injectStrict<BoardMenuScope>(MENU_SCOPE);
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
-const languageKeyForScopeType: Record<BoardMenuScope, string> = {
-	board: "components.board",
-	column: "components.boardColumn",
-	card: "components.boardCard",
-	collaborativeTextEditorElement:
+const languageKeyForScopeType: Record<BoardMenuScope, keyof MessageSchema> = {
+	[BoardMenuScope.BOARD]: "components.board",
+	[BoardMenuScope.COLUMN]: "components.boardColumn",
+	[BoardMenuScope.CARD]: "components.boardCard",
+	[BoardMenuScope.COLLABORATIVE_TEXT_EDITOR_ELEMENT]:
 		"components.cardElement.collaborativeTextEditorElement",
-	drawingElement: "components.cardElement.drawingElement",
-	externalToolElement: "components.cardElement.externalToolElement",
-	fileElement: "components.cardElement.fileElement",
-	linkElement: "components.cardElement.LinkElement",
-	submissionElement: "components.cardElement.submissionElement",
+	[BoardMenuScope.DRAWING_ELEMENT]: "components.cardElement.drawingElement",
+	[BoardMenuScope.EXTERNAL_TOOL_ELEMENT]:
+		"components.cardElement.externalToolElement",
+	[BoardMenuScope.FILE_ELEMENT]: "components.cardElement.fileElement",
+	[BoardMenuScope.LINK_ELEMENT]: "components.cardElement.LinkElement",
+	[BoardMenuScope.SUBMISSION_ELEMENT]:
+		"components.cardElement.submissionElement",
+	[BoardMenuScope.DELETED_ELEMENT]: "components.cardElement.deletedElement",
+	[BoardMenuScope.MEDIA_EXTERNAL_TOOL_ELEMENT]:
+		"components.cardElement.mediaExternalToolElement",
 };
 
 const onClick = (): void => {

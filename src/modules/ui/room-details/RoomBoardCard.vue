@@ -145,7 +145,7 @@ const onUnpublish = () => {
 
 const openBoard = async () => {
 	if (!props.dragInProgress) {
-		await router.push(`${props.columnBoardItem.columnBoardId}/board`);
+		await router.push(`/boards/${props.columnBoardItem.columnBoardId}`);
 	}
 };
 

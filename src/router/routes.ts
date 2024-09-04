@@ -4,13 +4,13 @@ import { Multiguard, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
+	isEnum,
+	isMongoId,
+	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_H5P_ID,
 	REGEX_ID,
 	REGEX_UUID,
-	isEnum,
-	isMongoId,
-	isOfficialSchoolNumber,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
@@ -113,6 +113,15 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		component: () => import("@/pages/administration/TeacherCreate.page.vue"),
 		name: "administration-teachers-new",
 		beforeEnter: createPermissionGuard(["teacher_create"]),
+	},
+	{
+		path: "/administration/rooms/new",
+		component: () => import("@/pages/administration/RoomsOverview.page.vue"),
+		name: "administration-rooms-new",
+		beforeEnter: createPermissionGuard(["course_administration"]),
+		props: (route: RouteLocationNormalized) => ({
+			tab: route.query.tab,
+		}),
 	},
 	{
 		path: "/administration/groups/classes",
@@ -244,7 +253,7 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: "/rooms/courses-list",
-		component: () => import("@/pages/rooms/CourseRoomList.page.vue"),
+		component: () => import("@/pages/course-rooms/CourseRoomList.page.vue"),
 		name: "course-room-list",
 	},
 	{
@@ -254,20 +263,23 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	},
 	{
 		path: "/rooms/courses-overview",
-		component: () => import("@/pages/rooms/CourseRoomOverview.page.vue"),
+		component: () => import("@/pages/course-rooms/CourseRoomOverview.page.vue"),
 		name: "course-room-overview",
 	},
 	{
-		// TODO BC-7822, BC-7823 target this route at new room details page
-		// and decide on that page which sub-component (page) has to be rendered
 		path: `/rooms/:id(${REGEX_ID})`,
-		component: () => import("@/pages/rooms/CourseRoomDetails.page.vue"),
+		component: async () => (await import("@page-room")).RoomDetailsPage,
 		name: "rooms-id",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,
-		component: async () => (await import("@page-board")).ColumnBoardPage,
+		redirect: { name: "boards-id" },
 		name: "rooms-board",
+	},
+	{
+		path: `/boards/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-board")).ColumnBoardPage,
+		name: "boards-id",
 		props: (route: RouteLocationNormalized) => ({
 			boardId: route.params.id,
 		}),

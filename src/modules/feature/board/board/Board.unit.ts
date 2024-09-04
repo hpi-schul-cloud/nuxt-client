@@ -56,7 +56,7 @@ import {
 } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { computed, nextTick, ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { Router, useRoute, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
@@ -91,6 +91,7 @@ const mockedUseEditMode = jest.mocked(useEditMode);
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
+const useRouteMock = <jest.Mock>useRoute;
 
 jest.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <jest.Mock>useBoardInactivity;
@@ -106,6 +107,7 @@ describe("Board", () => {
 	let mockedUsePageInactivity: DeepMocked<
 		ReturnType<typeof useBoardInactivity>
 	>;
+	let route: DeepMocked<ReturnType<typeof useRoute>>;
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
@@ -142,6 +144,9 @@ describe("Board", () => {
 			resetLastCreatedElementId: jest.fn(),
 		});
 		mockExtractDataAttribute.mockReturnValue("column-id");
+
+		route = createMock<ReturnType<typeof useRoute>>();
+		useRouteMock.mockReturnValue(route);
 
 		router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
@@ -824,7 +829,7 @@ describe("Board", () => {
 				await boardHeader.vm.$emit("copy:board");
 
 				expect(router.push).toHaveBeenCalledWith({
-					name: "rooms-board",
+					name: "boards-id",
 					params: { id: copyResultId },
 				});
 			});

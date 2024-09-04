@@ -234,6 +234,10 @@ export default {
 		"With the start of the migration, all students and teachers at your school will be able to switch the registration system to moin.schule. Users who have changed the login system can then only log in via moin.schule.",
 	"components.administration.adminMigrationSection.startWarningCard.title":
 		"Do you really want to start the account migration to moin.schule now?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
+		"Are you sure you want to remove the accounts links that are found automatically?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"The migration assistant had automatically found account links based on the usernames.<br><br>Do you want to remove the accounts links that are found automatically now?",
 	"components.administration.externalToolsSection.action.add":
 		"Add External Tool",
 	"components.administration.externalToolsSection.action.delete": "Delete Tool",
@@ -321,7 +325,8 @@ export default {
 	"components.board.menu.column": "Column settings",
 	"components.board.menu.collaborativeTextEditorElement": "Etherpad settings",
 	"components.board.menu.drawingElement": "Whiteboard settings",
-	"components.board.menu.externalToolElement": "Externeal tool settings",
+	"components.board.menu.externalToolElement": "External tool settings",
+	"components.board.menu.mediaExternalToolElement": "Medium settings",
 	"components.board.menu.fileElement": "File settings",
 	"components.board.menu.linkElement": "Link settings",
 	"components.board.menu.submissionElement": "Submission settings",
@@ -379,6 +384,7 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"This Etherpad is visible and editable for all course participants.",
 	"components.cardElement.externalToolElement": "External tool",
+	"components.cardElement.mediaExternalToolElement": "Medium",
 	"components.cardElement.fileElement": "File",
 	"components.cardElement.fileElement.altDescription":
 		"A short description helps people who cannot see the picture.",
@@ -419,6 +425,7 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Please enter a title.",
 	"components.cardElement.titleElement": "Title element",
+	"components.cardElement.deletedElement": "Deleted content",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",
 	"components.datePicker.validation.format": "Please use format DD.MM.YYYY",
@@ -793,11 +800,20 @@ export default {
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronization completed successfully",
 	"feature-course-sync.GroupSelectionDialog.title": "Select user group",
-	"feature-course-sync.GroupSelectionDialog.text":
-		"In the next step, the selected user group will be synchronized with the newly created course.",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Group selection",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"The following data for creating a new course is not available in the user group {groupName}:<li>Teacher</li><br/>Please check in moin.schule and start course creation again.",
+	"feature-course-sync.StartNewCourseSyncDialog.text":
+		"In the next step, the selected user group will be synchronized with the newly created course.",
+	"feature-course-sync.StartExistingCourseSyncDialog.text":
+		"The selected user group will be synchronized with the selected course in the next step.",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
+		"A synchronization with {systemName} overwrites the members in the course (teachers and students).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
+		"Should the synchronization of the user group {groupName} in the course {courseName} really be started?",
+	"feature-course-sync.StartExistingCourseSyncDialog.success":
+		"User group successfully synchronized",
+	"feature-course-sync.startRoomSyncDialog.title": "Start synchronization",
 	"format.date": "MM/DD/YYYY",
 	"format.dateLong": "dddd, MMMM DD. YYYY",
 	"format.dateTime": "MM/DD/YYYY HH:mm",
@@ -870,13 +886,20 @@ export default {
 		'Are you sure you want to delete class "<i>{itemName}<i>"?',
 	"pages.administration.classes.deleteDialog.title": "Delete class?",
 	"pages.administration.classes.edit": "Edit class",
-	"pages.administration.classes.hint":
+	"pages.administration.common.hint":
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {institute_title}.",
 	"pages.administration.classes.index.add": "Add class",
 	"pages.administration.classes.index.title": "Manage classes",
-	"pages.administration.classes.label.archive": "Archive",
+	"pages.administration.common.label.archive": "Archive",
+	"pages.administration.common.label.active": "Current",
 	"pages.administration.classes.manage": "Manage class",
 	"pages.administration.classes.header.sync": "Synchronized with",
+	"pages.administration.courses.delete": "Delete course",
+	"pages.administration.courses.deleteDialog.content":
+		'Do you really want this course "<i>{itemName}</i>" to delete?',
+	"pages.administration.courses.index.add": "Add course",
+
+	"pages.administration.courses.edit": "Edit course",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronization",
 	"pages.administration.ldap.activate.className": "Name",
@@ -1010,6 +1033,8 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Please match a valid URL format",
 	"pages.administration.migration.back": "Back",
+	"pages.administration.migration.clearAutoMatches":
+		"Reset automatic accounts links",
 	"pages.administration.migration.backToAdministration":
 		"Back to administration",
 	"pages.administration.migration.brbSchulportal": "weBBSchule",
@@ -1022,11 +1047,11 @@ export default {
 	"pages.administration.migration.finishTransferPhase": "Finish Transfer phase",
 	"pages.administration.migration.finishWizard": "Complete Migration Wizard",
 	"pages.administration.migration.ldapSource": "LDAP",
-	"pages.administration.migration.migrate": "Save accounts binding",
+	"pages.administration.migration.migrate": "Save accounts link",
 	"pages.administration.migration.nbc.migrate": "Perform migration",
 	"pages.administration.migration.next": "Next",
 	"pages.administration.migration.performingMigration":
-		"Saving the accounts binding...",
+		"Saving the accounts link...",
 	"pages.administration.migration.startUserMigration":
 		"Start accounts migration",
 	"pages.administration.migration.step1": "Introduction",
@@ -1083,6 +1108,7 @@ export default {
 		"The registration links could not be generated",
 	"pages.administration.remove.error": "Failed to delete users",
 	"pages.administration.remove.success": "Selected users deleted",
+	"pages.administration.rooms.index.title": "Manage courses",
 	"pages.administration.school.index.authSystems.addLdap": "Add LDAP System",
 	"pages.administration.school.index.authSystems.alias": "Alias",
 	"pages.administration.school.index.authSystems.confirmDeleteText":
@@ -1445,6 +1471,31 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Choose a course / subject",
 	"pages.content.placeholder.noLessonTopic": "Create a topic in the course",
 	"pages.content.preview_img.alt": "Image preview",
+	"pages.courseRoomDetails.fab.add.board": "New board",
+	"pages.courseRoomDetails.fab.add.columnBoard": "New column board",
+	"pages.courseRoomDetails.fab.add.lesson": "New topic",
+	"pages.courseRoomDetails.fab.add.task": "New task",
+	"pages.courseRooms.groupName": "Courses",
+	"pages.courseRooms.headerSection.archived": "Archive",
+	"pages.courseRooms.headerSection.menu.ariaLabel": "Course menu",
+	"pages.courseRooms.headerSection.synchronized": "Synchronized",
+	"pages.courseRooms.headerSection.toCourseFiles": "To the course files",
+	"pages.courseRooms.index.courses.active": "Current courses",
+	"pages.courseRooms.index.courses.all": "All courses",
+	"pages.courseRooms.index.courses.arrangeCourses": "Arrange courses",
+	"pages.courseRooms.index.search.label": "Search course",
+	"pages.courseRooms.menuItems.endSync": "End synchronization",
+	"pages.courseRooms.tabLabel.groups": "Groups",
+	"pages.courseRooms.tabLabel.tools": "Tools",
+	"pages.courseRooms.tabLabel.toolsOld": "Tools",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
+		"Create video conference {roomName}",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"All users participate as moderators",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
+		"Mute participants when entering",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Approval by the moderator before the room can be entered",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",
@@ -1472,10 +1523,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Select view",
 	"pages.room.dialog.boardLayout.singleColumn": "single-column",
 	"pages.room.dialog.boardLayout.multiColumn": "multi-column",
-	"pages.room.fab.add.lesson": "New topic",
-	"pages.room.fab.add.board": "New board",
-	"pages.room.fab.add.columnBoard": "New column board",
-	"pages.room.fab.add.task": "New task",
 	"pages.room.itemDelete.text": 'Delete {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
@@ -1511,6 +1558,7 @@ export default {
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
 	"pages.rooms.headerSection.toCourseFiles": "To the course files",
 	"pages.rooms.menuItems.endSync": "End synchronization",
+	"pages.rooms.menuItems.startSync": "Start synchronization",
 	"pages.rooms.importCourse.btn.continue": "Continue",
 	"pages.rooms.importCourse.codeError": "The course code is not in use.",
 	"pages.rooms.importCourse.importError":
@@ -1535,22 +1583,7 @@ export default {
 		"Course {name} was successfully imported.",
 	"pages.rooms.ccImportCourse.error":
 		"An error occurred while importing the course.",
-	"pages.rooms.index.courses.active": "Current courses",
-	"pages.rooms.index.courses.all": "All courses",
-	"pages.rooms.index.courses.arrangeCourses": "Arrange courses",
-	"pages.rooms.index.search.label": "Search course",
 	"pages.rooms.roomModal.courseGroupTitle": "Course group title",
-	"pages.rooms.tabLabel.groups": "Groups",
-	"pages.rooms.tabLabel.tools": "Tools",
-	"pages.rooms.tabLabel.toolsOld": "Tools",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"All users participate as moderators",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
-		"Mute participants when entering",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Approval by the moderator before the room can be entered",
-	"pages.rooms.tools.configureVideoconferenceDialog.title":
-		"Create video conference {roomName}",
 	"pages.rooms.tools.deactivated": "Tool deactivated",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deactivated",
 	"pages.rooms.tools.notLicensedDialog.title":
@@ -1573,6 +1606,8 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (e.g. compatible with Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
+	"pages.rooms.active.title": "Current rooms",
+	"pages.rooms.active.emptyState": "Currently there are no rooms here.",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",
@@ -1702,7 +1737,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
 	"feature.media-shelf.title": "Media shelf",
 	"feature.media-shelf.emptyState":
-		"No media has currently been activated for use.",
+		"There are currently no media available for use",
 	"feature.media-shelf.createLine": "Add line",
 	"feature.media-shelf.line.title": "Line",
 	"feature.media-shelf.availableLine.title": "Available media",
