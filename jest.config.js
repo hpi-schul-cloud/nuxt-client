@@ -18,6 +18,7 @@ const config = {
 		"^@page-(.*)$": "<rootDir>/src/modules/page/$1",
 		"^@ui-(.*)$": "<rootDir>/src/modules/ui/$1",
 		"^@util-(.*)$": "<rootDir>/src/modules/util/$1",
+		"^@icons(.*)$": "<rootDir>/src/components/icons/$1",
 		"^@/(.*)$": "<rootDir>/src/$1",
 		"^@@/(.*)$": "<rootDir>/$1",
 	},
