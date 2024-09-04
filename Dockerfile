@@ -9,7 +9,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci
 
-COPY babel.config.js .eslintrc.js LICENSE.md .prettierrc.js tsconfig.json tsconfig.build.json .eslintignore .prettierignore ./
+COPY babel.config.js .eslintrc.js eslint-plugin-schulcloud LICENSE.md .prettierrc.js tsconfig.json tsconfig.build.json .eslintignore .prettierignore ./
 COPY public ./public
 COPY src ./src
 COPY config/webpack ./config/webpack
