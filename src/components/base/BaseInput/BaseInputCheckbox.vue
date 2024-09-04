@@ -21,6 +21,11 @@
 	</label>
 </template>
 <script>
+import {
+	mdiCheckboxBlankOutline,
+	mdiCheckboxIntermediate,
+	mdiCheckboxOutline,
+} from "@icons/material";
 export const supportedTypes = ["checkbox"];
 
 export default {
@@ -62,11 +67,11 @@ export default {
 		},
 		visibleIcon() {
 			if (this.showUndefinedState && this.modelValue === undefined) {
-				return { name: "$mdiCheckboxIntermediate" };
+				return { name: mdiCheckboxIntermediate };
 			}
 			return this.isChecked
-				? { name: "$mdiCheckboxOutline" }
-				: { name: "$mdiCheckboxBlankOutline" };
+				? { name: mdiCheckboxOutline }
+				: { name: mdiCheckboxBlankOutline };
 		},
 	},
 	created() {

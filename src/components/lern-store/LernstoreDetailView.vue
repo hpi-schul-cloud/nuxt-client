@@ -110,7 +110,7 @@
 				<div class="metadata">
 					<div v-if="createdAt || updatedAt" class="meta-container">
 						<div class="meta-icon">
-							<v-icon class="material-icon">$mdiCalendar</v-icon>
+							<v-icon class="material-icon" :icon="mdiCalendar" />
 						</div>
 						<div class="meta-text">
 							<div v-if="createdAt">
@@ -125,7 +125,7 @@
 					</div>
 					<div class="meta-container">
 						<div>
-							<v-icon class="material-icon meta-icon">$mdiPound</v-icon>
+							<v-icon class="material-icon meta-icon" :icon="mdiPound" />
 						</div>
 						<template v-if="tags.length > 0">
 							<div class="text-wrap">
@@ -194,7 +194,7 @@ import {
 } from "@/utils/helpers";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
-import { mdiClose, mdiOpenInNew } from "@icons/material";
+import { mdiCalendar, mdiClose, mdiOpenInNew, mdiPound } from "@icons/material";
 import BaseLink from "../base/BaseLink";
 
 const DEFAULT_AUTHOR = "admin";
@@ -219,7 +219,9 @@ export default {
 	},
 	data() {
 		return {
+			mdiCalendar,
 			mdiClose,
+			mdiPound,
 			mdiOpenInNew,
 			windowWidth: window.outerWidth,
 			window: {

@@ -63,7 +63,7 @@
 								}}
 								<br />
 								<br />
-								<v-icon color="rgba(var(--v-theme-error))">$mdiAlert</v-icon>
+								<v-icon color="rgba(var(--v-theme-error))" :icon="mdiAlert" />
 								{{
 									$t("pages.administration.students.infobox.LDAP.paragraph-3")
 								}}
@@ -124,7 +124,7 @@
 								{{ $t("pages.administration.students.infobox.paragraph-3") }}
 								<br />
 								<br />
-								<v-icon color="rgba(var(--v-theme-error))">$mdiAlert</v-icon>
+								<v-icon color="rgba(var(--v-theme-error))" :icon="mdiAlert" />
 								{{ $t("pages.administration.students.infobox.paragraph-4") }}
 							</div>
 						</template>
@@ -213,11 +213,9 @@
 						}}</span>
 					</div>
 					<v-icon v-if="sortBy === column.field">
-						{{
-							sortOrder === "asc" ? "$mdiMenuUpOutline" : "$mdiMenuDownOutline"
-						}}
+						{{ sortOrder === "asc" ? mdiMenuUpOutline : mdiMenuDownOutline }}
 					</v-icon>
-					<v-icon v-else-if="column.sortable">$mdiMenuSwapOutline </v-icon>
+					<v-icon v-else-if="column.sortable" :icon="mdiMenuSwapOutline" />
 				</v-btn>
 				<div v-else class="th-wrap">
 					<span>{{ column.label }}</span>
@@ -230,7 +228,13 @@
 <script>
 import InfoBox from "@/components/molecules/InfoBox";
 import { envConfigModule } from "@/store";
-import { mdiInformation } from "@icons/material";
+import {
+	mdiAlert,
+	mdiInformation,
+	mdiMenuDownOutline,
+	mdiMenuSwapOutline,
+	mdiMenuUpOutline,
+} from "@icons/material";
 
 const selectionStateMap = new Map([
 	[true, "all"],
@@ -272,7 +276,11 @@ export default {
 	data() {
 		return {
 			infoBoxActive: false,
+			mdiAlert,
+			mdiMenuDownOutline,
 			mdiInformation,
+			mdiMenuSwapOutline,
+			mdiMenuUpOutline,
 		};
 	},
 	computed: {

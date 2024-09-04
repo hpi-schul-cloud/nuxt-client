@@ -3,7 +3,7 @@
 		density="compact"
 		ref="inputRef"
 		@update:modelValue="onFileChange"
-		prepend-icon="$mdiTrayArrowUp"
+		:prepend-icon="mdiTrayArrowUp"
 		:placeholder="$t('feature-board-file-element.placeholder.uploadFile')"
 		:hide-details="true"
 	/>
