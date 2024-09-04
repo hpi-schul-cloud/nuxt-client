@@ -26,7 +26,7 @@ module.exports = {
 
 	// Output
 	output: {
-		filename: "_nuxt/js/[name].js",
+		filename: "_nuxt/js/[name]-[contenthash].js",
 		path: path.resolve(__base, "dist"),
 		publicPath: "/",
 		chunkFilename: "_nuxt/js/[name].js",
