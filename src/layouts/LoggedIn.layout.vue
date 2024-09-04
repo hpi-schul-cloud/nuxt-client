@@ -57,7 +57,6 @@ onMounted(() => {
 	if (!sidebarExpandedValue) {
 		localStorage.setItem("sidebarExpanded", "true");
 	}
-	sidebarExpanded.value =
-		localStorage.getItem("sidebarExpanded") === "true" || false;
+	sidebarExpanded.value = sidebarExpandedValue === "true";
 });
 </script>
