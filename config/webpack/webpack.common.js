@@ -96,6 +96,7 @@ module.exports = {
 							"**/.DS_Store",
 							path.resolve(__base, "public/index.html"),
 							path.resolve(__base, "public/themes/**/*"),
+							path.resolve(__base, "public/content/**/*"),
 						],
 					},
 					info: {
@@ -107,7 +108,7 @@ module.exports = {
 						__base,
 						"node_modules/ngx-edu-sharing-app-as-web-component"
 					),
-					to: path.resolve(__base, "public/content/vendor/edu-sharing"),
+					to: path.resolve(__base, "dist/content/vendor/edu-sharing"),
 				},
 			],
 		}),

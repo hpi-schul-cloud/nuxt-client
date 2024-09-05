@@ -17,9 +17,6 @@ ARG SC_THEME=default
 ENV SC_THEME ${SC_THEME}
 RUN NODE_ENV=production npm run build
 
-# we need to copy the public/content folder after the build step, because the build step will add the web component files to the public folder
-COPY public/content ./public/content
-
 COPY .git ./.git
 RUN echo "{\"sha\": \"$(git rev-parse HEAD)\", \"version\": \"$(git describe --tags --abbrev=0)\", \"commitDate\": \"$(git log -1 --format=%cd --date=format:'%Y-%m-%dT%H:%M:%SZ')\", \"birthdate\": \"$(date +%Y-%m-%dT%H:%M:%SZ)\"}" > ./dist/nuxtversion
 
