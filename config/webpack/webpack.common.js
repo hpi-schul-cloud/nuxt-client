@@ -102,6 +102,13 @@ module.exports = {
 						minimized: true,
 					},
 				},
+				{
+					from: path.resolve(
+						__base,
+						"node_modules/ngx-edu-sharing-app-as-web-component"
+					),
+					to: path.resolve(__base, "public/vendor/edu-sharing"),
+				},
 			],
 		}),
 

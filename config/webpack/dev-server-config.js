@@ -8,6 +8,7 @@ const {
 	isServer,
 } = require("../../src/router/server-route");
 const url = require("url");
+const path = require("path");
 
 const createLegacyClientProxy = () => {
 	const legacyClientProxy = createProxyMiddleware({
@@ -96,6 +97,17 @@ const createDevServerConfig = () => {
 					}
 				},
 			});
+
+			// Copy assets before the dev server starts
+			const __base = path.resolve(__dirname, "../..");
+
+			const fs = require("fs-extra");
+			const source = path.resolve(
+				__base,
+				"node_modules/ngx-edu-sharing-app-as-web-component"
+			);
+			const destination = path.resolve(__base, "public/vendor/edu-sharing");
+			fs.copySync(source, destination);
 
 			return middlewares;
 		},
