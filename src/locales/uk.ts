@@ -334,6 +334,7 @@ export default {
 	"components.board.menu.drawingElement": "Налаштування дошки",
 	"components.board.menu.externalToolElement":
 		"Налаштування зовнішнього інструменту",
+	"components.board.menu.mediaExternalToolElement": "Середні налаштування",
 	"components.board.menu.fileElement": "Налаштування файлу",
 	"components.board.menu.linkElement": "Налаштування посилання",
 	"components.board.menu.submissionElement": "Налаштування Подання",
@@ -391,6 +392,7 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Цей Etherpad є видимою і доступною для редагування для всіх учасників курсу.",
 	"components.cardElement.externalToolElement": "Зовнішній інструмент",
+	"components.cardElement.mediaExternalToolElement": "Середній",
 	"components.cardElement.fileElement": "Файл",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
@@ -811,11 +813,20 @@ export default {
 		"Синхронізацію успішно завершено",
 	"feature-course-sync.GroupSelectionDialog.title":
 		"Виберіть групу користувачів",
-	"feature-course-sync.GroupSelectionDialog.text":
-		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Вибір групи",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Наступні дані для створення нового курсу недоступні в групі користувачів {groupName}:<li>Викладач</li><br/>Перевірте moin.schule і почніть створення курсу знову.",
+	"feature-course-sync.StartNewCourseSyncDialog.text":
+		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
+	"feature-course-sync.StartExistingCourseSyncDialog.text":
+		"Вибрана група користувачів буде синхронізована з вибраним курсом на наступному кроці.",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
+		"Синхронізація з {systemName} перезаписує людей у курсі (викладачі та студенти).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
+		"Чи дійсно слід починати синхронізацію групи користувачів {groupName} у курсі {courseName}?",
+	"feature-course-sync.StartExistingCourseSyncDialog.success":
+		"Групу користувачів успішно синхронізовано",
+	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -889,13 +900,19 @@ export default {
 		'Ви впевнені, що хочете видалити клас "<i>{itemName}<i>"?',
 	"pages.administration.classes.deleteDialog.title": "Видалити клас?",
 	"pages.administration.classes.edit": "Редагувати клас",
-	"pages.administration.classes.hint":
+	"pages.administration.common.hint":
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",
 	"pages.administration.classes.index.add": "Додати клас",
 	"pages.administration.classes.index.title": "Керувати заняттями",
-	"pages.administration.classes.label.archive": "Архів",
+	"pages.administration.common.label.archive": "Архів",
+	"pages.administration.common.label.active": "поточний",
 	"pages.administration.classes.manage": "Керувати класом",
 	"pages.administration.classes.header.sync": "Синхронізовано з",
+	"pages.administration.courses.delete": "Видалити курс",
+	"pages.administration.courses.deleteDialog.content":
+		'Ви впевнені, що хочете видалити цей курс "<i>{itemName}</i>" ?',
+	"pages.administration.courses.index.add": "Додати курс",
+	"pages.administration.courses.edit": "Редагувати курс",
 	"pages.administration.index.title": "Адміністрування",
 	"pages.administration.ldap.activate.breadcrumb": "Cинхронізація",
 	"pages.administration.ldap.activate.className": "Ім'я",
@@ -1105,6 +1122,7 @@ export default {
 		"Не вдалося згенерувати посилання для реєстрації",
 	"pages.administration.remove.error": "Не вдалося видалити користувачів",
 	"pages.administration.remove.success": "Вибраних користувачів видалено",
+	"pages.administration.rooms.index.title": "Керувати курсами",
 	"pages.administration.school.index.authSystems.addLdap":
 		"Додати систему LDAP",
 	"pages.administration.school.index.authSystems.alias": "Псевдонім",
@@ -1557,6 +1575,13 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
 	"pages.rooms.fab.import.course": "Імпортувати курс",
+	"pages.rooms.groupName": "Курси",
+	"pages.rooms.headerSection.archived": "Архів",
+	"pages.rooms.headerSection.synchronized": "Синхронізовано",
+	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
+	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
+	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
+	"pages.rooms.menuItems.startSync": "Почніть синхронізацію",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",
 	"pages.rooms.importCourse.codeError": "Код курсу не використовується.",
 	"pages.rooms.importCourse.importError":

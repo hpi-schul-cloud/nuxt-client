@@ -66,6 +66,7 @@
 				variant="text"
 				color="primary"
 				@click.stop="action.action"
+				:data-testid="action.dataTestId"
 			>
 				{{ action.name }}
 			</v-btn>
@@ -134,6 +135,9 @@ const cardActions = computed(() => {
 			icon: "lessonSend",
 			action: () => publishLesson(),
 			name: t("common.action.publish"),
+			dataTestId: `lesson-card-action-publish-${
+				toRef(props, "lessonCardIndex").value
+			}`,
 		});
 	}
 

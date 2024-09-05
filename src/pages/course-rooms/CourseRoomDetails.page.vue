@@ -92,6 +92,12 @@
 			:course-id="roomData.roomId"
 			@success="refreshRoom"
 		/>
+		<start-existing-course-sync-dialog
+			v-model:is-open="isStartSyncDialogOpen"
+			:course-name="roomData.title"
+			:course-id="roomData.roomId"
+			@success="refreshRoom"
+		/>
 		<SelectBoardLayoutDialog
 			v-if="boardLayoutsEnabled"
 			v-model="boardLayoutDialogIsOpen"
@@ -120,7 +126,10 @@ import {
 import { envConfigModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { EndCourseSyncDialog } from "@feature-course-sync";
+import {
+	EndCourseSyncDialog,
+	StartExistingCourseSyncDialog,
+} from "@feature-course-sync";
 import {
 	mdiAccountGroupOutline,
 	mdiContentCopy,
@@ -132,6 +141,7 @@ import {
 	mdiPlus,
 	mdiPuzzleOutline,
 	mdiShareVariantOutline,
+	mdiSync,
 	mdiSyncOff,
 	mdiViewDashboardOutline,
 	mdiViewListOutline,
@@ -166,6 +176,7 @@ export default defineComponent({
 		};
 	},
 	components: {
+		StartExistingCourseSyncDialog,
 		EndCourseSyncDialog,
 		vCustomDialog,
 		DefaultWireframe,
@@ -192,6 +203,7 @@ export default defineComponent({
 				mdiContentCopy,
 				mdiExport,
 				mdiSyncOff,
+				mdiSync,
 				mdiViewGridPlusOutline,
 			},
 			breadcrumbs: [
@@ -204,6 +216,7 @@ export default defineComponent({
 			courseId: this.$route.params.id,
 			isShareModalOpen: false,
 			isEndSyncDialogOpen: false,
+			isStartSyncDialogOpen: false,
 			tabIndex: 0,
 			boardLayoutDialogIsOpen: false,
 		};
@@ -426,6 +439,20 @@ export default defineComponent({
 				});
 			}
 
+			if (
+				envConfigModule.getEnv.FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED &&
+				!this.roomData.isSynchronized
+			) {
+				items.push({
+					icon: this.icons.mdiSync,
+					action: () => {
+						this.isStartSyncDialogOpen = true;
+					},
+					name: this.$t("pages.rooms.menuItems.startSync"),
+					dataTestId: "title-menu-start-sync",
+				});
+			}
+
 			return items;
 		},
 		copyResultModalStatus() {
@@ -544,7 +571,7 @@ export default defineComponent({
 				layout,
 			};
 			const board = await this.courseRoomDetailsModule.createBoard(params);
-			await this.$router.push(`/rooms/${board.id}/board`);
+			await this.$router.push(`/boards/${board.id}`);
 		},
 	},
 	watch: {

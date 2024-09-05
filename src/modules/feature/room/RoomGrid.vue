@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRoomsState } from "./data/Rooms.state";
+import { useRoomsState } from "@data-room";
 import { onMounted } from "vue";
 import RoomTile from "./RoomTile.vue";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
