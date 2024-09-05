@@ -37,6 +37,7 @@ const isActive = computed(() => {
 	const anyCoursePageIsActive =
 		route.path.includes("rooms") &&
 		route.path !== "/rooms" &&
+		!route.path.includes("administration") &&
 		props.item.to === "/rooms/courses-overview";
 
 	if (anyCoursePageIsActive) {
