@@ -39,5 +39,5 @@ __snapshots__
 # IntelliJ
 .idea/
 
-# exclude the public/vendor directory
-public/vendor
+# exclude the public/content directory
+public/content

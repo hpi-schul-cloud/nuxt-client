@@ -106,7 +106,10 @@ const createDevServerConfig = () => {
 				__base,
 				"node_modules/ngx-edu-sharing-app-as-web-component"
 			);
-			const destination = path.resolve(__base, "public/vendor/edu-sharing");
+			const destination = path.resolve(
+				__base,
+				"public/content/vendor/edu-sharing"
+			);
 			fs.copySync(source, destination);
 
 			return middlewares;
