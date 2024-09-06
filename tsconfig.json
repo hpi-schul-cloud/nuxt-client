@@ -48,6 +48,7 @@
 				"src/modules/feature/board-deleted-element"
 			],
 			"@feature-room": ["src/modules/feature/room"],
+			"@icons/*": ["src/components/icons/*"],
 			"@ui-alert": ["src/modules/ui/alert"],
 			"@ui-board": ["src/modules/ui/board"],
 			"@ui-breadcrumbs": ["src/modules/ui/breadcrumbs"],

@@ -399,7 +399,7 @@ describe("copy module", () => {
 							title: "ColumnBoard",
 							type: CopyApiResponseTypeEnum.Columnboard,
 							elementId: "123",
-							url: "/rooms/123/board",
+							url: "/boards/123",
 							elements: [
 								{
 									type: CopyApiResponseTypeEnum.DrawingElement,

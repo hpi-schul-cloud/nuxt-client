@@ -57,14 +57,12 @@
 						@click.stop="isSchoolPolicyFormDialogOpen = true"
 					>
 						<v-btn
-							icon
+							:icon="mdiTrayArrowUp"
 							variant="text"
 							:aria-label="
 								$t('pages.administration.school.index.schoolPolicy.edit')
 							"
-						>
-							<v-icon>$mdiTrayArrowUp</v-icon>
-						</v-btn>
+						/>
 					</v-list-item-action>
 					<v-list-item-action
 						v-if="privacyPolicy"
@@ -72,16 +70,14 @@
 						@click.stop="isDeletePolicyDialogOpen = true"
 					>
 						<v-btn
-							icon
+							:icon="mdiTrashCanOutline"
 							variant="text"
 							:aria-label="
 								$t(
 									'pages.administration.school.index.schoolPolicy.delete.title'
 								)
 							"
-						>
-							<v-icon>$mdiTrashCanOutline</v-icon>
-						</v-btn>
+						/>
 					</v-list-item-action>
 				</template>
 			</v-list-item>
@@ -96,7 +92,7 @@
 				:size="430"
 				has-buttons
 				confirm-btn-title-key="common.actions.delete"
-				confirm-btn-icon="$mdiTrashCanOutline"
+				:confirm-btn-icon="mdiTrashCanOutline"
 				@dialog-confirmed="deleteFile"
 				data-testid="delete-dialog"
 			>
@@ -138,7 +134,11 @@ import {
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { downloadFile } from "@/utils/fileHelper";
 import { formatDateForAlerts } from "@/plugins/datetime";
-import { mdiAlertCircle } from "@/components/icons/material";
+import {
+	mdiAlertCircle,
+	mdiTrashCanOutline,
+	mdiTrayArrowUp,
+} from "@icons/material";
 
 export default defineComponent({
 	name: "SchoolPolicy",
@@ -218,6 +218,8 @@ export default defineComponent({
 			formatDate,
 			closeDialog,
 			mdiAlertCircle,
+			mdiTrashCanOutline,
+			mdiTrayArrowUp,
 		};
 	},
 });

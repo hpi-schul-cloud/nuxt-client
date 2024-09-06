@@ -3,10 +3,10 @@
 		<template #body>
 			<modal-body-info :title="msg" :description="description">
 				<template v-if="isSuccess" #icon>
-					<v-icon size="60" color="success">$mdiCheckCircle</v-icon>
+					<v-icon size="60" color="success" :icon="mdiCheckCircle" />
 				</template>
 				<template v-else #icon>
-					<v-icon size="60" color="error">$mdiAlertCircle</v-icon>
+					<v-icon size="60" color="error" :icon="mdiAlertCircle" />
 				</template>
 			</modal-body-info>
 		</template>
@@ -24,6 +24,7 @@
 import BaseModal from "../base/BaseModal";
 import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
 import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
+import { mdiAlertCircle, mdiCheckCircle } from "@icons/material";
 export default {
 	name: "NotificationModal",
 	components: {
@@ -51,6 +52,12 @@ export default {
 		isSuccess: {
 			type: Boolean,
 		},
+	},
+	data() {
+		return {
+			mdiAlertCircle,
+			mdiCheckCircle,
+		};
 	},
 	computed: {
 		msg: {

@@ -107,7 +107,7 @@ import {
 	mdiFormatListChecks,
 	mdiPlaylistEdit,
 	mdiPlus,
-} from "@mdi/js";
+} from "@icons/material";
 
 import TasksDashboardStudent from "./TasksDashboardStudent";
 import TasksDashboardTeacher from "./TasksDashboardTeacher";

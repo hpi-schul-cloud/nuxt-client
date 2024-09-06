@@ -48,7 +48,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { mdiLock, mdiSync } from "@/components/icons/material";
+import { mdiLock, mdiSync } from "@icons/material";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 

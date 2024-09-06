@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiDotsVertical } from "@mdi/js";
+import { mdiDotsVertical } from "@icons/material";
 import { PropType } from "vue";
 import { MenuItem } from "./types";
 

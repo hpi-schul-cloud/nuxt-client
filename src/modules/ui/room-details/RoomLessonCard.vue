@@ -66,6 +66,7 @@
 				variant="text"
 				color="primary"
 				@click.stop="action.action"
+				:data-testid="action.dataTestId"
 			>
 				{{ action.name }}
 			</v-btn>
@@ -83,7 +84,7 @@ import {
 	mdiShareVariantOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
-} from "@mdi/js";
+} from "@icons/material";
 import { RoomDotMenu } from "@ui-room-details";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -134,6 +135,9 @@ const cardActions = computed(() => {
 			icon: "lessonSend",
 			action: () => publishLesson(),
 			name: t("common.action.publish"),
+			dataTestId: `lesson-card-action-publish-${
+				toRef(props, "lessonCardIndex").value
+			}`,
 		});
 	}
 

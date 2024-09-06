@@ -27,7 +27,7 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mdiPuzzleOutline } from "@mdi/js";
+import { mdiPuzzleOutline } from "@icons/material";
 import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";

@@ -806,11 +806,20 @@ export default {
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronisation erfolgreich beendet",
 	"feature-course-sync.GroupSelectionDialog.title": "Nutzendengruppe auswählen",
-	"feature-course-sync.GroupSelectionDialog.text":
-		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem neu erstellten Kurs synchronisiert.",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Gruppen-Auswahl",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Folgende Daten zur Erstellung eines neuen Kurses sind in Nutzergruppe {groupName} nicht vorhanden:<li>Lehrkraft</li><br/>Bitte in moin.schule überprüfen und Kurs-Erstellung erneut starten.",
+	"feature-course-sync.StartNewCourseSyncDialog.text":
+		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem neu erstellten Kurs synchronisiert.",
+	"feature-course-sync.StartExistingCourseSyncDialog.text":
+		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem ausgewählten Kurs synchronisiert.",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
+		"Eine Synchronisation mit {systemName} überschreibt die Personen des Kurses (Lehrkräfte und Schüler*innen).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
+		"Soll die Synchronisation der Nutzergruppe {groupName} im Kurs {courseName} wirklich gestartet werden?",
+	"feature-course-sync.StartExistingCourseSyncDialog.success":
+		"Nutzendengruppe erfolgreich synchronisiert",
+	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -884,13 +893,19 @@ export default {
 		'Möchten Sie wirklich die Klasse "<i>{itemName}</i>" löschen?',
 	"pages.administration.classes.deleteDialog.title": "Klasse löschen?",
 	"pages.administration.classes.edit": "Klasse bearbeiten",
-	"pages.administration.classes.hint":
+	"pages.administration.common.hint":
 		"Mit allen Änderungen und Einstellungen im Verwaltungsbereich wird bestätigt, dass diese durch einen weisungsberechtigten Schul-Admin mit Befugnis zu Anpassungen der Schule in der Cloud durchgeführt werden. Anpassungen durch den Schul-Admin gelten insofern als Weisung der Schule gegenüber dem Cloudbetreiber {institute_title}.",
 	"pages.administration.classes.index.add": "Klasse hinzufügen",
 	"pages.administration.classes.index.title": "Klassen verwalten",
-	"pages.administration.classes.label.archive": "Archiv",
+	"pages.administration.common.label.archive": "Archiv",
+	"pages.administration.common.label.active": "Aktuell",
 	"pages.administration.classes.manage": "Klasse verwalten",
 	"pages.administration.classes.header.sync": "Synchronisiert mit",
+	"pages.administration.courses.delete": "Kurs löschen",
+	"pages.administration.courses.deleteDialog.content":
+		'Möchten Sie wirklich diesen Kurs "<i>{itemName}</i>" löschen?',
+	"pages.administration.courses.index.add": "Kurs hinzufügen",
+	"pages.administration.courses.edit": "Kurs bearbeiten",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronisation",
 	"pages.administration.ldap.activate.className": "Name",
@@ -1099,6 +1114,7 @@ export default {
 		"Die Registrierungslinks konnten auf Grund eines Problems nicht generiert werden",
 	"pages.administration.remove.error": "Löschen der Nutzer fehlgeschlagen",
 	"pages.administration.remove.success": "Ausgewählte(r) Nutzer gelöscht",
+	"pages.administration.rooms.index.title": "Kurse verwalten",
 	"pages.administration.school.index.authSystems.addLdap":
 		"LDAP-System hinzufügen",
 	"pages.administration.school.index.authSystems.alias": "Alias",
@@ -1564,6 +1580,13 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",
 	"pages.rooms.fab.import.course": "Kurs importieren",
+	"pages.rooms.groupName": "Kurse",
+	"pages.rooms.headerSection.archived": "Archiv",
+	"pages.rooms.headerSection.synchronized": "Synchronisiert",
+	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
+	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
+	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
+	"pages.rooms.menuItems.startSync": "Synchronisation starten",
 	"pages.rooms.importCourse.btn.continue": "Weiter",
 	"pages.rooms.importCourse.codeError": "Der Kurs-Code wird nicht verwendet.",
 	"pages.rooms.importCourse.importError":

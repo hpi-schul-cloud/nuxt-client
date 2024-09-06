@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { mdiFileDocumentOutline } from "@mdi/js";
+import { mdiFileDocumentOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { mount, shallowMount } from "@vue/test-utils";
 import FileDescription from "./FileDescription.vue";

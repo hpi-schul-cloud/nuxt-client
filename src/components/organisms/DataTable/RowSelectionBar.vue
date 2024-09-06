@@ -46,7 +46,7 @@
 
 <script>
 import ContextMenu from "@/components/molecules/ContextMenu";
-import { mdiClose } from "@mdi/js";
+import { mdiClose } from "@icons/material";
 
 export default {
 	components: {

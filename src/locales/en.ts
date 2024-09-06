@@ -800,11 +800,20 @@ export default {
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronization completed successfully",
 	"feature-course-sync.GroupSelectionDialog.title": "Select user group",
-	"feature-course-sync.GroupSelectionDialog.text":
-		"In the next step, the selected user group will be synchronized with the newly created course.",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Group selection",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"The following data for creating a new course is not available in the user group {groupName}:<li>Teacher</li><br/>Please check in moin.schule and start course creation again.",
+	"feature-course-sync.StartNewCourseSyncDialog.text":
+		"In the next step, the selected user group will be synchronized with the newly created course.",
+	"feature-course-sync.StartExistingCourseSyncDialog.text":
+		"The selected user group will be synchronized with the selected course in the next step.",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
+		"A synchronization with {systemName} overwrites the members in the course (teachers and students).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
+		"Should the synchronization of the user group {groupName} in the course {courseName} really be started?",
+	"feature-course-sync.StartExistingCourseSyncDialog.success":
+		"User group successfully synchronized",
+	"feature-course-sync.startRoomSyncDialog.title": "Start synchronization",
 	"format.date": "MM/DD/YYYY",
 	"format.dateLong": "dddd, MMMM DD. YYYY",
 	"format.dateTime": "MM/DD/YYYY HH:mm",
@@ -877,13 +886,20 @@ export default {
 		'Are you sure you want to delete class "<i>{itemName}<i>"?',
 	"pages.administration.classes.deleteDialog.title": "Delete class?",
 	"pages.administration.classes.edit": "Edit class",
-	"pages.administration.classes.hint":
+	"pages.administration.common.hint":
 		"With all changes and settings in the administration area, it is confirmed that these are carried out by a school admin with authority to make adjustments to the school in the cloud. Adjustments made by the school admin are deemed to be instructions from the school to the cloud operator {institute_title}.",
 	"pages.administration.classes.index.add": "Add class",
 	"pages.administration.classes.index.title": "Manage classes",
-	"pages.administration.classes.label.archive": "Archive",
+	"pages.administration.common.label.archive": "Archive",
+	"pages.administration.common.label.active": "Current",
 	"pages.administration.classes.manage": "Manage class",
 	"pages.administration.classes.header.sync": "Synchronized with",
+	"pages.administration.courses.delete": "Delete course",
+	"pages.administration.courses.deleteDialog.content":
+		'Do you really want this course "<i>{itemName}</i>" to delete?',
+	"pages.administration.courses.index.add": "Add course",
+
+	"pages.administration.courses.edit": "Edit course",
 	"pages.administration.index.title": "Administration",
 	"pages.administration.ldap.activate.breadcrumb": "Synchronization",
 	"pages.administration.ldap.activate.className": "Name",
@@ -1092,6 +1108,7 @@ export default {
 		"The registration links could not be generated",
 	"pages.administration.remove.error": "Failed to delete users",
 	"pages.administration.remove.success": "Selected users deleted",
+	"pages.administration.rooms.index.title": "Manage courses",
 	"pages.administration.school.index.authSystems.addLdap": "Add LDAP System",
 	"pages.administration.school.index.authSystems.alias": "Alias",
 	"pages.administration.school.index.authSystems.confirmDeleteText":
@@ -1535,6 +1552,13 @@ export default {
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
 	"pages.rooms.fab.ariaLabel": "Create new course",
 	"pages.rooms.fab.import.course": "Import course",
+	"pages.rooms.groupName": "Courses",
+	"pages.rooms.headerSection.archived": "Archive",
+	"pages.rooms.headerSection.synchronized": "Synchronized",
+	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
+	"pages.rooms.headerSection.toCourseFiles": "To the course files",
+	"pages.rooms.menuItems.endSync": "End synchronization",
+	"pages.rooms.menuItems.startSync": "Start synchronization",
 	"pages.rooms.importCourse.btn.continue": "Continue",
 	"pages.rooms.importCourse.codeError": "The course code is not in use.",
 	"pages.rooms.importCourse.importError":

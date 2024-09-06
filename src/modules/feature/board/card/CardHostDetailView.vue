@@ -65,7 +65,7 @@
 import { CardResponse } from "@/serverApi/v3";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { useBoardPermissions } from "@data-board";
-import { mdiClose } from "@mdi/js";
+import { mdiClose } from "@icons/material";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { defineComponent, PropType, ref } from "vue";
 import CardAddElementMenu from "./CardAddElementMenu.vue";

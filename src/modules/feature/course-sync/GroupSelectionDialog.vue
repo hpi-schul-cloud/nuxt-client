@@ -1,11 +1,11 @@
 <template>
 	<vCustomDialog
-		:is-open="isOpen"
+		v-model:is-open="isOpen"
 		has-buttons
 		:buttons="['close', 'next']"
 		:next-btn-disabled="!selectedGroup || !hasTeacher(selectedGroup)"
 		@next="onConfirm"
-		@dialog-closed="closeDialog"
+		@dialog-closed="$emit('cancel')"
 	>
 		<template #title>
 			<div class="text-h4 my-2 text-break">
@@ -15,7 +15,7 @@
 
 		<template #content>
 			<p class="text-md mt-2" data-testid="group-dialog-info-text">
-				{{ $t("feature-course-sync.GroupSelectionDialog.text") }}
+				{{ description }}
 			</p>
 			<VAutocomplete
 				:label="$t('feature-course-sync.GroupSelectionDialog.selection.label')"
@@ -63,28 +63,34 @@ import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
 import { useGroupListState } from "@data-group";
 import { RenderHTML } from "@feature-render-html";
 import { WarningAlert } from "@ui-alert";
-import { ModelRef, Ref, ref, watch } from "vue";
 import { useDebounceFn } from "@vueuse/core";
+import { ModelRef, Ref, ref, watch } from "vue";
+
+defineProps({
+	description: {
+		type: String,
+		required: true,
+	},
+});
 
 const isOpen: ModelRef<boolean> = defineModel("isOpen", {
 	type: Boolean,
 	required: true,
 });
 
-const closeDialog = () => {
-	isOpen.value = false;
-};
-
-const onConfirm = async () => {
-	if (selectedGroup.value) {
-		window.location.assign(
-			`/courses/add?syncedGroupId=${selectedGroup.value.id}`
-		);
-	}
-};
+const emit = defineEmits<{
+	(e: "confirm", selectedGroup: GroupResponse): void;
+	(e: "cancel"): void;
+}>();
 
 const selectedGroup: Ref<GroupResponse | undefined> = ref();
 const searchGroupName: Ref<string> = ref("");
+
+const onConfirm = async () => {
+	if (selectedGroup.value) {
+		emit("confirm", selectedGroup.value);
+	}
+};
 
 const { groups, total, skip, limit, isLoading, fetchGroups } =
 	useGroupListState();

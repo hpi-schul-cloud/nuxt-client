@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-import { mdiOpenInNew } from "@mdi/js";
+import { mdiOpenInNew } from "@icons/material";
 import { defineComponent } from "vue";
 
 export default defineComponent({

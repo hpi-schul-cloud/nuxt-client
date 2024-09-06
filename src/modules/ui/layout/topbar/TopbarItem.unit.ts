@@ -4,7 +4,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import TopbarItem from "./TopbarItem.vue";
-import { mdiAlert } from "@mdi/js";
+import { mdiAlert } from "@icons/material";
 
 describe("@ui-layout/TopbarItem", () => {
 	const setup = () => {

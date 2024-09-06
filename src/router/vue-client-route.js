@@ -27,6 +27,8 @@ const vueRoutes = [
 	`^/administration/migration/?$`,
 	`^/administration/groups/classes/?$`,
 	`^/administration/groups/classes/${mongoId}/?$`,
+	`^/administration/rooms/new/?$`,
+	`^/boards/${mongoId}/?$`,
 	`^/content/?$`,
 	`^/content/${uuid}/?$`,
 	`^/error/?$`,

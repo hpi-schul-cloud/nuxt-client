@@ -51,7 +51,7 @@
 </template>
 
 <script lang="ts" setup>
-import { mdiClose } from "@mdi/js";
+import { mdiClose } from "@icons/material";
 import { useVuetifyBreakpoints } from "@util-device-detection";
 import { OnClickOutside } from "@vueuse/components";
 import { useWindowScroll, watchThrottled } from "@vueuse/core";

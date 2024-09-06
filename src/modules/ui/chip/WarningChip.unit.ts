@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { mdiAlert } from "@mdi/js";
+import { mdiAlert } from "@icons/material";
 import {
 	createTestingI18n,
 	createTestingVuetify,

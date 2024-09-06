@@ -68,7 +68,7 @@ import {
 	mdiTrashCanOutline,
 	mdiUndoVariant,
 	mdiViewDashboardOutline,
-} from "@/components/icons/material";
+} from "@icons/material";
 import {
 	BoardLayout,
 	ImportUserResponseRoleNamesEnum as Roles,
@@ -129,9 +129,7 @@ const isListBoard = computed(() => {
 });
 
 const titleIcon = computed(() => {
-	const icon = isListBoard.value
-		? "$mdiCustomGridOutline"
-		: mdiViewDashboardOutline;
+	const icon = isListBoard.value ? "$gridOutline" : mdiViewDashboardOutline;
 	return icon;
 });
 
@@ -145,7 +143,7 @@ const onUnpublish = () => {
 
 const openBoard = async () => {
 	if (!props.dragInProgress) {
-		await router.push(`${props.columnBoardItem.columnBoardId}/board`);
+		await router.push(`/boards/${props.columnBoardItem.columnBoardId}`);
 	}
 };
 
