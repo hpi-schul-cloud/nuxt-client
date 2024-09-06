@@ -24,7 +24,7 @@ import {
 	mdiAlertCircle,
 	mdiCheckCircle,
 	mdiInformation,
-} from "@/components/icons/material";
+} from "@icons/material";
 import { computed, PropType, Ref, ref } from "vue";
 
 const props = defineProps({

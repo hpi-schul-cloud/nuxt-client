@@ -62,7 +62,7 @@ import {
 	mdiEmailOutline,
 	mdiQrcode,
 	mdiShareVariantOutline,
-} from "@/components/icons/material";
+} from "@icons/material";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 

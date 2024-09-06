@@ -23,7 +23,7 @@
 	</div>
 </template>
 <script>
-import { mdiLock } from "@/components/icons/material";
+import { mdiLock } from "@icons/material";
 export default {
 	props: {
 		size: {

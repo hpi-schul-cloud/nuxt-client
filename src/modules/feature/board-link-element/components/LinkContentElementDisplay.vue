@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import { ComputedRef, computed, ref } from "vue";
-import { mdiLink } from "@mdi/js";
+import { mdiLink } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { injectStrict } from "@/utils/inject";
 import { useDisplay } from "vuetify";

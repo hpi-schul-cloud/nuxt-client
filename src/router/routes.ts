@@ -4,13 +4,13 @@ import { Multiguard, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
+	isEnum,
+	isMongoId,
+	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
 	REGEX_H5P_ID,
 	REGEX_ID,
 	REGEX_UUID,
-	isEnum,
-	isMongoId,
-	isOfficialSchoolNumber,
 } from "@/utils/validationUtil";
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
@@ -113,6 +113,15 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		component: () => import("@/pages/administration/TeacherCreate.page.vue"),
 		name: "administration-teachers-new",
 		beforeEnter: createPermissionGuard(["teacher_create"]),
+	},
+	{
+		path: "/administration/rooms/new",
+		component: () => import("@/pages/administration/RoomsOverview.page.vue"),
+		name: "administration-rooms-new",
+		beforeEnter: createPermissionGuard(["course_administration"]),
+		props: (route: RouteLocationNormalized) => ({
+			tab: route.query.tab,
+		}),
 	},
 	{
 		path: "/administration/groups/classes",

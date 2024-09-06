@@ -18,7 +18,7 @@
 						<span>{{ currentYear }}</span>
 					</v-tab>
 					<v-tab value="archive" data-testid="admin-class-previous-years-tab">
-						<span>{{ t("pages.administration.classes.label.archive") }}</span>
+						<span>{{ t("pages.administration.common.label.archive") }}</span>
 					</v-tab>
 				</v-tabs>
 			</div>
@@ -170,7 +170,7 @@
 
 		<p class="text-muted">
 			{{
-				t("pages.administration.classes.hint", {
+				t("pages.administration.common.hint", {
 					institute_title: getInstituteTitle,
 				})
 			}}
@@ -211,7 +211,7 @@ import {
 	mdiPencilOutline,
 	mdiSyncOff,
 	mdiTrashCanOutline,
-} from "@mdi/js";
+} from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";

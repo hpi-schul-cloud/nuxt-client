@@ -10,7 +10,7 @@
 
 <script setup lang="ts">
 import { BoardMenuAction } from "@ui-board";
-import { mdiShareVariantOutline } from "@/components/icons/material";
+import { mdiShareVariantOutline } from "@icons/material";
 
 const emit = defineEmits(["click"]);
 

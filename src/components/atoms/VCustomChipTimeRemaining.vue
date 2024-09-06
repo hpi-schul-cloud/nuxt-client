@@ -14,7 +14,7 @@
 <script>
 import { fromNowToFuture } from "@/plugins/datetime";
 import dayjs from "dayjs";
-import { mdiTimerSandComplete } from "@mdi/js";
+import { mdiTimerSandComplete } from "@icons/material";
 
 export default {
 	props: {

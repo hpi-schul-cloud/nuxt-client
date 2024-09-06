@@ -65,7 +65,7 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { mdiPuzzleOutline } from "@mdi/js";
+import { mdiPuzzleOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { useSharedLastCreatedElement } from "@util-board";
 import {

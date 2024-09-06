@@ -50,7 +50,7 @@
 <script setup>
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { mdiInformation } from "@mdi/js";
+import { mdiInformation } from "@icons/material";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { RenderHTML } from "@feature-render-html";

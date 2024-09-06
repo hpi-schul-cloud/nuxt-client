@@ -28,7 +28,7 @@
 		<template v-else>
 			<slot name="page-content" />
 		</template>
-		<GroupSelectionDialog v-model:is-open="isCourseSyncDialogOpen" />
+		<StartNewCourseSyncDialog v-model:is-open="isCourseSyncDialogOpen" />
 		<CommonCartridgeImportModal :max-width="480" class="upload-modal" />
 	</DefaultWireframe>
 </template>
@@ -43,8 +43,8 @@ import {
 	envConfigModule,
 	courseRoomListModule,
 } from "@/store";
-import { GroupSelectionDialog } from "@feature-course-sync";
-import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@mdi/js";
+import { StartNewCourseSyncDialog } from "@feature-course-sync";
+import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Fab, FabAction } from "./default-wireframe.types";

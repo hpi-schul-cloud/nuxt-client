@@ -12,7 +12,7 @@
 			>
 				<span class="description">{{ s.name }} </span>
 				<span v-show="index < currentStep">
-					<v-icon class="material-icon">$mdiCheck</v-icon>
+					<v-icon class="material-icon" :icon="mdiCheck" />
 				</span>
 			</li>
 		</ul>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { mdiCheck } from "@icons/material";
+
 export default {
 	components: {},
 	props: {
@@ -46,8 +48,9 @@ export default {
 		},
 	},
 	data() {
-		// This solely exists to appear in the coverage report
-		return {};
+		return {
+			mdiCheck,
+		};
 	},
 	computed: {
 		stepWidth: function () {

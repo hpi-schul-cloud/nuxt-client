@@ -201,7 +201,7 @@
 </template>
 
 <script lang="ts">
-import { mdiAlertCircle, mdiCheck } from "@/components/icons/material";
+import { mdiAlertCircle, mdiCheck } from "@icons/material";
 import { useUserLoginMigrationMappings } from "@/composables/user-login-migration-mappings.composable";
 import { BusinessError } from "@/store/types/commons";
 import { School } from "@/store/types/schools";
