@@ -25,13 +25,16 @@ module.exports = {
 	},
 
 	// Output
-	output: {
-		filename: "_nuxt/js/[name].js",
-		path: path.resolve(__base, "dist"),
-		publicPath: "/",
-		chunkFilename: "_nuxt/js/[name].js",
-		clean: true,
-	},
+	output:
+		process.env.NODE_ENV === "development"
+			? {}
+			: {
+					filename: "_nuxt/js/[name]-[contenthash:6].js",
+					chunkFilename: "_nuxt/js/[name]-[contenthash:6].js",
+					path: path.resolve(__base, "dist"),
+					publicPath: "/",
+					clean: true,
+				},
 
 	// Optimizations
 	optimization: {
