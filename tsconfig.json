@@ -55,6 +55,7 @@
 			"@ui-confirmation-dialog": ["src/modules/ui/confirmation-dialog"],
 			"@ui-date-time-picker": ["src/modules/ui/date-time-picker"],
 			"@ui-extended-icon-btn": ["src/modules/ui/extended-icon-btn"],
+			"@ui-kebab-menu": ["src/modules/ui/kebab-menu"],
 			"@ui-layout": ["src/modules/ui/layout"],
 			"@ui-light-box": ["src/modules/ui/light-box"],
 			"@ui-preview-image": ["src/modules/ui/preview-image"],
