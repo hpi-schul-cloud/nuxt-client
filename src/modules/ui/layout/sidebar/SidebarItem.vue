@@ -25,6 +25,8 @@ import { SidebarSingleItem } from "../types";
 import { useRoute } from "vue-router";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
+import { useSharedBoardPageInformation } from "@data-board";
+import { BoardExternalReferenceType } from "@/serverApi/v3";
 
 const props = defineProps({
 	item: {
@@ -37,6 +39,7 @@ const route = useRoute();
 
 const isActive = computed(() => {
 	const { isLoading, isRoom } = storeToRefs(useRoomDetailsStore());
+	const { contextType } = useSharedBoardPageInformation();
 
 	// Rooms
 	if (route.name === "rooms") {
@@ -60,6 +63,14 @@ const isActive = computed(() => {
 		route.name === "course-room-overview"
 	) {
 		return props.item.to === "/rooms/courses-overview";
+	}
+
+	// Board
+	if (route.name === "boards-id") {
+		return (
+			props.item.to === "/rooms/courses-overview" &&
+			contextType.value === BoardExternalReferenceType.Course
+		);
 	}
 
 	return (
