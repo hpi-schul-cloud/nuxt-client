@@ -75,7 +75,7 @@ const setup = () => {
 	};
 };
 
-const defineWindowWidth = (width: number) => {
+const defineWindowWidth = (width = 1564) => {
 	Object.defineProperty(window, "innerWidth", {
 		writable: true,
 		configurable: true,
@@ -94,6 +94,9 @@ Object.defineProperty(window, "localStorage", {
 });
 
 describe("LoggedIn.layout.vue", () => {
+	beforeEach(() => {
+		defineWindowWidth();
+	});
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
@@ -105,7 +108,6 @@ describe("LoggedIn.layout.vue", () => {
 	});
 
 	it("should show sidebar on Desktop as default", async () => {
-		defineWindowWidth(1564);
 		const sidebarExpanded = true;
 		const { wrapper } = setup();
 		const sidebar = wrapper.find("nav");
@@ -140,7 +142,6 @@ describe("LoggedIn.layout.vue", () => {
 	});
 
 	it("should set localStorage key 'sidebarExpanded' to 'false' on sidebar click", async () => {
-		defineWindowWidth(1564);
 		const { wrapper } = setup();
 		const topbarComponent = wrapper.findComponent(Topbar);
 		topbarComponent.vm.$emit("sidebar-toggled");
@@ -157,7 +158,6 @@ describe("LoggedIn.layout.vue", () => {
 	});
 
 	it("should set localStorage key 'sidebarExpanded' to 'true' on topbar click", async () => {
-		defineWindowWidth(564);
 		const { wrapper } = setup();
 		const topbarComponent = wrapper.findComponent(Topbar);
 		topbarComponent.vm.$emit("sidebar-toggled");
