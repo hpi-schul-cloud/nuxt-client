@@ -29,7 +29,8 @@ import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
 import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
-import { computed, onMounted, ref, watch } from "vue";
+import { useStorage } from "@vueuse/core";
+import { computed, watch } from "vue";
 import { useDisplay } from "vuetify";
 
 const { lgAndUp } = useDisplay();
@@ -38,25 +39,13 @@ const isDesktop = computed(() => {
 	return lgAndUp.value;
 });
 
-const sidebarExpanded = ref(isDesktop.value);
+const sidebarExpanded = useStorage("sidebarExpanded", isDesktop.value);
+
+watch(isDesktop, () => {
+	sidebarExpanded.value = lgAndUp.value;
+});
 
 const onToggleSidebar = () => {
 	sidebarExpanded.value = !sidebarExpanded.value;
 };
-
-watch(sidebarExpanded, (value) => {
-	localStorage.setItem("sidebarExpanded", value.toString());
-});
-
-watch(isDesktop, (value) => {
-	sidebarExpanded.value = value;
-});
-
-onMounted(() => {
-	const sidebarExpandedValue = localStorage.getItem("sidebarExpanded");
-	if (!sidebarExpandedValue) {
-		localStorage.setItem("sidebarExpanded", "true");
-	}
-	sidebarExpanded.value = sidebarExpandedValue === "true";
-});
 </script>
