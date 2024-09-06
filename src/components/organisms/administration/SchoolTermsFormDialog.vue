@@ -5,7 +5,7 @@
 		@dialog-closed="cancel"
 		has-buttons
 		confirm-btn-title-key="pages.administration.school.index.termsOfUse.replace"
-		confirm-btn-icon="$mdiFileReplaceOutline"
+		:confirm-btn-icon="mdiFileReplaceOutline"
 		:confirm-btn-disabled="!isValid"
 		@dialog-confirmed="submit"
 	>
@@ -16,7 +16,7 @@
 		</template>
 		<template #content>
 			<v-form ref="termsForm" v-model="isValid">
-				<v-alert type="warning" class="mb-10" icon="$mdiAlert">
+				<v-alert type="warning" class="mb-10" :icon="mdiAlert">
 					<div class="alert-text">
 						{{
 							t(
@@ -49,8 +49,8 @@
 							v-if="!isValid && isTouched"
 							color="rgba(var(--v-theme-error))"
 							data-testid="warning-icon"
-							>$mdiAlert</v-icon
-						>
+							:icon="mdiAlert"
+						/>
 					</template>
 				</v-file-input>
 			</v-form>
@@ -72,6 +72,7 @@ import { currentDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper";
 import { CreateConsentVersionPayload } from "@/store/types/consent-version";
 import { useI18n } from "vue-i18n";
+import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
 
 export default defineComponent({
 	name: "SchoolTermsFormDialog",
@@ -161,6 +162,8 @@ export default defineComponent({
 			isTouched: isFormTouched,
 			termsForm,
 			school,
+			mdiAlert,
+			mdiFileReplaceOutline,
 		};
 	},
 });

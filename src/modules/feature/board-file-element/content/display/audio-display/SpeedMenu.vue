@@ -86,7 +86,7 @@
 </template>
 
 <script lang="ts">
-import { mdiCheck, mdiPlaySpeed } from "@mdi/js";
+import { mdiCheck, mdiPlaySpeed } from "@icons/material";
 import { defineComponent } from "vue";
 
 export default defineComponent({

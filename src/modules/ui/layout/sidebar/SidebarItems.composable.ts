@@ -4,7 +4,21 @@ import {
 	FILE_PATHS_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
-import { mdiBookshelf } from "@mdi/js";
+import {
+	mdiAccountGroupOutline,
+	mdiAccountSupervisorCircleOutline,
+	mdiApplicationBracketsOutline,
+	mdiBookshelf,
+	mdiCalendarOutline,
+	mdiCogOutline,
+	mdiFolderOpenOutline,
+	mdiFormatListChecks,
+	mdiHelpCircleOutline,
+	mdiNewspaperVariantOutline,
+	mdiPuzzleOutline,
+	mdiSchoolOutline,
+	mdiViewGridOutline,
+} from "@icons/material";
 import { computed, ComputedRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { SidebarGroupItem, SidebarItems, SidebarSingleItem } from "../types";
@@ -18,39 +32,39 @@ export const useSidebarItems = () => {
 		{
 			title: "global.sidebar.item.overview",
 			href: "/dashboard",
-			icon: "$mdiViewGridOutline",
+			icon: mdiViewGridOutline,
 			testId: "Übersicht",
 		},
 		{
 			title: "global.sidebar.item.rooms",
 			to: "/rooms",
-			icon: "$mdiAccountSupervisorCircleOutline",
+			icon: mdiAccountSupervisorCircleOutline,
 			feature: "FEATURE_ROOMS_ENABLED",
 			testId: "Räume",
 		},
 		{
 			title: "global.sidebar.item.courses",
 			to: "/rooms/courses-overview",
-			icon: "$mdiSchoolOutline",
+			icon: mdiSchoolOutline,
 			testId: "Course-Overview",
 		},
 		{
 			title: "global.sidebar.item.teams",
 			href: "/teams",
-			icon: "$mdiAccountGroupOutline",
+			icon: mdiAccountGroupOutline,
 			permissions: ["TEAMS_ENABLED"],
 			testId: "Teams",
 		},
 		{
 			title: "global.sidebar.item.tasks",
 			to: "/tasks",
-			icon: "$mdiFormatListChecks",
+			icon: mdiFormatListChecks,
 			permissions: ["TASK_DASHBOARD_VIEW_V3", "TASK_DASHBOARD_TEACHER_VIEW_V3"],
 			testId: "Aufgaben",
 		},
 		{
 			title: "global.sidebar.item.files-old",
-			icon: "$mdiFolderOpenOutline",
+			icon: mdiFolderOpenOutline,
 			testId: "Dateien",
 			children: [
 				{
@@ -79,13 +93,13 @@ export const useSidebarItems = () => {
 		{
 			title: "pages.news.title",
 			href: "/news",
-			icon: "$mdiNewspaperVariantOutline",
+			icon: mdiNewspaperVariantOutline,
 			testId: "Neuigkeiten",
 		},
 		{
 			title: "global.sidebar.item.calendar",
 			href: "/calendar",
-			icon: "$mdiCalendarOutline",
+			icon: mdiCalendarOutline,
 			testId: "Termine",
 		},
 		{
@@ -105,7 +119,7 @@ export const useSidebarItems = () => {
 		{
 			title: "global.sidebar.item.addons",
 			href: "/addons",
-			icon: "$mdiPuzzleOutline",
+			icon: mdiPuzzleOutline,
 			permissions: ["ADDONS_ENABLED"],
 			testId: "Add-ons",
 		},
@@ -194,7 +208,7 @@ export const useSidebarItems = () => {
 	const metaLinks: ComputedRef<SidebarGroupItem[]> = computed(() => [
 		{
 			title: "global.sidebar.item.management",
-			icon: "$mdiCogOutline",
+			icon: mdiCogOutline,
 			permissions: ["TEACHER_LIST", "ADMIN_VIEW"],
 			testId: "Verwaltung",
 			children: [
@@ -264,7 +278,7 @@ export const useSidebarItems = () => {
 		},
 		{
 			title: "global.sidebar.item.helpArea",
-			icon: "$mdiHelpCircleOutline",
+			icon: mdiHelpCircleOutline,
 			testId: "Hilfebereich",
 			children: [
 				{
@@ -292,7 +306,7 @@ export const useSidebarItems = () => {
 		},
 		{
 			title: "global.sidebar.item.system",
-			icon: "$mdiApplicationBracketsOutline",
+			icon: mdiApplicationBracketsOutline,
 			testId: "system",
 			children: systemLinks,
 		},

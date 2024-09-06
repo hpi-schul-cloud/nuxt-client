@@ -28,7 +28,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiFileTreeOutline</v-icon>
+				<v-icon :icon="mdiFileTreeOutline" />
 			</template>
 		</base-input>
 		<p class="title-class">
@@ -70,7 +70,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiAccountGroupOutline</v-icon>
+				<v-icon :icon="mdiAccountGroupOutline" />
 			</template>
 		</base-input>
 	</div>
@@ -81,7 +81,11 @@ import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
 import { defineComponent } from "vue";
 import useVuelidate from "@vuelidate/core";
-import { mdiCheck } from "@mdi/js";
+import {
+	mdiAccountGroupOutline,
+	mdiCheck,
+	mdiFileTreeOutline,
+} from "@icons/material";
 
 export default defineComponent({
 	setup() {
@@ -111,7 +115,9 @@ export default defineComponent({
 				},
 				{ key: "required", message: this.$t("common.validation.required") },
 			],
+			mdiAccountGroupOutline,
 			mdiCheck,
+			mdiFileTreeOutline,
 		};
 	},
 	computed: {

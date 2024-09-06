@@ -3,7 +3,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { mdiChevronDown, mdiChevronUp } from "@mdi/js";
+import { mdiChevronDown, mdiChevronUp } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";

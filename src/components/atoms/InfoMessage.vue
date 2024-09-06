@@ -5,7 +5,7 @@
 	</div>
 </template>
 <script>
-import { mdiAlert } from "@/components/icons/material";
+import { mdiAlert } from "@icons/material";
 export default {
 	props: {
 		message: {

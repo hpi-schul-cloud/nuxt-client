@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { mdiReload } from "@mdi/js";
+import { mdiReload } from "@icons/material";
 import { computed, ComputedRef, defineComponent } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
 import { useI18n } from "vue-i18n";

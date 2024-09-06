@@ -64,12 +64,16 @@
 					>
 						<v-icon>{{ visibilityIcon }}</v-icon>
 					</v-btn>
-					<v-icon v-if="hasError" color="rgba(var(--v-theme-error))"
-						>$mdiAlert</v-icon
-					>
-					<v-icon v-if="success" color="rgba(var(--v-theme-success))">
-						$mdiCheckCircleOutline
-					</v-icon>
+					<v-icon
+						v-if="hasError"
+						color="rgba(var(--v-theme-error))"
+						:icon="mdiAlert"
+					/>
+					<v-icon
+						v-if="success"
+						color="rgba(var(--v-theme-success))"
+						:icon="mdiCheckCircleOutline"
+					/>
 				</div>
 			</div>
 		</div>
@@ -88,7 +92,12 @@
 </template>
 <script>
 import { inputRangeDate } from "@/plugins/datetime";
-import { mdiEyeOffOutline, mdiEyeOutline } from "@mdi/js";
+import {
+	mdiAlert,
+	mdiCheckCircleOutline,
+	mdiEyeOffOutline,
+	mdiEyeOutline,
+} from "@icons/material";
 import { defineComponent } from "vue";
 import { useUid } from "@/utils/uid";
 
@@ -144,6 +153,8 @@ export default defineComponent({
 	},
 	data() {
 		return {
+			mdiAlert,
+			mdiCheckCircleOutline,
 			mdiEyeOffOutline,
 			mdiEyeOutline,
 			hasFocus: false,

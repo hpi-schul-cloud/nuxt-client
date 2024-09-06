@@ -154,7 +154,7 @@ import {
 	mdiContentCopy,
 	mdiPencilOutline,
 	mdiTrashCanOutline,
-} from "@mdi/js";
+} from "@icons/material";
 
 export default {
 	components: {

@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiPlus } from "@mdi/js";
+import { mdiPlus } from "@icons/material";
 import { computed } from "vue";
 import { useSharedEditMode } from "@data-board";
 

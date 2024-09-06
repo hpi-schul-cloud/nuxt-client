@@ -41,7 +41,7 @@
 <script>
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { mdiLogin } from "@mdi/js";
+import { mdiLogin } from "@icons/material";
 
 export default {
 	props: {

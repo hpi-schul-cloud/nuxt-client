@@ -100,6 +100,7 @@ import { DataTableHeader } from "@/types/vuetify";
 import { useI18n } from "vue-i18n";
 import { MaybeRef } from "@vueuse/core";
 import { VExpansionPanelTitle } from "vuetify/lib/components/index.mjs";
+import { mdiCheck, mdiClose, mdiMinus } from "@icons/material";
 
 type StatusFilter = "all" | Status;
 
@@ -174,13 +175,13 @@ export default defineComponent({
 		};
 		const getStatusIcon = (item: TeacherSubmission) => {
 			if (item.status === "open") {
-				return "$mdiMinus";
+				return mdiMinus;
 			}
 			if (item.status === "completed") {
-				return "$mdiCheck";
+				return mdiCheck;
 			}
 			if (item.status === "expired") {
-				return "$mdiClose";
+				return mdiClose;
 			}
 		};
 		const getFilterClass = (filter: StatusFilter, count: number) => {

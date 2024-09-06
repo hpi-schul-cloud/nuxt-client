@@ -2,9 +2,9 @@
 	<v-menu>
 		<template v-slot:activator="{ props }">
 			<v-btn v-bind="props" variant="flat">
-				<v-icon class="filter-icon mr-2">$mdiTune</v-icon>
+				<v-icon class="filter-icon mr-2" :icon="mdiTune" />
 				<span data-testid="filter-title">{{ filterTitle }}</span>
-				<v-icon class="filter-icon">$mdiMenuDown</v-icon>
+				<v-icon class="filter-icon" :icon="mdiMenuDown" />
 			</v-btn>
 		</template>
 
@@ -64,8 +64,8 @@ import {
 } from "./types";
 import { ref, computed, PropType } from "vue";
 import { useDataTableFilter } from "./composables/filter.composable";
-
 import { useI18n } from "vue-i18n";
+import { mdiMenuDown, mdiTune } from "@icons/material";
 
 const props = defineProps({
 	filterFor: {

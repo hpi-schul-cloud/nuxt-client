@@ -109,7 +109,7 @@ import {
 	mdiTextBoxCheckOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
-} from "@mdi/js";
+} from "@icons/material";
 import { RoomDotMenu } from "@ui-room-details";
 
 const taskRequiredKeys = ["createdAt", "id", "name"];

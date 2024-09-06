@@ -56,7 +56,7 @@ import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 	mdiFileDocumentOutline,
-} from "@mdi/js";
+} from "@icons/material";
 
 defineEmits(["edit", "datasheet", "delete"]);
 </script>

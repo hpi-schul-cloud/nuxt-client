@@ -11,7 +11,7 @@
 					v-model="dateString"
 					ref="inputField"
 					data-testid="date-input"
-					append-inner-icon="$mdiCalendar"
+					:append-inner-icon="mdiCalendar"
 					:label="label"
 					:aria-label="ariaLabel"
 					:placeholder="t('common.placeholder.dateformat')"
@@ -51,6 +51,7 @@ import { helpers, requiredIf } from "@vuelidate/validators";
 import { dateInputMask as vDateInputMask } from "@util-input-masks";
 import { isValidDateFormat } from "@util-validators";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
+import { mdiCalendar } from "@icons/material";
 
 const props = defineProps({
 	date: { type: String }, // ISO 8601 string

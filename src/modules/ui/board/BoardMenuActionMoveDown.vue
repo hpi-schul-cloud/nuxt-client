@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { injectStrict } from "@/utils/inject";
-import { mdiArrowDown } from "@mdi/js";
+import { mdiArrowDown } from "@icons/material";
 import { BoardMenuAction } from "@ui-board";
 import {
 	BOARD_CARD_HAS_MULTIPLE_ELEMENTS,

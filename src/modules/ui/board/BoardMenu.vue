@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import type { MessageSchema } from "@/locales/schema";
-import { mdiDotsVertical } from "@mdi/js";
+import { mdiDotsVertical } from "@icons/material";
 import { computed, PropType, provide, toRef } from "vue";
 import { BoardMenuScope } from "./board-menu-scope";
 import { MENU_SCOPE } from "./injection-tokens";

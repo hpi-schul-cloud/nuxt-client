@@ -172,7 +172,7 @@ import {
 } from "@/utils/inject";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { RenderHTML } from "@feature-render-html";
-import { mdiAlert, mdiCheckCircle } from "@mdi/js";
+import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import {
 	computed,
 	ComputedRef,

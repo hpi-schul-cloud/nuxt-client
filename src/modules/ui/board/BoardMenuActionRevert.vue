@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiRestore } from "@mdi/js";
+import { mdiRestore } from "@icons/material";
 import { BoardMenuAction } from "@ui-board";
 import { useI18n } from "vue-i18n";
 
