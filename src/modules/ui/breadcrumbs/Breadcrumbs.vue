@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { mdiChevronLeft } from "@/components/icons/material";
+import { mdiChevronLeft } from "@icons/material";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 
 defineProps({
