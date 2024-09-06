@@ -17,7 +17,7 @@ import {
 import { mount } from "@vue/test-utils";
 import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index.mjs";
-import NewLoggedIn from "./LoggedIn.layout.vue";
+import LoggedInLayout from "./LoggedIn.layout.vue";
 import { Topbar } from "@ui-layout";
 
 jest.mock("vue-router", () => ({
@@ -45,7 +45,7 @@ const setup = () => {
 
 	const wrapper = mount(VApp, {
 		slots: {
-			default: h(NewLoggedIn),
+			default: h(LoggedInLayout),
 		},
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -86,17 +86,14 @@ const defineWindowWidth = (width: number) => {
 
 const mockGetLocalStorage = jest.fn();
 const mockSetLocalStorage = jest.fn();
+Object.defineProperty(window, "localStorage", {
+	value: {
+		getItem: mockGetLocalStorage,
+		setItem: mockSetLocalStorage,
+	},
+});
 
-describe("newLoggedIn", () => {
-	beforeEach(() => {
-		Object.defineProperty(window, "localStorage", {
-			value: {
-				getItem: mockGetLocalStorage,
-				setItem: mockSetLocalStorage,
-			},
-		});
-	});
-
+describe("LoggedIn.layout.vue", () => {
 	afterEach(() => {
 		jest.clearAllMocks();
 	});
@@ -137,9 +134,17 @@ describe("newLoggedIn", () => {
 		if (!sidebarExpanded) expect(sidebar.attributes("tabindex")).toBe("-1");
 	});
 
+	it("should call 'localStorage.getItem' on mounted", async () => {
+		setup();
+		expect(mockGetLocalStorage).toHaveBeenCalledWith("sidebarExpanded");
+	});
+
 	it("should set localStorage key 'sidebarExpanded' to 'false' on sidebar click", async () => {
 		defineWindowWidth(1564);
 		const { wrapper } = setup();
+		const topbarComponent = wrapper.findComponent(Topbar);
+		topbarComponent.vm.$emit("sidebar-toggled");
+
 		const sidebar = wrapper.find("nav");
 
 		await sidebar.trigger("click");
@@ -159,10 +164,5 @@ describe("newLoggedIn", () => {
 		await nextTick();
 
 		expect(mockSetLocalStorage).toHaveBeenCalledWith("sidebarExpanded", "true");
-	});
-
-	it("should call 'localStorage.getItem' on mounted", async () => {
-		setup();
-		expect(mockGetLocalStorage).toHaveBeenCalledWith("sidebarExpanded");
 	});
 });
