@@ -23,7 +23,7 @@
 
 <script>
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
-import { mdiChevronLeft, mdiMenuRight } from "@mdi/js";
+import { mdiChevronLeft, mdiMenuRight } from "@icons/material";
 
 export default {
 	name: "CopyResultModalListItem",

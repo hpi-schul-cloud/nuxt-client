@@ -25,13 +25,16 @@ module.exports = {
 	},
 
 	// Output
-	output: {
-		filename: "_nuxt/js/[name].js",
-		path: path.resolve(__base, "dist"),
-		publicPath: "/",
-		chunkFilename: "_nuxt/js/[name].js",
-		clean: true,
-	},
+	output:
+		process.env.NODE_ENV === "development"
+			? {}
+			: {
+					filename: "_nuxt/js/[name]-[contenthash:6].js",
+					chunkFilename: "_nuxt/js/[name]-[contenthash:6].js",
+					path: path.resolve(__base, "dist"),
+					publicPath: "/",
+					clean: true,
+				},
 
 	// Optimizations
 	optimization: {
@@ -154,6 +157,7 @@ module.exports = {
 			"@feature-news-form": getDir("src/modules/feature/news-form"),
 			"@feature-media-shelf": getDir("src/modules/feature/media-shelf"),
 			"@feature-room": getDir("src/modules/feature/room"),
+			"@icons": getDir("src/components/icons"),
 			"@ui-alert": getDir("src/modules/ui/alert"),
 			"@ui-board": getDir("src/modules/ui/board"),
 			"@ui-chip": getDir("src/modules/ui/chip"),

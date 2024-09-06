@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { mdiAlert } from "@mdi/js";
+import { mdiAlert } from "@icons/material";
 import { defineComponent } from "vue";
 import BaseAlert from "./BaseAlert.vue";
 

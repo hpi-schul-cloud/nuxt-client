@@ -39,7 +39,7 @@
 <script setup lang="ts">
 import { ContentElementType, DeletedElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
-import { mdiPuzzleOutline } from "@mdi/js";
+import { mdiPuzzleOutline } from "@icons/material";
 import { WarningAlert } from "@ui-alert";
 import { ContentElementBar } from "@ui-board";
 import { PropType, Ref, ref, toRef } from "vue";

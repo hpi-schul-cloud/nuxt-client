@@ -22,7 +22,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mdiAlert, mdiCheckCircle } from "@mdi/js";
+import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";

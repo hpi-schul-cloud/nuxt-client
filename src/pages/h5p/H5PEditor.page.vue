@@ -33,7 +33,7 @@
 <script lang="ts">
 import { useApplicationError } from "@/composables/application-error.composable";
 import { applicationErrorModule, notifierModule } from "@/store";
-import { mdiChevronLeft } from "@mdi/js";
+import { mdiChevronLeft } from "@icons/material";
 import { PropType, defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";

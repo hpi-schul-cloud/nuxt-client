@@ -21,7 +21,7 @@
 <script lang="ts">
 import { useApplicationError } from "@/composables/application-error.composable";
 import { applicationErrorModule } from "@/store";
-import { mdiChevronLeft } from "@mdi/js";
+import { mdiChevronLeft } from "@icons/material";
 import { defineComponent } from "vue";
 import { useRoute } from "vue-router";
 

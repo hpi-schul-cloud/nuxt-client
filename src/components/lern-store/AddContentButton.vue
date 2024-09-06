@@ -53,7 +53,7 @@ import { contentModule } from "@/store";
 import AddContentModal from "@/components/lern-store/AddContentModal";
 import NotificationModal from "@/components/lern-store/NotificationModal";
 import LoadingModal from "@/components/lern-store/LoadingModal";
-import { mdiPlusCircleOutline } from "@mdi/js";
+import { mdiPlusCircleOutline } from "@icons/material";
 import {
 	getMerlinReference,
 	getMetadataAttribute,

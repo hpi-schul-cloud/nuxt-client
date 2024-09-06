@@ -160,7 +160,7 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { mdiPencilOutline, mdiSync, mdiTrashCanOutline } from "@mdi/js";
+import { mdiPencilOutline, mdiSync, mdiTrashCanOutline } from "@icons/material";
 
 type Tab = "current" | "archive";
 

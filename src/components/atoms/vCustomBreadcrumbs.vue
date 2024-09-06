@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiChevronLeft } from "@mdi/js";
+import { mdiChevronLeft } from "@icons/material";
 
 defineProps({
 	breadcrumbs: {

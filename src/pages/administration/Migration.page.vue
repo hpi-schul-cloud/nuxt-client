@@ -554,7 +554,7 @@ import { BusinessError } from "@/store/types/commons";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
-import { mdiClose } from "@mdi/js";
+import { mdiClose } from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import {
 	computed,

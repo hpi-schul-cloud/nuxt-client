@@ -94,7 +94,7 @@
 <script setup lang="ts">
 import { onMounted, computed, ref } from "vue";
 import { useDebounceFn, watchDebounced } from "@vueuse/core";
-import { mdiChevronLeft, mdiMagnify, mdiClose } from "@mdi/js";
+import { mdiChevronLeft, mdiMagnify, mdiClose } from "@icons/material";
 import {
 	CONTENT_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,

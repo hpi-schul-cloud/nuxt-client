@@ -130,7 +130,7 @@ import {
 } from "vue";
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import CourseRoomDetailsModule from "@/store/course-room-details";
-import { mdiCheck } from "@mdi/js";
+import { mdiCheck } from "@icons/material";
 
 export default defineComponent({
 	name: "RoomVideoConferenceSection",

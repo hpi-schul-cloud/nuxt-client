@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { mdiCheck } from "@mdi/js";
+import { mdiCheck } from "@icons/material";
 import { shallowMount } from "@vue/test-utils";
 import SpeedMenu from "./SpeedMenu.vue";
 

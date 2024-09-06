@@ -12,7 +12,7 @@ import {
 	mdiCheckboxOutline,
 	mdiMenuDownOutline,
 	mdiMenuUpOutline,
-} from "@/components/icons/material";
+} from "@icons/material";
 
 const defaultData = tableData(5);
 

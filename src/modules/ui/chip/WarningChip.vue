@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiAlert } from "@mdi/js";
+import { mdiAlert } from "@icons/material";
 </script>
 
 <style scoped>

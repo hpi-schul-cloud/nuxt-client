@@ -135,7 +135,7 @@ import {
 	mdiShareVariantOutline,
 	mdiTrashCanOutline,
 	mdiUndoVariant,
-} from "@mdi/js";
+} from "@icons/material";
 import { defineComponent } from "vue";
 
 export default defineComponent({
