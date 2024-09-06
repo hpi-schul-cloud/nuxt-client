@@ -793,8 +793,6 @@ export default {
 		"Select Tool...",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
 	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
-	"feature-course-sync.EndCourseSyncDialog.alert":
-		"Once synchronization has ended, it cannot be started again. User data can be edited and maintained manually in the same way as regular courses.",
 	"feature-course-sync.EndCourseSyncDialog.description":
 		"Should the synchronization of the user group {groupName} in the course {courseName} really be ended?",
 	"feature-course-sync.EndCourseSyncDialog.success":
