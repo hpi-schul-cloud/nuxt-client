@@ -57,7 +57,6 @@ const onClick = (menuItem: MenuItem) => {
 </script>
 
 <style lang="scss" scoped>
-// stylelint-disable sh-waqar/declaration-use-variable
 .dotmenu-action {
 	min-height: 25px !important;
 }
