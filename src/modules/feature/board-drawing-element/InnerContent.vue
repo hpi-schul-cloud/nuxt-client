@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import image from "@/assets/img/tldraw.svg";
-import { mdiPresentation } from "@mdi/js";
+import { mdiPresentation } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { defineComponent } from "vue";
 

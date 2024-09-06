@@ -166,7 +166,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 } from "@/utils/inject";
-import { mdiInformation } from "@mdi/js";
+import { mdiInformation } from "@icons/material";
 import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 

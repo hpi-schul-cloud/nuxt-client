@@ -15,7 +15,7 @@
 				@update:model-value="updateMediaBoardLayout"
 			>
 				<VBtn
-					icon="$mdiCustomShelfOutline"
+					icon="$shelfOutline"
 					size="x-small"
 					width="48px"
 					:value="MediaBoardLayoutType.List"
@@ -69,7 +69,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { MediaBoardLayoutType } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
-import { mdiViewGridOutline } from "@mdi/js";
+import { mdiViewGridOutline } from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted } from "vue";
 import { useI18n } from "vue-i18n";

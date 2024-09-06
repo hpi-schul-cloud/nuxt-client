@@ -153,7 +153,7 @@
 <script lang="ts">
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import ExternalToolsSection from "@/components/administration/ExternalToolSection.vue";
-import { mdiAlertCircle, mdiMinus, mdiPlus } from "@/components/icons/material";
+import { mdiAlertCircle, mdiMinus, mdiPlus } from "@icons/material";
 import AuthSystems from "@/components/organisms/administration/AuthSystems.vue";
 import GeneralSettings from "@/components/organisms/administration/GeneralSettings.vue";
 import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue";

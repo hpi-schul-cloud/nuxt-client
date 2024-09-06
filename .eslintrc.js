@@ -12,7 +12,9 @@ module.exports = {
 	parserOptions: {
 		ecmaVersion: 2020,
 	},
+	plugins: ["schulcloud"],
 	rules: {
+		"schulcloud/material-icon-imports": "error",
 		"@typescript-eslint/no-explicit-any": "warn",
 		"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
 		"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",

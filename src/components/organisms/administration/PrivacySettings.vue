@@ -163,7 +163,7 @@
 <script setup lang="ts">
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
-import { mdiCheck } from "@mdi/js";
+import { mdiCheck } from "@icons/material";
 import { computed } from "vue";
 
 const props = defineProps({

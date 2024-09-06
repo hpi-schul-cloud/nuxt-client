@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { injectStrict } from "@/utils/inject";
-import { mdiArrowLeft } from "@mdi/js";
+import { mdiArrowLeft } from "@icons/material";
 import { BoardMenuAction } from "@ui-board";
 import { BOARD_HAS_MULTIPLE_COLUMNS, BOARD_IS_FIRST_COLUMN } from "@util-board";
 import { computed, ref } from "vue";

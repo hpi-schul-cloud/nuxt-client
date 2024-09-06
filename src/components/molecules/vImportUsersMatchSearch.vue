@@ -211,7 +211,7 @@ import {
 	mdiDelete,
 	mdiFlag,
 	mdiFlagOutline,
-} from "@mdi/js";
+} from "@icons/material";
 import { useDebounceFn } from "@vueuse/core";
 import {
 	computed,

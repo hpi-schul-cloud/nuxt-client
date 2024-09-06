@@ -19,7 +19,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiDnsOutline</v-icon>
+				<v-icon :icon="mdiDnsOutline" />
 			</template>
 		</base-input>
 		<base-input
@@ -37,7 +37,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiFileTreeOutline</v-icon>
+				<v-icon :icon="mdiFileTreeOutline" />
 			</template>
 		</base-input>
 		<base-input
@@ -55,7 +55,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiAccountCircleOutline</v-icon>
+				<v-icon :icon="mdiAccountCircleOutline" />
 			</template>
 		</base-input>
 		<base-input
@@ -76,7 +76,7 @@
 				})
 			"
 			><template #icon>
-				<v-icon>$mdiLockOutline</v-icon>
+				<v-icon :icon="mdiLockOutline" />
 			</template>
 		</base-input>
 	</div>
@@ -91,6 +91,12 @@ import {
 } from "@/utils/ldapConstants";
 import { defineComponent } from "vue";
 import useVuelidate from "@vuelidate/core";
+import {
+	mdiAccountCircleOutline,
+	mdiDnsOutline,
+	mdiFileTreeOutline,
+	mdiLockOutline,
+} from "@icons/material";
 
 export default defineComponent({
 	setup() {
@@ -109,6 +115,10 @@ export default defineComponent({
 	},
 	data() {
 		return {
+			mdiAccountCircleOutline,
+			mdiDnsOutline,
+			mdiFileTreeOutline,
+			mdiLockOutline,
 			pathSearchValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 				{

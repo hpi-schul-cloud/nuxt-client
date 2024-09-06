@@ -90,7 +90,7 @@ import {
 	mdiPalette,
 	mdiRenameOutline,
 	mdiTrashCanOutline,
-} from "@mdi/js";
+} from "@icons/material";
 import { computed, ComputedRef, ModelRef, PropType } from "vue";
 import { ColorShade, MediaBoardColorMapper } from "./utils";
 

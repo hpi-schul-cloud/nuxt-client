@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import { formatDateForAlerts } from "@/plugins/datetime";
-import { mdiAlertCircle, mdiInformation } from "@mdi/js";
+import { mdiAlertCircle, mdiInformation } from "@icons/material";
 import { StatusAlert } from "@/store/types/status-alert";
 
 defineProps({

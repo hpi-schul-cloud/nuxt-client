@@ -1,5 +1,5 @@
 import { ConfigResponse } from "@/serverApi/v3/api";
-import { mdiBookshelf } from "@mdi/js";
+import { mdiBookshelf } from "@icons/material";
 
 export type SidebarItemBase = {
 	title: string;

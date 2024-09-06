@@ -44,7 +44,7 @@ import {
 	courseRoomListModule,
 } from "@/store";
 import { StartNewCourseSyncDialog } from "@feature-course-sync";
-import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@mdi/js";
+import { mdiImport, mdiPlus, mdiSchoolOutline, mdiSync } from "@icons/material";
 import { computed, ComputedRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Fab, FabAction } from "./default-wireframe.types";

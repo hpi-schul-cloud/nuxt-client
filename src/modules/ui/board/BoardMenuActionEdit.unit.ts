@@ -1,7 +1,4 @@
-import {
-	mdiPencilOutline,
-	mdiRenameOutline,
-} from "@/components/icons/material";
+import { mdiPencilOutline, mdiRenameOutline } from "@icons/material";
 import {
 	createTestingI18n,
 	createTestingVuetify,

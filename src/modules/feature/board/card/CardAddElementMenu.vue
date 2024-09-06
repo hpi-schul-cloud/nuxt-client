@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { mdiPlus } from "@mdi/js";
+import { mdiPlus } from "@icons/material";
 import { defineComponent } from "vue";
 
 export default defineComponent({

@@ -43,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiAlertCircle } from "@/components/icons/material";
+import { mdiAlertCircle } from "@icons/material";
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import CourseRoomDetailsModule from "@/store/course-room-details";

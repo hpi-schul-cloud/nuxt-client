@@ -51,7 +51,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiAccountOutline</v-icon>
+				<v-icon :icon="mdiAccountOutline" />
 			</template>
 		</base-input>
 		<base-input
@@ -71,7 +71,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiAccountSchoolOutline</v-icon>
+				<v-icon :icon="mdiAccountSchoolOutline" />
 			</template>
 		</base-input>
 		<base-input
@@ -107,7 +107,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiShieldAccountVariantOutline</v-icon>
+				<v-icon :icon="mdiShieldAccountVariantOutline" />
 			</template>
 		</base-input>
 		<base-input
@@ -122,7 +122,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiAccountOffOutline</v-icon>
+				<v-icon :icon="mdiAccountOffOutline" />
 			</template>
 		</base-input>
 	</div>
@@ -133,6 +133,12 @@ import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
 import { defineComponent } from "vue";
 import useVuelidate from "@vuelidate/core";
+import {
+	mdiAccountOffOutline,
+	mdiAccountOutline,
+	mdiAccountSchoolOutline,
+	mdiShieldAccountVariantOutline,
+} from "@icons/material";
 
 export default defineComponent({
 	setup() {
@@ -153,6 +159,10 @@ export default defineComponent({
 	},
 	data() {
 		return {
+			mdiAccountOffOutline,
+			mdiAccountOutline,
+			mdiAccountSchoolOutline,
+			mdiShieldAccountVariantOutline,
 			memberValidationMessages: [
 				{ key: "required", message: this.$t("common.validation.required") },
 			],

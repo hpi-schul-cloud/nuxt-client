@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { mdiChevronLeft, mdiChevronRight } from "@mdi/js";
+import { mdiChevronLeft, mdiChevronRight } from "@icons/material";
 export default {
 	props: {
 		currentPage: {
