@@ -116,7 +116,6 @@ import { CopyParamsTypeEnum } from "@/store/copy";
 import {
 	mdiArchiveOutline,
 	mdiContentCopy,
-	mdiDotsVertical,
 	mdiPencilOutline,
 	mdiShareVariantOutline,
 	mdiTrashCanOutline,
@@ -159,7 +158,6 @@ export default defineComponent({
 	data() {
 		return {
 			confirmDeleteDialogIsOpen: false,
-			mdiDotsVertical,
 			mdiPencilOutline,
 			mdiUndoVariant,
 			mdiTrashCanOutline,

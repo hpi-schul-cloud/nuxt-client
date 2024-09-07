@@ -11,6 +11,7 @@
 				@click.stop.prevent
 				@dblclick.stop.prevent
 				@keydown.enter.stop
+				@keydown.space.stop
 				@keydown.left.right.up.down.stop
 			>
 				<VIcon>{{ mdiDotsVertical }}</VIcon>
