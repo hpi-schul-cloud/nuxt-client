@@ -1,104 +1,90 @@
 <template>
-	<v-menu location="bottom end">
-		<template v-slot:activator="{ props }">
-			<v-btn
-				v-bind="props"
-				:icon="mdiDotsVertical"
-				variant="text"
-				density="comfortable"
-				:aria-label="ariaLabel"
-				@keydown.space.stop
-				@keydown.left.right.up.down.stop
-			/>
-			<!-- for later refactoring: @keydown needed for a11y - perhaps because of nested v-lists -->
-		</template>
-		<v-list role="menu">
-			<v-list-item
-				v-if="isTeacher"
-				id="task-action-edit"
-				:href="editLink"
-				class="task-action"
-				data-testId="task-edit"
-				role="menuitem"
-				:draggable="false"
-			>
-				<v-list-item-title>
-					<v-icon :icon="mdiPencilOutline" class="task-action-icon" />
-					{{ $t("common.actions.edit") }}
-				</v-list-item-title>
-			</v-list-item>
-			<v-list-item
-				v-if="isTeacher && copyServiceEnabled"
-				id="task-action-copy"
-				class="task-action"
-				data-testId="task-copy"
-				@click="onCopyTask"
-				role="menuitem"
-			>
-				<v-list-item-title>
-					<v-icon :icon="mdiContentCopy" class="task-action-icon" />
-					{{ $t("common.actions.copy") }}
-				</v-list-item-title>
-			</v-list-item>
-			<v-list-item
-				v-if="isTeacher && shareTaskEnabled"
-				id="task-action-share"
-				class="task-action"
-				data-testId="task-share"
-				@click="onShareTask"
-				role="menuitem"
-			>
-				<v-list-item-title>
-					<v-icon :icon="mdiShareVariantOutline" class="task-action-icon" />
-					{{ $t("common.actions.shareCopy") }}
-				</v-list-item-title>
-			</v-list-item>
-			<v-list-item
-				v-if="isTeacher && taskIsPublished"
-				id="task-action-revert"
-				class="task-action"
-				data-testId="task-revert"
-				@click="handleRevertPublished"
-				role="menuitem"
-			>
-				<v-list-item-title>
+	<KebabMenu :aria-label="ariaLabel" data-testid="task-menu">
+		<v-list-item
+			v-if="isTeacher"
+			id="task-action-edit"
+			:href="editLink"
+			class="task-action"
+			data-testId="task-edit"
+			role="menuitem"
+			:draggable="false"
+		>
+			<v-list-item-title>
+				<v-icon :icon="mdiPencilOutline" class="task-action-icon" />
+				{{ $t("common.actions.edit") }}
+			</v-list-item-title>
+		</v-list-item>
+		<v-list-item
+			v-if="isTeacher && copyServiceEnabled"
+			id="task-action-copy"
+			class="task-action"
+			data-testId="task-copy"
+			@click="onCopyTask"
+			role="menuitem"
+		>
+			<v-list-item-title>
+				<v-icon :icon="mdiContentCopy" class="task-action-icon" />
+				{{ $t("common.actions.copy") }}
+			</v-list-item-title>
+		</v-list-item>
+		<v-list-item
+			v-if="isTeacher && shareTaskEnabled"
+			id="task-action-share"
+			class="task-action"
+			data-testId="task-share"
+			@click="onShareTask"
+			role="menuitem"
+		>
+			<v-list-item-title>
+				<v-icon :icon="mdiShareVariantOutline" class="task-action-icon" />
+				{{ $t("common.actions.shareCopy") }}
+			</v-list-item-title>
+		</v-list-item>
+		<v-list-item
+			v-if="isTeacher && taskIsPublished"
+			id="task-action-revert"
+			class="task-action"
+			data-testId="task-revert"
+			@click="handleRevertPublished"
+			role="menuitem"
+		>
+			<v-list-item-title>
+				<v-icon :icon="mdiUndoVariant" class="task-action-icon" />
+				{{ $t("pages.room.cards.label.revert") }}
+			</v-list-item-title>
+		</v-list-item>
+		<v-list-item
+			id="task-action-finish"
+			class="task-action"
+			data-testId="task-finish"
+			@click="handleFinish"
+			role="menuitem"
+		>
+			<v-list-item-title>
+				<template v-if="taskIsFinished">
 					<v-icon :icon="mdiUndoVariant" class="task-action-icon" />
-					{{ $t("pages.room.cards.label.revert") }}
-				</v-list-item-title>
-			</v-list-item>
-			<v-list-item
-				id="task-action-finish"
-				class="task-action"
-				data-testId="task-finish"
-				@click="handleFinish"
-				role="menuitem"
-			>
-				<v-list-item-title>
-					<template v-if="taskIsFinished">
-						<v-icon :icon="mdiUndoVariant" class="task-action-icon" />
-						{{ $t("common.labels.restore") }}
-					</template>
-					<template v-else>
-						<v-icon :icon="mdiArchiveOutline" class="task-action-icon" />
-						{{ $t("components.molecules.TaskItemMenu.finish") }}
-					</template>
-				</v-list-item-title>
-			</v-list-item>
-			<v-list-item
-				v-if="isTeacher"
-				id="task-action-delete"
-				class="task-action"
-				data-testId="task-delete"
-				@click="() => (confirmDeleteDialogIsOpen = true)"
-				role="menuitem"
-			>
-				<v-list-item-title>
-					<v-icon :icon="mdiTrashCanOutline" class="task-action-icon" />
-					{{ $t("common.actions.remove") }}
-				</v-list-item-title>
-			</v-list-item>
-		</v-list>
-	</v-menu>
+					{{ $t("common.labels.restore") }}
+				</template>
+				<template v-else>
+					<v-icon :icon="mdiArchiveOutline" class="task-action-icon" />
+					{{ $t("components.molecules.TaskItemMenu.finish") }}
+				</template>
+			</v-list-item-title>
+		</v-list-item>
+		<v-list-item
+			v-if="isTeacher"
+			id="task-action-delete"
+			class="task-action"
+			data-testId="task-delete"
+			@click="() => (confirmDeleteDialogIsOpen = true)"
+			role="menuitem"
+		>
+			<v-list-item-title>
+				<v-icon :icon="mdiTrashCanOutline" class="task-action-icon" />
+				{{ $t("common.actions.remove") }}
+			</v-list-item-title>
+		</v-list-item>
+	</KebabMenu>
 	<v-custom-dialog
 		v-model:isOpen="confirmDeleteDialogIsOpen"
 		:size="375"
@@ -137,10 +123,11 @@ import {
 	mdiUndoVariant,
 } from "@icons/material";
 import { defineComponent } from "vue";
+import { KebabMenu } from "@ui-kebab-menu";
 
 export default defineComponent({
 	emits: ["toggledMenu", "focusChanged", "copyTask", "shareTask"],
-	components: { vCustomDialog },
+	components: { vCustomDialog, KebabMenu },
 	props: {
 		taskId: {
 			type: String,

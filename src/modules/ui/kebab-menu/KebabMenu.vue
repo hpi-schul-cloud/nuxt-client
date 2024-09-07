@@ -8,10 +8,10 @@
 				:ripple="false"
 				icon
 				size="36"
-				@click.stop.prevent="() => {}"
-				@dblclick.stop.prevent="() => {}"
+				@click.stop.prevent
+				@dblclick.stop.prevent
 				@keydown.enter.stop
-				@keydown.left.right.up.down.stop="() => {}"
+				@keydown.left.right.up.down.stop
 			>
 				<VIcon>{{ mdiDotsVertical }}</VIcon>
 			</VBtn>
@@ -28,6 +28,4 @@ import { mdiDotsVertical } from "@icons/material";
 defineOptions({
 	inheritAttrs: false,
 });
-
-// defineProps();
 </script>
