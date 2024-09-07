@@ -44,7 +44,7 @@ a.room-link {
 	display: block;
 	text-decoration: none;
 	text-align: center;
-	color: rgba(var(--v-theme-primary));
+	color: unset;
 }
 
 .room-icon {
