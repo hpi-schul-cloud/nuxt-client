@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { mdiTrayArrowUp } from "@mdi/js";
+import { mdiTrayArrowUp } from "@icons/material";
 import { useI18n } from "vue-i18n";
 import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,

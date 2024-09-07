@@ -48,10 +48,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { Room } from "@/types/room/Room";
 import { KebabMenu } from "@ui-kebab-menu";
-import {
-	mdiPencilOutline,
-	mdiTrashCanOutline,
-} from "@/components/icons/material";
+import { mdiPencilOutline, mdiTrashCanOutline } from "@roicons/material";
 import { useRoomsState } from "@data-room";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useRouter } from "vue-router";

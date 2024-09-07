@@ -14,7 +14,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import { RoomColorEnum } from "./types";
-import { mdiCheckCircleOutline } from "@/components/icons/material";
+import { mdiCheckCircleOutline } from "@icons/material";
 
 defineProps({
 	color: {

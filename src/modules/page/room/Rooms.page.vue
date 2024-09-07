@@ -11,7 +11,7 @@
 import { useI18n } from "vue-i18n";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomGrid } from "@feature-room";
-import { mdiPlus } from "@/components/icons/material";
+import { mdiPlus } from "@icons/material";
 
 const { t } = useI18n();
 

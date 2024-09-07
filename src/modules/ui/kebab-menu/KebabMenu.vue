@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiDotsVertical } from "@/components/icons/material";
+import { mdiDotsVertical } from "@icons/material";
 
 defineOptions({
 	inheritAttrs: false,
