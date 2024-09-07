@@ -1,40 +1,30 @@
 <template>
-	<v-menu v-if="menuItems.length > 0" location="bottom end">
-		<template v-slot:activator="{ props }">
-			<v-btn
-				v-bind="($attrs, props)"
-				:icon="mdiDotsVertical"
-				variant="text"
-				density="comfortable"
-				class="three-dot-button"
-				:aria-label="$attrs['aria-label']"
-				:data-testid="dataTestid"
-				@keydown.space.stop
-			/>
-		</template>
-		<v-list role="menu">
-			<v-list-item
-				v-for="(item, i) in menuItems"
-				:key="i"
-				:data-testid="item.dataTestId || ''"
-				@click="onClick(item)"
-				density="comfortable"
-				class="dotmenu-action"
-				role="menuitem"
-			>
-				<v-list-item-title>
-					<v-icon :icon="item.icon" class="dotmenu-action-icon" />
-					{{ item.name }}
-				</v-list-item-title>
-			</v-list-item>
-		</v-list>
-	</v-menu>
+	<KebabMenu
+		v-if="menuItems.length > 0"
+		v-bind.attr="$attrs"
+		class="three-dot-button"
+	>
+		<v-list-item
+			v-for="(item, i) in menuItems"
+			:key="i"
+			:data-testid="item.dataTestId || ''"
+			@click="onClick(item)"
+			density="comfortable"
+			class="dotmenu-action"
+			role="menuitem"
+		>
+			<v-list-item-title>
+				<v-icon :icon="item.icon" class="dotmenu-action-icon" />
+				{{ item.name }}
+			</v-list-item-title>
+		</v-list-item>
+	</KebabMenu>
 </template>
 
 <script setup lang="ts">
-import { mdiDotsVertical } from "@icons/material";
 import { PropType } from "vue";
 import { MenuItem } from "./types";
+import { KebabMenu } from "@ui-kebab-menu";
 
 defineOptions({
 	inheritAttrs: false,
@@ -44,10 +34,6 @@ defineProps({
 	menuItems: {
 		type: Array as PropType<MenuItem[]>,
 		required: true,
-	},
-	dataTestid: {
-		type: String,
-		default: "",
 	},
 });
 
