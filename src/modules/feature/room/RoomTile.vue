@@ -2,9 +2,9 @@
 	<div>
 		<RouterLink :to="roomPath" class="room-link">
 			<div
-				class="room-icon"
-				:aria-label="iconAriaLabel"
-				:style="{ 'background-color': iconColor }"
+				class="room-avatar"
+				:class="avatarColor"
+				:aria-label="avatarAriaLabel"
 			>
 				<span class="text-h3 text-white" data-testid="room-short-title">
 					{{ room.shortTitle }}
@@ -14,6 +14,7 @@
 		</RouterLink>
 	</div>
 </template>
+
 <script setup lang="ts">
 import { Room } from "@/types/room/Room";
 import { computed, PropType } from "vue";
@@ -30,9 +31,9 @@ const { t } = useI18n();
 
 const roomPath = computed(() => `/rooms/${props.room.id}`);
 
-const iconColor = computed(() => props.room.displayColor);
+const avatarColor = computed(() => `room-color--${props.room.displayColor}`);
 
-const iconAriaLabel = computed(() => {
+const avatarAriaLabel = computed(() => {
 	return `${t("common.labels.room")} ${props.room.title}`;
 });
 </script>
@@ -47,7 +48,7 @@ a.room-link {
 	color: unset;
 }
 
-.room-icon {
+.room-avatar {
 	width: 5em;
 	height: 5em;
 	border-radius: 8px;
