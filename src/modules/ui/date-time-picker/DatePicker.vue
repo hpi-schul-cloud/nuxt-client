@@ -42,11 +42,11 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, watchEffect, unref } from "vue";
 import { useDebounceFn, computedAsync } from "@vueuse/core";
 import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
-import { useVuelidate } from "@vuelidate/core";
+import { useVuelidate, ErrorObject } from "@vuelidate/core";
 import { helpers, requiredIf } from "@vuelidate/validators";
 import { dateInputMask as vDateInputMask } from "@util-input-masks";
 import { isValidDateFormat } from "@util-validators";
@@ -107,11 +107,13 @@ const errorMessages = computedAsync(async () => {
 	return await getErrorMessages(v$.value.dateString);
 }, null);
 
+// TODO - figure out type, ExtractRulesResults is not exported
 const getErrorMessages = useDebounceFn((validationModel: any) => {
-	const messages = validationModel.$errors.map((e: any) => {
+	const messages = validationModel.$errors.map((e: ErrorObject) => {
 		return e.$message;
 	});
-	return messages;
+
+	return unref(messages);
 }, 700);
 
 const validate = () => {
