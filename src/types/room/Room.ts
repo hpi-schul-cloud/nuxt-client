@@ -5,4 +5,6 @@ export type Room = {
 	title: string;
 	shortTitle: string;
 	displayColor: RoomColorEnum;
+	startDate?: string;
+	endDate?: string;
 };

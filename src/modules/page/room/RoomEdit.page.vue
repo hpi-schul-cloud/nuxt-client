@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { watch } from "vue";
+import { computed, ComputedRef, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useRoomDetailsState } from "@data-room";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
@@ -35,18 +35,24 @@ const onUpdateRoom = (room: Room) => {
 	console.log(room);
 };
 
-const breadcrumbs: Breadcrumb[] = [
-	{
-		title: "Räume",
-		to: "/rooms",
-	},
-	{
-		title: "<Raumtitel>",
-		to: `/rooms/${route.params.id}`,
-	},
-	{
-		title: "Raum bearbeiten",
-		disabled: true,
-	},
-];
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+	if (room.value !== undefined) {
+		return [
+			{
+				title: "Räume",
+				to: "/rooms",
+			},
+			{
+				title: room.value.title,
+				to: `/rooms/${route.params.id}`,
+			},
+			{
+				title: "Raum bearbeiten",
+				disabled: true,
+			},
+		];
+	}
+
+	return [];
+});
 </script>

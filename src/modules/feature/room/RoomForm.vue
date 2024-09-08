@@ -7,8 +7,16 @@
 		<div class="mb-8">
 			Zeitraum
 			<div class="d-flex flex-fill">
-				<DatePicker class="flex-1-1 mr-4" />
-				<DatePicker class="flex-1-1 ml-4" />
+				<DatePicker
+					:date="roomData.startDate"
+					class="flex-1-1 mr-4"
+					@update:date="onUpdateStartDate"
+				/>
+				<DatePicker
+					:date="roomData.endDate"
+					class="flex-1-1 ml-4"
+					@update:date="onUpdateEndDate"
+				/>
 			</div>
 		</div>
 		<div class="d-flex">
@@ -22,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, watch, watchEffect } from "vue";
+import { PropType, ref, watchEffect } from "vue";
 import { RoomColorEnum } from "./RoomColorPicker/types";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { DatePicker } from "@ui-date-time-picker";
@@ -38,19 +46,23 @@ const roomData = ref<Partial<Room>>({
 	title: "",
 	shortTitle: "",
 	displayColor: RoomColorEnum.BLUE_GREY,
+	startDate: "",
+	endDate: "",
 });
 
 watchEffect(() => {
 	if (props.room) {
 		roomData.value = props.room;
 	}
-
-	console.log(roomData.value);
 });
 
-watch(roomData.value, () => {
-	console.log("mmhhh", roomData.value);
-});
+const onUpdateStartDate = (newDate: string) => {
+	roomData.value.startDate = newDate;
+};
+
+const onUpdateEndDate = (newDate: string) => {
+	roomData.value.endDate = newDate;
+};
 
 const onSave = () => {
 	console.log(roomData.value);
