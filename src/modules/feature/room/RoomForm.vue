@@ -31,7 +31,6 @@ import { Room } from "@/types/room/Room";
 const props = defineProps({
 	room: {
 		type: Object as PropType<Room | undefined>,
-		required: true,
 	},
 });
 

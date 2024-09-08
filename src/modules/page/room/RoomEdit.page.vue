@@ -38,15 +38,14 @@ const onUpdateRoom = (room: Room) => {
 const breadcrumbs: Breadcrumb[] = [
 	{
 		title: "Räume",
-		to: "/rooms/courses-overview",
+		to: "/rooms",
 	},
 	{
 		title: "<Raumtitel>",
-		to: "/rooms/courses-overview",
+		to: `/rooms/${route.params.id}`,
 	},
 	{
 		title: "Raum bearbeiten",
-		to: "/rooms/courses-overview",
 		disabled: true,
 	},
 ];

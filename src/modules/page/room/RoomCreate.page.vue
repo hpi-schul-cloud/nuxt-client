@@ -18,11 +18,10 @@ import { RoomForm } from "@feature-room";
 const breadcrumbs: Breadcrumb[] = [
 	{
 		title: "Räume",
-		to: "/rooms/courses-overview",
+		to: "/rooms",
 	},
 	{
 		title: "Raum erstellen",
-		to: "/rooms/courses-overview",
 		disabled: true,
 	},
 ];
