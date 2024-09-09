@@ -20,7 +20,7 @@
 
 <script>
 import { envConfigModule } from "@/store";
-import { mdiMagnify } from "@mdi/js";
+import { mdiMagnify } from "@icons/material";
 import { useEduSharingApi } from "../../composables/edu-sharing-api.composable";
 
 export default {
