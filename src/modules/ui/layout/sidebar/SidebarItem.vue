@@ -22,11 +22,7 @@
 <script setup lang="ts">
 import { computed, PropType } from "vue";
 import { SidebarSingleItem } from "../types";
-import { useRoute } from "vue-router";
-import { useRoomDetailsStore } from "@data-room";
-import { storeToRefs } from "pinia";
-import { useSharedBoardPageInformation } from "@data-board";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { useSidebarSelection } from "./SidebarSelection.composable";
 
 const props = defineProps({
 	item: {
@@ -35,49 +31,7 @@ const props = defineProps({
 	},
 });
 
-const route = useRoute();
-
-const isActive = computed(() => {
-	const { isLoading, isRoom } = storeToRefs(useRoomDetailsStore());
-	const { contextType } = useSharedBoardPageInformation();
-
-	// Rooms
-	if (route.name === "rooms") {
-		return props.item.to === "/rooms";
-	}
-
-	// RoomDetails, CourseRoomDetails
-	if (route.name === "rooms-id") {
-		if (isRoom.value === true) {
-			return props.item.to === "/rooms";
-		} else {
-			return (
-				props.item.to === "/rooms/courses-overview" && isLoading.value === false
-			);
-		}
-	}
-
-	// Courses
-	if (
-		route.name === "course-room-list" ||
-		route.name === "course-room-overview"
-	) {
-		return props.item.to === "/rooms/courses-overview";
-	}
-
-	// Board
-	if (route.name === "boards-id") {
-		return (
-			props.item.to === "/rooms/courses-overview" &&
-			contextType.value === BoardExternalReferenceType.Course
-		);
-	}
-
-	return (
-		route.path.includes(props.item.to as string) ||
-		route.path.includes(props.item.href as string)
-	);
-});
+const { isActive } = useSidebarSelection(() => props.item);
 
 const density = computed(() => {
 	return props.item.icon ? "default" : "compact";

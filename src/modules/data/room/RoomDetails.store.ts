@@ -7,6 +7,7 @@ import { defineStore } from "pinia";
 export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	const isLoading = ref(true);
 	const isRoom = ref(false);
+	const isCourseRoom = ref(false);
 	const room = ref<Room | undefined>();
 
 	const fetchRoom = async (id: string) => {
@@ -14,18 +15,20 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		// TODO call API
 		room.value = roomsData.find((r) => r.id === id);
 		isRoom.value = room.value != null;
+		isCourseRoom.value = !isRoom.value;
 		isLoading.value = false;
-	};
-
-	const deactivateRoom = () => {
-		isLoading.value = false;
-		isRoom.value = false;
 	};
 
 	const resetState = () => {
 		isLoading.value = true;
 		isRoom.value = false;
+		isCourseRoom.value = false;
 		room.value = undefined;
+	};
+
+	const deactivateRoom = () => {
+		resetState();
+		isLoading.value = false;
 	};
 
 	return {
@@ -33,6 +36,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		fetchRoom,
 		isLoading,
 		isRoom,
+		isCourseRoom,
 		resetState,
 		room,
 	};
