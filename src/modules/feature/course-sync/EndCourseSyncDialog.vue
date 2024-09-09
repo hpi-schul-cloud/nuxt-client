@@ -14,12 +14,6 @@
 			</h2>
 		</template>
 		<template #content>
-			<WarningAlert
-				class="mb-4"
-				data-testid="end-course-sync-dialog-warning-text"
-			>
-				{{ $t("feature-course-sync.EndCourseSyncDialog.alert") }}
-			</WarningAlert>
 			<p data-testid="end-course-sync-dialog-info-text">
 				{{
 					$t("feature-course-sync.EndCourseSyncDialog.description", {
@@ -36,7 +30,6 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useCourseApi } from "@data-room";
-import { WarningAlert } from "@ui-alert";
 import { useI18n } from "vue-i18n";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);

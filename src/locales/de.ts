@@ -799,8 +799,6 @@ export default {
 		"Tool auswählen...",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
 	"feature-course-sync.EndCourseSyncDialog.title": "Synchronisation beenden",
-	"feature-course-sync.EndCourseSyncDialog.alert":
-		"Ist die Synchronisation einmal beendet, kann sie nicht wieder gestartet werden. Nutzendendaten können im Nachgang analog zu regulären Kursen manuell bearbeitet und gepflegt werden.",
 	"feature-course-sync.EndCourseSyncDialog.description":
 		"Soll die Synchronization der Nutzendengruppe {groupName} im Kurs {courseName} wirklich beendet werden?",
 	"feature-course-sync.EndCourseSyncDialog.success":
@@ -816,7 +814,7 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
 		"Eine Synchronisation mit {systemName} überschreibt die Personen des Kurses (Lehrkräfte und Schüler*innen).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
-		"Soll die Synchronisation der Nutzergruppe {groupName} im Kurs {courseName} wirklich gestartet werden?",
+		"Soll die Synchronisation der Nutzendengruppe {groupName} im Kurs {courseName} wirklich gestartet werden?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Nutzendengruppe erfolgreich synchronisiert",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
