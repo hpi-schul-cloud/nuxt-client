@@ -23,7 +23,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiFileTreeOutline</v-icon>
+				<v-icon :icon="mdiFileTreeOutline" />
 			</template>
 		</base-input>
 		<p class="path-hint">
@@ -43,7 +43,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon :color="fillColor">$mdiAccountCircleOutline</v-icon>
+				<v-icon :color="fillColor" :icon="mdiAccountCircleOutline" />
 			</template>
 		</base-input>
 		<base-input
@@ -60,7 +60,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiAccountCircleOutline</v-icon>
+				<v-icon :icon="mdiAccountCircleOutline" />
 			</template>
 		</base-input>
 		<base-input
@@ -77,7 +77,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiEmailOutline</v-icon>
+				<v-icon :icon="mdiEmailOutline" />
 			</template>
 		</base-input>
 		<base-input
@@ -95,7 +95,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiCardAccountDetailsOutline</v-icon>
+				<v-icon :icon="mdiCardAccountDetailsOutline" />
 			</template>
 		</base-input>
 		<base-input
@@ -113,7 +113,7 @@
 			"
 		>
 			<template #icon>
-				<v-icon>$mdiAccountBoxOutline</v-icon>
+				<v-icon :icon="mdiAccountBoxOutline" />
 			</template>
 		</base-input>
 	</div>
@@ -124,6 +124,13 @@ import { required } from "@vuelidate/validators";
 import { ldapPathRegexValidator } from "@/utils/ldapConstants";
 import { defineComponent } from "vue";
 import useVuelidate from "@vuelidate/core";
+import {
+	mdiAccountBoxOutline,
+	mdiAccountCircleOutline,
+	mdiCardAccountDetailsOutline,
+	mdiEmailOutline,
+	mdiFileTreeOutline,
+} from "@icons/material";
 
 export default defineComponent({
 	setup() {
@@ -142,6 +149,11 @@ export default defineComponent({
 	},
 	data() {
 		return {
+			mdiAccountBoxOutline,
+			mdiAccountCircleOutline,
+			mdiCardAccountDetailsOutline,
+			mdiEmailOutline,
+			mdiFileTreeOutline,
 			usersValidationMessage: [
 				{ key: "required", message: this.$t("common.validation.required") },
 			],

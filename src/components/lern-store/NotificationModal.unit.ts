@@ -4,7 +4,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import NotificationModal from "./NotificationModal.vue";
-import { mdiAlertCircle, mdiCheckCircle } from "@/components/icons/material";
+import { mdiAlertCircle, mdiCheckCircle } from "@icons/material";
 
 const testProps = {
 	showNotificationModal: true,

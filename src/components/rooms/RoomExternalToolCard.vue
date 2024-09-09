@@ -54,7 +54,7 @@ import {
 	useContextExternalToolConfigurationStatus,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { mdiPencilOutline, mdiTrashCanOutline } from "@mdi/js";
+import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
 import { InfoChip, WarningChip } from "@ui-chip";
 import { RoomDotMenu } from "@ui-room-details";
 import { computed, ComputedRef, PropType, watch } from "vue";

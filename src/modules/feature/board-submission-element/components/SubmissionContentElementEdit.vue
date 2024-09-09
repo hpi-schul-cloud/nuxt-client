@@ -25,7 +25,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import { mdiLightbulbOnOutline } from "@mdi/js";
+import { mdiLightbulbOnOutline } from "@icons/material";
 import { TeacherSubmission } from "../types/submission";
 import { DateTimePicker } from "@ui-date-time-picker";
 import SubmissionContentElementTitle from "./SubmissionContentElementTitle.vue";

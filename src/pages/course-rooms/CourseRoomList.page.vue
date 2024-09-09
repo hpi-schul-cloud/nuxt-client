@@ -63,7 +63,7 @@ import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
 import { courseRoomListModule } from "@/store";
 import { ListItemsObject } from "@/store/types/rooms";
-import { mdiMagnify } from "@mdi/js";
+import { mdiMagnify } from "@icons/material";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { defineComponent } from "vue";
 

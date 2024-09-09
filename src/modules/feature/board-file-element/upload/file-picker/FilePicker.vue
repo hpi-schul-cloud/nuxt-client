@@ -3,14 +3,14 @@
 		density="compact"
 		ref="inputRef"
 		@update:modelValue="onFileChange"
-		prepend-icon="$mdiTrayArrowUp"
+		:prepend-icon="mdiTrayArrowUp"
 		:placeholder="$t('feature-board-file-element.placeholder.uploadFile')"
 		:hide-details="true"
 	/>
 </template>
 
 <script lang="ts">
-import { mdiTrayArrowUp } from "@mdi/js";
+import { mdiTrayArrowUp } from "@icons/material";
 import { useVModel } from "@vueuse/core";
 import { defineComponent, onMounted, ref, watch } from "vue";
 

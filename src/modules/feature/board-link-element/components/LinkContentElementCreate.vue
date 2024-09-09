@@ -35,7 +35,7 @@
 import { defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { isRequired, isValidUrl } from "@util-validators";
-import { mdiCheck } from "@mdi/js";
+import { mdiCheck } from "@icons/material";
 
 type VuetifyFormApi = {
 	validate: () => { valid: boolean };

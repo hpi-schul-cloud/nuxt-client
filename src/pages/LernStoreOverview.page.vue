@@ -22,7 +22,7 @@
 import EduSharingWrapper from "@/components/edu-sharing/EduSharingWrapper.vue";
 import themeConfig from "@/theme.config";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { mdiChevronLeft } from "@mdi/js";
+import { mdiChevronLeft } from "@icons/material";
 import { useDebounceFn, watchDebounced } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";

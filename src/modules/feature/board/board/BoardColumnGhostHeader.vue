@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { mdiPlus } from "@mdi/js";
+import { mdiPlus } from "@icons/material";
 
 defineProps({
 	isColumnActive: {

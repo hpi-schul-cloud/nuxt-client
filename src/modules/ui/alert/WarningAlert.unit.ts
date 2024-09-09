@@ -1,4 +1,4 @@
-import { mdiAlert } from "@mdi/js";
+import { mdiAlert } from "@icons/material";
 import { shallowMount } from "@vue/test-utils";
 import BaseAlert from "./BaseAlert.vue";
 import WarningAlert from "./WarningAlert.vue";

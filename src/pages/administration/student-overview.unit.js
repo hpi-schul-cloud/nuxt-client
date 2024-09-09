@@ -20,6 +20,7 @@ import { createStore } from "vuex";
 import mock$objects from "../../../tests/test-utils/pageStubs";
 import StudentPage from "./StudentOverview.page.vue";
 import { RouterLinkStub } from "@vue/test-utils";
+import { mdiCheckAll, mdiClose } from "@icons/material";
 
 const mockData = [
 	{
@@ -560,12 +561,12 @@ describe("students/index", () => {
 
 		expect(wrapper.vm.icons).toStrictEqual([
 			{
-				icon: "$mdiCheckAll",
+				icon: mdiCheckAll,
 				color: "rgba(var(--v-theme-success))",
 				label: "pages.administration.students.legend.icon.success",
 			},
 			{
-				icon: "$mdiClose",
+				icon: mdiClose,
 				color: "rgba(var(--v-theme-error))",
 				label: "utils.adminFilter.consent.label.missing",
 			},

@@ -3,7 +3,7 @@
 		<v-text-field
 			v-model="timeValue"
 			data-testid="time-input"
-			append-inner-icon="$mdiClockOutline"
+			:append-inner-icon="mdiClockOutline"
 			:label="label"
 			:aria-label="ariaLabel"
 			placeholder="HH:MM"
@@ -23,6 +23,7 @@ import { useVuelidate } from "@vuelidate/core";
 import { helpers, requiredIf } from "@vuelidate/validators";
 import { timeInputMask as vTimeInputMask } from "@util-input-masks";
 import { isValidTimeFormat } from "@util-validators";
+import { mdiClockOutline } from "@icons/material";
 
 const props = defineProps({
 	time: { type: String, required: true },

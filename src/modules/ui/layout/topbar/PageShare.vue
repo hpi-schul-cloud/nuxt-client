@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { ComponentPublicInstance, ref } from "vue";
-import { mdiPrinter, mdiContentCopy } from "@/components/icons/material";
+import { mdiPrinter, mdiContentCopy } from "@icons/material";
 import { QRCode } from "@ui-qr-code";
 
 const props = defineProps({
