@@ -805,8 +805,6 @@ export default {
 		"Виберіть інструмент...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
-	"feature-course-sync.EndCourseSyncDialog.alert":
-		"Після завершення синхронізації її не можна розпочати знову. Дані користувача можна редагувати та підтримувати вручну так само, як і звичайні курси.",
 	"feature-course-sync.EndCourseSyncDialog.description":
 		"Чи дійсно слід завершити синхронізацію групи користувачів {groupName} у курсі {courseName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":

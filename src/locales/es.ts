@@ -815,8 +815,6 @@ export default {
 		"Herramienta de selección...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Finalizar sincronización",
-	"feature-course-sync.EndCourseSyncDialog.alert":
-		"Una vez finalizada la sincronización, no se puede volver a iniciar. Los datos del usuario se pueden editar y mantener manualmente de la misma manera que los cursos regulares.",
 	"feature-course-sync.EndCourseSyncDialog.description":
 		"¿Debería realmente finalizarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
