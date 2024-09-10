@@ -1,3 +1,4 @@
+import { groupModule } from "@/store";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { SortOrder } from "@/store/types/sort-order.enum";
@@ -11,16 +12,18 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useCourseApi, useCourseList } from "@data-room";
+import {
+	EndCourseSyncDialog,
+	StartExistingCourseSyncDialog,
+} from "@feature-course-sync";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VDataTableServer } from "vuetify/lib/components/index.mjs";
-import { useCourseApi, useCourseList } from "@data-room";
-import { groupModule } from "@/store";
 import RoomsOverview from "./RoomsOverview.page.vue";
-import { StartExistingCourseSyncDialog } from "@feature-course-sync";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),
@@ -80,6 +83,7 @@ describe("RoomsOverview", () => {
 				},
 				stubs: {
 					StartExistingCourseSyncDialog: true,
+					EndCourseSyncDialog: true,
 				},
 			},
 			props: {
@@ -357,9 +361,61 @@ describe("RoomsOverview", () => {
 					'[data-testid="course-table-start-course-sync-btn"]'
 				);
 
+				const endSyncButton = wrapper.find(
+					'[data-testid="course-table-end-course-sync-btn"]'
+				);
+
 				expect(startSyncButton.exists()).toBeTruthy();
 				expect(editBtn.exists()).toBeTruthy();
 				expect(deleteBtn.exists()).toBeTruthy();
+				expect(endSyncButton.exists()).toBeFalsy();
+			});
+		});
+
+		describe("when synchronized courses are available", () => {
+			const setup = () => {
+				useCourseListMock.courses.value =
+					courseInfoDataResponseFactory.buildList(10, {
+						classNames: ["1A, 1B, 1C"],
+						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+						syncedGroup: "GroupName",
+					});
+
+				const envConfigModule = createModuleMocks(EnvConfigModule, {
+					getEnv: envsFactory.build({
+						FEATURE_SCHULCONNEX_COURSE_SYNC_ENABLED: true,
+						FEATURE_SHOW_NEW_ROOMS_VIEW_ENABLED: true,
+					}),
+				});
+
+				const { wrapper } = createWrapper("current", envConfigModule);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render 3 buttons", () => {
+				const { wrapper } = setup();
+
+				const editBtn = wrapper.find('[data-testid="course-table-edit-btn"]');
+
+				const deleteBtn = wrapper.find(
+					'[data-testid="course-table-delete-btn"]'
+				);
+
+				const endSyncButton = wrapper.find(
+					'[data-testid="course-table-end-course-sync-btn"]'
+				);
+
+				const startSyncButton = wrapper.find(
+					'[data-testid="course-table-start-course-sync-btn"]'
+				);
+
+				expect(endSyncButton.exists()).toBeTruthy();
+				expect(editBtn.exists()).toBeTruthy();
+				expect(deleteBtn.exists()).toBeTruthy();
+				expect(startSyncButton.exists()).toBeFalsy();
 			});
 		});
 
@@ -520,6 +576,42 @@ describe("RoomsOverview", () => {
 			});
 		});
 
+		describe("when clicking on the end sync course button", () => {
+			const setup = () => {
+				useCourseListMock.courses.value = [
+					courseInfoDataResponseFactory.build({
+						classNames: ["1A, 1B, 1C"],
+						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+						syncedGroup: "GroupName",
+					}),
+				];
+
+				const { wrapper } = createWrapper("archive");
+
+				const courseId: string = useCourseListMock.courses.value[0].id;
+
+				return {
+					wrapper,
+					courseId,
+				};
+			};
+
+			it("should open the EndCourseSyncDialog ", async () => {
+				const { wrapper } = setup();
+
+				await wrapper
+					.find('[data-testid="course-table-end-course-sync-btn"]')
+					.trigger("click");
+				await nextTick();
+
+				const dialog = wrapper.findComponent({
+					name: "EndCourseSyncDialog",
+				});
+
+				expect(dialog.vm.isOpen).toBe(true);
+			});
+		});
+
 		describe("when delete dialog is open", () => {
 			const setup = () => {
 				useCourseListMock.courses.value = [
@@ -600,6 +692,39 @@ describe("RoomsOverview", () => {
 				await nextTick();
 
 				wrapper.getComponent(StartExistingCourseSyncDialog).emitted("success");
+				await nextTick();
+
+				expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
+			});
+		});
+
+		describe("when end sync dialog emit succeed", () => {
+			const setup = () => {
+				useCourseListMock.courses.value = [
+					courseInfoDataResponseFactory.build({
+						classNames: ["1A, 1B, 1C"],
+						teacherNames: ["Lehrer", "Vertretung", "Lehrer Mock"],
+						syncedGroup: "GroupName",
+					}),
+				];
+
+				const { wrapper } = createWrapper();
+
+				return {
+					wrapper,
+					useCourseListMock,
+				};
+			};
+
+			it("should fetch courses", async () => {
+				const { wrapper } = setup();
+
+				await wrapper
+					.find('[data-testid="course-table-end-course-sync-btn"]')
+					.trigger("click");
+				await nextTick();
+
+				wrapper.getComponent(EndCourseSyncDialog).emitted("success");
 				await nextTick();
 
 				expect(useCourseListMock.fetchCourses).toHaveBeenCalled();
