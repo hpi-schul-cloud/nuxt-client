@@ -348,7 +348,7 @@ describe("RoomsOverview", () => {
 				};
 			};
 
-			it("should render 3 buttons", () => {
+			it("should render the edit, delete and start sync buttons", () => {
 				const { wrapper } = setup();
 
 				const editBtn = wrapper.find('[data-testid="course-table-edit-btn"]');
@@ -395,7 +395,7 @@ describe("RoomsOverview", () => {
 				};
 			};
 
-			it("should render 3 buttons", () => {
+			it("should render the edit, delete and end sync buttons", () => {
 				const { wrapper } = setup();
 
 				const editBtn = wrapper.find('[data-testid="course-table-edit-btn"]');

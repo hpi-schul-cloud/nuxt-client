@@ -129,7 +129,7 @@
 			data-testid="start-sync-dialog"
 		/>
 
-		<end-course-sync-dialog
+		<EndCourseSyncDialog
 			v-model:is-open="isEndSyncDialogOpen"
 			:course-name="selectedItem?.name"
 			:group-name="selectedItem?.syncedGroup"
