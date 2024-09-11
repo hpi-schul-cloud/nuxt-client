@@ -441,7 +441,7 @@ describe("RoomsOverview", () => {
 			});
 		});
 
-		describe("when feature Schulconnex Sync is enabled", () => {
+		describe("when feature Schulconnex Sync is disabled", () => {
 			const setup = () => {
 				useCourseListMock.courses.value =
 					courseInfoDataResponseFactory.buildList(10, {
@@ -476,7 +476,12 @@ describe("RoomsOverview", () => {
 					'[data-testid="course-table-start-course-sync-btn"]'
 				);
 
+				const endSyncButton = wrapper.find(
+					'[data-testid="course-table-end-course-sync-btn"]'
+				);
+
 				expect(startSyncButton.element.id).toBeFalsy();
+				expect(endSyncButton.exists()).toBeFalsy();
 				expect(editBtn.exists()).toBeTruthy();
 				expect(deleteBtn.exists()).toBeTruthy();
 			});
