@@ -22,7 +22,7 @@ import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-import MediaBoardExternalToolDeletedElement from "@/modules/feature/media-shelf/MediaBoardExternalToolDeletedElement.vue";
+import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
 
 jest.mock("@vueuse/core", () => {
 	return {
