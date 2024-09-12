@@ -3428,6 +3428,12 @@ export interface GroupResponse {
     externalSource?: ExternalSourceResponse;
     /**
      * 
+     * @type {PeriodResponse}
+     * @memberof GroupResponse
+     */
+    validPeriod?: PeriodResponse;
+    /**
+     * 
      * @type {string}
      * @memberof GroupResponse
      */
@@ -5871,6 +5877,25 @@ export interface PatchVisibilityParams {
      * @memberof PatchVisibilityParams
      */
     visibility: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface PeriodResponse
+ */
+export interface PeriodResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof PeriodResponse
+     */
+    from: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PeriodResponse
+     */
+    until: string;
 }
 /**
  * 
