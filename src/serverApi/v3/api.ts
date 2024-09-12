@@ -2542,6 +2542,12 @@ export interface DeletedElementContent {
      * @memberof DeletedElementContent
      */
     deletedElementType: ContentElementType;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeletedElementContent
+     */
+    description: string;
 }
 /**
  * 
@@ -2561,6 +2567,12 @@ export interface DeletedElementResponse {
      * @memberof DeletedElementResponse
      */
     type: ContentElementType;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeletedElementResponse
+     */
+    description: string;
     /**
      * 
      * @type {DeletedElementContent}
@@ -3426,6 +3438,12 @@ export interface GroupResponse {
      * @memberof GroupResponse
      */
     externalSource?: ExternalSourceResponse;
+    /**
+     * 
+     * @type {PeriodResponse}
+     * @memberof GroupResponse
+     */
+    validPeriod?: PeriodResponse;
     /**
      * 
      * @type {string}
@@ -5871,6 +5889,25 @@ export interface PatchVisibilityParams {
      * @memberof PatchVisibilityParams
      */
     visibility: boolean;
+}
+/**
+ * 
+ * @export
+ * @interface PeriodResponse
+ */
+export interface PeriodResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof PeriodResponse
+     */
+    from: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PeriodResponse
+     */
+    until: string;
 }
 /**
  * 

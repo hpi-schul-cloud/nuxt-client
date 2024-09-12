@@ -45,7 +45,7 @@ const onDelete = async () => {
 const elementDisplayData: Ref<MediaElementDisplay> = computed(() => {
 	return {
 		title: props.element?.content.title,
-		description: undefined,
+		description: props.element?.description,
 		thumbnail: undefined,
 	};
 });

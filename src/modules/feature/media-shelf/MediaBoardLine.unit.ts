@@ -570,11 +570,11 @@ describe("MediaBoardLine", () => {
 			it("should render the element as MediaBoardExternalToolElement", () => {
 				const { wrapper } = setup();
 
-				const deletedElement = wrapper.findComponent(
+				const externalToolElement = wrapper.findComponent(
 					MediaBoardExternalToolElement
 				);
 
-				expect(deletedElement.exists()).toEqual(true);
+				expect(externalToolElement.exists()).toEqual(true);
 			});
 		});
 	});

@@ -9,4 +9,5 @@ export const deletedElementResponseFactory =
 		type: ContentElementType.Deleted,
 		content: deletedElementContentFactory.build(),
 		timestamps: timestampsResponseFactory.build(),
+		description: "test-description",
 	}));
