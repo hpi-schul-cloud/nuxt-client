@@ -1,5 +1,9 @@
 import { MediaBoardLayoutType } from "@/serverApi/v3";
-import { mediaLineResponseFactory } from "@@/tests/test-utils";
+import {
+	deletedElementResponseFactory,
+	mediaExternalToolElementResponseFactory,
+	mediaLineResponseFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -18,6 +22,7 @@ import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
+import MediaBoardExternalToolDeletedElement from "@/modules/feature/media-shelf/MediaBoardExternalToolDeletedElement.vue";
 
 jest.mock("@vueuse/core", () => {
 	return {
@@ -517,6 +522,60 @@ describe("MediaBoardLine", () => {
 			await nextTick();
 
 			expect(wrapper.emitted("delete:element")).toEqual([["elementId"]]);
+		});
+	});
+
+	describe("when rendering an element", () => {
+		describe("when the element response is a DeletedElementResponse", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					line: mediaLineResponseFactory.build({
+						elements: deletedElementResponseFactory.buildList(1),
+					}),
+					layout: MediaBoardLayoutType.List,
+					index: 0,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render the element as MediaBoardExternalToolDeletedElement", () => {
+				const { wrapper } = setup();
+
+				const deletedElement = wrapper.findComponent(
+					MediaBoardExternalToolDeletedElement
+				);
+
+				expect(deletedElement.exists()).toEqual(true);
+			});
+		});
+
+		describe("when the element response is a MediaExternalToolElementResponse", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					line: mediaLineResponseFactory.build({
+						elements: mediaExternalToolElementResponseFactory.buildList(1),
+					}),
+					layout: MediaBoardLayoutType.List,
+					index: 0,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render the element as MediaBoardExternalToolElement", () => {
+				const { wrapper } = setup();
+
+				const deletedElement = wrapper.findComponent(
+					MediaBoardExternalToolElement
+				);
+
+				expect(deletedElement.exists()).toEqual(true);
+			});
 		});
 	});
 });

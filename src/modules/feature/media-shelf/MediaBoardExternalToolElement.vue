@@ -3,7 +3,6 @@
 		:element="elementDisplayData"
 		@click="onClick"
 		@keyup.enter="onClick"
-		:class="isDeletedPlaceholder && 'not-clickable opacity-60'"
 	>
 		<template #imageOverlay>
 			<div class="d-flex ga-1 flex-column pa-3">
@@ -25,16 +24,10 @@
 				>
 					{{ $t("common.medium.chip.incomplete") }}
 				</WarningChip>
-				<WarningChip
-					v-if="isDeletedPlaceholder"
-					data-testid="warning-chip-no-longer-available"
-				>
-					{{ $t("common.medium.chip.noLongerAvailable") }}
-				</WarningChip>
 			</div>
 		</template>
 		<template #menu>
-			<div :class="isDeletedPlaceholder && 'clickable opacity-100'">
+			<div>
 				<MediaBoardExternalToolElementMenu @delete:element="onDelete" />
 			</div>
 		</template>
@@ -92,22 +85,14 @@ const { determineMediaBoardElementStatusMessage, isOperational } =
 
 useErrorNotification(displayError);
 
-const elementDisplayData: Ref<MediaElementDisplay | undefined> = computed(
-	() => {
-		if (!displayData.value) {
-			return undefined;
-		}
-
-		const thumbnail = !isDeletedPlaceholder
-			? displayData.value.thumbnailUrl || displayData.value.logoUrl
-			: undefined;
-
-		return {
-			title: displayData.value.name,
-			description: displayData.value.description,
-			thumbnail,
-		};
-	}
+const elementDisplayData: Ref<MediaElementDisplay | undefined> = computed(() =>
+	displayData.value
+		? {
+				title: displayData.value.name,
+				description: displayData.value.description,
+				thumbnail: displayData.value.thumbnailUrl || displayData.value.logoUrl,
+			}
+		: undefined
 );
 
 const loadExternalToolData = async (
@@ -146,9 +131,6 @@ const isToolNotLicensed: ComputedRef = computed(
 		displayData.value?.status.isNotLicensed &&
 		!displayData.value?.status.isDeactivated
 );
-
-// FIXME: wip stub
-const isDeletedPlaceholder = false;
 
 const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
 
@@ -212,13 +194,3 @@ const onClick = async () => {
 	await fetchContextLaunchRequest(props.element.content.contextExternalToolId);
 };
 </script>
-
-<style scoped>
-.not-clickable {
-	pointer-events: none;
-}
-
-.clickable {
-	pointer-events: auto;
-}
-</style>
