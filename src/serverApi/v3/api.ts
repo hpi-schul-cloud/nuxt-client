@@ -6069,6 +6069,62 @@ export enum Permission {
 /**
  * 
  * @export
+ * @interface PreferredToolInfo
+ */
+export interface PreferredToolInfo {
+    /**
+     * 
+     * @type {string}
+     * @memberof PreferredToolInfo
+     */
+    icon: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PreferredToolInfo
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PreferredToolInfo
+     */
+    schoolExternalToolId?: string;
+}
+/**
+ * 
+ * @export
+ * @interface PreferredToolInfoList
+ */
+export interface PreferredToolInfoList {
+    /**
+     * The items for the current page.
+     * @type {Array<PreferredToolInfo>}
+     * @memberof PreferredToolInfoList
+     */
+    data: Array<PreferredToolInfo>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof PreferredToolInfoList
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof PreferredToolInfoList
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof PreferredToolInfoList
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
  * @interface ProviderConfigResponse
  */
 export interface ProviderConfigResponse {
@@ -11184,6 +11240,39 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cardControllerGetPreferredTools: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/cards/{cardId}/preferredTools`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Move a single card.
          * @param {string} cardId The id of the card.
          * @param {MoveCardBodyParams} moveCardBodyParams 
@@ -11360,6 +11449,15 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async cardControllerGetPreferredTools(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferredToolInfoList>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerGetPreferredTools(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Move a single card.
          * @param {string} cardId The id of the card.
          * @param {MoveCardBodyParams} moveCardBodyParams 
@@ -11437,6 +11535,14 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        cardControllerGetPreferredTools(options?: any): AxiosPromise<PreferredToolInfoList> {
+            return localVarFp.cardControllerGetPreferredTools(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Move a single card.
          * @param {string} cardId The id of the card.
          * @param {MoveCardBodyParams} moveCardBodyParams 
@@ -11507,6 +11613,14 @@ export interface BoardCardApiInterface {
      * @memberof BoardCardApiInterface
      */
     cardControllerGetCards(ids: Array<string>, options?: any): AxiosPromise<CardListResponse>;
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardCardApiInterface
+     */
+    cardControllerGetPreferredTools(options?: any): AxiosPromise<PreferredToolInfoList>;
 
     /**
      * 
@@ -11585,6 +11699,16 @@ export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
      */
     public cardControllerGetCards(ids: Array<string>, options?: any) {
         return BoardCardApiFp(this.configuration).cardControllerGetCards(ids, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardCardApi
+     */
+    public cardControllerGetPreferredTools(options?: any) {
+        return BoardCardApiFp(this.configuration).cardControllerGetPreferredTools(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

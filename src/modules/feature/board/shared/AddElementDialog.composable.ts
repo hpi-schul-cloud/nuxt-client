@@ -1,10 +1,16 @@
 import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
-import { ContentElementType } from "@/serverApi/v3";
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+import {
+	ContentElementType,
+	PreferredToolInfo,
+	PreferredToolInfoList,
+} from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiFormatText,
 	mdiLightbulbOnOutline,
 	mdiLink,
+	mdiMagnify,
 	mdiPresentation,
 	mdiPuzzleOutline,
 	mdiTextBoxEditOutline,
@@ -13,6 +19,20 @@ import {
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+
+//export class PreferredToolInfo {
+//	icon: string;
+//
+//	name: string;
+//
+//	schoolExternalToolId?: string;
+//
+//	constructor(props: PreferredToolInfo) {
+//		this.icon = props.icon;
+//		this.name = props.name;
+//		this.schoolExternalToolId = props.schoolExternalToolId;
+//	}
+//}
 
 type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 
@@ -26,6 +46,20 @@ export const useAddElementDialog = (
 
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
+
+	const { getPreferredTools } = useCardRestApi();
+
+	const preferredTools: PreferredToolInfoList = getPreferredTools();
+	// [
+	//	{
+	//		icon: "mdiMagnify",
+	//		name: "Personal Preference",
+	//	},
+	//	{
+	//		icon: "mdiTimerSandComplete",
+	//		name: "Hier koennte ihre Werbung stehen",
+	//	},
+	//];
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
@@ -117,6 +151,22 @@ export const useAddElementDialog = (
 			testId: "create-element-collaborative-text-editor",
 		});
 	}
+
+	preferredTools.data.every((tool: PreferredToolInfo) => {
+		options.push({
+			icon: tool.icon,
+			label: tool.name,
+			action: () => onElementClick(ContentElementType.ExternalTool),
+			testId: `create-element-preferred-element-${tool.name.replaceAll(" ", "-").toLowerCase()}`,
+		});
+	});
+
+	options.push({
+		icon: mdiMagnify,
+		label: "components.elementTypeSelection.elements.preferredElement.subtitle",
+		action: () => onElementClick(ContentElementType.ExternalTool),
+		testId: "create-element-preferred-element",
+	});
 
 	const askType = () => {
 		elementTypeOptions.value = options;

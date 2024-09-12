@@ -7,6 +7,7 @@ import {
 	CardResponse,
 	ColumnResponse,
 	ContentElementType,
+	CourseRoomsApiFactory,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
 	DrawingElementContent,
@@ -14,7 +15,6 @@ import {
 	FileElementContentBody,
 	LinkElementContentBody,
 	RichTextElementContentBody,
-	CourseRoomsApiFactory,
 	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
@@ -131,6 +131,10 @@ export const useBoardApi = () => {
 		return await cardsApi.cardControllerCreateElement(cardId, params);
 	};
 
+	const fetchPreferredTools = async () => {
+		return await cardsApi.cardControllerGetPreferredTools();
+	};
+
 	const deleteCardCall = async (cardId: string) => {
 		return cardsApi.cardControllerDeleteCard(cardId);
 	};
@@ -218,6 +222,7 @@ export const useBoardApi = () => {
 
 	return {
 		fetchBoardCall,
+		fetchPreferredTools,
 		createColumnCall,
 		createElementCall,
 		deleteElementCall,

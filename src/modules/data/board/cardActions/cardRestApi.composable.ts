@@ -1,11 +1,15 @@
-import { useBoardApi } from "../BoardApi.composable";
-import { useSharedEditMode } from "../EditMode.composable";
 import {
 	ApiErrorHandlerFactory,
 	BoardObjectType,
 	ErrorType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
+import { delay } from "@/utils/helpers";
+import { useBoardStore } from "@data-board";
+import { useBoardApi } from "../BoardApi.composable";
+import { useCardStore } from "../Card.store";
+import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { useSharedEditMode } from "../EditMode.composable";
 import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
@@ -16,10 +20,6 @@ import {
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
 } from "./cardActionPayload";
-import { useCardStore } from "../Card.store";
-import { useSharedCardRequestPool } from "../CardRequestPool.composable";
-import { delay } from "@/utils/helpers";
-import { useBoardStore } from "@data-board";
 
 export const useCardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -30,6 +30,7 @@ export const useCardRestApi = () => {
 
 	const {
 		createElementCall,
+		fetchPreferredTools,
 		deleteElementCall,
 		deleteCardCall,
 		updateElementCall,
@@ -58,6 +59,18 @@ export const useCardRestApi = () => {
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
+			});
+		}
+	};
+
+	const getPreferredTools = async () => {
+		try {
+			const preferredTools = await fetchPreferredTools();
+
+			return preferredTools;
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
 			});
 		}
 	};
@@ -189,6 +202,7 @@ export const useCardRestApi = () => {
 
 	return {
 		createElementRequest,
+		getPreferredTools,
 		deleteElementRequest,
 		moveElementRequest,
 		updateElementRequest,

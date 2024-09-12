@@ -449,6 +449,7 @@ export default {
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
 		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
+	"components.elementTypeSelection.elements.preferredElement.subtitle": "Mock",
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Abgabe",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
