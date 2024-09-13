@@ -1,10 +1,10 @@
-import { mount } from "@vue/test-utils";
-import { BoardMenuActionDelete } from "@ui-board";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { deletedElementResponseFactory } from "@@/tests/test-utils";
+import { mount } from "@vue/test-utils";
+import { BoardMenuActionDelete } from "@ui-board";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { VBtn } from "vuetify/lib/components/index.mjs";

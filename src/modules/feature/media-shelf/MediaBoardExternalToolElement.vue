@@ -27,9 +27,7 @@
 			</div>
 		</template>
 		<template #menu>
-			<div>
-				<MediaBoardExternalToolElementMenu @delete:element="onDelete" />
-			</div>
+			<MediaBoardExternalToolElementMenu @delete:element="onDelete" />
 		</template>
 	</MediaBoardElementDisplay>
 </template>

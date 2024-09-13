@@ -20,9 +20,9 @@
 </template>
 
 <script setup lang="ts">
+import { DeletedElementResponse } from "@/serverApi/v3";
 import { WarningChip } from "@ui-chip";
 import { computed, PropType, Ref } from "vue";
-import { DeletedElementResponse } from "@/serverApi/v3";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";

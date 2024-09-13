@@ -53,7 +53,7 @@
 						@end="onElementDragEnd"
 					>
 						<template #item="{ element }">
-							<MediaBoardDeletedElement
+							<MediaBoardExternalToolDeletedElement
 								v-if="isDeletedElement(element)"
 								:data-element-id="element.id"
 								:element="element"
@@ -100,10 +100,10 @@ import { useI18n } from "vue-i18n";
 import { availableMediaLineId, ElementMove } from "./data";
 import { useEditMode } from "./editMode.composable";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
+import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { MediaBoardColorMapper, useCollapsableState } from "./utils";
-import MediaBoardDeletedElement from "@/modules/feature/media-shelf/MediaBoardExternalToolDeletedElement.vue";
 
 const props = defineProps({
 	line: {
