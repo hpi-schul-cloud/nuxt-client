@@ -24,6 +24,7 @@ declare type FocusHandler = {
 	isFocusedById: Ref<boolean>;
 	setFocus: (id: FocusableId) => void;
 	isAnythingFocused: Ref<boolean>;
+	focusedId: Ref<string | undefined>;
 };
 
 /**
@@ -61,18 +62,22 @@ export function useBoardFocusHandler(
 	onFocusReceived?: () => void
 ): Pick<
 	FocusHandler,
-	"isFocusContained" | "isFocusWithin" | "isFocused" | "isFocusedById"
+	| "isFocusContained"
+	| "isFocusWithin"
+	| "isFocused"
+	| "isFocusedById"
+	| "focusedId"
 >;
 /**
  * Internal type to enable mocking of overloads
  */
 export function useBoardFocusHandler(
-	id?: never,
+	id?: string,
 	element?: never,
 	onFocusReceived?: never
 ): Partial<FocusHandler>;
 export function useBoardFocusHandler(
-	id?: MaybeRefOrGetter<FocusableId>,
+	id?: MaybeRefOrGetter<FocusableId> | string,
 	element?: Ref<HTMLElement | null>,
 	onFocusReceived?: () => void
 ): Partial<FocusHandler> {
@@ -90,6 +95,13 @@ export function useBoardFocusHandler(
 			 * Set Focus for a given ID
 			 */
 			setFocus,
+		};
+	}
+
+	if (id?.valueOf() && element == undefined) {
+		return {
+			setFocus,
+			focusedId,
 		};
 	}
 
