@@ -29,6 +29,7 @@ import {
 	UpdateColumnTitleSuccessPayload,
 } from "./boardActions/boardActionPayload";
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
+import { useSetFocusPrevios } from "./focusPrevios.composable";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
@@ -131,9 +132,17 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const deleteCardSuccess = (payload: DeleteCardSuccessPayload) => {
 		if (!board.value) return;
 		const cardId = payload.cardId;
+
 		const columnIndex = board.value.columns.findIndex(
 			(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
 		);
+
+		if (!payload.isOwnAction) {
+			const { focusedId } = useBoardFocusHandler(cardId);
+			if (focusedId?.value !== cardId) return;
+			useSetFocusPrevios(cardId, "card");
+		}
+
 		if (columnIndex !== -1) {
 			const cardIndex = board.value.columns[columnIndex].cards.findIndex(
 				(c) => c.cardId === cardId
