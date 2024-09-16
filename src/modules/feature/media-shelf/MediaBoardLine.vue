@@ -74,8 +74,11 @@ import {
 	MediaLineResponse,
 } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
-import { extractDataAttribute, useMediaBoardEditMode } from "@util-board";
+import {
+	extractDataAttribute,
+	useDragAndDrop,
+	useMediaBoardEditMode,
+} from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";

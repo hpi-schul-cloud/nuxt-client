@@ -8,6 +8,7 @@ import {
 	BOARD_IS_LIST_LAYOUT,
 } from "./board-injection-tokens";
 import { useBoardNotifier } from "./BoardNotifier.composable";
+import { useDragAndDrop } from "./dragAndDrop.composable";
 import {
 	EditModePermissions,
 	useCourseBoardEditMode,
@@ -32,4 +33,5 @@ export {
 	EditModePermissions,
 	useCourseBoardEditMode,
 	useMediaBoardEditMode,
+	useDragAndDrop,
 };

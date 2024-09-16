@@ -7,7 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import { useDragAndDrop } from "@/modules/feature/board/shared/DragAndDrop.composable";
 import {
 	MediaAvailableLineElementResponse,
 	ToolContextType,
@@ -18,6 +17,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { useExternalToolLaunchState } from "@data-external-tool";
+import { useDragAndDrop } from "@util-board";
 import { useErrorNotification } from "@util-error-notification";
 import { computed, ComputedRef, onUnmounted, PropType, watch } from "vue";
 import { useI18n } from "vue-i18n";

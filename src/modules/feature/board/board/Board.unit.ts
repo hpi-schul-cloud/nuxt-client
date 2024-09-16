@@ -61,12 +61,18 @@ import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
 
-jest.mock("@util-board");
+jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
+jest.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = jest.mocked(
 	useSharedLastCreatedElement
 );
+
+jest.mock("@util-board/extractDataAttribute.util");
 const mockExtractDataAttribute = jest.mocked(extractDataAttribute);
+
+jest.mock("@util-board/editMode.composable");
 const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
 const mockedUseEditMode = jest.mocked(useCourseBoardEditMode);
 

@@ -23,10 +23,13 @@ import {
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import {
+	useBoardNotifier,
+	useDragAndDrop,
+	useSharedLastCreatedElement,
+} from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed } from "vue";
-import { useDragAndDrop } from "../shared/DragAndDrop.composable";
 import BoardColumnVue from "./BoardColumn.vue";
 
 const { isDragging, dragEnd } = useDragAndDrop();

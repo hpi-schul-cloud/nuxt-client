@@ -44,8 +44,8 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
 import { WarningChip } from "@ui-chip";
+import { useDragAndDrop } from "@util-board";
 import { useErrorNotification } from "@util-error-notification";
 import { computed, ComputedRef, onUnmounted, PropType, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";

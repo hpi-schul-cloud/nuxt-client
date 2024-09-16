@@ -71,8 +71,7 @@ import {
 	MediaBoardLayoutType,
 } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
-import { extractDataAttribute } from "@util-board";
+import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { uniqueId } from "lodash";
 import { SortableEvent } from "sortablejs";
