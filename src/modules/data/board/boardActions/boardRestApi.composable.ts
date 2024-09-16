@@ -1,12 +1,11 @@
-import { useBoardStore } from "../Board.store";
-import { useBoardApi } from "../BoardApi.composable";
-import { useSharedEditMode } from "../EditMode.composable";
-import * as BoardActions from "./boardActions";
 import {
 	BoardObjectType,
 	ErrorType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
+import { useSharedEditMode } from "@util-board";
+import { useBoardStore } from "../Board.store";
+import { useBoardApi } from "../BoardApi.composable";
 import {
 	CreateCardRequestPayload,
 	DeleteColumnRequestPayload,
@@ -17,6 +16,7 @@ import {
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
 } from "./boardActionPayload";
+import * as BoardActions from "./boardActions";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();

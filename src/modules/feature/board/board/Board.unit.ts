@@ -8,10 +8,10 @@ import {
 } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import CopyModule from "@/store/copy";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import { Board } from "@/types/board/Board";
 import {
@@ -20,9 +20,9 @@ import {
 } from "@/types/board/Permissions";
 import {
 	COPY_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -39,19 +39,19 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
+	useBoardInactivity,
 	useBoardPermissions,
 	useBoardStore,
 	useCardStore,
-	useEditMode,
 	useSharedBoardPageInformation,
-	useSharedEditMode,
-	useBoardInactivity,
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	extractDataAttribute,
 	useBoardNotifier,
+	useCourseBoardEditMode,
+	useSharedEditMode,
 	useSharedLastCreatedElement,
 } from "@util-board";
 import { mount } from "@vue/test-utils";
@@ -67,9 +67,8 @@ const mockUseSharedLastCreatedElement = jest.mocked(
 	useSharedLastCreatedElement
 );
 const mockExtractDataAttribute = jest.mocked(extractDataAttribute);
-
-jest.mock("@data-board/EditMode.composable");
 const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
+const mockedUseEditMode = jest.mocked(useCourseBoardEditMode);
 
 jest.mock("@data-board/BoardPageInformation.composable");
 const mockedUseSharedBoardPageInformation = jest.mocked(
@@ -85,9 +84,6 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 
 jest.mock("@/composables/copy");
 const mockUseCopy = jest.mocked(useCopy);
-
-jest.mock("@data-board/EditMode.composable");
-const mockedUseEditMode = jest.mocked(useEditMode);
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -124,6 +120,7 @@ describe("Board", () => {
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
 			setEditModeId: jest.fn(),
+			isInEditMode: computed(() => true),
 		});
 
 		mockedUseSharedBoardPageInformation.mockReturnValue({

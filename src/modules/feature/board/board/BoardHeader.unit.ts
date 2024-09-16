@@ -10,11 +10,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import {
-	useBoardFocusHandler,
-	useBoardPermissions,
-	useEditMode,
-} from "@data-board";
+import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
 	BoardMenuActionCopy,
 	BoardMenuActionDelete,
@@ -23,17 +19,19 @@ import {
 	BoardMenuActionRevert,
 	BoardMenuActionShare,
 } from "@ui-board";
+import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 
 jest.mock("@data-board");
+jest.mock("@util-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 const mockUseBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 
 describe("BoardHeader", () => {
-	const mockedUseEditMode = jest.mocked(useEditMode);
+	const mockedUseEditMode = jest.mocked(useCourseBoardEditMode);
 
 	const setup = (
 		options?: {

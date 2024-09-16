@@ -75,7 +75,7 @@ import {
 } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
-import { extractDataAttribute } from "@util-board";
+import { extractDataAttribute, useMediaBoardEditMode } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
@@ -89,7 +89,6 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { availableMediaLineId, ElementMove } from "./data";
-import { useEditMode } from "./editMode.composable";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
@@ -136,7 +135,7 @@ const { openItems } = useCollapsableState("linePanel", collapsed);
 
 const { dragStart, dragEnd } = useDragAndDrop();
 
-const { startEditMode } = useEditMode(toRef(props, "line").value.id);
+const { startEditMode } = useMediaBoardEditMode(toRef(props, "line").value.id);
 
 const titlePlaceholder: ComputedRef<string> = computed(
 	() => `${t("feature.media-shelf.line.title").toString()} ${props.index + 1}`

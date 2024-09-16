@@ -5,6 +5,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
+import { useMediaBoardEditMode } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
@@ -13,7 +14,6 @@ import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { useDragAndDrop } from "../board/shared/DragAndDrop.composable";
 import { availableMediaLineId, ElementMove } from "./data";
-import { useEditMode } from "./editMode.composable";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
@@ -114,7 +114,7 @@ describe("MediaBoardLine", () => {
 			const menu = wrapper.findComponent(MediaBoardLineMenu);
 			menu.vm.$emit("rename-title");
 
-			expect(useEditMode(line.id).isEditMode.value).toEqual(true);
+			expect(useMediaBoardEditMode(line.id).isEditMode.value).toEqual(true);
 		});
 	});
 
