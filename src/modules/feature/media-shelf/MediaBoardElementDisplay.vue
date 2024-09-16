@@ -18,7 +18,7 @@
 				:ripple="false"
 			>
 				<div class="position-relative">
-					<div :class="isDeletedPlaceholder && 'opacity-60'">
+					<div :class="{ 'opacity-60': isUnavailable }">
 						<v-img
 							v-if="element.thumbnail"
 							:src="element.thumbnail"
@@ -73,7 +73,7 @@ defineProps({
 	element: {
 		type: Object as PropType<MediaElementDisplay>,
 	},
-	isDeletedPlaceholder: {
+	isUnavailable: {
 		type: Boolean,
 		default: false,
 	},

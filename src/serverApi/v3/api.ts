@@ -2569,12 +2569,6 @@ export interface DeletedElementResponse {
     type: ContentElementType;
     /**
      * 
-     * @type {string}
-     * @memberof DeletedElementResponse
-     */
-    description: string;
-    /**
-     * 
      * @type {DeletedElementContent}
      * @memberof DeletedElementResponse
      */

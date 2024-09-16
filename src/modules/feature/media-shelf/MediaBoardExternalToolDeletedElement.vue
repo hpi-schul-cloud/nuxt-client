@@ -2,7 +2,7 @@
 	<MediaBoardElementDisplay
 		:element="elementDisplayData"
 		class="not-clickable"
-		:isDeletedPlaceholder="true"
+		:isUnavailable="true"
 	>
 		<template #imageOverlay>
 			<div class="d-flex ga-1 flex-column pa-3">
@@ -45,7 +45,7 @@ const onDelete = async () => {
 const elementDisplayData: Ref<MediaElementDisplay> = computed(() => {
 	return {
 		title: props.element?.content.title,
-		description: props.element?.description,
+		description: props.element?.content.description,
 		thumbnail: undefined,
 	};
 });
