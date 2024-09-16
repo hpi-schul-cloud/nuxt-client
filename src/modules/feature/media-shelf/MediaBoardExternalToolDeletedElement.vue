@@ -1,9 +1,5 @@
 <template>
-	<MediaBoardElementDisplay
-		:element="elementDisplayData"
-		class="not-clickable"
-		:isUnavailable="true"
-	>
+	<MediaBoardElementDisplay :element="elementDisplayData" :isUnavailable="true">
 		<template #imageOverlay>
 			<div class="d-flex ga-1 flex-column pa-3">
 				<WarningChip data-testid="warning-chip-no-longer-available">
@@ -12,9 +8,7 @@
 			</div>
 		</template>
 		<template #menu>
-			<div class="clickable">
-				<MediaBoardExternalToolElementMenu @delete:element="onDelete" />
-			</div>
+			<MediaBoardExternalToolElementMenu @delete:element="onDelete" />
 		</template>
 	</MediaBoardElementDisplay>
 </template>
@@ -50,13 +44,3 @@ const elementDisplayData: Ref<MediaElementDisplay> = computed(() => {
 	};
 });
 </script>
-
-<style scoped>
-.not-clickable {
-	pointer-events: none;
-}
-
-.clickable {
-	pointer-events: auto;
-}
-</style>
