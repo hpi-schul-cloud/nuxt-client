@@ -78,6 +78,21 @@
 						<v-icon>{{ mdiSync }}</v-icon>
 					</v-btn>
 				</template>
+				<template v-if="showEndSyncAction(item)">
+					<v-btn
+						v-if="courseSyncEnabled"
+						:title="t('feature-course-sync.EndCourseSyncDialog.title')"
+						:aria-label="t('feature-course-sync.EndCourseSyncDialog.title')"
+						data-testid="course-table-end-course-sync-btn"
+						variant="outlined"
+						size="small"
+						class="mx-1 px-1"
+						min-width="0"
+						@click="onClickEndSyncIcon(item)"
+					>
+						<v-icon>{{ mdiSyncOff }}</v-icon>
+					</v-btn>
+				</template>
 			</template>
 		</v-data-table-server>
 		<v-custom-dialog
@@ -112,6 +127,14 @@
 			:course-name="selectedItem?.name"
 			@success="onConfirmSynchronizeCourse"
 			data-testid="start-sync-dialog"
+		/>
+
+		<EndCourseSyncDialog
+			v-model:is-open="isEndSyncDialogOpen"
+			:course-name="selectedItem?.name"
+			:group-name="selectedItem?.syncedGroup"
+			:course-id="selectedItem?.id"
+			@success="loadCourseList"
 		/>
 
 		<v-btn
@@ -154,13 +177,21 @@ import {
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useCourseList } from "@data-room";
-import { StartExistingCourseSyncDialog } from "@feature-course-sync";
+import {
+	EndCourseSyncDialog,
+	StartExistingCourseSyncDialog,
+} from "@feature-course-sync";
 import { RenderHTML } from "@feature-render-html";
+import {
+	mdiPencilOutline,
+	mdiSync,
+	mdiSyncOff,
+	mdiTrashCanOutline,
+} from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { mdiPencilOutline, mdiSync, mdiTrashCanOutline } from "@icons/material";
 
 type Tab = "current" | "archive";
 
@@ -245,9 +276,16 @@ const showRoomAction = (item: CourseInfoDataResponse) =>
 const showSyncAction = (item: CourseInfoDataResponse) =>
 	hasPermission.value && !item.syncedGroup;
 
+const showEndSyncAction = (item: CourseInfoDataResponse) =>
+	hasPermission.value && item.syncedGroup;
+
 const isDeleteDialogOpen: Ref<boolean> = ref(false);
 
 const isStartSyncDialogOpen: Ref<boolean> = ref(false);
+
+const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
+
+const isEndSyncDialogOpen: Ref<boolean> = ref(false);
 
 const selectedItem: Ref<CourseInfoDataResponse | undefined> = ref();
 
@@ -259,6 +297,11 @@ const onClickStartSyncIcon = (selectedCourse: CourseInfoDataResponse) => {
 	selectedItem.value = selectedCourse;
 	isStartSyncDialogOpen.value = true;
 	isCourseSyncDialogOpen.value = true;
+};
+
+const onClickEndSyncIcon = (selectedCourse: CourseInfoDataResponse) => {
+	selectedItem.value = selectedCourse;
+	isEndSyncDialogOpen.value = true;
 };
 
 const onClickDeleteIcon = (selectedCourse: CourseInfoDataResponse) => {
@@ -372,8 +415,6 @@ const getInstituteTitle: ComputedRef<string> = computed(() => {
 			return "Dataport";
 	}
 });
-
-const isCourseSyncDialogOpen: Ref<boolean> = ref(false);
 </script>
 
 <style scoped>
