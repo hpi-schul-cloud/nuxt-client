@@ -35,9 +35,10 @@ export const useSidebarSelection = (
 		if (route.name === "rooms-id") {
 			if (isRoom.value === true) {
 				return item.to === "/rooms";
-			}
-			if (isCourseRoom.value === true) {
+			} else if (isCourseRoom.value === true) {
 				return item.to === "/rooms/courses-overview";
+			} else {
+				return false;
 			}
 		}
 
