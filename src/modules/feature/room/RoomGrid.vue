@@ -47,13 +47,13 @@ onMounted(() => {
 @import "@/styles/settings.scss";
 
 .room-tile-grid {
+	margin-left: -20px;
+	margin-right: -20px;
+
 	@media #{map-get($display-breakpoints, "sm-and-up")} {
 		display: flex;
 		flex-wrap: wrap;
 	}
-
-	margin-left: -20px;
-	margin-right: -20px;
 }
 
 .room-tile {
