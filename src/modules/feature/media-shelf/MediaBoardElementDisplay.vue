@@ -18,20 +18,23 @@
 				:ripple="false"
 			>
 				<div class="position-relative">
-					<v-img
-						v-if="element.thumbnail"
-						:src="element.thumbnail"
-						:aspect-ratio="16 / 9"
-						width="100%"
-						data-testid="media-element-thumbnail"
-					/>
-					<v-img
-						v-else
-						:aspect-ratio="16 / 9"
-						width="100%"
-						src="@/assets/img/media-board/default_img_media_shelf.png"
-						data-testid="media-element-default-thumbnail"
-					/>
+					<div :class="{ 'opacity-60': isUnavailable }">
+						<v-img
+							v-if="element.thumbnail"
+							:src="element.thumbnail"
+							:aspect-ratio="16 / 9"
+							width="100%"
+							data-testid="media-element-thumbnail"
+						/>
+						<v-img
+							v-else
+							:aspect-ratio="16 / 9"
+							width="100%"
+							src="@/assets/img/media-board/default_img_media_shelf.png"
+							data-testid="media-element-default-thumbnail"
+						/>
+					</div>
+
 					<div v-if="$slots.imageOverlay" class="chip-position">
 						<slot name="imageOverlay" />
 					</div>
@@ -69,6 +72,10 @@ import { MediaElementDisplay } from "./data";
 defineProps({
 	element: {
 		type: Object as PropType<MediaElementDisplay>,
+	},
+	isUnavailable: {
+		type: Boolean,
+		default: false,
 	},
 });
 

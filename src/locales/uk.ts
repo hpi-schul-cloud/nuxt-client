@@ -97,6 +97,7 @@ export default {
 	"common.medium.chip.deactivated": "Вимкнено",
 	"common.medium.chip.notLicensed": "Не активовано",
 	"common.medium.chip.incomplete": "Конфігурація не завершена",
+	"common.medium.chip.noLongerAvailable": "Більше не доступний",
 	"common.medium.information.admin": "Перевірте налаштування.",
 	"common.medium.information.student": "Будь ласка, зверніться до вчителя.",
 	"common.medium.information.teacher":
@@ -805,8 +806,6 @@ export default {
 		"Виберіть інструмент...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
-	"feature-course-sync.EndCourseSyncDialog.alert":
-		"Після завершення синхронізації її не можна розпочати знову. Дані користувача можна редагувати та підтримувати вручну так само, як і звичайні курси.",
 	"feature-course-sync.EndCourseSyncDialog.description":
 		"Чи дійсно слід завершити синхронізацію групи користувачів {groupName} у курсі {courseName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":

@@ -97,6 +97,7 @@ export default {
 	"common.medium.chip.deactivated": "Deaktiviert",
 	"common.medium.chip.notLicensed": "Nicht freigeschaltet",
 	"common.medium.chip.incomplete": "Konfiguration unvollständig",
+	"common.medium.chip.noLongerAvailable": "Nicht mehr verfügbar",
 	"common.medium.information.admin": "Bitte Einstellungen überprüfen.",
 	"common.medium.information.student": "Bitte an eine Lehrkraft wenden.",
 	"common.medium.information.teacher": "Bitte an Schuladministrator:in wenden.",
@@ -799,8 +800,6 @@ export default {
 		"Tool auswählen...",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
 	"feature-course-sync.EndCourseSyncDialog.title": "Synchronisation beenden",
-	"feature-course-sync.EndCourseSyncDialog.alert":
-		"Ist die Synchronisation einmal beendet, kann sie nicht wieder gestartet werden. Nutzendendaten können im Nachgang analog zu regulären Kursen manuell bearbeitet und gepflegt werden.",
 	"feature-course-sync.EndCourseSyncDialog.description":
 		"Soll die Synchronization der Nutzendengruppe {groupName} im Kurs {courseName} wirklich beendet werden?",
 	"feature-course-sync.EndCourseSyncDialog.success":
@@ -816,7 +815,7 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
 		"Eine Synchronisation mit {systemName} überschreibt die Personen des Kurses (Lehrkräfte und Schüler*innen).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
-		"Soll die Synchronisation der Nutzergruppe {groupName} im Kurs {courseName} wirklich gestartet werden?",
+		"Soll die Synchronisation der Nutzendengruppe {groupName} im Kurs {courseName} wirklich gestartet werden?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Nutzendengruppe erfolgreich synchronisiert",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
@@ -1466,7 +1465,7 @@ export default {
 	"pages.content.index.search.placeholder": "Lern-Store durchsuchen",
 	"pages.content.init_state.img_alt": "Initial state Image",
 	"pages.content.init_state.message":
-		"Hier findest du hochwertige, auf dein Bundesland abgestimmte Inhalte.<br>Unser Team erschließt fortlaufend neue Materialen, um so dein Lernerlebnis weiter zu verbessern.<br><br>Hinweis:<br><br>Die im Lernstore angezeigten Materialien liegen nicht auf unserem Server, sondern werden über Schnittstellen zu anderen Servern verfügbar gemacht (Quellen sind zum Beispiel einzelne Bildungsserver, WirLernenOnline, Mundo u.a.).<br>Aus diesem Grund hat unser Team auch keinen Einfluss auf die dauerhafte Verfügbarkeit einzelner Materialien und auf das vollumfängliche Materialangebot der einzelnen Quellen.<br><br>Im Rahmen der Nutzung in Bildungseinrichtungen ist das Kopieren der Online-Medien auf Speichermedien, auf ein privates Endgerät oder auf Lernplattformen für einen geschlossenen Benutzerkreis ggf. erlaubt, soweit dies für die interne Verteilung und/oder Nutzung erforderlich ist.<br>Nach Beendigung der Arbeiten mit den jeweiligen Online-Medien sind diese von den privaten Endgeräten, Datenträgern und Lernplattformen zu löschen; spätestens beim Verlassen der Bildungseinrichtung.<br>Eine grundsätzliche Veröffentlichung (z.B. im Internet) der Online-Medien oder mit Teilen daraus neu hergestellten neuen und/oder bearbeiteten Werken ist grundsätzlich nicht zulässig, bzw. bedarf der Zustimmung des Rechtegebers.",
+		"Hier findest du hochwertige, auf dein Bundesland abgestimmte Inhalte.<br>Unser Team erschließt fortlaufend neue Materialien, um so dein Lernerlebnis weiter zu verbessern.<br><br>Hinweis:<br><br>Die im Lernstore angezeigten Materialien liegen nicht auf unserem Server, sondern werden über Schnittstellen zu anderen Servern verfügbar gemacht (Quellen sind zum Beispiel einzelne Bildungsserver, WirLernenOnline, Mundo u.a.).<br>Aus diesem Grund hat unser Team auch keinen Einfluss auf die dauerhafte Verfügbarkeit einzelner Materialien und auf das vollumfängliche Materialangebot der einzelnen Quellen.<br><br>Im Rahmen der Nutzung in Bildungseinrichtungen ist das Kopieren der Online-Medien auf Speichermedien, auf ein privates Endgerät oder auf Lernplattformen für einen geschlossenen Benutzerkreis ggf. erlaubt, soweit dies für die interne Verteilung und/oder Nutzung erforderlich ist.<br>Nach Beendigung der Arbeiten mit den jeweiligen Online-Medien sind diese von den privaten Endgeräten, Datenträgern und Lernplattformen zu löschen; spätestens beim Verlassen der Bildungseinrichtung.<br>Eine grundsätzliche Veröffentlichung (z.B. im Internet) der Online-Medien oder mit Teilen daraus neu hergestellten neuen und/oder bearbeiteten Werken ist grundsätzlich nicht zulässig, bzw. bedarf der Zustimmung des Rechtegebers.",
 	"pages.content.init_state.title": "Willkommen im Lern-Store!",
 	"pages.content.label.chooseACourse": "Wähle einen Kurs / Fach",
 	"pages.content.label.chooseALessonTopic": "Wähle ein Unterrichtsthema",

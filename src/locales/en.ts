@@ -97,6 +97,7 @@ export default {
 	"common.medium.chip.deactivated": "Disabled",
 	"common.medium.chip.notLicensed": "Not activated",
 	"common.medium.chip.incomplete": "Configuration incomplete",
+	"common.medium.chip.noLongerAvailable": "No longer available",
 	"common.medium.information.admin": "Please check settings.",
 	"common.medium.information.student": "Please contact a teacher.",
 	"common.medium.information.teacher":
@@ -793,8 +794,6 @@ export default {
 		"Select Tool...",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
 	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
-	"feature-course-sync.EndCourseSyncDialog.alert":
-		"Once synchronization has ended, it cannot be started again. User data can be edited and maintained manually in the same way as regular courses.",
 	"feature-course-sync.EndCourseSyncDialog.description":
 		"Should the synchronization of the user group {groupName} in the course {courseName} really be ended?",
 	"feature-course-sync.EndCourseSyncDialog.success":
