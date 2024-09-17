@@ -41,6 +41,7 @@
 				color="primary"
 				size="large"
 				:href="href"
+				:to="to"
 			>
 				<v-icon v-if="icon">{{ isMenuOpen ? mdiClose : icon }}</v-icon>
 				<span v-if="!isCollapsed" class="d-block"><slot /></span>
@@ -66,6 +67,7 @@ const props = withDefaults(
 	defineProps<{
 		icon?: string;
 		href?: string;
+		to?: string;
 		direction?: "top" | "bottom";
 		orientation?: "left" | "right";
 	}>(),

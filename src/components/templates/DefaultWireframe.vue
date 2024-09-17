@@ -26,6 +26,7 @@
 						:orientation="'right'"
 						:icon="fabItems.icon"
 						:href="fabItems.href"
+						:to="fabItems.to"
 						:aria-label="fabItems.ariaLabel"
 						:data-testid="fabItems.dataTestId"
 					>

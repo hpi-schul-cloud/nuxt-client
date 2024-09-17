@@ -18,7 +18,7 @@ const { t } = useI18n();
 const fabAction = {
 	icon: mdiPlus,
 	title: t("common.actions.create"),
-	href: "/rooms/new",
+	to: "/rooms/new",
 	ariaLabel: t("pages.rooms.fab.title"),
 	testId: "fab-add-room",
 };
