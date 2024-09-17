@@ -1,4 +1,7 @@
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
+import {
+	createTestingVuetify,
+	createTestingI18n,
+} from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import RoomColorPickerSwatch from "./RoomColorPickerSwatch.vue";
@@ -8,7 +11,7 @@ describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
 	const setup = (props?: ComponentProps<typeof RoomColorPickerSwatch>) => {
 		const wrapper = mount(RoomColorPickerSwatch, {
 			global: {
-				plugins: [createTestingVuetify()],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props,
 		});
@@ -21,9 +24,11 @@ describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
 			const { wrapper } = setup();
 
 			const selectedColor = wrapper.findComponent(
-				".color-swatch--color-blue-grey"
+				"[data-testid=color-swatch-blue-grey]"
 			);
-			const otherColor = wrapper.findComponent(".color-swatch--color-red");
+			const otherColor = wrapper.findComponent(
+				"[data-testid=color-swatch-red]"
+			);
 
 			expect(selectedColor.exists()).toStrictEqual(true);
 			expect(otherColor.exists()).toStrictEqual(false);
@@ -34,7 +39,9 @@ describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
 		it("should render with given color", () => {
 			const { wrapper } = setup({ color: RoomColorEnum.RED, isSelected: true });
 
-			const selectedColor = wrapper.findComponent(".color-swatch--color-red");
+			const selectedColor = wrapper.findComponent(
+				"[data-testid=color-swatch-red]"
+			);
 
 			expect(selectedColor.exists()).toStrictEqual(true);
 		});
@@ -42,7 +49,9 @@ describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
 		it("should render selected icon", () => {
 			const { wrapper } = setup({ color: RoomColorEnum.RED, isSelected: true });
 
-			const selectedColor = wrapper.findComponent(".color-swatch--color-red");
+			const selectedColor = wrapper.findComponent(
+				"[data-testid=color-swatch-red]"
+			);
 
 			expect(selectedColor.exists()).toStrictEqual(true);
 
@@ -56,7 +65,7 @@ describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
 			const { wrapper } = setup();
 
 			const selectedColor = wrapper.findComponent(
-				".color-swatch--color-blue-grey"
+				"[data-testid=color-swatch-blue-grey]"
 			);
 
 			await selectedColor.trigger("click");

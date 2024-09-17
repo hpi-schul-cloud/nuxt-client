@@ -1,14 +1,14 @@
 <template>
-	<label id="room-color-label" class="d-flex mb-2">Farbe</label>
+	<label id="room-color-label" class="d-flex mb-2">{{ $t(label) }}</label>
 	<div
 		class="d-flex flex-wrap"
 		role="radiogroup"
 		aria-labelledby="room-color-label"
 	>
-		<template v-for="color in RoomColorEnum" :key="color">
+		<template v-for="swatchColor in RoomColorEnum" :key="swatchColor">
 			<RoomColorPickerSwatch
-				:color="color"
-				:is-selected="isSelected(color)"
+				:color="swatchColor"
+				:is-selected="isSelected(swatchColor)"
 				@update:color="onUpdateColor($event)"
 			/>
 		</template>
@@ -22,21 +22,25 @@ import RoomColorPickerSwatch from "./RoomColorPickerSwatch.vue";
 import { RoomColorEnum } from "./types";
 
 const props = defineProps({
-	selectedColor: {
+	color: {
 		type: String as PropType<RoomColorEnum>,
 		default: RoomColorEnum.BLUE_GREY,
 	},
+	label: {
+		type: String,
+		default: "common.words.color",
+	},
 });
 
-const emit = defineEmits(["update:selectedColor"]);
+const emit = defineEmits(["update:color"]);
 
-const currentColor = useVModel(props, "selectedColor", emit);
+const currentColor = useVModel(props, "color", emit);
 
 const isSelected = (color: RoomColorEnum) => {
 	return color === currentColor.value;
 };
 
 const onUpdateColor = (color: RoomColorEnum) => {
-	emit("update:selectedColor", color);
+	emit("update:color", color);
 };
 </script>

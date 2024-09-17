@@ -4,7 +4,7 @@
 		:class="`room-color--${color}`"
 		:data-testid="`color-swatch-${color}`"
 		role="radio"
-		:aria-label="`color-${color}`"
+		:aria-label="ariaLabel"
 		@click="() => $emit('update:color', color)"
 	>
 		<VIcon v-if="isSelected" :icon="mdiCheckCircleOutline" color="white" />
@@ -12,11 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from "vue";
+import { computed, PropType } from "vue";
 import { RoomColorEnum } from "./types";
 import { mdiCheckCircleOutline } from "@icons/material";
+import { useI18n } from "vue-i18n";
 
-defineProps({
+const props = defineProps({
 	color: {
 		type: String as PropType<RoomColorEnum>,
 		default: RoomColorEnum.BLUE_GREY,
@@ -27,6 +28,13 @@ defineProps({
 });
 
 defineEmits(["update:color"]);
+
+const { t } = useI18n();
+
+const ariaLabel = computed(() => {
+	const translatedColor = t(`common.words.color.${props.color}`);
+	return `${t("common.words.color")} ${translatedColor}`;
+});
 </script>
 
 <style scoped>

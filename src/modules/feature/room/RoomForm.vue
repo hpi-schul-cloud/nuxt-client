@@ -10,7 +10,7 @@
 			@blur="v$.roomData.title.$touch"
 		/>
 		<div class="mb-8">
-			<RoomColorPicker v-model:selected-color="roomData.displayColor" />
+			<RoomColorPicker v-model:color="roomData.displayColor" />
 		</div>
 		<div class="mb-8">
 			Zeitraum

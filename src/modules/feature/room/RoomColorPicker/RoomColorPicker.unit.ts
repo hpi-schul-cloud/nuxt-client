@@ -7,7 +7,7 @@ import { ComponentProps } from "vue-component-type-helpers";
 import RoomColorPicker from "./RoomColorPicker.vue";
 import { RoomColorEnum } from "./types";
 
-describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
+describe("@feature-room/RoomColorPicker", () => {
 	const setup = (props?: ComponentProps<typeof RoomColorPicker>) => {
 		const wrapper = mount(RoomColorPicker, {
 			global: {
@@ -30,7 +30,7 @@ describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
 			const { wrapper } = setup();
 
 			const selectedColor = wrapper.findComponent(
-				".color-swatch--color-blue-grey"
+				"[data-testid=color-swatch-blue-grey]"
 			);
 
 			expect(selectedColor.exists()).toStrictEqual(true);
@@ -44,14 +44,16 @@ describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
 		it("should render given color as selected", () => {
 			const { wrapper } = setup({ selectedColor: RoomColorEnum.RED });
 
-			const selectedColor = wrapper.findComponent(".color-swatch--color-red");
+			const selectedColor = wrapper.findComponent(
+				"[data-testid=color-swatch-red]"
+			);
 			expect(selectedColor.exists()).toStrictEqual(true);
 
 			const selectedIcon = selectedColor.findComponent({ name: "VIcon" });
 			expect(selectedIcon.exists()).toStrictEqual(true);
 
 			const defaultColor = wrapper.findComponent(
-				".color-swatch--color-blue-grey"
+				"[data-testid=color-swatch-blue-grey]"
 			);
 			expect(defaultColor.exists()).toStrictEqual(true);
 
@@ -65,7 +67,7 @@ describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
 			const { wrapper } = setup();
 
 			const selectedColor = wrapper.findComponent(
-				".color-swatch--color-blue-grey"
+				"[data-testid=color-swatch-blue-grey]"
 			);
 			expect(selectedColor.exists()).toStrictEqual(true);
 
@@ -76,13 +78,15 @@ describe("@feature-room/RoomColorPicker/RoomColorPickerSwatch", () => {
 		it("should emit update:color event", async () => {
 			const { wrapper } = setup();
 
-			const newColor = wrapper.findComponent(".color-swatch--color-green");
+			const newColor = wrapper.findComponent(
+				"[data-testid=color-swatch-green]"
+			);
 
 			await newColor.trigger("click");
 
-			expect(wrapper.emitted()).toHaveProperty("update:selectedColor");
-			expect(wrapper.emitted()["update:selectedColor"]).toHaveLength(1);
-			expect(wrapper.emitted()["update:selectedColor"][0]).toEqual(["green"]);
+			expect(wrapper.emitted()).toHaveProperty("update:color");
+			expect(wrapper.emitted()["update:color"]).toHaveLength(1);
+			expect(wrapper.emitted()["update:color"][0]).toEqual(["green"]);
 		});
 	});
 });
