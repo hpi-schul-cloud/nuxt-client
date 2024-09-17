@@ -67,7 +67,7 @@ export const useCardRestApi = () => {
 		try {
 			const preferredTools = await fetchPreferredTools();
 
-			return preferredTools;
+			return preferredTools.data.data;
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notCreated", "boardElement"),

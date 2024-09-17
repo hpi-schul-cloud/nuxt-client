@@ -161,9 +161,18 @@ export default defineComponent({
 		);
 		const { hasDeletePermission } = useBoardPermissions();
 
+		/*const { getPreferredTools } = useCardRestApi();
+
+		const preferredTools: Ref<PreferredToolInfo[] | undefined> = ref();
+		const callApi = async () => {
+			preferredTools.value = await getPreferredTools();
+			console.log("called Api. Got: ", preferredTools.value);
+		}; */
+
 		const { askType } = useAddElementDialog(
 			cardStore.createElementRequest,
-			cardId.value
+			cardId.value //,
+			//preferredTools.value
 		);
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) =>
@@ -242,6 +251,7 @@ export default defineComponent({
 		});
 
 		onMounted(async () => {
+			//callApi();
 			if (card.value === undefined) {
 				await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
 			}

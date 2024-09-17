@@ -1,16 +1,10 @@
 import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
-import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
-import {
-	ContentElementType,
-	PreferredToolInfo,
-	PreferredToolInfoList,
-} from "@/serverApi/v3";
+import { ContentElementType, PreferredToolInfo } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiFormatText,
 	mdiLightbulbOnOutline,
 	mdiLink,
-	mdiMagnify,
 	mdiPresentation,
 	mdiPuzzleOutline,
 	mdiTextBoxEditOutline,
@@ -20,25 +14,12 @@ import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 
-//export class PreferredToolInfo {
-//	icon: string;
-//
-//	name: string;
-//
-//	schoolExternalToolId?: string;
-//
-//	constructor(props: PreferredToolInfo) {
-//		this.icon = props.icon;
-//		this.name = props.name;
-//		this.schoolExternalToolId = props.schoolExternalToolId;
-//	}
-//}
-
 type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 
 export const useAddElementDialog = (
 	createElementRequestFn: CreateElementRequestFn,
-	cardId: string
+	cardId: string //,
+	// preferredTools: PreferredToolInfo[] | undefined
 ) => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { showCustomNotifier } = useBoardNotifier();
@@ -47,19 +28,25 @@ export const useAddElementDialog = (
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
-	const { getPreferredTools } = useCardRestApi();
+	/* const { getPreferredTools } = useCardRestApi();
 
-	const preferredTools: PreferredToolInfoList = getPreferredTools();
-	// [
-	//	{
-	//		icon: "mdiMagnify",
-	//		name: "Personal Preference",
-	//	},
-	//	{
-	//		icon: "mdiTimerSandComplete",
-	//		name: "Hier koennte ihre Werbung stehen",
-	//	},
-	//];
+	const preferredTools: Ref<PreferredToolInfo[] | undefined> = ref();
+	const callApi = async () => {
+		preferredTools.value = await getPreferredTools();
+		console.log("called Api, got", preferredTools.value);
+	};
+	callApi(); */
+
+	const preferredTools = [
+		{
+			icon: "$mdiMagnify",
+			name: "Personal Preference",
+		},
+		{
+			icon: "$mdiTimerSandComplete",
+			name: "Hier könnte ihre Werbung stehen!",
+		},
+	];
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
@@ -152,21 +139,17 @@ export const useAddElementDialog = (
 		});
 	}
 
-	preferredTools.data.every((tool: PreferredToolInfo) => {
-		options.push({
-			icon: tool.icon,
-			label: tool.name,
-			action: () => onElementClick(ContentElementType.ExternalTool),
-			testId: `create-element-preferred-element-${tool.name.replaceAll(" ", "-").toLowerCase()}`,
+	// console.log("vor dem if: ", preferredTools);
+	if (preferredTools) {
+		preferredTools.forEach((tool: PreferredToolInfo) => {
+			options.push({
+				icon: tool.icon,
+				label: tool.name,
+				action: () => onElementClick(ContentElementType.ExternalTool),
+				testId: `create-element-preferred-element-${tool.name.replaceAll(" ", "-").toLowerCase()}`,
+			});
 		});
-	});
-
-	options.push({
-		icon: mdiMagnify,
-		label: "components.elementTypeSelection.elements.preferredElement.subtitle",
-		action: () => onElementClick(ContentElementType.ExternalTool),
-		testId: "create-element-preferred-element",
-	});
+	}
 
 	const askType = () => {
 		elementTypeOptions.value = options;
