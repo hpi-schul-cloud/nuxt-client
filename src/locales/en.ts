@@ -1606,6 +1606,9 @@ export default {
 		"Common Cartridge Version 1.1 (e.g. compatible with Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
 	// new rooms
+	"pages.roomDetails.ariaLabels.menu": "Room menu",
+	"pages.roomDetails.ariaLabels.menu.action.edit": "Edit room",
+	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
 	"pages.rooms.title": "Rooms",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",

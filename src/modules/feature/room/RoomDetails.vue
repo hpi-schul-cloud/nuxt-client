@@ -3,13 +3,19 @@
 		<DefaultWireframe max-width="short" :breadcrumbs="breadcrumbs">
 			<template #header>
 				<div class="d-flex align-items-center">
-					<h1 class="text-h3 pl-2 margin-bottom">{{ room.title }}</h1>
-					<KebabMenu class="mx-2" data-testid="room-menu">
+					<h1 class="text-h3 pl-2 margin-bottom" data-testid="room-title">
+						{{ room.title }}
+					</h1>
+					<KebabMenu
+						class="mx-2"
+						:aria-label="$t('pages.roomDetails.menu')"
+						data-testid="room-menu"
+					>
 						<VListItem
 							role="menuitem"
 							:to="`/rooms/${room.id}/edit`"
 							data-testid="room-action-edit"
-							aria-label="Raum bearbeiten"
+							:aria-label="$t('pages.roomDetails.menu.action.edit')"
 						>
 							<template v-slot:prepend>
 								<VIcon :icon="mdiPencilOutline" />
@@ -21,7 +27,7 @@
 						<VListItem
 							role="menuitem"
 							data-testid="room-action-delete"
-							aria-label="Raum löschen"
+							:aria-label="$t('pages.roomDetails.menu.action.delete')"
 							@click="onDelete"
 						>
 							<template v-slot:prepend>
@@ -68,7 +74,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	if (room.value != null) {
 		return [
 			{
-				title: t("pages.rooms.active.title"),
+				title: t("pages.rooms.title"),
 				to: "/rooms",
 			},
 			{
@@ -82,9 +88,10 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const onDelete = async () => {
 	if (!room.value) return;
+
 	const shouldDelete = await askDeleteConfirmation(
-		"blub",
-		"components.cardElement.mediaExternalToolElement"
+		room.value.title,
+		"common.labels.room"
 	);
 
 	if (shouldDelete) {

@@ -1628,6 +1628,9 @@ export default {
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
 	// new rooms
+	"pages.roomDetails.ariaLabels.menu": "Меню кімнати",
+	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
+	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
 	"pages.rooms.title": "Кімнати",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
