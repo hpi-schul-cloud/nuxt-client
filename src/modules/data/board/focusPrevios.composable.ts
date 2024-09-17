@@ -1,38 +1,80 @@
-import { useBoardStore, useBoardFocusHandler } from "@data-board";
+import { useBoardStore, useCardStore, useBoardFocusHandler } from "@data-board";
 
-type Level = "board" | "column" | "card" | "element";
+type ParamType = {
+	id: string;
+	parentId: string;
+	level: "board" | "column" | "card" | "element";
+	elementType?: string;
+};
 
-export const useSetFocusPrevios = async (id: string, level: Level) => {
-	console.log(level);
+export const useSetFocusPrevios = async (payload: ParamType) => {
 	const { board } = useBoardStore();
+	const { cards } = useCardStore();
+
+	const findPreviousElement = (payload: ParamType) => {
+		if (!board) return;
+
+		if (payload.level === "column") {
+			const columnIndex = board.columns.findIndex(
+				(column) => column.id === payload.id
+			);
+
+			if (columnIndex <= 0) return board.id;
+			return board.columns[columnIndex - 1].id;
+		}
+
+		if (payload.level === "card") {
+			const columnIndex = board.columns.findIndex(
+				(column) =>
+					column.cards.find((c) => c.cardId === payload.id) !== undefined
+			);
+
+			const cardIndex = board.columns[columnIndex].cards.findIndex(
+				(c) => c.cardId === payload.id
+			);
+
+			if (cardIndex <= 0) return board.columns[columnIndex].id;
+			return board.columns[columnIndex].cards[cardIndex - 1].cardId;
+		}
+
+		if (payload.level === "element") {
+			if (!cards) return;
+			const elements = cards[payload.parentId].elements;
+			if (elements.length === 0) return payload.parentId;
+
+			const elementIndex = elements.findIndex((e) => e.id === payload.id);
+			if (elementIndex <= 0) return payload.parentId;
+			const currentElement = elements[elementIndex];
+			const previousElement = elements[elementIndex - 1];
+
+			if (previousElement.type !== "richText") return previousElement.id;
+
+			if (
+				currentElement.type === "richText" ||
+				previousElement.type === "richText"
+			) {
+				return findPreviousElement({
+					id: elements[elementIndex - 1].id,
+					parentId: payload.parentId,
+					level: "element",
+				});
+			}
+		}
+	};
 
 	if (!board) return;
 	const { setFocus } = useBoardFocusHandler();
 
-	// if it's a card, find the column index
-	const columnIndex = board.columns.findIndex(
-		(column) => column.cards.find((c) => c.cardId === id) !== undefined
-	);
+	const previousId = findPreviousElement(payload);
+	if (!previousId) return;
 
-	const cardIndex = board.columns[columnIndex].cards.findIndex(
-		(c) => c.cardId === id
-	);
+	setFocus(previousId);
 
-	if (cardIndex > 0) {
-		const previousCard = board.columns[columnIndex].cards[cardIndex - 1].cardId;
-		setFocus(previousCard);
+	const element = document.querySelector(
+		`[data-focused-id="${previousId}"]`
+	) as HTMLElement;
 
-		const element = document.querySelector(
-			`[data-card-id="${previousCard}"]`
-		) as HTMLElement;
-
-		element?.setAttribute("tabindex", "0");
-		element?.dispatchEvent(
-			new KeyboardEvent("keypress", {
-				key: "Tab",
-			})
-		);
-
-		element?.focus();
-	}
+	element?.setAttribute("tabindex", "0");
+	setTimeout(() => element.removeAttribute("tabindex"), 1000);
+	element?.focus();
 };

@@ -19,6 +19,7 @@ import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedEditMode } from "@data-board";
+import { useSetFocusPrevios } from "./focusPrevios.composable";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards = ref<Record<string, CardResponse>>({});
@@ -165,6 +166,15 @@ export const useCardStore = defineStore("cardStore", () => {
 	): Promise<void> => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
+
+		const { focusedId } = useBoardFocusHandler(payload.elementId);
+		if (focusedId?.value === payload.elementId) {
+			useSetFocusPrevios({
+				id: payload.elementId,
+				parentId: payload.cardId,
+				level: "element",
+			});
+		}
 
 		const index = card.elements.findIndex((e) => e.id === payload.elementId);
 

@@ -137,10 +137,13 @@ export const useBoardStore = defineStore("boardStore", () => {
 			(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
 		);
 
-		if (!payload.isOwnAction) {
-			const { focusedId } = useBoardFocusHandler(cardId);
-			if (focusedId?.value !== cardId) return;
-			useSetFocusPrevios(cardId, "card");
+		const { focusedId } = useBoardFocusHandler(cardId);
+		if (focusedId?.value === cardId) {
+			useSetFocusPrevios({
+				id: cardId,
+				parentId: board.value.columns[columnIndex].id,
+				level: "card",
+			});
 		}
 
 		if (columnIndex !== -1) {
@@ -158,6 +161,16 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const deleteColumnSuccess = (payload: DeleteColumnSuccessPayload) => {
 		if (!board.value) return;
 		const columnId = payload.columnId;
+
+		const { focusedId } = useBoardFocusHandler(columnId);
+		if (focusedId?.value === columnId) {
+			useSetFocusPrevios({
+				id: columnId,
+				parentId: board.value.id,
+				level: "column",
+			});
+		}
+
 		const columnIndex = getColumnIndex(columnId);
 		if (columnIndex !== -1) {
 			board.value.columns.splice(columnIndex, 1);

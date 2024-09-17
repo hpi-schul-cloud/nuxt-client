@@ -14,6 +14,7 @@
 				variant="outlined"
 				tabindex="0"
 				min-height="120px"
+				:data-focused-id="card?.id"
 				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
 				:id="cardId"
 				:ripple="false"
