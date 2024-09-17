@@ -42,7 +42,7 @@ describe("@feature-room/RoomColorPicker", () => {
 
 	describe("when a color is given", () => {
 		it("should render given color as selected", () => {
-			const { wrapper } = setup({ selectedColor: RoomColorEnum.RED });
+			const { wrapper } = setup({ color: RoomColorEnum.RED });
 
 			const selectedColor = wrapper.findComponent(
 				"[data-testid=color-swatch-red]"
