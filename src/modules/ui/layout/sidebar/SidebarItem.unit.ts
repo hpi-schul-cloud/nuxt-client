@@ -5,6 +5,8 @@ import {
 } from "@@/tests/test-utils/setup";
 import SidebarItem from "./SidebarItem.vue";
 import { SidebarSingleItem } from "../types";
+import { ref } from "vue";
+import { useSidebarSelection } from "./SidebarSelection.composable";
 
 const iconItem: SidebarSingleItem = {
 	icon: "mdiOpen",
@@ -23,8 +25,13 @@ jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 
+jest.mock("./SidebarSelection.composable");
+const mockedUseSidebarSelection = jest.mocked(useSidebarSelection);
+
 describe("@ui-layout/SidebarItem", () => {
 	const setup = (sidebarItem: SidebarSingleItem) => {
+		mockedUseSidebarSelection.mockReturnValue({ isActive: ref(true) });
+
 		const wrapper = mount(SidebarItem, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
