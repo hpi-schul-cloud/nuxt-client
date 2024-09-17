@@ -8,14 +8,14 @@
 					</h1>
 					<KebabMenu
 						class="mx-2"
-						:aria-label="$t('pages.roomDetails.menu')"
+						:aria-label="$t('pages.roomDetails.ariaLabels.menu')"
 						data-testid="room-menu"
 					>
 						<VListItem
 							role="menuitem"
 							:to="`/rooms/${room.id}/edit`"
 							data-testid="room-action-edit"
-							:aria-label="$t('pages.roomDetails.menu.action.edit')"
+							:aria-label="$t('pages.roomDetails.ariaLabels.menu.action.edit')"
 						>
 							<template v-slot:prepend>
 								<VIcon :icon="mdiPencilOutline" />
@@ -27,7 +27,9 @@
 						<VListItem
 							role="menuitem"
 							data-testid="room-action-delete"
-							:aria-label="$t('pages.roomDetails.menu.action.delete')"
+							:aria-label="
+								$t('pages.roomDetails.ariaLabels.menu.action.delete')
+							"
 							@click="onDelete"
 						>
 							<template v-slot:prepend>
