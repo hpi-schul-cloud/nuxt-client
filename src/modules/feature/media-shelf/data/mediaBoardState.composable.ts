@@ -4,6 +4,7 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
+	DeletedElementResponse,
 	MediaAvailableLineResponse,
 	MediaBoardColors,
 	MediaBoardLayoutType,
@@ -44,8 +45,10 @@ const useMediaBoardState = () => {
 		}
 
 		const lineIndex: number = mediaBoard.value.lines.findIndex((line) => {
-			const element: MediaExternalToolElementResponse | undefined =
-				line.elements.find((element) => element.id === elementId);
+			const element:
+				| MediaExternalToolElementResponse
+				| DeletedElementResponse
+				| undefined = line.elements.find((element) => element.id === elementId);
 
 			return element !== undefined;
 		});
@@ -456,10 +459,8 @@ const useMediaBoardState = () => {
 			const tempFromLine = Array.from(
 				mediaBoard.value.lines[fromLineIndex].elements
 			);
-			const element: MediaExternalToolElementResponse = tempFromLine.splice(
-				oldElementIndex,
-				1
-			)[0];
+			const element: MediaExternalToolElementResponse | DeletedElementResponse =
+				tempFromLine.splice(oldElementIndex, 1)[0];
 			mediaBoard.value.lines[fromLineIndex].elements = tempFromLine;
 
 			const tempToLine = Array.from(

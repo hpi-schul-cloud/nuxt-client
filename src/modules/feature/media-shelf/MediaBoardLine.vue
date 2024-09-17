@@ -53,9 +53,15 @@
 						@end="onElementDragEnd"
 					>
 						<template #item="{ element }">
-							<MediaBoardExternalToolElement
+							<MediaBoardExternalToolDeletedElement
+								v-if="isDeletedElement(element)"
 								:data-element-id="element.id"
-								:key="element.id"
+								:element="element"
+								@delete:element="onElementDelete"
+							/>
+							<MediaBoardExternalToolElement
+								v-else
+								:data-element-id="element.id"
 								:element="element"
 								@delete:element="onElementDelete"
 							/>
@@ -69,8 +75,11 @@
 
 <script setup lang="ts">
 import {
+	ContentElementType,
+	DeletedElementResponse,
 	MediaBoardColors,
 	MediaBoardLayoutType,
+	MediaExternalToolElementResponse,
 	MediaLineResponse,
 } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
@@ -91,6 +100,7 @@ import { useI18n } from "vue-i18n";
 import { availableMediaLineId, ElementMove } from "./data";
 import { useEditMode } from "./editMode.composable";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
+import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { MediaBoardColorMapper, useCollapsableState } from "./utils";
@@ -193,5 +203,14 @@ const onElementDragEnd = async (event: SortableEvent) => {
 
 		emit("update:element-position", elementMove);
 	}
+};
+
+const isDeletedElement = (
+	element: MediaExternalToolElementResponse | DeletedElementResponse
+): element is DeletedElementResponse => {
+	if (!("type" in element)) {
+		return false;
+	}
+	return element.type === ContentElementType.Deleted;
 };
 </script>
