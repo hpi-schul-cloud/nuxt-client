@@ -3,8 +3,8 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler } from "@data-board";
-import BoardAnyTitleInput from "@feature-board/shared/BoardAnyTitleInput.vue";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { BoardAnyTitleInput } from "@ui-board";
 import { shallowMount } from "@vue/test-utils";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 

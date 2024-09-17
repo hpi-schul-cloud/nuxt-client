@@ -106,11 +106,10 @@ const onLineDragEnd = async (event: SortableEvent) => {
 
 	const lineId: string | undefined = extractDataAttribute(item, "lineId");
 
-	if (
-		lineId !== undefined &&
-		newIndex !== undefined &&
-		oldIndex !== undefined
-	) {
+	const isOutOfBounds =
+		lineId !== undefined && newIndex !== undefined && oldIndex !== undefined;
+
+	if (isOutOfBounds) {
 		const lineMove: LineMove = {
 			newLineIndex: newIndex,
 			oldLineIndex: oldIndex,

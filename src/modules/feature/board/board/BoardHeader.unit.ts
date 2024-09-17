@@ -12,6 +12,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
+	BoardAnyTitleInput,
 	BoardMenuActionCopy,
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
@@ -22,7 +23,6 @@ import {
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed } from "vue";
-import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 
 jest.mock("@data-board");

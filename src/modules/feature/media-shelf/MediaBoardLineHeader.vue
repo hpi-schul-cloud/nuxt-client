@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { useBoardFocusHandler } from "@data-board";
 import BoardColumnInteractionHandler from "@feature-board/board/BoardColumnInteractionHandler.vue";
-import BoardAnyTitleInput from "@feature-board/shared/BoardAnyTitleInput.vue";
+import { BoardAnyTitleInput } from "@ui-board";
 import { useMediaBoardEditMode } from "@util-board";
 import { ref, toRef } from "vue";
 

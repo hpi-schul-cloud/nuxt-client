@@ -134,13 +134,14 @@ const onElementDragEnd = async (event: SortableEvent) => {
 	const fromLineId: string | undefined = extractDataAttribute(from, "lineId");
 	const toLineId: string | undefined = extractDataAttribute(to, "lineId");
 
-	if (
+	const isOutOfBounds =
 		fromLineId === toLineId ||
 		newIndex === undefined ||
 		oldIndex === undefined ||
 		oldIndex < 0 ||
-		oldIndex > elements.value.length - 1
-	) {
+		oldIndex > elements.value.length - 1;
+
+	if (isOutOfBounds) {
 		return;
 	}
 

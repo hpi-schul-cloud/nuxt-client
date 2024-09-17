@@ -16,6 +16,7 @@ import {
 	useSharedEditMode,
 } from "./editMode.composable";
 import { extractDataAttribute } from "./extractDataAttribute.util";
+import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 import { useSharedLastCreatedElement } from "./LastCreatedElement.composable";
 
 export {
@@ -34,4 +35,5 @@ export {
 	useCourseBoardEditMode,
 	useMediaBoardEditMode,
 	useDragAndDrop,
+	useInlineEditInteractionHandler,
 };
