@@ -52,7 +52,6 @@ export const isValidTimeFormat = (value: string | null) => {
  * Checks if given value has valid time format
  */
 export const isValidDateFormat = (value: string | null) => {
-	console.log(value);
 	if (value === "" || value === null || value === undefined) {
 		return true;
 	}
