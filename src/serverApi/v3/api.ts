@@ -2542,6 +2542,12 @@ export interface DeletedElementContent {
      * @memberof DeletedElementContent
      */
     deletedElementType: ContentElementType;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeletedElementContent
+     */
+    description: string;
 }
 /**
  * 
@@ -3426,6 +3432,12 @@ export interface GroupResponse {
      * @memberof GroupResponse
      */
     externalSource?: ExternalSourceResponse;
+    /**
+     * 
+     * @type {PeriodResponse}
+     * @memberof GroupResponse
+     */
+    validPeriod?: PeriodResponse;
     /**
      * 
      * @type {string}
@@ -4534,10 +4546,10 @@ export interface MediaLineResponse {
     title: string;
     /**
      * The elements of the media line
-     * @type {Array<MediaExternalToolElementResponse>}
+     * @type {Array<MediaExternalToolElementResponse | DeletedElementResponse>}
      * @memberof MediaLineResponse
      */
-    elements: Array<MediaExternalToolElementResponse>;
+    elements: Array<MediaExternalToolElementResponse | DeletedElementResponse>;
     /**
      * The timestamps of the media line
      * @type {TimestampsResponse}
@@ -5875,6 +5887,25 @@ export interface PatchVisibilityParams {
 /**
  * 
  * @export
+ * @interface PeriodResponse
+ */
+export interface PeriodResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof PeriodResponse
+     */
+    from: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PeriodResponse
+     */
+    until: string;
+}
+/**
+ * 
+ * @export
  * @enum {string}
  */
 export enum Permission {
@@ -6356,6 +6387,86 @@ export enum RoleName {
     User = 'user'
 }
 
+/**
+ * 
+ * @export
+ * @interface RoomListResponse
+ */
+export interface RoomListResponse {
+    /**
+     * The items for the current page.
+     * @type {Array<RoomResponse>}
+     * @memberof RoomListResponse
+     */
+    data: Array<RoomResponse>;
+    /**
+     * The total amount of items.
+     * @type {number}
+     * @memberof RoomListResponse
+     */
+    total: number;
+    /**
+     * The amount of items skipped from the start.
+     * @type {number}
+     * @memberof RoomListResponse
+     */
+    skip: number;
+    /**
+     * The page size of the response.
+     * @type {number}
+     * @memberof RoomListResponse
+     */
+    limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface RoomResponse
+ */
+export interface RoomResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    color: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    startDate?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    untilDate?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    createdAt?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    updatedAt?: string;
+}
 /**
  * 
  * @export
@@ -18889,102 +19000,21 @@ export class PseudonymApi extends BaseAPI implements PseudonymApiInterface {
 
 
 /**
- * RoomsApi - axios parameter creator
+ * RoomApi - axios parameter creator
  * @export
  */
-export const RoomsApiAxiosParamCreator = function (configuration?: Configuration) {
+export const RoomApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} roomId The id of the room.
+         * @summary Get a list of rooms.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerCopyCourse: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomId' is not null or undefined
-            assertParamExists('roomsControllerCopyCourse', 'roomId', roomId)
-            const localVarPath = `/rooms/{roomId}/copy`
-                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} lessonId The id of the lesson.
-         * @param {LessonCopyApiParams} lessonCopyApiParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomsControllerCopyLesson: async (lessonId: string, lessonCopyApiParams: LessonCopyApiParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'lessonId' is not null or undefined
-            assertParamExists('roomsControllerCopyLesson', 'lessonId', lessonId)
-            // verify required parameter 'lessonCopyApiParams' is not null or undefined
-            assertParamExists('roomsControllerCopyLesson', 'lessonCopyApiParams', lessonCopyApiParams)
-            const localVarPath = `/rooms/lessons/{lessonId}/copy`
-                .replace(`{${"lessonId"}}`, encodeURIComponent(String(lessonId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(lessonCopyApiParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} roomId The id of the room.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomsControllerGetRoomBoard: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomId' is not null or undefined
-            assertParamExists('roomsControllerGetRoomBoard', 'roomId', roomId)
-            const localVarPath = `/rooms/{roomId}/board`
-                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+        roomControllerGetRooms: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/rooms`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -19000,101 +19030,19 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} roomId The id of the room.
-         * @param {string} elementId The id of the element within the room.
-         * @param {PatchVisibilityParams} patchVisibilityParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomsControllerPatchElementVisibility: async (roomId: string, elementId: string, patchVisibilityParams: PatchVisibilityParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomId' is not null or undefined
-            assertParamExists('roomsControllerPatchElementVisibility', 'roomId', roomId)
-            // verify required parameter 'elementId' is not null or undefined
-            assertParamExists('roomsControllerPatchElementVisibility', 'elementId', elementId)
-            // verify required parameter 'patchVisibilityParams' is not null or undefined
-            assertParamExists('roomsControllerPatchElementVisibility', 'patchVisibilityParams', patchVisibilityParams)
-            const localVarPath = `/rooms/{roomId}/elements/{elementId}/visibility`
-                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)))
-                .replace(`{${"elementId"}}`, encodeURIComponent(String(elementId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
             }
 
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(patchVisibilityParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} roomId The id of the room.
-         * @param {PatchOrderParams} patchOrderParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomsControllerPatchOrderingOfElements: async (roomId: string, patchOrderParams: PatchOrderParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomId' is not null or undefined
-            assertParamExists('roomsControllerPatchOrderingOfElements', 'roomId', roomId)
-            // verify required parameter 'patchOrderParams' is not null or undefined
-            assertParamExists('roomsControllerPatchOrderingOfElements', 'patchOrderParams', patchOrderParams)
-            const localVarPath = `/rooms/{roomId}/board/order`
-                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
             }
 
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
 
     
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(patchOrderParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -19105,249 +19053,85 @@ export const RoomsApiAxiosParamCreator = function (configuration?: Configuration
 };
 
 /**
- * RoomsApi - functional programming interface
+ * RoomApi - functional programming interface
  * @export
  */
-export const RoomsApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = RoomsApiAxiosParamCreator(configuration)
+export const RoomApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RoomApiAxiosParamCreator(configuration)
     return {
         /**
          * 
-         * @param {string} roomId The id of the room.
+         * @summary Get a list of rooms.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomsControllerCopyCourse(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerCopyCourse(roomId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} lessonId The id of the lesson.
-         * @param {LessonCopyApiParams} lessonCopyApiParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async roomsControllerCopyLesson(lessonId: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CopyApiResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerCopyLesson(lessonId, lessonCopyApiParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} roomId The id of the room.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async roomsControllerGetRoomBoard(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SingleColumnBoardResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerGetRoomBoard(roomId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} roomId The id of the room.
-         * @param {string} elementId The id of the element within the room.
-         * @param {PatchVisibilityParams} patchVisibilityParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async roomsControllerPatchElementVisibility(roomId: string, elementId: string, patchVisibilityParams: PatchVisibilityParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchElementVisibility(roomId, elementId, patchVisibilityParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} roomId The id of the room.
-         * @param {PatchOrderParams} patchOrderParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async roomsControllerPatchOrderingOfElements(roomId: string, patchOrderParams: PatchOrderParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomsControllerPatchOrderingOfElements(roomId, patchOrderParams, options);
+        async roomControllerGetRooms(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetRooms(skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
 };
 
 /**
- * RoomsApi - factory interface
+ * RoomApi - factory interface
  * @export
  */
-export const RoomsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = RoomsApiFp(configuration)
+export const RoomApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RoomApiFp(configuration)
     return {
         /**
          * 
-         * @param {string} roomId The id of the room.
+         * @summary Get a list of rooms.
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomsControllerCopyCourse(roomId: string, options?: any): AxiosPromise<CopyApiResponse> {
-            return localVarFp.roomsControllerCopyCourse(roomId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} lessonId The id of the lesson.
-         * @param {LessonCopyApiParams} lessonCopyApiParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomsControllerCopyLesson(lessonId: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): AxiosPromise<CopyApiResponse> {
-            return localVarFp.roomsControllerCopyLesson(lessonId, lessonCopyApiParams, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} roomId The id of the room.
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomsControllerGetRoomBoard(roomId: string, options?: any): AxiosPromise<SingleColumnBoardResponse> {
-            return localVarFp.roomsControllerGetRoomBoard(roomId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} roomId The id of the room.
-         * @param {string} elementId The id of the element within the room.
-         * @param {PatchVisibilityParams} patchVisibilityParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomsControllerPatchElementVisibility(roomId: string, elementId: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void> {
-            return localVarFp.roomsControllerPatchElementVisibility(roomId, elementId, patchVisibilityParams, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} roomId The id of the room.
-         * @param {PatchOrderParams} patchOrderParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomsControllerPatchOrderingOfElements(roomId: string, patchOrderParams: PatchOrderParams, options?: any): AxiosPromise<void> {
-            return localVarFp.roomsControllerPatchOrderingOfElements(roomId, patchOrderParams, options).then((request) => request(axios, basePath));
+        roomControllerGetRooms(skip?: number, limit?: number, options?: any): AxiosPromise<RoomListResponse> {
+            return localVarFp.roomControllerGetRooms(skip, limit, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * RoomsApi - interface
+ * RoomApi - interface
  * @export
- * @interface RoomsApi
+ * @interface RoomApi
  */
-export interface RoomsApiInterface {
+export interface RoomApiInterface {
     /**
      * 
-     * @param {string} roomId The id of the room.
+     * @summary Get a list of rooms.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomsApiInterface
+     * @memberof RoomApiInterface
      */
-    roomsControllerCopyCourse(roomId: string, options?: any): AxiosPromise<CopyApiResponse>;
-
-    /**
-     * 
-     * @param {string} lessonId The id of the lesson.
-     * @param {LessonCopyApiParams} lessonCopyApiParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomsApiInterface
-     */
-    roomsControllerCopyLesson(lessonId: string, lessonCopyApiParams: LessonCopyApiParams, options?: any): AxiosPromise<CopyApiResponse>;
-
-    /**
-     * 
-     * @param {string} roomId The id of the room.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomsApiInterface
-     */
-    roomsControllerGetRoomBoard(roomId: string, options?: any): AxiosPromise<SingleColumnBoardResponse>;
-
-    /**
-     * 
-     * @param {string} roomId The id of the room.
-     * @param {string} elementId The id of the element within the room.
-     * @param {PatchVisibilityParams} patchVisibilityParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomsApiInterface
-     */
-    roomsControllerPatchElementVisibility(roomId: string, elementId: string, patchVisibilityParams: PatchVisibilityParams, options?: any): AxiosPromise<void>;
-
-    /**
-     * 
-     * @param {string} roomId The id of the room.
-     * @param {PatchOrderParams} patchOrderParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomsApiInterface
-     */
-    roomsControllerPatchOrderingOfElements(roomId: string, patchOrderParams: PatchOrderParams, options?: any): AxiosPromise<void>;
+    roomControllerGetRooms(skip?: number, limit?: number, options?: any): AxiosPromise<RoomListResponse>;
 
 }
 
 /**
- * RoomsApi - object-oriented interface
+ * RoomApi - object-oriented interface
  * @export
- * @class RoomsApi
+ * @class RoomApi
  * @extends {BaseAPI}
  */
-export class RoomsApi extends BaseAPI implements RoomsApiInterface {
+export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
-     * @param {string} roomId The id of the room.
+     * @summary Get a list of rooms.
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomsApi
+     * @memberof RoomApi
      */
-    public roomsControllerCopyCourse(roomId: string, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerCopyCourse(roomId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} lessonId The id of the lesson.
-     * @param {LessonCopyApiParams} lessonCopyApiParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomsApi
-     */
-    public roomsControllerCopyLesson(lessonId: string, lessonCopyApiParams: LessonCopyApiParams, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerCopyLesson(lessonId, lessonCopyApiParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} roomId The id of the room.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomsApi
-     */
-    public roomsControllerGetRoomBoard(roomId: string, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerGetRoomBoard(roomId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} roomId The id of the room.
-     * @param {string} elementId The id of the element within the room.
-     * @param {PatchVisibilityParams} patchVisibilityParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomsApi
-     */
-    public roomsControllerPatchElementVisibility(roomId: string, elementId: string, patchVisibilityParams: PatchVisibilityParams, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerPatchElementVisibility(roomId, elementId, patchVisibilityParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} roomId The id of the room.
-     * @param {PatchOrderParams} patchOrderParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomsApi
-     */
-    public roomsControllerPatchOrderingOfElements(roomId: string, patchOrderParams: PatchOrderParams, options?: any) {
-        return RoomsApiFp(this.configuration).roomsControllerPatchOrderingOfElements(roomId, patchOrderParams, options).then((request) => request(this.axios, this.basePath));
+    public roomControllerGetRooms(skip?: number, limit?: number, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerGetRooms(skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

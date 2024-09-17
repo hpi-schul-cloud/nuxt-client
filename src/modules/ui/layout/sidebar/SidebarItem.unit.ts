@@ -68,4 +68,15 @@ describe("@ui-layout/SidebarItem", () => {
 
 		expect(wrapper.classes()).toContain("v-list-item--active");
 	});
+
+	it("should not highlight wrong sidebar item", () => {
+		const { wrapper } = setup({
+			icon: "mdiOpen",
+			title: "title",
+			testId: "testId",
+			to: "/administration/rooms/new",
+		});
+
+		expect(wrapper.classes()).not.toContain("v-list-item--active");
+	});
 });
