@@ -13,17 +13,17 @@
 <script setup lang="ts">
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { useRoomDetailsStore } from "@data-room";
+import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetails } from "@feature-room";
 import { storeToRefs } from "pinia";
-import { onUnmounted, watch } from "vue";
+import { computed, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const route = useRoute();
 const roomDetailsStore = useRoomDetailsStore();
-const { isLoading, isRoom, room } = storeToRefs(roomDetailsStore);
+const { isLoading, room, roomVariant } = storeToRefs(roomDetailsStore);
 const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 
 watch(
@@ -37,6 +37,8 @@ watch(
 	},
 	{ immediate: true }
 );
+
+const isRoom = computed(() => roomVariant.value === RoomVariant.ROOM);
 
 onUnmounted(() => {
 	resetState();

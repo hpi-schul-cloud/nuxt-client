@@ -9,7 +9,7 @@ import {
 	watchEffect,
 } from "vue";
 import { storeToRefs } from "pinia";
-import { useRoomDetailsStore } from "@data-room";
+import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { useSharedBoardPageInformation } from "@data-board";
 import { BoardExternalReferenceType } from "@/serverApi/v3";
 
@@ -20,7 +20,7 @@ export const useSidebarSelection = (
 		| ShallowRef<SidebarSingleItem>
 ) => {
 	const route = useRoute();
-	const { isCourseRoom, isRoom } = storeToRefs(useRoomDetailsStore());
+	const { roomVariant } = storeToRefs(useRoomDetailsStore());
 	const { contextType } = useSharedBoardPageInformation();
 
 	const isActive = ref(false);
@@ -33,9 +33,9 @@ export const useSidebarSelection = (
 
 		// RoomDetails, CourseRoomDetails
 		if (route.name === "rooms-id") {
-			if (isRoom.value === true) {
+			if (roomVariant.value === RoomVariant.ROOM) {
 				return item.to === "/rooms";
-			} else if (isCourseRoom.value === true) {
+			} else if (roomVariant.value === RoomVariant.COURSE_ROOM) {
 				return item.to === "/rooms/courses-overview";
 			} else {
 				return false;
@@ -59,8 +59,8 @@ export const useSidebarSelection = (
 		}
 
 		return (
-			route.path.includes(item.to as string) ||
-			route.path.includes(item.href as string)
+			route.path.startsWith(item.to as string) ||
+			route.path.startsWith(item.href as string)
 		);
 	};
 
