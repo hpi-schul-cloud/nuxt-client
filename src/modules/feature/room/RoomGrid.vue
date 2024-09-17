@@ -12,7 +12,7 @@
 		<VCustomEmptyState
 			ref="rooms-empty-state"
 			image="rooms-empty-state"
-			:title="t('pages.rooms.active.emptyState')"
+			:title="t('pages.rooms.emptyState')"
 			class="mt-16"
 		/>
 	</template>

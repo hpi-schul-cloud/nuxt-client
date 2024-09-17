@@ -1633,9 +1633,10 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
+	// new rooms
 	"pages.rooms.title": "Räume",
 	"pages.rooms.fab.title": "Raum erstellen",
-	"pages.rooms.active.emptyState": "Aktuell gibt es hier noch keine Räume.",
+	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
