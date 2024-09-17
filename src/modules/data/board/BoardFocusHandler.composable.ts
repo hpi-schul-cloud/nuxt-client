@@ -1,7 +1,6 @@
 import { BoardColumn } from "@/types/board/Board";
 import { BoardCard } from "@/types/board/Card";
 import { AnyContentElement } from "@/types/board/ContentElement";
-// WIP: InlineEditInteractionHandler needs to be extracted into it's own module... :: Feature-Modules have to be imported using the pattern '@feature-<name>'eslint@typescript-eslint/no-restricted-imports
 import { useInlineEditInteractionHandler } from "@util-board";
 import {
 	createSharedComposable,

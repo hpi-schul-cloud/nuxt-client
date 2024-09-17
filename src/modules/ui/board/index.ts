@@ -1,4 +1,3 @@
-import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 import BoardMenu from "./BoardMenu.vue";
 import BoardMenuAction from "./BoardMenuAction.vue";
 import BoardMenuActionCopy from "./BoardMenuActionCopy.vue";
@@ -34,5 +33,4 @@ export {
 	BoardMenuActionShare,
 	ContentElementBar,
 	BoardSectionCreationHeader,
-	BoardAnyTitleInput,
 };

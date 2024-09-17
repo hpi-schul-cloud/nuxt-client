@@ -52,7 +52,6 @@
 <script setup lang="ts">
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
-	BoardAnyTitleInput,
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
@@ -64,6 +63,7 @@ import {
 } from "@ui-board";
 import { useCourseBoardEditMode } from "@util-board";
 import { ref, toRef } from "vue";
+import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 
 const props = defineProps({

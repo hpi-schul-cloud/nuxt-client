@@ -8,7 +8,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
-	BoardAnyTitleInput,
 	BoardMenuActionMoveColumnDown,
 	BoardMenuActionMoveColumnUp,
 	BoardMenuActionMoveLeft,
@@ -17,6 +16,7 @@ import {
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed } from "vue";
+import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 
 jest.mock("@data-board");

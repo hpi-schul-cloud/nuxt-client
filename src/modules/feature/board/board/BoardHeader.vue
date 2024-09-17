@@ -55,7 +55,6 @@
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
-	BoardAnyTitleInput,
 	BoardMenu,
 	BoardMenuActionCopy,
 	BoardMenuActionDelete,
@@ -69,6 +68,7 @@ import { useCourseBoardEditMode } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
+import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
 
 const props = defineProps({
