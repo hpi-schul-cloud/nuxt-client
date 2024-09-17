@@ -1,18 +1,14 @@
 <template>
-	<div>
-		<RouterLink :to="roomPath" class="room-link">
-			<div
-				class="room-avatar"
-				:class="avatarColor"
-				:aria-label="avatarAriaLabel"
-			>
-				<span class="text-h3 text-white" data-testid="room-short-title">
-					{{ room.shortTitle }}
-				</span>
-			</div>
-			<div class="room-title mb-2 mt-2">{{ room.title }}</div>
-		</RouterLink>
-	</div>
+	<RouterLink :to="roomPath" class="room-link" :aria-label="avatarAriaLabel">
+		<div class="room-avatar" :class="avatarColor">
+			<span class="text-h3 text-white" data-testid="room-short-title">
+				{{ room.shortTitle }}
+			</span>
+		</div>
+		<div class="room-title mb-2 mt-2" data-testid="room-title">
+			{{ room.title }}
+		</div>
+	</RouterLink>
 </template>
 
 <script setup lang="ts">
