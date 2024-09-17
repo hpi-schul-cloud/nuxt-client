@@ -6,6 +6,7 @@
 					v-if="isRichTextElementResponse(element)"
 					:element="element"
 					:isEditMode="isEditMode"
+					:data-focused-id="element.id"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"

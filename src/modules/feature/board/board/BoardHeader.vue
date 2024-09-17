@@ -6,8 +6,9 @@
 			@end-edit-mode="onEndEditMode"
 			@keydown.enter="onStartEditMode"
 			tabindex="0"
+			:data-focused-id="boardId"
 		>
-			<div ref="boardHeader" :data-focused-id="boardId">
+			<div ref="boardHeader">
 				<BoardAnyTitleInput
 					class="ml-n2"
 					ref="boardHeader"
