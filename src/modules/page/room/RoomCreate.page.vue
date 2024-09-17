@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4">Create Room [TODO translation]</h1>
+			<h1 class="text-h3 py-2 mb-4">{{ $t("pages.rooms.fab.title") }}</h1>
 		</template>
 		<RoomForm />
 	</DefaultWireframe>
@@ -11,17 +11,17 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomForm } from "@feature-room";
-// import { useI18n } from "vue-i18n";
+import { useI18n } from "vue-i18n";
 
-// const { t } = useI18n();
+const { t } = useI18n();
 
 const breadcrumbs: Breadcrumb[] = [
 	{
-		title: "Räume",
+		title: t("pages.rooms.title"),
 		to: "/rooms",
 	},
 	{
-		title: "Raum erstellen",
+		title: t("pages.rooms.fab.title"),
 		disabled: true,
 	},
 ];

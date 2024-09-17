@@ -1,7 +1,9 @@
 <template>
 	<DefaultWireframe max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4">Edit Room [TODO translation]</h1>
+			<h1 class="text-h3 py-2 mb-4">
+				{{ $t("pages.roomDetails.ariaLabels.menu.action.edit") }}
+			</h1>
 		</template>
 		<div v-if="isLoading" />
 		<RoomForm v-else :room="room" @update:room="onUpdateRoom($event)" />
@@ -16,9 +18,9 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomForm } from "@feature-room";
 import { Room } from "@/types/room/Room";
-// import { useI18n } from "vue-i18n";
+import { useI18n } from "vue-i18n";
 
-// const { t } = useI18n();
+const { t } = useI18n();
 
 const route = useRoute();
 const { fetchRoom, isLoading, room } = useRoomDetailsState();
@@ -39,7 +41,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	if (room.value !== undefined) {
 		return [
 			{
-				title: "Räume",
+				title: t("pages.rooms.title"),
 				to: "/rooms",
 			},
 			{
@@ -47,7 +49,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 				to: `/rooms/${route.params.id}`,
 			},
 			{
-				title: "Raum bearbeiten",
+				title: t("pages.roomDetails.ariaLabels.menu.action.edit"),
 				disabled: true,
 			},
 		];
