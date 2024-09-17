@@ -38,7 +38,7 @@ export const isValidUrl: FormValidatorFn<string> = (errMsg) => (value) => {
  * Checks if given value has valid time format
  */
 export const isValidTimeFormat = (value: string | null) => {
-	if (value === "" || value === null) {
+	if (value === "" || value === null || value === undefined) {
 		return true;
 	}
 
@@ -52,7 +52,8 @@ export const isValidTimeFormat = (value: string | null) => {
  * Checks if given value has valid time format
  */
 export const isValidDateFormat = (value: string | null) => {
-	if (value === "" || value === null) {
+	console.log(value);
+	if (value === "" || value === null || value === undefined) {
 		return true;
 	}
 
