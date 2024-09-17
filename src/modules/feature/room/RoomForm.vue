@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, watchEffect } from "vue";
+import { computed, PropType, ref, watchEffect } from "vue";
 import { RoomColorEnum } from "./RoomColorPicker/types";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { DatePicker } from "@ui-date-time-picker";
@@ -56,6 +56,10 @@ watchEffect(() => {
 	}
 });
 
+const shortTitle = computed(() => {
+	return roomData.value.title?.slice(0, 2);
+});
+
 const onUpdateStartDate = (newDate: string) => {
 	roomData.value.startDate = newDate;
 };
@@ -65,6 +69,7 @@ const onUpdateEndDate = (newDate: string) => {
 };
 
 const onSave = () => {
+	roomData.value.shortTitle = shortTitle.value;
 	console.log(roomData.value);
 };
 </script>
