@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div :data-focused-id="element.id">
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
 			class="rich_text"

@@ -19,7 +19,7 @@ import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedEditMode } from "@data-board";
-import { useSetFocusPrevios } from "./focusPrevios.composable";
+import { useSetFocusPrevious } from "./focusPrevios.composable";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards = ref<Record<string, CardResponse>>({});
@@ -169,7 +169,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 		const { focusedId } = useBoardFocusHandler(payload.elementId);
 		if (focusedId?.value === payload.elementId) {
-			useSetFocusPrevios({
+			useSetFocusPrevious({
 				id: payload.elementId,
 				parentId: payload.cardId,
 				level: "element",

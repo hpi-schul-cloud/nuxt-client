@@ -8,6 +8,7 @@
 		:href="sanitizedUrl"
 		target="_blank"
 		:aria-label="ariaLabel"
+		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>

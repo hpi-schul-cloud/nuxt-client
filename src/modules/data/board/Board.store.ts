@@ -29,7 +29,7 @@ import {
 	UpdateColumnTitleSuccessPayload,
 } from "./boardActions/boardActionPayload";
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
-import { useSetFocusPrevios } from "./focusPrevios.composable";
+import { useSetFocusPrevious } from "./focusPrevios.composable";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
@@ -139,7 +139,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		const { focusedId } = useBoardFocusHandler(cardId);
 		if (focusedId?.value === cardId) {
-			useSetFocusPrevios({
+			useSetFocusPrevious({
 				id: cardId,
 				parentId: board.value.columns[columnIndex].id,
 				level: "card",
@@ -164,7 +164,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		const { focusedId } = useBoardFocusHandler(columnId);
 		if (focusedId?.value === columnId) {
-			useSetFocusPrevios({
+			useSetFocusPrevious({
 				id: columnId,
 				parentId: board.value.id,
 				level: "column",

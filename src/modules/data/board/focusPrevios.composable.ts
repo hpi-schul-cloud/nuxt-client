@@ -1,4 +1,9 @@
-import { useBoardStore, useCardStore, useBoardFocusHandler } from "@data-board";
+import {
+	useBoardStore,
+	useCardStore,
+	useBoardFocusHandler,
+	useSharedEditMode,
+} from "@data-board";
 
 type ParamType = {
 	id: string;
@@ -9,7 +14,9 @@ type ParamType = {
 const findPreviousElement = (payload: ParamType) => {
 	const { board } = useBoardStore();
 	const { cards } = useCardStore();
+
 	if (!board) return;
+
 	if (payload.level === "column") {
 		const columnIndex = board.columns.findIndex(
 			(column) => column.id === payload.id
@@ -40,16 +47,20 @@ const findPreviousElement = (payload: ParamType) => {
 
 		const elementIndex = elements.findIndex((e) => e.id === payload.id);
 		if (elementIndex <= 0) return payload.parentId;
+
 		const previousElement = elements[elementIndex - 1];
+		const { setEditModeId } = useSharedEditMode();
+		setEditModeId(payload.parentId);
 
 		return previousElement.id;
 	}
 };
 
-export const useSetFocusPrevios = async (payload: ParamType) => {
+export const useSetFocusPrevious = (payload: ParamType) => {
 	const { setFocus } = useBoardFocusHandler();
 
 	const previousId = findPreviousElement(payload);
+
 	if (!previousId) return;
 
 	setFocus(previousId);
@@ -58,5 +69,6 @@ export const useSetFocusPrevios = async (payload: ParamType) => {
 		`[data-focused-id="${previousId}"]`
 	) as HTMLElement;
 
+	element?.setAttribute("tabindex", "0");
 	element?.focus();
 };
