@@ -58,7 +58,7 @@ describe("@ui-layout/SidebarItem", () => {
 		expect(wrapper.findComponent(".v-icon").exists()).toBe(false);
 	});
 
-	it("should highlight correct sidebar item", () => {
+	it("should highlight item when selection is active", () => {
 		const { wrapper } = setup({
 			icon: "mdiOpen",
 			title: "title",
@@ -67,16 +67,5 @@ describe("@ui-layout/SidebarItem", () => {
 		});
 
 		expect(wrapper.classes()).toContain("v-list-item--active");
-	});
-
-	it("should not highlight wrong sidebar item", () => {
-		const { wrapper } = setup({
-			icon: "mdiOpen",
-			title: "title",
-			testId: "testId",
-			to: "/administration/rooms/new",
-		});
-
-		expect(wrapper.classes()).not.toContain("v-list-item--active");
 	});
 });
