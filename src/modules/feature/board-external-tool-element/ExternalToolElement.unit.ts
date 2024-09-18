@@ -754,6 +754,30 @@ describe("ExternalToolElement", () => {
 		});
 	});
 
+	describe("when moving the element with arrow keys", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper({
+				element: externalToolElementResponseFactory.build({
+					content: { contextExternalToolId: null },
+				}),
+				isEditMode: true,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should emit an event", async () => {
+			const { wrapper } = setup();
+
+			const card = wrapper.getComponent({ ref: "externalToolElement" });
+			await card.trigger("keydown.up");
+
+			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
+		});
+	});
+
 	describe("Aria label", () => {
 		describe("when no tool is selected", () => {
 			const setup = () => {
