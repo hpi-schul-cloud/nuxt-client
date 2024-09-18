@@ -4,7 +4,6 @@ type ParamType = {
 	id: string;
 	parentId: string;
 	level: "board" | "column" | "card" | "element";
-	elementType?: string;
 };
 
 const findPreviousElement = (payload: ParamType) => {
@@ -16,7 +15,7 @@ const findPreviousElement = (payload: ParamType) => {
 			(column) => column.id === payload.id
 		);
 
-		if (columnIndex <= 0) return board.id;
+		if (columnIndex <= 0) return payload.parentId;
 		return board.columns[columnIndex - 1].id;
 	}
 
@@ -30,7 +29,7 @@ const findPreviousElement = (payload: ParamType) => {
 			(c) => c.cardId === payload.id
 		);
 
-		if (cardIndex <= 0) return board.columns[columnIndex].id;
+		if (cardIndex <= 0) return payload.parentId;
 		return board.columns[columnIndex].cards[cardIndex - 1].cardId;
 	}
 
