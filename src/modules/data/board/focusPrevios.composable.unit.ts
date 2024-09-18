@@ -1,4 +1,4 @@
-import { useSetFocusPrevios } from "./focusPrevios.composable";
+import { useSetFocusPrevious } from "./focusPrevios.composable";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 import {
@@ -110,7 +110,7 @@ describe("useSetFocusPrevios", () => {
 		const notifierModuleMock = createModuleMocks(NotifierModule);
 		const loadingStateModuleMock = createModuleMocks(LoadingStateModule);
 
-		mountComposable(() => useSetFocusPrevios(payload), {
+		mountComposable(() => useSetFocusPrevious(payload), {
 			global: {
 				plugins: [createTestingI18n()],
 				provide: {
@@ -123,7 +123,6 @@ describe("useSetFocusPrevios", () => {
 				},
 			},
 		});
-		useSetFocusPrevios(payload);
 	};
 
 	describe("when level is element", () => {

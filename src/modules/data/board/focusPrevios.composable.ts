@@ -5,6 +5,8 @@ import {
 	useSharedEditMode,
 } from "@data-board";
 
+import { ContentElementType } from "@/serverApi/v3";
+
 type ParamType = {
 	id: string;
 	parentId: string;
@@ -49,7 +51,7 @@ const findPreviousElement = (payload: ParamType) => {
 		if (elementIndex <= 0) return payload.parentId;
 
 		const previousElement = elements[elementIndex - 1];
-		if (previousElement.type === "richText")
+		if (previousElement.type === ContentElementType.RichText)
 			return findPreviousElement({
 				id: previousElement.id,
 				parentId: payload.parentId,
