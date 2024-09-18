@@ -97,6 +97,7 @@ export default {
 	"common.medium.chip.deactivated": "Desactivado",
 	"common.medium.chip.notLicensed": "No esta activado",
 	"common.medium.chip.incomplete": "Configuración incompleta",
+	"common.medium.chip.noLongerAvailable": "Ya no está disponible",
 	"common.medium.information.admin": "Por favor verifique la configuración.",
 	"common.medium.information.student": "Por favor contacte a un maestro.",
 	"common.medium.information.teacher":
