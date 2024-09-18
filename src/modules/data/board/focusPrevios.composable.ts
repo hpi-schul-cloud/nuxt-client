@@ -49,6 +49,13 @@ const findPreviousElement = (payload: ParamType) => {
 		if (elementIndex <= 0) return payload.parentId;
 
 		const previousElement = elements[elementIndex - 1];
+		if (previousElement.type === "richText")
+			return findPreviousElement({
+				id: previousElement.id,
+				parentId: payload.parentId,
+				level: "element",
+			});
+
 		const { setEditModeId } = useSharedEditMode();
 		setEditModeId(payload.parentId);
 
