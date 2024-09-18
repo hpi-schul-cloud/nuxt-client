@@ -4,6 +4,7 @@ import {
 	ErrorType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
 import { useBoardStore } from "@data-board";
 import { useBoardApi } from "../BoardApi.composable";
@@ -41,7 +42,9 @@ export const useCardRestApi = () => {
 
 	const { setEditModeId } = useSharedEditMode();
 
-	const createElementRequest = async (payload: CreateElementRequestPayload) => {
+	const createElementRequest = async (
+		payload: CreateElementRequestPayload
+	): Promise<AnyContentElement | undefined> => {
 		const card = cardStore.getCard(payload.cardId);
 		if (card === undefined) return;
 
@@ -51,7 +54,7 @@ export const useCardRestApi = () => {
 				toPosition: payload.toPosition,
 			};
 			const newElement = await createElementCall(payload.cardId, params);
-			cardStore.createElementSuccess({
+			return cardStore.createElementSuccess({
 				...payload,
 				newElement: newElement.data,
 				isOwnAction: true,

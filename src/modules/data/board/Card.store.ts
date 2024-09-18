@@ -1,10 +1,13 @@
+import { CardResponse, ContentElementType } from "@/serverApi/v3";
+import { envConfigModule } from "@/store";
+import { AnyContentElement } from "@/types/board/ContentElement";
+import { useSharedEditMode } from "@data-board";
+import { useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, ref } from "vue";
-import { envConfigModule } from "@/store";
+import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload";
 
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { CardResponse, ContentElementType } from "@/serverApi/v3";
-import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload";
 import {
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
@@ -17,8 +20,6 @@ import {
 } from "./cardActions/cardActionPayload";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { useSharedLastCreatedElement } from "@util-board";
-import { useSharedEditMode } from "@data-board";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards = ref<Record<string, CardResponse>>({});
@@ -32,6 +33,8 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const { setFocus } = useBoardFocusHandler();
 	const { setEditModeId, editModeId } = useSharedEditMode();
+	//	const { fetchContextExternalTool, contextExternalTool } =
+	//		useContextExternalToolState();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -91,7 +94,9 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const createElementRequest = socketOrRest.createElementRequest;
 
-	const createElementSuccess = async (payload: CreateElementSuccessPayload) => {
+	const createElementSuccess = async (
+		payload: CreateElementSuccessPayload
+	): Promise<AnyContentElement | undefined> => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
@@ -109,6 +114,25 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (payload.isOwnAction === true) {
 			lastCreatedElementId.value = payload.newElement.id;
 			setFocus(payload.newElement.id);
+		}
+
+		// const isExternalToolElement = (
+		// 	element: AnyContentElement
+		// ): element is ExternalToolElementResponse => {
+		// 	return element.type === ContentElementType.ExternalTool;
+		// };
+		//
+		// if (
+		// 	isExternalToolElement(payload.newElement) &&
+		// 	payload.newElement.content.contextExternalToolId
+		// ) {
+		// 	await fetchContextExternalTool(payload.newElement.content.contextExternalToolId)
+		// 	if (contextExternalTool.value?.parameters.length) {
+		// 	}
+		// }
+
+		if (payload.type === ContentElementType.PreferredTool) {
+			lastCreatedElementId.value = "mock";
 		}
 		return payload.newElement;
 	};

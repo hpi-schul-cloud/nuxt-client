@@ -1,6 +1,18 @@
 import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
-import { ContentElementType, PreferredToolInfo } from "@/serverApi/v3";
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+import {
+	ContentElementType,
+	ExternalToolElementResponse,
+	PreferredToolInfo,
+	ToolContextType,
+} from "@/serverApi/v3";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	ContextExternalTool,
+	ContextExternalToolSave,
+	useContextExternalToolApi,
+} from "@data-external-tool";
 import {
 	mdiFormatText,
 	mdiLightbulbOnOutline,
@@ -28,6 +40,10 @@ export const useAddElementDialog = (
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
+	const { createContextExternalToolCall } = useContextExternalToolApi();
+
+	const { createElementRequest, updateElementRequest, fetchCardRequest } =
+		useCardRestApi();
 	/* const { getPreferredTools } = useCardRestApi();
 
 	const preferredTools: Ref<PreferredToolInfo[] | undefined> = ref();
@@ -41,10 +57,12 @@ export const useAddElementDialog = (
 		{
 			icon: "$mdiMagnify",
 			name: "Personal Preference",
+			schoolExternalToolId: "647de374cf6a427b9d39e5ba",
 		},
 		{
 			icon: "$mdiTimerSandComplete",
 			name: "Hier könnte ihre Werbung stehen!",
+			schoolExternalToolId: "644a46e5d0a8301e6cf25d86",
 		},
 	];
 
@@ -52,6 +70,48 @@ export const useAddElementDialog = (
 		closeDialog();
 
 		await createElementRequestFn({ type: elementType, cardId });
+		showNotificationByElementType(elementType);
+	};
+
+	const isExternalToolElement = (
+		element: AnyContentElement
+	): element is ExternalToolElementResponse => {
+		return element.type === ContentElementType.ExternalTool;
+	};
+
+	const onPreferredElementClick = async (
+		elementType: ContentElementType,
+		tool: PreferredToolInfo
+	) => {
+		closeDialog();
+		console.log("on click erfolgreich");
+
+		const element = await createElementRequest({ cardId, type: elementType });
+		if (!element || !isExternalToolElement(element)) {
+			throw new Error();
+		}
+		console.log("Element erstellt");
+
+		if (tool.schoolExternalToolId) {
+			const contextExternalToolSave: ContextExternalToolSave = {
+				schoolToolId: tool.schoolExternalToolId,
+				contextId: cardId,
+				contextType: ToolContextType.BoardElement,
+				parameters: [],
+			};
+			contextExternalToolSave.contextId = element.id;
+
+			const contextExternalTool: ContextExternalTool =
+				await createContextExternalToolCall(contextExternalToolSave);
+			console.log("Tool gespeichert mit id: ", contextExternalTool.id);
+
+			element.content.contextExternalToolId = contextExternalTool.id;
+
+			await updateElementRequest({ element });
+		}
+
+		await fetchCardRequest({ cardIds: [cardId] });
+
 		showNotificationByElementType(elementType);
 	};
 
@@ -139,13 +199,16 @@ export const useAddElementDialog = (
 		});
 	}
 
-	// console.log("vor dem if: ", preferredTools);
+	console.log("vor dem if: ", preferredTools);
 	if (preferredTools) {
 		preferredTools.forEach((tool: PreferredToolInfo) => {
+			console.log("in der schleife bei: ", tool);
+
 			options.push({
 				icon: tool.icon,
 				label: tool.name,
-				action: () => onElementClick(ContentElementType.ExternalTool),
+				action: () =>
+					onPreferredElementClick(ContentElementType.PreferredTool, tool),
 				testId: `create-element-preferred-element-${tool.name.replaceAll(" ", "-").toLowerCase()}`,
 			});
 		});

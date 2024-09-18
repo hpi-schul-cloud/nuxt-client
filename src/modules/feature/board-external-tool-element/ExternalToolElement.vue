@@ -242,6 +242,7 @@ export default defineComponent({
 				isConfigurationDialogOpen.value = true;
 				resetLastCreatedElementId();
 			}
+			loadCardData();
 		});
 
 		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;
