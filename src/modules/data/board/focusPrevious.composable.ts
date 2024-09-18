@@ -17,15 +17,16 @@ const findPreviousElement = (payload: ParamType) => {
 	const { board } = useBoardStore();
 	const { cards } = useCardStore();
 
-	if (!board) return;
+	if (!board || !cards) return;
 
 	if (payload.level === "column") {
 		const columnIndex = board.columns.findIndex(
 			(column) => column.id === payload.id
 		);
 
-		if (columnIndex <= 0) return payload.parentId;
-		return board.columns[columnIndex - 1].id;
+		return columnIndex <= 0
+			? payload.parentId
+			: board.columns[columnIndex - 1].id;
 	}
 
 	if (payload.level === "card") {
@@ -38,12 +39,12 @@ const findPreviousElement = (payload: ParamType) => {
 			(c) => c.cardId === payload.id
 		);
 
-		if (cardIndex <= 0) return payload.parentId;
-		return board.columns[columnIndex].cards[cardIndex - 1].cardId;
+		return cardIndex <= 0
+			? payload.parentId
+			: board.columns[columnIndex].cards[cardIndex - 1].cardId;
 	}
 
 	if (payload.level === "element") {
-		if (!cards) return;
 		const elements = cards[payload.parentId].elements;
 		if (elements.length === 0) return payload.parentId;
 
@@ -51,12 +52,13 @@ const findPreviousElement = (payload: ParamType) => {
 		if (elementIndex <= 0) return payload.parentId;
 
 		const previousElement = elements[elementIndex - 1];
-		if (previousElement.type === ContentElementType.RichText)
+		if (previousElement.type === ContentElementType.RichText) {
 			return findPreviousElement({
 				id: previousElement.id,
 				parentId: payload.parentId,
 				level: "element",
 			});
+		}
 
 		const { setEditModeId } = useSharedEditMode();
 		setEditModeId(payload.parentId);

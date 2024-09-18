@@ -19,7 +19,7 @@ import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useSharedLastCreatedElement } from "@util-board";
 import { useSharedEditMode } from "@data-board";
-import { useSetFocusPrevious } from "./focusPrevios.composable";
+import { useSetFocusPrevious } from "./focusPrevious.composable";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards = ref<Record<string, CardResponse>>({});

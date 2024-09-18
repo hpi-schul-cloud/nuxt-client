@@ -1,4 +1,4 @@
-import { useSetFocusPrevious } from "./focusPrevios.composable";
+import { useSetFocusPrevious } from "./focusPrevious.composable";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 import {
@@ -8,6 +8,7 @@ import {
 	columnResponseFactory,
 	envsFactory,
 	fileElementResponseFactory,
+	richTextElementResponseFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
@@ -63,7 +64,8 @@ const testBoard = boardResponseFactory.build({
 
 const card = cardResponseFactory.build();
 const elements = fileElementResponseFactory.buildList(3);
-card.elements = elements;
+const richTextElement = richTextElementResponseFactory.build();
+card.elements = [richTextElement, ...elements];
 
 const mockQuerySelector = jest.fn();
 Object.defineProperty(global.document, "querySelector", {
@@ -129,7 +131,7 @@ describe("useSetFocusPrevios", () => {
 		afterEach(() => {
 			jest.clearAllMocks();
 		});
-		it("it should call querySelector with parent id", async () => {
+		it("should call querySelector with parent id", async () => {
 			const payload: ParamType = {
 				id: "fileElementResponse1",
 				parentId: "card1",
@@ -137,12 +139,10 @@ describe("useSetFocusPrevios", () => {
 			};
 
 			setup(payload);
-
-			expect(mockQuerySelector).toHaveBeenCalled();
 			expect(mockQuerySelector.mock.lastCall[0]).toContain(payload.parentId);
 		});
 
-		it("it should call querySelector with previous element id", async () => {
+		it("should call querySelector with previous element id", async () => {
 			const payload: ParamType = {
 				id: "fileElementResponse2",
 				parentId: "card1",
@@ -150,8 +150,6 @@ describe("useSetFocusPrevios", () => {
 			};
 
 			setup(payload);
-
-			expect(mockQuerySelector).toHaveBeenCalled();
 			expect(mockQuerySelector.mock.lastCall[0]).toContain(
 				"fileElementResponse1"
 			);
@@ -162,7 +160,7 @@ describe("useSetFocusPrevios", () => {
 		afterEach(() => {
 			jest.clearAllMocks();
 		});
-		it("it should call querySelector with parent id", async () => {
+		it("should call querySelector with parent id", async () => {
 			const payload: ParamType = {
 				id: "card1",
 				parentId: "column1",
@@ -170,12 +168,10 @@ describe("useSetFocusPrevios", () => {
 			};
 
 			setup(payload);
-
-			expect(mockQuerySelector).toHaveBeenCalled();
 			expect(mockQuerySelector.mock.lastCall[0]).toContain(payload.parentId);
 		});
 
-		it("it should call querySelector with previous card id", async () => {
+		it("should call querySelector with previous card id", async () => {
 			const payload: ParamType = {
 				id: "card2",
 				parentId: "column1",
@@ -183,8 +179,6 @@ describe("useSetFocusPrevios", () => {
 			};
 
 			setup(payload);
-
-			expect(mockQuerySelector).toHaveBeenCalled();
 			expect(mockQuerySelector.mock.lastCall[0]).toContain("card1");
 		});
 	});
@@ -193,7 +187,7 @@ describe("useSetFocusPrevios", () => {
 		afterEach(() => {
 			jest.clearAllMocks();
 		});
-		it("it should call querySelector with parent id", async () => {
+		it("should call querySelector with parent id", async () => {
 			const payload: ParamType = {
 				id: "column1",
 				parentId: "board1",
@@ -201,12 +195,10 @@ describe("useSetFocusPrevios", () => {
 			};
 
 			setup(payload);
-
-			expect(mockQuerySelector).toHaveBeenCalled();
 			expect(mockQuerySelector.mock.lastCall[0]).toContain(payload.parentId);
 		});
 
-		it("it should call querySelector with previous column id", async () => {
+		it("should call querySelector with previous column id", async () => {
 			const payload: ParamType = {
 				id: "column2",
 				parentId: "board1",
@@ -214,8 +206,6 @@ describe("useSetFocusPrevios", () => {
 			};
 
 			setup(payload);
-
-			expect(mockQuerySelector).toHaveBeenCalled();
 			expect(mockQuerySelector.mock.lastCall[0]).toContain("column1");
 		});
 	});
