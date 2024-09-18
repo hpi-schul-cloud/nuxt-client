@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { computed, PropType } from "vue";
 import { SidebarSingleItem } from "../types";
-import { useRoute } from "vue-router";
+import { useSidebarSelection } from "./SidebarSelection.composable";
 
 const props = defineProps({
 	item: {
@@ -31,30 +31,7 @@ const props = defineProps({
 	},
 });
 
-const route = useRoute();
-
-const isActive = computed(() => {
-	const anyCoursePageIsActive =
-		route.path.includes("rooms") &&
-		route.path !== "/rooms" &&
-		!route.path.includes("administration") &&
-		props.item.to === "/rooms/courses-overview";
-
-	if (anyCoursePageIsActive) {
-		return true;
-	}
-
-	const roomsSidebarItem = props.item.to === "/rooms";
-	const isRoomsPageActive = route.path === "/rooms";
-	if (roomsSidebarItem) {
-		return isRoomsPageActive;
-	}
-
-	return (
-		route.path.includes(props.item.to as string) ||
-		route.path.includes(props.item.href as string)
-	);
-});
+const { isActive } = useSidebarSelection(() => props.item);
 
 const density = computed(() => {
 	return props.item.icon ? "default" : "compact";
