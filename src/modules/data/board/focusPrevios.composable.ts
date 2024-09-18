@@ -78,6 +78,5 @@ export const useSetFocusPrevious = (payload: ParamType) => {
 		`[data-focused-id="${previousId}"]`
 	) as HTMLElement;
 
-	element?.setAttribute("tabindex", "0");
 	element?.focus();
 };
