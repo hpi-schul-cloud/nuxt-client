@@ -113,7 +113,7 @@ const rules = computed(() => ({
 	},
 }));
 
-const v$ = useVuelidate(rules, { roomData }, { $lazy: true, $autoDirty: true });
+const v$ = useVuelidate(rules, { roomData }, { $lazy: true });
 
 watch(
 	() => v$.value,
