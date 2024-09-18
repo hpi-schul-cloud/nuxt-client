@@ -19,6 +19,8 @@ import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index.mjs";
 import LoggedInLayout from "./LoggedIn.layout.vue";
 import { Topbar } from "@ui-layout";
+import { createTestingPinia } from "@pinia/testing";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
@@ -43,12 +45,20 @@ const setup = () => {
 		},
 	});
 
+	setupStores({
+		envConfigModule: EnvConfigModule,
+	});
+
 	const wrapper = mount(VApp, {
 		slots: {
 			default: h(LoggedInLayout),
 		},
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
+			plugins: [
+				createTestingVuetify(),
+				createTestingI18n(),
+				createTestingPinia(),
+			],
 			provide: {
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,

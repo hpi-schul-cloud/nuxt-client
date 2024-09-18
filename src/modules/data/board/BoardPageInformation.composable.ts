@@ -4,6 +4,7 @@ import { createSharedComposable } from "@vueuse/core";
 import { ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useBoardApi } from "./BoardApi.composable";
+import { BoardContextType } from "@/types/board/BoardContext";
 
 const useBoardPageInformation = () => {
 	const { t } = useI18n();
@@ -20,6 +21,7 @@ const useBoardPageInformation = () => {
 	const pageTitle: Ref<string> = ref(getPageTitle());
 	const roomId: Ref<string | undefined> = ref(undefined);
 	const breadcrumbs: Ref<Breadcrumb[]> = ref([]);
+	const contextType: Ref<BoardContextType | undefined> = ref();
 
 	function getBreadcrumbs(
 		contextInfo: { id: string; name: string } | undefined
@@ -44,12 +46,14 @@ const useBoardPageInformation = () => {
 		const contextInfo = await getContextInfo(id);
 		pageTitle.value = getPageTitle(contextInfo?.name);
 		breadcrumbs.value = getBreadcrumbs(contextInfo);
+		contextType.value = contextInfo?.type;
 		roomId.value = contextInfo?.id;
 	};
 
 	return {
 		createPageInformation,
 		breadcrumbs,
+		contextType,
 		pageTitle,
 		roomId,
 	};

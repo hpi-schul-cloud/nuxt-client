@@ -5,6 +5,8 @@ import {
 } from "@@/tests/test-utils/setup";
 import SidebarItem from "./SidebarItem.vue";
 import { SidebarSingleItem } from "../types";
+import { ref } from "vue";
+import { useSidebarSelection } from "./SidebarSelection.composable";
 
 const iconItem: SidebarSingleItem = {
 	icon: "mdiOpen",
@@ -23,8 +25,13 @@ jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 
+jest.mock("./SidebarSelection.composable");
+const mockedUseSidebarSelection = jest.mocked(useSidebarSelection);
+
 describe("@ui-layout/SidebarItem", () => {
 	const setup = (sidebarItem: SidebarSingleItem) => {
+		mockedUseSidebarSelection.mockReturnValue({ isActive: ref(true) });
+
 		const wrapper = mount(SidebarItem, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -51,7 +58,7 @@ describe("@ui-layout/SidebarItem", () => {
 		expect(wrapper.findComponent(".v-icon").exists()).toBe(false);
 	});
 
-	it("should highlight correct sidebar item", () => {
+	it("should highlight item when selection is active", () => {
 		const { wrapper } = setup({
 			icon: "mdiOpen",
 			title: "title",
@@ -60,16 +67,5 @@ describe("@ui-layout/SidebarItem", () => {
 		});
 
 		expect(wrapper.classes()).toContain("v-list-item--active");
-	});
-
-	it("should not highlight wrong sidebar item", () => {
-		const { wrapper } = setup({
-			icon: "mdiOpen",
-			title: "title",
-			testId: "testId",
-			to: "/administration/rooms/new",
-		});
-
-		expect(wrapper.classes()).not.toContain("v-list-item--active");
 	});
 });

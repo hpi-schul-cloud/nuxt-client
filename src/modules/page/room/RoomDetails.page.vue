@@ -13,15 +13,18 @@
 <script setup lang="ts">
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { useRoomDetailsState } from "@data-room";
+import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetails } from "@feature-room";
-import { watch } from "vue";
+import { storeToRefs } from "pinia";
+import { computed, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const route = useRoute();
-const { fetchRoom, isLoading, isRoom, room } = useRoomDetailsState();
+const roomDetailsStore = useRoomDetailsStore();
+const { isLoading, room, roomVariant } = storeToRefs(roomDetailsStore);
+const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 
 watch(
 	() => route.params.id,
@@ -29,10 +32,15 @@ watch(
 		if (envConfigModule.getEnv["FEATURE_ROOMS_ENABLED"]) {
 			await fetchRoom(route.params.id as string);
 		} else {
-			isLoading.value = false;
-			isRoom.value = false;
+			deactivateRoom();
 		}
 	},
 	{ immediate: true }
 );
+
+const isRoom = computed(() => roomVariant.value === RoomVariant.ROOM);
+
+onUnmounted(() => {
+	resetState();
+});
 </script>
