@@ -122,5 +122,3 @@ watch(
 	}
 );
 </script>
-
-<style lang=""></style>

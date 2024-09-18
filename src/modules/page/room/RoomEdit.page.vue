@@ -13,17 +13,20 @@
 <script setup lang="ts">
 import { computed, ComputedRef, watch } from "vue";
 import { useRoute } from "vue-router";
-import { useRoomDetailsState } from "@data-room";
+import { useRoomDetailsStore } from "@data-room";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomForm } from "@feature-room";
 import { Room } from "@/types/room/Room";
 import { useI18n } from "vue-i18n";
+import { storeToRefs } from "pinia";
 
 const { t } = useI18n();
 
 const route = useRoute();
-const { fetchRoom, isLoading, room } = useRoomDetailsState();
+const roomDetailsStore = useRoomDetailsStore();
+const { isLoading, room } = storeToRefs(roomDetailsStore);
+const { fetchRoom } = roomDetailsStore;
 
 watch(
 	() => route.params.id,
