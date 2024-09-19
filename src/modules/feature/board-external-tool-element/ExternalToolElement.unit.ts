@@ -375,7 +375,7 @@ describe("ExternalToolElement", () => {
 				const { wrapper } = getWrapper(
 					{
 						element: externalToolElementResponseFactory.build({
-							content: { contextExternalToolId: "contextExternalToolId" },
+							content: { contextExternalToolId },
 						}),
 						isEditMode: false,
 					},
@@ -408,7 +408,7 @@ describe("ExternalToolElement", () => {
 				const { wrapper } = getWrapper(
 					{
 						element: externalToolElementResponseFactory.build({
-							content: { contextExternalToolId: "contextExternalToolId" },
+							content: { contextExternalToolId },
 						}),
 						isEditMode: false,
 					},
@@ -470,7 +470,7 @@ describe("ExternalToolElement", () => {
 				const { wrapper } = getWrapper(
 					{
 						element: externalToolElementResponseFactory.build({
-							content: { contextExternalToolId: "contextExternalToolId" },
+							content: { contextExternalToolId },
 						}),
 						isEditMode: false,
 					},
@@ -807,16 +807,18 @@ describe("ExternalToolElement", () => {
 		describe("when a tool is displayed and will be opened in the same tab", () => {
 			const setup = () => {
 				const toolName = "testTool";
+				const contextExternalToolId = "contextExternalToolId";
 
 				const { wrapper } = getWrapper(
 					{
 						element: externalToolElementResponseFactory.build({
-							content: { contextExternalToolId: "contextExternalToolId" },
+							content: { contextExternalToolId },
 						}),
 						isEditMode: true,
 					},
 					externalToolDisplayDataFactory.build({
 						name: toolName,
+						contextExternalToolId,
 						openInNewTab: false,
 					})
 				);
@@ -841,16 +843,18 @@ describe("ExternalToolElement", () => {
 		describe("when a tool is displayed and will be opened in a new tab", () => {
 			const setup = () => {
 				const toolName = "testTool";
+				const contextExternalToolId = "contextExternalToolId";
 
 				const { wrapper } = getWrapper(
 					{
 						element: externalToolElementResponseFactory.build({
-							content: { contextExternalToolId: "contextExternalToolId" },
+							content: { contextExternalToolId },
 						}),
 						isEditMode: true,
 					},
 					externalToolDisplayDataFactory.build({
 						name: toolName,
+						contextExternalToolId,
 						openInNewTab: true,
 					})
 				);
