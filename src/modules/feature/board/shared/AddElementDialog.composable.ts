@@ -1,18 +1,7 @@
 import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
-import {
-	ContentElementType,
-	ExternalToolElementResponse,
-	PreferredToolInfo,
-	ToolContextType,
-} from "@/serverApi/v3";
-import { AnyContentElement } from "@/types/board/ContentElement";
+import { ContentElementType, PreferredToolInfo } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import {
-	ContextExternalTool,
-	ContextExternalToolSave,
-	useContextExternalToolApi,
-} from "@data-external-tool";
 import {
 	mdiFormatText,
 	mdiLightbulbOnOutline,
@@ -40,10 +29,7 @@ export const useAddElementDialog = (
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
-	const { createContextExternalToolCall } = useContextExternalToolApi();
-
-	const { createElementRequest, updateElementRequest, fetchCardRequest } =
-		useCardRestApi();
+	const { createPreferredElement } = useCardRestApi();
 	/* const { getPreferredTools } = useCardRestApi();
 
 	const preferredTools: Ref<PreferredToolInfo[] | undefined> = ref();
@@ -73,12 +59,6 @@ export const useAddElementDialog = (
 		showNotificationByElementType(elementType);
 	};
 
-	const isExternalToolElement = (
-		element: AnyContentElement
-	): element is ExternalToolElementResponse => {
-		return element.type === ContentElementType.ExternalTool;
-	};
-
 	const onPreferredElementClick = async (
 		elementType: ContentElementType,
 		tool: PreferredToolInfo
@@ -86,31 +66,7 @@ export const useAddElementDialog = (
 		closeDialog();
 		console.log("on click erfolgreich");
 
-		const element = await createElementRequest({ cardId, type: elementType });
-		if (!element || !isExternalToolElement(element)) {
-			throw new Error();
-		}
-		console.log("Element erstellt");
-
-		if (tool.schoolExternalToolId) {
-			const contextExternalToolSave: ContextExternalToolSave = {
-				schoolToolId: tool.schoolExternalToolId,
-				contextId: cardId,
-				contextType: ToolContextType.BoardElement,
-				parameters: [],
-			};
-			contextExternalToolSave.contextId = element.id;
-
-			const contextExternalTool: ContextExternalTool =
-				await createContextExternalToolCall(contextExternalToolSave);
-			console.log("Tool gespeichert mit id: ", contextExternalTool.id);
-
-			element.content.contextExternalToolId = contextExternalTool.id;
-
-			await updateElementRequest({ element });
-		}
-
-		await fetchCardRequest({ cardIds: [cardId] });
+		await createPreferredElement({ cardId, type: elementType }, tool);
 
 		showNotificationByElementType(elementType);
 	};
@@ -208,7 +164,7 @@ export const useAddElementDialog = (
 				icon: tool.icon,
 				label: tool.name,
 				action: () =>
-					onPreferredElementClick(ContentElementType.PreferredTool, tool),
+					onPreferredElementClick(ContentElementType.ExternalTool, tool),
 				testId: `create-element-preferred-element-${tool.name.replaceAll(" ", "-").toLowerCase()}`,
 			});
 		});

@@ -238,11 +238,13 @@ export default defineComponent({
 
 		onMounted(() => {
 			loadCardData();
-			if (lastCreatedElementId.value === props.element.id) {
+			if (
+				lastCreatedElementId.value === props.element.id &&
+				!props.element.content.contextExternalToolId
+			) {
 				isConfigurationDialogOpen.value = true;
 				resetLastCreatedElementId();
 			}
-			loadCardData();
 		});
 
 		const refreshTimeInMs = envConfigModule.getEnv.CTL_TOOLS_RELOAD_TIME_MS;

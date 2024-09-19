@@ -33,8 +33,6 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const { setFocus } = useBoardFocusHandler();
 	const { setEditModeId, editModeId } = useSharedEditMode();
-	//	const { fetchContextExternalTool, contextExternalTool } =
-	//		useContextExternalToolState();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
 
@@ -116,24 +114,6 @@ export const useCardStore = defineStore("cardStore", () => {
 			setFocus(payload.newElement.id);
 		}
 
-		// const isExternalToolElement = (
-		// 	element: AnyContentElement
-		// ): element is ExternalToolElementResponse => {
-		// 	return element.type === ContentElementType.ExternalTool;
-		// };
-		//
-		// if (
-		// 	isExternalToolElement(payload.newElement) &&
-		// 	payload.newElement.content.contextExternalToolId
-		// ) {
-		// 	await fetchContextExternalTool(payload.newElement.content.contextExternalToolId)
-		// 	if (contextExternalTool.value?.parameters.length) {
-		// 	}
-		// }
-
-		if (payload.type === ContentElementType.PreferredTool) {
-			lastCreatedElementId.value = "mock";
-		}
 		return payload.newElement;
 	};
 
