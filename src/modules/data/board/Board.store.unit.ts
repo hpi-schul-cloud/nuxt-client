@@ -16,7 +16,11 @@ import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useCardStore, useSocketConnection } from "@data-board";
+import {
+	useCardStore,
+	// useSetFocusPrevious,
+	useSocketConnection,
+} from "@data-board";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
@@ -46,6 +50,17 @@ const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 jest.mock("./cardActions/cardSocketApi.composable");
 const mockedUseCardSocketApi = jest.mocked(useCardSocketApi);
 
+// const mockFocusPrevious = jest.fn();
+// jest.mock("./FocusPrevious.composable", () => {
+// 	return {
+// 		...jest.requireActual("./FocusPrevious.composable"),
+// 		useSetFocusPrevious: mockFocusPrevious,
+// 	};
+// });
+
+// jest.mock("./FocusPrevious.composable");
+// const mockFocusPrevious = jest.mocked(useSetFocusPrevious);
+
 describe("BoardStore", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
@@ -57,6 +72,7 @@ describe("BoardStore", () => {
 	let mockedCardSocketApiActions: DeepMocked<
 		ReturnType<typeof useCardSocketApi>
 	>;
+	let useSetFocusPrevious: jest.Mock;
 	let setEditModeId: jest.Mock;
 
 	beforeEach(() => {
@@ -90,6 +106,8 @@ describe("BoardStore", () => {
 			setEditModeId,
 			editModeId: ref(undefined),
 		});
+		useSetFocusPrevious = jest.fn();
+		useSetFocusPrevious.mockReturnValue({ mockedFocusPrevious });
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
@@ -349,6 +367,7 @@ describe("BoardStore", () => {
 
 			expect(firstCardIdAfterDeletion).not.toEqual(firstCardId);
 			expect(firstCardIdAfterDeletion).toEqual(secondCardId);
+			expect(mockFocusPrevious).toHaveBeenCalled();
 		});
 	});
 

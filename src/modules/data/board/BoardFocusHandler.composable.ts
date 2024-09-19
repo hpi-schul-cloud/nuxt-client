@@ -23,6 +23,7 @@ declare type FocusHandler = {
 	isFocusContained: Ref<boolean>;
 	isFocusedById: Ref<boolean>;
 	setFocus: (id: FocusableId) => void;
+	setElementFocused: (id: FocusableId) => void;
 	isAnythingFocused: Ref<boolean>;
 	focusedId: Ref<string | undefined>;
 };
@@ -32,7 +33,7 @@ declare type FocusHandler = {
  */
 export function useBoardFocusHandler(): Pick<
 	FocusHandler,
-	"isAnythingFocused" | "setFocus"
+	"isAnythingFocused" | "setFocus" | "setElementFocused"
 >;
 /**
  * Keeps track of focused elements on the Board to retain focus state across Board changes.
@@ -81,7 +82,7 @@ export function useBoardFocusHandler(
 	element?: Ref<HTMLElement | null>,
 	onFocusReceived?: () => void
 ): Partial<FocusHandler> {
-	const { setFocus, focusedId } = useSharedFocusedId();
+	const { setFocus, focusedId, setElementFocused } = useSharedFocusedId();
 
 	const isAnythingFocused = ref(focusedId.value !== undefined);
 
@@ -95,6 +96,7 @@ export function useBoardFocusHandler(
 			 * Set Focus for a given ID
 			 */
 			setFocus,
+			setElementFocused,
 		};
 	}
 
@@ -192,8 +194,17 @@ const useSharedFocusedId = createSharedComposable(() => {
 		focusedId.value = id.toString();
 	};
 
+	const setElementFocused = (id: MaybeRefOrGetter<FocusableId>) => {
+		const element = document.querySelector(
+			`[data-focused-id="${id}"]`
+		) as HTMLElement;
+
+		element?.focus();
+	};
+
 	return {
 		focusedId,
 		setFocus,
+		setElementFocused,
 	};
 });

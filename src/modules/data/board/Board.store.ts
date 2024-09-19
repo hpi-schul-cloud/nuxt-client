@@ -29,13 +29,12 @@ import {
 	UpdateColumnTitleSuccessPayload,
 } from "./boardActions/boardActionPayload";
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
-import { useSetFocusPrevious } from "./FocusPrevious.composable";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
-	const { setFocus } = useBoardFocusHandler();
+	const { setFocus, setElementFocused } = useBoardFocusHandler();
 
 	const restApi = useBoardRestApi();
 	const isSocketEnabled =
@@ -139,11 +138,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		const { focusedId } = useBoardFocusHandler(cardId);
 		if (focusedId?.value === cardId) {
-			useSetFocusPrevious({
-				id: cardId,
-				parentId: board.value.columns[columnIndex].id,
-				level: "card",
-			});
+			const previousId = getPreviousCardId(cardId);
+			if (!previousId) return;
+			setElementFocused(previousId);
 		}
 
 		if (columnIndex !== -1) {
@@ -164,11 +161,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 		const { focusedId } = useBoardFocusHandler(columnId);
 		if (focusedId?.value === columnId) {
-			useSetFocusPrevious({
-				id: columnId,
-				parentId: board.value.id,
-				level: "column",
-			});
+			const previousId = getPreviousColumnId(columnId);
+			if (!previousId) return;
+			setElementFocused(previousId);
 		}
 
 		const columnIndex = getColumnIndex(columnId);
@@ -312,6 +307,31 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (!board.value) return;
 
 		await socketOrRest.fetchBoardRequest({ boardId: board.value.id });
+	};
+
+	const getPreviousCardId = (cardId: string): string | undefined => {
+		if (!board.value) return;
+		const columnIndex = board?.value.columns.findIndex(
+			(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
+		);
+		const cardIndex = board.value.columns[columnIndex].cards.findIndex(
+			(c) => c.cardId === cardId
+		);
+
+		return cardIndex <= 0
+			? board.value.columns[columnIndex].id
+			: board.value.columns[columnIndex].cards[cardIndex - 1].cardId;
+	};
+
+	const getPreviousColumnId = (columnId: string): string | undefined => {
+		if (!board.value) return;
+		const columnIndex = board.value.columns.findIndex(
+			(column) => column.id === columnId
+		);
+
+		return columnIndex <= 0
+			? board.value.id
+			: board.value.columns[columnIndex - 1].id;
 	};
 
 	return {
