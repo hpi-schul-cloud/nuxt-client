@@ -10,6 +10,7 @@ import { useSocketConnection } from "./socket/socket";
 import { useCardStore } from "./Card.store";
 import { useBoardInactivity } from "./boardInactivity.composable";
 import { useForceRender } from "./fixSamePositionDnD.composable";
+import { useSetFocusPrevious } from "./FocusPrevious.composable";
 
 export {
 	boardActions,
@@ -22,6 +23,7 @@ export {
 	useContentElementState,
 	useEditMode,
 	useForceRender,
+	useSetFocusPrevious,
 	useSharedEditMode,
 	useSharedBoardPageInformation,
 	useSocketConnection,

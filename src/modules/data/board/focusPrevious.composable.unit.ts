@@ -1,4 +1,4 @@
-import { useSetFocusPrevious } from "./focusPrevious.composable";
+import { useSetFocusPrevious } from "./FocusPrevious.composable";
 import { setActivePinia } from "pinia";
 import { createTestingPinia } from "@pinia/testing";
 import {

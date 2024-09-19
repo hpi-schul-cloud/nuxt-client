@@ -29,7 +29,7 @@ import {
 	UpdateColumnTitleSuccessPayload,
 } from "./boardActions/boardActionPayload";
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
-import { useSetFocusPrevious } from "./focusPrevious.composable";
+import { useSetFocusPrevious } from "./FocusPrevious.composable";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
