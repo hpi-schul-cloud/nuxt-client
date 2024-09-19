@@ -1,5 +1,6 @@
 import { ToolParameterEntry } from "./tool-parameter-entry";
 import { SchoolExternalToolConfigurationStatus } from "./school-external-tool-configuration-status";
+import { ToolContextType } from "../../serverApi/v3";
 
 export interface SchoolExternalToolSave {
 	toolId: string;
@@ -9,6 +10,8 @@ export interface SchoolExternalToolSave {
 	parameters: ToolParameterEntry[];
 
 	isDeactivated: boolean;
+
+	availableContexts: ToolContextType[];
 }
 
 export interface SchoolExternalTool extends SchoolExternalToolSave {

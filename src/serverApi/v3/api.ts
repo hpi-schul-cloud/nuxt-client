@@ -2542,6 +2542,12 @@ export interface DeletedElementContent {
      * @memberof DeletedElementContent
      */
     deletedElementType: ContentElementType;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeletedElementContent
+     */
+    description: string;
 }
 /**
  * 
@@ -4540,10 +4546,10 @@ export interface MediaLineResponse {
     title: string;
     /**
      * The elements of the media line
-     * @type {Array<MediaExternalToolElementResponse>}
+     * @type {Array<MediaExternalToolElementResponse | DeletedElementResponse>}
      * @memberof MediaLineResponse
      */
-    elements: Array<MediaExternalToolElementResponse>;
+    elements: Array<MediaExternalToolElementResponse | DeletedElementResponse>;
     /**
      * The timestamps of the media line
      * @type {TimestampsResponse}
@@ -6542,6 +6548,12 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
      * @memberof SchoolExternalToolConfigurationTemplateResponse
      */
     parameters: Array<CustomParameterResponse>;
+    /**
+     * 
+     * @type {Array<ToolContextType>}
+     * @memberof SchoolExternalToolConfigurationTemplateResponse
+     */
+    validContexts: Array<ToolContextType>;
 }
 /**
  * 
@@ -6586,6 +6598,12 @@ export interface SchoolExternalToolPostParams {
      * @memberof SchoolExternalToolPostParams
      */
     isDeactivated: boolean;
+    /**
+     * List of tool contexts where the school external tool is available
+     * @type {Array<ToolContextType>}
+     * @memberof SchoolExternalToolPostParams
+     */
+    availableContexts: Array<ToolContextType>;
 }
 /**
  * 
@@ -6635,6 +6653,12 @@ export interface SchoolExternalToolResponse {
      * @memberof SchoolExternalToolResponse
      */
     status: SchoolExternalToolConfigurationStatusResponse;
+    /**
+     * 
+     * @type {Array<ToolContextType>}
+     * @memberof SchoolExternalToolResponse
+     */
+    availableContexts: Array<ToolContextType>;
 }
 /**
  * 

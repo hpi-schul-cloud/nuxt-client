@@ -276,6 +276,14 @@ export default {
 		"La herramienta se ha actualizado correctamente.",
 	"components.administration.externalToolsSection.table.header.status":
 		"Estado",
+	"components.administration.externalToolsSection.dialog.contextRestriction.tag.mediaboard":
+		"estante multimedia",
+	"components.administration.externalToolsSection.dialog.contextRestriction.tag.board":
+		"Tabla de astillas",
+	"components.administration.externalToolsSection.dialog.contextRestriction.tag.course":
+		"Curso",
+	"components.administration.externalToolsSection.dialog.contextRestriction.label":
+		"Restricción de contexto",
 	"components.administration.provisioningOptions.class.description":
 		"Active esta opción si las clases deben sincronizarse en la {instance}.",
 	"components.administration.provisioningOptions.class.label":

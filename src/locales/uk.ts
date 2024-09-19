@@ -277,6 +277,14 @@ export default {
 		"Інструмент успішно оновлено.",
 	"components.administration.externalToolsSection.table.header.status":
 		"статус",
+	"components.administration.externalToolsSection.dialog.contextRestriction.tag.mediaboard":
+		"Полиця для медіа",
+	"components.administration.externalToolsSection.dialog.contextRestriction.tag.board":
+		"Спальтенборд",
+	"components.administration.externalToolsSection.dialog.contextRestriction.tag.course":
+		"курс",
+	"components.administration.externalToolsSection.dialog.contextRestriction.label":
+		"Обмеження контексту",
 	"components.administration.provisioningOptions.class.description":
 		"Активуйте цю опцію, якщо класи мають бути синхронізовані в {instance}.",
 	"components.administration.provisioningOptions.class.label":

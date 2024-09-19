@@ -271,6 +271,14 @@ export default {
 		"Tool has been updated successfully.",
 	"components.administration.externalToolsSection.table.header.status":
 		"Status",
+	"components.administration.externalToolsSection.dialog.contextRestriction.tag.mediaboard":
+		"Mediaboard",
+	"components.administration.externalToolsSection.dialog.contextRestriction.tag.board":
+		"Columnboard",
+	"components.administration.externalToolsSection.dialog.contextRestriction.tag.course":
+		"Course",
+	"components.administration.externalToolsSection.dialog.contextRestriction.label":
+		"Context restriction",
 	"components.administration.provisioningOptions.class.description":
 		"Activate this option if classes should be synchronized into the {instance}.",
 	"components.administration.provisioningOptions.class.label":

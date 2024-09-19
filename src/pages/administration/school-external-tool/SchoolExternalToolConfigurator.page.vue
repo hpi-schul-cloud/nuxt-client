@@ -26,6 +26,20 @@
 					data-testId="configuration-deactivate-checkbox"
 					v-model="isDeactivated"
 				/>
+				<v-combobox
+					v-if="selectedTemplate?.availableContexts"
+					clearable
+					chips
+					multiple
+					:disabled="selectedTemplate.availableContexts.length === 0"
+					:label="
+						t(
+							'components.administration.externalToolsSection.dialog.contextRestriction.label'
+						)
+					"
+					:items="templateRestrictionTags"
+					v-model="selectedRestrictionTags"
+				/>
 			</template>
 		</external-tool-configurator>
 	</default-wireframe>
@@ -65,6 +79,7 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { ToolContextType } from "@/serverApi/v3";
 
 export default defineComponent({
 	components: {
@@ -119,6 +134,42 @@ export default defineComponent({
 
 		const configuration: Ref<SchoolExternalTool | undefined> = ref();
 
+		const selectedRestriction: Ref<string[] | undefined> = ref();
+
+		const toolContextTypeMapping: Record<ToolContextType, string> = {
+			[ToolContextType.MediaBoard]: t(
+				"components.administration.externalToolsSection.dialog.contextRestriction.tag.mediaboard"
+			),
+			[ToolContextType.BoardElement]: t(
+				"components.administration.externalToolsSection.dialog.contextRestriction.tag.board"
+			),
+			[ToolContextType.Course]: t(
+				"components.administration.externalToolsSection.dialog.contextRestriction.tag.course"
+			),
+		};
+
+		const templateRestrictionTags = computed(() => {
+			return (
+				selectedTemplate.value.availableContexts.map((context) => {
+					return {
+						title: toolContextTypeMapping[context],
+						value: context,
+					};
+				}) ?? []
+			);
+		});
+
+		const configuredRestriction: Ref<ToolContextType[]> = ref([]);
+
+		const selectedRestrictionTags: any = ref(
+			configuredRestriction.value.map((context) => {
+				return {
+					title: toolContextTypeMapping[context],
+					value: context,
+				};
+			})
+		);
+
 		const apiError: ComputedRef<BusinessError | undefined> = computed(() =>
 			schoolExternalToolsModule.getBusinessError.message
 				? schoolExternalToolsModule.getBusinessError
@@ -132,17 +183,39 @@ export default defineComponent({
 
 		const isDeactivated: Ref<boolean> = ref(false);
 
+		const filterSelectedContext = () => {
+			if (configuration.value && selectedTemplate.value.availableContexts) {
+				selectedRestrictionTags.value = configuration.value.availableContexts
+					.filter((context: ToolContextType) => {
+						return selectedTemplate.value.availableContexts.includes(context);
+					})
+					.map((context) => {
+						return {
+							title: toolContextTypeMapping[context],
+							value: context,
+						};
+					});
+			}
+		};
+
 		const onSave = async (
 			template: SchoolExternalToolConfigurationTemplate,
 			configuredParameterValues: ToolParameterEntry[]
 		) => {
 			if (authModule.getSchool) {
+				configuredRestriction.value = selectedRestrictionTags.value.map(
+					(restrictionTag: any): ToolContextType => {
+						return restrictionTag.value;
+					}
+				);
+
 				const schoolExternalTool: SchoolExternalToolSave =
 					SchoolExternalToolMapper.mapTemplateToSchoolExternalToolSave(
 						template,
 						configuredParameterValues,
 						authModule.getSchool.id,
-						isDeactivated.value
+						isDeactivated.value,
+						configuredRestriction.value
 					);
 
 				if (props.configId) {
@@ -178,6 +251,10 @@ export default defineComponent({
 			}
 		};
 
+		const selectedTemplate = computed(() => {
+			return configurationTemplates.value[0];
+		});
+
 		onMounted(async () => {
 			if (props.configId) {
 				// Loading order is important
@@ -191,6 +268,8 @@ export default defineComponent({
 					);
 
 				isDeactivated.value = configuration.value?.isDeactivated ?? false;
+
+				filterSelectedContext();
 			} else if (authModule.getSchool) {
 				await schoolExternalToolsModule.loadAvailableToolsForSchool(
 					authModule.getSchool.id
@@ -210,6 +289,11 @@ export default defineComponent({
 			onSave,
 			configuration,
 			isDeactivated,
+			configuredRestriction,
+			selectedRestriction,
+			selectedTemplate,
+			templateRestrictionTags,
+			selectedRestrictionTags,
 		};
 	},
 });

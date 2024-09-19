@@ -1,4 +1,5 @@
 import { ToolParameter } from "@/store/external-tool";
+import { ToolContextType } from "@/serverApi/v3";
 
 export interface ExternalToolConfigurationTemplate {
 	externalToolId: string;
@@ -10,6 +11,8 @@ export interface ExternalToolConfigurationTemplate {
 	logoUrl?: string;
 
 	parameters: ToolParameter[];
+
+	availableContexts: ToolContextType[];
 }
 
 export interface SchoolExternalToolConfigurationTemplate

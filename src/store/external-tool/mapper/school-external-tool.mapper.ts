@@ -7,6 +7,7 @@ import {
 	SchoolExternalToolPostParams,
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
+	ToolContextType,
 } from "@/serverApi/v3";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
 import {
@@ -34,6 +35,7 @@ export class SchoolExternalToolMapper {
 					ExternalToolMapper.mapToToolParameter(parameter)
 			),
 			isDeactivated: false,
+			availableContexts: response.validContexts,
 		};
 
 		return mapped;
@@ -42,9 +44,9 @@ export class SchoolExternalToolMapper {
 	static mapToSchoolExternalToolConfigurationTemplateList(
 		response: SchoolExternalToolConfigurationTemplateListResponse
 	): SchoolExternalToolConfigurationTemplate[] {
-		const mapped = response.data.map((tempalte) =>
+		const mapped = response.data.map((template) =>
 			SchoolExternalToolMapper.mapToSchoolExternalToolConfigurationTemplate(
-				tempalte
+				template
 			)
 		);
 
@@ -62,6 +64,7 @@ export class SchoolExternalToolMapper {
 					CommonToolMapper.mapToCustomParameterEntryParam(parameter)
 			),
 			isDeactivated: schoolExternalTool.isDeactivated,
+			availableContexts: schoolExternalTool.availableContexts,
 		};
 
 		return mapped;
@@ -81,6 +84,7 @@ export class SchoolExternalToolMapper {
 					CommonToolMapper.mapToToolParameterEntry(parameter)
 			),
 			isDeactivated: response.isDeactivated,
+			availableContexts: response.availableContexts,
 		};
 
 		return mapped;
@@ -90,13 +94,28 @@ export class SchoolExternalToolMapper {
 		template: SchoolExternalToolConfigurationTemplate,
 		parameterConfiguration: ToolParameterEntry[],
 		schoolId: string,
-		isDeactivated: boolean
+		isDeactivated: boolean,
+		configuredRestriction: ToolContextType[]
 	): SchoolExternalToolSave {
 		const mapped: SchoolExternalToolSave = {
 			schoolId: schoolId,
 			toolId: template.externalToolId,
 			parameters: parameterConfiguration,
 			isDeactivated,
+			availableContexts: configuredRestriction,
+			/*	? configuredRestriction
+						.map((context): ToolContextType | undefined => {
+							switch (context) {
+								case "board-element":
+									return ToolContextType.BoardElement;
+								case "media-board":
+									return ToolContextType.MediaBoard;
+								case "course":
+									return ToolContextType.Course;
+							}
+						})
+						.filter((context) => context !== undefined)
+				: [],*/
 		};
 
 		return mapped;
