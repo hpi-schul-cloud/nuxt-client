@@ -4,7 +4,7 @@
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 		@move:column-keyboard="onMoveColumnKeyboard"
-		:data-focused-id="columnId"
+		:id="columnId"
 	>
 		<div class="column-header mb-4 rounded" ref="columnHeader">
 			<div class="d-flex align-center py-2 pr-4 pl-2">

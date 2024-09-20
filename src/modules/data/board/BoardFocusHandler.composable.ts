@@ -195,9 +195,7 @@ const useSharedFocusedId = createSharedComposable(() => {
 	};
 
 	const setElementFocused = (id: MaybeRefOrGetter<FocusableId>) => {
-		const element = document.querySelector(
-			`[data-focused-id="${id}"]`
-		) as HTMLElement;
+		const element = document.getElementById(id.toString()) as HTMLElement;
 
 		element?.focus();
 	};
