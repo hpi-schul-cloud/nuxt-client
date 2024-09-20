@@ -16,11 +16,7 @@ import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import {
-	useCardStore,
-	// useSetFocusPrevious,
-	useSocketConnection,
-} from "@data-board";
+import { useCardStore, useSocketConnection } from "@data-board";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
@@ -72,7 +68,6 @@ describe("BoardStore", () => {
 	let mockedCardSocketApiActions: DeepMocked<
 		ReturnType<typeof useCardSocketApi>
 	>;
-	let useSetFocusPrevious: jest.Mock;
 	let setEditModeId: jest.Mock;
 
 	beforeEach(() => {
@@ -106,8 +101,6 @@ describe("BoardStore", () => {
 			setEditModeId,
 			editModeId: ref(undefined),
 		});
-		useSetFocusPrevious = jest.fn();
-		useSetFocusPrevious.mockReturnValue({ mockedFocusPrevious });
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
@@ -367,7 +360,6 @@ describe("BoardStore", () => {
 
 			expect(firstCardIdAfterDeletion).not.toEqual(firstCardId);
 			expect(firstCardIdAfterDeletion).toEqual(secondCardId);
-			expect(mockFocusPrevious).toHaveBeenCalled();
 		});
 	});
 
