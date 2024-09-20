@@ -10,8 +10,10 @@ import {
 	PreferredToolInfo,
 	ToolContextType,
 } from "@/serverApi/v3";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
+import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { useBoardStore } from "@data-board";
 import {
 	ContextExternalTool,
@@ -19,6 +21,7 @@ import {
 	ContextExternalToolSave,
 	useContextExternalToolApi,
 } from "@data-external-tool";
+import { ref, Ref } from "vue";
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardStore } from "../Card.store";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
@@ -56,6 +59,18 @@ export const useCardRestApi = () => {
 		useContextExternalToolApi();
 
 	const { setEditModeId } = useSharedEditMode();
+
+	const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
+		SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
+	);
+
+	const preferredToolConfigurationTemplate: Ref<
+		ContextExternalToolConfigurationTemplate | undefined
+	> = ref();
+
+	const getPreferredToolConfigurationTemplate = () => {
+		return preferredToolConfigurationTemplate;
+	};
 
 	const createElementRequest = async (
 		payload: CreateElementRequestPayload
@@ -108,6 +123,7 @@ export const useCardRestApi = () => {
 					(availableTool) =>
 						availableTool.schoolExternalToolId === tool.schoolExternalToolId
 				);
+				console.log("found template for tool: ", preferredTool);
 
 				if (!preferredTool?.parameters.length) {
 					const contextExternalToolSave: ContextExternalToolSave = {
@@ -116,8 +132,6 @@ export const useCardRestApi = () => {
 						contextType: ToolContextType.BoardElement,
 						parameters: [],
 					};
-
-					// get external tool -> get context params (see contextConfig dialog => get context params from schoolToolId)
 
 					const contextExternalTool: ContextExternalTool =
 						await createContextExternalToolCall(contextExternalToolSave);
@@ -135,6 +149,20 @@ export const useCardRestApi = () => {
 					}
 
 					await updateElementCall(newElement.data);
+				} else {
+					schoolExternalToolsModule.setContextExternalToolConfigurationTemplate(
+						preferredTool
+					);
+					console.log(
+						"preferred tool is set in store: ",
+						schoolExternalToolsModule.getContextExternalToolConfigurationTemplate
+					);
+
+					preferredToolConfigurationTemplate.value = preferredTool;
+					console.log(
+						"preferred tool is set: ",
+						preferredToolConfigurationTemplate.value
+					);
 				}
 			}
 
@@ -288,6 +316,8 @@ export const useCardRestApi = () => {
 	const disconnectSocketRequest = (): void => {};
 
 	return {
+		preferredToolConfigurationTemplate,
+		getPreferredToolConfigurationTemplate,
 		createElementRequest,
 		createPreferredElement,
 		getPreferredTools,

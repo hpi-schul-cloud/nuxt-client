@@ -2,6 +2,7 @@
 	<external-tool-configurator
 		:templates="availableTools"
 		:configuration="configuration"
+		:isPreferredTool="isPreferredTool"
 		:error="apiError"
 		:loading="loading"
 		:display-settings-title="displaySettingsTitle"
@@ -25,9 +26,12 @@
 
 <script setup lang="ts">
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 import { ToolContextType } from "@/serverApi/v3";
 import { ToolParameterEntry } from "@/store/external-tool";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { BusinessError } from "@/store/types/commons";
+import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import {
 	ContextExternalTool,
 	ContextExternalToolConfigurationTemplate,
@@ -86,6 +90,17 @@ const apiError: ComputedRef<BusinessError | undefined> = computed(
 	() => configError.value || templateError.value
 );
 
+const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
+);
+
+const { preferredToolConfigurationTemplate } = useCardRestApi();
+
+const preferredToolFromStore =
+	schoolExternalToolsModule.getContextExternalToolConfigurationTemplate;
+
+const isPreferredTool: Ref<boolean> = ref(false);
+
 const onCancel = async () => {
 	emit("cancel");
 };
@@ -129,10 +144,22 @@ const fetchData = async () => {
 
 		await fetchContextExternalTool(props.configId);
 		displayName.value = configuration.value?.displayName;
+	} else if (preferredToolFromStore) {
+		availableTools.value = [preferredToolFromStore];
+		isPreferredTool.value = true;
+		schoolExternalToolsModule.setContextExternalToolConfigurationTemplate(
+			undefined
+		);
+		console.log("available tools = ", availableTools.value);
 	} else {
 		await fetchAvailableToolConfigurationsForContext(
 			props.contextId,
 			props.contextType
+		);
+		console.log("wrong fetch");
+		console.log(
+			"is preferrd tool already set? ",
+			preferredToolConfigurationTemplate.value
 		);
 	}
 
