@@ -17,6 +17,7 @@ import {
 	CourseRoomsApiFactory,
 	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
+import { BoardContextType } from "@/types/board/BoardContext";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
@@ -185,7 +186,7 @@ export const useBoardApi = () => {
 		});
 	};
 
-	type ContextInfo = { id: string; name: string };
+	type ContextInfo = { id: string; type: BoardContextType; name: string };
 
 	const getContextInfo = async (
 		boardId: string
@@ -205,6 +206,7 @@ export const useBoardApi = () => {
 		}
 		return {
 			id: roomResponse.data.roomId,
+			type: context.type,
 			name: roomResponse.data.title,
 		};
 	};

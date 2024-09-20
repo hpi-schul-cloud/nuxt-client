@@ -2,6 +2,7 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardApi } from "./BoardApi.composable";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
+import { BoardContextType } from "@/types/board/BoardContext";
 
 jest.mock("./BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
@@ -36,13 +37,25 @@ describe("BoardPageInformation.composable", () => {
 		const setup = () => {
 			mockedBoardApiCalls.getContextInfo.mockResolvedValue({
 				id: "courseId",
+				type: BoardContextType.Course,
 				name: "Course #1",
 			});
 
-			const { createPageInformation, breadcrumbs, pageTitle, roomId } =
-				mountComposable(() => useSharedBoardPageInformation());
+			const {
+				createPageInformation,
+				breadcrumbs,
+				contextType,
+				pageTitle,
+				roomId,
+			} = mountComposable(() => useSharedBoardPageInformation());
 
-			return { createPageInformation, breadcrumbs, pageTitle, roomId };
+			return {
+				createPageInformation,
+				breadcrumbs,
+				contextType,
+				pageTitle,
+				roomId,
+			};
 		};
 
 		it("should return two breadcrumbs: 1. course page and and 2. course-overview page", async () => {
@@ -73,6 +86,16 @@ describe("BoardPageInformation.composable", () => {
 			await createPageInformation(fakeId);
 
 			expect(roomId.value).toEqual("courseId");
+		});
+
+		it("should set context type", async () => {
+			const { createPageInformation, contextType } = setup();
+
+			const fakeId = "abc123-2";
+
+			await createPageInformation(fakeId);
+
+			expect(contextType.value).toEqual(BoardContextType.Course);
 		});
 	});
 

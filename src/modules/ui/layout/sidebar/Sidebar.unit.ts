@@ -1,5 +1,5 @@
 import { mount } from "@vue/test-utils";
-import { h, nextTick } from "vue";
+import { h, nextTick, ref } from "vue";
 import { VApp } from "vuetify/lib/components/index.mjs";
 import {
 	createTestingI18n,
@@ -18,10 +18,14 @@ import FilePathsModule from "@/store/filePaths";
 import { createModuleMocks } from "@/utils/mock-store-module";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envsFactory } from "@@/tests/test-utils";
+import { useSidebarSelection } from "./SidebarSelection.composable";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
+
+jest.mock("./SidebarSelection.composable");
+const mockedUseSidebarSelection = jest.mocked(useSidebarSelection);
 
 const setup = (permissions?: string[]) => {
 	const authModule = createModuleMocks(AuthModule, {
@@ -42,6 +46,8 @@ const setup = (permissions?: string[]) => {
 			analogConsent: "",
 		},
 	});
+
+	mockedUseSidebarSelection.mockReturnValue({ isActive: ref(false) });
 
 	const wrapper = mount(VApp, {
 		global: {

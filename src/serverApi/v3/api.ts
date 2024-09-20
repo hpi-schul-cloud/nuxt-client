@@ -2542,6 +2542,12 @@ export interface DeletedElementContent {
      * @memberof DeletedElementContent
      */
     deletedElementType: ContentElementType;
+    /**
+     * 
+     * @type {string}
+     * @memberof DeletedElementContent
+     */
+    description: string;
 }
 /**
  * 
@@ -4540,10 +4546,10 @@ export interface MediaLineResponse {
     title: string;
     /**
      * The elements of the media line
-     * @type {Array<MediaExternalToolElementResponse>}
+     * @type {Array<MediaExternalToolElementResponse | DeletedElementResponse>}
      * @memberof MediaLineResponse
      */
-    elements: Array<MediaExternalToolElementResponse>;
+    elements: Array<MediaExternalToolElementResponse | DeletedElementResponse>;
     /**
      * The timestamps of the media line
      * @type {TimestampsResponse}

@@ -132,6 +132,7 @@ describe("Board", () => {
 		mockedUseSharedBoardPageInformation.mockReturnValue({
 			createPageInformation: jest.fn(),
 			breadcrumbs: ref([]),
+			contextType: ref(),
 			pageTitle: ref("page-title"),
 			roomId: ref("room-id"),
 		});
