@@ -1,38 +1,41 @@
 <template>
-	<v-card
-		class="mb-4"
-		:class="{ 'd-none': isHidden }"
-		data-testid="board-link-element"
-		ref="linkContentElement"
-		:variant="outlined"
-		:ripple="false"
-		@keydown.up.down="onKeydownArrow"
-		@keydown.stop
-		:aria-label="ariaLabel"
-		:href="sanitizedUrl"
-		target="_blank"
-		:loading="isLoading ? 'primary' : false"
-	>
-		<LinkContentElementDisplay
-			v-if="computedElement.content.url"
-			:url="computedElement.content.url"
-			:title="computedElement.content.title"
-			:imageUrl="computedElement.content.imageUrl"
-			:isEditMode="isEditMode"
-			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
-				<BoardMenuActionMoveUp @click="onMoveUp" />
-				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete @click="onDelete" />
-			</BoardMenu>
-		</LinkContentElementDisplay>
-		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
-			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
-				<BoardMenuActionMoveUp @click="onMoveUp" />
-				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete @click="onDelete" />
-			</BoardMenu>
-		</LinkContentElementCreate>
-	</v-card>
+	<div :id="element.id" tabindex="0" ref="linkContentElement">
+		<v-card
+			class="mb-4"
+			:class="{ 'd-none': isHidden }"
+			data-testid="board-link-element"
+			:variant="outlined"
+			:ripple="false"
+			@keydown.up.down="onKeydownArrow"
+			@keydown.stop
+			:aria-label="ariaLabel"
+			:href="sanitizedUrl"
+			target="_blank"
+			:loading="isLoading ? 'primary' : false"
+		>
+			{{ element.id }}
+			<LinkContentElementDisplay
+				v-if="computedElement.content.url"
+				:url="computedElement.content.url"
+				:title="computedElement.content.title"
+				:imageUrl="computedElement.content.imageUrl"
+				:isEditMode="isEditMode"
+				><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
+					<BoardMenuActionMoveUp @click="onMoveUp" />
+					<BoardMenuActionMoveDown @click="onMoveDown" />
+					<BoardMenuActionDelete @click="onDelete" />
+				</BoardMenu>
+			</LinkContentElementDisplay>
+
+			<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
+				><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
+					<BoardMenuActionMoveUp @click="onMoveUp" />
+					<BoardMenuActionMoveDown @click="onMoveDown" />
+					<BoardMenuActionDelete @click="onDelete" />
+				</BoardMenu>
+			</LinkContentElementCreate>
+		</v-card>
+	</div>
 </template>
 
 <script setup lang="ts">
