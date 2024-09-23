@@ -182,6 +182,12 @@ import {
 	StartExistingCourseSyncDialog,
 } from "@feature-course-sync";
 import { RenderHTML } from "@feature-render-html";
+import {
+	mdiPencilOutline,
+	mdiSync,
+	mdiSyncOff,
+	mdiTrashCanOutline,
+} from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
