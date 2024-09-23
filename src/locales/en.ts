@@ -25,6 +25,7 @@ export default {
 	"common.actions.shareCopy": "Share copy",
 	"common.actions.update": "Update",
 	"common.ariaLabel.newTab": "opens in a new tab",
+	"common.ariaLabel.sameTab": "opens in the same tab",
 	"common.labels.admin": "",
 	"common.labels.birthdate": "Date of birth",
 	"common.labels.birthday": "Date of Birth",
@@ -97,6 +98,7 @@ export default {
 	"common.medium.chip.deactivated": "Disabled",
 	"common.medium.chip.notLicensed": "Not activated",
 	"common.medium.chip.incomplete": "Configuration incomplete",
+	"common.medium.chip.noLongerAvailable": "No longer available",
 	"common.medium.information.admin": "Please check settings.",
 	"common.medium.information.student": "Please contact a teacher.",
 	"common.medium.information.teacher":
