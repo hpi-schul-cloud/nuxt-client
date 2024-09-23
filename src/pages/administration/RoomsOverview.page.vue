@@ -182,12 +182,6 @@ import {
 	StartExistingCourseSyncDialog,
 } from "@feature-course-sync";
 import { RenderHTML } from "@feature-render-html";
-import {
-	mdiPencilOutline,
-	mdiSync,
-	mdiSyncOff,
-	mdiTrashCanOutline,
-} from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, PropType, ref, Ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -326,12 +320,7 @@ const headers = computed(() => {
 			sortable: true,
 		},
 	];
-	headerList.push({
-		key: "classNames",
-		value: (item: CourseInfoDataResponse) => item.classNames?.join(", "),
-		title: t("common.labels.classes"),
-		sortable: false,
-	});
+
 	if (courseSyncEnabled.value) {
 		headerList.push({
 			key: "syncedGroup",
@@ -339,7 +328,14 @@ const headers = computed(() => {
 			sortable: false,
 		});
 	}
+
 	headerList.push(
+		{
+			key: "classNames",
+			value: (item: CourseInfoDataResponse) => item.classNames?.join(", "),
+			title: t("common.labels.classes"),
+			sortable: false,
+		},
 		{
 			key: "teacherNames",
 			value: (item: CourseInfoDataResponse) => item.teacherNames?.join(", "),
