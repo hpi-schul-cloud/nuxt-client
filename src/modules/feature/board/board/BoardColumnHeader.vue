@@ -51,11 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-	useBoardFocusHandler,
-	useBoardPermissions,
-	useEditMode,
-} from "@data-board";
+import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
@@ -66,6 +62,7 @@ import {
 	BoardMenuActionMoveRight,
 	BoardMenuScope,
 } from "@ui-board";
+import { useCourseBoardEditMode } from "@util-board";
 import { ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
@@ -101,11 +98,13 @@ const emit = defineEmits([
 ]);
 
 const columnId = toRef(props, "columnId");
-const { isEditMode, startEditMode, stopEditMode } = useEditMode(columnId.value);
+const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
+	columnId.value
+);
 
 const columnHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(columnId.value, columnHeader);
-const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 
 const onStartEditMode = () => {
 	if (!hasEditPermission) return;

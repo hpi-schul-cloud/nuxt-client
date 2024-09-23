@@ -1,4 +1,4 @@
-import { useDragAndDrop } from "./DragAndDrop.composable";
+import { useDragAndDrop } from "./dragAndDrop.composable";
 
 describe("DragAndDropComposable", () => {
 	describe("isDragging", () => {

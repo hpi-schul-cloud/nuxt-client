@@ -1,19 +1,12 @@
 import {
-	BoardPermissionChecks,
-	defaultPermissions,
-} from "@/types/board/Permissions";
-import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { useBoardPermissions } from "@data-board";
-import { VueWrapper, mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 
-jest.mock("./InlineEditInteractionHandler.composable");
+jest.mock("@util-board");
 
-jest.mock("@data-board/BoardPermissions.composable");
-const mockedUserPermissions = jest.mocked(useBoardPermissions);
 const defaultProps = {
 	value: "props value",
 	isEditMode: true,
@@ -25,23 +18,14 @@ const defaultProps = {
 describe("BoardAnyTitleTitleInput", () => {
 	let wrapper: VueWrapper<any>;
 
-	const setup = (
-		props: {
-			isEditMode: boolean;
-			scope: "card" | "column" | "board";
-			placeholder?: string;
-			isFocused?: boolean;
-			maxLength?: number;
-		},
-		options?: {
-			permissions?: BoardPermissionChecks;
-		}
-	) => {
+	const setup = (props: {
+		isEditMode: boolean;
+		scope: "card" | "column" | "board";
+		placeholder?: string;
+		isFocused?: boolean;
+		maxLength?: number;
+	}) => {
 		document.body.setAttribute("data-app", "true");
-		mockedUserPermissions.mockReturnValue({
-			...defaultPermissions,
-			...options?.permissions,
-		});
 
 		wrapper = mount(BoardAnyTitleInput, {
 			global: {

@@ -1,11 +1,5 @@
 import Board from "./board/Board.vue";
-import { useInlineEditInteractionHandler } from "./shared/InlineEditInteractionHandler.composable";
-/**
- * Todo: Refactor to accept any permission and be less specific to the board. then move to another module and export form there
- */
-// import { useBoardPermissions } from "./shared/BoardPermissions.composable";
+import BoardColumnInteractionHandler from "./board/BoardColumnInteractionHandler.vue";
+import BoardAnyTitleInput from "./shared/BoardAnyTitleInput.vue";
 
-export {
-	useInlineEditInteractionHandler, // WIP: refactor so export is not needed anymore
-	Board,
-};
+export { Board, BoardColumnInteractionHandler, BoardAnyTitleInput };

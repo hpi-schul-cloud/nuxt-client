@@ -1,4 +1,4 @@
-import { useDragAndDrop } from "@/modules/feature/board/shared/DragAndDrop.composable";
+import { useDragAndDrop } from "@util-board";
 import { ToolContextType } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
