@@ -30,18 +30,18 @@ export const useAddElementDialog = (
 
 	const { createPreferredElement } = useCardRestApi();
 
-	// prefrerred tools should be called from the server via
+	// preferred tools should be called from the server via
 	// const { getPreferredTools } = useCardRestApi();
 	// and made available here
 	const preferredTools = [
 		{
 			icon: "$mdiMagnify",
-			name: "Personal Preference",
+			name: "LTI Test Tool",
 			schoolExternalToolId: "647de374cf6a427b9d39e5ba",
 		},
 		{
 			icon: "$mdiTimerSandComplete",
-			name: "Hier könnte ihre Werbung stehen!",
+			name: "TestTool",
 			schoolExternalToolId: "644a46e5d0a8301e6cf25d86",
 		},
 	];
