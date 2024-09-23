@@ -26,7 +26,6 @@
 
 <script setup lang="ts">
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
-import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 import { ToolContextType } from "@/serverApi/v3";
 import { ToolParameterEntry } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -94,9 +93,7 @@ const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 );
 
-const { preferredToolConfigurationTemplate } = useCardRestApi();
-
-const preferredToolFromStore =
+const preferredTool =
 	schoolExternalToolsModule.getContextExternalToolConfigurationTemplate;
 
 const isPreferredTool: Ref<boolean> = ref(false);
@@ -144,22 +141,16 @@ const fetchData = async () => {
 
 		await fetchContextExternalTool(props.configId);
 		displayName.value = configuration.value?.displayName;
-	} else if (preferredToolFromStore) {
-		availableTools.value = [preferredToolFromStore];
+	} else if (preferredTool) {
+		availableTools.value = [preferredTool];
 		isPreferredTool.value = true;
 		schoolExternalToolsModule.setContextExternalToolConfigurationTemplate(
 			undefined
 		);
-		console.log("available tools = ", availableTools.value);
 	} else {
 		await fetchAvailableToolConfigurationsForContext(
 			props.contextId,
 			props.contextType
-		);
-		console.log("wrong fetch");
-		console.log(
-			"is preferrd tool already set? ",
-			preferredToolConfigurationTemplate.value
 		);
 	}
 

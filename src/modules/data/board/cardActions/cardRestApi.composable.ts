@@ -21,7 +21,6 @@ import {
 	ContextExternalToolSave,
 	useContextExternalToolApi,
 } from "@data-external-tool";
-import { ref, Ref } from "vue";
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardStore } from "../Card.store";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
@@ -63,14 +62,6 @@ export const useCardRestApi = () => {
 	const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 		SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
 	);
-
-	const preferredToolConfigurationTemplate: Ref<
-		ContextExternalToolConfigurationTemplate | undefined
-	> = ref();
-
-	const getPreferredToolConfigurationTemplate = () => {
-		return preferredToolConfigurationTemplate;
-	};
 
 	const createElementRequest = async (
 		payload: CreateElementRequestPayload
@@ -123,7 +114,6 @@ export const useCardRestApi = () => {
 					(availableTool) =>
 						availableTool.schoolExternalToolId === tool.schoolExternalToolId
 				);
-				console.log("found template for tool: ", preferredTool);
 
 				if (!preferredTool?.parameters.length) {
 					const contextExternalToolSave: ContextExternalToolSave = {
@@ -135,7 +125,6 @@ export const useCardRestApi = () => {
 
 					const contextExternalTool: ContextExternalTool =
 						await createContextExternalToolCall(contextExternalToolSave);
-					console.log("Tool gespeichert mit id: ", contextExternalTool.id);
 
 					const isExternalToolElement = (
 						element: AnyContentElement
@@ -152,16 +141,6 @@ export const useCardRestApi = () => {
 				} else {
 					schoolExternalToolsModule.setContextExternalToolConfigurationTemplate(
 						preferredTool
-					);
-					console.log(
-						"preferred tool is set in store: ",
-						schoolExternalToolsModule.getContextExternalToolConfigurationTemplate
-					);
-
-					preferredToolConfigurationTemplate.value = preferredTool;
-					console.log(
-						"preferred tool is set: ",
-						preferredToolConfigurationTemplate.value
 					);
 				}
 			}
@@ -316,8 +295,6 @@ export const useCardRestApi = () => {
 	const disconnectSocketRequest = (): void => {};
 
 	return {
-		preferredToolConfigurationTemplate,
-		getPreferredToolConfigurationTemplate,
 		createElementRequest,
 		createPreferredElement,
 		getPreferredTools,

@@ -1365,7 +1365,6 @@ export enum ContentElementType {
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
     ExternalTool = 'externalTool',
-    PreferredTool = 'preferredTool',
     CollaborativeTextEditor = 'collaborativeTextEditor',
     Deleted = 'deleted'
 }
@@ -2080,7 +2079,6 @@ export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     RichText = 'richText',
     SubmissionContainer = 'submissionContainer',
     ExternalTool = 'externalTool',
-    PreferredTool = 'preferredTool',
     CollaborativeTextEditor = 'collaborativeTextEditor',
     Deleted = 'deleted'
 }

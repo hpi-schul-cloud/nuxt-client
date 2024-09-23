@@ -20,7 +20,6 @@ type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 export const useAddElementDialog = (
 	createElementRequestFn: CreateElementRequestFn,
 	cardId: string //,
-	// preferredTools: PreferredToolInfo[] | undefined
 ) => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { showCustomNotifier } = useBoardNotifier();
@@ -30,15 +29,10 @@ export const useAddElementDialog = (
 		useSharedElementTypeSelection();
 
 	const { createPreferredElement } = useCardRestApi();
-	/* const { getPreferredTools } = useCardRestApi();
 
-	const preferredTools: Ref<PreferredToolInfo[] | undefined> = ref();
-	const callApi = async () => {
-		preferredTools.value = await getPreferredTools();
-		console.log("called Api, got", preferredTools.value);
-	};
-	callApi(); */
-
+	// prefrerred tools should be called from the server via
+	// const { getPreferredTools } = useCardRestApi();
+	// and made available here
 	const preferredTools = [
 		{
 			icon: "$mdiMagnify",
@@ -64,8 +58,6 @@ export const useAddElementDialog = (
 		tool: PreferredToolInfo
 	) => {
 		closeDialog();
-		console.log("on click erfolgreich");
-
 		await createPreferredElement({ cardId, type: elementType }, tool);
 
 		showNotificationByElementType(elementType);
@@ -155,11 +147,8 @@ export const useAddElementDialog = (
 		});
 	}
 
-	console.log("vor dem if: ", preferredTools);
 	if (preferredTools) {
 		preferredTools.forEach((tool: PreferredToolInfo) => {
-			console.log("in der schleife bei: ", tool);
-
 			options.push({
 				icon: tool.icon,
 				label: tool.name,
