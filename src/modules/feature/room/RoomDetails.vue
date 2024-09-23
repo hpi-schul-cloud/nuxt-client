@@ -62,7 +62,7 @@ import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useRouter } from "vue-router";
 
 const props = defineProps({
-	room: { type: Object as PropType<Room | undefined> },
+	room: { type: Object as PropType<Room> },
 });
 
 const { t } = useI18n();
@@ -80,7 +80,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 				to: "/rooms",
 			},
 			{
-				title: room.value.title,
+				title: room.value.name,
 				disabled: true,
 			},
 		];

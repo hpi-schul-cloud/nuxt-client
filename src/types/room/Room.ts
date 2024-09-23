@@ -1,10 +1,9 @@
-import { RoomColorEnum } from "@/modules/feature/room/RoomColorPicker/types";
+import { RoomColor } from "@/serverApi/v3";
 
 export type Room = {
 	id: string;
-	title: string;
-	shortTitle: string;
-	displayColor: RoomColorEnum;
+	name: string;
+	color: RoomColor;
 	startDate?: string;
 	endDate?: string;
 };

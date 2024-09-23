@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<VTextField
-			v-model="roomData.title"
+			v-model="roomData.name"
 			label="Name des Raumes"
 			class="mb-8"
 			:error-messages="
@@ -10,7 +10,10 @@
 			@blur="v$.roomData.title.$touch"
 		/>
 		<div class="mb-8">
-			<RoomColorPicker v-model:color="roomData.displayColor" />
+			<RoomColorPicker
+				v-model:color="roomData.color"
+				@update:color="onUpdateColor"
+			/>
 		</div>
 		<div class="mb-8">
 			Zeitraum
@@ -27,81 +30,61 @@
 				/>
 			</div>
 		</div>
-		<div class="d-flex">
-			<VSpacer />
-			<VBtn variant="text" class="mr-4" @click="onCancel">
-				{{ $t("common.actions.cancel") }}
-			</VBtn>
-			<VBtn variant="flat" color="primary" @click="onSave">
-				{{ $t("common.actions.save") }}
-			</VBtn>
-		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, watch, watchEffect } from "vue";
-import { RoomColorEnum } from "./RoomColorPicker/types";
+import { computed, PropType, watch } from "vue";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { DatePicker } from "@ui-date-time-picker";
-import { Room } from "@/types/room/Room";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
-import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { Room } from "@/types/room/Room";
+import { RoomColor } from "@/serverApi/v3";
 
 const props = defineProps({
 	room: {
-		type: Object as PropType<Room | undefined>,
+		type: Object as PropType<Room>,
+		required: true,
 	},
 });
 
-const router = useRouter();
+const emit = defineEmits([
+	"update:color",
+	"update:name",
+	"update:startDate",
+	"update:endDate",
+]);
+
+const roomData = computed(() => props.room);
+
 const { t } = useI18n();
-
-const roomData = ref<Partial<Room>>({
-	title: "",
-	shortTitle: "",
-	displayColor: RoomColorEnum.BLUE_GREY,
-	startDate: "",
-	endDate: "",
-});
-
-watchEffect(() => {
-	if (props.room) {
-		roomData.value = props.room;
-	}
-});
 
 // generate short title
 watch(
-	() => roomData.value.title,
+	() => roomData.value.name,
 	(newTitle, oldTitle) => {
 		if (!newTitle || newTitle === oldTitle) return;
 		if (newTitle.length < 2) return;
 
 		const shortTitle = newTitle?.slice(0, 2);
-		if (shortTitle === roomData.value.shortTitle) return;
-
-		roomData.value.shortTitle = shortTitle;
+		if (shortTitle === roomData.value.name) return;
+		// still needed at all?
+		emit("update:name", newTitle);
 	}
 );
 
+const onUpdateColor = (color: RoomColor) => {
+	emit("update:color", color);
+};
+
 const onUpdateStartDate = (newDate: string) => {
-	roomData.value.startDate = newDate;
+	emit("update:startDate", newDate);
 };
 
 const onUpdateEndDate = (newDate: string) => {
-	roomData.value.endDate = newDate;
-};
-
-const onSave = () => {
-	console.log(roomData.value);
-};
-
-const onCancel = () => {
-	// TODO use useConfirmationDialog here, when it's refactored
-	router.go(-1);
+	emit("update:endDate", newDate);
 };
 
 // Validation
