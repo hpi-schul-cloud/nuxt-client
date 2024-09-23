@@ -326,18 +326,20 @@ const headers = computed(() => {
 			sortable: true,
 		},
 	];
-	headerList.push(
-		{
-			key: "classNames",
-			value: (item: CourseInfoDataResponse) => item.classNames?.join(", "),
-			title: t("common.labels.classes"),
-			sortable: false,
-		},
-		{
+	headerList.push({
+		key: "classNames",
+		value: (item: CourseInfoDataResponse) => item.classNames?.join(", "),
+		title: t("common.labels.classes"),
+		sortable: false,
+	});
+	if (courseSyncEnabled.value) {
+		headerList.push({
 			key: "syncedGroup",
 			title: t("pages.administration.classes.header.sync"),
 			sortable: false,
-		},
+		});
+	}
+	headerList.push(
 		{
 			key: "teacherNames",
 			value: (item: CourseInfoDataResponse) => item.teacherNames?.join(", "),
