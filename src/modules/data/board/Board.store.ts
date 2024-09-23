@@ -1,12 +1,8 @@
-import { Board } from "@/types/board/Board";
-import { nextTick, ref } from "vue";
-import { defineStore } from "pinia";
-import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
-import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
-import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { useSharedEditMode } from "./EditMode.composable";
 import { envConfigModule } from "@/store";
-import { useCardStore } from "./Card.store";
+import { Board } from "@/types/board/Board";
+import { useSharedEditMode } from "@util-board";
+import { defineStore } from "pinia";
+import { nextTick, ref } from "vue";
 import {
 	CreateCardRequestPayload,
 	CreateCardSuccessPayload,
@@ -28,6 +24,10 @@ import {
 	UpdateColumnTitleRequestPayload,
 	UpdateColumnTitleSuccessPayload,
 } from "./boardActions/boardActionPayload";
+import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
+import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
+import { useCardStore } from "./Card.store";
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
 
 export const useBoardStore = defineStore("boardStore", () => {

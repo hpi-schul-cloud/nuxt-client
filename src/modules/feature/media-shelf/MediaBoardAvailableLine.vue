@@ -71,8 +71,7 @@ import {
 	MediaBoardLayoutType,
 } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
-import { extractDataAttribute } from "@util-board";
+import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { uniqueId } from "lodash";
 import { SortableEvent } from "sortablejs";
@@ -135,13 +134,14 @@ const onElementDragEnd = async (event: SortableEvent) => {
 	const fromLineId: string | undefined = extractDataAttribute(from, "lineId");
 	const toLineId: string | undefined = extractDataAttribute(to, "lineId");
 
-	if (
+	const isOutOfBounds =
 		fromLineId === toLineId ||
 		newIndex === undefined ||
 		oldIndex === undefined ||
 		oldIndex < 0 ||
-		oldIndex > elements.value.length - 1
-	) {
+		oldIndex > elements.value.length - 1;
+
+	if (isOutOfBounds) {
 		return;
 	}
 
