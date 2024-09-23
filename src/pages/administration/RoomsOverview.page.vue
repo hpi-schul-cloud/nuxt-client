@@ -334,6 +334,11 @@ const headers = computed(() => {
 			sortable: false,
 		},
 		{
+			key: "syncedGroup",
+			title: t("pages.administration.classes.header.sync"),
+			sortable: false,
+		},
+		{
 			key: "teacherNames",
 			value: (item: CourseInfoDataResponse) => item.teacherNames?.join(", "),
 			title: t("common.labels.teacher"),
