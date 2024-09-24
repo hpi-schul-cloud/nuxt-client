@@ -492,6 +492,21 @@ describe("BoardStore", () => {
 					expect(forceFocus).toHaveBeenCalledWith(firstColumn.id);
 				});
 			});
+
+			it("should not call forceFocus if column is not focused", async () => {
+				const { boardStore, firstColumn } = setup();
+
+				const { setFocus, forceFocus } = focusSetup("unknownId");
+
+				setFocus("unknownId");
+
+				boardStore.deleteColumnSuccess({
+					columnId: firstColumn.id,
+					isOwnAction: true,
+				});
+
+				expect(forceFocus).not.toHaveBeenCalledWith(firstColumn.id);
+			});
 		});
 	});
 

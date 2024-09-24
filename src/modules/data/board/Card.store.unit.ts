@@ -705,6 +705,23 @@ describe("CardStore", () => {
 					expect(setEditModeId).toHaveBeenCalled();
 				});
 			});
+
+			it("should not call forceFocus if element is not focused", async () => {
+				const { cardStore, cardId, elements } = setup();
+				const elementId = elements[0].id;
+
+				const { setFocus, forceFocus } = focusSetup("unknownId");
+
+				setFocus("unknownId");
+
+				await cardStore.deleteElementSuccess({
+					cardId,
+					elementId,
+					isOwnAction: true,
+				});
+
+				expect(forceFocus).not.toHaveBeenCalledWith(elementId);
+			});
 		});
 	});
 
