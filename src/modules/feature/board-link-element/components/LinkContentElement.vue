@@ -13,7 +13,6 @@
 			target="_blank"
 			:loading="isLoading ? 'primary' : false"
 		>
-			{{ element.id }}
 			<LinkContentElementDisplay
 				v-if="computedElement.content.url"
 				:url="computedElement.content.url"
