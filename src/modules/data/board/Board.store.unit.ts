@@ -482,7 +482,7 @@ describe("BoardStore", () => {
 					const { boardStore, firstColumn, secondColumn } = setup();
 
 					const { setFocus, forceFocus } = focusSetup(secondColumn.id);
-					setFocus(firstColumn);
+					setFocus(firstColumn.id);
 
 					boardStore.deleteColumnSuccess({
 						columnId: secondColumn.id,
