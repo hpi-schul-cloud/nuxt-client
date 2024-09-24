@@ -24,6 +24,7 @@ import { useI18n } from "vue-i18n";
 import { useBoardApi } from "./BoardApi.composable";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -48,6 +49,9 @@ const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 jest.mock("@data-board/socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
+jest.mock("./BoardFocusHandler.composable");
+const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
+
 describe("CardStore", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
@@ -64,6 +68,9 @@ describe("CardStore", () => {
 	>;
 	let setEditModeId: jest.Mock;
 	let editModeId: Ref<string | undefined>;
+	let mockedBoardFocusCalls: DeepMocked<
+		ReturnType<typeof useBoardFocusHandler>
+	>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -95,6 +102,10 @@ describe("CardStore", () => {
 			mockedSharedLastCreatedElementActions
 		);
 
+		mockedBoardFocusCalls =
+			createMock<ReturnType<typeof useBoardFocusHandler>>();
+		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
+
 		setEditModeId = jest.fn();
 		editModeId = ref(undefined);
 		mockedSharedEditMode.mockReturnValue({
@@ -125,6 +136,25 @@ describe("CardStore", () => {
 		}
 
 		return { cardStore, cardId, elements };
+	};
+
+	const focusSetup = (id: string) => {
+		// mockedBoardFocusCalls =
+		// 	createMock<ReturnType<typeof useBoardFocusHandler>>();
+		// mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
+
+		const focusedId = ref<string | undefined>(id);
+		const mockSetFocus = jest.fn().mockImplementation((id: string) => {
+			focusedId.value = id;
+		});
+		const mockForceFocus = jest.fn();
+		mockedBoardFocusHandler.mockReturnValue({
+			setFocus: mockSetFocus,
+			forceFocus: mockForceFocus,
+			focusedId,
+		});
+
+		return { setFocus: mockForceFocus, forceFocus: mockForceFocus };
 	};
 
 	afterEach(() => {
@@ -608,6 +638,9 @@ describe("CardStore", () => {
 	});
 
 	describe("deleteElementSuccess", () => {
+		afterEach(() => {
+			jest.resetAllMocks();
+		});
 		it("should not delete element if card is undefined", async () => {
 			const { cardStore, cardId, elements } = setup();
 			const numberOfElements = cardStore.cards[cardId].elements.length;
@@ -621,6 +654,7 @@ describe("CardStore", () => {
 
 			expect(cardStore.cards[cardId].elements.length).toEqual(numberOfElements);
 		});
+
 		it("should delete element", async () => {
 			const { cardStore, cardId, elements } = setup();
 			const numberOfElements = cardStore.cards[cardId].elements.length;
@@ -635,6 +669,46 @@ describe("CardStore", () => {
 			expect(cardStore.cards[cardId].elements.length).toEqual(
 				numberOfElements - 1
 			);
+		});
+
+		describe("forceFocus method", () => {
+			describe("when the element first element", () => {
+				it('should call "forceFocus" if already focused element is deleted', async () => {
+					const { cardStore, cardId, elements } = setup();
+					const elementId = elements[0].id;
+
+					const { setFocus, forceFocus } = focusSetup(elementId);
+					setFocus(elementId);
+
+					await cardStore.deleteElementSuccess({
+						cardId,
+						elementId,
+						isOwnAction: true,
+					});
+
+					expect(forceFocus).toHaveBeenCalled();
+					expect(setEditModeId).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when the element is not first element", () => {
+				it('should call "forceFocus" if already focused element is deleted', async () => {
+					const { cardStore, cardId, elements } = setup();
+					const elementId = elements[2].id;
+
+					const { setFocus, forceFocus } = focusSetup(elementId);
+					setFocus(elementId);
+
+					await cardStore.deleteElementSuccess({
+						cardId,
+						elementId,
+						isOwnAction: true,
+					});
+
+					expect(forceFocus).toHaveBeenCalled();
+					expect(setEditModeId).toHaveBeenCalled();
+				});
+			});
 		});
 	});
 
