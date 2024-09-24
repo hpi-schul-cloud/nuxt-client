@@ -22,7 +22,7 @@ declare type FocusHandler = {
 	isFocusContained: Ref<boolean>;
 	isFocusedById: Ref<boolean>;
 	setFocus: (id: FocusableId) => void;
-	setElementFocused: (id: FocusableId) => void;
+	forceFocus: (id: FocusableId) => void;
 	isAnythingFocused: Ref<boolean>;
 	focusedId: Ref<string | undefined>;
 };
@@ -32,7 +32,7 @@ declare type FocusHandler = {
  */
 export function useBoardFocusHandler(): Pick<
 	FocusHandler,
-	"isAnythingFocused" | "setFocus" | "setElementFocused"
+	"isAnythingFocused" | "setFocus" | "forceFocus"
 >;
 /**
  * Keeps track of focused elements on the Board to retain focus state across Board changes.
@@ -81,7 +81,7 @@ export function useBoardFocusHandler(
 	element?: Ref<HTMLElement | null>,
 	onFocusReceived?: () => void
 ): Partial<FocusHandler> {
-	const { setFocus, focusedId, setElementFocused } = useSharedFocusedId();
+	const { setFocus, focusedId, forceFocus } = useSharedFocusedId();
 
 	const isAnythingFocused = ref(focusedId.value !== undefined);
 
@@ -95,11 +95,11 @@ export function useBoardFocusHandler(
 			 * Set Focus for a given ID
 			 */
 			setFocus,
-			setElementFocused,
+			forceFocus,
 		};
 	}
 
-	if (id?.valueOf() && element == undefined) {
+	if (id?.valueOf() && element === undefined) {
 		return {
 			setFocus,
 			focusedId,
@@ -121,10 +121,10 @@ export function useBoardFocusHandler(
 		if (id !== focusedId.value) {
 			return;
 		}
-		forceFocus();
+		forceFocusOnMount();
 	});
 
-	const forceFocus = async () => {
+	const forceFocusOnMount = async () => {
 		await nextTick();
 		if (onFocusReceived !== undefined) {
 			onFocusReceived();
@@ -153,7 +153,7 @@ export function useBoardFocusHandler(
 	 * If an InlineEditInteraction is fired within the element boundary, force focus on this element
 	 */
 	useInlineEditInteractionHandler(async () => {
-		await forceFocus();
+		await forceFocusOnMount();
 	});
 
 	onUnmounted(() => {
@@ -193,7 +193,7 @@ const useSharedFocusedId = createSharedComposable(() => {
 		focusedId.value = id.toString();
 	};
 
-	const setElementFocused = (id: MaybeRefOrGetter<FocusableId>) => {
+	const forceFocus = (id: MaybeRefOrGetter<FocusableId>) => {
 		const element = document.getElementById(id.toString()) as HTMLElement;
 
 		element?.focus();
@@ -202,6 +202,6 @@ const useSharedFocusedId = createSharedComposable(() => {
 	return {
 		focusedId,
 		setFocus,
-		setElementFocused,
+		forceFocus,
 	};
 });

@@ -34,7 +34,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
-	const { setFocus, setElementFocused } = useBoardFocusHandler();
+	const { setFocus, forceFocus } = useBoardFocusHandler();
 
 	const restApi = useBoardRestApi();
 	const isSocketEnabled =
@@ -140,7 +140,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (focusedId?.value === cardId) {
 			const previousId = getPreviousCardId(cardId);
 			if (!previousId) return;
-			setElementFocused(previousId);
+			forceFocus(previousId);
 		}
 
 		if (columnIndex !== -1) {
@@ -163,7 +163,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (focusedId?.value === columnId) {
 			const previousId = getPreviousColumnId(columnId);
 			if (!previousId) return;
-			setElementFocused(previousId);
+			forceFocus(previousId);
 		}
 
 		const columnIndex = getColumnIndex(columnId);

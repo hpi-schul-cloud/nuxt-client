@@ -29,7 +29,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
-	const { setFocus, setElementFocused } = useBoardFocusHandler();
+	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const { setEditModeId, editModeId } = useSharedEditMode();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
@@ -172,7 +172,7 @@ export const useCardStore = defineStore("cardStore", () => {
 				payload.cardId
 			);
 			if (!previousId) return;
-			setElementFocused(previousId);
+			forceFocus(previousId);
 		}
 
 		const index = card.elements.findIndex((e) => e.id === payload.elementId);
