@@ -11,7 +11,7 @@ export const useRoomsState = () => {
 		isLoading.value = true;
 		await delay(500);
 		// TODO call API + do sorting there
-		rooms.value = roomsData.sort((r1, r2) => (r1.title > r2.title ? 1 : -1));
+		rooms.value = roomsData.sort((r1, r2) => (r1.name > r2.name ? 1 : -1));
 		isLoading.value = false;
 	};
 
