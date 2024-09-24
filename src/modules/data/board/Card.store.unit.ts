@@ -139,10 +139,6 @@ describe("CardStore", () => {
 	};
 
 	const focusSetup = (id: string) => {
-		// mockedBoardFocusCalls =
-		// 	createMock<ReturnType<typeof useBoardFocusHandler>>();
-		// mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
-
 		const focusedId = ref<string | undefined>(id);
 		const mockSetFocus = jest.fn().mockImplementation((id: string) => {
 			focusedId.value = id;
@@ -671,7 +667,7 @@ describe("CardStore", () => {
 			);
 		});
 
-		describe("forceFocus method", () => {
+		describe("when previous element needs to be focused", () => {
 			describe("when the element first element", () => {
 				it('should call "forceFocus" if already focused element is deleted', async () => {
 					const { cardStore, cardId, elements } = setup();
