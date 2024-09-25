@@ -25,6 +25,7 @@ export default {
 	"common.actions.shareCopy": "Kopie teilen",
 	"common.actions.update": "Aktualisieren",
 	"common.ariaLabel.newTab": "öffnet in einem neuen Tab",
+	"common.ariaLabel.sameTab": "öffnet im selben Tab",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Geburtsdatum",
 	"common.labels.birthday": "Geburtsdatum",
