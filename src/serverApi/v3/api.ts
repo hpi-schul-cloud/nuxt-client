@@ -7356,6 +7356,97 @@ export interface SingleColumnBoardResponse {
 /**
  * 
  * @export
+ * @interface SlimTaskResponse
+ */
+export interface SlimTaskResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof SlimTaskResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SlimTaskResponse
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SlimTaskResponse
+     */
+    descriptionInputFormat: SlimTaskResponseDescriptionInputFormatEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof SlimTaskResponse
+     */
+    availableDate: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof SlimTaskResponse
+     */
+    dueDate: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SlimTaskResponse
+     */
+    _private: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SlimTaskResponse
+     */
+    publicSubmissions: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SlimTaskResponse
+     */
+    teamSubmissions: boolean | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof SlimTaskResponse
+     */
+    creator: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof SlimTaskResponse
+     */
+    courseId: string | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SlimTaskResponse
+     */
+    submissionIds: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof SlimTaskResponse
+     */
+    finishedIds: Array<string>;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum SlimTaskResponseDescriptionInputFormatEnum {
+    PlainText = 'plainText',
+    RichTextCk5Simple = 'richTextCk5Simple',
+    RichTextCk4 = 'richTextCk4',
+    RichTextCk5 = 'richTextCk5'
+}
+
+/**
+ * 
+ * @export
  * @interface StudentPermissionParams
  */
 export interface StudentPermissionParams {
@@ -7690,86 +7781,80 @@ export interface TaskResponse {
      * @type {string}
      * @memberof TaskResponse
      */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
     name: string;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    description: string;
+    availableDate?: string;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    descriptionInputFormat: TaskResponseDescriptionInputFormatEnum;
+    dueDate?: string;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    availableDate: string | null;
+    courseName: string;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    dueDate: string | null;
+    lessonName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof TaskResponse
+     */
+    courseId: string;
+    /**
+     * Task description object, with props content: string and type: input format types
+     * @type {RichText}
+     * @memberof TaskResponse
+     */
+    description?: RichText;
     /**
      * 
      * @type {boolean}
      * @memberof TaskResponse
      */
-    _private: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TaskResponse
-     */
-    publicSubmissions: boolean | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof TaskResponse
-     */
-    teamSubmissions: boolean | null;
+    lessonHidden: boolean;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    creator: string | null;
+    displayColor?: string;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    courseId: string | null;
+    createdAt: string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {string}
      * @memberof TaskResponse
      */
-    submissionIds: Array<string>;
+    updatedAt: string;
     /**
      * 
-     * @type {Array<string>}
+     * @type {TaskStatusResponse}
      * @memberof TaskResponse
      */
-    finishedIds: Array<string>;
+    status: TaskStatusResponse;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum TaskResponseDescriptionInputFormatEnum {
-    PlainText = 'plainText',
-    RichTextCk5Simple = 'richTextCk5Simple',
-    RichTextCk4 = 'richTextCk4',
-    RichTextCk5 = 'richTextCk5'
-}
-
 /**
  * 
  * @export
@@ -15591,7 +15676,7 @@ export const LessonApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async lessonControllerGetLessonTasks(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TaskResponse>>> {
+        async lessonControllerGetLessonTasks(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SlimTaskResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetLessonTasks(lessonId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -15638,7 +15723,7 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<TaskResponse>> {
+        lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<SlimTaskResponse>> {
             return localVarFp.lessonControllerGetLessonTasks(lessonId, options).then((request) => request(axios, basePath));
         },
     };
@@ -15684,7 +15769,7 @@ export interface LessonApiInterface {
      * @throws {RequiredError}
      * @memberof LessonApiInterface
      */
-    lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<TaskResponse>>;
+    lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<SlimTaskResponse>>;
 
 }
 
