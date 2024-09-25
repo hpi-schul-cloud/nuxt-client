@@ -311,23 +311,19 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const getPreviousCardId = (cardId: string): string | undefined => {
 		if (!board.value) return;
-		const columnIndex = board?.value.columns.findIndex(
-			(column) => column.cards.find((c) => c.cardId === cardId) !== undefined
-		);
-		const cardIndex = board.value.columns[columnIndex].cards.findIndex(
-			(c) => c.cardId === cardId
-		);
+
+		const cardLocation = getCardLocation(cardId);
+		if (!cardLocation) return undefined;
+		const { columnIndex, columnId, cardIndex } = cardLocation;
 
 		return cardIndex <= 0
-			? board.value.columns[columnIndex].id
+			? columnId
 			: board.value.columns[columnIndex].cards[cardIndex - 1].cardId;
 	};
 
 	const getPreviousColumnId = (columnId: string): string | undefined => {
 		if (!board.value) return;
-		const columnIndex = board.value.columns.findIndex(
-			(column) => column.id === columnId
-		);
+		const columnIndex = getColumnIndex(columnId);
 
 		return columnIndex <= 0
 			? board.value.id
