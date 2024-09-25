@@ -5,18 +5,20 @@
 			:svg-width="$vuetify.display.xs ? 200 : undefined"
 			fill="rgba(var(--v-theme-primary))"
 			data-testid="img-permission"
+			class="w-66"
 		/>
 		<not-found-svg
 			v-else-if="isNotFoundError"
 			:svg-width="$vuetify.display.xs ? 200 : undefined"
 			fill="rgba(var(--v-theme-primary))"
 			data-testid="img-notfound"
+			class="w-66"
 		/>
 		<img
 			v-else
 			:alt="errorText"
 			src="@/assets/img/pc_repair.png"
-			class="pa-4"
+			class="pa-4 w-66"
 			data-testid="img-generic"
 		/>
 
