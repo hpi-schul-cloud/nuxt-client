@@ -17,4 +17,6 @@ export interface SchoolExternalTool extends SchoolExternalToolSave {
 	name: string;
 
 	status: SchoolExternalToolConfigurationStatus;
+
+	restrictToContexts?: string[];
 }
