@@ -7690,80 +7690,86 @@ export interface TaskResponse {
      * @type {string}
      * @memberof TaskResponse
      */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
     name: string;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    availableDate?: string;
+    description: string;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    dueDate?: string;
+    descriptionInputFormat: TaskResponseDescriptionInputFormatEnum;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    courseName: string;
+    availableDate: string | null;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    lessonName?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof TaskResponse
-     */
-    courseId: string;
-    /**
-     * Task description object, with props content: string and type: input format types
-     * @type {RichText}
-     * @memberof TaskResponse
-     */
-    description?: RichText;
+    dueDate: string | null;
     /**
      * 
      * @type {boolean}
      * @memberof TaskResponse
      */
-    lessonHidden: boolean;
+    _private: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TaskResponse
+     */
+    publicSubmissions: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof TaskResponse
+     */
+    teamSubmissions: boolean | null;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    displayColor?: string;
+    creator: string | null;
     /**
      * 
      * @type {string}
      * @memberof TaskResponse
      */
-    createdAt: string;
+    courseId: string | null;
     /**
      * 
-     * @type {string}
+     * @type {Array<string>}
      * @memberof TaskResponse
      */
-    updatedAt: string;
+    submissionIds: Array<string>;
     /**
      * 
-     * @type {TaskStatusResponse}
+     * @type {Array<string>}
      * @memberof TaskResponse
      */
-    status: TaskStatusResponse;
+    finishedIds: Array<string>;
 }
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum TaskResponseDescriptionInputFormatEnum {
+    PlainText = 'plainText',
+    RichTextCk5Simple = 'richTextCk5Simple',
+    RichTextCk4 = 'richTextCk4',
+    RichTextCk5 = 'richTextCk5'
+}
+
 /**
  * 
  * @export
@@ -15502,6 +15508,43 @@ export const LessonApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        lessonControllerGetLessonTasks: async (lessonId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'lessonId' is not null or undefined
+            assertParamExists('lessonControllerGetLessonTasks', 'lessonId', lessonId)
+            const localVarPath = `/lessons/{lessonId}/tasks`
+                .replace(`{${"lessonId"}}`, encodeURIComponent(String(lessonId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -15542,6 +15585,16 @@ export const LessonApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetLesson(lessonId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async lessonControllerGetLessonTasks(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TaskResponse>>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetLessonTasks(lessonId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -15579,6 +15632,15 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
         lessonControllerGetLesson(lessonId: string, options?: any): AxiosPromise<LessonResponse> {
             return localVarFp.lessonControllerGetLesson(lessonId, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @param {string} lessonId The id of the lesson.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<TaskResponse>> {
+            return localVarFp.lessonControllerGetLessonTasks(lessonId, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -15614,6 +15676,15 @@ export interface LessonApiInterface {
      * @memberof LessonApiInterface
      */
     lessonControllerGetLesson(lessonId: string, options?: any): AxiosPromise<LessonResponse>;
+
+    /**
+     * 
+     * @param {string} lessonId The id of the lesson.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LessonApiInterface
+     */
+    lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<TaskResponse>>;
 
 }
 
@@ -15655,6 +15726,17 @@ export class LessonApi extends BaseAPI implements LessonApiInterface {
      */
     public lessonControllerGetLesson(lessonId: string, options?: any) {
         return LessonApiFp(this.configuration).lessonControllerGetLesson(lessonId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} lessonId The id of the lesson.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof LessonApi
+     */
+    public lessonControllerGetLessonTasks(lessonId: string, options?: any) {
+        return LessonApiFp(this.configuration).lessonControllerGetLessonTasks(lessonId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
