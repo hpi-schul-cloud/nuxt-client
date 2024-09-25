@@ -60,6 +60,7 @@
 							@move-down:element="onMoveContentElementDown"
 							@move-up:element="onMoveContentElementUp"
 							@move-keyboard:element="onMoveContentElementKeyboard"
+							@update:element="onUpdateElement"
 						/>
 						<CardAddElementMenu @add-element="onAddElement" v-if="isEditMode" />
 					</div>
@@ -113,6 +114,7 @@ import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
+import { AnyContentElement } from "@/types/board/ContentElement";
 
 export default defineComponent({
 	name: "CardHost",
@@ -168,6 +170,11 @@ export default defineComponent({
 
 		const onMoveCardKeyboard = (event: KeyboardEvent) =>
 			emit("move:card-keyboard", event.code);
+
+		const onUpdateElement = (element: AnyContentElement) => {
+			console.log("update element", element);
+			cardStore.updateElementRequest({ element });
+		};
 
 		const _updateCardTitle = (newTitle: string, cardId: string) => {
 			cardStore.updateCardTitleRequest({ newTitle, cardId });
@@ -255,6 +262,7 @@ export default defineComponent({
 			isLoadingCard,
 			isHovered,
 			isFocusedById,
+			onUpdateElement,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
 			onDeleteCard,

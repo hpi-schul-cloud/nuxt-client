@@ -1,4 +1,5 @@
 import {
+	AppointmentFinderElementResponse,
 	CollaborativeTextEditorElementResponse,
 	DrawingElementResponse,
 	ExternalToolElementResponse,
@@ -15,4 +16,5 @@ export type AnyContentElement =
 	| SubmissionContainerElementResponse
 	| ExternalToolElementResponse
 	| DrawingElementResponse
-	| CollaborativeTextEditorElementResponse;
+	| CollaborativeTextEditorElementResponse
+	| AppointmentFinderElementResponse;

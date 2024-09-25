@@ -73,6 +73,19 @@
 					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
 				/>
+				<AppointmentFinderElement
+					v-else-if="isAppointmentFinderElementResponse(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					:isFirstElement="firstElementId === element.id"
+					:isLastElement="lastElementId === element.id"
+					:hasMultipleElements="hasMultipleElements"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+					@update-element="onUpdateElement"
+				/>
 				<DeletedElement
 					v-else-if="isDeletedElementResponse(element)"
 					:element="element"
@@ -86,6 +99,7 @@
 
 <script setup lang="ts">
 import {
+	AppointmentFinderElementResponse,
 	CollaborativeTextEditorElementResponse,
 	ContentElementType,
 	DeletedElementResponse,
@@ -107,6 +121,7 @@ import { FileContentElement } from "@feature-board-file-element";
 import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
+import { AppointmentFinderElement } from "@feature-board-appointment-finder-element";
 import { computed, PropType } from "vue";
 import ContentElement from "./ContentElement.vue";
 
@@ -126,6 +141,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
+	(e: "update:element", element: AnyContentElement): void;
 	(e: "delete:element", elementId: string): void;
 	(e: "move-down:element", elementMove: ElementMove): void;
 	(e: "move-up:element", elementMove: ElementMove): void;
@@ -134,6 +150,9 @@ const emit = defineEmits<{
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
+const onUpdateElement = (element: AnyContentElement) => {
+	emit("update:element", element);
+};
 const onDeleteElement = (elementId: string) => {
 	emit("delete:element", elementId);
 };
@@ -230,6 +249,12 @@ const isDeletedElementResponse = (
 	element: AnyContentElement
 ): element is DeletedElementResponse => {
 	return element.type === ContentElementType.Deleted;
+};
+
+const isAppointmentFinderElementResponse = (
+	element: AnyContentElement
+): element is AppointmentFinderElementResponse => {
+	return element.type === ContentElementType.AppointmentFinder;
 };
 
 const onMoveElementDown = (

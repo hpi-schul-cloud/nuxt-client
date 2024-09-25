@@ -177,6 +177,94 @@ export interface ApiValidationError {
 /**
  * 
  * @export
+ * @interface AppointmentFinderContentBody
+ */
+export interface AppointmentFinderContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppointmentFinderContentBody
+     */
+    appointmentFinderId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppointmentFinderContentBody
+     */
+    adminId: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppointmentFinderElementContent
+ */
+export interface AppointmentFinderElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppointmentFinderElementContent
+     */
+    appointmentFinderId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AppointmentFinderElementContent
+     */
+    adminId?: string;
+}
+/**
+ * 
+ * @export
+ * @interface AppointmentFinderElementContentBody
+ */
+export interface AppointmentFinderElementContentBody {
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof AppointmentFinderElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {AppointmentFinderContentBody}
+     * @memberof AppointmentFinderElementContentBody
+     */
+    content: AppointmentFinderContentBody;
+}
+/**
+ * 
+ * @export
+ * @interface AppointmentFinderElementResponse
+ */
+export interface AppointmentFinderElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof AppointmentFinderElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof AppointmentFinderElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof AppointmentFinderElementResponse
+     */
+    timestamps: TimestampsResponse;
+    /**
+     * 
+     * @type {AppointmentFinderElementContent}
+     * @memberof AppointmentFinderElementResponse
+     */
+    content: AppointmentFinderElementContent;
+}
+/**
+ * 
+ * @export
  * @interface AuthorizationBodyParams
  */
 export interface AuthorizationBodyParams {
@@ -1366,7 +1454,8 @@ export enum ContentElementType {
     SubmissionContainer = 'submissionContainer',
     ExternalTool = 'externalTool',
     CollaborativeTextEditor = 'collaborativeTextEditor',
-    Deleted = 'deleted'
+    Deleted = 'deleted',
+    AppointmentFinder = 'appointmentFinder'
 }
 
 /**
@@ -2080,7 +2169,8 @@ export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     SubmissionContainer = 'submissionContainer',
     ExternalTool = 'externalTool',
     CollaborativeTextEditor = 'collaborativeTextEditor',
-    Deleted = 'deleted'
+    Deleted = 'deleted',
+    AppointmentFinder = 'appointmentFinder'
 }
 
 /**
@@ -8050,10 +8140,10 @@ export interface UpdateBoardTitleParams {
 export interface UpdateElementContentBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody}
+     * @type {FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | AppointmentFinderElementContentBody}
      * @memberof UpdateElementContentBodyParams
      */
-    data: FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody;
+    data: FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | AppointmentFinderElementContentBody;
 }
 /**
  * 
@@ -11338,7 +11428,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | AppointmentFinderElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -11418,7 +11508,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | AppointmentFinderElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -11492,7 +11582,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | AppointmentFinderElementResponse>;
 
     /**
      * 
@@ -12310,7 +12400,7 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>> {
+        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | AppointmentFinderElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -12374,7 +12464,7 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse> {
+        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | AppointmentFinderElementResponse> {
             return localVarFp.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -12437,7 +12527,7 @@ export interface BoardElementApiInterface {
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse>;
+    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | AppointmentFinderElementResponse>;
 
 }
 
