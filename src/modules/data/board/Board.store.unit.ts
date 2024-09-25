@@ -153,7 +153,7 @@ describe("BoardStore", () => {
 			focusedId,
 		});
 
-		return { setFocus: mockForceFocus, forceFocus: mockForceFocus };
+		return { setFocus: mockSetFocus, forceFocus: mockForceFocus };
 	};
 
 	afterEach(() => {
@@ -385,10 +385,10 @@ describe("BoardStore", () => {
 			});
 			describe("when the card is first element", () => {
 				it('should call "forceFocus" if already focused card is deleted', async () => {
-					const { boardStore, cards } = setup();
+					const { boardStore, cards, firstColumn } = setup();
 					const firstCardId = cards[0].cardId;
 
-					const { setFocus, forceFocus } = focusSetup(firstCardId);
+					const { setFocus } = focusSetup(firstCardId);
 					setFocus(firstCardId);
 
 					boardStore.deleteCardSuccess({
@@ -396,7 +396,9 @@ describe("BoardStore", () => {
 						isOwnAction: true,
 					});
 
-					expect(forceFocus).toHaveBeenCalledWith(firstCardId);
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
+						firstColumn.id
+					);
 				});
 			});
 
@@ -406,15 +408,17 @@ describe("BoardStore", () => {
 					const firstCardId = cards[0].cardId;
 					const secondCardId = cards[1].cardId;
 
-					const { setFocus, forceFocus } = focusSetup(secondCardId);
-					setFocus(firstCardId);
+					const { setFocus } = focusSetup(secondCardId);
+					setFocus(secondCardId);
 
 					boardStore.deleteCardSuccess({
 						cardId: secondCardId,
 						isOwnAction: true,
 					});
 
-					expect(forceFocus).toHaveBeenCalledWith(firstCardId);
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
+						firstCardId
+					);
 				});
 			});
 		});
@@ -464,7 +468,7 @@ describe("BoardStore", () => {
 				it('should call "forceFocus" if already focused column is deleted', async () => {
 					const { boardStore, firstColumn } = setup();
 
-					const { setFocus, forceFocus } = focusSetup(firstColumn.id);
+					const { setFocus } = focusSetup(firstColumn.id);
 
 					setFocus(firstColumn.id);
 
@@ -473,7 +477,9 @@ describe("BoardStore", () => {
 						isOwnAction: true,
 					});
 
-					expect(forceFocus).toHaveBeenCalledWith(firstColumn.id);
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
+						boardStore.board?.id
+					);
 				});
 			});
 
@@ -481,15 +487,17 @@ describe("BoardStore", () => {
 				it('should call "forceFocus" if already focused column is deleted', async () => {
 					const { boardStore, firstColumn, secondColumn } = setup();
 
-					const { setFocus, forceFocus } = focusSetup(secondColumn.id);
-					setFocus(firstColumn.id);
+					const { setFocus } = focusSetup(secondColumn.id);
+					setFocus(secondColumn.id);
 
 					boardStore.deleteColumnSuccess({
 						columnId: secondColumn.id,
 						isOwnAction: true,
 					});
 
-					expect(forceFocus).toHaveBeenCalledWith(firstColumn.id);
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
+						firstColumn.id
+					);
 				});
 			});
 
