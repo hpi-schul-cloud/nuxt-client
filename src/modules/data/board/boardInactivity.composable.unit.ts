@@ -1,25 +1,25 @@
+import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
+import NotifierModule from "@/store/notifier";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@/utils/mock-store-module";
 import {
 	boardResponseFactory,
 	envsFactory,
 	mockedPiniaStoreTyping,
 	mountComposable,
 } from "@@/tests/test-utils";
-import {
-	useBoardInactivity,
-	connectionOptions,
-} from "./boardInactivity.composable";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@/utils/mock-store-module";
-import { computed, nextTick } from "vue";
-import { setActivePinia } from "pinia";
-import { createTestingPinia } from "@pinia/testing";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import setupStores from "@@/tests/test-utils/setupStores";
-import EnvConfigModule from "@/store/env-config";
-import { envConfigModule } from "@/store";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createTestingPinia } from "@pinia/testing";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { setActivePinia } from "pinia";
+import { computed, nextTick } from "vue";
 import { useBoardStore } from "./Board.store";
+import {
+	connectionOptions,
+	useBoardInactivity,
+} from "./boardInactivity.composable";
 import { useCardStore } from "./Card.store";
 import { useSocketConnection } from "./socket/socket";
 
@@ -31,16 +31,15 @@ jest.mock("vue-i18n", () => ({
 
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
-jest.mock("@util-board");
-const mockUseSharedLastCreatedElement = jest.mocked(
-	useSharedLastCreatedElement
-);
-
 jest.mock("./socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
 jest.mock("@util-board/BoardNotifier.composable");
+jest.mock("@util-board/LastCreatedElement.composable");
 const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = jest.mocked(
+	useSharedLastCreatedElement
+);
 
 let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 let boardStore: ReturnType<typeof useBoardStore>;

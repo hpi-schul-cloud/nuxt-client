@@ -23,8 +23,8 @@
 
 <script setup lang="ts">
 import { mdiPlus } from "@icons/material";
+import { useSharedEditMode } from "@util-board";
 import { computed } from "vue";
-import { useSharedEditMode } from "@data-board";
 
 defineProps({
 	dataTestid: {

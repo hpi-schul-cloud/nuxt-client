@@ -1,25 +1,28 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
 import { ColumnMove } from "@/types/board/DragAndDrop";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 	envsFactory,
 } from "@@/tests/test-utils/factory";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
-import { createPinia, setActivePinia } from "pinia";
-import { computed, ref } from "vue";
-import { useBoardStore } from "./Board.store";
-import { useSharedEditMode } from "./EditMode.composable";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useCardStore, useSocketConnection } from "@data-board";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import {
+	useBoardNotifier,
+	useSharedEditMode,
+	useSharedLastCreatedElement,
+} from "@util-board";
+import { createPinia, setActivePinia } from "pinia";
+import { computed, ref } from "vue";
+import { useBoardStore } from "./Board.store";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 jest.mock("./boardActions/boardSocketApi.composable");
@@ -28,10 +31,8 @@ const mockedUseBoardSocketApi = jest.mocked(useBoardSocketApi);
 jest.mock("./boardActions/boardRestApi.composable");
 const mockedUseBoardRestApi = jest.mocked(useBoardRestApi);
 
-jest.mock("./EditMode.composable");
-const mockedSharedEditMode = jest.mocked(useSharedEditMode);
-
 jest.mock("@util-board");
+const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = jest.mocked(
 	useSharedLastCreatedElement
@@ -89,6 +90,7 @@ describe("BoardStore", () => {
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
+			isInEditMode: computed(() => true),
 		});
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
