@@ -61,12 +61,7 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import {
-	RoomVariant,
-	useRoomDetailsStore,
-	useRoomFeature,
-	useRoomsState,
-} from "@data-room";
+import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomDetails } from "@feature-room";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
 import {
