@@ -2,7 +2,7 @@
 	<RouterLink :to="roomPath" class="room-link" :aria-label="avatarAriaLabel">
 		<div class="room-avatar" :class="avatarColor">
 			<span class="text-h3 text-white" data-testid="room-short-title">
-				{{ room.name }}
+				{{ roomShortName }}
 			</span>
 		</div>
 		<div class="room-title mb-2 mt-2" data-testid="room-title">
@@ -26,6 +26,15 @@ const props = defineProps({
 const { t } = useI18n();
 
 const roomPath = computed(() => `/rooms/${props.room.id}`);
+
+const roomShortName = computed(() => {
+	if (props.room) {
+		return props.room.name.length > 2
+			? props.room.name.slice(0, 2)
+			: props.room.name;
+	}
+	return "";
+});
 
 const avatarColor = computed(() => `room-color--${props.room.color}`);
 
