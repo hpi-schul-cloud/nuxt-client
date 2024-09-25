@@ -16,7 +16,7 @@
 			v-else
 			:alt="errorText"
 			src="@/assets/img/pc_repair.png"
-			class="pa-4 w-66"
+			class="repair-image"
 			data-testid="img-generic"
 		/>
 
@@ -71,3 +71,22 @@ export default defineComponent({
 	},
 });
 </script>
+<style lang="scss" scoped>
+@import "@/styles/settings.scss";
+
+.repair-image {
+	width: 75%;
+	height: auto;
+	padding: 6rem 1rem;
+
+	@media #{map-get($display-breakpoints, "sm-and-up")} {
+		padding: 6rem 1rem;
+	}
+
+	@media #{map-get($display-breakpoints, "md-and-up")} {
+		height: 320px;
+		width: auto;
+		padding: 1rem;
+	}
+}
+</style>
