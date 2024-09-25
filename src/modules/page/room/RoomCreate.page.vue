@@ -10,18 +10,16 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { RoomColor } from "@/serverApi/v3";
 import { RoomForm } from "@feature-room";
-import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { RoomCreateParams } from "@/types/room/Room";
-import { useRoomsState } from "@data-room";
+import { useRoomCreateState } from "@data-room";
 
 const { t } = useI18n();
 
 const router = useRouter();
-const { createRoom } = useRoomsState();
+const { createRoom, roomData } = useRoomCreateState();
 
 const breadcrumbs: Breadcrumb[] = [
 	{
@@ -34,16 +32,9 @@ const breadcrumbs: Breadcrumb[] = [
 	},
 ];
 
-const roomData = ref<RoomCreateParams>({
-	name: "",
-	color: RoomColor.BlueGrey,
-	startDate: undefined,
-	endDate: undefined,
-});
-
-const onSave = async (roomData: RoomCreateParams) => {
-	const room = await createRoom(roomData);
-	router.push({ name: "room-details", params: { id: room.id } });
+const onSave = async (roomParams: RoomCreateParams) => {
+	const { id } = await createRoom(roomParams);
+	router.push({ name: "room-details", params: { id } });
 };
 
 const onCancel = () => {

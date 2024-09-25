@@ -1,9 +1,4 @@
-import {
-	RoomCreateParams,
-	RoomDetails,
-	RoomItem,
-	RoomUpdateParams,
-} from "@/types/room/Room";
+import { RoomItem } from "@/types/room/Room";
 import { computed, ref } from "vue";
 import { RoomApiFactory } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
@@ -19,33 +14,6 @@ export const useRoomsState = () => {
 		isLoading.value = true;
 		try {
 			rooms.value = (await roomApi.roomControllerGetRooms()).data.data;
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-
-			throw createApplicationError(responseError.code);
-		} finally {
-			isLoading.value = false;
-		}
-	};
-
-	const createRoom = async (props: RoomCreateParams): Promise<RoomDetails> => {
-		isLoading.value = true;
-		try {
-			const room = (await roomApi.roomControllerCreateRoom(props)).data;
-			return room;
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-
-			throw createApplicationError(responseError.code);
-		} finally {
-			isLoading.value = false;
-		}
-	};
-
-	const updateRoom = async (id: string, props: RoomUpdateParams) => {
-		isLoading.value = true;
-		try {
-			await roomApi.roomControllerUpdateRoom(id, props);
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
@@ -77,8 +45,6 @@ export const useRoomsState = () => {
 		isLoading,
 		isEmpty,
 		fetchRooms,
-		createRoom,
-		updateRoom,
 		deleteRoom,
 	};
 };
