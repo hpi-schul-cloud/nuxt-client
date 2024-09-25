@@ -3,22 +3,7 @@
 		<template #header>
 			<h1 class="text-h3 py-2 mb-4">{{ $t("pages.rooms.fab.title") }}</h1>
 		</template>
-		<RoomForm
-			:room="roomData"
-			@update:color="onUpdateColor($event)"
-			@update:name="onUpdateName($event)"
-			@update:startDate="onUpdateStartDate($event)"
-			@update:endDate="onUpdateEndDate($event)"
-		/>
-		<div class="d-flex">
-			<VSpacer />
-			<VBtn variant="text" class="mr-4" @click="onCancel">
-				{{ $t("common.actions.cancel") }}
-			</VBtn>
-			<VBtn variant="flat" color="primary" @click="onSave">
-				{{ $t("common.actions.save") }}
-			</VBtn>
-		</div>
+		<RoomForm :room="roomData" @save="onSave" @cancel="onCancel" />
 	</DefaultWireframe>
 </template>
 
@@ -30,10 +15,13 @@ import { RoomForm } from "@feature-room";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { RoomCreateParams } from "@/types/room/Room";
+import { useRoomsState } from "@data-room";
 
 const { t } = useI18n();
 
 const router = useRouter();
+const { createRoom } = useRoomsState();
 
 const breadcrumbs: Breadcrumb[] = [
 	{
@@ -46,36 +34,20 @@ const breadcrumbs: Breadcrumb[] = [
 	},
 ];
 
-const roomData = ref({
-	id: "",
+const roomData = ref<RoomCreateParams>({
 	name: "",
 	color: RoomColor.BlueGrey,
-	startDate: "",
-	endDate: "",
+	startDate: undefined,
+	endDate: undefined,
 });
 
-const onSave = () => {
-	// await roomApi.roomControllerPostRoom(roomData.value);
+const onSave = async (roomData: RoomCreateParams) => {
+	const room = await createRoom(roomData);
+	router.push({ name: "room-details", params: { id: room.id } });
 };
 
 const onCancel = () => {
 	// TODO use useConfirmationDialog here, when it's refactored
 	router.go(-1);
-};
-
-const onUpdateColor = (color: RoomColor) => {
-	roomData.value.color = color;
-};
-
-const onUpdateName = (name: string) => {
-	roomData.value.name = name;
-};
-
-const onUpdateStartDate = (startDate: string) => {
-	roomData.value.startDate = startDate;
-};
-
-const onUpdateEndDate = (endDate: string) => {
-	roomData.value.endDate = endDate;
 };
 </script>

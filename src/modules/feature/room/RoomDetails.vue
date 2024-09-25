@@ -54,7 +54,7 @@ import { useI18n } from "vue-i18n";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
-import { Room } from "@/types/room/Room";
+import { RoomDetails } from "@/types/room/Room";
 import { KebabMenu } from "@ui-kebab-menu";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
 import { useRoomsState } from "@data-room";
@@ -62,7 +62,7 @@ import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { useRouter } from "vue-router";
 
 const props = defineProps({
-	room: { type: Object as PropType<Room> },
+	room: { type: Object as PropType<RoomDetails> },
 });
 
 const { t } = useI18n();

@@ -7,22 +7,7 @@
 		</template>
 		<div v-if="isLoading" />
 		<div v-else>
-			<RoomForm
-				:room="roomData"
-				@update:color="onUpdateColor($event)"
-				@update:name="onUpdateName($event)"
-				@update:startDate="onUpdateStartDate($event)"
-				@update:endDate="onUpdateEndDate($event)"
-			/>
-			<div class="d-flex">
-				<VSpacer />
-				<VBtn variant="text" class="mr-4" @click="onCancel">
-					{{ $t("common.actions.cancel") }}
-				</VBtn>
-				<VBtn variant="flat" color="primary" @click="onSave">
-					{{ $t("common.actions.save") }}
-				</VBtn>
-			</div>
+			<RoomForm :room="roomData" @save="onSave" @cancel="onCancel" />
 		</div>
 	</DefaultWireframe>
 </template>
@@ -30,13 +15,13 @@
 <script setup lang="ts">
 import { computed, ComputedRef, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useRoomDetailsStore } from "@data-room";
+import { useRoomDetailsStore, useRoomsState } from "@data-room";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomForm } from "@feature-room";
-// import { Room } from "@/types/room/Room";
 import { useI18n } from "vue-i18n";
 import { storeToRefs } from "pinia";
+import { RoomUpdateParams } from "@/types/room/Room";
 import { RoomColor } from "@/serverApi/v3";
 
 const { t } = useI18n();
@@ -46,46 +31,39 @@ const router = useRouter();
 const roomDetailsStore = useRoomDetailsStore();
 const { isLoading, room } = storeToRefs(roomDetailsStore);
 const { fetchRoom } = roomDetailsStore;
+const { updateRoom } = useRoomsState();
+
+const roomData = ref<RoomUpdateParams>({
+	name: "",
+	color: RoomColor.BlueGrey,
+});
 
 watch(
 	() => route.params.id,
 	async () => {
 		await fetchRoom(route.params.id as string);
+		if (room.value) {
+			roomData.value = {
+				name: room.value.name,
+				color: room.value.color,
+				startDate: room.value.startDate,
+				endDate: room.value.endDate,
+			};
+		} else {
+			// handle error
+		}
 	},
 	{ immediate: true }
 );
 
-const roomData = ref({
-	id: "",
-	name: "",
-	color: RoomColor.BlueGrey,
-	startDate: "",
-	endDate: "",
-});
-
-const onSave = async () => {
-	// await roomApi.roomControllerPatchRoom(roomData.value.id, roomData.value);
+const onSave = async (roomData: RoomUpdateParams) => {
+	await updateRoom(room.value!.id, roomData);
+	router.push({ name: "room-details", params: { id: room.value!.id } });
 };
 
 const onCancel = () => {
 	// TODO use useConfirmationDialog here, when it's refactored
 	router.go(-1);
-};
-
-const onUpdateColor = (color: RoomColor) => {
-	roomData.value.color = color;
-};
-
-const onUpdateName = (name: string) => {
-	roomData.value.name = name;
-};
-
-const onUpdateStartDate = (startDate: string) => {
-	roomData.value.startDate = startDate;
-};
-
-const onUpdateEndDate = (endDate: string) => {
-	roomData.value.endDate = endDate;
 };
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {

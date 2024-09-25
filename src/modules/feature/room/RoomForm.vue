@@ -10,26 +10,24 @@
 			@blur="v$.roomData.title.$touch"
 		/>
 		<div class="mb-8">
-			<RoomColorPicker
-				v-model:color="roomData.color"
-				@update:color="onUpdateColor"
-			/>
+			<RoomColorPicker v-model:color="roomData.color" />
 		</div>
 		<div class="mb-8">
 			Zeitraum
 			<div class="d-flex flex-fill">
-				<DatePicker
-					:date="roomData.startDate"
-					class="flex-1-1 mr-4"
-					@update:date="onUpdateStartDate"
-				/>
-				<DatePicker
-					:date="roomData.endDate"
-					class="flex-1-1 ml-4"
-					@update:date="onUpdateEndDate"
-				/>
+				<DatePicker v-model="roomData.startDate" class="flex-1-1 mr-4" />
+				<DatePicker v-model="roomData.endDate" class="flex-1-1 ml-4" />
 			</div>
 		</div>
+	</div>
+	<div class="d-flex">
+		<VSpacer />
+		<VBtn variant="text" class="mr-4" @click="onCancel">
+			{{ $t("common.actions.cancel") }}
+		</VBtn>
+		<VBtn variant="flat" color="primary" @click="onSave">
+			{{ $t("common.actions.save") }}
+		</VBtn>
 	</div>
 </template>
 
@@ -40,22 +38,16 @@ import { DatePicker } from "@ui-date-time-picker";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
-import { Room } from "@/types/room/Room";
-import { RoomColor } from "@/serverApi/v3";
+import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
 
 const props = defineProps({
 	room: {
-		type: Object as PropType<Room>,
+		type: Object as PropType<RoomCreateParams | RoomUpdateParams>,
 		required: true,
 	},
 });
 
-const emit = defineEmits([
-	"update:color",
-	"update:name",
-	"update:startDate",
-	"update:endDate",
-]);
+const emit = defineEmits(["save", "cancel"]);
 
 const roomData = computed(() => props.room);
 
@@ -71,21 +63,9 @@ watch(
 		const shortTitle = newTitle?.slice(0, 2);
 		if (shortTitle === roomData.value.name) return;
 		// still needed at all?
-		emit("update:name", newTitle);
+		// emit("update:name", newTitle);
 	}
 );
-
-const onUpdateColor = (color: RoomColor) => {
-	emit("update:color", color);
-};
-
-const onUpdateStartDate = (newDate: string) => {
-	emit("update:startDate", newDate);
-};
-
-const onUpdateEndDate = (newDate: string) => {
-	emit("update:endDate", newDate);
-};
 
 // Validation
 const rules = computed(() => ({
@@ -104,4 +84,12 @@ watch(
 		console.log("hello?", v$.value);
 	}
 );
+
+const onSave = () => {
+	emit("save", roomData.value);
+};
+
+const onCancel = () => {
+	emit("cancel");
+};
 </script>

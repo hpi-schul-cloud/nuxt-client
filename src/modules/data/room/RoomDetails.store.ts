@@ -1,7 +1,7 @@
-import { Room } from "@/types/room/Room";
+import { RoomDetails } from "@/types/room/Room";
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { RoomApiFactory, RoomDetailsResponse } from "@/serverApi/v3";
+import { RoomApiFactory } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 
@@ -12,23 +12,25 @@ export enum RoomVariant {
 
 export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	const isLoading = ref(true);
-	const room = ref<Room>();
+	const room = ref<RoomDetails>();
 	const roomVariant = ref<RoomVariant>();
 
-	const roomApi = RoomApiFactory(undefined, "v3", $axios);
+	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
-	const fetchRoom = async (id: string): Promise<RoomDetailsResponse> => {
+	const fetchRoom = async (id: string) => {
 		try {
-			const response = await roomApi.roomControllerGetRoomDetails(id);
+			room.value = (await roomApi.roomControllerGetRoomDetails(id)).data;
 			roomVariant.value = RoomVariant.ROOM;
-			isLoading.value = false;
-			return response.data;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
-			roomVariant.value = RoomVariant.COURSE_ROOM;
-			isLoading.value = false;
 
-			throw createApplicationError(responseError.code);
+			if (responseError.code === 404) {
+				roomVariant.value = RoomVariant.COURSE_ROOM;
+			} else {
+				throw createApplicationError(responseError.code);
+			}
+		} finally {
+			isLoading.value = false;
 		}
 	};
 
