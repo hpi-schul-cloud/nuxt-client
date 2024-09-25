@@ -1,5 +1,5 @@
 <template>
-	<div :id="element.id">
+	<div>
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
 			class="rich_text"
