@@ -4,6 +4,8 @@ import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import {
 	envsFactory,
+	externalToolElementResponseFactory,
+	fileElementResponseFactory,
 	richTextElementContentFactory,
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
@@ -126,10 +128,14 @@ describe("CardStore", () => {
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
 		const elements = richTextElementResponseFactory.buildList(3);
+		const fileElement = fileElementResponseFactory.build();
+		const externalToolElement = externalToolElementResponseFactory.build();
 
 		const cardId = cards[0].id;
 		const card = cards[0];
 		card.elements = elements;
+		card.elements.push(fileElement);
+		card.elements.push(externalToolElement);
 
 		for (const card of cards) {
 			cardStore.cards[card.id] = card;
@@ -456,7 +462,7 @@ describe("CardStore", () => {
 					isOwnAction: true,
 				});
 
-				expect(cardStore.cards[cardId].elements.length).toEqual(4);
+				expect(cardStore.cards[cardId].elements.length).toEqual(6);
 				expect(cardStore.cards[cardId].elements[toPosition]).toEqual(
 					newElement
 				);
@@ -465,7 +471,7 @@ describe("CardStore", () => {
 				const { cardStore, cardId } = setup();
 				const newElement = drawingElementResponseFactory.build();
 
-				expect(cardStore.cards[cardId].elements.length).toEqual(3);
+				expect(cardStore.cards[cardId].elements.length).toEqual(5);
 				await cardStore.createElementSuccess({
 					type: ContentElementType.Drawing,
 					cardId,
@@ -473,8 +479,8 @@ describe("CardStore", () => {
 					isOwnAction: true,
 				});
 
-				expect(cardStore.cards[cardId].elements.length).toEqual(4);
-				expect(cardStore.cards[cardId].elements[3]).toEqual(newElement);
+				expect(cardStore.cards[cardId].elements.length).toEqual(6);
+				expect(cardStore.cards[cardId].elements[5]).toEqual(newElement);
 			});
 		});
 
@@ -553,7 +559,7 @@ describe("CardStore", () => {
 				MOVE_DOWN
 			);
 
-			expect(cardStore.cards[cardId].elements[2].id).toEqual(elementId);
+			expect(cardStore.cards[cardId].elements[4].id).toEqual(elementId);
 		});
 
 		it("should call socket Api if feature flag is enabled", async () => {
@@ -673,7 +679,7 @@ describe("CardStore", () => {
 					const { cardStore, cardId, elements } = setup();
 					const elementId = elements[0].id;
 
-					const { setFocus, forceFocus } = focusSetup(elementId);
+					const { setFocus } = focusSetup(elementId);
 					setFocus(elementId);
 
 					await cardStore.deleteElementSuccess({
@@ -682,17 +688,17 @@ describe("CardStore", () => {
 						isOwnAction: true,
 					});
 
-					expect(forceFocus).toHaveBeenCalled();
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(cardId);
 					expect(setEditModeId).not.toHaveBeenCalled();
 				});
 			});
 
 			describe("when the element is not first element", () => {
 				it('should call "forceFocus" if already focused element is deleted', async () => {
-					const { cardStore, cardId, elements } = setup();
-					const elementId = elements[2].id;
+					const { cardStore, cardId } = setup();
+					const elementId = cardStore.cards[cardId].elements[4].id;
 
-					const { setFocus, forceFocus } = focusSetup(elementId);
+					const { setFocus } = focusSetup(elementId);
 					setFocus(elementId);
 
 					await cardStore.deleteElementSuccess({
@@ -701,7 +707,9 @@ describe("CardStore", () => {
 						isOwnAction: true,
 					});
 
-					expect(forceFocus).toHaveBeenCalled();
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
+						cardStore.cards[cardId].elements[3].id
+					);
 					expect(setEditModeId).toHaveBeenCalled();
 				});
 			});
@@ -710,7 +718,7 @@ describe("CardStore", () => {
 				const { cardStore, cardId, elements } = setup();
 				const elementId = elements[0].id;
 
-				const { setFocus, forceFocus } = focusSetup("unknownId");
+				const { setFocus } = focusSetup("unknownId");
 
 				setFocus("unknownId");
 
@@ -720,7 +728,7 @@ describe("CardStore", () => {
 					isOwnAction: true,
 				});
 
-				expect(forceFocus).not.toHaveBeenCalledWith(elementId);
+				expect(mockedBoardFocusCalls.forceFocus).not.toHaveBeenCalled();
 			});
 		});
 	});
