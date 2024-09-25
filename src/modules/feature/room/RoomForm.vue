@@ -5,9 +5,9 @@
 			label="Name des Raumes"
 			class="mb-8"
 			:error-messages="
-				v$.roomData.title.$errors.map((e: ErrorObject) => e.$message)
+				v$.roomData.name.$errors.map((e: ErrorObject) => unref(e.$message))
 			"
-			@blur="v$.roomData.title.$touch"
+			@blur="v$.roomData.name.$touch"
 		/>
 		<div class="mb-8">
 			<RoomColorPicker v-model:color="roomData.color" />
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, watch } from "vue";
+import { computed, PropType, unref } from "vue";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { DatePicker } from "@ui-date-time-picker";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
@@ -53,24 +53,10 @@ const roomData = computed(() => props.room);
 
 const { t } = useI18n();
 
-// generate short title
-watch(
-	() => roomData.value.name,
-	(newTitle, oldTitle) => {
-		if (!newTitle || newTitle === oldTitle) return;
-		if (newTitle.length < 2) return;
-
-		const shortTitle = newTitle?.slice(0, 2);
-		if (shortTitle === roomData.value.name) return;
-		// still needed at all?
-		// emit("update:name", newTitle);
-	}
-);
-
 // Validation
 const rules = computed(() => ({
 	roomData: {
-		title: {
+		name: {
 			required: helpers.withMessage(t("common.validation.required2"), required),
 		},
 	},
@@ -78,14 +64,12 @@ const rules = computed(() => ({
 
 const v$ = useVuelidate(rules, { roomData }, { $lazy: true, $autoDirty: true });
 
-watch(
-	() => v$.value,
-	() => {
-		console.log("hello?", v$.value);
+const onSave = async () => {
+	const valid = await v$.value.$validate();
+	if (!valid) {
+		// TODO notify user form is invalid
+		return;
 	}
-);
-
-const onSave = () => {
 	emit("save", roomData.value);
 };
 
