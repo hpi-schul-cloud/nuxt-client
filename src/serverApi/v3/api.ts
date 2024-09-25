@@ -6641,6 +6641,12 @@ export interface SchoolExternalToolResponse {
      * @memberof SchoolExternalToolResponse
      */
     status: SchoolExternalToolConfigurationStatusResponse;
+    /**
+     * 
+     * @type {Array<ToolContextType>}
+     * @memberof SchoolExternalToolResponse
+     */
+    restrictToContexts?: Array<ToolContextType>;
 }
 /**
  * 
