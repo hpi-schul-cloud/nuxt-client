@@ -73,66 +73,9 @@ const appointmentFinderElement = ref<HTMLElement | null>(null);
 const element = toRef(props, "element");
 useBoardFocusHandler(element.value.id, appointmentFinderElement);
 
-const authModule = injectStrict(AUTH_MODULE_KEY);
-
-const fullUserName = `${authModule.getMe?.user.firstName} ${authModule.getMe?.user.lastName}`;
-const today = new Date();
-const formattedDate = today.toISOString().split("T")[0];
-const appointmentData = {
-	status: "started",
-	appointmentId: "",
-	adminId: "",
-	creatorName: fullUserName,
-	subject: "Neue Abstimmung",
-	place: "",
-	description: "",
-	password: null,
-	suggestedDates: [
-		{
-			suggestedDateId: null,
-			startDate: formattedDate,
-			startTime: null,
-			endDate: null,
-			endTime: null,
-		},
-	],
-	participants: [],
-};
-
-const createAppointment = async () => {
-	const result = await $axios.post(
-		"http://localhost:4210/appointment/80248a42-8fe2-4d4a-89da-02e683511f76",
-		appointmentData,
-		{
-			headers: {
-				"Content-Type": "application/terminfinder.api-v1+json",
-			},
-		}
-	);
-	const updatedElement = {
-		...element.value,
-		content: {
-			...element.value.content,
-			appointmentFinderId: result.data.appointmentId,
-			adminId: result.data.adminId,
-		},
-	};
-	emit("update-element", updatedElement);
-
-	return result;
-};
-
 const redirectToAppointmentFinderUrl = async () => {
 	const windowReference = window.open();
 	const appointmentFinderId = props.element.content.appointmentFinderId;
-
-	if (!appointmentFinderId && windowReference) {
-		const result = await createAppointment();
-		const adminId = result.data.adminId;
-
-		const url = `http://localhost:4200/#/admin/dashboard/${adminId}`;
-		windowReference.location = url;
-	}
 
 	if (appointmentFinderId && windowReference) {
 		const url = `http://localhost:4200/#/poll/${appointmentFinderId}`;
