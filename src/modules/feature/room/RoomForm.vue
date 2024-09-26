@@ -1,34 +1,36 @@
 <template>
-	<div>
-		<VTextField
-			v-model="roomData.name"
-			label="Name des Raumes"
-			class="mb-8"
-			:error-messages="
-				v$.roomData.name.$errors.map((e: ErrorObject) => unref(e.$message))
-			"
-			@blur="v$.roomData.name.$touch"
-		/>
-		<div class="mb-8">
-			<RoomColorPicker v-model:color="roomData.color" />
-		</div>
-		<div class="mb-8">
-			Zeitraum
-			<div class="d-flex flex-fill">
-				<DatePicker v-model="roomData.startDate" class="flex-1-1 mr-4" />
-				<DatePicker v-model="roomData.endDate" class="flex-1-1 ml-4" />
+	<form @submit.prevent="onSave">
+		<div>
+			<VTextField
+				v-model="roomData.name"
+				label="Name des Raumes"
+				class="mb-8"
+				:error-messages="
+					v$.roomData.name.$errors.map((e: ErrorObject) => unref(e.$message))
+				"
+				@blur="v$.roomData.name.$touch"
+			/>
+			<div class="mb-8">
+				<RoomColorPicker v-model:color="roomData.color" />
+			</div>
+			<div class="mb-8">
+				Zeitraum
+				<div class="d-flex flex-fill">
+					<DatePicker v-model="roomData.startDate" class="flex-1-1 mr-4" />
+					<DatePicker v-model="roomData.endDate" class="flex-1-1 ml-4" />
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="d-flex">
-		<VSpacer />
-		<VBtn variant="text" class="mr-4" @click="onCancel">
-			{{ $t("common.actions.cancel") }}
-		</VBtn>
-		<VBtn variant="flat" color="primary" @click="onSave">
-			{{ $t("common.actions.save") }}
-		</VBtn>
-	</div>
+		<div class="d-flex">
+			<VSpacer />
+			<VBtn variant="text" class="mr-4" @click="onCancel">
+				{{ $t("common.actions.cancel") }}
+			</VBtn>
+			<VBtn variant="flat" color="primary" type="submit">
+				{{ $t("common.actions.save") }}
+			</VBtn>
+		</div>
+	</form>
 </template>
 
 <script setup lang="ts">
