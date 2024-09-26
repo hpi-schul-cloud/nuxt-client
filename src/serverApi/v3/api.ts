@@ -7632,6 +7632,19 @@ export interface TargetInfoResponse {
 /**
  * 
  * @export
+ * @interface TargetUserIdParams
+ */
+export interface TargetUserIdParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof TargetUserIdParams
+     */
+    userId: string;
+}
+/**
+ * 
+ * @export
  * @interface TaskCopyApiParams
  */
 export interface TaskCopyApiParams {
@@ -20400,6 +20413,135 @@ export class ShareTokenApi extends BaseAPI implements ShareTokenApiInterface {
      */
     public shareTokenControllerLookupShareToken(token: string, options?: any) {
         return ShareTokenApiFp(this.configuration).shareTokenControllerLookupShareToken(token, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * ShdApi - axios parameter creator
+ * @export
+ */
+export const ShdApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Create a support jwt for a user.
+         * @param {TargetUserIdParams} targetUserIdParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shdControllerSupportJwt: async (targetUserIdParams: TargetUserIdParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'targetUserIdParams' is not null or undefined
+            assertParamExists('shdControllerSupportJwt', 'targetUserIdParams', targetUserIdParams)
+            const localVarPath = `/shd/supportJwt`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(targetUserIdParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * ShdApi - functional programming interface
+ * @export
+ */
+export const ShdApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ShdApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a support jwt for a user.
+         * @param {TargetUserIdParams} targetUserIdParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async shdControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.shdControllerSupportJwt(targetUserIdParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * ShdApi - factory interface
+ * @export
+ */
+export const ShdApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ShdApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a support jwt for a user.
+         * @param {TargetUserIdParams} targetUserIdParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        shdControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): AxiosPromise<string> {
+            return localVarFp.shdControllerSupportJwt(targetUserIdParams, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * ShdApi - interface
+ * @export
+ * @interface ShdApi
+ */
+export interface ShdApiInterface {
+    /**
+     * 
+     * @summary Create a support jwt for a user.
+     * @param {TargetUserIdParams} targetUserIdParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ShdApiInterface
+     */
+    shdControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any): AxiosPromise<string>;
+
+}
+
+/**
+ * ShdApi - object-oriented interface
+ * @export
+ * @class ShdApi
+ * @extends {BaseAPI}
+ */
+export class ShdApi extends BaseAPI implements ShdApiInterface {
+    /**
+     * 
+     * @summary Create a support jwt for a user.
+     * @param {TargetUserIdParams} targetUserIdParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ShdApi
+     */
+    public shdControllerSupportJwt(targetUserIdParams: TargetUserIdParams, options?: any) {
+        return ShdApiFp(this.configuration).shdControllerSupportJwt(targetUserIdParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
