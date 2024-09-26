@@ -1,6 +1,8 @@
 <template>
 	<template v-if="room">
-		<div>[TODO - RoomDetails content]</div>
+		<div>
+			<!-- content goes here-->
+		</div>
 	</template>
 </template>
 
