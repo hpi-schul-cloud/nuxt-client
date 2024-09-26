@@ -33,6 +33,7 @@
 					@move-down:element="onMoveDown"
 					@move-up:element="onMoveUp"
 					@delete:element="onDelete"
+					@edit:finder="onEdit"
 				/>
 			</template>
 		</ContentElementBar>
@@ -48,8 +49,6 @@ import { ContentElementBar } from "@ui-board";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
-import { $axios } from "@/utils/api";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 const props = defineProps({
 	element: {
@@ -72,6 +71,16 @@ const { t } = useI18n();
 const appointmentFinderElement = ref<HTMLElement | null>(null);
 const element = toRef(props, "element");
 useBoardFocusHandler(element.value.id, appointmentFinderElement);
+
+const onEdit = () => {
+	const windowReference = window.open();
+	const adminId = props.element.content.adminId;
+
+	if (adminId && windowReference) {
+		const url = `http://localhost:4200/#/admin/dashboard/${adminId}`;
+		windowReference.location = url;
+	}
+};
 
 const redirectToAppointmentFinderUrl = async () => {
 	const windowReference = window.open();
