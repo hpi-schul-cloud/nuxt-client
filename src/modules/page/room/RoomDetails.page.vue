@@ -61,6 +61,7 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomDetails } from "@feature-room";
 import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
@@ -69,6 +70,7 @@ import {
 	useDeleteConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { KebabMenu } from "@ui-kebab-menu";
+import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onUnmounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -86,6 +88,11 @@ const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 const { t } = useI18n();
 const { deleteRoom } = useRoomsState();
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+
+const pageTitle = computed(() =>
+	buildPageTitle(`${room.value?.name} - ${t("pages.roomDetails.title")}`)
+);
+useTitle(pageTitle);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	if (room.value != null) {

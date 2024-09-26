@@ -16,8 +16,10 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomUpdateParams } from "@/types/room/Room";
+import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomEditState } from "@data-room";
 import { RoomForm } from "@feature-room";
+import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -27,6 +29,11 @@ const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const { fetchRoom, isLoading, roomData, updateRoom } = useRoomEditState();
+
+const pageTitle = computed(() =>
+	buildPageTitle(`${t("pages.roomEdit.title")}`)
+);
+useTitle(pageTitle);
 
 watch(
 	() => route.params.id,
