@@ -73,23 +73,17 @@ const element = toRef(props, "element");
 useBoardFocusHandler(element.value.id, appointmentFinderElement);
 
 const onEdit = () => {
-	const windowReference = window.open();
 	const adminId = props.element.content.adminId;
+	const url = `http://localhost:4200/#/admin/dashboard/${adminId}`;
 
-	if (adminId && windowReference) {
-		const url = `http://localhost:4200/#/admin/dashboard/${adminId}`;
-		windowReference.location = url;
-	}
+	window.open(url, "_blank");
 };
 
 const redirectToAppointmentFinderUrl = async () => {
-	const windowReference = window.open();
 	const appointmentFinderId = props.element.content.appointmentFinderId;
+	const url = `http://localhost:4200/#/poll/${appointmentFinderId}`;
 
-	if (appointmentFinderId && windowReference) {
-		const url = `http://localhost:4200/#/poll/${appointmentFinderId}`;
-		windowReference.location = url;
-	}
+	window.open(url, "_blank");
 };
 
 const ariaLabel = computed(() => {
