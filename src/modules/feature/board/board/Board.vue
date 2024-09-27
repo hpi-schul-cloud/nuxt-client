@@ -11,7 +11,7 @@
 					<BoardHeader
 						:boardId="board.id"
 						:title="board.title"
-						:isDraft="!board.isVisible"
+						:isDraft="!isBoardVisible"
 						class="mb-1"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
@@ -136,6 +136,7 @@ import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -146,11 +147,9 @@ const { t } = useI18n();
 const { resetNotifierModule, showCustomNotifier } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
-
 const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
-
 const { createPageInformation, roomId } = useSharedBoardPageInformation();
 
 watch(board, async () => {
@@ -181,6 +180,8 @@ const {
 	hasEditPermission,
 	isTeacher,
 } = useBoardPermissions();
+
+const isBoardVisible = computed(() => board.value?.isVisible);
 
 const onCreateCard = async (columnId: string) => {
 	if (hasCreateCardPermission) boardStore.createCardRequest({ columnId });
@@ -278,11 +279,8 @@ onMounted(() => {
 onUnmounted(() => {
 	boardStore.disconnectSocketRequest({});
 	boardStore.setBoard(undefined);
-});
-
-onUnmounted(() => {
-	resetNotifierModule();
 	cardStore.resetState();
+	resetNotifierModule();
 });
 
 const setAlert = useDebounceFn(() => {
@@ -292,14 +290,24 @@ const setAlert = useDebounceFn(() => {
 		return;
 	}
 
-	if (!board.value.isVisible) {
+	if (!isBoardVisible.value) {
 		showCustomNotifier(t("components.board.alert.info.draft"), "info");
 	} else {
 		showCustomNotifier(t("components.board.alert.info.teacher"), "info");
 	}
 }, 150);
 
-watch(() => board.value?.isVisible, setAlert, { immediate: true });
+watch(
+	() => board.value?.isVisible,
+	() => {
+		setAlert();
+
+		if (!(isBoardVisible.value || isTeacher)) {
+			router.push({ path: "/rooms/" + roomId.value });
+			throw createApplicationError(403);
+		}
+	}
+);
 
 const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.copyResult.title.loading")
