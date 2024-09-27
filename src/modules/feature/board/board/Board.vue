@@ -137,6 +137,7 @@ import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
+import { applicationErrorModule } from "@/store";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -304,8 +305,8 @@ watch(
 		setAlert();
 
 		if (!(isBoardVisible.value || isTeacher)) {
-			router.push({ path: "/rooms/" + roomId.value });
-			throw createApplicationError(403);
+			router.replace({ path: "/rooms/" + roomId.value });
+			applicationErrorModule.setError(createApplicationError(403));
 		}
 	}
 );
