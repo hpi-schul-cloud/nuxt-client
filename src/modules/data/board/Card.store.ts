@@ -29,7 +29,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const socketOrRest = isSocketEnabled ? useCardSocketApi() : restApi;
 
-	const { setFocus } = useBoardFocusHandler();
+	const { setFocus, forceFocus } = useBoardFocusHandler();
 	const { setEditModeId, editModeId } = useSharedEditMode();
 
 	const fetchCardRequest = socketOrRest.fetchCardRequest;
@@ -165,6 +165,16 @@ export const useCardStore = defineStore("cardStore", () => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
+		const { focusedId } = useBoardFocusHandler(payload.elementId);
+		if (focusedId?.value === payload.elementId) {
+			const previousId = getPreviousElementId(
+				payload.elementId,
+				payload.cardId
+			);
+			if (!previousId) return;
+			forceFocus(previousId);
+		}
+
 		const index = card.elements.findIndex((e) => e.id === payload.elementId);
 
 		if (index !== undefined && index > -1) {
@@ -187,6 +197,27 @@ export const useCardStore = defineStore("cardStore", () => {
 			);
 			cards.value[cardId].elements[elementIndex].content = payload.data.content;
 		}
+	};
+
+	const getPreviousElementId = (
+		elementId: string,
+		cardId: string
+	): string | undefined => {
+		const elements = cards.value[cardId].elements;
+		if (elements.length === 0) return cardId;
+
+		const elementIndex = elements.findIndex((e) => e.id === elementId);
+		if (elementIndex <= 0) return cardId;
+
+		const previousElement = elements[elementIndex - 1];
+		const { setEditModeId } = useSharedEditMode();
+		setEditModeId(cardId);
+
+		if (previousElement.type === ContentElementType.RichText) {
+			return getPreviousElementId(previousElement.id, cardId);
+		}
+
+		return previousElement.id;
 	};
 
 	return {
