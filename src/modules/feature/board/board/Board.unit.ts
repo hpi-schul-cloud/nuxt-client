@@ -831,35 +831,78 @@ describe("Board", () => {
 				expect(boardStore.updateBoardVisibilityRequest).toHaveBeenCalled();
 			});
 
-			describe("when a teacher sets the board to unpublished", () => {
-				it("should create application error page for students", async () => {
-					const mockRoomId = mockedUseSharedBoardPageInformation().roomId.value;
-					mockedBoardPermissions.isTeacher = false;
-					const { boardStore, wrapperVM } = setup();
-					expect(wrapperVM.isBoardVisible).toBe(true);
+			describe("@createApplicationError", () => {
+				describe("when board is draft mode", () => {
+					describe("when the user is not a teacher", () => {
+						it("should call 'createApplicationError' method", async () => {
+							const mockRoomId =
+								mockedUseSharedBoardPageInformation().roomId.value;
+							mockedBoardPermissions.isTeacher = false;
+							const { boardStore, wrapperVM } = setup();
+							expect(wrapperVM.isBoardVisible).toBe(true);
 
-					boardStore.board!.isVisible = false;
-					await nextTick();
+							boardStore.board!.isVisible = false;
+							await nextTick();
 
-					expect(wrapperVM.isBoardVisible).toBe(false);
-					expect(router.replace).toHaveBeenCalledWith({
-						path: "/rooms/" + mockRoomId,
+							expect(wrapperVM.isBoardVisible).toBe(false);
+							expect(router.replace).toHaveBeenCalledWith({
+								path: "/rooms/" + mockRoomId,
+							});
+							expect(
+								mockedCreateApplicationErrorCalls.createApplicationError
+							).toHaveBeenCalledWith(403);
+						});
 					});
-					expect(
-						mockedCreateApplicationErrorCalls.createApplicationError
-					).toHaveBeenCalledWith(403);
+
+					describe("when the user is a teacher", () => {
+						it("should not call 'createApplicationError' method", async () => {
+							mockedBoardPermissions.isTeacher = true;
+							const { boardStore, wrapperVM } = setup();
+							expect(wrapperVM.isBoardVisible).toBe(true);
+
+							boardStore.board!.isVisible = false;
+							await nextTick();
+
+							expect(wrapperVM.isBoardVisible).toBe(false);
+							expect(
+								mockedCreateApplicationErrorCalls.createApplicationError
+							).not.toHaveBeenCalled();
+						});
+					});
 				});
 
-				it("should not create application error page for teachers", async () => {
-					const { boardStore, wrapperVM } = setup();
-					expect(wrapperVM.isBoardVisible).toBe(true);
-					boardStore.board!.isVisible = false;
-					await nextTick();
+				describe("when board is published mode", () => {
+					describe("when the user is not a teacher", () => {
+						it("should not call 'createApplicationError' method", async () => {
+							mockedBoardPermissions.isTeacher = false;
+							const { boardStore, wrapperVM } = setup();
+							expect(wrapperVM.isBoardVisible).toBe(true);
 
-					expect(wrapperVM.isBoardVisible).toBe(false);
-					expect(
-						mockedCreateApplicationErrorCalls.createApplicationError
-					).not.toHaveBeenCalled();
+							boardStore.board!.isVisible = true;
+							await nextTick();
+
+							expect(wrapperVM.isBoardVisible).toBe(true);
+							expect(
+								mockedCreateApplicationErrorCalls.createApplicationError
+							).not.toHaveBeenCalled();
+						});
+					});
+
+					describe("when the user is a teacher", () => {
+						it("should not call 'createApplicationError' method", async () => {
+							mockedBoardPermissions.isTeacher = true;
+							const { boardStore, wrapperVM } = setup();
+							expect(wrapperVM.isBoardVisible).toBe(true);
+
+							boardStore.board!.isVisible = true;
+							await nextTick();
+
+							expect(wrapperVM.isBoardVisible).toBe(true);
+							expect(
+								mockedCreateApplicationErrorCalls.createApplicationError
+							).not.toHaveBeenCalled();
+						});
+					});
 				});
 			});
 		});
