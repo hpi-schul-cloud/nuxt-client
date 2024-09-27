@@ -3,7 +3,7 @@
 		class="text-editor-card mb-4"
 		data-testid="collaborative-text-editor-element"
 		variant="outlined"
-		ref="collaborativetextEditorElement"
+		ref="collaborativeTextEditorElement"
 		:ripple="false"
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
