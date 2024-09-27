@@ -11,12 +11,11 @@ module.exports = [
 	js.configs.recommended,
 	...vueTsEslintConfig({
 		// not supported as of version 13, version 14 will introduce support for the flat config
+		// for version 14 of this, we need to upgrade to eslint 9 because of the peer dependency
 		extends: [
 			// By default, only the recommended rules are enabled.
 			"recommended",
 		],
-		// Optional: specify the script langs in `.vue` files
-		// Defaults to `{ ts: true, js: false, tsx: false, jsx: false }`
 		supportedScriptLangs: {
 			ts: true,
 
@@ -28,11 +27,11 @@ module.exports = [
 			js: true,
 		},
 	}),
-	eslintPluginPrettierRecommended, // needs to be the last item
+	eslintPluginPrettierRecommended, // need to be the last item
 
 	{
 		languageOptions: {
-			// parser: tseslint.parser, // TODO: Do we need this?
+			parser: tseslint.parser,
 			ecmaVersion: 2020,
 			globals: {
 				...globals.node,
@@ -42,6 +41,14 @@ module.exports = [
 			schulcloud,
 			"@typescript-eslint": tseslint.plugin,
 		},
+		ignores: [
+			".vscode",
+			"/node_modules/**",
+			"dist",
+			"/src/serverApi/**",
+			"/src/fileStorageApi/**",
+			"/src/h5pEditorApi/**",
+		],
 		rules: {
 			"schulcloud/material-icon-imports": "error",
 			"@typescript-eslint/no-explicit-any": "warn",
@@ -58,7 +65,7 @@ module.exports = [
 			"@typescript-eslint/no-empty-function": "error",
 			"@typescript-eslint/ban-ts-comment": "error",
 			"@typescript-eslint/no-inferrable-types": "error",
-			"@typescript-eslint/ban-types": "error",
+			// "@typescript-eslint/ban-types": "error", // was removed in the plugin
 			"vue/no-v-text-v-html-on-component": "error",
 			"vue/no-v-html": "error",
 			"vue/html-self-closing": [
@@ -134,5 +141,3 @@ module.exports = [
 		},
 	},
 ];
-
-// eslint jest plugin ?
