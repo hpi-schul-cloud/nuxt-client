@@ -30,6 +30,7 @@ const vueRoutes = [
 	`^/administration/rooms/new/?$`,
 	`^/content/?$`,
 	`^/content/${uuid}/?$`,
+	`^/content/vendor/edu-sharing/.*`,
 	`^/error/?$`,
 	`^/imprint/?$`,
 	`^/news/new/?$`,

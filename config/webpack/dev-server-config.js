@@ -1,11 +1,14 @@
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const { isVueClient } = require("../../src/router/vue-client-route");
 const {
-	isServer,
+	isEduSharing,
+	isEduSharingRepo,
 	isFileStorage,
 	isH5pEditor,
+	isServer,
 } = require("../../src/router/server-route");
 const url = require("url");
+const path = require("path");
 
 const createLegacyClientProxy = () => {
 	const legacyClientProxy = createProxyMiddleware({
@@ -21,6 +24,14 @@ const createServerProxy = () => {
 		changeOrigin: true,
 	});
 	return serverProxy;
+};
+
+const createEduSharingProxy = () => {
+	const eduSharingProxy = createProxyMiddleware({
+		target: "http://localhost:4450",
+		changeOrigin: true,
+	});
+	return eduSharingProxy;
 };
 
 const createFileStorageProxy = () => {
@@ -39,15 +50,25 @@ const createH5pEditorProxy = () => {
 	return h5pEditorProxy;
 };
 
+const createEduSharingRepoProxy = () => {
+	const eduSharingRepoProxy = createProxyMiddleware({
+		target: "http://localhost:8100",
+		changeOrigin: true,
+	});
+	return eduSharingRepoProxy;
+};
+
 const createDevServerConfig = () => {
 	const legacyClientProxy = createLegacyClientProxy();
 	const serverProxy = createServerProxy();
+	const eduSharingProxy = createEduSharingProxy();
+	const eduSharingRepoProxy = createEduSharingRepoProxy();
 	const fileStorageProxy = createFileStorageProxy();
 	const h5pEditorProxy = createH5pEditorProxy();
 
 	const devServerConfig = {
-		port: 4000,
 		historyApiFallback: true,
+		port: 4000,
 
 		setupMiddlewares: (middlewares, devServer) => {
 			if (!devServer) {
@@ -63,6 +84,10 @@ const createDevServerConfig = () => {
 						fileStorageProxy(req, res, next);
 					} else if (isH5pEditor(path)) {
 						h5pEditorProxy(req, res, next);
+					} else if (isEduSharing(path)) {
+						eduSharingProxy(req, res, next);
+					} else if (isEduSharingRepo(path)) {
+						eduSharingRepoProxy(req, res, next);
 					} else if (isServer(path)) {
 						serverProxy(req, res, next);
 					} else if (isVueClient(path)) {
@@ -72,6 +97,20 @@ const createDevServerConfig = () => {
 					}
 				},
 			});
+
+			// Copy assets before the dev server starts
+			const __base = path.resolve(__dirname, "../..");
+
+			const fs = require("fs-extra");
+			const source = path.resolve(
+				__base,
+				"node_modules/ngx-edu-sharing-app-as-web-component"
+			);
+			const destination = path.resolve(
+				__base,
+				"public/content/vendor/edu-sharing"
+			);
+			fs.copySync(source, destination);
 
 			return middlewares;
 		},

@@ -74,7 +74,8 @@ const config = {
 	globals: {
 		"vue-jest": {
 			compilerOptions: {
-				isCustomElement: (tag) => tag.startsWith("h5p-"),
+				isCustomElement: (tag) =>
+					tag.startsWith("h5p-") || tag === "edu-sharing-app",
 			},
 		},
 	},
