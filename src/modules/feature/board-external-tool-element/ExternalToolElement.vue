@@ -119,7 +119,8 @@ const {
 
 const autofocus: Ref<boolean> = ref(false);
 const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
-useBoardFocusHandler(element.value.id, ref(null), () => {
+const externalToolElement = ref<HTMLElement | null>(null);
+useBoardFocusHandler(element.value.id, externalToolElement, () => {
 	autofocus.value = true;
 });
 

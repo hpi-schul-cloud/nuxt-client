@@ -6,6 +6,7 @@
 			@end-edit-mode="onEndEditMode"
 			@keydown.enter="onStartEditMode"
 			tabindex="0"
+			:id="boardId"
 		>
 			<div ref="boardHeader">
 				<BoardAnyTitleInput
