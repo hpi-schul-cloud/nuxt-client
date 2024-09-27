@@ -136,7 +136,7 @@ import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
 import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useApplicationError } from "@/composables/application-error.composable";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -151,6 +151,7 @@ const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
 const { createPageInformation, roomId } = useSharedBoardPageInformation();
+const { createApplicationError } = useApplicationError();
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
