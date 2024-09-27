@@ -42,12 +42,12 @@ module.exports = [
 			"@typescript-eslint": tseslint.plugin,
 		},
 		ignores: [
-			".vscode",
-			"/node_modules/**",
-			"dist",
-			"/src/serverApi/**",
-			"/src/fileStorageApi/**",
-			"/src/h5pEditorApi/**",
+			".vscode/**",
+			"node_modules/**",
+			"**/dist/**",
+			"src/serverApi/**",
+			"src/fileStorageApi/**",
+			"src/h5pEditorApi/**",
 		],
 		rules: {
 			"schulcloud/material-icon-imports": "error",
