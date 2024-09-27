@@ -60,6 +60,7 @@ import { Router, useRoute, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
+import { useApplicationError } from "@/composables/application-error.composable";
 
 jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -98,6 +99,9 @@ const useRouteMock = <jest.Mock>useRoute;
 jest.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <jest.Mock>useBoardInactivity;
 
+jest.mock("@/composables/application-error.composable");
+const mockedCreateApplicationError = jest.mocked(useApplicationError);
+
 describe("Board", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
@@ -110,6 +114,7 @@ describe("Board", () => {
 		ReturnType<typeof useBoardInactivity>
 	>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
+	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
@@ -122,6 +127,12 @@ describe("Board", () => {
 		mockedBoardPermissionsHandler =
 			createMock<ReturnType<typeof useBoardPermissions>>();
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissionsHandler);
+
+		mockedCreateApplicationErrorCalls =
+			createMock<ReturnType<typeof useApplicationError>>();
+		mockedCreateApplicationError.mockReturnValue(
+			mockedCreateApplicationErrorCalls
+		);
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
@@ -157,6 +168,8 @@ describe("Board", () => {
 
 		mockedBoardPermissions = { ...defaultPermissions };
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissions);
+		mockedUsePageInactivity =
+			createMock<ReturnType<typeof useBoardInactivity>>();
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
 	});
 
@@ -284,8 +297,15 @@ describe("Board", () => {
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		const cardStore = mockedPiniaStoreTyping(useCardStore);
 
+		const wrapperVM = wrapper.vm as unknown as {
+			board: Board;
+			openDeleteBoardDialog: () => void;
+			isBoardVisible: boolean;
+		};
+
 		return {
 			wrapper,
+			wrapperVM,
 			boardStore,
 			cardStore,
 			board,
@@ -297,13 +317,13 @@ describe("Board", () => {
 
 	describe("when component is mounted", () => {
 		it("should call boardStore fetchBoardRequest action", () => {
-			const { wrapper, boardStore, board } = setup();
+			const { wrapper, boardStore, board, wrapperVM } = setup();
 
 			expect(boardStore.fetchBoardRequest).toHaveBeenCalled();
 			expect(boardStore.board).toBeDefined();
 			expect(wrapper).toBeDefined();
 
-			expect(wrapper.vm.board).toStrictEqual(board);
+			expect(wrapperVM.board).toStrictEqual(board);
 		});
 
 		it("should be found in the dom", () => {
@@ -810,6 +830,38 @@ describe("Board", () => {
 
 				expect(boardStore.updateBoardVisibilityRequest).toHaveBeenCalled();
 			});
+
+			describe("when a teacher sets the board to unpublished", () => {
+				it("should create application error page for students", async () => {
+					const mockRoomId = mockedUseSharedBoardPageInformation().roomId.value;
+					mockedBoardPermissions.isTeacher = false;
+					const { boardStore, wrapperVM } = setup();
+					expect(wrapperVM.isBoardVisible).toBe(true);
+
+					boardStore.board!.isVisible = false;
+					await nextTick();
+
+					expect(wrapperVM.isBoardVisible).toBe(false);
+					expect(router.replace).toHaveBeenCalledWith({
+						path: "/rooms/" + mockRoomId,
+					});
+					expect(
+						mockedCreateApplicationErrorCalls.createApplicationError
+					).toHaveBeenCalledWith(403);
+				});
+
+				it("should not create application error page for teachers", async () => {
+					const { boardStore, wrapperVM } = setup();
+					expect(wrapperVM.isBoardVisible).toBe(true);
+					boardStore.board!.isVisible = false;
+					await nextTick();
+
+					expect(wrapperVM.isBoardVisible).toBe(false);
+					expect(
+						mockedCreateApplicationErrorCalls.createApplicationError
+					).not.toHaveBeenCalled();
+				});
+			});
 		});
 
 		describe("@copy:board", () => {
@@ -880,9 +932,9 @@ describe("Board", () => {
 
 			it("should call openDeleteBoardDialog method when board should be deleted", async () => {
 				mockedBoardPermissions.hasDeletePermission = true;
-				const { wrapper, board } = setup();
+				const { wrapper, board, wrapperVM } = setup();
 
-				wrapper.vm.openDeleteBoardDialog = openDeleteBoardDialogMock;
+				wrapperVM.openDeleteBoardDialog = openDeleteBoardDialogMock;
 
 				const columnComponent = wrapper.findComponent({
 					name: "BoardHeader",
