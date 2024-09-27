@@ -1,13 +1,11 @@
 const pluginVue = require("eslint-plugin-vue");
 const js = require("@eslint/js");
-// const vueTsEslintConfig = require("@vue/eslint-config-typescript");
-const tseslint = require("typescript-eslint");
 const schulcloud = require("./lib/eslint-plugin-schulcloud");
 const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended");
 const globals = require("globals");
 
+// needed for packages that are not yet compatible with the flat config
 const { FlatCompat } = require("@eslint/eslintrc");
-
 const compat = new FlatCompat();
 
 module.exports = [
@@ -36,7 +34,6 @@ module.exports = [
 
 	{
 		languageOptions: {
-			// parser: tseslint.parser,
 			ecmaVersion: 2020,
 			globals: {
 				...globals.node,
@@ -44,7 +41,6 @@ module.exports = [
 		},
 		plugins: {
 			schulcloud,
-			// "@typescript-eslint": tseslint.plugin,
 		},
 		ignores: [
 			".vscode/*",
@@ -70,7 +66,7 @@ module.exports = [
 			"@typescript-eslint/no-empty-function": "error",
 			"@typescript-eslint/ban-ts-comment": "error",
 			"@typescript-eslint/no-inferrable-types": "error",
-			// "@typescript-eslint/ban-types": "error", // was removed in the plugin
+			"@typescript-eslint/ban-types": "error",
 			"vue/no-v-text-v-html-on-component": "error",
 			"vue/no-v-html": "error",
 			"vue/html-self-closing": [
