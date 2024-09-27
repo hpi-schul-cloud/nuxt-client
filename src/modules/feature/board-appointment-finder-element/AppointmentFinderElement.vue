@@ -28,7 +28,7 @@
 				}}
 			</template>
 			<template #menu>
-				<CollaborativeTextEditorElementMenu
+				<AppointmentFinderElementMenu
 					v-if="isEditMode"
 					@move-down:element="onMoveDown"
 					@move-up:element="onMoveUp"
@@ -48,7 +48,7 @@ import { mdiCalendarCheck } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
+import AppointmentFinderElementMenu from "./components/AppointmentFinderElementMenu.vue";
 
 const props = defineProps({
 	element: {
