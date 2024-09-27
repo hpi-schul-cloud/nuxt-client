@@ -3729,6 +3729,97 @@ export interface LessonCopyApiParams {
 /**
  * 
  * @export
+ * @interface LessonLinkedTaskResponse
+ */
+export interface LessonLinkedTaskResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonLinkedTaskResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonLinkedTaskResponse
+     */
+    description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonLinkedTaskResponse
+     */
+    descriptionInputFormat: LessonLinkedTaskResponseDescriptionInputFormatEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonLinkedTaskResponse
+     */
+    availableDate: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonLinkedTaskResponse
+     */
+    dueDate: string | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof LessonLinkedTaskResponse
+     */
+    _private: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof LessonLinkedTaskResponse
+     */
+    publicSubmissions: boolean | null;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof LessonLinkedTaskResponse
+     */
+    teamSubmissions: boolean | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonLinkedTaskResponse
+     */
+    creator: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof LessonLinkedTaskResponse
+     */
+    courseId: string | null;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof LessonLinkedTaskResponse
+     */
+    submissionIds: Array<string>;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof LessonLinkedTaskResponse
+     */
+    finishedIds: Array<string>;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum LessonLinkedTaskResponseDescriptionInputFormatEnum {
+    PlainText = 'plainText',
+    RichTextCk5Simple = 'richTextCk5Simple',
+    RichTextCk4 = 'richTextCk4',
+    RichTextCk5 = 'richTextCk5'
+}
+
+/**
+ * 
+ * @export
  * @interface LessonMetadataListResponse
  */
 export interface LessonMetadataListResponse {
@@ -7353,97 +7444,6 @@ export interface SingleColumnBoardResponse {
      */
     isSynchronized: boolean;
 }
-/**
- * 
- * @export
- * @interface SlimTaskResponse
- */
-export interface SlimTaskResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof SlimTaskResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SlimTaskResponse
-     */
-    description: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof SlimTaskResponse
-     */
-    descriptionInputFormat: SlimTaskResponseDescriptionInputFormatEnum;
-    /**
-     * 
-     * @type {string}
-     * @memberof SlimTaskResponse
-     */
-    availableDate: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof SlimTaskResponse
-     */
-    dueDate: string | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SlimTaskResponse
-     */
-    _private: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SlimTaskResponse
-     */
-    publicSubmissions: boolean | null;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof SlimTaskResponse
-     */
-    teamSubmissions: boolean | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof SlimTaskResponse
-     */
-    creator: string | null;
-    /**
-     * 
-     * @type {string}
-     * @memberof SlimTaskResponse
-     */
-    courseId: string | null;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof SlimTaskResponse
-     */
-    submissionIds: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof SlimTaskResponse
-     */
-    finishedIds: Array<string>;
-}
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum SlimTaskResponseDescriptionInputFormatEnum {
-    PlainText = 'plainText',
-    RichTextCk5Simple = 'richTextCk5Simple',
-    RichTextCk4 = 'richTextCk4',
-    RichTextCk5 = 'richTextCk5'
-}
-
 /**
  * 
  * @export
@@ -15689,7 +15689,7 @@ export const LessonApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async lessonControllerGetLessonTasks(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<SlimTaskResponse>>> {
+        async lessonControllerGetLessonTasks(lessonId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<LessonLinkedTaskResponse>>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.lessonControllerGetLessonTasks(lessonId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -15736,7 +15736,7 @@ export const LessonApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<SlimTaskResponse>> {
+        lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<LessonLinkedTaskResponse>> {
             return localVarFp.lessonControllerGetLessonTasks(lessonId, options).then((request) => request(axios, basePath));
         },
     };
@@ -15782,7 +15782,7 @@ export interface LessonApiInterface {
      * @throws {RequiredError}
      * @memberof LessonApiInterface
      */
-    lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<SlimTaskResponse>>;
+    lessonControllerGetLessonTasks(lessonId: string, options?: any): AxiosPromise<Array<LessonLinkedTaskResponse>>;
 
 }
 
