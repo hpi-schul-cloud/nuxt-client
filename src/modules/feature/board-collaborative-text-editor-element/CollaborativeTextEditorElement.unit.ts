@@ -116,7 +116,7 @@ describe("CollaborativeTextEditorElement", () => {
 					});
 
 					const elementCard = wrapper.findComponent({
-						ref: "collaborativetextEditorElement",
+						ref: "collaborativeTextEditorElement",
 					});
 
 					await elementCard.trigger(`keydown.${key}`);
@@ -137,7 +137,7 @@ describe("CollaborativeTextEditorElement", () => {
 					});
 
 					const elementCard = wrapper.findComponent({
-						ref: "collaborativetextEditorElement",
+						ref: "collaborativeTextEditorElement",
 					});
 
 					await elementCard.trigger(`keydown.${key}`);
@@ -157,7 +157,7 @@ describe("CollaborativeTextEditorElement", () => {
 					});
 
 					const elementCard = wrapper.findComponent({
-						ref: "collaborativetextEditorElement",
+						ref: "collaborativeTextEditorElement",
 					});
 
 					await elementCard.trigger(`keydown.${key}`);
@@ -175,7 +175,7 @@ describe("CollaborativeTextEditorElement", () => {
 					});
 
 					const card = wrapper.findComponent({
-						ref: "collaborativetextEditorElement",
+						ref: "collaborativeTextEditorElement",
 					});
 
 					await card.trigger("click");
@@ -193,7 +193,7 @@ describe("CollaborativeTextEditorElement", () => {
 					});
 
 					const card = wrapper.findComponent({
-						ref: "collaborativetextEditorElement",
+						ref: "collaborativeTextEditorElement",
 					});
 
 					await card.trigger("click");
@@ -213,7 +213,7 @@ describe("CollaborativeTextEditorElement", () => {
 					});
 
 					const card = wrapper.findComponent({
-						ref: "collaborativetextEditorElement",
+						ref: "collaborativeTextEditorElement",
 					});
 
 					await card.trigger("click");
@@ -237,7 +237,7 @@ describe("CollaborativeTextEditorElement", () => {
 					});
 
 					const elementCard = wrapper.findComponent({
-						ref: "collaborativetextEditorElement",
+						ref: "collaborativeTextEditorElement",
 					});
 
 					await elementCard.trigger(`keydown.${key}`);
@@ -254,7 +254,7 @@ describe("CollaborativeTextEditorElement", () => {
 					});
 
 					const elementCard = wrapper.findComponent({
-						ref: "collaborativetextEditorElement",
+						ref: "collaborativeTextEditorElement",
 					});
 
 					await elementCard.trigger(`keydown.${key}`);
