@@ -68,6 +68,14 @@ describe("useSchoolExternalToolUtils", () => {
 					"components.administration.externalToolsSection.table.header.status"
 				);
 			});
+
+			it("should call the translation function for restrictToContexts", () => {
+				const { tMock } = setup();
+
+				expect(tMock).toHaveBeenCalledWith(
+					"components.administration.externalToolsSection.table.header.restrictedTo"
+				);
+			});
 		});
 
 		it("should return the correct headers", () => {
