@@ -174,9 +174,7 @@ describe("LinkContentElement", () => {
 					isEditMode: true,
 				});
 
-				const linkElement = wrapper.findComponent({
-					ref: "linkContentElement",
-				});
+				const linkElement = wrapper.find('[data-testid="board-link-element"]');
 
 				expect(linkElement.attributes("aria-label")).toBeUndefined();
 			});
@@ -206,9 +204,9 @@ describe("LinkContentElement", () => {
 					isEditMode: true,
 				});
 
-				const linkElement = wrapper.findComponent({
-					ref: "linkContentElement",
-				});
+				const linkElement = wrapper.findComponent(
+					'[data-testid="board-link-element"]'
+				);
 
 				expect(linkElement.attributes("aria-label")).toEqual(
 					`${element.content.url}, common.ariaLabel.newTab`
@@ -225,9 +223,9 @@ describe("LinkContentElement", () => {
 							isEditMode: true,
 						});
 
-						const linkElement = wrapper.findComponent({
-							ref: "linkContentElement",
-						});
+						const linkElement = wrapper.findComponent(
+							'[data-testid="board-link-element"]'
+						);
 
 						await linkElement.trigger(`keydown.${key}`);
 
@@ -246,9 +244,9 @@ describe("LinkContentElement", () => {
 							isEditMode: false,
 						});
 
-						const linkElement = wrapper.findComponent({
-							ref: "linkContentElement",
-						});
+						const linkElement = wrapper.findComponent(
+							'[data-testid="board-link-element"]'
+						);
 
 						await linkElement.trigger(`keydown.${key}`);
 
@@ -319,9 +317,9 @@ describe("LinkContentElement", () => {
 					isEditMode: false,
 				});
 
-				const linkElement = wrapper.findComponent({
-					ref: "linkContentElement",
-				});
+				const linkElement = wrapper.findComponent(
+					'[data-testid="board-link-element"]'
+				);
 
 				expect(linkElement.attributes("class")).toContain("d-none");
 			});
@@ -355,9 +353,9 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const linkElement = wrapper.findComponent({
-						ref: "linkContentElement",
-					});
+					const linkElement = wrapper.findComponent(
+						'[data-testid="board-link-element"]'
+					);
 
 					await linkElement.trigger(`keydown.${key}`);
 
