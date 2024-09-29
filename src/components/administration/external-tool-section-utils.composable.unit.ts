@@ -81,10 +81,13 @@ describe("useSchoolExternalToolUtils", () => {
 			expect(headers[1].title).toEqual(expectedTranslation);
 			expect(headers[1].value).toEqual("statusText");
 
-			expect(headers[2].title).toEqual("");
-			expect(headers[2].value).toEqual("actions");
-			expect(headers[2].sortable).toBe(false);
-			expect(headers[2].align).toEqual("end");
+			expect(headers[2].title).toEqual(expectedTranslation);
+			expect(headers[2].value).toEqual("restrictToContexts");
+
+			expect(headers[3].title).toEqual("");
+			expect(headers[3].value).toEqual("actions");
+			expect(headers[3].sortable).toBe(false);
+			expect(headers[3].align).toEqual("end");
 		});
 	});
 
@@ -109,6 +112,7 @@ describe("useSchoolExternalToolUtils", () => {
 					statusText: expectedTranslation,
 					isOutdated: schoolExternalTool.status.isOutdatedOnScopeSchool,
 					isDeactivated: false,
+					restrictToContexts: "",
 				},
 			]);
 		});
