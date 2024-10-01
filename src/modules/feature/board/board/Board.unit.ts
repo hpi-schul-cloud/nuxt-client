@@ -61,6 +61,7 @@ import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -850,7 +851,7 @@ describe("Board", () => {
 							});
 							expect(
 								mockedCreateApplicationErrorCalls.createApplicationError
-							).toHaveBeenCalledWith(403);
+							).toHaveBeenCalledWith(HttpStatusCode.Forbidden);
 						});
 					});
 
