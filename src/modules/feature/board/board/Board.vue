@@ -138,6 +138,7 @@ import BoardColumnGhost from "./BoardColumnGhost.vue";
 import BoardHeader from "./BoardHeader.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { applicationErrorModule } from "@/store";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
@@ -306,7 +307,9 @@ watch(
 
 		if (!(isBoardVisible.value || isTeacher)) {
 			router.replace({ path: "/rooms/" + roomId.value });
-			applicationErrorModule.setError(createApplicationError(403));
+			applicationErrorModule.setError(
+				createApplicationError(HttpStatusCode.Forbidden)
+			);
 		}
 	}
 );
