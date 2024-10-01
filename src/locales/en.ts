@@ -141,8 +141,8 @@ export default {
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings and contact your school administrator.",
 	"common.tool.information.outdatedOnSchool.teacher":
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please contact the school administrator.",
-	"common.tool.context.type.courses": "Course",
-	"common.tool.context.type.boardElements": "Column board",
+	"common.tool.context.type.courses": "Course tools",
+	"common.tool.context.type.boardElements": "Boards",
 	"common.tool.context.type.mediaShelves": "Media shelf",
 	"common.validation.email": "Please enter a valid e-mail address",
 	"common.validation.invalid": "The data you entered is invalid",

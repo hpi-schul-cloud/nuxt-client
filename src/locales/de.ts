@@ -140,8 +140,8 @@ export default {
 		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen.",
 	"common.tool.information.outdatedOnSchool.teacher":
 		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte an Schuladministrator:in wenden.",
-	"common.tool.context.type.courses": "Kurs",
-	"common.tool.context.type.boardElements": "Bereich",
+	"common.tool.context.type.courses": "Kurs-Tools",
+	"common.tool.context.type.boardElements": "Bereiche",
 	"common.tool.context.type.mediaShelves": "Medienregal",
 	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",

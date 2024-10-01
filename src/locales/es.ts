@@ -142,8 +142,8 @@ export default {
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Verifique la configuración y comuníquese con el administrador de su escuela.",
 	"common.tool.information.outdatedOnSchool.teacher":
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor comuníquese con el administrador de la escuela.",
-	"common.tool.context.type.courses": "Curso",
-	"common.tool.context.type.boardElements": "Tablero de columna",
+	"common.tool.context.type.courses": "Herramientas del curso",
+	"common.tool.context.type.boardElements": "Tableros",
 	"common.tool.context.type.mediaShelves": "Estante multimedia",
 	"common.validation.email":
 		"Por favor, introduzca una dirección de correo electrónico válida",

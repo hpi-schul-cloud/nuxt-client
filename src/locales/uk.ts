@@ -143,9 +143,9 @@ export default {
 		"Конфігурація інструменту {toolName} застаріла або неповна. Перевірте налаштування та зверніться до адміністратора школи.",
 	"common.tool.information.outdatedOnSchool.teacher":
 		"Конфігурація інструмента {toolName} неоновлена або неповна. Будь ласка, зверніться до адміністратора школи.",
-	"common.tool.context.type.courses": "Курс",
-	"common.tool.context.type.boardElements": "Дошка стовпців",
-	"common.tool.context.type.mediaShelves": "Медіаполичка",
+	"common.tool.context.type.courses": "Інструменти курсу",
+	"common.tool.context.type.boardElements": "Дошки",
+	"common.tool.context.type.mediaShelves": "Полиця для медіа",
 	"common.validation.email": "Введіть дійсну адресу електронної пошти",
 	"common.validation.invalid": "Введені вами дані недійсні",
 	"common.validation.number": "Потрібно ввести ціле число.",
