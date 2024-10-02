@@ -25,10 +25,12 @@
 
 <script setup lang="ts">
 import { useBoardFocusHandler } from "@data-board";
-import BoardColumnInteractionHandler from "@feature-board/board/BoardColumnInteractionHandler.vue";
-import BoardAnyTitleInput from "@feature-board/shared/BoardAnyTitleInput.vue";
+import {
+	BoardAnyTitleInput,
+	BoardColumnInteractionHandler,
+} from "@feature-board";
+import { useMediaBoardEditMode } from "@util-board";
 import { ref, toRef } from "vue";
-import { useEditMode } from "./editMode.composable";
 
 const props = defineProps({
 	lineId: {
@@ -53,7 +55,7 @@ const emit = defineEmits<{
 	(e: "update:title", newTitle: string): void;
 }>();
 
-const { isEditMode, startEditMode, stopEditMode } = useEditMode(
+const { isEditMode, startEditMode, stopEditMode } = useMediaBoardEditMode(
 	lineIdRef.value
 );
 

@@ -2,23 +2,23 @@
 	<RouterLink :to="roomPath" class="room-link" :aria-label="avatarAriaLabel">
 		<div class="room-avatar" :class="avatarColor">
 			<span class="text-h3 text-white" data-testid="room-short-title">
-				{{ room.shortTitle }}
+				{{ roomShortName }}
 			</span>
 		</div>
 		<div class="room-title mb-2 mt-2" data-testid="room-title">
-			{{ room.title }}
+			{{ room.name }}
 		</div>
 	</RouterLink>
 </template>
 
 <script setup lang="ts">
-import { Room } from "@/types/room/Room";
+import { RoomItem } from "@/types/room/Room";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	room: {
-		type: Object as PropType<Room>,
+		type: Object as PropType<RoomItem>,
 		required: true,
 	},
 });
@@ -27,10 +27,19 @@ const { t } = useI18n();
 
 const roomPath = computed(() => `/rooms/${props.room.id}`);
 
-const avatarColor = computed(() => `room-color--${props.room.displayColor}`);
+const roomShortName = computed(() => {
+	if (props.room) {
+		return props.room.name.length > 2
+			? props.room.name.slice(0, 2)
+			: props.room.name;
+	}
+	return "";
+});
+
+const avatarColor = computed(() => `room-color--${props.room.color}`);
 
 const avatarAriaLabel = computed(() => {
-	return `${t("common.labels.room")} ${props.room.title}`;
+	return `${t("common.labels.room")} ${props.room.name}`;
 });
 </script>
 

@@ -68,32 +68,32 @@
 </template>
 
 <script lang="ts">
-import { useDebounceFn } from "@vueuse/core";
-import { PropType, computed, defineComponent, provide, ref, toRef } from "vue";
-import CardHost from "../card/CardHost.vue";
-import { useDragAndDrop } from "../shared/DragAndDrop.composable";
+import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
+import {
+	cardDropPlaceholderOptions,
+	DragAndDropKey,
+} from "@/types/board/DragAndDrop";
 import {
 	useBoardPermissions,
 	useBoardStore,
 	useForceRender,
 } from "@data-board";
-import { useTouchDetection } from "@util-device-detection";
-import { BoardColumn, BoardSkeletonCard } from "@/types/board/Board";
-import {
-	DragAndDropKey,
-	cardDropPlaceholderOptions,
-} from "@/types/board/DragAndDrop";
-import BoardAddCardButton from "./BoardAddCardButton.vue";
-import BoardColumnHeader from "./BoardColumnHeader.vue";
 import {
 	BOARD_HAS_MULTIPLE_COLUMNS,
 	BOARD_IS_FIRST_COLUMN,
 	BOARD_IS_LAST_COLUMN,
 	extractDataAttribute,
+	useDragAndDrop,
 } from "@util-board";
+import { useTouchDetection } from "@util-device-detection";
+import { useDebounceFn } from "@vueuse/core";
+import { SortableEvent } from "sortablejs";
 
 import { Sortable } from "sortablejs-vue3";
-import { SortableEvent } from "sortablejs";
+import { computed, defineComponent, PropType, provide, ref, toRef } from "vue";
+import CardHost from "../card/CardHost.vue";
+import BoardAddCardButton from "./BoardAddCardButton.vue";
+import BoardColumnHeader from "./BoardColumnHeader.vue";
 
 export default defineComponent({
 	name: "BoardColumn",

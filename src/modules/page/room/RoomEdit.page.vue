@@ -6,27 +6,34 @@
 			</h1>
 		</template>
 		<div v-if="isLoading" />
-		<RoomForm v-else :room="room" @update:room="onUpdateRoom($event)" />
+		<div v-else>
+			<RoomForm :room="roomData" @save="onSave" @cancel="onCancel" />
+		</div>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, watch } from "vue";
-import { useRoute } from "vue-router";
-import { useRoomDetailsStore } from "@data-room";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { RoomUpdateParams } from "@/types/room/Room";
+import { buildPageTitle } from "@/utils/pageTitle";
+import { useRoomEditState } from "@data-room";
 import { RoomForm } from "@feature-room";
-import { Room } from "@/types/room/Room";
+import { useTitle } from "@vueuse/core";
+import { computed, ComputedRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { storeToRefs } from "pinia";
+import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
 
 const route = useRoute();
-const roomDetailsStore = useRoomDetailsStore();
-const { isLoading, room } = storeToRefs(roomDetailsStore);
-const { fetchRoom } = roomDetailsStore;
+const router = useRouter();
+const { fetchRoom, isLoading, roomData, updateRoom } = useRoomEditState();
+
+const pageTitle = computed(() =>
+	buildPageTitle(`${t("pages.roomEdit.title")}`)
+);
+useTitle(pageTitle);
 
 watch(
 	() => route.params.id,
@@ -36,19 +43,28 @@ watch(
 	{ immediate: true }
 );
 
-const onUpdateRoom = (room: Room) => {
-	console.log(room);
+const onSave = async (roomParams: RoomUpdateParams) => {
+	await updateRoom(route.params.id as string, roomParams);
+	router.push({
+		name: "room-details",
+		params: { id: route.params.id as string },
+	});
+};
+
+const onCancel = () => {
+	// TODO use useConfirmationDialog here, when it's refactored
+	router.go(-1);
 };
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	if (room.value !== undefined) {
+	if (roomData.value !== undefined) {
 		return [
 			{
 				title: t("pages.rooms.title"),
 				to: "/rooms",
 			},
 			{
-				title: room.value.title,
+				title: roomData.value.name,
 				to: `/rooms/${route.params.id}`,
 			},
 			{

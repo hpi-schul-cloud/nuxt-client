@@ -1,26 +1,29 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
-import { useBoardApi } from "./BoardApi.composable";
-import { useSharedEditMode } from "./EditMode.composable";
-import { useI18n } from "vue-i18n";
-import { useSocketConnection, useCardStore } from "@data-board";
-import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { useCardRestApi } from "./cardActions/cardRestApi.composable";
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
-import { createPinia, setActivePinia } from "pinia";
-import setupStores from "@@/tests/test-utils/setupStores";
-import EnvConfigModule from "@/store/env-config";
-import { Ref, ref } from "vue";
+import { ContentElementType } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
 import {
 	envsFactory,
 	richTextElementContentFactory,
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { ContentElementType } from "@/serverApi/v3";
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { useCardStore, useSocketConnection } from "@data-board";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import {
+	useBoardNotifier,
+	useSharedEditMode,
+	useSharedLastCreatedElement,
+} from "@util-board";
 import { cloneDeep } from "lodash";
+import { createPinia, setActivePinia } from "pinia";
+import { computed, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useBoardApi } from "./BoardApi.composable";
+import { useCardRestApi } from "./cardActions/cardRestApi.composable";
+import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -34,10 +37,8 @@ const mockedUseCardSocketApi = jest.mocked(useCardSocketApi);
 jest.mock("./cardActions/cardRestApi.composable");
 const mockedUseCardRestApi = jest.mocked(useCardRestApi);
 
-jest.mock("./EditMode.composable");
-const mockedSharedEditMode = jest.mocked(useSharedEditMode);
-
 jest.mock("@util-board");
+const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
 
@@ -99,6 +100,7 @@ describe("CardStore", () => {
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId,
+			isInEditMode: computed(() => true),
 		});
 	});
 
