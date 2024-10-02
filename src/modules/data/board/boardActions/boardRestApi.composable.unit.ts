@@ -1,7 +1,9 @@
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { setActivePinia } from "pinia";
+import { createTestingPinia } from "@pinia/testing";
+import { ref } from "vue";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import { ColumnMove } from "@/types/board/DragAndDrop";
+import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
@@ -10,15 +12,13 @@ import {
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { useBoardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { createTestingPinia } from "@pinia/testing";
-import { useSharedEditMode } from "@util-board";
-import { setActivePinia } from "pinia";
-import { computed, ref } from "vue";
-import { useBoardApi } from "../BoardApi.composable";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useSocketConnection, useBoardStore } from "@data-board";
 import { useBoardRestApi } from "./boardRestApi.composable";
+import { useBoardApi } from "../BoardApi.composable";
+import { useSharedEditMode } from "../EditMode.composable";
+import { ColumnMove } from "@/types/board/DragAndDrop";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -26,7 +26,7 @@ const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 jest.mock("../BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
-jest.mock("@util-board/editMode.composable");
+jest.mock("../EditMode.composable");
 const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
 jest.mock("../socket/socket");
@@ -57,7 +57,6 @@ describe("boardRestApi", () => {
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
-			isInEditMode: computed(() => true),
 		});
 	});
 

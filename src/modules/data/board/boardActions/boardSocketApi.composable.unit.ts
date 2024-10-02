@@ -11,8 +11,8 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	useBoardStore,
-	useForceRender,
 	useSocketConnection,
+	useForceRender,
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
@@ -49,8 +49,7 @@ const mockedUseBoardRestApi = jest.mocked(useBoardRestApi);
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("@util-board/BoardNotifier.composable");
-jest.mock("@util-board/LastCreatedElement.composable");
+jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
 

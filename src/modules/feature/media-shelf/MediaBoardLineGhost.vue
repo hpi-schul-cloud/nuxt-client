@@ -1,6 +1,6 @@
 <template>
 	<div class="mx-n4 px-4">
-		<BoardSectionCreationHeader
+		<BoardColumnGhostHeader
 			data-testid="create-line-button"
 			:isColumnActive="false"
 			:label="$t('feature.media-shelf.createLine')"
@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-import { BoardSectionCreationHeader } from "@ui-board";
+import BoardColumnGhostHeader from "@feature-board/board/BoardColumnGhostHeader.vue";
 import { Sortable } from "sortablejs-vue3";
 
 defineEmits<{ (e: "create:line"): void }>();

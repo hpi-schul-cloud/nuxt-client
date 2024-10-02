@@ -1,50 +1,33 @@
-import { RoomItem } from "@/types/room/Room";
+import { Room } from "@/types/room/Room";
+import { delay } from "@/utils/helpers";
 import { computed, ref } from "vue";
-import { RoomApiFactory } from "@/serverApi/v3";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
+import { roomsData } from "./rooms-mock-data";
 
 export const useRoomsState = () => {
-	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
-
-	const rooms = ref<RoomItem[]>([]);
+	const rooms = ref<Room[]>([]);
 	const isLoading = ref(true);
 
 	const fetchRooms = async () => {
 		isLoading.value = true;
-		try {
-			rooms.value = (await roomApi.roomControllerGetRooms()).data.data;
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-
-			throw createApplicationError(responseError.code);
-		} finally {
-			isLoading.value = false;
-		}
+		await delay(500);
+		// TODO call API + do sorting there
+		rooms.value = roomsData.sort((r1, r2) => (r1.title > r2.title ? 1 : -1));
+		isLoading.value = false;
 	};
 
 	const deleteRoom = async (roomId: string) => {
+		await fetchRooms();
 		isLoading.value = true;
-		try {
-			await roomApi.roomControllerDeleteRoom(roomId);
-		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
+		await delay(500);
+		// TODO call API
+		rooms.value = rooms.value.filter((room) => room.id !== roomId);
 
-			throw createApplicationError(responseError.code);
-		} finally {
-			isLoading.value = false;
-		}
+		isLoading.value = false;
 	};
 
 	const isEmpty = computed(() => {
 		return rooms.value.length === 0;
 	});
 
-	return {
-		rooms,
-		isLoading,
-		isEmpty,
-		fetchRooms,
-		deleteRoom,
-	};
+	return { rooms, isLoading, isEmpty, fetchRooms, deleteRoom };
 };

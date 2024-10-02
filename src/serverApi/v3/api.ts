@@ -6390,113 +6390,15 @@ export enum RoleName {
 /**
  * 
  * @export
- * @interface RoomDetailsResponse
- */
-export interface RoomDetailsResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    color: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    startDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    untilDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    createdAt?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomDetailsResponse
-     */
-    updatedAt?: string;
-}
-/**
- * 
- * @export
- * @interface RoomItemResponse
- */
-export interface RoomItemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    name: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    color: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    startDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    untilDate?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    createdAt?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomItemResponse
-     */
-    updatedAt?: string;
-}
-/**
- * 
- * @export
  * @interface RoomListResponse
  */
 export interface RoomListResponse {
     /**
      * The items for the current page.
-     * @type {Array<RoomItemResponse>}
+     * @type {Array<RoomResponse>}
      * @memberof RoomListResponse
      */
-    data: Array<RoomItemResponse>;
+    data: Array<RoomResponse>;
     /**
      * The total amount of items.
      * @type {number}
@@ -6515,6 +6417,55 @@ export interface RoomListResponse {
      * @memberof RoomListResponse
      */
     limit: number;
+}
+/**
+ * 
+ * @export
+ * @interface RoomResponse
+ */
+export interface RoomResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    color: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    startDate?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    untilDate?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    createdAt?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomResponse
+     */
+    updatedAt?: string;
 }
 /**
  * 
@@ -19056,82 +19007,6 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
     return {
         /**
          * 
-         * @summary Delete a room
-         * @param {string} roomId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomControllerDeleteRoom: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomId' is not null or undefined
-            assertParamExists('roomControllerDeleteRoom', 'roomId', roomId)
-            const localVarPath = `/rooms/{roomId}`
-                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary Get the details of a room
-         * @param {string} roomId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomControllerGetRoomDetails: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomId' is not null or undefined
-            assertParamExists('roomControllerGetRoomDetails', 'roomId', roomId)
-            const localVarPath = `/rooms/{roomId}`
-                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
@@ -19186,28 +19061,6 @@ export const RoomApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary Delete a room
-         * @param {string} roomId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async roomControllerDeleteRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerDeleteRoom(roomId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @summary Get the details of a room
-         * @param {string} roomId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async roomControllerGetRoomDetails(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomDetailsResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetRoomDetails(roomId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
@@ -19230,26 +19083,6 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
     return {
         /**
          * 
-         * @summary Delete a room
-         * @param {string} roomId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomControllerDeleteRoom(roomId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.roomControllerDeleteRoom(roomId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary Get the details of a room
-         * @param {string} roomId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        roomControllerGetRoomDetails(roomId: string, options?: any): AxiosPromise<RoomDetailsResponse> {
-            return localVarFp.roomControllerGetRoomDetails(roomId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
@@ -19270,26 +19103,6 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
 export interface RoomApiInterface {
     /**
      * 
-     * @summary Delete a room
-     * @param {string} roomId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomApiInterface
-     */
-    roomControllerDeleteRoom(roomId: string, options?: any): AxiosPromise<void>;
-
-    /**
-     * 
-     * @summary Get the details of a room
-     * @param {string} roomId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomApiInterface
-     */
-    roomControllerGetRoomDetails(roomId: string, options?: any): AxiosPromise<RoomDetailsResponse>;
-
-    /**
-     * 
      * @summary Get a list of rooms.
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
@@ -19308,30 +19121,6 @@ export interface RoomApiInterface {
  * @extends {BaseAPI}
  */
 export class RoomApi extends BaseAPI implements RoomApiInterface {
-    /**
-     * 
-     * @summary Delete a room
-     * @param {string} roomId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomApi
-     */
-    public roomControllerDeleteRoom(roomId: string, options?: any) {
-        return RoomApiFp(this.configuration).roomControllerDeleteRoom(roomId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Get the details of a room
-     * @param {string} roomId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RoomApi
-     */
-    public roomControllerGetRoomDetails(roomId: string, options?: any) {
-        return RoomApiFp(this.configuration).roomControllerGetRoomDetails(roomId, options).then((request) => request(this.axios, this.basePath));
-    }
-
     /**
      * 
      * @summary Get a list of rooms.

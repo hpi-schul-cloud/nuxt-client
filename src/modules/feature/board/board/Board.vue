@@ -104,25 +104,25 @@ import { CopyParamsTypeEnum } from "@/store/copy";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import {
-	useBoardInactivity,
 	useBoardPermissions,
 	useBoardStore,
 	useCardStore,
 	useSharedBoardPageInformation,
+	useSharedEditMode,
+	useBoardInactivity,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
 import {
-	BOARD_IS_LIST_LAYOUT,
 	extractDataAttribute,
 	useBoardNotifier,
-	useSharedEditMode,
+	BOARD_IS_LIST_LAYOUT,
 } from "@util-board";
 import { useTouchDetection } from "@util-device-detection";
 import { useDebounceFn } from "@vueuse/core";

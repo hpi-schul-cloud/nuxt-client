@@ -326,15 +326,6 @@ const headers = computed(() => {
 			sortable: true,
 		},
 	];
-
-	if (courseSyncEnabled.value) {
-		headerList.push({
-			key: "syncedGroup",
-			title: t("pages.administration.classes.header.sync"),
-			sortable: false,
-		});
-	}
-
 	headerList.push(
 		{
 			key: "classNames",

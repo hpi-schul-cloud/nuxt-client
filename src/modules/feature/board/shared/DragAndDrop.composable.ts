@@ -1,13 +1,11 @@
 import { createSharedComposable } from "@vueuse/core";
-import { Ref, ref } from "vue";
+import { ref } from "vue";
 
 const dragAndDrop = () => {
-	const isDragging: Ref<boolean> = ref(false);
-
+	const isDragging = ref(false);
 	const dragStart = (): void => {
 		isDragging.value = true;
 	};
-
 	const dragEnd = (): void => {
 		isDragging.value = false;
 	};

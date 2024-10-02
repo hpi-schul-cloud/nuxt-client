@@ -1,10 +1,6 @@
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import {
-	checkRoomsFeature,
-	Multiguard,
-	validateQueryParameters,
-} from "@/router/guards";
+import { Multiguard, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
@@ -245,13 +241,11 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
-		beforeEnter: checkRoomsFeature,
 		name: "rooms",
 	},
 	{
 		path: `/rooms/new`,
 		component: async () => (await import("@page-room")).RoomCreatePage,
-		beforeEnter: checkRoomsFeature,
 		name: "rooms-new",
 	},
 	{
@@ -262,7 +256,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms/:id/edit`,
 		component: async () => (await import("@page-room")).RoomEditPage,
-		beforeEnter: checkRoomsFeature,
 		name: "room-edit",
 	},
 	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).

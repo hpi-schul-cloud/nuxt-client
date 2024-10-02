@@ -1,44 +1,40 @@
-import { envConfigModule, notifierModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import {
-	BoardPermissionChecks,
-	defaultPermissions,
-} from "@/types/board/Permissions";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { computed } from "vue";
+import { shallowMount } from "@vue/test-utils";
 import {
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 	envsFactory,
 } from "@@/tests/test-utils/factory";
 import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
-import {
 	useBoardPermissions,
 	useBoardStore,
 	useForceRender,
 } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { createTestingPinia } from "@pinia/testing";
 import {
-	useBoardNotifier,
-	useDragAndDrop,
-	useSharedLastCreatedElement,
-} from "@util-board";
-import { shallowMount } from "@vue/test-utils";
-import { computed } from "vue";
+	BoardPermissionChecks,
+	defaultPermissions,
+} from "@/types/board/Permissions";
 import BoardColumnVue from "./BoardColumn.vue";
+import { useDragAndDrop } from "../shared/DragAndDrop.composable";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { envConfigModule, notifierModule } from "@/store";
+import { createTestingPinia } from "@pinia/testing";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
 
 const { isDragging, dragEnd } = useDragAndDrop();
 
 jest.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 
-jest.mock("@util-board/BoardNotifier.composable");
-jest.mock("@util-board/LastCreatedElement.composable");
+jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = jest.mocked(
 	useSharedLastCreatedElement

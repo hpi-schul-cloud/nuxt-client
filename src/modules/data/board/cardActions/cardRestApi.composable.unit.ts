@@ -1,28 +1,28 @@
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
+import { setActivePinia } from "pinia";
+import { ref } from "vue";
 import {
 	envsFactory,
 	mockedPiniaStoreTyping,
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
-import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { useBoardStore, useCardStore, useSocketConnection } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { createTestingPinia } from "@pinia/testing";
-import { useSharedEditMode } from "@util-board";
-import { AxiosResponse } from "axios";
-import { setActivePinia } from "pinia";
-import { computed, ref } from "vue";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { useSocketConnection, useCardStore, useBoardStore } from "@data-board";
+import { useCardRestApi } from "./cardRestApi.composable";
 import { useBoardApi } from "../BoardApi.composable";
-import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { useSharedEditMode } from "../EditMode.composable";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
+import { envConfigModule } from "@/store";
+import { createTestingPinia } from "@pinia/testing";
 import {
 	UpdateCardHeightRequestPayload,
 	UpdateCardTitleRequestPayload,
 } from "./cardActionPayload";
-import { useCardRestApi } from "./cardRestApi.composable";
+import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
+import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
+import { AxiosResponse } from "axios";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -33,7 +33,7 @@ const mockedUseBoardApi = jest.mocked(useBoardApi);
 jest.mock("../CardRequestPool.composable");
 const mockedSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
 
-jest.mock("@util-board/editMode.composable");
+jest.mock("../EditMode.composable");
 const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
 jest.mock("../socket/socket");
@@ -78,7 +78,6 @@ describe("useCardRestApi", () => {
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
-			isInEditMode: computed(() => true),
 		});
 	});
 

@@ -1,31 +1,33 @@
+import { computed } from "vue";
+import { shallowMount } from "@vue/test-utils";
+import BoardColumnHeader from "./BoardColumnHeader.vue";
+import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
+import {
+	useEditMode,
+	useBoardPermissions,
+	useBoardFocusHandler,
+} from "@data-board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
 	BoardMenuActionMoveColumnDown,
 	BoardMenuActionMoveColumnUp,
 	BoardMenuActionMoveLeft,
 	BoardMenuActionMoveRight,
 } from "@ui-board";
-import { useCourseBoardEditMode } from "@util-board";
-import { shallowMount } from "@vue/test-utils";
-import { computed } from "vue";
-import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
-import BoardColumnHeader from "./BoardColumnHeader.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock("@data-board");
-jest.mock("@util-board");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
 const mockUseBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 
 describe("BoardColumnHeader", () => {
-	const mockedUseEditMode = jest.mocked(useCourseBoardEditMode);
+	const mockedUseEditMode = jest.mocked(useEditMode);
 
 	const setup = (
 		options?: {

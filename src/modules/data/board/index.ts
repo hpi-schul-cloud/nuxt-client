@@ -1,14 +1,15 @@
-import { useBoardStore } from "./Board.store";
-import * as boardActions from "./boardActions/boardActions";
-import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { useBoardInactivity } from "./boardInactivity.composable";
-import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardPermissions } from "./BoardPermissions.composable";
-import { useCardStore } from "./Card.store";
-import * as cardActions from "./cardActions/cardActions";
+import { useBoardStore } from "./Board.store";
+import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useContentElementState } from "./ContentElementState.composable";
-import { useForceRender } from "./fixSamePositionDnD.composable";
+import { useEditMode, useSharedEditMode } from "./EditMode.composable";
+import * as boardActions from "./boardActions/boardActions";
+import * as cardActions from "./cardActions/cardActions";
 import { useSocketConnection } from "./socket/socket";
+import { useCardStore } from "./Card.store";
+import { useBoardInactivity } from "./boardInactivity.composable";
+import { useForceRender } from "./fixSamePositionDnD.composable";
 
 export {
 	boardActions,
@@ -19,7 +20,9 @@ export {
 	useBoardPermissions,
 	useCardStore,
 	useContentElementState,
+	useEditMode,
 	useForceRender,
+	useSharedEditMode,
 	useSharedBoardPageInformation,
 	useSocketConnection,
 };

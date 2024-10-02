@@ -45,7 +45,6 @@
 </template>
 
 <script lang="ts">
-import { useInlineEditInteractionHandler } from "@util-board";
 import {
 	computed,
 	defineComponent,
@@ -57,6 +56,7 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { VTextarea } from "vuetify/lib/components/index.mjs";
+import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 
 export default defineComponent({
 	name: "BoardAnyTitleInput",

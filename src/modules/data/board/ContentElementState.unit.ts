@@ -1,17 +1,17 @@
 import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import NotifierModule from "@/store/notifier";
+import { mountComposable } from "@@/tests/test-utils/mountComposable";
+import { useContentElementState } from "./ContentElementState.composable";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { envsFactory } from "@@/tests/test-utils";
-import { mountComposable } from "@@/tests/test-utils/mountComposable";
-import setupStores from "@@/tests/test-utils/setupStores";
+import NotifierModule from "@/store/notifier";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { useContentElementState } from "./ContentElementState.composable";
+import { envConfigModule } from "@/store";
+import { envsFactory } from "@@/tests/test-utils";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
 
-jest.mock("@util-board/InlineEditInteractionHandler.composable");
+jest.mock("@feature-board/shared/InlineEditInteractionHandler.composable");
 
 const notifierModule = createModuleMocks(NotifierModule);
 const TEST_ELEMENT: RichTextElementResponse = {

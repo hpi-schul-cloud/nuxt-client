@@ -1,15 +1,11 @@
+import { useBoardApi } from "../BoardApi.composable";
+import { useSharedEditMode } from "../EditMode.composable";
 import {
 	ApiErrorHandlerFactory,
 	BoardObjectType,
 	ErrorType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
-import { delay } from "@/utils/helpers";
-import { useBoardStore } from "@data-board";
-import { useSharedEditMode } from "@util-board";
-import { useBoardApi } from "../BoardApi.composable";
-import { useCardStore } from "../Card.store";
-import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import {
 	CreateElementRequestPayload,
 	DeleteCardRequestPayload,
@@ -20,6 +16,10 @@ import {
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
 } from "./cardActionPayload";
+import { useCardStore } from "../Card.store";
+import { useSharedCardRequestPool } from "../CardRequestPool.composable";
+import { delay } from "@/utils/helpers";
+import { useBoardStore } from "@data-board";
 
 export const useCardRestApi = () => {
 	const boardStore = useBoardStore();

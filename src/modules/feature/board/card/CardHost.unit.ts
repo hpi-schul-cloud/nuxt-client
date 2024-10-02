@@ -1,54 +1,55 @@
-import { CardResponse } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import {
-	cardResponseFactory,
 	envsFactory,
 	fileElementResponseFactory,
+	cardResponseFactory,
 } from "@@/tests/test-utils/factory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
 	useCardStore,
+	useEditMode,
+	useSharedEditMode,
 } from "@data-board";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuActionDelete } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import {
-	useBoardNotifier,
-	useCourseBoardEditMode,
-	useSharedEditMode,
-	useSharedLastCreatedElement,
-} from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed, ref } from "vue";
 import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import ContentElementList from "./ContentElementList.vue";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import { createTestingPinia } from "@pinia/testing";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { CardResponse } from "@/serverApi/v3";
 
 jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
-const mockedEditMode = jest.mocked(useCourseBoardEditMode);
-const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 
 jest.mock("@data-board/BoardPermissions.composable");
 const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
+
+jest.mock("@data-board/EditMode.composable");
+const mockedEditMode = jest.mocked(useEditMode);
+
+jest.mock("@data-board/EditMode.composable");
+const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
 
 jest.mock("../shared/AddElementDialog.composable");
 jest.mock("@ui-confirmation-dialog");
@@ -80,7 +81,6 @@ describe("CardHost", () => {
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
 			setEditModeId: jest.fn(),
-			isInEditMode: computed(() => true),
 		});
 
 		mockedBoardFocusHandler.mockReturnValue({

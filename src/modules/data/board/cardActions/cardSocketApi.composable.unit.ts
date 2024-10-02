@@ -42,8 +42,7 @@ const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
-jest.mock("@util-board/BoardNotifier.composable");
-jest.mock("@util-board/LastCreatedElement.composable");
+jest.mock("@util-board");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = jest.mocked(
 	useSharedLastCreatedElement

@@ -1,11 +1,10 @@
-import { CardResponse, ContentElementType } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
-import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
 import { nextTick, ref } from "vue";
-import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload";
+import { envConfigModule } from "@/store";
 
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
+import { CardResponse, ContentElementType } from "@/serverApi/v3";
+import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload";
 import {
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
@@ -18,6 +17,8 @@ import {
 } from "./cardActions/cardActionPayload";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { useSharedLastCreatedElement } from "@util-board";
+import { useSharedEditMode } from "@data-board";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards = ref<Record<string, CardResponse>>({});

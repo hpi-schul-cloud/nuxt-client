@@ -3,13 +3,13 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { shallowMount } from "@vue/test-utils";
-import BoardSectionCreationHeader from "./BoardSectionCreationHeader.vue";
+import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 
-describe("BoardSectionCreationHeader", () => {
+describe("BoardColumnGhostHeader", () => {
 	const setup = () => {
 		document.body.setAttribute("data-app", "true");
 
-		const wrapper = shallowMount(BoardSectionCreationHeader, {
+		const wrapper = shallowMount(BoardColumnGhostHeader, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -25,9 +25,7 @@ describe("BoardSectionCreationHeader", () => {
 	describe("when component is mounted", () => {
 		it("should be found in the dom", () => {
 			const { wrapper } = setup();
-			expect(wrapper.findComponent(BoardSectionCreationHeader).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent(BoardColumnGhostHeader).exists()).toBe(true);
 			expect(wrapper.findComponent({ name: "VBtn" }).exists()).toBe(true);
 		});
 	});
@@ -39,9 +37,7 @@ describe("BoardSectionCreationHeader", () => {
 			const button = wrapper.findComponent({ name: "VBtn" });
 			button.vm.$emit("click");
 			const emitted = wrapper.emitted();
-			expect(wrapper.findComponent(BoardSectionCreationHeader).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent(BoardColumnGhostHeader).exists()).toBe(true);
 			expect(emitted["add-column"]).toBeDefined();
 		});
 	});

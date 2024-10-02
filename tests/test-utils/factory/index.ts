@@ -25,7 +25,6 @@ export * from "./customParameterResponseFactory";
 export * from "./drawingElementResponseFactory";
 export * from "./envsFactory";
 export * from "./externalToolDisplayDataFactory";
-export * from "./externalToolElementResponseFactory";
 export * from "./fileElementContentFactory";
 export * from "./fileElementResponseFactory";
 export * from "./filerecordResponse.factory";

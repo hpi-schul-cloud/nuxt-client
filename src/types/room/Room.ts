@@ -1,12 +1,10 @@
-import {
-	CreateRoomBodyParams,
-	RoomDetailsResponse,
-	RoomItemResponse,
-	UpdateRoomBodyParams,
-} from "@/serverApi/v3";
+import { RoomColorEnum } from "@/modules/feature/room/RoomColorPicker/types";
 
-export type RoomItem = RoomItemResponse;
-export type RoomDetails = RoomDetailsResponse;
-
-export type RoomCreateParams = CreateRoomBodyParams;
-export type RoomUpdateParams = UpdateRoomBodyParams;
+export type Room = {
+	id: string;
+	title: string;
+	shortTitle: string;
+	displayColor: RoomColorEnum;
+	startDate?: string;
+	endDate?: string;
+};

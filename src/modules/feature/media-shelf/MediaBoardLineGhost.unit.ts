@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { BoardSectionCreationHeader } from "@ui-board";
+import BoardColumnGhostHeader from "@feature-board/board/BoardColumnGhostHeader.vue";
 import { mount } from "@vue/test-utils";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick } from "vue";
@@ -29,7 +29,7 @@ describe("MediaBoardLineGhost", () => {
 		it("should emit 'create:line'", async () => {
 			const { wrapper } = getWrapper();
 
-			const header = wrapper.findComponent(BoardSectionCreationHeader);
+			const header = wrapper.findComponent(BoardColumnGhostHeader);
 
 			header.vm.$emit("add-column");
 			await nextTick();

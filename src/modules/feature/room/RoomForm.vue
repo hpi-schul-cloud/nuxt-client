@@ -1,24 +1,30 @@
 <template>
-	<form @submit.prevent="onSave">
-		<div>
-			<VTextField
-				v-model="roomData.name"
-				label="Name des Raumes"
-				class="mb-8"
-				:error-messages="
-					v$.roomData.name.$errors.map((e: ErrorObject) => unref(e.$message))
-				"
-				@blur="v$.roomData.name.$touch"
-			/>
-			<div class="mb-8">
-				<RoomColorPicker v-model:color="roomData.color" />
-			</div>
-			<div class="mb-8">
-				Zeitraum
-				<div class="d-flex flex-fill">
-					<DatePicker v-model="roomData.startDate" class="flex-1-1 mr-4" />
-					<DatePicker v-model="roomData.endDate" class="flex-1-1 ml-4" />
-				</div>
+	<div>
+		<VTextField
+			v-model="roomData.title"
+			label="Name des Raumes"
+			class="mb-8"
+			:error-messages="
+				v$.roomData.title.$errors.map((e: ErrorObject) => e.$message)
+			"
+			@blur="v$.roomData.title.$touch"
+		/>
+		<div class="mb-8">
+			<RoomColorPicker v-model:color="roomData.displayColor" />
+		</div>
+		<div class="mb-8">
+			Zeitraum
+			<div class="d-flex flex-fill">
+				<DatePicker
+					:date="roomData.startDate"
+					class="flex-1-1 mr-4"
+					@update:date="onUpdateStartDate"
+				/>
+				<DatePicker
+					:date="roomData.endDate"
+					class="flex-1-1 ml-4"
+					@update:date="onUpdateEndDate"
+				/>
 			</div>
 		</div>
 		<div class="d-flex">
@@ -26,39 +32,82 @@
 			<VBtn variant="text" class="mr-4" @click="onCancel">
 				{{ $t("common.actions.cancel") }}
 			</VBtn>
-			<VBtn variant="flat" color="primary" type="submit">
+			<VBtn variant="flat" color="primary" @click="onSave">
 				{{ $t("common.actions.save") }}
 			</VBtn>
 		</div>
-	</form>
+	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, unref } from "vue";
+import { computed, PropType, ref, watch, watchEffect } from "vue";
+import { RoomColorEnum } from "./RoomColorPicker/types";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { DatePicker } from "@ui-date-time-picker";
+import { Room } from "@/types/room/Room";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
+import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
 
 const props = defineProps({
 	room: {
-		type: Object as PropType<RoomCreateParams | RoomUpdateParams>,
-		required: true,
+		type: Object as PropType<Room | undefined>,
 	},
 });
 
-const emit = defineEmits(["save", "cancel"]);
-
-const roomData = computed(() => props.room);
-
+const router = useRouter();
 const { t } = useI18n();
+
+const roomData = ref<Partial<Room>>({
+	title: "",
+	shortTitle: "",
+	displayColor: RoomColorEnum.BLUE_GREY,
+	startDate: "",
+	endDate: "",
+});
+
+watchEffect(() => {
+	if (props.room) {
+		roomData.value = props.room;
+	}
+});
+
+// generate short title
+watch(
+	() => roomData.value.title,
+	(newTitle, oldTitle) => {
+		if (!newTitle || newTitle === oldTitle) return;
+		if (newTitle.length < 2) return;
+
+		const shortTitle = newTitle?.slice(0, 2);
+		if (shortTitle === roomData.value.shortTitle) return;
+
+		roomData.value.shortTitle = shortTitle;
+	}
+);
+
+const onUpdateStartDate = (newDate: string) => {
+	roomData.value.startDate = newDate;
+};
+
+const onUpdateEndDate = (newDate: string) => {
+	roomData.value.endDate = newDate;
+};
+
+const onSave = () => {
+	console.log(roomData.value);
+};
+
+const onCancel = () => {
+	// TODO use useConfirmationDialog here, when it's refactored
+	router.go(-1);
+};
 
 // Validation
 const rules = computed(() => ({
 	roomData: {
-		name: {
+		title: {
 			required: helpers.withMessage(t("common.validation.required2"), required),
 		},
 	},
@@ -66,16 +115,10 @@ const rules = computed(() => ({
 
 const v$ = useVuelidate(rules, { roomData }, { $lazy: true });
 
-const onSave = async () => {
-	const valid = await v$.value.$validate();
-	if (!valid) {
-		// TODO notify user form is invalid
-		return;
+watch(
+	() => v$.value,
+	() => {
+		console.log("hello?", v$.value);
 	}
-	emit("save", roomData.value);
-};
-
-const onCancel = () => {
-	emit("cancel");
-};
+);
 </script>

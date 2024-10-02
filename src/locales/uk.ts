@@ -25,7 +25,6 @@ export default {
 	"common.actions.shareCopy": "Поділитися копією",
 	"common.actions.update": "Оновити",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
-	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
@@ -1642,9 +1641,6 @@ export default {
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
 	// new rooms
-	"pages.roomCreate.title": "Створити кімнату",
-	"pages.roomEdit.title": "Кімната редагування",
-	"pages.roomDetails.title": "Кімната",
 	"pages.roomDetails.ariaLabels.menu": "Меню кімнати",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
