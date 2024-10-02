@@ -20,7 +20,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomEditState } from "@data-room";
 import { RoomForm } from "@feature-room";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, watch } from "vue";
+import { computed, ComputedRef, watch, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 
@@ -35,10 +35,14 @@ const pageTitle = computed(() =>
 );
 useTitle(pageTitle);
 
+const initialRoomName = ref("");
+
 watch(
 	() => route.params.id,
 	async () => {
 		await fetchRoom(route.params.id as string);
+
+		initialRoomName.value = roomData.value.name;
 	},
 	{ immediate: true }
 );
@@ -64,7 +68,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 				to: "/rooms",
 			},
 			{
-				title: roomData.value.name,
+				title: initialRoomName.value,
 				to: `/rooms/${route.params.id}`,
 			},
 			{
