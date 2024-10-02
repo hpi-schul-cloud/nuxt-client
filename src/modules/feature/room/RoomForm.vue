@@ -17,17 +17,17 @@
 				<label id="time-period-label" class="d-flex mb-2">
 					{{ $t("components.roomForm.labels.timePeriod") }}
 				</label>
-				<div class="d-flex flex-fill">
+				<div class="d-flex">
 					<DatePicker
 						:date="roomData.startDate"
-						class="flex-1-1 mr-4"
+						class="w-50 mr-4"
 						data-testid="room-start-date-input"
 						aria-labelledby="time-period-label"
 						@update:date="onUpdateStartDate"
 					/>
 					<DatePicker
 						:date="roomData.endDate"
-						class="flex-1-1 ml-4"
+						class="w-50 ml-4"
 						data-testid="room-end-date-input"
 						aria-labelledby="time-period-label"
 						@update:date="onUpdateEndDate"

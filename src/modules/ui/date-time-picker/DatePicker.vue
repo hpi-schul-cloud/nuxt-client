@@ -1,44 +1,42 @@
 <template>
-	<div>
-		<v-menu
-			v-model="showDateDialog"
-			transition="scale-transition"
-			:close-on-content-click="false"
-		>
-			<template #activator="{ props }">
-				<v-text-field
-					v-bind="props"
-					v-bind.attr="$attrs"
-					v-model="dateString"
-					ref="inputField"
-					:append-inner-icon="mdiCalendar"
-					:label="label"
-					:aria-label="ariaLabel"
-					:placeholder="t('common.placeholder.dateformat')"
-					:error-messages="errorMessages"
-					v-date-input-mask
-					@update:model-value="validate"
-					@keydown.space="showDateDialog = true"
-					@keydown.prevent.enter="showDateDialog = true"
-					@keydown.up.down.stop
-					@keydown.tab="showDateDialog = false"
-				/>
-			</template>
-			<v-locale-provider :locale="locale">
-				<v-date-picker
-					v-model="dateObject"
-					:aria-expanded="showDateDialog"
-					:min="minDate"
-					:max="maxDate"
-					color="primary"
-					hide-header
-					show-adjacent-months
-					elevation="6"
-					@update:model-value="closeAndEmit"
-				/>
-			</v-locale-provider>
-		</v-menu>
-	</div>
+	<v-menu
+		v-model="showDateDialog"
+		transition="scale-transition"
+		:close-on-content-click="false"
+	>
+		<template #activator="{ props }">
+			<v-text-field
+				v-bind="props"
+				v-bind.attr="$attrs"
+				v-model="dateString"
+				ref="inputField"
+				:append-inner-icon="mdiCalendar"
+				:label="label"
+				:aria-label="ariaLabel"
+				:placeholder="t('common.placeholder.dateformat')"
+				:error-messages="errorMessages"
+				v-date-input-mask
+				@update:model-value="validate"
+				@keydown.space="showDateDialog = true"
+				@keydown.prevent.enter="showDateDialog = true"
+				@keydown.up.down.stop
+				@keydown.tab="showDateDialog = false"
+			/>
+		</template>
+		<v-locale-provider :locale="locale">
+			<v-date-picker
+				v-model="dateObject"
+				:aria-expanded="showDateDialog"
+				:min="minDate"
+				:max="maxDate"
+				color="primary"
+				hide-header
+				show-adjacent-months
+				elevation="6"
+				@update:model-value="closeAndEmit"
+			/>
+		</v-locale-provider>
+	</v-menu>
 </template>
 
 <script setup lang="ts">
