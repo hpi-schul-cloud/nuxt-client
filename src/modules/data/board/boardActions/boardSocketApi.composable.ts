@@ -19,6 +19,9 @@ import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
+import { applicationErrorModule } from "@/store";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
@@ -184,7 +187,11 @@ export const useBoardSocketApi = () => {
 	const deleteCardFailure = () => notifySocketError("notDeleted", "boardCard");
 	const deleteColumnFailure = () =>
 		notifySocketError("notDeleted", "boardColumn");
-	const fetchBoardFailure = () => notifySocketError("notLoaded", "board");
+	const fetchBoardFailure = () => {
+		applicationErrorModule.setError(
+			createApplicationError(HttpStatusCode.Forbidden)
+		);
+	};
 	const moveCardFailure = () => notifySocketError("notUpdated", "boardCard");
 	const moveColumnFailure = () =>
 		notifySocketError("notUpdated", "boardColumn");

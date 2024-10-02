@@ -17,6 +17,9 @@ import {
 	UpdateColumnTitleRequestPayload,
 } from "./boardActionPayload";
 import * as BoardActions from "./boardActions";
+import { applicationErrorModule } from "@/store";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -62,9 +65,9 @@ export const useBoardRestApi = () => {
 			const board = await fetchBoardCall(payload.boardId);
 			boardStore.fetchBoardSuccess(board);
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplate("notLoaded", "board"),
-			});
+			applicationErrorModule.setError(
+				createApplicationError(HttpStatusCode.Forbidden)
+			);
 		}
 		boardStore.setLoading(false);
 	};
