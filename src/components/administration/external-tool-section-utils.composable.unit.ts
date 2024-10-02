@@ -118,7 +118,7 @@ describe("useSchoolExternalToolUtils", () => {
 		describe("when receiving tools", () => {
 			const setupTool = () => {
 				const tool = schoolExternalToolFactory.build({
-					restrictToContexts: [ToolContextType.MediaBoard],
+					restrictToContexts: [],
 				});
 				return { tool };
 			};
@@ -145,7 +145,7 @@ describe("useSchoolExternalToolUtils", () => {
 						statusText: expectedTranslation,
 						isOutdated: schoolExternalTool.status.isOutdatedOnScopeSchool,
 						isDeactivated: false,
-						restrictToContexts: expectedTranslation,
+						restrictToContexts: "",
 					},
 				]);
 			});
@@ -192,6 +192,70 @@ describe("useSchoolExternalToolUtils", () => {
 
 				expect(tMock).toHaveBeenCalledWith(
 					"common.tool.context.type.boardElements"
+				);
+			});
+		});
+
+		describe("when translating status latest", () => {
+			const setupTool = () => {
+				const tool = schoolExternalToolFactory.build();
+
+				return { tool };
+			};
+
+			it("should call the translation function for status latest", () => {
+				const { tool } = setupTool();
+				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
+
+				getItems(schoolExternalToolsModule);
+
+				expect(tMock).toHaveBeenCalledWith(
+					"components.externalTools.status.latest"
+				);
+			});
+		});
+
+		describe("when translating status deactivated", () => {
+			const setupTool = () => {
+				const tool = schoolExternalToolFactory.build({
+					isDeactivated: true,
+				});
+
+				return { tool };
+			};
+
+			it("should call the translation function for status deactivated", () => {
+				const { tool } = setupTool();
+				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
+
+				getItems(schoolExternalToolsModule);
+
+				expect(tMock).toHaveBeenCalledWith(
+					"components.externalTools.status.deactivated"
+				);
+			});
+		});
+
+		describe("when translating status outdated", () => {
+			const setupTool = () => {
+				const tool = schoolExternalToolFactory.build({
+					status: {
+						isOutdatedOnScopeSchool: true,
+						isGloballyDeactivated: false,
+					},
+				});
+
+				return { tool };
+			};
+
+			it("should call the translation function for status outdated", () => {
+				const { tool } = setupTool();
+				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
+
+				getItems(schoolExternalToolsModule);
+
+				expect(tMock).toHaveBeenCalledWith(
+					"components.externalTools.status.outdated"
 				);
 			});
 		});
