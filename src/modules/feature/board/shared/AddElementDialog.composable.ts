@@ -1,7 +1,14 @@
 import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
-import { ContentElementType } from "@/serverApi/v3";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
+	BoardCardApiFactory,
+	BoardElementApiFactory,
+	ContentElementType,
+} from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useCardStore } from "@data-board";
+import {
+	mdiCalendarCheck,
 	mdiFormatText,
 	mdiLightbulbOnOutline,
 	mdiLink,
@@ -9,7 +16,6 @@ import {
 	mdiPuzzleOutline,
 	mdiTextBoxEditOutline,
 	mdiTrayArrowUp,
-	mdiCalendarCheck,
 } from "@icons/material";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
@@ -21,18 +27,61 @@ export const useAddElementDialog = (
 	createElementRequestFn: CreateElementRequestFn,
 	cardId: string
 ) => {
+	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
+	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
+	const { createElementSuccess } = useCardStore();
+
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { showCustomNotifier } = useBoardNotifier();
 	const { t } = useI18n();
 
-	const { isDialogOpen, closeDialog, elementTypeOptions } =
-		useSharedElementTypeSelection();
+	const {
+		isDialogOpen,
+		closeDialog,
+		elementTypeOptions,
+		isAppointmentFinderDialogOpen,
+	} = useSharedElementTypeSelection();
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
 
 		await createElementRequestFn({ type: elementType, cardId });
 		showNotificationByElementType(elementType);
+	};
+
+	// must be async atm because of type defs
+	const onAppointmentFinderClick = async () => {
+		closeDialog();
+		isAppointmentFinderDialogOpen.value = true;
+
+		const createAppointFinderElement = async (event: MessageEvent) => {
+			const {
+				data: { appointmentId, adminId },
+			} = event;
+			isAppointmentFinderDialogOpen.value = false;
+			const { data: element } = await cardsApi.cardControllerCreateElement(
+				cardId,
+				{
+					type: ContentElementType.AppointmentFinder,
+				}
+			);
+			const { data: updatedElement } =
+				await elementApi.elementControllerUpdateElement(element.id, {
+					data: {
+						type: ContentElementType.AppointmentFinder,
+						content: { appointmentFinderId: appointmentId, adminId },
+					},
+				});
+			createElementSuccess({
+				cardId,
+				type: ContentElementType.AppointmentFinder,
+				newElement: updatedElement,
+				isOwnAction: true,
+			});
+			window.removeEventListener("message", createAppointFinderElement);
+		};
+
+		window.addEventListener("message", createAppointFinderElement);
 	};
 
 	const showNotificationByElementType = (elementType: ContentElementType) => {
@@ -72,7 +121,7 @@ export const useAddElementDialog = (
 		icon: mdiCalendarCheck,
 		label:
 			"components.elementTypeSelection.elements.appointmentFinderElement.subtitle",
-		action: () => onElementClick(ContentElementType.AppointmentFinder),
+		action: () => onAppointmentFinderClick(),
 		testId: "create-element-appointment-finder",
 	});
 

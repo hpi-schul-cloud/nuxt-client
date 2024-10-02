@@ -84,7 +84,6 @@
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
-					@update-element="onUpdateElement"
 				/>
 				<DeletedElement
 					v-else-if="isDeletedElementResponse(element)"
@@ -150,9 +149,6 @@ const emit = defineEmits<{
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
-const onUpdateElement = (element: AnyContentElement) => {
-	emit("update:element", element);
-};
 const onDeleteElement = (elementId: string) => {
 	emit("delete:element", elementId);
 };

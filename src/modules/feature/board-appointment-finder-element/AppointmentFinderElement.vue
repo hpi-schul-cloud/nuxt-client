@@ -14,18 +14,11 @@
 		@keydown.stop
 	>
 		<ContentElementBar :hasGreyBackground="true">
-			<template #display v-if="element.content.appointmentFinderId">
+			<template #display>
 				<v-img :src="image" alt="" cover class="rounded-t" />
 			</template>
-			<template #logo v-if="!element.content.appointmentFinderId">
-				<v-icon>{{ mdiCalendarCheck }}</v-icon>
-			</template>
 			<template #title>
-				{{
-					element.content.appointmentFinderId
-						? t("components.cardElement.appointmentFinderElement")
-						: t("components.cardElement.appointmentFinderElement.createFinder")
-				}}
+				{{ t("components.cardElement.appointmentFinderElement") }}
 			</template>
 			<template #menu>
 				<AppointmentFinderElementMenu
@@ -44,7 +37,6 @@
 import image from "@/assets/img/appointmentFinder.png";
 import { AppointmentFinderElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler } from "@data-board";
-import { mdiCalendarCheck } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
@@ -63,7 +55,6 @@ const emit = defineEmits([
 	"move-down:edit",
 	"move-up:edit",
 	"move-keyboard:edit",
-	"update-element",
 ]);
 
 const { t } = useI18n();

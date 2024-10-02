@@ -31,6 +31,14 @@
 			</VCardActions>
 		</VCard>
 	</VDialog>
+	<VDialog v-model="isAppointmentFinderDialogOpen">
+		<VCard class="appointmentFinderDialog">
+			<iframe
+				src="http://localhost:4200/#/home"
+				class="appointmentFinderIframe"
+			/>
+		</VCard>
+	</VDialog>
 </template>
 
 <script setup lang="ts">
@@ -38,8 +46,12 @@ import { computed, ComputedRef } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 
-const { isDialogOpen, closeDialog, elementTypeOptions } =
-	useSharedElementTypeSelection();
+const {
+	isDialogOpen,
+	closeDialog,
+	elementTypeOptions,
+	isAppointmentFinderDialogOpen,
+} = useSharedElementTypeSelection();
 
 const dialogWidth: ComputedRef<number> = computed(() =>
 	elementTypeOptions.value.length >= 3 ? 426 : 320
@@ -54,5 +66,14 @@ const dialogWidth: ComputedRef<number> = computed(() =>
 
 .button-max-width {
 	max-width: 100px;
+}
+
+.appointmentFinderDialog {
+	height: 90vh;
+}
+
+.appointmentFinderIframe {
+	width: 100%;
+	height: 100%;
 }
 </style>

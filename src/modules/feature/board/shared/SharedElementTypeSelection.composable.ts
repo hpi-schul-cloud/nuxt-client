@@ -11,6 +11,7 @@ interface ElementTypeSelectionOptions {
 export const useSharedElementTypeSelection = createSharedComposable(() => {
 	const isDialogOpen = ref<boolean>(false);
 	const elementTypeOptions = ref<Array<ElementTypeSelectionOptions>>([]);
+	const isAppointmentFinderDialogOpen = ref<boolean>(false);
 
 	const closeDialog = () => {
 		isDialogOpen.value = false;
@@ -20,5 +21,6 @@ export const useSharedElementTypeSelection = createSharedComposable(() => {
 		isDialogOpen,
 		closeDialog,
 		elementTypeOptions,
+		isAppointmentFinderDialogOpen,
 	};
 });
