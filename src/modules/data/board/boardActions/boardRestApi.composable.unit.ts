@@ -1,5 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { envConfigModule } from "@/store";
+import { applicationErrorModule, envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
@@ -19,6 +19,9 @@ import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
+import ApplicationErrorModule from "@/store/application-error";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -39,6 +42,7 @@ describe("boardRestApi", () => {
 		ReturnType<typeof useSocketConnection>
 	>;
 	let setEditModeId: jest.Mock;
+	const setErrorMock = jest.fn();
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -62,11 +66,15 @@ describe("boardRestApi", () => {
 	});
 
 	const setup = (createBoard = true, isSocketEnabled = false) => {
-		setupStores({ envConfigModule: EnvConfigModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			applicationErrorModule: ApplicationErrorModule,
+		});
 		const envs = envsFactory.build({
 			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: isSocketEnabled,
 		});
 		envConfigModule.setEnvs(envs);
+		applicationErrorModule.setError = setErrorMock;
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		if (createBoard) {
@@ -150,7 +158,7 @@ describe("boardRestApi", () => {
 			expect(boardStore.setLoading).toHaveBeenLastCalledWith(false);
 		});
 
-		it("should call handleError if the fetch fails", async () => {
+		it("should call applicationErrorModule if the fetch fails", async () => {
 			const { boardStore } = setup();
 			const { fetchBoardRequest } = useBoardRestApi();
 
@@ -158,7 +166,9 @@ describe("boardRestApi", () => {
 
 			await fetchBoardRequest({ boardId: boardStore.board!.id });
 
-			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+			expect(setErrorMock).toHaveBeenCalledWith(
+				createApplicationError(HttpStatusCode.Forbidden)
+			);
 		});
 	});
 
