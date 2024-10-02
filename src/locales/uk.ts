@@ -798,6 +798,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Чернетки",
 	"components.organisms.TasksDashboardMain.tab.finished": "Завершено",
 	"components.organisms.TasksDashboardMain.tab.open": "Відкрити",
+	"components.roomForm.labels.roomName": "Назва кімнати",
+	"components.roomForm.labels.timePeriod": "Період часу",
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
 	"error.400": "400 – Неприпустимий запит",

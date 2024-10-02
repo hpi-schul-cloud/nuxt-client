@@ -792,6 +792,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Entwürfe",
 	"components.organisms.TasksDashboardMain.tab.finished": "Abgeschlossen",
 	"components.organisms.TasksDashboardMain.tab.open": "Offen",
+	"components.roomForm.labels.roomName": "Name des Raumes",
+	"components.roomForm.labels.timePeriod": "Zeitraum",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
 	"error.400": "400 – Fehlerhafte Anfrage",

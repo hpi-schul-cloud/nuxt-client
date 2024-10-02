@@ -804,6 +804,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Borradores",
 	"components.organisms.TasksDashboardMain.tab.finished": "Terminado",
 	"components.organisms.TasksDashboardMain.tab.open": "Abrir",
+	"components.roomForm.labels.roomName": "Nombre de la sala",
+	"components.roomForm.labels.timePeriod": "Periodo de tiempo",
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",

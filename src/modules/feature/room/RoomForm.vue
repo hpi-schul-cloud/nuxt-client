@@ -3,7 +3,7 @@
 		<div>
 			<VTextField
 				v-model="roomData.name"
-				label="Name des Raumes"
+				:label="$t('components.roomForm.labels.roomName')"
 				class="mb-8"
 				:error-messages="
 					v$.roomData.name.$errors.map((e: ErrorObject) => unref(e.$message))
@@ -13,7 +13,9 @@
 				<RoomColorPicker v-model:color="roomData.color" />
 			</div>
 			<div class="mb-8">
-				Zeitraum
+				<label id="time-period-label" class="d-flex mb-2">
+					{{ $t("components.roomForm.labels.timePeriod") }}
+				</label>
 				<div class="d-flex flex-fill">
 					<DatePicker
 						:date="roomData.startDate"
