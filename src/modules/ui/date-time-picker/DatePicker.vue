@@ -8,9 +8,9 @@
 			<template #activator="{ props }">
 				<v-text-field
 					v-bind="props"
+					v-bind.attr="$attrs"
 					v-model="dateString"
 					ref="inputField"
-					data-testid="date-input"
 					:append-inner-icon="mdiCalendar"
 					:label="label"
 					:aria-label="ariaLabel"
@@ -52,6 +52,10 @@ import { dateInputMask as vDateInputMask } from "@util-input-masks";
 import { isValidDateFormat } from "@util-validators";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { mdiCalendar } from "@icons/material";
+
+defineOptions({
+	inheritAttrs: false,
+});
 
 const props = defineProps({
 	date: { type: String }, // ISO 8601 string

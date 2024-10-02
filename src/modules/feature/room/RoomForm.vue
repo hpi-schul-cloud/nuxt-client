@@ -3,11 +3,12 @@
 		<div>
 			<VTextField
 				v-model="roomData.name"
-				:label="$t('components.roomForm.labels.roomName')"
 				class="mb-8"
+				:label="$t('components.roomForm.labels.roomName')"
 				:error-messages="
 					v$.roomData.name.$errors.map((e: ErrorObject) => unref(e.$message))
 				"
+				data-testid="room-name-input"
 			/>
 			<div class="mb-8">
 				<RoomColorPicker v-model:color="roomData.color" />
@@ -20,11 +21,15 @@
 					<DatePicker
 						:date="roomData.startDate"
 						class="flex-1-1 mr-4"
+						data-testid="room-start-date-input"
+						aria-labelledby="time-period-label"
 						@update:date="onUpdateStartDate"
 					/>
 					<DatePicker
 						:date="roomData.endDate"
 						class="flex-1-1 ml-4"
+						data-testid="room-end-date-input"
+						aria-labelledby="time-period-label"
 						@update:date="onUpdateEndDate"
 					/>
 				</div>
@@ -32,10 +37,20 @@
 		</div>
 		<div class="d-flex">
 			<VSpacer />
-			<VBtn variant="text" class="mr-4" @click="onCancel">
+			<VBtn
+				variant="text"
+				class="mr-4"
+				data-testid="room-form-cancel-btn"
+				@click="onCancel"
+			>
 				{{ $t("common.actions.cancel") }}
 			</VBtn>
-			<VBtn variant="flat" color="primary" type="submit">
+			<VBtn
+				variant="flat"
+				color="primary"
+				type="submit"
+				data-testid="room-form-save-btn"
+			>
 				{{ $t("common.actions.save") }}
 			</VBtn>
 		</div>
