@@ -20,6 +20,7 @@ import {
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { watch } from "vue";
 
 type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 
@@ -49,7 +50,7 @@ export const useAddElementDialog = (
 		showNotificationByElementType(elementType);
 	};
 
-	// must be async atm because of type defs
+	// must be async because of type defs
 	const onAppointmentFinderClick = async () => {
 		closeDialog();
 		isAppointmentFinderDialogOpen.value = true;
@@ -82,6 +83,12 @@ export const useAddElementDialog = (
 		};
 
 		window.addEventListener("message", createAppointFinderElement);
+
+		watch(isAppointmentFinderDialogOpen, (isOpen) => {
+			if (!isOpen) {
+				window.removeEventListener("message", createAppointFinderElement);
+			}
+		});
 	};
 
 	const showNotificationByElementType = (elementType: ContentElementType) => {
