@@ -6,7 +6,8 @@ import {
 	CopyApiResponseTypeEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
+import { envConfigModule, applicationErrorModule } from "@/store";
+import ApplicationErrorModule from "@/store/application-error";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import EnvConfigModule from "@/store/env-config";
@@ -62,6 +63,7 @@ import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 
 jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -116,6 +118,7 @@ describe("Board", () => {
 	>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
+	const setErrorMock = jest.fn();
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
@@ -179,7 +182,10 @@ describe("Board", () => {
 	});
 
 	const mockEnvConfigModule = (envs: Partial<ConfigResponse> | undefined) => {
-		setupStores({ envConfigModule: EnvConfigModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			applicationErrorModule: ApplicationErrorModule,
+		});
 		const envsMock = envsFactory.build({
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
@@ -297,6 +303,7 @@ describe("Board", () => {
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		const cardStore = mockedPiniaStoreTyping(useCardStore);
+		applicationErrorModule.setError = setErrorMock;
 
 		const wrapperVM = wrapper.vm as unknown as {
 			board: Board;
@@ -852,6 +859,9 @@ describe("Board", () => {
 							expect(
 								mockedCreateApplicationErrorCalls.createApplicationError
 							).toHaveBeenCalledWith(HttpStatusCode.Forbidden);
+							expect(setErrorMock).toHaveBeenCalledWith(
+								createApplicationError(HttpStatusCode.Forbidden)
+							);
 						});
 					});
 
@@ -868,6 +878,7 @@ describe("Board", () => {
 							expect(
 								mockedCreateApplicationErrorCalls.createApplicationError
 							).not.toHaveBeenCalled();
+							expect(setErrorMock).not.toHaveBeenCalled();
 						});
 					});
 				});
@@ -886,6 +897,7 @@ describe("Board", () => {
 							expect(
 								mockedCreateApplicationErrorCalls.createApplicationError
 							).not.toHaveBeenCalled();
+							expect(setErrorMock).not.toHaveBeenCalled();
 						});
 					});
 
@@ -902,6 +914,7 @@ describe("Board", () => {
 							expect(
 								mockedCreateApplicationErrorCalls.createApplicationError
 							).not.toHaveBeenCalled();
+							expect(setErrorMock).not.toHaveBeenCalled();
 						});
 					});
 				});
