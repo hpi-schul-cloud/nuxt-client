@@ -54,11 +54,7 @@
 
 <script setup lang="ts">
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import {
-	useBoardFocusHandler,
-	useBoardPermissions,
-	useEditMode,
-} from "@data-board";
+import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
 	BoardMenu,
 	BoardMenuActionCopy,
@@ -69,6 +65,7 @@ import {
 	BoardMenuActionShare,
 	BoardMenuScope,
 } from "@ui-board";
+import { useCourseBoardEditMode } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
@@ -100,7 +97,9 @@ const emit = defineEmits([
 
 const { t } = useI18n();
 const boardId = toRef(props, "boardId");
-const { isEditMode, startEditMode, stopEditMode } = useEditMode(boardId.value);
+const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
+	boardId.value
+);
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
 const { hasEditPermission } = useBoardPermissions();

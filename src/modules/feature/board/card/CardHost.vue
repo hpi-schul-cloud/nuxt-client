@@ -95,7 +95,6 @@ import {
 	useBoardFocusHandler,
 	useBoardPermissions,
 	useCardStore,
-	useEditMode,
 } from "@data-board";
 import { mdiArrowExpand } from "@icons/material";
 import {
@@ -104,6 +103,7 @@ import {
 	BoardMenuActionEdit,
 	BoardMenuScope,
 } from "@ui-board";
+import { useCourseBoardEditMode } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
@@ -156,7 +156,7 @@ export default defineComponent({
 		const hasCardTitle = computed(() => card.value?.title);
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
-		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
+		const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
 			cardId.value
 		);
 		const { hasDeletePermission } = useBoardPermissions();

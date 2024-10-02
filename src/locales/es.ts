@@ -25,6 +25,7 @@ export default {
 	"common.actions.shareCopy": "Compartir copia",
 	"common.actions.update": "Actualizar",
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
+	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
@@ -1663,6 +1664,9 @@ export default {
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
 	// new rooms
+	"pages.roomCreate.title": "Crear habitación",
+	"pages.roomEdit.title": "Editar habitación",
+	"pages.roomDetails.title": "Habitación",
 	"pages.roomDetails.ariaLabels.menu": "Menú de la habitación",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar habitación",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar habitación",
