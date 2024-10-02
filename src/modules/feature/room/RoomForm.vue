@@ -8,7 +8,6 @@
 				:error-messages="
 					v$.roomData.name.$errors.map((e: ErrorObject) => unref(e.$message))
 				"
-				@blur="v$.roomData.name.$touch"
 			/>
 			<div class="mb-8">
 				<RoomColorPicker v-model:color="roomData.color" />
@@ -16,8 +15,16 @@
 			<div class="mb-8">
 				Zeitraum
 				<div class="d-flex flex-fill">
-					<DatePicker v-model="roomData.startDate" class="flex-1-1 mr-4" />
-					<DatePicker v-model="roomData.endDate" class="flex-1-1 ml-4" />
+					<DatePicker
+						:date="roomData.startDate"
+						class="flex-1-1 mr-4"
+						@update:date="onUpdateStartDate"
+					/>
+					<DatePicker
+						:date="roomData.endDate"
+						class="flex-1-1 ml-4"
+						@update:date="onUpdateEndDate"
+					/>
 				</div>
 			</div>
 		</div>
@@ -50,10 +57,17 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["save", "cancel"]);
+const { t } = useI18n();
 
 const roomData = computed(() => props.room);
 
-const { t } = useI18n();
+const onUpdateStartDate = (newDate: string) => {
+	roomData.value.startDate = newDate;
+};
+
+const onUpdateEndDate = (newDate: string) => {
+	roomData.value.endDate = newDate;
+};
 
 // Validation
 const rules = computed(() => ({
@@ -64,7 +78,7 @@ const rules = computed(() => ({
 	},
 }));
 
-const v$ = useVuelidate(rules, { roomData }, { $lazy: true });
+const v$ = useVuelidate(rules, { roomData }, { $lazy: true, $autoDirty: true });
 
 const onSave = async () => {
 	const valid = await v$.value.$validate();
