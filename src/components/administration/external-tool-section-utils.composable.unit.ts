@@ -21,7 +21,6 @@ describe("useSchoolExternalToolUtils", () => {
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(tMock);
 
-		const schoolExternalTool = schoolExternalToolFactory.build();
 		const schoolExternalToolsModule = createModuleMocks(
 			SchoolExternalToolsModule,
 			{
