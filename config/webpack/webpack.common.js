@@ -26,10 +26,10 @@ module.exports = {
 
 	// Output
 	output: {
-		filename: "_nuxt/js/[name].js",
+		filename: "_nuxt/js/[name]-[contenthash:6].js",
+		chunkFilename: "_nuxt/js/[name]-[contenthash:6].js",
 		path: path.resolve(__base, "dist"),
 		publicPath: "/",
-		chunkFilename: "_nuxt/js/[name].js",
 		clean: true,
 	},
 
@@ -144,12 +144,17 @@ module.exports = {
 			"@feature-board-collaborative-text-editor-element": getDir(
 				"src/modules/feature/board-collaborative-text-editor-element"
 			),
+			"@feature-board-deleted-element": getDir(
+				"src/modules/feature/board-deleted-element"
+			),
 			"@feature-course-sync": getDir("src/modules/feature/course-sync"),
 			"@feature-board": getDir("src/modules/feature/board"),
 			"@feature-editor": getDir("src/modules/feature/editor"),
 			"@feature-render-html": getDir("src/modules/feature/render-html"),
 			"@feature-news-form": getDir("src/modules/feature/news-form"),
 			"@feature-media-shelf": getDir("src/modules/feature/media-shelf"),
+			"@feature-room": getDir("src/modules/feature/room"),
+			"@icons": getDir("src/components/icons"),
 			"@ui-alert": getDir("src/modules/ui/alert"),
 			"@ui-board": getDir("src/modules/ui/board"),
 			"@ui-chip": getDir("src/modules/ui/chip"),
@@ -172,6 +177,7 @@ module.exports = {
 			"@page-board": getDir("src/modules/page/board"),
 			"@page-class-members": getDir("src/modules/page/class-members"),
 			"@page-media-shelf": getDir("src/modules/page/media-shelf"),
+			"@page-room": getDir("src/modules/page/room"),
 		},
 		extensions: [".tsx", ".ts", ".mjs", ".js", ".jsx", ".vue", ".json"],
 		plugins: [new ThemeResolverPlugin(__base, replacements)],

@@ -36,7 +36,7 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { courseRoomListModule } from "@/store";
-import { mdiKeyboardReturn, mdiPencilOutline } from "@mdi/js";
+import { mdiKeyboardReturn, mdiPencilOutline } from "@icons/material";
 import { defineComponent } from "vue";
 
 export default defineComponent({

@@ -36,20 +36,21 @@
 import { useI18n } from "vue-i18n";
 import { PickerOption } from "./types";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
+import { mdiViewDashboardOutline } from "@icons/material";
 
 const { t } = useI18n();
 
 const boardLayouts: PickerOption[] = [
 	{
 		label: t("pages.room.dialog.boardLayout.multiColumn"),
-		icon: "$mdiViewDashboardOutline",
+		icon: mdiViewDashboardOutline,
 		eventName: "select:multi-column",
 		dataTestId: "dialog-add-multi-column-board",
 		ariaLabel: t("pages.room.dialog.boardLayout.multiColumn"),
 	},
 	{
 		label: t("pages.room.dialog.boardLayout.singleColumn"),
-		icon: "$mdiCustomGridOutline",
+		icon: "$gridOutline",
 		eventName: "select:single-column",
 		dataTestId: "dialog-add-single-column-board",
 		ariaLabel: t("pages.room.dialog.boardLayout.singleColumn"),

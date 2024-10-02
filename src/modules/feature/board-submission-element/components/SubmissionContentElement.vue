@@ -28,7 +28,7 @@
 				:isOverdue="isOverdue"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
 			>
-				<BoardMenu scope="element">
+				<BoardMenu :scope="BoardMenuScope.SUBMISSION_ELEMENT" has-background>
 					<BoardMenuActionMoveUp @click="onMoveElementUp" />
 					<BoardMenuActionMoveDown @click="onMoveElementDown" />
 					<BoardMenuActionDelete @click="onDeleteElement" />
@@ -39,22 +39,28 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType, ref, toRef } from "vue";
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
-import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
-import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
-import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { useI18n } from "vue-i18n";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	BoardMenuScope,
 } from "@ui-board";
+import { defineComponent, PropType, ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
+import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
+import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
+import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 
 export default defineComponent({
 	name: "SubmissionContentElement",
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
+	},
 	components: {
 		BoardMenu,
 		BoardMenuActionMoveUp,

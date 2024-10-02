@@ -9,7 +9,7 @@
 		>
 			<template #icon>
 				<v-icon class="material-icon">{{
-					activated ? "$mdiEmailCheckOutline" : "$mdiEmailRemoveOutline"
+					activated ? mdiEmailCheckOutline : mdiEmailRemoveOutline
 				}}</v-icon>
 			</template>
 		</info-modal-full-width>
@@ -20,6 +20,7 @@
 import InfoModalFullWidth from "@/components/molecules/InfoModalFullWidth";
 import { mapGetters } from "vuex";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { mdiEmailCheckOutline, mdiEmailRemoveOutline } from "@icons/material";
 
 export default {
 	components: {
@@ -30,6 +31,8 @@ export default {
 			activated: false,
 			keyword: null,
 			showModal: false,
+			mdiEmailCheckOutline,
+			mdiEmailRemoveOutline,
 		};
 	},
 	computed: {

@@ -1,57 +1,59 @@
 <template>
-	<v-card
-		class="mb-4"
-		:class="{ 'd-none': isHidden }"
-		data-testid="board-link-element"
-		ref="linkContentElement"
-		:variant="outlined"
-		:ripple="false"
-		@keydown.up.down="onKeydownArrow"
-		@keydown.stop
-		:aria-label="ariaLabel"
-		:href="sanitizedUrl"
-		target="_blank"
-		:loading="isLoading ? 'primary' : false"
-	>
-		<LinkContentElementDisplay
-			v-if="computedElement.content.url"
-			:url="computedElement.content.url"
-			:title="computedElement.content.title"
-			:imageUrl="computedElement.content.imageUrl"
-			:isEditMode="isEditMode"
-			><BoardMenu scope="element">
-				<BoardMenuActionMoveUp @click="onMoveUp" />
-				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete @click="onDelete" />
-			</BoardMenu>
-		</LinkContentElementDisplay>
-		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
-			><BoardMenu scope="element">
-				<BoardMenuActionMoveUp @click="onMoveUp" />
-				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete @click="onDelete" />
-			</BoardMenu>
-		</LinkContentElementCreate>
-	</v-card>
+	<div ref="linkContentElement">
+		<v-card
+			class="mb-4"
+			target="_blank"
+			data-testid="board-link-element"
+			:class="{ 'd-none': isHidden }"
+			:variant="outlined"
+			:ripple="false"
+			:aria-label="ariaLabel"
+			:href="sanitizedUrl"
+			:loading="isLoading ? 'primary' : false"
+			@keydown.up.down="onKeydownArrow"
+			@keydown.stop
+		>
+			<LinkContentElementDisplay
+				v-if="computedElement.content.url"
+				:url="computedElement.content.url"
+				:title="computedElement.content.title"
+				:imageUrl="computedElement.content.imageUrl"
+				:isEditMode="isEditMode"
+				><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
+					<BoardMenuActionMoveUp @click="onMoveUp" />
+					<BoardMenuActionMoveDown @click="onMoveDown" />
+					<BoardMenuActionDelete @click="onDelete" />
+				</BoardMenu>
+			</LinkContentElementDisplay>
+			<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
+				><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
+					<BoardMenuActionMoveUp @click="onMoveUp" />
+					<BoardMenuActionMoveDown @click="onMoveDown" />
+					<BoardMenuActionDelete @click="onDelete" />
+				</BoardMenu>
+			</LinkContentElementCreate>
+		</v-card>
+	</div>
 </template>
 
 <script setup lang="ts">
 import { LinkElementResponse } from "@/serverApi/v3";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { computed, PropType, ref, toRef } from "vue";
-import LinkContentElementCreate from "./LinkContentElementCreate.vue";
-import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	BoardMenuScope,
 } from "@ui-board";
-import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
-import { ensureProtocolIncluded } from "../util/url.util";
-import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
-import { sanitizeUrl } from "@braintree/sanitize-url";
+import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
+import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
+import { ensureProtocolIncluded } from "../util/url.util";
+import LinkContentElementCreate from "./LinkContentElementCreate.vue";
+import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 
 const props = defineProps({
 	element: {

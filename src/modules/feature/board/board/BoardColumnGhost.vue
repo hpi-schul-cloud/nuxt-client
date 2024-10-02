@@ -1,6 +1,6 @@
 <template>
 	<div ref="ghostColumnRef" :class="{ 'pl-4 pr-6': !isListBoard }">
-		<BoardColumnGhostHeader
+		<BoardSectionCreationHeader
 			:label="title"
 			:isColumnActive="isColumnHovered"
 			@add-column="onAddColumn"
@@ -36,12 +36,12 @@
 	</div>
 </template>
 <script setup lang="ts">
+import { BoardSectionCreationHeader } from "@ui-board";
+import { useDragAndDrop } from "@util-board";
 import { useElementHover } from "@vueuse/core";
 import { Sortable } from "sortablejs-vue3";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDragAndDrop } from "../shared/DragAndDrop.composable";
-import BoardColumnGhostHeader from "./BoardColumnGhostHeader.vue";
 
 const ghostColumnRef = ref<HTMLDivElement | undefined>();
 

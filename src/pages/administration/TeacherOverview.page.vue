@@ -28,7 +28,7 @@
 				@update:model-value="barSearch"
 			>
 				<template #icon>
-					<v-icon>$mdiMagnify</v-icon>
+					<v-icon :icon="mdiMagnify" />
 				</template>
 			</base-input>
 
@@ -69,14 +69,14 @@
 							v-if="status === 'ok'"
 							class="material-icon"
 							color="rgba(var(--v-theme-success))"
-							>$mdiCheck</v-icon
-						>
+							:icon="mdiCheck"
+						/>
 						<v-icon
 							v-else-if="status === 'missing'"
 							class="material-icon"
 							color="rgba(var(--v-theme-error))"
-							>$mdiClose</v-icon
-						>
+							:icon="mdiClose"
+						/>
 					</span>
 				</template>
 				<template #datacolumn-lastLoginSystemChange="{ data }">
@@ -138,10 +138,17 @@ import { printDate } from "@/plugins/datetime";
 import ProgressModal from "@/components/molecules/ProgressModal";
 import {
 	mdiAccountPlus,
+	mdiAlert,
+	mdiCheck,
+	mdiClose,
 	mdiCloudDownload,
+	mdiDeleteOutline,
+	mdiEmailOutline,
+	mdiMagnify,
 	mdiPencilOutline,
 	mdiPlus,
-} from "@mdi/js";
+	mdiQrcode,
+} from "@icons/material";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { reactive } from "vue";
 import DataFilter from "@/components/organisms/DataFilter/DataFilter.vue";
@@ -162,10 +169,17 @@ export default {
 	},
 	data() {
 		return {
-			mdiPlus,
 			mdiAccountPlus,
+			mdiAlert,
+			mdiCheck,
+			mdiClose,
 			mdiCloudDownload,
+			mdiDeleteOutline,
+			mdiEmailOutline,
+			mdiMagnify,
 			mdiPencilOutline,
+			mdiPlus,
+			mdiQrcode,
 			currentFilterQuery: this.getUiState(
 				"filter",
 				"pages.administration.teachers.index"
@@ -207,13 +221,13 @@ export default {
 					label: this.$t(
 						"pages.administration.teachers.index.tableActions.email"
 					),
-					icon: "$mdiEmailOutline",
+					icon: mdiEmailOutline,
 					action: this.handleBulkEMail,
 					dataTestId: "registration_link",
 				},
 				{
 					label: this.$t("pages.administration.teachers.index.tableActions.qr"),
-					icon: "$mdiQrcode",
+					icon: mdiQrcode,
 					action: this.handleBulkQR,
 					dataTestId: "qr_code",
 				},
@@ -221,7 +235,7 @@ export default {
 					label: this.$t(
 						"pages.administration.teachers.index.tableActions.delete"
 					),
-					icon: "$mdiDeleteOutline",
+					icon: mdiDeleteOutline,
 					action: this.handleBulkDelete,
 					permission: "TEACHER_DELETE",
 					dataTestId: "delete_action",
@@ -280,12 +294,12 @@ export default {
 			],
 			icons: [
 				{
-					icon: "$mdiCheck",
+					icon: mdiCheck,
 					color: "rgba(var(--v-theme-success))",
 					label: this.$t("pages.administration.students.legend.icon.success"),
 				},
 				{
-					icon: "$mdiClose",
+					icon: mdiClose,
 					color: "rgba(var(--v-theme-error))",
 					label: this.$t("utils.adminFilter.consent.label.missing"),
 				},
@@ -583,7 +597,7 @@ export default {
 					"pages.administration.teachers.index.remove.confirm.btnText"
 				),
 				cancelText: this.$t("common.actions.cancel"),
-				icon: "$mdiAlert",
+				icon: mdiAlert,
 				iconColor: "rgba(var(--v-theme-error))",
 				onConfirm,
 				onCancel,

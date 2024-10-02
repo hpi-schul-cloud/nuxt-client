@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
-import { mdiClose, mdiTrayArrowDown } from "@mdi/js";
+import { mdiClose, mdiTrayArrowDown } from "@icons/material";
 import { onKeyStroke } from "@vueuse/core";
 import { ref, watch } from "vue";
 import { useInternalLightBox } from "./LightBox.composable";

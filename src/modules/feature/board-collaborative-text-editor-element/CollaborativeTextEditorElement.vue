@@ -3,7 +3,7 @@
 		class="text-editor-card mb-4"
 		data-testid="collaborative-text-editor-element"
 		variant="outlined"
-		ref="collaborativetextEditorElement"
+		ref="collaborativeTextEditorElement"
 		:ripple="false"
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
@@ -39,7 +39,7 @@ import {
 	CollaborativeTextEditorParentType,
 } from "@/serverApi/v3";
 import { useBoardFocusHandler } from "@data-board";
-import { mdiTextBoxEditOutline } from "@mdi/js";
+import { mdiTextBoxEditOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";

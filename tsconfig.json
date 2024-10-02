@@ -44,6 +44,11 @@
 			"@feature-render-html": ["src/modules/feature/render-html"],
 			"@feature-news-form": ["src/modules/feature/news-form"],
 			"@feature-media-shelf": ["src/modules/feature/media-shelf"],
+			"@feature-board-deleted-element": [
+				"src/modules/feature/board-deleted-element"
+			],
+			"@feature-room": ["src/modules/feature/room"],
+			"@icons/*": ["src/components/icons/*"],
 			"@ui-alert": ["src/modules/ui/alert"],
 			"@ui-board": ["src/modules/ui/board"],
 			"@ui-chip": ["src/modules/ui/chip"],
@@ -66,6 +71,7 @@
 			"@page-board": ["src/modules/page/board"],
 			"@page-class-members": ["src/modules/page/class-members"],
 			"@page-media-shelf": ["src/modules/page/media-shelf"],
+			"@page-room": ["src/modules/page/room"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},

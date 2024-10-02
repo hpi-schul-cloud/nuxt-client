@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
-import { mdiSync } from "@mdi/js";
+import { mdiSync } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { VBadge } from "vuetify/lib/components/index.mjs";
 import vRoomAvatar from "./vRoomAvatar.vue";
@@ -21,6 +21,8 @@ const mockData = {
 	href: "/rooms/456",
 	isSynchronized: false,
 };
+
+jest.mock("vue-router");
 
 describe("vRoomAvatar", () => {
 	const setup = (optionalProps: object = {}) => {
@@ -97,32 +99,34 @@ describe("vRoomAvatar", () => {
 
 	it("should redirect to room page", async () => {
 		Object.defineProperty(window, "location", {
-			set: jest.fn(),
-			get: () => createMock<Location>(),
+			value: {
+				href: "",
+			},
+			writable: true,
 		});
-		const locationSpy = jest.spyOn(window, "location", "set");
 
 		const { wrapper } = setup();
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 		await avatarComponent.trigger("click");
 
-		expect(locationSpy).toHaveBeenCalledWith(mockData.href);
+		expect(window.location.href).toStrictEqual(mockData.href);
 	});
 
 	it("should redirect to room page if keyboard event triggered", async () => {
 		Object.defineProperty(window, "location", {
-			set: jest.fn(),
-			get: () => createMock<Location>(),
+			value: {
+				href: "",
+			},
+			writable: true,
 		});
-		const locationSpy = jest.spyOn(window, "location", "set");
 
 		const { wrapper } = setup();
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
 
 		await avatarComponent.trigger("keypress.enter");
 
-		expect(locationSpy).toHaveBeenCalledWith(mockData.href);
+		expect(window.location.href).toStrictEqual(mockData.href);
 	});
 
 	it("should not redirect to room page if condenseLayout props is true", async () => {

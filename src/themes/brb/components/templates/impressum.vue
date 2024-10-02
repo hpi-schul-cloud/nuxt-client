@@ -203,7 +203,7 @@
 </template>
 
 <script>
-import { mdiChat, mdiEmailOutline, mdiPhone } from "@mdi/js";
+import { mdiChat, mdiEmailOutline, mdiPhone } from "@icons/material";
 import { defineComponent } from "vue";
 
 // eslint-disable-next-line vue/require-direct-export

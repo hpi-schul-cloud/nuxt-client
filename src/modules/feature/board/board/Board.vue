@@ -104,29 +104,33 @@ import { CopyParamsTypeEnum } from "@/store/copy";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	COPY_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import {
+	useBoardInactivity,
 	useBoardPermissions,
 	useBoardStore,
 	useCardStore,
 	useSharedBoardPageInformation,
-	useSharedEditMode,
-	useBoardInactivity,
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
-import { extractDataAttribute, useBoardNotifier } from "@util-board";
+import {
+	BOARD_IS_LIST_LAYOUT,
+	extractDataAttribute,
+	useBoardNotifier,
+	useSharedEditMode,
+} from "@util-board";
 import { useTouchDetection } from "@util-device-detection";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, onUnmounted, watch } from "vue";
+import { computed, onMounted, onUnmounted, provide, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
 import { useBodyScrolling } from "../shared/BodyScrolling.composable";
 import BoardColumn from "./BoardColumn.vue";
@@ -152,6 +156,19 @@ const { createPageInformation, roomId } = useSharedBoardPageInformation();
 watch(board, async () => {
 	await createPageInformation(props.boardId);
 });
+
+const route = useRoute();
+
+watch(
+	() => route.params.id,
+	() => {
+		const boardId = Array.isArray(route.params.id)
+			? route.params.id[0]
+			: route.params.id;
+		boardStore.fetchBoardRequest({ boardId });
+	},
+	{ immediate: true }
+);
 
 useBodyScrolling();
 const { isTouchDetected } = useTouchDetection();
@@ -300,6 +317,8 @@ const isListBoard = computed(
 		board.value?.layout === BoardLayout.List
 );
 
+provide(BOARD_IS_LIST_LAYOUT, isListBoard);
+
 const copyResultModalItems = computed(
 	() => copyModule.getCopyResultFailedItems
 );
@@ -343,7 +362,7 @@ const router = useRouter();
 const onCopyBoard = async () => {
 	await copy({ id: props.boardId, type: CopyParamsTypeEnum.ColumnBoard });
 	const copyId = copyModule.getCopyResult?.id;
-	router.push({ name: "rooms-board", params: { id: copyId } });
+	router.push({ name: "boards-id", params: { id: copyId } });
 };
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);

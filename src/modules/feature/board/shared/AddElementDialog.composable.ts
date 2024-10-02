@@ -9,7 +9,7 @@ import {
 	mdiPuzzleOutline,
 	mdiTextBoxEditOutline,
 	mdiTrayArrowUp,
-} from "@mdi/js";
+} from "@icons/material";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";

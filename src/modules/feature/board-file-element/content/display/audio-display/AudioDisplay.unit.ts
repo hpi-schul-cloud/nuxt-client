@@ -3,10 +3,10 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
-import { mdiPause, mdiPlay } from "@mdi/js";
+import { mdiPause, mdiPlay } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { useMediaControls } from "@vueuse/core";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import AudioDisplay from "./AudioDisplay.vue";
 
 jest.mock("@vueuse/core", () => {
@@ -20,11 +20,12 @@ jest.mock("@vueuse/core", () => {
 
 describe("AudioDisplay", () => {
 	describe("when audio is not playing", () => {
-		const setup = () => {
+		const setup = (options?: { showMenu?: boolean }) => {
 			const src = "test-source";
 			const slotContent = "test-slot-content";
 			const props = {
 				src,
+				showMenu: options?.showMenu ?? true,
 			};
 
 			const currentTimeRef = ref(0);
@@ -68,10 +69,16 @@ describe("AudioDisplay", () => {
 			};
 		};
 
-		it("should render slot content", () => {
-			const { wrapper } = setup();
+		it("should render slot content if showMenu is true", () => {
+			const { wrapper } = setup({ showMenu: true });
 
 			expect(wrapper.text()).toContain("test-slot-content");
+		});
+
+		it("should render slot content if showMenu is false", () => {
+			const { wrapper } = setup({ showMenu: false });
+
+			expect(wrapper.text()).not.toContain("test-slot-content");
 		});
 
 		it("should call onSourceError", () => {
@@ -129,9 +136,9 @@ describe("AudioDisplay", () => {
 
 				const playButton = wrapper.findComponent({ name: "v-btn" });
 
-				playButton.vm.$emit("click");
+				playButton.trigger("click");
 
-				await wrapper.vm.$nextTick();
+				await nextTick();
 
 				expect(playingRef.value).toBe(true);
 			});
@@ -143,9 +150,9 @@ describe("AudioDisplay", () => {
 
 				const audioSlider = wrapper.findComponent({ name: "v-slider" });
 
-				audioSlider.vm.$emit("update:model-value", 10);
+				audioSlider.setValue(10);
 
-				await wrapper.vm.$nextTick();
+				await nextTick();
 
 				expect(currentTimeRef.value).toBe(10);
 			});
@@ -166,7 +173,7 @@ describe("AudioDisplay", () => {
 				const speedMenu = wrapper.findComponent({ name: "SpeedMenu" });
 				speedMenu.vm.$emit("updateRate", newRateValue);
 
-				await wrapper.vm.$nextTick();
+				await nextTick();
 
 				expect(rateRef.value).toBe(newRateValue);
 			});
@@ -179,6 +186,7 @@ describe("AudioDisplay", () => {
 			const slotContent = "test-slot-content";
 			const props = {
 				src,
+				showMenu: true,
 			};
 
 			const currentTimeRef = ref(5);
@@ -238,9 +246,9 @@ describe("AudioDisplay", () => {
 				const { wrapper, playingRef } = setup();
 
 				const playButton = wrapper.findComponent({ name: "v-btn" });
-				playButton.vm.$emit("click");
+				playButton.trigger("click");
 
-				await wrapper.vm.$nextTick();
+				await nextTick();
 
 				expect(playingRef.value).toBe(false);
 			});

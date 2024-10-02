@@ -20,13 +20,14 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useDragAndDrop } from "@util-board";
 import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { useDragAndDrop } from "../board/shared/DragAndDrop.composable";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
+import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 
 jest.mock("@data-external-tool");
 
@@ -56,6 +57,9 @@ describe("MediaBoardExternalToolElement", () => {
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
+				stubs: {
+					MediaBoardExternalToolElementMenu: true,
 				},
 			},
 			props,
@@ -517,6 +521,39 @@ describe("MediaBoardExternalToolElement", () => {
 				expect(deactivatedChip.exists()).toEqual(true);
 				expect(notLicenseChip.exists()).toEqual(false);
 				expect(incompleteChip.exists()).toEqual(true);
+			});
+		});
+	});
+
+	describe("Three dot menu", () => {
+		describe("when deleting the element from the menu", () => {
+			const setup = () => {
+				const externalToolElement =
+					mediaExternalToolElementResponseFactory.build();
+
+				useExternalToolDisplayStateMock.displayData.value =
+					externalToolDisplayDataFactory.build();
+
+				const { wrapper } = getWrapper({
+					element: externalToolElement,
+				});
+
+				return {
+					wrapper,
+					externalToolElement,
+				};
+			};
+
+			it("should emit a delete event", async () => {
+				const { wrapper, externalToolElement } = setup();
+
+				const menu = wrapper.getComponent(MediaBoardExternalToolElementMenu);
+				menu.vm.$emit("delete:element");
+				await nextTick();
+
+				expect(wrapper.emitted("delete:element")).toEqual([
+					[externalToolElement.id],
+				]);
 			});
 		});
 	});

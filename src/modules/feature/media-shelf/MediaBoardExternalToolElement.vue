@@ -26,6 +26,9 @@
 				</WarningChip>
 			</div>
 		</template>
+		<template #menu>
+			<MediaBoardExternalToolElementMenu @delete:element="onDelete" />
+		</template>
 	</MediaBoardElementDisplay>
 </template>
 
@@ -41,13 +44,14 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
 import { WarningChip } from "@ui-chip";
+import { useDragAndDrop } from "@util-board";
 import { useErrorNotification } from "@util-error-notification";
 import { computed, ComputedRef, onUnmounted, PropType, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { MediaElementDisplay } from "./data";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
+import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 
 const props = defineProps({
 	element: {
@@ -55,6 +59,10 @@ const props = defineProps({
 		required: true,
 	},
 });
+
+const emit = defineEmits<{
+	(e: "delete:element", elementId: string): void;
+}>();
 
 const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -134,9 +142,13 @@ onUnmounted(() => {
 
 const { isDragging } = useDragAndDrop();
 
+const onDelete = async () => {
+	emit("delete:element", props.element.id);
+};
+
 const onClick = async () => {
-	// Loading the launch request has failed
-	if (launchError.value) {
+	const hasLaunchRequestFailed = !!launchError.value;
+	if (hasLaunchRequestFailed) {
 		notifierModule.show({
 			status: "error",
 			text: t("error.load"),
@@ -150,8 +162,8 @@ const onClick = async () => {
 		return;
 	}
 
-	// Display warning, if the tool cannot be launch due to its status
-	if (!isOperational(displayData.value.status)) {
+	const hasValidStatus = isOperational(displayData.value.status);
+	if (!hasValidStatus) {
 		notifierModule.show({
 			status: "warning",
 			text: determineMediaBoardElementStatusMessage(displayData.value.status),
@@ -160,15 +172,14 @@ const onClick = async () => {
 		return;
 	}
 
-	// Don't launch tools while they are being dragged
 	if (isDragging.value) {
 		return;
 	}
 
 	launchTool();
 
-	// Launching the tool has failed
-	if (launchError.value) {
+	const hasLaunchFailed = !!launchError.value;
+	if (hasLaunchFailed) {
 		notifierModule.show({
 			status: "error",
 			text: t("error.generic"),

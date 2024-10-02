@@ -14,17 +14,11 @@
 			</h2>
 		</template>
 		<template #content>
-			<WarningAlert
-				class="mb-4"
-				data-testid="end-course-sync-dialog-warning-text"
-			>
-				{{ $t("feature-course-sync.EndCourseSyncDialog.alert") }}
-			</WarningAlert>
 			<p data-testid="end-course-sync-dialog-info-text">
 				{{
 					$t("feature-course-sync.EndCourseSyncDialog.description", {
-						courseName: courseName,
-						groupName: groupName,
+						courseName: courseName || "",
+						groupName: groupName || "",
 					})
 				}}
 			</p>
@@ -36,7 +30,6 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useCourseApi } from "@data-room";
-import { WarningAlert } from "@ui-alert";
 import { useI18n } from "vue-i18n";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
@@ -50,11 +43,9 @@ const isOpen = defineModel("isOpen", {
 const props = defineProps({
 	courseName: {
 		type: String,
-		required: true,
 	},
 	groupName: {
 		type: String,
-		required: true,
 	},
 	courseId: {
 		type: String,

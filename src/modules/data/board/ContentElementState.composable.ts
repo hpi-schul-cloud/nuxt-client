@@ -1,6 +1,6 @@
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { watchDebounced } from "@vueuse/core";
 import { computed, ComputedRef, Ref, ref, toRef } from "vue";
-import { AnyContentElement } from "@/types/board/ContentElement";
 import { useCardStore } from "./Card.store";
 
 export const useContentElementState = <T extends AnyContentElement>(
@@ -13,16 +13,16 @@ export const useContentElementState = <T extends AnyContentElement>(
 	const cardStore = useCardStore();
 	const _elementRef: Ref<T> = toRef(props, "element");
 
-	const modelValue = ref(_elementRef.value.content);
+	const modelValue: Ref<T["content"]> = ref(_elementRef.value.content);
 
 	const computedElement: ComputedRef<T> = computed(() => _elementRef.value);
 
-	const isLoading = ref<boolean>(false);
+	const isLoading: Ref<boolean> = ref<boolean>(false);
 
 	watchDebounced<T["content"]>(
 		modelValue.value,
-		async (modelValue) => {
-			cardStore.updateElementRequest({
+		async (modelValue: T["content"]): Promise<void> => {
+			await cardStore.updateElementRequest({
 				element: {
 					..._elementRef.value,
 					content: modelValue,

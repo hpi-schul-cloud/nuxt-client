@@ -14,9 +14,10 @@ import {
 	FileElementContentBody,
 	LinkElementContentBody,
 	RichTextElementContentBody,
-	RoomsApiFactory,
+	CourseRoomsApiFactory,
 	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
+import { BoardContextType } from "@/types/board/BoardContext";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
@@ -28,7 +29,7 @@ export const useBoardApi = () => {
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
 
-	const roomApi = RoomsApiFactory(undefined, "/v3", $axios);
+	const roomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
 
 	const fetchBoardCall = async (id: string): Promise<BoardResponse> => {
 		try {
@@ -185,7 +186,7 @@ export const useBoardApi = () => {
 		});
 	};
 
-	type ContextInfo = { id: string; name: string };
+	type ContextInfo = { id: string; type: BoardContextType; name: string };
 
 	const getContextInfo = async (
 		boardId: string
@@ -196,13 +197,16 @@ export const useBoardApi = () => {
 			return undefined;
 		}
 		const context = contextResponse.data;
-		const roomResponse = await roomApi.roomsControllerGetRoomBoard(context.id);
+		const roomResponse = await roomApi.courseRoomsControllerGetRoomBoard(
+			context.id
+		);
 
 		if (roomResponse.status !== 200) {
 			return undefined;
 		}
 		return {
 			id: roomResponse.data.roomId,
+			type: context.type,
 			name: roomResponse.data.title,
 		};
 	};

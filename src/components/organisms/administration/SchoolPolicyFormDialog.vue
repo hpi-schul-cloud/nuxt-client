@@ -5,7 +5,7 @@
 		@dialog-closed="cancel"
 		has-buttons
 		confirm-btn-title-key="pages.administration.school.index.schoolPolicy.replace"
-		confirm-btn-icon="$mdiFileReplaceOutline"
+		:confirm-btn-icon="mdiFileReplaceOutline"
 		:confirm-btn-disabled="!isValid"
 		@dialog-confirmed="submit"
 	>
@@ -69,7 +69,7 @@ import {
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { useI18n } from "vue-i18n";
-import { mdiAlert, mdiFileReplaceOutline } from "@mdi/js";
+import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
 import { School } from "@/store/types/schools";
 import { currentDate } from "@/plugins/datetime";
 import { toBase64 } from "@/utils/fileHelper";

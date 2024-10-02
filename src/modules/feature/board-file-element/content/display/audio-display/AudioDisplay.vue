@@ -51,13 +51,13 @@
 				</div>
 			</div>
 		</template>
-		<template #menu><slot /></template>
+		<template v-if="showMenu" #menu><slot /></template>
 	</ContentElementBar>
 </template>
 
 <script lang="ts">
 import { formatSecondsToHourMinSec } from "@/utils/fileHelper";
-import { mdiPause, mdiPlay, mdiPlaySpeed } from "@mdi/js";
+import { mdiPause, mdiPlay, mdiPlaySpeed } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
@@ -69,6 +69,7 @@ export default defineComponent({
 	components: { ContentElementBar, SpeedMenu },
 	props: {
 		src: { type: String, required: true },
+		showMenu: { type: Boolean, required: true },
 	},
 	emits: ["error"],
 	setup(props, { emit }) {

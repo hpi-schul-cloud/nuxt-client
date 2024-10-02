@@ -40,7 +40,7 @@ const axiosInitializer = () => {
 
 axiosInitializer();
 
-describe("room module", () => {
+describe("course-room module", () => {
 	beforeEach(() => {
 		setupStores({
 			authModule: AuthModule,
@@ -55,9 +55,9 @@ describe("room module", () => {
 			jest.clearAllMocks();
 		});
 		const mockApi = {
-			roomsControllerGetRoomBoard: jest.fn(),
-			roomsControllerPatchElementVisibility: jest.fn(),
-			roomsControllerPatchOrderingOfElements: jest.fn(),
+			courseRoomsControllerGetRoomBoard: jest.fn(),
+			courseRoomsControllerPatchElementVisibility: jest.fn(),
+			courseRoomsControllerPatchOrderingOfElements: jest.fn(),
 		};
 
 		describe("fetchCourse", () => {
@@ -131,16 +131,18 @@ describe("room module", () => {
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
 				jest
-					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
+					.spyOn(serverApi, "CourseRoomsApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.CourseRoomsApiInterface
+					);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				await courseRoomDetailsModule.fetchContent("123");
 
 				expect(courseRoomDetailsModule.getLoading).toBe(false);
-				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
+				expect(mockApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalled();
 				expect(
-					mockApi.roomsControllerGetRoomBoard.mock.calls[0][0]
+					mockApi.courseRoomsControllerGetRoomBoard.mock.calls[0][0]
 				).toStrictEqual("123");
 			});
 		});
@@ -148,8 +150,10 @@ describe("room module", () => {
 		describe("publishCard", () => {
 			it("'publishCard' action should call backend and 'fetchContent' method", async () => {
 				jest
-					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
+					.spyOn(serverApi, "CourseRoomsApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.CourseRoomsApiInterface
+					);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				await courseRoomDetailsModule.publishCard({
@@ -159,20 +163,22 @@ describe("room module", () => {
 
 				expect(courseRoomDetailsModule.getLoading).toBe(false);
 				expect(
-					mockApi.roomsControllerPatchElementVisibility
+					mockApi.courseRoomsControllerPatchElementVisibility
 				).toHaveBeenCalled();
 				expect(
-					mockApi.roomsControllerPatchElementVisibility.mock.calls[0]
+					mockApi.courseRoomsControllerPatchElementVisibility.mock.calls[0]
 				).toContain("54321");
-				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
+				expect(mockApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalled();
 			});
 		});
 
 		describe("sortElements", () => {
 			it("'sortElements' action should call backend and 'fetchContent' method", async () => {
 				jest
-					.spyOn(serverApi, "RoomsApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.RoomsApiInterface);
+					.spyOn(serverApi, "CourseRoomsApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as serverApi.CourseRoomsApiInterface
+					);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const payload = {
@@ -182,12 +188,12 @@ describe("room module", () => {
 
 				expect(courseRoomDetailsModule.getLoading).toBe(false);
 				expect(
-					mockApi.roomsControllerPatchOrderingOfElements
+					mockApi.courseRoomsControllerPatchOrderingOfElements
 				).toHaveBeenCalled();
 				expect(
-					mockApi.roomsControllerPatchOrderingOfElements.mock.calls[0][1]
+					mockApi.courseRoomsControllerPatchOrderingOfElements.mock.calls[0][1]
 				).toStrictEqual(payload);
-				expect(mockApi.roomsControllerGetRoomBoard).toHaveBeenCalled();
+				expect(mockApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalled();
 			});
 		});
 

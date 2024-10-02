@@ -9,7 +9,7 @@
 				query: { q: $route.query.q, inline: $route.query.inline },
 			}"
 		>
-			<v-icon class="material-icon">$mdiChevronLeft</v-icon>
+			<v-icon class="material-icon" :icon="mdiChevronLeft" />
 			{{ $t("pages.content.index.backToOverview") }}
 		</base-link>
 		<div class="content">
@@ -41,7 +41,7 @@
 					<div class="metadata">
 						<div v-if="createdAt || updatedAt" class="meta-container">
 							<div class="meta-icon">
-								<v-icon class="material-icon">$mdiCalendar</v-icon>
+								<v-icon class="material-icon" :icon="mdiCalendar" />
 							</div>
 							<div class="meta-text">
 								<div v-if="createdAt">
@@ -56,7 +56,7 @@
 						</div>
 						<div :style="{ margin: '0px' }" class="meta-container">
 							<div>
-								<v-icon class="material-icon meta-icon">$mdiPound</v-icon>
+								<v-icon class="material-icon meta-icon" :icon="mdiPound" />
 							</div>
 							<template v-if="tags.length > 0">
 								<div class="text-wrap">
@@ -144,6 +144,7 @@ import UserHasRole from "@/components/helpers/UserHasRole";
 import BaseLink from "../base/BaseLink";
 import { RenderHTML } from "@feature-render-html";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { mdiCalendar, mdiChevronLeft, mdiPound } from "@icons/material";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -168,6 +169,9 @@ export default defineComponent({
 		return {
 			checkedMaterials: [],
 			btnLabel: `${this.$t("pages.content._id.addToTopic")}`,
+			mdiCalendar,
+			mdiChevronLeft,
+			mdiPound,
 		};
 	},
 	computed: {

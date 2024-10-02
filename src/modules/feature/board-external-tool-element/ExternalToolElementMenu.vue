@@ -1,11 +1,11 @@
 <template>
-	<BoardMenu scope="element">
+	<BoardMenu :scope="BoardMenuScope.EXTERNAL_TOOL_ELEMENT" has-background>
 		<BoardMenuActionMoveUp @click="onMoveUp" />
 		<BoardMenuActionMoveDown @click="onMoveDown" />
 		<BoardMenuAction :icon="mdiCogOutline" @click="onEdit">
 			{{ $t("common.labels.settings") }}
 		</BoardMenuAction>
-		<BoardMenuActionDelete @click="onDelete" />
+		<BoardMenuActionDelete :name="displayName" @click="onDelete" />
 	</BoardMenu>
 </template>
 
@@ -15,23 +15,34 @@ import {
 	mdiArrowCollapseUp,
 	mdiCogOutline,
 	mdiTrashCanOutline,
-} from "@mdi/js";
+} from "@icons/material";
 import {
 	BoardMenu,
 	BoardMenuAction,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	BoardMenuScope,
 } from "@ui-board";
 import { defineComponent } from "vue";
 
 export default defineComponent({
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
+	},
 	components: {
 		BoardMenu,
 		BoardMenuActionDelete,
 		BoardMenuAction,
 		BoardMenuActionMoveUp,
 		BoardMenuActionMoveDown,
+	},
+	props: {
+		displayName: {
+			type: String,
+		},
 	},
 	emits: [
 		"edit:element",

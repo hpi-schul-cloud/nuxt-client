@@ -68,7 +68,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import { mdiInformation } from "@/components/icons/material";
+import { mdiInformation } from "@icons/material";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 

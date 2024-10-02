@@ -1,22 +1,27 @@
 import { MediaBoardLayoutType } from "@/serverApi/v3";
-import { mediaLineResponseFactory } from "@@/tests/test-utils";
+import {
+	deletedElementResponseFactory,
+	mediaExternalToolElementResponseFactory,
+	mediaLineResponseFactory,
+} from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
+import { useDragAndDrop, useMediaBoardEditMode } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
-import { useDragAndDrop } from "../board/shared/DragAndDrop.composable";
 import { availableMediaLineId, ElementMove } from "./data";
-import { useEditMode } from "./editMode.composable";
+import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
+import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
 
 jest.mock("@vueuse/core", () => {
 	return {
@@ -113,7 +118,7 @@ describe("MediaBoardLine", () => {
 			const menu = wrapper.findComponent(MediaBoardLineMenu);
 			menu.vm.$emit("rename-title");
 
-			expect(useEditMode(line.id).isEditMode.value).toEqual(true);
+			expect(useMediaBoardEditMode(line.id).isEditMode.value).toEqual(true);
 		});
 	});
 
@@ -492,6 +497,84 @@ describe("MediaBoardLine", () => {
 			const sortable = wrapper.findComponent(Sortable);
 
 			expect(sortable.classes()).not.toContain("flex-wrap");
+		});
+	});
+
+	describe("when a MediaBoardExternalToolElement gets deleted", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper({
+				line: mediaLineResponseFactory.build(),
+				layout: MediaBoardLayoutType.List,
+				index: 0,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should emit a delete event", async () => {
+			const { wrapper } = setup();
+
+			const element = wrapper.findComponent(MediaBoardExternalToolElement);
+			element.vm.$emit("delete:element", "elementId");
+			await nextTick();
+
+			expect(wrapper.emitted("delete:element")).toEqual([["elementId"]]);
+		});
+	});
+
+	describe("when rendering an element", () => {
+		describe("when the element response is a DeletedElementResponse", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					line: mediaLineResponseFactory.build({
+						elements: deletedElementResponseFactory.buildList(1),
+					}),
+					layout: MediaBoardLayoutType.List,
+					index: 0,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render the element as MediaBoardExternalToolDeletedElement", () => {
+				const { wrapper } = setup();
+
+				const deletedElement = wrapper.findComponent(
+					MediaBoardExternalToolDeletedElement
+				);
+
+				expect(deletedElement.exists()).toEqual(true);
+			});
+		});
+
+		describe("when the element response is a MediaExternalToolElementResponse", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					line: mediaLineResponseFactory.build({
+						elements: mediaExternalToolElementResponseFactory.buildList(1),
+					}),
+					layout: MediaBoardLayoutType.List,
+					index: 0,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should render the element as MediaBoardExternalToolElement", () => {
+				const { wrapper } = setup();
+
+				const externalToolElement = wrapper.findComponent(
+					MediaBoardExternalToolElement
+				);
+
+				expect(externalToolElement.exists()).toEqual(true);
+			});
 		});
 	});
 });

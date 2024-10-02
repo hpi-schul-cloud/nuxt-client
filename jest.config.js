@@ -1,6 +1,5 @@
 const config = {
 	verbose: true,
-	coverageProvider: "v8",
 
 	testEnvironment: "jsdom",
 	testEnvironmentOptions: {
@@ -19,6 +18,7 @@ const config = {
 		"^@page-(.*)$": "<rootDir>/src/modules/page/$1",
 		"^@ui-(.*)$": "<rootDir>/src/modules/ui/$1",
 		"^@util-(.*)$": "<rootDir>/src/modules/util/$1",
+		"^@icons(.*)$": "<rootDir>/src/components/icons/$1",
 		"^@/(.*)$": "<rootDir>/src/$1",
 		"^@@/(.*)$": "<rootDir>/$1",
 	},
@@ -56,6 +56,7 @@ const config = {
 		"<rootDir>/src/utils/**/*.(js|ts)",
 		"<rootDir>/src/composables/**/*.(js|ts)",
 		"<rootDir>/src/layouts/**/*.{js,ts,vue}",
+		"<rootDir>/lib/eslint-plugin-schulcloud/**/*.{js,ts,vue}",
 		// Exclude
 		"!<rootDir>/src/components/base/**/*",
 		"!<rootDir>/src/components/icons/**/*",

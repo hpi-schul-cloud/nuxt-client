@@ -17,7 +17,10 @@ import {
 import { mount } from "@vue/test-utils";
 import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index.mjs";
-import NewLoggedIn from "./LoggedIn.layout.vue";
+import LoggedInLayout from "./LoggedIn.layout.vue";
+import { Topbar } from "@ui-layout";
+import { createTestingPinia } from "@pinia/testing";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
@@ -42,12 +45,20 @@ const setup = () => {
 		},
 	});
 
+	setupStores({
+		envConfigModule: EnvConfigModule,
+	});
+
 	const wrapper = mount(VApp, {
 		slots: {
-			default: h(NewLoggedIn),
+			default: h(LoggedInLayout),
 		},
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
+			plugins: [
+				createTestingVuetify(),
+				createTestingI18n(),
+				createTestingPinia(),
+			],
 			provide: {
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
 				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
@@ -74,7 +85,7 @@ const setup = () => {
 	};
 };
 
-const defineWindowWidth = (width: number) => {
+const defineWindowWidth = (width = 1564) => {
 	Object.defineProperty(window, "innerWidth", {
 		writable: true,
 		configurable: true,
@@ -83,21 +94,32 @@ const defineWindowWidth = (width: number) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
-describe("newLoggedIn", () => {
+const mockGetLocalStorage = jest.fn();
+const mockSetLocalStorage = jest.fn();
+Object.defineProperty(window, "localStorage", {
+	value: {
+		getItem: mockGetLocalStorage,
+		setItem: mockSetLocalStorage,
+	},
+});
+
+describe("LoggedIn.layout.vue", () => {
+	beforeEach(() => {
+		defineWindowWidth();
+	});
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
 	it("should render correctly", async () => {
 		const { wrapper } = setup();
-		await nextTick();
-		await nextTick();
 
 		expect(wrapper.exists()).toBe(true);
 	});
 
 	it("should show sidebar on Desktop as default", async () => {
-		defineWindowWidth(1564);
 		const sidebarExpanded = true;
 		const { wrapper } = setup();
-		await nextTick();
-		await nextTick();
 		const sidebar = wrapper.find("nav");
 
 		if (!sidebarExpanded)
@@ -108,8 +130,6 @@ describe("newLoggedIn", () => {
 		defineWindowWidth(564);
 		const sidebarExpanded = true;
 		const { wrapper } = setup();
-		await nextTick();
-		await nextTick();
 		const sidebar = wrapper.find("nav");
 
 		if (!sidebarExpanded)
@@ -121,10 +141,38 @@ describe("newLoggedIn", () => {
 		const sidebarExpanded = true;
 		const { wrapper } = setup();
 
-		await nextTick();
-
 		const sidebar = wrapper.find("nav");
 
 		if (!sidebarExpanded) expect(sidebar.attributes("tabindex")).toBe("-1");
+	});
+
+	it("should call 'localStorage.getItem' on mounted", async () => {
+		setup();
+		expect(mockGetLocalStorage).toHaveBeenCalledWith("sidebarExpanded");
+	});
+
+	it("should set localStorage key 'sidebarExpanded' to 'false' on sidebar click", async () => {
+		const { wrapper } = setup();
+		const topbarComponent = wrapper.findComponent(Topbar);
+		topbarComponent.vm.$emit("sidebar-toggled");
+
+		const sidebar = wrapper.find("nav");
+
+		await sidebar.trigger("click");
+		await nextTick();
+
+		expect(mockSetLocalStorage).toHaveBeenCalledWith(
+			"sidebarExpanded",
+			"false"
+		);
+	});
+
+	it("should set localStorage key 'sidebarExpanded' to 'true' on topbar click", async () => {
+		const { wrapper } = setup();
+		const topbarComponent = wrapper.findComponent(Topbar);
+		topbarComponent.vm.$emit("sidebar-toggled");
+		await nextTick();
+
+		expect(mockSetLocalStorage).toHaveBeenCalledWith("sidebarExpanded", "true");
 	});
 });

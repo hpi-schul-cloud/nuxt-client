@@ -1,8 +1,4 @@
-import {
-	ConfigResponse,
-	ContentElementType,
-	ExternalToolElementResponse,
-} from "@/serverApi/v3";
+import { ConfigResponse, ExternalToolElementResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import { BusinessError } from "@/store/types/commons";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
@@ -11,8 +7,8 @@ import {
 	contextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,
 	externalToolDisplayDataFactory,
+	externalToolElementResponseFactory,
 	schoolToolConfigurationStatusFactory,
-	timestampsResponseFactory,
 } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -27,7 +23,7 @@ import {
 	useExternalToolLaunchState,
 } from "@data-external-tool";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { mdiPuzzleOutline } from "@mdi/js";
+import { mdiPuzzleOutline } from "@icons/material";
 import { useSharedLastCreatedElement } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
@@ -38,15 +34,6 @@ import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigu
 jest.mock("@data-board");
 jest.mock("@data-external-tool");
 jest.mock("@util-board");
-
-const EMPTY_TEST_ELEMENT: ExternalToolElementResponse = {
-	id: "external-tool-element-id",
-	content: {
-		contextExternalToolId: null,
-	},
-	type: ContentElementType.ExternalTool,
-	timestamps: timestampsResponseFactory.build(),
-};
 
 describe("ExternalToolElement", () => {
 	let useContentElementStateMock: DeepMocked<
@@ -154,10 +141,9 @@ describe("ExternalToolElement", () => {
 			it("should load the display data", async () => {
 				getWrapper(
 					{
-						element: {
-							...EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build({
 							content: { contextExternalToolId: "contextExternalToolId" },
-						},
+						}),
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
@@ -175,10 +161,9 @@ describe("ExternalToolElement", () => {
 			it("should load the launch request", async () => {
 				getWrapper(
 					{
-						element: {
-							...EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build({
 							content: { contextExternalToolId: "contextExternalToolId" },
-						},
+						}),
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
@@ -198,10 +183,9 @@ describe("ExternalToolElement", () => {
 			it("should not load the launch request", async () => {
 				getWrapper(
 					{
-						element: {
-							...EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build({
 							content: { contextExternalToolId: "contextExternalToolId" },
-						},
+						}),
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
@@ -224,10 +208,9 @@ describe("ExternalToolElement", () => {
 			it("should not load the launch request", async () => {
 				getWrapper(
 					{
-						element: {
-							...EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build({
 							content: { contextExternalToolId: "contextExternalToolId" },
-						},
+						}),
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
@@ -249,10 +232,9 @@ describe("ExternalToolElement", () => {
 			it("should not load the launch request", async () => {
 				getWrapper(
 					{
-						element: {
-							...EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build({
 							content: { contextExternalToolId: "contextExternalToolId" },
-						},
+						}),
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
@@ -274,10 +256,9 @@ describe("ExternalToolElement", () => {
 			it("should not load the launch request", async () => {
 				getWrapper(
 					{
-						element: {
-							...EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build({
 							content: { contextExternalToolId: "contextExternalToolId" },
-						},
+						}),
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
@@ -297,11 +278,11 @@ describe("ExternalToolElement", () => {
 
 		describe("when the element does not have a tool attached", () => {
 			it("should open the configuration dialog immediately", async () => {
-				useSharedLastCreatedElementMock.lastCreatedElementId.value =
-					EMPTY_TEST_ELEMENT.id;
+				const element = externalToolElementResponseFactory.build();
+				useSharedLastCreatedElementMock.lastCreatedElementId.value = element.id;
 
 				const { wrapper } = getWrapper({
-					element: EMPTY_TEST_ELEMENT,
+					element,
 					isEditMode: true,
 				});
 
@@ -316,7 +297,7 @@ describe("ExternalToolElement", () => {
 
 			it("should not load the display data", async () => {
 				getWrapper({
-					element: EMPTY_TEST_ELEMENT,
+					element: externalToolElementResponseFactory.build(),
 					isEditMode: false,
 				});
 
@@ -329,7 +310,7 @@ describe("ExternalToolElement", () => {
 
 			it("should not load the launch request", async () => {
 				getWrapper({
-					element: EMPTY_TEST_ELEMENT,
+					element: externalToolElementResponseFactory.build(),
 					isEditMode: false,
 				});
 
@@ -346,7 +327,7 @@ describe("ExternalToolElement", () => {
 		describe("when not in edit mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: EMPTY_TEST_ELEMENT,
+					element: externalToolElementResponseFactory.build(),
 					isEditMode: false,
 				});
 
@@ -367,7 +348,7 @@ describe("ExternalToolElement", () => {
 		describe("when in edit mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: EMPTY_TEST_ELEMENT,
+					element: externalToolElementResponseFactory.build(),
 					isEditMode: true,
 				});
 
@@ -393,10 +374,9 @@ describe("ExternalToolElement", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						element: {
-							...EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build({
 							content: { contextExternalToolId },
-						},
+						}),
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
@@ -427,10 +407,9 @@ describe("ExternalToolElement", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						element: {
-							...EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build({
 							content: { contextExternalToolId },
-						},
+						}),
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
@@ -459,15 +438,12 @@ describe("ExternalToolElement", () => {
 	describe("Loading", () => {
 		describe("when the component is loading", () => {
 			const setup = () => {
-				const contextExternalToolId = "context-external-tool-id";
-
 				useExternalToolElementDisplayStateMock.isLoading = ref(true);
 
 				const { wrapper } = getWrapper({
-					element: {
-						...EMPTY_TEST_ELEMENT,
-						content: { contextExternalToolId },
-					},
+					element: externalToolElementResponseFactory.build({
+						content: { contextExternalToolId: "contextExternalToolId" },
+					}),
 					isEditMode: false,
 				});
 
@@ -493,10 +469,9 @@ describe("ExternalToolElement", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						element: {
-							...EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build({
 							content: { contextExternalToolId },
-						},
+						}),
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({ contextExternalToolId })
@@ -521,7 +496,7 @@ describe("ExternalToolElement", () => {
 		describe("when clicking on a un-configured tool card in edit mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: EMPTY_TEST_ELEMENT,
+					element: externalToolElementResponseFactory.build(),
 					isEditMode: true,
 				});
 
@@ -557,7 +532,7 @@ describe("ExternalToolElement", () => {
 				);
 
 				const { wrapper } = getWrapper({
-					element: EMPTY_TEST_ELEMENT,
+					element: externalToolElementResponseFactory.build(),
 					isEditMode: true,
 				});
 
@@ -603,10 +578,9 @@ describe("ExternalToolElement", () => {
 		describe("when clicking on a configured tool card", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: {
-						...EMPTY_TEST_ELEMENT,
+					element: externalToolElementResponseFactory.build({
 						content: { contextExternalToolId: "contextExternalToolId" },
-					},
+					}),
 					isEditMode: false,
 				});
 
@@ -657,7 +631,7 @@ describe("ExternalToolElement", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						element: EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build(),
 						isEditMode: true,
 					},
 					externalToolDisplayDataFactory.build()
@@ -689,7 +663,7 @@ describe("ExternalToolElement", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						element: EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build(),
 						isEditMode: true,
 					},
 					externalToolDisplayDataFactory.build()
@@ -718,7 +692,7 @@ describe("ExternalToolElement", () => {
 
 				const { wrapper } = getWrapper(
 					{
-						element: EMPTY_TEST_ELEMENT,
+						element: externalToolElementResponseFactory.build(),
 						isEditMode: true,
 					},
 					externalToolDisplayDataFactory.build({
@@ -747,10 +721,9 @@ describe("ExternalToolElement", () => {
 			jest.useFakeTimers({ legacyFakeTimers: true });
 			const { wrapper, refreshTime } = getWrapper(
 				{
-					element: {
-						...EMPTY_TEST_ELEMENT,
+					element: externalToolElementResponseFactory.build({
 						content: { contextExternalToolId: "contextExternalToolId" },
-					},
+					}),
 					isEditMode: false,
 				},
 				externalToolDisplayDataFactory.build({
@@ -778,6 +751,154 @@ describe("ExternalToolElement", () => {
 			expect(
 				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalledTimes(2);
+		});
+	});
+
+	describe("when moving the element with arrow keys", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper({
+				element: externalToolElementResponseFactory.build({
+					content: { contextExternalToolId: null },
+				}),
+				isEditMode: true,
+			});
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should emit an event", async () => {
+			const { wrapper } = setup();
+
+			const card = wrapper.getComponent({ ref: "externalToolElement" });
+			await card.trigger("keydown.up");
+
+			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
+		});
+	});
+
+	describe("Aria label", () => {
+		describe("when no tool is selected", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: externalToolElementResponseFactory.build({
+						content: { contextExternalToolId: null },
+					}),
+					isEditMode: true,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should read that a tool needs to be selected", async () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.getComponent({ ref: "externalToolElement" });
+
+				expect(card.attributes("aria-label")).toEqual(
+					"components.cardElement.externalToolElement, feature-board-external-tool-element.placeholder.selectTool"
+				);
+			});
+		});
+
+		describe("when a tool is displayed and will be opened in the same tab", () => {
+			const setup = () => {
+				const toolName = "testTool";
+				const contextExternalToolId = "contextExternalToolId";
+
+				const { wrapper } = getWrapper(
+					{
+						element: externalToolElementResponseFactory.build({
+							content: { contextExternalToolId },
+						}),
+						isEditMode: true,
+					},
+					externalToolDisplayDataFactory.build({
+						name: toolName,
+						contextExternalToolId,
+						openInNewTab: false,
+					})
+				);
+
+				return {
+					wrapper,
+					toolName,
+				};
+			};
+
+			it("should read the tool name and the tab it is started in", async () => {
+				const { wrapper, toolName } = setup();
+
+				const card = wrapper.getComponent({ ref: "externalToolElement" });
+
+				expect(card.attributes("aria-label")).toEqual(
+					`components.cardElement.externalToolElement, ${toolName}, common.ariaLabel.sameTab`
+				);
+			});
+		});
+
+		describe("when a tool is displayed and will be opened in a new tab", () => {
+			const setup = () => {
+				const toolName = "testTool";
+				const contextExternalToolId = "contextExternalToolId";
+
+				const { wrapper } = getWrapper(
+					{
+						element: externalToolElementResponseFactory.build({
+							content: { contextExternalToolId },
+						}),
+						isEditMode: true,
+					},
+					externalToolDisplayDataFactory.build({
+						name: toolName,
+						contextExternalToolId,
+						openInNewTab: true,
+					})
+				);
+
+				return {
+					wrapper,
+					toolName,
+				};
+			};
+
+			it("should read the tool name and the tab it is started in", async () => {
+				const { wrapper, toolName } = setup();
+
+				const card = wrapper.getComponent({ ref: "externalToolElement" });
+
+				expect(card.attributes("aria-label")).toEqual(
+					`components.cardElement.externalToolElement, ${toolName}, common.ariaLabel.newTab`
+				);
+			});
+		});
+
+		describe("when a tool is selected and currently loading", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: externalToolElementResponseFactory.build({
+						content: { contextExternalToolId: "contextExternalToolId" },
+					}),
+					isEditMode: true,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should read that the tool is loading", async () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.getComponent({ ref: "externalToolElement" });
+
+				expect(card.attributes("aria-label")).toEqual(
+					`components.cardElement.externalToolElement, common.loading.text`
+				);
+			});
 		});
 	});
 });

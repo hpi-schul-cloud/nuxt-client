@@ -45,137 +45,144 @@
 		</div>
 	</div>
 </template>
-<script>
-import { mdiLock } from "@/components/icons/material";
-import { defineComponent } from "vue";
-import { mdiSync } from "@mdi/js";
 
-export default defineComponent({
-	props: {
-		item: {
-			type: Object,
-			required: true,
-		},
-		size: {
-			type: String,
-			default: "3em",
-		},
-		draggable: {
-			type: Boolean,
-		},
-		showBadge: {
-			type: Boolean,
-		},
-		condenseLayout: {
-			type: Boolean,
-		},
-	},
-	data() {
-		return {
-			isDragging: false,
-			mdiLock,
-		};
-	},
-	computed: {
-		badgeIcon() {
-			if (this.showBadge && this.item.notification === true) {
-				return mdiLock;
-			}
+<script setup lang="ts">
+import { computed, ref } from "vue";
+import { mdiLock, mdiSync } from "@icons/material";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
-			if (this.item.isSynchronized) {
-				return mdiSync;
-			}
-
-			return null;
-		},
-		stillBeingCopied() {
-			return this.item.copyingSince !== undefined;
-		},
-		avatarAriaLabel() {
-			const course = this.$t("common.labels.course");
-			if (this.stillBeingCopied) {
-				const ariaLabelSuffix = this.$t(
-					"components.molecules.copyResult.courseCopy.ariaLabelSuffix"
-				);
-				return `${course} ${this.item.title}: ${ariaLabelSuffix}`;
-			}
-			return `${course} ${this.item.title}`;
-		},
-		avatarTextClass() {
-			const classes = ["text-h7"];
-			if (this.condenseLayout) {
-				classes.push("group-avatar", "text-h7");
-			} else {
-				classes.push("single-avatar", "text-h3");
-			}
-			if (this.stillBeingCopied) {
-				classes.push("text-grey", "text-darken-1");
-			} else {
-				classes.push("text-white");
-			}
-			return classes;
-		},
-		avatarClass() {
-			return this.stillBeingCopied ? ["grey-lighten-2"] : [];
-		},
-		avatarColor() {
-			return this.stillBeingCopied ? undefined : this.item.displayColor;
-		},
-		title() {
-			if (this.item.copyingSince) {
-				return this.$t("components.molecules.copyResult.courseCopy.info");
-			}
-			if (this.item.titleDate) {
-				return `${this.item.title}\n${this.item.titleDate}`;
-			}
-			return this.item.title;
-		},
-		titleClasses() {
-			const marginClass = this.item.titleDate ? "mb-5" : "mb-7";
-			const copyingClass = this.stillBeingCopied
-				? ["text-grey", "text-darken-1"]
-				: [];
-			return [
-				"justify-center",
-				"mt-2",
-				"subtitle",
-				marginClass,
-				...copyingClass,
-			];
-		},
+const props = defineProps({
+	item: {
+		type: Object,
+		required: true,
 	},
-	methods: {
-		onClick() {
-			if (!this.condenseLayout && this.stillBeingCopied === false) {
-				if (this.item.to) {
-					this.$router.push({
-						path: `/rooms/${this.item.id}`,
-					});
-					return;
-				}
-				if (this.item.href) {
-					window.location = `/rooms/${this.item.id}`;
-				}
-			}
-		},
-		startDragAvatar() {
-			this.isDragging = true;
-			if (this.draggable) {
-				this.$emit("startDrag", this.item);
-			}
-		},
-		dragEnter() {
-			this.isDragging = false;
-		},
-		dragend() {
-			this.isDragging = false;
-			this.$emit("dragendAvatar");
-		},
-		dropAvatar() {
-			this.$emit("dropAvatar");
-		},
+	size: {
+		type: String,
+		default: "3em",
+	},
+	draggable: {
+		type: Boolean,
+	},
+	showBadge: {
+		type: Boolean,
+	},
+	condenseLayout: {
+		type: Boolean,
 	},
 });
+
+const emit = defineEmits(["startDrag", "dragendAvatar", "dropAvatar"]);
+
+const { t } = useI18n();
+const router = useRouter();
+
+const badgeIcon = computed(() => {
+	if (props.showBadge && props.item.notification === true) {
+		return mdiLock;
+	}
+
+	if (props.item.isSynchronized) {
+		return mdiSync;
+	}
+
+	return null;
+});
+
+const stillBeingCopied = computed(() => props.item.copyingSince !== undefined);
+
+const avatarAriaLabel = computed(() => {
+	const course = t("common.labels.course");
+	if (stillBeingCopied.value) {
+		const ariaLabelSuffix = t(
+			"components.molecules.copyResult.courseCopy.ariaLabelSuffix"
+		);
+		return `${course} ${props.item.title}: ${ariaLabelSuffix}`;
+	}
+	return `${course} ${props.item.title}`;
+});
+
+const avatarTextClass = computed(() => {
+	const classes = ["text-h7"];
+	if (props.condenseLayout) {
+		classes.push("group-avatar", "text-h7");
+	} else {
+		classes.push("single-avatar", "text-h3");
+	}
+
+	if (stillBeingCopied.value) {
+		classes.push("text-grey", "text-darken-1");
+	} else {
+		classes.push("text-white");
+	}
+
+	return classes;
+});
+
+const avatarClass = computed(() =>
+	stillBeingCopied.value ? ["grey-lighten-2"] : []
+);
+
+const avatarColor = computed(() =>
+	stillBeingCopied.value ? undefined : props.item.displayColor
+);
+
+const title = computed(() => {
+	if (props.item.copyingSince) {
+		return t("components.molecules.copyResult.courseCopy.info");
+	}
+
+	if (props.item.titleDate) {
+		return `${props.item.title}\n${props.item.titleDate}`;
+	}
+
+	return props.item.title;
+});
+
+const titleClasses = computed(() => {
+	const marginClass = props.item.titleDate ? "mb-5" : "mb-7";
+	const copyingClass = stillBeingCopied.value
+		? ["text-grey", "text-darken-1"]
+		: [];
+
+	return ["justify-center", "mt-2", "subtitle", marginClass, ...copyingClass];
+});
+
+const isDragging = ref(false);
+
+const onClick = () => {
+	if (!props.condenseLayout && stillBeingCopied.value === false) {
+		if (props.item.to) {
+			router.push({
+				path: `/rooms/${props.item.id}`,
+			});
+			return;
+		}
+		if (props.item.href) {
+			window.location.href = `/rooms/${props.item.id}`;
+		}
+	}
+};
+
+const startDragAvatar = () => {
+	isDragging.value = true;
+	if (props.draggable) {
+		emit("startDrag", props.item);
+	}
+};
+
+const dragEnter = () => {
+	isDragging.value = false;
+};
+
+const dragend = () => {
+	isDragging.value = false;
+	emit("dragendAvatar");
+};
+
+const dropAvatar = () => {
+	emit("dropAvatar");
+};
 </script>
 
 <style lang="scss" scoped>
@@ -183,10 +190,8 @@ export default defineComponent({
 @import "@/utils/multiline-ellipsis.scss";
 
 .v-avatar {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	width: 500px;
 	cursor: pointer;
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	border-radius: 0.5em;
 
 	&:focus {
@@ -195,7 +200,6 @@ export default defineComponent({
 }
 
 .single-avatar {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	font-size: 3em;
 	user-select: none;
 }
@@ -220,17 +224,13 @@ export default defineComponent({
 
 @media #{map-get($display-breakpoints, 'xs')} {
 	.subtitle {
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin-right: unset;
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		margin-left: unset;
-		/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 		font-size: 14px;
 	}
 }
 
 .group-avatar {
-	/* stylelint-disable-next-line sh-waqar/declaration-use-variable */
 	font-size: 0.5em;
 	user-select: none;
 }

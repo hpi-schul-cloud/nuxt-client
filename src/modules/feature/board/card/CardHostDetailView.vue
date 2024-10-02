@@ -62,10 +62,10 @@
 </template>
 
 <script lang="ts">
-import { BoardCard } from "@/types/board/Card";
+import { CardResponse } from "@/serverApi/v3";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { useBoardPermissions } from "@data-board";
-import { mdiClose } from "@mdi/js";
+import { mdiClose } from "@icons/material";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { defineComponent, PropType, ref } from "vue";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
@@ -81,7 +81,7 @@ export default defineComponent({
 	},
 	props: {
 		card: {
-			type: Object as PropType<BoardCard>,
+			type: Object as PropType<CardResponse>,
 			required: true,
 		},
 		isOpen: {

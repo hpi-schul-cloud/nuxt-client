@@ -25,6 +25,7 @@ export default {
 	"common.actions.shareCopy": "Compartir copia",
 	"common.actions.update": "Actualizar",
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
+	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
@@ -97,6 +98,7 @@ export default {
 	"common.medium.chip.deactivated": "Desactivado",
 	"common.medium.chip.notLicensed": "No esta activado",
 	"common.medium.chip.incomplete": "Configuración incompleta",
+	"common.medium.chip.noLongerAvailable": "Ya no está disponible",
 	"common.medium.information.admin": "Por favor verifique la configuración.",
 	"common.medium.information.student": "Por favor contacte a un maestro.",
 	"common.medium.information.teacher":
@@ -236,6 +238,10 @@ export default {
 		"Con el inicio de la migración, todos los estudiantes y profesores de su escuela podrán cambiar el sistema de registro a moin.schule. Los usuarios que hayan cambiado el sistema de inicio de sesión solo podrán iniciar sesión a través de moin.schule.",
 	"components.administration.adminMigrationSection.startWarningCard.title":
 		"¿Realmente desea iniciar la migración de la cuenta a moin.schule ahora?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
+		"¿Estás seguro de que quieres restablecer los accesos directos encontrados automáticamente?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"El asistente de migración ha encontrado automáticamente los enlaces de las cuentas basándose en los nombres de usuario.<br><br>¿Desea restablecer ahora los enlaces encontrados automáticamente?",
 	"components.administration.externalToolsSection.action.add":
 		"Añadir Herramienta Externa",
 	"components.administration.externalToolsSection.action.delete":
@@ -324,7 +330,17 @@ export default {
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
-	"components.board.menu.element": "Configuración del elemento",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Configuración del etherpad",
+	"components.board.menu.drawingElement": "Configuración de la pizarra",
+	"components.board.menu.externalToolElement":
+		"Configuración de la herramienta externa",
+	"components.board.menu.mediaExternalToolElement": "Configuraciones medias",
+	"components.board.menu.fileElement": "Configuración del archivo",
+	"components.board.menu.linkElement": "Configuración del enlace",
+	"components.board.menu.submissionElement": "Configuración del envío",
+	"components.board.menu.deletedElement":
+		"Configuración de contenido eliminado",
 	"components.board.notifications.errors.fileNameExists":
 		"Ya existe un archivo con este nombre.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -377,6 +393,9 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Este Etherpad es visible y editable para todos los participantes en el curso.",
+	"components.cardElement.externalToolElement": "Herramienta externa",
+	"components.cardElement.mediaExternalToolElement": "Medio",
+	"components.cardElement.fileElement": "Archivo",
 	"components.cardElement.fileElement.altDescription":
 		"Una breve descripción ayuda a las personas que no pueden ver la imagen.",
 	"components.cardElement.fileElement.alternativeText": "Texto alternativo",
@@ -399,6 +418,7 @@ export default {
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
 	"components.cardElement.fileElement.virusDetected":
 		"Se ha bloqueado el archivo debido a un virus sospechoso.",
+	"components.cardElement.LinkElement": "Enlace",
 	"components.cardElement.LinkElement.label": "Inserte la dirección del enlace",
 	"components.cardElement.notification.visibleAndEditable":
 		"Esta pizarra es visible y editable para todos los participantes en el curso.",
@@ -415,6 +435,9 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Por favor ingrese un título.",
 	"components.cardElement.titleElement": "Elemento título",
+	"components.cardElement.deletedElement": "Contenido eliminado",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.datePicker.validation.format":
 		"Por favor utilice el formato DD.MM.YYYY",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
@@ -429,8 +452,7 @@ export default {
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
-	"components.elementTypeSelection.elements.fileElement.subtitle":
-		"Editor de texto",
+	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
 		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
@@ -601,6 +623,16 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"Ninguno. El usuario es recién creado.",
 	"components.molecules.importUsersMatch.write": "Introduzca nombre o apellido",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"No disponible",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Profesor",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Estudiante",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Administrador de organización",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Gestión organizativa",
 	"components.molecules.MintEcFooter.chapters": "Resumen del capítulo",
 	"components.molecules.share.columnBoard.options.infoText":
 		"Con el siguiente enlace, el tablero puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
@@ -785,20 +817,27 @@ export default {
 		"Herramienta de selección...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Finalizar sincronización",
-	"feature-course-sync.EndCourseSyncDialog.alert":
-		"Una vez finalizada la sincronización, no se puede volver a iniciar. Los datos del usuario se pueden editar y mantener manualmente de la misma manera que los cursos regulares.",
 	"feature-course-sync.EndCourseSyncDialog.description":
 		"¿Debería realmente finalizarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Sincronización completada exitosamente",
 	"feature-course-sync.GroupSelectionDialog.title":
 		"Seleccionar grupo de usuarios",
-	"feature-course-sync.GroupSelectionDialog.text":
-		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
 	"feature-course-sync.GroupSelectionDialog.selection.label":
 		"Selección de grupo",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Los siguientes datos para crear un nuevo curso no están disponibles en el grupo de usuarios {groupName}:<li>Profesor</li><br/>Por favor, regístrese en moin.schule y comience la creación del curso nuevamente.",
+	"feature-course-sync.StartNewCourseSyncDialog.text":
+		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
+	"feature-course-sync.StartExistingCourseSyncDialog.text":
+		"El grupo de usuarios seleccionado se sincronizará con el curso seleccionado en el siguiente paso.",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
+		"Una sincronización con {systemName} sobrescribe a las personas del curso (profesores y estudiantes).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
+		"¿Debería realmente iniciarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
+	"feature-course-sync.StartExistingCourseSyncDialog.success":
+		"Grupo de usuarios sincronizado exitosamente",
+	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD/MM/YYYY HH:mm",
@@ -820,6 +859,7 @@ export default {
 	"global.sidebar.item.management": "Administración",
 	"global.sidebar.item.overview": "Panel",
 	"global.sidebar.item.releaseNotes": "¿Qué hay de nuevo?",
+	"global.sidebar.item.rooms": "Salas",
 	"global.sidebar.item.school": "Escuela",
 	"global.sidebar.item.student": "Estudiantes",
 	"global.sidebar.item.system": "Sistema",
@@ -870,13 +910,19 @@ export default {
 		'¿Está seguro de que desea eliminar la clase "<i>{itemName}<i>"?',
 	"pages.administration.classes.deleteDialog.title": "¿Eliminar clase?",
 	"pages.administration.classes.edit": "Editar clase",
-	"pages.administration.classes.hint":
+	"pages.administration.common.hint":
 		"Con todos los cambios y ajustes en el área de administración, se confirma que estos son llevados a cabo por un administrador de la escuela autorizado para hacer ajustes en la escuela en la nube. Los ajustes realizados por el administrador de la escuela se consideran instrucciones de la escuela al operador de la nube {institute_title}.",
 	"pages.administration.classes.index.add": "Agregar clase",
 	"pages.administration.classes.index.title": "Administrar clases",
-	"pages.administration.classes.label.archive": "Archivo",
+	"pages.administration.common.label.archive": "Archivo",
+	"pages.administration.common.label.active": "Actual",
 	"pages.administration.classes.manage": "Administrar clase",
 	"pages.administration.classes.header.sync": "Sincronizado con",
+	"pages.administration.courses.delete": "Eliminar curso",
+	"pages.administration.courses.deleteDialog.content":
+		'¿Realmente quieres este curso? "<i>{itemName}</i>" borrar?',
+	"pages.administration.courses.index.add": "Agregar curso",
+	"pages.administration.courses.edit": "Editar curso",
 	"pages.administration.index.title": "Administración",
 	"pages.administration.ldap.activate.breadcrumb": "Sincronización",
 	"pages.administration.ldap.activate.className": "Nombre",
@@ -1015,6 +1061,8 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Por favor, utilice un formato de URL válido",
 	"pages.administration.migration.back": "Paso anterior",
+	"pages.administration.migration.clearAutoMatches":
+		"Restablecer accesos directos automáticos",
 	"pages.administration.migration.backToAdministration":
 		"Volver a Administración",
 	"pages.administration.migration.brbSchulportal": "weBBSchule",
@@ -1091,6 +1139,7 @@ export default {
 		"No se han podido generar los enlaces de registro",
 	"pages.administration.remove.error": "Error al eliminar usuarios",
 	"pages.administration.remove.success": "Usuarios seleccionados eliminados",
+	"pages.administration.rooms.index.title": "Administrar cursos",
 	"pages.administration.school.index.authSystems.addLdap":
 		"Añadir sistema LDAP",
 	"pages.administration.school.index.authSystems.alias": "Alias",
@@ -1464,6 +1513,31 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Elige un curso / asignatura",
 	"pages.content.placeholder.noLessonTopic": "Crear un tema en el curso",
 	"pages.content.preview_img.alt": "Vista previa de la imagen",
+	"pages.courseRoomDetails.fab.add.board": "Nuevo tablero",
+	"pages.courseRoomDetails.fab.add.columnBoard": "Nuevo tablero de columna",
+	"pages.courseRoomDetails.fab.add.lesson": "Nuevo tema",
+	"pages.courseRoomDetails.fab.add.task": "Nuevo tarea",
+	"pages.courseRooms.groupName": "Cursos",
+	"pages.courseRooms.headerSection.archived": "Archivo",
+	"pages.courseRooms.headerSection.menu.ariaLabel": "Menú del curso",
+	"pages.courseRooms.headerSection.synchronized": "Sincronizado",
+	"pages.courseRooms.headerSection.toCourseFiles": "A los archivos del curso",
+	"pages.courseRooms.index.courses.active": "Cursos actuales",
+	"pages.courseRooms.index.courses.all": "Todos los cursos",
+	"pages.courseRooms.index.courses.arrangeCourses": "Organizar cursos",
+	"pages.courseRooms.index.search.label": "Buscar curso",
+	"pages.courseRooms.menuItems.endSync": "Finalizar sincronización",
+	"pages.courseRooms.tabLabel.groups": "Grupos",
+	"pages.courseRooms.tabLabel.tools": "Herramientas",
+	"pages.courseRooms.tabLabel.toolsOld": "Herramientas",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
+		"Crear videoconferencia {roomName}",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Todas las usuarias participan como moderadoras",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
+		"Silenciar a las participantes al entrar",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Aprobación del moderador antes de poder ingresar a la sala",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",
@@ -1493,10 +1567,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Seleccionar vista",
 	"pages.room.dialog.boardLayout.singleColumn": "monocolumna",
 	"pages.room.dialog.boardLayout.multiColumn": "multicolumna",
-	"pages.room.fab.add.lesson": "Nuevo tema",
-	"pages.room.fab.add.board": "Nuevo tablero",
-	"pages.room.fab.add.columnBoard": "Nuevo tablero de columna",
-	"pages.room.fab.add.task": "Nuevo tarea",
 	"pages.room.itemDelete.text": '¿Eliminar {itemType} "{itemTitle}"?',
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
@@ -1531,6 +1601,7 @@ export default {
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
 	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
 	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
+	"pages.rooms.menuItems.startSync": "Iniciar sincronización",
 	"pages.rooms.importCourse.btn.continue": "Continuar",
 	"pages.rooms.importCourse.codeError": "El código del curso no está en uso.",
 	"pages.rooms.importCourse.importError":
@@ -1555,22 +1626,7 @@ export default {
 		"El curso {name} se ha importado correctamente.",
 	"pages.rooms.ccImportCourse.error":
 		"Se ha producido un error al importar el curso.",
-	"pages.rooms.index.courses.active": "Cursos actuales",
-	"pages.rooms.index.courses.all": "Todos los cursos",
-	"pages.rooms.index.courses.arrangeCourses": "Organizar cursos",
-	"pages.rooms.index.search.label": "Buscar curso",
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
-	"pages.rooms.tabLabel.groups": "Grupos",
-	"pages.rooms.tabLabel.tools": "Herramientas",
-	"pages.rooms.tabLabel.toolsOld": "Herramientas",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Todas las usuarias participan como moderadoras",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
-		"Silenciar a las participantes al entrar",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Aprobación del moderador antes de poder ingresar a la sala",
-	"pages.rooms.tools.configureVideoconferenceDialog.title":
-		"Crear videoconferencia {roomName}",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Herramienta {toolName}“ desactivada",
@@ -1594,6 +1650,8 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
+	"pages.rooms.active.title": "Habitaciones actuales",
+	"pages.rooms.active.emptyState": "Actualmente no hay habitaciones aquí.",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
@@ -1729,7 +1787,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... y el 03.03.2020",
 	"feature.media-shelf.title": "Estante multimedia",
 	"feature.media-shelf.emptyState":
-		"Actualmente no se ha activado ningún medio para su uso.",
+		"Actualmente no hay medios disponibles para su uso",
 	"feature.media-shelf.createLine": "Añadir línea",
 	"feature.media-shelf.line.title": "Línea",
 	"feature.media-shelf.availableLine.title": "Medios disponibles",

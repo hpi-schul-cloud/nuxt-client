@@ -53,7 +53,7 @@ import SidebarItem from "./SidebarItem.vue";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
-import { mdiMenuOpen } from "@mdi/js";
+import { mdiMenuOpen } from "@icons/material";
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);

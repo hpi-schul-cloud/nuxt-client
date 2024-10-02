@@ -14,7 +14,7 @@
 		<div class="drawing-element-content">
 			<InnerContent :docName="element.id">
 				<template v-if="isEditMode">
-					<BoardMenu scope="element">
+					<BoardMenu :scope="BoardMenuScope.DRAWING_ELEMENT" has-background>
 						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
 						<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
 						<BoardMenuActionDelete @click="onDeleteElement" />
@@ -34,10 +34,11 @@ import {
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
+	BoardMenuScope,
 } from "@ui-board";
 import { computed, PropType, ref, toRef } from "vue";
-import InnerContent from "./InnerContent.vue";
 import { useI18n } from "vue-i18n";
+import InnerContent from "./InnerContent.vue";
 
 const props = defineProps({
 	element: {

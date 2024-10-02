@@ -10,7 +10,7 @@
 </template>
 
 <script lang="ts">
-import { mdiInformation, mdiClose } from "@mdi/js";
+import { mdiInformation, mdiClose } from "@icons/material";
 import { defineComponent } from "vue";
 import BaseAlert from "./BaseAlert.vue";
 

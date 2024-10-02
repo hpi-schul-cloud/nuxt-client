@@ -8,10 +8,10 @@ import {
 } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import CopyModule from "@/store/copy";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import { Board } from "@/types/board/Board";
 import {
@@ -20,9 +20,9 @@ import {
 } from "@/types/board/Permissions";
 import {
 	COPY_MODULE_KEY,
+	COURSE_ROOM_DETAILS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -39,37 +39,42 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import {
+	useBoardInactivity,
 	useBoardPermissions,
 	useBoardStore,
 	useCardStore,
-	useEditMode,
 	useSharedBoardPageInformation,
-	useSharedEditMode,
-	useBoardInactivity,
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	extractDataAttribute,
 	useBoardNotifier,
+	useCourseBoardEditMode,
+	useSharedEditMode,
 	useSharedLastCreatedElement,
 } from "@util-board";
 import { mount } from "@vue/test-utils";
 import { computed, nextTick, ref } from "vue";
-import { Router, useRouter } from "vue-router";
+import { Router, useRoute, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
 
-jest.mock("@util-board");
+jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
+jest.mock("@util-board/LastCreatedElement.composable");
 const mockUseSharedLastCreatedElement = jest.mocked(
 	useSharedLastCreatedElement
 );
+
+jest.mock("@util-board/extractDataAttribute.util");
 const mockExtractDataAttribute = jest.mocked(extractDataAttribute);
 
-jest.mock("@data-board/EditMode.composable");
+jest.mock("@util-board/editMode.composable");
 const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
+const mockedUseEditMode = jest.mocked(useCourseBoardEditMode);
 
 jest.mock("@data-board/BoardPageInformation.composable");
 const mockedUseSharedBoardPageInformation = jest.mocked(
@@ -86,11 +91,9 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 jest.mock("@/composables/copy");
 const mockUseCopy = jest.mocked(useCopy);
 
-jest.mock("@data-board/EditMode.composable");
-const mockedUseEditMode = jest.mocked(useEditMode);
-
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
+const useRouteMock = <jest.Mock>useRoute;
 
 jest.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <jest.Mock>useBoardInactivity;
@@ -106,6 +109,7 @@ describe("Board", () => {
 	let mockedUsePageInactivity: DeepMocked<
 		ReturnType<typeof useBoardInactivity>
 	>;
+	let route: DeepMocked<ReturnType<typeof useRoute>>;
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
@@ -122,11 +126,13 @@ describe("Board", () => {
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
 			setEditModeId: jest.fn(),
+			isInEditMode: computed(() => true),
 		});
 
 		mockedUseSharedBoardPageInformation.mockReturnValue({
 			createPageInformation: jest.fn(),
 			breadcrumbs: ref([]),
+			contextType: ref(),
 			pageTitle: ref("page-title"),
 			roomId: ref("room-id"),
 		});
@@ -142,6 +148,9 @@ describe("Board", () => {
 			resetLastCreatedElementId: jest.fn(),
 		});
 		mockExtractDataAttribute.mockReturnValue("column-id");
+
+		route = createMock<ReturnType<typeof useRoute>>();
+		useRouteMock.mockReturnValue(route);
 
 		router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
@@ -824,7 +833,7 @@ describe("Board", () => {
 				await boardHeader.vm.$emit("copy:board");
 
 				expect(router.push).toHaveBeenCalledWith({
-					name: "rooms-board",
+					name: "boards-id",
 					params: { id: copyResultId },
 				});
 			});

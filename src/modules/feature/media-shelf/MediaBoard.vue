@@ -53,6 +53,7 @@
 				v-if="board.lines.length < lineLimit"
 				@create:line="createLine"
 			/>
+			<ConfirmationDialog />
 		</div>
 	</div>
 </template>
@@ -60,13 +61,13 @@
 <script setup lang="ts">
 import { MediaAvailableLineResponse, MediaBoardResponse } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { extractDataAttribute } from "@util-board";
+import { ConfirmationDialog } from "@ui-confirmation-dialog";
+import { extractDataAttribute, useSharedEditMode } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import { PropType } from "vue";
 import { lineLimit, LineMove, useSharedMediaBoardState } from "./data";
-import { useSharedEditMode } from "./editMode.composable";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
@@ -105,11 +106,10 @@ const onLineDragEnd = async (event: SortableEvent) => {
 
 	const lineId: string | undefined = extractDataAttribute(item, "lineId");
 
-	if (
-		lineId !== undefined &&
-		newIndex !== undefined &&
-		oldIndex !== undefined
-	) {
+	const isOutOfBounds =
+		lineId !== undefined && newIndex !== undefined && oldIndex !== undefined;
+
+	if (isOutOfBounds) {
 		const lineMove: LineMove = {
 			newLineIndex: newIndex,
 			oldLineIndex: oldIndex,

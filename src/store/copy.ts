@@ -7,8 +7,8 @@ import {
 	CopyApiResponse,
 	CopyApiResponseStatusEnum,
 	CopyApiResponseTypeEnum,
-	RoomsApiFactory,
-	RoomsApiInterface,
+	CourseRoomsApiFactory,
+	CourseRoomsApiInterface,
 	ShareTokenApiFactory,
 	ShareTokenApiInterface,
 	ShareTokenBodyParamsParentTypeEnum,
@@ -49,8 +49,8 @@ export default class CopyModule extends VuexModule {
 	private isResultModalOpen = false;
 	private hasDrawingChild = false;
 
-	private get roomsApi(): RoomsApiInterface {
-		return RoomsApiFactory(undefined, "/v3", $axios);
+	private get roomsApi(): CourseRoomsApiInterface {
+		return CourseRoomsApiFactory(undefined, "/v3", $axios);
 	}
 
 	private get taskApi(): TaskApiInterface {
@@ -82,13 +82,13 @@ export default class CopyModule extends VuexModule {
 
 		if (type === CopyParamsTypeEnum.Lesson) {
 			copyResult = await this.roomsApi
-				.roomsControllerCopyLesson(id, { courseId })
+				.courseRoomsControllerCopyLesson(id, { courseId })
 				.then((response) => response.data);
 		}
 
 		if (type === CopyParamsTypeEnum.Course) {
 			copyResult = await this.roomsApi
-				.roomsControllerCopyCourse(id)
+				.courseRoomsControllerCopyCourse(id)
 				.then((response) => response.data);
 
 			if (copyResult && copyResult.elements) {
@@ -231,7 +231,7 @@ export default class CopyModule extends VuexModule {
 				case CopyApiResponseTypeEnum.Course:
 					return `/courses/${element.id}/edit`;
 				case CopyApiResponseTypeEnum.Columnboard:
-					return `/rooms/${element.id}/board`;
+					return `/boards/${element.id}`;
 			}
 			return undefined;
 		};

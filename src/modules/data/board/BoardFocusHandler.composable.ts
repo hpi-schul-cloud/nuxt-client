@@ -1,6 +1,7 @@
 import { BoardColumn } from "@/types/board/Board";
 import { BoardCard } from "@/types/board/Card";
 import { AnyContentElement } from "@/types/board/ContentElement";
+import { useInlineEditInteractionHandler } from "@util-board";
 import {
 	createSharedComposable,
 	MaybeRefOrGetter,
@@ -9,8 +10,6 @@ import {
 	useFocusWithin,
 } from "@vueuse/core";
 import { computed, nextTick, onMounted, onUnmounted, ref, Ref } from "vue";
-// WIP: InlineEditInteractionHandler needs to be extracted into it's own module... :: Feature-Modules have to be imported using the pattern '@feature-<name>'eslint@typescript-eslint/no-restricted-imports
-import { useInlineEditInteractionHandler } from "../../feature/board/shared/InlineEditInteractionHandler.composable";
 
 declare type FocusableId =
 	| BoardColumn["id"]
@@ -23,7 +22,9 @@ declare type FocusHandler = {
 	isFocusContained: Ref<boolean>;
 	isFocusedById: Ref<boolean>;
 	setFocus: (id: FocusableId) => void;
+	forceFocus: (id: FocusableId) => void;
 	isAnythingFocused: Ref<boolean>;
+	focusedId: Ref<string | undefined>;
 };
 
 /**
@@ -31,7 +32,7 @@ declare type FocusHandler = {
  */
 export function useBoardFocusHandler(): Pick<
 	FocusHandler,
-	"isAnythingFocused" | "setFocus"
+	"isAnythingFocused" | "setFocus" | "forceFocus"
 >;
 /**
  * Keeps track of focused elements on the Board to retain focus state across Board changes.
@@ -61,22 +62,26 @@ export function useBoardFocusHandler(
 	onFocusReceived?: () => void
 ): Pick<
 	FocusHandler,
-	"isFocusContained" | "isFocusWithin" | "isFocused" | "isFocusedById"
+	| "isFocusContained"
+	| "isFocusWithin"
+	| "isFocused"
+	| "isFocusedById"
+	| "focusedId"
 >;
 /**
  * Internal type to enable mocking of overloads
  */
 export function useBoardFocusHandler(
-	id?: never,
+	id?: string,
 	element?: never,
 	onFocusReceived?: never
 ): Partial<FocusHandler>;
 export function useBoardFocusHandler(
-	id?: MaybeRefOrGetter<FocusableId>,
+	id?: MaybeRefOrGetter<FocusableId> | string,
 	element?: Ref<HTMLElement | null>,
 	onFocusReceived?: () => void
 ): Partial<FocusHandler> {
-	const { setFocus, focusedId } = useSharedFocusedId();
+	const { setFocus, focusedId, forceFocus } = useSharedFocusedId();
 
 	const isAnythingFocused = ref(focusedId.value !== undefined);
 
@@ -90,6 +95,14 @@ export function useBoardFocusHandler(
 			 * Set Focus for a given ID
 			 */
 			setFocus,
+			forceFocus,
+		};
+	}
+
+	if (id?.valueOf() && element === undefined) {
+		return {
+			setFocus,
+			focusedId,
 		};
 	}
 
@@ -108,10 +121,10 @@ export function useBoardFocusHandler(
 		if (id !== focusedId.value) {
 			return;
 		}
-		forceFocus();
+		forceFocusOnMount();
 	});
 
-	const forceFocus = async () => {
+	const forceFocusOnMount = async () => {
 		await nextTick();
 		if (onFocusReceived !== undefined) {
 			onFocusReceived();
@@ -140,7 +153,7 @@ export function useBoardFocusHandler(
 	 * If an InlineEditInteraction is fired within the element boundary, force focus on this element
 	 */
 	useInlineEditInteractionHandler(async () => {
-		await forceFocus();
+		await forceFocusOnMount();
 	});
 
 	onUnmounted(() => {
@@ -180,8 +193,15 @@ const useSharedFocusedId = createSharedComposable(() => {
 		focusedId.value = id.toString();
 	};
 
+	const forceFocus = (id: MaybeRefOrGetter<FocusableId>) => {
+		const element = document.getElementById(id.toString()) as HTMLElement;
+
+		element?.focus();
+	};
+
 	return {
 		focusedId,
 		setFocus,
+		forceFocus,
 	};
 });

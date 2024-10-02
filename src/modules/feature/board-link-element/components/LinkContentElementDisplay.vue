@@ -4,9 +4,18 @@
 		ref="linkContentElementDisplay"
 		tabindex="-1"
 	>
-		<ContentElementBar :hasGreyBackground="true" :icon="mdiLink">
+		<ContentElementBar
+			:has-grey-background="true"
+			:icon="mdiLink"
+			:has-row-style="!!imageUrl && isSmallOrLargerListBoard"
+		>
 			<template #display v-if="imageUrl">
-				<v-img :src="imageUrl" alt="" class="rounded-t" />
+				<v-img
+					:src="imageUrl"
+					alt=""
+					:aspect-ratio="isSmallOrLargerListBoard ? 1.77777 : undefined"
+					:cover="isSmallOrLargerListBoard"
+				/>
 			</template>
 			<template #title>
 				{{ title }}
@@ -21,47 +30,46 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { ComputedRef, computed, defineComponent, ref } from "vue";
-import { mdiLink } from "@mdi/js";
+<script setup lang="ts">
+import { ComputedRef, computed, ref } from "vue";
+import { mdiLink } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
+import { injectStrict } from "@/utils/inject";
+import { useDisplay } from "vuetify";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
-export default defineComponent({
-	name: "LinkContentElementDisplay",
-	components: { ContentElementBar },
-	props: {
-		url: {
-			type: String,
-			required: true,
-		},
-		title: {
-			type: String,
-			require: true,
-		},
-		imageUrl: {
-			type: String,
-			required: false,
-		},
-		isEditMode: { type: Boolean, required: true },
+const props = defineProps({
+	url: {
+		type: String,
+		required: true,
 	},
-	setup(props) {
-		const hostname: ComputedRef<string> = computed(() => {
-			try {
-				const urlObject = new URL(props.url);
-				return urlObject.hostname;
-			} catch (e) {
-				return "";
-			}
-		});
-
-		const linkContentElementDisplay = ref(null);
-
-		return {
-			mdiLink,
-			hostname,
-			linkContentElementDisplay,
-		};
+	title: {
+		type: String,
+		require: true,
 	},
+	imageUrl: {
+		type: String,
+		required: false,
+	},
+	isEditMode: { type: Boolean, required: true },
+});
+
+const hostname: ComputedRef<string> = computed(() => {
+	try {
+		const urlObject = new URL(props.url);
+		return urlObject.hostname;
+	} catch (e) {
+		return "";
+	}
+});
+
+const linkContentElementDisplay = ref(null);
+
+const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
+const { smAndUp } = useDisplay();
+
+const isSmallOrLargerListBoard = computed(() => {
+	return smAndUp.value && isListLayout.value;
 });
 </script>
 

@@ -25,6 +25,7 @@ export default {
 	"common.actions.shareCopy": "Поділитися копією",
 	"common.actions.update": "Оновити",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
+	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
@@ -97,6 +98,7 @@ export default {
 	"common.medium.chip.deactivated": "Вимкнено",
 	"common.medium.chip.notLicensed": "Не активовано",
 	"common.medium.chip.incomplete": "Конфігурація не завершена",
+	"common.medium.chip.noLongerAvailable": "Більше не доступний",
 	"common.medium.information.admin": "Перевірте налаштування.",
 	"common.medium.information.student": "Будь ласка, зверніться до вчителя.",
 	"common.medium.information.teacher":
@@ -237,6 +239,10 @@ export default {
 		"З початком міграції всі учні та вчителі вашої школи зможуть перейти з системи реєстрації на moin.schule. Користувачі, які змінили систему входу, зможуть увійти лише через moin.schule.",
 	"components.administration.adminMigrationSection.startWarningCard.title":
 		"Ви справді хочете розпочати міграцію облікового запису до moin.schule зараз?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
+		"Ви впевнені, що хочете скинути автоматично знайдені ярлики?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
+		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів.<br><br>Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
 	"components.administration.externalToolsSection.action.add":
 		"Додати зовнішній інструмент",
 	"components.administration.externalToolsSection.action.delete":
@@ -325,7 +331,16 @@ export default {
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
-	"components.board.menu.element": "Налаштування елемента",
+	"components.board.menu.collaborativeTextEditorElement":
+		"Налаштування спільного текстового редактора",
+	"components.board.menu.drawingElement": "Налаштування дошки",
+	"components.board.menu.externalToolElement":
+		"Налаштування зовнішнього інструменту",
+	"components.board.menu.mediaExternalToolElement": "Середні налаштування",
+	"components.board.menu.fileElement": "Налаштування файлу",
+	"components.board.menu.linkElement": "Налаштування посилання",
+	"components.board.menu.submissionElement": "Налаштування Подання",
+	"components.board.menu.deletedElement": "Видалені налаштування вмісту",
 	"components.board.notifications.errors.fileNameExists":
 		"Файл з такою назвою вже існує.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
@@ -378,6 +393,9 @@ export default {
 	"components.cardElement.collaborativeTextEditorElement": "Etherpad",
 	"components.cardElement.collaborativeTextEditorElement.alert.info.visible":
 		"Цей Etherpad є видимою і доступною для редагування для всіх учасників курсу.",
+	"components.cardElement.externalToolElement": "Зовнішній інструмент",
+	"components.cardElement.mediaExternalToolElement": "Середній",
+	"components.cardElement.fileElement": "Файл",
 	"components.cardElement.fileElement.altDescription":
 		"Короткий опис допомагає людям, які не бачать зображення.",
 	"components.cardElement.fileElement.alternativeText": "альтернативний текст",
@@ -401,6 +419,7 @@ export default {
 		"Формат відео не підтримується цим браузером / операційною системою.",
 	"components.cardElement.fileElement.virusDetected":
 		"Файл було заблоковано через підозру на вірус.",
+	"components.cardElement.LinkElement": "Посилання",
 	"components.cardElement.LinkElement.label": "Вставити адресу посилання",
 	"components.cardElement.notification.visibleAndEditable":
 		"Ця дошка є видимою і доступною для редагування для всіх учасників курсу.",
@@ -417,6 +436,9 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Будь ласка, введіть назву.",
 	"components.cardElement.titleElement": "Елемент заголовка",
+	"components.cardElement.deletedElement": "Видалений вміст",
+	"components.cardElement.deletedElement.warning.externalToolElement":
+		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
 	"components.datePicker.validation.required": "Будь ласка, введіть дату.",
 	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
@@ -598,6 +620,16 @@ export default {
 	"components.molecules.importUsersMatch.unMatched":
 		"немає. Обліковий запис буде створено знову.",
 	"components.molecules.importUsersMatch.write": "Введіть ім'я та прізвище",
+	"components.molecules.importUsersMatch.externalRoleName.none":
+		"Немає в наявності",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.teacher":
+		"Учитель",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.student":
+		"Студент",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.orgAdmin":
+		"Організаційний адміністратор",
+	"components.molecules.importUsersMatch.externalRoleName.schulconnex.manager":
+		"Організаційний менеджмент",
 	"components.molecules.MintEcFooter.chapters": "Огляд розділу",
 	"components.molecules.share.columnBoard.options.infoText":
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
@@ -775,19 +807,26 @@ export default {
 		"Виберіть інструмент...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
-	"feature-course-sync.EndCourseSyncDialog.alert":
-		"Після завершення синхронізації її не можна розпочати знову. Дані користувача можна редагувати та підтримувати вручну так само, як і звичайні курси.",
 	"feature-course-sync.EndCourseSyncDialog.description":
 		"Чи дійсно слід завершити синхронізацію групи користувачів {groupName} у курсі {courseName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Синхронізацію успішно завершено",
 	"feature-course-sync.GroupSelectionDialog.title":
 		"Виберіть групу користувачів",
-	"feature-course-sync.GroupSelectionDialog.text":
-		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Вибір групи",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
 		"Наступні дані для створення нового курсу недоступні в групі користувачів {groupName}:<li>Викладач</li><br/>Перевірте moin.schule і почніть створення курсу знову.",
+	"feature-course-sync.StartNewCourseSyncDialog.text":
+		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
+	"feature-course-sync.StartExistingCourseSyncDialog.text":
+		"Вибрана група користувачів буде синхронізована з вибраним курсом на наступному кроці.",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
+		"Синхронізація з {systemName} перезаписує людей у курсі (викладачі та студенти).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
+		"Чи дійсно слід починати синхронізацію групи користувачів {groupName} у курсі {courseName}?",
+	"feature-course-sync.StartExistingCourseSyncDialog.success":
+		"Групу користувачів успішно синхронізовано",
+	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -809,6 +848,7 @@ export default {
 	"global.sidebar.item.management": "Управління",
 	"global.sidebar.item.overview": "Панель керування",
 	"global.sidebar.item.releaseNotes": "Що нового?",
+	"global.sidebar.item.rooms": "Номери",
 	"global.sidebar.item.school": "Школа",
 	"global.sidebar.item.student": "Учні",
 	"global.sidebar.item.system": "Cистема",
@@ -860,13 +900,19 @@ export default {
 		'Ви впевнені, що хочете видалити клас "<i>{itemName}<i>"?',
 	"pages.administration.classes.deleteDialog.title": "Видалити клас?",
 	"pages.administration.classes.edit": "Редагувати клас",
-	"pages.administration.classes.hint":
+	"pages.administration.common.hint":
 		"Усі зміни та налаштування в області адміністрування підтверджують, що вони внесені авторизованим адміністратором школи з повноваженнями вносити зміни до школи в хмарі. Коригування, внесені адміністратором школи, вважаються вказівками школи оператору хмари {institute_title}.",
 	"pages.administration.classes.index.add": "Додати клас",
 	"pages.administration.classes.index.title": "Керувати заняттями",
-	"pages.administration.classes.label.archive": "Архів",
+	"pages.administration.common.label.archive": "Архів",
+	"pages.administration.common.label.active": "поточний",
 	"pages.administration.classes.manage": "Керувати класом",
 	"pages.administration.classes.header.sync": "Синхронізовано з",
+	"pages.administration.courses.delete": "Видалити курс",
+	"pages.administration.courses.deleteDialog.content":
+		'Ви впевнені, що хочете видалити цей курс "<i>{itemName}</i>" ?',
+	"pages.administration.courses.index.add": "Додати курс",
+	"pages.administration.courses.edit": "Редагувати курс",
 	"pages.administration.index.title": "Адміністрування",
 	"pages.administration.ldap.activate.breadcrumb": "Cинхронізація",
 	"pages.administration.ldap.activate.className": "Ім'я",
@@ -999,6 +1045,8 @@ export default {
 	"pages.administration.ldapEdit.validation.url":
 		"Має відповідати дійсному формату URL-адреси",
 	"pages.administration.migration.back": "Назад",
+	"pages.administration.migration.clearAutoMatches":
+		"Скинути автоматичні ярлики",
 	"pages.administration.migration.backToAdministration":
 		"Повернутися до адміністрації",
 	"pages.administration.migration.brbSchulportal": "weBBSchule",
@@ -1074,6 +1122,7 @@ export default {
 		"Не вдалося згенерувати посилання для реєстрації",
 	"pages.administration.remove.error": "Не вдалося видалити користувачів",
 	"pages.administration.remove.success": "Вибраних користувачів видалено",
+	"pages.administration.rooms.index.title": "Керувати курсами",
 	"pages.administration.school.index.authSystems.addLdap":
 		"Додати систему LDAP",
 	"pages.administration.school.index.authSystems.alias": "Псевдонім",
@@ -1445,6 +1494,31 @@ export default {
 	"pages.content.placeholder.chooseACourse": "Вибрати курс/предмет",
 	"pages.content.placeholder.noLessonTopic": "Створити тему в курсі",
 	"pages.content.preview_img.alt": "Попередній перегляд зображення",
+	"pages.courseRoomDetails.fab.add.lesson": "Створити тему",
+	"pages.courseRoomDetails.fab.add.task": "Створити завдання",
+	"pages.courseRoomDetails.fab.add.board": "Нова дошка",
+	"pages.courseRoomDetails.fab.add.columnBoard": "Нова дошка",
+	"pages.courseRooms.groupName": "Курси",
+	"pages.courseRooms.headerSection.archived": "Архів",
+	"pages.courseRooms.headerSection.menu.ariaLabel": "Меню курсу",
+	"pages.courseRooms.headerSection.synchronized": "Синхронізовано",
+	"pages.courseRooms.headerSection.toCourseFiles": "До файлів курсу",
+	"pages.courseRooms.index.courses.active": "Поточні курси",
+	"pages.courseRooms.index.courses.all": "Всі курси",
+	"pages.courseRooms.index.courses.arrangeCourses": "Упорядкувати курси",
+	"pages.courseRooms.index.search.label": "Пошук курсу",
+	"pages.courseRooms.menuItems.endSync": "Завершити синхронізацію",
+	"pages.courseRooms.tabLabel.groups": "Групи",
+	"pages.courseRooms.tabLabel.tools": "Інструмент",
+	"pages.courseRooms.tabLabel.toolsOld": "Інструмент",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
+		"Створити відеоконференцію {roomName}",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Усі користувачі беруть участь як модератори",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
+		"Вимкнення звуку учасників при вході",
+	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Схвалення модератором перед входом до кімнати",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",
@@ -1473,10 +1547,6 @@ export default {
 	"pages.room.dialog.boardLayout.title": "Виберіть вид",
 	"pages.room.dialog.boardLayout.singleColumn": "одноколонкові",
 	"pages.room.dialog.boardLayout.multiColumn": "багатоколонкові",
-	"pages.room.fab.add.lesson": "Створити тему",
-	"pages.room.fab.add.board": "Нова дошка",
-	"pages.room.fab.add.columnBoard": "Нова дошка",
-	"pages.room.fab.add.task": "Створити завдання",
 	"pages.room.itemDelete.text":
 		'{itemType} "{itemTitle}" буде видалена. Ви впевнені, що хочете видалити?',
 	"pages.room.itemDelete.title": "Видалити елемент",
@@ -1511,6 +1581,7 @@ export default {
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
 	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
 	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
+	"pages.rooms.menuItems.startSync": "Почніть синхронізацію",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",
 	"pages.rooms.importCourse.codeError": "Код курсу не використовується.",
 	"pages.rooms.importCourse.importError":
@@ -1533,22 +1604,7 @@ export default {
 	"pages.rooms.ccImportCourse.loading": "Імпорт виконується...",
 	"pages.rooms.ccImportCourse.success": "Курс {name} успішно імпортовано.",
 	"pages.rooms.ccImportCourse.error": "Виникла помилка під час імпорту курсу.",
-	"pages.rooms.index.courses.active": "Поточні курси",
-	"pages.rooms.index.courses.all": "Всі курси",
-	"pages.rooms.index.courses.arrangeCourses": "Упорядкувати курси",
-	"pages.rooms.index.search.label": "Пошук курсу",
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
-	"pages.rooms.tabLabel.groups": "Групи",
-	"pages.rooms.tabLabel.tools": "Інструмент",
-	"pages.rooms.tabLabel.toolsOld": "Інструмент",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Усі користувачі беруть участь як модератори",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.mute":
-		"Вимкнення звуку учасників при вході",
-	"pages.rooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Схвалення модератором перед входом до кімнати",
-	"pages.rooms.tools.configureVideoconferenceDialog.title":
-		"Створити відеоконференцію {roomName}",
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",
 	"pages.rooms.tools.deactivatedDialog.title":
 		"Інструмент „{toolName}“ вимкнено",
@@ -1572,6 +1628,8 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
+	"pages.rooms.active.title": "Актуальні номери",
+	"pages.rooms.active.emptyState": "Зараз тут немає кімнат",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",
@@ -1700,7 +1758,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
 	"feature.media-shelf.title": "Полиця для медіа",
 	"feature.media-shelf.emptyState":
-		"Жоден носій не активовано для використання.",
+		"Наразі немає медіафайлів, доступних для використання",
 	"feature.media-shelf.createLine": "Додайте лінію",
 	"feature.media-shelf.line.title": "лінія",
 	"feature.media-shelf.availableLine.title": "Доступні медіа",

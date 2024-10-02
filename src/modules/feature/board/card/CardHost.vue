@@ -33,7 +33,12 @@
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
-						<BoardMenu v-if="hasDeletePermission" scope="card">
+						<BoardMenu
+							v-if="hasDeletePermission"
+							:scope="BoardMenuScope.CARD"
+							has-background
+							data-testid="card-menu-btn"
+						>
 							<BoardMenuActionEdit
 								v-if="!isEditMode"
 								@click="onStartEditMode"
@@ -89,15 +94,16 @@ import { delay } from "@/utils/helpers";
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
-	useEditMode,
 	useCardStore,
 } from "@data-board";
-import { mdiArrowExpand } from "@mdi/js";
+import { mdiArrowExpand } from "@icons/material";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
+	BoardMenuScope,
 } from "@ui-board";
+import { useCourseBoardEditMode } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
@@ -110,6 +116,11 @@ import ContentElementList from "./ContentElementList.vue";
 
 export default defineComponent({
 	name: "CardHost",
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
+	},
 	components: {
 		CardSkeleton,
 		CardTitle,
@@ -145,7 +156,7 @@ export default defineComponent({
 		const hasCardTitle = computed(() => card.value?.title);
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
-		const { isEditMode, startEditMode, stopEditMode } = useEditMode(
+		const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
 			cardId.value
 		);
 		const { hasDeletePermission } = useBoardPermissions();
@@ -211,7 +222,7 @@ export default defineComponent({
 
 			const delta = keyString === "ArrowUp" ? -1 : 1;
 
-			cardStore.moveElementRequest(
+			await cardStore.moveElementRequest(
 				props.cardId,
 				elementId,
 				elementIndex,
@@ -231,7 +242,9 @@ export default defineComponent({
 		});
 
 		onMounted(async () => {
-			await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
+			if (card.value === undefined) {
+				await cardStore.fetchCardRequest({ cardIds: [cardId.value] });
+			}
 		});
 
 		return {

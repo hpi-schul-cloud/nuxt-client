@@ -13,7 +13,7 @@
 			class="badge-component avatar-badge"
 			bordered
 			color="rgba(var(--v-theme-primary)"
-			icon="$mdiLock"
+			:icon="mdiLock"
 			:model-value="hasNotifications"
 		>
 			<v-card
@@ -54,6 +54,8 @@
 
 <script>
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
+import { mdiLock } from "@icons/material";
+
 export default {
 	components: {
 		RoomAvatarIterator,
@@ -83,6 +85,7 @@ export default {
 		return {
 			hovered: false,
 			isDragging: false,
+			mdiLock,
 		};
 	},
 	computed: {
