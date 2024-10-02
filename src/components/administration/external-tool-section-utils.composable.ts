@@ -60,8 +60,6 @@ export function useExternalToolsSectionUtils(
 								return t("common.tool.context.type.mediaShelves");
 							case ToolContextType.BoardElement:
 								return t("common.tool.context.type.boardElements");
-							default:
-								break;
 						}
 					})
 					.join(", ");

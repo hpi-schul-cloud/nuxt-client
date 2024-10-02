@@ -117,9 +117,8 @@ describe("useSchoolExternalToolUtils", () => {
 	describe("getItems is called", () => {
 		describe("when receiving tools", () => {
 			const setupTool = () => {
-				const tool = schoolExternalToolFactory.build({
-					restrictToContexts: [],
-				});
+				const tool = schoolExternalToolFactory.build();
+
 				return { tool };
 			};
 
