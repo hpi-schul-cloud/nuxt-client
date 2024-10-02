@@ -150,7 +150,7 @@ describe("useSchoolExternalToolUtils", () => {
 			});
 		});
 
-		describe("when translating context type", () => {
+		describe("when translating tool context type", () => {
 			const setupTool = () => {
 				const tool = schoolExternalToolFactory.build({
 					restrictToContexts: [
@@ -163,7 +163,7 @@ describe("useSchoolExternalToolUtils", () => {
 				return { tool };
 			};
 
-			it("should call the translation function for context type mediaShelves", () => {
+			it("should call the translation function for tool context type mediaShelves", () => {
 				const { tool } = setupTool();
 				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
 
@@ -174,7 +174,7 @@ describe("useSchoolExternalToolUtils", () => {
 				);
 			});
 
-			it("should call the translation function for context type course", () => {
+			it("should call the translation function for tool context type course", () => {
 				const { tool } = setupTool();
 				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
 
@@ -183,7 +183,7 @@ describe("useSchoolExternalToolUtils", () => {
 				expect(tMock).toHaveBeenCalledWith("common.tool.context.type.courses");
 			});
 
-			it("should call the translation function for context type boardElements", () => {
+			it("should call the translation function for tool context type boardElements", () => {
 				const { tool } = setupTool();
 				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
 
@@ -196,14 +196,14 @@ describe("useSchoolExternalToolUtils", () => {
 		});
 
 		describe("when translating status latest", () => {
-			const setupTool = () => {
+			const setupTools = () => {
 				const tool = schoolExternalToolFactory.build();
 
 				return { tool };
 			};
 
 			it("should call the translation function for status latest", () => {
-				const { tool } = setupTool();
+				const { tool } = setupTools();
 				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
 
 				getItems(schoolExternalToolsModule);
@@ -215,7 +215,7 @@ describe("useSchoolExternalToolUtils", () => {
 		});
 
 		describe("when translating status deactivated", () => {
-			const setupTool = () => {
+			const setupTools = () => {
 				const tool = schoolExternalToolFactory.build({
 					isDeactivated: true,
 				});
@@ -224,7 +224,7 @@ describe("useSchoolExternalToolUtils", () => {
 			};
 
 			it("should call the translation function for status deactivated", () => {
-				const { tool } = setupTool();
+				const { tool } = setupTools();
 				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
 
 				getItems(schoolExternalToolsModule);
@@ -236,7 +236,7 @@ describe("useSchoolExternalToolUtils", () => {
 		});
 
 		describe("when translating status outdated", () => {
-			const setupTool = () => {
+			const setupTools = () => {
 				const tool = schoolExternalToolFactory.build({
 					status: {
 						isOutdatedOnScopeSchool: true,
@@ -248,7 +248,7 @@ describe("useSchoolExternalToolUtils", () => {
 			};
 
 			it("should call the translation function for status outdated", () => {
-				const { tool } = setupTool();
+				const { tool } = setupTools();
 				const { getItems, tMock, schoolExternalToolsModule } = setup(tool);
 
 				getItems(schoolExternalToolsModule);
