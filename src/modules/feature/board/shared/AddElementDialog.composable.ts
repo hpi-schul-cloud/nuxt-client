@@ -55,7 +55,7 @@ export const useAddElementDialog = (
 		closeDialog();
 		isAppointmentFinderDialogOpen.value = true;
 
-		const createAppointFinderElement = async (event: MessageEvent) => {
+		const createAppointmentFinderElement = async (event: MessageEvent) => {
 			const {
 				data: { appointmentId, adminId },
 			} = event;
@@ -79,14 +79,14 @@ export const useAddElementDialog = (
 				newElement: updatedElement,
 				isOwnAction: true,
 			});
-			window.removeEventListener("message", createAppointFinderElement);
+			window.removeEventListener("message", createAppointmentFinderElement);
 		};
 
-		window.addEventListener("message", createAppointFinderElement);
+		window.addEventListener("message", createAppointmentFinderElement);
 
 		watch(isAppointmentFinderDialogOpen, (isOpen) => {
 			if (!isOpen) {
-				window.removeEventListener("message", createAppointFinderElement);
+				window.removeEventListener("message", createAppointmentFinderElement);
 			}
 		});
 	};
