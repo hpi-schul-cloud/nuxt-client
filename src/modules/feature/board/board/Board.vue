@@ -104,7 +104,6 @@ import { CopyParamsTypeEnum } from "@/store/copy";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	COPY_MODULE_KEY,
-	COURSE_ROOM_DETAILS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	SHARE_MODULE_KEY,
@@ -390,9 +389,7 @@ const onShareBoard = () => {
 	}
 };
 
-const courseRoomDetailsModule = injectStrict(COURSE_ROOM_DETAILS_MODULE_KEY);
 const openDeleteBoardDialog = async (id: string) => {
-	await courseRoomDetailsModule.deleteBoard(id);
-	router.push({ path: "/rooms/" + roomId.value });
+	boardStore.deleteBoardRequest({ boardId: id }, roomId.value);
 };
 </script>

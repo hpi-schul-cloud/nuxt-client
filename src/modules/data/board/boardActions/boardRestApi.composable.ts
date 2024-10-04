@@ -8,6 +8,7 @@ import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import {
 	CreateCardRequestPayload,
+	DeleteBoardRequestPayload,
 	DeleteColumnRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
@@ -17,7 +18,7 @@ import {
 	UpdateColumnTitleRequestPayload,
 } from "./boardActionPayload";
 import * as BoardActions from "./boardActions";
-import { applicationErrorModule } from "@/store";
+import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
@@ -66,10 +67,21 @@ export const useBoardRestApi = () => {
 			boardStore.fetchBoardSuccess(board);
 		} catch (error) {
 			applicationErrorModule.setError(
-				createApplicationError(HttpStatusCode.Forbidden)
+				createApplicationError(HttpStatusCode.NotFound)
 			);
 		}
 		boardStore.setLoading(false);
+	};
+
+	const deleteBoardRequest = async (payload: DeleteBoardRequestPayload) => {
+		try {
+			await courseRoomDetailsModule.deleteBoard(payload.boardId);
+			boardStore.deleteBoardSuccess({ ...payload, isOwnAction: true });
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDeleted", "board"),
+			});
+		}
 	};
 
 	const createColumnRequest = async () => {
@@ -247,6 +259,7 @@ export const useBoardRestApi = () => {
 		fetchBoardRequest,
 		createCardRequest,
 		createColumnRequest,
+		deleteBoardRequest,
 		deleteColumnRequest,
 		moveCardRequest,
 		moveColumnRequest,

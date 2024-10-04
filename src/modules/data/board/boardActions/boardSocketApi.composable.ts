@@ -5,6 +5,7 @@ import { useBoardStore } from "../Board.store";
 import {
 	CreateCardRequestPayload,
 	CreateColumnRequestPayload,
+	DeleteBoardRequestPayload,
 	DeleteColumnRequestPayload,
 	DisconnectSocketRequestPayload,
 	FetchBoardRequestPayload,
@@ -46,6 +47,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.createColumnSuccess, boardStore.createColumnSuccess),
 			on(CardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
 			on(BoardActions.deleteColumnSuccess, boardStore.deleteColumnSuccess),
+			on(BoardActions.deleteBoardSuccess, boardStore.deleteBoardSuccess),
 			on(BoardActions.moveCardSuccess, boardStore.moveCardSuccess),
 			on(BoardActions.moveColumnSuccess, boardStore.moveColumnSuccess),
 			on(BoardActions.fetchBoardSuccess, boardStore.fetchBoardSuccess),
@@ -132,6 +134,10 @@ export const useBoardSocketApi = () => {
 		emitOnSocket("create-column-request", payload);
 	};
 
+	const deleteBoardRequest = (payload: DeleteBoardRequestPayload) => {
+		emitOnSocket("delete-board-request", payload);
+	};
+
 	const deleteColumnRequest = (payload: DeleteColumnRequestPayload) => {
 		emitOnSocket("delete-column-request", payload);
 	};
@@ -188,8 +194,10 @@ export const useBoardSocketApi = () => {
 	const deleteColumnFailure = () =>
 		notifySocketError("notDeleted", "boardColumn");
 	const fetchBoardFailure = () => {
+		// should get error status from server and show appropriate messages
+
 		applicationErrorModule.setError(
-			createApplicationError(HttpStatusCode.Forbidden)
+			createApplicationError(HttpStatusCode.NotFound)
 		);
 	};
 	const moveCardFailure = () => notifySocketError("notUpdated", "boardCard");
@@ -207,6 +215,7 @@ export const useBoardSocketApi = () => {
 		createCardRequest,
 		createColumnRequest,
 		disconnectSocketRequest,
+		deleteBoardRequest,
 		deleteColumnRequest,
 		fetchBoardRequest,
 		moveCardRequest,
