@@ -194,8 +194,11 @@ export const useBoardSocketApi = () => {
 	const deleteColumnFailure = () =>
 		notifySocketError("notDeleted", "boardColumn");
 	const fetchBoardFailure = () => {
-		// should get error status from server and show appropriate messages
-
+		// Currently, 'FetchBoardFailurePayload' has only 'board-id' property,
+		// it should have error statuses from server as well and show the error page
+		// with appropriate messages e.g.
+		// 403 - HttpStatusCode.Forbidden
+		// 404 - HttpStatusCode.NotFound
 		applicationErrorModule.setError(
 			createApplicationError(HttpStatusCode.NotFound)
 		);

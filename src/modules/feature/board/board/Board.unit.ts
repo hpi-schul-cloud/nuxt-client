@@ -1006,19 +1006,19 @@ describe("Board", () => {
 				mockedBoardPermissions.hasDeletePermission = true;
 				const mockRoomId = mockedUseSharedBoardPageInformation().roomId.value;
 
-				const { wrapper, courseRoomDetailsModule, board } = setup();
+				const { wrapper, board, boardStore } = setup();
 
 				const columnComponent = wrapper.findComponent({
 					name: "BoardHeader",
 				});
 				await columnComponent.vm.$emit("delete:board");
 
-				expect(courseRoomDetailsModule.deleteBoard).toBeCalledWith(board.id);
-
-				expect(router.push).toHaveBeenCalledTimes(1);
-				expect(router.push).toHaveBeenCalledWith({
-					path: "/rooms/" + mockRoomId,
-				});
+				expect(boardStore.deleteBoardRequest).toHaveBeenCalledWith(
+					{
+						boardId: board.id,
+					},
+					mockRoomId
+				);
 			});
 		});
 	});
