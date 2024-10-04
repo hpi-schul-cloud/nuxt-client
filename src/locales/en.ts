@@ -141,6 +141,9 @@ export default {
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings and contact your school administrator.",
 	"common.tool.information.outdatedOnSchool.teacher":
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please contact the school administrator.",
+	"common.tool.context.type.courses": "Course tools",
+	"common.tool.context.type.boardElements": "Boards",
+	"common.tool.context.type.mediaShelves": "Media shelf",
 	"common.validation.email": "Please enter a valid e-mail address",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.number": "An integer must be entered.",
@@ -273,6 +276,8 @@ export default {
 		"Tool has been updated successfully.",
 	"components.administration.externalToolsSection.table.header.status":
 		"Status",
+	"components.administration.externalToolsSection.table.header.restrictedTo":
+		"Restricted to",
 	"components.administration.provisioningOptions.class.description":
 		"Activate this option if classes should be synchronized into the {instance}.",
 	"components.administration.provisioningOptions.class.label":
