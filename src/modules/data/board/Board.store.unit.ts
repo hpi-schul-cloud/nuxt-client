@@ -1,6 +1,7 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { envConfigModule } from "@/store";
+import { envConfigModule, applicationErrorModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import ApplicationErrorModule from "@/store/application-error";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
@@ -25,6 +26,9 @@ import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
+import { Router, useRoute, useRouter } from "vue-router";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
 jest.mock("./boardActions/boardSocketApi.composable");
 const mockedUseBoardSocketApi = jest.mocked(useBoardSocketApi);
@@ -51,6 +55,10 @@ const mockedUseCardSocketApi = jest.mocked(useCardSocketApi);
 jest.mock("./BoardFocusHandler.composable");
 const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
+const useRouteMock = <jest.Mock>useRoute;
+
 describe("BoardStore", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
@@ -66,10 +74,15 @@ describe("BoardStore", () => {
 	let mockedBoardFocusCalls: DeepMocked<
 		ReturnType<typeof useBoardFocusHandler>
 	>;
+	let router: DeepMocked<Router>;
+	let route: DeepMocked<ReturnType<typeof useRoute>>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
-		setupStores({ envConfigModule: EnvConfigModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			applicationErrorModule: ApplicationErrorModule,
+		});
 
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
@@ -108,6 +121,12 @@ describe("BoardStore", () => {
 		mockedBoardFocusCalls =
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
+
+		route = createMock<ReturnType<typeof useRoute>>();
+		useRouteMock.mockReturnValue(route);
+
+		router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 	});
 
 	const setup = (options?: { createBoard?: boolean; socketFlag?: boolean }) => {
@@ -1128,6 +1147,63 @@ describe("BoardStore", () => {
 				expect(
 					mockedBoardRestApiActions.fetchBoardRequest
 				).toHaveBeenCalledWith({ boardId: boardStore.board?.id });
+			});
+		});
+
+		describe("@deleteBoardRequest", () => {
+			it("should call socketApi.deleteBoardRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
+
+				expect(mockedSocketApiActions.deleteBoardRequest).toHaveBeenCalledWith({
+					boardId: "boardId",
+				});
+				expect(
+					mockedBoardRestApiActions.deleteBoardRequest
+				).not.toHaveBeenCalled();
+			});
+
+			it("should call restApi.deleteBoardRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
+
+				expect(
+					mockedBoardRestApiActions.deleteBoardRequest
+				).toHaveBeenCalledWith({ boardId: "boardId" });
+				expect(
+					mockedSocketApiActions.deleteBoardRequest
+				).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("@deleteBoardSuccess", () => {
+			it("should redirect to page if 'isOwnAction' is true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
+
+				boardStore.deleteBoardSuccess({
+					boardId: "boardId",
+					isOwnAction: true,
+				});
+
+				expect(router.replace).toHaveBeenCalledWith({ path: "/rooms/roomId" });
+			});
+
+			it('should call applicationErrorModule.showError if "isOwnAction" is false', async () => {
+				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
+				const { boardStore } = setup({ socketFlag: true });
+				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
+
+				boardStore.deleteBoardSuccess({
+					boardId: "boardId",
+					isOwnAction: false,
+				});
+
+				expect(setErrorSpy).toHaveBeenCalledWith(
+					createApplicationError(HttpStatusCode.NotFound)
+				);
 			});
 		});
 	});

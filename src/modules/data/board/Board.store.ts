@@ -33,7 +33,7 @@ import { useCardStore } from "./Card.store";
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import router from "@/router";
+import { useRouter } from "vue-router";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
@@ -49,6 +49,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
 
 	const { setEditModeId } = useSharedEditMode();
+	const router = useRouter();
 
 	const getLastColumnIndex = () => board.value!.columns.length - 1;
 
