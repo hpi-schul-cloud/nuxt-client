@@ -1,6 +1,8 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
 	BoardElementResponseTypeEnum as BoardTypes,
+	CopyApiResponseStatusEnum,
+	CopyApiResponseTypeEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 	SingleColumnBoardResponse,
 } from "@/serverApi/v3/api";
@@ -132,6 +134,13 @@ const getWrapper = (
 	copyModule = createModuleMocks(CopyModule, {
 		copy: jest.fn(),
 		getIsResultModalOpen: false,
+		getCopyResult: {
+			id: "copiedid",
+			type: CopyApiResponseTypeEnum.Course,
+			title: "Sample Course",
+			elements: [],
+			status: CopyApiResponseStatusEnum.Success,
+		},
 	});
 	downloadModule = createModuleMocks(CommonCartridgeExportModule, {
 		getIsExportModalOpen: false,
@@ -474,6 +483,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 					envConfigModule.setEnvs(envs);
 
 					const wrapper = getWrapper();
+					expect(wrapper.vm.courseId).toBe("123");
 
 					const threeDotButton = wrapper.findComponent(
 						'[data-testid="room-menu"]'
@@ -486,6 +496,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 					await moreActionButton.trigger("click");
 
 					expect(copyModule.copy).toHaveBeenCalled();
+					expect(wrapper.vm.courseId).toBe("copiedid");
 				});
 			});
 

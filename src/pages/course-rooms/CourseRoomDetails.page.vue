@@ -483,6 +483,7 @@ export default defineComponent({
 	methods: {
 		async initialize(courseId, activeTab = 0) {
 			this.setActiveTab(activeTab);
+			this.courseId = courseId;
 
 			await this.courseRoomDetailsModule.fetchContent(courseId);
 			await this.courseRoomDetailsModule.fetchScopePermission({
