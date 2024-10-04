@@ -1,6 +1,11 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { applicationErrorModule, envConfigModule } from "@/store";
+import {
+	applicationErrorModule,
+	envConfigModule,
+	courseRoomDetailsModule,
+} from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	boardResponseFactory,
@@ -69,6 +74,7 @@ describe("boardRestApi", () => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
 			applicationErrorModule: ApplicationErrorModule,
+			courseRoomDetailsModule: CourseRoomDetailsModule,
 		});
 		const envs = envsFactory.build({
 			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: isSocketEnabled,
@@ -169,6 +175,36 @@ describe("boardRestApi", () => {
 			expect(setErrorMock).toHaveBeenCalledWith(
 				createApplicationError(HttpStatusCode.Forbidden)
 			);
+		});
+	});
+
+	describe("@deleteBoardRequest", () => {
+		it("should call 'deleteBoardSuccess'", async () => {
+			const deleteBoardMock = jest.fn();
+			const { boardStore } = setup();
+			const { deleteBoardRequest } = useBoardRestApi();
+			const boardId = boardStore.board!.id;
+
+			courseRoomDetailsModule.deleteBoard = deleteBoardMock;
+
+			await deleteBoardRequest({ boardId });
+
+			expect(deleteBoardMock).toHaveBeenCalledWith(boardId);
+			expect(boardStore.deleteBoardSuccess).toHaveBeenCalledWith({
+				boardId,
+				isOwnAction: true,
+			});
+		});
+		it("should call handleError if the API call fails", async () => {
+			const deleteBoardMock = jest.fn().mockRejectedValue({});
+			const { boardStore } = setup();
+			const { deleteBoardRequest } = useBoardRestApi();
+			const boardId = boardStore.board!.id;
+			courseRoomDetailsModule.deleteBoard = deleteBoardMock;
+
+			await deleteBoardRequest({ boardId });
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});
 	});
 
