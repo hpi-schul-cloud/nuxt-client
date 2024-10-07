@@ -70,6 +70,7 @@ import {
 } from "@icons/material";
 import { computed, ComputedRef, ModelRef, PropType } from "vue";
 import { ColorShade, MediaBoardColorMapper } from "./utils";
+import { KebabMenu } from "@ui-kebab-menu";
 
 defineProps({
 	lineId: {
