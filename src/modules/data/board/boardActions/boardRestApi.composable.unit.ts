@@ -72,6 +72,9 @@ describe("boardRestApi", () => {
 			editModeId: ref(undefined),
 			isInEditMode: computed(() => true),
 		});
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 	});
 
 	const setup = (createBoard = true, isSocketEnabled = false) => {
@@ -85,9 +88,6 @@ describe("boardRestApi", () => {
 		});
 		envConfigModule.setEnvs(envs);
 		applicationErrorModule.setError = setErrorMock;
-
-		const router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		if (createBoard) {
