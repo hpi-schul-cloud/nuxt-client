@@ -11,6 +11,8 @@ export class SchoolExternalToolItem {
 
 	isDeactivated: boolean;
 
+	restrictToContexts: string;
+
 	constructor(props: SchoolExternalToolItem) {
 		this.id = props.id;
 		this.externalToolId = props.externalToolId;
@@ -18,5 +20,6 @@ export class SchoolExternalToolItem {
 		this.statusText = props.statusText;
 		this.isOutdated = props.isOutdated;
 		this.isDeactivated = props.isDeactivated;
+		this.restrictToContexts = props.restrictToContexts;
 	}
 }

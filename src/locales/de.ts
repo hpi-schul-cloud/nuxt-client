@@ -140,6 +140,9 @@ export default {
 		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen.",
 	"common.tool.information.outdatedOnSchool.teacher":
 		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte an Schuladministrator:in wenden.",
+	"common.tool.context.type.courses": "Kurs-Tools",
+	"common.tool.context.type.boardElements": "Bereiche",
+	"common.tool.context.type.mediaShelves": "Medienregal",
 	"common.validation.email": "Gib bitte eine valide Email-Adresse ein",
 	"common.validation.invalid": "Die von Ihnen eingegebenen Daten sind ungültig",
 	"common.validation.number": "Es muss ein Ganzzahl eingegeben werden.",
@@ -151,6 +154,19 @@ export default {
 		"Der eingegebene Text überschreitet die Maximallänge",
 	"common.words.and": "und",
 	"common.words.classes": "Klassen",
+	"common.words.color": "Farbe",
+	"common.words.color.blue": "Blau",
+	"common.words.color.blueGrey": "Blaugrau",
+	"common.words.color.brown": "Braun",
+	"common.words.color.green": "Grün",
+	"common.words.color.lightBlue": "Hellblau",
+	"common.words.color.magenta": "Magenta",
+	"common.words.color.olive": "Olivgrün",
+	"common.words.color.orange": "Orange",
+	"common.words.color.pink": "Pink",
+	"common.words.color.purple": "Violett",
+	"common.words.color.red": "Rot",
+	"common.words.color.turquoise": "Türkis",
 	"common.words.copiedToClipboard": "In die Zwischenablage kopiert",
 	"common.words.courseGroups": "Kursgruppen",
 	"common.words.courses": "Kurse",
@@ -275,6 +291,8 @@ export default {
 		"Tool wurde erfolgreich aktualisiert.",
 	"components.administration.externalToolsSection.table.header.status":
 		"Status",
+	"components.administration.externalToolsSection.table.header.restrictedTo":
+		"Eingeschränkt auf",
 	"components.administration.provisioningOptions.class.description":
 		"Aktivieren sie diese Option, wenn Klassen in die {instance} synchronisiert werden sollen.",
 	"components.administration.provisioningOptions.class.label":
@@ -779,6 +797,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Entwürfe",
 	"components.organisms.TasksDashboardMain.tab.finished": "Abgeschlossen",
 	"components.organisms.TasksDashboardMain.tab.open": "Offen",
+	"components.roomForm.labels.roomName": "Name des Raumes",
+	"components.roomForm.labels.timePeriod": "Zeitraum",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
 	"error.400": "400 – Fehlerhafte Anfrage",
@@ -1634,8 +1654,16 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
-	"pages.rooms.active.title": "Aktuelle Räume",
-	"pages.rooms.active.emptyState": "Aktuell gibt es hier noch keine Räume.",
+	// new rooms
+	"pages.roomCreate.title": "Raum erstellen",
+	"pages.roomEdit.title": "Raum bearbeiten",
+	"pages.roomDetails.title": "Raum",
+	"pages.roomDetails.ariaLabels.menu": "Raum-Menü",
+	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
+	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
+	"pages.rooms.title": "Räume",
+	"pages.rooms.fab.title": "Raum erstellen",
+	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
