@@ -128,7 +128,6 @@ const showBorder = computed(() => {
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
 
-//TODO: Check if this is still needed
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);
 }
