@@ -415,11 +415,10 @@ const loadClassList = async () => {
 };
 
 const onTabsChange = async (tab: string) => {
-	await loadClassList();
-
 	await router.replace({
 		query: { ...route.query, tab },
 	});
+	await loadClassList();
 };
 
 const onUpdateSortBy = async (sortBy: ClassSortItem[]) => {
