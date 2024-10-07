@@ -9,76 +9,54 @@
 		@click="collapsed = !collapsed"
 		data-testid="collapse-line-btn"
 	/>
-	<VMenu location="bottom end" min-width="250">
-		<template v-slot:activator="{ props }">
-			<VBtn
-				variant="text"
-				:ripple="false"
-				v-bind="props"
-				icon
-				@click.stop.prevent="() => {}"
-				@dblclick.stop.prevent="() => {}"
-				@keydown.enter.stop
-				@keydown.left.right.up.down.stop="() => {}"
-				size="small"
-				data-testid="line-menu-btn"
-				style="height: 36px; width: 36px"
-			>
-				<VIcon class="text-grey-darken-2">
-					{{ mdiDotsVertical }}
-				</VIcon>
-			</VBtn>
-		</template>
-		<VList>
-			<VListItem
-				v-if="lineId"
-				@click="$emit('rename-title', lineId)"
-				:prepend-icon="mdiRenameOutline"
-				data-testid="action-update-line-title"
-			>
-				<VListItemTitle>
-					<span>{{ $t("common.actions.rename") }}</span>
-				</VListItemTitle>
-			</VListItem>
-			<VListGroup>
-				<template v-slot:activator="{ props }">
-					<VListItem
-						v-bind="props"
-						:prepend-icon="mdiPalette"
-						@click.stop.prevent="() => {}"
-						data-testid="color-picker-btn"
-					>
-						<VListItemTitle>
-							<span>{{ $t("common.actions.pickColor") }}</span>
-						</VListItemTitle>
-					</VListItem>
-				</template>
-
-				<VColorPicker
-					hide-sliders
-					hide-inputs
-					hide-canvas
-					elevation="0"
-					:model-value="colorValue"
-					:swatches="swatches"
-					class="ma-2"
-					@update:model-value="onUpdateColor"
-					show-swatches
-					data-testid="line-color-picker"
-				/>
-			</VListGroup>
-			<VListItem
-				v-if="lineId"
-				@click="$emit('delete:line', lineId)"
-				:prepend-icon="mdiTrashCanOutline"
-				data-testid="action-delete-line"
-			>
-				<VListItemTitle>
-					<span>{{ $t("common.actions.remove") }}</span>
-				</VListItemTitle>
-			</VListItem>
-		</VList>
-	</VMenu>
+	<KebabMenu data-testid="line-menu-btn">
+		<VListItem
+			v-if="lineId"
+			@click="$emit('rename-title', lineId)"
+			:prepend-icon="mdiRenameOutline"
+			data-testid="action-update-line-title"
+		>
+			<VListItemTitle>
+				<span>{{ $t("common.actions.rename") }}</span>
+			</VListItemTitle>
+		</VListItem>
+		<VListGroup>
+			<template v-slot:activator="{ props }">
+				<VListItem
+					v-bind="props"
+					:prepend-icon="mdiPalette"
+					@click.stop.prevent="() => {}"
+					data-testid="color-picker-btn"
+				>
+					<VListItemTitle>
+						<span>{{ $t("common.actions.pickColor") }}</span>
+					</VListItemTitle>
+				</VListItem>
+			</template>
+			<VColorPicker
+				hide-sliders
+				hide-inputs
+				hide-canvas
+				elevation="0"
+				:model-value="colorValue"
+				:swatches="swatches"
+				class="ma-2"
+				@update:model-value="onUpdateColor"
+				show-swatches
+				data-testid="line-color-picker"
+			/>
+		</VListGroup>
+		<VListItem
+			v-if="lineId"
+			@click="$emit('delete:line', lineId)"
+			:prepend-icon="mdiTrashCanOutline"
+			data-testid="action-delete-line"
+		>
+			<VListItemTitle>
+				<span>{{ $t("common.actions.remove") }}</span>
+			</VListItemTitle>
+		</VListItem>
+	</KebabMenu>
 </template>
 
 <script setup lang="ts">
@@ -86,7 +64,6 @@ import { MediaBoardColors } from "@/serverApi/v3";
 import {
 	mdiChevronDown,
 	mdiChevronUp,
-	mdiDotsVertical,
 	mdiPalette,
 	mdiRenameOutline,
 	mdiTrashCanOutline,

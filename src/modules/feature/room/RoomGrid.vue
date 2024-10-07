@@ -12,19 +12,26 @@
 		<VCustomEmptyState
 			ref="rooms-empty-state"
 			image="rooms-empty-state"
-			:title="t('pages.rooms.active.emptyState')"
+			:title="t('pages.rooms.emptyState')"
 			class="mt-16"
 		/>
 	</template>
 	<template v-else>
-		<div class="room-tile-grid">
-			<RoomTile
-				v-for="room in rooms"
+		<v-row>
+			<v-col
+				v-for="(room, index) in rooms"
 				:key="room.id"
-				:room="room"
-				class="room-tile"
-			/>
-		</div>
+				cols="6"
+				md="4"
+				lg="3"
+			>
+				<RoomTile
+					:room="room"
+					class="px-5 mb-5"
+					:data-testid="`room-tile-${index}`"
+				/>
+			</v-col>
+		</v-row>
 	</template>
 </template>
 
@@ -42,34 +49,3 @@ onMounted(() => {
 	fetchRooms();
 });
 </script>
-
-<style lang="scss">
-@import "@/styles/settings.scss";
-
-.room-tile-grid {
-	@media #{map-get($display-breakpoints, "sm-and-up")} {
-		display: flex;
-		flex-wrap: wrap;
-	}
-
-	margin-left: -20px;
-	margin-right: -20px;
-}
-
-.room-tile {
-	padding-left: 20px;
-	padding-right: 20px;
-
-	margin-bottom: 20px;
-
-	@media #{map-get($display-breakpoints, "sm-and-up")} {
-		flex: 0 0 50%;
-	}
-	@media #{map-get($display-breakpoints, "md-and-up")} {
-		flex: 0 0 33.3333%;
-	}
-	@media #{map-get($display-breakpoints, "lg-and-up")} {
-		flex: 0 0 25%;
-	}
-}
-</style>
