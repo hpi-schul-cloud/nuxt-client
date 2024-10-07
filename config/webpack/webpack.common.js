@@ -110,7 +110,6 @@ module.exports = {
 			failOnWarning: false,
 			failOnError: true,
 			configType: "flat",
-			// eslintPath: "eslint/use-at-your-own-risk",
 		}),
 	],
 
