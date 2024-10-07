@@ -206,7 +206,10 @@ describe("ExternalToolSection", () => {
 				expect(vueWrapperArray[1].find("span").text()).toEqual(
 					"components.administration.externalToolsSection.table.header.status"
 				);
-				expect(vueWrapperArray[2].find("span").text()).toEqual("");
+				expect(vueWrapperArray[2].find("span").text()).toEqual(
+					"components.administration.externalToolsSection.table.header.restrictedTo"
+				);
+				expect(vueWrapperArray[3].find("span").text()).toEqual("");
 			});
 		});
 

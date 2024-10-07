@@ -11,10 +11,7 @@
 			class="d-sr-only"
 		/>
 		<div class="wireframe-header sticky">
-			<v-custom-breadcrumbs
-				v-if="breadcrumbs.length"
-				:breadcrumbs="breadcrumbs"
-			/>
+			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
 				<h1 v-if="headline" class="text-h3 pl-2" :data-testid="dataTestid">
@@ -29,6 +26,7 @@
 						:orientation="'right'"
 						:icon="fabItems.icon"
 						:href="fabItems.href"
+						:to="fabItems.to"
 						:aria-label="fabItems.ariaLabel"
 						:data-testid="fabItems.dataTestId"
 					>
@@ -70,15 +68,15 @@
 </template>
 
 <script setup lang="ts">
-import VCustomBreadcrumbs from "@/components/atoms/vCustomBreadcrumbs.vue";
+import { Breadcrumbs } from "@ui-breadcrumbs";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { useVuetifyBreakpoints } from "@util-device-detection";
 import { computed, PropType, useSlots } from "vue";
-import { Fab } from "./default-wireframe.types";
+import { Fab, Breadcrumb } from "./default-wireframe.types";
 
 const props = defineProps({
 	breadcrumbs: {
-		type: Array,
+		type: Array as PropType<Breadcrumb[]>,
 		required: false,
 		default: () => [],
 	},

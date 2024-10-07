@@ -1,13 +1,13 @@
 import { mount } from "@vue/test-utils";
-import vCustomBreadcrumbs from "./vCustomBreadcrumbs.vue";
+import Breadcrumbs from "./Breadcrumbs.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 
-describe("@/components/atoms/vCustomBreadcrumbs", () => {
+describe("@/components/atoms/Breadcrumbs", () => {
 	const setup = () => {
-		const wrapper = mount(vCustomBreadcrumbs, {
+		const wrapper = mount(Breadcrumbs, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

@@ -141,6 +141,9 @@ export default {
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings and contact your school administrator.",
 	"common.tool.information.outdatedOnSchool.teacher":
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please contact the school administrator.",
+	"common.tool.context.type.courses": "Course tools",
+	"common.tool.context.type.boardElements": "Boards",
+	"common.tool.context.type.mediaShelves": "Media shelf",
 	"common.validation.email": "Please enter a valid e-mail address",
 	"common.validation.invalid": "The data you entered is invalid",
 	"common.validation.number": "An integer must be entered.",
@@ -152,6 +155,19 @@ export default {
 		"The text you entered exceeds the maximum length",
 	"common.words.and": "and",
 	"common.words.classes": "Classes",
+	"common.words.color": "Color",
+	"common.words.color.blue": "Blue",
+	"common.words.color.blueGrey": "Blue grey",
+	"common.words.color.brown": "Brown",
+	"common.words.color.green": "Green",
+	"common.words.color.lightBlue": "Light blue",
+	"common.words.color.magenta": "Magenta",
+	"common.words.color.olive": "Olive",
+	"common.words.color.orange": "Orange",
+	"common.words.color.pink": "Pink",
+	"common.words.color.purple": "Purple",
+	"common.words.color.red": "Red",
+	"common.words.color.turquoise": "Turquoise",
 	"common.words.copiedToClipboard": "Copied to the clipboard",
 	"common.words.courseGroups": "Course Groups",
 	"common.words.courses": "Courses",
@@ -273,6 +289,8 @@ export default {
 		"Tool has been updated successfully.",
 	"components.administration.externalToolsSection.table.header.status":
 		"Status",
+	"components.administration.externalToolsSection.table.header.restrictedTo":
+		"Restricted to",
 	"components.administration.provisioningOptions.class.description":
 		"Activate this option if classes should be synchronized into the {instance}.",
 	"components.administration.provisioningOptions.class.label":
@@ -771,6 +789,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Drafts",
 	"components.organisms.TasksDashboardMain.tab.finished": "Finished",
 	"components.organisms.TasksDashboardMain.tab.open": "Open",
+	"components.roomForm.labels.roomName": "Name of the room",
+	"components.roomForm.labels.timePeriod": "Time period",
 	"components.timePicker.validation.format": "Please use format HH:MM",
 	"components.timePicker.validation.required": "Please enter a time.",
 	"error.400": "401 – Bad Request",
@@ -1606,8 +1626,16 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (e.g. compatible with Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
-	"pages.rooms.active.title": "Current rooms",
-	"pages.rooms.active.emptyState": "Currently there are no rooms here.",
+	// new rooms
+	"pages.roomCreate.title": "Create room",
+	"pages.roomEdit.title": "Edit room",
+	"pages.roomDetails.title": "Room",
+	"pages.roomDetails.ariaLabels.menu": "Room menu",
+	"pages.roomDetails.ariaLabels.menu.action.edit": "Edit room",
+	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
+	"pages.rooms.title": "Rooms",
+	"pages.rooms.fab.title": "Create room",
+	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",
