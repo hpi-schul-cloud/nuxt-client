@@ -333,8 +333,8 @@ export default {
 			this.window.height = window.innerHeight;
 		},
 		goBack() {
-			if (window.history.length > 1) {
-				this.$router && this.$router.back();
+			if (window.history.length > 1 && this.$router) {
+				this.$router.back();
 			} else {
 				window.close();
 			}

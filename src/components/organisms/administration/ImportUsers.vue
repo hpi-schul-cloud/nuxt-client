@@ -441,7 +441,9 @@ export default {
 	},
 	watch: {
 		dialogEdit(val) {
-			val || this.closeEdit();
+			if (!val) {
+				this.closeEdit();
+			}
 		},
 		searchFirstName() {
 			this.searchApi();

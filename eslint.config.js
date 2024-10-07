@@ -52,12 +52,19 @@ module.exports = [
 			"no-prototype-builtins": "error",
 			"no-empty": "error",
 			"no-var": "error",
+			"no-unused-vars": "off", // disable the base rule for @typescript-eslint/no-unused-vars
 			"prefer-const": "error",
 			"prettier/prettier": "error",
 			"@typescript-eslint/no-empty-function": "error",
 			"@typescript-eslint/no-require-imports": "off",
 			"@typescript-eslint/ban-ts-comment": "error",
 			"@typescript-eslint/no-inferrable-types": "error",
+			"@typescript-eslint/no-empty-object-type": [
+				"error",
+				{ allowInterfaces: "with-single-extends" },
+			],
+			// for now set this to warn because to much errors in catch blocks, need to decide if we want to us default option 'caughtErrors: all' for 'catch' blocks
+			"@typescript-eslint/no-unused-vars": "warn",
 			"vue/no-v-text-v-html-on-component": "error",
 			"vue/no-v-html": "error",
 			"vue/html-self-closing": [
