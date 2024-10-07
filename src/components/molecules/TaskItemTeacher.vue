@@ -7,6 +7,7 @@
 			v-bind="$attrs"
 			:aria-label="ariaLabel"
 			role="article"
+			:ripple="false"
 			@click="handleClick"
 			@focus="handleFocus(true)"
 			@keydown.tab.shift="handleFocus(false)"

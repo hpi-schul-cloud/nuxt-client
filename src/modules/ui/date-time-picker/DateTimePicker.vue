@@ -6,6 +6,7 @@
 				:date="date"
 				:label="dateInputLabel"
 				:aria-label="dateInputAriaLabel"
+				:data-testid="dateInputTestId"
 				:minDate="minDate"
 				:maxDate="maxDate"
 				@update:date="onDateUpdate"
@@ -40,6 +41,7 @@ const props = defineProps({
 	dateTime: { type: String },
 	dateInputLabel: { type: String, default: "" },
 	dateInputAriaLabel: { type: String, default: "" },
+	dateInputTestId: { type: String, default: "date-input" },
 	timeInputLabel: { type: String, default: "" },
 	timeInputAriaLabel: { type: String, default: "" },
 	minDate: { type: String },

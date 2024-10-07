@@ -389,9 +389,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				await vListItem.vm.$emit("focus");
 
 				expect(wrapper.vm.isActive).toBe(true);
-				const menuBtn = wrapper.findComponent(
-					`[aria-label="common.words.task"]`
-				);
+				const menuBtn = wrapper.findComponent(`[data-testid=task-menu]`);
 
 				expect(menuBtn.isVisible()).toBe(true);
 			});
