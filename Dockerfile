@@ -10,7 +10,7 @@ COPY package.json package-lock.json ./
 COPY lib/eslint-plugin-schulcloud ./lib/eslint-plugin-schulcloud
 RUN npm ci
 
-COPY babel.config.js .eslintrc.js LICENSE.md .prettierrc.js tsconfig.json tsconfig.build.json .eslintignore .prettierignore ./
+COPY babel.config.js eslint.config.js LICENSE.md .prettierrc.js tsconfig.json tsconfig.build.json .prettierignore ./
 COPY public ./public
 COPY src ./src
 COPY config/webpack ./config/webpack

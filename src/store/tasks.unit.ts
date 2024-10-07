@@ -472,8 +472,9 @@ describe("task store", () => {
 				tasksModule.courseFilter = ["Mathe"];
 				const spy = mockTaskFilter("byCourseNames", []);
 
-				tasksModule.openTasksForStudentIsEmpty;
+				const result = tasksModule.openTasksForStudentIsEmpty;
 
+				expect(result).toBe(false);
 				expect(spy).toHaveBeenCalledTimes(1);
 				expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 				spy.mockRestore();
@@ -483,8 +484,9 @@ describe("task store", () => {
 				const tasksModule = new TasksModule({});
 				const spy = mockTaskFilter("byOpenForStudent", []);
 
-				tasksModule.openTasksForStudentIsEmpty;
+				const result = tasksModule.openTasksForStudentIsEmpty;
 
+				expect(result).toBe(false);
 				expect(spy).toHaveBeenCalledTimes(1);
 				spy.mockRestore();
 			});
@@ -538,8 +540,9 @@ describe("task store", () => {
 			tasksModule.substituteFilter = true;
 			const spy = mockTaskFilter("filterSubstituteForTeacher", []);
 
-			tasksModule.openTasksForTeacherIsEmpty;
+			const result = tasksModule.openTasksForTeacherIsEmpty;
 
+			expect(result).toBe(false);
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(tasksModule.substituteFilter);
 			spy.mockRestore();
@@ -550,8 +553,9 @@ describe("task store", () => {
 			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			tasksModule.openTasksForTeacherIsEmpty;
+			const result = tasksModule.openTasksForTeacherIsEmpty;
 
+			expect(result).toBe(false);
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
@@ -561,8 +565,9 @@ describe("task store", () => {
 			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byOpenForTeacher", []);
 
-			tasksModule.openTasksForTeacherIsEmpty;
+			const result = tasksModule.openTasksForTeacherIsEmpty;
 
+			expect(result).toBe(false);
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});
@@ -621,8 +626,9 @@ describe("task store", () => {
 			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			tasksModule.completedTasksForStudentIsEmpty;
+			const result = tasksModule.completedTasksForStudentIsEmpty;
 
+			expect(result).toBe(false);
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
@@ -632,8 +638,9 @@ describe("task store", () => {
 			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byCompletedForStudent", []);
 
-			tasksModule.completedTasksForStudentIsEmpty;
+			const result = tasksModule.completedTasksForStudentIsEmpty;
 
+			expect(result).toBe(false);
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});
@@ -686,8 +693,9 @@ describe("task store", () => {
 			tasksModule.substituteFilter = true;
 			const spy = mockTaskFilter("filterSubstituteForTeacher", []);
 
-			tasksModule.draftsForTeacherIsEmpty;
+			const result = tasksModule.draftsForTeacherIsEmpty;
 
+			expect(result).toBe(false);
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(tasksModule.substituteFilter);
 			spy.mockRestore();
@@ -698,8 +706,9 @@ describe("task store", () => {
 			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			tasksModule.draftsForTeacherIsEmpty;
+			const result = tasksModule.draftsForTeacherIsEmpty;
 
+			expect(result).toBe(false);
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
@@ -709,8 +718,9 @@ describe("task store", () => {
 			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byDraftForTeacher", []);
 
-			tasksModule.draftsForTeacherIsEmpty;
+			const result = tasksModule.draftsForTeacherIsEmpty;
 
+			expect(result).toBe(false);
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});
@@ -769,8 +779,13 @@ describe("task store", () => {
 			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			tasksModule.getOpenTasksForStudent;
+			const result = tasksModule.getOpenTasksForStudent;
 
+			expect(result).toEqual({
+				overdue: [],
+				noDueDate: [],
+				withDueDate: [],
+			});
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
@@ -780,8 +795,13 @@ describe("task store", () => {
 			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byOpenForStudent", []);
 
-			tasksModule.getOpenTasksForStudent;
+			const result = tasksModule.getOpenTasksForStudent;
 
+			expect(result).toEqual({
+				overdue: [],
+				noDueDate: [],
+				withDueDate: [],
+			});
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});
@@ -814,7 +834,12 @@ describe("task store", () => {
 			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			tasksModule.getCompletedTasksForStudent;
+			const result = tasksModule.getCompletedTasksForStudent;
+
+			expect(result).toEqual({
+				submitted: [],
+				graded: [],
+			});
 
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
@@ -845,8 +870,13 @@ describe("task store", () => {
 			tasksModule.substituteFilter = true;
 			const spy = mockTaskFilter("filterSubstituteForTeacher", []);
 
-			tasksModule.getOpenTasksForTeacher;
+			const result = tasksModule.getOpenTasksForTeacher;
 
+			expect(result).toEqual({
+				overdue: [],
+				noDueDate: [],
+				withDueDate: [],
+			});
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(tasksModule.substituteFilter);
 			spy.mockRestore();
@@ -857,8 +887,13 @@ describe("task store", () => {
 			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			tasksModule.getOpenTasksForTeacher;
+			const result = tasksModule.getOpenTasksForTeacher;
 
+			expect(result).toEqual({
+				overdue: [],
+				noDueDate: [],
+				withDueDate: [],
+			});
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
@@ -868,8 +903,13 @@ describe("task store", () => {
 			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byOpenForTeacher", []);
 
-			tasksModule.getOpenTasksForTeacher;
+			const result = tasksModule.getOpenTasksForTeacher;
 
+			expect(result).toEqual({
+				overdue: [],
+				noDueDate: [],
+				withDueDate: [],
+			});
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});
@@ -902,8 +942,9 @@ describe("task store", () => {
 			tasksModule.substituteFilter = true;
 			const spy = mockTaskFilter("filterSubstituteForTeacher", []);
 
-			tasksModule.getDraftTasksForTeacher;
+			const result = tasksModule.getDraftTasksForTeacher;
 
+			expect(result).toEqual([]);
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(tasksModule.substituteFilter);
 			spy.mockRestore();
@@ -914,8 +955,9 @@ describe("task store", () => {
 			tasksModule.courseFilter = ["Mathe"];
 			const spy = mockTaskFilter("byCourseNames", []);
 
-			tasksModule.getDraftTasksForTeacher;
+			const result = tasksModule.getDraftTasksForTeacher;
 
+			expect(result).toEqual([]);
 			expect(spy).toHaveBeenCalledTimes(1);
 			expect(spy).toHaveBeenCalledWith(tasksModule.courseFilter);
 			spy.mockRestore();
@@ -925,8 +967,9 @@ describe("task store", () => {
 			const tasksModule = new TasksModule({});
 			const spy = mockTaskFilter("byDraftForTeacher", []);
 
-			tasksModule.getDraftTasksForTeacher;
+			const result = tasksModule.getDraftTasksForTeacher;
 
+			expect(result).toEqual([]);
 			expect(spy).toHaveBeenCalledTimes(1);
 			spy.mockRestore();
 		});

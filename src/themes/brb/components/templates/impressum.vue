@@ -206,7 +206,6 @@
 import { mdiChat, mdiEmailOutline, mdiPhone } from "@icons/material";
 import { defineComponent } from "vue";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
 		return {

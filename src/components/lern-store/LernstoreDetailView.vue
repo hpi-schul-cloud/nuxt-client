@@ -334,7 +334,7 @@ export default {
 		},
 		goBack() {
 			if (window.history.length > 1) {
-				this.$router && this.$router.back();
+				this.$router?.back();
 			} else {
 				window.close();
 			}
