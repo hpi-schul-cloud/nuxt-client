@@ -27,6 +27,7 @@ import { useBoardRestApi } from "./boardRestApi.composable";
 import ApplicationErrorModule from "@/store/application-error";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -39,6 +40,9 @@ const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
 jest.mock("../socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 describe("boardRestApi", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
@@ -81,6 +85,9 @@ describe("boardRestApi", () => {
 		});
 		envConfigModule.setEnvs(envs);
 		applicationErrorModule.setError = setErrorMock;
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		if (createBoard) {

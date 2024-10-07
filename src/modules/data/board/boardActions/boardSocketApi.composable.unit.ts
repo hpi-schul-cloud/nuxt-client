@@ -39,6 +39,7 @@ import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createApplicationError } from "@/utils/create-application-error.factory";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("../socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
@@ -59,6 +60,9 @@ const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 describe("useBoardSocketApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
@@ -83,6 +87,9 @@ describe("useBoardSocketApi", () => {
 			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
 		});
 		envConfigModule.setEnvs(envs);
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 
 		mockedSocketConnectionHandler =
 			createMock<ReturnType<typeof useSocketConnection>>();
