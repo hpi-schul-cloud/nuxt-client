@@ -138,6 +138,8 @@ const showBorder = computed(() => {
 
 .wireframe-header {
 	padding: 0 var(--space-lg);
+	display: flex;
+	flex-direction: column;
 }
 
 :deep(.v-application__wrap) {
