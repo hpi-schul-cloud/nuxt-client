@@ -1,36 +1,27 @@
-const pluginVue = require("eslint-plugin-vue");
 const js = require("@eslint/js");
+const pluginVue = require("eslint-plugin-vue");
+const vueTsEslintConfig = require("@vue/eslint-config-typescript");
 const schulcloud = require("./lib/eslint-plugin-schulcloud");
 const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended");
 const globals = require("globals");
 
-// needed for packages that are not yet compatible with the flat config
-const { FlatCompat } = require("@eslint/eslintrc");
-const compat = new FlatCompat();
-
 module.exports = [
 	...pluginVue.configs["flat/essential"],
 	js.configs.recommended,
-	// ...vueTsEslintConfig({
-	// 	// not supported as of version 13, version 14 will introduce support for the flat config
-	// 	// for version 14 of this, we need to upgrade to eslint 9 because of the peer dependency
-	// 	extends: [
-	// 		// By default, only the recommended rules are enabled.
-	// 		"recommended",
-	// 	],
-	// 	supportedScriptLangs: {
-	// 		ts: true,
+	...vueTsEslintConfig({
+		extends: ["recommended"],
+		supportedScriptLangs: {
+			ts: true,
 
-	// 		// [!DISCOURAGED]
-	// 		// Set to `true` to allow plain `<script>` or `<script setup>` blocks.
-	// 		// This might result-in false positive or negatives in some rules for `.vue` files.
-	// 		// Note you also need to configure `allowJs: true` and `checkJs: true`
-	// 		// in corresponding `tsconfig.json` files.
-	// 		js: true,
-	// 	},
-	// }),
-	...compat.extends("@vue/eslint-config-typescript/recommended"),
-	eslintPluginPrettierRecommended, // need to be the last item
+			// [!DISCOURAGED]
+			// Set to `true` to allow plain `<script>` or `<script setup>` blocks.
+			// This might result-in false positive or negatives in some rules for `.vue` files.
+			// Note you also need to configure `allowJs: true` and `checkJs: true`
+			// in corresponding `tsconfig.json` files.
+			js: true,
+		},
+	}),
+	eslintPluginPrettierRecommended,
 
 	{
 		languageOptions: {
@@ -64,9 +55,9 @@ module.exports = [
 			"prefer-const": "error",
 			"prettier/prettier": "error",
 			"@typescript-eslint/no-empty-function": "error",
+			"@typescript-eslint/no-require-imports": "off",
 			"@typescript-eslint/ban-ts-comment": "error",
 			"@typescript-eslint/no-inferrable-types": "error",
-			"@typescript-eslint/ban-types": "error",
 			"vue/no-v-text-v-html-on-component": "error",
 			"vue/no-v-html": "error",
 			"vue/html-self-closing": [
