@@ -56,7 +56,7 @@ module.exports = [
 			"prefer-const": "error",
 			"prettier/prettier": "error",
 			"@typescript-eslint/no-empty-function": "error",
-			"@typescript-eslint/no-require-imports": "off",
+			"@typescript-eslint/no-require-imports": "off", // decide which option we want to use for this rule
 			"@typescript-eslint/ban-ts-comment": "error",
 			"@typescript-eslint/no-inferrable-types": "error",
 			"@typescript-eslint/no-empty-object-type": [
