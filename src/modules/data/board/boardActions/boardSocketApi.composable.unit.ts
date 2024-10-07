@@ -455,6 +455,19 @@ describe("useBoardSocketApi", () => {
 		});
 	});
 
+	describe("deleteBoardRequest", () => {
+		it("should call action with correct parameters", () => {
+			const { deleteBoardRequest } = useBoardSocketApi();
+
+			deleteBoardRequest({ boardId: "test" });
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"delete-board-request",
+				{ boardId: "test" }
+			);
+		});
+	});
+
 	describe("createColumnRequest", () => {
 		it("should call action with correct parameters", () => {
 			const { createColumnRequest } = useBoardSocketApi();
