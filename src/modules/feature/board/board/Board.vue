@@ -305,7 +305,7 @@ watch(
 		setAlert();
 
 		if (!(isBoardVisible.value || isTeacher)) {
-			router.replace({ path: "/rooms/" + roomId.value });
+			router.replace({ name: "rooms-id", params: { id: roomId.value } });
 			applicationErrorModule.setError(
 				createApplicationError(HttpStatusCode.Forbidden)
 			);

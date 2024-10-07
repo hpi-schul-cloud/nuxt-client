@@ -1188,7 +1188,10 @@ describe("BoardStore", () => {
 					isOwnAction: true,
 				});
 
-				expect(router.replace).toHaveBeenCalledWith({ path: "/rooms/roomId" });
+				expect(router.replace).toHaveBeenCalledWith({
+					name: "rooms-id",
+					params: { id: "roomId" },
+				});
 			});
 
 			it('should call applicationErrorModule.showError if "isOwnAction" is false', async () => {

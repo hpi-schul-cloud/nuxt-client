@@ -320,7 +320,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const deleteBoardSuccess = (payload: DeleteBoardSuccessPayload) => {
 		if (payload.isOwnAction === true) {
-			router.replace({ path: "/rooms/" + referenceRoomId.value });
+			router.replace({
+				name: "rooms-id",
+				params: { id: referenceRoomId.value },
+			});
 			return;
 		}
 		applicationErrorModule.setError(

@@ -854,7 +854,8 @@ describe("Board", () => {
 
 							expect(wrapperVM.isBoardVisible).toBe(false);
 							expect(router.replace).toHaveBeenCalledWith({
-								path: "/rooms/" + mockRoomId,
+								name: "rooms-id",
+								params: { id: mockRoomId },
 							});
 							expect(
 								mockedCreateApplicationErrorCalls.createApplicationError
