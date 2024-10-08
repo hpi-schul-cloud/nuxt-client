@@ -162,7 +162,6 @@ const showBorder = computed(() => {
 .border {
 	margin-right: calc(-1 * var(--space-lg));
 	margin-left: calc(-1 * var(--space-lg));
-	margin-bottom: var(--space-xl);
 	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
 }
 
