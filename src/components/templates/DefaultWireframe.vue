@@ -51,7 +51,14 @@
 					</speed-dial-menu>
 				</slot>
 			</div>
-			<div v-if="showBorder" class="border" />
+			<!-- <div v-if="showBorder" class="border" /> -->
+			<hr
+				v-if="showBorder"
+				class="v-divider v-theme--light"
+				aria-orientation="horizontal"
+				role="separator"
+				aria-hidden="true"
+			/>
 		</div>
 		<v-container
 			:fluid="maxWidth !== 'nativ'"
