@@ -56,8 +56,10 @@ const onSave = async (roomParams: RoomUpdateParams) => {
 };
 
 const onCancel = () => {
-	// TODO use useConfirmationDialog here, when it's refactored
-	router.go(-1);
+	router.push({
+		name: "room-details",
+		params: { id: route.params.id as string },
+	});
 };
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
