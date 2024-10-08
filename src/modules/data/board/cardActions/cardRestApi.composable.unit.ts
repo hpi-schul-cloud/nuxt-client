@@ -43,6 +43,13 @@ const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: () => ({ t: jest.fn().mockImplementation((key) => key) }),
+	};
+});
+
 describe("useCardRestApi", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
