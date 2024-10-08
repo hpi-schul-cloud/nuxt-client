@@ -300,7 +300,7 @@ const setAlert = useDebounceFn(() => {
 }, 150);
 
 watch(
-	() => board.value?.isVisible,
+	() => isBoardVisible.value,
 	() => {
 		setAlert();
 
