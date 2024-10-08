@@ -54,6 +54,7 @@
 				{{ $t("common.actions.save") }}
 			</VBtn>
 		</div>
+		<ConfirmationDialog />
 	</form>
 </template>
 
@@ -65,6 +66,10 @@ import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
+import {
+	ConfirmationDialog,
+	useConfirmationDialog,
+} from "@ui-confirmation-dialog";
 
 const props = defineProps({
 	room: {
@@ -75,6 +80,8 @@ const props = defineProps({
 
 const emit = defineEmits(["save", "cancel"]);
 const { t } = useI18n();
+
+const { askConfirmation } = useConfirmationDialog();
 
 const roomData = computed(() => props.room);
 
@@ -106,7 +113,16 @@ const onSave = async () => {
 	emit("save", roomData.value);
 };
 
-const onCancel = () => {
-	emit("cancel");
+const onCancel = async () => {
+	// check dirty state
+
+	const shouldCancel = await askConfirmation({
+		message: t("ui-confirmation-dialog.ask-cancel-form"),
+		confirmActionLangKey: "common.actions.discard",
+	});
+
+	if (shouldCancel) {
+		emit("cancel");
+	}
 };
 </script>

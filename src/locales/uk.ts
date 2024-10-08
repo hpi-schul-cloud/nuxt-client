@@ -8,7 +8,7 @@ export default {
 	"common.actions.copy": "Копіювати",
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
-	"common.actions.discard": "Скасувати",
+	"common.actions.discard": "Відкинути",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
@@ -1756,6 +1756,7 @@ export default {
 	"tldraw.error.ws.4404": "Дошки з такою назвою не знайдено",
 	"ui-confirmation-dialog.ask-delete":
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
+	"ui-confirmation-dialog.ask-cancel-form": "Відкинути зміни?",
 	"ui-layout.topbar.pageShare.copyLink": "Скопіювати посилання",
 	"ui-layout.topbar.pageShare.printQRCode": "Роздрукуйте QR-код",
 	"util-validators-invalid-url": "Esta URL no es válida.",
