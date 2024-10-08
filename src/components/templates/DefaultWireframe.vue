@@ -54,7 +54,7 @@
 			<!-- <div v-if="showBorder" class="border" /> -->
 			<hr
 				v-if="showBorder"
-				class="v-divider v-theme--light border"
+				class="v-divider v-theme--light"
 				aria-orientation="horizontal"
 				role="separator"
 				aria-hidden="true"
@@ -167,7 +167,7 @@ const showBorder = computed(() => {
 	margin: 0;
 }
 
-.border {
+.v-divider {
 	margin-right: -1.5rem;
 	margin-left: -1.5rem;
 }
