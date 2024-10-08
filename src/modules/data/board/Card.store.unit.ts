@@ -1,26 +1,32 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
-import { useBoardApi } from "./BoardApi.composable";
-import { useSharedEditMode } from "./EditMode.composable";
-import { useI18n } from "vue-i18n";
-import { useSocketConnection, useCardStore } from "@data-board";
-import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { useCardRestApi } from "./cardActions/cardRestApi.composable";
-import { DeepMocked, createMock } from "@golevelup/ts-jest";
-import { createPinia, setActivePinia } from "pinia";
-import setupStores from "@@/tests/test-utils/setupStores";
-import EnvConfigModule from "@/store/env-config";
-import { Ref, ref } from "vue";
+import { ContentElementType } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
 import {
 	envsFactory,
+	externalToolElementResponseFactory,
+	fileElementResponseFactory,
 	richTextElementContentFactory,
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
-import { ContentElementType } from "@/serverApi/v3";
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { useCardStore, useSocketConnection } from "@data-board";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import {
+	useBoardNotifier,
+	useSharedEditMode,
+	useSharedLastCreatedElement,
+} from "@util-board";
 import { cloneDeep } from "lodash";
+import { createPinia, setActivePinia } from "pinia";
+import { computed, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useBoardApi } from "./BoardApi.composable";
+import { useCardRestApi } from "./cardActions/cardRestApi.composable";
+import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -34,10 +40,8 @@ const mockedUseCardSocketApi = jest.mocked(useCardSocketApi);
 jest.mock("./cardActions/cardRestApi.composable");
 const mockedUseCardRestApi = jest.mocked(useCardRestApi);
 
-jest.mock("./EditMode.composable");
-const mockedSharedEditMode = jest.mocked(useSharedEditMode);
-
 jest.mock("@util-board");
+const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
 
@@ -46,6 +50,9 @@ const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
 jest.mock("@data-board/socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+
+jest.mock("./BoardFocusHandler.composable");
+const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 
 describe("CardStore", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -63,6 +70,9 @@ describe("CardStore", () => {
 	>;
 	let setEditModeId: jest.Mock;
 	let editModeId: Ref<string | undefined>;
+	let mockedBoardFocusCalls: DeepMocked<
+		ReturnType<typeof useBoardFocusHandler>
+	>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -94,11 +104,16 @@ describe("CardStore", () => {
 			mockedSharedLastCreatedElementActions
 		);
 
+		mockedBoardFocusCalls =
+			createMock<ReturnType<typeof useBoardFocusHandler>>();
+		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
+
 		setEditModeId = jest.fn();
 		editModeId = ref(undefined);
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId,
+			isInEditMode: computed(() => true),
 		});
 	});
 
@@ -113,16 +128,35 @@ describe("CardStore", () => {
 		const cardStore = useCardStore();
 		const cards = cardResponseFactory.buildList(3);
 		const elements = richTextElementResponseFactory.buildList(3);
+		const fileElement = fileElementResponseFactory.build();
+		const externalToolElement = externalToolElementResponseFactory.build();
 
 		const cardId = cards[0].id;
 		const card = cards[0];
 		card.elements = elements;
+		card.elements.push(fileElement);
+		card.elements.push(externalToolElement);
 
 		for (const card of cards) {
 			cardStore.cards[card.id] = card;
 		}
 
 		return { cardStore, cardId, elements };
+	};
+
+	const focusSetup = (id: string) => {
+		const focusedId = ref<string | undefined>(id);
+		const mockSetFocus = jest.fn().mockImplementation((id: string) => {
+			focusedId.value = id;
+		});
+		const mockForceFocus = jest.fn();
+		mockedBoardFocusHandler.mockReturnValue({
+			setFocus: mockSetFocus,
+			forceFocus: mockForceFocus,
+			focusedId,
+		});
+
+		return { setFocus: mockForceFocus, forceFocus: mockForceFocus };
 	};
 
 	afterEach(() => {
@@ -428,7 +462,7 @@ describe("CardStore", () => {
 					isOwnAction: true,
 				});
 
-				expect(cardStore.cards[cardId].elements.length).toEqual(4);
+				expect(cardStore.cards[cardId].elements.length).toEqual(6);
 				expect(cardStore.cards[cardId].elements[toPosition]).toEqual(
 					newElement
 				);
@@ -437,7 +471,7 @@ describe("CardStore", () => {
 				const { cardStore, cardId } = setup();
 				const newElement = drawingElementResponseFactory.build();
 
-				expect(cardStore.cards[cardId].elements.length).toEqual(3);
+				expect(cardStore.cards[cardId].elements.length).toEqual(5);
 				await cardStore.createElementSuccess({
 					type: ContentElementType.Drawing,
 					cardId,
@@ -445,8 +479,8 @@ describe("CardStore", () => {
 					isOwnAction: true,
 				});
 
-				expect(cardStore.cards[cardId].elements.length).toEqual(4);
-				expect(cardStore.cards[cardId].elements[3]).toEqual(newElement);
+				expect(cardStore.cards[cardId].elements.length).toEqual(6);
+				expect(cardStore.cards[cardId].elements[5]).toEqual(newElement);
 			});
 		});
 
@@ -525,7 +559,7 @@ describe("CardStore", () => {
 				MOVE_DOWN
 			);
 
-			expect(cardStore.cards[cardId].elements[2].id).toEqual(elementId);
+			expect(cardStore.cards[cardId].elements[4].id).toEqual(elementId);
 		});
 
 		it("should call socket Api if feature flag is enabled", async () => {
@@ -606,6 +640,9 @@ describe("CardStore", () => {
 	});
 
 	describe("deleteElementSuccess", () => {
+		afterEach(() => {
+			jest.resetAllMocks();
+		});
 		it("should not delete element if card is undefined", async () => {
 			const { cardStore, cardId, elements } = setup();
 			const numberOfElements = cardStore.cards[cardId].elements.length;
@@ -619,6 +656,7 @@ describe("CardStore", () => {
 
 			expect(cardStore.cards[cardId].elements.length).toEqual(numberOfElements);
 		});
+
 		it("should delete element", async () => {
 			const { cardStore, cardId, elements } = setup();
 			const numberOfElements = cardStore.cards[cardId].elements.length;
@@ -633,6 +671,65 @@ describe("CardStore", () => {
 			expect(cardStore.cards[cardId].elements.length).toEqual(
 				numberOfElements - 1
 			);
+		});
+
+		describe("when previous element needs to be focused", () => {
+			describe("when the element first element", () => {
+				it('should call "forceFocus" if already focused element is deleted', async () => {
+					const { cardStore, cardId, elements } = setup();
+					const elementId = elements[0].id;
+
+					const { setFocus } = focusSetup(elementId);
+					setFocus(elementId);
+
+					await cardStore.deleteElementSuccess({
+						cardId,
+						elementId,
+						isOwnAction: true,
+					});
+
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(cardId);
+					expect(setEditModeId).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when the element is not first element", () => {
+				it('should call "forceFocus" if already focused element is deleted', async () => {
+					const { cardStore, cardId } = setup();
+					const elementId = cardStore.cards[cardId].elements[4].id;
+
+					const { setFocus } = focusSetup(elementId);
+					setFocus(elementId);
+
+					await cardStore.deleteElementSuccess({
+						cardId,
+						elementId,
+						isOwnAction: true,
+					});
+
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
+						cardStore.cards[cardId].elements[3].id
+					);
+					expect(setEditModeId).toHaveBeenCalled();
+				});
+			});
+
+			it("should not call forceFocus if element is not focused", async () => {
+				const { cardStore, cardId, elements } = setup();
+				const elementId = elements[0].id;
+
+				const { setFocus } = focusSetup("unknownId");
+
+				setFocus("unknownId");
+
+				await cardStore.deleteElementSuccess({
+					cardId,
+					elementId,
+					isOwnAction: true,
+				});
+
+				expect(mockedBoardFocusCalls.forceFocus).not.toHaveBeenCalled();
+			});
 		});
 	});
 

@@ -81,6 +81,7 @@ export class SchoolExternalToolMapper {
 					CommonToolMapper.mapToToolParameterEntry(parameter)
 			),
 			isDeactivated: response.isDeactivated,
+			restrictToContexts: response.restrictToContexts,
 		};
 
 		return mapped;

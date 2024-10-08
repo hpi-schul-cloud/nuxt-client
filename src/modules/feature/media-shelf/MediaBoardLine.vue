@@ -53,9 +53,15 @@
 						@end="onElementDragEnd"
 					>
 						<template #item="{ element }">
-							<MediaBoardExternalToolElement
+							<MediaBoardExternalToolDeletedElement
+								v-if="isDeletedElement(element)"
 								:data-element-id="element.id"
-								:key="element.id"
+								:element="element"
+								@delete:element="onElementDelete"
+							/>
+							<MediaBoardExternalToolElement
+								v-else
+								:data-element-id="element.id"
 								:element="element"
 								@delete:element="onElementDelete"
 							/>
@@ -69,13 +75,19 @@
 
 <script setup lang="ts">
 import {
+	ContentElementType,
+	DeletedElementResponse,
 	MediaBoardColors,
 	MediaBoardLayoutType,
+	MediaExternalToolElementResponse,
 	MediaLineResponse,
 } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { useDragAndDrop } from "@feature-board/shared/DragAndDrop.composable";
-import { extractDataAttribute } from "@util-board";
+import {
+	extractDataAttribute,
+	useDragAndDrop,
+	useMediaBoardEditMode,
+} from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
@@ -89,8 +101,8 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { availableMediaLineId, ElementMove } from "./data";
-import { useEditMode } from "./editMode.composable";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
+import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { MediaBoardColorMapper, useCollapsableState } from "./utils";
@@ -136,7 +148,7 @@ const { openItems } = useCollapsableState("linePanel", collapsed);
 
 const { dragStart, dragEnd } = useDragAndDrop();
 
-const { startEditMode } = useEditMode(toRef(props, "line").value.id);
+const { startEditMode } = useMediaBoardEditMode(toRef(props, "line").value.id);
 
 const titlePlaceholder: ComputedRef<string> = computed(
 	() => `${t("feature.media-shelf.line.title").toString()} ${props.index + 1}`
@@ -167,12 +179,13 @@ const onElementDragEnd = async (event: SortableEvent) => {
 	const toLineId: string | undefined = extractDataAttribute(to, "lineId");
 	const elementId: string | undefined = extractDataAttribute(item, "elementId");
 
-	if (
+	const isOutOfBounds =
 		newIndex === undefined ||
 		oldIndex === undefined ||
 		fromLineId === undefined ||
-		elementId === undefined
-	) {
+		elementId === undefined;
+
+	if (isOutOfBounds) {
 		return;
 	}
 
@@ -193,5 +206,14 @@ const onElementDragEnd = async (event: SortableEvent) => {
 
 		emit("update:element-position", elementMove);
 	}
+};
+
+const isDeletedElement = (
+	element: MediaExternalToolElementResponse | DeletedElementResponse
+): element is DeletedElementResponse => {
+	if (!("type" in element)) {
+		return false;
+	}
+	return element.type === ContentElementType.Deleted;
 };
 </script>

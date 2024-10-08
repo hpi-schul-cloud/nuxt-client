@@ -1,26 +1,30 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { envConfigModule } from "@/store";
+import EnvConfigModule from "@/store/env-config";
 import { ColumnMove } from "@/types/board/DragAndDrop";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
 	columnResponseFactory,
 	envsFactory,
 } from "@@/tests/test-utils/factory";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
-import { createPinia, setActivePinia } from "pinia";
-import { computed, ref } from "vue";
-import { useBoardStore } from "./Board.store";
-import { useSharedEditMode } from "./EditMode.composable";
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useCardStore, useSocketConnection } from "@data-board";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import {
+	useBoardNotifier,
+	useSharedEditMode,
+	useSharedLastCreatedElement,
+} from "@util-board";
+import { createPinia, setActivePinia } from "pinia";
+import { computed, ref } from "vue";
+import { useBoardStore } from "./Board.store";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 
 jest.mock("./boardActions/boardSocketApi.composable");
 const mockedUseBoardSocketApi = jest.mocked(useBoardSocketApi);
@@ -28,10 +32,8 @@ const mockedUseBoardSocketApi = jest.mocked(useBoardSocketApi);
 jest.mock("./boardActions/boardRestApi.composable");
 const mockedUseBoardRestApi = jest.mocked(useBoardRestApi);
 
-jest.mock("./EditMode.composable");
-const mockedSharedEditMode = jest.mocked(useSharedEditMode);
-
 jest.mock("@util-board");
+const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = jest.mocked(
 	useSharedLastCreatedElement
@@ -46,6 +48,9 @@ const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 jest.mock("./cardActions/cardSocketApi.composable");
 const mockedUseCardSocketApi = jest.mocked(useCardSocketApi);
 
+jest.mock("./BoardFocusHandler.composable");
+const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
+
 describe("BoardStore", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedErrorHandlerCalls: DeepMocked<ReturnType<typeof useErrorHandler>>;
@@ -58,6 +63,9 @@ describe("BoardStore", () => {
 		ReturnType<typeof useCardSocketApi>
 	>;
 	let setEditModeId: jest.Mock;
+	let mockedBoardFocusCalls: DeepMocked<
+		ReturnType<typeof useBoardFocusHandler>
+	>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
@@ -89,12 +97,17 @@ describe("BoardStore", () => {
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
+			isInEditMode: computed(() => true),
 		});
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
 			resetLastCreatedElementId: jest.fn(),
 		});
+
+		mockedBoardFocusCalls =
+			createMock<ReturnType<typeof useBoardFocusHandler>>();
+		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
 	});
 
 	const setup = (options?: { createBoard?: boolean; socketFlag?: boolean }) => {
@@ -126,6 +139,21 @@ describe("BoardStore", () => {
 		mockedPiniaStoreTyping(useCardStore);
 
 		return { boardStore, board, firstColumn, secondColumn, cards };
+	};
+
+	const focusSetup = (id: string) => {
+		const focusedId = ref<string | undefined>(id);
+		const mockSetFocus = jest.fn().mockImplementation((id: string) => {
+			focusedId.value = id;
+		});
+		const mockForceFocus = jest.fn();
+		mockedBoardFocusHandler.mockReturnValue({
+			setFocus: mockSetFocus,
+			forceFocus: mockForceFocus,
+			focusedId,
+		});
+
+		return { setFocus: mockSetFocus, forceFocus: mockForceFocus };
 	};
 
 	afterEach(() => {
@@ -350,6 +378,50 @@ describe("BoardStore", () => {
 			expect(firstCardIdAfterDeletion).not.toEqual(firstCardId);
 			expect(firstCardIdAfterDeletion).toEqual(secondCardId);
 		});
+
+		describe("when previous card needs to be focused", () => {
+			afterEach(() => {
+				jest.resetAllMocks();
+			});
+			describe("when the card is first element", () => {
+				it('should call "forceFocus" if already focused card is deleted', async () => {
+					const { boardStore, cards, firstColumn } = setup();
+					const firstCardId = cards[0].cardId;
+
+					const { setFocus } = focusSetup(firstCardId);
+					setFocus(firstCardId);
+
+					boardStore.deleteCardSuccess({
+						cardId: firstCardId,
+						isOwnAction: true,
+					});
+
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
+						firstColumn.id
+					);
+				});
+			});
+
+			describe("when the card is not the first element", () => {
+				it('should call "forceFocus" if already focused card is deleted', async () => {
+					const { boardStore, cards } = setup();
+					const firstCardId = cards[0].cardId;
+					const secondCardId = cards[1].cardId;
+
+					const { setFocus } = focusSetup(secondCardId);
+					setFocus(secondCardId);
+
+					boardStore.deleteCardSuccess({
+						cardId: secondCardId,
+						isOwnAction: true,
+					});
+
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
+						firstCardId
+					);
+				});
+			});
+		});
 	});
 
 	describe("deleteColumnSuccess", () => {
@@ -386,6 +458,63 @@ describe("BoardStore", () => {
 			expect(boardStore.board?.columns[0]).not.toEqual(firstColumn);
 			expect(boardStore.board?.columns[0]).toEqual(secondColumn);
 			expect(boardStore.board?.columns.length).toEqual(1);
+		});
+
+		describe("when previous column needs to be focused", () => {
+			afterEach(() => {
+				jest.resetAllMocks();
+			});
+			describe("when the column is the first element", () => {
+				it('should call "forceFocus" if already focused column is deleted', async () => {
+					const { boardStore, firstColumn } = setup();
+
+					const { setFocus } = focusSetup(firstColumn.id);
+
+					setFocus(firstColumn.id);
+
+					boardStore.deleteColumnSuccess({
+						columnId: firstColumn.id,
+						isOwnAction: true,
+					});
+
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
+						boardStore.board?.id
+					);
+				});
+			});
+
+			describe("when the column is not the first element", () => {
+				it('should call "forceFocus" if already focused column is deleted', async () => {
+					const { boardStore, firstColumn, secondColumn } = setup();
+
+					const { setFocus } = focusSetup(secondColumn.id);
+					setFocus(secondColumn.id);
+
+					boardStore.deleteColumnSuccess({
+						columnId: secondColumn.id,
+						isOwnAction: true,
+					});
+
+					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
+						firstColumn.id
+					);
+				});
+			});
+
+			it("should not call forceFocus if column is not focused", async () => {
+				const { boardStore, firstColumn } = setup();
+
+				const { setFocus, forceFocus } = focusSetup("unknownId");
+
+				setFocus("unknownId");
+
+				boardStore.deleteColumnSuccess({
+					columnId: firstColumn.id,
+					isOwnAction: true,
+				});
+
+				expect(forceFocus).not.toHaveBeenCalledWith(firstColumn.id);
+			});
 		});
 	});
 

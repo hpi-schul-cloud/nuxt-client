@@ -25,6 +25,7 @@ export default {
 	"common.actions.shareCopy": "Compartir copia",
 	"common.actions.update": "Actualizar",
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
+	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
 	"common.labels.admin": "Admin(s)",
 	"common.labels.birthdate": "Fecha de nacimiento",
 	"common.labels.birthday": "Fecha de nacimiento",
@@ -97,6 +98,7 @@ export default {
 	"common.medium.chip.deactivated": "Desactivado",
 	"common.medium.chip.notLicensed": "No esta activado",
 	"common.medium.chip.incomplete": "Configuración incompleta",
+	"common.medium.chip.noLongerAvailable": "Ya no está disponible",
 	"common.medium.information.admin": "Por favor verifique la configuración.",
 	"common.medium.information.student": "Por favor contacte a un maestro.",
 	"common.medium.information.teacher":
@@ -140,6 +142,9 @@ export default {
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Verifique la configuración y comuníquese con el administrador de su escuela.",
 	"common.tool.information.outdatedOnSchool.teacher":
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor comuníquese con el administrador de la escuela.",
+	"common.tool.context.type.courses": "Herramientas del curso",
+	"common.tool.context.type.boardElements": "Tableros",
+	"common.tool.context.type.mediaShelves": "Estante multimedia",
 	"common.validation.email":
 		"Por favor, introduzca una dirección de correo electrónico válida",
 	"common.validation.invalid": "Los datos introducidos no son válidos",
@@ -152,6 +157,19 @@ export default {
 		"The text you entered exceeds the maximum length",
 	"common.words.and": "y",
 	"common.words.classes": "Clases",
+	"common.words.color": "Color",
+	"common.words.color.blue": "Azul",
+	"common.words.color.blueGrey": "Azul-gris",
+	"common.words.color.brown": "Marrón",
+	"common.words.color.green": "Verde",
+	"common.words.color.lightBlue": "Azul claro",
+	"common.words.color.magenta": "Magenta",
+	"common.words.color.olive": "Verde oliva",
+	"common.words.color.orange": "Naranja",
+	"common.words.color.pink": "Rosa",
+	"common.words.color.purple": "Violeta",
+	"common.words.color.red": "Roja",
+	"common.words.color.turquoise": "Turquesa",
 	"common.words.copiedToClipboard": "Copiado en el portapapeles",
 	"common.words.courseGroups": "grupos de cursos",
 	"common.words.courses": "Cursos",
@@ -276,6 +294,8 @@ export default {
 		"La herramienta se ha actualizado correctamente.",
 	"components.administration.externalToolsSection.table.header.status":
 		"Estado",
+	"components.administration.externalToolsSection.table.header.restrictedTo":
+		"Restringido a",
 	"components.administration.provisioningOptions.class.description":
 		"Active esta opción si las clases deben sincronizarse en la {instance}.",
 	"components.administration.provisioningOptions.class.label":
@@ -789,6 +809,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Borradores",
 	"components.organisms.TasksDashboardMain.tab.finished": "Terminado",
 	"components.organisms.TasksDashboardMain.tab.open": "Abrir",
+	"components.roomForm.labels.roomName": "Nombre de la sala",
+	"components.roomForm.labels.timePeriod": "Periodo de tiempo",
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
@@ -1648,8 +1670,16 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
-	"pages.rooms.active.title": "Habitaciones actuales",
-	"pages.rooms.active.emptyState": "Actualmente no hay habitaciones aquí.",
+	// new rooms
+	"pages.roomCreate.title": "Crear habitación",
+	"pages.roomEdit.title": "Editar habitación",
+	"pages.roomDetails.title": "Habitación",
+	"pages.roomDetails.ariaLabels.menu": "Menú de la habitación",
+	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar habitación",
+	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar habitación",
+	"pages.rooms.title": "Habitaciones",
+	"pages.rooms.fab.title": "Crear habitación",
+	"pages.rooms.emptyState": "Actualmente no hay habitaciones aquí.",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",

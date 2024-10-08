@@ -5,6 +5,8 @@ import {
 } from "@@/tests/test-utils/setup";
 import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem } from "../types";
+import { useSidebarSelection } from "./SidebarSelection.composable";
+import { ref } from "vue";
 
 const groupItem: SidebarGroupItem = {
 	icon: "mdiOpen",
@@ -33,7 +35,12 @@ jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 
+jest.mock("./SidebarSelection.composable");
+const mockedUseSidebarSelection = jest.mocked(useSidebarSelection);
+
 describe("@ui-layout/SidebarCategoryItem", () => {
+	mockedUseSidebarSelection.mockReturnValue({ isActive: ref(false) });
+
 	const setup = (sidebarItem: SidebarGroupItem) => {
 		const wrapper = mount(SidebarCategoryItem, {
 			global: {

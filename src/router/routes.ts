@@ -1,6 +1,10 @@
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import { Multiguard, validateQueryParameters } from "@/router/guards";
+import {
+	checkRoomsFeature,
+	Multiguard,
+	validateQueryParameters,
+} from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
@@ -15,8 +19,7 @@ import {
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
-// routes configuration sorted in alphabetical order
-export const routes: Readonly<RouteRecordRaw[]> = [
+export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/activation/:activationCode(${REGEX_ACTIVATION_CODE})`,
 		component: () => import("@/pages/ActivationCode.page.vue"),
@@ -242,7 +245,25 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 	{
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
+		beforeEnter: checkRoomsFeature,
 		name: "rooms",
+	},
+	{
+		path: `/rooms/new`,
+		component: async () => (await import("@page-room")).RoomCreatePage,
+		beforeEnter: checkRoomsFeature,
+		name: "rooms-new",
+	},
+	{
+		path: `/rooms/:id`,
+		component: async () => (await import("@page-room")).RoomDetailsPage,
+		name: "room-details",
+	},
+	{
+		path: `/rooms/:id/edit`,
+		component: async () => (await import("@page-room")).RoomEditPage,
+		beforeEnter: checkRoomsFeature,
+		name: "room-edit",
 	},
 	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
 	// So we have to replace the reference there by "course-room-list" path.
@@ -342,5 +363,10 @@ export const routes: Readonly<RouteRecordRaw[]> = [
 		path: `/media-shelf`,
 		component: async () => (await import("@page-media-shelf")).MediaShelfPage,
 		name: "media-shelf",
+	},
+	{
+		path: "/",
+		component: () => import("@/pages/Home.page.vue"),
+		name: "home",
 	},
 ];

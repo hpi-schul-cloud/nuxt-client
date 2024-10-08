@@ -1,57 +1,59 @@
 <template>
-	<div>
-		<v-menu
-			v-model="showDateDialog"
-			transition="scale-transition"
-			:close-on-content-click="false"
-		>
-			<template #activator="{ props }">
-				<v-text-field
-					v-bind="props"
-					v-model="dateString"
-					ref="inputField"
-					data-testid="date-input"
-					:append-inner-icon="mdiCalendar"
-					:label="label"
-					:aria-label="ariaLabel"
-					:placeholder="t('common.placeholder.dateformat')"
-					:error-messages="errorMessages"
-					v-date-input-mask
-					@update:model-value="validate"
-					@keydown.space="showDateDialog = true"
-					@keydown.prevent.enter="showDateDialog = true"
-					@keydown.up.down.stop
-					@keydown.tab="showDateDialog = false"
-				/>
-			</template>
-			<v-locale-provider :locale="locale">
-				<v-date-picker
-					v-model="dateObject"
-					:aria-expanded="showDateDialog"
-					:min="minDate"
-					:max="maxDate"
-					color="primary"
-					hide-header
-					show-adjacent-months
-					elevation="6"
-					@update:model-value="closeAndEmit"
-				/>
-			</v-locale-provider>
-		</v-menu>
-	</div>
+	<v-menu
+		v-model="showDateDialog"
+		transition="scale-transition"
+		:close-on-content-click="false"
+	>
+		<template #activator="{ props }">
+			<v-text-field
+				v-bind="props"
+				v-bind.attr="$attrs"
+				v-model="dateString"
+				ref="inputField"
+				:append-inner-icon="mdiCalendar"
+				:label="label"
+				:aria-label="ariaLabel"
+				:placeholder="t('common.placeholder.dateformat')"
+				:error-messages="errorMessages"
+				v-date-input-mask
+				@update:model-value="validate"
+				@keydown.space="showDateDialog = true"
+				@keydown.prevent.enter="showDateDialog = true"
+				@keydown.up.down.stop
+				@keydown.tab="showDateDialog = false"
+			/>
+		</template>
+		<v-locale-provider :locale="locale">
+			<v-date-picker
+				v-model="dateObject"
+				:aria-expanded="showDateDialog"
+				:min="minDate"
+				:max="maxDate"
+				color="primary"
+				hide-header
+				show-adjacent-months
+				elevation="6"
+				@update:model-value="closeAndEmit"
+			/>
+		</v-locale-provider>
+	</v-menu>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, watchEffect, unref } from "vue";
 import { useDebounceFn, computedAsync } from "@vueuse/core";
 import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
-import { useVuelidate } from "@vuelidate/core";
+import { useVuelidate, ErrorObject } from "@vuelidate/core";
 import { helpers, requiredIf } from "@vuelidate/validators";
 import { dateInputMask as vDateInputMask } from "@util-input-masks";
 import { isValidDateFormat } from "@util-validators";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { mdiCalendar } from "@icons/material";
+
+defineOptions({
+	inheritAttrs: false,
+});
 
 const props = defineProps({
 	date: { type: String }, // ISO 8601 string
@@ -107,11 +109,13 @@ const errorMessages = computedAsync(async () => {
 	return await getErrorMessages(v$.value.dateString);
 }, null);
 
+// TODO - figure out type, ExtractRulesResults is not exported
 const getErrorMessages = useDebounceFn((validationModel: any) => {
-	const messages = validationModel.$errors.map((e: any) => {
+	const messages = validationModel.$errors.map((e: ErrorObject) => {
 		return e.$message;
 	});
-	return messages;
+
+	return unref(messages);
 }, 700);
 
 const validate = () => {

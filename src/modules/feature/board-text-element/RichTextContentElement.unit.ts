@@ -2,14 +2,16 @@ import { ContentElementType, RichTextElementResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
-import { mount } from "@vue/test-utils";
-import RichTextContentElementComponent from "./RichTextContentElement.vue";
-import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
-import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import RichTextContentElementComponent from "./RichTextContentElement.vue";
+import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
+import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
+
 jest.mock("@data-board", () => {
 	return {
 		useBoardFocusHandler: jest.fn(),
@@ -23,7 +25,7 @@ jest.mock("@ui-confirmation-dialog", () => {
 	};
 });
 
-jest.mock("@feature-board", () => {
+jest.mock("@util-board", () => {
 	return {
 		useInlineEditInteractionHandler: jest.fn(),
 	};
@@ -52,8 +54,15 @@ describe("RichTextContentElement", () => {
 		const wrapper = mount(RichTextContentElementComponent, {
 			propsData: props,
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					vueDompurifyHTMLPlugin,
+				],
 				provide: { [NOTIFIER_MODULE_KEY.valueOf()]: notifierModule },
+				stubs: {
+					RichTextContentElementEdit: true,
+				},
 			},
 		});
 

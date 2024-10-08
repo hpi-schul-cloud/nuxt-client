@@ -11,5 +11,6 @@ export const schoolExternalToolFactory = Factory.define<SchoolExternalTool>(
 		parameters: [],
 		status: schoolToolConfigurationStatusFactory.build(),
 		isDeactivated: false,
+		restrictToContexts: undefined,
 	})
 );

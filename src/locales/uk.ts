@@ -25,6 +25,7 @@ export default {
 	"common.actions.shareCopy": "Поділитися копією",
 	"common.actions.update": "Оновити",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
+	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
 	"common.labels.admin": "адміністратор(и)",
 	"common.labels.birthdate": "Дата народження",
 	"common.labels.birthday": "Дата народження",
@@ -97,6 +98,7 @@ export default {
 	"common.medium.chip.deactivated": "Вимкнено",
 	"common.medium.chip.notLicensed": "Не активовано",
 	"common.medium.chip.incomplete": "Конфігурація не завершена",
+	"common.medium.chip.noLongerAvailable": "Більше не доступний",
 	"common.medium.information.admin": "Перевірте налаштування.",
 	"common.medium.information.student": "Будь ласка, зверніться до вчителя.",
 	"common.medium.information.teacher":
@@ -141,6 +143,9 @@ export default {
 		"Конфігурація інструменту {toolName} застаріла або неповна. Перевірте налаштування та зверніться до адміністратора школи.",
 	"common.tool.information.outdatedOnSchool.teacher":
 		"Конфігурація інструмента {toolName} неоновлена або неповна. Будь ласка, зверніться до адміністратора школи.",
+	"common.tool.context.type.courses": "Інструменти курсу",
+	"common.tool.context.type.boardElements": "Дошки",
+	"common.tool.context.type.mediaShelves": "Полиця для медіа",
 	"common.validation.email": "Введіть дійсну адресу електронної пошти",
 	"common.validation.invalid": "Введені вами дані недійсні",
 	"common.validation.number": "Потрібно ввести ціле число.",
@@ -152,6 +157,19 @@ export default {
 		"Введений текст перевищує максимально дозволену довжину",
 	"common.words.and": "і",
 	"common.words.classes": "класи",
+	"common.words.color": "Колір",
+	"common.words.color.blue": "Синій",
+	"common.words.color.blueGrey": "Синьо-сірий",
+	"common.words.color.brown": "Коричневий",
+	"common.words.color.green": "Зелений",
+	"common.words.color.lightBlue": "Світло-блакитний",
+	"common.words.color.magenta": "Пурпурний.",
+	"common.words.color.olive": "Оливкова зелень",
+	"common.words.color.orange": "Помаранчевий",
+	"common.words.color.pink": "Рожевий",
+	"common.words.color.purple": "Фіалка",
+	"common.words.color.red": "Червоний",
+	"common.words.color.turquoise": "Бірюза",
 	"common.words.copiedToClipboard": "Скопійовано в буфер обміну",
 	"common.words.courseGroups": "курсові групи",
 	"common.words.courses": "Мій курс",
@@ -277,6 +295,8 @@ export default {
 		"Інструмент успішно оновлено.",
 	"components.administration.externalToolsSection.table.header.status":
 		"статус",
+	"components.administration.externalToolsSection.table.header.restrictedTo":
+		"Обмежено",
 	"components.administration.provisioningOptions.class.description":
 		"Активуйте цю опцію, якщо класи мають бути синхронізовані в {instance}.",
 	"components.administration.provisioningOptions.class.label":
@@ -783,6 +803,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.drafts": "Чернетки",
 	"components.organisms.TasksDashboardMain.tab.finished": "Завершено",
 	"components.organisms.TasksDashboardMain.tab.open": "Відкрити",
+	"components.roomForm.labels.roomName": "Назва кімнати",
+	"components.roomForm.labels.timePeriod": "Період часу",
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
 	"error.400": "400 – Неприпустимий запит",
@@ -1626,8 +1648,16 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
-	"pages.rooms.active.title": "Актуальні номери",
-	"pages.rooms.active.emptyState": "Зараз тут немає кімнат",
+	// new rooms
+	"pages.roomCreate.title": "Створити кімнату",
+	"pages.roomEdit.title": "Кімната редагування",
+	"pages.roomDetails.title": "Кімната",
+	"pages.roomDetails.ariaLabels.menu": "Меню кімнати",
+	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
+	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
+	"pages.rooms.title": "Кімнати",
+	"pages.rooms.fab.title": "Створити кімнату",
+	"pages.rooms.emptyState": "Зараз тут немає кімнат",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

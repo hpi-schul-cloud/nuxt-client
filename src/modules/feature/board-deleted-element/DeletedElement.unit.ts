@@ -1,5 +1,4 @@
-import { ContentElementType, DeletedElementResponse } from "@/serverApi/v3";
-import { timestampsResponseFactory } from "@@/tests/test-utils";
+import { deletedElementResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -14,16 +13,6 @@ import DeletedElement from "./DeletedElement.vue";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
 
 jest.mock("@data-board");
-
-const DELETED_ELEMENT: DeletedElementResponse = {
-	id: "deleted-element-id",
-	content: {
-		deletedElementType: ContentElementType.ExternalTool,
-		title: "Deleted Tool",
-	},
-	type: ContentElementType.Deleted,
-	timestamps: timestampsResponseFactory.build(),
-};
 
 describe("DeletedElement", () => {
 	let useBoardFocusHandlerMock: DeepMocked<
@@ -50,7 +39,7 @@ describe("DeletedElement", () => {
 
 	const getWrapper = (
 		props: ComponentProps<typeof DeletedElement> = {
-			element: DELETED_ELEMENT,
+			element: deletedElementResponseFactory.build(),
 			isEditMode: false,
 		}
 	) => {
@@ -75,7 +64,7 @@ describe("DeletedElement", () => {
 			useBoardPermissionsMock.isTeacher = false;
 
 			const { wrapper } = getWrapper({
-				element: DELETED_ELEMENT,
+				element: deletedElementResponseFactory.build(),
 				isEditMode: true,
 			});
 
@@ -97,7 +86,7 @@ describe("DeletedElement", () => {
 		describe("when in edit mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: DELETED_ELEMENT,
+					element: deletedElementResponseFactory.build(),
 					isEditMode: true,
 				});
 
@@ -118,7 +107,7 @@ describe("DeletedElement", () => {
 		describe("when not in edit mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: DELETED_ELEMENT,
+					element: deletedElementResponseFactory.build(),
 					isEditMode: false,
 				});
 
@@ -138,24 +127,26 @@ describe("DeletedElement", () => {
 
 		describe("when deleting the element", () => {
 			const setup = () => {
+				const deletedElement = deletedElementResponseFactory.build();
 				const { wrapper } = getWrapper({
-					element: DELETED_ELEMENT,
+					element: deletedElement,
 					isEditMode: true,
 				});
 
 				return {
 					wrapper,
+					deletedElement,
 				};
 			};
 
 			it("should emit an event", async () => {
-				const { wrapper } = setup();
+				const { wrapper, deletedElement } = setup();
 
 				wrapper.findComponent(DeletedElementMenu).vm.$emit("delete:element");
 				await nextTick();
 
 				expect(wrapper.emitted("delete:element")).toEqual([
-					[DELETED_ELEMENT.id],
+					[deletedElement.id],
 				]);
 			});
 		});
@@ -165,7 +156,7 @@ describe("DeletedElement", () => {
 		describe("when the deleted element was an external tool element", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
-					element: DELETED_ELEMENT,
+					element: deletedElementResponseFactory.build(),
 					isEditMode: true,
 				});
 
