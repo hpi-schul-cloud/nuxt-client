@@ -307,7 +307,10 @@ watch(
 		if (!(isBoardVisible.value || isTeacher)) {
 			router.replace({ name: "rooms-id", params: { id: roomId.value } });
 			applicationErrorModule.setError(
-				createApplicationError(HttpStatusCode.Forbidden)
+				createApplicationError(
+					HttpStatusCode.Forbidden,
+					t("components.board.error.403")
+				)
 			);
 		}
 	}

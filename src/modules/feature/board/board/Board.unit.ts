@@ -859,7 +859,11 @@ describe("Board", () => {
 							});
 							expect(
 								mockedCreateApplicationErrorCalls.createApplicationError
-							).toHaveBeenCalledWith(HttpStatusCode.Forbidden);
+							).toHaveBeenCalledWith(
+								HttpStatusCode.Forbidden,
+								"components.board.error.403"
+							);
+
 							expect(setErrorMock).toHaveBeenCalledWith(
 								createApplicationError(HttpStatusCode.Forbidden)
 							);
