@@ -175,7 +175,7 @@ const showBorder = computed(() => {
 
 @media #{map-get($display-breakpoints, 'sm-and-up')} {
 	.breadcrumbs-placeholder {
-		height: 24px;
+		height: 22px;
 	}
 }
 
