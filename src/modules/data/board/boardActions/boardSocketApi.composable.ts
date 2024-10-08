@@ -23,6 +23,7 @@ import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
 import { applicationErrorModule } from "@/store";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { useI18n } from "vue-i18n";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
@@ -38,6 +39,7 @@ export const useBoardSocketApi = () => {
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateColumnTitleSuccess,
 	} = useBoardAriaNotification();
+	const { t } = useI18n();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
@@ -195,7 +197,10 @@ export const useBoardSocketApi = () => {
 		notifySocketError("notDeleted", "boardColumn");
 	const fetchBoardFailure = () => {
 		applicationErrorModule.setError(
-			createApplicationError(HttpStatusCode.NotFound)
+			createApplicationError(
+				HttpStatusCode.NotFound,
+				t("components.board.error.404")
+			)
 		);
 	};
 	const moveCardFailure = () => notifySocketError("notUpdated", "boardCard");

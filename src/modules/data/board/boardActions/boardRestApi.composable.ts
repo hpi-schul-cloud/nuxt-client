@@ -21,6 +21,7 @@ import * as BoardActions from "./boardActions";
 import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { useI18n } from "vue-i18n";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -37,6 +38,8 @@ export const useBoardRestApi = () => {
 		updateBoardTitleCall,
 		updateBoardVisibilityCall,
 	} = useBoardApi();
+
+	const { t } = useI18n();
 
 	const { setEditModeId } = useSharedEditMode();
 
@@ -67,7 +70,10 @@ export const useBoardRestApi = () => {
 			boardStore.fetchBoardSuccess(board);
 		} catch (error) {
 			applicationErrorModule.setError(
-				createApplicationError(HttpStatusCode.NotFound)
+				createApplicationError(
+					HttpStatusCode.NotFound,
+					t("components.board.error.404")
+				)
 			);
 		}
 		boardStore.setLoading(false);

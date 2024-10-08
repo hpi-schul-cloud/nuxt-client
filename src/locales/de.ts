@@ -342,6 +342,7 @@ export default {
 	"components.board.column.defaultTitle": "Neuer Abschnitt",
 	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
+	"components.board.error.404": "Board mit diesem Namen wurde nicht gefunden",
 	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",

@@ -340,6 +340,7 @@ export default {
 	"components.board.column.defaultTitle": "New column",
 	"components.board.column.ghost.column.placeholder": "Add column",
 	"components.board.column.ghost.list.placeholder": "Add section",
+	"components.board.error.404": "Board with this name was not found",
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",

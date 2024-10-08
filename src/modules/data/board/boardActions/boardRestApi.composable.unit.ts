@@ -44,6 +44,17 @@ const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: () => {
+			return {
+				t: (key: string) => key,
+			};
+		},
+	};
+});
+
 describe("boardRestApi", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
@@ -180,7 +191,13 @@ describe("boardRestApi", () => {
 			await fetchBoardRequest({ boardId: boardStore.board!.id });
 
 			expect(setErrorMock).toHaveBeenCalledWith(
-				createApplicationError(HttpStatusCode.Forbidden)
+				createApplicationError(HttpStatusCode.NotFound)
+			);
+			expect(setErrorMock.mock.lastCall[0].statusCode).toStrictEqual(
+				HttpStatusCode.NotFound
+			);
+			expect(setErrorMock.mock.lastCall[0].translationKey).toStrictEqual(
+				"components.board.error.404"
 			);
 		});
 	});

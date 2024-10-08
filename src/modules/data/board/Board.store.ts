@@ -34,6 +34,7 @@ import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
@@ -47,6 +48,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SOCKET_ENABLED;
 
 	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
+
+	const { t } = useI18n();
 
 	const { setEditModeId } = useSharedEditMode();
 	const router = useRouter();
@@ -327,7 +330,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 			return;
 		}
 		applicationErrorModule.setError(
-			createApplicationError(HttpStatusCode.NotFound)
+			createApplicationError(
+				HttpStatusCode.NotFound,
+				t("components.board.error.404")
+			)
 		);
 	};
 

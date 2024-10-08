@@ -281,7 +281,13 @@ describe("useBoardSocketApi", () => {
 				dispatch(BoardActions.fetchBoardFailure({ boardId: "test" }));
 
 				expect(setErrorSpy).toHaveBeenCalledWith(
-					createApplicationError(HttpStatusCode.Forbidden)
+					createApplicationError(HttpStatusCode.NotFound)
+				);
+				expect(setErrorSpy.mock.calls[0][0].statusCode).toStrictEqual(
+					HttpStatusCode.NotFound
+				);
+				expect(setErrorSpy.mock.calls[0][0].translationKey).toStrictEqual(
+					"components.board.error.404"
 				);
 			});
 
