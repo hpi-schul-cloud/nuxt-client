@@ -54,7 +54,7 @@
 			<!-- <div v-if="showBorder" class="border" /> -->
 			<hr
 				v-if="showBorder"
-				class="v-divider v-theme--light"
+				class="v-divider v-theme--light border"
 				aria-orientation="horizontal"
 				role="separator"
 				aria-hidden="true"
@@ -168,9 +168,8 @@ const showBorder = computed(() => {
 }
 
 .border {
-	margin-right: calc(-1 * var(--space-lg));
-	margin-left: calc(-1 * var(--space-lg));
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+	margin-right: -1.5rem;
+	margin-left: -1.5rem;
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-up')} {
