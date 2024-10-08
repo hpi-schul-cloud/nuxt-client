@@ -155,6 +155,7 @@ const showBorder = computed(() => {
 
 .main-content {
 	padding: 0 var(--space-lg);
+	margin-top: 2rem;
 }
 
 .container-short-width {
