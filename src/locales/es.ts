@@ -346,7 +346,7 @@ export default {
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
 	"components.board.error.404":
-		"No se ha encontrado ningún foro con este nombre",
+		"Error 404 – No se ha encontrado ningún foro con este nombre",
 	"components.board.error.403":
 		"Error 403 – Lamentablemente, falta la autorización para ver este contenido.",
 	"components.board.menu.board": "Configuración del tablero",
