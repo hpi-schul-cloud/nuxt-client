@@ -114,7 +114,7 @@ const onSave = async () => {
 };
 
 const onCancel = async () => {
-	// check dirty state
+	if (!v$.value.$anyDirty) emit("cancel");
 
 	const shouldCancel = await askConfirmation({
 		message: t("ui-confirmation-dialog.ask-cancel-form"),
