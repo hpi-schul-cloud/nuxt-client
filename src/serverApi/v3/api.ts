@@ -6171,6 +6171,7 @@ export enum Permission {
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
+    SchoolEditAll = 'SCHOOL_EDIT_ALL',
     SchoolLogoManage = 'SCHOOL_LOGO_MANAGE',
     SchoolNewsEdit = 'SCHOOL_NEWS_EDIT',
     SchoolPermissionChange = 'SCHOOL_PERMISSION_CHANGE',
@@ -6233,58 +6234,40 @@ export enum Permission {
 /**
  * 
  * @export
- * @interface PreferredToolInfo
+ * @interface PreferedToolListResponse
  */
-export interface PreferredToolInfo {
+export interface PreferedToolListResponse {
     /**
      * 
-     * @type {string}
-     * @memberof PreferredToolInfo
+     * @type {Array<PreferedToolResponse>}
+     * @memberof PreferedToolListResponse
      */
-    icon: string;
+    data: Array<PreferedToolResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface PreferedToolResponse
+ */
+export interface PreferedToolResponse {
     /**
      * 
      * @type {string}
-     * @memberof PreferredToolInfo
+     * @memberof PreferedToolResponse
+     */
+    schoolExternalToolId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PreferedToolResponse
      */
     name: string;
     /**
      * 
      * @type {string}
-     * @memberof PreferredToolInfo
+     * @memberof PreferedToolResponse
      */
-    schoolExternalToolId?: string;
-}
-/**
- * 
- * @export
- * @interface PreferredToolInfoList
- */
-export interface PreferredToolInfoList {
-    /**
-     * The items for the current page.
-     * @type {Array<PreferredToolInfo>}
-     * @memberof PreferredToolInfoList
-     */
-    data: Array<PreferredToolInfo>;
-    /**
-     * The total amount of items.
-     * @type {number}
-     * @memberof PreferredToolInfoList
-     */
-    total: number;
-    /**
-     * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof PreferredToolInfoList
-     */
-    skip: number;
-    /**
-     * The page size of the response.
-     * @type {number}
-     * @memberof PreferredToolInfoList
-     */
-    limit: number;
+    icon: string;
 }
 /**
  * 
@@ -11523,39 +11506,6 @@ export const BoardCardApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerGetPreferredTools: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/cards/{cardId}/preferredTools`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Move a single card.
          * @param {string} cardId The id of the card.
          * @param {MoveCardBodyParams} moveCardBodyParams 
@@ -11732,15 +11682,6 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async cardControllerGetPreferredTools(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferredToolInfoList>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerGetPreferredTools(options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Move a single card.
          * @param {string} cardId The id of the card.
          * @param {MoveCardBodyParams} moveCardBodyParams 
@@ -11818,14 +11759,6 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
         },
         /**
          * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        cardControllerGetPreferredTools(options?: any): AxiosPromise<PreferredToolInfoList> {
-            return localVarFp.cardControllerGetPreferredTools(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Move a single card.
          * @param {string} cardId The id of the card.
          * @param {MoveCardBodyParams} moveCardBodyParams 
@@ -11896,14 +11829,6 @@ export interface BoardCardApiInterface {
      * @memberof BoardCardApiInterface
      */
     cardControllerGetCards(ids: Array<string>, options?: any): AxiosPromise<CardListResponse>;
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApiInterface
-     */
-    cardControllerGetPreferredTools(options?: any): AxiosPromise<PreferredToolInfoList>;
 
     /**
      * 
@@ -11982,16 +11907,6 @@ export class BoardCardApi extends BaseAPI implements BoardCardApiInterface {
      */
     public cardControllerGetCards(ids: Array<string>, options?: any) {
         return BoardCardApiFp(this.configuration).cardControllerGetCards(ids, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardCardApi
-     */
-    public cardControllerGetPreferredTools(options?: any) {
-        return BoardCardApiFp(this.configuration).cardControllerGetPreferredTools(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -22598,6 +22513,48 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Lists all preferred tools that can be added for a given context
+         * @param {any} contextType 
+         * @param {string} contextId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerGetPreferedToolsForContext: async (contextType: any, contextId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contextType' is not null or undefined
+            assertParamExists('toolConfigurationControllerGetPreferedToolsForContext', 'contextType', contextType)
+            // verify required parameter 'contextId' is not null or undefined
+            assertParamExists('toolConfigurationControllerGetPreferedToolsForContext', 'contextId', contextId)
+            const localVarPath = `/tools/{contextType}/{contextId}/preferred-tools`
+                .replace(`{${"contextType"}}`, encodeURIComponent(String(contextType)))
+                .replace(`{${"contextId"}}`, encodeURIComponent(String(contextId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Lists all context types available in the SVS
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -23668,6 +23625,18 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Lists all preferred tools that can be added for a given context
+         * @param {any} contextType 
+         * @param {string} contextId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolConfigurationControllerGetPreferedToolsForContext(contextType: any, contextId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferedToolListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetPreferedToolsForContext(contextType, contextId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Lists all context types available in the SVS
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -24004,6 +23973,17 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Lists all preferred tools that can be added for a given context
+         * @param {any} contextType 
+         * @param {string} contextId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerGetPreferedToolsForContext(contextType: any, contextId: string, options?: any): AxiosPromise<PreferedToolListResponse> {
+            return localVarFp.toolConfigurationControllerGetPreferedToolsForContext(contextType, contextId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Lists all context types available in the SVS
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -24311,6 +24291,17 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolConfigurationTemplateResponse>;
+
+    /**
+     * 
+     * @summary Lists all preferred tools that can be added for a given context
+     * @param {any} contextType 
+     * @param {string} contextId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolConfigurationControllerGetPreferedToolsForContext(contextType: any, contextId: string, options?: any): AxiosPromise<PreferedToolListResponse>;
 
     /**
      * 
@@ -24628,6 +24619,19 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: any) {
         return ToolApiFp(this.configuration).toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Lists all preferred tools that can be added for a given context
+     * @param {any} contextType 
+     * @param {string} contextId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolConfigurationControllerGetPreferedToolsForContext(contextType: any, contextId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolConfigurationControllerGetPreferedToolsForContext(contextType, contextId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
