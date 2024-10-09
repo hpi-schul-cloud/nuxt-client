@@ -6251,23 +6251,23 @@ export interface PreferedToolListResponse {
  */
 export interface PreferedToolResponse {
     /**
-     * 
+     * Id of the school external tool
      * @type {string}
      * @memberof PreferedToolResponse
      */
     schoolExternalToolId: string;
     /**
-     * 
+     * Name of the external tool
      * @type {string}
      * @memberof PreferedToolResponse
      */
     name: string;
     /**
-     * 
+     * Name of the icon to be rendered when displaying it as a preferred tool
      * @type {string}
      * @memberof PreferedToolResponse
      */
-    icon: string;
+    iconName?: string;
 }
 /**
  * 
