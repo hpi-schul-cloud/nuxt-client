@@ -2,7 +2,7 @@
 	<vCustomDialog
 		data-testid="delete-dialog-item"
 		:has-buttons="true"
-		confirm-btn-title-key="common.actions.delete"
+		:confirm-btn-title-key="confirmBtnLangKey"
 		@dialog-confirmed="onConfirmation"
 		:is-open="isDialogOpen"
 		@dialog-closed="onCloseDialog"
@@ -36,11 +36,15 @@ export default defineComponent({
 			dialogOptions.value ? dialogOptions.value.message : ""
 		);
 
+		const confirmBtnLangKey = computed(() =>
+			dialogOptions.value ? dialogOptions.value.confirmActionLangKey : undefined
+		);
+
 		return {
 			message,
-			dialogOptions,
 			isDialogOpen,
-			onConfirmation: onConfirmation,
+			confirmBtnLangKey,
+			onConfirmation,
 			onCloseDialog,
 		};
 	},
