@@ -4,7 +4,7 @@
 			xmlns="http://www.w3.org/2000/svg"
 			:width="svgWidth"
 			height="320"
-			viewBox="10 60 650 620"
+			viewBox="30 50 640 630"
 			:fill="fill"
 		>
 			<g fill-rule="evenodd">
