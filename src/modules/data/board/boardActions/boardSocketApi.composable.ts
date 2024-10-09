@@ -5,6 +5,7 @@ import { useBoardStore } from "../Board.store";
 import {
 	CreateCardRequestPayload,
 	CreateColumnRequestPayload,
+	DeleteBoardRequestPayload,
 	DeleteColumnRequestPayload,
 	DisconnectSocketRequestPayload,
 	FetchBoardRequestPayload,
@@ -19,6 +20,10 @@ import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
+import { applicationErrorModule } from "@/store";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { useI18n } from "vue-i18n";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
@@ -34,6 +39,7 @@ export const useBoardSocketApi = () => {
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateColumnTitleSuccess,
 	} = useBoardAriaNotification();
+	const { t } = useI18n();
 
 	const dispatch = async (
 		action: PermittedStoreActions<typeof BoardActions & typeof CardActions>
@@ -43,6 +49,7 @@ export const useBoardSocketApi = () => {
 			on(BoardActions.createColumnSuccess, boardStore.createColumnSuccess),
 			on(CardActions.deleteCardSuccess, boardStore.deleteCardSuccess),
 			on(BoardActions.deleteColumnSuccess, boardStore.deleteColumnSuccess),
+			on(BoardActions.deleteBoardSuccess, boardStore.deleteBoardSuccess),
 			on(BoardActions.moveCardSuccess, boardStore.moveCardSuccess),
 			on(BoardActions.moveColumnSuccess, boardStore.moveColumnSuccess),
 			on(BoardActions.fetchBoardSuccess, boardStore.fetchBoardSuccess),
@@ -129,6 +136,10 @@ export const useBoardSocketApi = () => {
 		emitOnSocket("create-column-request", payload);
 	};
 
+	const deleteBoardRequest = (payload: DeleteBoardRequestPayload) => {
+		emitOnSocket("delete-board-request", payload);
+	};
+
 	const deleteColumnRequest = (payload: DeleteColumnRequestPayload) => {
 		emitOnSocket("delete-column-request", payload);
 	};
@@ -184,7 +195,14 @@ export const useBoardSocketApi = () => {
 	const deleteCardFailure = () => notifySocketError("notDeleted", "boardCard");
 	const deleteColumnFailure = () =>
 		notifySocketError("notDeleted", "boardColumn");
-	const fetchBoardFailure = () => notifySocketError("notLoaded", "board");
+	const fetchBoardFailure = () => {
+		applicationErrorModule.setError(
+			createApplicationError(
+				HttpStatusCode.NotFound,
+				t("components.board.error.404")
+			)
+		);
+	};
 	const moveCardFailure = () => notifySocketError("notUpdated", "boardCard");
 	const moveColumnFailure = () =>
 		notifySocketError("notUpdated", "boardColumn");
@@ -200,6 +218,7 @@ export const useBoardSocketApi = () => {
 		createCardRequest,
 		createColumnRequest,
 		disconnectSocketRequest,
+		deleteBoardRequest,
 		deleteColumnRequest,
 		fetchBoardRequest,
 		moveCardRequest,

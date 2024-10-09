@@ -88,10 +88,10 @@ export type UpdateColumnTitleSuccessPayload = {
 export type UpdateColumnTitleFailurePayload = UpdateColumnTitleRequestPayload;
 
 export type DeleteBoardRequestPayload = {
-	id: string;
+	boardId: string;
 };
 export type DeleteBoardSuccessPayload = {
-	id: string;
+	boardId: string;
 	isOwnAction: boolean;
 };
 export type DeleteBoardFailurePayload = DeleteBoardRequestPayload;

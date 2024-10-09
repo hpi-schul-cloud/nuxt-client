@@ -1,6 +1,7 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { envConfigModule } from "@/store";
+import { envConfigModule, applicationErrorModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import ApplicationErrorModule from "@/store/application-error";
 import {
 	boardResponseFactory,
 	cardResponseFactory,
@@ -36,6 +37,9 @@ import {
 import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("../socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
@@ -57,6 +61,9 @@ const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
+
 describe("useBoardSocketApi", () => {
 	let mockedSocketConnectionHandler: DeepMocked<
 		ReturnType<typeof useSocketConnection>
@@ -71,12 +78,18 @@ describe("useBoardSocketApi", () => {
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
-		setupStores({ envConfigModule: EnvConfigModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			applicationErrorModule: ApplicationErrorModule,
+		});
 
 		const envs = envsFactory.build({
 			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
 		});
 		envConfigModule.setEnvs(envs);
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 
 		mockedSocketConnectionHandler =
 			createMock<ReturnType<typeof useSocketConnection>>();
@@ -262,6 +275,22 @@ describe("useBoardSocketApi", () => {
 		});
 
 		describe("failure actions", () => {
+			it("should call applicationErrorModule.setError for fetchBoardFailure action", () => {
+				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
+				const { dispatch } = useBoardSocketApi();
+				dispatch(BoardActions.fetchBoardFailure({ boardId: "test" }));
+
+				expect(setErrorSpy).toHaveBeenCalledWith(
+					createApplicationError(HttpStatusCode.NotFound)
+				);
+				expect(setErrorSpy.mock.calls[0][0].statusCode).toStrictEqual(
+					HttpStatusCode.NotFound
+				);
+				expect(setErrorSpy.mock.calls[0][0].translationKey).toStrictEqual(
+					"components.board.error.404"
+				);
+			});
+
 			it("should call notifySocketError for createCardFailure action", () => {
 				const { dispatch } = useBoardSocketApi();
 
@@ -435,6 +464,19 @@ describe("useBoardSocketApi", () => {
 			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"fetch-board-request",
 				{ boardId: "boardId" }
+			);
+		});
+	});
+
+	describe("deleteBoardRequest", () => {
+		it("should call action with correct parameters", () => {
+			const { deleteBoardRequest } = useBoardSocketApi();
+
+			deleteBoardRequest({ boardId: "test" });
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
+				"delete-board-request",
+				{ boardId: "test" }
 			);
 		});
 	});
