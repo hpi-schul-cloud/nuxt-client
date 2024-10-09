@@ -1,6 +1,6 @@
 import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
-import { ContentElementType, PreferredToolInfo } from "@/serverApi/v3";
+import { ContentElementType, PreferedToolResponse } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiFormatText,
@@ -19,7 +19,7 @@ type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 
 export const useAddElementDialog = (
 	createElementRequestFn: CreateElementRequestFn,
-	cardId: string //,
+	cardId: string
 ) => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { showCustomNotifier } = useBoardNotifier();
@@ -35,12 +35,12 @@ export const useAddElementDialog = (
 	// and made available here
 	const preferredTools = [
 		{
-			icon: "$mdiMagnify",
+			icon: "mdiMagnify",
 			name: "LTI Test Tool",
 			schoolExternalToolId: "647de374cf6a427b9d39e5ba",
 		},
 		{
-			icon: "$mdiTimerSandComplete",
+			icon: "mdiTimerSandComplete",
 			name: "TestTool",
 			schoolExternalToolId: "644a46e5d0a8301e6cf25d86",
 		},
@@ -55,7 +55,7 @@ export const useAddElementDialog = (
 
 	const onPreferredElementClick = async (
 		elementType: ContentElementType,
-		tool: PreferredToolInfo
+		tool: PreferedToolResponse
 	) => {
 		closeDialog();
 		await createPreferredElement({ cardId, type: elementType }, tool);
@@ -148,10 +148,14 @@ export const useAddElementDialog = (
 	}
 
 	if (preferredTools) {
-		preferredTools.forEach((tool: PreferredToolInfo) => {
+		preferredTools.forEach((tool: PreferedToolResponse) => {
+			if (!tool.iconName) {
+				tool.iconName = mdiPuzzleOutline;
+			}
+
 			options.push({
-				icon: tool.icon,
-				label: tool.name,
+				icon: tool.iconName,
+				label: "$" + tool.name,
 				action: () =>
 					onPreferredElementClick(ContentElementType.ExternalTool, tool),
 				testId: `create-element-preferred-element-${tool.name.replaceAll(" ", "-").toLowerCase()}`,

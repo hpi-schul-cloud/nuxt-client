@@ -7,7 +7,7 @@ import {
 import {
 	ContentElementType,
 	ExternalToolElementResponse,
-	PreferredToolInfo,
+	PreferedToolResponse,
 	ToolContextType,
 } from "@/serverApi/v3";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -45,7 +45,6 @@ export const useCardRestApi = () => {
 
 	const {
 		createElementCall,
-		fetchPreferredTools,
 		deleteElementCall,
 		deleteCardCall,
 		updateElementCall,
@@ -53,6 +52,8 @@ export const useCardRestApi = () => {
 		updateCardTitle,
 		updateCardHeightCall,
 	} = useBoardApi();
+
+	const { fetchPreferredTools } = useContextExternalToolApi();
 
 	const { createContextExternalToolCall, fetchAvailableToolsForContextCall } =
 		useContextExternalToolApi();
@@ -89,7 +90,7 @@ export const useCardRestApi = () => {
 
 	const createPreferredElement = async (
 		payload: CreateElementRequestPayload,
-		tool: PreferredToolInfo
+		tool: PreferedToolResponse
 	): Promise<AnyContentElement | undefined> => {
 		const card = cardStore.getCard(payload.cardId);
 		if (card === undefined) return;
@@ -157,9 +158,12 @@ export const useCardRestApi = () => {
 		}
 	};
 
-	const getPreferredTools = async () => {
+	const getPreferredTools = async (
+		contextType: ToolContextType,
+		contextId: string
+	) => {
 		try {
-			const preferredTools = await fetchPreferredTools();
+			const preferredTools = await fetchPreferredTools(contextType, contextId);
 
 			return preferredTools.data.data;
 		} catch (error) {

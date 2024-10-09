@@ -1,7 +1,6 @@
 import { CardResponse, ContentElementType } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
-import { AnyContentElement } from "@/types/board/ContentElement";
 import { defineStore } from "pinia";
 import { nextTick, ref } from "vue";
 import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload";
@@ -91,9 +90,7 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const createElementRequest = socketOrRest.createElementRequest;
 
-	const createElementSuccess = async (
-		payload: CreateElementSuccessPayload
-	): Promise<AnyContentElement | undefined> => {
+	const createElementSuccess = async (payload: CreateElementSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
 
