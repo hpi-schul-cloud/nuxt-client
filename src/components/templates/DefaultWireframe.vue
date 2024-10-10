@@ -51,7 +51,6 @@
 					</speed-dial-menu>
 				</slot>
 			</div>
-			<!-- <div v-if="showBorder" class="border" /> -->
 			<hr
 				v-if="showBorder"
 				class="v-divider v-theme--light"
