@@ -1,24 +1,24 @@
-import { shallowMount } from "@vue/test-utils";
+import { DrawingElementResponse } from "@/serverApi/v3";
+import { ConfigResponse } from "@/serverApi/v3/api";
+import EnvConfigModule from "@/store/env-config";
+import NotifierModule from "@/store/notifier";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
+import { drawingElementResponseFactory } from "@@/tests/test-utils";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
-import { DrawingElementResponse } from "@/serverApi/v3";
-import DrawingContentElement from "./DrawingContentElement.vue";
-import NotifierModule from "@/store/notifier";
-import EnvConfigModule from "@/store/env-config";
-import { ConfigResponse } from "@/serverApi/v3/api";
-import InnerContent from "./InnerContent.vue";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 } from "@ui-board";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
-import { drawingElementResponseFactory } from "@@/tests/test-utils";
+import { shallowMount } from "@vue/test-utils";
+import DrawingContentElement from "./DrawingContentElement.vue";
+import InnerContent from "./InnerContent.vue";
 
 // Mocks
 jest.mock("@data-board", () => ({
@@ -81,7 +81,7 @@ describe("DrawingContentElement", () => {
 			});
 
 			expect(elementCard.attributes("href")).toBe(
-				`/tldraw?roomName=${DRAWING_ELEMENT.id}`
+				`/tldraw?parentId=${DRAWING_ELEMENT.id}`
 			);
 			expect(elementCard.attributes("target")).toBe("_blank");
 		});
