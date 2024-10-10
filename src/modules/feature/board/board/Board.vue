@@ -99,6 +99,7 @@ import { useLoadingState } from "@/composables/loadingState";
 import {
 	BoardLayout,
 	ShareTokenBodyParamsParentTypeEnum,
+	ToolContextType,
 } from "@/serverApi/v3";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import { ColumnMove } from "@/types/board/DragAndDrop";
@@ -273,6 +274,10 @@ onMounted(() => {
 	setAlert();
 	useBoardInactivity();
 	boardStore.fetchBoardRequest({ boardId: props.boardId });
+	cardStore.getPreferredTools(
+		ToolContextType.BoardElement,
+		"nonExistentContextId"
+	);
 });
 
 onUnmounted(() => {

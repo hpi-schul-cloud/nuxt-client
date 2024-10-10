@@ -4,8 +4,23 @@ import {
 	ErrorType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
+import {
+	ContentElementType,
+	ExternalToolElementResponse,
+	PreferredToolResponse,
+	ToolContextType,
+} from "@/serverApi/v3";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
+import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { useBoardStore } from "@data-board";
+import {
+	ContextExternalTool,
+	ContextExternalToolConfigurationTemplate,
+	ContextExternalToolSave,
+	useContextExternalToolApi,
+} from "@data-external-tool";
 import { useSharedEditMode } from "@util-board";
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardStore } from "../Card.store";
@@ -38,9 +53,20 @@ export const useCardRestApi = () => {
 		updateCardHeightCall,
 	} = useBoardApi();
 
+	const { fetchPreferredTools } = useContextExternalToolApi();
+
+	const { createContextExternalToolCall, fetchAvailableToolsForContextCall } =
+		useContextExternalToolApi();
+
 	const { setEditModeId } = useSharedEditMode();
 
-	const createElementRequest = async (payload: CreateElementRequestPayload) => {
+	const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
+		SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
+	);
+
+	const createElementRequest = async (
+		payload: CreateElementRequestPayload
+	): Promise<AnyContentElement | undefined> => {
 		const card = cardStore.getCard(payload.cardId);
 		if (card === undefined) return;
 
@@ -50,7 +76,7 @@ export const useCardRestApi = () => {
 				toPosition: payload.toPosition,
 			};
 			const newElement = await createElementCall(payload.cardId, params);
-			cardStore.createElementSuccess({
+			return cardStore.createElementSuccess({
 				...payload,
 				newElement: newElement.data,
 				isOwnAction: true,
@@ -58,6 +84,91 @@ export const useCardRestApi = () => {
 		} catch (error) {
 			handleError(error, {
 				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
+			});
+		}
+	};
+
+	const createPreferredElement = async (
+		payload: CreateElementRequestPayload,
+		tool: PreferredToolResponse
+	): Promise<AnyContentElement | undefined> => {
+		const card = cardStore.getCard(payload.cardId);
+		if (card === undefined) return;
+
+		try {
+			const params = {
+				type: payload.type,
+				toPosition: payload.toPosition,
+			};
+			const newElement = await createElementCall(payload.cardId, params);
+
+			if (tool.schoolExternalToolId) {
+				const availableTools: ContextExternalToolConfigurationTemplate[] =
+					await fetchAvailableToolsForContextCall(
+						newElement.data.id,
+						ToolContextType.BoardElement
+					);
+
+				const preferredTool:
+					| ContextExternalToolConfigurationTemplate
+					| undefined = availableTools.find(
+					(availableTool) =>
+						availableTool.schoolExternalToolId === tool.schoolExternalToolId
+				);
+
+				if (!preferredTool?.parameters.length) {
+					const contextExternalToolSave: ContextExternalToolSave = {
+						schoolToolId: tool.schoolExternalToolId,
+						contextId: newElement.data.id,
+						contextType: ToolContextType.BoardElement,
+						parameters: [],
+					};
+
+					const contextExternalTool: ContextExternalTool =
+						await createContextExternalToolCall(contextExternalToolSave);
+
+					const isExternalToolElement = (
+						element: AnyContentElement
+					): element is ExternalToolElementResponse => {
+						return element.type === ContentElementType.ExternalTool;
+					};
+
+					if (isExternalToolElement(newElement.data)) {
+						newElement.data.content.contextExternalToolId =
+							contextExternalTool.id;
+					}
+
+					await updateElementCall(newElement.data);
+				} else {
+					schoolExternalToolsModule.setContextExternalToolConfigurationTemplate(
+						preferredTool
+					);
+				}
+			}
+
+			return cardStore.createElementSuccess({
+				...payload,
+				newElement: newElement.data,
+				isOwnAction: true,
+			});
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDeleted", "boardCard"),
+			});
+		}
+	};
+
+	const getPreferredTools = async (
+		contextType: ToolContextType,
+		contextId: string
+	) => {
+		try {
+			const preferredTools = await fetchPreferredTools(contextType, contextId);
+
+			return preferredTools.data.data;
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notCreated", "boardElement"),
 			});
 		}
 	};
@@ -189,6 +300,8 @@ export const useCardRestApi = () => {
 
 	return {
 		createElementRequest,
+		createPreferredElement,
+		getPreferredTools,
 		deleteElementRequest,
 		moveElementRequest,
 		updateElementRequest,

@@ -1,4 +1,9 @@
-import { CardResponse, ContentElementType } from "@/serverApi/v3";
+import {
+	CardResponse,
+	ContentElementType,
+	PreferredToolResponse,
+	ToolContextType,
+} from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
@@ -109,6 +114,7 @@ export const useCardStore = defineStore("cardStore", () => {
 			lastCreatedElementId.value = payload.newElement.id;
 			setFocus(payload.newElement.id);
 		}
+
 		return payload.newElement;
 	};
 
@@ -220,6 +226,13 @@ export const useCardStore = defineStore("cardStore", () => {
 		return previousElement.id;
 	};
 
+	const getPreferredTools = (
+		contextType: ToolContextType,
+		contextId: string
+	): Promise<PreferredToolResponse[] | undefined> => {
+		return restApi.getPreferredTools(contextType, contextId);
+	};
+
 	return {
 		createCardSuccess,
 		createElementRequest,
@@ -242,5 +255,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		updateCardHeightSuccess,
 		updateCardTitleRequest,
 		updateCardTitleSuccess,
+		getPreferredTools,
 	};
 });

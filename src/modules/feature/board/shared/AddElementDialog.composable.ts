@@ -1,5 +1,6 @@
 import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
-import { ContentElementType } from "@/serverApi/v3";
+import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
+import { ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiFormatText,
@@ -20,6 +21,10 @@ export const useAddElementDialog = (
 	createElementRequestFn: CreateElementRequestFn,
 	cardId: string
 ) => {
+	//const props = defineProps({
+	//	preferredTools: { type: Object, default: undefined },
+	//});
+
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { showCustomNotifier } = useBoardNotifier();
 	const { t } = useI18n();
@@ -27,10 +32,44 @@ export const useAddElementDialog = (
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
+	const { createPreferredElement } = useCardRestApi();
+
+	//let preferredTools;
+	//if (!props.preferredTools) {
+	const preferredTools = [
+		{
+			iconName: "mdiMagnify",
+			name: "LTI Test Tool",
+			schoolExternalToolId: "647de374cf6a427b9d39e5ba",
+		},
+		{
+			iconName: "mdiTimerSandComplete",
+			name: "TestTool",
+			schoolExternalToolId: "644a46e5d0a8301e6cf25d86",
+		},
+		{
+			name: "TestTool without iconName and way too long name",
+			schoolExternalToolId: "644a46e5d0a8301e6cf25d86",
+		},
+	];
+	//} else {
+	//	preferredTools = props.preferredTools;
+	//}
+
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
 
 		await createElementRequestFn({ type: elementType, cardId });
+		showNotificationByElementType(elementType);
+	};
+
+	const onPreferredElementClick = async (
+		elementType: ContentElementType,
+		tool: PreferredToolResponse
+	) => {
+		closeDialog();
+		await createPreferredElement({ cardId, type: elementType }, tool);
+
 		showNotificationByElementType(elementType);
 	};
 
@@ -115,6 +154,25 @@ export const useAddElementDialog = (
 				"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle",
 			action: () => onElementClick(ContentElementType.CollaborativeTextEditor),
 			testId: "create-element-collaborative-text-editor",
+		});
+	}
+
+	if (
+		envConfigModule.getEnv.FEATURE_PREFERRED_CTL_TOOLS_ENABLED &&
+		preferredTools
+	) {
+		preferredTools.forEach((tool: PreferredToolResponse) => {
+			if (!tool.iconName) {
+				tool.iconName = "mdiPuzzleOutline";
+			}
+
+			options.push({
+				icon: "$" + tool.iconName,
+				label: tool.name,
+				action: () =>
+					onPreferredElementClick(ContentElementType.ExternalTool, tool),
+				testId: `create-element-preferred-element-${tool.name.replaceAll(" ", "-").toLowerCase()}`,
+			});
 		});
 	}
 

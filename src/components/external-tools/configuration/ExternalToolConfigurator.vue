@@ -100,7 +100,6 @@
 
 <script setup lang="ts">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
-import { mdiAlertCircle, mdiContentPaste } from "@icons/material";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import {
 	SchoolExternalTool,
@@ -114,6 +113,7 @@ import {
 	ContextExternalTool,
 	ExternalToolConfigurationTemplate,
 } from "@data-external-tool";
+import { mdiAlertCircle, mdiContentPaste } from "@icons/material";
 import {
 	computed,
 	ComputedRef,
@@ -144,6 +144,9 @@ const props = defineProps({
 	},
 	configuration: {
 		type: Object as PropType<ConfigurationTypes>,
+	},
+	isPreferredTool: {
+		type: Boolean,
 	},
 	error: {
 		type: Object as PropType<BusinessError>,
@@ -364,4 +367,10 @@ const filterToolNameOrUrl = (
 
 	return isMatchItemName || isMatchItemUrl;
 };
+
+watch(configurationTemplates, () => {
+	if (props.isPreferredTool) {
+		selectedTemplate.value = props.templates[0];
+	}
+});
 </script>

@@ -228,7 +228,10 @@ const loadCardData = async () => {
 
 onMounted(() => {
 	loadCardData();
-	if (lastCreatedElementId.value === props.element.id) {
+	if (
+		lastCreatedElementId.value === props.element.id &&
+		!props.element.content.contextExternalToolId
+	) {
 		isConfigurationDialogOpen.value = true;
 		resetLastCreatedElementId();
 	}
