@@ -40,7 +40,4 @@ defineProps({
 	display: inline-flex;
 	font-size: 14px;
 }
-.v-breadcrumbs {
-	line-height: 20px;
-}
 </style>
