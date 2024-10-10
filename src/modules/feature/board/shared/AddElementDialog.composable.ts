@@ -1,6 +1,6 @@
 import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
-import { ContentElementType, PreferedToolResponse } from "@/serverApi/v3";
+import { ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	mdiFormatText,
@@ -21,6 +21,10 @@ export const useAddElementDialog = (
 	createElementRequestFn: CreateElementRequestFn,
 	cardId: string
 ) => {
+	//const props = defineProps({
+	//	preferredTools: { type: Object, default: undefined },
+	//});
+
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { showCustomNotifier } = useBoardNotifier();
 	const { t } = useI18n();
@@ -30,21 +34,27 @@ export const useAddElementDialog = (
 
 	const { createPreferredElement } = useCardRestApi();
 
-	// preferred tools should be called from the server via
-	// const { getPreferredTools } = useCardRestApi();
-	// and made available here
+	//let preferredTools;
+	//if (!props.preferredTools) {
 	const preferredTools = [
 		{
-			icon: "mdiMagnify",
+			iconName: "mdiMagnify",
 			name: "LTI Test Tool",
 			schoolExternalToolId: "647de374cf6a427b9d39e5ba",
 		},
 		{
-			icon: "mdiTimerSandComplete",
+			iconName: "mdiTimerSandComplete",
 			name: "TestTool",
 			schoolExternalToolId: "644a46e5d0a8301e6cf25d86",
 		},
+		{
+			name: "TestTool without iconName and way too long name",
+			schoolExternalToolId: "644a46e5d0a8301e6cf25d86",
+		},
 	];
+	//} else {
+	//	preferredTools = props.preferredTools;
+	//}
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
@@ -55,7 +65,7 @@ export const useAddElementDialog = (
 
 	const onPreferredElementClick = async (
 		elementType: ContentElementType,
-		tool: PreferedToolResponse
+		tool: PreferredToolResponse
 	) => {
 		closeDialog();
 		await createPreferredElement({ cardId, type: elementType }, tool);
@@ -147,15 +157,18 @@ export const useAddElementDialog = (
 		});
 	}
 
-	if (preferredTools) {
-		preferredTools.forEach((tool: PreferedToolResponse) => {
+	if (
+		envConfigModule.getEnv.FEATURE_PREFERRED_CTL_TOOLS_ENABLED &&
+		preferredTools
+	) {
+		preferredTools.forEach((tool: PreferredToolResponse) => {
 			if (!tool.iconName) {
-				tool.iconName = mdiPuzzleOutline;
+				tool.iconName = "mdiPuzzleOutline";
 			}
 
 			options.push({
-				icon: tool.iconName,
-				label: "$" + tool.name,
+				icon: "$" + tool.iconName,
+				label: tool.name,
 				action: () =>
 					onPreferredElementClick(ContentElementType.ExternalTool, tool),
 				testId: `create-element-preferred-element-${tool.name.replaceAll(" ", "-").toLowerCase()}`,

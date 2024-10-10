@@ -7,7 +7,7 @@ import {
 import {
 	ContentElementType,
 	ExternalToolElementResponse,
-	PreferedToolResponse,
+	PreferredToolResponse,
 	ToolContextType,
 } from "@/serverApi/v3";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
@@ -90,7 +90,7 @@ export const useCardRestApi = () => {
 
 	const createPreferredElement = async (
 		payload: CreateElementRequestPayload,
-		tool: PreferedToolResponse
+		tool: PreferredToolResponse
 	): Promise<AnyContentElement | undefined> => {
 		const card = cardStore.getCard(payload.cardId);
 		if (card === undefined) return;

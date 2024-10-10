@@ -119,7 +119,7 @@ export const useContextExternalToolApi = () => {
 		contextType: ToolContextType,
 		contextId: string
 	) => {
-		return await toolApi.toolConfigurationControllerGetPreferedToolsForContext(
+		return await toolApi.toolConfigurationControllerGetPreferredToolsForContext(
 			contextType,
 			contextId
 		);

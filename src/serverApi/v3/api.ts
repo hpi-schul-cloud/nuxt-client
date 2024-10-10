@@ -819,6 +819,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_PREFERRED_CTL_TOOLS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_SHOW_MIGRATION_WIZARD: boolean;
     /**
      * 
@@ -6234,38 +6240,38 @@ export enum Permission {
 /**
  * 
  * @export
- * @interface PreferedToolListResponse
+ * @interface PreferredToolListResponse
  */
-export interface PreferedToolListResponse {
+export interface PreferredToolListResponse {
     /**
      * 
-     * @type {Array<PreferedToolResponse>}
-     * @memberof PreferedToolListResponse
+     * @type {Array<PreferredToolResponse>}
+     * @memberof PreferredToolListResponse
      */
-    data: Array<PreferedToolResponse>;
+    data: Array<PreferredToolResponse>;
 }
 /**
  * 
  * @export
- * @interface PreferedToolResponse
+ * @interface PreferredToolResponse
  */
-export interface PreferedToolResponse {
+export interface PreferredToolResponse {
     /**
      * Id of the school external tool
      * @type {string}
-     * @memberof PreferedToolResponse
+     * @memberof PreferredToolResponse
      */
     schoolExternalToolId: string;
     /**
      * Name of the external tool
      * @type {string}
-     * @memberof PreferedToolResponse
+     * @memberof PreferredToolResponse
      */
     name: string;
     /**
      * Name of the icon to be rendered when displaying it as a preferred tool
      * @type {string}
-     * @memberof PreferedToolResponse
+     * @memberof PreferredToolResponse
      */
     iconName?: string;
 }
@@ -22519,11 +22525,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetPreferedToolsForContext: async (contextType: any, contextId: string, options: any = {}): Promise<RequestArgs> => {
+        toolConfigurationControllerGetPreferredToolsForContext: async (contextType: any, contextId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextType' is not null or undefined
-            assertParamExists('toolConfigurationControllerGetPreferedToolsForContext', 'contextType', contextType)
+            assertParamExists('toolConfigurationControllerGetPreferredToolsForContext', 'contextType', contextType)
             // verify required parameter 'contextId' is not null or undefined
-            assertParamExists('toolConfigurationControllerGetPreferedToolsForContext', 'contextId', contextId)
+            assertParamExists('toolConfigurationControllerGetPreferredToolsForContext', 'contextId', contextId)
             const localVarPath = `/tools/{contextType}/{contextId}/preferred-tools`
                 .replace(`{${"contextType"}}`, encodeURIComponent(String(contextType)))
                 .replace(`{${"contextId"}}`, encodeURIComponent(String(contextId)));
@@ -23631,8 +23637,8 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetPreferedToolsForContext(contextType: any, contextId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferedToolListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetPreferedToolsForContext(contextType, contextId, options);
+        async toolConfigurationControllerGetPreferredToolsForContext(contextType: any, contextId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferredToolListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetPreferredToolsForContext(contextType, contextId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -23979,8 +23985,8 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetPreferedToolsForContext(contextType: any, contextId: string, options?: any): AxiosPromise<PreferedToolListResponse> {
-            return localVarFp.toolConfigurationControllerGetPreferedToolsForContext(contextType, contextId, options).then((request) => request(axios, basePath));
+        toolConfigurationControllerGetPreferredToolsForContext(contextType: any, contextId: string, options?: any): AxiosPromise<PreferredToolListResponse> {
+            return localVarFp.toolConfigurationControllerGetPreferredToolsForContext(contextType, contextId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -24301,7 +24307,7 @@ export interface ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetPreferedToolsForContext(contextType: any, contextId: string, options?: any): AxiosPromise<PreferedToolListResponse>;
+    toolConfigurationControllerGetPreferredToolsForContext(contextType: any, contextId: string, options?: any): AxiosPromise<PreferredToolListResponse>;
 
     /**
      * 
@@ -24630,8 +24636,8 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolConfigurationControllerGetPreferedToolsForContext(contextType: any, contextId: string, options?: any) {
-        return ToolApiFp(this.configuration).toolConfigurationControllerGetPreferedToolsForContext(contextType, contextId, options).then((request) => request(this.axios, this.basePath));
+    public toolConfigurationControllerGetPreferredToolsForContext(contextType: any, contextId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolConfigurationControllerGetPreferredToolsForContext(contextType, contextId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
