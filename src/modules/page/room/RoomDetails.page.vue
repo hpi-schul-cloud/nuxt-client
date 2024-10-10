@@ -5,7 +5,7 @@
 			<DefaultWireframe max-width="short" :breadcrumbs="breadcrumbs">
 				<template #header v-if="room">
 					<div class="d-flex align-items-center">
-						<h1 class="text-h3 pl-2 mb-4" data-testid="room-title">
+						<h1 class="text-h3 mb-4" data-testid="room-title">
 							{{ room.name }}
 						</h1>
 						<KebabMenu
