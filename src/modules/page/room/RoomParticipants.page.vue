@@ -8,7 +8,14 @@
 		<template #header>
 			<h1 class="text-h3 py-2 mb-4">Manage Participants</h1>
 		</template>
-		<div>Participants page</div>
+		<div class="mb-8">
+			Hier könnte Text stehen oder ein wichtiger Hinweis, zum Beispiel: wo man
+			den Hilfeartikelzur Anzeige des eigenen Namens im zentralen Verzeichnis
+			findet.
+		</div>
+		<div>
+			<ParticipantsTable :participants="participants" />
+		</div>
 	</DefaultWireframe>
 </template>
 
@@ -23,13 +30,12 @@ import { useRoute } from "vue-router";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
+import { participants } from "../../data/room/mockParticipantsList";
+import { ParticipantsTable } from "@feature-room";
 
 const { fetchRoom } = useRoomDetailsStore();
-
 const { t } = useI18n();
-
 const route = useRoute();
-
 const { room } = storeToRefs(useRoomDetailsStore());
 
 if (room.value === undefined) {
@@ -39,7 +45,7 @@ if (room.value === undefined) {
 }
 
 const pageTitle = computed(() =>
-	buildPageTitle(`${t("pages.roomEdit.title")}`)
+	buildPageTitle(`${room.value?.name} - Manage Participants`)
 );
 useTitle(pageTitle);
 

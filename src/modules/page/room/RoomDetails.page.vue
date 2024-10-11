@@ -32,11 +32,9 @@
 							<VListItem
 								role="menuitem"
 								:to="`/rooms/${room.id}/participants`"
-								:aria-label="
-									$t('pages.roomDetails.ariaLabels.menu.action.delete')
-								"
+								:aria-label="'Manage Participants'"
 							>
-								<template v-slot:prepend>
+								<template #prepend>
 									<VIcon :icon="mdiAccountGroupOutline" />
 								</template>
 								<VListItemTitle> Manage Participants </VListItemTitle>
