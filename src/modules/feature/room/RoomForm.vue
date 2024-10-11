@@ -11,7 +11,10 @@
 				data-testid="room-name-input"
 			/>
 			<div class="mb-8">
-				<RoomColorPicker v-model:color="roomData.color" />
+				<RoomColorPicker
+					v-model:color="roomData.color"
+					@update:color="onUpdateColor"
+				/>
 			</div>
 			<div class="mb-8">
 				<label id="time-period-label" class="d-flex mb-2">
@@ -85,12 +88,18 @@ const { askConfirmation } = useConfirmationDialog();
 
 const roomData = computed(() => props.room);
 
+const onUpdateColor = () => {
+	v$.value.$touch();
+};
+
 const onUpdateStartDate = (newDate: string) => {
 	roomData.value.startDate = newDate;
+	v$.value.$touch();
 };
 
 const onUpdateEndDate = (newDate: string) => {
 	roomData.value.endDate = newDate;
+	v$.value.$touch();
 };
 
 // Validation
