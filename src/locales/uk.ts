@@ -181,6 +181,7 @@ export default {
 	"common.words.languages.uk": "Українська",
 	"common.words.learnContent": "Зміст навчання",
 	"common.words.lernstore": "Навчальний магазин",
+	"common.words.mainSchool": "Основна школа",
 	"common.words.no": "Немає",
 	"common.words.noChoice": "Немає вибору",
 	"common.words.otherGroups": "інші групи",

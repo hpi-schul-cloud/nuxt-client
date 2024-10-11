@@ -1,7 +1,7 @@
 <template>
 	<v-card flat>
 		<v-card-title class="d-flex align-center pe-2">
-			<span>Participants (5)</span>
+			<span>Participants ({{ participantsCount }})</span>
 			<v-spacer />
 			<v-spacer />
 			<v-text-field
@@ -26,17 +26,18 @@
 			:headers="tableHeader"
 			:sort-asc-icon="mdiMenuDown"
 			:sort-desc-icon="mdiMenuUp"
+			@update:current-items="onUpdateFilter"
 		/>
 	</v-card>
 </template>
 
 <script setup lang="ts">
-import { PropType, ref } from "vue";
+import { PropType, ref, toRef } from "vue";
 import { Participants } from "./types";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 
-defineProps({
+const props = defineProps({
 	participants: {
 		type: Array as PropType<Participants[]>,
 		required: true,
@@ -44,6 +45,12 @@ defineProps({
 });
 const { t } = useI18n();
 const search = ref("");
+const participantsCount = ref(0);
+participantsCount.value = toRef(props, "participants").value.length;
+
+const onUpdateFilter = (value: Participants[]) => {
+	participantsCount.value = value.length;
+};
 const tableHeader = [
 	{
 		title: t("common.labels.firstName"),
@@ -61,7 +68,7 @@ const tableHeader = [
 		title: t("common.words.classes"),
 		key: "classes",
 	},
-	{ title: "School", key: "school" },
+	{ title: t("common.words.mainSchool"), key: "school" },
 ];
 </script>
 

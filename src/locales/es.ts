@@ -181,6 +181,7 @@ export default {
 	"common.words.languages.uk": "Ucranio",
 	"common.words.learnContent": "Contenidos de aprendizaje",
 	"common.words.lernstore": "Lern-Store",
+	"common.words.mainSchool": "Escuela principal",
 	"common.words.no": "No",
 	"common.words.noChoice": "Sin elección",
 	"common.words.otherGroups": "otros grupos",

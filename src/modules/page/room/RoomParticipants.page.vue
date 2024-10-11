@@ -10,7 +10,7 @@
 		</template>
 		<div class="mb-8">
 			Hier könnte Text stehen oder ein wichtiger Hinweis, zum Beispiel: wo man
-			den Hilfeartikelzur Anzeige des eigenen Namens im zentralen Verzeichnis
+			den Hilfeartikel zur Anzeige des eigenen Namens im zentralen Verzeichnis
 			findet.
 		</div>
 		<div>

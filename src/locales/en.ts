@@ -179,6 +179,7 @@ export default {
 	"common.words.languages.uk": "Ukrainian",
 	"common.words.learnContent": "Learning content",
 	"common.words.lernstore": "Learning Store",
+	"common.words.mainSchool": "Main School",
 	"common.words.no": "No",
 	"common.words.noChoice": "No choice",
 	"common.words.otherGroups": "other groups",
