@@ -96,11 +96,19 @@ module.exports = {
 							"**/.DS_Store",
 							path.resolve(__base, "public/index.html"),
 							path.resolve(__base, "public/themes/**/*"),
+							path.resolve(__base, "public/content/**/*"),
 						],
 					},
 					info: {
 						minimized: true,
 					},
+				},
+				{
+					from: path.resolve(
+						__base,
+						"node_modules/ngx-edu-sharing-app-as-web-component"
+					),
+					to: path.resolve(__base, "dist/content/vendor/edu-sharing"),
 				},
 			],
 		}),
@@ -226,7 +234,8 @@ module.exports = {
 				loader: "vue-loader",
 				options: {
 					compilerOptions: {
-						isCustomElement: (tag) => tag.startsWith("h5p-"),
+						isCustomElement: (tag) =>
+							tag.startsWith("h5p-") || tag === "edu-sharing-app",
 					},
 				},
 			},

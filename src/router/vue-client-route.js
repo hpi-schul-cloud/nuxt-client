@@ -31,6 +31,7 @@ const vueRoutes = [
 	`^/boards/${mongoId}/?$`,
 	`^/content/?$`,
 	`^/content/${uuid}/?$`,
+	`^/content/vendor/edu-sharing/.*`,
 	`^/error/?$`,
 	`^/h5p/player/${h5pId}/?$`,
 	`^/h5p/editor/?$`,
