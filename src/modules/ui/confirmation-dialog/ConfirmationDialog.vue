@@ -38,6 +38,5 @@ const confirmBtnLangKey = computed(() =>
 <style scoped>
 .text-break-word {
 	word-break: break-word;
-	white-space: normal;
 }
 </style>
