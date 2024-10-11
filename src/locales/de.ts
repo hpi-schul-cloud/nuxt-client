@@ -343,9 +343,9 @@ export default {
 	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
 	"components.board.error.404":
-		"Fehler 404 –Board mit diesem Namen wurde nicht gefunden",
+		"Fehler 404 – Bereich mit diesem Namen wurde nicht gefunden",
 	"components.board.error.403":
-		"Fehler 403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
+		"Fehler 403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen",
 	"components.board.menu.board": "Bereich-Einstellungen",
 	"components.board.menu.card": "Karten-Einstellungen",
 	"components.board.menu.column": "Abschnitt-Einstellungen",
