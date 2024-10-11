@@ -22520,19 +22520,12 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Lists all preferred tools that can be added for a given context
-         * @param {any} contextType 
-         * @param {string} contextId 
+         * @param {Array<ToolContextType>} [contextType] XXX
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetPreferredToolsForContext: async (contextType: any, contextId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'contextType' is not null or undefined
-            assertParamExists('toolConfigurationControllerGetPreferredToolsForContext', 'contextType', contextType)
-            // verify required parameter 'contextId' is not null or undefined
-            assertParamExists('toolConfigurationControllerGetPreferredToolsForContext', 'contextId', contextId)
-            const localVarPath = `/tools/{contextType}/{contextId}/preferred-tools`
-                .replace(`{${"contextType"}}`, encodeURIComponent(String(contextType)))
-                .replace(`{${"contextId"}}`, encodeURIComponent(String(contextId)));
+        toolConfigurationControllerGetPreferredToolsForContext: async (contextType?: Array<ToolContextType>, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/tools/preferred-tools`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -22547,6 +22540,10 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (contextType) {
+                localVarQueryParameter['contextType'] = contextType;
+            }
 
 
     
@@ -23632,13 +23629,12 @@ export const ToolApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Lists all preferred tools that can be added for a given context
-         * @param {any} contextType 
-         * @param {string} contextId 
+         * @param {Array<ToolContextType>} [contextType] XXX
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetPreferredToolsForContext(contextType: any, contextId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferredToolListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetPreferredToolsForContext(contextType, contextId, options);
+        async toolConfigurationControllerGetPreferredToolsForContext(contextType?: Array<ToolContextType>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferredToolListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetPreferredToolsForContext(contextType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -23980,13 +23976,12 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Lists all preferred tools that can be added for a given context
-         * @param {any} contextType 
-         * @param {string} contextId 
+         * @param {Array<ToolContextType>} [contextType] XXX
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetPreferredToolsForContext(contextType: any, contextId: string, options?: any): AxiosPromise<PreferredToolListResponse> {
-            return localVarFp.toolConfigurationControllerGetPreferredToolsForContext(contextType, contextId, options).then((request) => request(axios, basePath));
+        toolConfigurationControllerGetPreferredToolsForContext(contextType?: Array<ToolContextType>, options?: any): AxiosPromise<PreferredToolListResponse> {
+            return localVarFp.toolConfigurationControllerGetPreferredToolsForContext(contextType, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -24301,13 +24296,12 @@ export interface ToolApiInterface {
     /**
      * 
      * @summary Lists all preferred tools that can be added for a given context
-     * @param {any} contextType 
-     * @param {string} contextId 
+     * @param {Array<ToolContextType>} [contextType] XXX
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetPreferredToolsForContext(contextType: any, contextId: string, options?: any): AxiosPromise<PreferredToolListResponse>;
+    toolConfigurationControllerGetPreferredToolsForContext(contextType?: Array<ToolContextType>, options?: any): AxiosPromise<PreferredToolListResponse>;
 
     /**
      * 
@@ -24630,14 +24624,13 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
     /**
      * 
      * @summary Lists all preferred tools that can be added for a given context
-     * @param {any} contextType 
-     * @param {string} contextId 
+     * @param {Array<ToolContextType>} [contextType] XXX
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolConfigurationControllerGetPreferredToolsForContext(contextType: any, contextId: string, options?: any) {
-        return ToolApiFp(this.configuration).toolConfigurationControllerGetPreferredToolsForContext(contextType, contextId, options).then((request) => request(this.axios, this.basePath));
+    public toolConfigurationControllerGetPreferredToolsForContext(contextType?: Array<ToolContextType>, options?: any) {
+        return ToolApiFp(this.configuration).toolConfigurationControllerGetPreferredToolsForContext(contextType, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

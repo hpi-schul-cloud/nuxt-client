@@ -274,10 +274,7 @@ onMounted(() => {
 	setAlert();
 	useBoardInactivity();
 	boardStore.fetchBoardRequest({ boardId: props.boardId });
-	cardStore.getPreferredTools(
-		ToolContextType.BoardElement,
-		"nonExistentContextId"
-	);
+	cardStore.loadPreferredTools(ToolContextType.BoardElement);
 });
 
 onUnmounted(() => {

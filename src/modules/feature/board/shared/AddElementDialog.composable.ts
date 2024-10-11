@@ -2,6 +2,7 @@ import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/ca
 import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 import { ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useCardStore } from "@data-board";
 import {
 	mdiFormatText,
 	mdiLightbulbOnOutline,
@@ -21,9 +22,7 @@ export const useAddElementDialog = (
 	createElementRequestFn: CreateElementRequestFn,
 	cardId: string
 ) => {
-	//const props = defineProps({
-	//	preferredTools: { type: Object, default: undefined },
-	//});
+	const cardStore = useCardStore();
 
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { showCustomNotifier } = useBoardNotifier();
@@ -34,27 +33,7 @@ export const useAddElementDialog = (
 
 	const { createPreferredElement } = useCardRestApi();
 
-	//let preferredTools;
-	//if (!props.preferredTools) {
-	const preferredTools = [
-		{
-			iconName: "mdiMagnify",
-			name: "LTI Test Tool",
-			schoolExternalToolId: "647de374cf6a427b9d39e5ba",
-		},
-		{
-			iconName: "mdiTimerSandComplete",
-			name: "TestTool",
-			schoolExternalToolId: "644a46e5d0a8301e6cf25d86",
-		},
-		{
-			name: "TestTool without iconName and way too long name",
-			schoolExternalToolId: "644a46e5d0a8301e6cf25d86",
-		},
-	];
-	//} else {
-	//	preferredTools = props.preferredTools;
-	//}
+	const preferredTools = cardStore.preferredTools;
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
@@ -164,6 +143,10 @@ export const useAddElementDialog = (
 		preferredTools.forEach((tool: PreferredToolResponse) => {
 			if (!tool.iconName) {
 				tool.iconName = "mdiPuzzleOutline";
+			}
+
+			if (tool.name.length > 22) {
+				tool.name = tool.name.slice(0, 19) + "..";
 			}
 
 			options.push({

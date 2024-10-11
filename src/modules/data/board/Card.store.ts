@@ -26,6 +26,7 @@ import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards = ref<Record<string, CardResponse>>({});
+	const preferredTools = ref<PreferredToolResponse[]>();
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const restApi = useCardRestApi();
@@ -226,11 +227,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		return previousElement.id;
 	};
 
-	const getPreferredTools = (
-		contextType: ToolContextType,
-		contextId: string
-	): Promise<PreferredToolResponse[] | undefined> => {
-		return restApi.getPreferredTools(contextType, contextId);
+	const loadPreferredTools = async (contextType: ToolContextType) => {
+		preferredTools.value = await restApi.getPreferredTools(contextType);
 	};
 
 	return {
@@ -255,6 +253,7 @@ export const useCardStore = defineStore("cardStore", () => {
 		updateCardHeightSuccess,
 		updateCardTitleRequest,
 		updateCardTitleSuccess,
-		getPreferredTools,
+		loadPreferredTools,
+		preferredTools,
 	};
 });

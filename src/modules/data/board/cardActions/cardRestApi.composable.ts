@@ -158,12 +158,9 @@ export const useCardRestApi = () => {
 		}
 	};
 
-	const getPreferredTools = async (
-		contextType: ToolContextType,
-		contextId: string
-	) => {
+	const getPreferredTools = async (contextType: ToolContextType) => {
 		try {
-			const preferredTools = await fetchPreferredTools(contextType, contextId);
+			const preferredTools = await fetchPreferredTools(contextType);
 
 			return preferredTools.data.data;
 		} catch (error) {
