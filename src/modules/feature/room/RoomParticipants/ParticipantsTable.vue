@@ -48,31 +48,26 @@ const tableHeader = [
 	{
 		title: t("common.labels.firstName"),
 		key: "firstName",
-		class: "table-header",
 	},
 	{
 		title: t("common.labels.lastName"),
 		key: "lastName",
-		class: "table-header-text-color ",
 	},
 	{
 		title: t("common.labels.role"),
 		key: "role",
-		class: "table-header-text-color ",
 	},
 	{
 		title: t("common.words.classes"),
 		key: "classes",
-		class: "table-header-text-color ",
 	},
-	{ title: "School", key: "school", class: "table-header-text-color " },
+	{ title: "School", key: "school" },
 ];
 </script>
-<style lang="scss">
-.v-data-table-header__content span:first-of-type {
-	color: rgba(var(--v-theme-primary-darken-1)) !important;
+
+<style lang="scss" scoped>
+:deep .v-data-table-header__content {
+	color: rgba(var(--v-theme-primary-darken-1));
 	font-weight: bold;
-	// color: red !important;
-	/* // color: red !important; */
 }
 </style>
