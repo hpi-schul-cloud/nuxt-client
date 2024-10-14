@@ -3,10 +3,10 @@
 		max-width="nativ"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
-		@fab:clicked="onFabClicked"
+		@fab:clicked="onFabClick"
 	>
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4">
+			<h1 class="text-h3 py-2 mb-4 title-header">
 				{{ t("pages.rooms.participants.manageParticipants") }}
 			</h1>
 		</template>
@@ -72,7 +72,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	];
 });
 
-const onFabClicked = () => {
+const onFabClick = () => {
 	console.log("FAB clicked");
 };
 
