@@ -33,10 +33,11 @@ const store = {
 
 describe("RoomParticipantsPage", () => {
 	let router: DeepMocked<Router>;
-	// let route: DeepMocked<ReturnType<typeof useRoute>>;
+	let route: DeepMocked<ReturnType<typeof useRoute>>;
 
 	beforeEach(() => {
-		// route = createMock<ReturnType<typeof useRoute>>();
+		route = createMock<ReturnType<typeof useRoute>>();
+		useRouteMock.mockReturnValue(route);
 		useRouteMock.mockReturnValue({ params: { id: "room-id" } });
 
 		router = createMock<Router>();
