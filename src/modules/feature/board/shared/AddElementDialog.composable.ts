@@ -14,7 +14,10 @@ import {
 } from "@icons/material";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
-import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import {
+	ElementTypeSelectionOptions,
+	useSharedElementTypeSelection,
+} from "./SharedElementTypeSelection.composable";
 
 type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 
@@ -70,7 +73,7 @@ export const useAddElementDialog = (
 		}
 	};
 
-	const options = [
+	const options: ElementTypeSelectionOptions[] = [
 		{
 			icon: mdiFormatText,
 			label: "components.elementTypeSelection.elements.textElement.subtitle",
@@ -145,8 +148,11 @@ export const useAddElementDialog = (
 				tool.iconName = "mdiPuzzleOutline";
 			}
 
-			if (tool.name.length > 22) {
-				tool.name = tool.name.slice(0, 19) + "..";
+			const fullName = tool.name;
+			let tooltipText;
+			if (tool.name.length > 20) {
+				tooltipText = tool.name;
+				tool.name = tool.name.slice(0, 17) + "..";
 			}
 
 			options.push({
@@ -154,7 +160,8 @@ export const useAddElementDialog = (
 				label: tool.name,
 				action: () =>
 					onPreferredElementClick(ContentElementType.ExternalTool, tool),
-				testId: `create-element-preferred-element-${tool.name.replaceAll(" ", "-").toLowerCase()}`,
+				testId: `create-element-preferred-element-${fullName}`,
+				tooltipText,
 			});
 		});
 	}

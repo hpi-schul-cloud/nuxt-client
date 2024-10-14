@@ -1,6 +1,9 @@
 <template>
 	<v-btn variant="text" size="large" :height="85" :width="125">
 		<span class="d-flex flex-column justify-center button-max-width">
+			<v-tooltip location="top" origin="auto" transition="fade">
+				{{ tooltipText }}
+			</v-tooltip>
 			<span>
 				<v-icon size="x-large">{{ icon }}</v-icon>
 			</span>
@@ -18,6 +21,9 @@ defineProps({
 	label: {
 		type: String,
 		required: true,
+	},
+	tooltipText: {
+		type: String,
 	},
 });
 </script>

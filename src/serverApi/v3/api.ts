@@ -280,6 +280,55 @@ export interface BasicToolConfigParams {
 /**
  * 
  * @export
+ * @interface BoardColumnBoardResponse
+ */
+export interface BoardColumnBoardResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardColumnBoardResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardColumnBoardResponse
+     */
+    title: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardColumnBoardResponse
+     */
+    published: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardColumnBoardResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardColumnBoardResponse
+     */
+    updatedAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardColumnBoardResponse
+     */
+    columnBoardId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardColumnBoardResponse
+     */
+    layout: string;
+}
+/**
+ * 
+ * @export
  * @interface BoardContextResponse
  */
 export interface BoardContextResponse {
@@ -310,10 +359,10 @@ export interface BoardElementResponse {
     type: BoardElementResponseTypeEnum;
     /**
      * Content of the Board, either: a task or a lesson specific for the board
-     * @type {object}
+     * @type {BoardTaskResponse | BoardLessonResponse | BoardColumnBoardResponse}
      * @memberof BoardElementResponse
      */
-    content: object;
+    content: BoardTaskResponse | BoardLessonResponse | BoardColumnBoardResponse;
 }
 
 /**
@@ -347,6 +396,67 @@ export enum BoardLayout {
     Grid = 'grid'
 }
 
+/**
+ * 
+ * @export
+ * @interface BoardLessonResponse
+ */
+export interface BoardLessonResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardLessonResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardLessonResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardLessonResponse
+     */
+    courseName?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof BoardLessonResponse
+     */
+    numberOfPublishedTasks: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BoardLessonResponse
+     */
+    numberOfDraftTasks: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BoardLessonResponse
+     */
+    numberOfPlannedTasks: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardLessonResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardLessonResponse
+     */
+    updatedAt: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardLessonResponse
+     */
+    hidden: boolean;
+}
 /**
  * 
  * @export
@@ -399,6 +509,116 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     layout: string;
+}
+/**
+ * 
+ * @export
+ * @interface BoardTaskResponse
+ */
+export interface BoardTaskResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    availableDate?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    dueDate?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    courseName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    displayColor?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    createdAt: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof BoardTaskResponse
+     */
+    updatedAt: string;
+    /**
+     * 
+     * @type {BoardTaskStatusResponse}
+     * @memberof BoardTaskResponse
+     */
+    status: BoardTaskStatusResponse;
+}
+/**
+ * 
+ * @export
+ * @interface BoardTaskStatusResponse
+ */
+export interface BoardTaskStatusResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof BoardTaskStatusResponse
+     */
+    submitted: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BoardTaskStatusResponse
+     */
+    maxSubmissions: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof BoardTaskStatusResponse
+     */
+    graded: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardTaskStatusResponse
+     */
+    isDraft: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardTaskStatusResponse
+     */
+    isSubstitutionTeacher: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof BoardTaskStatusResponse
+     */
+    isFinished: boolean;
 }
 /**
  * 
@@ -6273,7 +6493,7 @@ export interface PreferredToolResponse {
      * @type {string}
      * @memberof PreferredToolResponse
      */
-    iconName?: string;
+    iconName: string;
 }
 /**
  * 
@@ -10367,6 +10587,40 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Logs out a user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutControllerLogout: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/logout`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -10410,6 +10664,16 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Logs out a user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async logoutControllerLogout(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.logoutControllerLogout(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -10450,6 +10714,15 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse> {
             return localVarFp.loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Logs out a user.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutControllerLogout(options?: any): AxiosPromise<void> {
+            return localVarFp.logoutControllerLogout(options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -10488,6 +10761,15 @@ export interface AuthenticationApiInterface {
      * @memberof AuthenticationApiInterface
      */
     loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
+
+    /**
+     * 
+     * @summary Logs out a user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApiInterface
+     */
+    logoutControllerLogout(options?: any): AxiosPromise<void>;
 
 }
 
@@ -10532,6 +10814,17 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      */
     public loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any) {
         return AuthenticationApiFp(this.configuration).loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Logs out a user.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApi
+     */
+    public logoutControllerLogout(options?: any) {
+        return AuthenticationApiFp(this.configuration).logoutControllerLogout(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -22520,11 +22813,11 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Lists all preferred tools that can be added for a given context
-         * @param {Array<ToolContextType>} [contextType] XXX
+         * @param {ToolContextType} [contextType] Context types for tools
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetPreferredToolsForContext: async (contextType?: Array<ToolContextType>, options: any = {}): Promise<RequestArgs> => {
+        toolConfigurationControllerGetPreferredToolsForContext: async (contextType?: ToolContextType, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/tools/preferred-tools`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -22541,7 +22834,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
 
-            if (contextType) {
+            if (contextType !== undefined) {
                 localVarQueryParameter['contextType'] = contextType;
             }
 
@@ -23629,11 +23922,11 @@ export const ToolApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Lists all preferred tools that can be added for a given context
-         * @param {Array<ToolContextType>} [contextType] XXX
+         * @param {ToolContextType} [contextType] Context types for tools
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolConfigurationControllerGetPreferredToolsForContext(contextType?: Array<ToolContextType>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferredToolListResponse>> {
+        async toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferredToolListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetPreferredToolsForContext(contextType, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -23976,11 +24269,11 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Lists all preferred tools that can be added for a given context
-         * @param {Array<ToolContextType>} [contextType] XXX
+         * @param {ToolContextType} [contextType] Context types for tools
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolConfigurationControllerGetPreferredToolsForContext(contextType?: Array<ToolContextType>, options?: any): AxiosPromise<PreferredToolListResponse> {
+        toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any): AxiosPromise<PreferredToolListResponse> {
             return localVarFp.toolConfigurationControllerGetPreferredToolsForContext(contextType, options).then((request) => request(axios, basePath));
         },
         /**
@@ -24296,12 +24589,12 @@ export interface ToolApiInterface {
     /**
      * 
      * @summary Lists all preferred tools that can be added for a given context
-     * @param {Array<ToolContextType>} [contextType] XXX
+     * @param {ToolContextType} [contextType] Context types for tools
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolConfigurationControllerGetPreferredToolsForContext(contextType?: Array<ToolContextType>, options?: any): AxiosPromise<PreferredToolListResponse>;
+    toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any): AxiosPromise<PreferredToolListResponse>;
 
     /**
      * 
@@ -24624,12 +24917,12 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
     /**
      * 
      * @summary Lists all preferred tools that can be added for a given context
-     * @param {Array<ToolContextType>} [contextType] XXX
+     * @param {ToolContextType} [contextType] Context types for tools
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolConfigurationControllerGetPreferredToolsForContext(contextType?: Array<ToolContextType>, options?: any) {
+    public toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any) {
         return ToolApiFp(this.configuration).toolConfigurationControllerGetPreferredToolsForContext(contextType, options).then((request) => request(this.axios, this.basePath));
     }
 

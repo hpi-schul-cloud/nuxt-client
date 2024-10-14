@@ -17,6 +17,7 @@
 					:data-testid="item.testId"
 					:icon="item.icon"
 					:label="item.label"
+					:tooltip-text="item.tooltipText"
 					@click.stop="item.action"
 				/>
 			</VCardText>
@@ -37,10 +38,6 @@
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { computed, ComputedRef } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-
-//const props = defineProps({
-//	preferredTools: { type: Object as PropType<PreferredToolResponse[]> },
-//});
 
 const { isDialogOpen, closeDialog, elementTypeOptions } =
 	useSharedElementTypeSelection();
