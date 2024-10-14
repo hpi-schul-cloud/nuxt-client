@@ -136,7 +136,9 @@ const classes = computed(() => {
 });
 
 const onFabItemClick = () => (isMenuOpen.value = !isMenuOpen.value);
-const onFabClick = () => emit("fab:clicked"); // TODO: add unit test for this event
+const onFabClick = () => {
+	emit("fab:clicked");
+};
 const onClickOutside = () => (isMenuOpen.value = false);
 
 /**
