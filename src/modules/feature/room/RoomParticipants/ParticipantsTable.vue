@@ -1,7 +1,7 @@
 <template>
 	<v-card flat>
 		<v-card-title class="d-flex align-center pe-2">
-			<span>{{ tableTitle }}</span>
+			<span class="table-title">{{ tableTitle }}</span>
 			<v-spacer />
 			<v-spacer />
 			<v-text-field
@@ -19,7 +19,6 @@
 
 		<v-divider />
 		<v-data-table
-			color="primary"
 			v-model:search="search"
 			:items="participants"
 			item-value="id"
