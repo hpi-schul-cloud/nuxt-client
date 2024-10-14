@@ -148,26 +148,28 @@ export const useAddElementDialog = (
 				tool.iconName = "mdiPuzzleOutline";
 			}
 
-			const fullName = tool.name;
-			let tooltipText;
+			let displayName = tool.name;
+			let islongName = false;
 			if (tool.name.length > 20) {
-				tooltipText = tool.name;
-				tool.name = tool.name.slice(0, 17) + "..";
+				islongName = true;
+				displayName = tool.name.slice(0, 17) + "..";
 			}
 
 			options.push({
 				icon: "$" + tool.iconName,
-				label: tool.name,
+				label: displayName,
 				action: () =>
 					onPreferredElementClick(ContentElementType.ExternalTool, tool),
-				testId: `create-element-preferred-element-${fullName}`,
-				tooltipText,
+				testId: `create-element-preferred-element-${tool.name}`,
+				tooltipText: islongName ? tool.name : undefined,
 			});
 		});
+		console.log("options im composable: ", options);
 	}
 
 	const askType = () => {
 		elementTypeOptions.value = options;
+		console.log("im askType: ", elementTypeOptions.value, "options: ", options);
 		isDialogOpen.value = true;
 	};
 

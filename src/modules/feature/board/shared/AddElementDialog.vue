@@ -42,6 +42,8 @@ import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.comp
 const { isDialogOpen, closeDialog, elementTypeOptions } =
 	useSharedElementTypeSelection();
 
+console.log("im addElementDialog: ", elementTypeOptions.value);
+
 const dialogWidth: ComputedRef<number> = computed(() =>
 	elementTypeOptions.value.length >= 3 ? 426 : 320
 );

@@ -26,4 +26,5 @@ defineProps({
 		type: String,
 	},
 });
+console.log("im extendedBtn: ");
 </script>
