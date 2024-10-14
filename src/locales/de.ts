@@ -1665,6 +1665,11 @@ export default {
 	"pages.rooms.title": "Räume",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
+	"pages.rooms.participants.label": "Teilnehmende",
+	"pages.rooms.participants.addParticipants": "Teilnehmende hinzufügen",
+	"pages.rooms.participants.manageParticipants": "Teilnehmende verwalten",
+	"pages.rooms.participants.participantTable.itemsPerPage":
+		"Elemente pro Seite",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",

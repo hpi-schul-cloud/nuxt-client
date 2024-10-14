@@ -6,7 +6,9 @@
 		@fab:clicked="onFabClicked"
 	>
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4">Manage Participants</h1>
+			<h1 class="text-h3 py-2 mb-4">
+				{{ t("pages.rooms.participants.manageParticipants") }}
+			</h1>
 		</template>
 		<div class="mb-8">
 			Hier könnte Text stehen oder ein wichtiger Hinweis, zum Beispiel: wo man
@@ -45,7 +47,9 @@ if (room.value === undefined) {
 }
 
 const pageTitle = computed(() =>
-	buildPageTitle(`${room.value?.name} - Manage Participants`)
+	buildPageTitle(
+		`${room.value?.name} - ${t("pages.rooms.participants.manageParticipants")}`
+	)
 );
 useTitle(pageTitle);
 
@@ -62,7 +66,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 			to: `/rooms/${route.params.id}`,
 		},
 		{
-			title: "manage participants",
+			title: t("pages.rooms.participants.manageParticipants"),
 			disabled: true,
 		},
 	];
@@ -80,8 +84,8 @@ onMounted(async () => {
 
 const fabAction = {
 	icon: mdiPlus,
-	title: "Add Participants",
-	ariaLabel: "Add User",
+	title: t("pages.rooms.participants.addParticipants"),
+	ariaLabel: t("pages.rooms.participants.addParticipants"),
 	testId: "fab-add-participant",
 };
 </script>

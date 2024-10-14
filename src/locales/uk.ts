@@ -1659,6 +1659,11 @@ export default {
 	"pages.rooms.title": "Кімнати",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
+	"pages.rooms.participants.label": "Учасники",
+	"pages.rooms.participants.addParticipants": "Додайте учасників",
+	"pages.rooms.participants.manageParticipants": "Керувати учасниками",
+	"pages.rooms.participants.participantTable.itemsPerPage":
+		"Елементів на сторінці",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

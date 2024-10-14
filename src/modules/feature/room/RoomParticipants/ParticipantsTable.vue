@@ -1,13 +1,13 @@
 <template>
 	<v-card flat>
 		<v-card-title class="d-flex align-center pe-2">
-			<span>Participants ({{ participantsCount }})</span>
+			<span>{{ tableTitle }}</span>
 			<v-spacer />
 			<v-spacer />
 			<v-text-field
 				v-model="search"
 				density="compact"
-				label="Search"
+				:label="t('common.labels.search')"
 				:prepend-inner-icon="mdiMagnify"
 				variant="solo-filled"
 				flat
@@ -24,16 +24,18 @@
 			:items="participants"
 			item-value="id"
 			:headers="tableHeader"
-			:items-per-page="5"
 			:sort-asc-icon="mdiMenuDown"
 			:sort-desc-icon="mdiMenuUp"
+			:items-per-page-text="
+				t('pages.rooms.participants.participantTable.itemsPerPage')
+			"
 			@update:current-items="onUpdateFilter"
 		/>
 	</v-card>
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef } from "vue";
 import { Participants } from "./types";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
@@ -46,12 +48,18 @@ const props = defineProps({
 });
 const { t } = useI18n();
 const search = ref("");
-const participantsCount = ref(0);
-participantsCount.value = toRef(props, "participants").value.length;
+const participantsCount = toRef(props, "participants").value.length;
+const participantsFilterCount = ref(participantsCount);
 
 const onUpdateFilter = (value: Participants[]) => {
-	participantsCount.value = value.length;
+	participantsFilterCount.value =
+		search.value === "" ? participantsCount : value.length;
 };
+
+const tableTitle = computed(
+	() =>
+		`${t("pages.rooms.participants.label")} (${participantsFilterCount.value})`
+);
 const tableHeader = [
 	{
 		title: t("common.labels.firstName"),
