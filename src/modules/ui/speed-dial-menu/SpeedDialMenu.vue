@@ -159,7 +159,7 @@ const hasPseudoRenderElement = (actionsInSlot: VNode[]) => {
 }
 
 .default-width {
-	width: 120px !important;
+	width: 100%;
 }
 
 .position-relative {
@@ -184,5 +184,6 @@ const hasPseudoRenderElement = (actionsInSlot: VNode[]) => {
 
 .size-transition {
 	transition: all 200ms ease-in-out;
+	min-width: 56px;
 }
 </style>

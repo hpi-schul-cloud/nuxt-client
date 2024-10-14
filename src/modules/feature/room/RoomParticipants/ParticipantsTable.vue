@@ -24,6 +24,7 @@
 			:items="participants"
 			item-value="id"
 			:headers="tableHeader"
+			:items-per-page="5"
 			:sort-asc-icon="mdiMenuDown"
 			:sort-desc-icon="mdiMenuUp"
 			@update:current-items="onUpdateFilter"

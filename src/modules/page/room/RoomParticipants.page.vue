@@ -80,7 +80,7 @@ onMounted(async () => {
 
 const fabAction = {
 	icon: mdiPlus,
-	title: "Add User",
+	title: "Add Participants",
 	ariaLabel: "Add User",
 	testId: "fab-add-participant",
 };
