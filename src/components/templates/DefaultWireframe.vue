@@ -116,7 +116,6 @@ const emit = defineEmits({
 });
 
 const onFabClicked = () => {
-	// TODO: add unit test for this event
 	emit("fab:clicked");
 };
 
