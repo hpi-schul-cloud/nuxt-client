@@ -19,8 +19,8 @@
 			<ParticipantsTable :participants="participants" />
 		</div>
 		<div>
-			<v-dialog v-model="participantsDialog" width="auto">
-				<ParticipantsDialog />
+			<v-dialog v-model="participantsDialog" width="auto" persistent>
+				<AddParticipants :userList="potentialUsers" @close="onDialogClose" />
 			</v-dialog>
 		</div>
 	</DefaultWireframe>
@@ -37,8 +37,11 @@ import { useRoute } from "vue-router";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
-import { participants } from "../../data/room/mockParticipantsList";
-import { ParticipantsTable, ParticipantsDialog } from "@feature-room";
+import {
+	participants,
+	potentialUsers,
+} from "../../data/room/mockParticipantsList";
+import { ParticipantsTable, AddParticipants } from "@feature-room";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -79,8 +82,11 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const onFabClick = () => {
-	console.log("FAB clicked");
 	participantsDialog.value = true;
+};
+
+const onDialogClose = () => {
+	participantsDialog.value = false;
 };
 
 onMounted(async () => {
