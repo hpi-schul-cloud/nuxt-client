@@ -17,7 +17,6 @@
 					:data-testid="item.testId"
 					:icon="item.icon"
 					:label="item.label"
-					:tooltip-text="item.tooltipText"
 					@click.stop="item.action"
 				/>
 			</VCardText>
@@ -41,8 +40,6 @@ import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.comp
 
 const { isDialogOpen, closeDialog, elementTypeOptions } =
 	useSharedElementTypeSelection();
-
-console.log("im addElementDialog: ", elementTypeOptions.value);
 
 const dialogWidth: ComputedRef<number> = computed(() =>
 	elementTypeOptions.value.length >= 3 ? 426 : 320

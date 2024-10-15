@@ -6,7 +6,6 @@ export interface ElementTypeSelectionOptions {
 	label: string;
 	action: () => void;
 	testId: string;
-	tooltipText?: string;
 }
 
 export const useSharedElementTypeSelection = createSharedComposable(() => {
