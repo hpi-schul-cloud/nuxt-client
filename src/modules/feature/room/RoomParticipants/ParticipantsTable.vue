@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import { computed, PropType, ref, toRef } from "vue";
-import { Participants } from "./types";
+import { Participants } from "../../../data/room/roomParticipants/types";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 

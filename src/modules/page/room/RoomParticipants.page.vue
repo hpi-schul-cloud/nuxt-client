@@ -43,10 +43,10 @@ import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import {
 	participants,
-	potentialUsers,
+	potentialParticipants,
 } from "../../data/room/roomParticipants/mockParticipantsList";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
-import { Participants } from "@/modules/feature/room/RoomParticipants/types";
+import { Participants } from "@/modules/data/room/roomParticipants/types";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -97,7 +97,7 @@ const onDialogClose = () => {
 };
 
 const onAddParticipants = (participantIds: string[]) => {
-	const newParticipants = potentialUsers.filter((user) =>
+	const newParticipants = potentialParticipants.filter((user) =>
 		participantIds.includes(user.id)
 	);
 
