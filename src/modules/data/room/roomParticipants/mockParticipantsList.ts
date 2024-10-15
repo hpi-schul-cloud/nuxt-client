@@ -91,7 +91,7 @@ export const participants = [
 	},
 ];
 
-export const potentialUsers = [
+export const potentialParticipants = [
 	{
 		id: "507f1f77bcf86cd799439014",
 		firstName: "Hans",

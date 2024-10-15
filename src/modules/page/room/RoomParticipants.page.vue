@@ -16,11 +16,15 @@
 			findet.
 		</div>
 		<div>
-			<ParticipantsTable :participants="participants" />
+			<ParticipantsTable :participants="participantsList" />
 		</div>
 		<div>
 			<v-dialog v-model="participantsDialog" width="auto" persistent>
-				<AddParticipants :userList="potentialUsers" @close="onDialogClose" />
+				<AddParticipants
+					:userList="potentialUsers"
+					@close="onDialogClose"
+					@add:participants="onAddParticipants"
+				/>
 			</v-dialog>
 		</div>
 	</DefaultWireframe>
@@ -31,7 +35,7 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, ref } from "vue";
+import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useRoomDetailsStore } from "@data-room";
@@ -40,8 +44,9 @@ import { mdiPlus } from "@icons/material";
 import {
 	participants,
 	potentialUsers,
-} from "../../data/room/mockParticipantsList";
+} from "../../data/room/roomParticipants/mockParticipantsList";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
+import { Participants } from "@/modules/feature/room/RoomParticipants/types";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -54,6 +59,8 @@ if (room.value === undefined) {
 	// The store is resetted onUnmounted lifecycle hook in RoomDetails.page.vue
 	console.log("Room store not found");
 }
+
+const participantsList: Ref<Participants[]> = ref(participants);
 
 const pageTitle = computed(() =>
 	buildPageTitle(
@@ -87,6 +94,14 @@ const onFabClick = () => {
 
 const onDialogClose = () => {
 	participantsDialog.value = false;
+};
+
+const onAddParticipants = (participantIds: string[]) => {
+	const newParticipants = potentialUsers.filter((user) =>
+		participantIds.includes(user.id)
+	);
+
+	participantsList.value = [...participantsList.value, ...newParticipants];
 };
 
 onMounted(async () => {
