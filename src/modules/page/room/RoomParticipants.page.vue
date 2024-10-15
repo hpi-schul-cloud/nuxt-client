@@ -18,6 +18,11 @@
 		<div>
 			<ParticipantsTable :participants="participants" />
 		</div>
+		<div>
+			<v-dialog v-model="participantsDialog" width="auto">
+				<ParticipantsDialog />
+			</v-dialog>
+		</div>
 	</DefaultWireframe>
 </template>
 
@@ -26,19 +31,20 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted } from "vue";
+import { computed, ComputedRef, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { participants } from "../../data/room/mockParticipantsList";
-import { ParticipantsTable } from "@feature-room";
+import { ParticipantsTable, ParticipantsDialog } from "@feature-room";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
 const { room } = storeToRefs(useRoomDetailsStore());
+const participantsDialog = ref(false);
 
 if (room.value === undefined) {
 	// TODO: how to get room value from store?
@@ -74,6 +80,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const onFabClick = () => {
 	console.log("FAB clicked");
+	participantsDialog.value = true;
 };
 
 onMounted(async () => {
