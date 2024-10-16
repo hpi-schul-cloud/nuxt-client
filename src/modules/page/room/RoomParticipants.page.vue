@@ -60,12 +60,6 @@ const {
 	fetchPotential,
 } = useParticipants();
 
-if (room.value === undefined) {
-	// TODO: how to get room value from store?
-	// The store is resetted onUnmounted lifecycle hook in RoomDetails.page.vue
-	console.log("Room store not found");
-}
-
 const participantsList: Ref<Participants[]> = ref(participants);
 
 const pageTitle = computed(() =>
@@ -103,8 +97,8 @@ const onDialogClose = () => {
 	participantsDialog.value = false;
 };
 
-const onAddParticipants = (participantIds: string[]) => {
-	addParticipants(participantIds);
+const onAddParticipants = async (participantIds: string[]) => {
+	await addParticipants(participantIds);
 };
 
 const onUpdateRole = async (role: RoleName) => {
