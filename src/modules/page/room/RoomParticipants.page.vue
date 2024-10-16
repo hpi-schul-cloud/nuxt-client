@@ -10,12 +10,12 @@
 				{{ t("pages.rooms.participants.manageParticipants") }}
 			</h1>
 		</template>
-		<div class="mb-8">
+		<div class="mb-8 mx-8">
 			Hier könnte Text stehen oder ein wichtiger Hinweis, zum Beispiel: wo man
 			den Hilfeartikel zur Anzeige des eigenen Namens im zentralen Verzeichnis
 			findet.
 		</div>
-		<div>
+		<div class="mx-8">
 			<ParticipantsTable :participants="participantsList" />
 		</div>
 		<div>
