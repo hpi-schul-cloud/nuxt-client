@@ -13,7 +13,6 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomColor } from "@/serverApi/v3";
 import { nextTick } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import { mockParticipants } from "../../data/room/roomParticipants/mockParticipantsList";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -122,14 +121,35 @@ describe("RoomParticipantsPage", () => {
 		it("should render DefaultWireframe", async () => {
 			const { wrapper, wrapperVM } = setup();
 			const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
-			await nextTick();
 			expect(wireframe.exists()).toBe(true);
+			await nextTick();
 			expect(wireframe.vm.breadcrumbs).toBe(wrapperVM.breadcrumbs);
 			expect(wireframe.vm["fab-items"]).toBe(wrapperVM.fabItem);
+		});
+
+		it("should set the breadcrumbs", async () => {
+			const { wrapper, wrapperVM } = setup();
+			const breadcrumbComponent = wrapper.findComponent({
+				name: "v-breadcrumbs",
+			});
+
+			await nextTick();
+			expect(breadcrumbComponent.exists()).toBe(true);
+			expect(breadcrumbComponent.vm.items).toBe(wrapperVM.breadcrumbs);
 		});
 	});
 
 	describe("ParticpantsTable", () => {
+		it("should render ParticipantsTable", async () => {
+			const { wrapper } = setup();
+			const participantsTable = wrapper.findComponent({
+				name: "ParticipantsTable",
+			});
+			expect(participantsTable.exists()).toBe(true);
+		});
+	});
+
+	describe("ParticipantsTable", () => {
 		it("should render ParticipantsTable", async () => {
 			const { wrapper } = setup();
 			const participantsTable = wrapper.findComponent({

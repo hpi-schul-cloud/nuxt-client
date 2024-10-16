@@ -19,7 +19,7 @@
 			<ParticipantsTable :participants="participantsList" />
 		</div>
 		<div>
-			<v-dialog v-model="participantsDialog" width="auto" persistent>
+			<v-dialog v-model="isParticipantsDialogOpen" width="auto" persistent>
 				<AddParticipants
 					:userList="potentialParticipants"
 					@close="onDialogClose"
@@ -45,13 +45,13 @@ import { mdiPlus } from "@icons/material";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
 import { Participants } from "@/modules/data/room/roomParticipants/types";
 import { RoleName } from "@/serverApi/v3";
-import { useParticipants } from "@/modules/data/room/roomParticipants/participants.composable";
+import { useParticipants } from "../../data/room/index";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
 const { room } = storeToRefs(useRoomDetailsStore());
-const participantsDialog = ref(false);
+const isParticipantsDialogOpen = ref(false);
 const {
 	potentialParticipants,
 	participants,
@@ -90,11 +90,11 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const onFabClick = async () => {
 	await fetchPotential(RoleName.Teacher);
-	participantsDialog.value = true;
+	isParticipantsDialogOpen.value = true;
 };
 
 const onDialogClose = () => {
-	participantsDialog.value = false;
+	isParticipantsDialogOpen.value = false;
 };
 
 const onAddParticipants = async (participantIds: string[]) => {
