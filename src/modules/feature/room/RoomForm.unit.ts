@@ -21,7 +21,6 @@ const invalidMockRoom: RoomCreateParams = {
 
 describe("@feature-room/RoomForm", () => {
 	const setup = (props: ComponentProps<typeof RoomForm>) => {
-
 		const wrapper = mount(RoomForm, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -37,9 +36,9 @@ describe("@feature-room/RoomForm", () => {
 		const { wrapper } = setup({ room: invalidMockRoom });
 
 		// validation needs to be triggered manually due to code structure
-		await wrapper.vm.v$.$validate()
+		await wrapper.vm.v$.$validate();
 
-		await wrapper.find("[type='submit']").trigger('click')
+		await wrapper.find("[type='submit']").trigger("click");
 		await nextTick();
 
 		expect(wrapper.vm.v$.$invalid).toEqual(true);
@@ -50,9 +49,9 @@ describe("@feature-room/RoomForm", () => {
 		const { wrapper } = setup({ room: mockRoom });
 
 		// validation needs to be triggered manually due to code structure
-		await wrapper.vm.v$.$validate()
+		await wrapper.vm.v$.$validate();
 
-		await wrapper.find("[type='submit']").trigger('click')
+		await wrapper.find("[type='submit']").trigger("click");
 		await nextTick();
 
 		expect(wrapper.vm.v$.$invalid).toEqual(false);
@@ -68,7 +67,7 @@ describe("@feature-room/RoomForm", () => {
 		input.setValue("New Name");
 		await nextTick();
 
-		const cancelButton = wrapper.get('[data-testId="room-form-cancel-btn"]')
+		const cancelButton = wrapper.get('[data-testId="room-form-cancel-btn"]');
 		await cancelButton.trigger("click");
 
 		expect(wrapper.vm.v$.$anyDirty).toEqual(true);
@@ -78,7 +77,7 @@ describe("@feature-room/RoomForm", () => {
 	it("should emit cancel when room values were not touched", async () => {
 		const { wrapper } = setup({ room: mockRoom });
 
-		const cancelButton = wrapper.get('[data-testId="room-form-cancel-btn"]')
+		const cancelButton = wrapper.get('[data-testId="room-form-cancel-btn"]');
 		await cancelButton.trigger("click");
 
 		expect(wrapper.vm.v$.$anyDirty).toEqual(false);
