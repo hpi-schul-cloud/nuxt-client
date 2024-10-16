@@ -1,15 +1,7 @@
 <template>
 	<div class="wireframe-container">
-		<div
-			aria-live="polite"
-			id="notify-screen-reader-polite"
-			class="d-sr-only"
-		/>
-		<div
-			aria-live="assertive"
-			id="notify-screen-reader-assertive"
-			class="d-sr-only"
-		/>
+		<div aria-live="polite" id="notify-screen-reader-polite" class="d-sr-only" />
+		<div aria-live="assertive" id="notify-screen-reader-assertive" class="d-sr-only" />
 		<div class="wireframe-header sticky">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else class="breadcrumbs-placeholder" />
@@ -20,30 +12,15 @@
 			</slot>
 			<div v-if="fabItems" class="fab-wrapper">
 				<slot name="fab">
-					<speed-dial-menu
-						class="wireframe-fab"
-						:direction="isBelowLarge ? 'top' : 'bottom'"
-						:orientation="'right'"
-						:icon="fabItems.icon"
-						:href="fabItems.href"
-						:to="fabItems.to"
-						:aria-label="fabItems.ariaLabel"
-						:data-testid="fabItems.dataTestId"
-					>
+					<speed-dial-menu class="wireframe-fab" :direction="isBelowLarge ? 'top' : 'bottom'"
+						:orientation="'right'" :icon="fabItems.icon" :href="fabItems.href" :to="fabItems.to"
+						:aria-label="fabItems.ariaLabel" :data-testid="fabItems.dataTestId">
 						{{ fabItems.title }}
 						<template #actions>
-							<template
-								v-for="(action, index) in fabItems.actions"
-								:key="index"
-							>
-								<speed-dial-menu-action
-									:dataTestId="action.dataTestId"
-									:icon="action.icon"
-									:href="action.href"
-									:to="action.to"
-									:aria-label="action.ariaLabel"
-									@click="$emit('onFabItemClick', action.customEvent)"
-								>
+							<template v-for="(action, index) in fabItems.actions" :key="index">
+								<speed-dial-menu-action :dataTestId="action.dataTestId" :icon="action.icon"
+									:href="action.href" :to="action.to" :aria-label="action.ariaLabel"
+									@click="$emit('onFabItemClick', action.customEvent)">
 									{{ action.label }}
 								</speed-dial-menu-action>
 							</template>
@@ -51,23 +28,14 @@
 					</speed-dial-menu>
 				</slot>
 			</div>
-			<hr
-				v-if="showBorder"
-				class="v-divider v-theme--light"
-				aria-orientation="horizontal"
-				role="separator"
-				aria-hidden="true"
-			/>
+			<hr v-if="showBorder" class="v-divider v-theme--light" aria-orientation="horizontal" role="separator"
+				aria-hidden="true" />
 		</div>
-		<v-container
-			:fluid="maxWidth !== 'nativ'"
-			class="main-content"
-			:class="{
-				'container-short-width': maxWidth === 'short',
-				'container-full-width': maxWidth === 'full',
-				'overflow-x-auto': allowOverflowX,
-			}"
-		>
+		<v-container :fluid="maxWidth !== 'nativ'" class="main-content" :class="{
+			'container-short-width': maxWidth === 'short',
+			'container-full-width': maxWidth === 'full',
+			'overflow-x-auto': allowOverflowX,
+		}">
 			<slot />
 		</v-container>
 	</div>
@@ -153,8 +121,8 @@ const showBorder = computed(() => {
 }
 
 .main-content {
-	padding: 0 var(--space-lg);
-	margin-top: 2rem;
+	padding: 0 var(--space-lg) var(--space-lg) var(--space-lg);
+	margin-top: var(--space-xl);
 }
 
 .container-short-width {
