@@ -74,13 +74,42 @@ describe("@feature-room/RoomForm", () => {
 		expect(wrapper.emitted("cancel")).toBeUndefined();
 	});
 
-	it("should emit cancel when room values were not touched", async () => {
+	it("should emit cancel when room values were not touched", () => {
 		const { wrapper } = setup({ room: mockRoom });
 
 		const cancelButton = wrapper.get('[data-testId="room-form-cancel-btn"]');
-		await cancelButton.trigger("click");
+		cancelButton.trigger("click");
 
 		expect(wrapper.vm.v$.$anyDirty).toEqual(false);
 		expect(wrapper.emitted("cancel")).toHaveLength(1);
+	});
+
+	it("should change room state when new start date is given", () => {
+		const { wrapper } = setup({ room: mockRoom });
+
+		const datePickers = wrapper.findAllComponents({
+			name: "date-picker",
+		});
+
+		const today = new Date().toISOString();
+
+		datePickers[0].vm.$emit("update:date", today);
+
+		expect(wrapper.vm.v$.$anyDirty).toEqual(true);
+	});
+
+	it("should change room state when new end date is given", () => {
+		const { wrapper } = setup({ room: mockRoom });
+
+		const datePickers = wrapper.findAllComponents({
+			name: "date-picker",
+		});
+
+		const today = new Date();
+		const tomorrow = new Date(today.getDate() + 1).toISOString();
+
+		datePickers[1].vm.$emit("update:date", tomorrow);
+
+		expect(wrapper.vm.v$.$anyDirty).toEqual(true);
 	});
 });
