@@ -12,6 +12,8 @@ import { nextTick } from "vue";
 const mockRoom: RoomCreateParams = {
 	name: "A11Y for Beginners",
 	color: RoomColor.Magenta,
+	startDate: "",
+	endDate: "",
 };
 
 const invalidMockRoom: RoomCreateParams = {
@@ -67,6 +69,8 @@ describe("@feature-room/RoomForm", () => {
 		input.setValue("New Name");
 		await nextTick();
 
+		expect(wrapper.vm.room.name).toEqual("New Name");
+
 		const cancelButton = wrapper.get('[data-testId="room-form-cancel-btn"]');
 		await cancelButton.trigger("click");
 
@@ -88,7 +92,7 @@ describe("@feature-room/RoomForm", () => {
 		const { wrapper } = setup({ room: mockRoom });
 
 		const datePickers = wrapper.findAllComponents({
-			name: "date-picker",
+			name: "DatePicker",
 		});
 
 		const today = new Date().toISOString();
@@ -96,13 +100,14 @@ describe("@feature-room/RoomForm", () => {
 		datePickers[0].vm.$emit("update:date", today);
 
 		expect(wrapper.vm.v$.$anyDirty).toEqual(true);
+		expect(wrapper.vm.room.startDate).toEqual(today);
 	});
 
 	it("should change room state when new end date is given", () => {
 		const { wrapper } = setup({ room: mockRoom });
 
 		const datePickers = wrapper.findAllComponents({
-			name: "date-picker",
+			name: "DatePicker",
 		});
 
 		const today = new Date();
@@ -111,5 +116,21 @@ describe("@feature-room/RoomForm", () => {
 		datePickers[1].vm.$emit("update:date", tomorrow);
 
 		expect(wrapper.vm.v$.$anyDirty).toEqual(true);
+		expect(wrapper.vm.room.endDate).toEqual(tomorrow);
+	});
+
+	it("should change room state when new color is given", () => {
+		const { wrapper } = setup({ room: mockRoom });
+
+		const colorPicker = wrapper.findComponent({
+			name: "RoomColorPicker",
+		});
+
+		const newColor = RoomColor.Red;
+
+		colorPicker.vm.$emit("update:color", newColor);
+
+		expect(wrapper.vm.v$.$anyDirty).toEqual(true);
+		expect(wrapper.vm.room.color).toEqual(newColor);
 	});
 });
