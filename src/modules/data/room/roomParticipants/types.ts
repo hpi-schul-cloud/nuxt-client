@@ -4,7 +4,7 @@ export type Participants = {
 	firstName: string;
 	lastName: string;
 	fullName: string;
-	role: string;
+	roleName: string;
 	classes: string;
 	school: string;
 };

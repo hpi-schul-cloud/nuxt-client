@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import ParticipantsTable from "./ParticipantsTable.vue";
-import { participants } from "../../../data/room/roomParticipants/mockParticipantsList";
+import { mockParticipants } from "../../../data/room/roomParticipants/mockParticipantsList";
 import { Participants } from "../../../data/room/roomParticipants/types";
 import { Ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
@@ -14,7 +14,7 @@ describe("ParticipantsTable", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props: { participants },
+			props: { participants: mockParticipants },
 		});
 
 		const wrapperVM = wrapper.vm as unknown as {
@@ -42,7 +42,7 @@ describe("ParticipantsTable", () => {
 			const dataTable = wrapper.findComponent({ name: "v-data-table" });
 
 			expect(dataTable).toBeTruthy();
-			expect(dataTable.vm.items).toEqual(participants);
+			expect(dataTable.vm.items).toEqual(mockParticipants);
 			expect(dataTable.vm.headers).toEqual(wrapperVM.tableHeader);
 			expect(dataTable.vm["itemsPerPageText"]).toEqual(
 				"pages.rooms.participants.participantTable.itemsPerPage"
@@ -75,7 +75,7 @@ describe("ParticipantsTable", () => {
 			const search = wrapper.findComponent({ name: "v-text-field" });
 
 			const title = wrapper.find(".table-title");
-			expect(title.text()).toContain(`(${participants.length})`);
+			expect(title.text()).toContain(`(${mockParticipants.length})`);
 			await search.vm.$emit("update:modelValue", "Alice");
 			expect(wrapperVM.search).toBe("Alice");
 			const dataTable = wrapper.findComponent({ name: "v-data-table" });

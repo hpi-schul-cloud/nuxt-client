@@ -11,10 +11,10 @@
 			<div class="mx-4 mt-4">
 				<v-autocomplete
 					v-model="school"
+					:label="t('global.sidebar.item.school')"
 					item-value="id"
 					item-title="name"
 					density="comfortable"
-					:label="t('global.sidebar.item.school')"
 					readonly
 					menu-icon=""
 					color="primary"
@@ -24,11 +24,12 @@
 
 			<div class="ma-4">
 				<v-autocomplete
-					v-model="preSelecterRole"
+					v-model="selectedRole"
 					:items="roles"
+					:label="t('common.labels.role')"
+					@update:model-value="onRoleChange"
 					auto-select-first="exact"
 					density="comfortable"
-					:label="t('common.labels.role')"
 					color="primary"
 					bg-color="white"
 				/>
@@ -38,8 +39,8 @@
 				<v-autocomplete
 					v-model="selectedUsers"
 					:items="userList"
-					density="comfortable"
 					:label="t('common.labels.name')"
+					density="comfortable"
 					color="primary"
 					bg-color="white"
 					item-value="id"
@@ -77,21 +78,30 @@ import { useI18n } from "vue-i18n";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, PropType, ref } from "vue";
 import { Participants } from "../../../data/room/roomParticipants/types";
+import { RoleName } from "@/serverApi/v3";
 
 defineProps({
 	userList: {
 		type: Array as PropType<Participants[]>,
 	},
+	preSelectedRole: {
+		type: String as PropType<RoleName>,
+	},
 });
 
-const emit = defineEmits(["add:participants", "close"]);
+const emit = defineEmits(["add:participants", "close", "update:role"]);
 
 const { t } = useI18n();
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const school = computed(() => authModule.getSchool);
 const roles = computed(() => ["Teacher", "Student"]);
-const preSelecterRole = ref<string>("Teacher");
+const selectedRole = ref<string>("Teacher");
 const selectedUsers = ref<Participants[]>([]);
+
+const onRoleChange = () => {
+	selectedUsers.value = [];
+	emit("update:role", selectedRole.value);
+};
 
 const onAddParticipants = () => {
 	emit("add:participants", selectedUsers.value);

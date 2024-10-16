@@ -24,6 +24,7 @@
 					:userList="potentialParticipants"
 					@close="onDialogClose"
 					@add:participants="onAddParticipants"
+					@update:role="onUpdateRole"
 				/>
 			</v-dialog>
 		</div>
@@ -43,6 +44,7 @@ import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
 import { Participants } from "@/modules/data/room/roomParticipants/types";
+import { RoleName } from "@/serverApi/v3";
 import { useParticipants } from "@/modules/data/room/roomParticipants/participants.composable";
 
 const { fetchRoom } = useRoomDetailsStore();
@@ -93,7 +95,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const onFabClick = async () => {
-	await fetchPotential();
+	await fetchPotential(RoleName.Teacher);
 	participantsDialog.value = true;
 };
 
@@ -105,10 +107,17 @@ const onAddParticipants = (participantIds: string[]) => {
 	addParticipants(participantIds);
 };
 
+const onUpdateRole = async (role: RoleName) => {
+	await fetchPotential(role);
+};
+
 onMounted(async () => {
 	// TODO: Is fetchRoom() necessary on every page load?
 	// Not reseting the store onUnmounted lifecycle hook in RoomDetails.page.vue can be a solution
-	await fetchRoom(route.params.id as string);
+	if (room.value === undefined) {
+		console.log("Room store not found");
+		await fetchRoom(route.params.id as string);
+	}
 	await fetch();
 });
 

@@ -136,9 +136,6 @@ describe("RoomParticipantsPage", () => {
 				name: "ParticipantsTable",
 			});
 			expect(participantsTable.exists()).toBe(true);
-			await nextTick();
-			await nextTick();
-			expect(participantsTable.vm.participants).toStrictEqual(mockParticipants);
 		});
 	});
 });

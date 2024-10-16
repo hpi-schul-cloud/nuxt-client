@@ -1,9 +1,10 @@
 import { Ref, ref } from "vue";
 import {
 	mockParticipants,
-	mockPotantialParticipants,
+	mockPotentialParticipants,
 } from "./mockParticipantsList";
 import { Participants } from "./types";
+import { RoleName } from "@/serverApi/v3";
 
 export const useParticipants = () => {
 	const participants: Ref<Participants[]> = ref([]);
@@ -13,9 +14,19 @@ export const useParticipants = () => {
 		participants.value = await Promise.resolve(mockParticipants);
 	};
 
-	const fetchPotential = async () => {
+	const fetchPotential = async (role: RoleName) => {
+		if (role) {
+			potentialParticipants.value = await Promise.resolve(
+				mockPotentialParticipants.filter(
+					(participant: Participants) =>
+						participant.roleName.toLowerCase() === role.toString().toLowerCase()
+				)
+			);
+			return;
+		}
+
 		potentialParticipants.value = await Promise.resolve(
-			mockPotantialParticipants
+			mockPotentialParticipants
 		);
 	};
 
