@@ -19,7 +19,7 @@ export const useParticipants = () => {
 			potentialParticipants.value = await Promise.resolve(
 				mockPotentialParticipants.filter(
 					(participant: Participants) =>
-						participant.roleName.toLowerCase() === role.toString().toLowerCase()
+						participant.roleName.toLowerCase() === role.toLowerCase()
 				)
 			);
 			return;
@@ -30,16 +30,23 @@ export const useParticipants = () => {
 		);
 	};
 
-	const addParticipants = (ids: string[]) => {
+	const addParticipants = async (ids: string[]) => {
 		const newParticipants = potentialParticipants.value.filter((p) =>
 			ids.includes(p.id)
 		);
 
-		participants.value = [...participants.value, ...newParticipants];
+		participants.value = await Promise.resolve([
+			...participants.value,
+			...newParticipants,
+		]);
 	};
 
-	const deleteParticipants = (ids: string[]) => {
-		participants.value = participants.value.filter((p) => !ids.includes(p.id));
+	const deleteParticipants = async (ids: string[]) => {
+		await Promise.resolve(
+			(participants.value = participants.value.filter(
+				(p) => !ids.includes(p.id)
+			))
+		);
 	};
 
 	return {
