@@ -13,6 +13,10 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomColor } from "@/serverApi/v3";
 import { nextTick } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { flushPromises } from "@vue/test-utils";
+import AuthModule from "@/store/auth";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { authModule } from "@/store";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -30,6 +34,8 @@ const store = {
 	},
 };
 
+// const authModule = createModuleMocks(AuthModule, {});
+
 describe("RoomParticipantsPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
@@ -43,6 +49,7 @@ describe("RoomParticipantsPage", () => {
 		useRouterMock.mockReturnValue(router);
 		setupStores({
 			envConfigModule: EnvConfigModule,
+			authModule: AuthModule,
 		});
 	});
 
@@ -60,6 +67,9 @@ describe("RoomParticipantsPage", () => {
 					createTestingI18n(),
 					createTestingVuetify(),
 				],
+				provide: {
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
+				},
 			},
 		});
 
@@ -82,6 +92,7 @@ describe("RoomParticipantsPage", () => {
 				ariaLabel: string;
 				testId: string;
 			};
+			isParticipantsDialogOpen: boolean;
 			onFabClick: ReturnType<typeof jest.fn>;
 		};
 
@@ -156,6 +167,38 @@ describe("RoomParticipantsPage", () => {
 				name: "ParticipantsTable",
 			});
 			expect(participantsTable.exists()).toBe(true);
+		});
+	});
+
+	describe("AddParticipant Dialog", () => {
+		it("should render AddParticipants", async () => {
+			const { wrapper, wrapperVM } = setup();
+
+			const dialogBefore = wrapper.findComponent({ name: "AddParticipants" });
+			expect(dialogBefore.exists()).toBe(false);
+			expect(wrapperVM.isParticipantsDialogOpen).toBe(false);
+
+			const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
+			wireframe.vm.$emit("fab:clicked");
+			await flushPromises();
+			const dialogAfter = wrapper.findComponent({ name: "AddParticipants" });
+			expect(dialogAfter.exists()).toBe(true);
+			expect(wrapperVM.isParticipantsDialogOpen).toBe(true);
+		});
+
+		it("should close AddParticipants dialog", async () => {
+			const { wrapper, wrapperVM } = setup();
+
+			const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
+			wireframe.vm.$emit("fab:clicked");
+			await flushPromises();
+			const dialogAfter = wrapper.findComponent({ name: "AddParticipants" });
+			expect(dialogAfter.exists()).toBe(true);
+			expect(wrapperVM.isParticipantsDialogOpen).toBe(true);
+
+			dialogAfter.vm.$emit("close");
+			await flushPromises();
+			expect(wrapperVM.isParticipantsDialogOpen).toBe(false);
 		});
 	});
 });
