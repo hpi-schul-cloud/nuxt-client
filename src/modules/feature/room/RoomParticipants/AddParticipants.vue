@@ -10,6 +10,7 @@
 			<v-divider />
 			<div class="mx-4 mt-4">
 				<v-autocomplete
+					ref="autoCompleteSchool"
 					v-model="school"
 					:label="t('global.sidebar.item.school')"
 					item-value="id"
@@ -24,6 +25,7 @@
 
 			<div class="ma-4">
 				<v-autocomplete
+					ref="autoCompleteRole"
 					v-model="selectedRole"
 					:items="roles"
 					:label="t('common.labels.role')"
@@ -37,6 +39,7 @@
 
 			<div class="ma-4">
 				<v-autocomplete
+					ref="autoCompleteUsers"
 					v-model="selectedUsers"
 					:items="userList"
 					:label="t('common.labels.name')"
@@ -57,12 +60,14 @@
 		<template v-slot:actions>
 			<v-spacer />
 			<v-btn
+				ref="cancelButton"
 				class="ms-auto"
 				color="primary"
 				:text="t('common.actions.cancel')"
 				@click="onClose"
 			/>
 			<v-btn
+				ref="addButton"
 				class="ms-auto"
 				color="primary"
 				:text="t('common.actions.add')"
@@ -94,8 +99,8 @@ const emit = defineEmits(["add:participants", "close", "update:role"]);
 const { t } = useI18n();
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const school = computed(() => authModule.getSchool);
-const roles = computed(() => ["Teacher", "Student"]);
-const selectedRole = ref<string>("Teacher");
+const roles = computed(() => [RoleName.Teacher, RoleName.Student]);
+const selectedRole = ref<RoleName>(RoleName.Teacher);
 const selectedUsers = ref<Participants[]>([]);
 
 const onRoleChange = () => {

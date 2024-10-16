@@ -34,8 +34,6 @@ const store = {
 	},
 };
 
-// const authModule = createModuleMocks(AuthModule, {});
-
 describe("RoomParticipantsPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
