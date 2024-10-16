@@ -21,7 +21,7 @@
 		<div>
 			<v-dialog v-model="participantsDialog" width="auto" persistent>
 				<AddParticipants
-					:userList="potentialUsers"
+					:userList="potentialParticipants"
 					@close="onDialogClose"
 					@add:participants="onAddParticipants"
 				/>
@@ -41,18 +41,22 @@ import { useRoute } from "vue-router";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
-import {
-	participants,
-	potentialParticipants,
-} from "../../data/room/roomParticipants/mockParticipantsList";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
 import { Participants } from "@/modules/data/room/roomParticipants/types";
+import { useParticipants } from "@/modules/data/room/roomParticipants/participants.composable";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
 const { room } = storeToRefs(useRoomDetailsStore());
 const participantsDialog = ref(false);
+const {
+	potentialParticipants,
+	participants,
+	addParticipants,
+	fetch,
+	fetchPotential,
+} = useParticipants();
 
 if (room.value === undefined) {
 	// TODO: how to get room value from store?
@@ -88,7 +92,8 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	];
 });
 
-const onFabClick = () => {
+const onFabClick = async () => {
+	await fetchPotential();
 	participantsDialog.value = true;
 };
 
@@ -97,17 +102,14 @@ const onDialogClose = () => {
 };
 
 const onAddParticipants = (participantIds: string[]) => {
-	const newParticipants = potentialParticipants.filter((user) =>
-		participantIds.includes(user.id)
-	);
-
-	participantsList.value = [...participantsList.value, ...newParticipants];
+	addParticipants(participantIds);
 };
 
 onMounted(async () => {
 	// TODO: Is fetchRoom() necessary on every page load?
 	// Not reseting the store onUnmounted lifecycle hook in RoomDetails.page.vue can be a solution
 	await fetchRoom(route.params.id as string);
+	await fetch();
 });
 
 const fabAction = {

@@ -13,7 +13,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomColor } from "@/serverApi/v3";
 import { nextTick } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import { participants } from "../../data/room/roomParticipants/mockParticipantsList";
+import { mockParticipants } from "../../data/room/roomParticipants/mockParticipantsList";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -136,7 +136,9 @@ describe("RoomParticipantsPage", () => {
 				name: "ParticipantsTable",
 			});
 			expect(participantsTable.exists()).toBe(true);
-			expect(participantsTable.vm.participants).toStrictEqual(participants);
+			await nextTick();
+			await nextTick();
+			expect(participantsTable.vm.participants).toStrictEqual(mockParticipants);
 		});
 	});
 });

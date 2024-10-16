@@ -1,16 +1,42 @@
-import { participants, potentialParticipants } from "./mockParticipantsList";
+import { Ref, ref } from "vue";
+import {
+	mockParticipants,
+	mockPotantialParticipants,
+} from "./mockParticipantsList";
+import { Participants } from "./types";
 
 export const useParticipants = () => {
-	const getParticipants = async () => {
-		return Promise.resolve(participants);
+	const participants: Ref<Participants[]> = ref([]);
+	const potentialParticipants: Ref<Participants[]> = ref([]);
+
+	const fetch = async () => {
+		participants.value = await Promise.resolve(mockParticipants);
 	};
 
-	const getPotentialParticipants = async () => {
-		return Promise.resolve(potentialParticipants);
+	const fetchPotential = async () => {
+		potentialParticipants.value = await Promise.resolve(
+			mockPotantialParticipants
+		);
+	};
+
+	const addParticipants = (ids: string[]) => {
+		const newParticipants = potentialParticipants.value.filter((p) =>
+			ids.includes(p.id)
+		);
+
+		participants.value = [...participants.value, ...newParticipants];
+	};
+
+	const deleteParticipants = (ids: string[]) => {
+		participants.value = participants.value.filter((p) => !ids.includes(p.id));
 	};
 
 	return {
-		getParticipants,
-		getPotentialParticipants,
+		addParticipants,
+		deleteParticipants,
+		fetch,
+		fetchPotential,
+		participants,
+		potentialParticipants,
 	};
 };

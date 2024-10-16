@@ -1,4 +1,4 @@
-export const participants = [
+export const mockParticipants = [
 	{
 		id: "507f1f77bcf86cd799439011",
 		firstName: "John",
@@ -91,7 +91,7 @@ export const participants = [
 	},
 ];
 
-export const potentialParticipants = [
+export const mockPotantialParticipants = [
 	{
 		id: "507f1f77bcf86cd799439014",
 		firstName: "Hans",
