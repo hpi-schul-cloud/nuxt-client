@@ -306,6 +306,12 @@ describe("Board", () => {
 			expect(wrapper.vm.board).toStrictEqual(board);
 		});
 
+		it("should call cardStore loadPreferredTools action", () => {
+			const { cardStore } = setup();
+
+			expect(cardStore.loadPreferredTools).toHaveBeenCalled();
+		});
+
 		it("should be found in the dom", () => {
 			const { wrapper } = setup();
 

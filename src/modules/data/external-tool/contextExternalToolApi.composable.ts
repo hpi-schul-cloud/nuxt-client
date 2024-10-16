@@ -115,9 +115,11 @@ export const useContextExternalToolApi = () => {
 		return toolConfigurationTemplate;
 	};
 
-	const fetchPreferredTools = async (contextType: ToolContextType) => {
+	const fetchPreferredTools = async (
+		contextType: ToolContextType | undefined
+	) => {
 		return await toolApi.toolConfigurationControllerGetPreferredToolsForContext(
-			[contextType]
+			contextType
 		);
 	};
 

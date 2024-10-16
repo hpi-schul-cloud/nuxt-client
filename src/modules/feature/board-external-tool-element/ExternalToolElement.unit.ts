@@ -177,6 +177,31 @@ describe("ExternalToolElement", () => {
 					useExternalToolLaunchStateMock.fetchContextLaunchRequest
 				).toHaveBeenCalledWith("contextExternalToolId");
 			});
+
+			it("should not open dialog", async () => {
+				const element = externalToolElementResponseFactory.build({
+					content: { contextExternalToolId: "contextExternalToolId" },
+				});
+				useSharedLastCreatedElementMock.lastCreatedElementId.value = element.id;
+
+				const { wrapper } = getWrapper(
+					{
+						element,
+						isEditMode: true,
+					},
+					externalToolDisplayDataFactory.build({
+						status: schoolToolConfigurationStatusFactory.build(),
+					})
+				);
+
+				await nextTick();
+
+				const dialog = wrapper.findComponent(
+					ExternalToolElementConfigurationDialog
+				);
+
+				expect(dialog.props("isOpen")).toEqual(false);
+			});
 		});
 
 		describe("when the element has a tool attached, but it is outdated", () => {
