@@ -1,0 +1,116 @@
+<template>
+	<v-card min-width="560">
+		<template v-slot:prepend>
+			<h1 class="mb-4 h4">
+				{{ t("pages.rooms.participants.addParticipants") }}
+			</h1>
+		</template>
+
+		<template v-slot:default>
+			<v-divider />
+			<div class="mx-4 mt-4">
+				<v-autocomplete
+					ref="autoCompleteSchool"
+					v-model="school"
+					:label="t('global.sidebar.item.school')"
+					item-value="id"
+					item-title="name"
+					density="comfortable"
+					readonly
+					menu-icon=""
+					color="primary"
+					bg-color="white"
+				/>
+			</div>
+
+			<div class="ma-4">
+				<v-autocomplete
+					ref="autoCompleteRole"
+					v-model="selectedRole"
+					:items="roles"
+					:label="t('common.labels.role')"
+					@update:model-value="onRoleChange"
+					auto-select-first="exact"
+					density="comfortable"
+					color="primary"
+					bg-color="white"
+				/>
+			</div>
+
+			<div class="ma-4">
+				<v-autocomplete
+					ref="autoCompleteUsers"
+					v-model="selectedUsers"
+					:items="userList"
+					:label="t('common.labels.name')"
+					density="comfortable"
+					color="primary"
+					bg-color="white"
+					item-value="id"
+					item-title="fullName"
+					multiple
+					chips
+					closable-chips
+					clear-on-select
+				/>
+			</div>
+			<v-divider class="mt-4" />
+		</template>
+
+		<template v-slot:actions>
+			<v-spacer />
+			<v-btn
+				ref="cancelButton"
+				class="ms-auto"
+				color="primary"
+				:text="t('common.actions.cancel')"
+				@click="onClose"
+			/>
+			<v-btn
+				ref="addButton"
+				class="ms-auto"
+				color="primary"
+				:text="t('common.actions.add')"
+				variant="flat"
+				@click="onAddParticipants"
+			/>
+		</template>
+	</v-card>
+</template>
+
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
+import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { computed, PropType, ref } from "vue";
+import { Participants } from "../../../data/room/roomParticipants/types";
+import { RoleName } from "@/serverApi/v3";
+
+defineProps({
+	userList: {
+		type: Array as PropType<Participants[]>,
+	},
+	preSelectedRole: {
+		type: String as PropType<RoleName>,
+	},
+});
+
+const emit = defineEmits(["add:participants", "close", "update:role"]);
+
+const { t } = useI18n();
+const authModule = injectStrict(AUTH_MODULE_KEY);
+const school = computed(() => authModule.getSchool);
+const roles = computed(() => [RoleName.Teacher, RoleName.Student]);
+const selectedRole = ref<RoleName>(RoleName.Teacher);
+const selectedUsers = ref<Participants[]>([]);
+
+const onRoleChange = () => {
+	selectedUsers.value = [];
+	emit("update:role", selectedRole.value);
+};
+
+const onAddParticipants = () => {
+	emit("add:participants", selectedUsers.value);
+	emit("close");
+};
+const onClose = () => emit("close");
+</script>

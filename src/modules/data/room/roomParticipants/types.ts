@@ -3,7 +3,8 @@ export type Participants = {
 	id: string;
 	firstName: string;
 	lastName: string;
-	role: string;
+	fullName: string;
+	roleName: string;
 	classes: string;
 	school: string;
 };

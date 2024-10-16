@@ -25,6 +25,8 @@
 			:headers="tableHeader"
 			:sort-asc-icon="mdiMenuDown"
 			:sort-desc-icon="mdiMenuUp"
+			:items-per-page="5"
+			:items-per-page-options="[5, 10, 20, 50]"
 			:items-per-page-text="
 				t('pages.rooms.participants.participantTable.itemsPerPage')
 			"
@@ -35,7 +37,7 @@
 
 <script setup lang="ts">
 import { computed, PropType, ref, toRef } from "vue";
-import { Participants } from "./types";
+import { Participants } from "../../../data/room/roomParticipants/types";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 
