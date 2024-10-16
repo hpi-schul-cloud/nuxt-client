@@ -5,8 +5,17 @@ import {
 import { mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import RoomGrid from "./RoomGrid.vue";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useRoomsState } from "@data-room";
+import { ref } from "vue";
+import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
+import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import RoomTile from "./RoomTile.vue";
+
+jest.mock("@data-room");
 
 describe("@feature-room/RoomGrid", () => {
+	let useRoomsStateMock: DeepMocked<ReturnType<typeof useRoomsState>>;
 	const setup = (props?: ComponentProps<typeof RoomGrid>) => {
 		const wrapper = mount(RoomGrid, {
 			global: {
@@ -18,9 +27,59 @@ describe("@feature-room/RoomGrid", () => {
 		return { wrapper };
 	};
 
-	it.todo("should render loading state when rooms are loading");
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
 
-	it.todo("should render empty state when no rooms were found");
+	it("should render loading state when rooms are loading", () => {
+		useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
+			isLoading: ref(true),
+			isEmpty: ref(false),
+			rooms: ref([]),
+			fetchRooms: jest.fn(),
+		});
 
-	it.todo("should render tiles for each room");
+		jest.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
+
+		const { wrapper } = setup();
+
+		const loader = wrapper.findComponent(VSkeletonLoader);
+		expect(loader.exists()).toBe(true);
+	});
+
+	it("should render empty state when no rooms were found", () => {
+		useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
+			isLoading: ref(false),
+			isEmpty: ref(true),
+			rooms: ref([]),
+			fetchRooms: jest.fn(),
+		});
+
+		jest.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
+
+		const { wrapper } = setup();
+
+		const emptyState = wrapper.findComponent(VCustomEmptyState);
+		expect(emptyState.exists()).toBe(true);
+	});
+
+	it("should render tiles for each room", () => {
+		const mockRooms = [
+			{ id: "1", name: "Room 1" },
+			{ id: "2", name: "Room 2" },
+		];
+		useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
+			isLoading: ref(false),
+			isEmpty: ref(false),
+			rooms: ref(mockRooms),
+			fetchRooms: jest.fn(),
+		});
+
+		jest.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
+
+		const { wrapper } = setup();
+
+		const tiles = wrapper.findAllComponents(RoomTile);
+		expect(tiles.length).toEqual(2);
+	});
 });
