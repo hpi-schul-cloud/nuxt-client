@@ -75,4 +75,5 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_AI_TUTOR_ENABLED: false,
 	FEATURE_ROOMS_ENABLED: false,
 	CALENDAR_SERVICE_ENABLED: false,
+	FEATURE_PREFERRED_CTL_TOOLS_ENABLED: false,
 };

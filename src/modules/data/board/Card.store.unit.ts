@@ -1,5 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ContentElementType } from "@/serverApi/v3";
+import { ContentElementType, ToolContextType } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import {
@@ -24,9 +24,9 @@ import { createPinia, setActivePinia } from "pinia";
 import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useBoardApi } from "./BoardApi.composable";
+import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
-import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -795,6 +795,18 @@ describe("CardStore", () => {
 			});
 
 			expect(cardStore.cards[cardId].elements[0].content).toEqual(newContent);
+		});
+	});
+
+	describe("loadPreferredTools", () => {
+		it("should call getPreferredTools", () => {
+			const { cardStore } = setup();
+
+			cardStore.loadPreferredTools(ToolContextType.BoardElement);
+
+			expect(mockedCardRestApiActions.getPreferredTools).toHaveBeenCalledWith(
+				ToolContextType.BoardElement
+			);
 		});
 	});
 });
