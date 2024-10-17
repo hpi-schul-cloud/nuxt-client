@@ -32,6 +32,7 @@ import {
 } from "./cardActionPayload";
 import * as CardActions from "./cardActions";
 import { useCardSocketApi } from "./cardSocketApi.composable";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -44,6 +45,9 @@ const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 
 jest.mock("@util-board/BoardNotifier.composable");
 jest.mock("@util-board/LastCreatedElement.composable");
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
+
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 const mockUseSharedLastCreatedElement = jest.mocked(
 	useSharedLastCreatedElement
@@ -81,6 +85,9 @@ describe("useCardSocketApi", () => {
 			lastCreatedElementId: computed(() => "element-id"),
 			resetLastCreatedElementId: jest.fn(),
 		});
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 	});
 
 	afterEach(() => {

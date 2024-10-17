@@ -10,6 +10,8 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
 import { useContentElementState } from "./ContentElementState.composable";
+import { Router, useRouter } from "vue-router";
+import { createMock } from "@golevelup/ts-jest";
 
 jest.mock("@util-board/InlineEditInteractionHandler.composable");
 
@@ -34,6 +36,9 @@ jest.mock("vue-i18n", () => {
 	};
 });
 
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
+
 describe("useContentElementState composable", () => {
 	beforeEach(() => {
 		setupStores({ envConfigModule: EnvConfigModule });
@@ -42,6 +47,9 @@ describe("useContentElementState composable", () => {
 		});
 		envConfigModule.setEnvs(envs);
 		setActivePinia(createTestingPinia());
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 	});
 	const setup = (options = { isEditMode: false, element: TEST_ELEMENT }) => {
 		return mountComposable(() => useContentElementState(options), {
