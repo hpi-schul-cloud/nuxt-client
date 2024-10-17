@@ -28,6 +28,18 @@
 									{{ $t("common.actions.edit") }}
 								</VListItemTitle>
 							</VListItem>
+
+							<VListItem
+								role="menuitem"
+								:to="`/rooms/${room.id}/participants`"
+								:aria-label="'Manage Participants'"
+							>
+								<template #prepend>
+									<VIcon :icon="mdiAccountGroupOutline" />
+								</template>
+								<VListItemTitle> Manage Participants </VListItemTitle>
+							</VListItem>
+
 							<VListItem
 								role="menuitem"
 								data-testid="room-action-delete"
@@ -64,7 +76,11 @@ import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomDetails } from "@feature-room";
-import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
+import {
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+	mdiAccountGroupOutline,
+} from "@icons/material";
 import {
 	ConfirmationDialog,
 	useDeleteConfirmationDialog,

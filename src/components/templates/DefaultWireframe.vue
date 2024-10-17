@@ -29,6 +29,7 @@
 						:to="fabItems.to"
 						:aria-label="fabItems.ariaLabel"
 						:data-testid="fabItems.dataTestId"
+						@fab:clicked="onFabClicked"
 					>
 						{{ fabItems.title }}
 						<template #actions>
@@ -109,9 +110,14 @@ const props = defineProps({
 	},
 });
 
-defineEmits({
+const emit = defineEmits({
 	onFabItemClick: (event: string) => (event ? true : false),
+	"fab:clicked": () => true,
 });
+
+const onFabClicked = () => {
+	emit("fab:clicked");
+};
 
 defineOptions({
 	inheritAttrs: false,

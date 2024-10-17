@@ -13,7 +13,7 @@
 				:icon="isCollapsed"
 				color="primary"
 				size="large"
-				@click="onClick"
+				@click="onFabItemClick"
 			>
 				<v-icon v-if="icon && !isMenuOpen">{{ icon }}</v-icon>
 				<v-icon v-if="isMenuOpen">{{ mdiClose }}</v-icon>
@@ -42,6 +42,7 @@
 				size="large"
 				:href="href"
 				:to="to"
+				@click="onFabClick"
 			>
 				<v-icon v-if="icon">{{ isMenuOpen ? mdiClose : icon }}</v-icon>
 				<span v-if="!isCollapsed" class="d-block"><slot /></span>
@@ -73,6 +74,8 @@ const props = withDefaults(
 	}>(),
 	{ direction: "bottom", orientation: "left" }
 );
+
+const emit = defineEmits(["fab:clicked"]);
 
 const slots = useSlots();
 
@@ -132,7 +135,10 @@ const classes = computed(() => {
 	return classList.join(" ");
 });
 
-const onClick = () => (isMenuOpen.value = !isMenuOpen.value);
+const onFabItemClick = () => (isMenuOpen.value = !isMenuOpen.value);
+const onFabClick = () => {
+	emit("fab:clicked");
+};
 const onClickOutside = () => (isMenuOpen.value = false);
 
 /**
@@ -155,7 +161,7 @@ const hasPseudoRenderElement = (actionsInSlot: VNode[]) => {
 }
 
 .default-width {
-	width: 120px !important;
+	width: 100%;
 }
 
 .position-relative {
@@ -180,5 +186,6 @@ const hasPseudoRenderElement = (actionsInSlot: VNode[]) => {
 
 .size-transition {
 	transition: all 200ms ease-in-out;
+	min-width: 56px;
 }
 </style>

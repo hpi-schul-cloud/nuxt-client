@@ -163,4 +163,18 @@ describe("SpeedDialMenu", () => {
 			expect(menuButton.text()).toEqual("DefaultSlotLabel");
 		}
 	);
+
+	describe("when component has no actions", () => {
+		it("should emit 'fab:clicked' after click the fab button", async () => {
+			const wrapper = mount(SpeedDialMenu, {
+				global: { plugins: [createTestingVuetify()] },
+			});
+
+			wrapper.setProps({ icon: mdiClose });
+
+			const button = wrapper.findComponent({ name: "v-btn" });
+			await button.trigger("click");
+			expect(wrapper.emitted("fab:clicked")).toHaveLength(1);
+		});
+	});
 });

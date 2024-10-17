@@ -123,4 +123,19 @@ describe("DefaultWireframe", () => {
 		const menu = wrapper.find(".menu");
 		expect(menu.text()).toBe("a custom menu or searchbar");
 	});
+
+	it("should emit 'fab:clicked' after click the fab button", async () => {
+		const wrapper = setup();
+		await wrapper.setProps({
+			fabItems: {
+				icon: "mdi-close",
+				title: "dummy title",
+			},
+		});
+
+		const fab = wrapper.findComponent({ name: "speed-dial-menu" });
+		await fab.vm.$emit("fab:clicked");
+
+		expect(wrapper.emitted("fab:clicked")).toHaveLength(1);
+	});
 });
