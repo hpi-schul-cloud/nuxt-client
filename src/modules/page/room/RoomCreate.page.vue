@@ -46,7 +46,8 @@ const onSave = async (roomParams: RoomCreateParams) => {
 };
 
 const onCancel = () => {
-	// TODO use useConfirmationDialog here, when it's refactored
-	router.go(-1);
+	router.push({
+		name: "rooms",
+	});
 };
 </script>

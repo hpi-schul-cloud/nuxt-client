@@ -17,7 +17,10 @@ export const useDeleteConfirmationDialog = () => {
 			type: typeString,
 		});
 
-		const shouldDelete = await askConfirmation({ message });
+		const shouldDelete = await askConfirmation({
+			message,
+			confirmActionLangKey: "common.actions.delete",
+		});
 
 		return shouldDelete;
 	};
