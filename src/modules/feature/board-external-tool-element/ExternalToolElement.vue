@@ -2,7 +2,7 @@
 	<v-card
 		v-show="hasLinkedTool || isEditMode"
 		class="mb-4"
-		data-testid="board-external-tool-element"
+		:data-testid="`board-external-tool-element-${toolDisplayName}`"
 		elevation="0"
 		variant="outlined"
 		ref="externalToolElement"
