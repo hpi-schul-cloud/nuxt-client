@@ -181,6 +181,7 @@ export default {
 	"common.words.languages.uk": "Українська",
 	"common.words.learnContent": "Зміст навчання",
 	"common.words.lernstore": "Навчальний магазин",
+	"common.words.mainSchool": "Основна школа",
 	"common.words.no": "Немає",
 	"common.words.noChoice": "Немає вибору",
 	"common.words.otherGroups": "інші групи",
@@ -1662,6 +1663,11 @@ export default {
 	"pages.rooms.title": "Кімнати",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
+	"pages.rooms.participants.label": "Учасники",
+	"pages.rooms.participants.addParticipants": "Додайте учасників",
+	"pages.rooms.participants.manageParticipants": "Керувати учасниками",
+	"pages.rooms.participants.participantTable.itemsPerPage":
+		"Записи на сторінку",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

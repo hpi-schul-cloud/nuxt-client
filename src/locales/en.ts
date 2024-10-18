@@ -179,6 +179,7 @@ export default {
 	"common.words.languages.uk": "Ukrainian",
 	"common.words.learnContent": "Learning content",
 	"common.words.lernstore": "Learning Store",
+	"common.words.mainSchool": "Main School",
 	"common.words.no": "No",
 	"common.words.noChoice": "No choice",
 	"common.words.otherGroups": "other groups",
@@ -1640,6 +1641,10 @@ export default {
 	"pages.rooms.title": "Rooms",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
+	"pages.rooms.participants.label": "Participants",
+	"pages.rooms.participants.addParticipants": "Add participants",
+	"pages.rooms.participants.manageParticipants": "Manage participants",
+	"pages.rooms.participants.participantTable.itemsPerPage": "Entries per page",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",
