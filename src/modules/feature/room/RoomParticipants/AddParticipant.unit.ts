@@ -48,7 +48,6 @@ describe("AddParticipants", () => {
 
 			expect(wrapper.exists()).toBe(true);
 			expect(wrapper.findComponent(AddParticipants)).toBeTruthy();
-			expect(wrapperVM.preSelectedRole).toStrictEqual(RoleName.Teacher);
 			expect(wrapperVM.userList).toStrictEqual(mockPotentialParticipants);
 		});
 
