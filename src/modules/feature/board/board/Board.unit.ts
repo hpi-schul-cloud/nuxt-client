@@ -840,7 +840,7 @@ describe("Board", () => {
 			});
 
 			describe("@createApplicationError", () => {
-				describe("when board is draft mode", () => {
+				describe("when board is in draft mode", () => {
 					describe("when the user is not a teacher", () => {
 						it("should call 'createApplicationError' method", async () => {
 							const mockRoomId =

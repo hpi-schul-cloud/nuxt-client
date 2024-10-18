@@ -41,7 +41,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
 	const { setFocus, forceFocus } = useBoardFocusHandler();
-	const referenceRoomId = ref<string | undefined>(undefined);
+	const roomId = ref<string | undefined>(undefined);
 
 	const restApi = useBoardRestApi();
 	const isSocketEnabled =
@@ -315,9 +315,9 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const deleteBoardRequest = async (
 		payload: DeleteBoardRequestPayload,
-		roomId: string | undefined
+		paramRoomId: string | undefined
 	) => {
-		if (roomId) referenceRoomId.value = roomId;
+		if (paramRoomId) roomId.value = paramRoomId;
 		await socketOrRest.deleteBoardRequest(payload);
 	};
 
@@ -325,7 +325,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 		if (payload.isOwnAction === true) {
 			router.replace({
 				name: "rooms-id",
-				params: { id: referenceRoomId.value },
+				params: { id: roomId.value },
 			});
 			return;
 		}
