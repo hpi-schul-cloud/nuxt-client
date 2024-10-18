@@ -1,13 +1,13 @@
 <template>
 	<v-card min-width="560">
 		<template v-slot:prepend>
-			<h1 class="mb-4 ml-2 h4">
+			<h1 class="mb-5 ml-2 h4">
 				{{ t("pages.rooms.participants.addParticipants") }}
 			</h1>
 		</template>
 
 		<template v-slot:default>
-			<div class="ml-4 mr-6">
+			<div class="ml-8 mr-6">
 				<div class="mt-4">
 					<v-autocomplete
 						ref="autoCompleteSchool"
@@ -114,3 +114,14 @@ const onAddParticipants = () => {
 };
 const onClose = () => emit("close");
 </script>
+
+<style scoped>
+:deep .v-label {
+	margin-left: 0px !important;
+	padding-left: 2px !important;
+}
+
+:deep .v-field__input {
+	padding-left: 2px !important;
+}
+</style>
