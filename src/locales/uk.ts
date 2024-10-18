@@ -347,6 +347,10 @@ export default {
 	"components.board.column.defaultTitle": "Нова колонка",
 	"components.board.column.ghost.column.placeholder": "Додати стовпець",
 	"components.board.column.ghost.list.placeholder": "Додати розділ",
+	"components.board.error.404":
+		"Помилка 404 – Дошки з такою назвою не знайдено",
+	"components.board.error.403":
+		"Помилка 403 – На жаль, у вас немає дозволу на перегляд цього контенту",
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",

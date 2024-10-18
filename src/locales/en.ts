@@ -341,6 +341,10 @@ export default {
 	"components.board.column.defaultTitle": "New column",
 	"components.board.column.ghost.column.placeholder": "Add column",
 	"components.board.column.ghost.list.placeholder": "Add section",
+	"components.board.error.404":
+		"Error 404 – Board with this name was not found",
+	"components.board.error.403":
+		"Error 403 – Unfortunately, you do not have permission to view this content",
 	"components.board.menu.board": "Board settings",
 	"components.board.menu.card": "Card settings",
 	"components.board.menu.column": "Column settings",

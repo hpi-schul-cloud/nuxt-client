@@ -22,6 +22,7 @@ import {
 } from "./boardInactivity.composable";
 import { useCardStore } from "./Card.store";
 import { useSocketConnection } from "./socket/socket";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -33,6 +34,9 @@ const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 jest.mock("./socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 jest.mock("@util-board/BoardNotifier.composable");
 jest.mock("@util-board/LastCreatedElement.composable");
@@ -75,6 +79,9 @@ describe("pageInactivity.composable", () => {
 	mockedSocketConnectionHandler =
 		createMock<ReturnType<typeof useSocketConnection>>();
 	mockedUseSocketConnection.mockReturnValue(mockedSocketConnectionHandler);
+
+	const router = createMock<Router>();
+	useRouterMock.mockReturnValue(router);
 
 	const setup = (timer = 0) => {
 		boardStore = mockedPiniaStoreTyping(useBoardStore);
