@@ -11,7 +11,7 @@
 			</h1>
 		</template>
 
-		<div class="mb-8 mt-12">
+		<div class="mb-8 mt-12 mx-16">
 			Hier könnte Text stehen oder ein wichtiger Hinweis, zum Beispiel: wo man
 			den Hilfeartikel zur Anzeige des eigenen Namens im zentralen Verzeichnis
 			findet.
@@ -87,7 +87,6 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 		},
 	];
 });
-
 
 const onFabClick = async () => {
 	await fetchPotentialUsers(RoleName.Teacher);

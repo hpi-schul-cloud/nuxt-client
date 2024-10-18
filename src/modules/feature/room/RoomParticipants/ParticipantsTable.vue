@@ -73,7 +73,7 @@ const tableHeader = [
 	},
 	{
 		title: t("common.labels.role"),
-		key: "role",
+		key: "roleName",
 	},
 	{
 		title: t("common.words.classes"),
