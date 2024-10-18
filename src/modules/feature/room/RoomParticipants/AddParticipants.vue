@@ -7,7 +7,6 @@
 		</template>
 
 		<template v-slot:default>
-			<v-divider />
 			<div class="mx-4 mt-4">
 				<v-autocomplete
 					ref="autoCompleteSchool"
@@ -29,6 +28,8 @@
 					v-model="selectedRole"
 					:items="roles"
 					:label="t('common.labels.role')"
+					readonly
+					menu-icon=""
 					@update:model-value="onRoleChange"
 					auto-select-first="exact"
 					density="comfortable"
@@ -43,7 +44,6 @@
 					v-model="selectedUsers"
 					:items="userList"
 					:label="t('common.labels.name')"
-					density="comfortable"
 					color="primary"
 					bg-color="white"
 					item-value="id"
@@ -54,7 +54,6 @@
 					clear-on-select
 				/>
 			</div>
-			<v-divider class="mt-4" />
 		</template>
 
 		<template v-slot:actions>
