@@ -595,6 +595,11 @@ export default defineComponent({
 	white-space: nowrap;
 }
 
+.text-h3 {
+	size: 33px;
+	line-height: 40px;
+}
+
 :deep(.theme--light.v-chip:hover::before) {
 	opacity: 0;
 }

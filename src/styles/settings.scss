@@ -3,9 +3,6 @@
   $heading-font-family: var(--font-accent),
   $line-height-root: var(--line-height-md),
 
-  $breadcrumbs-line-height: 20px,
-  $breadcrumbs-item-padding: 0px,
-
   $typography: (
     "h1": (
       "size": var(--heading-1),
@@ -16,8 +13,8 @@
       "line-height": var(--line-height-sm),
     ),
     "h3": (
-      "size": 33px,
-      "line-height": 40px,
+      "size": var(--heading-3),
+      "line-height": var(--line-height-sm),
     ),
     "h4": (
       "size": var(--heading-4),

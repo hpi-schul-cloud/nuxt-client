@@ -134,6 +134,11 @@ const showBorder = computed(() => {
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
 
+.text-h3 {
+	size: 33px;
+	line-height: 40px;
+}
+
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);
 }
