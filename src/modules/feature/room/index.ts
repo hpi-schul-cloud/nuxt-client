@@ -5,3 +5,4 @@ import ParticipantsTable from "./RoomParticipants/ParticipantsTable.vue";
 import AddParticipants from "./RoomParticipants/AddParticipants.vue";
 
 export { RoomGrid, RoomDetails, RoomForm, ParticipantsTable, AddParticipants };
+

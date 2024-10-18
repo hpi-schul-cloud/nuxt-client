@@ -155,6 +155,7 @@ describe("RoomParticipantsPage", () => {
 				name: "ParticipantsTable",
 			});
 			expect(participantsTable.exists()).toBe(true);
+
 		});
 	});
 

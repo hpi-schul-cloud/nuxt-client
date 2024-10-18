@@ -16,7 +16,7 @@
 			den Hilfeartikel zur Anzeige des eigenen Namens im zentralen Verzeichnis
 			findet.
 		</div>
-		<div class="mx-8">
+		<div class="mx-16">
 			<ParticipantsTable :participants="participantsList" />
 		</div>
 		<div>
@@ -37,12 +37,15 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
+
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
+
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
+
 import { ParticipantsTable, AddParticipants } from "@feature-room";
 import { RoleName } from "@/serverApi/v3";
 import { useParticipants, Participants } from "@data-room";
@@ -51,6 +54,7 @@ const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
 const { room } = storeToRefs(useRoomDetailsStore());
+
 const isParticipantsDialogOpen = ref(false);
 const {
 	potentialParticipants,
@@ -83,6 +87,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 		},
 	];
 });
+
 
 const onFabClick = async () => {
 	await fetchPotentialUsers(RoleName.Teacher);
