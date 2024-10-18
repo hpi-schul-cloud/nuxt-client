@@ -44,12 +44,8 @@ import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
-import { Participants } from "@/modules/data/room/roomParticipants/types";
 import { RoleName } from "@/serverApi/v3";
-import { useParticipants } from "../../data/room/index";
-import { mockParticipants } from "@data-room";
-import { ParticipantsTable } from "@feature-room";
-
+import { useParticipants, Participants } from "@data-room";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();

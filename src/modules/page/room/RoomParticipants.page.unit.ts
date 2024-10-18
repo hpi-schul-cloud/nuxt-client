@@ -18,8 +18,6 @@ import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule } from "@/store";
 
-import { mockParticipants } from "@data-room";
-
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 const useRouteMock = <jest.Mock>useRoute;

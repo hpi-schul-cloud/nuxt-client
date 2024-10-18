@@ -82,7 +82,7 @@
 import { useI18n } from "vue-i18n";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, PropType, ref } from "vue";
-import { Participants } from "../../../data/room/roomParticipants/types";
+import { Participants } from "@data-room";
 import { RoleName } from "@/serverApi/v3";
 
 defineProps({

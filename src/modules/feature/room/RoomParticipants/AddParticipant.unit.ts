@@ -3,11 +3,10 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import AddParticipants from "./AddParticipants.vue";
-import { mockPotentialParticipants } from "@/modules/data/room/roomParticipants/mockParticipantsList";
 import { RoleName } from "@/serverApi/v3";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule } from "@/store";
-import { Participants } from "@/modules/data/room/roomParticipants/types";
+import { Participants, mockPotentialParticipants } from "@data-room";
 import { nextTick } from "vue";
 
 jest.mock("@/store/store-accessor", () => {

@@ -3,10 +3,8 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import ParticipantsTable from "./ParticipantsTable.vue";
-import { mockParticipants } from @data-room";
-import { Participants } from "../../../data/room/roomParticipants/types";
-import { participants } from "@data-room";
-import { Participants } from "./types";
+import { mockParticipants } from "@data-room";
+import { Participants } from "@data-room";
 import { Ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 
