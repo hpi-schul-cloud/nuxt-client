@@ -28,7 +28,9 @@ export default defineComponent({
 		watch(
 			() => applicationErrorModule.getStatusCode,
 			(to) => {
-				to !== null ? routeToErrorPage() : null;
+				if (to !== null) {
+					routeToErrorPage();
+				}
 			},
 			{ immediate: true }
 		);

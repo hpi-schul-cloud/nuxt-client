@@ -109,7 +109,9 @@ export default {
 			// this.$emit("input", event);
 		},
 		handleBlur(event) {
-			this.validationModel && this.validationModel.$touch();
+			if (this.validationModel) {
+				this.validationModel.$touch();
+			}
 			this.$emit("blur", event);
 		},
 		handleFocus(event) {

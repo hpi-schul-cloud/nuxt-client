@@ -109,6 +109,7 @@ module.exports = {
 			extensions: [".js", ".jsx", ".vue", ".ts", ".tsx"],
 			failOnWarning: false,
 			failOnError: true,
+			configType: "flat",
 		}),
 	],
 
