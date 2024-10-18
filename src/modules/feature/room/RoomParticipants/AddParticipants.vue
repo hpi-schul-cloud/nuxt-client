@@ -88,9 +88,6 @@ defineProps({
 	userList: {
 		type: Array as PropType<Participants[]>,
 	},
-	preSelectedRole: {
-		type: String as PropType<RoleName>,
-	},
 });
 
 const emit = defineEmits(["add:participants", "close", "update:role"]);

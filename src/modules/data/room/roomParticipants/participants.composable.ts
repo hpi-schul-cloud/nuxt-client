@@ -10,7 +10,7 @@ export const useParticipants = () => {
 	const participants: Ref<Participants[]> = ref([]);
 	const potentialParticipants: Ref<Participants[]> = ref([]);
 
-	const fetch = async () => {
+	const fetchParticipants = async () => {
 		participants.value = await Promise.resolve(mockParticipants);
 	};
 
@@ -52,7 +52,7 @@ export const useParticipants = () => {
 	return {
 		addParticipants,
 		deleteParticipants,
-		fetch,
+		fetchParticipants,
 		fetchPotentialUsers,
 		participants,
 		potentialParticipants,
