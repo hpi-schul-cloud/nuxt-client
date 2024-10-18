@@ -2,9 +2,13 @@ import { ContentElementType } from "@/serverApi/v3";
 import { ConfigResponse } from "@/serverApi/v3/api";
 import NotifierModule from "@/store/notifier";
 import { injectStrict } from "@/utils/inject";
+import { mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { useCardStore } from "@data-board";
 import { createMock } from "@golevelup/ts-jest";
+import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
+import { setActivePinia } from "pinia";
 import { ref } from "vue";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
@@ -12,6 +16,8 @@ import { useAddElementDialog } from "./AddElementDialog.composable";
 setupStores({ notifierModule: NotifierModule });
 
 jest.mock("./SharedElementTypeSelection.composable");
+
+jest.mock("@data-board");
 
 jest.mock("@/utils/inject");
 const mockedInjectStrict = jest.mocked(injectStrict);
@@ -51,6 +57,10 @@ mockedInjectStrict.mockImplementation(() => {
 });
 
 describe("ElementTypeSelection Composable", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia({}));
+	});
+
 	describe("onElementClick", () => {
 		describe("when element is created successfully", () => {
 			const setup = () => {
@@ -272,15 +282,24 @@ describe("ElementTypeSelection Composable", () => {
 				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 				FEATURE_TLDRAW_ENABLED: true,
 				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
+				FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
 			}
 		) => {
 			const cardId = "cardId";
+			const cardStore = mockedPiniaStoreTyping(useCardStore);
 			const addElementMock = jest.fn();
 			const closeDialogMock = jest.fn();
 			const { elementTypeOptions } = setupSharedElementTypeSelectionMock({
 				closeDialogMock,
 			});
 
+			cardStore.preferredTools = [
+				{
+					name: "mock tool",
+					iconName: "mdiMock",
+					schoolExternalToolId: ObjectIdMock(),
+				},
+			];
 			const showCustomNotifierMock = jest.fn();
 			const mockedBoardNotifierCalls = createMock<
 				ReturnType<typeof useBoardNotifier>
@@ -473,6 +492,37 @@ describe("ElementTypeSelection Composable", () => {
 				askType();
 
 				const action = elementTypeOptions.value[4].action;
+				action();
+
+				expect(closeDialogMock).toBeCalledTimes(1);
+			});
+		});
+
+		// TODO N21-2167 fix Cannot read properties of undefined (reading 'showCustomNotifier')
+		describe("when the preferred tool action is called", () => {
+			it("should call add element function with right argument", async () => {
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				const action = elementTypeOptions.value[6].action;
+				action();
+
+				expect(addElementMock).toBeCalledTimes(1);
+				expect(addElementMock).toBeCalledWith({
+					type: ContentElementType.ExternalTool,
+					cardId,
+				});
+			});
+
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+				askType();
+
+				const action = elementTypeOptions.value[6].action;
 				action();
 
 				expect(closeDialogMock).toBeCalledTimes(1);

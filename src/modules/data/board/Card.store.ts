@@ -12,6 +12,7 @@ import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload";
 
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import {
+	CreateElementRequestPayload,
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
 	DeleteElementSuccessPayload,
@@ -95,6 +96,13 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	const createElementRequest = socketOrRest.createElementRequest;
+
+	const createPreferredElement = async (
+		payload: CreateElementRequestPayload,
+		tool: PreferredToolResponse
+	) => {
+		restApi.createPreferredElement(payload, tool);
+	};
 
 	const createElementSuccess = async (payload: CreateElementSuccessPayload) => {
 		const card = cards.value[payload.cardId];
@@ -232,6 +240,7 @@ export const useCardStore = defineStore("cardStore", () => {
 	};
 
 	return {
+		createPreferredElement,
 		createCardSuccess,
 		createElementRequest,
 		createElementSuccess,

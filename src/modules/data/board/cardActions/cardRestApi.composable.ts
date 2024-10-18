@@ -7,13 +7,13 @@ import {
 import {
 	ContentElementType,
 	ExternalToolElementResponse,
+	PreferredToolListResponse,
 	PreferredToolResponse,
 	ToolContextType,
 } from "@/serverApi/v3";
-import SchoolExternalToolsModule from "@/store/school-external-tools";
+import { schoolExternalToolsModule } from "@/store";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { delay } from "@/utils/helpers";
-import { injectStrict, SCHOOL_EXTERNAL_TOOLS_MODULE_KEY } from "@/utils/inject";
 import { useBoardStore } from "@data-board";
 import {
 	ContextExternalTool,
@@ -22,6 +22,7 @@ import {
 	useContextExternalToolApi,
 } from "@data-external-tool";
 import { useSharedEditMode } from "@util-board";
+import { AxiosResponse } from "axios";
 import { useBoardApi } from "../BoardApi.composable";
 import { useCardStore } from "../Card.store";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
@@ -59,11 +60,6 @@ export const useCardRestApi = () => {
 		useContextExternalToolApi();
 
 	const { setEditModeId } = useSharedEditMode();
-
-	const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
-		SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
-	);
-
 	const createElementRequest = async (
 		payload: CreateElementRequestPayload
 	): Promise<AnyContentElement | undefined> => {
@@ -160,7 +156,8 @@ export const useCardRestApi = () => {
 
 	const getPreferredTools = async (contextType: ToolContextType) => {
 		try {
-			const preferredTools = await fetchPreferredTools(contextType);
+			const preferredTools: AxiosResponse<PreferredToolListResponse> =
+				await fetchPreferredTools(contextType);
 
 			return preferredTools.data.data;
 		} catch (error) {

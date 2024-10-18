@@ -47,6 +47,6 @@ onMounted(() => {
 
 <style scoped>
 .button-max-width {
-	max-width: 100px;
+	max-width: 125px;
 }
 </style>

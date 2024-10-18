@@ -1,11 +1,17 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { ContentElementType, ToolContextType } from "@/serverApi/v3";
+import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
+import {
+	ContentElementType,
+	PreferredToolResponse,
+	ToolContextType,
+} from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import {
 	envsFactory,
 	externalToolElementResponseFactory,
 	fileElementResponseFactory,
+	ObjectIdMock,
 	richTextElementContentFactory,
 	richTextElementResponseFactory,
 } from "@@/tests/test-utils";
@@ -807,6 +813,40 @@ describe("CardStore", () => {
 			expect(mockedCardRestApiActions.getPreferredTools).toHaveBeenCalledWith(
 				ToolContextType.BoardElement
 			);
+		});
+	});
+
+	describe("createPreferredElement", () => {
+		const setupCreatePreferredElement = () => {
+			const { cardStore } = setup();
+
+			const payload: CreateElementRequestPayload = {
+				cardId: "cardId",
+				type: ContentElementType.ExternalTool,
+			};
+
+			const preferredTool: PreferredToolResponse = {
+				schoolExternalToolId: ObjectIdMock(),
+				name: "Tool name",
+				iconName: "mock iconName",
+			};
+
+			return {
+				cardStore,
+				payload,
+				preferredTool,
+			};
+		};
+
+		it("should call createPreferredElement", () => {
+			const { cardStore, payload, preferredTool } =
+				setupCreatePreferredElement();
+
+			cardStore.createPreferredElement(payload, preferredTool);
+
+			expect(
+				mockedCardRestApiActions.createPreferredElement
+			).toHaveBeenCalledWith(payload, preferredTool);
 		});
 	});
 });

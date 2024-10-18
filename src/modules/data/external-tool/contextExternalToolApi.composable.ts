@@ -3,6 +3,7 @@ import {
 	ContextExternalToolConfigurationTemplateResponse,
 	ContextExternalToolPostParams,
 	ContextExternalToolResponse,
+	PreferredToolListResponse,
 	ToolApiFactory,
 	ToolApiInterface,
 	ToolContextType,
@@ -117,7 +118,7 @@ export const useContextExternalToolApi = () => {
 
 	const fetchPreferredTools = async (
 		contextType: ToolContextType | undefined
-	) => {
+	): Promise<AxiosResponse<PreferredToolListResponse>> => {
 		return await toolApi.toolConfigurationControllerGetPreferredToolsForContext(
 			contextType
 		);

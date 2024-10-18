@@ -1,5 +1,4 @@
 import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
-import { useCardRestApi } from "@/modules/data/board/cardActions/cardRestApi.composable";
 import { ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useCardStore } from "@data-board";
@@ -34,8 +33,6 @@ export const useAddElementDialog = (
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
-	const { createPreferredElement } = useCardRestApi();
-
 	const preferredTools = cardStore.preferredTools;
 
 	const onElementClick = async (elementType: ContentElementType) => {
@@ -50,7 +47,7 @@ export const useAddElementDialog = (
 		tool: PreferredToolResponse
 	) => {
 		closeDialog();
-		await createPreferredElement({ cardId, type: elementType }, tool);
+		await cardStore.createPreferredElement({ cardId, type: elementType }, tool);
 
 		showNotificationByElementType(elementType);
 	};
