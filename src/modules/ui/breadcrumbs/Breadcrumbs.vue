@@ -1,10 +1,7 @@
 <template>
 	<v-breadcrumbs :items="breadcrumbs" class="custom-breadcrumb px-0 py-0">
-		<template #prepend>
-			<v-icon>{{ mdiChevronLeft }}</v-icon>
-		</template>
 		<template #divider>
-			<v-icon>{{ mdiChevronLeft }}</v-icon>
+			<v-icon>{{ mdiChevronRight }}</v-icon>
 		</template>
 		<template #item="{ item, index }">
 			<v-breadcrumbs-item
@@ -24,7 +21,7 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import { mdiChevronLeft } from "@icons/material";
+import { mdiChevronRight } from "@icons/material";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 
 defineProps({

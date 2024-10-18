@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe max-width="short" :fab-items="fabAction">
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4">{{ t("pages.rooms.title") }}</h1>
+			<h1 class="text-h3 mb-4">{{ t("pages.rooms.title") }}</h1>
 		</template>
 		<RoomGrid />
 	</DefaultWireframe>
@@ -29,3 +29,9 @@ const fabAction = {
 	testId: "fab-add-room",
 };
 </script>
+<style scoped>
+.text-h3 {
+	size: 33px;
+	line-height: 40px;
+}
+</style>

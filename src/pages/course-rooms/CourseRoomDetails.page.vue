@@ -7,7 +7,7 @@
 		max-width="short"
 	>
 		<template #header>
-			<div class="d-flex ma-2 mt-3">
+			<div class="d-flex mt-3">
 				<h1
 					class="text-h3 pb-2 ma-0 course-title"
 					:class="{ 'pr-5': roomData.isArchived }"
@@ -593,6 +593,11 @@ export default defineComponent({
 .course-title {
 	overflow: hidden;
 	white-space: nowrap;
+}
+
+.text-h3 {
+	size: 33px;
+	line-height: 40px;
 }
 
 :deep(.theme--light.v-chip:hover::before) {

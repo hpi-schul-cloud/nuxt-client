@@ -1,7 +1,7 @@
 <template>
 	<DefaultWireframe max-width="short" :breadcrumbs="breadcrumbs">
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4">
+			<h1 class="text-h3 mb-4">
 				{{ $t("pages.roomDetails.ariaLabels.menu.action.edit") }}
 			</h1>
 		</template>
@@ -81,3 +81,9 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	return [];
 });
 </script>
+<style scoped>
+.text-h3 {
+	size: 33px;
+	line-height: 40px;
+}
+</style>
