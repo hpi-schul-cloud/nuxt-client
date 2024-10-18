@@ -1685,7 +1685,7 @@ export default {
 	"pages.rooms.participants.addParticipants": "Añadir participantes",
 	"pages.rooms.participants.manageParticipants": "Administrar participantes",
 	"pages.rooms.participants.participantTable.itemsPerPage":
-		"Elementos por página",
+		"Entradas por página",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",

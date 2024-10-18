@@ -1638,9 +1638,9 @@ export default {
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.rooms.participants.label": "Participants",
-	"pages.rooms.participants.addParticipants": "Add Participants",
-	"pages.rooms.participants.manageParticipants": "Manage Participants",
-	"pages.rooms.participants.participantTable.itemsPerPage": "Items per page",
+	"pages.rooms.participants.addParticipants": "Add participants",
+	"pages.rooms.participants.manageParticipants": "Manage participants",
+	"pages.rooms.participants.participantTable.itemsPerPage": "Entries per page",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",

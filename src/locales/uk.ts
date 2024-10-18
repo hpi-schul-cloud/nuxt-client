@@ -1663,7 +1663,7 @@ export default {
 	"pages.rooms.participants.addParticipants": "Додайте учасників",
 	"pages.rooms.participants.manageParticipants": "Керувати учасниками",
 	"pages.rooms.participants.participantTable.itemsPerPage":
-		"Елементів на сторінці",
+		"Записи на сторінку",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",
