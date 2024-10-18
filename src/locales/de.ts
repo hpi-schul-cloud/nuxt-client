@@ -179,6 +179,7 @@ export default {
 	"common.words.learnContent": "Lerninhalte",
 	"common.words.export": "Kurs-Export wird heruntergeladen",
 	"common.words.lernstore": "Lern-Store",
+	"common.words.mainSchool": "Stammschule",
 	"common.words.no": "Nein",
 	"common.words.noChoice": "Keine Auswahl",
 	"common.words.otherGroups": "sonstige Gruppen",
@@ -1664,6 +1665,11 @@ export default {
 	"pages.rooms.title": "Räume",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
+	"pages.rooms.participants.label": "Teilnehmende",
+	"pages.rooms.participants.addParticipants": "Teilnehmende hinzufügen",
+	"pages.rooms.participants.manageParticipants": "Teilnehmende verwalten",
+	"pages.rooms.participants.participantTable.itemsPerPage":
+		"Einträge pro Seite",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
