@@ -14,7 +14,7 @@ export const useParticipants = () => {
 		participants.value = await Promise.resolve(mockParticipants);
 	};
 
-	const fetchPotential = async (role: RoleName) => {
+	const fetchPotentialUsers = async (role: RoleName) => {
 		if (role) {
 			potentialParticipants.value = await Promise.resolve(
 				mockPotentialParticipants.filter(
@@ -53,7 +53,7 @@ export const useParticipants = () => {
 		addParticipants,
 		deleteParticipants,
 		fetch,
-		fetchPotential,
+		fetchPotentialUsers,
 		participants,
 		potentialParticipants,
 	};
