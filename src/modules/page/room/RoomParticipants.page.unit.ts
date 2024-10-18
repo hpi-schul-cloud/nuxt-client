@@ -13,7 +13,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomColor } from "@/serverApi/v3";
 import { nextTick } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import { participants } from "../../data/room/mockParticipantsList";
+import { participants } from "@data-room";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;

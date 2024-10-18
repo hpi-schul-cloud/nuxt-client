@@ -10,7 +10,7 @@
 				{{ t("pages.rooms.participants.manageParticipants") }}
 			</h1>
 		</template>
-		<div class="mb-8">
+		<div class="mb-8 mt-12">
 			Hier könnte Text stehen oder ein wichtiger Hinweis, zum Beispiel: wo man
 			den Hilfeartikel zur Anzeige des eigenen Namens im zentralen Verzeichnis
 			findet.
@@ -32,7 +32,7 @@ import { useRoute } from "vue-router";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
-import { participants } from "../../data/room/mockParticipantsList";
+import { participants } from "@data-room";
 import { ParticipantsTable } from "@feature-room";
 
 const { fetchRoom } = useRoomDetailsStore();
@@ -64,10 +64,6 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 		{
 			title: room.value?.name || "",
 			to: `/rooms/${route.params.id}`,
-		},
-		{
-			title: t("pages.rooms.participants.manageParticipants"),
-			disabled: true,
 		},
 	];
 });
