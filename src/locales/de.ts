@@ -1669,7 +1669,7 @@ export default {
 	"pages.rooms.participants.addParticipants": "Teilnehmende hinzufügen",
 	"pages.rooms.participants.manageParticipants": "Teilnehmende verwalten",
 	"pages.rooms.participants.participantTable.itemsPerPage":
-		"Elemente pro Seite",
+		"Einträge pro Seite",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",
