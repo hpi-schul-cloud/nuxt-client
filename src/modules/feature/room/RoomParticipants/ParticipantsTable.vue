@@ -20,7 +20,7 @@
 		<v-divider />
 		<v-data-table
 			v-model:search="search"
-			:items="participants"
+			:items="participantsList"
 			item-value="id"
 			:headers="tableHeader"
 			:sort-asc-icon="mdiMenuDown"
@@ -49,18 +49,19 @@ const props = defineProps({
 });
 const { t } = useI18n();
 const search = ref("");
-const participantsCount = toRef(props, "participants").value.length;
-const participantsFilterCount = ref(participantsCount);
+const participantsList = toRef(props, "participants");
+const participantsFilterCount = ref(participantsList.value.length);
 
 const onUpdateFilter = (value: Participants[]) => {
 	participantsFilterCount.value =
-		search.value === "" ? participantsCount : value.length;
+		search.value === "" ? participantsList.value.length : value.length;
 };
 
 const tableTitle = computed(
 	() =>
 		`${t("pages.rooms.participants.label")} (${participantsFilterCount.value})`
 );
+
 const tableHeader = [
 	{
 		title: t("common.labels.firstName"),
