@@ -99,7 +99,7 @@ const emit = defineEmits(["add:participants", "close", "update:role"]);
 const { t } = useI18n();
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const school = computed(() => authModule.getSchool);
-const roles = computed(() => [RoleName.Teacher, RoleName.Student]);
+const roles = computed(() => [RoleName.Teacher]);
 const selectedRole = ref<RoleName>(RoleName.Teacher);
 const selectedUsers = ref<Participants[]>([]);
 
