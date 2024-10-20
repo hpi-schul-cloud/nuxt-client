@@ -181,6 +181,7 @@ export default {
 	"common.words.languages.uk": "Українська",
 	"common.words.learnContent": "Зміст навчання",
 	"common.words.lernstore": "Навчальний магазин",
+	"common.words.mainSchool": "Основна школа",
 	"common.words.no": "Немає",
 	"common.words.noChoice": "Немає вибору",
 	"common.words.otherGroups": "інші групи",
@@ -346,6 +347,10 @@ export default {
 	"components.board.column.defaultTitle": "Нова колонка",
 	"components.board.column.ghost.column.placeholder": "Додати стовпець",
 	"components.board.column.ghost.list.placeholder": "Додати розділ",
+	"components.board.error.404":
+		"Помилка 404 – Дошки з такою назвою не знайдено",
+	"components.board.error.403":
+		"Помилка 403 – На жаль, у вас немає дозволу на перегляд цього контенту",
 	"components.board.menu.board": "Налаштування дошки",
 	"components.board.menu.card": "Налаштування картки",
 	"components.board.menu.column": "Налаштування колонки",
@@ -1658,6 +1663,11 @@ export default {
 	"pages.rooms.title": "Кімнати",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
+	"pages.rooms.participants.label": "Учасники",
+	"pages.rooms.participants.addParticipants": "Додайте учасників",
+	"pages.rooms.participants.manageParticipants": "Керувати учасниками",
+	"pages.rooms.participants.participantTable.itemsPerPage":
+		"Записи на сторінку",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

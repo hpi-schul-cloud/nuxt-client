@@ -181,6 +181,7 @@ export default {
 	"common.words.languages.uk": "Ucranio",
 	"common.words.learnContent": "Contenidos de aprendizaje",
 	"common.words.lernstore": "Lern-Store",
+	"common.words.mainSchool": "Escuela principal",
 	"common.words.no": "No",
 	"common.words.noChoice": "Sin elección",
 	"common.words.otherGroups": "otros grupos",
@@ -345,6 +346,10 @@ export default {
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
+	"components.board.error.404":
+		"Error 404 – No se ha encontrado ningún tablero con este nombre",
+	"components.board.error.403":
+		"Error 403 – Lamentablemente, falta la autorización para ver este contenido",
 	"components.board.menu.board": "Configuración del tablero",
 	"components.board.menu.card": "Configuración de la tarjeta",
 	"components.board.menu.column": "Configuración del columna",
@@ -1680,6 +1685,11 @@ export default {
 	"pages.rooms.title": "Habitaciones",
 	"pages.rooms.fab.title": "Crear habitación",
 	"pages.rooms.emptyState": "Actualmente no hay habitaciones aquí.",
+	"pages.rooms.participants.label": "Participantes",
+	"pages.rooms.participants.addParticipants": "Añadir participantes",
+	"pages.rooms.participants.manageParticipants": "Administrar participantes",
+	"pages.rooms.participants.participantTable.itemsPerPage":
+		"Entradas por página",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
