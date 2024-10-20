@@ -51,13 +51,7 @@
 					</speed-dial-menu>
 				</slot>
 			</div>
-			<hr
-				v-if="showBorder"
-				class="v-divider v-theme--light"
-				aria-orientation="horizontal"
-				role="separator"
-				aria-hidden="true"
-			/>
+			<v-divider v-if="showDivider" class="mb-8 mx-n6" />
 		</div>
 		<v-container
 			:fluid="maxWidth !== 'nativ'"
@@ -126,7 +120,7 @@ const slots = useSlots();
 
 const isBelowLarge = useVuetifyBreakpoints().smallerOrEqual("lg");
 
-const showBorder = computed(() => {
+const showDivider = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);
 });
 </script>
