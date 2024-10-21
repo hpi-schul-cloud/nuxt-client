@@ -1,4 +1,4 @@
-import { envConfigModule } from "@/store";
+import { applicationErrorModule, envConfigModule } from "@/store";
 import { Board } from "@/types/board/Board";
 import { useSharedEditMode } from "@util-board";
 import { defineStore } from "pinia";
@@ -8,6 +8,8 @@ import {
 	CreateCardSuccessPayload,
 	CreateColumnRequestPayload,
 	CreateColumnSuccessPayload,
+	DeleteBoardRequestPayload,
+	DeleteBoardSuccessPayload,
 	DeleteColumnRequestPayload,
 	DeleteColumnSuccessPayload,
 	DisconnectSocketRequestPayload,
@@ -29,12 +31,17 @@ import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardStore } from "./Card.store";
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { useRouter } from "vue-router";
+import { useI18n } from "vue-i18n";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
 	const board = ref<Board | undefined>(undefined);
 	const isLoading = ref<boolean>(false);
 	const { setFocus, forceFocus } = useBoardFocusHandler();
+	const roomId = ref<string | undefined>(undefined);
 
 	const restApi = useBoardRestApi();
 	const isSocketEnabled =
@@ -42,7 +49,10 @@ export const useBoardStore = defineStore("boardStore", () => {
 
 	const socketOrRest = isSocketEnabled ? useBoardSocketApi() : restApi;
 
+	const { t } = useI18n();
+
 	const { setEditModeId } = useSharedEditMode();
+	const router = useRouter();
 
 	const getLastColumnIndex = () => board.value!.columns.length - 1;
 
@@ -303,6 +313,30 @@ export const useBoardStore = defineStore("boardStore", () => {
 		setBoard(payload);
 	};
 
+	const deleteBoardRequest = async (
+		payload: DeleteBoardRequestPayload,
+		paramRoomId: string | undefined
+	) => {
+		if (paramRoomId) roomId.value = paramRoomId;
+		await socketOrRest.deleteBoardRequest(payload);
+	};
+
+	const deleteBoardSuccess = (payload: DeleteBoardSuccessPayload) => {
+		if (payload.isOwnAction === true) {
+			router.replace({
+				name: "rooms-id",
+				params: { id: roomId.value },
+			});
+			return;
+		}
+		applicationErrorModule.setError(
+			createApplicationError(
+				HttpStatusCode.NotFound,
+				t("components.board.error.404")
+			)
+		);
+	};
+
 	const reloadBoard = async () => {
 		if (!board.value) return;
 
@@ -343,6 +377,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		createCardSuccess,
 		createColumnRequest,
 		createColumnSuccess,
+		deleteBoardRequest,
+		deleteBoardSuccess,
 		deleteCardSuccess,
 		deleteColumnRequest,
 		deleteColumnSuccess,

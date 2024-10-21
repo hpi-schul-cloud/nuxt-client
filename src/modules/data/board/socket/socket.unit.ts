@@ -13,6 +13,7 @@ import { useBoardNotifier } from "@util-board";
 import { setActivePinia } from "pinia";
 import * as socketModule from "socket.io-client";
 import { useI18n } from "vue-i18n";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -37,6 +38,9 @@ jest.mock("@vueuse/shared", () => {
 		}),
 	};
 });
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
 
 const startMock = jest.fn();
 const stopMock = jest.fn();
@@ -87,6 +91,9 @@ describe("socket.ts", () => {
 
 		mockBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		mockUseBoardNotifier.mockReturnValue(mockBoardNotifierCalls);
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 	});
 
 	beforeEach(() => {
