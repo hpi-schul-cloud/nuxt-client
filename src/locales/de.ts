@@ -456,6 +456,9 @@ export default {
 	"components.cardElement.deletedElement": "Gelöschter Inhalt",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
+	"components.cardElement.appointmentFinderElement": "Terminfinder",
+	"components.cardElement.appointmentFinderElement.createFinder":
+		"Terminfinder erstellen...",
 	"components.datePicker.validation.format":
 		"Bitte Format DD.MM.YYYY verwenden.",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
@@ -477,6 +480,8 @@ export default {
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Abgabe",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
+	"components.elementTypeSelection.elements.appointmentFinderElement.subtitle":
+		"Terminfinder",
 	"components.externalTools.status.deactivated": "Deaktiviert",
 	"components.externalTools.status.incomplete": "Unvollständig",
 	"components.externalTools.status.latest": "Aktuell",

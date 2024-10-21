@@ -38,6 +38,9 @@
 			"@feature-board-collaborative-text-editor-element": [
 				"src/modules/feature/board-collaborative-text-editor-element"
 			],
+			"@feature-board-appointment-finder-element": [
+				"src/modules/feature/board-appointment-finder-element"
+			],
 			"@feature-board": ["src/modules/feature/board"],
 			"@feature-course-sync": ["src/modules/feature/course-sync"],
 			"@feature-editor": ["src/modules/feature/editor"],
