@@ -10,16 +10,15 @@
 			<div class="ml-6 mr-6">
 				<div class="mt-3">
 					<v-autocomplete
-						ref="autoCompleteSchool"
 						v-model="school"
 						:label="t('global.sidebar.item.school')"
+						bg-color="white"
+						color="primary"
+						density="comfortable"
 						item-value="id"
 						item-title="name"
-						density="comfortable"
-						readonly
 						menu-icon=""
-						color="primary"
-						bg-color="white"
+						readonly
 						variant="underlined"
 					/>
 				</div>
@@ -30,14 +29,14 @@
 						v-model="selectedRole"
 						:items="roles"
 						:label="t('common.labels.role')"
-						readonly
-						menu-icon=""
-						@update:model-value="onRoleChange"
 						auto-select-first="exact"
-						density="comfortable"
-						color="primary"
 						bg-color="white"
+						color="primary"
+						density="comfortable"
+						menu-icon=""
+						readonly
 						variant="underlined"
+						@update:model-value="onRoleChange"
 					/>
 				</div>
 
@@ -47,14 +46,14 @@
 						v-model="selectedUsers"
 						:items="userList"
 						:label="t('common.labels.name')"
-						color="primary"
 						bg-color="white"
-						item-value="id"
-						item-title="fullName"
-						multiple
 						chips
 						closable-chips
 						clear-on-select
+						color="primary"
+						item-value="id"
+						item-title="fullName"
+						multiple
 						variant="underlined"
 					/>
 				</div>
@@ -66,16 +65,16 @@
 			<div class="mr-4 mb-3">
 				<v-btn
 					ref="cancelButton"
+					:text="t('common.actions.cancel')"
 					class="ms-auto mr-2"
 					color="primary"
-					:text="t('common.actions.cancel')"
 					@click="onClose"
 				/>
 				<v-btn
 					ref="addButton"
+					:text="t('common.actions.add')"
 					class="ms-auto"
 					color="primary"
-					:text="t('common.actions.add')"
 					variant="flat"
 					@click="onAddParticipants"
 				/>

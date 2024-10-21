@@ -12,7 +12,7 @@
 		</template>
 
 		<div class="mb-8 mt-12 mx-16">
-			Füge Teilnehmende zum Kurs hinzu. Lehrkräfte anderer Schulen können
+			Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können
 			hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im
 			eigenen Profil aktiviert haben
 			<a
@@ -106,8 +106,7 @@ const onUpdateRole = async (role: RoleName) => {
 };
 
 onMounted(async () => {
-	// TODO: Is fetchRoom() necessary on every page load?
-	// Not reseting the store onUnmounted lifecycle hook in RoomDetails.page.vue can be a solution
+	// call fetchRoom() again because the store is reset on unmounted lifecycle hook in RoomDetails.page.vue
 	if (room.value === undefined) {
 		console.log("Room store not found");
 		await fetchRoom(route.params.id as string);
