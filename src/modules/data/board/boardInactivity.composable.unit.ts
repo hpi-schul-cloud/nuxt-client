@@ -137,14 +137,14 @@ describe("pageInactivity.composable", () => {
 		it("should be changed after MAX_TIMEOUT_FOR_INACTIVITY is achieved", async () => {
 			setup(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(false);
-			jest.advanceTimersByTime(3000);
+			vi.advanceTimersByTime(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(true);
 		});
 
 		it("should not be changed after MAX_TIMEOUT_FOR_INACTIVITY is not achieved", async () => {
 			setup(3000);
 			expect(connectionOptions.isTimeoutReached).toBe(false);
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 			expect(connectionOptions.isTimeoutReached).toBe(false);
 		});
 	});

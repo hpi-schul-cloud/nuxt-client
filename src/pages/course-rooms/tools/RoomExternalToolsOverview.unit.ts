@@ -208,7 +208,7 @@ describe("RoomExternalToolOverview", () => {
 				useExternalToolDisplayListStateMock.fetchDisplayData
 			).toHaveBeenCalledTimes(1);
 
-			jest.advanceTimersByTime(refreshTime + 1000);
+			vi.advanceTimersByTime(refreshTime + 1000);
 
 			expect(
 				useExternalToolDisplayListStateMock.fetchDisplayData

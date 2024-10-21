@@ -71,7 +71,7 @@ describe("useBoardAriaNotification", () => {
 		const element = document.getElementById("notify-screen-reader-polite");
 
 		notifyCreateCardSuccess(payload);
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_CREATED_SUCCESS);
 	});
 
@@ -84,7 +84,7 @@ describe("useBoardAriaNotification", () => {
 		const element = document.getElementById("notify-screen-reader-polite");
 
 		notifyCreateColumnSuccess(payload);
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.COLUMN_CREATED_SUCCESS
 		);
@@ -95,7 +95,7 @@ describe("useBoardAriaNotification", () => {
 		const element = document.getElementById("notify-screen-reader-polite");
 
 		notifyDeleteCardSuccess({ cardId: "cardId", isOwnAction: false });
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_DELETED_SUCCESS);
 	});
 
@@ -108,7 +108,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.COLUMN_DELETED_SUCCESS
 		);
@@ -129,7 +129,7 @@ describe("useBoardAriaNotification", () => {
 			toColumnIndex: 0,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.CARD_MOVED_IN_SAME_COLUMN_SUCCESS
 		);
@@ -150,7 +150,7 @@ describe("useBoardAriaNotification", () => {
 			toColumnIndex: 1,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.CARD_MOVED_TO_ANOTHER_COLUMN_SUCCESS
 		);
@@ -170,7 +170,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.COLUMN_MOVED_SUCCESS);
 	});
 
@@ -184,7 +184,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.BOARD_TITLE_UPDATED_SUCCESS
 		);
@@ -200,7 +200,7 @@ describe("useBoardAriaNotification", () => {
 				isOwnAction: false,
 			});
 
-			jest.advanceTimersByTime(3000);
+			vi.advanceTimersByTime(3000);
 			expect(element?.innerHTML).toContain(
 				SR_I18N_KEYS_MAP.BOARD_PUBLISHED_SUCCESS
 			);
@@ -215,7 +215,7 @@ describe("useBoardAriaNotification", () => {
 				isOwnAction: false,
 			});
 
-			jest.advanceTimersByTime(3000);
+			vi.advanceTimersByTime(3000);
 			expect(element?.innerHTML).toContain(
 				SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS
 			);
@@ -232,7 +232,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.COLUMN_TITLE_UPDATED_SUCCESS
 		);
@@ -248,7 +248,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(
 			SR_I18N_KEYS_MAP.CARD_TITLE_UPDATED_SUCCESS
 		);
@@ -267,7 +267,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
@@ -281,7 +281,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
@@ -296,7 +296,7 @@ describe("useBoardAriaNotification", () => {
 			isOwnAction: false,
 		});
 
-		jest.advanceTimersByTime(3000);
+		vi.advanceTimersByTime(3000);
 		expect(element?.innerHTML).toContain(SR_I18N_KEYS_MAP.CARD_UPDATED_SUCCESS);
 	});
 
@@ -311,7 +311,7 @@ describe("useBoardAriaNotification", () => {
 			const element = document.getElementById("notify-screen-reader-polite");
 
 			notifyCreateCardSuccess(payload);
-			jest.advanceTimersByTime(3000);
+			vi.advanceTimersByTime(3000);
 			expect(element?.innerHTML).toBe("");
 		});
 	});

@@ -488,7 +488,7 @@ describe("useCardSocketApi", () => {
 			const { fetchCardRequest } = useCardSocketApi();
 			fetchCardRequest(payload);
 
-			jest.advanceTimersByTime(1000);
+			vi.advanceTimersByTime(1000);
 			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith(
 				"fetch-card-request",
 				payload

@@ -21,7 +21,7 @@ describe("drag composable", () => {
 
 		endDragging();
 
-		jest.advanceTimersByTime(dragInProgressDelay);
+		vi.advanceTimersByTime(dragInProgressDelay);
 		expect(dragInProgress.value).toBe(false);
 	});
 });

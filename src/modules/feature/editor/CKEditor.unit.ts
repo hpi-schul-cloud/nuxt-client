@@ -147,7 +147,7 @@ describe("CKEditor", () => {
 				ref: "ck",
 			});
 			ck.vm.$emit("blur");
-			jest.advanceTimersByTime(200);
+			vi.advanceTimersByTime(200);
 
 			const emitted = wrapper.emitted();
 			expect(emitted["blur"]).toHaveLength(1);

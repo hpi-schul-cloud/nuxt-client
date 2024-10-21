@@ -745,7 +745,7 @@ describe("ExternalToolElement", () => {
 				useExternalToolLaunchStateMock.fetchContextLaunchRequest
 			).toHaveBeenCalledTimes(1);
 
-			jest.advanceTimersByTime(refreshTime + 1000);
+			vi.advanceTimersByTime(refreshTime + 1000);
 			await nextTick();
 
 			expect(

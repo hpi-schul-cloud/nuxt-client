@@ -8,12 +8,12 @@ describe("helpers", () => {
 			delay(100).then(spy);
 
 			// not resolved after half time
-			jest.advanceTimersByTime(50);
+			vi.advanceTimersByTime(50);
 			await Promise.resolve();
 			expect(spy).not.toHaveBeenCalled();
 
 			// resolved after full time
-			jest.advanceTimersByTime(50);
+			vi.advanceTimersByTime(50);
 			await Promise.resolve();
 			expect(spy).toHaveBeenCalled();
 		});

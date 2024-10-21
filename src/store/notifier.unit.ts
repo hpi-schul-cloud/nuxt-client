@@ -66,7 +66,7 @@ describe("notifier store", () => {
 				notifierModule.show(payload);
 
 				expect(addNotifierMock).toHaveBeenCalledWith(payload);
-				jest.advanceTimersByTime(1000);
+				vi.advanceTimersByTime(1000);
 				expect(removeNotifierMock).toHaveBeenCalledWith(payload);
 			});
 		});
