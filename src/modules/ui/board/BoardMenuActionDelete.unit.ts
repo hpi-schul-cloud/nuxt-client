@@ -11,8 +11,8 @@ import { BoardMenuScope } from "./board-menu-scope";
 import BoardMenuAction from "./BoardMenuAction.vue";
 import { MENU_SCOPE } from "./injection-tokens";
 
-jest.mock("@ui-confirmation-dialog");
-const mockedUseDeleteConfirmationDialog = jest.mocked(
+vi.mock("@ui-confirmation-dialog");
+const mockedUseDeleteConfirmationDialog = vi.mocked(
 	useDeleteConfirmationDialog
 );
 

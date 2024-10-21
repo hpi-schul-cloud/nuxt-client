@@ -14,7 +14,7 @@ export const setupCollaborativeTextEditorNotifier = (props: Props = {}) => {
 		showInternalServerErrorMock,
 	} = props;
 
-	const mockedSelectedFile = jest.mocked(useCollaborativeTextEditorNotifier);
+	const mockedSelectedFile = vi.mocked(useCollaborativeTextEditorNotifier);
 
 	const showForbiddenError = showForbiddenErrorMock ?? vi.fn();
 	const showUnauthorizedError = showUnauthorizedErrorMock ?? vi.fn();

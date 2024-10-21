@@ -18,7 +18,7 @@ export const setupFileStorageNotifier = (props: Props = {}) => {
 		showFileExistsErrorMock,
 	} = props;
 
-	const mockedSelectedFile = jest.mocked(useFileStorageNotifier);
+	const mockedSelectedFile = vi.mocked(useFileStorageNotifier);
 
 	const showFileTooBigError = showFileTooBigErrorMock ?? vi.fn();
 	const showForbiddenError = showForbiddenErrorMock ?? vi.fn();

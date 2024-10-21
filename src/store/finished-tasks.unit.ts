@@ -12,7 +12,7 @@ import { AxiosInstance } from "axios";
  * @param result the result of the task filter
  * @returns
  */
-jest.mock("axios");
+vi.mock("axios");
 initializeAxios({
 	// get: () => {
 	// 	return { data: [] };

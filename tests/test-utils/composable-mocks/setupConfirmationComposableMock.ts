@@ -8,7 +8,7 @@ interface Props {
 
 export default function setupConfirmationComposableMock(props: Props = {}) {
 	const { askConfirmationMock } = props;
-	const confirmationMock = jest.mocked(useConfirmationDialog);
+	const confirmationMock = vi.mocked(useConfirmationDialog);
 
 	const askConfirmation = askConfirmationMock ?? vi.fn();
 	const isDialogOpen = ref(false);

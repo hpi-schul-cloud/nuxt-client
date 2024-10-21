@@ -10,7 +10,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { RouterLinkStub } from "@vue/test-utils";
 
-jest.mock("@/utils/pageTitle", () => ({
+vi.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 

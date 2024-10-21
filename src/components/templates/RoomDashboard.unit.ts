@@ -28,7 +28,7 @@ import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import { VCard } from "vuetify/lib/components/index.mjs";
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
 const mockData = {

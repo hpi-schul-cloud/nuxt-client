@@ -9,7 +9,7 @@ import { useMediaControls } from "@vueuse/core";
 import { nextTick, ref } from "vue";
 import AudioDisplay from "./AudioDisplay.vue";
 
-jest.mock("@vueuse/core", () => {
+vi.mock("@vueuse/core", () => {
 	const original = jest.requireActual("@vueuse/core");
 
 	return {
@@ -43,7 +43,7 @@ describe("AudioDisplay", () => {
 				rate: rateRef,
 				onSourceError: onSourceErrorMock,
 			});
-			jest.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
+			vi.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
 
 			const wrapper = mount(AudioDisplay, {
 				props,
@@ -202,7 +202,7 @@ describe("AudioDisplay", () => {
 				duration: durationRef,
 				rate: rateRef,
 			});
-			jest.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
+			vi.mocked(useMediaControls).mockReturnValue(useMediaControlsMock);
 
 			const wrapper = mount(AudioDisplay, {
 				props,

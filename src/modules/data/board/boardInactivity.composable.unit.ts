@@ -24,26 +24,24 @@ import { useCardStore } from "./Card.store";
 import { useSocketConnection } from "./socket/socket";
 import { Router, useRouter } from "vue-router";
 
-jest.mock("vue-i18n", () => ({
+vi.mock("vue-i18n", () => ({
 	useI18n: () => ({
 		t: vi.fn().mockImplementation((key) => key),
 	}),
 }));
 
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("./socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("./socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
-jest.mock("@util-board/BoardNotifier.composable");
-jest.mock("@util-board/LastCreatedElement.composable");
-const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockUseSharedLastCreatedElement = jest.mocked(
-	useSharedLastCreatedElement
-);
+vi.mock("@util-board/BoardNotifier.composable");
+vi.mock("@util-board/LastCreatedElement.composable");
+const mockUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
 let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 let boardStore: ReturnType<typeof useBoardStore>;

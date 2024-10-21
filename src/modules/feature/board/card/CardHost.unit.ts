@@ -38,21 +38,21 @@ import { setupAddElementDialogMock } from "../test-utils/AddElementDialogMock";
 import CardHost from "./CardHost.vue";
 import ContentElementList from "./ContentElementList.vue";
 
-jest.mock("@util-board");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
-const mockedEditMode = jest.mocked(useCourseBoardEditMode);
-const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
+vi.mock("@util-board");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
+const mockedEditMode = vi.mocked(useCourseBoardEditMode);
+const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
 
-jest.mock("@data-board/BoardFocusHandler.composable");
-const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
+vi.mock("@data-board/BoardFocusHandler.composable");
+const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
-jest.mock("@data-board/BoardPermissions.composable");
-const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
+vi.mock("@data-board/BoardPermissions.composable");
+const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
 
-jest.mock("../shared/AddElementDialog.composable");
-jest.mock("@ui-confirmation-dialog");
-const mockedUseDeleteConfirmationDialog = jest.mocked(
+vi.mock("../shared/AddElementDialog.composable");
+vi.mock("@ui-confirmation-dialog");
+const mockedUseDeleteConfirmationDialog = vi.mocked(
 	useDeleteConfirmationDialog
 );
 

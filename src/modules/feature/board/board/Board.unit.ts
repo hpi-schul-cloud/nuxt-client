@@ -65,45 +65,43 @@ import { useApplicationError } from "@/composables/application-error.composable"
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("@util-board/LastCreatedElement.composable");
-const mockUseSharedLastCreatedElement = jest.mocked(
-	useSharedLastCreatedElement
-);
+vi.mock("@util-board/LastCreatedElement.composable");
+const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-jest.mock("@util-board/extractDataAttribute.util");
-const mockExtractDataAttribute = jest.mocked(extractDataAttribute);
+vi.mock("@util-board/extractDataAttribute.util");
+const mockExtractDataAttribute = vi.mocked(extractDataAttribute);
 
-jest.mock("@util-board/editMode.composable");
-const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
-const mockedUseEditMode = jest.mocked(useCourseBoardEditMode);
+vi.mock("@util-board/editMode.composable");
+const mockedUseSharedEditMode = vi.mocked(useSharedEditMode);
+const mockedUseEditMode = vi.mocked(useCourseBoardEditMode);
 
-jest.mock("@data-board/BoardPageInformation.composable");
-const mockedUseSharedBoardPageInformation = jest.mocked(
+vi.mock("@data-board/BoardPageInformation.composable");
+const mockedUseSharedBoardPageInformation = vi.mocked(
 	useSharedBoardPageInformation
 );
 
-jest.mock("@data-board/BoardPermissions.composable");
-const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
+vi.mock("@data-board/BoardPermissions.composable");
+const mockedUseBoardPermissions = vi.mocked(useBoardPermissions);
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-jest.mock("@/composables/copy");
-const mockUseCopy = jest.mocked(useCopy);
+vi.mock("@/composables/copy");
+const mockUseCopy = vi.mocked(useCopy);
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 const useRouteMock = <jest.Mock>useRoute;
 
-jest.mock("@data-board/boardInactivity.composable");
+vi.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <jest.Mock>useBoardInactivity;
 
-jest.mock("@/composables/application-error.composable");
-const mockedCreateApplicationError = jest.mocked(useApplicationError);
+vi.mock("@/composables/application-error.composable");
+const mockedCreateApplicationError = vi.mocked(useApplicationError);
 
 describe("Board", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;

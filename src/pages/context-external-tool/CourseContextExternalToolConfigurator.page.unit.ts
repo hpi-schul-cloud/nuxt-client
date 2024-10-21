@@ -20,7 +20,7 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
 	useRouter: vi.fn(),
 }));

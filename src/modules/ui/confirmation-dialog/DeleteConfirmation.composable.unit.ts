@@ -3,9 +3,9 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useDeleteConfirmationDialog } from "./DeleteConfirmation.composable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { useI18n } from "vue-i18n";
-jest.mock("./Confirmation.composable");
+vi.mock("./Confirmation.composable");
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
 		useI18n: vi.fn(),

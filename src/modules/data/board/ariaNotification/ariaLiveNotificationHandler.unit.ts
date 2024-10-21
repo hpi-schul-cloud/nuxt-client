@@ -25,21 +25,21 @@ const card = {
 	visibilitySettings: {},
 };
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
 		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 
-jest.mock("../Board.store", () => ({
+vi.mock("../Board.store", () => ({
 	useBoardStore: vi.fn().mockReturnValue({
 		getColumnIndex: vi.fn().mockReturnValue(10),
 		getCardLocation: vi.fn().mockReturnValue(1),
 	}),
 }));
 
-jest.mock("../Card.store", () => ({
+vi.mock("../Card.store", () => ({
 	useCardStore: vi.fn().mockReturnValue({
 		cards: [card],
 	}),
@@ -49,7 +49,7 @@ describe("useBoardAriaNotification", () => {
 	jest.useFakeTimers();
 
 	const mockNotifyOnScreenReader = vi.fn();
-	jest.mock("@/composables/ariaLiveNotifier", () => ({
+	vi.mock("@/composables/ariaLiveNotifier", () => ({
 		notifyOnScreenReader: () => mockNotifyOnScreenReader,
 	}));
 

@@ -25,25 +25,25 @@ import {
 import { useCardRestApi } from "./cardRestApi.composable";
 import { Router, useRouter } from "vue-router";
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+vi.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-jest.mock("../BoardApi.composable");
-const mockedUseBoardApi = jest.mocked(useBoardApi);
+vi.mock("../BoardApi.composable");
+const mockedUseBoardApi = vi.mocked(useBoardApi);
 
-jest.mock("../CardRequestPool.composable");
-const mockedSharedCardRequestPool = jest.mocked(useSharedCardRequestPool);
+vi.mock("../CardRequestPool.composable");
+const mockedSharedCardRequestPool = vi.mocked(useSharedCardRequestPool);
 
-jest.mock("@util-board/editMode.composable");
-const mockedSharedEditMode = jest.mocked(useSharedEditMode);
+vi.mock("@util-board/editMode.composable");
+const mockedSharedEditMode = vi.mocked(useSharedEditMode);
 
-jest.mock("../socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("../socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
 		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),

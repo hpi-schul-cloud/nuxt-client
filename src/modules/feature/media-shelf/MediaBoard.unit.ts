@@ -27,15 +27,15 @@ import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
 
-jest.mock("./data/mediaBoardState.composable");
-jest.mock("@vueuse/core", () => {
+vi.mock("./data/mediaBoardState.composable");
+vi.mock("@vueuse/core", () => {
 	return {
 		...jest.requireActual("@vueuse/core"),
 		useMediaQuery: vi.fn(),
 	};
 });
 
-jest.mocked(useMediaQuery).mockReturnValue(ref(true));
+vi.mocked(useMediaQuery).mockReturnValue(ref(true));
 
 describe("MediaBoard", () => {
 	let useSharedMediaBoardStateMock: DeepMocked<

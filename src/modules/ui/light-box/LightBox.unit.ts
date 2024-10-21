@@ -15,10 +15,10 @@ import {
 import { LightBoxOptions, useInternalLightBox } from "./LightBox.composable";
 import LightBox from "./LightBox.vue";
 
-jest.mock("./LightBox.composable");
-jest.mock("@/utils/fileHelper");
+vi.mock("./LightBox.composable");
+vi.mock("@/utils/fileHelper");
 
-const mockedUseInternalLightBox = jest.mocked(useInternalLightBox);
+const mockedUseInternalLightBox = vi.mocked(useInternalLightBox);
 
 describe("LightBox", () => {
 	beforeEach(() => {
@@ -40,7 +40,7 @@ describe("LightBox", () => {
 			name: props.name ?? "test-name",
 		});
 
-		const mockedDownloadFile = jest.mocked(downloadFile).mockReturnValueOnce();
+		const mockedDownloadFile = vi.mocked(downloadFile).mockReturnValueOnce();
 
 		mockedUseInternalLightBox.mockReturnValue({
 			close: close,

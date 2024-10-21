@@ -8,7 +8,7 @@ import {
 } from "@@/tests/test-utils";
 import { useContextExternalToolConfigurationStatus } from "./ContextExternalToolConfigurationStatus.composable";
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
 		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),

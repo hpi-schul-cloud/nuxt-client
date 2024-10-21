@@ -8,7 +8,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 
-jest.mock("@data-board");
+vi.mock("@data-board");
 
 describe("MediaBoardLineHeader", () => {
 	let useBoardFocusHandlerMock: DeepMocked<
@@ -34,7 +34,7 @@ describe("MediaBoardLineHeader", () => {
 		useBoardFocusHandlerMock =
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
 
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 	});
 
 	afterEach(() => {

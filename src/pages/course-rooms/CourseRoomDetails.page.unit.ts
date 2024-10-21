@@ -41,7 +41,7 @@ import { VBtn } from "vuetify/lib/components/index.mjs";
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
 
-jest.mock("./tools/RoomExternalToolsOverview.vue");
+vi.mock("./tools/RoomExternalToolsOverview.vue");
 
 const mockData: SingleColumnBoardResponse = {
 	roomId: "123",

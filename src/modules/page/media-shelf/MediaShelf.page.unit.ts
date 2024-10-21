@@ -13,14 +13,14 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { ref } from "vue";
 import MediaShelfPage from "./MediaShelf.page.vue";
 
-jest.mock("@feature-media-shelf", () => {
+vi.mock("@feature-media-shelf", () => {
 	return {
 		...jest.requireActual("@feature-media-shelf"),
 		useSharedMediaBoardState: vi.fn(),
 	};
 });
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 

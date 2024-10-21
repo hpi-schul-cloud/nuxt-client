@@ -23,13 +23,13 @@ import { Router, useRouter } from "vue-router";
 import { VCheckboxBtn } from "vuetify/lib/components/index.mjs";
 import ProvisioningOptionsPage from "./ProvisioningOptionsPage.vue";
 
-jest.mock("@data-provisioning-options");
+vi.mock("@data-provisioning-options");
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
 jest

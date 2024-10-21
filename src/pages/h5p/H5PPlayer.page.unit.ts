@@ -2,7 +2,7 @@ import { mount } from "@vue/test-utils";
 import H5pPlayerPage from "./H5PPlayer.page.vue";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRoute: () => ({ params: { id: "test-id" }, query: {} }),
 }));
 

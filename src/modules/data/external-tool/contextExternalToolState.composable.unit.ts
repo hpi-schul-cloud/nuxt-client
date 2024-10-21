@@ -9,7 +9,7 @@ import { useContextExternalToolApi } from "./contextExternalToolApi.composable";
 import { useContextExternalToolState } from "./contextExternalToolState.composable";
 import { ContextExternalTool } from "./types";
 
-jest.mock("@data-external-tool/contextExternalToolApi.composable");
+vi.mock("@data-external-tool/contextExternalToolApi.composable");
 
 describe("contextExternalToolState.composable", () => {
 	let useContextExternalToolApiMock: DeepMocked<

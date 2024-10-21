@@ -17,19 +17,17 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 
-jest.mock("@data-board/BoardFocusHandler.composable");
-jest.mock("@feature-board");
+vi.mock("@data-board/BoardFocusHandler.composable");
+vi.mock("@feature-board");
 
-jest.mock("@ui-confirmation-dialog");
+vi.mock("@ui-confirmation-dialog");
 const mockedUse = createMock<ReturnType<typeof useDeleteConfirmationDialog>>();
 mockedUse.askDeleteConfirmation.mockResolvedValue(true);
-const useDeleteConfirmationDialogMock = jest.mocked(
-	useDeleteConfirmationDialog
-);
+const useDeleteConfirmationDialogMock = vi.mocked(useDeleteConfirmationDialog);
 useDeleteConfirmationDialogMock.mockReturnValue(mockedUse);
 
-jest.mock("@data-board/ContentElementState.composable");
-const mockedUseContentElementState = jest.mocked(useContentElementState);
+vi.mock("@data-board/ContentElementState.composable");
+const mockedUseContentElementState = vi.mocked(useContentElementState);
 const mockedUseContentElementStateResponse =
 	createMock<ReturnType<typeof useContentElementState>>();
 
@@ -37,8 +35,8 @@ mockedUseContentElementState.mockReturnValue(
 	mockedUseContentElementStateResponse
 );
 
-jest.mock("../composables/SubmissionContentElementState.composable");
-const mockedUseSubmissionContentElementState = jest.mocked(
+vi.mock("../composables/SubmissionContentElementState.composable");
+const mockedUseSubmissionContentElementState = vi.mocked(
 	useSubmissionContentElementState
 );
 const mockedUseSubmissionContentElementStateResponse: ReturnType<

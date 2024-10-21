@@ -5,7 +5,7 @@ import {
 import { mount, VueWrapper } from "@vue/test-utils";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 
-jest.mock("@util-board");
+vi.mock("@util-board");
 
 const defaultProps = {
 	value: "props value",

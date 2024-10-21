@@ -31,13 +31,13 @@ import {
 	BoardMenuActionMoveUp,
 } from "@ui-board";
 
-jest.mock("@data-board/ContentElementState.composable");
+vi.mock("@data-board/ContentElementState.composable");
 
-jest.mock("@data-board/BoardFocusHandler.composable");
-jest.mock("../composables/MetaTagExtractorApi.composable");
-jest.mock("../composables/PreviewGenerator.composable");
+vi.mock("@data-board/BoardFocusHandler.composable");
+vi.mock("../composables/MetaTagExtractorApi.composable");
+vi.mock("../composables/PreviewGenerator.composable");
 
-const mockedUseContentElementState = jest.mocked(useContentElementState);
+const mockedUseContentElementState = vi.mocked(useContentElementState);
 
 let defaultElement = linkElementResponseFactory.build();
 const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
@@ -65,11 +65,11 @@ describe("LinkContentElement", () => {
 		usePreviewGeneratorMock =
 			createMock<ReturnType<typeof usePreviewGenerator>>();
 
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 		jest
 			.mocked(useMetaTagExtractorApi)
 			.mockReturnValue(useMetaTagExtractorApiMock);
-		jest.mocked(usePreviewGenerator).mockReturnValue(usePreviewGeneratorMock);
+		vi.mocked(usePreviewGenerator).mockReturnValue(usePreviewGeneratorMock);
 
 		defaultElement = linkElementResponseFactory.build();
 	});

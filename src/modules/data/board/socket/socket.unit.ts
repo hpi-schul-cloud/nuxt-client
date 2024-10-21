@@ -15,19 +15,19 @@ import * as socketModule from "socket.io-client";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
 
-jest.mock("vue-i18n");
+vi.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("socket.io-client");
-const mockSocketIOClient = jest.mocked(socketModule);
+vi.mock("socket.io-client");
+const mockSocketIOClient = vi.mocked(socketModule);
 
-jest.mock("@util-board/BoardNotifier.composable");
-const mockUseBoardNotifier = jest.mocked(useBoardNotifier);
+vi.mock("@util-board/BoardNotifier.composable");
+const mockUseBoardNotifier = vi.mocked(useBoardNotifier);
 
-jest.mock("../boardActions/boardSocketApi.composable");
-jest.mock("../boardActions/boardRestApi.composable");
+vi.mock("../boardActions/boardSocketApi.composable");
+vi.mock("../boardActions/boardRestApi.composable");
 
-jest.mock("@vueuse/shared", () => {
+vi.mock("@vueuse/shared", () => {
 	return {
 		...jest.requireActual("@vueuse/shared"),
 		useTimeoutFn: vi.fn().mockImplementation((cb: () => void) => {
@@ -39,7 +39,7 @@ jest.mock("@vueuse/shared", () => {
 	};
 });
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
 const startMock = vi.fn();

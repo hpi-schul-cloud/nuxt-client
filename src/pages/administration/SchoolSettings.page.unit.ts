@@ -13,13 +13,13 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { nextTick, reactive } from "vue";
-jest.mock("vue-router");
+vi.mock("vue-router");
 
 const useRouteMock = <jest.Mock<Partial<RouteLocationNormalizedLoaded>>>(
 	useRoute
 );
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 

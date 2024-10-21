@@ -7,9 +7,9 @@ import { mount } from "@vue/test-utils";
 import { useI18n } from "vue-i18n";
 import FileAttributes from "./FileAttributes.vue";
 
-jest.mock("@/utils/fileHelper");
+vi.mock("@/utils/fileHelper");
 
-jest.mock("vue-i18n");
+vi.mock("vue-i18n");
 
 describe("FileAttributes", () => {
 	const setup = () => {
@@ -23,7 +23,7 @@ describe("FileAttributes", () => {
 		const getFileExtensionMock = jest
 			.mocked(getFileExtension)
 			.mockReturnValueOnce(extension);
-		const i18nMock = jest.mocked(useI18n).mockReturnValue({
+		const i18nMock = vi.mocked(useI18n).mockReturnValue({
 			t: vi.fn().mockImplementation((key: string) => key),
 			n: vi.fn().mockImplementation((key: string) => key),
 		});

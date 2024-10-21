@@ -9,7 +9,7 @@ import { useExternalToolDisplayState } from "./externalToolDisplayState.composab
 import { useExternalToolReferenceApi } from "./externalToolReferenceApi.composable";
 import { ExternalToolDisplayData } from "./types";
 
-jest.mock("@data-external-tool/externalToolReferenceApi.composable");
+vi.mock("@data-external-tool/externalToolReferenceApi.composable");
 
 describe("externalToolDisplayState.composable", () => {
 	let useExternalToolReferenceApiMock: DeepMocked<

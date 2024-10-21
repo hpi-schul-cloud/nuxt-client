@@ -19,7 +19,7 @@ export const setupFileStorageApiMock = (props: Props = {}) => {
 		uploadFromUrlMock,
 		getFileRecordMock,
 	} = props;
-	const mockedFileStorageApi = jest.mocked(useFileStorageApi);
+	const mockedFileStorageApi = vi.mocked(useFileStorageApi);
 	const getFileRecord =
 		getFileRecordMock ?? vi.fn(() => ref<FileRecordResponse>());
 

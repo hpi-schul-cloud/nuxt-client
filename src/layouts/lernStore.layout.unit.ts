@@ -18,7 +18,7 @@ const query = {
 	isCollection: "true",
 };
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
 }));
 

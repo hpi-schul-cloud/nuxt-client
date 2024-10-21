@@ -12,20 +12,20 @@ import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
 
-jest.mock("@data-board", () => {
+vi.mock("@data-board", () => {
 	return {
 		useBoardFocusHandler: vi.fn(),
 		useContentElementState: vi.fn(() => ({ modelValue: {} })),
 		useDeleteConfirmationDialog: vi.fn(),
 	};
 });
-jest.mock("@ui-confirmation-dialog", () => {
+vi.mock("@ui-confirmation-dialog", () => {
 	return {
 		useDeleteConfirmationDialog: vi.fn(),
 	};
 });
 
-jest.mock("@util-board", () => {
+vi.mock("@util-board", () => {
 	return {
 		useInlineEditInteractionHandler: vi.fn(),
 	};

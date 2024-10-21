@@ -8,7 +8,7 @@ import { mount } from "@vue/test-utils";
 import { defineComponent, ref } from "vue";
 import { usePreviewGenerator } from "./PreviewGenerator.composable";
 
-jest.mock("@feature-board-file-element");
+vi.mock("@feature-board-file-element");
 
 describe("usePreviewGenerator", () => {
 	afterEach(() => {

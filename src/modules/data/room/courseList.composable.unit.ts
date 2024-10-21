@@ -22,8 +22,8 @@ import { useCourseInfoApi } from "./courseInfoApi.composable";
 import { useCourseApi } from "./courseApi.composable";
 import { useCourseList } from "./courseList.composable";
 
-jest.mock("./courseApi.composable");
-jest.mock("./courseInfoApi.composable");
+vi.mock("./courseApi.composable");
+vi.mock("./courseInfoApi.composable");
 
 describe("courseList.composable", () => {
 	let useCourseApiMock: DeepMocked<ReturnType<typeof useCourseApi>>;
@@ -36,8 +36,8 @@ describe("courseList.composable", () => {
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>();
 		useCourseInfoApiMock = createMock<ReturnType<typeof useCourseInfoApi>>();
 
-		jest.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
-		jest.mocked(useCourseInfoApi).mockReturnValue(useCourseInfoApiMock);
+		vi.mocked(useCourseApi).mockReturnValue(useCourseApiMock);
+		vi.mocked(useCourseInfoApi).mockReturnValue(useCourseInfoApiMock);
 	});
 
 	afterEach(() => {

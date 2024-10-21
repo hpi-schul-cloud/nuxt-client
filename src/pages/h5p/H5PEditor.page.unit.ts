@@ -6,7 +6,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRoute: () => ({ params: { id: "test-id" }, query: {} }),
 }));
 

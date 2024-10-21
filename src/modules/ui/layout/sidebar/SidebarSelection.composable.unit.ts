@@ -9,11 +9,11 @@ import { ref } from "vue";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { BoardContextType } from "@/types/board/BoardContext";
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouteMock = <jest.Mock>useRoute;
 
-jest.mock("@data-board/BoardPageInformation.composable");
-const mockedUseSharedBoardPageInformation = jest.mocked(
+vi.mock("@data-board/BoardPageInformation.composable");
+const mockedUseSharedBoardPageInformation = vi.mocked(
 	useSharedBoardPageInformation
 );
 

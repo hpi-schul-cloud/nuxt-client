@@ -11,11 +11,11 @@ import {
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-jest.mock("@/composables/locale-storage.composable", () => ({
+vi.mock("@/composables/locale-storage.composable", () => ({
 	useStorage: () => ({
 		set: vi.fn(),
 		get: vi.fn(),

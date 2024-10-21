@@ -22,7 +22,7 @@ const mockData = {
 	isSynchronized: false,
 };
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 
 describe("vRoomAvatar", () => {
 	const setup = (optionalProps: object = {}) => {

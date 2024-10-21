@@ -24,15 +24,15 @@ import { FileAlert } from "./shared/types/FileAlert.enum";
 import { FileProperties } from "./shared/types/file-properties";
 import FileUpload from "./upload/FileUpload.vue";
 
-jest.mock("@data-board", () => {
+vi.mock("@data-board", () => {
 	return {
 		useBoardFocusHandler: vi.fn(),
 		useContentElementState: vi.fn(() => ({ modelValue: {} })),
 	};
 });
-jest.mock("@feature-board");
-jest.mock("./shared/composables/FileStorageApi.composable");
-jest.mock("./content/alert/useFileAlerts.composable");
+vi.mock("@feature-board");
+vi.mock("./shared/composables/FileStorageApi.composable");
+vi.mock("./content/alert/useFileAlerts.composable");
 
 describe("FileContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
@@ -43,7 +43,7 @@ describe("FileContentElement", () => {
 		const menu = "slot-menu";
 
 		const addAlertMock = vi.fn();
-		jest.mocked(useFileAlerts).mockReturnValue({
+		vi.mocked(useFileAlerts).mockReturnValue({
 			addAlert: addAlertMock,
 			alerts: computed(() => []),
 		});

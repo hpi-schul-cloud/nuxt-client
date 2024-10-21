@@ -31,9 +31,9 @@ import ExternalToolElement from "./ExternalToolElement.vue";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 
-jest.mock("@data-board");
-jest.mock("@data-external-tool");
-jest.mock("@util-board");
+vi.mock("@data-board");
+vi.mock("@data-external-tool");
+vi.mock("@util-board");
 
 describe("ExternalToolElement", () => {
 	let useContentElementStateMock: DeepMocked<
@@ -78,7 +78,7 @@ describe("ExternalToolElement", () => {
 		jest
 			.mocked(useContentElementState)
 			.mockReturnValue(useContentElementStateMock);
-		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		vi.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 		jest
 			.mocked(useExternalToolDisplayState)
 			.mockReturnValue(useExternalToolElementDisplayStateMock);

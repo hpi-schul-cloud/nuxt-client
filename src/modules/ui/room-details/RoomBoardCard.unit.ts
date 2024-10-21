@@ -16,7 +16,7 @@ import { createModuleMocks } from "@/utils/mock-store-module";
 import { createMock } from "@golevelup/ts-jest";
 import { Router, useRouter } from "vue-router";
 import { VListItem, VMenu } from "vuetify/lib/components/index.mjs";
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
 type BoardData = {

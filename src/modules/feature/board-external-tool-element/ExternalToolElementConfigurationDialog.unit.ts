@@ -12,7 +12,7 @@ import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 
-jest.mock("@util-board");
+vi.mock("@util-board");
 
 describe("ExternalToolElementConfigurationDialog", () => {
 	let useBoardNotifierMock: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -20,7 +20,7 @@ describe("ExternalToolElementConfigurationDialog", () => {
 	beforeEach(() => {
 		useBoardNotifierMock = createMock<ReturnType<typeof useBoardNotifier>>();
 
-		jest.mocked(useBoardNotifier).mockReturnValue(useBoardNotifierMock);
+		vi.mocked(useBoardNotifier).mockReturnValue(useBoardNotifierMock);
 	});
 
 	afterEach(() => {

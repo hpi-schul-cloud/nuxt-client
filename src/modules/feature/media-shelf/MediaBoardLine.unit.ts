@@ -23,14 +23,14 @@ import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
 
-jest.mock("@vueuse/core", () => {
+vi.mock("@vueuse/core", () => {
 	return {
 		...jest.requireActual("@vueuse/core"),
 		useMediaQuery: vi.fn(),
 	};
 });
 
-jest.mocked(useMediaQuery).mockReturnValue(ref(true));
+vi.mocked(useMediaQuery).mockReturnValue(ref(true));
 
 describe("MediaBoardLine", () => {
 	const getWrapper = (

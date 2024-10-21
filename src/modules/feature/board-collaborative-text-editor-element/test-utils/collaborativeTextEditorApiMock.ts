@@ -7,7 +7,7 @@ interface Props {
 
 export const setupCollaborativeTextEditorApiMock = (props: Props = {}) => {
 	const { getUrlMock } = props;
-	const mockedCollaborativeTextEditorApi = jest.mocked(
+	const mockedCollaborativeTextEditorApi = vi.mocked(
 		useCollaborativeTextEditorApi
 	);
 

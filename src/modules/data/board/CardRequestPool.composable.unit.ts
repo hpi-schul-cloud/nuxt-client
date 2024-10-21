@@ -4,7 +4,7 @@ import * as serverApi from "@/serverApi/v3/api";
 import * as axios from "axios";
 import { initializeAxios } from "@/utils/api";
 
-jest.mock("axios");
+vi.mock("axios");
 
 let mockReturnData: { data: { data: { id: string }[] } };
 const cardsApiFactoryMock = {

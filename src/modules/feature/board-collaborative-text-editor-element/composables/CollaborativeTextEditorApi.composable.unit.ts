@@ -13,14 +13,14 @@ import {
 	useCollaborativeTextEditorApi,
 } from "./CollaborativeTextEditorApi.composable";
 
-jest.mock("./CollaborativeTextEditorNotifications.composable");
+vi.mock("./CollaborativeTextEditorNotifications.composable");
 
-jest.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = jest.mocked(
+vi.mock("@/utils/api");
+const mockedMapAxiosErrorToResponseError = vi.mocked(
 	mapAxiosErrorToResponseError
 );
 
-jest.mock<typeof import("@/utils/create-global-state")>(
+vi.mock<typeof import("@/utils/create-global-state")>(
 	"@/utils/create-global-state",
 	() => ({
 		createTestableGlobaleState: (composable) => composable,

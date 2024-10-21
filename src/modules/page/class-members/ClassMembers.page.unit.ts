@@ -14,7 +14,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
-jest.mock("@data-group", () => {
+vi.mock("@data-group", () => {
 	return {
 		...jest.requireActual("@data-group"),
 		useGroupState: vi.fn(),
@@ -55,7 +55,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 	beforeEach(() => {
 		useGroupStateMock = createMock<ReturnType<typeof useGroupState>>();
 
-		jest.mocked(useGroupState).mockReturnValue(useGroupStateMock);
+		vi.mocked(useGroupState).mockReturnValue(useGroupStateMock);
 	});
 
 	afterEach(() => {

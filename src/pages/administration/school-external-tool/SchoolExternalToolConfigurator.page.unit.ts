@@ -26,11 +26,11 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRouter: vi.fn(),
 }));
 

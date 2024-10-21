@@ -13,7 +13,7 @@ import { useContentElementState } from "./ContentElementState.composable";
 import { Router, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-jest";
 
-jest.mock("@util-board/InlineEditInteractionHandler.composable");
+vi.mock("@util-board/InlineEditInteractionHandler.composable");
 
 const notifierModule = createModuleMocks(NotifierModule);
 const TEST_ELEMENT: RichTextElementResponse = {
@@ -29,14 +29,14 @@ const TEST_ELEMENT: RichTextElementResponse = {
 	},
 };
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("@vueuse/core"),
 		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
 describe("useContentElementState composable", () => {

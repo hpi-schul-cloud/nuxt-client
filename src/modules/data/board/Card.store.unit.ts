@@ -28,31 +28,31 @@ import { useCardRestApi } from "./cardActions/cardRestApi.composable";
 import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 
-jest.mock("vue-i18n");
+vi.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
 
-jest.mock("@data-board/BoardApi.composable");
-const mockedUseBoardApi = jest.mocked(useBoardApi);
+vi.mock("@data-board/BoardApi.composable");
+const mockedUseBoardApi = vi.mocked(useBoardApi);
 
-jest.mock("./cardActions/cardSocketApi.composable");
-const mockedUseCardSocketApi = jest.mocked(useCardSocketApi);
+vi.mock("./cardActions/cardSocketApi.composable");
+const mockedUseCardSocketApi = vi.mocked(useCardSocketApi);
 
-jest.mock("./cardActions/cardRestApi.composable");
-const mockedUseCardRestApi = jest.mocked(useCardRestApi);
+vi.mock("./cardActions/cardRestApi.composable");
+const mockedUseCardRestApi = vi.mocked(useCardRestApi);
 
-jest.mock("@util-board");
-const mockedSharedEditMode = jest.mocked(useSharedEditMode);
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
+vi.mock("@util-board");
+const mockedSharedEditMode = vi.mocked(useSharedEditMode);
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockedSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+vi.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-jest.mock("@data-board/socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("@data-board/socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("./BoardFocusHandler.composable");
-const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
+vi.mock("./BoardFocusHandler.composable");
+const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
 describe("CardStore", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;

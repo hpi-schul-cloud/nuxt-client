@@ -5,7 +5,7 @@ import Mock = jest.Mock;
 
 const mockError = vi.fn();
 
-jest.mock("@/store", () => ({
+vi.mock("@/store", () => ({
 	authModule: {
 		getUserPermissions: ["validPermission_1", "validPermission_2"],
 	},

@@ -15,7 +15,7 @@ interface ElementTypeSelectionOptions {
 
 export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 	const { closeDialogMock } = props;
-	const mockedSharedElementTypeSelection = jest.mocked(
+	const mockedSharedElementTypeSelection = vi.mocked(
 		useSharedElementTypeSelection
 	);
 

@@ -12,7 +12,7 @@ import { nextTick } from "vue";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import AddElementDialog from "./AddElementDialog.vue";
 
-jest.mock("./SharedElementTypeSelection.composable");
+vi.mock("./SharedElementTypeSelection.composable");
 
 describe("ElementTypeSelection", () => {
 	const envConfigModule: jest.Mocked<EnvConfigModule> = createModuleMocks(

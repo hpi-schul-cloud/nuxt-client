@@ -29,7 +29,7 @@ import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 
-jest.mock("@data-external-tool");
+vi.mock("@data-external-tool");
 
 describe("MediaBoardExternalToolElement", () => {
 	let useExternalToolDisplayStateMock: DeepMocked<

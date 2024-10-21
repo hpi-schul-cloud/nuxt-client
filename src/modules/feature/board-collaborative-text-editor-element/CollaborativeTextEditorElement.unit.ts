@@ -17,13 +17,13 @@ import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEd
 import { setupCollaborativeTextEditorApiMock } from "./test-utils/collaborativeTextEditorApiMock";
 
 // Mocks
-jest.mock("@data-board", () => ({
+vi.mock("@data-board", () => ({
 	useBoardFocusHandler: vi.fn(),
 	useContentElementState: vi.fn(() => ({ modelValue: {} })),
 	useDeleteConfirmationDialog: vi.fn(),
 }));
-jest.mock("@feature-board");
-jest.mock("./composables/CollaborativeTextEditorApi.composable");
+vi.mock("@feature-board");
+vi.mock("./composables/CollaborativeTextEditorApi.composable");
 
 describe("CollaborativeTextEditorElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);

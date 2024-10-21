@@ -12,7 +12,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { createStore } from "vuex";
 import { default as NewTeacher } from "./TeacherCreate.page.vue";
 
-jest.mock("@/utils/pageTitle", () => ({
+vi.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 

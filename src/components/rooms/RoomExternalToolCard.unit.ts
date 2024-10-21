@@ -16,7 +16,7 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import RoomExternalToolCard from "./RoomExternalToolCard.vue";
 
-jest.mock("@data-external-tool");
+vi.mock("@data-external-tool");
 
 describe("RoomExternalToolCard", () => {
 	let useExternalToolLaunchStateMock: DeepMocked<

@@ -12,7 +12,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
 
-jest.mock("@data-external-tool/ExternalToolApi.composable");
+vi.mock("@data-external-tool/ExternalToolApi.composable");
 
 describe("ExternalToolLaunchState.composable", () => {
 	let useExternalToolApiMock: DeepMocked<ReturnType<typeof useExternalToolApi>>;
@@ -21,7 +21,7 @@ describe("ExternalToolLaunchState.composable", () => {
 		useExternalToolApiMock =
 			createMock<ReturnType<typeof useExternalToolApi>>();
 
-		jest.mocked(useExternalToolApi).mockReturnValue(useExternalToolApiMock);
+		vi.mocked(useExternalToolApi).mockReturnValue(useExternalToolApiMock);
 	});
 
 	afterEach(() => {

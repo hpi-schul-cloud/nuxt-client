@@ -4,24 +4,24 @@ import { useBoardApi } from "./BoardApi.composable";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { BoardContextType } from "@/types/board/BoardContext";
 
-jest.mock("./BoardApi.composable");
-const mockedUseBoardApi = jest.mocked(useBoardApi);
+vi.mock("./BoardApi.composable");
+const mockedUseBoardApi = vi.mocked(useBoardApi);
 
-jest.mock<typeof import("@/utils/create-shared-composable")>(
+vi.mock<typeof import("@/utils/create-shared-composable")>(
 	"@/utils/create-shared-composable",
 	() => ({
 		createTestableSharedComposable: (composable) => composable,
 	})
 );
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
 		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 

@@ -5,13 +5,13 @@ import { validateQueryParameters } from "@/router/guards/validate-query-paramete
 import { isMongoId } from "@/utils/validationUtil";
 import Mock = jest.Mock;
 
-jest.mock("@/store", () => ({
+vi.mock("@/store", () => ({
 	applicationErrorModule: {
 		setError: vi.fn(),
 	},
 }));
 
-jest.mock("@/composables/application-error.composable", () => ({
+vi.mock("@/composables/application-error.composable", () => ({
 	useApplicationError: () => ({
 		createApplicationError: vi.fn(() => ({
 			status: 400,

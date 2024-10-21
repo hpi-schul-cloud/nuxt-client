@@ -30,36 +30,34 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 
-jest.mock("./boardActions/boardSocketApi.composable");
-const mockedUseBoardSocketApi = jest.mocked(useBoardSocketApi);
+vi.mock("./boardActions/boardSocketApi.composable");
+const mockedUseBoardSocketApi = vi.mocked(useBoardSocketApi);
 
-jest.mock("./boardActions/boardRestApi.composable");
-const mockedUseBoardRestApi = jest.mocked(useBoardRestApi);
+vi.mock("./boardActions/boardRestApi.composable");
+const mockedUseBoardRestApi = vi.mocked(useBoardRestApi);
 
-jest.mock("@util-board");
-const mockedSharedEditMode = jest.mocked(useSharedEditMode);
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-const mockUseSharedLastCreatedElement = jest.mocked(
-	useSharedLastCreatedElement
-);
+vi.mock("@util-board");
+const mockedSharedEditMode = vi.mocked(useSharedEditMode);
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+const mockUseSharedLastCreatedElement = vi.mocked(useSharedLastCreatedElement);
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
-const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+vi.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = vi.mocked(useErrorHandler);
 
-jest.mock("@data-board/socket/socket");
-const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+vi.mock("@data-board/socket/socket");
+const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 
-jest.mock("./cardActions/cardSocketApi.composable");
-const mockedUseCardSocketApi = jest.mocked(useCardSocketApi);
+vi.mock("./cardActions/cardSocketApi.composable");
+const mockedUseCardSocketApi = vi.mocked(useCardSocketApi);
 
-jest.mock("./BoardFocusHandler.composable");
-const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
+vi.mock("./BoardFocusHandler.composable");
+const mockedBoardFocusHandler = vi.mocked(useBoardFocusHandler);
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 const useRouteMock = <jest.Mock>useRoute;
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
 		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),

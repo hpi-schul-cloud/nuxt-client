@@ -7,9 +7,9 @@ import DataFilter from "./DataFilter.vue";
 import { useDataTableFilter } from "./composables/filter.composable";
 import { computed, ref } from "vue";
 
-jest.mock("./composables/filter.composable");
+vi.mock("./composables/filter.composable");
 
-const mockedUseBoardApi = jest.mocked(useDataTableFilter);
+const mockedUseBoardApi = vi.mocked(useDataTableFilter);
 describe("@components/DataFilter/DataFilter.vue", () => {
 	const updateFilterMock = vi.fn();
 	const removeFilterMock = vi.fn();

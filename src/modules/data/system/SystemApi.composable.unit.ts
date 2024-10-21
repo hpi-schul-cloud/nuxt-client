@@ -5,7 +5,7 @@ import { mockApiResponse } from "@@/tests/test-utils";
 import { useSystemApi } from "@data-system";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 
-jest.mock("@/components/error-handling/ErrorHandler.composable");
+vi.mock("@/components/error-handling/ErrorHandler.composable");
 
 describe("SystemApi.composable", () => {
 	let systemApi: DeepMocked<SystemsApiInterface>;
@@ -16,7 +16,7 @@ describe("SystemApi.composable", () => {
 		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>();
 
 		jest.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemApi);
-		jest.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
+		vi.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
 	});
 
 	afterEach(() => {

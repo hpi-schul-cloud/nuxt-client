@@ -7,7 +7,7 @@ import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { GroupListFilter, useGroupApi, useGroupListState } from "./index";
 
-jest.mock("@data-group/GroupApi.composable");
+vi.mock("@data-group/GroupApi.composable");
 
 describe("groupListState.composable", () => {
 	let useGroupApiMock: DeepMocked<ReturnType<typeof useGroupApi>>;
@@ -17,7 +17,7 @@ describe("groupListState.composable", () => {
 	beforeEach(() => {
 		useGroupApiMock = createMock<ReturnType<typeof useGroupApi>>();
 
-		jest.mocked(useGroupApi).mockReturnValue(useGroupApiMock);
+		vi.mocked(useGroupApi).mockReturnValue(useGroupApiMock);
 	});
 
 	afterEach(() => {

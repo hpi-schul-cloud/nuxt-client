@@ -15,22 +15,22 @@ import { AxiosResponse } from "axios";
 import { setupFileStorageNotifier } from "../test-utils/fileStorageNotifier";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
 
-jest.mock("./FileStorageNotifications.composable");
+vi.mock("./FileStorageNotifications.composable");
 
-jest.mock("@/utils/helpers");
+vi.mock("@/utils/helpers");
 
-jest.mock("@/utils/api");
-const mockedMapAxiosErrorToResponseError = jest.mocked(
+vi.mock("@/utils/api");
+const mockedMapAxiosErrorToResponseError = vi.mocked(
 	mapAxiosErrorToResponseError
 );
 
-jest.mock("@/store/store-accessor", () => ({
+vi.mock("@/store/store-accessor", () => ({
 	authModule: {
 		getSchool: { id: "schoolId" },
 	},
 }));
 
-jest.mock<typeof import("@/utils/create-global-state")>(
+vi.mock<typeof import("@/utils/create-global-state")>(
 	"@/utils/create-global-state",
 	() => ({
 		createTestableGlobaleState: (composable) => composable,

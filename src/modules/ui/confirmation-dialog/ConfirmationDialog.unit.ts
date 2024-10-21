@@ -3,9 +3,9 @@ import { ref } from "vue";
 import { useInternalConfirmationDialog } from "./Confirmation.composable";
 import DeleteConfirmation from "./ConfirmationDialog.vue";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-jest.mock("./Confirmation.composable");
+vi.mock("./Confirmation.composable");
 
-const mockedUseInternalConfirmationDialog = jest.mocked(
+const mockedUseInternalConfirmationDialog = vi.mocked(
 	useInternalConfirmationDialog
 );
 

@@ -7,7 +7,7 @@ interface Props {
 }
 
 export const setupAddElementDialogMock = (props: Props = {}) => {
-	const mockedUseAddElementDialog = jest.mocked(useAddElementDialog);
+	const mockedUseAddElementDialog = vi.mocked(useAddElementDialog);
 
 	const createTextElementMock = vi.fn();
 	const createFileElementMock = vi.fn();

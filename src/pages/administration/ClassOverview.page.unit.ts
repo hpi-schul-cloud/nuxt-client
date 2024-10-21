@@ -27,14 +27,14 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { VBtn, VDataTableServer } from "vuetify/lib/components/index.mjs";
 import ClassOverview from "./ClassOverview.page.vue";
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRoute: vi.fn(),
 	useRouter: vi.fn(),
 }));
 const useRouteMock = <jest.Mock>useRoute;
 const useRouterMock = <jest.Mock>useRouter;
 
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+vi.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 

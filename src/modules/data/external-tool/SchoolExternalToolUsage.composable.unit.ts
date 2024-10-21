@@ -9,7 +9,7 @@ import {
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { BusinessError } from "@/store/types/commons";
 
-jest.mock("@data-external-tool/SchoolExternalToolApi.composable");
+vi.mock("@data-external-tool/SchoolExternalToolApi.composable");
 
 describe("SchoolExternalToolUsage.composable", () => {
 	let useSchoolExternalToolApiMock: DeepMocked<

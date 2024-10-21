@@ -9,7 +9,7 @@ import { ref, watch } from "vue";
 import { useCopy } from "./copy";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 
-jest.mock("./loadingState");
+vi.mock("./loadingState");
 
 describe("copy composable", () => {
 	const setup = () => {

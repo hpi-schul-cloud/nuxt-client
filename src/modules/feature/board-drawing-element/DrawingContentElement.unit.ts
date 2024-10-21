@@ -21,12 +21,12 @@ import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";
 
 // Mocks
-jest.mock("@data-board", () => ({
+vi.mock("@data-board", () => ({
 	useBoardFocusHandler: vi.fn(),
 	useContentElementState: vi.fn(() => ({ modelValue: {} })),
 	useDeleteConfirmationDialog: vi.fn(),
 }));
-jest.mock("@feature-board");
+vi.mock("@feature-board");
 
 const DRAWING_ELEMENT = drawingElementResponseFactory.build();
 

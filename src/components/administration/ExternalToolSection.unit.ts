@@ -31,9 +31,9 @@ import ExternalToolSection from "./ExternalToolSection.vue";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import { ConfigResponse } from "@/serverApi/v3";
 
-jest.mock("@data-external-tool");
+vi.mock("@data-external-tool");
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
 describe("ExternalToolSection", () => {

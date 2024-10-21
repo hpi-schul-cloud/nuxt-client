@@ -4,8 +4,8 @@ import axios, { isAxiosError } from "axios";
 import { $axios, initializeAxios, mapAxiosErrorToResponseError } from "./api";
 import { mount } from "@vue/test-utils";
 
-jest.mock("axios");
-const mockedIsAxiosError = jest.mocked(isAxiosError);
+vi.mock("axios");
+const mockedIsAxiosError = vi.mocked(isAxiosError);
 
 describe("AxiosInstance", () => {
 	describe("initializeAxios", () => {

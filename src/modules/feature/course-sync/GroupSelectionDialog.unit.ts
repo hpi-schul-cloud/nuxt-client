@@ -13,7 +13,7 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { VAutocomplete } from "vuetify/lib/components/index.mjs";
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
-jest.mock("@data-group", () => {
+vi.mock("@data-group", () => {
 	return {
 		...jest.requireActual("@data-group"),
 		useGroupListState: vi.fn(),
@@ -54,7 +54,7 @@ describe("GroupSelectionDialog", () => {
 	beforeEach(() => {
 		useGroupListStateMock = createMock<ReturnType<typeof useGroupListState>>();
 
-		jest.mocked(useGroupListState).mockReturnValue(useGroupListStateMock);
+		vi.mocked(useGroupListState).mockReturnValue(useGroupListStateMock);
 	});
 
 	afterEach(() => {

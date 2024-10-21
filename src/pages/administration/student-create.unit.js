@@ -11,7 +11,7 @@ import { nextTick } from "vue";
 import { createStore } from "vuex";
 import NewStudent from "./StudentCreate.page.vue";
 
-jest.mock("@/utils/pageTitle", () => ({
+vi.mock("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 

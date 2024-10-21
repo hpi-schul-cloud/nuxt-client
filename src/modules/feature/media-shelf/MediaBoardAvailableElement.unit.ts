@@ -21,8 +21,8 @@ import { MediaElementDisplay, useSharedMediaBoardState } from "./data";
 import MediaBoardAvailableElement from "./MediaBoardAvailableElement.vue";
 import MediaBoardElementDisplay from "./MediaBoardElementDisplay.vue";
 
-jest.mock("@data-external-tool");
-jest.mock("./data");
+vi.mock("@data-external-tool");
+vi.mock("./data");
 
 describe("MediaBoardAvailableElement", () => {
 	let useExternalToolLaunchStateMock: DeepMocked<

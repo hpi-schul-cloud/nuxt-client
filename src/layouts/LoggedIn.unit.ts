@@ -22,7 +22,7 @@ import { Topbar } from "@ui-layout";
 import { createTestingPinia } from "@pinia/testing";
 import setupStores from "@@/tests/test-utils/setupStores";
 
-jest.mock("vue-router", () => ({
+vi.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 

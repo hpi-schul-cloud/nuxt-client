@@ -6,7 +6,7 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useI18n } from "vue-i18n";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
 		useI18n: vi.fn().mockReturnValue({
@@ -17,7 +17,7 @@ jest.mock("vue-i18n", () => {
 });
 
 const maxFileSize = 100;
-const mockI18nModule = jest.mocked(useI18n());
+const mockI18nModule = vi.mocked(useI18n());
 
 const notifierModule = createModuleMocks(NotifierModule);
 const configModule = createModuleMocks(EnvConfigModule, {

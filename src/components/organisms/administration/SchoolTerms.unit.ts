@@ -19,7 +19,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 
-jest.mock("@/utils/fileHelper");
+vi.mock("@/utils/fileHelper");
 
 describe("SchoolTerms", () => {
 	let authModule: jest.Mocked<AuthModule>;
@@ -187,7 +187,7 @@ describe("SchoolTerms", () => {
 		it("should call downloadFile method", () => {
 			const wrapper = setup();
 
-			const downloadFileMock = jest.mocked(downloadFile).mockReturnValueOnce();
+			const downloadFileMock = vi.mocked(downloadFile).mockReturnValueOnce();
 			const termsItem = wrapper.findComponent(
 				'[data-testid="terms-item"]'
 			) as VueWrapper<typeof SchoolTerms>;

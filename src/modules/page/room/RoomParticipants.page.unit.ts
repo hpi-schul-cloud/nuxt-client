@@ -15,7 +15,7 @@ import { nextTick } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { participants } from "@data-room";
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 const useRouteMock = <jest.Mock>useRoute;
 useRouteMock.mockReturnValue({ params: { id: "room-id" } });

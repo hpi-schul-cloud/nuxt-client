@@ -19,14 +19,14 @@ import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 
-jest.mock("@vueuse/core", () => {
+vi.mock("@vueuse/core", () => {
 	return {
 		...jest.requireActual("@vueuse/core"),
 		useMediaQuery: vi.fn(),
 	};
 });
 
-jest.mocked(useMediaQuery).mockReturnValue(ref(true));
+vi.mocked(useMediaQuery).mockReturnValue(ref(true));
 
 describe("MediaBoardAvailableLine", () => {
 	const getWrapper = (

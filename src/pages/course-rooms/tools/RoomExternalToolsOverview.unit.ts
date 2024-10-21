@@ -26,7 +26,7 @@ import { ref } from "vue";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 
-jest.mock("@data-external-tool");
+vi.mock("@data-external-tool");
 
 describe("RoomExternalToolOverview", () => {
 	let useExternalToolDisplayListStateMock: DeepMocked<

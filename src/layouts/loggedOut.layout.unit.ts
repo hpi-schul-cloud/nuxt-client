@@ -15,7 +15,7 @@ import { mount } from "@vue/test-utils";
 import { useRouter } from "vue-router";
 import loggedOut from "./loggedOut.layout.vue";
 
-jest.mock("vue-router");
+vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
 describe("loggedOutLayout", () => {

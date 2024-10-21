@@ -11,14 +11,14 @@ import { useAddElementDialog } from "./AddElementDialog.composable";
 
 setupStores({ notifierModule: NotifierModule });
 
-jest.mock("./SharedElementTypeSelection.composable");
+vi.mock("./SharedElementTypeSelection.composable");
 
-jest.mock("@/utils/inject");
-const mockedInjectStrict = jest.mocked(injectStrict);
+vi.mock("@/utils/inject");
+const mockedInjectStrict = vi.mocked(injectStrict);
 
 const translationMap: Record<string, string> = {};
 
-jest.mock("vue-i18n", () => {
+vi.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
 		useI18n: vi.fn().mockReturnValue({
@@ -29,9 +29,9 @@ jest.mock("vue-i18n", () => {
 	};
 });
 
-jest.mock("@util-board");
-const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
-jest.mocked(useSharedLastCreatedElement).mockImplementation(() => {
+vi.mock("@util-board");
+const mockedUseBoardNotifier = vi.mocked(useBoardNotifier);
+vi.mocked(useSharedLastCreatedElement).mockImplementation(() => {
 	return {
 		lastCreatedElementId: ref(undefined),
 		resetLastCreatedElementId: vi.fn(),
