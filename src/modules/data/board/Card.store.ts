@@ -239,6 +239,10 @@ export const useCardStore = defineStore("cardStore", () => {
 		preferredTools.value = await restApi.getPreferredTools(contextType);
 	};
 
+	const getPreferredTools = (): PreferredToolResponse[] | undefined => {
+		return preferredTools.value;
+	};
+
 	return {
 		createPreferredElement,
 		createCardSuccess,
@@ -264,5 +268,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		updateCardTitleSuccess,
 		loadPreferredTools,
 		preferredTools,
+		getPreferredTools,
 	};
 });

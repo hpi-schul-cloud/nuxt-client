@@ -147,7 +147,16 @@ describe("CardStore", () => {
 			cardStore.cards[card.id] = card;
 		}
 
-		return { cardStore, cardId, elements };
+		const preferredTools = [
+			{
+				name: "mock tool",
+				iconName: "mdiMock",
+				schoolExternalToolId: ObjectIdMock(),
+			},
+		];
+		cardStore.preferredTools = preferredTools;
+
+		return { cardStore, cardId, elements, preferredTools };
 	};
 
 	const focusSetup = (id: string) => {
@@ -847,6 +856,14 @@ describe("CardStore", () => {
 			expect(
 				mockedCardRestApiActions.createPreferredElement
 			).toHaveBeenCalledWith(payload, preferredTool);
+		});
+	});
+
+	describe("getPreferredTools", () => {
+		it("should return preferred tools", () => {
+			const { cardStore, preferredTools } = setup();
+
+			expect(cardStore.getPreferredTools()).toEqual(preferredTools);
 		});
 	});
 });

@@ -33,7 +33,7 @@ export const useAddElementDialog = (
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
-	const preferredTools = cardStore.preferredTools;
+	const preferredTools = cardStore.getPreferredTools();
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();

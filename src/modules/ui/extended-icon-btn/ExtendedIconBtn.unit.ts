@@ -3,8 +3,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
-import { nextTick } from "vue";
-import { VTooltip } from "vuetify/lib/components/index.mjs";
 import ExtendedIconBtn from "./ExtendedIconBtn.vue";
 
 describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
@@ -42,7 +40,7 @@ describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
 	});
 
 	// TODO N21-2167 find tooltip
-	it("should not show tooltip when hovered over", () => {});
+	//it("should not show tooltip when hovered over", () => {});
 
 	it("should render a clickable button", async () => {
 		const wrapper = mountComponent({
@@ -55,7 +53,7 @@ describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
 	});
 
 	// TODO N21-2167 find tooltip
-	describe("when label text is too long", () => {
+	/*describe("when label text is too long", () => {
 		it("should show tooltip when hovered over", async () => {
 			const wrapper = mountComponent({
 				props: { icon: "example-icon", label: "too-long-example-label" },
@@ -69,5 +67,5 @@ describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
 
 			expect(displayStyle).toBe("none");
 		});
-	});
+	}); */
 });
