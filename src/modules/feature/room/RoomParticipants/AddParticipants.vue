@@ -1,13 +1,13 @@
 <template>
-	<v-card min-width="560">
+	<v-card min-width="480" max-height="480">
 		<template v-slot:prepend>
-			<h1 class="mb-5 ml-2 h4">
+			<v-card-title data-testid="dialog-title" class="dialog-title pt-4">
 				{{ t("pages.rooms.participants.addParticipants") }}
-			</h1>
+			</v-card-title>
 		</template>
 
 		<template v-slot:default>
-			<div class="ml-8 mr-6">
+			<div class="ml-6 mr-6">
 				<div class="mt-4">
 					<v-autocomplete
 						ref="autoCompleteSchool"
