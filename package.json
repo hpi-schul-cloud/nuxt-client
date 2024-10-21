@@ -6,7 +6,8 @@
 	"scripts": {
 		"serve": "cross-env NODE_ENV=development webpack serve --config config/webpack/webpack.dev.js",
 		"build": "cross-env NODE_ENV=production webpack --config config/webpack/webpack.prod.js",
-		"test:vitest": "vitest",
+		"test:vitest": "vitest run",
+		"test:vitest:watch": "vitest",
 		"test": "cross-env NODE_ENV=test npm run test:unit",
 		"test:unit": "npx jest",
 		"test:unit:ci": "npm run test:unit -- --coverage --ci --maxWorkers=4",
