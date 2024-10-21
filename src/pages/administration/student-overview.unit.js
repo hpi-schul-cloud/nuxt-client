@@ -247,7 +247,7 @@ describe("students/index", () => {
 		expect(checkBox.exists()).toBe(true);
 		await checkBox.trigger("click");
 		await dataRow.vm.$emit("update:selected", true);
-		jest.runAllTimers();
+		vi.runAllTimers();
 		// user is selected
 		expect(dataRow.vm.selected).toBe(true);
 
@@ -262,14 +262,14 @@ describe("students/index", () => {
 		expect(openContextButton.exists()).toBe(true);
 		// contextMenu is clicked
 		await openContextButton.trigger("click");
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		// delete button action is rendered in contextMenu
 		const deleteActionButton = wrapper.find(`[data-testid="delete_action"]`);
 		expect(deleteActionButton.exists()).toBe(true);
 		// delete button is clicked
 		await deleteActionButton.trigger("click");
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		// delete action is emitted
 		expect(selectionBar.emitted("fire-action")[0][0].dataTestId).toStrictEqual(
@@ -486,7 +486,7 @@ describe("students/index", () => {
 		const { wrapper, usersActionsStubs, uiStateMutationsStubs } = setup();
 
 		//run all existing timers
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		const searchBarInput = wrapper.find(`input[data-testid="searchbar"]`);
 		expect(searchBarInput.exists()).toBe(true);
@@ -494,7 +494,7 @@ describe("students/index", () => {
 		searchBarInput.setValue("abc");
 
 		//run new timer from updating the value
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		expect(uiStateMutationsStubs.set).toHaveBeenCalled();
 

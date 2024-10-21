@@ -413,7 +413,7 @@ describe("Board", () => {
 
 			setup();
 
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
 		});
@@ -423,7 +423,7 @@ describe("Board", () => {
 
 			setup({ isBoardVisible: false });
 
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalledWith(
 				"components.board.alert.info.draft",
@@ -436,7 +436,7 @@ describe("Board", () => {
 
 			setup();
 
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalledWith(
 				"components.board.alert.info.teacher",
@@ -450,7 +450,7 @@ describe("Board", () => {
 			const { boardStore } = setup({ isBoardVisible: false });
 			boardStore.board!.isVisible = true;
 
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalledWith(
 				"components.board.alert.info.teacher",
@@ -464,7 +464,7 @@ describe("Board", () => {
 			const { boardStore } = setup();
 			boardStore.board!.isVisible = false;
 
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalledWith(
 				"components.board.alert.info.draft",
@@ -479,7 +479,7 @@ describe("Board", () => {
 
 			setup();
 
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(
 				mockedBoardNotifierCalls.showCustomNotifier

@@ -65,7 +65,7 @@ describe("@/components/molecules/ContextMenu", () => {
 		const wrapper = getWrapper();
 		await wrapper.find(".context-menu__button").trigger("click");
 
-		jest.runAllTimers();
+		vi.runAllTimers();
 
 		const emitted = await wrapper.emitted("update:show");
 		expect(emitted).toHaveLength(1);

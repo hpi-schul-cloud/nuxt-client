@@ -555,7 +555,7 @@ describe("FileContent", () => {
 			const fileInputs = wrapper.findComponent(FileInputs);
 
 			fileInputs.vm.$emit("update:alternativeText");
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(wrapper.emitted("update:alternativeText")).toHaveLength(1);
 		});
@@ -566,7 +566,7 @@ describe("FileContent", () => {
 			const fileInputs = wrapper.findComponent(FileInputs);
 
 			fileInputs.vm.$emit("update:caption");
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(wrapper.emitted("update:caption")).toHaveLength(1);
 		});

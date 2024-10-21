@@ -60,7 +60,7 @@ describe("@/mixins/print", () => {
 			const testContent = "some plain old content";
 			vi.useFakeTimers();
 			method(testContent);
-			jest.runAllTimers();
+			vi.runAllTimers();
 			expect(newWindowMock.print).toHaveBeenCalled();
 			expect(newWindowMock.close).toHaveBeenCalled();
 		});

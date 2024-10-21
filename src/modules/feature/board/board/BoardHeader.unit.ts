@@ -166,7 +166,7 @@ describe("BoardHeader", () => {
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
 				titleInput.vm.$emit("update:value", "");
 
-				jest.runAllTimers();
+				vi.runAllTimers();
 
 				const emitted = wrapper.emitted("update:title");
 				expect(emitted).toBeUndefined();
@@ -182,7 +182,7 @@ describe("BoardHeader", () => {
 				const titleInput = wrapper.findComponent(BoardAnyTitleInput);
 				titleInput.vm.$emit("update:value", "new-title");
 
-				jest.runAllTimers();
+				vi.runAllTimers();
 
 				const emitted = wrapper.emitted("update:title");
 				expect(emitted).toBeDefined();
@@ -201,7 +201,7 @@ describe("BoardHeader", () => {
 				titleInput.vm.$emit("update:value", "");
 				titleInput.vm.$emit("blur");
 
-				jest.runAllTimers();
+				vi.runAllTimers();
 
 				const emitted = wrapper.emitted("update:title");
 				expect(emitted).toBeDefined();
@@ -221,7 +221,7 @@ describe("BoardHeader", () => {
 				titleInput.vm.$emit("update:value", "newTitle");
 				titleInput.vm.$emit("blur");
 
-				jest.runAllTimers();
+				vi.runAllTimers();
 
 				const emitted = wrapper.emitted("update:title");
 				expect(emitted?.[1]).toBeUndefined();

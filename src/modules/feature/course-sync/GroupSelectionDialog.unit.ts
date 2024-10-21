@@ -96,7 +96,7 @@ describe("GroupSelectionDialog", () => {
 
 			const autocomplete = wrapper.findComponent(VAutocomplete);
 			await autocomplete.setValue("testGroup", "search");
-			jest.runAllTimers();
+			vi.runAllTimers();
 
 			expect(useGroupListStateMock.fetchGroups).toHaveBeenCalledWith<
 				[GroupListFilter, { append: boolean }?]
