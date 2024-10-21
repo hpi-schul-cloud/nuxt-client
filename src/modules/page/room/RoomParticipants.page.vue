@@ -12,9 +12,13 @@
 		</template>
 
 		<div class="mb-8 mt-12 mx-16">
-			Hier könnte Text stehen oder ein wichtiger Hinweis, zum Beispiel: wo man
-			den Hilfeartikel zur Anzeige des eigenen Namens im zentralen Verzeichnis
-			findet.
+			Füge Teilnehmende zum Kurs hinzu. Lehrkräfte anderer Schulen können
+			hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im
+			eigenen Profil aktiviert haben
+			<a
+				href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
+				>(weitere Informationen)</a
+			>.
 		</div>
 		<div class="mx-16">
 			<ParticipantsTable :participants="participantsList" />
