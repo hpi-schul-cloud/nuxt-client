@@ -90,9 +90,7 @@ describe("ErrorHandler.Composable", () => {
 
 		describe("when no errorHandler for the code of the error is defined", () => {
 			it("should fall back to console.error", async () => {
-				const consoleErrorSpy = jest
-					.spyOn(console, "error")
-					.mockImplementation();
+				const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation();
 				const { handleError } = setup();
 
 				mockedIsAxiosError.mockReturnValueOnce(true);

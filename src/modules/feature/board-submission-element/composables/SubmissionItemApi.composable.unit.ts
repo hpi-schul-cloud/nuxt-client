@@ -11,9 +11,9 @@ describe("SubmissionItemApi.composable", () => {
 		submissionItemApi = createMock<serverApi.BoardSubmissionApiInterface>();
 
 		vi.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(elementApi);
-		jest
-			.spyOn(serverApi, "BoardSubmissionApiFactory")
-			.mockReturnValue(submissionItemApi);
+		vi.spyOn(serverApi, "BoardSubmissionApiFactory").mockReturnValue(
+			submissionItemApi
+		);
 	});
 
 	afterEach(() => {

@@ -12,9 +12,7 @@ import FilePicker from "./file-picker/FilePicker.vue";
 const setupUseSharedLastCreatedElementMock = () => {
 	const mockedUse =
 		createMock<ReturnType<typeof utilBoard.useSharedLastCreatedElement>>();
-	jest
-		.spyOn(utilBoard, "useSharedLastCreatedElement")
-		.mockReturnValue(mockedUse);
+	vi.spyOn(utilBoard, "useSharedLastCreatedElement").mockReturnValue(mockedUse);
 };
 
 describe("FileUpload", () => {

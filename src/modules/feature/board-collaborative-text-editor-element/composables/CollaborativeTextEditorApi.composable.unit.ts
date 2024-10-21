@@ -62,9 +62,10 @@ describe("CollaborativeTextEditorApi Composable", () => {
 
 				const collaborativeTextEditorApi =
 					createMock<serverApi.CollaborativeTextEditorApiInterface>();
-				jest
-					.spyOn(serverApi, "CollaborativeTextEditorApiFactory")
-					.mockReturnValue(collaborativeTextEditorApi);
+				vi.spyOn(
+					serverApi,
+					"CollaborativeTextEditorApiFactory"
+				).mockReturnValue(collaborativeTextEditorApi);
 				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockResolvedValueOnce(
 					response
 				);
@@ -114,9 +115,10 @@ describe("CollaborativeTextEditorApi Composable", () => {
 
 				const collaborativeTextEditorApi =
 					createMock<serverApi.CollaborativeTextEditorApiInterface>();
-				jest
-					.spyOn(serverApi, "CollaborativeTextEditorApiFactory")
-					.mockReturnValue(collaborativeTextEditorApi);
+				vi.spyOn(
+					serverApi,
+					"CollaborativeTextEditorApiFactory"
+				).mockReturnValue(collaborativeTextEditorApi);
 				collaborativeTextEditorApi.collaborativeTextEditorControllerGetOrCreateCollaborativeTextEditorForParent.mockRejectedValue(
 					responseError
 				);

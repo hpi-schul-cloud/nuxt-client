@@ -24,8 +24,7 @@ let newWindowMock;
 describe("@/mixins/print", () => {
 	beforeEach(() => {
 		newWindowMock = getNewWindowMock();
-		jest
-			.spyOn(window, "open")
+		vi.spyOn(window, "open")
 			.mockImplementation()
 			.mockReturnValue(newWindowMock);
 	});

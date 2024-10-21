@@ -103,13 +103,13 @@ setupStores({
 });
 
 const spyMocks = {
-	storeRoomAlignMock: jest
+	storeRoomAlignMock: vi
 		.spyOn(courseRoomListModule, "align")
 		.mockImplementation(async () => ({})),
-	storeModuleFetchMock: jest
+	storeModuleFetchMock: vi
 		.spyOn(courseRoomListModule, "fetch")
 		.mockImplementation(async () => ({})),
-	storeModuleFetchAllMock: jest
+	storeModuleFetchAllMock: vi
 		.spyOn(courseRoomListModule, "fetchAllElements")
 		.mockImplementation(async () => ({})),
 };

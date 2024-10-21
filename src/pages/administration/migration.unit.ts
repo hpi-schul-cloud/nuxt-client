@@ -410,9 +410,9 @@ describe("User Migration / Index", () => {
 					});
 				});
 
-				jest
-					.spyOn(schoolsModule, "fetchSchool")
-					.mockResolvedValueOnce(Promise.resolve());
+				vi.spyOn(schoolsModule, "fetchSchool").mockResolvedValueOnce(
+					Promise.resolve()
+				);
 
 				const button = wrapper.findComponent(
 					"[data-testid=import-users-cancel-migration-btn]"
@@ -529,9 +529,10 @@ describe("User Migration / Index", () => {
 
 				const wrapper = getWrapper();
 
-				jest
-					.spyOn(importUsersModule, "clearAllAutoMatches")
-					.mockResolvedValueOnce(Promise.resolve());
+				vi.spyOn(
+					importUsersModule,
+					"clearAllAutoMatches"
+				).mockResolvedValueOnce(Promise.resolve());
 
 				vi.spyOn(importUsersStub.methods, "reloadData");
 

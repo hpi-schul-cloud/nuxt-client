@@ -34,9 +34,9 @@ describe("UserLoginMigrationModule", () => {
 
 		apiMock = createMock<UserLoginMigrationApiInterface>();
 
-		jest
-			.spyOn(serverApi, "UserLoginMigrationApiFactory")
-			.mockReturnValue(apiMock);
+		vi.spyOn(serverApi, "UserLoginMigrationApiFactory").mockReturnValue(
+			apiMock
+		);
 
 		setupStores({
 			authModule: AuthModule,

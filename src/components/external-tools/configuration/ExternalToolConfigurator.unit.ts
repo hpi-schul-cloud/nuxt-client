@@ -20,12 +20,13 @@ import ExternalToolConfigSettings from "./ExternalToolConfigSettings.vue";
 import ExternalToolConfigurator from "./ExternalToolConfigurator.vue";
 
 describe("ExternalToolConfigurator", () => {
-	jest
-		.spyOn(useExternalToolUtilsComposable, "useExternalToolMappings")
-		.mockReturnValue({
-			...useExternalToolUtilsComposable.useExternalToolMappings(),
-			getBusinessErrorTranslationKey: () => "",
-		});
+	vi.spyOn(
+		useExternalToolUtilsComposable,
+		"useExternalToolMappings"
+	).mockReturnValue({
+		...useExternalToolUtilsComposable.useExternalToolMappings(),
+		getBusinessErrorTranslationKey: () => "",
+	});
 
 	const getWrapper = (
 		props: ComponentProps<typeof ExternalToolConfigurator>

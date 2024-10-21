@@ -23,7 +23,7 @@ describe("finished task store", () => {
 	describe("actions", () => {
 		const setup = (taskApiMock: any) => {
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const spy = jest
+			const spy = vi
 				.spyOn(serverApi, "TaskApiFactory")
 				.mockReturnValue(taskApiMock as unknown as serverApi.TaskApiInterface);
 			const finishedTasksModule = new FinishedTasksModule({});
@@ -61,7 +61,7 @@ describe("finished task store", () => {
 
 			it("should fetch the next page", (done) => {
 				const mockApi = {
-					taskControllerFindAllFinished: jest
+					taskControllerFindAllFinished: vi
 						.fn()
 						.mockResolvedValueOnce({
 							data: {
@@ -81,7 +81,7 @@ describe("finished task store", () => {
 						}),
 				};
 
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -113,7 +113,7 @@ describe("finished task store", () => {
 					taskControllerFindAllFinished: vi.fn(),
 				};
 
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -137,7 +137,7 @@ describe("finished task store", () => {
 					taskControllerFindAllFinished: vi.fn(),
 				};
 
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -162,7 +162,7 @@ describe("finished task store", () => {
 						Promise.reject({ ...error })
 					),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -184,7 +184,7 @@ describe("finished task store", () => {
 		describe("refetchTasks", () => {
 			it("should fetch all tasks up until current pagination", async () => {
 				const mockApi = {
-					taskControllerFindAllFinished: jest
+					taskControllerFindAllFinished: vi
 						.fn()
 						.mockReturnValueOnce({
 							data: {
@@ -212,7 +212,7 @@ describe("finished task store", () => {
 						}),
 				};
 
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -246,7 +246,7 @@ describe("finished task store", () => {
 						Promise.reject({ ...error })
 					),
 				};
-				const spy = jest
+				const spy = vi
 					.spyOn(serverApi, "TaskApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
@@ -277,9 +277,9 @@ describe("finished task store", () => {
 					taskControllerRestore: vi.fn(() => Promise.reject({ ...error })),
 				};
 
-				jest
-					.spyOn(serverApi, "TaskApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
+				vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.TaskApiInterface
+				);
 
 				finishedTasksModule.restoreTask(task.id).then(() => {
 					expect(finishedTasksModule.getStatus).toBe("error");

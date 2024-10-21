@@ -18,9 +18,9 @@ describe("status alerts module", () => {
 						},
 					})),
 				};
-				jest
-					.spyOn(serverApi, "AlertApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.AlertApiInterface);
+				vi.spyOn(serverApi, "AlertApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.AlertApiInterface
+				);
 				const statusAlertsModule = new StatusAlertsModule({});
 				const setStatusAlertsSpy = vi.spyOn(
 					statusAlertsModule,
@@ -43,9 +43,9 @@ describe("status alerts module", () => {
 				const mockApi = {
 					alertControllerFind: vi.fn(() => Promise.reject({ ...error })),
 				};
-				jest
-					.spyOn(serverApi, "AlertApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.AlertApiInterface);
+				vi.spyOn(serverApi, "AlertApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.AlertApiInterface
+				);
 				const statusAlertsModule = new StatusAlertsModule({});
 				const setBusinessErrorSpy = vi.spyOn(
 					statusAlertsModule,

@@ -25,15 +25,13 @@ describe("AdminMigrationSection", () => {
 	let userLoginMigrationModule: jest.Mocked<UserLoginMigrationModule>;
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
 
-	jest
-		.spyOn(
-			useUserLoginMigrationMappingsComposable,
-			"useUserLoginMigrationMappings"
-		)
-		.mockReturnValue({
-			...useUserLoginMigrationMappingsComposable.useUserLoginMigrationMappings(),
-			getBusinessErrorTranslationKey: () => "",
-		});
+	vi.spyOn(
+		useUserLoginMigrationMappingsComposable,
+		"useUserLoginMigrationMappings"
+	).mockReturnValue({
+		...useUserLoginMigrationMappingsComposable.useUserLoginMigrationMappings(),
+		getBusinessErrorTranslationKey: () => "",
+	});
 
 	const setup = (
 		schoolGetters: Partial<SchoolsModule> = {},

@@ -310,9 +310,9 @@ describe("auth store module", () => {
 						data: { successful: true },
 					}),
 				};
-				jest
-					.spyOn(serverApi, "UserApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
+				vi.spyOn(serverApi, "UserApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.UserApiInterface
+				);
 				const authModule = new AuthModule({});
 
 				authModule.updateUserLanguage(LanguageType.De);
@@ -326,9 +326,9 @@ describe("auth store module", () => {
 						throw new AxiosError("I'm an error");
 					}),
 				};
-				jest
-					.spyOn(serverApi, "UserApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.UserApiInterface);
+				vi.spyOn(serverApi, "UserApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.UserApiInterface
+				);
 				const authModule = new AuthModule({});
 
 				authModule.updateUserLanguage(LanguageType.De);

@@ -60,11 +60,9 @@ describe("copy module", () => {
 				const roomCopyMockApi = {
 					courseRoomsControllerCopyCourse: vi.fn(async () => ({})),
 				};
-				jest
-					.spyOn(serverApi, "CourseRoomsApiFactory")
-					.mockReturnValue(
-						roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
-					);
+				vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(
+					roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
+				);
 
 				const copyModule = new CopyModule({});
 				const payload: CopyParams = {
@@ -83,11 +81,9 @@ describe("copy module", () => {
 					const taskMockApi = {
 						taskControllerCopyTask: vi.fn(async () => ({ data: {} })),
 					};
-					jest
-						.spyOn(serverApi, "TaskApiFactory")
-						.mockReturnValue(
-							taskMockApi as unknown as serverApi.TaskApiInterface
-						);
+					vi.spyOn(serverApi, "TaskApiFactory").mockReturnValue(
+						taskMockApi as unknown as serverApi.TaskApiInterface
+					);
 					const copyModule = new CopyModule({});
 
 					it("should send with courseId", async () => {
@@ -127,11 +123,9 @@ describe("copy module", () => {
 							data: {},
 						})),
 					};
-					jest
-						.spyOn(serverApi, "CourseRoomsApiFactory")
-						.mockReturnValue(
-							roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
-						);
+					vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(
+						roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
+					);
 
 					const copyModule = new CopyModule({});
 					const payload: CopyParams = {
@@ -155,11 +149,9 @@ describe("copy module", () => {
 							data: {},
 						})),
 					};
-					jest
-						.spyOn(serverApi, "CourseRoomsApiFactory")
-						.mockReturnValue(
-							roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
-						);
+					vi.spyOn(serverApi, "CourseRoomsApiFactory").mockReturnValue(
+						roomCopyMockApi as unknown as serverApi.CourseRoomsApiInterface
+					);
 					const copyModule = new CopyModule({});
 					await copyModule.copy({
 						id: "testLessonId",
@@ -177,11 +169,9 @@ describe("copy module", () => {
 					const boardCopyMockApi = {
 						boardControllerCopyBoard: vi.fn(async () => ({ data: {} })),
 					};
-					jest
-						.spyOn(serverApi, "BoardApiFactory")
-						.mockReturnValue(
-							boardCopyMockApi as unknown as serverApi.BoardApiInterface
-						);
+					vi.spyOn(serverApi, "BoardApiFactory").mockReturnValue(
+						boardCopyMockApi as unknown as serverApi.BoardApiInterface
+					);
 					const copyModule = new CopyModule({});
 					await copyModule.copy({
 						id: "testBoardId",
@@ -202,11 +192,9 @@ describe("copy module", () => {
 						data: {},
 					})),
 				};
-				jest
-					.spyOn(serverApi, "ShareTokenApiFactory")
-					.mockReturnValue(
-						shareApiMock as unknown as serverApi.ShareTokenApiInterface
-					);
+				vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
+					shareApiMock as unknown as serverApi.ShareTokenApiInterface
+				);
 
 				const copyModule = new CopyModule({});
 				const token = "abc123a";
@@ -226,11 +214,9 @@ describe("copy module", () => {
 						data: {},
 					})),
 				};
-				jest
-					.spyOn(serverApi, "ShareTokenApiFactory")
-					.mockReturnValue(
-						shareApiMock as unknown as serverApi.ShareTokenApiInterface
-					);
+				vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
+					shareApiMock as unknown as serverApi.ShareTokenApiInterface
+				);
 
 				const copyModule = new CopyModule({});
 				const token = "abc123a";
@@ -252,11 +238,9 @@ describe("copy module", () => {
 				const shareApiMock = {
 					shareTokenControllerImportShareToken: vi.fn(async () => ({})),
 				};
-				jest
-					.spyOn(serverApi, "ShareTokenApiFactory")
-					.mockReturnValue(
-						shareApiMock as unknown as serverApi.ShareTokenApiInterface
-					);
+				vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
+					shareApiMock as unknown as serverApi.ShareTokenApiInterface
+				);
 
 				const copyModule = new CopyModule({});
 				const payload = {
@@ -278,11 +262,9 @@ describe("copy module", () => {
 						data: {},
 					})),
 				};
-				jest
-					.spyOn(serverApi, "ShareTokenApiFactory")
-					.mockReturnValue(
-						shareApiMock as unknown as serverApi.ShareTokenApiInterface
-					);
+				vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
+					shareApiMock as unknown as serverApi.ShareTokenApiInterface
+				);
 
 				const copyModule = new CopyModule({});
 				const token = "abc123a";
@@ -304,11 +286,9 @@ describe("copy module", () => {
 				const shareApiMock = {
 					shareTokenControllerImportShareToken: vi.fn(async () => ({})),
 				};
-				jest
-					.spyOn(serverApi, "ShareTokenApiFactory")
-					.mockReturnValue(
-						shareApiMock as unknown as serverApi.ShareTokenApiInterface
-					);
+				vi.spyOn(serverApi, "ShareTokenApiFactory").mockReturnValue(
+					shareApiMock as unknown as serverApi.ShareTokenApiInterface
+				);
 
 				const copyModule = new CopyModule({});
 				const payload = {

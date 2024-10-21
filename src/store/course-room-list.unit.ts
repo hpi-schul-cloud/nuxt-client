@@ -88,16 +88,14 @@ describe("rooms module", () => {
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
 				const mockApi = {
-					dashboardControllerFindForUser: jest
+					dashboardControllerFindForUser: vi
 						.fn()
 						.mockResolvedValue({ data: {} }),
 				};
 
-				jest
-					.spyOn(serverApi, "DashboardApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.DashboardApiInterface
-					);
+				vi.spyOn(serverApi, "DashboardApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.DashboardApiInterface
+				);
 
 				const courseRoomListModule = new CourseRoomListModule({});
 
@@ -123,11 +121,9 @@ describe("rooms module", () => {
 					})),
 				};
 
-				jest
-					.spyOn(serverApi, "DashboardApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.DashboardApiInterface
-					);
+				vi.spyOn(serverApi, "DashboardApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.DashboardApiInterface
+				);
 
 				const courseRoomListModule = new CourseRoomListModule({});
 
@@ -176,11 +172,9 @@ describe("rooms module", () => {
 						data: { ...groupToPatch },
 					})),
 				};
-				jest
-					.spyOn(serverApi, "DashboardApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.DashboardApiInterface
-					);
+				vi.spyOn(serverApi, "DashboardApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.DashboardApiInterface
+				);
 
 				const courseRoomListModule = new CourseRoomListModule({});
 				const roomsData: RoomsData = {
@@ -211,11 +205,9 @@ describe("rooms module", () => {
 						Promise.reject({ ...error })
 					),
 				};
-				jest
-					.spyOn(serverApi, "DashboardApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as serverApi.DashboardApiInterface
-					);
+				vi.spyOn(serverApi, "DashboardApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.DashboardApiInterface
+				);
 				const courseRoomListModule = new CourseRoomListModule({});
 				const roomsData: RoomsData = {
 					id: "dummyId",
@@ -243,9 +235,9 @@ describe("rooms module", () => {
 		describe("fetchAllElements", () => {
 			it("should call the backend", async () => {
 				const mockApi = { courseControllerFindForUser: vi.fn() };
-				jest
-					.spyOn(serverApi, "CoursesApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
+				vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.CoursesApiInterface
+				);
 				const courseRoomListModule = new CourseRoomListModule({});
 				await courseRoomListModule.fetchAllElements();
 
@@ -267,9 +259,9 @@ describe("rooms module", () => {
 						Promise.reject({ ...error })
 					),
 				};
-				jest
-					.spyOn(serverApi, "CoursesApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
+				vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(
+					mockApi as unknown as serverApi.CoursesApiInterface
+				);
 				const courseRoomListModule = new CourseRoomListModule({});
 
 				courseRoomListModule.fetchAllElements().then(() => {

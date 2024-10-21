@@ -27,7 +27,7 @@ describe("@/utils/fileHelper", () => {
 				download: "",
 				click: vi.fn(),
 			};
-			const createElementSpy = jest
+			const createElementSpy = vi
 				.spyOn(document, "createElement")
 				.mockImplementation(() => link);
 			document.body.appendChild = vi.fn();

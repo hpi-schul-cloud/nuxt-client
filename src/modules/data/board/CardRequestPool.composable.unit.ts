@@ -19,9 +19,9 @@ const setup = (...cardIds: string[]) => {
 	const returnedCards = cardIds.map((id) => ({ id }));
 	mockReturnData = { data: { data: returnedCards } };
 
-	jest
-		.spyOn(serverApi, "BoardCardApiFactory")
-		.mockReturnValue(cardsApiFactoryMock as unknown as BoardCardApiInterface);
+	vi.spyOn(serverApi, "BoardCardApiFactory").mockReturnValue(
+		cardsApiFactoryMock as unknown as BoardCardApiInterface
+	);
 
 	return { cardsApiFactoryMock };
 };
