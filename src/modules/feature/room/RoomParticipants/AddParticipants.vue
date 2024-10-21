@@ -1,9 +1,6 @@
 <template>
 	<v-card min-width="480" max-height="480">
 		<template v-slot:prepend>
-			<!-- <v-card-title data-testid="dialog-title" class="dialog-title pt-4">
-				{{ t("pages.rooms.participants.addParticipants") }}
-			</v-card-title> -->
 			<div ref="textTitle" class="text-h4 mt-2">
 				{{ t("pages.rooms.participants.addParticipants") }}
 			</div>
@@ -11,7 +8,7 @@
 
 		<template v-slot:default>
 			<div class="ml-6 mr-6">
-				<div class="mt-2">
+				<div class="mt-3">
 					<v-autocomplete
 						ref="autoCompleteSchool"
 						v-model="school"
