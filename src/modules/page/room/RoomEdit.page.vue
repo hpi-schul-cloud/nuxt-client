@@ -81,9 +81,3 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	return [];
 });
 </script>
-<style scoped>
-.text-h3 {
-	size: 33px;
-	line-height: 40px;
-}
-</style>

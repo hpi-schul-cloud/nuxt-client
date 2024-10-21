@@ -29,9 +29,3 @@ const fabAction = {
 	testId: "fab-add-room",
 };
 </script>
-<style scoped>
-.text-h3 {
-	size: 33px;
-	line-height: 40px;
-}
-</style>

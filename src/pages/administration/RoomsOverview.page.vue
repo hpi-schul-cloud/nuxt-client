@@ -430,8 +430,4 @@ const getInstituteTitle: ComputedRef<string> = computed(() => {
 .v-tabs {
 	margin-bottom: -2px;
 }
-.text-h3 {
-	size: 33px;
-	line-height: 40px;
-}
 </style>

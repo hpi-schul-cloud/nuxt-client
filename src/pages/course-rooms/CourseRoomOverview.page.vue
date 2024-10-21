@@ -426,10 +426,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.text-h3 {
-	size: 33px;
-	line-height: 40px;
-}
 .header-actions-section {
 	width: 100%;
 	height: 56px;
