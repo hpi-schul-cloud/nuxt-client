@@ -126,7 +126,7 @@ describe("RoomsOverview", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("general", () => {

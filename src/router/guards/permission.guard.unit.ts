@@ -16,7 +16,7 @@ vi.mock("@/store", () => ({
 
 describe("PermissionGuard", () => {
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	function setup() {

@@ -26,7 +26,7 @@ describe("courseInfoApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("loadCoursesForSchool", () => {

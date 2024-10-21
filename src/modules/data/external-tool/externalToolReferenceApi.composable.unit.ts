@@ -19,7 +19,7 @@ describe("externalToolReferenceApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchDisplayDataCall", () => {

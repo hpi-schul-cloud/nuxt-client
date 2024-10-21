@@ -28,7 +28,7 @@ describe("ProvisioningOptionsApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getProvisioningOptions", () => {

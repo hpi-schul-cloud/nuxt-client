@@ -38,7 +38,7 @@ describe("ToolConfigurationStatus.composable", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("determineToolStatusTranslationKey", () => {

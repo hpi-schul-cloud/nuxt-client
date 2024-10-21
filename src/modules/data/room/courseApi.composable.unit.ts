@@ -21,7 +21,7 @@ describe("courseApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("stopSynchronization", () => {

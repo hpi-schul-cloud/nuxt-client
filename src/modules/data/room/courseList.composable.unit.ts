@@ -41,7 +41,7 @@ describe("courseList.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("setSortBy", () => {

@@ -25,7 +25,7 @@ describe("ExternalToolApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchContextLaunchDataCall", () => {

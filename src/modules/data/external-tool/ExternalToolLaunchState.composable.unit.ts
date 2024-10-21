@@ -25,7 +25,7 @@ describe("ExternalToolLaunchState.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchContextLaunchRequest", () => {

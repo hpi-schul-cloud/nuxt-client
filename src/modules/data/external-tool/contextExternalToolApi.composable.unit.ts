@@ -33,7 +33,7 @@ describe("contextExternalToolApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchContextExternalToolCall", () => {

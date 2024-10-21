@@ -82,7 +82,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchData", () => {

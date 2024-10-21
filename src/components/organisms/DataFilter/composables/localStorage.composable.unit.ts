@@ -24,7 +24,7 @@ vi.mock("@vueuse/core", () => {
 
 describe("localStorage composable", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should initialize the default state", () => {

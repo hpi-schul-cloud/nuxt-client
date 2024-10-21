@@ -121,7 +121,7 @@ describe("CardHost", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (options?: { hasCard?: boolean; hasElement?: boolean }) => {

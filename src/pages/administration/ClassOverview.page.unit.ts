@@ -131,7 +131,7 @@ const findTableComponen = (wrapper: VueWrapper) => {
 
 describe("ClassOverview", () => {
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("general", () => {

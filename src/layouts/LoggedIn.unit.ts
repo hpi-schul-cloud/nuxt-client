@@ -108,7 +108,7 @@ describe("LoggedIn.layout.vue", () => {
 		defineWindowWidth();
 	});
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should render correctly", async () => {

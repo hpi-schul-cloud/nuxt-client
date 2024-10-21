@@ -58,7 +58,7 @@ describe("DrawingContentElement", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when component is mounted", () => {

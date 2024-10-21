@@ -67,7 +67,7 @@ describe("RoomExternalToolsSection", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when there are tools in the list", () => {

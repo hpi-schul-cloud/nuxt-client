@@ -22,7 +22,7 @@ vi.mock("@/composables/application-error.composable", () => ({
 
 describe("validateQueryParameters", () => {
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	function setup() {

@@ -52,7 +52,7 @@ describe("course-room module", () => {
 
 	describe("actions", () => {
 		afterEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 		const mockApi = {
 			courseRoomsControllerGetRoomBoard: vi.fn(),

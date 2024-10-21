@@ -21,7 +21,7 @@ describe("groupListState.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getComposable = () => {

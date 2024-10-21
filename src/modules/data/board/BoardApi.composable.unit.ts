@@ -33,7 +33,7 @@ describe("BoardApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("createColumnCall", () => {

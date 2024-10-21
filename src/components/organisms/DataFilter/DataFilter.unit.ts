@@ -50,7 +50,7 @@ describe("@components/DataFilter/DataFilter.vue", () => {
 
 	describe("should render the component", () => {
 		afterEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		it("should render the component", () => {

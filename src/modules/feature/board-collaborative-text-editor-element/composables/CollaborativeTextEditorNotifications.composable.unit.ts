@@ -36,7 +36,7 @@ const setupMountComposable = () => {
 
 describe("CollaborativeTextEditorNotifications.composable", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when showForbiddenError called", () => {

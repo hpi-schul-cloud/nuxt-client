@@ -33,7 +33,7 @@ describe("mediaBoardState.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getLineIndex", () => {

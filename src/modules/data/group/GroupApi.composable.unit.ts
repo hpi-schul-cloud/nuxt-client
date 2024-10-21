@@ -14,7 +14,7 @@ describe("GroupApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getGroup", () => {

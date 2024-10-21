@@ -12,7 +12,7 @@ vi.mock("@feature-board-file-element");
 
 describe("usePreviewGenerator", () => {
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getWrapper = (elementId: string) => {

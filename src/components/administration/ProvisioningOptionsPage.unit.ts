@@ -90,7 +90,7 @@ describe("ProvisioningOptionsPage", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("breadcrumbs", () => {
@@ -313,7 +313,7 @@ describe("ProvisioningOptionsPage", () => {
 
 			describe("when disabling options", () => {
 				beforeEach(() => {
-					jest.clearAllMocks();
+					vi.clearAllMocks();
 				});
 				const setup = async () => {
 					useProvisioningOptionsStateMock.provisioningOptionsData.value =

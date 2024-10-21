@@ -27,7 +27,7 @@ describe("LightBox composable", () => {
 		};
 
 		beforeEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		describe("open", () => {
@@ -67,7 +67,7 @@ describe("LightBox composable", () => {
 		};
 
 		beforeEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		describe("when openInternal is called", () => {

@@ -52,7 +52,7 @@ const serverDataSuccess: CopyApiResponse = {
 describe("copy module", () => {
 	describe("actions", () => {
 		afterEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		describe("copy", () => {

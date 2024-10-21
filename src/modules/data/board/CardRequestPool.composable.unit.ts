@@ -28,7 +28,7 @@ const setup = (...cardIds: string[]) => {
 
 describe("card-request-pool.composable", () => {
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should return Card data", async () => {

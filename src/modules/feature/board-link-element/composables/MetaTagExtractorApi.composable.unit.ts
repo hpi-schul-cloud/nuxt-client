@@ -15,7 +15,7 @@ describe("useMetaTagExtractorApi", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getMetaTags", () => {

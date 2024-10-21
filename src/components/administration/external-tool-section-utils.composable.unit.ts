@@ -47,7 +47,7 @@ describe("useSchoolExternalToolUtils", () => {
 	};
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getHeaders is called", () => {

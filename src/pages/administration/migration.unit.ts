@@ -515,7 +515,7 @@ describe("User Migration / Index", () => {
 
 			afterEach(() => {
 				document.body.innerHTML = "";
-				jest.clearAllMocks();
+				vi.clearAllMocks();
 			});
 
 			const setup = async () => {

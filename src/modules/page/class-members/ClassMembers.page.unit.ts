@@ -59,7 +59,7 @@ describe("@pages/ClassMembers.page.vue", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("title", () => {

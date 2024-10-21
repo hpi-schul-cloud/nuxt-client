@@ -176,7 +176,7 @@ describe("Board", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const mockEnvConfigModule = (envs: Partial<ConfigResponse> | undefined) => {

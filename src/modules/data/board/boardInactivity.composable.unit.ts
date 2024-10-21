@@ -97,7 +97,7 @@ describe("pageInactivity.composable", () => {
 
 	describe("usePageInactivity", () => {
 		beforeEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 		it("should call the store functions when isTimeoutReached value true", async () => {
 			const useBoardInactivity = setup();
@@ -129,10 +129,10 @@ describe("pageInactivity.composable", () => {
 	describe("isTimeoutReached value", () => {
 		beforeEach(() => {
 			connectionOptions.isTimeoutReached = false;
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 		afterEach(() => {
-			jest.clearAllTimers();
+			vi.clearAllTimers();
 		});
 		it("should be changed after MAX_TIMEOUT_FOR_INACTIVITY is achieved", async () => {
 			setup(3000);

@@ -26,7 +26,7 @@ describe("SchoolExternalToolUsage.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchSchoolExternalToolMetadata", () => {

@@ -20,7 +20,7 @@ describe("SystemApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getSystem", () => {

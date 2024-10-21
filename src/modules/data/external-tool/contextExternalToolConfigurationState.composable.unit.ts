@@ -27,7 +27,7 @@ describe("contextExternalToolConfigurationState.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when no data is loaded", () => {

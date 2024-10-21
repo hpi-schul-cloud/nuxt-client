@@ -60,7 +60,7 @@ describe("StartExistingCourseSyncDialog", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when the dialog is open", () => {

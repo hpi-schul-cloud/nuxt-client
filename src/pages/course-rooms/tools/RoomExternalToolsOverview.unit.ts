@@ -80,7 +80,7 @@ describe("RoomExternalToolOverview", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when no tools or no videoconference is in the list", () => {

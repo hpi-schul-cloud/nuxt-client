@@ -114,7 +114,7 @@ describe("ExternalToolSection", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("when component is used", () => {

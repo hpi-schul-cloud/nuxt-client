@@ -301,7 +301,7 @@ describe("auth store module", () => {
 
 		describe("updateUserLanguage", () => {
 			afterEach(() => {
-				jest.clearAllMocks();
+				vi.clearAllMocks();
 			});
 
 			it("should call backend succesfully", () => {

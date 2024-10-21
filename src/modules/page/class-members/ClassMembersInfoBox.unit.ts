@@ -40,7 +40,7 @@ describe("ClassMembersInfoBox", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("alert", () => {

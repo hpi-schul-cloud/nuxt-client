@@ -14,7 +14,7 @@ describe("CommonCartridgeImportModule", () => {
 	});
 
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getters", () => {

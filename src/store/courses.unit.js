@@ -5,7 +5,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 
 describe("courses store", () => {
 	beforeEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 		setupStores({ notifierModule: NotifierModule });
 	});
 	describe("removeCourseItem action", () => {

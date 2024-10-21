@@ -173,7 +173,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	it("should fetch the room data", async () => {

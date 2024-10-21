@@ -17,7 +17,7 @@ describe("SubmissionItemApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("create submissionItem", () => {

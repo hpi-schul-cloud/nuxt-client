@@ -209,7 +209,7 @@ describe("@/components/molecules/importUsers", () => {
 		};
 
 		afterEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		it("should set search data properties when search first name changes", async () => {

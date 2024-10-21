@@ -34,7 +34,7 @@ describe("ProvisioningOptionsState.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("fetchProvisioningOptionsData", () => {

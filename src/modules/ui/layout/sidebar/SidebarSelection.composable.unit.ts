@@ -37,7 +37,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const setup = (routeProps: { path: string; name: string }) => {

@@ -61,7 +61,7 @@ describe("DeleteConfirmation composable", () => {
 		};
 
 		beforeEach(() => {
-			jest.clearAllMocks();
+			vi.clearAllMocks();
 		});
 
 		describe("when title is defined", () => {

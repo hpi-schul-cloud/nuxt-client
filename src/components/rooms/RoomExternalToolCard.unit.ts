@@ -47,7 +47,7 @@ describe("RoomExternalToolCard", () => {
 
 	afterEach(() => {
 		jest.resetAllMocks();
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getWrapper = (tool: ExternalToolDisplayData, canEdit: boolean) => {

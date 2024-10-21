@@ -40,7 +40,7 @@ describe("mediaBoardApi.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	describe("getMediaBoardForUser", () => {

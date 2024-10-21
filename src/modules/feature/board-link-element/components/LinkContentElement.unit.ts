@@ -75,7 +75,7 @@ describe("LinkContentElement", () => {
 	});
 
 	afterEach(() => {
-		jest.clearAllMocks();
+		vi.clearAllMocks();
 	});
 
 	const getWrapper = (props: {
