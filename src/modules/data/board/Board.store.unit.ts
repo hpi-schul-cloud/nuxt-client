@@ -1200,7 +1200,7 @@ describe("BoardStore", () => {
 			});
 
 			it('should call applicationErrorModule.showError if "isOwnAction" is false', async () => {
-				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
+				const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
 				const { boardStore } = setup({ socketFlag: true });
 				await boardStore.deleteBoardRequest({ boardId: "boardId" }, "roomId");
 

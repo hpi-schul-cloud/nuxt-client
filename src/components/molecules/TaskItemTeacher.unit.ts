@@ -79,7 +79,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 			set: vi.fn(),
 			get: () => createMock<Location>(),
 		});
-		const locationSpy = jest.spyOn(window, "location", "set");
+		const locationSpy = vi.spyOn(window, "location", "set");
 
 		const wrapper = getWrapper({ task: tasksTeacher[0] });
 		const taskCard = wrapper.findComponent(VListItem);

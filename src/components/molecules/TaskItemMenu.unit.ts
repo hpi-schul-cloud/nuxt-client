@@ -176,7 +176,7 @@ describe("@/components/molecules/TaskItemMenu", () => {
 
 	describe("when restoring a task", () => {
 		it("should call restoreTask of FinishedTasksModule", async () => {
-			const restoreTaskMock = jest.spyOn(finishedTasksModule, "restoreTask");
+			const restoreTaskMock = vi.spyOn(finishedTasksModule, "restoreTask");
 			const task = tasksTeacher[1];
 			const wrapper = getWrapper({
 				taskId: task.id,

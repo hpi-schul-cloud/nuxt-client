@@ -276,7 +276,7 @@ describe("useBoardSocketApi", () => {
 
 		describe("failure actions", () => {
 			it("should call applicationErrorModule.setError for fetchBoardFailure action", () => {
-				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
+				const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
 				const { dispatch } = useBoardSocketApi();
 				dispatch(BoardActions.fetchBoardFailure({ boardId: "test" }));
 

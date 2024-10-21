@@ -153,7 +153,7 @@ describe("task store", () => {
 				const tasksModule = new TasksModule({});
 				const tasks = taskFactory.buildList(3);
 				tasksModule.setTasks(tasks);
-				const fetchAllTasksSpy = jest.spyOn(tasksModule, "fetchAllTasks");
+				const fetchAllTasksSpy = vi.spyOn(tasksModule, "fetchAllTasks");
 
 				tasksModule.revertPublishedTask(tasks[0].id).then(() => {
 					expect(tasksModule.getStatus).toBe("completed");
@@ -213,7 +213,7 @@ describe("task store", () => {
 				const tasksModule = new TasksModule({});
 				const tasks = taskFactory.buildList(3);
 				tasksModule.setTasks(tasks);
-				const fetchAllTasksSpy = jest.spyOn(tasksModule, "fetchAllTasks");
+				const fetchAllTasksSpy = vi.spyOn(tasksModule, "fetchAllTasks");
 
 				tasksModule.deleteTask(tasks[0].id).then(() => {
 					expect(tasksModule.getStatus).toBe("completed");

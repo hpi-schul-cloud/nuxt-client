@@ -22,12 +22,12 @@ describe("status alerts module", () => {
 					.spyOn(serverApi, "AlertApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.AlertApiInterface);
 				const statusAlertsModule = new StatusAlertsModule({});
-				const setStatusAlertsSpy = jest.spyOn(
+				const setStatusAlertsSpy = vi.spyOn(
 					statusAlertsModule,
 					"setStatusAlerts"
 				);
-				const setStatusSpy = jest.spyOn(statusAlertsModule, "setStatus");
-				const resetBusinessErrorSpy = jest.spyOn(
+				const setStatusSpy = vi.spyOn(statusAlertsModule, "setStatus");
+				const resetBusinessErrorSpy = vi.spyOn(
 					statusAlertsModule,
 					"resetBusinessError"
 				);
@@ -47,7 +47,7 @@ describe("status alerts module", () => {
 					.spyOn(serverApi, "AlertApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.AlertApiInterface);
 				const statusAlertsModule = new StatusAlertsModule({});
-				const setBusinessErrorSpy = jest.spyOn(
+				const setBusinessErrorSpy = vi.spyOn(
 					statusAlertsModule,
 					"setBusinessError"
 				);

@@ -15,7 +15,7 @@ describe("SystemApi.composable", () => {
 		systemApi = createMock<SystemsApiInterface>();
 		useErrorHandlerMock = createMock<ReturnType<typeof useErrorHandler>>();
 
-		jest.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemApi);
+		vi.spyOn(serverApi, "SystemsApiFactory").mockReturnValue(systemApi);
 		vi.mocked(useErrorHandler).mockReturnValue(useErrorHandlerMock);
 	});
 

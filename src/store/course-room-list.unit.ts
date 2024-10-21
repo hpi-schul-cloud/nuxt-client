@@ -158,8 +158,8 @@ describe("rooms module", () => {
 				// TODO: call server will be here when server ready
 				const courseRoomListModule = new CourseRoomListModule({});
 
-				const setRoomDataSpy = jest.spyOn(courseRoomListModule, "setRoomData");
-				const setLoadingSpy = jest.spyOn(courseRoomListModule, "setLoading");
+				const setRoomDataSpy = vi.spyOn(courseRoomListModule, "setRoomData");
+				const setLoadingSpy = vi.spyOn(courseRoomListModule, "setLoading");
 
 				await courseRoomListModule.delete("id");
 
@@ -291,7 +291,7 @@ describe("rooms module", () => {
 					message: "",
 				};
 				const courseRoomListModule = new CourseRoomListModule({});
-				const getSharedCourseDataSpy = jest.spyOn(
+				const getSharedCourseDataSpy = vi.spyOn(
 					courseRoomListModule,
 					"confirmSharedCourseData"
 				);

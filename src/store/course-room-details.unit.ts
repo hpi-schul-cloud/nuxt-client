@@ -457,11 +457,11 @@ describe("course-room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const setBusinessErrorSpy = jest.spyOn(
+				const setBusinessErrorSpy = vi.spyOn(
 					courseRoomDetailsModule,
 					"setBusinessError"
 				);
-				const resetBusinessErrorSpy = jest.spyOn(
+				const resetBusinessErrorSpy = vi.spyOn(
 					courseRoomDetailsModule,
 					"resetBusinessError"
 				);
@@ -501,12 +501,12 @@ describe("course-room module", () => {
 					.mockReturnValue(mockApi as unknown as serverApi.TaskApiInterface);
 
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const finishTaskSpy = jest.spyOn(courseRoomDetailsModule, "finishTask");
-				const setBusinessErrorSpy = jest.spyOn(
+				const finishTaskSpy = vi.spyOn(courseRoomDetailsModule, "finishTask");
+				const setBusinessErrorSpy = vi.spyOn(
 					courseRoomDetailsModule,
 					"setBusinessError"
 				);
-				const resetBusinessErrorSpy = jest.spyOn(
+				const resetBusinessErrorSpy = vi.spyOn(
 					courseRoomDetailsModule,
 					"resetBusinessError"
 				);
@@ -548,7 +548,7 @@ describe("course-room module", () => {
 					} as AxiosInstance);
 				})();
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const fetchScopePermissionSpy = jest.spyOn(
+				const fetchScopePermissionSpy = vi.spyOn(
 					courseRoomDetailsModule,
 					"fetchScopePermission"
 				);
@@ -636,7 +636,7 @@ describe("course-room module", () => {
 				HttpStatusCode.RequestTimeout,
 				HttpStatusCode.InternalServerError,
 			])("should create an application-error for http-error(%p)", (code) => {
-				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
+				const setErrorSpy = vi.spyOn(applicationErrorModule, "setError");
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const errorData = { response: { data: { code } } };
 				courseRoomDetailsModule.setError(errorData);

@@ -6,7 +6,7 @@ describe("ApplicationErrorModule store", () => {
 	describe("actions", () => {
 		describe("setError", () => {
 			it("should set the state", () => {
-				const setErrorMock = jest.spyOn(errorModule, "setError");
+				const setErrorMock = vi.spyOn(errorModule, "setError");
 				const payload = {
 					statusCode: HttpStatusCode.Unauthorized,
 					translationKey: "funny error key",
@@ -17,8 +17,8 @@ describe("ApplicationErrorModule store", () => {
 			});
 
 			it("should call the mutations", () => {
-				const setStatusCodeMock = jest.spyOn(errorModule, "setStatusCode");
-				const setTranslationKeyMock = jest.spyOn(
+				const setStatusCodeMock = vi.spyOn(errorModule, "setStatusCode");
+				const setTranslationKeyMock = vi.spyOn(
 					errorModule,
 					"setTranslationKey"
 				);
@@ -35,15 +35,15 @@ describe("ApplicationErrorModule store", () => {
 
 		describe("resetError", () => {
 			it("should set the state", () => {
-				const resetErrorMock = jest.spyOn(errorModule, "resetError");
+				const resetErrorMock = vi.spyOn(errorModule, "resetError");
 				errorModule.resetError();
 
 				expect(resetErrorMock).toHaveBeenCalled();
 			});
 
 			it("should call the mutations", () => {
-				const setStatusCodeMock = jest.spyOn(errorModule, "setStatusCode");
-				const setTranslationKeyMock = jest.spyOn(
+				const setStatusCodeMock = vi.spyOn(errorModule, "setStatusCode");
+				const setTranslationKeyMock = vi.spyOn(
 					errorModule,
 					"setTranslationKey"
 				);

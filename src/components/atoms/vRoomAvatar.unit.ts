@@ -134,7 +134,7 @@ describe("vRoomAvatar", () => {
 			set: vi.fn(),
 			get: () => createMock<Location>(),
 		});
-		const locationSpy = jest.spyOn(window, "location", "set");
+		const locationSpy = vi.spyOn(window, "location", "set");
 		const { wrapper } = setup({ condenseLayout: true });
 
 		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });

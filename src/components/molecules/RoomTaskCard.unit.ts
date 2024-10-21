@@ -235,7 +235,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				set: vi.fn(),
 				get: () => createMock<Location>(),
 			});
-			const locationSpy = jest.spyOn(window, "location", "set");
+			const locationSpy = vi.spyOn(window, "location", "set");
 
 			const wrapper = getWrapper({ task: testTask, userRole });
 			const taskCard = wrapper.find(".task-card");
@@ -250,7 +250,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				set: vi.fn(),
 				get: () => createMock<Location>(),
 			});
-			const locationSpy = jest.spyOn(window, "location", "set");
+			const locationSpy = vi.spyOn(window, "location", "set");
 
 			const wrapper = getWrapper({
 				task: testTask,
@@ -809,7 +809,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 				get: () => createMock<Location>(),
 			});
 
-			const locationSpy = jest.spyOn(window, "location", "set");
+			const locationSpy = vi.spyOn(window, "location", "set");
 
 			await wrapper.trigger("keydown.enter");
 

@@ -1,7 +1,7 @@
 import infiniteScrolling from "./infiniteScrolling";
 
 const getInstance = () => {
-	jest.spyOn(window, "scrollTo").mockImplementation();
+	vi.spyOn(window, "scrollTo").mockImplementation();
 
 	return mount(
 		{
@@ -17,7 +17,7 @@ describe("@/mixins/infiniteScrolling", () => {
 		expect(getInstance).not.toThrow();
 	});
 	it("$_backToTop scroll to the top", () => {
-		const scrollToMock = jest.spyOn(window, "scrollTo");
+		const scrollToMock = vi.spyOn(window, "scrollTo");
 		const wrapper = getInstance();
 		wrapper.vm.$_backToTop();
 		expect(scrollToMock.mock.calls.pop()[0]).toStrictEqual(

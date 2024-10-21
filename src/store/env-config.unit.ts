@@ -30,8 +30,8 @@ describe("env-config module", () => {
 	let consoleErrorSpy: any;
 
 	beforeEach(() => {
-		consoleWarnSpy = jest.spyOn(console, "warn").mockImplementation();
-		consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+		consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation();
+		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation();
 		jest.resetAllMocks();
 	});
 
@@ -110,7 +110,7 @@ describe("env-config module", () => {
 				it("should handle status", async () => {
 					setup();
 					const envConfigModule = new EnvConfigModule({});
-					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+					const setStatusSpy = vi.spyOn(envConfigModule, "setStatus");
 
 					await envConfigModule.loadConfiguration();
 
@@ -231,7 +231,7 @@ describe("env-config module", () => {
 				it("should handle status", async () => {
 					setup();
 					const envConfigModule = new EnvConfigModule({});
-					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+					const setStatusSpy = vi.spyOn(envConfigModule, "setStatus");
 
 					await envConfigModule.loadConfiguration();
 
@@ -329,7 +329,7 @@ describe("env-config module", () => {
 				it("should not set status to completed", async () => {
 					setup();
 					const envConfigModule = new EnvConfigModule({});
-					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+					const setStatusSpy = vi.spyOn(envConfigModule, "setStatus");
 
 					await envConfigModule.loadConfiguration();
 
@@ -375,7 +375,7 @@ describe("env-config module", () => {
 				it("should call setStatus with error", async () => {
 					setup();
 					const envConfigModule = new EnvConfigModule({});
-					const setStatusSpy = jest.spyOn(envConfigModule, "setStatus");
+					const setStatusSpy = vi.spyOn(envConfigModule, "setStatus");
 
 					await envConfigModule.loadConfiguration();
 

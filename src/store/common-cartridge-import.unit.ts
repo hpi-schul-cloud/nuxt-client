@@ -10,7 +10,7 @@ describe("CommonCartridgeImportModule", () => {
 		sut = new CommonCartridgeImportModule({});
 		coursesApiMock = createMock<CoursesApiInterface>();
 
-		jest.spyOn(sut, "coursesApi", "get").mockReturnValue(coursesApiMock);
+		vi.spyOn(sut, "coursesApi", "get").mockReturnValue(coursesApiMock);
 	});
 
 	beforeEach(() => {

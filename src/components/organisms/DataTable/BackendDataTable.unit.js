@@ -47,7 +47,7 @@ const getTableRowsContent = async (wrapper) => {
 
 describe("@/components/organisms/DataTable/BackendDataTable", () => {
 	beforeEach(() => {
-		jest.spyOn(window, "scrollTo").mockImplementation();
+		vi.spyOn(window, "scrollTo").mockImplementation();
 	});
 
 	describe("rendering", () => {

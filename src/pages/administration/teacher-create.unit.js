@@ -88,7 +88,7 @@ describe("teachers/new", () => {
 		const mockStore = createMockStore(createTeacherStub);
 		const mockMe = meResponseFactory.build();
 
-		const notifierModuleMock = jest.spyOn(notifierModule, "show");
+		const notifierModuleMock = vi.spyOn(notifierModule, "show");
 		const wrapper = mount(NewTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],

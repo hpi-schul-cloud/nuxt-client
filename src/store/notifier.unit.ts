@@ -6,7 +6,7 @@ describe("notifier store", () => {
 		describe("show", () => {
 			it("should call 'addNotifier' mutation", () => {
 				const notifierModule = new NotifierModule({});
-				const addNotifierMock = jest.spyOn(notifierModule, "addNotifier");
+				const addNotifierMock = vi.spyOn(notifierModule, "addNotifier");
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
@@ -20,7 +20,7 @@ describe("notifier store", () => {
 
 			it("should add default values", () => {
 				const notifierModule = new NotifierModule({});
-				const addNotifierMock = jest.spyOn(notifierModule, "addNotifier");
+				const addNotifierMock = vi.spyOn(notifierModule, "addNotifier");
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
@@ -40,7 +40,7 @@ describe("notifier store", () => {
 
 			it("should pass payload if optional params are set", () => {
 				const notifierModule = new NotifierModule({});
-				const addNotifierMock = jest.spyOn(notifierModule, "addNotifier");
+				const addNotifierMock = vi.spyOn(notifierModule, "addNotifier");
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",
@@ -55,8 +55,8 @@ describe("notifier store", () => {
 			it("should call removeNotifier when timeout reached", () => {
 				vi.useFakeTimers();
 				const notifierModule = new NotifierModule({});
-				const addNotifierMock = jest.spyOn(notifierModule, "addNotifier");
-				const removeNotifierMock = jest.spyOn(notifierModule, "removeNotifier");
+				const addNotifierMock = vi.spyOn(notifierModule, "addNotifier");
+				const removeNotifierMock = vi.spyOn(notifierModule, "removeNotifier");
 				const payload: AlertPayload = {
 					text: "hello world",
 					status: "success",

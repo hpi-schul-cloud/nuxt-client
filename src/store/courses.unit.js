@@ -135,7 +135,7 @@ describe("courses store", () => {
 		});
 
 		it("should call toast successful if no error is thrown when courseItem is a homework", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const notifierMock = vi.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "homework",
@@ -151,7 +151,7 @@ describe("courses store", () => {
 		});
 
 		it("should call toast successful if no error is thrown when courseItem is a lesson", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const notifierMock = vi.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "lesson",
@@ -167,7 +167,7 @@ describe("courses store", () => {
 		});
 
 		it("should call toast error if error is thrown from dispatched action when courseItem is a homework", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const notifierMock = vi.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "homework",
@@ -183,7 +183,7 @@ describe("courses store", () => {
 		});
 
 		it("should call toast error if error is thrown from dispatched action when courseItem is a lesson", async () => {
-			const notifierMock = jest.spyOn(notifierModule, "show");
+			const notifierMock = vi.spyOn(notifierModule, "show");
 			// given
 			const courseItem = {
 				type: "lesson",

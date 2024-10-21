@@ -21,11 +21,11 @@ describe("auth store module", () => {
 
 	beforeAll(() => {
 		meApi = createMock<serverApi.MeApiInterface>();
-		jest.spyOn(serverApi, "MeApiFactory").mockReturnValue(meApi);
+		vi.spyOn(serverApi, "MeApiFactory").mockReturnValue(meApi);
 	});
 
 	beforeEach(() => {
-		consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation();
 	});
 
 	afterEach(() => {

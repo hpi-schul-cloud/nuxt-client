@@ -181,7 +181,7 @@ describe("SchoolSettingsPage", () => {
 	});
 
 	it("should load needed data from server", async () => {
-		const fetchSystemsSpy = jest.spyOn(schoolsModule, "fetchSystems");
+		const fetchSystemsSpy = vi.spyOn(schoolsModule, "fetchSystems");
 
 		setup();
 		await nextTick();

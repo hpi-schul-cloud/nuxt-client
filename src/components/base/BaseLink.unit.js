@@ -85,7 +85,7 @@ describe("@/components/base/BaseLink", () => {
 
 	it("log warning for insecure external urls", () => {
 		// use .mockImplementation() to prevent output to console
-		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
+		const consoleWarn = vi.spyOn(console, "warn").mockImplementation();
 		createWrapper({
 			props: {
 				href: "http://dbildungscloud.de",
@@ -98,7 +98,7 @@ describe("@/components/base/BaseLink", () => {
 
 	it("log warning for invalid props", () => {
 		// use .mockImplementation() to prevent output to console
-		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
+		const consoleWarn = vi.spyOn(console, "warn").mockImplementation();
 
 		createWrapper();
 

@@ -61,7 +61,7 @@ describe("@/components/base/BaseInput", () => {
 	});
 
 	it("writes an error to the console on unsupported types", () => {
-		jest.spyOn(console, "error");
+		vi.spyOn(console, "error");
 		createWrapper({
 			type: "unsupported",
 		});

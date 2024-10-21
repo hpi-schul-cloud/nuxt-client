@@ -11,7 +11,7 @@ describe("useMetaTagExtractorApi", () => {
 	beforeEach(() => {
 		api = createMock<serverApi.MetaTagExtractorApi>();
 
-		jest.spyOn(serverApi, "MetaTagExtractorApiFactory").mockReturnValue(api);
+		vi.spyOn(serverApi, "MetaTagExtractorApiFactory").mockReturnValue(api);
 	});
 
 	afterEach(() => {

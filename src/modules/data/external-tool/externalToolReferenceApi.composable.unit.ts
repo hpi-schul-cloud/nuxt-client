@@ -15,7 +15,7 @@ describe("externalToolReferenceApi.composable", () => {
 	beforeEach(() => {
 		toolApi = createMock<serverApi.ToolApiInterface>();
 
-		jest.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
+		vi.spyOn(serverApi, "ToolApiFactory").mockReturnValue(toolApi);
 	});
 
 	afterEach(() => {

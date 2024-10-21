@@ -24,7 +24,7 @@ describe("import-users store actions", () => {
 	let mockApi: any;
 
 	beforeAll(() => {
-		spy = jest.spyOn(serverApi, "UserImportApiFactory");
+		spy = vi.spyOn(serverApi, "UserImportApiFactory");
 	});
 
 	beforeEach(() => {

@@ -64,7 +64,7 @@ describe("share module", () => {
 					const shareModule = new ShareModule({});
 					shareModule.setParentId("sampleCourseId");
 					shareModule.setParentType(ShareTokenBodyParamsParentTypeEnum.Courses);
-					const setShareUrlMock = jest.spyOn(shareModule, "setShareUrl");
+					const setShareUrlMock = vi.spyOn(shareModule, "setShareUrl");
 
 					await shareModule.createShareUrl(sharePayload);
 					const result = setShareUrlMock.mock.calls[0][0];
@@ -116,9 +116,9 @@ describe("share module", () => {
 		describe("startShareFlow", () => {
 			it("should call setParentId, setParentType and setShareModalOpen mutations", async () => {
 				const shareModule = new ShareModule({});
-				const setParentIdMock = jest.spyOn(shareModule, "setParentId");
-				const setParentTypeMock = jest.spyOn(shareModule, "setParentType");
-				const setShareModalOpenMock = jest.spyOn(
+				const setParentIdMock = vi.spyOn(shareModule, "setParentId");
+				const setParentTypeMock = vi.spyOn(shareModule, "setParentType");
+				const setShareModalOpenMock = vi.spyOn(
 					shareModule,
 					"setShareModalOpen"
 				);
@@ -138,9 +138,9 @@ describe("share module", () => {
 		describe("resetShareFlow", () => {
 			it("should call setCourseId, setShareModalOpen and setShareUrl mutations", async () => {
 				const shareModule = new ShareModule({});
-				const setIdMock = jest.spyOn(shareModule, "setParentId");
-				const setShareUrlMock = jest.spyOn(shareModule, "setShareUrl");
-				const setShareModalOpenMock = jest.spyOn(
+				const setIdMock = vi.spyOn(shareModule, "setParentId");
+				const setShareUrlMock = vi.spyOn(shareModule, "setShareUrl");
+				const setShareModalOpenMock = vi.spyOn(
 					shareModule,
 					"setShareModalOpen"
 				);

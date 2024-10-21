@@ -24,7 +24,7 @@ const testProps = {
 	resource: Collection,
 };
 
-jest.spyOn(window, "scrollTo").mockImplementation();
+vi.spyOn(window, "scrollTo").mockImplementation();
 
 setupStores({
 	contentModule: ContentModule,

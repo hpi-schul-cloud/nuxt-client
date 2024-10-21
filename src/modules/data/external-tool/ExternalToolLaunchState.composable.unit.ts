@@ -204,7 +204,7 @@ describe("ExternalToolLaunchState.composable", () => {
 			const setup = () => {
 				const composable = useExternalToolLaunchState();
 
-				jest.spyOn(window, "open");
+				vi.spyOn(window, "open");
 
 				return {
 					...composable,
@@ -231,7 +231,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					const composable = useExternalToolLaunchState();
 					composable.toolLaunchRequest.value = launchRequest;
 
-					jest.spyOn(window, "open");
+					vi.spyOn(window, "open");
 
 					return {
 						...composable,
@@ -258,7 +258,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					const composable = useExternalToolLaunchState();
 					composable.toolLaunchRequest.value = launchRequest;
 
-					jest.spyOn(window, "open");
+					vi.spyOn(window, "open");
 
 					return {
 						...composable,
@@ -374,7 +374,7 @@ describe("ExternalToolLaunchState.composable", () => {
 				const composable = useExternalToolLaunchState();
 				composable.toolLaunchRequest.value = launchRequest;
 
-				jest.spyOn(window, "open");
+				vi.spyOn(window, "open");
 
 				return {
 					...composable,

@@ -6,7 +6,7 @@ describe("loading-state store", () => {
 		describe("open", () => {
 			it("should set default values for omitted options", () => {
 				const loadingStateModule = new LoadingStateModule({});
-				const setLoadingStateMock = jest.spyOn(
+				const setLoadingStateMock = vi.spyOn(
 					loadingStateModule,
 					"setLoadingState"
 				);
@@ -25,7 +25,7 @@ describe("loading-state store", () => {
 
 			it("should overwrite default values with given options", () => {
 				const loadingStateModule = new LoadingStateModule({});
-				const setLoadingStateMock = jest.spyOn(
+				const setLoadingStateMock = vi.spyOn(
 					loadingStateModule,
 					"setLoadingState"
 				);

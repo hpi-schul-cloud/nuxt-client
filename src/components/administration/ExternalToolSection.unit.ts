@@ -179,7 +179,7 @@ describe("ExternalToolSection", () => {
 			});
 
 			const windowMock = createMock<Window>();
-			jest.spyOn(window, "open").mockImplementation(() => windowMock);
+			vi.spyOn(window, "open").mockImplementation(() => windowMock);
 
 			return {
 				wrapper,

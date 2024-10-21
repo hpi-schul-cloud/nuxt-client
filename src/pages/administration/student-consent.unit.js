@@ -290,7 +290,7 @@ describe("students/consent", () => {
 	});
 
 	it("should progress next step if consent is not required", async () => {
-		const notifierModuleMock = jest.spyOn(notifierModule, "show");
+		const notifierModuleMock = vi.spyOn(notifierModule, "show");
 		const envs = envsFactory.build({ FEATURE_CONSENT_NECESSARY: false });
 		envConfigModule.setEnvs(envs);
 		const { wrapper } = setup();

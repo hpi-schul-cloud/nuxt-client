@@ -85,7 +85,7 @@ describe("@components/share/ImportFlow", () => {
 			rooms: CourseRoomListModule,
 			envConfigModule: EnvConfigModule,
 		});
-		jest.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation();
+		vi.spyOn(courseRoomListModule, "fetchAllElements").mockImplementation();
 	});
 
 	describe("token is provided", () => {

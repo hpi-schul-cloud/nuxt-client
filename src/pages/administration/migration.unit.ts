@@ -238,7 +238,7 @@ describe("User Migration / Index", () => {
 		});
 
 		it("implement perform migration", async () => {
-			const performMigrationMock = jest.spyOn(
+			const performMigrationMock = vi.spyOn(
 				importUsersModule,
 				"performMigration"
 			);
@@ -296,10 +296,7 @@ describe("User Migration / Index", () => {
 		it("perform end maintenance", async () => {
 			const { wrapper } = await setup();
 
-			const endMaintenanceMock = jest.spyOn(
-				schoolsModule,
-				"migrationStartSync"
-			);
+			const endMaintenanceMock = vi.spyOn(schoolsModule, "migrationStartSync");
 			endMaintenanceMock.mockImplementation(async () => {
 				schoolsModule.setSchool({
 					...schoolsModule.getSchool,
@@ -400,7 +397,7 @@ describe("User Migration / Index", () => {
 			it("should call stores on dialog-confirm", async () => {
 				const { wrapper } = await setup();
 
-				const cancelMigrationMock = jest.spyOn(
+				const cancelMigrationMock = vi.spyOn(
 					importUsersModule,
 					"cancelMigration"
 				);
@@ -439,7 +436,7 @@ describe("User Migration / Index", () => {
 			it("should redirect to school settings migration section", async () => {
 				const { wrapper } = await setup();
 
-				const cancelMigrationMock = jest.spyOn(
+				const cancelMigrationMock = vi.spyOn(
 					importUsersModule,
 					"cancelMigration"
 				);
@@ -536,7 +533,7 @@ describe("User Migration / Index", () => {
 					.spyOn(importUsersModule, "clearAllAutoMatches")
 					.mockResolvedValueOnce(Promise.resolve());
 
-				jest.spyOn(importUsersStub.methods, "reloadData");
+				vi.spyOn(importUsersStub.methods, "reloadData");
 
 				wrapper.vm.migrationStep = 2;
 				wrapper.vm.t("pages.administration.migration.title", {

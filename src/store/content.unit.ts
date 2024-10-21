@@ -368,10 +368,7 @@ describe("content module", () => {
 					url: "",
 				},
 			};
-			const setNoticationSpy = jest.spyOn(
-				contentModule,
-				"setNotificationModal"
-			);
+			const setNoticationSpy = vi.spyOn(contentModule, "setNotificationModal");
 
 			expect(setNoticationSpy.mock.calls[0]).toBeUndefined();
 			await contentModule.addToLesson(mockQuery);

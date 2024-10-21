@@ -33,7 +33,7 @@ describe("mediaBoardApi.composable", () => {
 		jest
 			.spyOn(serverApi, "MediaBoardApiFactory")
 			.mockReturnValue(mediaBoardApi);
-		jest.spyOn(serverApi, "MediaLineApiFactory").mockReturnValue(mediaLineApi);
+		vi.spyOn(serverApi, "MediaLineApiFactory").mockReturnValue(mediaLineApi);
 		jest
 			.spyOn(serverApi, "MediaElementApiFactory")
 			.mockReturnValue(mediaElementApi);

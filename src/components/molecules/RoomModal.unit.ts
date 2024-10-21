@@ -105,7 +105,7 @@ describe("RoomModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(courseRoomListModule, "update");
+				const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update");
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
@@ -140,7 +140,7 @@ describe("RoomModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(courseRoomListModule, "update");
+				const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update");
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");
@@ -181,7 +181,7 @@ describe("RoomModal", () => {
 			const setup = async () => {
 				const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(courseRoomListModule, "update");
+				const storeRoomUpdateMock = vi.spyOn(courseRoomListModule, "update");
 				const titleInput = wrapper
 					.findComponent({ name: "v-text-field" })
 					.find("input");

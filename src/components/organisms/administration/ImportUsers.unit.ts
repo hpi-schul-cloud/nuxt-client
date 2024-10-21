@@ -200,7 +200,7 @@ describe("@/components/molecules/importUsers", () => {
 		const setup = () => {
 			const wrapper = getWrapper(mockData);
 
-			const getDataFromApiSpy = jest.spyOn(wrapper.vm, "getDataFromApi");
+			const getDataFromApiSpy = vi.spyOn(wrapper.vm, "getDataFromApi");
 
 			return {
 				wrapper,

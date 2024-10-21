@@ -16,7 +16,7 @@ describe("courseApi.composable", () => {
 		courseApi = createMock<serverApi.CoursesApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
 
-		jest.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(courseApi);
+		vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(courseApi);
 		initializeAxios(axiosMock);
 	});
 
