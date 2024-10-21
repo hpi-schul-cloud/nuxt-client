@@ -67,7 +67,7 @@ describe("useContentElementState composable", () => {
 	});
 
 	it("should call saving function after debounced change of modelValue", async () => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 		const { modelValue } = setup({ isEditMode: true, element: TEST_ELEMENT });
 
 		const updatedModel: RichTextElementResponse["content"] = {

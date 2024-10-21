@@ -77,7 +77,7 @@ describe("useCardSocketApi", () => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
@@ -90,7 +90,7 @@ describe("useCardSocketApi", () => {
 
 	afterEach(() => {
 		jest.runOnlyPendingTimers();
-		jest.useRealTimers();
+		vi.useRealTimers();
 	});
 
 	describe("dispatch", () => {

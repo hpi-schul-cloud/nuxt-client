@@ -13,12 +13,12 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 describe("FileContent", () => {
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 	});
 
 	afterEach(() => {
 		jest.runOnlyPendingTimers();
-		jest.useRealTimers();
+		vi.useRealTimers();
 	});
 
 	const setup = (options?: {

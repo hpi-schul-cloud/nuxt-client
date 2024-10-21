@@ -8,7 +8,7 @@ describe("useAriaLiveNotifier", () => {
 					<div id="notify-screen-reader-assertive"></div>
 				</div>`;
 
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 	});
 
 	it("should notify on screen reader on 'aria-live=assertive' mode", () => {

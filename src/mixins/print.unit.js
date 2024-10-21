@@ -59,7 +59,7 @@ describe("@/mixins/print", () => {
 
 		it("closes new window after print", () => {
 			const testContent = "some plain old content";
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			method(testContent);
 			jest.runAllTimers();
 			expect(newWindowMock.print).toHaveBeenCalled();

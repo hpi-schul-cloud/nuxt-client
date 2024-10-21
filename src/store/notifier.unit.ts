@@ -53,7 +53,7 @@ describe("notifier store", () => {
 			});
 
 			it("should call removeNotifier when timeout reached", () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 				const notifierModule = new NotifierModule({});
 				const addNotifierMock = jest.spyOn(notifierModule, "addNotifier");
 				const removeNotifierMock = jest.spyOn(notifierModule, "removeNotifier");

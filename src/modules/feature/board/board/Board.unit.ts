@@ -409,7 +409,7 @@ describe("Board", () => {
 		});
 
 		it("should call the board notifier when the user is teacher", () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 
 			setup();
 
@@ -419,7 +419,7 @@ describe("Board", () => {
 		});
 
 		it("should call the board notifier with draft info when board is not visible", () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 
 			setup({ isBoardVisible: false });
 
@@ -432,7 +432,7 @@ describe("Board", () => {
 		});
 
 		it("should call the board notifier with published info when board is visible", () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 
 			setup();
 
@@ -445,7 +445,7 @@ describe("Board", () => {
 		});
 
 		it("should call the board notifier with published info when board becomes visible", () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 
 			const { boardStore } = setup({ isBoardVisible: false });
 			boardStore.board!.isVisible = true;
@@ -459,7 +459,7 @@ describe("Board", () => {
 		});
 
 		it("should call the board notifier with draft info when board should not be visible anymore", () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 
 			const { boardStore } = setup();
 			boardStore.board!.isVisible = false;
@@ -475,7 +475,7 @@ describe("Board", () => {
 		it("should not call the board notifier when the user is not a teacher", () => {
 			mockedBoardPermissions.isTeacher = false;
 
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 
 			setup();
 

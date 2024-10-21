@@ -61,7 +61,7 @@ describe("@/components/molecules/ContextMenu", () => {
 	});
 
 	it("emits (update:show false) event when button gets clicked", async () => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 		const wrapper = getWrapper();
 		await wrapper.find(".context-menu__button").trigger("click");
 

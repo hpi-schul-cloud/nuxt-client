@@ -128,7 +128,7 @@ describe("AdminMigrationSection", () => {
 
 	describe("Migration Control Section", () => {
 		it("should render migration control section when grace period is not expired", () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			jest.setSystemTime(new Date(2023, 1, 3));
 			const { wrapper } = setup(
 				{},
@@ -163,7 +163,7 @@ describe("AdminMigrationSection", () => {
 					},
 				}
 			);
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			jest.setSystemTime(new Date(2023, 1, 3));
 
 			expect(
@@ -346,7 +346,7 @@ describe("AdminMigrationSection", () => {
 					},
 				}
 			);
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			jest.setSystemTime(new Date(2023, 1, 3));
 
 			const buttonComponent = wrapper.find(
@@ -625,7 +625,7 @@ describe("AdminMigrationSection", () => {
 
 	describe("Date paragraph", () => {
 		it("should exist when migration has been completed", async () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			jest.setSystemTime(new Date(2023, 1, 2));
 			const { wrapper } = setup(
 				{
@@ -651,7 +651,7 @@ describe("AdminMigrationSection", () => {
 		});
 
 		it("should show finalFinish text when migration grace period has expired", async () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			jest.setSystemTime(new Date(2023, 1, 4));
 			const { wrapper } = setup(
 				{

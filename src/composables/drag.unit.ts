@@ -12,7 +12,7 @@ describe("drag composable", () => {
 	});
 
 	it("should alter status on stop dragging after delay", () => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 
 		const { dragInProgressDelay, startDragging, endDragging, dragInProgress } =
 			useDrag();

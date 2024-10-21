@@ -23,7 +23,7 @@ const mockFileEnvs: FilesStorageConfigResponse = {
 	MAX_FILE_SIZE: 10,
 };
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe("env-config module", () => {
 	let consoleWarnSpy: any;

@@ -27,7 +27,7 @@ const mountComponent = (
 describe("@components/DataFilter/filterComponents/DateBetween.vue", () => {
 	describe("should render the component", () => {
 		it("should render the date picker components", async () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			const testDate = new Date(2024, 0, 1);
 			jest.setSystemTime(testDate);
 

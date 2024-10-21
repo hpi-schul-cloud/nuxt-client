@@ -46,7 +46,7 @@ vi.mock("../Card.store", () => ({
 }));
 
 describe("useBoardAriaNotification", () => {
-	jest.useFakeTimers();
+	vi.useFakeTimers();
 
 	const mockNotifyOnScreenReader = vi.fn();
 	vi.mock("@/composables/ariaLiveNotifier", () => ({

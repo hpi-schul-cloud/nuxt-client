@@ -159,7 +159,7 @@ describe("BoardHeader", () => {
 	describe("when the title is updated", () => {
 		describe("when the title is empty", () => {
 			it("should not emit 'update:title'", () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 
 				const { wrapper } = setup();
 
@@ -175,7 +175,7 @@ describe("BoardHeader", () => {
 
 		describe("when the title is not empty", () => {
 			it("should emit 'update:title'", () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 
 				const { wrapper } = setup();
 
@@ -193,7 +193,7 @@ describe("BoardHeader", () => {
 	describe("when the title loses focus", () => {
 		describe("when the title is empty", () => {
 			it("should emit 'update:title'", () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 
 				const { wrapper } = setup();
 
@@ -213,7 +213,7 @@ describe("BoardHeader", () => {
 
 		describe("when the title is not empty", () => {
 			it("should not emit 'update:title'", () => {
-				jest.useFakeTimers();
+				vi.useFakeTimers();
 
 				const { wrapper } = setup();
 

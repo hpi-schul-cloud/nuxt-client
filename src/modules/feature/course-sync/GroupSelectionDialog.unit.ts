@@ -91,7 +91,7 @@ describe("GroupSelectionDialog", () => {
 
 	describe("when searching for a specific group name", () => {
 		it("should load only groups with that name", async () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			const { wrapper } = getWrapper();
 
 			const autocomplete = wrapper.findComponent(VAutocomplete);

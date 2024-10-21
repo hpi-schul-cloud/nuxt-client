@@ -120,7 +120,7 @@ describe("teachers/index", () => {
 	const OLD_ENV = process.env;
 
 	beforeEach(() => {
-		jest.useFakeTimers();
+		vi.useFakeTimers();
 
 		jest.resetModules(); // reset module registry to avoid conflicts
 		process.env = { ...OLD_ENV }; // make a copy

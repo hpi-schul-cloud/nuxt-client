@@ -543,7 +543,7 @@ describe("@/components/molecules/RoomTaskCard", () => {
 			});
 
 			it("should return true value after calculated isPlanned() method", () => {
-				jest.useFakeTimers().setSystemTime(new Date()); // this line sets a permanent fake time
+				vi.useFakeTimers().setSystemTime(new Date()); // this line sets a permanent fake time
 				const inFutureDate = new Date(Date.now() + 5001);
 				const localProps = {
 					...testTask,

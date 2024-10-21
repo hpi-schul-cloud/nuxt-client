@@ -140,7 +140,7 @@ describe("CKEditor", () => {
 		});
 
 		it("should emit delayed blur on editor blur", async () => {
-			jest.useFakeTimers();
+			vi.useFakeTimers();
 			const { wrapper } = setup();
 
 			const ck = wrapper.findComponent({

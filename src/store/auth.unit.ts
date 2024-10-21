@@ -13,7 +13,7 @@ import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe("auth store module", () => {
 	let consoleErrorSpy: any;

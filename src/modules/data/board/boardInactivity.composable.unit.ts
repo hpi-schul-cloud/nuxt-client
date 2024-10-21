@@ -55,7 +55,7 @@ const envs = envsFactory.build({
 	FEATURE_COLUMN_BOARD_SOCKET_ENABLED: true,
 });
 
-jest.useFakeTimers();
+vi.useFakeTimers();
 
 describe("pageInactivity.composable", () => {
 	setActivePinia(createTestingPinia());

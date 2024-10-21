@@ -190,10 +190,10 @@ describe("RoomExternalToolOverview", () => {
 
 	describe("when refresh time is over", () => {
 		afterEach(() => {
-			jest.useRealTimers();
+			vi.useRealTimers();
 		});
 		const setup = () => {
-			jest.useFakeTimers({ legacyFakeTimers: true });
+			vi.useFakeTimers({ legacyFakeTimers: true });
 			const { refreshTime } = getWrapper();
 
 			return {
