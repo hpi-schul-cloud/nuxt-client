@@ -11,7 +11,10 @@
 				data-testid="room-name-input"
 			/>
 			<div class="mb-8">
-				<RoomColorPicker v-model:color="roomData.color" />
+				<RoomColorPicker
+					v-model:color="roomData.color"
+					@update:color="onUpdateColor"
+				/>
 			</div>
 			<div class="mb-8">
 				<label id="time-period-label" class="d-flex mb-2">
@@ -54,6 +57,7 @@
 				{{ $t("common.actions.save") }}
 			</VBtn>
 		</div>
+		<ConfirmationDialog />
 	</form>
 </template>
 
@@ -65,6 +69,10 @@ import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
+import {
+	ConfirmationDialog,
+	useConfirmationDialog,
+} from "@ui-confirmation-dialog";
 
 const props = defineProps({
 	room: {
@@ -76,14 +84,22 @@ const props = defineProps({
 const emit = defineEmits(["save", "cancel"]);
 const { t } = useI18n();
 
+const { askConfirmation } = useConfirmationDialog();
+
 const roomData = computed(() => props.room);
+
+const onUpdateColor = () => {
+	v$.value.$touch();
+};
 
 const onUpdateStartDate = (newDate: string) => {
 	roomData.value.startDate = newDate;
+	v$.value.$touch();
 };
 
 const onUpdateEndDate = (newDate: string) => {
 	roomData.value.endDate = newDate;
+	v$.value.$touch();
 };
 
 // Validation
@@ -106,7 +122,16 @@ const onSave = async () => {
 	emit("save", roomData.value);
 };
 
-const onCancel = () => {
-	emit("cancel");
+const onCancel = async () => {
+	if (!v$.value.$anyDirty) emit("cancel");
+
+	const shouldCancel = await askConfirmation({
+		message: t("ui-confirmation-dialog.ask-cancel-form"),
+		confirmActionLangKey: "common.actions.discard",
+	});
+
+	if (shouldCancel) {
+		emit("cancel");
+	}
 };
 </script>
