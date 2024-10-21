@@ -15,7 +15,7 @@
 		"sourceMap": true,
 		"experimentalDecorators": true,
 		"baseUrl": ".",
-		"types": ["webpack-env", "jest"],
+		"types": ["webpack-env", "jest", "vitest/globals"],
 		"paths": {
 			"@data-board": ["src/modules/data/board"],
 			"@data-external-tool": ["src/modules/data/external-tool"],
