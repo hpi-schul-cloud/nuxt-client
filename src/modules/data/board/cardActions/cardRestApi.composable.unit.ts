@@ -42,6 +42,7 @@ import {
 	UpdateCardTitleRequestPayload,
 } from "./cardActionPayload";
 import { useCardRestApi } from "./cardRestApi.composable";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -60,6 +61,16 @@ const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 
 jest.mock("../socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
+
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
+
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: () => ({ t: jest.fn().mockImplementation((key) => key) }),
+	};
+});
 
 describe("useCardRestApi", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
@@ -114,6 +125,9 @@ describe("useCardRestApi", () => {
 			editModeId: ref(undefined),
 			isInEditMode: computed(() => true),
 		});
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 	});
 
 	const setup = () => {

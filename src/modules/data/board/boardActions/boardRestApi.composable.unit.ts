@@ -1,6 +1,11 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { envConfigModule } from "@/store";
+import {
+	applicationErrorModule,
+	envConfigModule,
+	courseRoomDetailsModule,
+} from "@/store";
 import EnvConfigModule from "@/store/env-config";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import { ColumnMove } from "@/types/board/DragAndDrop";
 import {
 	boardResponseFactory,
@@ -19,6 +24,10 @@ import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
+import ApplicationErrorModule from "@/store/application-error";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { Router, useRouter } from "vue-router";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -32,6 +41,20 @@ const mockedSharedEditMode = jest.mocked(useSharedEditMode);
 jest.mock("../socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
 
+jest.mock("vue-router");
+const useRouterMock = <jest.Mock>useRouter;
+
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: () => {
+			return {
+				t: (key: string) => key,
+			};
+		},
+	};
+});
+
 describe("boardRestApi", () => {
 	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
 	let mockedBoardApiCalls: DeepMocked<ReturnType<typeof useBoardApi>>;
@@ -39,6 +62,7 @@ describe("boardRestApi", () => {
 		ReturnType<typeof useSocketConnection>
 	>;
 	let setEditModeId: jest.Mock;
+	const setErrorMock = jest.fn();
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -59,14 +83,22 @@ describe("boardRestApi", () => {
 			editModeId: ref(undefined),
 			isInEditMode: computed(() => true),
 		});
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 	});
 
 	const setup = (createBoard = true, isSocketEnabled = false) => {
-		setupStores({ envConfigModule: EnvConfigModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			applicationErrorModule: ApplicationErrorModule,
+			courseRoomDetailsModule: CourseRoomDetailsModule,
+		});
 		const envs = envsFactory.build({
 			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: isSocketEnabled,
 		});
 		envConfigModule.setEnvs(envs);
+		applicationErrorModule.setError = setErrorMock;
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		if (createBoard) {
@@ -150,13 +182,51 @@ describe("boardRestApi", () => {
 			expect(boardStore.setLoading).toHaveBeenLastCalledWith(false);
 		});
 
-		it("should call handleError if the fetch fails", async () => {
+		it("should call applicationErrorModule if the fetch fails", async () => {
 			const { boardStore } = setup();
 			const { fetchBoardRequest } = useBoardRestApi();
 
 			mockedBoardApiCalls.fetchBoardCall.mockRejectedValue({});
 
 			await fetchBoardRequest({ boardId: boardStore.board!.id });
+
+			expect(setErrorMock).toHaveBeenCalledWith(
+				createApplicationError(HttpStatusCode.NotFound)
+			);
+			expect(setErrorMock.mock.lastCall[0].statusCode).toStrictEqual(
+				HttpStatusCode.NotFound
+			);
+			expect(setErrorMock.mock.lastCall[0].translationKey).toStrictEqual(
+				"components.board.error.404"
+			);
+		});
+	});
+
+	describe("@deleteBoardRequest", () => {
+		it("should call 'deleteBoardSuccess'", async () => {
+			const deleteBoardMock = jest.fn();
+			const { boardStore } = setup();
+			const { deleteBoardRequest } = useBoardRestApi();
+			const boardId = boardStore.board!.id;
+
+			courseRoomDetailsModule.deleteBoard = deleteBoardMock;
+
+			await deleteBoardRequest({ boardId });
+
+			expect(deleteBoardMock).toHaveBeenCalledWith(boardId);
+			expect(boardStore.deleteBoardSuccess).toHaveBeenCalledWith({
+				boardId,
+				isOwnAction: true,
+			});
+		});
+		it("should call handleError if the API call fails", async () => {
+			const deleteBoardMock = jest.fn().mockRejectedValue({});
+			const { boardStore } = setup();
+			const { deleteBoardRequest } = useBoardRestApi();
+			const boardId = boardStore.board!.id;
+			courseRoomDetailsModule.deleteBoard = deleteBoardMock;
+
+			await deleteBoardRequest({ boardId });
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
 		});

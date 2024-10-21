@@ -6,7 +6,8 @@ import {
 	CopyApiResponseTypeEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { envConfigModule } from "@/store";
+import { envConfigModule, applicationErrorModule } from "@/store";
+import ApplicationErrorModule from "@/store/application-error";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import EnvConfigModule from "@/store/env-config";
@@ -62,6 +63,9 @@ import { Router, useRoute, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
+import { useApplicationError } from "@/composables/application-error.composable";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 
 jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -100,6 +104,9 @@ const useRouteMock = <jest.Mock>useRoute;
 jest.mock("@data-board/boardInactivity.composable");
 const mockUseBoardInactivity = <jest.Mock>useBoardInactivity;
 
+jest.mock("@/composables/application-error.composable");
+const mockedCreateApplicationError = jest.mocked(useApplicationError);
+
 describe("Board", () => {
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	let mockedCopyCalls: DeepMocked<ReturnType<typeof useCopy>>;
@@ -112,6 +119,8 @@ describe("Board", () => {
 		ReturnType<typeof useBoardInactivity>
 	>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
+	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
+	const setErrorMock = jest.fn();
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
@@ -124,6 +133,12 @@ describe("Board", () => {
 		mockedBoardPermissionsHandler =
 			createMock<ReturnType<typeof useBoardPermissions>>();
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissionsHandler);
+
+		mockedCreateApplicationErrorCalls =
+			createMock<ReturnType<typeof useApplicationError>>();
+		mockedCreateApplicationError.mockReturnValue(
+			mockedCreateApplicationErrorCalls
+		);
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
@@ -159,6 +174,8 @@ describe("Board", () => {
 
 		mockedBoardPermissions = { ...defaultPermissions };
 		mockedUseBoardPermissions.mockReturnValue(mockedBoardPermissions);
+		mockedUsePageInactivity =
+			createMock<ReturnType<typeof useBoardInactivity>>();
 		mockUseBoardInactivity.mockReturnValue(mockedUsePageInactivity);
 	});
 
@@ -167,7 +184,10 @@ describe("Board", () => {
 	});
 
 	const mockEnvConfigModule = (envs: Partial<ConfigResponse> | undefined) => {
-		setupStores({ envConfigModule: EnvConfigModule });
+		setupStores({
+			envConfigModule: EnvConfigModule,
+			applicationErrorModule: ApplicationErrorModule,
+		});
 		const envsMock = envsFactory.build({
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
 			FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
@@ -292,9 +312,17 @@ describe("Board", () => {
 
 		const boardStore = mockedPiniaStoreTyping(useBoardStore);
 		const cardStore = mockedPiniaStoreTyping(useCardStore);
+		applicationErrorModule.setError = setErrorMock;
+
+		const wrapperVM = wrapper.vm as unknown as {
+			board: Board;
+			openDeleteBoardDialog: () => void;
+			isBoardVisible: boolean;
+		};
 
 		return {
 			wrapper,
+			wrapperVM,
 			boardStore,
 			cardStore,
 			board,
@@ -306,13 +334,13 @@ describe("Board", () => {
 
 	describe("when component is mounted", () => {
 		it("should call boardStore fetchBoardRequest action", () => {
-			const { wrapper, boardStore, board } = setup();
+			const { wrapper, boardStore, board, wrapperVM } = setup();
 
 			expect(boardStore.fetchBoardRequest).toHaveBeenCalled();
 			expect(boardStore.board).toBeDefined();
 			expect(wrapper).toBeDefined();
 
-			expect(wrapper.vm.board).toStrictEqual(board);
+			expect(wrapperVM.board).toStrictEqual(board);
 		});
 
 		it("should call cardStore loadPreferredTools action", () => {
@@ -825,6 +853,92 @@ describe("Board", () => {
 
 				expect(boardStore.updateBoardVisibilityRequest).toHaveBeenCalled();
 			});
+
+			describe("@createApplicationError", () => {
+				describe("when board is in draft mode", () => {
+					describe("when the user is not a teacher", () => {
+						it("should call 'createApplicationError' method", async () => {
+							const mockRoomId =
+								mockedUseSharedBoardPageInformation().roomId.value;
+							mockedBoardPermissions.isTeacher = false;
+							const { boardStore, wrapperVM } = setup();
+							expect(wrapperVM.isBoardVisible).toBe(true);
+
+							boardStore.board!.isVisible = false;
+							await nextTick();
+
+							expect(wrapperVM.isBoardVisible).toBe(false);
+							expect(router.replace).toHaveBeenCalledWith({
+								name: "rooms-id",
+								params: { id: mockRoomId },
+							});
+							expect(
+								mockedCreateApplicationErrorCalls.createApplicationError
+							).toHaveBeenCalledWith(
+								HttpStatusCode.Forbidden,
+								"components.board.error.403"
+							);
+
+							expect(setErrorMock).toHaveBeenCalledWith(
+								createApplicationError(HttpStatusCode.Forbidden)
+							);
+						});
+					});
+
+					describe("when the user is a teacher", () => {
+						it("should not call 'createApplicationError' method", async () => {
+							mockedBoardPermissions.isTeacher = true;
+							const { boardStore, wrapperVM } = setup();
+							expect(wrapperVM.isBoardVisible).toBe(true);
+
+							boardStore.board!.isVisible = false;
+							await nextTick();
+
+							expect(wrapperVM.isBoardVisible).toBe(false);
+							expect(
+								mockedCreateApplicationErrorCalls.createApplicationError
+							).not.toHaveBeenCalled();
+							expect(setErrorMock).not.toHaveBeenCalled();
+						});
+					});
+				});
+
+				describe("when board is published mode", () => {
+					describe("when the user is not a teacher", () => {
+						it("should not call 'createApplicationError' method", async () => {
+							mockedBoardPermissions.isTeacher = false;
+							const { boardStore, wrapperVM } = setup();
+							expect(wrapperVM.isBoardVisible).toBe(true);
+
+							boardStore.board!.isVisible = true;
+							await nextTick();
+
+							expect(wrapperVM.isBoardVisible).toBe(true);
+							expect(
+								mockedCreateApplicationErrorCalls.createApplicationError
+							).not.toHaveBeenCalled();
+							expect(setErrorMock).not.toHaveBeenCalled();
+						});
+					});
+
+					describe("when the user is a teacher", () => {
+						it("should not call 'createApplicationError' method", async () => {
+							mockedBoardPermissions.isTeacher = true;
+							const { boardStore, wrapperVM } = setup();
+							expect(wrapperVM.isBoardVisible).toBe(true);
+
+							boardStore.board!.isVisible = true;
+							await nextTick();
+
+							expect(wrapperVM.isBoardVisible).toBe(true);
+							expect(
+								mockedCreateApplicationErrorCalls.createApplicationError
+							).not.toHaveBeenCalled();
+							expect(setErrorMock).not.toHaveBeenCalled();
+						});
+					});
+				});
+			});
 		});
 
 		describe("@copy:board", () => {
@@ -895,9 +1009,9 @@ describe("Board", () => {
 
 			it("should call openDeleteBoardDialog method when board should be deleted", async () => {
 				mockedBoardPermissions.hasDeletePermission = true;
-				const { wrapper, board } = setup();
+				const { wrapper, board, wrapperVM } = setup();
 
-				wrapper.vm.openDeleteBoardDialog = openDeleteBoardDialogMock;
+				wrapperVM.openDeleteBoardDialog = openDeleteBoardDialogMock;
 
 				const columnComponent = wrapper.findComponent({
 					name: "BoardHeader",
@@ -912,19 +1026,19 @@ describe("Board", () => {
 				mockedBoardPermissions.hasDeletePermission = true;
 				const mockRoomId = mockedUseSharedBoardPageInformation().roomId.value;
 
-				const { wrapper, courseRoomDetailsModule, board } = setup();
+				const { wrapper, board, boardStore } = setup();
 
 				const columnComponent = wrapper.findComponent({
 					name: "BoardHeader",
 				});
 				await columnComponent.vm.$emit("delete:board");
 
-				expect(courseRoomDetailsModule.deleteBoard).toBeCalledWith(board.id);
-
-				expect(router.push).toHaveBeenCalledTimes(1);
-				expect(router.push).toHaveBeenCalledWith({
-					path: "/rooms/" + mockRoomId,
-				});
+				expect(boardStore.deleteBoardRequest).toHaveBeenCalledWith(
+					{
+						boardId: board.id,
+					},
+					mockRoomId
+				);
 			});
 		});
 	});
