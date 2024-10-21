@@ -3,8 +3,6 @@
   $heading-font-family: var(--font-accent),
   $line-height-root: var(--line-height-md),
 
-  $breadcrumbs-item-padding: 0px,
-
   $typography: (
     "h1": (
       "size": var(--heading-1),
@@ -58,6 +56,8 @@
   // $treeview-node-margin: 0,
   // $treeview-node-padding: 0,
 
+  // breadcrumbs
+  $breadcrumbs-item-padding: 0px,
   // v-label
   $label-opacity: var(--v-high-emphasis-opacity)
 );
