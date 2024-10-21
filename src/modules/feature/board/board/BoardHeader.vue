@@ -10,7 +10,7 @@
 		>
 			<div ref="boardHeader">
 				<BoardAnyTitleInput
-					class="ml-n2"
+					class="ml-n4"
 					ref="boardHeader"
 					scope="board"
 					:value="boardTitle"
