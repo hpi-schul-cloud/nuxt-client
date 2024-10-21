@@ -23,7 +23,7 @@ vi.mock("@vueuse/core", async () => {
 	};
 });
 
-vi.mock("vue-i18n", () => {
+vi.mock("vue-i18n", async () => {
 	return {
 		...(await vi.importActual("vue-i18n")),
 		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),

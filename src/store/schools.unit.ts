@@ -323,13 +323,16 @@ describe("schools module", () => {
 				setSchoolSpy = vi.spyOn(schoolsModule, "setSchool");
 			});
 
-			afterEach((done) => {
-				done();
-				spy.mockRestore();
-				setLoadingSpy.mockRestore();
-				setErrorSpy.mockRestore();
-				setSchoolSpy.mockRestore();
-			});
+			afterEach(
+				() =>
+					new Promise<void>((done) => {
+						done();
+						spy.mockRestore();
+						setLoadingSpy.mockRestore();
+						setErrorSpy.mockRestore();
+						setSchoolSpy.mockRestore();
+					})
+			);
 
 			it("should not call backend if inMaintenance is false", async () => {
 				schoolsModule.setSchool({
@@ -416,13 +419,16 @@ describe("schools module", () => {
 				setSchoolSpy = vi.spyOn(schoolsModule, "setSchool");
 			});
 
-			afterEach((done) => {
-				done();
-				spy.mockRestore();
-				setLoadingSpy.mockRestore();
-				setErrorSpy.mockRestore();
-				setSchoolSpy.mockRestore();
-			});
+			afterEach(
+				() =>
+					new Promise<void>((done) => {
+						done();
+						spy.mockRestore();
+						setLoadingSpy.mockRestore();
+						setErrorSpy.mockRestore();
+						setSchoolSpy.mockRestore();
+					})
+			);
 
 			it("should not call backend if inUserMigration flag is not true", async () => {
 				schoolsModule.setSchool({

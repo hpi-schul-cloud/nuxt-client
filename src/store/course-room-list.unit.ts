@@ -252,26 +252,27 @@ describe("rooms module", () => {
 				).toStrictEqual(100); // $limit: 100
 			});
 
-			it("handle error", (done) => {
-				const error = { status: 418, statusText: "I'm not a teapot" };
-				const mockApi = {
-					courseControllerFindForUser: vi.fn(() =>
-						Promise.reject({ ...error })
-					),
-				};
-				vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(
-					mockApi as unknown as serverApi.CoursesApiInterface
-				);
-				const courseRoomListModule = new CourseRoomListModule({});
+			it("handle error", () =>
+				new Promise<void>((done) => {
+					const error = { status: 418, statusText: "I'm not a teapot" };
+					const mockApi = {
+						courseControllerFindForUser: vi.fn(() =>
+							Promise.reject({ ...error })
+						),
+					};
+					vi.spyOn(serverApi, "CoursesApiFactory").mockReturnValue(
+						mockApi as unknown as serverApi.CoursesApiInterface
+					);
+					const courseRoomListModule = new CourseRoomListModule({});
 
-				courseRoomListModule.fetchAllElements().then(() => {
-					expect(courseRoomListModule.getLoading).toBe(false);
-					expect(courseRoomListModule.getError).toStrictEqual({ ...error });
-					done();
-				});
+					courseRoomListModule.fetchAllElements().then(() => {
+						expect(courseRoomListModule.getLoading).toBe(false);
+						expect(courseRoomListModule.getError).toStrictEqual({ ...error });
+						done();
+					});
 
-				expect(courseRoomListModule.getLoading).toBe(true);
-			});
+					expect(courseRoomListModule.getLoading).toBe(true);
+				}));
 		});
 
 		describe("confirmSharedCourseData", () => {
