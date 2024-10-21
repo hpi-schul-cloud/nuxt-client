@@ -13,9 +13,9 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { VAutocomplete } from "vuetify/lib/components/index.mjs";
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
-vi.mock("@data-group", () => {
+vi.mock("@data-group", async () => {
 	return {
-		...jest.requireActual("@data-group"),
+		...(await vi.importActual("@data-group")),
 		useGroupListState: vi.fn(),
 	};
 });

@@ -5,9 +5,9 @@ import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useI18n } from "vue-i18n";
 import { useCollaborativeTextEditorNotifier } from "./CollaborativeTextEditorNotifications.composable";
 
-vi.mock("vue-i18n", () => {
+vi.mock("vue-i18n", async () => {
 	return {
-		...jest.requireActual("vue-i18n"),
+		...(await vi.importActual("vue-i18n")),
 		useI18n: vi.fn().mockReturnValue({
 			t: jest
 				.fn()

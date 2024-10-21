@@ -15,9 +15,9 @@ const defaultState = {
 	version: 1,
 };
 
-vi.mock("@vueuse/core", () => {
+vi.mock("@vueuse/core", async () => {
 	return {
-		...jest.requireActual("@vueuse/core"),
+		...(await vi.importActual("@vueuse/core")),
 		useStorage: vi.fn().mockReturnValue({ value: defaultState }),
 	};
 });

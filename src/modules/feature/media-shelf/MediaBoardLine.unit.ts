@@ -23,9 +23,9 @@ import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
 
-vi.mock("@vueuse/core", () => {
+vi.mock("@vueuse/core", async () => {
 	return {
-		...jest.requireActual("@vueuse/core"),
+		...(await vi.importActual("@vueuse/core")),
 		useMediaQuery: vi.fn(),
 	};
 });

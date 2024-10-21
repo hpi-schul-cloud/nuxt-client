@@ -30,9 +30,9 @@ vi.mock("vue-router", () => ({
 	useRouter: vi.fn(),
 }));
 
-vi.mock("@data-room", () => {
+vi.mock("@data-room", async () => {
 	return {
-		...jest.requireActual("@data-room"),
+		...(await vi.importActual("@data-room")),
 		useCourseList: vi.fn(),
 		useCourseApi: vi.fn(),
 	};

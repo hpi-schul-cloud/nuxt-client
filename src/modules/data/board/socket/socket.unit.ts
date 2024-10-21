@@ -27,9 +27,9 @@ const mockUseBoardNotifier = vi.mocked(useBoardNotifier);
 vi.mock("../boardActions/boardSocketApi.composable");
 vi.mock("../boardActions/boardRestApi.composable");
 
-vi.mock("@vueuse/shared", () => {
+vi.mock("@vueuse/shared", async () => {
 	return {
-		...jest.requireActual("@vueuse/shared"),
+		...(await vi.importActual("@vueuse/shared")),
 		useTimeoutFn: vi.fn().mockImplementation((cb: () => void) => {
 			cb();
 			return {

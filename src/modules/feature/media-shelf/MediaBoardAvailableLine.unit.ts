@@ -19,9 +19,9 @@ import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 
-vi.mock("@vueuse/core", () => {
+vi.mock("@vueuse/core", async () => {
 	return {
-		...jest.requireActual("@vueuse/core"),
+		...(await vi.importActual("@vueuse/core")),
 		useMediaQuery: vi.fn(),
 	};
 });

@@ -43,9 +43,9 @@ const mockedUseSocketConnection = vi.mocked(useSocketConnection);
 vi.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 
-vi.mock("vue-i18n", () => {
+vi.mock("vue-i18n", async () => {
 	return {
-		...jest.requireActual("vue-i18n"),
+		...(await vi.importActual("vue-i18n")),
 		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });

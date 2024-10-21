@@ -25,9 +25,9 @@ const translationMap: Record<string, string> = {};
 
 keys.forEach((key) => (translationMap[key] = key));
 
-vi.mock("vue-i18n", () => {
+vi.mock("vue-i18n", async () => {
 	return {
-		...jest.requireActual("vue-i18n"),
+		...(await vi.importActual("vue-i18n")),
 		useI18n: vi.fn().mockReturnValue({
 			t: (key: string) => {
 				return translationMap[key] || "error.generic";

@@ -28,9 +28,9 @@ import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
 
 vi.mock("./data/mediaBoardState.composable");
-vi.mock("@vueuse/core", () => {
+vi.mock("@vueuse/core", async () => {
 	return {
-		...jest.requireActual("@vueuse/core"),
+		...(await vi.importActual("@vueuse/core")),
 		useMediaQuery: vi.fn(),
 	};
 });

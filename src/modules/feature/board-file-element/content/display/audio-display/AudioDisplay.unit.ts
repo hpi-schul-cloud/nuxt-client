@@ -9,8 +9,8 @@ import { useMediaControls } from "@vueuse/core";
 import { nextTick, ref } from "vue";
 import AudioDisplay from "./AudioDisplay.vue";
 
-vi.mock("@vueuse/core", () => {
-	const original = jest.requireActual("@vueuse/core");
+vi.mock("@vueuse/core", async () => {
+	const original = await vi.importActual("@vueuse/core");
 
 	return {
 		...original,

@@ -13,9 +13,9 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { ref } from "vue";
 import MediaShelfPage from "./MediaShelf.page.vue";
 
-vi.mock("@feature-media-shelf", () => {
+vi.mock("@feature-media-shelf", async () => {
 	return {
-		...jest.requireActual("@feature-media-shelf"),
+		...(await vi.importActual("@feature-media-shelf")),
 		useSharedMediaBoardState: vi.fn(),
 	};
 });
