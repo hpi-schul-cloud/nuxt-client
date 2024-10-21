@@ -9,9 +9,9 @@ import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({
-			t: jest.fn().mockImplementation((key: string) => key),
-			n: jest.fn().mockImplementation((key: string) => key),
+		useI18n: vi.fn().mockReturnValue({
+			t: vi.fn().mockImplementation((key: string) => key),
+			n: vi.fn().mockImplementation((key: string) => key),
 		}),
 	};
 });

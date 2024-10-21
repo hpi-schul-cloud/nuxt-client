@@ -131,7 +131,7 @@ describe("vRoomAvatar", () => {
 
 	it("should not redirect to room page if condenseLayout props is true", async () => {
 		Object.defineProperty(window, "location", {
-			set: jest.fn(),
+			set: vi.fn(),
 			get: () => createMock<Location>(),
 		});
 		const locationSpy = jest.spyOn(window, "location", "set");

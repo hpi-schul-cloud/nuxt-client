@@ -20,11 +20,11 @@ export const setupFileStorageNotifier = (props: Props = {}) => {
 
 	const mockedSelectedFile = jest.mocked(useFileStorageNotifier);
 
-	const showFileTooBigError = showFileTooBigErrorMock ?? jest.fn();
-	const showForbiddenError = showForbiddenErrorMock ?? jest.fn();
-	const showUnauthorizedError = showUnauthorizedErrorMock ?? jest.fn();
-	const showInternalServerError = showInternalServerErrorMock ?? jest.fn();
-	const showFileExistsError = showFileExistsErrorMock ?? jest.fn();
+	const showFileTooBigError = showFileTooBigErrorMock ?? vi.fn();
+	const showForbiddenError = showForbiddenErrorMock ?? vi.fn();
+	const showUnauthorizedError = showUnauthorizedErrorMock ?? vi.fn();
+	const showInternalServerError = showInternalServerErrorMock ?? vi.fn();
+	const showFileExistsError = showFileExistsErrorMock ?? vi.fn();
 
 	const mocks = {
 		showFileTooBigError,

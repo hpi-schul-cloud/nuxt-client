@@ -16,7 +16,7 @@ import MediaShelfPage from "./MediaShelf.page.vue";
 jest.mock("@feature-media-shelf", () => {
 	return {
 		...jest.requireActual("@feature-media-shelf"),
-		useSharedMediaBoardState: jest.fn(),
+		useSharedMediaBoardState: vi.fn(),
 	};
 });
 

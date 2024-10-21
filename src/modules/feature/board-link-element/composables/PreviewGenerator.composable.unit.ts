@@ -34,7 +34,7 @@ describe("usePreviewGenerator", () => {
 			describe("when image can be uploaded", () => {
 				const setup = () => {
 					const elementId = "my-custom-mocked-id";
-					const uploadFromUrlMock = jest.fn();
+					const uploadFromUrlMock = vi.fn();
 					const fileRecord = fileRecordResponseFactory.build({
 						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 					});
@@ -97,7 +97,7 @@ describe("usePreviewGenerator", () => {
 					const externalImageUrl = "https://test.de/my-article/image.jpg";
 					const elementId = "my-custom-mocked-id";
 					const error = new Error("upload failed");
-					const uploadFromUrlMock = jest.fn().mockRejectedValueOnce(error);
+					const uploadFromUrlMock = vi.fn().mockRejectedValueOnce(error);
 
 					const { getFileRecord } = setupFileStorageApiMock({
 						uploadFromUrlMock,
@@ -129,7 +129,7 @@ describe("usePreviewGenerator", () => {
 				const setup = () => {
 					const externalImageUrl = "https://test.de/my-article/image.jpg";
 					const elementId = "my-custom-mocked-id";
-					const uploadFromUrlMock = jest.fn();
+					const uploadFromUrlMock = vi.fn();
 					const getFileRecordMock = jest
 						.fn()
 						.mockReturnValueOnce(ref(undefined));

@@ -18,9 +18,9 @@ import { setupCollaborativeTextEditorApiMock } from "./test-utils/collaborativeT
 
 // Mocks
 jest.mock("@data-board", () => ({
-	useBoardFocusHandler: jest.fn(),
-	useContentElementState: jest.fn(() => ({ modelValue: {} })),
-	useDeleteConfirmationDialog: jest.fn(),
+	useBoardFocusHandler: vi.fn(),
+	useContentElementState: vi.fn(() => ({ modelValue: {} })),
+	useDeleteConfirmationDialog: vi.fn(),
 }));
 jest.mock("@feature-board");
 jest.mock("./composables/CollaborativeTextEditorApi.composable");
@@ -34,7 +34,7 @@ describe("CollaborativeTextEditorElement", () => {
 		const resolvedValue = props.getUrlHasError
 			? undefined
 			: `${CollaborativeTextEditorParentType.ContentElement}/${element.id}`;
-		const getUrlMock = jest.fn().mockResolvedValueOnce(resolvedValue);
+		const getUrlMock = vi.fn().mockResolvedValueOnce(resolvedValue);
 
 		const { getUrl } = setupCollaborativeTextEditorApiMock({
 			getUrlMock,

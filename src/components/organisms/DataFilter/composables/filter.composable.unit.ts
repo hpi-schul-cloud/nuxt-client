@@ -19,14 +19,14 @@ const defaultState = {
 jest.mock("@vueuse/core", () => {
 	return {
 		...jest.requireActual("@vueuse/core"),
-		useStorage: jest.fn().mockReturnValue({ value: defaultState }),
+		useStorage: vi.fn().mockReturnValue({ value: defaultState }),
 	};
 });
 
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 

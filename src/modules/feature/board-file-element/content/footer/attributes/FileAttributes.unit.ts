@@ -24,8 +24,8 @@ describe("FileAttributes", () => {
 			.mocked(getFileExtension)
 			.mockReturnValueOnce(extension);
 		const i18nMock = jest.mocked(useI18n).mockReturnValue({
-			t: jest.fn().mockImplementation((key: string) => key),
-			n: jest.fn().mockImplementation((key: string) => key),
+			t: vi.fn().mockImplementation((key: string) => key),
+			n: vi.fn().mockImplementation((key: string) => key),
 		});
 
 		const wrapper = mount(FileAttributes, {

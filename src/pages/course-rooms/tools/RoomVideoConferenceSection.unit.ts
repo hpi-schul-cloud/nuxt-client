@@ -761,7 +761,7 @@ describe("RoomVideoConferenceSection", () => {
 	describe("when a videoconference is started or joined", () => {
 		describe("when an error occurs", () => {
 			const setup = () => {
-				const error = jest.fn(() => {
+				const error = vi.fn(() => {
 					throw new Error();
 				});
 

@@ -8,7 +8,7 @@ jest.mock("axios");
 
 let mockReturnData: { data: { data: { id: string }[] } };
 const cardsApiFactoryMock = {
-	cardControllerGetCards: jest.fn().mockImplementation(() => mockReturnData),
+	cardControllerGetCards: vi.fn().mockImplementation(() => mockReturnData),
 };
 initializeAxios({
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars

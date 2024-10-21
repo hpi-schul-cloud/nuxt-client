@@ -45,7 +45,7 @@ describe("teachers/new", () => {
 	});
 
 	it("should call 'createTeacher' action", async () => {
-		const createTeacherStub = jest.fn();
+		const createTeacherStub = vi.fn();
 		const mockStore = createMockStore(createTeacherStub);
 		const mockMe = meResponseFactory.build();
 
@@ -84,7 +84,7 @@ describe("teachers/new", () => {
 	});
 
 	it("should call notifier successful", async () => {
-		const createTeacherStub = jest.fn();
+		const createTeacherStub = vi.fn();
 		const mockStore = createMockStore(createTeacherStub);
 		const mockMe = meResponseFactory.build();
 
@@ -123,7 +123,7 @@ describe("teachers/new", () => {
 	});
 
 	it("should show error", async () => {
-		const failingCreateAction = jest.fn(() => Promise.reject());
+		const failingCreateAction = vi.fn(() => Promise.reject());
 		const mockStore = createMockStore(failingCreateAction);
 		const mockMe = meResponseFactory.build();
 

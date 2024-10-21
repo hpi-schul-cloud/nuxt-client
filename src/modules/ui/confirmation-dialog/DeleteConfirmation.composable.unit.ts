@@ -8,7 +8,7 @@ jest.mock("./Confirmation.composable");
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn(),
+		useI18n: vi.fn(),
 	};
 });
 const useI18nMock = <jest.Mock>useI18n;
@@ -26,7 +26,7 @@ describe("DeleteConfirmation composable", () => {
 				elementId: "elementId",
 				name: "name",
 			};
-			const askConfirmationMock = jest.fn().mockResolvedValueOnce(isConfirmed);
+			const askConfirmationMock = vi.fn().mockResolvedValueOnce(isConfirmed);
 			const { askConfirmation } = setupConfirmationComposableMock({
 				askConfirmationMock,
 			});

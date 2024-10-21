@@ -14,7 +14,7 @@ describe("autoLogout module", () => {
 	describe("actions", () => {
 		it("init should call setInit mutation", () => {
 			const autoLogoutModule = new AutoLogoutModule({});
-			const spySetInit = jest.fn();
+			const spySetInit = vi.fn();
 
 			autoLogoutModule.setInit = spySetInit;
 
@@ -24,7 +24,7 @@ describe("autoLogout module", () => {
 
 		it("extendSession should call setActive mutation", async () => {
 			const autoLogoutModule = new AutoLogoutModule({});
-			const spySetActive = jest.fn();
+			const spySetActive = vi.fn();
 
 			autoLogoutModule.setActive = spySetActive;
 

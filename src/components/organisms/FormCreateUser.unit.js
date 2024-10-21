@@ -11,15 +11,15 @@ const validRole = {
 };
 
 const getMockActions = () => ({
-	findStudents: jest.fn().mockReturnValue(Promise.resolve()),
-	find: jest.fn().mockReturnValue(Promise.resolve(validRole)),
+	findStudents: vi.fn().mockReturnValue(Promise.resolve()),
+	find: vi.fn().mockReturnValue(Promise.resolve(validRole)),
 });
 
 const getMockActionsErrorCreate = () => ({
 	create: () => {
 		throw new Error("Duplicate Mail");
 	},
-	find: jest.fn().mockReturnValue(Promise.resolve(validRole)),
+	find: vi.fn().mockReturnValue(Promise.resolve(validRole)),
 });
 
 describe("@/components/organisms/FormCreateUser", () => {

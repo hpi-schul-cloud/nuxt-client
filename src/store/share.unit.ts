@@ -28,7 +28,7 @@ describe("share module", () => {
 		describe("createShareUrl", () => {
 			describe("should make a 'POST' request to the backend", () => {
 				const shareTokenMockApi = {
-					shareTokenControllerCreateShareToken: jest.fn(async () => ({
+					shareTokenControllerCreateShareToken: vi.fn(async () => ({
 						data: {
 							token: "sampleToken",
 							payload: {
@@ -76,7 +76,7 @@ describe("share module", () => {
 					const shareModule = new ShareModule({});
 					const error = { statusCode: 418, message: "server error" };
 					const shareTokenErrorMockApi = {
-						shareTokenControllerCreateShareToken: jest.fn(() =>
+						shareTokenControllerCreateShareToken: vi.fn(() =>
 							Promise.reject({ ...error })
 						),
 					};
@@ -95,7 +95,7 @@ describe("share module", () => {
 				it("should return undefined if shareTokenResult is undefined", async () => {
 					const shareModule = new ShareModule({});
 					const shareTokenErrorMockApi = {
-						shareTokenControllerCreateShareToken: jest.fn(() =>
+						shareTokenControllerCreateShareToken: vi.fn(() =>
 							Promise.resolve(undefined)
 						),
 					};

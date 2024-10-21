@@ -135,7 +135,7 @@ describe("copy composable", () => {
 
 	it("should open failure alert notification on server error", async () => {
 		const { copy, copyModuleMock, notifierModuleMock, payload } = setup();
-		copyModuleMock.copy = jest.fn().mockRejectedValue(false);
+		copyModuleMock.copy = vi.fn().mockRejectedValue(false);
 
 		await copy(payload);
 

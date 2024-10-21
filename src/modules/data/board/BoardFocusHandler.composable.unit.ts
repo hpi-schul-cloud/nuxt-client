@@ -33,7 +33,7 @@ describe("BoardFocusHandler composable", () => {
 	});
 
 	describe("forceFocus method", () => {
-		const mockGetElementById = jest.fn();
+		const mockGetElementById = vi.fn();
 		Object.defineProperty(global.document, "getElementById", {
 			value: mockGetElementById,
 		});

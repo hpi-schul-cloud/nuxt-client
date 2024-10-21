@@ -62,7 +62,7 @@ describe("boardRestApi", () => {
 		ReturnType<typeof useSocketConnection>
 	>;
 	let setEditModeId: jest.Mock;
-	const setErrorMock = jest.fn();
+	const setErrorMock = vi.fn();
 
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
@@ -77,7 +77,7 @@ describe("boardRestApi", () => {
 		mockedBoardApiCalls = createMock<ReturnType<typeof useBoardApi>>();
 		mockedUseBoardApi.mockReturnValue(mockedBoardApiCalls);
 
-		setEditModeId = jest.fn();
+		setEditModeId = vi.fn();
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
@@ -204,7 +204,7 @@ describe("boardRestApi", () => {
 
 	describe("@deleteBoardRequest", () => {
 		it("should call 'deleteBoardSuccess'", async () => {
-			const deleteBoardMock = jest.fn();
+			const deleteBoardMock = vi.fn();
 			const { boardStore } = setup();
 			const { deleteBoardRequest } = useBoardRestApi();
 			const boardId = boardStore.board!.id;
@@ -220,7 +220,7 @@ describe("boardRestApi", () => {
 			});
 		});
 		it("should call handleError if the API call fails", async () => {
-			const deleteBoardMock = jest.fn().mockRejectedValue({});
+			const deleteBoardMock = vi.fn().mockRejectedValue({});
 			const { boardStore } = setup();
 			const { deleteBoardRequest } = useBoardRestApi();
 			const boardId = boardStore.board!.id;
@@ -713,7 +713,7 @@ describe("boardRestApi", () => {
 			const { updateBoardTitleRequest } = useBoardRestApi();
 
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
-			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
+			mockedErrorHandler.notifyWithTemplate.mockReturnValue(vi.fn());
 
 			await updateBoardTitleRequest({
 				boardId: "boardId",
@@ -729,7 +729,7 @@ describe("boardRestApi", () => {
 			const { updateBoardTitleRequest } = useBoardRestApi();
 
 			mockedBoardApiCalls.updateBoardTitleCall.mockRejectedValue({});
-			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
+			mockedErrorHandler.notifyWithTemplate.mockReturnValue(vi.fn());
 
 			await updateBoardTitleRequest({
 				boardId: "boardId",

@@ -83,7 +83,7 @@ const getWrapperShallow = (
 	});
 };
 
-window.scrollTo = jest.fn();
+window.scrollTo = vi.fn();
 
 describe("User Migration / Index", () => {
 	beforeEach(() => {

@@ -69,7 +69,7 @@ describe("FileUpload", () => {
 				setup();
 
 				const beforeUnloadEvent = new Event("beforeunload");
-				const preventDefaultSpy = jest.fn();
+				const preventDefaultSpy = vi.fn();
 				preventDefaultSpy.mockClear();
 
 				beforeUnloadEvent.preventDefault = preventDefaultSpy;
@@ -157,7 +157,7 @@ describe("FileUpload", () => {
 				filePicker.vm.$emit("update:file", { fileName: "Test.jpg" });
 
 				const beforeUnloadEvent = new Event("beforeunload");
-				const preventDefaultSpy = jest.fn();
+				const preventDefaultSpy = vi.fn();
 
 				beforeUnloadEvent.preventDefault = preventDefaultSpy;
 				window.dispatchEvent(beforeUnloadEvent);
@@ -215,7 +215,7 @@ describe("FileUpload", () => {
 				setup();
 
 				const beforeUnloadEvent = new Event("beforeunload");
-				const preventDefaultSpy = jest.fn();
+				const preventDefaultSpy = vi.fn();
 
 				beforeUnloadEvent.preventDefault = preventDefaultSpy;
 				window.dispatchEvent(beforeUnloadEvent);
@@ -280,7 +280,7 @@ describe("FileUpload", () => {
 			setup();
 
 			const beforeUnloadEvent = new Event("beforeunload");
-			const preventDefaultSpy = jest.fn();
+			const preventDefaultSpy = vi.fn();
 
 			beforeUnloadEvent.preventDefault = preventDefaultSpy;
 			window.dispatchEvent(beforeUnloadEvent);

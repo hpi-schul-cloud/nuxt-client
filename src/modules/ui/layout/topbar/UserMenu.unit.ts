@@ -14,7 +14,7 @@ describe("@ui-layout/UserMenu", () => {
 	const setup = () => {
 		const authModule = createModuleMocks(AuthModule, {
 			getLocale: "de",
-			logout: jest.fn(),
+			logout: vi.fn(),
 		});
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getAvailableLanguages: [LanguageType.De, LanguageType.En],

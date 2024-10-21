@@ -32,7 +32,7 @@ const TEST_ELEMENT: RichTextElementResponse = {
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("@vueuse/core"),
-		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 

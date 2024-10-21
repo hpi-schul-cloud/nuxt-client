@@ -46,7 +46,7 @@ const useRouterMock = <jest.Mock>useRouter;
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
-		useI18n: () => ({ t: jest.fn().mockImplementation((key) => key) }),
+		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });
 
@@ -85,7 +85,7 @@ describe("useCardRestApi", () => {
 			mockedSharedCardRequestPoolCalls
 		);
 
-		setEditModeId = jest.fn();
+		setEditModeId = vi.fn();
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
@@ -503,7 +503,7 @@ describe("useCardRestApi", () => {
 			cardStore.getCard.mockReturnValue(card);
 
 			mockedBoardApiCalls.updateCardTitle.mockRejectedValue({});
-			mockedErrorHandler.notifyWithTemplate.mockReturnValue(jest.fn());
+			mockedErrorHandler.notifyWithTemplate.mockReturnValue(vi.fn());
 
 			await updateCardTitleRequest({
 				cardId: card.id,

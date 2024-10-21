@@ -26,15 +26,15 @@ import { VDataTableServer } from "vuetify/lib/components/index.mjs";
 import RoomsOverview from "./RoomsOverview.page.vue";
 
 jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
 
 jest.mock("@data-room", () => {
 	return {
 		...jest.requireActual("@data-room"),
-		useCourseList: jest.fn(),
-		useCourseApi: jest.fn(),
+		useCourseList: vi.fn(),
+		useCourseApi: vi.fn(),
 	};
 });
 
@@ -117,8 +117,8 @@ describe("RoomsOverview", () => {
 		});
 
 		useCourseApiMock = createMock<ReturnType<typeof useCourseApi>>({
-			startSynchronization: jest.fn(),
-			stopSynchronization: jest.fn(),
+			startSynchronization: vi.fn(),
+			stopSynchronization: vi.fn(),
 		});
 
 		jest.mocked(useCourseList).mockReturnValue(useCourseListMock);

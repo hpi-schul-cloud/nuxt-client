@@ -21,8 +21,8 @@ import { Router, useRouter } from "vue-router";
 import CourseContextExternalToolConfigurator from "./CourseContextExternalToolConfigurator.page.vue";
 
 jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
 
 const useRouterMock = <jest.Mock>useRouter;
@@ -63,7 +63,7 @@ describe("CourseContextExternalToolConfigurator", () => {
 						template: "<div></div>",
 						setup() {
 							return {
-								fetchData: jest.fn(),
+								fetchData: vi.fn(),
 							};
 						},
 					},

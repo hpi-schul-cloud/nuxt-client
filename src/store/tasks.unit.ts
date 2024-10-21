@@ -37,7 +37,7 @@ describe("task store", () => {
 		describe("fetchAllTasks", () => {
 			it("should request a list of tasks", (done) => {
 				const mockApi = {
-					taskControllerFindAll: jest.fn(() => ({
+					taskControllerFindAll: vi.fn(() => ({
 						data: {
 							data: [{ mockTask: "mock task value" }],
 							total: 3,
@@ -117,7 +117,7 @@ describe("task store", () => {
 			it("should handle an error", (done) => {
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					taskControllerFindAll: jest.fn(() => Promise.reject({ ...error })),
+					taskControllerFindAll: vi.fn(() => Promise.reject({ ...error })),
 				};
 				jest
 					.spyOn(serverApi, "TaskApiFactory")
@@ -144,7 +144,7 @@ describe("task store", () => {
 
 			it("should call api to revert a published task", (done) => {
 				const mockApi = {
-					taskControllerRevertPublished: jest.fn(),
+					taskControllerRevertPublished: vi.fn(),
 				};
 				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")
@@ -177,7 +177,7 @@ describe("task store", () => {
 				const task = taskFactory.build();
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					taskControllerFinish: jest.fn(() => Promise.reject({ ...error })),
+					taskControllerFinish: vi.fn(() => Promise.reject({ ...error })),
 				};
 
 				jest
@@ -204,7 +204,7 @@ describe("task store", () => {
 
 			it("should call api to delete a task", (done) => {
 				const mockApi = {
-					taskControllerDelete: jest.fn(),
+					taskControllerDelete: vi.fn(),
 				};
 				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")

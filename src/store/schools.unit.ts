@@ -313,7 +313,7 @@ describe("schools module", () => {
 				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
 				mockApi = {
-					importUserControllerEndSchoolInMaintenance: jest.fn(() => ({})),
+					importUserControllerEndSchoolInMaintenance: vi.fn(() => ({})),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -369,7 +369,7 @@ describe("schools module", () => {
 					JSON.stringify({ statusCode: "500", message: "foo" })
 				);
 				mockApi = {
-					importUserControllerEndSchoolInMaintenance: jest.fn(() =>
+					importUserControllerEndSchoolInMaintenance: vi.fn(() =>
 						Promise.reject(error)
 					),
 				};
@@ -406,7 +406,7 @@ describe("schools module", () => {
 				schoolsModule = new SchoolsModule({});
 				spy = jest.spyOn(serverApi, "UserImportApiFactory");
 				mockApi = {
-					importUserControllerStartSchoolInUserMigration: jest.fn(() => ({})),
+					importUserControllerStartSchoolInUserMigration: vi.fn(() => ({})),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -463,7 +463,7 @@ describe("schools module", () => {
 			it("should handle error", async () => {
 				const error = { statusCode: "500", message: "foo" };
 				mockApi = {
-					importUserControllerStartSchoolInUserMigration: jest.fn(() =>
+					importUserControllerStartSchoolInUserMigration: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};

@@ -323,7 +323,7 @@ describe("@/components/molecules/importUsers", () => {
 		let getDataFromApiSpy: any;
 		let wrapper: any;
 		beforeEach(async () => {
-			getDataFromApiSpy = jest.fn();
+			getDataFromApiSpy = vi.fn();
 			wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
 			wrapper.vm.school.inMaintenance = true;

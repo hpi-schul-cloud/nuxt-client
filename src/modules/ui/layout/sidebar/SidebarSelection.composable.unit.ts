@@ -28,7 +28,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 		);
 
 		mockedUseSharedBoardPageInformation.mockReturnValue({
-			createPageInformation: jest.fn(),
+			createPageInformation: vi.fn(),
 			breadcrumbs: ref([]),
 			contextType: ref(),
 			pageTitle: ref("page-title"),
@@ -259,7 +259,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			describe("when board context is a course", () => {
 				const setupCourseContext = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: jest.fn(),
+						createPageInformation: vi.fn(),
 						breadcrumbs: ref([]),
 						contextType: ref(BoardContextType.Course),
 						pageTitle: ref("page-title"),
@@ -280,7 +280,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			describe("when board context is a user", () => {
 				const setupUserContext = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
-						createPageInformation: jest.fn(),
+						createPageInformation: vi.fn(),
 						breadcrumbs: ref([]),
 						contextType: ref(BoardContextType.User),
 						pageTitle: ref("page-title"),

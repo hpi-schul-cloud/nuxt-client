@@ -12,7 +12,7 @@ describe("status alerts module", () => {
 		describe("fetchStatusAlerts", () => {
 			it("should call api and set the alerts corectly", async () => {
 				const mockApi = {
-					alertControllerFind: jest.fn(() => ({
+					alertControllerFind: vi.fn(() => ({
 						data: {
 							data: mockStatusAlerts,
 						},
@@ -41,7 +41,7 @@ describe("status alerts module", () => {
 			it("should handle exception", async () => {
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					alertControllerFind: jest.fn(() => Promise.reject({ ...error })),
+					alertControllerFind: vi.fn(() => Promise.reject({ ...error })),
 				};
 				jest
 					.spyOn(serverApi, "AlertApiFactory")

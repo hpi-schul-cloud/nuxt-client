@@ -28,8 +28,8 @@ import { VBtn, VDataTableServer } from "vuetify/lib/components/index.mjs";
 import ClassOverview from "./ClassOverview.page.vue";
 
 jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
 const useRouteMock = <jest.Mock>useRoute;
 const useRouterMock = <jest.Mock>useRouter;

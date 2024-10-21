@@ -46,8 +46,8 @@ const mockedUseSubmissionContentElementStateResponse: ReturnType<
 > = {
 	submissions: ref([]),
 	studentSubmission: ref({ completed: false }),
-	fetchSubmissionItems: jest.fn(),
-	updateSubmissionItem: jest.fn(),
+	fetchSubmissionItems: vi.fn(),
+	updateSubmissionItem: vi.fn(),
 	loading: ref(false),
 	isOverdue: computed(() => false),
 };

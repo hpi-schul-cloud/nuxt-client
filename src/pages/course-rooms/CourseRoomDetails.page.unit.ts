@@ -112,7 +112,7 @@ const $route = {
 	},
 	path: "/rooms/",
 };
-const $router = { push: jest.fn(), resolve: jest.fn(), replace: jest.fn() };
+const $router = { push: vi.fn(), resolve: vi.fn(), replace: vi.fn() };
 
 let copyModule: CopyModule;
 let loadingStateModuleMock: LoadingStateModule;
@@ -132,7 +132,7 @@ const getWrapper = (
 
 	notifierModule = createModuleMocks(NotifierModule);
 	copyModule = createModuleMocks(CopyModule, {
-		copy: jest.fn(),
+		copy: vi.fn(),
 		getIsResultModalOpen: false,
 		getCopyResult: {
 			id: "copiedid",
@@ -148,17 +148,17 @@ const getWrapper = (
 		getTopics: [],
 		getTasks: [],
 		getColumnBoards: [],
-		startExportFlow: jest.fn(),
+		startExportFlow: vi.fn(),
 	});
 	shareModule = createModuleMocks(ShareModule, {
 		getIsShareModalOpen: true,
 		getParentType: ShareTokenBodyParamsParentTypeEnum.Courses,
-		createShareUrl: jest.fn(),
-		startShareFlow: jest.fn(),
-		resetShareFlow: jest.fn(),
+		createShareUrl: vi.fn(),
+		startShareFlow: vi.fn(),
+		resetShareFlow: vi.fn(),
 	});
 	courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
-		fetchContent: jest.fn(),
+		fetchContent: vi.fn(),
 		getRoomData: mockData,
 		getPermissionData: permissionData,
 	});

@@ -26,8 +26,8 @@ import FileUpload from "./upload/FileUpload.vue";
 
 jest.mock("@data-board", () => {
 	return {
-		useBoardFocusHandler: jest.fn(),
-		useContentElementState: jest.fn(() => ({ modelValue: {} })),
+		useBoardFocusHandler: vi.fn(),
+		useContentElementState: vi.fn(() => ({ modelValue: {} })),
 	};
 });
 jest.mock("@feature-board");
@@ -42,7 +42,7 @@ describe("FileContentElement", () => {
 	}) => {
 		const menu = "slot-menu";
 
-		const addAlertMock = jest.fn();
+		const addAlertMock = vi.fn();
 		jest.mocked(useFileAlerts).mockReturnValue({
 			addAlert: addAlertMock,
 			alerts: computed(() => []),
@@ -136,7 +136,7 @@ describe("FileContentElement", () => {
 					isUploading: props?.isUploading,
 				});
 
-				const getFileRecordMock = jest.fn().mockImplementationOnce(() => {
+				const getFileRecordMock = vi.fn().mockImplementationOnce(() => {
 					return ref(fileRecordResponse);
 				});
 				const { fetchFile } = setupFileStorageApiMock({
@@ -430,7 +430,7 @@ describe("FileContentElement", () => {
 					const element = fileElementResponseFactory.build();
 					document.body.setAttribute("data-app", "true");
 
-					const uploadMock = jest.fn().mockRejectedValueOnce(new Error("test"));
+					const uploadMock = vi.fn().mockRejectedValueOnce(new Error("test"));
 					setupFileStorageApiMock({
 						uploadMock,
 					});
@@ -485,7 +485,7 @@ describe("FileContentElement", () => {
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
 					isUploading: props?.isUploading,
 				});
-				const getFileRecordMock = jest.fn().mockImplementation(() => {
+				const getFileRecordMock = vi.fn().mockImplementation(() => {
 					return ref(fileRecordResponse);
 				});
 				const { fetchFile } = setupFileStorageApiMock({

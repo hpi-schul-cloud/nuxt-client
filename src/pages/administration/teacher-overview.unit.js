@@ -79,10 +79,10 @@ const createMockStore = () => {
 			users: {
 				namespaced: true,
 				actions: {
-					findTeachers: jest.fn(),
-					deleteUsers: jest.fn(),
-					getQrRegistrationLinks: jest.fn(),
-					sendRegistrationLink: jest.fn(),
+					findTeachers: vi.fn(),
+					deleteUsers: vi.fn(),
+					getQrRegistrationLinks: vi.fn(),
+					sendRegistrationLink: vi.fn(),
 				},
 				getters: {
 					getList: () => mockData,
@@ -103,7 +103,7 @@ const createMockStore = () => {
 					get: () => () => ({ page: 1 }),
 				},
 				mutations: {
-					set: jest.fn(),
+					set: vi.fn(),
 				},
 			},
 		},

@@ -54,7 +54,7 @@ const searchStrings = {
 };
 
 describe("AuthSystems", () => {
-	const RouterLinkStubMock = { ...RouterLinkStub, useLink: jest.fn() };
+	const RouterLinkStubMock = { ...RouterLinkStub, useLink: vi.fn() };
 	const createWrapper = (options = {}) => {
 		const wrapper = mount(AuthSystems, {
 			global: {

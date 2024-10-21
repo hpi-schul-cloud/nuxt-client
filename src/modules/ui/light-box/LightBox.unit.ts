@@ -31,7 +31,7 @@ describe("LightBox", () => {
 		alt?: string;
 		name?: string;
 	}) => {
-		const close = jest.fn();
+		const close = vi.fn();
 		const isLightBoxOpen = ref(true);
 		const lightBoxOptions = ref<LightBoxOptions>({
 			downloadUrl: props.downloadUrl ?? "test-downloadUrl",
@@ -46,7 +46,7 @@ describe("LightBox", () => {
 			close: close,
 			isLightBoxOpen: isLightBoxOpen,
 			lightBoxOptions: lightBoxOptions,
-			openInternal: jest.fn(),
+			openInternal: vi.fn(),
 		});
 
 		const wrapper = shallowMount(LightBox, {

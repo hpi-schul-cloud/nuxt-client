@@ -36,8 +36,8 @@ describe("BoardColumnHeader", () => {
 		const isEditMode = computed(() => true);
 		mockedUseEditMode.mockReturnValue({
 			isEditMode,
-			startEditMode: jest.fn(),
-			stopEditMode: jest.fn(),
+			startEditMode: vi.fn(),
+			stopEditMode: vi.fn(),
 		});
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,

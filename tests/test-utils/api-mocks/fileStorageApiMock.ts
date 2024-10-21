@@ -21,12 +21,12 @@ export const setupFileStorageApiMock = (props: Props = {}) => {
 	} = props;
 	const mockedFileStorageApi = jest.mocked(useFileStorageApi);
 	const getFileRecord =
-		getFileRecordMock ?? jest.fn(() => ref<FileRecordResponse>());
+		getFileRecordMock ?? vi.fn(() => ref<FileRecordResponse>());
 
-	const fetchFile = fetchFileMock ?? jest.fn();
-	const rename = renameMock ?? jest.fn();
-	const upload = uploadMock ?? jest.fn();
-	const uploadFromUrl = uploadFromUrlMock ?? jest.fn();
+	const fetchFile = fetchFileMock ?? vi.fn();
+	const rename = renameMock ?? vi.fn();
+	const upload = uploadMock ?? vi.fn();
+	const uploadFromUrl = uploadFromUrlMock ?? vi.fn();
 
 	const mocks = {
 		fetchFile,

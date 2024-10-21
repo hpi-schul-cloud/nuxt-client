@@ -21,7 +21,7 @@ const translationMap: Record<string, string> = {};
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({
+		useI18n: vi.fn().mockReturnValue({
 			t: (key: string) => key,
 			tc: (key: string) => key,
 			te: (key: string) => translationMap[key] !== undefined,
@@ -34,7 +34,7 @@ const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 jest.mocked(useSharedLastCreatedElement).mockImplementation(() => {
 	return {
 		lastCreatedElementId: ref(undefined),
-		resetLastCreatedElementId: jest.fn(),
+		resetLastCreatedElementId: vi.fn(),
 	};
 });
 
@@ -58,10 +58,10 @@ describe("ElementTypeSelection Composable", () => {
 
 				setupSharedElementTypeSelectionMock();
 
-				const addElementMock = jest.fn();
+				const addElementMock = vi.fn();
 				const elementType = ContentElementType.RichText;
 
-				const showCustomNotifierMock = jest.fn();
+				const showCustomNotifierMock = vi.fn();
 				const mockedBoardNotifierCalls = createMock<
 					ReturnType<typeof useBoardNotifier>
 				>({
@@ -111,10 +111,10 @@ describe("ElementTypeSelection Composable", () => {
 
 					const cardId = "cardId";
 
-					const addElementMock = jest.fn();
+					const addElementMock = vi.fn();
 					const elementType = ContentElementType.CollaborativeTextEditor;
 
-					const showCustomNotifierMock = jest.fn();
+					const showCustomNotifierMock = vi.fn();
 					const mockedBoardNotifierCalls = createMock<
 						ReturnType<typeof useBoardNotifier>
 					>({
@@ -161,10 +161,10 @@ describe("ElementTypeSelection Composable", () => {
 
 					const cardId = "cardId";
 
-					const addElementMock = jest.fn();
+					const addElementMock = vi.fn();
 					const elementType = ContentElementType.RichText;
 
-					const showCustomNotifierMock = jest.fn();
+					const showCustomNotifierMock = vi.fn();
 					const mockedBoardNotifierCalls = createMock<
 						ReturnType<typeof useBoardNotifier>
 					>({
@@ -203,7 +203,7 @@ describe("ElementTypeSelection Composable", () => {
 				it("should show Notification", async () => {
 					const i18nKeyWhiteboard =
 						"components.cardElement.notification.visibleAndEditable";
-					const addElementMock = jest.fn();
+					const addElementMock = vi.fn();
 					const elementType = ContentElementType.Drawing;
 					const { showCustomNotifierMock, cardId } = setup();
 
@@ -224,9 +224,9 @@ describe("ElementTypeSelection Composable", () => {
 		describe("when addElement returns error", () => {
 			const setup = () => {
 				const error = new Error("Test error");
-				const addElementMock = jest.fn().mockRejectedValueOnce(error);
+				const addElementMock = vi.fn().mockRejectedValueOnce(error);
 
-				const showCustomNotifierMock = jest.fn();
+				const showCustomNotifierMock = vi.fn();
 				const mockedBoardNotifierCalls = createMock<
 					ReturnType<typeof useBoardNotifier>
 				>({
@@ -256,7 +256,7 @@ describe("ElementTypeSelection Composable", () => {
 
 	describe("askType", () => {
 		it("should set isDialogOpen to true", () => {
-			const addElementMock = jest.fn();
+			const addElementMock = vi.fn();
 			const { isDialogOpen } = setupSharedElementTypeSelectionMock();
 			const { askType } = useAddElementDialog(addElementMock, "cardId");
 
@@ -275,13 +275,13 @@ describe("ElementTypeSelection Composable", () => {
 			}
 		) => {
 			const cardId = "cardId";
-			const addElementMock = jest.fn();
-			const closeDialogMock = jest.fn();
+			const addElementMock = vi.fn();
+			const closeDialogMock = vi.fn();
 			const { elementTypeOptions } = setupSharedElementTypeSelectionMock({
 				closeDialogMock,
 			});
 
-			const showCustomNotifierMock = jest.fn();
+			const showCustomNotifierMock = vi.fn();
 			const mockedBoardNotifierCalls = createMock<
 				ReturnType<typeof useBoardNotifier>
 			>({

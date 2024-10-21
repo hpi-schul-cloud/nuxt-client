@@ -14,20 +14,20 @@ import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vu
 
 jest.mock("@data-board", () => {
 	return {
-		useBoardFocusHandler: jest.fn(),
-		useContentElementState: jest.fn(() => ({ modelValue: {} })),
-		useDeleteConfirmationDialog: jest.fn(),
+		useBoardFocusHandler: vi.fn(),
+		useContentElementState: vi.fn(() => ({ modelValue: {} })),
+		useDeleteConfirmationDialog: vi.fn(),
 	};
 });
 jest.mock("@ui-confirmation-dialog", () => {
 	return {
-		useDeleteConfirmationDialog: jest.fn(),
+		useDeleteConfirmationDialog: vi.fn(),
 	};
 });
 
 jest.mock("@util-board", () => {
 	return {
-		useInlineEditInteractionHandler: jest.fn(),
+		useInlineEditInteractionHandler: vi.fn(),
 	};
 });
 

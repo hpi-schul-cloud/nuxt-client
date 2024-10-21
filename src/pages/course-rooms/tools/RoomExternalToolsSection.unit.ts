@@ -20,8 +20,8 @@ import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
 
 jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+	useRoute: vi.fn(),
+	useRouter: vi.fn(),
 }));
 const useRouterMock = <jest.Mock>useRouter;
 

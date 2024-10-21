@@ -34,7 +34,7 @@ describe("finished task store", () => {
 		describe("fetchFinishedTasks", () => {
 			it("should request an initial list of tasks", (done) => {
 				const { taskApiMock, finishedTasksModule } = setup({
-					taskControllerFindAllFinished: jest.fn(() => ({
+					taskControllerFindAllFinished: vi.fn(() => ({
 						data: {
 							data: [{ mockTask: "mock task value" }],
 							total: 1,
@@ -110,7 +110,7 @@ describe("finished task store", () => {
 				finishedTasksModule.isInitialized = true;
 
 				const mockApi = {
-					taskControllerFindAllFinished: jest.fn(),
+					taskControllerFindAllFinished: vi.fn(),
 				};
 
 				const spy = jest
@@ -134,7 +134,7 @@ describe("finished task store", () => {
 				finishedTasksModule.isInitialized = true;
 
 				const mockApi = {
-					taskControllerFindAllFinished: jest.fn(),
+					taskControllerFindAllFinished: vi.fn(),
 				};
 
 				const spy = jest
@@ -158,7 +158,7 @@ describe("finished task store", () => {
 
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					taskControllerFindAllFinished: jest.fn(() =>
+					taskControllerFindAllFinished: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -242,7 +242,7 @@ describe("finished task store", () => {
 
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					taskControllerFindAllFinished: jest.fn(() =>
+					taskControllerFindAllFinished: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -274,7 +274,7 @@ describe("finished task store", () => {
 				const task = taskFactory.build();
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					taskControllerRestore: jest.fn(() => Promise.reject({ ...error })),
+					taskControllerRestore: vi.fn(() => Promise.reject({ ...error })),
 				};
 
 				jest

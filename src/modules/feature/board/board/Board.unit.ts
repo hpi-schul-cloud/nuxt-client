@@ -118,7 +118,7 @@ describe("Board", () => {
 	>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
-	const setErrorMock = jest.fn();
+	const setErrorMock = vi.fn();
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
@@ -140,12 +140,12 @@ describe("Board", () => {
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
-			setEditModeId: jest.fn(),
+			setEditModeId: vi.fn(),
 			isInEditMode: computed(() => true),
 		});
 
 		mockedUseSharedBoardPageInformation.mockReturnValue({
-			createPageInformation: jest.fn(),
+			createPageInformation: vi.fn(),
 			breadcrumbs: ref([]),
 			contextType: ref(),
 			pageTitle: ref("page-title"),
@@ -154,13 +154,13 @@ describe("Board", () => {
 
 		mockedUseEditMode.mockReturnValue({
 			isEditMode: computed(() => false),
-			startEditMode: jest.fn(),
-			stopEditMode: jest.fn(),
+			startEditMode: vi.fn(),
+			stopEditMode: vi.fn(),
 		});
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
-			resetLastCreatedElementId: jest.fn(),
+			resetLastCreatedElementId: vi.fn(),
 		});
 		mockExtractDataAttribute.mockReturnValue("column-id");
 
@@ -989,7 +989,7 @@ describe("Board", () => {
 		describe("when the 'delete' menu button is clicked", () => {
 			let openDeleteBoardDialogMock: jest.Mock;
 			beforeEach(() => {
-				openDeleteBoardDialogMock = jest.fn();
+				openDeleteBoardDialogMock = vi.fn();
 			});
 
 			it("should call openDeleteBoardDialog method when board should be deleted", async () => {

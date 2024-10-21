@@ -7,13 +7,13 @@ import Mock = jest.Mock;
 
 jest.mock("@/store", () => ({
 	applicationErrorModule: {
-		setError: jest.fn(),
+		setError: vi.fn(),
 	},
 }));
 
 jest.mock("@/composables/application-error.composable", () => ({
 	useApplicationError: () => ({
-		createApplicationError: jest.fn(() => ({
+		createApplicationError: vi.fn(() => ({
 			status: 400,
 			message: "Bad Request",
 		})),
@@ -27,7 +27,7 @@ describe("validateQueryParameters", () => {
 
 	function setup() {
 		const route: RouteLocationNormalized = {} as RouteLocationNormalized;
-		const next: Mock<NavigationGuardNext> = jest.fn();
+		const next: Mock<NavigationGuardNext> = vi.fn();
 		return { to: route, from: route, next };
 	}
 

@@ -19,7 +19,7 @@ const query = {
 };
 
 jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
+	useRoute: vi.fn(),
 }));
 
 const useRouteMock = <jest.Mock>useRoute;

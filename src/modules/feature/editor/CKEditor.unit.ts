@@ -41,7 +41,7 @@ describe("CKEditor", () => {
 			props,
 		});
 
-		const editorMock = { editing: { view: { document: { on: jest.fn() } } } };
+		const editorMock = { editing: { view: { document: { on: vi.fn() } } } };
 
 		return { wrapper, editorMock };
 	};

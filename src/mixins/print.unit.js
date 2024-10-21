@@ -7,15 +7,15 @@ const getNewWindowMock = () => {
 			get innerHTML() {
 				return content;
 			},
-			write: jest.fn().mockImplementation((...args) => {
+			write: vi.fn().mockImplementation((...args) => {
 				args.forEach((text) => (content += text));
 			}),
-			close: jest.fn(),
+			close: vi.fn(),
 		},
-		addEventListener: jest.fn().mockImplementation((event, cb) => cb()),
-		focus: jest.fn(),
-		print: jest.fn(),
-		close: jest.fn(),
+		addEventListener: vi.fn().mockImplementation((event, cb) => cb()),
+		focus: vi.fn(),
+		print: vi.fn(),
+		close: vi.fn(),
 	};
 };
 

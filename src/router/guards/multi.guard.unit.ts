@@ -41,7 +41,7 @@ describe("Multiguard", () => {
 		const setup = () => {
 			const to: RouteLocationNormalized = createRoute("to", "/to");
 			const from: RouteLocationNormalized = createRoute("from", "/from");
-			const next = jest.fn();
+			const next = vi.fn();
 
 			const multiguard = Multiguard([]);
 
@@ -64,7 +64,7 @@ describe("Multiguard", () => {
 			};
 			const to = createRoute("to", "/to");
 			const from = createRoute("from", "/from");
-			const next = jest.fn();
+			const next = vi.fn();
 
 			const multiguard = Multiguard([(to, from, next) => next(expected)]);
 
@@ -84,7 +84,7 @@ describe("Multiguard", () => {
 		const setup = () => {
 			const to = createRoute("to", "/to");
 			const from = createRoute("from", "/from");
-			const next = jest.fn();
+			const next = vi.fn();
 
 			const multiguard = Multiguard([
 				(to, from, next) => next(),
@@ -110,7 +110,7 @@ describe("Multiguard", () => {
 			};
 			const to = createRoute("to", "/to");
 			const from = createRoute("from", "/from");
-			const next = jest.fn();
+			const next = vi.fn();
 
 			const multiguard = Multiguard([
 				(to, from, next) => next(expected),
@@ -136,7 +136,7 @@ describe("Multiguard", () => {
 			};
 			const to = createRoute("to", "/to");
 			const from = createRoute("from", "/from");
-			const next = jest.fn();
+			const next = vi.fn();
 
 			const multiguard = Multiguard([
 				(to, from, next) => next(expected),

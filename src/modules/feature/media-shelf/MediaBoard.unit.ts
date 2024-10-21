@@ -31,7 +31,7 @@ jest.mock("./data/mediaBoardState.composable");
 jest.mock("@vueuse/core", () => {
 	return {
 		...jest.requireActual("@vueuse/core"),
-		useMediaQuery: jest.fn(),
+		useMediaQuery: vi.fn(),
 	};
 });
 

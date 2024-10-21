@@ -29,8 +29,8 @@ describe("ElementTypeSelection", () => {
 		const { closeDialog, isDialogOpen, elementTypeOptions } =
 			setupSharedElementTypeSelectionMock();
 
-		const createTextElement = jest.fn();
-		const createFileElement = jest.fn();
+		const createTextElement = vi.fn();
+		const createFileElement = vi.fn();
 
 		elementTypeOptions.value = [
 			{

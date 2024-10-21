@@ -26,7 +26,7 @@ import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDelete
 jest.mock("@vueuse/core", () => {
 	return {
 		...jest.requireActual("@vueuse/core"),
-		useMediaQuery: jest.fn(),
+		useMediaQuery: vi.fn(),
 	};
 });
 

@@ -8,14 +8,14 @@ import { useCollaborativeTextEditorNotifier } from "./CollaborativeTextEditorNot
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({
+		useI18n: vi.fn().mockReturnValue({
 			t: jest
 				.fn()
 				.mockImplementation(
 					(key: string, dynamic?: object): string =>
 						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
 				),
-			n: jest.fn().mockImplementation((key: string) => key),
+			n: vi.fn().mockImplementation((key: string) => key),
 		}),
 	};
 });

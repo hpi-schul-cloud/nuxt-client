@@ -50,9 +50,9 @@ describe("@/components/organisms/LernstoreCollectionDetailView", () => {
 					RouterLink: RouterLinkStub,
 				},
 				computed: {
-					loading: () => jest.fn(),
-					elements: () => jest.fn(),
-					selected: () => jest.fn(),
+					loading: () => vi.fn(),
+					elements: () => vi.fn(),
+					selected: () => vi.fn(),
 				},
 				state: {
 					loading: true,

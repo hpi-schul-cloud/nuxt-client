@@ -112,7 +112,7 @@ describe("@/components/molecules/RoomLessonCard", () => {
 			});
 
 			Object.defineProperty(window, "location", {
-				set: jest.fn(),
+				set: vi.fn(),
 				get: () => createMock<Location>(),
 			});
 

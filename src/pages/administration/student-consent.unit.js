@@ -61,10 +61,10 @@ const createMockStore = () => {
 			bulkConsent: {
 				namespaced: true,
 				actions: {
-					register: jest.fn(),
-					updateStudent: jest.fn(),
-					setStudents: jest.fn(),
-					findConsentUsers: jest.fn(),
+					register: vi.fn(),
+					updateStudent: vi.fn(),
+					setStudents: vi.fn(),
+					findConsentUsers: vi.fn(),
 				},
 				getters: {
 					getSelectedStudentsData: () => mockData,
@@ -75,11 +75,11 @@ const createMockStore = () => {
 				},
 
 				mutations: {
-					setSelectedStudents: jest.fn(),
-					setRegisteredStudents: jest.fn(),
-					setStudentsData: jest.fn(),
-					updateStudentData: jest.fn(),
-					setRegisterError: jest.fn(),
+					setSelectedStudents: vi.fn(),
+					setRegisteredStudents: vi.fn(),
+					setStudentsData: vi.fn(),
+					updateStudentData: vi.fn(),
+					setRegisterError: vi.fn(),
 				},
 			},
 			filePaths: {

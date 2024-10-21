@@ -75,7 +75,7 @@ describe("SystemsModule", () => {
 				};
 
 				const mockApi = {
-					systemControllerFind: jest.fn().mockResolvedValue({
+					systemControllerFind: vi.fn().mockResolvedValue({
 						data: {
 							data: [
 								{

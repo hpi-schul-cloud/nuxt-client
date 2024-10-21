@@ -52,7 +52,7 @@ describe("StartNewCourseSyncDialog", () => {
 
 			Object.defineProperty(window, "location", {
 				configurable: true,
-				value: { assign: jest.fn() },
+				value: { assign: vi.fn() },
 			});
 
 			const group = groupResponseFactory.build();

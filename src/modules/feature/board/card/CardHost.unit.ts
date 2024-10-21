@@ -79,7 +79,7 @@ describe("CardHost", () => {
 
 		mockedUseSharedEditMode.mockReturnValue({
 			editModeId: ref(undefined),
-			setEditModeId: jest.fn(),
+			setEditModeId: vi.fn(),
 			isInEditMode: computed(() => true),
 		});
 
@@ -92,8 +92,8 @@ describe("CardHost", () => {
 
 		mockedEditMode.mockReturnValue({
 			isEditMode: computed(() => true),
-			startEditMode: jest.fn(),
-			stopEditMode: jest.fn(),
+			startEditMode: vi.fn(),
+			stopEditMode: vi.fn(),
 		});
 
 		setupAddElementDialogMock();

@@ -11,9 +11,9 @@ jest.mock("./composables/filter.composable");
 
 const mockedUseBoardApi = jest.mocked(useDataTableFilter);
 describe("@components/DataFilter/DataFilter.vue", () => {
-	const updateFilterMock = jest.fn();
-	const removeFilterMock = jest.fn();
-	const removeChipFilterMock = jest.fn();
+	const updateFilterMock = vi.fn();
+	const removeFilterMock = vi.fn();
+	const removeChipFilterMock = vi.fn();
 	const defaultFilterMenuItems = [
 		{ label: "Registration", value: "consentStatus" },
 		{ label: "Class(es)", value: "classes" },

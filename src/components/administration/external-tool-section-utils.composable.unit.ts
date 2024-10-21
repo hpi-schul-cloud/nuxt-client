@@ -17,7 +17,7 @@ import { SchoolExternalTool } from "@/store/external-tool";
 describe("useSchoolExternalToolUtils", () => {
 	const setup = (schoolExternalTool: SchoolExternalTool) => {
 		const expectedTranslation = "translated";
-		const tMock = jest.fn().mockReturnValue(expectedTranslation);
+		const tMock = vi.fn().mockReturnValue(expectedTranslation);
 
 		const { getHeaders, getItems } = useExternalToolsSectionUtils(tMock);
 

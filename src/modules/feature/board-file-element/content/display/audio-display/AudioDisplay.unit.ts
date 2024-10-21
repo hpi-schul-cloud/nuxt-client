@@ -14,7 +14,7 @@ jest.mock("@vueuse/core", () => {
 
 	return {
 		...original,
-		useMediaControls: jest.fn(),
+		useMediaControls: vi.fn(),
 	};
 });
 
@@ -32,7 +32,7 @@ describe("AudioDisplay", () => {
 			const durationRef = ref(50);
 			const rateRef = ref(1);
 			const playingRef = ref(false);
-			const onSourceErrorMock = jest.fn();
+			const onSourceErrorMock = vi.fn();
 
 			const useMediaControlsMock = createMock<
 				ReturnType<typeof useMediaControls>

@@ -55,9 +55,9 @@ describe("course-room module", () => {
 			jest.clearAllMocks();
 		});
 		const mockApi = {
-			courseRoomsControllerGetRoomBoard: jest.fn(),
-			courseRoomsControllerPatchElementVisibility: jest.fn(),
-			courseRoomsControllerPatchOrderingOfElements: jest.fn(),
+			courseRoomsControllerGetRoomBoard: vi.fn(),
+			courseRoomsControllerPatchElementVisibility: vi.fn(),
+			courseRoomsControllerPatchOrderingOfElements: vi.fn(),
 		};
 
 		describe("fetchCourse", () => {
@@ -200,7 +200,7 @@ describe("course-room module", () => {
 		describe("deleteLesson", () => {
 			it("should call api to delete a lesson", async () => {
 				const mockApi = {
-					lessonControllerDelete: jest.fn(),
+					lessonControllerDelete: vi.fn(),
 				};
 				const spy = jest
 					.spyOn(serverApi, "LessonApiFactory")
@@ -219,7 +219,7 @@ describe("course-room module", () => {
 			it("should catch error in catch block", async () => {
 				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi = {
-					lessonControllerDelete: jest.fn(() => Promise.reject({ ...error })),
+					lessonControllerDelete: vi.fn(() => Promise.reject({ ...error })),
 				};
 				const spy = jest
 					.spyOn(serverApi, "LessonApiFactory")
@@ -238,7 +238,7 @@ describe("course-room module", () => {
 		describe("deleteTask", () => {
 			it("should call api to delete a lesson", async () => {
 				const mockApi = {
-					taskControllerDelete: jest.fn(),
+					taskControllerDelete: vi.fn(),
 				};
 				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")
@@ -257,7 +257,7 @@ describe("course-room module", () => {
 			it("should catch error in catch block", async () => {
 				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi = {
-					taskControllerDelete: jest.fn(() => Promise.reject({ ...error })),
+					taskControllerDelete: vi.fn(() => Promise.reject({ ...error })),
 				};
 				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")
@@ -276,7 +276,7 @@ describe("course-room module", () => {
 		describe("createBoard", () => {
 			it("should call api to create a column board", async () => {
 				const mockApi = {
-					boardControllerCreateBoard: jest.fn(),
+					boardControllerCreateBoard: vi.fn(),
 				};
 				const spy = jest
 					.spyOn(serverApi, "BoardApiFactory")
@@ -299,7 +299,7 @@ describe("course-room module", () => {
 
 			it("should call api to create a list board", async () => {
 				const mockApi = {
-					boardControllerCreateBoard: jest.fn(),
+					boardControllerCreateBoard: vi.fn(),
 				};
 				const spy = jest
 					.spyOn(serverApi, "BoardApiFactory")
@@ -323,7 +323,7 @@ describe("course-room module", () => {
 			it("should catch error in catch block", async () => {
 				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi = {
-					boardControllerCreateBoard: jest.fn().mockRejectedValue(error),
+					boardControllerCreateBoard: vi.fn().mockRejectedValue(error),
 				};
 				const spy = jest
 					.spyOn(serverApi, "BoardApiFactory")
@@ -348,7 +348,7 @@ describe("course-room module", () => {
 		describe("deleteBoard", () => {
 			it("should call api to delete a board", async () => {
 				const mockApi = {
-					boardControllerDeleteBoard: jest.fn(),
+					boardControllerDeleteBoard: vi.fn(),
 				};
 				const spy = jest
 					.spyOn(serverApi, "BoardApiFactory")
@@ -367,7 +367,7 @@ describe("course-room module", () => {
 			it("should catch error in catch block", async () => {
 				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi = {
-					boardControllerDeleteBoard: jest.fn().mockRejectedValue(error),
+					boardControllerDeleteBoard: vi.fn().mockRejectedValue(error),
 				};
 				const spy = jest
 					.spyOn(serverApi, "BoardApiFactory")
@@ -387,7 +387,7 @@ describe("course-room module", () => {
 			it("should call backend api", async () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const mockApi = {
-					lessonControllerDelete: jest.fn(() => Promise.resolve()),
+					lessonControllerDelete: vi.fn(() => Promise.resolve()),
 				};
 				const spy = jest
 					.spyOn(serverApi, "CoursesApiFactory")
@@ -408,7 +408,7 @@ describe("course-room module", () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi = {
-					courseControllerExportCourse: jest.fn(() =>
+					courseControllerExportCourse: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -450,7 +450,7 @@ describe("course-room module", () => {
 					} as AxiosInstance);
 				})();
 				const mockApi = {
-					taskControllerFinish: jest.fn(),
+					taskControllerFinish: vi.fn(),
 				};
 				jest
 					.spyOn(serverApi, "TaskApiFactory")

@@ -118,7 +118,7 @@ describe("rooms module", () => {
 		describe("align", () => {
 			it("should call server and 'setPosition' mutation", async () => {
 				const mockApi = {
-					dashboardControllerMoveElement: jest.fn(() => ({
+					dashboardControllerMoveElement: vi.fn(() => ({
 						data: { id: "42", gridElements: [] },
 					})),
 				};
@@ -172,7 +172,7 @@ describe("rooms module", () => {
 		describe("update", () => {
 			it("should call the backend", async () => {
 				const mockApi = {
-					dashboardControllerPatchGroup: jest.fn((groupToPatch) => ({
+					dashboardControllerPatchGroup: vi.fn((groupToPatch) => ({
 						data: { ...groupToPatch },
 					})),
 				};
@@ -207,7 +207,7 @@ describe("rooms module", () => {
 			it("handle error", async () => {
 				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
-					dashboardControllerPatchGroup: jest.fn(() =>
+					dashboardControllerPatchGroup: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -242,7 +242,7 @@ describe("rooms module", () => {
 
 		describe("fetchAllElements", () => {
 			it("should call the backend", async () => {
-				const mockApi = { courseControllerFindForUser: jest.fn() };
+				const mockApi = { courseControllerFindForUser: vi.fn() };
 				jest
 					.spyOn(serverApi, "CoursesApiFactory")
 					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
@@ -263,7 +263,7 @@ describe("rooms module", () => {
 			it("handle error", (done) => {
 				const error = { status: 418, statusText: "I'm not a teapot" };
 				const mockApi = {
-					courseControllerFindForUser: jest.fn(() =>
+					courseControllerFindForUser: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -310,7 +310,7 @@ describe("rooms module", () => {
 					status: "",
 					message: "",
 				};
-				const setBusinessErrorMock = jest.fn();
+				const setBusinessErrorMock = vi.fn();
 				const courseRoomListModule = new CourseRoomListModule({});
 				courseRoomListModule.setBusinessError = setBusinessErrorMock;
 

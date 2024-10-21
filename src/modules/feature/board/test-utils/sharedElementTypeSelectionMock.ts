@@ -19,7 +19,7 @@ export const setupSharedElementTypeSelectionMock = (props: Props = {}) => {
 		useSharedElementTypeSelection
 	);
 
-	const closeDialog = closeDialogMock ?? jest.fn();
+	const closeDialog = closeDialogMock ?? vi.fn();
 	const isDialogOpen = ref(false);
 
 	const elementTypeOptions: Ref<Array<ElementTypeSelectionOptions>> = ref([]);

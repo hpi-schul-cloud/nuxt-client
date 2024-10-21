@@ -11,7 +11,7 @@ export const setupCollaborativeTextEditorApiMock = (props: Props = {}) => {
 		useCollaborativeTextEditorApi
 	);
 
-	const getUrl = getUrlMock ?? jest.fn();
+	const getUrl = getUrlMock ?? vi.fn();
 
 	const mocks = {
 		getUrl,

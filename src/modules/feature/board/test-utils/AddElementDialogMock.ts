@@ -9,8 +9,8 @@ interface Props {
 export const setupAddElementDialogMock = (props: Props = {}) => {
 	const mockedUseAddElementDialog = jest.mocked(useAddElementDialog);
 
-	const createTextElementMock = jest.fn();
-	const createFileElementMock = jest.fn();
+	const createTextElementMock = vi.fn();
+	const createFileElementMock = vi.fn();
 
 	const elementTypeOptionsMock: Ref<
 		{
@@ -33,8 +33,8 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 			testId: "action2-id",
 		},
 	]);
-	const askTypeMock = props.askTypeMock || jest.fn();
-	const onFileSelectMock = jest.fn();
+	const askTypeMock = props.askTypeMock || vi.fn();
+	const onFileSelectMock = vi.fn();
 	const isFilePickerOpenMock = ref(false);
 	const isDialogOpenMock = ref(false);
 
@@ -42,8 +42,8 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 		askType: askTypeMock,
 		isDialogOpen: isDialogOpenMock,
 		elementTypeOptions: elementTypeOptionsMock,
-		onElementClick: jest.fn(),
-		onFileElementClick: jest.fn(),
+		onElementClick: vi.fn(),
+		onFileElementClick: vi.fn(),
 		onFileSelect: onFileSelectMock,
 		isFilePickerOpen: isFilePickerOpenMock,
 	};

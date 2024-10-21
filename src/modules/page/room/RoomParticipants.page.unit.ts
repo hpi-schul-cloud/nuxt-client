@@ -83,7 +83,7 @@ describe("RoomParticipantsPage", () => {
 				ariaLabel: string;
 				testId: string;
 			};
-			onFabClick: ReturnType<typeof jest.fn>;
+			onFabClick: ReturnType<typeof vi.fn>;
 		};
 
 		return { wrapper, roomDetailsStore, wrapperVM };

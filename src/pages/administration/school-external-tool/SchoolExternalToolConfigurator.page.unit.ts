@@ -31,7 +31,7 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 }));
 
 jest.mock("vue-router", () => ({
-	useRouter: jest.fn(),
+	useRouter: vi.fn(),
 }));
 
 const useRouterMock = <jest.Mock>useRouter;

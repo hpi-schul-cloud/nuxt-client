@@ -59,7 +59,7 @@ describe("BoardMenuActionMoveColumnUp Component", () => {
 			});
 			const listItemComponent = wrapper.findComponent(BoardMenuAction);
 
-			listItemComponent.vm.$emit("click", { preventDefault: jest.fn() });
+			listItemComponent.vm.$emit("click", { preventDefault: vi.fn() });
 			const emitted = wrapper.emitted("click");
 
 			expect(emitted).toBeDefined();

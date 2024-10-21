@@ -41,11 +41,11 @@ describe("BoardHeader", () => {
 		props?: { isDraft: boolean }
 	) => {
 		const isEditMode = computed(() => true);
-		const mockedStartEditMode = jest.fn();
+		const mockedStartEditMode = vi.fn();
 		mockedUseEditMode.mockReturnValue({
 			isEditMode,
 			startEditMode: mockedStartEditMode,
-			stopEditMode: jest.fn(),
+			stopEditMode: vi.fn(),
 		});
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,

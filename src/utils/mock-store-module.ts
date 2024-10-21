@@ -23,7 +23,7 @@ const mockMutations = <M>(
 	statics: StaticsType
 ) => {
 	Object.keys(module.mutations as MutationTree<M>).forEach((key) => {
-		statics[key] = jest.fn();
+		statics[key] = vi.fn();
 	});
 };
 
@@ -33,7 +33,7 @@ const mockActions = <M>(
 	statics: StaticsType
 ) => {
 	Object.keys(module.actions as ActionTree<M, any>).forEach((key) => {
-		statics[key] = jest.fn();
+		statics[key] = vi.fn();
 	});
 };
 

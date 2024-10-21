@@ -4,7 +4,7 @@ describe("helpers", () => {
 	describe("delay", () => {
 		test("should not resolve until timeout has passed", async () => {
 			jest.useFakeTimers();
-			const spy = jest.fn();
+			const spy = vi.fn();
 			delay(100).then(spy);
 
 			// not resolved after half time

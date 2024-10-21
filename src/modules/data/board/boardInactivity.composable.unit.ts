@@ -26,7 +26,7 @@ import { Router, useRouter } from "vue-router";
 
 jest.mock("vue-i18n", () => ({
 	useI18n: () => ({
-		t: jest.fn().mockImplementation((key) => key),
+		t: vi.fn().mockImplementation((key) => key),
 	}),
 }));
 
@@ -67,7 +67,7 @@ describe("pageInactivity.composable", () => {
 
 	mockUseSharedLastCreatedElement.mockReturnValue({
 		lastCreatedElementId: computed(() => "element-id"),
-		resetLastCreatedElementId: jest.fn(),
+		resetLastCreatedElementId: vi.fn(),
 	});
 
 	mockBoardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();

@@ -60,7 +60,7 @@ describe("@/components/share/ShareModalResult", () => {
 
 	it("should write to clipboard and emit done onCopy()", async () => {
 		const mockClipboard = {
-			writeText: jest.fn(),
+			writeText: vi.fn(),
 		};
 		Object.assign(navigator, { clipboard: mockClipboard });
 
@@ -75,7 +75,7 @@ describe("@/components/share/ShareModalResult", () => {
 	});
 
 	it("should follow href and emit done onMailShareUrl()", async () => {
-		const assignSpy = jest.fn();
+		const assignSpy = vi.fn();
 		Object.defineProperty(window, "location", {
 			set: () => createMock<Location>(),
 			get: () =>
@@ -97,7 +97,7 @@ describe("@/components/share/ShareModalResult", () => {
 	});
 
 	it("should use native platform share onShareMobilePlatflorm()", async () => {
-		const mockSharePromise = jest.fn().mockReturnValue(Promise.resolve());
+		const mockSharePromise = vi.fn().mockReturnValue(Promise.resolve());
 		Object.assign(navigator, { share: mockSharePromise });
 
 		const { wrapper, shareUrl } = setup();

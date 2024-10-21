@@ -1,4 +1,7 @@
 // .mts extension to avoid CJS deprecation warning
+
+// https://github.com/vuejs/core/blob/main/vitest.config.ts
+// https://vitest.dev/config/
 import { defineConfig } from "vitest/config";
 
 export default defineConfig({

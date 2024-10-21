@@ -3,6 +3,6 @@
  */
 
 // eslint-disable-next-line no-undef
-const vMaska = jest.fn();
+const vMaska = vi.fn();
 
 export { vMaska };

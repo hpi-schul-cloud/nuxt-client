@@ -99,7 +99,7 @@ describe("content module", () => {
 	describe("actions", () => {
 		it("selectElement action should call setSelectedElement mutation", () => {
 			const contentModule = new ContentModule({});
-			const selectedSpy = jest.fn();
+			const selectedSpy = vi.fn();
 			contentModule.setSelectedElement = selectedSpy;
 			expect(selectedSpy).not.toBeCalled();
 			contentModule.selectElement("mockId");
@@ -107,7 +107,7 @@ describe("content module", () => {
 		});
 		it("unselectElemeent action should call setSelectedElement mutation", () => {
 			const contentModule = new ContentModule({});
-			const selectedSpy = jest.fn();
+			const selectedSpy = vi.fn();
 			contentModule.setSelectedElement = selectedSpy;
 			expect(selectedSpy).not.toBeCalled();
 			contentModule.unselectElement("mockId");
@@ -117,10 +117,10 @@ describe("content module", () => {
 			const contentModule = new ContentModule({});
 			axiosInitializer();
 			const searchQuery = "mock";
-			const incLoadingSpy = jest.fn();
-			const setLastQuerySpy = jest.fn();
-			const decLoadingSpy = jest.fn();
-			const setResourcesSpy = jest.fn();
+			const incLoadingSpy = vi.fn();
+			const setLastQuerySpy = vi.fn();
+			const decLoadingSpy = vi.fn();
+			const setResourcesSpy = vi.fn();
 
 			contentModule.incLoading = incLoadingSpy;
 			contentModule.setLastQuery = setLastQuerySpy;
@@ -163,9 +163,9 @@ describe("content module", () => {
 				$skip: 0,
 				searchQuery: "mock",
 			};
-			const incLoadingSpy = jest.fn();
-			const decLoadingSpy = jest.fn();
-			const addResourceSpy = jest.fn();
+			const incLoadingSpy = vi.fn();
+			const decLoadingSpy = vi.fn();
+			const addResourceSpy = vi.fn();
 
 			contentModule.incLoading = incLoadingSpy;
 			contentModule.decLoading = decLoadingSpy;
@@ -213,10 +213,10 @@ describe("content module", () => {
 				$skip: 0,
 				searchQuery: "mock",
 			};
-			const incLoadingSpy = jest.fn();
-			const setLastQuerySpy = jest.fn();
-			const decLoadingSpy = jest.fn();
-			const setElementsSpy = jest.fn();
+			const incLoadingSpy = vi.fn();
+			const setLastQuerySpy = vi.fn();
+			const decLoadingSpy = vi.fn();
+			const setElementsSpy = vi.fn();
 
 			contentModule.incLoading = incLoadingSpy;
 			contentModule.setLastQuery = setLastQuerySpy;
@@ -255,9 +255,9 @@ describe("content module", () => {
 				$skip: 0,
 				searchQuery: "mock",
 			};
-			const incLoadingSpy = jest.fn();
-			const decLoadingSpy = jest.fn();
-			const addElementsSpy = jest.fn();
+			const incLoadingSpy = vi.fn();
+			const decLoadingSpy = vi.fn();
+			const addElementsSpy = vi.fn();
 
 			contentModule.incLoading = incLoadingSpy;
 			contentModule.decLoading = decLoadingSpy;
@@ -288,7 +288,7 @@ describe("content module", () => {
 			const contentModule = new ContentModule({});
 			axiosInitializer();
 
-			const setLessonsSpy = jest.fn();
+			const setLessonsSpy = vi.fn();
 
 			contentModule.setLessons = setLessonsSpy;
 
@@ -326,7 +326,7 @@ describe("content module", () => {
 					url: "",
 				},
 			};
-			const setNotificationSpy = jest.fn();
+			const setNotificationSpy = vi.fn();
 
 			contentModule.setNotificationModal = setNotificationSpy;
 
@@ -381,8 +381,8 @@ describe("content module", () => {
 			const contentModule = new ContentModule({});
 			axiosInitializer();
 
-			const setStatusSpy = jest.fn();
-			const setCurrentResourceSpy = jest.fn();
+			const setStatusSpy = vi.fn();
+			const setCurrentResourceSpy = vi.fn();
 
 			contentModule.setStatus = setStatusSpy;
 			contentModule.setCurrentResource = setCurrentResourceSpy;
@@ -406,7 +406,7 @@ describe("content module", () => {
 			setupStores({ envConfigModule: EnvConfigModule });
 
 			const contentModule = new ContentModule({});
-			const initSpy = jest.fn();
+			const initSpy = vi.fn();
 
 			contentModule.initMutation = initSpy;
 

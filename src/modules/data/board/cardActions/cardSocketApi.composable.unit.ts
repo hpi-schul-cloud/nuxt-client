@@ -83,7 +83,7 @@ describe("useCardSocketApi", () => {
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
-			resetLastCreatedElementId: jest.fn(),
+			resetLastCreatedElementId: vi.fn(),
 		});
 
 		const router = createMock<Router>();

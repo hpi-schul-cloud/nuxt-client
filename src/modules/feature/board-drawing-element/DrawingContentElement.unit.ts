@@ -22,9 +22,9 @@ import InnerContent from "./InnerContent.vue";
 
 // Mocks
 jest.mock("@data-board", () => ({
-	useBoardFocusHandler: jest.fn(),
-	useContentElementState: jest.fn(() => ({ modelValue: {} })),
-	useDeleteConfirmationDialog: jest.fn(),
+	useBoardFocusHandler: vi.fn(),
+	useContentElementState: vi.fn(() => ({ modelValue: {} })),
+	useDeleteConfirmationDialog: vi.fn(),
 }));
 jest.mock("@feature-board");
 

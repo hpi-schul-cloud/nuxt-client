@@ -28,19 +28,19 @@ const card = {
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({ t: (key: string) => key }),
+		useI18n: vi.fn().mockReturnValue({ t: (key: string) => key }),
 	};
 });
 
 jest.mock("../Board.store", () => ({
-	useBoardStore: jest.fn().mockReturnValue({
-		getColumnIndex: jest.fn().mockReturnValue(10),
-		getCardLocation: jest.fn().mockReturnValue(1),
+	useBoardStore: vi.fn().mockReturnValue({
+		getColumnIndex: vi.fn().mockReturnValue(10),
+		getCardLocation: vi.fn().mockReturnValue(1),
 	}),
 }));
 
 jest.mock("../Card.store", () => ({
-	useCardStore: jest.fn().mockReturnValue({
+	useCardStore: vi.fn().mockReturnValue({
 		cards: [card],
 	}),
 }));
@@ -48,7 +48,7 @@ jest.mock("../Card.store", () => ({
 describe("useBoardAriaNotification", () => {
 	jest.useFakeTimers();
 
-	const mockNotifyOnScreenReader = jest.fn();
+	const mockNotifyOnScreenReader = vi.fn();
 	jest.mock("@/composables/ariaLiveNotifier", () => ({
 		notifyOnScreenReader: () => mockNotifyOnScreenReader,
 	}));

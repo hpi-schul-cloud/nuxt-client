@@ -30,7 +30,7 @@ describe("BoardMenuActionMoveDown Component", () => {
 		return wrapper;
 	};
 
-	const askDeleteConfirmationMock = jest.fn();
+	const askDeleteConfirmationMock = vi.fn();
 
 	setupDeleteConfirmationComposableMock({
 		askDeleteConfirmationMock,

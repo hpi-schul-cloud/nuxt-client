@@ -42,8 +42,8 @@ const mockResponseData = {
 };
 
 const getStoreOptions = () => {
-	const submitStub = jest.fn();
-	const patchStub = jest.fn();
+	const submitStub = vi.fn();
+	const patchStub = vi.fn();
 
 	const storeOptions = {
 		modules: {
@@ -81,7 +81,7 @@ const getStoreOptions = () => {
 
 describe("ldap/activate", () => {
 	const setup = ({ route, storeOptions }) => {
-		const routerPushStub = jest.fn();
+		const routerPushStub = vi.fn();
 
 		const wrapper = mount(ldapActivate, {
 			global: {

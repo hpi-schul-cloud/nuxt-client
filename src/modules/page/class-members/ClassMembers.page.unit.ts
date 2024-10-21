@@ -17,7 +17,7 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 jest.mock("@data-group", () => {
 	return {
 		...jest.requireActual("@data-group"),
-		useGroupState: jest.fn(),
+		useGroupState: vi.fn(),
 	};
 });
 

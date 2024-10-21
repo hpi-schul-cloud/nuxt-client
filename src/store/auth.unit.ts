@@ -306,7 +306,7 @@ describe("auth store module", () => {
 
 			it("should call backend succesfully", () => {
 				const mockApi = {
-					userControllerChangeLanguage: jest.fn().mockReturnValue({
+					userControllerChangeLanguage: vi.fn().mockReturnValue({
 						data: { successful: true },
 					}),
 				};
@@ -322,7 +322,7 @@ describe("auth store module", () => {
 
 			it("should catch error", () => {
 				const mockApi = {
-					userControllerChangeLanguage: jest.fn().mockImplementation(() => {
+					userControllerChangeLanguage: vi.fn().mockImplementation(() => {
 						throw new AxiosError("I'm an error");
 					}),
 				};
@@ -351,7 +351,7 @@ describe("auth store module", () => {
 
 				const authModule = new AuthModule({});
 
-				const mockReplace = jest.fn();
+				const mockReplace = vi.fn();
 				Object.defineProperty(window, "location", {
 					configurable: true,
 					value: { replace: mockReplace },

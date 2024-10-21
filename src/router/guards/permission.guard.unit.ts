@@ -3,7 +3,7 @@ import { NavigationGuard, RouteLocationNormalized } from "vue-router";
 import { NavigationGuardNext } from "vue-router";
 import Mock = jest.Mock;
 
-const mockError = jest.fn();
+const mockError = vi.fn();
 
 jest.mock("@/store", () => ({
 	authModule: {
@@ -21,7 +21,7 @@ describe("PermissionGuard", () => {
 
 	function setup() {
 		const route: RouteLocationNormalized = {} as RouteLocationNormalized;
-		const next: Mock<NavigationGuardNext> = jest.fn();
+		const next: Mock<NavigationGuardNext> = vi.fn();
 		return { to: route, from: route, next };
 	}
 

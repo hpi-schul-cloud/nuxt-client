@@ -11,7 +11,7 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 }));
 
 describe("TaskOverview", () => {
-	const fetchAllTasksSpy = jest.fn();
+	const fetchAllTasksSpy = vi.fn();
 	const getWrapper = (userRole: string) => {
 		return shallowMount(TaskOverview, {
 			global: {

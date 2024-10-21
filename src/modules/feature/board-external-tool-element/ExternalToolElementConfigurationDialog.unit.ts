@@ -41,8 +41,8 @@ describe("ExternalToolElementConfigurationDialog", () => {
 						template: "<div></div>",
 						setup() {
 							return {
-								fetchData: jest.fn(),
-								clearData: jest.fn(),
+								fetchData: vi.fn(),
+								clearData: vi.fn(),
 							};
 						},
 					},

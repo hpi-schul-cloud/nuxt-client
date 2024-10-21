@@ -32,7 +32,7 @@ describe("ImageDisplay", () => {
 		};
 
 		const isLightBoxOpen = ref(false);
-		const open = jest.fn();
+		const open = vi.fn();
 		mockedUseLightBox.mockReturnValue({ isLightBoxOpen, open });
 
 		mockedConvertDownloadToPreviewUrl.mockImplementation(

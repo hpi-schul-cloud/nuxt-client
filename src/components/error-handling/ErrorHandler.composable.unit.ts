@@ -28,7 +28,7 @@ keys.forEach((key) => (translationMap[key] = key));
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
-		useI18n: jest.fn().mockReturnValue({
+		useI18n: vi.fn().mockReturnValue({
 			t: (key: string) => {
 				return translationMap[key] || "error.generic";
 			},
@@ -80,7 +80,7 @@ describe("ErrorHandler.Composable", () => {
 				mockedIsAxiosError.mockReturnValueOnce(true);
 				const errorResponse = mockErrorResponse();
 
-				const handle404Mock = jest.fn();
+				const handle404Mock = vi.fn();
 
 				handleError(errorResponse, { 404: handle404Mock });
 
@@ -115,7 +115,7 @@ describe("ErrorHandler.Composable", () => {
 				mockedIsAxiosError.mockReturnValueOnce(true);
 				const errorResponse = mockErrorResponse();
 
-				const handleCallbackMock = jest.fn();
+				const handleCallbackMock = vi.fn();
 
 				handleAnyError(errorResponse, handleCallbackMock);
 

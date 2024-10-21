@@ -58,7 +58,7 @@ describe("copy module", () => {
 		describe("copy", () => {
 			it("should throw an error if copyResult is undefined", async () => {
 				const roomCopyMockApi = {
-					courseRoomsControllerCopyCourse: jest.fn(async () => ({})),
+					courseRoomsControllerCopyCourse: vi.fn(async () => ({})),
 				};
 				jest
 					.spyOn(serverApi, "CourseRoomsApiFactory")
@@ -81,7 +81,7 @@ describe("copy module", () => {
 			describe("copy a task", () => {
 				describe("should make a 'POST' request to the backend", () => {
 					const taskMockApi = {
-						taskControllerCopyTask: jest.fn(async () => ({ data: {} })),
+						taskControllerCopyTask: vi.fn(async () => ({ data: {} })),
 					};
 					jest
 						.spyOn(serverApi, "TaskApiFactory")
@@ -123,7 +123,7 @@ describe("copy module", () => {
 			describe("copy a course", () => {
 				it("should make a 'POST' request to the backend", async () => {
 					const roomCopyMockApi = {
-						courseRoomsControllerCopyCourse: jest.fn(async () => ({
+						courseRoomsControllerCopyCourse: vi.fn(async () => ({
 							data: {},
 						})),
 					};
@@ -151,7 +151,7 @@ describe("copy module", () => {
 			describe("copy a lesson", () => {
 				it("should make a 'POST' request to the backend", async () => {
 					const roomCopyMockApi = {
-						courseRoomsControllerCopyLesson: jest.fn(async () => ({
+						courseRoomsControllerCopyLesson: vi.fn(async () => ({
 							data: {},
 						})),
 					};
@@ -175,7 +175,7 @@ describe("copy module", () => {
 			describe("copy a board", () => {
 				it("should make a 'POST' request to the backend", async () => {
 					const boardCopyMockApi = {
-						boardControllerCopyBoard: jest.fn(async () => ({ data: {} })),
+						boardControllerCopyBoard: vi.fn(async () => ({ data: {} })),
 					};
 					jest
 						.spyOn(serverApi, "BoardApiFactory")
@@ -198,7 +198,7 @@ describe("copy module", () => {
 		describe("validate share token", () => {
 			it("should validate share token by using the api", async () => {
 				const shareApiMock = {
-					shareTokenControllerLookupShareToken: jest.fn(async () => ({
+					shareTokenControllerLookupShareToken: vi.fn(async () => ({
 						data: {},
 					})),
 				};
@@ -222,7 +222,7 @@ describe("copy module", () => {
 		describe("import a course", () => {
 			it("should import a course by using the shareApi", async () => {
 				const shareApiMock = {
-					shareTokenControllerImportShareToken: jest.fn(async () => ({
+					shareTokenControllerImportShareToken: vi.fn(async () => ({
 						data: {},
 					})),
 				};
@@ -250,7 +250,7 @@ describe("copy module", () => {
 
 			it("should throw an error if copyResult is undefined", async () => {
 				const shareApiMock = {
-					shareTokenControllerImportShareToken: jest.fn(async () => ({})),
+					shareTokenControllerImportShareToken: vi.fn(async () => ({})),
 				};
 				jest
 					.spyOn(serverApi, "ShareTokenApiFactory")
@@ -274,7 +274,7 @@ describe("copy module", () => {
 		describe("import a lesson", () => {
 			it("should import a lesson by using the shareApi", async () => {
 				const shareApiMock = {
-					shareTokenControllerImportShareToken: jest.fn(async () => ({
+					shareTokenControllerImportShareToken: vi.fn(async () => ({
 						data: {},
 					})),
 				};
@@ -302,7 +302,7 @@ describe("copy module", () => {
 
 			it("should throw an error if copyResult is undefined", async () => {
 				const shareApiMock = {
-					shareTokenControllerImportShareToken: jest.fn(async () => ({})),
+					shareTokenControllerImportShareToken: vi.fn(async () => ({})),
 				};
 				jest
 					.spyOn(serverApi, "ShareTokenApiFactory")

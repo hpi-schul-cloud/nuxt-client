@@ -16,7 +16,7 @@ import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 jest.mock("@data-group", () => {
 	return {
 		...jest.requireActual("@data-group"),
-		useGroupListState: jest.fn(),
+		useGroupListState: vi.fn(),
 	};
 });
 

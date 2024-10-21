@@ -11,7 +11,7 @@ import {
 } from "vuetify/lib/components/index.mjs";
 import RoomDotMenu from "./RoomDotMenu.vue";
 
-const action = jest.fn();
+const action = vi.fn();
 const testProps = {
 	menuItems: [
 		{

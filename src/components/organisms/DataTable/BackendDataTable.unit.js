@@ -416,7 +416,7 @@ describe("@/components/organisms/DataTable/BackendDataTable", () => {
 			it("can trigger on selected rows", async () => {
 				const totalSelections = testData.length;
 				const selection = [...Array(totalSelections).keys()].map(String);
-				const testAction = jest.fn();
+				const testAction = vi.fn();
 				const actionLabel = "TestAction";
 				const wrapper = getWrapper({
 					rowsSelectable: true,

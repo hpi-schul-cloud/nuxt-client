@@ -38,10 +38,10 @@ describe("loggedOutLayout", () => {
 
 		const $route = { path: "home" };
 		const $router = {
-			push: jest.fn(),
+			push: vi.fn(),
 			currentRoute: { value: $route },
-			replace: jest.fn(),
-			afterEach: jest.fn(),
+			replace: vi.fn(),
+			afterEach: vi.fn(),
 		};
 		useRouterMock.mockReturnValue($router);
 

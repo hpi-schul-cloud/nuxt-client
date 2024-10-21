@@ -45,9 +45,9 @@ const getStoreOptions = () => ({
 		"ldap-config": {
 			namespaced: true,
 			actions: {
-				getData: jest.fn(),
-				verifyData: jest.fn(),
-				verifyExisting: jest.fn(),
+				getData: vi.fn(),
+				verifyData: vi.fn(),
+				verifyExisting: vi.fn(),
 			},
 			getters: {
 				getData: () => ({ ...mockInputData }),
@@ -68,7 +68,7 @@ const getStoreOptions = () => ({
 
 describe("ldap/config", () => {
 	const setup = ({ route, storeOptions }) => {
-		window.scrollTo = jest.fn();
+		window.scrollTo = vi.fn();
 
 		const mockStore = createStore(storeOptions);
 

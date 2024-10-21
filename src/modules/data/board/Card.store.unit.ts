@@ -108,7 +108,7 @@ describe("CardStore", () => {
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
 		mockedBoardFocusHandler.mockReturnValue(mockedBoardFocusCalls);
 
-		setEditModeId = jest.fn();
+		setEditModeId = vi.fn();
 		editModeId = ref(undefined);
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
@@ -146,10 +146,10 @@ describe("CardStore", () => {
 
 	const focusSetup = (id: string) => {
 		const focusedId = ref<string | undefined>(id);
-		const mockSetFocus = jest.fn().mockImplementation((id: string) => {
+		const mockSetFocus = vi.fn().mockImplementation((id: string) => {
 			focusedId.value = id;
 		});
-		const mockForceFocus = jest.fn();
+		const mockForceFocus = vi.fn();
 		mockedBoardFocusHandler.mockReturnValue({
 			setFocus: mockSetFocus,
 			forceFocus: mockForceFocus,

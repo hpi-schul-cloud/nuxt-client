@@ -10,15 +10,15 @@ describe("@ui-layout/PageShare", () => {
 	const setup = (attrs = {}) => {
 		const windowMock = createMock<Window>({
 			document: {
-				write: jest.fn().mockImplementation(() => "<img></img>"),
+				write: vi.fn().mockImplementation(() => "<img></img>"),
 			},
-			print: jest.fn(),
-			close: jest.fn(),
+			print: vi.fn(),
+			close: vi.fn(),
 		});
 
 		Object.defineProperty(window, "open", {
 			configurable: true,
-			value: jest.fn().mockReturnValue(windowMock),
+			value: vi.fn().mockReturnValue(windowMock),
 		});
 
 		const wrapper = mount(PageShare, {
@@ -55,7 +55,7 @@ describe("@ui-layout/PageShare", () => {
 		it("should copy link to clipboard", async () => {
 			Object.defineProperty(navigator, "clipboard", {
 				value: {
-					writeText: jest.fn(),
+					writeText: vi.fn(),
 				},
 			});
 

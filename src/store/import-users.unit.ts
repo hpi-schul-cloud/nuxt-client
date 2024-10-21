@@ -35,9 +35,7 @@ describe("import-users store actions", () => {
 		describe("fetchAllUsers", () => {
 			it("should request a list of unmatched users", async () => {
 				mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(
-						() => mockResponse
-					),
+					importUserControllerFindAllUnmatchedUsers: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -59,9 +57,7 @@ describe("import-users store actions", () => {
 
 			it("should request list of unmatched users with filter", async () => {
 				mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(
-						() => mockResponse
-					),
+					importUserControllerFindAllUnmatchedUsers: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -84,9 +80,7 @@ describe("import-users store actions", () => {
 
 			it("should request list of unmatched users with pagination", async () => {
 				mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(
-						() => mockResponse
-					),
+					importUserControllerFindAllUnmatchedUsers: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -111,7 +105,7 @@ describe("import-users store actions", () => {
 			it("should handle business errors", async () => {
 				const error = { statusCode: "500", message: "foo" };
 				const mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(() =>
+					importUserControllerFindAllUnmatchedUsers: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -131,9 +125,7 @@ describe("import-users store actions", () => {
 		describe("fetchTotalUnmatched", () => {
 			it("should request list a unmatched users", async () => {
 				mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(
-						() => mockResponse
-					),
+					importUserControllerFindAllUnmatchedUsers: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -151,7 +143,7 @@ describe("import-users store actions", () => {
 			it("should handle buness error", async () => {
 				const error = { statusCode: "500", message: "foo" };
 				const mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(() =>
+					importUserControllerFindAllUnmatchedUsers: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -171,7 +163,7 @@ describe("import-users store actions", () => {
 		describe("fetchAllImportUsers", () => {
 			it("should request a list of import users", async () => {
 				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
+					importUserControllerFindAllImportUsers: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -207,7 +199,7 @@ describe("import-users store actions", () => {
 
 			it("featch importusers with filters", async () => {
 				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
+					importUserControllerFindAllImportUsers: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -254,7 +246,7 @@ describe("import-users store actions", () => {
 
 			it("featch importusers with sorting by firstName", async () => {
 				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
+					importUserControllerFindAllImportUsers: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -291,7 +283,7 @@ describe("import-users store actions", () => {
 
 			it("featch importusers with sorting by lastName desc", async () => {
 				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
+					importUserControllerFindAllImportUsers: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -329,7 +321,7 @@ describe("import-users store actions", () => {
 
 			it("featch importusers with pagination", async () => {
 				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
+					importUserControllerFindAllImportUsers: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -368,7 +360,7 @@ describe("import-users store actions", () => {
 			it("should handle buness error", async () => {
 				const error = { statusCode: "500", message: "foo" };
 				const mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() =>
+					importUserControllerFindAllImportUsers: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -388,7 +380,7 @@ describe("import-users store actions", () => {
 		describe("fetchTotalMatched", () => {
 			it("should request import users which are matched", async () => {
 				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
+					importUserControllerFindAllImportUsers: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -420,7 +412,7 @@ describe("import-users store actions", () => {
 			it("should handle buness error", async () => {
 				const error = { statusCode: "500", message: "foo" };
 				const mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() =>
+					importUserControllerFindAllImportUsers: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -440,7 +432,7 @@ describe("import-users store actions", () => {
 		describe("deleteMatch", () => {
 			it("should call removeMatch and return new importUser record without match", async () => {
 				mockApi = {
-					importUserControllerRemoveMatch: jest.fn(() => mockResponse),
+					importUserControllerRemoveMatch: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -460,7 +452,7 @@ describe("import-users store actions", () => {
 			it("should handle buness error", async () => {
 				const error = { statusCode: "500", message: "foo" };
 				const mockApi = {
-					importUserControllerRemoveMatch: jest.fn(() =>
+					importUserControllerRemoveMatch: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -481,7 +473,7 @@ describe("import-users store actions", () => {
 		describe("saveMatch", () => {
 			it("should call SetMatch with payload and return importUser record with match", async () => {
 				mockApi = {
-					importUserControllerSetMatch: jest.fn(() => mockResponse),
+					importUserControllerSetMatch: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -500,7 +492,7 @@ describe("import-users store actions", () => {
 			it("should handle error", async () => {
 				const error = { statusCode: "500", message: "foo" };
 				const mockApi = {
-					importUserControllerSetMatch: jest.fn(() =>
+					importUserControllerSetMatch: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -520,7 +512,7 @@ describe("import-users store actions", () => {
 		describe("saveFlag", function () {
 			it("should  call UpdateFlag with flag=true and return importUser with flag=true", async () => {
 				mockApi = {
-					importUserControllerUpdateFlag: jest.fn(() => mockResponse),
+					importUserControllerUpdateFlag: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -537,7 +529,7 @@ describe("import-users store actions", () => {
 			});
 			it("should call UpdateFlag with flag=false and return importUser with flag=false", async () => {
 				mockApi = {
-					importUserControllerUpdateFlag: jest.fn(() => mockResponse),
+					importUserControllerUpdateFlag: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -555,7 +547,7 @@ describe("import-users store actions", () => {
 
 			it("should update the state", async () => {
 				mockApi = {
-					importUserControllerUpdateFlag: jest.fn(() => mockResponse),
+					importUserControllerUpdateFlag: vi.fn(() => mockResponse),
 				};
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
@@ -607,7 +599,7 @@ describe("import-users store actions", () => {
 			it("should handle business error", async () => {
 				const error = { statusCode: "500", message: "foo" };
 				const mockApi = {
-					importUserControllerUpdateFlag: jest.fn(() =>
+					importUserControllerUpdateFlag: vi.fn(() =>
 						Promise.reject({ ...error })
 					),
 				};
@@ -627,7 +619,7 @@ describe("import-users store actions", () => {
 			describe("when fetching the data", () => {
 				const setup = () => {
 					mockApi = {
-						importUserControllerPopulateImportUsers: jest.fn(),
+						importUserControllerPopulateImportUsers: vi.fn(),
 					};
 
 					spy.mockReturnValue(
@@ -651,7 +643,7 @@ describe("import-users store actions", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 					mockApi = {
-						importUserControllerPopulateImportUsers: jest.fn(() =>
+						importUserControllerPopulateImportUsers: vi.fn(() =>
 							Promise.reject(error)
 						),
 					};
@@ -683,7 +675,7 @@ describe("import-users store actions", () => {
 			describe("when action is called", () => {
 				const setup = () => {
 					mockApi = {
-						importUserControllerCancelMigration: jest.fn(),
+						importUserControllerCancelMigration: vi.fn(),
 					};
 
 					spy.mockReturnValue(
@@ -707,7 +699,7 @@ describe("import-users store actions", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 					mockApi = {
-						importUserControllerCancelMigration: jest.fn(() =>
+						importUserControllerCancelMigration: vi.fn(() =>
 							Promise.reject(error)
 						),
 					};
@@ -739,7 +731,7 @@ describe("import-users store actions", () => {
 			describe("when action is called", () => {
 				const setup = () => {
 					mockApi = {
-						importUserControllerClearAllAutoMatches: jest.fn(),
+						importUserControllerClearAllAutoMatches: vi.fn(),
 					};
 
 					spy.mockReturnValue(
@@ -763,7 +755,7 @@ describe("import-users store actions", () => {
 					const error = axiosErrorFactory.build();
 					const apiError = mapAxiosErrorToResponseError(error);
 					mockApi = {
-						importUserControllerClearAllAutoMatches: jest.fn(() =>
+						importUserControllerClearAllAutoMatches: vi.fn(() =>
 							Promise.reject(error)
 						),
 					};

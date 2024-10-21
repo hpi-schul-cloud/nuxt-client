@@ -12,7 +12,7 @@ export default function setupDeleteConfirmationComposableMock(
 	const { askDeleteConfirmationMock } = props;
 	const deleteConfirmationMock = jest.mocked(useDeleteConfirmationDialog);
 
-	const askDeleteConfirmation = askDeleteConfirmationMock ?? jest.fn();
+	const askDeleteConfirmation = askDeleteConfirmationMock ?? vi.fn();
 	const isDeleteDialogOpen = ref(false);
 
 	const mocks = {

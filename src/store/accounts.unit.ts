@@ -28,8 +28,8 @@ describe("accounts module", () => {
 		});
 		it("getTTL should call resetBusinessError and setStatus mutations", async () => {
 			const accountsModule = new AccountsModule({});
-			const spyResetError = jest.fn();
-			const spySetStatus = jest.fn();
+			const spyResetError = vi.fn();
+			const spySetStatus = vi.fn();
 
 			accountsModule.resetBusinessError = spyResetError;
 			accountsModule.setStatus = spySetStatus;
@@ -47,8 +47,8 @@ describe("accounts module", () => {
 		});
 		it("resetJwtTimer should call resetBusinessError and setStatus mutations", async () => {
 			const accountsModule = new AccountsModule({});
-			const spyResetError = jest.fn();
-			const spySetStatus = jest.fn();
+			const spyResetError = vi.fn();
+			const spySetStatus = vi.fn();
 
 			accountsModule.resetBusinessError = spyResetError;
 			accountsModule.setStatus = spySetStatus;

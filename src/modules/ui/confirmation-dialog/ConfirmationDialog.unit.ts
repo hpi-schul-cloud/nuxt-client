@@ -10,8 +10,8 @@ const mockedUseInternalConfirmationDialog = jest.mocked(
 );
 
 describe("DeleteConfirmation", () => {
-	const confirmSpy = jest.fn();
-	const cancelSpy = jest.fn();
+	const confirmSpy = vi.fn();
+	const cancelSpy = vi.fn();
 	const setup = (options: {
 		isDeleteModalOpen?: boolean;
 		title?: string;
@@ -20,7 +20,7 @@ describe("DeleteConfirmation", () => {
 		mockedUseInternalConfirmationDialog.mockReturnValue({
 			confirm: confirmSpy,
 			cancel: cancelSpy,
-			askInternal: jest.fn(),
+			askInternal: vi.fn(),
 			dialogOptions: ref({ message: "TestMessage" }),
 			isDialogOpen: ref(true),
 		});

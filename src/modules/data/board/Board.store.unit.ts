@@ -62,7 +62,7 @@ const useRouteMock = <jest.Mock>useRoute;
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
-		useI18n: () => ({ t: jest.fn().mockImplementation((key) => key) }),
+		useI18n: () => ({ t: vi.fn().mockImplementation((key) => key) }),
 	};
 });
 
@@ -113,7 +113,7 @@ describe("BoardStore", () => {
 			createMock<ReturnType<typeof useCardSocketApi>>();
 		mockedUseCardSocketApi.mockReturnValue(mockedCardSocketApiActions);
 
-		setEditModeId = jest.fn();
+		setEditModeId = vi.fn();
 		mockedSharedEditMode.mockReturnValue({
 			setEditModeId,
 			editModeId: ref(undefined),
@@ -122,7 +122,7 @@ describe("BoardStore", () => {
 
 		mockUseSharedLastCreatedElement.mockReturnValue({
 			lastCreatedElementId: computed(() => "element-id"),
-			resetLastCreatedElementId: jest.fn(),
+			resetLastCreatedElementId: vi.fn(),
 		});
 
 		mockedBoardFocusCalls =
@@ -169,10 +169,10 @@ describe("BoardStore", () => {
 
 	const focusSetup = (id: string) => {
 		const focusedId = ref<string | undefined>(id);
-		const mockSetFocus = jest.fn().mockImplementation((id: string) => {
+		const mockSetFocus = vi.fn().mockImplementation((id: string) => {
 			focusedId.value = id;
 		});
-		const mockForceFocus = jest.fn();
+		const mockForceFocus = vi.fn();
 		mockedBoardFocusHandler.mockReturnValue({
 			setFocus: mockSetFocus,
 			forceFocus: mockForceFocus,

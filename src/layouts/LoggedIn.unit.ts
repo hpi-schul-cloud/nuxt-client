@@ -94,8 +94,8 @@ const defineWindowWidth = (width = 1564) => {
 	window.dispatchEvent(new Event("resize"));
 };
 
-const mockGetLocalStorage = jest.fn();
-const mockSetLocalStorage = jest.fn();
+const mockGetLocalStorage = vi.fn();
+const mockSetLocalStorage = vi.fn();
 Object.defineProperty(window, "localStorage", {
 	value: {
 		getItem: mockGetLocalStorage,

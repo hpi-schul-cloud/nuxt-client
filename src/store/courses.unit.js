@@ -9,14 +9,14 @@ describe("courses store", () => {
 		setupStores({ notifierModule: NotifierModule });
 	});
 	describe("removeCourseItem action", () => {
-		const dispatch = jest.fn();
+		const dispatch = vi.fn();
 
 		const storeContext = {
 			dispatch,
 		};
 		coursesStore.actions.app = {
 			i18n: {
-				t: jest.fn(),
+				t: vi.fn(),
 			},
 		};
 

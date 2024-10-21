@@ -69,7 +69,7 @@ describe("env-config module", () => {
 						.mockReturnValue(fileApi);
 					fileApi.publicConfig.mockResolvedValueOnce(fileStorageConfigResponse);
 
-					const contentInitMock = jest.fn();
+					const contentInitMock = vi.fn();
 					const contentModuleMock = {
 						...ContentModule,
 						actions: {
@@ -78,7 +78,7 @@ describe("env-config module", () => {
 						},
 					};
 
-					const filePathsInitMock = jest.fn();
+					const filePathsInitMock = vi.fn();
 					const filePathsModuleMock = {
 						...FilePathsModule,
 						actions: {
@@ -174,7 +174,7 @@ describe("env-config module", () => {
 						.mockReturnValue(fileApi);
 					fileApi.publicConfig.mockRejectedValueOnce(error);
 
-					const contentModuleInitMock = jest.fn();
+					const contentModuleInitMock = vi.fn();
 					const contentModuleMock = {
 						...ContentModule,
 						actions: {
@@ -183,7 +183,7 @@ describe("env-config module", () => {
 						},
 					};
 
-					const filePathsModuleInitMock = jest.fn();
+					const filePathsModuleInitMock = vi.fn();
 					const filePathsModuleMock = {
 						...FilePathsModule,
 						actions: {
@@ -192,7 +192,7 @@ describe("env-config module", () => {
 						},
 					};
 
-					const setErrorMock = jest.fn();
+					const setErrorMock = vi.fn();
 					const applicationErrorModuleMock = {
 						...ApplicationErrorModule,
 						actions: {
@@ -294,7 +294,7 @@ describe("env-config module", () => {
 						.mockReturnValue(fileApi);
 					fileApi.publicConfig.mockResolvedValueOnce(fileStorageConfigResponse);
 
-					const contentInitMock = jest.fn();
+					const contentInitMock = vi.fn();
 					const contentModuleMock = {
 						...ContentModule,
 						actions: {
@@ -303,7 +303,7 @@ describe("env-config module", () => {
 						},
 					};
 
-					const filePathsInitMock = jest.fn();
+					const filePathsInitMock = vi.fn();
 					const filePathsModuleMock = {
 						...FilePathsModule,
 						actions: {

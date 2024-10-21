@@ -120,7 +120,7 @@ let notifierModuleMock;
 
 const defaultMocks = {
 	$route: { query: {} },
-	$router: { replace: jest.fn() },
+	$router: { replace: vi.fn() },
 };
 
 const getWrapper = (device = "desktop", options = {}) => {

@@ -49,7 +49,7 @@ const mockedUseForceRender = jest.mocked(useForceRender);
 
 mockUseSharedLastCreatedElement.mockReturnValue({
 	lastCreatedElementId: computed(() => "element-id"),
-	resetLastCreatedElementId: jest.fn(),
+	resetLastCreatedElementId: vi.fn(),
 });
 
 describe("BoardColumn", () => {
