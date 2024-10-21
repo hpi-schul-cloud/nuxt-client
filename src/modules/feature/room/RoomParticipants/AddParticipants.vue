@@ -1,14 +1,17 @@
 <template>
 	<v-card min-width="480" max-height="480">
 		<template v-slot:prepend>
-			<v-card-title data-testid="dialog-title" class="dialog-title pt-4">
+			<!-- <v-card-title data-testid="dialog-title" class="dialog-title pt-4">
 				{{ t("pages.rooms.participants.addParticipants") }}
-			</v-card-title>
+			</v-card-title> -->
+			<div ref="textTitle" class="text-h4 mt-2">
+				{{ t("pages.rooms.participants.addParticipants") }}
+			</div>
 		</template>
 
 		<template v-slot:default>
 			<div class="ml-6 mr-6">
-				<div class="mt-4">
+				<div class="mt-2">
 					<v-autocomplete
 						ref="autoCompleteSchool"
 						v-model="school"
@@ -20,6 +23,7 @@
 						menu-icon=""
 						color="primary"
 						bg-color="white"
+						variant="underlined"
 					/>
 				</div>
 
@@ -36,6 +40,7 @@
 						density="comfortable"
 						color="primary"
 						bg-color="white"
+						variant="underlined"
 					/>
 				</div>
 
@@ -53,6 +58,7 @@
 						chips
 						closable-chips
 						clear-on-select
+						variant="underlined"
 					/>
 				</div>
 			</div>
@@ -63,7 +69,7 @@
 			<div class="mr-4 mb-3">
 				<v-btn
 					ref="cancelButton"
-					class="ms-auto"
+					class="ms-auto mr-2"
 					color="primary"
 					:text="t('common.actions.cancel')"
 					@click="onClose"
