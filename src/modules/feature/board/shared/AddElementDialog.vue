@@ -34,9 +34,9 @@
 </template>
 
 <script setup lang="ts">
+import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { computed, ComputedRef } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
-import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 
 const { isDialogOpen, closeDialog, elementTypeOptions } =
 	useSharedElementTypeSelection();

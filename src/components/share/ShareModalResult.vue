@@ -15,7 +15,7 @@
 					class="d-sm-none d-flex"
 					data-testid="mobilePlatformAction"
 					:icon="mdiShareVariantOutline"
-					label="common.actions.share"
+					:label="$t('common.actions.share')"
 					@click.stop="onShareMobilePlatflorm(shareUrl)"
 				/>
 
@@ -23,7 +23,7 @@
 					class="d-sm-flex d-none"
 					data-testid="shareMailAction"
 					:icon="mdiEmailOutline"
-					label="components.molecules.share.result.mailShare"
+					:label="$t('components.molecules.share.result.mailShare')"
 					@click.stop="onMailShareUrl(shareUrl, type)"
 				/>
 
@@ -31,7 +31,7 @@
 					class="d-sm-flex d-none"
 					data-testid="copyAction"
 					:icon="mdiContentCopy"
-					label="components.molecules.share.result.copyClipboard"
+					:label="$t('components.molecules.share.result.copyClipboard')"
 					@click.stop="onCopy(shareUrl)"
 				/>
 
@@ -39,7 +39,7 @@
 					class="d-flex"
 					data-testid="qrCodeAction"
 					:icon="mdiQrcode"
-					label="components.molecules.share.result.qrCodeScan"
+					:label="$t('components.molecules.share.result.qrCodeScan')"
 					@click.stop="onShowQrCode"
 				/>
 			</div>

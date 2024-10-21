@@ -13,6 +13,7 @@ import CourseRoomDetailsModule from "@/store/course-room-details";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
 import { Board } from "@/types/board/Board";
 import {
@@ -24,6 +25,7 @@ import {
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@/utils/mock-store-module";
@@ -241,6 +243,9 @@ describe("Board", () => {
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomId: "room1",
 		});
+		const schoolExternalToolsModule = createModuleMocks(
+			SchoolExternalToolsModule
+		);
 		return {
 			notifierModule,
 			envConfigModule,
@@ -249,6 +254,7 @@ describe("Board", () => {
 			shareModule,
 			courseRoomDetailsModule,
 			copyResultId,
+			schoolExternalToolsModule,
 		};
 	};
 
@@ -265,6 +271,7 @@ describe("Board", () => {
 			shareModule,
 			courseRoomDetailsModule,
 			copyResultId,
+			schoolExternalToolsModule,
 		} = setupProvideModules(options?.envs);
 
 		const board = createBoard({
@@ -296,6 +303,8 @@ describe("Board", () => {
 					loadingStateModule,
 					[SHARE_MODULE_KEY.valueOf()]: shareModule,
 					[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
+					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
+						schoolExternalToolsModule,
 				},
 			},
 			propsData: { boardId: board.id },
@@ -332,6 +341,12 @@ describe("Board", () => {
 			expect(wrapper).toBeDefined();
 
 			expect(wrapperVM.board).toStrictEqual(board);
+		});
+
+		it("should call cardStore loadPreferredTools action", () => {
+			const { cardStore } = setup();
+
+			expect(cardStore.loadPreferredTools).toHaveBeenCalled();
 		});
 
 		it("should be found in the dom", () => {

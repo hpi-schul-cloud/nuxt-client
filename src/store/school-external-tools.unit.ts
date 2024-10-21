@@ -8,6 +8,7 @@ import * as serverApi from "@/serverApi/v3/api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	axiosErrorFactory,
+	contextExternalToolConfigurationTemplateFactory,
 	customParameterResponseFactory,
 	mockApiResponse,
 	schoolExternalToolConfigurationStatusResponseFactory,
@@ -59,6 +60,27 @@ describe("SchoolExternalToolsModule", () => {
 
 					expect(module.getLoading).toEqual(true);
 				});
+			});
+		});
+
+		describe("getContextExternalToolConfigurationTemplate", () => {
+			const setup = () => {
+				const contextExternalToolConfigurationTemplate =
+					contextExternalToolConfigurationTemplateFactory.build();
+				module.setContextExternalToolConfigurationTemplate(
+					contextExternalToolConfigurationTemplate
+				);
+
+				return {
+					contextExternalToolConfigurationTemplate,
+				};
+			};
+			it("should return template", () => {
+				const { contextExternalToolConfigurationTemplate } = setup();
+
+				expect(module.getContextExternalToolConfigurationTemplate).toEqual(
+					contextExternalToolConfigurationTemplate
+				);
 			});
 		});
 	});
