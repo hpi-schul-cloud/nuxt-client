@@ -17,7 +17,7 @@ describe("FileContent", () => {
 	});
 
 	afterEach(() => {
-		jest.runOnlyPendingTimers();
+		vi.runOnlyPendingTimers();
 		vi.useRealTimers();
 	});
 

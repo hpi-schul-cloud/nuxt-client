@@ -28,7 +28,7 @@ describe("VideoConferenceModule", () => {
 	});
 
 	afterEach(() => {
-		jest.restoreAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	const mockApi = () => {

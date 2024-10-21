@@ -39,7 +39,7 @@ describe("GroupModule", () => {
 	});
 
 	afterEach(() => {
-		jest.restoreAllMocks();
+		vi.restoreAllMocks();
 	});
 
 	describe("getter/setter", () => {

@@ -89,7 +89,7 @@ describe("useCardSocketApi", () => {
 	});
 
 	afterEach(() => {
-		jest.runOnlyPendingTimers();
+		vi.runOnlyPendingTimers();
 		vi.useRealTimers();
 	});
 
