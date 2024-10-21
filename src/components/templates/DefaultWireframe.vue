@@ -52,7 +52,7 @@
 					</speed-dial-menu>
 				</slot>
 			</div>
-			<v-divider v-if="showDivider" class="mb-8 mx-n6" />
+			<v-divider v-if="showDivider" class="mx-n6" />
 		</div>
 		<v-container
 			:fluid="maxWidth !== 'nativ'"
