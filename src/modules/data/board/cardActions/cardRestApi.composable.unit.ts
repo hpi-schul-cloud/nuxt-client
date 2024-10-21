@@ -1,5 +1,4 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { createElementRequest } from "@/modules/data/board/cardActions/cardActions";
 import {
 	ContentElementType,
 	ExternalToolElementResponse,
@@ -35,6 +34,7 @@ import { useSharedEditMode } from "@util-board";
 import { AxiosResponse } from "axios";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
+import { Router, useRouter } from "vue-router";
 import { useBoardApi } from "../BoardApi.composable";
 import { useSharedCardRequestPool } from "../CardRequestPool.composable";
 import {
@@ -42,7 +42,6 @@ import {
 	UpdateCardTitleRequestPayload,
 } from "./cardActionPayload";
 import { useCardRestApi } from "./cardRestApi.composable";
-import { Router, useRouter } from "vue-router";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
