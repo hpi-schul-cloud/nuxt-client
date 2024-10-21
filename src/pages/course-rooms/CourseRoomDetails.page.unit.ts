@@ -222,7 +222,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	it("should fetch data", async () => {

@@ -84,7 +84,7 @@ describe("ExternalToolElementAlert", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when an error exists", () => {

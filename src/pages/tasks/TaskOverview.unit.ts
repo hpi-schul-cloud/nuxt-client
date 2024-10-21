@@ -29,7 +29,7 @@ describe("TaskOverview", () => {
 	};
 
 	beforeEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 		setupStores({
 			envConfigModule: EnvConfigModule,
 		});

@@ -181,7 +181,7 @@ describe("BoardStore", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getLastColumnIndex", () => {
@@ -405,7 +405,7 @@ describe("BoardStore", () => {
 
 		describe("when previous card needs to be focused", () => {
 			afterEach(() => {
-				jest.resetAllMocks();
+				vi.resetAllMocks();
 			});
 			describe("when the card is first element", () => {
 				it('should call "forceFocus" if already focused card is deleted', async () => {
@@ -486,7 +486,7 @@ describe("BoardStore", () => {
 
 		describe("when previous column needs to be focused", () => {
 			afterEach(() => {
-				jest.resetAllMocks();
+				vi.resetAllMocks();
 			});
 			describe("when the column is the first element", () => {
 				it('should call "forceFocus" if already focused column is deleted', async () => {

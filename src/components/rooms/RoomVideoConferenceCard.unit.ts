@@ -29,7 +29,7 @@ describe("RoomVideoConferenceCard", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("Title", () => {

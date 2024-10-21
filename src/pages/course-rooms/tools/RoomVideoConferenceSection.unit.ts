@@ -87,7 +87,7 @@ describe("RoomVideoConferenceSection", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the video conference is not running", () => {

@@ -160,7 +160,7 @@ describe("CardStore", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("fetchCardRequest", () => {
@@ -641,7 +641,7 @@ describe("CardStore", () => {
 
 	describe("deleteElementSuccess", () => {
 		afterEach(() => {
-			jest.resetAllMocks();
+			vi.resetAllMocks();
 		});
 		it("should not delete element if card is undefined", async () => {
 			const { cardStore, cardId, elements } = setup();

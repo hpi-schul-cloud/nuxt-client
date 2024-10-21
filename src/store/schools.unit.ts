@@ -46,7 +46,7 @@ describe("schools module", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("actions", () => {

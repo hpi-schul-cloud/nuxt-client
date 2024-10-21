@@ -17,7 +17,7 @@ const setupUseSharedLastCreatedElementMock = () => {
 
 describe("FileUpload", () => {
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when isEditMode is true", () => {

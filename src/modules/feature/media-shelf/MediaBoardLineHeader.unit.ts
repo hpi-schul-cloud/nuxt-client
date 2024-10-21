@@ -38,7 +38,7 @@ describe("MediaBoardLineHeader", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the title updated", () => {

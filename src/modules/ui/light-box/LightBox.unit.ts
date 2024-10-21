@@ -22,7 +22,7 @@ const mockedUseInternalLightBox = vi.mocked(useInternalLightBox);
 
 describe("LightBox", () => {
 	beforeEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const setup = (props: {

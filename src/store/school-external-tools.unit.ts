@@ -42,7 +42,7 @@ describe("SchoolExternalToolsModule", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getters", () => {

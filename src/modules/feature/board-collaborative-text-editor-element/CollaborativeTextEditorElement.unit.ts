@@ -63,7 +63,7 @@ describe("CollaborativeTextEditorElement", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when component is not in edit-mode", () => {

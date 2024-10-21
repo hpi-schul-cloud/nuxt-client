@@ -44,7 +44,7 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 
 describe("CollaborativeTextEditorApi Composable", () => {
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getUrl", () => {

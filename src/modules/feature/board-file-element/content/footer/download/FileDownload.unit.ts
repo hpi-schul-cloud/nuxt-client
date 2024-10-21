@@ -12,7 +12,7 @@ vi.mock("@/utils/fileHelper");
 
 describe("FileDownload", () => {
 	beforeEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const setup = () => {

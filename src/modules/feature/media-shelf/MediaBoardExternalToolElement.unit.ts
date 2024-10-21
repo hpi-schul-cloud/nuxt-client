@@ -102,7 +102,7 @@ describe("MediaBoardExternalToolElement", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when loading external tool data", () => {

@@ -22,7 +22,7 @@ describe("MediaBoardLineGhost", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the new line button is clicked", () => {

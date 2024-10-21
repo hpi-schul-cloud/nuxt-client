@@ -53,7 +53,7 @@ describe("FileAttributes", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	it("should be found in dom", () => {

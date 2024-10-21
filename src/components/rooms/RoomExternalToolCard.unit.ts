@@ -46,7 +46,7 @@ describe("RoomExternalToolCard", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 		vi.clearAllMocks();
 	});
 

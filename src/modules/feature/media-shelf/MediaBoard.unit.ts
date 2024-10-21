@@ -73,7 +73,7 @@ describe("MediaBoard", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the available line creates a new element on the board", () => {

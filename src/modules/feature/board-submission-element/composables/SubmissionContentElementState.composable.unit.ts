@@ -29,7 +29,7 @@ describe("SubmissionContentElementState.composable", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const setup = (

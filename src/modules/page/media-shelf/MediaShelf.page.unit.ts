@@ -61,7 +61,7 @@ describe("MediaShelfPage", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the page is loading", () => {

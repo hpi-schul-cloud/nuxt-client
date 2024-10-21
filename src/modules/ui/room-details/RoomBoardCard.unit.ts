@@ -109,7 +109,7 @@ describe("RoomBoardCard", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when a board card is rendered", () => {

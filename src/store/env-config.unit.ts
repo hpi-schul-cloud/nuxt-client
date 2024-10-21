@@ -32,7 +32,7 @@ describe("env-config module", () => {
 	beforeEach(() => {
 		consoleWarnSpy = vi.spyOn(console, "warn").mockImplementation();
 		consoleErrorSpy = vi.spyOn(console, "error").mockImplementation();
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	afterEach(() => {

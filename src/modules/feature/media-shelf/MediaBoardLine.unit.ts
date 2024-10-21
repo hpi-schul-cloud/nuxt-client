@@ -57,7 +57,7 @@ describe("MediaBoardLine", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when rendering the line", () => {

@@ -56,7 +56,7 @@ describe("DeletedElement", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the user is not a teacher", () => {

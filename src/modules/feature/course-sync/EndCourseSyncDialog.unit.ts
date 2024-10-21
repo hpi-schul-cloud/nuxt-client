@@ -46,7 +46,7 @@ describe("EndCourseSyncDialog", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when clicking on cancel", () => {

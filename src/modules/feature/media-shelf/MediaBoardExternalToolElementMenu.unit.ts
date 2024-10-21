@@ -20,7 +20,7 @@ describe("MediaBoardExternalToolElementMenu", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("Delete Button", () => {

@@ -44,7 +44,7 @@ describe("UserLoginMigrationModule", () => {
 	});
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("getter/setter", () => {

@@ -52,7 +52,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	const setup = () => {

@@ -101,7 +101,7 @@ describe("BoardPageInformation.composable", () => {
 
 	describe("when board context does not exist", () => {
 		beforeEach(() => {
-			jest.resetAllMocks();
+			vi.resetAllMocks();
 		});
 
 		const setup = () => {

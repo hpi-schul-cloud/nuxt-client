@@ -133,7 +133,7 @@ describe("ExternalToolElement", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when the element is mounted", () => {

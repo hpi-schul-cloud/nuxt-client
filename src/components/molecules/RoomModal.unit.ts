@@ -27,7 +27,7 @@ describe("RoomModal", () => {
 	};
 
 	afterEach(() => {
-		jest.resetAllMocks();
+		vi.resetAllMocks();
 	});
 
 	describe("when modal is not open", () => {
