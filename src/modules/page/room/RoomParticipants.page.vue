@@ -10,13 +10,28 @@
 				{{ t("pages.rooms.participants.manageParticipants") }}
 			</h1>
 		</template>
-		<div class="mb-8 mt-12">
-			Hier könnte Text stehen oder ein wichtiger Hinweis, zum Beispiel: wo man
-			den Hilfeartikel zur Anzeige des eigenen Namens im zentralen Verzeichnis
-			findet.
+
+		<div class="mb-8 mt-12 mx-16">
+			Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können
+			hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im
+			eigenen Profil aktiviert haben
+			<a
+				href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
+				>(weitere Informationen)</a
+			>.
+		</div>
+		<div class="mx-16">
+			<ParticipantsTable :participants="participantsList" />
 		</div>
 		<div>
-			<ParticipantsTable :participants="participants" />
+			<v-dialog v-model="isParticipantsDialogOpen" width="auto" persistent>
+				<AddParticipants
+					:userList="potentialParticipants"
+					@close="onDialogClose"
+					@add:participants="onAddParticipants"
+					@update:role="onUpdateRole"
+				/>
+			</v-dialog>
 		</div>
 	</DefaultWireframe>
 </template>
@@ -26,25 +41,30 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted } from "vue";
+import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { useRoomDetailsStore } from "@data-room";
+import { useRoomDetailsStore, useParticipants, Participants } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
-import { participants } from "@data-room";
-import { ParticipantsTable } from "@feature-room";
+import { ParticipantsTable, AddParticipants } from "@feature-room";
+import { RoleName } from "@/serverApi/v3";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
 const { room } = storeToRefs(useRoomDetailsStore());
 
-if (room.value === undefined) {
-	// TODO: how to get room value from store?
-	// The store is resetted onUnmounted lifecycle hook in RoomDetails.page.vue
-	console.log("Room store not found");
-}
+const isParticipantsDialogOpen = ref(false);
+const {
+	potentialParticipants,
+	participants,
+	addParticipants,
+	fetchParticipants,
+	fetchPotentialUsers,
+} = useParticipants();
+
+const participantsList: Ref<Participants[]> = ref(participants);
 
 const pageTitle = computed(() =>
 	buildPageTitle(
@@ -68,14 +88,30 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	];
 });
 
-const onFabClick = () => {
-	console.log("FAB clicked");
+const onFabClick = async () => {
+	await fetchPotentialUsers(RoleName.Teacher);
+	isParticipantsDialogOpen.value = true;
+};
+
+const onDialogClose = () => {
+	isParticipantsDialogOpen.value = false;
+};
+
+const onAddParticipants = async (participantIds: string[]) => {
+	await addParticipants(participantIds);
+};
+
+const onUpdateRole = async (role: RoleName) => {
+	await fetchPotentialUsers(role);
 };
 
 onMounted(async () => {
-	// TODO: Is fetchRoom() necessary on every page load?
-	// Not reseting the store onUnmounted lifecycle hook in RoomDetails.page.vue can be a solution
-	await fetchRoom(route.params.id as string);
+	// call fetchRoom() again because the store is reset on unmounted lifecycle hook in RoomDetails.page.vue
+	if (room.value === undefined) {
+		console.log("Room store not found");
+		await fetchRoom(route.params.id as string);
+	}
+	await fetchParticipants();
 });
 
 const fabAction = {
