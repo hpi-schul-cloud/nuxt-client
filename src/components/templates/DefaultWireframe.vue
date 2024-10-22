@@ -168,7 +168,8 @@ const showDivider = computed(() => {
 .v-divider {
 	margin-right: -1.5rem;
 	margin-left: -1.5rem;
-	z-index: 1000;
+	position: relative;
+	z-index: 1;
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-up')} {
@@ -188,6 +189,7 @@ const showDivider = computed(() => {
 	.wireframe-fab {
 		position: relative;
 		top: 0;
+		z-index: 1000;
 	}
 }
 
@@ -196,6 +198,7 @@ const showDivider = computed(() => {
 		position: fixed !important;
 		bottom: 2rem;
 		right: 1rem;
+		z-index: 1000;
 	}
 }
 
