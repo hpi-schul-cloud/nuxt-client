@@ -14,6 +14,7 @@
 				color="primary"
 				size="large"
 				@click="onFabItemClick"
+				data-testid="create-course"
 			>
 				<v-icon v-if="icon && !isMenuOpen">{{ icon }}</v-icon>
 				<v-icon v-if="isMenuOpen">{{ mdiClose }}</v-icon>
@@ -43,6 +44,7 @@
 				:href="href"
 				:to="to"
 				@click="onFabClick"
+				data-testid="create-task"
 			>
 				<v-icon v-if="icon">{{ isMenuOpen ? mdiClose : icon }}</v-icon>
 				<span v-if="!isCollapsed" class="d-block"><slot /></span>

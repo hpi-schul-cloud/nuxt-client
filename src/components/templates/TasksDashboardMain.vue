@@ -280,7 +280,7 @@ export default {
 					title: this.$t("common.actions.create"),
 					href: "/homework/new?returnUrl=tasks",
 					ariaLabel: this.$t("common.actions.create"),
-					testId: "addTask",
+					dataTestId: "addTask",
 				};
 			}
 			return null;
