@@ -168,6 +168,7 @@ const showDivider = computed(() => {
 .v-divider {
 	margin-right: -1.5rem;
 	margin-left: -1.5rem;
+	z-index: 1000;
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-up')} {
