@@ -80,13 +80,27 @@ const props = defineProps({
 		required: true,
 	},
 });
-
 const emit = defineEmits(["save", "cancel"]);
-const { t } = useI18n();
 
+const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 
 const roomData = computed(() => props.room);
+
+// Validation
+const validationRules = computed(() => ({
+	roomData: {
+		name: {
+			required: helpers.withMessage(t("common.validation.required2"), required),
+		},
+	},
+}));
+
+const v$ = useVuelidate(
+	validationRules,
+	{ roomData },
+	{ $lazy: true, $autoDirty: true }
+);
 
 const onUpdateColor = () => {
 	v$.value.$touch();
@@ -102,17 +116,6 @@ const onUpdateEndDate = (newDate: string) => {
 	v$.value.$touch();
 };
 
-// Validation
-const rules = computed(() => ({
-	roomData: {
-		name: {
-			required: helpers.withMessage(t("common.validation.required2"), required),
-		},
-	},
-}));
-
-const v$ = useVuelidate(rules, { roomData }, { $lazy: true, $autoDirty: true });
-
 const onSave = async () => {
 	const valid = await v$.value.$validate();
 	if (!valid) {
@@ -123,7 +126,8 @@ const onSave = async () => {
 };
 
 const onCancel = async () => {
-	if (!v$.value.$anyDirty) emit("cancel");
+	const noChangesMade = !v$.value.$anyDirty;
+	if (noChangesMade) emit("cancel");
 
 	const shouldCancel = await askConfirmation({
 		message: t("ui-confirmation-dialog.ask-cancel-form"),
