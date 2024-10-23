@@ -42,44 +42,15 @@ module.exports = [
 			"src/h5pEditorApi/*",
 		],
 		rules: {
-			"schulcloud/material-icon-imports": "error",
-			"@typescript-eslint/no-explicit-any": "warn",
-			"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
-			"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",
-			"no-useless-escape": "error",
-			"no-irregular-whitespace": "error",
-			"no-undef": "warn",
-			"no-prototype-builtins": "error",
-			"no-empty": "error",
-			"no-var": "error",
-			"no-unused-vars": "off", // disable the base rule for @typescript-eslint/no-unused-vars
-			"prefer-const": "error",
-			"prettier/prettier": "error",
-			"@typescript-eslint/no-empty-function": "error",
-			"@typescript-eslint/no-require-imports": "off", // decide which option we want to use for this rule
 			"@typescript-eslint/ban-ts-comment": "error",
-			"@typescript-eslint/no-inferrable-types": "error",
+			"@typescript-eslint/no-empty-function": "error",
 			"@typescript-eslint/no-empty-object-type": [
 				"error",
 				{ allowInterfaces: "with-single-extends" },
 			],
-			// for now set this to warn because to much errors in catch blocks, need to decide if we want to us default option 'caughtErrors: all' for 'catch' blocks
-			"@typescript-eslint/no-unused-vars": "warn",
-			"vue/no-v-text-v-html-on-component": "error",
-			"vue/no-v-html": "error",
-			"vue/html-self-closing": [
-				"error",
-				{
-					html: {
-						void: "always",
-					},
-				},
-			],
-			"vue/no-setup-props-reactivity-loss": "error",
-			"vue/no-useless-template-attributes": "error",
-			"vue/no-mutating-props": "error",
-			// TODO - make a final decision about this rule
-			"vue/multi-word-component-names": "off",
+			"@typescript-eslint/no-explicit-any": "warn",
+			"@typescript-eslint/no-inferrable-types": "error",
+			"@typescript-eslint/no-require-imports": "off", // decide which option we want to use for this rule
 			"@typescript-eslint/no-restricted-imports": [
 				"warn",
 				{
@@ -126,6 +97,34 @@ module.exports = [
 					],
 				},
 			],
+			// for now set this to warn because to much errors in catch blocks, need to decide if we want to us default option 'caughtErrors: all' for 'catch' blocks
+			"@typescript-eslint/no-unused-vars": "warn",
+			"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
+			"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",
+			"no-empty": "error",
+			"no-irregular-whitespace": "error",
+			"no-prototype-builtins": "error",
+			"no-undef": "warn",
+			"no-unused-vars": "off", // disable the base rule for @typescript-eslint/no-unused-vars
+			"no-useless-escape": "error",
+			"no-var": "error",
+			"prefer-const": "error",
+			"prettier/prettier": "error",
+			"schulcloud/material-icon-imports": "error",
+			"vue/html-self-closing": [
+				"error",
+				{
+					html: {
+						void: "always",
+					},
+				},
+			],
+			"vue/multi-word-component-names": "off", // TODO - make a final decision about this rule
+			"vue/no-mutating-props": "error",
+			"vue/no-setup-props-reactivity-loss": "error",
+			"vue/no-useless-template-attributes": "error",
+			"vue/no-v-html": "error",
+			"vue/no-v-text-v-html-on-component": "error",
 		},
 	},
 	{
