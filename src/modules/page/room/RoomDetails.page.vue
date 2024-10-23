@@ -5,7 +5,7 @@
 			<DefaultWireframe max-width="short" :breadcrumbs="breadcrumbs">
 				<template #header v-if="room">
 					<div class="d-flex align-items-center">
-						<h1 class="text-h3 pl-2 mb-4" data-testid="room-title">
+						<h1 class="text-h3 mb-4" data-testid="room-title">
 							{{ room.name }}
 						</h1>
 						<KebabMenu
@@ -28,6 +28,20 @@
 									{{ $t("common.actions.edit") }}
 								</VListItemTitle>
 							</VListItem>
+
+							<VListItem
+								role="menuitem"
+								:to="`/rooms/${room.id}/participants`"
+								:aria-label="t('pages.rooms.participants.manageParticipants')"
+							>
+								<template #prepend>
+									<VIcon :icon="mdiAccountGroupOutline" />
+								</template>
+								<VListItemTitle>
+									{{ t("pages.rooms.participants.manageParticipants") }}
+								</VListItemTitle>
+							</VListItem>
+
 							<VListItem
 								role="menuitem"
 								data-testid="room-action-delete"
@@ -64,7 +78,11 @@ import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomDetails } from "@feature-room";
-import { mdiPencilOutline, mdiTrashCanOutline } from "@icons/material";
+import {
+	mdiPencilOutline,
+	mdiTrashCanOutline,
+	mdiAccountGroupOutline,
+} from "@icons/material";
 import {
 	ConfirmationDialog,
 	useDeleteConfirmationDialog,

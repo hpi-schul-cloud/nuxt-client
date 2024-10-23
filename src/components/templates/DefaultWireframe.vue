@@ -14,7 +14,7 @@
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
-				<h1 v-if="headline" class="text-h3 pl-2" :data-testid="dataTestid">
+				<h1 v-if="headline" class="text-h3" :data-testid="dataTestid">
 					{{ headline }}
 				</h1>
 			</slot>
@@ -29,6 +29,7 @@
 						:to="fabItems.to"
 						:aria-label="fabItems.ariaLabel"
 						:data-testid="fabItems.dataTestId"
+						@fab:clicked="onFabClicked"
 					>
 						{{ fabItems.title }}
 						<template #actions>
@@ -51,7 +52,7 @@
 					</speed-dial-menu>
 				</slot>
 			</div>
-			<div v-if="showBorder" class="border" />
+			<v-divider v-if="showDivider" class="mx-n6" />
 		</div>
 		<v-container
 			:fluid="maxWidth !== 'nativ'"
@@ -109,9 +110,14 @@ const props = defineProps({
 	},
 });
 
-defineEmits({
+const emit = defineEmits({
 	onFabItemClick: (event: string) => (event ? true : false),
+	"fab:clicked": () => true,
 });
+
+const onFabClicked = () => {
+	emit("fab:clicked");
+};
 
 defineOptions({
 	inheritAttrs: false,
@@ -120,14 +126,13 @@ const slots = useSlots();
 
 const isBelowLarge = useVuetifyBreakpoints().smallerOrEqual("lg");
 
-const showBorder = computed(() => {
+const showDivider = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);
 });
 </script>
 
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
-
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);
 }
@@ -138,6 +143,8 @@ const showBorder = computed(() => {
 
 .wireframe-header {
 	padding: 0 var(--space-lg);
+	display: flex;
+	flex-direction: column;
 }
 
 :deep(.v-application__wrap) {
@@ -145,7 +152,8 @@ const showBorder = computed(() => {
 }
 
 .main-content {
-	padding: 0 var(--space-lg);
+	padding: 0 var(--space-lg) var(--space-lg) var(--space-lg);
+	margin-top: var(--space-xl);
 }
 
 .container-short-width {
@@ -157,16 +165,14 @@ const showBorder = computed(() => {
 	margin: 0;
 }
 
-.border {
-	margin-right: calc(-1 * var(--space-lg));
-	margin-left: calc(-1 * var(--space-lg));
-	margin-bottom: var(--space-xl);
-	border-bottom: 2px solid rgba(0, 0, 0, 0.12);
+.v-divider {
+	margin-right: -1.5rem;
+	margin-left: -1.5rem;
 }
 
 @media #{map-get($display-breakpoints, 'sm-and-up')} {
 	.breadcrumbs-placeholder {
-		height: 24px;
+		height: 22px;
 	}
 }
 

@@ -8,6 +8,7 @@ import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import {
 	CreateCardRequestPayload,
+	DeleteBoardRequestPayload,
 	DeleteColumnRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
@@ -17,6 +18,10 @@ import {
 	UpdateColumnTitleRequestPayload,
 } from "./boardActionPayload";
 import * as BoardActions from "./boardActions";
+import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { useI18n } from "vue-i18n";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -33,6 +38,8 @@ export const useBoardRestApi = () => {
 		updateBoardTitleCall,
 		updateBoardVisibilityCall,
 	} = useBoardApi();
+
+	const { t } = useI18n();
 
 	const { setEditModeId } = useSharedEditMode();
 
@@ -62,11 +69,25 @@ export const useBoardRestApi = () => {
 			const board = await fetchBoardCall(payload.boardId);
 			boardStore.fetchBoardSuccess(board);
 		} catch (error) {
-			handleError(error, {
-				404: notifyWithTemplate("notLoaded", "board"),
-			});
+			applicationErrorModule.setError(
+				createApplicationError(
+					HttpStatusCode.NotFound,
+					t("components.board.error.404")
+				)
+			);
 		}
 		boardStore.setLoading(false);
+	};
+
+	const deleteBoardRequest = async (payload: DeleteBoardRequestPayload) => {
+		try {
+			await courseRoomDetailsModule.deleteBoard(payload.boardId);
+			boardStore.deleteBoardSuccess({ ...payload, isOwnAction: true });
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notDeleted", "board"),
+			});
+		}
 	};
 
 	const createColumnRequest = async () => {
@@ -244,6 +265,7 @@ export const useBoardRestApi = () => {
 		fetchBoardRequest,
 		createCardRequest,
 		createColumnRequest,
+		deleteBoardRequest,
 		deleteColumnRequest,
 		moveCardRequest,
 		moveColumnRequest,

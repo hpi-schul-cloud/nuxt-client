@@ -59,7 +59,7 @@ const drawingElement = ref<HTMLElement | null>(null);
 const element = toRef(props, "element");
 
 const sanitizedUrl = computed(() =>
-	sanitizeUrl(`/tldraw?roomName=${element.value.id}`)
+	sanitizeUrl(`/tldraw?parentId=${element.value.id}`)
 );
 
 useBoardFocusHandler(element.value.id, drawingElement);
