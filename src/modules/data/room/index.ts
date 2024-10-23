@@ -8,6 +8,7 @@ export { useRoomEditState } from "./RoomEdit.state";
 export {
 	mockParticipants,
 	mockPotentialParticipants,
+	mockSchools,
 } from "./roomParticipants/mockParticipantsList";
 export { useParticipants } from "./roomParticipants/participants.composable";
 export { Participants } from "./roomParticipants/types";

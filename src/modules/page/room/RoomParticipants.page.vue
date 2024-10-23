@@ -61,7 +61,7 @@ const {
 	participants,
 	addParticipants,
 	fetchParticipants,
-	fetchPotentialUsers,
+	getPotentialParticipants,
 } = useParticipants();
 
 const participantsList: Ref<Participants[]> = ref(participants);
@@ -89,7 +89,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const onFabClick = async () => {
-	await fetchPotentialUsers(RoleName.Teacher);
+	await getPotentialParticipants(RoleName.Teacher);
 	isParticipantsDialogOpen.value = true;
 };
 
@@ -102,7 +102,7 @@ const onAddParticipants = async (participantIds: string[]) => {
 };
 
 const onUpdateRole = async (role: RoleName) => {
-	await fetchPotentialUsers(role);
+	await getPotentialParticipants(role);
 };
 
 onMounted(async () => {

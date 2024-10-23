@@ -138,3 +138,8 @@ export const mockPotentialParticipants = [
 		fullName: "Weber, Michael",
 	},
 ];
+
+export const mockSchools = [
+	{ id: "1", name: "Paul-Gerhardt-Gymnasium" },
+	{ id: "2", name: "Another School" },
+];
