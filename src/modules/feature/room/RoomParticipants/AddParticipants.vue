@@ -55,6 +55,7 @@
 						item-value="id"
 						item-title="fullName"
 						multiple
+						:no-data-text="t('common.nodata')"
 						variant="underlined"
 					/>
 				</div>

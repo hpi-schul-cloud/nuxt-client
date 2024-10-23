@@ -5,7 +5,7 @@ export const mockParticipants = [
 		lastName: "Doe",
 		roleName: "Teacher",
 		classes: "1B",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Doe, John",
 	},
 	{
@@ -14,7 +14,7 @@ export const mockParticipants = [
 		lastName: "Smith",
 		roleName: "Teacher",
 		classes: "2A",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Smith, Jane",
 	},
 	{
@@ -23,7 +23,7 @@ export const mockParticipants = [
 		lastName: "Johnson",
 		roleName: "Teacher",
 		classes: "3A",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Johnson, Alice",
 	},
 	{
@@ -32,7 +32,7 @@ export const mockParticipants = [
 		lastName: "Brown",
 		roleName: "Teacher",
 		classes: "1A",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Brown, Bob",
 	},
 	{
@@ -41,7 +41,7 @@ export const mockParticipants = [
 		lastName: "Davis",
 		roleName: "Teacher",
 		classes: "1B",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Davis, Charlie",
 	},
 	{
@@ -50,7 +50,7 @@ export const mockParticipants = [
 		lastName: "Wilson",
 		roleName: "Teacher",
 		classes: "2B",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Wilson, David",
 	},
 	{
@@ -59,7 +59,7 @@ export const mockParticipants = [
 		lastName: "Martinez",
 		roleName: "Teacher",
 		classes: "3B",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Martinez, Eva",
 	},
 	{
@@ -68,7 +68,7 @@ export const mockParticipants = [
 		lastName: "Garcia",
 		roleName: "Teacher",
 		classes: "1C",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Garcia, Frank",
 	},
 	{
@@ -77,7 +77,7 @@ export const mockParticipants = [
 		lastName: "Hernandez",
 		roleName: "Teacher",
 		classes: "2C",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Hernandez, Grace",
 	},
 	{
@@ -86,7 +86,7 @@ export const mockParticipants = [
 		lastName: "Lopez",
 		roleName: "Teacher",
 		classes: "3C",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Lopez, Hank",
 	},
 ];
@@ -98,7 +98,7 @@ export const mockPotentialParticipants = [
 		lastName: "Müller",
 		roleName: "Teacher",
 		classes: "1A",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Müller, Hans",
 	},
 	{
@@ -107,7 +107,7 @@ export const mockPotentialParticipants = [
 		lastName: "Schmidt",
 		roleName: "Student",
 		classes: "2B",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Schmidt, Anna",
 	},
 	{
@@ -116,7 +116,7 @@ export const mockPotentialParticipants = [
 		lastName: "Schneider",
 		roleName: "Teacher",
 		classes: "3C",
-		school: "Paul-Gerhardt-Gymnasium",
+		schoolName: "Paul-Gerhardt-Gymnasium",
 		fullName: "Schneider, Peter",
 	},
 	{
@@ -125,7 +125,7 @@ export const mockPotentialParticipants = [
 		lastName: "Fischer",
 		roleName: "Student",
 		classes: "4D",
-		school: "Schule D",
+		schoolName: "Schule D",
 		fullName: "Fischer, Julia",
 	},
 	{
@@ -134,7 +134,7 @@ export const mockPotentialParticipants = [
 		lastName: "Weber",
 		roleName: "Teacher",
 		classes: "5E",
-		school: "Schule E",
+		schoolName: "Schule E",
 		fullName: "Weber, Michael",
 	},
 ];

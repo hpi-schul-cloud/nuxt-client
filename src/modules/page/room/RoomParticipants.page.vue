@@ -6,7 +6,7 @@
 		@fab:clicked="onFabClick"
 	>
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4 title-header">
+			<h1 class="text-h3 mb-4">
 				{{ t("pages.rooms.participants.manageParticipants") }}
 			</h1>
 		</template>
@@ -21,7 +21,7 @@
 			>.
 		</div>
 		<div class="mx-16">
-			<ParticipantsTable :participants="participantsList" />
+			<ParticipantsTable v-if="!isLoading" :participants="participantsList" />
 		</div>
 		<div>
 			<v-dialog v-model="isParticipantsDialogOpen" width="auto" persistent>
@@ -44,11 +44,11 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { useRoomDetailsStore, useParticipants, Participants } from "@data-room";
+import { useRoomDetailsStore, useParticipants } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName, RoomParticipantResponse } from "@/serverApi/v3";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -57,6 +57,7 @@ const { room } = storeToRefs(useRoomDetailsStore());
 
 const isParticipantsDialogOpen = ref(false);
 const {
+	isLoading,
 	potentialParticipants,
 	participants,
 	addParticipants,
@@ -64,7 +65,7 @@ const {
 	getPotentialParticipants,
 } = useParticipants();
 
-const participantsList: Ref<Participants[]> = ref(participants);
+const participantsList: Ref<RoomParticipantResponse[]> = ref(participants);
 
 const pageTitle = computed(() =>
 	buildPageTitle(
