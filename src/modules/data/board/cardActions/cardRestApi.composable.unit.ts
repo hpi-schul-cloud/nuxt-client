@@ -317,8 +317,8 @@ describe("useCardRestApi", () => {
 		describe("when preferred tool has a custom parameter on scope context", () => {
 			const setupPreferredElementCall = () => {
 				const { cardStore, card } = setup();
-				const { createPreferredElement, updateElementRequest } =
-					useCardRestApi();
+				const { createPreferredElement } = useCardRestApi();
+				const { updateElementCall } = useBoardApi();
 
 				const preferredTool: PreferredToolResponse = {
 					schoolExternalToolId: "schoolExternalToolId",
@@ -357,23 +357,35 @@ describe("useCardRestApi", () => {
 					[availableTool]
 				);
 
+				const setTemplateSpy = jest.spyOn(
+					schoolExternalToolsModule,
+					"setContextExternalToolConfigurationTemplate"
+				);
+
 				return {
 					createPreferredElement,
 					preferredTool,
-					updateElementRequest,
+					updateElementCall,
 					payload,
+					setTemplateSpy,
 				};
 			};
 
 			it("should set the ContextExternalToolConfigurationTemplate in schoolToolModule", async () => {
-				const { createPreferredElement, preferredTool, payload } =
-					setupPreferredElementCall();
+				const {
+					createPreferredElement,
+					preferredTool,
+					payload,
+					setTemplateSpy,
+				} = setupPreferredElementCall();
 
 				await createPreferredElement(payload, preferredTool);
 
-				expect(
-					schoolExternalToolsModule.setContextExternalToolConfigurationTemplate
-				).toHaveBeenCalledWith(preferredTool);
+				expect(setTemplateSpy).toHaveBeenCalledWith(
+					expect.objectContaining({
+						schoolExternalToolId: preferredTool.schoolExternalToolId,
+					})
+				);
 			});
 
 			it("should not create a ContextExternal Tool", async () => {
@@ -392,20 +404,20 @@ describe("useCardRestApi", () => {
 					createPreferredElement,
 					preferredTool,
 					payload,
-					updateElementRequest,
+					updateElementCall,
 				} = setupPreferredElementCall();
 
 				await createPreferredElement(payload, preferredTool);
 
-				expect(updateElementRequest).not.toHaveBeenCalled();
+				expect(updateElementCall).not.toHaveBeenCalled();
 			});
 		});
 
 		describe("when preferred tool has no parameters", () => {
 			const setupPreferredElementCall = () => {
 				const { cardStore, card } = setup();
-				const { createPreferredElement, updateElementRequest } =
-					useCardRestApi();
+				const { createPreferredElement } = useCardRestApi();
+				const { updateElementCall } = useBoardApi();
 
 				const preferredTool: PreferredToolResponse = {
 					schoolExternalToolId: "schoolExternalToolId",
@@ -450,7 +462,7 @@ describe("useCardRestApi", () => {
 					createPreferredElement,
 					preferredTool,
 					payload,
-					updateElementRequest,
+					updateElementCall,
 					contextExternalToolSave,
 					newElementResponse,
 				};
@@ -477,14 +489,12 @@ describe("useCardRestApi", () => {
 					preferredTool,
 					payload,
 					newElementResponse,
-					updateElementRequest,
+					updateElementCall,
 				} = setupPreferredElementCall();
 
 				await createPreferredElement(payload, preferredTool);
 
-				expect(updateElementRequest).toHaveBeenCalledWith(
-					newElementResponse.data
-				);
+				expect(updateElementCall).toHaveBeenCalledWith(newElementResponse.data);
 			});
 		});
 

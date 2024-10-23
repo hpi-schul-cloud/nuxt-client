@@ -1,8 +1,9 @@
 import { ContentElementType } from "@/serverApi/v3";
 import { ConfigResponse } from "@/serverApi/v3/api";
+import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { injectStrict } from "@/utils/inject";
-import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useCardStore } from "@data-board";
 import { createMock } from "@golevelup/ts-jest";
@@ -16,8 +17,6 @@ import { useAddElementDialog } from "./AddElementDialog.composable";
 setupStores({ notifierModule: NotifierModule });
 
 jest.mock("./SharedElementTypeSelection.composable");
-
-jest.mock("@data-board");
 
 jest.mock("@/utils/inject");
 const mockedInjectStrict = jest.mocked(injectStrict);
@@ -35,8 +34,10 @@ jest.mock("vue-i18n", () => {
 	};
 });
 
-jest.mock("@util-board");
+jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
+jest.mock("@util-board/LastCreatedElement.composable");
 jest.mocked(useSharedLastCreatedElement).mockImplementation(() => {
 	return {
 		lastCreatedElementId: ref(undefined),
@@ -56,16 +57,18 @@ mockedInjectStrict.mockImplementation(() => {
 	};
 });
 
-// TODO N21-2167 remove .skip()
-describe.skip("ElementTypeSelection Composable", () => {
+describe("ElementTypeSelection Composable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
 	});
 
 	describe("onElementClick", () => {
 		describe("when element is created successfully", () => {
 			const setup = () => {
-				const cardStore = mockedPiniaStoreTyping(useCardStore);
 				const cardId = "cardId";
 
 				setupSharedElementTypeSelectionMock();
@@ -81,10 +84,7 @@ describe.skip("ElementTypeSelection Composable", () => {
 				});
 				mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
-				//cardStore.getPreferredTools = jest.fn();
-
 				return {
-					cardStore,
 					addElementMock,
 					elementType,
 					showCustomNotifierMock,
@@ -291,22 +291,22 @@ describe.skip("ElementTypeSelection Composable", () => {
 			}
 		) => {
 			const cardId = "cardId";
-			//const cardStore = mockedPiniaStoreTyping(useCardStore);
+			const cardStore = mockedPiniaStoreTyping(useCardStore);
 			const addElementMock = jest.fn();
 			const closeDialogMock = jest.fn();
 			const { elementTypeOptions } = setupSharedElementTypeSelectionMock({
 				closeDialogMock,
 			});
 
-			//const preferredTools = [
-			//	{
-			//		name: "mock tool",
-			//		iconName: "mdiMock",
-			//		schoolExternalToolId: ObjectIdMock(),
-			//	},
-			//];
+			const preferredTools = [
+				{
+					name: "mock tool",
+					iconName: "mdiMock",
+					schoolExternalToolId: ObjectIdMock(),
+				},
+			];
 
-			//cardStore.getPreferredTools.mockReturnValue(preferredTools);
+			cardStore.getPreferredTools.mockReturnValue(preferredTools);
 
 			const showCustomNotifierMock = jest.fn();
 			const mockedBoardNotifierCalls = createMock<
@@ -499,7 +499,7 @@ describe.skip("ElementTypeSelection Composable", () => {
 
 				askType();
 
-				const action = elementTypeOptions.value[4].action;
+				const action = elementTypeOptions.value[5].action;
 				action();
 
 				expect(closeDialogMock).toBeCalledTimes(1);

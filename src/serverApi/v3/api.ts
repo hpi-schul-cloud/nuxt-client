@@ -1228,6 +1228,12 @@ export interface ConfigResponse {
     FEATURE_TLDRAW_ENABLED: boolean;
     /**
      * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    TLDRAW__WEBSOCKET_URL: string;
+    /**
+     * 
      * @type {boolean}
      * @memberof ConfigResponse
      */
@@ -1237,7 +1243,7 @@ export interface ConfigResponse {
      * @type {number}
      * @memberof ConfigResponse
      */
-    TLDRAW__ASSETS_MAX_SIZE: number;
+    TLDRAW__ASSETS_MAX_SIZE_BYTES: number;
     /**
      * 
      * @type {Array<string>}
