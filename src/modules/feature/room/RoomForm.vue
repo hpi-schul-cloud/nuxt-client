@@ -62,7 +62,7 @@ import { computed, PropType, unref } from "vue";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { DatePicker } from "@ui-date-time-picker";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
-import { helpers, required } from "@vuelidate/validators";
+import { helpers, required, maxLength } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
 
@@ -90,6 +90,7 @@ const onUpdateEndDate = (newDate: string) => {
 const rules = computed(() => ({
 	roomData: {
 		name: {
+			maxLength: maxLength(100),
 			required: helpers.withMessage(t("common.validation.required2"), required),
 		},
 	},
