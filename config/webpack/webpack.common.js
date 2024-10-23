@@ -144,6 +144,9 @@ module.exports = {
 			"@feature-board-collaborative-text-editor-element": getDir(
 				"src/modules/feature/board-collaborative-text-editor-element"
 			),
+			"@feature-board-appointment-finder-element": getDir(
+				"src/modules/feature/board-appointment-finder-element"
+			),
 			"@feature-board-deleted-element": getDir(
 				"src/modules/feature/board-deleted-element"
 			),
