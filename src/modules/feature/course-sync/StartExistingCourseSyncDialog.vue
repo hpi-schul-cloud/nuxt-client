@@ -23,7 +23,9 @@
 					component="span"
 					:html="
 						$t(
-							'feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning',
+							isUserInGroup
+								? 'feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning'
+								: 'feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning',
 							{
 								systemName: 'moin.schule',
 							}
@@ -49,12 +51,17 @@
 
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { GroupResponse } from "@/serverApi/v3";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { GroupResponse, GroupUserResponse, MeResponse } from "@/serverApi/v3";
+import type AuthModule from "@/store/auth";
+import {
+	AUTH_MODULE_KEY,
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { useCourseApi } from "@data-room";
 import { RenderHTML } from "@feature-render-html";
 import { WarningAlert } from "@ui-alert";
-import { ModelRef, Ref, ref } from "vue";
+import { computed, ModelRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
@@ -88,6 +95,19 @@ const onConfirmGroupSelection = async (group: GroupResponse) => {
 };
 
 const { startSynchronization } = useCourseApi();
+const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+
+const isUserInGroup = computed(() => {
+	const me: MeResponse | undefined = authModule.getMe;
+
+	if (!me || !selectedGroup.value) {
+		return false;
+	}
+
+	return selectedGroup.value.users.some(
+		(user: GroupUserResponse) => user.id === me.user.id
+	);
+});
 
 const onConfirmWarning = async () => {
 	if (!selectedGroup.value || !props.courseId) {

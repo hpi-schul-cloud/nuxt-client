@@ -832,8 +832,10 @@ export default {
 		"In the next step, the selected user group will be synchronized with the newly created course.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
 		"The selected user group will be synchronized with the selected course in the next step.",
-	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning":
 		"A synchronization with {systemName} overwrites the members in the course (teachers and students).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning":
+		"The synchronization of the course with the selected group can change the assignment of the students.<br/><br/>The assignment of the teachers remains unchanged in this course.",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
 		"Should the synchronization of the user group {groupName} in the course {courseName} really be started?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
