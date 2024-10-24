@@ -27,7 +27,6 @@ import { computed, defineComponent, onUnmounted } from "vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useI18n } from "vue-i18n";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ErrorPage",
 	components: {

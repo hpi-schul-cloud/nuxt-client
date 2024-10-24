@@ -92,7 +92,6 @@ import { useLoadingState } from "../../composables/loadingState";
 import { useI18n } from "vue-i18n";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	setup() {
 		const { t } = useI18n();

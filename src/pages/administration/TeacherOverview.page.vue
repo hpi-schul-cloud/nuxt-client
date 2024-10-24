@@ -120,7 +120,6 @@
 	</div>
 </template>
 <script>
-/* eslint-disable max-lines */
 import {
 	authModule,
 	envConfigModule,

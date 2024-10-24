@@ -134,7 +134,6 @@
 </template>
 
 <script>
-/* eslint-disable max-lines */
 import { mapGetters } from "vuex";
 import { envConfigModule, notifierModule, schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
