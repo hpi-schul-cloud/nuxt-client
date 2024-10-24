@@ -12,7 +12,7 @@
 					<v-autocomplete
 						ref="autoCompleteSchool"
 						v-model="selectedSchool"
-						:items="mockSchools"
+						:items="schoolList"
 						:label="t('global.sidebar.item.school')"
 						bg-color="white"
 						color="primary"
@@ -87,21 +87,27 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { PropType, ref } from "vue";
-import { mockSchools } from "@data-room";
-import { RoleName, RoomParticipantResponse } from "@/serverApi/v3";
+import { PropType, ref, toRef } from "vue";
+import {
+	RoleName,
+	RoomParticipantResponse,
+	SchoolForExternalInviteResponse,
+} from "@/serverApi/v3";
 
-defineProps({
+const props = defineProps({
 	userList: {
 		type: Array as PropType<RoomParticipantResponse[]>,
+	},
+	schools: {
+		type: Array as PropType<SchoolForExternalInviteResponse[]>,
+		required: true,
 	},
 });
 
 const emit = defineEmits(["add:participants", "close", "update:role"]);
-
 const { t } = useI18n();
-
-const selectedSchool = ref(mockSchools[0]);
+const schoolList = toRef(props, "schools");
+const selectedSchool = ref(schoolList.value[0].id);
 
 const roles = [
 	{ id: RoleName.Teacher, name: t("common.roleName.teacher") },
@@ -118,7 +124,7 @@ const onRoleChange = () => {
 
 const onSchoolChange = () => {
 	selectedRole.value = roles[0];
-	selectedUsers.value = [];
+	onRoleChange();
 };
 
 const onAddParticipants = () => {

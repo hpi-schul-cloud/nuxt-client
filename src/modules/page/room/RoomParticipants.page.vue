@@ -21,12 +21,17 @@
 			>.
 		</div>
 		<div class="mx-16">
-			<ParticipantsTable v-if="!isLoading" :participants="participantsList" />
+			<ParticipantsTable
+				v-if="!isLoading"
+				:participants="participantsList"
+				@remove:participant="onRemoveParticipant"
+			/>
 		</div>
 		<div>
 			<v-dialog v-model="isParticipantsDialogOpen" width="auto" persistent>
 				<AddParticipants
 					:userList="potentialParticipants"
+					:schools="schools"
 					@close="onDialogClose"
 					@add:participants="onAddParticipants"
 					@update:role="onUpdateRole"
@@ -60,9 +65,11 @@ const {
 	isLoading,
 	potentialParticipants,
 	participants,
+	schools,
 	addParticipants,
 	fetchParticipants,
 	getPotentialParticipants,
+	removeParticipants,
 } = useParticipants();
 
 const participantsList: Ref<RoomParticipantResponse[]> = ref(participants);
@@ -104,6 +111,10 @@ const onAddParticipants = async (participantIds: string[]) => {
 
 const onUpdateRole = async (role: RoleName) => {
 	await getPotentialParticipants(role);
+};
+
+const onRemoveParticipant = async (participantId: string) => {
+	await removeParticipants([participantId]);
 };
 
 onMounted(async () => {

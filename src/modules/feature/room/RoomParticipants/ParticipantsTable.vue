@@ -31,14 +31,27 @@
 				t('pages.rooms.participants.participantTable.itemsPerPage')
 			"
 			@update:current-items="onUpdateFilter"
-		/>
+		>
+			<template #[`item.actions`]="{ item }">
+				<v-icon
+					@click="onRemoveParticipant(item.id)"
+					class="cursor-pointer"
+					:icon="mdiTrashCanOutline"
+				/>
+			</template>
+		</v-data-table>
 	</v-card>
 </template>
 
 <script setup lang="ts">
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
+import {
+	mdiMenuDown,
+	mdiMenuUp,
+	mdiMagnify,
+	mdiTrashCanOutline,
+} from "@icons/material";
 import { RoomParticipantResponse, RoleName } from "@/serverApi/v3";
 
 const props = defineProps({
@@ -47,6 +60,9 @@ const props = defineProps({
 		required: true,
 	},
 });
+
+const emit = defineEmits(["remove:participant"]);
+
 const { t } = useI18n();
 const search = ref("");
 const userList = toRef(props, "participants");
@@ -78,6 +94,10 @@ const tableTitle = computed(
 		`${t("pages.rooms.participants.label")} (${participantsFilterCount.value})`
 );
 
+const onRemoveParticipant = (id: string) => {
+	emit("remove:participant", id);
+};
+
 const tableHeader = [
 	{
 		title: t("common.labels.firstName"),
@@ -96,6 +116,7 @@ const tableHeader = [
 		key: "classes",
 	},
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
+	{ title: "", key: "actions", sortable: false },
 ];
 </script>
 
