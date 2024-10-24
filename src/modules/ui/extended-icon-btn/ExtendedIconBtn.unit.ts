@@ -1,8 +1,8 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import ExtendedIconBtn from "./ExtendedIconBtn.vue";
 
 describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
@@ -12,6 +12,7 @@ describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
 		return mount(ExtendedIconBtn, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { VTooltip: true },
 			},
 			...options,
 		});
@@ -38,6 +39,9 @@ describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
 		expect(wrapper.html()).toContain("example-label");
 	});
 
+	// TODO N21-2167 find tooltip
+	//it("should not show tooltip when hovered over", () => {});
+
 	it("should render a clickable button", async () => {
 		const wrapper = mountComponent({
 			props: { icon: "example-icon", label: "example-label" },
@@ -47,4 +51,21 @@ describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
 
 		expect(wrapper.emitted("click")).toBeDefined();
 	});
+
+	// TODO N21-2167 find tooltip
+	/*describe("when label text is too long", () => {
+		it("should show tooltip when hovered over", async () => {
+			const wrapper = mountComponent({
+				props: { icon: "example-icon", label: "too-long-example-label" },
+			});
+
+			const displayStyle = wrapper.getComponent(VTooltip).find("div").element
+				.style.display;
+			wrapper.get("button").trigger("mouseover");
+
+			await nextTick();
+
+			expect(displayStyle).toBe("none");
+		});
+	}); */
 });
