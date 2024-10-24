@@ -175,7 +175,6 @@
 </template>
 
 <script>
-/* eslint-disable max-lines */
 import UserHasRole from "@/components/helpers/UserHasRole";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import LernStorePlayer from "@/components/lern-store/LernStorePlayer";

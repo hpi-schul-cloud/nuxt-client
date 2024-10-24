@@ -10,7 +10,6 @@ import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
 /**
  * This component handles the routing to "/error" whenever a global Error is set in ApplicationErrorModule
  */
-// eslint-disable-next-line vue/require-direct-export
 export default defineComponent({
 	name: "ApplicationErrorRouting",
 	setup() {
