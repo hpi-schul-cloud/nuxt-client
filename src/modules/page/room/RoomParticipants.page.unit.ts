@@ -10,13 +10,13 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { RoomColor } from "@/serverApi/v3";
 import { nextTick } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { flushPromises } from "@vue/test-utils";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule } from "@/store";
+import { RoomColor } from "@/serverApi/v3";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -28,7 +28,7 @@ const store = {
 	room: {
 		id: "1",
 		name: "Room 1",
-		color: "blue-gray" as RoomColor,
+		color: RoomColor.BlueGrey,
 		createdAt: new Date().toString(),
 		updatedAt: new Date().toString(),
 	},

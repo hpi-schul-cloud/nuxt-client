@@ -3,6 +3,7 @@ import { ref } from "vue";
 
 interface ConfirmationOptions {
 	message: string;
+	confirmActionLangKey?: string;
 }
 
 export const useConfirmationDialog = () => {
