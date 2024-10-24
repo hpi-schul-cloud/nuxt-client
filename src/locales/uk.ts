@@ -1666,6 +1666,7 @@ export default {
 	"pages.rooms.participants.label": "Учасники",
 	"pages.rooms.participants.addParticipants": "Додайте учасників",
 	"pages.rooms.participants.manageParticipants": "Керувати учасниками",
+	"pages.rooms.participants.removeParticipants": "Видалити учасника",
 	"pages.rooms.participants.participantTable.itemsPerPage":
 		"Записи на сторінку",
 	"pages.taskCard.addElement": "Додати елемент",

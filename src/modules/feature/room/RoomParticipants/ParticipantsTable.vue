@@ -34,9 +34,11 @@
 		>
 			<template #[`item.actions`]="{ item }">
 				<v-icon
-					@click="onRemoveParticipant(item.id)"
 					class="cursor-pointer"
 					:icon="mdiTrashCanOutline"
+					:aria-label="t('pages.rooms.participants.removeParticipants')"
+					:title="t('pages.rooms.participants.removeParticipants')"
+					@click="onRemoveParticipant(item.id)"
 				/>
 			</template>
 		</v-data-table>

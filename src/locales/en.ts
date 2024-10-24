@@ -1644,6 +1644,7 @@ export default {
 	"pages.rooms.participants.label": "Participants",
 	"pages.rooms.participants.addParticipants": "Add participants",
 	"pages.rooms.participants.manageParticipants": "Manage participants",
+	"pages.rooms.participants.removeParticipants": "Remove participants",
 	"pages.rooms.participants.participantTable.itemsPerPage": "Entries per page",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
