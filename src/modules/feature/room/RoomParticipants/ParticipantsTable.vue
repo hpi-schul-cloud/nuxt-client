@@ -37,7 +37,6 @@
 
 <script setup lang="ts">
 import { computed, PropType, ref, toRef } from "vue";
-import { Participants } from "@data-room";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import { RoomParticipantResponse, RoleName } from "@/serverApi/v3";
@@ -69,7 +68,7 @@ const participantsList = computed(() =>
 
 const participantsFilterCount = ref(participantsList.value.length);
 
-const onUpdateFilter = (value: Participants[]) => {
+const onUpdateFilter = (value: RoomParticipantResponse[]) => {
 	participantsFilterCount.value =
 		search.value === "" ? participantsList.value.length : value.length;
 };
