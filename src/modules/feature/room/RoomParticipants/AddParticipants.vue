@@ -88,12 +88,12 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { PropType, ref } from "vue";
-import { Participants, mockSchools } from "@data-room";
-import { RoleName } from "@/serverApi/v3";
+import { mockSchools } from "@data-room";
+import { RoleName, RoomParticipantResponse } from "@/serverApi/v3";
 
 defineProps({
 	userList: {
-		type: Array as PropType<Participants[]>,
+		type: Array as PropType<RoomParticipantResponse[]>,
 	},
 });
 
@@ -109,7 +109,7 @@ const roles = [
 ];
 
 const selectedRole = ref(roles[0]);
-const selectedUsers = ref<Participants[]>([]);
+const selectedUsers = ref<RoomParticipantResponse[]>([]);
 
 const onRoleChange = () => {
 	selectedUsers.value = [];
