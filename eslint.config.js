@@ -24,6 +24,16 @@ module.exports = [
 	eslintPluginPrettierRecommended,
 
 	{
+		ignores: [
+			".vscode/**",
+			"node_modules/**",
+			"**/dist/**",
+			"src/serverApi/**",
+			"src/fileStorageApi/**",
+			"src/h5pEditorApi/**",
+		],
+	},
+	{
 		languageOptions: {
 			ecmaVersion: 2020,
 			globals: {
@@ -33,14 +43,6 @@ module.exports = [
 		plugins: {
 			schulcloud,
 		},
-		ignores: [
-			".vscode/*",
-			"node_modules/*",
-			"**/dist/*",
-			"src/serverApi/*",
-			"src/fileStorageApi/*",
-			"src/h5pEditorApi/*",
-		],
 		rules: {
 			"@typescript-eslint/ban-ts-comment": "error",
 			"@typescript-eslint/no-empty-function": "error",
