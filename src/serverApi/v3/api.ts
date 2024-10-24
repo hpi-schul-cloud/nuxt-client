@@ -19872,13 +19872,17 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary Get a list of rooms.
+         * @param {string} roomId 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomControllerGetParticipants: async (skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/rooms/{roomId}/participants`;
+        roomControllerGetParticipants: async (roomId: string, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerGetParticipants', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/participants`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -20074,13 +20078,14 @@ export const RoomApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Get a list of rooms.
+         * @param {string} roomId 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomControllerGetParticipants(skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomParticipantListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetParticipants(skip, limit, options);
+        async roomControllerGetParticipants(roomId: string, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomParticipantListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetParticipants(roomId, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -20151,13 +20156,14 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary Get a list of rooms.
+         * @param {string} roomId 
          * @param {number} [skip] Number of elements (not pages) to be skipped
          * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomControllerGetParticipants(skip?: number, limit?: number, options?: any): AxiosPromise<RoomParticipantListResponse> {
-            return localVarFp.roomControllerGetParticipants(skip, limit, options).then((request) => request(axios, basePath));
+        roomControllerGetParticipants(roomId: string, skip?: number, limit?: number, options?: any): AxiosPromise<RoomParticipantListResponse> {
+            return localVarFp.roomControllerGetParticipants(roomId, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -20223,13 +20229,14 @@ export interface RoomApiInterface {
     /**
      * 
      * @summary Get a list of rooms.
+     * @param {string} roomId 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
      */
-    roomControllerGetParticipants(skip?: number, limit?: number, options?: any): AxiosPromise<RoomParticipantListResponse>;
+    roomControllerGetParticipants(roomId: string, skip?: number, limit?: number, options?: any): AxiosPromise<RoomParticipantListResponse>;
 
     /**
      * 
@@ -20299,14 +20306,15 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
     /**
      * 
      * @summary Get a list of rooms.
+     * @param {string} roomId 
      * @param {number} [skip] Number of elements (not pages) to be skipped
      * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi
      */
-    public roomControllerGetParticipants(skip?: number, limit?: number, options?: any) {
-        return RoomApiFp(this.configuration).roomControllerGetParticipants(skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public roomControllerGetParticipants(roomId: string, skip?: number, limit?: number, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerGetParticipants(roomId, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
