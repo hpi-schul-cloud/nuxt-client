@@ -1672,6 +1672,7 @@ export default {
 	"pages.rooms.participants.label": "Teilnehmende",
 	"pages.rooms.participants.addParticipants": "Teilnehmende hinzufügen",
 	"pages.rooms.participants.manageParticipants": "Teilnehmende verwalten",
+	"pages.rooms.participants.removeParticipants": "Teilnehmende entfernen",
 	"pages.rooms.participants.participantTable.itemsPerPage":
 		"Einträge pro Seite",
 	"pages.taskCard.addElement": "Element hinzufügen",

@@ -31,9 +31,10 @@ export {
 	BOARD_IS_LAST_COLUMN,
 	BOARD_IS_LIST_LAYOUT,
 	useSharedEditMode,
-	EditModePermissions,
 	useCourseBoardEditMode,
 	useMediaBoardEditMode,
 	useDragAndDrop,
 	useInlineEditInteractionHandler,
 };
+
+export { EditModePermissions };

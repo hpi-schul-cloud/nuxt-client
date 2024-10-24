@@ -6,7 +6,7 @@
 		@fab:clicked="onFabClick"
 	>
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4 title-header">
+			<h1 class="text-h3 mb-4">
 				{{ t("pages.rooms.participants.manageParticipants") }}
 			</h1>
 		</template>
@@ -21,12 +21,17 @@
 			>.
 		</div>
 		<div class="mx-16">
-			<ParticipantsTable :participants="participantsList" />
+			<ParticipantsTable
+				v-if="!isLoading"
+				:participants="participantsList"
+				@remove:participant="onRemoveParticipant"
+			/>
 		</div>
 		<div>
 			<v-dialog v-model="isParticipantsDialogOpen" width="auto" persistent>
 				<AddParticipants
 					:userList="potentialParticipants"
+					:schools="schools"
 					@close="onDialogClose"
 					@add:participants="onAddParticipants"
 					@update:role="onUpdateRole"
@@ -44,11 +49,11 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { useRoomDetailsStore, useParticipants, Participants } from "@data-room";
+import { useRoomDetailsStore, useParticipants } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName, RoomParticipantResponse } from "@/serverApi/v3";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -56,15 +61,20 @@ const route = useRoute();
 const { room } = storeToRefs(useRoomDetailsStore());
 
 const isParticipantsDialogOpen = ref(false);
+
+const roomId = route.params.id.toString();
 const {
+	isLoading,
 	potentialParticipants,
 	participants,
+	schools,
 	addParticipants,
 	fetchParticipants,
-	fetchPotentialUsers,
-} = useParticipants();
+	getPotentialParticipants,
+	removeParticipants,
+} = useParticipants(roomId);
 
-const participantsList: Ref<Participants[]> = ref(participants);
+const participantsList: Ref<RoomParticipantResponse[]> = ref(participants);
 
 const pageTitle = computed(() =>
 	buildPageTitle(
@@ -89,7 +99,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const onFabClick = async () => {
-	await fetchPotentialUsers(RoleName.Teacher);
+	await getPotentialParticipants(RoleName.Teacher);
 	isParticipantsDialogOpen.value = true;
 };
 
@@ -102,14 +112,18 @@ const onAddParticipants = async (participantIds: string[]) => {
 };
 
 const onUpdateRole = async (role: RoleName) => {
-	await fetchPotentialUsers(role);
+	await getPotentialParticipants(role);
+};
+
+const onRemoveParticipant = async (participantId: string) => {
+	await removeParticipants([participantId]);
 };
 
 onMounted(async () => {
 	// call fetchRoom() again because the store is reset on unmounted lifecycle hook in RoomDetails.page.vue
 	if (room.value === undefined) {
 		console.log("Room store not found");
-		await fetchRoom(route.params.id as string);
+		await fetchRoom(roomId);
 	}
 	await fetchParticipants();
 });

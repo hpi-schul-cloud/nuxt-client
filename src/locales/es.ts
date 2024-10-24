@@ -1688,6 +1688,7 @@ export default {
 	"pages.rooms.participants.label": "Participantes",
 	"pages.rooms.participants.addParticipants": "Añadir participantes",
 	"pages.rooms.participants.manageParticipants": "Administrar participantes",
+	"pages.rooms.participants.removeParticipants": "Eliminar participante",
 	"pages.rooms.participants.participantTable.itemsPerPage":
 		"Entradas por página",
 	"pages.taskCard.addElement": "Añadir artículo",

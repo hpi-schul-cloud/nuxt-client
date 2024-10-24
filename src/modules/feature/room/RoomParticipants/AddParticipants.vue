@@ -10,16 +10,17 @@
 			<div class="ml-6 mr-6">
 				<div class="mt-3">
 					<v-autocomplete
-						v-model="school"
+						ref="autoCompleteSchool"
+						v-model="selectedSchool"
+						:items="schoolList"
 						:label="t('global.sidebar.item.school')"
 						bg-color="white"
 						color="primary"
 						density="comfortable"
-						item-value="id"
 						item-title="name"
-						menu-icon=""
-						readonly
+						item-value="id"
 						variant="underlined"
+						@update:model-value="onSchoolChange"
 					/>
 				</div>
 
@@ -33,8 +34,8 @@
 						bg-color="white"
 						color="primary"
 						density="comfortable"
-						menu-icon=""
-						readonly
+						item-title="name"
+						item-value="id"
 						variant="underlined"
 						@update:model-value="onRoleChange"
 					/>
@@ -54,6 +55,7 @@
 						item-value="id"
 						item-title="fullName"
 						multiple
+						:no-data-text="t('common.nodata')"
 						variant="underlined"
 					/>
 				</div>
@@ -85,29 +87,44 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { computed, PropType, ref } from "vue";
-import { Participants } from "@data-room";
-import { RoleName } from "@/serverApi/v3";
+import { PropType, ref, toRef } from "vue";
+import {
+	RoleName,
+	RoomParticipantResponse,
+	SchoolForExternalInviteResponse,
+} from "@/serverApi/v3";
 
-defineProps({
+const props = defineProps({
 	userList: {
-		type: Array as PropType<Participants[]>,
+		type: Array as PropType<RoomParticipantResponse[]>,
+	},
+	schools: {
+		type: Array as PropType<SchoolForExternalInviteResponse[]>,
+		required: true,
 	},
 });
 
 const emit = defineEmits(["add:participants", "close", "update:role"]);
-
 const { t } = useI18n();
-const authModule = injectStrict(AUTH_MODULE_KEY);
-const school = computed(() => authModule.getSchool);
-const roles = computed(() => [RoleName.Teacher]);
-const selectedRole = ref<RoleName>(RoleName.Teacher);
-const selectedUsers = ref<Participants[]>([]);
+const schoolList = toRef(props, "schools");
+const selectedSchool = ref(schoolList.value[0].id);
+
+const roles = [
+	{ id: RoleName.Teacher, name: t("common.roleName.teacher") },
+	{ id: RoleName.Student, name: t("common.roleName.student") },
+];
+
+const selectedRole = ref(roles[0]);
+const selectedUsers = ref<RoomParticipantResponse[]>([]);
 
 const onRoleChange = () => {
 	selectedUsers.value = [];
 	emit("update:role", selectedRole.value);
+};
+
+const onSchoolChange = () => {
+	selectedRole.value = roles[0];
+	onRoleChange();
 };
 
 const onAddParticipants = () => {
@@ -116,14 +133,3 @@ const onAddParticipants = () => {
 };
 const onClose = () => emit("close");
 </script>
-
-<style scoped>
-:deep .v-label {
-	margin-left: 0px !important;
-	padding-left: 2px !important;
-}
-
-:deep .v-field__input {
-	padding-left: 2px !important;
-}
-</style>
