@@ -59,7 +59,7 @@ export const useParticipants = () => {
 		participants.value.push(...newParticipants);
 	};
 
-	const deleteParticipants = async (ids: string[]) => {
+	const removeParticipants = async (ids: string[]) => {
 		await Promise.resolve(
 			(participants.value = participants.value.filter(
 				(p) => !ids.includes(p.id)
@@ -69,9 +69,9 @@ export const useParticipants = () => {
 
 	return {
 		addParticipants,
-		deleteParticipants,
 		fetchParticipants,
 		getPotentialParticipants,
+		removeParticipants,
 		isLoading,
 		participants,
 		potentialParticipants,
