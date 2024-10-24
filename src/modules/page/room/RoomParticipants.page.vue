@@ -61,6 +61,8 @@ const route = useRoute();
 const { room } = storeToRefs(useRoomDetailsStore());
 
 const isParticipantsDialogOpen = ref(false);
+
+const roomId = route.params.id.toString();
 const {
 	isLoading,
 	potentialParticipants,
@@ -70,7 +72,7 @@ const {
 	fetchParticipants,
 	getPotentialParticipants,
 	removeParticipants,
-} = useParticipants();
+} = useParticipants(roomId);
 
 const participantsList: Ref<RoomParticipantResponse[]> = ref(participants);
 
@@ -121,7 +123,7 @@ onMounted(async () => {
 	// call fetchRoom() again because the store is reset on unmounted lifecycle hook in RoomDetails.page.vue
 	if (room.value === undefined) {
 		console.log("Room store not found");
-		await fetchRoom(route.params.id as string);
+		await fetchRoom(roomId);
 	}
 	await fetchParticipants();
 });

@@ -10,7 +10,7 @@ import {
 import { $axios } from "@/utils/api";
 import { schoolsModule } from "@/store";
 
-export const useParticipants = () => {
+export const useParticipants = (roomId: string) => {
 	const participants: Ref<RoomParticipantResponse[]> = ref([]);
 	const potentialParticipants: Ref<RoomParticipantResponse[]> = ref([]);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
@@ -28,7 +28,7 @@ export const useParticipants = () => {
 		try {
 			isLoading.value = true;
 			const participantsData = (
-				await roomApi.roomControllerGetParticipants(50, 50)
+				await roomApi.roomControllerGetParticipants(roomId)
 			).data;
 
 			getSchools();
