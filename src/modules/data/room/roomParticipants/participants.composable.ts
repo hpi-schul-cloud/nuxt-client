@@ -1,5 +1,5 @@
 import { Ref, ref } from "vue";
-import { ParticipantsType } from "./types";
+import { ParticipantType } from "./types";
 import {
 	RoleName,
 	RoomApiFactory,
@@ -10,8 +10,8 @@ import {
 import { $axios } from "@/utils/api";
 
 export const useParticipants = (roomId: string) => {
-	const participants: Ref<ParticipantsType[]> = ref([]);
-	const potentialParticipants: Ref<ParticipantsType[]> = ref([]);
+	const participants: Ref<ParticipantType[]> = ref([]);
+	const potentialParticipants: Ref<ParticipantType[]> = ref([]);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const isLoading = ref(false);
 	const ownSchool = {

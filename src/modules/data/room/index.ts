@@ -7,4 +7,4 @@ export { useRoomCreateState } from "./RoomCreate.state";
 export { useRoomEditState } from "./RoomEdit.state";
 
 export { useParticipants } from "./roomParticipants/participants.composable";
-export type { ParticipantsType } from "./roomParticipants/types";
+export type { ParticipantType } from "./roomParticipants/types";

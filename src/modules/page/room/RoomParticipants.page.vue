@@ -55,7 +55,7 @@ import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
 import { RoleName } from "@/serverApi/v3";
-import { ParticipantsType } from "@data-room";
+import { ParticipantType } from "@data-room";
 import {
 	ConfirmationDialog,
 	useDeleteConfirmationDialog,
@@ -78,7 +78,7 @@ const {
 	removeParticipants,
 } = useParticipants(roomId);
 
-const participantsList: Ref<ParticipantsType[]> = ref(participants);
+const participantsList: Ref<ParticipantType[]> = ref(participants);
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 const pageTitle = computed(() =>
@@ -120,7 +120,7 @@ const onUpdateRole = async (role: RoleName) => {
 	await getPotentialParticipants(role);
 };
 
-const onRemoveParticipant = async (participant: ParticipantsType) => {
+const onRemoveParticipant = async (participant: ParticipantType) => {
 	const shouldDelete = await askDeleteConfirmation(
 		participant.fullName,
 		"pages.rooms.participant.label"

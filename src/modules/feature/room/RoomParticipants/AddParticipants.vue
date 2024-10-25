@@ -89,11 +89,11 @@
 import { useI18n } from "vue-i18n";
 import { PropType, ref, toRef } from "vue";
 import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
-import { ParticipantsType } from "@data-room";
+import { ParticipantType } from "@data-room";
 
 const props = defineProps({
 	userList: {
-		type: Array as PropType<ParticipantsType[]>,
+		type: Array as PropType<ParticipantType[]>,
 	},
 	schools: {
 		type: Array as PropType<SchoolForExternalInviteResponse[]>,
@@ -112,7 +112,7 @@ const roles = [
 ];
 
 const selectedRole = ref(roles[0]);
-const selectedUsers = ref<ParticipantsType[]>([]);
+const selectedUsers = ref<string[]>([]);
 
 const onRoleChange = () => {
 	selectedUsers.value = [];

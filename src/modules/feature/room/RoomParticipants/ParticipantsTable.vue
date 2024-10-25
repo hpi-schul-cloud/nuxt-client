@@ -55,11 +55,11 @@ import {
 	mdiTrashCanOutline,
 } from "@icons/material";
 import { RoleName } from "@/serverApi/v3";
-import { ParticipantsType } from "@data-room";
+import { ParticipantType } from "@data-room";
 
 const props = defineProps({
 	participants: {
-		type: Array as PropType<ParticipantsType[]>,
+		type: Array as PropType<ParticipantType[]>,
 		required: true,
 	},
 });
@@ -87,7 +87,7 @@ const participantsList = computed(() =>
 
 const participantsFilterCount = ref(participantsList.value.length);
 
-const onUpdateFilter = (value: ParticipantsType[]) => {
+const onUpdateFilter = (value: ParticipantType[]) => {
 	participantsFilterCount.value =
 		search.value === "" ? participantsList.value.length : value.length;
 };
@@ -97,7 +97,7 @@ const tableTitle = computed(
 		`${t("pages.rooms.participants.label")} (${participantsFilterCount.value})`
 );
 
-const onRemoveParticipant = (participant: ParticipantsType) => {
+const onRemoveParticipant = (participant: ParticipantType) => {
 	emit("remove:participant", participant);
 };
 

@@ -1,5 +1,5 @@
 import { RoomParticipantResponse } from "@/serverApi/v3";
 
-export type ParticipantsType = RoomParticipantResponse & {
+export type ParticipantType = RoomParticipantResponse & {
 	fullName: string;
 };
