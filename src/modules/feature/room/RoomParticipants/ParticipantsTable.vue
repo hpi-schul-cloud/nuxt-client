@@ -21,7 +21,7 @@
 		<v-data-table
 			v-model:search="search"
 			:items="participantsList"
-			item-value="id"
+			item-value="userId"
 			:headers="tableHeader"
 			:sort-asc-icon="mdiMenuDown"
 			:sort-desc-icon="mdiMenuUp"
@@ -54,11 +54,12 @@ import {
 	mdiMagnify,
 	mdiTrashCanOutline,
 } from "@icons/material";
-import { RoomParticipantResponse, RoleName } from "@/serverApi/v3";
+import { RoleName } from "@/serverApi/v3";
+import { ParticipantsType } from "@data-room";
 
 const props = defineProps({
 	participants: {
-		type: Array as PropType<RoomParticipantResponse[]>,
+		type: Array as PropType<ParticipantsType[]>,
 		required: true,
 	},
 });
@@ -86,7 +87,7 @@ const participantsList = computed(() =>
 
 const participantsFilterCount = ref(participantsList.value.length);
 
-const onUpdateFilter = (value: RoomParticipantResponse[]) => {
+const onUpdateFilter = (value: ParticipantsType[]) => {
 	participantsFilterCount.value =
 		search.value === "" ? participantsList.value.length : value.length;
 };
@@ -96,7 +97,7 @@ const tableTitle = computed(
 		`${t("pages.rooms.participants.label")} (${participantsFilterCount.value})`
 );
 
-const onRemoveParticipant = (participant: RoomParticipantResponse) => {
+const onRemoveParticipant = (participant: ParticipantsType) => {
 	emit("remove:participant", participant);
 };
 

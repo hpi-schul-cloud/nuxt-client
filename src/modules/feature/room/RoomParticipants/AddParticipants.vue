@@ -52,7 +52,7 @@
 						closable-chips
 						clear-on-select
 						color="primary"
-						item-value="id"
+						item-value="userId"
 						item-title="fullName"
 						multiple
 						:no-data-text="t('common.nodata')"
@@ -88,15 +88,12 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { PropType, ref, toRef } from "vue";
-import {
-	RoleName,
-	RoomParticipantResponse,
-	SchoolForExternalInviteResponse,
-} from "@/serverApi/v3";
+import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
+import { ParticipantsType } from "@data-room";
 
 const props = defineProps({
 	userList: {
-		type: Array as PropType<RoomParticipantResponse[]>,
+		type: Array as PropType<ParticipantsType[]>,
 	},
 	schools: {
 		type: Array as PropType<SchoolForExternalInviteResponse[]>,
@@ -115,7 +112,7 @@ const roles = [
 ];
 
 const selectedRole = ref(roles[0]);
-const selectedUsers = ref<RoomParticipantResponse[]>([]);
+const selectedUsers = ref<ParticipantsType[]>([]);
 
 const onRoleChange = () => {
 	selectedUsers.value = [];

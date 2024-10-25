@@ -1,5 +1,5 @@
 import { Ref, ref } from "vue";
-
+import { ParticipantsType } from "./types";
 import {
 	RoleName,
 	RoomApiFactory,
@@ -10,8 +10,8 @@ import {
 import { $axios } from "@/utils/api";
 
 export const useParticipants = (roomId: string) => {
-	const participants: Ref<RoomParticipantResponse[]> = ref([]);
-	const potentialParticipants: Ref<RoomParticipantResponse[]> = ref([]);
+	const participants: Ref<ParticipantsType[]> = ref([]);
+	const potentialParticipants: Ref<ParticipantsType[]> = ref([]);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const isLoading = ref(false);
 	const ownSchool = {
@@ -25,13 +25,19 @@ export const useParticipants = (roomId: string) => {
 	const fetchParticipants = async () => {
 		try {
 			isLoading.value = true;
-			const participantsData = (
-				await roomApi.roomControllerGetParticipants(roomId)
-			).data;
+			const participantsData = (await roomApi.roomControllerGetMembers(roomId))
+				.data;
 
 			getSchools();
 
-			participants.value = participantsData.data;
+			participants.value = participantsData.data.map(
+				(participant: RoomParticipantResponse) => {
+					return {
+						...participant,
+						fullName: `${participant.lastName}, ${participant.firstName}`,
+					};
+				}
+			);
 			isLoading.value = false;
 		} catch (error) {
 			isLoading.value = false;
@@ -50,6 +56,7 @@ export const useParticipants = (roomId: string) => {
 				.map((user) => {
 					return {
 						...user,
+						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
 						roleName: RoleName.Teacher,
 						schoolName: ownSchool.name,
@@ -58,7 +65,7 @@ export const useParticipants = (roomId: string) => {
 				.filter((u) => {
 					return (
 						u.roleName === role &&
-						!participants.value.some((p) => p.id === u.id)
+						!participants.value.some((p) => p.userId === u.id)
 					);
 				});
 		} catch (error) {
@@ -87,7 +94,7 @@ export const useParticipants = (roomId: string) => {
 
 	const addParticipants = async (ids: string[]) => {
 		const newParticipants = potentialParticipants.value.filter((p) =>
-			ids.includes(p.id)
+			ids.includes(p.userId)
 		);
 
 		participants.value.push(...newParticipants);
@@ -96,7 +103,7 @@ export const useParticipants = (roomId: string) => {
 	const removeParticipants = async (ids: string[]) => {
 		await Promise.resolve(
 			(participants.value = participants.value.filter(
-				(p) => !ids.includes(p.id)
+				(p) => !ids.includes(p.userId)
 			))
 		);
 	};
