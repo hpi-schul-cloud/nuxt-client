@@ -120,7 +120,6 @@ const onUpdateRole = async (role: RoleName) => {
 };
 
 const onRemoveParticipant = async (participant: RoomParticipantResponse) => {
-	console.log("Remove participant", participant);
 	const shouldDelete = await askDeleteConfirmation(
 		participant.fullName,
 		"pages.rooms.participant.label"
