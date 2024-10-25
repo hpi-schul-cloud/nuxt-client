@@ -52,7 +52,6 @@
 					</speed-dial-menu>
 				</slot>
 			</div>
-			<!-- TODO: divider oder fabButton -->
 			<v-divider v-if="showDivider" class="mx-n6" />
 		</div>
 		<v-container
@@ -167,6 +166,7 @@ const showDivider = computed(() => {
 }
 
 .v-divider {
+	z-index: 0;
 	margin-right: -1.5rem;
 	margin-left: -1.5rem;
 }
