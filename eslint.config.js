@@ -35,7 +35,7 @@ module.exports = [
 	},
 	{
 		languageOptions: {
-			ecmaVersion: 2020,
+			ecmaVersion: "latest",
 			globals: {
 				...globals.node,
 			},
@@ -133,9 +133,9 @@ module.exports = [
 		languageOptions: {
 			globals: {
 				...globals.jest,
-				mount: false,
-				shallowMount: false,
-				fail: false,
+				mount: "readonly",
+				shallowMount: "readonly",
+				fail: "readonly",
 			},
 		},
 	},
