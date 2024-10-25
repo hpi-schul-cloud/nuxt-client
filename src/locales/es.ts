@@ -1685,6 +1685,7 @@ export default {
 	"pages.rooms.title": "Habitaciones",
 	"pages.rooms.fab.title": "Crear habitación",
 	"pages.rooms.emptyState": "Actualmente no hay habitaciones aquí.",
+	"pages.rooms.participant.label": "Partícipe",
 	"pages.rooms.participants.label": "Participantes",
 	"pages.rooms.participants.addParticipants": "Añadir participantes",
 	"pages.rooms.participants.manageParticipants": "Administrar participantes",

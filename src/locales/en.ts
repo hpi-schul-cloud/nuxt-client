@@ -1641,6 +1641,7 @@ export default {
 	"pages.rooms.title": "Rooms",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
+	"pages.rooms.participant.label": "Participant",
 	"pages.rooms.participants.label": "Participants",
 	"pages.rooms.participants.addParticipants": "Add participants",
 	"pages.rooms.participants.manageParticipants": "Manage participants",

@@ -38,7 +38,7 @@
 					:icon="mdiTrashCanOutline"
 					:aria-label="t('pages.rooms.participants.removeParticipants')"
 					:title="t('pages.rooms.participants.removeParticipants')"
-					@click="onRemoveParticipant(item.id)"
+					@click="onRemoveParticipant(item)"
 				/>
 			</template>
 		</v-data-table>
@@ -96,8 +96,8 @@ const tableTitle = computed(
 		`${t("pages.rooms.participants.label")} (${participantsFilterCount.value})`
 );
 
-const onRemoveParticipant = (id: string) => {
-	emit("remove:participant", id);
+const onRemoveParticipant = (participant: RoomParticipantResponse) => {
+	emit("remove:participant", participant);
 };
 
 const tableHeader = [

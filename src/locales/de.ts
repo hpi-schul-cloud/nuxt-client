@@ -1669,6 +1669,7 @@ export default {
 	"pages.rooms.title": "Räume",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
+	"pages.rooms.participant.label": "Teilnehmer:in",
 	"pages.rooms.participants.label": "Teilnehmende",
 	"pages.rooms.participants.addParticipants": "Teilnehmende hinzufügen",
 	"pages.rooms.participants.manageParticipants": "Teilnehmende verwalten",

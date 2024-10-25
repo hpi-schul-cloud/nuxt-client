@@ -11,7 +11,7 @@
 			</h1>
 		</template>
 
-		<div class="mb-8 mt-12 mx-16">
+		<div class="mb-8 mt-12">
 			Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können
 			hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im
 			eigenen Profil aktiviert haben
@@ -20,7 +20,7 @@
 				>(weitere Informationen)</a
 			>.
 		</div>
-		<div class="mx-16">
+		<div>
 			<ParticipantsTable
 				v-if="!isLoading"
 				:participants="participantsList"
@@ -38,6 +38,7 @@
 				/>
 			</v-dialog>
 		</div>
+		<ConfirmationDialog />
 	</DefaultWireframe>
 </template>
 
@@ -54,14 +55,16 @@ import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
 import { RoleName, RoomParticipantResponse } from "@/serverApi/v3";
+import {
+	ConfirmationDialog,
+	useDeleteConfirmationDialog,
+} from "@ui-confirmation-dialog";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
 const { room } = storeToRefs(useRoomDetailsStore());
-
 const isParticipantsDialogOpen = ref(false);
-
 const roomId = route.params.id.toString();
 const {
 	isLoading,
@@ -75,6 +78,7 @@ const {
 } = useParticipants(roomId);
 
 const participantsList: Ref<RoomParticipantResponse[]> = ref(participants);
+const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 const pageTitle = computed(() =>
 	buildPageTitle(
@@ -115,8 +119,14 @@ const onUpdateRole = async (role: RoleName) => {
 	await getPotentialParticipants(role);
 };
 
-const onRemoveParticipant = async (participantId: string) => {
-	await removeParticipants([participantId]);
+const onRemoveParticipant = async (participant: RoomParticipantResponse) => {
+	console.log("Remove participant", participant);
+	const shouldDelete = await askDeleteConfirmation(
+		participant.fullName,
+		"pages.rooms.participant.label"
+	);
+	if (!shouldDelete) return;
+	await removeParticipants([participant.id]);
 };
 
 onMounted(async () => {
