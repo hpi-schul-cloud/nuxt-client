@@ -6,6 +6,8 @@ import {
 	SchoolApiFactory,
 	RoomParticipantResponse,
 	SchoolForExternalInviteResponse,
+	UserIdAndRole,
+	UserIdAndRoleRoleNameEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
@@ -96,6 +98,15 @@ export const useParticipants = (roomId: string) => {
 		const newParticipants = potentialParticipants.value.filter((p) =>
 			ids.includes(p.userId)
 		);
+
+		const userIdsAndRoles: UserIdAndRole[] = newParticipants.map((p) => ({
+			userId: p.userId,
+			roleName: UserIdAndRoleRoleNameEnum.Editor,
+		}));
+
+		await roomApi.roomControllerAddMembers(roomId, {
+			userIdsAndRoles,
+		});
 
 		participants.value.push(...newParticipants);
 	};
