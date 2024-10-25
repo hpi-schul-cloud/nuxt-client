@@ -4,7 +4,7 @@ import { ref } from "vue";
 export interface ElementTypeSelectionOptions {
 	icon: string;
 	label: string;
-	action: () => void;
+	action: () => Promise<void>;
 	testId: string;
 }
 
