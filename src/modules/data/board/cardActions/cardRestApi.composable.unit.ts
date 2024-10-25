@@ -49,7 +49,7 @@ const mockedUseErrorHandler = jest.mocked(useErrorHandler);
 jest.mock("../BoardApi.composable");
 const mockedUseBoardApi = jest.mocked(useBoardApi);
 
-jest.mock("@data-external-tool/ContextExternalToolApi.composable");
+jest.mock("@data-external-tool/contextExternalToolApi.composable");
 const mockedUseContextExternalToolApi = jest.mocked(useContextExternalToolApi);
 
 jest.mock("../CardRequestPool.composable");

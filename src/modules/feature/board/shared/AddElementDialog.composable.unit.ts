@@ -505,36 +505,5 @@ describe("ElementTypeSelection Composable", () => {
 				expect(closeDialogMock).toBeCalledTimes(1);
 			});
 		});
-
-		// TODO N21-2167 fix Cannot read properties of undefined (reading 'showCustomNotifier')
-		/* describe("when the preferred tool action is called", () => {
-			it("should call add element function with right argument", async () => {
-				const { elementTypeOptions, addElementMock, cardId } = setup();
-				const { askType } = useAddElementDialog(addElementMock, cardId);
-
-				askType();
-
-				const action = elementTypeOptions.value[6].action;
-				action();
-
-				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith({
-					type: ContentElementType.ExternalTool,
-					cardId,
-				});
-			});
-
-			it("should set isDialogOpen to false", async () => {
-				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
-					setup();
-				const { askType } = useAddElementDialog(addElementMock, cardId);
-				askType();
-
-				const action = elementTypeOptions.value[6].action;
-				action();
-
-				expect(closeDialogMock).toBeCalledTimes(1);
-			});
-		}); */
 	});
 });

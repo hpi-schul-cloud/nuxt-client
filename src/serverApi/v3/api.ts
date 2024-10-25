@@ -344,6 +344,8 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoleCreate = 'ROLE_CREATE',
     RoleEdit = 'ROLE_EDIT',
     RoleView = 'ROLE_VIEW',
+    RoomEdit = 'ROOM_EDIT',
+    RoomView = 'ROOM_VIEW',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -3920,6 +3922,7 @@ export interface GroupResponse {
 export enum GroupResponseTypeEnum {
     Class = 'class',
     Course = 'course',
+    Room = 'room',
     Other = 'other'
 }
 
@@ -6803,6 +6806,8 @@ export enum RoleName {
     DemoTeacher = 'demoTeacher',
     Expert = 'expert',
     Helpdesk = 'helpdesk',
+    RoomViewer = 'room_viewer',
+    RoomEditor = 'room_editor',
     Student = 'student',
     Superhero = 'superhero',
     Teacher = 'teacher',
