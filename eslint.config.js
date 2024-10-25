@@ -52,7 +52,7 @@ module.exports = [
 			],
 			"@typescript-eslint/no-explicit-any": "warn",
 			"@typescript-eslint/no-inferrable-types": "error",
-			"@typescript-eslint/no-require-imports": "off", // decide which option we want to use for this rule
+			"@typescript-eslint/no-require-imports": "warn",
 			"@typescript-eslint/no-restricted-imports": [
 				"warn",
 				{
@@ -99,7 +99,6 @@ module.exports = [
 					],
 				},
 			],
-			// for now set this to warn because to much errors in catch blocks, need to decide if we want to us default option 'caughtErrors: all' for 'catch' blocks
 			"@typescript-eslint/no-unused-vars": "warn",
 			"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
 			"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",
@@ -130,7 +129,7 @@ module.exports = [
 		},
 	},
 	{
-		files: ["**/*.unit.{j,t}s?(x)"],
+		files: ["**/*.unit.{j,t}s?(x)", "tests/**"],
 		languageOptions: {
 			globals: {
 				...globals.jest,
