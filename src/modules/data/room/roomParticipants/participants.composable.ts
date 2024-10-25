@@ -8,17 +8,15 @@ import {
 	SchoolForExternalInviteResponse,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-import { schoolsModule } from "@/store";
 
 export const useParticipants = (roomId: string) => {
 	const participants: Ref<RoomParticipantResponse[]> = ref([]);
 	const potentialParticipants: Ref<RoomParticipantResponse[]> = ref([]);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const isLoading = ref(false);
-	const ownSchoolData = schoolsModule.getSchool;
 	const ownSchool = {
-		id: ownSchoolData.id,
-		name: ownSchoolData.name,
+		id: "5f2987e020834114b8efd6f8",
+		name: "Paul-Gerhardt-Gymnasium",
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -69,10 +67,6 @@ export const useParticipants = (roomId: string) => {
 	};
 
 	const getSchools = async () => {
-		const federalStateId = schoolsModule.getFederalState?.id;
-
-		if (!federalStateId) return;
-
 		try {
 			const response =
 				await schoolApi.schoolControllerGetSchoolListForExternalInvite();
@@ -80,11 +74,11 @@ export const useParticipants = (roomId: string) => {
 			schools.value = response.data;
 
 			if (schools.value.findIndex((s) => s.id === ownSchool?.id) === -1) {
-				schools.value.unshift(ownSchoolData);
+				schools.value.unshift(ownSchool);
 			} else {
 				const index = schools.value.findIndex((s) => s.id === ownSchool?.id);
 				schools.value.splice(index, 1);
-				schools.value.unshift(ownSchoolData);
+				schools.value.unshift(ownSchool);
 			}
 		} catch (error) {
 			console.error(error);
