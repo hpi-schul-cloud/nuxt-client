@@ -16,7 +16,7 @@ export const setupAddElementDialogMock = (props: Props = {}) => {
 		{
 			icon: string;
 			label: string;
-			action: () => void;
+			action: () => Promise<void>;
 			testId: string;
 		}[]
 	> = ref([

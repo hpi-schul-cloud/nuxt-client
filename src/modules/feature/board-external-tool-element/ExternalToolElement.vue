@@ -2,7 +2,7 @@
 	<v-card
 		v-show="hasLinkedTool || isEditMode"
 		class="mb-4"
-		data-testid="board-external-tool-element"
+		:data-testid="`board-external-tool-element-${toolDisplayName}`"
 		elevation="0"
 		variant="outlined"
 		ref="externalToolElement"
@@ -228,7 +228,10 @@ const loadCardData = async () => {
 
 onMounted(() => {
 	loadCardData();
-	if (lastCreatedElementId.value === props.element.id) {
+	if (
+		lastCreatedElementId.value === props.element.id &&
+		!props.element.content.contextExternalToolId
+	) {
 		isConfigurationDialogOpen.value = true;
 		resetLastCreatedElementId();
 	}
