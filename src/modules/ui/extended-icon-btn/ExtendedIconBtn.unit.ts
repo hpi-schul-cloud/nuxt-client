@@ -1,8 +1,8 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import ExtendedIconBtn from "./ExtendedIconBtn.vue";
 
 describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
@@ -12,6 +12,7 @@ describe("@ui-extended-icon-btn/ExtendedIconBtn.vue", () => {
 		return mount(ExtendedIconBtn, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: { VTooltip: true },
 			},
 			...options,
 		});

@@ -15,6 +15,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { computed, nextTick } from "vue";
+import { Router, useRouter } from "vue-router";
 import { useBoardStore } from "./Board.store";
 import {
 	connectionOptions,
@@ -22,7 +23,6 @@ import {
 } from "./boardInactivity.composable";
 import { useCardStore } from "./Card.store";
 import { useSocketConnection } from "./socket/socket";
-import { Router, useRouter } from "vue-router";
 
 jest.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -85,7 +85,7 @@ describe("pageInactivity.composable", () => {
 
 	const setup = (timer = 0) => {
 		boardStore = mockedPiniaStoreTyping(useBoardStore);
-		cardStore = mockedPiniaStoreTyping(useCardStore);
+		cardStore = mockedPiniaStoreTyping(useCardStore) as any;
 		boardStore.board = boardResponseFactory.build();
 		cardStore.cards = {};
 		return mountComposable(() => useBoardInactivity(timer), {
