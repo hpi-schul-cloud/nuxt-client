@@ -166,7 +166,7 @@ const showDivider = computed(() => {
 }
 
 .v-divider {
-	z-index: 0;
+	z-index: -1;
 	margin-right: -1.5rem;
 	margin-left: -1.5rem;
 }
