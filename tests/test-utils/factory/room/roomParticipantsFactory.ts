@@ -6,7 +6,7 @@ import {
 
 export const roomParticipantResponseFactory =
 	Factory.define<RoomParticipantResponse>(({ sequence }) => ({
-		id: `participant${sequence}`,
+		userId: `participant${sequence}`,
 		firstName: `firstName${sequence}`,
 		lastName: `lastName${sequence}`,
 		fullName: `lastName${sequence}, firstName${sequence}`,
