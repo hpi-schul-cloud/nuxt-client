@@ -2,7 +2,7 @@ import * as useExternalToolUtilsComposable from "@/composables/external-tool-map
 import { ToolParameterLocation } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	schoolExternalToolConfigurationTemplateFactory,
 	schoolExternalToolFactory,

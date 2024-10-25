@@ -15,7 +15,7 @@ import {
 	COMMON_CARTRIDGE_IMPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
 } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import CourseRoomOverviewPage from "./CourseRoomOverview.page.vue";

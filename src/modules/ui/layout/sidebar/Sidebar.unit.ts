@@ -15,7 +15,7 @@ import Sidebar from "./Sidebar.vue";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { SchulcloudTheme } from "@/serverApi/v3";
 import { envsFactory } from "@@/tests/test-utils";
 import { useSidebarSelection } from "./SidebarSelection.composable";

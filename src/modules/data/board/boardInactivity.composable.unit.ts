@@ -2,7 +2,7 @@ import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	boardResponseFactory,
 	envsFactory,

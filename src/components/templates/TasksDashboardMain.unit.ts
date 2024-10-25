@@ -13,7 +13,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,

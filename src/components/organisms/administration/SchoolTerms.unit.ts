@@ -3,7 +3,7 @@ import AuthModule from "@/store/auth";
 import SchoolsModule from "@/store/schools";
 import TermsOfUseModule from "@/store/terms-of-use";
 import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { VueWrapper, mount } from "@vue/test-utils";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { ConsentVersion } from "@/store/types/consent-version";

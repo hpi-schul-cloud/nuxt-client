@@ -2,7 +2,7 @@ import { ConfigResponse, ExternalToolElementResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import { BusinessError } from "@/store/types/commons";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,

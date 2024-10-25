@@ -13,7 +13,7 @@ import {
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import { computed, nextTick, ref } from "vue";
 import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
 import { ConfigResponse } from "@/serverApi/v3/api";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";

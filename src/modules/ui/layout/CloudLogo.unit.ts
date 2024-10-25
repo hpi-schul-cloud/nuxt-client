@@ -1,6 +1,6 @@
 import { shallowMount } from "@vue/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import CloudLogo from "./CloudLogo.vue";
