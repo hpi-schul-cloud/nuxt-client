@@ -6,8 +6,12 @@ import AddParticipants from "./AddParticipants.vue";
 import { RoleName } from "@/serverApi/v3";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule } from "@/store";
-import { Participants, mockPotentialParticipants } from "@data-room";
 import { nextTick } from "vue";
+import {
+	roomParticipantResponseFactory,
+	roomParticipantSchoolResponseFactory,
+} from "@@/tests/test-utils";
+import { Participants } from "./types";
 
 jest.mock("@/store/store-accessor", () => {
 	return {
@@ -17,6 +21,10 @@ jest.mock("@/store/store-accessor", () => {
 		},
 	};
 });
+
+const mockPotentialParticipants = roomParticipantResponseFactory.buildList(3);
+const roomParticipantsSchools =
+	roomParticipantSchoolResponseFactory.buildList(3);
 
 describe("AddParticipants", () => {
 	const setup = () => {
@@ -29,7 +37,7 @@ describe("AddParticipants", () => {
 			},
 			props: {
 				userList: mockPotentialParticipants,
-				preSelectedRole: RoleName.Teacher,
+				schools: roomParticipantsSchools,
 			},
 		});
 
@@ -89,8 +97,8 @@ describe("AddParticipants", () => {
 
 			expect(userComponent).toBeTruthy();
 			await userComponent.vm.$emit("update:modelValue", [
-				mockPotentialParticipants[0].id,
-				mockPotentialParticipants[1].id,
+				mockPotentialParticipants[0].userId,
+				mockPotentialParticipants[1].userId,
 			]);
 			await nextTick();
 			expect(wrapperVM.selectedUsers).toHaveLength(2);
@@ -107,8 +115,8 @@ describe("AddParticipants", () => {
 
 			expect(userComponent).toBeTruthy();
 			await userComponent.vm.$emit("update:modelValue", [
-				mockPotentialParticipants[0].id,
-				mockPotentialParticipants[1].id,
+				mockPotentialParticipants[0].userId,
+				mockPotentialParticipants[1].userId,
 			]);
 			await nextTick();
 

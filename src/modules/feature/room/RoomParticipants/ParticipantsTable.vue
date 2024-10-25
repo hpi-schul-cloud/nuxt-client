@@ -54,7 +54,6 @@ import {
 	mdiMagnify,
 	mdiTrashCanOutline,
 } from "@icons/material";
-import { RoleName } from "@/serverApi/v3";
 import { ParticipantType } from "@data-room";
 
 const props = defineProps({
@@ -68,23 +67,7 @@ const emit = defineEmits(["remove:participant"]);
 
 const { t } = useI18n();
 const search = ref("");
-const userList = toRef(props, "participants");
-type Role = RoleName.Teacher | RoleName.Student;
-
-const roles: Record<Role, string> = {
-	[RoleName.Teacher]: t("common.roleName.teacher") ?? "Teacher",
-	[RoleName.Student]: t("common.roleName.student") ?? "Student",
-};
-
-const participantsList = computed(() =>
-	userList.value.map((participant) => {
-		return {
-			...participant,
-			roleName: roles[participant.roleName as Role],
-		};
-	})
-);
-
+const participantsList = toRef(props, "participants");
 const participantsFilterCount = ref(participantsList.value.length);
 
 const onUpdateFilter = (value: ParticipantType[]) => {

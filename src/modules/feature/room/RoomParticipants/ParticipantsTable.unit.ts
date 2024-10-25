@@ -3,10 +3,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import ParticipantsTable from "./ParticipantsTable.vue";
-import { mockParticipants } from "@data-room";
-import { Participants } from "@data-room";
 import { Ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
+import { roomParticipantResponseFactory } from "@@/tests/test-utils";
+import { ParticipantType } from "@data-room";
+
+const mockParticipants = roomParticipantResponseFactory.buildList(3);
 
 describe("ParticipantsTable", () => {
 	const setup = () => {
@@ -18,7 +20,7 @@ describe("ParticipantsTable", () => {
 		});
 
 		const wrapperVM = wrapper.vm as unknown as {
-			participants: Participants[];
+			participants: ParticipantType[];
 			search: Ref<string>;
 			tableTitle: string;
 			tableHeader: { title: string; key: string }[];
@@ -76,11 +78,11 @@ describe("ParticipantsTable", () => {
 
 			const title = wrapper.find(".table-title");
 			expect(title.text()).toContain(`(${mockParticipants.length})`);
-			await search.vm.$emit("update:modelValue", "Alice");
-			expect(wrapperVM.search).toBe("Alice");
+			await search.vm.$emit("update:modelValue", mockParticipants[0].firstName);
+			expect(wrapperVM.search).toBe(mockParticipants[0].firstName);
 			const dataTable = wrapper.findComponent({ name: "v-data-table" });
 
-			expect(dataTable.vm.search).toEqual("Alice");
+			expect(dataTable.vm.search).toEqual(mockParticipants[0].firstName);
 			expect(title.text()).toContain("(1)");
 		});
 	});

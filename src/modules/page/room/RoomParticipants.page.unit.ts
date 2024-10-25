@@ -219,7 +219,7 @@ describe("RoomParticipantsPage", () => {
 				await flushPromises();
 				expect(
 					mockUseParticipantsCalls.removeParticipants
-				).toHaveBeenCalledWith([mockParticipants[0].id]);
+				).toHaveBeenCalledWith([mockParticipants[0].userId]);
 			});
 		});
 	});
