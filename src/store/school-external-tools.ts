@@ -7,7 +7,10 @@ import {
 	ToolApiInterface,
 } from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
+import {
+	ContextExternalToolConfigurationTemplate,
+	SchoolExternalToolConfigurationTemplate,
+} from "@data-external-tool";
 import { AxiosResponse } from "axios";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { SchoolExternalTool, SchoolExternalToolSave } from "./external-tool";
@@ -24,6 +27,10 @@ export default class SchoolExternalToolsModule extends VuexModule {
 
 	private schoolExternalToolConfigurationTemplates: SchoolExternalToolConfigurationTemplate[] =
 		[];
+
+	private contextExternalToolConfigurationTemplate:
+		| ContextExternalToolConfigurationTemplate
+		| undefined;
 
 	private loading = false;
 
@@ -43,6 +50,12 @@ export default class SchoolExternalToolsModule extends VuexModule {
 
 	get getSchoolExternalToolConfigurationTemplates(): SchoolExternalToolConfigurationTemplate[] {
 		return this.schoolExternalToolConfigurationTemplates;
+	}
+
+	get getContextExternalToolConfigurationTemplate():
+		| ContextExternalToolConfigurationTemplate
+		| undefined {
+		return this.contextExternalToolConfigurationTemplate;
 	}
 
 	get getLoading(): boolean {
@@ -70,6 +83,13 @@ export default class SchoolExternalToolsModule extends VuexModule {
 		toolConfigurations: SchoolExternalToolConfigurationTemplate[]
 	): void {
 		this.schoolExternalToolConfigurationTemplates = [...toolConfigurations];
+	}
+
+	@Mutation
+	setContextExternalToolConfigurationTemplate(
+		toolConfiguration: ContextExternalToolConfigurationTemplate | undefined
+	): void {
+		this.contextExternalToolConfigurationTemplate = toolConfiguration;
 	}
 
 	@Mutation

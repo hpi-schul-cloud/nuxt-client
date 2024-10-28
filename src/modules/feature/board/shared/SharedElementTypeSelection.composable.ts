@@ -1,10 +1,10 @@
 import { createSharedComposable } from "@vueuse/core";
 import { ref } from "vue";
 
-interface ElementTypeSelectionOptions {
+export interface ElementTypeSelectionOptions {
 	icon: string;
 	label: string;
-	action: () => void;
+	action: () => Promise<void>;
 	testId: string;
 }
 

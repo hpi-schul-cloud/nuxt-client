@@ -7,6 +7,7 @@ import {
 	CardResponse,
 	ColumnResponse,
 	ContentElementType,
+	CourseRoomsApiFactory,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
 	DrawingElementContent,
@@ -14,7 +15,6 @@ import {
 	FileElementContentBody,
 	LinkElementContentBody,
 	RichTextElementContentBody,
-	CourseRoomsApiFactory,
 	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
 import { BoardContextType } from "@/types/board/BoardContext";
