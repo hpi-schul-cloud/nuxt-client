@@ -6,7 +6,7 @@ import {
 	SYSTEMS_MODULE_KEY,
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import UserLoginMigrationError from "./UserLoginMigrationError.page.vue";

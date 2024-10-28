@@ -2,7 +2,7 @@ import { ConfigResponse, ExternalToolElementResponse } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import { BusinessError } from "@/store/types/commons";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	contextExternalToolConfigurationStatusFactory,
 	contextExternalToolFactory,
@@ -176,6 +176,31 @@ describe("ExternalToolElement", () => {
 				expect(
 					useExternalToolLaunchStateMock.fetchContextLaunchRequest
 				).toHaveBeenCalledWith("contextExternalToolId");
+			});
+
+			it("should not open dialog", async () => {
+				const element = externalToolElementResponseFactory.build({
+					content: { contextExternalToolId: "contextExternalToolId" },
+				});
+				useSharedLastCreatedElementMock.lastCreatedElementId.value = element.id;
+
+				const { wrapper } = getWrapper(
+					{
+						element,
+						isEditMode: true,
+					},
+					externalToolDisplayDataFactory.build({
+						status: schoolToolConfigurationStatusFactory.build(),
+					})
+				);
+
+				await nextTick();
+
+				const dialog = wrapper.findComponent(
+					ExternalToolElementConfigurationDialog
+				);
+
+				expect(dialog.props("isOpen")).toEqual(false);
 			});
 		});
 

@@ -1,6 +1,6 @@
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { useI18n } from "vue-i18n";
 import { useCollaborativeTextEditorNotifier } from "./CollaborativeTextEditorNotifications.composable";

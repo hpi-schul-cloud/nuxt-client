@@ -244,9 +244,11 @@ export default {
 				);
 			},
 			set(state) {
-				state
-					? this.selectAllRowsOfAllPages()
-					: this.unselectAllRowsOfAllPages();
+				if (state) {
+					this.selectAllRowsOfAllPages();
+				} else {
+					this.unselectAllRowsOfAllPages();
+				}
 			},
 		},
 		currentPageSelectionState: {

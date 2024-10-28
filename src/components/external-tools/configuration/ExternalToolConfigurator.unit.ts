@@ -2,8 +2,10 @@ import * as useExternalToolUtilsComposable from "@/composables/external-tool-map
 import { ToolParameterLocation } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
+	contextExternalToolConfigurationTemplateFactory,
+	contextExternalToolFactory,
 	schoolExternalToolConfigurationTemplateFactory,
 	schoolExternalToolFactory,
 	toolParameterFactory,
@@ -83,6 +85,34 @@ describe("ExternalToolConfigurator", () => {
 				const selectionRow = wrapper.find(".v-autocomplete .v-list-item-title");
 
 				expect(selectionRow.text()).toEqual(template.name);
+			});
+		});
+
+		describe("when a preferred tool is loaded", () => {
+			const setup = () => {
+				const template1 =
+					contextExternalToolConfigurationTemplateFactory.build();
+				const template2 =
+					contextExternalToolConfigurationTemplateFactory.build();
+
+				const { wrapper } = getWrapper({
+					templates: [template1, template2],
+					configuration: contextExternalToolFactory.build(),
+					isPreferredTool: true,
+				});
+
+				return {
+					wrapper,
+					template1,
+				};
+			};
+
+			it("should display the preferred tool in the selection", async () => {
+				const { wrapper, template1 } = setup();
+
+				const selectionRow = wrapper.find(".v-autocomplete .v-list-item-title");
+
+				expect(selectionRow.text()).toEqual(template1.name);
 			});
 		});
 
