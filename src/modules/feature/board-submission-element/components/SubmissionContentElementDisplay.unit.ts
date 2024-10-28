@@ -1,7 +1,7 @@
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { shallowMount } from "@vue/test-utils";
 import AuthModule from "@/store/auth";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
 import SubmissionItemStudentDisplay from "./SubmissionItemStudentDisplay.vue";
 import SubmissionItemsTeacherDisplay from "./SubmissionItemsTeacherDisplay.vue";

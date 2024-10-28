@@ -1,5 +1,5 @@
 import PrivacyPolicyModule from "@/store/privacy-policy";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import SchoolsModule from "@/store/schools";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { mount } from "@vue/test-utils";

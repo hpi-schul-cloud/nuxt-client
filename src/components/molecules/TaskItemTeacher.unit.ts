@@ -2,7 +2,7 @@ import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import {
 	createTestingI18n,

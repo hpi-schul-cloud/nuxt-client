@@ -1,7 +1,7 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { groupResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,

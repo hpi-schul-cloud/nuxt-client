@@ -1,5 +1,5 @@
 import LoadingStateModule from "@/store/loading-state";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { nextTick } from "vue";
 import { useLoadingState } from "./loadingState";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";

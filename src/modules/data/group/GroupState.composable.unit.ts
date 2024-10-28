@@ -1,7 +1,7 @@
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { Group, useGroupApi, useGroupState } from "./index";
 import { groupFactory } from "@@/tests/test-utils/factory/groupFactory";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 import { mountComposable } from "@@/tests/test-utils";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";

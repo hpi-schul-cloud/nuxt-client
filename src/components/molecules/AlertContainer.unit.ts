@@ -8,7 +8,7 @@ import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { mount } from "@vue/test-utils";
 import AlertContainer from "./AlertContainer.vue";
 import Alert from "./Alert.vue";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 
 const getWrapper = (
 	device = "desktop",

@@ -1,6 +1,0 @@
-.vscode
-/node_modules/**
-dist
-/src/serverApi/**
-/src/fileStorageApi/**
-/src/h5pEditorApi/**
