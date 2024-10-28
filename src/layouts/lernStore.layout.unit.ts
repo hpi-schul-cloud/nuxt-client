@@ -8,7 +8,7 @@ import {
 import { shallowMount } from "@vue/test-utils";
 import lernStoreLayout from "./lernStore.layout.vue";
 import { CONTENT_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { useRoute } from "vue-router";
 
 const params = {

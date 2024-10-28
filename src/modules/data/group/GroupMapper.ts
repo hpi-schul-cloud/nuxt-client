@@ -10,6 +10,7 @@ export const GroupTypeMapping: Record<GroupResponseTypeEnum, GroupType> = {
 	[GroupResponseTypeEnum.Class]: GroupType.Class,
 	[GroupResponseTypeEnum.Course]: GroupType.Course,
 	[GroupResponseTypeEnum.Other]: GroupType.Other,
+	[GroupResponseTypeEnum.Room]: GroupType.Room,
 };
 
 export const GroupUserRoleMapping: Partial<Record<RoleName, GroupUserRole>> = {

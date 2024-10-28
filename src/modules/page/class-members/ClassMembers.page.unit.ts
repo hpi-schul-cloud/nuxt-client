@@ -6,7 +6,7 @@ import { Group, useGroupState } from "@data-group";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { groupFactory } from "@@/tests/test-utils/factory";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 import {
 	createTestingI18n,

@@ -1,6 +1,6 @@
 import ApplicationErrorModule from "@/store/application-error";
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,

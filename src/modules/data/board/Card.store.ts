@@ -1,4 +1,9 @@
-import { CardResponse, ContentElementType } from "@/serverApi/v3";
+import {
+	CardResponse,
+	ContentElementType,
+	PreferredToolResponse,
+	ToolContextType,
+} from "@/serverApi/v3";
 import { envConfigModule } from "@/store";
 import { useSharedEditMode, useSharedLastCreatedElement } from "@util-board";
 import { defineStore } from "pinia";
@@ -7,6 +12,7 @@ import { CreateCardSuccessPayload } from "./boardActions/boardActionPayload";
 
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import {
+	CreateElementRequestPayload,
 	CreateElementSuccessPayload,
 	DeleteCardSuccessPayload,
 	DeleteElementSuccessPayload,
@@ -21,6 +27,7 @@ import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 export const useCardStore = defineStore("cardStore", () => {
 	const cards = ref<Record<string, CardResponse>>({});
+	const preferredTools = ref<PreferredToolResponse[]>();
 	const { lastCreatedElementId } = useSharedLastCreatedElement();
 
 	const restApi = useCardRestApi();
@@ -90,6 +97,13 @@ export const useCardStore = defineStore("cardStore", () => {
 
 	const createElementRequest = socketOrRest.createElementRequest;
 
+	const createPreferredElement = async (
+		payload: CreateElementRequestPayload,
+		tool: PreferredToolResponse
+	) => {
+		restApi.createPreferredElement(payload, tool);
+	};
+
 	const createElementSuccess = async (payload: CreateElementSuccessPayload) => {
 		const card = cards.value[payload.cardId];
 		if (card === undefined) return;
@@ -109,6 +123,7 @@ export const useCardStore = defineStore("cardStore", () => {
 			lastCreatedElementId.value = payload.newElement.id;
 			setFocus(payload.newElement.id);
 		}
+
 		return payload.newElement;
 	};
 
@@ -220,7 +235,16 @@ export const useCardStore = defineStore("cardStore", () => {
 		return previousElement.id;
 	};
 
+	const loadPreferredTools = async (contextType: ToolContextType) => {
+		preferredTools.value = await restApi.getPreferredTools(contextType);
+	};
+
+	const getPreferredTools = (): PreferredToolResponse[] | undefined => {
+		return preferredTools.value;
+	};
+
 	return {
+		createPreferredElement,
 		createCardSuccess,
 		createElementRequest,
 		createElementSuccess,
@@ -242,5 +266,8 @@ export const useCardStore = defineStore("cardStore", () => {
 		updateCardHeightSuccess,
 		updateCardTitleRequest,
 		updateCardTitleSuccess,
+		loadPreferredTools,
+		preferredTools,
+		getPreferredTools,
 	};
 });
