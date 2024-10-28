@@ -79,33 +79,30 @@ const props = withDefaults(
 		maxWidth: 480,
 	}
 );
-const file = computed<File[]>({
-	get: () =>
-		commonCartridgeImportModule.file ? [commonCartridgeImportModule.file] : [],
-	set: (value: File[]) => commonCartridgeImportModule.setFile(value[0]),
+const file = computed<File | undefined>({
+	get: () => commonCartridgeImportModule.file,
+	set: (value: File | undefined) => commonCartridgeImportModule.setFile(value),
 });
 const isOpen = computed<boolean>({
 	get: () => commonCartridgeImportModule.isOpen,
 	set: (value: boolean) => commonCartridgeImportModule.setIsOpen(value),
 });
 const importButtonDisabled = computed(() => {
-	return file.value.length === 0;
+	return !file.value;
 });
 
 function onCancel(): void {
-	file.value = [];
+	file.value = undefined;
 	commonCartridgeImportModule.setIsOpen(false);
 }
 
 async function onConfirm(): Promise<void> {
-	const [selectedFile] = file.value;
-
 	commonCartridgeImportModule.setIsOpen(false);
 	loadingStateModule.open({
 		text: i18n.t("pages.rooms.ccImportCourse.loading"),
 	});
 
-	await commonCartridgeImportModule.importCommonCartridgeFile(selectedFile);
+	await commonCartridgeImportModule.importCommonCartridgeFile(file.value);
 
 	if (commonCartridgeImportModule.isSuccess) {
 		await Promise.allSettled([
@@ -128,7 +125,7 @@ async function onConfirm(): Promise<void> {
 		});
 	}
 
-	file.value = [];
+	file.value = undefined;
 }
 </script>
 
