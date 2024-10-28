@@ -1641,6 +1641,8 @@ export default {
 	"pages.rooms.title": "Rooms",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
+	"pages.rooms.participant.infoText":
+		'Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their own profile <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(more information)</a>.',
 	"pages.rooms.participant.label": "Participant",
 	"pages.rooms.participants.label": "Participants",
 	"pages.rooms.participants.addParticipants": "Add participants",

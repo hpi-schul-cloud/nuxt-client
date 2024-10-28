@@ -12,13 +12,7 @@
 		</template>
 
 		<div class="mb-8 mt-12">
-			Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können
-			hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im
-			eigenen Profil aktiviert haben
-			<a
-				href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
-				>(weitere Informationen)</a
-			>.
+			<RenderHTML :html="t('pages.rooms.participant.infoText')" />
 		</div>
 		<div>
 			<ParticipantsTable
@@ -60,6 +54,7 @@ import {
 	ConfirmationDialog,
 	useDeleteConfirmationDialog,
 } from "@ui-confirmation-dialog";
+import RenderHTML from "@/modules/feature/render-html/RenderHTML.vue";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();

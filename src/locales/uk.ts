@@ -1663,6 +1663,8 @@ export default {
 	"pages.rooms.title": "Кімнати",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
+	"pages.rooms.participant.infoText":
+		'Додайте учасників до кімнати. Вчителів з інших шкіл можна додавати, якщо вони активували видимість у центральному каталозі у власному профілі <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(більше інформації)</a>.',
 	"pages.rooms.participant.label": "Учасник",
 	"pages.rooms.participants.label": "Учасники",
 	"pages.rooms.participants.addParticipants": "Додайте учасників",

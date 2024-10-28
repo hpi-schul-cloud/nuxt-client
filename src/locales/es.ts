@@ -1685,6 +1685,8 @@ export default {
 	"pages.rooms.title": "Habitaciones",
 	"pages.rooms.fab.title": "Crear habitación",
 	"pages.rooms.emptyState": "Actualmente no hay habitaciones aquí.",
+	"pages.rooms.participant.infoText":
+		'Añade participantes a la sala. Se pueden añadir profesores de otros centros educativos si tienen activada la visibilidad en el directorio central en su propio perfil <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(más información)</a>.',
 	"pages.rooms.participant.label": "Partícipe",
 	"pages.rooms.participants.label": "Participantes",
 	"pages.rooms.participants.addParticipants": "Añadir participantes",

@@ -111,7 +111,7 @@ const roles = [
 	{ id: RoleName.RoomViewer, name: t("pages.rooms.participants.roles.viewer") },
 ];
 
-const selectedRole = ref(roles[0]);
+const selectedRole = ref<string>(roles[0].id);
 const selectedUsers = ref<string[]>([]);
 
 const onRoleChange = () => {
@@ -120,7 +120,7 @@ const onRoleChange = () => {
 };
 
 const onSchoolChange = () => {
-	selectedRole.value = roles[0];
+	selectedRole.value = roles[0].id;
 	onRoleChange();
 };
 
@@ -128,5 +128,6 @@ const onAddParticipants = () => {
 	emit("add:participants", selectedUsers.value);
 	emit("close");
 };
+
 const onClose = () => emit("close");
 </script>
