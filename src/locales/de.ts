@@ -1676,6 +1676,8 @@ export default {
 	"pages.rooms.participants.removeParticipants": "Teilnehmende entfernen",
 	"pages.rooms.participants.participantTable.itemsPerPage":
 		"Einträge pro Seite",
+	"pages.rooms.participants.roles.editor": "Raumeditor",
+	"pages.rooms.participants.roles.viewer": "Raumbetrachter",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",

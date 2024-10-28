@@ -1670,6 +1670,8 @@ export default {
 	"pages.rooms.participants.removeParticipants": "Видалити учасника",
 	"pages.rooms.participants.participantTable.itemsPerPage":
 		"Записи на сторінку",
+	"pages.rooms.participants.roles.editor": "Редактор кімнати",
+	"pages.rooms.participants.roles.viewer": "Переглядач кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",

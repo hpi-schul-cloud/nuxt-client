@@ -1647,6 +1647,8 @@ export default {
 	"pages.rooms.participants.manageParticipants": "Manage participants",
 	"pages.rooms.participants.removeParticipants": "Remove participants",
 	"pages.rooms.participants.participantTable.itemsPerPage": "Entries per page",
+	"pages.rooms.participants.roles.editor": "Room editor",
+	"pages.rooms.participants.roles.viewer": "Room viewer",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",

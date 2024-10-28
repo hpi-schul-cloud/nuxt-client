@@ -1692,6 +1692,8 @@ export default {
 	"pages.rooms.participants.removeParticipants": "Eliminar participante",
 	"pages.rooms.participants.participantTable.itemsPerPage":
 		"Entradas por página",
+	"pages.rooms.participants.roles.editor": "Editor de salas",
+	"pages.rooms.participants.roles.viewer": "Visor de salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",

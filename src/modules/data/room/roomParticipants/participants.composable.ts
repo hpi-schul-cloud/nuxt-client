@@ -10,21 +10,22 @@ import {
 	UserIdAndRoleRoleNameEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
-
-const userRoles: Record<string, string> = {
-	// TODO: Add translations here
-	[RoleName.RoomEditor]: "Room Editor",
-	[RoleName.RoomViewer]: "Room Viewer",
-};
+import { useI18n } from "vue-i18n";
 
 export const useParticipants = (roomId: string) => {
 	const participants: Ref<RoomParticipantResponse[]> = ref([]);
 	const potentialParticipants: Ref<ParticipantType[]> = ref([]);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const isLoading = ref(false);
+	const { t } = useI18n();
 	const ownSchool = {
 		id: "5f2987e020834114b8efd6f8",
 		name: "Paul-Gerhardt-Gymnasium",
+	};
+
+	const userRoles: Record<string, string> = {
+		[RoleName.RoomEditor]: t("pages.rooms.participants.roles.editor"),
+		[RoleName.RoomViewer]: t("pages.rooms.participants.roles.viewer"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
