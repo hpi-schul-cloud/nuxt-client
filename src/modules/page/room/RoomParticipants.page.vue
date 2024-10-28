@@ -106,7 +106,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const onFabClick = async () => {
 	await getSchools();
-	await getPotentialParticipants(RoleName.Teacher);
+	await getPotentialParticipants(RoleName.RoomEditor);
 	isParticipantsDialogOpen.value = true;
 };
 

@@ -17,7 +17,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick, ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { flushPromises } from "@vue/test-utils";
-import { RoomColor } from "@/serverApi/v3";
+import { RoleName, RoomColor } from "@/serverApi/v3";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 
@@ -67,6 +67,7 @@ describe("RoomParticipantsPage", () => {
 		mockUseParticipantsCalls.getPotentialParticipants = jest.fn();
 		mockUseParticipantsCalls.fetchParticipants = jest.fn();
 		mockUseParticipantsCalls.removeParticipants = jest.fn();
+		mockUseParticipantsCalls.getSchools = jest.fn();
 		mockUseParticipants.mockReturnValue({
 			...mockUseParticipantsCalls,
 			schools: ref(roomParticipantsSchools),
@@ -167,10 +168,12 @@ describe("RoomParticipantsPage", () => {
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
 				await wireframe.vm.$emit("fab:clicked");
+				await flushPromises();
 
+				expect(mockUseParticipantsCalls.getSchools).toHaveBeenCalled();
 				expect(
 					mockUseParticipantsCalls.getPotentialParticipants
-				).toHaveBeenCalledWith("teacher");
+				).toHaveBeenCalledWith(RoleName.RoomEditor);
 			});
 		});
 

@@ -36,8 +36,6 @@ export const useParticipants = (roomId: string) => {
 			const participantsData = (await roomApi.roomControllerGetMembers(roomId))
 				.data;
 
-			// getSchools();
-
 			participants.value = participantsData.data.map(
 				(participant: RoomParticipantResponse) => {
 					return {
