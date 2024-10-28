@@ -124,6 +124,8 @@ async function onConfirm(): Promise<void> {
 			autoClose: true,
 		});
 	}
+
+	file.value = undefined;
 }
 </script>
 
