@@ -54,7 +54,7 @@ import { useRoomDetailsStore, useParticipants } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName, RoomParticipantResponse } from "@/serverApi/v3";
 import { ParticipantType } from "@data-room";
 import {
 	ConfirmationDialog,
@@ -75,10 +75,11 @@ const {
 	addParticipants,
 	fetchParticipants,
 	getPotentialParticipants,
+	getSchools,
 	removeParticipants,
 } = useParticipants(roomId);
 
-const participantsList: Ref<ParticipantType[]> = ref(participants);
+const participantsList: Ref<RoomParticipantResponse[]> = ref(participants);
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 const pageTitle = computed(() =>
@@ -104,6 +105,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const onFabClick = async () => {
+	await getSchools();
 	await getPotentialParticipants(RoleName.Teacher);
 	isParticipantsDialogOpen.value = true;
 };

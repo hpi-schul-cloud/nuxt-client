@@ -13,8 +13,8 @@
 				flat
 				hide-details
 				single-line
-				width="200"
 			/>
+			<!-- width="200" -->
 		</v-card-title>
 
 		<v-divider />
@@ -54,11 +54,11 @@ import {
 	mdiMagnify,
 	mdiTrashCanOutline,
 } from "@icons/material";
-import { ParticipantType } from "@data-room";
+import { RoomParticipantResponse } from "@/serverApi/v3";
 
 const props = defineProps({
 	participants: {
-		type: Array as PropType<ParticipantType[]>,
+		type: Array as PropType<RoomParticipantResponse[]>,
 		required: true,
 	},
 });
@@ -70,7 +70,7 @@ const search = ref("");
 const participantsList = toRef(props, "participants");
 const participantsFilterCount = ref(participantsList.value.length);
 
-const onUpdateFilter = (value: ParticipantType[]) => {
+const onUpdateFilter = (value: RoomParticipantResponse[]) => {
 	participantsFilterCount.value =
 		search.value === "" ? participantsList.value.length : value.length;
 };
@@ -80,7 +80,7 @@ const tableTitle = computed(
 		`${t("pages.rooms.participants.label")} (${participantsFilterCount.value})`
 );
 
-const onRemoveParticipant = (participant: ParticipantType) => {
+const onRemoveParticipant = (participant: RoomParticipantResponse) => {
 	emit("remove:participant", participant);
 };
 

@@ -36,7 +36,7 @@ export const useParticipants = (roomId: string) => {
 			const participantsData = (await roomApi.roomControllerGetMembers(roomId))
 				.data;
 
-			getSchools();
+			// getSchools();
 
 			participants.value = participantsData.data.map(
 				(participant: RoomParticipantResponse) => {
@@ -129,6 +129,7 @@ export const useParticipants = (roomId: string) => {
 		addParticipants,
 		fetchParticipants,
 		getPotentialParticipants,
+		getSchools,
 		removeParticipants,
 		isLoading,
 		participants,
