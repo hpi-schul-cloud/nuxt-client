@@ -11,8 +11,14 @@ import {
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
+const userRoles: Record<string, string> = {
+	// TODO: Add translations here
+	[RoleName.RoomEditor]: "Room Editor",
+	[RoleName.RoomViewer]: "Room Viewer",
+};
+
 export const useParticipants = (roomId: string) => {
-	const participants: Ref<ParticipantType[]> = ref([]);
+	const participants: Ref<RoomParticipantResponse[]> = ref([]);
 	const potentialParticipants: Ref<ParticipantType[]> = ref([]);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const isLoading = ref(false);
@@ -36,7 +42,7 @@ export const useParticipants = (roomId: string) => {
 				(participant: RoomParticipantResponse) => {
 					return {
 						...participant,
-						fullName: `${participant.lastName}, ${participant.firstName}`,
+						roleName: userRoles[participant.roleName],
 					};
 				}
 			);
@@ -60,7 +66,7 @@ export const useParticipants = (roomId: string) => {
 						...user,
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
-						roleName: RoleName.Teacher,
+						roleName: RoleName.RoomEditor,
 						schoolName: ownSchool.name,
 					};
 				})
