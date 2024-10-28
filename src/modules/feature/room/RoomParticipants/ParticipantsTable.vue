@@ -97,10 +97,11 @@ const tableHeader = [
 		title: t("common.labels.role"),
 		key: "roleName",
 	},
-	{
-		title: t("common.words.classes"),
-		key: "classes",
-	},
+	// TODO: Decide if we want to show classes in the table or not
+	// {
+	// 	title: t("common.words.classes"),
+	// 	key: "classes",
+	// },
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
 	{ title: "", key: "actions", sortable: false },
 ];

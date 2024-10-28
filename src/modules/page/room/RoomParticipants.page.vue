@@ -124,7 +124,7 @@ const onUpdateRole = async (role: RoleName) => {
 
 const onRemoveParticipant = async (participant: ParticipantType) => {
 	const shouldDelete = await askDeleteConfirmation(
-		participant.fullName,
+		`${participant.lastName}, ${participant.firstName}`,
 		"pages.rooms.participant.label"
 	);
 	if (!shouldDelete) return;
