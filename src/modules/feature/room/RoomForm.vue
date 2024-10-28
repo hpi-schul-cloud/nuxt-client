@@ -23,6 +23,7 @@
 				<div class="d-flex">
 					<DatePicker
 						:date="roomData.startDate"
+						:min-date="todayISO"
 						class="w-50 mr-4"
 						data-testid="room-start-date-input"
 						aria-labelledby="time-period-label"
@@ -30,6 +31,7 @@
 					/>
 					<DatePicker
 						:date="roomData.endDate"
+						:min-date="todayISO"
 						class="w-50 ml-4"
 						data-testid="room-end-date-input"
 						aria-labelledby="time-period-label"
@@ -73,6 +75,8 @@ import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
+import { DATETIME_FORMAT } from "@/plugins/datetime";
+import dayjs from "dayjs";
 
 const props = defineProps({
 	room: {
@@ -86,6 +90,9 @@ const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 
 const roomData = computed(() => props.room);
+const todayISO = computed(() =>
+	dayjs.tz(new Date(), "DD.MM.YYYY", "UTC").format(DATETIME_FORMAT.inputDate)
+);
 
 // Validation
 const validationRules = computed(() => ({
