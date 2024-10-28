@@ -1,5 +1,5 @@
 import ShareModule from "@/store/share";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mount } from "@vue/test-utils";
 import ShareModal from "./ShareModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";

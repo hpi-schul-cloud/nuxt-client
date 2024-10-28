@@ -7,7 +7,7 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { envsFactory } from "@@/tests/test-utils";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import {

@@ -1,7 +1,7 @@
 import SchoolSettings from "./SchoolSettings.page.vue";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { shallowMount } from "@vue/test-utils";
 import { FederalState } from "@/store/types/schools";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";

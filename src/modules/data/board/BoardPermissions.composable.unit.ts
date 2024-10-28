@@ -1,6 +1,6 @@
 import AuthModule from "@/store/auth";
 import { useBoardPermissions } from "./BoardPermissions.composable";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 
 describe("BoardPermissions.composable", () => {
 	let authModuleMock: jest.Mocked<AuthModule>;

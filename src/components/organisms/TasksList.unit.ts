@@ -3,7 +3,7 @@ import FinishedTasksModule from "@/store/finished-tasks";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { Task } from "@/store/types/tasks";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import mocks from "@@/tests/test-utils/mockDataTasks";
 import { mount } from "@vue/test-utils";
 import TaskItemTeacher from "../molecules/TaskItemTeacher.vue";
