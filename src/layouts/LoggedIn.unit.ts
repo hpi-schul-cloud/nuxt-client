@@ -8,7 +8,7 @@ import {
 	FILE_PATHS_MODULE_KEY,
 	THEME_KEY,
 } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,

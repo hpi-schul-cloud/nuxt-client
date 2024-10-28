@@ -22,6 +22,7 @@ describe("DeleteConfirmation composable", () => {
 				| "components.boardCard"
 				| "components.boardElement" = "components.boardElement";
 			const titleTranslationKey = "ui-confirmation-dialog.ask-delete";
+			const confirmActionLangKey = "common.actions.delete";
 			const data = {
 				elementId: "elementId",
 				name: "name",
@@ -51,6 +52,7 @@ describe("DeleteConfirmation composable", () => {
 			return {
 				askDeleteConfirmation,
 				askConfirmation,
+				confirmActionLangKey,
 				data,
 				translateMock,
 				typeLanguageKey,
@@ -88,6 +90,7 @@ describe("DeleteConfirmation composable", () => {
 				const {
 					askDeleteConfirmation,
 					askConfirmation,
+					confirmActionLangKey,
 					title,
 					typeLanguageKey,
 					titleTranslationKey,
@@ -96,6 +99,7 @@ describe("DeleteConfirmation composable", () => {
 				await askDeleteConfirmation(title, typeLanguageKey);
 
 				expect(askConfirmation).toHaveBeenCalledWith({
+					confirmActionLangKey: expect.stringContaining(confirmActionLangKey),
 					message: expect.stringContaining(titleTranslationKey),
 				});
 			});
@@ -131,6 +135,7 @@ describe("DeleteConfirmation composable", () => {
 				const {
 					askDeleteConfirmation,
 					askConfirmation,
+					confirmActionLangKey,
 					typeLanguageKey,
 					titleTranslationKey,
 				} = setup(true);
@@ -138,6 +143,7 @@ describe("DeleteConfirmation composable", () => {
 				await askDeleteConfirmation("", typeLanguageKey);
 
 				expect(askConfirmation).toHaveBeenCalledWith({
+					confirmActionLangKey: expect.stringContaining(confirmActionLangKey),
 					message: expect.stringContaining(titleTranslationKey),
 				});
 			});

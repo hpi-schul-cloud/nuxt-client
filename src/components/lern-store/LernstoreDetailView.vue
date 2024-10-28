@@ -175,7 +175,6 @@
 </template>
 
 <script>
-/* eslint-disable max-lines */
 import UserHasRole from "@/components/helpers/UserHasRole";
 import AddContentButton from "@/components/lern-store/AddContentButton";
 import LernStorePlayer from "@/components/lern-store/LernStorePlayer";
@@ -334,7 +333,7 @@ export default {
 		},
 		goBack() {
 			if (window.history.length > 1) {
-				this.$router && this.$router.back();
+				this.$router?.back();
 			} else {
 				window.close();
 			}

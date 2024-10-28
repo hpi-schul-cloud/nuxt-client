@@ -5,7 +5,7 @@ import {
 } from "@/serverApi/v3";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { DataTableHeader } from "@/store/types/data-table-header";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	schoolExternalToolFactory,
 	schoolExternalToolResponseFactory,

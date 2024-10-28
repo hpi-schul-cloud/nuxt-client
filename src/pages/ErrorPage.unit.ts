@@ -1,7 +1,7 @@
 import ErrorPage from "./Error.page.vue";
 import { mount } from "@vue/test-utils";
 import ApplicationErrorModule from "@/store/application-error";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import ErrorContent from "@/components/error-handling/ErrorContent.vue";
 import { APPLICATION_ERROR_KEY } from "@/utils/inject";

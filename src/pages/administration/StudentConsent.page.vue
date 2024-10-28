@@ -312,7 +312,6 @@
 </template>
 
 <script>
-/* eslint-disable max-lines */
 import { envConfigModule, filePathsModule, notifierModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import StepProgress from "@/components/organisms/StepProgress";

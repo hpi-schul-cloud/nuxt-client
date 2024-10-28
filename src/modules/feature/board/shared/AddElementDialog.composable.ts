@@ -1,6 +1,7 @@
 import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
-import { ContentElementType } from "@/serverApi/v3";
+import { ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { useCardStore } from "@data-board";
 import {
 	mdiFormatText,
 	mdiLightbulbOnOutline,
@@ -12,7 +13,10 @@ import {
 } from "@icons/material";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
-import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import {
+	ElementTypeSelectionOptions,
+	useSharedElementTypeSelection,
+} from "./SharedElementTypeSelection.composable";
 
 type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 
@@ -20,6 +24,8 @@ export const useAddElementDialog = (
 	createElementRequestFn: CreateElementRequestFn,
 	cardId: string
 ) => {
+	const cardStore = useCardStore();
+
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { showCustomNotifier } = useBoardNotifier();
 	const { t } = useI18n();
@@ -27,10 +33,22 @@ export const useAddElementDialog = (
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
+	const preferredTools = cardStore.getPreferredTools();
+
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
 
 		await createElementRequestFn({ type: elementType, cardId });
+		showNotificationByElementType(elementType);
+	};
+
+	const onPreferredElementClick = async (
+		elementType: ContentElementType,
+		tool: PreferredToolResponse
+	) => {
+		closeDialog();
+		await cardStore.createPreferredElement({ cardId, type: elementType }, tool);
+
 		showNotificationByElementType(elementType);
 	};
 
@@ -52,16 +70,16 @@ export const useAddElementDialog = (
 		}
 	};
 
-	const options = [
+	const options: ElementTypeSelectionOptions[] = [
 		{
 			icon: mdiFormatText,
-			label: "components.elementTypeSelection.elements.textElement.subtitle",
+			label: t("components.elementTypeSelection.elements.textElement.subtitle"),
 			action: () => onElementClick(ContentElementType.RichText),
 			testId: "create-element-text",
 		},
 		{
 			icon: mdiTrayArrowUp,
-			label: "components.elementTypeSelection.elements.fileElement.subtitle",
+			label: t("components.elementTypeSelection.elements.fileElement.subtitle"),
 			action: () => onElementClick(ContentElementType.File),
 			testId: "create-element-file",
 		},
@@ -70,8 +88,9 @@ export const useAddElementDialog = (
 	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
 		options.push({
 			icon: mdiLightbulbOnOutline,
-			label:
-				"components.elementTypeSelection.elements.submissionElement.subtitle",
+			label: t(
+				"components.elementTypeSelection.elements.submissionElement.subtitle"
+			),
 			action: () => onElementClick(ContentElementType.SubmissionContainer),
 			testId: "create-element-submission-container",
 		});
@@ -80,8 +99,9 @@ export const useAddElementDialog = (
 	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
 		options.push({
 			icon: mdiPuzzleOutline,
-			label:
-				"components.elementTypeSelection.elements.externalToolElement.subtitle",
+			label: t(
+				"components.elementTypeSelection.elements.externalToolElement.subtitle"
+			),
 			action: () => onElementClick(ContentElementType.ExternalTool),
 			testId: "create-element-external-tool-container",
 		});
@@ -90,7 +110,7 @@ export const useAddElementDialog = (
 	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
 		options.push({
 			icon: mdiLink,
-			label: "components.elementTypeSelection.elements.linkElement.subtitle",
+			label: t("components.elementTypeSelection.elements.linkElement.subtitle"),
 			action: () => onElementClick(ContentElementType.Link),
 			testId: "create-element-link",
 		});
@@ -99,7 +119,7 @@ export const useAddElementDialog = (
 	if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
 		options.push({
 			icon: mdiPresentation,
-			label: "components.cardElement.drawingElement",
+			label: t("components.cardElement.drawingElement"),
 			action: () => onElementClick(ContentElementType.Drawing),
 			testId: "create-element-drawing-element",
 		});
@@ -111,10 +131,30 @@ export const useAddElementDialog = (
 	) {
 		options.push({
 			icon: mdiTextBoxEditOutline,
-			label:
-				"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle",
+			label: t(
+				"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle"
+			),
 			action: () => onElementClick(ContentElementType.CollaborativeTextEditor),
 			testId: "create-element-collaborative-text-editor",
+		});
+	}
+
+	if (
+		envConfigModule.getEnv.FEATURE_PREFERRED_CTL_TOOLS_ENABLED &&
+		preferredTools
+	) {
+		preferredTools.forEach((tool: PreferredToolResponse) => {
+			if (!tool.iconName) {
+				tool.iconName = "mdiPuzzleOutline";
+			}
+
+			options.push({
+				icon: "$" + tool.iconName,
+				label: tool.name,
+				action: () =>
+					onPreferredElementClick(ContentElementType.ExternalTool, tool),
+				testId: `create-element-preferred-element-${tool.name}`,
+			});
 		});
 	}
 

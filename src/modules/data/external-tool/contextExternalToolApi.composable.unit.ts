@@ -283,4 +283,16 @@ describe("contextExternalToolApi.composable", () => {
 			);
 		});
 	});
+
+	describe("fetchPreferredTools", () => {
+		it("should call the api", async () => {
+			await useContextExternalToolApi().fetchPreferredTools(
+				ToolContextType.BoardElement
+			);
+
+			expect(
+				toolApi.toolConfigurationControllerGetPreferredToolsForContext
+			).toHaveBeenCalledWith(ToolContextType.BoardElement);
+		});
+	});
 });
