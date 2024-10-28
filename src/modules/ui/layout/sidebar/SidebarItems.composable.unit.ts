@@ -1,7 +1,7 @@
 import { ENV_CONFIG_MODULE_KEY, FILE_PATHS_MODULE_KEY } from "@/utils/inject";
 import { envsFactory, mountComposable } from "@@/tests/test-utils";
 import { useSidebarItems } from "./SidebarItems.composable";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { ConfigResponse, SchulcloudTheme } from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";

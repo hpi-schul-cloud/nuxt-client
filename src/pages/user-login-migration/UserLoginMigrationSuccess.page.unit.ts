@@ -1,7 +1,7 @@
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import { shallowMount } from "@vue/test-utils";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import UserLoginMigrationSuccessPage from "./UserLoginMigrationSuccess.page.vue";
 import { SYSTEMS_MODULE_KEY } from "@/utils/inject";
 import {

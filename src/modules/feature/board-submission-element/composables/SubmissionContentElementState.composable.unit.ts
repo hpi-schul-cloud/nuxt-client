@@ -4,7 +4,7 @@ import { useSubmissionItemApi } from "./SubmissionItemApi.composable";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ref } from "vue";
 import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { SubmissionsResponse } from "@/serverApi/v3";
 import { submissionsResponseFactory } from "@@/tests/test-utils";
