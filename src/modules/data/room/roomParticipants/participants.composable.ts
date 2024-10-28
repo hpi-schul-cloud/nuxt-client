@@ -115,12 +115,13 @@ export const useParticipants = (roomId: string) => {
 		participants.value.push(...newParticipants);
 	};
 
-	const removeParticipants = async (ids: string[]) => {
-		await Promise.resolve(
-			(participants.value = participants.value.filter(
-				(p) => !ids.includes(p.userId)
-			))
+	const removeParticipants = async (userIds: string[]) => {
+		await roomApi.roomControllerRemoveMembers(roomId, { userIds });
+		participants.value = participants.value.filter(
+			(p) => !userIds.includes(p.userId)
 		);
+
+		return participants.value;
 	};
 
 	return {
