@@ -8,7 +8,7 @@ import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule } from "@/store";
 import { nextTick } from "vue";
 import {
-	roomParticipantResponseFactory,
+	addParticipantListFactory,
 	roomParticipantSchoolResponseFactory,
 } from "@@/tests/test-utils";
 import { Participants } from "./types";
@@ -22,7 +22,7 @@ jest.mock("@/store/store-accessor", () => {
 	};
 });
 
-const mockPotentialParticipants = roomParticipantResponseFactory.buildList(3);
+const mockPotentialParticipants = addParticipantListFactory.buildList(3);
 const roomParticipantsSchools =
 	roomParticipantSchoolResponseFactory.buildList(3);
 
@@ -78,11 +78,11 @@ describe("AddParticipants", () => {
 			});
 
 			expect(roleComponent).toBeTruthy();
-			await roleComponent.vm.$emit("update:modelValue", RoleName.Student);
+			await roleComponent.vm.$emit("update:modelValue", RoleName.RoomViewer);
 			await nextTick();
 			expect(wrapper.emitted("update:role")).toHaveLength(1);
 			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
-				RoleName.Student,
+				RoleName.RoomViewer,
 			]);
 		});
 	});

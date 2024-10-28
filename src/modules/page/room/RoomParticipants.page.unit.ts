@@ -1,6 +1,7 @@
 import RoomParticipantsPage from "./RoomParticipants.page.vue";
 import { createTestingPinia } from "@pinia/testing";
 import {
+	addParticipantListFactory,
 	mockedPiniaStoreTyping,
 	roomParticipantResponseFactory,
 	roomParticipantSchoolResponseFactory,
@@ -38,7 +39,7 @@ const store = {
 };
 
 const mockParticipants = roomParticipantResponseFactory.buildList(3);
-const mockPotentialParticipants = roomParticipantResponseFactory.buildList(3);
+const mockPotentialParticipants = addParticipantListFactory.buildList(3);
 const roomParticipantsSchools =
 	roomParticipantSchoolResponseFactory.buildList(3);
 
