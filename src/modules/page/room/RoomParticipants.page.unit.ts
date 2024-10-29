@@ -21,6 +21,7 @@ import { flushPromises } from "@vue/test-utils";
 import { RoleName, RoomColor } from "@/serverApi/v3";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
+import { useTitle } from "@vueuse/core";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -37,6 +38,15 @@ const store = {
 		updatedAt: new Date().toString(),
 	},
 };
+
+jest.mock("@vueuse/core", () => {
+	return {
+		...jest.requireActual("@vueuse/core"),
+		useTitle: jest.fn(),
+	};
+});
+
+jest.mocked(useTitle).mockReturnValue(ref(null));
 
 const mockParticipants = roomParticipantResponseFactory.buildList(3);
 const mockPotentialParticipants = addParticipantListFactory.buildList(3);
@@ -153,6 +163,7 @@ describe("RoomParticipantsPage", () => {
 			expect(wrapperVM.pageTitle).toContain(
 				"pages.rooms.participants.manageParticipants"
 			);
+			expect(useTitle).toHaveBeenCalled();
 		});
 
 		it("should have the correct title", async () => {

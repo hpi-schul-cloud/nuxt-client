@@ -14,7 +14,6 @@
 				hide-details
 				single-line
 			/>
-			<!-- width="200" -->
 		</v-card-title>
 
 		<v-divider />
