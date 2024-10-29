@@ -149,7 +149,7 @@ export const useParticipants = (roomId: string) => {
 			);
 		} catch (error) {
 			showFailure(t("pages.rooms.participant.error.delete"));
-			console.log(error);
+			console.error(error);
 		}
 	};
 
