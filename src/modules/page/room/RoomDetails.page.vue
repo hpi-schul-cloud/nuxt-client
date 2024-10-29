@@ -2,7 +2,7 @@
 	<div v-if="isLoading" />
 	<template v-else>
 		<template v-if="isRoom">
-			<DefaultWireframe max-width="short" :breadcrumbs="breadcrumbs">
+			<DefaultWireframe max-width="full" :breadcrumbs="breadcrumbs">
 				<template #header v-if="room">
 					<div class="d-flex align-items-center">
 						<h1 class="text-h3 mb-4" data-testid="room-title">
@@ -60,7 +60,7 @@
 						</KebabMenu>
 					</div>
 				</template>
-				<RoomDetails :room="room" />
+				<RoomDetails :room="room" :room-boards="roomBoards" />
 				<ConfirmationDialog />
 			</DefaultWireframe>
 		</template>
@@ -100,7 +100,8 @@ const route = useRoute();
 const router = useRouter();
 
 const roomDetailsStore = useRoomDetailsStore();
-const { isLoading, room, roomVariant } = storeToRefs(roomDetailsStore);
+const { isLoading, room, roomVariant, roomBoards } =
+	storeToRefs(roomDetailsStore);
 const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 
 const { t } = useI18n();
