@@ -107,8 +107,8 @@ const schoolList = toRef(props, "schools");
 const selectedSchool = ref(schoolList.value[0].id);
 
 const roles = [
-	{ id: RoleName.RoomEditor, name: t("pages.rooms.participants.roles.editor") },
-	{ id: RoleName.RoomViewer, name: t("pages.rooms.participants.roles.viewer") },
+	{ id: RoleName.RoomEditor, name: t("common.labels.teacher") },
+	// { id: RoleName.RoomViewer, name: t("pages.rooms.participants.roles.viewer") },
 ];
 
 const selectedRole = ref<string>(roles[0].id);

@@ -26,8 +26,9 @@ export const useParticipants = (roomId: string) => {
 	};
 
 	const userRoles: Record<string, string> = {
-		[RoleName.RoomEditor]: t("pages.rooms.participants.roles.editor"),
-		[RoleName.RoomViewer]: t("pages.rooms.participants.roles.viewer"),
+		[RoleName.RoomEditor]: t("common.labels.teacher"),
+		// This role name is not used for now
+		// [RoleName.RoomViewer]: t("pages.rooms.participants.roles.viewer"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);

@@ -69,7 +69,7 @@ describe("useParticipants", () => {
 			expect(participants.value).toEqual(
 				participantsMock.map((participant) => ({
 					...participant,
-					displayRoleName: "pages.rooms.participants.roles.editor",
+					displayRoleName: "common.labels.teacher",
 				}))
 			);
 		});
@@ -228,7 +228,7 @@ describe("useParticipants", () => {
 			expect(participants.value).toEqual([
 				{
 					...firstPotentialParticipant,
-					displayRoleName: "pages.rooms.participants.roles.editor",
+					displayRoleName: "common.labels.teacher",
 				},
 			]);
 		});
