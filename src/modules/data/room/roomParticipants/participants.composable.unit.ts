@@ -273,7 +273,6 @@ describe("useParticipants", () => {
 			expect(participants.value).not.toContainEqual(firstParticipant);
 		});
 
-		// ToDo: Fix this test
 		it("should throw an error if the API call fails", async () => {
 			const { removeParticipants } = useParticipants(roomId);
 
@@ -282,6 +281,7 @@ describe("useParticipants", () => {
 
 			await removeParticipants(["id"]);
 
+			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"pages.rooms.participant.error.delete"
 			);
