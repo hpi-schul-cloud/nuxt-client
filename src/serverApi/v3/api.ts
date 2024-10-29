@@ -1222,6 +1222,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_PREFERRED_CTL_TOOLS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_SHOW_MIGRATION_WIZARD: boolean;
     /**
      * 
@@ -6470,6 +6476,44 @@ export interface PeriodResponse {
      * @memberof PeriodResponse
      */
     until: string;
+}
+/**
+ * 
+ * @export
+ * @interface PreferredToolListResponse
+ */
+export interface PreferredToolListResponse {
+    /**
+     * 
+     * @type {Array<PreferredToolResponse>}
+     * @memberof PreferredToolListResponse
+     */
+    data: Array<PreferredToolResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface PreferredToolResponse
+ */
+export interface PreferredToolResponse {
+    /**
+     * Id of the school external tool
+     * @type {string}
+     * @memberof PreferredToolResponse
+     */
+    schoolExternalToolId: string;
+    /**
+     * Name of the external tool
+     * @type {string}
+     * @memberof PreferredToolResponse
+     */
+    name: string;
+    /**
+     * Name of the icon to be rendered when displaying it as a preferred tool
+     * @type {string}
+     * @memberof PreferredToolResponse
+     */
+    iconName: string;
 }
 /**
  * 
@@ -23295,6 +23339,45 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Lists all preferred tools that can be added for a given context
+         * @param {ToolContextType} [contextType] Context types for tools
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerGetPreferredToolsForContext: async (contextType?: ToolContextType, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/tools/preferred-tools`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (contextType !== undefined) {
+                localVarQueryParameter['contextType'] = contextType;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Lists all context types available in the SVS
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -24365,6 +24448,17 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Lists all preferred tools that can be added for a given context
+         * @param {ToolContextType} [contextType] Context types for tools
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PreferredToolListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolConfigurationControllerGetPreferredToolsForContext(contextType, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Lists all context types available in the SVS
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -24701,6 +24795,16 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Lists all preferred tools that can be added for a given context
+         * @param {ToolContextType} [contextType] Context types for tools
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any): AxiosPromise<PreferredToolListResponse> {
+            return localVarFp.toolConfigurationControllerGetPreferredToolsForContext(contextType, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Lists all context types available in the SVS
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -25008,6 +25112,16 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: any): AxiosPromise<SchoolExternalToolConfigurationTemplateResponse>;
+
+    /**
+     * 
+     * @summary Lists all preferred tools that can be added for a given context
+     * @param {ToolContextType} [contextType] Context types for tools
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any): AxiosPromise<PreferredToolListResponse>;
 
     /**
      * 
@@ -25325,6 +25439,18 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId: string, options?: any) {
         return ToolApiFp(this.configuration).toolConfigurationControllerGetConfigurationTemplateForSchool(schoolExternalToolId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Lists all preferred tools that can be added for a given context
+     * @param {ToolContextType} [contextType] Context types for tools
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolConfigurationControllerGetPreferredToolsForContext(contextType?: ToolContextType, options?: any) {
+        return ToolApiFp(this.configuration).toolConfigurationControllerGetPreferredToolsForContext(contextType, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
