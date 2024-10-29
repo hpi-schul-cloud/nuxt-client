@@ -76,10 +76,12 @@ export const useParticipants = (roomId: string) => {
 						schoolName: ownSchool.name,
 					};
 				})
-				.filter((u) => {
+				.filter((user) => {
 					return (
-						u.roleName === payload.role &&
-						!participants.value.some((p) => p.userId === u.id)
+						user.roleName === payload.role &&
+						!participants.value.some(
+							(participant) => participant.userId === user.id
+						)
 					);
 				});
 		} catch (error) {
@@ -94,36 +96,39 @@ export const useParticipants = (roomId: string) => {
 
 			schools.value = response.data;
 
-			if (schools.value.findIndex((s) => s.id === ownSchool?.id) === -1) {
-				schools.value.unshift(ownSchool);
-			} else {
-				const index = schools.value.findIndex((s) => s.id === ownSchool?.id);
-				schools.value.splice(index, 1);
-				schools.value.unshift(ownSchool);
+			const schoolIndex = schools.value.findIndex(
+				(school) => school.id === ownSchool?.id
+			);
+
+			if (schoolIndex >= 0) {
+				schools.value.splice(schoolIndex, 1);
 			}
+			schools.value.unshift(ownSchool);
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
-	const addParticipants = async (ids: string[]) => {
-		const newParticipants = potentialParticipants.value.filter((p) =>
-			ids.includes(p.userId)
+	const addParticipants = async (userIds: string[]) => {
+		const newParticipants = potentialParticipants.value.filter((participant) =>
+			userIds.includes(participant.userId)
 		);
 
-		const userIdsAndRoles: UserIdAndRole[] = newParticipants.map((p) => ({
-			userId: p.userId,
-			roleName: UserIdAndRoleRoleNameEnum.Editor,
-		}));
+		const userIdsAndRoles: UserIdAndRole[] = newParticipants.map(
+			(participant) => ({
+				userId: participant.userId,
+				roleName: UserIdAndRoleRoleNameEnum.Editor,
+			})
+		);
 
 		try {
 			await roomApi.roomControllerAddMembers(roomId, {
 				userIdsAndRoles,
 			});
 			participants.value.push(
-				...newParticipants.map((p) => ({
-					...p,
-					displayRoleName: userRoles[p.roleName],
+				...newParticipants.map((participant) => ({
+					...participant,
+					displayRoleName: userRoles[participant.roleName],
 				}))
 			);
 		} catch (error) {
@@ -135,7 +140,7 @@ export const useParticipants = (roomId: string) => {
 		try {
 			await roomApi.roomControllerRemoveMembers(roomId, { userIds });
 			participants.value = participants.value.filter(
-				(p) => !userIds.includes(p.userId)
+				(participant) => !userIds.includes(participant.userId)
 			);
 		} catch (error) {
 			console.log(error);
