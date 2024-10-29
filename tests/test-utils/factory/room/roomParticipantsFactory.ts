@@ -12,6 +12,7 @@ export const roomParticipantResponseFactory =
 		firstName: `firstName${sequence}`,
 		lastName: `lastName${sequence}`,
 		roleName: RoleName.RoomEditor,
+		displayRoleName: RoleName.Teacher,
 		schoolName: "Paul-Gerhardt-Gymnasium",
 	}));
 
@@ -22,6 +23,7 @@ export const addParticipantListFactory = Factory.define<ParticipantType>(
 		lastName: `lastName${sequence}`,
 		fullName: `lastName${sequence}, firstName${sequence}`,
 		roleName: RoleName.RoomEditor,
+		displayRoleName: RoleName.Teacher,
 		schoolName: "Paul-Gerhardt-Gymnasium",
 	})
 );

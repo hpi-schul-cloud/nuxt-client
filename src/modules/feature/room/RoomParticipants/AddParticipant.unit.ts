@@ -82,7 +82,7 @@ describe("AddParticipants", () => {
 			await nextTick();
 			expect(wrapper.emitted("update:role")).toHaveLength(1);
 			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
-				RoleName.RoomViewer,
+				{ role: RoleName.RoomViewer, schoolId: roomParticipantsSchools[0].id },
 			]);
 		});
 	});

@@ -174,7 +174,7 @@ describe("RoomParticipantsPage", () => {
 				expect(mockUseParticipantsCalls.getSchools).toHaveBeenCalled();
 				expect(
 					mockUseParticipantsCalls.getPotentialParticipants
-				).toHaveBeenCalledWith(RoleName.RoomEditor);
+				).toHaveBeenCalledWith({ role: RoleName.RoomEditor });
 			});
 		});
 
