@@ -41,7 +41,7 @@ export const useParticipants = (roomId: string) => {
 				(participant: RoomParticipantResponse) => {
 					return {
 						...participant,
-						roleName: userRoles[participant.roleName],
+						displayRoleName: userRoles[participant.roleName],
 					};
 				}
 			);
@@ -53,11 +53,18 @@ export const useParticipants = (roomId: string) => {
 		}
 	};
 
-	const getPotentialParticipants = async (role: RoleName) => {
-		if (!ownSchool?.id) return;
+	const getPotentialParticipants = async (
+		payload: {
+			role: RoleName;
+			schoolId?: string;
+		} = { role: RoleName.RoomEditor, schoolId: ownSchool.id }
+	) => {
 		try {
-			const result = (await schoolApi.schoolControllerGetTeachers(ownSchool.id))
-				.data;
+			const result = (
+				await schoolApi.schoolControllerGetTeachers(
+					payload.schoolId ?? ownSchool.id
+				)
+			).data;
 
 			potentialParticipants.value = result.data
 				.map((user) => {
@@ -71,7 +78,7 @@ export const useParticipants = (roomId: string) => {
 				})
 				.filter((u) => {
 					return (
-						u.roleName === role &&
+						u.roleName === payload.role &&
 						!participants.value.some((p) => p.userId === u.id)
 					);
 				});
@@ -109,11 +116,19 @@ export const useParticipants = (roomId: string) => {
 			roleName: UserIdAndRoleRoleNameEnum.Editor,
 		}));
 
-		await roomApi.roomControllerAddMembers(roomId, {
-			userIdsAndRoles,
-		});
-
-		participants.value.push(...newParticipants);
+		try {
+			await roomApi.roomControllerAddMembers(roomId, {
+				userIdsAndRoles,
+			});
+			participants.value.push(
+				...newParticipants.map((p) => ({
+					...p,
+					displayRoleName: userRoles[p.roleName],
+				}))
+			);
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const removeParticipants = async (userIds: string[]) => {

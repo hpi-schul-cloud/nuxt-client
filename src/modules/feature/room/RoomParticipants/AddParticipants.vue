@@ -116,7 +116,10 @@ const selectedUsers = ref<string[]>([]);
 
 const onRoleChange = () => {
 	selectedUsers.value = [];
-	emit("update:role", selectedRole.value);
+	emit("update:role", {
+		role: selectedRole.value,
+		schoolId: selectedSchool.value,
+	});
 };
 
 const onSchoolChange = () => {

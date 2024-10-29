@@ -95,7 +95,7 @@ const tableHeader = [
 	},
 	{
 		title: t("common.labels.role"),
-		key: "roleName",
+		key: "displayRoleName",
 	},
 	// TODO: Decide if we want to show classes in the table or not
 	// {

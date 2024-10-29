@@ -28,7 +28,7 @@
 					:schools="schools"
 					@close="onDialogClose"
 					@add:participants="onAddParticipants"
-					@update:role="onUpdateRole"
+					@update:role="onUpdateRoleOrSchool"
 				/>
 			</v-dialog>
 		</div>
@@ -101,7 +101,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const onFabClick = async () => {
 	await getSchools();
-	await getPotentialParticipants(RoleName.RoomEditor);
+	await getPotentialParticipants({ role: RoleName.RoomEditor });
 	isParticipantsDialogOpen.value = true;
 };
 
@@ -113,8 +113,11 @@ const onAddParticipants = async (participantIds: string[]) => {
 	await addParticipants(participantIds);
 };
 
-const onUpdateRole = async (role: RoleName) => {
-	await getPotentialParticipants(role);
+const onUpdateRoleOrSchool = async (payload: {
+	role: RoleName;
+	schoolId: string;
+}) => {
+	await getPotentialParticipants(payload);
 };
 
 const onRemoveParticipant = async (participant: ParticipantType) => {
