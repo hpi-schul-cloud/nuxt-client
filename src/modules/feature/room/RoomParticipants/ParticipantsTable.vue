@@ -105,7 +105,7 @@ const tableHeader = [
 	// 	key: "classes",
 	// },
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
-	{ title: "", key: "actions", sortable: false },
+	{ title: "", key: "actions", sortable: false, width: 50 },
 ];
 </script>
 
