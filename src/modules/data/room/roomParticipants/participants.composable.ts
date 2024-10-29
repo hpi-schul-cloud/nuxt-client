@@ -117,10 +117,14 @@ export const useParticipants = (roomId: string) => {
 	};
 
 	const removeParticipants = async (userIds: string[]) => {
-		await roomApi.roomControllerRemoveMembers(roomId, { userIds });
-		participants.value = participants.value.filter(
-			(p) => !userIds.includes(p.userId)
-		);
+		try {
+			await roomApi.roomControllerRemoveMembers(roomId, { userIds });
+			participants.value = participants.value.filter(
+				(p) => !userIds.includes(p.userId)
+			);
+		} catch (error) {
+			console.log(error);
+		}
 
 		return participants.value;
 	};
