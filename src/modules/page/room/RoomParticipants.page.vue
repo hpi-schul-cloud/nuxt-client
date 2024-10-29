@@ -44,12 +44,15 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { useRoomDetailsStore, useParticipants } from "@data-room";
+import {
+	useRoomDetailsStore,
+	useParticipants,
+	ParticipantType,
+} from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
-import { ParticipantType } from "@data-room";
 import {
 	ConfirmationDialog,
 	useDeleteConfirmationDialog,
