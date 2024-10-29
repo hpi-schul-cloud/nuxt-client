@@ -126,7 +126,11 @@ const onRemoveParticipant = async (participant: ParticipantType) => {
 		"pages.rooms.participant.label"
 	);
 	if (!shouldDelete) return;
-	await removeParticipants([participant.userId]);
+	onRemoveParticipants([participant.userId]);
+};
+
+const onRemoveParticipants = async (participantIds: string[]) => {
+	await removeParticipants(participantIds);
 };
 
 onMounted(async () => {

@@ -20,8 +20,9 @@
 		<v-divider />
 		<v-data-table
 			v-model:search="search"
-			:items="participantsList"
+			v-model="selectedParticipants"
 			item-value="userId"
+			:items="participantsList"
 			:headers="tableHeader"
 			:sort-asc-icon="mdiMenuDown"
 			:sort-desc-icon="mdiMenuUp"
@@ -68,6 +69,7 @@ const emit = defineEmits(["remove:participant"]);
 const { t } = useI18n();
 const search = ref("");
 const participantsList = toRef(props, "participants");
+const selectedParticipants = ref<string[]>([]);
 const participantsFilterCount = ref(participantsList.value.length);
 
 const onUpdateFilter = (value: RoomParticipantResponse[]) => {

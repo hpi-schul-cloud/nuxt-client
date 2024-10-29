@@ -20121,7 +20121,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
             assertParamExists('roomControllerRemoveMembers', 'roomId', roomId)
             // verify required parameter 'removeRoomMembersBodyParams' is not null or undefined
             assertParamExists('roomControllerRemoveMembers', 'removeRoomMembersBodyParams', removeRoomMembersBodyParams)
-            const localVarPath = `/rooms/{roomId}/members`
+            const localVarPath = `/rooms/{roomId}/members/remove`
                 .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -20130,7 +20130,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
