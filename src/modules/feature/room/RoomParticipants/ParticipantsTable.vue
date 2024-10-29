@@ -55,11 +55,11 @@ import {
 	mdiMagnify,
 	mdiTrashCanOutline,
 } from "@icons/material";
-import { RoomParticipantResponse } from "@/serverApi/v3";
+import { RoomMemberResponse } from "@/serverApi/v3";
 
 const props = defineProps({
 	participants: {
-		type: Array as PropType<RoomParticipantResponse[]>,
+		type: Array as PropType<RoomMemberResponse[]>,
 		required: true,
 	},
 });
@@ -72,7 +72,7 @@ const participantsList = toRef(props, "participants");
 const selectedParticipants = ref<string[]>([]);
 const participantsFilterCount = ref(participantsList.value.length);
 
-const onUpdateFilter = (value: RoomParticipantResponse[]) => {
+const onUpdateFilter = (value: RoomMemberResponse[]) => {
 	participantsFilterCount.value =
 		search.value === "" ? participantsList.value.length : value.length;
 };
@@ -82,7 +82,7 @@ const tableTitle = computed(
 		`${t("pages.rooms.participants.label")} (${participantsFilterCount.value})`
 );
 
-const onRemoveParticipant = (participant: RoomParticipantResponse) => {
+const onRemoveParticipant = (participant: RoomMemberResponse) => {
 	emit("remove:participant", participant);
 };
 

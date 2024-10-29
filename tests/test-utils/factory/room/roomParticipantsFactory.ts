@@ -1,13 +1,13 @@
 import { Factory } from "fishery";
 import {
 	RoleName,
-	RoomParticipantResponse,
+	RoomMemberResponse,
 	SchoolForExternalInviteResponse,
 } from "@/serverApi/v3";
 import { ParticipantType } from "@data-room";
 
 export const roomParticipantResponseFactory =
-	Factory.define<RoomParticipantResponse>(({ sequence }) => ({
+	Factory.define<RoomMemberResponse>(({ sequence }) => ({
 		userId: `participant${sequence}`,
 		firstName: `firstName${sequence}`,
 		lastName: `lastName${sequence}`,

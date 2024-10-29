@@ -4,20 +4,22 @@ import {
 	RoleName,
 	RoomApiFactory,
 	SchoolApiFactory,
-	RoomParticipantResponse,
+	RoomMemberResponse,
 	SchoolForExternalInviteResponse,
 	UserIdAndRole,
 	UserIdAndRoleRoleNameEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useI18n } from "vue-i18n";
+import { useBoardNotifier } from "@util-board";
 
 export const useParticipants = (roomId: string) => {
-	const participants: Ref<RoomParticipantResponse[]> = ref([]);
+	const participants: Ref<RoomMemberResponse[]> = ref([]);
 	const potentialParticipants: Ref<ParticipantType[]> = ref([]);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const isLoading = ref(false);
 	const { t } = useI18n();
+	const { showFailure } = useBoardNotifier();
 	const ownSchool = {
 		id: "5f2987e020834114b8efd6f8",
 		name: "Paul-Gerhardt-Gymnasium",
@@ -38,7 +40,7 @@ export const useParticipants = (roomId: string) => {
 				.data;
 
 			participants.value = participantsData.data.map(
-				(participant: RoomParticipantResponse) => {
+				(participant: RoomMemberResponse) => {
 					return {
 						...participant,
 						displayRoleName: userRoles[participant.roleName],
@@ -47,9 +49,9 @@ export const useParticipants = (roomId: string) => {
 			);
 			isLoading.value = false;
 		} catch (error) {
-			isLoading.value = false;
-			// TODO: Handle error createApplicationError(responseError.code);
+			showFailure(t("pages.rooms.participant.error.load"));
 			console.error(error);
+			isLoading.value = false;
 		}
 	};
 
@@ -85,6 +87,7 @@ export const useParticipants = (roomId: string) => {
 					);
 				});
 		} catch (error) {
+			showFailure(t("pages.rooms.participant.error.load"));
 			console.error(error);
 		}
 	};
@@ -132,6 +135,7 @@ export const useParticipants = (roomId: string) => {
 				}))
 			);
 		} catch (error) {
+			showFailure(t("pages.rooms.participant.error.add"));
 			console.error(error);
 		}
 	};
@@ -143,10 +147,9 @@ export const useParticipants = (roomId: string) => {
 				(participant) => !userIds.includes(participant.userId)
 			);
 		} catch (error) {
+			showFailure(t("pages.rooms.participant.error.delete"));
 			console.log(error);
 		}
-
-		return participants.value;
 	};
 
 	return {

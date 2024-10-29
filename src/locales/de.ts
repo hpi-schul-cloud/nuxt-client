@@ -1669,6 +1669,12 @@ export default {
 	"pages.rooms.title": "Räume",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
+	"pages.rooms.participant.error.load":
+		"Die Teilnehmenden-Liste konnte nicht geladen werden.",
+	"pages.rooms.participant.error.add":
+		"Hinzufügen von Teilnehmenden fehlgeschlagen.",
+	"pages.rooms.participant.error.delete":
+		"Löschen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.participant.infoText":
 		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im eigenen Profil aktiviert haben	<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(weitere Informationen)</a>.',
 	"pages.rooms.participant.label": "Teilnehmer:in",

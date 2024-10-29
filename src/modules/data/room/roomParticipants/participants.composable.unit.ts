@@ -12,19 +12,25 @@ import { useParticipants } from "@data-room";
 import { useI18n } from "vue-i18n";
 import {
 	RoleName,
-	RoomParticipantResponse,
+	RoomMemberResponse,
 	SchoolUserListResponse,
 	UserIdAndRoleRoleNameEnum,
 } from "@/serverApi/v3/api";
+import { useBoardNotifier } from "@util-board";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
+
+jest.mock("@util-board/BoardNotifier.composable");
+jest.mock("@util-board/LastCreatedElement.composable");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("useParticipants", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
 	let consoleErrorSpy: jest.SpyInstance;
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 	const roomId = "room-id";
 
 	beforeEach(() => {
@@ -36,6 +42,10 @@ describe("useParticipants", () => {
 		jest.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);
 		initializeAxios(axiosMock);
+
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 	});
 
 	afterEach(() => {
@@ -73,6 +83,9 @@ describe("useParticipants", () => {
 			await fetchParticipants();
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"pages.rooms.participant.error.load"
+			);
 		});
 	});
 
@@ -113,7 +126,7 @@ describe("useParticipants", () => {
 			const { getPotentialParticipants, potentialParticipants, participants } =
 				useParticipants(roomId);
 
-			const participantsMock: RoomParticipantResponse[] = [
+			const participantsMock: RoomMemberResponse[] = [
 				{
 					userId: "1",
 					firstName: "Carl",
@@ -150,6 +163,9 @@ describe("useParticipants", () => {
 			await getPotentialParticipants();
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"pages.rooms.participant.error.load"
+			);
 		});
 	});
 
@@ -226,6 +242,9 @@ describe("useParticipants", () => {
 			await addParticipants(["id"]);
 
 			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"pages.rooms.participant.error.add"
+			);
 		});
 	});
 
@@ -255,7 +274,7 @@ describe("useParticipants", () => {
 		});
 
 		// ToDo: Fix this test
-		it.failing("should throw an error if the API call fails", async () => {
+		it("should throw an error if the API call fails", async () => {
 			const { removeParticipants } = useParticipants(roomId);
 
 			const error = new Error("Test error");
@@ -263,7 +282,9 @@ describe("useParticipants", () => {
 
 			await removeParticipants(["id"]);
 
-			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"pages.rooms.participant.error.delete"
+			);
 		});
 	});
 });

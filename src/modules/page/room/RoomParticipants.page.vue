@@ -48,7 +48,7 @@ import { useRoomDetailsStore, useParticipants } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
-import { RoleName, RoomParticipantResponse } from "@/serverApi/v3";
+import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { ParticipantType } from "@data-room";
 import {
 	ConfirmationDialog,
@@ -74,7 +74,7 @@ const {
 	removeParticipants,
 } = useParticipants(roomId);
 
-const participantsList: Ref<RoomParticipantResponse[]> = ref(participants);
+const participantsList: Ref<RoomMemberResponse[]> = ref(participants);
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 const pageTitle = computed(() =>
