@@ -93,15 +93,25 @@ const isOpen = computed({
 
 const step = computed(() => (shareModule.getShareUrl === undefined ? 1 : 2));
 
-const modalOptions = computed(() => new Map([]));
-modalOptions.value.set(1, {
-	title: t("components.molecules.share.options.title"),
-	actionButtons: ["cancel", "next"],
-});
-modalOptions.value.set(2, {
-	title: t("components.molecules.share.result.title"),
-	actionButtons: ["close"],
-});
+const modalOptions = computed(
+	() =>
+		new Map([
+			[
+				1,
+				{
+					title: t("components.molecules.share.options.title"),
+					actionButtons: ["cancel", "next"],
+				},
+			],
+			[
+				2,
+				{
+					title: t("components.molecules.share.result.title"),
+					actionButtons: ["close"],
+				},
+			],
+		])
+);
 
 const shareUrl = computed(() => shareModule.getShareUrl);
 
