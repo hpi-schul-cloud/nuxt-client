@@ -106,11 +106,7 @@ const { t } = useI18n();
 const schoolList = toRef(props, "schools");
 const selectedSchool = ref(schoolList.value[0].id);
 
-const roles = [
-	{ id: RoleName.RoomEditor, name: t("common.labels.teacher") },
-	// This role is not used for now
-	// { id: RoleName.RoomViewer, name: t("pages.rooms.participants.roles.viewer") },
-];
+const roles = [{ id: RoleName.RoomEditor, name: t("common.labels.teacher") }];
 
 const selectedRole = ref<string>(roles[0].id);
 const selectedUsers = ref<string[]>([]);

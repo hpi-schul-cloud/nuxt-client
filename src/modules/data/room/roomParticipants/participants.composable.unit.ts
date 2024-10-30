@@ -3,6 +3,7 @@ import {
 	mockApiResponse,
 	roomParticipantResponseFactory,
 	roomParticipantSchoolResponseFactory,
+	schoolFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import * as serverApi from "@/serverApi/v3/api";
@@ -17,6 +18,9 @@ import {
 	UserIdAndRoleRoleNameEnum,
 } from "@/serverApi/v3/api";
 import { useBoardNotifier } from "@util-board";
+import { schoolsModule } from "@/store";
+import SchoolsModule from "@/store/schools";
+import setupStores from "@@/tests/test-utils/setupStores";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -31,6 +35,7 @@ describe("useParticipants", () => {
 	let axiosMock: DeepMocked<AxiosInstance>;
 	let consoleErrorSpy: jest.SpyInstance;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
 	const roomId = "room-id";
 
 	beforeEach(() => {
@@ -46,6 +51,17 @@ describe("useParticipants", () => {
 		mockedBoardNotifierCalls =
 			createMock<ReturnType<typeof useBoardNotifier>>();
 		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+		setupStores({
+			schoolsModule: SchoolsModule,
+		});
+
+		schoolsModule.setSchool(
+			schoolFactory.build({
+				id: "school-id",
+				name: "Paul-Gerhardt-Gymnasium",
+			})
+		);
 	});
 
 	afterEach(() => {
@@ -125,7 +141,10 @@ describe("useParticipants", () => {
 			const { getPotentialParticipants, potentialParticipants, participants } =
 				useParticipants(roomId);
 
-			const participantsMock: RoomMemberResponse[] = [
+			const participantsMock: RoomMemberResponse =
+				roomParticipantResponseFactory.build();
+
+			const participantsMock_1: RoomMemberResponse[] = [
 				{
 					userId: "1",
 					firstName: "Carl",
@@ -134,10 +153,16 @@ describe("useParticipants", () => {
 					schoolName: "Paul-Gerhardt-Gymnasium",
 				},
 			];
-			participants.value = participantsMock;
+			participants.value = [participantsMock];
 
 			const schoolTeachersList: SchoolUserListResponse = {
-				data: [{ firstName: "Carl", lastName: "Cord", id: "1" }],
+				data: [
+					{
+						firstName: participantsMock.firstName,
+						lastName: participantsMock.lastName,
+						id: participantsMock.userId,
+					},
+				],
 				total: 3,
 				skip: 0,
 				limit: 3,
@@ -170,18 +195,19 @@ describe("useParticipants", () => {
 	describe("getSchools", () => {
 		it("should get schools", async () => {
 			const { getSchools, schools } = useParticipants(roomId);
-
 			const schoolList = roomParticipantSchoolResponseFactory.buildList(3);
-
 			schoolApiMock.schoolControllerGetSchoolListForExternalInvite.mockResolvedValue(
 				mockApiResponse({
 					data: schoolList,
 				})
 			);
-
 			await getSchools();
 
-			expect(schools.value).toEqual(schoolList);
+			expect(schools.value).toHaveLength(schoolList.length + 1);
+			expect(schools.value[0]).toStrictEqual({
+				id: "school-id",
+				name: "Paul-Gerhardt-Gymnasium",
+			});
 		});
 
 		it("should throw an error if the API call fails", async () => {

@@ -12,6 +12,7 @@ import {
 import { $axios } from "@/utils/api";
 import { useI18n } from "vue-i18n";
 import { useBoardNotifier } from "@util-board";
+import { schoolsModule } from "@/store";
 
 export const useParticipants = (roomId: string) => {
 	const participants: Ref<RoomMemberResponse[]> = ref([]);
@@ -21,14 +22,12 @@ export const useParticipants = (roomId: string) => {
 	const { t } = useI18n();
 	const { showFailure } = useBoardNotifier();
 	const ownSchool = {
-		id: "5f2987e020834114b8efd6f8",
-		name: "Paul-Gerhardt-Gymnasium",
+		id: schoolsModule.getSchool.id,
+		name: schoolsModule.getSchool.name,
 	};
 
 	const userRoles: Record<string, string> = {
 		[RoleName.RoomEditor]: t("common.labels.teacher"),
-		// This role name is not used for now
-		// [RoleName.RoomViewer]: t("pages.rooms.participants.roles.viewer"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
