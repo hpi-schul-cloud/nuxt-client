@@ -17,7 +17,7 @@
 		<template #content>
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
-				<div v-if="step === 1 && isOpen">
+				<div v-if="step === 'firstStep' && isOpen">
 					<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 						<div class="mx-2">
 							<v-icon color="info" :icon="mdiInformation" />
@@ -44,7 +44,7 @@
 					/>
 				</div>
 
-				<div v-if="step === 2 && isOpen">
+				<div v-if="step === 'secondStep' && isOpen">
 					<share-modal-result
 						:share-url="shareUrl"
 						:type="type"
@@ -57,7 +57,7 @@
 	</v-custom-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
@@ -91,39 +91,35 @@ const isOpen = computed({
 	set: () => shareModule.resetShareFlow(),
 });
 
-const step = computed(() => (shareModule.getShareUrl === undefined ? 1 : 2));
+type ShareModalStep = "firstStep" | "secondStep";
 
-const modalOptions = computed(
-	() =>
-		new Map([
-			[
-				1,
-				{
-					title: t("components.molecules.share.options.title"),
-					actionButtons: ["cancel", "next"],
-				},
-			],
-			[
-				2,
-				{
-					title: t("components.molecules.share.result.title"),
-					actionButtons: ["close"],
-				},
-			],
-		])
+const step = computed<ShareModalStep>(() =>
+	shareModule.getShareUrl === undefined ? "firstStep" : "secondStep"
 );
+
+const modalOptions: Record<
+	ShareModalStep,
+	{ title: string; actionButtons: string[] }
+> = {
+	firstStep: {
+		title: t("components.molecules.share.options.title"),
+		actionButtons: ["cancel", "next"],
+	},
+	secondStep: {
+		title: t("components.molecules.share.result.title"),
+		actionButtons: ["close"],
+	},
+};
 
 const shareUrl = computed(() => shareModule.getShareUrl);
 
 const actionButtons = computed(() => {
-	return modalOptions.value.get(step.value)?.actionButtons ?? [];
+	return modalOptions[step.value].actionButtons ?? [];
 });
 
 const shareOptions = ref(undefined);
 
-const modalTitle = computed(
-	() => modalOptions.value.get(step.value)?.title ?? ""
-);
+const modalTitle = computed(() => modalOptions[step.value].title ?? "");
 
 const onShareOptionsChange = (newValue) => {
 	shareOptions.value = newValue;
