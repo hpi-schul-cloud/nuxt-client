@@ -51,7 +51,6 @@ export const useParticipants = (roomId: string) => {
 			isLoading.value = false;
 		} catch (error) {
 			showFailure(t("pages.rooms.participant.error.load"));
-			console.error(error);
 			isLoading.value = false;
 		}
 	};
@@ -89,7 +88,6 @@ export const useParticipants = (roomId: string) => {
 				});
 		} catch (error) {
 			showFailure(t("pages.rooms.participant.error.load"));
-			console.error(error);
 		}
 	};
 
@@ -137,7 +135,6 @@ export const useParticipants = (roomId: string) => {
 			);
 		} catch (error) {
 			showFailure(t("pages.rooms.participant.error.add"));
-			console.error(error);
 		}
 	};
 
@@ -149,7 +146,6 @@ export const useParticipants = (roomId: string) => {
 			);
 		} catch (error) {
 			showFailure(t("pages.rooms.participant.error.delete"));
-			console.error(error);
 		}
 	};
 

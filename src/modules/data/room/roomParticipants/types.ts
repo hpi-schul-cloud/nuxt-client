@@ -1,5 +1,5 @@
-import { RoomParticipantResponse } from "@/serverApi/v3";
+import { RoomMemberResponse } from "@/serverApi/v3";
 
-export type ParticipantType = RoomParticipantResponse & {
+export type ParticipantType = RoomMemberResponse & {
 	fullName: string;
 };

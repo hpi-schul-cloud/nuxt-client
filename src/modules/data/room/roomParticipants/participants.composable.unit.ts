@@ -82,7 +82,6 @@ describe("useParticipants", () => {
 
 			await fetchParticipants();
 
-			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"pages.rooms.participant.error.load"
 			);
@@ -162,7 +161,6 @@ describe("useParticipants", () => {
 
 			await getPotentialParticipants();
 
-			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"pages.rooms.participant.error.load"
 			);
@@ -241,7 +239,6 @@ describe("useParticipants", () => {
 
 			await addParticipants(["id"]);
 
-			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"pages.rooms.participant.error.add"
 			);
@@ -281,7 +278,6 @@ describe("useParticipants", () => {
 
 			await removeParticipants(["id"]);
 
-			expect(consoleErrorSpy).toHaveBeenCalledWith(error);
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"pages.rooms.participant.error.delete"
 			);
