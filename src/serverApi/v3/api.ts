@@ -491,22 +491,11 @@ export interface BoardColumnBoardResponse {
     columnBoardId: string;
     /**
      * 
-     * @type {string}
+     * @type {BoardLayout}
      * @memberof BoardColumnBoardResponse
      */
-    layout: BoardColumnBoardResponseLayoutEnum;
+    layout: BoardLayout;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum BoardColumnBoardResponseLayoutEnum {
-    Columns = 'columns',
-    List = 'list',
-    Grid = 'grid'
-}
-
 /**
  * 
  * @export
@@ -6852,10 +6841,10 @@ export interface RoomBoardItemResponse {
     title: string;
     /**
      * 
-     * @type {string}
+     * @type {BoardLayout}
      * @memberof RoomBoardItemResponse
      */
-    layout: RoomBoardItemResponseLayoutEnum;
+    layout: BoardLayout;
     /**
      * 
      * @type {string}
@@ -6869,17 +6858,6 @@ export interface RoomBoardItemResponse {
      */
     updatedAt: string;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum RoomBoardItemResponseLayoutEnum {
-    Columns = 'columns',
-    List = 'list',
-    Grid = 'grid'
-}
-
 /**
  * 
  * @export
