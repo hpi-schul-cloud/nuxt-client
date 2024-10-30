@@ -96,15 +96,9 @@ export const useParticipants = (roomId: string) => {
 			const response =
 				await schoolApi.schoolControllerGetSchoolListForExternalInvite();
 
-			schools.value = response.data;
-
-			const schoolIndex = schools.value.findIndex(
-				(school) => school.id === ownSchool?.id
+			schools.value = response.data.filter(
+				(school) => school.id !== ownSchool.id
 			);
-
-			if (schoolIndex >= 0) {
-				schools.value.splice(schoolIndex, 1);
-			}
 			schools.value.unshift(ownSchool);
 		} catch (error) {
 			console.error(error);
