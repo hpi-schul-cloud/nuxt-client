@@ -144,15 +144,6 @@ describe("useParticipants", () => {
 			const participantsMock: RoomMemberResponse =
 				roomParticipantResponseFactory.build();
 
-			const participantsMock_1: RoomMemberResponse[] = [
-				{
-					userId: "1",
-					firstName: "Carl",
-					lastName: "Cord",
-					roleName: RoleName.RoomEditor,
-					schoolName: "Paul-Gerhardt-Gymnasium",
-				},
-			];
 			participants.value = [participantsMock];
 
 			const schoolTeachersList: SchoolUserListResponse = {

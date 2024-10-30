@@ -1,5 +1,5 @@
 <template>
-	<v-card min-width="480" max-height="480">
+	<v-card>
 		<template v-slot:prepend>
 			<div ref="textTitle" class="text-h4 mt-2">
 				{{ t("pages.rooms.participants.addParticipants") }}

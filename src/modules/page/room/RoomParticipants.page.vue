@@ -1,6 +1,6 @@
 <template>
 	<DefaultWireframe
-		max-width="nativ"
+		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
 		@fab:clicked="onFabClick"
@@ -21,17 +21,21 @@
 				@remove:participant="onRemoveParticipant"
 			/>
 		</div>
-		<div>
-			<v-dialog v-model="isParticipantsDialogOpen" width="auto" persistent>
-				<AddParticipants
-					:userList="potentialParticipants"
-					:schools="schools"
-					@close="onDialogClose"
-					@add:participants="onAddParticipants"
-					@update:role="onUpdateRoleOrSchool"
-				/>
-			</v-dialog>
-		</div>
+
+		<v-dialog
+			v-model="isParticipantsDialogOpen"
+			:width="xs ? 'auto' : 480"
+			persistent
+			max-width="480"
+		>
+			<AddParticipants
+				:userList="potentialParticipants"
+				:schools="schools"
+				@close="onDialogClose"
+				@add:participants="onAddParticipants"
+				@update:role="onUpdateRoleOrSchool"
+			/>
+		</v-dialog>
 		<ConfirmationDialog />
 	</DefaultWireframe>
 </template>
@@ -58,10 +62,12 @@ import {
 	useDeleteConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import RenderHTML from "@/modules/feature/render-html/RenderHTML.vue";
+import { useDisplay } from "vuetify";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
+const { xs } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 const isParticipantsDialogOpen = ref(false);
 const roomId = route.params.id.toString();
