@@ -12,14 +12,14 @@
 					<v-autocomplete
 						ref="autoCompleteSchool"
 						v-model="selectedSchool"
-						:items="schoolList"
-						:label="t('global.sidebar.item.school')"
 						bg-color="white"
 						color="primary"
 						density="comfortable"
 						item-title="name"
 						item-value="id"
 						variant="underlined"
+						:items="schoolList"
+						:label="t('global.sidebar.item.school')"
 						@update:model-value="onSchoolChange"
 					/>
 				</div>
@@ -28,8 +28,6 @@
 					<v-autocomplete
 						ref="autoCompleteRole"
 						v-model="selectedRole"
-						:items="roles"
-						:label="t('common.labels.role')"
 						auto-select-first="exact"
 						bg-color="white"
 						color="primary"
@@ -37,6 +35,8 @@
 						item-title="name"
 						item-value="id"
 						variant="underlined"
+						:items="roles"
+						:label="t('common.labels.role')"
 						@update:model-value="onRoleChange"
 					/>
 				</div>
@@ -45,18 +45,18 @@
 					<v-autocomplete
 						ref="autoCompleteUsers"
 						v-model="selectedUsers"
-						:items="userList"
-						:label="t('common.labels.name')"
 						bg-color="white"
 						chips
-						closable-chips
 						clear-on-select
+						closable-chips
 						color="primary"
 						item-value="userId"
 						item-title="fullName"
 						multiple
-						:no-data-text="t('common.nodata')"
 						variant="underlined"
+						:items="userList"
+						:label="t('common.labels.name')"
+						:no-data-text="t('common.nodata')"
 					/>
 				</div>
 			</div>
@@ -67,17 +67,17 @@
 			<div class="mr-4 mb-3">
 				<v-btn
 					ref="cancelButton"
-					:text="t('common.actions.cancel')"
 					class="ms-auto mr-2"
 					color="primary"
+					:text="t('common.actions.cancel')"
 					@click="onClose"
 				/>
 				<v-btn
 					ref="addButton"
-					:text="t('common.actions.add')"
 					class="ms-auto"
 					color="primary"
 					variant="flat"
+					:text="t('common.actions.add')"
 					@click="onAddParticipants"
 				/>
 			</div>
@@ -108,6 +108,7 @@ const selectedSchool = ref(schoolList.value[0].id);
 
 const roles = [
 	{ id: RoleName.RoomEditor, name: t("common.labels.teacher") },
+	// This role is not used for now
 	// { id: RoleName.RoomViewer, name: t("pages.rooms.participants.roles.viewer") },
 ];
 

@@ -7,12 +7,12 @@
 			<v-text-field
 				v-model="search"
 				density="compact"
-				:label="t('common.labels.search')"
-				:prepend-inner-icon="mdiMagnify"
 				variant="solo-filled"
 				flat
 				hide-details
 				single-line
+				:label="t('common.labels.search')"
+				:prepend-inner-icon="mdiMagnify"
 			/>
 		</v-card-title>
 
