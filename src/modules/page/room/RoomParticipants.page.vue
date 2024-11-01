@@ -131,8 +131,11 @@ const onUpdateRoleOrSchool = async (payload: {
 
 const onRemoveParticipant = async (participant: ParticipantType) => {
 	const shouldDelete = await askDeleteConfirmation(
-		`${participant.lastName}, ${participant.firstName}`,
-		"pages.rooms.participant.label"
+		undefined,
+		"",
+		t("pages.rooms.participant.delete.confirmation", {
+			memberName: `${participant.firstName} ${participant.lastName}`,
+		})
 	);
 	if (!shouldDelete) return;
 	onRemoveParticipants([participant.userId]);

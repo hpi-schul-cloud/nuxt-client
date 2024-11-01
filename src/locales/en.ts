@@ -1645,6 +1645,8 @@ export default {
 		"The participant list could not be loaded.",
 	"pages.rooms.participant.error.add": "Adding participants failed.",
 	"pages.rooms.participant.error.delete": "Deleting participants failed.",
+	"pages.rooms.participant.delete.confirmation":
+		"Really remove {memberName} from the room?",
 	"pages.rooms.participant.infoText":
 		'Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their own profile <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(more information)</a>.',
 	"pages.rooms.participant.label": "Participant",
