@@ -1,8 +1,8 @@
-import { MessageSchema } from "@/locales/schema";
+import { MessageSchemaCustom } from "@/locales/schema";
 import { createI18n } from "vue-i18n";
 
 export const createTestingI18n = (options = {}) => {
-	const i18n = createI18n<MessageSchema, "en">({
+	const i18n = createI18n<MessageSchemaCustom, "en">({
 		legacy: false,
 		locale: "en",
 		fallbackLocale: ["en"],
@@ -12,7 +12,7 @@ export const createTestingI18n = (options = {}) => {
 		fallbackWarn: false,
 		silentTranslationWarn: true,
 		messages: {
-			en: {} as MessageSchema,
+			en: {} as MessageSchemaCustom,
 		},
 		...options,
 	});

@@ -1,9 +1,9 @@
-import { MessageSchema } from "@/locales/schema";
+import { MessageSchemaCustom } from "@/locales/schema";
 import { createMock } from "@golevelup/ts-jest";
 
 export const i18nMock = createMock<{
 	t: (
-		key: keyof MessageSchema,
+		key: keyof MessageSchemaCustom,
 		placeholders?: Record<string, unknown>
 	) => string;
 }>({
