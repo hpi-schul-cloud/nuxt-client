@@ -6847,6 +6847,12 @@ export interface RoomBoardItemResponse {
     layout: BoardLayout;
     /**
      * 
+     * @type {boolean}
+     * @memberof RoomBoardItemResponse
+     */
+    isVisible: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof RoomBoardItemResponse
      */

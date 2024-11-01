@@ -1,13 +1,13 @@
 <template>
-	<v-row class="mt-4">
+	<v-row class="mt-4" data-testid="board-grid">
 		<v-col
 			v-for="(board, index) in boards"
 			:key="board.id"
 			cols="12"
-			md="6"
-			lg="3"
+			md="4"
+			xl="3"
 		>
-			<BoardTile :board="board" :data-testid="`room-board-card-${index}`" />
+			<BoardTile :board="board" :index="index" />
 		</v-col>
 	</v-row>
 </template>

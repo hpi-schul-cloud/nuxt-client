@@ -1,11 +1,32 @@
 <template>
-	<div v-if="board" class="board-tile pa-4">
-		<div>
-			<VIcon size="14" class="mr-1" :icon="titleIcon" />
-			{{ titlePrefix }}
+	<div
+		v-if="board"
+		class="board-tile pa-4"
+		:class="{ 'board-hidden': isHidden }"
+	>
+		<div
+			class="board-tile-subtitle"
+			:data-testid="`board-tile-subtitle-${props.index}`"
+		>
+			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
+			{{ subtitleText }}
 		</div>
-		<div class="text-h6">
+		<div
+			class="board-tile-title text-h6 my-4"
+			:data-testid="`board-tile-title-${props.index}`"
+		>
 			{{ board.title }}
+		</div>
+		<div
+			class="board-tile-actions"
+			:data-testid="`board-tile-actions-${props.index}`"
+		>
+			<RouterLink
+				:to="boardPath"
+				:data-testid="`board-tile-open-button-${props.index}`"
+			>
+				Öffnen
+			</RouterLink>
 		</div>
 	</div>
 </template>
@@ -18,7 +39,8 @@ import { useI18n } from "vue-i18n";
 import { mdiViewDashboardOutline } from "@icons/material";
 
 const props = defineProps({
-	board: { type: Object as PropType<RoomBoardItem> },
+	board: { type: Object as PropType<RoomBoardItem>, required: true },
+	index: { type: Number, required: true },
 });
 
 const { t } = useI18n();
@@ -29,16 +51,30 @@ const isListBoard = computed(() => {
 	return board.value?.layout === BoardLayout.List;
 });
 
-const titleIcon = computed(() => {
+const isHidden = computed(() => {
+	return board.value?.isVisible === false;
+});
+
+const subtitleIcon = computed(() => {
 	const icon = isListBoard.value ? "$gridOutline" : mdiViewDashboardOutline;
 	return icon;
 });
 
-const titlePrefix = computed(() =>
-	isListBoard.value
+const subtitleText = computed(() => {
+	const text = isListBoard.value
 		? t("pages.room.boardCard.label.listBoard")
-		: t("pages.room.boardCard.label.columnBoard")
-);
+		: t("pages.room.boardCard.label.columnBoard");
+
+	if (isHidden.value) {
+		const suffix = ` - ${t("common.words.draft")}`;
+		return text + suffix;
+	}
+	return text;
+});
+
+const boardPath = computed(() => {
+	return `/boards/${board.value?.id}`;
+});
 </script>
 
 <style lang="scss" scoped>
@@ -47,5 +83,10 @@ const titlePrefix = computed(() =>
 .board-tile {
 	background-color: map-get($grey, lighten-5);
 	border: 1px solid map-get($grey, lighten-2);
+
+	&.board-hidden .board-tile-subtitle,
+	&.board-hidden .board-tile-title {
+		opacity: 0.5;
+	}
 }
 </style>
