@@ -7,20 +7,15 @@ export const useDeleteConfirmationDialog = () => {
 
 	const askDeleteConfirmation = async (
 		title: string | undefined,
-		typeLanguageKey: string,
-		fullText?: string | undefined
+		typeLanguageKey: string
 	): Promise<boolean> => {
 		const titleString = title ? ` "${title}"` : "";
 		const typeString = t(typeLanguageKey);
 
-		let message = t("ui-confirmation-dialog.ask-delete", {
+		const message = t("ui-confirmation-dialog.ask-delete", {
 			title: titleString,
 			type: typeString,
 		});
-
-		if (fullText) {
-			message = fullText;
-		}
 
 		const shouldDelete = await askConfirmation({
 			message,

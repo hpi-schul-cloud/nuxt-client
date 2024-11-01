@@ -19,7 +19,7 @@ import { nextTick, ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { flushPromises } from "@vue/test-utils";
 import { RoleName, RoomColor } from "@/serverApi/v3";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { useTitle } from "@vueuse/core";
 
@@ -58,9 +58,7 @@ const mockUseParticipants = jest.mocked(useParticipants);
 
 jest.mock("@ui-confirmation-dialog");
 jest.mock("@ui-confirmation-dialog");
-const mockedUseDeleteConfirmationDialog = jest.mocked(
-	useDeleteConfirmationDialog
-);
+const mockedUseDeleteConfirmationDialog = jest.mocked(useConfirmationDialog);
 
 describe("RoomParticipantsPage", () => {
 	let router: DeepMocked<Router>;
@@ -92,8 +90,8 @@ describe("RoomParticipantsPage", () => {
 			askDeleteConfirmationMock,
 		});
 		mockedUseDeleteConfirmationDialog.mockReturnValue({
-			askDeleteConfirmation: askDeleteConfirmationMock,
-			isDeleteDialogOpen: ref(false),
+			askConfirmation: askDeleteConfirmationMock,
+			isDialogOpen: ref(false),
 		});
 
 		setupStores({

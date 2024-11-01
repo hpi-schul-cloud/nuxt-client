@@ -14,7 +14,7 @@
 		<div class="mb-8 mt-12">
 			<RenderHTML :html="t('pages.rooms.participant.infoText')" />
 		</div>
-		<div>
+		<div class="mb-12">
 			<ParticipantsTable
 				v-if="!isLoading"
 				:participants="participantsList"
@@ -59,6 +59,7 @@ import { ParticipantsTable, AddParticipants } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import {
 	ConfirmationDialog,
+	useConfirmationDialog,
 	useDeleteConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { RenderHTML } from "@feature-render-html";
@@ -130,13 +131,12 @@ const onUpdateRoleOrSchool = async (payload: {
 };
 
 const onRemoveParticipant = async (participant: ParticipantType) => {
-	const shouldDelete = await askDeleteConfirmation(
-		undefined,
-		"",
-		t("pages.rooms.participant.delete.confirmation", {
-			memberName: `${participant.firstName} ${participant.lastName}`,
-		})
-	);
+	const { askConfirmation } = useConfirmationDialog();
+	const message = t("pages.rooms.participant.delete.confirmation", {
+		memberName: `${participant.firstName} ${participant.lastName}`,
+	});
+	const shouldDelete = await askConfirmation({ message });
+
 	if (!shouldDelete) return;
 	onRemoveParticipants([participant.userId]);
 };
