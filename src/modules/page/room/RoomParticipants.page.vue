@@ -138,11 +138,7 @@ const onRemoveParticipant = async (participant: ParticipantType) => {
 	const shouldDelete = await askConfirmation({ message });
 
 	if (!shouldDelete) return;
-	onRemoveParticipants([participant.userId]);
-};
-
-const onRemoveParticipants = async (participantIds: string[]) => {
-	await removeParticipants(participantIds);
+	await removeParticipants([participant.userId]);
 };
 
 onMounted(async () => {
