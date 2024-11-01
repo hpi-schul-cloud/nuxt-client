@@ -1,38 +1,42 @@
 <template>
 	<DefaultWireframe
-		max-width="nativ"
+		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
 		@fab:clicked="onFabClick"
 	>
 		<template #header>
-			<h1 class="text-h3 py-2 mb-4 title-header">
+			<h1 class="text-h3 mb-4">
 				{{ t("pages.rooms.participants.manageParticipants") }}
 			</h1>
 		</template>
 
-		<div class="mb-8 mt-12 mx-16">
-			Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können
-			hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im
-			eigenen Profil aktiviert haben
-			<a
-				href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
-				>(weitere Informationen)</a
-			>.
+		<div class="mb-8 mt-12">
+			<RenderHTML :html="t('pages.rooms.participant.infoText')" />
 		</div>
-		<div class="mx-16">
-			<ParticipantsTable :participants="participantsList" />
+		<div class="mb-12">
+			<ParticipantsTable
+				v-if="!isLoading"
+				:participants="participantsList"
+				@remove:participant="onRemoveParticipant"
+			/>
 		</div>
-		<div>
-			<v-dialog v-model="isParticipantsDialogOpen" width="auto" persistent>
-				<AddParticipants
-					:userList="potentialParticipants"
-					@close="onDialogClose"
-					@add:participants="onAddParticipants"
-					@update:role="onUpdateRole"
-				/>
-			</v-dialog>
-		</div>
+
+		<v-dialog
+			v-model="isParticipantsDialogOpen"
+			:width="xs ? 'auto' : 480"
+			persistent
+			max-width="480"
+		>
+			<AddParticipants
+				:userList="potentialParticipants"
+				:schools="schools"
+				@close="onDialogClose"
+				@add:participants="onAddParticipants"
+				@update:role="onUpdateRoleOrSchool"
+			/>
+		</v-dialog>
+		<ConfirmationDialog />
 	</DefaultWireframe>
 </template>
 
@@ -44,27 +48,44 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { useRoomDetailsStore, useParticipants, Participants } from "@data-room";
+import {
+	useRoomDetailsStore,
+	useParticipants,
+	ParticipantType,
+} from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { ParticipantsTable, AddParticipants } from "@feature-room";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
+import {
+	ConfirmationDialog,
+	useConfirmationDialog,
+	useDeleteConfirmationDialog,
+} from "@ui-confirmation-dialog";
+import { RenderHTML } from "@feature-render-html";
+import { useDisplay } from "vuetify";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
+const { xs } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
-
 const isParticipantsDialogOpen = ref(false);
+const roomId = route.params.id.toString();
 const {
+	isLoading,
 	potentialParticipants,
 	participants,
+	schools,
 	addParticipants,
 	fetchParticipants,
-	fetchPotentialUsers,
-} = useParticipants();
+	getPotentialParticipants,
+	getSchools,
+	removeParticipants,
+} = useParticipants(roomId);
 
-const participantsList: Ref<Participants[]> = ref(participants);
+const participantsList: Ref<RoomMemberResponse[]> = ref(participants);
+const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 const pageTitle = computed(() =>
 	buildPageTitle(
@@ -89,7 +110,8 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const onFabClick = async () => {
-	await fetchPotentialUsers(RoleName.Teacher);
+	await getSchools();
+	await getPotentialParticipants({ role: RoleName.RoomEditor });
 	isParticipantsDialogOpen.value = true;
 };
 
@@ -101,15 +123,29 @@ const onAddParticipants = async (participantIds: string[]) => {
 	await addParticipants(participantIds);
 };
 
-const onUpdateRole = async (role: RoleName) => {
-	await fetchPotentialUsers(role);
+const onUpdateRoleOrSchool = async (payload: {
+	role: RoleName;
+	schoolId: string;
+}) => {
+	await getPotentialParticipants(payload);
+};
+
+const onRemoveParticipant = async (participant: ParticipantType) => {
+	const { askConfirmation } = useConfirmationDialog();
+	const message = t("pages.rooms.participant.delete.confirmation", {
+		memberName: `${participant.firstName} ${participant.lastName}`,
+	});
+	const shouldDelete = await askConfirmation({ message });
+
+	if (!shouldDelete) return;
+	await removeParticipants([participant.userId]);
 };
 
 onMounted(async () => {
 	// call fetchRoom() again because the store is reset on unmounted lifecycle hook in RoomDetails.page.vue
 	if (room.value === undefined) {
 		console.log("Room store not found");
-		await fetchRoom(route.params.id as string);
+		await fetchRoom(roomId);
 	}
 	await fetchParticipants();
 });

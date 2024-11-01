@@ -1641,10 +1641,22 @@ export default {
 	"pages.rooms.title": "Rooms",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
+	"pages.rooms.participant.error.load":
+		"The participant list could not be loaded.",
+	"pages.rooms.participant.error.add": "Adding participants failed.",
+	"pages.rooms.participant.error.delete": "Deleting participants failed.",
+	"pages.rooms.participant.delete.confirmation":
+		"Really remove {memberName} from the room?",
+	"pages.rooms.participant.infoText":
+		'Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their own profile <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(more information)</a>.',
+	"pages.rooms.participant.label": "Participant",
 	"pages.rooms.participants.label": "Participants",
 	"pages.rooms.participants.addParticipants": "Add participants",
 	"pages.rooms.participants.manageParticipants": "Manage participants",
+	"pages.rooms.participants.removeParticipants": "Remove participants",
 	"pages.rooms.participants.participantTable.itemsPerPage": "Entries per page",
+	"pages.rooms.participants.roles.editor": "Room editor",
+	"pages.rooms.participants.roles.viewer": "Room viewer",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",
