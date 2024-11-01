@@ -74,7 +74,6 @@ export const useParticipants = (roomId: string) => {
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
 						roleName: RoleName.RoomEditor,
-						schoolName: ownSchool.name,
 					};
 				})
 				.filter((user) => {

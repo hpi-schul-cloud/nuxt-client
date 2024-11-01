@@ -7663,6 +7663,12 @@ export interface SchoolUserResponse {
      * @type {string}
      * @memberof SchoolUserResponse
      */
+    schoolName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SchoolUserResponse
+     */
     id: string;
 }
 /**
