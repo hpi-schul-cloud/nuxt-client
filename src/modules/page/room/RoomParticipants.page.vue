@@ -61,7 +61,7 @@ import {
 	ConfirmationDialog,
 	useDeleteConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import RenderHTML from "@/modules/feature/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 import { useDisplay } from "vuetify";
 
 const { fetchRoom } = useRoomDetailsStore();
