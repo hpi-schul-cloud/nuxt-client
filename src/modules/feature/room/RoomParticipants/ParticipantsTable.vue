@@ -26,7 +26,7 @@
 			:sort-asc-icon="mdiMenuDown"
 			:sort-desc-icon="mdiMenuUp"
 			:items-per-page-options="[5, 10, 25, 50, 100]"
-			:items-per-page="5"
+			:items-per-page="50"
 			:items-per-page-text="
 				t('pages.rooms.participants.participantTable.itemsPerPage')
 			"
