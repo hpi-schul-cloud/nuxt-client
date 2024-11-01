@@ -30,6 +30,7 @@
 			:items-per-page-text="
 				t('pages.rooms.participants.participantTable.itemsPerPage')
 			"
+			:no-data-text="t('common.nodata')"
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">
