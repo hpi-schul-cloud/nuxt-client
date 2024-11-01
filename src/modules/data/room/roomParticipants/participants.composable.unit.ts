@@ -111,8 +111,18 @@ describe("useParticipants", () => {
 
 			const schoolTeachersList: SchoolUserListResponse = {
 				data: [
-					{ firstName: "Carl", lastName: "Cord", id: "1" },
-					{ firstName: "John", lastName: "Doe", id: "2" },
+					{
+						firstName: "Carl",
+						lastName: "Cord",
+						id: "1",
+						schoolName: "Paul-Gerhardt-Gymnasium",
+					},
+					{
+						firstName: "John",
+						lastName: "Doe",
+						id: "2",
+						schoolName: "Paul-Gerhardt-Gymnasium",
+					},
 				],
 				total: 3,
 				skip: 0,
@@ -152,6 +162,7 @@ describe("useParticipants", () => {
 						firstName: participantsMock.firstName,
 						lastName: participantsMock.lastName,
 						id: participantsMock.userId,
+						schoolName: participantsMock.schoolName,
 					},
 				],
 				total: 3,
