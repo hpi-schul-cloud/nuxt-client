@@ -15,6 +15,7 @@ import {
 	FileElementContentBody,
 	LinkElementContentBody,
 	RichTextElementContentBody,
+	RoomApiFactory,
 	SubmissionContainerElementContentBody,
 } from "@/serverApi/v3";
 import { BoardContextType } from "@/types/board/BoardContext";
@@ -29,7 +30,8 @@ export const useBoardApi = () => {
 	const cardsApi = BoardCardApiFactory(undefined, "/v3", $axios);
 	const elementApi = BoardElementApiFactory(undefined, "/v3", $axios);
 
-	const roomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
+	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
+	const courseRoomApi = CourseRoomsApiFactory(undefined, "/v3", $axios);
 
 	const fetchBoardCall = async (id: string): Promise<BoardResponse> => {
 		try {
@@ -186,6 +188,17 @@ export const useBoardApi = () => {
 		});
 	};
 
+	const fetchRoomName = async (id: string): Promise<string | undefined> => {
+		let title = (await roomApi.roomControllerGetRoomDetails(id)).data?.name;
+
+		if (!title) {
+			title = (await courseRoomApi.courseRoomsControllerGetRoomBoard(id)).data
+				?.title;
+		}
+
+		return title;
+	};
+
 	type ContextInfo = { id: string; type: BoardContextType; name: string };
 
 	const getContextInfo = async (
@@ -197,17 +210,17 @@ export const useBoardApi = () => {
 			return undefined;
 		}
 		const context = contextResponse.data;
-		const roomResponse = await roomApi.courseRoomsControllerGetRoomBoard(
-			context.id
-		);
 
-		if (roomResponse.status !== 200) {
+		const roomName = await fetchRoomName(context.id);
+
+		if (roomName === undefined) {
 			return undefined;
 		}
+
 		return {
-			id: roomResponse.data.roomId,
+			id: context.id,
 			type: context.type,
-			name: roomResponse.data.title,
+			name: roomName,
 		};
 	};
 
