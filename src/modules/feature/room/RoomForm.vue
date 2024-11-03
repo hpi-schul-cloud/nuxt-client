@@ -94,15 +94,31 @@ const todayISO = computed(() =>
 	dayjs.tz(new Date(), "DD.MM.YYYY", "UTC").format(DATETIME_FORMAT.inputDate)
 );
 
-const beforeEndDate = (endDate: string | undefined) =>
-	helpers.withParams(
-		{ type: "beforeEndDate", value: endDate },
-		helpers.withMessage("kaputt", (startDate: string) => {
-			console.log(startDate, endDate);
-			if (!endDate) return true;
+const beforeEndDate = (compareDate: {
+	date: string | undefined;
+	type: "startDate" | "endDate";
+}) => {
+	const givenDateIsStartDate = compareDate.type === "endDate";
+
+	return helpers.withParams(
+		{ type: "beforeEndDate", value: compareDate },
+		helpers.withMessage("kaputt", (givenDate: string) => {
+			let startDate: string | undefined;
+			let endDate: string | undefined;
+
+			if (givenDateIsStartDate) {
+				startDate = givenDate;
+				endDate = compareDate.date;
+			} else {
+				startDate = compareDate.date;
+				endDate = givenDate;
+			}
+			console.log(startDate, compareDate);
+			if (!startDate || !endDate) return true;
 			return new Date(startDate) < new Date(endDate);
 		})
 	);
+};
 
 // Validation
 const validationRules = computed(() => ({
@@ -112,7 +128,16 @@ const validationRules = computed(() => ({
 			required: helpers.withMessage(t("common.validation.required2"), required),
 		},
 		startDate: {
-			beforeEndDate: beforeEndDate(roomData.value.endDate),
+			beforeEndDate: beforeEndDate({
+				date: roomData.value.endDate,
+				type: "endDate",
+			}),
+		},
+		endDate: {
+			beforeEndDate: beforeEndDate({
+				date: roomData.value.startDate,
+				type: "startDate",
+			}),
 		},
 	},
 }));
@@ -131,14 +156,13 @@ const onUpdateStartDate = (newDate: string) => {
 	roomData.value.startDate = newDate;
 	// v$.value.$touch();
 	console.log("errors", v$.value.roomData.startDate.$errors);
-	// console.log("dirty", v$.value.$anyDirty);
 };
 
 const onUpdateEndDate = (newDate: string) => {
 	roomData.value.endDate = newDate;
 	// v$.value.$touch();
 
-	console.log("errors", v$.value.roomData.startDate.$errors);
+	console.log("errors", v$.value.roomData.endDate.$errors);
 };
 
 watch(
