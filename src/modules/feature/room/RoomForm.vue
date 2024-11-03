@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, unref } from "vue";
+import { computed, PropType, unref, watch } from "vue";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { DatePicker } from "@ui-date-time-picker";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
@@ -94,12 +94,25 @@ const todayISO = computed(() =>
 	dayjs.tz(new Date(), "DD.MM.YYYY", "UTC").format(DATETIME_FORMAT.inputDate)
 );
 
+const beforeEndDate = (endDate: string | undefined) =>
+	helpers.withParams(
+		{ type: "beforeEndDate", value: endDate },
+		helpers.withMessage("kaputt", (startDate: string) => {
+			console.log(startDate, endDate);
+			if (!endDate) return true;
+			return new Date(startDate) < new Date(endDate);
+		})
+	);
+
 // Validation
 const validationRules = computed(() => ({
 	roomData: {
 		name: {
 			maxLength: maxLength(100),
 			required: helpers.withMessage(t("common.validation.required2"), required),
+		},
+		startDate: {
+			beforeEndDate: beforeEndDate(roomData.value.endDate),
 		},
 	},
 }));
@@ -116,13 +129,22 @@ const onUpdateColor = () => {
 
 const onUpdateStartDate = (newDate: string) => {
 	roomData.value.startDate = newDate;
-	v$.value.$touch();
+	// v$.value.$touch();
+	console.log("errors", v$.value.roomData.startDate.$errors);
+	// console.log("dirty", v$.value.$anyDirty);
 };
 
 const onUpdateEndDate = (newDate: string) => {
 	roomData.value.endDate = newDate;
-	v$.value.$touch();
+	// v$.value.$touch();
+
+	console.log("errors", v$.value.roomData.startDate.$errors);
 };
+
+watch(
+	() => v$.value.$anyDirty,
+	() => console.log("dirty", v$.value.$anyDirty)
+);
 
 const onSave = async () => {
 	const valid = await v$.value.$validate();
