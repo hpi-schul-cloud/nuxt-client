@@ -804,6 +804,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.open": "Offen",
 	"components.roomForm.labels.roomName": "Name des Raumes",
 	"components.roomForm.labels.timePeriod": "Zeitraum",
+	"components.roomForm.labels.timePeriod.from": "Zeitraum von",
+	"components.roomForm.labels.timePeriod.to": "Zeitraum bis",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
 	"error.400": "400 – Fehlerhafte Anfrage",

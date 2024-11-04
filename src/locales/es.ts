@@ -816,6 +816,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.open": "Abrir",
 	"components.roomForm.labels.roomName": "Nombre de la sala",
 	"components.roomForm.labels.timePeriod": "Periodo de tiempo",
+	"components.roomForm.labels.timePeriod.from": "Periodo de tiempo desde",
+	"components.roomForm.labels.timePeriod.to": "Periodo de tiempo hasta",
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",

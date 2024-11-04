@@ -810,6 +810,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.open": "Відкрити",
 	"components.roomForm.labels.roomName": "Назва кімнати",
 	"components.roomForm.labels.timePeriod": "Період часу",
+	"components.roomForm.labels.timePeriod.from": "Період від",
+	"components.roomForm.labels.timePeriod.to": "Період до",
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
 	"error.400": "400 – Неприпустимий запит",
