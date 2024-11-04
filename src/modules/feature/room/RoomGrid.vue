@@ -28,7 +28,6 @@
 				<RoomTile
 					:room="room"
 					class="px-5 mb-5"
-					:draggable="draggable"
 					:data-testid="`room-tile-${index}`"
 				/>
 			</v-col>
@@ -45,13 +44,6 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const { rooms, isLoading, isEmpty, fetchRooms } = useRoomsState();
-
-defineProps({
-	draggable: {
-		type: Boolean,
-		default: false,
-	},
-});
 
 onMounted(() => {
 	fetchRooms();

@@ -1684,7 +1684,6 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Menú de la habitación",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar habitación",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar habitación",
-	"pages.rooms.arrangeRooms": "Organizar habitaciones",
 	"pages.rooms.emptyState": "Actualmente no hay habitaciones aquí.",
 	"pages.rooms.fab.title": "Crear habitación",
 	"pages.rooms.participant.error.load":

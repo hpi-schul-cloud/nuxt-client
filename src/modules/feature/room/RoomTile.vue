@@ -3,7 +3,7 @@
 		:to="roomPath"
 		class="room-link"
 		:aria-label="avatarAriaLabel"
-		:draggable="draggable"
+		draggable="false"
 	>
 		<div class="room-avatar" :class="avatarColor">
 			<span class="text-h3 text-white" data-testid="room-short-title">
@@ -22,10 +22,6 @@ import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({
-	draggable: {
-		type: Boolean,
-		default: false,
-	},
 	room: {
 		type: Object as PropType<RoomItem>,
 		required: true,

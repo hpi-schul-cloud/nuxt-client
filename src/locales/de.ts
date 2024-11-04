@@ -1668,7 +1668,6 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Raum-Menü",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
-	"pages.rooms.arrangeRooms": "Räume umordnen",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.participant.error.load":
