@@ -796,6 +796,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.open": "Open",
 	"components.roomForm.labels.roomName": "Name of the room",
 	"components.roomForm.labels.timePeriod": "Time period",
+	"components.roomForm.labels.timePeriod.from": "Time period from",
+	"components.roomForm.labels.timePeriod.to": "Time period to",
 	"components.timePicker.validation.format": "Please use format HH:MM",
 	"components.timePicker.validation.required": "Please enter a time.",
 	"error.400": "401 – Bad Request",
