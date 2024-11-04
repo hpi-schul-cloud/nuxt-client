@@ -1663,11 +1663,23 @@ export default {
 	"pages.rooms.title": "Кімнати",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
+	"pages.rooms.participant.error.load":
+		"Не вдалося завантажити список учасників.",
+	"pages.rooms.participant.error.add": "Не вдалося додати учасників.",
+	"pages.rooms.participant.error.delete": "Не вдалося видалити учасників.",
+	"pages.rooms.participant.delete.confirmation":
+		"Справді видалити {memberName} з кімнати?",
+	"pages.rooms.participant.infoText":
+		'Додайте учасників до кімнати. Вчителів з інших шкіл можна додавати, якщо вони активували видимість у центральному каталозі у власному профілі <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(більше інформації)</a>.',
+	"pages.rooms.participant.label": "Учасник",
 	"pages.rooms.participants.label": "Учасники",
 	"pages.rooms.participants.addParticipants": "Додайте учасників",
 	"pages.rooms.participants.manageParticipants": "Керувати учасниками",
+	"pages.rooms.participants.removeParticipants": "Видалити учасника",
 	"pages.rooms.participants.participantTable.itemsPerPage":
 		"Записи на сторінку",
+	"pages.rooms.participants.roles.editor": "Редактор кімнати",
+	"pages.rooms.participants.roles.viewer": "Переглядач кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",
