@@ -1684,9 +1684,8 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Menú de la habitación",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar habitación",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar habitación",
-	"pages.rooms.title": "Habitaciones",
-	"pages.rooms.fab.title": "Crear habitación",
 	"pages.rooms.emptyState": "Actualmente no hay habitaciones aquí.",
+	"pages.rooms.fab.title": "Crear habitación",
 	"pages.rooms.participant.error.load":
 		"No se pudo cargar la lista de participantes.",
 	"pages.rooms.participant.error.add": "Error al agregar participantes.",
@@ -1704,6 +1703,7 @@ export default {
 		"Entradas por página",
 	"pages.rooms.participants.roles.editor": "Editor de salas",
 	"pages.rooms.participants.roles.viewer": "Visor de salas",
+	"pages.rooms.title": "Habitaciones",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
