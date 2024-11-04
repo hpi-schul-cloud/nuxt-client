@@ -141,6 +141,7 @@ import {
 	mdiViewGridOutline,
 	mdiViewGridPlusOutline,
 	mdiViewListOutline,
+	mdiMovieRoll,
 } from "@mdi/js";
 
 export {
@@ -285,4 +286,5 @@ export {
 	mdiViewGridOutline,
 	mdiViewGridPlusOutline,
 	mdiViewListOutline,
+	mdiMovieRoll,
 };
