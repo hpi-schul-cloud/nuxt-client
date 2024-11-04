@@ -24,6 +24,7 @@
 					<DatePicker
 						:date="roomData.startDate"
 						:min-date="todayISO"
+						:errors="startDateErrors"
 						class="w-50 mr-4"
 						data-testid="room-start-date-input"
 						aria-labelledby="time-period-label"
@@ -32,6 +33,7 @@
 					<DatePicker
 						:date="roomData.endDate"
 						:min-date="todayISO"
+						:errors="endDateErrors"
 						class="w-50 ml-4"
 						data-testid="room-end-date-input"
 						aria-labelledby="time-period-label"
@@ -94,14 +96,17 @@ const todayISO = computed(() =>
 	dayjs.tz(new Date(), "DD.MM.YYYY", "UTC").format(DATETIME_FORMAT.inputDate)
 );
 
-const beforeEndDate = (compareDate: {
+const startDateErrors = computed(() => v$.value.roomData.startDate.$errors);
+const endDateErrors = computed(() => v$.value.roomData.endDate.$errors);
+
+const startBeforeEndDate = (compareDate: {
 	date: string | undefined;
 	type: "startDate" | "endDate";
 }) => {
 	const givenDateIsStartDate = compareDate.type === "endDate";
 
 	return helpers.withParams(
-		{ type: "beforeEndDate", value: compareDate },
+		{ type: "startBeforeEndDate", value: compareDate },
 		helpers.withMessage("kaputt", (givenDate: string) => {
 			let startDate: string | undefined;
 			let endDate: string | undefined;
@@ -113,7 +118,7 @@ const beforeEndDate = (compareDate: {
 				startDate = compareDate.date;
 				endDate = givenDate;
 			}
-			console.log(startDate, compareDate);
+
 			if (!startDate || !endDate) return true;
 			return new Date(startDate) < new Date(endDate);
 		})
@@ -128,13 +133,13 @@ const validationRules = computed(() => ({
 			required: helpers.withMessage(t("common.validation.required2"), required),
 		},
 		startDate: {
-			beforeEndDate: beforeEndDate({
+			startBeforeEndDate: startBeforeEndDate({
 				date: roomData.value.endDate,
 				type: "endDate",
 			}),
 		},
 		endDate: {
-			beforeEndDate: beforeEndDate({
+			startBeforeEndDate: startBeforeEndDate({
 				date: roomData.value.startDate,
 				type: "startDate",
 			}),
@@ -154,21 +159,14 @@ const onUpdateColor = () => {
 
 const onUpdateStartDate = (newDate: string) => {
 	roomData.value.startDate = newDate;
-	// v$.value.$touch();
 	console.log("errors", v$.value.roomData.startDate.$errors);
 };
 
 const onUpdateEndDate = (newDate: string) => {
 	roomData.value.endDate = newDate;
-	// v$.value.$touch();
 
 	console.log("errors", v$.value.roomData.endDate.$errors);
 };
-
-watch(
-	() => v$.value.$anyDirty,
-	() => console.log("dirty", v$.value.$anyDirty)
-);
 
 const onSave = async () => {
 	const valid = await v$.value.$validate();
