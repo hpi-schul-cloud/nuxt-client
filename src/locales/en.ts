@@ -1640,9 +1640,8 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Room menu",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Edit room",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
-	"pages.rooms.title": "Rooms",
-	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
+	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.participant.error.load":
 		"The participant list could not be loaded.",
 	"pages.rooms.participant.error.add": "Adding participants failed.",
@@ -1659,6 +1658,7 @@ export default {
 	"pages.rooms.participants.participantTable.itemsPerPage": "Entries per page",
 	"pages.rooms.participants.roles.editor": "Room editor",
 	"pages.rooms.participants.roles.viewer": "Room viewer",
+	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
 		"Are you sure, you want to remove this element?",
