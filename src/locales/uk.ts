@@ -846,9 +846,9 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
 		"Вибрана група користувачів буде синхронізована з вибраним курсом на наступному кроці.",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning":
-		"Синхронізація з {systemName} перезаписує людей у курсі (викладачі та студенти).",
+		"Синхронізація перезаписує учасників курсу (призначених викладачів і студентів).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning":
-		"Синхронізація курсу з вибраною групою може змінити призначення студентів.<br/><br/>Призначення викладачів у цьому курсі залишається незмінним.",
+		"Синхронізація перезаписує учасників курсу (призначених студентів).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
 		"Чи дійсно слід починати синхронізацію групи користувачів {groupName} у курсі {courseName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":

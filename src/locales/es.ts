@@ -857,9 +857,9 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
 		"El grupo de usuarios seleccionado se sincronizará con el curso seleccionado en el siguiente paso.",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning":
-		"Una sincronización con {systemName} sobrescribe a las personas del curso (profesores y estudiantes).",
+		"Una sincronización sobrescribe a los participantes del curso (profesores y estudiantes asignados).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning":
-		"La sincronización del curso con el grupo seleccionado puede cambiar la asignación de los estudiantes.<br/><br/>La asignación de los profesores permanece sin cambios en este curso.",
+		"Una sincronización sobrescribe a los participantes del curso (estudiantes asignados).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
 		"¿Debería realmente iniciarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":

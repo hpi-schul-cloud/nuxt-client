@@ -839,9 +839,9 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
 		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem ausgewählten Kurs synchronisiert.",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning":
-		"Eine Synchronisation mit {systemName} überschreibt die Personen des Kurses (Lehrkräfte und Schüler*innen).",
+		"Eine Synchronisation überschreibt die Kursteilnehmenden (zugeordnete Lehrkräfte und Schüler:innen).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning":
-		"Die Synchronisation des Kurses mit der gewählten Gruppe kann die Zuordnung der Schüler*innen verändern.<br/><br/>Die Zuordnung der Lehrkräfte bleibt in diesem Kurs davon unverändert.",
+		"Eine Synchronisation überschreibt die Kursteilnehmenden (zugeordnete Schüler:innen).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
 		"Soll die Synchronisation der Nutzendengruppe {groupName} im Kurs {courseName} wirklich gestartet werden?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":

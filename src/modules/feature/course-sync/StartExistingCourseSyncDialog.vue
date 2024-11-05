@@ -19,20 +19,15 @@
 
 		<template #content>
 			<WarningAlert data-testid="no-teacher-warning">
-				<RenderHTML
-					component="span"
-					:html="
+				<span data-testid="no-teacher-warning-text">
+					{{
 						$t(
 							isUserInGroup
-								? 'feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning'
-								: 'feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning',
-							{
-								systemName: 'moin.schule',
-							}
+								? "feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning"
+								: "feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning"
 						)
-					"
-					data-testid="no-teacher-warning-text"
-				/>
+					}}
+				</span>
 			</WarningAlert>
 			<p class="text-md mt-2" data-testid="group-dialog-info-text">
 				{{
@@ -59,7 +54,6 @@ import {
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { useCourseApi } from "@data-room";
-import { RenderHTML } from "@feature-render-html";
 import { WarningAlert } from "@ui-alert";
 import { computed, ModelRef, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
