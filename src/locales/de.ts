@@ -1674,17 +1674,17 @@ export default {
 		"Die Teilnehmenden-Liste konnte nicht geladen werden.",
 	"pages.rooms.members.error.add":
 		"Hinzufügen von Teilnehmenden fehlgeschlagen.",
-	"pages.rooms.members.error.delete":
+	"pages.rooms.members.error.remove":
 		"Löschen von Teilnehmenden fehlgeschlagen.",
-	"pages.rooms.members.delete.confirmation":
+	"pages.rooms.members.remove.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.infoText":
 		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im eigenen Profil aktiviert haben	<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(weitere Informationen)</a>.',
 	"pages.rooms.member.label": "Teilnehmer:in",
 	"pages.rooms.members.label": "Teilnehmende",
-	"pages.rooms.members.addMembers": "Teilnehmende hinzufügen",
-	"pages.rooms.members.manageMembers": "Teilnehmende verwalten",
-	"pages.rooms.members.removeMembers": "Teilnehmende entfernen",
+	"pages.rooms.members.add": "Teilnehmende hinzufügen",
+	"pages.rooms.members.manage": "Teilnehmende verwalten",
+	"pages.rooms.members.remove": "Teilnehmende entfernen",
 	"pages.rooms.members.table.itemsPerPage": "Einträge pro Seite",
 	"pages.rooms.members.roles.editor": "Raumeditor",
 	"pages.rooms.members.roles.viewer": "Raumbetrachter",

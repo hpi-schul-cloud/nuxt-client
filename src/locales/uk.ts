@@ -1666,16 +1666,16 @@ export default {
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.members.error.load": "Не вдалося завантажити список учасників.",
 	"pages.rooms.members.error.add": "Не вдалося додати учасників.",
-	"pages.rooms.members.error.delete": "Не вдалося видалити учасників.",
-	"pages.rooms.members.delete.confirmation":
+	"pages.rooms.members.error.remove": "Не вдалося видалити учасників.",
+	"pages.rooms.members.remove.confirmation":
 		"Справді видалити {memberName} з кімнати?",
 	"pages.rooms.members.infoText":
 		'Додайте учасників до кімнати. Вчителів з інших шкіл можна додавати, якщо вони активували видимість у центральному каталозі у власному профілі <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(більше інформації)</a>.',
 	"pages.rooms.member.label": "Учасник",
 	"pages.rooms.members.label": "Учасники",
-	"pages.rooms.members.addMembers": "Додайте учасників",
-	"pages.rooms.members.manageMembers": "Керувати учасниками",
-	"pages.rooms.members.removeMembers": "Видалити учасника",
+	"pages.rooms.members.add": "Додайте учасників",
+	"pages.rooms.members.manage": "Керувати учасниками",
+	"pages.rooms.members.remove": "Видалити учасника",
 	"pages.rooms.members.table.itemsPerPage": "Записи на сторінку",
 	"pages.rooms.members.roles.editor": "Редактор кімнати",
 	"pages.rooms.members.roles.viewer": "Переглядач кімнати",

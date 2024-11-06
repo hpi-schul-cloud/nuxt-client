@@ -1644,16 +1644,16 @@ export default {
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.members.error.load": "The participant list could not be loaded.",
 	"pages.rooms.members.error.add": "Adding participants failed.",
-	"pages.rooms.members.error.delete": "Deleting participants failed.",
-	"pages.rooms.members.delete.confirmation":
+	"pages.rooms.members.error.remove": "Deleting participants failed.",
+	"pages.rooms.members.remove.confirmation":
 		"Really remove {memberName} from the room?",
 	"pages.rooms.members.infoText":
 		'Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their own profile <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(more information)</a>.',
 	"pages.rooms.member.label": "Participant",
 	"pages.rooms.members.label": "Participants",
-	"pages.rooms.members.addMembers": "Add participants",
-	"pages.rooms.members.manageMembers": "Manage participants",
-	"pages.rooms.members.removeMembers": "Remove participants",
+	"pages.rooms.members.add": "Add participants",
+	"pages.rooms.members.manage": "Manage participants",
+	"pages.rooms.members.remove": "Remove participants",
 	"pages.rooms.members.table.itemsPerPage": "Entries per page",
 	"pages.rooms.members.roles.editor": "Room editor",
 	"pages.rooms.members.roles.viewer": "Room viewer",

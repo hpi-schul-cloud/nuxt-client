@@ -1689,16 +1689,16 @@ export default {
 	"pages.rooms.members.error.load":
 		"No se pudo cargar la lista de participantes.",
 	"pages.rooms.members.error.add": "Error al agregar participantes.",
-	"pages.rooms.members.error.delete": "Error al eliminar participantes.",
-	"pages.rooms.members.delete.confirmation":
+	"pages.rooms.members.error.remove": "Error al eliminar participantes.",
+	"pages.rooms.members.remove.confirmation":
 		"¿De verdad quieres borrar a {memberName} de la sala?",
 	"pages.rooms.members.infoText":
 		'Añade participantes a la sala. Se pueden añadir profesores de otros centros educativos si tienen activada la visibilidad en el directorio central en su propio perfil <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(más información)</a>.',
 	"pages.rooms.member.label": "Partícipe",
 	"pages.rooms.members.label": "Participantes",
-	"pages.rooms.members.addMembers": "Añadir participantes",
-	"pages.rooms.members.manageMembers": "Administrar participantes",
-	"pages.rooms.members.removeMembers": "Eliminar participante",
+	"pages.rooms.members.add": "Añadir participantes",
+	"pages.rooms.members.manage": "Administrar participantes",
+	"pages.rooms.members.remove": "Eliminar participante",
 	"pages.rooms.members.table.itemsPerPage": "Entradas por página",
 	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
