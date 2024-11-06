@@ -1686,23 +1686,22 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar habitación",
 	"pages.rooms.emptyState": "Actualmente no hay habitaciones aquí.",
 	"pages.rooms.fab.title": "Crear habitación",
-	"pages.rooms.participant.error.load":
+	"pages.rooms.members.error.load":
 		"No se pudo cargar la lista de participantes.",
-	"pages.rooms.participant.error.add": "Error al agregar participantes.",
-	"pages.rooms.participant.error.delete": "Error al eliminar participantes.",
-	"pages.rooms.participant.delete.confirmation":
+	"pages.rooms.members.error.add": "Error al agregar participantes.",
+	"pages.rooms.members.error.delete": "Error al eliminar participantes.",
+	"pages.rooms.members.delete.confirmation":
 		"¿De verdad quieres borrar a {memberName} de la sala?",
-	"pages.rooms.participant.infoText":
+	"pages.rooms.members.infoText":
 		'Añade participantes a la sala. Se pueden añadir profesores de otros centros educativos si tienen activada la visibilidad en el directorio central en su propio perfil <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(más información)</a>.',
-	"pages.rooms.participant.label": "Partícipe",
-	"pages.rooms.participants.label": "Participantes",
-	"pages.rooms.participants.addParticipants": "Añadir participantes",
-	"pages.rooms.participants.manageParticipants": "Administrar participantes",
-	"pages.rooms.participants.removeParticipants": "Eliminar participante",
-	"pages.rooms.participants.participantTable.itemsPerPage":
-		"Entradas por página",
-	"pages.rooms.participants.roles.editor": "Editor de salas",
-	"pages.rooms.participants.roles.viewer": "Visor de salas",
+	"pages.rooms.member.label": "Partícipe",
+	"pages.rooms.members.label": "Participantes",
+	"pages.rooms.members.addMembers": "Añadir participantes",
+	"pages.rooms.members.manageMembers": "Administrar participantes",
+	"pages.rooms.members.removeMembers": "Eliminar participante",
+	"pages.rooms.members.table.itemsPerPage": "Entradas por página",
+	"pages.rooms.members.roles.editor": "Editor de salas",
+	"pages.rooms.members.roles.viewer": "Visor de salas",
 	"pages.rooms.title": "Habitaciones",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

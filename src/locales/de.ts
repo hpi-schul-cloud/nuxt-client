@@ -1670,25 +1670,24 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.rooms.fab.title": "Raum erstellen",
-	"pages.rooms.participant.error.load":
+	"pages.rooms.members.error.load":
 		"Die Teilnehmenden-Liste konnte nicht geladen werden.",
-	"pages.rooms.participant.error.add":
+	"pages.rooms.members.error.add":
 		"Hinzufügen von Teilnehmenden fehlgeschlagen.",
-	"pages.rooms.participant.error.delete":
+	"pages.rooms.members.error.delete":
 		"Löschen von Teilnehmenden fehlgeschlagen.",
-	"pages.rooms.participant.delete.confirmation":
+	"pages.rooms.members.delete.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
-	"pages.rooms.participant.infoText":
+	"pages.rooms.members.infoText":
 		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im eigenen Profil aktiviert haben	<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(weitere Informationen)</a>.',
-	"pages.rooms.participant.label": "Teilnehmer:in",
-	"pages.rooms.participants.label": "Teilnehmende",
-	"pages.rooms.participants.addParticipants": "Teilnehmende hinzufügen",
-	"pages.rooms.participants.manageParticipants": "Teilnehmende verwalten",
-	"pages.rooms.participants.removeParticipants": "Teilnehmende entfernen",
-	"pages.rooms.participants.participantTable.itemsPerPage":
-		"Einträge pro Seite",
-	"pages.rooms.participants.roles.editor": "Raumeditor",
-	"pages.rooms.participants.roles.viewer": "Raumbetrachter",
+	"pages.rooms.member.label": "Teilnehmer:in",
+	"pages.rooms.members.label": "Teilnehmende",
+	"pages.rooms.members.addMembers": "Teilnehmende hinzufügen",
+	"pages.rooms.members.manageMembers": "Teilnehmende verwalten",
+	"pages.rooms.members.removeMembers": "Teilnehmende entfernen",
+	"pages.rooms.members.table.itemsPerPage": "Einträge pro Seite",
+	"pages.rooms.members.roles.editor": "Raumeditor",
+	"pages.rooms.members.roles.viewer": "Raumbetrachter",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
