@@ -1,5 +1,10 @@
 <template>
-	<RouterLink :to="roomPath" class="room-link" :aria-label="avatarAriaLabel">
+	<RouterLink
+		:to="roomPath"
+		class="room-link"
+		:aria-label="avatarAriaLabel"
+		draggable="false"
+	>
 		<div class="room-avatar" :class="avatarColor">
 			<span class="text-h3 text-white" data-testid="room-short-title">
 				{{ roomShortName }}

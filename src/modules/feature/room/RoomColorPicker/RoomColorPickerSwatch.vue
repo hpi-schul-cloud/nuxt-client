@@ -5,6 +5,7 @@
 		:data-testid="`color-swatch-${color}`"
 		role="radio"
 		:aria-label="ariaLabel"
+		:aria-checked="isSelected"
 		@click="() => $emit('update:color', color)"
 	>
 		<VIcon v-if="isSelected" :icon="mdiCheckCircleOutline" color="white" />

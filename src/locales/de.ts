@@ -804,6 +804,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.open": "Offen",
 	"components.roomForm.labels.roomName": "Name des Raumes",
 	"components.roomForm.labels.timePeriod": "Zeitraum",
+	"components.roomForm.labels.timePeriod.from": "Zeitraum von",
+	"components.roomForm.labels.timePeriod.to": "Zeitraum bis",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
 	"error.400": "400 – Fehlerhafte Anfrage",
@@ -1666,9 +1668,8 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Raum-Menü",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
-	"pages.rooms.title": "Räume",
-	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
+	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.participant.error.load":
 		"Die Teilnehmenden-Liste konnte nicht geladen werden.",
 	"pages.rooms.participant.error.add":
@@ -1688,6 +1689,7 @@ export default {
 		"Einträge pro Seite",
 	"pages.rooms.participants.roles.editor": "Raumeditor",
 	"pages.rooms.participants.roles.viewer": "Raumbetrachter",
+	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
 		"Bist du dir sicher, dass du das Element löschen möchtest?",

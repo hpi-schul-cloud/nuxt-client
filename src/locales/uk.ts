@@ -810,6 +810,8 @@ export default {
 	"components.organisms.TasksDashboardMain.tab.open": "Відкрити",
 	"components.roomForm.labels.roomName": "Назва кімнати",
 	"components.roomForm.labels.timePeriod": "Період часу",
+	"components.roomForm.labels.timePeriod.from": "Період від",
+	"components.roomForm.labels.timePeriod.to": "Період до",
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
 	"error.400": "400 – Неприпустимий запит",
@@ -1660,9 +1662,8 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Меню кімнати",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
-	"pages.rooms.title": "Кімнати",
-	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
+	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.participant.error.load":
 		"Не вдалося завантажити список учасників.",
 	"pages.rooms.participant.error.add": "Не вдалося додати учасників.",
@@ -1680,6 +1681,7 @@ export default {
 		"Записи на сторінку",
 	"pages.rooms.participants.roles.editor": "Редактор кімнати",
 	"pages.rooms.participants.roles.viewer": "Переглядач кімнати",
+	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
 		"Ви впевнені, що хочете видалити цей елемент?",
