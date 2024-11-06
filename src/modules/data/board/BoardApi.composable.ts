@@ -188,15 +188,17 @@ export const useBoardApi = () => {
 		});
 	};
 
-	const fetchRoomName = async (id: string): Promise<string | undefined> => {
-		let title = (await roomApi.roomControllerGetRoomDetails(id)).data?.name;
+	const fetchRoomName = async (
+		type: BoardContextType,
+		id: string
+	): Promise<string | undefined> => {
+		const name =
+			type === BoardContextType.Room
+				? (await roomApi.roomControllerGetRoomDetails(id)).data.name
+				: (await courseRoomApi.courseRoomsControllerGetRoomBoard(id)).data
+						.title;
 
-		if (!title) {
-			title = (await courseRoomApi.courseRoomsControllerGetRoomBoard(id)).data
-				?.title;
-		}
-
-		return title;
+		return name;
 	};
 
 	type ContextInfo = { id: string; type: BoardContextType; name: string };
@@ -211,7 +213,7 @@ export const useBoardApi = () => {
 		}
 		const context = contextResponse.data;
 
-		const roomName = await fetchRoomName(context.id);
+		const roomName = await fetchRoomName(context.type, context.id);
 
 		if (roomName === undefined) {
 			return undefined;
