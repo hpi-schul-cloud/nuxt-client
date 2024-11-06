@@ -33,7 +33,7 @@ describe("@pages/RoomCreate.page.vue", () => {
 	});
 	it("should navigate to 'rooms' on cancel", async () => {
 		const { wrapper, router } = setup();
-		(wrapper.vm as any).onCancel();
+		wrapper.vm.onCancel();
 		expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
 	});
 });
