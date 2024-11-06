@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import AddParticipants from "./AddParticipants.vue";
+import AddMembers from "./AddMembers.vue";
 import { RoleName } from "@/serverApi/v3";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule } from "@/store";
@@ -26,9 +26,9 @@ const mockPotentialParticipants = addParticipantListFactory.buildList(3);
 const roomParticipantsSchools =
 	roomParticipantSchoolResponseFactory.buildList(3);
 
-describe("AddParticipants", () => {
+describe("AddMembers", () => {
 	const setup = () => {
-		const wrapper = mount(AddParticipants, {
+		const wrapper = mount(AddMembers, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -55,7 +55,7 @@ describe("AddParticipants", () => {
 			const { wrapper, wrapperVM } = setup();
 
 			expect(wrapper.exists()).toBe(true);
-			expect(wrapper.findComponent(AddParticipants)).toBeTruthy();
+			expect(wrapper.findComponent(AddMembers)).toBeTruthy();
 			expect(wrapperVM.userList).toStrictEqual(mockPotentialParticipants);
 		});
 

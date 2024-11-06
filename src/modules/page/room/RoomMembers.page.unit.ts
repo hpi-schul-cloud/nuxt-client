@@ -194,7 +194,7 @@ describe("RoomParticipantsPage", () => {
 				const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
 				wireframe.vm.$emit("fab:clicked");
 				await flushPromises();
-				const dialogAfter = wrapper.findComponent({ name: "AddParticipants" });
+				const dialogAfter = wrapper.findComponent({ name: "AddMembers" });
 				expect(dialogAfter.exists()).toBe(true);
 				expect(wrapperVM.isParticipantsDialogOpen).toBe(true);
 
@@ -210,7 +210,7 @@ describe("RoomParticipantsPage", () => {
 				const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
 				wireframe.vm.$emit("fab:clicked");
 				await flushPromises();
-				const dialog = wrapper.findComponent({ name: "AddParticipants" });
+				const dialog = wrapper.findComponent({ name: "AddMembers" });
 				await dialog.vm.$emit("update:role");
 
 				expect(
@@ -222,13 +222,10 @@ describe("RoomParticipantsPage", () => {
 		describe("@onRemoveParticipant", () => {
 			it("should call deleteParticipant method", async () => {
 				const { wrapper } = setup();
-				const participantsTable = wrapper.findComponent({
-					name: "ParticipantsTable",
+				const membersTable = wrapper.findComponent({
+					name: "MembersTable",
 				});
-				await participantsTable.vm.$emit(
-					"remove:participant",
-					mockParticipants[0]
-				);
+				await membersTable.vm.$emit("remove:participant", mockParticipants[0]);
 				await flushPromises();
 				expect(
 					mockUseParticipantsCalls.removeParticipants
@@ -260,20 +257,20 @@ describe("RoomParticipantsPage", () => {
 	});
 
 	describe("ParticpantsTable", () => {
-		it("should render ParticipantsTable", async () => {
+		it("should render MembersTable", async () => {
 			const { wrapper } = setup();
-			const participantsTable = wrapper.findComponent({
-				name: "ParticipantsTable",
+			const membersTable = wrapper.findComponent({
+				name: "MembersTable",
 			});
-			expect(participantsTable.exists()).toBe(true);
+			expect(membersTable.exists()).toBe(true);
 		});
 	});
 
 	describe("AddParticipant Dialog", () => {
-		it("should render AddParticipants", async () => {
+		it("should render AddMembers", async () => {
 			const { wrapper, wrapperVM } = setup();
 
-			const dialogBefore = wrapper.findComponent({ name: "AddParticipants" });
+			const dialogBefore = wrapper.findComponent({ name: "AddMembers" });
 			expect(dialogBefore.exists()).toBe(false);
 			expect(wrapperVM.isParticipantsDialogOpen).toBe(false);
 
@@ -281,19 +278,19 @@ describe("RoomParticipantsPage", () => {
 			expect(wireframe.exists()).toBe(true);
 			await wireframe.vm.$emit("fab:clicked");
 			await flushPromises();
-			const dialogAfter = wrapper.findComponent({ name: "AddParticipants" });
+			const dialogAfter = wrapper.findComponent({ name: "AddMembers" });
 			expect(dialogAfter.exists()).toBe(true);
 			expect(wrapperVM.isParticipantsDialogOpen).toBe(true);
 			expect(mockUseParticipantsCalls.fetchParticipants).toHaveBeenCalled();
 		});
 
-		it("should close AddParticipants dialog", async () => {
+		it("should close AddMembers dialog", async () => {
 			const { wrapper, wrapperVM } = setup();
 
 			const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
 			wireframe.vm.$emit("fab:clicked");
 			await flushPromises();
-			const dialogAfter = wrapper.findComponent({ name: "AddParticipants" });
+			const dialogAfter = wrapper.findComponent({ name: "AddMembers" });
 			expect(dialogAfter.exists()).toBe(true);
 			expect(wrapperVM.isParticipantsDialogOpen).toBe(true);
 

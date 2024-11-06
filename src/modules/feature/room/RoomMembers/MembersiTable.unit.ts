@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import ParticipantsTable from "./ParticipantsTable.vue";
+import MembersTable from "./MembersTable.vue";
 import { Ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import { roomParticipantResponseFactory } from "@@/tests/test-utils";
@@ -10,9 +10,9 @@ import { ParticipantType } from "@data-room";
 
 const mockParticipants = roomParticipantResponseFactory.buildList(3);
 
-describe("ParticipantsTable", () => {
+describe("MembersTable", () => {
 	const setup = () => {
-		const wrapper = mount(ParticipantsTable, {
+		const wrapper = mount(MembersTable, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -34,7 +34,7 @@ describe("ParticipantsTable", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.exists()).toBe(true);
-			expect(wrapper.findComponent(ParticipantsTable)).toBeTruthy();
+			expect(wrapper.findComponent(MembersTable)).toBeTruthy();
 		});
 	});
 

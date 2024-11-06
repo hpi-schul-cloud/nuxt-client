@@ -31,7 +31,7 @@
 
 							<VListItem
 								role="menuitem"
-								:to="`/rooms/${room.id}/participants`"
+								:to="`/rooms/${room.id}/members`"
 								:aria-label="t('pages.rooms.participants.manageParticipants')"
 							>
 								<template #prepend>

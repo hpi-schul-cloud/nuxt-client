@@ -15,7 +15,7 @@
 			<RenderHTML :html="t('pages.rooms.participant.infoText')" />
 		</div>
 		<div class="mb-12">
-			<ParticipantsTable
+			<MembersTable
 				v-if="!isLoading"
 				:participants="participantsList"
 				@remove:participant="onRemoveParticipant"
@@ -28,7 +28,7 @@
 			persistent
 			max-width="480"
 		>
-			<AddParticipants
+			<AddMembers
 				:userList="potentialParticipants"
 				:schools="schools"
 				@close="onDialogClose"
@@ -55,12 +55,11 @@ import {
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
-import { ParticipantsTable, AddParticipants } from "@feature-room";
+import { MembersTable, AddMembers } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
-	useDeleteConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { RenderHTML } from "@feature-render-html";
 import { useDisplay } from "vuetify";
@@ -85,7 +84,6 @@ const {
 } = useParticipants(roomId);
 
 const participantsList: Ref<RoomMemberResponse[]> = ref(participants);
-const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 const pageTitle = computed(() =>
 	buildPageTitle(
