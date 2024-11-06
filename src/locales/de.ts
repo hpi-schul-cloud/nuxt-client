@@ -16,7 +16,7 @@ export default {
 	"common.actions.logout": "Abmelden",
 	"common.actions.ok": "OK",
 	"common.actions.pickColor": "Hintergrundfarbe auswählen",
-	"common.actions.remove": "Löschen",
+	"common.actions.remove": "Entfernen",
 	"common.actions.rename": "Umbenennen",
 	"common.actions.save": "Speichern",
 	"common.actions.scrollToTop": "Nach oben scrollen",
@@ -1644,7 +1644,7 @@ export default {
 	"pages.rooms.tools.notLicensedDialog.title":
 		"Tool „{toolName}“ nicht freigeschaltet",
 	"pages.rooms.tools.deleteDialog.content":
-		"Möchten Sie wirklich das Tool '<i>{itemName}</i>' aus dem Kurs entfernen?",
+		"Tool '{itemName}' wirklich entfernen?",
 	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",
 	"pages.rooms.tools.emptyState": "Es gibt noch keine Tools in diesem Kurs.",
 	"pages.rooms.tools.incomplete": "Konfiguration unvollständig",
