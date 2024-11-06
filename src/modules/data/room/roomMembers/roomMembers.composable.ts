@@ -130,7 +130,7 @@ export const useRoomMembers = (roomId: string) => {
 				(member) => !userIds.includes(member.userId)
 			);
 		} catch (error) {
-			showFailure(t("pages.rooms.members.error.delete"));
+			showFailure(t("pages.rooms.members.error.remove"));
 		}
 	};
 

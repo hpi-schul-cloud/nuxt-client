@@ -306,7 +306,7 @@ describe("useMembers", () => {
 			await removeMembers(["id"]);
 
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.delete"
+				"pages.rooms.members.error.remove"
 			);
 		});
 	});
