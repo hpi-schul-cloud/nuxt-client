@@ -31,6 +31,8 @@
 				t('pages.rooms.participants.participantTable.itemsPerPage')
 			"
 			:no-data-text="t('common.nodata')"
+			:mobile="null"
+			mobile-breakpoint="sm"
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">
@@ -110,7 +112,7 @@ const tableHeader = [
 </script>
 
 <style lang="scss" scoped>
-:deep .v-data-table-header__content {
+:deep(.v-data-table-header__content) {
 	color: rgba(var(--v-theme-primary-darken-1));
 	font-weight: bold;
 }
