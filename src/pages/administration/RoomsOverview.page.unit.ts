@@ -3,7 +3,7 @@ import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { SortOrder } from "@/store/types/sort-order.enum";
 import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	courseInfoDataResponseFactory,
 	envsFactory,

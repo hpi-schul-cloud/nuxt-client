@@ -7,21 +7,21 @@
 			<v-text-field
 				v-model="search"
 				density="compact"
-				:label="t('common.labels.search')"
-				:prepend-inner-icon="mdiMagnify"
 				variant="solo-filled"
 				flat
 				hide-details
 				single-line
-				width="200"
+				:label="t('common.labels.search')"
+				:prepend-inner-icon="mdiMagnify"
 			/>
 		</v-card-title>
 
 		<v-divider />
 		<v-data-table
 			v-model:search="search"
+			v-model="selectedParticipants"
+			item-value="userId"
 			:items="participantsList"
-			item-value="id"
 			:headers="tableHeader"
 			:sort-asc-icon="mdiMenuDown"
 			:sort-desc-icon="mdiMenuUp"
@@ -30,29 +30,49 @@
 			:items-per-page-text="
 				t('pages.rooms.participants.participantTable.itemsPerPage')
 			"
+			:no-data-text="t('common.nodata')"
 			@update:current-items="onUpdateFilter"
-		/>
+		>
+			<template #[`item.actions`]="{ item }">
+				<v-icon
+					class="cursor-pointer"
+					:icon="mdiTrashCanOutline"
+					:aria-label="t('pages.rooms.participants.removeParticipants')"
+					:title="t('pages.rooms.participants.removeParticipants')"
+					@click="onRemoveParticipant(item)"
+				/>
+			</template>
+		</v-data-table>
 	</v-card>
 </template>
 
 <script setup lang="ts">
 import { computed, PropType, ref, toRef } from "vue";
-import { Participants } from "@data-room";
 import { useI18n } from "vue-i18n";
-import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
+import {
+	mdiMenuDown,
+	mdiMenuUp,
+	mdiMagnify,
+	mdiTrashCanOutline,
+} from "@icons/material";
+import { RoomMemberResponse } from "@/serverApi/v3";
 
 const props = defineProps({
 	participants: {
-		type: Array as PropType<Participants[]>,
+		type: Array as PropType<RoomMemberResponse[]>,
 		required: true,
 	},
 });
+
+const emit = defineEmits(["remove:participant"]);
+
 const { t } = useI18n();
 const search = ref("");
 const participantsList = toRef(props, "participants");
+const selectedParticipants = ref<string[]>([]);
 const participantsFilterCount = ref(participantsList.value.length);
 
-const onUpdateFilter = (value: Participants[]) => {
+const onUpdateFilter = (value: RoomMemberResponse[]) => {
 	participantsFilterCount.value =
 		search.value === "" ? participantsList.value.length : value.length;
 };
@@ -61,6 +81,10 @@ const tableTitle = computed(
 	() =>
 		`${t("pages.rooms.participants.label")} (${participantsFilterCount.value})`
 );
+
+const onRemoveParticipant = (participant: RoomMemberResponse) => {
+	emit("remove:participant", participant);
+};
 
 const tableHeader = [
 	{
@@ -73,13 +97,15 @@ const tableHeader = [
 	},
 	{
 		title: t("common.labels.role"),
-		key: "roleName",
+		key: "displayRoleName",
 	},
-	{
-		title: t("common.words.classes"),
-		key: "classes",
-	},
-	{ title: t("common.words.mainSchool"), key: "school" },
+	// TODO: Decide if we want to show classes in the table or not
+	// {
+	// 	title: t("common.words.classes"),
+	// 	key: "classes",
+	// },
+	{ title: t("common.words.mainSchool"), key: "schoolName" },
+	{ title: "", key: "actions", sortable: false, width: 50 },
 ];
 </script>
 

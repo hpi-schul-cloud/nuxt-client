@@ -3,7 +3,7 @@ import { ConfigResponse } from "@/serverApi/v3/api";
 import EnvConfigModule from "@/store/env-config";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,

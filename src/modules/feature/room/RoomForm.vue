@@ -11,10 +11,13 @@
 				data-testid="room-name-input"
 			/>
 			<div class="mb-8">
-				<RoomColorPicker v-model:color="roomData.color" />
+				<RoomColorPicker
+					v-model:color="roomData.color"
+					@update:color="onUpdateColor"
+				/>
 			</div>
 			<div class="mb-8">
-				<label id="time-period-label" class="d-flex mb-2">
+				<label class="d-flex mb-2">
 					{{ $t("components.roomForm.labels.timePeriod") }}
 				</label>
 				<div class="d-flex">
@@ -22,14 +25,14 @@
 						:date="roomData.startDate"
 						class="w-50 mr-4"
 						data-testid="room-start-date-input"
-						aria-labelledby="time-period-label"
+						:aria-label="$t('components.roomForm.labels.timePeriod.from')"
 						@update:date="onUpdateStartDate"
 					/>
 					<DatePicker
 						:date="roomData.endDate"
 						class="w-50 ml-4"
 						data-testid="room-end-date-input"
-						aria-labelledby="time-period-label"
+						:aria-label="$t('components.roomForm.labels.timePeriod.to')"
 						@update:date="onUpdateEndDate"
 					/>
 				</div>
@@ -54,6 +57,7 @@
 				{{ $t("common.actions.save") }}
 			</VBtn>
 		</div>
+		<ConfirmationDialog />
 	</form>
 </template>
 
@@ -65,6 +69,10 @@ import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers, required } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
+import {
+	ConfirmationDialog,
+	useConfirmationDialog,
+} from "@ui-confirmation-dialog";
 
 const props = defineProps({
 	room: {
@@ -72,22 +80,15 @@ const props = defineProps({
 		required: true,
 	},
 });
-
 const emit = defineEmits(["save", "cancel"]);
+
 const { t } = useI18n();
+const { askConfirmation } = useConfirmationDialog();
 
 const roomData = computed(() => props.room);
 
-const onUpdateStartDate = (newDate: string) => {
-	roomData.value.startDate = newDate;
-};
-
-const onUpdateEndDate = (newDate: string) => {
-	roomData.value.endDate = newDate;
-};
-
 // Validation
-const rules = computed(() => ({
+const validationRules = computed(() => ({
 	roomData: {
 		name: {
 			required: helpers.withMessage(t("common.validation.required2"), required),
@@ -95,7 +96,25 @@ const rules = computed(() => ({
 	},
 }));
 
-const v$ = useVuelidate(rules, { roomData }, { $lazy: true, $autoDirty: true });
+const v$ = useVuelidate(
+	validationRules,
+	{ roomData },
+	{ $lazy: true, $autoDirty: true }
+);
+
+const onUpdateColor = () => {
+	v$.value.$touch();
+};
+
+const onUpdateStartDate = (newDate: string) => {
+	roomData.value.startDate = newDate;
+	v$.value.$touch();
+};
+
+const onUpdateEndDate = (newDate: string) => {
+	roomData.value.endDate = newDate;
+	v$.value.$touch();
+};
 
 const onSave = async () => {
 	const valid = await v$.value.$validate();
@@ -106,7 +125,17 @@ const onSave = async () => {
 	emit("save", roomData.value);
 };
 
-const onCancel = () => {
-	emit("cancel");
+const onCancel = async () => {
+	const noChangesMade = !v$.value.$anyDirty;
+	if (noChangesMade) emit("cancel");
+
+	const shouldCancel = await askConfirmation({
+		message: t("ui-confirmation-dialog.ask-cancel-form"),
+		confirmActionLangKey: "common.actions.discard",
+	});
+
+	if (shouldCancel) {
+		emit("cancel");
+	}
 };
 </script>

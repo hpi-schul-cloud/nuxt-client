@@ -1,8 +1,12 @@
 import ExternalToolConfigurator from "@/components/external-tools/configuration/ExternalToolConfigurator.vue";
 import { ToolContextType } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import SchoolExternalToolsModule from "@/store/school-external-tools";
+import {
+	NOTIFIER_MODULE_KEY,
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
+} from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	businessErrorFactory,
 	contextExternalToolFactory,
@@ -40,15 +44,25 @@ describe("CourseContextExternalToolConfigurator", () => {
 	>;
 
 	const getWrapper = (
-		props: ComponentProps<typeof ContextExternalToolConfigurator>
+		props: ComponentProps<typeof ContextExternalToolConfigurator>,
+		getters: Partial<SchoolExternalToolsModule> = {}
 	) => {
 		const notifierModule = createModuleMocks(NotifierModule);
+		const schoolExternalToolsModule = createModuleMocks(
+			SchoolExternalToolsModule,
+			{
+				getContextExternalToolConfigurationTemplate: undefined,
+				...getters,
+			}
+		);
 
 		const wrapper = mount(ContextExternalToolConfigurator, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
+						schoolExternalToolsModule,
 				},
 			},
 			props,
@@ -142,6 +156,49 @@ describe("CourseContextExternalToolConfigurator", () => {
 				expect(
 					useContextExternalToolStateMock.fetchContextExternalTool
 				).toHaveBeenCalledWith("configId");
+			});
+		});
+
+		describe("when a preferred tool with a custom parameter is loaded", () => {
+			const setup = async () => {
+				const contextExternalToolConfigurationTemplate =
+					contextExternalToolConfigurationTemplateFactory.build();
+				const { wrapper } = getWrapper(
+					{
+						contextId: "contextId",
+						contextType: ToolContextType.BoardElement,
+					},
+					{
+						getContextExternalToolConfigurationTemplate:
+							contextExternalToolConfigurationTemplate,
+					}
+				);
+
+				return {
+					wrapper,
+					contextExternalToolConfigurationTemplate,
+				};
+			};
+
+			it("should not fetch available tools", async () => {
+				const { wrapper } = await setup();
+
+				await wrapper.vm.fetchData();
+
+				expect(
+					useContextExternalToolConfigurationStateMock.fetchAvailableToolConfigurationsForContext
+				).not.toHaveBeenCalledWith("contextId", ToolContextType.BoardElement);
+			});
+
+			it("should set the preferred tool as an available tool", async () => {
+				const { wrapper, contextExternalToolConfigurationTemplate } =
+					await setup();
+
+				await wrapper.vm.fetchData();
+
+				expect(
+					useContextExternalToolConfigurationStateMock.availableTools.value
+				).toEqual([contextExternalToolConfigurationTemplate]);
 			});
 		});
 	});

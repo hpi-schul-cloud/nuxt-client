@@ -1,10 +1,5 @@
-// Remove this type after api types are generated
-export type Participants = {
-	id: string;
-	firstName: string;
-	lastName: string;
+import { RoomMemberResponse } from "@/serverApi/v3";
+
+export type ParticipantType = RoomMemberResponse & {
 	fullName: string;
-	roleName: string;
-	classes: string;
-	school: string;
 };

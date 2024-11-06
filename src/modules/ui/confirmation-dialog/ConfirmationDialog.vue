@@ -1,8 +1,8 @@
 <template>
 	<vCustomDialog
 		data-testid="delete-dialog-item"
-		:has-buttons="true"
-		confirm-btn-title-key="common.actions.delete"
+		has-buttons
+		:confirm-btn-title-key="confirmBtnLangKey"
 		@dialog-confirmed="onConfirmation"
 		:is-open="isDialogOpen"
 		@dialog-closed="onCloseDialog"
@@ -15,40 +15,28 @@
 	</vCustomDialog>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { computed, defineComponent } from "vue";
+import { computed } from "vue";
 import { useInternalConfirmationDialog } from "./Confirmation.composable";
 
-export default defineComponent({
-	name: "ConfirmationDialog",
-	components: {
-		vCustomDialog,
-	},
-	setup() {
-		const { confirm, cancel, dialogOptions, isDialogOpen } =
-			useInternalConfirmationDialog();
+const { confirm, cancel, dialogOptions, isDialogOpen } =
+	useInternalConfirmationDialog();
 
-		const onConfirmation = () => confirm();
-		const onCloseDialog = () => cancel();
+const onConfirmation = () => confirm();
+const onCloseDialog = () => cancel();
 
-		const message = computed(() =>
-			dialogOptions.value ? dialogOptions.value.message : ""
-		);
+const message = computed(() =>
+	dialogOptions.value ? dialogOptions.value.message : ""
+);
 
-		return {
-			message,
-			dialogOptions,
-			isDialogOpen,
-			onConfirmation: onConfirmation,
-			onCloseDialog,
-		};
-	},
-});
+const confirmBtnLangKey = computed(() =>
+	dialogOptions.value ? dialogOptions.value.confirmActionLangKey : undefined
+);
 </script>
+
 <style scoped>
 .text-break-word {
 	word-break: break-word;
-	white-space: normal;
 }
 </style>

@@ -212,9 +212,7 @@ export default {
 			let found = false;
 			items.forEach((item) => {
 				if (found) return;
-				item.elements.find((e) => types.includes(e.type))
-					? (found = true)
-					: null;
+				found = item.elements.find((e) => types.includes(e.type));
 			});
 			return found;
 		},

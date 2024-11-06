@@ -4,7 +4,6 @@ In order to get the correct type, we must implement a custom type-wrapper that a
 See Pinia's documentation: https://pinia.vuejs.org/cookbook/testing.html#Mocking-the-returned-value-of-an-action;
 */
 import type { Store, StoreDefinition } from "pinia";
-import { Jest as jest } from "@jest/environment";
 
 export function mockedPiniaStoreTyping<TStoreDef extends () => unknown>(
 	useStore: TStoreDef

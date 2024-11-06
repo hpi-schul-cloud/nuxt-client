@@ -1,7 +1,7 @@
 import { useBoardNotifier } from "./BoardNotifier.composable";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import NotifierModule from "@/store/notifier";
 
 const notifierModule = createModuleMocks(NotifierModule);

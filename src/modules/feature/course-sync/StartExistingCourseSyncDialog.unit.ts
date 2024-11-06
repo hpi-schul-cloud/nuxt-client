@@ -3,7 +3,7 @@ import { RoleName } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import { AUTH_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { groupResponseFactory, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,

@@ -13,7 +13,7 @@ import {
 import BaseModal from "@/components/base/BaseModal";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 
 const toast = {
 	error401: -1,

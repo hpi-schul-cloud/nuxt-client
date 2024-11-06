@@ -1,5 +1,7 @@
+import { ConfigResponse } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
+import { SchoolExternalToolMetadata } from "@/store/external-tool";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import {
@@ -8,7 +10,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { createModuleMocks } from "@/utils/mock-store-module";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	envsFactory,
 	meResponseFactory,
@@ -28,8 +30,6 @@ import { nextTick, ref } from "vue";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import ExternalToolSection from "./ExternalToolSection.vue";
-import { SchoolExternalToolMetadata } from "@/store/external-tool";
-import { ConfigResponse } from "@/serverApi/v3";
 
 jest.mock("@data-external-tool");
 
@@ -402,6 +402,7 @@ describe("ExternalToolSection", () => {
 					statusText: "statusText",
 					isOutdated: false,
 					isDeactivated: false,
+					restrictToContexts: "",
 				};
 
 				const itemName: string = wrapper.vm.getItemName;
