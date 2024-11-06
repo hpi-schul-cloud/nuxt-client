@@ -5,10 +5,10 @@ import {
 import MembersTable from "./MembersTable.vue";
 import { Ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
-import { roomParticipantResponseFactory } from "@@/tests/test-utils";
-import { ParticipantType } from "@data-room";
+import { roomMemberResponseFactory } from "@@/tests/test-utils";
+import { RoomMember } from "@data-room";
 
-const mockParticipants = roomParticipantResponseFactory.buildList(3);
+const mockMembers = roomMemberResponseFactory.buildList(3);
 
 describe("MembersTable", () => {
 	const setup = () => {
@@ -16,11 +16,11 @@ describe("MembersTable", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props: { participants: mockParticipants },
+			props: { members: mockMembers },
 		});
 
 		const wrapperVM = wrapper.vm as unknown as {
-			participants: ParticipantType[];
+			members: RoomMember[];
 			search: Ref<string>;
 			tableTitle: string;
 			tableHeader: { title: string; key: string }[];
@@ -30,7 +30,7 @@ describe("MembersTable", () => {
 	};
 
 	describe("when component is mounted", () => {
-		it("should render participants", () => {
+		it("should render member's table", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.exists()).toBe(true);
@@ -44,10 +44,10 @@ describe("MembersTable", () => {
 			const dataTable = wrapper.findComponent({ name: "v-data-table" });
 
 			expect(dataTable).toBeTruthy();
-			expect(dataTable.vm.items).toEqual(mockParticipants);
+			expect(dataTable.vm.items).toEqual(mockMembers);
 			expect(dataTable.vm.headers).toEqual(wrapperVM.tableHeader);
 			expect(dataTable.vm["itemsPerPageText"]).toEqual(
-				"pages.rooms.participants.participantTable.itemsPerPage"
+				"pages.rooms.members.table.itemsPerPage"
 			);
 			expect(dataTable.vm["sortAscIcon"]).toEqual(mdiMenuDown);
 			expect(dataTable.vm["sortDescIcon"]).toEqual(mdiMenuUp);
@@ -72,17 +72,17 @@ describe("MembersTable", () => {
 			expect(search.vm["vModel"]).toEqual(wrapperVM.search.value);
 		});
 
-		it("should filter the participants based on the search value", async () => {
+		it("should filter the members based on the search value", async () => {
 			const { wrapper, wrapperVM } = setup();
 			const search = wrapper.findComponent({ name: "v-text-field" });
 
 			const title = wrapper.find(".table-title");
-			expect(title.text()).toContain(`(${mockParticipants.length})`);
-			await search.vm.$emit("update:modelValue", mockParticipants[0].firstName);
-			expect(wrapperVM.search).toBe(mockParticipants[0].firstName);
+			expect(title.text()).toContain(`(${mockMembers.length})`);
+			await search.vm.$emit("update:modelValue", mockMembers[0].firstName);
+			expect(wrapperVM.search).toBe(mockMembers[0].firstName);
 			const dataTable = wrapper.findComponent({ name: "v-data-table" });
 
-			expect(dataTable.vm.search).toEqual(mockParticipants[0].firstName);
+			expect(dataTable.vm.search).toEqual(mockMembers[0].firstName);
 			expect(title.text()).toContain("(1)");
 		});
 	});

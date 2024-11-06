@@ -1,12 +1,12 @@
-import RoomParticipantsPage from "./RoomParticipants.page.vue";
+import RoomMembersPage from "./RoomMembers.page.vue";
 import { createTestingPinia } from "@pinia/testing";
 import {
-	addParticipantListFactory,
+	roomMemberListFactory,
 	mockedPiniaStoreTyping,
-	roomParticipantResponseFactory,
-	roomParticipantSchoolResponseFactory,
+	roomMemberResponseFactory,
+	roomMemberSchoolResponseFactory,
 } from "@@/tests/test-utils";
-import { useParticipants, useRoomDetailsStore } from "@data-room";
+import { useRoomMembers, useRoomDetailsStore } from "@data-room";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -48,22 +48,21 @@ jest.mock("@vueuse/core", () => {
 
 jest.mocked(useTitle).mockReturnValue(ref(null));
 
-const mockParticipants = roomParticipantResponseFactory.buildList(3);
-const mockPotentialParticipants = addParticipantListFactory.buildList(3);
-const roomParticipantsSchools =
-	roomParticipantSchoolResponseFactory.buildList(3);
+const mockMembers = roomMemberResponseFactory.buildList(3);
+const mockPotentialMembers = roomMemberListFactory.buildList(3);
+const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
 
-jest.mock("../../data/room/roomParticipants/participants.composable");
-const mockUseParticipants = jest.mocked(useParticipants);
+jest.mock("../../data/room/roomMembers/roomMembers.composable");
+const mockUseMembers = jest.mocked(useRoomMembers);
 
 jest.mock("@ui-confirmation-dialog");
 jest.mock("@ui-confirmation-dialog");
 const mockedUseDeleteConfirmationDialog = jest.mocked(useConfirmationDialog);
 
-describe("RoomParticipantsPage", () => {
+describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
-	let mockUseParticipantsCalls: DeepMocked<ReturnType<typeof useParticipants>>;
+	let mockUseMembersCalls: DeepMocked<ReturnType<typeof useRoomMembers>>;
 
 	beforeEach(() => {
 		route = createMock<ReturnType<typeof useRoute>>();
@@ -72,17 +71,17 @@ describe("RoomParticipantsPage", () => {
 
 		router = createMock<Router>();
 		useRouterMock.mockReturnValue(router);
-		mockUseParticipantsCalls = createMock<ReturnType<typeof useParticipants>>();
-		mockUseParticipantsCalls.getPotentialParticipants = jest.fn();
-		mockUseParticipantsCalls.fetchParticipants = jest.fn();
-		mockUseParticipantsCalls.removeParticipants = jest.fn();
-		mockUseParticipantsCalls.getSchools = jest.fn();
-		mockUseParticipants.mockReturnValue({
-			...mockUseParticipantsCalls,
-			schools: ref(roomParticipantsSchools),
-			participants: ref(mockParticipants),
+		mockUseMembersCalls = createMock<ReturnType<typeof useRoomMembers>>();
+		mockUseMembersCalls.getPotentialMembers = jest.fn();
+		mockUseMembersCalls.fetchMembers = jest.fn();
+		mockUseMembersCalls.removeMembers = jest.fn();
+		mockUseMembersCalls.getSchools = jest.fn();
+		mockUseMembers.mockReturnValue({
+			...mockUseMembersCalls,
+			schools: ref(roomMembersSchools),
+			roomMembers: ref(mockMembers),
 			isLoading: ref(false),
-			potentialParticipants: ref(mockPotentialParticipants),
+			potentialRoomMembers: ref(mockPotentialMembers),
 		});
 
 		const askDeleteConfirmationMock = async () => await Promise.resolve(true);
@@ -100,7 +99,7 @@ describe("RoomParticipantsPage", () => {
 	});
 
 	const setup = () => {
-		const wrapper = mount(RoomParticipantsPage, {
+		const wrapper = mount(RoomMembersPage, {
 			global: {
 				plugins: [
 					createTestingPinia({
@@ -135,7 +134,7 @@ describe("RoomParticipantsPage", () => {
 				ariaLabel: string;
 				testId: string;
 			};
-			isParticipantsDialogOpen: boolean;
+			isMembersDialogOpen: boolean;
 			onFabClick: ReturnType<typeof jest.fn>;
 		};
 
@@ -147,7 +146,7 @@ describe("RoomParticipantsPage", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.exists()).toBe(true);
-			expect(wrapper.findComponent(RoomParticipantsPage)).toBeTruthy();
+			expect(wrapper.findComponent(RoomMembersPage)).toBeTruthy();
 		});
 
 		it("should call 'fetchRoom' method in the store", async () => {
@@ -158,37 +157,33 @@ describe("RoomParticipantsPage", () => {
 		it("should set the page title", async () => {
 			const { wrapperVM } = setup();
 			expect(wrapperVM.pageTitle).toContain("Room 1");
-			expect(wrapperVM.pageTitle).toContain(
-				"pages.rooms.participants.manageParticipants"
-			);
+			expect(wrapperVM.pageTitle).toContain("pages.rooms.members.manage");
 			expect(useTitle).toHaveBeenCalled();
 		});
 
 		it("should have the correct title", async () => {
 			const { wrapper } = setup();
-			expect(wrapper.find("h1").text()).toContain(
-				"pages.rooms.participants.manageParticipants"
-			);
+			expect(wrapper.find("h1").text()).toContain("pages.rooms.members.manage");
 		});
 	});
 
 	describe("@methods", () => {
 		describe("@onFabClick", () => {
-			it("should call getPotantialParticipants method", async () => {
+			it("should call getPotantialMembers method", async () => {
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
 				await wireframe.vm.$emit("fab:clicked");
 				await flushPromises();
 
-				expect(mockUseParticipantsCalls.getSchools).toHaveBeenCalled();
-				expect(
-					mockUseParticipantsCalls.getPotentialParticipants
-				).toHaveBeenCalledWith({ role: RoleName.RoomEditor });
+				expect(mockUseMembersCalls.getSchools).toHaveBeenCalled();
+				expect(mockUseMembersCalls.getPotentialMembers).toHaveBeenCalledWith({
+					role: RoleName.RoomEditor,
+				});
 			});
 		});
 
 		describe("@onDialogClose", () => {
-			it("should set isParticipantsDialogOpen to false", async () => {
+			it("should set isMembersDialogOpen to false", async () => {
 				const { wrapper, wrapperVM } = setup();
 
 				const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
@@ -196,16 +191,16 @@ describe("RoomParticipantsPage", () => {
 				await flushPromises();
 				const dialogAfter = wrapper.findComponent({ name: "AddMembers" });
 				expect(dialogAfter.exists()).toBe(true);
-				expect(wrapperVM.isParticipantsDialogOpen).toBe(true);
+				expect(wrapperVM.isMembersDialogOpen).toBe(true);
 
 				dialogAfter.vm.$emit("close");
 				await flushPromises();
-				expect(wrapperVM.isParticipantsDialogOpen).toBe(false);
+				expect(wrapperVM.isMembersDialogOpen).toBe(false);
 			});
 		});
 
-		describe("@onAddParticipants", () => {
-			it("should call getPotantialParticipants method", async () => {
+		describe("@onAddMembers", () => {
+			it("should call getPotantialMembers method", async () => {
 				const { wrapper } = setup();
 				const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
 				wireframe.vm.$emit("fab:clicked");
@@ -213,23 +208,21 @@ describe("RoomParticipantsPage", () => {
 				const dialog = wrapper.findComponent({ name: "AddMembers" });
 				await dialog.vm.$emit("update:role");
 
-				expect(
-					mockUseParticipantsCalls.getPotentialParticipants
-				).toHaveBeenCalled();
+				expect(mockUseMembersCalls.getPotentialMembers).toHaveBeenCalled();
 			});
 		});
 
-		describe("@onRemoveParticipant", () => {
-			it("should call deleteParticipant method", async () => {
+		describe("@onRemoveMember", () => {
+			it("should call deleteMember method", async () => {
 				const { wrapper } = setup();
 				const membersTable = wrapper.findComponent({
 					name: "MembersTable",
 				});
-				await membersTable.vm.$emit("remove:participant", mockParticipants[0]);
+				await membersTable.vm.$emit("remove:member", mockMembers[0]);
 				await flushPromises();
-				expect(
-					mockUseParticipantsCalls.removeParticipants
-				).toHaveBeenCalledWith([mockParticipants[0].userId]);
+				expect(mockUseMembersCalls.removeMembers).toHaveBeenCalledWith([
+					mockMembers[0].userId,
+				]);
 			});
 		});
 	});
@@ -256,7 +249,7 @@ describe("RoomParticipantsPage", () => {
 		});
 	});
 
-	describe("ParticpantsTable", () => {
+	describe("MembersTable", () => {
 		it("should render MembersTable", async () => {
 			const { wrapper } = setup();
 			const membersTable = wrapper.findComponent({
@@ -266,13 +259,13 @@ describe("RoomParticipantsPage", () => {
 		});
 	});
 
-	describe("AddParticipant Dialog", () => {
+	describe("AddMembers Dialog", () => {
 		it("should render AddMembers", async () => {
 			const { wrapper, wrapperVM } = setup();
 
 			const dialogBefore = wrapper.findComponent({ name: "AddMembers" });
 			expect(dialogBefore.exists()).toBe(false);
-			expect(wrapperVM.isParticipantsDialogOpen).toBe(false);
+			expect(wrapperVM.isMembersDialogOpen).toBe(false);
 
 			const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
 			expect(wireframe.exists()).toBe(true);
@@ -280,8 +273,8 @@ describe("RoomParticipantsPage", () => {
 			await flushPromises();
 			const dialogAfter = wrapper.findComponent({ name: "AddMembers" });
 			expect(dialogAfter.exists()).toBe(true);
-			expect(wrapperVM.isParticipantsDialogOpen).toBe(true);
-			expect(mockUseParticipantsCalls.fetchParticipants).toHaveBeenCalled();
+			expect(wrapperVM.isMembersDialogOpen).toBe(true);
+			expect(mockUseMembersCalls.fetchMembers).toHaveBeenCalled();
 		});
 
 		it("should close AddMembers dialog", async () => {
@@ -292,11 +285,11 @@ describe("RoomParticipantsPage", () => {
 			await flushPromises();
 			const dialogAfter = wrapper.findComponent({ name: "AddMembers" });
 			expect(dialogAfter.exists()).toBe(true);
-			expect(wrapperVM.isParticipantsDialogOpen).toBe(true);
+			expect(wrapperVM.isMembersDialogOpen).toBe(true);
 
 			dialogAfter.vm.$emit("close");
 			await flushPromises();
-			expect(wrapperVM.isParticipantsDialogOpen).toBe(false);
+			expect(wrapperVM.isMembersDialogOpen).toBe(false);
 		});
 	});
 });

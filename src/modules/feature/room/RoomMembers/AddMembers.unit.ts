@@ -8,10 +8,10 @@ import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule } from "@/store";
 import { nextTick } from "vue";
 import {
-	addParticipantListFactory,
-	roomParticipantSchoolResponseFactory,
+	roomMemberListFactory,
+	roomMemberSchoolResponseFactory,
 } from "@@/tests/test-utils";
-import { Participants } from "./types";
+import { RoomMember } from "@data-room";
 
 jest.mock("@/store/store-accessor", () => {
 	return {
@@ -22,9 +22,8 @@ jest.mock("@/store/store-accessor", () => {
 	};
 });
 
-const mockPotentialParticipants = addParticipantListFactory.buildList(3);
-const roomParticipantsSchools =
-	roomParticipantSchoolResponseFactory.buildList(3);
+const mockPotentialMembers = roomMemberListFactory.buildList(3);
+const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
 
 describe("AddMembers", () => {
 	const setup = () => {
@@ -36,15 +35,15 @@ describe("AddMembers", () => {
 				},
 			},
 			props: {
-				userList: mockPotentialParticipants,
-				schools: roomParticipantsSchools,
+				memberList: mockPotentialMembers,
+				schools: roomMembersSchools,
 			},
 		});
 
 		const wrapperVM = wrapper.vm as unknown as {
-			userList: Participants[];
+			memberList: RoomMember[];
 			preSelectedRole: RoleName;
-			selectedUsers: Participants[];
+			selectedUsers: RoomMember[];
 		};
 
 		return { wrapper, wrapperVM };
@@ -56,7 +55,7 @@ describe("AddMembers", () => {
 
 			expect(wrapper.exists()).toBe(true);
 			expect(wrapper.findComponent(AddMembers)).toBeTruthy();
-			expect(wrapperVM.userList).toStrictEqual(mockPotentialParticipants);
+			expect(wrapperVM.memberList).toStrictEqual(mockPotentialMembers);
 		});
 
 		it("should render Autocomplete components", () => {
@@ -82,7 +81,7 @@ describe("AddMembers", () => {
 			await nextTick();
 			expect(wrapper.emitted("update:role")).toHaveLength(1);
 			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
-				{ role: RoleName.RoomViewer, schoolId: roomParticipantsSchools[0].id },
+				{ role: RoleName.RoomViewer, schoolId: roomMembersSchools[0].id },
 			]);
 		});
 	});
@@ -97,8 +96,8 @@ describe("AddMembers", () => {
 
 			expect(userComponent).toBeTruthy();
 			await userComponent.vm.$emit("update:modelValue", [
-				mockPotentialParticipants[0].userId,
-				mockPotentialParticipants[1].userId,
+				mockPotentialMembers[0].userId,
+				mockPotentialMembers[1].userId,
 			]);
 			await nextTick();
 			expect(wrapperVM.selectedUsers).toHaveLength(2);
@@ -115,8 +114,8 @@ describe("AddMembers", () => {
 
 			expect(userComponent).toBeTruthy();
 			await userComponent.vm.$emit("update:modelValue", [
-				mockPotentialParticipants[0].userId,
-				mockPotentialParticipants[1].userId,
+				mockPotentialMembers[0].userId,
+				mockPotentialMembers[1].userId,
 			]);
 			await nextTick();
 
@@ -127,8 +126,8 @@ describe("AddMembers", () => {
 			expect(addButton).toBeTruthy();
 			await addButton.trigger("click");
 			await nextTick();
-			expect(wrapper.emitted("add:participants")).toHaveLength(1);
-			expect(wrapper.emitted("add:participants")![0]).toStrictEqual([
+			expect(wrapper.emitted("add:members")).toHaveLength(1);
+			expect(wrapper.emitted("add:members")![0]).toStrictEqual([
 				wrapperVM.selectedUsers,
 			]);
 			expect(wrapper.emitted("close")).toHaveLength(1);
