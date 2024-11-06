@@ -1,8 +1,13 @@
 <template>
-	<div
+	<VCard
 		v-if="board"
 		class="board-tile pa-4"
 		:class="{ 'board-hidden': isHidden }"
+		hover
+		role="link"
+		:data-testid="`board-tile-${props.index}`"
+		@click="openBoard"
+		@keydown.enter.self="openBoard"
 	>
 		<div
 			class="board-tile-subtitle"
@@ -17,18 +22,7 @@
 		>
 			{{ board.title }}
 		</div>
-		<div
-			class="board-tile-actions"
-			:data-testid="`board-tile-actions-${props.index}`"
-		>
-			<RouterLink
-				:to="boardPath"
-				:data-testid="`board-tile-open-button-${props.index}`"
-			>
-				Öffnen
-			</RouterLink>
-		</div>
-	</div>
+	</VCard>
 </template>
 
 <script setup lang="ts">
@@ -37,6 +31,7 @@ import { RoomBoardItem } from "@/types/room/Room";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { mdiViewDashboardOutline } from "@icons/material";
+import { useRouter } from "vue-router";
 
 const props = defineProps({
 	board: { type: Object as PropType<RoomBoardItem>, required: true },
@@ -44,6 +39,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const router = useRouter();
 
 const board = toRef(props, "board");
 
@@ -72,9 +68,10 @@ const subtitleText = computed(() => {
 	return text;
 });
 
-const boardPath = computed(() => {
-	return `/boards/${board.value?.id}`;
-});
+const openBoard = () => {
+	if (!board.value) return;
+	router.push(`/boards/${board.value.id}`);
+};
 </script>
 
 <style lang="scss" scoped>
