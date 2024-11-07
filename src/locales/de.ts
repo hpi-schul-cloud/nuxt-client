@@ -1679,7 +1679,7 @@ export default {
 	"pages.rooms.participant.delete.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.participant.infoText":
-		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im eigenen Profil aktiviert haben	<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(weitere Informationen)</a>.',
+		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	(<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">weitere Informationen</a>).',
 	"pages.rooms.participant.label": "Teilnehmer:in",
 	"pages.rooms.participants.label": "Teilnehmende",
 	"pages.rooms.participants.addParticipants": "Teilnehmende hinzufügen",
