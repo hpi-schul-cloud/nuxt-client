@@ -104,21 +104,24 @@ const startBeforeEndDate = (compareDate: {
 
 	return helpers.withParams(
 		{ type: "startBeforeEndDate", value: compareDate },
-		helpers.withMessage("kaputt", (givenDate: string) => {
-			let startDate: string | undefined;
-			let endDate: string | undefined;
+		helpers.withMessage(
+			"Das Startdatum muss vor dem Enddatum liegen.",
+			(givenDate: string) => {
+				let startDate: string | undefined;
+				let endDate: string | undefined;
 
-			if (givenDateIsStartDate) {
-				startDate = givenDate;
-				endDate = compareDate.date;
-			} else {
-				startDate = compareDate.date;
-				endDate = givenDate;
+				if (givenDateIsStartDate) {
+					startDate = givenDate;
+					endDate = compareDate.date;
+				} else {
+					startDate = compareDate.date;
+					endDate = givenDate;
+				}
+
+				if (!startDate || !endDate) return true;
+				return new Date(startDate) < new Date(endDate);
 			}
-
-			if (!startDate || !endDate) return true;
-			return new Date(startDate) < new Date(endDate);
-		})
+		)
 	);
 };
 
