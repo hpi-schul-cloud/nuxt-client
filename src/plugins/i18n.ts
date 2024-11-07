@@ -9,7 +9,6 @@ import enGB from "../locales/en";
 import esES from "../locales/es";
 import ukUA from "../locales/uk";
 import { MessageSchema } from "@/locales/schema";
-import { de, en, es, uk } from "vuetify/locale";
 
 declare type SupportedLanguages = "en" | "de" | "es" | "uk";
 
