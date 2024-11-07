@@ -65,7 +65,7 @@
 						</KebabMenu>
 					</div>
 				</template>
-				<RoomDetails :room="room" :room-boards="roomBoards" />
+				<RoomDetails v-if="room" :room="room" :room-boards="roomBoards" />
 				<ConfirmationDialog />
 				<SelectBoardLayoutDialog
 					v-if="boardLayoutsEnabled"

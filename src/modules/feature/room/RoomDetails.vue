@@ -1,9 +1,7 @@
 <template>
-	<template v-if="room">
-		<div>
-			<BoardGrid :boards="roomBoards" />
-		</div>
-	</template>
+	<div>
+		<BoardGrid :boards="roomBoards" />
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -12,11 +10,10 @@ import { PropType, toRef } from "vue";
 import BoardGrid from "./BoardGrid.vue";
 
 const props = defineProps({
-	room: { type: Object as PropType<RoomDetails> },
+	room: { type: Object as PropType<RoomDetails>, required: true },
 	roomBoards: { type: Array as PropType<RoomBoardItem[]> },
 });
 
-const room = toRef(props, "room");
 const roomBoards = toRef(props, "roomBoards");
 </script>
 
