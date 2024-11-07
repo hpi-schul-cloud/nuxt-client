@@ -1640,6 +1640,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Room menu",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Edit room",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
+	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.participant.error.load":

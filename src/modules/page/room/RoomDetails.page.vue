@@ -171,7 +171,7 @@ const createBoard = async (layout: BoardLayout) => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
 	const params: CreateBoardBodyParams = {
-		title: "Raum-Board", // t("pages.room.boardCard.label.courseBoard"),
+		title: t("pages.roomDetails.board.defaultName"),
 		parentId: room.value.id,
 		parentType: BoardParentType.Room,
 		layout,

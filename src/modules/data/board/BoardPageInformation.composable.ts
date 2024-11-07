@@ -11,10 +11,10 @@ const useBoardPageInformation = () => {
 
 	const { getContextInfo } = useBoardApi();
 
-	const contextInfo = ref<Awaited<ReturnType<typeof getContextInfo>>>();
+	const boardContext = ref<Awaited<ReturnType<typeof getContextInfo>>>();
 
 	const pageTitle = computed(() => {
-		const courseName = contextInfo.value?.name;
+		const courseName = boardContext.value?.name;
 		const courseNameForPageTitle = courseName ? ", " + courseName : "";
 
 		return buildPageTitle(
@@ -22,13 +22,13 @@ const useBoardPageInformation = () => {
 		);
 	});
 
-	const roomId = computed(() => contextInfo.value?.id);
-	const contextType = computed(() => contextInfo.value?.type);
+	const roomId = computed(() => boardContext.value?.id);
+	const contextType = computed(() => boardContext.value?.type);
 
 	const breadcrumbs = computed((): Breadcrumb[] => {
-		const id = unref(contextInfo)?.id;
-		const type = unref(contextInfo)?.type;
-		const name = unref(contextInfo)?.name;
+		const id = unref(boardContext)?.id;
+		const type = unref(boardContext)?.type;
+		const name = unref(boardContext)?.name;
 
 		if (!id || !type) {
 			return [];
@@ -66,7 +66,7 @@ const useBoardPageInformation = () => {
 	});
 
 	const createPageInformation = async (id: string): Promise<void> => {
-		contextInfo.value = await getContextInfo(id);
+		boardContext.value = await getContextInfo(id);
 	};
 
 	return {
