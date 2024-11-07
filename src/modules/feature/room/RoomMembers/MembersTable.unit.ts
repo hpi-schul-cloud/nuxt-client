@@ -7,6 +7,7 @@ import { Ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import { roomMemberResponseFactory } from "@@/tests/test-utils";
 import { RoomMember } from "@data-room";
+import { RoomMemberResponse } from "@/serverApi/v3";
 
 const mockMembers = roomMemberResponseFactory.buildList(3);
 
@@ -21,9 +22,11 @@ describe("MembersTable", () => {
 
 		const wrapperVM = wrapper.vm as unknown as {
 			members: RoomMember[];
+			memberList: Ref<RoomMemberResponse[]>;
 			search: Ref<string>;
 			tableTitle: string;
 			tableHeader: { title: string; key: string }[];
+			membersFilterCount: Ref<number>;
 		};
 
 		return { wrapper, wrapperVM };
@@ -58,6 +61,16 @@ describe("MembersTable", () => {
 			const title = wrapper.find(".table-title");
 
 			expect(title.text()).toBe(wrapperVM.tableTitle);
+		});
+
+		describe("when remove button is clicked", () => {
+			it("should emit 'remove:member'", async () => {
+				const { wrapper } = setup();
+				const removeBtn = wrapper.find(".cursor-pointer");
+
+				await removeBtn.trigger("click");
+				expect(wrapper.emitted("remove:member")).toBeTruthy();
+			});
 		});
 	});
 

@@ -29,7 +29,7 @@ jest.mock("@util-board/BoardNotifier.composable");
 jest.mock("@util-board/LastCreatedElement.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
-describe("useMembers", () => {
+describe("useRoomMembers", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
