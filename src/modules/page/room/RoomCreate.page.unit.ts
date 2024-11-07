@@ -7,14 +7,12 @@ import {
 import { RoomCreatePage } from "@page-room";
 import { useRouter } from "vue-router";
 import { RoomColor } from "@/serverApi/v3";
+import { RoomForm } from "@feature-room";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
 		push: jest.fn(),
 	}),
-}));
-jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
-	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
 jest.mock("@data-room", () => ({
@@ -26,6 +24,10 @@ jest.mock("@data-room", () => ({
 		}),
 	}),
 	roomData: {},
+}));
+
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
 const roomParams: RoomCreateParams = {
@@ -43,11 +45,13 @@ describe("@pages/RoomCreate.page.vue", () => {
 		});
 
 		const { createRoom } = useRoomCreateState();
+		const roomComponent = wrapper.findComponent(RoomForm);
 
 		return {
 			wrapper,
 			router: useRouter(),
 			createRoom,
+			roomComponent,
 		};
 	};
 
@@ -55,27 +59,35 @@ describe("@pages/RoomCreate.page.vue", () => {
 		const { wrapper } = setup();
 		expect(wrapper.vm).toBeDefined();
 	});
-	it("should navigate to 'rooms' on cancel", async () => {
-		const { wrapper, router } = setup();
-		wrapper.vm.onCancel();
-		expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
-	});
 	it("should call createRoom with correct parameters on save", async () => {
-		const { wrapper, createRoom } = setup();
-		await wrapper.vm.onSave(roomParams);
-		expect(createRoom).toHaveBeenCalledWith(roomParams);
-	});
-	it("should call createRoom with correct parameters on save", async () => {
-		const { wrapper, createRoom } = setup();
-		await wrapper.vm.onSave(roomParams);
+		const { createRoom, roomComponent } = setup();
+		roomComponent.vm.$emit("save", roomParams);
 		expect(createRoom).toHaveBeenCalledWith(roomParams);
 	});
 	it("should navigate to 'room-details' with correct room id on save", async () => {
-		const { wrapper, router } = setup();
-		await wrapper.vm.onSave(roomParams);
+		const { roomComponent, router } = setup();
+		roomComponent.vm.$emit("save", roomParams);
 		expect(router.push).toHaveBeenCalledWith({
 			name: "room-details",
 			params: { id: "123" },
 		});
 	});
+	it("should navigate to 'rooms' on cancel", async () => {
+		const { router, roomComponent } = setup();
+		roomComponent.vm.$emit("cancel");
+		expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
+	});
+	// it("should navigate to 'room-details' with correct room id on save", async () => {
+	// 	const { wrapper, router } = setup();
+	// 	await wrapper.vm.$emit("onSave", { roomParams });
+	// 	expect(router.push).toHaveBeenCalledWith({
+	// 		name: "room-details",
+	// 		params: { id: "123" },
+	// 	});
+	// });
+	// it("should navigate to 'rooms' on cancel", async () => {
+	// 	const { wrapper, router } = setup();
+	// 	wrapper.vm.onCancel();
+	// 	expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
+	// });
 });
