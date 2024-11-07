@@ -1,37 +1,34 @@
 <template>
 	<VCard
-		v-if="board"
 		class="board-tile pa-4"
 		:class="{ 'board-hidden': isHidden }"
 		hover
 		role="link"
 		:data-testid="`board-tile-${props.index}`"
-		@click="openBoard"
-		@keydown.enter.self="openBoard"
+		:to="boardPath"
 	>
-		<div
+		<VCardSubtitle
 			class="board-tile-subtitle"
 			:data-testid="`board-tile-subtitle-${props.index}`"
 		>
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
 			{{ subtitleText }}
-		</div>
-		<div
-			class="board-tile-title text-h6 my-4"
+		</VCardSubtitle>
+		<VCardTitle
+			class="board-tile-title text-h6 my-2"
 			:data-testid="`board-tile-title-${props.index}`"
 		>
 			{{ board.title }}
-		</div>
+		</VCardTitle>
 	</VCard>
 </template>
 
 <script setup lang="ts">
 import { BoardLayout } from "@/serverApi/v3";
 import { RoomBoardItem } from "@/types/room/Room";
+import { mdiViewDashboardOutline } from "@icons/material";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { mdiViewDashboardOutline } from "@icons/material";
-import { useRouter } from "vue-router";
 
 const props = defineProps({
 	board: { type: Object as PropType<RoomBoardItem>, required: true },
@@ -39,7 +36,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const router = useRouter();
 
 const board = toRef(props, "board");
 
@@ -68,10 +64,9 @@ const subtitleText = computed(() => {
 	return text;
 });
 
-const openBoard = () => {
-	if (!board.value) return;
-	router.push(`/boards/${board.value.id}`);
-};
+const boardPath = computed(() => {
+	return `/boards/${board.value.id}`;
+});
 </script>
 
 <style lang="scss" scoped>
