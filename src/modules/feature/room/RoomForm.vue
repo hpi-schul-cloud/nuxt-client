@@ -105,7 +105,7 @@ const startBeforeEndDate = (compareDate: {
 	return helpers.withParams(
 		{ type: "startBeforeEndDate", value: compareDate },
 		helpers.withMessage(
-			"Das Startdatum muss vor dem Enddatum liegen.",
+			t("components.roomForm.validation.timePeriod.startBeforeEnd"),
 			(givenDate: string) => {
 				let startDate: string | undefined;
 				let endDate: string | undefined;
