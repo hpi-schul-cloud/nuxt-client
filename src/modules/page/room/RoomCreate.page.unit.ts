@@ -77,17 +77,4 @@ describe("@pages/RoomCreate.page.vue", () => {
 		roomComponent.vm.$emit("cancel");
 		expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
 	});
-	// it("should navigate to 'room-details' with correct room id on save", async () => {
-	// 	const { wrapper, router } = setup();
-	// 	await wrapper.vm.$emit("onSave", { roomParams });
-	// 	expect(router.push).toHaveBeenCalledWith({
-	// 		name: "room-details",
-	// 		params: { id: "123" },
-	// 	});
-	// });
-	// it("should navigate to 'rooms' on cancel", async () => {
-	// 	const { wrapper, router } = setup();
-	// 	wrapper.vm.onCancel();
-	// 	expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
-	// });
 });
