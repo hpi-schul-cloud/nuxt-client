@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { BoardLayout } from "@/serverApi/v3";
 import { RoomBoardItem } from "@/types/room/Room";
-import { mdiViewDashboardOutline } from "@icons/material";
+import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -48,7 +48,9 @@ const isHidden = computed(() => {
 });
 
 const subtitleIcon = computed(() => {
-	const icon = isListBoard.value ? "$gridOutline" : mdiViewDashboardOutline;
+	const icon = isListBoard.value
+		? mdiViewAgendaOutline
+		: mdiViewDashboardOutline;
 	return icon;
 });
 
