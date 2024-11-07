@@ -1,10 +1,10 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { BoardContextType } from "@/types/board/BoardContext";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { createSharedComposable } from "@vueuse/core";
-import { computed, ref, Ref, unref } from "vue";
+import { computed, ref, unref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useBoardApi } from "./BoardApi.composable";
-import { BoardContextType } from "@/types/board/BoardContext";
 
 const useBoardPageInformation = () => {
 	const { t } = useI18n();
