@@ -14,30 +14,10 @@ import { de, en, es, uk } from "vuetify/locale";
 declare type SupportedLanguages = "en" | "de" | "es" | "uk";
 
 const messages: Record<SupportedLanguages, MessageSchema> = {
-	en: {
-		$vuetify: {
-			...en,
-		},
-		...enGB,
-	},
-	de: {
-		$vuetify: {
-			...de,
-		},
-		...deDE,
-	},
-	es: {
-		$vuetify: {
-			...es,
-		},
-		...esES,
-	},
-	uk: {
-		$vuetify: {
-			...uk,
-		},
-		...ukUA,
-	},
+	en: enGB,
+	de: deDE,
+	es: esES,
+	uk: ukUA,
 };
 
 const fileSizeFormat = {
