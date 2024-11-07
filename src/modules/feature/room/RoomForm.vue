@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, unref, watch } from "vue";
+import { computed, PropType, unref } from "vue";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { DatePicker } from "@ui-date-time-picker";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
@@ -95,9 +95,6 @@ const roomData = computed(() => props.room);
 const todayISO = computed(() =>
 	dayjs.tz(new Date(), "DD.MM.YYYY", "UTC").format(DATETIME_FORMAT.inputDate)
 );
-
-const startDateErrors = computed(() => v$.value.roomData.startDate.$errors);
-const endDateErrors = computed(() => v$.value.roomData.endDate.$errors);
 
 const startBeforeEndDate = (compareDate: {
 	date: string | undefined;
@@ -153,19 +150,19 @@ const v$ = useVuelidate(
 	{ $lazy: true, $autoDirty: true }
 );
 
+const startDateErrors = computed(() => v$.value.roomData.startDate.$errors);
+const endDateErrors = computed(() => v$.value.roomData.endDate.$errors);
+
 const onUpdateColor = () => {
 	v$.value.$touch();
 };
 
 const onUpdateStartDate = (newDate: string) => {
 	roomData.value.startDate = newDate;
-	console.log("errors", v$.value.roomData.startDate.$errors);
 };
 
 const onUpdateEndDate = (newDate: string) => {
 	roomData.value.endDate = newDate;
-
-	console.log("errors", v$.value.roomData.endDate.$errors);
 };
 
 const onSave = async () => {
