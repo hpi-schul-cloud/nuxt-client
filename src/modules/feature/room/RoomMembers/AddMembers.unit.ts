@@ -3,10 +3,10 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import AddMembers from "./AddMembers.vue";
-import { RoleName } from "@/serverApi/v3";
+import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule } from "@/store";
-import { nextTick } from "vue";
+import { nextTick, Ref } from "vue";
 import {
 	roomMemberListFactory,
 	roomMemberSchoolResponseFactory,
@@ -44,6 +44,7 @@ describe("AddMembers", () => {
 			memberList: RoomMember[];
 			preSelectedRole: RoleName;
 			selectedUsers: RoomMember[];
+			schoolList: Ref<SchoolForExternalInviteResponse[]>;
 		};
 
 		return { wrapper, wrapperVM };
@@ -56,6 +57,7 @@ describe("AddMembers", () => {
 			expect(wrapper.exists()).toBe(true);
 			expect(wrapper.findComponent(AddMembers)).toBeTruthy();
 			expect(wrapperVM.memberList).toStrictEqual(mockPotentialMembers);
+			expect(wrapperVM.schoolList).toStrictEqual(roomMembersSchools);
 		});
 
 		it("should render Autocomplete components", () => {

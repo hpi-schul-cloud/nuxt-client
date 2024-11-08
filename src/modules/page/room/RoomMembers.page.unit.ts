@@ -102,13 +102,7 @@ describe("RoomMembersPage", () => {
 		const wrapper = mount(RoomMembersPage, {
 			global: {
 				plugins: [
-					createTestingPinia({
-						initialState: {
-							useRoomDetailsStore: {
-								room: store,
-							},
-						},
-					}),
+					createTestingPinia(),
 					createTestingI18n(),
 					createTestingVuetify(),
 				],

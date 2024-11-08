@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import MembersTable from "./MembersTable.vue";
-import { nextTick, Ref } from "vue";
+import { Ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import { roomMemberResponseFactory } from "@@/tests/test-utils";
 import { RoomMember } from "@data-room";
