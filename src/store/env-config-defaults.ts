@@ -77,4 +77,5 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_ROOMS_ENABLED: false,
 	CALENDAR_SERVICE_ENABLED: false,
 	FEATURE_PREFERRED_CTL_TOOLS_ENABLED: false,
+	FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: false,
 };

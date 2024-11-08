@@ -15,6 +15,7 @@ export const useSystemApi = () => {
 
 			const system: System = {
 				id: response.data.id,
+				alias: response.data.alias,
 				displayName: response.data.displayName ?? "",
 			};
 
