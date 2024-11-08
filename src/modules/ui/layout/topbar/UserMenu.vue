@@ -100,6 +100,12 @@ const setSystemValuesFromJwt = async (jwt: string): Promise<void> => {
 		return;
 	}
 
+	console.info(JSON.stringify(fetchedSystem));
+	console.info(
+		"Feature flag",
+		envConfigModule.getEnv.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED
+	);
+
 	isExternalLogoutAllowed.value =
 		fetchedSystem.alias === "SANIS" &&
 		envConfigModule.getEnv.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED;
@@ -111,8 +117,8 @@ onMounted(async () => {
 	if (jwt) {
 		try {
 			await setSystemValuesFromJwt(jwt);
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 		} catch (err) {
+			console.error(err);
 			isExternalLogoutAllowed.value = false;
 			systemName.value = "";
 		}
