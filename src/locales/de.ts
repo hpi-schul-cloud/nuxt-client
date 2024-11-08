@@ -843,7 +843,7 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning":
 		"Eine Synchronisation überschreibt die Kursteilnehmenden (zugeordnete Lehrkräfte und Schüler:innen).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning":
-		"Eine Synchronisation überschreibt die Kursteilnehmenden (zugeordnete  Schüler:innen).",
+		"Eine Synchronisation überschreibt die Kursteilnehmenden (zugeordnete Schüler:innen).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
 		"Soll der Kurs {courseName} mit der Nutzendengruppe {groupName} wirklich synchronisiert werden?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
