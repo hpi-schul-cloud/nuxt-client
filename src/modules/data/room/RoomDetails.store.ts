@@ -1,4 +1,4 @@
-import { RoomDetails } from "@/types/room/Room";
+import { RoomBoardItem, RoomDetails } from "@/types/room/Room";
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { RoomApiFactory } from "@/serverApi/v3";
@@ -14,6 +14,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	const isLoading = ref(true);
 	const room = ref<RoomDetails>();
 	const roomVariant = ref<RoomVariant>();
+	const roomBoards = ref<RoomBoardItem[]>([]);
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 
@@ -21,6 +22,9 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		try {
 			room.value = (await roomApi.roomControllerGetRoomDetails(id)).data;
 			roomVariant.value = RoomVariant.ROOM;
+			roomBoards.value = (
+				await roomApi.roomControllerGetRoomBoards(id)
+			).data.data;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
@@ -51,5 +55,6 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		resetState,
 		room,
 		roomVariant,
+		roomBoards,
 	};
 });
