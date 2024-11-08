@@ -845,7 +845,7 @@ export default {
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Finalizar sincronización",
 	"feature-course-sync.EndCourseSyncDialog.description":
-		"¿Debería realmente finalizarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
+		"¿Debería realmente detenerse la sincronización del curso {courseName} con el grupo de usuarios {groupName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Sincronización completada exitosamente",
 	"feature-course-sync.GroupSelectionDialog.title":
@@ -858,10 +858,12 @@ export default {
 		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
 		"El grupo de usuarios seleccionado se sincronizará con el curso seleccionado en el siguiente paso.",
-	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
-		"Una sincronización con {systemName} sobrescribe a las personas del curso (profesores y estudiantes).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning":
+		"Una sincronización sobrescribe a los participantes del curso (profesores y estudiantes asignados).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning":
+		"Una sincronización sobrescribe a los participantes del curso (estudiantes asignados).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
-		"¿Debería realmente iniciarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
+		"¿Debería realmente sincronizarse el curso {courseName} con el grupo de usuarios {groupName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Grupo de usuarios sincronizado exitosamente",
 	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
