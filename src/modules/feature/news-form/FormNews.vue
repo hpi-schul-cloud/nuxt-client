@@ -68,7 +68,7 @@
 								@click="remove"
 							>
 								<v-icon size="20" class="mr-1">{{ mdiDelete }}</v-icon>
-								{{ $t("common.actions.remove") }}
+								{{ $t("common.actions.delete") }}
 							</v-btn>
 							<v-btn variant="text" @click="cancel">
 								<v-icon size="20" class="mr-1">{{ mdiClose }}</v-icon>

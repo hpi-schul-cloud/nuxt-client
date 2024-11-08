@@ -845,7 +845,7 @@ export default {
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Finalizar sincronización",
 	"feature-course-sync.EndCourseSyncDialog.description":
-		"¿Debería realmente finalizarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
+		"¿Debería realmente detenerse la sincronización del curso {courseName} con el grupo de usuarios {groupName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Sincronización completada exitosamente",
 	"feature-course-sync.GroupSelectionDialog.title":
@@ -858,10 +858,12 @@ export default {
 		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
 		"El grupo de usuarios seleccionado se sincronizará con el curso seleccionado en el siguiente paso.",
-	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
-		"Una sincronización con {systemName} sobrescribe a las personas del curso (profesores y estudiantes).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning":
+		"Una sincronización sobrescribe a los participantes del curso (profesores y estudiantes asignados).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning":
+		"Una sincronización sobrescribe a los participantes del curso (estudiantes asignados).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
-		"¿Debería realmente iniciarse la sincronización del grupo de usuarios {groupName} en el curso {courseName}?",
+		"¿Debería realmente sincronizarse el curso {courseName} con el grupo de usuarios {groupName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Grupo de usuarios sincronizado exitosamente",
 	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
@@ -1678,22 +1680,22 @@ export default {
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
 	// new rooms
-	"pages.roomCreate.title": "Crear habitación",
-	"pages.roomEdit.title": "Editar habitación",
-	"pages.roomDetails.title": "Habitación",
-	"pages.roomDetails.ariaLabels.menu": "Menú de la habitación",
-	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar habitación",
-	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar habitación",
-	"pages.rooms.emptyState": "Actualmente no hay habitaciones aquí.",
-	"pages.rooms.fab.title": "Crear habitación",
+	"pages.roomCreate.title": "Crear sala",
+	"pages.roomEdit.title": "Editar sala",
+	"pages.roomDetails.title": "Sala",
+	"pages.roomDetails.ariaLabels.menu": "Menú de la sala",
+	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
+	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar sala",
+	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
+	"pages.rooms.fab.title": "Crear sala",
 	"pages.rooms.participant.error.load":
 		"No se pudo cargar la lista de participantes.",
 	"pages.rooms.participant.error.add": "Error al agregar participantes.",
 	"pages.rooms.participant.error.delete": "Error al eliminar participantes.",
 	"pages.rooms.participant.delete.confirmation":
-		"¿De verdad quieres borrar a {memberName} de la sala?",
+		"¿Eliminar {memberName} de la sala?",
 	"pages.rooms.participant.infoText":
-		'Añade participantes a la sala. Se pueden añadir profesores de otros centros educativos si tienen activada la visibilidad en el directorio central en su propio perfil <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(más información)</a>.',
+		'Añadir participantes a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">más información</a>).',
 	"pages.rooms.participant.label": "Partícipe",
 	"pages.rooms.participants.label": "Participantes",
 	"pages.rooms.participants.addParticipants": "Añadir participantes",
@@ -1703,7 +1705,7 @@ export default {
 		"Entradas por página",
 	"pages.rooms.participants.roles.editor": "Editor de salas",
 	"pages.rooms.participants.roles.viewer": "Visor de salas",
-	"pages.rooms.title": "Habitaciones",
+	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
