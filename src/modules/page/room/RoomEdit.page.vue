@@ -5,10 +5,10 @@
 				{{ $t("pages.roomDetails.ariaLabels.menu.action.edit") }}
 			</h1>
 		</template>
-		<div v-if="isLoading" />
+		<!-- <div v-if="isLoading" />
 		<div v-else>
 			<RoomForm :room="roomData" @save="onSave" @cancel="onCancel" />
-		</div>
+		</div> -->
 	</DefaultWireframe>
 </template>
 
