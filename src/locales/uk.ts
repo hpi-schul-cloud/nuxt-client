@@ -835,7 +835,7 @@ export default {
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
 	"feature-course-sync.EndCourseSyncDialog.description":
-		"Чи дійсно слід завершити синхронізацію групи користувачів {groupName} у курсі {courseName}?",
+		"Чи дійсно слід припинити синхронізацію курсу {courseName} із групою користувачів {groupName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Синхронізацію успішно завершено",
 	"feature-course-sync.GroupSelectionDialog.title":
@@ -847,10 +847,12 @@ export default {
 		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
 		"Вибрана група користувачів буде синхронізована з вибраним курсом на наступному кроці.",
-	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
-		"Синхронізація з {systemName} перезаписує людей у курсі (викладачі та студенти).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning":
+		"Синхронізація перезаписує учасників курсу (призначених викладачів і студентів).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning":
+		"Синхронізація перезаписує учасників курсу (призначених студентів).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
-		"Чи дійсно слід починати синхронізацію групи користувачів {groupName} у курсі {courseName}?",
+		"Чи справді курс {courseName} потрібно синхронізувати з групою користувачів {groupName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Групу користувачів успішно синхронізовано",
 	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
