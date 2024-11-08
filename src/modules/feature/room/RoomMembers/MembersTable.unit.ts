@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import MembersTable from "./MembersTable.vue";
-import { Ref } from "vue";
+import { nextTick, Ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import { roomMemberResponseFactory } from "@@/tests/test-utils";
 import { RoomMember } from "@data-room";
@@ -58,6 +58,16 @@ describe("MembersTable", () => {
 			const title = wrapper.find(".table-title");
 
 			expect(title.text()).toBe(wrapperVM.tableTitle);
+		});
+
+		describe("when the remove button is clicked", () => {
+			it("should emit the remove event", async () => {
+				const { wrapper } = setup();
+				const removeButton = wrapper.find(".cursor-pointer");
+
+				await removeButton.trigger("click");
+				expect(wrapper.emitted("remove:member")).toBeTruthy();
+			});
 		});
 	});
 
