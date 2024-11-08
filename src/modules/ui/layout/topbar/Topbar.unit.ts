@@ -8,6 +8,7 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
 	STATUS_ALERTS_MODULE_KEY,
 } from "@/utils/inject";
 import AuthModule from "@/store/auth";
@@ -18,6 +19,7 @@ import { VApp } from "vuetify/lib/components/index.mjs";
 import { envsFactory } from "@@/tests/test-utils";
 import EnvConfigModule from "@/store/env-config";
 import { SchulcloudTheme } from "@/serverApi/v3";
+import NotifierModule from "@/store/notifier";
 
 describe("@ui-layout/Topbar", () => {
 	const setup = async (windowWidth = 1300, isSidebarExpanded?: boolean) => {
@@ -47,6 +49,8 @@ describe("@ui-layout/Topbar", () => {
 			getStatusAlerts: mockStatusAlerts,
 		});
 
+		const notifierModule = createModuleMocks(NotifierModule);
+
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,
 			configurable: true,
@@ -60,6 +64,7 @@ describe("@ui-layout/Topbar", () => {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 			slots: {

@@ -111,8 +111,10 @@ onMounted(async () => {
 	if (jwt) {
 		try {
 			await setSystemValuesFromJwt(jwt);
-		} catch (e) {
-			console.error(e);
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+		} catch (err) {
+			isExternalLogoutAllowed.value = false;
+			systemName.value = "";
 		}
 	}
 });
