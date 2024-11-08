@@ -372,5 +372,28 @@ describe("auth store module", () => {
 				});
 			});
 		});
+
+		describe("externalLogout", () => {
+			const setup = () => {
+				const authModule = new AuthModule({});
+
+				const mockReplace = jest.fn();
+				Object.defineProperty(window, "location", {
+					configurable: true,
+					value: { replace: mockReplace },
+				});
+
+				return { authModule, mockReplace };
+			};
+
+			describe("when external logout action is called", () => {
+				it("should replace the window.location", () => {
+					const { authModule, mockReplace } = setup();
+
+					authModule.externalLogout();
+					expect(mockReplace).toHaveBeenLastCalledWith("/logout/external");
+				});
+			});
+		});
 	});
 });

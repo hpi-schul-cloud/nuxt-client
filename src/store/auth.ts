@@ -186,7 +186,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	@Action
-	externalLogout(redirectUrl = "/logout/external"): void {
-		window.location.replace(redirectUrl);
+	externalLogout(): void {
+		window.location.replace("/logout/external");
 	}
 }
