@@ -81,7 +81,7 @@
 		>
 			<v-list-item-title>
 				<v-icon :icon="mdiTrashCanOutline" class="task-action-icon" />
-				{{ $t("common.actions.remove") }}
+				{{ $t("common.actions.delete") }}
 			</v-list-item-title>
 		</v-list-item>
 	</KebabMenu>
@@ -89,7 +89,7 @@
 		v-model:isOpen="confirmDeleteDialogIsOpen"
 		:size="375"
 		has-buttons
-		confirm-btn-title-key="common.actions.remove"
+		confirm-btn-title-key="common.actions.delete"
 		@dialog-confirmed="handleDelete"
 	>
 		<template #title>

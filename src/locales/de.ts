@@ -16,7 +16,7 @@ export default {
 	"common.actions.logout": "Abmelden",
 	"common.actions.ok": "OK",
 	"common.actions.pickColor": "Hintergrundfarbe auswählen",
-	"common.actions.remove": "Löschen",
+	"common.actions.remove": "Entfernen",
 	"common.actions.rename": "Umbenennen",
 	"common.actions.save": "Speichern",
 	"common.actions.scrollToTop": "Nach oben scrollen",
@@ -829,7 +829,7 @@ export default {
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
 	"feature-course-sync.EndCourseSyncDialog.title": "Synchronisation beenden",
 	"feature-course-sync.EndCourseSyncDialog.description":
-		"Soll die Synchronization der Nutzendengruppe {groupName} im Kurs {courseName} wirklich beendet werden?",
+		"Soll die Synchronisation des Kurses {courseName} mit der Nutzendengruppe {groupName} wirklich beendet werden?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronisation erfolgreich beendet",
 	"feature-course-sync.GroupSelectionDialog.title": "Nutzendengruppe auswählen",
@@ -840,10 +840,12 @@ export default {
 		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem neu erstellten Kurs synchronisiert.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
 		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem ausgewählten Kurs synchronisiert.",
-	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
-		"Eine Synchronisation mit {systemName} überschreibt die Personen des Kurses (Lehrkräfte und Schüler*innen).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning":
+		"Eine Synchronisation überschreibt die Kursteilnehmenden (zugeordnete Lehrkräfte und Schüler:innen).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning":
+		"Eine Synchronisation überschreibt die Kursteilnehmenden (zugeordnete Schüler:innen).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
-		"Soll die Synchronisation der Nutzendengruppe {groupName} im Kurs {courseName} wirklich gestartet werden?",
+		"Soll der Kurs {courseName} mit der Nutzendengruppe {groupName} wirklich synchronisiert werden?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Nutzendengruppe erfolgreich synchronisiert",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
@@ -1680,7 +1682,7 @@ export default {
 	"pages.rooms.participant.delete.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.participant.infoText":
-		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im eigenen Profil aktiviert haben	<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(weitere Informationen)</a>.',
+		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	(<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">weitere Informationen</a>).',
 	"pages.rooms.participant.label": "Teilnehmer:in",
 	"pages.rooms.participants.label": "Teilnehmende",
 	"pages.rooms.participants.addParticipants": "Teilnehmende hinzufügen",
