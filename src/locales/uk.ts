@@ -1671,9 +1671,9 @@ export default {
 	"pages.rooms.participant.error.add": "Не вдалося додати учасників.",
 	"pages.rooms.participant.error.delete": "Не вдалося видалити учасників.",
 	"pages.rooms.participant.delete.confirmation":
-		"Справді видалити {memberName} з кімнати?",
+		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
 	"pages.rooms.participant.infoText":
-		'Додайте учасників до кімнати. Вчителів з інших шкіл можна додавати, якщо вони активували видимість у центральному каталозі у власному профілі <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(більше інформації)</a>.',
+		'Додайте учасників до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">більше інформації</a>).',
 	"pages.rooms.participant.label": "Учасник",
 	"pages.rooms.participants.label": "Учасники",
 	"pages.rooms.participants.addParticipants": "Додайте учасників",
