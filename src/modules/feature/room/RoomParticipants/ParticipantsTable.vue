@@ -34,11 +34,10 @@
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">
-				<v-icon
-					class="cursor-pointer"
-					:icon="mdiTrashCanOutline"
+				<v-btn
+					variant="text"
 					:aria-label="t('pages.rooms.participants.removeParticipants')"
-					:title="t('pages.rooms.participants.removeParticipants')"
+					:icon="mdiTrashCanOutline"
 					@click="onRemoveParticipant(item)"
 				/>
 			</template>
