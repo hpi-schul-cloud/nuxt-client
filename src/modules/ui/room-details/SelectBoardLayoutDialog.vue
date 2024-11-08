@@ -36,7 +36,7 @@
 import { useI18n } from "vue-i18n";
 import { PickerOption } from "./types";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
-import { mdiViewDashboardOutline } from "@icons/material";
+import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 
 const { t } = useI18n();
 
@@ -50,7 +50,7 @@ const boardLayouts: PickerOption[] = [
 	},
 	{
 		label: t("pages.room.dialog.boardLayout.singleColumn"),
-		icon: "$gridOutline",
+		icon: mdiViewAgendaOutline,
 		eventName: "select:single-column",
 		dataTestId: "dialog-add-single-column-board",
 		ariaLabel: t("pages.room.dialog.boardLayout.singleColumn"),

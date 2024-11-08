@@ -480,10 +480,11 @@ describe("BoardApi.composable", () => {
 			const { getContextInfo } = useBoardApi();
 
 			const FAKE_BOARD_ID = "MY_BOARD_ID123";
-			const FAKE_RESPONSE = {
+			const FAKE_CONTEXT_RESPONSE = {
 				status: 200,
 				data: {
 					id: "someid",
+					type: "course",
 				},
 			};
 
@@ -497,7 +498,7 @@ describe("BoardApi.composable", () => {
 
 			boardApi.boardControllerGetBoardContext = jest
 				.fn()
-				.mockResolvedValueOnce(FAKE_RESPONSE);
+				.mockResolvedValueOnce(FAKE_CONTEXT_RESPONSE);
 			roomsApi.courseRoomsControllerGetRoomBoard = jest
 				.fn()
 				.mockResolvedValueOnce(FAKE_ROOM_RESPONSE);
@@ -509,12 +510,13 @@ describe("BoardApi.composable", () => {
 			);
 
 			expect(roomsApi.courseRoomsControllerGetRoomBoard).toHaveBeenCalledWith(
-				FAKE_RESPONSE.data.id
+				FAKE_CONTEXT_RESPONSE.data.id
 			);
 
 			expect(result).toEqual(
 				expect.objectContaining({
-					id: FAKE_ROOM_RESPONSE.data.roomId,
+					id: FAKE_CONTEXT_RESPONSE.data.id,
+					type: FAKE_CONTEXT_RESPONSE.data.type,
 					name: FAKE_ROOM_RESPONSE.data.title,
 				})
 			);
