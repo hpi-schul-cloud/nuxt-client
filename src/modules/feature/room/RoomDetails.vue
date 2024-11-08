@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="room-details">
 		<BoardGrid :boards="roomBoards" />
 	</div>
 </template>
@@ -16,9 +16,3 @@ const props = defineProps({
 
 const roomBoards = toRef(props, "roomBoards");
 </script>
-
-<style scoped>
-.margin-bottom {
-	margin-bottom: var(--space-md);
-}
-</style>

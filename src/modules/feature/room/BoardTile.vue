@@ -1,9 +1,8 @@
 <template>
 	<VCard
 		class="board-tile pa-4"
-		:class="{ 'board-hidden': isHidden }"
+		:class="{ 'board-is-draft': isDraft }"
 		hover
-		role="link"
 		:data-testid="`board-tile-${props.index}`"
 		:to="boardPath"
 	>
@@ -43,7 +42,7 @@ const isListBoard = computed(() => {
 	return board.value?.layout === BoardLayout.List;
 });
 
-const isHidden = computed(() => {
+const isDraft = computed(() => {
 	return board.value?.isVisible === false;
 });
 
@@ -59,7 +58,7 @@ const subtitleText = computed(() => {
 		? t("pages.room.boardCard.label.listBoard")
 		: t("pages.room.boardCard.label.columnBoard");
 
-	if (isHidden.value) {
+	if (isDraft.value) {
 		const suffix = ` - ${t("common.words.draft")}`;
 		return text + suffix;
 	}
@@ -78,8 +77,8 @@ const boardPath = computed(() => {
 	background-color: map-get($grey, lighten-5);
 	border: 1px solid map-get($grey, lighten-2);
 
-	&.board-hidden .board-tile-subtitle,
-	&.board-hidden .board-tile-title {
+	&.board-is-draft .board-tile-subtitle,
+	&.board-is-draft .board-tile-title {
 		opacity: 0.5;
 	}
 }
