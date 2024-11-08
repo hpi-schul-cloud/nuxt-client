@@ -1,5 +1,5 @@
 <template>
-	<v-card min-width="480" max-height="480">
+	<v-card>
 		<template v-slot:prepend>
 			<div ref="textTitle" class="text-h4 mt-2">
 				{{ t("pages.rooms.participants.addParticipants") }}
@@ -10,16 +10,17 @@
 			<div class="ml-6 mr-6">
 				<div class="mt-3">
 					<v-autocomplete
-						v-model="school"
-						:label="t('global.sidebar.item.school')"
+						ref="autoCompleteSchool"
+						v-model="selectedSchool"
 						bg-color="white"
 						color="primary"
 						density="comfortable"
-						item-value="id"
 						item-title="name"
-						menu-icon=""
-						readonly
+						item-value="id"
 						variant="underlined"
+						:items="schoolList"
+						:label="t('global.sidebar.item.school')"
+						@update:model-value="onSchoolChange"
 					/>
 				</div>
 
@@ -27,15 +28,15 @@
 					<v-autocomplete
 						ref="autoCompleteRole"
 						v-model="selectedRole"
-						:items="roles"
-						:label="t('common.labels.role')"
 						auto-select-first="exact"
 						bg-color="white"
 						color="primary"
 						density="comfortable"
-						menu-icon=""
-						readonly
+						item-title="name"
+						item-value="id"
 						variant="underlined"
+						:items="roles"
+						:label="t('common.labels.role')"
 						@update:model-value="onRoleChange"
 					/>
 				</div>
@@ -44,17 +45,18 @@
 					<v-autocomplete
 						ref="autoCompleteUsers"
 						v-model="selectedUsers"
-						:items="userList"
-						:label="t('common.labels.name')"
 						bg-color="white"
 						chips
-						closable-chips
 						clear-on-select
+						closable-chips
 						color="primary"
-						item-value="id"
+						item-value="userId"
 						item-title="fullName"
 						multiple
 						variant="underlined"
+						:items="userList"
+						:label="t('common.labels.name')"
+						:no-data-text="t('common.nodata')"
 					/>
 				</div>
 			</div>
@@ -65,17 +67,17 @@
 			<div class="mr-4 mb-3">
 				<v-btn
 					ref="cancelButton"
-					:text="t('common.actions.cancel')"
 					class="ms-auto mr-2"
 					color="primary"
+					:text="t('common.actions.cancel')"
 					@click="onClose"
 				/>
 				<v-btn
 					ref="addButton"
-					:text="t('common.actions.add')"
 					class="ms-auto"
 					color="primary"
 					variant="flat"
+					:text="t('common.actions.add')"
 					@click="onAddParticipants"
 				/>
 			</div>
@@ -85,45 +87,47 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { computed, PropType, ref } from "vue";
-import { Participants } from "@data-room";
-import { RoleName } from "@/serverApi/v3";
+import { PropType, ref, toRef } from "vue";
+import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
+import { ParticipantType } from "@data-room";
 
-defineProps({
+const props = defineProps({
 	userList: {
-		type: Array as PropType<Participants[]>,
+		type: Array as PropType<ParticipantType[]>,
+	},
+	schools: {
+		type: Array as PropType<SchoolForExternalInviteResponse[]>,
+		required: true,
 	},
 });
 
 const emit = defineEmits(["add:participants", "close", "update:role"]);
-
 const { t } = useI18n();
-const authModule = injectStrict(AUTH_MODULE_KEY);
-const school = computed(() => authModule.getSchool);
-const roles = computed(() => [RoleName.Teacher]);
-const selectedRole = ref<RoleName>(RoleName.Teacher);
-const selectedUsers = ref<Participants[]>([]);
+const schoolList = toRef(props, "schools");
+const selectedSchool = ref(schoolList.value[0].id);
+
+const roles = [{ id: RoleName.RoomEditor, name: t("common.labels.teacher") }];
+
+const selectedRole = ref<string>(roles[0].id);
+const selectedUsers = ref<string[]>([]);
 
 const onRoleChange = () => {
 	selectedUsers.value = [];
-	emit("update:role", selectedRole.value);
+	emit("update:role", {
+		role: selectedRole.value,
+		schoolId: selectedSchool.value,
+	});
+};
+
+const onSchoolChange = () => {
+	selectedRole.value = roles[0].id;
+	onRoleChange();
 };
 
 const onAddParticipants = () => {
 	emit("add:participants", selectedUsers.value);
 	emit("close");
 };
+
 const onClose = () => emit("close");
 </script>
-
-<style scoped>
-:deep .v-label {
-	margin-left: 0px !important;
-	padding-left: 2px !important;
-}
-
-:deep .v-field__input {
-	padding-left: 2px !important;
-}
-</style>

@@ -66,3 +66,4 @@ export * from "./media-board";
 export * from "./contextExternalToolResponseFactory";
 export * from "./courseInfoDataResponseFactory";
 export * from "./deletedElementResponseFactory";
+export * from "./room";
