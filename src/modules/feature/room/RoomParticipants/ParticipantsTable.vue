@@ -115,4 +115,9 @@ const tableHeader = [
 	color: rgba(var(--v-theme-primary-darken-1));
 	font-weight: bold;
 }
+
+/* table header for mobile view */
+:deep(.v-data-table__td-title) {
+	font-weight: bold;
+}
 </style>
