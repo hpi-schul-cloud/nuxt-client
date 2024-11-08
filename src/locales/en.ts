@@ -823,7 +823,7 @@ export default {
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
 	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
 	"feature-course-sync.EndCourseSyncDialog.description":
-		"Should the synchronization of the user group {groupName} in the course {courseName} really be ended?",
+		"Should the synchronization of the course {courseName} with the user group {groupName} really be stopped?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Synchronization completed successfully",
 	"feature-course-sync.GroupSelectionDialog.title": "Select user group",
@@ -834,10 +834,12 @@ export default {
 		"In the next step, the selected user group will be synchronized with the newly created course.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
 		"The selected user group will be synchronized with the selected course in the next step.",
-	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
-		"A synchronization with {systemName} overwrites the members in the course (teachers and students).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning":
+		"A synchronization overwrites the course participants (assigned teachers and students).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning":
+		"A synchronization overwrites the course participants (assigned students).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
-		"Should the synchronization of the user group {groupName} in the course {courseName} really be started?",
+		"Should the course {courseName} really be synchronized with the user group {groupName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"User group successfully synchronized",
 	"feature-course-sync.startRoomSyncDialog.title": "Start synchronization",
