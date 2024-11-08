@@ -21,10 +21,6 @@
 			<VListItem href="/account" data-testid="account-link">
 				{{ $t("global.topbar.settings") }}
 			</VListItem>
-			<VListItem data-testid="logout" @click="logout">
-				{{ $t("common.labels.logout")
-				}}{{ isExternalLogoutAllowed ? " Bildungscloud" : "" }}
-			</VListItem>
 			<VListItem
 				v-if="isExternalLogoutAllowed"
 				data-testid="external-logout"
@@ -32,6 +28,10 @@
 			>
 				{{ $t("common.labels.logout")
 				}}{{ isExternalLogoutAllowed ? ` Bildungscloud & ${systemName}` : "" }}
+			</VListItem>
+			<VListItem data-testid="logout" @click="logout">
+				{{ $t("common.labels.logout")
+				}}{{ isExternalLogoutAllowed ? " Bildungscloud" : "" }}
 			</VListItem>
 		</VList>
 	</VMenu>
