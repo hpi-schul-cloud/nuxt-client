@@ -9,14 +9,20 @@ import enGB from "../locales/en";
 import esES from "../locales/es";
 import ukUA from "../locales/uk";
 import { MessageSchema } from "@/locales/schema";
+import {
+	de as deVuetify,
+	en as enVuetify,
+	es as esVuetify,
+	uk as ukVuetify,
+} from "vuetify/locale";
 
 declare type SupportedLanguages = "en" | "de" | "es" | "uk";
 
 const messages: Record<SupportedLanguages, MessageSchema> = {
-	en: enGB,
-	de: deDE,
-	es: esES,
-	uk: ukUA,
+	en: { ...enGB, $vuetify: enVuetify },
+	de: { ...deDE, $vuetify: deVuetify },
+	es: { ...esES, $vuetify: esVuetify },
+	uk: { ...ukUA, $vuetify: ukVuetify },
 };
 
 const fileSizeFormat = {
