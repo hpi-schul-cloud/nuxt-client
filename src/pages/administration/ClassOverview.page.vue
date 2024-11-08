@@ -129,6 +129,7 @@
 			max-width="360"
 			data-testid="delete-dialog"
 			has-buttons
+			confirmBtnTitleKey="common.actions.delete"
 			:buttons="['cancel', 'confirm']"
 			@dialog-closed="onCancelClassDeletion"
 			@dialog-confirmed="onConfirmClassDeletion"

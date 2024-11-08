@@ -34,9 +34,9 @@
 			<template #[`item.actions`]="{ item }">
 				<v-icon
 					class="cursor-pointer"
+					variant="text"
 					:icon="mdiTrashCanOutline"
 					:aria-label="t('pages.rooms.members.remove')"
-					:title="t('pages.rooms.members.remove')"
 					@click="onRemoveMember(item)"
 				/>
 			</template>

@@ -78,12 +78,11 @@ const {
 	getSchools,
 	removeMembers,
 } = useRoomMembers(roomId);
-
 const memberList: Ref<RoomMemberResponse[]> = ref(roomMembers);
-
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
+
 useTitle(pageTitle);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
@@ -127,7 +126,11 @@ const onRemoveMember = async (member: RoomMember) => {
 	const message = t("pages.rooms.members.remove.confirmation", {
 		memberName: `${member.firstName} ${member.lastName}`,
 	});
-	const shouldDelete = await askConfirmation({ message });
+
+	const shouldDelete = await askConfirmation({
+		message,
+		confirmActionLangKey: "common.actions.remove",
+	});
 
 	if (!shouldDelete) return;
 	await removeMembers([member.userId]);
