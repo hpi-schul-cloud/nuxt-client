@@ -41,6 +41,8 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
+      - name: Add libraries needed for installing canvas npm package
+        run: sudp apt update && sudo apt install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
       - uses: actions/checkout@v4
       - name: setup node
         uses: actions/setup-node@v4
