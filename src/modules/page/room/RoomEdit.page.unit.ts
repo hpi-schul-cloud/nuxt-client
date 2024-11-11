@@ -6,7 +6,10 @@ import {
 import { useRoomEditState } from "@data-room";
 import { RoomEditPage } from "@page-room";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import { RoomUpdateParams } from "@/types/room/Room";
+import { RoomColor } from "@/serverApi/v3";
+import { RoomForm } from "@feature-room";
 
 const roomIdMock = "test-1234";
 
@@ -42,10 +45,10 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-// const roomParams: RoomUpdateParams = {
-// 	name: "test",
-// 	color: RoomColor.Blue,
-// };
+const roomParams: RoomUpdateParams = {
+	name: "test",
+	color: RoomColor.Blue,
+};
 
 describe("@pages/RoomEdit.page.vue", () => {
 	const setup = () => {
@@ -56,12 +59,16 @@ describe("@pages/RoomEdit.page.vue", () => {
 			},
 		});
 
-		const { isLoading } = useRoomEditState();
+		const { isLoading, updateRoom } = useRoomEditState();
+		const roomFormComponent = wrapper.findComponent(RoomForm);
 
 		return {
 			wrapper,
 			isLoading,
 			useRoute,
+			router: useRouter(),
+			updateRoom,
+			roomFormComponent,
 		};
 	};
 
@@ -72,6 +79,8 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 	it("should have breadcrumbs prop in DefaultWireframe component", () => {
 		const { wrapper } = setup();
+
+		// TODO execute watch?
 		const defaultWireframe = wrapper.findComponent({
 			name: "DefaultWireframe",
 		});
@@ -80,6 +89,23 @@ describe("@pages/RoomEdit.page.vue", () => {
 			(breadcrumb: Breadcrumb) => breadcrumb.to === `/rooms/${roomIdMock}`
 		);
 		expect(breadcrumb).toBeDefined();
+	});
+	it("should call updateRoom with correct parameters on save event", async () => {
+		const { updateRoom, roomFormComponent } = setup();
+
+		roomFormComponent.vm.$emit("save", roomParams);
+
+		expect(updateRoom).toHaveBeenCalledWith(roomIdMock, roomParams);
+	});
+	it("should navigate to 'room-details' with correct room id on save", async () => {
+		const { roomFormComponent, router } = setup();
+
+		roomFormComponent.vm.$emit("save", roomParams);
+
+		expect(router.push).toHaveBeenCalledWith({
+			name: "room-details",
+			params: { id: roomIdMock },
+		});
 	});
 	// 	const { createRoom, roomComponent } = setup();
 	// 	roomComponent.vm.$emit("save", roomParams);
