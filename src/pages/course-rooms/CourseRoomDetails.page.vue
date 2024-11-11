@@ -394,7 +394,7 @@ export default defineComponent({
 					name:
 						this.$t("common.actions.edit") +
 						"/" +
-						this.$t("common.actions.remove"),
+						this.$t("common.actions.delete"),
 					dataTestId: "room-menu-edit-delete",
 				},
 			];

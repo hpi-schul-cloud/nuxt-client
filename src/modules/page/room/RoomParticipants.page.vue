@@ -60,7 +60,6 @@ import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
-	useDeleteConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { RenderHTML } from "@feature-render-html";
 import { useDisplay } from "vuetify";
@@ -85,7 +84,6 @@ const {
 } = useParticipants(roomId);
 
 const participantsList: Ref<RoomMemberResponse[]> = ref(participants);
-const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 const pageTitle = computed(() =>
 	buildPageTitle(
@@ -135,7 +133,11 @@ const onRemoveParticipant = async (participant: ParticipantType) => {
 	const message = t("pages.rooms.participant.delete.confirmation", {
 		memberName: `${participant.firstName} ${participant.lastName}`,
 	});
-	const shouldDelete = await askConfirmation({ message });
+
+	const shouldDelete = await askConfirmation({
+		message,
+		confirmActionLangKey: "common.actions.remove",
+	});
 
 	if (!shouldDelete) return;
 	await removeParticipants([participant.userId]);
