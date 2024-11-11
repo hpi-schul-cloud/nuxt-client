@@ -1,8 +1,10 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { RoleName } from "@/serverApi/v3";
+import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { AUTH_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { groupResponseFactory } from "@@/tests/test-utils";
+import { groupResponseFactory, meResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -28,7 +30,12 @@ describe("StartExistingCourseSyncDialog", () => {
 			courseName: "courseName",
 		}
 	) => {
+		const me = meResponseFactory.build();
+
 		const notifierModule = createModuleMocks(NotifierModule);
+		const authModule = createModuleMocks(AuthModule, {
+			getMe: me,
+		});
 
 		const wrapper = mount(StartExistingCourseSyncDialog, {
 			global: {
@@ -39,9 +46,11 @@ describe("StartExistingCourseSyncDialog", () => {
 				],
 				stubs: {
 					GroupSelectionDialog: true,
+					VDialog: true,
 				},
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			},
 			props,
@@ -50,6 +59,7 @@ describe("StartExistingCourseSyncDialog", () => {
 		return {
 			wrapper,
 			notifierModule,
+			me,
 		};
 	};
 
@@ -250,6 +260,78 @@ describe("StartExistingCourseSyncDialog", () => {
 			const { wrapper } = await setup();
 
 			expect(wrapper.emitted("success")).toBeUndefined();
+		});
+	});
+
+	describe("when the user is part of the selected group", () => {
+		const setup = async () => {
+			const { wrapper, notifierModule, me } = getWrapper();
+
+			const group = groupResponseFactory.build({
+				users: [
+					{
+						id: me.user.id,
+						firstName: me.user.firstName,
+						lastName: me.user.lastName,
+						role: RoleName.Teacher,
+					},
+				],
+			});
+
+			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
+			await nextTick();
+
+			return {
+				wrapper,
+				notifierModule,
+				group,
+			};
+		};
+
+		it("should display the correct warning in the confirmation dialog", async () => {
+			const { wrapper } = await setup();
+
+			const text = wrapper.find("[data-testid=no-teacher-warning-text]");
+
+			expect(text.text()).toEqual(
+				"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning"
+			);
+		});
+	});
+
+	describe("when the user is not part of the selected group", () => {
+		const setup = async () => {
+			const { wrapper, notifierModule } = getWrapper();
+
+			const group = groupResponseFactory.build({
+				users: [
+					{
+						id: "otherUserId",
+						firstName: "firstname",
+						lastName: "lastname",
+						role: RoleName.Teacher,
+					},
+				],
+			});
+
+			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
+			await nextTick();
+
+			return {
+				wrapper,
+				notifierModule,
+				group,
+			};
+		};
+
+		it("should display the correct warning in the confirmation dialog", async () => {
+			const { wrapper } = await setup();
+
+			const text = wrapper.find("[data-testid=no-teacher-warning-text]");
+
+			expect(text.text()).toEqual(
+				"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning"
+			);
 		});
 	});
 });
