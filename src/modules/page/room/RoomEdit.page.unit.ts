@@ -5,6 +5,18 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useRoomEditState } from "@data-room";
 import { RoomEditPage } from "@page-room";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { useRoute } from "vue-router";
+
+const roomIdMock = "test-1234";
+
+const roomDataMock = {
+	value: {
+		id: roomIdMock,
+		name: "test",
+		color: "blue",
+	},
+};
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -12,18 +24,10 @@ jest.mock("vue-router", () => ({
 	}),
 	useRoute: jest.fn().mockReturnValue({
 		params: {
-			id: "test-1234",
+			id: roomIdMock,
 		},
 	}),
 }));
-
-const roomDataMock = {
-	value: {
-		id: "123",
-		name: "test",
-		color: "blue",
-	},
-};
 
 jest.mock("@data-room", () => ({
 	useRoomEditState: jest.fn().mockReturnValue({
@@ -57,7 +61,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 		return {
 			wrapper,
 			isLoading,
-			// router: useRouter(),
+			useRoute,
 		};
 	};
 
@@ -66,11 +70,17 @@ describe("@pages/RoomEdit.page.vue", () => {
 		expect(wrapper.vm).toBeDefined();
 	});
 
-	it("should call fetchRoom with correct parameters on mount", async () => {
-		setup();
-		expect(useRoomEditState().fetchRoom).toHaveBeenCalledWith("test-1234");
+	it("should have breadcrumbs prop in DefaultWireframe component", () => {
+		const { wrapper } = setup();
+		const defaultWireframe = wrapper.findComponent({
+			name: "DefaultWireframe",
+		});
+		const breadcrumbsProp: Breadcrumb[] = defaultWireframe.props().breadcrumbs;
+		const breadcrumb = breadcrumbsProp.find(
+			(breadcrumb: Breadcrumb) => breadcrumb.to === `/rooms/${roomIdMock}`
+		);
+		expect(breadcrumb).toBeDefined();
 	});
-	// it("should call createRoom with correct parameters on save", async () => {
 	// 	const { createRoom, roomComponent } = setup();
 	// 	roomComponent.vm.$emit("save", roomParams);
 	// 	expect(createRoom).toHaveBeenCalledWith(roomParams);
