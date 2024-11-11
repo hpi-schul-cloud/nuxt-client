@@ -231,28 +231,6 @@ const onClickElement = async () => {
 	}
 };
 
-// const onClickElement = async () => {
-// 	if (hasLinkedTool.value && !props.isEditMode) {
-// 		launchTool();
-
-// 		if (isToolLaunchable.value && modelValue.value.contextExternalToolId) {
-// 			await fetchContextLaunchRequest(modelValue.value.contextExternalToolId);
-// 		}
-// 	}
-
-// 	if (hasLinkedTool.value && props.isEditMode && isDeepLinkingTool.value) {
-// 		launchTool();
-
-// 		if (isToolLaunchable.value && modelValue.value.contextExternalToolId) {
-// 			await fetchContextLaunchRequest(modelValue.value.contextExternalToolId);
-// 		}
-// 	}
-
-// 	if (!hasLinkedTool.value && props.isEditMode) {
-// 		isConfigurationDialogOpen.value = true;
-// 	}
-// };
-
 const onConfigurationDialogClose = () => {
 	isConfigurationDialogOpen.value = false;
 };

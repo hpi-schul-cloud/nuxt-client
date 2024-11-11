@@ -64,6 +64,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					url: response.url,
 					payload: response.payload,
 					openNewTab: response.openNewTab,
+					isDeepLink: false,
 				});
 			});
 
@@ -151,6 +152,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					url: response.url,
 					payload: response.payload,
 					openNewTab: response.openNewTab,
+					isDeepLink: false,
 				});
 			});
 
