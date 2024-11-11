@@ -1,5 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { LanguageType } from "@/serverApi/v3/api";
+import { LanguageType, MeSystemResponse } from "@/serverApi/v3/api";
 import { envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -247,6 +247,23 @@ describe("auth store module", () => {
 				expect(authModule.isLoggedIn).toBe(true);
 			});
 		});
+
+		describe("loginSystem", () => {
+			it("should system info of the user", () => {
+				const authModule = new AuthModule({});
+				const mockedSystem: MeSystemResponse = {
+					id: "test-system-id",
+					name: "test system",
+					hasEndSessionEndpoint: false,
+				};
+				const mockMe = meResponseFactory.build({
+					system: mockedSystem,
+				});
+				authModule.setMe(mockMe);
+
+				expect(authModule.loginSystem).toStrictEqual(mockedSystem);
+			});
+		});
 	});
 
 	describe("actions", () => {
@@ -375,6 +392,16 @@ describe("auth store module", () => {
 
 		describe("externalLogout", () => {
 			const setup = () => {
+				initializeAxios({
+					defaults: {
+						headers: {
+							common: {
+								Authorization: "",
+							},
+						},
+					},
+				} as AxiosInstance);
+
 				const authModule = new AuthModule({});
 
 				const mockReplace = jest.fn();

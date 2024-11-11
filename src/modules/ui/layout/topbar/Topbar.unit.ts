@@ -49,8 +49,6 @@ describe("@ui-layout/Topbar", () => {
 			getStatusAlerts: mockStatusAlerts,
 		});
 
-		const notifierModule = createModuleMocks(NotifierModule);
-
 		Object.defineProperty(window, "innerWidth", {
 			writable: true,
 			configurable: true,
@@ -64,7 +62,6 @@ describe("@ui-layout/Topbar", () => {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 					[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 			slots: {

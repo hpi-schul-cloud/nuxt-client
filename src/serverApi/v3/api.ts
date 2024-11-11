@@ -4841,6 +4841,12 @@ export interface MeResponse {
      * @memberof MeResponse
      */
     account: MeAccountResponse;
+    /**
+     * 
+     * @type {MeSystemResponse}
+     * @memberof MeResponse
+     */
+    system?: MeSystemResponse;
 }
 /**
  * 
@@ -4904,6 +4910,31 @@ export interface MeSchoolResponse {
      * @memberof MeSchoolResponse
      */
     logo: MeSchoolLogoResponse;
+}
+/**
+ * 
+ * @export
+ * @interface MeSystemResponse
+ */
+export interface MeSystemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSystemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSystemResponse
+     */
+    name?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MeSystemResponse
+     */
+    hasEndSessionEndpoint: boolean;
 }
 /**
  * 
@@ -6221,6 +6252,12 @@ export interface OauthConfigResponse {
      * @memberof OauthConfigResponse
      */
     jwksEndpoint: string;
+    /**
+     * End session endpoint
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    endSessionEndpoint?: string;
 }
 /**
  * 

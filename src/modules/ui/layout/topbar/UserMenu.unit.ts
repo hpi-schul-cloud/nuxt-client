@@ -1,40 +1,31 @@
 import { mount } from "@vue/test-utils";
-import UserMenu from "./UserMenu.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { envsFactory } from "@@/tests/test-utils";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
-import { LanguageType } from "@/serverApi/v3";
-import { System, useSystemApi } from "@data-system";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import NotifierModule from "@/store/notifier";
+import { LanguageType, MeSystemResponse } from "@/serverApi/v3";
 import { VBtn } from "vuetify/lib/components/index.mjs";
+import UserMenu from "./UserMenu.vue";
 
 jest.mock("@data-system");
 
 describe("@ui-layout/UserMenu", () => {
-	let useSystemApiMock: DeepMocked<ReturnType<typeof useSystemApi>>;
-
 	const setupWrapper = (
 		isExternalFeatureEnabled = false,
-		mockedSystem?: System
+		mockedSystem?: MeSystemResponse
 	) => {
 		const authModule = createModuleMocks(AuthModule, {
 			getLocale: "de",
 			logout: jest.fn(),
 			externalLogout: jest.fn(),
-			getAccessToken:
-				"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwic3lzdGVtSWQiOiJhYmMxMjMiLCJpYX" +
-				"QiOjE1MTYyMzkwMjJ9.Zrpvm5T50Y_s-pd5OoqdxKRBaf3rJGMAviUz7Be84zA",
+			get loginSystem(): MeSystemResponse | undefined {
+				return mockedSystem;
+			},
 		});
 
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
@@ -44,19 +35,12 @@ describe("@ui-layout/UserMenu", () => {
 			}),
 		});
 
-		const notifierModule = createModuleMocks(NotifierModule);
-
-		useSystemApiMock = createMock<ReturnType<typeof useSystemApi>>();
-		jest.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
-		useSystemApiMock.getSystem.mockResolvedValue(mockedSystem);
-
 		const wrapper = mount(UserMenu, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
 			},
 			props: {
@@ -109,12 +93,12 @@ describe("@ui-layout/UserMenu", () => {
 	});
 
 	describe("external logout", () => {
-		describe("when feature flag is enabled and the user is logged in from moin.schule", () => {
+		describe("when feature flag is enabled and end session endpoint is available for the system", () => {
 			const setup = () => {
-				const mockedSystem: System = {
+				const mockedSystem: MeSystemResponse = {
 					id: "testId",
-					displayName: "moin.schule",
-					alias: "SANIS",
+					name: "Test System",
+					hasEndSessionEndpoint: true,
 				};
 
 				const { wrapper, authModule } = setupWrapper(true, mockedSystem);
@@ -125,7 +109,7 @@ describe("@ui-layout/UserMenu", () => {
 			it("should show the external logout button", async () => {
 				const { wrapper, mockedSystem } = setup();
 
-				const menuBtn = wrapper.findComponent({ name: "VBtn" });
+				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
 				const externalLogoutBtn = wrapper.findComponent(
@@ -134,14 +118,14 @@ describe("@ui-layout/UserMenu", () => {
 
 				expect(externalLogoutBtn.exists()).toBe(true);
 				expect(externalLogoutBtn.text()).toEqual(
-					`common.labels.logout Bildungscloud & ${mockedSystem.displayName}`
+					`common.labels.logout Bildungscloud & ${mockedSystem.name}`
 				);
 			});
 
 			it("should trigger external logout function on logout item click", async () => {
 				const { wrapper, authModule } = setup();
 
-				const menuBtn = wrapper.findComponent({ name: "VBtn" });
+				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
 				const externalLogoutBtn = wrapper.findComponent(
@@ -157,7 +141,7 @@ describe("@ui-layout/UserMenu", () => {
 			it("should show the correct text for the logout button", async () => {
 				const { wrapper } = setup();
 
-				const menuBtn = wrapper.findComponent({ name: "VBtn" });
+				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
 				const logoutBtn = wrapper.findComponent("[data-testid=logout]");
@@ -169,10 +153,10 @@ describe("@ui-layout/UserMenu", () => {
 
 		describe("when feature flag is disabled", () => {
 			const setup = () => {
-				const mockedSystem: System = {
+				const mockedSystem: MeSystemResponse = {
 					id: "testId",
-					displayName: "moin.schule",
-					alias: "SANIS",
+					name: "Test System",
+					hasEndSessionEndpoint: true,
 				};
 
 				const { wrapper } = setupWrapper(false, mockedSystem);
@@ -196,7 +180,7 @@ describe("@ui-layout/UserMenu", () => {
 			it("should show the correct text for the logout button", async () => {
 				const { wrapper } = setup();
 
-				const menuBtn = wrapper.findComponent({ name: "VBtn" });
+				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
 				const logoutBtn = wrapper.findComponent("[data-testid=logout]");
@@ -206,12 +190,12 @@ describe("@ui-layout/UserMenu", () => {
 			});
 		});
 
-		describe("when user is not logged in from moin.schule", () => {
+		describe("when end session endpoint is not available for the systeme", () => {
 			const setup = () => {
-				const mockedSystem: System = {
+				const mockedSystem: MeSystemResponse = {
 					id: "testId",
-					displayName: "mock",
-					alias: "mock-system",
+					name: "Test System",
+					hasEndSessionEndpoint: false,
 				};
 
 				const { wrapper } = setupWrapper(true, mockedSystem);
@@ -235,7 +219,7 @@ describe("@ui-layout/UserMenu", () => {
 			it("should show the correct text for the logout button", async () => {
 				const { wrapper } = setup();
 
-				const menuBtn = wrapper.findComponent({ name: "VBtn" });
+				const menuBtn = wrapper.findComponent(VBtn);
 				await menuBtn.trigger("click");
 
 				const logoutBtn = wrapper.findComponent("[data-testid=logout]");

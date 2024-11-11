@@ -4,6 +4,7 @@ import {
 	MeApiInterface,
 	MeResponse,
 	MeSchoolResponse,
+	MeSystemResponse,
 	MeUserResponse,
 	UserApiFactory,
 	UserApiInterface,
@@ -139,6 +140,10 @@ export default class AuthModule extends VuexModule {
 		return !!this.accessToken;
 	}
 
+	get loginSystem(): MeSystemResponse | undefined {
+		return this.me?.system;
+	}
+
 	@Action
 	async login(jwt: string) {
 		const { data } = await this.meApi.meControllerMe();
@@ -187,6 +192,8 @@ export default class AuthModule extends VuexModule {
 
 	@Action
 	externalLogout(): void {
+		localStorage.clear();
+		delete $axios.defaults.headers.common["Authorization"];
 		window.location.replace("/logout/external");
 	}
 }
