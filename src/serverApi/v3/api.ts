@@ -4709,7 +4709,8 @@ export interface Lti11ToolConfigUpdateParams {
  * @enum {string}
  */
 export enum LtiMessageType {
-    BasicLtiLaunchRequest = 'basic-lti-launch-request'
+    BasicLtiLaunchRequest = 'basic-lti-launch-request',
+    ContentItemSelectionRequest = 'ContentItemSelectionRequest'
 }
 
 /**
@@ -8614,6 +8615,12 @@ export interface ToolLaunchRequestResponse {
      * @memberof ToolLaunchRequestResponse
      */
     openNewTab?: boolean;
+    /**
+     * Specifies whether the request is an LTI Deep linking content item selection request
+     * @type {boolean}
+     * @memberof ToolLaunchRequestResponse
+     */
+    isDeepLink: boolean;
 }
 
 /**
