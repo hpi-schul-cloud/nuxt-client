@@ -1,7 +1,9 @@
+import value from "@/assets/img/tldraw.svg";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useRoomEditState } from "@data-room";
 import { RoomEditPage } from "@page-room";
 
 jest.mock("vue-router", () => ({
@@ -10,15 +12,23 @@ jest.mock("vue-router", () => ({
 	}),
 	useRoute: jest.fn().mockReturnValue({
 		params: {
-			id: "123",
+			id: "test-1234",
 		},
 	}),
 }));
 
+const roomDataMock = {
+	value: {
+		id: "123",
+		name: "test",
+		color: "blue",
+	},
+};
+
 jest.mock("@data-room", () => ({
 	useRoomEditState: jest.fn().mockReturnValue({
 		isLoading: false,
-		roomData: { value: { id: "123", name: "test", color: "blue" } },
+		roomData: roomDataMock,
 		updateRoom: jest.fn(),
 		fetchRoom: jest.fn(),
 	}),
@@ -42,10 +52,11 @@ describe("@pages/RoomEdit.page.vue", () => {
 			},
 		});
 
-		// const { updateRoom } = useRoomEditState();
+		const { isLoading } = useRoomEditState();
 
 		return {
 			wrapper,
+			isLoading,
 			// router: useRouter(),
 		};
 	};
@@ -53,6 +64,11 @@ describe("@pages/RoomEdit.page.vue", () => {
 	it("should be rendered in DOM", () => {
 		const { wrapper } = setup();
 		expect(wrapper.vm).toBeDefined();
+	});
+
+	it("should call fetchRoom with correct parameters on mount", async () => {
+		setup();
+		expect(useRoomEditState().fetchRoom).toHaveBeenCalledWith("test-1234");
 	});
 	// it("should call createRoom with correct parameters on save", async () => {
 	// 	const { createRoom, roomComponent } = setup();
