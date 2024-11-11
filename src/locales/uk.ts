@@ -830,6 +830,8 @@ export default {
 	"feature-board-external-tool-element.dialog.title": "Вибір і налаштування",
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Виберіть інструмент...",
+	"feature-board-external-tool-element.placeholder.selectContent":
+		"Виберіть вміст {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
 	"feature-course-sync.EndCourseSyncDialog.description":

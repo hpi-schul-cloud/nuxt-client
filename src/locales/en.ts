@@ -818,6 +818,8 @@ export default {
 	"feature-board-external-tool-element.dialog.title": "Selection & Settings",
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Select Tool...",
+	"feature-board-external-tool-element.placeholder.selectContent":
+		"Select {toolName} content...",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
 	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
 	"feature-course-sync.EndCourseSyncDialog.description":
