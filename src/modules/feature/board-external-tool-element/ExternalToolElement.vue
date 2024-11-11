@@ -1,6 +1,6 @@
 <template>
 	<v-card
-		v-show="hasLinkedTool || isEditMode"
+		v-show="showTool || isEditMode"
 		class="mb-4"
 		:data-testid="`board-external-tool-element-${toolDisplayName}`"
 		elevation="0"
@@ -21,11 +21,7 @@
 				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" />
 			</template>
 			<template #title>
-				{{
-					hasLinkedTool
-						? toolDisplayName
-						: t("feature-board-external-tool-element.placeholder.selectTool")
-				}}
+				{{ toolTitle }}
 			</template>
 			<template #menu>
 				<ExternalToolElementMenu
@@ -115,6 +111,7 @@ const {
 	launchTool,
 	fetchContextLaunchRequest,
 	error: launchError,
+	toolLaunchRequest,
 } = useExternalToolLaunchState();
 
 const autofocus: Ref<boolean> = ref(false);
@@ -137,6 +134,14 @@ const { lastCreatedElementId, resetLastCreatedElementId } =
 const hasLinkedTool: ComputedRef<boolean> = computed(
 	() => !!modelValue.value.contextExternalToolId
 );
+
+const isDeepLinkingTool: ComputedRef<boolean | undefined> = computed(
+	() => toolLaunchRequest.value?.isDeepLink
+);
+
+const showTool: ComputedRef<boolean> = computed(() => {
+	return isDeepLinkingTool.value ? false : hasLinkedTool.value;
+});
 
 const toolDisplayName: ComputedRef<string> = computed(
 	() => displayData.value?.name ?? "..."
@@ -171,6 +176,23 @@ const isLoading = computed(
 
 const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 
+const toolTitle: ComputedRef<string> = computed(() => {
+	if (hasLinkedTool.value) {
+		if (isDeepLinkingTool.value) {
+			return t(
+				"feature-board-external-tool-element.placeholder.selectContent",
+				{
+					toolName: toolDisplayName.value,
+				}
+			);
+		}
+
+		return toolDisplayName.value;
+	}
+
+	return t("feature-board-external-tool-element.placeholder.selectTool");
+});
+
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (props.isEditMode) {
 		event.preventDefault();
@@ -193,7 +215,10 @@ const onEditElement = () => {
 };
 
 const onClickElement = async () => {
-	if (hasLinkedTool.value && !props.isEditMode) {
+	if (
+		hasLinkedTool.value &&
+		(!props.isEditMode || (props.isEditMode && isDeepLinkingTool.value))
+	) {
 		launchTool();
 
 		if (isToolLaunchable.value && modelValue.value.contextExternalToolId) {
@@ -205,6 +230,28 @@ const onClickElement = async () => {
 		isConfigurationDialogOpen.value = true;
 	}
 };
+
+// const onClickElement = async () => {
+// 	if (hasLinkedTool.value && !props.isEditMode) {
+// 		launchTool();
+
+// 		if (isToolLaunchable.value && modelValue.value.contextExternalToolId) {
+// 			await fetchContextLaunchRequest(modelValue.value.contextExternalToolId);
+// 		}
+// 	}
+
+// 	if (hasLinkedTool.value && props.isEditMode && isDeepLinkingTool.value) {
+// 		launchTool();
+
+// 		if (isToolLaunchable.value && modelValue.value.contextExternalToolId) {
+// 			await fetchContextLaunchRequest(modelValue.value.contextExternalToolId);
+// 		}
+// 	}
+
+// 	if (!hasLinkedTool.value && props.isEditMode) {
+// 		isConfigurationDialogOpen.value = true;
+// 	}
+// };
 
 const onConfigurationDialogClose = () => {
 	isConfigurationDialogOpen.value = false;
