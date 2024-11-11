@@ -8,36 +8,21 @@ import deDE from "../locales/de";
 import enGB from "../locales/en";
 import esES from "../locales/es";
 import ukUA from "../locales/uk";
+import {
+	de as deVuetify,
+	en as enVuetify,
+	es as esVuetify,
+	uk as ukVuetify,
+} from "vuetify/locale";
 import { MessageSchema } from "@/locales/schema";
-import { de, en, es, uk } from "vuetify/locale";
 
 declare type SupportedLanguages = "en" | "de" | "es" | "uk";
 
 const messages: Record<SupportedLanguages, MessageSchema> = {
-	en: {
-		$vuetify: {
-			...en,
-		},
-		...enGB,
-	},
-	de: {
-		$vuetify: {
-			...de,
-		},
-		...deDE,
-	},
-	es: {
-		$vuetify: {
-			...es,
-		},
-		...esES,
-	},
-	uk: {
-		$vuetify: {
-			...uk,
-		},
-		...ukUA,
-	},
+	en: { ...enGB, $vuetify: enVuetify },
+	de: { ...deDE, $vuetify: deVuetify },
+	es: { ...esES, $vuetify: esVuetify },
+	uk: { ...ukUA, $vuetify: ukVuetify },
 };
 
 const fileSizeFormat = {
