@@ -18,7 +18,7 @@ jest.mock("vue-router", () => ({
 jest.mock("@data-room", () => ({
 	useRoomEditState: jest.fn().mockReturnValue({
 		isLoading: false,
-		roomData: "",
+		roomData: { value: { id: "123", name: "test", color: "blue" } },
 		updateRoom: jest.fn(),
 		fetchRoom: jest.fn(),
 	}),
