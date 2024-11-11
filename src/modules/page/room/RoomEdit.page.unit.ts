@@ -24,13 +24,6 @@ jest.mock("@data-room", () => ({
 	}),
 }));
 
-// jest.mock("vue", () => ({
-// 	...jest.requireActual("vue"),
-// 	ref: jest.fn().mockReturnValue({
-// 		value: "",
-// 	}),
-// }));
-
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
