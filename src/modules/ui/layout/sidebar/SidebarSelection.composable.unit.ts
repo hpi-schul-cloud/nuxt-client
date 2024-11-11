@@ -1,13 +1,13 @@
+import { BoardContextType } from "@/types/board/BoardContext";
+import { useSharedBoardPageInformation } from "@data-board";
+import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { createMock } from "@golevelup/ts-jest";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia, storeToRefs } from "pinia";
+import { computed } from "vue";
 import { RouteLocationNormalized, useRoute } from "vue-router";
 import { SidebarSingleItem } from "../types";
 import { useSidebarSelection } from "./SidebarSelection.composable";
-import { createMock } from "@golevelup/ts-jest";
-import { setActivePinia, storeToRefs } from "pinia";
-import { createTestingPinia } from "@pinia/testing";
-import { useSharedBoardPageInformation } from "@data-board";
-import { ref } from "vue";
-import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { BoardContextType } from "@/types/board/BoardContext";
 
 jest.mock("vue-router");
 const useRouteMock = <jest.Mock>useRoute;
@@ -29,10 +29,10 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 
 		mockedUseSharedBoardPageInformation.mockReturnValue({
 			createPageInformation: jest.fn(),
-			breadcrumbs: ref([]),
-			contextType: ref(),
-			pageTitle: ref("page-title"),
-			roomId: ref("room-id"),
+			breadcrumbs: computed(() => []),
+			contextType: computed(() => undefined),
+			pageTitle: computed(() => "page-title"),
+			roomId: computed(() => "room-id"),
 		});
 	});
 
@@ -260,10 +260,10 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				const setupCourseContext = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
 						createPageInformation: jest.fn(),
-						breadcrumbs: ref([]),
-						contextType: ref(BoardContextType.Course),
-						pageTitle: ref("page-title"),
-						roomId: ref("room-id"),
+						breadcrumbs: computed(() => []),
+						contextType: computed(() => BoardContextType.Course),
+						pageTitle: computed(() => "page-title"),
+						roomId: computed(() => "room-id"),
 					});
 
 					return setupBoardDetailsRoute();
@@ -281,10 +281,10 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				const setupUserContext = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
 						createPageInformation: jest.fn(),
-						breadcrumbs: ref([]),
-						contextType: ref(BoardContextType.User),
-						pageTitle: ref("page-title"),
-						roomId: ref("room-id"),
+						breadcrumbs: computed(() => []),
+						contextType: computed(() => BoardContextType.User),
+						pageTitle: computed(() => "page-title"),
+						roomId: computed(() => "room-id"),
 					});
 
 					return setupBoardDetailsRoute();
