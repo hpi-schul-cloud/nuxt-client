@@ -46,7 +46,7 @@ import App from "./App.vue";
 import { handleApplicationError } from "./plugins/application-error-handler";
 import { createI18n } from "./plugins/i18n";
 import store from "./plugins/store";
-import createVuetify from "./plugins/vuetify";
+import vuetify from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
 
@@ -141,7 +141,6 @@ app.use(VueDOMPurifyHTML, {
 
 	// creation of i18n relies on envConfigModule authModule
 	const i18n = createI18n();
-	const vuetify = createVuetify(i18n);
 
 	app.use(router).use(store).use(vuetify).use(i18n);
 
