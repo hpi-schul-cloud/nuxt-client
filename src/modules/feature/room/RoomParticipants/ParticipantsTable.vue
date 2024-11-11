@@ -31,14 +31,15 @@
 				t('pages.rooms.participants.participantTable.itemsPerPage')
 			"
 			:no-data-text="t('common.nodata')"
+			:mobile="null"
+			mobile-breakpoint="sm"
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">
-				<v-icon
-					class="cursor-pointer"
-					:icon="mdiTrashCanOutline"
+				<v-btn
+					variant="text"
 					:aria-label="t('pages.rooms.participants.removeParticipants')"
-					:title="t('pages.rooms.participants.removeParticipants')"
+					:icon="mdiTrashCanOutline"
 					@click="onRemoveParticipant(item)"
 				/>
 			</template>
@@ -110,8 +111,13 @@ const tableHeader = [
 </script>
 
 <style lang="scss" scoped>
-:deep .v-data-table-header__content {
+:deep(.v-data-table-header__content) {
 	color: rgba(var(--v-theme-primary-darken-1));
+	font-weight: bold;
+}
+
+/* table header for mobile view */
+:deep(.v-data-table__td-title) {
 	font-weight: bold;
 }
 </style>
