@@ -214,12 +214,18 @@ module.exports = {
 					},
 				],
 			},
-			// I18n - TS
+			// I18n - .ts, .mjs
 			{
-				test: /\.ts$/,
+				test: /\.(ts|mjs)$/,
 				type: "javascript/auto",
 				loader: path.resolve(__dirname, "vue-i18n-loader.js"),
-				include: [path.resolve(__src, "locales")],
+				include: [
+					path.resolve(__src, "locales"),
+					path.resolve(__base, "node_modules/vuetify/lib/locale"),
+				],
+				exclude: [
+					path.resolve(__base, "node_modules/vuetify/lib/locale/adapters"),
+				],
 			},
 			// Vue
 			{
