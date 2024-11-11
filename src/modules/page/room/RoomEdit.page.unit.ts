@@ -1,15 +1,8 @@
-import { RoomUpdateParams } from "@/types/room/Room";
-import { useRoomEditState } from "@data-room";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { RoomEditPage } from "@page-room";
-import { useRouter } from "vue-router";
-import { RoomColor } from "@/serverApi/v3";
-import { RoomForm } from "@feature-room";
-
-import { createVuetify } from "vuetify";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -30,27 +23,22 @@ jest.mock("@data-room", () => ({
 		fetchRoom: jest.fn(),
 	}),
 }));
-jest.mock("@feature-room", () => ({
-	RoomForm: {
-		template: "<div></div>",
-	},
-}));
 
-jest.mock("vue", () => ({
-	...jest.requireActual("vue"),
-	ref: jest.fn().mockReturnValue({
-		value: "",
-	}),
-}));
+// jest.mock("vue", () => ({
+// 	...jest.requireActual("vue"),
+// 	ref: jest.fn().mockReturnValue({
+// 		value: "",
+// 	}),
+// }));
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-const roomParams: RoomUpdateParams = {
-	name: "test",
-	color: RoomColor.Blue,
-};
+// const roomParams: RoomUpdateParams = {
+// 	name: "test",
+// 	color: RoomColor.Blue,
+// };
 
 describe("@pages/RoomEdit.page.vue", () => {
 	const setup = () => {
@@ -61,11 +49,11 @@ describe("@pages/RoomEdit.page.vue", () => {
 			},
 		});
 
-		const { updateRoom } = useRoomEditState();
+		// const { updateRoom } = useRoomEditState();
 
 		return {
 			wrapper,
-			router: useRouter(),
+			// router: useRouter(),
 		};
 	};
 
