@@ -1686,6 +1686,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Menú de la sala",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar sala",
+	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
 	"pages.rooms.fab.title": "Crear sala",
 	"pages.rooms.participant.error.load":
