@@ -214,7 +214,7 @@ module.exports = {
 					},
 				],
 			},
-			// I18n - .ts, .mjs
+			// I18n - TS, JSON
 			{
 				test: /\.(ts|mjs)$/,
 				type: "javascript/auto",
