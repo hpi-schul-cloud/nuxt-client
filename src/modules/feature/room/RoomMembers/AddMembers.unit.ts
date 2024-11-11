@@ -6,7 +6,7 @@ import AddMembers from "./AddMembers.vue";
 import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule } from "@/store";
-import { nextTick, Ref } from "vue";
+import { nextTick } from "vue";
 import {
 	roomMemberListFactory,
 	roomMemberSchoolResponseFactory,
@@ -44,7 +44,8 @@ describe("AddMembers", () => {
 			memberList: RoomMember[];
 			preSelectedRole: RoleName;
 			selectedUsers: RoomMember[];
-			schoolList: Ref<SchoolForExternalInviteResponse[]>;
+			schoolList: SchoolForExternalInviteResponse[];
+			roles: { id: string; name: string }[];
 		};
 
 		return { wrapper, wrapperVM };
@@ -58,19 +59,64 @@ describe("AddMembers", () => {
 			expect(wrapper.findComponent(AddMembers)).toBeTruthy();
 			expect(wrapperVM.memberList).toStrictEqual(mockPotentialMembers);
 			expect(wrapperVM.schoolList).toStrictEqual(roomMembersSchools);
+			expect(wrapperVM.schoolList).toHaveLength(3);
 		});
 
-		it("should render Autocomplete components", () => {
-			const { wrapper } = setup();
-			const autoCompleteComponents = wrapper.findAllComponents({
-				name: "v-autocomplete",
+		describe("AutoComplete components", () => {
+			it("should render Autocomplete components", () => {
+				const { wrapper } = setup();
+				const autoCompleteComponents = wrapper.findAllComponents({
+					name: "v-autocomplete",
+				});
+
+				expect(autoCompleteComponents).toHaveLength(3);
 			});
 
-			expect(autoCompleteComponents).toHaveLength(3);
+			it("should have proper props for autoCompleteSchool component", () => {
+				const { wrapper, wrapperVM } = setup();
+				const schoolComponent = wrapper.findComponent({
+					name: "v-autocomplete",
+					ref: "autoCompleteSchool",
+				});
+
+				expect(schoolComponent).toBeTruthy();
+				expect(schoolComponent.props("items")).toStrictEqual(
+					wrapperVM.schoolList
+				);
+				expect(schoolComponent.props("modelValue")).toBe(
+					wrapperVM.schoolList[0].id
+				);
+			});
+
+			it("should have proper props for autoCompleteRole component", () => {
+				const { wrapper, wrapperVM } = setup();
+				const roleComponent = wrapper.findComponent({
+					name: "v-autocomplete",
+					ref: "autoCompleteRole",
+				});
+
+				expect(roleComponent).toBeTruthy();
+				expect(roleComponent.props("items")).toStrictEqual(wrapperVM.roles);
+				expect(roleComponent.props("modelValue")).toBe(wrapperVM.roles[0].id);
+			});
+
+			it("should have proper props for autoCompleteUsers component", () => {
+				const { wrapper, wrapperVM } = setup();
+				const userComponent = wrapper.findComponent({
+					name: "v-autocomplete",
+					ref: "autoCompleteUsers",
+				});
+
+				expect(userComponent).toBeTruthy();
+				expect(userComponent.props("items")).toStrictEqual(
+					wrapperVM.memberList
+				);
+				expect(userComponent.props("modelValue")).toHaveLength(0);
+			});
 		});
 	});
 
-	describe("When userRole is changed", () => {
+	describe("when userRole is changed", () => {
 		it("should emit the userRole", async () => {
 			const { wrapper } = setup();
 			const roleComponent = wrapper.findComponent({
@@ -88,7 +134,7 @@ describe("AddMembers", () => {
 		});
 	});
 
-	describe("When user is selected", () => {
+	describe("when user(s) selected", () => {
 		it("should add user to selectedUsers", async () => {
 			const { wrapper, wrapperVM } = setup();
 			const userComponent = wrapper.findComponent({
@@ -103,10 +149,14 @@ describe("AddMembers", () => {
 			]);
 			await nextTick();
 			expect(wrapperVM.selectedUsers).toHaveLength(2);
+			expect(userComponent.props("modelValue")).toStrictEqual([
+				mockPotentialMembers[0].userId,
+				mockPotentialMembers[1].userId,
+			]);
 		});
 	});
 
-	describe("When add button clicked", () => {
+	describe("when add button clicked", () => {
 		it("should emit the selectedUsers", async () => {
 			const { wrapper, wrapperVM } = setup();
 			const userComponent = wrapper.findComponent({
@@ -136,7 +186,7 @@ describe("AddMembers", () => {
 		});
 	});
 
-	describe("When cancel button clicked", () => {
+	describe("when cancel button clicked", () => {
 		it("should emit the selectedUsers", async () => {
 			const { wrapper } = setup();
 
