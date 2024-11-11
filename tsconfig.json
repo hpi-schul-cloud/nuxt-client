@@ -87,7 +87,7 @@
 		"src/**/*.tsx",
 		"src/**/*.vue",
 		"tests/**/*.ts",
-		"tests/**/*.tsx"
-, "types/vuetify-locale-de.d.ts", "types/shims-vuetify.d.ts", "types/shims-vue.d.ts", "types/shims-tsx.d.ts"	],
+		"tests/**/*.tsx",
+	],
 	"exclude": ["node_modules", "dist", "./src/components/base/components.js"]
 }
