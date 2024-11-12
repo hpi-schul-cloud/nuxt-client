@@ -17,6 +17,7 @@
 		"experimentalDecorators": true,
 		"baseUrl": ".",
 		"types": ["webpack-env", "jest"],
+		"typeRoots": ["./node_modules/@types", "./types"],
 		"paths": {
 			"@data-board": ["src/modules/data/board"],
 			"@data-external-tool": ["src/modules/data/external-tool"],
@@ -86,7 +87,8 @@
 		"src/**/*.tsx",
 		"src/**/*.vue",
 		"tests/**/*.ts",
-		"tests/**/*.tsx"
+		"tests/**/*.tsx",
+		"types/**/*.d.ts"
 	],
 	"exclude": ["node_modules", "dist", "./src/components/base/components.js"]
 }
