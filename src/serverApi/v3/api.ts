@@ -1585,6 +1585,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_ROOMS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: boolean;
 }
 /**
  * 
@@ -4838,6 +4844,12 @@ export interface MeResponse {
      * @memberof MeResponse
      */
     account: MeAccountResponse;
+    /**
+     * 
+     * @type {MeSystemResponse}
+     * @memberof MeResponse
+     */
+    system?: MeSystemResponse;
 }
 /**
  * 
@@ -4901,6 +4913,31 @@ export interface MeSchoolResponse {
      * @memberof MeSchoolResponse
      */
     logo: MeSchoolLogoResponse;
+}
+/**
+ * 
+ * @export
+ * @interface MeSystemResponse
+ */
+export interface MeSystemResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSystemResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MeSystemResponse
+     */
+    name?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof MeSystemResponse
+     */
+    hasEndSessionEndpoint: boolean;
 }
 /**
  * 
@@ -6218,6 +6255,12 @@ export interface OauthConfigResponse {
      * @memberof OauthConfigResponse
      */
     jwksEndpoint: string;
+    /**
+     * End session endpoint
+     * @type {string}
+     * @memberof OauthConfigResponse
+     */
+    endSessionEndpoint?: string;
 }
 /**
  * 
@@ -10848,6 +10891,40 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
         },
         /**
          * 
+         * @summary Logs out a user from the external system.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutControllerExternalSystemLogout: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/logout/external`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Logs out a user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10925,6 +11002,16 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Logs out a user from the external system.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async logoutControllerExternalSystemLogout(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.logoutControllerExternalSystemLogout(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Logs out a user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -10975,6 +11062,15 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         },
         /**
          * 
+         * @summary Logs out a user from the external system.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutControllerExternalSystemLogout(options?: any): AxiosPromise<void> {
+            return localVarFp.logoutControllerExternalSystemLogout(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Logs out a user.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -11020,6 +11116,15 @@ export interface AuthenticationApiInterface {
      * @memberof AuthenticationApiInterface
      */
     loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any): AxiosPromise<LoginResponse>;
+
+    /**
+     * 
+     * @summary Logs out a user from the external system.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApiInterface
+     */
+    logoutControllerExternalSystemLogout(options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -11073,6 +11178,17 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      */
     public loginControllerLoginOauth2(oauth2AuthorizationBodyParams: Oauth2AuthorizationBodyParams, options?: any) {
         return AuthenticationApiFp(this.configuration).loginControllerLoginOauth2(oauth2AuthorizationBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Logs out a user from the external system.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApi
+     */
+    public logoutControllerExternalSystemLogout(options?: any) {
+        return AuthenticationApiFp(this.configuration).logoutControllerExternalSystemLogout(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
