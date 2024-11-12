@@ -53,7 +53,7 @@
 			data-testid="action-delete-line"
 		>
 			<VListItemTitle>
-				<span>{{ $t("common.actions.remove") }}</span>
+				<span>{{ $t("common.actions.delete") }}</span>
 			</VListItemTitle>
 		</VListItem>
 	</KebabMenu>
