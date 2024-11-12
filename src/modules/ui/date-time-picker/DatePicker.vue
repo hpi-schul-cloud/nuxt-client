@@ -23,19 +23,18 @@
 				@keydown.tab="showDateDialog = false"
 			/>
 		</template>
-		<v-locale-provider :locale="locale">
-			<v-date-picker
-				v-model="dateObject"
-				:aria-expanded="showDateDialog"
-				:min="minDate"
-				:max="maxDate"
-				color="primary"
-				hide-header
-				show-adjacent-months
-				elevation="6"
-				@update:model-value="closeAndEmit"
-			/>
-		</v-locale-provider>
+
+		<v-date-picker
+			v-model="dateObject"
+			:aria-expanded="showDateDialog"
+			:min="minDate"
+			:max="maxDate"
+			color="primary"
+			hide-header
+			show-adjacent-months
+			elevation="6"
+			@update:model-value="closeAndEmit"
+		/>
 	</v-menu>
 </template>
 
