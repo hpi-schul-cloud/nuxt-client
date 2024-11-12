@@ -80,46 +80,25 @@
 						"
 						component="p"
 					/>
-					<RenderHTML
-						data-testid="delete-dialog-content-courses"
-						class="text-md mb-0"
-						:html="
-							t(
-								'components.administration.externalToolsSection.dialog.content.courses',
-								{
-									courseCount: metadata.course,
-								}
-							)
-						"
-						component="p"
-					/>
-					<RenderHTML
+					<p data-testid="delete-dialog-content-courses" class="text-md mb-0">
+						<b>{{ metadata.course }}</b>
+						{{ t("common.tool.context.type.courses") }}
+					</p>
+					<p
 						data-testid="delete-dialog-content-board-elements"
 						:class="isMediaBoardUsageVisible ? 'text-md mb-0' : 'text-md'"
-						:html="
-							t(
-								'components.administration.externalToolsSection.dialog.content.boardElements',
-								{
-									boardElementCount: metadata.boardElement,
-								}
-							)
-						"
-						component="p"
-					/>
-					<RenderHTML
+					>
+						<b>{{ metadata.boardElement }}</b>
+						{{ t("common.tool.context.type.boardElements") }}
+					</p>
+					<p
 						v-if="isMediaBoardUsageVisible"
 						data-testid="delete-dialog-content-media-shelves"
 						class="text-md"
-						:html="
-							t(
-								'components.administration.externalToolsSection.dialog.content.mediaShelves',
-								{
-									mediaBoardCount: metadata.mediaBoard,
-								}
-							)
-						"
-						component="p"
-					/>
+					>
+						<b>{{ metadata.mediaBoard }}</b>
+						{{ t("common.tool.context.type.mediaShelves") }}
+					</p>
 					<RenderHTML
 						data-testid="delete-dialog-content-media-warning"
 						class="text-md mb-0"
