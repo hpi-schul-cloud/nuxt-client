@@ -48,11 +48,14 @@ watch(
 );
 
 const onSave = async (roomParams: RoomUpdateParams) => {
-	await updateRoom(route.params.id as string, roomParams);
-	router.push({
-		name: "room-details",
-		params: { id: route.params.id as string },
-	});
+	const room = await updateRoom(route.params.id as string, roomParams);
+
+	if (room) {
+		router.push({
+			name: "room-details",
+			params: { id: route.params.id as string },
+		});
+	}
 };
 
 const onCancel = () => {
