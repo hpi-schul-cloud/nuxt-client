@@ -1,7 +1,11 @@
 <template>
-	<ContentElementBar :hasGreyBackground="true" :icon="mdiPresentation">
+	<ContentElementBar
+		:hasGreyBackground="true"
+		:icon="mdiPresentation"
+		:has-row-style="isSmallOrLargerListBoard"
+	>
 		<template #display>
-			<v-img :src="imageSrc" alt="" cover class="rounded-t" />
+			<v-img :src="imageSrc" alt="" cover />
 		</template>
 		<template #title>
 			{{ $t("components.cardElement.drawingElement") }}
@@ -12,22 +16,21 @@
 	</ContentElementBar>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import image from "@/assets/img/tldraw.svg";
 import { mdiPresentation } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
-import { defineComponent } from "vue";
+import { computed, ref } from "vue";
+import { injectStrict } from "@/utils/inject";
+import { useDisplay } from "vuetify";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
-export default defineComponent({
-	name: "InnerContent",
-	components: { ContentElementBar },
-	setup() {
-		const imageSrc = image;
+const imageSrc = image;
 
-		return {
-			imageSrc,
-			mdiPresentation,
-		};
-	},
+const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
+const { smAndUp } = useDisplay();
+
+const isSmallOrLargerListBoard = computed(() => {
+	return smAndUp.value && isListLayout.value;
 });
 </script>
