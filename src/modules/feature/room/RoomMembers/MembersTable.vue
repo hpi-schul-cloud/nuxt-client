@@ -35,7 +35,7 @@
 			<template #[`item.actions`]="{ item }">
 				<v-btn
 					ref="removeMember"
-					flat
+					variant="text"
 					:icon="mdiTrashCanOutline"
 					:aria-label="t('pages.rooms.members.remove')"
 					@click="onRemoveMember(item)"
