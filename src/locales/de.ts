@@ -16,7 +16,7 @@ export default {
 	"common.actions.logout": "Abmelden",
 	"common.actions.ok": "OK",
 	"common.actions.pickColor": "Hintergrundfarbe auswählen",
-	"common.actions.remove": "Löschen",
+	"common.actions.remove": "Entfernen",
 	"common.actions.rename": "Umbenennen",
 	"common.actions.save": "Speichern",
 	"common.actions.scrollToTop": "Nach oben scrollen",
@@ -1670,6 +1670,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Raum-Menü",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
+	"pages.roomDetails.board.defaultName": "Raum-Bereich",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.participant.error.load":
@@ -1681,7 +1682,7 @@ export default {
 	"pages.rooms.participant.delete.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.participant.infoText":
-		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie die Sichtbarkeit im zentralen Verzeichnis im eigenen Profil aktiviert haben	<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(weitere Informationen)</a>.',
+		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	(<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">weitere Informationen</a>).',
 	"pages.rooms.participant.label": "Teilnehmer:in",
 	"pages.rooms.participants.label": "Teilnehmende",
 	"pages.rooms.participants.addParticipants": "Teilnehmende hinzufügen",
