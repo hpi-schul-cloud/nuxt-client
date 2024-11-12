@@ -29,6 +29,8 @@
 			:items-per-page="50"
 			:items-per-page-text="t('pages.rooms.members.table.itemsPerPage')"
 			:no-data-text="t('common.nodata')"
+			:mobile="null"
+			mobile-breakpoint="sm"
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">
@@ -106,8 +108,13 @@ const tableHeader = [
 </script>
 
 <style lang="scss" scoped>
-:deep .v-data-table-header__content {
+:deep(.v-data-table-header__content) {
 	color: rgba(var(--v-theme-primary-darken-1));
+	font-weight: bold;
+}
+
+/* table header for mobile view */
+:deep(.v-data-table__td-title) {
 	font-weight: bold;
 }
 </style>

@@ -1,13 +1,13 @@
 <template>
 	<VCard
-		class="board-tile pa-4"
+		class="board-tile"
 		:class="{ 'board-is-draft': isDraft }"
 		hover
 		:data-testid="`board-tile-${props.index}`"
 		:to="boardPath"
 	>
 		<VCardSubtitle
-			class="board-tile-subtitle"
+			class="board-tile-subtitle mt-4"
 			:data-testid="`board-tile-subtitle-${props.index}`"
 		>
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
