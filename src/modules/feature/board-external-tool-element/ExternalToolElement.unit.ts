@@ -426,10 +426,14 @@ describe("ExternalToolElement", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper(
 					{
-						element: externalToolElementResponseFactory.build(),
+						element: externalToolElementResponseFactory.build({
+							content: { contextExternalToolId: "contextExternalToolId" },
+						}),
 						isEditMode: true,
 					},
-					undefined,
+					externalToolDisplayDataFactory.build({
+						status: schoolToolConfigurationStatusFactory.build(),
+					}),
 					toolLaunchRequestFactory.build({ isDeepLink: true })
 				);
 
@@ -444,6 +448,16 @@ describe("ExternalToolElement", () => {
 				const element = wrapper.findComponent({ ref: "externalToolElement" });
 
 				expect(element.isVisible()).toEqual(true);
+			});
+
+			it("should load the launch request", async () => {
+				setup();
+
+				await nextTick();
+
+				expect(
+					useExternalToolLaunchStateMock.fetchContextLaunchRequest
+				).toHaveBeenCalledWith("contextExternalToolId");
 			});
 		});
 	});

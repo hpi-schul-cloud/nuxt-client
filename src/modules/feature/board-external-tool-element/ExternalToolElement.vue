@@ -139,9 +139,9 @@ const isDeepLinkingTool: ComputedRef<boolean | undefined> = computed(
 	() => toolLaunchRequest.value?.isDeepLink
 );
 
-const showTool: ComputedRef<boolean> = computed(() => {
-	return isDeepLinkingTool.value ? false : hasLinkedTool.value;
-});
+const showTool: ComputedRef<boolean> = computed(() =>
+	isDeepLinkingTool.value ? false : hasLinkedTool.value
+);
 
 const toolDisplayName: ComputedRef<string> = computed(
 	() => displayData.value?.name ?? "..."
