@@ -22,6 +22,7 @@ import { RoleName, RoomColor } from "@/serverApi/v3";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { useTitle } from "@vueuse/core";
+import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -105,6 +106,7 @@ describe("RoomMembersPage", () => {
 					createTestingPinia(),
 					createTestingI18n(),
 					createTestingVuetify(),
+					vueDompurifyHTMLPlugin,
 				],
 			},
 		});
@@ -254,7 +256,7 @@ describe("RoomMembersPage", () => {
 	});
 
 	describe("AddMembers Dialog", () => {
-		it("should render AddMembers", async () => {
+		it("should open AddMembers dialog", async () => {
 			const { wrapper, wrapperVM } = setup();
 
 			const dialogBefore = wrapper.findComponent({ name: "AddMembers" });
