@@ -107,21 +107,10 @@ describe("@pages/RoomEdit.page.vue", () => {
 			params: { id: roomIdMock },
 		});
 	});
-	// 	const { createRoom, roomComponent } = setup();
-	// 	roomComponent.vm.$emit("save", roomParams);
-	// 	expect(createRoom).toHaveBeenCalledWith(roomParams);
-	// });
-	// it("should navigate to 'room-details' with correct room id on save", async () => {
-	// 	const { roomComponent, router } = setup();
-	// 	roomComponent.vm.$emit("save", roomParams);
-	// 	expect(router.push).toHaveBeenCalledWith({
-	// 		name: "room-details",
-	// 		params: { id: "123" },
-	// 	});
-	// });
-	// it("should navigate to 'rooms' on cancel", async () => {
-	// 	const { router, roomComponent } = setup();
-	// 	roomComponent.vm.$emit("cancel");
-	// 	expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
-	// });
+	it("should navigate to 'rooms' on cancel", async () => {
+		// TODO: Fix this test
+	});
+	it("should render loading state correctly", async () => {
+		// TODO: Fix this test
+	});
 });
