@@ -33,7 +33,6 @@
 					<DatePicker
 						:date="roomData.endDate"
 						:min-date="todayISO"
-						:errors="endDateErrors"
 						class="w-50 ml-4"
 						data-testid="room-end-date-input"
 						:aria-label="$t('components.roomForm.labels.timePeriod.to')"
