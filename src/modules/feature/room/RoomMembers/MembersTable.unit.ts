@@ -60,10 +60,13 @@ describe("MembersTable", () => {
 		describe("when the remove button is clicked", () => {
 			it("should emit the remove event", async () => {
 				const { wrapper } = setup();
-				const removeButton = wrapper.find(".cursor-pointer");
+				const removeButton = wrapper.findComponent({
+					name: "v-btn",
+					ref: "removeMember",
+				});
 
-				await removeButton.trigger("click");
-				expect(wrapper.emitted("remove:member")).toBeTruthy();
+				await removeButton.vm.$emit("click");
+				expect(wrapper.emitted()).toHaveProperty("remove:member");
 			});
 		});
 	});

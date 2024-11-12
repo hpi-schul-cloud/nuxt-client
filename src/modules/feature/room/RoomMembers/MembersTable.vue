@@ -33,9 +33,9 @@
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">
-				<v-icon
-					class="cursor-pointer"
-					variant="text"
+				<v-btn
+					ref="removeMember"
+					flat
 					:icon="mdiTrashCanOutline"
 					:aria-label="t('pages.rooms.members.remove')"
 					@click="onRemoveMember(item)"
@@ -97,10 +97,6 @@ const tableHeader = [
 		title: t("common.labels.role"),
 		key: "displayRoleName",
 	},
-	// {
-	// 	title: t("common.words.classes"),
-	// 	key: "classes",
-	// },
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
 	{ title: "", key: "actions", sortable: false, width: 50 },
 ];
