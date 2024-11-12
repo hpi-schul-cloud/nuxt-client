@@ -818,6 +818,8 @@ export default {
 	"components.roomForm.labels.timePeriod": "Periodo de tiempo",
 	"components.roomForm.labels.timePeriod.from": "Periodo de tiempo desde",
 	"components.roomForm.labels.timePeriod.to": "Periodo de tiempo hasta",
+	"components.roomForm.validation.generalSaveError":
+		"Se ha producido un error al guardar. Por favor, compruebe sus entradas e inténtelo de nuevo.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
 		"La fecha de inicio debe ser anterior a la fecha de finalización.",
 	"components.timePicker.validation.format":

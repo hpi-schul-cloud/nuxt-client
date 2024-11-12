@@ -806,6 +806,8 @@ export default {
 	"components.roomForm.labels.timePeriod": "Zeitraum",
 	"components.roomForm.labels.timePeriod.from": "Zeitraum von",
 	"components.roomForm.labels.timePeriod.to": "Zeitraum bis",
+	"components.roomForm.validation.generalSaveError":
+		"Beim Speichern ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
 		"Das Startdatum muss vor dem Enddatum liegen.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",

@@ -170,11 +170,9 @@ const onUpdateEndDate = (newDate: string) => {
 
 const onSave = async () => {
 	const valid = await v$.value.$validate();
-	if (!valid) {
-		// TODO notify user form is invalid
-		return;
+	if (valid) {
+		emit("save", roomData.value);
 	}
-	emit("save", roomData.value);
 };
 
 const onCancel = async () => {

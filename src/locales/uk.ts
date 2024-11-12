@@ -812,6 +812,8 @@ export default {
 	"components.roomForm.labels.timePeriod": "Період часу",
 	"components.roomForm.labels.timePeriod.from": "Період від",
 	"components.roomForm.labels.timePeriod.to": "Період до",
+	"components.roomForm.validation.generalSaveError":
+		"Виникла помилка при збереженні. Будь ласка, перевірте свої записи та спробуйте ще раз.",
 	"components.roomForm.validation.timePeriod.startBeforeEnd":
 		"Дата початку повинна передувати даті закінчення.",
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
