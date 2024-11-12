@@ -1688,7 +1688,6 @@ export default {
 	"pages.rooms.members.add": "Teilnehmende hinzufügen",
 	"pages.rooms.members.manage": "Teilnehmende verwalten",
 	"pages.rooms.members.remove": "Teilnehmende entfernen",
-	"pages.rooms.members.table.itemsPerPage": "Einträge pro Seite",
 	"pages.rooms.members.roles.editor": "Raumeditor",
 	"pages.rooms.members.roles.viewer": "Raumbetrachter",
 	"pages.rooms.title": "Räume",

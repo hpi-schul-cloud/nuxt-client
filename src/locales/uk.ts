@@ -1679,7 +1679,6 @@ export default {
 	"pages.rooms.members.add": "Додайте учасників",
 	"pages.rooms.members.manage": "Керувати учасниками",
 	"pages.rooms.members.remove": "Видалити учасника",
-	"pages.rooms.members.table.itemsPerPage": "Записи на сторінку",
 	"pages.rooms.members.roles.editor": "Редактор кімнати",
 	"pages.rooms.members.roles.viewer": "Переглядач кімнати",
 	"pages.rooms.title": "Кімнати",

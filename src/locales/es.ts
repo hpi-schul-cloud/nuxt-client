@@ -1702,7 +1702,6 @@ export default {
 	"pages.rooms.members.add": "Añadir participantes",
 	"pages.rooms.members.manage": "Administrar participantes",
 	"pages.rooms.members.remove": "Eliminar participante",
-	"pages.rooms.members.table.itemsPerPage": "Entradas por página",
 	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
 	"pages.rooms.title": "Salas",

@@ -1657,7 +1657,6 @@ export default {
 	"pages.rooms.members.add": "Add participants",
 	"pages.rooms.members.manage": "Manage participants",
 	"pages.rooms.members.remove": "Remove participants",
-	"pages.rooms.members.table.itemsPerPage": "Entries per page",
 	"pages.rooms.members.roles.editor": "Room editor",
 	"pages.rooms.members.roles.viewer": "Room viewer",
 	"pages.rooms.title": "Rooms",

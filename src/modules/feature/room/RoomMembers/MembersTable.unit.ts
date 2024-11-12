@@ -46,9 +46,6 @@ describe("MembersTable", () => {
 			expect(dataTable).toBeTruthy();
 			expect(dataTable.vm.items).toEqual(mockMembers);
 			expect(dataTable.vm.headers).toEqual(wrapperVM.tableHeader);
-			expect(dataTable.vm["itemsPerPageText"]).toEqual(
-				"pages.rooms.members.table.itemsPerPage"
-			);
 			expect(dataTable.vm["sortAscIcon"]).toEqual(mdiMenuDown);
 			expect(dataTable.vm["sortDescIcon"]).toEqual(mdiMenuUp);
 		});
