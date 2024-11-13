@@ -3,6 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { RoomDetailsPage } from "@page-room";
+import { storeToRefs } from "pinia";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -20,6 +21,31 @@ jest.mock("@/utils/inject", () => ({
 		return {
 			getEnv: jest.fn().mockReturnValue(true),
 		};
+	}),
+}));
+// const mockRoomDetailsStore = {
+// 	deactivateRoom: jest.fn(),
+// 	fetchRoom: jest.fn(),
+// 	resetState: jest.fn(),
+// };
+
+jest.mock("@data-room", () => ({
+	useRoomDetailsStore: jest.fn().mockReturnValue({
+		deactivateRoom: jest.fn(),
+		fetchRoom: jest.fn(),
+		resetState: jest.fn(),
+	}),
+	useRoomsState: jest.fn().mockReturnValue({
+		deleteRoom: jest.fn(),
+	}),
+}));
+
+jest.mock("pinia", () => ({
+	storeToRefs: jest.fn().mockReturnValue({
+		isLoading: jest.fn(),
+		room: jest.fn(),
+		roomVariant: jest.fn(),
+		roomBoards: jest.fn(),
 	}),
 }));
 
