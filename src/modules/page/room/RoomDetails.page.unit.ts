@@ -16,9 +16,9 @@ jest.mock("vue-router", () => ({
 }));
 
 jest.mock("@/utils/inject", () => ({
-	injectStrict: jest.fn().mockImplementation((key) => {
+	injectStrict: jest.fn().mockImplementation(() => {
 		return {
-			getEnv: jest.fn().mockReturnValue(true), // gibt immer true zurück
+			getEnv: jest.fn().mockReturnValue(true),
 		};
 	}),
 }));
