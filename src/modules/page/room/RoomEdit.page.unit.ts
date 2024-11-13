@@ -108,9 +108,35 @@ describe("@pages/RoomEdit.page.vue", () => {
 		});
 	});
 	it("should navigate to 'rooms' on cancel", async () => {
-		// TODO: Fix this test
+		const { roomFormComponent, router } = setup();
+
+		roomFormComponent.vm.$emit("cancel", roomParams);
+
+		expect(router.push).toHaveBeenCalledWith({
+			name: "room-details",
+			params: { id: roomIdMock },
+		});
 	});
-	it("should render loading state correctly", async () => {
-		// TODO: Fix this test
+	it("should render roomForm as component is not loading  ", async () => {
+		(useRoomEditState as jest.Mock).mockReturnValueOnce({
+			isLoading: false,
+			roomData: roomDataMock,
+			updateRoom: jest.fn(),
+			fetchRoom: jest.fn(),
+		});
+
+		const { roomFormComponent } = setup();
+		expect(roomFormComponent).toBeDefined();
+	});
+	it("should not render roomForm as component is loading  ", async () => {
+		(useRoomEditState as jest.Mock).mockReturnValueOnce({
+			isLoading: true,
+			roomData: roomDataMock,
+			updateRoom: jest.fn(),
+			fetchRoom: jest.fn(),
+		});
+
+		const { roomFormComponent } = setup();
+		expect(roomFormComponent.exists()).toBeFalsy();
 	});
 });
