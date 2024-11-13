@@ -31,6 +31,7 @@
 				t('pages.rooms.participants.participantTable.itemsPerPage')
 			"
 			:no-data-text="t('common.nodata')"
+			data-testid="participants-table"
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">

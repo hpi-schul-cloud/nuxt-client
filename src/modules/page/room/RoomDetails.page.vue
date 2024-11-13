@@ -32,6 +32,7 @@
 							<VListItem
 								role="menuitem"
 								:to="`/rooms/${room.id}/participants`"
+								data-testid="room-action-manage-participants"
 								:aria-label="t('pages.rooms.participants.manageParticipants')"
 							>
 								<template #prepend>

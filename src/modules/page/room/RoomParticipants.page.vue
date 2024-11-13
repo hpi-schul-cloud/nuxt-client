@@ -27,6 +27,7 @@
 			:width="xs ? 'auto' : 480"
 			persistent
 			max-width="480"
+			data-testid="dialog-add-participants"
 		>
 			<AddParticipants
 				:userList="potentialParticipants"
