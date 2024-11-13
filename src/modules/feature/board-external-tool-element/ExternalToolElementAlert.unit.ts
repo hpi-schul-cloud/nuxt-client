@@ -469,5 +469,32 @@ describe("ExternalToolElementAlert", () => {
 				);
 			});
 		});
+
+		describe("when the user is a student", () => {
+			const setup = () => {
+				useBoardPermissionsMock.isTeacher = false;
+
+				const { wrapper } = getWrapper(
+					{
+						toolStatus: contextExternalToolConfigurationStatusFactory.build({
+							isIncompleteOperationalOnScopeContext: true,
+						}),
+					},
+					["student"]
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should not display a student friendly message", () => {
+				const { wrapper } = setup();
+
+				const alerts = wrapper.findAllComponents(InfoAlert);
+
+				expect(alerts).toHaveLength(0);
+			});
+		});
 	});
 });
