@@ -2,7 +2,12 @@
 	<div v-if="isLoading" />
 	<template v-else>
 		<template v-if="isRoom">
-			<DefaultWireframe max-width="short" :breadcrumbs="breadcrumbs">
+			<DefaultWireframe
+				max-width="full"
+				:breadcrumbs="breadcrumbs"
+				:fabItems="fabItems"
+				@onFabItemClick="fabItemClickHandler"
+			>
 				<template #header v-if="room">
 					<div class="d-flex align-items-center">
 						<h1 class="text-h3 mb-4" data-testid="room-title">
@@ -61,8 +66,14 @@
 						</KebabMenu>
 					</div>
 				</template>
-				<RoomDetails :room="room" />
+				<RoomDetails v-if="room" :room="room" :room-boards="roomBoards" />
 				<ConfirmationDialog />
+				<SelectBoardLayoutDialog
+					v-if="boardLayoutsEnabled"
+					v-model="boardLayoutDialogIsOpen"
+					@select:multi-column="createBoard(BoardLayout.Columns)"
+					@select:single-column="createBoard(BoardLayout.List)"
+				/>
 			</DefaultWireframe>
 		</template>
 		<template v-else>
@@ -75,7 +86,11 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomDetails } from "@feature-room";
@@ -89,19 +104,35 @@ import {
 	useDeleteConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { KebabMenu } from "@ui-kebab-menu";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, ComputedRef, onUnmounted, watch } from "vue";
+import { computed, ComputedRef, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
+import {
+	mdiPlus,
+	mdiViewGridPlusOutline,
+	mdiViewDashboardOutline,
+} from "@icons/material";
+import {
+	BoardApiFactory,
+	BoardLayout,
+	BoardParentType,
+	CreateBoardBodyParams,
+	ImportUserResponseRoleNamesEnum as Roles,
+} from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const authModule = injectStrict(AUTH_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
 
 const roomDetailsStore = useRoomDetailsStore();
-const { isLoading, room, roomVariant } = storeToRefs(roomDetailsStore);
+const { isLoading, room, roomVariant, roomBoards } =
+	storeToRefs(roomDetailsStore);
 const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 
 const { t } = useI18n();
@@ -128,6 +159,73 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	}
 	return [];
 });
+
+const boardLayoutsEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
+);
+
+const boardLayoutDialogIsOpen = ref(false);
+
+const createBoard = async (layout: BoardLayout) => {
+	if (!room.value) return;
+
+	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
+
+	const params: CreateBoardBodyParams = {
+		title: t("pages.roomDetails.board.defaultName"),
+		parentId: room.value.id,
+		parentType: BoardParentType.Room,
+		layout,
+	};
+	const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;
+
+	router.push(`/boards/${boardId}`);
+};
+
+const fabItems = computed(() => {
+	const actions = [];
+	// TODO refine permissions
+	if (
+		authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase()) &&
+		authModule.getUserRoles.includes(Roles.Teacher)
+	) {
+		if (boardLayoutsEnabled.value) {
+			actions.push({
+				label: t("pages.courseRoomDetails.fab.add.board"),
+				icon: mdiViewGridPlusOutline,
+				customEvent: "board-type-dialog-open",
+				dataTestId: "fab_button_add_board",
+				ariaLabel: t("pages.courseRoomDetails.fab.add.board"),
+			});
+		} else {
+			actions.push({
+				label: t("pages.courseRoomDetails.fab.add.columnBoard"),
+				icon: mdiViewDashboardOutline,
+				customEvent: "board-create",
+				dataTestId: "fab_button_add_column_board",
+				ariaLabel: t("pages.courseRoomDetails.fab.add.columnBoard"),
+			});
+		}
+	}
+
+	const items = {
+		icon: mdiPlus,
+		title: t("common.actions.create"),
+		ariaLabel: t("common.actions.create"),
+		dataTestId: "add-content-button",
+		actions: actions,
+	};
+
+	return items;
+});
+
+const fabItemClickHandler = (event: string) => {
+	if (event === "board-type-dialog-open") {
+		boardLayoutDialogIsOpen.value = true;
+	} else if (event === "board-create") {
+		createBoard(BoardLayout.Columns);
+	}
+};
 
 watch(
 	() => route.params.id,

@@ -1,5 +1,6 @@
 import {
 	CreateRoomBodyParams,
+	RoomBoardItemResponse,
 	RoomDetailsResponse,
 	RoomItemResponse,
 	UpdateRoomBodyParams,
@@ -7,6 +8,7 @@ import {
 
 export type RoomItem = RoomItemResponse;
 export type RoomDetails = RoomDetailsResponse;
+export type RoomBoardItem = RoomBoardItemResponse;
 
 export type RoomCreateParams = CreateRoomBodyParams;
 export type RoomUpdateParams = UpdateRoomBodyParams;

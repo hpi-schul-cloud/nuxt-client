@@ -148,10 +148,10 @@ describe("Board", () => {
 
 		mockedUseSharedBoardPageInformation.mockReturnValue({
 			createPageInformation: jest.fn(),
-			breadcrumbs: ref([]),
-			contextType: ref(),
-			pageTitle: ref("page-title"),
-			roomId: ref("room-id"),
+			breadcrumbs: computed(() => []),
+			contextType: computed(() => undefined),
+			pageTitle: computed(() => "page-title"),
+			roomId: computed(() => "room-id"),
 		});
 
 		mockedUseEditMode.mockReturnValue({
