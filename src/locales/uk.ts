@@ -826,6 +826,8 @@ export default {
 	"feature-board-external-tool-element.dialog.title": "Вибір і налаштування",
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Виберіть інструмент...",
+	"feature-board-external-tool-element.placeholder.selectContent":
+		"Виберіть вміст {toolName}...",
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
 	"feature-course-sync.EndCourseSyncDialog.description":
@@ -1661,23 +1663,19 @@ export default {
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
 	"pages.rooms.fab.title": "Створити кімнату",
-	"pages.rooms.participant.error.load":
-		"Не вдалося завантажити список учасників.",
-	"pages.rooms.participant.error.add": "Не вдалося додати учасників.",
-	"pages.rooms.participant.error.delete": "Не вдалося видалити учасників.",
-	"pages.rooms.participant.delete.confirmation":
+	"pages.rooms.members.error.load": "Не вдалося завантажити список учасників.",
+	"pages.rooms.members.error.add": "Не вдалося додати учасників.",
+	"pages.rooms.members.error.remove": "Не вдалося видалити учасників.",
+	"pages.rooms.members.remove.confirmation":
 		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
-	"pages.rooms.participant.infoText":
+	"pages.rooms.members.infoText":
 		'Додайте учасників до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">більше інформації</a>).',
-	"pages.rooms.participant.label": "Учасник",
-	"pages.rooms.participants.label": "Учасники",
-	"pages.rooms.participants.addParticipants": "Додайте учасників",
-	"pages.rooms.participants.manageParticipants": "Керувати учасниками",
-	"pages.rooms.participants.removeParticipants": "Видалити учасника",
-	"pages.rooms.participants.participantTable.itemsPerPage":
-		"Записи на сторінку",
-	"pages.rooms.participants.roles.editor": "Редактор кімнати",
-	"pages.rooms.participants.roles.viewer": "Переглядач кімнати",
+	"pages.rooms.members.label": "Учасники",
+	"pages.rooms.members.add": "Додайте учасників",
+	"pages.rooms.members.manage": "Керувати учасниками",
+	"pages.rooms.members.remove": "Видалити учасника",
+	"pages.rooms.members.roles.editor": "Редактор кімнати",
+	"pages.rooms.members.roles.viewer": "Переглядач кімнати",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
