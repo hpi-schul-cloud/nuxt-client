@@ -12,8 +12,6 @@
 					<v-autocomplete
 						ref="autoCompleteSchool"
 						v-model="selectedSchool"
-						bg-color="white"
-						color="primary"
 						density="comfortable"
 						item-title="name"
 						item-value="id"
@@ -29,8 +27,6 @@
 						ref="autoCompleteRole"
 						v-model="selectedRole"
 						auto-select-first="exact"
-						bg-color="white"
-						color="primary"
 						density="comfortable"
 						item-title="name"
 						item-value="id"
@@ -45,11 +41,9 @@
 					<v-autocomplete
 						ref="autoCompleteUsers"
 						v-model="selectedUsers"
-						bg-color="white"
 						chips
 						clear-on-select
 						closable-chips
-						color="primary"
 						item-value="userId"
 						item-title="fullName"
 						multiple
