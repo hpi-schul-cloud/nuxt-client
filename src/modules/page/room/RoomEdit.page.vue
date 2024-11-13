@@ -15,10 +15,10 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { RoomForm } from "@feature-room";
 import { RoomUpdateParams } from "@/types/room/Room";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomEditState } from "@data-room";
+import { RoomForm } from "@feature-room";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, watch, ref } from "vue";
 import { useI18n } from "vue-i18n";
