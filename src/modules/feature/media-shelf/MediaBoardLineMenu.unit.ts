@@ -54,7 +54,7 @@ describe("MediaBoardLineMenu", () => {
 			expect(menuItems.length).toEqual(3);
 			expect(menuItems[0].text()).toEqual("common.actions.rename");
 			expect(menuItems[1].text()).toEqual("common.actions.pickColor");
-			expect(menuItems[2].text()).toEqual("common.actions.remove");
+			expect(menuItems[2].text()).toEqual("common.actions.delete");
 		});
 	});
 

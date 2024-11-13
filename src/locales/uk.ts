@@ -835,7 +835,7 @@ export default {
 	"feature-board-file-element.placeholder.uploadFile": "Cargar archivo",
 	"feature-course-sync.EndCourseSyncDialog.title": "Завершити синхронізацію",
 	"feature-course-sync.EndCourseSyncDialog.description":
-		"Чи дійсно слід завершити синхронізацію групи користувачів {groupName} у курсі {courseName}?",
+		"Чи дійсно слід припинити синхронізацію курсу {courseName} із групою користувачів {groupName}?",
 	"feature-course-sync.EndCourseSyncDialog.success":
 		"Синхронізацію успішно завершено",
 	"feature-course-sync.GroupSelectionDialog.title":
@@ -847,10 +847,12 @@ export default {
 		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
 		"Вибрана група користувачів буде синхронізована з вибраним курсом на наступному кроці.",
-	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.warning":
-		"Синхронізація з {systemName} перезаписує людей у курсі (викладачі та студенти).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning":
+		"Синхронізація перезаписує учасників курсу (призначених викладачів і студентів).",
+	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning":
+		"Синхронізація перезаписує учасників курсу (призначених студентів).",
 	"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text":
-		"Чи дійсно слід починати синхронізацію групи користувачів {groupName} у курсі {courseName}?",
+		"Чи справді курс {courseName} потрібно синхронізувати з групою користувачів {groupName}?",
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Групу користувачів успішно синхронізовано",
 	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
@@ -1662,6 +1664,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu": "Меню кімнати",
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
+	"pages.roomDetails.board.defaultName": "Космічна дошка",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.participant.error.load":
@@ -1669,9 +1672,9 @@ export default {
 	"pages.rooms.participant.error.add": "Не вдалося додати учасників.",
 	"pages.rooms.participant.error.delete": "Не вдалося видалити учасників.",
 	"pages.rooms.participant.delete.confirmation":
-		"Справді видалити {memberName} з кімнати?",
+		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
 	"pages.rooms.participant.infoText":
-		'Додайте учасників до кімнати. Вчителів з інших шкіл можна додавати, якщо вони активували видимість у центральному каталозі у власному профілі <a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">(більше інформації)</a>.',
+		'Додайте учасників до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">більше інформації</a>).',
 	"pages.rooms.participant.label": "Учасник",
 	"pages.rooms.participants.label": "Учасники",
 	"pages.rooms.participants.addParticipants": "Додайте учасників",
