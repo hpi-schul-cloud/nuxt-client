@@ -77,18 +77,18 @@ describe("@pages/RoomEdit.page.vue", () => {
 		expect(wrapper.vm).toBeDefined();
 	});
 
-	it("should have breadcrumbs prop in DefaultWireframe component", () => {
+	it("should have breadcrumbs prop in DefaultWireframe component", async () => {
 		const { wrapper } = setup();
 
-		// TODO execute watch?
+		await wrapper.vm.$nextTick();
 		const defaultWireframe = wrapper.findComponent({
 			name: "DefaultWireframe",
 		});
 		const breadcrumbsProp: Breadcrumb[] = defaultWireframe.props().breadcrumbs;
 		const breadcrumb = breadcrumbsProp.find(
-			(breadcrumb: Breadcrumb) => breadcrumb.to === `/rooms/${roomIdMock}`
+			(breadcrumb: Breadcrumb) => breadcrumb.title === roomDataMock.value.name
 		);
-		expect(breadcrumb).toBeDefined();
+		expect(breadcrumb?.to).toContain(roomIdMock);
 	});
 	it("should call updateRoom with correct parameters on save event", async () => {
 		const { updateRoom, roomFormComponent } = setup();
