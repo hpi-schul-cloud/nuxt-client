@@ -135,7 +135,7 @@
 	</div>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import { ToolApiAxiosParamCreator } from "@/serverApi/v3";
 import { RequestArgs } from "@/serverApi/v3/base";
 import AuthModule from "@/store/auth";
@@ -152,14 +152,7 @@ import {
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { RenderHTML } from "@feature-render-html";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
-import {
-	computed,
-	ComputedRef,
-	defineComponent,
-	onMounted,
-	Ref,
-	ref,
-} from "vue";
+import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
@@ -167,135 +160,107 @@ import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
 import EnvConfigModule from "@/store/env-config";
 
-export default defineComponent({
-	name: "ExternalToolSection",
-	components: { ExternalToolToolbar, RenderHTML },
-	setup() {
-		const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
-			SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
+const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
+	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
+);
+const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+
+const router = useRouter();
+
+onMounted(async () => {
+	if (authModule.getSchool) {
+		await schoolExternalToolsModule.loadSchoolExternalTools(
+			authModule.getSchool.id
 		);
-		const envConfigModule: EnvConfigModule = injectStrict(
-			ENV_CONFIG_MODULE_KEY
+	}
+});
+
+const { t } = useI18n();
+
+const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
+const { fetchSchoolExternalToolUsage, metadata } = useSchoolExternalToolUsage();
+
+const headers: DataTableHeader[] = getHeaders;
+
+const items: ComputedRef<SchoolExternalToolItem[]> = computed(() => {
+	return getItems(schoolExternalToolsModule);
+});
+
+const isLoading: ComputedRef<boolean> = computed(() => {
+	return schoolExternalToolsModule.getLoading;
+});
+
+const editTool = (item: SchoolExternalToolItem) => {
+	router.push({
+		name: "administration-tool-config-edit",
+		params: { configId: item.id },
+	});
+};
+
+const showDatasheet = async (item: SchoolExternalToolItem) => {
+	const requestArgs: RequestArgs =
+		await ToolApiAxiosParamCreator().toolControllerGetDatasheet(
+			item.externalToolId
 		);
-		const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-		const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
-		const router = useRouter();
+	window.open("/api/v3" + requestArgs.url);
+};
 
-		onMounted(async () => {
-			if (authModule.getSchool) {
-				await schoolExternalToolsModule.loadSchoolExternalTools(
-					authModule.getSchool.id
-				);
-			}
+const onDeleteTool = async () => {
+	if (itemToDelete.value) {
+		await schoolExternalToolsModule.deleteSchoolExternalTool(
+			itemToDelete.value.id
+		);
+	}
+
+	notifierModule.show({
+		text: t(
+			"components.administration.externalToolsSection.notification.deleted"
+		),
+		status: "success",
+	});
+
+	onCloseDeleteDialog();
+};
+
+const itemToDelete: Ref<SchoolExternalToolItem | undefined> = ref();
+const getItemName: ComputedRef<string> = computed(() => {
+	return itemToDelete.value ? itemToDelete.value?.name : "";
+});
+
+const isDeleteDialogOpen: Ref<boolean> = ref(false);
+
+const openDeleteDialog = async (item: SchoolExternalToolItem) => {
+	itemToDelete.value = item;
+	isDeleteDialogOpen.value = true;
+	await fetchSchoolExternalToolUsage(item.id);
+
+	if (!metadata.value) {
+		notifierModule.show({
+			text: t(
+				"components.administration.externalToolsSection.dialog.content.metadata.error"
+			),
+			status: "error",
 		});
+	}
+};
 
-		const { t } = useI18n();
+const onCloseDeleteDialog = () => {
+	itemToDelete.value = undefined;
 
-		const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
-		const { fetchSchoolExternalToolUsage, metadata } =
-			useSchoolExternalToolUsage();
+	isDeleteDialogOpen.value = false;
+};
 
-		const headers: DataTableHeader[] = getHeaders;
-
-		const items: ComputedRef<SchoolExternalToolItem[]> = computed(() => {
-			return getItems(schoolExternalToolsModule);
-		});
-
-		const isLoading: ComputedRef<boolean> = computed(() => {
-			return schoolExternalToolsModule.getLoading;
-		});
-
-		const editTool = (item: SchoolExternalToolItem) => {
-			router.push({
-				name: "administration-tool-config-edit",
-				params: { configId: item.id },
-			});
-		};
-
-		const showDatasheet = async (item: SchoolExternalToolItem) => {
-			const requestArgs: RequestArgs =
-				await ToolApiAxiosParamCreator().toolControllerGetDatasheet(
-					item.externalToolId
-				);
-
-			window.open("/api/v3" + requestArgs.url);
-		};
-
-		const onDeleteTool = async () => {
-			if (itemToDelete.value) {
-				await schoolExternalToolsModule.deleteSchoolExternalTool(
-					itemToDelete.value.id
-				);
-			}
-
-			notifierModule.show({
-				text: t(
-					"components.administration.externalToolsSection.notification.deleted"
-				),
-				status: "success",
-			});
-
-			onCloseDeleteDialog();
-		};
-
-		const itemToDelete: Ref<SchoolExternalToolItem | undefined> = ref();
-		const getItemName: ComputedRef<string> = computed(() => {
-			return itemToDelete.value ? itemToDelete.value?.name : "";
-		});
-
-		const isDeleteDialogOpen: Ref<boolean> = ref(false);
-
-		const openDeleteDialog = async (item: SchoolExternalToolItem) => {
-			itemToDelete.value = item;
-			isDeleteDialogOpen.value = true;
-			await fetchSchoolExternalToolUsage(item.id);
-
-			if (!metadata.value) {
-				notifierModule.show({
-					text: t(
-						"components.administration.externalToolsSection.dialog.content.metadata.error"
-					),
-					status: "error",
-				});
-			}
-		};
-
-		const onCloseDeleteDialog = () => {
-			itemToDelete.value = undefined;
-
-			isDeleteDialogOpen.value = false;
-		};
-
-		const isMediaBoardUsageVisible: ComputedRef<boolean> = computed(() => {
-			if (!metadata.value) {
-				return false;
-			}
-			const isVisible =
-				metadata.value.mediaBoard > 0 ||
-				envConfigModule.getEnv.FEATURE_MEDIA_SHELF_ENABLED;
-			return isVisible;
-		});
-
-		return {
-			t,
-			headers,
-			items,
-			isLoading,
-			editTool,
-			onDeleteTool,
-			showDatasheet,
-			isDeleteDialogOpen,
-			openDeleteDialog,
-			onCloseDeleteDialog,
-			itemToDelete,
-			getItemName,
-			mdiAlert,
-			mdiCheckCircle,
-			metadata,
-			isMediaBoardUsageVisible,
-		};
-	},
+const isMediaBoardUsageVisible: ComputedRef<boolean> = computed(() => {
+	if (!metadata.value) {
+		return false;
+	}
+	const isVisible =
+		metadata.value.mediaBoard > 0 ||
+		envConfigModule.getEnv.FEATURE_MEDIA_SHELF_ENABLED;
+	return isVisible;
 });
 </script>
 
