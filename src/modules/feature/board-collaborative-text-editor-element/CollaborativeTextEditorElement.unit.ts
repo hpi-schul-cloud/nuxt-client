@@ -15,6 +15,7 @@ import { nextTick } from "vue";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { setupCollaborativeTextEditorApiMock } from "./test-utils/collaborativeTextEditorApiMock";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 // Mocks
 jest.mock("@data-board", () => ({
@@ -28,10 +29,23 @@ jest.mock("./composables/CollaborativeTextEditorApi.composable");
 describe("CollaborativeTextEditorElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 
-	const setup = (props: { isEditMode: boolean; getUrlHasError?: boolean }) => {
+	const setup = (options?: {
+		getUrlHasError?: boolean;
+		isEditMode?: boolean;
+		isListBoard?: boolean;
+		windowWidth?: number;
+	}) => {
 		const element = collaborativeTextEditorElementResponseFactory.build();
 
-		const resolvedValue = props.getUrlHasError
+		const { isListBoard, windowWidth, getUrlHasError, isEditMode } = {
+			getUrlHasError: false,
+			isListBoard: false,
+			isEditMode: false,
+			windowWidth: 1280,
+			...options,
+		};
+
+		const resolvedValue = getUrlHasError
 			? undefined
 			: `${CollaborativeTextEditorParentType.ContentElement}/${element.id}`;
 		const getUrlMock = jest.fn().mockResolvedValueOnce(resolvedValue);
@@ -40,14 +54,21 @@ describe("CollaborativeTextEditorElement", () => {
 			getUrlMock,
 		});
 
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: windowWidth,
+		});
+
 		const wrapper = mount(CollaborativeTextEditorElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+					[BOARD_IS_LIST_LAYOUT as symbol]: isListBoard,
 				},
 			},
-			propsData: { ...props, element: element },
+			propsData: { isEditMode, element },
 		});
 
 		const windowMock = createMock<Window>();
@@ -323,5 +344,59 @@ describe("CollaborativeTextEditorElement", () => {
 				expect(wrapper.emitted("delete:element")).toBeTruthy();
 			});
 		});
+	});
+
+	describe("when board is a list board", () => {
+		it.each`
+			screenSize  | px
+			${"small"}  | ${600}
+			${"medium"} | ${960}
+			${"large"}  | ${1280}
+		`(
+			"content should have row style for $screenSize display sizes",
+			({ px: windowWidth }) => {
+				const { wrapper } = setup({
+					isListBoard: true,
+					windowWidth,
+				});
+
+				expect(wrapper.find(".content-element-bar").classes()).toContain(
+					"flex-row"
+				);
+			}
+		);
+
+		it("content should have column style when display size is smaller than 600px", () => {
+			const { wrapper } = setup({
+				isListBoard: true,
+				windowWidth: 599,
+			});
+
+			expect(wrapper.find(".content-element-bar").classes()).toContain(
+				"flex-column"
+			);
+		});
+	});
+
+	describe("when board is not a list board", () => {
+		it.each`
+			screenSize  | px
+			${"xs"}     | ${590}
+			${"small"}  | ${600}
+			${"medium"} | ${960}
+			${"large"}  | ${1280}
+		`(
+			"content should have column style for $screenSize display sizes",
+			({ px: windowWidth }) => {
+				const { wrapper } = setup({
+					isListBoard: false,
+					windowWidth,
+				});
+
+				expect(wrapper.find(".content-element-bar").classes()).toContain(
+					"flex-column"
+				);
+			}
+		);
 	});
 });
