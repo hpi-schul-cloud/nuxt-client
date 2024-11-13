@@ -1,4 +1,3 @@
-import value from "@/assets/img/tldraw.svg";
 import {
 	createTestingI18n,
 	createTestingVuetify,
