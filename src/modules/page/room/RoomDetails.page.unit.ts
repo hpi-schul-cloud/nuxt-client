@@ -49,6 +49,10 @@ jest.mock("pinia", () => ({
 	}),
 }));
 
+jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
+	buildPageTitle: (pageTitle) => pageTitle ?? "",
+}));
+
 describe("@pages/RoomsDetails.page.vue", () => {
 	const setup = () => {
 		const wrapper = mount(RoomDetailsPage, {
