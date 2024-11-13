@@ -88,6 +88,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 		const breadcrumb = breadcrumbsProp.find(
 			(breadcrumb: Breadcrumb) => breadcrumb.title === roomDataMock.value.name
 		);
+
 		expect(breadcrumb?.to).toContain(roomIdMock);
 	});
 	it("should call updateRoom with correct parameters on save event", async () => {
