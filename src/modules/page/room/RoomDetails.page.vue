@@ -36,14 +36,14 @@
 
 							<VListItem
 								role="menuitem"
-								:to="`/rooms/${room.id}/participants`"
-								:aria-label="t('pages.rooms.participants.manageParticipants')"
+								:to="`/rooms/${room.id}/members`"
+								:aria-label="t('pages.rooms.members.manage')"
 							>
 								<template #prepend>
 									<VIcon :icon="mdiAccountGroupOutline" />
 								</template>
 								<VListItemTitle>
-									{{ t("pages.rooms.participants.manageParticipants") }}
+									{{ t("pages.rooms.members.manage") }}
 								</VListItemTitle>
 							</VListItem>
 

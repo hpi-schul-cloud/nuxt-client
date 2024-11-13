@@ -2,7 +2,7 @@
 	<v-card>
 		<template v-slot:prepend>
 			<div ref="textTitle" class="text-h4 mt-2">
-				{{ t("pages.rooms.participants.addParticipants") }}
+				{{ t("pages.rooms.members.add") }}
 			</div>
 		</template>
 
@@ -12,8 +12,6 @@
 					<v-autocomplete
 						ref="autoCompleteSchool"
 						v-model="selectedSchool"
-						bg-color="white"
-						color="primary"
 						density="comfortable"
 						item-title="name"
 						item-value="id"
@@ -29,8 +27,6 @@
 						ref="autoCompleteRole"
 						v-model="selectedRole"
 						auto-select-first="exact"
-						bg-color="white"
-						color="primary"
 						density="comfortable"
 						item-title="name"
 						item-value="id"
@@ -45,16 +41,14 @@
 					<v-autocomplete
 						ref="autoCompleteUsers"
 						v-model="selectedUsers"
-						bg-color="white"
 						chips
 						clear-on-select
 						closable-chips
-						color="primary"
 						item-value="userId"
 						item-title="fullName"
 						multiple
 						variant="underlined"
-						:items="userList"
+						:items="memberList"
 						:label="t('common.labels.name')"
 						:no-data-text="t('common.nodata')"
 					/>
@@ -78,7 +72,7 @@
 					color="primary"
 					variant="flat"
 					:text="t('common.actions.add')"
-					@click="onAddParticipants"
+					@click="onAddMembers"
 				/>
 			</div>
 		</template>
@@ -89,11 +83,11 @@
 import { useI18n } from "vue-i18n";
 import { PropType, ref, toRef } from "vue";
 import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
-import { ParticipantType } from "@data-room";
+import { RoomMember } from "@data-room";
 
 const props = defineProps({
-	userList: {
-		type: Array as PropType<ParticipantType[]>,
+	memberList: {
+		type: Array as PropType<RoomMember[]>,
 	},
 	schools: {
 		type: Array as PropType<SchoolForExternalInviteResponse[]>,
@@ -101,7 +95,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["add:participants", "close", "update:role"]);
+const emit = defineEmits(["add:members", "close", "update:role"]);
 const { t } = useI18n();
 const schoolList = toRef(props, "schools");
 const selectedSchool = ref(schoolList.value[0].id);
@@ -124,8 +118,8 @@ const onSchoolChange = () => {
 	onRoleChange();
 };
 
-const onAddParticipants = () => {
-	emit("add:participants", selectedUsers.value);
+const onAddMembers = () => {
+	emit("add:members", selectedUsers.value);
 	emit("close");
 };
 

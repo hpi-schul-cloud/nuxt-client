@@ -1691,23 +1691,20 @@ export default {
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
 	"pages.rooms.fab.title": "Crear sala",
-	"pages.rooms.participant.error.load":
+	"pages.rooms.members.error.load":
 		"No se pudo cargar la lista de participantes.",
-	"pages.rooms.participant.error.add": "Error al agregar participantes.",
-	"pages.rooms.participant.error.delete": "Error al eliminar participantes.",
-	"pages.rooms.participant.delete.confirmation":
+	"pages.rooms.members.error.add": "Error al agregar participantes.",
+	"pages.rooms.members.error.remove": "Error al eliminar participantes.",
+	"pages.rooms.members.remove.confirmation":
 		"¿Eliminar {memberName} de la sala?",
-	"pages.rooms.participant.infoText":
+	"pages.rooms.members.infoText":
 		'Añadir participantes a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">más información</a>).',
-	"pages.rooms.participant.label": "Partícipe",
-	"pages.rooms.participants.label": "Participantes",
-	"pages.rooms.participants.addParticipants": "Añadir participantes",
-	"pages.rooms.participants.manageParticipants": "Administrar participantes",
-	"pages.rooms.participants.removeParticipants": "Eliminar participante",
-	"pages.rooms.participants.participantTable.itemsPerPage":
-		"Entradas por página",
-	"pages.rooms.participants.roles.editor": "Editor de salas",
-	"pages.rooms.participants.roles.viewer": "Visor de salas",
+	"pages.rooms.members.label": "Participantes",
+	"pages.rooms.members.add": "Añadir participantes",
+	"pages.rooms.members.manage": "Administrar participantes",
+	"pages.rooms.members.remove": "Eliminar participante",
+	"pages.rooms.members.roles.editor": "Editor de salas",
+	"pages.rooms.members.roles.viewer": "Visor de salas",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
