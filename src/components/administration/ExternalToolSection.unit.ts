@@ -483,8 +483,8 @@ describe("ExternalToolSection", () => {
 
 			it("should display dialogs for course tools and boards", async () => {
 				const { wrapper, schoolExternalToolMetadata } = setup();
-				const expectedCourseDialog = `${schoolExternalToolMetadata.course} common.tool.context.type.courses`;
-				const expectedBoardDialog = `${schoolExternalToolMetadata.boardElement} common.tool.context.type.boardElements`;
+				const expectedCourseDialog = `common.tool.context.type.courses (${schoolExternalToolMetadata.course})`;
+				const expectedBoardDialog = `common.tool.context.type.boardElements (${schoolExternalToolMetadata.boardElement})`;
 
 				const tableRows = wrapper.find("tbody").findAll("tr");
 				const deleteButton = tableRows[0].get('[data-testid="deleteAction"]');
@@ -578,7 +578,7 @@ describe("ExternalToolSection", () => {
 					}
 				);
 
-				const expectedDialogText = `${metadata.mediaBoard} common.tool.context.type.mediaShelves`;
+				const expectedDialogText = `common.tool.context.type.mediaShelves (${metadata.mediaBoard})`;
 
 				return {
 					wrapper,
@@ -683,7 +683,7 @@ describe("ExternalToolSection", () => {
 					}
 				);
 
-				const expectedDialogText = `${metadata.mediaBoard} common.tool.context.type.mediaShelves`;
+				const expectedDialogText = `common.tool.context.type.mediaShelves (${metadata.mediaBoard})`;
 
 				return {
 					wrapper,

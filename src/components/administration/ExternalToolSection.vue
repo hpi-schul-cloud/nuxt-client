@@ -81,23 +81,23 @@
 						component="p"
 					/>
 					<p data-testid="delete-dialog-content-courses" class="text-md mb-0">
-						<b>{{ metadata.course }}</b>
 						{{ t("common.tool.context.type.courses") }}
+						<b>({{ metadata.course }})</b>
 					</p>
 					<p
 						data-testid="delete-dialog-content-board-elements"
 						:class="isMediaBoardUsageVisible ? 'text-md mb-0' : 'text-md'"
 					>
-						<b>{{ metadata.boardElement }}</b>
 						{{ t("common.tool.context.type.boardElements") }}
+						<b>({{ metadata.boardElement }})</b>
 					</p>
 					<p
 						v-if="isMediaBoardUsageVisible"
 						data-testid="delete-dialog-content-media-shelves"
 						class="text-md"
 					>
-						<b>{{ metadata.mediaBoard }}</b>
 						{{ t("common.tool.context.type.mediaShelves") }}
+						<b>({{ metadata.mediaBoard }})</b>
 					</p>
 					<RenderHTML
 						data-testid="delete-dialog-content-media-warning"
