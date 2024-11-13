@@ -5,4 +5,5 @@ export type ToolLaunchRequest = {
 	url: string;
 	payload?: string;
 	openNewTab?: boolean;
+	isDeepLink: boolean;
 };
