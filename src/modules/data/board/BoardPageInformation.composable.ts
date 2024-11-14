@@ -69,12 +69,17 @@ const useBoardPageInformation = () => {
 		boardContext.value = await getContextInfo(id);
 	};
 
+	const resetPageInformation = (): void => {
+		boardContext.value = undefined;
+	};
+
 	return {
 		createPageInformation,
 		breadcrumbs,
 		contextType,
 		pageTitle,
 		roomId,
+		resetPageInformation,
 	};
 };
 

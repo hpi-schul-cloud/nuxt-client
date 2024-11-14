@@ -152,7 +152,8 @@ const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
-const { createPageInformation, roomId } = useSharedBoardPageInformation();
+const { createPageInformation, roomId, resetPageInformation } =
+	useSharedBoardPageInformation();
 const { createApplicationError } = useApplicationError();
 
 watch(board, async () => {
@@ -274,6 +275,7 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 };
 
 onMounted(() => {
+	resetPageInformation();
 	setAlert();
 	useBoardInactivity();
 	boardStore.fetchBoardRequest({ boardId: props.boardId });
