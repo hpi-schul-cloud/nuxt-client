@@ -1,9 +1,20 @@
+import { RoomColor, RoomDetailsResponse } from "@/serverApi/v3";
+import { RoomDetails } from "@/types/room/Room";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { RoomVariant } from "@data-room";
 import { RoomDetailsPage } from "@page-room";
 import { storeToRefs } from "pinia";
+
+const roomDataMock: RoomDetailsResponse = {
+	id: "test-123",
+	name: "Test room",
+	color: "blue" as RoomColor,
+	createdAt: new Date().toISOString(),
+	updatedAt: new Date().toISOString(),
+};
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -23,14 +34,18 @@ jest.mock("@/utils/inject", () => ({
 		};
 	}),
 }));
-// const mockRoomDetailsStore = {
-// 	deactivateRoom: jest.fn(),
-// 	fetchRoom: jest.fn(),
-// 	resetState: jest.fn(),
-// };
 
 jest.mock("@data-room", () => ({
 	useRoomDetailsStore: jest.fn().mockReturnValue({
+		isLoading: false,
+		room: {
+			id: "test-123",
+			name: "Test room",
+			color: "blue",
+			createdAt: new Date().toISOString(),
+			updatedAt: new Date().toISOString(),
+		},
+		roomVariant: "room" as RoomVariant,
 		deactivateRoom: jest.fn(),
 		fetchRoom: jest.fn(),
 		resetState: jest.fn(),
@@ -42,10 +57,16 @@ jest.mock("@data-room", () => ({
 
 jest.mock("pinia", () => ({
 	storeToRefs: jest.fn().mockReturnValue({
-		isLoading: jest.fn(),
-		room: jest.fn(),
-		roomVariant: jest.fn(),
-		roomBoards: jest.fn(),
+		isLoading: false,
+		room: {
+			id: "test-123",
+			name: "Test room",
+			color: "blue" as RoomColor,
+			createdAt: new Date().toISOString(),
+			updatedAt: new Date().toISOString(),
+		},
+		roomVariant: "room" as RoomVariant,
+		roomBoards: [],
 	}),
 }));
 
@@ -59,6 +80,11 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			shallow: true,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				mocks: {
+					roomVariant: {
+						value: "room" as RoomVariant,
+					},
+				},
 			},
 		});
 
@@ -70,4 +96,16 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		const { wrapper } = setup();
 		expect(wrapper.vm).toBeDefined();
 	});
+	// it("should not render roomForm as component is loading  ", async () => {
+	// 	(storeToRefs as jest.Mock).mockReturnValueOnce({
+	// 		isLoading: false,
+	// 		room: jest.fn(),
+	// 		roomVariant: jest.fn(),
+	// 		roomBoards: jest.fn(),
+	// 	});
+
+	// 	const { wrapper } = setup();
+	// 	console.log(wrapper.html());
+	// 	expect(wrapper.vm).toBeDefined();
+	// });
 });
