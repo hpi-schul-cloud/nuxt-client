@@ -6,7 +6,7 @@
 		@fab:clicked="onFabClick"
 	>
 		<template #header>
-			<h1 class="text-h3 mb-4">
+			<h1 class="text-h3 mb-4" data-testid="room-title">
 				{{ t("pages.rooms.members.manage") }}
 			</h1>
 		</template>
