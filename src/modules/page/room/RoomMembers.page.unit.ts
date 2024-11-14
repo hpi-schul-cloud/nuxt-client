@@ -173,7 +173,7 @@ describe("RoomMembersPage", () => {
 
 				expect(mockUseMembersCalls.getSchools).toHaveBeenCalled();
 				expect(mockUseMembersCalls.getPotentialMembers).toHaveBeenCalledWith({
-					role: RoleName.RoomEditor,
+					role: RoleName.Roomeditor,
 				});
 			});
 		});

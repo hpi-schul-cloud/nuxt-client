@@ -14,11 +14,13 @@
 							{{ room.name }}
 						</h1>
 						<KebabMenu
+							v-if="canModifyBoard"
 							class="mx-2"
 							:aria-label="$t('pages.roomDetails.ariaLabels.menu')"
 							data-testid="room-menu"
 						>
 							<VListItem
+								v-if="canEditBoard"
 								role="menuitem"
 								:to="`/rooms/${room.id}/edit`"
 								data-testid="room-action-edit"
@@ -35,6 +37,7 @@
 							</VListItem>
 
 							<VListItem
+								v-if="canEditBoard"
 								role="menuitem"
 								:to="`/rooms/${room.id}/members`"
 								:aria-label="t('pages.rooms.members.manage')"
@@ -48,12 +51,13 @@
 							</VListItem>
 
 							<VListItem
+								v-if="canDeleteBoard"
 								role="menuitem"
 								data-testid="room-action-delete"
 								:aria-label="
 									$t('pages.roomDetails.ariaLabels.menu.action.delete')
 								"
-								@click="onDelete"
+								@click="deleteBoard"
 							>
 								<template v-slot:prepend>
 									<VIcon :icon="mdiTrashCanOutline" />
@@ -85,14 +89,10 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { RoomDetails } from "@feature-room";
+import { RoomDetails, useRoomAuthorization } from "@feature-room";
 import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
@@ -119,12 +119,10 @@ import {
 	BoardLayout,
 	BoardParentType,
 	CreateBoardBodyParams,
-	ImportUserResponseRoleNamesEnum as Roles,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-const authModule = injectStrict(AUTH_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -163,31 +161,14 @@ const boardLayoutsEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
 );
 
+const { canCreateBoard, canEditBoard, canDeleteBoard, canModifyBoard } =
+	useRoomAuthorization(room);
+
 const boardLayoutDialogIsOpen = ref(false);
-
-const createBoard = async (layout: BoardLayout) => {
-	if (!room.value) return;
-
-	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
-
-	const params: CreateBoardBodyParams = {
-		title: t("pages.roomDetails.board.defaultName"),
-		parentId: room.value.id,
-		parentType: BoardParentType.Room,
-		layout,
-	};
-	const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;
-
-	router.push(`/boards/${boardId}`);
-};
 
 const fabItems = computed(() => {
 	const actions = [];
-	// TODO refine permissions
-	if (
-		authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase()) &&
-		authModule.getUserRoles.includes(Roles.Teacher)
-	) {
+	if (canCreateBoard.value) {
 		if (boardLayoutsEnabled.value) {
 			actions.push({
 				label: t("pages.courseRoomDetails.fab.add.board"),
@@ -240,8 +221,24 @@ watch(
 
 const isRoom = computed(() => roomVariant.value === RoomVariant.ROOM);
 
-const onDelete = async () => {
-	if (!room.value) return;
+const createBoard = async (layout: BoardLayout) => {
+	if (!room.value || !canCreateBoard.value) return;
+
+	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
+
+	const params: CreateBoardBodyParams = {
+		title: t("pages.roomDetails.board.defaultName"),
+		parentId: room.value.id,
+		parentType: BoardParentType.Room,
+		layout,
+	};
+	const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;
+
+	router.push(`/boards/${boardId}`);
+};
+
+const deleteBoard = async () => {
+	if (!room.value || !canDeleteBoard.value) return;
 
 	const shouldDelete = await askDeleteConfirmation(
 		room.value.name,

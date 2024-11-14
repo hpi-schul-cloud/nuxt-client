@@ -128,7 +128,14 @@ import { useTouchDetection } from "@util-device-detection";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, onMounted, onUnmounted, provide, watch } from "vue";
+import {
+	computed,
+	onMounted,
+	onUnmounted,
+	PropType,
+	provide,
+	watch,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import AddElementDialog from "../shared/AddElementDialog.vue";
@@ -139,10 +146,11 @@ import BoardHeader from "./BoardHeader.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
 import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 
 const props = defineProps({
 	boardId: { type: String, required: true },
-	breadcrumbs: { type: Array, default: () => [] },
+	breadcrumbs: { type: Array as PropType<Breadcrumb[]>, default: () => [] },
 });
 
 const { t } = useI18n();

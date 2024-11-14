@@ -141,7 +141,7 @@ describe("useRoomMembers", () => {
 					...user,
 					userId: user.id,
 					fullName: `${user.lastName}, ${user.firstName}`,
-					roleName: RoleName.RoomEditor,
+					roleName: RoleName.Roomeditor,
 					schoolName: "Paul-Gerhardt-Gymnasium",
 				}))
 			);
