@@ -45,13 +45,13 @@ describe("@pages/RoomCreate.page.vue", () => {
 		});
 
 		const { createRoom } = useRoomCreateState();
-		const roomComponent = wrapper.findComponent(RoomForm);
+		const roomFormComponent = wrapper.findComponent(RoomForm);
 
 		return {
 			wrapper,
 			router: useRouter(),
 			createRoom,
-			roomComponent,
+			roomFormComponent,
 		};
 	};
 
@@ -59,22 +59,26 @@ describe("@pages/RoomCreate.page.vue", () => {
 		const { wrapper } = setup();
 		expect(wrapper.vm).toBeDefined();
 	});
+	it("should have roomFormComponent", () => {
+		const { roomFormComponent } = setup();
+		expect(roomFormComponent).toBeDefined();
+	});
 	it("should call createRoom with correct parameters on save", async () => {
-		const { createRoom, roomComponent } = setup();
-		roomComponent.vm.$emit("save", roomParams);
+		const { createRoom, roomFormComponent } = setup();
+		roomFormComponent.vm.$emit("save", roomParams);
 		expect(createRoom).toHaveBeenCalledWith(roomParams);
 	});
 	it("should navigate to 'room-details' with correct room id on save", async () => {
-		const { roomComponent, router } = setup();
-		roomComponent.vm.$emit("save", roomParams);
+		const { roomFormComponent, router } = setup();
+		roomFormComponent.vm.$emit("save", roomParams);
 		expect(router.push).toHaveBeenCalledWith({
 			name: "room-details",
 			params: { id: "123" },
 		});
 	});
 	it("should navigate to 'rooms' on cancel", async () => {
-		const { router, roomComponent } = setup();
-		roomComponent.vm.$emit("cancel");
+		const { router, roomFormComponent } = setup();
+		roomFormComponent.vm.$emit("cancel");
 		expect(router.push).toHaveBeenCalledWith({ name: "rooms" });
 	});
 });

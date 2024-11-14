@@ -75,6 +75,10 @@ describe("@pages/RoomEdit.page.vue", () => {
 		const { wrapper } = setup();
 		expect(wrapper.vm).toBeDefined();
 	});
+	it("should have roomFormComponent", () => {
+		const { roomFormComponent } = setup();
+		expect(roomFormComponent).toBeDefined();
+	});
 
 	it("should have breadcrumbs prop in DefaultWireframe component", async () => {
 		const { wrapper } = setup();
@@ -137,6 +141,6 @@ describe("@pages/RoomEdit.page.vue", () => {
 		});
 
 		const { roomFormComponent } = setup();
-		expect(roomFormComponent.exists()).toBeFalsy();
+		expect(roomFormComponent.exists()).toEqual(false);
 	});
 });
