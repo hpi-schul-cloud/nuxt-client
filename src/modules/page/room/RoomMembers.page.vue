@@ -150,6 +150,6 @@ const fabAction = {
 	icon: mdiPlus,
 	title: t("pages.rooms.members.add"),
 	ariaLabel: t("pages.rooms.members.add"),
-	testId: "fab-add-members",
+	dataTestId: "fab-add-members",
 };
 </script>
