@@ -7,33 +7,33 @@
 	>
 		<template #header>
 			<h1 class="text-h3 mb-4">
-				{{ t("pages.rooms.participants.manageParticipants") }}
+				{{ t("pages.rooms.members.manage") }}
 			</h1>
 		</template>
 
 		<div class="mb-8 mt-12">
-			<RenderHTML :html="t('pages.rooms.participant.infoText')" />
+			<RenderHTML :html="t('pages.rooms.members.infoText')" />
 		</div>
 		<div class="mb-12">
-			<ParticipantsTable
+			<MembersTable
 				v-if="!isLoading"
-				:participants="participantsList"
-				@remove:participant="onRemoveParticipant"
+				:members="memberList"
+				@remove:member="onRemoveMember"
 			/>
 		</div>
 
 		<v-dialog
-			v-model="isParticipantsDialogOpen"
+			v-model="isMembersDialogOpen"
 			:width="xs ? 'auto' : 480"
 			persistent
 			max-width="480"
 			data-testid="dialog-add-participants"
 		>
-			<AddParticipants
-				:userList="potentialParticipants"
+			<AddMembers
+				:memberList="potentialRoomMembers"
 				:schools="schools"
 				@close="onDialogClose"
-				@add:participants="onAddParticipants"
+				@add:members="onAddMembers"
 				@update:role="onUpdateRoleOrSchool"
 			/>
 		</v-dialog>
@@ -49,14 +49,10 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import {
-	useRoomDetailsStore,
-	useParticipants,
-	ParticipantType,
-} from "@data-room";
+import { useRoomDetailsStore, useRoomMembers, RoomMember } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
-import { ParticipantsTable, AddParticipants } from "@feature-room";
+import { MembersTable, AddMembers } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import {
 	ConfirmationDialog,
@@ -70,27 +66,24 @@ const { t } = useI18n();
 const route = useRoute();
 const { xs } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
-const isParticipantsDialogOpen = ref(false);
+const isMembersDialogOpen = ref(false);
 const roomId = route.params.id.toString();
 const {
 	isLoading,
-	potentialParticipants,
-	participants,
+	potentialRoomMembers,
+	roomMembers,
 	schools,
-	addParticipants,
-	fetchParticipants,
-	getPotentialParticipants,
+	addMembers,
+	fetchMembers,
+	getPotentialMembers,
 	getSchools,
-	removeParticipants,
-} = useParticipants(roomId);
-
-const participantsList: Ref<RoomMemberResponse[]> = ref(participants);
-
+	removeMembers,
+} = useRoomMembers(roomId);
+const memberList: Ref<RoomMemberResponse[]> = ref(roomMembers);
 const pageTitle = computed(() =>
-	buildPageTitle(
-		`${room.value?.name} - ${t("pages.rooms.participants.manageParticipants")}`
-	)
+	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
+
 useTitle(pageTitle);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
@@ -110,29 +103,29 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const onFabClick = async () => {
 	await getSchools();
-	await getPotentialParticipants({ role: RoleName.RoomEditor });
-	isParticipantsDialogOpen.value = true;
+	await getPotentialMembers({ role: RoleName.RoomEditor });
+	isMembersDialogOpen.value = true;
 };
 
 const onDialogClose = () => {
-	isParticipantsDialogOpen.value = false;
+	isMembersDialogOpen.value = false;
 };
 
-const onAddParticipants = async (participantIds: string[]) => {
-	await addParticipants(participantIds);
+const onAddMembers = async (memberIds: string[]) => {
+	await addMembers(memberIds);
 };
 
 const onUpdateRoleOrSchool = async (payload: {
 	role: RoleName;
 	schoolId: string;
 }) => {
-	await getPotentialParticipants(payload);
+	await getPotentialMembers(payload);
 };
 
-const onRemoveParticipant = async (participant: ParticipantType) => {
+const onRemoveMember = async (member: RoomMember) => {
 	const { askConfirmation } = useConfirmationDialog();
-	const message = t("pages.rooms.participant.delete.confirmation", {
-		memberName: `${participant.firstName} ${participant.lastName}`,
+	const message = t("pages.rooms.members.remove.confirmation", {
+		memberName: `${member.firstName} ${member.lastName}`,
 	});
 
 	const shouldDelete = await askConfirmation({
@@ -141,7 +134,7 @@ const onRemoveParticipant = async (participant: ParticipantType) => {
 	});
 
 	if (!shouldDelete) return;
-	await removeParticipants([participant.userId]);
+	await removeMembers([member.userId]);
 };
 
 onMounted(async () => {
@@ -150,13 +143,13 @@ onMounted(async () => {
 		console.log("Room store not found");
 		await fetchRoom(roomId);
 	}
-	await fetchParticipants();
+	await fetchMembers();
 });
 
 const fabAction = {
 	icon: mdiPlus,
-	title: t("pages.rooms.participants.addParticipants"),
-	ariaLabel: t("pages.rooms.participants.addParticipants"),
-	testId: "fab-add-participant",
+	title: t("pages.rooms.members.add"),
+	ariaLabel: t("pages.rooms.members.add"),
+	testId: "fab-add-members",
 };
 </script>

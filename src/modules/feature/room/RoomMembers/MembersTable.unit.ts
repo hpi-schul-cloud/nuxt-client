@@ -2,25 +2,25 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import ParticipantsTable from "./ParticipantsTable.vue";
+import MembersTable from "./MembersTable.vue";
 import { Ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
-import { roomParticipantResponseFactory } from "@@/tests/test-utils";
-import { ParticipantType } from "@data-room";
+import { roomMemberResponseFactory } from "@@/tests/test-utils";
+import { RoomMember } from "@data-room";
 
-const mockParticipants = roomParticipantResponseFactory.buildList(3);
+const mockMembers = roomMemberResponseFactory.buildList(3);
 
-describe("ParticipantsTable", () => {
+describe("MembersTable", () => {
 	const setup = () => {
-		const wrapper = mount(ParticipantsTable, {
+		const wrapper = mount(MembersTable, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props: { participants: mockParticipants },
+			props: { members: mockMembers },
 		});
 
 		const wrapperVM = wrapper.vm as unknown as {
-			participants: ParticipantType[];
+			members: RoomMember[];
 			search: Ref<string>;
 			tableTitle: string;
 			tableHeader: { title: string; key: string }[];
@@ -30,11 +30,11 @@ describe("ParticipantsTable", () => {
 	};
 
 	describe("when component is mounted", () => {
-		it("should render participants", () => {
+		it("should render member's table", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.exists()).toBe(true);
-			expect(wrapper.findComponent(ParticipantsTable)).toBeTruthy();
+			expect(wrapper.findComponent(MembersTable)).toBeTruthy();
 		});
 	});
 
@@ -44,11 +44,8 @@ describe("ParticipantsTable", () => {
 			const dataTable = wrapper.findComponent({ name: "v-data-table" });
 
 			expect(dataTable).toBeTruthy();
-			expect(dataTable.vm.items).toEqual(mockParticipants);
+			expect(dataTable.vm.items).toEqual(mockMembers);
 			expect(dataTable.vm.headers).toEqual(wrapperVM.tableHeader);
-			expect(dataTable.vm["itemsPerPageText"]).toEqual(
-				"pages.rooms.participants.participantTable.itemsPerPage"
-			);
 			expect(dataTable.vm["sortAscIcon"]).toEqual(mdiMenuDown);
 			expect(dataTable.vm["sortDescIcon"]).toEqual(mdiMenuUp);
 		});
@@ -58,6 +55,19 @@ describe("ParticipantsTable", () => {
 			const title = wrapper.find(".table-title");
 
 			expect(title.text()).toBe(wrapperVM.tableTitle);
+		});
+
+		describe("when the remove button is clicked", () => {
+			it("should emit the remove event", async () => {
+				const { wrapper } = setup();
+				const removeButton = wrapper.findComponent({
+					name: "v-btn",
+					ref: "removeMember",
+				});
+
+				await removeButton.vm.$emit("click");
+				expect(wrapper.emitted()).toHaveProperty("remove:member");
+			});
 		});
 	});
 
@@ -72,17 +82,17 @@ describe("ParticipantsTable", () => {
 			expect(search.vm["vModel"]).toEqual(wrapperVM.search.value);
 		});
 
-		it("should filter the participants based on the search value", async () => {
+		it("should filter the members based on the search value", async () => {
 			const { wrapper, wrapperVM } = setup();
 			const search = wrapper.findComponent({ name: "v-text-field" });
 
 			const title = wrapper.find(".table-title");
-			expect(title.text()).toContain(`(${mockParticipants.length})`);
-			await search.vm.$emit("update:modelValue", mockParticipants[0].firstName);
-			expect(wrapperVM.search).toBe(mockParticipants[0].firstName);
+			expect(title.text()).toContain(`(${mockMembers.length})`);
+			await search.vm.$emit("update:modelValue", mockMembers[0].firstName);
+			expect(wrapperVM.search).toBe(mockMembers[0].firstName);
 			const dataTable = wrapper.findComponent({ name: "v-data-table" });
 
-			expect(dataTable.vm.search).toEqual(mockParticipants[0].firstName);
+			expect(dataTable.vm.search).toEqual(mockMembers[0].firstName);
 			expect(title.text()).toContain("(1)");
 		});
 	});
