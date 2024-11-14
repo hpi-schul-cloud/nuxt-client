@@ -1,7 +1,9 @@
+import { RoomBoardItem, RoomDetails } from "@/types/room/Room";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 
@@ -28,25 +30,44 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
+interface RoomDetailsStore {
+	isLoading?: boolean;
+	room?: RoomDetails;
+	roomVariant?: RoomVariant;
+	roomBoards?: RoomBoardItem[];
+}
+
 describe("@pages/RoomsDetails.page.vue", () => {
-	const setup = () => {
+	const setup = (roomDetailsStore: RoomDetailsStore) => {
 		const wrapper = mount(RoomDetailsPage, {
 			shallow: true,
 			global: {
 				plugins: [
 					createTestingVuetify(),
 					createTestingI18n(),
-					createTestingPinia(),
+					createTestingPinia({
+						initialState: {
+							roomDetailsStore,
+						},
+					}),
 				],
 			},
 		});
 
+		const store = useRoomDetailsStore();
+
 		return {
 			wrapper,
+			store,
 		};
 	};
 	it("should be rendered in DOM", () => {
-		const { wrapper } = setup();
+		const { wrapper } = setup({});
 		expect(wrapper.vm).toBeDefined();
+	});
+	it("should render just an empty div when isLoading is true", () => {
+		const { wrapper } = setup({ isLoading: true });
+		const div = wrapper.find("div");
+		expect(div.element.children.length).toBe(0);
 	});
 });
