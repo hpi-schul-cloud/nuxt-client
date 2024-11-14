@@ -271,12 +271,6 @@ export default {
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
 	"components.administration.externalToolsSection.dialog.content.header":
 		"Sind Sie sich sicher, dass Sie das Tool <b>{itemName}</b> löschen wollen? </br></br>Zurzeit wird das Tool wie folgt genutzt:",
-	"components.administration.externalToolsSection.dialog.content.courses":
-		"<b>{courseCount}</b> Kurs(e)",
-	"components.administration.externalToolsSection.dialog.content.boardElements":
-		"<b>{boardElementCount}</b> Bereich(e)",
-	"components.administration.externalToolsSection.dialog.content.mediaShelves":
-		"<b>{mediaBoardCount}</b> Medienregal(e)",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Achtung: Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
 	"components.administration.externalToolsSection.dialog.title":

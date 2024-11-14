@@ -274,12 +274,6 @@ export default {
 		"Неможливо визначити використання інструменту.",
 	"components.administration.externalToolsSection.dialog.content.header":
 		"Ви впевнені, що хочете видалити інструмент <b>{itemName}</b>? <br><br>Наразі інструмент використовується таким чином:",
-	"components.administration.externalToolsSection.dialog.content.courses":
-		"<b>{courseCount}</b> Курс(и)",
-	"components.administration.externalToolsSection.dialog.content.boardElements":
-		"<b>{boardElementCount}</b> Дошка(и) стовпців",
-	"components.administration.externalToolsSection.dialog.content.mediaShelves":
-		"<b>{mediaBoardCount}</b> Медіаполичка(и)",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
 	"components.administration.externalToolsSection.dialog.title":
