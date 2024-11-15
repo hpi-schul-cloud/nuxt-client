@@ -1,1 +1,1 @@
-export * from "./roomParticipantsFactory";
+export * from "./roomMembersFactory";
