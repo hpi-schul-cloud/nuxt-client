@@ -79,6 +79,8 @@ export const useErrorHandler = () => {
 		const handlerFunction = mergedErrorMap[responseError.code];
 		if (handlerFunction) {
 			handlerFunction(responseError);
+		} else {
+			console.error(error);
 		}
 	};
 
