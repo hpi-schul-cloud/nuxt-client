@@ -84,6 +84,12 @@ export default {
 		},
 	},
 	created() {
+		if (!componentDictionary[this.type]) {
+			console.error(
+				`invalid prop type ${this.type}:\n` +
+					`$attrs ${JSON.stringify(this.$attrs)}`
+			);
+		}
 		this.validationObject = this.validationModel;
 	},
 	methods: {
