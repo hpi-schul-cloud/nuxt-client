@@ -39,10 +39,10 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
-const roomName = "test-room";
+const mockRoomName = "test-room";
 const mockRoomDetails = {
 	id: "test-123",
-	name: roomName,
+	name: mockRoomName,
 	color: RoomColor.Blue,
 	createdAt: new Date().toDateString(),
 	updatedAt: new Date().toDateString(),
@@ -116,6 +116,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			room: mockRoomDetails,
 		});
 		const roomDetailsComponent = wrapper.findComponent(RoomDetailsPage);
-		expect(roomDetailsComponent.vm.room).toEqual(room);
+		expect(roomDetailsComponent.vm.room).toEqual(mockRoomDetails);
 	});
 });
