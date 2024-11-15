@@ -55,10 +55,6 @@ describe("@pages/RoomCreate.page.vue", () => {
 		};
 	};
 
-	it("should be rendered in DOM", () => {
-		const { wrapper } = setup();
-		expect(wrapper.vm).toBeDefined();
-	});
 	it("should have roomFormComponent", () => {
 		const { roomFormComponent } = setup();
 		expect(roomFormComponent).toBeDefined();
