@@ -15,7 +15,7 @@ jest.mock("vue-router", () => ({
 	}),
 }));
 
-jest.mock("@data-room", () => ({
+jest.mock("@data-room/RoomCreate.state.ts", () => ({
 	useRoomCreateState: jest.fn().mockReturnValue({
 		createRoom: jest.fn().mockResolvedValue({
 			id: "123",
