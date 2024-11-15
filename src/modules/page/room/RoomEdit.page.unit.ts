@@ -9,6 +9,7 @@ import { useRoute, useRouter } from "vue-router";
 import { RoomUpdateParams } from "@/types/room/Room";
 import { RoomColor } from "@/serverApi/v3";
 import { RoomForm } from "@feature-room";
+import { nextTick } from "vue";
 
 const roomIdMock = "test-1234";
 
@@ -83,7 +84,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 	it("should have breadcrumbs prop in DefaultWireframe component", async () => {
 		const { wrapper } = setup();
 
-		await wrapper.vm.$nextTick();
+		await nextTick();
 		const defaultWireframe = wrapper.findComponent({
 			name: "DefaultWireframe",
 		});

@@ -1,5 +1,10 @@
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomColor } from "@/serverApi/v3";
+import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import EnvConfigModule from "@/store/env-config";
 import { RoomBoardItem, RoomDetails } from "@/types/room/Room";
+import { envsFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -7,6 +12,16 @@ import {
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
+import AuthModule from "@/store/auth";
+
+const envs = envsFactory.build();
+const envConfigModule = createModuleMocks(EnvConfigModule, {
+	getEnv: envs,
+});
+const authModule = createModuleMocks(AuthModule, {
+	getUserPermissions: ["course_edit", "course_create", "course_remove"],
+	getUserRoles: ["teacher"],
+});
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -16,14 +31,6 @@ jest.mock("vue-router", () => ({
 		params: {
 			id: "test-123",
 		},
-	}),
-}));
-
-jest.mock("@/utils/inject", () => ({
-	injectStrict: jest.fn().mockImplementation(() => {
-		return {
-			getEnv: jest.fn().mockReturnValue(true),
-		};
 	}),
 }));
 
@@ -52,6 +59,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						},
 					}),
 				],
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
+				},
 			},
 		});
 
@@ -71,20 +82,29 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		const div = wrapper.find("div");
 		expect(div.element.children.length).toBe(0);
 	});
-	// it("should render RoomDetails component when isLoading is false", () => {
-	// 	const { wrapper } = setup({
-	// 		isLoading: false,
-	// 		room: {
-	// 			id: "test-123",
-	// 			name: "test",
-	// 			color: RoomColor.Blue,
-	// 			createdAt: "2021-01-01T00:00:00.000Z",
-	// 			updatedAt: "2021-01-01T00:00:00.000Z",
-	// 		},
-	// 		roomVariant: RoomVariant.ROOM,
-	// 		roomBoards: [],
-	// 	});
-	// 	console.log(wrapper.html());
-	// 	expect(wrapper.exists()).toBe(true);
-	// });
+	it("should render DefaultWireframe if roomVariant is valid", () => {
+		const { wrapper } = setup({
+			isLoading: false,
+			roomVariant: RoomVariant.ROOM,
+		});
+		const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+		expect(defaultWireframe).toBeDefined();
+	});
+	it("", () => {
+		const roomName = "test-room";
+		const room = {
+			id: "test-123",
+			name: roomName,
+			color: RoomColor.Blue,
+			createdAt: new Date().toDateString(),
+			updatedAt: new Date().toDateString(),
+		};
+		const { wrapper } = setup({
+			isLoading: false,
+			roomVariant: RoomVariant.ROOM,
+			room,
+		});
+		const roomDetailsComponent = wrapper.findComponent(RoomDetailsPage);
+		expect(roomDetailsComponent.vm.room).toEqual(room);
+	});
 });
