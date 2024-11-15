@@ -20,6 +20,7 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
+import { CommonCartridgeApiFactory } from "@/commonCartridgeApi/v3";
 
 @Module({
 	name: "courseRoomDetailsModule",
@@ -199,11 +200,11 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const response = await CoursesApiFactory(
+			const response = await CommonCartridgeApiFactory(
 				undefined,
 				"v3",
 				$axios
-			).courseControllerExportCourse(
+			).commonCartridgeControllerExportCourseToCommonCartridge(
 				this.roomData.roomId,
 				exportSettings.version,
 				{
@@ -215,6 +216,22 @@ export default class CourseRoomDetailsModule extends VuexModule {
 					responseType: "blob",
 				}
 			);
+			// const response = await CoursesApiFactory(
+			// 	undefined,
+			// 	"v3",
+			// 	$axios
+			// ).courseControllerExportCourse(
+			// 	this.roomData.roomId,
+			// 	exportSettings.version,
+			// 	{
+			// 		topics: exportSettings.topics,
+			// 		tasks: exportSettings.tasks,
+			// 		columnBoards: exportSettings.columnBoards,
+			// 	},
+			// 	{
+			// 		responseType: "blob",
+			// 	}
+			// );
 			const link = document.createElement("a");
 			link.href = URL.createObjectURL(
 				new Blob([response.data as unknown as Blob])
