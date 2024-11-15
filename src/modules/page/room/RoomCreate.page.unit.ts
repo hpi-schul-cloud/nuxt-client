@@ -22,8 +22,11 @@ jest.mock("@data-room", () => ({
 			name: "test",
 			color: "blue",
 		}),
+		roomData: {
+			name: "test-room-data",
+			color: "blue",
+		},
 	}),
-	roomData: {},
 }));
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
