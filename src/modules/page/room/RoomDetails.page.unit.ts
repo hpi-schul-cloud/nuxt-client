@@ -1,3 +1,4 @@
+import { RoomColor } from "@/serverApi/v3";
 import { RoomBoardItem, RoomDetails } from "@/types/room/Room";
 import {
 	createTestingI18n,
@@ -70,4 +71,20 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		const div = wrapper.find("div");
 		expect(div.element.children.length).toBe(0);
 	});
+	// it("should render RoomDetails component when isLoading is false", () => {
+	// 	const { wrapper } = setup({
+	// 		isLoading: false,
+	// 		room: {
+	// 			id: "test-123",
+	// 			name: "test",
+	// 			color: RoomColor.Blue,
+	// 			createdAt: "2021-01-01T00:00:00.000Z",
+	// 			updatedAt: "2021-01-01T00:00:00.000Z",
+	// 		},
+	// 		roomVariant: RoomVariant.ROOM,
+	// 		roomBoards: [],
+	// 	});
+	// 	console.log(wrapper.html());
+	// 	expect(wrapper.exists()).toBe(true);
+	// });
 });
