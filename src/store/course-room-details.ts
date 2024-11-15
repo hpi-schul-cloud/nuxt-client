@@ -204,7 +204,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 				undefined,
 				"v3",
 				$axios
-			).commonCartridgeControllerExportCourseToCommonCartridge(
+			).commonCartridgeControllerExportCourse(
 				this.roomData.roomId,
 				exportSettings.version,
 				{
