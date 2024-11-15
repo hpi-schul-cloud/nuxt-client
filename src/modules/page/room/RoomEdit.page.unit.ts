@@ -73,7 +73,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 	it("should be rendered in DOM", () => {
 		const { wrapper } = setup();
-		expect(wrapper.vm).toBeDefined();
+		expect(wrapper.exists()).toBe(true);
 	});
 	it("should have roomFormComponent", () => {
 		const { roomFormComponent } = setup();
