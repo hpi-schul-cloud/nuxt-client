@@ -134,7 +134,6 @@ const onMoveColumnKeyboard = (event: KeyboardEvent) => {
 };
 
 const emitIfNotListBoard = (event: string) => {
-	console.log("emitIfNotListBoard", emit);
 	if (!props.isListBoard) {
 		emit(event);
 	}

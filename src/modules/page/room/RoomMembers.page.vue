@@ -139,7 +139,6 @@ const onRemoveMember = async (member: RoomMember) => {
 onMounted(async () => {
 	// call fetchRoom() again because the store is reset on unmounted lifecycle hook in RoomDetails.page.vue
 	if (room.value === undefined) {
-		console.log("Room store not found");
 		await fetchRoom(roomId);
 	}
 	await fetchMembers();

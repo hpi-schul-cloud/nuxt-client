@@ -13,13 +13,14 @@ import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import AuthModule from "@/store/auth";
+import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 
 const envs = envsFactory.build();
 const envConfigModule = createModuleMocks(EnvConfigModule, {
 	getEnv: envs,
 });
 const authModule = createModuleMocks(AuthModule, {
-	getUserPermissions: ["course_edit", "course_create", "course_remove"],
+	getUserPermissions: [],
 	getUserRoles: ["teacher"],
 });
 
@@ -37,6 +38,15 @@ jest.mock("vue-router", () => ({
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
+
+const roomName = "test-room";
+const mockRoomDetails = {
+	id: "test-123",
+	name: roomName,
+	color: RoomColor.Blue,
+	createdAt: new Date().toDateString(),
+	updatedAt: new Date().toDateString(),
+};
 
 interface RoomDetailsStore {
 	isLoading?: boolean;
@@ -90,19 +100,20 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 		expect(defaultWireframe).toBeDefined();
 	});
-	it("", () => {
-		const roomName = "test-room";
-		const room = {
-			id: "test-123",
-			name: roomName,
-			color: RoomColor.Blue,
-			createdAt: new Date().toDateString(),
-			updatedAt: new Date().toDateString(),
-		};
+	it("should render empty CourseRoomDetailsPage if roomVariant is invalid", () => {
 		const { wrapper } = setup({
 			isLoading: false,
-			roomVariant: RoomVariant.ROOM,
-			room,
+			roomVariant: undefined,
+			room: mockRoomDetails,
+		});
+		const roomDetailsComponent = wrapper.findComponent(CourseRoomDetailsPage);
+		expect(roomDetailsComponent.element.children.length).toBe(0);
+	});
+	it("should correctly pass room details to RoomDetailsPage component", () => {
+		const { wrapper } = setup({
+			isLoading: false,
+			roomVariant: undefined,
+			room: mockRoomDetails,
 		});
 		const roomDetailsComponent = wrapper.findComponent(RoomDetailsPage);
 		expect(roomDetailsComponent.vm.room).toEqual(room);
