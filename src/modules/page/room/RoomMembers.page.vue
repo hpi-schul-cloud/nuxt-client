@@ -24,15 +24,16 @@
 
 		<v-dialog
 			v-model="isMembersDialogOpen"
-			:width="xs ? 'auto' : 480"
-			persistent
 			max-width="480"
+			persistent
+			:width="xs ? 'auto' : 480"
+			@keydown.esc="onDialogClose"
 		>
 			<AddMembers
 				:memberList="potentialRoomMembers"
 				:schools="schools"
-				@close="onDialogClose"
 				@add:members="onAddMembers"
+				@close="onDialogClose"
 				@update:role="onUpdateRoleOrSchool"
 			/>
 		</v-dialog>
