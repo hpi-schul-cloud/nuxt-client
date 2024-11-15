@@ -279,13 +279,28 @@ describe("RoomMembersPage", () => {
 			const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
 			wireframe.vm.$emit("fab:clicked");
 			await flushPromises();
-			const dialogAfter = wrapper.findComponent({ name: "AddMembers" });
-			expect(dialogAfter.exists()).toBe(true);
+			const dialog = wrapper.findComponent({ name: "AddMembers" });
+			expect(dialog.exists()).toBe(true);
 			expect(wrapperVM.isMembersDialogOpen).toBe(true);
 
-			dialogAfter.vm.$emit("close");
-			await flushPromises();
+			dialog.vm.$emit("close");
 			expect(wrapperVM.isMembersDialogOpen).toBe(false);
+		});
+
+		describe("when 'escape' key pressed", () => {
+			it("should close AddMembers dialog", async () => {
+				const { wrapper, wrapperVM } = setup();
+
+				const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
+				wireframe.vm.$emit("fab:clicked");
+				await flushPromises();
+				const dialog = wrapper.findComponent({ name: "AddMembers" });
+				expect(dialog.exists()).toBe(true);
+				expect(wrapperVM.isMembersDialogOpen).toBe(true);
+
+				await dialog.trigger("keydown.esc");
+				expect(wrapperVM.isMembersDialogOpen).toBe(false);
+			});
 		});
 	});
 });
