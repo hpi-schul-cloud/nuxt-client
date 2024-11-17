@@ -23,7 +23,6 @@
 				@keydown.tab="showDateDialog = false"
 			/>
 		</template>
-
 		<v-date-picker
 			v-model="dateObject"
 			:aria-expanded="showDateDialog"
@@ -64,7 +63,7 @@ const props = defineProps({
 	errors: { type: Array as PropType<ErrorObject[]>, default: () => [] },
 });
 const emit = defineEmits(["update:date", "error"]);
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 const showDateDialog = ref(false);
 const inputField = ref<HTMLInputElement | null>(null);

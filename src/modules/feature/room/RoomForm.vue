@@ -101,28 +101,12 @@ const tomorrowISO = computed(() => {
 		.format(DATETIME_FORMAT.inputDate);
 });
 
-const startBeforeEndDate = (compareDate: {
-	date: string | undefined;
-	type: "startDate" | "endDate";
-}) => {
-	const givenDateIsStartDate = compareDate.type === "endDate";
-
+const startBeforeEndDate = (endDate: string | undefined) => {
 	return helpers.withParams(
-		{ type: "startBeforeEndDate", value: compareDate },
+		{ type: "startBeforeEndDate", value: endDate },
 		helpers.withMessage(
 			t("components.roomForm.validation.timePeriod.startBeforeEnd"),
-			(givenDate: string) => {
-				let startDate: string | undefined;
-				let endDate: string | undefined;
-
-				if (givenDateIsStartDate) {
-					startDate = givenDate;
-					endDate = compareDate.date;
-				} else {
-					startDate = compareDate.date;
-					endDate = givenDate;
-				}
-
+			(startDate: string) => {
 				if (!startDate || !endDate) return true;
 				return new Date(startDate) < new Date(endDate);
 			}
@@ -137,16 +121,7 @@ const validationRules = computed(() => ({
 			required: helpers.withMessage(t("common.validation.required2"), required),
 		},
 		startDate: {
-			startBeforeEndDate: startBeforeEndDate({
-				date: roomData.value.endDate,
-				type: "endDate",
-			}),
-		},
-		endDate: {
-			startBeforeEndDate: startBeforeEndDate({
-				date: roomData.value.startDate,
-				type: "startDate",
-			}),
+			startBeforeEndDate: startBeforeEndDate(roomData.value.endDate),
 		},
 	},
 }));

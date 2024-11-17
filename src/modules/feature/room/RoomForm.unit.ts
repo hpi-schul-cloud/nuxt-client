@@ -16,11 +16,6 @@ const mockRoom: RoomCreateParams = {
 	endDate: "",
 };
 
-const invalidMockRoom: RoomCreateParams = {
-	name: "",
-	color: RoomColor.Magenta,
-};
-
 const emptyMockRoom: RoomCreateParams = {
 	name: "",
 	color: RoomColor.Magenta,
