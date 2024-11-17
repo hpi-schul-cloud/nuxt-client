@@ -32,7 +32,7 @@
 					/>
 					<DatePicker
 						:date="roomData.endDate"
-						:min-date="todayISO"
+						:min-date="tomorrowISO"
 						class="w-50 ml-4"
 						data-testid="room-end-date-input"
 						:aria-label="$t('components.roomForm.labels.timePeriod.to')"
@@ -94,6 +94,12 @@ const roomData = computed(() => props.room);
 const todayISO = computed(() =>
 	dayjs.tz(new Date(), "DD.MM.YYYY", "UTC").format(DATETIME_FORMAT.inputDate)
 );
+const tomorrowISO = computed(() => {
+	const tomorrow = new Date().setDate(new Date().getDate() + 1);
+	return dayjs
+		.tz(tomorrow, "DD.MM.YYYY", "UTC")
+		.format(DATETIME_FORMAT.inputDate);
+});
 
 const startBeforeEndDate = (compareDate: {
 	date: string | undefined;
@@ -124,7 +130,6 @@ const startBeforeEndDate = (compareDate: {
 	);
 };
 
-// Validation
 const validationRules = computed(() => ({
 	roomData: {
 		name: {
@@ -153,7 +158,6 @@ const v$ = useVuelidate(
 );
 
 const startDateErrors = computed(() => v$.value.roomData.startDate.$errors);
-const endDateErrors = computed(() => v$.value.roomData.endDate.$errors);
 
 const onUpdateColor = () => {
 	v$.value.$touch();
