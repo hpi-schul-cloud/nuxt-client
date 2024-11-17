@@ -13,9 +13,13 @@
 		@keydown.enter.space="redirectToEditorUrl"
 		@keydown.stop
 	>
-		<ContentElementBar :hasGreyBackground="true" :icon="mdiTextBoxEditOutline">
+		<ContentElementBar
+			:hasGreyBackground="true"
+			:has-row-style="isSmallOrLargerListBoard"
+			:icon="mdiTextBoxEditOutline"
+		>
 			<template #display>
-				<v-img :src="image" alt="" cover class="rounded-t" />
+				<v-img :src="image" alt="" cover />
 			</template>
 			<template #title>
 				{{ $t("components.cardElement.collaborativeTextEditorElement") }}
@@ -45,6 +49,9 @@ import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import CollaborativeTextEditorElementMenu from "./components/CollaborativeTextEditorElementMenu.vue";
 import { useCollaborativeTextEditorApi } from "./composables/CollaborativeTextEditorApi.composable";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { injectStrict } from "@/utils/inject";
+import { useDisplay } from "vuetify";
 
 const props = defineProps({
 	element: {
@@ -98,6 +105,13 @@ const onKeydownArrow = (event: KeyboardEvent) => {
 const onDelete = () => emit("delete:element", props.element.id);
 const onMoveUp = () => emit("move-up:edit");
 const onMoveDown = () => emit("move-down:edit");
+
+const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
+const { smAndUp } = useDisplay();
+
+const isSmallOrLargerListBoard = computed(() => {
+	return smAndUp.value && isListLayout.value;
+});
 </script>
 
 <style scoped lang="scss">

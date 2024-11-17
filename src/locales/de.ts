@@ -271,12 +271,6 @@ export default {
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
 	"components.administration.externalToolsSection.dialog.content.header":
 		"Sind Sie sich sicher, dass Sie das Tool <b>{itemName}</b> löschen wollen? </br></br>Zurzeit wird das Tool wie folgt genutzt:",
-	"components.administration.externalToolsSection.dialog.content.courses":
-		"<b>{courseCount}</b> Kurs(e)",
-	"components.administration.externalToolsSection.dialog.content.boardElements":
-		"<b>{boardElementCount}</b> Bereich(e)",
-	"components.administration.externalToolsSection.dialog.content.mediaShelves":
-		"<b>{mediaBoardCount}</b> Medienregal(e)",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Achtung: Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
 	"components.administration.externalToolsSection.dialog.title":
@@ -830,6 +824,8 @@ export default {
 	"feature-board-external-tool-element.dialog.title": "Auswahl & Einstellungen",
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Tool auswählen...",
+	"feature-board-external-tool-element.placeholder.selectContent":
+		"{toolName} Inhalt auswählen...",
 	"feature-board-file-element.placeholder.uploadFile": "Datei hochladen",
 	"feature-course-sync.EndCourseSyncDialog.title": "Synchronisation beenden",
 	"feature-course-sync.EndCourseSyncDialog.description":
@@ -1677,25 +1673,22 @@ export default {
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.rooms.fab.title": "Raum erstellen",
-	"pages.rooms.participant.error.load":
+	"pages.rooms.members.error.load":
 		"Die Teilnehmenden-Liste konnte nicht geladen werden.",
-	"pages.rooms.participant.error.add":
+	"pages.rooms.members.error.add":
 		"Hinzufügen von Teilnehmenden fehlgeschlagen.",
-	"pages.rooms.participant.error.delete":
+	"pages.rooms.members.error.remove":
 		"Löschen von Teilnehmenden fehlgeschlagen.",
-	"pages.rooms.participant.delete.confirmation":
+	"pages.rooms.members.remove.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
-	"pages.rooms.participant.infoText":
+	"pages.rooms.members.infoText":
 		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	(<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">weitere Informationen</a>).',
-	"pages.rooms.participant.label": "Teilnehmer:in",
-	"pages.rooms.participants.label": "Teilnehmende",
-	"pages.rooms.participants.addParticipants": "Teilnehmende hinzufügen",
-	"pages.rooms.participants.manageParticipants": "Teilnehmende verwalten",
-	"pages.rooms.participants.removeParticipants": "Teilnehmende entfernen",
-	"pages.rooms.participants.participantTable.itemsPerPage":
-		"Einträge pro Seite",
-	"pages.rooms.participants.roles.editor": "Raumeditor",
-	"pages.rooms.participants.roles.viewer": "Raumbetrachter",
+	"pages.rooms.members.label": "Teilnehmende",
+	"pages.rooms.members.add": "Teilnehmende hinzufügen",
+	"pages.rooms.members.manage": "Teilnehmende verwalten",
+	"pages.rooms.members.remove": "Teilnehmende entfernen",
+	"pages.rooms.members.roles.editor": "Raumeditor",
+	"pages.rooms.members.roles.viewer": "Raumbetrachter",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
