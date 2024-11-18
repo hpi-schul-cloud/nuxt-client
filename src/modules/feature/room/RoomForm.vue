@@ -32,7 +32,7 @@
 					/>
 					<DatePicker
 						:date="roomData.endDate"
-						:min-date="tomorrowISO"
+						:min-date="todayISO"
 						class="w-50 ml-4"
 						data-testid="room-end-date-input"
 						:aria-label="$t('components.roomForm.labels.timePeriod.to')"
@@ -94,21 +94,39 @@ const roomData = computed(() => props.room);
 const todayISO = computed(() =>
 	dayjs.tz(new Date(), "DD.MM.YYYY", "UTC").format(DATETIME_FORMAT.inputDate)
 );
-const tomorrowISO = computed(() => {
-	const tomorrow = new Date().setDate(new Date().getDate() + 1);
-	return dayjs
-		.tz(tomorrow, "DD.MM.YYYY", "UTC")
-		.format(DATETIME_FORMAT.inputDate);
-});
 
-const startBeforeEndDate = (endDate: string | undefined) => {
+const isStartBeforeEndDate = (
+	startDate: string | undefined,
+	endDate: string | undefined
+) => {
+	if (!startDate || !endDate) return true;
+	return new Date(startDate) <= new Date(endDate);
+};
+
+const areDatesSameDay = (
+	startDate: string | undefined,
+	endDate: string | undefined
+) => {
+	if (!startDate || !endDate) return true;
+	const start = new Date(startDate);
+	const end = new Date(endDate);
+	return (
+		start.getFullYear() === end.getFullYear() &&
+		start.getMonth() === end.getMonth() &&
+		start.getDate() === end.getDate()
+	);
+};
+
+const startBeforeEndDateValidator = (endDate: string | undefined) => {
 	return helpers.withParams(
 		{ type: "startBeforeEndDate", value: endDate },
 		helpers.withMessage(
 			t("components.roomForm.validation.timePeriod.startBeforeEnd"),
 			(startDate: string) => {
-				if (!startDate || !endDate) return true;
-				return new Date(startDate) < new Date(endDate);
+				return (
+					isStartBeforeEndDate(startDate, endDate) ||
+					areDatesSameDay(startDate, endDate)
+				);
 			}
 		)
 	);
@@ -121,7 +139,7 @@ const validationRules = computed(() => ({
 			required: helpers.withMessage(t("common.validation.required2"), required),
 		},
 		startDate: {
-			startBeforeEndDate: startBeforeEndDate(roomData.value.endDate),
+			startBeforeEndDate: startBeforeEndDateValidator(roomData.value.endDate),
 		},
 	},
 }));
