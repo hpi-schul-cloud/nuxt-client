@@ -1,5 +1,14 @@
 <template>
-	<div v-if="isLoading" />
+	<template v-if="isLoading">
+		<div data-testid="loading" class="w-100 text-center">
+			<VProgressCircular
+				color="primary"
+				indeterminate
+				:size="51"
+				class="my-10"
+			/>
+		</div>
+	</template>
 	<template v-else>
 		<template v-if="isRoom">
 			<DefaultWireframe
@@ -94,9 +103,12 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomDetails } from "@feature-room";
 import {
-	mdiPencilOutline,
-	mdiTrashCanOutline,
 	mdiAccountGroupOutline,
+	mdiPencilOutline,
+	mdiPlus,
+	mdiTrashCanOutline,
+	mdiViewDashboardOutline,
+	mdiViewGridPlusOutline,
 } from "@icons/material";
 import {
 	ConfirmationDialog,
@@ -109,11 +121,6 @@ import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import {
-	mdiPlus,
-	mdiViewGridPlusOutline,
-	mdiViewDashboardOutline,
-} from "@icons/material";
 import {
 	BoardApiFactory,
 	BoardLayout,
