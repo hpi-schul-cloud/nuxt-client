@@ -1692,7 +1692,8 @@ export default {
 	"pages.rooms.members.remove.confirmation":
 		"¿Eliminar {memberName} de la sala?",
 	"pages.rooms.members.infoText":
-		'Añadir participantes a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">más información</a>).',
+		"Añadir participantes a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
+	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Participantes",
 	"pages.rooms.members.add": "Añadir participantes",
 	"pages.rooms.members.manage": "Administrar participantes",

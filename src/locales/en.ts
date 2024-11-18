@@ -1647,7 +1647,8 @@ export default {
 	"pages.rooms.members.remove.confirmation":
 		"Remove {memberName} from the room?",
 	"pages.rooms.members.infoText":
-		'Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">more information</a>).',
+		"Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
+	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add participants",
 	"pages.rooms.members.manage": "Manage participants",
