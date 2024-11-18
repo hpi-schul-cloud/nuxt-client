@@ -1,6 +1,6 @@
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { watchDebounced } from "@vueuse/core";
-import { computed, ComputedRef, Ref, ref, toRef } from "vue";
+import { computed, ComputedRef, Ref, ref, toRef, watch } from "vue";
 import { useCardStore } from "./Card.store";
 
 export const useContentElementState = <T extends AnyContentElement>(
@@ -31,6 +31,12 @@ export const useContentElementState = <T extends AnyContentElement>(
 		},
 		{ debounce: options.autoSaveDebounce, maxWait: 2500 }
 	);
+	// watch<T["content"]>(
+	// 	modelValue.value,
+	// 	async (modelValue: T["content"]): Promise<void> => {
+	// 		console.log(modelValue);
+	// 	}
+	// );
 
 	return {
 		/**
