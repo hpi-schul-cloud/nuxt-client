@@ -75,7 +75,7 @@ export default defineComponent({
 		);
 
 		const isToolIncompleteOperational: ComputedRef<boolean> = computed(
-			() => props.toolStatus.isIncompleteOperationalOnScopeContext && isTeacher
+			() => props.toolStatus.isIncompleteOperationalOnScopeContext
 		);
 
 		const errorMessage: ComputedRef<string> = computed(() =>

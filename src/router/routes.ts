@@ -266,10 +266,10 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "room-edit",
 	},
 	{
-		path: `/rooms/:id/members`,
-		component: async () => (await import("@page-room")).RoomMembersPage,
+		path: `/rooms/:id/participants`,
+		component: async () => (await import("@page-room")).RoomParticipantsPage,
 		beforeEnter: checkRoomsFeature,
-		name: "room-members",
+		name: "room-participants",
 	},
 	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
 	// So we have to replace the reference there by "course-room-list" path.

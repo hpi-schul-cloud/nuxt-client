@@ -9,5 +9,4 @@ export const toolLaunchRequestResponseFactory =
 		method: ToolLaunchRequestResponseMethodEnum.Get,
 		payload: '{ "key": "value" }',
 		url: "https://example.com/tool-launch",
-		isDeepLink: false,
 	}));

@@ -67,7 +67,6 @@ describe("ExternalToolApi.composable", () => {
 				payload: launchRequest.payload,
 				method: ToolLaunchRequestMethodEnum.Get,
 				openNewTab: launchRequest.openNewTab,
-				isDeepLink: false,
 			});
 		});
 	});
@@ -119,7 +118,6 @@ describe("ExternalToolApi.composable", () => {
 				payload: launchRequest.payload,
 				method: ToolLaunchRequestMethodEnum.Get,
 				openNewTab: launchRequest.openNewTab,
-				isDeepLink: false,
 			});
 		});
 	});

@@ -1,6 +1,6 @@
 <template>
 	<v-card
-		v-show="showTool || isEditMode"
+		v-show="hasLinkedTool || isEditMode"
 		class="mb-4"
 		:data-testid="`board-external-tool-element-${toolDisplayName}`"
 		elevation="0"
@@ -21,7 +21,11 @@
 				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" />
 			</template>
 			<template #title>
-				{{ toolTitle }}
+				{{
+					hasLinkedTool
+						? toolDisplayName
+						: t("feature-board-external-tool-element.placeholder.selectTool")
+				}}
 			</template>
 			<template #menu>
 				<ExternalToolElementMenu
@@ -111,7 +115,6 @@ const {
 	launchTool,
 	fetchContextLaunchRequest,
 	error: launchError,
-	toolLaunchRequest,
 } = useExternalToolLaunchState();
 
 const autofocus: Ref<boolean> = ref(false);
@@ -134,18 +137,6 @@ const { lastCreatedElementId, resetLastCreatedElementId } =
 const hasLinkedTool: ComputedRef<boolean> = computed(
 	() => !!modelValue.value.contextExternalToolId
 );
-
-const isDeepLinkingTool: ComputedRef<boolean | undefined> = computed(
-	() => toolLaunchRequest.value?.isDeepLink
-);
-
-const showTool: ComputedRef<boolean> = computed(() => {
-	if (!toolLaunchRequest.value) {
-		return false;
-	}
-
-	return toolLaunchRequest.value.isDeepLink ? false : hasLinkedTool.value;
-});
 
 const toolDisplayName: ComputedRef<string> = computed(
 	() => displayData.value?.name ?? "..."
@@ -180,23 +171,6 @@ const isLoading = computed(
 
 const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 
-const toolTitle: ComputedRef<string> = computed(() => {
-	if (hasLinkedTool.value) {
-		if (isDeepLinkingTool.value) {
-			return t(
-				"feature-board-external-tool-element.placeholder.selectContent",
-				{
-					toolName: toolDisplayName.value,
-				}
-			);
-		}
-
-		return toolDisplayName.value;
-	}
-
-	return t("feature-board-external-tool-element.placeholder.selectTool");
-});
-
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (props.isEditMode) {
 		event.preventDefault();
@@ -219,10 +193,7 @@ const onEditElement = () => {
 };
 
 const onClickElement = async () => {
-	if (
-		hasLinkedTool.value &&
-		(!props.isEditMode || (props.isEditMode && isDeepLinkingTool.value))
-	) {
+	if (hasLinkedTool.value && !props.isEditMode) {
 		launchTool();
 
 		if (isToolLaunchable.value && modelValue.value.contextExternalToolId) {

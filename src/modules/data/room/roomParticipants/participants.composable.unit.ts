@@ -1,15 +1,15 @@
 import {
-	roomMemberListFactory,
+	addParticipantListFactory,
 	mockApiResponse,
-	roomMemberResponseFactory,
-	roomMemberSchoolResponseFactory,
+	roomParticipantResponseFactory,
+	roomParticipantSchoolResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import * as serverApi from "@/serverApi/v3/api";
 import { initializeAxios } from "@/utils/api";
 import { AxiosInstance } from "axios";
-import { useRoomMembers } from "@data-room";
+import { useParticipants } from "@data-room";
 import { useI18n } from "vue-i18n";
 import {
 	RoleName,
@@ -29,7 +29,7 @@ jest.mock("@util-board/BoardNotifier.composable");
 jest.mock("@util-board/LastCreatedElement.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
-describe("useRoomMembers", () => {
+describe("useParticipants", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
@@ -69,45 +69,45 @@ describe("useRoomMembers", () => {
 		consoleErrorSpy.mockRestore();
 	});
 
-	describe("fetchMembers", () => {
-		it("should fetch members and map members with role names", async () => {
-			const { fetchMembers, roomMembers } = useRoomMembers(roomId);
-			const membersMock = roomMemberResponseFactory.buildList(3);
+	describe("fetchParticipants", () => {
+		it("should fetch participants and map participants with role names", async () => {
+			const { fetchParticipants, participants } = useParticipants(roomId);
+			const participantsMock = roomParticipantResponseFactory.buildList(3);
 
 			roomApiMock.roomControllerGetMembers.mockResolvedValue(
 				mockApiResponse({
-					data: { data: membersMock },
+					data: { data: participantsMock },
 				})
 			);
 
-			await fetchMembers();
+			await fetchParticipants();
 
-			expect(roomMembers.value).toEqual(
-				membersMock.map((member) => ({
-					...member,
+			expect(participants.value).toEqual(
+				participantsMock.map((participant) => ({
+					...participant,
 					displayRoleName: "common.labels.teacher",
 				}))
 			);
 		});
 
 		it("should throw an error if the API call fails", async () => {
-			const { fetchMembers } = useRoomMembers(roomId);
+			const { fetchParticipants } = useParticipants(roomId);
 
 			const error = new Error("Test error");
 			roomApiMock.roomControllerGetMembers.mockRejectedValue(error);
 
-			await fetchMembers();
+			await fetchParticipants();
 
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.load"
+				"pages.rooms.participant.error.load"
 			);
 		});
 	});
 
-	describe("getPotentialMembers", () => {
-		it("should get potential members", async () => {
-			const { getPotentialMembers, potentialRoomMembers } =
-				useRoomMembers(roomId);
+	describe("getPotentialParticipants", () => {
+		it("should get potential participants", async () => {
+			const { getPotentialParticipants, potentialParticipants } =
+				useParticipants(roomId);
 
 			const schoolTeachersList: SchoolUserListResponse = {
 				data: [
@@ -134,9 +134,9 @@ describe("useRoomMembers", () => {
 				})
 			);
 
-			await getPotentialMembers();
+			await getPotentialParticipants();
 
-			expect(potentialRoomMembers.value).toEqual(
+			expect(potentialParticipants.value).toEqual(
 				schoolTeachersList.data.map((user) => ({
 					...user,
 					userId: user.id,
@@ -147,21 +147,22 @@ describe("useRoomMembers", () => {
 			);
 		});
 
-		it("should filter out members that are already in the room", async () => {
-			const { getPotentialMembers, potentialRoomMembers, roomMembers } =
-				useRoomMembers(roomId);
+		it("should filter out participants that are already in the room", async () => {
+			const { getPotentialParticipants, potentialParticipants, participants } =
+				useParticipants(roomId);
 
-			const membersMock: RoomMemberResponse = roomMemberResponseFactory.build();
+			const participantsMock: RoomMemberResponse =
+				roomParticipantResponseFactory.build();
 
-			roomMembers.value = [membersMock];
+			participants.value = [participantsMock];
 
 			const schoolTeachersList: SchoolUserListResponse = {
 				data: [
 					{
-						firstName: membersMock.firstName,
-						lastName: membersMock.lastName,
-						id: membersMock.userId,
-						schoolName: membersMock.schoolName,
+						firstName: participantsMock.firstName,
+						lastName: participantsMock.lastName,
+						id: participantsMock.userId,
+						schoolName: participantsMock.schoolName,
 					},
 				],
 				total: 3,
@@ -174,29 +175,29 @@ describe("useRoomMembers", () => {
 				})
 			);
 
-			await getPotentialMembers();
+			await getPotentialParticipants();
 
-			expect(potentialRoomMembers.value).toEqual([]);
+			expect(potentialParticipants.value).toEqual([]);
 		});
 
 		it("should throw an error if the API call fails", async () => {
-			const { getPotentialMembers } = useRoomMembers(roomId);
+			const { getPotentialParticipants } = useParticipants(roomId);
 
 			const error = new Error("Test error");
 			schoolApiMock.schoolControllerGetTeachers.mockRejectedValue(error);
 
-			await getPotentialMembers();
+			await getPotentialParticipants();
 
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.load"
+				"pages.rooms.participant.error.load"
 			);
 		});
 	});
 
 	describe("getSchools", () => {
 		it("should get schools", async () => {
-			const { getSchools, schools } = useRoomMembers(roomId);
-			const schoolList = roomMemberSchoolResponseFactory.buildList(3);
+			const { getSchools, schools } = useParticipants(roomId);
+			const schoolList = roomParticipantSchoolResponseFactory.buildList(3);
 			schoolApiMock.schoolControllerGetSchoolListForExternalInvite.mockResolvedValue(
 				mockApiResponse({
 					data: schoolList,
@@ -212,7 +213,7 @@ describe("useRoomMembers", () => {
 		});
 
 		it("should throw an error if the API call fails", async () => {
-			const { getSchools } = useRoomMembers(roomId);
+			const { getSchools } = useParticipants(roomId);
 
 			const error = new Error("Test error");
 			schoolApiMock.schoolControllerGetSchoolListForExternalInvite.mockRejectedValue(
@@ -225,88 +226,88 @@ describe("useRoomMembers", () => {
 		});
 	});
 
-	describe("addMembers", () => {
-		it("should add a members to the room", async () => {
-			const { addMembers, potentialRoomMembers, roomMembers } =
-				useRoomMembers(roomId);
+	describe("addParticipants", () => {
+		it("should add a participants to the room", async () => {
+			const { addParticipants, potentialParticipants, participants } =
+				useParticipants(roomId);
 
 			roomApiMock.roomControllerAddMembers.mockResolvedValue(
 				mockApiResponse({})
 			);
 
-			potentialRoomMembers.value = roomMemberListFactory.buildList(3);
-			const firstPotentialMember = potentialRoomMembers.value[0];
+			potentialParticipants.value = addParticipantListFactory.buildList(3);
+			const firstPotentialParticipant = potentialParticipants.value[0];
 
-			await addMembers([firstPotentialMember.userId]);
+			await addParticipants([firstPotentialParticipant.userId]);
 
 			expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(
 				roomId,
 				{
 					userIdsAndRoles: [
 						{
-							userId: firstPotentialMember.userId,
+							userId: firstPotentialParticipant.userId,
 							roleName: UserIdAndRoleRoleNameEnum.Editor,
 						},
 					],
 				}
 			);
-			expect(roomMembers.value).toEqual([
+			expect(participants.value).toEqual([
 				{
-					...firstPotentialMember,
+					...firstPotentialParticipant,
 					displayRoleName: "common.labels.teacher",
 				},
 			]);
 		});
 
 		it("should throw an error if the API call fails", async () => {
-			const { addMembers } = useRoomMembers(roomId);
+			const { addParticipants } = useParticipants(roomId);
 
 			const error = new Error("Test error");
 			roomApiMock.roomControllerAddMembers.mockRejectedValue(error);
 
-			await addMembers(["id"]);
+			await addParticipants(["id"]);
 
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.add"
+				"pages.rooms.participant.error.add"
 			);
 		});
 	});
 
-	describe("removeMembers", () => {
-		it("should remove a members from the room", async () => {
-			const { removeMembers, roomMembers } = useRoomMembers(roomId);
+	describe("removeParticipants", () => {
+		it("should remove a participants from the room", async () => {
+			const { removeParticipants, participants } = useParticipants(roomId);
 
 			roomApiMock.roomControllerRemoveMembers.mockResolvedValue(
 				mockApiResponse({})
 			);
 
-			const membersMock = roomMemberResponseFactory.buildList(3);
-			roomMembers.value = membersMock;
+			const participantsMock = roomParticipantResponseFactory.buildList(3);
+			participants.value = participantsMock;
 
-			const firstMember = membersMock[0];
+			const firstParticipant = participantsMock[0];
 
-			await removeMembers([firstMember.userId]);
+			await removeParticipants([firstParticipant.userId]);
 
 			expect(roomApiMock.roomControllerRemoveMembers).toHaveBeenCalledWith(
 				roomId,
 				{
-					userIds: [firstMember.userId],
+					userIds: [firstParticipant.userId],
 				}
 			);
 
-			expect(roomMembers.value).not.toContainEqual(firstMember);
+			expect(participants.value).not.toContainEqual(firstParticipant);
 		});
 
 		it("should throw an error if the API call fails", async () => {
-			const { removeMembers } = useRoomMembers(roomId);
+			const { removeParticipants } = useParticipants(roomId);
 
 			const error = new Error("Test error");
 			roomApiMock.roomControllerRemoveMembers.mockRejectedValue(error);
 
-			await removeMembers(["id"]);
+			await removeParticipants(["id"]);
 
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-				"pages.rooms.members.error.remove"
+				"pages.rooms.participant.error.delete"
 			);
 		});
 	});

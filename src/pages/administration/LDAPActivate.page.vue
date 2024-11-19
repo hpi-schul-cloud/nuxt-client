@@ -209,7 +209,6 @@ import {
 import { RenderHTML } from "@feature-render-html";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { SchulcloudTheme } from "@/serverApi/v3";
 
 const redirectToConfigPage = (page) => {
 	const { id } = page.$route.query;
@@ -246,7 +245,6 @@ export default {
 		}),
 		showUserMigrationOption() {
 			return (
-				envConfigModule.getTheme !== SchulcloudTheme.N21 &&
 				envConfigModule.getEnv.FEATURE_USER_MIGRATION_ENABLED &&
 				!this.$route?.query?.id
 			);

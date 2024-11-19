@@ -12,7 +12,6 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { createStore } from "vuex";
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
-import { SchulcloudTheme } from "../../serverApi/v3";
 
 const mockResponseData = {
 	ok: true,
@@ -243,34 +242,5 @@ describe("ldap/activate", () => {
 		expect(section.exists()).toBe(true);
 		const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);
 		expect(checkbox.exists()).toBe(true);
-	});
-
-	describe("when the instance is NBC", () => {
-		const setupNbc = () => {
-			const envs = envsFactory.build({
-				SC_THEME: SchulcloudTheme.N21,
-				FEATURE_USER_MIGRATION_ENABLED: true,
-			});
-			envConfigModule.setEnvs(envs);
-
-			const { storeOptions } = getStoreOptions();
-
-			const { wrapper } = setup({
-				route: { query: {} },
-				storeOptions,
-			});
-
-			return { wrapper };
-		};
-
-		it("should not show show section and checkbox for user migration", () => {
-			const { wrapper } = setupNbc();
-
-			const section = wrapper.find(`[data-testid="migrateUsersSection"]`);
-			const checkbox = wrapper.find(`[data-testid="migrateUsersCheckbox"]`);
-
-			expect(section.exists()).toBe(false);
-			expect(checkbox.exists()).toBe(false);
-		});
 	});
 });

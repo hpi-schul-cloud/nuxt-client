@@ -1,5 +1,5 @@
 import { Ref, ref } from "vue";
-import { RoomMember } from "./types";
+import { ParticipantType } from "./types";
 import {
 	RoleName,
 	RoomApiFactory,
@@ -14,9 +14,9 @@ import { useI18n } from "vue-i18n";
 import { useBoardNotifier } from "@util-board";
 import { schoolsModule } from "@/store";
 
-export const useRoomMembers = (roomId: string) => {
-	const roomMembers: Ref<RoomMemberResponse[]> = ref([]);
-	const potentialRoomMembers: Ref<RoomMember[]> = ref([]);
+export const useParticipants = (roomId: string) => {
+	const participants: Ref<RoomMemberResponse[]> = ref([]);
+	const potentialParticipants: Ref<ParticipantType[]> = ref([]);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const isLoading = ref(false);
 	const { t } = useI18n();
@@ -33,25 +33,28 @@ export const useRoomMembers = (roomId: string) => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
 
-	const fetchMembers = async () => {
+	const fetchParticipants = async () => {
 		try {
 			isLoading.value = true;
-			const { data } = (await roomApi.roomControllerGetMembers(roomId)).data;
+			const participantsData = (await roomApi.roomControllerGetMembers(roomId))
+				.data;
 
-			roomMembers.value = data.map((member: RoomMemberResponse) => {
-				return {
-					...member,
-					displayRoleName: userRoles[member.roleName],
-				};
-			});
+			participants.value = participantsData.data.map(
+				(participant: RoomMemberResponse) => {
+					return {
+						...participant,
+						displayRoleName: userRoles[participant.roleName],
+					};
+				}
+			);
 			isLoading.value = false;
 		} catch (error) {
-			showFailure(t("pages.rooms.members.error.load"));
+			showFailure(t("pages.rooms.participant.error.load"));
 			isLoading.value = false;
 		}
 	};
 
-	const getPotentialMembers = async (
+	const getPotentialParticipants = async (
 		payload: {
 			role: RoleName;
 			schoolId?: string;
@@ -64,7 +67,7 @@ export const useRoomMembers = (roomId: string) => {
 				)
 			).data;
 
-			potentialRoomMembers.value = result.data
+			potentialParticipants.value = result.data
 				.map((user) => {
 					return {
 						...user,
@@ -76,11 +79,13 @@ export const useRoomMembers = (roomId: string) => {
 				.filter((user) => {
 					return (
 						user.roleName === payload.role &&
-						!roomMembers.value.some((member) => member.userId === user.id)
+						!participants.value.some(
+							(participant) => participant.userId === user.id
+						)
 					);
 				});
 		} catch (error) {
-			showFailure(t("pages.rooms.members.error.load"));
+			showFailure(t("pages.rooms.participant.error.load"));
 		}
 	};
 
@@ -98,51 +103,53 @@ export const useRoomMembers = (roomId: string) => {
 		}
 	};
 
-	const addMembers = async (userIds: string[]) => {
-		const newMembers = potentialRoomMembers.value.filter((member) =>
-			userIds.includes(member.userId)
+	const addParticipants = async (userIds: string[]) => {
+		const newParticipants = potentialParticipants.value.filter((participant) =>
+			userIds.includes(participant.userId)
 		);
 
-		const userIdsAndRoles: UserIdAndRole[] = newMembers.map((member) => ({
-			userId: member.userId,
-			roleName: UserIdAndRoleRoleNameEnum.Editor,
-		}));
+		const userIdsAndRoles: UserIdAndRole[] = newParticipants.map(
+			(participant) => ({
+				userId: participant.userId,
+				roleName: UserIdAndRoleRoleNameEnum.Editor,
+			})
+		);
 
 		try {
 			await roomApi.roomControllerAddMembers(roomId, {
 				userIdsAndRoles,
 			});
-			roomMembers.value.push(
-				...newMembers.map((member) => ({
-					...member,
-					displayRoleName: userRoles[member.roleName],
+			participants.value.push(
+				...newParticipants.map((participant) => ({
+					...participant,
+					displayRoleName: userRoles[participant.roleName],
 				}))
 			);
 		} catch (error) {
-			showFailure(t("pages.rooms.members.error.add"));
+			showFailure(t("pages.rooms.participant.error.add"));
 		}
 	};
 
-	const removeMembers = async (userIds: string[]) => {
+	const removeParticipants = async (userIds: string[]) => {
 		try {
 			await roomApi.roomControllerRemoveMembers(roomId, { userIds });
-			roomMembers.value = roomMembers.value.filter(
-				(member) => !userIds.includes(member.userId)
+			participants.value = participants.value.filter(
+				(participant) => !userIds.includes(participant.userId)
 			);
 		} catch (error) {
-			showFailure(t("pages.rooms.members.error.remove"));
+			showFailure(t("pages.rooms.participant.error.delete"));
 		}
 	};
 
 	return {
-		addMembers,
-		fetchMembers,
-		getPotentialMembers,
+		addParticipants,
+		fetchParticipants,
+		getPotentialParticipants,
 		getSchools,
-		removeMembers,
+		removeParticipants,
 		isLoading,
-		roomMembers,
-		potentialRoomMembers,
+		participants,
+		potentialParticipants,
 		schools,
 	};
 };

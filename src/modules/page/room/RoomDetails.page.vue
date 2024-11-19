@@ -1,14 +1,5 @@
 <template>
-	<template v-if="isLoading">
-		<div data-testid="loading" class="w-100 text-center">
-			<VProgressCircular
-				color="primary"
-				indeterminate
-				:size="51"
-				class="my-10"
-			/>
-		</div>
-	</template>
+	<div v-if="isLoading" />
 	<template v-else>
 		<template v-if="isRoom">
 			<DefaultWireframe
@@ -45,14 +36,14 @@
 
 							<VListItem
 								role="menuitem"
-								:to="`/rooms/${room.id}/members`"
-								:aria-label="t('pages.rooms.members.manage')"
+								:to="`/rooms/${room.id}/participants`"
+								:aria-label="t('pages.rooms.participants.manageParticipants')"
 							>
 								<template #prepend>
 									<VIcon :icon="mdiAccountGroupOutline" />
 								</template>
 								<VListItemTitle>
-									{{ t("pages.rooms.members.manage") }}
+									{{ t("pages.rooms.participants.manageParticipants") }}
 								</VListItemTitle>
 							</VListItem>
 
@@ -103,12 +94,9 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomDetails } from "@feature-room";
 import {
-	mdiAccountGroupOutline,
 	mdiPencilOutline,
-	mdiPlus,
 	mdiTrashCanOutline,
-	mdiViewDashboardOutline,
-	mdiViewGridPlusOutline,
+	mdiAccountGroupOutline,
 } from "@icons/material";
 import {
 	ConfirmationDialog,
@@ -121,6 +109,11 @@ import { storeToRefs } from "pinia";
 import { computed, ComputedRef, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
+import {
+	mdiPlus,
+	mdiViewGridPlusOutline,
+	mdiViewDashboardOutline,
+} from "@icons/material";
 import {
 	BoardApiFactory,
 	BoardLayout,

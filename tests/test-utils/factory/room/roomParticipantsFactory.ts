@@ -4,22 +4,21 @@ import {
 	RoomMemberResponse,
 	SchoolForExternalInviteResponse,
 } from "@/serverApi/v3";
-import { RoomMember } from "@data-room";
+import { ParticipantType } from "@data-room";
 
-export const roomMemberResponseFactory = Factory.define<RoomMemberResponse>(
-	({ sequence }) => ({
-		userId: `member${sequence}`,
+export const roomParticipantResponseFactory =
+	Factory.define<RoomMemberResponse>(({ sequence }) => ({
+		userId: `participant${sequence}`,
 		firstName: `firstName${sequence}`,
 		lastName: `lastName${sequence}`,
 		roleName: RoleName.RoomEditor,
 		displayRoleName: RoleName.Teacher,
 		schoolName: "Paul-Gerhardt-Gymnasium",
-	})
-);
+	}));
 
-export const roomMemberListFactory = Factory.define<RoomMember>(
+export const addParticipantListFactory = Factory.define<ParticipantType>(
 	({ sequence }) => ({
-		userId: `member${sequence}`,
+		userId: `participant${sequence}`,
 		firstName: `firstName${sequence}`,
 		lastName: `lastName${sequence}`,
 		fullName: `lastName${sequence}, firstName${sequence}`,
@@ -29,7 +28,7 @@ export const roomMemberListFactory = Factory.define<RoomMember>(
 	})
 );
 
-export const roomMemberSchoolResponseFactory =
+export const roomParticipantSchoolResponseFactory =
 	Factory.define<SchoolForExternalInviteResponse>(({ sequence }) => ({
 		id: `school${sequence}`,
 		name: `schoolName${sequence}`,

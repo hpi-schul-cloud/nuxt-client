@@ -488,12 +488,15 @@ describe("ExternalToolElementAlert", () => {
 				};
 			};
 
-			it("should not display a student friendly message", () => {
+			it("should display a student friendly message", () => {
 				const { wrapper } = setup();
 
 				const alerts = wrapper.findAllComponents(InfoAlert);
 
-				expect(alerts).toHaveLength(0);
+				expect(alerts).toHaveLength(1);
+				expect(alerts[0].text()).toEqual(
+					'common.tool.information.outdated.student {"toolName":"Tool name"}'
+				);
 			});
 		});
 	});

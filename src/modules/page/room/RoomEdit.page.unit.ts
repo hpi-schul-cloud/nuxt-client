@@ -9,7 +9,6 @@ import { useRoute, useRouter } from "vue-router";
 import { RoomUpdateParams } from "@/types/room/Room";
 import { RoomColor } from "@/serverApi/v3";
 import { RoomForm } from "@feature-room";
-import { nextTick } from "vue";
 
 const roomIdMock = "test-1234";
 
@@ -74,7 +73,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 	it("should be rendered in DOM", () => {
 		const { wrapper } = setup();
-		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.vm).toBeDefined();
 	});
 	it("should have roomFormComponent", () => {
 		const { roomFormComponent } = setup();
@@ -84,7 +83,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 	it("should have breadcrumbs prop in DefaultWireframe component", async () => {
 		const { wrapper } = setup();
 
-		await nextTick();
+		await wrapper.vm.$nextTick();
 		const defaultWireframe = wrapper.findComponent({
 			name: "DefaultWireframe",
 		});

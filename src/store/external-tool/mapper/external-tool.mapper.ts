@@ -71,7 +71,6 @@ export class ExternalToolMapper {
 			url: response.url,
 			payload: response.payload,
 			openNewTab: response.openNewTab,
-			isDeepLink: response.isDeepLink,
 		};
 
 		return mapped;

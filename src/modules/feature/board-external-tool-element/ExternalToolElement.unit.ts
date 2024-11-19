@@ -22,8 +22,6 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { ToolLaunchRequest } from "@/store/external-tool";
-import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiPuzzleOutline } from "@icons/material";
 import { useSharedLastCreatedElement } from "@util-board";
@@ -104,12 +102,10 @@ describe("ExternalToolElement", () => {
 			element: ExternalToolElementResponse;
 			isEditMode: boolean;
 		},
-		displayData?: ExternalToolDisplayData,
-		toolLaunchRequest?: ToolLaunchRequest
+		displayData?: ExternalToolDisplayData
 	) => {
 		useContentElementStateMock.modelValue = ref(propsData.element.content);
 		useExternalToolElementDisplayStateMock.displayData.value = displayData;
-		useExternalToolLaunchStateMock.toolLaunchRequest.value = toolLaunchRequest;
 
 		const refreshTime = 299000;
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
@@ -386,78 +382,12 @@ describe("ExternalToolElement", () => {
 				};
 			};
 
-			it("should show the element", () => {
-				const { wrapper } = setup();
-
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
-
-				expect(element.isVisible()).toEqual(true);
-			});
-		});
-	});
-
-	describe("when deeplinking tool is selected", () => {
-		describe("when not in edit mode", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper(
-					{
-						element: externalToolElementResponseFactory.build(),
-						isEditMode: false,
-					},
-					undefined,
-					toolLaunchRequestFactory.build({ isDeepLink: true })
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should hide the element", () => {
 				const { wrapper } = setup();
 
 				const element = wrapper.findComponent({ ref: "externalToolElement" });
 
-				expect(element.isVisible()).toEqual(false);
-			});
-		});
-
-		describe("when in edit mode", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper(
-					{
-						element: externalToolElementResponseFactory.build({
-							content: { contextExternalToolId: "contextExternalToolId" },
-						}),
-						isEditMode: true,
-					},
-					externalToolDisplayDataFactory.build({
-						status: schoolToolConfigurationStatusFactory.build(),
-					}),
-					toolLaunchRequestFactory.build({ isDeepLink: true })
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should show the element", () => {
-				const { wrapper } = setup();
-
-				const element = wrapper.findComponent({ ref: "externalToolElement" });
-
 				expect(element.isVisible()).toEqual(true);
-			});
-
-			it("should load the launch request", async () => {
-				setup();
-
-				await nextTick();
-
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).toHaveBeenCalledWith("contextExternalToolId");
 			});
 		});
 	});
@@ -678,53 +608,6 @@ describe("ExternalToolElement", () => {
 					}),
 					isEditMode: false,
 				});
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should launch the tool", async () => {
-				const { wrapper } = setup();
-
-				const card = wrapper.findComponent({
-					ref: "externalToolElement",
-				});
-
-				card.vm.$emit("click");
-				await nextTick();
-
-				expect(useExternalToolLaunchStateMock.launchTool).toHaveBeenCalled();
-			});
-
-			it("should fetch launch request after launch", async () => {
-				const { wrapper } = setup();
-
-				const card = wrapper.findComponent({
-					ref: "externalToolElement",
-				});
-
-				card.vm.$emit("click");
-				await nextTick();
-
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).toHaveBeenCalled();
-			});
-		});
-
-		describe("when clicking on a deeplinking tool card", () => {
-			const setup = () => {
-				const { wrapper } = getWrapper(
-					{
-						element: externalToolElementResponseFactory.build({
-							content: { contextExternalToolId: "contextExternalToolId" },
-						}),
-						isEditMode: true,
-					},
-					undefined,
-					toolLaunchRequestFactory.build({ isDeepLink: true })
-				);
 
 				return {
 					wrapper,

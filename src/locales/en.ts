@@ -269,6 +269,12 @@ export default {
 		"The usage of the tool could not be determined.",
 	"components.administration.externalToolsSection.dialog.content.header":
 		"Are you sure you want to delete the <b>{itemName}</b> tool? <br><br>Currently, the tool is used as follows:",
+	"components.administration.externalToolsSection.dialog.content.courses":
+		"<b>{courseCount}</b> Course(s)",
+	"components.administration.externalToolsSection.dialog.content.boardElements":
+		"<b>{boardElementCount}</b> Column board(s)",
+	"components.administration.externalToolsSection.dialog.content.mediaShelves":
+		"<b>{mediaBoardCount}</b> Media shelf(s)",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Attention: If the tool is removed, it can no longer be used for this school.",
 	"components.administration.externalToolsSection.dialog.title":
@@ -817,8 +823,6 @@ export default {
 	"feature-board-external-tool-element.dialog.title": "Selection & Settings",
 	"feature-board-external-tool-element.placeholder.selectTool":
 		"Select Tool...",
-	"feature-board-external-tool-element.placeholder.selectContent":
-		"Select {toolName} content...",
 	"feature-board-file-element.placeholder.uploadFile": "Upload file",
 	"feature-course-sync.EndCourseSyncDialog.title": "End synchronization",
 	"feature-course-sync.EndCourseSyncDialog.description":
@@ -1644,19 +1648,22 @@ export default {
 	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.rooms.fab.title": "Create room",
-	"pages.rooms.members.error.load": "The participant list could not be loaded.",
-	"pages.rooms.members.error.add": "Adding participants failed.",
-	"pages.rooms.members.error.remove": "Deleting participants failed.",
-	"pages.rooms.members.remove.confirmation":
+	"pages.rooms.participant.error.load":
+		"The participant list could not be loaded.",
+	"pages.rooms.participant.error.add": "Adding participants failed.",
+	"pages.rooms.participant.error.delete": "Deleting participants failed.",
+	"pages.rooms.participant.delete.confirmation":
 		"Remove {memberName} from the room?",
-	"pages.rooms.members.infoText":
+	"pages.rooms.participant.infoText":
 		'Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">more information</a>).',
-	"pages.rooms.members.label": "Participants",
-	"pages.rooms.members.add": "Add participants",
-	"pages.rooms.members.manage": "Manage participants",
-	"pages.rooms.members.remove": "Remove participants",
-	"pages.rooms.members.roles.editor": "Room editor",
-	"pages.rooms.members.roles.viewer": "Room viewer",
+	"pages.rooms.participant.label": "Participant",
+	"pages.rooms.participants.label": "Participants",
+	"pages.rooms.participants.addParticipants": "Add participants",
+	"pages.rooms.participants.manageParticipants": "Manage participants",
+	"pages.rooms.participants.removeParticipants": "Remove participants",
+	"pages.rooms.participants.participantTable.itemsPerPage": "Entries per page",
+	"pages.rooms.participants.roles.editor": "Room editor",
+	"pages.rooms.participants.roles.viewer": "Room viewer",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
