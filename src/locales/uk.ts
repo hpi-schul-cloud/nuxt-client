@@ -599,6 +599,10 @@ export default {
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Виберіть курс, до якого ви бажаєте імпортувати дошку.",
 	"components.molecules.import.courses.label": "Курс",
+	"components.molecules.import.columnBoard.options.selectRoom":
+		"Оберіть кімнату",
+	"components.molecules.import.columnBoard.options.selectRoom.infoText":
+		"Виберіть кімнату, до якого ви бажаєте імпортувати дошку.",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Буде створено копію.<br>собисті дані не будуть імпортовані.<br>Зовнішні інструменти не будуть скопійовані.<br>Курс можна перейменувати нижче.",
 	"components.molecules.import.courses.options.infoText":
