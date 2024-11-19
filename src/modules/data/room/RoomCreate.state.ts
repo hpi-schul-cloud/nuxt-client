@@ -1,13 +1,11 @@
 import { RoomApiFactory, RoomColor } from "@/serverApi/v3";
-import { RoomCreateParams, RoomItem } from "@/types/room/Room";
+import { RoomApiError, RoomCreateParams, RoomItem } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useRoomCreateState = () => {
-	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 	const { t } = useI18n();
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -20,9 +18,7 @@ export const useRoomCreateState = () => {
 		endDate: undefined,
 	});
 
-	const createRoom = async (
-		params: RoomCreateParams
-	): Promise<RoomItem | undefined> => {
+	const createRoom = async (params: RoomCreateParams): Promise<RoomItem> => {
 		isLoading.value = true;
 		try {
 			const room = (await roomApi.roomControllerCreateRoom(params)).data;
@@ -32,9 +28,10 @@ export const useRoomCreateState = () => {
 			const responseError = mapAxiosErrorToResponseError(error);
 
 			if (responseError.type === "API_VALIDATION_ERROR") {
-				notifierModule.show({
-					text: t("components.roomForm.validation.generalSaveError"),
-					status: "error",
+				throw new RoomApiError({
+					message: t("components.roomForm.validation.generalSaveError"),
+					type: responseError.type,
+					code: responseError.code,
 				});
 			} else {
 				throw createApplicationError(responseError.code);

@@ -26,7 +26,6 @@ const emptyMockRoom: RoomCreateParams = {
 describe("@feature-room/RoomForm", () => {
 	const setup = (props: ComponentProps<typeof RoomForm>) => {
 		const wrapper = mount(RoomForm, {
-			sync: false,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
