@@ -16,6 +16,7 @@
 				<a
 					href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
 					target="_blank"
+					rel="noopener"
 					:ariaLabel="linkAriaLabel"
 					>{{ t("pages.rooms.members.infoText.moreInformation") }}</a
 				>
