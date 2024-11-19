@@ -16,6 +16,7 @@
 				<a
 					href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
 					target="_blank"
+					:ariaLabel="linkAriaLabel"
 					>{{ t("pages.rooms.members.infoText.moreInformation") }}</a
 				>
 			</i18n-t>
@@ -156,4 +157,9 @@ const fabAction = {
 	ariaLabel: t("pages.rooms.members.add"),
 	testId: "fab-add-members",
 };
+
+const linkAriaLabel = computed(
+	() =>
+		`${t("pages.rooms.members.infoText.moreInformation")}, ${t("common.ariaLabel.newTab")}`
+);
 </script>
