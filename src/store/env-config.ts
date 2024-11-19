@@ -225,7 +225,6 @@ export default class EnvConfigModule extends VuexModule {
 				HttpStatusCode.GatewayTimeout
 			);
 			applicationErrorModule.setError(applicationError);
-			console.error(`Configuration could not be loaded from the server`, error);
 
 			this.setStatus("error");
 		}

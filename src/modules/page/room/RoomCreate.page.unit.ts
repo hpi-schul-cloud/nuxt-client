@@ -15,15 +15,18 @@ jest.mock("vue-router", () => ({
 	}),
 }));
 
-jest.mock("@data-room", () => ({
+jest.mock("@data-room/RoomCreate.state.ts", () => ({
 	useRoomCreateState: jest.fn().mockReturnValue({
 		createRoom: jest.fn().mockResolvedValue({
 			id: "123",
 			name: "test",
 			color: "blue",
 		}),
+		roomData: {
+			name: "test-room-data",
+			color: "blue",
+		},
 	}),
-	roomData: {},
 }));
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
@@ -55,10 +58,6 @@ describe("@pages/RoomCreate.page.vue", () => {
 		};
 	};
 
-	it("should be rendered in DOM", () => {
-		const { wrapper } = setup();
-		expect(wrapper.vm).toBeDefined();
-	});
 	it("should have roomFormComponent", () => {
 		const { roomFormComponent } = setup();
 		expect(roomFormComponent).toBeDefined();

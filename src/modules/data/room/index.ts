@@ -6,5 +6,5 @@ export { useCourseList } from "./courseList.composable";
 export { useRoomCreateState } from "./RoomCreate.state";
 export { useRoomEditState } from "./RoomEdit.state";
 
-export { useParticipants } from "./roomParticipants/participants.composable";
-export type { ParticipantType } from "./roomParticipants/types";
+export { useRoomMembers } from "./roomMembers/roomMembers.composable";
+export type { RoomMember } from "./roomMembers/types";
