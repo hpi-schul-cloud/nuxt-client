@@ -37,7 +37,7 @@
 							v-if="hasDeletePermission"
 							:scope="BoardMenuScope.CARD"
 							has-background
-							data-testid="card-menu-btn"
+							:data-testid="boardMenuTestId"
 						>
 							<BoardMenuActionEdit
 								v-if="!isEditMode"
@@ -135,6 +135,8 @@ export default defineComponent({
 	props: {
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
+		rowIndex: { type: Number, required: true },
+		columnIndex: { type: Number, required: true },
 	},
 	emits: ["move:card-keyboard", "delete:card", "reload:board"],
 	setup(props, { emit }) {
@@ -154,6 +156,10 @@ export default defineComponent({
 		const isLoadingCard = computed(() => card.value === undefined);
 
 		const hasCardTitle = computed(() => card.value?.title);
+
+		const boardMenuTestId = computed(
+			() => `card-menu-btn-${props.columnIndex}-${props.rowIndex}`
+		);
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
@@ -255,6 +261,7 @@ export default defineComponent({
 			isLoadingCard,
 			isHovered,
 			isFocusedById,
+			boardMenuTestId,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
 			onDeleteCard,
