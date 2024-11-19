@@ -16,7 +16,7 @@
 			/>
 		</v-card-title>
 
-		<v-divider />
+		<v-divider role="presentation" />
 		<v-data-table
 			v-model:search="search"
 			v-model="selectedMembers"
