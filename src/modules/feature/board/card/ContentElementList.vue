@@ -1,7 +1,11 @@
 <template>
 	<VCardText class="mb-n4">
 		<template v-for="(element, index) in elements" :key="element.id">
-			<ContentElement :index="index" :elementCount="elements.length">
+			<ContentElement
+				:index="index"
+				:elementCount="elements.length"
+				:data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`"
+			>
 				<RichTextContentElement
 					v-if="isRichTextElementResponse(element)"
 					:element="element"
@@ -131,6 +135,14 @@ const props = defineProps({
 	},
 	isDetailView: {
 		type: Boolean,
+		required: true,
+	},
+	rowIndex: {
+		type: Number,
+		required: true,
+	},
+	columnIndex: {
+		type: Number,
 		required: true,
 	},
 });
