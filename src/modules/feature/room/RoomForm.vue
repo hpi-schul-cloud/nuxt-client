@@ -108,6 +108,7 @@ const areDatesSameDay = (
 	endDate: string | undefined
 ) => {
 	if (!startDate || !endDate) return true;
+
 	const start = new Date(startDate);
 	const end = new Date(endDate);
 	return (
@@ -117,17 +118,22 @@ const areDatesSameDay = (
 	);
 };
 
+const isStartBeforeOrEqualToEndDate = (
+	startDate: string | undefined,
+	endDate: string | undefined
+) => {
+	return (
+		isStartBeforeEndDate(startDate, endDate) ||
+		areDatesSameDay(startDate, endDate)
+	);
+};
+
 const startBeforeEndDateValidator = (endDate: string | undefined) => {
 	return helpers.withParams(
 		{ type: "startBeforeEndDate", value: endDate },
 		helpers.withMessage(
 			t("components.roomForm.validation.timePeriod.startBeforeEnd"),
-			(startDate: string) => {
-				return (
-					isStartBeforeEndDate(startDate, endDate) ||
-					areDatesSameDay(startDate, endDate)
-				);
-			}
+			(startDate: string) => isStartBeforeOrEqualToEndDate(startDate, endDate)
 		)
 	);
 };
@@ -166,9 +172,9 @@ const onUpdateEndDate = (newDate: string) => {
 
 const onSave = async () => {
 	const valid = await v$.value.$validate();
-	// if (valid) {
-	emit("save", roomData.value);
-	// }
+	if (valid) {
+		emit("save", roomData.value);
+	}
 };
 
 const onCancel = async () => {
