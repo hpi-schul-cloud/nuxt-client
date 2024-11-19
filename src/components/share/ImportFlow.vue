@@ -1,12 +1,11 @@
 <template>
 	<div>
-		<SelectDestinationModal
+		<select-course-modal
 			:is-open="isSelectCourseModalOpen"
 			:parent-name="parentName"
 			:parent-type="parentType"
-			:destinations="destinations"
-			:destination-type="destinationType"
-			@next="onReferenceSelected"
+			:courses="courses"
+			@next="onCourseSelected"
 			@cancel="onCancel"
 		/>
 		<import-modal
@@ -25,25 +24,19 @@
 	</div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import ImportModal from "@/components/share/ImportModal.vue";
 import { useLoadingState } from "@/composables/loadingState";
-import {
-	BoardExternalReferenceType,
-	ShareTokenInfoResponseParentTypeEnum,
-} from "@/serverApi/v3/api";
-import { ImportDestinationItem } from "@/store/types/rooms";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
 	COPY_MODULE_KEY,
-	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
-import { PropType, computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, inject, ref } from "vue";
 import CopyResultModal from "../copy-result-modal/CopyResultModal.vue";
-import SelectDestinationModal from "./SelectDestinationModal.vue";
+import SelectCourseModal from "./SelectCourseModal.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	token: {
@@ -54,12 +47,8 @@ const props = defineProps({
 		type: Boolean,
 		required: true,
 	},
-	destinations: {
-		type: Array as PropType<ImportDestinationItem[]>,
-		required: true,
-	},
-	destinationType: {
-		type: String as PropType<BoardExternalReferenceType>,
+	courses: {
+		type: Array,
 		required: true,
 	},
 });
@@ -68,15 +57,13 @@ const emit = defineEmits(["success"]);
 const { t } = useI18n();
 const copyModule = injectStrict(COPY_MODULE_KEY);
 const notifier = injectStrict(NOTIFIER_MODULE_KEY);
-const loadingStateModule = injectStrict(LOADING_STATE_MODULE_KEY);
+const loadingStateModule = inject("loadingStateModule");
 
 const parentName = ref("");
-const parentType = ref<ShareTokenInfoResponseParentTypeEnum>(
-	ShareTokenInfoResponseParentTypeEnum.Lessons
-);
+const parentType = ref("lessons");
 const newName = ref("");
 
-const destinationId = ref<string>();
+const destinationCourseId = ref(undefined);
 const isSelectCourseModalOpen = ref(false);
 
 const isImportModalOpen = ref(false);
@@ -95,7 +82,7 @@ const { isLoadingDialogOpen } = useLoadingState(
 	t("components.molecules.import.options.loadingMessage")
 );
 
-const openModal = (modalName: string) => {
+const openModal = (modalName) => {
 	isSelectCourseModalOpen.value = modalName === "selectCourse";
 	isImportModalOpen.value = modalName === "import";
 	isLoadingDialogOpen.value = modalName === "loading";
@@ -106,7 +93,7 @@ const closeModals = () => openModal("none");
 
 // notifiers
 
-const showFailureBackend = (name: string) => {
+const showFailureBackend = (name) => {
 	notifier.show({
 		text: t("components.molecules.import.options.failure.backendError", {
 			name,
@@ -147,14 +134,12 @@ async function validateShareToken() {
 		parentName.value = validateResult.parentName;
 		parentType.value = validateResult.parentType;
 		openModal(
-			parentType.value === ShareTokenInfoResponseParentTypeEnum.Courses
+			parentType.value === ShareTokenBodyParamsParentTypeEnum.Courses
 				? "import"
 				: "selectCourse"
 		);
-	} catch (error: unknown) {
-		const apiError = mapAxiosErrorToResponseError(error);
-
-		if (apiError.code === 403) {
+	} catch (error) {
+		if (error.response?.status === 403) {
 			showFailurePermission();
 		} else {
 			showFailureInvalidToken();
@@ -163,7 +148,7 @@ async function validateShareToken() {
 	}
 }
 
-async function startImport(name: string) {
+async function startImport(name) {
 	newName.value = name;
 	openModal("loading");
 	try {
@@ -171,27 +156,27 @@ async function startImport(name: string) {
 			token: props.token,
 			type: parentType.value,
 			newName: newName.value,
-			destinationId: destinationId.value,
+			destinationCourseId: destinationCourseId.value,
 		});
 		if (copyResultModalItems.value.length === 0) {
 			loadingStateModule.close();
-			emit("success", newName.value, destinationId.value);
+			emit("success", newName.value, destinationCourseId.value);
 			copyModule.reset();
 		} else {
 			openModal("result");
 		}
-	} catch (error: unknown) {
+	} catch (error) {
 		showFailureBackend(newName.value);
 	}
 }
 
 // event handlers
 
-const onReferenceSelected = (referenceId: string) => {
-	destinationId.value = referenceId;
+const onCourseSelected = (courseId) => {
+	destinationCourseId.value = courseId;
 	openModal("import");
 };
-const onImport = (newName: string) => startImport(newName);
+const onImport = (newName) => startImport(newName);
 const onCancel = () => closeModals();
 const onCopyResultModalClosed = () => {
 	emit("success", newName.value);

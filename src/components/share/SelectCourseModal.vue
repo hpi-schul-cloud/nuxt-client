@@ -21,19 +21,25 @@
 						<v-icon color="info">{{ mdiInformation }}</v-icon>
 					</div>
 					<div>
-						{{ infoText }}
+						{{
+							t(
+								`components.molecules.import.${parentType}.options.selectCourse.infoText`
+							)
+						}}
 					</div>
 				</div>
 				<v-select
-					v-model="selectedReference"
+					v-model="selectedCourse"
 					return-object
 					item-value="id"
-					item-title="name"
-					:items="destinations"
-					:placeholder="selectionPlaceholder"
+					item-title="title"
+					:items="courses"
+					:placeholder="
+						t(`components.molecules.import.${parentType}.options.selectCourse`)
+					"
 					:rules="[rules.required]"
 					:error="showError()"
-					:hint="selectionHint"
+					:hint="t('common.labels.course')"
 					persistent-hint
 				/>
 			</div>
@@ -44,64 +50,32 @@
 <script setup lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { mdiInformation } from "@icons/material";
-import { computed, PropType, reactive, ref } from "vue";
+import { PropType, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { ImportDestinationItem } from "@/store/types/rooms";
-import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { AllItems, ListItemsObject } from "@/store/types/rooms";
 
 const emit = defineEmits(["import", "cancel", "next"]);
-const props = defineProps({
+defineProps({
 	isOpen: { type: Boolean },
 	parentName: { type: String, required: true },
 	parentType: { type: String, required: true },
-	destinations: {
-		type: Array as PropType<ImportDestinationItem[]>,
-		required: true,
-	},
-	destinationType: {
-		type: Object as PropType<BoardExternalReferenceType>,
-		required: true,
-	},
+	courses: { type: Array as PropType<AllItems>, required: true },
 });
 const { t } = useI18n();
 
-const selectedReference = ref<ImportDestinationItem>();
+const selectedCourse = ref<ListItemsObject | undefined>(undefined);
 
 const showErrorOnEmpty = ref(false);
-const showError = () => !selectedReference.value && showErrorOnEmpty.value;
+const showError = () => !selectedCourse.value && showErrorOnEmpty.value;
 
 const rules = reactive({
 	required: (value: string | undefined) =>
 		!!value || t("common.validation.required"),
 });
 
-const infoText = computed(() =>
-	t(
-		props.destinationType === BoardExternalReferenceType.Room
-			? `components.molecules.import.${props.parentType}.options.selectRoom.infoText`
-			: `components.molecules.import.${props.parentType}.options.selectCourse.infoText`
-	)
-);
-
-const selectionPlaceholder = computed(() =>
-	t(
-		props.destinationType === BoardExternalReferenceType.Room
-			? `components.molecules.import.${props.parentType}.options.selectRoom`
-			: `components.molecules.import.${props.parentType}.options.selectCourse`
-	)
-);
-
-const selectionHint = computed(() =>
-	t(
-		props.destinationType === BoardExternalReferenceType.Room
-			? "common.labels.room"
-			: "common.labels.course"
-	)
-);
-
 const onNext = () => {
 	showErrorOnEmpty.value = true;
-	const id = selectedReference.value?.id;
+	const id = selectedCourse.value?.id;
 	if (rules.required(id) === true) {
 		emit("next", id);
 	}

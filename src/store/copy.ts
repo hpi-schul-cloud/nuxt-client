@@ -13,7 +13,6 @@ import {
 	ShareTokenApiInterface,
 	ShareTokenBodyParamsParentTypeEnum,
 	ShareTokenInfoResponse,
-	ShareTokenInfoResponseParentTypeEnum,
 	TaskApiFactory,
 	TaskApiInterface,
 } from "../serverApi/v3/api";
@@ -33,10 +32,10 @@ export enum CopyParamsTypeEnum {
 }
 
 interface CopyByShareTokenPayload {
-	type: ShareTokenInfoResponseParentTypeEnum;
+	type: ShareTokenBodyParamsParentTypeEnum;
 	token: string;
 	newName: string;
-	destinationId?: string;
+	destinationCourseId?: string;
 }
 
 @Module({
@@ -128,9 +127,12 @@ export default class CopyModule extends VuexModule {
 	}
 
 	@Action({ rawError: true })
-	async validateShareToken(token: string): Promise<ShareTokenInfoResponse> {
+	async validateShareToken(
+		token: string
+	): Promise<ShareTokenInfoResponse | undefined> {
 		const shareTokenResponse =
 			await this.shareApi.shareTokenControllerLookupShareToken(token);
+		if (!shareTokenResponse) return undefined;
 		return shareTokenResponse.data;
 	}
 
@@ -139,7 +141,7 @@ export default class CopyModule extends VuexModule {
 		token,
 		type,
 		newName,
-		destinationId,
+		destinationCourseId,
 	}: CopyByShareTokenPayload): Promise<CopyResultItem[]> {
 		let copyResult: CopyApiResponse | undefined = undefined;
 
@@ -156,7 +158,7 @@ export default class CopyModule extends VuexModule {
 			copyResult = await this.shareApi
 				.shareTokenControllerImportShareToken(token, {
 					newName,
-					destinationId,
+					destinationCourseId,
 				})
 				.then((response) => response.data);
 		}
@@ -223,9 +225,9 @@ export default class CopyModule extends VuexModule {
 		const getUrl = (element: CopyApiResponse): string | undefined => {
 			switch (element.type) {
 				case CopyApiResponseTypeEnum.Task:
-					return `/homework/${element.id}/edit?returnUrl=rooms/${element.destinationId}`;
+					return `/homework/${element.id}/edit?returnUrl=rooms/${element.destinationCourseId}`;
 				case CopyApiResponseTypeEnum.Lesson:
-					return `/courses/${element.destinationId}/topics/${element.id}/edit?returnUrl=rooms/${element.destinationId}`;
+					return `/courses/${element.destinationCourseId}/topics/${element.id}/edit?returnUrl=rooms/${element.destinationCourseId}`;
 				case CopyApiResponseTypeEnum.Course:
 					return `/courses/${element.id}/edit`;
 				case CopyApiResponseTypeEnum.Columnboard:
