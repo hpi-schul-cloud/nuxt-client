@@ -43,9 +43,9 @@ const breadcrumbs: Breadcrumb[] = [
 	},
 ];
 
-const onSave = async (roomParams: RoomCreateParams) => {
+const onSave = async (payload: { room: RoomCreateParams }) => {
 	try {
-		const room = await createRoom(roomParams);
+		const room = await createRoom(payload.room);
 
 		router.push({ name: "room-details", params: { id: room.id } });
 	} catch (error) {

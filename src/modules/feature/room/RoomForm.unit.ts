@@ -63,6 +63,9 @@ describe("@feature-room/RoomForm", () => {
 				await nextTick();
 
 				expect(wrapper.emitted("save")).toHaveLength(1);
+				expect(wrapper.emitted("save")?.[0][0]).toStrictEqual({
+					room: mockRoom,
+				});
 			});
 		});
 	});

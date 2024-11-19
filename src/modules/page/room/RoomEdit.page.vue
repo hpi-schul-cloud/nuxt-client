@@ -47,8 +47,8 @@ watch(
 	{ immediate: true }
 );
 
-const onSave = async (roomParams: RoomUpdateParams) => {
-	const room = await updateRoom(route.params.id as string, roomParams);
+const onSave = async (payload: { room: RoomUpdateParams }) => {
+	const room = await updateRoom(route.params.id as string, payload.room);
 
 	if (room) {
 		router.push({

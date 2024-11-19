@@ -173,7 +173,7 @@ const onUpdateEndDate = (newDate: string) => {
 const onSave = async () => {
 	const valid = await v$.value.$validate();
 	if (valid) {
-		emit("save", roomData.value);
+		emit("save", { room: roomData.value });
 	}
 };
 
