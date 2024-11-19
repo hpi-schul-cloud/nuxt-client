@@ -40,6 +40,7 @@
 								v-if="canEditBoard"
 								role="menuitem"
 								:to="`/rooms/${room.id}/members`"
+								data-testid="room-action-manage-participants"
 								:aria-label="t('pages.rooms.members.manage')"
 							>
 								<template #prepend>

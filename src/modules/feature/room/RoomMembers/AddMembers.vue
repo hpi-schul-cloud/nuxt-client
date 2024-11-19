@@ -8,7 +8,7 @@
 
 		<template v-slot:default>
 			<div class="ml-6 mr-6">
-				<div class="mt-3">
+				<div class="mt-3" data-testid="add-participant-school">
 					<v-autocomplete
 						ref="autoCompleteSchool"
 						v-model="selectedSchool"
@@ -22,7 +22,7 @@
 					/>
 				</div>
 
-				<div class="mt-4">
+				<div class="mt-4" data-testid="add-participant-role">
 					<v-autocomplete
 						ref="autoCompleteRole"
 						v-model="selectedRole"
@@ -37,7 +37,7 @@
 					/>
 				</div>
 
-				<div class="mt-4">
+				<div class="mt-4" data-testid="add-participant-name">
 					<v-autocomplete
 						ref="autoCompleteUsers"
 						v-model="selectedUsers"
@@ -64,6 +64,7 @@
 					class="ms-auto mr-2"
 					color="primary"
 					:text="t('common.actions.cancel')"
+					data-testid="add-participant-cancel-btn"
 					@click="onClose"
 				/>
 				<v-btn
@@ -72,6 +73,7 @@
 					color="primary"
 					variant="flat"
 					:text="t('common.actions.add')"
+					data-testid="add-participant-save-btn"
 					@click="onAddMembers"
 				/>
 			</div>
