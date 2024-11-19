@@ -7,6 +7,7 @@ import { ComponentProps } from "vue-component-type-helpers";
 import BoardGrid from "./BoardGrid.vue";
 import { BoardLayout } from "@/serverApi/v3";
 import { RoomBoardItem } from "@/types/room/Room";
+import { roomBoardTileListFactory } from "@@/tests/test-utils";
 
 const mockBoard: RoomBoardItem = {
 	id: "59cce2c61113d1132c98dc06",
@@ -16,6 +17,8 @@ const mockBoard: RoomBoardItem = {
 	createdAt: "2017-09-28T11:49:39.924Z",
 	updatedAt: "2017-09-28T11:49:39.924Z",
 };
+
+const mockBoards = roomBoardTileListFactory.buildList(3);
 
 describe("@feature-room/BoardGrid", () => {
 	const setup = (props: ComponentProps<typeof BoardGrid>) => {
@@ -31,9 +34,11 @@ describe("@feature-room/BoardGrid", () => {
 		return { wrapper };
 	};
 
-	it("should render correctly", async () => {
-		const { wrapper } = setup({ boards: [mockBoard] });
+	it("should render list of BoardTiles", async () => {
+		const { wrapper } = setup({ boards: mockBoards });
 
-		expect(wrapper.exists()).toStrictEqual(true);
+		const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
+
+		expect(boardTiles.length).toStrictEqual(3);
 	});
 });
