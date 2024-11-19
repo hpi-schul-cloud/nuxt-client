@@ -13,46 +13,22 @@ import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import AuthModule from "@/store/auth";
-import { nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { Ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { Router, useRoute, useRouter } from "vue-router";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useRoute, useRouter } from "vue-router";
+
+import { roomDetailsFactory } from "@@/tests/test-utils/factory/roomDetailsFactory";
+import { flushPromises } from "@vue/test-utils";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 const useRouteMock = <jest.Mock>useRoute;
-useRouteMock.mockReturnValue({ params: { id: "room-id" } });
-
-const authModule = createModuleMocks(AuthModule, {
-	getUserPermissions: ["course_edit"],
-	getUserRoles: ["teacher"],
-});
-
-jest.mock("vue-router", () => ({
-	useRouter: jest.fn().mockReturnValue({
-		push: jest.fn(),
-	}),
-	useRoute: jest.fn().mockReturnValue({
-		params: {
-			id: "test-123",
-		},
-	}),
-}));
+useRouteMock.mockReturnValue({ params: { id: "room-id" }, push: jest.fn() });
+useRouterMock.mockReturnValue({ push: jest.fn() });
 
 describe("@pages/RoomsDetails.page.vue", () => {
-	let router: DeepMocked<Router>;
-	let route: DeepMocked<ReturnType<typeof useRoute>>;
-
 	beforeEach(() => {
-		route = createMock<ReturnType<typeof useRoute>>();
-		useRouteMock.mockReturnValue(route);
-		useRouteMock.mockReturnValue({ params: { id: "room-id" } });
-
-		router = createMock<Router>();
-		useRouterMock.mockReturnValue(router);
-
 		setupStores({
 			envConfigModule: EnvConfigModule,
 		});
@@ -63,11 +39,15 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			isLoading,
 			roomVariant,
 			envs,
+			isTeacher,
+			hasEditPermission,
 		}: {
 			isLoading: boolean;
 			roomVariant?: RoomVariant;
 			envs?: Record<string, unknown>;
-		} = { isLoading: false }
+			isTeacher?: boolean;
+			hasEditPermission?: boolean;
+		} = { isLoading: false, roomVariant: RoomVariant.ROOM }
 	) => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: envsFactory.build({
@@ -77,27 +57,17 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			}),
 		});
 
-		const wrapper = mount(RoomDetailsPage, {
+		const authModule = createModuleMocks(AuthModule, {
+			getUserPermissions: !hasEditPermission ? ["course_edit"] : [],
+			getUserRoles: !isTeacher ? ["teacher"] : [],
+		});
+
+		const wrapper = shallowMount(RoomDetailsPage, {
 			global: {
 				plugins: [
 					createTestingVuetify(),
 					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomDetailsStore: {
-								isLoading,
-								room: {
-									id: "1",
-									name: "Room 1",
-									color: RoomColor.BlueGrey,
-									createdAt: new Date().toString(),
-									updatedAt: new Date().toString(),
-								},
-								roomVariant,
-							},
-						},
-					}),
-					vueDompurifyHTMLPlugin,
+					createTestingPinia(),
 				],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
@@ -111,6 +81,11 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
+		const room = roomDetailsFactory.build();
+		roomDetailsStore.room = room;
+		roomDetailsStore.roomVariant = roomVariant;
+		roomDetailsStore.isLoading = isLoading;
+		roomDetailsStore.roomBoards = [];
 
 		const wrapperVM = wrapper.vm as unknown as {
 			room: {
@@ -122,14 +97,16 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			};
 			pageTitle: string;
 			breadcrumbs: Breadcrumb[];
-			fabItem: {
+			fabItems: {
 				icon: string;
 				title: string;
 				ariaLabel: string;
 				testId: string;
-			};
+			}[];
 			isMembersDialogOpen: boolean;
+			isRoom: Ref<boolean>;
 			onFabClick: ReturnType<typeof jest.fn>;
+			boardLayoutsEnabled: Ref<boolean>;
 		};
 
 		return {
@@ -142,6 +119,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	describe("when page is mounted", () => {
 		it("should be rendered in DOM", () => {
 			const { wrapper } = setup();
+
 			expect(wrapper.vm).toBeDefined();
 		});
 
@@ -150,6 +128,66 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 			expect(defaultWireframe).toBeDefined();
+		});
+
+		describe("breadcrumbs", () => {
+			it("should have elements inside the list", () => {
+				const { wrapperVM } = setup();
+
+				expect(wrapperVM.breadcrumbs).toHaveLength(2);
+				expect(wrapperVM.breadcrumbs[0].title).toContain("pages.rooms.title");
+			});
+
+			describe("when room is undefined", () => {
+				it("should not have any element inside the list", () => {
+					const { wrapperVM, roomDetailsStore } = setup();
+					roomDetailsStore.room = undefined;
+					expect(wrapperVM.breadcrumbs).toHaveLength(0);
+				});
+			});
+		});
+
+		describe("pageTitle", () => {
+			it("should set the page title", async () => {
+				const { wrapperVM } = setup();
+				expect(wrapperVM.pageTitle).toContain("pages.roomDetails.title");
+			});
+		});
+
+		describe("boardLayoutsEnabled", () => {
+			it("should be true", () => {
+				const { wrapperVM } = setup();
+				expect(wrapperVM.boardLayoutsEnabled).toBe(true);
+			});
+
+			it("should be false", () => {
+				const { wrapperVM } = setup({
+					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
+					isLoading: false,
+				});
+				expect(wrapperVM.boardLayoutsEnabled).toBe(false);
+			});
+		});
+
+		describe("when FEATURE_ROOMS_ENABLED flag is set true", () => {
+			it("should call fetchRoom on mounted", () => {
+				const { roomDetailsStore } = setup();
+
+				expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith("room-id");
+				expect(roomDetailsStore.deactivateRoom).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when FEATURE_ROOMS_ENABLED flag is set false", () => {
+			it("should not call fetchRoom on mounted", () => {
+				const { roomDetailsStore } = setup({
+					envs: { FEATURE_ROOMS_ENABLED: false },
+					isLoading: false,
+				});
+
+				expect(roomDetailsStore.deactivateRoom).toHaveBeenCalled();
+				expect(roomDetailsStore.fetchRoom).not.toHaveBeenCalled();
+			});
 		});
 	});
 
@@ -164,9 +202,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when roomVariant is invalid", () => {
 		it("should not render RoomDetails", () => {
-			const { wrapper } = setup();
-			// roomVariant: undefined,
-			// room: mockRoomDetails,
+			const { wrapper } = setup({
+				roomVariant: RoomVariant.COURSE_ROOM,
+				isLoading: false,
+			});
 
 			const roomDetailsComponent = wrapper.findComponent({
 				name: "RoomDetails",
@@ -176,19 +215,21 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	});
 
 	describe("when not loading", () => {
-		it("should not render a loading indication", () => {
+		it("should not render a loading indication", async () => {
 			const { wrapper } = setup({ isLoading: false });
+			await flushPromises();
 
-			const div = wrapper.find("[data-testid=loading]");
+			const div = wrapper.find('[data-testid="loading"]');
 			expect(div.exists()).toBe(false);
 		});
 
 		describe("when roomVariant is valid", () => {
-			it("should render DefaultLayout ", () => {
+			it("should render DefaultLayout ", async () => {
 				const { wrapper } = setup({
 					isLoading: false,
 					roomVariant: RoomVariant.ROOM,
 				});
+				await flushPromises();
 
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 				expect(defaultWireframe.exists()).toBe(true);
@@ -201,13 +242,16 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						roomVariant: RoomVariant.ROOM,
 					});
 
-					const fabButton = wrapper.find("[data-testid=add-content-button]");
-					await fabButton.trigger("click");
+					await flushPromises();
+					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+					defaultWireframe.vm.$emit("fabItemClick", "board-type-dialog-open");
+					// const fabButton = wrapper.find("[data-testid=add-content-button]");
+					// await fabButton.trigger("click");
 
-					const createBoardButton = wrapper.find(
-						"[data-testid=add-content-button]"
-					);
-					await createBoardButton.trigger("click");
+					// const createBoardButton = wrapper.find(
+					// 	"[data-testid=add-content-button]"
+					// );
+					// await createBoardButton.trigger("click");
 
 					const selectLayoutDialog = wrapper.findComponent({
 						name: "SelectBoardLayoutDialog",
@@ -228,6 +272,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 							roomVariant: RoomVariant.ROOM,
 						});
 
+						await flushPromises();
+
 						const mockApi = {
 							boardControllerCreateBoard: jest
 								.fn()
@@ -239,16 +285,20 @@ describe("@pages/RoomsDetails.page.vue", () => {
 								mockApi as unknown as serverApi.BoardApiInterface
 							);
 
-						const addContentButton = wrapper.findComponent(
-							"[data-testid=add-content-button]"
-						);
-						await addContentButton.trigger("click");
-
-						await nextTick();
+						// const addContentButton = wrapper.findComponent(
+						// 	"[data-testid=add-content-button]"
+						// );
+						// await addContentButton.trigger("click");
 
 						const selectLayoutDialog = wrapper.findComponent({
 							name: "SelectBoardLayoutDialog",
 						});
+
+						// await nextTick();
+
+						// const selectLayoutDialog = wrapper.findComponent({
+						// 	name: "SelectBoardLayoutDialog",
+						// });
 						await selectLayoutDialog.vm.$emit(`select:${event}`);
 
 						expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
