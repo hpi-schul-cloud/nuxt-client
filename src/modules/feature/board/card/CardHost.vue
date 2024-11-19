@@ -18,6 +18,7 @@
 				:id="cardId"
 				:ripple="false"
 				:hover="isHovered"
+				:data-testid="cardTestId"
 			>
 				<template v-if="isLoadingCard">
 					<CardSkeleton :height="height" />
@@ -160,6 +161,9 @@ export default defineComponent({
 		const boardMenuTestId = computed(
 			() => `card-menu-btn-${props.columnIndex}-${props.rowIndex}`
 		);
+		const cardTestId = computed(
+			() => `board-card-${props.columnIndex}-${props.rowIndex}`
+		);
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
@@ -262,6 +266,7 @@ export default defineComponent({
 			isHovered,
 			isFocusedById,
 			boardMenuTestId,
+			cardTestId,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
 			onDeleteCard,
