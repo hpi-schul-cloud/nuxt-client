@@ -38,7 +38,7 @@
 					ref="removeMember"
 					variant="text"
 					:icon="mdiTrashCanOutline"
-					:aria-label="t('pages.rooms.members.remove')"
+					:aria-label="getRemoveAriaLabel(item)"
 					@click="onRemoveMember(item)"
 				/>
 			</template>
@@ -101,6 +101,11 @@ const tableHeader = [
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
 	{ title: "", key: "actions", sortable: false, width: 50 },
 ];
+
+const getRemoveAriaLabel = (member: RoomMemberResponse) =>
+	t("pages.rooms.members.remove.ariaLabel", {
+		memberName: `${member.firstName} ${member.lastName}`,
+	});
 </script>
 
 <style lang="scss" scoped>
