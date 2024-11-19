@@ -2072,11 +2072,11 @@ export interface CopyApiResponse {
      */
     type: CopyApiResponseTypeEnum;
     /**
-     * Id of destination course
+     * Id of destination parent reference
      * @type {string}
      * @memberof CopyApiResponse
      */
-    destinationCourseId?: string;
+    destinationId?: string;
     /**
      * Copy progress status of copied element
      * @type {string}
@@ -8183,11 +8183,11 @@ export interface ShareTokenImportBodyParams {
      */
     newName: string;
     /**
-     * Id of the course to which the lesson/task will be added
+     * Id of the parent to which the imported object will be added.
      * @type {string}
      * @memberof ShareTokenImportBodyParams
      */
-    destinationCourseId?: string | null;
+    destinationId?: string | null;
 }
 /**
  * 

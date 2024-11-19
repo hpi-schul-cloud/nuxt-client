@@ -160,7 +160,7 @@ const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
-const { createPageInformation, roomId, resetPageInformation } =
+const { createPageInformation, contextType, roomId, resetPageInformation } =
 	useSharedBoardPageInformation();
 const { createApplicationError } = useApplicationError();
 
@@ -400,6 +400,7 @@ const onShareBoard = () => {
 		shareModule.startShareFlow({
 			id: props.boardId,
 			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+			destinationType: contextType.value,
 		});
 	}
 };
