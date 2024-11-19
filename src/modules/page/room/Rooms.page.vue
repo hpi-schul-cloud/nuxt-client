@@ -26,6 +26,6 @@ const fabAction = {
 	title: t("common.actions.create"),
 	to: "/rooms/new",
 	ariaLabel: t("pages.rooms.fab.title"),
-	testId: "fab-add-room",
+	dataTestId: "fab-add-room",
 };
 </script>

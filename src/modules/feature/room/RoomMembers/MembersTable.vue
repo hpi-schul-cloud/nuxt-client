@@ -19,28 +19,27 @@
 		<v-divider />
 		<v-data-table
 			v-model:search="search"
-			v-model="selectedParticipants"
+			v-model="selectedMembers"
 			item-value="userId"
-			:items="participantsList"
+			:items="membersList"
 			:headers="tableHeader"
 			:sort-asc-icon="mdiMenuDown"
 			:sort-desc-icon="mdiMenuUp"
 			:items-per-page-options="[5, 10, 25, 50, 100]"
 			:items-per-page="50"
-			:items-per-page-text="
-				t('pages.rooms.participants.participantTable.itemsPerPage')
-			"
 			:no-data-text="t('common.nodata')"
 			:mobile="null"
 			mobile-breakpoint="sm"
+			data-testid="participants-table"
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">
 				<v-btn
+					ref="removeMember"
 					variant="text"
-					:aria-label="t('pages.rooms.participants.removeParticipants')"
 					:icon="mdiTrashCanOutline"
-					@click="onRemoveParticipant(item)"
+					:aria-label="t('pages.rooms.members.remove')"
+					@click="onRemoveMember(item)"
 				/>
 			</template>
 		</v-data-table>
@@ -59,32 +58,31 @@ import {
 import { RoomMemberResponse } from "@/serverApi/v3";
 
 const props = defineProps({
-	participants: {
+	members: {
 		type: Array as PropType<RoomMemberResponse[]>,
 		required: true,
 	},
 });
 
-const emit = defineEmits(["remove:participant"]);
+const emit = defineEmits(["remove:member"]);
 
 const { t } = useI18n();
 const search = ref("");
-const participantsList = toRef(props, "participants");
-const selectedParticipants = ref<string[]>([]);
-const participantsFilterCount = ref(participantsList.value.length);
+const membersList = toRef(props, "members");
+const selectedMembers = ref<string[]>([]);
+const membersFilterCount = ref(membersList.value?.length);
 
 const onUpdateFilter = (value: RoomMemberResponse[]) => {
-	participantsFilterCount.value =
-		search.value === "" ? participantsList.value.length : value.length;
+	membersFilterCount.value =
+		search.value === "" ? membersList.value.length : value.length;
 };
 
 const tableTitle = computed(
-	() =>
-		`${t("pages.rooms.participants.label")} (${participantsFilterCount.value})`
+	() => `${t("pages.rooms.members.label")} (${membersFilterCount.value})`
 );
 
-const onRemoveParticipant = (participant: RoomMemberResponse) => {
-	emit("remove:participant", participant);
+const onRemoveMember = (member: RoomMemberResponse) => {
+	emit("remove:member", member);
 };
 
 const tableHeader = [
@@ -100,11 +98,6 @@ const tableHeader = [
 		title: t("common.labels.role"),
 		key: "displayRoleName",
 	},
-	// TODO: Decide if we want to show classes in the table or not
-	// {
-	// 	title: t("common.words.classes"),
-	// 	key: "classes",
-	// },
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
 	{ title: "", key: "actions", sortable: false, width: 50 },
 ];
