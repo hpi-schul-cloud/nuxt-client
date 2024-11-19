@@ -1,5 +1,5 @@
 # build stage
-FROM docker.io/node:20 AS build-stage
+FROM docker.io/node:22 AS build-stage
 
 ## add libraries needed for installing canvas npm package
 RUN apt update && apt install -y g++ libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev;
