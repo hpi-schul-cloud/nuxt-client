@@ -10,11 +10,13 @@ permissions:
   contents: read
 
 env:
-  node: 20
+  node: 22
 jobs:
   unit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
+      - name: Add libraries needed for installing canvas npm package
+        run: sudo apt update && sudo apt install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
       - uses: actions/checkout@v4
       - name: setup node
         uses: actions/setup-node@v4
@@ -37,8 +39,10 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONARCLOUD_TOKEN }}
 
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
+      - name: Add libraries needed for installing canvas npm package
+        run: sudo apt update && sudo apt install -y build-essential libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
       - uses: actions/checkout@v4
       - name: setup node
         uses: actions/setup-node@v4
