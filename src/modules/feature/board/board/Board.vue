@@ -152,7 +152,8 @@ const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
 const cardStore = useCardStore();
 const board = computed(() => boardStore.board);
-const { createPageInformation, roomId } = useSharedBoardPageInformation();
+const { createPageInformation, roomId, contextType } =
+	useSharedBoardPageInformation();
 const { createApplicationError } = useApplicationError();
 
 watch(board, async () => {
@@ -390,6 +391,7 @@ const onShareBoard = () => {
 		shareModule.startShareFlow({
 			id: props.boardId,
 			type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
+			destinationType: contextType.value,
 		});
 	}
 };

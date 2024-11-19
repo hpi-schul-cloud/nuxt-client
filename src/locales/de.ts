@@ -595,6 +595,9 @@ export default {
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Der Kurs, in den der Bereich importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.courses.label": "Kurs",
+	"components.molecules.import.columnBoard.options.selectRoom": "Raum wählen",
+	"components.molecules.import.columnBoard.options.selectRoom.infoText":
+		"Der Raum, in den der Bereich importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"Es wird eine Kopie erstellt.<br>Personenbezogene Daten werden nicht importiert.<br>Externe Tools werden nicht kopiert. <br>Der Kurs kann im Folgenden umbenannt werden.",
 	"components.molecules.import.courses.options.infoText":

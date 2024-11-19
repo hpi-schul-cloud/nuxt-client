@@ -357,8 +357,10 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoleCreate = 'ROLE_CREATE',
     RoleEdit = 'ROLE_EDIT',
     RoleView = 'ROLE_VIEW',
+    RoomCreate = 'ROOM_CREATE',
     RoomEdit = 'ROOM_EDIT',
     RoomView = 'ROOM_VIEW',
+    RoomDelete = 'ROOM_DELETE',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -2070,11 +2072,11 @@ export interface CopyApiResponse {
      */
     type: CopyApiResponseTypeEnum;
     /**
-     * Id of destination course
+     * Id of destination parent reference
      * @type {string}
      * @memberof CopyApiResponse
      */
-    destinationCourseId?: string;
+    destinationId?: string;
     /**
      * Copy progress status of copied element
      * @type {string}
@@ -4717,7 +4719,8 @@ export interface Lti11ToolConfigUpdateParams {
  * @enum {string}
  */
 export enum LtiMessageType {
-    BasicLtiLaunchRequest = 'basic-lti-launch-request'
+    BasicLtiLaunchRequest = 'basic-lti-launch-request',
+    ContentItemSelectionRequest = 'ContentItemSelectionRequest'
 }
 
 /**
@@ -6368,6 +6371,19 @@ export interface OidcContextResponse {
 /**
  * 
  * @export
+ * @interface OidcLogoutBodyParams
+ */
+export interface OidcLogoutBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcLogoutBodyParams
+     */
+    logout_token: string;
+}
+/**
+ * 
+ * @export
  * @interface ParentConsentResponse
  */
 export interface ParentConsentResponse {
@@ -6522,6 +6538,180 @@ export interface PeriodResponse {
      */
     until: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum Permission {
+    AccountCreate = 'ACCOUNT_CREATE',
+    AccountDelete = 'ACCOUNT_DELETE',
+    AccountEdit = 'ACCOUNT_EDIT',
+    AccountView = 'ACCOUNT_VIEW',
+    AddSchoolMembers = 'ADD_SCHOOL_MEMBERS',
+    AdminEdit = 'ADMIN_EDIT',
+    AdminView = 'ADMIN_VIEW',
+    BaseView = 'BASE_VIEW',
+    CalendarCreate = 'CALENDAR_CREATE',
+    CalendarEdit = 'CALENDAR_EDIT',
+    CalendarView = 'CALENDAR_VIEW',
+    ChangeTeamRoles = 'CHANGE_TEAM_ROLES',
+    ClassCreate = 'CLASS_CREATE',
+    ClassEdit = 'CLASS_EDIT',
+    ClassFullAdmin = 'CLASS_FULL_ADMIN',
+    ClassList = 'CLASS_LIST',
+    ClassRemove = 'CLASS_REMOVE',
+    ClassView = 'CLASS_VIEW',
+    CommentsCreate = 'COMMENTS_CREATE',
+    CommentsEdit = 'COMMENTS_EDIT',
+    CommentsView = 'COMMENTS_VIEW',
+    ContentNonOerView = 'CONTENT_NON_OER_VIEW',
+    ContentView = 'CONTENT_VIEW',
+    ContextToolAdmin = 'CONTEXT_TOOL_ADMIN',
+    ContextToolUser = 'CONTEXT_TOOL_USER',
+    CoursegroupCreate = 'COURSEGROUP_CREATE',
+    CoursegroupEdit = 'COURSEGROUP_EDIT',
+    CourseAdministration = 'COURSE_ADMINISTRATION',
+    CourseCreate = 'COURSE_CREATE',
+    CourseDelete = 'COURSE_DELETE',
+    CourseEdit = 'COURSE_EDIT',
+    CourseRemove = 'COURSE_REMOVE',
+    CourseView = 'COURSE_VIEW',
+    CreateSupportJwt = 'CREATE_SUPPORT_JWT',
+    CreateTopicsAndTasks = 'CREATE_TOPICS_AND_TASKS',
+    DashboardView = 'DASHBOARD_VIEW',
+    DatasourcesCreate = 'DATASOURCES_CREATE',
+    DatasourcesDelete = 'DATASOURCES_DELETE',
+    DatasourcesEdit = 'DATASOURCES_EDIT',
+    DatasourcesRun = 'DATASOURCES_RUN',
+    DatasourcesRunView = 'DATASOURCES_RUN_VIEW',
+    DatasourcesView = 'DATASOURCES_VIEW',
+    DefaultFilePermissions = 'DEFAULT_FILE_PERMISSIONS',
+    DeleteTeam = 'DELETE_TEAM',
+    EditAllFiles = 'EDIT_ALL_FILES',
+    EnterthecloudStart = 'ENTERTHECLOUD_START',
+    FederalstateCreate = 'FEDERALSTATE_CREATE',
+    FederalstateEdit = 'FEDERALSTATE_EDIT',
+    FederalstateView = 'FEDERALSTATE_VIEW',
+    FilestorageCreate = 'FILESTORAGE_CREATE',
+    FilestorageEdit = 'FILESTORAGE_EDIT',
+    FilestorageRemove = 'FILESTORAGE_REMOVE',
+    FilestorageView = 'FILESTORAGE_VIEW',
+    FileCreate = 'FILE_CREATE',
+    FileDelete = 'FILE_DELETE',
+    FileMove = 'FILE_MOVE',
+    FolderCreate = 'FOLDER_CREATE',
+    FolderDelete = 'FOLDER_DELETE',
+    GroupList = 'GROUP_LIST',
+    GroupFullAdmin = 'GROUP_FULL_ADMIN',
+    GroupView = 'GROUP_VIEW',
+    HelpdeskCreate = 'HELPDESK_CREATE',
+    HelpdeskEdit = 'HELPDESK_EDIT',
+    HelpdeskView = 'HELPDESK_VIEW',
+    HomeworkCreate = 'HOMEWORK_CREATE',
+    HomeworkEdit = 'HOMEWORK_EDIT',
+    HomeworkView = 'HOMEWORK_VIEW',
+    ImportUserMigrate = 'IMPORT_USER_MIGRATE',
+    ImportUserUpdate = 'IMPORT_USER_UPDATE',
+    ImportUserView = 'IMPORT_USER_VIEW',
+    InstanceView = 'INSTANCE_VIEW',
+    InviteAdministrators = 'INVITE_ADMINISTRATORS',
+    InviteExperts = 'INVITE_EXPERTS',
+    JoinMeeting = 'JOIN_MEETING',
+    LeaveTeam = 'LEAVE_TEAM',
+    LernstoreView = 'LERNSTORE_VIEW',
+    LessonsCreate = 'LESSONS_CREATE',
+    LessonsView = 'LESSONS_VIEW',
+    LinkCreate = 'LINK_CREATE',
+    NewsCreate = 'NEWS_CREATE',
+    NewsEdit = 'NEWS_EDIT',
+    NewsView = 'NEWS_VIEW',
+    NextcloudUser = 'NEXTCLOUD_USER',
+    NotificationCreate = 'NOTIFICATION_CREATE',
+    NotificationEdit = 'NOTIFICATION_EDIT',
+    NotificationView = 'NOTIFICATION_VIEW',
+    OauthClientEdit = 'OAUTH_CLIENT_EDIT',
+    OauthClientView = 'OAUTH_CLIENT_VIEW',
+    PasswordEdit = 'PASSWORD_EDIT',
+    PwrecoveryCreate = 'PWRECOVERY_CREATE',
+    PwrecoveryEdit = 'PWRECOVERY_EDIT',
+    PwrecoveryView = 'PWRECOVERY_VIEW',
+    ReleasesCreate = 'RELEASES_CREATE',
+    ReleasesEdit = 'RELEASES_EDIT',
+    ReleasesView = 'RELEASES_VIEW',
+    RemoveMembers = 'REMOVE_MEMBERS',
+    RenameTeam = 'RENAME_TEAM',
+    RequestConsents = 'REQUEST_CONSENTS',
+    RoleCreate = 'ROLE_CREATE',
+    RoleEdit = 'ROLE_EDIT',
+    RoleView = 'ROLE_VIEW',
+    RoomCreate = 'ROOM_CREATE',
+    RoomEdit = 'ROOM_EDIT',
+    RoomView = 'ROOM_VIEW',
+    RoomDelete = 'ROOM_DELETE',
+    SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
+    SchoolCreate = 'SCHOOL_CREATE',
+    SchoolEdit = 'SCHOOL_EDIT',
+    SchoolEditAll = 'SCHOOL_EDIT_ALL',
+    SchoolLogoManage = 'SCHOOL_LOGO_MANAGE',
+    SchoolNewsEdit = 'SCHOOL_NEWS_EDIT',
+    SchoolPermissionChange = 'SCHOOL_PERMISSION_CHANGE',
+    SchoolPermissionView = 'SCHOOL_PERMISSION_VIEW',
+    SchoolStudentTeamManage = 'SCHOOL_STUDENT_TEAM_MANAGE',
+    SchoolSystemEdit = 'SCHOOL_SYSTEM_EDIT',
+    SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
+    SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
+    ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
+    StartMeeting = 'START_MEETING',
+    StudentCreate = 'STUDENT_CREATE',
+    StudentDelete = 'STUDENT_DELETE',
+    StudentEdit = 'STUDENT_EDIT',
+    StudentList = 'STUDENT_LIST',
+    StudentSkipRegistration = 'STUDENT_SKIP_REGISTRATION',
+    SubmissionsCreate = 'SUBMISSIONS_CREATE',
+    SubmissionsEdit = 'SUBMISSIONS_EDIT',
+    SubmissionsSchoolView = 'SUBMISSIONS_SCHOOL_VIEW',
+    SubmissionsView = 'SUBMISSIONS_VIEW',
+    SyncStart = 'SYNC_START',
+    SystemCreate = 'SYSTEM_CREATE',
+    SystemEdit = 'SYSTEM_EDIT',
+    SystemView = 'SYSTEM_VIEW',
+    TaskDashboardTeacherViewV3 = 'TASK_DASHBOARD_TEACHER_VIEW_V3',
+    TaskDashboardViewV3 = 'TASK_DASHBOARD_VIEW_V3',
+    TeacherCreate = 'TEACHER_CREATE',
+    TeacherDelete = 'TEACHER_DELETE',
+    TeacherEdit = 'TEACHER_EDIT',
+    TeacherList = 'TEACHER_LIST',
+    TeacherSkipRegistration = 'TEACHER_SKIP_REGISTRATION',
+    TeamCreate = 'TEAM_CREATE',
+    ToolCreateEtherpad = 'TOOL_CREATE_ETHERPAD',
+    TeamEdit = 'TEAM_EDIT',
+    TeamInviteExternal = 'TEAM_INVITE_EXTERNAL',
+    TeamView = 'TEAM_VIEW',
+    ToolAdmin = 'TOOL_ADMIN',
+    ToolCreate = 'TOOL_CREATE',
+    ToolEdit = 'TOOL_EDIT',
+    ToolNewView = 'TOOL_NEW_VIEW',
+    ToolView = 'TOOL_VIEW',
+    TopicCreate = 'TOPIC_CREATE',
+    TopicEdit = 'TOPIC_EDIT',
+    TopicView = 'TOPIC_VIEW',
+    UploadFiles = 'UPLOAD_FILES',
+    UseLibreoffice = 'USE_LIBREOFFICE',
+    UseRocketchat = 'USE_ROCKETCHAT',
+    UsergroupCreate = 'USERGROUP_CREATE',
+    UsergroupEdit = 'USERGROUP_EDIT',
+    UsergroupView = 'USERGROUP_VIEW',
+    UserChangeOwnName = 'USER_CHANGE_OWN_NAME',
+    UserCreate = 'USER_CREATE',
+    UserLoginMigrationAdmin = 'USER_LOGIN_MIGRATION_ADMIN',
+    UserLoginMigrationRollback = 'USER_LOGIN_MIGRATION_ROLLBACK',
+    UserLoginMigrationForce = 'USER_LOGIN_MIGRATION_FORCE',
+    UserMigrate = 'USER_MIGRATE',
+    UserUpdate = 'USER_UPDATE',
+    YearsEdit = 'YEARS_EDIT'
+}
+
 /**
  * 
  * @export
@@ -6877,8 +7067,8 @@ export enum RoleName {
     DemoTeacher = 'demoTeacher',
     Expert = 'expert',
     Helpdesk = 'helpdesk',
-    RoomViewer = 'room_viewer',
-    RoomEditor = 'room_editor',
+    Roomviewer = 'roomviewer',
+    Roomeditor = 'roomeditor',
     Student = 'student',
     Superhero = 'superhero',
     Teacher = 'teacher',
@@ -7013,6 +7203,12 @@ export interface RoomDetailsResponse {
      * @type {string}
      * @memberof RoomDetailsResponse
      */
+    schoolId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomDetailsResponse
+     */
     startDate?: string;
     /**
      * 
@@ -7032,6 +7228,12 @@ export interface RoomDetailsResponse {
      * @memberof RoomDetailsResponse
      */
     updatedAt: string;
+    /**
+     * 
+     * @type {Array<Permission>}
+     * @memberof RoomDetailsResponse
+     */
+    permissions: Array<Permission>;
 }
 /**
  * 
@@ -7057,6 +7259,12 @@ export interface RoomItemResponse {
      * @memberof RoomItemResponse
      */
     color: RoomColor;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomItemResponse
+     */
+    schoolId: string;
     /**
      * 
      * @type {string}
@@ -7975,11 +8183,11 @@ export interface ShareTokenImportBodyParams {
      */
     newName: string;
     /**
-     * Id of the course to which the lesson/task will be added
+     * Id of the parent to which the imported object will be added.
      * @type {string}
      * @memberof ShareTokenImportBodyParams
      */
-    destinationCourseId?: string | null;
+    destinationId?: string | null;
 }
 /**
  * 
@@ -8733,6 +8941,12 @@ export interface ToolLaunchRequestResponse {
      * @memberof ToolLaunchRequestResponse
      */
     openNewTab?: boolean;
+    /**
+     * Specifies whether the request is an LTI Deep linking content item selection request
+     * @type {boolean}
+     * @memberof ToolLaunchRequestResponse
+     */
+    isDeepLink: boolean;
 }
 
 /**
@@ -9014,8 +9228,8 @@ export interface UserIdAndRole {
     * @enum {string}
     */
 export enum UserIdAndRoleRoleNameEnum {
-    Editor = 'room_editor',
-    Viewer = 'room_viewer'
+    Roomeditor = 'roomeditor',
+    Roomviewer = 'roomviewer'
 }
 
 /**
@@ -10950,6 +11164,42 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Logs out a user for a given logout token from an external oidc system.
+         * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutControllerLogoutOidc: async (oidcLogoutBodyParams: OidcLogoutBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'oidcLogoutBodyParams' is not null or undefined
+            assertParamExists('logoutControllerLogoutOidc', 'oidcLogoutBodyParams', oidcLogoutBodyParams)
+            const localVarPath = `/logout/oidc`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(oidcLogoutBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -11013,6 +11263,17 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.logoutControllerLogout(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Logs out a user for a given logout token from an external oidc system.
+         * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.logoutControllerLogoutOidc(oidcLogoutBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -11071,6 +11332,16 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         logoutControllerLogout(options?: any): AxiosPromise<void> {
             return localVarFp.logoutControllerLogout(options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Logs out a user for a given logout token from an external oidc system.
+         * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.logoutControllerLogoutOidc(oidcLogoutBodyParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -11127,6 +11398,16 @@ export interface AuthenticationApiInterface {
      * @memberof AuthenticationApiInterface
      */
     logoutControllerLogout(options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Logs out a user for a given logout token from an external oidc system.
+     * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApiInterface
+     */
+    logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -11193,6 +11474,18 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      */
     public logoutControllerLogout(options?: any) {
         return AuthenticationApiFp(this.configuration).logoutControllerLogout(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Logs out a user for a given logout token from an external oidc system.
+     * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApi
+     */
+    public logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any) {
+        return AuthenticationApiFp(this.configuration).logoutControllerLogoutOidc(oidcLogoutBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

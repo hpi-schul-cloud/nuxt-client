@@ -1,6 +1,7 @@
 import { $axios } from "@/utils/api";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import {
+	BoardExternalReferenceType,
 	ShareTokenApiFactory,
 	ShareTokenApiInterface,
 	ShareTokenBodyParams,
@@ -20,6 +21,7 @@ export interface SharePayload extends ShareOptions {
 export interface StartFlow {
 	id: string;
 	type: ShareTokenBodyParamsParentTypeEnum;
+	destinationType?: BoardExternalReferenceType;
 }
 
 @Module({
@@ -32,6 +34,8 @@ export default class ShareModule extends VuexModule {
 	private parentId = "";
 	private shareUrl: string | undefined = undefined;
 	private parentType = ShareTokenBodyParamsParentTypeEnum.Courses;
+	private destinationType: BoardExternalReferenceType =
+		BoardExternalReferenceType.Course;
 
 	private get shareApi(): ShareTokenApiInterface {
 		return ShareTokenApiFactory(undefined, "v3", $axios);
@@ -53,7 +57,11 @@ export default class ShareModule extends VuexModule {
 					shareTokenPayload
 				);
 			if (!shareTokenResult) return undefined;
-			const shareUrl = `${window.location.origin}/rooms/courses-overview?import=${shareTokenResult.data.token}`;
+			const sharePath =
+				this.destinationType === BoardExternalReferenceType.Course
+					? "rooms/courses-overview"
+					: "rooms";
+			const shareUrl = `${window.location.origin}/${sharePath}?import=${shareTokenResult.data.token}`;
 			this.setShareUrl(shareUrl);
 			return shareTokenResult.data;
 		} catch {
@@ -62,9 +70,12 @@ export default class ShareModule extends VuexModule {
 	}
 
 	@Action
-	startShareFlow({ id, type }: StartFlow): void {
+	startShareFlow({ id, type, destinationType }: StartFlow): void {
 		this.setParentId(id);
 		this.setParentType(type);
+		if (destinationType) {
+			this.setDestinationType(destinationType);
+		}
 		this.setShareModalOpen(true);
 	}
 
@@ -83,6 +94,11 @@ export default class ShareModule extends VuexModule {
 	@Mutation
 	setParentType(type: ShareTokenBodyParamsParentTypeEnum): void {
 		this.parentType = type;
+	}
+
+	@Mutation
+	setDestinationType(destinationType: BoardExternalReferenceType): void {
+		this.destinationType = destinationType;
 	}
 
 	@Mutation

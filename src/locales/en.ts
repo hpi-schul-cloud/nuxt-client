@@ -590,6 +590,9 @@ export default {
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Please select the course into which you would like to import the board.",
 	"components.molecules.import.courses.label": "Course",
+	"components.molecules.import.columnBoard.options.selectRoom": "Select room",
+	"components.molecules.import.columnBoard.options.selectRoom.infoText":
+		"Please select the room into which you would like to import the board.",
 	"components.molecules.import.courses.options.ctlTools.infoText":
 		"A copy will be created.<br>Personal data will not be imported.<br>External tools will not be copied.<br>The course can be renamed below.",
 	"components.molecules.import.courses.options.infoText":
