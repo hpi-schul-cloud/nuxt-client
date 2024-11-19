@@ -20,12 +20,10 @@ const mockBoard: RoomBoardItem = {
 describe("@feature-room/BoardTile", () => {
 	const setup = (props: ComponentProps<typeof BoardTile>) => {
 		const wrapper = mount(BoardTile, {
-			sync: false,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props,
-			attachTo: document.body,
 		});
 
 		return { wrapper };

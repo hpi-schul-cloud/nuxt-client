@@ -21,20 +21,19 @@ const mockRoom: RoomDetailsType = {
 describe("@feature-room/RoomDetails", () => {
 	const setup = (props: ComponentProps<typeof RoomDetails>) => {
 		const wrapper = mount(RoomDetails, {
-			sync: false,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props,
-			attachTo: document.body,
 		});
 
 		return { wrapper };
 	};
 
-	it("should render correctly", async () => {
+	it("should render BoardGrid", async () => {
 		const { wrapper } = setup({ room: mockRoom });
 
-		expect(wrapper.exists()).toStrictEqual(true);
+		const boardGrid = wrapper.findComponent({ name: "BoardGrid" });
+		expect(boardGrid.exists()).toStrictEqual(true);
 	});
 });
