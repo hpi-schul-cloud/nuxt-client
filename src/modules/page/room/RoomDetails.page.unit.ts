@@ -26,7 +26,7 @@ const useRouteMock = <jest.Mock>useRoute;
 useRouteMock.mockReturnValue({ params: { id: "room-id" } });
 
 const authModule = createModuleMocks(AuthModule, {
-	getUserPermissions: [],
+	getUserPermissions: ["course_edit"],
 	getUserRoles: ["teacher"],
 });
 
@@ -186,14 +186,34 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		describe("when roomVariant is valid", () => {
 			it("should render DefaultLayout ", () => {
 				const { wrapper } = setup({
-					isLoading: true,
+					isLoading: false,
 					roomVariant: RoomVariant.ROOM,
 				});
-				// isLoading: false,
-				// roomVariant: RoomVariant.ROOM,
 
 				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				expect(defaultWireframe).toBeDefined();
+				expect(defaultWireframe.exists()).toBe(true);
+			});
+
+			describe("when user clicks on add content button", () => {
+				it("should open the select layout dialog", async () => {
+					const { wrapper } = setup({
+						isLoading: false,
+						roomVariant: RoomVariant.ROOM,
+					});
+
+					const fabButton = wrapper.find("[data-testid=add-content-button]");
+					await fabButton.trigger("click");
+
+					const createBoardButton = wrapper.find(
+						"[data-testid=add-content-button]"
+					);
+					await createBoardButton.trigger("click");
+
+					const selectLayoutDialog = wrapper.findComponent({
+						name: "SelectBoardLayoutDialog",
+					});
+					expect(selectLayoutDialog.exists()).toBe(true);
+				});
 			});
 
 			describe("when user creates a new board", () => {
@@ -219,8 +239,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 								mockApi as unknown as serverApi.BoardApiInterface
 							);
 
-						jest.spyOn(serverApi, "BoardApiFactory");
-
 						const addContentButton = wrapper.findComponent(
 							"[data-testid=add-content-button]"
 						);
@@ -228,10 +246,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 						await nextTick();
 
-						const buttonComponent = wrapper.findComponent({
+						const selectLayoutDialog = wrapper.findComponent({
 							name: "SelectBoardLayoutDialog",
 						});
-						await buttonComponent.vm.$emit(`select:${event}`);
+						await selectLayoutDialog.vm.$emit(`select:${event}`);
 
 						expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
 						expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledWith(
