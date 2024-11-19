@@ -1,5 +1,9 @@
 <template>
-	<BoardMenu :scope="BoardMenuScope.EXTERNAL_TOOL_ELEMENT" has-background>
+	<BoardMenu
+		:scope="BoardMenuScope.EXTERNAL_TOOL_ELEMENT"
+		has-background
+		:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+	>
 		<BoardMenuActionMoveUp @click="onMoveUp" />
 		<BoardMenuActionMoveDown @click="onMoveDown" />
 		<BoardMenuAction :icon="mdiCogOutline" @click="onEdit">
@@ -43,6 +47,9 @@ export default defineComponent({
 		displayName: {
 			type: String,
 		},
+		columnIndex: { type: Number, required: true },
+		rowIndex: { type: Number, required: true },
+		elementIndex: { type: Number, required: true },
 	},
 	emits: [
 		"edit:element",

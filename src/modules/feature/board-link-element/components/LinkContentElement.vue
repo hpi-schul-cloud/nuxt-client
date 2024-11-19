@@ -19,7 +19,11 @@
 				:title="computedElement.content.title"
 				:imageUrl="computedElement.content.imageUrl"
 				:isEditMode="isEditMode"
-				><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
+				><BoardMenu
+					:scope="BoardMenuScope.LINK_ELEMENT"
+					has-background
+					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+				>
 					<BoardMenuActionMoveUp @click="onMoveUp" />
 					<BoardMenuActionMoveDown @click="onMoveDown" />
 					<BoardMenuActionDelete @click="onDelete" />
@@ -54,6 +58,7 @@ import { usePreviewGenerator } from "../composables/PreviewGenerator.composable"
 import { ensureProtocolIncluded } from "../util/url.util";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
+import { ro } from "vuetify/lib/locale/index.mjs";
 
 const props = defineProps({
 	element: {
@@ -62,6 +67,9 @@ const props = defineProps({
 	},
 	isEditMode: { type: Boolean, required: true },
 	isDetailView: { type: Boolean, required: true },
+	columnIndex: { type: Number, required: true },
+	rowIndex: { type: Number, required: true },
+	elementIndex: { type: Number, required: true },
 });
 const emit = defineEmits<{
 	(e: "delete:element", id: string): void;
