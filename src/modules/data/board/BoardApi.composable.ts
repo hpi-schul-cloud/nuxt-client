@@ -124,6 +124,14 @@ export const useBoardApi = () => {
 				type: ContentElementType.Drawing,
 			};
 		}
+
+		if (element.type === ContentElementType.AppointmentFinder) {
+			return {
+				content: element.content,
+				type: ContentElementType.AppointmentFinder,
+			};
+		}
+
 		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 

@@ -10,6 +10,7 @@ import {
 	mdiPuzzleOutline,
 	mdiTextBoxEditOutline,
 	mdiTrayArrowUp,
+	mdiCalendarCheck,
 } from "@icons/material";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
@@ -84,6 +85,14 @@ export const useAddElementDialog = (
 			testId: "create-element-file",
 		},
 	];
+
+	options.push({
+		icon: mdiCalendarCheck,
+		label:
+			"components.elementTypeSelection.elements.appointmentFinderElement.subtitle",
+		action: () => onElementClick(ContentElementType.AppointmentFinder),
+		testId: "create-element-appointment-finder",
+	});
 
 	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
 		options.push({
