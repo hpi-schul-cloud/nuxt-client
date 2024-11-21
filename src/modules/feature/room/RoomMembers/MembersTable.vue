@@ -30,6 +30,7 @@
 			:no-data-text="t('common.nodata')"
 			:mobile="null"
 			mobile-breakpoint="sm"
+			data-testid="participants-table"
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">
