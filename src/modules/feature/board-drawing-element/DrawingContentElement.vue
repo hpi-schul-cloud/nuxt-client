@@ -14,7 +14,11 @@
 		<div class="drawing-element-content">
 			<InnerContent :docName="element.id">
 				<template v-if="isEditMode">
-					<BoardMenu :scope="BoardMenuScope.DRAWING_ELEMENT" has-background>
+					<BoardMenu
+						:scope="BoardMenuScope.DRAWING_ELEMENT"
+						has-background
+						:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+					>
 						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
 						<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
 						<BoardMenuActionDelete @click="onDeleteElement" />
@@ -46,6 +50,9 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	columnIndex: { type: Number, required: true },
+	rowIndex: { type: Number, required: true },
+	elementIndex: { type: Number, required: true },
 });
 const emit = defineEmits([
 	"delete:element",

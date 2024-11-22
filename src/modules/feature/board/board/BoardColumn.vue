@@ -50,6 +50,8 @@
 						}"
 						:card-id="element.cardId"
 						:height="element.height"
+						:row-index="index"
+						:column-index="reactiveIndex"
 						@move:card-keyboard="
 							onMoveCardKeyboard(index, element.cardId, $event)
 						"
