@@ -68,7 +68,13 @@ describe("CollaborativeTextEditorElement", () => {
 					[BOARD_IS_LIST_LAYOUT as symbol]: isListBoard,
 				},
 			},
-			propsData: { isEditMode, element },
+			propsData: {
+				isEditMode,
+				element,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
+			},
 		});
 
 		const windowMock = createMock<Window>();

@@ -82,6 +82,9 @@ describe("LinkContentElement", () => {
 		element: LinkElementResponse;
 		isEditMode: boolean;
 		isDetailView: boolean;
+		columnIndex: number;
+		rowIndex: number;
+		elementIndex: number;
 	}) => {
 		const notifierModule = createModuleMocks(NotifierModule);
 		const wrapper = shallowMount(LinkContentElement, {
@@ -137,6 +140,9 @@ describe("LinkContentElement", () => {
 			element,
 			isEditMode: options.isEditMode,
 			isDetailView: false,
+			columnIndex: 0,
+			rowIndex: 1,
+			elementIndex: 2,
 		});
 
 		return {

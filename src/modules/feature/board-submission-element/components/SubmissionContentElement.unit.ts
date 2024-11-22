@@ -16,6 +16,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("@feature-board");
@@ -59,8 +60,11 @@ mockedUseSubmissionContentElementState.mockReturnValue(
 describe("SubmissionContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 	const getWrapper = (props: {
-		element: AnyContentElement;
+		element: SubmissionContainerElementResponse;
 		isEditMode: boolean;
+		columnIndex: number;
+		rowIndex: number;
+		elementIndex: number;
 	}) => {
 		const wrapper = shallowMount(SubmissionContentElement, {
 			global: {
@@ -93,6 +97,9 @@ describe("SubmissionContentElement", () => {
 			const { wrapper } = getWrapper({
 				element,
 				isEditMode: false,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
 			});
 
 			return {
@@ -191,6 +198,9 @@ describe("SubmissionContentElement", () => {
 			const { wrapper } = getWrapper({
 				element,
 				isEditMode: true,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
 			});
 
 			return {

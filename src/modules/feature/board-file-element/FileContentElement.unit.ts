@@ -23,6 +23,7 @@ import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import { FileProperties } from "./shared/types/file-properties";
 import FileUpload from "./upload/FileUpload.vue";
+import { FileElementResponse } from "@/serverApi/v3";
 
 jest.mock("@data-board", () => {
 	return {
@@ -37,8 +38,11 @@ jest.mock("./content/alert/useFileAlerts.composable");
 describe("FileContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
 	const getWrapper = (props: {
-		element: AnyContentElement;
+		element: FileElementResponse;
 		isEditMode: boolean;
+		columnIndex: number;
+		rowIndex: number;
+		elementIndex: number;
 	}) => {
 		const menu = "slot-menu";
 
@@ -72,6 +76,9 @@ describe("FileContentElement", () => {
 				const { wrapper, menu } = getWrapper({
 					element,
 					isEditMode: false,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				return {
@@ -160,6 +167,9 @@ describe("FileContentElement", () => {
 				const { wrapper, menu, addAlertMock } = getWrapper({
 					element,
 					isEditMode: false,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				return {
@@ -357,6 +367,9 @@ describe("FileContentElement", () => {
 					const { wrapper } = getWrapper({
 						element,
 						isEditMode: true,
+						columnIndex: 0,
+						rowIndex: 1,
+						elementIndex: 2,
 					});
 
 					return {
@@ -438,6 +451,9 @@ describe("FileContentElement", () => {
 					const { wrapper } = getWrapper({
 						element,
 						isEditMode: true,
+						columnIndex: 0,
+						rowIndex: 1,
+						elementIndex: 2,
 					});
 
 					return {
@@ -509,6 +525,9 @@ describe("FileContentElement", () => {
 				const { wrapper, menu } = getWrapper({
 					element,
 					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				return {

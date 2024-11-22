@@ -31,7 +31,12 @@ describe("CardHostDetailView", () => {
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			const { wrapper } = setup({ card: CARD_WITH_ELEMENTS, isOpen: true });
+			const { wrapper } = setup({
+				card: CARD_WITH_ELEMENTS,
+				isOpen: true,
+				columnIndex: 0,
+				rowIndex: 1,
+			});
 			expect(wrapper.findComponent(CardHostDetailView).exists()).toBe(true);
 		});
 	});
