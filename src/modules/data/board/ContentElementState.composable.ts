@@ -31,12 +31,6 @@ export const useContentElementState = <T extends AnyContentElement>(
 		},
 		{ debounce: options.autoSaveDebounce, maxWait: 2500 }
 	);
-	// watch<T["content"]>(
-	// 	modelValue.value,
-	// 	async (modelValue: T["content"]): Promise<void> => {
-	// 		console.log(modelValue);
-	// 	}
-	// );
 
 	return {
 		/**
