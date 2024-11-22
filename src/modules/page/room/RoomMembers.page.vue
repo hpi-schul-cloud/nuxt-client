@@ -6,7 +6,7 @@
 		@fab:clicked="onFabClick"
 	>
 		<template #header>
-			<h1 class="text-h3 mb-4">
+			<h1 class="text-h3 mb-4" data-testid="room-title">
 				{{ t("pages.rooms.members.manage") }}
 			</h1>
 		</template>
@@ -27,6 +27,7 @@
 			:width="xs ? 'auto' : 480"
 			persistent
 			max-width="480"
+			data-testid="dialog-add-participants"
 		>
 			<AddMembers
 				:memberList="potentialRoomMembers"
@@ -149,6 +150,6 @@ const fabAction = {
 	icon: mdiPlus,
 	title: t("pages.rooms.members.add"),
 	ariaLabel: t("pages.rooms.members.add"),
-	testId: "fab-add-members",
+	dataTestId: "fab-add-members",
 };
 </script>

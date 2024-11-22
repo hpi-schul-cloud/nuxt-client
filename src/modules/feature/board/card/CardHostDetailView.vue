@@ -48,6 +48,8 @@
 							:elements="card.elements"
 							:isEditMode="isEditMode"
 							:isDetailView="true"
+							:row-index="rowIndex"
+							:column-index="columnIndex"
 							@delete:element="onDeleteElement"
 							@move-down:element="onMoveElementDown"
 							@move-up:element="onMoveElementUp"
@@ -86,6 +88,14 @@ export default defineComponent({
 		},
 		isOpen: {
 			type: Boolean,
+			required: true,
+		},
+		rowIndex: {
+			type: Number,
+			required: true,
+		},
+		columnIndex: {
+			type: Number,
 			required: true,
 		},
 	},
