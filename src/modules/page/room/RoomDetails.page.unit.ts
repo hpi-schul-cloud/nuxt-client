@@ -13,24 +13,27 @@ import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import AuthModule from "@/store/auth";
-import { Ref } from "vue";
+import { nextTick, Ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useRoute, useRouter } from "vue-router";
-
 import { roomDetailsFactory } from "@@/tests/test-utils/factory/roomDetailsFactory";
 import { flushPromises } from "@vue/test-utils";
-import KebabMenu from "@/modules/ui/kebab-menu/KebabMenu.vue";
-import { VListItem } from "vuetify/lib/components/index.mjs";
+import { Router, useRoute, useRouter } from "vue-router";
+import { createMock } from "@golevelup/ts-jest";
 
-jest.mock("vue-router");
-const useRouterMock = <jest.Mock>useRouter;
-const useRouteMock = <jest.Mock>useRoute;
-useRouteMock.mockReturnValue({ params: { id: "room-id" }, push: jest.fn() });
-useRouterMock.mockReturnValue({ push: jest.fn() });
+jest.mock("vue-router", () => ({
+	useRoute: jest.fn(),
+	useRouter: jest.fn(),
+}));
 
 describe("@pages/RoomsDetails.page.vue", () => {
+	const router = createMock<Router>();
+	const useRouteMock = <jest.Mock>useRoute;
+	useRouteMock.mockReturnValue({ params: { id: "room-id" }, push: jest.fn() });
+	const useRouterMock = <jest.Mock>useRouter;
+
 	beforeEach(() => {
+		useRouterMock.mockReturnValue(router);
 		setupStores({
 			envConfigModule: EnvConfigModule,
 		});
@@ -64,7 +67,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			getUserRoles: !isTeacher ? ["teacher"] : [],
 		});
 
-		const wrapper = shallowMount(RoomDetailsPage, {
+		const wrapper = mount(RoomDetailsPage, {
 			global: {
 				plugins: [
 					createTestingVuetify(),
@@ -80,6 +83,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					CourseRoomDetailsPage: true,
 				},
 			},
+			router,
 		});
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
@@ -248,13 +252,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					await flushPromises();
 					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 					defaultWireframe.vm.$emit("fabItemClick", "board-type-dialog-open");
-					// const fabButton = wrapper.find("[data-testid=add-content-button]");
-					// await fabButton.trigger("click");
-
-					// const createBoardButton = wrapper.find(
-					// 	"[data-testid=add-content-button]"
-					// );
-					// await createBoardButton.trigger("click");
 
 					const selectLayoutDialog = wrapper.findComponent({
 						name: "SelectBoardLayoutDialog",
@@ -288,20 +285,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 								mockApi as unknown as serverApi.BoardApiInterface
 							);
 
-						// const addContentButton = wrapper.findComponent(
-						// 	"[data-testid=add-content-button]"
-						// );
-						// await addContentButton.trigger("click");
-
 						const selectLayoutDialog = wrapper.findComponent({
 							name: "SelectBoardLayoutDialog",
 						});
 
-						// await nextTick();
-
-						// const selectLayoutDialog = wrapper.findComponent({
-						// 	name: "SelectBoardLayoutDialog",
-						// });
 						await selectLayoutDialog.vm.$emit(`select:${event}`);
 
 						expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
@@ -315,28 +302,24 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 
 			describe("when user clicks on edit room button", () => {
-				it.only("should navigate to the edit room page", async () => {
-					const { wrapper, authModule, roomDetailsStore, wrapperVM } = setup({
+				it("should navigate to the edit room page", async () => {
+					const { wrapper } = setup({
 						isLoading: false,
 						roomVariant: RoomVariant.ROOM,
 						hasEditPermission: true,
 					});
 
-					// console.log(wrapperVM.isRoom);
 					await flushPromises();
-
-					console.log(roomDetailsStore.room);
 					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-					// defaultWireframe.vm.$emit("fab:clicked");
-					await flushPromises();
+					const kebabMenu = defaultWireframe.find('[data-testid="room-menu"]');
+					await kebabMenu.trigger("click");
 
 					const menus = wrapper.findAllComponents({ name: "VListItem" });
-					await flushPromises();
 
-					console.log(menus);
-					// console.log(defaultWireframe.props());
+					menus[0].vm.$emit("click");
+					await nextTick();
 
-					expect(true).toBe(true);
+					expect(useRouteMock).toHaveBeenCalled();
 				});
 			});
 		});

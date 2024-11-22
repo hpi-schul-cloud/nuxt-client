@@ -28,6 +28,7 @@
 							data-testid="room-menu"
 						>
 							<VListItem
+								ref="editRoomMenu"
 								role="menuitem"
 								:to="`/rooms/${room.id}/edit`"
 								data-testid="room-action-edit"
@@ -44,6 +45,7 @@
 							</VListItem>
 
 							<VListItem
+								ref="manageMembersMenu"
 								role="menuitem"
 								:to="`/rooms/${room.id}/members`"
 								data-testid="room-action-manage-participants"
@@ -58,6 +60,7 @@
 							</VListItem>
 
 							<VListItem
+								ref="deleteRoomMenu"
 								role="menuitem"
 								data-testid="room-action-delete"
 								:aria-label="
