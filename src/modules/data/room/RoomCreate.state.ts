@@ -1,13 +1,9 @@
 import { RoomApiFactory, RoomColor } from "@/serverApi/v3";
-import { RoomApiError, RoomCreateParams, RoomItem } from "@/types/room/Room";
+import { RoomCreateParams, RoomItem } from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createApplicationError } from "@/utils/create-application-error.factory";
 import { ref } from "vue";
-import { useI18n } from "vue-i18n";
 
 export const useRoomCreateState = () => {
-	const { t } = useI18n();
-
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const isLoading = ref(true);
 
@@ -18,6 +14,9 @@ export const useRoomCreateState = () => {
 		endDate: undefined,
 	});
 
+	/**
+	 * @throws ApiResponseError | ApiValidationError
+	 */
 	const createRoom = async (params: RoomCreateParams): Promise<RoomItem> => {
 		isLoading.value = true;
 		try {
@@ -25,17 +24,7 @@ export const useRoomCreateState = () => {
 
 			return room;
 		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-
-			if (responseError.type === "API_VALIDATION_ERROR") {
-				throw new RoomApiError({
-					message: t("components.roomForm.validation.generalSaveError"),
-					type: responseError.type,
-					code: responseError.code,
-				});
-			} else {
-				throw createApplicationError(responseError.code);
-			}
+			throw mapAxiosErrorToResponseError(error);
 		} finally {
 			isLoading.value = false;
 		}

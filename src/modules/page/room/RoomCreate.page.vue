@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { RoomApiError, RoomCreateParams } from "@/types/room/Room";
+import { RoomCreateParams } from "@/types/room/Room";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomCreateState } from "@data-room";
 import { RoomForm } from "@feature-room";
@@ -20,6 +20,7 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { ApiResponseError } from "@/store/types/commons";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
@@ -48,16 +49,21 @@ const onSave = async (payload: { room: RoomCreateParams }) => {
 		const room = await createRoom(payload.room);
 
 		router.push({ name: "room-details", params: { id: room.id } });
-	} catch (error) {
-		if (error instanceof RoomApiError) {
+	} catch (error: unknown) {
+		if (isInvalidRequestError(error)) {
 			notifierModule.show({
 				text: t("components.roomForm.validation.generalSaveError"),
 				status: "error",
 			});
 		} else {
-			throw createApplicationError(400);
+			throw createApplicationError((error as ApiResponseError).code);
 		}
 	}
+};
+
+const isInvalidRequestError = (error: unknown): boolean => {
+	const apiError = error as ApiResponseError;
+	return apiError.code === 400;
 };
 
 const onCancel = () => {
