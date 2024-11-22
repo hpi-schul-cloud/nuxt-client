@@ -1,5 +1,4 @@
 import NotifierModule from "@/store/notifier";
-import { AnyContentElement } from "@/types/board/ContentElement";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
