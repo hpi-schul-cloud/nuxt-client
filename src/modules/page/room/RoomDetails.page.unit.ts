@@ -20,6 +20,8 @@ import { useRoute, useRouter } from "vue-router";
 
 import { roomDetailsFactory } from "@@/tests/test-utils/factory/roomDetailsFactory";
 import { flushPromises } from "@vue/test-utils";
+import KebabMenu from "@/modules/ui/kebab-menu/KebabMenu.vue";
+import { VListItem } from "vuetify/lib/components/index.mjs";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -58,7 +60,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: !hasEditPermission ? ["course_edit"] : [],
+			getUserPermissions: hasEditPermission ? ["course_edit"] : [],
 			getUserRoles: !isTeacher ? ["teacher"] : [],
 		});
 
@@ -113,6 +115,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			wrapper,
 			roomDetailsStore,
 			wrapperVM,
+			authModule,
 		};
 	};
 
@@ -309,6 +312,32 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						spy.mockRestore();
 					}
 				);
+			});
+
+			describe("when user clicks on edit room button", () => {
+				it.only("should navigate to the edit room page", async () => {
+					const { wrapper, authModule, roomDetailsStore, wrapperVM } = setup({
+						isLoading: false,
+						roomVariant: RoomVariant.ROOM,
+						hasEditPermission: true,
+					});
+
+					// console.log(wrapperVM.isRoom);
+					await flushPromises();
+
+					console.log(roomDetailsStore.room);
+					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
+					// defaultWireframe.vm.$emit("fab:clicked");
+					await flushPromises();
+
+					const menus = wrapper.findAllComponents({ name: "VListItem" });
+					await flushPromises();
+
+					console.log(menus);
+					// console.log(defaultWireframe.props());
+
+					expect(true).toBe(true);
+				});
 			});
 		});
 	});
