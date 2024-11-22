@@ -29,6 +29,9 @@
 			<template #menu>
 				<DeletedElementMenu
 					v-if="isEditMode"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="elementIndex"
 					@delete:element="onDeleteElement"
 				/>
 			</template>
@@ -51,6 +54,9 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	columnIndex: { type: Number, required: true },
+	rowIndex: { type: Number, required: true },
+	elementIndex: { type: Number, required: true },
 });
 
 const emit = defineEmits<{

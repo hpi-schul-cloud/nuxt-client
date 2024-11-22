@@ -23,6 +23,7 @@
 			<BoardMenu
 				:scope="BoardMenuScope.FILE_ELEMENT"
 				has-background
+				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				v-if="isEditMode"
 			>
 				<BoardMenuActionMoveUp @click="onMoveUp" />
@@ -95,6 +96,9 @@ export default defineComponent({
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
+		columnIndex: { type: Number, required: true },
+		rowIndex: { type: Number, required: true },
+		elementIndex: { type: Number, required: true },
 	},
 	emits: [
 		"delete:element",
