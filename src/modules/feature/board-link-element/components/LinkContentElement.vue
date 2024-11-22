@@ -58,7 +58,6 @@ import { usePreviewGenerator } from "../composables/PreviewGenerator.composable"
 import { ensureProtocolIncluded } from "../util/url.util";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
-import { ro } from "vuetify/lib/locale/index.mjs";
 
 const props = defineProps({
 	element: {
