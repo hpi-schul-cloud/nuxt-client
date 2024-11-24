@@ -6369,6 +6369,19 @@ export interface OidcContextResponse {
 /**
  * 
  * @export
+ * @interface OidcLogoutBodyParams
+ */
+export interface OidcLogoutBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcLogoutBodyParams
+     */
+    logout_token: string;
+}
+/**
+ * 
+ * @export
  * @interface ParentConsentResponse
  */
 export interface ParentConsentResponse {
@@ -6872,6 +6885,7 @@ export enum RoleName {
     CourseAdministrator = 'courseAdministrator',
     CourseStudent = 'courseStudent',
     CourseSubstitutionTeacher = 'courseSubstitutionTeacher',
+    GroupSubstitutionTeacher = 'groupSubstitutionTeacher',
     CourseTeacher = 'courseTeacher',
     Demo = 'demo',
     DemoStudent = 'demoStudent',
@@ -10957,6 +10971,42 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Logs out a user for a given logout token from an external oidc system.
+         * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutControllerLogoutOidc: async (oidcLogoutBodyParams: OidcLogoutBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'oidcLogoutBodyParams' is not null or undefined
+            assertParamExists('logoutControllerLogoutOidc', 'oidcLogoutBodyParams', oidcLogoutBodyParams)
+            const localVarPath = `/logout/oidc`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(oidcLogoutBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -11020,6 +11070,17 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.logoutControllerLogout(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Logs out a user for a given logout token from an external oidc system.
+         * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.logoutControllerLogoutOidc(oidcLogoutBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -11078,6 +11139,16 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         logoutControllerLogout(options?: any): AxiosPromise<void> {
             return localVarFp.logoutControllerLogout(options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Logs out a user for a given logout token from an external oidc system.
+         * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.logoutControllerLogoutOidc(oidcLogoutBodyParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -11134,6 +11205,16 @@ export interface AuthenticationApiInterface {
      * @memberof AuthenticationApiInterface
      */
     logoutControllerLogout(options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Logs out a user for a given logout token from an external oidc system.
+     * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApiInterface
+     */
+    logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -11200,6 +11281,18 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      */
     public logoutControllerLogout(options?: any) {
         return AuthenticationApiFp(this.configuration).logoutControllerLogout(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Logs out a user for a given logout token from an external oidc system.
+     * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApi
+     */
+    public logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any) {
+        return AuthenticationApiFp(this.configuration).logoutControllerLogoutOidc(oidcLogoutBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

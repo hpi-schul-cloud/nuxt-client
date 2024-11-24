@@ -17,6 +17,7 @@ export const GroupUserRoleMapping: Partial<Record<RoleName, GroupUserRole>> = {
 	[RoleName.Administrator]: GroupUserRole.Administrator,
 	[RoleName.Student]: GroupUserRole.Student,
 	[RoleName.Teacher]: GroupUserRole.Teacher,
+	[RoleName.GroupSubstitutionTeacher]: GroupUserRole.GroupSubstituteTeacher,
 };
 
 export const GroupUserRoleNameTranslationMapping: Record<
@@ -26,6 +27,8 @@ export const GroupUserRoleNameTranslationMapping: Record<
 	[GroupUserRole.Administrator]: "common.roleName.administrator",
 	[GroupUserRole.Student]: "common.roleName.student",
 	[GroupUserRole.Teacher]: "common.roleName.teacher",
+	[GroupUserRole.GroupSubstituteTeacher]:
+		"common.roleName.groupSubstitutionTeacher",
 	[GroupUserRole.Unknown]: "common.labels.unknown",
 };
 
