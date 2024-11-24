@@ -2,12 +2,11 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import RoomForm from "./RoomForm.vue";
 import { RoomCreateParams } from "@/types/room/Room";
 import { RoomColor } from "@/serverApi/v3";
-import { nextTick } from "vue";
 
 const mockRoom: RoomCreateParams = {
 	name: "A11Y for Beginners",
@@ -45,7 +44,7 @@ describe("@feature-room/RoomForm", () => {
 					"[data-testid='room-form-save-btn']"
 				);
 				await saveBtn.trigger("click");
-				await nextTick();
+				await flushPromises();
 
 				expect(wrapper.emitted("save")).toBeUndefined();
 			});
@@ -59,8 +58,7 @@ describe("@feature-room/RoomForm", () => {
 					"[data-testid='room-form-save-btn']"
 				);
 				await saveBtn.trigger("click");
-				await nextTick();
-				await nextTick();
+				await flushPromises();
 
 				expect(wrapper.emitted("save")).toHaveLength(1);
 				expect(wrapper.emitted("save")?.[0][0]).toStrictEqual({
