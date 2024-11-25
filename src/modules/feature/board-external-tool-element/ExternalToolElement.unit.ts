@@ -878,14 +878,14 @@ describe("ExternalToolElement", () => {
 
 			expect(
 				useExternalToolLaunchStateMock.fetchContextLaunchRequest
-			).toHaveBeenCalledTimes(2);
+			).toHaveBeenCalledTimes(1);
 
 			jest.advanceTimersByTime(refreshTime + 1000);
 			await nextTick();
 
 			expect(
 				useExternalToolLaunchStateMock.fetchContextLaunchRequest
-			).toHaveBeenCalledTimes(3);
+			).toHaveBeenCalledTimes(2);
 		});
 	});
 
