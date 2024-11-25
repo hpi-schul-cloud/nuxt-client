@@ -12,7 +12,15 @@
 		</template>
 
 		<div class="mb-8 mt-12">
-			<RenderHTML :html="t('pages.rooms.members.infoText')" />
+			<i18n-t keypath="pages.rooms.members.infoText">
+				<a
+					href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
+					target="_blank"
+					rel="noopener"
+					:ariaLabel="linkAriaLabel"
+					>{{ t("pages.rooms.members.infoText.moreInformation") }}</a
+				>
+			</i18n-t>
 		</div>
 		<div class="mb-12">
 			<MembersTable
@@ -58,7 +66,6 @@ import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { RenderHTML } from "@feature-render-html";
 import { useDisplay } from "vuetify";
 
 const { fetchRoom } = useRoomDetailsStore();
@@ -151,4 +158,9 @@ const fabAction = {
 	ariaLabel: t("pages.rooms.members.add"),
 	dataTestId: "fab-add-members",
 };
+
+const linkAriaLabel = computed(
+	() =>
+		`${t("pages.rooms.members.infoText.moreInformation")}, ${t("common.ariaLabel.newTab")}`
+);
 </script>
