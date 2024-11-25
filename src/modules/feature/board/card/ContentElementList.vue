@@ -1,7 +1,11 @@
 <template>
 	<VCardText class="mb-n4">
 		<template v-for="(element, index) in elements" :key="element.id">
-			<ContentElement :index="index" :elementCount="elements.length">
+			<ContentElement
+				:index="index"
+				:elementCount="elements.length"
+				:data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`"
+			>
 				<RichTextContentElement
 					v-if="isRichTextElementResponse(element)"
 					:element="element"
@@ -19,6 +23,9 @@
 					:isDetailView="isDetailView"
 					:id="element.id"
 					tabindex="0"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="index"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
@@ -30,6 +37,9 @@
 					:isEditMode="isEditMode"
 					:id="element.id"
 					tabindex="0"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="index"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
@@ -40,6 +50,9 @@
 					:element="element"
 					:isEditMode="isEditMode"
 					:id="element.id"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="index"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
@@ -50,6 +63,9 @@
 					:element="element"
 					:isEditMode="isEditMode"
 					:id="element.id"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="index"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
@@ -65,6 +81,9 @@
 					:hasMultipleElements="hasMultipleElements"
 					:id="element.id"
 					tabindex="0"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="index"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
@@ -78,6 +97,9 @@
 					:isLastElement="lastElementId === element.id"
 					:hasMultipleElements="hasMultipleElements"
 					:id="element.id"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="index"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
@@ -87,6 +109,9 @@
 					v-else-if="isDeletedElementResponse(element)"
 					:element="element"
 					:isEditMode="isEditMode"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="index"
 					@delete:element="onDeleteElement"
 				/>
 			</ContentElement>
@@ -131,6 +156,14 @@ const props = defineProps({
 	},
 	isDetailView: {
 		type: Boolean,
+		required: true,
+	},
+	rowIndex: {
+		type: Number,
+		required: true,
+	},
+	columnIndex: {
+		type: Number,
 		required: true,
 	},
 });
