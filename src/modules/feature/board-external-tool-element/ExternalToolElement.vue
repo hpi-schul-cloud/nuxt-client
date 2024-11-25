@@ -77,11 +77,13 @@ import {
 	Ref,
 	ref,
 	toRef,
+	watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
+import { useRoute } from "vue-router";
 
 const props = defineProps({
 	element: {
@@ -149,7 +151,7 @@ const hasDeepLink: ComputedRef<boolean> = computed(
 );
 
 const showTool: ComputedRef<boolean> = computed(() => {
-	if (!hasLinkedTool.value) {
+	if (!displayData.value || !hasLinkedTool.value) {
 		return false;
 	}
 
@@ -195,13 +197,11 @@ const toolTitle: ComputedRef<string> = computed(() => {
 	}
 
 	if (isDeepLinkingTool.value) {
-		if (hasDeepLink.value) {
-			return displayData.value?.ltiDeepLink?.title ?? toolDisplayName.value;
-		}
-
-		return t("feature-board-external-tool-element.placeholder.selectContent", {
-			toolName: toolDisplayName.value,
-		});
+		return hasDeepLink.value
+			? toolDisplayName.value
+			: t("feature-board-external-tool-element.placeholder.selectContent", {
+					toolName: toolDisplayName.value,
+				});
 	}
 
 	return toolDisplayName.value;
@@ -309,4 +309,6 @@ const ariaLabel = computed(() => {
 
 	return information.join(", ");
 });
+
+watch(() => displayData.value, loadCardData, { immediate: true });
 </script>
