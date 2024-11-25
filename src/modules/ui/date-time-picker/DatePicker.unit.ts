@@ -1,14 +1,9 @@
-import {
-	ComponentMountingOptions,
-	flushPromises,
-	mount,
-} from "@vue/test-utils";
+import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import DatePicker from "./DatePicker.vue";
-import { nextTick } from "vue";
 
 describe("DatePicker", () => {
 	const mountComponent = (
