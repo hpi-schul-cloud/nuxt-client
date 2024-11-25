@@ -104,12 +104,10 @@ describe("ExternalToolElement", () => {
 			element: ExternalToolElementResponse;
 			isEditMode: boolean;
 		},
-		displayData?: ExternalToolDisplayData,
-		toolLaunchRequest?: ToolLaunchRequest
+		displayData?: ExternalToolDisplayData
 	) => {
 		useContentElementStateMock.modelValue = ref(propsData.element.content);
 		useExternalToolElementDisplayStateMock.displayData.value = displayData;
-		useExternalToolLaunchStateMock.toolLaunchRequest.value = toolLaunchRequest;
 
 		const refreshTime = 299000;
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
@@ -407,8 +405,9 @@ describe("ExternalToolElement", () => {
 						element: externalToolElementResponseFactory.build(),
 						isEditMode: false,
 					},
-					undefined,
-					toolLaunchRequestFactory.build({ isDeepLink: true })
+					externalToolDisplayDataFactory.build({
+						isLtiDeepLinkingTool: true,
+					})
 				);
 
 				return {
@@ -436,8 +435,8 @@ describe("ExternalToolElement", () => {
 					},
 					externalToolDisplayDataFactory.build({
 						status: schoolToolConfigurationStatusFactory.build(),
-					}),
-					toolLaunchRequestFactory.build({ isDeepLink: true })
+						isLtiDeepLinkingTool: true,
+					})
 				);
 
 				return {
@@ -451,16 +450,6 @@ describe("ExternalToolElement", () => {
 				const element = wrapper.findComponent({ ref: "externalToolElement" });
 
 				expect(element.isVisible()).toEqual(true);
-			});
-
-			it("should load the launch request", async () => {
-				setup();
-
-				await nextTick();
-
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).toHaveBeenCalledWith("contextExternalToolId");
 			});
 		});
 	});
@@ -725,8 +714,9 @@ describe("ExternalToolElement", () => {
 						}),
 						isEditMode: true,
 					},
-					undefined,
-					toolLaunchRequestFactory.build({ isDeepLink: true })
+					externalToolDisplayDataFactory.build({
+						isLtiDeepLinkingTool: true,
+					})
 				);
 
 				return {
@@ -888,14 +878,14 @@ describe("ExternalToolElement", () => {
 
 			expect(
 				useExternalToolLaunchStateMock.fetchContextLaunchRequest
-			).toHaveBeenCalledTimes(1);
+			).toHaveBeenCalledTimes(2);
 
 			jest.advanceTimersByTime(refreshTime + 1000);
 			await nextTick();
 
 			expect(
 				useExternalToolLaunchStateMock.fetchContextLaunchRequest
-			).toHaveBeenCalledTimes(2);
+			).toHaveBeenCalledTimes(3);
 		});
 	});
 

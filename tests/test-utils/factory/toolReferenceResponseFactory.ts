@@ -8,4 +8,5 @@ export const toolReferenceResponseFactory =
 		status: contextExternalToolConfigurationStatusFactory.build(),
 		openInNewTab: true,
 		displayName: `Tool ${sequence}`,
+		isLtiDeepLinkingTool: false,
 	}));

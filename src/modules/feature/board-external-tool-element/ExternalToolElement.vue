@@ -83,7 +83,6 @@ import { useI18n } from "vue-i18n";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
 import ExternalToolElementConfigurationDialog from "./ExternalToolElementConfigurationDialog.vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
-import { useRoute } from "vue-router";
 
 const props = defineProps({
 	element: {
