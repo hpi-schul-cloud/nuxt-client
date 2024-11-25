@@ -1,6 +1,7 @@
 <template>
 	<room-base-card
-		:title="tool.name"
+		v-if="showTool"
+		:title="toolName"
 		:logo-url="tool.logoUrl"
 		:open-in-new-tab="tool.openInNewTab"
 		test-id="tool-card"
@@ -121,6 +122,28 @@ const menuItems = [
 		dataTestId: "tool-delete",
 	},
 ];
+
+const isDeepLinkingTool: ComputedRef = computed(
+	() => !!props.tool.isLtiDeepLinkingTool
+);
+
+const hasDeepLink: ComputedRef = computed(() => !!props.tool.ltiDeepLink);
+
+const toolName: ComputedRef = computed(() => {
+	if (isDeepLinkingTool.value) {
+		return hasDeepLink.value
+			? props.tool.name
+			: t("feature-board-external-tool-element.placeholder.selectContent", {
+					toolName: props.tool.name,
+				});
+	}
+
+	return props.tool.name;
+});
+
+const showTool: ComputedRef = computed(
+	() => !(isDeepLinkingTool.value && !hasDeepLink.value && !isTeacher())
+);
 
 const isToolOutdated: ComputedRef = computed(
 	() =>
