@@ -73,6 +73,7 @@ export class ExternalToolMapper {
 			url: response.url,
 			payload: response.payload,
 			openNewTab: response.openNewTab,
+			launchType: response.launchType,
 		};
 
 		return mapped;
