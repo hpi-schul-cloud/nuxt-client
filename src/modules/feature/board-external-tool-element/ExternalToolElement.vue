@@ -28,6 +28,9 @@
 					v-if="isEditMode"
 					ref="externalToolElementMenu"
 					:display-name="displayData?.name"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="elementIndex"
 					@move-down:element="onMoveElementDown"
 					@move-up:element="onMoveElementUp"
 					@delete:element="onDeleteElement"
@@ -86,6 +89,9 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	columnIndex: { type: Number, required: true },
+	rowIndex: { type: Number, required: true },
+	elementIndex: { type: Number, required: true },
 });
 
 const emit = defineEmits<{
