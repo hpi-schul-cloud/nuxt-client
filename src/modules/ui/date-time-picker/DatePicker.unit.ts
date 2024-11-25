@@ -1,9 +1,14 @@
-import { ComponentMountingOptions, mount } from "@vue/test-utils";
+import {
+	ComponentMountingOptions,
+	flushPromises,
+	mount,
+} from "@vue/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import DatePicker from "./DatePicker.vue";
+import { nextTick } from "vue";
 
 describe("DatePicker", () => {
 	const mountComponent = (
@@ -12,6 +17,9 @@ describe("DatePicker", () => {
 		return mount(DatePicker, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: {
+					"transition-group": false,
+				},
 			},
 			...options,
 			attachTo: document.body,
@@ -38,12 +46,12 @@ describe("DatePicker", () => {
 
 		const dateSelector = wrapper.findComponent({ name: "v-date-picker" });
 		expect(dateSelector.exists()).toBe(true);
-		dateSelector.vm.$emit("update:model-value", new Date().toISOString());
+		dateSelector.vm.$emit("update:modelValue", new Date().toISOString());
 
 		expect(wrapper.emitted("update:date")).toHaveLength(1);
 	});
 
-	describe("when date is invalid", () => {
+	describe("when required prop is set & value is left empty", () => {
 		it("should emit error event", async () => {
 			const wrapper = mountComponent({
 				props: {
@@ -60,7 +68,9 @@ describe("DatePicker", () => {
 			expect(wrapper.emitted("update:date")).toBeUndefined();
 			expect(wrapper.emitted("error")).toHaveLength(1);
 		});
+	});
 
+	describe("when date is invalid", () => {
 		it("should emit error event", async () => {
 			const wrapper = mountComponent({
 				props: { date: new Date().toISOString() },
@@ -74,5 +84,9 @@ describe("DatePicker", () => {
 			expect(wrapper.emitted("update:date")).toBeUndefined();
 			expect(wrapper.emitted("error")).toHaveLength(1);
 		});
+
+		// TODO: Can't properly be tested with debounced validation, needs a new approach
+		it.todo("should display error message");
+		it.todo("should display external error message");
 	});
 });
