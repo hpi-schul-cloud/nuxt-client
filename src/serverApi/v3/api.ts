@@ -4450,6 +4450,12 @@ export interface LinkContentBody {
      * @memberof LinkContentBody
      */
     imageUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkContentBody
+     */
+    originalImageUrl: string;
 }
 /**
  * 
