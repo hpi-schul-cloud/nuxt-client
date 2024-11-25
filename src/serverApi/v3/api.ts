@@ -4099,6 +4099,18 @@ export enum LanguageType {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum LaunchType {
+    Basic = 'basic',
+    Oauth2 = 'oauth2',
+    Lti11BasicLaunch = 'lti11BasicLaunch',
+    Lti11ContentItemSelection = 'lti11ContentItemSelection'
+}
+
+/**
+ * 
+ * @export
  * @interface LayoutBodyParams
  */
 export interface LayoutBodyParams {
@@ -8955,6 +8967,12 @@ export interface ToolLaunchRequestResponse {
      * @memberof ToolLaunchRequestResponse
      */
     openNewTab?: boolean;
+    /**
+     * 
+     * @type {LaunchType}
+     * @memberof ToolLaunchRequestResponse
+     */
+    launchType: LaunchType;
 }
 
 /**
