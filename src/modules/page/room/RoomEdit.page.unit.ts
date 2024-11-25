@@ -53,7 +53,6 @@ const roomParams: RoomUpdateParams = {
 describe("@pages/RoomEdit.page.vue", () => {
 	const setup = () => {
 		const wrapper = mount(RoomEditPage, {
-			shallow: true,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

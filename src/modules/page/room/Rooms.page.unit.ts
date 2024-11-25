@@ -25,7 +25,7 @@ describe("RoomsPage", () => {
 	});
 
 	const setup = () => {
-		const wrapper = shallowMount(RoomsPage, {
+		const wrapper = mount(RoomsPage, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 			},

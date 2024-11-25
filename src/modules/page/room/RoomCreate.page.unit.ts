@@ -41,7 +41,6 @@ const roomParams: RoomCreateParams = {
 describe("@pages/RoomCreate.page.vue", () => {
 	const setup = () => {
 		const wrapper = mount(RoomCreatePage, {
-			shallow: true,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
