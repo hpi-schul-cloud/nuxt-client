@@ -18,23 +18,54 @@
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
 				<div v-if="step === 'firstStep' && isOpen">
+					<div data-testid="share-options-info-text">
+						{{ t(`components.molecules.share.${type}.options.infoText`) }}
+						<p />
+					</div>
 					<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 						<div class="mx-2">
 							<v-icon color="info" :icon="mdiInformation" />
 						</div>
 						<div>
-							{{ t(`components.molecules.share.${type}.options.infoText`) }}
-							<br />
-							{{ t("components.molecules.copyResult.courseFiles.info") }}
-							<div
-								data-testid="share-modal-external-tools-info"
-								v-if="ctlToolsEnabled"
-							>
+							<div data-testid="share-options-table-header">
 								{{
 									t(
-										`components.molecules.share.courses.options.ctlTools.infotext`
+										"components.molecules.share.courses.options.tableHeader.InfoText"
 									)
 								}}
+								<ul class="ml-6">
+									<li
+										style="margin: 1px"
+										data-testid="share-options-personal-data-text"
+									>
+										{{
+											t(
+												"components.molecules.share.options.personalData.infoText"
+											)
+										}}
+									</li>
+									<RenderHTML
+										v-if="showCtlToolsInfo"
+										:html="
+											t(
+												'components.molecules.share.courses.options.ctlTools.infoText',
+												{}
+											)
+										"
+										component="p"
+										style="margin-bottom: 0px"
+										data-testid="share-modal-external-tools-info"
+									/>
+									<RenderHTML
+										:html="
+											t(
+												'components.molecules.share.courses.options.restrictions.infoText',
+												{}
+											)
+										"
+										component="p"
+									/>
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -58,9 +89,10 @@
 </template>
 
 <script setup lang="ts">
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
+import RenderHTML from "@/modules/feature/render-html/RenderHTML.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -96,6 +128,8 @@ type ShareModalStep = "firstStep" | "secondStep";
 const step = computed<ShareModalStep>(() =>
 	shareModule.getShareUrl === undefined ? "firstStep" : "secondStep"
 );
+
+const isCourse = computed(() => props.type === "courses");
 
 const modalOptions: Record<
 	ShareModalStep,
@@ -141,7 +175,10 @@ const onCopy = () => {
 	});
 };
 
-const ctlToolsEnabled = computed(() => {
-	return envConfigModule.getCtlToolsTabEnabled;
+const showCtlToolsInfo = computed(() => {
+	return (
+		envConfigModule.getCtlToolsTabEnabled &&
+		(props.type === "courses" || props.type === "columnBoard")
+	);
 });
 </script>

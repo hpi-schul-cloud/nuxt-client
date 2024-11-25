@@ -660,13 +660,19 @@ export default {
 	"components.molecules.share.courses.options.ctlTools.infotext":
 		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
 	"components.molecules.share.courses.options.infoText":
-		"Con el siguiente enlace, el curso puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
+		"<li>Herramientas externas no disponibles en la escuela de destino </li><li>Configuraciones protegidas de herramientas externas </li>",
+	"components.molecules.share.options.personalData.infoText":
+		"Datos personales",
+	"components.molecules.share.courses.options.restrictions.infoText":
+		"<li>Archivos en Archivos de curso </li><li>Contenido de Etherpads </li><li>ID de Geogebra y </li><li>Grupos de cursos </li>",
+	"components.molecules.share.courses.options.tableHeader.InfoText":
+		"No se copiará el siguiente contenido:",
 	"components.molecules.share.courses.result.linkLabel":
 		"Enlace a la copia del curso",
 	"components.molecules.share.lessons.mail.body": "Enlace al tema:",
 	"components.molecules.share.lessons.mail.subject": "Tema de importación",
 	"components.molecules.share.lessons.options.infoText":
-		"Con el siguiente enlace, el tema puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
+		"Con el siguiente enlace, el tema puede ser importado como copia por otros profesores.",
 	"components.molecules.share.lessons.result.linkLabel":
 		"Enlace a la copia del tema",
 	"components.molecules.share.options.expiresInDays":
@@ -681,7 +687,7 @@ export default {
 	"components.molecules.share.tasks.mail.body": "Enlace a la tarea:",
 	"components.molecules.share.tasks.mail.subject": "Tarea de importación",
 	"components.molecules.share.tasks.options.infoText":
-		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
+		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores.",
 	"components.molecules.share.tasks.result.linkLabel":
 		"Enlace a la copia de la tarea",
 	"components.molecules.TaskItemMenu.confirmDelete.text":

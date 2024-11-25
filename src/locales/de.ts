@@ -651,20 +651,26 @@ export default {
 		"Organisationsleitung",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.share.columnBoard.options.infoText":
-		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link Bereich-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
-	"components.molecules.share.courses.options.ctlTools.infotext":
-		"Externe Tools, die dem Kurs oder Karten im Bereich zugeordnet sind, werden nicht kopiert.",
+	"components.molecules.share.courses.options.ctlTools.infoText":
+		"<li>In Zielschule nicht verfügbare, externe Tools</li><li>Geschützte Einstellungen externer Tools</li>",
 	"components.molecules.share.courses.options.infoText":
-		"Mit dem folgenden Link kann der Kurs als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+		"Mit dem folgenden Link kann der Kurs als Kopie von anderen Lehrkräften importiert werden.",
+	"components.molecules.share.options.personalData.infoText":
+		"Personenbezogene Daten",
+	"components.molecules.share.courses.options.restrictions.infoText":
+		"<li>Dateien unter Kurs-Dateien</li><li>Inhalte aus Etherpads</li><li>Geogebra IDs und</li><li>Kursgruppen</li>",
+	"components.molecules.share.courses.options.tableHeader.InfoText":
+		"Folgende Inhalte werden nicht kopiert:",
 	"components.molecules.share.courses.result.linkLabel": "Link Kurskopie",
 	"components.molecules.share.lessons.mail.body": "Link zum Thema:",
 	"components.molecules.share.lessons.mail.subject": "Thema zum Importieren",
 	"components.molecules.share.lessons.options.infoText":
-		"Mit dem folgenden Link kann das Thema als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+		"Mit dem folgenden Link kann das Thema als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.lessons.result.linkLabel": "Link Themakopie",
 	"components.molecules.share.options.expiresInDays":
 		"Link läuft nach 21 Tagen ab",
@@ -678,7 +684,7 @@ export default {
 	"components.molecules.share.tasks.mail.body": "Link zur Aufgabe:",
 	"components.molecules.share.tasks.mail.subject": "Aufgabe zum Importieren",
 	"components.molecules.share.tasks.options.infoText":
-		"Mit dem folgenden Link kann die Aufgabe als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+		"Mit dem folgenden Link kann die Aufgabe als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.tasks.result.linkLabel": "Link Aufgabekopie",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Bist du dir sicher, dass du die Aufgabe "{taskTitle}" löschen möchtest?',

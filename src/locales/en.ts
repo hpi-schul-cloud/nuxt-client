@@ -640,17 +640,22 @@ export default {
 	"components.molecules.share.courses.mail.body": "Link to the course:",
 	"components.molecules.share.courses.mail.subject": "Course you can import",
 	"components.molecules.share.courses.options.ctlTools.infotext":
-		"External tools associated with the course or boarding cards will not be copied.",
+		"<li>External tools not available in the target school </li><li>Protected settings of external tools</li>",
 	"components.molecules.share.courses.options.infoText":
-		"With the following link, the course can be imported as a copy by other teachers. Personal data will not be imported.",
+		"With the following link, the course can be imported as a copy by other teachers.",
+	"components.molecules.share.options.personalData.infoText": "Personal data",
+	"components.molecules.share.courses.options.restrictions.infoText":
+		"<li>Files under Course Files </li><li>Content from Etherpads </li><li>Geogebra IDs and </li><li>Course groups </li>",
+	"components.molecules.share.courses.options.tableHeader.InfoText":
+		"The following content will not be copied:",
 	"components.molecules.share.courses.result.linkLabel": "Link course copy",
 	"components.molecules.share.lessons.mail.body": "Link to the topic:",
 	"components.molecules.share.lessons.mail.subject": "Topic you can import",
 	"components.molecules.share.lessons.options.infoText":
-		"With the following link, the topic can be imported as a copy by other teachers. Personal data will not be imported.",
+		"With the following link, the topic can be imported as a copy by other teachers.",
 	"components.molecules.share.lessons.result.linkLabel": "Link topic copy",
 	"components.molecules.share.columnBoard.options.infoText":
-		"With the following link, the board can be imported as a copy by other teachers. Personal data will not be imported.",
+		"With the following link, the board can be imported as a copy by other teachers.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link to Board copy",
 	"components.molecules.share.options.expiresInDays":

@@ -657,14 +657,20 @@ export default {
 	"components.molecules.share.courses.options.ctlTools.infotext":
 		"Зовнішні інструменти, пов’язані з курсом або посадочними картками, не будуть скопійовані.",
 	"components.molecules.share.courses.options.infoText":
-		"За наступним посиланням курс може бути імпортований як копія іншими викладачами. Персональні дані не імпортуються.",
+		"<li>Зовнішні інструменти недоступні в цільовій школі </li><li>Захищені налаштування зовнішніх інструментів </li> ",
+	"components.molecules.share.options.personalData.infoText":
+		"Персональні дані",
+	"components.molecules.share.courses.options.restrictions.infoText":
+		"<li>Файли в розділі Файли курсу </li><li>Вміст із Etherpads </li><li>Ідентифікатори Geogebra та </li><li>Групи курсів </li>",
+	"components.molecules.share.courses.options.tableHeader.InfoText":
+		"Наступний вміст не буде скопійовано:",
 	"components.molecules.share.courses.result.linkLabel":
 		"Посилання на копію курсу",
 	"components.molecules.share.lessons.mail.body": "Посилання на курс:",
 	"components.molecules.share.lessons.mail.subject":
 		"Теми, які можна імпортувати",
 	"components.molecules.share.lessons.options.infoText":
-		"За наступним посиланням тему можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
+		"За наступним посиланням тему можуть імпортувати як копію інші вчителі.",
 	"components.molecules.share.lessons.result.linkLabel": "Копія теми посилання",
 	"components.molecules.share.options.expiresInDays":
 		"Термін дії посилання закінчується через 21 днів",
@@ -679,7 +685,7 @@ export default {
 	"components.molecules.share.tasks.mail.subject":
 		"Завдання, які можна імпортувати",
 	"components.molecules.share.tasks.options.infoText":
-		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
+		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі.",
 	"components.molecules.share.tasks.result.linkLabel":
 		"Зв'язати копію завдання",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
