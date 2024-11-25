@@ -141,7 +141,10 @@ const startBeforeEndDateValidator = (endDate: string | undefined) => {
 const validationRules = computed(() => ({
 	roomData: {
 		name: {
-			maxLength: maxLength(100),
+			maxLength: helpers.withMessage(
+				t("common.validation.tooLong"),
+				maxLength(100)
+			),
 			required: helpers.withMessage(t("common.validation.required2"), required),
 		},
 		startDate: {
