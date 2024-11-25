@@ -4619,6 +4619,12 @@ export interface Lti11DeepLinkContentItemListParams {
      * @memberof Lti11DeepLinkContentItemListParams
      */
     context: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Lti11DeepLinkContentItemListParams
+     */
+    graph: Array<string>;
 }
 /**
  * 
@@ -4686,6 +4692,85 @@ export interface Lti11DeepLinkParams {
      * @memberof Lti11DeepLinkParams
      */
     oauth_signature: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_callback?: string;
+}
+/**
+ * 
+ * @export
+ * @interface Lti11DeepLinkParamsRaw
+ */
+export interface Lti11DeepLinkParamsRaw {
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    lti_message_type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    lti_version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    content_items?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    data: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_nonce: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_timestamp: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_signature_method: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_consumer_key: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_signature: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_callback?: string;
 }
 /**
  * 
@@ -4802,13 +4887,37 @@ export interface LtiDeepLinkResponse {
      * @type {string}
      * @memberof LtiDeepLinkResponse
      */
-    url?: string;
+    title?: string;
     /**
      * 
      * @type {string}
      * @memberof LtiDeepLinkResponse
      */
-    title?: string;
+    text?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    availableFrom?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    availableUntil?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    submissionFrom?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    submissionUntil?: string;
 }
 /**
  * 
@@ -24476,15 +24585,15 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @param {string} contextExternalToolId 
-         * @param {Lti11DeepLinkParams} lti11DeepLinkParams 
+         * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolDeepLinkControllerDeepLink: async (contextExternalToolId: string, lti11DeepLinkParams: Lti11DeepLinkParams, options: any = {}): Promise<RequestArgs> => {
+        toolDeepLinkControllerDeepLink: async (contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'contextExternalToolId' is not null or undefined
             assertParamExists('toolDeepLinkControllerDeepLink', 'contextExternalToolId', contextExternalToolId)
-            // verify required parameter 'lti11DeepLinkParams' is not null or undefined
-            assertParamExists('toolDeepLinkControllerDeepLink', 'lti11DeepLinkParams', lti11DeepLinkParams)
+            // verify required parameter 'lti11DeepLinkParamsRaw' is not null or undefined
+            assertParamExists('toolDeepLinkControllerDeepLink', 'lti11DeepLinkParamsRaw', lti11DeepLinkParamsRaw)
             const localVarPath = `/tools/context-external-tools/{contextExternalToolId}/lti11-deep-link-callback`
                 .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -24505,7 +24614,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
             setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(lti11DeepLinkParams, localVarRequestOptions, configuration)
+            localVarRequestOptions.data = serializeDataIfNeeded(lti11DeepLinkParamsRaw, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -25154,12 +25263,12 @@ export const ToolApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} contextExternalToolId 
-         * @param {Lti11DeepLinkParams} lti11DeepLinkParams 
+         * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParams: Lti11DeepLinkParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParams, options);
+        async toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -25496,12 +25605,12 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @param {string} contextExternalToolId 
-         * @param {Lti11DeepLinkParams} lti11DeepLinkParams 
+         * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParams: Lti11DeepLinkParams, options?: any): AxiosPromise<string> {
-            return localVarFp.toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParams, options).then((request) => request(axios, basePath));
+        toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): AxiosPromise<string> {
+            return localVarFp.toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -25826,12 +25935,12 @@ export interface ToolApiInterface {
     /**
      * 
      * @param {string} contextExternalToolId 
-     * @param {Lti11DeepLinkParams} lti11DeepLinkParams 
+     * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParams: Lti11DeepLinkParams, options?: any): AxiosPromise<string>;
+    toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): AxiosPromise<string>;
 
     /**
      * 
@@ -26196,13 +26305,13 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
     /**
      * 
      * @param {string} contextExternalToolId 
-     * @param {Lti11DeepLinkParams} lti11DeepLinkParams 
+     * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParams: Lti11DeepLinkParams, options?: any) {
-        return ToolApiFp(this.configuration).toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParams, options).then((request) => request(this.axios, this.basePath));
+    public toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any) {
+        return ToolApiFp(this.configuration).toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
