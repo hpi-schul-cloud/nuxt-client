@@ -77,7 +77,6 @@ import {
 	Ref,
 	ref,
 	toRef,
-	watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
 import ExternalToolElementAlert from "./ExternalToolElementAlert.vue";
@@ -118,7 +117,7 @@ const {
 	launchTool,
 	fetchContextLaunchRequest,
 	error: launchError,
-} = useExternalToolLaunchState();
+} = useExternalToolLaunchState(() => loadCardData());
 
 const autofocus: Ref<boolean> = ref(false);
 const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
@@ -308,6 +307,4 @@ const ariaLabel = computed(() => {
 
 	return information.join(", ");
 });
-
-watch(() => displayData.value, loadCardData, { immediate: true });
 </script>

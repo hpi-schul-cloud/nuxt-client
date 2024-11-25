@@ -73,7 +73,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["edit", "delete", "error"]);
+const emit = defineEmits(["edit", "delete", "error", "refresh"]);
 
 const { t } = useI18n();
 
@@ -81,7 +81,7 @@ const {
 	fetchContextLaunchRequest,
 	launchTool,
 	error: launchError,
-} = useExternalToolLaunchState();
+} = useExternalToolLaunchState(() => emit("refresh"));
 
 const { isTeacher } = useContextExternalToolConfigurationStatus();
 
