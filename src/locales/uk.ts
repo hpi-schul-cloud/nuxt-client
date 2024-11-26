@@ -585,6 +585,8 @@ export default {
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
+	"components.molecules.import.columnBoard.rename":
+		"При необхідності назву дошки можна змінити: ",
 	"components.molecules.import.columnBoard.options.infoText":
 		"Ви можете перейменувати дошку нижче",
 	"components.molecules.import.columnBoard.options.title": "Дошка імпорту",
@@ -593,14 +595,18 @@ export default {
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Виберіть курс, до якого ви бажаєте імпортувати дошку.",
 	"components.molecules.import.courses.label": "Курс",
-	"components.molecules.import.courses.options.ctlTools.infoText":
-		"Буде створено копію.<br>собисті дані не будуть імпортовані.<br>Зовнішні інструменти не будуть скопійовані.<br>Курс можна перейменувати нижче.",
+	"components.molecules.import.courses.rename":
+		"При необхідності назву курсу можна перейменувати: ",
+	"components.molecules.import.options.ctlTools.infoText":
+		"Наступний вміст не буде скопійовано:<br><ul class='ml-6'><li>Особисті дані</li><li>Зовнішні інструменти, недоступні в цільовій школі</li><li>Захищені налаштування зовнішніх інструментів< /li><li>Файли у Файлах курсу</li><li>Вміст із Etherpads </li><li>Ідентифікатори Geogebra та </li><li>Групи курсів </li></ul >",
 	"components.molecules.import.courses.options.infoText":
-		"Дані учасників не будуть скопійовані. Курс можна перейменувати нижче.",
+		"Наступний вміст не буде скопійовано:<br><ul class='ml-6'><li>Особисті дані</li><li>Файли у файлах курсу</li><li>Вміст із Etherpads</li > <li>ідентифікатори Geogebra та </li><li>групи курсів </li></ul>",
 	"components.molecules.import.courses.options.title": "Курс імпорту",
 	"components.molecules.import.lessons.label": "Тема",
+	"components.molecules.import.lessons.rename":
+		"При необхідності назву теми можна перейменувати: ",
 	"components.molecules.import.lessons.options.infoText":
-		"Дані учасників не будуть скопійовані. Тема можна перейменувати нижче.",
+		"Наступний вміст не буде скопійовано:<br><ul class='ml-6'><li>Особисті дані</li><li>Файли у файлах курсу</li><li>Вміст із Etherpads</li > <li>ідентифікатори Geogebra та </li><li>групи курсів </li></ul>",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
 		"Будь ласка, оберіть курс з якого ви хочете імпортувати тему",
 	"components.molecules.import.lessons.options.selectCourse": "Оберіть курс",
@@ -615,8 +621,10 @@ export default {
 		"Виконується імпорту...",
 	"components.molecules.import.options.success": "{name} успішно імпортовано",
 	"components.molecules.import.tasks.label": "Завдання",
+	"components.molecules.import.tasks.rename":
+		"При необхідності назву завдання можна перейменувати: ",
 	"components.molecules.import.tasks.options.infoText":
-		"Дані, що стосуються учасників, не копіюються. Завдання можна перейменувати нижче.",
+		"Наступний вміст не буде скопійовано:<br><ul class='ml-6'><li>Особисті дані</li><li>Файли у файлах курсу</li><li>Вміст із Etherpads</li > <li>ідентифікатори Geogebra та </li><li>групи курсів </li></ul>",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Виберіть курс, до якого ви хочете імпортувати завдання.",
 	"components.molecules.import.tasks.options.selectCourse": "Оберіть курс",

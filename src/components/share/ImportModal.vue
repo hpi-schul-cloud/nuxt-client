@@ -23,18 +23,22 @@
 					</div>
 					<RenderHTML
 						data-testid="import-modal-external-tools-info"
-						v-if="ctlToolsEnabled && parentType === 'courses'"
+						v-if="
+							ctlToolsEnabled &&
+							(parentType === 'courses' || parentType === 'columnBoard')
+						"
+						:html="t(`components.molecules.import.options.ctlTools.infoText`)"
+					/>
+					<RenderHTML
+						v-else
+						data-testid="import-modal-coursefiles-info"
 						:html="
-							t(
-								`components.molecules.import.${parentType}.options.ctlTools.infoText`
-							)
+							t(`components.molecules.import.${parentType}.options.infoText`)
 						"
 					/>
-					<div v-else data-testid="import-modal-coursefiles-info">
-						{{
-							t(`components.molecules.import.${parentType}.options.infoText`)
-						}}
-					</div>
+				</div>
+				<div class="mb-4">
+					{{ t(`components.molecules.import.${parentType}.rename`) }}
 				</div>
 				<v-text-field
 					ref="nameInputText"
@@ -48,7 +52,7 @@
 </template>
 
 <script setup>
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@icons/material";
 import { computed, reactive, ref } from "vue";

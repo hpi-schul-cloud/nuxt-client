@@ -581,6 +581,8 @@ export default {
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
+	"components.molecules.import.columnBoard.rename":
+		"Bei Bedarf kann der Name des Bereiches umbenannt werden: ",
 	"components.molecules.import.columnBoard.options.infoText":
 		"Der Bereich kann im Folgenden umbenannt werden. ",
 	"components.molecules.import.columnBoard.options.title":
@@ -589,14 +591,18 @@ export default {
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Der Kurs, in den der Bereich importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.courses.label": "Kurs",
-	"components.molecules.import.courses.options.ctlTools.infoText":
-		"Es wird eine Kopie erstellt.<br>Personenbezogene Daten werden nicht importiert.<br>Externe Tools werden nicht kopiert. <br>Der Kurs kann im Folgenden umbenannt werden.",
+	"components.molecules.import.courses.rename":
+		"Bei Bedarf kann der Name des Kurses umbenannt werden: ",
+	"components.molecules.import.options.ctlTools.infoText":
+		"Folgende Inhalte werden nicht kopiert:<br><ul class='ml-6'><li>Personenbezogene Daten</li><li>In Zielschule nicht verfügbare, externe Tools</li><li>Geschützte Einstellungen externer Tools</li><li>Dateien unter Kurs-Dateien</li><li>Inhalte aus Etherpads</li><li>Geogebra IDs und</li><li>Kursgruppen</li></ul>",
 	"components.molecules.import.courses.options.infoText":
-		"Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Der Kurs kann im Folgenden umbenannt werden.",
+		"Folgende Inhalte werden nicht kopiert:<br><ul class='ml-6'><li>Personenbezogene Daten</li><li>Dateien unter Kurs-Dateien</li><li>Inhalte aus Etherpads</li><li>Geogebra IDs und</li><li>Kursgruppen</li></ul>",
 	"components.molecules.import.courses.options.title": "Kurs importieren",
 	"components.molecules.import.lessons.label": "Thema",
+	"components.molecules.import.lessons.rename":
+		"Bei Bedarf kann der Name des Themas umbenannt werden: ",
 	"components.molecules.import.lessons.options.infoText":
-		"Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Das Thema kann im Folgenden umbenannt werden.",
+		"Folgende Inhalte werden nicht kopiert:<br><ul class='ml-6'><li>Personenbezogene Daten</li><li>Dateien unter Kurs-Dateien</li><li>Inhalte aus Etherpads</li><li>Geogebra IDs und</li><li>Kursgruppen</li></ul>",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
 		"Der Kurs, in den das Thema importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.lessons.options.selectCourse": "Kurs wählen",
@@ -611,8 +617,10 @@ export default {
 	"components.molecules.import.options.success":
 		"{name} wurde erfolgreich importiert",
 	"components.molecules.import.tasks.label": "Aufgabe",
+	"components.molecules.import.tasks.rename":
+		"Bei Bedarf kann der Name der Aufgabe umbenannt werden: ",
 	"components.molecules.import.tasks.options.infoText":
-		"Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Die Aufgabe kann im Folgenden umbenannt werden.",
+		"Folgende Inhalte werden nicht kopiert:<br><ul class='ml-6'><li>Personenbezogene Daten</li><li>Dateien unter Kurs-Dateien</li><li>Inhalte aus Etherpads</li><li>Geogebra IDs und</li><li>Kursgruppen</li></ul>",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Der Kurs, in den die Aufgabe importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.export.options.info":

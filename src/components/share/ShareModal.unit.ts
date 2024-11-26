@@ -139,7 +139,7 @@ describe("@/components/share/ShareModal", () => {
 
 				const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
 
-				expect(renderHtmls[0].isVisible()).toBe(true);
+				expect(infotext.isVisible()).toBe(true);
 				expect(renderHtmls[0].props("html")).toEqual(
 					"components.molecules.share.courses.options.ctlTools.infoText"
 				);

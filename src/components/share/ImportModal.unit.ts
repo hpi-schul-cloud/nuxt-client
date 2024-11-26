@@ -2,11 +2,11 @@ import ImportModal from "@/components/share/ImportModal.vue";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { mount } from "@vue/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("@components/share/ImportModal", () => {
 	const setup = (envConfigModuleGetter?: Partial<EnvConfigModule>) => {
@@ -123,7 +123,7 @@ describe("@components/share/ImportModal", () => {
 				);
 
 				expect(infoText.attributes("html")).toEqual(
-					"components.molecules.import.courses.options.ctlTools.infoText"
+					"components.molecules.import.options.ctlTools.infoText"
 				);
 			});
 			it("should not show course file info", () => {
@@ -168,14 +168,9 @@ describe("@components/share/ImportModal", () => {
 				it("should set the right key for course files", () => {
 					const { wrapper } = setup({ getCtlToolsTabEnabled: false });
 
-					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
-					const cardText = dialog.findComponent({ name: "v-card-text" });
+					const renderHtml = wrapper.findComponent({ name: "RenderHTML" });
 
-					const infoText = cardText.find(
-						`[data-testid="import-modal-coursefiles-info"]`
-					);
-
-					expect(infoText.element.innerHTML).toEqual(
+					expect(renderHtml.props("html")).toEqual(
 						"components.molecules.import.courses.options.infoText"
 					);
 				});

@@ -589,6 +589,8 @@ export default {
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
+	"components.molecules.import.columnBoard.rename":
+		"Si es necesario, se puede cambiar el nombre del tablero: ",
 	"components.molecules.import.columnBoard.options.infoText":
 		"Puede cambiar el nombre del tablero a continuación.",
 	"components.molecules.import.columnBoard.options.title": "Importar tablero",
@@ -597,14 +599,18 @@ export default {
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar el tablero.",
 	"components.molecules.import.courses.label": "Curso",
-	"components.molecules.import.courses.options.ctlTools.infoText":
-		"Se creará una copia.<br>No se importarán datos personales.<br>No se copiarán herramientas externas.<br>Se puede cambiar el nombre del curso a continuación.",
+	"components.molecules.import.courses.rename":
+		"Si es necesario, se puede cambiar el nombre del curso: ",
+	"components.molecules.import.options.ctlTools.infoText":
+		"El siguiente contenido no se copiará:<br><ul class='ml-6'><li>Datos personales</li><li>Herramientas externas no disponibles en la escuela de destino</li><li>Configuraciones protegidas de herramientas externas</li><li>Archivos en Archivos de curso</li><li>Contenido de Etherpads </li><li>ID de Geogebra y </li><li>Grupos de cursos </li></ul >",
 	"components.molecules.import.courses.options.infoText":
-		"Los datos relacionados con los participantes no se copiarán. El curso se puede renombrar a continuación.",
+		"El siguiente contenido no se copiará:<br><ul class='ml-6'><li>Datos personales</li><li>Archivos en archivos del curso</li><li>Contenido de Etherpads</li > <li>ID de Geogebra y </li><li>Grupos de cursos </li></ul>",
 	"components.molecules.import.courses.options.title": "Importar curso",
 	"components.molecules.import.lessons.label": "Tema",
+	"components.molecules.import.lessons.rename":
+		"Si es necesario, se puede cambiar el nombre del tema: ",
 	"components.molecules.import.lessons.options.infoText":
-		"Los datos relacionados con los participantes no se copiarán. El tema se puede renombrar a continuación.",
+		"El siguiente contenido no se copiará:<br><ul class='ml-6'><li>Datos personales</li><li>Archivos en archivos del curso</li><li>Contenido de Etherpads</li > <li>ID de Geogebra y </li><li>Grupos de cursos </li></ul>",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar el tema.",
 	"components.molecules.import.lessons.options.selectCourse": "Elija el curso",
@@ -619,8 +625,10 @@ export default {
 		"Importación en curso...",
 	"components.molecules.import.options.success": "{name} importado con éxito",
 	"components.molecules.import.tasks.label": "Tarea",
+	"components.molecules.import.tasks.rename":
+		"Si es necesario, se puede cambiar el nombre de la tarea: ",
 	"components.molecules.import.tasks.options.infoText":
-		"Los datos relacionados con los participantes no se copiarán. La tarea se puede renombrar a continuación.",
+		"El siguiente contenido no se copiará:<br><ul class='ml-6'><li>Datos personales</li><li>Archivos en archivos del curso</li><li>Contenido de Etherpads</li > <li>ID de Geogebra y </li><li>Grupos de cursos </li></ul>",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar la tarea.",
 	"components.molecules.import.tasks.options.selectCourse": "Elija el curso",
