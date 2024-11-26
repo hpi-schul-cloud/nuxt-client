@@ -6,6 +6,7 @@ import {
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { uniqueId } from "lodash";
 import { onUnmounted, ref, Ref } from "vue";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 
@@ -110,11 +111,8 @@ export const useExternalToolLaunchState = (
 		form.action = toolLaunch.url;
 		form.id = "launch-form";
 
-		if (toolLaunch.launchType === LaunchType.Lti11ContentItemSelection) {
-			form.target = "newWindow";
-		} else {
-			form.target = toolLaunch.openNewTab ? "_blank" : "_self";
-		}
+		const target = uniqueId();
+		form.target = toolLaunch.openNewTab ? target : "_self";
 
 		const payload = JSON.parse(toolLaunch.payload || "{}");
 
@@ -131,7 +129,7 @@ export const useExternalToolLaunchState = (
 
 		document.body.appendChild(form);
 
-		windowRef.value = window.open(undefined, "newWindow");
+		windowRef.value = window.open(undefined, form.target);
 
 		form.submit();
 
