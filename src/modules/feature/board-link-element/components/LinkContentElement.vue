@@ -51,7 +51,7 @@ import {
 	BoardMenuActionMoveUp,
 	BoardMenuScope,
 } from "@ui-board";
-import { computed, PropType, ref, toRef, watch } from "vue";
+import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
@@ -106,28 +106,22 @@ const isHidden = computed(
 	() => props.isEditMode === false && !computedElement.value.content.url
 );
 
-const originalImageUrl = computed(() => {
-	return computedElement.value.content.originalImageUrl;
-});
-
-watch(originalImageUrl, async (newValue, oldValue) => {
-	if (newValue && newValue !== oldValue) {
-		modelValue.value.imageUrl = await createPreviewImage(newValue);
-	}
-});
-
-// const { getMetaTags } = useMetaTagExtractorApi();
+const { getMetaTags } = useMetaTagExtractorApi();
 
 const { createPreviewImage } = usePreviewGenerator(element.value.id);
 
 const onCreateUrl = async (originalUrl: string) => {
 	isLoading.value = true;
-
 	try {
 		const validUrl = ensureProtocolIncluded(originalUrl);
-		modelValue.value.url = validUrl;
-	} catch (error) {
-		modelValue.value.url = "";
+		const { url, title, description, originalImageUrl } =
+			await getMetaTags(validUrl);
+		modelValue.value.url = url;
+		modelValue.value.title = title;
+		modelValue.value.description = description;
+		if (originalImageUrl) {
+			modelValue.value.imageUrl = await createPreviewImage(originalImageUrl);
+		}
 	} finally {
 		isLoading.value = false;
 	}
