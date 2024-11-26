@@ -1,49 +1,52 @@
 <template>
 	<div v-if="isLoading" />
-	<template v-else>
-		<template v-if="isRoom">
-			<DefaultWireframe
-				max-width="full"
-				:breadcrumbs="breadcrumbs"
-				:fabItems="fabItems"
-				@onFabItemClick="fabItemClickHandler"
-			>
-				<template #header v-if="room">
-					<div class="d-flex align-items-center">
-						<h1 class="text-h3 mb-4" data-testid="room-title">
-							{{ room.name }}
-						</h1>
-						<RoomMenu :room-id="room.id" @room:delete="onDelete" />
-					</div>
-				</template>
-				<RoomDetails v-if="room" :room="room" :room-boards="roomBoards" />
-				<ConfirmationDialog />
-				<SelectBoardLayoutDialog
-					v-if="boardLayoutsEnabled"
-					v-model="boardLayoutDialogIsOpen"
-					@select:multi-column="createBoard(BoardLayout.Columns)"
-					@select:single-column="createBoard(BoardLayout.List)"
-				/>
-			</DefaultWireframe>
+	<DefaultWireframe
+		v-else
+		max-width="full"
+		:breadcrumbs="breadcrumbs"
+		:fabItems="fabItems"
+		@onFabItemClick="fabItemClickHandler"
+	>
+		<template #header>
+			<div class="d-flex align-items-center">
+				<h1 class="text-h3 mb-4" data-testid="room-title">
+					{{ room.name }}
+				</h1>
+				<RoomMenu :room-id="room.id" @room:delete="onDelete" />
+			</div>
 		</template>
-		<template v-else>
-			<CourseRoomDetailsPage />
-		</template>
-	</template>
+		<RoomDetails :room="room" :room-boards="roomBoards" />
+		<ConfirmationDialog />
+		<SelectBoardLayoutDialog
+			v-if="boardLayoutsEnabled"
+			v-model="boardLayoutDialogIsOpen"
+			@select:multi-column="createBoard(BoardLayout.Columns)"
+			@select:single-column="createBoard(BoardLayout.List)"
+		/>
+	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
+import router from "@/router";
 import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+	BoardLayout,
+	BoardApiFactory,
+	CreateBoardBodyParams,
+	BoardParentType,
+	ImportUserResponseRoleNamesEnum as Roles,
+} from "@/serverApi/v3";
+import { envConfigModule, authModule } from "@/store";
+import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
+import { useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomDetails, RoomMenu } from "@feature-room";
+import {
+	mdiViewGridPlusOutline,
+	mdiViewDashboardOutline,
+	mdiPlus,
+} from "@icons/material";
 import {
 	ConfirmationDialog,
 	useDeleteConfirmationDialog,
@@ -51,52 +54,45 @@ import {
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, ComputedRef, onUnmounted, ref, watch } from "vue";
+import { computed, ComputedRef, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
-import {
-	mdiPlus,
-	mdiViewGridPlusOutline,
-	mdiViewDashboardOutline,
-} from "@icons/material";
-import {
-	BoardApiFactory,
-	BoardLayout,
-	BoardParentType,
-	CreateBoardBodyParams,
-	ImportUserResponseRoleNamesEnum as Roles,
-} from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
-
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-const authModule = injectStrict(AUTH_MODULE_KEY);
-
-const route = useRoute();
-const router = useRouter();
-
-const roomDetailsStore = useRoomDetailsStore();
-const { isLoading, room, roomVariant, roomBoards } =
-	storeToRefs(roomDetailsStore);
-const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 
 const { t } = useI18n();
 const { deleteRoom } = useRoomsState();
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+
+const { isLoading, room, roomBoards } = storeToRefs(useRoomDetailsStore());
 
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.roomDetails.title")}`)
 );
 useTitle(pageTitle);
 
+const onDelete = async () => {
+	if (!room) return;
+
+	const shouldDelete = await askDeleteConfirmation(
+		room.value?.name,
+		"common.labels.room"
+	);
+
+	if (shouldDelete) {
+		await deleteRoom(room.value!.id);
+		router.push({
+			name: "rooms",
+		});
+	}
+};
+
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	if (room.value != null) {
+	if (room != null) {
 		return [
 			{
 				title: t("pages.rooms.title"),
 				to: "/rooms",
 			},
 			{
-				title: room.value.name,
+				title: room.value!.name,
 				disabled: true,
 			},
 		];
@@ -111,13 +107,13 @@ const boardLayoutsEnabled = computed(
 const boardLayoutDialogIsOpen = ref(false);
 
 const createBoard = async (layout: BoardLayout) => {
-	if (!room.value) return;
+	if (!room) return;
 
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
 	const params: CreateBoardBodyParams = {
 		title: t("pages.roomDetails.board.defaultName"),
-		parentId: room.value.id,
+		parentId: room.value!.id,
 		parentType: BoardParentType.Room,
 		layout,
 	};
@@ -170,38 +166,4 @@ const fabItemClickHandler = (event: string) => {
 		createBoard(BoardLayout.Columns);
 	}
 };
-
-watch(
-	() => route.params.id,
-	async () => {
-		if (envConfigModule.getEnv["FEATURE_ROOMS_ENABLED"]) {
-			await fetchRoom(route.params.id as string);
-		} else {
-			deactivateRoom();
-		}
-	},
-	{ immediate: true }
-);
-
-const isRoom = computed(() => roomVariant.value === RoomVariant.ROOM);
-
-const onDelete = async () => {
-	if (!room.value) return;
-
-	const shouldDelete = await askDeleteConfirmation(
-		room.value.name,
-		"common.labels.room"
-	);
-
-	if (shouldDelete) {
-		await deleteRoom(room.value.id);
-		router.push({
-			name: "rooms",
-		});
-	}
-};
-
-onUnmounted(() => {
-	resetState();
-});
 </script>

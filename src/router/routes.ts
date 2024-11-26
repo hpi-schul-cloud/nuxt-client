@@ -295,7 +295,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})`,
-		component: async () => (await import("@page-room")).RoomDetailsPage,
+		component: async () => (await import("@page-room")).RoomDetailsSwitchPage,
 		name: "rooms-id",
 	},
 	{
