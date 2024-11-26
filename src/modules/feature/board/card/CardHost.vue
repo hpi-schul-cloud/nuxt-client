@@ -18,6 +18,7 @@
 				:id="cardId"
 				:ripple="false"
 				:hover="isHovered"
+				:data-testid="cardTestId"
 			>
 				<template v-if="isLoadingCard">
 					<CardSkeleton :height="height" />
@@ -37,7 +38,7 @@
 							v-if="hasDeletePermission"
 							:scope="BoardMenuScope.CARD"
 							has-background
-							data-testid="card-menu-btn"
+							:data-testid="boardMenuTestId"
 						>
 							<BoardMenuActionEdit
 								v-if="!isEditMode"
@@ -56,6 +57,8 @@
 							:elements="card.elements"
 							:isEditMode="isEditMode"
 							:isDetailView="isDetailView"
+							:row-index="rowIndex"
+							:column-index="columnIndex"
 							@delete:element="onDeleteElement"
 							@move-down:element="onMoveContentElementDown"
 							@move-up:element="onMoveContentElementUp"
@@ -71,6 +74,8 @@
 			v-if="card"
 			:card="card"
 			:isOpen="isDetailView"
+			:rowIndex="rowIndex"
+			:columnIndex="columnIndex"
 			@delete:element="onDeleteElement"
 			@move-down:element="onMoveContentElementDown"
 			@move-up:element="onMoveContentElementUp"
@@ -135,6 +140,8 @@ export default defineComponent({
 	props: {
 		height: { type: Number, required: true },
 		cardId: { type: String, required: true },
+		rowIndex: { type: Number, required: true },
+		columnIndex: { type: Number, required: true },
 	},
 	emits: ["move:card-keyboard", "delete:card", "reload:board"],
 	setup(props, { emit }) {
@@ -154,6 +161,13 @@ export default defineComponent({
 		const isLoadingCard = computed(() => card.value === undefined);
 
 		const hasCardTitle = computed(() => card.value?.title);
+
+		const boardMenuTestId = computed(
+			() => `card-menu-btn-${props.columnIndex}-${props.rowIndex}`
+		);
+		const cardTestId = computed(
+			() => `board-card-${props.columnIndex}-${props.rowIndex}`
+		);
 
 		const { height: cardHostHeight } = useElementSize(cardHost);
 		const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
@@ -255,6 +269,8 @@ export default defineComponent({
 			isLoadingCard,
 			isHovered,
 			isFocusedById,
+			boardMenuTestId,
+			cardTestId,
 			onMoveCardKeyboard,
 			onUpdateCardTitle,
 			onDeleteCard,

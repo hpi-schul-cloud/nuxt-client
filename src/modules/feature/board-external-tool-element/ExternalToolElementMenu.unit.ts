@@ -11,6 +11,9 @@ describe("ExternalToolElementMenu", () => {
 		isFirstElement: boolean;
 		isLastElement: boolean;
 		hasMultipleElements: boolean;
+		columnIndex: number;
+		rowIndex: number;
+		elementIndex: number;
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
@@ -36,6 +39,9 @@ describe("ExternalToolElementMenu", () => {
 				hasMultipleElements: true,
 				isFirstElement: false,
 				isLastElement: false,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
 			});
 
 			return {
@@ -68,6 +74,9 @@ describe("ExternalToolElementMenu", () => {
 				hasMultipleElements: true,
 				isFirstElement: false,
 				isLastElement: false,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
 			});
 
 			return {

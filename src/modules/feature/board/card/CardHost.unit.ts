@@ -156,6 +156,8 @@ describe("CardHost", () => {
 			propsData: {
 				cardId: card?.id ?? "cardId",
 				height: card?.height ?? 0,
+				columnIndex: 0,
+				rowIndex: 1,
 			},
 		});
 

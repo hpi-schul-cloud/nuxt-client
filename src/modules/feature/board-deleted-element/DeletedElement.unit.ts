@@ -41,6 +41,9 @@ describe("DeletedElement", () => {
 		props: ComponentProps<typeof DeletedElement> = {
 			element: deletedElementResponseFactory.build(),
 			isEditMode: false,
+			columnIndex: 0,
+			rowIndex: 1,
+			elementIndex: 2,
 		}
 	) => {
 		const wrapper = mount(DeletedElement, {
@@ -66,6 +69,9 @@ describe("DeletedElement", () => {
 			const { wrapper } = getWrapper({
 				element: deletedElementResponseFactory.build(),
 				isEditMode: true,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
 			});
 
 			return {
@@ -88,6 +94,9 @@ describe("DeletedElement", () => {
 				const { wrapper } = getWrapper({
 					element: deletedElementResponseFactory.build(),
 					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				return {
@@ -109,6 +118,9 @@ describe("DeletedElement", () => {
 				const { wrapper } = getWrapper({
 					element: deletedElementResponseFactory.build(),
 					isEditMode: false,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				return {
@@ -131,6 +143,9 @@ describe("DeletedElement", () => {
 				const { wrapper } = getWrapper({
 					element: deletedElement,
 					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				return {
@@ -158,6 +173,9 @@ describe("DeletedElement", () => {
 				const { wrapper } = getWrapper({
 					element: deletedElementResponseFactory.build(),
 					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				return {
