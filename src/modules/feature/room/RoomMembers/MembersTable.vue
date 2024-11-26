@@ -15,6 +15,11 @@
 				:prepend-inner-icon="mdiMagnify"
 			/>
 		</v-card-title>
+		<div>
+			<v-btn variant="tonal" class="mb-2" @click="toggleMultiSelection">
+				Activate Multi Selection
+			</v-btn>
+		</div>
 
 		<v-divider />
 		<v-data-table
@@ -29,17 +34,26 @@
 			:items-per-page="50"
 			:no-data-text="t('common.nodata')"
 			:mobile="null"
-			mobile-breakpoint="sm"
+			:show-select="multiSelection"
 			data-testid="participants-table"
+			mobile-breakpoint="sm"
 			@update:current-items="onUpdateFilter"
 		>
+			<template v-if="selectedMembers.length" #[`header.actions`]="{}">
+				<v-btn
+					variant="text"
+					:icon="mdiDeleteSweepOutline"
+					:aria-label="t('pages.rooms.members.remove')"
+					@click="onRemoveMembers(selectedMembers)"
+				/>
+			</template>
 			<template #[`item.actions`]="{ item }">
 				<v-btn
 					ref="removeMember"
 					variant="text"
 					:icon="mdiTrashCanOutline"
 					:aria-label="t('pages.rooms.members.remove')"
-					@click="onRemoveMember(item)"
+					@click="onRemoveMembers([item.userId])"
 				/>
 			</template>
 		</v-data-table>
@@ -54,6 +68,7 @@ import {
 	mdiMenuUp,
 	mdiMagnify,
 	mdiTrashCanOutline,
+	mdiDeleteSweepOutline,
 } from "@icons/material";
 import { RoomMemberResponse } from "@/serverApi/v3";
 
@@ -64,13 +79,14 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["remove:member"]);
+const emit = defineEmits(["remove:member", "remove:members"]);
 
 const { t } = useI18n();
 const search = ref("");
 const membersList = toRef(props, "members");
 const selectedMembers = ref<string[]>([]);
 const membersFilterCount = ref(membersList.value?.length);
+const multiSelection = ref(false);
 
 const onUpdateFilter = (value: RoomMemberResponse[]) => {
 	membersFilterCount.value =
@@ -81,8 +97,13 @@ const tableTitle = computed(
 	() => `${t("pages.rooms.members.label")} (${membersFilterCount.value})`
 );
 
-const onRemoveMember = (member: RoomMemberResponse) => {
-	emit("remove:member", member);
+const onRemoveMembers = (userIds?: string[]) => {
+	emit("remove:members", userIds);
+};
+
+const toggleMultiSelection = () => {
+	multiSelection.value = !multiSelection.value;
+	selectedMembers.value = [];
 };
 
 const tableHeader = [
