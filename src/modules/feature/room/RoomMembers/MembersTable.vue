@@ -17,7 +17,7 @@
 		</v-card-title>
 		<div>
 			<v-btn variant="tonal" class="mb-2" @click="toggleMultiSelection">
-				Activate Multi Selection
+				{{ activateButtonTitle }}
 			</v-btn>
 		</div>
 
@@ -40,21 +40,29 @@
 			@update:current-items="onUpdateFilter"
 		>
 			<template v-if="selectedMembers.length" #[`header.actions`]>
-				<v-btn
-					variant="text"
-					:icon="mdiDeleteSweepOutline"
-					:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-					@click="onRemoveMembers(selectedMembers)"
-				/>
+				<div class="d-flex d-inline-flex align-center justify-end">
+					<span class=""
+						>({{ selectedMembers.length }})
+						{{ t("pages.administration.selected") }}</span
+					>
+					<v-btn
+						variant="text"
+						:icon="mdiDeleteSweepOutline"
+						:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
+						@click="onRemoveMembers(selectedMembers)"
+					/>
+				</div>
 			</template>
 			<template #[`item.actions`]="{ item }">
-				<v-btn
-					ref="removeMember"
-					variant="text"
-					:icon="mdiTrashCanOutline"
-					:aria-label="getRemoveAriaLabel(item)"
-					@click="onRemoveMembers([item.userId])"
-				/>
+				<div class="d-flex justify-end">
+					<v-btn
+						ref="removeMember"
+						variant="text"
+						:icon="mdiTrashCanOutline"
+						:aria-label="getRemoveAriaLabel(item)"
+						@click="onRemoveMembers([item.userId])"
+					/>
+				</div>
 			</template>
 		</v-data-table>
 	</v-card>
@@ -79,7 +87,7 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["remove:member", "remove:members"]);
+const emit = defineEmits(["remove:members"]);
 
 const { t } = useI18n();
 const search = ref("");
@@ -87,6 +95,11 @@ const membersList = toRef(props, "members");
 const selectedMembers = ref<string[]>([]);
 const membersFilterCount = ref(membersList.value?.length);
 const multiSelection = ref(false);
+const activateButtonTitle = computed(() =>
+	multiSelection.value
+		? t("pages.rooms.members.deactivateMultiSelection")
+		: t("pages.rooms.members.activateMultiSelection")
+);
 
 const onUpdateFilter = (value: RoomMemberResponse[]) => {
 	membersFilterCount.value =
@@ -120,7 +133,7 @@ const tableHeader = [
 		key: "displayRoleName",
 	},
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
-	{ title: "", key: "actions", sortable: false, width: 50 },
+	{ title: "", key: "actions", sortable: false, width: 180 },
 ];
 
 const getRemoveAriaLabel = (member: RoomMemberResponse) =>
