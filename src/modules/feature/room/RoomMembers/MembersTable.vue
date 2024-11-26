@@ -53,7 +53,7 @@
 					variant="text"
 					:icon="mdiTrashCanOutline"
 					:aria-label="getRemoveAriaLabel(item)"
-          @click="onRemoveMembers([item.userId])"
+					@click="onRemoveMembers([item.userId])"
 				/>
 			</template>
 		</v-data-table>

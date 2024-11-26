@@ -1675,10 +1675,6 @@ export default {
 		"Hinzufügen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.members.error.remove":
 		"Löschen von Teilnehmenden fehlgeschlagen.",
-	"pages.rooms.members.remove.confirmation":
-		"{memberName} wirklich aus dem Raum entfernen?",
-	"pages.rooms.members.multipleRemove.confirmation":
-		"Mehrere Teilnehmer aus dem Raum entfernen?",
 	"pages.rooms.members.infoText":
 		"Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
@@ -1688,6 +1684,8 @@ export default {
 	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
 	"pages.rooms.members.remove.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
+	"pages.rooms.members.multipleRemove.confirmation":
+		"Mehrere Teilnehmer aus dem Raum entfernen?",
 	"pages.rooms.members.roles.editor": "Raumeditor",
 	"pages.rooms.members.roles.viewer": "Raumbetrachter",
 	"pages.rooms.title": "Räume",
