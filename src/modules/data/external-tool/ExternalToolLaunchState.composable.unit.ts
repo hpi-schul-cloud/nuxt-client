@@ -1,4 +1,8 @@
-import { ContextExternalToolBodyParams, ToolContextType } from "@/serverApi/v3";
+import {
+	ContextExternalToolBodyParams,
+	LaunchType,
+	ToolContextType,
+} from "@/serverApi/v3";
 import {
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,
@@ -64,7 +68,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					url: response.url,
 					payload: response.payload,
 					openNewTab: response.openNewTab,
-					isDeepLink: false,
+					launchType: LaunchType.Basic,
 				});
 			});
 
@@ -152,7 +156,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					url: response.url,
 					payload: response.payload,
 					openNewTab: response.openNewTab,
-					isDeepLink: false,
+					launchType: response.launchType,
 				});
 			});
 
@@ -303,7 +307,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					const form = document.getElementById("launch-form");
 
 					expect(form?.outerHTML).toEqual(
-						`<form method="POST" action="${launchRequest.url}" target="_self" id="launch-form"><input type="hidden" name="key" value="value"></form>`
+						`<form method="POST" action="${launchRequest.url}" id="launch-form" target="_self"><input type="hidden" name="key" value="value"></form>`
 					);
 				});
 			});
@@ -333,7 +337,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					const form = document.getElementById("launch-form");
 
 					expect(form?.outerHTML).toEqual(
-						`<form method="POST" action="${launchRequest.url}" target="_blank" id="launch-form"></form>`
+						`<form method="POST" action="${launchRequest.url}" id="launch-form" target="2"></form>`
 					);
 				});
 			});
