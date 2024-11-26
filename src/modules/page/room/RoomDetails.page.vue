@@ -13,57 +13,7 @@
 						<h1 class="text-h3 mb-4" data-testid="room-title">
 							{{ room.name }}
 						</h1>
-						<KebabMenu
-							class="mx-2"
-							:aria-label="$t('pages.roomDetails.ariaLabels.menu')"
-							data-testid="room-menu"
-						>
-							<VListItem
-								role="menuitem"
-								:to="`/rooms/${room.id}/edit`"
-								data-testid="room-action-edit"
-								:aria-label="
-									$t('pages.roomDetails.ariaLabels.menu.action.edit')
-								"
-							>
-								<template v-slot:prepend>
-									<VIcon :icon="mdiPencilOutline" />
-								</template>
-								<VListItemTitle>
-									{{ $t("common.actions.edit") }}
-								</VListItemTitle>
-							</VListItem>
-
-							<VListItem
-								role="menuitem"
-								:to="`/rooms/${room.id}/members`"
-								data-testid="room-action-manage-participants"
-								:aria-label="t('pages.rooms.members.manage')"
-							>
-								<template #prepend>
-									<VIcon :icon="mdiAccountGroupOutline" />
-								</template>
-								<VListItemTitle>
-									{{ t("pages.rooms.members.manage") }}
-								</VListItemTitle>
-							</VListItem>
-
-							<VListItem
-								role="menuitem"
-								data-testid="room-action-delete"
-								:aria-label="
-									$t('pages.roomDetails.ariaLabels.menu.action.delete')
-								"
-								@click="onDelete"
-							>
-								<template v-slot:prepend>
-									<VIcon :icon="mdiTrashCanOutline" />
-								</template>
-								<VListItemTitle>
-									{{ $t("common.actions.delete") }}
-								</VListItemTitle>
-							</VListItem>
-						</KebabMenu>
+						<RoomMenu :room-id="room.id" @room:delete="onDelete" />
 					</div>
 				</template>
 				<RoomDetails v-if="room" :room="room" :room-boards="roomBoards" />
@@ -93,17 +43,11 @@ import {
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { RoomDetails } from "@feature-room";
-import {
-	mdiPencilOutline,
-	mdiTrashCanOutline,
-	mdiAccountGroupOutline,
-} from "@icons/material";
+import { RoomDetails, RoomMenu } from "@feature-room";
 import {
 	ConfirmationDialog,
 	useDeleteConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { KebabMenu } from "@ui-kebab-menu";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
