@@ -1691,6 +1691,8 @@ export default {
 	"pages.rooms.members.error.remove": "Error al eliminar participantes.",
 	"pages.rooms.members.remove.confirmation":
 		"¿Eliminar {memberName} de la sala?",
+	"pages.rooms.members.multipleRemove.confirmation":
+		"¿Eliminar varios participantes de la sala?",
 	"pages.rooms.members.infoText":
 		'Añadir participantes a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">más información</a>).',
 	"pages.rooms.members.label": "Participantes",

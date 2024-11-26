@@ -1646,6 +1646,8 @@ export default {
 	"pages.rooms.members.error.remove": "Deleting participants failed.",
 	"pages.rooms.members.remove.confirmation":
 		"Remove {memberName} from the room?",
+	"pages.rooms.members.multipleRemove.confirmation":
+		"Remove multiple participants from the room?",
 	"pages.rooms.members.infoText":
 		'Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">more information</a>).',
 	"pages.rooms.members.label": "Participants",

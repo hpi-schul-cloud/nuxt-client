@@ -1677,6 +1677,8 @@ export default {
 		"Löschen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.members.remove.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
+	"pages.rooms.members.multipleRemove.confirmation":
+		"Mehrere Teilnehmer aus dem Raum entfernen?",
 	"pages.rooms.members.infoText":
 		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	(<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">weitere Informationen</a>).',
 	"pages.rooms.members.label": "Teilnehmende",
