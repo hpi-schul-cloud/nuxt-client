@@ -1674,6 +1674,8 @@ export default {
 	"pages.rooms.members.add": "Додайте учасників",
 	"pages.rooms.members.manage": "Керувати учасниками",
 	"pages.rooms.members.remove.ariaLabel": "Видалити {memberName} з кімнати",
+	"pages.rooms.members.multipleRemove.ariaLabel":
+		"Видалити кількох учасників із кімнати",
 	"pages.rooms.members.remove.confirmation":
 		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
 	"pages.rooms.members.multipleRemove.confirmation":

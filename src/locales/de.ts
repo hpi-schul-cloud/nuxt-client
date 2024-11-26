@@ -1682,6 +1682,8 @@ export default {
 	"pages.rooms.members.add": "Teilnehmende hinzufügen",
 	"pages.rooms.members.manage": "Teilnehmende verwalten",
 	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
+	"pages.rooms.members.multipleRemove.ariaLabel":
+		"Mehrere Teilnehmer aus dem Raum entfernen",
 	"pages.rooms.members.remove.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.multipleRemove.confirmation":

@@ -1696,6 +1696,8 @@ export default {
 	"pages.rooms.members.add": "Añadir participantes",
 	"pages.rooms.members.manage": "Administrar participantes",
 	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
+	"pages.rooms.members.multipleRemove.ariaLabel":
+		"Eliminar varios participantes de la sala",
 	"pages.rooms.members.remove.confirmation":
 		"¿Eliminar {memberName} de la sala?",
 	"pages.rooms.members.multipleRemove.confirmation":

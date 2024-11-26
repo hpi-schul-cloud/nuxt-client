@@ -39,11 +39,11 @@
 			mobile-breakpoint="sm"
 			@update:current-items="onUpdateFilter"
 		>
-			<template v-if="selectedMembers.length" #[`header.actions`]="{}">
+			<template v-if="selectedMembers.length" #[`header.actions`]>
 				<v-btn
 					variant="text"
 					:icon="mdiDeleteSweepOutline"
-					:aria-label="t('pages.rooms.members.remove')"
+					:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
 					@click="onRemoveMembers(selectedMembers)"
 				/>
 			</template>
