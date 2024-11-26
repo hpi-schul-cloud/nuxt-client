@@ -18,7 +18,7 @@
 			<MembersTable
 				v-if="!isLoading"
 				:members="memberList"
-				@remove:member="onRemoveMember"
+				@remove:members="onRemoveMembers"
 			/>
 		</div>
 
@@ -83,7 +83,7 @@ const memberList: Ref<RoomMemberResponse[]> = ref(roomMembers);
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
-
+const { askConfirmation } = useConfirmationDialog();
 useTitle(pageTitle);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
@@ -122,11 +122,16 @@ const onUpdateRoleOrSchool = async (payload: {
 	await getPotentialMembers(payload);
 };
 
-const onRemoveMember = async (member: RoomMember) => {
-	const { askConfirmation } = useConfirmationDialog();
-	const message = t("pages.rooms.members.remove.confirmation", {
-		memberName: `${member.firstName} ${member.lastName}`,
-	});
+const onRemoveMembers = async (memberIds: string[]) => {
+	let message = t("pages.rooms.members.multipleRemove.confirmation");
+	if (memberIds.length === 1) {
+		const member = memberList.value.find(
+			(member) => member.userId === memberIds[0]
+		);
+		message = t("pages.rooms.members.remove.confirmation", {
+			memberName: `${member?.firstName} ${member?.lastName}`,
+		});
+	}
 
 	const shouldDelete = await askConfirmation({
 		message,
@@ -134,7 +139,7 @@ const onRemoveMember = async (member: RoomMember) => {
 	});
 
 	if (!shouldDelete) return;
-	await removeMembers([member.userId]);
+	await removeMembers(memberIds);
 };
 
 onMounted(async () => {
