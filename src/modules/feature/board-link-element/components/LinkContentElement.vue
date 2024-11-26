@@ -115,16 +115,14 @@ const onCreateUrl = async (originalUrl: string) => {
 
 	try {
 		const validUrl = ensureProtocolIncluded(originalUrl);
-		modelValue.value.url = validUrl;
-
-		const { title, description, imageUrl } = await getMetaTags(validUrl);
+		const { url, title, description, originalImageUrl } =
+			await getMetaTags(validUrl);
+		modelValue.value.url = url;
 		modelValue.value.title = title;
 		modelValue.value.description = description;
-		if (imageUrl) {
-			modelValue.value.imageUrl = await createPreviewImage(imageUrl);
+		if (originalImageUrl) {
+			modelValue.value.imageUrl = await createPreviewImage(originalImageUrl);
 		}
-	} catch (error) {
-		modelValue.value.url = "";
 	} finally {
 		isLoading.value = false;
 	}
