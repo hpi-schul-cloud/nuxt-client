@@ -1688,6 +1688,9 @@ export default {
 		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Mehrere Teilnehmer aus dem Raum entfernen?",
+	"pages.rooms.members.activateMultiSelection": "Mehrfachauswahl aktivieren",
+	"pages.rooms.members.deactivateMultiSelection":
+		"Mehrfachauswahl deaktivieren",
 	"pages.rooms.members.roles.editor": "Raumeditor",
 	"pages.rooms.members.roles.viewer": "Raumbetrachter",
 	"pages.rooms.title": "Räume",

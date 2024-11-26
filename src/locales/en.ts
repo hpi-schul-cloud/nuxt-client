@@ -1657,6 +1657,8 @@ export default {
 		"Remove {memberName} from the room?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Remove multiple participants from the room?",
+	"pages.rooms.members.activateMultiSelection": "Activate multi-selection",
+	"pages.rooms.members.deactivateMultiSelection": "Deactivate multi-selection",
 	"pages.rooms.members.roles.editor": "Room editor",
 	"pages.rooms.members.roles.viewer": "Room viewer",
 	"pages.rooms.title": "Rooms",
