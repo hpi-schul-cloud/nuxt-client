@@ -21,7 +21,7 @@
 			</v-btn>
 		</div>
 
-		<v-divider />
+		<v-divider role="presentation" />
 		<v-data-table
 			v-model:search="search"
 			v-model="selectedMembers"
@@ -52,8 +52,8 @@
 					ref="removeMember"
 					variant="text"
 					:icon="mdiTrashCanOutline"
-					:aria-label="t('pages.rooms.members.remove')"
-					@click="onRemoveMembers([item.userId])"
+					:aria-label="getRemoveAriaLabel(item)"
+          @click="onRemoveMembers([item.userId])"
 				/>
 			</template>
 		</v-data-table>
@@ -122,6 +122,11 @@ const tableHeader = [
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
 	{ title: "", key: "actions", sortable: false, width: 50 },
 ];
+
+const getRemoveAriaLabel = (member: RoomMemberResponse) =>
+	t("pages.rooms.members.remove.ariaLabel", {
+		memberName: `${member.firstName} ${member.lastName}`,
+	});
 </script>
 
 <style lang="scss" scoped>

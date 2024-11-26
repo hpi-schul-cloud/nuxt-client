@@ -1671,11 +1671,14 @@ export default {
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Видалити кількох учасників із кімнати?",
 	"pages.rooms.members.infoText":
-		'Додайте учасників до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">більше інформації</a>).',
+		"Додайте учасників до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
+	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте учасників",
 	"pages.rooms.members.manage": "Керувати учасниками",
-	"pages.rooms.members.remove": "Видалити учасника",
+	"pages.rooms.members.remove.ariaLabel": "Видалити {memberName} з кімнати",
+	"pages.rooms.members.remove.confirmation":
+		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
 	"pages.rooms.members.roles.editor": "Редактор кімнати",
 	"pages.rooms.members.roles.viewer": "Переглядач кімнати",
 	"pages.rooms.title": "Кімнати",
