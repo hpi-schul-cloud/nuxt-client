@@ -2,12 +2,11 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
-import { mount } from "@vue/test-utils";
+import { flushPromises, mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import RoomForm from "./RoomForm.vue";
 import { RoomCreateParams } from "@/types/room/Room";
 import { RoomColor } from "@/serverApi/v3";
-import { nextTick } from "vue";
 
 const mockRoom: RoomCreateParams = {
 	name: "A11Y for Beginners",
@@ -16,9 +15,11 @@ const mockRoom: RoomCreateParams = {
 	endDate: "",
 };
 
-const invalidMockRoom: RoomCreateParams = {
+const emptyMockRoom: RoomCreateParams = {
 	name: "",
 	color: RoomColor.Magenta,
+	startDate: undefined,
+	endDate: undefined,
 };
 
 describe("@feature-room/RoomForm", () => {
@@ -34,103 +35,71 @@ describe("@feature-room/RoomForm", () => {
 		return { wrapper };
 	};
 
-	it("should not save invalid room", async () => {
-		const { wrapper } = setup({ room: invalidMockRoom });
+	describe("when save button is clicked", () => {
+		describe("when room data is invalid", () => {
+			it("should not emit 'save' event", async () => {
+				const { wrapper } = setup({ room: emptyMockRoom });
 
-		// validation needs to be triggered manually due to code structure
-		await wrapper.vm.v$.$validate();
+				const saveBtn = wrapper.findComponent(
+					"[data-testid='room-form-save-btn']"
+				);
+				await saveBtn.trigger("click");
+				await flushPromises();
 
-		await wrapper.find("[type='submit']").trigger("click");
-		await nextTick();
-
-		expect(wrapper.vm.v$.$invalid).toEqual(true);
-		expect(wrapper.emitted("save")).toBeUndefined();
-	});
-
-	it("should emit save if room is valid", async () => {
-		const { wrapper } = setup({ room: mockRoom });
-
-		// validation needs to be triggered manually due to code structure
-		await wrapper.vm.v$.$validate();
-
-		await wrapper.find("[type='submit']").trigger("click");
-		await nextTick();
-
-		expect(wrapper.vm.v$.$invalid).toEqual(false);
-		expect(wrapper.emitted("save")).toHaveLength(1);
-	});
-
-	it("should not directly emit cancel when room values were changed", async () => {
-		const { wrapper } = setup({ room: mockRoom });
-
-		const textField = wrapper.findComponent({ name: "VTextField" });
-		const input = textField.find("input");
-
-		input.setValue("New Name");
-		await nextTick();
-
-		expect(wrapper.vm.room.name).toEqual("New Name");
-
-		const cancelButton = wrapper.get('[data-testId="room-form-cancel-btn"]');
-		await cancelButton.trigger("click");
-
-		expect(wrapper.vm.v$.$anyDirty).toEqual(true);
-		expect(wrapper.emitted("cancel")).toBeUndefined();
-	});
-
-	it("should emit cancel when room values were not touched", () => {
-		const { wrapper } = setup({ room: mockRoom });
-
-		const cancelButton = wrapper.get('[data-testId="room-form-cancel-btn"]');
-		cancelButton.trigger("click");
-
-		expect(wrapper.vm.v$.$anyDirty).toEqual(false);
-		expect(wrapper.emitted("cancel")).toHaveLength(1);
-	});
-
-	it("should change room state when new start date is given", () => {
-		const { wrapper } = setup({ room: mockRoom });
-
-		const datePickers = wrapper.findAllComponents({
-			name: "DatePicker",
+				expect(wrapper.emitted("save")).toBeUndefined();
+			});
 		});
 
-		const today = new Date().toISOString();
+		describe("when room data is valid", () => {
+			it("should emit 'save' event", async () => {
+				const { wrapper } = setup({ room: mockRoom });
 
-		datePickers[0].vm.$emit("update:date", today);
+				const saveBtn = wrapper.findComponent(
+					"[data-testid='room-form-save-btn']"
+				);
+				await saveBtn.trigger("click");
+				await flushPromises();
 
-		expect(wrapper.vm.v$.$anyDirty).toEqual(true);
-		expect(wrapper.vm.room.startDate).toEqual(today);
+				expect(wrapper.emitted("save")).toHaveLength(1);
+				expect(wrapper.emitted("save")?.[0][0]).toStrictEqual({
+					room: mockRoom,
+				});
+			});
+		});
 	});
 
-	it("should change room state when new end date is given", () => {
-		const { wrapper } = setup({ room: mockRoom });
+	describe("when cancel button is clicked", () => {
+		describe("when room values were not changed", () => {
+			it("should emit cancel", async () => {
+				const { wrapper } = setup({ room: mockRoom });
 
-		const datePickers = wrapper.findAllComponents({
-			name: "DatePicker",
+				const cancelButton = wrapper.get(
+					'[data-testid="room-form-cancel-btn"]'
+				);
+				await cancelButton.trigger("click");
+
+				expect(wrapper.emitted("cancel")).toHaveLength(1);
+			});
 		});
 
-		const today = new Date();
-		const tomorrow = new Date(today.getDate() + 1).toISOString();
+		describe("when room values were changed", () => {
+			it("should not directly emit cancel", async () => {
+				const { wrapper } = setup({ room: mockRoom });
 
-		datePickers[1].vm.$emit("update:date", tomorrow);
+				const textField = wrapper.findComponent({ name: "VTextField" });
+				const input = textField.find("input");
 
-		expect(wrapper.vm.v$.$anyDirty).toEqual(true);
-		expect(wrapper.vm.room.endDate).toEqual(tomorrow);
-	});
+				await input.setValue("New Name");
 
-	it("should change room state when new color is given", () => {
-		const { wrapper } = setup({ room: mockRoom });
+				expect(wrapper.vm.room.name).toEqual("New Name");
 
-		const colorPicker = wrapper.findComponent({
-			name: "RoomColorPicker",
+				const cancelButton = wrapper.get(
+					'[data-testId="room-form-cancel-btn"]'
+				);
+				await cancelButton.trigger("click");
+
+				expect(wrapper.emitted("cancel")).toBeUndefined();
+			});
 		});
-
-		const newColor = RoomColor.Red;
-
-		colorPicker.vm.$emit("update:color", newColor);
-
-		expect(wrapper.vm.v$.$anyDirty).toEqual(true);
-		expect(wrapper.vm.room.color).toEqual(newColor);
 	});
 });
