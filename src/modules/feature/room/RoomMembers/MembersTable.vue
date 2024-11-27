@@ -16,7 +16,7 @@
 			/>
 		</v-card-title>
 
-		<v-divider />
+		<v-divider role="presentation" />
 		<v-data-table
 			v-model:search="search"
 			v-model="selectedMembers"
@@ -30,6 +30,7 @@
 			:no-data-text="t('common.nodata')"
 			:mobile="null"
 			mobile-breakpoint="sm"
+			data-testid="participants-table"
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">
@@ -37,7 +38,7 @@
 					ref="removeMember"
 					variant="text"
 					:icon="mdiTrashCanOutline"
-					:aria-label="t('pages.rooms.members.remove')"
+					:aria-label="getRemoveAriaLabel(item)"
 					@click="onRemoveMember(item)"
 				/>
 			</template>
@@ -100,6 +101,11 @@ const tableHeader = [
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
 	{ title: "", key: "actions", sortable: false, width: 50 },
 ];
+
+const getRemoveAriaLabel = (member: RoomMemberResponse) =>
+	t("pages.rooms.members.remove.ariaLabel", {
+		memberName: `${member.firstName} ${member.lastName}`,
+	});
 </script>
 
 <style lang="scss" scoped>

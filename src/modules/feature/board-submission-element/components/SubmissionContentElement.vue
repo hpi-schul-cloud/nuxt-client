@@ -28,7 +28,11 @@
 				:isOverdue="isOverdue"
 				@update:dueDate="($event) => (modelValue.dueDate = $event)"
 			>
-				<BoardMenu :scope="BoardMenuScope.SUBMISSION_ELEMENT" has-background>
+				<BoardMenu
+					:scope="BoardMenuScope.SUBMISSION_ELEMENT"
+					has-background
+					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+				>
 					<BoardMenuActionMoveUp @click="onMoveElementUp" />
 					<BoardMenuActionMoveDown @click="onMoveElementDown" />
 					<BoardMenuActionDelete @click="onDeleteElement" />
@@ -75,6 +79,9 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
+		columnIndex: { type: Number, required: true },
+		rowIndex: { type: Number, required: true },
+		elementIndex: { type: Number, required: true },
 	},
 	emits: [
 		"move-keyboard:edit",

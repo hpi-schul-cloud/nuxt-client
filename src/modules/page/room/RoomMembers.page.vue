@@ -6,13 +6,21 @@
 		@fab:clicked="onFabClick"
 	>
 		<template #header>
-			<h1 class="text-h3 mb-4">
+			<h1 class="text-h3 mb-4" data-testid="room-title">
 				{{ t("pages.rooms.members.manage") }}
 			</h1>
 		</template>
 
 		<div class="mb-8 mt-12">
-			<RenderHTML :html="t('pages.rooms.members.infoText')" />
+			<i18n-t keypath="pages.rooms.members.infoText">
+				<a
+					href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
+					target="_blank"
+					rel="noopener"
+					:ariaLabel="linkAriaLabel"
+					>{{ t("pages.rooms.members.infoText.moreInformation") }}</a
+				>
+			</i18n-t>
 		</div>
 		<div class="mb-12">
 			<MembersTable
@@ -27,6 +35,7 @@
 			:width="xs ? 'auto' : 480"
 			persistent
 			max-width="480"
+			data-testid="dialog-add-participants"
 		>
 			<AddMembers
 				:memberList="potentialRoomMembers"
@@ -57,7 +66,6 @@ import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { RenderHTML } from "@feature-render-html";
 import { useDisplay } from "vuetify";
 
 const { fetchRoom } = useRoomDetailsStore();
@@ -149,6 +157,11 @@ const fabAction = {
 	icon: mdiPlus,
 	title: t("pages.rooms.members.add"),
 	ariaLabel: t("pages.rooms.members.add"),
-	testId: "fab-add-members",
+	dataTestId: "fab-add-members",
 };
+
+const linkAriaLabel = computed(
+	() =>
+		`${t("pages.rooms.members.infoText.moreInformation")}, ${t("common.ariaLabel.newTab")}`
+);
 </script>
