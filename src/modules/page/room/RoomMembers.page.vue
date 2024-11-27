@@ -57,7 +57,7 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { useRoomDetailsStore, useRoomMembers, RoomMember } from "@data-room";
+import { useRoomDetailsStore, useRoomMembers } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { MembersTable, AddMembers } from "@feature-room";
@@ -92,21 +92,6 @@ const pageTitle = computed(() =>
 );
 const { askConfirmation } = useConfirmationDialog();
 useTitle(pageTitle);
-
-const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	if (room === undefined) return [];
-
-	return [
-		{
-			title: t("pages.rooms.title"),
-			to: "/rooms",
-		},
-		{
-			title: room.value?.name || "",
-			to: `/rooms/${route.params.id}`,
-		},
-	];
-});
 
 const onFabClick = async () => {
 	await getSchools();
@@ -154,6 +139,21 @@ onMounted(async () => {
 		await fetchRoom(roomId);
 	}
 	await fetchMembers();
+});
+
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+	if (room === undefined) return [];
+
+	return [
+		{
+			title: t("pages.rooms.title"),
+			to: "/rooms",
+		},
+		{
+			title: room.value?.name || "",
+			to: `/rooms/${route.params.id}`,
+		},
+	];
 });
 
 const fabAction = {

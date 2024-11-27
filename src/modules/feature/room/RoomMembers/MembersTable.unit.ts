@@ -66,7 +66,7 @@ describe("MembersTable", () => {
 				});
 
 				await removeButton.vm.$emit("click");
-				expect(wrapper.emitted()).toHaveProperty("remove:member");
+				expect(wrapper.emitted()).toHaveProperty("remove:members");
 			});
 		});
 	});
