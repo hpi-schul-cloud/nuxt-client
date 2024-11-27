@@ -23,7 +23,11 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, watch, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { ApiResponseError } from "@/store/types/commons";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
 const route = useRoute();
@@ -47,12 +51,29 @@ watch(
 	{ immediate: true }
 );
 
-const onSave = async (roomParams: RoomUpdateParams) => {
-	await updateRoom(route.params.id as string, roomParams);
-	router.push({
-		name: "room-details",
-		params: { id: route.params.id as string },
-	});
+const onSave = async (payload: { room: RoomUpdateParams }) => {
+	try {
+		await updateRoom(route.params.id as string, payload.room);
+
+		router.push({
+			name: "room-details",
+			params: { id: route.params.id as string },
+		});
+	} catch (error: unknown) {
+		if (isInvalidRequestError(error)) {
+			notifierModule.show({
+				text: t("components.roomForm.validation.generalSaveError"),
+				status: "error",
+			});
+		} else {
+			throw createApplicationError((error as ApiResponseError).code);
+		}
+	}
+};
+
+const isInvalidRequestError = (error: unknown): boolean => {
+	const apiError = error as ApiResponseError;
+	return apiError.code === 400;
 };
 
 const onCancel = () => {
