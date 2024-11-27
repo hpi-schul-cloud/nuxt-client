@@ -329,7 +329,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					};
 				};
 
-				it("should create a launch form with target _blank", () => {
+				it("should create a launch form with a number as the target ", () => {
 					const { launchRequest, launchTool } = setup();
 
 					launchTool();
