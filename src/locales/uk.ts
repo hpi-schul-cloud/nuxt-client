@@ -1679,7 +1679,7 @@ export default {
 	"pages.rooms.members.remove.confirmation":
 		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
 	"pages.rooms.members.multipleRemove.confirmation":
-		"Видалити кількох учасників із кімнати?",
+		"Видалити {count} вибраних учасників із кімнати?",
 	"pages.rooms.members.activateMultiSelection": "Активуйте мультивибір",
 	"pages.rooms.members.deactivateMultiSelection": "Вимкніть множинний вибір",
 	"pages.rooms.members.roles.editor": "Редактор кімнати",
