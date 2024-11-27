@@ -23,6 +23,8 @@
 				<div class="d-flex">
 					<DatePicker
 						:date="roomData.startDate"
+						:min-date="todayISO"
+						:errors="startDateErrors"
 						class="w-50 mr-4"
 						data-testid="room-start-date-input"
 						:aria-label="$t('components.roomForm.labels.timePeriod.from')"
@@ -30,6 +32,7 @@
 					/>
 					<DatePicker
 						:date="roomData.endDate"
+						:min-date="todayISO"
 						class="w-50 ml-4"
 						data-testid="room-end-date-input"
 						:aria-label="$t('components.roomForm.labels.timePeriod.to')"
@@ -66,13 +69,15 @@ import { computed, PropType, unref } from "vue";
 import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 import { DatePicker } from "@ui-date-time-picker";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
-import { helpers, required } from "@vuelidate/validators";
+import { helpers, required, maxLength } from "@vuelidate/validators";
 import { useI18n } from "vue-i18n";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
+import { DATETIME_FORMAT } from "@/plugins/datetime";
+import dayjs from "dayjs";
 
 const props = defineProps({
 	room: {
@@ -86,12 +91,64 @@ const { t } = useI18n();
 const { askConfirmation } = useConfirmationDialog();
 
 const roomData = computed(() => props.room);
+const todayISO = computed(() =>
+	dayjs.tz(new Date(), "DD.MM.YYYY", "UTC").format(DATETIME_FORMAT.inputDate)
+);
 
-// Validation
+const isStartBeforeEndDate = (
+	startDate: string | undefined,
+	endDate: string | undefined
+) => {
+	if (!startDate || !endDate) return true;
+	return new Date(startDate) <= new Date(endDate);
+};
+
+const areDatesSameDay = (
+	startDate: string | undefined,
+	endDate: string | undefined
+) => {
+	if (!startDate || !endDate) return true;
+
+	const start = new Date(startDate);
+	const end = new Date(endDate);
+	return (
+		start.getFullYear() === end.getFullYear() &&
+		start.getMonth() === end.getMonth() &&
+		start.getDate() === end.getDate()
+	);
+};
+
+const isStartBeforeOrEqualToEndDate = (
+	startDate: string | undefined,
+	endDate: string | undefined
+) => {
+	return (
+		isStartBeforeEndDate(startDate, endDate) ||
+		areDatesSameDay(startDate, endDate)
+	);
+};
+
+const startBeforeEndDateValidator = (endDate: string | undefined) => {
+	return helpers.withParams(
+		{ type: "startBeforeEndDate", value: endDate },
+		helpers.withMessage(
+			t("components.roomForm.validation.timePeriod.startBeforeEnd"),
+			(startDate: string) => isStartBeforeOrEqualToEndDate(startDate, endDate)
+		)
+	);
+};
+
 const validationRules = computed(() => ({
 	roomData: {
 		name: {
+			maxLength: helpers.withMessage(
+				t("common.validation.tooLong"),
+				maxLength(100)
+			),
 			required: helpers.withMessage(t("common.validation.required2"), required),
+		},
+		startDate: {
+			startBeforeEndDate: startBeforeEndDateValidator(roomData.value.endDate),
 		},
 	},
 }));
@@ -102,27 +159,25 @@ const v$ = useVuelidate(
 	{ $lazy: true, $autoDirty: true }
 );
 
+const startDateErrors = computed(() => v$.value.roomData.startDate.$errors);
+
 const onUpdateColor = () => {
 	v$.value.$touch();
 };
 
 const onUpdateStartDate = (newDate: string) => {
 	roomData.value.startDate = newDate;
-	v$.value.$touch();
 };
 
 const onUpdateEndDate = (newDate: string) => {
 	roomData.value.endDate = newDate;
-	v$.value.$touch();
 };
 
 const onSave = async () => {
 	const valid = await v$.value.$validate();
-	if (!valid) {
-		// TODO notify user form is invalid
-		return;
+	if (valid) {
+		emit("save", { room: roomData.value });
 	}
-	emit("save", roomData.value);
 };
 
 const onCancel = async () => {
