@@ -37,6 +37,9 @@ export const useRoomEditState = () => {
 		}
 	};
 
+	/**
+	 * @throws ApiResponseError | ApiValidationError
+	 */
 	const updateRoom = async (
 		id: string,
 		params: RoomUpdateParams
@@ -45,9 +48,7 @@ export const useRoomEditState = () => {
 		try {
 			await roomApi.roomControllerUpdateRoom(id, params);
 		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-
-			throw createApplicationError(responseError.code);
+			throw mapAxiosErrorToResponseError(error);
 		} finally {
 			isLoading.value = false;
 		}
