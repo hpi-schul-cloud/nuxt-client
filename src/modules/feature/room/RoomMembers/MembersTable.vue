@@ -7,10 +7,10 @@
 			<v-text-field
 				v-model="search"
 				density="compact"
-				variant="solo-filled"
 				flat
 				hide-details
 				single-line
+				variant="solo-filled"
 				:label="t('common.labels.search')"
 				:prepend-inner-icon="mdiMagnify"
 			/>
@@ -25,7 +25,9 @@
 		<v-data-table
 			v-model:search="search"
 			v-model="selectedMembers"
+			data-testid="participants-table"
 			item-value="userId"
+			mobile-breakpoint="sm"
 			:items="membersList"
 			:headers="tableHeader"
 			:sort-asc-icon="mdiMenuDown"
@@ -35,8 +37,6 @@
 			:no-data-text="t('common.nodata')"
 			:mobile="null"
 			:show-select="multiSelection"
-			data-testid="participants-table"
-			mobile-breakpoint="sm"
 			@update:current-items="onUpdateFilter"
 		>
 			<template v-if="selectedMembers.length" #[`header.actions`]>
@@ -110,7 +110,7 @@ const tableTitle = computed(
 	() => `${t("pages.rooms.members.label")} (${membersFilterCount.value})`
 );
 
-const onRemoveMembers = (userIds?: string[]) => {
+const onRemoveMembers = (userIds: string[]) => {
 	emit("remove:members", userIds);
 };
 
@@ -152,4 +152,8 @@ const getRemoveAriaLabel = (member: RoomMemberResponse) =>
 :deep(.v-data-table__td-title) {
 	font-weight: bold;
 }
+
+// :deep(.v-data-table tbody .v-data-table__tr) {
+// 	background: #d8903370 !important;
+// }
 </style>
