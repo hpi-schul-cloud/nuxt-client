@@ -127,8 +127,7 @@ export const useBoardSocketApi = () => {
 		emitOnSocket("fetch-board-request", payload);
 	};
 
-	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
-		console.log("disconnectSocketRequest", payload);
+	const disconnectSocketRequest = () => {
 		disconnectSocket();
 	};
 
