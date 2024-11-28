@@ -69,7 +69,7 @@ const pageTitle = computed(() =>
 useTitle(pageTitle);
 
 const onDelete = async () => {
-	if (!room) return;
+	if (!room.value) return;
 
 	const shouldDelete = await askDeleteConfirmation(
 		room.value?.name,
@@ -85,14 +85,14 @@ const onDelete = async () => {
 };
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	if (room != null) {
+	if (room.value != null) {
 		return [
 			{
 				title: t("pages.rooms.title"),
 				to: "/rooms",
 			},
 			{
-				title: room.value!.name,
+				title: room.value.name,
 				disabled: true,
 			},
 		];
@@ -107,13 +107,13 @@ const boardLayoutsEnabled = computed(
 const boardLayoutDialogIsOpen = ref(false);
 
 const createBoard = async (layout: BoardLayout) => {
-	if (!room) return;
+	if (!room.value) return;
 
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
 	const params: CreateBoardBodyParams = {
 		title: t("pages.roomDetails.board.defaultName"),
-		parentId: room.value!.id,
+		parentId: room.value.id,
 		parentType: BoardParentType.Room,
 		layout,
 	};
