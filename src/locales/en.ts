@@ -792,6 +792,10 @@ export default {
 	"components.roomForm.labels.timePeriod": "Time period",
 	"components.roomForm.labels.timePeriod.from": "Time period from",
 	"components.roomForm.labels.timePeriod.to": "Time period to",
+	"components.roomForm.validation.generalSaveError":
+		"An error occurred while saving. Please check your inputs and try again.",
+	"components.roomForm.validation.timePeriod.startBeforeEnd":
+		"The start date must be before the end date.",
 	"components.timePicker.validation.format": "Please use format HH:MM",
 	"components.timePicker.validation.required": "Please enter a time.",
 	"error.400": "401 – Bad Request",

@@ -10,6 +10,7 @@ type MetaTagResult = {
 	title: string;
 	description: string;
 	imageUrl?: string;
+	originalImageUrl?: string;
 };
 
 export const useMetaTagExtractorApi = () => {
@@ -62,7 +63,7 @@ export const useMetaTagExtractorApi = () => {
 			return mapMetaTagResponse(res.data);
 		} catch (e) {
 			return {
-				url,
+				url: "",
 				title: "",
 				description: "",
 			};
