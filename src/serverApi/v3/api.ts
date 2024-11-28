@@ -7084,6 +7084,8 @@ export enum RoleName {
     DemoStudent = 'demoStudent',
     DemoTeacher = 'demoTeacher',
     Expert = 'expert',
+    GuestTeacher = 'guestTeacher',
+    GuestStudent = 'guestStudent',
     Helpdesk = 'helpdesk',
     Roomviewer = 'roomviewer',
     Roomeditor = 'roomeditor',
@@ -20701,7 +20703,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Update a room
+         * @summary Create a new room
          * @param {string} roomId 
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -20846,7 +20848,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Update a room
+         * @summary Create a new room
          * @param {string} roomId 
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -20951,7 +20953,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Update a room
+         * @summary Create a new room
          * @param {string} roomId 
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21054,7 +21056,7 @@ export interface RoomApiInterface {
 
     /**
      * 
-     * @summary Update a room
+     * @summary Create a new room
      * @param {string} roomId 
      * @param {UpdateRoomBodyParams} updateRoomBodyParams 
      * @param {*} [options] Override http request option.
@@ -21173,7 +21175,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
 
     /**
      * 
-     * @summary Update a room
+     * @summary Create a new room
      * @param {string} roomId 
      * @param {UpdateRoomBodyParams} updateRoomBodyParams 
      * @param {*} [options] Override http request option.
