@@ -356,13 +356,10 @@ describe("ExternalToolElement", () => {
 	describe("when no tool is selected", () => {
 		describe("when not in edit mode", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper(
-					{
-						element: externalToolElementResponseFactory.build(),
-						isEditMode: false,
-					},
-					undefined
-				);
+				const { wrapper } = getWrapper({
+					element: externalToolElementResponseFactory.build(),
+					isEditMode: false,
+				});
 
 				return {
 					wrapper,
@@ -380,13 +377,10 @@ describe("ExternalToolElement", () => {
 
 		describe("when in edit mode", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper(
-					{
-						element: externalToolElementResponseFactory.build(),
-						isEditMode: true,
-					},
-					undefined
-				);
+				const { wrapper } = getWrapper({
+					element: externalToolElementResponseFactory.build(),
+					isEditMode: true,
+				});
 
 				return {
 					wrapper,

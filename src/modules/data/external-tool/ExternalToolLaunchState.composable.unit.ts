@@ -446,7 +446,7 @@ describe("ExternalToolLaunchState.composable", () => {
 				jest.restoreAllMocks();
 			});
 
-			it("should start an interval and clean up when the window is closed", async () => {
+			it("should call refreshCallback", async () => {
 				jest.useFakeTimers();
 				const {
 					launchTool,
@@ -470,7 +470,8 @@ describe("ExternalToolLaunchState.composable", () => {
 				expect(clearInterval).toHaveBeenCalled();
 			});
 
-			it("should not clean up if the window is not closed", async () => {
+			it("should not call refreshCallback", async () => {
+				jest.useFakeTimers();
 				const { launchTool, refreshCallback, mockWindow } = setup();
 
 				launchTool();
