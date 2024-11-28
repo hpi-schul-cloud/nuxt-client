@@ -1,24 +1,30 @@
 <template>
 	<VCard
-		class="board-tile"
-		:class="{ 'board-is-draft': isDraft }"
-		hover
+		class="bg-grey-lighten-5"
+		:class="{ 'bg-white opacity-70': isDraft }"
+		variant="outlined"
+		draggable="false"
 		:data-testid="`board-tile-${props.index}`"
 		:to="boardPath"
 	>
 		<VCardSubtitle
-			class="board-tile-subtitle mt-4"
+			class="mt-4 d-flex align-center"
 			:data-testid="`board-tile-subtitle-${props.index}`"
 		>
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
 			{{ subtitleText }}
 		</VCardSubtitle>
-		<VCardTitle
-			class="board-tile-title text-h6 my-2"
-			:data-testid="`board-tile-title-${props.index}`"
-		>
-			{{ board.title }}
-		</VCardTitle>
+		<VTooltip :text="board.title">
+			<template v-slot:activator="{ props }">
+				<VCardTitle
+					v-bind="props"
+					class="board-tile-title text-body-1 font-weight-bold my-2"
+					:data-testid="`board-tile-title-${props.index}`"
+				>
+					{{ board.title }}
+				</VCardTitle>
+			</template>
+		</VTooltip>
 	</VCard>
 </template>
 
@@ -69,17 +75,3 @@ const boardPath = computed(() => {
 	return `/boards/${board.value.id}`;
 });
 </script>
-
-<style lang="scss" scoped>
-@import "@/styles/settings.scss";
-
-.board-tile {
-	background-color: map-get($grey, lighten-5);
-	border: 1px solid map-get($grey, lighten-2);
-
-	&.board-is-draft .board-tile-subtitle,
-	&.board-is-draft .board-tile-title {
-		opacity: 0.5;
-	}
-}
-</style>
