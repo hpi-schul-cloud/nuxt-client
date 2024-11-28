@@ -301,8 +301,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		toColumn.cards.splice(newIndex, 0, item);
 	};
 
-	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
-		socketOrRest.disconnectSocketRequest(payload);
+	const disconnectSocketRequest = () => {
+		socketOrRest.disconnectSocketRequest();
 	};
 
 	const fetchBoardRequest = async (payload: FetchBoardRequestPayload) => {
