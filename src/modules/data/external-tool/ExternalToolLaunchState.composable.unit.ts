@@ -15,6 +15,7 @@ import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunch
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
+import { nextTick } from "vue";
 
 jest.mock("@data-external-tool/ExternalToolApi.composable");
 
@@ -289,7 +290,6 @@ describe("ExternalToolLaunchState.composable", () => {
 						method: ToolLaunchRequestMethodEnum.Post,
 						openNewTab: true,
 						payload: "",
-						launchType: LaunchType.Lti11ContentItemSelection,
 					});
 
 					const composable = useExternalToolLaunchState();
@@ -406,6 +406,84 @@ describe("ExternalToolLaunchState.composable", () => {
 				launchTool();
 
 				expect(window.open).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when the launch is with launchType Lti11ContentItemSelection", () => {
+			const setup = () => {
+				const refreshCallback = jest.fn();
+				const launchRequest = toolLaunchRequestFactory.build({
+					method: ToolLaunchRequestMethodEnum.Post,
+					openNewTab: true,
+					launchType: LaunchType.Lti11ContentItemSelection,
+				});
+
+				const composable = useExternalToolLaunchState(refreshCallback);
+				composable.toolLaunchRequest.value = launchRequest;
+
+				const mockWindow = {
+					closed: false,
+				};
+
+				jest
+					.spyOn(window, "open")
+					.mockReturnValue(mockWindow as unknown as Window);
+
+				const setInterval = jest.spyOn(window, "setInterval");
+				const clearInterval = jest.spyOn(window, "clearInterval");
+
+				return {
+					...composable,
+					refreshCallback,
+					setInterval,
+					clearInterval,
+					mockWindow,
+				};
+			};
+
+			afterEach(() => {
+				jest.useRealTimers();
+				jest.restoreAllMocks();
+			});
+
+			it("should start an interval and clean up when the window is closed", async () => {
+				jest.useFakeTimers();
+				const {
+					launchTool,
+					refreshCallback,
+					mockWindow,
+					setInterval,
+					clearInterval,
+				} = setup();
+
+				launchTool();
+
+				expect(setInterval).toHaveBeenCalled();
+				expect(mockWindow.closed).toBe(false);
+
+				mockWindow.closed = true;
+
+				jest.advanceTimersByTime(1000);
+				await nextTick();
+
+				expect(refreshCallback).toHaveBeenCalled();
+				expect(clearInterval).toHaveBeenCalled();
+			});
+
+			it("should not clean up if the window is not closed", async () => {
+				const { launchTool, refreshCallback, mockWindow } = setup();
+
+				launchTool();
+
+				expect(setInterval).toHaveBeenCalled();
+
+				mockWindow.closed = false;
+
+				jest.advanceTimersByTime(1000);
+				await nextTick();
+
+				expect(refreshCallback).not.toHaveBeenCalled();
+				expect(clearInterval).not.toHaveBeenCalled();
 			});
 		});
 	});
