@@ -1,24 +1,29 @@
 <template>
 	<v-card flat>
-		<v-card-title>
-			<span class="table-title">{{ tableTitle }}</span>
-		</v-card-title>
 		<div
-			class="d-flex justify-space-between align-center mb-2"
-			style="min-height: 50px"
+			class="d-flex justify-space-between align-center mb-2 table-title-header"
 		>
 			<div class="mx-4">
-				<div v-if="selectedMembers.length">
+				<div v-if="selectedMembers.length" class="selected-options">
 					<span>
 						({{ selectedMembers.length }})
 						{{ t("pages.administration.selected") }}
 					</span>
 					<v-btn
+						ref="removeSelectedMembers"
 						class="ml-2"
 						variant="text"
 						:icon="mdiTrashCanOutline"
 						:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
 						@click="onRemoveMembers(selectedMembers)"
+					/>
+					<v-btn
+						ref="removeSelectedMembers"
+						class="ml-2"
+						variant="text"
+						:icon="mdiClose"
+						:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
+						@click="resetSelectedMembers"
 					/>
 				</div>
 			</div>
@@ -28,9 +33,9 @@
 				flat
 				hide-details
 				max-width="400px"
+				mobile-breakpoint="sm"
 				single-line
 				variant="solo-filled"
-				mobile-breakpoint="sm"
 				:label="t('common.labels.search')"
 				:prepend-inner-icon="mdiMagnify"
 			/>
@@ -71,9 +76,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, toRef } from "vue";
+import { PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import {
+	mdiClose,
 	mdiMenuDown,
 	mdiMenuUp,
 	mdiMagnify,
@@ -95,9 +101,9 @@ const membersList = toRef(props, "members");
 const selectedMembers = ref<string[]>([]);
 const membersFilterCount = ref(membersList.value?.length);
 
-const tableTitle = computed(
-	() => `${t("pages.rooms.members.label")} (${membersFilterCount.value})`
-);
+// const tableTitle = computed(
+// 	() => `${t("pages.rooms.members.label")} (${membersFilterCount.value})`
+// );
 
 const onUpdateFilter = (value: RoomMemberResponse[]) => {
 	membersFilterCount.value =
@@ -106,6 +112,10 @@ const onUpdateFilter = (value: RoomMemberResponse[]) => {
 
 const onRemoveMembers = (userIds: string[]) => {
 	emit("remove:members", userIds);
+};
+
+const resetSelectedMembers = () => {
+	selectedMembers.value = [];
 };
 
 const getRemoveAriaLabel = (member: RoomMemberResponse) =>
@@ -141,4 +151,12 @@ const tableHeader = [
 :deep(.v-data-table__td-title) {
 	font-weight: bold;
 }
+
+.table-title-header {
+	min-height: 50px;
+}
+
+// .selected-options {
+// 	background-color: red;
+// }
 </style>
