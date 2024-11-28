@@ -8,6 +8,7 @@ import {
 	contextExternalToolFactory,
 	externalToolDisplayDataFactory,
 	externalToolElementResponseFactory,
+	ltiDeepLinkResponseFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils";
 import {
@@ -395,12 +396,14 @@ describe("ExternalToolElement", () => {
 		});
 	});
 
-	describe("when deeplinking tool is selected", () => {
+	describe("when a deeplinking tool without a deeplink is selected", () => {
 		describe("when not in edit mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper(
 					{
-						element: externalToolElementResponseFactory.build(),
+						element: externalToolElementResponseFactory.build({
+							content: { contextExternalToolId: "contextExternalToolId" },
+						}),
 						isEditMode: false,
 					},
 					externalToolDisplayDataFactory.build({
@@ -434,6 +437,66 @@ describe("ExternalToolElement", () => {
 					externalToolDisplayDataFactory.build({
 						status: schoolToolConfigurationStatusFactory.build(),
 						isLtiDeepLinkingTool: true,
+					})
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show the element", () => {
+				const { wrapper } = setup();
+
+				const element = wrapper.findComponent({ ref: "externalToolElement" });
+
+				expect(element.isVisible()).toEqual(true);
+			});
+		});
+	});
+
+	describe("when a deeplinking tool with a deeplink is selected", () => {
+		describe("when not in edit mode", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper(
+					{
+						element: externalToolElementResponseFactory.build({
+							content: { contextExternalToolId: "contextExternalToolId" },
+						}),
+						isEditMode: false,
+					},
+					externalToolDisplayDataFactory.build({
+						isLtiDeepLinkingTool: true,
+						ltiDeepLink: ltiDeepLinkResponseFactory.build(),
+					})
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show the element", () => {
+				const { wrapper } = setup();
+
+				const element = wrapper.findComponent({ ref: "externalToolElement" });
+
+				expect(element.isVisible()).toEqual(true);
+			});
+		});
+
+		describe("when in edit mode", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper(
+					{
+						element: externalToolElementResponseFactory.build({
+							content: { contextExternalToolId: "contextExternalToolId" },
+						}),
+						isEditMode: true,
+					},
+					externalToolDisplayDataFactory.build({
+						isLtiDeepLinkingTool: true,
+						ltiDeepLink: ltiDeepLinkResponseFactory.build(),
 					})
 				);
 
