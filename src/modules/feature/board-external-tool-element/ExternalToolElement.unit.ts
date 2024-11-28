@@ -106,7 +106,7 @@ describe("ExternalToolElement", () => {
 		displayData?: ExternalToolDisplayData
 	) => {
 		useContentElementStateMock.modelValue = ref(propsData.element.content);
-		useExternalToolElementDisplayStateMock.displayData = ref(displayData);
+		useExternalToolElementDisplayStateMock.displayData.value = displayData;
 
 		const refreshTime = 299000;
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
@@ -380,10 +380,13 @@ describe("ExternalToolElement", () => {
 
 		describe("when in edit mode", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper({
-					element: externalToolElementResponseFactory.build(),
-					isEditMode: true,
-				});
+				const { wrapper } = getWrapper(
+					{
+						element: externalToolElementResponseFactory.build(),
+						isEditMode: true,
+					},
+					undefined
+				);
 
 				return {
 					wrapper,

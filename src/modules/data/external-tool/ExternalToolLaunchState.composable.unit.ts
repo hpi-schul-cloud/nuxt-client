@@ -283,6 +283,37 @@ describe("ExternalToolLaunchState.composable", () => {
 		});
 
 		describe("when launching a tool with post method", () => {
+			describe("when opening in a new tab", () => {
+				const setup = () => {
+					const launchRequest = toolLaunchRequestFactory.build({
+						method: ToolLaunchRequestMethodEnum.Post,
+						openNewTab: true,
+						payload: "",
+						launchType: LaunchType.Lti11ContentItemSelection,
+					});
+
+					const composable = useExternalToolLaunchState();
+					composable.toolLaunchRequest.value = launchRequest;
+
+					return {
+						...composable,
+						launchRequest,
+					};
+				};
+
+				it("should create a launch form with a number as the target ", () => {
+					const { launchRequest, launchTool } = setup();
+
+					launchTool();
+
+					const form = document.getElementById("launch-form");
+
+					expect(form?.outerHTML).toEqual(
+						`<form method="POST" action="${launchRequest.url}" id="launch-form" target="1"></form>`
+					);
+				});
+			});
+
 			describe("when opening in the same tab", () => {
 				const setup = () => {
 					const launchRequest = toolLaunchRequestFactory.build({
@@ -308,36 +339,6 @@ describe("ExternalToolLaunchState.composable", () => {
 
 					expect(form?.outerHTML).toEqual(
 						`<form method="POST" action="${launchRequest.url}" id="launch-form" target="_self"><input type="hidden" name="key" value="value"></form>`
-					);
-				});
-			});
-
-			describe("when opening in a new tab", () => {
-				const setup = () => {
-					const launchRequest = toolLaunchRequestFactory.build({
-						method: ToolLaunchRequestMethodEnum.Post,
-						openNewTab: true,
-						payload: "",
-					});
-
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
-
-					return {
-						...composable,
-						launchRequest,
-					};
-				};
-
-				it("should create a launch form with a number as the target ", () => {
-					const { launchRequest, launchTool } = setup();
-
-					launchTool();
-
-					const form = document.getElementById("launch-form");
-
-					expect(form?.outerHTML).toEqual(
-						`<form method="POST" action="${launchRequest.url}" id="launch-form" target="2"></form>`
 					);
 				});
 			});
