@@ -612,6 +612,11 @@ describe("ExternalToolElement", () => {
 		describe("when the component has finished loading", () => {
 			const setup = () => {
 				const contextExternalToolId = "context-external-tool-id";
+				const displayData = externalToolDisplayDataFactory.build({
+					contextExternalToolId,
+					isLtiDeepLinkingTool: true,
+					ltiDeepLink: ltiDeepLinkResponseFactory.build(),
+				});
 
 				useExternalToolElementDisplayStateMock.isLoading = ref(false);
 
@@ -622,20 +627,24 @@ describe("ExternalToolElement", () => {
 						}),
 						isEditMode: false,
 					},
-					externalToolDisplayDataFactory.build({ contextExternalToolId })
+					displayData
 				);
 
 				return {
 					wrapper,
+					displayData,
 				};
 			};
 
 			it("should display a loading state", () => {
-				const { wrapper } = setup();
+				const { wrapper, displayData } = setup();
 
 				const title = wrapper.findComponent({ ref: "externalToolElement" });
 
 				expect(title.attributes("loading")).toBe("false");
+				expect(
+					useExternalToolElementDisplayStateMock.displayData.value
+				).toEqual(displayData);
 			});
 		});
 	});
