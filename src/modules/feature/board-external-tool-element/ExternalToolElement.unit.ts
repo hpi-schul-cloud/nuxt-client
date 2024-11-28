@@ -106,7 +106,7 @@ describe("ExternalToolElement", () => {
 		displayData?: ExternalToolDisplayData
 	) => {
 		useContentElementStateMock.modelValue = ref(propsData.element.content);
-		useExternalToolElementDisplayStateMock.displayData.value = displayData;
+		useExternalToolElementDisplayStateMock.displayData = ref(displayData);
 
 		const refreshTime = 299000;
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
