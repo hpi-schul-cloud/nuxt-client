@@ -344,12 +344,10 @@ describe("useCardSocketApi", () => {
 	});
 
 	describe("disconnectSocketRequest", () => {
-		const payload: DisconnectSocketRequestPayload = {};
-
 		it("should call disconnectSocket", () => {
 			const { disconnectSocketRequest } = useCardSocketApi();
 
-			disconnectSocketRequest(payload);
+			disconnectSocketRequest();
 
 			expect(mockedSocketConnectionHandler.disconnectSocket).toHaveBeenCalled();
 		});

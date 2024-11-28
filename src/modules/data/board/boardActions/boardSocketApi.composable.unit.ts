@@ -428,12 +428,10 @@ describe("useBoardSocketApi", () => {
 	});
 
 	describe("disconnectSocketRequest", () => {
-		const payload: DisconnectSocketRequestPayload = {};
-
 		it("should call disconnectSocket", () => {
 			const { disconnectSocketRequest } = useBoardSocketApi();
 
-			disconnectSocketRequest(payload);
+			disconnectSocketRequest();
 
 			expect(mockedSocketConnectionHandler.disconnectSocket).toHaveBeenCalled();
 		});

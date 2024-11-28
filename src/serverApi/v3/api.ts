@@ -4456,6 +4456,12 @@ export interface LinkContentBody {
      * @memberof LinkContentBody
      */
     imageUrl: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkContentBody
+     */
+    originalImageUrl: string;
 }
 /**
  * 
@@ -4481,6 +4487,12 @@ export interface LinkElementContent {
      * @memberof LinkElementContent
      */
     description?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LinkElementContent
+     */
+    originalImageUrl?: string;
     /**
      * 
      * @type {string}
@@ -5495,6 +5507,12 @@ export interface MetaTagExtractorResponse {
      * @memberof MetaTagExtractorResponse
      */
     description: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MetaTagExtractorResponse
+     */
+    originalImageUrl: string;
     /**
      * 
      * @type {string}
