@@ -198,6 +198,9 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				expect(content).toContain(
 					"components.molecules.copyResult.ctlTools.withFeature.info"
 				);
+				expect(content).toContain(
+					"components.molecules.copyResult.ctlTools.withFeature.info.additional"
+				);
 			});
 		});
 
@@ -242,20 +245,23 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 
 		it.each([
 			[
-				"components.molecules.copyResult.label.geogebra",
+				"components.molecules.copyResult.geogebraCopy.info",
 				CopyApiResponseTypeEnum.LessonContentGeogebra,
 			],
 			[
-				"components.molecules.copyResult.label.etherpad",
+				"components.molecules.copyResult.etherpadCopy.info",
 				CopyApiResponseTypeEnum.LessonContentEtherpad,
 			],
 			[
-				"components.molecules.copyResult.label.nexboard",
+				"components.molecules.copyResult.nexboardCopy.info",
 				CopyApiResponseTypeEnum.LessonContentNexboard,
 			],
-			["common.words.courseGroups", CopyApiResponseTypeEnum.CoursegroupGroup],
 			[
-				"components.molecules.copyResult.label.files",
+				"components.molecules.copyResult.courseGroupCopy.info",
+				CopyApiResponseTypeEnum.CoursegroupGroup,
+			],
+			[
+				"components.molecules.copyResult.fileCopy.error",
 				CopyApiResponseTypeEnum.File,
 			],
 		])("should render if there is a %s item", (title, type) => {
@@ -273,6 +279,9 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			const dialog = wrapper.findComponent(vCustomDialog);
 			const content = dialog.findComponent(".v-card-text").text();
 
+			expect(content).toContain(
+				"components.molecules.copyResult.tableHeader.infoText"
+			);
 			expect(content).toContain(title);
 		});
 	});

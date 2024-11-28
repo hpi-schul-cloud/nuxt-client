@@ -514,21 +514,21 @@ export default {
 		"wird noch kopiert",
 	"components.molecules.copyResult.courseCopy.info": "Kurs wird erstellt",
 	"components.molecules.copyResult.courseFiles.info":
-		"Kursdateien, die nicht Teil von Aufgaben oder Themen sind, werden nicht kopiert.",
-	"components.molecules.copyResult.courseGroupCopy.info":
-		"Gruppen und deren Inhalte werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.ctlTools.info":
-		"Externe Tools, die dem Kurs oder Karten im Bereich zugeordnet sind, werden nicht kopiert.",
+		"Dateien unter Kurs-Dateien", // change
+	"components.molecules.copyResult.courseGroupCopy.info": "Kursgruppen", // change
+	"components.molecules.copyResult.ctlTools.info": "Externe Tools", // change
 	"components.molecules.copyResult.ctlTools.withFeature.info":
-		"Geschützte Teile der Tool-Konfigurationen werden nicht kopiert.",
-	"components.molecules.copyResult.etherpadCopy.info":
-		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
+		"Geschützte Einstellungen externer Tools.", // change
+	"components.molecules.copyResult.ctlTools.withFeature.info.additional":
+		"In Zielschule nicht verfügbare, externe Tools.", // new
+	"components.molecules.copyResult.etherpadCopy.info": "Inhalte aus Etherpads.", // change
 	"components.molecules.copyResult.failedCopy":
 		"Der Kopiervorgang konnte nicht abgeschlossen werden.",
 	"components.molecules.copyResult.fileCopy.error":
 		"Folgende Dateien konnten nicht kopiert werden und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.geogebraCopy.info":
-		"Material-IDs werden aus technischen Gründen nicht kopiert und müssen neu hinzugefügt werden.",
+	"components.molecules.copyResult.geogebraCopy.info": "Geogebra IDs.", // change
+	"components.molecules.copyResult.tableHeader.infoText":
+		"Folgende Inhalte wurden nicht kopiert: ", // new
 	"components.molecules.copyResult.information":
 		"Nachfolgend können die fehlenden Inhalte mit Hilfe der Quick-Links ergänzt werden. Die Links öffnen sich in einem separatem Tab.",
 	"components.molecules.copyResult.label.columnBoard": "Bereich",
@@ -574,8 +574,7 @@ export default {
 		"Der Kopiervorgang wurde abgeschlossen.",
 	"components.molecules.copyResult.title.failure": "Kopieren fehlgeschlagen",
 	"components.molecules.copyResult.title.loading": "Kopiervorgang läuft...",
-	"components.molecules.copyResult.title.partial":
-		"Wichtige Kopier-Informationen",
+	"components.molecules.copyResult.title.partial": "KopierBericht", // change
 	"components.molecules.copyResult.title.success": "Kopieren erfolgreich",
 	"components.molecules.courseheader.coursedata": "Kursdateien",
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",

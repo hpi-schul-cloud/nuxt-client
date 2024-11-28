@@ -20,18 +20,19 @@
 						<v-icon color="warning">{{ mdiAlert }}</v-icon>
 					</div>
 					<div>
-						<template v-for="(warning, index) in copyResultWarnings">
-							<p
-								v-if="warning.isShow"
-								:key="index"
-								class="mb-0 aligned-with-icon"
-								data-testid="warning-title"
-							>
-								<strong>{{ warning.title }}</strong>
-								&middot;
-								{{ warning.text }}
-							</p>
-						</template>
+						{{ $t("components.molecules.copyResult.tableHeader.infoText") }}
+						<ul class="ml-6">
+							<template v-for="(warning, index) in copyResultWarnings">
+								<li
+									v-if="warning.isShow"
+									:key="index"
+									class="mb-0 aligned-with-icon"
+									data-testid="warning-title"
+								>
+									{{ warning.text }}
+								</li>
+							</template>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -126,6 +127,15 @@ export default {
 					isShow: this.hasFileElement || this.isCourse,
 					text: this.filesInfoText,
 					title: this.$t("components.molecules.copyResult.label.files"),
+				},
+				{
+					isShow:
+						this.hasFeatureCtlsToolsenabled &&
+						envConfigModule.getEnv.FEATURE_CTL_TOOLS_COPY_ENABLED,
+					text: this.$t(
+						"components.molecules.copyResult.ctlTools.withFeature.info.additional"
+					),
+					title: this.$t("components.molecules.copyResult.label.externalTools"),
 				},
 				{
 					isShow: this.hasFeatureCtlsToolsenabled,
