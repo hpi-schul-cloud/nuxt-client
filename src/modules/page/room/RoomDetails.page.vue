@@ -15,7 +15,7 @@
 				<RoomMenu :room-id="room.id" @room:delete="onDelete" />
 			</div>
 		</template>
-		<RoomDetails :room="room" :room-boards="roomBoards" />
+		<BoardGrid :boards="roomBoards" />
 		<ConfirmationDialog />
 		<SelectBoardLayoutDialog
 			v-if="boardLayoutsEnabled"
@@ -41,7 +41,7 @@ import { envConfigModule, authModule } from "@/store";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomDetailsStore, useRoomsState } from "@data-room";
-import { RoomDetails, RoomMenu } from "@feature-room";
+import { BoardGrid, RoomMenu } from "@feature-room";
 import {
 	mdiViewGridPlusOutline,
 	mdiViewDashboardOutline,
