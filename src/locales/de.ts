@@ -1684,7 +1684,7 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
 	"pages.rooms.members.add": "Teilnehmende hinzufügen",
-	"pages.rooms.members.manage": "Teilnehmende verwalten",
+	"pages.rooms.members.manage": "Raum-Teilnehmende",
 	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
 	"pages.rooms.members.multipleRemove.ariaLabel":
 		"Mehrere Teilnehmer aus dem Raum entfernen",
