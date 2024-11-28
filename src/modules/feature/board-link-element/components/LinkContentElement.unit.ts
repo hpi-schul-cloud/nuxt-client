@@ -128,6 +128,7 @@ describe("LinkContentElement", () => {
 				url,
 				title: "Super duper mega page title",
 				description: "This page is sooo cool!",
+				originalImageUrl: "https://imagestock.com/great-image.jpg",
 				imageUrl: "https://imagestock.com/great-image.jpg",
 			})
 		);
@@ -455,6 +456,7 @@ describe("LinkContentElement", () => {
 							url,
 							title: "my title",
 							description: "",
+							originalImageUrl: "https://abc.de/foto.png",
 							imageUrl: "https://abc.de/foto.png",
 							type: "unknown",
 							parentTitle: "",

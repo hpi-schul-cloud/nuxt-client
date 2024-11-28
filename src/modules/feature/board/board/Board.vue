@@ -282,7 +282,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	boardStore.disconnectSocketRequest({});
+	boardStore.disconnectSocketRequest();
 	boardStore.setBoard(undefined);
 	cardStore.resetState();
 	resetNotifierModule();
