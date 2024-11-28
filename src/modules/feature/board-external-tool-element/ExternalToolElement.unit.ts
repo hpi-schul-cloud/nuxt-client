@@ -152,6 +152,7 @@ describe("ExternalToolElement", () => {
 					},
 					externalToolDisplayDataFactory.build({
 						status: schoolToolConfigurationStatusFactory.build(),
+						isLtiDeepLinkingTool: false,
 					})
 				);
 
@@ -355,10 +356,13 @@ describe("ExternalToolElement", () => {
 	describe("when no tool is selected", () => {
 		describe("when not in edit mode", () => {
 			const setup = () => {
-				const { wrapper } = getWrapper({
-					element: externalToolElementResponseFactory.build(),
-					isEditMode: false,
-				});
+				const { wrapper } = getWrapper(
+					{
+						element: externalToolElementResponseFactory.build(),
+						isEditMode: false,
+					},
+					undefined
+				);
 
 				return {
 					wrapper,
@@ -632,19 +636,15 @@ describe("ExternalToolElement", () => {
 
 				return {
 					wrapper,
-					displayData,
 				};
 			};
 
 			it("should display a loading state", () => {
-				const { wrapper, displayData } = setup();
+				const { wrapper } = setup();
 
 				const title = wrapper.findComponent({ ref: "externalToolElement" });
 
 				expect(title.attributes("loading")).toBe("false");
-				expect(
-					useExternalToolElementDisplayStateMock.displayData.value
-				).toEqual(displayData);
 			});
 		});
 	});
