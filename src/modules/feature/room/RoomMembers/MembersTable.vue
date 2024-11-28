@@ -22,14 +22,12 @@
 					/>
 				</div>
 			</div>
-			<v-spacer />
-			<v-spacer />
 			<v-text-field
 				v-model="search"
 				density="compact"
 				flat
 				hide-details
-				max-width="300px"
+				max-width="400px"
 				single-line
 				variant="solo-filled"
 				mobile-breakpoint="sm"
@@ -129,7 +127,7 @@ const tableHeader = [
 		key: "displayRoleName",
 	},
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
-	{ title: "", key: "actions", sortable: false, width: 180 },
+	{ title: "", key: "actions", sortable: false, width: 50 },
 ];
 </script>
 
