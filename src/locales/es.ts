@@ -1705,7 +1705,7 @@ export default {
 	"pages.rooms.members.remove.confirmation":
 		"¿Eliminar {memberName} de la sala?",
 	"pages.rooms.members.multipleRemove.confirmation":
-		"¿Eliminar {count} participantes seleccionadas de la sala?",
+		"¿Eliminar participantes seleccionadas de la sala?",
 	"pages.rooms.members.activateMultiSelection": "Activar selección múltiple",
 	"pages.rooms.members.deactivateMultiSelection":
 		"Desactivar selección múltiple",

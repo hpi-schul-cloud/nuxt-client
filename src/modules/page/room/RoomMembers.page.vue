@@ -117,9 +117,7 @@ const onUpdateRoleOrSchool = async (payload: {
 };
 
 const onRemoveMembers = async (memberIds: string[]) => {
-	let message = t("pages.rooms.members.multipleRemove.confirmation", {
-		count: memberIds.length,
-	});
+	let message = t("pages.rooms.members.multipleRemove.confirmation");
 	if (memberIds.length === 1) {
 		const member = memberList.value.find(
 			(member) => member.userId === memberIds[0]

@@ -4,10 +4,10 @@
 			<span class="table-title">{{ tableTitle }}</span>
 		</v-card-title>
 		<div
-			class="d-flex justify-space-between align-end mb-2"
+			class="d-flex justify-space-between align-center mb-2"
 			style="min-height: 50px"
 		>
-			<div class="align-center ml-4">
+			<div class="mx-4">
 				<div v-if="selectedMembers.length">
 					<span>
 						({{ selectedMembers.length }})
