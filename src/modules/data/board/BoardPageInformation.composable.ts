@@ -13,17 +13,26 @@ const useBoardPageInformation = () => {
 
 	const boardContext = ref<Awaited<ReturnType<typeof getContextInfo>>>();
 
-	const pageTitle = computed(() => {
-		const courseName = boardContext.value?.name;
-		const courseNameForPageTitle = courseName ? ", " + courseName : "";
-
-		return buildPageTitle(
-			`${t("pages.room.boardCard.label.courseBoard")}${courseNameForPageTitle}`
-		);
-	});
-
 	const roomId = computed(() => boardContext.value?.id);
 	const contextType = computed(() => boardContext.value?.type);
+
+	const pageTitle = computed(() => {
+		const roomName = unref(boardContext)?.name;
+		const roomNameForPageTitle = roomName ? ", " + roomName : "";
+		const type = unref(boardContext)?.type;
+
+		if (type === BoardContextType.Course) {
+			return buildPageTitle(
+				`${t("pages.room.boardCard.label.courseBoard")}${roomNameForPageTitle}`
+			);
+		}
+		if (type === BoardContextType.Room) {
+			return buildPageTitle(
+				`${t("pages.roomDetails.board.defaultName")}${roomNameForPageTitle}`
+			);
+		}
+		return "";
+	});
 
 	const breadcrumbs = computed((): Breadcrumb[] => {
 		const id = unref(boardContext)?.id;
