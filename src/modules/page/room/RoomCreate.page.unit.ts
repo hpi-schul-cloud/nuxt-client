@@ -8,6 +8,10 @@ import { RoomCreatePage } from "@page-room";
 import { useRouter } from "vue-router";
 import { RoomColor } from "@/serverApi/v3";
 import { RoomForm } from "@feature-room";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
+import { flushPromises } from "@vue/test-utils";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -40,9 +44,14 @@ const roomParams: RoomCreateParams = {
 
 describe("@pages/RoomCreate.page.vue", () => {
 	const setup = () => {
+		const notifierModule = createModuleMocks(NotifierModule);
+
 		const wrapper = mount(RoomCreatePage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
 			},
 		});
 
@@ -61,11 +70,14 @@ describe("@pages/RoomCreate.page.vue", () => {
 		const { roomFormComponent } = setup();
 		expect(roomFormComponent).toBeDefined();
 	});
+
 	it("should call createRoom with correct parameters on save", async () => {
 		const { createRoom, roomFormComponent } = setup();
-		roomFormComponent.vm.$emit("save", roomParams);
+		roomFormComponent.vm.$emit("save", { room: roomParams });
+		await flushPromises();
 		expect(createRoom).toHaveBeenCalledWith(roomParams);
 	});
+
 	it("should navigate to 'room-details' with correct room id on save", async () => {
 		const { roomFormComponent, router } = setup();
 		roomFormComponent.vm.$emit("save", roomParams);
@@ -74,6 +86,7 @@ describe("@pages/RoomCreate.page.vue", () => {
 			params: { id: "123" },
 		});
 	});
+
 	it("should navigate to 'rooms' on cancel", async () => {
 		const { router, roomFormComponent } = setup();
 		roomFormComponent.vm.$emit("cancel");
