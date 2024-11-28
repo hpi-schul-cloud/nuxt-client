@@ -795,6 +795,10 @@ export default {
 	"components.roomForm.labels.timePeriod": "Time period",
 	"components.roomForm.labels.timePeriod.from": "Time period from",
 	"components.roomForm.labels.timePeriod.to": "Time period to",
+	"components.roomForm.validation.generalSaveError":
+		"An error occurred while saving. Please check your inputs and try again.",
+	"components.roomForm.validation.timePeriod.startBeforeEnd":
+		"The start date must be before the end date.",
 	"components.timePicker.validation.format": "Please use format HH:MM",
 	"components.timePicker.validation.required": "Please enter a time.",
 	"error.400": "401 – Bad Request",
@@ -1647,14 +1651,15 @@ export default {
 	"pages.rooms.members.error.load": "The participant list could not be loaded.",
 	"pages.rooms.members.error.add": "Adding participants failed.",
 	"pages.rooms.members.error.remove": "Deleting participants failed.",
-	"pages.rooms.members.remove.confirmation":
-		"Remove {memberName} from the room?",
 	"pages.rooms.members.infoText":
-		'Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">more information</a>).',
+		"Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
+	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add participants",
 	"pages.rooms.members.manage": "Manage participants",
-	"pages.rooms.members.remove": "Remove participants",
+	"pages.rooms.members.remove.ariaLabel": "Remove {memberName} from the room",
+	"pages.rooms.members.remove.confirmation":
+		"Remove {memberName} from the room?",
 	"pages.rooms.members.roles.editor": "Room editor",
 	"pages.rooms.members.roles.viewer": "Room viewer",
 	"pages.rooms.title": "Rooms",

@@ -54,6 +54,7 @@
 									:columnCount="board.columns.length"
 									:class="{ 'my-0': isListBoard }"
 									:isListBoard="isListBoard"
+									:data-testid="`board-column-${index}`"
 									@reload:board="onReloadBoard"
 									@create:card="onCreateCard"
 									@delete:card="onDeleteCard"
@@ -291,7 +292,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-	boardStore.disconnectSocketRequest({});
+	boardStore.disconnectSocketRequest();
 	boardStore.setBoard(undefined);
 	cardStore.resetState();
 	resetNotifierModule();

@@ -42,6 +42,9 @@ describe("DrawingContentElement", () => {
 	const setup = (props: {
 		element: DrawingElementResponse;
 		isEditMode: boolean;
+		columnIndex: number;
+		rowIndex: number;
+		elementIndex: number;
 	}) => {
 		const wrapper = shallowMount(DrawingContentElement, {
 			global: {
@@ -66,6 +69,9 @@ describe("DrawingContentElement", () => {
 			const { wrapper } = setup({
 				element: DRAWING_ELEMENT,
 				isEditMode: false,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
 			});
 			expect(wrapper.findComponent(InnerContent).exists()).toBe(true);
 		});
@@ -74,6 +80,9 @@ describe("DrawingContentElement", () => {
 			const { wrapper } = setup({
 				element: DRAWING_ELEMENT,
 				isEditMode: false,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
 			});
 
 			const elementCard = wrapper.findComponent({
@@ -90,6 +99,9 @@ describe("DrawingContentElement", () => {
 			const { wrapper } = setup({
 				element: DRAWING_ELEMENT,
 				isEditMode: false,
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
 			});
 
 			const elementCard = wrapper.findComponent({
@@ -108,6 +120,9 @@ describe("DrawingContentElement", () => {
 					const { wrapper } = setup({
 						element: DRAWING_ELEMENT,
 						isEditMode: false,
+						columnIndex: 0,
+						rowIndex: 1,
+						elementIndex: 2,
 					});
 
 					const elementCard = wrapper.findComponent({
@@ -124,6 +139,9 @@ describe("DrawingContentElement", () => {
 				const { wrapper } = setup({
 					element: DRAWING_ELEMENT,
 					isEditMode: false,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				const elementMenu = wrapper.findComponent(BoardMenu);
@@ -139,6 +157,9 @@ describe("DrawingContentElement", () => {
 					const { wrapper } = setup({
 						element: DRAWING_ELEMENT,
 						isEditMode: true,
+						columnIndex: 0,
+						rowIndex: 1,
+						elementIndex: 2,
 					});
 
 					const elementCard = wrapper.findComponent({
@@ -155,6 +176,9 @@ describe("DrawingContentElement", () => {
 				const { wrapper } = setup({
 					element: DRAWING_ELEMENT,
 					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				const elementMenu = wrapper.findComponent(BoardMenu);
@@ -166,6 +190,9 @@ describe("DrawingContentElement", () => {
 				const { wrapper } = setup({
 					element: DRAWING_ELEMENT,
 					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				const menuItem = wrapper.findComponent(BoardMenuActionDelete);
@@ -179,6 +206,9 @@ describe("DrawingContentElement", () => {
 				const { wrapper } = setup({
 					element: DRAWING_ELEMENT,
 					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
@@ -192,6 +222,9 @@ describe("DrawingContentElement", () => {
 				const { wrapper } = setup({
 					element: DRAWING_ELEMENT,
 					isEditMode: true,
+					columnIndex: 0,
+					rowIndex: 1,
+					elementIndex: 2,
 				});
 
 				const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);

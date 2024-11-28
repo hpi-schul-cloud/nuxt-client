@@ -456,7 +456,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.datePicker.validation.format":
-		"Por favor utilice el formato DD.MM.YYYY",
+		"Por favor utilice el formato DD.MM.AAAA",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
 	"components.dateTimePicker.messages.dateInPast":
 		"La fecha y la hora están en el pasado.",
@@ -816,6 +816,10 @@ export default {
 	"components.roomForm.labels.timePeriod": "Periodo de tiempo",
 	"components.roomForm.labels.timePeriod.from": "Periodo de tiempo desde",
 	"components.roomForm.labels.timePeriod.to": "Periodo de tiempo hasta",
+	"components.roomForm.validation.generalSaveError":
+		"Se ha producido un error al guardar. Por favor, compruebe sus entradas e inténtelo de nuevo.",
+	"components.roomForm.validation.timePeriod.startBeforeEnd":
+		"La fecha de inicio debe ser anterior a la fecha de finalización.",
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
@@ -1693,14 +1697,15 @@ export default {
 		"No se pudo cargar la lista de participantes.",
 	"pages.rooms.members.error.add": "Error al agregar participantes.",
 	"pages.rooms.members.error.remove": "Error al eliminar participantes.",
-	"pages.rooms.members.remove.confirmation":
-		"¿Eliminar {memberName} de la sala?",
 	"pages.rooms.members.infoText":
-		'Añadir participantes a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">más información</a>).',
+		"Añadir participantes a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
+	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Participantes",
 	"pages.rooms.members.add": "Añadir participantes",
 	"pages.rooms.members.manage": "Administrar participantes",
-	"pages.rooms.members.remove": "Eliminar participante",
+	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
+	"pages.rooms.members.remove.confirmation":
+		"¿Eliminar {memberName} de la sala?",
 	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
 	"pages.rooms.title": "Salas",

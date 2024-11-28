@@ -1098,7 +1098,7 @@ describe("BoardStore", () => {
 			it("should call socketApi.disconnectSocketRequest when feature flag is set true", () => {
 				const { boardStore } = setup({ socketFlag: true });
 
-				boardStore.disconnectSocketRequest({});
+				boardStore.disconnectSocketRequest();
 
 				expect(
 					mockedSocketApiActions.disconnectSocketRequest
@@ -1108,7 +1108,7 @@ describe("BoardStore", () => {
 			it("should call restApi.disconnectSocketRequest when feature flag is set false", () => {
 				const { boardStore } = setup();
 
-				boardStore.disconnectSocketRequest({});
+				boardStore.disconnectSocketRequest();
 
 				expect(
 					mockedBoardRestApiActions.disconnectSocketRequest

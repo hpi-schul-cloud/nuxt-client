@@ -803,6 +803,10 @@ export default {
 	"components.roomForm.labels.timePeriod": "Zeitraum",
 	"components.roomForm.labels.timePeriod.from": "Zeitraum von",
 	"components.roomForm.labels.timePeriod.to": "Zeitraum bis",
+	"components.roomForm.validation.generalSaveError":
+		"Beim Speichern ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.",
+	"components.roomForm.validation.timePeriod.startBeforeEnd":
+		"Das Startdatum muss vor dem Enddatum liegen.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
 	"error.400": "400 – Fehlerhafte Anfrage",
@@ -1678,14 +1682,15 @@ export default {
 		"Hinzufügen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.members.error.remove":
 		"Löschen von Teilnehmenden fehlgeschlagen.",
-	"pages.rooms.members.remove.confirmation":
-		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.infoText":
-		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	(<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">weitere Informationen</a>).',
+		"Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
+	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
 	"pages.rooms.members.add": "Teilnehmende hinzufügen",
 	"pages.rooms.members.manage": "Teilnehmende verwalten",
-	"pages.rooms.members.remove": "Teilnehmende entfernen",
+	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
+	"pages.rooms.members.remove.confirmation":
+		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.roles.editor": "Raumeditor",
 	"pages.rooms.members.roles.viewer": "Raumbetrachter",
 	"pages.rooms.title": "Räume",

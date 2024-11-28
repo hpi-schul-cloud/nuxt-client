@@ -126,6 +126,9 @@ describe("ExternalToolElement", () => {
 				isLastElement: false,
 				hasMultipleElements: false,
 				cardId: "cardId",
+				columnIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
 				...propsData,
 			},
 		});

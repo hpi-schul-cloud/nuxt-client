@@ -82,6 +82,9 @@ describe("LinkContentElement", () => {
 		element: LinkElementResponse;
 		isEditMode: boolean;
 		isDetailView: boolean;
+		columnIndex: number;
+		rowIndex: number;
+		elementIndex: number;
 	}) => {
 		const notifierModule = createModuleMocks(NotifierModule);
 		const wrapper = shallowMount(LinkContentElement, {
@@ -125,6 +128,7 @@ describe("LinkContentElement", () => {
 				url,
 				title: "Super duper mega page title",
 				description: "This page is sooo cool!",
+				originalImageUrl: "https://imagestock.com/great-image.jpg",
 				imageUrl: "https://imagestock.com/great-image.jpg",
 			})
 		);
@@ -137,6 +141,9 @@ describe("LinkContentElement", () => {
 			element,
 			isEditMode: options.isEditMode,
 			isDetailView: false,
+			columnIndex: 0,
+			rowIndex: 1,
+			elementIndex: 2,
 		});
 
 		return {
@@ -449,6 +456,7 @@ describe("LinkContentElement", () => {
 							url,
 							title: "my title",
 							description: "",
+							originalImageUrl: "https://abc.de/foto.png",
 							imageUrl: "https://abc.de/foto.png",
 							type: "unknown",
 							parentTitle: "",
