@@ -1,7 +1,27 @@
 <template>
 	<v-card flat>
-		<v-card-title class="d-flex align-center pe-2">
+		<v-card-title>
 			<span class="table-title">{{ tableTitle }}</span>
+		</v-card-title>
+		<div
+			class="d-flex justify-space-between align-end mb-2"
+			style="min-height: 50px"
+		>
+			<div class="align-center ml-4">
+				<div v-if="selectedMembers.length">
+					<span>
+						({{ selectedMembers.length }})
+						{{ t("pages.administration.selected") }}
+					</span>
+					<v-btn
+						class="ml-2"
+						variant="text"
+						:icon="mdiTrashCanOutline"
+						:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
+						@click="onRemoveMembers(selectedMembers)"
+					/>
+				</div>
+			</div>
 			<v-spacer />
 			<v-spacer />
 			<v-text-field
@@ -9,16 +29,13 @@
 				density="compact"
 				flat
 				hide-details
+				max-width="300px"
 				single-line
 				variant="solo-filled"
+				mobile-breakpoint="sm"
 				:label="t('common.labels.search')"
 				:prepend-inner-icon="mdiMagnify"
 			/>
-		</v-card-title>
-		<div>
-			<v-btn variant="tonal" class="mb-2" @click="toggleMultiSelection">
-				{{ activateButtonTitle }}
-			</v-btn>
 		</div>
 
 		<v-divider role="presentation" />
@@ -26,6 +43,7 @@
 			v-model:search="search"
 			v-model="selectedMembers"
 			data-testid="participants-table"
+			hover
 			item-value="userId"
 			mobile-breakpoint="sm"
 			:items="membersList"
@@ -36,23 +54,9 @@
 			:items-per-page="50"
 			:no-data-text="t('common.nodata')"
 			:mobile="null"
-			:show-select="multiSelection"
+			:show-select="true"
 			@update:current-items="onUpdateFilter"
 		>
-			<template v-if="selectedMembers.length" #[`header.actions`]>
-				<div class="d-flex d-inline-flex align-center justify-end">
-					<span class=""
-						>({{ selectedMembers.length }})
-						{{ t("pages.administration.selected") }}</span
-					>
-					<v-btn
-						variant="text"
-						:icon="mdiDeleteSweepOutline"
-						:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-						@click="onRemoveMembers(selectedMembers)"
-					/>
-				</div>
-			</template>
 			<template #[`item.actions`]="{ item }">
 				<div class="d-flex justify-end">
 					<v-btn
@@ -76,7 +80,6 @@ import {
 	mdiMenuUp,
 	mdiMagnify,
 	mdiTrashCanOutline,
-	mdiDeleteSweepOutline,
 } from "@icons/material";
 import { RoomMemberResponse } from "@/serverApi/v3";
 
@@ -88,17 +91,14 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["remove:members"]);
-
 const { t } = useI18n();
 const search = ref("");
 const membersList = toRef(props, "members");
 const selectedMembers = ref<string[]>([]);
 const membersFilterCount = ref(membersList.value?.length);
-const multiSelection = ref(false);
-const activateButtonTitle = computed(() =>
-	multiSelection.value
-		? t("pages.rooms.members.deactivateMultiSelection")
-		: t("pages.rooms.members.activateMultiSelection")
+
+const tableTitle = computed(
+	() => `${t("pages.rooms.members.label")} (${membersFilterCount.value})`
 );
 
 const onUpdateFilter = (value: RoomMemberResponse[]) => {
@@ -106,18 +106,14 @@ const onUpdateFilter = (value: RoomMemberResponse[]) => {
 		search.value === "" ? membersList.value.length : value.length;
 };
 
-const tableTitle = computed(
-	() => `${t("pages.rooms.members.label")} (${membersFilterCount.value})`
-);
-
 const onRemoveMembers = (userIds: string[]) => {
 	emit("remove:members", userIds);
 };
 
-const toggleMultiSelection = () => {
-	multiSelection.value = !multiSelection.value;
-	selectedMembers.value = [];
-};
+const getRemoveAriaLabel = (member: RoomMemberResponse) =>
+	t("pages.rooms.members.remove.ariaLabel", {
+		memberName: `${member.firstName} ${member.lastName}`,
+	});
 
 const tableHeader = [
 	{
@@ -135,11 +131,6 @@ const tableHeader = [
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
 	{ title: "", key: "actions", sortable: false, width: 180 },
 ];
-
-const getRemoveAriaLabel = (member: RoomMemberResponse) =>
-	t("pages.rooms.members.remove.ariaLabel", {
-		memberName: `${member.firstName} ${member.lastName}`,
-	});
 </script>
 
 <style lang="scss" scoped>
@@ -152,8 +143,4 @@ const getRemoveAriaLabel = (member: RoomMemberResponse) =>
 :deep(.v-data-table__td-title) {
 	font-weight: bold;
 }
-
-// :deep(.v-data-table tbody .v-data-table__tr) {
-// 	background: #d8903370 !important;
-// }
 </style>

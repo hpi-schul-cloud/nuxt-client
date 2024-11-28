@@ -18,10 +18,12 @@
 					target="_blank"
 					rel="noopener"
 					:ariaLabel="linkAriaLabel"
-					>{{ t("pages.rooms.members.infoText.moreInformation") }}</a
 				>
+					{{ t("pages.rooms.members.infoText.moreInformation") }}
+				</a>
 			</i18n-t>
 		</div>
+
 		<div class="mb-12">
 			<MembersTable
 				v-if="!isLoading"
@@ -33,9 +35,9 @@
 		<v-dialog
 			v-model="isMembersDialogOpen"
 			:width="xs ? 'auto' : 480"
-			persistent
-			max-width="480"
 			data-testid="dialog-add-participants"
+			max-width="480"
+			persistent
 		>
 			<AddMembers
 				:memberList="potentialRoomMembers"
@@ -45,8 +47,8 @@
 				@update:role="onUpdateRoleOrSchool"
 			/>
 		</v-dialog>
-		<ConfirmationDialog />
 	</DefaultWireframe>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
