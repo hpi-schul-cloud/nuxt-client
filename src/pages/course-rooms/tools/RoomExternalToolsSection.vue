@@ -11,7 +11,7 @@
 			@edit="onEditTool"
 			@error="onError"
 			@refresh="$emit('refresh')"
-			:data-testid="`external-tool-card-${tool.name}`"
+			:data-testid="`external-tool-card-${index}`"
 		/>
 
 		<RoomExternalToolsErrorDialog
