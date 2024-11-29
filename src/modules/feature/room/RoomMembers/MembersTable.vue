@@ -64,15 +64,13 @@
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">
-				<div class="d-flex justify-end">
-					<v-btn
-						ref="removeMember"
-						variant="text"
-						:aria-label="getRemoveAriaLabel(item)"
-						:icon="mdiTrashCanOutline"
-						@click="onRemoveMembers([item.userId])"
-					/>
-				</div>
+				<v-btn
+					ref="removeMember"
+					variant="text"
+					:aria-label="getRemoveAriaLabel(item)"
+					:icon="mdiTrashCanOutline"
+					@click="onRemoveMembers([item.userId])"
+				/>
 			</template>
 		</v-data-table>
 	</v-card>
