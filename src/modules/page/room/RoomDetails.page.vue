@@ -1,16 +1,5 @@
 <template>
-	<template v-if="isLoading">
-		<div data-testid="loading" class="w-100 text-center">
-			<VProgressCircular
-				color="primary"
-				indeterminate
-				:size="51"
-				class="my-10"
-			/>
-		</div>
-	</template>
 	<DefaultWireframe
-		v-else
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fabItems="fabItems"
@@ -19,7 +8,7 @@
 		<template #header>
 			<div class="d-flex align-items-center">
 				<h1 class="text-h3 mb-4" data-testid="room-title">
-					{{ room.name }}
+					{{ roomTitle }}
 				</h1>
 				<RoomMenu
 					@room:edit="onEdit"
@@ -74,12 +63,19 @@ const { t } = useI18n();
 const { deleteRoom } = useRoomsState();
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
-const { isLoading, room, roomBoards } = storeToRefs(useRoomDetailsStore());
+const { room, roomBoards } = storeToRefs(useRoomDetailsStore());
 
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.roomDetails.title")}`)
 );
 useTitle(pageTitle);
+
+const roomTitle = computed(() => {
+	if (room.value) {
+		return room.value.name;
+	}
+	return t("pages.roomDetails.title");
+});
 
 const onEdit = () => {
 	if (!room.value) return;
