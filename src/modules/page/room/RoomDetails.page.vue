@@ -23,13 +23,13 @@
 							{{ room.name }}
 						</h1>
 						<KebabMenu
-							v-if="canModifyBoard"
+							v-if="canModifyRoom"
 							class="mx-2"
 							:aria-label="$t('pages.roomDetails.ariaLabels.menu')"
 							data-testid="room-menu"
 						>
 							<VListItem
-								v-if="canEditBoard"
+								v-if="canEditRoom"
 								ref="editRoomMenu"
 								role="menuitem"
 								:to="`/rooms/${room.id}/edit`"
@@ -47,7 +47,7 @@
 							</VListItem>
 
 							<VListItem
-								v-if="canEditBoard"
+								v-if="canEditRoom"
 								ref="manageMembersMenu"
 								role="menuitem"
 								:to="`/rooms/${room.id}/members`"
@@ -63,7 +63,7 @@
 							</VListItem>
 
 							<VListItem
-								v-if="canDeleteBoard"
+								v-if="canDeleteRoom"
 								ref="deleteRoomMenu"
 								role="menuitem"
 								data-testid="room-action-delete"
@@ -172,14 +172,14 @@ const boardLayoutsEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
 );
 
-const { canCreateBoard, canEditBoard, canDeleteBoard, canModifyBoard } =
+const { canCreateRoom, canEditRoom, canDeleteRoom, canModifyRoom } =
 	useRoomAuthorization(room);
 
 const boardLayoutDialogIsOpen = ref(false);
 
 const fabItems = computed(() => {
 	const actions = [];
-	if (canCreateBoard.value) {
+	if (canCreateRoom.value) {
 		if (boardLayoutsEnabled.value) {
 			actions.push({
 				label: t("pages.courseRoomDetails.fab.add.board"),
@@ -233,7 +233,7 @@ watch(
 const isRoom = computed(() => roomVariant.value === RoomVariant.ROOM);
 
 const createBoard = async (layout: BoardLayout) => {
-	if (!room.value || !canCreateBoard.value) return;
+	if (!room.value || !canCreateRoom.value) return;
 
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
@@ -249,7 +249,7 @@ const createBoard = async (layout: BoardLayout) => {
 };
 
 const deleteBoard = async () => {
-	if (!room.value || !canDeleteBoard.value) return;
+	if (!room.value || !canDeleteRoom.value) return;
 
 	const shouldDelete = await askDeleteConfirmation(
 		room.value.name,
