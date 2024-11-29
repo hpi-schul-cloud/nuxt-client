@@ -155,6 +155,10 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 			title: room.value?.name || "",
 			to: `/rooms/${route.params.id}`,
 		},
+		{
+			title: t("pages.rooms.members.manage"),
+			disabled: true,
+		},
 	];
 });
 
