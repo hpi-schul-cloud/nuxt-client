@@ -15,7 +15,7 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { nextTick, ref } from "vue";
+import { nextTick, Ref, ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { flushPromises } from "@vue/test-utils";
 import { RoleName, RoomColor } from "@/serverApi/v3";
@@ -133,6 +133,7 @@ describe("RoomMembersPage", () => {
 				testId: string;
 			};
 			isMembersDialogOpen: boolean;
+			selectedMembers: Ref<string[]>;
 			onFabClick: ReturnType<typeof jest.fn>;
 		};
 
@@ -213,14 +214,16 @@ describe("RoomMembersPage", () => {
 		describe("@onRemoveMember", () => {
 			describe("when user confirms the removal", () => {
 				it("should call removeMember method", async () => {
-					const { wrapper } = setup();
+					const { wrapper, wrapperVM } = setup();
 					const membersTable = wrapper.findComponent({
 						name: "MembersTable",
 					});
-					await membersTable.vm.$emit("remove:members", [
+					await membersTable.vm.$emit("select:members", [
 						mockMembers[0].userId,
 					]);
+					await membersTable.vm.$emit("remove:members");
 					await flushPromises();
+
 					expect(mockUseMembersCalls.removeMembers).toHaveBeenCalledWith([
 						mockMembers[0].userId,
 					]);
@@ -237,10 +240,11 @@ describe("RoomMembersPage", () => {
 					const membersTable = wrapper.findComponent({
 						name: "MembersTable",
 					});
-					await membersTable.vm.$emit("remove:members", [
+					await membersTable.vm.$emit("select:members", [
 						mockMembers[0].userId,
 						mockMembers[1].userId,
 					]);
+					await membersTable.vm.$emit("remove:members");
 					await flushPromises();
 					expect(mockUseMembersCalls.removeMembers).toHaveBeenCalledWith([
 						mockMembers[0].userId,

@@ -4,9 +4,9 @@
 			class="d-flex justify-space-between align-center mb-2 table-title-header"
 		>
 			<div class="mr-2 pa-0 pl-4 multi-action-menu">
-				<template v-if="selectedMembers.length">
+				<template v-if="selectedMemberList.length">
 					<span class="d-inline-flex">
-						{{ selectedMembers.length }}
+						{{ selectedMemberList.length }}
 						{{ t("pages.administration.selected") }}
 					</span>
 					<v-btn
@@ -16,7 +16,7 @@
 						variant="text"
 						:icon="mdiTrashCanOutline"
 						:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-						@click="onRemoveMembers(selectedMembers)"
+						@click="onRemoveMembers"
 					/>
 
 					<v-btn
@@ -47,7 +47,7 @@
 		<v-divider role="presentation" />
 		<v-data-table
 			v-model:search="search"
-			v-model="selectedMembers"
+			v-model="selectedMemberList"
 			data-testid="participants-table"
 			hover
 			item-value="userId"
@@ -62,6 +62,7 @@
 			:sort-asc-icon="mdiMenuDown"
 			:sort-desc-icon="mdiMenuUp"
 			@update:current-items="onUpdateFilter"
+			@update:model-value="onSelectMembers"
 		>
 			<template #[`item.actions`]="{ item }">
 				<v-btn
@@ -69,7 +70,7 @@
 					variant="text"
 					:aria-label="getRemoveAriaLabel(item)"
 					:icon="mdiTrashCanOutline"
-					@click="onRemoveMembers([item.userId])"
+					@click="onRemoveMembers"
 				/>
 			</template>
 		</v-data-table>
@@ -77,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, toRef } from "vue";
+import { PropType, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	mdiClose,
@@ -93,27 +94,42 @@ const props = defineProps({
 		type: Array as PropType<RoomMemberResponse[]>,
 		required: true,
 	},
+	selectedMembers: {
+		type: Array as PropType<string[]>,
+		required: true,
+	},
 });
 
-const emit = defineEmits(["remove:members"]);
+const emit = defineEmits(["remove:members", "select:members"]);
 const { t } = useI18n();
 const search = ref("");
 const membersList = toRef(props, "members");
-const selectedMembers = ref<string[]>([]);
+const selectedMemberList = ref<string[]>([]);
 const membersFilterCount = ref(membersList.value?.length);
+
+watch(
+	() => props.selectedMembers,
+	(value) => {
+		selectedMemberList.value = value;
+	}
+);
 
 const onUpdateFilter = (value: RoomMemberResponse[]) => {
 	membersFilterCount.value =
 		search.value === "" ? membersList.value.length : value.length;
 };
 
-const onRemoveMembers = (userIds: string[]) => {
-	emit("remove:members", userIds);
-	selectedMembers.value = [];
+const onRemoveMembers = () => {
+	emit("remove:members");
+};
+
+const onSelectMembers = (userIds: string[]) => {
+	emit("select:members", userIds);
 };
 
 const onResetSelectedMembers = () => {
-	selectedMembers.value = [];
+	emit("select:members", []);
+	selectedMemberList.value = [];
 };
 
 const getRemoveAriaLabel = (member: RoomMemberResponse) =>

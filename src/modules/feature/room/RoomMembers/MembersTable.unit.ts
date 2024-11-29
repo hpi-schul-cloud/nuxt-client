@@ -17,7 +17,7 @@ describe("MembersTable", () => {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props: { members: mockMembers },
+			props: { members: mockMembers, selectedMembers: [] },
 		});
 
 		const wrapperVM = wrapper.vm as unknown as {
@@ -25,7 +25,7 @@ describe("MembersTable", () => {
 			search: Ref<string>;
 			tableTitle: string;
 			tableHeader: { title: string; key: string }[];
-			selectedMembers: string[];
+			selectedMemberList: string[];
 		};
 
 		return { wrapper, wrapperVM };
@@ -85,13 +85,13 @@ describe("MembersTable", () => {
 				it("should set the selectedMembers", async () => {
 					const { wrapper, wrapperVM } = setup();
 					const dataTable = wrapper.findComponent({ name: "v-data-table" });
-					expect(wrapperVM.selectedMembers.length).toStrictEqual(0);
+					expect(wrapperVM.selectedMemberList.length).toStrictEqual(0);
 					dataTable.vm.$emit("update:modelValue", [
 						mockMembers[0].userId,
 						mockMembers[1].userId,
 					]);
 
-					expect(wrapperVM.selectedMembers).toStrictEqual([
+					expect(wrapperVM.selectedMemberList).toStrictEqual([
 						mockMembers[0].userId,
 						mockMembers[1].userId,
 					]);
@@ -131,9 +131,6 @@ describe("MembersTable", () => {
 							});
 							await bulkRemoveButton.vm.$emit("click");
 							expect(wrapper.emitted()).toHaveProperty("remove:members");
-							expect(wrapper.emitted()["remove:members"]).toStrictEqual([
-								[[mockMembers[0].userId, mockMembers[1].userId]],
-							]);
 						});
 					});
 				});
@@ -147,7 +144,7 @@ describe("MembersTable", () => {
 							mockMembers[1].userId,
 						]);
 						await flushPromises();
-						expect(wrapperVM.selectedMembers).toStrictEqual([
+						expect(wrapperVM.selectedMemberList).toStrictEqual([
 							mockMembers[0].userId,
 							mockMembers[1].userId,
 						]);
@@ -155,7 +152,7 @@ describe("MembersTable", () => {
 							ref: "resetSelectedMembers",
 						});
 						resetButton.vm.$emit("click");
-						expect(wrapperVM.selectedMembers).toStrictEqual([]);
+						expect(wrapperVM.selectedMemberList).toStrictEqual([]);
 					});
 				});
 			});
