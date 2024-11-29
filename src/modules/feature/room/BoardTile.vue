@@ -4,12 +4,12 @@
 		:class="{ 'bg-white opacity-70': isDraft }"
 		variant="outlined"
 		draggable="false"
-		:data-testid="`board-tile-${props.index}`"
+		:data-testid="`board-tile-${index}`"
 		:to="boardPath"
 	>
 		<VCardSubtitle
 			class="mt-4 d-flex align-center"
-			:data-testid="`board-tile-subtitle-${props.index}`"
+			:data-testid="`board-tile-subtitle-${index}`"
 		>
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
 			{{ subtitleText }}
@@ -19,7 +19,7 @@
 				<VCardTitle
 					v-bind="props"
 					class="board-tile-title text-body-1 font-weight-bold my-2"
-					:data-testid="`board-tile-title-${props.index}`"
+					:data-testid="`board-tile-title-${index}`"
 				>
 					{{ board.title }}
 				</VCardTitle>
