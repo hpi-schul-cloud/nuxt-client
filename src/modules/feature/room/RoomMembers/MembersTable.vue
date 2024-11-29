@@ -3,29 +3,40 @@
 		<div
 			class="d-flex justify-space-between align-center mb-2 table-title-header"
 		>
-			<div class="mx-4">
-				<div v-if="selectedMembers.length" class="selected-options">
-					<span>
+			<div class="mr-2">
+				<v-banner
+					v-if="selectedMembers.length"
+					bg-color="rgba(var(--v-theme-primary), 0.12)"
+					density="comfortable"
+					lines="one"
+					max-height="40px"
+					mobile-breakpoint="sm"
+					rounded
+				>
+					<template v-slot:text>
 						({{ selectedMembers.length }})
 						{{ t("pages.administration.selected") }}
-					</span>
-					<v-btn
-						ref="removeSelectedMembers"
-						class="ml-2"
-						variant="text"
-						:icon="mdiTrashCanOutline"
-						:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-						@click="onRemoveMembers(selectedMembers)"
-					/>
-					<v-btn
-						ref="removeSelectedMembers"
-						class="ml-2"
-						variant="text"
-						:icon="mdiClose"
-						:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-						@click="resetSelectedMembers"
-					/>
-				</div>
+					</template>
+
+					<template v-slot:actions>
+						<v-btn
+							ref="removeSelectedMembers"
+							variant="text"
+							:icon="mdiTrashCanOutline"
+							:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
+							@click="onRemoveMembers(selectedMembers)"
+						/>
+						<!-- TODO: add ariaLabel for this button -->
+						<v-btn
+							ref="resetSelectedMembers"
+							class="ml-2"
+							variant="text"
+							:icon="mdiClose"
+							:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
+							@click="resetSelectedMembers"
+						/>
+					</template>
+				</v-banner>
 			</div>
 			<v-text-field
 				v-model="search"
@@ -51,13 +62,13 @@
 			mobile-breakpoint="sm"
 			:items="membersList"
 			:headers="tableHeader"
-			:sort-asc-icon="mdiMenuDown"
-			:sort-desc-icon="mdiMenuUp"
 			:items-per-page-options="[5, 10, 25, 50, 100]"
 			:items-per-page="50"
 			:no-data-text="t('common.nodata')"
 			:mobile="null"
 			:show-select="true"
+			:sort-asc-icon="mdiMenuDown"
+			:sort-desc-icon="mdiMenuUp"
 			@update:current-items="onUpdateFilter"
 		>
 			<template #[`item.actions`]="{ item }">
@@ -65,8 +76,8 @@
 					<v-btn
 						ref="removeMember"
 						variant="text"
-						:icon="mdiTrashCanOutline"
 						:aria-label="getRemoveAriaLabel(item)"
+						:icon="mdiTrashCanOutline"
 						@click="onRemoveMembers([item.userId])"
 					/>
 				</div>
@@ -100,10 +111,6 @@ const search = ref("");
 const membersList = toRef(props, "members");
 const selectedMembers = ref<string[]>([]);
 const membersFilterCount = ref(membersList.value?.length);
-
-// const tableTitle = computed(
-// 	() => `${t("pages.rooms.members.label")} (${membersFilterCount.value})`
-// );
 
 const onUpdateFilter = (value: RoomMemberResponse[]) => {
 	membersFilterCount.value =
@@ -156,7 +163,7 @@ const tableHeader = [
 	min-height: 50px;
 }
 
-// .selected-options {
-// 	background-color: red;
-// }
+.v-banner {
+	border-style: none;
+}
 </style>

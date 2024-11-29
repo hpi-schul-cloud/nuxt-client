@@ -7,6 +7,7 @@ import { Ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import { roomMemberResponseFactory } from "@@/tests/test-utils";
 import { RoomMember } from "@data-room";
+import { flushPromises } from "@vue/test-utils";
 
 const mockMembers = roomMemberResponseFactory.buildList(3);
 
@@ -24,6 +25,7 @@ describe("MembersTable", () => {
 			search: Ref<string>;
 			tableTitle: string;
 			tableHeader: { title: string; key: string }[];
+			selectedMembers: string[];
 		};
 
 		return { wrapper, wrapperVM };
@@ -50,13 +52,6 @@ describe("MembersTable", () => {
 			expect(dataTable.vm["sortDescIcon"]).toEqual(mdiMenuUp);
 		});
 
-		it("should render the table title", () => {
-			const { wrapper, wrapperVM } = setup();
-			const title = wrapper.find(".table-title");
-
-			expect(title.text()).toBe(wrapperVM.tableTitle);
-		});
-
 		describe("when the remove button is clicked", () => {
 			it("should emit the remove event", async () => {
 				const { wrapper } = setup();
@@ -67,6 +62,102 @@ describe("MembersTable", () => {
 
 				await removeButton.vm.$emit("click");
 				expect(wrapper.emitted()).toHaveProperty("remove:members");
+			});
+		});
+
+		describe("multiple selection", () => {
+			it("should render checkBoxes", async () => {
+				const { wrapper } = setup();
+				const dataTable = wrapper.findComponent({ name: "v-data-table" });
+
+				const checkBoxes = [];
+				const rows = dataTable.findAll("tr");
+				rows.forEach((row) => {
+					const checkBox = row.find("input[type='checkbox']");
+					if (checkBox.exists()) {
+						checkBoxes.push(checkBox);
+					}
+				});
+				expect(checkBoxes.length).toBeGreaterThan(0);
+			});
+
+			describe("when checkboxes are clicked", () => {
+				it("should set the selectedMembers", async () => {
+					const { wrapper, wrapperVM } = setup();
+					const dataTable = wrapper.findComponent({ name: "v-data-table" });
+					expect(wrapperVM.selectedMembers.length).toStrictEqual(0);
+					dataTable.vm.$emit("update:modelValue", [
+						mockMembers[0].userId,
+						mockMembers[1].userId,
+					]);
+
+					expect(wrapperVM.selectedMembers).toStrictEqual([
+						mockMembers[0].userId,
+						mockMembers[1].userId,
+					]);
+				});
+
+				describe("bulk remove button", () => {
+					it("should be visible", async () => {
+						const { wrapper } = setup();
+						const dataTable = wrapper.findComponent({ name: "v-data-table" });
+						const bulkRemoveButtonBefore = wrapper.findComponent({
+							ref: "removeSelectedMembers",
+						});
+
+						expect(bulkRemoveButtonBefore.exists()).toBe(false);
+						dataTable.vm.$emit("update:modelValue", [
+							mockMembers[0].userId,
+							mockMembers[1].userId,
+						]);
+						await flushPromises();
+						const bulkRemoveButtonAfter = wrapper.findComponent({
+							ref: "removeSelectedMembers",
+						});
+						expect(bulkRemoveButtonAfter.exists()).toBe(true);
+					});
+
+					describe("when the bulk remove button is clicked", () => {
+						it("should emit the 'remove:members'", async () => {
+							const { wrapper } = setup();
+							const dataTable = wrapper.findComponent({ name: "v-data-table" });
+							dataTable.vm.$emit("update:modelValue", [
+								mockMembers[0].userId,
+								mockMembers[1].userId,
+							]);
+							await flushPromises();
+							const bulkRemoveButton = wrapper.findComponent({
+								ref: "removeSelectedMembers",
+							});
+							await bulkRemoveButton.vm.$emit("click");
+							expect(wrapper.emitted()).toHaveProperty("remove:members");
+							expect(wrapper.emitted()["remove:members"]).toStrictEqual([
+								[[mockMembers[0].userId, mockMembers[1].userId]],
+							]);
+						});
+					});
+				});
+
+				describe("when reset button is clicked", () => {
+					it("should reset the selected members", async () => {
+						const { wrapper, wrapperVM } = setup();
+						const dataTable = wrapper.findComponent({ name: "v-data-table" });
+						dataTable.vm.$emit("update:modelValue", [
+							mockMembers[0].userId,
+							mockMembers[1].userId,
+						]);
+						await flushPromises();
+						expect(wrapperVM.selectedMembers).toStrictEqual([
+							mockMembers[0].userId,
+							mockMembers[1].userId,
+						]);
+						const resetButton = wrapper.findComponent({
+							ref: "resetSelectedMembers",
+						});
+						resetButton.vm.$emit("click");
+						expect(wrapperVM.selectedMembers).toStrictEqual([]);
+					});
+				});
 			});
 		});
 	});
@@ -86,14 +177,11 @@ describe("MembersTable", () => {
 			const { wrapper, wrapperVM } = setup();
 			const search = wrapper.findComponent({ name: "v-text-field" });
 
-			const title = wrapper.find(".table-title");
-			expect(title.text()).toContain(`(${mockMembers.length})`);
 			await search.vm.$emit("update:modelValue", mockMembers[0].firstName);
 			expect(wrapperVM.search).toBe(mockMembers[0].firstName);
 			const dataTable = wrapper.findComponent({ name: "v-data-table" });
 
 			expect(dataTable.vm.search).toEqual(mockMembers[0].firstName);
-			expect(title.text()).toContain("(1)");
 		});
 	});
 });
