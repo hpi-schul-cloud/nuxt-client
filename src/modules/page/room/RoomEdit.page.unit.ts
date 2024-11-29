@@ -10,6 +10,9 @@ import { RoomUpdateParams } from "@/types/room/Room";
 import { RoomColor } from "@/serverApi/v3";
 import { RoomForm } from "@feature-room";
 import { nextTick } from "vue";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
 
 const roomIdMock = "test-1234";
 
@@ -52,9 +55,13 @@ const roomParams: RoomUpdateParams = {
 
 describe("@pages/RoomEdit.page.vue", () => {
 	const setup = () => {
+		const notifierModule = createModuleMocks(NotifierModule);
 		const wrapper = mount(RoomEditPage, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
 			},
 		});
 
@@ -75,6 +82,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 		const { wrapper } = setup();
 		expect(wrapper.exists()).toBe(true);
 	});
+
 	it("should have roomFormComponent", () => {
 		const { roomFormComponent } = setup();
 		expect(roomFormComponent).toBeDefined();
@@ -94,13 +102,15 @@ describe("@pages/RoomEdit.page.vue", () => {
 
 		expect(breadcrumb?.to).toContain(roomIdMock);
 	});
+
 	it("should call updateRoom with correct parameters on save event", async () => {
 		const { updateRoom, roomFormComponent } = setup();
 
-		roomFormComponent.vm.$emit("save", roomParams);
+		roomFormComponent.vm.$emit("save", { room: roomParams });
 
 		expect(updateRoom).toHaveBeenCalledWith(roomIdMock, roomParams);
 	});
+
 	it("should navigate to 'room-details' with correct room id on save", async () => {
 		const { roomFormComponent, router } = setup();
 
@@ -111,6 +121,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			params: { id: roomIdMock },
 		});
 	});
+
 	it("should navigate to 'rooms' on cancel", async () => {
 		const { roomFormComponent, router } = setup();
 
@@ -121,6 +132,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 			params: { id: roomIdMock },
 		});
 	});
+
 	it("should render roomForm as component is not loading  ", async () => {
 		(useRoomEditState as jest.Mock).mockReturnValueOnce({
 			isLoading: false,
@@ -132,6 +144,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 		const { roomFormComponent } = setup();
 		expect(roomFormComponent).toBeDefined();
 	});
+
 	it("should not render roomForm as component is loading  ", async () => {
 		(useRoomEditState as jest.Mock).mockReturnValueOnce({
 			isLoading: true,
