@@ -52,10 +52,13 @@ export const useSidebarSelection = (
 
 		// Board
 		if (route.name === "boards-id") {
-			return (
-				item.to === "/rooms/courses-overview" &&
-				contextType.value === BoardExternalReferenceType.Course
-			);
+			if (roomVariant.value === RoomVariant.ROOM) {
+				return item.to === "/rooms";
+			} else if (roomVariant.value === RoomVariant.COURSE_ROOM) {
+				return item.to === "/rooms/courses-overview";
+			} else {
+				return false;
+			}
 		}
 
 		return (

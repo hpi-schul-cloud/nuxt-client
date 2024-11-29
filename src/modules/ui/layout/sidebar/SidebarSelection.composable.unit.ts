@@ -171,6 +171,47 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 					expect(isActive.value).toBe(false);
 				});
 			});
+
+			describe("when board details path is matched", () => {
+				const setupBoardDetailsRoute = () => {
+					return setup({
+						path: "/boards/0000dcfbfb5c7a3f00bf21ac",
+						name: "boards-id",
+					});
+				};
+
+				describe("when board context is a room", () => {
+					const setupIsRoom = () => {
+						const { roomVariant } = storeToRefs(useRoomDetailsStore());
+						roomVariant.value = RoomVariant.ROOM;
+
+						return setupBoardDetailsRoute();
+					};
+
+					it("should be active", () => {
+						const { roomsItem } = setupIsRoom();
+						const { isActive } = useSidebarSelection(roomsItem);
+
+						expect(isActive.value).toBe(true);
+					});
+				});
+
+				describe("when board context is something else", () => {
+					const setupIsOther = () => {
+						const { roomVariant } = storeToRefs(useRoomDetailsStore());
+						roomVariant.value = undefined;
+
+						return setupBoardDetailsRoute();
+					};
+
+					it("should not be active", () => {
+						const { roomsItem } = setupIsOther();
+						const { isActive } = useSidebarSelection(roomsItem);
+
+						expect(isActive.value).toBe(false);
+					});
+				});
+			});
 		});
 	});
 
@@ -266,6 +307,9 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 						roomId: computed(() => "room-id"),
 					});
 
+					const { roomVariant } = storeToRefs(useRoomDetailsStore());
+					roomVariant.value = RoomVariant.COURSE_ROOM;
+
 					return setupBoardDetailsRoute();
 				};
 
@@ -286,6 +330,9 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 						pageTitle: computed(() => "page-title"),
 						roomId: computed(() => "room-id"),
 					});
+
+					const { roomVariant } = storeToRefs(useRoomDetailsStore());
+					roomVariant.value = undefined;
 
 					return setupBoardDetailsRoute();
 				};
