@@ -662,7 +662,7 @@ export default {
 		"Посилання на копію дошки",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
-	"components.molecules.share.courses.options.ctlTools.infotext":
+	"components.molecules.share.courses.options.ctlTools.infoText":
 		"Зовнішні інструменти, пов’язані з курсом або посадочними картками, не будуть скопійовані.",
 	"components.molecules.share.courses.options.infoText":
 		"<li>Зовнішні інструменти недоступні в цільовій школі </li><li>Захищені налаштування зовнішніх інструментів </li> ",

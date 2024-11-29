@@ -647,7 +647,7 @@ export default {
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
 	"components.molecules.share.courses.mail.body": "Link to the course:",
 	"components.molecules.share.courses.mail.subject": "Course you can import",
-	"components.molecules.share.courses.options.ctlTools.infotext":
+	"components.molecules.share.courses.options.ctlTools.infoText":
 		"<li>External tools not available in the target school </li><li>Protected settings of external tools</li>",
 	"components.molecules.share.courses.options.infoText":
 		"With the following link, the course can be imported as a copy by other teachers.",

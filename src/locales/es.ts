@@ -665,7 +665,7 @@ export default {
 		"Enlace a la copia del tablón",
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
-	"components.molecules.share.courses.options.ctlTools.infotext":
+	"components.molecules.share.courses.options.ctlTools.infoText":
 		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
 	"components.molecules.share.courses.options.infoText":
 		"<li>Herramientas externas no disponibles en la escuela de destino </li><li>Configuraciones protegidas de herramientas externas </li>",
