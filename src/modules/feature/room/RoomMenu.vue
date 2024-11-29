@@ -6,9 +6,9 @@
 	>
 		<VListItem
 			role="menuitem"
-			:to="`/rooms/${roomId}/edit`"
 			data-testid="room-action-edit"
 			:aria-label="$t('pages.roomDetails.ariaLabels.menu.action.edit')"
+			@click="() => $emit('room:edit')"
 		>
 			<template #prepend>
 				<VIcon :icon="mdiPencilOutline" />
@@ -19,9 +19,9 @@
 		</VListItem>
 		<VListItem
 			role="menuitem"
-			:to="`/rooms/${roomId}/members`"
-			data-testid="room-action-manage-participants"
+			data-testid="room-action-manage-members"
 			:aria-label="$t('pages.rooms.members.manage')"
+			@click="() => $emit('room:manage-members')"
 		>
 			<template #prepend>
 				<VIcon :icon="mdiAccountGroupOutline" />
@@ -54,9 +54,5 @@ import {
 	mdiAccountGroupOutline,
 } from "@icons/material";
 
-defineProps({
-	roomId: { type: String, required: true },
-});
-
-defineEmits(["room:delete"]);
+defineEmits(["room:edit", "room:manage-members", "room:delete"]);
 </script>

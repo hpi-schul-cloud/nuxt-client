@@ -12,7 +12,11 @@
 				<h1 class="text-h3 mb-4" data-testid="room-title">
 					{{ room.name }}
 				</h1>
-				<RoomMenu :room-id="room.id" @room:delete="onDelete" />
+				<RoomMenu
+					@room:edit="onEdit"
+					@room:manage-members="onManageMembers"
+					@room:delete="onDelete"
+				/>
 			</div>
 		</template>
 		<BoardGrid :boards="roomBoards" />
@@ -67,6 +71,28 @@ const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.roomDetails.title")}`)
 );
 useTitle(pageTitle);
+
+const onEdit = () => {
+	if (!room.value) return;
+
+	router.push({
+		name: "room-edit",
+		params: {
+			id: room.value.id,
+		},
+	});
+};
+
+const onManageMembers = () => {
+	if (!room.value) return;
+
+	router.push({
+		name: "room-members",
+		params: {
+			id: room.value.id,
+		},
+	});
+};
 
 const onDelete = async () => {
 	if (!room.value) return;
