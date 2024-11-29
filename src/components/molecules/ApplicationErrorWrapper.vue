@@ -6,7 +6,6 @@
 				:error-text="translatedErrorMessage"
 				data-testid="error-content"
 			/>
-			<div>Status: {{ appErrorStatusCode }}</div>
 			<v-btn
 				class="mt-4"
 				color="primary"
