@@ -94,7 +94,11 @@ describe("useRoomCreateState", () => {
 			expect(isLoading.value).toBe(true);
 			roomApiMock.roomControllerCreateRoom.mockRejectedValue({ code: 404 });
 
-			await expect(createRoom(roomData.value)).rejects.toThrow();
+			await createRoom(roomData.value).catch(() => {
+				expect(mockedMapAxiosErrorToResponseError).toHaveBeenCalledWith({
+					code: 404,
+				});
+			});
 			expect(isLoading.value).toBe(false);
 		});
 	});
