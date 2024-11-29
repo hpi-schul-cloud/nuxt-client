@@ -3,40 +3,32 @@
 		<div
 			class="d-flex justify-space-between align-center mb-2 table-title-header"
 		>
-			<div class="mr-2">
-				<v-banner
-					v-if="selectedMembers.length"
-					bg-color="rgba(var(--v-theme-primary), 0.12)"
-					density="comfortable"
-					lines="one"
-					max-height="40px"
-					mobile-breakpoint="sm"
-					rounded
-				>
-					<template v-slot:text>
-						({{ selectedMembers.length }})
+			<div class="mr-2 pa-0 pl-4 multi-action-menu">
+				<template v-if="selectedMembers.length">
+					<span class="d-inline-flex">
+						{{ selectedMembers.length }}
 						{{ t("pages.administration.selected") }}
-					</template>
+					</span>
+					<v-btn
+						ref="removeSelectedMembers"
+						class="ml-2"
+						size="small"
+						variant="text"
+						:icon="mdiTrashCanOutline"
+						:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
+						@click="onRemoveMembers(selectedMembers)"
+					/>
 
-					<template v-slot:actions>
-						<v-btn
-							ref="removeSelectedMembers"
-							variant="text"
-							:icon="mdiTrashCanOutline"
-							:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-							@click="onRemoveMembers(selectedMembers)"
-						/>
-						<!-- TODO: add ariaLabel for this button -->
-						<v-btn
-							ref="resetSelectedMembers"
-							class="ml-2"
-							variant="text"
-							:icon="mdiClose"
-							:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-							@click="resetSelectedMembers"
-						/>
-					</template>
-				</v-banner>
+					<v-btn
+						ref="resetSelectedMembers"
+						class="ml-16 mr-2"
+						size="x-small"
+						variant="text"
+						:icon="mdiClose"
+						:aria-label="t('pages.rooms.members.remove.ariaLabel')"
+						@click="onResetSelectedMembers"
+					/>
+				</template>
 			</div>
 			<v-text-field
 				v-model="search"
@@ -119,9 +111,10 @@ const onUpdateFilter = (value: RoomMemberResponse[]) => {
 
 const onRemoveMembers = (userIds: string[]) => {
 	emit("remove:members", userIds);
+	selectedMembers.value = [];
 };
 
-const resetSelectedMembers = () => {
+const onResetSelectedMembers = () => {
 	selectedMembers.value = [];
 };
 
@@ -163,7 +156,11 @@ const tableHeader = [
 	min-height: 50px;
 }
 
-.v-banner {
-	border-style: none;
+.multi-action-menu {
+	display: flex;
+	align-items: center;
+	background-color: rgba(var(--v-theme-primary), 0.12);
+	border-radius: 0.25rem;
+	max-height: 40px;
 }
 </style>
