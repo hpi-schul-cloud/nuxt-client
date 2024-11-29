@@ -194,7 +194,7 @@ const onReferenceSelected = (referenceId: string) => {
 const onImport = (newName: string) => startImport(newName);
 const onCancel = () => closeModals();
 const onCopyResultModalClosed = () => {
-	emit("success", newName.value);
+	emit("success", newName.value, destinationId.value);
 	copyModule.reset();
 };
 </script>

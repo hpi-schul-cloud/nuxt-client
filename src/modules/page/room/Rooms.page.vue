@@ -58,6 +58,7 @@ onMounted(() => {
 });
 
 const onImportSuccess = (newName: string, id: string) => {
+	console.log("++++", newName, id);
 	showImportSuccess(newName);
 	router.replace({ name: "rooms-id", params: { id } });
 };
