@@ -523,7 +523,7 @@ export default {
 	"components.molecules.copyResult.ctlTools.info":
 		"Зовнішні інструменти, пов’язані з курсом, і посадкові картки не копіюються.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
-		"Захищені частини конфігурацій інструменту не копіюються.",
+		"Зовнішні інструменти та захищені частини конфігурацій інструментів, які недоступні в цільовій школі, не копіюються.",
 	"components.molecules.copyResult.etherpadCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.failedCopy":

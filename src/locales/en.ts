@@ -515,7 +515,7 @@ export default {
 	"components.molecules.copyResult.ctlTools.info":
 		"External tools associated with the course and boarding cards are not copied.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
-		"Protected parts of the tool configurations are not copied.",
+		"External tools and protected parts of the tool configurations that are not available in the target school are not copied.",
 	"components.molecules.copyResult.etherpadCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.failedCopy":
