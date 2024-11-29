@@ -138,7 +138,6 @@ export const useExternalToolLaunchState = (
 				if (windowRef.value?.closed) {
 					await refreshCallback?.();
 
-					// Cleanup
 					windowRef.value = null;
 					clearInterval(windowIntervalHandle.value);
 				}
