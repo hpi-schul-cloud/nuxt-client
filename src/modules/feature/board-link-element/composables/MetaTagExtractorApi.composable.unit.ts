@@ -27,6 +27,7 @@ describe("useMetaTagExtractorApi", () => {
 						title: "",
 						description: "",
 						imageUrl: "",
+						originalImageUrl: "",
 						type: "unknown",
 						parentTitle: "",
 						parentType: "unknown",
@@ -70,6 +71,7 @@ describe("useMetaTagExtractorApi", () => {
 							title: "Shakespear",
 							description: "",
 							imageUrl: "",
+							originalImageUrl: "",
 							type: "board",
 							parentTitle: "English",
 							parentType: "course",
@@ -114,6 +116,7 @@ describe("useMetaTagExtractorApi", () => {
 							title: "",
 							description: "",
 							imageUrl: "",
+							originalImageUrl: "",
 							type: "board",
 							parentTitle: "English",
 							parentType: "course",
@@ -154,6 +157,7 @@ describe("useMetaTagExtractorApi", () => {
 					title: "",
 					description: "",
 					imageUrl: "",
+					originalImageUrl: "",
 					type: "unknown",
 					parentTitle: "",
 					parentType: "unknown",
@@ -177,7 +181,7 @@ describe("useMetaTagExtractorApi", () => {
 				const url = "https://test.de/my-article";
 				const data = await composable?.getMetaTags(url);
 
-				expect(data).toEqual({ url, title: "", description: "" });
+				expect(data).toEqual({ url: "", title: "", description: "" });
 			});
 		});
 	});

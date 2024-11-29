@@ -23,7 +23,6 @@
 				@keydown.tab="showDateDialog = false"
 			/>
 		</template>
-
 		<v-date-picker
 			v-model="dateObject"
 			:aria-expanded="showDateDialog"
@@ -33,13 +32,13 @@
 			hide-header
 			show-adjacent-months
 			elevation="6"
-			@update:model-value="closeAndEmit"
+			@update:modelValue="closeAndEmit"
 		/>
 	</v-menu>
 </template>
 
 <script setup lang="ts">
-import { computed, ref, watchEffect, unref } from "vue";
+import { computed, ref, watchEffect, unref, PropType, toRef } from "vue";
 import { useDebounceFn, computedAsync } from "@vueuse/core";
 import dayjs from "dayjs";
 import { useI18n } from "vue-i18n";
@@ -61,13 +60,15 @@ const props = defineProps({
 	required: { type: Boolean },
 	minDate: { type: String },
 	maxDate: { type: String },
+	errors: { type: Array as PropType<ErrorObject[]>, default: () => [] },
 });
 const emit = defineEmits(["update:date", "error"]);
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 const showDateDialog = ref(false);
 const inputField = ref<HTMLInputElement | null>(null);
 const dateString = ref<string>();
+const externalErrors = toRef(props, "errors");
 
 watchEffect(() => {
 	dateString.value = props.date
@@ -77,12 +78,13 @@ watchEffect(() => {
 
 const dateObject = computed({
 	get() {
-		if (v$.value.dateString.$invalid)
-			return props.date ? new Date(props.date) : undefined;
+		if (isValid.value) {
+			return dateString.value
+				? dayjs(dateString.value, DATETIME_FORMAT.date).toDate()
+				: undefined;
+		}
 
-		return dateString.value
-			? dayjs(dateString.value, DATETIME_FORMAT.date).toDate()
-			: undefined;
+		return props.date ? new Date(props.date) : undefined;
 	},
 	set(newValue) {
 		dateString.value = dayjs(newValue).format(DATETIME_FORMAT.date);
@@ -104,24 +106,36 @@ const rules = computed(() => ({
 
 const v$ = useVuelidate(rules, { dateString }, { $lazy: true });
 
-const errorMessages = computedAsync(async () => {
-	return await getErrorMessages(v$.value.dateString);
+const isValid = computed(() => {
+	return !v$.value.dateString.$invalid;
+});
+
+const combinedErrors = computed(() => {
+	return v$.value.dateString.$errors.concat(externalErrors.value);
+});
+
+const errorMessages = computedAsync<string[] | null>(async () => {
+	const messages = await getErrorMessages(combinedErrors.value);
+
+	return messages ?? [];
 }, null);
 
-// TODO - figure out type, ExtractRulesResults is not exported
-const getErrorMessages = useDebounceFn((validationModel: any) => {
-	const messages = validationModel.$errors.map((e: ErrorObject) => {
-		return e.$message;
-	});
+const getErrorMessages = useDebounceFn(
+	async (errors: ErrorObject[] | undefined) => {
+		const messages = errors?.map((e: ErrorObject) => {
+			return unref(e.$message);
+		});
 
-	return unref(messages);
-}, 700);
+		return messages;
+	},
+	700
+);
 
 const validate = () => {
 	v$.value.dateString.$touch();
 	v$.value.$validate();
 
-	if (!v$.value.dateString.$invalid) {
+	if (isValid.value) {
 		emitDate();
 	} else {
 		emit("error");

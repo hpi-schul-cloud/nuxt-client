@@ -456,7 +456,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.datePicker.validation.format":
-		"Por favor utilice el formato DD.MM.YYYY",
+		"Por favor utilice el formato DD.MM.AAAA",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
 	"components.dateTimePicker.messages.dateInPast":
 		"La fecha y la hora están en el pasado.",
@@ -826,6 +826,10 @@ export default {
 	"components.roomForm.labels.timePeriod": "Periodo de tiempo",
 	"components.roomForm.labels.timePeriod.from": "Periodo de tiempo desde",
 	"components.roomForm.labels.timePeriod.to": "Periodo de tiempo hasta",
+	"components.roomForm.validation.generalSaveError":
+		"Se ha producido un error al guardar. Por favor, compruebe sus entradas e inténtelo de nuevo.",
+	"components.roomForm.validation.timePeriod.startBeforeEnd":
+		"La fecha de inicio debe ser anterior a la fecha de finalización.",
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
