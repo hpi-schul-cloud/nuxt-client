@@ -1,5 +1,14 @@
 <template>
-	<div v-if="isLoading" />
+	<template v-if="isLoading">
+		<div data-testid="loading" class="w-100 text-center">
+			<VProgressCircular
+				color="primary"
+				indeterminate
+				:size="51"
+				class="my-10"
+			/>
+		</div>
+	</template>
 	<DefaultWireframe
 		v-else
 		max-width="full"
