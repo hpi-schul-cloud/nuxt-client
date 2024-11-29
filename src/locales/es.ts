@@ -1700,15 +1700,14 @@ export default {
 	"pages.rooms.members.add": "Añadir participantes",
 	"pages.rooms.members.manage": "Participantes de la sala",
 	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
+	"pages.rooms.members.resetSelection.ariaLabel":
+		"Restablecer las participantes seleccionadas de la lista",
 	"pages.rooms.members.multipleRemove.ariaLabel":
 		"Eliminar varios participantes de la sala",
 	"pages.rooms.members.remove.confirmation":
 		"¿Eliminar {memberName} de la sala?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"¿Eliminar participantes seleccionadas de la sala?",
-	"pages.rooms.members.activateMultiSelection": "Activar selección múltiple",
-	"pages.rooms.members.deactivateMultiSelection":
-		"Desactivar selección múltiple",
 	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
 	"pages.rooms.title": "Salas",
