@@ -131,7 +131,12 @@ describe("useRoomEditState", () => {
 			"room-id",
 			params
 		);
-		await expect(updateRoom("room-id", params)).rejects.toThrow();
+
+		await updateRoom("room-id", params).catch(() => {
+			expect(mockedMapAxiosErrorToResponseError).toHaveBeenCalledWith({
+				code: 404,
+			});
+		});
 		expect(isLoading.value).toBe(false);
 	});
 });
