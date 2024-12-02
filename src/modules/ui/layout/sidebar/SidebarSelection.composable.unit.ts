@@ -136,7 +136,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			const setupRoomDetailsRoute = () => {
 				return setup({
 					path: "/rooms/0000dcfbfb5c7a3f00bf21ab",
-					name: "rooms-id",
+					name: "room-details",
 				});
 			};
 
@@ -252,7 +252,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			const setupRoomDetailsRoute = () => {
 				return setup({
 					path: "/rooms/0000dcfbfb5c7a3f00bf21ab",
-					name: "rooms-id",
+					name: "room-details",
 				});
 			};
 
