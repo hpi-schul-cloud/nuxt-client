@@ -70,14 +70,7 @@ describe("MembersTable", () => {
 				const { wrapper } = setup();
 				const dataTable = wrapper.findComponent({ name: "v-data-table" });
 
-				const checkBoxes = [];
-				const rows = dataTable.findAll("tr");
-				rows.forEach((row) => {
-					const checkBox = row.find("input[type='checkbox']");
-					if (checkBox.exists()) {
-						checkBoxes.push(checkBox);
-					}
-				});
+				const checkBoxes = dataTable.findAll("tr input[type='checkbox']");
 				expect(checkBoxes.length).toBeGreaterThan(0);
 			});
 
