@@ -245,7 +245,7 @@ describe("useRoomMembers", () => {
 					userIdsAndRoles: [
 						{
 							userId: firstPotentialMember.userId,
-							roleName: UserIdAndRoleRoleNameEnum.Editor,
+							roleName: UserIdAndRoleRoleNameEnum.Roomeditor,
 						},
 					],
 				}

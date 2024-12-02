@@ -23,7 +23,7 @@ import { useRoomsState } from "@data-room";
 import { RoomGrid } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { BoardExternalReferenceType } from "@/serverApi/v3";
@@ -45,13 +45,22 @@ const fabAction = {
 	dataTestId: "fab-add-room",
 };
 
-const isImportMode = computed(() => {
-	return route.query.import !== undefined;
-});
+const isImportMode = ref(false);
+const importToken = ref<string>();
 
-const importToken = computed(() => {
-	return route.query.import as string;
-});
+watch(
+	() => route.query.import,
+	() => {
+		if (route.query.import !== undefined) {
+			isImportMode.value = true;
+			importToken.value = route.query.import as string;
+		} else {
+			isImportMode.value = false;
+			importToken.value = undefined;
+		}
+	},
+	{ immediate: true }
+);
 
 onMounted(() => {
 	fetchRooms();

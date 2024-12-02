@@ -1,7 +1,7 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { BoardContextType } from "@/types/board/BoardContext";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { createSharedComposable } from "@vueuse/core";
 import { computed, ref, unref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useBoardApi } from "./BoardApi.composable";
@@ -92,6 +92,6 @@ const useBoardPageInformation = () => {
 	};
 };
 
-export const useSharedBoardPageInformation = createSharedComposable(
+export const useSharedBoardPageInformation = createTestableSharedComposable(
 	useBoardPageInformation
 );

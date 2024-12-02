@@ -125,11 +125,11 @@ describe("AddMembers", () => {
 			});
 
 			expect(roleComponent).toBeTruthy();
-			await roleComponent.vm.$emit("update:modelValue", RoleName.RoomViewer);
+			await roleComponent.vm.$emit("update:modelValue", RoleName.Roomviewer);
 			await nextTick();
 			expect(wrapper.emitted("update:role")).toHaveLength(1);
 			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
-				{ role: RoleName.RoomViewer, schoolId: roomMembersSchools[0].id },
+				{ role: RoleName.Roomviewer, schoolId: roomMembersSchools[0].id },
 			]);
 		});
 	});
