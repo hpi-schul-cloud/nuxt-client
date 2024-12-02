@@ -214,7 +214,7 @@ describe("RoomMembersPage", () => {
 		describe("@onRemoveMember", () => {
 			describe("when user confirms the removal", () => {
 				it("should call removeMember method", async () => {
-					const { wrapper, wrapperVM } = setup();
+					const { wrapper } = setup();
 					const membersTable = wrapper.findComponent({
 						name: "MembersTable",
 					});

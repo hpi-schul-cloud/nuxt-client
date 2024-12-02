@@ -1,80 +1,78 @@
 <template>
-	<v-card flat>
-		<div
-			class="d-flex justify-space-between align-center mb-2 table-title-header"
-		>
-			<div class="mr-2 pa-0 pl-4 multi-action-menu">
-				<template v-if="selectedMemberList.length">
-					<span class="d-inline-flex">
-						{{ selectedMemberList.length }}
-						{{ t("pages.administration.selected") }}
-					</span>
-					<v-btn
-						ref="removeSelectedMembers"
-						class="ml-2"
-						size="small"
-						variant="text"
-						:icon="mdiTrashCanOutline"
-						:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-						@click="onRemoveMembers"
-					/>
-
-					<v-btn
-						ref="resetSelectedMembers"
-						class="ml-16 mr-2"
-						size="x-small"
-						variant="text"
-						:icon="mdiClose"
-						:aria-label="t('pages.rooms.members.remove.ariaLabel')"
-						@click="onResetSelectedMembers"
-					/>
-				</template>
-			</div>
-			<v-text-field
-				v-model="search"
-				density="compact"
-				flat
-				hide-details
-				max-width="400px"
-				mobile-breakpoint="sm"
-				single-line
-				variant="solo-filled"
-				:label="t('common.labels.search')"
-				:prepend-inner-icon="mdiMagnify"
-			/>
-		</div>
-
-		<v-divider role="presentation" />
-		<v-data-table
-			v-model:search="search"
-			v-model="selectedMemberList"
-			data-testid="participants-table"
-			hover
-			item-value="userId"
-			mobile-breakpoint="sm"
-			:items="membersList"
-			:headers="tableHeader"
-			:items-per-page-options="[5, 10, 25, 50, 100]"
-			:items-per-page="50"
-			:no-data-text="t('common.nodata')"
-			:mobile="null"
-			:show-select="true"
-			:sort-asc-icon="mdiMenuDown"
-			:sort-desc-icon="mdiMenuUp"
-			@update:current-items="onUpdateFilter"
-			@update:model-value="onSelectMembers"
-		>
-			<template #[`item.actions`]="{ item }">
+	<div
+		class="d-flex justify-space-between align-center mb-2 table-title-header"
+	>
+		<div class="mr-2 pa-0 pl-4 multi-action-menu">
+			<template v-if="selectedMemberList.length">
+				<span class="d-inline-flex">
+					{{ selectedMemberList.length }}
+					{{ t("pages.administration.selected") }}
+				</span>
 				<v-btn
-					ref="removeMember"
+					ref="removeSelectedMembers"
+					class="ml-2"
+					size="small"
 					variant="text"
-					:aria-label="getRemoveAriaLabel(item)"
 					:icon="mdiTrashCanOutline"
+					:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
 					@click="onRemoveMembers"
 				/>
+
+				<v-btn
+					ref="resetSelectedMembers"
+					class="ml-16 mr-2"
+					size="x-small"
+					variant="text"
+					:icon="mdiClose"
+					:aria-label="t('pages.rooms.members.remove.ariaLabel')"
+					@click="onResetSelectedMembers"
+				/>
 			</template>
-		</v-data-table>
-	</v-card>
+		</div>
+		<v-text-field
+			v-model="search"
+			density="compact"
+			flat
+			hide-details
+			max-width="400px"
+			mobile-breakpoint="sm"
+			single-line
+			variant="solo-filled"
+			:label="t('common.labels.search')"
+			:prepend-inner-icon="mdiMagnify"
+		/>
+	</div>
+
+	<v-divider role="presentation" />
+	<v-data-table
+		v-model:search="search"
+		v-model="selectedMemberList"
+		data-testid="participants-table"
+		hover
+		item-value="userId"
+		mobile-breakpoint="sm"
+		:items="membersList"
+		:headers="tableHeader"
+		:items-per-page-options="[5, 10, 25, 50, 100]"
+		:items-per-page="50"
+		:no-data-text="t('common.nodata')"
+		:mobile="null"
+		:show-select="true"
+		:sort-asc-icon="mdiMenuDown"
+		:sort-desc-icon="mdiMenuUp"
+		@update:current-items="onUpdateFilter"
+		@update:model-value="onSelectMembers"
+	>
+		<template #[`item.actions`]="{ item }">
+			<v-btn
+				ref="removeMember"
+				variant="text"
+				:aria-label="getRemoveAriaLabel(item)"
+				:icon="mdiTrashCanOutline"
+				@click="onRemoveMembers"
+			/>
+		</template>
+	</v-data-table>
 </template>
 
 <script setup lang="ts">
