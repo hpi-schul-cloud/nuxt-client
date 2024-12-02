@@ -656,10 +656,12 @@ export default {
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"Зовнішні інструменти, пов’язані з курсом або посадочними картками, не будуть скопійовані.",
-	"components.molecules.shareImport.options.infoText.line1":
+	"components.molecules.shareImport.options.ctlTools.infoText.line1":
 		"Зовнішні інструменти недоступні в цільовій школі",
-	"components.molecules.shareImport.options.infoText.line2":
+	"components.molecules.shareImport.options.ctlTools.infoText.line2":
 		"Захищені налаштування зовнішніх інструментів",
+	"components.molecules.share.courses.options.infoText":
+		"Використовуючи наступне посилання, курс може бути імпортований як копія іншими викладачами.",
 	"components.molecules.shareImport.options.personalData.infoText":
 		"Персональні дані",
 	"components.molecules.shareImport.options.restrictions.infoText.line1":

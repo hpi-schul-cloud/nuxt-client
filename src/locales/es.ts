@@ -659,10 +659,12 @@ export default {
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
-	"components.molecules.shareImport.options.infoText.line1":
+	"components.molecules.shareImport.options.ctlTools.infoText.line1":
 		"Herramientas externas no disponibles en la escuela de destino",
-	"components.molecules.shareImport.options.infoText.line2":
+	"components.molecules.shareImport.options.ctlTools.infoText.line2":
 		"Configuraciones protegidas de herramientas externas",
+	"components.molecules.share.courses.options.infoText":
+		"Utilizando el siguiente enlace, otros profesores pueden importar el curso como una copia.",
 	"components.molecules.shareImport.options.personalData.infoText":
 		"Datos personales",
 	"components.molecules.shareImport.options.restrictions.infoText.line1":
