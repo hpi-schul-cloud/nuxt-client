@@ -15,14 +15,14 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { nextTick, ref } from "vue";
+import { nextTick, Ref, ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { flushPromises } from "@vue/test-utils";
 import { RoleName, RoomColor } from "@/serverApi/v3";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
-import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { useTitle } from "@vueuse/core";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -64,6 +64,9 @@ describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let mockUseMembersCalls: DeepMocked<ReturnType<typeof useRoomMembers>>;
+	const askConfirmationMock = jest
+		.fn()
+		.mockImplementation(async () => await Promise.resolve(true));
 
 	beforeEach(() => {
 		route = createMock<ReturnType<typeof useRoute>>();
@@ -85,12 +88,11 @@ describe("RoomMembersPage", () => {
 			potentialRoomMembers: ref(mockPotentialMembers),
 		});
 
-		const askDeleteConfirmationMock = async () => await Promise.resolve(true);
-		setupDeleteConfirmationComposableMock({
-			askDeleteConfirmationMock,
+		setupConfirmationComposableMock({
+			askConfirmationMock,
 		});
 		mockedUseDeleteConfirmationDialog.mockReturnValue({
-			askConfirmation: askDeleteConfirmationMock,
+			askConfirmation: askConfirmationMock,
 			isDialogOpen: ref(false),
 		});
 
@@ -131,6 +133,7 @@ describe("RoomMembersPage", () => {
 				testId: string;
 			};
 			isMembersDialogOpen: boolean;
+			selectedMembers: Ref<string[]>;
 			onFabClick: ReturnType<typeof jest.fn>;
 		};
 
@@ -209,16 +212,49 @@ describe("RoomMembersPage", () => {
 		});
 
 		describe("@onRemoveMember", () => {
-			it("should call deleteMember method", async () => {
-				const { wrapper } = setup();
-				const membersTable = wrapper.findComponent({
-					name: "MembersTable",
+			describe("when user confirms the removal", () => {
+				it("should call removeMember method", async () => {
+					const { wrapper } = setup();
+					const membersTable = wrapper.findComponent({
+						name: "MembersTable",
+					});
+					await membersTable.vm.$emit("select:members", [
+						mockMembers[0].userId,
+					]);
+					await membersTable.vm.$emit("remove:members");
+					await flushPromises();
+
+					expect(mockUseMembersCalls.removeMembers).toHaveBeenCalledWith([
+						mockMembers[0].userId,
+					]);
+					expect(askConfirmationMock).toHaveBeenCalledWith({
+						confirmActionLangKey: "common.actions.remove",
+						message: "pages.rooms.members.remove.confirmation",
+					});
 				});
-				await membersTable.vm.$emit("remove:member", mockMembers[0]);
-				await flushPromises();
-				expect(mockUseMembersCalls.removeMembers).toHaveBeenCalledWith([
-					mockMembers[0].userId,
-				]);
+			});
+
+			describe("when user confirms multiple removal ", () => {
+				it("should call removeMember method", async () => {
+					const { wrapper } = setup();
+					const membersTable = wrapper.findComponent({
+						name: "MembersTable",
+					});
+					await membersTable.vm.$emit("select:members", [
+						mockMembers[0].userId,
+						mockMembers[1].userId,
+					]);
+					await membersTable.vm.$emit("remove:members");
+					await flushPromises();
+					expect(mockUseMembersCalls.removeMembers).toHaveBeenCalledWith([
+						mockMembers[0].userId,
+						mockMembers[1].userId,
+					]);
+					expect(askConfirmationMock).toHaveBeenCalledWith({
+						confirmActionLangKey: "common.actions.remove",
+						message: "pages.rooms.members.multipleRemove.confirmation",
+					});
+				});
 			});
 		});
 	});
