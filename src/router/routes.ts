@@ -255,13 +255,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "rooms-new",
 	},
 	{
-		path: `/rooms/:id/edit`,
+		path: `/rooms/:id(${REGEX_ID})/edit`,
 		component: async () => (await import("@page-room")).RoomEditPage,
 		beforeEnter: checkRoomsFeature,
 		name: "room-edit",
 	},
 	{
-		path: `/rooms/:id/members`,
+		path: `/rooms/:id(${REGEX_ID})/members`,
 		component: async () => (await import("@page-room")).RoomMembersPage,
 		beforeEnter: checkRoomsFeature,
 		name: "room-members",
