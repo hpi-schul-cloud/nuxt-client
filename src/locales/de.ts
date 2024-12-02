@@ -1693,7 +1693,7 @@ export default {
 	"pages.rooms.members.remove.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.multipleRemove.confirmation":
-		"Ausgewählte Teilnehmende aus dem Raum entfernen?",
+		"Ausgewählte Teilnehmende wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.roles.editor": "Raumeditor",
 	"pages.rooms.members.roles.viewer": "Raumbetrachter",
 	"pages.rooms.title": "Räume",

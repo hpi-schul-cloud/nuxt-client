@@ -2,8 +2,8 @@
 	<div
 		class="d-flex justify-space-between align-center mb-2 table-title-header"
 	>
-		<div class="mr-2 pa-0 pl-4 multi-action-menu">
-			<template v-if="selectedMemberList.length">
+		<template v-if="selectedMemberList.length">
+			<div class="mr-2 pa-0 pl-4 multi-action-menu">
 				<span class="d-inline-flex">
 					{{ selectedMemberList.length }}
 					{{ t("pages.administration.selected") }}
@@ -11,7 +11,7 @@
 				<v-btn
 					ref="removeSelectedMembers"
 					class="ml-2"
-					size="small"
+					size="x-small"
 					variant="text"
 					:icon="mdiTrashCanOutline"
 					:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
@@ -20,15 +20,16 @@
 
 				<v-btn
 					ref="resetSelectedMembers"
-					class="ml-16 mr-2"
+					class="ml-8 mr-2"
 					size="x-small"
 					variant="text"
 					:icon="mdiClose"
 					:aria-label="t('pages.rooms.members.remove.ariaLabel')"
 					@click="onResetSelectedMembers"
 				/>
-			</template>
-		</div>
+			</div>
+		</template>
+		<v-spacer />
 		<v-text-field
 			v-model="search"
 			density="compact"
@@ -66,6 +67,7 @@
 		<template #[`item.actions`]="{ item }">
 			<v-btn
 				ref="removeMember"
+				size="x-small"
 				variant="text"
 				:aria-label="getRemoveAriaLabel(item)"
 				:icon="mdiTrashCanOutline"
@@ -173,6 +175,6 @@ const tableHeader = [
 	align-items: center;
 	background-color: rgba(var(--v-theme-primary), 0.12);
 	border-radius: 0.25rem;
-	max-height: 40px;
+	min-height: 40px;
 }
 </style>

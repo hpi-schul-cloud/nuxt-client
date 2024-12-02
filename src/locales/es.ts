@@ -1310,7 +1310,7 @@ export default {
 	"pages.administration.school.index.usedFileStorage":
 		"Almacenamiento de archivos usados en la nube",
 	"pages.administration.select": "seleccionad{'@'}s",
-	"pages.administration.selected": "seleccinad{'@'}(s)",
+	"pages.administration.selected": "seleccionado(s)",
 	"pages.administration.sendMail.alreadyRegistered":
 		"El correo electrónico de registro no se ha enviado porque el registro ya ha tenido lugar",
 	"pages.administration.sendMail.error":
