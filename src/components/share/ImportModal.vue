@@ -8,6 +8,7 @@
 		confirm-btn-title-key="common.actions.import"
 		@dialog-confirmed="onConfirm"
 		@dialog-canceled="onCancel"
+		data-testid="import-modal"
 	>
 		<template #title>
 			<div ref="textTitle" class="text-h4 my-2">
@@ -45,6 +46,7 @@
 					v-model="newName"
 					:label="t(`components.molecules.import.${parentType}.label`)"
 					:rules="[rules.required]"
+					data-testid="import-modal-name-input"
 				/>
 			</div>
 		</template>
