@@ -1,4 +1,8 @@
-import { ContextExternalToolBodyParams, ToolContextType } from "@/serverApi/v3";
+import {
+	ContextExternalToolBodyParams,
+	LaunchType,
+	ToolContextType,
+} from "@/serverApi/v3";
 import {
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,
@@ -11,6 +15,7 @@ import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunch
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 import { useExternalToolLaunchState } from "./ExternalToolLaunchState.composable";
+import { nextTick } from "vue";
 
 jest.mock("@data-external-tool/ExternalToolApi.composable");
 
@@ -64,7 +69,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					url: response.url,
 					payload: response.payload,
 					openNewTab: response.openNewTab,
-					isDeepLink: false,
+					launchType: LaunchType.Basic,
 				});
 			});
 
@@ -152,7 +157,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					url: response.url,
 					payload: response.payload,
 					openNewTab: response.openNewTab,
-					isDeepLink: false,
+					launchType: response.launchType,
 				});
 			});
 
@@ -279,6 +284,36 @@ describe("ExternalToolLaunchState.composable", () => {
 		});
 
 		describe("when launching a tool with post method", () => {
+			describe("when opening in a new tab", () => {
+				const setup = () => {
+					const launchRequest = toolLaunchRequestFactory.build({
+						method: ToolLaunchRequestMethodEnum.Post,
+						openNewTab: true,
+						payload: "",
+					});
+
+					const composable = useExternalToolLaunchState();
+					composable.toolLaunchRequest.value = launchRequest;
+
+					return {
+						...composable,
+						launchRequest,
+					};
+				};
+
+				it("should create a launch form with a number as the target ", () => {
+					const { launchRequest, launchTool } = setup();
+
+					launchTool();
+
+					const form = document.getElementById("launch-form");
+
+					expect(form?.outerHTML).toEqual(
+						`<form method="POST" action="${launchRequest.url}" id="launch-form" target="1"></form>`
+					);
+				});
+			});
+
 			describe("when opening in the same tab", () => {
 				const setup = () => {
 					const launchRequest = toolLaunchRequestFactory.build({
@@ -303,37 +338,7 @@ describe("ExternalToolLaunchState.composable", () => {
 					const form = document.getElementById("launch-form");
 
 					expect(form?.outerHTML).toEqual(
-						`<form method="POST" action="${launchRequest.url}" target="_self" id="launch-form"><input type="hidden" name="key" value="value"></form>`
-					);
-				});
-			});
-
-			describe("when opening in a new tab", () => {
-				const setup = () => {
-					const launchRequest = toolLaunchRequestFactory.build({
-						method: ToolLaunchRequestMethodEnum.Post,
-						openNewTab: true,
-						payload: "",
-					});
-
-					const composable = useExternalToolLaunchState();
-					composable.toolLaunchRequest.value = launchRequest;
-
-					return {
-						...composable,
-						launchRequest,
-					};
-				};
-
-				it("should create a launch form with target _blank", () => {
-					const { launchRequest, launchTool } = setup();
-
-					launchTool();
-
-					const form = document.getElementById("launch-form");
-
-					expect(form?.outerHTML).toEqual(
-						`<form method="POST" action="${launchRequest.url}" target="_blank" id="launch-form"></form>`
+						`<form method="POST" action="${launchRequest.url}" id="launch-form" target="_self"><input type="hidden" name="key" value="value"></form>`
 					);
 				});
 			});
@@ -401,6 +406,85 @@ describe("ExternalToolLaunchState.composable", () => {
 				launchTool();
 
 				expect(window.open).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when the launch is with launchType Lti11ContentItemSelection", () => {
+			const setup = () => {
+				const refreshCallback = jest.fn();
+				const launchRequest = toolLaunchRequestFactory.build({
+					method: ToolLaunchRequestMethodEnum.Post,
+					openNewTab: true,
+					launchType: LaunchType.Lti11ContentItemSelection,
+				});
+
+				const composable = useExternalToolLaunchState(refreshCallback);
+				composable.toolLaunchRequest.value = launchRequest;
+
+				const mockWindow = {
+					closed: false,
+				};
+
+				jest
+					.spyOn(window, "open")
+					.mockReturnValue(mockWindow as unknown as Window);
+
+				const setInterval = jest.spyOn(window, "setInterval");
+				const clearInterval = jest.spyOn(window, "clearInterval");
+
+				return {
+					...composable,
+					refreshCallback,
+					setInterval,
+					clearInterval,
+					mockWindow,
+				};
+			};
+
+			afterEach(() => {
+				jest.useRealTimers();
+				jest.restoreAllMocks();
+			});
+
+			it("should call refreshCallback", async () => {
+				jest.useFakeTimers();
+				const {
+					launchTool,
+					refreshCallback,
+					mockWindow,
+					setInterval,
+					clearInterval,
+				} = setup();
+
+				launchTool();
+
+				expect(setInterval).toHaveBeenCalled();
+				expect(mockWindow.closed).toBe(false);
+
+				mockWindow.closed = true;
+
+				jest.advanceTimersByTime(1000);
+				await nextTick();
+
+				expect(refreshCallback).toHaveBeenCalled();
+				expect(clearInterval).toHaveBeenCalled();
+			});
+
+			it("should not call refreshCallback", async () => {
+				jest.useFakeTimers();
+				const { launchTool, refreshCallback, mockWindow } = setup();
+
+				launchTool();
+
+				expect(setInterval).toHaveBeenCalled();
+
+				mockWindow.closed = false;
+
+				jest.advanceTimersByTime(1000);
+				await nextTick();
+
+				expect(refreshCallback).not.toHaveBeenCalled();
+				expect(clearInterval).not.toHaveBeenCalled();
 			});
 		});
 	});
