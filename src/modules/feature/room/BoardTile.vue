@@ -1,8 +1,6 @@
 <template>
 	<VCard
-		class="bg-grey-lighten-5"
-		:class="{ 'bg-white opacity-70': isDraft }"
-		variant="outlined"
+		:variant="isDraft ? 'outlined' : 'tonal'"
 		draggable="false"
 		:data-testid="`board-tile-${index}`"
 		:to="boardPath"
