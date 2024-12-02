@@ -1674,15 +1674,22 @@ export default {
 	"pages.rooms.members.error.load": "Не вдалося завантажити список учасників.",
 	"pages.rooms.members.error.add": "Не вдалося додати учасників.",
 	"pages.rooms.members.error.remove": "Не вдалося видалити учасників.",
+
 	"pages.rooms.members.infoText":
 		"Додайте учасників до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте учасників",
-	"pages.rooms.members.manage": "Керувати учасниками",
+	"pages.rooms.members.manage": "Кімната Учасники",
 	"pages.rooms.members.remove.ariaLabel": "Видалити {memberName} з кімнати",
+	"pages.rooms.members.resetSelection.ariaLabel":
+		"Скинути вибраних учасників зі списку",
+	"pages.rooms.members.multipleRemove.ariaLabel":
+		"Видалити кількох учасників із кімнати",
 	"pages.rooms.members.remove.confirmation":
 		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
+	"pages.rooms.members.multipleRemove.confirmation":
+		"Видалити вибраних учасників із кімнати?",
 	"pages.rooms.members.roles.editor": "Редактор кімнати",
 	"pages.rooms.members.roles.viewer": "Переглядач кімнати",
 	"pages.rooms.title": "Кімнати",

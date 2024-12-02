@@ -18,24 +18,28 @@
 					target="_blank"
 					rel="noopener"
 					:ariaLabel="linkAriaLabel"
-					>{{ t("pages.rooms.members.infoText.moreInformation") }}</a
 				>
+					{{ t("pages.rooms.members.infoText.moreInformation") }}
+				</a>
 			</i18n-t>
 		</div>
+
 		<div class="mb-12">
 			<MembersTable
 				v-if="!isLoading"
 				:members="memberList"
-				@remove:member="onRemoveMember"
+				:selectedMembers="selectedMembers"
+				@remove:members="onRemoveMembers"
+				@select:members="onSelectMembers"
 			/>
 		</div>
 
 		<v-dialog
 			v-model="isMembersDialogOpen"
 			:width="xs ? 'auto' : 480"
-			persistent
-			max-width="480"
 			data-testid="dialog-add-participants"
+			max-width="480"
+			persistent
 		>
 			<AddMembers
 				:memberList="potentialRoomMembers"
@@ -45,8 +49,8 @@
 				@update:role="onUpdateRoleOrSchool"
 			/>
 		</v-dialog>
-		<ConfirmationDialog />
 	</DefaultWireframe>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -57,7 +61,7 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { useRoomDetailsStore, useRoomMembers, RoomMember } from "@data-room";
+import { useRoomDetailsStore, useRoomMembers } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { MembersTable, AddMembers } from "@feature-room";
@@ -87,26 +91,12 @@ const {
 	removeMembers,
 } = useRoomMembers(roomId);
 const memberList: Ref<RoomMemberResponse[]> = ref(roomMembers);
+const selectedMembers = ref<string[]>([]);
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
-
+const { askConfirmation } = useConfirmationDialog();
 useTitle(pageTitle);
-
-const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	if (room === undefined) return [];
-
-	return [
-		{
-			title: t("pages.rooms.title"),
-			to: "/rooms",
-		},
-		{
-			title: room.value?.name || "",
-			to: `/rooms/${route.params.id}`,
-		},
-	];
-});
 
 const onFabClick = async () => {
 	await getSchools();
@@ -122,6 +112,10 @@ const onAddMembers = async (memberIds: string[]) => {
 	await addMembers(memberIds);
 };
 
+const onSelectMembers = (memberIds: string[]) => {
+	selectedMembers.value = memberIds;
+};
+
 const onUpdateRoleOrSchool = async (payload: {
 	role: RoleName;
 	schoolId: string;
@@ -129,11 +123,16 @@ const onUpdateRoleOrSchool = async (payload: {
 	await getPotentialMembers(payload);
 };
 
-const onRemoveMember = async (member: RoomMember) => {
-	const { askConfirmation } = useConfirmationDialog();
-	const message = t("pages.rooms.members.remove.confirmation", {
-		memberName: `${member.firstName} ${member.lastName}`,
-	});
+const onRemoveMembers = async () => {
+	let message = t("pages.rooms.members.multipleRemove.confirmation");
+	if (selectedMembers.value.length === 1) {
+		const member = memberList.value.find(
+			(member) => member.userId === selectedMembers.value[0]
+		);
+		message = t("pages.rooms.members.remove.confirmation", {
+			memberName: `${member?.firstName} ${member?.lastName}`,
+		});
+	}
 
 	const shouldDelete = await askConfirmation({
 		message,
@@ -141,15 +140,34 @@ const onRemoveMember = async (member: RoomMember) => {
 	});
 
 	if (!shouldDelete) return;
-	await removeMembers([member.userId]);
+	await removeMembers(selectedMembers.value);
+	selectedMembers.value = [];
 };
 
 onMounted(async () => {
-	// call fetchRoom() again because the store is reset on unmounted lifecycle hook in RoomDetails.page.vue
 	if (room.value === undefined) {
 		await fetchRoom(roomId);
 	}
 	await fetchMembers();
+});
+
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+	if (room === undefined) return [];
+
+	return [
+		{
+			title: t("pages.rooms.title"),
+			to: "/rooms",
+		},
+		{
+			title: room.value?.name || "",
+			to: `/rooms/${route.params.id}`,
+		},
+		{
+			title: t("pages.rooms.members.manage"),
+			disabled: true,
+		},
+	];
 });
 
 const fabAction = {
