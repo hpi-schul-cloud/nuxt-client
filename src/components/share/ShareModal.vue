@@ -20,7 +20,6 @@
 				<div v-if="step === 'firstStep' && isOpen">
 					<div data-testid="share-options-info-text">
 						{{ t(`components.molecules.share.${type}.options.infoText`) }}
-						<p />
 					</div>
 					<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 						<div class="mx-2">
@@ -30,41 +29,62 @@
 							<div data-testid="share-options-table-header">
 								{{
 									t(
-										"components.molecules.share.courses.options.tableHeader.InfoText"
+										"components.molecules.shareImport.options.tableHeader.InfoText"
 									)
 								}}
 								<ul class="ml-6">
-									<li
-										style="margin: 1px"
-										data-testid="share-options-personal-data-text"
-									>
+									<li data-testid="share-options-personal-data-text">
 										{{
 											t(
-												"components.molecules.share.options.personalData.infoText"
+												"components.molecules.shareImport.options.personalData.infoText"
 											)
 										}}
 									</li>
-									<RenderHTML
+									<li
 										v-if="showCtlToolsInfo"
-										:html="
-											t(
-												'components.molecules.share.courses.options.ctlTools.infoText',
-												{}
-											)
-										"
-										component="p"
-										style="margin-bottom: 0px"
 										data-testid="share-modal-external-tools-info"
-									/>
-									<RenderHTML
-										:html="
+									>
+										{{
 											t(
-												'components.molecules.share.courses.options.restrictions.infoText',
-												{}
+												"components.molecules.shareImport.options.ctlTools.infoText.line1"
 											)
-										"
-										component="p"
-									/>
+										}}
+									</li>
+									<li v-if="showCtlToolsInfo">
+										{{
+											t(
+												"components.molecules.shareImport.options.ctlTools.infoText.line2"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											t(
+												"components.molecules.shareImport.options.restrictions.infoText.line1"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											t(
+												"components.molecules.shareImport.options.restrictions.infoText.line2"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											t(
+												"components.molecules.shareImport.options.restrictions.infoText.line3"
+											)
+										}}
+									</li>
+									<li>
+										{{
+											t(
+												"components.molecules.shareImport.options.restrictions.infoText.line4"
+											)
+										}}
+									</li>
 								</ul>
 							</div>
 						</div>
@@ -92,7 +112,6 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
-import RenderHTML from "@/modules/feature/render-html/RenderHTML.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
 	ENV_CONFIG_MODULE_KEY,

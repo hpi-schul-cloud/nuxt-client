@@ -647,14 +647,23 @@ export default {
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
 	"components.molecules.share.courses.mail.body": "Link to the course:",
 	"components.molecules.share.courses.mail.subject": "Course you can import",
-	"components.molecules.share.courses.options.ctlTools.infoText":
-		"<li>External tools not available in the target school </li><li>Protected settings of external tools</li>",
+	"components.molecules.shareImport.options.ctlTools.infoText.line1":
+		"External tools not available in the target school",
+	"components.molecules.shareImport.options.ctlTools.infoText.line2":
+		"Protected settings of external tools",
 	"components.molecules.share.courses.options.infoText":
 		"With the following link, the course can be imported as a copy by other teachers.",
-	"components.molecules.share.options.personalData.infoText": "Personal data",
-	"components.molecules.share.courses.options.restrictions.infoText":
-		"<li>Files under Course Files </li><li>Content from Etherpads </li><li>Geogebra IDs and </li><li>Course groups </li>",
-	"components.molecules.share.courses.options.tableHeader.InfoText":
+	"components.molecules.shareImport.options.personalData.infoText":
+		"Personal data",
+	"components.molecules.shareImport.options.restrictions.infoText.line1":
+		"Files under Course Files",
+	"components.molecules.shareImport.options.restrictions.infoText.line2":
+		"Content from Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.line3":
+		"Geogebra IDs and",
+	"components.molecules.shareImport.options.restrictions.infoText.line4":
+		"Course groups",
+	"components.molecules.shareImport.options.tableHeader.InfoText":
 		"The following content will not be copied:",
 	"components.molecules.share.courses.result.linkLabel": "Link course copy",
 	"components.molecules.share.lessons.mail.body": "Link to the topic:",

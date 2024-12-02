@@ -593,16 +593,10 @@ export default {
 	"components.molecules.import.courses.label": "Kurs",
 	"components.molecules.import.courses.rename":
 		"Bei Bedarf kann der Name des Kurses umbenannt werden: ",
-	"components.molecules.import.options.ctlTools.infoText":
-		"Folgende Inhalte werden nicht kopiert:<br><ul class='ml-6'><li>Personenbezogene Daten</li><li>In Zielschule nicht verfügbare, externe Tools</li><li>Geschützte Einstellungen externer Tools</li><li>Dateien unter Kurs-Dateien</li><li>Inhalte aus Etherpads</li><li>Geogebra IDs und</li><li>Kursgruppen</li></ul>",
-	"components.molecules.import.courses.options.infoText":
-		"Folgende Inhalte werden nicht kopiert:<br><ul class='ml-6'><li>Personenbezogene Daten</li><li>Dateien unter Kurs-Dateien</li><li>Inhalte aus Etherpads</li><li>Geogebra IDs und</li><li>Kursgruppen</li></ul>",
 	"components.molecules.import.courses.options.title": "Kurs importieren",
 	"components.molecules.import.lessons.label": "Thema",
 	"components.molecules.import.lessons.rename":
 		"Bei Bedarf kann der Name des Themas umbenannt werden: ",
-	"components.molecules.import.lessons.options.infoText":
-		"Folgende Inhalte werden nicht kopiert:<br><ul class='ml-6'><li>Personenbezogene Daten</li><li>Dateien unter Kurs-Dateien</li><li>Inhalte aus Etherpads</li><li>Geogebra IDs und</li><li>Kursgruppen</li></ul>",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
 		"Der Kurs, in den das Thema importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.lessons.options.selectCourse": "Kurs wählen",
@@ -619,8 +613,6 @@ export default {
 	"components.molecules.import.tasks.label": "Aufgabe",
 	"components.molecules.import.tasks.rename":
 		"Bei Bedarf kann der Name der Aufgabe umbenannt werden: ",
-	"components.molecules.import.tasks.options.infoText":
-		"Folgende Inhalte werden nicht kopiert:<br><ul class='ml-6'><li>Personenbezogene Daten</li><li>Dateien unter Kurs-Dateien</li><li>Inhalte aus Etherpads</li><li>Geogebra IDs und</li><li>Kursgruppen</li></ul>",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Der Kurs, in den die Aufgabe importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.export.options.info":
@@ -664,15 +656,23 @@ export default {
 		"Link Bereich-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
-	"components.molecules.share.courses.options.ctlTools.infoText":
-		"<li>In Zielschule nicht verfügbare, externe Tools</li><li>Geschützte Einstellungen externer Tools</li>",
+	"components.molecules.shareImport.options.ctlTools.infoText.line1":
+		"In Zielschule nicht verfügbare, externe Tools",
+	"components.molecules.shareImport.options.ctlTools.infoText.line2":
+		"Geschützte Einstellungen externer Tools",
 	"components.molecules.share.courses.options.infoText":
 		"Mit dem folgenden Link kann der Kurs als Kopie von anderen Lehrkräften importiert werden.",
-	"components.molecules.share.options.personalData.infoText":
+	"components.molecules.shareImport.options.personalData.infoText":
 		"Personenbezogene Daten",
-	"components.molecules.share.courses.options.restrictions.infoText":
-		"<li>Dateien unter Kurs-Dateien</li><li>Inhalte aus Etherpads</li><li>Geogebra IDs und</li><li>Kursgruppen</li>",
-	"components.molecules.share.courses.options.tableHeader.InfoText":
+	"components.molecules.shareImport.options.restrictions.infoText.line1":
+		"Dateien unter Kurs-Dateien",
+	"components.molecules.shareImport.options.restrictions.infoText.line2":
+		"Inhalte aus Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.line3":
+		"Geogebra IDs und",
+	"components.molecules.shareImport.options.restrictions.infoText.line4":
+		"Kursgruppen",
+	"components.molecules.shareImport.options.tableHeader.InfoText":
 		"Folgende Inhalte werden nicht kopiert:",
 	"components.molecules.share.courses.result.linkLabel": "Link Kurskopie",
 	"components.molecules.share.lessons.mail.body": "Link zum Thema:",

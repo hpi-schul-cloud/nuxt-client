@@ -22,21 +22,69 @@
 					<div class="mx-2">
 						<v-icon color="info" :icon="mdiInformation" />
 					</div>
-					<RenderHTML
-						data-testid="import-modal-external-tools-info"
-						v-if="
-							ctlToolsEnabled &&
-							(parentType === 'courses' || parentType === 'columnBoard')
-						"
-						:html="t(`components.molecules.import.options.ctlTools.infoText`)"
-					/>
-					<RenderHTML
-						v-else
-						data-testid="import-modal-coursefiles-info"
-						:html="
-							t(`components.molecules.import.${parentType}.options.infoText`)
-						"
-					/>
+					<div>
+						<div data-testid="import-options-table-header">
+							{{
+								t(
+									"components.molecules.shareImport.options.tableHeader.InfoText"
+								)
+							}}
+							<ul class="ml-6">
+								<li data-testid="import-options-personal-data-text">
+									{{
+										t(
+											"components.molecules.shareImport.options.personalData.infoText"
+										)
+									}}
+								</li>
+								<li
+									v-if="showCtlToolsInfo"
+									data-testid="import-modal-external-tools-info"
+								>
+									{{
+										t(
+											"components.molecules.shareImport.options.ctlTools.infoText.line1"
+										)
+									}}
+								</li>
+								<li v-if="showCtlToolsInfo">
+									{{
+										t(
+											"components.molecules.shareImport.options.ctlTools.infoText.line2"
+										)
+									}}
+								</li>
+								<li data-testid="import-modal-coursefiles-info">
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.line1"
+										)
+									}}
+								</li>
+								<li>
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.line2"
+										)
+									}}
+								</li>
+								<li>
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.line3"
+										)
+									}}
+								</li>
+								<li>
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.line4"
+										)
+									}}
+								</li>
+							</ul>
+						</div>
+					</div>
 				</div>
 				<div class="mb-4">
 					{{ t(`components.molecules.import.${parentType}.rename`) }}
@@ -59,7 +107,6 @@ import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@icons/material";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { RenderHTML } from "@feature-render-html";
 
 const emit = defineEmits(["import", "cancel"]);
 const props = defineProps({
@@ -88,7 +135,10 @@ const onConfirm = () => {
 };
 const onCancel = () => emit("cancel");
 
-const ctlToolsEnabled = computed(() => {
-	return envConfigModule.getCtlToolsTabEnabled;
+const showCtlToolsInfo = computed(() => {
+	return (
+		envConfigModule.getCtlToolsTabEnabled &&
+		(props.parentType === "courses" || props.parentType === "columnBoard")
+	);
 });
 </script>

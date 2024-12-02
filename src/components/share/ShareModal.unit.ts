@@ -137,11 +137,9 @@ describe("@/components/share/ShareModal", () => {
 					`[data-testid="share-modal-external-tools-info"]`
 				);
 
-				const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
-
 				expect(infotext.isVisible()).toBe(true);
-				expect(renderHtmls[0].props("html")).toEqual(
-					"components.molecules.share.courses.options.ctlTools.infoText"
+				expect(infotext.text()).toEqual(
+					"components.molecules.shareImport.options.ctlTools.infoText.line1"
 				);
 			});
 		});

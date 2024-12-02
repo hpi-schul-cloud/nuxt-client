@@ -122,11 +122,11 @@ describe("@components/share/ImportModal", () => {
 					`[data-testid="import-modal-external-tools-info"]`
 				);
 
-				expect(infoText.attributes("html")).toEqual(
-					"components.molecules.import.options.ctlTools.infoText"
+				expect(infoText.text()).toEqual(
+					"components.molecules.shareImport.options.ctlTools.infoText.line1"
 				);
 			});
-			it("should not show course file info", () => {
+			it("should also show course file info", () => {
 				const { wrapper } = setup({ getCtlToolsTabEnabled: true });
 
 				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
@@ -136,7 +136,7 @@ describe("@components/share/ImportModal", () => {
 					`[data-testid="import-modal-coursefiles-info"]`
 				);
 
-				expect(infoText.exists()).toBe(false);
+				expect(infoText.exists()).toBe(true);
 			});
 		});
 		describe("show ctl tool info is disabled", () => {
@@ -168,10 +168,15 @@ describe("@components/share/ImportModal", () => {
 				it("should set the right key for course files", () => {
 					const { wrapper } = setup({ getCtlToolsTabEnabled: false });
 
-					const renderHtml = wrapper.findComponent({ name: "RenderHTML" });
+					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+					const cardText = dialog.findComponent({ name: "v-card-text" });
 
-					expect(renderHtml.props("html")).toEqual(
-						"components.molecules.import.courses.options.infoText"
+					const infoText = cardText.find(
+						`[data-testid="import-modal-coursefiles-info"]`
+					);
+
+					expect(infoText.element.innerHTML).toEqual(
+						"components.molecules.shareImport.options.restrictions.infoText.line1"
 					);
 				});
 			});
