@@ -31,7 +31,6 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import router from "@/router";
 import {
 	BoardLayout,
 	BoardApiFactory,
@@ -58,10 +57,12 @@ import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 const { t } = useI18n();
 const { deleteRoom } = useRoomsState();
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+const router = useRouter();
 
 const { room, roomBoards } = storeToRefs(useRoomDetailsStore());
 
