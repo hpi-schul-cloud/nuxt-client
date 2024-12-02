@@ -240,4 +240,25 @@ describe("RoomExternalToolOverview", () => {
 			).toHaveBeenCalledWith(displayData.contextExternalToolId);
 		});
 	});
+
+	describe("when emit refresh", () => {
+		const setup = () => {
+			const { wrapper } = getWrapper();
+
+			return {
+				wrapper,
+			};
+		};
+
+		it("should call tool reference endpoint again", () => {
+			const { wrapper } = setup();
+
+			const section = wrapper.findComponent(RoomExternalToolsSection);
+			section.vm.$emit("refresh");
+
+			expect(
+				useExternalToolDisplayListStateMock.fetchDisplayData
+			).toHaveBeenCalledTimes(2);
+		});
+	});
 });

@@ -1,3 +1,4 @@
+import { LaunchType } from "@/serverApi/v3";
 import { ToolLaunchRequestMethodEnum } from "@/store/external-tool/tool-launch-request-method.enum";
 
 export type ToolLaunchRequest = {
@@ -5,5 +6,5 @@ export type ToolLaunchRequest = {
 	url: string;
 	payload?: string;
 	openNewTab?: boolean;
-	isDeepLink: boolean;
+	launchType: LaunchType;
 };

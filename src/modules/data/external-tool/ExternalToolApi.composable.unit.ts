@@ -1,6 +1,7 @@
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	ContextExternalToolBodyParams,
+	LaunchType,
 	ToolContextType,
 	ToolLaunchRequestResponse,
 } from "@/serverApi/v3/api";
@@ -67,7 +68,7 @@ describe("ExternalToolApi.composable", () => {
 				payload: launchRequest.payload,
 				method: ToolLaunchRequestMethodEnum.Get,
 				openNewTab: launchRequest.openNewTab,
-				isDeepLink: false,
+				launchType: LaunchType.Basic,
 			});
 		});
 	});
@@ -119,7 +120,7 @@ describe("ExternalToolApi.composable", () => {
 				payload: launchRequest.payload,
 				method: ToolLaunchRequestMethodEnum.Get,
 				openNewTab: launchRequest.openNewTab,
-				isDeepLink: false,
+				launchType: LaunchType.Basic,
 			});
 		});
 	});
