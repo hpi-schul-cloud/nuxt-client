@@ -647,21 +647,21 @@ export default {
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
 	"components.molecules.share.courses.mail.body": "Link to the course:",
 	"components.molecules.share.courses.mail.subject": "Course you can import",
-	"components.molecules.shareImport.options.ctlTools.infoText.line1":
+	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"External tools not available in the target school",
-	"components.molecules.shareImport.options.ctlTools.infoText.line2":
+	"components.molecules.shareImport.options.ctlTools.infoText.protected":
 		"Protected settings of external tools",
 	"components.molecules.share.courses.options.infoText":
 		"With the following link, the course can be imported as a copy by other teachers.",
-	"components.molecules.shareImport.options.personalData.infoText":
+	"components.molecules.shareImport.options.restrictions.infoText.personalData":
 		"Personal data",
-	"components.molecules.shareImport.options.restrictions.infoText.line1":
+	"components.molecules.shareImport.options.restrictions.infoText.courseFiles":
 		"Files under Course Files",
-	"components.molecules.shareImport.options.restrictions.infoText.line2":
+	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
 		"Content from Etherpads",
-	"components.molecules.shareImport.options.restrictions.infoText.line3":
+	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
 		"Geogebra IDs and",
-	"components.molecules.shareImport.options.restrictions.infoText.line4":
+	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Course groups",
 	"components.molecules.shareImport.options.tableHeader.InfoText":
 		"The following content will not be copied:",

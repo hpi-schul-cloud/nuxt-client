@@ -656,21 +656,21 @@ export default {
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"Зовнішні інструменти, пов’язані з курсом або посадочними картками, не будуть скопійовані.",
-	"components.molecules.shareImport.options.ctlTools.infoText.line1":
+	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"Зовнішні інструменти недоступні в цільовій школі",
-	"components.molecules.shareImport.options.ctlTools.infoText.line2":
+	"components.molecules.shareImport.options.ctlTools.infoText.protected":
 		"Захищені налаштування зовнішніх інструментів",
 	"components.molecules.share.courses.options.infoText":
 		"Використовуючи наступне посилання, курс може бути імпортований як копія іншими викладачами.",
-	"components.molecules.shareImport.options.personalData.infoText":
+	"components.molecules.shareImport.options.restrictions.infoText.personalData":
 		"Персональні дані",
-	"components.molecules.shareImport.options.restrictions.infoText.line1":
+	"components.molecules.shareImport.options.restrictions.infoText.courseFiles":
 		"Файли в розділі Файли курсу",
-	"components.molecules.shareImport.options.restrictions.infoText.line2":
+	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
 		"Вміст із Etherpads",
-	"components.molecules.shareImport.options.restrictions.infoText.line3":
+	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
 		"Ідентифікатори Geogebra та",
-	"components.molecules.shareImport.options.restrictions.infoText.line4":
+	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Групи курсів",
 	"components.molecules.shareImport.options.tableHeader.InfoText":
 		"Наступний вміст не буде скопійовано:",

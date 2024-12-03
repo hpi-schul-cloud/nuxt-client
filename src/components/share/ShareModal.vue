@@ -25,68 +25,66 @@
 						<div class="mx-2">
 							<v-icon color="info" :icon="mdiInformation" />
 						</div>
-						<div>
-							<div data-testid="share-options-table-header">
-								{{
-									t(
-										"components.molecules.shareImport.options.tableHeader.InfoText"
-									)
-								}}
-								<ul class="ml-6">
-									<li data-testid="share-options-personal-data-text">
-										{{
-											t(
-												"components.molecules.shareImport.options.personalData.infoText"
-											)
-										}}
-									</li>
-									<li
-										v-if="showCtlToolsInfo"
-										data-testid="share-modal-external-tools-info"
-									>
-										{{
-											t(
-												"components.molecules.shareImport.options.ctlTools.infoText.line1"
-											)
-										}}
-									</li>
-									<li v-if="showCtlToolsInfo">
-										{{
-											t(
-												"components.molecules.shareImport.options.ctlTools.infoText.line2"
-											)
-										}}
-									</li>
-									<li>
-										{{
-											t(
-												"components.molecules.shareImport.options.restrictions.infoText.line1"
-											)
-										}}
-									</li>
-									<li>
-										{{
-											t(
-												"components.molecules.shareImport.options.restrictions.infoText.line2"
-											)
-										}}
-									</li>
-									<li>
-										{{
-											t(
-												"components.molecules.shareImport.options.restrictions.infoText.line3"
-											)
-										}}
-									</li>
-									<li>
-										{{
-											t(
-												"components.molecules.shareImport.options.restrictions.infoText.line4"
-											)
-										}}
-									</li>
-								</ul>
-							</div>
+						<div data-testid="share-options-table-header">
+							{{
+								t(
+									"components.molecules.shareImport.options.tableHeader.InfoText"
+								)
+							}}
+							<ul class="ml-6">
+								<li data-testid="share-options-personal-data-text">
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.personalData"
+										)
+									}}
+								</li>
+								<li
+									v-if="showCtlToolsInfo"
+									data-testid="share-modal-external-tools-info"
+								>
+									{{
+										t(
+											"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
+										)
+									}}
+								</li>
+								<li v-if="showCtlToolsInfo">
+									{{
+										t(
+											"components.molecules.shareImport.options.ctlTools.infoText.protected"
+										)
+									}}
+								</li>
+								<li data-testid="share-modal-coursefiles-info">
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
+										)
+									}}
+								</li>
+								<li>
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.etherpad"
+										)
+									}}
+								</li>
+								<li>
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.geogebra"
+										)
+									}}
+								</li>
+								<li>
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.courseGroups"
+										)
+									}}
+								</li>
+							</ul>
 						</div>
 					</div>
 					<share-modal-options-form

@@ -659,21 +659,21 @@ export default {
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
-	"components.molecules.shareImport.options.ctlTools.infoText.line1":
+	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"Herramientas externas no disponibles en la escuela de destino",
-	"components.molecules.shareImport.options.ctlTools.infoText.line2":
+	"components.molecules.shareImport.options.ctlTools.infoText.protected":
 		"Configuraciones protegidas de herramientas externas",
 	"components.molecules.share.courses.options.infoText":
 		"Utilizando el siguiente enlace, otros profesores pueden importar el curso como una copia.",
-	"components.molecules.shareImport.options.personalData.infoText":
+	"components.molecules.shareImport.options.restrictions.infoText.personalData":
 		"Datos personales",
-	"components.molecules.shareImport.options.restrictions.infoText.line1":
+	"components.molecules.shareImport.options.restrictions.infoText.courseFiles":
 		"Archivos en Archivos de curso",
-	"components.molecules.shareImport.options.restrictions.infoText.line2":
+	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
 		"Contenido de Etherpads",
-	"components.molecules.shareImport.options.restrictions.infoText.line3":
+	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
 		"ID de Geogebra y",
-	"components.molecules.shareImport.options.restrictions.infoText.line4":
+	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Grupos de cursos",
 	"components.molecules.shareImport.options.tableHeader.InfoText":
 		"No se copiará el siguiente contenido:",

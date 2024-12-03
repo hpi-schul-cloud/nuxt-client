@@ -123,7 +123,7 @@ describe("@components/share/ImportModal", () => {
 				);
 
 				expect(infoText.text()).toEqual(
-					"components.molecules.shareImport.options.ctlTools.infoText.line1"
+					"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
 				);
 			});
 			it("should also show course file info", () => {
@@ -176,7 +176,7 @@ describe("@components/share/ImportModal", () => {
 					);
 
 					expect(infoText.element.innerHTML).toEqual(
-						"components.molecules.shareImport.options.restrictions.infoText.line1"
+						"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
 					);
 				});
 			});

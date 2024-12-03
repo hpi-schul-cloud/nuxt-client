@@ -139,7 +139,7 @@ describe("@/components/share/ShareModal", () => {
 
 				expect(infotext.isVisible()).toBe(true);
 				expect(infotext.text()).toEqual(
-					"components.molecules.shareImport.options.ctlTools.infoText.line1"
+					"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
 				);
 			});
 		});

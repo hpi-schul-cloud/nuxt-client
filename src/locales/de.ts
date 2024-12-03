@@ -656,21 +656,21 @@ export default {
 		"Link Bereich-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
-	"components.molecules.shareImport.options.ctlTools.infoText.line1":
+	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"In Zielschule nicht verfügbare, externe Tools",
-	"components.molecules.shareImport.options.ctlTools.infoText.line2":
+	"components.molecules.shareImport.options.ctlTools.infoText.protected":
 		"Geschützte Einstellungen externer Tools",
 	"components.molecules.share.courses.options.infoText":
 		"Mit dem folgenden Link kann der Kurs als Kopie von anderen Lehrkräften importiert werden.",
-	"components.molecules.shareImport.options.personalData.infoText":
+	"components.molecules.shareImport.options.restrictions.infoText.personalData":
 		"Personenbezogene Daten",
-	"components.molecules.shareImport.options.restrictions.infoText.line1":
+	"components.molecules.shareImport.options.restrictions.infoText.courseFiles":
 		"Dateien unter Kurs-Dateien",
-	"components.molecules.shareImport.options.restrictions.infoText.line2":
+	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
 		"Inhalte aus Etherpads",
-	"components.molecules.shareImport.options.restrictions.infoText.line3":
+	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
 		"Geogebra IDs und",
-	"components.molecules.shareImport.options.restrictions.infoText.line4":
+	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Kursgruppen",
 	"components.molecules.shareImport.options.tableHeader.InfoText":
 		"Folgende Inhalte werden nicht kopiert:",

@@ -33,7 +33,7 @@
 								<li data-testid="import-options-personal-data-text">
 									{{
 										t(
-											"components.molecules.shareImport.options.personalData.infoText"
+											"components.molecules.shareImport.options.restrictions.infoText.personalData"
 										)
 									}}
 								</li>
@@ -43,42 +43,42 @@
 								>
 									{{
 										t(
-											"components.molecules.shareImport.options.ctlTools.infoText.line1"
+											"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
 										)
 									}}
 								</li>
 								<li v-if="showCtlToolsInfo">
 									{{
 										t(
-											"components.molecules.shareImport.options.ctlTools.infoText.line2"
+											"components.molecules.shareImport.options.ctlTools.infoText.protected"
 										)
 									}}
 								</li>
 								<li data-testid="import-modal-coursefiles-info">
 									{{
 										t(
-											"components.molecules.shareImport.options.restrictions.infoText.line1"
+											"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
 										)
 									}}
 								</li>
 								<li>
 									{{
 										t(
-											"components.molecules.shareImport.options.restrictions.infoText.line2"
+											"components.molecules.shareImport.options.restrictions.infoText.etherpad"
 										)
 									}}
 								</li>
 								<li>
 									{{
 										t(
-											"components.molecules.shareImport.options.restrictions.infoText.line3"
+											"components.molecules.shareImport.options.restrictions.infoText.geogebra"
 										)
 									}}
 								</li>
 								<li>
 									{{
 										t(
-											"components.molecules.shareImport.options.restrictions.infoText.line4"
+											"components.molecules.shareImport.options.restrictions.infoText.courseGroups"
 										)
 									}}
 								</li>
