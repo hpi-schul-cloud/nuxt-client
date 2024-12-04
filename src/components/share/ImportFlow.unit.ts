@@ -1,7 +1,7 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import ImportModal from "@/components/share/ImportModal.vue";
-import SelectCourseModal from "@/components/share/SelectCourseModal.vue";
+import SelectDestinationModal from "@/components/share/SelectDestinationModal.vue";
 import {
 	CopyApiResponse,
 	CopyApiResponseStatusEnum,
@@ -11,15 +11,20 @@ import {
 } from "@/serverApi/v3";
 import { courseRoomListModule } from "@/store";
 import CopyModule from "@/store/copy";
+import CourseRoomListModule from "@/store/course-room-list";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import CourseRoomListModule from "@/store/course-room-list";
 import {
 	COPY_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
+	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
+import {
+	apiResponseErrorFactory,
+	axiosErrorFactory,
+} from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -59,7 +64,7 @@ describe("@components/share/ImportFlow", () => {
 				],
 				provide: {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
-					loadingStateModule: loadingStateModuleMock,
+					[LOADING_STATE_MODULE_KEY]: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
@@ -122,7 +127,16 @@ describe("@components/share/ImportFlow", () => {
 
 			it("is shown for insufficient permissions", async () => {
 				copyModuleMock.validateShareToken = () =>
-					Promise.reject({ response: { status: 403 } });
+					Promise.reject(
+						axiosErrorFactory.build({
+							response: {
+								data: apiResponseErrorFactory.build({
+									message: "FORBIDDEN",
+									code: 403,
+								}),
+							},
+						})
+					);
 				setup();
 				await nextTick();
 
@@ -151,7 +165,7 @@ describe("@components/share/ImportFlow", () => {
 					await nextTick();
 
 					const selectCourseModal = wrapper.findComponent({
-						name: "select-course-modal",
+						name: "SelectDestinationModal",
 					});
 
 					expect(selectCourseModal.props("isOpen")).toBe(true);
@@ -166,7 +180,7 @@ describe("@components/share/ImportFlow", () => {
 					select.setValue(course);
 
 					const selectCourseDialog = wrapper
-						.findComponent(SelectCourseModal)
+						.findComponent(SelectDestinationModal)
 						.findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
@@ -185,7 +199,7 @@ describe("@components/share/ImportFlow", () => {
 					select.setValue(course);
 
 					const selectCourseDialog = wrapper
-						.findComponent(SelectCourseModal)
+						.findComponent(SelectDestinationModal)
 						.findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
@@ -195,7 +209,7 @@ describe("@components/share/ImportFlow", () => {
 					importModalDialog.vm.$emit("dialog-confirmed");
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
-						destinationCourseId: course.id,
+						destinationId: course.id,
 						token,
 						type: ShareTokenBodyParamsParentTypeEnum.Lessons,
 						newName: originalName,
@@ -217,7 +231,7 @@ describe("@components/share/ImportFlow", () => {
 					await nextTick();
 
 					const selectCourseModal = wrapper.findComponent({
-						name: "select-course-modal",
+						name: "SelectDestinationModal",
 					});
 					expect(selectCourseModal.props("isOpen")).toBe(true);
 				});
@@ -231,7 +245,7 @@ describe("@components/share/ImportFlow", () => {
 					select.setValue(course);
 
 					const selectCourseDialog = wrapper
-						.findComponent(SelectCourseModal)
+						.findComponent(SelectDestinationModal)
 						.findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
@@ -250,7 +264,7 @@ describe("@components/share/ImportFlow", () => {
 					select.setValue(course);
 
 					const selectCourseDialog = wrapper
-						.findComponent(SelectCourseModal)
+						.findComponent(SelectDestinationModal)
 						.findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
@@ -260,7 +274,7 @@ describe("@components/share/ImportFlow", () => {
 					importModalDialog.vm.$emit("dialog-confirmed");
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
-						destinationCourseId: course.id,
+						destinationId: course.id,
 						token,
 						type: ShareTokenBodyParamsParentTypeEnum.Tasks,
 						newName: originalName,
@@ -427,7 +441,7 @@ describe("@components/share/ImportFlow", () => {
 					await nextTick();
 
 					const selectCourseModal = wrapper.findComponent({
-						name: "select-course-modal",
+						name: "SelectDestinationModal",
 					});
 
 					expect(selectCourseModal.props("isOpen")).toBe(true);
@@ -442,7 +456,7 @@ describe("@components/share/ImportFlow", () => {
 					select.setValue(course);
 
 					const selectCourseDialog = wrapper
-						.findComponent(SelectCourseModal)
+						.findComponent(SelectDestinationModal)
 						.findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
@@ -461,7 +475,7 @@ describe("@components/share/ImportFlow", () => {
 					select.setValue(course);
 
 					const selectCourseDialog = wrapper
-						.findComponent(SelectCourseModal)
+						.findComponent(SelectDestinationModal)
 						.findComponent(vCustomDialog);
 					selectCourseDialog.vm.$emit("next");
 
@@ -471,7 +485,7 @@ describe("@components/share/ImportFlow", () => {
 					importModalDialog.vm.$emit("dialog-confirmed");
 
 					expect(copyModuleMock.copyByShareToken).toHaveBeenCalledWith({
-						destinationCourseId: course.id,
+						destinationId: course.id,
 						token,
 						type: ShareTokenBodyParamsParentTypeEnum.ColumnBoard,
 						newName: originalName,

@@ -53,8 +53,10 @@ export const useSidebarSelection = (
 		// Board
 		if (route.name === "boards-id") {
 			return (
-				item.to === "/rooms/courses-overview" &&
-				contextType.value === BoardExternalReferenceType.Course
+				(item.to === "/rooms/courses-overview" &&
+					contextType.value === BoardExternalReferenceType.Course) ||
+				(item.to === "/rooms" &&
+					contextType.value === BoardExternalReferenceType.Room)
 			);
 		}
 
