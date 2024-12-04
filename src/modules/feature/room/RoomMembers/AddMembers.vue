@@ -1,5 +1,5 @@
 <template>
-	<v-card>
+	<v-card ref="addMembersContent">
 		<template v-slot:prepend>
 			<div ref="textTitle" class="text-h4 mt-2">
 				{{ t("pages.rooms.members.add") }}
@@ -19,6 +19,7 @@
 						:items="schoolList"
 						:label="t('global.sidebar.item.school')"
 						@update:model-value="onSchoolChange"
+						@update:menu="onAutocompleteToggle"
 					/>
 				</div>
 
@@ -34,6 +35,7 @@
 						:items="roles"
 						:label="t('common.labels.role')"
 						@update:model-value="onRoleChange"
+						@update:menu="onAutocompleteToggle"
 					/>
 				</div>
 
@@ -51,6 +53,7 @@
 						:items="memberList"
 						:label="t('common.labels.name')"
 						:no-data-text="t('common.nodata')"
+						@update:menu="onAutocompleteToggle"
 					/>
 				</div>
 			</div>
@@ -86,6 +89,7 @@ import { useI18n } from "vue-i18n";
 import { PropType, ref, toRef } from "vue";
 import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
 import { RoomMember } from "@data-room";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 
 const props = defineProps({
 	memberList: {
@@ -125,5 +129,16 @@ const onAddMembers = () => {
 	emit("close");
 };
 
+const onAutocompleteToggle = (open: boolean) => {
+	if (open) {
+		pause();
+	} else {
+		unpause();
+	}
+};
+
 const onClose = () => emit("close");
+
+const addMembersContent = ref();
+const { pause, unpause } = useFocusTrap(addMembersContent, { immediate: true });
 </script>
