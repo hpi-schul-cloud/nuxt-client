@@ -1,4 +1,4 @@
-import { RoomCreateParams } from "@/types/room/Room";
+import { RoomColorEnum, RoomCreateParams } from "@/types/room/Room";
 import { useRoomCreateState } from "@data-room";
 import {
 	createTestingI18n,
@@ -6,7 +6,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import { RoomCreatePage } from "@page-room";
 import { useRouter } from "vue-router";
-import { RoomColor } from "@/serverApi/v3";
 import { RoomForm } from "@feature-room";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -39,7 +38,7 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 
 const roomParams: RoomCreateParams = {
 	name: "test",
-	color: RoomColor.Blue,
+	color: RoomColorEnum.Blue,
 };
 
 describe("@pages/RoomCreate.page.vue", () => {

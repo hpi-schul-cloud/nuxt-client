@@ -18,11 +18,12 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { nextTick, ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { flushPromises } from "@vue/test-utils";
-import { RoleName, RoomColor } from "@/serverApi/v3";
+import { RoleName } from "@/serverApi/v3";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 import { useTitle } from "@vueuse/core";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import { RoomColorEnum } from "@/types/room/Room";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -34,7 +35,7 @@ const store = {
 	room: {
 		id: "1",
 		name: "Room 1",
-		color: RoomColor.BlueGrey,
+		color: RoomColorEnum.BlueGrey,
 		createdAt: new Date().toString(),
 		updatedAt: new Date().toString(),
 	},
@@ -118,7 +119,7 @@ describe("RoomMembersPage", () => {
 			room: {
 				id: string;
 				name: string;
-				color: RoomColor;
+				color: RoomColorEnum;
 				createdAt: string;
 				updatedAt: string;
 			};

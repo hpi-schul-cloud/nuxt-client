@@ -6,8 +6,7 @@ import { useRoomEditState } from "@data-room";
 import { RoomEditPage } from "@page-room";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { useRoute, useRouter } from "vue-router";
-import { RoomUpdateParams } from "@/types/room/Room";
-import { RoomColor } from "@/serverApi/v3";
+import { RoomUpdateParams, RoomColorEnum } from "@/types/room/Room";
 import { RoomForm } from "@feature-room";
 import { nextTick } from "vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
@@ -50,7 +49,7 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 
 const roomParams: RoomUpdateParams = {
 	name: "test",
-	color: RoomColor.Blue,
+	color: RoomColorEnum.Blue,
 };
 
 describe("@pages/RoomEdit.page.vue", () => {

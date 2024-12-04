@@ -1,6 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { RoomColor } from "@/serverApi/v3";
 import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
@@ -20,6 +19,7 @@ import { roomDetailsFactory } from "@@/tests/test-utils/factory/roomDetailsFacto
 import { flushPromises } from "@vue/test-utils";
 import { Router, useRoute, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-jest";
+import { RoomColorEnum } from "@/types/room/Room";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),
@@ -97,7 +97,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			room: {
 				id: string;
 				name: string;
-				color: RoomColor;
+				color: RoomColorEnum;
 				createdAt: string;
 				updatedAt: string;
 			};

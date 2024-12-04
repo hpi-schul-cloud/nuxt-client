@@ -1,12 +1,11 @@
 import { Factory } from "fishery";
-import { RoomDetails } from "@/types/room/Room";
-import { RoomColor } from "@/serverApi/v3";
+import { RoomDetails, RoomColorEnum } from "@/types/room/Room";
 
 export const roomDetailsFactory = Factory.define<RoomDetails>(
 	({ sequence }) => ({
 		id: `room${sequence}`,
 		name: `room #${sequence}`,
-		color: RoomColor.BlueGrey,
+		color: RoomColorEnum.BlueGrey,
 		startDate: new Date().toISOString(),
 		endDate: new Date().toISOString(),
 		createdAt: new Date().toISOString(),

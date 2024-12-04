@@ -5,13 +5,12 @@ import {
 import { mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import RoomTile from "./RoomTile.vue";
-import { RoomItem } from "@/types/room/Room";
-import { RoomColor } from "@/serverApi/v3";
+import { RoomItem, RoomColorEnum } from "@/types/room/Room";
 
 const mockRoom: RoomItem = {
 	id: "123",
 	name: "A11Y for Beginners",
-	color: RoomColor.Magenta,
+	color: RoomColorEnum.Magenta,
 	createdAt: "2024-10-11T16:36:06.434Z",
 	updatedAt: "2024-10-11T16:36:06.434Z",
 };
