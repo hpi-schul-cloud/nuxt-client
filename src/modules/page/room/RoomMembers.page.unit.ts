@@ -57,7 +57,6 @@ jest.mock("../../data/room/roomMembers/roomMembers.composable");
 const mockUseMembers = jest.mocked(useRoomMembers);
 
 jest.mock("@ui-confirmation-dialog");
-jest.mock("@ui-confirmation-dialog");
 const mockedUseDeleteConfirmationDialog = jest.mocked(useConfirmationDialog);
 
 describe("RoomMembersPage", () => {
