@@ -1,5 +1,6 @@
 import { Factory } from "fishery";
 import {
+	LaunchType,
 	ToolLaunchRequestResponse,
 	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
@@ -9,5 +10,5 @@ export const toolLaunchRequestResponseFactory =
 		method: ToolLaunchRequestResponseMethodEnum.Get,
 		payload: '{ "key": "value" }',
 		url: "https://example.com/tool-launch",
-		isDeepLink: false,
+		launchType: LaunchType.Basic,
 	}));

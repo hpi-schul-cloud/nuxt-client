@@ -10,4 +10,5 @@ export const externalToolDisplayDataFactory =
 		openInNewTab: false,
 		status: contextExternalToolConfigurationStatusFactory.build(),
 		logoUrl: "https://example.com/logo.png",
+		isLtiDeepLinkingTool: false,
 	}));

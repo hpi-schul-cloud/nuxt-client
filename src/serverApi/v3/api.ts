@@ -2014,12 +2014,6 @@ export interface ContextExternalToolResponse {
      * @memberof ContextExternalToolResponse
      */
     parameters: Array<CustomParameterEntryResponse>;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolResponse
-     */
-    logoUrl?: string;
 }
 
 /**
@@ -4105,6 +4099,18 @@ export enum LanguageType {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum LaunchType {
+    Basic = 'basic',
+    Oauth2 = 'oauth2',
+    Lti11BasicLaunch = 'lti11BasicLaunch',
+    Lti11ContentItemSelection = 'lti11ContentItemSelection'
+}
+
+/**
+ * 
+ * @export
  * @interface LayoutBodyParams
  */
 export interface LayoutBodyParams {
@@ -4628,6 +4634,171 @@ export interface LoginResponse {
 /**
  * 
  * @export
+ * @interface Lti11DeepLinkContentItemListParams
+ */
+export interface Lti11DeepLinkContentItemListParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkContentItemListParams
+     */
+    context: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Lti11DeepLinkContentItemListParams
+     */
+    graph: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface Lti11DeepLinkParams
+ */
+export interface Lti11DeepLinkParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    lti_message_type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    lti_version: string;
+    /**
+     * 
+     * @type {Lti11DeepLinkContentItemListParams}
+     * @memberof Lti11DeepLinkParams
+     */
+    content_items?: Lti11DeepLinkContentItemListParams;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    data: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_nonce: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_timestamp: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_signature_method: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_consumer_key: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_signature: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_callback?: string;
+}
+/**
+ * 
+ * @export
+ * @interface Lti11DeepLinkParamsRaw
+ */
+export interface Lti11DeepLinkParamsRaw {
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    lti_message_type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    lti_version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    content_items?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    data: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_nonce: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_timestamp: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_signature_method: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_consumer_key: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_signature: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_callback?: string;
+}
+/**
+ * 
+ * @export
  * @interface Lti11ToolConfigCreateParams
  */
 export interface Lti11ToolConfigCreateParams {
@@ -4722,6 +4893,55 @@ export interface Lti11ToolConfigUpdateParams {
      * @memberof Lti11ToolConfigUpdateParams
      */
     launch_presentation_locale: string;
+}
+/**
+ * 
+ * @export
+ * @interface LtiDeepLinkResponse
+ */
+export interface LtiDeepLinkResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    mediaType: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    title?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    text?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    availableFrom?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    availableUntil?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    submissionFrom?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    submissionUntil?: string;
 }
 /**
  * 
@@ -6383,6 +6603,19 @@ export interface OidcContextResponse {
      * @memberof OidcContextResponse
      */
     ui_locales: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface OidcLogoutBodyParams
+ */
+export interface OidcLogoutBodyParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof OidcLogoutBodyParams
+     */
+    logout_token: string;
 }
 /**
  * 
@@ -8753,11 +8986,11 @@ export interface ToolLaunchRequestResponse {
      */
     openNewTab?: boolean;
     /**
-     * Specifies whether the request is an LTI Deep linking content item selection request
-     * @type {boolean}
+     * 
+     * @type {LaunchType}
      * @memberof ToolLaunchRequestResponse
      */
-    isDeepLink: boolean;
+    launchType: LaunchType;
 }
 
 /**
@@ -8830,6 +9063,18 @@ export interface ToolReferenceResponse {
      * @memberof ToolReferenceResponse
      */
     status: ContextExternalToolConfigurationStatusResponse;
+    /**
+     * Whether the tool is a lti deep linking tool
+     * @type {boolean}
+     * @memberof ToolReferenceResponse
+     */
+    isLtiDeepLinkingTool: boolean;
+    /**
+     * 
+     * @type {LtiDeepLinkResponse}
+     * @memberof ToolReferenceResponse
+     */
+    ltiDeepLink?: LtiDeepLinkResponse;
 }
 /**
  * 
@@ -10975,6 +11220,42 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * 
+         * @summary Logs out a user for a given logout token from an external oidc system.
+         * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutControllerLogoutOidc: async (oidcLogoutBodyParams: OidcLogoutBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'oidcLogoutBodyParams' is not null or undefined
+            assertParamExists('logoutControllerLogoutOidc', 'oidcLogoutBodyParams', oidcLogoutBodyParams)
+            const localVarPath = `/logout/oidc`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(oidcLogoutBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -11038,6 +11319,17 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.logoutControllerLogout(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Logs out a user for a given logout token from an external oidc system.
+         * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.logoutControllerLogoutOidc(oidcLogoutBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -11096,6 +11388,16 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
         logoutControllerLogout(options?: any): AxiosPromise<void> {
             return localVarFp.logoutControllerLogout(options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Logs out a user for a given logout token from an external oidc system.
+         * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.logoutControllerLogoutOidc(oidcLogoutBodyParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -11152,6 +11454,16 @@ export interface AuthenticationApiInterface {
      * @memberof AuthenticationApiInterface
      */
     logoutControllerLogout(options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Logs out a user for a given logout token from an external oidc system.
+     * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApiInterface
+     */
+    logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -11218,6 +11530,18 @@ export class AuthenticationApi extends BaseAPI implements AuthenticationApiInter
      */
     public logoutControllerLogout(options?: any) {
         return AuthenticationApiFp(this.configuration).logoutControllerLogout(options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Logs out a user for a given logout token from an external oidc system.
+     * @param {OidcLogoutBodyParams} oidcLogoutBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApi
+     */
+    public logoutControllerLogoutOidc(oidcLogoutBodyParams: OidcLogoutBodyParams, options?: any) {
+        return AuthenticationApiFp(this.configuration).logoutControllerLogoutOidc(oidcLogoutBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
@@ -24296,6 +24620,45 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} contextExternalToolId 
+         * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolDeepLinkControllerDeepLink: async (contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contextExternalToolId' is not null or undefined
+            assertParamExists('toolDeepLinkControllerDeepLink', 'contextExternalToolId', contextExternalToolId)
+            // verify required parameter 'lti11DeepLinkParamsRaw' is not null or undefined
+            assertParamExists('toolDeepLinkControllerDeepLink', 'lti11DeepLinkParamsRaw', lti11DeepLinkParamsRaw)
+            const localVarPath = `/tools/context-external-tools/{contextExternalToolId}/lti11-deep-link-callback`
+                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(lti11DeepLinkParamsRaw, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get tool launch request for a context external tool id
          * @param {string} contextExternalToolId The id of the context external tool
          * @param {*} [options] Override http request option.
@@ -24935,6 +25298,17 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} contextExternalToolId 
+         * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get tool launch request for a context external tool id
          * @param {string} contextExternalToolId The id of the context external tool
          * @param {*} [options] Override http request option.
@@ -25266,6 +25640,16 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {string} contextExternalToolId 
+         * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): AxiosPromise<string> {
+            return localVarFp.toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get tool launch request for a context external tool id
          * @param {string} contextExternalToolId The id of the context external tool
          * @param {*} [options] Override http request option.
@@ -25583,6 +25967,16 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any): AxiosPromise<ExternalToolResponse>;
+
+    /**
+     * 
+     * @param {string} contextExternalToolId 
+     * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): AxiosPromise<string>;
 
     /**
      * 
@@ -25942,6 +26336,18 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any) {
         return ToolApiFp(this.configuration).toolControllerUpdateExternalTool(externalToolId, externalToolUpdateParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} contextExternalToolId 
+     * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any) {
+        return ToolApiFp(this.configuration).toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

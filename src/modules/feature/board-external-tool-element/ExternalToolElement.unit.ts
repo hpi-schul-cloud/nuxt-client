@@ -8,6 +8,7 @@ import {
 	contextExternalToolFactory,
 	externalToolDisplayDataFactory,
 	externalToolElementResponseFactory,
+	ltiDeepLinkResponseFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils";
 import {
@@ -22,8 +23,6 @@ import {
 	useExternalToolDisplayState,
 	useExternalToolLaunchState,
 } from "@data-external-tool";
-import { ToolLaunchRequest } from "@/store/external-tool";
-import { toolLaunchRequestFactory } from "@@/tests/test-utils/factory/toolLaunchRequestFactory";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiPuzzleOutline } from "@icons/material";
 import { useSharedLastCreatedElement } from "@util-board";
@@ -104,12 +103,10 @@ describe("ExternalToolElement", () => {
 			element: ExternalToolElementResponse;
 			isEditMode: boolean;
 		},
-		displayData?: ExternalToolDisplayData,
-		toolLaunchRequest?: ToolLaunchRequest
+		displayData?: ExternalToolDisplayData
 	) => {
 		useContentElementStateMock.modelValue = ref(propsData.element.content);
 		useExternalToolElementDisplayStateMock.displayData.value = displayData;
-		useExternalToolLaunchStateMock.toolLaunchRequest.value = toolLaunchRequest;
 
 		const refreshTime = 299000;
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
@@ -155,6 +152,7 @@ describe("ExternalToolElement", () => {
 					},
 					externalToolDisplayDataFactory.build({
 						status: schoolToolConfigurationStatusFactory.build(),
+						isLtiDeepLinkingTool: false,
 					})
 				);
 
@@ -399,16 +397,19 @@ describe("ExternalToolElement", () => {
 		});
 	});
 
-	describe("when deeplinking tool is selected", () => {
+	describe("when a deeplinking tool without a deeplink is selected", () => {
 		describe("when not in edit mode", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper(
 					{
-						element: externalToolElementResponseFactory.build(),
+						element: externalToolElementResponseFactory.build({
+							content: { contextExternalToolId: "contextExternalToolId" },
+						}),
 						isEditMode: false,
 					},
-					undefined,
-					toolLaunchRequestFactory.build({ isDeepLink: true })
+					externalToolDisplayDataFactory.build({
+						isLtiDeepLinkingTool: true,
+					})
 				);
 
 				return {
@@ -436,8 +437,8 @@ describe("ExternalToolElement", () => {
 					},
 					externalToolDisplayDataFactory.build({
 						status: schoolToolConfigurationStatusFactory.build(),
-					}),
-					toolLaunchRequestFactory.build({ isDeepLink: true })
+						isLtiDeepLinkingTool: true,
+					})
 				);
 
 				return {
@@ -452,15 +453,65 @@ describe("ExternalToolElement", () => {
 
 				expect(element.isVisible()).toEqual(true);
 			});
+		});
+	});
 
-			it("should load the launch request", async () => {
-				setup();
+	describe("when a deeplinking tool with a deeplink is selected", () => {
+		describe("when not in edit mode", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper(
+					{
+						element: externalToolElementResponseFactory.build({
+							content: { contextExternalToolId: "contextExternalToolId" },
+						}),
+						isEditMode: false,
+					},
+					externalToolDisplayDataFactory.build({
+						isLtiDeepLinkingTool: true,
+						ltiDeepLink: ltiDeepLinkResponseFactory.build(),
+					})
+				);
 
-				await nextTick();
+				return {
+					wrapper,
+				};
+			};
 
-				expect(
-					useExternalToolLaunchStateMock.fetchContextLaunchRequest
-				).toHaveBeenCalledWith("contextExternalToolId");
+			it("should show the element", () => {
+				const { wrapper } = setup();
+
+				const element = wrapper.findComponent({ ref: "externalToolElement" });
+
+				expect(element.isVisible()).toEqual(true);
+			});
+		});
+
+		describe("when in edit mode", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper(
+					{
+						element: externalToolElementResponseFactory.build({
+							content: { contextExternalToolId: "contextExternalToolId" },
+						}),
+						isEditMode: true,
+					},
+					externalToolDisplayDataFactory.build({
+						isLtiDeepLinkingTool: true,
+						ltiDeepLink: ltiDeepLinkResponseFactory.build(),
+					})
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show the element", () => {
+				const { wrapper } = setup();
+
+				const element = wrapper.findComponent({ ref: "externalToolElement" });
+
+				expect(element.isVisible()).toEqual(true);
 			});
 		});
 	});
@@ -562,6 +613,11 @@ describe("ExternalToolElement", () => {
 		describe("when the component has finished loading", () => {
 			const setup = () => {
 				const contextExternalToolId = "context-external-tool-id";
+				const displayData = externalToolDisplayDataFactory.build({
+					contextExternalToolId,
+					isLtiDeepLinkingTool: true,
+					ltiDeepLink: ltiDeepLinkResponseFactory.build(),
+				});
 
 				useExternalToolElementDisplayStateMock.isLoading = ref(false);
 
@@ -572,7 +628,7 @@ describe("ExternalToolElement", () => {
 						}),
 						isEditMode: false,
 					},
-					externalToolDisplayDataFactory.build({ contextExternalToolId })
+					displayData
 				);
 
 				return {
@@ -725,8 +781,9 @@ describe("ExternalToolElement", () => {
 						}),
 						isEditMode: true,
 					},
-					undefined,
-					toolLaunchRequestFactory.build({ isDeepLink: true })
+					externalToolDisplayDataFactory.build({
+						isLtiDeepLinkingTool: true,
+					})
 				);
 
 				return {

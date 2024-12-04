@@ -1,4 +1,4 @@
-import { ContextExternalToolBodyParams } from "@/serverApi/v3";
+import { ContextExternalToolBodyParams, LaunchType } from "@/serverApi/v3";
 import {
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,
@@ -6,16 +6,22 @@ import {
 import { BusinessError } from "@/store/types/commons";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { ref, Ref } from "vue";
+import { uniqueId } from "lodash";
+import { onUnmounted, ref, Ref } from "vue";
 import { useExternalToolApi } from "./ExternalToolApi.composable";
 
-export const useExternalToolLaunchState = () => {
+export const useExternalToolLaunchState = (
+	refreshCallback?: () => Promise<void> | void
+) => {
 	const { fetchContextLaunchDataCall, fetchSchoolLaunchDataCall } =
 		useExternalToolApi();
 
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 	const toolLaunchRequest: Ref<ToolLaunchRequest | undefined> = ref();
+
+	const windowRef: Ref<Window | null> = ref(null);
+	const windowIntervalHandle: Ref<NodeJS.Timeout | undefined> = ref();
 
 	const fetchContextLaunchRequest = async (
 		contextExternalToolId: string
@@ -103,8 +109,10 @@ export const useExternalToolLaunchState = () => {
 		const form: HTMLFormElement = document.createElement("form");
 		form.method = "POST";
 		form.action = toolLaunch.url;
-		form.target = toolLaunch.openNewTab ? "_blank" : "_self";
 		form.id = "launch-form";
+
+		const target = uniqueId();
+		form.target = toolLaunch.openNewTab ? target : "_self";
 
 		const payload = JSON.parse(toolLaunch.payload || "{}");
 
@@ -121,8 +129,25 @@ export const useExternalToolLaunchState = () => {
 
 		document.body.appendChild(form);
 
+		windowRef.value = window.open(undefined, form.target);
+
 		form.submit();
+
+		if (toolLaunch.launchType === LaunchType.Lti11ContentItemSelection) {
+			windowIntervalHandle.value = setInterval(async () => {
+				if (windowRef.value?.closed) {
+					await refreshCallback?.();
+
+					windowRef.value = null;
+					clearInterval(windowIntervalHandle.value);
+				}
+			}, 1000);
+		}
 	};
+
+	onUnmounted(() => {
+		clearInterval(windowIntervalHandle.value);
+	});
 
 	return {
 		toolLaunchRequest,
