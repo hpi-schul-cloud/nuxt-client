@@ -18,19 +18,15 @@
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
 				<div v-if="step === 'firstStep' && isOpen">
-					<div data-testid="share-options-info-text">
+					<p data-testid="share-options-info-text">
 						{{ t(`components.molecules.share.${type}.options.infoText`) }}
-					</div>
+					</p>
 					<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 						<div class="mx-2">
 							<v-icon color="info" :icon="mdiInformation" />
 						</div>
 						<div data-testid="share-options-table-header">
-							{{
-								t(
-									"components.molecules.shareImport.options.tableHeader.InfoText"
-								)
-							}}
+							{{ t("components.molecules.share.options.tableHeader.InfoText") }}
 							<ul class="ml-6">
 								<li data-testid="share-options-personal-data-text">
 									{{

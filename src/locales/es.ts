@@ -598,10 +598,10 @@ export default {
 		"Elija el curso",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar el tablero.",
-	"components.molecules.import.courses.label": "Curso",
+	"components.molecules.import.courses.label": "Nombre del curso",
 	"components.molecules.import.courses.rename":
 		"Si es necesario, se puede cambiar el nombre del curso: ",
-	"components.molecules.import.courses.options.title": "Importar curso",
+	"components.molecules.import.courses.options.title": "Importar copia nuestra",
 	"components.molecules.import.lessons.label": "Tema",
 	"components.molecules.import.lessons.rename":
 		"Si es necesario, se puede cambiar el nombre del tema: ",
@@ -618,6 +618,8 @@ export default {
 	"components.molecules.import.options.loadingMessage":
 		"Importación en curso...",
 	"components.molecules.import.options.success": "{name} importado con éxito",
+	"components.molecules.import.options.tableHeader.InfoText":
+		"No se importará el siguiente contenido:",
 	"components.molecules.import.tasks.label": "Tarea",
 	"components.molecules.import.tasks.rename":
 		"Si es necesario, se puede cambiar el nombre de la tarea: ",
@@ -675,7 +677,7 @@ export default {
 		"ID de Geogebra y",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Grupos de cursos",
-	"components.molecules.shareImport.options.tableHeader.InfoText":
+	"components.molecules.share.options.tableHeader.InfoText":
 		"No se copiará el siguiente contenido:",
 	"components.molecules.share.courses.result.linkLabel":
 		"Enlace a la copia del curso",

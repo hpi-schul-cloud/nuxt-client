@@ -585,19 +585,13 @@ export default {
 		"Select course",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Please select the course into which you would like to import the board.",
-	"components.molecules.import.courses.label": "Course",
+	"components.molecules.import.courses.label": "Course name",
 	"components.molecules.import.courses.rename":
 		"If necessary, the name of the course can be renamed: ",
-	"components.molecules.import.options.ctlTools.infoText":
-		"The following content will not be copied:<br><ul class='ml-6'><li>Personal data</li><li>External tools not available in the target school</li><li>Protected settings of external tools< /li><li>Files under course files</li><li>Content from Etherpads</li><li>Geogebra IDs and</li><li>course groups</li></ul>",
-	"components.molecules.import.courses.options.infoText":
-		"The following content will not be copied:<br><ul class='ml-6'><li>Personal data</li><li>Files under course files</li><li>Content from Etherpads</li> <li>Geogebra IDs and </li><li>Course groups </li></ul>",
-	"components.molecules.import.courses.options.title": "Import course",
+	"components.molecules.import.courses.options.title": "Import course copy",
 	"components.molecules.import.lessons.label": "Topic",
 	"components.molecules.import.lessons.rename":
 		"If necessary, the name of the topic can be renamed: ",
-	"components.molecules.import.lessons.options.infoText":
-		"The following content will not be copied:<br><ul class='ml-6'><li>Personal data</li><li>Files under course files</li><li>Content from Etherpads</li> <li>Geogebra IDs and </li><li>Course groups </li></ul>",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
 		"Please select the course into which you would like to import the topic.",
 	"components.molecules.import.lessons.options.selectCourse": "Select course",
@@ -610,11 +604,11 @@ export default {
 		"Unfortunately, the necessary authorization is missing.",
 	"components.molecules.import.options.loadingMessage": "Import in progress...",
 	"components.molecules.import.options.success": "{name} imported successfully",
+	"components.molecules.import.options.tableHeader.InfoText":
+		"The following content will not be imported:",
 	"components.molecules.import.tasks.label": "Task",
 	"components.molecules.import.tasks.rename":
 		"If necessary, the name of the task can be renamed: ",
-	"components.molecules.import.tasks.options.infoText":
-		"The following content will not be copied:<br><ul class='ml-6'><li>Personal data</li><li>Files under course files</li><li>Content from Etherpads</li> <li>Geogebra IDs and </li><li>Course groups </li></ul>",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Please select the course into which you would like to import the task.",
 	"components.molecules.import.tasks.options.selectCourse": "Select course",
@@ -663,7 +657,7 @@ export default {
 		"Geogebra IDs and",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Course groups",
-	"components.molecules.shareImport.options.tableHeader.InfoText":
+	"components.molecules.share.options.tableHeader.InfoText":
 		"The following content will not be copied:",
 	"components.molecules.share.courses.result.linkLabel": "Link course copy",
 	"components.molecules.share.lessons.mail.body": "Link to the topic:",

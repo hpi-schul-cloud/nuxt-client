@@ -594,10 +594,11 @@ export default {
 		"Оберіть курс",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Виберіть курс, до якого ви бажаєте імпортувати дошку.",
-	"components.molecules.import.courses.label": "Курс",
+	"components.molecules.import.courses.label": "Назва курсу",
 	"components.molecules.import.courses.rename":
 		"При необхідності назву курсу можна перейменувати: ",
-	"components.molecules.import.courses.options.title": "Курс імпорту",
+	"components.molecules.import.courses.options.title":
+		"Імпортувати копію курсу",
 	"components.molecules.import.lessons.label": "Тема",
 	"components.molecules.import.lessons.rename":
 		"При необхідності назву теми можна перейменувати: ",
@@ -614,6 +615,8 @@ export default {
 	"components.molecules.import.options.loadingMessage":
 		"Виконується імпорту...",
 	"components.molecules.import.options.success": "{name} успішно імпортовано",
+	"components.molecules.import.options.tableHeader.InfoText":
+		"Наступний вміст не буде імпортовано:",
 	"components.molecules.import.tasks.label": "Завдання",
 	"components.molecules.import.tasks.rename":
 		"При необхідності назву завдання можна перейменувати: ",
@@ -672,7 +675,7 @@ export default {
 		"Ідентифікатори Geogebra та",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Групи курсів",
-	"components.molecules.shareImport.options.tableHeader.InfoText":
+	"components.molecules.share.options.tableHeader.InfoText":
 		"Наступний вміст не буде скопійовано:",
 	"components.molecules.share.courses.result.linkLabel":
 		"Посилання на копію курсу",

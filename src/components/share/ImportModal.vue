@@ -25,9 +25,7 @@
 					<div>
 						<div data-testid="import-options-table-header">
 							{{
-								t(
-									"components.molecules.shareImport.options.tableHeader.InfoText"
-								)
+								t("components.molecules.import.options.tableHeader.InfoText")
 							}}
 							<ul class="ml-6">
 								<li data-testid="import-options-personal-data-text">

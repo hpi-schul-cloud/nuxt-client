@@ -590,10 +590,10 @@ export default {
 	"components.molecules.import.columnBoard.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Der Kurs, in den der Bereich importiert werden soll, muss im Folgenden ausgewählt werden.",
-	"components.molecules.import.courses.label": "Kurs",
+	"components.molecules.import.courses.label": "Kurs-Name",
 	"components.molecules.import.courses.rename":
 		"Bei Bedarf kann der Name des Kurses umbenannt werden: ",
-	"components.molecules.import.courses.options.title": "Kurs importieren",
+	"components.molecules.import.courses.options.title": "Kurs-Kopie importieren",
 	"components.molecules.import.lessons.label": "Thema",
 	"components.molecules.import.lessons.rename":
 		"Bei Bedarf kann der Name des Themas umbenannt werden: ",
@@ -610,6 +610,8 @@ export default {
 	"components.molecules.import.options.loadingMessage": "Import läuft...",
 	"components.molecules.import.options.success":
 		"{name} wurde erfolgreich importiert",
+	"components.molecules.import.options.tableHeader.InfoText":
+		"Folgende Inhalte werden nicht importiert:",
 	"components.molecules.import.tasks.label": "Aufgabe",
 	"components.molecules.import.tasks.rename":
 		"Bei Bedarf kann der Name der Aufgabe umbenannt werden: ",
@@ -672,7 +674,7 @@ export default {
 		"Geogebra IDs und",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Kursgruppen",
-	"components.molecules.shareImport.options.tableHeader.InfoText":
+	"components.molecules.share.options.tableHeader.InfoText":
 		"Folgende Inhalte werden nicht kopiert:",
 	"components.molecules.share.courses.result.linkLabel": "Link Kurskopie",
 	"components.molecules.share.lessons.mail.body": "Link zum Thema:",
