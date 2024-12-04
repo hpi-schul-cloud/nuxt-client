@@ -56,7 +56,6 @@
 		:headers="tableHeader"
 		:items-per-page-options="[5, 10, 25, 50, 100]"
 		:items-per-page="50"
-		:no-data-text="t('common.nodata')"
 		:mobile="null"
 		:show-select="true"
 		:sort-asc-icon="mdiMenuDown"
@@ -94,7 +93,7 @@ const props = defineProps({
 		type: Array as PropType<RoomMemberResponse[]>,
 		required: true,
 	},
-	selectedMembers: {
+	selectedMemberIds: {
 		type: Array as PropType<string[]>,
 		required: true,
 	},
@@ -108,15 +107,15 @@ const selectedMemberList = ref<string[]>([]);
 const membersFilterCount = ref(membersList.value?.length);
 
 watch(
-	() => props.selectedMembers,
-	(value) => {
-		selectedMemberList.value = value;
+	() => props.selectedMemberIds,
+	(newSelectedMemberIds) => {
+		selectedMemberList.value = newSelectedMemberIds;
 	}
 );
 
-const onUpdateFilter = (value: RoomMemberResponse[]) => {
+const onUpdateFilter = (filteredMembers: RoomMemberResponse[]) => {
 	membersFilterCount.value =
-		search.value === "" ? membersList.value.length : value.length;
+		search.value === "" ? membersList.value.length : filteredMembers.length;
 };
 
 const onRemoveMembers = (memberIds: string[]) => {

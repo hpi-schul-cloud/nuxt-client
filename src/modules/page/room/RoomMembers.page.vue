@@ -28,7 +28,7 @@
 			<MembersTable
 				v-if="!isLoading"
 				:members="memberList"
-				:selectedMembers="selectedMemberIds"
+				:selected-member-ids="selectedMemberIds"
 				@remove:members="onRemoveMembers"
 				@select:members="onSelectMembers"
 			/>
