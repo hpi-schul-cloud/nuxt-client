@@ -557,6 +557,8 @@ export default {
 	"components.molecules.copyResult.label.timeGroup": "Група часу",
 	"components.molecules.copyResult.label.unknown": "Невідомий",
 	"components.molecules.copyResult.label.userGroup": "Група користувачів",
+	"components.molecules.copyResult.label.toolElements":
+		"Інструментальний елемент",
 	"components.molecules.copyResult.metadata": "Загальна інформація",
 	"components.molecules.copyResult.nexboardCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",

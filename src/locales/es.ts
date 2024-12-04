@@ -561,6 +561,8 @@ export default {
 	"components.molecules.copyResult.label.timeGroup": "Grupo de tiempo",
 	"components.molecules.copyResult.label.unknown": "Desconocido",
 	"components.molecules.copyResult.label.userGroup": "Grupo de usuario",
+	"components.molecules.copyResult.label.toolElements":
+		"Elemento de herramienta",
 	"components.molecules.copyResult.metadata": "Información general",
 	"components.molecules.copyResult.nexboardCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",

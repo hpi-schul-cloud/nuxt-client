@@ -121,6 +121,8 @@ export default {
 					return this.$t("components.molecules.copyResult.label.columnBoard");
 				case CopyApiResponseTypeEnum.DrawingElement:
 					return this.$t("components.molecules.copyResult.label.tldraw");
+				case CopyApiResponseTypeEnum.ExternalToolElement:
+					return this.$t("components.molecules.copyResult.label.toolElements");
 				default:
 					return this.$t("components.molecules.copyResult.label.unknown");
 			}

@@ -546,8 +546,9 @@ export default {
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
 	"components.molecules.copyResult.label.link": "Link",
 	"components.molecules.copyResult.label.timeGroup": "Time Group",
-	"components.molecules.copyResult.label.unknown": "Unkown",
+	"components.molecules.copyResult.label.unknown": "Unknown",
 	"components.molecules.copyResult.label.userGroup": "User Group",
+	"components.molecules.copyResult.label.toolElements": "Tool Element",
 	"components.molecules.copyResult.metadata": "General Information",
 	"components.molecules.copyResult.nexboardCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
