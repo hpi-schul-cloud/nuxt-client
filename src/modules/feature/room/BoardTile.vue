@@ -1,6 +1,6 @@
 <template>
 	<VCard
-		:class="{ 'bg-surface-light': !isDraft }"
+		:class="isDraft ? 'opacity-70' : 'bg-surface-light'"
 		:variant="isDraft ? 'outlined' : 'flat'"
 		draggable="false"
 		:data-testid="`board-tile-${index}`"
@@ -8,6 +8,7 @@
 	>
 		<VCardSubtitle
 			class="mt-4 d-flex align-center"
+			:class="{ 'opacity-100': isDraft }"
 			:data-testid="`board-tile-subtitle-${index}`"
 		>
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
