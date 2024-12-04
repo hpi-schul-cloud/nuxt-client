@@ -47,7 +47,10 @@
 										)
 									}}
 								</li>
-								<li v-if="showCtlToolsInfo">
+								<li
+									v-if="showCtlToolsInfo"
+									data-testid="import-modal-external-tools-protected-parameter-info"
+								>
 									{{
 										t(
 											"components.molecules.shareImport.options.ctlTools.infoText.protected"
