@@ -70,7 +70,7 @@
 								:aria-label="
 									$t('pages.roomDetails.ariaLabels.menu.action.delete')
 								"
-								@click="deleteBoard"
+								@click="onDelete"
 							>
 								<template v-slot:prepend>
 									<VIcon :icon="mdiTrashCanOutline" />
@@ -249,7 +249,7 @@ const createBoard = async (layout: BoardLayout) => {
 	router.push(`/boards/${boardId}`);
 };
 
-const deleteBoard = async () => {
+const onDelete = async () => {
 	if (!room.value || !canDeleteRoom.value) return;
 
 	const shouldDelete = await askDeleteConfirmation(
