@@ -14,13 +14,13 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { useRoomsState } from "@data-room";
 import { createMock } from "@golevelup/ts-jest";
 import { flushPromises } from "@vue/test-utils";
 import { useTitle } from "@vueuse/core";
 import { ref } from "vue";
-import { RouteLocation, useRoute } from "vue-router";
+import { RouteLocation, Router, useRoute, useRouter } from "vue-router";
 import RoomsPage from "./Rooms.page.vue";
-import { useRoomsState } from "@data-room";
 
 jest.mock("@vueuse/core", () => {
 	return {
@@ -32,6 +32,7 @@ jest.mocked(useTitle).mockReturnValue(ref(null));
 
 jest.mock("vue-router");
 const useRouteMock = useRoute as jest.Mock;
+const useRouterMock = useRouter as jest.Mock;
 
 jest.mock("@data-room/Rooms.state");
 const useRoomsStateMock = useRoomsState as jest.Mock;
@@ -43,14 +44,19 @@ describe("RoomsPage", () => {
 		});
 	});
 
-	const setup = () => {
+	const setup = (routeQuery: RouteLocation["query"] = {}) => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {});
 		const copyModule = createModuleMocks(CopyModule);
 		const loadingState = createModuleMocks(LoadingStateModule);
 		const notifierModuleMock = createModuleMocks(NotifierModule);
 
-		const route = createMock<RouteLocation>({});
+		const route = createMock<RouteLocation>({
+			query: routeQuery,
+		});
 		useRouteMock.mockReturnValue(route);
+
+		const router = createMock<Router>();
+		useRouterMock.mockReturnValue(router);
 
 		useRoomsStateMock.mockReturnValue({
 			rooms: ref([]),
@@ -85,6 +91,8 @@ describe("RoomsPage", () => {
 		return {
 			wrapper,
 			wrapperVM,
+			notifierModuleMock,
+			router,
 		};
 	};
 
@@ -100,6 +108,60 @@ describe("RoomsPage", () => {
 			await flushPromises();
 			expect(useTitle).toHaveBeenCalled();
 			expect(wrapperVM.pageTitle).toContain("pages.rooms.title");
+		});
+	});
+
+	describe("when the page is in import mode", () => {
+		const setupImportMode = () => {
+			const token = "6S6s-CWVVxEG";
+			const { wrapper, notifierModuleMock, router } = setup({ import: token });
+
+			return {
+				wrapper,
+				token,
+				notifierModuleMock,
+				router,
+			};
+		};
+
+		it("should activate import flow", () => {
+			const { wrapper } = setupImportMode();
+			const importFLow = wrapper.findComponent({ name: "ImportFlow" });
+
+			expect(importFLow.props().isActive).toBe(true);
+		});
+
+		it("should pass the token to the import flow", () => {
+			const { wrapper, token } = setupImportMode();
+			const importFLow = wrapper.findComponent({ name: "ImportFlow" });
+
+			expect(importFLow.props().token).toBe(token);
+		});
+
+		describe("when the import flow succeeded", () => {
+			it("should notify about successful import", () => {
+				const { wrapper, notifierModuleMock } = setupImportMode();
+				const importFLow = wrapper.findComponent({ name: "ImportFlow" });
+				importFLow.vm.$emit("success", "newName", "newId");
+
+				expect(notifierModuleMock.show).toHaveBeenCalledWith(
+					expect.objectContaining({
+						text: "components.molecules.import.options.success",
+						status: "success",
+					})
+				);
+			});
+
+			it("should go to the room details page", () => {
+				const { wrapper, router } = setupImportMode();
+				const importFLow = wrapper.findComponent({ name: "ImportFlow" });
+				importFLow.vm.$emit("success", "newName", "newId");
+
+				expect(router.replace).toHaveBeenCalledWith({
+					name: "rooms-id",
+					params: { id: "newId" },
+				});
+			});
 		});
 	});
 
