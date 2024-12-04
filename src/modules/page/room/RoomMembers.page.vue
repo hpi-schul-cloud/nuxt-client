@@ -28,7 +28,7 @@
 			<MembersTable
 				v-if="!isLoading"
 				:members="memberList"
-				:selectedMembers="selectedMembers"
+				:selectedMembers="selectedMemberIds"
 				@remove:members="onRemoveMembers"
 				@select:members="onSelectMembers"
 			/>
@@ -91,7 +91,7 @@ const {
 	removeMembers,
 } = useRoomMembers(roomId);
 const memberList: Ref<RoomMemberResponse[]> = ref(roomMembers);
-const selectedMembers = ref<string[]>([]);
+const selectedMemberIds = ref<string[]>([]);
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
@@ -113,7 +113,7 @@ const onAddMembers = async (memberIds: string[]) => {
 };
 
 const onSelectMembers = (memberIds: string[]) => {
-	selectedMembers.value = memberIds;
+	selectedMemberIds.value = memberIds;
 };
 
 const onUpdateRoleOrSchool = async (payload: {
@@ -123,11 +123,11 @@ const onUpdateRoleOrSchool = async (payload: {
 	await getPotentialMembers(payload);
 };
 
-const onRemoveMembers = async () => {
+const onRemoveMembers = async (memberIds: string[]) => {
 	let message = t("pages.rooms.members.multipleRemove.confirmation");
-	if (selectedMembers.value.length === 1) {
+	if (memberIds.length === 1) {
 		const member = memberList.value.find(
-			(member) => member.userId === selectedMembers.value[0]
+			(member) => member.userId === memberIds[0]
 		);
 		message = t("pages.rooms.members.remove.confirmation", {
 			memberName: `${member?.firstName} ${member?.lastName}`,
@@ -140,8 +140,9 @@ const onRemoveMembers = async () => {
 	});
 
 	if (!shouldDelete) return;
-	await removeMembers(selectedMembers.value);
-	selectedMembers.value = [];
+
+	await removeMembers(memberIds);
+	selectedMemberIds.value = [];
 };
 
 onMounted(async () => {

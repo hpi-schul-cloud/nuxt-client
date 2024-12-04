@@ -15,7 +15,7 @@
 					variant="text"
 					:icon="mdiTrashCanOutline"
 					:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-					@click="onRemoveMembers"
+					@click="onRemoveMembers(selectedMemberList)"
 				/>
 
 				<v-btn
@@ -71,7 +71,7 @@
 				variant="text"
 				:aria-label="getRemoveAriaLabel(item)"
 				:icon="mdiTrashCanOutline"
-				@click="onRemoveMembers"
+				@click="onRemoveMembers([item.userId])"
 			/>
 		</template>
 	</v-data-table>
@@ -119,8 +119,8 @@ const onUpdateFilter = (value: RoomMemberResponse[]) => {
 		search.value === "" ? membersList.value.length : value.length;
 };
 
-const onRemoveMembers = () => {
-	emit("remove:members");
+const onRemoveMembers = (memberIds: string[]) => {
+	emit("remove:members", memberIds);
 };
 
 const onSelectMembers = (userIds: string[]) => {
