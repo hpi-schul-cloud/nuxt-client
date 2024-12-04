@@ -14,17 +14,15 @@
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
 			{{ subtitleText }}
 		</VCardSubtitle>
-		<VTooltip :text="board.title">
-			<template v-slot:activator="{ props }">
-				<VCardTitle
-					v-bind="props"
-					class="board-tile-title text-body-1 font-weight-bold my-2"
-					:data-testid="`board-tile-title-${index}`"
-				>
-					{{ board.title }}
-				</VCardTitle>
-			</template>
-		</VTooltip>
+
+		<VCardTitle
+			class="board-tile-title text-body-1 font-weight-bold my-2"
+			:data-testid="`board-tile-title-${index}`"
+		>
+			<LineClamp>
+				{{ board.title }}
+			</LineClamp>
+		</VCardTitle>
 	</VCard>
 </template>
 
@@ -34,6 +32,7 @@ import { RoomBoardItem } from "@/types/room/Room";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { LineClamp } from "@ui-line-clamp";
 
 const props = defineProps({
 	board: { type: Object as PropType<RoomBoardItem>, required: true },
