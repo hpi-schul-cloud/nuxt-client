@@ -117,8 +117,7 @@ const {
 	launchTool,
 	fetchContextLaunchRequest,
 	error: launchError,
-	toolLaunchRequest,
-} = useExternalToolLaunchState();
+} = useExternalToolLaunchState(() => loadCardData());
 
 const autofocus: Ref<boolean> = ref(false);
 const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
@@ -141,16 +140,20 @@ const hasLinkedTool: ComputedRef<boolean> = computed(
 	() => !!modelValue.value.contextExternalToolId
 );
 
-const isDeepLinkingTool: ComputedRef<boolean | undefined> = computed(
-	() => toolLaunchRequest.value?.isDeepLink
+const isDeepLinkingTool: ComputedRef<boolean> = computed(
+	() => !!displayData.value?.isLtiDeepLinkingTool
+);
+
+const hasDeepLink: ComputedRef<boolean> = computed(
+	() => !!displayData.value?.ltiDeepLink
 );
 
 const showTool: ComputedRef<boolean> = computed(() => {
-	if (!toolLaunchRequest.value) {
+	if (!displayData.value || !hasLinkedTool.value) {
 		return false;
 	}
 
-	return toolLaunchRequest.value.isDeepLink ? false : hasLinkedTool.value;
+	return isDeepLinkingTool.value ? hasDeepLink.value : true;
 });
 
 const toolDisplayName: ComputedRef<string> = computed(
@@ -187,20 +190,19 @@ const isLoading = computed(
 const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 
 const toolTitle: ComputedRef<string> = computed(() => {
-	if (hasLinkedTool.value) {
-		if (isDeepLinkingTool.value) {
-			return t(
-				"feature-board-external-tool-element.placeholder.selectContent",
-				{
-					toolName: toolDisplayName.value,
-				}
-			);
-		}
-
-		return toolDisplayName.value;
+	if (!hasLinkedTool.value) {
+		return t("feature-board-external-tool-element.placeholder.selectTool");
 	}
 
-	return t("feature-board-external-tool-element.placeholder.selectTool");
+	if (isDeepLinkingTool.value) {
+		return hasDeepLink.value
+			? toolDisplayName.value
+			: t("feature-board-external-tool-element.placeholder.selectContent", {
+					toolName: toolDisplayName.value,
+				});
+	}
+
+	return toolDisplayName.value;
 });
 
 const onKeydownArrow = (event: KeyboardEvent) => {
