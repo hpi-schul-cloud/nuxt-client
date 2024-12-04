@@ -172,7 +172,7 @@ describe("BoardPageInformation.composable", () => {
 	});
 
 	describe("when board context does not exist", () => {
-		const setup = async () => {
+		const setup = () => {
 			mockedBoardApiCalls.getContextInfo.mockResolvedValue(undefined);
 
 			const { createPageInformation, breadcrumbs, pageTitle } = mountComposable(
@@ -183,7 +183,7 @@ describe("BoardPageInformation.composable", () => {
 		};
 
 		it("should not return breadcrumbs", async () => {
-			const { createPageInformation, breadcrumbs } = await setup();
+			const { createPageInformation, breadcrumbs } = setup();
 
 			const fakeId = "abc123";
 
@@ -193,7 +193,7 @@ describe("BoardPageInformation.composable", () => {
 		});
 
 		it("should generate empty page title", async () => {
-			const { createPageInformation, pageTitle } = await setup();
+			const { createPageInformation, pageTitle } = setup();
 
 			const fakeId = "abc123";
 
