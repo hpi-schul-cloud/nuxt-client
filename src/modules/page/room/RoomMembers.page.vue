@@ -40,6 +40,7 @@
 			data-testid="dialog-add-participants"
 			max-width="480"
 			persistent
+			@keydown.esc="isMembersDialogOpen = false"
 		>
 			<AddMembers
 				:memberList="potentialRoomMembers"
