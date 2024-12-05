@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import MembersTable from "./MembersTable.vue";
-import { ref, Ref } from "vue";
+import { ref } from "vue";
 import {
 	mdiMenuDown,
 	mdiMenuUp,
@@ -11,7 +11,6 @@ import {
 	mdiTrashCanOutline,
 } from "@icons/material";
 import { roomMemberResponseFactory } from "@@/tests/test-utils";
-import { RoomMember } from "@data-room";
 import { VueWrapper } from "@vue/test-utils";
 import { VBtn, VDataTable } from "vuetify/lib/components/index.mjs";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -34,9 +33,18 @@ describe("MembersTable", () => {
 		});
 	});
 
+	const tableHeaders = [
+		"common.labels.firstName",
+		"common.labels.lastName",
+		"common.labels.role",
+		"common.words.mainSchool",
+		"",
+	];
+
 	const setup = () => {
 		const mockMembers = roomMemberResponseFactory.buildList(3);
 		const wrapper = mount(MembersTable, {
+			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -46,56 +54,207 @@ describe("MembersTable", () => {
 		return { wrapper, mockMembers };
 	};
 
-	describe("when component is mounted", () => {
-		it("should render member's table", () => {
-			const { wrapper } = setup();
+	it("should render members table component", () => {
+		const { wrapper } = setup();
 
-			expect(wrapper.exists()).toBe(true);
-		});
+		expect(wrapper.exists()).toBe(true);
 	});
 
-	describe("DataTable component", () => {
-		const tableHeaders = [
-			"common.labels.firstName",
-			"common.labels.lastName",
-			"common.labels.role",
-			"common.words.mainSchool",
-			"",
-		];
+	it("should render data table", () => {
+		const { wrapper, mockMembers } = setup();
 
-		it("should render the table component", () => {
+		const dataTable = wrapper.getComponent(VDataTable);
+
+		expect(dataTable.props("headers")!.map((header) => header.title)).toEqual(
+			tableHeaders
+		);
+		expect(dataTable.props("items")).toEqual(mockMembers);
+		expect(dataTable.props("sortAscIcon")).toEqual(mdiMenuDown);
+		expect(dataTable.props("sortDescIcon")).toEqual(mdiMenuUp);
+	});
+
+	describe("member selection", () => {
+		// index 0 is the header checkbox
+		const selectCheckboxes = async (indices: number[], wrapper: VueWrapper) => {
+			const dataTable = wrapper.getComponent(VDataTable);
+			const checkboxes = dataTable.findAll("input[type='checkbox']");
+
+			for (const index of indices) {
+				const checkbox = checkboxes[index];
+				await checkbox.trigger("click");
+			}
+
+			return { checkboxes };
+		};
+
+		it("should render checkboxes", async () => {
 			const { wrapper, mockMembers } = setup();
 
-			const dataTable = wrapper.getComponent(VDataTable);
+			const dataTable = wrapper.findComponent(VDataTable);
+			const checkboxes = dataTable.findAll("input[type='checkbox']");
 
-			expect(dataTable.props("headers")!.map((header) => header.title)).toEqual(
-				tableHeaders
-			);
-			expect(dataTable.props("items")).toEqual(mockMembers);
-			expect(dataTable.props("sortAscIcon")).toEqual(mdiMenuDown);
-			expect(dataTable.props("sortDescIcon")).toEqual(mdiMenuUp);
+			expect(checkboxes.length).toEqual(mockMembers.length + 1); // all checkboxes including header checkbox
 		});
 
-		describe("when the remove button is clicked", () => {
-			const triggerMemberRemoval = async (
-				index: number,
-				wrapper: VueWrapper
-			) => {
-				const dataTable = wrapper.getComponent(VDataTable);
-				const removeButton: VueWrapper<VBtn> = dataTable
-					.findAllComponents(VBtn)
-					.filter(
-						(btn: VueWrapper<VBtn>) => btn.props("icon") === mdiTrashCanOutline
-					)[index];
-				await removeButton.trigger("click");
-			};
+		describe("when members are selected", () => {
+			it("should select all members when header checkbox is clicked", async () => {
+				const { wrapper } = setup();
 
-			it("opens confirmation dialog with remove message for single member ", async () => {
+				const { checkboxes } = await selectCheckboxes([0], wrapper);
+
+				const checkedIndices = checkboxes.reduce(
+					(selectedIndices, checkbox, index) => {
+						if (checkbox.attributes("checked") === "") {
+							selectedIndices.push(index);
+						}
+						return selectedIndices;
+					},
+					[] as Array<number>
+				);
+
+				const expectedIndices = [0, 1, 2, 3];
+
+				expect(checkedIndices).toEqual(expectedIndices);
+			});
+
+			it("should render the multi action menu", async () => {
+				const { wrapper } = setup();
+
+				await selectCheckboxes([1], wrapper);
+
+				const multiActionMenu = wrapper.find(".multi-action-menu");
+
+				expect(multiActionMenu.exists()).toBe(true);
+			});
+
+			it("should render remove button in multi action menu", async () => {
+				const { wrapper } = setup();
+
+				await selectCheckboxes([1], wrapper);
+
+				const multiActionMenu = wrapper.find(".multi-action-menu");
+				const removeButton = multiActionMenu.findComponent({
+					ref: "removeSelectedMembers",
+				});
+
+				expect(removeButton.exists()).toBe(true);
+			});
+
+			it("should render reset button in multi action menu", async () => {
+				const { wrapper } = setup();
+
+				await selectCheckboxes([1, 2], wrapper);
+
+				const multiActionMenu = wrapper.find(".multi-action-menu");
+				const resetButton = multiActionMenu.findComponent({
+					ref: "resetSelectedMembers",
+				});
+
+				expect(resetButton.exists()).toBe(true);
+			});
+
+			it("should reset member selection when clicking reset button", async () => {
+				const { wrapper } = setup();
+
+				askConfirmationMock.mockResolvedValue(false);
+
+				await selectCheckboxes([0], wrapper);
+
+				const multiActionMenu = wrapper.find(".multi-action-menu");
+				const resetButton = multiActionMenu.findComponent({
+					ref: "resetSelectedMembers",
+				});
+				await resetButton.trigger("click");
+
+				const checkboxes = wrapper
+					.getComponent(VDataTable)
+					.findAll("input[type='checkbox']");
+
+				const checkedIndices = checkboxes.reduce(
+					(selectedIndices, checkbox, index) => {
+						if (checkbox.attributes("checked") === "") {
+							selectedIndices.push(index);
+						}
+						return selectedIndices;
+					},
+					[] as Array<number>
+				);
+
+				expect(checkedIndices).toEqual([]);
+			});
+
+			it.each([
+				{
+					description: "one member",
+					checkboxesToSelect: [1],
+				},
+				{
+					description: "multiple members",
+					checkboxesToSelect: [1, 2],
+				},
+			])(
+				"should render number of selected users in multi action menu when $description selected",
+				async ({ checkboxesToSelect }) => {
+					const { wrapper } = setup();
+
+					await selectCheckboxes(checkboxesToSelect, wrapper);
+
+					const multiActionMenu = wrapper.find(".multi-action-menu");
+
+					expect(multiActionMenu.text()).toBe(
+						`${checkboxesToSelect.length} pages.administration.selected`
+					);
+				}
+			);
+
+			it("should emit remove:members event when remove button of action menu is clicked", async () => {
+				const { wrapper, mockMembers } = setup();
+
+				askConfirmationMock.mockResolvedValue(true);
+
+				await selectCheckboxes([1], wrapper);
+
+				const multiActionMenu = wrapper.find(".multi-action-menu");
+				const removeButton = multiActionMenu.findComponent({
+					ref: "removeSelectedMembers",
+				});
+				await removeButton.trigger("click");
+
+				const removeEvents = wrapper.emitted("remove:members");
+				expect(removeEvents).toHaveLength(1);
+				expect(removeEvents![0]).toEqual([[mockMembers[0].userId]]);
+			});
+
+			it("should not emit remove:members event when remove was cancled", async () => {
+				const { wrapper } = setup();
+
+				askConfirmationMock.mockResolvedValue(false);
+
+				await selectCheckboxes([1], wrapper);
+
+				const multiActionMenu = wrapper.find(".multi-action-menu");
+				const removeButton = multiActionMenu.findComponent({
+					ref: "removeSelectedMembers",
+				});
+				await removeButton.trigger("click");
+
+				expect(wrapper.emitted()).not.toHaveProperty("remove:members");
+			});
+
+			it("opens confirmation dialog with remove message for single member", async () => {
 				const { wrapper } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);
 
-				await triggerMemberRemoval(0, wrapper);
+				await selectCheckboxes([1], wrapper);
+
+				const multiActionMenu = wrapper.find(".multi-action-menu");
+				const removeButton = multiActionMenu.findComponent({
+					ref: "removeSelectedMembers",
+				});
+				await removeButton.trigger("click");
+
+				expect(wrapper.emitted()).toHaveProperty("remove:members");
 
 				expect(askConfirmationMock).toHaveBeenCalledWith({
 					confirmActionLangKey: "common.actions.remove",
@@ -103,102 +262,90 @@ describe("MembersTable", () => {
 				});
 			});
 
-			it("should call remove:members even after confirmation", async () => {
-				const { wrapper, mockMembers } = setup();
+			it("opens confirmation dialog with remove message for multiple members ", async () => {
+				const { wrapper } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);
 
-				await triggerMemberRemoval(0, wrapper);
+				await selectCheckboxes([1, 2], wrapper);
+
+				const multiActionMenu = wrapper.find(".multi-action-menu");
+				const removeButton = multiActionMenu.findComponent({
+					ref: "removeSelectedMembers",
+				});
+				await removeButton.trigger("click");
 
 				expect(wrapper.emitted()).toHaveProperty("remove:members");
 
-				const removeEvents = wrapper.emitted("remove:members");
-				expect(removeEvents).toHaveLength(1);
-				expect(removeEvents![0]).toEqual([[mockMembers[0].userId]]);
+				expect(askConfirmationMock).toHaveBeenCalledWith({
+					confirmActionLangKey: "common.actions.remove",
+					message: "pages.rooms.members.multipleRemove.confirmation",
+				});
 			});
+		});
 
-			it("should not call remove:members event when dialog is cancelled", async () => {
+		describe("when no members are selected", () => {
+			it("should not render multi action menu when no members are selected", async () => {
 				const { wrapper } = setup();
 
-				askConfirmationMock.mockResolvedValue(false);
+				const multiActionMenu = wrapper.find(".multi-action-menu");
 
-				await triggerMemberRemoval(0, wrapper);
-
-				expect(wrapper.emitted()).not.toHaveProperty("remove:members");
-			});
-		});
-
-		// ToDo: refactor those tests not using vm
-		describe("multiple selection", () => {
-			it("should render checkBoxes", async () => {
-				const { wrapper, mockMembers } = setup();
-
-				const dataTable = wrapper.findComponent(VDataTable);
-				const checkBoxes = dataTable.findAll("input[type='checkbox']");
-
-				expect(checkBoxes.length).toEqual(mockMembers.length + 1);
+				expect(multiActionMenu.exists()).toBe(false);
 			});
 
-			// describe("when checkboxes are clicked", () => {
-			// describe("bulk remove button", () => {
-			// 	it("should be visible", async () => {
-			// 		const { wrapper, mockMembers } = setup();
-			// 		const dataTable = wrapper.findComponent(VDataTable);
+			describe("when the remove button in the action column is clicked", () => {
+				const triggerMemberRemoval = async (
+					index: number,
+					wrapper: VueWrapper
+				) => {
+					const dataTable = wrapper.getComponent(VDataTable);
+					const removeButton: VueWrapper<VBtn> = dataTable
+						.findAllComponents(VBtn)
+						.filter(
+							(btn: VueWrapper<VBtn>) =>
+								btn.props("icon") === mdiTrashCanOutline
+						)[index];
+					await removeButton.trigger("click");
+				};
 
-			// 		const bulkRemoveButtonBefore = wrapper.findComponent({
-			// 			ref: "removeSelectedMembers",
-			// 		});
-			// 		expect(bulkRemoveButtonBefore.exists()).toBe(false);
+				it("opens confirmation dialog with remove message for single member ", async () => {
+					const { wrapper } = setup();
 
-			// 		dataTable.vm.$emit("update:modelValue", [
-			// 			mockMembers[0].userId,
-			// 			mockMembers[1].userId,
-			// 		]);
-			// 		await flushPromises();
-			// 		const bulkRemoveButtonAfter = wrapper.findComponent({
-			// 			ref: "removeSelectedMembers",
-			// 		});
-			// 		expect(bulkRemoveButtonAfter.exists()).toBe(true);
-			// 	});
-			// 			describe("when the bulk remove button is clicked", () => {
-			// 				it("should emit the 'remove:members'", async () => {
-			// 					const { wrapper } = setup();
-			// 					const dataTable = wrapper.findComponent({ name: "v-data-table" });
-			// 					dataTable.vm.$emit("update:modelValue", [
-			// 						mockMembers[0].userId,
-			// 						mockMembers[1].userId,
-			// 					]);
-			// 					await flushPromises();
-			// 					const bulkRemoveButton = wrapper.findComponent({
-			// 						ref: "removeSelectedMembers",
-			// 					});
-			// 					await bulkRemoveButton.vm.$emit("click");
-			// 					expect(wrapper.emitted()).toHaveProperty("remove:members");
-			// 				});
-			// 			});
+					askConfirmationMock.mockResolvedValue(true);
+
+					await triggerMemberRemoval(0, wrapper);
+
+					expect(askConfirmationMock).toHaveBeenCalledWith({
+						confirmActionLangKey: "common.actions.remove",
+						message: "pages.rooms.members.remove.confirmation",
+					});
+				});
+
+				it("should call remove:members event after confirmation", async () => {
+					const { wrapper, mockMembers } = setup();
+
+					askConfirmationMock.mockResolvedValue(true);
+
+					await triggerMemberRemoval(0, wrapper);
+
+					expect(wrapper.emitted()).toHaveProperty("remove:members");
+
+					const removeEvents = wrapper.emitted("remove:members");
+					expect(removeEvents).toHaveLength(1);
+					expect(removeEvents![0]).toEqual([[mockMembers[0].userId]]);
+				});
+
+				it("should not call remove:members event when dialog is cancelled", async () => {
+					const { wrapper } = setup();
+
+					askConfirmationMock.mockResolvedValue(false);
+
+					await triggerMemberRemoval(0, wrapper);
+
+					expect(wrapper.emitted()).not.toHaveProperty("remove:members");
+				});
+			});
 		});
-		// 		describe("when reset button is clicked", () => {
-		// 			it("should reset the selected members", async () => {
-		// 				// const { wrapper, wrapperVM } = setup();
-		// 				// const dataTable = wrapper.findComponent({ name: "v-data-table" });
-		// 				// dataTable.vm.$emit("update:modelValue", [
-		// 				// 	mockMembers[0].userId,
-		// 				// 	mockMembers[1].userId,
-		// 				// ]);
-		// 				// await flushPromises();
-		// 				// expect(wrapperVM.selectedUserIds).toStrictEqual([
-		// 				// 	mockMembers[0].userId,
-		// 				// 	mockMembers[1].userId,
-		// 				// ]);
-		// 				// const resetButton = wrapper.findComponent({
-		// 				// 	ref: "resetSelectedMembers",
-		// 				// });
-		// 				// resetButton.vm.$emit("click");
-		// 				// expect(wrapperVM.selectedUserIds).toStrictEqual([]);
-		// 			});
-		// 		});
-		// 		});
-		// 	});
 	});
 
 	// describe("Search component", () => {
