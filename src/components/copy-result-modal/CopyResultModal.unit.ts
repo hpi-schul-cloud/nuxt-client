@@ -151,7 +151,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
-		describe("when root item is a Course, has no failed file and CTL_TOOLS_COPY feature flag is enabled", () => {
+		describe("when there is no failed file and CTL_TOOLS_COPY & CTL_TOOLS_TAB_ENABLED feature flag is enabled", () => {
 			describe("when the item has element of type external tool", () => {
 				const setup = () => {
 					const envs = envsFactory.build({
@@ -165,6 +165,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 						title: "Course External Tool",
 						type: CopyApiResponseTypeEnum.ExternalTool,
 					});
+					copyResultItems[0].type = CopyApiResponseTypeEnum.Course;
 
 					const wrapper = createWrapper({
 						isOpen: true,
@@ -175,7 +176,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					return { wrapper };
 				};
 
-				it("should show the warning text for non-copyable course external tools ", () => {
+				it("should show the warning text for non-copyable course external tools", () => {
 					const { wrapper } = setup();
 
 					const dialog = wrapper.findComponent(vCustomDialog);
@@ -187,7 +188,7 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				});
 			});
 
-			describe("when the item has no element of type external tool", () => {
+			describe("when there is an item of type ExternalToolElement", () => {
 				const setup = () => {
 					const envs = envsFactory.build({
 						FEATURE_CTL_TOOLS_TAB_ENABLED: true,
@@ -196,6 +197,12 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					envConfigModule.setEnvs(envs);
 
 					const copyResultItems = mockLessonResultItems([]);
+					copyResultItems[0].elements.push({
+						title: "Board External Tool Element",
+						type: CopyApiResponseTypeEnum.ExternalToolElement,
+					});
+					copyResultItems[0].type = CopyApiResponseTypeEnum.Course;
+
 					const wrapper = createWrapper({
 						isOpen: true,
 						copyResultItems,
@@ -205,13 +212,13 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 					return { wrapper };
 				};
 
-				it("should not show the warning text for non-copyable course external tools ", () => {
+				it("should show the warning text for non-copyable course external tools", () => {
 					const { wrapper } = setup();
 
 					const dialog = wrapper.findComponent(vCustomDialog);
 					const content = dialog.findComponent(".v-card-text").text();
 
-					expect(content).not.toContain(
+					expect(content).toContain(
 						"components.molecules.copyResult.ctlTools.withFeature.info"
 					);
 				});

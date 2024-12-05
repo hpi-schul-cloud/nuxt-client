@@ -128,7 +128,9 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.files"),
 				},
 				{
-					isShow: this.isFeatureCtlToolsEnabled && this.hasExternalTool,
+					isShow:
+						this.isFeatureCtlToolsEnabled &&
+						(this.hasExternalTool || this.hasExternalToolElement),
 					text: this.externalToolsInfoText,
 					title: this.$t("components.molecules.copyResult.label.externalTools"),
 				},
@@ -212,9 +214,16 @@ export default {
 				CopyApiResponseTypeEnum.ExternalTool
 			);
 		},
+		hasExternalToolElement() {
+			return this.hasElementOfType(
+				this.items,
+				CopyApiResponseTypeEnum.ExternalToolElement
+			);
+		},
 	},
 	methods: {
 		hasElementOfType(items, types) {
+			console.log(JSON.stringify(items));
 			let found = false;
 			items.forEach((item) => {
 				if (found) return;
