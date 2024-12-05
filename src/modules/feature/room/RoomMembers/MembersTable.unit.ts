@@ -12,7 +12,7 @@ import {
 } from "@icons/material";
 import { roomMemberResponseFactory } from "@@/tests/test-utils";
 import { VueWrapper } from "@vue/test-utils";
-import { VBtn, VDataTable } from "vuetify/lib/components/index.mjs";
+import { VBtn, VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 
@@ -241,7 +241,7 @@ describe("MembersTable", () => {
 				expect(wrapper.emitted()).not.toHaveProperty("remove:members");
 			});
 
-			it("opens confirmation dialog with remove message for single member", async () => {
+			it("should render confirmation dialog with text for single member when remove button is clicked", async () => {
 				const { wrapper } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);
@@ -262,7 +262,7 @@ describe("MembersTable", () => {
 				});
 			});
 
-			it("opens confirmation dialog with remove message for multiple members ", async () => {
+			it("should render confirmation dialog with text for multiple members when remove button is clicked", async () => {
 				const { wrapper } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);
@@ -281,6 +281,36 @@ describe("MembersTable", () => {
 					confirmActionLangKey: "common.actions.remove",
 					message: "pages.rooms.members.multipleRemove.confirmation",
 				});
+			});
+
+			it("should keep selection if confirmation dialog is canceled", async () => {
+				const { wrapper } = setup();
+
+				askConfirmationMock.mockResolvedValue(false);
+
+				await selectCheckboxes([1], wrapper);
+
+				const multiActionMenu = wrapper.find(".multi-action-menu");
+				const removeButton = multiActionMenu.findComponent({
+					ref: "removeSelectedMembers",
+				});
+				await removeButton.trigger("click");
+
+				const checkboxes = wrapper
+					.getComponent(VDataTable)
+					.findAll("input[type='checkbox']");
+
+				const checkedIndices = checkboxes.reduce(
+					(selectedIndices, checkbox, index) => {
+						if (checkbox.attributes("checked") === "") {
+							selectedIndices.push(index);
+						}
+						return selectedIndices;
+					},
+					[] as Array<number>
+				);
+
+				expect(checkedIndices).toEqual([1]);
 			});
 		});
 
@@ -308,7 +338,7 @@ describe("MembersTable", () => {
 					await removeButton.trigger("click");
 				};
 
-				it("opens confirmation dialog with remove message for single member ", async () => {
+				it("should open confirmation dialog with remove message for single member ", async () => {
 					const { wrapper } = setup();
 
 					askConfirmationMock.mockResolvedValue(true);
@@ -348,26 +378,31 @@ describe("MembersTable", () => {
 		});
 	});
 
-	// describe("Search component", () => {
-	// 	it("should render the search component", () => {
-	// 		const { wrapper, wrapperVM } = setup();
-	// 		const search = wrapper.findComponent({ name: "v-text-field" });
+	describe("searching for members in table)", () => {
+		it("should render the search component", () => {
+			const { wrapper } = setup();
+			const search = wrapper.findComponent(VTextField);
 
-	// 		expect(search).toBeTruthy();
-	// 		expect(search.vm["label"]).toEqual("common.labels.search");
-	// 		expect(search.vm["prependInnerIcon"]).toEqual(mdiMagnify);
-	// 		expect(search.vm["vModel"]).toEqual(wrapperVM.search.value);
-	// 	});
+			expect(search.exists()).toBe(true);
+			expect(search.props("label")).toEqual("common.labels.search");
+			expect(search.props("prependInnerIcon")).toEqual(mdiMagnify);
+		});
 
-	// 	it("should filter the members based on the search value", async () => {
-	// 		const { wrapper, wrapperVM } = setup();
-	// 		const search = wrapper.findComponent({ name: "v-text-field" });
+		it("should filter the members based on the search value", async () => {
+			const { wrapper, mockMembers } = setup();
 
-	// 		await search.vm.$emit("update:modelValue", mockMembers[0].firstName);
-	// 		expect(wrapperVM.search).toBe(mockMembers[0].firstName);
-	// 		const dataTable = wrapper.findComponent({ name: "v-data-table" });
+			const search = wrapper.getComponent(VTextField);
+			const searchValue = mockMembers[0].firstName;
 
-	// 		expect(dataTable.vm.search).toEqual(mockMembers[0].firstName);
-	// 	});
-	// });
+			await search.setValue(searchValue);
+
+			const dataTable = wrapper.getComponent(VDataTable);
+			const dataTableTextContent = dataTable.text();
+
+			expect(dataTable.props("search")).toEqual(searchValue);
+			expect(dataTableTextContent).toContain(mockMembers[0].firstName);
+			expect(dataTableTextContent).not.toContain(mockMembers[1].firstName);
+			expect(dataTableTextContent).not.toContain(mockMembers[2].firstName);
+		});
+	});
 });
