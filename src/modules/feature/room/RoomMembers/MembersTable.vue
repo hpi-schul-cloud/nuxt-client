@@ -63,9 +63,9 @@
 		@update:current-items="onUpdateFilter"
 		@update:model-value="onSelectMembers"
 	>
-		<template #[`item.actions`]="{ item }">
+		<template #[`item.actions`]="{ item, index }">
 			<v-btn
-				ref="removeMember"
+				:data-testid="`remove-member-${index}`"
 				size="x-small"
 				variant="text"
 				:aria-label="getRemoveAriaLabel(item)"
