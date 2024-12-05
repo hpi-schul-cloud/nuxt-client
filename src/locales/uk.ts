@@ -170,6 +170,7 @@ export default {
 	"common.words.color.purple": "Фіалка",
 	"common.words.color.red": "Червоний",
 	"common.words.color.turquoise": "Бірюза",
+	"common.words.color.yellow": "Жовтий",
 	"common.words.copiedToClipboard": "Скопійовано в буфер обміну",
 	"common.words.courseGroups": "курсові групи",
 	"common.words.courses": "Мій курс",
@@ -357,6 +358,8 @@ export default {
 	"components.board.menu.fileElement": "Налаштування файлу",
 	"components.board.menu.linkElement": "Налаштування посилання",
 	"components.board.menu.submissionElement": "Налаштування Подання",
+	"components.board.menu.videoConferenceElement":
+		"Налаштування відеоконференція",
 	"components.board.menu.deletedElement": "Видалені налаштування вмісту",
 	"components.board.notifications.errors.fileNameExists":
 		"Файл з такою назвою вже існує.",
@@ -453,6 +456,9 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Будь ласка, введіть назву.",
 	"components.cardElement.titleElement": "Елемент заголовка",
+	"components.cardElement.videoConferenceElement": "Відеоконференція",
+	"components.cardElement.videoConferenceElement.label":
+		"Вставити назву відеоконференції",
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
@@ -475,6 +481,8 @@ export default {
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Подання",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Текст",
+	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
+		"Відеоконференція",
 	"components.externalTools.status.deactivated": "Деактивовано",
 	"components.externalTools.status.incomplete": "Конфігурація не завершена",
 	"components.externalTools.status.latest": "Останній",

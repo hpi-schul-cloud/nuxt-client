@@ -167,6 +167,7 @@ export default {
 	"common.words.color.purple": "Violett",
 	"common.words.color.red": "Rot",
 	"common.words.color.turquoise": "Türkis",
+	"common.words.color.yellow": "Gelb",
 	"common.words.copiedToClipboard": "In die Zwischenablage kopiert",
 	"common.words.courseGroups": "Kursgruppen",
 	"common.words.courses": "Kurse",
@@ -352,6 +353,8 @@ export default {
 	"components.board.menu.fileElement": "Datei-Einstellungen",
 	"components.board.menu.linkElement": "Link-Einstellungen",
 	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
+	"components.board.menu.videoConferenceElement":
+		"Videokonferenz-Einstellungen",
 	"components.board.menu.deletedElement": "Gelöschter-Inhalt-Einstellungen",
 	"components.board.notifications.errors.fileNameExists":
 		"Es existiert bereits eine Datei mit diesem Namen.",
@@ -447,6 +450,9 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Bitte Titel angeben.",
 	"components.cardElement.titleElement": "Titelelement",
+	"components.cardElement.videoConferenceElement": "Videokonferenz",
+	"components.cardElement.videoConferenceElement.label":
+		"Videokonferenz-Titel einfügen",
 	"components.cardElement.deletedElement": "Gelöschter Inhalt",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
@@ -471,6 +477,8 @@ export default {
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Abgabe",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
+	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
+		"Videokonferenz",
 	"components.externalTools.status.deactivated": "Deaktiviert",
 	"components.externalTools.status.incomplete": "Unvollständig",
 	"components.externalTools.status.latest": "Aktuell",

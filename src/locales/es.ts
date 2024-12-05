@@ -170,6 +170,7 @@ export default {
 	"common.words.color.purple": "Violeta",
 	"common.words.color.red": "Roja",
 	"common.words.color.turquoise": "Turquesa",
+	"common.words.color.yellow": "Amarillo",
 	"common.words.copiedToClipboard": "Copiado en el portapapeles",
 	"common.words.courseGroups": "grupos de cursos",
 	"common.words.courses": "Cursos",
@@ -356,6 +357,8 @@ export default {
 	"components.board.menu.fileElement": "Configuración del archivo",
 	"components.board.menu.linkElement": "Configuración del enlace",
 	"components.board.menu.submissionElement": "Configuración del envío",
+	"components.board.menu.videoConferenceElement":
+		"Configuración de la videoconferencia",
 	"components.board.menu.deletedElement":
 		"Configuración de contenido eliminado",
 	"components.board.notifications.errors.fileNameExists":
@@ -452,6 +455,9 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Por favor ingrese un título.",
 	"components.cardElement.titleElement": "Elemento título",
+	"components.cardElement.videoConferenceElement": "Videoconferencia",
+	"components.cardElement.videoConferenceElement.label":
+		"Insertar título de la videoconferencia",
 	"components.cardElement.deletedElement": "Contenido eliminado",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
@@ -476,6 +482,8 @@ export default {
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Envíos",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Texto",
+	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
+		"Videoconferencia",
 	"components.externalTools.status.deactivated": "Desactivado",
 	"components.externalTools.status.incomplete": "Configuración incompleta",
 	"components.externalTools.status.latest": "Actual",
