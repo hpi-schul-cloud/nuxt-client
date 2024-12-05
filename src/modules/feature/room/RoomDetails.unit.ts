@@ -12,8 +12,10 @@ const mockRoom: RoomDetailsType = {
 	id: "59cce2c61113d1132c98dc06",
 	name: "A11Y for Beginners",
 	color: RoomColor.Magenta,
+	schoolId: "123",
 	startDate: "",
 	endDate: "",
+	permissions: [],
 	createdAt: "2017-09-28T11:49:39.924Z",
 	updatedAt: "2017-09-28T11:49:39.924Z",
 };
