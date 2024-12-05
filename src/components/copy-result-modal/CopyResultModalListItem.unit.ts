@@ -161,10 +161,51 @@ describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 				CopyApiResponseTypeEnum.CollaborativeTextEditorElement,
 				"components.molecules.copyResult.label.etherpad",
 			],
+			[
+				CopyApiResponseTypeEnum.ExternalToolElement,
+				"components.molecules.copyResult.label.toolElements",
+			],
 		];
 
 		map.forEach(([constant, languageConstant]) => {
 			expect(wrapper.vm.getElementTypeName(constant)).toBe(languageConstant);
+		});
+	});
+
+	describe("when the item props has course tools in its elements field", () => {
+		const setup = () => {
+			const elements = Array.from(mockItem.elements);
+			const courseToolTitle = "Course External Tool";
+			elements.push({
+				title: courseToolTitle,
+				type: CopyApiResponseTypeEnum.ExternalTool,
+			});
+			const item = { ...mockItem };
+			item.elements = elements;
+
+			return { item, courseToolTitle };
+		};
+
+		it("should not show course tools in the list", () => {
+			const { item, courseToolTitle } = setup();
+
+			const wrapper = createWrapper({ item });
+
+			expect(wrapper.vm.aggregatedElements()).not.toContain(
+				expect.objectContaining({
+					type: "components.molecules.copyResult.label.unknown",
+					title: courseToolTitle,
+				})
+			);
+
+			const elements = wrapper.findAll(
+				'[data-testid="copy-result-list-item-element-info"]'
+			);
+			elements.forEach((elementInfo) => {
+				expect(elementInfo.text()).not.toContain(
+					"components.molecules.copyResult.label.unknown"
+				);
+			});
 		});
 	});
 });

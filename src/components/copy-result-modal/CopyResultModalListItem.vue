@@ -9,6 +9,7 @@
 				v-for="element in aggregatedElements()"
 				:key="element.type"
 				class="element-info"
+				data-testid="copy-result-list-item-element-info"
 			>
 				<span>
 					{{ element.count }} {{ element.type }}
@@ -130,6 +131,10 @@ export default {
 		aggregatedElements() {
 			const elementMap = new Map();
 			for (const element of this.elements) {
+				if (element.type === CopyApiResponseTypeEnum.ExternalTool) {
+					continue;
+				}
+
 				const typeName = this.getElementType(element);
 				if (elementMap.has(typeName)) {
 					const data = elementMap.get(typeName);
