@@ -245,25 +245,46 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
-		beforeEnter: checkRoomsFeature,
+		beforeEnter: Multiguard([
+			checkRoomsFeature,
+			createPermissionGuard(["room_create"]),
+		]),
 		name: "rooms",
 	},
 	{
 		path: `/rooms/new`,
 		component: async () => (await import("@page-room")).RoomCreatePage,
-		beforeEnter: checkRoomsFeature,
+		beforeEnter: Multiguard([
+			checkRoomsFeature,
+			createPermissionGuard(["room_create"]),
+		]),
 		name: "rooms-new",
+	},
+	{
+		path: `/rooms/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-room")).RoomDetailsSwitchPage,
+		beforeEnter: Multiguard([
+			checkRoomsFeature,
+			createPermissionGuard(["room_create"]),
+		]),
+		name: "room-details",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/edit`,
 		component: async () => (await import("@page-room")).RoomEditPage,
-		beforeEnter: checkRoomsFeature,
+		beforeEnter: Multiguard([
+			checkRoomsFeature,
+			createPermissionGuard(["room_create"]),
+		]),
 		name: "room-edit",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/members`,
 		component: async () => (await import("@page-room")).RoomMembersPage,
-		beforeEnter: checkRoomsFeature,
+		beforeEnter: Multiguard([
+			checkRoomsFeature,
+			createPermissionGuard(["room_create"]),
+		]),
 		name: "room-members",
 	},
 	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
@@ -287,11 +308,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: "/rooms/courses-overview",
 		component: () => import("@/pages/course-rooms/CourseRoomOverview.page.vue"),
 		name: "course-room-overview",
-	},
-	{
-		path: `/rooms/:id(${REGEX_ID})`,
-		component: async () => (await import("@page-room")).RoomDetailsSwitchPage,
-		name: "room-details",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/board`,

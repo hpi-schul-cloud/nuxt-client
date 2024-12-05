@@ -11,6 +11,7 @@
 					{{ roomTitle }}
 				</h1>
 				<RoomMenu
+					v-if="isMenuEnabled"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
 					@room:delete="onDelete"
@@ -29,35 +30,36 @@
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import {
-	BoardLayout,
-	BoardApiFactory,
-	CreateBoardBodyParams,
-	BoardParentType,
-	ImportUserResponseRoleNamesEnum as Roles,
-} from "@/serverApi/v3";
-import { envConfigModule, authModule } from "@/store";
-import { $axios } from "@/utils/api";
-import { buildPageTitle } from "@/utils/pageTitle";
-import { useRoomDetailsStore, useRoomsState } from "@data-room";
-import { BoardGrid, RoomMenu } from "@feature-room";
-import {
-	mdiViewGridPlusOutline,
-	mdiViewDashboardOutline,
-	mdiPlus,
-} from "@icons/material";
-import {
-	ConfirmationDialog,
-	useDeleteConfirmationDialog,
-} from "@ui-confirmation-dialog";
-import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { useRoomDetailsStore, useRoomsState } from "@data-room";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	BoardApiFactory,
+	BoardLayout,
+	BoardParentType,
+	CreateBoardBodyParams,
+} from "@/serverApi/v3";
+import { $axios } from "@/utils/api";
+import { buildPageTitle } from "@/utils/pageTitle";
+import {
+	ConfirmationDialog,
+	useDeleteConfirmationDialog,
+} from "@ui-confirmation-dialog";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { BoardGrid, RoomMenu, useRoomAuthorization } from "@feature-room";
+import {
+	mdiViewGridPlusOutline,
+	mdiViewDashboardOutline,
+	mdiPlus,
+} from "@icons/material";
+
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const { t } = useI18n();
 const { deleteRoom } = useRoomsState();
@@ -101,15 +103,15 @@ const onManageMembers = () => {
 };
 
 const onDelete = async () => {
-	if (!room.value) return;
+	if (!room.value || !canDeleteRoom.value) return;
 
 	const shouldDelete = await askDeleteConfirmation(
-		room.value?.name,
+		room.value.name,
 		"common.labels.room"
 	);
 
 	if (shouldDelete) {
-		await deleteRoom(room.value!.id);
+		await deleteRoom(room.value.id);
 		router.push({
 			name: "rooms",
 		});
@@ -136,31 +138,15 @@ const boardLayoutsEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
 );
 
+const { canEditRoom, canDeleteRoom } = useRoomAuthorization(room);
+
+const isMenuEnabled = computed(() => canEditRoom.value || canDeleteRoom.value);
+
 const boardLayoutDialogIsOpen = ref(false);
-
-const createBoard = async (layout: BoardLayout) => {
-	if (!room.value) return;
-
-	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
-
-	const params: CreateBoardBodyParams = {
-		title: t("pages.roomDetails.board.defaultName"),
-		parentId: room.value.id,
-		parentType: BoardParentType.Room,
-		layout,
-	};
-	const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;
-
-	router.push(`/boards/${boardId}`);
-};
 
 const fabItems = computed(() => {
 	const actions = [];
-	// TODO refine permissions
-	if (
-		authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase()) &&
-		authModule.getUserRoles.includes(Roles.Teacher)
-	) {
+	if (canEditRoom.value) {
 		if (boardLayoutsEnabled.value) {
 			actions.push({
 				label: t("pages.courseRoomDetails.fab.add.board"),
@@ -197,5 +183,21 @@ const fabItemClickHandler = (event: string) => {
 	} else if (event === "board-create") {
 		createBoard(BoardLayout.Columns);
 	}
+};
+
+const createBoard = async (layout: BoardLayout) => {
+	if (!room.value || !canEditRoom.value) return;
+
+	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
+
+	const params: CreateBoardBodyParams = {
+		title: t("pages.roomDetails.board.defaultName"),
+		parentId: room.value.id,
+		parentType: BoardParentType.Room,
+		layout,
+	};
+	const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;
+
+	router.push(`/boards/${boardId}`);
 };
 </script>

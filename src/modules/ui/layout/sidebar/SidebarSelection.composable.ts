@@ -10,6 +10,8 @@ import {
 } from "vue";
 import { storeToRefs } from "pinia";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { useSharedBoardPageInformation } from "@data-board";
+import { BoardExternalReferenceType } from "@/serverApi/v3";
 
 export const useSidebarSelection = (
 	sidebarItem:
@@ -19,6 +21,7 @@ export const useSidebarSelection = (
 ) => {
 	const route = useRoute();
 	const { roomVariant } = storeToRefs(useRoomDetailsStore());
+	const { contextType } = useSharedBoardPageInformation();
 
 	const isActive = ref(false);
 
@@ -49,13 +52,12 @@ export const useSidebarSelection = (
 
 		// Board
 		if (route.name === "boards-id") {
-			if (roomVariant.value === RoomVariant.ROOM) {
-				return item.to === "/rooms";
-			} else if (roomVariant.value === RoomVariant.COURSE_ROOM) {
-				return item.to === "/rooms/courses-overview";
-			} else {
-				return false;
-			}
+			return (
+				(item.to === "/rooms/courses-overview" &&
+					contextType.value === BoardExternalReferenceType.Course) ||
+				(item.to === "/rooms" &&
+					contextType.value === BoardExternalReferenceType.Room)
+			);
 		}
 
 		return (

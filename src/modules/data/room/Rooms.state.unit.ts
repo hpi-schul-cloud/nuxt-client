@@ -127,6 +127,7 @@ describe("useRoomsState", () => {
 					id: "1",
 					name: "Room 1",
 					color: RoomColorEnum.BlueGrey,
+					schoolId: "6749dd4e657d98af622e370c",
 					createdAt: "2024.11.18",
 					updatedAt: "2024.11.18",
 				},

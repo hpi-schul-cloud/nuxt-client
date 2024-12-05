@@ -30,7 +30,7 @@ const serverDataPartial: CopyApiResponse = {
 const serverDataSuccess: CopyApiResponse = {
 	title: "Thema X",
 	type: CopyApiResponseTypeEnum.Lesson,
-	destinationCourseId: "aCourseId",
+	destinationId: "aCourseId",
 	status: CopyApiResponseStatusEnum.Success,
 	id: "123",
 	elements: [
@@ -237,7 +237,7 @@ describe("copy module", () => {
 				const newName = "My Course";
 				const payload = {
 					token,
-					type: serverApi.ShareTokenBodyParamsParentTypeEnum.Courses,
+					type: serverApi.ShareTokenInfoResponseParentTypeEnum.Courses,
 					newName,
 				};
 
@@ -261,7 +261,7 @@ describe("copy module", () => {
 				const copyModule = new CopyModule({});
 				const payload = {
 					token: "abc123a",
-					type: serverApi.ShareTokenBodyParamsParentTypeEnum.Courses,
+					type: serverApi.ShareTokenInfoResponseParentTypeEnum.Courses,
 					newName: "My Course",
 				};
 
@@ -289,7 +289,7 @@ describe("copy module", () => {
 				const newName = "My Lesson";
 				const payload = {
 					token,
-					type: serverApi.ShareTokenBodyParamsParentTypeEnum.Lessons,
+					type: serverApi.ShareTokenInfoResponseParentTypeEnum.Lessons,
 					newName,
 				};
 
@@ -313,7 +313,7 @@ describe("copy module", () => {
 				const copyModule = new CopyModule({});
 				const payload = {
 					token: "abc123a",
-					type: serverApi.ShareTokenBodyParamsParentTypeEnum.Lessons,
+					type: serverApi.ShareTokenInfoResponseParentTypeEnum.Lessons,
 					newName: "My Lesson",
 				};
 
@@ -347,7 +347,7 @@ describe("copy module", () => {
 				const serverData = {
 					title: "Aufgabe",
 					type: CopyApiResponseTypeEnum.Task,
-					destinationCourseId: "testCourseId",
+					destinationId: "testCourseId",
 					status: CopyApiResponseStatusEnum.Failure,
 					id: "123",
 					elements: [
@@ -384,7 +384,7 @@ describe("copy module", () => {
 					const serverData = {
 						title: "ColumnBoard",
 						type: CopyApiResponseTypeEnum.Columnboard,
-						destinationCourseId: "testCourseId",
+						destinationId: "testCourseId",
 						status: CopyApiResponseStatusEnum.Failure,
 						id: "123",
 						elements: [
@@ -423,7 +423,7 @@ describe("copy module", () => {
 				const serverData = {
 					title: "Thema",
 					type: CopyApiResponseTypeEnum.Lesson,
-					destinationCourseId: "testCourseIdX",
+					destinationId: "testCourseIdX",
 					status: CopyApiResponseStatusEnum.Failure,
 					id: "456",
 					elements: [

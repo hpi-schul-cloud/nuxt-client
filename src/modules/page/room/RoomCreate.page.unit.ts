@@ -81,7 +81,7 @@ describe("@pages/RoomCreate.page.vue", () => {
 		const { roomFormComponent, router } = setup();
 		roomFormComponent.vm.$emit("save", roomParams);
 		expect(router.push).toHaveBeenCalledWith({
-			name: "room-details",
+			name: "rooms-id",
 			params: { id: "123" },
 		});
 	});

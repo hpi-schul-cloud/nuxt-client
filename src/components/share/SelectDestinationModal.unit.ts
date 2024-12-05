@@ -1,11 +1,11 @@
 import { mount } from "@vue/test-utils";
-import SelectCourseModal from "@/components/share/SelectCourseModal.vue";
+import SelectDestinationModal from "@/components/share/SelectDestinationModal.vue";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 
-describe("@components/share/SelectCourseModal", () => {
+describe("@components/share/SelectDestinationModal", () => {
 	const course = {
 		id: "1234",
 		title: "Mathe",
@@ -20,7 +20,7 @@ describe("@components/share/SelectCourseModal", () => {
 	};
 
 	const setup = () => {
-		const wrapper = mount(SelectCourseModal, {
+		const wrapper = mount(SelectDestinationModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

@@ -110,13 +110,13 @@ describe("@pages/RoomEdit.page.vue", () => {
 		expect(updateRoom).toHaveBeenCalledWith(roomIdMock, roomParams);
 	});
 
-	it("should navigate to 'room-details' with correct room id on save", async () => {
+	it("should navigate to 'rooms-id' with correct room id on save", async () => {
 		const { roomFormComponent, router } = setup();
 
 		roomFormComponent.vm.$emit("save", roomParams);
 
 		expect(router.push).toHaveBeenCalledWith({
-			name: "room-details",
+			name: "rooms-id",
 			params: { id: roomIdMock },
 		});
 	});
@@ -127,7 +127,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 		roomFormComponent.vm.$emit("cancel", roomParams);
 
 		expect(router.push).toHaveBeenCalledWith({
-			name: "room-details",
+			name: "rooms-id",
 			params: { id: roomIdMock },
 		});
 	});

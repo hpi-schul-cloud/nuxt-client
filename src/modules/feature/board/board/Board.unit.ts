@@ -152,6 +152,7 @@ describe("Board", () => {
 			contextType: computed(() => undefined),
 			pageTitle: computed(() => "page-title"),
 			roomId: computed(() => "room-id"),
+			resetPageInformation: jest.fn(),
 		});
 
 		mockedUseEditMode.mockReturnValue({

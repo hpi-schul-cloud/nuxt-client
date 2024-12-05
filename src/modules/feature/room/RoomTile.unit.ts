@@ -11,6 +11,7 @@ const mockRoom: RoomItem = {
 	id: "123",
 	name: "A11Y for Beginners",
 	color: RoomColorEnum.Magenta,
+	schoolId: "123",
 	createdAt: "2024-10-11T16:36:06.434Z",
 	updatedAt: "2024-10-11T16:36:06.434Z",
 };

@@ -36,6 +36,8 @@ const store = {
 		id: "1",
 		name: "Room 1",
 		color: RoomColorEnum.BlueGrey,
+		schoolId: "1",
+		permissions: [],
 		createdAt: new Date().toString(),
 		updatedAt: new Date().toString(),
 	},
@@ -122,6 +124,7 @@ describe("RoomMembersPage", () => {
 				id: string;
 				name: string;
 				color: RoomColorEnum;
+				schoolId: string;
 				createdAt: string;
 				updatedAt: string;
 			};
@@ -177,7 +180,7 @@ describe("RoomMembersPage", () => {
 
 				expect(mockUseMembersCalls.getSchools).toHaveBeenCalled();
 				expect(mockUseMembersCalls.getPotentialMembers).toHaveBeenCalledWith({
-					role: RoleName.RoomEditor,
+					role: RoleName.Roomeditor,
 				});
 			});
 		});
