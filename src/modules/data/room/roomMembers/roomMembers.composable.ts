@@ -27,7 +27,7 @@ export const useRoomMembers = (roomId: string) => {
 	};
 
 	const userRoles: Record<string, string> = {
-		[RoleName.RoomEditor]: t("common.labels.teacher"),
+		[RoleName.Roomeditor]: t("common.labels.teacher"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -55,7 +55,7 @@ export const useRoomMembers = (roomId: string) => {
 		payload: {
 			role: RoleName;
 			schoolId?: string;
-		} = { role: RoleName.RoomEditor, schoolId: ownSchool.id }
+		} = { role: RoleName.Roomeditor, schoolId: ownSchool.id }
 	) => {
 		try {
 			const result = (
@@ -70,7 +70,7 @@ export const useRoomMembers = (roomId: string) => {
 						...user,
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
-						roleName: RoleName.RoomEditor,
+						roleName: RoleName.Roomeditor,
 					};
 				})
 				.filter((user) => {
@@ -105,7 +105,7 @@ export const useRoomMembers = (roomId: string) => {
 
 		const userIdsAndRoles: UserIdAndRole[] = newMembers.map((member) => ({
 			userId: member.userId,
-			roleName: UserIdAndRoleRoleNameEnum.Editor,
+			roleName: UserIdAndRoleRoleNameEnum.Roomeditor,
 		}));
 
 		try {

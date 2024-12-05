@@ -3,6 +3,7 @@ import * as serverApi from "../serverApi/v3/api";
 import {
 	ShareTokenApiInterface,
 	ShareTokenBodyParamsParentTypeEnum,
+	BoardExternalReferenceType,
 } from "../serverApi/v3/api";
 import setupStores from "@@/tests/test-utils/setupStores";
 import courseRoomDetailsModule from "@/store/course-room-details";
@@ -114,23 +115,30 @@ describe("share module", () => {
 		});
 
 		describe("startShareFlow", () => {
-			it("should call setParentId, setParentType and setShareModalOpen mutations", async () => {
+			it("should call setParentId, setParentType, setDestinationType and setShareModalOpen mutations", async () => {
 				const shareModule = new ShareModule({});
 				const setParentIdMock = jest.spyOn(shareModule, "setParentId");
 				const setParentTypeMock = jest.spyOn(shareModule, "setParentType");
+				const setDestinationTypeMock = jest.spyOn(
+					shareModule,
+					"setDestinationType"
+				);
 				const setShareModalOpenMock = jest.spyOn(
 					shareModule,
 					"setShareModalOpen"
 				);
 				const testId = "test-id";
 				const type = ShareTokenBodyParamsParentTypeEnum.Courses;
+				const destinationType = BoardExternalReferenceType.Room;
 				shareModule.startShareFlow({
 					id: testId,
 					type,
+					destinationType,
 				});
 
 				expect(setParentIdMock).toHaveBeenCalledWith(testId);
 				expect(setParentTypeMock).toHaveBeenCalledWith(type);
+				expect(setDestinationTypeMock).toHaveBeenCalledWith(destinationType);
 				expect(setShareModalOpenMock).toHaveBeenCalledWith(true);
 			});
 		});

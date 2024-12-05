@@ -13,18 +13,28 @@ import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import AuthModule from "@/store/auth";
-import { nextTick, Ref } from "vue";
+import { nextTick, ref, Ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { roomDetailsFactory } from "@@/tests/test-utils/factory/roomDetailsFactory";
 import { flushPromises } from "@vue/test-utils";
 import { Router, useRoute, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-jest";
+import { useRoomAuthorization } from "@feature-room";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),
 	useRouter: jest.fn(),
 }));
+
+jest.mock("@feature-room/roomAuthorization.composable");
+const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
+	canCreateRoom: ref(false),
+	canViewRoom: ref(false),
+	canEditRoom: ref(false),
+	canDeleteRoom: ref(false),
+};
+(useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
 describe("@pages/RoomsDetails.page.vue", () => {
 	const router = createMock<Router>();
@@ -267,6 +277,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				])(
 					"should have a '$layout'-layout when '$event' was chosen",
 					async ({ event, layout }) => {
+						roomPermissions.canEditRoom.value = true;
+
 						const { wrapper } = setup({
 							isLoading: false,
 							roomVariant: RoomVariant.ROOM,
