@@ -22,7 +22,7 @@
 	</div>
 </template>
 
-<script script setup lang="ts">
+<script setup lang="ts">
 import { computed, onMounted, ref } from "vue";
 
 const textElement = ref<HTMLDivElement | undefined>(undefined);
