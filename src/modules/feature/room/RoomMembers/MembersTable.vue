@@ -3,7 +3,10 @@
 		class="d-flex justify-space-between align-center mb-2 table-title-header"
 	>
 		<template v-if="selectedUserIds.length">
-			<div class="mr-2 pa-0 pl-4 multi-action-menu">
+			<div
+				class="mr-2 pa-0 pl-4 multi-action-menu"
+				data-testid="multi-action-menu"
+			>
 				<span class="d-inline-flex">
 					{{ selectedUserIds.length }}
 					{{ t("pages.administration.selected") }}
@@ -32,6 +35,7 @@
 		<v-spacer />
 		<v-text-field
 			v-model="search"
+			data-testid="member-search"
 			density="compact"
 			flat
 			hide-details

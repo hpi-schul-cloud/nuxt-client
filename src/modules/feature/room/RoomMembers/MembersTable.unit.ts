@@ -120,7 +120,7 @@ describe("MembersTable", () => {
 
 			await selectCheckboxes([1], wrapper);
 
-			const multiActionMenu = wrapper.find(".multi-action-menu");
+			const multiActionMenu = wrapper.find("[data-testid=multi-action-menu]");
 
 			expect(multiActionMenu.exists()).toBe(true);
 		});
@@ -186,8 +186,7 @@ describe("MembersTable", () => {
 
 				await selectCheckboxes(checkboxesToSelect, wrapper);
 
-				const multiActionMenu = wrapper.find(".multi-action-menu");
-				// TODO: ggf. replace with data-testid ?
+				const multiActionMenu = wrapper.get("[data-testid=multi-action-menu]");
 
 				expect(multiActionMenu.text()).toBe(
 					`${checkboxesToSelect.length} pages.administration.selected`
@@ -227,46 +226,39 @@ describe("MembersTable", () => {
 			expect(wrapper.emitted()).not.toHaveProperty("remove:members");
 		});
 
-		// TODO: ggf. merge with next test to it.each
-		it("should render confirmation dialog with text for single member when remove button is clicked", async () => {
-			const { wrapper } = setup();
+		it.each([
+			{
+				description: "single member",
+				checkboxesToSelect: [1],
+				expectedMessage: "pages.rooms.members.remove.confirmation",
+			},
+			{
+				description: "multiple members",
+				checkboxesToSelect: [1, 2],
+				expectedMessage: "pages.rooms.members.multipleRemove.confirmation",
+			},
+		])(
+			"should render confirmation dialog with text for $description when remove button is clicked",
+			async ({ checkboxesToSelect, expectedMessage }) => {
+				const { wrapper } = setup();
 
-			askConfirmationMock.mockResolvedValue(true);
+				askConfirmationMock.mockResolvedValue(true);
 
-			await selectCheckboxes([1], wrapper);
+				await selectCheckboxes(checkboxesToSelect, wrapper);
 
-			const removeButton = wrapper.findComponent({
-				ref: "removeSelectedMembers",
-			});
-			await removeButton.trigger("click");
+				const removeButton = wrapper.findComponent({
+					ref: "removeSelectedMembers",
+				});
+				await removeButton.trigger("click");
 
-			expect(wrapper.emitted()).toHaveProperty("remove:members");
+				expect(wrapper.emitted()).toHaveProperty("remove:members");
 
-			expect(askConfirmationMock).toHaveBeenCalledWith({
-				confirmActionLangKey: "common.actions.remove",
-				message: "pages.rooms.members.remove.confirmation",
-			});
-		});
-
-		it("should render confirmation dialog with text for multiple members when remove button is clicked", async () => {
-			const { wrapper } = setup();
-
-			askConfirmationMock.mockResolvedValue(true);
-
-			await selectCheckboxes([1, 2], wrapper);
-
-			const removeButton = wrapper.findComponent({
-				ref: "removeSelectedMembers",
-			});
-			await removeButton.trigger("click");
-
-			expect(wrapper.emitted()).toHaveProperty("remove:members");
-
-			expect(askConfirmationMock).toHaveBeenCalledWith({
-				confirmActionLangKey: "common.actions.remove",
-				message: "pages.rooms.members.multipleRemove.confirmation",
-			});
-		});
+				expect(askConfirmationMock).toHaveBeenCalledWith({
+					confirmActionLangKey: "common.actions.remove",
+					message: expectedMessage,
+				});
+			}
+		);
 
 		it("should keep selection if confirmation dialog is canceled", async () => {
 			const { wrapper } = setup();
@@ -293,8 +285,7 @@ describe("MembersTable", () => {
 	describe("when no members are selected", () => {
 		it("should not render multi action menu when no members are selected", async () => {
 			const { wrapper } = setup();
-
-			const multiActionMenu = wrapper.find(".multi-action-menu");
+			const multiActionMenu = wrapper.find("[data-testid=multi-action-menu]");
 
 			expect(multiActionMenu.exists()).toBe(false);
 		});
