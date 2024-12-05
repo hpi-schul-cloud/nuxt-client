@@ -41,3 +41,8 @@ export type SharingCourseObject = {
 };
 
 export type AllItems = Array<ListItemsObject>;
+
+export type ImportDestinationItem = {
+	id: string;
+	name: string;
+};

@@ -117,7 +117,8 @@
 	<import-flow
 		:is-active="isImportMode"
 		:token="importToken"
-		:courses="courses"
+		:destinations="courses"
+		destination-type="course"
 		@success="onImportSuccess"
 	/>
 </template>
@@ -211,7 +212,12 @@ export default defineComponent({
 			});
 		},
 		courses() {
-			return courseRoomListModule.getAllElements;
+			return courseRoomListModule.getAllElements.map((item) => {
+				return {
+					id: item.id,
+					name: item.title,
+				};
+			});
 		},
 		hasRoomsBeingCopied() {
 			return this.rooms.some((item) => item.copyingSince !== undefined);

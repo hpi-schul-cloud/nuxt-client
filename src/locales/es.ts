@@ -601,6 +601,10 @@ export default {
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar el tablero.",
 	"components.molecules.import.courses.label": "Nombre del curso",
+	"components.molecules.import.columnBoard.options.selectRoom":
+		"Seleccionar sala",
+	"components.molecules.import.columnBoard.options.selectRoom.infoText":
+		"Seleccione la sala en la que desea importar el tablero.",
 	"components.molecules.import.courses.rename":
 		"Si es necesario, se puede cambiar el nombre del curso: ",
 	"components.molecules.import.courses.options.title": "Importar copia nuestra",

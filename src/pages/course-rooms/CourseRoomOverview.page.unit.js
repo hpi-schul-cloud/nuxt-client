@@ -200,12 +200,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		const expected = [
 			{
 				id: "1234",
-				isArchived: undefined,
-				searchText: "Mathe",
-				title: "Mathe",
-				shortTitle: "Ma",
-				displayColor: "#54616e",
-				to: "/rooms/1234",
+				name: "Mathe",
 			},
 		];
 
