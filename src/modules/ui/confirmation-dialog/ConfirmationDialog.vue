@@ -1,4 +1,5 @@
 <template>
+	<!-- ToDo: replace vCustomDialog with v-dailog, use component <UseFocusTrap>  -->
 	<vCustomDialog
 		data-testid="delete-dialog-item"
 		has-buttons
