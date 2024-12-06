@@ -41,9 +41,6 @@
 							{{ $t(`components.molecules.export.options.info`) }}
 							<br />
 							&middot;
-							{{ $t(`components.molecules.export.options.info.point1`) }}
-							<br />
-							&middot;
 							{{ $t(`components.molecules.export.options.info.point2`) }}
 						</p>
 					</div>
