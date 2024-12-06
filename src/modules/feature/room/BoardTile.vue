@@ -14,7 +14,6 @@
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
 			{{ subtitleText }}
 		</VCardSubtitle>
-
 		<VCardTitle
 			class="board-tile-title text-body-1 font-weight-bold my-2"
 			:data-testid="`board-tile-title-${index}`"
@@ -40,7 +39,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-
 const board = toRef(props, "board");
 
 const isListBoard = computed(() => {
@@ -55,6 +53,7 @@ const subtitleIcon = computed(() => {
 	const icon = isListBoard.value
 		? mdiViewAgendaOutline
 		: mdiViewDashboardOutline;
+
 	return icon;
 });
 
@@ -67,6 +66,7 @@ const subtitleText = computed(() => {
 		const suffix = ` - ${t("common.words.draft")}`;
 		return text + suffix;
 	}
+
 	return text;
 });
 
