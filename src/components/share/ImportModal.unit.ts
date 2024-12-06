@@ -2,11 +2,11 @@ import ImportModal from "@/components/share/ImportModal.vue";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { mount } from "@vue/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
 
 describe("@components/share/ImportModal", () => {
 	const setup = (envConfigModuleGetter?: Partial<EnvConfigModule>) => {
@@ -122,11 +122,11 @@ describe("@components/share/ImportModal", () => {
 					`[data-testid="import-modal-external-tools-info"]`
 				);
 
-				expect(infoText.attributes("html")).toEqual(
-					"components.molecules.import.courses.options.ctlTools.infoText"
+				expect(infoText.text()).toEqual(
+					"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
 				);
 			});
-			it("should not show course file info", () => {
+			it("should also show course file info", () => {
 				const { wrapper } = setup({ getCtlToolsTabEnabled: true });
 
 				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
@@ -136,7 +136,7 @@ describe("@components/share/ImportModal", () => {
 					`[data-testid="import-modal-coursefiles-info"]`
 				);
 
-				expect(infoText.exists()).toBe(false);
+				expect(infoText.exists()).toBe(true);
 			});
 		});
 		describe("show ctl tool info is disabled", () => {
@@ -176,7 +176,7 @@ describe("@components/share/ImportModal", () => {
 					);
 
 					expect(infoText.element.innerHTML).toEqual(
-						"components.molecules.import.courses.options.infoText"
+						"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
 					);
 				});
 			});

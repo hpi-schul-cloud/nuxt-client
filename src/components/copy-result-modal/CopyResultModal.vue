@@ -128,7 +128,9 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.files"),
 				},
 				{
-					isShow: this.hasFeatureCtlsToolsenabled,
+					isShow:
+						this.isFeatureCtlToolsEnabled &&
+						(this.hasExternalTool || this.hasExternalToolElement),
 					text: this.externalToolsInfoText,
 					title: this.$t("components.molecules.copyResult.label.externalTools"),
 				},
@@ -178,7 +180,7 @@ export default {
 				CopyApiResponseTypeEnum.CoursegroupGroup
 			);
 		},
-		hasFeatureCtlsToolsenabled() {
+		isFeatureCtlToolsEnabled() {
 			return envConfigModule.getCtlToolsTabEnabled;
 		},
 		hasErrors() {
@@ -205,6 +207,18 @@ export default {
 			return envConfigModule.getEnv.FEATURE_CTL_TOOLS_COPY_ENABLED
 				? this.$t("components.molecules.copyResult.ctlTools.withFeature.info")
 				: this.$t("components.molecules.copyResult.ctlTools.info");
+		},
+		hasExternalTool() {
+			return this.hasElementOfType(
+				this.items,
+				CopyApiResponseTypeEnum.ExternalTool
+			);
+		},
+		hasExternalToolElement() {
+			return this.hasElementOfType(
+				this.items,
+				CopyApiResponseTypeEnum.ExternalToolElement
+			);
 		},
 	},
 	methods: {

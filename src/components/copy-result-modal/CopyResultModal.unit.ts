@@ -151,53 +151,77 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
-		it("should render ctl tools info if root item is a Course and has no failed file ", () => {
-			const copyResultItems = mockLessonResultItems([]);
+		describe("when there is no failed file and CTL_TOOLS_COPY & CTL_TOOLS_TAB_ENABLED feature flag is enabled", () => {
+			describe("when the item has element of type external tool", () => {
+				const setup = () => {
+					const envs = envsFactory.build({
+						FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+						FEATURE_CTL_TOOLS_COPY_ENABLED: true,
+					});
+					envConfigModule.setEnvs(envs);
 
-			const envs = envsFactory.build({
-				FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-			});
-			envConfigModule.setEnvs(envs);
-			const wrapper = createWrapper({
-				isOpen: true,
-				copyResultItems,
-				copyResultRootItemType: CopyApiResponseTypeEnum.Course,
-			});
+					const copyResultItems = mockLessonResultItems([]);
+					copyResultItems[0].elements.push({
+						title: "Course External Tool",
+						type: CopyApiResponseTypeEnum.ExternalTool,
+					});
+					copyResultItems[0].type = CopyApiResponseTypeEnum.Course;
 
-			const dialog = wrapper.findComponent(vCustomDialog);
-			const content = dialog.findComponent(".v-card-text").text();
+					const wrapper = createWrapper({
+						isOpen: true,
+						copyResultItems,
+						copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+					});
 
-			expect(content).toContain(
-				"components.molecules.copyResult.ctlTools.info"
-			);
-		});
+					return { wrapper };
+				};
 
-		describe("when root item is a Course, has no failed file and CTL_TOOLS_COPY feature flag is enabled", () => {
-			const setup = () => {
-				const copyResultItems = mockLessonResultItems([]);
-				const wrapper = createWrapper({
-					isOpen: true,
-					copyResultItems,
-					copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+				it("should show the warning text for non-copyable course external tools", () => {
+					const { wrapper } = setup();
+
+					const dialog = wrapper.findComponent(vCustomDialog);
+					const content = dialog.findComponent(".v-card-text").text();
+
+					expect(content).toContain(
+						"components.molecules.copyResult.ctlTools.withFeature.info"
+					);
 				});
+			});
 
-				return { wrapper };
-			};
+			describe("when there is an item of type ExternalToolElement", () => {
+				const setup = () => {
+					const envs = envsFactory.build({
+						FEATURE_CTL_TOOLS_TAB_ENABLED: true,
+						FEATURE_CTL_TOOLS_COPY_ENABLED: true,
+					});
+					envConfigModule.setEnvs(envs);
 
-			it("should render ctl tools copy info ", () => {
-				const envs = envsFactory.build({
-					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-					FEATURE_CTL_TOOLS_COPY_ENABLED: true,
+					const copyResultItems = mockLessonResultItems([]);
+					copyResultItems[0].elements.push({
+						title: "Board External Tool Element",
+						type: CopyApiResponseTypeEnum.ExternalToolElement,
+					});
+					copyResultItems[0].type = CopyApiResponseTypeEnum.Course;
+
+					const wrapper = createWrapper({
+						isOpen: true,
+						copyResultItems,
+						copyResultRootItemType: CopyApiResponseTypeEnum.Course,
+					});
+
+					return { wrapper };
+				};
+
+				it("should show the warning text for non-copyable course external tools", () => {
+					const { wrapper } = setup();
+
+					const dialog = wrapper.findComponent(vCustomDialog);
+					const content = dialog.findComponent(".v-card-text").text();
+
+					expect(content).toContain(
+						"components.molecules.copyResult.ctlTools.withFeature.info"
+					);
 				});
-				envConfigModule.setEnvs(envs);
-				const { wrapper } = setup();
-
-				const dialog = wrapper.findComponent(vCustomDialog);
-				const content = dialog.findComponent(".v-card-text").text();
-
-				expect(content).toContain(
-					"components.molecules.copyResult.ctlTools.withFeature.info"
-				);
 			});
 		});
 

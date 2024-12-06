@@ -5,6 +5,7 @@
 			:model-value="shareUrl"
 			readonly
 			:label="`${t(`components.molecules.share.${type}.result.linkLabel`)}`"
+			data-testid="share-course-result-url"
 		/>
 		<div class="mb-4">
 			<div

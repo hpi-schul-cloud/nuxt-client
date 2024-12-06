@@ -8,6 +8,7 @@
 		confirm-btn-title-key="common.actions.import"
 		@dialog-confirmed="onConfirm"
 		@dialog-canceled="onCancel"
+		data-testid="import-modal"
 	>
 		<template #title>
 			<div ref="textTitle" class="text-h4 my-2">
@@ -21,26 +22,76 @@
 					<div class="mx-2">
 						<v-icon color="info" :icon="mdiInformation" />
 					</div>
-					<RenderHTML
-						data-testid="import-modal-external-tools-info"
-						v-if="ctlToolsEnabled && parentType === 'courses'"
-						:html="
-							t(
-								`components.molecules.import.${parentType}.options.ctlTools.infoText`
-							)
-						"
-					/>
-					<div v-else data-testid="import-modal-coursefiles-info">
-						{{
-							t(`components.molecules.import.${parentType}.options.infoText`)
-						}}
+					<div data-testid="import-options-table-header">
+						{{ t("components.molecules.import.options.tableHeader.InfoText") }}
+						<ul class="ml-6">
+							<li data-testid="import-options-personal-data-text">
+								{{
+									t(
+										"components.molecules.shareImport.options.restrictions.infoText.personalData"
+									)
+								}}
+							</li>
+							<li
+								v-if="showCtlToolsInfo"
+								data-testid="import-modal-external-tools-info"
+							>
+								{{
+									t(
+										"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
+									)
+								}}
+							</li>
+							<li
+								v-if="showCtlToolsInfo"
+								data-testid="import-modal-external-tools-protected-parameter-info"
+							>
+								{{
+									t(
+										"components.molecules.shareImport.options.ctlTools.infoText.protected"
+									)
+								}}
+							</li>
+							<li data-testid="import-modal-coursefiles-info">
+								{{
+									t(
+										"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
+									)
+								}}
+							</li>
+							<li>
+								{{
+									t(
+										"components.molecules.shareImport.options.restrictions.infoText.etherpad"
+									)
+								}}
+							</li>
+							<li>
+								{{
+									t(
+										"components.molecules.shareImport.options.restrictions.infoText.geogebra"
+									)
+								}}
+							</li>
+							<li>
+								{{
+									t(
+										"components.molecules.shareImport.options.restrictions.infoText.courseGroups"
+									)
+								}}
+							</li>
+						</ul>
 					</div>
+				</div>
+				<div class="mb-4">
+					{{ t(`components.molecules.import.${parentType}.rename`) }}
 				</div>
 				<v-text-field
 					ref="nameInputText"
 					v-model="newName"
 					:label="t(`components.molecules.import.${parentType}.label`)"
 					:rules="[rules.required]"
+					data-testid="import-modal-name-input"
 				/>
 			</div>
 		</template>
@@ -48,12 +99,11 @@
 </template>
 
 <script setup>
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@icons/material";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { RenderHTML } from "@feature-render-html";
 
 const emit = defineEmits(["import", "cancel"]);
 const props = defineProps({
@@ -82,7 +132,10 @@ const onConfirm = () => {
 };
 const onCancel = () => emit("cancel");
 
-const ctlToolsEnabled = computed(() => {
-	return envConfigModule.getCtlToolsTabEnabled;
+const showCtlToolsInfo = computed(() => {
+	return (
+		envConfigModule.getCtlToolsTabEnabled &&
+		(props.parentType === "courses" || props.parentType === "columnBoard")
+	);
 });
 </script>

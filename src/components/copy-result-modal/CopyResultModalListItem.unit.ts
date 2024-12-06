@@ -161,6 +161,10 @@ describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 				CopyApiResponseTypeEnum.CollaborativeTextEditorElement,
 				"components.molecules.copyResult.label.etherpad",
 			],
+			[
+				CopyApiResponseTypeEnum.ExternalToolElement,
+				"components.molecules.copyResult.label.toolElements",
+			],
 		];
 
 		map.forEach(([constant, languageConstant]) => {

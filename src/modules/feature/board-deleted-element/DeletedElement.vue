@@ -8,20 +8,6 @@
 		ref="deletedElement"
 		:ripple="false"
 	>
-		<WarningAlert
-			v-if="
-				element.content.deletedElementType === ContentElementType.ExternalTool
-			"
-		>
-			{{
-				$t(
-					"components.cardElement.deletedElement.warning.externalToolElement",
-					{
-						toolName: element.content.title,
-					}
-				)
-			}}
-		</WarningAlert>
 		<ContentElementBar :has-grey-background="true" :icon="mdiPuzzleOutline">
 			<template #title>
 				{{ element.content.title }}
@@ -36,6 +22,20 @@
 				/>
 			</template>
 		</ContentElementBar>
+		<WarningAlert
+			v-if="
+				element.content.deletedElementType === ContentElementType.ExternalTool
+			"
+		>
+			{{
+				$t(
+					"components.cardElement.deletedElement.warning.externalToolElement",
+					{
+						toolName: element.content.title,
+					}
+				)
+			}}
+		</WarningAlert>
 	</VCard>
 </template>
 
