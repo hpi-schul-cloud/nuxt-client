@@ -6,6 +6,7 @@ import {
 	LinkElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
+	VideoConferenceElementResponse,
 } from "@/serverApi/v3";
 
 export type AnyContentElement =
@@ -15,4 +16,5 @@ export type AnyContentElement =
 	| SubmissionContainerElementResponse
 	| ExternalToolElementResponse
 	| DrawingElementResponse
-	| CollaborativeTextEditorElementResponse;
+	| CollaborativeTextEditorElementResponse
+	| VideoConferenceElementResponse;
