@@ -172,45 +172,54 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 					expect(isActive.value).toBe(false);
 				});
 			});
+		});
 
-			describe("when board details path is matched", () => {
-				const setupBoardDetailsRoute = () => {
-					return setup({
-						path: "/boards/0000dcfbfb5c7a3f00bf21ac",
-						name: "boards-id",
+		describe("when board details path is matched", () => {
+			const setupBoardDetailsRoute = () => {
+				return setup({
+					path: "/boards/0000dcfbfb5c7a3f00bf21ac",
+					name: "boards-id",
+				});
+			};
+
+			describe("and board context is a room", () => {
+				const setupIsRoom = () => {
+					mockedUseSharedBoardPageInformation.mockReturnValue({
+						createPageInformation: jest.fn(),
+						breadcrumbs: computed(() => []),
+						contextType: computed(() => BoardContextType.Room),
+						pageTitle: computed(() => "page-title"),
+						roomId: computed(() => "room-id"),
+						resetPageInformation: jest.fn(),
 					});
+
+					const { roomVariant } = storeToRefs(useRoomDetailsStore());
+					roomVariant.value = RoomVariant.ROOM;
+
+					return setupBoardDetailsRoute();
 				};
 
-				describe("when board context is a room", () => {
-					const setupIsRoom = () => {
-						const { roomVariant } = storeToRefs(useRoomDetailsStore());
-						roomVariant.value = RoomVariant.ROOM;
+				it("should be active", () => {
+					const { roomsItem } = setupIsRoom();
+					const { isActive } = useSidebarSelection(roomsItem);
 
-						return setupBoardDetailsRoute();
-					};
-
-					it("should be active", () => {
-						const { roomsItem } = setupIsRoom();
-						const { isActive } = useSidebarSelection(roomsItem);
-
-						expect(isActive.value).toBe(true);
-					});
+					expect(isActive.value).toBe(true);
 				});
+			});
 
-				describe("when board context is something else", () => {
-					const setupIsOther = () => {
-						const { roomVariant } = storeToRefs(useRoomDetailsStore());
-						roomVariant.value = undefined;
+			describe("and board context is something else", () => {
+				const setupIsOther = () => {
+					const { roomVariant } = storeToRefs(useRoomDetailsStore());
+					roomVariant.value = undefined;
 
-						return setupBoardDetailsRoute();
-					};
+					return setupBoardDetailsRoute();
+				};
 
-					it("should not be active", () => {
-						const { roomsItem } = setupIsOther();
-						const { isActive } = useSidebarSelection(roomsItem);
+				it("should not be active", () => {
+					const { roomsItem } = setupIsOther();
+					const { isActive } = useSidebarSelection(roomsItem);
 
-						expect(isActive.value).toBe(false);
-					});
+					expect(isActive.value).toBe(false);
 				});
 			});
 		});
@@ -298,7 +307,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				});
 			};
 
-			describe("when board context is a course", () => {
+			describe("and board context is a course", () => {
 				const setupCourseContext = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
 						createPageInformation: jest.fn(),
@@ -323,7 +332,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 				});
 			});
 
-			describe("when board context is a user", () => {
+			describe("and board context is a user", () => {
 				const setupUserContext = () => {
 					mockedUseSharedBoardPageInformation.mockReturnValue({
 						createPageInformation: jest.fn(),
