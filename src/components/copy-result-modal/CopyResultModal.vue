@@ -223,7 +223,6 @@ export default {
 	},
 	methods: {
 		hasElementOfType(items, types) {
-			console.log(JSON.stringify(items));
 			let found = false;
 			items.forEach((item) => {
 				if (found) return;

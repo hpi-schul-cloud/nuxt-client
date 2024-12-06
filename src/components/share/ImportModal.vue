@@ -22,69 +22,65 @@
 					<div class="mx-2">
 						<v-icon color="info" :icon="mdiInformation" />
 					</div>
-					<div>
-						<div data-testid="import-options-table-header">
-							{{
-								t("components.molecules.import.options.tableHeader.InfoText")
-							}}
-							<ul class="ml-6">
-								<li data-testid="import-options-personal-data-text">
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.personalData"
-										)
-									}}
-								</li>
-								<li
-									v-if="showCtlToolsInfo"
-									data-testid="import-modal-external-tools-info"
-								>
-									{{
-										t(
-											"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
-										)
-									}}
-								</li>
-								<li
-									v-if="showCtlToolsInfo"
-									data-testid="import-modal-external-tools-protected-parameter-info"
-								>
-									{{
-										t(
-											"components.molecules.shareImport.options.ctlTools.infoText.protected"
-										)
-									}}
-								</li>
-								<li data-testid="import-modal-coursefiles-info">
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
-										)
-									}}
-								</li>
-								<li>
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.etherpad"
-										)
-									}}
-								</li>
-								<li>
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.geogebra"
-										)
-									}}
-								</li>
-								<li>
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.courseGroups"
-										)
-									}}
-								</li>
-							</ul>
-						</div>
+					<div data-testid="import-options-table-header">
+						{{ t("components.molecules.import.options.tableHeader.InfoText") }}
+						<ul class="ml-6">
+							<li data-testid="import-options-personal-data-text">
+								{{
+									t(
+										"components.molecules.shareImport.options.restrictions.infoText.personalData"
+									)
+								}}
+							</li>
+							<li
+								v-if="showCtlToolsInfo"
+								data-testid="import-modal-external-tools-info"
+							>
+								{{
+									t(
+										"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
+									)
+								}}
+							</li>
+							<li
+								v-if="showCtlToolsInfo"
+								data-testid="import-modal-external-tools-protected-parameter-info"
+							>
+								{{
+									t(
+										"components.molecules.shareImport.options.ctlTools.infoText.protected"
+									)
+								}}
+							</li>
+							<li data-testid="import-modal-coursefiles-info">
+								{{
+									t(
+										"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
+									)
+								}}
+							</li>
+							<li>
+								{{
+									t(
+										"components.molecules.shareImport.options.restrictions.infoText.etherpad"
+									)
+								}}
+							</li>
+							<li>
+								{{
+									t(
+										"components.molecules.shareImport.options.restrictions.infoText.geogebra"
+									)
+								}}
+							</li>
+							<li>
+								{{
+									t(
+										"components.molecules.shareImport.options.restrictions.infoText.courseGroups"
+									)
+								}}
+							</li>
+						</ul>
 					</div>
 				</div>
 				<div class="mb-4">

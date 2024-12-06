@@ -145,8 +145,6 @@ const step = computed<ShareModalStep>(() =>
 	shareModule.getShareUrl === undefined ? "firstStep" : "secondStep"
 );
 
-const isCourse = computed(() => props.type === "courses");
-
 const modalOptions: Record<
 	ShareModalStep,
 	{ title: string; actionButtons: string[] }
