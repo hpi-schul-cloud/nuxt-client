@@ -459,6 +459,8 @@ export default {
 	"components.cardElement.videoConferenceElement": "Відеоконференція",
 	"components.cardElement.videoConferenceElement.label":
 		"Вставити назву відеоконференції",
+	"components.cardElement.videoConferenceElement.configurationDialog.title":
+		"Створити відеоконференцію {elementTitle}",
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",

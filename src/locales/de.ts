@@ -453,6 +453,8 @@ export default {
 	"components.cardElement.videoConferenceElement": "Videokonferenz",
 	"components.cardElement.videoConferenceElement.label":
 		"Videokonferenz-Titel einfügen",
+	"components.cardElement.videoConferenceElement.configurationDialog.title":
+		"Videokonferenz {elementTitle} erstellen",
 	"components.cardElement.deletedElement": "Gelöschter Inhalt",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",

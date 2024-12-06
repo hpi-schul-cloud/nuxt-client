@@ -10,6 +10,7 @@ import {
 	mdiPuzzleOutline,
 	mdiTextBoxEditOutline,
 	mdiTrayArrowUp,
+	mdiVideo,
 } from "@icons/material";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
@@ -143,18 +144,25 @@ export const useAddElementDialog = (
 		envConfigModule.getEnv.FEATURE_PREFERRED_CTL_TOOLS_ENABLED &&
 		preferredTools
 	) {
-		preferredTools.forEach((tool: PreferredToolResponse) => {
-			if (!tool.iconName) {
-				tool.iconName = "mdiPuzzleOutline";
-			}
+		options.push({
+			icon: mdiVideo,
+			label: t(
+				"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle"
+			),
+			action: () => onElementClick(ContentElementType.CollaborativeTextEditor),
+			testId: "create-element-collaborative-text-editor",
+		});
+	}
 
-			options.push({
-				icon: "$" + tool.iconName,
-				label: tool.name,
-				action: () =>
-					onPreferredElementClick(ContentElementType.ExternalTool, tool),
-				testId: `create-element-preferred-element-${tool.name}`,
-			});
+	// eslint-disable-next-line no-constant-condition
+	if (true /*add env here*/) {
+		options.push({
+			icon: mdiVideo,
+			label: t(
+				"components.elementTypeSelection.elements.videoConferenceElement.subtitle"
+			),
+			action: () => onElementClick(ContentElementType.VideoConference),
+			testId: "create-element-video-conference",
 		});
 	}
 

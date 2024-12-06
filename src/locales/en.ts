@@ -449,6 +449,8 @@ export default {
 	"components.cardElement.videoConferenceElement": "Video conference",
 	"components.cardElement.videoConferenceElement.label":
 		"Insert video conference title",
+	"components.cardElement.videoConferenceElement.configurationDialog.title":
+		"Create video conference {elementTitle}",
 	"components.cardElement.deletedElement": "Deleted content",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",

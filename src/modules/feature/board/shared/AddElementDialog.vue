@@ -8,9 +8,7 @@
 			<VCardTitle class="text-h4 text-break px-6 pt-4">
 				{{ $t("components.elementTypeSelection.dialog.title") }}
 			</VCardTitle>
-			<VCardText
-				class="d-flex flex-row flex-wrap align-items-center justify-space-between"
-			>
+			<VCardText class="d-flex flex-row flex-wrap align-items-center">
 				<ExtendedIconBtn
 					v-for="(item, key) in elementTypeOptions"
 					:key="key"
