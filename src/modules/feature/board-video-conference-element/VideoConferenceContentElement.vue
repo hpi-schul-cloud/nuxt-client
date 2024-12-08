@@ -234,7 +234,7 @@ const ariaLabel = computed(() => {
 	)}`;
 });
 
-const elementTitle = computed(() => element.value.content.title);
+const elementTitle = computed(() => computedElement.value.content.title);
 
 const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 	() => videoConferenceModule.getVideoConferenceInfo
@@ -271,7 +271,7 @@ const isRefreshing: ComputedRef<boolean> = computed(
 const isRunning: ComputedRef<boolean> = computed(
 	() =>
 		videoConferenceInfo.value.state === VideoConferenceState.RUNNING &&
-		videoConferenceInfo.value.scopeId === element.value.id
+		videoConferenceInfo.value.scopeId === computedElement.value.id
 );
 
 const isWaitingRoomActive: ComputedRef<boolean> = computed(
@@ -283,7 +283,7 @@ const isConfigurationDialogOpen: Ref<boolean> = ref(false);
 onMounted(async () => {
 	await videoConferenceModule.fetchVideoConferenceInfo({
 		scope: VideoConferenceScope.VideoConferenceElement,
-		scopeId: element.value.id,
+		scopeId: computedElement.value.id,
 	});
 });
 
@@ -294,7 +294,7 @@ const onRefresh = async () => {
 
 	await videoConferenceModule.fetchVideoConferenceInfo({
 		scope: VideoConferenceScope.VideoConferenceElement,
-		scopeId: element.value.id,
+		scopeId: computedElement.value.id,
 	});
 };
 
@@ -332,7 +332,7 @@ const onMoveUp = () => emit("move-up:edit");
 const onDelete = async (confirmation: Promise<boolean>) => {
 	const shouldDelete = await confirmation;
 	if (shouldDelete) {
-		emit("delete:element", element.value.id);
+		emit("delete:element", computedElement.value.id);
 	}
 };
 
@@ -345,7 +345,7 @@ const startVideoConference = async () => {
 
 	await videoConferenceModule.startVideoConference({
 		scope: VideoConferenceScope.VideoConferenceElement,
-		scopeId: element.value.id,
+		scopeId: computedElement.value.id,
 		videoConferenceOptions: videoConferenceOptions.value,
 		logoutUrl: logoutUrl.toString(),
 	});
@@ -359,7 +359,7 @@ const joinVideoConference = async () => {
 	const videoConferenceUrl: VideoConferenceJoinResponse | undefined =
 		await videoConferenceModule.joinVideoConference({
 			scope: VideoConferenceScope.VideoConferenceElement,
-			scopeId: element.value.id,
+			scopeId: computedElement.value.id,
 		});
 
 	if (videoConferenceUrl) {
