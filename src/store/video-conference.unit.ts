@@ -106,6 +106,7 @@ describe("VideoConferenceModule", () => {
 					const result = module.getVideoConferenceInfo;
 
 					expect(result).toEqual<VideoConferenceInfo>({
+						scopeId: "",
 						state: VideoConferenceState.NOT_STARTED,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -144,6 +145,7 @@ describe("VideoConferenceModule", () => {
 					state: VideoConferenceStateResponse.Running,
 				});
 				const state = videoConferenceInfoFactory.build({
+					scopeId: "scopeId",
 					state: VideoConferenceState.RUNNING,
 				});
 
