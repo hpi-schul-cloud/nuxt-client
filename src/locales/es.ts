@@ -1816,6 +1816,10 @@ export default {
 		"La videoconferencia aún no ha comenzado o no tienes permiso para unirte.",
 	"pages.videoConference.info.notStarted":
 		"La videoconferencia aún no ha comenzado.",
+	"pages.videoConference.info.notEnabledParticipants":
+		"El elemento ya no está disponible. Póngase en contacto con el profesor.",
+	"pages.videoConference.info.notEnabledTeacher":
+		"El elemento ya no está disponible. Póngase en contacto con Admin.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",

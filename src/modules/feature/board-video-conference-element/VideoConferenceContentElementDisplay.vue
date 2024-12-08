@@ -12,7 +12,7 @@
 		>
 			<template #display>
 				<div
-					v-if="!isRunning && canJoin && !canStart"
+					v-if="canStart && !isVideoConferenceEnabled"
 					class="mt-2"
 					data-testId="vc-info-box-show"
 				>
@@ -24,11 +24,32 @@
 					>
 						<div class="d-flex flex-wrap gap-4">
 							<span class="flex-1 my-auto">
+								{{ t("pages.videoConference.info.notEnabledTeacher") }}
+							</span>
+						</div>
+					</v-alert>
+				</div>
+				<div
+					v-if="!isRunning && canJoin && !canStart"
+					class="mt-2"
+					data-testId="vc-info-box-show"
+				>
+					<v-alert
+						density="compact"
+						class="ma-0"
+						type="info"
+						data-testId="vc-info-box"
+					>
+						<div class="d-flex flex-wrap gap-4">
+							<span v-if="isVideoConferenceEnabled" class="flex-1 my-auto">
 								{{
-									hasPermission
+									hasParticipationPermission
 										? t("pages.videoConference.info.notStarted")
 										: t("pages.videoConference.info.noPermission")
 								}}
+							</span>
+							<span v-else class="flex-1 my-auto">
+								{{ t("pages.videoConference.info.notEnabledParticipants") }}
 							</span>
 						</div>
 					</v-alert>
@@ -60,6 +81,7 @@ import { injectStrict } from "@/utils/inject";
 import { useDisplay } from "vuetify";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useI18n } from "vue-i18n";
+import { envConfigModule } from "@/store";
 
 const emit = defineEmits(["click", "refresh"]);
 
@@ -104,8 +126,14 @@ const isSmallOrLargerListBoard = computed(() => {
 	return smAndUp.value && isListLayout.value;
 });
 
+const isVideoConferenceEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_VIDEOCONFERENCE_ENABLED
+);
+
 const onClick = () => {
-	if (!props.isRunning && props.canJoin && !props.canStart) {
+	if (!isVideoConferenceEnabled.value) {
+		return;
+	} else if (!props.isRunning && props.canJoin && !props.canStart) {
 		emit("refresh");
 	} else if (props.canStart) {
 		emit("click");

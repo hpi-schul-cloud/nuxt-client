@@ -1767,6 +1767,10 @@ export default {
 		"The video conference hasn't started yet or you don't have permission to join it.",
 	"pages.videoConference.info.notStarted":
 		"The video conference hasn't started yet.",
+	"pages.videoConference.info.notEnabledParticipants":
+		"The element is no longer available. Please contact the teacher.",
+	"pages.videoConference.info.notEnabledTeacher":
+		"The element is no longer available. Please contact Admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
 	"error.500":
 		"There are problems in the system. We are working on fixing the issue. Please try again later.",

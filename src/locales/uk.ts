@@ -1791,6 +1791,10 @@ export default {
 	"pages.videoConference.info.noPermission":
 		"Відеоконференція ще не почалася або у вас немає дозволу приєднатися до неї.",
 	"pages.videoConference.info.notStarted": "Відеоконференція ще не почалася.",
+	"pages.videoConference.info.notEnabledParticipants":
+		"Елемент більше не доступний. Будь ласка, зверніться до викладача.",
+	"pages.videoConference.info.notEnabledTeacher":
+		"Елемент більше не доступний. Будь ласка, зверніться до адміністратора.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
 	"error.500":
 		"Є проблеми в системі. Ми працюємо над усуненням проблеми. Будь ласка, спробуйте пізніше.",

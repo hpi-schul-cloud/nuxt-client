@@ -89,13 +89,10 @@
 					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
 				/>
-				<CollaborativeTextEditorElement
-					v-else-if="showCollaborativeTextEditorElement(element)"
+				<VideoConferenceContentElement
+					v-else-if="showVideoConferenceElement(element)"
 					:element="element"
 					:isEditMode="isEditMode"
-					:isFirstElement="firstElementId === element.id"
-					:isLastElement="lastElementId === element.id"
-					:hasMultipleElements="hasMultipleElements"
 					:id="element.id"
 					:column-index="columnIndex"
 					:row-index="rowIndex"
@@ -105,12 +102,14 @@
 					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
 				/>
-				<VideoConferenceContentElement
-					v-else-if="isVideoConferenceElementResponse(element)"
+				<CollaborativeTextEditorElement
+					v-else-if="showCollaborativeTextEditorElement(element)"
 					:element="element"
 					:isEditMode="isEditMode"
+					:isFirstElement="firstElementId === element.id"
+					:isLastElement="lastElementId === element.id"
+					:hasMultipleElements="hasMultipleElements"
 					:id="element.id"
-					tabindex="0"
 					:column-index="columnIndex"
 					:row-index="rowIndex"
 					:element-index="index"
@@ -295,6 +294,13 @@ const isVideoConferenceElementResponse = (
 	element: AnyContentElement
 ): element is VideoConferenceElementResponse => {
 	return element.type === ContentElementType.VideoConference;
+};
+
+const showVideoConferenceElement = (
+	element: AnyContentElement
+): element is VideoConferenceElementResponse => {
+	// eslint-disable-next-line no-constant-binary-expression
+	return true && isVideoConferenceElementResponse(element);
 };
 
 const onMoveElementDown = (

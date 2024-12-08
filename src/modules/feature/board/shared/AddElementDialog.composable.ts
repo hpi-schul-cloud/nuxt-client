@@ -144,13 +144,18 @@ export const useAddElementDialog = (
 		envConfigModule.getEnv.FEATURE_PREFERRED_CTL_TOOLS_ENABLED &&
 		preferredTools
 	) {
-		options.push({
-			icon: mdiVideo,
-			label: t(
-				"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle"
-			),
-			action: () => onElementClick(ContentElementType.CollaborativeTextEditor),
-			testId: "create-element-collaborative-text-editor",
+		preferredTools.forEach((tool: PreferredToolResponse) => {
+			if (!tool.iconName) {
+				tool.iconName = "mdiPuzzleOutline";
+			}
+
+			options.push({
+				icon: "$" + tool.iconName,
+				label: tool.name,
+				action: () =>
+					onPreferredElementClick(ContentElementType.ExternalTool, tool),
+				testId: `create-element-preferred-element-${tool.name}`,
+			});
 		});
 	}
 
