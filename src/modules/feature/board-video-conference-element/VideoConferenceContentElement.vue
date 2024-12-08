@@ -269,7 +269,9 @@ const isRefreshing: ComputedRef<boolean> = computed(
 );
 
 const isRunning: ComputedRef<boolean> = computed(
-	() => videoConferenceInfo.value.state === VideoConferenceState.RUNNING
+	() =>
+		videoConferenceInfo.value.state === VideoConferenceState.RUNNING &&
+		videoConferenceInfo.value.scopeId === element.value.id
 );
 
 const isWaitingRoomActive: ComputedRef<boolean> = computed(
@@ -297,17 +299,11 @@ const onRefresh = async () => {
 };
 
 const onClick = async () => {
-	if (
-		videoConferenceInfo.value.state === VideoConferenceState.NOT_STARTED &&
-		canStart.value
-	) {
+	if (!isRunning.value && canStart.value) {
 		openConfigurationDiaolog();
 	}
 
-	if (
-		videoConferenceInfo.value.state === VideoConferenceState.RUNNING &&
-		canJoin.value
-	) {
+	if (isRunning.value && canJoin.value) {
 		await joinVideoConference();
 	}
 };
@@ -355,6 +351,8 @@ const startVideoConference = async () => {
 	});
 
 	await joinVideoConference();
+
+	isConfigurationDialogOpen.value = false;
 };
 
 const joinVideoConference = async () => {
