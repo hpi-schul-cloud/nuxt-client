@@ -185,50 +185,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(wrapperVM.boardLayoutsEnabled).toBe(false);
 			});
 		});
-
-		describe("when FEATURE_ROOMS_ENABLED flag is set true", () => {
-			it("should call fetchRoom on mounted", () => {
-				const { roomDetailsStore } = setup();
-
-				expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith("room-id");
-				expect(roomDetailsStore.deactivateRoom).not.toHaveBeenCalled();
-			});
-		});
-
-		describe("when FEATURE_ROOMS_ENABLED flag is set false", () => {
-			it("should not call fetchRoom on mounted", () => {
-				const { roomDetailsStore } = setup({
-					envs: { FEATURE_ROOMS_ENABLED: false },
-					isLoading: false,
-				});
-
-				expect(roomDetailsStore.deactivateRoom).toHaveBeenCalled();
-				expect(roomDetailsStore.fetchRoom).not.toHaveBeenCalled();
-			});
-		});
-	});
-
-	describe("when loading", () => {
-		it("should render a loading indication", () => {
-			const { wrapper } = setup({ isLoading: true });
-
-			const div = wrapper.find("[data-testid=loading]");
-			expect(div.exists()).toBe(true);
-		});
-	});
-
-	describe("when roomVariant is invalid", () => {
-		it("should not render RoomDetails", () => {
-			const { wrapper } = setup({
-				roomVariant: RoomVariant.COURSE_ROOM,
-				isLoading: false,
-			});
-
-			const roomDetailsComponent = wrapper.findComponent({
-				name: "RoomDetails",
-			});
-			expect(roomDetailsComponent.exists()).toBe(false);
-		});
 	});
 
 	describe("when not loading", () => {
