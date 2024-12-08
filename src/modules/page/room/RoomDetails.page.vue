@@ -1,130 +1,42 @@
 <template>
-	<template v-if="isLoading">
-		<div data-testid="loading" class="w-100 text-center">
-			<VProgressCircular
-				color="primary"
-				indeterminate
-				:size="51"
-				class="my-10"
-			/>
-		</div>
-	</template>
-	<template v-else>
-		<template v-if="isRoom">
-			<DefaultWireframe
-				max-width="full"
-				:breadcrumbs="breadcrumbs"
-				:fabItems="fabItems"
-				@onFabItemClick="fabItemClickHandler"
-			>
-				<template #header v-if="room">
-					<div class="d-flex align-items-center">
-						<h1 class="text-h3 mb-4" data-testid="room-title">
-							{{ room.name }}
-						</h1>
-						<KebabMenu
-							v-if="isMenuEnabled"
-							class="mx-2"
-							:aria-label="$t('pages.roomDetails.ariaLabels.menu')"
-							data-testid="room-menu"
-						>
-							<VListItem
-								v-if="canEditRoom"
-								ref="editRoomMenu"
-								role="menuitem"
-								:to="`/rooms/${room.id}/edit`"
-								data-testid="room-action-edit"
-								:aria-label="
-									$t('pages.roomDetails.ariaLabels.menu.action.edit')
-								"
-							>
-								<template v-slot:prepend>
-									<VIcon :icon="mdiPencilOutline" />
-								</template>
-								<VListItemTitle>
-									{{ $t("common.actions.edit") }}
-								</VListItemTitle>
-							</VListItem>
-
-							<VListItem
-								v-if="canEditRoom"
-								ref="manageMembersMenu"
-								role="menuitem"
-								:to="`/rooms/${room.id}/members`"
-								data-testid="room-action-manage-participants"
-								:aria-label="t('pages.rooms.members.manage')"
-							>
-								<template #prepend>
-									<VIcon :icon="mdiAccountGroupOutline" />
-								</template>
-								<VListItemTitle>
-									{{ t("pages.rooms.members.manage") }}
-								</VListItemTitle>
-							</VListItem>
-
-							<VListItem
-								v-if="canDeleteRoom"
-								ref="deleteRoomMenu"
-								role="menuitem"
-								data-testid="room-action-delete"
-								:aria-label="
-									$t('pages.roomDetails.ariaLabels.menu.action.delete')
-								"
-								@click="onDelete"
-							>
-								<template v-slot:prepend>
-									<VIcon :icon="mdiTrashCanOutline" />
-								</template>
-								<VListItemTitle>
-									{{ $t("common.actions.delete") }}
-								</VListItemTitle>
-							</VListItem>
-						</KebabMenu>
-					</div>
-				</template>
-				<RoomDetails v-if="room" :room="room" :room-boards="roomBoards" />
-				<ConfirmationDialog />
-				<SelectBoardLayoutDialog
-					v-if="boardLayoutsEnabled"
-					v-model="boardLayoutDialogIsOpen"
-					@select:multi-column="createBoard(BoardLayout.Columns)"
-					@select:single-column="createBoard(BoardLayout.List)"
+	<DefaultWireframe
+		max-width="full"
+		:breadcrumbs="breadcrumbs"
+		:fabItems="fabItems"
+		@onFabItemClick="fabItemClickHandler"
+	>
+		<template #header>
+			<div class="d-flex align-items-center">
+				<h1 class="text-h3 mb-4" data-testid="room-title">
+					{{ roomTitle }}
+				</h1>
+				<RoomMenu
+					v-if="isMenuEnabled"
+					@room:edit="onEdit"
+					@room:manage-members="onManageMembers"
+					@room:delete="onDelete"
 				/>
-			</DefaultWireframe>
+			</div>
 		</template>
-		<template v-else>
-			<CourseRoomDetailsPage />
-		</template>
-	</template>
+		<BoardGrid :boards="roomBoards" />
+		<ConfirmationDialog />
+		<SelectBoardLayoutDialog
+			v-if="boardLayoutsEnabled"
+			v-model="boardLayoutDialogIsOpen"
+			@select:multi-column="createBoard(BoardLayout.Columns)"
+			@select:single-column="createBoard(BoardLayout.List)"
+		/>
+	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { buildPageTitle } from "@/utils/pageTitle";
-import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { RoomDetails, useRoomAuthorization } from "@feature-room";
-import {
-	mdiAccountGroupOutline,
-	mdiPencilOutline,
-	mdiPlus,
-	mdiTrashCanOutline,
-	mdiViewDashboardOutline,
-	mdiViewGridPlusOutline,
-} from "@icons/material";
-import {
-	ConfirmationDialog,
-	useDeleteConfirmationDialog,
-} from "@ui-confirmation-dialog";
-import { KebabMenu } from "@ui-kebab-menu";
-import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
-import { computed, ComputedRef, onUnmounted, ref, watch } from "vue";
+import { computed, ComputedRef, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
+import { useRoomDetailsStore, useRoomsState } from "@data-room";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import {
 	BoardApiFactory,
 	BoardLayout,
@@ -132,25 +44,79 @@ import {
 	CreateBoardBodyParams,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { buildPageTitle } from "@/utils/pageTitle";
+import {
+	ConfirmationDialog,
+	useDeleteConfirmationDialog,
+} from "@ui-confirmation-dialog";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { BoardGrid, RoomMenu, useRoomAuthorization } from "@feature-room";
+import {
+	mdiViewGridPlusOutline,
+	mdiViewDashboardOutline,
+	mdiPlus,
+} from "@icons/material";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-
-const route = useRoute();
-const router = useRouter();
-
-const roomDetailsStore = useRoomDetailsStore();
-const { isLoading, room, roomVariant, roomBoards } =
-	storeToRefs(roomDetailsStore);
-const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 
 const { t } = useI18n();
 const { deleteRoom } = useRoomsState();
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+const router = useRouter();
+
+const { room, roomBoards } = storeToRefs(useRoomDetailsStore());
 
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.roomDetails.title")}`)
 );
 useTitle(pageTitle);
+
+const roomTitle = computed(() => {
+	if (room.value) {
+		return room.value.name;
+	}
+	return t("pages.roomDetails.title");
+});
+
+const onEdit = () => {
+	if (!room.value) return;
+
+	router.push({
+		name: "room-edit",
+		params: {
+			id: room.value.id,
+		},
+	});
+};
+
+const onManageMembers = () => {
+	if (!room.value) return;
+
+	router.push({
+		name: "room-members",
+		params: {
+			id: room.value.id,
+		},
+	});
+};
+
+const onDelete = async () => {
+	if (!room.value || !canDeleteRoom.value) return;
+
+	const shouldDelete = await askDeleteConfirmation(
+		room.value.name,
+		"common.labels.room"
+	);
+
+	if (shouldDelete) {
+		await deleteRoom(room.value.id);
+		router.push({
+			name: "rooms",
+		});
+	}
+};
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	if (room.value != null) {
@@ -219,20 +185,6 @@ const fabItemClickHandler = (event: string) => {
 	}
 };
 
-watch(
-	() => route.params.id,
-	async () => {
-		if (envConfigModule.getEnv["FEATURE_ROOMS_ENABLED"]) {
-			await fetchRoom(route.params.id as string);
-		} else {
-			deactivateRoom();
-		}
-	},
-	{ immediate: true }
-);
-
-const isRoom = computed(() => roomVariant.value === RoomVariant.ROOM);
-
 const createBoard = async (layout: BoardLayout) => {
 	if (!room.value || !canEditRoom.value) return;
 
@@ -248,24 +200,4 @@ const createBoard = async (layout: BoardLayout) => {
 
 	router.push(`/boards/${boardId}`);
 };
-
-const onDelete = async () => {
-	if (!room.value || !canDeleteRoom.value) return;
-
-	const shouldDelete = await askDeleteConfirmation(
-		room.value.name,
-		"common.labels.room"
-	);
-
-	if (shouldDelete) {
-		await deleteRoom(room.value.id);
-		router.push({
-			name: "rooms",
-		});
-	}
-};
-
-onUnmounted(() => {
-	resetState();
-});
 </script>

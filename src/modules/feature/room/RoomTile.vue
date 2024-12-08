@@ -10,16 +10,19 @@
 				{{ roomShortName }}
 			</span>
 		</div>
-		<div class="room-title mb-2 mt-2" data-testid="room-title">
-			{{ room.name }}
+		<div class="mb-2 mt-2" data-testid="room-title">
+			<LineClamp>
+				{{ room.name }}
+			</LineClamp>
 		</div>
 	</RouterLink>
 </template>
 
 <script setup lang="ts">
-import { RoomItem } from "@/types/room/Room";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
+import { LineClamp } from "@ui-line-clamp";
+import { RoomItem } from "@/types/room/Room";
 
 const props = defineProps({
 	room: {
@@ -49,8 +52,6 @@ const avatarAriaLabel = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/utils/multiline-ellipsis.scss";
-
 a.room-link {
 	display: block;
 	text-decoration: none;
@@ -75,13 +76,5 @@ a.room-link {
 	transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 	transition-property: width, height;
 	vertical-align: middle;
-}
-
-.room-title {
-	@include excerpt(
-		$font-size: calc(var(--space-base-vuetify) * 4),
-		$line-height: var(--line-height-lg),
-		$lines-to-show: 3
-	);
 }
 </style>
