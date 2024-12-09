@@ -225,7 +225,7 @@ const fabItemClickHandler = (event: string) => {
 	}
 };
 
-const canViewRoom = computed(() => {
+const canAccessRoom = computed(() => {
 	return (
 		envConfigModule.getEnv.FEATURE_ROOMS_ENABLED &&
 		authModule.getUserPermissions.includes(Permission.RoomCreate.toLowerCase())
@@ -235,7 +235,7 @@ const canViewRoom = computed(() => {
 watch(
 	() => route.params.id,
 	async () => {
-		if (canViewRoom.value) {
+		if (canAccessRoom.value) {
 			await fetchRoom(route.params.id as string);
 		} else {
 			deactivateRoom();
