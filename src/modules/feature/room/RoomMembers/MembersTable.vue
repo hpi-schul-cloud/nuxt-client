@@ -2,10 +2,13 @@
 	<div
 		class="d-flex justify-space-between align-center mb-2 table-title-header"
 	>
-		<template v-if="selectedMemberList.length">
-			<div class="mr-2 pa-0 pl-4 multi-action-menu">
+		<template v-if="selectedUserIds.length">
+			<div
+				class="mr-2 pa-0 pl-4 multi-action-menu"
+				data-testid="multi-action-menu"
+			>
 				<span class="d-inline-flex">
-					{{ selectedMemberList.length }}
+					{{ selectedUserIds.length }}
 					{{ t("pages.administration.selected") }}
 				</span>
 				<v-btn
@@ -15,7 +18,7 @@
 					variant="text"
 					:icon="mdiTrashCanOutline"
 					:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-					@click="onRemoveMembers"
+					@click="onRemoveMembers(selectedUserIds)"
 				/>
 
 				<v-btn
@@ -47,16 +50,15 @@
 	<v-divider role="presentation" />
 	<v-data-table
 		v-model:search="search"
-		v-model="selectedMemberList"
+		v-model="selectedUserIds"
 		data-testid="participants-table"
 		hover
 		item-value="userId"
 		mobile-breakpoint="sm"
-		:items="membersList"
+		:items="memberList"
 		:headers="tableHeader"
 		:items-per-page-options="[5, 10, 25, 50, 100]"
 		:items-per-page="50"
-		:no-data-text="t('common.nodata')"
 		:mobile="null"
 		:show-select="true"
 		:sort-asc-icon="mdiMenuDown"
@@ -64,21 +66,22 @@
 		@update:current-items="onUpdateFilter"
 		@update:model-value="onSelectMembers"
 	>
-		<template #[`item.actions`]="{ item }">
+		<template #[`item.actions`]="{ item, index }">
 			<v-btn
-				ref="removeMember"
+				:data-testid="`remove-member-${index}`"
 				size="x-small"
 				variant="text"
 				:aria-label="getRemoveAriaLabel(item)"
 				:icon="mdiTrashCanOutline"
-				@click="onRemoveMembers"
+				@click="onRemoveMembers([item.userId])"
 			/>
 		</template>
 	</v-data-table>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, toRef, watch } from "vue";
+import { PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	mdiClose,
@@ -88,14 +91,18 @@ import {
 	mdiTrashCanOutline,
 } from "@icons/material";
 import { RoomMemberResponse } from "@/serverApi/v3";
+import {
+	ConfirmationDialog,
+	useConfirmationDialog,
+} from "@ui-confirmation-dialog";
+
+const { askConfirmation } = useConfirmationDialog();
+
+const selectedUserIds = ref<string[]>([]);
 
 const props = defineProps({
 	members: {
 		type: Array as PropType<RoomMemberResponse[]>,
-		required: true,
-	},
-	selectedMembers: {
-		type: Array as PropType<string[]>,
 		required: true,
 	},
 });
@@ -103,24 +110,12 @@ const props = defineProps({
 const emit = defineEmits(["remove:members", "select:members"]);
 const { t } = useI18n();
 const search = ref("");
-const membersList = toRef(props, "members");
-const selectedMemberList = ref<string[]>([]);
-const membersFilterCount = ref(membersList.value?.length);
+const memberList = toRef(props, "members");
+const membersFilterCount = ref(memberList.value?.length);
 
-watch(
-	() => props.selectedMembers,
-	(value) => {
-		selectedMemberList.value = value;
-	}
-);
-
-const onUpdateFilter = (value: RoomMemberResponse[]) => {
+const onUpdateFilter = (filteredMembers: RoomMemberResponse[]) => {
 	membersFilterCount.value =
-		search.value === "" ? membersList.value.length : value.length;
-};
-
-const onRemoveMembers = () => {
-	emit("remove:members");
+		search.value === "" ? memberList.value.length : filteredMembers.length;
 };
 
 const onSelectMembers = (userIds: string[]) => {
@@ -128,8 +123,36 @@ const onSelectMembers = (userIds: string[]) => {
 };
 
 const onResetSelectedMembers = () => {
-	emit("select:members", []);
-	selectedMemberList.value = [];
+	selectedUserIds.value = [];
+};
+
+const onRemoveMembers = async (userIds: string[]) => {
+	const shouldRemove = await confirmRemoval(userIds);
+	if (shouldRemove) {
+		selectedUserIds.value = selectedUserIds.value.filter(
+			(userId) => !userIds.includes(userId)
+		);
+		emit("remove:members", userIds);
+	}
+};
+
+const confirmRemoval = async (userIds: string[]) => {
+	let message = t("pages.rooms.members.multipleRemove.confirmation");
+	if (userIds.length === 1) {
+		const member = memberList.value.find(
+			(member) => member.userId === userIds[0]
+		);
+		message = t("pages.rooms.members.remove.confirmation", {
+			memberName: `${member?.firstName} ${member?.lastName}`,
+		});
+	}
+
+	const shouldRemove = await askConfirmation({
+		message,
+		confirmActionLangKey: "common.actions.remove",
+	});
+
+	return shouldRemove;
 };
 
 const getRemoveAriaLabel = (member: RoomMemberResponse) =>
