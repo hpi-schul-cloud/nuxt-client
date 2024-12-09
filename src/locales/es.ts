@@ -126,6 +126,7 @@ export default {
 	"common.roleName.student": "Estudiante",
 	"common.roleName.superhero": "Administrador de Schul-Cloud",
 	"common.roleName.teacher": "Profesor",
+	"common.roleName.groupSubstitutionTeacher": "Profesor suplente",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor verifique la configuración.",
 	"common.tool.information.outdated.student":

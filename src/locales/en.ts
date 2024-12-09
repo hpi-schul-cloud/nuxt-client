@@ -125,6 +125,7 @@ export default {
 	"common.roleName.student": "Student",
 	"common.roleName.superhero": "Schul-Cloud Admin",
 	"common.roleName.teacher": "Teacher",
+	"common.roleName.groupSubstitutionTeacher": "Substitute Teacher",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings.",
 	"common.tool.information.outdated.student":
