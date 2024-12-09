@@ -115,6 +115,16 @@ describe("MembersTable", () => {
 			expect(checkedIndices).toEqual(expectedIndices);
 		});
 
+		it("should emit select:members", async () => {
+			const { wrapper, mockMembers } = setup();
+
+			await selectCheckboxes([1], wrapper);
+
+			const selectEvents = wrapper.emitted("select:members");
+			expect(selectEvents).toHaveLength(1);
+			expect(selectEvents![0]).toEqual([[mockMembers[0].userId]]);
+		});
+
 		it("should render the multi action menu", async () => {
 			const { wrapper } = setup();
 
@@ -346,7 +356,7 @@ describe("MembersTable", () => {
 	describe("when searching for members", () => {
 		it("should render the search component", () => {
 			const { wrapper } = setup();
-			// TODO: add data-testid for search-field
+
 			const search = wrapper.getComponent(VTextField);
 
 			expect(search.props("label")).toEqual("common.labels.search");

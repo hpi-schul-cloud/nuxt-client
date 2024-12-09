@@ -35,7 +35,6 @@
 		<v-spacer />
 		<v-text-field
 			v-model="search"
-			data-testid="member-search"
 			density="compact"
 			flat
 			hide-details
