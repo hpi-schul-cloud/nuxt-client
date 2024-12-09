@@ -102,7 +102,11 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomDetails, useRoomAuthorization } from "@feature-room";
@@ -130,10 +134,12 @@ import {
 	BoardLayout,
 	BoardParentType,
 	CreateBoardBodyParams,
+	Permission,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const authModule = injectStrict(AUTH_MODULE_KEY);
 
 const route = useRoute();
 const router = useRouter();
@@ -219,10 +225,17 @@ const fabItemClickHandler = (event: string) => {
 	}
 };
 
+const canViewRoom = computed(() => {
+	return (
+		envConfigModule.getEnv.FEATURE_ROOMS_ENABLED &&
+		authModule.getUserPermissions.includes(Permission.RoomCreate.toLowerCase())
+	);
+});
+
 watch(
 	() => route.params.id,
 	async () => {
-		if (envConfigModule.getEnv["FEATURE_ROOMS_ENABLED"]) {
+		if (canViewRoom.value) {
 			await fetchRoom(route.params.id as string);
 		} else {
 			deactivateRoom();
