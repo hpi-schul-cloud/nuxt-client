@@ -1196,7 +1196,7 @@ describe("BoardStore", () => {
 				});
 
 				expect(router.replace).toHaveBeenCalledWith({
-					name: "rooms-id",
+					name: "room-details",
 					params: { id: "roomId" },
 				});
 			});

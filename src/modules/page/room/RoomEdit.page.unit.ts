@@ -6,8 +6,7 @@ import { useRoomEditState } from "@data-room";
 import { RoomEditPage } from "@page-room";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { useRoute, useRouter } from "vue-router";
-import { RoomUpdateParams } from "@/types/room/Room";
-import { RoomColor } from "@/serverApi/v3";
+import { RoomUpdateParams, RoomColorEnum } from "@/types/room/Room";
 import { RoomForm } from "@feature-room";
 import { nextTick } from "vue";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
@@ -50,7 +49,7 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 
 const roomParams: RoomUpdateParams = {
 	name: "test",
-	color: RoomColor.Blue,
+	color: RoomColorEnum.Blue,
 };
 
 describe("@pages/RoomEdit.page.vue", () => {
@@ -111,13 +110,13 @@ describe("@pages/RoomEdit.page.vue", () => {
 		expect(updateRoom).toHaveBeenCalledWith(roomIdMock, roomParams);
 	});
 
-	it("should navigate to 'rooms-id' with correct room id on save", async () => {
+	it("should navigate to 'room-details' with correct room id on save", async () => {
 		const { roomFormComponent, router } = setup();
 
 		roomFormComponent.vm.$emit("save", roomParams);
 
 		expect(router.push).toHaveBeenCalledWith({
-			name: "rooms-id",
+			name: "room-details",
 			params: { id: roomIdMock },
 		});
 	});
@@ -128,7 +127,7 @@ describe("@pages/RoomEdit.page.vue", () => {
 		roomFormComponent.vm.$emit("cancel", roomParams);
 
 		expect(router.push).toHaveBeenCalledWith({
-			name: "rooms-id",
+			name: "room-details",
 			params: { id: roomIdMock },
 		});
 	});

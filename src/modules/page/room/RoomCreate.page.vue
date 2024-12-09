@@ -50,7 +50,7 @@ const onSave = async (payload: { room: RoomCreateParams }) => {
 	try {
 		const room = await createRoom(payload.room);
 
-		router.push({ name: "rooms-id", params: { id: room.id } });
+		router.push({ name: "room-details", params: { id: room.id } });
 	} catch (error: unknown) {
 		if (isInvalidRequestError(error)) {
 			notifierModule.show({

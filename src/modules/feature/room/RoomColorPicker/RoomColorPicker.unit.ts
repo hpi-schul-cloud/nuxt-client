@@ -5,7 +5,7 @@ import {
 import { mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import RoomColorPicker from "./RoomColorPicker.vue";
-import { RoomColor } from "@/serverApi/v3";
+import { RoomColorEnum } from "@/types/room/Room";
 
 describe("@feature-room/RoomColorPicker", () => {
 	const setup = (props?: ComponentProps<typeof RoomColorPicker>) => {
@@ -42,7 +42,7 @@ describe("@feature-room/RoomColorPicker", () => {
 
 	describe("when a color is given", () => {
 		it("should render given color as selected", () => {
-			const { wrapper } = setup({ color: RoomColor.Red });
+			const { wrapper } = setup({ color: RoomColorEnum.Red });
 
 			const selectedColor = wrapper.findComponent(
 				"[data-testid=color-swatch-red]"

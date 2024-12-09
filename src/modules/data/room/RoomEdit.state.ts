@@ -1,5 +1,9 @@
-import { RoomApiFactory, RoomColor } from "@/serverApi/v3";
-import { RoomDetails, RoomUpdateParams } from "@/types/room/Room";
+import { RoomApiFactory } from "@/serverApi/v3";
+import {
+	RoomDetails,
+	RoomUpdateParams,
+	RoomColorEnum,
+} from "@/types/room/Room";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { ref } from "vue";
@@ -19,7 +23,7 @@ export const useRoomEditState = () => {
 
 	const roomData = ref<RoomUpdateParams>({
 		name: "",
-		color: RoomColor.BlueGrey,
+		color: RoomColorEnum.BlueGrey,
 		startDate: undefined,
 		endDate: undefined,
 	});
