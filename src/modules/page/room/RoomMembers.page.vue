@@ -11,8 +11,8 @@
 			</h1>
 		</template>
 
-		<div class="mb-8 mt-12">
-			<i18n-t keypath="pages.rooms.members.infoText">
+		<div class="mb-8 mt-12" data-testid="info-text">
+			<i18n-t keypath="pages.rooms.members.infoText" scope="global">
 				<a
 					href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
 					target="_blank"

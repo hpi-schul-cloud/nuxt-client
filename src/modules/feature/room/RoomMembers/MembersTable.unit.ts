@@ -4,15 +4,10 @@ import {
 } from "@@/tests/test-utils/setup";
 import MembersTable from "./MembersTable.vue";
 import { ref } from "vue";
-import {
-	mdiMenuDown,
-	mdiMenuUp,
-	mdiMagnify,
-	mdiTrashCanOutline,
-} from "@icons/material";
+import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import { roomMemberResponseFactory } from "@@/tests/test-utils";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
-import { VBtn, VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
+import { VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 
@@ -306,11 +301,10 @@ describe("MembersTable", () => {
 				wrapper: VueWrapper
 			) => {
 				const dataTable = wrapper.getComponent(VDataTable);
-				const removeButton: VueWrapper<VBtn> = dataTable
-					.findAllComponents(VBtn)
-					.filter(
-						(btn: VueWrapper<VBtn>) => btn.props("icon") === mdiTrashCanOutline
-					)[index];
+				const removeButton = dataTable.findComponent(
+					`[data-testid=remove-member-${index}]`
+				);
+
 				await removeButton.trigger("click");
 			};
 
