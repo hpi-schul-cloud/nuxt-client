@@ -157,6 +157,8 @@ import {
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
+import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { storeToRefs } from "pinia";
 
 export default defineComponent({
 	setup() {
@@ -168,11 +170,14 @@ export default defineComponent({
 		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } =
 			useCopy(isLoadingDialogOpen);
 
+		const { roomVariant } = storeToRefs(useRoomDetailsStore());
+
 		return {
 			mdiPlus,
 			copy,
 			backgroundCopyProcesses,
 			isCopyProcessInBackground,
+			roomVariant,
 		};
 	},
 	components: {
@@ -486,6 +491,11 @@ export default defineComponent({
 			this.courseId = courseId;
 
 			await this.courseRoomDetailsModule.fetchContent(courseId);
+
+			if (this.roomData.roomId) {
+				this.roomVariant = RoomVariant.COURSE_ROOM;
+			}
+
 			await this.courseRoomDetailsModule.fetchScopePermission({
 				courseId,
 				userId: this.authModule.getUser?.id,

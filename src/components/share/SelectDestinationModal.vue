@@ -59,7 +59,7 @@ const props = defineProps({
 		required: true,
 	},
 	destinationType: {
-		type: Object as PropType<BoardExternalReferenceType>,
+		type: String as PropType<BoardExternalReferenceType>,
 		required: true,
 	},
 });

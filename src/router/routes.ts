@@ -263,14 +263,10 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-room")).RoomDetailsPage,
-		beforeEnter: Multiguard([
-			checkRoomsFeature,
-			createPermissionGuard(["room_create"]),
-		]),
 		name: "rooms-id",
 	},
 	{
-		path: `/rooms/:id/edit`,
+		path: `/rooms/:id(${REGEX_ID})/edit`,
 		component: async () => (await import("@page-room")).RoomEditPage,
 		beforeEnter: Multiguard([
 			checkRoomsFeature,
@@ -279,7 +275,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "room-edit",
 	},
 	{
-		path: `/rooms/:id/members`,
+		path: `/rooms/:id(${REGEX_ID})/members`,
 		component: async () => (await import("@page-room")).RoomMembersPage,
 		beforeEnter: Multiguard([
 			checkRoomsFeature,
