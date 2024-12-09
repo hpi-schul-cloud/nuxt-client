@@ -6,6 +6,7 @@ import { Factory } from "fishery";
 
 export const videoConferenceInfoFactory = Factory.define<VideoConferenceInfo>(
 	() => ({
+		scopeId: "123",
 		state: VideoConferenceState.NOT_STARTED,
 		options: {
 			everyAttendeeJoinsMuted: false,

@@ -1,4 +1,6 @@
 export type VideoConferenceInfo = {
+	scopeId: string;
+
 	state: VideoConferenceState;
 
 	options: VideoConferenceOptions;

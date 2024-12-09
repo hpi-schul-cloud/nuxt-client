@@ -40,6 +40,7 @@ describe("RoomVideoConferenceSection", () => {
 
 		const videoConferenceModule = createModuleMocks(VideoConferenceModule, {
 			getVideoConferenceInfo: {
+				scopeId: props.roomId,
 				state: VideoConferenceState.NOT_STARTED,
 				options: {
 					everyAttendeeJoinsMuted: false,
@@ -100,6 +101,7 @@ describe("RoomVideoConferenceSection", () => {
 				false,
 				{
 					getVideoConferenceInfo: {
+						scopeId: "roomId",
 						state: VideoConferenceState.NOT_STARTED,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -136,6 +138,7 @@ describe("RoomVideoConferenceSection", () => {
 				false,
 				{
 					getVideoConferenceInfo: {
+						scopeId: "roomId",
 						state: VideoConferenceState.RUNNING,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -172,6 +175,7 @@ describe("RoomVideoConferenceSection", () => {
 				false,
 				{
 					getVideoConferenceInfo: {
+						scopeId: "roomId",
 						state: VideoConferenceState.NOT_STARTED,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -209,6 +213,7 @@ describe("RoomVideoConferenceSection", () => {
 				true,
 				{
 					getVideoConferenceInfo: {
+						scopeId: "roomId",
 						state: VideoConferenceState.RUNNING,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -246,6 +251,7 @@ describe("RoomVideoConferenceSection", () => {
 				true,
 				{
 					getVideoConferenceInfo: {
+						scopeId: "roomId",
 						state: VideoConferenceState.RUNNING,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -283,6 +289,7 @@ describe("RoomVideoConferenceSection", () => {
 				false,
 				{
 					getVideoConferenceInfo: {
+						scopeId: "roomId",
 						state: VideoConferenceState.RUNNING,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -320,6 +327,7 @@ describe("RoomVideoConferenceSection", () => {
 				false,
 				{
 					getVideoConferenceInfo: {
+						scopeId: "roomId",
 						state: VideoConferenceState.RUNNING,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -357,6 +365,7 @@ describe("RoomVideoConferenceSection", () => {
 				false,
 				{
 					getVideoConferenceInfo: {
+						scopeId: "roomId",
 						state: VideoConferenceState.RUNNING,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -394,6 +403,7 @@ describe("RoomVideoConferenceSection", () => {
 				false,
 				{
 					getVideoConferenceInfo: {
+						scopeId: "roomId",
 						state: VideoConferenceState.RUNNING,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -440,6 +450,7 @@ describe("RoomVideoConferenceSection", () => {
 					false,
 					{
 						getVideoConferenceInfo: {
+							scopeId: "roomId",
 							state: VideoConferenceState.RUNNING,
 							options: {
 								everyAttendeeJoinsMuted: false,
@@ -483,6 +494,7 @@ describe("RoomVideoConferenceSection", () => {
 					false,
 					{
 						getVideoConferenceInfo: {
+							scopeId: "roomId",
 							state: VideoConferenceState.NOT_STARTED,
 							options: {
 								everyAttendeeJoinsMuted: false,
@@ -527,6 +539,7 @@ describe("RoomVideoConferenceSection", () => {
 					false,
 					{
 						getVideoConferenceInfo: {
+							scopeId: "roomId",
 							state: VideoConferenceState.NOT_STARTED,
 							options: {
 								everyAttendeeJoinsMuted: false,
@@ -580,6 +593,7 @@ describe("RoomVideoConferenceSection", () => {
 				false,
 				{
 					getVideoConferenceInfo: {
+						scopeId: roomId,
 						state: VideoConferenceState.NOT_STARTED,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -718,6 +732,7 @@ describe("RoomVideoConferenceSection", () => {
 				false,
 				{
 					getVideoConferenceInfo: {
+						scopeId: "roomId",
 						state: VideoConferenceState.NOT_STARTED,
 						options: {
 							everyAttendeeJoinsMuted: false,
@@ -773,6 +788,7 @@ describe("RoomVideoConferenceSection", () => {
 					false,
 					{
 						getVideoConferenceInfo: {
+							scopeId: "roomId",
 							state: VideoConferenceState.RUNNING,
 							options: {
 								everyAttendeeJoinsMuted: false,
@@ -814,6 +830,7 @@ describe("RoomVideoConferenceSection", () => {
 					false,
 					{
 						getVideoConferenceInfo: {
+							scopeId: "roomId",
 							state: VideoConferenceState.RUNNING,
 							options: {
 								everyAttendeeJoinsMuted: false,

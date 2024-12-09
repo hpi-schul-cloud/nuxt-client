@@ -505,5 +505,35 @@ describe("ElementTypeSelection Composable", () => {
 				expect(closeDialogMock).toBeCalledTimes(1);
 			});
 		});
+		describe("when the VideoConference action is called", () => {
+			it("should call video conference element function with right argument", async () => {
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				const action = elementTypeOptions.value[7].action;
+				action();
+
+				expect(addElementMock).toBeCalledTimes(1);
+				expect(addElementMock).toBeCalledWith({
+					type: ContentElementType.VideoConference,
+					cardId,
+				});
+			});
+
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				const action = elementTypeOptions.value[7].action;
+				action();
+
+				expect(closeDialogMock).toBeCalledTimes(1);
+			});
+		});
 	});
 });
