@@ -2,11 +2,10 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
-import { flushPromises, mount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import RoomMenu from "./RoomMenu.vue";
 import { RouterLink } from "vue-router";
-import { RoomVariant } from "@data-room";
-import { ref, nextTick } from "vue";
+import { ref } from "vue";
 import { useRoomAuthorization } from "./roomAuthorization.composable";
 import { createTestingPinia } from "@pinia/testing";
 

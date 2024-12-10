@@ -42,7 +42,6 @@ import {
 	BoardLayout,
 	BoardParentType,
 	CreateBoardBodyParams,
-	Permission,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
@@ -60,12 +59,12 @@ import {
 	mdiPlus,
 } from "@icons/material";
 
+const router = useRouter();
+const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
-const { t } = useI18n();
 const { deleteRoom } = useRoomsState();
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
-const router = useRouter();
 
 const { room, roomBoards } = storeToRefs(useRoomDetailsStore());
 
@@ -75,10 +74,20 @@ const pageTitle = computed(() =>
 useTitle(pageTitle);
 
 const roomTitle = computed(() => {
-	if (room.value) {
-		return room.value.name;
-	}
-	return t("pages.roomDetails.title");
+	return room.value ? room.value.name : t("pages.roomDetails.title");
+});
+
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+	return [
+		{
+			title: t("pages.rooms.title"),
+			to: "/rooms",
+		},
+		{
+			title: roomTitle.value,
+			disabled: true,
+		},
+	];
 });
 
 const onEdit = () => {
@@ -118,22 +127,6 @@ const onDelete = async () => {
 		});
 	}
 };
-
-const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	if (room.value != null) {
-		return [
-			{
-				title: t("pages.rooms.title"),
-				to: "/rooms",
-			},
-			{
-				title: room.value.name,
-				disabled: true,
-			},
-		];
-	}
-	return [];
-});
 
 const boardLayoutsEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
