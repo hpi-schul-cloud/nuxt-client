@@ -535,7 +535,7 @@ export default {
 	"components.molecules.copyResult.ctlTools.info":
 		"Las herramientas externas asociadas al curso y las tarjetas de embarque no se copian.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
-		"Las partes protegidas de las configuraciones de herramientas no se copian.",
+		"Las herramientas externas y las partes protegidas de las configuraciones de herramientas que no están disponibles en la escuela de destino no se copian.",
 	"components.molecules.copyResult.etherpadCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.failedCopy":
@@ -571,6 +571,8 @@ export default {
 	"components.molecules.copyResult.label.timeGroup": "Grupo de tiempo",
 	"components.molecules.copyResult.label.unknown": "Desconocido",
 	"components.molecules.copyResult.label.userGroup": "Grupo de usuario",
+	"components.molecules.copyResult.label.toolElements":
+		"Elemento de herramienta",
 	"components.molecules.copyResult.metadata": "Información general",
 	"components.molecules.copyResult.nexboardCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
@@ -599,6 +601,8 @@ export default {
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
+	"components.molecules.import.columnBoard.rename":
+		"Si es necesario, se puede cambiar el nombre del tablero: ",
 	"components.molecules.import.columnBoard.options.infoText":
 		"Puede cambiar el nombre del tablero a continuación.",
 	"components.molecules.import.columnBoard.options.title": "Importar tablero",
@@ -606,19 +610,17 @@ export default {
 		"Elija el curso",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar el tablero.",
-	"components.molecules.import.courses.label": "Curso",
+	"components.molecules.import.courses.label": "Nombre del curso",
 	"components.molecules.import.columnBoard.options.selectRoom":
 		"Seleccionar sala",
 	"components.molecules.import.columnBoard.options.selectRoom.infoText":
 		"Seleccione la sala en la que desea importar el tablero.",
-	"components.molecules.import.courses.options.ctlTools.infoText":
-		"Se creará una copia.<br>No se importarán datos personales.<br>No se copiarán herramientas externas.<br>Se puede cambiar el nombre del curso a continuación.",
-	"components.molecules.import.courses.options.infoText":
-		"Los datos relacionados con los participantes no se copiarán. El curso se puede renombrar a continuación.",
-	"components.molecules.import.courses.options.title": "Importar curso",
+	"components.molecules.import.courses.rename":
+		"Si es necesario, se puede cambiar el nombre del curso: ",
+	"components.molecules.import.courses.options.title": "Importar copia nuestra",
 	"components.molecules.import.lessons.label": "Tema",
-	"components.molecules.import.lessons.options.infoText":
-		"Los datos relacionados con los participantes no se copiarán. El tema se puede renombrar a continuación.",
+	"components.molecules.import.lessons.rename":
+		"Si es necesario, se puede cambiar el nombre del tema: ",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar el tema.",
 	"components.molecules.import.lessons.options.selectCourse": "Elija el curso",
@@ -632,9 +634,11 @@ export default {
 	"components.molecules.import.options.loadingMessage":
 		"Importación en curso...",
 	"components.molecules.import.options.success": "{name} importado con éxito",
+	"components.molecules.import.options.tableHeader.InfoText":
+		"No se importará el siguiente contenido:",
 	"components.molecules.import.tasks.label": "Tarea",
-	"components.molecules.import.tasks.options.infoText":
-		"Los datos relacionados con los participantes no se copiarán. La tarea se puede renombrar a continuación.",
+	"components.molecules.import.tasks.rename":
+		"Si es necesario, se puede cambiar el nombre de la tarea: ",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar la tarea.",
 	"components.molecules.import.tasks.options.selectCourse": "Elija el curso",
@@ -671,16 +675,32 @@ export default {
 		"Enlace a la copia del tablón",
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
-	"components.molecules.share.courses.options.ctlTools.infotext":
+	"components.molecules.share.courses.options.ctlTools.infoText":
 		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
+	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
+		"Herramientas externas no disponibles en la escuela de destino",
+	"components.molecules.shareImport.options.ctlTools.infoText.protected":
+		"Configuraciones protegidas de herramientas externas",
 	"components.molecules.share.courses.options.infoText":
-		"Con el siguiente enlace, el curso puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
+		"Utilizando el siguiente enlace, otros profesores pueden importar el curso como una copia.",
+	"components.molecules.shareImport.options.restrictions.infoText.personalData":
+		"Datos personales",
+	"components.molecules.shareImport.options.restrictions.infoText.courseFiles":
+		"Archivos en Archivos de curso",
+	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
+		"Contenido de Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
+		"ID de Geogebra y",
+	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
+		"Grupos de cursos",
+	"components.molecules.share.options.tableHeader.InfoText":
+		"No se copiará el siguiente contenido:",
 	"components.molecules.share.courses.result.linkLabel":
 		"Enlace a la copia del curso",
 	"components.molecules.share.lessons.mail.body": "Enlace al tema:",
 	"components.molecules.share.lessons.mail.subject": "Tema de importación",
 	"components.molecules.share.lessons.options.infoText":
-		"Con el siguiente enlace, el tema puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
+		"Con el siguiente enlace, el tema puede ser importado como copia por otros profesores.",
 	"components.molecules.share.lessons.result.linkLabel":
 		"Enlace a la copia del tema",
 	"components.molecules.share.options.expiresInDays":
@@ -695,7 +715,7 @@ export default {
 	"components.molecules.share.tasks.mail.body": "Enlace a la tarea:",
 	"components.molecules.share.tasks.mail.subject": "Tarea de importación",
 	"components.molecules.share.tasks.options.infoText":
-		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
+		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores.",
 	"components.molecules.share.tasks.result.linkLabel":
 		"Enlace a la copia de la tarea",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
