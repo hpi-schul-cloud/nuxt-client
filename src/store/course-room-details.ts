@@ -297,7 +297,6 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			applicationErrorModule.resetError();
 			return;
 		}
-		console.log("error", error);
 
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore

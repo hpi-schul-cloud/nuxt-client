@@ -341,7 +341,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					const { wrapper } = setup({
 						isLoading: false,
 						roomVariant: RoomVariant.ROOM,
-						permissions: ["course_edit"],
+						permissions: ["room_edit"],
 					});
 
 					await flushPromises();
