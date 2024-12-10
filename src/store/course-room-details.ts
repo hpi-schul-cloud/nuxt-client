@@ -38,7 +38,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	};
 	scopePermissions: string[] = [];
 	loading = false;
-	error: null | object = null;
+	error: unknown = null;
 	businessError: BusinessError = {
 		statusCode: "",
 		message: "",
@@ -64,7 +64,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			this.setLoading(false);
 
 			return data;
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.setError(error);
 
 			this.setLoading(false);
@@ -81,7 +81,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 				await this.roomsApi.courseRoomsControllerGetRoomBoard(id);
 			this.setRoomData(data);
 			this.setLoading(false);
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.setError(error);
 			this.setLoading(false);
 		}
@@ -105,7 +105,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			await this.fetchContent(this.roomData.roomId);
 
 			this.setLoading(false);
-		} catch (error: any) {
+		} catch (error: unknown) {
 			this.setError(error);
 			this.setLoading(false);
 		}
@@ -275,8 +275,13 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		userId: string;
 	}): Promise<void> {
 		const requestUrl = `/v3/courses/${payload.courseId}/user-permissions`;
-		const ret_val = (await $axios.get(requestUrl)).data;
-		this.setPermissionData(ret_val[payload.userId]);
+		try {
+			const ret_val = (await $axios.get(requestUrl)).data;
+			this.setPermissionData(ret_val[payload.userId]);
+		} catch (error: unknown) {
+			this.setError(error);
+			this.setLoading(false);
+		}
 	}
 
 	@Mutation
@@ -295,7 +300,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Mutation
-	setError(error: object | null): void {
+	setError(error: unknown): void {
 		this.error = error;
 		const handledApplicationErrors: Array<HttpStatusCode> = [
 			HttpStatusCode.BadRequest,
@@ -340,7 +345,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		return this.loading;
 	}
 
-	get getError(): object | null {
+	get getError(): unknown {
 		return this.error;
 	}
 

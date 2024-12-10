@@ -523,7 +523,7 @@ export default {
 	"components.molecules.copyResult.ctlTools.info":
 		"Зовнішні інструменти, пов’язані з курсом, і посадкові картки не копіюються.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
-		"Захищені частини конфігурацій інструменту не копіюються.",
+		"Зовнішні інструменти та захищені частини конфігурацій інструментів, які недоступні в цільовій школі, не копіюються.",
 	"components.molecules.copyResult.etherpadCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.failedCopy":
@@ -557,6 +557,8 @@ export default {
 	"components.molecules.copyResult.label.timeGroup": "Група часу",
 	"components.molecules.copyResult.label.unknown": "Невідомий",
 	"components.molecules.copyResult.label.userGroup": "Група користувачів",
+	"components.molecules.copyResult.label.toolElements":
+		"Інструментальний елемент",
 	"components.molecules.copyResult.metadata": "Загальна інформація",
 	"components.molecules.copyResult.nexboardCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
@@ -585,6 +587,8 @@ export default {
 	"components.molecules.EdusharingFooter.img_alt": "логотип edusharing",
 	"components.molecules.EdusharingFooter.text": "на платформі",
 	"components.molecules.import.columnBoard.label": "Назва дошки",
+	"components.molecules.import.columnBoard.rename":
+		"При необхідності назву дошки можна змінити: ",
 	"components.molecules.import.columnBoard.options.infoText":
 		"Ви можете перейменувати дошку нижче",
 	"components.molecules.import.columnBoard.options.title": "Дошка імпорту",
@@ -592,15 +596,18 @@ export default {
 		"Оберіть курс",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Виберіть курс, до якого ви бажаєте імпортувати дошку.",
-	"components.molecules.import.courses.label": "Курс",
-	"components.molecules.import.courses.options.ctlTools.infoText":
-		"Буде створено копію.<br>собисті дані не будуть імпортовані.<br>Зовнішні інструменти не будуть скопійовані.<br>Курс можна перейменувати нижче.",
-	"components.molecules.import.courses.options.infoText":
-		"Дані учасників не будуть скопійовані. Курс можна перейменувати нижче.",
-	"components.molecules.import.courses.options.title": "Курс імпорту",
+	"components.molecules.import.courses.label": "Назва курсу",
+	"components.molecules.import.columnBoard.options.selectRoom":
+		"Оберіть кімнату",
+	"components.molecules.import.columnBoard.options.selectRoom.infoText":
+		"Виберіть кімнату, до якого ви бажаєте імпортувати дошку.",
+	"components.molecules.import.courses.rename":
+		"При необхідності назву курсу можна перейменувати: ",
+	"components.molecules.import.courses.options.title":
+		"Імпортувати копію курсу",
 	"components.molecules.import.lessons.label": "Тема",
-	"components.molecules.import.lessons.options.infoText":
-		"Дані учасників не будуть скопійовані. Тема можна перейменувати нижче.",
+	"components.molecules.import.lessons.rename":
+		"При необхідності назву теми можна перейменувати: ",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
 		"Будь ласка, оберіть курс з якого ви хочете імпортувати тему",
 	"components.molecules.import.lessons.options.selectCourse": "Оберіть курс",
@@ -614,9 +621,11 @@ export default {
 	"components.molecules.import.options.loadingMessage":
 		"Виконується імпорту...",
 	"components.molecules.import.options.success": "{name} успішно імпортовано",
+	"components.molecules.import.options.tableHeader.InfoText":
+		"Наступний вміст не буде імпортовано:",
 	"components.molecules.import.tasks.label": "Завдання",
-	"components.molecules.import.tasks.options.infoText":
-		"Дані, що стосуються учасників, не копіюються. Завдання можна перейменувати нижче.",
+	"components.molecules.import.tasks.rename":
+		"При необхідності назву завдання можна перейменувати: ",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Виберіть курс, до якого ви хочете імпортувати завдання.",
 	"components.molecules.import.tasks.options.selectCourse": "Оберіть курс",
@@ -654,17 +663,33 @@ export default {
 		"Посилання на копію дошки",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
-	"components.molecules.share.courses.options.ctlTools.infotext":
+	"components.molecules.share.courses.options.ctlTools.infoText":
 		"Зовнішні інструменти, пов’язані з курсом або посадочними картками, не будуть скопійовані.",
+	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
+		"Зовнішні інструменти недоступні в цільовій школі",
+	"components.molecules.shareImport.options.ctlTools.infoText.protected":
+		"Захищені налаштування зовнішніх інструментів",
 	"components.molecules.share.courses.options.infoText":
-		"За наступним посиланням курс може бути імпортований як копія іншими викладачами. Персональні дані не імпортуються.",
+		"Використовуючи наступне посилання, курс може бути імпортований як копія іншими викладачами.",
+	"components.molecules.shareImport.options.restrictions.infoText.personalData":
+		"Персональні дані",
+	"components.molecules.shareImport.options.restrictions.infoText.courseFiles":
+		"Файли в розділі Файли курсу",
+	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
+		"Вміст із Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
+		"Ідентифікатори Geogebra та",
+	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
+		"Групи курсів",
+	"components.molecules.share.options.tableHeader.InfoText":
+		"Наступний вміст не буде скопійовано:",
 	"components.molecules.share.courses.result.linkLabel":
 		"Посилання на копію курсу",
 	"components.molecules.share.lessons.mail.body": "Посилання на курс:",
 	"components.molecules.share.lessons.mail.subject":
 		"Теми, які можна імпортувати",
 	"components.molecules.share.lessons.options.infoText":
-		"За наступним посиланням тему можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
+		"За наступним посиланням тему можуть імпортувати як копію інші вчителі.",
 	"components.molecules.share.lessons.result.linkLabel": "Копія теми посилання",
 	"components.molecules.share.options.expiresInDays":
 		"Термін дії посилання закінчується через 21 днів",
@@ -679,7 +704,7 @@ export default {
 	"components.molecules.share.tasks.mail.subject":
 		"Завдання, які можна імпортувати",
 	"components.molecules.share.tasks.options.infoText":
-		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі. Особисті дані не будуть імпортовані.",
+		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі.",
 	"components.molecules.share.tasks.result.linkLabel":
 		"Зв'язати копію завдання",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
@@ -806,6 +831,10 @@ export default {
 	"components.roomForm.labels.timePeriod": "Період часу",
 	"components.roomForm.labels.timePeriod.from": "Період від",
 	"components.roomForm.labels.timePeriod.to": "Період до",
+	"components.roomForm.validation.generalSaveError":
+		"Виникла помилка при збереженні. Будь ласка, перевірте свої записи та спробуйте ще раз.",
+	"components.roomForm.validation.timePeriod.startBeforeEnd":
+		"Дата початку повинна передувати даті закінчення.",
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
 	"error.400": "400 – Неприпустимий запит",
@@ -1666,14 +1695,22 @@ export default {
 	"pages.rooms.members.error.load": "Не вдалося завантажити список учасників.",
 	"pages.rooms.members.error.add": "Не вдалося додати учасників.",
 	"pages.rooms.members.error.remove": "Не вдалося видалити учасників.",
-	"pages.rooms.members.remove.confirmation":
-		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
+
 	"pages.rooms.members.infoText":
-		'Додайте учасників до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">більше інформації</a>).',
+		"Додайте учасників до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
+	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте учасників",
-	"pages.rooms.members.manage": "Керувати учасниками",
-	"pages.rooms.members.remove": "Видалити учасника",
+	"pages.rooms.members.manage": "Кімната Учасники",
+	"pages.rooms.members.remove.ariaLabel": "Видалити {memberName} з кімнати",
+	"pages.rooms.members.resetSelection.ariaLabel":
+		"Скинути вибраних учасників зі списку",
+	"pages.rooms.members.multipleRemove.ariaLabel":
+		"Видалити кількох учасників із кімнати",
+	"pages.rooms.members.remove.confirmation":
+		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
+	"pages.rooms.members.multipleRemove.confirmation":
+		"Видалити вибраних учасників із кімнати?",
 	"pages.rooms.members.roles.editor": "Редактор кімнати",
 	"pages.rooms.members.roles.viewer": "Переглядач кімнати",
 	"pages.rooms.title": "Кімнати",

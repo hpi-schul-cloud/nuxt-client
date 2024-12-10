@@ -81,8 +81,7 @@ export const useCardSocketApi = () => {
 
 	const { emitOnSocket, disconnectSocket } = useSocketConnection(dispatch);
 
-	const disconnectSocketRequest = (payload: DisconnectSocketRequestPayload) => {
-		console.log("disconnectSocketRequest", payload);
+	const disconnectSocketRequest = () => {
 		disconnectSocket();
 	};
 

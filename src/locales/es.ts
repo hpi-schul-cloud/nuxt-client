@@ -456,7 +456,7 @@ export default {
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
 	"components.datePicker.validation.format":
-		"Por favor utilice el formato DD.MM.YYYY",
+		"Por favor utilice el formato DD.MM.AAAA",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
 	"components.dateTimePicker.messages.dateInPast":
 		"La fecha y la hora están en el pasado.",
@@ -525,7 +525,7 @@ export default {
 	"components.molecules.copyResult.ctlTools.info":
 		"Las herramientas externas asociadas al curso y las tarjetas de embarque no se copian.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
-		"Las partes protegidas de las configuraciones de herramientas no se copian.",
+		"Las herramientas externas y las partes protegidas de las configuraciones de herramientas que no están disponibles en la escuela de destino no se copian.",
 	"components.molecules.copyResult.etherpadCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.failedCopy":
@@ -561,6 +561,8 @@ export default {
 	"components.molecules.copyResult.label.timeGroup": "Grupo de tiempo",
 	"components.molecules.copyResult.label.unknown": "Desconocido",
 	"components.molecules.copyResult.label.userGroup": "Grupo de usuario",
+	"components.molecules.copyResult.label.toolElements":
+		"Elemento de herramienta",
 	"components.molecules.copyResult.metadata": "Información general",
 	"components.molecules.copyResult.nexboardCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
@@ -589,6 +591,8 @@ export default {
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logotipo",
 	"components.molecules.EdusharingFooter.text": "desarrollado por",
 	"components.molecules.import.columnBoard.label": "Título del tablero",
+	"components.molecules.import.columnBoard.rename":
+		"Si es necesario, se puede cambiar el nombre del tablero: ",
 	"components.molecules.import.columnBoard.options.infoText":
 		"Puede cambiar el nombre del tablero a continuación.",
 	"components.molecules.import.columnBoard.options.title": "Importar tablero",
@@ -596,15 +600,17 @@ export default {
 		"Elija el curso",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar el tablero.",
-	"components.molecules.import.courses.label": "Curso",
-	"components.molecules.import.courses.options.ctlTools.infoText":
-		"Se creará una copia.<br>No se importarán datos personales.<br>No se copiarán herramientas externas.<br>Se puede cambiar el nombre del curso a continuación.",
-	"components.molecules.import.courses.options.infoText":
-		"Los datos relacionados con los participantes no se copiarán. El curso se puede renombrar a continuación.",
-	"components.molecules.import.courses.options.title": "Importar curso",
+	"components.molecules.import.courses.label": "Nombre del curso",
+	"components.molecules.import.columnBoard.options.selectRoom":
+		"Seleccionar sala",
+	"components.molecules.import.columnBoard.options.selectRoom.infoText":
+		"Seleccione la sala en la que desea importar el tablero.",
+	"components.molecules.import.courses.rename":
+		"Si es necesario, se puede cambiar el nombre del curso: ",
+	"components.molecules.import.courses.options.title": "Importar copia nuestra",
 	"components.molecules.import.lessons.label": "Tema",
-	"components.molecules.import.lessons.options.infoText":
-		"Los datos relacionados con los participantes no se copiarán. El tema se puede renombrar a continuación.",
+	"components.molecules.import.lessons.rename":
+		"Si es necesario, se puede cambiar el nombre del tema: ",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar el tema.",
 	"components.molecules.import.lessons.options.selectCourse": "Elija el curso",
@@ -618,9 +624,11 @@ export default {
 	"components.molecules.import.options.loadingMessage":
 		"Importación en curso...",
 	"components.molecules.import.options.success": "{name} importado con éxito",
+	"components.molecules.import.options.tableHeader.InfoText":
+		"No se importará el siguiente contenido:",
 	"components.molecules.import.tasks.label": "Tarea",
-	"components.molecules.import.tasks.options.infoText":
-		"Los datos relacionados con los participantes no se copiarán. La tarea se puede renombrar a continuación.",
+	"components.molecules.import.tasks.rename":
+		"Si es necesario, se puede cambiar el nombre de la tarea: ",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Seleccione el curso al que desea importar la tarea.",
 	"components.molecules.import.tasks.options.selectCourse": "Elija el curso",
@@ -657,16 +665,32 @@ export default {
 		"Enlace a la copia del tablón",
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
-	"components.molecules.share.courses.options.ctlTools.infotext":
+	"components.molecules.share.courses.options.ctlTools.infoText":
 		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
+	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
+		"Herramientas externas no disponibles en la escuela de destino",
+	"components.molecules.shareImport.options.ctlTools.infoText.protected":
+		"Configuraciones protegidas de herramientas externas",
 	"components.molecules.share.courses.options.infoText":
-		"Con el siguiente enlace, el curso puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
+		"Utilizando el siguiente enlace, otros profesores pueden importar el curso como una copia.",
+	"components.molecules.shareImport.options.restrictions.infoText.personalData":
+		"Datos personales",
+	"components.molecules.shareImport.options.restrictions.infoText.courseFiles":
+		"Archivos en Archivos de curso",
+	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
+		"Contenido de Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
+		"ID de Geogebra y",
+	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
+		"Grupos de cursos",
+	"components.molecules.share.options.tableHeader.InfoText":
+		"No se copiará el siguiente contenido:",
 	"components.molecules.share.courses.result.linkLabel":
 		"Enlace a la copia del curso",
 	"components.molecules.share.lessons.mail.body": "Enlace al tema:",
 	"components.molecules.share.lessons.mail.subject": "Tema de importación",
 	"components.molecules.share.lessons.options.infoText":
-		"Con el siguiente enlace, el tema puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
+		"Con el siguiente enlace, el tema puede ser importado como copia por otros profesores.",
 	"components.molecules.share.lessons.result.linkLabel":
 		"Enlace a la copia del tema",
 	"components.molecules.share.options.expiresInDays":
@@ -681,7 +705,7 @@ export default {
 	"components.molecules.share.tasks.mail.body": "Enlace a la tarea:",
 	"components.molecules.share.tasks.mail.subject": "Tarea de importación",
 	"components.molecules.share.tasks.options.infoText":
-		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores. Los datos personales no se importarán.",
+		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores.",
 	"components.molecules.share.tasks.result.linkLabel":
 		"Enlace a la copia de la tarea",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
@@ -812,6 +836,10 @@ export default {
 	"components.roomForm.labels.timePeriod": "Periodo de tiempo",
 	"components.roomForm.labels.timePeriod.from": "Periodo de tiempo desde",
 	"components.roomForm.labels.timePeriod.to": "Periodo de tiempo hasta",
+	"components.roomForm.validation.generalSaveError":
+		"Se ha producido un error al guardar. Por favor, compruebe sus entradas e inténtelo de nuevo.",
+	"components.roomForm.validation.timePeriod.startBeforeEnd":
+		"La fecha de inicio debe ser anterior a la fecha de finalización.",
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
@@ -1306,7 +1334,7 @@ export default {
 	"pages.administration.school.index.usedFileStorage":
 		"Almacenamiento de archivos usados en la nube",
 	"pages.administration.select": "seleccionad{'@'}s",
-	"pages.administration.selected": "seleccinad{'@'}(s)",
+	"pages.administration.selected": "seleccionado(s)",
 	"pages.administration.sendMail.alreadyRegistered":
 		"El correo electrónico de registro no se ha enviado porque el registro ya ha tenido lugar",
 	"pages.administration.sendMail.error":
@@ -1689,14 +1717,21 @@ export default {
 		"No se pudo cargar la lista de participantes.",
 	"pages.rooms.members.error.add": "Error al agregar participantes.",
 	"pages.rooms.members.error.remove": "Error al eliminar participantes.",
-	"pages.rooms.members.remove.confirmation":
-		"¿Eliminar {memberName} de la sala?",
 	"pages.rooms.members.infoText":
-		'Añadir participantes a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">más información</a>).',
+		"Añadir participantes a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
+	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Participantes",
 	"pages.rooms.members.add": "Añadir participantes",
-	"pages.rooms.members.manage": "Administrar participantes",
-	"pages.rooms.members.remove": "Eliminar participante",
+	"pages.rooms.members.manage": "Participantes de la sala",
+	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
+	"pages.rooms.members.resetSelection.ariaLabel":
+		"Restablecer las participantes seleccionadas de la lista",
+	"pages.rooms.members.multipleRemove.ariaLabel":
+		"Eliminar varios participantes de la sala",
+	"pages.rooms.members.remove.confirmation":
+		"¿Eliminar {memberName} de la sala?",
+	"pages.rooms.members.multipleRemove.confirmation":
+		"¿Eliminar participantes seleccionadas de la sala?",
 	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
 	"pages.rooms.title": "Salas",

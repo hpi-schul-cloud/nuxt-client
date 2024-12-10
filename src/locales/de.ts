@@ -520,7 +520,7 @@ export default {
 	"components.molecules.copyResult.ctlTools.info":
 		"Externe Tools, die dem Kurs oder Karten im Bereich zugeordnet sind, werden nicht kopiert.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
-		"Geschützte Teile der Tool-Konfigurationen werden nicht kopiert.",
+		"In Zielschule nicht verfügbare externe tools und geschützte Teile der Tool-Konfigurationen werden nicht kopiert.",
 	"components.molecules.copyResult.etherpadCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.failedCopy":
@@ -553,6 +553,7 @@ export default {
 	"components.molecules.copyResult.label.timeGroup": "Zeitgruppe",
 	"components.molecules.copyResult.label.unknown": "Unbekannt",
 	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
+	"components.molecules.copyResult.label.toolElements": "Tool-Element",
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
 	"components.molecules.copyResult.nexboardCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
@@ -581,6 +582,8 @@ export default {
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.import.columnBoard.label": "Titel des Bereichs",
+	"components.molecules.import.columnBoard.rename":
+		"Bei Bedarf kann der Name des Bereiches umbenannt werden: ",
 	"components.molecules.import.columnBoard.options.infoText":
 		"Der Bereich kann im Folgenden umbenannt werden. ",
 	"components.molecules.import.columnBoard.options.title":
@@ -588,15 +591,16 @@ export default {
 	"components.molecules.import.columnBoard.options.selectCourse": "Kurs wählen",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Der Kurs, in den der Bereich importiert werden soll, muss im Folgenden ausgewählt werden.",
-	"components.molecules.import.courses.label": "Kurs",
-	"components.molecules.import.courses.options.ctlTools.infoText":
-		"Es wird eine Kopie erstellt.<br>Personenbezogene Daten werden nicht importiert.<br>Externe Tools werden nicht kopiert. <br>Der Kurs kann im Folgenden umbenannt werden.",
-	"components.molecules.import.courses.options.infoText":
-		"Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Der Kurs kann im Folgenden umbenannt werden.",
-	"components.molecules.import.courses.options.title": "Kurs importieren",
+	"components.molecules.import.courses.label": "Kurs-Name",
+	"components.molecules.import.columnBoard.options.selectRoom": "Raum wählen",
+	"components.molecules.import.columnBoard.options.selectRoom.infoText":
+		"Der Raum, in den der Bereich importiert werden soll, muss im Folgenden ausgewählt werden.",
+	"components.molecules.import.courses.rename":
+		"Bei Bedarf kann der Name des Kurses umbenannt werden: ",
+	"components.molecules.import.courses.options.title": "Kurs-Kopie importieren",
 	"components.molecules.import.lessons.label": "Thema",
-	"components.molecules.import.lessons.options.infoText":
-		"Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Das Thema kann im Folgenden umbenannt werden.",
+	"components.molecules.import.lessons.rename":
+		"Bei Bedarf kann der Name des Themas umbenannt werden: ",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
 		"Der Kurs, in den das Thema importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.import.lessons.options.selectCourse": "Kurs wählen",
@@ -610,9 +614,11 @@ export default {
 	"components.molecules.import.options.loadingMessage": "Import läuft...",
 	"components.molecules.import.options.success":
 		"{name} wurde erfolgreich importiert",
+	"components.molecules.import.options.tableHeader.InfoText":
+		"Folgende Inhalte werden nicht importiert:",
 	"components.molecules.import.tasks.label": "Aufgabe",
-	"components.molecules.import.tasks.options.infoText":
-		"Es wird eine Kopie erstellt. Personenbezogene Daten werden nicht importiert. Die Aufgabe kann im Folgenden umbenannt werden.",
+	"components.molecules.import.tasks.rename":
+		"Bei Bedarf kann der Name der Aufgabe umbenannt werden: ",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Der Kurs, in den die Aufgabe importiert werden soll, muss im Folgenden ausgewählt werden.",
 	"components.molecules.export.options.info":
@@ -651,20 +657,34 @@ export default {
 		"Organisationsleitung",
 	"components.molecules.MintEcFooter.chapters": "Kapitelübersicht",
 	"components.molecules.share.columnBoard.options.infoText":
-		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+		"Mit dem folgenden Link kann der Bereich als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link Bereich-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
-	"components.molecules.share.courses.options.ctlTools.infotext":
-		"Externe Tools, die dem Kurs oder Karten im Bereich zugeordnet sind, werden nicht kopiert.",
+	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
+		"In Zielschule nicht verfügbare, externe Tools",
+	"components.molecules.shareImport.options.ctlTools.infoText.protected":
+		"Geschützte Einstellungen externer Tools",
 	"components.molecules.share.courses.options.infoText":
-		"Mit dem folgenden Link kann der Kurs als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+		"Mit dem folgenden Link kann der Kurs als Kopie von anderen Lehrkräften importiert werden.",
+	"components.molecules.shareImport.options.restrictions.infoText.personalData":
+		"Personenbezogene Daten",
+	"components.molecules.shareImport.options.restrictions.infoText.courseFiles":
+		"Dateien unter Kurs-Dateien",
+	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
+		"Inhalte aus Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
+		"Geogebra IDs und",
+	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
+		"Kursgruppen",
+	"components.molecules.share.options.tableHeader.InfoText":
+		"Folgende Inhalte werden nicht kopiert:",
 	"components.molecules.share.courses.result.linkLabel": "Link Kurskopie",
 	"components.molecules.share.lessons.mail.body": "Link zum Thema:",
 	"components.molecules.share.lessons.mail.subject": "Thema zum Importieren",
 	"components.molecules.share.lessons.options.infoText":
-		"Mit dem folgenden Link kann das Thema als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+		"Mit dem folgenden Link kann das Thema als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.lessons.result.linkLabel": "Link Themakopie",
 	"components.molecules.share.options.expiresInDays":
 		"Link läuft nach 21 Tagen ab",
@@ -678,7 +698,7 @@ export default {
 	"components.molecules.share.tasks.mail.body": "Link zur Aufgabe:",
 	"components.molecules.share.tasks.mail.subject": "Aufgabe zum Importieren",
 	"components.molecules.share.tasks.options.infoText":
-		"Mit dem folgenden Link kann die Aufgabe als Kopie von anderen Lehrkräften importiert werden. Personenbezogene Daten werden dabei nicht importiert.",
+		"Mit dem folgenden Link kann die Aufgabe als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.tasks.result.linkLabel": "Link Aufgabekopie",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Bist du dir sicher, dass du die Aufgabe "{taskTitle}" löschen möchtest?',
@@ -800,6 +820,10 @@ export default {
 	"components.roomForm.labels.timePeriod": "Zeitraum",
 	"components.roomForm.labels.timePeriod.from": "Zeitraum von",
 	"components.roomForm.labels.timePeriod.to": "Zeitraum bis",
+	"components.roomForm.validation.generalSaveError":
+		"Beim Speichern ist ein Fehler aufgetreten. Bitte überprüfe deine Eingaben und versuche es erneut.",
+	"components.roomForm.validation.timePeriod.startBeforeEnd":
+		"Das Startdatum muss vor dem Enddatum liegen.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
 	"error.400": "400 – Fehlerhafte Anfrage",
@@ -1675,14 +1699,21 @@ export default {
 		"Hinzufügen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.members.error.remove":
 		"Löschen von Teilnehmenden fehlgeschlagen.",
-	"pages.rooms.members.remove.confirmation":
-		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.infoText":
-		'Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	(<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">weitere Informationen</a>).',
+		"Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
+	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
 	"pages.rooms.members.add": "Teilnehmende hinzufügen",
-	"pages.rooms.members.manage": "Teilnehmende verwalten",
-	"pages.rooms.members.remove": "Teilnehmende entfernen",
+	"pages.rooms.members.manage": "Raum-Teilnehmende",
+	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
+	"pages.rooms.members.resetSelection.ariaLabel":
+		"Ausgewählte Teilnehmer aus der Liste zurücksetzen",
+	"pages.rooms.members.multipleRemove.ariaLabel":
+		"Mehrere Teilnehmer aus dem Raum entfernen",
+	"pages.rooms.members.remove.confirmation":
+		"{memberName} wirklich aus dem Raum entfernen?",
+	"pages.rooms.members.multipleRemove.confirmation":
+		"Ausgewählte Teilnehmende wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.roles.editor": "Raumeditor",
 	"pages.rooms.members.roles.viewer": "Raumbetrachter",
 	"pages.rooms.title": "Räume",

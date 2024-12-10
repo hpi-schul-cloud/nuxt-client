@@ -11,7 +11,7 @@ export const roomMemberResponseFactory = Factory.define<RoomMemberResponse>(
 		userId: `member${sequence}`,
 		firstName: `firstName${sequence}`,
 		lastName: `lastName${sequence}`,
-		roleName: RoleName.RoomEditor,
+		roleName: RoleName.Roomeditor,
 		displayRoleName: RoleName.Teacher,
 		schoolName: "Paul-Gerhardt-Gymnasium",
 	})
@@ -23,7 +23,7 @@ export const roomMemberListFactory = Factory.define<RoomMember>(
 		firstName: `firstName${sequence}`,
 		lastName: `lastName${sequence}`,
 		fullName: `lastName${sequence}, firstName${sequence}`,
-		roleName: RoleName.RoomEditor,
+		roleName: RoleName.Roomeditor,
 		displayRoleName: RoleName.Teacher,
 		schoolName: "Paul-Gerhardt-Gymnasium",
 	})

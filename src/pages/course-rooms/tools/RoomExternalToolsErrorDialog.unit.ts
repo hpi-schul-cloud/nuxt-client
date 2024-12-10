@@ -58,6 +58,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 			name: "Test Tool",
 			openInNewTab: false,
 			contextExternalToolId: "contextExternalToolId",
+			isLtiDeepLinkingTool: false,
 		};
 	};
 

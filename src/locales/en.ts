@@ -515,7 +515,7 @@ export default {
 	"components.molecules.copyResult.ctlTools.info":
 		"External tools associated with the course and boarding cards are not copied.",
 	"components.molecules.copyResult.ctlTools.withFeature.info":
-		"Protected parts of the tool configurations are not copied.",
+		"External tools and protected parts of the tool configurations that are not available in the target school are not copied.",
 	"components.molecules.copyResult.etherpadCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.failedCopy":
@@ -546,8 +546,9 @@ export default {
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
 	"components.molecules.copyResult.label.link": "Link",
 	"components.molecules.copyResult.label.timeGroup": "Time Group",
-	"components.molecules.copyResult.label.unknown": "Unkown",
+	"components.molecules.copyResult.label.unknown": "Unknown",
 	"components.molecules.copyResult.label.userGroup": "User Group",
+	"components.molecules.copyResult.label.toolElements": "Tool Element",
 	"components.molecules.copyResult.metadata": "General Information",
 	"components.molecules.copyResult.nexboardCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
@@ -576,6 +577,8 @@ export default {
 	"components.molecules.EdusharingFooter.img_alt": "edusharing-logo",
 	"components.molecules.EdusharingFooter.text": "powered by",
 	"components.molecules.import.columnBoard.label": "Board title",
+	"components.molecules.import.columnBoard.rename":
+		"If necessary, the name of the board can be renamed: ",
 	"components.molecules.import.columnBoard.options.infoText":
 		"The board can be renamed below.",
 	"components.molecules.import.columnBoard.options.title": "Import board",
@@ -583,15 +586,16 @@ export default {
 		"Select course",
 	"components.molecules.import.columnBoard.options.selectCourse.infoText":
 		"Please select the course into which you would like to import the board.",
-	"components.molecules.import.courses.label": "Course",
-	"components.molecules.import.courses.options.ctlTools.infoText":
-		"A copy will be created.<br>Personal data will not be imported.<br>External tools will not be copied.<br>The course can be renamed below.",
-	"components.molecules.import.courses.options.infoText":
-		"Participant-related data will not be copied. The course can be renamed below.",
-	"components.molecules.import.courses.options.title": "Import course",
+	"components.molecules.import.courses.label": "Course name",
+	"components.molecules.import.columnBoard.options.selectRoom": "Select room",
+	"components.molecules.import.columnBoard.options.selectRoom.infoText":
+		"Please select the room into which you would like to import the board.",
+	"components.molecules.import.courses.rename":
+		"If necessary, the name of the course can be renamed: ",
+	"components.molecules.import.courses.options.title": "Import course copy",
 	"components.molecules.import.lessons.label": "Topic",
-	"components.molecules.import.lessons.options.infoText":
-		"Participant-related data will not be copied. The topic can be renamed below.",
+	"components.molecules.import.lessons.rename":
+		"If necessary, the name of the topic can be renamed: ",
 	"components.molecules.import.lessons.options.selectCourse.infoText":
 		"Please select the course into which you would like to import the topic.",
 	"components.molecules.import.lessons.options.selectCourse": "Select course",
@@ -604,9 +608,11 @@ export default {
 		"Unfortunately, the necessary authorization is missing.",
 	"components.molecules.import.options.loadingMessage": "Import in progress...",
 	"components.molecules.import.options.success": "{name} imported successfully",
+	"components.molecules.import.options.tableHeader.InfoText":
+		"The following content will not be imported:",
 	"components.molecules.import.tasks.label": "Task",
-	"components.molecules.import.tasks.options.infoText":
-		"Participant-related data will not be copied. The task can be renamed below.",
+	"components.molecules.import.tasks.rename":
+		"If necessary, the name of the task can be renamed: ",
 	"components.molecules.import.tasks.options.selectCourse.infoText":
 		"Please select the course into which you would like to import the task.",
 	"components.molecules.import.tasks.options.selectCourse": "Select course",
@@ -639,18 +645,32 @@ export default {
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
 	"components.molecules.share.courses.mail.body": "Link to the course:",
 	"components.molecules.share.courses.mail.subject": "Course you can import",
-	"components.molecules.share.courses.options.ctlTools.infotext":
-		"External tools associated with the course or boarding cards will not be copied.",
+	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
+		"External tools not available in the target school",
+	"components.molecules.shareImport.options.ctlTools.infoText.protected":
+		"Protected settings of external tools",
 	"components.molecules.share.courses.options.infoText":
-		"With the following link, the course can be imported as a copy by other teachers. Personal data will not be imported.",
+		"With the following link, the course can be imported as a copy by other teachers.",
+	"components.molecules.shareImport.options.restrictions.infoText.personalData":
+		"Personal data",
+	"components.molecules.shareImport.options.restrictions.infoText.courseFiles":
+		"Files under Course Files",
+	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
+		"Content from Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
+		"Geogebra IDs and",
+	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
+		"Course groups",
+	"components.molecules.share.options.tableHeader.InfoText":
+		"The following content will not be copied:",
 	"components.molecules.share.courses.result.linkLabel": "Link course copy",
 	"components.molecules.share.lessons.mail.body": "Link to the topic:",
 	"components.molecules.share.lessons.mail.subject": "Topic you can import",
 	"components.molecules.share.lessons.options.infoText":
-		"With the following link, the topic can be imported as a copy by other teachers. Personal data will not be imported.",
+		"With the following link, the topic can be imported as a copy by other teachers.",
 	"components.molecules.share.lessons.result.linkLabel": "Link topic copy",
 	"components.molecules.share.columnBoard.options.infoText":
-		"With the following link, the board can be imported as a copy by other teachers. Personal data will not be imported.",
+		"With the following link, the board can be imported as a copy by other teachers.",
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link to Board copy",
 	"components.molecules.share.options.expiresInDays":
@@ -792,6 +812,10 @@ export default {
 	"components.roomForm.labels.timePeriod": "Time period",
 	"components.roomForm.labels.timePeriod.from": "Time period from",
 	"components.roomForm.labels.timePeriod.to": "Time period to",
+	"components.roomForm.validation.generalSaveError":
+		"An error occurred while saving. Please check your inputs and try again.",
+	"components.roomForm.validation.timePeriod.startBeforeEnd":
+		"The start date must be before the end date.",
 	"components.timePicker.validation.format": "Please use format HH:MM",
 	"components.timePicker.validation.required": "Please enter a time.",
 	"error.400": "401 – Bad Request",
@@ -1644,14 +1668,21 @@ export default {
 	"pages.rooms.members.error.load": "The participant list could not be loaded.",
 	"pages.rooms.members.error.add": "Adding participants failed.",
 	"pages.rooms.members.error.remove": "Deleting participants failed.",
-	"pages.rooms.members.remove.confirmation":
-		"Remove {memberName} from the room?",
 	"pages.rooms.members.infoText":
-		'Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile (<a href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben">more information</a>).',
+		"Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
+	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add participants",
-	"pages.rooms.members.manage": "Manage participants",
-	"pages.rooms.members.remove": "Remove participants",
+	"pages.rooms.members.manage": "Room Participants",
+	"pages.rooms.members.remove.ariaLabel": "Remove {memberName} from the room",
+	"pages.rooms.members.resetSelection.ariaLabel":
+		"Reset selected participants from the list",
+	"pages.rooms.members.multipleRemove.ariaLabel":
+		"Remove multiple participants from the room",
+	"pages.rooms.members.remove.confirmation":
+		"Remove {memberName} from the room?",
+	"pages.rooms.members.multipleRemove.confirmation":
+		"Remove selected participants from the room?",
 	"pages.rooms.members.roles.editor": "Room editor",
 	"pages.rooms.members.roles.viewer": "Room viewer",
 	"pages.rooms.title": "Rooms",
