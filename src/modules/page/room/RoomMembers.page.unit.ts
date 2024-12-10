@@ -18,7 +18,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { ref } from "vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-import { roomDetailsFactory } from "@@/tests/test-utils/factory/roomDetailsFactory";
+import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
 import { AddMembers, MembersTable } from "@feature-room";
 import { mdiPlus } from "@icons/material";
@@ -55,7 +55,7 @@ describe("RoomMembersPage", () => {
 
 	const buildRoom = () => {
 		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
-		const room = roomDetailsFactory.build();
+		const room = roomFactory.build();
 		const potentialMembers = roomMemberListFactory.buildList(3);
 
 		mockRoomMemberCalls.schools = ref(roomMembersSchools);
