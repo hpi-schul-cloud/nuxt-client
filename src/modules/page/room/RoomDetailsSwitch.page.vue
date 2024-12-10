@@ -18,13 +18,19 @@
 <script setup lang="ts">
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { RoomDetailsPage } from "@page-room";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { computed, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
+import { Permission } from "@/serverApi/v3";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const authModule = injectStrict(AUTH_MODULE_KEY);
 
 const route = useRoute();
 
@@ -32,10 +38,17 @@ const roomDetailsStore = useRoomDetailsStore();
 const { isLoading, roomVariant } = storeToRefs(roomDetailsStore);
 const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 
+const canAccessRoom = computed(() => {
+	return (
+		envConfigModule.getEnv.FEATURE_ROOMS_ENABLED &&
+		authModule.getUserPermissions.includes(Permission.RoomCreate.toLowerCase())
+	);
+});
+
 watch(
 	() => route.params.id,
 	async () => {
-		if (envConfigModule.getEnv["FEATURE_ROOMS_ENABLED"]) {
+		if (canAccessRoom.value) {
 			await fetchRoom(route.params.id as string);
 		} else {
 			deactivateRoom();

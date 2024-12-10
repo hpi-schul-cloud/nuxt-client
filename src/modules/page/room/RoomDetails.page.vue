@@ -42,6 +42,7 @@ import {
 	BoardLayout,
 	BoardParentType,
 	CreateBoardBodyParams,
+	Permission,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";

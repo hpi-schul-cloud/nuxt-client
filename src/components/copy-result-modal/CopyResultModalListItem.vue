@@ -9,6 +9,7 @@
 				v-for="element in aggregatedElements()"
 				:key="element.type"
 				class="element-info"
+				data-testid="copy-result-list-item-element-info"
 			>
 				<span>
 					{{ element.count }} {{ element.type }}
@@ -121,6 +122,8 @@ export default {
 					return this.$t("components.molecules.copyResult.label.columnBoard");
 				case CopyApiResponseTypeEnum.DrawingElement:
 					return this.$t("components.molecules.copyResult.label.tldraw");
+				case CopyApiResponseTypeEnum.ExternalToolElement:
+					return this.$t("components.molecules.copyResult.label.toolElements");
 				default:
 					return this.$t("components.molecules.copyResult.label.unknown");
 			}

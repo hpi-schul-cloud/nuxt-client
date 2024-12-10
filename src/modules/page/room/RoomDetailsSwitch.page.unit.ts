@@ -186,12 +186,29 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 		});
 
-		describe("when FEATURE_ROOMS_ENABLED flag is set true", () => {
-			it("should call fetchRoom on mounted", () => {
-				const { roomDetailsStore } = setup();
+		describe("when FEATURE_ROOMS_ENABLED flag is set to true", () => {
+			describe("and user has 'room_create' permission", () => {
+				it("should call fetchRoom on mounted", () => {
+					const { roomDetailsStore } = setup({
+						isLoading: false,
+						permissions: ["room_create"],
+					});
 
-				expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith("room-id");
-				expect(roomDetailsStore.deactivateRoom).not.toHaveBeenCalled();
+					expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith("room-id");
+					expect(roomDetailsStore.deactivateRoom).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("and user does not have 'room_create' permission", () => {
+				it("should not call fetchRoom on mounted", () => {
+					const { roomDetailsStore } = setup({
+						isLoading: false,
+						permissions: [],
+					});
+
+					expect(roomDetailsStore.deactivateRoom).toHaveBeenCalled();
+					expect(roomDetailsStore.fetchRoom).not.toHaveBeenCalled();
+				});
 			});
 		});
 
