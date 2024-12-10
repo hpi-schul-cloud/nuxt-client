@@ -1791,8 +1791,8 @@ export enum ContentElementType {
     SubmissionContainer = 'submissionContainer',
     ExternalTool = 'externalTool',
     CollaborativeTextEditor = 'collaborativeTextEditor',
-    Deleted = 'deleted',
-    VideoConference = 'videoConference'
+    VideoConference = 'videoConference',
+    Deleted = 'deleted'
 }
 
 /**
@@ -7407,6 +7407,7 @@ export enum RoomColor {
     Pink = 'pink',
     Red = 'red',
     Orange = 'orange',
+    Yellow = 'yellow',
     Olive = 'olive',
     Green = 'green',
     Turquoise = 'turquoise',
@@ -7414,8 +7415,7 @@ export enum RoomColor {
     Blue = 'blue',
     Magenta = 'magenta',
     Purple = 'purple',
-    Brown = 'brown',
-    Yellow = 'yellow'
+    Brown = 'brown'
 }
 
 /**
