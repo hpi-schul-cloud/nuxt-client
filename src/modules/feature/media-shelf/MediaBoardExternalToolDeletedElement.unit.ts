@@ -1,15 +1,15 @@
+import { deletedElementResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { deletedElementResponseFactory } from "@@/tests/test-utils";
+import { BoardMenuAction } from "@ui-board";
 import { mount } from "@vue/test-utils";
-import { BoardMenuActionDelete } from "@ui-board";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { VBtn } from "vuetify/lib/components/index.mjs";
-import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 import MediaBoardDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
+import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 
 describe("MediaBoardDeletedElement", () => {
 	const getWrapper = (
@@ -68,7 +68,7 @@ describe("MediaBoardDeletedElement", () => {
 					.getComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const deleteAction = wrapper.findComponent(BoardMenuActionDelete);
+				const deleteAction = wrapper.findComponent(BoardMenuAction);
 
 				expect(deleteAction.exists()).toEqual(true);
 			});
