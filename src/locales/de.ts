@@ -124,6 +124,7 @@ export default {
 	"common.roleName.student": "Schüler:in",
 	"common.roleName.superhero": "Schul-Cloud Admin",
 	"common.roleName.teacher": "Lehrkraft",
+	"common.roleName.groupSubstitutionTeacher": "Vertretungslehrkraft",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen und an Schuladministrator:in wenden.",
 	"common.tool.information.outdated.student":
