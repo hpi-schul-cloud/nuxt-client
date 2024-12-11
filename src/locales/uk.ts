@@ -1508,7 +1508,7 @@ export default {
 	"pages.administration.teachers.new.title": "Додати викладача",
 	"pages.administration.teachers.table.edit.ariaLabel": "Редагування вчителя",
 	"pages.common.tools.configureVideoconferenceDialog.title":
-		"Створити відеоконференцію {roomName}",
+		"Створити відеоконференцію",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Усі користувачі беруть участь як модератори",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute":

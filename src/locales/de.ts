@@ -1502,7 +1502,7 @@ export default {
 	"pages.administration.teachers.new.title": "Lehrkraft hinzufügen",
 	"pages.administration.teachers.table.edit.ariaLabel": "Lehrkraft bearbeiten",
 	"pages.common.tools.configureVideoconferenceDialog.title":
-		"Videokonferenz {title} erstellen",
+		"Videokonferenz erstellen",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"Alle Nutzer:innen nehmen als Moderator:in teil",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute":

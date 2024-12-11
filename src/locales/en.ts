@@ -1479,7 +1479,7 @@ export default {
 	"pages.administration.teachers.new.title": "Add teacher",
 	"pages.administration.teachers.table.edit.ariaLabel": "Edit teacher",
 	"pages.common.tools.configureVideoconferenceDialog.title":
-		"Create video conference {roomName}",
+		"Create video conference",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
 		"All users participate as moderators",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute":

@@ -35,11 +35,7 @@
 						class="text-h4 my-2"
 						data-testId="videoconference-config-dialog-title"
 					>
-						{{
-							$t("pages.common.tools.configureVideoconferenceDialog.title", {
-								title: roomName,
-							})
-						}}
+						{{ $t("pages.common.tools.configureVideoconferenceDialog.title") }}
 					</h2>
 				</v-card-title>
 				<v-card-text>
@@ -126,6 +122,7 @@ import {
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { mdiCheck } from "@icons/material";
+import { useDisplay } from "vuetify/lib/framework.mjs";
 
 export default defineComponent({
 	name: "RoomVideoConferenceSection",
@@ -145,9 +142,13 @@ export default defineComponent({
 			COURSE_ROOM_DETAILS_MODULE_KEY
 		);
 
-		const roomName = computed(
-			() => courseRoomDetailsModule.getRoomData.title ?? ""
-		);
+		const { smAndUp } = useDisplay();
+		const maxLengthTitle = smAndUp.value ? 40 : 25;
+
+		const roomName = computed(() => {
+			const title = courseRoomDetailsModule.getRoomData.title ?? "";
+			return title.slice(0, maxLengthTitle);
+		});
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 			() => videoConferenceModule.getVideoConferenceInfo
