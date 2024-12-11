@@ -1,4 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
+import * as commoncartridgeApi from "@/commonCartridgeApi/v3/api";
 import { BoardParentType } from "@/serverApi/v3/api";
 import { applicationErrorModule, authModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
@@ -390,8 +391,10 @@ describe("course-room module", () => {
 					lessonControllerDelete: jest.fn(() => Promise.resolve()),
 				};
 				const spy = jest
-					.spyOn(serverApi, "CoursesApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
+					.spyOn(commoncartridgeApi, "CommonCartridgeApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as commoncartridgeApi.CommonCartridgeApiInterface
+					);
 
 				await expect(
 					courseRoomDetailsModule.downloadCommonCartridgeCourse({
@@ -413,8 +416,10 @@ describe("course-room module", () => {
 					),
 				};
 				const spy = jest
-					.spyOn(serverApi, "CoursesApiFactory")
-					.mockReturnValue(mockApi as unknown as serverApi.CoursesApiInterface);
+					.spyOn(commoncartridgeApi, "CommonCartridgeApiFactory")
+					.mockReturnValue(
+						mockApi as unknown as commoncartridgeApi.CommonCartridgeApiInterface
+					);
 
 				await courseRoomDetailsModule.downloadCommonCartridgeCourse({
 					version: "1.1.0",
