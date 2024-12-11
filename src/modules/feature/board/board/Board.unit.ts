@@ -1,4 +1,5 @@
 import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
+import { useApplicationError } from "@/composables/application-error.composable";
 import { useCopy } from "@/composables/copy";
 import {
 	ConfigResponse,
@@ -6,7 +7,7 @@ import {
 	CopyApiResponseTypeEnum,
 	ShareTokenBodyParamsParentTypeEnum,
 } from "@/serverApi/v3";
-import { envConfigModule, applicationErrorModule } from "@/store";
+import { applicationErrorModule, envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import CopyModule from "@/store/copy";
 import CourseRoomDetailsModule from "@/store/course-room-details";
@@ -15,11 +16,13 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import ShareModule from "@/store/share";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
 import {
 	BoardPermissionChecks,
 	defaultPermissions,
 } from "@/types/board/Permissions";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	COPY_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
@@ -28,7 +31,6 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
@@ -36,6 +38,7 @@ import {
 	columnResponseFactory,
 	envsFactory,
 } from "@@/tests/test-utils/factory";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -63,9 +66,6 @@ import { Router, useRoute, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
-import { useApplicationError } from "@/composables/application-error.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { createApplicationError } from "@/utils/create-application-error.factory";
 
 jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -344,12 +344,6 @@ describe("Board", () => {
 			expect(wrapperVM.board).toStrictEqual(board);
 		});
 
-		it("should call cardStore loadPreferredTools action", () => {
-			const { cardStore } = setup();
-
-			expect(cardStore.loadPreferredTools).toHaveBeenCalled();
-		});
-
 		it("should be found in the dom", () => {
 			const { wrapper } = setup();
 
@@ -375,6 +369,24 @@ describe("Board", () => {
 				const boardHeaderComponent = wrapper.findComponent(BoardHeaderVue);
 
 				expect(boardHeaderComponent.props("title")).toBe(board.title);
+			});
+		});
+
+		describe("when the user has tool create permissions", () => {
+			it("should call cardStore loadPreferredTools action", () => {
+				mockedBoardPermissions.hasCreateToolPermission = true;
+				const { cardStore } = setup();
+
+				expect(cardStore.loadPreferredTools).toHaveBeenCalled();
+			});
+		});
+
+		describe("when the user does not have tool create permissions", () => {
+			it("should call cardStore loadPreferredTools action", () => {
+				mockedBoardPermissions.hasCreateToolPermission = false;
+				const { cardStore } = setup();
+
+				expect(cardStore.loadPreferredTools).not.toHaveBeenCalled();
 			});
 		});
 	});

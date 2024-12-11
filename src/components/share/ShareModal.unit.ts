@@ -1,22 +1,22 @@
-import ShareModule from "@/store/share";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { mount } from "@vue/test-utils";
-import ShareModal from "./ShareModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import EnvConfigModule from "@/store/env-config";
+import NotifierModule from "@/store/notifier";
+import ShareModule from "@/store/share";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import NotifierModule from "@/store/notifier";
-import EnvConfigModule from "@/store/env-config";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import ShareModal from "./ShareModal.vue";
 
 describe("@/components/share/ShareModal", () => {
 	let shareModuleMock: ShareModule;
@@ -137,11 +137,10 @@ describe("@/components/share/ShareModal", () => {
 					`[data-testid="share-modal-external-tools-info"]`
 				);
 
-				expect(infotext.text()).toEqual(
-					"components.molecules.share.courses.options.ctlTools.infotext"
-				);
-
 				expect(infotext.isVisible()).toBe(true);
+				expect(infotext.text()).toEqual(
+					"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
+				);
 			});
 		});
 

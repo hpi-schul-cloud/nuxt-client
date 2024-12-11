@@ -18,24 +18,72 @@
 			<!--Fade-out animation ensures that the dialog shows the last visible step while closing-->
 			<v-fade-transition>
 				<div v-if="step === 'firstStep' && isOpen">
+					<p data-testid="share-options-info-text">
+						{{ t(`components.molecules.share.${type}.options.infoText`) }}
+					</p>
 					<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
 						<div class="mx-2">
 							<v-icon color="info" :icon="mdiInformation" />
 						</div>
-						<div>
-							{{ t(`components.molecules.share.${type}.options.infoText`) }}
-							<br />
-							{{ t("components.molecules.copyResult.courseFiles.info") }}
-							<div
-								data-testid="share-modal-external-tools-info"
-								v-if="ctlToolsEnabled"
-							>
-								{{
-									t(
-										`components.molecules.share.courses.options.ctlTools.infotext`
-									)
-								}}
-							</div>
+						<div data-testid="share-options-table-header">
+							{{ t("components.molecules.share.options.tableHeader.InfoText") }}
+							<ul class="ml-6">
+								<li data-testid="share-options-personal-data-text">
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.personalData"
+										)
+									}}
+								</li>
+								<li
+									v-if="showCtlToolsInfo"
+									data-testid="share-modal-external-tools-info"
+								>
+									{{
+										t(
+											"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
+										)
+									}}
+								</li>
+								<li
+									v-if="showCtlToolsInfo"
+									data-testid="share-modal-external-tools-protected-parameter-info"
+								>
+									{{
+										t(
+											"components.molecules.shareImport.options.ctlTools.infoText.protected"
+										)
+									}}
+								</li>
+								<li data-testid="share-modal-coursefiles-info">
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
+										)
+									}}
+								</li>
+								<li>
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.etherpad"
+										)
+									}}
+								</li>
+								<li>
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.geogebra"
+										)
+									}}
+								</li>
+								<li>
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.courseGroups"
+										)
+									}}
+								</li>
+							</ul>
 						</div>
 					</div>
 					<share-modal-options-form
@@ -58,7 +106,7 @@
 </template>
 
 <script setup lang="ts">
-import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
@@ -141,7 +189,10 @@ const onCopy = () => {
 	});
 };
 
-const ctlToolsEnabled = computed(() => {
-	return envConfigModule.getCtlToolsTabEnabled;
+const showCtlToolsInfo = computed(() => {
+	return (
+		envConfigModule.getCtlToolsTabEnabled &&
+		(props.type === "courses" || props.type === "columnBoard")
+	);
 });
 </script>
