@@ -29,7 +29,6 @@ const videoConferenceStateMapping: Partial<
 })
 export default class VideoConferenceModule extends VuexModule {
 	private videoConferenceInfo: VideoConferenceInfo = {
-		scopeId: "",
 		state: VideoConferenceState.NOT_STARTED,
 		options: {
 			everyAttendeeJoinsMuted: false,
@@ -91,7 +90,6 @@ export default class VideoConferenceModule extends VuexModule {
 				);
 
 			const mapped: VideoConferenceInfo = {
-				scopeId: params.scopeId,
 				state:
 					videoConferenceStateMapping[response.data.state] ??
 					VideoConferenceState.UNKNOWN,
@@ -149,7 +147,6 @@ export default class VideoConferenceModule extends VuexModule {
 			);
 
 			this.setVideoConferenceInfo({
-				scopeId: params.scopeId,
 				state: VideoConferenceState.RUNNING,
 				options: params.videoConferenceOptions,
 			});
