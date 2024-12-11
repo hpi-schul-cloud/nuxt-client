@@ -191,6 +191,10 @@ const tableHeader = [
 	font-weight: bold;
 }
 
+:deep(.v-data-table__td .v-selection-control--disabled i) {
+	color: rgba(var(--v-theme-on-surface), 0.6);
+}
+
 .table-title-header {
 	min-height: 50px;
 }
