@@ -3,6 +3,7 @@
 		<v-card
 			class="mb-4"
 			data-testid="video-conference-element"
+			:class="{ 'd-none': isHidden }"
 			:variant="outlined"
 			ref="videoConferenceElement"
 			:ripple="false"
@@ -16,10 +17,9 @@
 				:url="computedElement.content.url"
 				:title="computedElement.content.title"
 				:has-participation-permission="hasParticipationPermission"
-				:can-join="canJoin"
 				:can-start="canStart"
 				:is-running="isRunning"
-				:isEditMode="isEditMode"
+				:is-edit-mode="isEditMode"
 				@click="onClick"
 				@refresh="onRefresh"
 				><BoardMenu
@@ -70,12 +70,9 @@
 							data-testId="videoconference-config-dialog-title"
 						>
 							{{
-								$t(
-									"components.cardElement.videoConferenceElement.configurationDialog.title",
-									{
-										elementTitle,
-									}
-								)
+								$t("pages.common.tools.configureVideoconferenceDialog.title", {
+									title: elementTitle,
+								})
 							}}
 						</h2>
 					</v-card-title>
@@ -84,9 +81,8 @@
 							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
 							data-testId="every-attendee-joins-muted"
 							:label="
-								// TODO: move to common
 								$t(
-									'pages.courseRooms.tools.configureVideoconferenceDialog.text.mute'
+									'pages.common.tools.configureVideoconferenceDialog.text.mute'
 								)
 							"
 							:hide-details="true"
@@ -95,9 +91,8 @@
 							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
 							data-testId="moderator-must-approve-join-requests"
 							:label="
-								// TODO: move to common
 								$t(
-									'pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom'
+									'pages.common.tools.configureVideoconferenceDialog.text.waitingRoom'
 								)
 							"
 							:hide-details="true"
@@ -106,9 +101,8 @@
 							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
 							data-testId="everybody-joins-as-moderator"
 							:label="
-								// TODO: move to common
 								$t(
-									'pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission'
+									'pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission'
 								)
 							"
 							:hide-details="true"
@@ -148,7 +142,6 @@ import {
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
-	useBoardStore,
 	useContentElementState,
 } from "@data-board";
 import {
@@ -178,8 +171,8 @@ import {
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import VideoConferenceModule from "@/store/video-conference";
 import {
-	AUTH_MODULE_KEY,
 	injectStrict,
+	AUTH_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
 import { useRoute } from "vue-router";
@@ -208,13 +201,12 @@ const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const videoConferenceModule: VideoConferenceModule = injectStrict(
 	VIDEO_CONFERENCE_MODULE_KEY
 );
-const boardStore = useBoardStore();
 const { isStudent, isTeacher } = useBoardPermissions();
 
 const { t } = useI18n();
 const videoConferenceElement = ref(null);
 const element = toRef(props, "element");
-const boardId = boardStore.board?.id || route.params.id;
+const boardId = route.params.id;
 
 const outlined = computed(() => {
 	return props.isEditMode === true || computedElement.value.content.url !== ""
@@ -264,14 +256,16 @@ const isCreating = computed(
 	() => props.isEditMode && !computedElement.value.content.url
 );
 
+const isHidden = computed(
+	() => props.isEditMode === false && !computedElement.value.content.url
+);
+
 const isRefreshing: ComputedRef<boolean> = computed(
 	() => videoConferenceModule.getLoading
 );
 
 const isRunning: ComputedRef<boolean> = computed(
-	() =>
-		videoConferenceInfo.value.state === VideoConferenceState.RUNNING &&
-		videoConferenceInfo.value.scopeId === computedElement.value.id
+	() => videoConferenceInfo.value.state === VideoConferenceState.RUNNING
 );
 
 const isWaitingRoomActive: ComputedRef<boolean> = computed(
@@ -322,7 +316,7 @@ const onCreateTitle = (title: string) => {
 };
 
 const onKeydownArrow = (event: KeyboardEvent) => {
-	if (props.isEditMode) {
+	if (isCreating.value === false && props.isEditMode) {
 		event.preventDefault();
 		emit("move-keyboard:edit", event);
 	}

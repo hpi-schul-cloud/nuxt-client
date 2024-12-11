@@ -453,8 +453,6 @@ export default {
 	"components.cardElement.videoConferenceElement": "Videokonferenz",
 	"components.cardElement.videoConferenceElement.label":
 		"Videokonferenz-Titel einfügen",
-	"components.cardElement.videoConferenceElement.configurationDialog.title":
-		"Videokonferenz {elementTitle} erstellen",
 	"components.cardElement.deletedElement": "Gelöschter Inhalt",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
@@ -1503,6 +1501,14 @@ export default {
 		"Lehrkraft erfolgreich angelegt!",
 	"pages.administration.teachers.new.title": "Lehrkraft hinzufügen",
 	"pages.administration.teachers.table.edit.ariaLabel": "Lehrkraft bearbeiten",
+	"pages.common.tools.configureVideoconferenceDialog.title":
+		"Videokonferenz {title} erstellen",
+	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Alle Nutzer:innen nehmen als Moderator:in teil",
+	"pages.common.tools.configureVideoconferenceDialog.text.mute":
+		"Teilnehmer:innen beim Betreten stummschalten",
+	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.content._id.addToTopic": "Hinzufügen zu",
 	"pages.content._id.collection.selectElements":
 		"Wählen Sie die Elemente, die Sie zum Thema hinzufügen möchten",
@@ -1571,14 +1577,6 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Gruppen",
 	"pages.courseRooms.tabLabel.tools": "Tools",
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
-		"Videokonferenz {roomName} erstellen",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Alle Nutzer:innen nehmen als Moderator:in teil",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
-		"Teilnehmer:innen beim Betreten stummschalten",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",

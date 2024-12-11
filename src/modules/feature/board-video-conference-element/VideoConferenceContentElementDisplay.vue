@@ -1,26 +1,23 @@
 <template>
-	<div
-		data-testid="board-video-conference-element"
-		ref="videoConferenceContentElementDisplay"
-		tabindex="-1"
-	>
+	<div ref="videoConferenceContentElementDisplay" tabindex="-1">
 		<ContentElementBar
 			:hasGreyBackground="true"
 			:icon="mdiVideo"
 			:has-row-style="isSmallOrLargerListBoard"
+			data-testId="board-video-conference-element"
 			@click.stop="onClick"
 		>
 			<template #display>
 				<div
 					v-if="canStart && !isVideoConferenceEnabled"
 					class="mt-2"
-					data-testId="vc-info-box-show"
+					data-testId="vc-info-box-show-no-feature"
 				>
 					<v-alert
 						density="compact"
 						class="ma-0"
 						type="info"
-						data-testId="vc-info-box"
+						data-testId="vc-info-box-no-feature"
 					>
 						<div class="d-flex flex-wrap gap-4">
 							<span class="flex-1 my-auto">
@@ -30,7 +27,7 @@
 					</v-alert>
 				</div>
 				<div
-					v-if="!isRunning && canJoin && !canStart"
+					v-if="!isRunning && !canStart"
 					class="mt-2"
 					data-testId="vc-info-box-show"
 				>
@@ -47,6 +44,27 @@
 										? t("pages.videoConference.info.notStarted")
 										: t("pages.videoConference.info.noPermission")
 								}}
+							</span>
+							<span v-else class="flex-1 my-auto">
+								{{ t("pages.videoConference.info.notEnabledParticipants") }}
+							</span>
+						</div>
+					</v-alert>
+				</div>
+				<div
+					v-if="isRunning && !hasParticipationPermission"
+					class="mt-2"
+					data-testId="vc-info-box-show-no-permission"
+				>
+					<v-alert
+						density="compact"
+						class="ma-0"
+						type="info"
+						data-testId="vc-info-box-no-permission"
+					>
+						<div class="d-flex flex-wrap gap-4">
+							<span v-if="isVideoConferenceEnabled" class="flex-1 my-auto">
+								{{ t("pages.videoConference.info.noPermission") }}
 							</span>
 							<span v-else class="flex-1 my-auto">
 								{{ t("pages.videoConference.info.notEnabledParticipants") }}
@@ -88,10 +106,6 @@ const emit = defineEmits(["click", "refresh"]);
 const imageSrc = image;
 
 const props = defineProps({
-	canJoin: {
-		type: Boolean,
-		required: true,
-	},
 	canStart: {
 		type: Boolean,
 		required: true,
@@ -131,11 +145,17 @@ const isVideoConferenceEnabled = computed(
 );
 
 const onClick = () => {
-	if (!isVideoConferenceEnabled.value) {
+	if (!isVideoConferenceEnabled.value || !props.hasParticipationPermission) {
 		return;
-	} else if (!props.isRunning && props.canJoin && !props.canStart) {
+	} else if (
+		!props.isRunning &&
+		props.hasParticipationPermission &&
+		!props.canStart
+	) {
 		emit("refresh");
 	} else if (props.canStart) {
+		emit("click");
+	} else if (props.hasParticipationPermission && props.isRunning) {
 		emit("click");
 	}
 };

@@ -46,7 +46,7 @@ type VuetifyFormApi = {
 };
 
 export default defineComponent({
-	name: "videoConferenceContentElementCreate",
+	name: "VideoConferenceContentElementCreate",
 	components: {},
 	emits: ["create:title"],
 	setup(_, { emit }) {

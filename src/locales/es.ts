@@ -458,8 +458,6 @@ export default {
 	"components.cardElement.videoConferenceElement": "Videoconferencia",
 	"components.cardElement.videoConferenceElement.label":
 		"Insertar título de la videoconferencia",
-	"components.cardElement.videoConferenceElement.configurationDialog.title":
-		"Crear videoconferencia {elementTitle}",
 	"components.cardElement.deletedElement": "Contenido eliminado",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
@@ -1526,6 +1524,14 @@ export default {
 		"¡Profesor creado correctamente!",
 	"pages.administration.teachers.new.title": "Añadir profesor",
 	"pages.administration.teachers.table.edit.ariaLabel": "Editar profesor",
+	"pages.common.tools.configureVideoconferenceDialog.title":
+		"Crear videoconferencia {roomName}",
+	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Todas las usuarias participan como moderadoras",
+	"pages.common.tools.configureVideoconferenceDialog.text.mute":
+		"Silenciar a las participantes al entrar",
+	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Aprobación del moderador antes de poder ingresar a la sala",
 	"pages.content._id.addToTopic": "Para ser añadido a",
 	"pages.content._id.collection.selectElements":
 		"Selecciona los elementos que deses añadir al tema",
@@ -1593,14 +1599,6 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Grupos",
 	"pages.courseRooms.tabLabel.tools": "Herramientas",
 	"pages.courseRooms.tabLabel.toolsOld": "Herramientas",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
-		"Crear videoconferencia {roomName}",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Todas las usuarias participan como moderadoras",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
-		"Silenciar a las participantes al entrar",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Aprobación del moderador antes de poder ingresar a la sala",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",

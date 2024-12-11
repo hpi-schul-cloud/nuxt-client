@@ -449,8 +449,6 @@ export default {
 	"components.cardElement.videoConferenceElement": "Video conference",
 	"components.cardElement.videoConferenceElement.label":
 		"Insert video conference title",
-	"components.cardElement.videoConferenceElement.configurationDialog.title":
-		"Create video conference {elementTitle}",
 	"components.cardElement.deletedElement": "Deleted content",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",
@@ -1480,6 +1478,14 @@ export default {
 	"pages.administration.teachers.new.success": "Teacher successfully created!",
 	"pages.administration.teachers.new.title": "Add teacher",
 	"pages.administration.teachers.table.edit.ariaLabel": "Edit teacher",
+	"pages.common.tools.configureVideoconferenceDialog.title":
+		"Create video conference {roomName}",
+	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"All users participate as moderators",
+	"pages.common.tools.configureVideoconferenceDialog.text.mute":
+		"Mute participants when entering",
+	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Approval by the moderator before the room can be entered",
 	"pages.content._id.addToTopic": "To be added to",
 	"pages.content._id.collection.selectElements":
 		"Select the items you want to add to the topic",
@@ -1546,14 +1552,6 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Groups",
 	"pages.courseRooms.tabLabel.tools": "Tools",
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
-		"Create video conference {roomName}",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"All users participate as moderators",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
-		"Mute participants when entering",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Approval by the moderator before the room can be entered",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",

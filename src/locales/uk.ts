@@ -459,8 +459,6 @@ export default {
 	"components.cardElement.videoConferenceElement": "Відеоконференція",
 	"components.cardElement.videoConferenceElement.label":
 		"Вставити назву відеоконференції",
-	"components.cardElement.videoConferenceElement.configurationDialog.title":
-		"Створити відеоконференцію {elementTitle}",
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
@@ -1509,6 +1507,14 @@ export default {
 	"pages.administration.teachers.new.success": "Викладача успішно створено!",
 	"pages.administration.teachers.new.title": "Додати викладача",
 	"pages.administration.teachers.table.edit.ariaLabel": "Редагування вчителя",
+	"pages.common.tools.configureVideoconferenceDialog.title":
+		"Створити відеоконференцію {roomName}",
+	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Усі користувачі беруть участь як модератори",
+	"pages.common.tools.configureVideoconferenceDialog.text.mute":
+		"Вимкнення звуку учасників при вході",
+	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Схвалення модератором перед входом до кімнати",
 	"pages.content._id.addToTopic": "Для додавання в",
 	"pages.content._id.collection.selectElements":
 		"Виберіть елементи, які треба додати до теми",
@@ -1575,14 +1581,6 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Групи",
 	"pages.courseRooms.tabLabel.tools": "Інструмент",
 	"pages.courseRooms.tabLabel.toolsOld": "Інструмент",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
-		"Створити відеоконференцію {roomName}",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Усі користувачі беруть участь як модератори",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
-		"Вимкнення звуку учасників при вході",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Схвалення модератором перед входом до кімнати",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",

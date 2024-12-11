@@ -159,8 +159,7 @@ export const useAddElementDialog = (
 		});
 	}
 
-	// eslint-disable-next-line no-constant-condition
-	if (true /*add env here*/) {
+	if (envConfigModule.getEnv.FEATURE_VIDEOCONFERENCE_ENABLED) {
 		options.push({
 			icon: mdiVideo,
 			label: t(
