@@ -156,12 +156,34 @@ describe("VideoConferenceModule", () => {
 				};
 			};
 
-			it("should update the stores video conference info", async () => {
+			it("should update the stores video conference info in course scope", async () => {
 				const { state } = setup();
 
 				await module.fetchVideoConferenceInfo({
 					scopeId: "scopeId",
 					scope: VideoConferenceScope.Course,
+				});
+
+				expect(module.getVideoConferenceInfo).toEqual(state);
+			});
+
+			it("should update the stores video conference info in room scope", async () => {
+				const { state } = setup();
+
+				await module.fetchVideoConferenceInfo({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Room,
+				});
+
+				expect(module.getVideoConferenceInfo).toEqual(state);
+			});
+
+			it("should update the stores video conference info in video conference element scope", async () => {
+				const { state } = setup();
+
+				await module.fetchVideoConferenceInfo({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.VideoConferenceElement,
 				});
 
 				expect(module.getVideoConferenceInfo).toEqual(state);
@@ -183,12 +205,34 @@ describe("VideoConferenceModule", () => {
 				};
 			};
 
-			it("should update the stores error", async () => {
+			it("should update the stores error in course scope", async () => {
 				const { error } = setup();
 
 				await module.fetchVideoConferenceInfo({
 					scopeId: "scopeId",
 					scope: VideoConferenceScope.Course,
+				});
+
+				expect(module.getError).toEqual(error);
+			});
+
+			it("should update the stores error in room scope", async () => {
+				const { error } = setup();
+
+				await module.fetchVideoConferenceInfo({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Room,
+				});
+
+				expect(module.getError).toEqual(error);
+			});
+
+			it("should update the stores error in video conference element scope", async () => {
+				const { error } = setup();
+
+				await module.fetchVideoConferenceInfo({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.VideoConferenceElement,
 				});
 
 				expect(module.getError).toEqual(error);
@@ -215,13 +259,37 @@ describe("VideoConferenceModule", () => {
 				};
 			};
 
-			it("should return a response", async () => {
+			it("should return a response in course scope", async () => {
 				const { mockResponse } = setup();
 
 				const response: VideoConferenceJoinResponse | undefined =
 					await module.joinVideoConference({
 						scopeId: "scopeId",
 						scope: VideoConferenceScope.Course,
+					});
+
+				expect(response).toEqual(mockResponse);
+			});
+
+			it("should return a response in room scope", async () => {
+				const { mockResponse } = setup();
+
+				const response: VideoConferenceJoinResponse | undefined =
+					await module.joinVideoConference({
+						scopeId: "scopeId",
+						scope: VideoConferenceScope.Room,
+					});
+
+				expect(response).toEqual(mockResponse);
+			});
+
+			it("should return a response in video conference element scope", async () => {
+				const { mockResponse } = setup();
+
+				const response: VideoConferenceJoinResponse | undefined =
+					await module.joinVideoConference({
+						scopeId: "scopeId",
+						scope: VideoConferenceScope.VideoConferenceElement,
 					});
 
 				expect(response).toEqual(mockResponse);
@@ -243,12 +311,34 @@ describe("VideoConferenceModule", () => {
 				};
 			};
 
-			it("should update the stores error", async () => {
+			it("should update the stores error in course scope", async () => {
 				const { error } = setup();
 
 				await module.joinVideoConference({
 					scopeId: "scopeId",
 					scope: VideoConferenceScope.Course,
+				});
+
+				expect(module.getError).toEqual(error);
+			});
+
+			it("should update the stores error in room scope", async () => {
+				const { error } = setup();
+
+				await module.joinVideoConference({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Room,
+				});
+
+				expect(module.getError).toEqual(error);
+			});
+
+			it("should update the stores error in video conference element scope", async () => {
+				const { error } = setup();
+
+				await module.joinVideoConference({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.VideoConferenceElement,
 				});
 
 				expect(module.getError).toEqual(error);
@@ -275,7 +365,7 @@ describe("VideoConferenceModule", () => {
 				};
 			};
 
-			it("should call apiMock.videoConferenceControllerStart", async () => {
+			it("should call apiMock.videoConferenceControllerStart in course scope", async () => {
 				const { videoConferenceOptions, videoconferenceApi } = setup();
 
 				await module.startVideoConference({
@@ -291,6 +381,46 @@ describe("VideoConferenceModule", () => {
 					...videoConferenceOptions,
 					logoutUrl: "mockUrl",
 				});
+			});
+
+			it("should call apiMock.videoConferenceControllerStart in room scope", async () => {
+				const { videoConferenceOptions, videoconferenceApi } = setup();
+
+				await module.startVideoConference({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Room,
+					videoConferenceOptions,
+					logoutUrl: "mockUrl",
+				});
+
+				expect(
+					videoconferenceApi.videoConferenceControllerStart
+				).toHaveBeenCalledWith(VideoConferenceScope.Room, "scopeId", {
+					...videoConferenceOptions,
+					logoutUrl: "mockUrl",
+				});
+			});
+
+			it("should call apiMock.videoConferenceControllerStart in video conference element scope", async () => {
+				const { videoConferenceOptions, videoconferenceApi } = setup();
+
+				await module.startVideoConference({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.VideoConferenceElement,
+					videoConferenceOptions,
+					logoutUrl: "mockUrl",
+				});
+
+				expect(
+					videoconferenceApi.videoConferenceControllerStart
+				).toHaveBeenCalledWith(
+					VideoConferenceScope.VideoConferenceElement,
+					"scopeId",
+					{
+						...videoConferenceOptions,
+						logoutUrl: "mockUrl",
+					}
+				);
 			});
 		});
 
@@ -316,12 +446,36 @@ describe("VideoConferenceModule", () => {
 				};
 			};
 
-			it("should update the stores error", async () => {
+			it("should update the stores error in course scope", async () => {
 				const { error, videoConferenceOptions } = setup();
 
 				await module.startVideoConference({
 					scopeId: "scopeId",
 					scope: VideoConferenceScope.Course,
+					videoConferenceOptions,
+				});
+
+				expect(module.getError).toEqual(error);
+			});
+
+			it("should update the stores error in room scope", async () => {
+				const { error, videoConferenceOptions } = setup();
+
+				await module.startVideoConference({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.Room,
+					videoConferenceOptions,
+				});
+
+				expect(module.getError).toEqual(error);
+			});
+
+			it("should update the stores error in video conference element scope", async () => {
+				const { error, videoConferenceOptions } = setup();
+
+				await module.startVideoConference({
+					scopeId: "scopeId",
+					scope: VideoConferenceScope.VideoConferenceElement,
 					videoConferenceOptions,
 				});
 

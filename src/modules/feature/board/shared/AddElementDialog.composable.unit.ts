@@ -288,6 +288,7 @@ describe("ElementTypeSelection Composable", () => {
 				FEATURE_TLDRAW_ENABLED: true,
 				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
 				FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
+				FEATURE_VIDEOCONFERENCE_ENABLED: true,
 			}
 		) => {
 			const cardId = "cardId";
@@ -500,6 +501,37 @@ describe("ElementTypeSelection Composable", () => {
 				askType();
 
 				const action = elementTypeOptions.value[5].action;
+				action();
+
+				expect(closeDialogMock).toBeCalledTimes(1);
+			});
+		});
+		describe("when the VideoConference action is called", () => {
+			it("should call video conference element function with right argument", async () => {
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				console.log(elementTypeOptions.value);
+				const action = elementTypeOptions.value[7].action;
+				action();
+
+				expect(addElementMock).toBeCalledTimes(1);
+				expect(addElementMock).toBeCalledWith({
+					type: ContentElementType.VideoConference,
+					cardId,
+				});
+			});
+
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				const action = elementTypeOptions.value[7].action;
 				action();
 
 				expect(closeDialogMock).toBeCalledTimes(1);

@@ -267,6 +267,29 @@ describe("BoardApi.composable", () => {
 			);
 		});
 
+		it("should call elementControllerUpdateElement api with VideoConferenceElement", async () => {
+			const { updateElementCall } = useBoardApi();
+			const payload: serverApi.VideoConferenceElementResponse = {
+				id: "video-conference-element-id",
+				type: ContentElementType.VideoConference,
+				content: {
+					title: "Some title",
+				},
+				timestamps: timestampsResponseFactory.build(),
+			};
+			const data = {
+				content: payload.content,
+				type: ContentElementType.VideoConference,
+			};
+
+			await updateElementCall(payload);
+
+			expect(elementApi.elementControllerUpdateElement).toHaveBeenCalledWith(
+				payload.id,
+				{ data }
+			);
+		});
+
 		it("should throw error for unkown element type", async () => {
 			const { updateElementCall } = useBoardApi();
 			const payload = {
