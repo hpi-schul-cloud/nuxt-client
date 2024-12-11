@@ -299,8 +299,10 @@ const isVideoConferenceElementResponse = (
 const showVideoConferenceElement = (
 	element: AnyContentElement
 ): element is VideoConferenceElementResponse => {
-	// eslint-disable-next-line no-constant-binary-expression
-	return true && isVideoConferenceElementResponse(element);
+	return (
+		envConfigModule.getEnv.FEATURE_VIDEOCONFERENCE_ENABLED &&
+		isVideoConferenceElementResponse(element)
+	);
 };
 
 const onMoveElementDown = (

@@ -1,11 +1,7 @@
-import { envConfigModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
-import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import setupStores from "@@/tests/test-utils/setupStores";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
