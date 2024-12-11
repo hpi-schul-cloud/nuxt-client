@@ -21,7 +21,7 @@
 		<BoardGrid :boards="roomBoards" />
 		<ConfirmationDialog />
 		<SelectBoardLayoutDialog
-			v-if="boardLayoutsEnabled"
+			v-if="boardLayoutsEnabled && canCreateRoom"
 			v-model="boardLayoutDialogIsOpen"
 			@select:multi-column="createBoard(BoardLayout.Columns)"
 			@select:single-column="createBoard(BoardLayout.List)"
@@ -73,9 +73,19 @@ const pageTitle = computed(() =>
 );
 useTitle(pageTitle);
 
+const { canCreateRoom, canEditRoom, canDeleteRoom } =
+	useRoomAuthorization(room);
+
 const roomTitle = computed(() => {
 	return room.value ? room.value.name : t("pages.roomDetails.title");
 });
+
+const boardLayoutsEnabled = computed(
+	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
+);
+
+const isMenuEnabled = computed(() => canEditRoom.value || canDeleteRoom.value);
+const boardLayoutDialogIsOpen = ref(false);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	return [
@@ -89,55 +99,6 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 		},
 	];
 });
-
-const onEdit = () => {
-	if (!room.value) return;
-
-	router.push({
-		name: "room-edit",
-		params: {
-			id: room.value.id,
-		},
-	});
-};
-
-const onManageMembers = () => {
-	if (!room.value) return;
-
-	router.push({
-		name: "room-members",
-		params: {
-			id: room.value.id,
-		},
-	});
-};
-
-const onDelete = async () => {
-	if (!room.value || !canDeleteRoom.value) return;
-
-	const shouldDelete = await askDeleteConfirmation(
-		room.value.name,
-		"common.labels.room"
-	);
-
-	if (shouldDelete) {
-		await deleteRoom(room.value.id);
-		router.push({
-			name: "rooms",
-		});
-	}
-};
-
-const boardLayoutsEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
-);
-
-const { canCreateRoom, canEditRoom, canDeleteRoom } =
-	useRoomAuthorization(room);
-
-const isMenuEnabled = computed(() => canEditRoom.value || canDeleteRoom.value);
-
-const boardLayoutDialogIsOpen = ref(false);
 
 const fabItems = computed(() => {
 	if (!canCreateRoom.value) return undefined;
@@ -178,6 +139,44 @@ const fabItemClickHandler = (event: string) => {
 		boardLayoutDialogIsOpen.value = true;
 	} else if (event === "board-create") {
 		createBoard(BoardLayout.Columns);
+	}
+};
+
+const onEdit = () => {
+	if (!room.value) return;
+
+	router.push({
+		name: "room-edit",
+		params: {
+			id: room.value.id,
+		},
+	});
+};
+
+const onManageMembers = () => {
+	if (!room.value) return;
+
+	router.push({
+		name: "room-members",
+		params: {
+			id: room.value.id,
+		},
+	});
+};
+
+const onDelete = async () => {
+	if (!room.value || !canDeleteRoom.value) return;
+
+	const shouldDelete = await askDeleteConfirmation(
+		room.value.name,
+		"common.labels.room"
+	);
+
+	if (shouldDelete) {
+		await deleteRoom(room.value.id);
+		router.push({
+			name: "rooms",
+		});
 	}
 };
 
