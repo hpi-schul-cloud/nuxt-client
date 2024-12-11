@@ -191,8 +191,8 @@ const tableHeader = [
 	font-weight: bold;
 }
 
-:deep(.v-data-table__td .v-selection-control--disabled i) {
-	color: rgba(var(--v-theme-on-surface), 0.6);
+:deep(.v-data-table__td .v-selection-control--disabled) {
+	color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity));
 }
 
 .table-title-header {
