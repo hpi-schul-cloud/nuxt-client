@@ -10,6 +10,7 @@ import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
 } from "@@/tests/test-utils";
+import { RoomColorEnum } from "@/types/room/Room";
 
 jest.mock("@/utils/api");
 const mockedMapAxiosErrorToResponseError = jest.mocked(
@@ -105,7 +106,7 @@ describe("useRoomEditState", () => {
 			expect(isLoading.value).toBe(true);
 			const params = {
 				name: "room-name",
-				color: serverApi.RoomColor.BlueGrey,
+				color: RoomColorEnum.BlueGrey,
 			};
 
 			await updateRoom("room-id", params);
@@ -123,7 +124,7 @@ describe("useRoomEditState", () => {
 		const { updateRoom, isLoading } = setup();
 		const params = {
 			name: "room-name",
-			color: serverApi.RoomColor.BlueGrey,
+			color: RoomColorEnum.BlueGrey,
 		};
 		roomApiMock.roomControllerUpdateRoom.mockRejectedValue({ code: 404 });
 

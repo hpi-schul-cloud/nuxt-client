@@ -158,7 +158,7 @@ describe("RoomsPage", () => {
 				importFLow.vm.$emit("success", "newName", "newId");
 
 				expect(router.replace).toHaveBeenCalledWith({
-					name: "rooms-id",
+					name: "room-details",
 					params: { id: "newId" },
 				});
 			});

@@ -1,7 +1,4 @@
-import * as serverApi from "@/serverApi/v3/api";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { RoomColor } from "@/serverApi/v3";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -12,19 +9,20 @@ import {
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
-import AuthModule from "@/store/auth";
-import { nextTick, ref, Ref } from "vue";
+import { ref, Ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { roomDetailsFactory } from "@@/tests/test-utils/factory/roomDetailsFactory";
-import { flushPromises } from "@vue/test-utils";
-import { Router, useRoute, useRouter } from "vue-router";
-import { createMock } from "@golevelup/ts-jest";
+import { roomFactory } from "@@/tests/test-utils/factory/room";
+import { useRouter } from "vue-router";
+import { RoomColorEnum } from "@/types/room/Room";
 import { useRoomAuthorization } from "@feature-room";
+import { flushPromises, VueWrapper } from "@vue/test-utils";
+import * as serverApi from "@/serverApi/v3/api";
 
 jest.mock("vue-router", () => ({
-	useRoute: jest.fn(),
-	useRouter: jest.fn(),
+	useRouter: jest.fn().mockReturnValue({
+		push: jest.fn(),
+	}),
 }));
 
 jest.mock("@feature-room/roomAuthorization.composable");
@@ -37,13 +35,7 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
 describe("@pages/RoomsDetails.page.vue", () => {
-	const router = createMock<Router>();
-	const useRouteMock = <jest.Mock>useRoute;
-	useRouteMock.mockReturnValue({ params: { id: "room-id" }, push: jest.fn() });
-	const useRouterMock = <jest.Mock>useRouter;
-
 	beforeEach(() => {
-		useRouterMock.mockReturnValue(router);
 		setupStores({
 			envConfigModule: EnvConfigModule,
 		});
@@ -51,18 +43,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	const setup = (
 		{
-			isLoading,
-			roomVariant,
+			undefinedRoom,
 			envs,
-			isTeacher,
-			permissions,
 		}: {
-			isLoading: boolean;
-			roomVariant?: RoomVariant;
+			undefinedRoom?: boolean;
 			envs?: Record<string, unknown>;
-			isTeacher?: boolean;
-			permissions?: string[];
-		} = { isLoading: false, roomVariant: RoomVariant.ROOM }
+		} = { undefinedRoom: false }
 	) => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: envsFactory.build({
@@ -72,42 +58,41 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			}),
 		});
 
-		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: permissions || [],
-			getUserRoles: !isTeacher ? ["teacher"] : [],
-		});
+		const room = roomFactory.build();
 
 		const wrapper = mount(RoomDetailsPage, {
 			global: {
 				plugins: [
 					createTestingVuetify(),
 					createTestingI18n(),
-					createTestingPinia(),
+					createTestingPinia({
+						initialState: {
+							roomDetailsStore: {
+								isLoading: false,
+								room: undefinedRoom ? undefined : room,
+								roomVariant: RoomVariant.ROOM,
+								roomBoards: [],
+							},
+						},
+					}),
 				],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
-				stubs: {
-					SelectBoardLayoutDialog: true,
-					CourseRoomDetailsPage: true,
 				},
 			},
-			router,
 		});
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
-		const room = roomDetailsFactory.build();
-		roomDetailsStore.room = room;
-		roomDetailsStore.roomVariant = roomVariant;
-		roomDetailsStore.isLoading = isLoading;
-		roomDetailsStore.roomBoards = [];
+
+		if (undefinedRoom) {
+			roomDetailsStore.room = undefined;
+		}
 
 		const wrapperVM = wrapper.vm as unknown as {
 			room: {
 				id: string;
 				name: string;
-				color: RoomColor;
+				color: RoomColorEnum;
 				createdAt: string;
 				updatedAt: string;
 			};
@@ -128,235 +113,271 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		return {
 			wrapper,
 			roomDetailsStore,
+			room,
 			wrapperVM,
-			authModule,
+			router: useRouter(),
 		};
 	};
 
 	describe("when page is mounted", () => {
-		it("should be rendered in DOM", () => {
-			const { wrapper } = setup();
+		it("should set the page title", async () => {
+			const { room } = setup();
 
-			expect(wrapper.vm).toBeDefined();
+			expect(document.title).toContain(
+				`${room.name} - ${"pages.roomDetails.title"}`
+			);
 		});
 
 		it("should render DefaultWireframe", () => {
 			const { wrapper } = setup();
 
-			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-			expect(defaultWireframe).toBeDefined();
-		});
-
-		describe("breadcrumbs", () => {
-			it("should have elements inside the list", () => {
-				const { wrapperVM } = setup();
-
-				expect(wrapperVM.breadcrumbs).toHaveLength(2);
-				expect(wrapperVM.breadcrumbs[0].title).toContain("pages.rooms.title");
+			const defaultWireframe = wrapper.findComponent({
+				name: "DefaultWireframe",
 			});
 
-			describe("when room is undefined", () => {
-				it("should not have any element inside the list", () => {
-					const { wrapperVM, roomDetailsStore } = setup();
-					roomDetailsStore.room = undefined;
-					expect(wrapperVM.breadcrumbs).toHaveLength(0);
+			expect(defaultWireframe.exists()).toBe(true);
+		});
+
+		it("should render BoardGrid", () => {
+			const { wrapper } = setup();
+
+			const boardGrid = wrapper.findComponent({ name: "BoardGrid" });
+			expect(boardGrid.exists()).toBe(true);
+		});
+
+		describe("and room is defined", () => {
+			it("should render breadcrumbs with room name", () => {
+				const { wrapper, room } = setup();
+
+				const breadcrumbs = wrapper.getComponent({ name: "Breadcrumbs" });
+
+				const breadcrumbItems = breadcrumbs.findAllComponents({
+					name: "v-breadcrumbs-item",
 				});
-			});
-		});
 
-		describe("pageTitle", () => {
-			it("should set the page title", async () => {
-				const { wrapperVM } = setup();
-				expect(wrapperVM.pageTitle).toContain("pages.roomDetails.title");
-			});
-		});
-
-		describe("boardLayoutsEnabled", () => {
-			it("should be true", () => {
-				const { wrapperVM } = setup();
-				expect(wrapperVM.boardLayoutsEnabled).toBe(true);
-			});
-
-			it("should be false", () => {
-				const { wrapperVM } = setup({
-					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
-					isLoading: false,
-				});
-				expect(wrapperVM.boardLayoutsEnabled).toBe(false);
+				expect(breadcrumbItems).toHaveLength(2);
+				expect(breadcrumbItems[1].text()).toContain(room.name);
 			});
 		});
 
-		describe("when FEATURE_ROOMS_ENABLED flag is set to true", () => {
-			describe("and user has 'room_create' permission", () => {
-				it("should call fetchRoom on mounted", () => {
-					const { roomDetailsStore } = setup({
-						isLoading: false,
-						permissions: ["room_create"],
-					});
+		describe("and room is undefined", () => {
+			it("should render breadcrumbs with default name", () => {
+				const { wrapper } = setup({ undefinedRoom: true });
 
-					expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith("room-id");
-					expect(roomDetailsStore.deactivateRoom).not.toHaveBeenCalled();
+				const breadcrumbs = wrapper.getComponent({ name: "Breadcrumbs" });
+
+				const breadcrumbItems = breadcrumbs.findAllComponents({
+					name: "v-breadcrumbs-item",
 				});
-			});
 
-			describe("and user does not have 'room_create' permission", () => {
-				it("should not call fetchRoom on mounted", () => {
-					const { roomDetailsStore } = setup({
-						isLoading: false,
-						permissions: [],
-					});
-
-					expect(roomDetailsStore.deactivateRoom).toHaveBeenCalled();
-					expect(roomDetailsStore.fetchRoom).not.toHaveBeenCalled();
-				});
+				expect(breadcrumbItems).toHaveLength(2);
+				expect(breadcrumbItems[1].text()).toContain("pages.roomDetails.title");
 			});
 		});
 
-		describe("when FEATURE_ROOMS_ENABLED flag is set false", () => {
-			it("should not call fetchRoom on mounted", () => {
-				const { roomDetailsStore } = setup({
-					envs: { FEATURE_ROOMS_ENABLED: false },
-					isLoading: false,
-				});
+		describe("and user has permission to edit or delete room", () => {
+			it("should render kebab menu", () => {
+				roomPermissions.canEditRoom.value = true;
+				roomPermissions.canDeleteRoom.value = false;
 
-				expect(roomDetailsStore.deactivateRoom).toHaveBeenCalled();
-				expect(roomDetailsStore.fetchRoom).not.toHaveBeenCalled();
+				const { wrapper } = setup();
+
+				const menu = wrapper.findComponent({ name: "RoomMenu" });
+
+				expect(menu.exists()).toBe(true);
+			});
+		});
+
+		describe("and user does not have permission to edit nor to delete room", () => {
+			it("should not render kebab menu", () => {
+				roomPermissions.canEditRoom.value = false;
+				roomPermissions.canDeleteRoom.value = false;
+
+				const { wrapper } = setup();
+
+				const menu = wrapper.findComponent({ name: "RoomMenu" });
+
+				expect(menu.exists()).toBe(false);
 			});
 		});
 	});
 
-	describe("when loading", () => {
-		it("should render a loading indication", () => {
-			const { wrapper } = setup({ isLoading: true });
+	describe("when using the menu", () => {
+		beforeEach(() => {
+			roomPermissions.canEditRoom.value = true;
+			roomPermissions.canDeleteRoom.value = true;
+		});
 
-			const div = wrapper.find("[data-testid=loading]");
-			expect(div.exists()).toBe(true);
+		describe("and user clicks on edit room", () => {
+			it("should navigate to the edit room page", async () => {
+				const { wrapper, router, room } = setup();
+
+				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				menu.vm.$emit("room:edit");
+
+				expect(menu.emitted()).toHaveProperty("room:edit");
+
+				expect(router.push).toHaveBeenCalledWith({
+					name: "room-edit",
+					params: { id: room.id },
+				});
+			});
+		});
+
+		describe("and user clicks on manage members", () => {
+			it("should navigate to the member management page", async () => {
+				const { wrapper, router, room } = setup();
+
+				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				menu.vm.$emit("room:manage-members");
+
+				expect(menu.emitted()).toHaveProperty("room:manage-members");
+
+				expect(router.push).toHaveBeenCalledWith({
+					name: "room-members",
+					params: { id: room.id },
+				});
+			});
+		});
+
+		describe("and user clicks on delete room", () => {
+			it.todo("should open confirmation dialog");
+
+			it.todo("should open confirmation dialog");
 		});
 	});
 
-	describe("when roomVariant is invalid", () => {
-		it("should not render RoomDetails", () => {
-			const { wrapper } = setup({
-				roomVariant: RoomVariant.COURSE_ROOM,
-				isLoading: false,
-			});
-
-			const roomDetailsComponent = wrapper.findComponent({
-				name: "RoomDetails",
-			});
-			expect(roomDetailsComponent.exists()).toBe(false);
-		});
-	});
-
-	describe("when not loading", () => {
-		it("should not render a loading indication", async () => {
-			const { wrapper } = setup({
-				isLoading: false,
-				permissions: ["room_create"],
-			});
+	describe("when user wants to create a board", () => {
+		const openSpeedDialMenu = async (wrapper: VueWrapper) => {
+			const speedDialMenu = wrapper.getComponent({ name: "speed-dial-menu" });
+			await speedDialMenu.getComponent({ name: "v-btn" }).trigger("click");
 			await flushPromises();
+		};
 
-			const div = wrapper.find('[data-testid="loading"]');
-			expect(div.exists()).toBe(false);
+		describe("and user does not have 'room_create' permission", () => {
+			it("should not render speed dial menu", () => {
+				roomPermissions.canCreateRoom.value = false;
+				const { wrapper } = setup();
+
+				const fabButton = wrapper.findComponent(
+					"[data-testid='add-content-button']"
+				);
+
+				expect(fabButton.exists()).toBe(false);
+			});
 		});
 
-		describe("when roomVariant is valid", () => {
-			it("should render DefaultLayout ", async () => {
-				const { wrapper } = setup({
-					isLoading: false,
-					roomVariant: RoomVariant.ROOM,
-					permissions: ["room_create"],
-				});
-				await flushPromises();
-
-				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				expect(defaultWireframe.exists()).toBe(true);
+		describe("and multiple board layouts are enabled", () => {
+			beforeEach(() => {
+				roomPermissions.canCreateRoom.value = true;
 			});
 
-			describe("when user clicks on add content button", () => {
-				it("should open the select layout dialog", async () => {
-					const { wrapper } = setup({
-						isLoading: false,
-						roomVariant: RoomVariant.ROOM,
-						permissions: ["room_create"],
-					});
+			const openDialog = async (wrapper: VueWrapper) => {
+				await openSpeedDialMenu(wrapper);
+
+				const boardCreateDialogBtn = wrapper.findComponent(
+					"[data-testid='fab_button_add_board']"
+				);
+				await boardCreateDialogBtn.trigger("click");
+			};
+
+			it("should render board create button, that opens a dialog", async () => {
+				const { wrapper } = setup();
+				await openSpeedDialMenu(wrapper);
+
+				const actions = wrapper.findAllComponents({
+					name: "SpeedDialMenuAction",
+				});
+				const boardCreateDialogBtn = wrapper.findComponent(
+					"[data-testid='fab_button_add_board']"
+				);
+
+				expect(actions).toHaveLength(1);
+				expect(boardCreateDialogBtn.exists()).toBe(true);
+			});
+
+			it("should open dialog", async () => {
+				const { wrapper } = setup();
+				await openDialog(wrapper);
+
+				const dialog = wrapper.getComponent({
+					name: "SelectBoardLayoutDialog",
+				});
+				const dialogContent = dialog.findComponent({
+					name: "VCard",
+				});
+
+				expect(dialogContent.exists()).toBe(true);
+			});
+
+			// TODO - make this work
+			it.each([{ layout: "multi-column" }, { layout: "single-column" }])(
+				"should create board with '$layout' layout",
+				async ({ layout }) => {
+					const { wrapper } = setup();
 
 					await flushPromises();
-					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-					defaultWireframe.vm.$emit("onFabItemClick", "board-type-dialog-open");
+
+					const mockApi = {
+						boardControllerCreateBoard: jest
+							.fn()
+							.mockResolvedValue({ data: { id: "board-id" } }),
+					};
+					const spy = jest
+						.spyOn(serverApi, "BoardApiFactory")
+						.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
 
 					const selectLayoutDialog = wrapper.findComponent({
 						name: "SelectBoardLayoutDialog",
 					});
-					expect(selectLayoutDialog.exists()).toBe(true);
-				});
+
+					await selectLayoutDialog.vm.$emit(`select:${layout}`);
+
+					expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
+					expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledWith(
+						expect.objectContaining({ layout })
+					);
+
+					spy.mockRestore();
+				}
+			);
+		});
+
+		describe("and only column board is enabled", () => {
+			beforeEach(() => {
+				roomPermissions.canCreateRoom.value = true;
 			});
 
-			describe("when user creates a new board", () => {
-				it.each([
-					{ event: "multi-column", layout: "columns" },
-					{ event: "single-column", layout: "list" },
-				])(
-					"should have a '$layout'-layout when '$event' was chosen",
-					async ({ event, layout }) => {
-						roomPermissions.canEditRoom.value = true;
+			it("should not render dialog", () => {
+				const { wrapper } = setup({
+					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
+				});
 
-						const { wrapper } = setup({
-							isLoading: false,
-							roomVariant: RoomVariant.ROOM,
-							permissions: ["room_create"],
-						});
+				const dialog = wrapper.findComponent({
+					name: "SelectBoardLayoutDialog",
+				});
 
-						await flushPromises();
+				expect(dialog.exists()).toBe(false);
+			});
 
-						const mockApi = {
-							boardControllerCreateBoard: jest
-								.fn()
-								.mockResolvedValue({ data: { id: "board-id" } }),
-						};
-						const spy = jest
-							.spyOn(serverApi, "BoardApiFactory")
-							.mockReturnValue(
-								mockApi as unknown as serverApi.BoardApiInterface
-							);
+			it("should render board create button, that creates a multi-column board", async () => {
+				const { wrapper } = setup({
+					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
+				});
+				await openSpeedDialMenu(wrapper);
 
-						const selectLayoutDialog = wrapper.findComponent({
-							name: "SelectBoardLayoutDialog",
-						});
-
-						await selectLayoutDialog.vm.$emit(`select:${event}`);
-
-						expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
-						expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledWith(
-							expect.objectContaining({ layout })
-						);
-
-						spy.mockRestore();
-					}
+				const actions = wrapper.findAllComponents({
+					name: "SpeedDialMenuAction",
+				});
+				const boardCreateBtn = wrapper.findComponent(
+					"[data-testid='fab_button_add_column_board']"
 				);
+
+				expect(actions).toHaveLength(1);
+				expect(boardCreateBtn.exists()).toBe(true);
 			});
 
-			describe("when user clicks on edit room button", () => {
-				it("should navigate to the edit room page", async () => {
-					const { wrapper } = setup({
-						isLoading: false,
-						roomVariant: RoomVariant.ROOM,
-						permissions: ["room_edit"],
-					});
-
-					await flushPromises();
-					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-					const kebabMenu = defaultWireframe.find('[data-testid="room-menu"]');
-					await kebabMenu.trigger("click");
-
-					const menus = wrapper.findAllComponents({ name: "VListItem" });
-
-					menus[0].vm.$emit("click");
-					await nextTick();
-
-					expect(useRouteMock).toHaveBeenCalled();
-				});
-			});
+			it.todo("should create column board");
 		});
 	});
 });

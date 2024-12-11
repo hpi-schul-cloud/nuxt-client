@@ -388,7 +388,7 @@ export default defineComponent({
 		onImportSuccess(name, id) {
 			this.showImportSuccess(name);
 			if (id) {
-				this.$router.replace({ name: "rooms-id", params: { id } });
+				this.$router.replace({ name: "room-details", params: { id } });
 			} else {
 				this.$router.replace({ name: "course-room-overview" });
 				courseRoomListModule.fetch();

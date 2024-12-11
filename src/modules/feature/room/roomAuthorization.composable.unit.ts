@@ -6,7 +6,7 @@ import AuthModule from "@/store/auth";
 import { RoomDetails } from "@/types/room/Room";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { mountComposable } from "@@/tests/test-utils";
-import { roomDetailsFactory } from "@@/tests/test-utils/factory/roomDetailsFactory";
+import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { ref } from "vue";
 import { useRoomAuthorization } from "./roomAuthorization.composable";
@@ -19,7 +19,7 @@ describe("roomAuthorization", () => {
 		roomPermissions = [],
 	}: setupParams) => {
 		const room = ref<RoomDetails>(
-			roomDetailsFactory.build({ permissions: roomPermissions })
+			roomFactory.build({ permissions: roomPermissions })
 		);
 		const authModuleMock = createModuleMocks(AuthModule, {
 			getUserRoles: userRoles,

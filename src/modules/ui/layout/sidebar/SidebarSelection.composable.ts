@@ -32,7 +32,7 @@ export const useSidebarSelection = (
 		}
 
 		// RoomDetails, CourseRoomDetails
-		if (route.name === "rooms-id") {
+		if (route.name === "room-details") {
 			if (roomVariant.value === RoomVariant.ROOM) {
 				return item.to === "/rooms";
 			} else if (roomVariant.value === RoomVariant.COURSE_ROOM) {
