@@ -1734,6 +1734,7 @@ export default {
 		"¿Eliminar participantes seleccionadas de la sala?",
 	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
+	"pages.rooms.members.tableHeader.actions": "Acciones",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

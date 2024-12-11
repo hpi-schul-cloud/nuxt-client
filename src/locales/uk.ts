@@ -1713,6 +1713,7 @@ export default {
 		"Видалити вибраних учасників із кімнати?",
 	"pages.rooms.members.roles.editor": "Редактор кімнати",
 	"pages.rooms.members.roles.viewer": "Переглядач кімнати",
+	"pages.rooms.members.tableHeader.actions": "Дії",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
