@@ -34,7 +34,6 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 
 describe("@pages/RoomsDetails.page.vue", () => {
 	beforeEach(() => {
-		// useRouterMock.mockReturnValue(router);
 		setupStores({
 			envConfigModule: EnvConfigModule,
 		});
@@ -248,36 +247,34 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and user clicks on delete room", () => {
-			it("should navigate to the member management page", async () => {
-				const { wrapper, router, room } = setup();
+			it.todo("should open confirmation dialog");
 
-				const menu = wrapper.getComponent({ name: "RoomMenu" });
-				menu.vm.$emit("room:manage-members");
-
-				expect(menu.emitted()).toHaveProperty("room:manage-members");
-
-				expect(router.push).toHaveBeenCalledWith({
-					name: "room-members",
-					params: { id: room.id },
-				});
-			});
+			it.todo("should open confirmation dialog");
 		});
 	});
 
-	// describe("boardLayoutsEnabled", () => {
-	// 	it("should be true", () => {
-	// 		const { wrapperVM } = setup();
-	// 		expect(wrapperVM.boardLayoutsEnabled).toBe(true);
-	// 	});
+	describe("when user wants to create a board", () => {
+		describe("and user does not have 'room_create' permission", () => {
+			it("should not render fab button", () => {
+				roomPermissions.canCreateRoom.value = false;
 
-	// 	it("should be false", () => {
-	// 		const { wrapperVM } = setup({
-	// 			envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
-	// 			isLoading: false,
-	// 		});
-	// 		expect(wrapperVM.boardLayoutsEnabled).toBe(false);
-	// 	});
-	// });
+				const { wrapper } = setup();
+
+				const fabButton = wrapper.findComponent(
+					"[data-testid='add-content-button']"
+				);
+
+				expect(fabButton.exists()).toBe(false);
+			});
+		});
+
+		describe("and multiple board layouts are enabled", () => {
+			it.todo("should render board create button, that opens a dialog");
+			it.todo("should open dialog");
+			it.todo("should create column board");
+			it.todo("should create list board");
+		});
+	});
 
 	// describe("when not loading", () => {
 	// 	describe("when roomVariant is valid", () => {

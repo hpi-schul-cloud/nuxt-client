@@ -132,32 +132,34 @@ const boardLayoutsEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
 );
 
-const { canEditRoom, canDeleteRoom } = useRoomAuthorization(room);
+const { canCreateRoom, canEditRoom, canDeleteRoom } =
+	useRoomAuthorization(room);
 
 const isMenuEnabled = computed(() => canEditRoom.value || canDeleteRoom.value);
 
 const boardLayoutDialogIsOpen = ref(false);
 
 const fabItems = computed(() => {
+	if (!canCreateRoom.value) return undefined;
+
 	const actions = [];
-	if (canEditRoom.value) {
-		if (boardLayoutsEnabled.value) {
-			actions.push({
-				label: t("pages.courseRoomDetails.fab.add.board"),
-				icon: mdiViewGridPlusOutline,
-				customEvent: "board-type-dialog-open",
-				dataTestId: "fab_button_add_board",
-				ariaLabel: t("pages.courseRoomDetails.fab.add.board"),
-			});
-		} else {
-			actions.push({
-				label: t("pages.courseRoomDetails.fab.add.columnBoard"),
-				icon: mdiViewDashboardOutline,
-				customEvent: "board-create",
-				dataTestId: "fab_button_add_column_board",
-				ariaLabel: t("pages.courseRoomDetails.fab.add.columnBoard"),
-			});
-		}
+
+	if (boardLayoutsEnabled.value) {
+		actions.push({
+			label: t("pages.courseRoomDetails.fab.add.board"),
+			icon: mdiViewGridPlusOutline,
+			customEvent: "board-type-dialog-open",
+			dataTestId: "fab_button_add_board",
+			ariaLabel: t("pages.courseRoomDetails.fab.add.board"),
+		});
+	} else {
+		actions.push({
+			label: t("pages.courseRoomDetails.fab.add.columnBoard"),
+			icon: mdiViewDashboardOutline,
+			customEvent: "board-create",
+			dataTestId: "fab_button_add_column_board",
+			ariaLabel: t("pages.courseRoomDetails.fab.add.columnBoard"),
+		});
 	}
 
 	const items = {

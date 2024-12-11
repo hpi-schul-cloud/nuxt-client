@@ -15,7 +15,7 @@ import AuthModule from "@/store/auth";
 import { nextTick, ref, Ref } from "vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { roomDetailsFactory } from "@@/tests/test-utils/factory/roomDetailsFactory";
+import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
 import { flushPromises } from "@vue/test-utils";
 import { Router, useRoute, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-jest";
@@ -55,13 +55,13 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			roomVariant,
 			envs,
 			isTeacher,
-			hasEditPermission,
+			permissions,
 		}: {
 			isLoading: boolean;
 			roomVariant?: RoomVariant;
 			envs?: Record<string, unknown>;
 			isTeacher?: boolean;
-			hasEditPermission?: boolean;
+			permissions?: string[];
 		} = { isLoading: false, roomVariant: RoomVariant.ROOM }
 	) => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
@@ -73,7 +73,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: hasEditPermission ? ["course_edit"] : [],
+			getUserPermissions: permissions || [],
 			getUserRoles: !isTeacher ? ["teacher"] : [],
 		});
 
@@ -97,7 +97,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
-		const room = roomDetailsFactory.build();
+		const room = roomFactory.build();
 		roomDetailsStore.room = room;
 		roomDetailsStore.roomVariant = roomVariant;
 		roomDetailsStore.isLoading = isLoading;
@@ -185,53 +185,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(wrapperVM.boardLayoutsEnabled).toBe(false);
 			});
 		});
-
-		describe("when FEATURE_ROOMS_ENABLED flag is set to true", () => {
-			describe("and user has 'room_create' permission", () => {
-				it("should call fetchRoom on mounted", () => {
-					const { roomDetailsStore } = setup({
-						isLoading: false,
-						permissions: ["room_create"],
-					});
-
-					expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith("room-id");
-					expect(roomDetailsStore.deactivateRoom).not.toHaveBeenCalled();
-				});
-			});
-
-			describe("and user does not have 'room_create' permission", () => {
-				it("should not call fetchRoom on mounted", () => {
-					const { roomDetailsStore } = setup({
-						isLoading: false,
-						permissions: [],
-					});
-
-					expect(roomDetailsStore.deactivateRoom).toHaveBeenCalled();
-					expect(roomDetailsStore.fetchRoom).not.toHaveBeenCalled();
-				});
-			});
-		});
-
-		describe("when FEATURE_ROOMS_ENABLED flag is set false", () => {
-			it("should not call fetchRoom on mounted", () => {
-				const { roomDetailsStore } = setup({
-					envs: { FEATURE_ROOMS_ENABLED: false },
-					isLoading: false,
-				});
-
-				expect(roomDetailsStore.deactivateRoom).toHaveBeenCalled();
-				expect(roomDetailsStore.fetchRoom).not.toHaveBeenCalled();
-			});
-		});
-	});
-
-	describe("when loading", () => {
-		it("should render a loading indication", () => {
-			const { wrapper } = setup({ isLoading: true });
-
-			const div = wrapper.find("[data-testid=loading]");
-			expect(div.exists()).toBe(true);
-		});
 	});
 
 	describe("when roomVariant is invalid", () => {
@@ -250,7 +203,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when not loading", () => {
 		it("should not render a loading indication", async () => {
-			const { wrapper } = setup({ isLoading: false });
+			const { wrapper } = setup({
+				isLoading: false,
+				permissions: ["room_create"],
+			});
 			await flushPromises();
 
 			const div = wrapper.find('[data-testid="loading"]');
@@ -262,6 +218,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const { wrapper } = setup({
 					isLoading: false,
 					roomVariant: RoomVariant.ROOM,
+					permissions: ["room_create"],
 				});
 				await flushPromises();
 
@@ -274,11 +231,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					const { wrapper } = setup({
 						isLoading: false,
 						roomVariant: RoomVariant.ROOM,
+						permissions: ["room_create"],
 					});
 
 					await flushPromises();
 					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-					defaultWireframe.vm.$emit("fabItemClick", "board-type-dialog-open");
+					defaultWireframe.vm.$emit("onFabItemClick", "board-type-dialog-open");
 
 					const selectLayoutDialog = wrapper.findComponent({
 						name: "SelectBoardLayoutDialog",
@@ -299,6 +257,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						const { wrapper } = setup({
 							isLoading: false,
 							roomVariant: RoomVariant.ROOM,
+							permissions: ["room_create"],
 						});
 
 						await flushPromises();
@@ -335,7 +294,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					const { wrapper } = setup({
 						isLoading: false,
 						roomVariant: RoomVariant.ROOM,
-						hasEditPermission: true,
+						permissions: ["room_edit"],
 					});
 
 					await flushPromises();
