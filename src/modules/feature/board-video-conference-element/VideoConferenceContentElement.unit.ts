@@ -210,7 +210,7 @@ describe("VideoConferenceContentElement", () => {
 		describe("when content title is defined", () => {
 			it("should render display of video conference content with correct props", () => {
 				const videoConferenceElementContent =
-					videoConferenceElementContentFactory.build({title: "test-title"});
+					videoConferenceElementContentFactory.build({ title: "test-title" });
 				const { wrapper, element } = setup({
 					content: videoConferenceElementContent,
 					isEditMode: true,
