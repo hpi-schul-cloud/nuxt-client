@@ -1685,7 +1685,6 @@ export default {
 		"Remove selected participants from the room?",
 	"pages.rooms.members.roles.editor": "Room editor",
 	"pages.rooms.members.roles.viewer": "Room viewer",
-	"pages.rooms.members.tableHeader.actions": "Actions",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

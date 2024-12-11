@@ -1712,7 +1712,6 @@ export default {
 		"Mehrere Teilnehmer aus dem Raum entfernen",
 	"pages.rooms.members.remove.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
-	"pages.rooms.members.tableHeader.actions": "Aktionen",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Ausgewählte Teilnehmende wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.roles.editor": "Raumeditor",

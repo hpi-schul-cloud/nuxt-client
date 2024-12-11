@@ -33,7 +33,7 @@ describe("MembersTable", () => {
 		"common.labels.lastName",
 		"common.labels.role",
 		"common.words.mainSchool",
-		"pages.rooms.members.tableHeader.actions",
+		"",
 	];
 
 	const setup = () => {
