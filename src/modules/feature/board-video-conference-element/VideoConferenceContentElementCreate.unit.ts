@@ -9,10 +9,6 @@ import VideoConferenceContentElementCreate from "./VideoConferenceContentElement
 const title = "video conference title";
 
 describe("VideoConferenceContentElementCreate", () => {
-	afterEach(() => {
-		jest.clearAllMocks();
-	});
-
 	const setup = () => {
 		const wrapper = mount(VideoConferenceContentElementCreate, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
@@ -22,6 +18,10 @@ describe("VideoConferenceContentElementCreate", () => {
 			wrapper,
 		};
 	};
+
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
 
 	describe("when valid title was entered", () => {
 		describe("when enter is pressed", () => {
@@ -52,25 +52,24 @@ describe("VideoConferenceContentElementCreate", () => {
 
 	describe("when title field is empty", () => {
 		describe("when submit button is clicked", () => {
-			it.todo(
-				"should show required-error-message" /* , async () => {
+			it("should show required-error-message", async () => {
 				const { wrapper } = setup();
 
+				await wrapper.findComponent({ name: "v-textarea" }).setValue("");
 				await wrapper.find("form").trigger("submit.prevent");
 
 				const alerts = wrapper.find('[role="alert"]').text();
 
 				expect(alerts).toEqual("common.validation.required2");
-			} */
-			);
+			});
 
-			it("should not emit create:url event", async () => {
+			it("should not emit create:title event", async () => {
 				const { wrapper } = setup();
 
-				await wrapper.findComponent({ name: "v-textarea" }).setValue(title);
+				await wrapper.findComponent({ name: "v-textarea" }).setValue("");
 				await wrapper.find("form").trigger("submit.prevent");
 
-				expect(wrapper.emitted("create:url")).toBeUndefined();
+				expect(wrapper.emitted("create:title")).toBeUndefined();
 			});
 		});
 	});

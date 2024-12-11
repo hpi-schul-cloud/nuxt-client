@@ -123,10 +123,6 @@ const props = defineProps({
 		type: String,
 		require: true,
 	},
-	url: {
-		type: String,
-		required: true,
-	},
 });
 
 const videoConferenceContentElementDisplay = ref(null);

@@ -9864,12 +9864,6 @@ export interface VideoConferenceContentBody {
      * @memberof VideoConferenceContentBody
      */
     title: string;
-    /**
-     *
-     * @type {string}
-     * @memberof VideoConferenceContentBody
-     */
-    url: string;
 }
 /**
  *
@@ -9914,12 +9908,6 @@ export interface VideoConferenceElementContent {
      * @memberof VideoConferenceElementContent
      */
     title: string;
-    /**
-     *
-     * @type {string}
-     * @memberof VideoConferenceElementContent
-     */
-    url: string;
 }
 /**
  *

@@ -36,7 +36,6 @@ describe("VideoConferenceContentElementDisplay", () => {
 		hasParticipationPermission: boolean;
 		canStart: boolean;
 		title: string;
-		url: string;
 	}) => {
 		const wrapper = mount(VideoConferenceContentElementDisplay, {
 			global: {
@@ -66,7 +65,6 @@ describe("VideoConferenceContentElementDisplay", () => {
 				hasParticipationPermission: true,
 				canStart: true,
 				title: "video conference",
-				url: "XYZ",
 			});
 
 			return {
@@ -92,7 +90,6 @@ describe("VideoConferenceContentElementDisplay", () => {
 				hasParticipationPermission: true,
 				canStart: true,
 				title: "video conference",
-				url: "XYZ",
 			});
 
 			return {
@@ -127,7 +124,6 @@ describe("VideoConferenceContentElementDisplay", () => {
 				hasParticipationPermission: true,
 				canStart: false,
 				title: "video conference",
-				url: "XYZ",
 			});
 
 			return {
@@ -154,7 +150,6 @@ describe("VideoConferenceContentElementDisplay", () => {
 				hasParticipationPermission: false,
 				canStart: false,
 				title: "video conference",
-				url: "XYZ",
 			});
 
 			return {
@@ -181,7 +176,6 @@ describe("VideoConferenceContentElementDisplay", () => {
 				hasParticipationPermission: true,
 				canStart: true,
 				title: "video conference",
-				url: "XYZ",
 			});
 
 			return {
@@ -206,7 +200,6 @@ describe("VideoConferenceContentElementDisplay", () => {
 				hasParticipationPermission: true,
 				canStart: true,
 				title: "video conference",
-				url: "XYZ",
 			});
 
 			return {
@@ -231,7 +224,6 @@ describe("VideoConferenceContentElementDisplay", () => {
 				hasParticipationPermission: false,
 				canStart: false,
 				title: "video conference",
-				url: "XYZ",
 			});
 
 			return {
@@ -258,7 +250,6 @@ describe("VideoConferenceContentElementDisplay", () => {
 				hasParticipationPermission: true,
 				canStart: false,
 				title: "video conference",
-				url: "XYZ",
 			});
 
 			return {
@@ -287,7 +278,6 @@ describe("VideoConferenceContentElementDisplay", () => {
 				hasParticipationPermission: true,
 				canStart: false,
 				title: "video conference",
-				url: "XYZ",
 			});
 
 			return {
@@ -316,7 +306,6 @@ describe("VideoConferenceContentElementDisplay", () => {
 				hasParticipationPermission: true,
 				canStart: true,
 				title: "video conference",
-				url: "XYZ",
 			});
 
 			return {

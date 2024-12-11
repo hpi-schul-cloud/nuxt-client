@@ -13,8 +13,7 @@
 			@keydown.stop
 		>
 			<VideoConferenceContentElementDisplay
-				v-if="computedElement.content.url"
-				:url="computedElement.content.url"
+				v-if="computedElement.content.title"
 				:title="computedElement.content.title"
 				:has-participation-permission="hasParticipationPermission"
 				:can-start="canStart"
@@ -209,7 +208,7 @@ const element = toRef(props, "element");
 const boardId = route.params.id;
 
 const outlined = computed(() => {
-	return props.isEditMode === true || computedElement.value.content.url !== ""
+	return props.isEditMode === true || computedElement.value.content.title !== ""
 		? "outlined"
 		: "text";
 });
@@ -253,11 +252,11 @@ const hasParticipationPermission: ComputedRef<boolean> = computed(() => {
 });
 
 const isCreating = computed(
-	() => props.isEditMode && !computedElement.value.content.url
+	() => props.isEditMode && !computedElement.value.content.title
 );
 
 const isHidden = computed(
-	() => props.isEditMode === false && !computedElement.value.content.url
+	() => props.isEditMode === false && !computedElement.value.content.title
 );
 
 const isRefreshing: ComputedRef<boolean> = computed(
@@ -312,7 +311,6 @@ const onCloseConfigurationDialog = () => {
 
 const onCreateTitle = (title: string) => {
 	modelValue.value.title = title;
-	modelValue.value.url = "https://www.google.de";
 };
 
 const onKeydownArrow = (event: KeyboardEvent) => {

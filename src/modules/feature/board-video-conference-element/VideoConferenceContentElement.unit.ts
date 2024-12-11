@@ -157,8 +157,7 @@ describe("VideoConferenceContentElement", () => {
 		const element = {
 			...defaultElement,
 			content: videoConferenceElementContentFactory.build({
-				url: undefined,
-				title: "test-title",
+				title: undefined,
 				...options.content,
 			}),
 		};
@@ -184,7 +183,7 @@ describe("VideoConferenceContentElement", () => {
 	};
 
 	describe("when video conference element is displayed", () => {
-		describe("when content url is undefined", () => {
+		describe("when content title is undefined", () => {
 			it("should not render display of video conference content", () => {
 				const { wrapper } = setup({
 					isEditMode: true,
@@ -208,10 +207,10 @@ describe("VideoConferenceContentElement", () => {
 			});
 		});
 
-		describe("when content url is defined", () => {
+		describe("when content title is defined", () => {
 			it("should render display of video conference content with correct props", () => {
 				const videoConferenceElementContent =
-					videoConferenceElementContentFactory.build();
+					videoConferenceElementContentFactory.build({title: "test-title"});
 				const { wrapper, element } = setup({
 					content: videoConferenceElementContent,
 					isEditMode: true,
@@ -221,9 +220,6 @@ describe("VideoConferenceContentElement", () => {
 					VideoConferenceContentElementDisplay
 				);
 
-				expect(videoConferenceElementDisplay.props().url).toEqual(
-					element.content.url
-				);
 				expect(videoConferenceElementDisplay.props().title).toEqual(
 					element.content.title
 				);
@@ -364,7 +360,6 @@ describe("VideoConferenceContentElement", () => {
 						const element = {
 							...defaultElement,
 							content: videoConferenceElementContentFactory.build({
-								url: undefined,
 								title: "test-title",
 								...options.content,
 							}),
@@ -432,7 +427,6 @@ describe("VideoConferenceContentElement", () => {
 						const element = {
 							...defaultElement,
 							content: videoConferenceElementContentFactory.build({
-								url: undefined,
 								title: "test-title",
 								...options.content,
 							}),
@@ -503,7 +497,6 @@ describe("VideoConferenceContentElement", () => {
 					const element = {
 						...defaultElement,
 						content: videoConferenceElementContentFactory.build({
-							url: undefined,
 							title: "test-title",
 							...options.content,
 						}),
@@ -697,7 +690,6 @@ describe("VideoConferenceContentElement", () => {
 				const element = {
 					...defaultElement,
 					content: videoConferenceElementContentFactory.build({
-						url: undefined,
 						title: "test-title",
 						...options.content,
 					}),
@@ -750,7 +742,6 @@ describe("VideoConferenceContentElement", () => {
 				const element = {
 					...defaultElement,
 					content: videoConferenceElementContentFactory.build({
-						url: undefined,
 						title: "test-title",
 						...options.content,
 					}),

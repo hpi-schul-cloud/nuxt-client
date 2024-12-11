@@ -273,7 +273,6 @@ describe("BoardApi.composable", () => {
 				id: "video-conference-element-id",
 				type: ContentElementType.VideoConference,
 				content: {
-					url: "https://fake-url.com",
 					title: "Some title",
 				},
 				timestamps: timestampsResponseFactory.build(),
