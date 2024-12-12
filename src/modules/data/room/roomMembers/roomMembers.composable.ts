@@ -16,7 +16,7 @@ import { schoolsModule } from "@/store";
 import { authModule } from "@/store/store-accessor";
 
 export const useRoomMembers = (roomId: string) => {
-	const roomMembers: Ref<RoomMemberResponse[] | any[]> = ref([]);
+	const roomMembers: Ref<RoomMemberResponse[]> = ref([]);
 	const potentialRoomMembers: Ref<RoomMember[]> = ref([]);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const isLoading = ref(false);
