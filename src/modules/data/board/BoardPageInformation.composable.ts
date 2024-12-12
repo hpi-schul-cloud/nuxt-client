@@ -1,7 +1,7 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import { BoardContextType } from "@/types/board/BoardContext";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { createSharedComposable } from "@vueuse/core";
 import { computed, ref, unref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useBoardApi } from "./BoardApi.composable";
@@ -13,17 +13,26 @@ const useBoardPageInformation = () => {
 
 	const boardContext = ref<Awaited<ReturnType<typeof getContextInfo>>>();
 
-	const pageTitle = computed(() => {
-		const courseName = boardContext.value?.name;
-		const courseNameForPageTitle = courseName ? ", " + courseName : "";
-
-		return buildPageTitle(
-			`${t("pages.room.boardCard.label.courseBoard")}${courseNameForPageTitle}`
-		);
-	});
-
 	const roomId = computed(() => boardContext.value?.id);
 	const contextType = computed(() => boardContext.value?.type);
+
+	const pageTitle = computed(() => {
+		const roomName = unref(boardContext)?.name;
+		const roomNameForPageTitle = roomName ? ", " + roomName : "";
+		const type = unref(boardContext)?.type;
+
+		if (type === BoardContextType.Course) {
+			return buildPageTitle(
+				`${t("pages.room.boardCard.label.courseBoard")}${roomNameForPageTitle}`
+			);
+		}
+		if (type === BoardContextType.Room) {
+			return buildPageTitle(
+				`${t("pages.roomDetails.board.defaultName")}${roomNameForPageTitle}`
+			);
+		}
+		return "";
+	});
 
 	const breadcrumbs = computed((): Breadcrumb[] => {
 		const id = unref(boardContext)?.id;
@@ -69,15 +78,20 @@ const useBoardPageInformation = () => {
 		boardContext.value = await getContextInfo(id);
 	};
 
+	const resetPageInformation = (): void => {
+		boardContext.value = undefined;
+	};
+
 	return {
 		createPageInformation,
 		breadcrumbs,
 		contextType,
 		pageTitle,
 		roomId,
+		resetPageInformation,
 	};
 };
 
-export const useSharedBoardPageInformation = createSharedComposable(
+export const useSharedBoardPageInformation = createTestableSharedComposable(
 	useBoardPageInformation
 );

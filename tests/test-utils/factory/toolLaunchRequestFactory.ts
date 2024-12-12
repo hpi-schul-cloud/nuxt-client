@@ -1,3 +1,4 @@
+import { LaunchType } from "@/serverApi/v3";
 import {
 	ToolLaunchRequest,
 	ToolLaunchRequestMethodEnum,
@@ -9,6 +10,6 @@ export const toolLaunchRequestFactory = Factory.define<ToolLaunchRequest>(
 		method: ToolLaunchRequestMethodEnum.Get,
 		payload: '{ "key": "value" }',
 		url: "https://example.com/tool-launch",
-		isDeepLink: false,
+		launchType: LaunchType.Basic,
 	})
 );

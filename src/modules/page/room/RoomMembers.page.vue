@@ -11,31 +11,33 @@
 			</h1>
 		</template>
 
-		<div class="mb-8 mt-12">
-			<i18n-t keypath="pages.rooms.members.infoText">
+		<div class="mb-8 mt-12" data-testid="info-text">
+			<i18n-t keypath="pages.rooms.members.infoText" scope="global">
 				<a
 					href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
 					target="_blank"
 					rel="noopener"
 					:ariaLabel="linkAriaLabel"
-					>{{ t("pages.rooms.members.infoText.moreInformation") }}</a
 				>
+					{{ t("pages.rooms.members.infoText.moreInformation") }}
+				</a>
 			</i18n-t>
 		</div>
+
 		<div class="mb-12">
 			<MembersTable
 				v-if="!isLoading"
 				:members="memberList"
-				@remove:member="onRemoveMember"
+				@remove:members="onRemoveMembers"
 			/>
 		</div>
 
 		<v-dialog
 			v-model="isMembersDialogOpen"
 			:width="xs ? 'auto' : 480"
-			persistent
-			max-width="480"
 			data-testid="dialog-add-participants"
+			max-width="480"
+			persistent
 		>
 			<AddMembers
 				:memberList="potentialRoomMembers"
@@ -45,7 +47,6 @@
 				@update:role="onUpdateRoleOrSchool"
 			/>
 		</v-dialog>
-		<ConfirmationDialog />
 	</DefaultWireframe>
 </template>
 
@@ -57,15 +58,11 @@ import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
-import { useRoomDetailsStore, useRoomMembers, RoomMember } from "@data-room";
+import { useRoomDetailsStore, useRoomMembers } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { MembersTable, AddMembers } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
-import {
-	ConfirmationDialog,
-	useConfirmationDialog,
-} from "@ui-confirmation-dialog";
 import { useDisplay } from "vuetify";
 
 const { fetchRoom } = useRoomDetailsStore();
@@ -93,24 +90,9 @@ const pageTitle = computed(() =>
 
 useTitle(pageTitle);
 
-const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	if (room === undefined) return [];
-
-	return [
-		{
-			title: t("pages.rooms.title"),
-			to: "/rooms",
-		},
-		{
-			title: room.value?.name || "",
-			to: `/rooms/${route.params.id}`,
-		},
-	];
-});
-
 const onFabClick = async () => {
 	await getSchools();
-	await getPotentialMembers({ role: RoleName.RoomEditor });
+	await getPotentialMembers({ role: RoleName.Roomeditor });
 	isMembersDialogOpen.value = true;
 };
 
@@ -129,28 +111,34 @@ const onUpdateRoleOrSchool = async (payload: {
 	await getPotentialMembers(payload);
 };
 
-const onRemoveMember = async (member: RoomMember) => {
-	const { askConfirmation } = useConfirmationDialog();
-	const message = t("pages.rooms.members.remove.confirmation", {
-		memberName: `${member.firstName} ${member.lastName}`,
-	});
-
-	const shouldDelete = await askConfirmation({
-		message,
-		confirmActionLangKey: "common.actions.remove",
-	});
-
-	if (!shouldDelete) return;
-	await removeMembers([member.userId]);
+const onRemoveMembers = async (memberIds: string[]) => {
+	await removeMembers(memberIds);
 };
 
 onMounted(async () => {
-	// call fetchRoom() again because the store is reset on unmounted lifecycle hook in RoomDetails.page.vue
 	if (room.value === undefined) {
-		console.log("Room store not found");
 		await fetchRoom(roomId);
 	}
 	await fetchMembers();
+});
+
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+	if (room === undefined) return [];
+
+	return [
+		{
+			title: t("pages.rooms.title"),
+			to: "/rooms",
+		},
+		{
+			title: room.value?.name || "",
+			to: `/rooms/${route.params.id}`,
+		},
+		{
+			title: t("pages.rooms.members.manage"),
+			disabled: true,
+		},
+	];
 });
 
 const fabAction = {

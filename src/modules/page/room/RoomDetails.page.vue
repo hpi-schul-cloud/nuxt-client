@@ -1,5 +1,14 @@
 <template>
-	<div v-if="isLoading" />
+	<template v-if="isLoading">
+		<div data-testid="loading" class="w-100 text-center">
+			<VProgressCircular
+				color="primary"
+				indeterminate
+				:size="51"
+				class="my-10"
+			/>
+		</div>
+	</template>
 	<template v-else>
 		<template v-if="isRoom">
 			<DefaultWireframe
@@ -14,11 +23,14 @@
 							{{ room.name }}
 						</h1>
 						<KebabMenu
+							v-if="isMenuEnabled"
 							class="mx-2"
 							:aria-label="$t('pages.roomDetails.ariaLabels.menu')"
 							data-testid="room-menu"
 						>
 							<VListItem
+								v-if="canEditRoom"
+								ref="editRoomMenu"
 								role="menuitem"
 								:to="`/rooms/${room.id}/edit`"
 								data-testid="room-action-edit"
@@ -35,6 +47,8 @@
 							</VListItem>
 
 							<VListItem
+								v-if="canEditRoom"
+								ref="manageMembersMenu"
 								role="menuitem"
 								:to="`/rooms/${room.id}/members`"
 								data-testid="room-action-manage-participants"
@@ -49,6 +63,8 @@
 							</VListItem>
 
 							<VListItem
+								v-if="canDeleteRoom"
+								ref="deleteRoomMenu"
 								role="menuitem"
 								data-testid="room-action-delete"
 								:aria-label="
@@ -93,11 +109,14 @@ import {
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { RoomDetails } from "@feature-room";
+import { RoomDetails, useRoomAuthorization } from "@feature-room";
 import {
-	mdiPencilOutline,
-	mdiTrashCanOutline,
 	mdiAccountGroupOutline,
+	mdiPencilOutline,
+	mdiPlus,
+	mdiTrashCanOutline,
+	mdiViewDashboardOutline,
+	mdiViewGridPlusOutline,
 } from "@icons/material";
 import {
 	ConfirmationDialog,
@@ -111,16 +130,11 @@ import { computed, ComputedRef, onUnmounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import {
-	mdiPlus,
-	mdiViewGridPlusOutline,
-	mdiViewDashboardOutline,
-} from "@icons/material";
-import {
 	BoardApiFactory,
 	BoardLayout,
 	BoardParentType,
 	CreateBoardBodyParams,
-	ImportUserResponseRoleNamesEnum as Roles,
+	Permission,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 
@@ -164,31 +178,15 @@ const boardLayoutsEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
 );
 
+const { canEditRoom, canDeleteRoom } = useRoomAuthorization(room);
+
+const isMenuEnabled = computed(() => canEditRoom.value || canDeleteRoom.value);
+
 const boardLayoutDialogIsOpen = ref(false);
-
-const createBoard = async (layout: BoardLayout) => {
-	if (!room.value) return;
-
-	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
-
-	const params: CreateBoardBodyParams = {
-		title: t("pages.roomDetails.board.defaultName"),
-		parentId: room.value.id,
-		parentType: BoardParentType.Room,
-		layout,
-	};
-	const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;
-
-	router.push(`/boards/${boardId}`);
-};
 
 const fabItems = computed(() => {
 	const actions = [];
-	// TODO refine permissions
-	if (
-		authModule.getUserPermissions.includes("COURSE_EDIT".toLowerCase()) &&
-		authModule.getUserRoles.includes(Roles.Teacher)
-	) {
+	if (canEditRoom.value) {
 		if (boardLayoutsEnabled.value) {
 			actions.push({
 				label: t("pages.courseRoomDetails.fab.add.board"),
@@ -227,10 +225,17 @@ const fabItemClickHandler = (event: string) => {
 	}
 };
 
+const canAccessRoom = computed(() => {
+	return (
+		envConfigModule.getEnv.FEATURE_ROOMS_ENABLED &&
+		authModule.getUserPermissions.includes(Permission.RoomCreate.toLowerCase())
+	);
+});
+
 watch(
 	() => route.params.id,
 	async () => {
-		if (envConfigModule.getEnv["FEATURE_ROOMS_ENABLED"]) {
+		if (canAccessRoom.value) {
 			await fetchRoom(route.params.id as string);
 		} else {
 			deactivateRoom();
@@ -241,8 +246,24 @@ watch(
 
 const isRoom = computed(() => roomVariant.value === RoomVariant.ROOM);
 
+const createBoard = async (layout: BoardLayout) => {
+	if (!room.value || !canEditRoom.value) return;
+
+	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
+
+	const params: CreateBoardBodyParams = {
+		title: t("pages.roomDetails.board.defaultName"),
+		parentId: room.value.id,
+		parentType: BoardParentType.Room,
+		layout,
+	};
+	const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;
+
+	router.push(`/boards/${boardId}`);
+};
+
 const onDelete = async () => {
-	if (!room.value) return;
+	if (!room.value || !canDeleteRoom.value) return;
 
 	const shouldDelete = await askDeleteConfirmation(
 		room.value.name,

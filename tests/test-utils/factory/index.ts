@@ -64,6 +64,7 @@ export * from "./videoConferenceJoinResponseFactory";
 export * from "./envsFactory";
 export * from "./media-board";
 export * from "./contextExternalToolResponseFactory";
+export * from "./ltiDeepLinkResponseFactory";
 export * from "./courseInfoDataResponseFactory";
 export * from "./deletedElementResponseFactory";
 export * from "./room";

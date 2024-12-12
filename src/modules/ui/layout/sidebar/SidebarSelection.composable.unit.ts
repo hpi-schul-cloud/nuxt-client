@@ -33,6 +33,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 			contextType: computed(() => undefined),
 			pageTitle: computed(() => "page-title"),
 			roomId: computed(() => "room-id"),
+			resetPageInformation: jest.fn(),
 		});
 	});
 
@@ -264,6 +265,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 						contextType: computed(() => BoardContextType.Course),
 						pageTitle: computed(() => "page-title"),
 						roomId: computed(() => "room-id"),
+						resetPageInformation: jest.fn(),
 					});
 
 					return setupBoardDetailsRoute();
@@ -285,6 +287,7 @@ describe("@ui/layout/sidebar/SidebarSelection.composable", () => {
 						contextType: computed(() => BoardContextType.User),
 						pageTitle: computed(() => "page-title"),
 						roomId: computed(() => "room-id"),
+						resetPageInformation: jest.fn(),
 					});
 
 					return setupBoardDetailsRoute();

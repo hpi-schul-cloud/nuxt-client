@@ -62,6 +62,7 @@ describe("externalToolReferenceApi.composable", () => {
 				logoUrl: displayData.logoUrl,
 				status: contextExternalToolConfigurationStatusFactory.build(),
 				openInNewTab: displayData.openInNewTab,
+				isLtiDeepLinkingTool: displayData.isLtiDeepLinkingTool,
 			});
 		});
 	});
@@ -109,6 +110,7 @@ describe("externalToolReferenceApi.composable", () => {
 					logoUrl: displayData.logoUrl,
 					status: contextExternalToolConfigurationStatusFactory.build(),
 					openInNewTab: displayData.openInNewTab,
+					isLtiDeepLinkingTool: displayData.isLtiDeepLinkingTool,
 				},
 			]);
 		});

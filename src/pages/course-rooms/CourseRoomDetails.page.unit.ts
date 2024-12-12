@@ -40,6 +40,7 @@ import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { createTestingPinia } from "@pinia/testing";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -181,7 +182,11 @@ const getWrapper = (
 
 	return mount(CourseRoomDetailsPage, {
 		global: {
-			plugins: [createTestingVuetify(), createTestingI18n()],
+			plugins: [
+				createTestingVuetify(),
+				createTestingI18n(),
+				createTestingPinia(),
+			],
 			mocks: {
 				$router,
 				$route,

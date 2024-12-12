@@ -357,8 +357,10 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoleCreate = 'ROLE_CREATE',
     RoleEdit = 'ROLE_EDIT',
     RoleView = 'ROLE_VIEW',
+    RoomCreate = 'ROOM_CREATE',
     RoomEdit = 'ROOM_EDIT',
     RoomView = 'ROOM_VIEW',
+    RoomDelete = 'ROOM_DELETE',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -2014,12 +2016,6 @@ export interface ContextExternalToolResponse {
      * @memberof ContextExternalToolResponse
      */
     parameters: Array<CustomParameterEntryResponse>;
-    /**
-     * 
-     * @type {string}
-     * @memberof ContextExternalToolResponse
-     */
-    logoUrl?: string;
 }
 
 /**
@@ -2070,11 +2066,11 @@ export interface CopyApiResponse {
      */
     type: CopyApiResponseTypeEnum;
     /**
-     * Id of destination course
+     * Id of destination parent reference
      * @type {string}
      * @memberof CopyApiResponse
      */
-    destinationCourseId?: string;
+    destinationId?: string;
     /**
      * Copy progress status of copied element
      * @type {string}
@@ -4105,6 +4101,18 @@ export enum LanguageType {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum LaunchType {
+    Basic = 'basic',
+    Oauth2 = 'oauth2',
+    Lti11BasicLaunch = 'lti11BasicLaunch',
+    Lti11ContentItemSelection = 'lti11ContentItemSelection'
+}
+
+/**
+ * 
+ * @export
  * @interface LayoutBodyParams
  */
 export interface LayoutBodyParams {
@@ -4628,6 +4636,171 @@ export interface LoginResponse {
 /**
  * 
  * @export
+ * @interface Lti11DeepLinkContentItemListParams
+ */
+export interface Lti11DeepLinkContentItemListParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkContentItemListParams
+     */
+    context: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof Lti11DeepLinkContentItemListParams
+     */
+    graph: Array<string>;
+}
+/**
+ * 
+ * @export
+ * @interface Lti11DeepLinkParams
+ */
+export interface Lti11DeepLinkParams {
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    lti_message_type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    lti_version: string;
+    /**
+     * 
+     * @type {Lti11DeepLinkContentItemListParams}
+     * @memberof Lti11DeepLinkParams
+     */
+    content_items?: Lti11DeepLinkContentItemListParams;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    data: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_nonce: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_timestamp: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_signature_method: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_consumer_key: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_signature: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParams
+     */
+    oauth_callback?: string;
+}
+/**
+ * 
+ * @export
+ * @interface Lti11DeepLinkParamsRaw
+ */
+export interface Lti11DeepLinkParamsRaw {
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    lti_message_type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    lti_version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    content_items?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    data: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_version: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_nonce: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_timestamp: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_signature_method: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_consumer_key: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_signature: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Lti11DeepLinkParamsRaw
+     */
+    oauth_callback?: string;
+}
+/**
+ * 
+ * @export
  * @interface Lti11ToolConfigCreateParams
  */
 export interface Lti11ToolConfigCreateParams {
@@ -4722,6 +4895,55 @@ export interface Lti11ToolConfigUpdateParams {
      * @memberof Lti11ToolConfigUpdateParams
      */
     launch_presentation_locale: string;
+}
+/**
+ * 
+ * @export
+ * @interface LtiDeepLinkResponse
+ */
+export interface LtiDeepLinkResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    mediaType: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    title?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    text?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    availableFrom?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    availableUntil?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    submissionFrom?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof LtiDeepLinkResponse
+     */
+    submissionUntil?: string;
 }
 /**
  * 
@@ -6557,6 +6779,180 @@ export interface PeriodResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum Permission {
+    AccountCreate = 'ACCOUNT_CREATE',
+    AccountDelete = 'ACCOUNT_DELETE',
+    AccountEdit = 'ACCOUNT_EDIT',
+    AccountView = 'ACCOUNT_VIEW',
+    AddSchoolMembers = 'ADD_SCHOOL_MEMBERS',
+    AdminEdit = 'ADMIN_EDIT',
+    AdminView = 'ADMIN_VIEW',
+    BaseView = 'BASE_VIEW',
+    CalendarCreate = 'CALENDAR_CREATE',
+    CalendarEdit = 'CALENDAR_EDIT',
+    CalendarView = 'CALENDAR_VIEW',
+    ChangeTeamRoles = 'CHANGE_TEAM_ROLES',
+    ClassCreate = 'CLASS_CREATE',
+    ClassEdit = 'CLASS_EDIT',
+    ClassFullAdmin = 'CLASS_FULL_ADMIN',
+    ClassList = 'CLASS_LIST',
+    ClassRemove = 'CLASS_REMOVE',
+    ClassView = 'CLASS_VIEW',
+    CommentsCreate = 'COMMENTS_CREATE',
+    CommentsEdit = 'COMMENTS_EDIT',
+    CommentsView = 'COMMENTS_VIEW',
+    ContentNonOerView = 'CONTENT_NON_OER_VIEW',
+    ContentView = 'CONTENT_VIEW',
+    ContextToolAdmin = 'CONTEXT_TOOL_ADMIN',
+    ContextToolUser = 'CONTEXT_TOOL_USER',
+    CoursegroupCreate = 'COURSEGROUP_CREATE',
+    CoursegroupEdit = 'COURSEGROUP_EDIT',
+    CourseAdministration = 'COURSE_ADMINISTRATION',
+    CourseCreate = 'COURSE_CREATE',
+    CourseDelete = 'COURSE_DELETE',
+    CourseEdit = 'COURSE_EDIT',
+    CourseRemove = 'COURSE_REMOVE',
+    CourseView = 'COURSE_VIEW',
+    CreateSupportJwt = 'CREATE_SUPPORT_JWT',
+    CreateTopicsAndTasks = 'CREATE_TOPICS_AND_TASKS',
+    DashboardView = 'DASHBOARD_VIEW',
+    DatasourcesCreate = 'DATASOURCES_CREATE',
+    DatasourcesDelete = 'DATASOURCES_DELETE',
+    DatasourcesEdit = 'DATASOURCES_EDIT',
+    DatasourcesRun = 'DATASOURCES_RUN',
+    DatasourcesRunView = 'DATASOURCES_RUN_VIEW',
+    DatasourcesView = 'DATASOURCES_VIEW',
+    DefaultFilePermissions = 'DEFAULT_FILE_PERMISSIONS',
+    DeleteTeam = 'DELETE_TEAM',
+    EditAllFiles = 'EDIT_ALL_FILES',
+    EnterthecloudStart = 'ENTERTHECLOUD_START',
+    FederalstateCreate = 'FEDERALSTATE_CREATE',
+    FederalstateEdit = 'FEDERALSTATE_EDIT',
+    FederalstateView = 'FEDERALSTATE_VIEW',
+    FilestorageCreate = 'FILESTORAGE_CREATE',
+    FilestorageEdit = 'FILESTORAGE_EDIT',
+    FilestorageRemove = 'FILESTORAGE_REMOVE',
+    FilestorageView = 'FILESTORAGE_VIEW',
+    FileCreate = 'FILE_CREATE',
+    FileDelete = 'FILE_DELETE',
+    FileMove = 'FILE_MOVE',
+    FolderCreate = 'FOLDER_CREATE',
+    FolderDelete = 'FOLDER_DELETE',
+    GroupList = 'GROUP_LIST',
+    GroupFullAdmin = 'GROUP_FULL_ADMIN',
+    GroupView = 'GROUP_VIEW',
+    HelpdeskCreate = 'HELPDESK_CREATE',
+    HelpdeskEdit = 'HELPDESK_EDIT',
+    HelpdeskView = 'HELPDESK_VIEW',
+    HomeworkCreate = 'HOMEWORK_CREATE',
+    HomeworkEdit = 'HOMEWORK_EDIT',
+    HomeworkView = 'HOMEWORK_VIEW',
+    ImportUserMigrate = 'IMPORT_USER_MIGRATE',
+    ImportUserUpdate = 'IMPORT_USER_UPDATE',
+    ImportUserView = 'IMPORT_USER_VIEW',
+    InstanceView = 'INSTANCE_VIEW',
+    InviteAdministrators = 'INVITE_ADMINISTRATORS',
+    InviteExperts = 'INVITE_EXPERTS',
+    JoinMeeting = 'JOIN_MEETING',
+    LeaveTeam = 'LEAVE_TEAM',
+    LernstoreView = 'LERNSTORE_VIEW',
+    LessonsCreate = 'LESSONS_CREATE',
+    LessonsView = 'LESSONS_VIEW',
+    LinkCreate = 'LINK_CREATE',
+    NewsCreate = 'NEWS_CREATE',
+    NewsEdit = 'NEWS_EDIT',
+    NewsView = 'NEWS_VIEW',
+    NextcloudUser = 'NEXTCLOUD_USER',
+    NotificationCreate = 'NOTIFICATION_CREATE',
+    NotificationEdit = 'NOTIFICATION_EDIT',
+    NotificationView = 'NOTIFICATION_VIEW',
+    OauthClientEdit = 'OAUTH_CLIENT_EDIT',
+    OauthClientView = 'OAUTH_CLIENT_VIEW',
+    PasswordEdit = 'PASSWORD_EDIT',
+    PwrecoveryCreate = 'PWRECOVERY_CREATE',
+    PwrecoveryEdit = 'PWRECOVERY_EDIT',
+    PwrecoveryView = 'PWRECOVERY_VIEW',
+    ReleasesCreate = 'RELEASES_CREATE',
+    ReleasesEdit = 'RELEASES_EDIT',
+    ReleasesView = 'RELEASES_VIEW',
+    RemoveMembers = 'REMOVE_MEMBERS',
+    RenameTeam = 'RENAME_TEAM',
+    RequestConsents = 'REQUEST_CONSENTS',
+    RoleCreate = 'ROLE_CREATE',
+    RoleEdit = 'ROLE_EDIT',
+    RoleView = 'ROLE_VIEW',
+    RoomCreate = 'ROOM_CREATE',
+    RoomEdit = 'ROOM_EDIT',
+    RoomView = 'ROOM_VIEW',
+    RoomDelete = 'ROOM_DELETE',
+    SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
+    SchoolCreate = 'SCHOOL_CREATE',
+    SchoolEdit = 'SCHOOL_EDIT',
+    SchoolEditAll = 'SCHOOL_EDIT_ALL',
+    SchoolLogoManage = 'SCHOOL_LOGO_MANAGE',
+    SchoolNewsEdit = 'SCHOOL_NEWS_EDIT',
+    SchoolPermissionChange = 'SCHOOL_PERMISSION_CHANGE',
+    SchoolPermissionView = 'SCHOOL_PERMISSION_VIEW',
+    SchoolStudentTeamManage = 'SCHOOL_STUDENT_TEAM_MANAGE',
+    SchoolSystemEdit = 'SCHOOL_SYSTEM_EDIT',
+    SchoolSystemView = 'SCHOOL_SYSTEM_VIEW',
+    SchoolToolAdmin = 'SCHOOL_TOOL_ADMIN',
+    ScopePermissionsView = 'SCOPE_PERMISSIONS_VIEW',
+    StartMeeting = 'START_MEETING',
+    StudentCreate = 'STUDENT_CREATE',
+    StudentDelete = 'STUDENT_DELETE',
+    StudentEdit = 'STUDENT_EDIT',
+    StudentList = 'STUDENT_LIST',
+    StudentSkipRegistration = 'STUDENT_SKIP_REGISTRATION',
+    SubmissionsCreate = 'SUBMISSIONS_CREATE',
+    SubmissionsEdit = 'SUBMISSIONS_EDIT',
+    SubmissionsSchoolView = 'SUBMISSIONS_SCHOOL_VIEW',
+    SubmissionsView = 'SUBMISSIONS_VIEW',
+    SyncStart = 'SYNC_START',
+    SystemCreate = 'SYSTEM_CREATE',
+    SystemEdit = 'SYSTEM_EDIT',
+    SystemView = 'SYSTEM_VIEW',
+    TaskDashboardTeacherViewV3 = 'TASK_DASHBOARD_TEACHER_VIEW_V3',
+    TaskDashboardViewV3 = 'TASK_DASHBOARD_VIEW_V3',
+    TeacherCreate = 'TEACHER_CREATE',
+    TeacherDelete = 'TEACHER_DELETE',
+    TeacherEdit = 'TEACHER_EDIT',
+    TeacherList = 'TEACHER_LIST',
+    TeacherSkipRegistration = 'TEACHER_SKIP_REGISTRATION',
+    TeamCreate = 'TEAM_CREATE',
+    ToolCreateEtherpad = 'TOOL_CREATE_ETHERPAD',
+    TeamEdit = 'TEAM_EDIT',
+    TeamInviteExternal = 'TEAM_INVITE_EXTERNAL',
+    TeamView = 'TEAM_VIEW',
+    ToolAdmin = 'TOOL_ADMIN',
+    ToolCreate = 'TOOL_CREATE',
+    ToolEdit = 'TOOL_EDIT',
+    ToolNewView = 'TOOL_NEW_VIEW',
+    ToolView = 'TOOL_VIEW',
+    TopicCreate = 'TOPIC_CREATE',
+    TopicEdit = 'TOPIC_EDIT',
+    TopicView = 'TOPIC_VIEW',
+    UploadFiles = 'UPLOAD_FILES',
+    UseLibreoffice = 'USE_LIBREOFFICE',
+    UseRocketchat = 'USE_ROCKETCHAT',
+    UsergroupCreate = 'USERGROUP_CREATE',
+    UsergroupEdit = 'USERGROUP_EDIT',
+    UsergroupView = 'USERGROUP_VIEW',
+    UserChangeOwnName = 'USER_CHANGE_OWN_NAME',
+    UserCreate = 'USER_CREATE',
+    UserLoginMigrationAdmin = 'USER_LOGIN_MIGRATION_ADMIN',
+    UserLoginMigrationRollback = 'USER_LOGIN_MIGRATION_ROLLBACK',
+    UserLoginMigrationForce = 'USER_LOGIN_MIGRATION_FORCE',
+    UserMigrate = 'USER_MIGRATE',
+    UserUpdate = 'USER_UPDATE',
+    YearsEdit = 'YEARS_EDIT'
+}
+
+/**
+ * 
+ * @export
  * @interface PreferredToolListResponse
  */
 export interface PreferredToolListResponse {
@@ -6909,9 +7305,11 @@ export enum RoleName {
     DemoStudent = 'demoStudent',
     DemoTeacher = 'demoTeacher',
     Expert = 'expert',
+    GuestTeacher = 'guestTeacher',
+    GuestStudent = 'guestStudent',
     Helpdesk = 'helpdesk',
-    RoomViewer = 'room_viewer',
-    RoomEditor = 'room_editor',
+    Roomviewer = 'roomviewer',
+    Roomeditor = 'roomeditor',
     Student = 'student',
     Superhero = 'superhero',
     Teacher = 'teacher',
@@ -7046,6 +7444,12 @@ export interface RoomDetailsResponse {
      * @type {string}
      * @memberof RoomDetailsResponse
      */
+    schoolId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomDetailsResponse
+     */
     startDate?: string;
     /**
      * 
@@ -7065,6 +7469,12 @@ export interface RoomDetailsResponse {
      * @memberof RoomDetailsResponse
      */
     updatedAt: string;
+    /**
+     * 
+     * @type {Array<Permission>}
+     * @memberof RoomDetailsResponse
+     */
+    permissions: Array<Permission>;
 }
 /**
  * 
@@ -7090,6 +7500,12 @@ export interface RoomItemResponse {
      * @memberof RoomItemResponse
      */
     color: RoomColor;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomItemResponse
+     */
+    schoolId: string;
     /**
      * 
      * @type {string}
@@ -8008,11 +8424,11 @@ export interface ShareTokenImportBodyParams {
      */
     newName: string;
     /**
-     * Id of the course to which the lesson/task will be added
+     * Id of the parent to which the imported object will be added.
      * @type {string}
      * @memberof ShareTokenImportBodyParams
      */
-    destinationCourseId?: string | null;
+    destinationId?: string | null;
 }
 /**
  * 
@@ -8767,11 +9183,11 @@ export interface ToolLaunchRequestResponse {
      */
     openNewTab?: boolean;
     /**
-     * Specifies whether the request is an LTI Deep linking content item selection request
-     * @type {boolean}
+     * 
+     * @type {LaunchType}
      * @memberof ToolLaunchRequestResponse
      */
-    isDeepLink: boolean;
+    launchType: LaunchType;
 }
 
 /**
@@ -8844,6 +9260,18 @@ export interface ToolReferenceResponse {
      * @memberof ToolReferenceResponse
      */
     status: ContextExternalToolConfigurationStatusResponse;
+    /**
+     * Whether the tool is a lti deep linking tool
+     * @type {boolean}
+     * @memberof ToolReferenceResponse
+     */
+    isLtiDeepLinkingTool: boolean;
+    /**
+     * 
+     * @type {LtiDeepLinkResponse}
+     * @memberof ToolReferenceResponse
+     */
+    ltiDeepLink?: LtiDeepLinkResponse;
 }
 /**
  * 
@@ -9053,8 +9481,8 @@ export interface UserIdAndRole {
     * @enum {string}
     */
 export enum UserIdAndRoleRoleNameEnum {
-    Editor = 'room_editor',
-    Viewer = 'room_viewer'
+    Roomeditor = 'roomeditor',
+    Roomviewer = 'roomviewer'
 }
 
 /**
@@ -20508,7 +20936,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Create a new room
+         * @summary Update an existing room
          * @param {string} roomId 
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -20528,7 +20956,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
                 baseOptions = configuration.baseOptions;
             }
 
-            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -20653,7 +21081,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create a new room
+         * @summary Update an existing room
          * @param {string} roomId 
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -20758,7 +21186,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Create a new room
+         * @summary Update an existing room
          * @param {string} roomId 
          * @param {UpdateRoomBodyParams} updateRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -20861,7 +21289,7 @@ export interface RoomApiInterface {
 
     /**
      * 
-     * @summary Create a new room
+     * @summary Update an existing room
      * @param {string} roomId 
      * @param {UpdateRoomBodyParams} updateRoomBodyParams 
      * @param {*} [options] Override http request option.
@@ -20980,7 +21408,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
 
     /**
      * 
-     * @summary Create a new room
+     * @summary Update an existing room
      * @param {string} roomId 
      * @param {UpdateRoomBodyParams} updateRoomBodyParams 
      * @param {*} [options] Override http request option.
@@ -24389,6 +24817,45 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @param {string} contextExternalToolId 
+         * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolDeepLinkControllerDeepLink: async (contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contextExternalToolId' is not null or undefined
+            assertParamExists('toolDeepLinkControllerDeepLink', 'contextExternalToolId', contextExternalToolId)
+            // verify required parameter 'lti11DeepLinkParamsRaw' is not null or undefined
+            assertParamExists('toolDeepLinkControllerDeepLink', 'lti11DeepLinkParamsRaw', lti11DeepLinkParamsRaw)
+            const localVarPath = `/tools/context-external-tools/{contextExternalToolId}/lti11-deep-link-callback`
+                .replace(`{${"contextExternalToolId"}}`, encodeURIComponent(String(contextExternalToolId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(lti11DeepLinkParamsRaw, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get tool launch request for a context external tool id
          * @param {string} contextExternalToolId The id of the context external tool
          * @param {*} [options] Override http request option.
@@ -25028,6 +25495,17 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @param {string} contextExternalToolId 
+         * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get tool launch request for a context external tool id
          * @param {string} contextExternalToolId The id of the context external tool
          * @param {*} [options] Override http request option.
@@ -25359,6 +25837,16 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @param {string} contextExternalToolId 
+         * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): AxiosPromise<string> {
+            return localVarFp.toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get tool launch request for a context external tool id
          * @param {string} contextExternalToolId The id of the context external tool
          * @param {*} [options] Override http request option.
@@ -25676,6 +26164,16 @@ export interface ToolApiInterface {
      * @memberof ToolApiInterface
      */
     toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any): AxiosPromise<ExternalToolResponse>;
+
+    /**
+     * 
+     * @param {string} contextExternalToolId 
+     * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApiInterface
+     */
+    toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any): AxiosPromise<string>;
 
     /**
      * 
@@ -26035,6 +26533,18 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
      */
     public toolControllerUpdateExternalTool(externalToolId: string, externalToolUpdateParams: ExternalToolUpdateParams, options?: any) {
         return ToolApiFp(this.configuration).toolControllerUpdateExternalTool(externalToolId, externalToolUpdateParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @param {string} contextExternalToolId 
+     * @param {Lti11DeepLinkParamsRaw} lti11DeepLinkParamsRaw 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ToolApi
+     */
+    public toolDeepLinkControllerDeepLink(contextExternalToolId: string, lti11DeepLinkParamsRaw: Lti11DeepLinkParamsRaw, options?: any) {
+        return ToolApiFp(this.configuration).toolDeepLinkControllerDeepLink(contextExternalToolId, lti11DeepLinkParamsRaw, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
