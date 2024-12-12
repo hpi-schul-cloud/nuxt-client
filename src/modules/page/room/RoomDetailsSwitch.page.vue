@@ -18,31 +18,24 @@
 <script setup lang="ts">
 import CourseRoomDetailsPage from "@/pages/course-rooms/CourseRoomDetails.page.vue";
 import { RoomDetailsPage } from "@page-room";
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	injectStrict,
-} from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { computed, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
-import { Permission } from "@/serverApi/v3";
+import { useRoomAuthorization } from "@feature-room";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-const authModule = injectStrict(AUTH_MODULE_KEY);
-
 const route = useRoute();
 
 const roomDetailsStore = useRoomDetailsStore();
-const { isLoading, roomVariant } = storeToRefs(roomDetailsStore);
+const { isLoading, roomVariant, room } = storeToRefs(roomDetailsStore);
 const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 
+const { canCreateRoom } = useRoomAuthorization(room);
+
 const canAccessRoom = computed(() => {
-	return (
-		envConfigModule.getEnv.FEATURE_ROOMS_ENABLED &&
-		authModule.getUserPermissions.includes(Permission.RoomCreate.toLowerCase())
-	);
+	return envConfigModule.getEnv.FEATURE_ROOMS_ENABLED && canCreateRoom.value;
 });
 
 watch(

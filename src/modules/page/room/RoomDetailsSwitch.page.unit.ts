@@ -1,6 +1,4 @@
-import * as serverApi from "@/serverApi/v3/api";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -9,17 +7,13 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { RoomVariant, useRoomDetailsStore } from "@data-room";
-import { RoomDetailsPage } from "@page-room";
+import { RoomDetailsSwitchPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
-import AuthModule from "@/store/auth";
-import { nextTick, ref, Ref } from "vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { ref } from "vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
-import { flushPromises } from "@vue/test-utils";
 import { Router, useRoute, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-jest";
-import { RoomColorEnum } from "@/types/room/Room";
 import { useRoomAuthorization } from "@feature-room";
 
 jest.mock("vue-router", () => ({
@@ -36,7 +30,7 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 };
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
-describe("@pages/RoomsDetails.page.vue", () => {
+describe("@pages/RoomsDetailsSwitch.page.vue", () => {
 	const router = createMock<Router>();
 	const useRouteMock = <jest.Mock>useRoute;
 	useRouteMock.mockReturnValue({ params: { id: "room-id" }, push: jest.fn() });
@@ -53,262 +47,115 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		{
 			isLoading,
 			roomVariant,
-			envs,
-			isTeacher,
-			permissions,
 		}: {
 			isLoading: boolean;
 			roomVariant?: RoomVariant;
-			envs?: Record<string, unknown>;
-			isTeacher?: boolean;
-			permissions?: string[];
 		} = { isLoading: false, roomVariant: RoomVariant.ROOM }
 	) => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: envsFactory.build({
 				FEATURE_BOARD_LAYOUT_ENABLED: true,
 				FEATURE_ROOMS_ENABLED: true,
-				...envs,
 			}),
 		});
 
-		const authModule = createModuleMocks(AuthModule, {
-			getUserPermissions: permissions || [],
-			getUserRoles: !isTeacher ? ["teacher"] : [],
-		});
+		const room = roomFactory.build();
 
-		const wrapper = mount(RoomDetailsPage, {
+		const wrapper = mount(RoomDetailsSwitchPage, {
 			global: {
 				plugins: [
 					createTestingVuetify(),
 					createTestingI18n(),
-					createTestingPinia(),
+					createTestingPinia({
+						initialState: {
+							roomDetailsStore: {
+								isLoading,
+								room,
+								roomVariant,
+								roomBoards: [],
+							},
+						},
+					}),
 				],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
-					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 				stubs: {
-					SelectBoardLayoutDialog: true,
 					CourseRoomDetailsPage: true,
+					"RoomDetails.page": true,
 				},
 			},
 			router,
 		});
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
-		const room = roomFactory.build();
-		roomDetailsStore.room = room;
-		roomDetailsStore.roomVariant = roomVariant;
-		roomDetailsStore.isLoading = isLoading;
-		roomDetailsStore.roomBoards = [];
-
-		const wrapperVM = wrapper.vm as unknown as {
-			room: {
-				id: string;
-				name: string;
-				color: RoomColorEnum;
-				createdAt: string;
-				updatedAt: string;
-			};
-			pageTitle: string;
-			breadcrumbs: Breadcrumb[];
-			fabItems: {
-				icon: string;
-				title: string;
-				ariaLabel: string;
-				testId: string;
-			}[];
-			isMembersDialogOpen: boolean;
-			isRoom: Ref<boolean>;
-			onFabClick: ReturnType<typeof jest.fn>;
-			boardLayoutsEnabled: Ref<boolean>;
-		};
 
 		return {
 			wrapper,
 			roomDetailsStore,
-			wrapperVM,
-			authModule,
 		};
 	};
 
-	describe("when page is mounted", () => {
-		it("should be rendered in DOM", () => {
-			const { wrapper } = setup();
+	describe("when page is loading", () => {
+		it("should render loading state", async () => {
+			const { wrapper } = setup({ isLoading: true });
+			const loadingState = wrapper.findComponent({ name: "VProgressCircular" });
 
-			expect(wrapper.vm).toBeDefined();
+			expect(loadingState.exists()).toBe(true);
 		});
 
-		it("should render DefaultWireframe", () => {
-			const { wrapper } = setup();
+		describe("and user has access to rooms", () => {
+			it("should fetch room", () => {
+				roomPermissions.canCreateRoom.value = true;
+				const { roomDetailsStore } = setup({ isLoading: true });
 
-			const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-			expect(defaultWireframe).toBeDefined();
-		});
-
-		describe("breadcrumbs", () => {
-			it("should have elements inside the list", () => {
-				const { wrapperVM } = setup();
-
-				expect(wrapperVM.breadcrumbs).toHaveLength(2);
-				expect(wrapperVM.breadcrumbs[0].title).toContain("pages.rooms.title");
-			});
-
-			describe("when room is undefined", () => {
-				it("should not have any element inside the list", () => {
-					const { wrapperVM, roomDetailsStore } = setup();
-					roomDetailsStore.room = undefined;
-					expect(wrapperVM.breadcrumbs).toHaveLength(0);
-				});
+				expect(roomDetailsStore.fetchRoom).toHaveBeenCalled();
 			});
 		});
 
-		describe("pageTitle", () => {
-			it("should set the page title", async () => {
-				const { wrapperVM } = setup();
-				expect(wrapperVM.pageTitle).toContain("pages.roomDetails.title");
-			});
-		});
+		describe("and user does not have access to rooms", () => {
+			it("should deactivate room", () => {
+				roomPermissions.canCreateRoom.value = false;
+				const { roomDetailsStore } = setup({ isLoading: true });
 
-		describe("boardLayoutsEnabled", () => {
-			it("should be true", () => {
-				const { wrapperVM } = setup();
-				expect(wrapperVM.boardLayoutsEnabled).toBe(true);
-			});
-
-			it("should be false", () => {
-				const { wrapperVM } = setup({
-					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
-					isLoading: false,
-				});
-				expect(wrapperVM.boardLayoutsEnabled).toBe(false);
+				expect(roomDetailsStore.deactivateRoom).toHaveBeenCalled();
 			});
 		});
 	});
 
-	describe("when roomVariant is invalid", () => {
-		it("should not render RoomDetails", () => {
-			const { wrapper } = setup({
-				roomVariant: RoomVariant.COURSE_ROOM,
-				isLoading: false,
-			});
-
-			const roomDetailsComponent = wrapper.findComponent({
-				name: "RoomDetails",
-			});
-			expect(roomDetailsComponent.exists()).toBe(false);
-		});
-	});
-
-	describe("when not loading", () => {
+	describe("when page has loaded", () => {
 		it("should not render a loading indication", async () => {
-			const { wrapper } = setup({
-				isLoading: false,
-				permissions: ["room_create"],
-			});
-			await flushPromises();
+			const { wrapper } = setup({ isLoading: false });
+			const loadingState = wrapper.findComponent({ name: "VProgressCircular" });
 
-			const div = wrapper.find('[data-testid="loading"]');
-			expect(div.exists()).toBe(false);
+			expect(loadingState.exists()).toBe(false);
 		});
 
-		describe("when roomVariant is valid", () => {
-			it("should render DefaultLayout ", async () => {
+		describe("and room variant is ROOM", () => {
+			it("should render room details page", () => {
+				roomPermissions.canCreateRoom.value = true;
 				const { wrapper } = setup({
 					isLoading: false,
 					roomVariant: RoomVariant.ROOM,
-					permissions: ["room_create"],
 				});
-				await flushPromises();
 
-				const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-				expect(defaultWireframe.exists()).toBe(true);
-			});
-
-			describe("when user clicks on add content button", () => {
-				it("should open the select layout dialog", async () => {
-					const { wrapper } = setup({
-						isLoading: false,
-						roomVariant: RoomVariant.ROOM,
-						permissions: ["room_create"],
-					});
-
-					await flushPromises();
-					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-					defaultWireframe.vm.$emit("onFabItemClick", "board-type-dialog-open");
-
-					const selectLayoutDialog = wrapper.findComponent({
-						name: "SelectBoardLayoutDialog",
-					});
-					expect(selectLayoutDialog.exists()).toBe(true);
-				});
-			});
-
-			describe("when user creates a new board", () => {
-				it.each([
-					{ event: "multi-column", layout: "columns" },
-					{ event: "single-column", layout: "list" },
-				])(
-					"should have a '$layout'-layout when '$event' was chosen",
-					async ({ event, layout }) => {
-						roomPermissions.canEditRoom.value = true;
-
-						const { wrapper } = setup({
-							isLoading: false,
-							roomVariant: RoomVariant.ROOM,
-							permissions: ["room_create"],
-						});
-
-						await flushPromises();
-
-						const mockApi = {
-							boardControllerCreateBoard: jest
-								.fn()
-								.mockResolvedValue({ data: { id: "board-id" } }),
-						};
-						const spy = jest
-							.spyOn(serverApi, "BoardApiFactory")
-							.mockReturnValue(
-								mockApi as unknown as serverApi.BoardApiInterface
-							);
-
-						const selectLayoutDialog = wrapper.findComponent({
-							name: "SelectBoardLayoutDialog",
-						});
-
-						await selectLayoutDialog.vm.$emit(`select:${event}`);
-
-						expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
-						expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledWith(
-							expect.objectContaining({ layout })
-						);
-
-						spy.mockRestore();
-					}
+				expect(wrapper.html()).toBe(
+					"<room-details.page-stub></room-details.page-stub>"
 				);
 			});
+		});
 
-			describe("when user clicks on edit room button", () => {
-				it("should navigate to the edit room page", async () => {
-					const { wrapper } = setup({
-						isLoading: false,
-						roomVariant: RoomVariant.ROOM,
-						permissions: ["room_edit"],
-					});
-
-					await flushPromises();
-					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
-					const kebabMenu = defaultWireframe.find('[data-testid="room-menu"]');
-					await kebabMenu.trigger("click");
-
-					const menus = wrapper.findAllComponents({ name: "VListItem" });
-
-					menus[0].vm.$emit("click");
-					await nextTick();
-
-					expect(useRouteMock).toHaveBeenCalled();
+		describe("and room variant is COURSE_ROOM", () => {
+			it("should render course-room details page", () => {
+				roomPermissions.canCreateRoom.value = true;
+				const { wrapper } = setup({
+					isLoading: false,
+					roomVariant: RoomVariant.COURSE_ROOM,
 				});
+
+				expect(wrapper.html()).toBe(
+					"<course-room-details-page-stub></course-room-details-page-stub>"
+				);
 			});
 		});
 	});
