@@ -174,7 +174,6 @@ import {
 } from "@/utils/inject";
 import { useRoute } from "vue-router";
 import AuthModule from "@/store/auth";
-import { useDisplay } from "vuetify/lib/framework.mjs";
 
 const props = defineProps({
 	element: {
@@ -201,9 +200,6 @@ const videoConferenceModule: VideoConferenceModule = injectStrict(
 );
 const { isStudent, isTeacher } = useBoardPermissions();
 
-const { smAndUp } = useDisplay();
-const maxLengthTitle = smAndUp.value ? 40 : 25;
-
 const { t } = useI18n();
 const videoConferenceElement = ref(null);
 const element = toRef(props, "element");
@@ -225,11 +221,6 @@ const ariaLabel = computed(() => {
 	return `${t("components.cardElement.videoConferenceElement")}, ${t(
 		"common.ariaLabel.newTab"
 	)}`;
-});
-
-const elementTitle = computed(() => {
-	const title = computedElement.value.content.title;
-	return title.slice(0, maxLengthTitle);
 });
 
 const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
