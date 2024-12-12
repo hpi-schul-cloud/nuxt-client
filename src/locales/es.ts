@@ -1719,11 +1719,11 @@ export default {
 	"pages.rooms.members.error.add": "Error al agregar participantes.",
 	"pages.rooms.members.error.remove": "Error al eliminar participantes.",
 	"pages.rooms.members.infoText":
-		"Añadir participantes a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
+		"Añadir miembros a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Participantes",
-	"pages.rooms.members.add": "Añadir participantes",
-	"pages.rooms.members.manage": "Participantes de la sala",
+	"pages.rooms.members.add": "Añadir miembros",
+	"pages.rooms.members.manage": "Miembros de la sala",
 	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Restablecer las participantes seleccionadas de la lista",
@@ -1732,7 +1732,7 @@ export default {
 	"pages.rooms.members.remove.confirmation":
 		"¿Eliminar {memberName} de la sala?",
 	"pages.rooms.members.multipleRemove.confirmation":
-		"¿Eliminar participantes seleccionadas de la sala?",
+		"¿Eliminar miembros seleccionadas de la sala?",
 	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
 	"pages.rooms.title": "Salas",
