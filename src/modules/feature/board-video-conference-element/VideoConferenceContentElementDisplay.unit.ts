@@ -1,4 +1,4 @@
-import { mount } from "@vue/test-utils";
+import { mount, VueWrapper } from "@vue/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -30,6 +30,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 		});
 		envConfigModule.setEnvs(envs);
 	});
+
 	const getWrapper = (propsData: {
 		isEditMode: boolean;
 		isRunning: boolean;
@@ -58,192 +59,127 @@ describe("VideoConferenceContentElementDisplay", () => {
 	});
 
 	describe("Title", () => {
-		const setup = () => {
+		it("should display a title", () => {
+			const title = "video conference";
 			const wrapper = getWrapper({
 				isEditMode: false,
 				isRunning: false,
 				hasParticipationPermission: true,
 				canStart: true,
-				title: "video conference",
+				title,
 			});
 
-			return {
-				wrapper,
-			};
-		};
-
-		it("should display a title", () => {
-			const title = "video conference";
-			const { wrapper } = setup();
-
 			const titleElement = wrapper.find(".content-element-title");
-
 			expect(titleElement.text()).toEqual(title);
 		});
 	});
 
-	describe("when the video conference is not running and the user is a teacher and the feature is deactivated", () => {
-		const setup = () => {
+	describe("Alerts", () => {
+		const setup = (propsData: {
+			isRunning: boolean;
+			hasParticipationPermission: boolean;
+			canStart: boolean;
+		}) => {
 			const wrapper = getWrapper({
 				isEditMode: false,
-				isRunning: false,
-				hasParticipationPermission: true,
-				canStart: true,
 				title: "video conference",
+				...propsData,
 			});
 
-			return {
-				wrapper,
-			};
+			return { wrapper };
 		};
 
-		it("should display a description text", () => {
+		it("should show 'not enabled for teacher' alert when feature is disabled", () => {
 			const envs = envsFactory.build({
 				FEATURE_VIDEOCONFERENCE_ENABLED: false,
 			});
 			envConfigModule.setEnvs(envs);
-			const { wrapper } = setup();
+
+			const { wrapper } = setup({
+				isRunning: false,
+				hasParticipationPermission: true,
+				canStart: true,
+			});
 
 			const alert = wrapper.findComponent(
 				'[data-testId="vc-info-box-no-feature"]'
 			);
-
 			const text = alert.find("span.my-auto");
-
 			expect(text.text()).toEqual(
 				"pages.videoConference.info.notEnabledTeacher"
 			);
 		});
-	});
 
-	describe("when the video conference is not running and user is not a teacher but a participant", () => {
-		const setup = () => {
-			const wrapper = getWrapper({
-				isEditMode: false,
+		it("should show 'not started' alert for a participant when the video conference is not running", () => {
+			const { wrapper } = setup({
 				isRunning: false,
 				hasParticipationPermission: true,
 				canStart: false,
-				title: "video conference",
 			});
 
-			return {
-				wrapper,
-			};
-		};
-
-		it("should display a description text", () => {
-			const { wrapper } = setup();
-
 			const alert = wrapper.findComponent('[data-testId="vc-info-box"]');
-
 			const text = alert.find("span.my-auto");
-
 			expect(text.text()).toEqual("pages.videoConference.info.notStarted");
 		});
-	});
 
-	describe("when the video conference is not running and user is not a teacher and not a participant", () => {
-		const setup = () => {
-			const wrapper = getWrapper({
-				isEditMode: false,
+		it("should show 'no permission' alert for a user with no participation permission", () => {
+			const { wrapper } = setup({
 				isRunning: false,
 				hasParticipationPermission: false,
 				canStart: false,
-				title: "video conference",
 			});
 
-			return {
-				wrapper,
-			};
-		};
-
-		it("should display a description text", () => {
-			const { wrapper } = setup();
-
 			const alert = wrapper.findComponent('[data-testId="vc-info-box"]');
-
 			const text = alert.find("span.my-auto");
-
 			expect(text.text()).toEqual("pages.videoConference.info.noPermission");
 		});
-	});
 
-	describe("when the video conference is not running and user is a teacher", () => {
-		const setup = () => {
-			const wrapper = getWrapper({
-				isEditMode: false,
+		it("should not display any alert when the conference is not running and the user is a teacher", () => {
+			const { wrapper } = setup({
 				isRunning: false,
 				hasParticipationPermission: true,
 				canStart: true,
-				title: "video conference",
 			});
 
-			return {
-				wrapper,
-			};
-		};
-
-		it("should not display alert", () => {
-			const { wrapper } = setup();
-
 			const alert = wrapper.find('[data-testId="vc-info-box-show"]');
-
 			expect(alert.exists()).toEqual(false);
 		});
-	});
 
-	describe("when the video conference is running", () => {
-		const setup = () => {
-			const wrapper = getWrapper({
-				isEditMode: false,
+		it("should show 'no permission' alert when the conference is running and user has no participation permission", () => {
+			const { wrapper } = setup({
+				isRunning: true,
+				hasParticipationPermission: false,
+				canStart: false,
+			});
+
+			const alert = wrapper.findComponent(
+				'[data-testId="vc-info-box-no-permission"]'
+			);
+			const text = alert.find("span.my-auto");
+			expect(text.text()).toEqual("pages.videoConference.info.noPermission");
+		});
+
+		it("should display a pulsating dot when the conference is running and the user has permission", () => {
+			const { wrapper } = setup({
 				isRunning: true,
 				hasParticipationPermission: true,
 				canStart: true,
-				title: "video conference",
 			});
 
-			return {
-				wrapper,
-			};
-		};
-
-		it("should display a pulsating dot", () => {
-			const { wrapper } = setup();
-
 			const dot = wrapper.find(".pulsating-dot");
-
 			expect(dot.exists()).toEqual(true);
 		});
 	});
 
-	describe("when the user does not have the permission to join the video conference", () => {
-		const setup = () => {
-			const wrapper = getWrapper({
-				isEditMode: false,
-				isRunning: true,
-				hasParticipationPermission: false,
-				canStart: false,
-				title: "video conference",
-			});
-
-			return {
-				wrapper,
-			};
+	describe("Events", () => {
+		const triggerClick = async (wrapper: VueWrapper) => {
+			const element = wrapper.find(
+				'[data-testId="board-video-conference-element"]'
+			);
+			await element.trigger("click");
 		};
 
-		it("should display a description text", () => {
-			const { wrapper } = setup();
-
-			const alert = wrapper.find('[data-testId="vc-info-box-no-permission"]');
-
-			const text = alert.find("span.my-auto");
-
-			expect(text.text()).toEqual("pages.videoConference.info.noPermission");
-		});
-	});
-
-	describe("when the user does have the permission to join the video conference", () => {
-		const setup = () => {
+		it("should emit a click event when the user can join and the conference is running", async () => {
 			const wrapper = getWrapper({
 				isEditMode: false,
 				isRunning: true,
@@ -252,26 +188,11 @@ describe("VideoConferenceContentElementDisplay", () => {
 				title: "video conference",
 			});
 
-			return {
-				wrapper,
-			};
-		};
-
-		it("should emit a click event", async () => {
-			const { wrapper } = setup();
-
-			const element = wrapper.find(
-				'[data-testId="board-video-conference-element"]'
-			);
-
-			await element.trigger("click");
-
+			await triggerClick(wrapper);
 			expect(wrapper.emitted("click")).toBeDefined();
 		});
-	});
 
-	describe("when clicking on the element and video conference is not running, with participation permission but not teacher", () => {
-		const setup = () => {
+		it("should emit a refresh event when the user can join but the conference is not running", async () => {
 			const wrapper = getWrapper({
 				isEditMode: false,
 				isRunning: false,
@@ -280,26 +201,11 @@ describe("VideoConferenceContentElementDisplay", () => {
 				title: "video conference",
 			});
 
-			return {
-				wrapper,
-			};
-		};
-
-		it("should emit a refresh event", async () => {
-			const { wrapper } = setup();
-
-			const element = wrapper.find(
-				'[data-testId="board-video-conference-element"]'
-			);
-
-			await element.trigger("click");
-
+			await triggerClick(wrapper);
 			expect(wrapper.emitted("refresh")).toBeDefined();
 		});
-	});
 
-	describe("when clicking on the element and video conference is not running as a teacher", () => {
-		const setup = () => {
+		it("should emit a click event when the user is a teacher and the conference is not running", async () => {
 			const wrapper = getWrapper({
 				isEditMode: false,
 				isRunning: false,
@@ -308,20 +214,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				title: "video conference",
 			});
 
-			return {
-				wrapper,
-			};
-		};
-
-		it("should emit a click event", async () => {
-			const { wrapper } = setup();
-
-			const element = wrapper.find(
-				'[data-testId="board-video-conference-element"]'
-			);
-
-			await element.trigger("click");
-
+			await triggerClick(wrapper);
 			expect(wrapper.emitted("click")).toBeDefined();
 		});
 	});

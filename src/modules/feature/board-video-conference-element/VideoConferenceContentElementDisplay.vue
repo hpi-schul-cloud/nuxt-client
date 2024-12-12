@@ -9,7 +9,7 @@
 		>
 			<template #display>
 				<div
-					v-if="canStart && !isVideoConferenceEnabled"
+					v-if="shouldShowNoFeatureAlert"
 					class="mt-2"
 					data-testId="vc-info-box-show-no-feature"
 				>
@@ -27,7 +27,7 @@
 					</v-alert>
 				</div>
 				<div
-					v-if="!isRunning && !canStart"
+					v-if="shouldShowInfoAlert"
 					class="mt-2"
 					data-testId="vc-info-box-show"
 				>
@@ -38,21 +38,14 @@
 						data-testId="vc-info-box"
 					>
 						<div class="d-flex flex-wrap gap-4">
-							<span v-if="isVideoConferenceEnabled" class="flex-1 my-auto">
-								{{
-									hasParticipationPermission
-										? t("pages.videoConference.info.notStarted")
-										: t("pages.videoConference.info.noPermission")
-								}}
-							</span>
-							<span v-else class="flex-1 my-auto">
-								{{ t("pages.videoConference.info.notEnabledParticipants") }}
+							<span class="flex-1 my-auto">
+								{{ alertMessage }}
 							</span>
 						</div>
 					</v-alert>
 				</div>
 				<div
-					v-if="isRunning && !hasParticipationPermission"
+					v-if="shouldShowNoPermissionAlert"
 					class="mt-2"
 					data-testId="vc-info-box-show-no-permission"
 				>
@@ -63,11 +56,8 @@
 						data-testId="vc-info-box-no-permission"
 					>
 						<div class="d-flex flex-wrap gap-4">
-							<span v-if="isVideoConferenceEnabled" class="flex-1 my-auto">
-								{{ t("pages.videoConference.info.noPermission") }}
-							</span>
-							<span v-else class="flex-1 my-auto">
-								{{ t("pages.videoConference.info.notEnabledParticipants") }}
+							<span class="flex-1 my-auto">
+								{{ noPermissionMessage }}
 							</span>
 						</div>
 					</v-alert>
@@ -132,26 +122,47 @@ const { t } = useI18n();
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const isSmallOrLargerListBoard = computed(() => {
-	return smAndUp.value && isListLayout.value;
-});
+const isSmallOrLargerListBoard = computed(
+	() => smAndUp.value && isListLayout.value
+);
 
 const isVideoConferenceEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_VIDEOCONFERENCE_ENABLED
 );
 
+const shouldShowNoFeatureAlert = computed(
+	() => props.canStart && !isVideoConferenceEnabled.value
+);
+const shouldShowInfoAlert = computed(() => !props.isRunning && !props.canStart);
+const shouldShowNoPermissionAlert = computed(
+	() => props.isRunning && !props.hasParticipationPermission
+);
+
+const alertMessage = computed(() => {
+	if (isVideoConferenceEnabled.value) {
+		return props.hasParticipationPermission
+			? t("pages.videoConference.info.notStarted")
+			: t("pages.videoConference.info.noPermission");
+	} else {
+		return t("pages.videoConference.info.notEnabledParticipants");
+	}
+});
+
+const noPermissionMessage = computed(() => {
+	if (isVideoConferenceEnabled.value) {
+		return t("pages.videoConference.info.noPermission");
+	} else {
+		return t("pages.videoConference.info.notEnabledParticipants");
+	}
+});
+
 const onClick = () => {
-	if (!isVideoConferenceEnabled.value || !props.hasParticipationPermission) {
+	if (!isVideoConferenceEnabled.value || !props.hasParticipationPermission)
 		return;
-	} else if (
-		!props.isRunning &&
-		props.hasParticipationPermission &&
-		!props.canStart
-	) {
+
+	if (!props.isRunning && props.hasParticipationPermission && !props.canStart) {
 		emit("refresh");
-	} else if (props.canStart) {
-		emit("click");
-	} else if (props.hasParticipationPermission && props.isRunning) {
+	} else {
 		emit("click");
 	}
 };
@@ -161,6 +172,7 @@ const onClick = () => {
 a {
 	text-decoration: none;
 }
+
 .menu {
 	position: absolute;
 	right: 10px;
