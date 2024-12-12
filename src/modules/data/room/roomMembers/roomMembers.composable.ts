@@ -27,7 +27,10 @@ export const useRoomMembers = (roomId: string) => {
 	};
 
 	const userRoles: Record<string, string> = {
+		[RoleName.Roomowner]: t("common.labels.teacher"),
+		[RoleName.Roomadmin]: t("common.labels.teacher"),
 		[RoleName.Roomeditor]: t("common.labels.teacher"),
+		[RoleName.Roomviewer]: t("common.labels.teacher"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);

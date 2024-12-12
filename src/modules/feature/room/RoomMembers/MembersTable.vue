@@ -56,6 +56,7 @@
 		item-value="userId"
 		mobile-breakpoint="sm"
 		:items="memberList"
+		item-selectable="isSelectable"
 		:headers="tableHeader"
 		:items-per-page-options="[5, 10, 25, 50, 100]"
 		:items-per-page="50"
@@ -69,6 +70,7 @@
 		<template #[`item.actions`]="{ item, index }">
 			<v-btn
 				:data-testid="`remove-member-${index}`"
+				v-if="item.roleName !== RoleName.Roomowner"
 				size="x-small"
 				variant="text"
 				:aria-label="getRemoveAriaLabel(item)"
@@ -90,7 +92,7 @@ import {
 	mdiMagnify,
 	mdiTrashCanOutline,
 } from "@icons/material";
-import { RoomMemberResponse } from "@/serverApi/v3";
+import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
@@ -187,6 +189,10 @@ const tableHeader = [
 /* table header for mobile view */
 :deep(.v-data-table__td-title) {
 	font-weight: bold;
+}
+
+:deep(.v-data-table__td .v-selection-control--disabled) {
+	color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity));
 }
 
 .table-title-header {
