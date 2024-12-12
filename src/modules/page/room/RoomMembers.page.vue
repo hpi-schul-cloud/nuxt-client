@@ -83,7 +83,6 @@ const {
 	getSchools,
 	removeMembers,
 } = useRoomMembers(roomId);
-
 const memberList: Ref<RoomMemberResponse[]> = ref(roomMembers);
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
