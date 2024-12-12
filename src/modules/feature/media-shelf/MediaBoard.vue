@@ -53,7 +53,6 @@
 				v-if="board.lines.length < lineLimit"
 				@create:line="createLine"
 			/>
-			<ConfirmationDialog />
 		</div>
 	</div>
 </template>
@@ -61,7 +60,6 @@
 <script setup lang="ts">
 import { MediaAvailableLineResponse, MediaBoardResponse } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { extractDataAttribute, useSharedEditMode } from "@util-board";
 import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
