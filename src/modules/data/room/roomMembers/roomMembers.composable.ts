@@ -13,9 +13,10 @@ import { $axios } from "@/utils/api";
 import { useI18n } from "vue-i18n";
 import { useBoardNotifier } from "@util-board";
 import { schoolsModule } from "@/store";
+import { authModule } from "@/store/store-accessor";
 
 export const useRoomMembers = (roomId: string) => {
-	const roomMembers: Ref<RoomMemberResponse[]> = ref([]);
+	const roomMembers: Ref<RoomMemberResponse[] | any[]> = ref([]);
 	const potentialRoomMembers: Ref<RoomMember[]> = ref([]);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const isLoading = ref(false);
@@ -25,6 +26,7 @@ export const useRoomMembers = (roomId: string) => {
 		id: schoolsModule.getSchool.id,
 		name: schoolsModule.getSchool.name,
 	};
+	const currentUserId = authModule.getUser?.id ?? "";
 
 	const userRoles: Record<string, string> = {
 		[RoleName.Roomowner]: t("common.labels.teacher"),
@@ -45,6 +47,10 @@ export const useRoomMembers = (roomId: string) => {
 				return {
 					...member,
 					displayRoleName: userRoles[member.roleName],
+					isSelectable: !(
+						member.userId === currentUserId ||
+						member.roleName === RoleName.Roomowner
+					),
 				};
 			});
 			isLoading.value = false;

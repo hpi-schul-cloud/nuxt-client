@@ -65,8 +65,6 @@ import { MembersTable, AddMembers } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 
-import { authModule } from "@/store/store-accessor";
-
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
@@ -85,15 +83,8 @@ const {
 	getSchools,
 	removeMembers,
 } = useRoomMembers(roomId);
-const currentUserId = authModule.getUser?.id ?? "";
-const memberList: Ref<RoomMemberResponse[]> = computed(() => {
-	return roomMembers.value.map((member) => ({
-		...member,
-		isSelectable: !(
-			member.userId === currentUserId || member.roleName === RoleName.Roomowner
-		),
-	}));
-});
+
+const memberList: Ref<RoomMemberResponse[]> = ref(roomMembers);
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );

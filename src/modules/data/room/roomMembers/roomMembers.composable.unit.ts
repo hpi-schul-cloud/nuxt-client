@@ -86,6 +86,7 @@ describe("useRoomMembers", () => {
 				membersMock.map((member) => ({
 					...member,
 					displayRoleName: "common.labels.teacher",
+					isSelectable: true,
 				}))
 			);
 		});
