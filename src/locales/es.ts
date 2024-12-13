@@ -328,6 +328,7 @@ export default {
 	"components.base.showPassword": "Mostrar contraseña",
 	"components.board.action.addCard": "Añadir tarjeta",
 	"components.board.action.delete": "Eliminar",
+	"components.board.action.deleteFromSection": "Quitar de la sección",
 	"components.board.action.detail-view": "Vista detallada",
 	"components.board.action.download": "Descargar",
 	"components.board.action.moveDown": "Bajar",

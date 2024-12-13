@@ -331,6 +331,7 @@ export default {
 	"components.base.showPassword": "Показати пароль",
 	"components.board.action.addCard": "Додати картка",
 	"components.board.action.delete": "Видалити",
+	"components.board.action.deleteFromSection": "Видалити з розділу",
 	"components.board.action.detail-view": "Детальний вигляд",
 	"components.board.action.download": "Завантажити",
 	"components.board.action.moveDown": "Рухатися вниз",

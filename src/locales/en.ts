@@ -323,6 +323,7 @@ export default {
 	"components.base.showPassword": "Show password",
 	"components.board.action.addCard": "Add card",
 	"components.board.action.delete": "Delete",
+	"components.board.action.deleteFromSection": "Remove from section",
 	"components.board.action.detail-view": "Detail view",
 	"components.board.action.download": "Download",
 	"components.board.action.moveDown": "Move down",
