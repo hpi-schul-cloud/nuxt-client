@@ -27,11 +27,9 @@ describe("@feature-room/RoomMenu", () => {
 					createTestingI18n(),
 					createTestingPinia(),
 				],
-				stubs: ["RouterLink"],
-			},
-			attachTo: document.body,
-			stubs: {
-				RouterLink,
+				stubs: {
+					RouterLink,
+				},
 			},
 		});
 
@@ -124,7 +122,7 @@ describe("@feature-room/RoomMenu", () => {
 		roomPermissions.canEditRoom.value = true;
 		roomPermissions.canDeleteRoom.value = true;
 
-		describe("when clicking on edit button", () => {
+		describe("and clicking on edit button", () => {
 			it("should emit 'room:edit' event", async () => {
 				const { wrapper, menuBtn } = setup();
 				await menuBtn.trigger("click");
@@ -138,7 +136,7 @@ describe("@feature-room/RoomMenu", () => {
 			});
 		});
 
-		describe("when clicking on manage members button", () => {
+		describe("and clicking on manage members button", () => {
 			it("should emit 'room:manage-members' event", async () => {
 				const { wrapper, menuBtn } = setup();
 				await menuBtn.trigger("click");
@@ -152,7 +150,7 @@ describe("@feature-room/RoomMenu", () => {
 			});
 		});
 
-		describe("when clicking on delete button", () => {
+		describe("and clicking on delete button", () => {
 			it("should emit 'room:delete' event", async () => {
 				const { wrapper, menuBtn } = setup();
 				await menuBtn.trigger("click");
