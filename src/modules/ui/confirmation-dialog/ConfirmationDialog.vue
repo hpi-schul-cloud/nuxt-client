@@ -1,5 +1,4 @@
 <template>
-	<!-- ToDo: Styling -->
 	<VDialog
 		v-model="isDialogOpen"
 		data-testid="delete-dialog-item"
@@ -8,28 +7,29 @@
 		<UseFocusTrap>
 			<VCard>
 				<template #title>
-					<h2 class="text-h4 dialog-title">
+					<h2 class="text-h4 my-2 px-2 dialog-title">
 						{{ message }}
 					</h2>
 				</template>
 
 				<template #actions>
 					<VSpacer />
-					<!-- <div class="action-buttons"> -->
-					<VBtn
-						data-testid="dialog-cancel"
-						variant="text"
-						:text="t('common.actions.cancel')"
-						@click="cancel"
-					/>
-					<VBtn
-						data-testid="dialog-confirm"
-						color="primary"
-						variant="flat"
-						:text="t(confirmBtnLangKey)"
-						@click="confirm"
-					/>
-					<!-- </div> -->
+					<div class="action-buttons px-6">
+						<VBtn
+							data-testid="dialog-cancel"
+							variant="text"
+							:text="t('common.actions.cancel')"
+							@click="cancel"
+						/>
+						<VBtn
+							data-testid="dialog-confirm"
+							class="px-6"
+							color="primary"
+							variant="flat"
+							:text="t(confirmBtnLangKey)"
+							@click="confirm"
+						/>
+					</div>
 				</template>
 			</VCard>
 		</UseFocusTrap>
@@ -59,6 +59,7 @@ const confirmBtnLangKey = computed(() =>
 
 <style scoped>
 .action-buttons {
+	display: flex;
 	margin-bottom: calc(var(--space-base-vuetify) * 2);
 	gap: calc(var(--space-base-vuetify) * 2);
 }
@@ -67,5 +68,6 @@ const confirmBtnLangKey = computed(() =>
 	white-space: normal;
 	hyphens: none;
 	word-break: break-word;
+	line-height: var(--line-height-lg);
 }
 </style>
