@@ -14,7 +14,8 @@
 		"generate-client:server": "node generate-client.js -c openapitools-for-server.json",
 		"generate-client:filestorage": "node generate-client.js -u 'http://localhost:4444/api/v3/docs-json/' -p 'src/fileStorageApi/v3' -c 'openapitools-for-file-storage.json'",
 		"generate-client:h5p-editor": "node generate-client.js -u 'http://localhost:4448/api/v3/docs-json/' -p 'src/h5pEditorApi/v3' -c 'openapitools-for-h5p-editor.json'",
-		"generate-client:common-cartridge": "node generate-client.js -u 'http://localhost:3350/api/v3/docs-json/' -p 'src/commonCartridgeApi/v3' -c 'openapitools-for-common-cartridge.json'"
+		"pregenerate-client:common-cartridge": "rimraf ./src/commonCartridgeApi/v3",
+		"generate-client:common-cartridge": "openapi-generator-cli generate -c ./openapitools.json --generator-key common-cartridge-api"
 	},
 	"dependencies": {
 		"@braintree/sanitize-url": "^6.0.4",
@@ -33,6 +34,7 @@
 		"mobile-drag-drop": "^3.0.0-rc.0",
 		"object-hash": "^3.0.0",
 		"pinia": "^2.1.7",
+		"rimraf": "^6.0.1",
 		"socket.io-client": "^4.7.5",
 		"sortablejs": "^1.15.2",
 		"sortablejs-vue3": "^1.2.11",

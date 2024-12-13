@@ -13,15 +13,16 @@
  */
 
 
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
-import { Configuration } from '../configuration';
+import type { Configuration } from '../configuration';
+import type { AxiosPromise, AxiosInstance, RawAxiosRequestConfig } from 'axios';
+import globalAxios from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
 // @ts-ignore
-import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { BASE_PATH, COLLECTION_FORMATS, type RequestArgs, BaseAPI, RequiredError, operationServerMap } from '../base';
 // @ts-ignore
-import { CourseExportBodyParams } from '../models';
+import type { CourseExportBodyParams } from '../models';
 /**
  * CommonCartridgeApi - axios parameter creator
  * @export
@@ -30,21 +31,21 @@ export const CommonCartridgeApiAxiosParamCreator = function (configuration?: Con
     return {
         /**
          * 
-         * @param {string} parentId 
-         * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
+         * @param {string} courseId 
+         * @param {CommonCartridgeControllerExportCourseVersion} version The version of CC export
          * @param {CourseExportBodyParams} courseExportBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        commonCartridgeControllerExportCourse: async (parentId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'parentId' is not null or undefined
-            assertParamExists('commonCartridgeControllerExportCourse', 'parentId', parentId)
+        commonCartridgeControllerExportCourse: async (courseId: string, version: CommonCartridgeControllerExportCourseVersion, courseExportBodyParams: CourseExportBodyParams, options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'courseId' is not null or undefined
+            assertParamExists('commonCartridgeControllerExportCourse', 'courseId', courseId)
             // verify required parameter 'version' is not null or undefined
             assertParamExists('commonCartridgeControllerExportCourse', 'version', version)
             // verify required parameter 'courseExportBodyParams' is not null or undefined
             assertParamExists('commonCartridgeControllerExportCourse', 'courseExportBodyParams', courseExportBodyParams)
-            const localVarPath = `/common-cartridge/export/{parentId}`
-                .replace(`{${"parentId"}}`, encodeURIComponent(String(parentId)));
+            const localVarPath = `/common-cartridge/export/{courseId}`
+                .replace(`{${"courseId"}}`, encodeURIComponent(String(courseId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -64,7 +65,7 @@ export const CommonCartridgeApiAxiosParamCreator = function (configuration?: Con
     
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(courseExportBodyParams, localVarRequestOptions, configuration)
@@ -86,15 +87,17 @@ export const CommonCartridgeApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @param {string} parentId 
-         * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
+         * @param {string} courseId 
+         * @param {CommonCartridgeControllerExportCourseVersion} version The version of CC export
          * @param {CourseExportBodyParams} courseExportBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async commonCartridgeControllerExportCourse(parentId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.commonCartridgeControllerExportCourse(parentId, version, courseExportBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        async commonCartridgeControllerExportCourse(courseId: string, version: CommonCartridgeControllerExportCourseVersion, courseExportBodyParams: CourseExportBodyParams, options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.commonCartridgeControllerExportCourse(courseId, version, courseExportBodyParams, options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['CommonCartridgeApi.commonCartridgeControllerExportCourse']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
         },
     }
 };
@@ -108,14 +111,14 @@ export const CommonCartridgeApiFactory = function (configuration?: Configuration
     return {
         /**
          * 
-         * @param {string} parentId 
-         * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
+         * @param {string} courseId 
+         * @param {CommonCartridgeControllerExportCourseVersion} version The version of CC export
          * @param {CourseExportBodyParams} courseExportBodyParams 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        commonCartridgeControllerExportCourse(parentId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any): AxiosPromise<void> {
-            return localVarFp.commonCartridgeControllerExportCourse(parentId, version, courseExportBodyParams, options).then((request) => request(axios, basePath));
+        commonCartridgeControllerExportCourse(courseId: string, version: CommonCartridgeControllerExportCourseVersion, courseExportBodyParams: CourseExportBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.commonCartridgeControllerExportCourse(courseId, version, courseExportBodyParams, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -128,14 +131,14 @@ export const CommonCartridgeApiFactory = function (configuration?: Configuration
 export interface CommonCartridgeApiInterface {
     /**
      * 
-     * @param {string} parentId 
-     * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
+     * @param {string} courseId 
+     * @param {CommonCartridgeControllerExportCourseVersion} version The version of CC export
      * @param {CourseExportBodyParams} courseExportBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommonCartridgeApiInterface
      */
-    commonCartridgeControllerExportCourse(parentId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any): AxiosPromise<void>;
+    commonCartridgeControllerExportCourse(courseId: string, version: CommonCartridgeControllerExportCourseVersion, courseExportBodyParams: CourseExportBodyParams, options?: RawAxiosRequestConfig): AxiosPromise<void>;
 
 }
 
@@ -148,14 +151,26 @@ export interface CommonCartridgeApiInterface {
 export class CommonCartridgeApi extends BaseAPI implements CommonCartridgeApiInterface {
     /**
      * 
-     * @param {string} parentId 
-     * @param {'1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0'} version The version of CC export
+     * @param {string} courseId 
+     * @param {CommonCartridgeControllerExportCourseVersion} version The version of CC export
      * @param {CourseExportBodyParams} courseExportBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CommonCartridgeApi
      */
-    public commonCartridgeControllerExportCourse(parentId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any) {
-        return CommonCartridgeApiFp(this.configuration).commonCartridgeControllerExportCourse(parentId, version, courseExportBodyParams, options).then((request) => request(this.axios, this.basePath));
+    public commonCartridgeControllerExportCourse(courseId: string, version: CommonCartridgeControllerExportCourseVersion, courseExportBodyParams: CourseExportBodyParams, options?: RawAxiosRequestConfig) {
+        return CommonCartridgeApiFp(this.configuration).commonCartridgeControllerExportCourse(courseId, version, courseExportBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
+
+/**
+ * @export
+ */
+export const CommonCartridgeControllerExportCourseVersion = {
+    _0_0: '1.0.0',
+    _1_0: '1.1.0',
+    _2_0: '1.2.0',
+    _3_0: '1.3.0',
+    _4_0: '1.4.0'
+} as const;
+export type CommonCartridgeControllerExportCourseVersion = typeof CommonCartridgeControllerExportCourseVersion[keyof typeof CommonCartridgeControllerExportCourseVersion];
