@@ -43,7 +43,6 @@ describe("VideoConferenceContentElementCreate", () => {
 				await wrapper
 					.findComponent({ name: "VTextarea" })
 					.trigger("keydown.enter");
-				await nextTick();
 
 				expect(wrapper.emitted("create:title")).toEqual([[title]]);
 			});
