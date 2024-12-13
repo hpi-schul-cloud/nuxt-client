@@ -24,7 +24,7 @@ describe("VideoConferenceContentElementCreate", () => {
 	});
 
 	describe("when valid title was entered", () => {
-		describe("when enter is pressed", () => {
+		describe("and enter is pressed", () => {
 			it("should not show error-message", async () => {
 				const { wrapper } = setup();
 
@@ -51,7 +51,7 @@ describe("VideoConferenceContentElementCreate", () => {
 	});
 
 	describe("when title field is empty", () => {
-		describe("when submit button is clicked", () => {
+		describe("and submit button is clicked", () => {
 			it("should show required-error-message", async () => {
 				const { wrapper } = setup();
 

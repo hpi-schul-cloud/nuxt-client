@@ -184,7 +184,7 @@ describe("VideoConferenceContentElement", () => {
 	};
 
 	describe("when video conference element is displayed", () => {
-		describe("when content title is undefined", () => {
+		describe("and content title is undefined", () => {
 			it("should not render display of video conference content", () => {
 				const { wrapper } = setup({
 					isEditMode: true,
@@ -208,7 +208,7 @@ describe("VideoConferenceContentElement", () => {
 			});
 		});
 
-		describe("when content title is defined", () => {
+		describe("and content title is defined", () => {
 			it("should render display of video conference content with correct props", () => {
 				const videoConferenceElementContent =
 					videoConferenceElementContentFactory.build({ title: "test-title" });
@@ -249,7 +249,7 @@ describe("VideoConferenceContentElement", () => {
 				);
 			});
 
-			describe("when element is in edit mode", () => {
+			describe("and element is in edit mode", () => {
 				it.each(["up", "down"])(
 					"should 'emit move-keyboard:edit' when arrow key %s is pressed",
 					async (key) => {
@@ -271,7 +271,7 @@ describe("VideoConferenceContentElement", () => {
 				);
 			});
 
-			describe("when element is in view mode", () => {
+			describe("and element is in view mode", () => {
 				it.each(["up", "down"])(
 					"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in view mode",
 					async (key) => {
@@ -351,7 +351,7 @@ describe("VideoConferenceContentElement", () => {
 			});
 
 			describe("onElementClick", () => {
-				describe("when video conference is not running", () => {
+				describe("and video conference is not running", () => {
 					it("should open the configuration dialog", async () => {
 						const { wrapper } = setup({
 							content: videoConferenceElementContentFactory.build(),
@@ -371,7 +371,7 @@ describe("VideoConferenceContentElement", () => {
 					});
 				});
 
-				describe("when video conference is running", () => {
+				describe("and video conference is running", () => {
 					const setup = (
 						options: {
 							content?: VideoConferenceElementContent;
@@ -465,7 +465,7 @@ describe("VideoConferenceContentElement", () => {
 	});
 
 	describe("when video conference element is being created", () => {
-		describe("when element is in view mode", () => {
+		describe("and element is in view mode", () => {
 			it("should hide video conference element in view mode when no title was entered", () => {
 				const { wrapper } = setup({
 					isEditMode: false,
@@ -489,7 +489,7 @@ describe("VideoConferenceContentElement", () => {
 			});
 		});
 
-		describe("when element is in edit mode", () => {
+		describe("and element is in edit mode", () => {
 			it("should render VideoConferenceContentElementCreate component when in editmode", () => {
 				const { wrapper } = setup({ isEditMode: true });
 
@@ -564,7 +564,7 @@ describe("VideoConferenceContentElement", () => {
 		});
 
 		describe("onCreateTitle", () => {
-			describe("when title was provided", () => {
+			describe("and title was provided", () => {
 				it("should display the title ", async () => {
 					const videoConferenceTitle = "Very specific vc title";
 					const { wrapper } = setup({
@@ -582,7 +582,7 @@ describe("VideoConferenceContentElement", () => {
 		});
 	});
 	describe("when a videoconference is started or joined", () => {
-		describe("when an error occurs", () => {
+		describe("and an error occurs", () => {
 			const setup = (
 				options: {
 					content?: VideoConferenceElementContent;
@@ -640,7 +640,7 @@ describe("VideoConferenceContentElement", () => {
 			});
 		});
 
-		describe("when no error occurs", () => {
+		describe("and no error occurs", () => {
 			const setup = (
 				options: {
 					content?: VideoConferenceElementContent;
