@@ -48,7 +48,7 @@
 				ref="vDialog"
 				v-model="isErrorDialogOpen"
 				:max-width="480"
-				data-testId="error-dialog"
+				data-testid="error-dialog"
 				@click:outside="onCloseErrorDialog"
 				@keydown.esc="onCloseErrorDialog"
 			>
@@ -75,13 +75,13 @@
 			<VDialog
 				v-model="isConfigurationDialogOpen"
 				max-width="480"
-				data-testId="videoconference-config-dialog"
+				data-testid="videoconference-config-dialog"
 			>
 				<VCard :ripple="false">
 					<VCardTitle>
 						<h2
 							class="text-h4 my-2"
-							data-testId="videoconference-config-dialog-title"
+							data-testid="videoconference-config-dialog-title"
 						>
 							{{
 								$t("pages.common.tools.configureVideoconferenceDialog.title")
@@ -91,7 +91,7 @@
 					<VCardText>
 						<VCheckbox
 							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
-							data-testId="every-attendee-joins-muted"
+							data-testid="every-attendee-joins-muted"
 							:label="
 								$t(
 									'pages.common.tools.configureVideoconferenceDialog.text.mute'
@@ -101,7 +101,7 @@
 						/>
 						<VCheckbox
 							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
-							data-testId="moderator-must-approve-join-requests"
+							data-testid="moderator-must-approve-join-requests"
 							:label="
 								$t(
 									'pages.common.tools.configureVideoconferenceDialog.text.waitingRoom'
@@ -111,7 +111,7 @@
 						/>
 						<VCheckbox
 							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
-							data-testId="everybody-joins-as-moderator"
+							data-testid="everybody-joins-as-moderator"
 							:label="
 								$t(
 									'pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission'
@@ -123,14 +123,14 @@
 					<VCardActions>
 						<VSpacer />
 						<VBtn
-							data-testId="dialog-cancel"
+							data-testid="dialog-cancel"
 							variant="text"
 							@click="onCloseConfigurationDialog"
 						>
 							{{ $t("common.actions.cancel") }}
 						</VBtn>
 						<VBtn
-							data-testId="dialog-create"
+							data-testid="dialog-create"
 							class="px-6"
 							color="primary"
 							variant="flat"

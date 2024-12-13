@@ -4,20 +4,20 @@
 			:hasGreyBackground="true"
 			:icon="mdiVideo"
 			:has-row-style="isSmallOrLargerListBoard"
-			data-testId="board-video-conference-element"
+			data-testid="board-video-conference-element"
 			@click.stop="onClick"
 		>
 			<template #display>
 				<div
 					v-if="shouldShowNoFeatureAlert"
 					class="mt-2"
-					data-testId="vc-info-box-show-no-feature"
+					data-testid="vc-info-box-show-no-feature"
 				>
 					<VAlert
 						density="compact"
 						class="ma-0"
 						type="info"
-						data-testId="vc-info-box-no-feature"
+						data-testid="vc-info-box-no-feature"
 					>
 						<div class="d-flex flex-wrap gap-4">
 							<span class="flex-1 my-auto">
@@ -29,13 +29,13 @@
 				<div
 					v-if="shouldShowInfoAlert"
 					class="mt-2"
-					data-testId="vc-info-box-show"
+					data-testid="vc-info-box-show"
 				>
 					<VAlert
 						density="compact"
 						class="ma-0"
 						type="info"
-						data-testId="vc-info-box"
+						data-testid="vc-info-box"
 					>
 						<div class="d-flex flex-wrap gap-4">
 							<span class="flex-1 my-auto">
@@ -47,13 +47,13 @@
 				<div
 					v-if="shouldShowNoPermissionAlert"
 					class="mt-2"
-					data-testId="vc-info-box-show-no-permission"
+					data-testid="vc-info-box-show-no-permission"
 				>
 					<VAlert
 						density="compact"
 						class="ma-0"
 						type="info"
-						data-testId="vc-info-box-no-permission"
+						data-testid="vc-info-box-no-permission"
 					>
 						<div class="d-flex flex-wrap gap-4">
 							<span class="flex-1 my-auto">

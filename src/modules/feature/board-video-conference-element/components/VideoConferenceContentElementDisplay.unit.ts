@@ -102,7 +102,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 			});
 
 			const alert = wrapper.findComponent(
-				'[data-testId="vc-info-box-no-feature"]'
+				'[data-testid="vc-info-box-no-feature"]'
 			);
 			const text = alert.find("span.my-auto");
 			expect(text.text()).toEqual(
@@ -117,7 +117,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				canStart: false,
 			});
 
-			const alert = wrapper.findComponent('[data-testId="vc-info-box"]');
+			const alert = wrapper.findComponent('[data-testid="vc-info-box"]');
 			const text = alert.find("span.my-auto");
 			expect(text.text()).toEqual("pages.videoConference.info.notStarted");
 		});
@@ -129,7 +129,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				canStart: false,
 			});
 
-			const alert = wrapper.findComponent('[data-testId="vc-info-box"]');
+			const alert = wrapper.findComponent('[data-testid="vc-info-box"]');
 			const text = alert.find("span.my-auto");
 			expect(text.text()).toEqual("pages.videoConference.info.noPermission");
 		});
@@ -141,7 +141,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				canStart: true,
 			});
 
-			const alert = wrapper.find('[data-testId="vc-info-box-show"]');
+			const alert = wrapper.find('[data-testid="vc-info-box-show"]');
 			expect(alert.exists()).toEqual(false);
 		});
 
@@ -153,7 +153,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 			});
 
 			const alert = wrapper.findComponent(
-				'[data-testId="vc-info-box-no-permission"]'
+				'[data-testid="vc-info-box-no-permission"]'
 			);
 			const text = alert.find("span.my-auto");
 			expect(text.text()).toEqual("pages.videoConference.info.noPermission");
@@ -174,7 +174,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 	describe("Events", () => {
 		const triggerClick = async (wrapper: VueWrapper) => {
 			const element = wrapper.find(
-				'[data-testId="board-video-conference-element"]'
+				'[data-testid="board-video-conference-element"]'
 			);
 			await element.trigger("click");
 		};

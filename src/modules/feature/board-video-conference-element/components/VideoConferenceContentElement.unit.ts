@@ -364,7 +364,7 @@ describe("VideoConferenceContentElement", () => {
 						await videoConferenceElementDisplay.vm.$emit("click");
 
 						const configurationDialog = wrapper.findComponent<typeof VDialog>(
-							'[data-testId="videoconference-config-dialog"]'
+							'[data-testid="videoconference-config-dialog"]'
 						);
 
 						expect(configurationDialog.props("modelValue")).toBe(true);
