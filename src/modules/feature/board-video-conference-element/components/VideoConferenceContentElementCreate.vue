@@ -1,5 +1,5 @@
 <template>
-	<div data-testid="board-video-conference-element-create" tabindex="-1">
+	<div data-testid="board-video-conference-element-create">
 		<VImg :src="imageSrc" alt="" cover />
 		<VCardText>
 			<VForm @submit.prevent.stop="onSubmit" ref="form" validate-on="submit">
