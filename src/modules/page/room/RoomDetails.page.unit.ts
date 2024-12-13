@@ -6,18 +6,17 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { RoomVariant, useRoomDetailsStore } from "@data-room";
+import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
-import { ref, Ref } from "vue";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import { ref } from "vue";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { useRouter } from "vue-router";
-import { RoomColorEnum } from "@/types/room/Room";
 import { useRoomAuthorization } from "@feature-room";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import * as serverApi from "@/serverApi/v3/api";
+import { createMock } from "@golevelup/ts-jest";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -58,6 +57,16 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			}),
 		});
 
+		const useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
+			isLoading: ref(false),
+			isEmpty: ref(false),
+			rooms: ref([]),
+			fetchRooms: jest.fn(),
+			deleteRoom: jest.fn(),
+		});
+
+		jest.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
+
 		const room = roomFactory.build();
 
 		const wrapper = mount(RoomDetailsPage, {
@@ -88,34 +97,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			roomDetailsStore.room = undefined;
 		}
 
-		const wrapperVM = wrapper.vm as unknown as {
-			room: {
-				id: string;
-				name: string;
-				color: RoomColorEnum;
-				createdAt: string;
-				updatedAt: string;
-			};
-			pageTitle: string;
-			breadcrumbs: Breadcrumb[];
-			fabItems: {
-				icon: string;
-				title: string;
-				ariaLabel: string;
-				testId: string;
-			}[];
-			isMembersDialogOpen: boolean;
-			isRoom: Ref<boolean>;
-			onFabClick: ReturnType<typeof jest.fn>;
-			boardLayoutsEnabled: Ref<boolean>;
-		};
-
 		return {
 			wrapper,
 			roomDetailsStore,
 			room,
-			wrapperVM,
 			router: useRouter(),
+			useRoomsStateMock,
 		};
 	};
 
@@ -241,9 +228,24 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and user clicks on delete room", () => {
-			it.todo("should open confirmation dialog");
+			it.only("should open confirmation dialog", async () => {
+				const { wrapper, useRoomsStateMock } = setup();
 
-			it.todo("should open confirmation dialog");
+				const menu = wrapper.getComponent({ name: "RoomMenu" });
+				await menu.vm.$emit("room:delete");
+
+				const confirmBtn = wrapper.findComponent(
+					"[data-testid='dialog-confirm']"
+				);
+
+				await confirmBtn.trigger("click");
+				console.log(confirmBtn.html());
+
+				expect(useRoomsStateMock.deleteRoom).toHaveBeenCalled();
+				// expect(dialog.props()["data-testid"]).toBe("delete-dialog-item");
+			});
+
+			it.todo("should delete room");
 		});
 	});
 

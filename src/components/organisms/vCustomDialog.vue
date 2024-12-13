@@ -6,7 +6,7 @@
 		@click:outside="closeDialog"
 		@keydown.esc="closeDialog"
 	>
-		<v-card :ripple="false">
+		<v-card :ripple="false" data-testid="dialog-content">
 			<v-card-title data-testid="dialog-title" class="dialog-title px-6 pt-4">
 				<slot name="title" />
 			</v-card-title>
