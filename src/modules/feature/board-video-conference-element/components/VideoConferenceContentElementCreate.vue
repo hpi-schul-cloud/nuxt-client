@@ -1,10 +1,10 @@
 <template>
 	<div data-testid="board-video-conference-element-create" tabindex="-1">
-		<v-img :src="imageSrc" alt="" cover />
-		<v-card-text>
-			<v-form @submit.prevent.stop="onSubmit" ref="form" validate-on="submit">
+		<VImg :src="imageSrc" alt="" cover />
+		<VCardText>
+			<VForm @submit.prevent.stop="onSubmit" ref="form" validate-on="submit">
 				<div class="d-flex flex-row">
-					<v-textarea
+					<VTextarea
 						v-model="title"
 						:rules="rules"
 						:label="$t('components.cardElement.videoConferenceElement.label')"
@@ -19,7 +19,7 @@
 
 					<div class="align-self-center pl-2">
 						<button type="submit" ref="submit">
-							<v-icon aria-hidden="true"> {{ mdiCheck }}</v-icon>
+							<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>
 							<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
 						</button>
 					</div>
@@ -28,8 +28,8 @@
 						<slot />
 					</div>
 				</div>
-			</v-form>
-		</v-card-text>
+			</VForm>
+		</VCardText>
 	</div>
 </template>
 
@@ -39,6 +39,7 @@ import { useI18n } from "vue-i18n";
 import image from "@/assets/img/videoConference.svg";
 import { isRequired } from "@util-validators";
 import { mdiCheck } from "@icons/material";
+import { VCardText, VForm } from "vuetify/lib/components/index.mjs";
 
 type VuetifyFormApi = {
 	validate: () => { valid: boolean };

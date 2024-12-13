@@ -13,7 +13,7 @@
 					class="mt-2"
 					data-testId="vc-info-box-show-no-feature"
 				>
-					<v-alert
+					<VAlert
 						density="compact"
 						class="ma-0"
 						type="info"
@@ -24,14 +24,14 @@
 								{{ t("pages.videoConference.info.notEnabledTeacher") }}
 							</span>
 						</div>
-					</v-alert>
+					</VAlert>
 				</div>
 				<div
 					v-if="shouldShowInfoAlert"
 					class="mt-2"
 					data-testId="vc-info-box-show"
 				>
-					<v-alert
+					<VAlert
 						density="compact"
 						class="ma-0"
 						type="info"
@@ -42,14 +42,14 @@
 								{{ alertMessage }}
 							</span>
 						</div>
-					</v-alert>
+					</VAlert>
 				</div>
 				<div
 					v-if="shouldShowNoPermissionAlert"
 					class="mt-2"
 					data-testId="vc-info-box-show-no-permission"
 				>
-					<v-alert
+					<VAlert
 						density="compact"
 						class="ma-0"
 						type="info"
@@ -60,9 +60,9 @@
 								{{ noPermissionMessage }}
 							</span>
 						</div>
-					</v-alert>
+					</VAlert>
 				</div>
-				<v-img :src="imageSrc" alt="" cover />
+				<VImg :src="imageSrc" alt="" cover />
 			</template>
 			<template #title>
 				{{ title }}

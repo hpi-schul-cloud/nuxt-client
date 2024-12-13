@@ -1,6 +1,6 @@
 <template>
 	<div ref="videoConferenceContentElement">
-		<v-card
+		<VCard
 			class="mb-4"
 			data-testid="video-conference-element"
 			:class="{ 'd-none': isHidden }"
@@ -42,7 +42,7 @@
 					<BoardMenuActionDelete @click="onDelete" />
 				</BoardMenu>
 			</VideoConferenceContentElementCreate>
-			<v-custom-dialog
+			<VCustomDialog
 				:is-open="isErrorDialogOpen"
 				:has-buttons="true"
 				:buttons="['close']"
@@ -54,15 +54,15 @@
 						{{ $t("error.generic") }}
 					</h2>
 				</template>
-			</v-custom-dialog>
+			</VCustomDialog>
 
-			<v-dialog
+			<VDialog
 				v-model="isConfigurationDialogOpen"
 				max-width="480"
 				data-testId="videoconference-config-dialog"
 			>
-				<v-card :ripple="false">
-					<v-card-title>
+				<VCard :ripple="false">
+					<VCardTitle>
 						<h2
 							class="text-h4 my-2"
 							data-testId="videoconference-config-dialog-title"
@@ -71,9 +71,9 @@
 								$t("pages.common.tools.configureVideoconferenceDialog.title")
 							}}
 						</h2>
-					</v-card-title>
-					<v-card-text>
-						<v-checkbox
+					</VCardTitle>
+					<VCardText>
+						<VCheckbox
 							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
 							data-testId="every-attendee-joins-muted"
 							:label="
@@ -83,7 +83,7 @@
 							"
 							:hide-details="true"
 						/>
-						<v-checkbox
+						<VCheckbox
 							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
 							data-testId="moderator-must-approve-join-requests"
 							:label="
@@ -93,7 +93,7 @@
 							"
 							:hide-details="true"
 						/>
-						<v-checkbox
+						<VCheckbox
 							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
 							data-testId="everybody-joins-as-moderator"
 							:label="
@@ -103,17 +103,17 @@
 							"
 							:hide-details="true"
 						/>
-					</v-card-text>
-					<v-card-actions>
-						<v-spacer />
-						<v-btn
+					</VCardText>
+					<VCardActions>
+						<VSpacer />
+						<VBtn
 							data-testId="dialog-cancel"
 							variant="text"
 							@click="onCloseConfigurationDialog"
 						>
 							{{ $t("common.actions.cancel") }}
-						</v-btn>
-						<v-btn
+						</VBtn>
+						<VBtn
 							data-testId="dialog-create"
 							class="px-6"
 							color="primary"
@@ -121,11 +121,11 @@
 							@click="startVideoConference"
 						>
 							{{ $t("common.actions.create") }}
-						</v-btn>
-					</v-card-actions>
-				</v-card>
-			</v-dialog>
-		</v-card>
+						</VBtn>
+					</VCardActions>
+				</VCard>
+			</VDialog>
+		</VCard>
 	</div>
 </template>
 
