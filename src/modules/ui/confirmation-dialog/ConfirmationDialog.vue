@@ -7,14 +7,14 @@
 		<UseFocusTrap>
 			<VCard>
 				<template #title>
-					<h2 class="text-h4 my-2 px-2 dialog-title">
+					<h2 class="text-h4 ma-2 dialog-title">
 						{{ message }}
 					</h2>
 				</template>
 
 				<template #actions>
 					<VSpacer />
-					<div class="action-buttons px-6">
+					<div class="action-buttons mx-6">
 						<VBtn
 							data-testid="dialog-cancel"
 							variant="text"
@@ -41,6 +41,7 @@ import { computed } from "vue";
 import { useInternalConfirmationDialog } from "./Confirmation.composable";
 import { useI18n } from "vue-i18n";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
+import { VSpacer } from "vuetify/lib/components/index.mjs";
 
 const { t } = useI18n();
 const { confirm, cancel, dialogOptions, isDialogOpen } =
