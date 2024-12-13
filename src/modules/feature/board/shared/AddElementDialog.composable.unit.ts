@@ -103,7 +103,10 @@ describe("ElementTypeSelection Composable", () => {
 				await onElementClick(elementType);
 
 				expect(addElementMock).toHaveBeenCalledTimes(1);
-				expect(addElementMock).toBeCalledWith({ type: elementType, cardId });
+				expect(addElementMock).toHaveBeenCalledWith({
+					type: elementType,
+					cardId,
+				});
 				expect(isDialogOpen.value).toBe(false);
 			});
 
@@ -210,7 +213,7 @@ describe("ElementTypeSelection Composable", () => {
 
 					await onElementClick(elementType);
 
-					expect(showCustomNotifierMock).toBeCalledTimes(0);
+					expect(showCustomNotifierMock).toHaveBeenCalledTimes(0);
 				});
 			});
 
@@ -336,8 +339,8 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[0].action;
 				action();
 
-				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith({
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toHaveBeenCalledWith({
 					type: ContentElementType.RichText,
 					cardId,
 				});
@@ -352,7 +355,7 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[0].action;
 				action();
 
-				expect(closeDialogMock).toBeCalledTimes(1);
+				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -366,8 +369,8 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[1].action;
 				action();
 
-				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith({
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toHaveBeenCalledWith({
 					type: ContentElementType.File,
 					cardId,
 				});
@@ -383,7 +386,7 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[1].action;
 				action();
 
-				expect(closeDialogMock).toBeCalledTimes(1);
+				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -396,8 +399,8 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[2].action;
 				action();
 
-				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith({
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toHaveBeenCalledWith({
 					type: ContentElementType.SubmissionContainer,
 					cardId,
 				});
@@ -412,7 +415,7 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[2].action;
 				action();
 
-				expect(closeDialogMock).toBeCalledTimes(1);
+				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 
@@ -426,8 +429,8 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[3].action;
 				action();
 
-				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith({
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toHaveBeenCalledWith({
 					type: ContentElementType.ExternalTool,
 					cardId,
 				});
@@ -443,7 +446,7 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[3].action;
 				action();
 
-				expect(closeDialogMock).toBeCalledTimes(1);
+				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 		describe("when the DrawingElement action is called", () => {
@@ -456,8 +459,8 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[4].action;
 				action();
 
-				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith({
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toHaveBeenCalledWith({
 					type: ContentElementType.Drawing,
 					cardId,
 				});
@@ -473,7 +476,7 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[4].action;
 				action();
 
-				expect(closeDialogMock).toBeCalledTimes(1);
+				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 		describe("when the CollaborativeTextEditorElement action is called", () => {
@@ -486,8 +489,8 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[5].action;
 				action();
 
-				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith({
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toHaveBeenCalledWith({
 					type: ContentElementType.CollaborativeTextEditor,
 					cardId,
 				});
@@ -503,7 +506,7 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[5].action;
 				action();
 
-				expect(closeDialogMock).toBeCalledTimes(1);
+				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 		describe("when the VideoConference action is called", () => {
@@ -517,8 +520,8 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[7].action;
 				action();
 
-				expect(addElementMock).toBeCalledTimes(1);
-				expect(addElementMock).toBeCalledWith({
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toHaveBeenCalledWith({
 					type: ContentElementType.VideoConference,
 					cardId,
 				});
@@ -534,7 +537,7 @@ describe("ElementTypeSelection Composable", () => {
 				const action = elementTypeOptions.value[7].action;
 				action();
 
-				expect(closeDialogMock).toBeCalledTimes(1);
+				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
 	});
