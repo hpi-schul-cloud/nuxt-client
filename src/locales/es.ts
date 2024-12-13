@@ -1838,7 +1838,7 @@ export default {
 	"pages.videoConference.info.notEnabledParticipants":
 		"El elemento ya no está disponible. Póngase en contacto con el profesor.",
 	"pages.videoConference.info.notEnabledTeacher":
-		"El elemento ya no está disponible. Póngase en contacto con Admin.",
+		"El elemento ya no está disponible. Póngase en contacto con el administrador.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",

@@ -1820,7 +1820,7 @@ export default {
 	"pages.videoConference.info.notEnabledParticipants":
 		"Das Element ist nicht mehr verfügbar. Bitte an die Lehrkraft wenden.",
 	"pages.videoConference.info.notEnabledTeacher":
-		"Das Element ist nicht mehr verfügbar. Bitte an Admin wenden.",
+		"Das Element ist nicht mehr verfügbar. Bitte an den Admin wenden.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
 	"error.500":
 		"Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",
