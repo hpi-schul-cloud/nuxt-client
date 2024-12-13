@@ -9,8 +9,7 @@
 			:ripple="false"
 			target="_blank"
 			:aria-label="ariaLabel"
-			@keydown.up.down="onKeydownArrow"
-			@keydown.stop
+			@keydown.stop.up.down="onKeydownArrow"
 		>
 			<VideoConferenceContentElementDisplay
 				v-if="computedElement.content.title"
