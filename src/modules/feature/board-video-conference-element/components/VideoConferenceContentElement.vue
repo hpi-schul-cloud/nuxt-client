@@ -1,5 +1,5 @@
 <template>
-	<div ref="videoConferenceContentElement">
+	<div>
 		<VCard
 			class="mb-4"
 			data-testid="video-conference-element"
@@ -20,7 +20,8 @@
 				:is-edit-mode="isEditMode"
 				@click="onClick"
 				@refresh="onRefresh"
-				><BoardMenu
+			>
+				<BoardMenu
 					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 					has-background
 					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
@@ -33,7 +34,8 @@
 			<VideoConferenceContentElementCreate
 				v-if="isCreating"
 				@create:title="onCreateTitle"
-				><BoardMenu
+			>
+				<BoardMenu
 					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 					has-background
 				>

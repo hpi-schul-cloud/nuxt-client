@@ -1,5 +1,5 @@
 <template>
-	<div ref="videoConferenceContentElementDisplay" tabindex="-1">
+	<div tabindex="-1">
 		<ContentElementBar
 			:hasGreyBackground="true"
 			:icon="mdiVideo"
@@ -114,8 +114,6 @@ const props = defineProps({
 		require: true,
 	},
 });
-
-const videoConferenceContentElementDisplay = ref(null);
 
 const { t } = useI18n();
 
