@@ -1,3 +1,3 @@
-import VideoConferenceContentElement from "./VideoConferenceContentElement.vue";
+import VideoConferenceContentElement from "./components/VideoConferenceContentElement.vue";
 
 export { VideoConferenceContentElement };

@@ -159,7 +159,7 @@ export const useAddElementDialog = (
 		});
 	}
 
-	if (envConfigModule.getEnv.FEATURE_VIDEOCONFERENCE_ENABLED) {
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED) {
 		options.push({
 			icon: mdiVideo,
 			label: t(

@@ -291,7 +291,7 @@ describe("ElementTypeSelection Composable", () => {
 				FEATURE_TLDRAW_ENABLED: true,
 				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
 				FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
-				FEATURE_VIDEOCONFERENCE_ENABLED: true,
+				FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
 			}
 		) => {
 			const cardId = "cardId";

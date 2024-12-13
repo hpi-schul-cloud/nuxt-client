@@ -300,7 +300,7 @@ const showVideoConferenceElement = (
 	element: AnyContentElement
 ): element is VideoConferenceElementResponse => {
 	return (
-		envConfigModule.getEnv.FEATURE_VIDEOCONFERENCE_ENABLED &&
+		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
 		isVideoConferenceElementResponse(element)
 	);
 };
