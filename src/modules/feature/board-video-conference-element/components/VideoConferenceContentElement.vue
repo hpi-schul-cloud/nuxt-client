@@ -18,7 +18,7 @@
 				:can-start="canStart"
 				:is-running="isRunning"
 				:is-edit-mode="isEditMode"
-				@click="onClick"
+				@click="onContentClick"
 				@refresh="onRefresh"
 			>
 				<BoardMenu
@@ -301,7 +301,7 @@ const onRefresh = async () => {
 	});
 };
 
-const onClick = async () => {
+const onContentClick = async () => {
 	if (!isRunning.value && canStart.value) {
 		openConfigurationDiaolog();
 	}

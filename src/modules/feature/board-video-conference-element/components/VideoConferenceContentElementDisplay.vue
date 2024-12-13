@@ -5,7 +5,7 @@
 			:icon="mdiVideo"
 			:has-row-style="isSmallOrLargerListBoard"
 			data-testid="board-video-conference-element"
-			@click.stop="onClick"
+			@click.stop="onContentClick"
 		>
 			<template #display>
 				<div
@@ -154,7 +154,7 @@ const noPermissionMessage = computed(() => {
 	}
 });
 
-const onClick = () => {
+const onContentClick = () => {
 	if (!isVideoConferenceEnabled.value || !props.hasParticipationPermission)
 		return;
 

@@ -350,7 +350,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 			});
 
-			describe("onClick", () => {
+			describe("onElementClick", () => {
 				describe("when video conference is not running", () => {
 					it("should open the configuration dialog", async () => {
 						const { wrapper } = setup({
