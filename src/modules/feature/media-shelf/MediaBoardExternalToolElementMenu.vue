@@ -5,21 +5,21 @@
 		has-background
 		data-testid="deleted-element-menu-btn"
 	>
-		<BoardMenuActionDelete @click="onDelete" />
+		<BoardMenuAction
+			:icon="mdiTrashCanOutline"
+			data-testid="board-menu-action-delete"
+			@click="$emit('delete:element')"
+		>
+			{{ $t("components.board.action.deleteFromSection") }}
+		</BoardMenuAction>
 	</BoardMenu>
 </template>
 
 <script setup lang="ts">
-import { BoardMenu, BoardMenuActionDelete, BoardMenuScope } from "@ui-board";
+import { mdiTrashCanOutline } from "@icons/material";
+import { BoardMenu, BoardMenuAction, BoardMenuScope } from "@ui-board";
 
-const emit = defineEmits<{
+defineEmits<{
 	(e: "delete:element"): void;
 }>();
-
-const onDelete = async (confirmation: Promise<boolean>) => {
-	const shouldDelete = await confirmation;
-	if (shouldDelete) {
-		emit("delete:element");
-	}
-};
 </script>
