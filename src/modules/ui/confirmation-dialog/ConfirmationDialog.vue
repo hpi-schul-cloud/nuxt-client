@@ -14,7 +14,7 @@
 
 				<template #actions>
 					<VSpacer />
-					<div class="action-buttons mx-6">
+					<div class="action-buttons mx-4">
 						<VBtn
 							data-testid="dialog-cancel"
 							variant="text"
@@ -59,16 +59,16 @@ const confirmBtnLangKey = computed(() =>
 </script>
 
 <style scoped>
-.action-buttons {
-	display: flex;
-	margin-bottom: calc(var(--space-base-vuetify) * 2);
-	gap: calc(var(--space-base-vuetify) * 2);
-}
-
 .dialog-title {
 	white-space: normal;
 	hyphens: none;
 	word-break: break-word;
 	line-height: var(--line-height-lg);
+}
+
+.action-buttons {
+	display: flex;
+	margin-bottom: calc(var(--space-base-vuetify) * 2);
+	gap: calc(var(--space-base-vuetify) * 2);
 }
 </style>
