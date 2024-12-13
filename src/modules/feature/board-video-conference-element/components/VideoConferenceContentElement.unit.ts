@@ -632,9 +632,11 @@ describe("VideoConferenceContentElement", () => {
 				);
 				await videoConferenceElement.trigger("click");
 
-				const dialog = wrapper.find('[data-testId="error-dialog"]');
+				const dialog = wrapper.findComponent({
+					ref: "vDialog",
+				});
 
-				expect(dialog.attributes("isopen")).toBe("true");
+				expect(dialog.props("modelValue")).toBe(true);
 			});
 		});
 
@@ -684,9 +686,11 @@ describe("VideoConferenceContentElement", () => {
 				);
 				await videoConferenceElement.trigger("click");
 
-				const dialog = wrapper.find('[data-testId="error-dialog"]');
+				const dialog = wrapper.findComponent({
+					ref: "vDialog",
+				});
 
-				expect(dialog.attributes("isopen")).toBe("false");
+				expect(dialog.props("modelValue")).toBe(false);
 			});
 		});
 	});

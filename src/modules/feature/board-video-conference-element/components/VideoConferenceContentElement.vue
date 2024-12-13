@@ -44,19 +44,33 @@
 					<BoardMenuActionDelete @click="onDelete" />
 				</BoardMenu>
 			</VideoConferenceContentElementCreate>
-			<VCustomDialog
-				:is-open="isErrorDialogOpen"
-				:has-buttons="true"
-				:buttons="['close']"
+			<VDialog
+				ref="vDialog"
+				v-model="isErrorDialogOpen"
+				:max-width="480"
 				data-testId="error-dialog"
-				@dialog-closed="onCloseErrorDialog"
+				@click:outside="onCloseErrorDialog"
+				@keydown.esc="onCloseErrorDialog"
 			>
-				<template #title>
-					<h2 class="text-h4 my-2 text-break-word">
-						{{ $t("error.generic") }}
-					</h2>
-				</template>
-			</VCustomDialog>
+				<VCard :ripple="false">
+					<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
+						<h2 class="text-h4 my-2 text-break-word">
+							{{ $t("error.generic") }}
+						</h2>
+					</VCardTitle>
+					<VCardActions class="action-buttons px-6">
+						<div class="button-section button-right">
+							<VBtn
+								data-testid="dialog-close"
+								variant="outlined"
+								@click="onCloseErrorDialog"
+							>
+								{{ $t("common.labels.close") }}
+							</VBtn>
+						</div>
+					</VCardActions>
+				</VCard>
+			</VDialog>
 
 			<VDialog
 				v-model="isConfigurationDialogOpen"
@@ -166,7 +180,6 @@ import {
 	VideoConferenceOptions,
 	VideoConferenceState,
 } from "@/store/types/video-conference";
-import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import VideoConferenceModule from "@/store/video-conference";
 import {
 	injectStrict,
