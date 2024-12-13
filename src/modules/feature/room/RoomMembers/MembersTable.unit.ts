@@ -5,11 +5,12 @@ import {
 import MembersTable from "./MembersTable.vue";
 import { ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
-import { roomMemberResponseFactory } from "@@/tests/test-utils";
+import { roomMemberFactory } from "@@/tests/test-utils";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
 import { VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
+import { RoleName } from "@/serverApi/v3";
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
@@ -37,7 +38,7 @@ describe("MembersTable", () => {
 	];
 
 	const setup = () => {
-		const mockMembers = roomMemberResponseFactory.buildList(3);
+		const mockMembers = roomMemberFactory(RoleName.Roomeditor).buildList(3);
 		const wrapper = mount(MembersTable, {
 			attachTo: document.body,
 			global: {
