@@ -19,7 +19,6 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	ConfigResponse,
 	VideoConferenceElementContent,
-	VideoConferenceElementResponse,
 	VideoConferenceScope,
 } from "@/serverApi/v3/api";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
@@ -103,17 +102,48 @@ describe("VideoConferenceContentElement", () => {
 		jest.clearAllMocks();
 	});
 
-	const getWrapper = (
-		props: {
-			element: VideoConferenceElementResponse;
+	const setupWrapper = (
+		options: {
+			content?: VideoConferenceElementContent;
 			isEditMode: boolean;
-			columnIndex: number;
-			rowIndex: number;
-			elementIndex: number;
-		},
-		role: "teacher" | "student" = "teacher",
-		videoConferenceModuleGetter?: Partial<VideoConferenceModule>
+			role?: "teacher" | "student";
+			columnIndex?: number;
+			rowIndex?: number;
+			elementIndex?: number;
+			videoConferenceModuleGetter?: Partial<VideoConferenceModule>;
+		} = {
+			content: undefined,
+			isEditMode: true,
+			role: "teacher",
+			columnIndex: 0,
+			rowIndex: 1,
+			elementIndex: 2,
+		}
 	) => {
+		const {
+			content,
+			isEditMode,
+			role = "teacher",
+			columnIndex = 0,
+			rowIndex = 1,
+			elementIndex = 2,
+			videoConferenceModuleGetter,
+		} = options;
+
+		const element = {
+			...defaultElement,
+			content: videoConferenceElementContentFactory.build({
+				title: undefined,
+				...content,
+			}),
+		};
+
+		mockedUseContentElementState.mockReturnValue({
+			modelValue: ref(element.content),
+			computedElement: computed(() => element),
+			isLoading: ref(false),
+		});
+
 		const notifierModule = createModuleMocks(NotifierModule);
 		const authModule = createModuleMocks(AuthModule, {
 			getUserRoles: [role],
@@ -142,38 +172,13 @@ describe("VideoConferenceContentElement", () => {
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 				},
 			},
-			props: { ...props },
-		});
-
-		return { videoConferenceModule, wrapper };
-	};
-
-	const setup = (
-		options: {
-			content?: VideoConferenceElementContent;
-			isEditMode: boolean;
-		} = { content: undefined, isEditMode: true }
-	) => {
-		const element = {
-			...defaultElement,
-			content: videoConferenceElementContentFactory.build({
-				title: undefined,
-				...options.content,
-			}),
-		};
-
-		mockedUseContentElementState.mockReturnValue({
-			modelValue: ref(element.content),
-			computedElement: computed(() => element),
-			isLoading: ref(false),
-		});
-
-		const { videoConferenceModule, wrapper } = getWrapper({
-			element,
-			isEditMode: options.isEditMode,
-			columnIndex: 0,
-			rowIndex: 1,
-			elementIndex: 2,
+			props: {
+				element,
+				isEditMode,
+				columnIndex,
+				rowIndex,
+				elementIndex,
+			},
 		});
 
 		return {
@@ -186,8 +191,8 @@ describe("VideoConferenceContentElement", () => {
 	describe("when video conference element is displayed", () => {
 		describe("and content title is undefined", () => {
 			it("should not render display of video conference content", () => {
-				const { wrapper } = setup({
-					isEditMode: true,
+				const { wrapper } = setupWrapper({
+					isEditMode: false,
 				});
 
 				const videoConferenceElementDisplay = wrapper.findComponent(
@@ -198,7 +203,7 @@ describe("VideoConferenceContentElement", () => {
 			});
 
 			it("should not render video conference element menu", () => {
-				const { wrapper } = setup({
+				const { wrapper } = setupWrapper({
 					isEditMode: false,
 				});
 
@@ -212,9 +217,9 @@ describe("VideoConferenceContentElement", () => {
 			it("should render display of video conference content with correct props", () => {
 				const videoConferenceElementContent =
 					videoConferenceElementContentFactory.build({ title: "test-title" });
-				const { wrapper, element } = setup({
+				const { wrapper, element } = setupWrapper({
 					content: videoConferenceElementContent,
-					isEditMode: true,
+					isEditMode: false,
 				});
 
 				const videoConferenceElementDisplay = wrapper.findComponent(
@@ -224,7 +229,7 @@ describe("VideoConferenceContentElement", () => {
 				expect(videoConferenceElementDisplay.props().title).toEqual(
 					element.content.title
 				);
-				expect(videoConferenceElementDisplay.props().isEditMode).toEqual(true);
+				expect(videoConferenceElementDisplay.props().isEditMode).toEqual(false);
 				expect(videoConferenceElementDisplay.props().canStart).toEqual(true);
 				expect(
 					videoConferenceElementDisplay.props().hasParticipationPermission
@@ -235,9 +240,9 @@ describe("VideoConferenceContentElement", () => {
 			it("should have the correct aria-label", () => {
 				const videoConferenceElementContent =
 					videoConferenceElementContentFactory.build();
-				const { wrapper } = setup({
+				const { wrapper } = setupWrapper({
 					content: videoConferenceElementContent,
-					isEditMode: true,
+					isEditMode: false,
 				});
 
 				const videoConferenceElement = wrapper.findComponent(
@@ -255,7 +260,7 @@ describe("VideoConferenceContentElement", () => {
 					async (key) => {
 						const videoConferenceElementContent =
 							videoConferenceElementContentFactory.build();
-						const { wrapper } = setup({
+						const { wrapper } = setupWrapper({
 							content: videoConferenceElementContent,
 							isEditMode: true,
 						});
@@ -277,7 +282,7 @@ describe("VideoConferenceContentElement", () => {
 					async (key) => {
 						const videoConferenceElementContent =
 							videoConferenceElementContentFactory.build();
-						const { wrapper } = setup({
+						const { wrapper } = setupWrapper({
 							content: videoConferenceElementContent,
 							isEditMode: false,
 						});
@@ -297,7 +302,7 @@ describe("VideoConferenceContentElement", () => {
 				it("should render video conference element menu", () => {
 					const videoConferenceElementContent =
 						videoConferenceElementContentFactory.build();
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContent,
 						isEditMode: true,
 					});
@@ -310,7 +315,7 @@ describe("VideoConferenceContentElement", () => {
 				it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
 					const videoConferenceElementContent =
 						videoConferenceElementContentFactory.build();
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContent,
 						isEditMode: true,
 					});
@@ -324,7 +329,7 @@ describe("VideoConferenceContentElement", () => {
 				it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
 					const videoConferenceElementContent =
 						videoConferenceElementContentFactory.build();
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContent,
 						isEditMode: true,
 					});
@@ -338,7 +343,7 @@ describe("VideoConferenceContentElement", () => {
 				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
 					const videoConferenceElementContent =
 						videoConferenceElementContentFactory.build();
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContent,
 						isEditMode: true,
 					});
@@ -353,7 +358,7 @@ describe("VideoConferenceContentElement", () => {
 			describe("onElementClick", () => {
 				describe("and video conference is not running", () => {
 					it("should open the configuration dialog", async () => {
-						const { wrapper } = setup({
+						const { wrapper } = setupWrapper({
 							content: videoConferenceElementContentFactory.build(),
 							isEditMode: false,
 						});
@@ -372,36 +377,11 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				describe("and video conference is running", () => {
-					const setup = (
-						options: {
-							content?: VideoConferenceElementContent;
-							isEditMode: boolean;
-						} = { content: undefined, isEditMode: true }
-					) => {
-						const element = {
-							...defaultElement,
-							content: videoConferenceElementContentFactory.build({
-								title: "test-title",
-								...options.content,
-							}),
-						};
-
-						mockedUseContentElementState.mockReturnValue({
-							modelValue: ref(element.content),
-							computedElement: computed(() => element),
-							isLoading: ref(false),
-						});
-
-						const { videoConferenceModule, wrapper } = getWrapper(
-							{
-								element,
-								isEditMode: options.isEditMode,
-								columnIndex: 0,
-								rowIndex: 1,
-								elementIndex: 2,
-							},
-							"teacher",
-							{
+					it("should call joinVideoConference", async () => {
+						const { element, videoConferenceModule, wrapper } = setupWrapper({
+							content: videoConferenceElementContentFactory.build(),
+							isEditMode: false,
+							videoConferenceModuleGetter: {
 								getVideoConferenceInfo: {
 									state: VideoConferenceState.RUNNING,
 									options: {
@@ -411,19 +391,7 @@ describe("VideoConferenceContentElement", () => {
 									},
 								},
 								getLoading: true,
-							}
-						);
-
-						return {
-							element,
-							videoConferenceModule,
-							wrapper,
-						};
-					};
-					it("should call joinVideoConference", async () => {
-						const { element, videoConferenceModule, wrapper } = setup({
-							content: videoConferenceElementContentFactory.build(),
-							isEditMode: false,
+							},
 						});
 
 						const videoConferenceElementDisplay = wrapper.findComponent(
@@ -443,7 +411,7 @@ describe("VideoConferenceContentElement", () => {
 
 			describe("onRefresh", () => {
 				it("should call fetchVideoConferenceInfo", async () => {
-					const { element, videoConferenceModule, wrapper } = setup({
+					const { element, videoConferenceModule, wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
 					});
@@ -467,7 +435,7 @@ describe("VideoConferenceContentElement", () => {
 	describe("when video conference element is being created", () => {
 		describe("and element is in view mode", () => {
 			it("should hide video conference element in view mode when no title was entered", () => {
-				const { wrapper } = setup({
+				const { wrapper } = setupWrapper({
 					isEditMode: false,
 				});
 
@@ -479,7 +447,7 @@ describe("VideoConferenceContentElement", () => {
 			});
 
 			it("should not render video conference element menu in view mode", () => {
-				const { wrapper } = setup({
+				const { wrapper } = setupWrapper({
 					isEditMode: false,
 				});
 
@@ -491,7 +459,7 @@ describe("VideoConferenceContentElement", () => {
 
 		describe("and element is in edit mode", () => {
 			it("should render VideoConferenceContentElementCreate component when in editmode", () => {
-				const { wrapper } = setup({ isEditMode: true });
+				const { wrapper } = setupWrapper({ isEditMode: true });
 
 				const videoConferenceCreateComponent = wrapper.findComponent(
 					VideoConferenceContentElementCreate
@@ -503,7 +471,7 @@ describe("VideoConferenceContentElement", () => {
 			it.each(["up", "down"])(
 				"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in edit mode",
 				async (key) => {
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
 
@@ -519,7 +487,7 @@ describe("VideoConferenceContentElement", () => {
 
 			describe("video conference element menu", () => {
 				it("should render video conference element menu", () => {
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
 
@@ -529,7 +497,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
 
@@ -540,7 +508,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
 
@@ -551,7 +519,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
 
@@ -567,7 +535,7 @@ describe("VideoConferenceContentElement", () => {
 			describe("and title was provided", () => {
 				it("should display the title ", async () => {
 					const videoConferenceTitle = "Very specific vc title";
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build({
 							title: videoConferenceTitle,
 						}),
@@ -583,49 +551,17 @@ describe("VideoConferenceContentElement", () => {
 	});
 	describe("when a videoconference is started or joined", () => {
 		describe("and an error occurs", () => {
-			const setup = (
-				options: {
-					content?: VideoConferenceElementContent;
-					isEditMode: boolean;
-				} = { content: undefined, isEditMode: true }
-			) => {
+			it("should display an error dialog", async () => {
 				const error = jest.fn(() => {
 					throw new Error();
 				});
-
-				const element = {
-					...defaultElement,
-					content: videoConferenceElementContentFactory.build({
-						title: "test-title",
-						...options.content,
-					}),
-				};
-
-				mockedUseContentElementState.mockReturnValue({
-					modelValue: ref(element.content),
-					computedElement: computed(() => element),
-					isLoading: ref(false),
-				});
-
-				const { wrapper } = getWrapper(
-					{
-						element,
-						isEditMode: options.isEditMode,
-						columnIndex: 0,
-						rowIndex: 1,
-						elementIndex: 2,
+				const { wrapper } = setupWrapper({
+					content: videoConferenceElementContentFactory.build(),
+					isEditMode: false,
+					videoConferenceModuleGetter: {
+						getError: error,
 					},
-					"teacher",
-					{ getError: error }
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
-			it("should display an error dialog", async () => {
-				const { wrapper } = setup();
+				});
 
 				const videoConferenceElement = wrapper.findComponent(
 					'[data-testid="video-conference-element"]'
@@ -641,45 +577,14 @@ describe("VideoConferenceContentElement", () => {
 		});
 
 		describe("and no error occurs", () => {
-			const setup = (
-				options: {
-					content?: VideoConferenceElementContent;
-					isEditMode: boolean;
-				} = { content: undefined, isEditMode: true }
-			) => {
-				const element = {
-					...defaultElement,
-					content: videoConferenceElementContentFactory.build({
-						title: "test-title",
-						...options.content,
-					}),
-				};
-
-				mockedUseContentElementState.mockReturnValue({
-					modelValue: ref(element.content),
-					computedElement: computed(() => element),
-					isLoading: ref(false),
-				});
-
-				const { wrapper } = getWrapper(
-					{
-						element,
-						isEditMode: options.isEditMode,
-						columnIndex: 0,
-						rowIndex: 1,
-						elementIndex: 2,
-					},
-					"teacher",
-					{ getError: null }
-				);
-
-				return {
-					wrapper,
-				};
-			};
-
 			it("should not display an error dialog", async () => {
-				const { wrapper } = setup();
+				const { wrapper } = setupWrapper({
+					content: videoConferenceElementContentFactory.build(),
+					isEditMode: false,
+					videoConferenceModuleGetter: {
+						getError: null,
+					},
+				});
 
 				const videoConferenceElement = wrapper.findComponent(
 					'[data-testid="video-conference-element"]'
