@@ -74,6 +74,7 @@
 				<div
 					v-if="isRunning && hasParticipationPermission"
 					class="pulsating-dot my-auto"
+					data-testid="vc-pulsating-dot"
 				/>
 			</template>
 		</ContentElementBar>

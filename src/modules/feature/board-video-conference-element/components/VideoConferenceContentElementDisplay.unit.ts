@@ -69,7 +69,9 @@ describe("VideoConferenceContentElementDisplay", () => {
 				title,
 			});
 
-			const titleElement = wrapper.find(".content-element-title");
+			const titleElement = wrapper.find(
+				'[data-testid="content-element-title-slot"]'
+			);
 			expect(titleElement.text()).toEqual(title);
 		});
 	});
@@ -166,7 +168,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				canStart: true,
 			});
 
-			const dot = wrapper.find(".pulsating-dot");
+			const dot = wrapper.find('[data-testid="vc-pulsating-dot"]');
 			expect(dot.exists()).toEqual(true);
 		});
 	});
