@@ -278,7 +278,7 @@ describe("VideoConferenceContentElement", () => {
 
 			describe("and element is in view mode", () => {
 				it.each(["up", "down"])(
-					"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in view mode",
+					"should not 'emit move-keyboard:edit' when arrow key %s is pressed",
 					async (key) => {
 						const videoConferenceElementContent =
 							videoConferenceElementContentFactory.build();
@@ -433,8 +433,8 @@ describe("VideoConferenceContentElement", () => {
 	});
 
 	describe("when video conference element is being created", () => {
-		describe("and element is in view mode", () => {
-			it("should hide video conference element in view mode when no title was entered", () => {
+		describe("and no title was entered", () => {
+			it("should hide video conference element in view mode", () => {
 				const { wrapper } = setupWrapper({
 					isEditMode: false,
 				});
@@ -458,7 +458,7 @@ describe("VideoConferenceContentElement", () => {
 		});
 
 		describe("and element is in edit mode", () => {
-			it("should render VideoConferenceContentElementCreate component when in editmode", () => {
+			it("should render VideoConferenceContentElementCreate component", () => {
 				const { wrapper } = setupWrapper({ isEditMode: true });
 
 				const videoConferenceCreateComponent = wrapper.findComponent(
@@ -469,7 +469,7 @@ describe("VideoConferenceContentElement", () => {
 			});
 
 			it.each(["up", "down"])(
-				"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in edit mode",
+				"should not 'emit move-keyboard:edit' when arrow key %s is pressed",
 				async (key) => {
 					const { wrapper } = setupWrapper({
 						isEditMode: true,
