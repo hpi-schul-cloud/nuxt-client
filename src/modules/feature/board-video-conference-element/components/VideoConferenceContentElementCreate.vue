@@ -33,64 +33,46 @@
 	</div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import image from "@/assets/img/videoConference.svg";
 import { isRequired } from "@util-validators";
 import { mdiCheck } from "@icons/material";
-import { VCardText, VForm } from "vuetify/lib/components/index.mjs";
 
 type VuetifyFormApi = {
 	validate: () => { valid: boolean };
 	resetValidation: () => void;
 };
 
-export default defineComponent({
-	name: "VideoConferenceContentElementCreate",
-	components: {},
-	emits: ["create:title"],
-	setup(_, { emit }) {
-		const { t } = useI18n();
-		const title = ref<string>(
-			t("components.cardElement.videoConferenceElement")
-		);
-		const form = ref<VuetifyFormApi | null>(null);
+const emit = defineEmits(["create:title"]);
 
-		const imageSrc = image;
+const { t } = useI18n();
+const title = ref<string>(t("components.cardElement.videoConferenceElement"));
+const form = ref<VuetifyFormApi | null>(null);
 
-		const rules = [isRequired(t("common.validation.required2"))];
+const imageSrc = image;
 
-		const onSubmit = async () => {
-			if (form?.value) {
-				// await needed for validation to finish
-				const { valid } = await form.value.validate();
-				if (valid) {
-					emit("create:title", title.value);
-				}
-			}
-		};
+const rules = [isRequired(t("common.validation.required2"))];
 
-		const onKeydown = (e: KeyboardEvent) => {
-			if (e.key === "enter" || e.key === "Enter") {
-				e.preventDefault();
-				onSubmit();
-			} else if (form?.value) {
-				form.value.resetValidation();
-			}
-		};
+const onSubmit = async () => {
+	if (form?.value) {
+		// await needed for validation to finish
+		const { valid } = await form.value.validate();
+		if (valid) {
+			emit("create:title", title.value);
+		}
+	}
+};
 
-		return {
-			onKeydown,
-			onSubmit,
-			imageSrc,
-			form,
-			title,
-			rules,
-			mdiCheck,
-		};
-	},
-});
+const onKeydown = (e: KeyboardEvent) => {
+	if (e.key === "enter" || e.key === "Enter") {
+		e.preventDefault();
+		onSubmit();
+	} else if (form?.value) {
+		form.value.resetValidation();
+	}
+};
 </script>
 
 <style scoped>
