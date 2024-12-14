@@ -1,5 +1,5 @@
 <template>
-	<div tabindex="-1">
+	<div>
 		<ContentElementBar
 			:hasGreyBackground="true"
 			:icon="mdiVideo"
