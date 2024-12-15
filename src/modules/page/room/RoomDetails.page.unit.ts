@@ -16,13 +16,15 @@ import { useRouter } from "vue-router";
 import { useRoomAuthorization } from "@feature-room";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import * as serverApi from "@/serverApi/v3/api";
-import { createMock } from "@golevelup/ts-jest";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
 		push: jest.fn(),
 	}),
 }));
+
+jest.mock("@data-room/Rooms.state");
 
 jest.mock("@feature-room/roomAuthorization.composable");
 const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
@@ -34,10 +36,23 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
 describe("@pages/RoomsDetails.page.vue", () => {
+	let useRoomsStateMock: DeepMocked<ReturnType<typeof useRoomsState>>;
+
 	beforeEach(() => {
 		setupStores({
 			envConfigModule: EnvConfigModule,
 		});
+
+		useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
+			isLoading: ref(false),
+			isEmpty: ref(false),
+			rooms: ref([]),
+		});
+		jest.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
+	});
+
+	afterEach(() => {
+		jest.clearAllMocks();
 	});
 
 	const setup = (
@@ -46,7 +61,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			envs,
 		}: {
 			undefinedRoom?: boolean;
-			envs?: Record<string, unknown>;
+			envs?: Partial<serverApi.ConfigResponse>;
 		} = { undefinedRoom: false }
 	) => {
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
@@ -56,16 +71,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				...envs,
 			}),
 		});
-
-		const useRoomsStateMock = createMock<ReturnType<typeof useRoomsState>>({
-			isLoading: ref(false),
-			isEmpty: ref(false),
-			rooms: ref([]),
-			fetchRooms: jest.fn(),
-			deleteRoom: jest.fn(),
-		});
-
-		jest.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
 
 		const room = roomFactory.build();
 
@@ -92,10 +97,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
-
-		if (undefinedRoom) {
-			roomDetailsStore.room = undefined;
-		}
 
 		return {
 			wrapper,
@@ -228,8 +229,8 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and user clicks on delete room", () => {
-			it.only("should open confirmation dialog", async () => {
-				const { wrapper, useRoomsStateMock } = setup();
+			it("should open confirmation dialog", async () => {
+				const { wrapper } = setup();
 
 				const menu = wrapper.getComponent({ name: "RoomMenu" });
 				await menu.vm.$emit("room:delete");
@@ -238,14 +239,25 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					"[data-testid='dialog-confirm']"
 				);
 
-				await confirmBtn.trigger("click");
-				console.log(confirmBtn.html());
-
-				expect(useRoomsStateMock.deleteRoom).toHaveBeenCalled();
-				// expect(dialog.props()["data-testid"]).toBe("delete-dialog-item");
+				expect(confirmBtn.exists()).toBe(true);
 			});
 
-			it.todo("should delete room");
+			describe("and user confirms deletion", () => {
+				it("should delete room", async () => {
+					const { wrapper, useRoomsStateMock } = setup();
+
+					const menu = wrapper.getComponent({ name: "RoomMenu" });
+					await menu.vm.$emit("room:delete");
+
+					const confirmBtn = wrapper.findComponent(
+						"[data-testid='dialog-confirm']"
+					);
+
+					await confirmBtn.trigger("click");
+
+					expect(useRoomsStateMock.deleteRoom).toHaveBeenCalled();
+				});
+			});
 		});
 	});
 
@@ -312,42 +324,47 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(dialogContent.exists()).toBe(true);
 			});
 
-			// TODO - make this work
-			it.each([{ layout: "multi-column" }, { layout: "single-column" }])(
-				"should create board with '$layout' layout",
-				async ({ layout }) => {
-					const { wrapper } = setup();
-
-					await flushPromises();
-
-					const mockApi = {
-						boardControllerCreateBoard: jest
-							.fn()
-							.mockResolvedValue({ data: { id: "board-id" } }),
-					};
-					const spy = jest
-						.spyOn(serverApi, "BoardApiFactory")
-						.mockReturnValue(mockApi as unknown as serverApi.BoardApiInterface);
+			describe("and user selects a multi-column layout", () => {
+				it("should create a board with multi-column layout", async () => {
+					const { wrapper, roomDetailsStore, room } = setup();
+					await openDialog(wrapper);
 
 					const selectLayoutDialog = wrapper.findComponent({
 						name: "SelectBoardLayoutDialog",
 					});
+					await selectLayoutDialog.vm.$emit("select:multi-column");
 
-					await selectLayoutDialog.vm.$emit(`select:${layout}`);
-
-					expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledTimes(1);
-					expect(mockApi.boardControllerCreateBoard).toHaveBeenCalledWith(
-						expect.objectContaining({ layout })
+					expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
+						room.id,
+						serverApi.BoardLayout.Columns,
+						"pages.roomDetails.board.defaultName"
 					);
+				});
+			});
 
-					spy.mockRestore();
-				}
-			);
+			describe("and user selects a single-column layout", () => {
+				it("should create a board with single-column layout", async () => {
+					const { wrapper, roomDetailsStore, room } = setup();
+					await openDialog(wrapper);
+
+					const selectLayoutDialog = wrapper.findComponent({
+						name: "SelectBoardLayoutDialog",
+					});
+					await selectLayoutDialog.vm.$emit("select:single-column");
+
+					expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
+						room.id,
+						serverApi.BoardLayout.List,
+						"pages.roomDetails.board.defaultName"
+					);
+				});
+			});
 		});
 
 		describe("and only column board is enabled", () => {
 			beforeEach(() => {
 				roomPermissions.canCreateRoom.value = true;
+				roomPermissions.canEditRoom.value = true;
 			});
 
 			it("should not render dialog", () => {
@@ -379,7 +396,24 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(boardCreateBtn.exists()).toBe(true);
 			});
 
-			it.todo("should create column board");
+			it("should create column board", async () => {
+				const { wrapper, roomDetailsStore, room } = setup({
+					envs: { FEATURE_BOARD_LAYOUT_ENABLED: false },
+				});
+				await openSpeedDialMenu(wrapper);
+
+				const boardCreateBtn = wrapper.findComponent(
+					"[data-testid='fab_button_add_column_board']"
+				);
+
+				await boardCreateBtn.trigger("click");
+
+				expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
+					room.id,
+					serverApi.BoardLayout.Columns,
+					"pages.roomDetails.board.defaultName"
+				);
+			});
 		});
 	});
 });
