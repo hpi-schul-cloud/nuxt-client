@@ -23,41 +23,35 @@
 		<SelectBoardLayoutDialog
 			v-if="boardLayoutsEnabled && canCreateRoom"
 			v-model="boardLayoutDialogIsOpen"
-			@select:multi-column="createBoard(BoardLayout.Columns)"
-			@select:single-column="createBoard(BoardLayout.List)"
+			@select:multi-column="onCreateBoard(BoardLayout.Columns)"
+			@select:single-column="onCreateBoard(BoardLayout.List)"
 		/>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
-import { useTitle } from "@vueuse/core";
-import { storeToRefs } from "pinia";
-import { computed, ComputedRef, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRouter } from "vue-router";
-import { useRoomDetailsStore, useRoomsState } from "@data-room";
+import { Breadcrumb } from "@/components/templates/default-wireframe.types";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { BoardLayout } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import {
-	BoardApiFactory,
-	BoardLayout,
-	BoardParentType,
-	CreateBoardBodyParams,
-} from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useRoomDetailsStore, useRoomsState } from "@data-room";
+import { BoardGrid, RoomMenu, useRoomAuthorization } from "@feature-room";
+import {
+	mdiPlus,
+	mdiViewDashboardOutline,
+	mdiViewGridPlusOutline,
+} from "@icons/material";
 import {
 	ConfirmationDialog,
 	useDeleteConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
-import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { BoardGrid, RoomMenu, useRoomAuthorization } from "@feature-room";
-import {
-	mdiViewGridPlusOutline,
-	mdiViewDashboardOutline,
-	mdiPlus,
-} from "@icons/material";
+import { useTitle } from "@vueuse/core";
+import { storeToRefs } from "pinia";
+import { computed, ComputedRef, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const { t } = useI18n();
@@ -66,7 +60,9 @@ const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const { deleteRoom } = useRoomsState();
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
-const { room, roomBoards } = storeToRefs(useRoomDetailsStore());
+const roomDetailsStore = useRoomDetailsStore();
+const { room, roomBoards } = storeToRefs(roomDetailsStore);
+const { createBoard } = roomDetailsStore;
 
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.roomDetails.title")}`)
@@ -138,7 +134,7 @@ const fabItemClickHandler = (event: string) => {
 	if (event === "board-type-dialog-open") {
 		boardLayoutDialogIsOpen.value = true;
 	} else if (event === "board-create") {
-		createBoard(BoardLayout.Columns);
+		onCreateBoard(BoardLayout.Columns);
 	}
 };
 
@@ -180,18 +176,14 @@ const onDelete = async () => {
 	}
 };
 
-const createBoard = async (layout: BoardLayout) => {
+const onCreateBoard = async (layout: BoardLayout) => {
 	if (!room.value || !canEditRoom.value) return;
 
-	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
-
-	const params: CreateBoardBodyParams = {
-		title: t("pages.roomDetails.board.defaultName"),
-		parentId: room.value.id,
-		parentType: BoardParentType.Room,
+	const boardId = await createBoard(
+		room.value.id,
 		layout,
-	};
-	const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;
+		t("pages.roomDetails.board.defaultName")
+	);
 
 	router.push(`/boards/${boardId}`);
 };
