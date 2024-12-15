@@ -46,6 +46,8 @@ jest.mock("@data-board/ContentElementState.composable");
 jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("@data-board/BoardPermissions.composable");
 
+window.open = jest.fn();
+
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
 const useRouteMock = <jest.Mock>useRoute;
@@ -161,6 +163,11 @@ describe("VideoConferenceContentElement", () => {
 			getLoading: false,
 			...videoConferenceModuleGetter,
 		});
+
+		const joinVideoConferenceMock = jest
+			.fn()
+			.mockResolvedValueOnce({ url: "https://example.com" });
+		videoConferenceModule.joinVideoConference = joinVideoConferenceMock;
 
 		const wrapper = shallowMount(VideoConferenceContentElement, {
 			global: {
