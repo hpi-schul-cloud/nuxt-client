@@ -55,7 +55,7 @@
 				<VCard :ripple="false">
 					<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
 						<h2 class="text-h4 my-2 text-break-word">
-							{{ $t("error.generic") }}
+							{{ t("error.generic") }}
 						</h2>
 					</VCardTitle>
 					<VCardActions class="action-buttons px-6">
@@ -65,7 +65,7 @@
 								variant="outlined"
 								@click="onCloseErrorDialog"
 							>
-								{{ $t("common.labels.close") }}
+								{{ t("common.labels.close") }}
 							</VBtn>
 						</div>
 					</VCardActions>
@@ -83,9 +83,7 @@
 							class="text-h4 my-2"
 							data-testid="videoconference-config-dialog-title"
 						>
-							{{
-								$t("pages.common.tools.configureVideoconferenceDialog.title")
-							}}
+							{{ t("pages.common.tools.configureVideoconferenceDialog.title") }}
 						</h2>
 					</VCardTitle>
 					<VCardText>
@@ -93,9 +91,7 @@
 							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
 							data-testid="every-attendee-joins-muted"
 							:label="
-								$t(
-									'pages.common.tools.configureVideoconferenceDialog.text.mute'
-								)
+								t('pages.common.tools.configureVideoconferenceDialog.text.mute')
 							"
 							:hide-details="true"
 						/>
@@ -103,7 +99,7 @@
 							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
 							data-testid="moderator-must-approve-join-requests"
 							:label="
-								$t(
+								t(
 									'pages.common.tools.configureVideoconferenceDialog.text.waitingRoom'
 								)
 							"
@@ -113,7 +109,7 @@
 							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
 							data-testid="everybody-joins-as-moderator"
 							:label="
-								$t(
+								t(
 									'pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission'
 								)
 							"
@@ -127,7 +123,7 @@
 							variant="text"
 							@click="onCloseConfigurationDialog"
 						>
-							{{ $t("common.actions.cancel") }}
+							{{ t("common.actions.cancel") }}
 						</VBtn>
 						<VBtn
 							data-testid="dialog-create"
@@ -136,7 +132,7 @@
 							variant="flat"
 							@click="startVideoConference"
 						>
-							{{ $t("common.actions.create") }}
+							{{ t("common.actions.create") }}
 						</VBtn>
 					</VCardActions>
 				</VCard>
@@ -364,8 +360,10 @@ const joinVideoConference = async () => {
 			scopeId: computedElement.value.id,
 		});
 
-	if (videoConferenceUrl) {
-		window.open(videoConferenceUrl.url, "_blank");
+	const windowReference = window.open();
+
+	if (videoConferenceUrl && windowReference) {
+		windowReference.location = videoConferenceUrl.url;
 	}
 };
 

@@ -7,20 +7,20 @@
 					<VTextarea
 						v-model="title"
 						:rules="rules"
-						:label="$t('components.cardElement.videoConferenceElement.label')"
+						:label="t('components.cardElement.videoConferenceElement.label')"
 						type="text"
 						:autofocus="true"
 						:auto-grow="true"
 						rows="1"
 						@keydown="onKeydown"
 						class="text"
-						:placeholder="$t('components.cardElement.videoConferenceElement')"
+						:placeholder="t('components.cardElement.videoConferenceElement')"
 					/>
 
 					<div class="align-self-center pl-2">
 						<button type="submit" ref="submit">
 							<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>
-							<span class="d-sr-only">{{ $t("common.actions.save") }}</span>
+							<span class="d-sr-only">{{ t("common.actions.save") }}</span>
 						</button>
 					</div>
 
