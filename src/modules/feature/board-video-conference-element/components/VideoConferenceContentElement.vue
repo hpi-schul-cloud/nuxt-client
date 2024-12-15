@@ -144,7 +144,6 @@
 <script setup lang="ts">
 import {
 	VideoConferenceElementResponse,
-	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 } from "@/serverApi/v3";
 import {
@@ -354,17 +353,18 @@ const startVideoConference = async () => {
 };
 
 const joinVideoConference = async () => {
-	const videoConferenceUrl: VideoConferenceJoinResponse | undefined =
-		await videoConferenceModule.joinVideoConference({
-			scope: VideoConferenceScope.VideoConferenceElement,
-			scopeId: computedElement.value.id,
-		});
-
 	const windowReference = window.open();
 
-	if (videoConferenceUrl && windowReference) {
-		windowReference.location = videoConferenceUrl.url;
-	}
+	videoConferenceModule
+		.joinVideoConference({
+			scope: VideoConferenceScope.VideoConferenceElement,
+			scopeId: computedElement.value.id,
+		})
+		.then((response) => {
+			if (response && windowReference) {
+				windowReference.location = response.url;
+			}
+		});
 };
 
 const isErrorDialogOpen: ComputedRef<boolean> = computed(
