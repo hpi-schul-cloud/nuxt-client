@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import MembersTable from "./MembersTable.vue";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import { roomMemberFactory } from "@@/tests/test-utils";
 import { DOMWrapper, VueWrapper } from "@vue/test-utils";
@@ -344,6 +344,41 @@ describe("MembersTable", () => {
 				await triggerMemberRemoval(0, wrapper);
 
 				expect(wrapper.emitted()).not.toHaveProperty("remove:members");
+			});
+
+			describe("when members are 'roomowner'", () => {
+				const ownerMembers = roomMemberFactory(RoleName.Roomowner)
+					.buildList(3)
+					.map((member) => ({ ...member, isSelectable: false }));
+
+				it("should not render remove button for room owner", async () => {
+					const { wrapper } = setup();
+
+					wrapper.setProps({ members: ownerMembers });
+					await nextTick();
+
+					const dataTable = wrapper.getComponent(VDataTable);
+					const removeButton = dataTable.findComponent(
+						"[data-testid=remove-member-0]"
+					);
+
+					expect(removeButton.exists()).toBe(false);
+				});
+
+				it("members should not be selectable", async () => {
+					const { wrapper } = setup();
+
+					wrapper.setProps({ members: ownerMembers });
+					await nextTick();
+
+					const dataTable = wrapper.getComponent(VDataTable);
+
+					const checkboxes = dataTable.findAllComponents({
+						name: "VSelectionControl",
+					});
+
+					expect(checkboxes[1].vm.disabled).toBe(true);
+				});
 			});
 		});
 	});
