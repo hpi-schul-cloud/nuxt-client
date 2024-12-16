@@ -11,11 +11,16 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { ref } from "vue";
 import { useRoomAuthorization } from "./roomAuthorization.composable";
 
-type setupParams = { userRoles?: Roles[]; roomPermissions?: Permission[] };
+type setupParams = {
+	userRoles?: Roles[];
+	userPermissions?: Permission[];
+	roomPermissions?: Permission[];
+};
 
 describe("roomAuthorization", () => {
 	const genericSetup = ({
 		userRoles = [],
+		userPermissions = [],
 		roomPermissions = [],
 	}: setupParams) => {
 		const room = ref<RoomDetails>(
@@ -23,6 +28,7 @@ describe("roomAuthorization", () => {
 		);
 		const authModuleMock = createModuleMocks(AuthModule, {
 			getUserRoles: userRoles,
+			getUserPermissions: userPermissions,
 		});
 		return mountComposable(() => useRoomAuthorization(room), {
 			global: { provide: { [AUTH_MODULE_KEY]: authModuleMock } },
@@ -34,7 +40,7 @@ describe("roomAuthorization", () => {
 			const setup = () => {
 				return genericSetup({
 					userRoles: [Roles.Teacher],
-					roomPermissions: [Permission.RoomEdit],
+					userPermissions: [Permission.RoomCreate],
 				});
 			};
 
