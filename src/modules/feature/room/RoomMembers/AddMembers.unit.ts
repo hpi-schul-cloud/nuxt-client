@@ -23,25 +23,24 @@ jest.mock("@/store/store-accessor", () => {
 });
 
 describe("AddMembers", () => {
+	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
+
 	const setup = () => {
 		const potentialRoomMembers = roomMemberListFactory.buildList(3);
 		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
-		const wrapper: VueWrapper<InstanceType<typeof AddMembers>> = mount(
-			AddMembers,
-			{
-				attachTo: document.body,
-				global: {
-					plugins: [createTestingVuetify(), createTestingI18n()],
-					provide: {
-						[AUTH_MODULE_KEY.valueOf()]: authModule,
-					},
+		wrapper = mount(AddMembers, {
+			attachTo: document.body,
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
-				props: {
-					memberList: potentialRoomMembers,
-					schools: roomMembersSchools,
-				},
-			}
-		);
+			},
+			props: {
+				memberList: potentialRoomMembers,
+				schools: roomMembersSchools,
+			},
+		});
 
 		return {
 			wrapper,
@@ -49,6 +48,10 @@ describe("AddMembers", () => {
 			roomMembersSchools,
 		};
 	};
+
+	afterEach(() => {
+		wrapper.unmount(); // necessary due focus trap
+	});
 
 	describe("when component is mounted", () => {
 		it("should render component", () => {

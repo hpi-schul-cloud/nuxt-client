@@ -53,7 +53,7 @@ describe("ConfirmationDialog", () => {
 	};
 
 	afterEach(() => {
-		wrapper.unmount(); // otherwise tests break when running all tests
+		wrapper.unmount(); // otherwise tests break when running all tests, necessary due focus trap
 	});
 
 	describe("when component is mounted", () => {
