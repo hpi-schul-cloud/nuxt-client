@@ -1708,9 +1708,9 @@ export default {
 	"pages.rooms.members.manage": "Raum-Mitglieder",
 	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
-		"Ausgewählte Teilnehmer aus der Liste zurücksetzen",
+		"Ausgewählte Mitglieder aus der Liste zurücksetzen",
 	"pages.rooms.members.multipleRemove.ariaLabel":
-		"Mehrere Teilnehmer aus dem Raum entfernen",
+		"Mehrere Mitglieder aus dem Raum entfernen",
 	"pages.rooms.members.remove.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.multipleRemove.confirmation":

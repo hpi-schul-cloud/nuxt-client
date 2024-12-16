@@ -1726,9 +1726,9 @@ export default {
 	"pages.rooms.members.manage": "Miembros de la sala",
 	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
 	"pages.rooms.members.resetSelection.ariaLabel":
-		"Restablecer las participantes seleccionadas de la lista",
+		"Restablecer las miembros seleccionadas de la lista",
 	"pages.rooms.members.multipleRemove.ariaLabel":
-		"Eliminar varios participantes de la sala",
+		"Eliminar varios miembros de la sala",
 	"pages.rooms.members.remove.confirmation":
 		"¿Eliminar {memberName} de la sala?",
 	"pages.rooms.members.multipleRemove.confirmation":

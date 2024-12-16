@@ -1704,9 +1704,9 @@ export default {
 	"pages.rooms.members.manage": "Кімната Члени",
 	"pages.rooms.members.remove.ariaLabel": "Видалити {memberName} з кімнати",
 	"pages.rooms.members.resetSelection.ariaLabel":
-		"Скинути вибраних учасників зі списку",
+		"Скинути вибраних членів зі списку",
 	"pages.rooms.members.multipleRemove.ariaLabel":
-		"Видалити кількох учасників із кімнати",
+		"Видалити кількох членів із кімнати",
 	"pages.rooms.members.remove.confirmation":
 		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
 	"pages.rooms.members.multipleRemove.confirmation":
