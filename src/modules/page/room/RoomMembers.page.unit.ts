@@ -22,6 +22,7 @@ import { roomDetailsFactory } from "@@/tests/test-utils/factory/roomDetailsFacto
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
 import { AddMembers, MembersTable } from "@feature-room";
 import { mdiPlus } from "@icons/material";
+import { VueWrapper } from "@vue/test-utils";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -34,6 +35,7 @@ describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let mockRoomMemberCalls: DeepMocked<ReturnType<typeof useRoomMembers>>;
+	let wrapper: VueWrapper<InstanceType<typeof RoomMembersPage>>;
 
 	const routeRoomId = "room-id";
 
@@ -79,7 +81,7 @@ describe("RoomMembersPage", () => {
 		const members = roomMemberResponseFactory.buildList(3);
 		mockRoomMemberCalls.roomMembers = ref(members);
 
-		const wrapper = mount(RoomMembersPage, {
+		wrapper = mount(RoomMembersPage, {
 			attachTo: document.body,
 			global: {
 				plugins: [
@@ -102,6 +104,10 @@ describe("RoomMembersPage", () => {
 
 		return { wrapper, roomDetailsStore, members, room };
 	};
+
+	afterEach(() => {
+		wrapper.unmount(); // necessary due focus trap in AddMembers
+	});
 
 	it("should be found in the dom", () => {
 		const { wrapper } = setup();
