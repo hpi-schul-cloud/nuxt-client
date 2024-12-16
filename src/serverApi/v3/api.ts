@@ -361,6 +361,9 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomEdit = 'ROOM_EDIT',
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
+    RoomMembersAdd = 'ROOM_MEMBERS_ADD',
+    RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
+    RoomChangeOwner = 'ROOM_CHANGE_OWNER',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -6872,6 +6875,9 @@ export enum Permission {
     RoomEdit = 'ROOM_EDIT',
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
+    RoomMembersAdd = 'ROOM_MEMBERS_ADD',
+    RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
+    RoomChangeOwner = 'ROOM_CHANGE_OWNER',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
     SchoolEdit = 'SCHOOL_EDIT',
@@ -7294,6 +7300,8 @@ export enum RoleName {
     Helpdesk = 'helpdesk',
     Roomviewer = 'roomviewer',
     Roomeditor = 'roomeditor',
+    Roomadmin = 'roomadmin',
+    Roomowner = 'roomowner',
     Student = 'student',
     Superhero = 'superhero',
     Teacher = 'teacher',
@@ -9466,6 +9474,8 @@ export interface UserIdAndRole {
     * @enum {string}
     */
 export enum UserIdAndRoleRoleNameEnum {
+    Roomowner = 'roomowner',
+    Roomadmin = 'roomadmin',
     Roomeditor = 'roomeditor',
     Roomviewer = 'roomviewer'
 }
