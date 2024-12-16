@@ -23,6 +23,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	const roomBoards = ref<RoomBoardItem[]>([]);
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
+	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
 	const fetchRoom = async (id: string) => {
 		try {
@@ -49,8 +50,6 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		layout: BoardLayout,
 		title: string
 	) => {
-		const boardApi = BoardApiFactory(undefined, "/v3", $axios);
-
 		const params: CreateBoardBodyParams = {
 			title: title,
 			parentId: roomId,
