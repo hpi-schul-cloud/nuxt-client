@@ -121,11 +121,11 @@ export interface AccountSearchListResponse {
  */
 export interface AddRoomMembersBodyParams {
     /**
-     * Array of userIds and their roles inside of the room
-     * @type {Array<UserIdAndRole>}
+     * The IDs of the users
+     * @type {Array<string>}
      * @memberof AddRoomMembersBodyParams
      */
-    userIdsAndRoles: Array<UserIdAndRole>;
+    userIds: Array<string>;
 }
 /**
  * 
@@ -9439,37 +9439,6 @@ export interface UserDataResponse {
      */
     userId: string;
 }
-/**
- * 
- * @export
- * @interface UserIdAndRole
- */
-export interface UserIdAndRole {
-    /**
-     * The ID of the user
-     * @type {string}
-     * @memberof UserIdAndRole
-     */
-    userId: string;
-    /**
-     * The role of the user
-     * @type {string}
-     * @memberof UserIdAndRole
-     */
-    roleName: UserIdAndRoleRoleNameEnum;
-}
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum UserIdAndRoleRoleNameEnum {
-    Roomowner = 'roomowner',
-    Roomadmin = 'roomadmin',
-    Roomeditor = 'roomeditor',
-    Roomviewer = 'roomviewer'
-}
-
 /**
  * 
  * @export
