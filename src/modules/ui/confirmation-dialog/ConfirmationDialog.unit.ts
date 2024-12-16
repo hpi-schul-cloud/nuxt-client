@@ -25,30 +25,31 @@ describe("ConfirmationDialog", () => {
 
 	const setup = (options?: {
 		message?: string;
-		confirmActionLanguageKey?: string;
+		confirmActionLangKey?: string;
 	}) => {
-		const { message, confirmActionLanguageKey } = {
+		const { message, confirmActionLangKey } = {
 			message: "titleMessage",
-			confirmActionLanguageKey: "ActionKey",
+			confirmActionLangKey: "ActionKey",
 			...options,
 		};
 
 		useInternalConfirmationDialogMock.mockReturnValue({
 			dialogOptions: ref({
 				message,
-				confirmActionLanguageKey,
+				confirmActionLangKey,
 			}),
 			isDialogOpen: ref(true),
 			confirm: confirmMock,
 			cancel: cancelMock,
 			askInternal: jest.fn(),
 		});
+
 		wrapper = mount(ConfirmationDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
-		return { wrapper, message };
+		return { wrapper, message, confirmActionLangKey };
 	};
 
 	afterEach(() => {
@@ -99,6 +100,56 @@ describe("ConfirmationDialog", () => {
 			expect(cancelMock).toHaveBeenCalled();
 		});
 	});
-});
 
-// ToDo: add test confirmBtnLanguageKey
+	describe("confirm button", () => {
+		it("should call 'confirm' if button is clicked", async () => {
+			const { wrapper } = setup();
+
+			const confirmButton = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.findComponent("[data-testid='dialog-confirm']");
+
+			await confirmButton.trigger("click");
+			expect(confirmMock).toHaveBeenCalled();
+		});
+
+		it("should have correct text when own language key is provided", async () => {
+			const { wrapper, confirmActionLangKey } = setup({
+				confirmActionLangKey: "providedLanguageKey",
+			});
+
+			const confirmButton = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.findComponent("[data-testid='dialog-confirm']");
+
+			expect(confirmButton.text()).toContain(confirmActionLangKey);
+		});
+
+		it("should have default text when no language key is provided", async () => {
+			const { wrapper } = setup({ confirmActionLangKey: undefined });
+
+			const confirmButton = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.findComponent("[data-testid='dialog-confirm']");
+
+			expect(confirmButton.text()).toContain("common.actions.confirm");
+		});
+	});
+
+	describe("cancel button", () => {
+		it("should call 'cancel' if dialog is cancelled", async () => {
+			const { wrapper } = setup();
+
+			const cancelButton = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.findComponent("[data-testid='dialog-cancel']");
+
+			await cancelButton.trigger("click");
+			expect(cancelMock).toHaveBeenCalled();
+		});
+	});
+});
