@@ -170,6 +170,7 @@ export default {
 	"common.words.color.purple": "Фіалка",
 	"common.words.color.red": "Червоний",
 	"common.words.color.turquoise": "Бірюза",
+	"common.words.color.yellow": "Жовтий",
 	"common.words.copiedToClipboard": "Скопійовано в буфер обміну",
 	"common.words.courseGroups": "курсові групи",
 	"common.words.courses": "Мій курс",
@@ -358,6 +359,8 @@ export default {
 	"components.board.menu.fileElement": "Налаштування файлу",
 	"components.board.menu.linkElement": "Налаштування посилання",
 	"components.board.menu.submissionElement": "Налаштування Подання",
+	"components.board.menu.videoConferenceElement":
+		"Налаштування відеоконференція",
 	"components.board.menu.deletedElement": "Видалені налаштування вмісту",
 	"components.board.notifications.errors.fileNameExists":
 		"Файл з такою назвою вже існує.",
@@ -454,6 +457,9 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Будь ласка, введіть назву.",
 	"components.cardElement.titleElement": "Елемент заголовка",
+	"components.cardElement.videoConferenceElement": "Відеоконференція",
+	"components.cardElement.videoConferenceElement.label":
+		"Вставити назву відеоконференції",
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
@@ -476,6 +482,8 @@ export default {
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Подання",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Текст",
+	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
+		"Відеоконференція",
 	"components.externalTools.status.deactivated": "Деактивовано",
 	"components.externalTools.status.incomplete": "Конфігурація не завершена",
 	"components.externalTools.status.latest": "Останній",
@@ -1500,6 +1508,14 @@ export default {
 	"pages.administration.teachers.new.success": "Викладача успішно створено!",
 	"pages.administration.teachers.new.title": "Додати викладача",
 	"pages.administration.teachers.table.edit.ariaLabel": "Редагування вчителя",
+	"pages.common.tools.configureVideoconferenceDialog.title":
+		"Створити відеоконференцію",
+	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Усі користувачі беруть участь як модератори",
+	"pages.common.tools.configureVideoconferenceDialog.text.mute":
+		"Вимкнення звуку учасників при вході",
+	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Схвалення модератором перед входом до кімнати",
 	"pages.content._id.addToTopic": "Для додавання в",
 	"pages.content._id.collection.selectElements":
 		"Виберіть елементи, які треба додати до теми",
@@ -1566,14 +1582,6 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Групи",
 	"pages.courseRooms.tabLabel.tools": "Інструмент",
 	"pages.courseRooms.tabLabel.toolsOld": "Інструмент",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
-		"Створити відеоконференцію {roomName}",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Усі користувачі беруть участь як модератори",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
-		"Вимкнення звуку учасників при вході",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Схвалення модератором перед входом до кімнати",
 	"pages.files.overview.courseFiles": "Файли курсу",
 	"pages.files.overview.favorites": "Обрані",
 	"pages.files.overview.personalFiles": "Мої особисті справи",
@@ -1802,6 +1810,10 @@ export default {
 	"pages.videoConference.info.noPermission":
 		"Відеоконференція ще не почалася або у вас немає дозволу приєднатися до неї.",
 	"pages.videoConference.info.notStarted": "Відеоконференція ще не почалася.",
+	"pages.videoConference.info.notEnabledParticipants":
+		"Елемент більше не доступний. Будь ласка, зверніться до викладача.",
+	"pages.videoConference.info.notEnabledTeacher":
+		"Елемент більше не доступний. Будь ласка, зверніться з адміністратором.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
 	"error.500":
 		"Є проблеми в системі. Ми працюємо над усуненням проблеми. Будь ласка, спробуйте пізніше.",

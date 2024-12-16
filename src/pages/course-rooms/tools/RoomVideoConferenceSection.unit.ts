@@ -563,7 +563,7 @@ describe("RoomVideoConferenceSection", () => {
 			const title = cardTitle.text();
 
 			expect(title).toContain(
-				'pages.courseRooms.tools.configureVideoconferenceDialog.title {"roomName":"roomName"}'
+				"pages.common.tools.configureVideoconferenceDialog.title"
 			);
 		});
 	});

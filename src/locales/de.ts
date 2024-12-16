@@ -167,6 +167,7 @@ export default {
 	"common.words.color.purple": "Violett",
 	"common.words.color.red": "Rot",
 	"common.words.color.turquoise": "Türkis",
+	"common.words.color.yellow": "Gelb",
 	"common.words.copiedToClipboard": "In die Zwischenablage kopiert",
 	"common.words.courseGroups": "Kursgruppen",
 	"common.words.courses": "Kurse",
@@ -353,6 +354,8 @@ export default {
 	"components.board.menu.fileElement": "Datei-Einstellungen",
 	"components.board.menu.linkElement": "Link-Einstellungen",
 	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
+	"components.board.menu.videoConferenceElement":
+		"Videokonferenz-Einstellungen",
 	"components.board.menu.deletedElement": "Gelöschter-Inhalt-Einstellungen",
 	"components.board.notifications.errors.fileNameExists":
 		"Es existiert bereits eine Datei mit diesem Namen.",
@@ -448,6 +451,9 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Bitte Titel angeben.",
 	"components.cardElement.titleElement": "Titelelement",
+	"components.cardElement.videoConferenceElement": "Videokonferenz",
+	"components.cardElement.videoConferenceElement.label":
+		"Videokonferenz-Titel einfügen",
 	"components.cardElement.deletedElement": "Gelöschter Inhalt",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
@@ -472,6 +478,8 @@ export default {
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Abgabe",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
+	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
+		"Videokonferenz",
 	"components.externalTools.status.deactivated": "Deaktiviert",
 	"components.externalTools.status.incomplete": "Unvollständig",
 	"components.externalTools.status.latest": "Aktuell",
@@ -1494,6 +1502,14 @@ export default {
 		"Lehrkraft erfolgreich angelegt!",
 	"pages.administration.teachers.new.title": "Lehrkraft hinzufügen",
 	"pages.administration.teachers.table.edit.ariaLabel": "Lehrkraft bearbeiten",
+	"pages.common.tools.configureVideoconferenceDialog.title":
+		"Videokonferenz erstellen",
+	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Alle Nutzer:innen nehmen als Moderator:in teil",
+	"pages.common.tools.configureVideoconferenceDialog.text.mute":
+		"Teilnehmer:innen beim Betreten stummschalten",
+	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.content._id.addToTopic": "Hinzufügen zu",
 	"pages.content._id.collection.selectElements":
 		"Wählen Sie die Elemente, die Sie zum Thema hinzufügen möchten",
@@ -1562,14 +1578,6 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Gruppen",
 	"pages.courseRooms.tabLabel.tools": "Tools",
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
-		"Videokonferenz {roomName} erstellen",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Alle Nutzer:innen nehmen als Moderator:in teil",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
-		"Teilnehmer:innen beim Betreten stummschalten",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
 	"pages.files.overview.courseFiles": "Kurs-Dateien",
 	"pages.files.overview.favorites": "Favoriten",
 	"pages.files.overview.personalFiles": "Meine persönlichen Dateien",
@@ -1809,6 +1817,10 @@ export default {
 		"Die Videokonferenz wurde noch nicht gestartet oder du bist nicht berechtigt, an ihr teilzunehmen.",
 	"pages.videoConference.info.notStarted":
 		"Die Videokonferenz wurde noch nicht gestartet.",
+	"pages.videoConference.info.notEnabledParticipants":
+		"Das Element ist nicht mehr verfügbar. Bitte an die Lehrkraft wenden.",
+	"pages.videoConference.info.notEnabledTeacher":
+		"Das Element ist nicht mehr verfügbar. Bitte an den Admin wenden.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
 	"error.500":
 		"Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",

@@ -44,7 +44,10 @@
 
 				<v-icon v-if="icon" :icon="icon" size="20" class="mr-2" />
 
-				<LineClamp class="content-element-title">
+				<LineClamp
+					class="content-element-title"
+					data-testid="content-element-title-slot"
+				>
 					<slot name="title" />
 				</LineClamp>
 			</div>
