@@ -40,7 +40,9 @@ describe("roomAuthorization", () => {
 			const setup = () => {
 				return genericSetup({
 					userRoles: [Roles.Teacher],
-					userPermissions: [Permission.RoomCreate],
+					userPermissions: [
+						Permission.RoomCreate.toLocaleLowerCase() as Permission,
+					],
 				});
 			};
 
