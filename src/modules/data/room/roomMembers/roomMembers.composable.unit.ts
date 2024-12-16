@@ -16,7 +16,6 @@ import {
 	RoleName,
 	RoomMemberResponse,
 	SchoolUserListResponse,
-	UserIdAndRoleRoleNameEnum,
 } from "@/serverApi/v3/api";
 import { useBoardNotifier } from "@util-board";
 import { schoolsModule, authModule } from "@/store";
@@ -278,12 +277,7 @@ describe("useRoomMembers", () => {
 			expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(
 				roomId,
 				{
-					userIdsAndRoles: [
-						{
-							userId: firstPotentialMember.userId,
-							roleName: UserIdAndRoleRoleNameEnum.Roomeditor,
-						},
-					],
+					userIds: [firstPotentialMember.userId],
 				}
 			);
 			expect(roomMembers.value).toEqual([
