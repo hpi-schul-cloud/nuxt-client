@@ -10,4 +10,5 @@ export enum BoardMenuScope {
 	SUBMISSION_ELEMENT = "submissionElement",
 	DELETED_ELEMENT = "deletedElement",
 	MEDIA_EXTERNAL_TOOL_ELEMENT = "mediaExternalToolElement",
+	VIDEO_CONFERENCE_ELEMENT = "videoConferenceElement",
 }

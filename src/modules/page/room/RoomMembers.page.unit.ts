@@ -3,7 +3,7 @@ import { createTestingPinia } from "@pinia/testing";
 import {
 	roomMemberListFactory,
 	mockedPiniaStoreTyping,
-	roomMemberResponseFactory,
+	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
 } from "@@/tests/test-utils";
 import { useRoomMembers, useRoomDetailsStore } from "@data-room";
@@ -80,7 +80,7 @@ describe("RoomMembersPage", () => {
 
 		const room = createRoom ? buildRoom() : undefined;
 
-		const members = roomMemberResponseFactory.buildList(3);
+		const members = roomMemberFactory(RoleName.Roomeditor).buildList(3);
 		mockRoomMemberCalls.roomMembers = ref(members);
 
 		wrapper = mount(RoomMembersPage, {

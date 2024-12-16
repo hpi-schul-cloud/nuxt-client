@@ -6,11 +6,9 @@
 	>
 		<VCard>
 			<VCardTitle class="text-h4 text-break px-6 pt-4">
-				{{ $t("components.elementTypeSelection.dialog.title") }}
+				{{ t("components.elementTypeSelection.dialog.title") }}
 			</VCardTitle>
-			<VCardText
-				class="d-flex flex-row flex-wrap align-items-center justify-space-between"
-			>
+			<VCardText class="d-flex flex-row flex-wrap align-items-center">
 				<ExtendedIconBtn
 					v-for="(item, key) in elementTypeOptions"
 					:key="key"
@@ -26,7 +24,7 @@
 					variant="outlined"
 					@click.stop="closeDialog"
 				>
-					{{ $t("common.labels.close") }}
+					{{ t("common.labels.close") }}
 				</VBtn>
 			</VCardActions>
 		</VCard>
@@ -37,9 +35,12 @@
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
 import { computed, ComputedRef } from "vue";
 import { useSharedElementTypeSelection } from "./SharedElementTypeSelection.composable";
+import { useI18n } from "vue-i18n";
 
 const { isDialogOpen, closeDialog, elementTypeOptions } =
 	useSharedElementTypeSelection();
+
+const { t } = useI18n();
 
 const dialogWidth: ComputedRef<number> = computed(() =>
 	elementTypeOptions.value.length >= 3 ? 426 : 320

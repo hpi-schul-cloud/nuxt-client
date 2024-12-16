@@ -1,9 +1,10 @@
 import {
 	roomMemberListFactory,
 	mockApiResponse,
-	roomMemberResponseFactory,
+	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
 	schoolFactory,
+	meResponseFactory,
 } from "@@/tests/test-utils";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import * as serverApi from "@/serverApi/v3/api";
@@ -15,11 +16,11 @@ import {
 	RoleName,
 	RoomMemberResponse,
 	SchoolUserListResponse,
-	UserIdAndRoleRoleNameEnum,
 } from "@/serverApi/v3/api";
 import { useBoardNotifier } from "@util-board";
-import { schoolsModule } from "@/store";
+import { schoolsModule, authModule } from "@/store";
 import SchoolsModule from "@/store/schools";
+import AuthModule from "@/store/auth";
 import setupStores from "@@/tests/test-utils/setupStores";
 
 jest.mock("vue-i18n");
@@ -54,6 +55,7 @@ describe("useRoomMembers", () => {
 
 		setupStores({
 			schoolsModule: SchoolsModule,
+			authModule: AuthModule,
 		});
 
 		schoolsModule.setSchool(
@@ -62,6 +64,9 @@ describe("useRoomMembers", () => {
 				name: "Paul-Gerhardt-Gymnasium",
 			})
 		);
+
+		const mockMe = meResponseFactory.build();
+		authModule.setMe(mockMe);
 	});
 
 	afterEach(() => {
@@ -70,24 +75,52 @@ describe("useRoomMembers", () => {
 	});
 
 	describe("fetchMembers", () => {
-		it("should fetch members and map members with role names", async () => {
-			const { fetchMembers, roomMembers } = useRoomMembers(roomId);
-			const membersMock = roomMemberResponseFactory.buildList(3);
+		describe("when the user is not room owner", () => {
+			it("should fetch members and map members with role names", async () => {
+				const { fetchMembers, roomMembers } = useRoomMembers(roomId);
+				const membersMock = roomMemberFactory(RoleName.Roomeditor).buildList(3);
 
-			roomApiMock.roomControllerGetMembers.mockResolvedValue(
-				mockApiResponse({
-					data: { data: membersMock },
-				})
-			);
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse({
+						data: { data: membersMock },
+					})
+				);
 
-			await fetchMembers();
+				await fetchMembers();
 
-			expect(roomMembers.value).toEqual(
-				membersMock.map((member) => ({
-					...member,
-					displayRoleName: "common.labels.teacher",
-				}))
-			);
+				expect(roomMembers.value).toEqual(
+					membersMock.map((member) => ({
+						...member,
+						displayRoleName: "common.labels.teacher",
+						isSelectable: true,
+					}))
+				);
+			});
+		});
+
+		describe("when the user is room owner", () => {
+			it("should fetch members and map members with role names", async () => {
+				const { fetchMembers, roomMembers } = useRoomMembers(roomId);
+				const membersMock = roomMemberFactory(RoleName.Roomowner).buildList(3);
+
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse({
+						data: {
+							data: membersMock,
+						},
+					})
+				);
+
+				await fetchMembers();
+
+				expect(roomMembers.value).toEqual(
+					membersMock.map((member) => ({
+						...member,
+						displayRoleName: "common.labels.teacher",
+						isSelectable: false,
+					}))
+				);
+			});
 		});
 
 		it("should throw an error if the API call fails", async () => {
@@ -151,7 +184,9 @@ describe("useRoomMembers", () => {
 			const { getPotentialMembers, potentialRoomMembers, roomMembers } =
 				useRoomMembers(roomId);
 
-			const membersMock: RoomMemberResponse = roomMemberResponseFactory.build();
+			const membersMock: RoomMemberResponse = roomMemberFactory(
+				RoleName.Roomeditor
+			).build();
 
 			roomMembers.value = [membersMock];
 
@@ -242,12 +277,7 @@ describe("useRoomMembers", () => {
 			expect(roomApiMock.roomControllerAddMembers).toHaveBeenCalledWith(
 				roomId,
 				{
-					userIdsAndRoles: [
-						{
-							userId: firstPotentialMember.userId,
-							roleName: UserIdAndRoleRoleNameEnum.Roomeditor,
-						},
-					],
+					userIds: [firstPotentialMember.userId],
 				}
 			);
 			expect(roomMembers.value).toEqual([
@@ -280,7 +310,7 @@ describe("useRoomMembers", () => {
 				mockApiResponse({})
 			);
 
-			const membersMock = roomMemberResponseFactory.buildList(3);
+			const membersMock = roomMemberFactory(RoleName.Roomeditor).buildList(3);
 			roomMembers.value = membersMock;
 
 			const firstMember = membersMock[0];
