@@ -1699,7 +1699,7 @@ export default {
 	"pages.rooms.members.infoText":
 		"Додайте члени до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
-	"pages.rooms.members.label": "часники",
+	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.manage": "Кімната Члени",
 	"pages.rooms.members.remove.ariaLabel": "Видалити {memberName} з кімнати",
