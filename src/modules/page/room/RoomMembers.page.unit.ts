@@ -31,6 +31,8 @@ const useRouteMock = <jest.Mock>useRoute;
 jest.mock("../../data/room/roomMembers/roomMembers.composable");
 const mockUseRoomMembers = jest.mocked(useRoomMembers);
 
+jest.mock("@vueuse/integrations"); // mock focus trap from add members because we use mount
+
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
