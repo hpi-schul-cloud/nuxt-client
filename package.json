@@ -14,7 +14,7 @@
 		"generate-client:server": "node generate-client.js -c openapitools-for-server.json",
 		"generate-client:filestorage": "node generate-client.js -u 'http://localhost:4444/api/v3/docs-json/' -p 'src/fileStorageApi/v3' -c 'openapitools-for-file-storage.json'",
 		"generate-client:h5p-editor": "node generate-client.js -u 'http://localhost:4448/api/v3/docs-json/' -p 'src/h5pEditorApi/v3' -c 'openapitools-for-h5p-editor.json'",
-		"pregenerate-client:common-cartridge": "rimraf ./src/commonCartridgeApi/v3",
+		"pregenerate-client:common-cartridge": "rm -rf ./src/commonCartridgeApi/v3",
 		"generate-client:common-cartridge": "openapi-generator-cli generate -c ./openapitools.json --generator-key common-cartridge-api"
 	},
 	"dependencies": {
@@ -85,7 +85,6 @@
 		"jest-transform-stub": "^2.0.0",
 		"prettier": "^3.2.5",
 		"resize-observer-polyfill": "^1.5.1",
-		"rimraf": "^3.0.2",
 		"sass": "^1.77.8",
 		"sass-loader": "^16.0.0",
 		"ts-jest": "^29.1.2",
