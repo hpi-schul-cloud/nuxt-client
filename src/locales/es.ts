@@ -1734,13 +1734,13 @@ export default {
 	"pages.rooms.members.manage": "Miembros de la sala",
 	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
 	"pages.rooms.members.resetSelection.ariaLabel":
-		"Restablecer las miembros seleccionadas de la lista",
+		"Restablecer las miembros seleccionados de la lista",
 	"pages.rooms.members.multipleRemove.ariaLabel":
 		"Eliminar varios miembros de la sala",
 	"pages.rooms.members.remove.confirmation":
 		"¿Eliminar {memberName} de la sala?",
 	"pages.rooms.members.multipleRemove.confirmation":
-		"¿Eliminar miembros seleccionadas de la sala?",
+		"¿Eliminar miembros seleccionados de la sala?",
 	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
 	"pages.rooms.title": "Salas",
