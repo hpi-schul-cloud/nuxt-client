@@ -51,10 +51,8 @@ const message = computed(() =>
 	dialogOptions.value ? dialogOptions.value.message : ""
 );
 
-const confirmBtnLangKey = computed(() =>
-	dialogOptions.value
-		? dialogOptions.value.confirmActionLangKey
-		: "common.actions.confirm"
+const confirmBtnLangKey = computed(
+	() => dialogOptions.value?.confirmActionLangKey ?? "common.actions.confirm"
 );
 </script>
 

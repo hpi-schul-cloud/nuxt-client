@@ -6,7 +6,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import ConfirmationDialog from "./ConfirmationDialog.vue";
 import { VCard, VDialog } from "vuetify/lib/components/index.mjs";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { VueWrapper } from "@vue/test-utils";
 
 jest.mock("./Confirmation.composable");
 const useInternalConfirmationDialogMock = jest.mocked(
@@ -14,37 +14,36 @@ const useInternalConfirmationDialogMock = jest.mocked(
 );
 
 describe("ConfirmationDialog", () => {
-	let internalConfirmationDialogMock: DeepMocked<
-		ReturnType<typeof useInternalConfirmationDialog>
-	>;
+	let cancelMock: jest.Mock;
+	let confirmMock: jest.Mock;
+	let wrapper: VueWrapper<InstanceType<typeof ConfirmationDialog>>;
 
 	beforeEach(() => {
-		internalConfirmationDialogMock =
-			createMock<ReturnType<typeof useInternalConfirmationDialog>>();
-		useInternalConfirmationDialogMock.mockReturnValue(
-			internalConfirmationDialogMock
-		);
+		cancelMock = jest.fn();
+		confirmMock = jest.fn();
 	});
 
 	const setup = (options?: {
-		isDialogOpen?: boolean;
 		message?: string;
-		confirmActionLangKey?: string;
+		confirmActionLanguageKey?: string;
 	}) => {
-		const { isDialogOpen, message, confirmActionLangKey } = {
-			isDialogOpen: true,
+		const { message, confirmActionLanguageKey } = {
 			message: "titleMessage",
-			confirmActionLangKey: "ActionKey",
+			confirmActionLanguageKey: "ActionKey",
 			...options,
 		};
 
-		internalConfirmationDialogMock.dialogOptions = ref({
-			message,
-			confirmActionLangKey,
+		useInternalConfirmationDialogMock.mockReturnValue({
+			dialogOptions: ref({
+				message,
+				confirmActionLanguageKey,
+			}),
+			isDialogOpen: ref(true),
+			confirm: confirmMock,
+			cancel: cancelMock,
+			askInternal: jest.fn(),
 		});
-		internalConfirmationDialogMock.isDialogOpen = ref(isDialogOpen);
-
-		const wrapper = mount(ConfirmationDialog, {
+		wrapper = mount(ConfirmationDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -53,12 +52,12 @@ describe("ConfirmationDialog", () => {
 	};
 
 	afterEach(() => {
-		useInternalConfirmationDialogMock.mockReset();
+		wrapper.unmount(); // otherwise tests break when running all tests
 	});
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			const { wrapper } = setup({});
+			const { wrapper } = setup();
 
 			expect(wrapper.exists()).toBe(true);
 		});
@@ -75,9 +74,8 @@ describe("ConfirmationDialog", () => {
 		});
 	});
 
-	// fix: tests should be independent
-	describe("when a dialog button clicked", () => {
-		it("should call 'confirm' if 'confirm' button clicked", () => {
+	describe("when a dialog button is clicked", () => {
+		it("should call 'confirm' if 'confirm' button clicked", async () => {
 			const { wrapper } = setup();
 
 			const confirmButton = wrapper
@@ -85,11 +83,11 @@ describe("ConfirmationDialog", () => {
 				.findComponent(VCard)
 				.findComponent("[data-testid='dialog-confirm']");
 
-			confirmButton.trigger("click");
-			expect(internalConfirmationDialogMock.confirm).toHaveBeenCalled();
+			await confirmButton.trigger("click");
+			expect(confirmMock).toHaveBeenCalled();
 		});
 
-		it("should call 'cancel' if 'cancel' button clicked", () => {
+		it("should call 'cancel' if 'cancel' button clicked", async () => {
 			const { wrapper } = setup();
 
 			const cancelButton = wrapper
@@ -97,8 +95,8 @@ describe("ConfirmationDialog", () => {
 				.findComponent(VCard)
 				.findComponent("[data-testid='dialog-cancel']");
 
-			cancelButton.trigger("click");
-			expect(internalConfirmationDialogMock.cancel).toHaveBeenCalled();
+			await cancelButton.trigger("click");
+			expect(cancelMock).toHaveBeenCalled();
 		});
 	});
 });
