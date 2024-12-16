@@ -73,7 +73,7 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import LineClamp from "../LineClamp.vue";
+import { LineClamp } from "@ui-line-clamp";
 import { IconProps } from "vuetify";
 import { hasSlotContent } from "@util-vue";
 

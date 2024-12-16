@@ -17,9 +17,9 @@
 </template>
 
 <script setup lang="ts">
-import { RoomItem } from "@/types/room/Room";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
+import { RoomItem } from "@/types/room/Room";
 
 const props = defineProps({
 	room: {
@@ -29,7 +29,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-
 const roomPath = computed(() => `/rooms/${props.room.id}`);
 
 const roomShortName = computed(() => {
