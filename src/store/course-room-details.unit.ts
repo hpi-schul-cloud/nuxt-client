@@ -1,5 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
-import * as commoncartridgeApi from "@/commonCartridgeApi/v3/api";
+import { CommonCartridgeApiFactory } from "@/commonCartridgeApi/v3/api";
 import { BoardParentType } from "@/serverApi/v3/api";
 import { applicationErrorModule, authModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
@@ -8,7 +8,7 @@ import { initializeAxios } from "@/utils/api";
 import { meResponseFactory } from "@@/tests/test-utils";
 import { courseFactory } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { AxiosError, AxiosInstance } from "axios";
+import { AxiosError, AxiosInstance, AxiosPromise } from "axios";
 import CourseRoomDetailsModule from "./course-room-details";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
@@ -387,14 +387,12 @@ describe("course-room module", () => {
 		describe("downloadCommonCartridgeCourse", () => {
 			it("should call backend api", async () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const mockApi = {
-					lessonControllerDelete: jest.fn(() => Promise.resolve()),
-				};
 				const spy = jest
-					.spyOn(commoncartridgeApi, "CommonCartridgeApiFactory")
-					.mockReturnValue(
-						mockApi as unknown as commoncartridgeApi.CommonCartridgeApiInterface
-					);
+					.spyOn(
+						CommonCartridgeApiFactory(),
+						"commonCartridgeControllerExportCourse"
+					)
+					.mockReturnValue(Promise.resolve() as unknown as AxiosPromise<void>);
 
 				await expect(
 					courseRoomDetailsModule.downloadCommonCartridgeCourse({
@@ -410,15 +408,13 @@ describe("course-room module", () => {
 			it("should catch error in catch block", async () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const error = { statusCode: 418, message: "I'm a teapot" };
-				const mockApi = {
-					courseControllerExportCourse: jest.fn(() =>
-						Promise.reject({ ...error })
-					),
-				};
 				const spy = jest
-					.spyOn(commoncartridgeApi, "CommonCartridgeApiFactory")
+					.spyOn(
+						CommonCartridgeApiFactory(),
+						"commonCartridgeControllerExportCourse"
+					)
 					.mockReturnValue(
-						mockApi as unknown as commoncartridgeApi.CommonCartridgeApiInterface
+						Promise.reject(error) as unknown as AxiosPromise<void>
 					);
 
 				await courseRoomDetailsModule.downloadCommonCartridgeCourse({

@@ -1,6 +1,5 @@
 import {
 	BoardApiFactory,
-	CoursesApiFactory,
 	CreateBoardBodyParams,
 	CreateBoardResponse,
 	LessonApiFactory,
