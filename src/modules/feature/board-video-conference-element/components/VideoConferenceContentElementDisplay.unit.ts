@@ -16,7 +16,7 @@ import { envsFactory } from "@@/tests/test-utils";
 
 const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
 	getEnv: createMock<ConfigResponse>({
-		FEATURE_VIDEOCONFERENCE_ENABLED: true,
+		FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
 	}),
 });
 
@@ -28,7 +28,7 @@ const setupWrapper = ({
 	envOverrides?: Partial<ConfigResponse>;
 } = {}) => {
 	const envs = envsFactory.build({
-		FEATURE_VIDEOCONFERENCE_ENABLED: true,
+		FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
 		...envOverrides,
 	});
 	envConfigModule.setEnvs(envs);
@@ -94,7 +94,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 						title: "video conference",
 					},
 					envOverrides: {
-						FEATURE_VIDEOCONFERENCE_ENABLED: false,
+						FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: false,
 					},
 				});
 

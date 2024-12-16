@@ -126,7 +126,7 @@ const isSmallOrLargerListBoard = computed(
 );
 
 const isVideoConferenceEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_VIDEOCONFERENCE_ENABLED
+	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED
 );
 
 const shouldShowNoFeatureAlert = computed(

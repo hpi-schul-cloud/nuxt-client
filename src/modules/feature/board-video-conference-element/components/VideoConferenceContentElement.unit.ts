@@ -58,7 +58,7 @@ const mockedUseContentElementState = jest.mocked(useContentElementState);
 let defaultElement = videoConferenceElementResponseFactory.build();
 const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
 	getEnv: createMock<ConfigResponse>({
-		FEATURE_VIDEOCONFERENCE_ENABLED: true,
+		FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
 	}),
 });
 
