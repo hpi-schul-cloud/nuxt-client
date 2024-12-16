@@ -35,14 +35,7 @@
 						class="text-h4 my-2"
 						data-testId="videoconference-config-dialog-title"
 					>
-						{{
-							$t(
-								"pages.courseRooms.tools.configureVideoconferenceDialog.title",
-								{
-									roomName: roomName,
-								}
-							)
-						}}
+						{{ $t("pages.common.tools.configureVideoconferenceDialog.title") }}
 					</h2>
 				</v-card-title>
 				<v-card-text>
@@ -50,9 +43,7 @@
 						v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
 						data-testId="every-attendee-joins-muted"
 						:label="
-							$t(
-								'pages.courseRooms.tools.configureVideoconferenceDialog.text.mute'
-							)
+							$t('pages.common.tools.configureVideoconferenceDialog.text.mute')
 						"
 						:hide-details="true"
 					/>
@@ -61,7 +52,7 @@
 						data-testId="moderator-must-approve-join-requests"
 						:label="
 							$t(
-								'pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom'
+								'pages.common.tools.configureVideoconferenceDialog.text.waitingRoom'
 							)
 						"
 						:hide-details="true"
@@ -71,7 +62,7 @@
 						data-testId="everybody-joins-as-moderator"
 						:label="
 							$t(
-								'pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission'
+								'pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission'
 							)
 						"
 						:hide-details="true"
@@ -131,6 +122,7 @@ import {
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import CourseRoomDetailsModule from "@/store/course-room-details";
 import { mdiCheck } from "@icons/material";
+import { useDisplay } from "vuetify/lib/framework.mjs";
 
 export default defineComponent({
 	name: "RoomVideoConferenceSection",
@@ -150,9 +142,13 @@ export default defineComponent({
 			COURSE_ROOM_DETAILS_MODULE_KEY
 		);
 
-		const roomName = computed(
-			() => courseRoomDetailsModule.getRoomData.title ?? ""
-		);
+		const { smAndUp } = useDisplay();
+		const maxLengthTitle = smAndUp.value ? 40 : 25;
+
+		const roomName = computed(() => {
+			const title = courseRoomDetailsModule.getRoomData.title ?? "";
+			return title.slice(0, maxLengthTitle);
+		});
 
 		const videoConferenceInfo: ComputedRef<VideoConferenceInfo> = computed(
 			() => videoConferenceModule.getVideoConferenceInfo

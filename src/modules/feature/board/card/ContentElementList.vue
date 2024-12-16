@@ -89,6 +89,19 @@
 					@move-up:edit="onMoveElementUp(index, element)"
 					@delete:element="onDeleteElement"
 				/>
+				<VideoConferenceContentElement
+					v-else-if="showVideoConferenceElement(element)"
+					:element="element"
+					:isEditMode="isEditMode"
+					:id="element.id"
+					:column-index="columnIndex"
+					:row-index="rowIndex"
+					:element-index="index"
+					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					@move-down:edit="onMoveElementDown(index, element)"
+					@move-up:edit="onMoveElementUp(index, element)"
+					@delete:element="onDeleteElement"
+				/>
 				<CollaborativeTextEditorElement
 					v-else-if="showCollaborativeTextEditorElement(element)"
 					:element="element"
@@ -130,6 +143,7 @@ import {
 	LinkElementResponse,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
+	VideoConferenceElementResponse,
 } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
@@ -142,6 +156,7 @@ import { FileContentElement } from "@feature-board-file-element";
 import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
+import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { computed, PropType } from "vue";
 import ContentElement from "./ContentElement.vue";
 
@@ -273,6 +288,21 @@ const isDeletedElementResponse = (
 	element: AnyContentElement
 ): element is DeletedElementResponse => {
 	return element.type === ContentElementType.Deleted;
+};
+
+const isVideoConferenceElementResponse = (
+	element: AnyContentElement
+): element is VideoConferenceElementResponse => {
+	return element.type === ContentElementType.VideoConference;
+};
+
+const showVideoConferenceElement = (
+	element: AnyContentElement
+): element is VideoConferenceElementResponse => {
+	return (
+		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
+		isVideoConferenceElementResponse(element)
+	);
 };
 
 const onMoveElementDown = (
