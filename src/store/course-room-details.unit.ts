@@ -387,12 +387,14 @@ describe("course-room module", () => {
 		describe("downloadCommonCartridgeCourse", () => {
 			it("should call backend api", async () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const spy = jest
-					.spyOn(
-						CommonCartridgeApiFactory(),
-						"commonCartridgeControllerExportCourse"
-					)
-					.mockReturnValue(Promise.resolve() as unknown as AxiosPromise<void>);
+
+				jest
+					.spyOn(courseRoomDetailsModule, "getCommonCartridgeApi")
+					.mockReturnValue({
+						commonCartridgeControllerExportCourse: jest.fn(
+							() => Promise.resolve() as unknown as AxiosPromise<void>
+						),
+					});
 
 				await expect(
 					courseRoomDetailsModule.downloadCommonCartridgeCourse({
@@ -402,20 +404,18 @@ describe("course-room module", () => {
 						columnBoards: [],
 					})
 				).resolves.not.toBeDefined();
-
-				spy.mockRestore();
 			});
 			it("should catch error in catch block", async () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const error = { statusCode: 418, message: "I'm a teapot" };
-				const spy = jest
-					.spyOn(
-						CommonCartridgeApiFactory(),
-						"commonCartridgeControllerExportCourse"
-					)
-					.mockReturnValue(
-						Promise.reject(error) as unknown as AxiosPromise<void>
-					);
+
+				jest
+					.spyOn(courseRoomDetailsModule, "getCommonCartridgeApi")
+					.mockReturnValue({
+						commonCartridgeControllerExportCourse: jest.fn(() =>
+							Promise.reject(error)
+						),
+					});
 
 				await courseRoomDetailsModule.downloadCommonCartridgeCourse({
 					version: "1.1.0",
@@ -425,8 +425,6 @@ describe("course-room module", () => {
 				});
 
 				expect(courseRoomDetailsModule.businessError).toStrictEqual(error);
-
-				spy.mockRestore();
 			});
 		});
 

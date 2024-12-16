@@ -19,7 +19,10 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError } from "./types/commons";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
-import { CommonCartridgeApiFactory } from "@/commonCartridgeApi/v3";
+import {
+	CommonCartridgeApiFactory,
+	CommonCartridgeApiInterface,
+} from "@/commonCartridgeApi/v3";
 
 @Module({
 	name: "courseRoomDetailsModule",
@@ -51,6 +54,10 @@ export default class CourseRoomDetailsModule extends VuexModule {
 
 	private get lessonApi(): LessonApiInterface {
 		return LessonApiFactory(undefined, "/v3", $axios);
+	}
+
+	public getCommonCartridgeApi(): CommonCartridgeApiInterface {
+		return CommonCartridgeApiFactory(undefined, "/v3", $axios);
 	}
 
 	@Action
@@ -199,22 +206,19 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}): Promise<void> {
 		this.resetBusinessError();
 		try {
-			const response = await CommonCartridgeApiFactory(
-				undefined,
-				"v3",
-				$axios
-			).commonCartridgeControllerExportCourse(
-				this.roomData.roomId,
-				exportSettings.version,
-				{
-					topics: exportSettings.topics,
-					tasks: exportSettings.tasks,
-					columnBoards: exportSettings.columnBoards,
-				},
-				{
-					responseType: "blob",
-				}
-			);
+			const response =
+				await this.getCommonCartridgeApi().commonCartridgeControllerExportCourse(
+					this.roomData.roomId,
+					exportSettings.version,
+					{
+						topics: exportSettings.topics,
+						tasks: exportSettings.tasks,
+						columnBoards: exportSettings.columnBoards,
+					},
+					{
+						responseType: "blob",
+					}
+				);
 			// const response = await CoursesApiFactory(
 			// 	undefined,
 			// 	"v3",
