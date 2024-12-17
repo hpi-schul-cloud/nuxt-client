@@ -247,6 +247,18 @@ describe("RoomMembersPage", () => {
 					expect(dialog.props("modelValue")).toBe(false);
 				});
 
+				it("should close dialog on escape key", async () => {
+					const { wrapper } = setup();
+
+					const dialog = wrapper.getComponent(VDialog);
+					await dialog.setValue(true);
+
+					const dialogContent = dialog.getComponent(AddMembers);
+					await dialogContent.trigger("keydown.escape");
+
+					expect(dialog.props("modelValue")).toBe(false);
+				});
+
 				it("should call addMembers method on @add:members", async () => {
 					const { wrapper } = setup();
 
