@@ -1,23 +1,26 @@
 <template>
 	<VCard
-		class="board-tile"
-		:class="{ 'board-is-draft': isDraft }"
-		hover
-		:data-testid="`board-tile-${props.index}`"
+		:class="isDraft ? 'opacity-70' : 'bg-surface-light'"
+		:variant="isDraft ? 'outlined' : 'flat'"
+		draggable="false"
+		:data-testid="`board-tile-${index}`"
 		:to="boardPath"
 	>
 		<VCardSubtitle
-			class="board-tile-subtitle mt-4"
-			:data-testid="`board-tile-subtitle-${props.index}`"
+			class="mt-4 d-flex align-center"
+			:class="{ 'opacity-100': isDraft }"
+			:data-testid="`board-tile-subtitle-${index}`"
 		>
 			<VIcon size="14" class="mr-1" :icon="subtitleIcon" />
 			{{ subtitleText }}
 		</VCardSubtitle>
 		<VCardTitle
-			class="board-tile-title text-h6 my-2"
-			:data-testid="`board-tile-title-${props.index}`"
+			class="board-tile-title text-body-1 font-weight-bold my-2"
+			:data-testid="`board-tile-title-${index}`"
 		>
-			{{ board.title }}
+			<LineClamp>
+				{{ board.title }}
+			</LineClamp>
 		</VCardTitle>
 	</VCard>
 </template>
@@ -28,6 +31,7 @@ import { RoomBoardItem } from "@/types/room/Room";
 import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
 import { computed, PropType, toRef } from "vue";
 import { useI18n } from "vue-i18n";
+import { LineClamp } from "@ui-line-clamp";
 
 const props = defineProps({
 	board: { type: Object as PropType<RoomBoardItem>, required: true },
@@ -35,7 +39,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-
 const board = toRef(props, "board");
 
 const isListBoard = computed(() => {
@@ -50,6 +53,7 @@ const subtitleIcon = computed(() => {
 	const icon = isListBoard.value
 		? mdiViewAgendaOutline
 		: mdiViewDashboardOutline;
+
 	return icon;
 });
 
@@ -62,6 +66,7 @@ const subtitleText = computed(() => {
 		const suffix = ` - ${t("common.words.draft")}`;
 		return text + suffix;
 	}
+
 	return text;
 });
 
@@ -69,17 +74,3 @@ const boardPath = computed(() => {
 	return `/boards/${board.value.id}`;
 });
 </script>
-
-<style lang="scss" scoped>
-@import "@/styles/settings.scss";
-
-.board-tile {
-	background-color: map-get($grey, lighten-5);
-	border: 1px solid map-get($grey, lighten-2);
-
-	&.board-is-draft .board-tile-subtitle,
-	&.board-is-draft .board-tile-title {
-		opacity: 0.5;
-	}
-}
-</style>
