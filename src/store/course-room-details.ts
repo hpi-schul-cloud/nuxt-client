@@ -205,7 +205,9 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		columnBoards: string[];
 	}): Promise<void> {
 		this.resetBusinessError();
+		console.log("exportSettings", exportSettings);
 		try {
+			console.log("making the request");
 			const response =
 				await this.getCommonCartridgeApi().commonCartridgeControllerExportCourse(
 					this.roomData.roomId,
@@ -219,6 +221,8 @@ export default class CourseRoomDetailsModule extends VuexModule {
 						responseType: "blob",
 					}
 				);
+
+			console.log("response", response);
 
 			const link = document.createElement("a");
 			link.href = URL.createObjectURL(
