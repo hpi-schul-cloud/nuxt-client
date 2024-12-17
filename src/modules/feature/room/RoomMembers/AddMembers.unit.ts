@@ -75,7 +75,6 @@ describe("AddMembers", () => {
 			it("should have proper props for autoCompleteSchool component", () => {
 				const { wrapper, roomMembersSchools } = setup();
 				const schoolComponent = wrapper.getComponent({
-					name: "v-autocomplete",
 					ref: "autoCompleteSchool",
 				});
 
@@ -94,7 +93,6 @@ describe("AddMembers", () => {
 				];
 
 				const roleComponent = wrapper.getComponent({
-					name: "v-autocomplete",
 					ref: "autoCompleteRole",
 				});
 
@@ -105,7 +103,6 @@ describe("AddMembers", () => {
 			it("should have proper props for autoCompleteUsers component", () => {
 				const { wrapper, potentialRoomMembers } = setup();
 				const userComponent = wrapper.getComponent({
-					name: "v-autocomplete",
 					ref: "autoCompleteUsers",
 				});
 
@@ -117,20 +114,83 @@ describe("AddMembers", () => {
 		});
 	});
 
-	describe("when userRole is changed", () => {
-		it("should emit the userRole", async () => {
+	describe("when school is changed", () => {
+		it("should emit 'update:role'", async () => {
 			const { wrapper, roomMembersSchools } = setup();
-			const roleComponent = wrapper.getComponent({
-				name: "v-autocomplete",
-				ref: "autoCompleteRole",
+			const selectedSchool = roomMembersSchools[1].id;
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
 			});
 
-			await roleComponent.setValue(RoleName.Roomviewer);
+			await schoolComponent.setValue(selectedSchool);
 
 			expect(wrapper.emitted("update:role")).toHaveLength(1);
 			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
-				{ role: RoleName.Roomviewer, schoolId: roomMembersSchools[0].id },
+				{ role: RoleName.Roomeditor, schoolId: selectedSchool },
 			]);
+		});
+
+		it("should set the role to room editor", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			await schoolComponent.setValue("schoolId");
+
+			const roleComponent = wrapper.getComponent({
+				ref: "autoCompleteRole",
+			});
+
+			expect(roleComponent.props("modelValue")).toBe(RoleName.Roomeditor);
+		});
+
+		it("should reset selectedUsers", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
+			await schoolComponent.setValue("schoolId");
+
+			expect(userComponent.props("modelValue")).toEqual([]);
+		});
+	});
+
+	describe("when userRole is changed", () => {
+		it("should emit the userRole", async () => {
+			const { wrapper, roomMembersSchools } = setup();
+			const selectedRole = RoleName.Roomeditor;
+			const roleComponent = wrapper.getComponent({
+				ref: "autoCompleteRole",
+			});
+
+			await roleComponent.setValue(selectedRole);
+
+			expect(wrapper.emitted("update:role")).toHaveLength(1);
+			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
+				{ role: selectedRole, schoolId: roomMembersSchools[0].id },
+			]);
+		});
+
+		it("should reset selectedUsers", async () => {
+			const { wrapper } = setup();
+			const roleComponent = wrapper.getComponent({
+				ref: "autoCompleteRole",
+			});
+
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
+			await roleComponent.setValue(RoleName.Roomeditor);
+
+			expect(wrapper.emitted()).toHaveProperty("update:role");
+			expect(userComponent.props("modelValue")).toEqual([]);
 		});
 	});
 
@@ -138,7 +198,6 @@ describe("AddMembers", () => {
 		it("should add user to selectedUsers", async () => {
 			const { wrapper, potentialRoomMembers } = setup();
 			const userComponent = wrapper.getComponent({
-				name: "v-autocomplete",
 				ref: "autoCompleteUsers",
 			});
 
@@ -147,8 +206,7 @@ describe("AddMembers", () => {
 				potentialRoomMembers[1].userId,
 			]);
 
-			// todo refactor expect without wrapperVM
-			// expect(wrapperVM.selectedUsers).toHaveLength(2);
+			expect(userComponent.props("modelValue")).toHaveLength(2);
 			expect(userComponent.props("modelValue")).toStrictEqual([
 				potentialRoomMembers[0].userId,
 				potentialRoomMembers[1].userId,
@@ -160,7 +218,6 @@ describe("AddMembers", () => {
 		it("should emit the selectedUsers", async () => {
 			const { wrapper, potentialRoomMembers } = setup();
 			const userComponent = wrapper.getComponent({
-				name: "v-autocomplete",
 				ref: "autoCompleteUsers",
 			});
 
@@ -168,19 +225,36 @@ describe("AddMembers", () => {
 				potentialRoomMembers[0].userId,
 				potentialRoomMembers[1].userId,
 			];
-
 			userComponent.setValue(selectedUsers);
 
 			const addButton = wrapper.getComponent({
-				name: "v-btn",
 				ref: "addButton",
 			});
-
 			await addButton.trigger("click");
 
 			expect(wrapper.emitted("add:members")).toHaveLength(1);
 			expect(wrapper.emitted("add:members")![0]).toStrictEqual([selectedUsers]);
 			expect(wrapper.emitted("close")).toHaveLength(1);
+		});
+
+		it("should emit 'close'", async () => {
+			const { wrapper, potentialRoomMembers } = setup();
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
+			const selectedUsers = [
+				potentialRoomMembers[0].userId,
+				potentialRoomMembers[1].userId,
+			];
+			userComponent.setValue(selectedUsers);
+
+			const addButton = wrapper.getComponent({
+				ref: "addButton",
+			});
+			await addButton.trigger("click");
+
+			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 	});
 
@@ -189,7 +263,6 @@ describe("AddMembers", () => {
 			const { wrapper } = setup();
 
 			const cancelButton = wrapper.getComponent({
-				name: "v-btn",
 				ref: "cancelButton",
 			});
 
