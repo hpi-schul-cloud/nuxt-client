@@ -1,7 +1,13 @@
 import { RoomBoardItem, RoomDetails } from "@/types/room/Room";
 import { ref } from "vue";
 import { defineStore } from "pinia";
-import { RoomApiFactory } from "@/serverApi/v3";
+import {
+	BoardApiFactory,
+	BoardLayout,
+	BoardParentType,
+	CreateBoardBodyParams,
+	RoomApiFactory,
+} from "@/serverApi/v3";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 
@@ -17,6 +23,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	const roomBoards = ref<RoomBoardItem[]>([]);
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
+	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
 
 	const fetchRoom = async (id: string) => {
 		try {
@@ -38,6 +45,22 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 		}
 	};
 
+	const createBoard = async (
+		roomId: string,
+		layout: BoardLayout,
+		title: string
+	) => {
+		const params: CreateBoardBodyParams = {
+			title: title,
+			parentId: roomId,
+			parentType: BoardParentType.Room,
+			layout,
+		};
+		const boardId = (await boardApi.boardControllerCreateBoard(params)).data.id;
+
+		return boardId;
+	};
+
 	const resetState = () => {
 		isLoading.value = true;
 		room.value = undefined;
@@ -51,6 +74,7 @@ export const useRoomDetailsStore = defineStore("roomDetailsStore", () => {
 	return {
 		deactivateRoom,
 		fetchRoom,
+		createBoard,
 		isLoading,
 		resetState,
 		room,

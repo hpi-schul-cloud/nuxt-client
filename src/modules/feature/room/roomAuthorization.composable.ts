@@ -22,8 +22,9 @@ export const useRoomAuthorization = (
 		const permissions = toValue(room)?.permissions ?? [];
 
 		canCreateRoom.value =
-			permissions.includes(Permission.RoomEdit) &&
-			authModule.getUserRoles.includes(Roles.Teacher);
+			authModule.getUserPermissions.includes(
+				Permission.RoomCreate.toLowerCase()
+			) && authModule.getUserRoles.includes(Roles.Teacher);
 		canViewRoom.value = permissions.includes(Permission.RoomView);
 		canEditRoom.value = permissions.includes(Permission.RoomEdit);
 		canDeleteRoom.value = permissions.includes(Permission.RoomDelete);

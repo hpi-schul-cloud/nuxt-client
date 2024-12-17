@@ -170,6 +170,7 @@ export default {
 	"common.words.color.purple": "Violeta",
 	"common.words.color.red": "Roja",
 	"common.words.color.turquoise": "Turquesa",
+	"common.words.color.yellow": "Amarillo",
 	"common.words.copiedToClipboard": "Copiado en el portapapeles",
 	"common.words.courseGroups": "grupos de cursos",
 	"common.words.courses": "Cursos",
@@ -357,6 +358,8 @@ export default {
 	"components.board.menu.fileElement": "Configuración del archivo",
 	"components.board.menu.linkElement": "Configuración del enlace",
 	"components.board.menu.submissionElement": "Configuración del envío",
+	"components.board.menu.videoConferenceElement":
+		"Configuración de la videoconferencia",
 	"components.board.menu.deletedElement":
 		"Configuración de contenido eliminado",
 	"components.board.notifications.errors.fileNameExists":
@@ -453,6 +456,9 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Por favor ingrese un título.",
 	"components.cardElement.titleElement": "Elemento título",
+	"components.cardElement.videoConferenceElement": "Videoconferencia",
+	"components.cardElement.videoConferenceElement.label":
+		"Insertar título de la videoconferencia",
 	"components.cardElement.deletedElement": "Contenido eliminado",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
@@ -477,6 +483,8 @@ export default {
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Envíos",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Texto",
+	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
+		"Videoconferencia",
 	"components.externalTools.status.deactivated": "Desactivado",
 	"components.externalTools.status.incomplete": "Configuración incompleta",
 	"components.externalTools.status.latest": "Actual",
@@ -1517,6 +1525,14 @@ export default {
 		"¡Profesor creado correctamente!",
 	"pages.administration.teachers.new.title": "Añadir profesor",
 	"pages.administration.teachers.table.edit.ariaLabel": "Editar profesor",
+	"pages.common.tools.configureVideoconferenceDialog.title":
+		"Crear videoconferencia",
+	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Todas las usuarias participan como moderadoras",
+	"pages.common.tools.configureVideoconferenceDialog.text.mute":
+		"Silenciar a las participantes al entrar",
+	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Aprobación del moderador antes de poder ingresar a la sala",
 	"pages.content._id.addToTopic": "Para ser añadido a",
 	"pages.content._id.collection.selectElements":
 		"Selecciona los elementos que deses añadir al tema",
@@ -1584,14 +1600,6 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Grupos",
 	"pages.courseRooms.tabLabel.tools": "Herramientas",
 	"pages.courseRooms.tabLabel.toolsOld": "Herramientas",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
-		"Crear videoconferencia {roomName}",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Todas las usuarias participan como moderadoras",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
-		"Silenciar a las participantes al entrar",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Aprobación del moderador antes de poder ingresar a la sala",
 	"pages.files.overview.courseFiles": "Archivos del curso",
 	"pages.files.overview.favorites": "Favoritos",
 	"pages.files.overview.personalFiles": "Archivos personales",
@@ -1827,6 +1835,10 @@ export default {
 		"La videoconferencia aún no ha comenzado o no tienes permiso para unirte.",
 	"pages.videoConference.info.notStarted":
 		"La videoconferencia aún no ha comenzado.",
+	"pages.videoConference.info.notEnabledParticipants":
+		"El elemento ya no está disponible. Póngase en contacto con el profesor.",
+	"pages.videoConference.info.notEnabledTeacher":
+		"El elemento ya no está disponible. Póngase en contacto con el administrador.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",

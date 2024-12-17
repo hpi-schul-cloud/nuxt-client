@@ -8,6 +8,7 @@ import { initializeAxios, mapAxiosErrorToResponseError } from "@/utils/api";
 import {
 	apiResponseErrorFactory,
 	axiosErrorFactory,
+	mockApiResponse,
 } from "@@/tests/test-utils";
 
 jest.mock("@/utils/api");
@@ -35,12 +36,14 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 
 describe("useRoomDetailsStore", () => {
 	let roomApiMock: DeepMocked<serverApi.RoomApiInterface>;
+	let boardApiMock: DeepMocked<serverApi.BoardApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
 	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
 
 	beforeEach(() => {
 		setActivePinia(createPinia());
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
+		boardApiMock = createMock<serverApi.BoardApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
 		mockedCreateApplicationErrorCalls =
 			createMock<ReturnType<typeof useApplicationError>>();
@@ -49,6 +52,7 @@ describe("useRoomDetailsStore", () => {
 		);
 
 		jest.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
+		jest.spyOn(serverApi, "BoardApiFactory").mockReturnValue(boardApiMock);
 		initializeAxios(axiosMock);
 	});
 
@@ -133,6 +137,32 @@ describe("useRoomDetailsStore", () => {
 			store.deactivateRoom();
 			expect(store.isLoading).toBe(false);
 			expect(store.room).toBeUndefined();
+		});
+	});
+
+	describe("createBoard", () => {
+		it("should call createBoard api", async () => {
+			const { store } = setup();
+			const boardId = "board-id";
+			const roomId = "room-id";
+			const layout = serverApi.BoardLayout.Columns;
+			const title = "title";
+
+			boardApiMock.boardControllerCreateBoard.mockResolvedValue(
+				mockApiResponse({
+					data: { id: boardId },
+				})
+			);
+
+			const result = await store.createBoard(roomId, layout, title);
+
+			expect(result).toBe(boardId);
+			expect(boardApiMock.boardControllerCreateBoard).toHaveBeenCalledWith({
+				title,
+				parentId: roomId,
+				parentType: serverApi.BoardParentType.Room,
+				layout,
+			});
 		});
 	});
 });

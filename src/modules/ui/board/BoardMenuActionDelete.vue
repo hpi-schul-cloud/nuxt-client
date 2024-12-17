@@ -43,6 +43,8 @@ const languageKeyForScopeType: Record<BoardMenuScope, keyof MessageSchema> = {
 	[BoardMenuScope.DELETED_ELEMENT]: "components.cardElement.deletedElement",
 	[BoardMenuScope.MEDIA_EXTERNAL_TOOL_ELEMENT]:
 		"components.cardElement.mediaExternalToolElement",
+	[BoardMenuScope.VIDEO_CONFERENCE_ELEMENT]:
+		"components.cardElement.videoConferenceElement",
 };
 
 const onClick = (): void => {
