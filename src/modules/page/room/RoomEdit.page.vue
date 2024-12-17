@@ -56,7 +56,7 @@ const onSave = async (payload: { room: RoomUpdateParams }) => {
 		await updateRoom(route.params.id as string, payload.room);
 
 		router.push({
-			name: "rooms-id",
+			name: "room-details",
 			params: { id: route.params.id as string },
 		});
 	} catch (error: unknown) {
@@ -78,7 +78,7 @@ const isInvalidRequestError = (error: unknown): boolean => {
 
 const onCancel = () => {
 	router.push({
-		name: "rooms-id",
+		name: "room-details",
 		params: { id: route.params.id as string },
 	});
 };

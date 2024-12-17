@@ -4,6 +4,7 @@
 			v-for="(board, index) in boards"
 			:key="board.id"
 			cols="12"
+			sm="6"
 			md="4"
 			xl="3"
 		>

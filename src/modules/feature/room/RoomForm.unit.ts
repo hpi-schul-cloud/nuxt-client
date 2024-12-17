@@ -5,19 +5,18 @@ import {
 import { flushPromises, mount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import RoomForm from "./RoomForm.vue";
-import { RoomCreateParams } from "@/types/room/Room";
-import { RoomColor } from "@/serverApi/v3";
+import { RoomColorEnum, RoomCreateParams } from "@/types/room/Room";
 
 const mockRoom: RoomCreateParams = {
 	name: "A11Y for Beginners",
-	color: RoomColor.Magenta,
+	color: RoomColorEnum.Magenta,
 	startDate: "",
 	endDate: "",
 };
 
 const emptyMockRoom: RoomCreateParams = {
 	name: "",
-	color: RoomColor.Magenta,
+	color: RoomColorEnum.Magenta,
 	startDate: undefined,
 	endDate: undefined,
 };

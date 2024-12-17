@@ -324,7 +324,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 	const deleteBoardSuccess = (payload: DeleteBoardSuccessPayload) => {
 		if (payload.isOwnAction === true) {
 			router.replace({
-				name: "rooms-id",
+				name: "room-details",
 				params: { id: roomId.value },
 			});
 			return;
