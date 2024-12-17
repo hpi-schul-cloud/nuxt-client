@@ -73,6 +73,17 @@ describe("ConfirmationDialog", () => {
 
 			expect(dialogTitle.text()).toContain(message);
 		});
+
+		it("should render empty dialog title if no message is provided", async () => {
+			const { wrapper } = setup({ message: undefined });
+
+			const dialogTitle = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.find(".dialog-title");
+
+			expect(dialogTitle.text()).toBe("");
+		});
 	});
 
 	describe("when a dialog button is clicked", () => {
