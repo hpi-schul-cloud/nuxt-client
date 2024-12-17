@@ -1709,20 +1709,20 @@ export default {
 	"pages.rooms.members.error.remove":
 		"Löschen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.members.infoText":
-		"Füge Teilnehmende zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
+		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
-	"pages.rooms.members.add": "Teilnehmende hinzufügen",
-	"pages.rooms.members.manage": "Raum-Teilnehmende",
+	"pages.rooms.members.add": "Mitglieder hinzufügen",
+	"pages.rooms.members.manage": "Raum-Mitglieder",
 	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
-		"Ausgewählte Teilnehmer aus der Liste zurücksetzen",
+		"Ausgewählte Mitglieder aus der Liste zurücksetzen",
 	"pages.rooms.members.multipleRemove.ariaLabel":
-		"Mehrere Teilnehmer aus dem Raum entfernen",
+		"Mehrere Mitglieder aus dem Raum entfernen",
 	"pages.rooms.members.remove.confirmation":
 		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.multipleRemove.confirmation":
-		"Ausgewählte Teilnehmende wirklich aus dem Raum entfernen?",
+		"Ausgewählte Mitglieder wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.roles.editor": "Raumeditor",
 	"pages.rooms.members.roles.viewer": "Raumbetrachter",
 	"pages.rooms.title": "Räume",
