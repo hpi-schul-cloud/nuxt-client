@@ -89,7 +89,7 @@ import { PropType, ref, toRef } from "vue";
 import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
 import { RoomMember } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import { VAutocomplete, VCard } from "vuetify/lib/components/index.mjs";
 
 const props = defineProps({
 	memberList: {
@@ -131,7 +131,7 @@ const onAddMembers = () => {
 
 const onClose = () => emit("close");
 
-const addMembersContent = ref();
+const addMembersContent = ref<VCard>();
 const { pause, unpause } = useFocusTrap(addMembersContent, {
 	immediate: true,
 });

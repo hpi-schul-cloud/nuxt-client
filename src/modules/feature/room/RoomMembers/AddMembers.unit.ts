@@ -12,6 +12,7 @@ import {
 } from "@@/tests/test-utils";
 import { VueWrapper } from "@vue/test-utils";
 import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 
 jest.mock("@/store/store-accessor", () => {
 	return {
@@ -22,8 +23,25 @@ jest.mock("@/store/store-accessor", () => {
 	};
 });
 
+jest.mock("@vueuse/integrations/useFocusTrap", () => {
+	return {
+		...jest.requireActual("@vueuse/integrations/useFocusTrap"),
+		useFocusTrap: jest.fn(),
+	};
+});
 describe("AddMembers", () => {
 	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
+	let pauseMock: jest.Mock;
+	let unpauseMock: jest.Mock;
+
+	beforeEach(() => {
+		pauseMock = jest.fn();
+		unpauseMock = jest.fn();
+		(useFocusTrap as jest.Mock).mockReturnValue({
+			pause: pauseMock,
+			unpause: unpauseMock,
+		});
+	});
 
 	const setup = () => {
 		const potentialRoomMembers = roomMemberListFactory.buildList(3);
@@ -271,6 +289,51 @@ describe("AddMembers", () => {
 			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 	});
-});
 
-// TODO: add tests for focus trap (@update:menu)
+	describe("focus trap", () => {
+		it("should pause focus trap when any autocomplete menu is open", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			schoolComponent.vm.menu = true;
+
+			expect(pauseMock).toHaveBeenCalledTimes(1);
+		});
+
+		it("should unpause focus trap when all autocomplete menus are closed", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			schoolComponent.vm.menu = true;
+			expect(pauseMock).toHaveBeenCalledTimes(1);
+
+			schoolComponent.vm.menu = false;
+			expect(unpauseMock).toHaveBeenCalled();
+		});
+
+		it("should not unpause focus trap when a autocomplete is closed while another one is opened", async () => {
+			// this happens when user switches between autocomplete components for brief moment both are treated as open
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			const roleComponent = wrapper.getComponent({
+				ref: "autoCompleteRole",
+			});
+
+			schoolComponent.vm.menu = true;
+			roleComponent.vm.menu = true;
+
+			expect(pauseMock).toHaveBeenCalled();
+			expect(unpauseMock).not.toHaveBeenCalled();
+
+			schoolComponent.vm.menu = false;
+			expect(unpauseMock).not.toHaveBeenCalled();
+		});
+	});
+});
