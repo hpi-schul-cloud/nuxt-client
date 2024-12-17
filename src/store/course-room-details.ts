@@ -234,6 +234,8 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			link.click();
 			URL.revokeObjectURL(link.href);
 		} catch (error: any) {
+			console.log("error", error);
+
 			this.setBusinessError({
 				statusCode: error?.response?.status,
 				message: error?.response?.statusText,
