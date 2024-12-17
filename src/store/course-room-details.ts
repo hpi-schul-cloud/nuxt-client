@@ -219,22 +219,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 						responseType: "blob",
 					}
 				);
-			// const response = await CoursesApiFactory(
-			// 	undefined,
-			// 	"v3",
-			// 	$axios
-			// ).courseControllerExportCourse(
-			// 	this.roomData.roomId,
-			// 	exportSettings.version,
-			// 	{
-			// 		topics: exportSettings.topics,
-			// 		tasks: exportSettings.tasks,
-			// 		columnBoards: exportSettings.columnBoards,
-			// 	},
-			// 	{
-			// 		responseType: "blob",
-			// 	}
-			// );
+
 			const link = document.createElement("a");
 			link.href = URL.createObjectURL(
 				new Blob([response.data as unknown as Blob])
