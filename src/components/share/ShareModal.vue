@@ -21,7 +21,10 @@
 					<p data-testid="share-options-info-text">
 						{{ t(`components.molecules.share.${type}.options.infoText`) }}
 					</p>
-					<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
+					<div
+						class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
+						v-if="showAlertInfo"
+					>
 						<div class="mx-2">
 							<v-icon color="info" :icon="mdiInformation" />
 						</div>
@@ -193,6 +196,14 @@ const showCtlToolsInfo = computed(() => {
 	return (
 		envConfigModule.getCtlToolsTabEnabled &&
 		(props.type === "courses" || props.type === "columnBoard")
+	);
+});
+
+const showAlertInfo = computed(() => {
+	return (
+		props.type === "courses" ||
+		props.type === "columnBoard" ||
+		props.type === "lessons"
 	);
 });
 </script>
