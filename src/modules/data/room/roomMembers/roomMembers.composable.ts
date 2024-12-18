@@ -6,8 +6,6 @@ import {
 	SchoolApiFactory,
 	RoomMemberResponse,
 	SchoolForExternalInviteResponse,
-	UserIdAndRole,
-	UserIdAndRoleRoleNameEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useI18n } from "vue-i18n";
@@ -112,15 +110,8 @@ export const useRoomMembers = (roomId: string) => {
 			userIds.includes(member.userId)
 		);
 
-		const userIdsAndRoles: UserIdAndRole[] = newMembers.map((member) => ({
-			userId: member.userId,
-			roleName: UserIdAndRoleRoleNameEnum.Roomeditor,
-		}));
-
 		try {
-			await roomApi.roomControllerAddMembers(roomId, {
-				userIdsAndRoles,
-			});
+			await roomApi.roomControllerAddMembers(roomId, { userIds });
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
 					...member,
