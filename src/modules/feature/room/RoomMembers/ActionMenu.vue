@@ -1,4 +1,4 @@
-<template v-if="selectedUserIds.length">
+<template>
 	<div class="mr-2 pa-0 pl-4 multi-action-menu" data-testid="multi-action-menu">
 		<span class="d-inline-flex">
 			{{ selectedIds.length }}
