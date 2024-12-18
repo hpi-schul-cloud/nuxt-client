@@ -72,73 +72,12 @@
 				</VCard>
 			</VDialog>
 
-			<VDialog
-				v-model="isConfigurationDialogOpen"
-				max-width="480"
-				data-testid="videoconference-config-dialog"
-			>
-				<VCard :ripple="false">
-					<VCardTitle>
-						<h2
-							class="text-h4 my-2"
-							data-testid="videoconference-config-dialog-title"
-						>
-							{{ t("pages.common.tools.configureVideoconferenceDialog.title") }}
-						</h2>
-					</VCardTitle>
-					<VCardText>
-						<VCheckbox
-							v-model="videoConferenceInfo.options.everyAttendeeJoinsMuted"
-							data-testid="every-attendee-joins-muted"
-							:label="
-								t('pages.common.tools.configureVideoconferenceDialog.text.mute')
-							"
-							:hide-details="true"
-						/>
-						<VCheckbox
-							v-model="
-								videoConferenceInfo.options.moderatorMustApproveJoinRequests
-							"
-							data-testid="moderator-must-approve-join-requests"
-							:label="
-								t(
-									'pages.common.tools.configureVideoconferenceDialog.text.waitingRoom'
-								)
-							"
-							:hide-details="true"
-						/>
-						<VCheckbox
-							v-model="videoConferenceInfo.options.everybodyJoinsAsModerator"
-							data-testid="everybody-joins-as-moderator"
-							:label="
-								t(
-									'pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission'
-								)
-							"
-							:hide-details="true"
-						/>
-					</VCardText>
-					<VCardActions>
-						<VSpacer />
-						<VBtn
-							data-testid="dialog-cancel"
-							variant="text"
-							@click="onCloseConfigurationDialog"
-						>
-							{{ t("common.actions.cancel") }}
-						</VBtn>
-						<VBtn
-							data-testid="dialog-create"
-							class="px-6"
-							color="primary"
-							variant="flat"
-							@click="onStartVideoConference"
-						>
-							{{ t("common.actions.create") }}
-						</VBtn>
-					</VCardActions>
-				</VCard>
-			</VDialog>
+			<VideoConferenceConfigurationDialog
+				:is-open="isConfigurationDialogOpen"
+				:options="videoConferenceInfo.options"
+				@close="onCloseConfigurationDialog"
+				@start-video-conference="onStartVideoConference"
+			/>
 		</VCard>
 	</div>
 </template>
@@ -155,6 +94,7 @@ import {
 import { useI18n } from "vue-i18n";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
+import VideoConferenceConfigurationDialog from "./VideoConferenceConfigurationDialog.vue";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
