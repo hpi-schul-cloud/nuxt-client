@@ -189,20 +189,20 @@ $pulseIconColor: #15ba97;
 	margin: 10px;
 	box-shadow: 0 0 0 0 $pulseIconColor;
 	transform: scale(1);
-	animation: pulse 1.5s infinite;
+	animation: pulse 1.5s 5;
 
 	@keyframes pulse {
 		0% {
+			transform: scale(1);
+			box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+		}
+		30% {
 			transform: scale(0.95);
 			box-shadow: 0 0 0 0 $pulseIconColor;
 		}
-		70% {
+		100% {
 			transform: scale(1);
 			box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
-		}
-		100% {
-			transform: scale(0.95);
-			box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
 		}
 	}
 
