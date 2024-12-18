@@ -2,7 +2,7 @@
 	<div>
 		<ContentElementBar
 			:hasGreyBackground="true"
-			:icon="mdiVideo"
+			:icon="mdiVideoOutline"
 			:has-row-style="isSmallOrLargerListBoard"
 			data-testid="board-video-conference-element"
 			@click.stop="onContentClick"
@@ -84,7 +84,7 @@
 <script setup lang="ts">
 import image from "@/assets/img/videoConference.svg";
 import { computed, ref } from "vue";
-import { mdiVideo } from "@icons/material";
+import { mdiVideoOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { injectStrict } from "@/utils/inject";
 import { useDisplay } from "vuetify";
