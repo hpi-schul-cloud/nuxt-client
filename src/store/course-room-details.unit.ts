@@ -1,5 +1,6 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { CommonCartridgeApiFactory } from "@/commonCartridgeApi/v3/api";
+import * as commonCartridgeApi from "@/commonCartridgeApi/v3/api/common-cartridge-api";
+import { CommonCartridgeApiInterface } from "@/commonCartridgeApi/v3/api";
 import { BoardParentType } from "@/serverApi/v3/api";
 import { applicationErrorModule, authModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
@@ -387,14 +388,14 @@ describe("course-room module", () => {
 		describe("downloadCommonCartridgeCourse", () => {
 			it("should call backend api", async () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-
-				jest
-					.spyOn(courseRoomDetailsModule, "getCommonCartridgeApi")
-					.mockReturnValue({
-						commonCartridgeControllerExportCourse: jest.fn(
-							() => Promise.resolve() as unknown as AxiosPromise<void>
-						),
-					});
+				const mockApi: CommonCartridgeApiInterface = {
+					commonCartridgeControllerExportCourse: jest.fn(
+						() => Promise.resolve() as unknown as AxiosPromise<void>
+					),
+				};
+				const spy = jest
+					.spyOn(commonCartridgeApi, "CommonCartridgeApiFactory")
+					.mockReturnValue(mockApi);
 
 				await expect(
 					courseRoomDetailsModule.downloadCommonCartridgeCourse({
@@ -404,18 +405,24 @@ describe("course-room module", () => {
 						columnBoards: [],
 					})
 				).resolves.not.toBeDefined();
+
+				expect(
+					mockApi.commonCartridgeControllerExportCourse
+				).toHaveBeenCalled();
+
+				spy.mockRestore();
 			});
 			it("should catch error in catch block", async () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const error = { statusCode: 418, message: "I'm a teapot" };
-
-				jest
-					.spyOn(courseRoomDetailsModule, "getCommonCartridgeApi")
-					.mockReturnValue({
-						commonCartridgeControllerExportCourse: jest.fn(() =>
-							Promise.reject(error)
-						),
-					});
+				const mockApi: CommonCartridgeApiInterface = {
+					commonCartridgeControllerExportCourse: jest.fn(() =>
+						Promise.reject(error)
+					),
+				};
+				const spy = jest
+					.spyOn(commonCartridgeApi, "CommonCartridgeApiFactory")
+					.mockReturnValue(mockApi);
 
 				await courseRoomDetailsModule.downloadCommonCartridgeCourse({
 					version: "1.1.0",
@@ -425,6 +432,8 @@ describe("course-room module", () => {
 				});
 
 				expect(courseRoomDetailsModule.businessError).toStrictEqual(error);
+
+				spy.mockRestore();
 			});
 		});
 
@@ -822,7 +831,7 @@ describe("course-room module", () => {
 			it("should return the CommonCartridgeApiInterface", () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 
-				const result = courseRoomDetailsModule.getCommonCartridgeApi();
+				const result = courseRoomDetailsModule.commonCartridgeApi;
 
 				expect(result).toBeInstanceOf(Object);
 			});

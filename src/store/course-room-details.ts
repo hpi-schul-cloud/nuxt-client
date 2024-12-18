@@ -56,7 +56,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		return LessonApiFactory(undefined, "/v3", $axios);
 	}
 
-	public get getCommonCartridgeApi(): CommonCartridgeApiInterface {
+	public get commonCartridgeApi(): CommonCartridgeApiInterface {
 		return CommonCartridgeApiFactory(undefined, "/v3", $axios);
 	}
 
@@ -209,7 +209,7 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		try {
 			console.log("making the request");
 			const response =
-				await this.getCommonCartridgeApi.commonCartridgeControllerExportCourse(
+				await this.commonCartridgeApi.commonCartridgeControllerExportCourse(
 					this.roomData.roomId,
 					exportSettings.version,
 					{
