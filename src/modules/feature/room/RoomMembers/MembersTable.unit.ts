@@ -6,7 +6,7 @@ import MembersTable from "./MembersTable.vue";
 import { nextTick, ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import { roomMemberFactory } from "@@/tests/test-utils";
-import { DOMWrapper, VueWrapper } from "@vue/test-utils";
+import { DOMWrapper, flushPromises, VueWrapper } from "@vue/test-utils";
 import { VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
@@ -131,41 +131,26 @@ describe("MembersTable", () => {
 			expect(multiActionMenu.exists()).toBe(true);
 		});
 
-		it("should render selected members remove button", async () => {
+		it("should render ActionMenu component remove button", async () => {
 			const { wrapper } = setup();
 
 			await selectCheckboxes([1], wrapper);
 
-			const removeButton = wrapper.findComponent({
-				ref: "removeSelectedMembers",
-			});
+			const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
 
-			expect(removeButton.exists()).toBe(true);
+			expect(actionMenu.exists()).toBe(true);
 		});
 
-		it("should render selected members reset button", async () => {
-			const { wrapper } = setup();
-
-			await selectCheckboxes([1, 2], wrapper);
-
-			const resetButton = wrapper.findComponent({
-				ref: "resetSelectedMembers",
-			});
-
-			expect(resetButton.exists()).toBe(true);
-		});
-
-		it("should reset member selection when clicking reset button", async () => {
+		it("should reset member selection when clicking reset button on ActionMenu", async () => {
 			const { wrapper } = setup();
 
 			askConfirmationMock.mockResolvedValue(false);
 
 			await selectCheckboxes([0], wrapper);
 
-			const resetButton = wrapper.findComponent({
-				ref: "resetSelectedMembers",
-			});
-			await resetButton.trigger("click");
+			const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
+			actionMenu.vm.$emit("reset:selected");
+			await flushPromises();
 
 			const checkboxes = wrapper
 				.getComponent(VDataTable)
@@ -200,17 +185,16 @@ describe("MembersTable", () => {
 			}
 		);
 
-		it("should emit remove:members when selected members remove button is clicked", async () => {
+		it("should emit remove:members when selected members remove button is clicked on Action Menu", async () => {
 			const { wrapper, mockMembers } = setup();
 
 			askConfirmationMock.mockResolvedValue(true);
 
 			await selectCheckboxes([1], wrapper);
 
-			const removeButton = wrapper.findComponent({
-				ref: "removeSelectedMembers",
-			});
-			await removeButton.trigger("click");
+			const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
+			actionMenu.vm.$emit("remove:selected", [mockMembers[0].userId]);
+			await flushPromises();
 
 			const removeEvents = wrapper.emitted("remove:members");
 			expect(removeEvents).toHaveLength(1);
@@ -224,10 +208,9 @@ describe("MembersTable", () => {
 
 			await selectCheckboxes([1], wrapper);
 
-			const removeButton = wrapper.findComponent({
-				ref: "removeSelectedMembers",
-			});
-			await removeButton.trigger("click");
+			const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
+			actionMenu.vm.$emit("reset:selected");
+			await flushPromises();
 
 			expect(wrapper.emitted()).not.toHaveProperty("remove:members");
 		});
@@ -246,16 +229,18 @@ describe("MembersTable", () => {
 		])(
 			"should render confirmation dialog with text for $description when remove button is clicked",
 			async ({ checkboxesToSelect, expectedMessage }) => {
-				const { wrapper } = setup();
+				const { wrapper, mockMembers } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);
 
 				await selectCheckboxes(checkboxesToSelect, wrapper);
 
-				const removeButton = wrapper.findComponent({
-					ref: "removeSelectedMembers",
-				});
-				await removeButton.trigger("click");
+				const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
+				actionMenu.vm.$emit(
+					"remove:selected",
+					checkboxesToSelect.map((i) => mockMembers[i].userId)
+				);
+				await flushPromises();
 
 				expect(wrapper.emitted()).toHaveProperty("remove:members");
 
@@ -267,16 +252,15 @@ describe("MembersTable", () => {
 		);
 
 		it("should keep selection if confirmation dialog is canceled", async () => {
-			const { wrapper } = setup();
+			const { wrapper, mockMembers } = setup();
 
 			askConfirmationMock.mockResolvedValue(false);
 
 			await selectCheckboxes([1], wrapper);
 
-			const removeButton = wrapper.getComponent({
-				ref: "removeSelectedMembers",
-			});
-			await removeButton.trigger("click");
+			const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
+			actionMenu.vm.$emit("remove:selected", [mockMembers[0].userId]);
+			await flushPromises();
 
 			const checkboxes = wrapper
 				.getComponent(VDataTable)
