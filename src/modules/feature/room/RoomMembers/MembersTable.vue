@@ -2,36 +2,12 @@
 	<div
 		class="d-flex justify-space-between align-center mb-2 table-title-header"
 	>
-		<template v-if="selectedUserIds.length">
-			<div
-				class="mr-2 pa-0 pl-4 multi-action-menu"
-				data-testid="multi-action-menu"
-			>
-				<span class="d-inline-flex">
-					{{ selectedUserIds.length }}
-					{{ t("pages.administration.selected") }}
-				</span>
-				<v-btn
-					ref="removeSelectedMembers"
-					class="ml-2"
-					size="x-small"
-					variant="text"
-					:icon="mdiTrashCanOutline"
-					:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-					@click="onRemoveMembers(selectedUserIds)"
-				/>
-
-				<v-btn
-					ref="resetSelectedMembers"
-					class="ml-8 mr-2"
-					size="x-small"
-					variant="text"
-					:icon="mdiClose"
-					:aria-label="t('pages.rooms.members.remove.ariaLabel')"
-					@click="onResetSelectedMembers"
-				/>
-			</div>
-		</template>
+		<ActionMenu
+			v-if="selectedUserIds.length"
+			:selectedIds="selectedUserIds"
+			@remove:selected="onRemoveMembers"
+			@reset:selected="onResetSelectedMembers"
+		/>
 		<v-spacer />
 		<v-text-field
 			v-model="search"
@@ -83,10 +59,10 @@
 </template>
 
 <script setup lang="ts">
+import ActionMenu from "./ActionMenu.vue";
 import { PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import {
-	mdiClose,
 	mdiMenuDown,
 	mdiMenuUp,
 	mdiMagnify,
