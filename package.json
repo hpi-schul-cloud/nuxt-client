@@ -14,7 +14,6 @@
 		"generate-client:server": "node generate-client.js -c openapitools-for-server.json",
 		"generate-client:filestorage": "node generate-client.js -u 'http://localhost:4444/api/v3/docs-json/' -p 'src/fileStorageApi/v3' -c 'openapitools-for-file-storage.json'",
 		"generate-client:h5p-editor": "node generate-client.js -u 'http://localhost:4448/api/v3/docs-json/' -p 'src/h5pEditorApi/v3' -c 'openapitools-for-h5p-editor.json'",
-		"pregenerate-client:common-cartridge": "rm -rf ./src/commonCartridgeApi/v3",
 		"generate-client:common-cartridge": "openapi-generator-cli generate -c ./openapitools.json --generator-key common-cartridge-api"
 	},
 	"dependencies": {

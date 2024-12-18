@@ -25,18 +25,19 @@ export interface CourseExportBodyParams {
      * @type {Array<string>}
      * @memberof CourseExportBodyParams
      */
-    'topics': Array<string>;
+    topics: Array<string>;
     /**
      * The list of ids of tasks which should be exported. If empty no tasks are exported.
      * @type {Array<string>}
      * @memberof CourseExportBodyParams
      */
-    'tasks': Array<string>;
+    tasks: Array<string>;
     /**
      * The list of ids of column boards which should be exported. If empty no column boards are exported.
      * @type {Array<string>}
      * @memberof CourseExportBodyParams
      */
-    'columnBoards': Array<string>;
+    columnBoards: Array<string>;
 }
+
 
