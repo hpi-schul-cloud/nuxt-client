@@ -83,6 +83,8 @@ const isOpen: ModelRef<boolean> = defineModel("isOpen", {
 	required: true,
 });
 
+const { t } = useI18n();
+
 const emit = defineEmits(["close", "update:options", "start-video-conference"]);
 
 const localOptions = ref<VideoConferenceOptions>({
@@ -106,6 +108,4 @@ watch(
 	},
 	{ deep: true }
 );
-
-const { t } = useI18n();
 </script>
