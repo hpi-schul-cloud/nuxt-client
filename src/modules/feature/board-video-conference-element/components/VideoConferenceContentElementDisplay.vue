@@ -2,7 +2,7 @@
 	<div>
 		<ContentElementBar
 			:hasGreyBackground="true"
-			:icon="mdiVideo"
+			:icon="mdiVideoOutline"
 			:has-row-style="isSmallOrLargerListBoard"
 			data-testid="board-video-conference-element"
 			@click.stop="onContentClick"
@@ -84,7 +84,7 @@
 <script setup lang="ts">
 import image from "@/assets/img/videoConference.svg";
 import { computed, ref } from "vue";
-import { mdiVideo } from "@icons/material";
+import { mdiVideoOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { injectStrict } from "@/utils/inject";
 import { useDisplay } from "vuetify";
@@ -189,20 +189,20 @@ $pulseIconColor: #15ba97;
 	margin: 10px;
 	box-shadow: 0 0 0 0 $pulseIconColor;
 	transform: scale(1);
-	animation: pulse 1.5s infinite;
+	animation: pulse 1.5s 5;
 
 	@keyframes pulse {
 		0% {
+			transform: scale(1);
+			box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+		}
+		30% {
 			transform: scale(0.95);
 			box-shadow: 0 0 0 0 $pulseIconColor;
 		}
-		70% {
+		100% {
 			transform: scale(1);
 			box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
-		}
-		100% {
-			transform: scale(0.95);
-			box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
 		}
 	}
 
