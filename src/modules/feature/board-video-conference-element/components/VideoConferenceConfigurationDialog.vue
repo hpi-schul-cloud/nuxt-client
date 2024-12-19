@@ -106,6 +106,7 @@ watch(
 	(newLocalOptions) => {
 		emit("update:options", newLocalOptions);
 	},
+	// "deep" might be not necessary here as the deep watcher is created implicitly
 	{ deep: true }
 );
 </script>
