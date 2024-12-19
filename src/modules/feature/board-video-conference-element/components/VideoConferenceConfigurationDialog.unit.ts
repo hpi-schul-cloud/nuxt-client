@@ -10,8 +10,8 @@ import { VideoConferenceOptions } from "@/store/types/video-conference";
 
 const defaultOptions = ref<VideoConferenceOptions>({
 	everyAttendeeJoinsMuted: false,
-	moderatorMustApproveJoinRequests: true,
 	everybodyJoinsAsModerator: false,
+	moderatorMustApproveJoinRequests: true,
 });
 
 describe("VideoConferenceConfigurationDialog", () => {
@@ -79,10 +79,15 @@ describe("VideoConferenceConfigurationDialog", () => {
 			);
 			await checkbox.setValue(true);
 			const emitted = wrapper.emitted();
-			expect(emitted).toHaveLength(1);
-			const emittedValue = emitted[0][0];
-			// from here on currently not working
-			// expect(emittedValue.everyAttendeeJoinsMuted).toBe(true);
+
+			const expectedObject = {
+				everyAttendeeJoinsMuted: true,
+				everybodyJoinsAsModerator: false,
+				moderatorMustApproveJoinRequests: true,
+			};
+
+			expect(emitted["update:options"]).toHaveLength(1);
+			expect(emitted["update:options"]).toStrictEqual([[expectedObject]]);
 		});
 
 		it("should toggle moderatorMustApproveJoinRequests option when checkbox is clicked", async () => {
@@ -92,7 +97,16 @@ describe("VideoConferenceConfigurationDialog", () => {
 				"[data-testid='moderator-must-approve-join-requests']"
 			);
 			await checkbox.setValue(false);
-			expect(defaultOptions.value.moderatorMustApproveJoinRequests).toBe(false);
+			const emitted = wrapper.emitted();
+
+			const expectedObject = {
+				everyAttendeeJoinsMuted: false,
+				everybodyJoinsAsModerator: false,
+				moderatorMustApproveJoinRequests: false,
+			};
+
+			expect(emitted["update:options"]).toHaveLength(1);
+			expect(emitted["update:options"]).toStrictEqual([[expectedObject]]);
 		});
 
 		it("should toggle everybodyJoinsAsModerator option when checkbox is clicked", async () => {
@@ -102,7 +116,16 @@ describe("VideoConferenceConfigurationDialog", () => {
 				"[data-testid='everybody-joins-as-moderator']"
 			);
 			await checkbox.setValue(true);
-			expect(defaultOptions.value.everybodyJoinsAsModerator).toBe(true);
+			const emitted = wrapper.emitted();
+
+			const expectedObject = {
+				everyAttendeeJoinsMuted: false,
+				everybodyJoinsAsModerator: true,
+				moderatorMustApproveJoinRequests: true,
+			};
+
+			expect(emitted["update:options"]).toHaveLength(1);
+			expect(emitted["update:options"]).toStrictEqual([[expectedObject]]);
 		});
 	});
 });
