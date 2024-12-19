@@ -18,7 +18,10 @@
 
 		<template #content>
 			<div>
-				<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
+				<div
+					class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
+					v-if="showAlertInfo"
+				>
 					<div class="mx-2">
 						<v-icon color="info" :icon="mdiInformation" />
 					</div>
@@ -136,6 +139,14 @@ const showCtlToolsInfo = computed(() => {
 	return (
 		envConfigModule.getCtlToolsTabEnabled &&
 		(props.parentType === "courses" || props.parentType === "columnBoard")
+	);
+});
+
+const showAlertInfo = computed(() => {
+	return (
+		props.parentType === "courses" ||
+		props.parentType === "columnBoard" ||
+		props.parentType === "lessons"
 	);
 });
 </script>
