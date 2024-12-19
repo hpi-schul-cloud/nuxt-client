@@ -21,17 +21,44 @@
 					<p data-testid="share-options-info-text">
 						{{ t(`components.molecules.share.${type}.options.infoText`) }}
 					</p>
-					<div class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5">
+					<div
+						class="d-flex flex-row pa-2 mb-4 rounded bg-blue-lighten-5"
+						v-if="showAlertInfo"
+					>
 						<div class="mx-2">
 							<v-icon color="info" :icon="mdiInformation" />
 						</div>
 						<div data-testid="share-options-table-header">
 							{{ t("components.molecules.share.options.tableHeader.InfoText") }}
 							<ul class="ml-6">
-								<li data-testid="share-options-personal-data-text">
+								<li
+									data-testid="share-options-personal-data-text"
+									v-if="showCourseInfo"
+								>
 									{{
 										t(
 											"components.molecules.shareImport.options.restrictions.infoText.personalData"
+										)
+									}}
+								</li>
+								<li v-if="showCourseInfo || showLessonInfo">
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.geogebra"
+										)
+									}}
+								</li>
+								<li v-if="showCourseInfo || showBoardInfo || showLessonInfo">
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.etherpad"
+										)
+									}}
+								</li>
+								<li v-if="showCourseInfo || showBoardInfo">
+									{{
+										t(
+											"components.molecules.shareImport.options.restrictions.infoText.whiteboard"
 										)
 									}}
 								</li>
@@ -55,28 +82,17 @@
 										)
 									}}
 								</li>
-								<li data-testid="share-modal-coursefiles-info">
+								<li
+									data-testid="share-modal-coursefiles-info"
+									v-if="showCourseInfo"
+								>
 									{{
 										t(
 											"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
 										)
 									}}
 								</li>
-								<li>
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.etherpad"
-										)
-									}}
-								</li>
-								<li>
-									{{
-										t(
-											"components.molecules.shareImport.options.restrictions.infoText.geogebra"
-										)
-									}}
-								</li>
-								<li>
+								<li v-if="showCourseInfo">
 									{{
 										t(
 											"components.molecules.shareImport.options.restrictions.infoText.courseGroups"
@@ -194,5 +210,24 @@ const showCtlToolsInfo = computed(() => {
 		envConfigModule.getCtlToolsTabEnabled &&
 		(props.type === "courses" || props.type === "columnBoard")
 	);
+});
+
+const showAlertInfo = computed(() => {
+	return (
+		props.type === "courses" ||
+		props.type === "columnBoard" ||
+		props.type === "lessons"
+	);
+});
+
+const showCourseInfo = computed(() => {
+	return props.type === "courses";
+});
+
+const showBoardInfo = computed(() => {
+	return props.type === "columnBoard";
+});
+const showLessonInfo = computed(() => {
+	return props.type === "lessons";
 });
 </script>

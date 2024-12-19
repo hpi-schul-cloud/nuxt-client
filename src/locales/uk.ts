@@ -686,8 +686,10 @@ export default {
 		"Файли в розділі Файли курсу",
 	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
 		"Вміст із Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.whiteboard":
+		"Вміст із Whiteboards",
 	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
-		"Ідентифікатори Geogebra та",
+		"Ідентифікатори Geogebra",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Групи курсів",
 	"components.molecules.share.options.tableHeader.InfoText":

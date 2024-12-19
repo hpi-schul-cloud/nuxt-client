@@ -683,8 +683,10 @@ export default {
 		"Dateien unter Kurs-Dateien",
 	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
 		"Inhalte aus Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.whiteboard":
+		"Inhalte aus Whiteboards",
 	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
-		"Geogebra IDs und",
+		"Geogebra IDs",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Kursgruppen",
 	"components.molecules.share.options.tableHeader.InfoText":
