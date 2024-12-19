@@ -10,7 +10,7 @@ import {
 	mdiPuzzleOutline,
 	mdiTextBoxEditOutline,
 	mdiTrayArrowUp,
-	mdiVideo,
+	mdiVideoOutline,
 } from "@icons/material";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
@@ -161,7 +161,7 @@ export const useAddElementDialog = (
 
 	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED) {
 		options.push({
-			icon: mdiVideo,
+			icon: mdiVideoOutline,
 			label: t(
 				"components.elementTypeSelection.elements.videoConferenceElement.subtitle"
 			),
