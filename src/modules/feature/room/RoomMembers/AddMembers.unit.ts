@@ -3,15 +3,16 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import AddMembers from "./AddMembers.vue";
-import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
+import { RoleName } from "@/serverApi/v3";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { authModule } from "@/store";
-import { nextTick } from "vue";
 import {
 	roomMemberListFactory,
 	roomMemberSchoolResponseFactory,
 } from "@@/tests/test-utils";
-import { RoomMember } from "@data-room";
+import { VueWrapper } from "@vue/test-utils";
+import { VAutocomplete } from "vuetify/lib/components/index.mjs";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 
 jest.mock("@/store/store-accessor", () => {
 	return {
@@ -22,12 +23,31 @@ jest.mock("@/store/store-accessor", () => {
 	};
 });
 
-const mockPotentialMembers = roomMemberListFactory.buildList(3);
-const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
-
+jest.mock("@vueuse/integrations/useFocusTrap", () => {
+	return {
+		...jest.requireActual("@vueuse/integrations/useFocusTrap"),
+		useFocusTrap: jest.fn(),
+	};
+});
 describe("AddMembers", () => {
+	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
+	let pauseMock: jest.Mock;
+	let unpauseMock: jest.Mock;
+
+	beforeEach(() => {
+		pauseMock = jest.fn();
+		unpauseMock = jest.fn();
+		(useFocusTrap as jest.Mock).mockReturnValue({
+			pause: pauseMock,
+			unpause: unpauseMock,
+		});
+	});
+
 	const setup = () => {
-		const wrapper = mount(AddMembers, {
+		const potentialRoomMembers = roomMemberListFactory.buildList(3);
+		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
+		wrapper = mount(AddMembers, {
+			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -35,154 +55,224 @@ describe("AddMembers", () => {
 				},
 			},
 			props: {
-				memberList: mockPotentialMembers,
+				memberList: potentialRoomMembers,
 				schools: roomMembersSchools,
 			},
 		});
 
-		const wrapperVM = wrapper.vm as unknown as {
-			memberList: RoomMember[];
-			preSelectedRole: RoleName;
-			selectedUsers: RoomMember[];
-			schoolList: SchoolForExternalInviteResponse[];
-			roles: { id: string; name: string }[];
+		return {
+			wrapper,
+			potentialRoomMembers,
+			roomMembersSchools,
 		};
-
-		return { wrapper, wrapperVM };
 	};
+
+	afterEach(() => {
+		wrapper.unmount(); // necessary due focus trap
+	});
 
 	describe("when component is mounted", () => {
 		it("should render component", () => {
-			const { wrapper, wrapperVM } = setup();
+			const { wrapper, potentialRoomMembers, roomMembersSchools } = setup();
 
 			expect(wrapper.exists()).toBe(true);
-			expect(wrapper.findComponent(AddMembers)).toBeTruthy();
-			expect(wrapperVM.memberList).toStrictEqual(mockPotentialMembers);
-			expect(wrapperVM.schoolList).toStrictEqual(roomMembersSchools);
-			expect(wrapperVM.schoolList).toHaveLength(3);
+			expect(wrapper.props()).toEqual({
+				memberList: potentialRoomMembers,
+				schools: roomMembersSchools,
+			});
 		});
 
-		describe("AutoComplete components", () => {
-			it("should render Autocomplete components", () => {
+		describe("Autocomplete components", () => {
+			it("should render autocomplete components", () => {
 				const { wrapper } = setup();
-				const autoCompleteComponents = wrapper.findAllComponents({
-					name: "v-autocomplete",
-				});
+				const autoCompleteComponents = wrapper.findAllComponents(VAutocomplete);
 
 				expect(autoCompleteComponents).toHaveLength(3);
 			});
 
 			it("should have proper props for autoCompleteSchool component", () => {
-				const { wrapper, wrapperVM } = setup();
-				const schoolComponent = wrapper.findComponent({
-					name: "v-autocomplete",
+				const { wrapper, roomMembersSchools } = setup();
+				const schoolComponent = wrapper.getComponent({
 					ref: "autoCompleteSchool",
 				});
 
-				expect(schoolComponent).toBeTruthy();
 				expect(schoolComponent.props("items")).toStrictEqual(
-					wrapperVM.schoolList
+					roomMembersSchools
 				);
 				expect(schoolComponent.props("modelValue")).toBe(
-					wrapperVM.schoolList[0].id
+					roomMembersSchools[0].id
 				);
 			});
-
 			it("should have proper props for autoCompleteRole component", () => {
-				const { wrapper, wrapperVM } = setup();
-				const roleComponent = wrapper.findComponent({
-					name: "v-autocomplete",
+				const { wrapper } = setup();
+
+				const roles = [
+					{ id: RoleName.Roomeditor, name: "common.labels.teacher" },
+				];
+
+				const roleComponent = wrapper.getComponent({
 					ref: "autoCompleteRole",
 				});
 
-				expect(roleComponent).toBeTruthy();
-				expect(roleComponent.props("items")).toStrictEqual(wrapperVM.roles);
-				expect(roleComponent.props("modelValue")).toBe(wrapperVM.roles[0].id);
+				expect(roleComponent.props("items")).toStrictEqual(roles);
+				expect(roleComponent.props("modelValue")).toBe(roles[0].id);
 			});
 
 			it("should have proper props for autoCompleteUsers component", () => {
-				const { wrapper, wrapperVM } = setup();
-				const userComponent = wrapper.findComponent({
-					name: "v-autocomplete",
+				const { wrapper, potentialRoomMembers } = setup();
+				const userComponent = wrapper.getComponent({
 					ref: "autoCompleteUsers",
 				});
 
-				expect(userComponent).toBeTruthy();
 				expect(userComponent.props("items")).toStrictEqual(
-					wrapperVM.memberList
+					potentialRoomMembers
 				);
 				expect(userComponent.props("modelValue")).toHaveLength(0);
 			});
 		});
 	});
 
-	describe("when userRole is changed", () => {
-		it("should emit the userRole", async () => {
+	describe("when school is changed", () => {
+		it("should emit 'update:role'", async () => {
+			const { wrapper, roomMembersSchools } = setup();
+			const selectedSchool = roomMembersSchools[1].id;
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			await schoolComponent.setValue(selectedSchool);
+
+			expect(wrapper.emitted("update:role")).toHaveLength(1);
+			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
+				{ role: RoleName.Roomeditor, schoolId: selectedSchool },
+			]);
+		});
+
+		it("should set the role to room editor", async () => {
 			const { wrapper } = setup();
-			const roleComponent = wrapper.findComponent({
-				name: "v-autocomplete",
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			await schoolComponent.setValue("schoolId");
+
+			const roleComponent = wrapper.getComponent({
 				ref: "autoCompleteRole",
 			});
 
-			expect(roleComponent).toBeTruthy();
-			await roleComponent.vm.$emit("update:modelValue", RoleName.Roomviewer);
-			await nextTick();
+			expect(roleComponent.props("modelValue")).toBe(RoleName.Roomeditor);
+		});
+
+		it("should reset selectedUsers", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
+			await schoolComponent.setValue("schoolId");
+
+			expect(userComponent.props("modelValue")).toEqual([]);
+		});
+	});
+
+	describe("when userRole is changed", () => {
+		it("should emit the userRole", async () => {
+			const { wrapper, roomMembersSchools } = setup();
+			const selectedRole = RoleName.Roomeditor;
+			const roleComponent = wrapper.getComponent({
+				ref: "autoCompleteRole",
+			});
+
+			await roleComponent.setValue(selectedRole);
+
 			expect(wrapper.emitted("update:role")).toHaveLength(1);
 			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
-				{ role: RoleName.Roomviewer, schoolId: roomMembersSchools[0].id },
+				{ role: selectedRole, schoolId: roomMembersSchools[0].id },
 			]);
+		});
+
+		it("should reset selectedUsers", async () => {
+			const { wrapper } = setup();
+			const roleComponent = wrapper.getComponent({
+				ref: "autoCompleteRole",
+			});
+
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
+			await roleComponent.setValue(RoleName.Roomeditor);
+
+			expect(wrapper.emitted()).toHaveProperty("update:role");
+			expect(userComponent.props("modelValue")).toEqual([]);
 		});
 	});
 
 	describe("when user(s) selected", () => {
 		it("should add user to selectedUsers", async () => {
-			const { wrapper, wrapperVM } = setup();
-			const userComponent = wrapper.findComponent({
-				name: "v-autocomplete",
+			const { wrapper, potentialRoomMembers } = setup();
+			const userComponent = wrapper.getComponent({
 				ref: "autoCompleteUsers",
 			});
 
-			expect(userComponent).toBeTruthy();
-			await userComponent.vm.$emit("update:modelValue", [
-				mockPotentialMembers[0].userId,
-				mockPotentialMembers[1].userId,
+			await userComponent.setValue([
+				potentialRoomMembers[0].userId,
+				potentialRoomMembers[1].userId,
 			]);
-			await nextTick();
-			expect(wrapperVM.selectedUsers).toHaveLength(2);
+
+			expect(userComponent.props("modelValue")).toHaveLength(2);
 			expect(userComponent.props("modelValue")).toStrictEqual([
-				mockPotentialMembers[0].userId,
-				mockPotentialMembers[1].userId,
+				potentialRoomMembers[0].userId,
+				potentialRoomMembers[1].userId,
 			]);
 		});
 	});
 
 	describe("when add button clicked", () => {
 		it("should emit the selectedUsers", async () => {
-			const { wrapper, wrapperVM } = setup();
-			const userComponent = wrapper.findComponent({
-				name: "v-autocomplete",
+			const { wrapper, potentialRoomMembers } = setup();
+			const userComponent = wrapper.getComponent({
 				ref: "autoCompleteUsers",
 			});
 
-			expect(userComponent).toBeTruthy();
-			await userComponent.vm.$emit("update:modelValue", [
-				mockPotentialMembers[0].userId,
-				mockPotentialMembers[1].userId,
-			]);
-			await nextTick();
+			const selectedUsers = [
+				potentialRoomMembers[0].userId,
+				potentialRoomMembers[1].userId,
+			];
+			userComponent.setValue(selectedUsers);
 
-			const addButton = wrapper.findComponent({
-				name: "v-btn",
+			const addButton = wrapper.getComponent({
 				ref: "addButton",
 			});
-			expect(addButton).toBeTruthy();
 			await addButton.trigger("click");
-			await nextTick();
+
 			expect(wrapper.emitted("add:members")).toHaveLength(1);
-			expect(wrapper.emitted("add:members")![0]).toStrictEqual([
-				wrapperVM.selectedUsers,
-			]);
+			expect(wrapper.emitted("add:members")![0]).toStrictEqual([selectedUsers]);
 			expect(wrapper.emitted("close")).toHaveLength(1);
+		});
+
+		it("should emit 'close'", async () => {
+			const { wrapper, potentialRoomMembers } = setup();
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
+			const selectedUsers = [
+				potentialRoomMembers[0].userId,
+				potentialRoomMembers[1].userId,
+			];
+			userComponent.setValue(selectedUsers);
+
+			const addButton = wrapper.getComponent({
+				ref: "addButton",
+			});
+			await addButton.trigger("click");
+
+			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 	});
 
@@ -190,14 +280,60 @@ describe("AddMembers", () => {
 		it("should emit the selectedUsers", async () => {
 			const { wrapper } = setup();
 
-			const cancelButton = wrapper.findComponent({
-				name: "v-btn",
+			const cancelButton = wrapper.getComponent({
 				ref: "cancelButton",
 			});
-			expect(cancelButton).toBeTruthy();
+
 			await cancelButton.trigger("click");
-			await nextTick();
-			expect(wrapper.emitted("close")).toHaveLength(1);
+
+			expect(wrapper.emitted()).toHaveProperty("close");
+		});
+	});
+
+	describe("focus trap", () => {
+		it("should pause focus trap when any autocomplete menu is open", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			schoolComponent.vm.menu = true;
+
+			expect(pauseMock).toHaveBeenCalledTimes(1);
+		});
+
+		it("should unpause focus trap when all autocomplete menus are closed", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			schoolComponent.vm.menu = true;
+			expect(pauseMock).toHaveBeenCalledTimes(1);
+
+			schoolComponent.vm.menu = false;
+			expect(unpauseMock).toHaveBeenCalled();
+		});
+
+		it("should not unpause focus trap when a autocomplete is closed while another one is opened", async () => {
+			// this happens when user switches between autocomplete components for brief moment both are treated as open
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			const roleComponent = wrapper.getComponent({
+				ref: "autoCompleteRole",
+			});
+
+			schoolComponent.vm.menu = true;
+			roleComponent.vm.menu = true;
+
+			expect(pauseMock).toHaveBeenCalled();
+			expect(unpauseMock).not.toHaveBeenCalled();
+
+			schoolComponent.vm.menu = false;
+			expect(unpauseMock).not.toHaveBeenCalled();
 		});
 	});
 });

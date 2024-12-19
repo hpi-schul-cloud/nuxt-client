@@ -1,61 +1,166 @@
-import { shallowMount } from "@vue/test-utils";
 import { ref } from "vue";
 import { useInternalConfirmationDialog } from "./Confirmation.composable";
-import DeleteConfirmation from "./ConfirmationDialog.vue";
-import { createTestingI18n } from "@@/tests/test-utils/setup";
-jest.mock("./Confirmation.composable");
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
+import ConfirmationDialog from "./ConfirmationDialog.vue";
+import { VCard, VDialog } from "vuetify/lib/components/index.mjs";
+import { VueWrapper } from "@vue/test-utils";
 
-const mockedUseInternalConfirmationDialog = jest.mocked(
+jest.mock("./Confirmation.composable");
+const useInternalConfirmationDialogMock = jest.mocked(
 	useInternalConfirmationDialog
 );
 
-describe("DeleteConfirmation", () => {
-	const confirmSpy = jest.fn();
-	const cancelSpy = jest.fn();
-	const setup = (options: {
-		isDeleteModalOpen?: boolean;
-		title?: string;
-		typeName?: string;
+describe("ConfirmationDialog", () => {
+	let cancelMock: jest.Mock;
+	let confirmMock: jest.Mock;
+	let wrapper: VueWrapper<InstanceType<typeof ConfirmationDialog>>;
+
+	beforeEach(() => {
+		cancelMock = jest.fn();
+		confirmMock = jest.fn();
+	});
+
+	const setup = (options?: {
+		message?: string;
+		confirmActionLangKey?: string;
 	}) => {
-		mockedUseInternalConfirmationDialog.mockReturnValue({
-			confirm: confirmSpy,
-			cancel: cancelSpy,
-			askInternal: jest.fn(),
-			dialogOptions: ref({ message: "TestMessage" }),
+		const { message, confirmActionLangKey } = {
+			message: "titleMessage",
+			confirmActionLangKey: "ActionKey",
+			...options,
+		};
+
+		useInternalConfirmationDialogMock.mockReturnValue({
+			dialogOptions: ref({
+				message,
+				confirmActionLangKey,
+			}),
 			isDialogOpen: ref(true),
+			confirm: confirmMock,
+			cancel: cancelMock,
+			askInternal: jest.fn(),
 		});
 
-		const wrapper = shallowMount(DeleteConfirmation, {
-			global: { plugins: [createTestingI18n()] },
-			props: {
-				isDeleteModalOpen: options?.isDeleteModalOpen ?? true,
-				title: options.title ?? "title",
-				typeName: options.typeName ?? "card",
+		wrapper = mount(ConfirmationDialog, {
+			global: {
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 		});
-		return wrapper;
+		return { wrapper, message, confirmActionLangKey };
 	};
+
+	afterEach(() => {
+		wrapper.unmount(); // otherwise tests break when running all tests, necessary due focus trap
+	});
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			const wrapper = setup({});
-			expect(wrapper.findComponent(DeleteConfirmation).exists()).toBe(true);
+			const { wrapper } = setup();
+
+			expect(wrapper.exists()).toBe(true);
+		});
+
+		it("should render dialog title", async () => {
+			const { wrapper, message } = setup();
+
+			const dialogTitle = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.find(".dialog-title");
+
+			expect(dialogTitle.text()).toContain(message);
+		});
+
+		it("should render empty dialog title if no message is provided", async () => {
+			const { wrapper } = setup({ message: undefined });
+
+			const dialogTitle = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.find(".dialog-title");
+
+			expect(dialogTitle.text()).toBe("");
 		});
 	});
 
-	describe("when a dialog button clicked", () => {
-		it("should broadcast 'confirm' if 'remove' button clicked", () => {
-			const wrapper = setup({});
-			const dialog = wrapper.findComponent({ name: "vCustomDialog" });
-			dialog.vm.$emit("dialog-confirmed");
-			expect(confirmSpy).toHaveBeenCalled();
+	describe("when a dialog button is clicked", () => {
+		it("should call 'confirm' if 'confirm' button clicked", async () => {
+			const { wrapper } = setup();
+
+			const confirmButton = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.findComponent("[data-testid='dialog-confirm']");
+
+			await confirmButton.trigger("click");
+			expect(confirmMock).toHaveBeenCalled();
 		});
 
-		it("should emit 'dialog-cancel' if 'cancel' button clicked", () => {
-			const wrapper = setup({});
-			const dialog = wrapper.findComponent({ name: "vCustomDialog" });
-			dialog.vm.$emit("dialog-closed");
-			expect(cancelSpy).toHaveBeenCalled();
+		it("should call 'cancel' if 'cancel' button clicked", async () => {
+			const { wrapper } = setup();
+
+			const cancelButton = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.findComponent("[data-testid='dialog-cancel']");
+
+			await cancelButton.trigger("click");
+			expect(cancelMock).toHaveBeenCalled();
+		});
+	});
+
+	describe("confirm button", () => {
+		it("should call 'confirm' if button is clicked", async () => {
+			const { wrapper } = setup();
+
+			const confirmButton = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.findComponent("[data-testid='dialog-confirm']");
+
+			await confirmButton.trigger("click");
+			expect(confirmMock).toHaveBeenCalled();
+		});
+
+		it("should have correct text when own language key is provided", async () => {
+			const { wrapper, confirmActionLangKey } = setup({
+				confirmActionLangKey: "providedLanguageKey",
+			});
+
+			const confirmButton = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.findComponent("[data-testid='dialog-confirm']");
+
+			expect(confirmButton.text()).toContain(confirmActionLangKey);
+		});
+
+		it("should have default text when no language key is provided", async () => {
+			const { wrapper } = setup({ confirmActionLangKey: undefined });
+
+			const confirmButton = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.findComponent("[data-testid='dialog-confirm']");
+
+			expect(confirmButton.text()).toContain("common.actions.confirm");
+		});
+	});
+
+	describe("cancel button", () => {
+		it("should call 'cancel' if dialog is cancelled", async () => {
+			const { wrapper } = setup();
+
+			const cancelButton = wrapper
+				.findComponent(VDialog)
+				.findComponent(VCard)
+				.findComponent("[data-testid='dialog-cancel']");
+
+			await cancelButton.trigger("click");
+			expect(cancelMock).toHaveBeenCalled();
 		});
 	});
 });
