@@ -94,7 +94,7 @@ import {
 import { useI18n } from "vue-i18n";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
-import VideoConferenceConfigurationDialog from "./VideoConferenceConfigurationDialog.vue";
+import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
