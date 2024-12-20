@@ -1505,11 +1505,11 @@ export default {
 	"pages.common.tools.configureVideoconferenceDialog.title":
 		"Videokonferenz erstellen",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Alle Nutzer:innen nehmen als Moderator:in teil",
+		"Moderationsrechte für alle Teilnehmenden",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute":
-		"Teilnehmer:innen beim Betreten stummschalten",
+		"Teilnehmende beim Betreten stummschalten",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Freigabe durch Moderator:in, bevor der Raum betreten werden kann",
+		"Warteraum für Teilnehmende aktivieren",
 	"pages.content._id.addToTopic": "Hinzufügen zu",
 	"pages.content._id.collection.selectElements":
 		"Wählen Sie die Elemente, die Sie zum Thema hinzufügen möchten",

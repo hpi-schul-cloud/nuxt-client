@@ -70,12 +70,13 @@
 			<template #menu v-if="isEditMode">
 				<slot />
 			</template>
-			<template #logo>
-				<div
+			<template #statusInfo>
+				<div class="pulsating-dot my-auto" data-testid="vc-pulsating-dot" />
+				<!-- <div
 					v-if="isRunning && hasParticipationPermission"
 					class="pulsating-dot my-auto"
 					data-testid="vc-pulsating-dot"
-				/>
+				/> -->
 			</template>
 		</ContentElementBar>
 	</div>
@@ -186,7 +187,6 @@ $pulseIconColor: #15ba97;
 	border-radius: 50%;
 	height: 20px;
 	width: 20px;
-	margin: 10px;
 	box-shadow: 0 0 0 0 $pulseIconColor;
 	transform: scale(1);
 	animation: pulse 1.5s 5;

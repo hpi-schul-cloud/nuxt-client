@@ -50,6 +50,10 @@
 				>
 					<slot name="title" />
 				</LineClamp>
+
+				<div v-if="$slots.statusInfo" class="statusInfo">
+					<slot name="statusInfo" />
+				</div>
 			</div>
 
 			<div
@@ -143,5 +147,8 @@ const props = defineProps({
 .logo-container {
 	width: 24px;
 	height: 24px;
+}
+.statusInfo {
+	margin-left: auto;
 }
 </style>
