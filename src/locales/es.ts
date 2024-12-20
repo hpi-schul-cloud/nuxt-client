@@ -688,8 +688,10 @@ export default {
 		"Archivos en Archivos de curso",
 	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
 		"Contenido de Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.whiteboard":
+		"Contenido de Whiteboards",
 	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
-		"ID de Geogebra y",
+		"ID de Geogebra",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Grupos de cursos",
 	"components.molecules.share.options.tableHeader.InfoText":
