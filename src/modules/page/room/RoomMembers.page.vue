@@ -3,7 +3,9 @@
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
+		:fixed-header="fixedHeader"
 		@fab:clicked="onFabClick"
+		ref="wireframe"
 	>
 		<template #header>
 			<h1 class="text-h3 mb-4" data-testid="room-title">
@@ -28,6 +30,7 @@
 			<MembersTable
 				v-if="!isLoading"
 				:members="memberList"
+				:fixed-top="fixedHeader"
 				@remove:members="onRemoveMembers"
 			/>
 		</div>
@@ -55,7 +58,7 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
+import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useRoomDetailsStore, useRoomMembers } from "@data-room";
@@ -64,11 +67,12 @@ import { mdiPlus } from "@icons/material";
 import { MembersTable, AddMembers } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
+import { useElementBounding } from "@vueuse/core";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
-const { xs } = useDisplay();
+const { xs, mdAndDown } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 const isMembersDialogOpen = ref(false);
 const roomId = route.params.id.toString();
@@ -87,6 +91,9 @@ const memberList: Ref<RoomMemberResponse[]> = ref(roomMembers);
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
+const wireframe = ref<HTMLElement | null>(null);
+const fixedHeader = ref(false);
+const { y } = useElementBounding(wireframe);
 
 useTitle(pageTitle);
 
@@ -120,6 +127,10 @@ onMounted(async () => {
 		await fetchRoom(roomId);
 	}
 	await fetchMembers();
+});
+
+watch(y, () => {
+	fixedHeader.value = y.value <= -64 && mdAndDown.value;
 });
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {

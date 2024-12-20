@@ -1,6 +1,8 @@
 <template>
 	<div
+		id="table-title-header"
 		class="d-flex justify-space-between align-center mb-2 table-title-header"
+		:class="{ 'fixed-position': fixedTop }"
 	>
 		<ActionMenu
 			v-if="selectedUserIds.length"
@@ -82,6 +84,9 @@ const props = defineProps({
 	members: {
 		type: Array as PropType<RoomMemberResponse[]>,
 		required: true,
+	},
+	fixedTop: {
+		type: Boolean,
 	},
 });
 
@@ -181,5 +186,14 @@ const tableHeader = [
 	background-color: rgba(var(--v-theme-primary), 0.12);
 	border-radius: 0.25rem;
 	min-height: 40px;
+}
+
+.fixed-position {
+	position: fixed;
+	top: 0;
+	margin-top: 159px;
+	width: 95vw;
+	z-index: 10;
+	background: rgb(var(--v-theme-white));
 }
 </style>
