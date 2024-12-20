@@ -1,8 +1,16 @@
 <template>
-	<DefaultWireframe max-width="short" :fab-items="fabAction">
+	<DefaultWireframe max-width="nativ" :fab-items="fabAction">
 		<template #header>
 			<h1 class="text-h3 mb-4">{{ t("pages.rooms.title") }}</h1>
 		</template>
+		<InfoAlert class="mb-14">
+			{{ t("pages.rooms.infoAlert.welcome") }}
+			<ul class="mt-1 pl-4">
+				<li>{{ t("pages.rooms.infoAlert.welcome.visbilility") }}</li>
+				<li>{{ t("pages.rooms.infoAlert.welcome.colloboration") }}</li>
+				<li>{{ t("pages.rooms.infoAlert.welcome.teamsAndCourses") }}</li>
+			</ul>
+		</InfoAlert>
 		<RoomGrid />
 		<ImportFlow
 			:is-active="isImportMode"
@@ -27,6 +35,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { InfoAlert } from "@ui-alert";
 
 const { t } = useI18n();
 const route = useRoute();
