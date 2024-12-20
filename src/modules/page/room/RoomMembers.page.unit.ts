@@ -22,6 +22,7 @@ import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
 import { AddMembers, MembersTable } from "@feature-room";
 import { mdiPlus } from "@icons/material";
+import { VueWrapper } from "@vue/test-utils";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -30,10 +31,13 @@ const useRouteMock = <jest.Mock>useRoute;
 jest.mock("../../data/room/roomMembers/roomMembers.composable");
 const mockUseRoomMembers = jest.mocked(useRoomMembers);
 
+jest.mock("@vueuse/integrations"); // mock focus trap from add members because we use mount
+
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let mockRoomMemberCalls: DeepMocked<ReturnType<typeof useRoomMembers>>;
+	let wrapper: VueWrapper<InstanceType<typeof RoomMembersPage>>;
 
 	const routeRoomId = "room-id";
 
@@ -79,7 +83,7 @@ describe("RoomMembersPage", () => {
 		const members = roomMemberFactory(RoleName.Roomeditor).buildList(3);
 		mockRoomMemberCalls.roomMembers = ref(members);
 
-		const wrapper = mount(RoomMembersPage, {
+		wrapper = mount(RoomMembersPage, {
 			attachTo: document.body,
 			global: {
 				plugins: [
@@ -102,6 +106,10 @@ describe("RoomMembersPage", () => {
 
 		return { wrapper, roomDetailsStore, members, room };
 	};
+
+	afterEach(() => {
+		wrapper.unmount(); // necessary due focus trap in AddMembers
+	});
 
 	it("should be found in the dom", () => {
 		const { wrapper } = setup();
@@ -235,6 +243,18 @@ describe("RoomMembersPage", () => {
 
 					const addMemberComponent = dialog.findComponent(AddMembers);
 					await addMemberComponent.vm.$emit("close");
+
+					expect(dialog.props("modelValue")).toBe(false);
+				});
+
+				it("should close dialog on escape key", async () => {
+					const { wrapper } = setup();
+
+					const dialog = wrapper.getComponent(VDialog);
+					await dialog.setValue(true);
+
+					const dialogContent = dialog.getComponent(AddMembers);
+					await dialogContent.trigger("keydown.escape");
 
 					expect(dialog.props("modelValue")).toBe(false);
 				});
