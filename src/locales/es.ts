@@ -1530,11 +1530,11 @@ export default {
 	"pages.common.tools.configureVideoconferenceDialog.title":
 		"Crear videoconferencia",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Todas las usuarias participan como moderadoras",
+		"Derechos de moderación para todos los participantes",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute":
-		"Silenciar a las participantes al entrar",
+		"Silenciar a los participantes al entrar",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Aprobación del moderador antes de poder ingresar a la sala",
+		"Activar la sala de espera para los participantes",
 	"pages.content._id.addToTopic": "Para ser añadido a",
 	"pages.content._id.collection.selectElements":
 		"Selecciona los elementos que deses añadir al tema",

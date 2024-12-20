@@ -175,6 +175,9 @@ module.exports = {
 			"@ui-skip-link": getDir("src/modules/ui/skip-link"),
 			"@ui-speed-dial-menu": getDir("src/modules/ui/speed-dial-menu"),
 			"@ui-qr-code": getDir("src/modules/ui/qr-code"),
+			"@ui-video-conference-configuration-dialog": getDir(
+				"src/modules/ui/video-conference-configuration-dialog"
+			),
 			"@util-board": getDir("src/modules/util/board"),
 			"@util-validators": getDir("src/modules/util/validators"),
 			"@util-vue": getDir("src/modules/util/vue"),
