@@ -6,13 +6,12 @@ import {
 	SchoolApiFactory,
 	RoomMemberResponse,
 	SchoolForExternalInviteResponse,
-	UserIdAndRole,
-	UserIdAndRoleRoleNameEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useI18n } from "vue-i18n";
 import { useBoardNotifier } from "@util-board";
 import { schoolsModule } from "@/store";
+import { authModule } from "@/store/store-accessor";
 
 export const useRoomMembers = (roomId: string) => {
 	const roomMembers: Ref<RoomMemberResponse[]> = ref([]);
@@ -25,9 +24,13 @@ export const useRoomMembers = (roomId: string) => {
 		id: schoolsModule.getSchool.id,
 		name: schoolsModule.getSchool.name,
 	};
+	const currentUserId = authModule.getUser?.id ?? "";
 
 	const userRoles: Record<string, string> = {
+		[RoleName.Roomowner]: t("common.labels.teacher"),
+		[RoleName.Roomadmin]: t("common.labels.teacher"),
 		[RoleName.Roomeditor]: t("common.labels.teacher"),
+		[RoleName.Roomviewer]: t("common.labels.teacher"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -42,6 +45,10 @@ export const useRoomMembers = (roomId: string) => {
 				return {
 					...member,
 					displayRoleName: userRoles[member.roleName],
+					isSelectable: !(
+						member.userId === currentUserId ||
+						member.roleName === RoleName.Roomowner
+					),
 				};
 			});
 			isLoading.value = false;
@@ -103,15 +110,8 @@ export const useRoomMembers = (roomId: string) => {
 			userIds.includes(member.userId)
 		);
 
-		const userIdsAndRoles: UserIdAndRole[] = newMembers.map((member) => ({
-			userId: member.userId,
-			roleName: UserIdAndRoleRoleNameEnum.Roomeditor,
-		}));
-
 		try {
-			await roomApi.roomControllerAddMembers(roomId, {
-				userIdsAndRoles,
-			});
+			await roomApi.roomControllerAddMembers(roomId, { userIds });
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
 					...member,

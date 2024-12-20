@@ -145,6 +145,9 @@ module.exports = {
 			"@feature-board-collaborative-text-editor-element": getDir(
 				"src/modules/feature/board-collaborative-text-editor-element"
 			),
+			"@feature-board-video-conference-element": getDir(
+				"src/modules/feature/board-video-conference-element"
+			),
 			"@feature-board-deleted-element": getDir(
 				"src/modules/feature/board-deleted-element"
 			),
@@ -166,6 +169,7 @@ module.exports = {
 			"@ui-kebab-menu": getDir("src/modules/ui/kebab-menu"),
 			"@ui-layout": getDir("src/modules/ui/layout"),
 			"@ui-light-box": getDir("src/modules/ui/light-box"),
+			"@ui-line-clamp": getDir("src/modules/ui/line-clamp"),
 			"@ui-preview-image": getDir("src/modules/ui/preview-image"),
 			"@ui-room-details": getDir("src/modules/ui/room-details"),
 			"@ui-skip-link": getDir("src/modules/ui/skip-link"),

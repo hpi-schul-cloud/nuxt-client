@@ -1,5 +1,5 @@
 <template>
-	<v-card>
+	<v-card ref="addMembersContent">
 		<template v-slot:prepend>
 			<div ref="textTitle" class="text-h4 mt-2">
 				{{ t("pages.rooms.members.add") }}
@@ -19,6 +19,7 @@
 						:items="schoolList"
 						:label="t('global.sidebar.item.school')"
 						@update:model-value="onSchoolChange"
+						@update:menu="onAutocompleteToggle"
 					/>
 				</div>
 
@@ -34,6 +35,7 @@
 						:items="roles"
 						:label="t('common.labels.role')"
 						@update:model-value="onRoleChange"
+						@update:menu="onAutocompleteToggle"
 					/>
 				</div>
 
@@ -50,7 +52,7 @@
 						variant="underlined"
 						:items="memberList"
 						:label="t('common.labels.name')"
-						:no-data-text="t('common.nodata')"
+						@update:menu="onAutocompleteToggle"
 					/>
 				</div>
 			</div>
@@ -86,6 +88,8 @@ import { useI18n } from "vue-i18n";
 import { PropType, ref, toRef } from "vue";
 import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
 import { RoomMember } from "@data-room";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { VAutocomplete, VCard } from "vuetify/lib/components/index.mjs";
 
 const props = defineProps({
 	memberList: {
@@ -126,4 +130,31 @@ const onAddMembers = () => {
 };
 
 const onClose = () => emit("close");
+
+const addMembersContent = ref<VCard>();
+const { pause, unpause } = useFocusTrap(addMembersContent, {
+	immediate: true,
+});
+
+const autoCompleteSchool = ref<VAutocomplete>();
+const autoCompleteRole = ref<VAutocomplete>();
+const autoCompleteUsers = ref<VAutocomplete>();
+
+const onAutocompleteToggle = () => {
+	const autocompleteRefs = [
+		autoCompleteSchool,
+		autoCompleteRole,
+		autoCompleteUsers,
+	];
+
+	const isAnyAutocompleteOpen = autocompleteRefs.some(
+		(autocomplete) => autocomplete.value?.menu
+	);
+
+	if (isAnyAutocompleteOpen) {
+		pause();
+	} else {
+		unpause();
+	}
+};
 </script>

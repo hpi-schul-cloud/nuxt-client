@@ -6,16 +6,15 @@ import {
 } from "@/serverApi/v3";
 import { RoomMember } from "@data-room";
 
-export const roomMemberResponseFactory = Factory.define<RoomMemberResponse>(
-	({ sequence }) => ({
+export const roomMemberFactory = (roleName = RoleName.Roomowner) =>
+	Factory.define<RoomMemberResponse>(({ sequence }) => ({
 		userId: `member${sequence}`,
 		firstName: `firstName${sequence}`,
 		lastName: `lastName${sequence}`,
-		roleName: RoleName.Roomeditor,
+		roleName,
 		displayRoleName: RoleName.Teacher,
 		schoolName: "Paul-Gerhardt-Gymnasium",
-	})
-);
+	}));
 
 export const roomMemberListFactory = Factory.define<RoomMember>(
 	({ sequence }) => ({

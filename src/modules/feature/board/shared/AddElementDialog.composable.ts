@@ -10,6 +10,7 @@ import {
 	mdiPuzzleOutline,
 	mdiTextBoxEditOutline,
 	mdiTrayArrowUp,
+	mdiVideo,
 } from "@icons/material";
 import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
@@ -155,6 +156,17 @@ export const useAddElementDialog = (
 					onPreferredElementClick(ContentElementType.ExternalTool, tool),
 				testId: `create-element-preferred-element-${tool.name}`,
 			});
+		});
+	}
+
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED) {
+		options.push({
+			icon: mdiVideo,
+			label: t(
+				"components.elementTypeSelection.elements.videoConferenceElement.subtitle"
+			),
+			action: () => onElementClick(ContentElementType.VideoConference),
+			testId: "create-element-video-conference",
 		});
 	}
 

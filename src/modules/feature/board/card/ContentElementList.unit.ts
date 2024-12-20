@@ -19,6 +19,7 @@ import { RichTextContentElement } from "@feature-board-text-element";
 import { createMock } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
 import ContentElementList from "./ContentElementList.vue";
+import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 
 describe("ContentElementList", () => {
 	const setup = (props: {
@@ -44,7 +45,7 @@ describe("ContentElementList", () => {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
 				},
 			},
-			props: { ...props },
+			props: { ...props, rowIndex: 0, columnIndex: 0 },
 		});
 
 		return { wrapper };
@@ -92,6 +93,10 @@ describe("ContentElementList", () => {
 			{
 				elementType: ContentElementType.Deleted,
 				component: DeletedElement,
+			},
+			{
+				elementType: ContentElementType.VideoConference,
+				component: VideoConferenceContentElement,
 			},
 		];
 

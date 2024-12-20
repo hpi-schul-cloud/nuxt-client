@@ -17,6 +17,7 @@ import {
 	RichTextElementContentBody,
 	RoomApiFactory,
 	SubmissionContainerElementContentBody,
+	VideoConferenceElementContentBody,
 } from "@/serverApi/v3";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { AnyContentElement } from "@/types/board/ContentElement";
@@ -123,6 +124,13 @@ export const useBoardApi = () => {
 				content: element.content as DrawingElementContent,
 				type: ContentElementType.Drawing,
 			};
+		}
+
+		if (element.type === ContentElementType.VideoConference) {
+			return {
+				content: element.content,
+				type: ContentElementType.VideoConference,
+			} as VideoConferenceElementContentBody;
 		}
 		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
