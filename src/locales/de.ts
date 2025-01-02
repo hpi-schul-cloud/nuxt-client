@@ -1118,6 +1118,8 @@ export default {
 		"Kontenverknüpfungen werden gespeichert...",
 	"pages.administration.migration.startUserMigration":
 		"Kontenmigration starten",
+	"pages.administration.migration.matchByPreferredName":
+		"Rufnamen bei der automatischen Konto-Verknüpfung bevorzugen",
 	"pages.administration.migration.step1": "Anleitung",
 	"pages.administration.migration.step2": "Vorbereitung",
 	"pages.administration.migration.step3": "Zusammenfassung",

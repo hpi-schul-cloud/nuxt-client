@@ -158,52 +158,78 @@
 									/>
 								</VCardText>
 								<VCardActions>
-									<VRow align="center" justify="end">
-										<VBtn
-											v-if="isMigrationNotStarted"
-											data-testid="start_user_migration"
-											variant="flat"
-											color="primary"
-											:disabled="isLoading"
-											@click="setSchoolInUserMigration"
-										>
-											<VProgressCircular
-												v-if="isLoading"
-												:size="20"
-												indeterminate
-											/>
-											{{
-												t("pages.administration.migration.startUserMigration")
-											}}
-										</VBtn>
-										<VBtn
-											v-else-if="canPerformMigration"
-											data-testid="migration_tutorial_next"
-											:disabled="totalImportUsers === 0"
-											variant="flat"
-											color="primary"
-											@click="nextStep"
-										>
-											<VProgressCircular
-												v-if="totalImportUsers === 0 && school.inUserMigration"
-												:size="20"
-												indeterminate
-											/>
-											{{
-												totalImportUsers > 0 || school.inUserMigration === false
-													? t("pages.administration.migration.next")
-													: t("pages.administration.migration.waiting")
-											}}
-										</VBtn>
-										<VBtn
-											v-else-if="isMigrationFinished"
-											id="migration_tutorial_skip"
-											variant="flat"
-											color="primary"
-											@click="nextStep"
-										>
-											{{ t("pages.administration.migration.next") }}
-										</VBtn>
+									<VRow align="center" justify="space-between">
+										<div class="ml-14">
+											<VSwitch
+												v-show="
+													isNbc &&
+													!isMigrationFinished &&
+													totalImportUsers === 0
+												"
+												:label="
+													t(
+														'pages.administration.migration.matchByPreferredName'
+													)
+												"
+												:disabled="isLoading"
+												:true-value="true"
+												:false-value="false"
+												:model-value="matchByPreferredName"
+												data-testid="migration-preferred-name-switch"
+											></VSwitch>
+										</div>
+										<div>
+											<VBtn
+												v-if="isMigrationNotStarted"
+												data-testid="start_user_migration"
+												variant="flat"
+												color="primary"
+												:disabled="isLoading"
+												@click="setSchoolInUserMigration"
+											>
+												<VProgressCircular
+													v-if="isLoading"
+													:size="20"
+													indeterminate
+													class="mr-1"
+												/>
+												{{
+													t("pages.administration.migration.startUserMigration")
+												}}
+											</VBtn>
+											<VBtn
+												v-else-if="canPerformMigration"
+												data-testid="migration_tutorial_next"
+												:disabled="totalImportUsers === 0"
+												variant="flat"
+												color="primary"
+												@click="nextStep"
+											>
+												<VProgressCircular
+													v-if="
+														totalImportUsers === 0 && school.inUserMigration
+													"
+													:size="20"
+													indeterminate
+													class="mr-1"
+												/>
+												{{
+													totalImportUsers > 0 ||
+													school.inUserMigration === false
+														? t("pages.administration.migration.next")
+														: t("pages.administration.migration.waiting")
+												}}
+											</VBtn>
+											<VBtn
+												v-else-if="isMigrationFinished"
+												id="migration_tutorial_skip"
+												variant="flat"
+												color="primary"
+												@click="nextStep"
+											>
+												{{ t("pages.administration.migration.next") }}
+											</VBtn>
+										</div>
 									</VRow>
 								</VCardActions>
 							</VCard>
@@ -582,6 +608,8 @@ const errorTimeout: Ref<number> = ref(7500);
 
 const isLoading: Ref<boolean> = ref(false);
 
+const matchByPreferredName: Ref<boolean> = ref(false);
+
 const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> =
 	ref(undefined);
 
@@ -717,7 +745,9 @@ const setSchoolInUserMigration = async () => {
 	isLoading.value = true;
 
 	if (isNbc.value) {
-		await importUsersModule.populateImportUsersFromExternalSystem();
+		await importUsersModule.populateImportUsersFromExternalSystem(
+			matchByPreferredName.value
+		);
 
 		if (importUsersModule.getBusinessError) {
 			isLoading.value = false;

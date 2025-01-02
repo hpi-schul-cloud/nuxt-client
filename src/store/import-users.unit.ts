@@ -642,7 +642,7 @@ describe("import-users store actions", () => {
 
 					expect(
 						mockApi.importUserControllerPopulateImportUsers
-					).toHaveBeenCalledWith();
+					).toHaveBeenCalledWith(false);
 				});
 			});
 

@@ -1148,6 +1148,8 @@ export default {
 		"La implementación de la migración...",
 	"pages.administration.migration.startUserMigration":
 		"Iniciar la migración de cuentas",
+	"pages.administration.migration.matchByPreferredName":
+		"Prefiere apodos para la vinculación automática de cuentas",
 	"pages.administration.migration.step1": "Instrucciones",
 	"pages.administration.migration.step2": "Preparación",
 	"pages.administration.migration.step3": "Resumen",
