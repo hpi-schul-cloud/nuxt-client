@@ -16,19 +16,13 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomsState } from "@data-room";
 import { createMock } from "@golevelup/ts-jest";
-import { flushPromises } from "@vue/test-utils";
-import { useTitle } from "@vueuse/core";
 import { ref } from "vue";
 import { RouteLocation, Router, useRoute, useRouter } from "vue-router";
 import RoomsPage from "./Rooms.page.vue";
-
-jest.mock("@vueuse/core", () => {
-	return {
-		...jest.requireActual("@vueuse/core"),
-		useTitle: jest.fn(),
-	};
-});
-jest.mocked(useTitle).mockReturnValue(ref(null));
+import { mdiPlus } from "@icons/material";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { RoomGrid } from "@feature-room";
+import ImportFlow from "@/components/share/ImportFlow.vue";
 
 jest.mock("vue-router");
 const useRouteMock = useRoute as jest.Mock;
@@ -75,22 +69,12 @@ describe("RoomsPage", () => {
 					[LOADING_STATE_MODULE_KEY]: loadingState,
 					[NOTIFIER_MODULE_KEY]: notifierModuleMock,
 				},
+				stubs: { ImportFlow: true },
 			},
 		});
-		const wrapperVM = wrapper.vm as unknown as {
-			pageTitle: string;
-			fabItem: {
-				icon: string;
-				title: string;
-				to: string;
-				ariaLabel: string;
-				testId: string;
-			};
-		};
 
 		return {
 			wrapper,
-			wrapperVM,
 			notifierModuleMock,
 			router,
 		};
@@ -103,11 +87,10 @@ describe("RoomsPage", () => {
 			expect(wrapper.exists()).toBe(true);
 		});
 
-		it("should have the correct title", async () => {
-			const { wrapperVM } = setup();
-			await flushPromises();
-			expect(useTitle).toHaveBeenCalled();
-			expect(wrapperVM.pageTitle).toContain("pages.rooms.title");
+		it("should have the correct page title", async () => {
+			setup();
+
+			expect(document.title).toContain("pages.rooms.title");
 		});
 	});
 
@@ -126,23 +109,24 @@ describe("RoomsPage", () => {
 
 		it("should activate import flow", () => {
 			const { wrapper } = setupImportMode();
-			const importFLow = wrapper.findComponent({ name: "ImportFlow" });
+			const importFLow = wrapper.findComponent(ImportFlow);
 
 			expect(importFLow.props().isActive).toBe(true);
 		});
 
 		it("should pass the token to the import flow", () => {
 			const { wrapper, token } = setupImportMode();
-			const importFLow = wrapper.findComponent({ name: "ImportFlow" });
+			const importFLow = wrapper.findComponent(ImportFlow);
 
 			expect(importFLow.props().token).toBe(token);
 		});
 
 		describe("when the import flow succeeded", () => {
-			it("should notify about successful import", () => {
+			it("should notify about successful import", async () => {
 				const { wrapper, notifierModuleMock } = setupImportMode();
-				const importFLow = wrapper.findComponent({ name: "ImportFlow" });
-				importFLow.vm.$emit("success", "newName", "newId");
+				const importFlow = wrapper.findComponent(ImportFlow);
+
+				importFlow.vm.$emit("success", "newName", "newId");
 
 				expect(notifierModuleMock.show).toHaveBeenCalledWith(
 					expect.objectContaining({
@@ -152,10 +136,11 @@ describe("RoomsPage", () => {
 				);
 			});
 
-			it("should go to the room details page", () => {
+			it("should go to the room details page", async () => {
 				const { wrapper, router } = setupImportMode();
-				const importFLow = wrapper.findComponent({ name: "ImportFlow" });
-				importFLow.vm.$emit("success", "newName", "newId");
+				const importFlow = wrapper.findComponent(ImportFlow);
+
+				importFlow.vm.$emit("success", "newName", "newId");
 
 				expect(router.replace).toHaveBeenCalledWith({
 					name: "room-details",
@@ -177,19 +162,25 @@ describe("RoomsPage", () => {
 			});
 
 			it("should have the correct props", async () => {
-				const { wrapper, wrapperVM } = setup();
-				const wireframe = wrapper.findComponent({
-					name: "DefaultWireframe",
-				});
+				const { wrapper } = setup();
+				const wireframe = wrapper.findComponent(DefaultWireframe);
 
-				expect(wireframe.vm["fab-items"]).toBe(wrapperVM.fabItem);
+				const expectedFabItems = {
+					icon: mdiPlus,
+					title: "common.actions.create",
+					to: "/rooms/new",
+					ariaLabel: "pages.rooms.fab.title",
+					dataTestId: "fab-add-room",
+				};
+
+				expect(wireframe.props("fabItems")).toEqual(expectedFabItems);
 			});
 		});
 
 		describe("RoomGrid", () => {
 			it("should be found in the dom", async () => {
 				const { wrapper } = setup();
-				const roomGrid = wrapper.findComponent({ name: "RoomGrid" });
+				const roomGrid = wrapper.findComponent(RoomGrid);
 
 				expect(roomGrid.exists()).toBe(true);
 			});
