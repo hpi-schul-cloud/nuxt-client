@@ -23,6 +23,7 @@ import { mdiPlus } from "@icons/material";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomGrid } from "@feature-room";
 import ImportFlow from "@/components/share/ImportFlow.vue";
+import InfoAlert from "@/modules/ui/alert/InfoAlert.vue";
 
 jest.mock("vue-router");
 const useRouteMock = useRoute as jest.Mock;
@@ -81,16 +82,34 @@ describe("RoomsPage", () => {
 	};
 
 	describe("when the page is mounted", () => {
-		it("should be found in the dom", async () => {
+		it("should be found in the dom", () => {
 			const { wrapper } = setup();
 
 			expect(wrapper.exists()).toBe(true);
 		});
 
-		it("should have the correct page title", async () => {
+		it("should have the correct page title", () => {
 			setup();
 
 			expect(document.title).toContain("pages.rooms.title");
+		});
+
+		it("should render info alert", () => {
+			const { wrapper } = setup();
+			const alert = wrapper.findComponent(InfoAlert);
+
+			expect(alert.exists()).toBe(true);
+
+			const expectedListHeaderTexts = "pages.rooms.infoAlert.welcome";
+			const expectedListText = [
+				"pages.rooms.infoAlert.welcome.collaboration",
+				"pages.rooms.infoAlert.welcome.teamsAndCourses",
+				"pages.rooms.infoAlert.welcome.visibility",
+			].join("");
+
+			const expectedInfoText = `${expectedListHeaderTexts} ${expectedListText}`;
+
+			expect(alert.text()).toBe(expectedInfoText);
 		});
 	});
 

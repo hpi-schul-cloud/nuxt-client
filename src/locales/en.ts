@@ -1676,7 +1676,7 @@ export default {
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.infoAlert.welcome": 'Welcome to the new "Rooms"!',
-	"pages.rooms.infoAlert.welcome.colloboration":
+	"pages.rooms.infoAlert.welcome.collaboration":
 		"Rooms will combine functions from courses and teams in the future to provide more opportunities for cross-school working.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
 		"Teams and courses will remain until the content can be transferred to rooms.",

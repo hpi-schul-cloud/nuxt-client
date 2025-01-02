@@ -1704,7 +1704,7 @@ export default {
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.infoAlert.welcome": 'Ласкаво просимо до нових "Кімнат"!',
-	"pages.rooms.infoAlert.welcome.colloboration":
+	"pages.rooms.infoAlert.welcome.collaboration":
 		"У майбутньому кімнати об'єднають функції курсів і команд, щоб запропонувати більше можливостей для міжшкільної співпраці.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
 		"Команди та курси залишатимуться, доки вміст не буде перенесено до кімнат.",

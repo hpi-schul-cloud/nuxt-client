@@ -1705,7 +1705,7 @@ export default {
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.infoAlert.welcome": 'Willkommen in den neuen "Räumen"!',
-	"pages.rooms.infoAlert.welcome.colloboration":
+	"pages.rooms.infoAlert.welcome.collaboration":
 		"Räume werden zukünftig Funktionen aus Kursen und Teams vereinen, um mehr Möglichkeiten für das schulübergreifende Arbeiten zu bieten.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
 		"Teams und Kurse bleiben bestehen, bis die Inhalte in Räume überführt werden können.",

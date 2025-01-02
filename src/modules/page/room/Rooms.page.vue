@@ -5,8 +5,9 @@
 		</template>
 		<InfoAlert class="mb-14">
 			{{ t("pages.rooms.infoAlert.welcome") }}
+
 			<ul class="mt-1 pl-4">
-				<li>{{ t("pages.rooms.infoAlert.welcome.colloboration") }}</li>
+				<li>{{ t("pages.rooms.infoAlert.welcome.collaboration") }}</li>
 				<li>{{ t("pages.rooms.infoAlert.welcome.teamsAndCourses") }}</li>
 				<li>
 					<i18n-t
