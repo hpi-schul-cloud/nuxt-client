@@ -6,9 +6,35 @@
 		<InfoAlert class="mb-14">
 			{{ t("pages.rooms.infoAlert.welcome") }}
 			<ul class="mt-1 pl-4">
-				<li>{{ t("pages.rooms.infoAlert.welcome.visbilility") }}</li>
 				<li>{{ t("pages.rooms.infoAlert.welcome.colloboration") }}</li>
 				<li>{{ t("pages.rooms.infoAlert.welcome.teamsAndCourses") }}</li>
+				<li>
+					<i18n-t
+						keypath="pages.rooms.infoAlert.welcome.visibility"
+						scope="global"
+					>
+						<template #helpLink>
+							<a
+								href="/help/confluence/375458794"
+								target="_blank"
+								rel="noopener"
+								:aria-label="helpAriaLabel"
+							>
+								{{ t("pages.rooms.infoAlert.welcome.visibility.help") }}
+							</a>
+						</template>
+						<template #feedbackLink>
+							<a
+								href="/help/contact"
+								target="_blank"
+								rel="noopener"
+								:aria-label="feedbackAriaLabel"
+							>
+								{{ t("pages.rooms.infoAlert.welcome.visibility.feedback") }}
+							</a>
+						</template>
+					</i18n-t>
+				</li>
 			</ul>
 		</InfoAlert>
 		<RoomGrid />
@@ -89,4 +115,14 @@ const showImportSuccess = (newName: string) => {
 		timeout: 5000,
 	});
 };
+
+const helpAriaLabel = computed(
+	() =>
+		`${t("pages.rooms.infoAlert.welcome.visibility.help")}, ${t("common.ariaLabel.newTab")}`
+);
+
+const feedbackAriaLabel = computed(
+	() =>
+		`${t("pages.rooms.infoAlert.welcome.visibility.feedback")}, ${t("common.ariaLabel.newTab")}`
+);
 </script>

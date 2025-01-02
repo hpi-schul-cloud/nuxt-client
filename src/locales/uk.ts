@@ -1703,6 +1703,15 @@ export default {
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
 	"pages.rooms.fab.title": "Створити кімнату",
+	"pages.rooms.infoAlert.welcome": 'Ласкаво просимо до нових "Кімнат"!',
+	"pages.rooms.infoAlert.welcome.colloboration":
+		"У майбутньому кімнати об'єднають функції курсів і команд, щоб запропонувати більше можливостей для міжшкільної співпраці.",
+	"pages.rooms.infoAlert.welcome.teamsAndCourses":
+		"Команди та курси залишатимуться, доки вміст не буде перенесено до кімнат.",
+	"pages.rooms.infoAlert.welcome.visibility":
+		"Кімнати наразі видимі лише для вчителів і будуть далі розвиватися. Додаткову інформацію можна знайти на нашій {helpLink}. Ми будемо вдячні за ваші {feedbackLink} щодо поточного стану.",
+	"pages.rooms.infoAlert.welcome.visibility.help": "Сторінка допомоги",
+	"pages.rooms.infoAlert.welcome.visibility.feedback": "відгуки",
 	"pages.rooms.members.error.load": "Не вдалося завантажити список учасників.",
 	"pages.rooms.members.error.add": "Не вдалося додати учасників.",
 	"pages.rooms.members.error.remove": "Не вдалося видалити учасників.",
