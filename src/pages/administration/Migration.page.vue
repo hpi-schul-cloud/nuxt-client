@@ -176,7 +176,7 @@
 												:false-value="false"
 												:model-value="matchByPreferredName"
 												data-testid="migration-preferred-name-switch"
-											></VSwitch>
+											/>
 										</div>
 										<div>
 											<VBtn
