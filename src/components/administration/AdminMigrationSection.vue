@@ -1,15 +1,50 @@
 <template>
 	<div>
 		<div v-if="!isGracePeriodExpired" data-testId="migration-control-section">
-			<RenderHTML
-				data-testid="text-description"
-				:html="
-					t('components.administration.adminMigrationSection.description', {
-						supportLink,
-					})
-				"
-				component="p"
-			/>
+			<div data-testid="text-description">
+				<p class="mb-0">
+					{{
+						t(
+							"components.administration.adminMigrationSection.description.firstPart"
+						)
+					}}
+				</p>
+				<p>
+					{{
+						t(
+							"components.administration.adminMigrationSection.description.secondPart"
+						)
+					}}
+				</p>
+				<i18n-t
+					keypath="components.administrationSection.description.support"
+					scope="global"
+					tag="p"
+					class="text-red font-weight-bold"
+				>
+					<a :href="supportLink" data-testid="support-link">
+						{{ t("components.administrationSection.description.support.link") }}
+					</a>
+				</i18n-t>
+				<i18n-t
+					keypath="components.administrationSection.description.moreInformation"
+					scope="global"
+					tag="p"
+				>
+					<a
+						data-testid="migration-blog-link"
+						href="https://blog.niedersachsen.cloud/umzug"
+						target="_blank"
+						rel="noopener"
+					>
+						{{
+							t(
+								"components.administrationSection.description.moreInformation.link"
+							)
+						}}
+					</a>
+				</i18n-t>
+			</div>
 			<div v-if="isStartButtonVisible">
 				<v-alert type="info">
 					<div class="alert-text">

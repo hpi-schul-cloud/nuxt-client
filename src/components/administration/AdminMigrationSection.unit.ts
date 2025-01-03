@@ -183,7 +183,7 @@ describe("AdminMigrationSection", () => {
 
 			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
 
-			expect(renderHtmls[1].props("html")).toStrictEqual(
+			expect(renderHtmls[0].props("html")).toStrictEqual(
 				"components.administration.adminMigrationSection.infoText"
 			);
 		});
@@ -205,7 +205,7 @@ describe("AdminMigrationSection", () => {
 
 			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
 
-			expect(renderHtmls[1].props("html")).toStrictEqual(
+			expect(renderHtmls[0].props("html")).toStrictEqual(
 				"components.administration.adminMigrationSection.migrationActive"
 			);
 		});
@@ -368,7 +368,7 @@ describe("AdminMigrationSection", () => {
 
 			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
 			const switchComponent = wrapper.findComponent({ name: "v-switch" });
-			await buttonComponent.vm.$emit("click");
+			await buttonComponent.trigger("click");
 
 			expect(buttonComponent.exists()).toBe(false);
 			expect(switchComponent.isVisible()).toBe(false);
@@ -440,7 +440,7 @@ describe("AdminMigrationSection", () => {
 
 			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
 			const switchComponent = wrapper.findComponent({ name: "v-switch" });
-			await buttonComponent.vm.$emit("click");
+			await buttonComponent.trigger("click");
 
 			expect(buttonComponent.exists()).toBe(false);
 			expect(switchComponent.isVisible()).toBe(false);
@@ -460,7 +460,7 @@ describe("AdminMigrationSection", () => {
 				);
 
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
+				await buttonComponent.trigger("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
 
@@ -478,7 +478,7 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 					const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-					await buttonComponent.vm.$emit("click");
+					await buttonComponent.trigger("click");
 
 					const cardComponent = wrapper.findComponent({ name: "v-card" });
 					const cardButtonAgree = cardComponent.find("[data-testId=agree-btn]");
@@ -506,7 +506,7 @@ describe("AdminMigrationSection", () => {
 					}
 				);
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
+				await buttonComponent.trigger("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
 				const cardButtonDisagree = cardComponent.find(
@@ -540,7 +540,7 @@ describe("AdminMigrationSection", () => {
 				);
 
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
+				await buttonComponent.trigger("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
 
@@ -567,7 +567,7 @@ describe("AdminMigrationSection", () => {
 				);
 
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
+				await buttonComponent.trigger("click");
 
 				const warningCards = wrapper.findAllComponents({
 					name: "migration-warning-card",
@@ -602,7 +602,7 @@ describe("AdminMigrationSection", () => {
 					}
 				);
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
+				await buttonComponent.trigger("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
 				const cardButtonDisagree = cardComponent.find(
@@ -645,7 +645,7 @@ describe("AdminMigrationSection", () => {
 
 			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
 
-			expect(renderHtmls[2].props("html")).toContain(
+			expect(renderHtmls[1].props("html")).toContain(
 				"components.administration.adminMigrationSection.oauthMigrationFinished.text"
 			);
 		});

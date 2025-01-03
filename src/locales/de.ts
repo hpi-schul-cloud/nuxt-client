@@ -205,8 +205,16 @@ export default {
 		"Audio Schieberegler für Fortschritt",
 	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
 	"component.cardElement.fileElement.audioPlayer.speed": "Geschwindigkeitsmenü",
-	"components.administration.adminMigrationSection.description":
-		'Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.<br>Der Migrationsvorgang erfordert ein einmaliges Anmelden der Schüler:innen und Lehrkräfte an beiden Systemen.<br><br><span class="text-red"><b>Falls Sie keine Migration in Ihrer Schule durchführen wollen, <u>starten Sie den Migrationsprozess nicht</u>,\nsondern wenden Sie sich bitte an den </span> <a href="{supportLink}" data-testid ="support-link">Support</a></b>.<br><br>Wichtige Informationen zum Migrationsprozess sind <a href="https://blog.niedersachsen.cloud/umzug" data-testid="migration-blog-link" target="_blank">hier</a> verfügbar.',
+	"components.administration.adminMigrationSection.description.firstPart":
+		"Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.",
+	"components.administration.adminMigrationSection.description.secondPart":
+		"Der Migrationsvorgang erfordert ein einmaliges Anmelden der Schüler:innen und Lehrkräfte an beiden Systemen.",
+	"components.administrationSection.description.support":
+		"Falls Sie keine Migration in Ihrer Schule durchführen wollen, starten Sie den Migrationsprozess nicht, sondern wenden Sie sich bitte an den {0}.",
+	"components.administrationSection.description.support.link": "Support",
+	"components.administrationSection.description.moreInformation":
+		"Wichtige Informationen zum Migrationsprozess sind {0} verfügbar.",
+	"components.administrationSection.description.moreInformation.link": "hier",
 	"components.administration.adminMigrationSection.enableSyncDuringMigration.label":
 		"Die Synchronisation mit dem bisherigen Login-System für Klassen und Accounts während der Migration erlauben",
 	"components.administration.adminMigrationSection.endWarningCard.agree": "Ok",
