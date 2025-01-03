@@ -165,7 +165,7 @@
 		@set="onCloseMigration()"
 	/>
 
-	<RenderHTML
+	<div
 		v-if="
 			userLoginMigration &&
 			userLoginMigration.closedAt &&
@@ -173,16 +173,27 @@
 		"
 		class="migration-completion-date"
 		data-testid="migration-finished-timestamp"
-		:html="
-			t(latestMigration, {
-				date: dayjs(userLoginMigration.closedAt).format('DD.MM.YYYY'),
-				time: dayjs(userLoginMigration.closedAt).format('HH:mm'),
-				finishDate: dayjs(userLoginMigration.finishedAt).format('DD.MM.YYYY'),
-				finishTime: dayjs(userLoginMigration.finishedAt).format('HH:mm'),
-			})
-		"
-		component="p"
-	/>
+	>
+		<p class="mb-0">
+			{{
+				t(
+					"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph",
+					{
+						date: dayjs(userLoginMigration.closedAt).format("DD.MM.YYYY"),
+						time: dayjs(userLoginMigration.closedAt).format("HH:mm"),
+					}
+				)
+			}}
+		</p>
+		<p>
+			{{
+				t(`${latestMigration}.secondParagraph`, {
+					finishDate: dayjs(userLoginMigration.finishedAt).format("DD.MM.YYYY"),
+					finishTime: dayjs(userLoginMigration.finishedAt).format("HH:mm"),
+				})
+			}}
+		</p>
+	</div>
 
 	<v-switch
 		v-if="!isGracePeriodExpired && globalFeatureEnableLdapSyncDuringMigration"
@@ -273,7 +284,7 @@ import {
 import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { InfoAlert } from "@ui-alert";
-import RenderHTML from "@/modules/feature/render-html/RenderHTML.vue";
+import { RenderHTML } from "@feature-render-html";
 
 export default defineComponent({
 	name: "AdminMigrationSection",

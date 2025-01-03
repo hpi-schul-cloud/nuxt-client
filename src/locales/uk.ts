@@ -272,10 +272,12 @@ export default {
 		"Якщо ви скасуєте запуск майстра міграції зараз, зв'язки облікових записів, зроблені в поточному сеансі, будуть скинуті. Ви дійсно хочете скасувати майстер зараз?",
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
 		"Ви впевнені, що хочете скасувати міграцію?",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
-		"Перенесення облікового запису завершено {date} о {time}.<br>Період очікування після завершення міграції нарешті закінчується {finishDate} о {finishTime}!",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
-		"Перенесення облікового запису завершено {date} о {time}.<br>Період очікування минув. Перенесення нарешті завершено {finishDate} о {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph":
+		"Перенесення облікового запису завершено {date} о {time}",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.secondParagraph":
+		"Період очікування після завершення міграції нарешті закінчується {finishDate} о {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
+		"Період очікування минув. Перенесення нарешті завершено {finishDate} о {finishTime}!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
 		"Застарілі облікові записи студентів і викладачів відображаються у відповідних списках вибору, коли користувачів призначають до класів, курсів і команд.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label":

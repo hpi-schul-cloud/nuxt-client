@@ -271,10 +271,12 @@ export default {
 		"Si cancela ahora la ejecución del asistente de migración, se restablecerán los vínculos de cuenta realizados en la sesión actual. ¿Realmente desea cancelar el asistente ahora?",
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
 		"¿Estás seguro de que quieres cancelar la migración?",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
-		"La migración de la cuenta se completó el {date} a las {time}.<br>¡El periodo de espera tras la finalización de la migración termina finalmente el {finishDate} a las {finishTime}!",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
-		"La migración de la cuenta se completó el {date} a las {time}.<br>El periodo de espera ha expirado. ¡La migración se completó finalmente el {finishDate} a las {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph":
+		"La migración de la cuenta se completó el {date} a las {time}.",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.secondParagraph":
+		"¡El periodo de espera tras la finalización de la migración termina finalmente el {finishDate} a las {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
+		"El periodo de espera ha expirado. ¡La migración se completó finalmente el {finishDate} a las {finishTime}!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
 		"Las cuentas de estudiantes y profesores obsoletas se muestran en las listas de selección correspondientes cuando los usuarios se asignan a clases, cursos y equipos.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label":

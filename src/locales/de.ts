@@ -266,10 +266,12 @@ export default {
 		"Wenn Sie die Ausführung des Migrationsassistenten jetzt abbrechen, werden die in der aktuellen Sitzung durchgeführten Konten-Verknüpfungen zurückgesetzt. Möchten Sie die Ausführung des Assistenten jetzt wirklich abbrechen?",
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
 		"Sind Sie sich sicher, dass Sie die Migration abbrechen wollen?",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
-		"Die Account-Migration wurde am {date} um {time} Uhr abgeschlossen.<br>Die Wartefrist nach Abschluss der Migration endet endgültig am {finishDate} um {finishTime} Uhr!",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
-		"Die Account-Migration wurde am {date} um {time} Uhr abgeschlossen.<br>Die Wartefrist ist abgelaufen. Migration wurde am {finishDate} um {finishTime} Uhr endgültig beendet!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph":
+		"Die Account-Migration wurde am {date} um {time} Uhr abgeschlossen.",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.secondParagraph":
+		"Die Wartefrist nach Abschluss der Migration endet endgültig am {finishDate} um {finishTime} Uhr!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
+		"Die Wartefrist ist abgelaufen. Migration wurde am {finishDate} um {finishTime} Uhr endgültig beendet!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
 		"Veraltete Accounts der Schüler:innen und Lehrkräfte werden bei der Zuordnung der Nutzer zu Klassen, Kursen und Teams in den entsprechenden Auswahllisten angezeigt.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label":

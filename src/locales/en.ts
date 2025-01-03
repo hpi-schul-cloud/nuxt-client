@@ -269,10 +269,12 @@ export default {
 		"If you cancel the execution of the migration wizard now, the account links made in the current session will be reset. Do you really want to cancel the wizard now?",
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
 		"Are you sure you want to cancel the migration?",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
-		"The account migration was completed on {date} at {time}.<br>The waiting period after completion of the migration finally ends on {finishDate} at {finishTime}!",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
-		"The account migration was completed on {date} at {time}.<br>The waiting period has expired. Migration was finally completed on {finishDate} at {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph":
+		"The account migration was completed on {date} at {time}.",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.secondParagraph":
+		"The waiting period after completion of the migration finally ends on {finishDate} at {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
+		"The waiting period has expired. Migration was finally completed on {finishDate} at {finishTime}!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
 		"Outdated student and teacher accounts are displayed in the corresponding selection lists when users are assigned to classes, courses and teams.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label":

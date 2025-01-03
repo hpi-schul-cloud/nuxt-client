@@ -652,11 +652,18 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
-
-			expect(renderHtmls[0].props("html")).toContain(
-				"components.administration.adminMigrationSection.oauthMigrationFinished.text"
+			const dateParagraph = wrapper.get(
+				"[data-testid=migration-finished-timestamp]"
 			);
+
+			const expectedText = ["firstParagraph", "secondParagraph"]
+				.map(
+					(paragraph) =>
+						`components.administration.adminMigrationSection.oauthMigrationFinished.text.${paragraph}`
+				)
+				.join("");
+
+			expect(dateParagraph.text()).toBe(expectedText);
 		});
 
 		it("should show finalFinish text when migration grace period has expired", async () => {
@@ -678,12 +685,16 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const renderHtml = wrapper.findComponent({ name: "RenderHTML" });
-
-			expect(renderHtml.props()).toHaveProperty("html");
-			expect(renderHtml.props("html")).toContain(
-				"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete"
+			const paragraph = wrapper.get(
+				"[data-testid=migration-finished-timestamp]"
 			);
+
+			const expectedText = [
+				"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph",
+				"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph",
+			].join("");
+
+			expect(paragraph.text()).toBe(expectedText);
 		});
 
 		it("should not exist when migration has not been completed", async () => {
