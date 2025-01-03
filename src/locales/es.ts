@@ -228,7 +228,21 @@ export default {
 	"components.administration.adminMigrationSection.endWarningCard.disagree":
 		"Desgaje",
 	"components.administration.adminMigrationSection.endWarningCard.text":
-		'Confirme que desea completar la migración de la cuenta de usuario a moin.schule.<br><br><span class="text-red">Advertencia: Completar la migración de la cuenta de usuario tiene los siguientes efectos:</span><br><br><ul><li>Los estudiantes y profesores que cambiaron a moin.schule solo pueden registrarse a través de moin.schule.</li><br><li>La migración ya no es posible para estudiantes y profesores.</li><br><li>Los estudiantes y profesores que no han migrado aún pueden seguir matriculándose como antes.</li><br><li>Los usuarios que no han migrado también pueden iniciar sesión a través de moin.schule, pero esto crea una cuenta vacía adicional en Niedersächsische Bildungscloud.<br><span class="text-red">No es posible la transferencia automática de datos de la cuenta existente a esta nueva cuenta.</span></li><br><li><span class="text-red">Tras un periodo de espera de {gracePeriod} días, la finalización de la migración de cuentas se convierte en definitiva. A continuación, se desactiva el antiguo sistema de inicio de sesión y se eliminan las cuentas que no se hayan migrado.</span></li></ul><br><br> La información importante sobre el proceso de migración está disponible <a href="https://blog.niedersachsen.cloud/umzug" data-testid="end-warningcard-migration-blog-link" target="_blank">aquí</a>.',
+		"Confirme que desea completar la migración de la cuenta de usuario a moin.schule.",
+	"components.administration.adminMigrationSection.endWarningCard.text.warning":
+		"Advertencia: Completar la migración de la cuenta de usuario tiene los siguientes efectos:",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.firstElement":
+		"Los estudiantes y profesores que cambiaron a moin.schule solo pueden registrarse a través de moin.schule.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.secondElement":
+		"La migración ya no es posible para estudiantes y profesores.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.thirdElement":
+		"Los estudiantes y profesores que no han migrado aún pueden seguir matriculándose como antes.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement":
+		"Los usuarios que no han migrado también pueden iniciar sesión a través de moin.schule, pero esto crea una cuenta vacía adicional en Niedersächsische Bildungscloud.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement.warning":
+		"No es posible la transferencia automática de datos de la cuenta existente a esta nueva cuenta.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.lastElement":
+		"Tras un periodo de espera de {gracePeriod} días, la finalización de la migración de cuentas se convierte en definitiva. A continuación, se desactiva el antiguo sistema de inicio de sesión y se eliminan las cuentas que no se hayan migrado.",
 	"components.administration.adminMigrationSection.endWarningCard.title":
 		"¿Realmente desea completar la migración de la cuenta de usuario a moin.schule ahora?",
 	"components.administration.adminMigrationSection.headers":

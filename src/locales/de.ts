@@ -223,7 +223,21 @@ export default {
 	"components.administration.adminMigrationSection.endWarningCard.disagree":
 		"Abbrechen",
 	"components.administration.adminMigrationSection.endWarningCard.text":
-		'Bitte bestätigen, dass die Account-Migration zu moin.schule abgeschlossen werden soll.<br><br><span class="text-red">Achtung: Der Abschluss der Account-Migration hat folgende Auswirkungen:</span><br><br><ul><li>Zu moin.schule gewechselte Schüler:innen und Lehrkräfte können sich nur noch über moin.schule anmelden.</li><br><li>Eine Migration ist für Schüler:innen und Lehrkräfte nicht mehr möglich.</li><br><li>Nicht migrierte Schüler:innen und Lehrkräfte können sich weiterhin wie bisher anmelden.</li><br><li>Nicht migrierte Anwender können sich auch über moin.schule anmelden, erzeugen aber dadurch einen zusätzlichen, leeren Account in der Niedersächsischen Bildungscloud.<br><span class="text-red">Eine automatische Datenübernahme aus dem vorbestehenden Account in diesen neuen Account ist nicht möglich.</span></li><br><li><span class="text-red">Nach Ablauf einer Wartefrist von {gracePeriod} Tagen wird der Abschluss der Account-Migration endgültig. Im Anschluss wird das alte Anmeldesystem abgeschaltet und nicht migrierte Accounts werden gelöscht.</span></li></ul><br><br>Wichtige Informationen zum Migrationsprozess sind <a href="https://blog.niedersachsen.cloud/umzug" data-testid="end-warningcard-migration-blog-link" target="_blank">hier</a> verfügbar.',
+		"Bitte bestätigen, dass die Account-Migration zu moin.schule abgeschlossen werden soll.",
+	"components.administration.adminMigrationSection.endWarningCard.text.warning":
+		"Achtung: Der Abschluss der Account-Migration hat folgende Auswirkungen:",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.firstElement":
+		"Zu moin.schule gewechselte Schüler:innen und Lehrkräfte können sich nur noch über moin.schule anmelden.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.secondElement":
+		"Eine Migration ist für Schüler:innen und Lehrkräfte nicht mehr möglich.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.thirdElement":
+		"Nicht migrierte Schüler:innen und Lehrkräfte können sich weiterhin wie bisher anmelden.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement":
+		"Nicht migrierte Anwender können sich auch über moin.schule anmelden, erzeugen aber dadurch einen zusätzlichen, leeren Account in der Niedersächsischen Bildungscloud.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement.warning":
+		"Eine automatische Datenübernahme aus dem vorbestehenden Account in diesen neuen Account ist nicht möglich.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.lastElement":
+		"Nach Ablauf einer Wartefrist von {gracePeriod} Tagen wird der Abschluss der Account-Migration endgültig. Im Anschluss wird das alte Anmeldesystem abgeschaltet und nicht migrierte Accounts werden gelöscht.",
 	"components.administration.adminMigrationSection.endWarningCard.title":
 		"Möchten Sie die Account-Migration zu moin.schule jetzt wirklich abschließen?",
 	"components.administration.adminMigrationSection.headers":

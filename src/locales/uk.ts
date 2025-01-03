@@ -229,7 +229,21 @@ export default {
 	"components.administration.adminMigrationSection.endWarningCard.disagree":
 		"Переривати",
 	"components.administration.adminMigrationSection.endWarningCard.text":
-		'Будь ласка, підтвердьте, що ви хочете завершити міграцію облікового запису користувача до moin.schule.<br><br><span class="text-red">Попередження: Завершення міграції облікового запису користувача має такі наслідки:</span><br><br><ul><li>Студенти та викладачі, які перейшли на moin.schule, можуть зареєструватися лише через moin.schule.</li><br><li>Міграція більше неможлива для студентів і викладачів.</li><br><li>Студенти і вчителі, які не перейшли, можуть продовжувати реєструватися, як і раніше.</li><br><li>Користувачі, які не перейшли, також можуть зареєструватися через moin.schule, але це створює додатковий порожній обліковий запис у Niedersächsische Bildungscloud.<br><span class="text-red">Автоматичне перенесення даних із існуючого облікового запису до цього нового облікового запису неможливе.<span></li><br><li><span class="text-red">Після періоду очікування в {gracePeriod} дн. перенесення облікового запису стає остаточним. Тоді стару систему реєстрації буде вимкнено, а облікові записи, які не було перенесено, буде видалено.</span></li></ul><br><br>Доступна важлива інформація щодо процесу міграції <a href="https://blog.niedersachsen.cloud/umzug" data-testid="end-warningcard-migration-blog-link" target="_blank">тут</a>.',
+		"Будь ласка, підтвердьте, що ви хочете завершити міграцію облікового запису користувача до moin.schule.",
+	"components.administration.adminMigrationSection.endWarningCard.text.warning":
+		"Попередження: Завершення міграції облікового запису користувача має такі наслідки:",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.firstElement":
+		"Студенти та викладачі, які перейшли на moin.schule, можуть зареєструватися лише через moin.schule.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.secondElement":
+		"Міграція більше неможлива для студентів і викладачів.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.thirdElement":
+		"Студенти і вчителі, які не перейшли, можуть продовжувати реєструватися, як і раніше.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement":
+		"Користувачі, які не перейшли, також можуть зареєструватися через moin.schule, але це створює додатковий порожній обліковий запис у Niedersächsische Bildungscloud.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement.warning":
+		"Автоматичне перенесення даних із існуючого облікового запису до цього нового облікового запису неможливе.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.lastElement":
+		"Після періоду очікування в {gracePeriod} дн. перенесення облікового запису стає остаточним. Тоді стару систему реєстрації буде вимкнено, а облікові записи, які не було перенесено, буде видалено.",
 	"components.administration.adminMigrationSection.endWarningCard.title":
 		"Ви справді бажаєте зараз завершити міграцію облікового запису користувача до moin.schule?",
 	"components.administration.adminMigrationSection.headers":
