@@ -292,8 +292,10 @@ export default {
 		"Ви справді хочете розпочати міграцію облікового запису до moin.schule зараз?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Ви впевнені, що хочете скинути автоматично знайдені ярлики?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
-		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів.<br><br>Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
+		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів.",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
+		"Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
 	"components.administration.externalToolsSection.action.add":
 		"Додати зовнішній інструмент",
 	"components.administration.externalToolsSection.action.delete":

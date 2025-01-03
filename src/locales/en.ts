@@ -289,8 +289,10 @@ export default {
 		"Do you really want to start the account migration to moin.schule now?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Are you sure you want to remove the accounts links that are found automatically?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
-		"The migration assistant had automatically found account links based on the usernames.<br><br>Do you want to remove the accounts links that are found automatically now?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
+		"The migration assistant had automatically found account links based on the usernames.",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
+		"Do you want to remove the accounts links that are found automatically now?",
 	"components.administration.externalToolsSection.action.add":
 		"Add External Tool",
 	"components.administration.externalToolsSection.action.delete": "Delete Tool",

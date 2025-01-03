@@ -286,8 +286,10 @@ export default {
 		"Möchten Sie die Account-Migration zu moin.schule jetzt wirklich starten?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Sind Sie sicher, dass Sie die automatisch gefundenen Verknüpfungen zurücksetzen wollen?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
-		"Der Migrationsassistent hat Konten-Verknüpfungen anhand der Nutzer-Namen automatisch gefunden.<br><br>Möchten Sie die automatisch gefundenen Verknüpfungen jetzt zurücksetzen?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
+		"Der Migrationsassistent hat Konten-Verknüpfungen anhand der Nutzer-Namen automatisch gefunden.",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
+		"Möchten Sie die automatisch gefundenen Verknüpfungen jetzt zurücksetzen?",
 	"components.administration.externalToolsSection.action.add":
 		"Externes Tool hinzufügen",
 	"components.administration.externalToolsSection.action.delete":

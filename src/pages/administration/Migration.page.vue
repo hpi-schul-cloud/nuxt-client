@@ -116,13 +116,21 @@
 							}}
 						</template>
 						<template #content>
-							<RenderHTML
-								:html="
+							<p>
+								{{
 									t(
-										'components.administration.adminMigrationSection.clearAutoMatchesDialog.description'
+										"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph"
 									)
-								"
-							/>
+								}}
+							</p>
+							<p>
+								{{
+									t(
+										"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph"
+									)
+								}}
+								>
+							</p>
 						</template>
 					</VCustomDialog>
 				</div>

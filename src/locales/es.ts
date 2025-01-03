@@ -291,8 +291,10 @@ export default {
 		"¿Realmente desea iniciar la migración de la cuenta a moin.schule ahora?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"¿Estás seguro de que quieres restablecer los accesos directos encontrados automáticamente?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
-		"El asistente de migración ha encontrado automáticamente los enlaces de las cuentas basándose en los nombres de usuario.<br><br>¿Desea restablecer ahora los enlaces encontrados automáticamente?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
+		"El asistente de migración ha encontrado automáticamente los enlaces de las cuentas basándose en los nombres de usuario.",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
+		"¿Desea restablecer ahora los enlaces encontrados automáticamente?",
 	"components.administration.externalToolsSection.action.add":
 		"Añadir Herramienta Externa",
 	"components.administration.externalToolsSection.action.delete":
