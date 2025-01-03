@@ -299,8 +299,12 @@ export default {
 	"components.administration.externalToolsSection.action.edit": "Edit Tool",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"View data sheet",
-	"components.administration.externalToolsSection.description":
-		'The school-specific parameters for the external tool are configured here. After saving the configuration, the tool will be available within the school.<br><br>\nFurther information is available in our <a href="https://docs.dbildungscloud.de/x/uoKqDg" target="_blank">Help section on external tools</a>.',
+	"components.administration.externalToolsSection.description.firstParagraph":
+		"The school-specific parameters for the external tool are configured here. After saving the configuration, the tool will be available within the school.",
+	"components.administration.externalToolsSection.description.secondParagraph":
+		"Further information is available in our {0}.",
+	"components.administration.externalToolsSection.description.secondParagraph.link":
+		"Help section on external tools",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"The usage of the tool could not be determined.",
 	"components.administration.externalToolsSection.dialog.content.header":

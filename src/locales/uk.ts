@@ -304,8 +304,12 @@ export default {
 		"інструмент редагування",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Переглянути таблицю даних",
-	"components.administration.externalToolsSection.description":
-		'Тут налаштовуються спеціальні параметри зовнішнього інструменту для школи. Після збереження конфігурації інструмент буде доступний у школі.<br><br>\nДодаткову інформацію можна знайти на нашому сайті <a href="https://docs.dbildungscloud.de/x/uoKqDg" target=" _blank">Розділ довідки щодо зовнішніх інструментів</a>.',
+	"components.administration.externalToolsSection.description.firstParagraph":
+		"Тут налаштовуються спеціальні параметри зовнішнього інструменту для школи. Після збереження конфігурації інструмент буде доступний у школі.",
+	"components.administration.externalToolsSection.description.secondParagraph":
+		"Додаткову інформацію можна знайти на нашому сайті {0}.",
+	"components.administration.externalToolsSection.description.secondParagraph.link":
+		"Розділ довідки щодо зовнішніх інструментів",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
 	"components.administration.externalToolsSection.dialog.content.header":

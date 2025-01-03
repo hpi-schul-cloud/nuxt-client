@@ -298,8 +298,12 @@ export default {
 		"Tool bearbeiten",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Datenblatt anzeigen",
-	"components.administration.externalToolsSection.description":
-		'Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb der Schule verfügbar.<br><br>\nWeitere Informationen sind in unserem <a href="https://docs.dbildungscloud.de/x/uoKqDg" target="_blank">Hilfebereich zu externen Tools</a> zu finden.',
+	"components.administration.externalToolsSection.description.firstParagraph":
+		"Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb der Schule verfügbar.",
+	"components.administration.externalToolsSection.description.secondParagraph":
+		"Weitere Informationen sind in unserem {0} zu finden.",
+	"components.administration.externalToolsSection.description.secondParagraph.link":
+		"Hilfebereich zu externen Tools",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
 	"components.administration.externalToolsSection.dialog.content.header":

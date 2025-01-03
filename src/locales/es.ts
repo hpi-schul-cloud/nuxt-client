@@ -303,8 +303,12 @@ export default {
 		"Editar herramienta",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Ver hoja de datos",
-	"components.administration.externalToolsSection.description":
-		'Los parámetros específicos de la escuela para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta estará disponible dentro de la escuela.<br><br>\nMás información está disponible en nuestro <a href="https://docs.dbildungscloud.de/x/uoKqDg" target=" _blank">Sección de ayuda sobre herramientas externas</a>.',
+	"components.administration.externalToolsSection.description.firstParagraph":
+		"Los parámetros específicos de la escuela para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta estará disponible dentro de la escuela.",
+	"components.administration.externalToolsSection.description.secondParagraph":
+		"Más información está disponible en nuestro {0}.",
+	"components.administration.externalToolsSection.description.secondParagraph.link":
+		"Sección de ayuda sobre herramientas externas",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"No se pudo determinar el uso de la herramienta.",
 	"components.administration.externalToolsSection.dialog.content.header":
