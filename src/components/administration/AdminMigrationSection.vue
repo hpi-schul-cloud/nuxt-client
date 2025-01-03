@@ -1,238 +1,251 @@
 <template>
-	<div>
-		<div v-if="!isGracePeriodExpired" data-testId="migration-control-section">
-			<div data-testid="text-description">
-				<p class="mb-0">
+	<div v-if="!isGracePeriodExpired" data-testId="migration-control-section">
+		<div data-testid="text-description">
+			<p class="mb-0">
+				{{
+					t(
+						"components.administration.adminMigrationSection.description.firstPart"
+					)
+				}}
+			</p>
+			<p>
+				{{
+					t(
+						"components.administration.adminMigrationSection.description.secondPart"
+					)
+				}}
+			</p>
+			<i18n-t
+				keypath="components.administrationSection.description.support"
+				scope="global"
+				tag="p"
+				class="text-red font-weight-bold"
+			>
+				<a :href="supportLink" data-testid="support-link">
+					{{ t("components.administrationSection.description.support.link") }}
+				</a>
+			</i18n-t>
+			<i18n-t
+				keypath="components.administrationSection.description.moreInformation"
+				scope="global"
+				tag="p"
+			>
+				<a
+					data-testid="migration-blog-link"
+					href="https://blog.niedersachsen.cloud/umzug"
+					target="_blank"
+					rel="noopener"
+				>
 					{{
 						t(
-							"components.administration.adminMigrationSection.description.firstPart"
+							"components.administrationSection.description.moreInformation.link"
+						)
+					}}
+				</a>
+			</i18n-t>
+		</div>
+		<div v-if="isStartButtonVisible">
+			<InfoAlert data-testid="migration-info-text">
+				<p>
+					{{
+						t(
+							"components.administration.adminMigrationSection.infoText.firstParagraph"
 						)
 					}}
 				</p>
 				<p>
 					{{
 						t(
-							"components.administration.adminMigrationSection.description.secondPart"
+							"components.administration.adminMigrationSection.infoText.secondParagraph"
 						)
 					}}
 				</p>
 				<i18n-t
-					keypath="components.administrationSection.description.support"
-					scope="global"
-					tag="p"
-					class="text-red font-weight-bold"
-				>
-					<a :href="supportLink" data-testid="support-link">
-						{{ t("components.administrationSection.description.support.link") }}
-					</a>
-				</i18n-t>
-				<i18n-t
-					keypath="components.administrationSection.description.moreInformation"
+					keypath="components.administration.adminMigrationSection.infoText.thirdParagraph"
 					scope="global"
 					tag="p"
 				>
 					<a
-						data-testid="migration-blog-link"
-						href="https://blog.niedersachsen.cloud/umzug"
-						target="_blank"
-						rel="noopener"
+						href="mailto:nbc-support@netz-21.de?subject=Schulnummer%20nicht%20korrekt"
 					>
-						{{
-							t(
-								"components.administrationSection.description.moreInformation.link"
-							)
-						}}
+						{{ t("components.administrationSection.description.support.link") }}
 					</a>
 				</i18n-t>
-			</div>
-			<div v-if="isStartButtonVisible">
-				<v-alert type="info">
-					<div class="alert-text">
-						<RenderHTML
-							data-testid="migration-info-text"
-							:html="
-								t('components.administration.adminMigrationSection.infoText')
-							"
-							component="span"
-						/>
-					</div>
-				</v-alert>
-			</div>
-			<div v-else-if="isMigrationActive">
-				<v-alert type="info">
-					<div class="alert-text">
-						<RenderHTML
-							data-testid="migration-active-status"
-							:html="
-								t(
-									'components.administration.adminMigrationSection.migrationActive'
-								)
-							"
-							component="span"
-						/>
-					</div>
-				</v-alert>
-			</div>
-			<v-btn
-				v-if="isStartButtonVisible"
-				class="my-4 button-start"
-				color="primary"
-				variant="flat"
-				:disabled="!officialSchoolNumber"
-				data-testid="migration-start-button"
-				@click="onToggleShowStartWarning"
-			>
-				{{
-					t(
-						"components.administration.adminMigrationSection.migrationEnableButton.label"
-					)
-				}}
-			</v-btn>
-			<v-btn
-				v-if="isEndButtonVisible"
-				class="my-4 button-end"
-				color="primary"
-				variant="flat"
-				:disabled="!isMigrationActive"
-				data-testid="migration-end-button"
-				@click="onToggleShowEndWarning"
-			>
-				{{
-					t(
-						"components.administration.adminMigrationSection.migrationEndButton.label"
-					)
-				}}
-			</v-btn>
-			<v-alert
-				v-if="error && error.message"
-				type="error"
-				:icon="mdiAlertCircle"
-				data-testid="error-alert"
-			>
-				<div class="alert-text">
-					<RenderHTML
-						data-testid="migration-error-text"
-						:html="$t(getBusinessErrorTranslationKey(error)!)"
-						component="span"
-					/>
-				</div>
-			</v-alert>
-			<v-switch
-				v-show="isShowMandatorySwitch"
-				:label="
-					t(
-						'components.administration.adminMigrationSection.mandatorySwitch.label'
-					)
-				"
-				:disabled="!isMigrationActive"
-				:true-value="true"
-				:false-value="false"
-				:true-icon="mdiCheck"
-				:model-value="isMigrationMandatory"
-				class="ml-1"
-				data-testid="migration-mandatory-switch"
-				@update:model-value="setMigrationMandatory(!isMigrationMandatory)"
-			/>
+				<p class="text-red">
+					{{
+						t(
+							"components.administration.adminMigrationSection.infoText.fourthParagraph"
+						)
+					}}
+				</p>
+			</InfoAlert>
 		</div>
-
-		<migration-warning-card
-			value="start"
-			v-if="isStartWarningVisible"
-			data-testid="migration-start-warning-card"
-			@start="onToggleShowStartWarning"
-			@set="onStartMigration()"
-		/>
-
-		<migration-warning-card
-			value="end"
-			v-if="isEndWarningVisible"
-			data-testid="migration-end-warning-card"
-			@end="onToggleShowEndWarning"
-			@set="onCloseMigration()"
-		/>
-
-		<RenderHTML
-			v-if="
-				userLoginMigration &&
-				userLoginMigration.closedAt &&
-				userLoginMigration.finishedAt
-			"
-			class="migration-completion-date"
-			data-testid="migration-finished-timestamp"
-			:html="
-				t(latestMigration, {
-					date: dayjs(userLoginMigration.closedAt).format('DD.MM.YYYY'),
-					time: dayjs(userLoginMigration.closedAt).format('HH:mm'),
-					finishDate: dayjs(userLoginMigration.finishedAt).format('DD.MM.YYYY'),
-					finishTime: dayjs(userLoginMigration.finishedAt).format('HH:mm'),
-				})
-			"
-			component="p"
-		/>
-
-		<v-switch
-			v-if="!isGracePeriodExpired && globalFeatureEnableLdapSyncDuringMigration"
-			:label="
-				t(
-					'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
-				)
-			"
-			:disabled="!isMigrationActive"
-			v-model="school.featureObject.enableLdapSyncDuringMigration"
-			class="ml-1"
-			:true-icon="mdiCheck"
-			data-testid="enable-sync-during-migration-switch"
-			@update:model-value="setSchoolFeatures"
-		/>
-
-		<template v-if="showMigrationWizard && !isMigrationFinished">
-			<v-btn
-				:disabled="!isMigrationActive || !isSchoolMigrated"
-				class="my-4"
-				color="primary"
-				variant="flat"
-				data-testid="migration-wizard-button"
-				:to="{ name: 'administration-migration' }"
-			>
+		<div v-else-if="isMigrationActive">
+			<InfoAlert data-testid="migration-active-status">
 				{{
-					t(
-						"components.administration.adminMigrationSection.migrationWizardButton.label"
-					)
+					t("components.administration.adminMigrationSection.migrationActive")
 				}}
-			</v-btn>
-			<p>
-				{{
-					t(
-						"components.administration.adminMigrationSection.migrationWizardButton.description"
-					)
-				}}
-			</p>
-		</template>
-
-		<v-switch
-			v-if="globalFeatureShowOutdatedUsers"
-			:label="
-				t(
-					'components.administration.adminMigrationSection.showOutdatedUsers.label'
-				)
-			"
-			v-model="school.featureObject.showOutdatedUsers"
-			class="ml-1"
-			:true-icon="mdiCheck"
-			data-testid="show-outdated-users-switch"
-			@update:model-value="setSchoolFeatures"
-		/>
-		<p
-			v-if="globalFeatureShowOutdatedUsers"
-			data-testid="show-outdated-users-description"
+			</InfoAlert>
+		</div>
+		<v-btn
+			v-if="isStartButtonVisible"
+			class="my-4 button-start"
+			color="primary"
+			variant="flat"
+			:disabled="!officialSchoolNumber"
+			data-testid="migration-start-button"
+			@click="onToggleShowStartWarning"
 		>
 			{{
 				t(
-					"components.administration.adminMigrationSection.showOutdatedUsers.description"
+					"components.administration.adminMigrationSection.migrationEnableButton.label"
+				)
+			}}
+		</v-btn>
+		<v-btn
+			v-if="isEndButtonVisible"
+			class="my-4 button-end"
+			color="primary"
+			variant="flat"
+			:disabled="!isMigrationActive"
+			data-testid="migration-end-button"
+			@click="onToggleShowEndWarning"
+		>
+			{{
+				t(
+					"components.administration.adminMigrationSection.migrationEndButton.label"
+				)
+			}}
+		</v-btn>
+		<v-alert
+			v-if="error && error.message"
+			type="error"
+			:icon="mdiAlertCircle"
+			data-testid="error-alert"
+		>
+			<div class="alert-text">
+				<RenderHTML
+					data-testid="migration-error-text"
+					:html="$t(getBusinessErrorTranslationKey(error)!)"
+					component="span"
+				/>
+			</div>
+		</v-alert>
+		<v-switch
+			v-show="isShowMandatorySwitch"
+			:label="
+				t(
+					'components.administration.adminMigrationSection.mandatorySwitch.label'
+				)
+			"
+			:disabled="!isMigrationActive"
+			:true-value="true"
+			:false-value="false"
+			:true-icon="mdiCheck"
+			:model-value="isMigrationMandatory"
+			class="ml-1"
+			data-testid="migration-mandatory-switch"
+			@update:model-value="setMigrationMandatory(!isMigrationMandatory)"
+		/>
+	</div>
+
+	<migration-warning-card
+		value="start"
+		v-if="isStartWarningVisible"
+		data-testid="migration-start-warning-card"
+		@start="onToggleShowStartWarning"
+		@set="onStartMigration()"
+	/>
+
+	<migration-warning-card
+		value="end"
+		v-if="isEndWarningVisible"
+		data-testid="migration-end-warning-card"
+		@end="onToggleShowEndWarning"
+		@set="onCloseMigration()"
+	/>
+
+	<RenderHTML
+		v-if="
+			userLoginMigration &&
+			userLoginMigration.closedAt &&
+			userLoginMigration.finishedAt
+		"
+		class="migration-completion-date"
+		data-testid="migration-finished-timestamp"
+		:html="
+			t(latestMigration, {
+				date: dayjs(userLoginMigration.closedAt).format('DD.MM.YYYY'),
+				time: dayjs(userLoginMigration.closedAt).format('HH:mm'),
+				finishDate: dayjs(userLoginMigration.finishedAt).format('DD.MM.YYYY'),
+				finishTime: dayjs(userLoginMigration.finishedAt).format('HH:mm'),
+			})
+		"
+		component="p"
+	/>
+
+	<v-switch
+		v-if="!isGracePeriodExpired && globalFeatureEnableLdapSyncDuringMigration"
+		:label="
+			t(
+				'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
+			)
+		"
+		:disabled="!isMigrationActive"
+		v-model="school.featureObject.enableLdapSyncDuringMigration"
+		class="ml-1"
+		:true-icon="mdiCheck"
+		data-testid="enable-sync-during-migration-switch"
+		@update:model-value="setSchoolFeatures"
+	/>
+
+	<template v-if="showMigrationWizard && !isMigrationFinished">
+		<v-btn
+			:disabled="!isMigrationActive || !isSchoolMigrated"
+			class="my-4"
+			color="primary"
+			variant="flat"
+			data-testid="migration-wizard-button"
+			:to="{ name: 'administration-migration' }"
+		>
+			{{
+				t(
+					"components.administration.adminMigrationSection.migrationWizardButton.label"
+				)
+			}}
+		</v-btn>
+		<p>
+			{{
+				t(
+					"components.administration.adminMigrationSection.migrationWizardButton.description"
 				)
 			}}
 		</p>
-	</div>
+	</template>
+
+	<v-switch
+		v-if="globalFeatureShowOutdatedUsers"
+		:label="
+			t(
+				'components.administration.adminMigrationSection.showOutdatedUsers.label'
+			)
+		"
+		v-model="school.featureObject.showOutdatedUsers"
+		class="ml-1"
+		:true-icon="mdiCheck"
+		data-testid="show-outdated-users-switch"
+		@update:model-value="setSchoolFeatures"
+	/>
+	<p
+		v-if="globalFeatureShowOutdatedUsers"
+		data-testid="show-outdated-users-description"
+	>
+		{{
+			t(
+				"components.administration.adminMigrationSection.showOutdatedUsers.description"
+			)
+		}}
+	</p>
 </template>
 
 <script lang="ts">
@@ -248,7 +261,6 @@ import {
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 } from "@/utils/inject";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
-import { RenderHTML } from "@feature-render-html";
 import dayjs from "dayjs";
 import {
 	computed,
@@ -260,11 +272,14 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
+import { InfoAlert } from "@ui-alert";
+import RenderHTML from "@/modules/feature/render-html/RenderHTML.vue";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
 	components: {
 		MigrationWarningCard,
+		InfoAlert,
 		RenderHTML,
 	},
 	setup() {

@@ -181,11 +181,20 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
+			const infoText = wrapper.get('[data-testId="migration-info-text"]');
+			const expectedText = [
+				"firstParagraph",
+				"secondParagraph",
+				"thirdParagraph",
+				"fourthParagraph",
+			]
+				.map(
+					(text) =>
+						`components.administration.adminMigrationSection.infoText.${text}`
+				)
+				.join("");
 
-			expect(renderHtmls[0].props("html")).toStrictEqual(
-				"components.administration.adminMigrationSection.infoText"
-			);
+			expect(infoText.text()).toEqual(expectedText);
 		});
 
 		it("should display the info text activeMigration when the admin activated the migration", () => {
@@ -203,9 +212,9 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
+			const infoText = wrapper.get('[data-testId="migration-active-status"]');
 
-			expect(renderHtmls[0].props("html")).toStrictEqual(
+			expect(infoText.text()).toStrictEqual(
 				"components.administration.adminMigrationSection.migrationActive"
 			);
 		});
@@ -645,7 +654,7 @@ describe("AdminMigrationSection", () => {
 
 			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
 
-			expect(renderHtmls[1].props("html")).toContain(
+			expect(renderHtmls[0].props("html")).toContain(
 				"components.administration.adminMigrationSection.oauthMigrationFinished.text"
 			);
 		});

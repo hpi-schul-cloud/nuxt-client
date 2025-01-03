@@ -242,8 +242,14 @@ export default {
 		"Möchten Sie die Account-Migration zu moin.schule jetzt wirklich abschließen?",
 	"components.administration.adminMigrationSection.headers":
 		"Account-Migration zu moin.schule",
-	"components.administration.adminMigrationSection.infoText":
-		'Bitte überprüfen Sie die Richtigkeit der in der Niedersächsischen Bildungscloud eingetragenen offiziellen Schulnummer.<br><br> Starten Sie die Migration zu moin.schule erst, nachdem Sie die Richtigkeit der offiziellen Schulnummer sichergestellt haben.<br><br>Sie können die eingetragene Schulnummer nicht eigenständig ändern. Falls eine Korrektur der Schulnummer erforderlich ist, kontaktieren Sie bitte den <a href="mailto:nbc-support{\'@\'}netz-21.de?subject=Schulnummer%20nicht%20korrekt">Support</a>.<br><br><span class="text-red">Mit dem Start der Migration wird die Richtigkeit der eingetragenen Schulnummer bestätigt.</span>',
+	"components.administration.adminMigrationSection.infoText.firstParagraph":
+		"Bitte überprüfen Sie die Richtigkeit der in der Niedersächsischen Bildungscloud eingetragenen offiziellen Schulnummer.",
+	"components.administration.adminMigrationSection.infoText.secondParagraph":
+		"Starten Sie die Migration zu moin.schule erst, nachdem Sie die Richtigkeit der offiziellen Schulnummer sichergestellt haben.",
+	"components.administration.adminMigrationSection.infoText.thirdParagraph":
+		" Sie können die eingetragene Schulnummer nicht eigenständig ändern. Falls eine Korrektur der Schulnummer erforderlich ist, kontaktieren Sie bitte den {0}.",
+	"components.administration.adminMigrationSection.infoText.fourthParagraph":
+		"Mit dem Start der Migration wird die Richtigkeit der eingetragenen Schulnummer bestätigt.",
 	"components.administration.adminMigrationSection.mandatorySwitch.label":
 		"Migration verpflichtend",
 	"components.administration.adminMigrationSection.migrationActive":

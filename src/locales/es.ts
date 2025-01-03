@@ -247,8 +247,14 @@ export default {
 		"¿Realmente desea completar la migración de la cuenta de usuario a moin.schule ahora?",
 	"components.administration.adminMigrationSection.headers":
 		"Migración de cuenta a moin.schule",
-	"components.administration.adminMigrationSection.infoText":
-		'Verifique que el número de escuela oficial ingresado en Niedersächsische Bildungscloud sea correcto.<br><br> Inicie la migración a moin.schule solo después de asegurarse de que el número de escuela oficial sea correcto.<br><br>No puede usar la escuela el número introducido cambia de forma independiente. Si es necesario corregir el número de la escuela, comuníquese con <a href="mailto:nbc-support{\'@\'}netz-21.de?subject=Schulnummer%20nicht%20korrekt">Soporte<a>.<br><br> <span class="text-red">El inicio de la migración confirma que el número de escuela ingresado es correcto.<span>',
+	"components.administration.adminMigrationSection.infoText.firstParagraph":
+		"Verifique que el número de escuela oficial ingresado en Niedersächsische Bildungscloud sea correcto.",
+	"components.administration.adminMigrationSection.infoText.secondParagraph":
+		"Inicie la migración a moin.schule solo después de asegurarse de que el número de escuela oficial sea correcto.",
+	"components.administration.adminMigrationSection.infoText.thirdParagraph":
+		"No puede cambiar el número de escuela ingresado de forma independiente. Si es necesario corregir el número de la escuela, comuníquese con {0}.",
+	"components.administration.adminMigrationSection.infoText.fourthParagraph":
+		"El inicio de la migración confirma que el número de escuela ingresado es correcto.",
 	"components.administration.adminMigrationSection.mandatorySwitch.label":
 		"Migración obligatoria",
 	"components.administration.adminMigrationSection.migrationActive":

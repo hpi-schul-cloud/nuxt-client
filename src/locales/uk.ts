@@ -248,8 +248,14 @@ export default {
 		"Ви справді бажаєте зараз завершити міграцію облікового запису користувача до moin.schule?",
 	"components.administration.adminMigrationSection.headers":
 		"Міграція облікового запису в moin.schule",
-	"components.administration.adminMigrationSection.infoText":
-		'Будь ласка, переконайтеся, що офіційний номер школи, введений у Niedersächsische Bildungscloud, є правильним.<br><br>Почніть міграцію до moin.schule лише після того, як ви переконаєтеся, що офіційний номер школи правильний.<br><br>Ви не можете використовувати школу. введене число змінюється самостійно. Якщо потрібно виправити номер школи, зверніться до <a href="mailto:nbc-support{\'@\'}netz-21.de?subject=Schulnummer%20nicht%20korrekt">Служби підтримки<a>.<br><br><span class="text-red">Початок міграції підтверджує, що введений номер школи правильний.<span>',
+	"components.administration.adminMigrationSection.infoText.firstParagraph":
+		"Будь ласка, переконайтеся, що офіційний номер школи, введений у Niedersächsische Bildungscloud, є правильним.",
+	"components.administration.adminMigrationSection.infoText.secondParagraph":
+		"Почніть міграцію до moin.schule лише після того, як ви переконаєтеся, що офіційний номер школи правильний.",
+	"components.administration.adminMigrationSection.infoText.thirdParagraph":
+		"Ви не можете змінити введений номер школи самостійно. Якщо потрібно виправити номер школи, зверніться до {0}.",
+	"components.administration.adminMigrationSection.infoText.fourthParagraph":
+		"Початок міграції підтверджує, що введений номер школи правильний.",
 	"components.administration.adminMigrationSection.mandatorySwitch.label":
 		"Міграція обов'язкова",
 	"components.administration.adminMigrationSection.migrationActive":
