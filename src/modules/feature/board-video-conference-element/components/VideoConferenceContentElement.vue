@@ -8,6 +8,7 @@
 			ref="videoConferenceElement"
 			:ripple="false"
 			target="_blank"
+			link
 			:aria-label="ariaLabel"
 			@keydown.stop.up.down="onKeydownArrow"
 		>

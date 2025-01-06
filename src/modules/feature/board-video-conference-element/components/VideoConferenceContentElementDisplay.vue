@@ -168,10 +168,6 @@ const onContentClick = () => {
 </script>
 
 <style lang="scss" scoped>
-// a {
-// 	text-decoration: none;
-// }
-
 .menu {
 	position: absolute;
 	right: 10px;
