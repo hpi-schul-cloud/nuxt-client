@@ -929,7 +929,7 @@ export default {
 	"feature-course-sync.GroupSelectionDialog.selection.label":
 		"Selección de grupo",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
-		"Los siguientes datos para crear un nuevo curso no están disponibles en el grupo de usuarios {groupName}:<li>Profesor</li><br/>Por favor, regístrese en moin.schule y comience la creación del curso nuevamente.",
+		"Los siguientes datos para crear un nuevo curso no están disponibles en el grupo de usuarios {groupName}: {teacher} Por favor, regístrese en moin.schule y comience la creación del curso nuevamente.",
 	"feature-course-sync.StartNewCourseSyncDialog.text":
 		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":

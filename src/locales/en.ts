@@ -900,7 +900,7 @@ export default {
 	"feature-course-sync.GroupSelectionDialog.title": "Select user group",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Group selection",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
-		"The following data for creating a new course is not available in the user group {groupName}:<li>Teacher</li><br/>Please check in moin.schule and start course creation again.",
+		"The following data for creating a new course is not available in the user group {groupName}: {teacher} Please check in moin.schule and start course creation again.",
 	"feature-course-sync.StartNewCourseSyncDialog.text":
 		"In the next step, the selected user group will be synchronized with the newly created course.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":

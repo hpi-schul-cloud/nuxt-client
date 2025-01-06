@@ -43,15 +43,23 @@
 				v-if="selectedGroup && !hasTeacher(selectedGroup)"
 				data-testid="no-teacher-warning"
 			>
-				<RenderHTML
-					component="span"
-					:html="
-						$t('feature-course-sync.GroupSelectionDialog.noTeacher', {
-							groupName: selectedGroup.name,
-						})
-					"
-					data-testid="no-teacher-warning-text"
-				/>
+				<span data-testid="no-teacher-warning-text">
+					<i18n-t
+						keypath="feature-course-sync.GroupSelectionDialog.noTeacher"
+						scope="global"
+					>
+						<template #groupName>
+							{{ selectedGroup.name }}
+						</template>
+						<template #teacher>
+							<ul class="mb-3 pl-4">
+								<li>
+									{{ t("common.labels.teacher") }}
+								</li>
+							</ul>
+						</template>
+					</i18n-t>
+				</span>
 			</WarningAlert>
 		</template>
 	</vCustomDialog>
@@ -61,10 +69,10 @@
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { GroupResponse, GroupUserResponse, RoleName } from "@/serverApi/v3";
 import { useGroupListState } from "@data-group";
-import { RenderHTML } from "@feature-render-html";
 import { WarningAlert } from "@ui-alert";
 import { useDebounceFn } from "@vueuse/core";
 import { ModelRef, Ref, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
 
 defineProps({
 	description: {
@@ -72,6 +80,8 @@ defineProps({
 		required: true,
 	},
 });
+
+const { t } = useI18n();
 
 const isOpen: ModelRef<boolean> = defineModel("isOpen", {
 	type: Boolean,

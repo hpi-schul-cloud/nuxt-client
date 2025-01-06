@@ -919,7 +919,7 @@ export default {
 		"Виберіть групу користувачів",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Вибір групи",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
-		"Наступні дані для створення нового курсу недоступні в групі користувачів {groupName}:<li>Викладач</li><br/>Перевірте moin.schule і почніть створення курсу знову.",
+		"Наступні дані для створення нового курсу недоступні в групі користувачів {groupName}: {teacher} Перевірте moin.schule і почніть створення курсу знову.",
 	"feature-course-sync.StartNewCourseSyncDialog.text":
 		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":

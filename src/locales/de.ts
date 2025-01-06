@@ -904,7 +904,7 @@ export default {
 	"feature-course-sync.GroupSelectionDialog.title": "Nutzendengruppe auswählen",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Gruppen-Auswahl",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
-		"Folgende Daten zur Erstellung eines neuen Kurses sind in Nutzergruppe {groupName} nicht vorhanden:<li>Lehrkraft</li><br/>Bitte in moin.schule überprüfen und Kurs-Erstellung erneut starten.",
+		"Folgende Daten zur Erstellung eines neuen Kurses sind in Nutzergruppe {groupName} nicht vorhanden: {teacher} Bitte in moin.schule überprüfen und Kurs-Erstellung erneut starten.",
 	"feature-course-sync.StartNewCourseSyncDialog.text":
 		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem neu erstellten Kurs synchronisiert.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
