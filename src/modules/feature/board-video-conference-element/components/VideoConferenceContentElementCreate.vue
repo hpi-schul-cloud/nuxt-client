@@ -1,62 +1,42 @@
 <template>
 	<div data-testid="board-video-conference-element-create">
-		<ContentElementBar :has-row-style="isSmallOrLargerListBoard">
-			<template #display>
-				<VImg :src="imageSrc" alt="" cover />
-			</template>
-			<template #title>
-				<VCardText>
-					<VForm
-						@submit.prevent.stop="onSubmit"
-						ref="form"
-						validate-on="submit"
-					>
-						<div class="d-flex flex-row">
-							<VTextarea
-								v-model="title"
-								:rules="rules"
-								:label="
-									t('components.cardElement.videoConferenceElement.label')
-								"
-								type="text"
-								:autofocus="true"
-								:auto-grow="true"
-								rows="1"
-								@keydown="onKeydown"
-								class="text"
-								:placeholder="
-									t('components.cardElement.videoConferenceElement')
-								"
-							/>
-
-							<div class="align-self-center pl-2">
-								<button type="submit" ref="submit">
-									<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>
-									<span class="d-sr-only">{{ t("common.actions.save") }}</span>
-								</button>
-							</div>
-
-							<div class="align-self-center menu">
-								<slot />
-							</div>
-						</div>
-					</VForm>
-				</VCardText>
-			</template>
-		</ContentElementBar>
+		<VImg :src="imageSrc" alt="" cover />
+		<VCardText>
+			<VForm @submit.prevent.stop="onSubmit" ref="form" validate-on="submit">
+				<div class="d-flex flex-row">
+					<VTextarea
+						v-model="title"
+						:rules="rules"
+						:label="t('components.cardElement.videoConferenceElement.label')"
+						type="text"
+						:autofocus="true"
+						:auto-grow="true"
+						rows="1"
+						@keydown="onKeydown"
+						class="text"
+						:placeholder="t('components.cardElement.videoConferenceElement')"
+					/>
+					<div class="align-self-center pl-2">
+						<button type="submit" ref="submit">
+							<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>
+							<span class="d-sr-only">{{ t("common.actions.save") }}</span>
+						</button>
+					</div>
+					<div class="align-self-center menu">
+						<slot />
+					</div>
+				</div>
+			</VForm>
+		</VCardText>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import image from "@/assets/img/videoConference.svg";
 import { isRequired } from "@util-validators";
 import { mdiCheck } from "@icons/material";
-import { ContentElementBar } from "@ui-board";
-import { injectStrict } from "@/utils/inject";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { useDisplay } from "vuetify/lib/framework.mjs";
 
 type VuetifyFormApi = {
 	validate: () => { valid: boolean };
@@ -66,13 +46,6 @@ type VuetifyFormApi = {
 const emit = defineEmits(["create:title"]);
 
 const { t } = useI18n();
-
-const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
-const { smAndUp } = useDisplay();
-
-const isSmallOrLargerListBoard = computed(
-	() => smAndUp.value && isListLayout.value
-);
 const title = ref<string>(t("components.cardElement.videoConferenceElement"));
 const form = ref<VuetifyFormApi | null>(null);
 
