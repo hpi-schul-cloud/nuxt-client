@@ -189,11 +189,14 @@ const tableHeader = [
 }
 
 .fixed-position {
+	$space-left-right: calc(var(--space-base-vuetify) * 6);
+
 	position: fixed;
-	top: 0;
-	margin-top: 159px;
-	width: 95vw;
-	z-index: 10;
+	top: 159px;
+	right: $space-left-right;
+	left: $space-left-right;
+	width: calc(100% - 48px);
+	z-index: 1;
 	background: rgb(var(--v-theme-white));
 }
 </style>
