@@ -964,8 +964,21 @@ export default {
 	"mixins.typeMeta.types.image": "Image",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Website",
-	"page-class-members.classMembersInfoBox.text":
-		"<p>A declaration of consent does <b>not</b> need to be obtained when registering students. The use of the Niedersächsischen Bildungscloud is regulated in the Lower Saxony Schools Act (Section 31 Para. 5 NSchG).<br><br>If the school obtains or receives the user's data via an external system, no further steps are necessary in the cloud. Registration takes place via the external system.<br><br>Otherwise, invitations to register can be sent via link via the administration area of the cloud:<br><ul><li>Sending registration links to the stored email addresses (also possible to create directly when importing)</li><li>Print registration links as QR print sheets, cut them out and distribute QR slips to students</li><li>Select one or more users, e.g. all students in a class , and then carry out the desired action</li><li>Alternatively possible: Switch to edit mode of the user profile and retrieve the individual registration link directly in order to send it manually</li></ul></p>",
+	"pages.classMembers.infoBox.text.firstParagraph":
+		"A declaration of consent does {0} need to be obtained when registering students. The use of the Niedersächsischen Bildungscloud is regulated in the Lower Saxony Schools Act (Section 31 Para. 5 NSchG).",
+	"pages.classMembers.infoBox.text.firstParagraph.bold": "not",
+	"pages.classMembers.infoBox.text.secondParagraph":
+		"If the school obtains or receives the user's data via an external system, no further steps are necessary in the cloud. Registration takes place via the external system.",
+	"pages.classMembers.infoBox.text.thirdParagraph":
+		"Otherwise, invitations to register can be sent via link via the administration area of the cloud:",
+	"pages.classMembers.infoBox.text.listItem.first":
+		"Sending registration links to the stored email addresses (also possible to create directly when importing)",
+	"pages.classMembers.infoBox.text.listItem.second":
+		"Print registration links as QR print sheets, cut them out and distribute QR slips to students",
+	"pages.classMembers.infoBox.text.listItem.third":
+		"Select one or more users, e.g. all students in a class, and then carry out the desired action",
+	"pages.classMembers.infoBox.text.listItem.last":
+		"Alternatively possible: Switch to edit mode of the user profile and retrieve the individual registration link directly in order to send it manually",
 	"page-class-members.classMembersInfoBox.title":
 		"Students are not yet in the Niedersächsischen Bildungscloud?",
 	"page-class-members.systemInfoText":

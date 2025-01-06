@@ -993,8 +993,21 @@ export default {
 	"mixins.typeMeta.types.image": "Imagen",
 	"mixins.typeMeta.types.video": "Vídeo",
 	"mixins.typeMeta.types.webpage": "Página web",
-	"page-class-members.classMembersInfoBox.text":
-		"<p><b>No</b> es necesario obtener una declaración de consentimiento al registrar estudiantes. El uso de Niedersächsischen Bildungscloud está regulado por la Ley de escuelas de Baja Sajonia (artículo 31, párrafo 5 de la NSchG).<br><br>Si la escuela obtiene o recibe los datos del usuario a través de un sistema externo, no es necesario realizar ningún otro paso en el proceso nube. El registro se realiza a través del sistema externo.<br><br>De lo contrario, las invitaciones para registrarse se pueden enviar mediante un enlace a través del área de administración de la nube:<br><ul><li>Envío de enlaces de registro a las direcciones de correo electrónico almacenadas (También es posible crear directamente al importar)</li><li>Imprima enlaces de registro como hojas de impresión QR, recórtelas y distribuya recibos QR a los estudiantes<li><li>Seleccione uno o más usuarios, p.e. todos los estudiantes de una clase y luego llevar a cabo la acción deseada</li><li>Alternativamente posible: cambiar al modo de edición del perfil de usuario y recuperar el enlace de registro individual directamente para enviarlo manualmente</li></ul></p>",
+	"pages.classMembers.infoBox.text.firstParagraph":
+		"No es necesario obtener una declaración de consentimiento al registrar estudiantes. El uso de Niedersächsischen Bildungscloud está regulado por la Ley de escuelas de Baja Sajonia (artículo 31, párrafo 5 de la NSchG).",
+	"pages.classMembers.infoBox.text.firstParagraph.bold": "No",
+	"pages.classMembers.infoBox.text.secondParagraph":
+		"Si la escuela obtiene o recibe los datos del usuario a través de un sistema externo, no es necesario realizar ningún otro paso en el proceso nube. El registro se realiza a través del sistema externo.",
+	"pages.classMembers.infoBox.text.thirdParagraph":
+		"De lo contrario, las invitaciones para registrarse se pueden enviar mediante un enlace a través del área de administración de la nube:",
+	"pages.classMembers.infoBox.text.listItem.first":
+		"Envío de enlaces de registro a las direcciones de correo electrónico almacenadas (También es posible crear directamente al importar)",
+	"pages.classMembers.infoBox.text.listItem.second":
+		"Imprima enlaces de registro como hojas de impresión QR, recórtelas y distribuya recibos QR a los estudiantes",
+	"pages.classMembers.infoBox.text.listItem.third":
+		"Seleccione uno o más usuarios, p.e. todos los estudiantes de una clase y luego llevar a cabo la acción deseada",
+	"pages.classMembers.infoBox.text.listItem.last":
+		"Alternativamente posible: cambiar al modo de edición del perfil de usuario y recuperar el enlace de registro individual directamente para enviarlo manualmente",
 	"page-class-members.classMembersInfoBox.title":
 		"¿Los estudiantes aún no están en la Niedersächsischen Bildungscloud?",
 	"page-class-members.systemInfoText":

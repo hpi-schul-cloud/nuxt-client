@@ -969,8 +969,21 @@ export default {
 	"mixins.typeMeta.types.image": "Bild",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Webseite",
-	"page-class-members.classMembersInfoBox.text":
-		"<p>Eine Einverständniserklärung bei der Registrierung von Schüler:innen muss <b>nicht</b> eingeholt werden. Die Nutzung der Niedersächsischen Bildungscloud ist im niedersächsischen Schulgesetz (§ 31 Abs. 5 NSchG) geregelt.<br><br>Falls die Schule die Daten der Nutzenden über ein externes System bezieht bzw. übermittelt bekommt, sind keine weiteren Schritte in der Cloud notwendig. Die Registrierung erfolgt über das externe System.<br><br>Anderenfalls können über den Verwaltungsbereich der Cloud Einladungen zur Registrierung per Link versendet werden:<br><ul><li>Versand von Registrierungslinks an die hinterlegten E-Mail-Adressen (auch direkt beim Importieren/Anlegen möglich)</li><li>Registrierungslinks als QR-Druckbogen drucken, ausschneiden und QR-Zettel an Schüler:innen verteilen</li><li>Einen oder mehrere Nutzer:innen auswählen, z.B. alle Schüler:innen einer Klasse, und dann die gewünschte Aktion durchführen</li><li>Alternativ möglich: Wechseln in den Bearbeiten-Modus des Nutzerprofils und den individuellen Registrierungslink direkt abrufen, um ihn händisch zu versenden</li></ul></p>",
+	"pages.classMembers.infoBox.text.firstParagraph":
+		"Eine Einverständniserklärung bei der Registrierung von Schüler:innen muss {0} eingeholt werden. Die Nutzung der Niedersächsischen Bildungscloud ist im niedersächsischen Schulgesetz (§ 31 Abs. 5 NSchG) geregelt.",
+	"pages.classMembers.infoBox.text.firstParagraph.bold": "nicht",
+	"pages.classMembers.infoBox.text.secondParagraph":
+		"Falls die Schule die Daten der Nutzenden über ein externes System bezieht bzw. übermittelt bekommt, sind keine weiteren Schritte in der Cloud notwendig. Die Registrierung erfolgt über das externe System.",
+	"pages.classMembers.infoBox.text.thirdParagraph":
+		"Anderenfalls können über den Verwaltungsbereich der Cloud Einladungen zur Registrierung per Link versendet werden:",
+	"pages.classMembers.infoBox.text.listItem.first":
+		"Versand von Registrierungslinks an die hinterlegten E-Mail-Adressen (auch direkt beim Importieren/Anlegen möglich)",
+	"pages.classMembers.infoBox.text.listItem.second":
+		"Registrierungslinks als QR-Druckbogen drucken, ausschneiden und QR-Zettel an Schüler:innen verteilen",
+	"pages.classMembers.infoBox.text.listItem.third":
+		"Einen oder mehrere Nutzer:innen auswählen, z.B. alle Schüler:innen einer Klasse, und dann die gewünschte Aktion durchführen",
+	"pages.classMembers.infoBox.text.listItem.last":
+		"Alternativ möglich: Wechseln in den Bearbeiten-Modus des Nutzerprofils und den individuellen Registrierungslink direkt abrufen, um ihn händisch zu versenden",
 	"page-class-members.classMembersInfoBox.title":
 		"Schüler:innen sind noch nicht in der Niedersächsischen Bildungscloud?",
 	"page-class-members.systemInfoText":

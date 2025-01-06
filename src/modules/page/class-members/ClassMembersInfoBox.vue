@@ -12,11 +12,24 @@
 		<h2 class="text-h4">
 			{{ $t("page-class-members.classMembersInfoBox.title") }}
 		</h2>
-		<RenderHTML
-			:html="$t('page-class-members.classMembersInfoBox.text')"
-			data-testid="class-members-info-box-text"
-			component="div"
-		/>
+		<div data-testid="class-members-info-box-text">
+			<i18n-t
+				keypath="pages.classMembers.infoBox.text.firstParagraph"
+				scope="global"
+				tag="p"
+			>
+				<span class="font-weight-bold">
+					{{ t("pages.classMembers.infoBox.text.firstParagraph.bold") }}</span
+				>
+			</i18n-t>
+			<p>{{ t("pages.classMembers.infoBox.text.secondParagraph") }}</p>
+			<p>{{ t("pages.classMembers.infoBox.text.thirdParagraph") }}</p>
+			<ul class="pl-4">
+				<li v-for="(item, index) in infoBoxTextListItems" :key="index">
+					{{ t(item) }}
+				</li>
+			</ul>
+		</div>
 	</div>
 </template>
 <script lang="ts">
@@ -30,10 +43,9 @@ import {
 	Ref,
 	watch,
 } from "vue";
-import { RenderHTML } from "@feature-render-html";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
-	components: { RenderHTML },
 	props: {
 		systemId: {
 			type: String,
@@ -41,9 +53,17 @@ export default defineComponent({
 		},
 	},
 	setup(props) {
+		const { t } = useI18n();
 		const { getSystem } = useSystemApi();
 
 		const system: Ref<System | undefined> = ref();
+
+		const infoBoxTextListItems = [
+			t("pages.classMembers.infoBox.text.listItem.first"),
+			t("pages.classMembers.infoBox.text.listItem.second"),
+			t("pages.classMembers.infoBox.text.listItem.third"),
+			t("pages.classMembers.infoBox.text.listItem.last"),
+		];
 
 		onMounted(async () => {
 			if (props.systemId) {
@@ -69,6 +89,8 @@ export default defineComponent({
 		return {
 			hasSystem,
 			systemName,
+			infoBoxTextListItems,
+			t,
 		};
 	},
 });
