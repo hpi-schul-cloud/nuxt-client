@@ -285,6 +285,7 @@ import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { InfoAlert } from "@ui-alert";
 import { RenderHTML } from "@feature-render-html";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 
 export default defineComponent({
 	name: "AdminMigrationSection",
@@ -406,11 +407,12 @@ export default defineComponent({
 			return subject;
 		};
 
-		const supportLink: ComputedRef<string> = computed(
-			() =>
+		const supportLink: ComputedRef<string> = computed(() =>
+			sanitizeUrl(
 				`mailto:${
 					envConfigModule.getAccessibilityReportEmail
 				}?subject=${getSubject()}`
+			)
 		);
 
 		const globalFeatureEnableLdapSyncDuringMigration: ComputedRef<boolean> =
