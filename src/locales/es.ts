@@ -1724,7 +1724,7 @@ export default {
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
 	"pages.rooms.fab.title": "Crear sala",
-	"pages.rooms.infoAlert.welcome": '¡Bienvenidos a las nuevas "Salas"!',
+	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"En el futuro, las salas combinarán funciones de cursos y equipos para ofrecer más oportunidades de colaboración entre escuelas.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":

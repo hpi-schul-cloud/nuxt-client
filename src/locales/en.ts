@@ -1675,7 +1675,7 @@ export default {
 	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.rooms.fab.title": "Create room",
-	"pages.rooms.infoAlert.welcome": 'Welcome to the new "Rooms"!',
+	"pages.rooms.infoAlert.welcome": "Welcome to the new Rooms!",
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"Rooms will combine functions from courses and teams in the future to provide more opportunities for cross-school working.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
