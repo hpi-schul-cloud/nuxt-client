@@ -160,7 +160,7 @@ import { useRouter } from "vue-router";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import EnvConfigModule from "@/store/env-config";
+import { RenderHTML } from "@feature-render-html";
 
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
