@@ -306,8 +306,10 @@ export default {
 		"Hilfebereich zu externen Tools",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
-	"components.administration.externalToolsSection.dialog.content.header":
-		"Sind Sie sich sicher, dass Sie das Tool <b>{itemName}</b> löschen wollen? </br></br>Zurzeit wird das Tool wie folgt genutzt:",
+	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
+		"Sind Sie sich sicher, dass Sie das Tool {0} löschen wollen?",
+	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+		"Zurzeit wird das Tool wie folgt genutzt:",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Achtung: Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
 	"components.administration.externalToolsSection.dialog.title":
@@ -1740,7 +1742,7 @@ export default {
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.rooms.fab.title": "Raum erstellen",
-	"pages.rooms.infoAlert.welcome": 'Willkommen in den neuen "Räumen"!',
+	"pages.rooms.infoAlert.welcome": "Willkommen in den neuen Räumen!",
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"Räume werden zukünftig Funktionen aus Kursen und Teams vereinen, um mehr Möglichkeiten für das schulübergreifende Arbeiten zu bieten.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":

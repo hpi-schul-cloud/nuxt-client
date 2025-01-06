@@ -66,20 +66,23 @@
 						}}
 					</h2>
 				</v-card-title>
-				<v-card-text class="text--primary">
-					<RenderHTML
-						data-testid="delete-dialog-content-header"
-						class="text-md mt-2 mb-0"
-						:html="
-							t(
-								'components.administration.externalToolsSection.dialog.content.header',
-								{
-									itemName: getItemName,
-								}
-							)
-						"
-						component="p"
-					/>
+				<v-card-text>
+					<div data-testid="delete-dialog-content-header">
+						<i18n-t
+							keypath="components.administration.externalToolsSection.dialog.content.header.firstParagraph"
+							scope="global"
+							tag="p"
+						>
+							<b>{{ getItemName }}</b>
+						</i18n-t>
+						<p class="mb-0">
+							{{
+								t(
+									"components.administration.externalToolsSection.dialog.content.header.secondParagraph"
+								)
+							}}
+						</p>
+					</div>
 					<p data-testid="delete-dialog-content-courses" class="text-md mb-0">
 						{{ t("common.tool.context.type.courses") }}
 						<b>({{ metadata.course }})</b>
@@ -150,7 +153,6 @@ import {
 	ENV_CONFIG_MODULE_KEY,
 } from "@/utils/inject";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
-import { RenderHTML } from "@feature-render-html";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";

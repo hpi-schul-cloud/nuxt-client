@@ -311,8 +311,10 @@ export default {
 		"Sección de ayuda sobre herramientas externas",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"No se pudo determinar el uso de la herramienta.",
-	"components.administration.externalToolsSection.dialog.content.header":
-		"¿Está seguro de que desea eliminar la herramienta <b>{itemName}</b>? <br><br>Actualmente la herramienta se utiliza de la siguiente manera:",
+	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
+		"¿Está seguro de que desea eliminar la herramienta {0}?",
+	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+		"Actualmente la herramienta se utiliza de la siguiente manera:",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Atención: Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
 	"components.administration.externalToolsSection.dialog.title":
@@ -1763,7 +1765,7 @@ export default {
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
 	"pages.rooms.fab.title": "Crear sala",
-	"pages.rooms.infoAlert.welcome": '¡Bienvenidos a las nuevas "Salas"!',
+	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"En el futuro, las salas combinarán funciones de cursos y equipos para ofrecer más oportunidades de colaboración entre escuelas.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":

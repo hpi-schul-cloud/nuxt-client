@@ -312,8 +312,10 @@ export default {
 		"Розділ довідки щодо зовнішніх інструментів",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
-	"components.administration.externalToolsSection.dialog.content.header":
-		"Ви впевнені, що хочете видалити інструмент <b>{itemName}</b>? <br><br>Наразі інструмент використовується таким чином:",
+	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
+		"Ви впевнені, що хочете видалити інструмент {0}?",
+	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+		"Наразі інструмент використовується таким чином:",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
 	"components.administration.externalToolsSection.dialog.title":
@@ -1742,7 +1744,7 @@ export default {
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
 	"pages.rooms.fab.title": "Створити кімнату",
-	"pages.rooms.infoAlert.welcome": 'Ласкаво просимо до нових "Кімнат"!',
+	"pages.rooms.infoAlert.welcome": "Ласкаво просимо до нових Кімнат!",
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"У майбутньому кімнати об'єднають функції курсів і команд, щоб запропонувати більше можливостей для міжшкільної співпраці.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":

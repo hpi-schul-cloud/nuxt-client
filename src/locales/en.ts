@@ -307,8 +307,10 @@ export default {
 		"Help section on external tools",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"The usage of the tool could not be determined.",
-	"components.administration.externalToolsSection.dialog.content.header":
-		"Are you sure you want to delete the <b>{itemName}</b> tool? <br><br>Currently, the tool is used as follows:",
+	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
+		"Are you sure you want to delete the {0} tool?",
+	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+		"Currently, the tool is used as follows:",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Attention: If the tool is removed, it can no longer be used for this school.",
 	"components.administration.externalToolsSection.dialog.title":
@@ -1714,7 +1716,7 @@ export default {
 	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.rooms.fab.title": "Create room",
-	"pages.rooms.infoAlert.welcome": 'Welcome to the new "Rooms"!',
+	"pages.rooms.infoAlert.welcome": "Welcome to the new Rooms!",
 	"pages.rooms.infoAlert.welcome.collaboration":
 		"Rooms will combine functions from courses and teams in the future to provide more opportunities for cross-school working.",
 	"pages.rooms.infoAlert.welcome.teamsAndCourses":
