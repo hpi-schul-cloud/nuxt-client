@@ -683,8 +683,10 @@ export default {
 		"Dateien unter Kurs-Dateien",
 	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
 		"Inhalte aus Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.whiteboard":
+		"Inhalte aus Whiteboards",
 	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
-		"Geogebra IDs und",
+		"Geogebra IDs",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Kursgruppen",
 	"components.molecules.share.options.tableHeader.InfoText":
@@ -1702,6 +1704,15 @@ export default {
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.rooms.fab.title": "Raum erstellen",
+	"pages.rooms.infoAlert.welcome": "Willkommen in den neuen Räumen!",
+	"pages.rooms.infoAlert.welcome.collaboration":
+		"Räume werden zukünftig Funktionen aus Kursen und Teams vereinen, um mehr Möglichkeiten für das schulübergreifende Arbeiten zu bieten.",
+	"pages.rooms.infoAlert.welcome.teamsAndCourses":
+		"Teams und Kurse bleiben bestehen, bis die Inhalte in Räume überführt werden können.",
+	"pages.rooms.infoAlert.welcome.visibility":
+		"Räume sind vorerst nur für Lehrkräfte sichtbar und werden weiter ausgebaut. Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.",
+	"pages.rooms.infoAlert.welcome.visibility.help": "Hilfeseite",
+	"pages.rooms.infoAlert.welcome.visibility.feedback": "Rückmeldungen",
 	"pages.rooms.members.error.load":
 		"Die Teilnehmenden-Liste konnte nicht geladen werden.",
 	"pages.rooms.members.error.add":

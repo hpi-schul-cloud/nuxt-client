@@ -17,7 +17,6 @@ import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { ref } from "vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
 import { AddMembers, MembersTable } from "@feature-room";
@@ -97,7 +96,6 @@ describe("RoomMembersPage", () => {
 					}),
 					createTestingI18n(),
 					createTestingVuetify(),
-					vueDompurifyHTMLPlugin,
 				],
 			},
 		});

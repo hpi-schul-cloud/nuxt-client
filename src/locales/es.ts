@@ -688,8 +688,10 @@ export default {
 		"Archivos en Archivos de curso",
 	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
 		"Contenido de Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.whiteboard":
+		"Contenido de Whiteboards",
 	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
-		"ID de Geogebra y",
+		"ID de Geogebra",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Grupos de cursos",
 	"components.molecules.share.options.tableHeader.InfoText":
@@ -1722,6 +1724,15 @@ export default {
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
 	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
 	"pages.rooms.fab.title": "Crear sala",
+	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
+	"pages.rooms.infoAlert.welcome.collaboration":
+		"En el futuro, las salas combinarán funciones de cursos y equipos para ofrecer más oportunidades de colaboración entre escuelas.",
+	"pages.rooms.infoAlert.welcome.teamsAndCourses":
+		"Los equipos y cursos seguirán existiendo hasta que el contenido pueda ser transferido a las salas.",
+	"pages.rooms.infoAlert.welcome.visibility":
+		"Las salas son actualmente visibles solo para los profesores y se seguirán desarrollando. Puede encontrar más información en nuestro {helpLink}. Agradecemos sus {feedbackLink} sobre el estado actual.",
+	"pages.rooms.infoAlert.welcome.visibility.help": "página de ayuda",
+	"pages.rooms.infoAlert.welcome.visibility.feedback": "comentarios",
 	"pages.rooms.members.error.load":
 		"No se pudo cargar la lista de participantes.",
 	"pages.rooms.members.error.add": "Error al agregar participantes.",

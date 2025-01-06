@@ -665,8 +665,10 @@ export default {
 		"Files under Course Files",
 	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
 		"Content from Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.whiteboard":
+		"Content from Whiteboards",
 	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
-		"Geogebra IDs and",
+		"Geogebra IDs",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Course groups",
 	"components.molecules.share.options.tableHeader.InfoText":
@@ -1673,6 +1675,15 @@ export default {
 	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.rooms.fab.title": "Create room",
+	"pages.rooms.infoAlert.welcome": "Welcome to the new Rooms!",
+	"pages.rooms.infoAlert.welcome.collaboration":
+		"Rooms will combine functions from courses and teams in the future to provide more opportunities for cross-school working.",
+	"pages.rooms.infoAlert.welcome.teamsAndCourses":
+		"Teams and courses will remain until the content can be transferred to rooms.",
+	"pages.rooms.infoAlert.welcome.visibility":
+		"Rooms are currently only visible to teachers and will be further developed. Further information can be found on our {helpLink}. We look forward to receiving {feedbackLink} on the current status.",
+	"pages.rooms.infoAlert.welcome.visibility.help": "help page",
+	"pages.rooms.infoAlert.welcome.visibility.feedback": "feedback",
 	"pages.rooms.members.error.load": "The participant list could not be loaded.",
 	"pages.rooms.members.error.add": "Adding participants failed.",
 	"pages.rooms.members.error.remove": "Deleting participants failed.",
