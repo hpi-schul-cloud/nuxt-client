@@ -1016,7 +1016,7 @@ export default {
 		"Перенести клас на наступний навчальний рік",
 	"pages.administration.classes.delete": "Видалити клас",
 	"pages.administration.classes.deleteDialog.content":
-		'Ви впевнені, що хочете видалити клас "<i>{itemName}<i>"?',
+		'Ви впевнені, що хочете видалити клас "{itemName}"?',
 	"pages.administration.classes.deleteDialog.title": "Видалити клас?",
 	"pages.administration.classes.edit": "Редагувати клас",
 	"pages.administration.common.hint":

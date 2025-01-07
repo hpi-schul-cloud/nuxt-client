@@ -1001,7 +1001,7 @@ export default {
 		"Klasse in das nächste Schuljahr versetzen",
 	"pages.administration.classes.delete": "Klasse löschen",
 	"pages.administration.classes.deleteDialog.content":
-		'Möchten Sie wirklich die Klasse "<i>{itemName}</i>" löschen?',
+		'Möchten Sie wirklich die Klasse "{itemName}" löschen?',
 	"pages.administration.classes.deleteDialog.title": "Klasse löschen?",
 	"pages.administration.classes.edit": "Klasse bearbeiten",
 	"pages.administration.common.hint":

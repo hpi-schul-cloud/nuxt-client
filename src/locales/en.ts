@@ -996,7 +996,7 @@ export default {
 		"Move class to the next school year",
 	"pages.administration.classes.delete": "Delete class",
 	"pages.administration.classes.deleteDialog.content":
-		'Are you sure you want to delete class "<i>{itemName}<i>"?',
+		'Are you sure you want to delete class "{itemName}"?',
 	"pages.administration.classes.deleteDialog.title": "Delete class?",
 	"pages.administration.classes.edit": "Edit class",
 	"pages.administration.common.hint":

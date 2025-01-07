@@ -140,15 +140,13 @@
 				</h2>
 			</template>
 			<template #content>
-				<RenderHTML
-					class="text-md mt-2"
-					:html="
-						t('pages.administration.classes.deleteDialog.content', {
+				<p>
+					{{
+						t("pages.administration.classes.deleteDialog.content", {
 							itemName: selectedItemName,
 						})
-					"
-					component="p"
-				/>
+					}}
+				</p>
 			</template>
 		</v-custom-dialog>
 		<end-course-sync-dialog
@@ -205,7 +203,6 @@ import {
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { EndCourseSyncDialog } from "@feature-course-sync";
-import { RenderHTML } from "@feature-render-html";
 import {
 	mdiAccountGroupOutline,
 	mdiArrowUp,

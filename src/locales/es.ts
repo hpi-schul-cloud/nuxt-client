@@ -1025,7 +1025,7 @@ export default {
 		"Mover la clase al próximo año escolar",
 	"pages.administration.classes.delete": "Eliminar clase",
 	"pages.administration.classes.deleteDialog.content":
-		'¿Está seguro de que desea eliminar la clase "<i>{itemName}<i>"?',
+		'¿Está seguro de que desea eliminar la clase "{itemName}"?',
 	"pages.administration.classes.deleteDialog.title": "¿Eliminar clase?",
 	"pages.administration.classes.edit": "Editar clase",
 	"pages.administration.common.hint":
