@@ -1027,7 +1027,7 @@ export default {
 	"pages.administration.ldap.activate.migrateExistingUsers.error":
 		"An error occured. The migration assistant could not be activated. The LDAP system was not activated either. Please try again. If this problem persists, please contact support.",
 	"pages.administration.ldap.activate.migrateExistingUsers.info":
-		"If you have already manually created users that are to be managed via LDAP in the future, you can use the migration wizard.<br> The wizard links LDAP users with existing users. You can adjust the linking and must confirm it before the linking becomes active. Only then can users log on via the LDAP. <br>If the LDAP system is activated without the migration wizard, all users are imported from the LDAP. It is no longer possible to subsequently link users.",
+		"If you have already manually created users that are to be managed via LDAP in the future, you can use the migration wizard. The wizard links LDAP users with existing users. You can adjust the linking and must confirm it before the linking becomes active. Only then can users log on via the LDAP. If the LDAP system is activated without the migration wizard, all users are imported from the LDAP. It is no longer possible to subsequently link users.",
 	"pages.administration.ldap.activate.migrateExistingUsers.title":
 		"Migrate existing user accounts",
 	"pages.administration.ldap.activate.ok": "Ok",
