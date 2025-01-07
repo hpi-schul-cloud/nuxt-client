@@ -1,42 +1,56 @@
 <template>
-	<div data-testid="board-video-conference-element-create">
-		<VImg :src="imageSrc" alt="" cover />
-		<VCardText>
-			<VForm @submit.prevent.stop="onSubmit" ref="form" validate-on="submit">
-				<div class="d-flex flex-row">
-					<VTextarea
-						v-model="title"
-						:rules="rules"
-						:label="t('components.cardElement.videoConferenceElement.label')"
-						type="text"
-						:autofocus="true"
-						:auto-grow="true"
-						rows="1"
-						@keydown="onKeydown"
-						class="text"
-						:placeholder="t('components.cardElement.videoConferenceElement')"
-					/>
-					<div class="align-self-center pl-2">
-						<button type="submit" ref="submit">
-							<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>
-							<span class="d-sr-only">{{ t("common.actions.save") }}</span>
-						</button>
+	<div
+		data-testid="board-video-conference-element-create"
+		class="d-flex"
+		:class="{
+			'flex-row': hasRowStyle,
+			'flex-column': !hasRowStyle,
+		}"
+	>
+		<div class="display-listboard">
+			<VImg :src="imageSrc" alt="" cover />
+		</div>
+		<div class="text-listboard">
+			<VCardText>
+				<VForm @submit.prevent.stop="onSubmit" ref="form" validate-on="submit">
+					<div class="d-flex flex-row">
+						<VTextarea
+							v-model="title"
+							:rules="rules"
+							:label="t('components.cardElement.videoConferenceElement.label')"
+							type="text"
+							:autofocus="true"
+							:auto-grow="true"
+							rows="1"
+							@keydown="onKeydown"
+							class="text"
+							:placeholder="t('components.cardElement.videoConferenceElement')"
+						/>
+						<div class="align-self-center pl-2">
+							<button type="submit" ref="submit">
+								<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>
+								<span class="d-sr-only">{{ t("common.actions.save") }}</span>
+							</button>
+						</div>
+						<div class="align-self-center menu">
+							<slot />
+						</div>
 					</div>
-					<div class="align-self-center menu">
-						<slot />
-					</div>
-				</div>
-			</VForm>
-		</VCardText>
+				</VForm>
+			</VCardText>
+		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import image from "@/assets/img/videoConference.svg";
 import { isRequired } from "@util-validators";
 import { mdiCheck } from "@icons/material";
+import { injectStrict } from "@/utils/inject";
+import { useDisplay } from "vuetify";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 type VuetifyFormApi = {
 	validate: () => { valid: boolean };
@@ -71,6 +85,13 @@ const onKeydown = (e: KeyboardEvent) => {
 		form.value.resetValidation();
 	}
 };
+
+const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
+const { smAndUp } = useDisplay();
+
+const hasRowStyle = computed(() => {
+	return smAndUp.value && isListLayout.value;
+});
 </script>
 
 <style scoped>
@@ -79,5 +100,12 @@ const onKeydown = (e: KeyboardEvent) => {
 }
 .menu {
 	margin-right: -6px;
+}
+.display-listboard {
+	flex: 0 0 33%;
+}
+
+.text-listboard {
+	flex: 0 0 67%;
 }
 </style>
