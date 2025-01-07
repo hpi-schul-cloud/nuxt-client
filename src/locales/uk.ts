@@ -1221,10 +1221,16 @@ export default {
 	"pages.administration.migration.step5.syncReady2":
 		"При наступному запуску синхронізації всі дані з {source} передаються до {instance}.",
 	"pages.administration.migration.step5": "Завершити",
-	"pages.administration.migration.summary":
-		"<p>Було зроблено такі призначення:</p><br><p><b>{importUsersCount}</b> {source}-облікові записи користувачів мають призначений обліковий запис користувача {instance}. Ці облікові записи користувачів буде переміщено до {source}.</p><p> <b>{importUsersUnmatchedCount}</b> {source}-облікові записи користувачів не мають пов’язаного облікового запису користувача {instance}. </p> <p> <b>{usersUnmatchedCount}</b> {instance} обліковим записам користувачів не було призначено облікових записів {source}. Облікові записи {instance} зберігаються та можуть бути згодом видалені на сторінці адміністрування (або зв’язатися зі службою підтримки користувачів).</p>",
-	"pages.administration.migration.summary.nbc":
-		"<p>Було зроблено такі зіставлення:</p><br><p><b>{importUsersCount}</b> {source}-облікові записи користувачів мають призначений обліковий запис користувача {instance}. Ці облікові записи користувачів буде переміщено до {source}.</p><p><b>{importUsersUnmatchedCount}</b> {source}-облікові записи користувачів не мають пов’язаного облікового запису користувача {instance}.</p><p >Облікові записи користувачів {instance}, які не було перенесено до {source}, зберігаються та можуть бути переміщені пізніше або згодом видалені під час адміністрування.</p>",
+	"pages.administration.migration.summary.firstParagraph":
+		"Було зроблено такі призначення:",
+	"pages.administration.migration.summary.secondParagraph.importUsersCount":
+		"{source}-облікові записи користувачів мають призначений обліковий запис користувача {instance}. Ці облікові записи користувачів буде переміщено до {source}.",
+	"pages.administration.migration.summary.thirdParagraph.importUsersUnmatchedCount":
+		"{source}-облікові записи користувачів не мають пов’язаного облікового запису користувача {instance}.",
+	"pages.administration.migration.summary.lastParagraph.usersUnmatchedCount":
+		"{instance} обліковим записам користувачів не було призначено облікових записів {source}. Облікові записи {instance} зберігаються та можуть бути згодом видалені на сторінці адміністрування (або зв’язатися зі службою підтримки користувачів).",
+	"pages.administration.migration.summary.lastParagraph.nbc":
+		"Облікові записи користувачів {instance}, які не було перенесено до {source}, зберігаються та можуть бути переміщені пізніше або згодом видалені під час адміністрування.",
 	"pages.administration.migration.title":
 		"Перенести облікові записи користувачів із",
 	"pages.administration.migration.tutorialWait":

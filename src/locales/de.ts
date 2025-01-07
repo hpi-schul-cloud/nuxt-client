@@ -1204,10 +1204,16 @@ export default {
 	"pages.administration.migration.step5.syncReady2":
 		"Mit dem nächsten Sync-Lauf werden alle Daten aus dem {source} in die {instance} übernommen.",
 	"pages.administration.migration.step5": "Ende",
-	"pages.administration.migration.summary":
-		"<p>Folgende Zuordnungen wurden vorgenommen:</p><br><p><b>{importUsersCount}</b> {source}-Benutzerkonten sind einem {instance}-Benutzerkonto zugeordnet. Diese Benutzerkonten werden zu {source} migriert.</p><p><b>{importUsersUnmatchedCount}</b> {source}-Benutzerkonten sind keinem {instance}-Benutzerkonto zugeordnet.</p><p><b>{usersUnmatchedCount}</b> bereits vorhandene {instance}-Benutzerkonten sind keinem {source}-Benutzerkonto zugeordnet. Die {instance}-Benutzerkonten bleiben erhalten und können in der Verwaltung nachträglich gelöscht werden.</p>",
-	"pages.administration.migration.summary.nbc":
-		"<p>Folgende Zuordnungen wurden vorgenommen:</p><br><p><b>{importUsersCount}</b> {source}-Benutzerkonten sind einem {instance}-Benutzerkonto zugeordnet. Diese Benutzerkonten werden zu {source} migriert.</p><p><b>{importUsersUnmatchedCount}</b> {source}-Benutzerkonten sind keinem {instance}-Benutzerkonto zugeordnet.</p><p>Die {instance}-Benutzerkonten, die nicht zu {source} migriert wurden, bleiben erhalten und können zu einem späteren Zeitpunkt migriert werden oder in der Verwaltung nachträglich gelöscht werden.</p>",
+	"pages.administration.migration.summary.firstParagraph":
+		"Folgende Zuordnungen wurden vorgenommen:",
+	"pages.administration.migration.summary.secondParagraph.importUsersCount":
+		"{source}-Benutzerkonten sind einem {instance}-Benutzerkonto zugeordnet. Diese Benutzerkonten werden zu {source} migriert.",
+	"pages.administration.migration.summary.thirdParagraph.importUsersUnmatchedCount":
+		"{source}-Benutzerkonten sind keinem {instance}-Benutzerkonto zugeordnet.",
+	"pages.administration.migration.summary.lastParagraph.usersUnmatchedCount":
+		"bereits vorhandene {instance}-Benutzerkonten sind keinem {source}-Benutzerkonto zugeordnet. Die {instance}-Benutzerkonten bleiben erhalten und können in der Verwaltung nachträglich gelöscht werden.",
+	"pages.administration.migration.summary.lastParagraph.nbc":
+		"Die {instance}-Benutzerkonten, die nicht zu {source} migriert wurden, bleiben erhalten und können zu einem späteren Zeitpunkt migriert werden oder in der Verwaltung nachträglich gelöscht werden.",
 	"pages.administration.migration.title":
 		"{source}-Konten mit bestehenden {instance}-Konten verknüpfen",
 	"pages.administration.migration.tutorialWait":
