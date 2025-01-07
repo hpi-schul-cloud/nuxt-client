@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import InfoModalFullWidth from "@/components/molecules/InfoModalFullWidth";
+import InfoModalFullWidth from "@/components/molecules/InfoModalFullWidth.vue";
 import { mapGetters } from "vuex";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiEmailCheckOutline, mdiEmailRemoveOutline } from "@icons/material";

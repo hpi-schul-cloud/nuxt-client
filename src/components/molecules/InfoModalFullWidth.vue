@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
 
 export default {
 	components: {

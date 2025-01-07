@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import CopyResultModalListItem from "@/components/copy-result-modal/CopyResultModalListItem";
+import CopyResultModalListItem from "@/components/copy-result-modal/CopyResultModalListItem.vue";
 
 export default {
 	name: "CopyResultModalList",

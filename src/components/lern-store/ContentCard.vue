@@ -66,9 +66,9 @@
 
 <script>
 import { contentModule } from "@/store";
-import BaseLink from "@/components/base/BaseLink";
-import AddContentButton from "@/components/lern-store/AddContentButton";
-import UserHasRole from "@/components/helpers/UserHasRole";
+import BaseLink from "@/components/base/BaseLink.vue";
+import AddContentButton from "@/components/lern-store/AddContentButton.vue";
+import UserHasRole from "@/components/helpers/UserHasRole.vue";
 import contentMeta from "@/mixins/contentMeta";
 import { getProvider, isCollectionHelper } from "@/utils/helpers";
 

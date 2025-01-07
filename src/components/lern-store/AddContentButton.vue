@@ -50,9 +50,9 @@
 
 <script>
 import { contentModule } from "@/store";
-import AddContentModal from "@/components/lern-store/AddContentModal";
-import NotificationModal from "@/components/lern-store/NotificationModal";
-import LoadingModal from "@/components/lern-store/LoadingModal";
+import AddContentModal from "@/components/lern-store/AddContentModal.vue";
+import NotificationModal from "@/components/lern-store/NotificationModal.vue";
+import LoadingModal from "@/components/lern-store/LoadingModal.vue";
 import { mdiPlusCircleOutline } from "@icons/material";
 import {
 	getMerlinReference,

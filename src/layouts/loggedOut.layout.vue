@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import NavigationBar from "@/components/legacy/NavigationBar";
+import NavigationBar from "@/components/legacy/NavigationBar.vue";
 import TheFooter from "@/components/legacy/TheFooter.vue";
-import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting";
+import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting.vue";
 import { envConfigModule } from "@/store";
 
 export default {

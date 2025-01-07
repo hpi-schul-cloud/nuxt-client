@@ -226,7 +226,7 @@
 </template>
 
 <script>
-import InfoBox from "@/components/molecules/InfoBox";
+import InfoBox from "@/components/molecules/InfoBox.vue";
 import { envConfigModule } from "@/store";
 import {
 	mdiAlert,

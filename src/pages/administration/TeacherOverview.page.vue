@@ -128,13 +128,13 @@ import {
 } from "@/store";
 import { mapGetters } from "vuex";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable";
-import AdminTableLegend from "@/components/molecules/AdminTableLegend";
+import BackendDataTable from "@/components/organisms/DataTable/BackendDataTable.vue";
+import AdminTableLegend from "@/components/molecules/AdminTableLegend.vue";
 
 import print from "@/mixins/print";
 import UserHasPermission from "@/mixins/UserHasPermission";
 import { printDate } from "@/plugins/datetime";
-import ProgressModal from "@/components/molecules/ProgressModal";
+import ProgressModal from "@/components/molecules/ProgressModal.vue";
 import {
 	mdiAccountPlus,
 	mdiAlert,

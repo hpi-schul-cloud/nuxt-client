@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import FormCreateUser from "@/components/organisms/FormCreateUser";
-import InfoMessage from "@/components/atoms/InfoMessage";
+import FormCreateUser from "@/components/organisms/FormCreateUser.vue";
+import InfoMessage from "@/components/atoms/InfoMessage.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { inputRangeDate } from "@/plugins/datetime";
 import { notifierModule } from "@/store";

@@ -14,59 +14,47 @@
 
 <script :src="scriptSrc" charset="UTF-8"></script>
 
-<script lang="ts">
-import { defineComponent, ref, watch, onMounted } from "vue";
+<script setup lang="ts">
+import { ref, watchEffect, onMounted } from "vue";
 import { $axios } from "@/utils/api";
 
-export default defineComponent({
-	name: "LernStorePlayer",
-	props: {
-		nodeId: {
-			type: String,
-			default: "",
-		},
-		loading: {
-			type: Boolean,
-			default: true,
-		},
-		iframeSrc: {
-			type: String,
-			default: "",
-		},
-		scriptSrc: {
-			type: String,
-			default: "",
-		},
+const props = defineProps({
+	nodeId: {
+		type: String,
+		default: "",
 	},
-	setup(props) {
-		const model = ref(props.nodeId);
-		const loading = ref(props.loading);
-		const iframeSrc = ref(props.iframeSrc);
-		const scriptSrc = ref(props.scriptSrc);
-
-		watch(
-			() => props.nodeId,
-			(newValue: string) => {
-				model.value = newValue;
-			}
-		);
-
-		onMounted(async () => {
-			await $axios
-				.get(`/v1/edu-sharing/player/${model.value}`)
-				.then((response) => {
-					iframeSrc.value = response.data.iframe_src;
-					scriptSrc.value = response.data.script_src;
-				});
-			loading.value = false;
-		});
-
-		return {
-			loading,
-			iframeSrc,
-			scriptSrc,
-		};
+	loading: {
+		type: Boolean,
+		default: true,
 	},
+	iframeSrc: {
+		type: String,
+		default: "",
+	},
+	scriptSrc: {
+		type: String,
+		default: "",
+	},
+});
+
+const model = ref("");
+const isLoading = ref(true);
+const iFrameSrc = ref("");
+const scriptSrcString = ref("");
+
+watchEffect(() => {
+	model.value = props.nodeId;
+	isLoading.value = props.loading;
+	iFrameSrc.value = props.iframeSrc;
+	scriptSrcString.value = props.scriptSrc;
+});
+
+onMounted(async () => {
+	await $axios.get(`/v1/edu-sharing/player/${model.value}`).then((response) => {
+		iFrameSrc.value = response.data.iframe_src;
+		scriptSrcString.value = response.data.script_src;
+	});
+	isLoading.value = false;
 });
 </script>
 

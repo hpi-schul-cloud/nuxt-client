@@ -80,9 +80,9 @@
 </template>
 
 <script>
-import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
-import TasksList from "@/components/organisms/TasksList";
+import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels.vue";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import TasksList from "@/components/organisms/TasksList.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";

@@ -197,9 +197,9 @@ import { envConfigModule, schoolsModule } from "@/store";
 import { mapGetters } from "vuex";
 import { ldapErrorHandler } from "@/utils/ldapErrorHandling";
 import { unchangedPassword } from "@/utils/ldapConstants";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
-import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm";
-import InfoMessage from "@/components/atoms/InfoMessage";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
+import ModalFooterConfirm from "@/components/molecules/ModalFooterConfirm.vue";
+import InfoMessage from "@/components/atoms/InfoMessage.vue";
 import {
 	mdiAccountSchoolOutline,
 	mdiCheckCircle,

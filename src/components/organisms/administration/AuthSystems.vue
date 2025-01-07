@@ -147,7 +147,7 @@
 </template>
 
 <script>
-import vCustomDialog from "@/components/organisms/vCustomDialog";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import {
 	mdiCheckCircle,

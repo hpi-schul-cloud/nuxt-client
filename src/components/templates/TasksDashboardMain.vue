@@ -99,7 +99,7 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { authModule } from "@/store";
 import { ImportUserResponseRoleNamesEnum as Roles } from "@/serverApi/v3";
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import {
 	mdiArchiveOutline,
 	mdiCheck,
@@ -109,8 +109,8 @@ import {
 	mdiPlus,
 } from "@icons/material";
 
-import TasksDashboardStudent from "./TasksDashboardStudent";
-import TasksDashboardTeacher from "./TasksDashboardTeacher";
+import TasksDashboardStudent from "./TasksDashboardStudent.vue";
+import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 import { COPY_MODULE_KEY } from "@/utils/inject";
 
 const roleBasedRoutes = {

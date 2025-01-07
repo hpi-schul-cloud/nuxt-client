@@ -19,8 +19,8 @@
 
 <script>
 import { contentModule } from "@/store";
-import LernstoreDetailView from "@/components/lern-store/LernstoreDetailView";
-import LernstoreCollectionDetailView from "@/components/lern-store/LernstoreCollectionDetailView";
+import LernstoreDetailView from "@/components/lern-store/LernstoreDetailView.vue";
+import LernstoreCollectionDetailView from "@/components/lern-store/LernstoreCollectionDetailView.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 
 export default {
