@@ -3,7 +3,7 @@
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
-		:fixed-header="fixedHeader"
+		:fixed-header="fixedHeader.status"
 		@fab:clicked="onFabClick"
 		ref="wireframe"
 	>
@@ -30,7 +30,7 @@
 			<MembersTable
 				v-if="!isLoading"
 				:members="memberList"
-				:fixed-top="fixedHeader"
+				:fixed-position="fixedHeader"
 				@remove:members="onRemoveMembers"
 			/>
 		</div>
@@ -93,8 +93,11 @@ const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
 const wireframe = ref<HTMLElement | null>(null);
-const fixedHeader = ref(false);
-const { y } = useElementBounding(wireframe);
+const fixedHeader = ref({
+	status: false,
+	position: 0,
+});
+const { y, top } = useElementBounding(wireframe);
 
 useTitle(pageTitle);
 
@@ -128,10 +131,12 @@ onMounted(async () => {
 		await fetchRoom(roomId);
 	}
 	await fetchMembers();
+	const header = document.querySelector(".wireframe-header") as HTMLElement;
+	fixedHeader.value.position = header.offsetHeight + top.value;
 });
 
 watch(y, () => {
-	fixedHeader.value = y.value <= -64 && mdAndDown.value;
+	fixedHeader.value.status = y.value <= -top.value && mdAndDown.value;
 });
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {

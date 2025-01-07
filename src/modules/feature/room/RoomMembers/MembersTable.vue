@@ -2,7 +2,9 @@
 	<div
 		id="table-title-header"
 		class="d-flex justify-space-between align-center mb-2 table-title-header"
-		:class="{ 'fixed-position': fixedTop }"
+		:class="{ 'fixed-position': fixedPosition.status }"
+		ref="tableTitleHeader"
+		:style="{ top: `${fixedPosition.position}px` }"
 	>
 		<ActionMenu
 			v-if="selectedUserIds.length"
@@ -85,8 +87,9 @@ const props = defineProps({
 		type: Array as PropType<RoomMemberResponse[]>,
 		required: true,
 	},
-	fixedTop: {
-		type: Boolean,
+	fixedPosition: {
+		type: Object as PropType<{ status: boolean; position: number }>,
+		default: () => ({ status: false, position: 0 }),
 	},
 });
 
@@ -100,6 +103,8 @@ const onUpdateFilter = (filteredMembers: RoomMemberResponse[]) => {
 	membersFilterCount.value =
 		search.value === "" ? memberList.value.length : filteredMembers.length;
 };
+
+const tableTitleHeader = ref<HTMLElement | null>(null);
 
 const onSelectMembers = (userIds: string[]) => {
 	emit("select:members", userIds);
@@ -190,12 +195,10 @@ const tableHeader = [
 
 .fixed-position {
 	$space-left-right: calc(var(--space-base-vuetify) * 6);
-
 	position: fixed;
-	top: 159px;
 	right: $space-left-right;
 	left: $space-left-right;
-	width: calc(100% - 48px);
+	width: calc(100% - $space-left-right * 2);
 	z-index: 1;
 	background: rgb(var(--v-theme-white));
 }
