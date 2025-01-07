@@ -3,7 +3,6 @@
 		id="table-title-header"
 		class="d-flex justify-space-between align-center mb-2 table-title-header"
 		:class="{ 'fixed-position': fixedPosition.status }"
-		ref="tableTitleHeader"
 		:style="{ top: `${fixedPosition.position}px` }"
 	>
 		<ActionMenu
@@ -103,8 +102,6 @@ const onUpdateFilter = (filteredMembers: RoomMemberResponse[]) => {
 	membersFilterCount.value =
 		search.value === "" ? memberList.value.length : filteredMembers.length;
 };
-
-const tableTitleHeader = ref<HTMLElement | null>(null);
 
 const onSelectMembers = (userIds: string[]) => {
 	emit("select:members", userIds);
