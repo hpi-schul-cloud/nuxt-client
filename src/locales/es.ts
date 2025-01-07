@@ -1863,15 +1863,19 @@ export default {
 		"El valor de un parámetro no sigue las reglas dadas. Por favor, ajuste el valor en consecuencia.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Ya se ha asignado una herramienta con el mismo nombre a este curso. Los nombres de las herramientas deben ser únicos dentro de un curso.",
-	"pages.tool.context.description":
-		'Después de guardar la selección, la herramienta está disponible dentro del curso.<br><br>\nEncontrará más información en nuestra <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Sección de ayuda sobre herramientas externas</a>.',
 	"pages.tool.context.displayName": "Nombre para mostrar",
 	"pages.tool.context.displayNameDescription":
 		"El nombre para mostrar de la herramienta se puede anular y debe ser único",
 	"pages.tool.context.title": "Adición de herramientas externas",
 	"pages.tool.deactivate.label": "Desactivar herramienta en la escuela",
-	"pages.tool.description":
-		'Los parámetros específicos del curso para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta está disponible dentro del curso.<br><br>\nEliminar una configuración elimina la herramienta de el curso.<br><br>\nPuede encontrar más información en nuestro <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Sección de ayuda sobre herramientas externas</a>.',
+	"pages.tool.description.firstParagraph":
+		"Los parámetros específicos del curso para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta está disponible dentro del curso.",
+	"pages.tool.description.secondParagraph":
+		"Eliminar una configuración elimina la herramienta del curso.",
+	"pages.tool.description.moreInformation":
+		"Puede encontrar más información en nuestro {0}.",
+	"pages.tool.description.moreInformation.link":
+		"Sección de ayuda sobre herramientas externas",
 	"pages.tool.select.label": "Selección de Herramientas / URL de herramienta",
 	"pages.tool.select.description":
 		"Busque herramientas o ingrese la URL de una herramienta o insértela desde el caché manualmente o con un botón",

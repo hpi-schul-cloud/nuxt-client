@@ -1843,15 +1843,19 @@ export default {
 		"Der Wert eines Parameters folgt nicht den vorgegebenen Regeln. Bitte den Wert entsprechend anpassen.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Ein Tool mit gleichem Namen wurde bereits dem Kurs zugeordnet. Die einem Kurs zugeordneten Tools müssen eindeutige Namen haben.",
-	"pages.tool.context.description":
-		'Nach dem Speichern der Auswahl ist das Tool innerhalb des Kurses verfügbar.<br><br>\nWeitere Informationen sind in unserem <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Hilfebereich zu externen Tools</a> zu finden.',
 	"pages.tool.context.displayName": "Anzeigename",
 	"pages.tool.context.displayNameDescription":
 		"Der Anzeigename des Tools kann überschrieben werden und muss eindeutig sein",
 	"pages.tool.context.title": "Hinzufügen externer Tools",
 	"pages.tool.deactivate.label": "Tool in der Schule deaktivieren",
-	"pages.tool.description":
-		'Die kursspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb des Kurses verfügbar.<br><br>\nDurch das Löschen einer Konfiguration wird das Tool dem Kurs wieder entzogen.<br><br>\nWeitere Informationen sind in unserem <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Hilfebereich zu externen Tools</a> zu finden.',
+	"pages.tool.description.firstParagraph":
+		"Die kursspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb des Kurses verfügbar.",
+	"pages.tool.description.secondParagraph":
+		"Durch das Löschen einer Konfiguration wird das Tool dem Kurs wieder entzogen.",
+	"pages.tool.description.moreInformation":
+		"Weitere Informationen sind in unserem {0} zu finden.",
+	"pages.tool.description.moreInformation.link":
+		"Hilfebreich zu externen Tools",
 	"pages.tool.select.label": "Tool-Auswahl / Tool-URL",
 	"pages.tool.select.description":
 		"Nach Tools suchen oder eine Tool-URL eingeben bzw. aus dem Zwischenspeicher manuell oder per Knopf einfügen",

@@ -1812,15 +1812,19 @@ export default {
 		"The value of a parameter does not follow the given rules. Please adjust the value accordingly.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"A tool with the same name is already assigned to this course. Tool names must be unique within a course.",
-	"pages.tool.context.description":
-		'After saving the selection, the tool is available within the course.<br><br>\nMore information can be found in our <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Help section on External Tools</a>.',
 	"pages.tool.context.displayName": "Display name",
 	"pages.tool.context.displayNameDescription":
 		"The tool display name can be overridden and must be unique",
 	"pages.tool.context.title": "Adding External Tools",
 	"pages.tool.deactivate.label": "Deactivate tool at school",
-	"pages.tool.description":
-		'The course-specific parameters for the external tool are configured here. After saving the configuration, the tool is available inside the course.<br><br>\nDeleting a configuration removes the tool from the course.<br><br>\nMore information can be found in our <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Help section on external tools</a>.',
+	"pages.tool.description.firstParagraph":
+		"The course-specific parameters for the external tool are configured here. After saving the configuration, the tool is available inside the course.",
+	"pages.tool.description.secondParagraph":
+		"Deleting a configuration removes the tool from the course.",
+	"pages.tool.description.moreInformation":
+		"More information can be found in our {0}.",
+	"pages.tool.description.moreInformation.link":
+		"Help section on external tools",
 	"pages.tool.select.label": "Tool selection / Tool-URL",
 	"pages.tool.select.description":
 		"Type the address, or use the button to paste it from the clipboard",
