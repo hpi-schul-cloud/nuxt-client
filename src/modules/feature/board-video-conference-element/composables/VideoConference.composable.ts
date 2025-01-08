@@ -30,9 +30,9 @@ export const useVideoConference = (
 	const videoConferenceInfo = ref<VideoConferenceInfo>({
 		state: VideoConferenceState.NOT_STARTED,
 		options: {
-			everyAttendeeJoinsMuted: true,
+			everyAttendeeJoinsMuted: false,
 			everybodyJoinsAsModerator: false,
-			moderatorMustApproveJoinRequests: false,
+			moderatorMustApproveJoinRequests: true,
 		},
 	});
 
