@@ -3,8 +3,8 @@
 		data-testid="board-video-conference-element-create"
 		class="d-flex"
 		:class="{
-			'flex-row': hasRowStyle,
-			'flex-column': !hasRowStyle,
+			'flex-row': isRenderedAsList,
+			'flex-column': !isRenderedAsList,
 		}"
 	>
 		<div class="display-listboard">
@@ -89,7 +89,7 @@ const onKeydown = (e: KeyboardEvent) => {
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
-const hasRowStyle = computed(() => {
+const isRenderedAsList = computed(() => {
 	return smAndUp.value && isListLayout.value;
 });
 </script>
