@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { ModelRef, PropType, ref, watch } from "vue";
+import { computed, ComputedRef, ModelRef, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { VideoConferenceOptions } from "@/store/types/video-conference";
 
@@ -85,28 +85,9 @@ const isOpen: ModelRef<boolean> = defineModel("isOpen", {
 
 const { t } = useI18n();
 
-const emit = defineEmits(["close", "update:options", "start-video-conference"]);
+defineEmits(["close", "start-video-conference"]);
 
-const localOptions = ref<VideoConferenceOptions>({
-	everyAttendeeJoinsMuted: false,
-	everybodyJoinsAsModerator: false,
-	moderatorMustApproveJoinRequests: true,
-});
-
-watch(
-	() => props.options,
-	(newOptions) => {
-		localOptions.value = { ...newOptions };
-	},
-	{ immediate: true }
-);
-
-watch(
-	() => localOptions.value,
-	(newLocalOptions) => {
-		emit("update:options", newLocalOptions);
-	},
-	// "deep" might be not necessary here as the deep watcher is created implicitly
-	{ deep: true }
+const localOptions: ComputedRef<VideoConferenceOptions> = computed(
+	() => props.options
 );
 </script>
