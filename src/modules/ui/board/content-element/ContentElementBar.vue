@@ -15,7 +15,7 @@
 			v-if="$slots.display"
 			class="content-element-display"
 			:class="{
-				'content-element-display-listboard': hasRowStyle,
+				'content-element-display-list-board': hasRowStyle,
 			}"
 		>
 			<slot name="display" />
@@ -27,7 +27,7 @@
 			"
 			:class="{
 				'bg-surface-light': props.hasGreyBackground === true,
-				'content-element-bar-texts-listboard': hasRowStyle,
+				'content-element-bar-texts-list-board': hasRowStyle,
 			}"
 			class="content-element-bar-texts py-4"
 		>
@@ -119,11 +119,11 @@ const props = defineProps({
 	position: relative;
 }
 
-.content-element-bar-texts-listboard {
+.content-element-bar-texts-list-board {
 	flex: 0 0 67%;
 }
 
-.content-element-display-listboard {
+.content-element-display-list-board {
 	flex: 0 0 33%;
 }
 

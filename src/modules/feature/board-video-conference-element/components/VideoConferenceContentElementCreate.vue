@@ -7,10 +7,10 @@
 			'flex-column': !isRenderedAsList,
 		}"
 	>
-		<div class="display-listboard">
+		<div class="display-list-board">
 			<VImg :src="imageSrc" alt="" cover />
 		</div>
-		<div class="text-listboard">
+		<div class="text-list-board">
 			<VCardText>
 				<VForm @submit.prevent.stop="onSubmit" ref="form" validate-on="submit">
 					<div class="d-flex flex-row">
@@ -101,11 +101,11 @@ const isRenderedAsList = computed(() => {
 .menu {
 	margin-right: -6px;
 }
-.display-listboard {
+.display-list-board {
 	flex: 0 0 33%;
 }
 
-.text-listboard {
+.text-list-board {
 	flex: 0 0 67%;
 }
 </style>
