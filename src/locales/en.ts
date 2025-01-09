@@ -1847,12 +1847,17 @@ export default {
 		"After the move, you can only login here with {targetSystem}.",
 	"pages.userMigration.description.lastParagraph":
 		'Press "{startMigration}" and log in with your {targetSystem} account.',
-	"pages.userMigration.error.description":
-		'Unfortunately, the move of your account to {targetSystem} failed.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
-	"pages.userMigration.error.schoolNumberMismatch":
-		"Please pass on this information:<br><b>School number in {instance}: {sourceSchoolNumber}, school number in {targetSystem}: {targetSchoolNumber}</b>.",
+	"pages.userMigration.error.description.fail":
+		"Unfortunately, the move of your account to {targetSystem} failed.",
+	"pages.userMigration.error.description.support":
+		"Please contact the administrator or {0} directly.",
+	"pages.userMigration.error.description.support.link": "Support",
 	"pages.userMigration.error.multipleUsersFound":
-		'This moin.schule account is already linked to an account in the Niedersächsische Bildungscloud and cannot be used again for the migration.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
+		"This moin.schule account is already linked to an account in the Niedersächsische Bildungscloud and cannot be used again for the migration.",
+	"pages.userMigration.error.schoolNumberMismatch.information":
+		"Please pass on this information:",
+	"pages.userMigration.error.schoolNumberMismatch.information.schoolNumber":
+		"School number in Niedersächsischen Bildungscloud: {sourceSchoolNumber}, school number in {targetSystem}: {targetSchoolNumber}",
 	"pages.userMigration.error.title": "Account move failed",
 	"pages.userMigration.success.description":
 		"The move of your account to {targetSystem} is complete.<br>Please register again now.",

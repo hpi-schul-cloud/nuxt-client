@@ -1874,12 +1874,17 @@ export default {
 		"Після переходу ви зможете зареєструватися тут лише за допомогою {targetSystem}.",
 	"pages.userMigration.description.lastParagraph":
 		'Натисніть "{startMigration}" і увійдіть за допомогою свого облікового запису {targetSystem}.',
-	"pages.userMigration.error.description":
-		'На жаль, не вдалося перемістити ваш обліковий запис до {targetSystem}.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
-	"pages.userMigration.error.schoolNumberMismatch":
-		"Будь ласка, Передайте цю інформацію:<br><b>Номер школи в {instance}: {sourceSchoolNumber}, номер школи в {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.description.fail":
+		"На жаль, не вдалося перемістити ваш обліковий запис до {targetSystem}.",
+	"pages.userMigration.error.description.support":
+		"Зверніться безпосередньо до адміністратора або {0}.",
+	"pages.userMigration.error.description.support.link": "служби підтримки",
 	"pages.userMigration.error.multipleUsersFound":
-		'Цей обліковий запис moin.schule вже пов\'язаний з обліковим записом у Niedersächsische Bildungscloud і не може бути використаний повторно для міграції.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
+		"Цей обліковий запис moin.schule вже пов'язаний з обліковим записом у Niedersächsische Bildungscloud і не може бути використаний повторно для міграції.",
+	"pages.userMigration.error.schoolNumberMismatch.information":
+		"Будь ласка, Передайте цю інформацію:",
+	"pages.userMigration.error.schoolNumberMismatch.information.schoolNumber":
+		"Номер школи в Niedersächsischen Bildungscloud: {sourceSchoolNumber}, номер школи в {targetSystem}: {targetSchoolNumber}",
 	"pages.userMigration.error.title": "Не вдалося перемістити обліковий запис",
 	"pages.userMigration.success.description":
 		"Переміщення вашого облікового запису до {targetSystem} завершено.<br>Зареєструйтеся знову.",

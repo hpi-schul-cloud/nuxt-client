@@ -2,46 +2,57 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/migration_error.svg" alt="" />
 		<h1 class="pl-4 pr-4">
-			{{ $t("pages.userMigration.error.title") }}
+			{{ t("pages.userMigration.error.title") }}
 		</h1>
 		<div>
-			<RenderHTML
-				class="pa-4"
-				data-testId="text-description"
-				v-if="!multipleUsersFound"
-				:html="
-					$t('pages.userMigration.error.description', {
+			<p v-if="!multipleUsersFound" data-testid="text-description" class="ma-8">
+				{{
+					t("pages.userMigration.error.description.fail", {
 						targetSystem: getSystemName(),
-						instance: this.$theme.name,
-						supportLink,
 					})
-				"
-				component="p"
-			/>
-			<RenderHTML
-				data-testId="text-multiple-users-found"
-				v-else
-				:html="
-					$t('pages.userMigration.error.multipleUsersFound', {
-						targetSystem: getSystemName(),
-						instance: this.$theme.name,
-						supportLink,
-					})
-				"
-				component="p"
-			/>
-			<RenderHTML
-				data-testId="text-schoolnumber-mismatch"
+				}}
+				<span class="d-block">
+					<i18n-t
+						keypath="pages.userMigration.error.description.support"
+						scope="global"
+					>
+						<a :href="supportLink">{{
+							t("pages.userMigration.error.description.support.link")
+						}}</a>
+					</i18n-t>
+				</span>
+			</p>
+			<p v-else data-testid="text-multiple-users-found" class="ma-8">
+				{{ t("pages.userMigration.error.multipleUsersFound") }}
+				<span class="d-block">
+					<i18n-t
+						keypath="pages.userMigration.error.description.support"
+						scope="global"
+					>
+						<a :href="supportLink">{{
+							t("pages.userMigration.error.description.support.link")
+						}}</a>
+					</i18n-t>
+				</span>
+			</p>
+			<p
 				v-if="targetSchoolNumber && sourceSchoolNumber"
-				:html="
-					$t('pages.userMigration.error.schoolNumberMismatch', {
-						targetSystem: getSystemName(),
-						targetSchoolNumber,
-						sourceSchoolNumber,
-					})
-				"
-				component="p"
-			/>
+				data-testid="text-schoolnumber-mismatch"
+			>
+				{{ t("pages.userMigration.error.schoolNumberMismatch.information") }}
+				<span class="d-block font-weight-bold">
+					{{
+						t(
+							"pages.userMigration.error.schoolNumberMismatch.information.schoolNumber",
+							{
+								targetSystem: getSystemName(),
+								targetSchoolNumber,
+								sourceSchoolNumber,
+							}
+						)
+					}}
+				</span>
+			</p>
 			<v-btn
 				color="primary"
 				variant="flat"
@@ -55,7 +66,6 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import {
@@ -78,10 +88,10 @@ import UserLoginMigrationModule from "@/store/user-login-migrations";
 import EnvConfigModule from "@/store/env-config";
 import { UserLoginMigration } from "@/store/user-login-migration";
 import { useI18n } from "vue-i18n";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 
 export default defineComponent({
 	name: "UserLoginMigrationError",
-	components: { RenderHTML },
 	props: {
 		targetSchoolNumber: {
 			type: String,
@@ -128,11 +138,12 @@ export default defineComponent({
 			return subject;
 		};
 
-		const supportLink: ComputedRef<string> = computed(
-			() =>
+		const supportLink: ComputedRef<string> = computed(() =>
+			sanitizeUrl(
 				`mailto:${
 					envConfigModule.getAccessibilityReportEmail
 				}?subject=${getSubject()}`
+			)
 		);
 
 		const userLoginMigration: ComputedRef<UserLoginMigration | undefined> =
@@ -149,6 +160,7 @@ export default defineComponent({
 			supportLink,
 			getSystemName,
 			userLoginMigration,
+			t,
 		};
 	},
 });

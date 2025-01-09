@@ -1898,12 +1898,17 @@ export default {
 		"Después de la mudanza, solo puede registrarse aquí con {targetSystem}.",
 	"pages.userMigration.description.lastParagraph":
 		'Presione "{startMigration}" e inicie sesión con su cuenta {targetSystem}.',
-	"pages.userMigration.error.description":
-		'Desafortunadamente, la transferencia de su cuenta a {targetSystem} falló.<br>Por favor, póngase en contacto con el administrador o <a href="{supportLink}">Soporte</a> directamente.',
-	"pages.userMigration.error.schoolNumberMismatch":
-		"Por favor pasa esta información: {sourceSchoolNumber}, número de escuela en {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.description.fail":
+		"Desafortunadamente, la transferencia de su cuenta a {targetSystem} falló.",
+	"pages.userMigration.error.description.support":
+		"Por favor, póngase en contacto con el administrador o {0} directamente.",
+	"pages.userMigration.error.description.support.link": "Soporte",
 	"pages.userMigration.error.multipleUsersFound":
-		'Este Cuenta de moin.schule ya está vinculado a una cuenta en la Niedersächsische Bildungscloud y no se puede volver a utilizar para la migración.<br>Por favor, póngase en contacto con el administrador o <a href="{supportLink}">Soporte</a> directamente.',
+		"Este Cuenta de moin.schule ya está vinculado a una cuenta en la Niedersächsische Bildungscloud y no se puede volver a utilizar para la migración.",
+	"pages.userMigration.error.schoolNumberMismatch.information":
+		"Por favor pasa esta información:",
+	"pages.userMigration.error.schoolNumberMismatch.information.schoolNumber":
+		"{sourceSchoolNumber}, número de escuela en {targetSystem}: {targetSchoolNumber}.",
 	"pages.userMigration.error.title": "Error al mover la cuenta",
 	"pages.userMigration.success.description":
 		"Se completó el movimiento de su cuenta a {targetSystem}.<br>Por favor, regístrese de nuevo ahora.",

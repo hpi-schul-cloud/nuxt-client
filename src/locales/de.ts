@@ -1878,12 +1878,17 @@ export default {
 		"Nach dem Umzug kannst Du Dich hier nur noch mit {targetSystem} anmelden.",
 	"pages.userMigration.description.lastParagraph":
 		"Drücke auf „{startMigration}“ und melde Dich mit Deinem {targetSystem}-Account an.",
-	"pages.userMigration.error.description":
-		'Der Umzug Deines Accounts zu {targetSystem} ist leider fehlgeschlagen.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
-	"pages.userMigration.error.schoolNumberMismatch":
-		"Gib diese Informationen bitte weiter:<br><b>Schulnummer in der Niedersächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.error.description.fail":
+		"Der Umzug Deines Accounts zu {targetSystem} ist leider fehlgeschlagen.",
+	"pages.userMigration.error.description.support":
+		"Wende Dich bitte an den Administrator oder direkt an den {0}.",
+	"pages.userMigration.error.description.support.link": "Support",
 	"pages.userMigration.error.multipleUsersFound":
-		'Dieser moin.schule-Account ist bereits mit einem Account in der Niedersächsischen Bildungscloud verbunden und kann nicht noch einmal für die Migration verwendet werden.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
+		"Dieser moin.schule-Account ist bereits mit einem Account in der Niedersächsischen Bildungscloud verbunden und kann nicht noch einmal für die Migration verwendet werden.",
+	"pages.userMigration.error.schoolNumberMismatch.information":
+		"Gib diese Informationen bitte weiter:",
+	"pages.userMigration.error.schoolNumberMismatch.information.schoolNumber":
+		"Schulnummer in der Niedersächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.",
 	"pages.userMigration.error.title": "Umzug des Accounts fehlgeschlagen",
 	"pages.userMigration.success.description":
 		"Der Umzug Deines Accounts zu {targetSystem} ist fertig.<br>Melde Dich jetzt bitte neu an.",
