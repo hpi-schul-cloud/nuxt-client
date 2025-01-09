@@ -1887,10 +1887,17 @@ export default {
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",
 	"pages.userMigration.button.skip": "Ahora no",
 	"pages.userMigration.button.startMigration": "Empieza a moverte",
-	"pages.userMigration.description.fromSource":
-		'¡Hola!<br>Actualmente, su escuela está cambiando el sistema de registro.<br>Ahora puede migrar su cuenta a {targetSystem}.<br>Después de la mudanza, solo puede registrarse aquí con {targetSystem}.<br><br > Presione "{startMigration}" e inicie sesión con su cuenta {targetSystem}.',
-	"pages.userMigration.description.fromSourceMandatory":
-		'¡Hola!<br>Actualmente, su escuela está cambiando el sistema de registro.<br>Ahora debe migrar su cuenta a {targetSystem}.<br>Después de la mudanza, solo puede registrarse aquí con {targetSystem}.<br><br > Presione "{startMigration}" e inicie sesión con su cuenta {targetSystem}.',
+	"pages.userMigration.description.firstParagraph.hello": "¡Hola!",
+	"pages.userMigration.description.firstParagraph.changeSource":
+		"Actualmente, su escuela está cambiando el sistema de registro.",
+	"pages.userMigration.description.firstParagraph.fromSource":
+		"Ahora puede migrar su cuenta a {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.fromSourceMandatory":
+		"Ahora debe migrar su cuenta a {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.loginWith":
+		"Después de la mudanza, solo puede registrarse aquí con {targetSystem}.",
+	"pages.userMigration.description.lastParagraph":
+		'Presione "{startMigration}" e inicie sesión con su cuenta {targetSystem}.',
 	"pages.userMigration.error.description":
 		'Desafortunadamente, la transferencia de su cuenta a {targetSystem} falló.<br>Por favor, póngase en contacto con el administrador o <a href="{supportLink}">Soporte</a> directamente.',
 	"pages.userMigration.error.schoolNumberMismatch":

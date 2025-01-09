@@ -1836,10 +1836,17 @@ export default {
 	"pages.userMigration.backToLogin": "Return to login page",
 	"pages.userMigration.button.skip": "Not now",
 	"pages.userMigration.button.startMigration": "Start",
-	"pages.userMigration.description.fromSource":
-		'Hello!<br>Your school is currently changing the registration system.<br>You can now migrate your account to {targetSystem}.<br>After the move, you can only register here with {targetSystem}.<br><br> Press "{startMigration}" and log in with your {targetSystem} account.',
-	"pages.userMigration.description.fromSourceMandatory":
-		'Hello!<br>Your school is currently changing the registration system.<br>You must migrate your account to {targetSystem} now.<br>After the move, you can only register here with {targetSystem}.<br><br> Press "{startMigration}" and log in with your {targetSystem} account.',
+	"pages.userMigration.description.firstParagraph.hello": "Hello!",
+	"pages.userMigration.description.firstParagraph.changeSource":
+		"Your school is currently changing the registration system.",
+	"pages.userMigration.description.firstParagraph.fromSource":
+		"You can now migrate your account to {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.fromSourceMandatory":
+		"You must migrate your account to {targetSystem} now.",
+	"pages.userMigration.description.firstParagraph.loginWith":
+		"After the move, you can only login here with {targetSystem}.",
+	"pages.userMigration.description.lastParagraph":
+		'Press "{startMigration}" and log in with your {targetSystem} account.',
 	"pages.userMigration.error.description":
 		'Unfortunately, the move of your account to {targetSystem} failed.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
 	"pages.userMigration.error.schoolNumberMismatch":

@@ -1863,10 +1863,17 @@ export default {
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",
 	"pages.userMigration.button.skip": "Не зараз",
 	"pages.userMigration.button.startMigration": "почати рухатися",
-	"pages.userMigration.description.fromSource":
-		'Привіт!<br>Ваш навчальний заклад зараз змінює систему реєстрації.<br>Тепер ви можете перенести свій обліковий запис на {targetSystem}.<br>Після переходу ви зможете зареєструватися тут лише за допомогою {targetSystem}.<br><br > Натисніть "{startMigration}" і увійдіть за допомогою свого облікового запису {targetSystem}.',
-	"pages.userMigration.description.fromSourceMandatory":
-		'Привіт!<br>Ваш навчальний заклад зараз змінює систему реєстрації.<br>Тепер ви повинні перенести свій обліковий запис на {targetSystem}.<br>Після переходу ви зможете зареєструватися тут лише за допомогою {targetSystem}.<br><br > Натисніть "{startMigration}" і увійдіть за допомогою свого облікового запису {targetSystem}.',
+	"pages.userMigration.description.firstParagraph.hello": "Привіт!",
+	"pages.userMigration.description.firstParagraph.changeSource":
+		"Ваш навчальний заклад зараз змінює систему реєстрації.",
+	"pages.userMigration.description.firstParagraph.fromSource":
+		"Тепер ви можете перенести свій обліковий запис на {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.fromSourceMandatory":
+		"Тепер ви повинні перенести свій обліковий запис на {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.loginWith":
+		"Після переходу ви зможете зареєструватися тут лише за допомогою {targetSystem}.",
+	"pages.userMigration.description.lastParagraph":
+		'Натисніть "{startMigration}" і увійдіть за допомогою свого облікового запису {targetSystem}.',
 	"pages.userMigration.error.description":
 		'На жаль, не вдалося перемістити ваш обліковий запис до {targetSystem}.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
 	"pages.userMigration.error.schoolNumberMismatch":

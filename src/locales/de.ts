@@ -1867,12 +1867,19 @@ export default {
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.button.startMigration": "Umzug starten",
-	"pages.userMigration.description.fromSource":
-		"Hallo!<br>Deine Schule wechselt gerade das Anmeldesystem.<br>Du kannst Deinen Account jetzt zu {targetSystem} umziehen.<br>Nach dem Umzug kannst Du Dich hier nur noch mit {targetSystem} anmelden.<br><br>Drücke auf „{startMigration}“ und melde Dich mit Deinem {targetSystem}-Account an.",
-	"pages.userMigration.description.fromSourceMandatory":
-		"Hallo!<br>Deine Schule wechselt gerade das Anmeldesystem.<br>Du musst Deinen Account jetzt zu {targetSystem} umziehen.<br>Nach dem Umzug kannst Du Dich hier nur noch mit {targetSystem} anmelden.<br><br>Drücke auf „{startMigration}“ und melde Dich mit Deinem {targetSystem}-Account an.",
+	"pages.userMigration.description.firstParagraph.hello": "Hallo!",
+	"pages.userMigration.description.firstParagraph.changeSource":
+		"Deine Schule wechselt gerade das Anmeldesystem",
+	"pages.userMigration.description.firstParagraph.fromSource":
+		"Du kannst Deinen Account jetzt zu {targetSystem} umziehen.",
+	"pages.userMigration.description.firstParagraph.fromSourceMandatory":
+		"Du musst Deinen Account jetzt zu {targetSystem} umziehen",
+	"pages.userMigration.description.firstParagraph.loginWith":
+		"Nach dem Umzug kannst Du Dich hier nur noch mit {targetSystem} anmelden.",
+	"pages.userMigration.description.lastParagraph":
+		"Drücke auf „{startMigration}“ und melde Dich mit Deinem {targetSystem}-Account an.",
 	"pages.userMigration.error.description":
-		'Der Umzug Deines Accounts zu {targetSystem} ist leider fehlegeschlagen.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
+		'Der Umzug Deines Accounts zu {targetSystem} ist leider fehlgeschlagen.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
 	"pages.userMigration.error.schoolNumberMismatch":
 		"Gib diese Informationen bitte weiter:<br><b>Schulnummer in der Niedersächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.</b>",
 	"pages.userMigration.error.multipleUsersFound":
