@@ -7,10 +7,13 @@
 			:variant="outlined"
 			ref="videoConferenceElement"
 			:ripple="false"
+			tabindex="0"
+			role="link"
 			target="_blank"
 			link
 			:aria-label="ariaLabel"
 			@keydown.stop.up.down="onKeydownArrow"
+			@keyup.enter="onContentEnter"
 		>
 			<VideoConferenceContentElementDisplay
 				v-if="computedElement.content.title"
@@ -227,5 +230,11 @@ const onJoinVideoConference = async () => {
 			windowReference.location = response;
 		}
 	});
+};
+
+const onContentEnter = async () => {
+	if (!props.isEditMode) {
+		onContentClick();
+	}
 };
 </script>

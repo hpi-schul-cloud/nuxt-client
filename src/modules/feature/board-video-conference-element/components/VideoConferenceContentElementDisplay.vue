@@ -1,5 +1,5 @@
 <template>
-	<div tabindex="0">
+	<div>
 		<ContentElementBar
 			:has-grey-background="true"
 			:icon="mdiVideoOutline"
