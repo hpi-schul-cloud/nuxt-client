@@ -1891,7 +1891,9 @@ export default {
 		"Schulnummer in der Niedersächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.",
 	"pages.userMigration.error.title": "Umzug des Accounts fehlgeschlagen",
 	"pages.userMigration.success.description":
-		"Der Umzug Deines Accounts zu {targetSystem} ist fertig.<br>Melde Dich jetzt bitte neu an.",
+		"Der Umzug Deines Accounts zu {targetSystem} ist fertig.",
+	"pages.userMigration.success.description.loginAgain":
+		"Melde Dich jetzt bitte neu an.",
 	"pages.userMigration.success.login": "Login über {targetSystem}",
 	"pages.userMigration.success.title":
 		"Erfolgreicher Umzug deines Anmeldesystems",

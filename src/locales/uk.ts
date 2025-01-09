@@ -1887,7 +1887,8 @@ export default {
 		"Номер школи в Niedersächsischen Bildungscloud: {sourceSchoolNumber}, номер школи в {targetSystem}: {targetSchoolNumber}",
 	"pages.userMigration.error.title": "Не вдалося перемістити обліковий запис",
 	"pages.userMigration.success.description":
-		"Переміщення вашого облікового запису до {targetSystem} завершено.<br>Зареєструйтеся знову.",
+		"Переміщення вашого облікового запису до {targetSystem} завершено.",
+	"pages.userMigration.success.description.loginAgain": "Зареєструйтеся знову.",
 	"pages.userMigration.success.login":
 		"Iniciar sesión a través de {targetSystem}",
 	"pages.userMigration.success.title":

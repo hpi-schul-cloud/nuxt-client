@@ -1911,7 +1911,9 @@ export default {
 		"{sourceSchoolNumber}, número de escuela en {targetSystem}: {targetSchoolNumber}.",
 	"pages.userMigration.error.title": "Error al mover la cuenta",
 	"pages.userMigration.success.description":
-		"Se completó el movimiento de su cuenta a {targetSystem}.<br>Por favor, regístrese de nuevo ahora.",
+		"Se completó el movimiento de su cuenta a {targetSystem}.",
+	"pages.userMigration.success.description.loginAgain":
+		"Por favor, regístrese de nuevo ahora.",
 	"pages.userMigration.success.login":
 		"Iniciar sesión a través de {targetSystem}",
 	"pages.userMigration.success.title":

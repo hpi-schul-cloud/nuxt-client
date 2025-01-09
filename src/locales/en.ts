@@ -1860,7 +1860,9 @@ export default {
 		"School number in Niedersächsischen Bildungscloud: {sourceSchoolNumber}, school number in {targetSystem}: {targetSchoolNumber}",
 	"pages.userMigration.error.title": "Account move failed",
 	"pages.userMigration.success.description":
-		"The move of your account to {targetSystem} is complete.<br>Please register again now.",
+		"The move of your account to {targetSystem} is complete.",
+	"pages.userMigration.success.description.loginAgain":
+		"Please register again now.",
 	"pages.userMigration.success.login": "Login via {targetSystem}",
 	"pages.userMigration.success.title":
 		"Successful migration of your registration system",

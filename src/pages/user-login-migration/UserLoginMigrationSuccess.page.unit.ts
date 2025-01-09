@@ -17,7 +17,6 @@ describe("UserLoginMigrationSuccess", () => {
 	let systemsModule: jest.Mocked<SystemsModule>;
 
 	const setup = (props: { targetSystem: string }) => {
-		document.body.setAttribute("data-app", "true");
 		const systemsMock: System[] = [
 			{
 				id: "sourceSystemId",
@@ -38,10 +37,6 @@ describe("UserLoginMigrationSuccess", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SYSTEMS_MODULE_KEY.valueOf()]: systemsModule,
-				},
-				mocks: {
-					$t: (key: string, dynamic?: object): string =>
-						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 				},
 			},
 			props,
@@ -73,12 +68,10 @@ describe("UserLoginMigrationSuccess", () => {
 					targetSystem: "targetSystemId",
 				});
 
-				const descriptionText = wrapper
-					.findComponent('[data-testid="text-description"]')
-					.attributes("html");
+				const descriptionText = wrapper.get('[data-testid="text-description"]');
 
-				expect(descriptionText).toEqual(
-					'pages.userMigration.success.description {"targetSystem":"targetSystem"}'
+				expect(descriptionText.text()).toEqual(
+					"pages.userMigration.success.description pages.userMigration.success.description.loginAgain"
 				);
 			});
 
@@ -89,9 +82,7 @@ describe("UserLoginMigrationSuccess", () => {
 
 				const button = wrapper.find("[data-testId=btn-proceed]");
 
-				expect(button.text()).toEqual(
-					'pages.userMigration.success.login {"targetSystem":"targetSystem"}'
-				);
+				expect(button.text()).toEqual("pages.userMigration.success.login");
 				expect(button.attributes().to).toEqual("/logout");
 			});
 		});
