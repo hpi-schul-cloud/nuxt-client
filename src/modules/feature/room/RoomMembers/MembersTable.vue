@@ -77,10 +77,6 @@ import {
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
 
-const { askConfirmation } = useConfirmationDialog();
-
-const selectedUserIds = ref<string[]>([]);
-
 const props = defineProps({
 	members: {
 		type: Array as PropType<RoomMemberResponse[]>,
@@ -91,7 +87,8 @@ const props = defineProps({
 		default: () => ({ status: false, position: 0 }),
 	},
 });
-
+const { askConfirmation } = useConfirmationDialog();
+const selectedUserIds = ref<string[]>([]);
 const emit = defineEmits(["remove:members", "select:members"]);
 const { t } = useI18n();
 const search = ref("");
