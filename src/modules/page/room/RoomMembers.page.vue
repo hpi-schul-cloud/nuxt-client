@@ -96,7 +96,7 @@ const fixedHeaderOnMobile = ref({
 	status: false,
 	position: 0,
 });
-const { y, top } = useElementBounding(wireframe);
+const { y } = useElementBounding(wireframe);
 
 useTitle(pageTitle);
 
@@ -131,11 +131,11 @@ onMounted(async () => {
 	}
 	await fetchMembers();
 	const header = document.querySelector(".wireframe-header") as HTMLElement;
-	fixedHeaderOnMobile.value.position = header.offsetHeight + top.value;
+	fixedHeaderOnMobile.value.position = header.offsetHeight + y.value;
 });
 
 watch(y, () => {
-	fixedHeaderOnMobile.value.status = y.value <= -top.value && mdAndDown.value;
+	fixedHeaderOnMobile.value.status = y.value <= 0 && mdAndDown.value;
 });
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
