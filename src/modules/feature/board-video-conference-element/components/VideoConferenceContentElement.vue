@@ -10,7 +10,6 @@
 			tabindex="0"
 			role="link"
 			target="_blank"
-			link
 			:aria-label="ariaLabel"
 			@keydown.stop.up.down="onKeydownArrow"
 			@keyup.enter="onContentEnter"
@@ -190,6 +189,7 @@ const isCreating = computed(
 onMounted(fetchVideoConferenceInfo);
 
 const onContentClick = async () => {
+	await fetchVideoConferenceInfo();
 	if (isRunning.value && hasParticipationPermission.value) {
 		await onJoinVideoConference();
 	} else if (!isRunning.value && canStart.value) {
