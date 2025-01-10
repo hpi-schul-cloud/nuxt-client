@@ -51,7 +51,11 @@
 					<slot name="title" />
 				</LineClamp>
 
-				<div v-if="$slots.statusInfo" class="statusInfo">
+				<div
+					v-if="$slots.statusInfo"
+					class="statusInfo"
+					data-testid="status-info-slot"
+				>
 					<slot name="statusInfo" />
 				</div>
 			</div>
