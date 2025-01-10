@@ -1757,7 +1757,7 @@ export default {
 	"pages.rooms.tools.notLicensedDialog.title":
 		"Herramienta “{toolName}” no activada",
 	"pages.rooms.tools.deleteDialog.content":
-		"¿Está seguro de que desea eliminar la herramienta '<i>{itemName}</i>' del curso?",
+		"¿Está seguro de que desea eliminar la herramienta '{itemName}' del curso?",
 	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",
 	"pages.rooms.tools.emptyState": "No hay herramientas en este curso todavía.",
 	"pages.rooms.tools.incomplete": "Configuración incompleta",

@@ -14,7 +14,6 @@ import { ExternalToolDisplayData } from "@data-external-tool";
 import { createMock } from "@golevelup/ts-jest";
 import { mount, MountingOptions } from "@vue/test-utils";
 import { nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import RoomExternalToolsErrorDialog from "./RoomExternalToolsErrorDialog.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
@@ -41,11 +40,7 @@ describe("RoomExternalToolsSection", () => {
 			>,
 			{
 				global: {
-					plugins: [
-						createTestingVuetify(),
-						createTestingI18n(),
-						vueDompurifyHTMLPlugin,
-					],
+					plugins: [createTestingVuetify(), createTestingI18n()],
 					provide: {
 						[AUTH_MODULE_KEY.valueOf()]: authModule,
 					},

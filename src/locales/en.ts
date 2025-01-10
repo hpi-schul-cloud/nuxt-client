@@ -1708,7 +1708,7 @@ export default {
 	"pages.rooms.tools.notLicensedDialog.title":
 		"Tool “{toolName}” not activated",
 	"pages.rooms.tools.deleteDialog.content":
-		"Are you sure you want to remove the tool '<i>{itemName}</i>' from the course?",
+		"Are you sure you want to remove the tool '{itemName}' from the course?",
 	"pages.rooms.tools.deleteDialog.title": "Remove tool?",
 	"pages.rooms.tools.emptyState": "There are no tools in this course yet.",
 	"pages.rooms.tools.incomplete": "Configuration incomplete",

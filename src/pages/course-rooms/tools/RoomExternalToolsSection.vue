@@ -37,16 +37,13 @@
 				</h2>
 			</template>
 			<template #content>
-				<RenderHTML
-					class="text-md mt-2"
-					data-testid="delete-dialog-content"
-					:html="
-						t('pages.rooms.tools.deleteDialog.content', {
+				<p data-testid="delete-dialog-content">
+					{{
+						t("pages.rooms.tools.deleteDialog.content", {
 							itemName: selectedItemName,
 						})
-					"
-					component="p"
-				/>
+					}}
+				</p>
 			</template>
 		</v-custom-dialog>
 	</div>
@@ -60,7 +57,6 @@ import { ToolContextType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { ExternalToolDisplayData } from "@data-external-tool";
-import { RenderHTML } from "@feature-render-html";
 import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
