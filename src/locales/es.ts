@@ -1622,10 +1622,22 @@ export default {
 	"pages.content.index.search_resources": "Recursos",
 	"pages.content.index.search_results": "Resultados de la búsqueda de",
 	"pages.content.index.search.placeholder": "Buscar tienda de aprendizaje",
-	"pages.content.init_state.img_alt": "Imagen de estado inicial",
-	"pages.content.init_state.message":
-		"Aquí encontrará contenidos de alta calidad adaptados a su estado.<br>Nuestro equipo está desarrollando constantemente nuevos materiales para mejorar su experiencia de aprendizaje.<br><br>Nota:<br><br>Los materiales expuestos en la Tienda de Aprendizaje no se encuentran en nuestro servidor, sino que están disponibles a través de interfaces con otros servidores (las fuentes incluyen servidores educativos individuales, WirLernenOnline, Mundo, etc.).<br>Por esta razón, nuestro equipo no tiene ninguna influencia en la disponibilidad permanente de los materiales individuales y en toda la gama de materiales ofrecidos por las fuentes individuales.<br><br>En el contexto del uso en instituciones educativas, se permite la copia de los medios en línea en medios de almacenamiento, en un dispositivo final privado o en plataformas de aprendizaje para un círculo cerrado de usuarios, si es necesario, en la medida en que esto sea necesario para la distribución y/o uso interno.<br>Una vez finalizado el trabajo con los respectivos medios de comunicación en línea, éstos deben ser eliminados de los dispositivos finales privados, de los soportes de datos y de las plataformas de aprendizaje; a más tardar cuando se abandone la institución educativa.<br>Por lo general, no se permite la publicación fundamental (por ejemplo, en Internet) de los medios de comunicación en línea o con partes de ellos de obras nuevas y/o editadas, o se requiere el consentimiento del propietario de los derechos.",
-	"pages.content.init_state.title": "¡Bienvenido a la nueva Lern-Store!",
+	"pages.content.initState.description":
+		"Aquí encontrará contenidos de alta calidad adaptados a su estado.",
+	"pages.content.initState.description.newMaterials":
+		"Nuestro equipo está desarrollando constantemente nuevos materiales para mejorar su experiencia de aprendizaje.",
+	"pages.content.initState.description.hint": "Nota:",
+	"pages.content.initState.description.hint.materials":
+		"Los materiales expuestos en la Tienda de Aprendizaje no se encuentran en nuestro servidor, sino que están disponibles a través de interfaces con otros servidores (las fuentes incluyen servidores educativos individuales, WirLernenOnline, Mundo, etc.).",
+	"pages.content.initState.description.hint.availability":
+		"Por esta razón, nuestro equipo no tiene ninguna influencia en la disponibilidad permanente de los materiales individuales y en toda la gama de materiales ofrecidos por las fuentes individuales.",
+	"pages.content.initState.description.usage":
+		"En el contexto del uso en instituciones educativas, se permite la copia de los medios en línea en medios de almacenamiento, en un dispositivo final privado o en plataformas de aprendizaje para un círculo cerrado de usuarios, si es necesario, en la medida en que esto sea necesario para la distribución y/o uso interno.",
+	"pages.content.initState.description.usage.deleteHint":
+		"Una vez finalizado el trabajo con los respectivos medios de comunicación en línea, éstos deben ser eliminados de los dispositivos finales privados, de los soportes de datos y de las plataformas de aprendizaje; a más tardar cuando se abandone la institución educativa.",
+	"pages.content.initState.description.usage.notPermitted":
+		"Por lo general, no se permite la publicación fundamental (por ejemplo, en Internet) de los medios de comunicación en línea o con partes de ellos de obras nuevas y/o editadas, o se requiere el consentimiento del propietario de los derechos.",
+	"pages.content.initState.title": "¡Bienvenido a la nueva Lern-Store!",
 	"pages.content.label.chooseACourse": "Selecciona un curso/asignatura",
 	"pages.content.label.chooseALessonTopic": "Elige un tema de la lección",
 	"pages.content.label.deselect": "Eliminar",

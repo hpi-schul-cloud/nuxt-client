@@ -1576,10 +1576,22 @@ export default {
 	"pages.content.index.search_resources": "Resources",
 	"pages.content.index.search_results": "Search results for",
 	"pages.content.index.search.placeholder": "Search Learning store",
-	"pages.content.init_state.img_alt": "Initial state Image",
-	"pages.content.init_state.message":
-		"Here you find high quality content adapted to your federal state.<br>Our team is constantly developing new materials to further improve your learning experience.<br><br>Note:<br><br>The materials displayed in the Learning Store are not located on our server, but are made available via interfaces to other servers (sources include individual educational servers, WirLernenOnline, Mundo, etc.). For this reason, our team has no influence on the permanent availability of individual materials and on the full range of materials offered by the individual sources.<br><br>In the context of use in educational institutions, copying of the online media to storage media, to a private end device or to learning platforms for a closed circle of users is permitted if necessary, insofar as this is required for internal distribution and/or use.<br>After completion of the work with the respective online media, these are to be deleted from the private end devices, data carriers and learning platforms; at the latest when leaving the educational institution.<br>A fundamental publication (e.g. on the internet) of the online media or with parts of it newly produced new and/or edited works is generally not permitted or requires the consent of the rights owner.",
-	"pages.content.init_state.title": "Welcome to the Learning Store!",
+	"pages.content.initState.description":
+		"Here you find high quality content adapted to your federal state.",
+	"pages.content.initState.description.newMaterials":
+		"Our team is constantly developing new materials to further improve your learning experience.",
+	"pages.content.initState.description.hint": "Note:",
+	"pages.content.initState.description.hint.materials":
+		"The materials displayed in the Learning Store are not located on our server, but are made available via interfaces to other servers (sources include individual educational servers, WirLernenOnline, Mundo, etc.).",
+	"pages.content.initState.description.hint.availability":
+		"For this reason, our team has no influence on the permanent availability of individual materials and on the full range of materials offered by the individual sources.",
+	"pages.content.initState.description.usage":
+		"In the context of use in educational institutions, copying of the online media to storage media, to a private end device or to learning platforms for a closed circle of users is permitted if necessary, insofar as this is required for internal distribution and/or use.",
+	"pages.content.initState.description.usage.deleteHint":
+		"After completion of the work with the respective online media, these are to be deleted from the private end devices, data carriers and learning platforms; at the latest when leaving the educational institution.",
+	"pages.content.initState.description.usage.notPermitted":
+		"A fundamental publication (e.g. on the internet) of the online media or with parts of it newly produced new and/or edited works is generally not permitted or requires the consent of the rights owner.",
+	"pages.content.initState.title": "Welcome to the Learning Store!",
 	"pages.content.label.chooseACourse": "Select a course/subject",
 	"pages.content.label.chooseALessonTopic": "Choose a lesson topic",
 	"pages.content.label.deselect": "Remove",
