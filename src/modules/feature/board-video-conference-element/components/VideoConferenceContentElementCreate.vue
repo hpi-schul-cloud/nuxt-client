@@ -59,6 +59,9 @@ type VuetifyFormApi = {
 
 const emit = defineEmits(["create:title"]);
 
+const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
+const { smAndUp } = useDisplay();
+
 const { t } = useI18n();
 const title = ref<string>(t("components.cardElement.videoConferenceElement"));
 const form = ref<VuetifyFormApi | null>(null);
@@ -85,9 +88,6 @@ const onKeydown = (e: KeyboardEvent) => {
 		form.value.resetValidation();
 	}
 };
-
-const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
-const { smAndUp } = useDisplay();
 
 const isRenderedAsList = computed(() => {
 	return smAndUp.value && isListLayout.value;
