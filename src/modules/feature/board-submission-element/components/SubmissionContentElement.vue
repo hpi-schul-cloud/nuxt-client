@@ -33,8 +33,14 @@
 					has-background
 					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				>
-					<BoardMenuActionMoveUp @click="onMoveElementUp" />
-					<BoardMenuActionMoveDown @click="onMoveElementDown" />
+					<BoardMenuActionMoveUp
+						v-if="isNotFirstElement"
+						@click="onMoveElementUp"
+					/>
+					<BoardMenuActionMoveDown
+						v-if="isNotLastElement"
+						@click="onMoveElementDown"
+					/>
 					<BoardMenuActionDelete @click="onDeleteElement" />
 				</BoardMenu>
 			</SubmissionContentElementEdit>
@@ -79,6 +85,8 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
+		isNotFirstElement: { type: Boolean, requried: false },
+		isNotLastElement: { type: Boolean, requried: false },
 		columnIndex: { type: Number, required: true },
 		rowIndex: { type: Number, required: true },
 		elementIndex: { type: Number, required: true },

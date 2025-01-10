@@ -1,28 +1,20 @@
 <template>
 	<BoardMenuAction
-		v-if="isVisible"
 		:icon="mdiArrowLeft"
 		data-testid="board-menu-action-move-left"
 		@click="onClick"
 	>
-		{{ $t("components.board.action.moveLeft") }}
+		{{ t("components.board.action.moveLeft") }}
 	</BoardMenuAction>
 </template>
 
 <script setup lang="ts">
-import { injectStrict } from "@/utils/inject";
 import { mdiArrowLeft } from "@icons/material";
 import { BoardMenuAction } from "@ui-board";
-import { BOARD_HAS_MULTIPLE_COLUMNS, BOARD_IS_FIRST_COLUMN } from "@util-board";
-import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const emit = defineEmits(["click"]);
-
-const hasMultipleColumns = ref(injectStrict(BOARD_HAS_MULTIPLE_COLUMNS));
-const isFirstColumn = ref(injectStrict(BOARD_IS_FIRST_COLUMN));
-const isVisible = computed(
-	() => hasMultipleColumns.value && !isFirstColumn.value
-);
 
 const onClick = ($event: Event) => emit("click", $event);
 </script>

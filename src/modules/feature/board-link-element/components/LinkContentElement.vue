@@ -24,15 +24,21 @@
 					has-background
 					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				>
-					<BoardMenuActionMoveUp @click="onMoveUp" />
-					<BoardMenuActionMoveDown @click="onMoveDown" />
+					<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<BoardMenuActionMoveDown
+						v-if="isNotLastElement"
+						@click="onMoveDown"
+					/>
 					<BoardMenuActionDelete @click="onDelete" />
 				</BoardMenu>
 			</LinkContentElementDisplay>
 			<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
 				><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
-					<BoardMenuActionMoveUp @click="onMoveUp" />
-					<BoardMenuActionMoveDown @click="onMoveDown" />
+					<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<BoardMenuActionMoveDown
+						v-if="isNotLastElement"
+						@click="onMoveDown"
+					/>
 					<BoardMenuActionDelete @click="onDelete" />
 				</BoardMenu>
 			</LinkContentElementCreate>
@@ -66,13 +72,15 @@ const props = defineProps({
 	},
 	isEditMode: { type: Boolean, required: true },
 	isDetailView: { type: Boolean, required: true },
+	isNotFirstElement: { type: Boolean, requried: false },
+	isNotLastElement: { type: Boolean, requried: false },
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
 });
 const emit = defineEmits<{
 	(e: "delete:element", id: string): void;
-	(e: "move-keyboard:edit", event: Event): void;
+	(e: "move-keyboard:edit", event: KeyboardEvent): void;
 	(e: "move-down:edit"): void;
 	(e: "move-up:edit"): void;
 }>();

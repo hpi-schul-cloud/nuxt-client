@@ -25,22 +25,26 @@
 						:data-testid="`column-menu-btn-${index}`"
 					>
 						<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
-						<BoardMenuActionMoveLeft
-							v-if="!isListBoard"
-							@click="onMoveColumnLeft"
-						/>
-						<BoardMenuActionMoveRight
-							v-if="!isListBoard"
-							@click="onMoveColumnRight"
-						/>
-						<BoardMenuActionMoveColumnUp
-							v-if="isListBoard"
-							@click="onMoveColumnUp"
-						/>
-						<BoardMenuActionMoveColumnDown
-							v-if="isListBoard"
-							@click="onMoveColumnDown"
-						/>
+						<template v-if="isListBoard">
+							<BoardMenuActionMoveUp
+								v-if="isNotFirstColumn"
+								@click="onMoveColumnUp"
+							/>
+							<BoardMenuActionMoveDown
+								v-if="isNotLastColumn"
+								@click="onMoveColumnDown"
+							/>
+						</template>
+						<template v-else>
+							<BoardMenuActionMoveLeft
+								v-if="isNotFirstColumn"
+								@click="onMoveColumnLeft"
+							/>
+							<BoardMenuActionMoveRight
+								v-if="isNotLastColumn"
+								@click="onMoveColumnRight"
+							/>
+						</template>
 						<BoardMenuActionDelete :name="title" @click="onDelete" />
 					</BoardMenu>
 				</BoardAnyTitleInput>
@@ -56,8 +60,8 @@ import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
-	BoardMenuActionMoveColumnDown,
-	BoardMenuActionMoveColumnUp,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
 	BoardMenuActionMoveLeft,
 	BoardMenuActionMoveRight,
 	BoardMenuScope,
@@ -68,26 +72,15 @@ import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 
 const props = defineProps({
-	columnId: {
-		type: String,
-		required: true,
-	},
-	index: {
-		type: Number,
-	},
-	isListBoard: {
-		type: Boolean,
-		required: true,
-	},
-	title: {
-		type: String,
-		required: true,
-	},
-	titlePlaceholder: {
-		type: String,
-		default: "",
-	},
+	columnId: { type: String, required: true },
+	index: { type: Number },
+	isListBoard: { type: Boolean, required: true },
+	isNotFirstColumn: { type: Boolean, requried: false },
+	isNotLastColumn: { type: Boolean, requried: false },
+	title: { type: String, required: true },
+	titlePlaceholder: { type: String, default: "" },
 });
+
 const emit = defineEmits([
 	"delete:column",
 	"move:column-down",
@@ -128,13 +121,12 @@ const onMoveColumnKeyboard = (event: KeyboardEvent) => {
 		emit("move:column-left");
 	} else if (event.code === "ArrowRight") {
 		emit("move:column-right");
-	} else {
-		console.log("not supported key event");
 	}
 };
 
-const emitIfNotListBoard = (event: string) => {
-	console.log("emitIfNotListBoard", emit);
+const emitIfNotListBoard = (
+	event: "move:column-left" | "move:column-right"
+) => {
 	if (!props.isListBoard) {
 		emit(event);
 	}

@@ -108,6 +108,8 @@ describe("VideoConferenceContentElement", () => {
 		options: {
 			content?: VideoConferenceElementContent;
 			isEditMode: boolean;
+			isNotFirstElement?: boolean;
+			isNotLastElement?: boolean;
 			role?: "teacher" | "student";
 			columnIndex?: number;
 			rowIndex?: number;
@@ -125,6 +127,8 @@ describe("VideoConferenceContentElement", () => {
 		const {
 			content,
 			isEditMode,
+			isNotFirstElement,
+			isNotLastElement,
 			role = "teacher",
 			columnIndex = 0,
 			rowIndex = 1,
@@ -185,6 +189,8 @@ describe("VideoConferenceContentElement", () => {
 				columnIndex,
 				rowIndex,
 				elementIndex,
+				isNotFirstElement,
+				isNotLastElement,
 			},
 		});
 
@@ -319,32 +325,78 @@ describe("VideoConferenceContentElement", () => {
 					expect(videoConferenceElementMenu.exists()).toBe(true);
 				});
 
-				it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
-					const videoConferenceElementContent =
-						videoConferenceElementContentFactory.build();
-					const { wrapper } = setupWrapper({
-						content: videoConferenceElementContent,
-						isEditMode: true,
+				describe("when element is first element", () => {
+					describe("when move up menu item is clicked", () => {
+						it("should emit 'move-up:edit' event", async () => {
+							const videoConferenceElementContent =
+								videoConferenceElementContentFactory.build();
+							const { wrapper } = setupWrapper({
+								content: videoConferenceElementContent,
+								isEditMode: true,
+								isNotFirstElement: false,
+							});
+
+							const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+
+							expect(menuItem.exists()).toBe(false);
+						});
 					});
-
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
-					await menuItem.trigger("click");
-
-					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
 				});
 
-				it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
-					const videoConferenceElementContent =
-						videoConferenceElementContentFactory.build();
-					const { wrapper } = setupWrapper({
-						content: videoConferenceElementContent,
-						isEditMode: true,
+				describe("when element is not first element", () => {
+					describe("when move up menu item is clicked", () => {
+						it("should emit 'move-up:edit' event", async () => {
+							const videoConferenceElementContent =
+								videoConferenceElementContentFactory.build();
+							const { wrapper } = setupWrapper({
+								content: videoConferenceElementContent,
+								isEditMode: true,
+								isNotFirstElement: true,
+							});
+
+							const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+							await menuItem.trigger("click");
+
+							expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+						});
 					});
+				});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
-					await menuItem.trigger("click");
+				describe("when element is last element", () => {
+					describe("when move down menu item is clicked", () => {
+						it("should emit 'move-down:edit' event ", async () => {
+							const videoConferenceElementContent =
+								videoConferenceElementContentFactory.build();
+							const { wrapper } = setupWrapper({
+								content: videoConferenceElementContent,
+								isEditMode: true,
+								isNotLastElement: false,
+							});
 
-					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+							const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+
+							expect(menuItem.exists()).toBe(false);
+						});
+					});
+				});
+
+				describe("when element is not last element", () => {
+					describe("when move down menu item is clicked", () => {
+						it("should emit 'move-down:edit' event ", async () => {
+							const videoConferenceElementContent =
+								videoConferenceElementContentFactory.build();
+							const { wrapper } = setupWrapper({
+								content: videoConferenceElementContent,
+								isEditMode: true,
+								isNotLastElement: true,
+							});
+
+							const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+							await menuItem.trigger("click");
+
+							expect(wrapper.emitted()).toHaveProperty("move-down:edit");
+						});
+					});
 				});
 
 				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
@@ -503,26 +555,64 @@ describe("VideoConferenceContentElement", () => {
 					expect(videoConferenceElementMenu.exists()).toBe(true);
 				});
 
-				it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
-					const { wrapper } = setupWrapper({
-						isEditMode: true,
+				describe("when element is first element", () => {
+					it("should hide 'move-up' menu item", async () => {
+						const { wrapper } = setupWrapper({
+							isEditMode: true,
+							isNotFirstElement: false,
+						});
+
+						const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+
+						expect(menuItem.exists()).toBe(false);
 					});
-
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
-					await menuItem.trigger("click");
-
-					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
 				});
 
-				it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
-					const { wrapper } = setupWrapper({
-						isEditMode: true,
+				describe("when element is not first element", () => {
+					describe("when move up menu item is clicked", () => {
+						it("should emit 'move-up:edit' event", async () => {
+							const { wrapper } = setupWrapper({
+								isEditMode: true,
+								isNotFirstElement: true,
+							});
+
+							const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+							await menuItem.trigger("click");
+
+							expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+						});
 					});
+				});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
-					await menuItem.trigger("click");
+				describe("when element is last element", () => {
+					describe("when move down menu item is clicked", () => {
+						it("should emit 'move-down:edit' event", async () => {
+							const { wrapper } = setupWrapper({
+								isEditMode: true,
+								isNotLastElement: false,
+							});
 
-					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+							const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+
+							expect(menuItem.exists()).toBe(false);
+						});
+					});
+				});
+
+				describe("when element is not last element", () => {
+					describe("when move down menu item is clicked", () => {
+						it("should emit 'move-down:edit' event", async () => {
+							const { wrapper } = setupWrapper({
+								isEditMode: true,
+								isNotLastElement: true,
+							});
+
+							const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+							await menuItem.trigger("click");
+
+							expect(wrapper.emitted()).toHaveProperty("move-down:edit");
+						});
+					});
 				});
 
 				it("should emit 'delete:element' event when delete menu item is clicked", async () => {

@@ -6,7 +6,7 @@
 	>
 		<template #title>
 			<h2 class="text-h4 my-2">
-				{{ $t("feature-board-external-tool-element.dialog.title") }}
+				{{ t("feature-board-external-tool-element.dialog.title") }}
 			</h2>
 		</template>
 		<template #content>

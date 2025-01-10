@@ -3,8 +3,6 @@ import BoardMenuAction from "./BoardMenuAction.vue";
 import BoardMenuActionCopy from "./BoardMenuActionCopy.vue";
 import BoardMenuActionDelete from "./BoardMenuActionDelete.vue";
 import BoardMenuActionEdit from "./BoardMenuActionEdit.vue";
-import BoardMenuActionMoveColumnDown from "./BoardMenuActionMoveColumnDown.vue";
-import BoardMenuActionMoveColumnUp from "./BoardMenuActionMoveColumnUp.vue";
 import BoardMenuActionMoveDown from "./BoardMenuActionMoveDown.vue";
 import BoardMenuActionMoveLeft from "./BoardMenuActionMoveLeft.vue";
 import BoardMenuActionMoveRight from "./BoardMenuActionMoveRight.vue";
@@ -22,8 +20,6 @@ export {
 	BoardMenuActionCopy,
 	BoardMenuActionEdit,
 	BoardMenuActionDelete,
-	BoardMenuActionMoveColumnDown,
-	BoardMenuActionMoveColumnUp,
 	BoardMenuActionMoveUp,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveLeft,

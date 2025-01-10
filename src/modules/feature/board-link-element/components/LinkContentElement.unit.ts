@@ -82,6 +82,8 @@ describe("LinkContentElement", () => {
 		element: LinkElementResponse;
 		isEditMode: boolean;
 		isDetailView: boolean;
+		isNotFirstElement?: boolean;
+		isNotLastElement?: boolean;
 		columnIndex: number;
 		rowIndex: number;
 		elementIndex: number;
@@ -106,7 +108,15 @@ describe("LinkContentElement", () => {
 			content?: LinkElementContent;
 			isEditMode: boolean;
 			isDetailView?: boolean;
-		} = { content: undefined, isEditMode: true, isDetailView: false }
+			isNotFirstElement?: boolean;
+			isNotLastElement?: boolean;
+		} = {
+			content: undefined,
+			isEditMode: true,
+			isDetailView: false,
+			isNotFirstElement: true,
+			isNotLastElement: true,
+		}
 	) => {
 		const element = {
 			...defaultElement,
@@ -141,6 +151,8 @@ describe("LinkContentElement", () => {
 			element,
 			isEditMode: options.isEditMode,
 			isDetailView: false,
+			isNotFirstElement: true,
+			isNotLastElement: true,
 			columnIndex: 0,
 			rowIndex: 1,
 			elementIndex: 2,

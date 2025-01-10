@@ -8,8 +8,8 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
-	BoardMenuActionMoveColumnDown,
-	BoardMenuActionMoveColumnUp,
+	BoardMenuActionMoveDown,
+	BoardMenuActionMoveUp,
 	BoardMenuActionMoveLeft,
 	BoardMenuActionMoveRight,
 } from "@ui-board";
@@ -91,28 +91,62 @@ describe("BoardColumnHeader", () => {
 		});
 
 		describe("when the column should be moved down", () => {
-			it("should emit move:column-down", async () => {
-				const wrapper = setup({}, { isListBoard: true });
+			describe("when the column is the last column", () => {
+				it("should hide move:column-down menut item", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: true, isNotLastColumn: false }
+					);
 
-				const moveDownButton = wrapper.findComponent(
-					BoardMenuActionMoveColumnDown
-				);
-				moveDownButton.vm.$emit("click");
+					const moveDownButton = wrapper.findComponent(BoardMenuActionMoveDown);
 
-				const emitted = wrapper.emitted();
-				expect(emitted["move:column-down"]).toBeDefined();
+					expect(moveDownButton.exists()).toBe(false);
+				});
+			});
+
+			describe("when the column is not the last column", () => {
+				it("should emit move:column-down", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: true, isNotLastColumn: true }
+					);
+
+					const moveDownButton = wrapper.findComponent(BoardMenuActionMoveDown);
+					moveDownButton.vm.$emit("click");
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-down"]).toBeDefined();
+				});
 			});
 		});
 
 		describe("when the column should be moved up", () => {
-			it("should emit move:column-up", async () => {
-				const wrapper = setup({}, { isListBoard: true });
+			describe("when the column is the first column", () => {
+				it("should hide move:column-up menu item", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: true, isNotFirstColumn: false }
+					);
 
-				const moveUpButton = wrapper.findComponent(BoardMenuActionMoveColumnUp);
-				moveUpButton.vm.$emit("click");
+					const moveUpButton = wrapper.findComponent(BoardMenuActionMoveUp);
 
-				const emitted = wrapper.emitted();
-				expect(emitted["move:column-up"]).toBeDefined();
+					expect(moveUpButton.exists()).toBe(false);
+				});
+			});
+
+			describe("when the column is not the first column", () => {
+				it("should emit move:column-up", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: true, isNotFirstColumn: true }
+					);
+
+					const moveUpButton = wrapper.findComponent(BoardMenuActionMoveUp);
+					moveUpButton.vm.$emit("click");
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-up"]).toBeDefined();
+				});
 			});
 		});
 	});
@@ -121,35 +155,73 @@ describe("BoardColumnHeader", () => {
 		it("should not show options to move up and down", async () => {
 			const wrapper = setup({}, { isListBoard: false });
 
-			const moveDownButton = wrapper.findComponent(
-				BoardMenuActionMoveColumnDown
-			);
-			const moveUpButton = wrapper.findComponent(BoardMenuActionMoveColumnUp);
+			const moveDownButton = wrapper.findComponent(BoardMenuActionMoveDown);
+			const moveUpButton = wrapper.findComponent(BoardMenuActionMoveUp);
 			expect(moveDownButton.exists()).toBe(false);
 			expect(moveUpButton.exists()).toBe(false);
 		});
 
 		describe("when the column should be moved to the left", () => {
-			it("should emit move:column-left", async () => {
-				const wrapper = setup({}, { isListBoard: false });
+			describe("when the column is the first column", () => {
+				it("should hide move:column-left menuitem", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: false, isNotFirstColumn: false }
+					);
 
-				const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
-				moveLeftButton.vm.$emit("click");
+					const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
 
-				const emitted = wrapper.emitted();
-				expect(emitted["move:column-left"]).toBeDefined();
+					expect(moveLeftButton.exists()).toBe(false);
+				});
+			});
+
+			describe("when the column is not the first column", () => {
+				it("should emit move:column-left", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: false, isNotFirstColumn: true }
+					);
+
+					const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
+					moveLeftButton.vm.$emit("click");
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-left"]).toBeDefined();
+				});
 			});
 		});
 
 		describe("when the column should be moved to the right", () => {
-			it("should emit move:column-right", async () => {
-				const wrapper = setup({}, { isListBoard: false });
+			describe("when the column is the last column", () => {
+				it("should hide move:column-right menu item", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: false, isNotLastColumn: false }
+					);
 
-				const moveRightButton = wrapper.findComponent(BoardMenuActionMoveRight);
-				moveRightButton.vm.$emit("click");
+					const moveRightButton = wrapper.findComponent(
+						BoardMenuActionMoveRight
+					);
 
-				const emitted = wrapper.emitted();
-				expect(emitted["move:column-right"]).toBeDefined();
+					expect(moveRightButton.exists()).toBe(false);
+				});
+			});
+
+			describe("when the column is not the last column", () => {
+				it("should emit move:column-right", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: false, isNotLastColumn: true }
+					);
+
+					const moveRightButton = wrapper.findComponent(
+						BoardMenuActionMoveRight
+					);
+					moveRightButton.vm.$emit("click");
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-right"]).toBeDefined();
+				});
 			});
 		});
 	});

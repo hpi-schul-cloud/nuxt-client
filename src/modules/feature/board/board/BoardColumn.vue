@@ -5,6 +5,8 @@
 			:title="column.title"
 			:index="index"
 			:isListBoard="isListBoard"
+			:isNotFirstColumn="isNotFirstColumn"
+			:isNotLastColumn="isNotLastColumn"
 			@delete:column="onColumnDelete"
 			@move:column-down="onMoveColumnDown"
 			@move:column-left="onMoveColumnLeft"
@@ -80,19 +82,13 @@ import {
 	useBoardStore,
 	useForceRender,
 } from "@data-board";
-import {
-	BOARD_HAS_MULTIPLE_COLUMNS,
-	BOARD_IS_FIRST_COLUMN,
-	BOARD_IS_LAST_COLUMN,
-	extractDataAttribute,
-	useDragAndDrop,
-} from "@util-board";
+import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useTouchDetection } from "@util-device-detection";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 
 import { Sortable } from "sortablejs-vue3";
-import { computed, defineComponent, PropType, provide, ref, toRef } from "vue";
+import { computed, defineComponent, PropType, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
@@ -162,18 +158,12 @@ export default defineComponent({
 			() => hasCreateColumnPermission && isDragging.value === false
 		);
 
-		const hasManyColumns = computed(() => props.columnCount > 1);
-		const isFirstColumn = computed(
-			() => hasManyColumns.value && props.index === 0
+		const isNotFirstColumn = computed(
+			() => props.columnCount > 1 && props.index !== 0
 		);
-		const lastIndex = computed(() => props.columnCount - 1);
-		const isLastColumn = computed(
-			() => hasManyColumns.value && props.index === lastIndex.value
+		const isNotLastColumn = computed(
+			() => props.columnCount > 1 && props.index !== props.columnCount - 1
 		);
-
-		provide(BOARD_HAS_MULTIPLE_COLUMNS, hasManyColumns);
-		provide(BOARD_IS_FIRST_COLUMN, isFirstColumn);
-		provide(BOARD_IS_LAST_COLUMN, isLastColumn);
 
 		const onCreateCard = () => emit("create:card", props.column.id);
 
@@ -330,6 +320,8 @@ export default defineComponent({
 			hasMovePermission,
 			isDragging,
 			isTouchDetected,
+			isNotFirstColumn,
+			isNotLastColumn,
 			sortableClasses,
 			onCreateCard,
 			onDeleteCard,

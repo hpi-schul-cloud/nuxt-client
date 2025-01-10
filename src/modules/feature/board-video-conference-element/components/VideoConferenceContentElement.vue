@@ -26,8 +26,11 @@
 					has-background
 					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				>
-					<BoardMenuActionMoveUp @click="onMoveUp" />
-					<BoardMenuActionMoveDown @click="onMoveDown" />
+					<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<BoardMenuActionMoveDown
+						v-if="isNotLastElement"
+						@click="onMoveDown"
+					/>
 					<BoardMenuActionDelete @click="onDelete" />
 				</BoardMenu>
 			</VideoConferenceContentElementDisplay>
@@ -39,8 +42,11 @@
 					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 					has-background
 				>
-					<BoardMenuActionMoveUp @click="onMoveUp" />
-					<BoardMenuActionMoveDown @click="onMoveDown" />
+					<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<BoardMenuActionMoveDown
+						v-if="isNotLastElement"
+						@click="onMoveDown"
+					/>
 					<BoardMenuActionDelete @click="onDelete" />
 				</BoardMenu>
 			</VideoConferenceContentElementCreate>
@@ -190,6 +196,8 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	isNotFirstElement: { type: Boolean, requried: false },
+	isNotLastElement: { type: Boolean, requried: false },
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },

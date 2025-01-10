@@ -17,7 +17,7 @@
 			>
 				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
-					{{ $t(boardMenuAriaLabel) }}
+					{{ t(boardMenuAriaLabel) }}
 				</span>
 			</VBtn>
 		</template>
@@ -33,6 +33,8 @@ import { mdiDotsVertical } from "@icons/material";
 import { computed, PropType, provide, toRef } from "vue";
 import { BoardMenuScope } from "./board-menu-scope";
 import { MENU_SCOPE } from "./injection-tokens";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const props = defineProps({
 	variant: {

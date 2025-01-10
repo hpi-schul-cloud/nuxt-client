@@ -19,8 +19,14 @@
 						has-background
 						:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 					>
-						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
-						<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
+						<BoardMenuActionMoveUp
+							v-if="isNotFirstElement"
+							@click="onMoveDrawingElementEditUp"
+						/>
+						<BoardMenuActionMoveDown
+							v-if="isNotLastElement"
+							@click="onMoveDrawingElementEditDown"
+						/>
 						<BoardMenuActionDelete @click="onDeleteElement" />
 					</BoardMenu>
 				</template>
@@ -50,6 +56,8 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	isNotFirstElement: { type: Boolean, requried: false },
+	isNotLastElement: { type: Boolean, requried: false },
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },

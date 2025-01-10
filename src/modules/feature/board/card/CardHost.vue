@@ -230,7 +230,7 @@ export default defineComponent({
 
 		const onMoveContentElementKeyboard = async (
 			{ payload: elementId, elementIndex }: ElementMove,
-			keyString: DragAndDropKey
+			keyString: string
 		) => {
 			if (!verticalCursorKeys.includes(keyString)) return;
 

@@ -26,8 +26,8 @@
 				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				v-if="isEditMode"
 			>
-				<BoardMenuActionMoveUp @click="onMoveUp" />
-				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<BoardMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
 			</BoardMenu>
 		</FileContent>
@@ -39,8 +39,8 @@
 			:isUploading="isUploading"
 		>
 			<BoardMenu :scope="BoardMenuScope.FILE_ELEMENT" has-background>
-				<BoardMenuActionMoveUp @click="onMoveUp" />
-				<BoardMenuActionMoveDown @click="onMoveDown" />
+				<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<BoardMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<BoardMenuActionDelete @click="onDelete" />
 			</BoardMenu>
 		</FileUpload>
@@ -96,6 +96,8 @@ export default defineComponent({
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
+		isNotFirstElement: { type: Boolean, requried: false },
+		isNotLastElement: { type: Boolean, requried: false },
 		columnIndex: { type: Number, required: true },
 		rowIndex: { type: Number, required: true },
 		elementIndex: { type: Number, required: true },
@@ -109,6 +111,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const fileContentElement = ref(null);
 		const isLoadingFileRecord = ref(true);
+
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
