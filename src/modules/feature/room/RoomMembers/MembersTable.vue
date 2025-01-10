@@ -11,7 +11,7 @@
 			@remove:selected="onRemoveMembers"
 			@reset:selected="onResetSelectedMembers"
 		/>
-		<v-spacer />
+		<v-spacer v-if="!selectedUserIds.length" />
 		<v-text-field
 			v-model="search"
 			density="compact"

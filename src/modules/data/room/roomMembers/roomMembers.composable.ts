@@ -69,7 +69,7 @@ export const useRoomMembers = (roomId: string) => {
 				await schoolApi.schoolControllerGetTeachers(
 					payload.schoolId ?? ownSchool.id,
 					0,
-					100
+					100 // should not be paginated
 				)
 			).data;
 

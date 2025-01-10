@@ -16,7 +16,7 @@
 
 		<v-btn
 			ref="resetSelectedMembers"
-			class="ml-8 mr-2"
+			class="ml-2 mr-2"
 			size="x-small"
 			variant="text"
 			:icon="mdiClose"
