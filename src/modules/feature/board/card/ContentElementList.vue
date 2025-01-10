@@ -5,7 +5,7 @@
 				:data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`"
 			>
 				<component
-					:is="mapTpComponent(element.type)"
+					:is="mapToComponent(element.type)"
 					:id="element.id"
 					:element="element"
 					:column-index="columnIndex"
@@ -109,7 +109,7 @@ const onMoveElementKeyboard = (
 	emit("move-keyboard:element", elementMove, event.code);
 };
 
-const mapTpComponent = (type: string) => {
+const mapToComponent = (type: string) => {
 	switch (type) {
 		case ContentElementType.RichText:
 			return RichTextContentElement;
