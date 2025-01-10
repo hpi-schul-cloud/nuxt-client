@@ -1604,11 +1604,18 @@ export default {
 	"pages.content._id.metadata.provider": "Editor",
 	"pages.content._id.metadata.updatedAt": "Última modificación el",
 	"pages.content.card.collection": "Colección",
-	"pages.content.empty_state.error.img_alt": "imagen-estado-vacío",
-	"pages.content.empty_state.error.message":
-		"<span><p>La consulta de búsqueda debe contener al menos 2 caracteres.<br>Comprueba si todas las palabras están escritas correctamente.<br>Prueba otras consultas de búsqueda.<br>Prueba con consultas más comunes.<br>Intenta usar una consulta más corta.</p></span>",
-	"pages.content.empty_state.error.subtitle": "Sugerencia:",
-	"pages.content.empty_state.error.title": "¡Vaya, no hay resultados!",
+	"pages.content.emptyState.error.message.suggestions": "Sugerencia:",
+	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
+		"La consulta de búsqueda debe contener al menos 2 caracteres.",
+	"pages.content.emptyState.error.message.suggestions.correctSpelling":
+		"Comprueba si todas las palabras están escritas correctamente.",
+	"pages.content.emptyState.error.message.suggestions.otherSearchTerms":
+		"Prueba otras consultas de búsqueda.",
+	"pages.content.emptyState.error.message.suggestions.generalSearchTerms":
+		"Prueba con consultas más comunes.",
+	"pages.content.emptyState.error.message.suggestions.lessSearchTerms":
+		"Intenta usar una consulta más corta.",
+	"pages.content.emptyState.error.title": "¡Vaya, no hay resultados!",
 	"pages.content.index.backToCourse": "Volver al curso",
 	"pages.content.index.backToOverview": "Volver a la vista general",
 	"pages.content.index.search_for": "Buscar...",

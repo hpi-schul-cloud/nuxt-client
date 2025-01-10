@@ -1587,11 +1587,18 @@ export default {
 	"pages.content._id.metadata.provider": "Видавець",
 	"pages.content._id.metadata.updatedAt": "Дата останнього змінення",
 	"pages.content.card.collection": "Колекція",
-	"pages.content.empty_state.error.img_alt": "пусте зображення стану",
-	"pages.content.empty_state.error.message":
-		"<span><p>Пошуковий запит має містити щонайменше 2 символи.<br>Перевірте правильність написання всіх слів.<br>Спробуйте інші пошукові запити.<br>Спробуйте більш поширені запити.<br>Спробуйте використати коротший запит.</p></span>",
-	"pages.content.empty_state.error.subtitle": "Рекомендація:",
-	"pages.content.empty_state.error.title": "Отакої, результатів немає!",
+	"pages.content.emptyState.error.message.suggestions": "Рекомендація:",
+	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
+		"Пошуковий запит має містити щонайменше 2 символи.",
+	"pages.content.emptyState.error.message.suggestions.correctSpelling":
+		"Перевірте правильність написання всіх слів.",
+	"pages.content.emptyState.error.message.suggestions.otherSearchTerms":
+		"Спробуйте інші пошукові запити.",
+	"pages.content.emptyState.error.message.suggestions.generalSearchTerms":
+		"Спробуйте більш поширені запити.",
+	"pages.content.emptyState.error.message.suggestions.lessSearchTerms":
+		"Спробуйте використати коротший запит.",
+	"pages.content.emptyState.error.title": "Отакої, результатів немає!",
 	"pages.content.index.backToCourse": "Назад до курсу",
 	"pages.content.index.backToOverview": "Назад до огляду",
 	"pages.content.index.search_for": "Пошук...",

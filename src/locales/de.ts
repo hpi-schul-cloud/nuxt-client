@@ -1578,11 +1578,18 @@ export default {
 	"pages.content._id.metadata.provider": "Herausgeber",
 	"pages.content._id.metadata.updatedAt": "zuletzt geändert am",
 	"pages.content.card.collection": "Lernobjekt",
-	"pages.content.empty_state.error.img_alt": "empty-state-img",
-	"pages.content.empty_state.error.message":
-		"<b>Vorschlag:</b><br><br>Der Suchbegriff muss mindestens 2 Zeichen enthalten.<br>Achte darauf, dass alle Wörter richtig geschrieben sind. <br>Probiere es mit anderen Suchbegriffen.<br>Probiere es mit allgemeineren Suchbegriffen.<br>Probiere es mit weniger Suchbegriffen.<br>",
-	"pages.content.empty_state.error.subtitle": "Vorschlag:",
-	"pages.content.empty_state.error.title": "Ooops, keine Ergebnisse!",
+	"pages.content.emptyState.error.message.suggestions": "Vorschlag:",
+	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
+		"Der Suchbegriff muss mindestens 2 Zeichen enthalten.",
+	"pages.content.emptyState.error.message.suggestions.correctSpelling":
+		"Achte darauf, dass alle Wörter richtig geschrieben sind.",
+	"pages.content.emptyState.error.message.suggestions.otherSearchTerms":
+		"Probiere es mit anderen Suchbegriffen.",
+	"pages.content.emptyState.error.message.suggestions.generalSearchTerms":
+		"Probiere es mit allgemeineren Suchbegriffen.",
+	"pages.content.emptyState.error.message.suggestions.lessSearchTerms":
+		"Probiere es mit weniger Suchbegriffen.",
+	"pages.content.emptyState.error.title": "Ooops, keine Ergebnisse!",
 	"pages.content.index.backToCourse": "Zurück zum Kurs",
 	"pages.content.index.backToOverview": "Zurück zur Übersicht",
 	"pages.content.index.search_for": "Suche nach …",

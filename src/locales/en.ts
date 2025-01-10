@@ -1558,11 +1558,18 @@ export default {
 	"pages.content._id.metadata.provider": "Publisher",
 	"pages.content._id.metadata.updatedAt": "Last modified on",
 	"pages.content.card.collection": "Collection",
-	"pages.content.empty_state.error.img_alt": "empty-state-image",
-	"pages.content.empty_state.error.message":
-		"<span><p>The search query should contain at least 2 characters.<br>Check if all words are spelled correctly.<br>Try out other search queries.<br>Try out more common queries.<br>Try to use a shorter query.</p></span>",
-	"pages.content.empty_state.error.subtitle": "Suggestion:",
-	"pages.content.empty_state.error.title": "Whoops, no results!",
+	"pages.content.emptyState.error.message.suggestions": "Suggestion:",
+	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
+		"The search query should contain at least 2 characters.",
+	"pages.content.emptyState.error.message.suggestions.correctSpelling":
+		"Check if all words are spelled correctly.",
+	"pages.content.emptyState.error.message.suggestions.otherSearchTerms":
+		"Try out other search queries.",
+	"pages.content.emptyState.error.message.suggestions.generalSearchTerms":
+		"Try out more common queries.",
+	"pages.content.emptyState.error.message.suggestions.lessSearchTerms":
+		"Try to use a shorter query.",
+	"pages.content.emptyState.error.title": "Whoops, no results!",
 	"pages.content.index.backToCourse": "Back to the Course",
 	"pages.content.index.backToOverview": "Back to Overview",
 	"pages.content.index.search_for": "Search for...",
