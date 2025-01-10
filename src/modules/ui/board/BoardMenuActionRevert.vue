@@ -12,7 +12,6 @@
 import { mdiRestore } from "@icons/material";
 import { BoardMenuAction } from "@ui-board";
 import { useI18n } from "vue-i18n";
-
 const { t } = useI18n();
 
 const emit = defineEmits(["click"]);
