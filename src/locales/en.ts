@@ -770,7 +770,7 @@ export default {
 	"components.organisms.AutoLogoutWarning.warning.remainingTime":
 		"less than one minute | one minute | {remainingTime} minutes",
 	"components.organisms.AutoLogoutWarning.warning":
-		"Attention: You will be logged out automatically in <span class='error--text'>{remainingTime}</span>. Now extend your session to two hours.",
+		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
 	"components.organisms.ContentCard.report.body":
 		"Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email":

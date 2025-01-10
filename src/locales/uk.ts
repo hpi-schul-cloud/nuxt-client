@@ -790,7 +790,7 @@ export default {
 	"components.organisms.AutoLogoutWarning.warning.remainingTime":
 		"менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
 	"components.organisms.AutoLogoutWarning.warning":
-		"Увага! Ви автоматично вийдете з системи через <span class='error--text'> {remainingTime} </span>. Тепер продовжте час сеансу до двох годин.",
+		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
 	"components.organisms.ContentCard.report.body":
 		"Повідомлення про вміст з ідентифікатором",
 	"components.organisms.ContentCard.report.email":

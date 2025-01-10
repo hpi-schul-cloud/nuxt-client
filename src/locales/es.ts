@@ -792,7 +792,7 @@ export default {
 	"components.organisms.AutoLogoutWarning.warning.remainingTime":
 		"menos de un minuto | un minuto | {remainingTime} minutos",
 	"components.organisms.AutoLogoutWarning.warning":
-		"Atención: te desconectarás automáticamente en <span class='error--text'>{remainingTime}</span>. Amplía ahora tu sesión dos horas.",
+		"Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
 	"components.organisms.ContentCard.report.body":
 		"Informar del contenido con el ID",
 	"components.organisms.ContentCard.report.email":

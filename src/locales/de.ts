@@ -775,7 +775,7 @@ export default {
 	"components.organisms.AutoLogoutWarning.warning.remainingTime":
 		"weniger als einer Minute | einer Minute | {remainingTime} Minuten",
 	"components.organisms.AutoLogoutWarning.warning":
-		"Achtung: Du wirst in <span class='text-error'> {remainingTime} </span> automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
+		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
 	"components.organisms.ContentCard.report.body":
 		"Melden des Inhaltes mit der ID",
 	"components.organisms.ContentCard.report.email":
