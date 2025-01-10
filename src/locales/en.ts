@@ -1009,7 +1009,7 @@ export default {
 	"pages.administration.classes.header.sync": "Synchronized with",
 	"pages.administration.courses.delete": "Delete course",
 	"pages.administration.courses.deleteDialog.content":
-		'Do you really want this course "<i>{itemName}</i>" to delete?',
+		'Do you really want this course "{itemName}" to delete?',
 	"pages.administration.courses.index.add": "Add course",
 
 	"pages.administration.courses.edit": "Edit course",

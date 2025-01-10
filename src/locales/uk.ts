@@ -1029,7 +1029,7 @@ export default {
 	"pages.administration.classes.header.sync": "Синхронізовано з",
 	"pages.administration.courses.delete": "Видалити курс",
 	"pages.administration.courses.deleteDialog.content":
-		'Ви впевнені, що хочете видалити цей курс "<i>{itemName}</i>" ?',
+		'Ви впевнені, що хочете видалити цей курс "{itemName}" ?',
 	"pages.administration.courses.index.add": "Додати курс",
 	"pages.administration.courses.edit": "Редагувати курс",
 	"pages.administration.index.title": "Адміністрування",
