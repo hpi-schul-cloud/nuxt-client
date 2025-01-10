@@ -207,8 +207,6 @@ export default {
 	"component.cardElement.fileElement.audioPlayer.slider": "Control deslizante",
 	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
 	"component.cardElement.fileElement.audioPlayer.speed": "Menú de velocidad",
-	"components.administration.adminMigrationSection.description":
-		'Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.<br>El proceso de migración requiere un inicio de sesión único de los estudiantes y profesores en ambos sistemas.<br><br><span class="text-red"><b>Si no desea realizar una migración en su centro educativo, <u>por favor, no inicie el proceso de migración</u>,\ncontacte con <a href="{supportLink}" data-testid ="support-link">soporte</a></b>.<br><br>Información importante sobre el proceso de migración es <a href="https://blog.niedersachsen.cloud/umzug" data-testid="migration-blog-link" target="_blank">disponible aquí<a>.',
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.",
 	"components.administration.adminMigrationSection.description.secondPart":

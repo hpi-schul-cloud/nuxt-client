@@ -207,8 +207,6 @@ export default {
 	"component.cardElement.fileElement.audioPlayer.slider": "повзунок",
 	"component.cardElement.fileElement.audioPlayer.speed.normal": "нормальний",
 	"component.cardElement.fileElement.audioPlayer.speed": "швидке меню",
-	"components.administration.adminMigrationSection.description":
-		'Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.<br>Процес міграції вимагає одноразового входу студентів і викладачів в обидві системи.<br><br><span class="text-red"><b>Якщо ви не хочете виконувати міграцію у вашому навчальному закладі, <u>не починайте процес міграції</u>,\nа зверніться до служби </span><a href="{supportLink}" data-testid ="support-link">підтримки</a></b>.<br><br>Важлива інформація про процес міграції <a href="https://blog.niedersachsen.cloud/umzug" data-testid="migration-blog-link" target="_blank">доступний тут<a>.',
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
 	"components.administration.adminMigrationSection.description.secondPart":
