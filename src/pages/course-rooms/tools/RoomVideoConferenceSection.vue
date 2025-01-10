@@ -9,7 +9,6 @@
 			@click="onClick"
 			@refresh="onRefresh"
 		/>
-
 		<VDialog
 			ref="vDialog"
 			v-model="isErrorDialogOpen"
@@ -37,7 +36,6 @@
 				</VCardActions>
 			</VCard>
 		</VDialog>
-
 		<VideoConferenceConfigurationDialog
 			:is-open="isConfigurationDialogOpen"
 			:options="videoConferenceOptions"

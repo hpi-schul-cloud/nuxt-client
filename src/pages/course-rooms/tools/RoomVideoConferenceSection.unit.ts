@@ -64,7 +64,7 @@ describe("RoomVideoConferenceSection", () => {
 			},
 		});
 
-		const wrapper = shallowMount(RoomVideoConferenceSection, {
+		const wrapper = mount(RoomVideoConferenceSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -393,12 +393,12 @@ describe("RoomVideoConferenceSection", () => {
 			};
 		};
 
-		it("should call fetchVideoConferenceInfo", async () => {
+		it("should call fetchVideoConferenceInfo", () => {
 			const { wrapper, videoConferenceModule } = setup();
 
 			const card = wrapper.findComponent(RoomVideoConferenceCard);
 
-			await card.vm.$emit("refresh");
+			card.vm.$emit("refresh");
 
 			expect(
 				videoConferenceModule.fetchVideoConferenceInfo
@@ -442,7 +442,7 @@ describe("RoomVideoConferenceSection", () => {
 
 				const card = wrapper.findComponent(RoomVideoConferenceCard);
 
-				await card.vm.$emit("click");
+				await card.trigger("click");
 
 				expect(videoConferenceModule.joinVideoConference).toHaveBeenCalledWith({
 					scope: VideoConferenceScope.Course,
@@ -481,13 +481,17 @@ describe("RoomVideoConferenceSection", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.findComponent(RoomVideoConferenceCard);
-				await card.vm.$emit("click");
+				await card.trigger("click");
 
 				const configurationDialog = wrapper.findComponent<typeof VDialog>(
 					VideoConferenceConfigurationDialog
 				);
 
-				expect(configurationDialog.props("modelValue")).toBe(true);
+				const dialogContent = configurationDialog.findComponent({
+					name: "VCard",
+				});
+
+				expect(dialogContent.exists()).toBe(true);
 			});
 		});
 	});
@@ -528,13 +532,13 @@ describe("RoomVideoConferenceSection", () => {
 			};
 		};
 
-		it("should call start with correct options", async () => {
+		it("should call start with correct options", () => {
 			const { wrapper, videoConferenceModule, params, roomId } = setup();
 
 			const configurationDialog = wrapper.findComponent(
 				VideoConferenceConfigurationDialog
 			);
-			await configurationDialog.vm.$emit("start-video-conference");
+			configurationDialog.vm.$emit("start-video-conference");
 
 			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
 				scope: params.scope,
@@ -556,7 +560,11 @@ describe("RoomVideoConferenceSection", () => {
 			);
 			await configurationDialog.vm.$emit("start-video-conference");
 
-			expect(configurationDialog.props("modelValue")).toBe(false);
+			const dialogContent = configurationDialog.findComponent({
+				name: "VCard",
+			});
+
+			expect(dialogContent.exists()).toBe(false);
 			expect(videoConferenceModule.startVideoConference).toHaveBeenCalledWith({
 				scope: params.scope,
 				scopeId: params.scopeId,
@@ -606,7 +614,11 @@ describe("RoomVideoConferenceSection", () => {
 			);
 			await configurationDialog.vm.$emit("close");
 
-			expect(configurationDialog.props("modelValue")).toBe(false);
+			const dialogContent = configurationDialog.findComponent({
+				name: "VCard",
+			});
+
+			expect(dialogContent.exists()).toBe(false);
 			expect(videoConferenceModule.startVideoConference).not.toHaveBeenCalled();
 			expect(videoConferenceModule.joinVideoConference).not.toHaveBeenCalled();
 		});
@@ -648,11 +660,12 @@ describe("RoomVideoConferenceSection", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.findComponent(RoomVideoConferenceCard);
-				await card.vm.$emit("click");
+				await card.trigger("click");
 
-				const dialog = wrapper.find('[data-testId="error-dialog"]');
+				const errorDialog = wrapper.findAllComponents({ name: "VDialog" })[0];
+				const dialogContent = errorDialog.findComponent({ name: "VCard" });
 
-				expect(dialog.attributes("isopen")).toBe("true");
+				expect(dialogContent.exists()).toBe(true);
 			});
 		});
 
@@ -687,11 +700,12 @@ describe("RoomVideoConferenceSection", () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.findComponent(RoomVideoConferenceCard);
-				await card.vm.$emit("click");
+				await card.trigger("click");
 
-				const dialog = wrapper.find('[data-testId="error-dialog"]');
+				const errorDialog = wrapper.findAllComponents({ name: "VDialog" })[0];
+				const dialogContent = errorDialog.findComponent({ name: "VCard" });
 
-				expect(dialog.attributes("isopen")).toBe("false");
+				expect(dialogContent.exists()).toBe(false);
 			});
 		});
 	});
