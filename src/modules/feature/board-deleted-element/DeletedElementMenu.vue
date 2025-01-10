@@ -4,7 +4,10 @@
 		has-background
 		:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 	>
-		<BoardMenuActionDelete @click="onDelete" />
+		<BoardMenuActionDelete
+			@click="onDelete"
+			:scope="BoardMenuScope.DELETED_ELEMENT"
+		/>
 	</BoardMenu>
 </template>
 

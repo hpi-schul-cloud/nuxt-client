@@ -9,7 +9,11 @@
 		<BoardMenuAction :icon="mdiCogOutline" @click="onEdit">
 			{{ t("common.labels.settings") }}
 		</BoardMenuAction>
-		<BoardMenuActionDelete :name="displayName" @click="onDelete" />
+		<BoardMenuActionDelete
+			:name="displayName"
+			:scope="BoardMenuScope.EXTERNAL_TOOL_ELEMENT"
+			@click="onDelete"
+		/>
 	</BoardMenu>
 </template>
 

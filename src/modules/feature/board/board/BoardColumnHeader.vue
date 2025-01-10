@@ -45,7 +45,11 @@
 								@click="onMoveColumnRight"
 							/>
 						</template>
-						<BoardMenuActionDelete :name="title" @click="onDelete" />
+						<BoardMenuActionDelete
+							:name="title"
+							:scope="BoardMenuScope.COLUMN"
+							@click="onDelete"
+						/>
 					</BoardMenu>
 				</BoardAnyTitleInput>
 			</div>

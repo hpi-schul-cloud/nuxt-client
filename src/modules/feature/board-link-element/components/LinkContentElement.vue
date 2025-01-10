@@ -29,7 +29,10 @@
 						v-if="isNotLastElement"
 						@click="onMoveDown"
 					/>
-					<BoardMenuActionDelete @click="onDelete" />
+					<BoardMenuActionDelete
+						:scope="BoardMenuScope.LINK_ELEMENT"
+						@click="onDelete"
+					/>
 				</BoardMenu>
 			</LinkContentElementDisplay>
 			<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
@@ -39,7 +42,10 @@
 						v-if="isNotLastElement"
 						@click="onMoveDown"
 					/>
-					<BoardMenuActionDelete @click="onDelete" />
+					<BoardMenuActionDelete
+						:scope="BoardMenuScope.LINK_ELEMENT"
+						@click="onDelete"
+					/>
 				</BoardMenu>
 			</LinkContentElementCreate>
 		</v-card>

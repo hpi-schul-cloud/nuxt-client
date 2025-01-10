@@ -31,7 +31,10 @@
 						v-if="isNotLastElement"
 						@click="onMoveDown"
 					/>
-					<BoardMenuActionDelete @click="onDelete" />
+					<BoardMenuActionDelete
+						:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
+						@click="onDelete"
+					/>
 				</BoardMenu>
 			</VideoConferenceContentElementDisplay>
 			<VideoConferenceContentElementCreate
@@ -47,7 +50,10 @@
 						v-if="isNotLastElement"
 						@click="onMoveDown"
 					/>
-					<BoardMenuActionDelete @click="onDelete" />
+					<BoardMenuActionDelete
+						:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
+						@click="onDelete"
+					/>
 				</BoardMenu>
 			</VideoConferenceContentElementCreate>
 			<VDialog

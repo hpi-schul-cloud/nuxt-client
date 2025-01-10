@@ -45,7 +45,11 @@
 					<BoardMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
 					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-					<BoardMenuActionDelete :name="title" @click="onDeleteBoard" />
+					<BoardMenuActionDelete
+						:name="title"
+						:scope="BoardMenuScope.COLUMN"
+						@click="onDeleteBoard"
+					/>
 				</BoardMenu>
 			</div>
 		</div>

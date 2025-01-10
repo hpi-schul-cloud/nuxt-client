@@ -45,8 +45,8 @@
 								@click="onStartEditMode"
 							/>
 							<BoardMenuActionDelete
-								data-test-id="board-menu-action-delete"
 								:name="card.title"
+								:scope="BoardMenuScope.CARD"
 								@click="onDeleteCard"
 							/>
 						</BoardMenu>
@@ -90,11 +90,7 @@
 </template>
 
 <script lang="ts">
-import {
-	DragAndDropKey,
-	ElementMove,
-	verticalCursorKeys,
-} from "@/types/board/DragAndDrop";
+import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
 import {
 	useBoardFocusHandler,

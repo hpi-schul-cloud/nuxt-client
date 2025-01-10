@@ -27,7 +27,10 @@
 							v-if="isNotLastElement"
 							@click="onMoveDrawingElementEditDown"
 						/>
-						<BoardMenuActionDelete @click="onDeleteElement" />
+						<BoardMenuActionDelete
+							@click="onDeleteElement"
+							:scope="BoardMenuScope.DRAWING_ELEMENT"
+						/>
 					</BoardMenu>
 				</template>
 			</InnerContent>

@@ -41,7 +41,10 @@
 						v-if="isNotLastElement"
 						@click="onMoveElementDown"
 					/>
-					<BoardMenuActionDelete @click="onDeleteElement" />
+					<BoardMenuActionDelete
+						:scope="BoardMenuScope.SUBMISSION_ELEMENT"
+						@click="onDeleteElement"
+					/>
 				</BoardMenu>
 			</SubmissionContentElementEdit>
 		</div>

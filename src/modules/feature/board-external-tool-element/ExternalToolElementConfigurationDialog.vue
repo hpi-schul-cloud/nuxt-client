@@ -47,7 +47,8 @@ const props = defineProps({
 		default: ToolContextType.BoardElement,
 	},
 	configId: {
-		type: String,
+		type: [String, null],
+		required: true,
 	},
 });
 

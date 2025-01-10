@@ -28,7 +28,11 @@
 			>
 				<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<BoardMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
+				<BoardMenuActionDelete
+					:name="fileProperties.name"
+					:scope="BoardMenuScope.FILE_ELEMENT"
+					@click="onDelete"
+				/>
 			</BoardMenu>
 		</FileContent>
 		<FileUpload
@@ -41,7 +45,10 @@
 			<BoardMenu :scope="BoardMenuScope.FILE_ELEMENT" has-background>
 				<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<BoardMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<BoardMenuActionDelete @click="onDelete" />
+				<BoardMenuActionDelete
+					:scope="BoardMenuScope.FILE_ELEMENT"
+					@click="onDelete"
+				/>
 			</BoardMenu>
 		</FileUpload>
 	</v-card>

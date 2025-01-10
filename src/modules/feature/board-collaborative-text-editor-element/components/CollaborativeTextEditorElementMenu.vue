@@ -6,7 +6,10 @@
 	>
 		<BoardMenuActionMoveUp @click="onMoveUp" />
 		<BoardMenuActionMoveDown @click="onMoveDown" />
-		<BoardMenuActionDelete @click="onDelete" />
+		<BoardMenuActionDelete
+			@click="onDelete"
+			:scope="BoardMenuScope.COLLABORATIVE_TEXT_EDITOR_ELEMENT"
+		/>
 	</BoardMenu>
 </template>
 
