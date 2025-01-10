@@ -145,7 +145,7 @@ describe("GroupSelectionDialog", () => {
 		it("should close the dialog", async () => {
 			const { wrapper } = getWrapper();
 
-			const cancelBtn = wrapper.findComponent("[data-testid=dialog-close]");
+			const cancelBtn = wrapper.findComponent("[data-testid=dialog-cancel]");
 			await cancelBtn.trigger("click");
 
 			expect(wrapper.vm.isOpen).toEqual(false);
