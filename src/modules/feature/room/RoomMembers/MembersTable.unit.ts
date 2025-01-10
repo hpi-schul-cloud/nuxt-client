@@ -131,14 +131,17 @@ describe("MembersTable", () => {
 			expect(multiActionMenu.exists()).toBe(true);
 		});
 
-		it("should render ActionMenu component remove button", async () => {
+		it("should render ActionMenu component", async () => {
 			const { wrapper } = setup();
+
+			const actionMenuBefore = wrapper.findComponent({ name: "ActionMenu" });
+			expect(actionMenuBefore.exists()).toBe(false);
 
 			await selectCheckboxes([1], wrapper);
 
-			const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
+			const actionMenuAfter = wrapper.findComponent({ name: "ActionMenu" });
 
-			expect(actionMenu.exists()).toBe(true);
+			expect(actionMenuAfter.exists()).toBe(true);
 		});
 
 		it("should reset member selection when clicking reset button on ActionMenu", async () => {
@@ -392,6 +395,27 @@ describe("MembersTable", () => {
 			expect(dataTableTextContent).toContain(mockMembers[0].firstName);
 			expect(dataTableTextContent).not.toContain(mockMembers[1].firstName);
 			expect(dataTableTextContent).not.toContain(mockMembers[2].firstName);
+		});
+	});
+
+	describe("when 'fixedPosition' prop is set", () => {
+		it("should have 'fixed-position' class", async () => {
+			const { wrapper } = setup();
+
+			const elementBefore = wrapper.find(".table-title-header");
+			expect(elementBefore.classes("fixed-position")).toBe(false);
+
+			wrapper.setProps({
+				fixedPosition: {
+					status: true,
+					position: 0,
+				},
+			});
+			await nextTick();
+			await nextTick();
+
+			const elementAfter = wrapper.find(".table-title-header");
+			expect(elementAfter.classes("fixed-position")).toBe(true);
 		});
 	});
 });

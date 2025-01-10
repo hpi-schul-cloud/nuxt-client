@@ -1,6 +1,5 @@
 <template>
 	<div
-		id="table-title-header"
 		class="d-flex justify-space-between align-center mb-2 table-title-header"
 		:class="{ 'fixed-position': fixedPosition.status }"
 		:style="{ top: `${fixedPosition.position}px` }"
