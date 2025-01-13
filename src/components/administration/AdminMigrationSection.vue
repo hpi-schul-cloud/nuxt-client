@@ -124,11 +124,9 @@
 			data-testid="error-alert"
 		>
 			<div class="alert-text">
-				<RenderHTML
-					data-testid="migration-error-text"
-					:html="$t(getBusinessErrorTranslationKey(error)!)"
-					component="span"
-				/>
+				<span data-testid="migration-error-text">
+					{{ t(getBusinessErrorTranslationKey(error)!) }}
+				</span>
 			</div>
 		</v-alert>
 		<v-switch
@@ -284,7 +282,6 @@ import {
 import { useI18n } from "vue-i18n";
 import MigrationWarningCard from "./MigrationWarningCard.vue";
 import { InfoAlert } from "@ui-alert";
-import { RenderHTML } from "@feature-render-html";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 
 export default defineComponent({
@@ -292,7 +289,6 @@ export default defineComponent({
 	components: {
 		MigrationWarningCard,
 		InfoAlert,
-		RenderHTML,
 	},
 	setup() {
 		const { t } = useI18n();
