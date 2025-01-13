@@ -48,12 +48,12 @@ describe("RenderHTML", () => {
 			expect(wrapper.element.nodeName).toStrictEqual("SPAN");
 		});
 
-		describe("when ck5 config is active", () => {
+		describe("when richText config is active", () => {
 			it("should strip non whitelisted tags", () => {
 				const { wrapper } = setup({
 					html: "<h1>test value</h1>",
 					component: "span",
-					config: "ck5",
+					config: "richText",
 				});
 				expect(wrapper.find("h1").exists()).toBe(false);
 			});
@@ -62,7 +62,7 @@ describe("RenderHTML", () => {
 				const { wrapper } = setup({
 					html: "<h5>test value</h5>",
 					component: "span",
-					config: "ck5",
+					config: "richText",
 				});
 				expect(wrapper.find("h5").exists()).toBe(true);
 			});
@@ -71,7 +71,7 @@ describe("RenderHTML", () => {
 				const { wrapper } = setup({
 					html: '<span id="someId" style="font-color: green;" class="someclass">test value</span>',
 					component: "div",
-					config: "ck5",
+					config: "richText",
 				});
 				expect(wrapper.html()).toEqual(
 					'<div><span class="someclass" style="font-color: green;">test value</span></div>'
@@ -82,48 +82,10 @@ describe("RenderHTML", () => {
 				const { wrapper } = setup({
 					html: '<span style="font-color: green;" class="someclass">test value</span>',
 					component: "div",
-					config: "ck5",
+					config: "richText",
 				});
 				expect(wrapper.html()).toEqual(
 					'<div><span class="someclass" style="font-color: green;">test value</span></div>'
-				);
-			});
-		});
-
-		describe("when translations config is active", () => {
-			it("should strip non whiteltisted tags", () => {
-				const { wrapper } = setup({
-					html: "<h5>test value</h5>",
-					component: "span",
-				});
-				expect(wrapper.find("h5").exists()).toBe(false);
-			});
-
-			it("should allow whitelisted tags", () => {
-				const { wrapper } = setup({
-					html: "<div>test value</div>",
-					component: "span",
-				});
-				expect(wrapper.find("div").exists()).toBe(false);
-			});
-
-			it("should strip non whitelisted attributes", () => {
-				const { wrapper } = setup({
-					html: '<b id="someId" class="someclass">test value</b>',
-					component: "span",
-				});
-				expect(wrapper.html()).toEqual(
-					'<span><b class="someclass">test value</b></span>'
-				);
-			});
-
-			it("should allow whitelisted attributes", () => {
-				const { wrapper } = setup({
-					html: '<b class="someclass">test value</b>',
-					component: "span",
-				});
-				expect(wrapper.html()).toEqual(
-					'<span><b class="someclass">test value</b></span>'
 				);
 			});
 		});

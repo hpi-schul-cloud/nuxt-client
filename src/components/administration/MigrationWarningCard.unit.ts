@@ -5,18 +5,13 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("MigrationWarningCard", () => {
 	const setup = (value = "start") => {
 		document.body.setAttribute("data-app", "true");
 		const wrapper = mount(MigrationWarningCard, {
 			global: {
-				plugins: [
-					createTestingI18n(),
-					createTestingVuetify(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingI18n(), createTestingVuetify()],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: {
 						getMigrationEndGracePeriod: () => 86400000,
@@ -53,12 +48,14 @@ describe("MigrationWarningCard", () => {
 			it("should have the right text elements ", () => {
 				const { wrapper } = setup();
 
-				const renderHtml = wrapper.findComponent({ name: "RenderHTML" });
+				const infoText = wrapper.find(
+					'[data-testid="migration-warning-card-info-text"'
+				);
 
 				expect(wrapper.html()).toContain(
 					"components.administration.adminMigrationSection.startWarningCard.title"
 				);
-				expect(renderHtml.props("html")).toContain(
+				expect(infoText.text()).toContain(
 					"components.administration.adminMigrationSection.startWarningCard.text"
 				);
 				expect(wrapper.text()).toContain(
@@ -106,12 +103,14 @@ describe("MigrationWarningCard", () => {
 			it("should have the right text elements ", async () => {
 				const { wrapper } = setup("end");
 
-				const renderHtml = wrapper.findComponent({ name: "RenderHTML" });
+				const infoText = wrapper.find(
+					'[data-testid="migration-warning-card-info-text"'
+				);
 
 				expect(wrapper.text()).toContain(
 					"components.administration.adminMigrationSection.endWarningCard.title"
 				);
-				expect(renderHtml.props("html")).toContain(
+				expect(infoText.text()).toContain(
 					"components.administration.adminMigrationSection.endWarningCard.text"
 				);
 				expect(wrapper.text()).toContain(

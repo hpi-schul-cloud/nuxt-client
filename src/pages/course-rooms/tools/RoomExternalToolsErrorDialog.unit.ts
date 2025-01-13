@@ -12,7 +12,6 @@ import {
 	ExternalToolDisplayData,
 } from "@data-external-tool";
 import { mount } from "@vue/test-utils";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("RoomExternalToolsErrorDialog", () => {
 	const getWrapper = (props: {
@@ -26,17 +25,9 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 		const wrapper = mount(RoomExternalToolsErrorDialog, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
-				},
-				mocks: {
-					$t: (key: string, dynamic?: object): string =>
-						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 				},
 			},
 			props: {
@@ -83,9 +74,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
-				expect(title.text()).toEqual(
-					'pages.rooms.tools.outdatedDialog.title {"toolName":"Test Tool"}'
-				);
+				expect(title.text()).toEqual("pages.rooms.tools.outdatedDialog.title");
 			});
 
 			it("should render the correct content text", () => {
@@ -94,7 +83,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 				const content = wrapper.findComponent(".v-card-text");
 
 				expect(content.text()).toEqual(
-					'common.tool.information.outdatedOnSchool.teacher {"toolName":"Test Tool"}'
+					"common.tool.information.outdatedOnSchool.teacher"
 				);
 			});
 		});
@@ -120,7 +109,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
 				expect(title.text()).toEqual(
-					'pages.rooms.tools.incompleteDialog.title {"toolName":"Test Tool"}'
+					"pages.rooms.tools.incompleteDialog.title"
 				);
 			});
 
@@ -130,7 +119,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 				const content = wrapper.findComponent(".v-card-text");
 
 				expect(content.text()).toEqual(
-					'common.tool.information.outdated.teacher {"toolName":"Test Tool"}'
+					"common.tool.information.outdated.teacher"
 				);
 			});
 		});
@@ -155,7 +144,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
-				expect(title.text()).toEqual('error.generic {"toolName":"Test Tool"}');
+				expect(title.text()).toEqual("error.generic");
 			});
 
 			it("should render the correct content text", () => {
@@ -164,7 +153,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 				const content = wrapper.findComponent(".v-card-text");
 
 				expect(content.text()).toEqual(
-					'common.tool.information.outdated.teacher {"toolName":"Test Tool"}'
+					"common.tool.information.outdated.teacher"
 				);
 			});
 		});
@@ -190,7 +179,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
 				expect(title.text()).toEqual(
-					'pages.rooms.tools.deactivatedDialog.title {"toolName":"Test Tool"}'
+					"pages.rooms.tools.deactivatedDialog.title"
 				);
 			});
 
@@ -200,7 +189,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 				const content = wrapper.findComponent(".v-card-text");
 
 				expect(content.text()).toEqual(
-					'common.tool.information.deactivated.teacher {"toolName":"Test Tool"}'
+					"common.tool.information.deactivated.teacher"
 				);
 			});
 		});
@@ -226,7 +215,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 				const title = wrapper.findComponent('[data-testid="dialog-title"]');
 
 				expect(title.text()).toEqual(
-					'pages.rooms.tools.notLicensedDialog.title {"toolName":"Test Tool"}'
+					"pages.rooms.tools.notLicensedDialog.title"
 				);
 			});
 
@@ -236,7 +225,7 @@ describe("RoomExternalToolsErrorDialog", () => {
 				const content = wrapper.findComponent(".v-card-text");
 
 				expect(content.text()).toEqual(
-					'common.tool.information.notLicensed.teacher {"toolName":"Test Tool"}'
+					"common.tool.information.notLicensed.teacher"
 				);
 			});
 		});

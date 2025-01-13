@@ -17,6 +17,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { VCardText } from "vuetify/lib/components/index.mjs";
 
 jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
@@ -57,6 +58,7 @@ const getWrapper = (
 			},
 			stubs: {
 				ImportUsers: importUsersStub,
+				VSnackbar: true,
 			},
 		},
 		...options,
@@ -70,11 +72,7 @@ const getWrapperShallow = (
 
 	return shallowMount(MigrationWizard, {
 		global: {
-			plugins: [
-				createTestingVuetify(),
-				createTestingI18n(),
-				vueDompurifyHTMLPlugin,
-			],
+			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[THEME_KEY.valueOf()]: $theme,
 			},
@@ -203,24 +201,23 @@ describe("User Migration / Index", () => {
 			importUsersModule.setTotalUnmatched(totalUnmatched);
 			importUsersModule.setTotalMatched(totalMatched);
 
-			const wrapper = getWrapper();
+			const wrapper = getWrapperShallow();
 
 			wrapper.vm.migrationStep = 3;
 			await nextTick();
 
-			const findText = wrapper.find("[data-testid=migration_summary]");
+			const findText = wrapper
+				.find("[data-testid=migration_summary]")
+				.getComponent(VCardText);
 
-			const summaryText = wrapper.vm.t(
-				"pages.administration.migration.summary",
-				{
-					instance: $theme.name,
-					source: wrapper.vm.t("pages.administration.migration.ldapSource"),
-					importUsersCount: totalMatched,
-					importUsersUnmatchedCount: totalImportUsers - totalMatched,
-					usersUnmatchedCount: totalUnmatched,
-				}
-			);
-			expect(findText.text()).toContain(summaryText);
+			const expectedSummaryText = [
+				"pages.administration.migration.summary.firstParagraph",
+				`${totalMatched} pages.administration.migration.summary.secondParagraph.importUsersCount`,
+				`${totalImportUsers - totalMatched} pages.administration.migration.summary.thirdParagraph.importUsersUnmatchedCount`,
+				`${totalUnmatched} pages.administration.migration.summary.lastParagraph.usersUnmatchedCount`,
+			].join("");
+
+			expect(findText.text()).toContain(expectedSummaryText);
 		});
 
 		it("should disable perform migration button, if confirm not checked", async () => {

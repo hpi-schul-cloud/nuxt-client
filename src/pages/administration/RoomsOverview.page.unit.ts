@@ -20,7 +20,6 @@ import {
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VDataTableServer } from "vuetify/lib/components/index.mjs";
 import RoomsOverview from "./RoomsOverview.page.vue";
@@ -72,11 +71,7 @@ describe("RoomsOverview", () => {
 
 		const wrapper = mount(RoomsOverview, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,

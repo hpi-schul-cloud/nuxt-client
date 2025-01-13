@@ -1,5 +1,5 @@
 export default {
-	ck5: {
+	richText: {
 		ALLOWED_TAGS: [
 			"h4",
 			"h5",
@@ -31,9 +31,5 @@ export default {
 			"figure",
 		],
 		ALLOWED_ATTR: ["class", "href", "name", "target", "style", "rel"],
-	},
-	translations: {
-		ALLOWED_TAGS: ["br", "span", "p", "ul", "li", "a", "b"],
-		ALLOWED_ATTR: ["class", "href", "target"],
 	},
 };
