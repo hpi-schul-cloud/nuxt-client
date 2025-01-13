@@ -1184,6 +1184,8 @@ export default {
 		"Збереження прив'язки облікових записів...",
 	"pages.administration.migration.startUserMigration":
 		"Почніть міграцію облікових записів",
+	"pages.administration.migration.matchByPreferredName":
+		"Надайте перевагу псевдонімам для автоматичного зв’язування облікових записів",
 	"pages.administration.migration.step1": "Вступ",
 	"pages.administration.migration.step2": "Підготовка",
 	"pages.administration.migration.step3": "Зведення",

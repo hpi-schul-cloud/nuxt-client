@@ -27215,10 +27215,11 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
         /**
          * Populates import users from specific user migration populate endpoint.
          * @summary Populates import users
+         * @param {boolean} [matchByPreferredName] Should the users preferred name from the external system be used for auto-matching to existing users?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerPopulateImportUsers: async (options: any = {}): Promise<RequestArgs> => {
+        importUserControllerPopulateImportUsers: async (matchByPreferredName?: boolean, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/user/import/populate-import-users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -27234,6 +27235,10 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (matchByPreferredName !== undefined) {
+                localVarQueryParameter['matchByPreferredName'] = matchByPreferredName;
+            }
 
 
     
@@ -27516,11 +27521,12 @@ export const UserImportApiFp = function(configuration?: Configuration) {
         /**
          * Populates import users from specific user migration populate endpoint.
          * @summary Populates import users
+         * @param {boolean} [matchByPreferredName] Should the users preferred name from the external system be used for auto-matching to existing users?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerPopulateImportUsers(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerPopulateImportUsers(options);
+        async importUserControllerPopulateImportUsers(matchByPreferredName?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerPopulateImportUsers(matchByPreferredName, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -27643,11 +27649,12 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
         /**
          * Populates import users from specific user migration populate endpoint.
          * @summary Populates import users
+         * @param {boolean} [matchByPreferredName] Should the users preferred name from the external system be used for auto-matching to existing users?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerPopulateImportUsers(options?: any): AxiosPromise<void> {
-            return localVarFp.importUserControllerPopulateImportUsers(options).then((request) => request(axios, basePath));
+        importUserControllerPopulateImportUsers(matchByPreferredName?: boolean, options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerPopulateImportUsers(matchByPreferredName, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -27763,11 +27770,12 @@ export interface UserImportApiInterface {
     /**
      * Populates import users from specific user migration populate endpoint.
      * @summary Populates import users
+     * @param {boolean} [matchByPreferredName] Should the users preferred name from the external system be used for auto-matching to existing users?
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApiInterface
      */
-    importUserControllerPopulateImportUsers(options?: any): AxiosPromise<void>;
+    importUserControllerPopulateImportUsers(matchByPreferredName?: boolean, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -27893,12 +27901,13 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
     /**
      * Populates import users from specific user migration populate endpoint.
      * @summary Populates import users
+     * @param {boolean} [matchByPreferredName] Should the users preferred name from the external system be used for auto-matching to existing users?
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApi
      */
-    public importUserControllerPopulateImportUsers(options?: any) {
-        return UserImportApiFp(this.configuration).importUserControllerPopulateImportUsers(options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerPopulateImportUsers(matchByPreferredName?: boolean, options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerPopulateImportUsers(matchByPreferredName, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

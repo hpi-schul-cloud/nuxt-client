@@ -1165,6 +1165,8 @@ export default {
 		"Saving the accounts link...",
 	"pages.administration.migration.startUserMigration":
 		"Start accounts migration",
+	"pages.administration.migration.matchByPreferredName":
+		"Prefer nicknames for automatic account linking",
 	"pages.administration.migration.step1": "Introduction",
 	"pages.administration.migration.step2": "Preparation",
 	"pages.administration.migration.step3": "Summary",
