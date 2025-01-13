@@ -324,7 +324,7 @@ describe("BoardColumnHeader", () => {
 				permissions: { hasDeletePermission: true },
 			});
 
-			const action = wrapper.findComponent(BoardMenuActionRename);
+			const action = wrapper.findComponent(KebabMenuActionRename);
 			action.trigger("click");
 
 			expect(mockedStartEditMode).toHaveBeenCalled();
