@@ -35,7 +35,7 @@ describe("ActionMenu", () => {
 			.findComponent({ ref: "removeSelectedMembers" })
 			.trigger("click");
 		const emitted = wrapper.emitted("remove:selected");
-		expect(emitted).toBeDefined();
+		expect(wrapper.emitted()).toHaveProperty("remove:selected");
 		expect(emitted![0][0]).toStrictEqual(["test-id#1", "test-id#2"]);
 	});
 
@@ -44,7 +44,7 @@ describe("ActionMenu", () => {
 		await wrapper
 			.findComponent({ ref: "resetSelectedMembers" })
 			.trigger("click");
-		const emitted = wrapper.emitted("reset:selected");
-		expect(emitted).toBeDefined();
+
+		expect(wrapper.emitted()).toHaveProperty("reset:selected");
 	});
 });

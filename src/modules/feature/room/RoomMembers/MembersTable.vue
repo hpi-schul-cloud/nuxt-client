@@ -1,8 +1,8 @@
 <template>
 	<div
 		class="d-flex justify-space-between align-center mb-2 table-title-header"
-		:class="{ 'fixed-position': fixedPosition.status }"
-		:style="{ top: `${fixedPosition.position}px` }"
+		:class="{ 'fixed-position': fixedPosition.enabled }"
+		:style="{ top: `${fixedPosition.positionTop}px` }"
 	>
 		<ActionMenu
 			v-if="selectedUserIds.length"
@@ -82,8 +82,8 @@ const props = defineProps({
 		required: true,
 	},
 	fixedPosition: {
-		type: Object as PropType<{ status: boolean; position: number }>,
-		default: () => ({ status: false, position: 0 }),
+		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
+		default: () => ({ enabled: false, positionTop: 0 }),
 	},
 });
 const { askConfirmation } = useConfirmationDialog();

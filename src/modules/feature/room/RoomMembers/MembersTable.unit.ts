@@ -407,8 +407,8 @@ describe("MembersTable", () => {
 
 			wrapper.setProps({
 				fixedPosition: {
-					status: true,
-					position: 0,
+					enabled: true,
+					positionTop: 0,
 				},
 			});
 			await nextTick();

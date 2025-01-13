@@ -1,5 +1,5 @@
 <template>
-	<div class="mr-2 pa-0 pl-4 multi-action-menu" data-testid="multi-action-menu">
+	<div class="mr-2 pa-0 pl-4" data-testid="multi-action-menu">
 		<span class="d-inline-flex selected-count">
 			{{ selectedIds.length }}
 			{{ t("pages.administration.selected") }}
@@ -37,7 +37,10 @@ const props = defineProps({
 	},
 });
 const { t } = useI18n();
-const emit = defineEmits(["remove:selected", "reset:selected"]);
+const emit = defineEmits<{
+	(e: "remove:selected", selectedIds: string[]): void;
+	(e: "reset:selected"): void;
+}>();
 
 const onRemove = () => {
 	emit("remove:selected", props.selectedIds);

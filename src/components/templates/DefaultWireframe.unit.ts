@@ -45,6 +45,7 @@ describe("DefaultWireframe", () => {
 			props: {
 				fullWidth: true,
 				headline: "dummy title",
+				maxWidth: "full",
 				breadcrumbs: [
 					{
 						title: "dummy breadcrumb 1",
@@ -110,7 +111,7 @@ describe("DefaultWireframe", () => {
 
 	it("displays headline in slot", () => {
 		const wrapper = setup({
-			props: { headline: "property title", fullWidth: false },
+			props: { headline: "property title", fullWidth: false, maxWidth: "full" },
 			slots: {
 				header: [
 					"<h1>slot title</h1>",
@@ -126,7 +127,9 @@ describe("DefaultWireframe", () => {
 	});
 
 	it("should emit 'fab:clicked' after click the fab button", async () => {
-		const wrapper = setup();
+		const wrapper = setup({
+			props: { maxWidth: "nativ" },
+		});
 		await wrapper.setProps({
 			fabItems: {
 				icon: "mdi-close",
@@ -142,7 +145,9 @@ describe("DefaultWireframe", () => {
 
 	describe("when 'fixedHeader' prop is set", () => {
 		it("should have 'fixed-header' class", async () => {
-			const wrapper = setup();
+			const wrapper = setup({
+				props: { maxWidth: "nativ" },
+			});
 
 			const headerBefore = wrapper.find(".wireframe-header");
 			expect(headerBefore.classes("fixed")).toBe(false);

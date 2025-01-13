@@ -3,7 +3,7 @@
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
-		:fixed-header="fixedHeaderOnMobile.status"
+		:fixed-header="fixedHeaderOnMobile.enabled"
 		@fab:clicked="onFabClick"
 		ref="wireframe"
 	>
@@ -93,8 +93,8 @@ const pageTitle = computed(() =>
 );
 const wireframe = ref<HTMLElement | null>(null);
 const fixedHeaderOnMobile = ref({
-	status: false,
-	position: 0,
+	enabled: false,
+	positionTop: 0,
 });
 const { y } = useElementBounding(wireframe);
 
@@ -131,11 +131,11 @@ onMounted(async () => {
 	}
 	await fetchMembers();
 	const header = document.querySelector(".wireframe-header") as HTMLElement;
-	fixedHeaderOnMobile.value.position = header.offsetHeight + y.value;
+	fixedHeaderOnMobile.value.positionTop = header.offsetHeight + y.value;
 });
 
 watch(y, () => {
-	fixedHeaderOnMobile.value.status = y.value <= 0 && mdAndDown.value;
+	fixedHeaderOnMobile.value.enabled = y.value <= -64 && mdAndDown.value;
 });
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
