@@ -40,7 +40,7 @@
 					:scope="BoardMenuScope.BOARD"
 					data-testid="board-menu-btn"
 				>
-					<BoardMenuActionEdit @click="onStartEditMode" />
+					<BoardMenuActionRename @click="onStartEditMode" />
 					<BoardMenuActionCopy @click="onCopyBoard" />
 					<BoardMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
 					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
@@ -63,7 +63,7 @@ import {
 	BoardMenu,
 	BoardMenuActionCopy,
 	BoardMenuActionDelete,
-	BoardMenuActionEdit,
+	BoardMenuActionRename,
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
 	BoardMenuActionShare,

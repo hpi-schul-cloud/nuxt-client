@@ -24,7 +24,10 @@
 						:scope="BoardMenuScope.COLUMN"
 						:data-testid="`column-menu-btn-${index}`"
 					>
-						<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
+						<BoardMenuActionRename
+							v-if="!isEditMode"
+							@click="onStartEditMode"
+						/>
 						<template v-if="isListBoard">
 							<BoardMenuActionMoveUp
 								v-if="isNotFirstColumn"
@@ -63,7 +66,7 @@ import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
 	BoardMenu,
 	BoardMenuActionDelete,
-	BoardMenuActionEdit,
+	BoardMenuActionRename,
 	BoardMenuActionMoveDown,
 	BoardMenuActionMoveUp,
 	BoardMenuActionMoveLeft,

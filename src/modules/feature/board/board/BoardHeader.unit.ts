@@ -14,10 +14,10 @@ import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
 	BoardMenuActionCopy,
 	BoardMenuActionDelete,
-	BoardMenuActionEdit,
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
 	BoardMenuActionShare,
+	BoardMenuActionRename,
 } from "@ui-board";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
@@ -114,11 +114,12 @@ describe("BoardHeader", () => {
 			it("should enable copying", () => {
 				const { wrapper } = setup({
 					permissions: { hasEditPermission: true },
+					envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 				});
 
-				const editButton = wrapper.findComponent(BoardMenuActionEdit);
+				const shareButton = wrapper.findComponent(BoardMenuActionShare);
 
-				expect(editButton.exists()).toBe(true);
+				expect(shareButton.exists()).toBe(true);
 			});
 
 			it("should enable sharing with feature flag", () => {
@@ -149,7 +150,7 @@ describe("BoardHeader", () => {
 		it("should call startEditMode", async () => {
 			const { startEditMode, wrapper } = setup();
 
-			const editButton = wrapper.findComponent(BoardMenuActionEdit);
+			const editButton = wrapper.findComponent(BoardMenuActionRename);
 			await editButton.trigger("click");
 
 			expect(startEditMode).toBeCalled();

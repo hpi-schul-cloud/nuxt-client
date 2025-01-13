@@ -12,8 +12,8 @@ import {
 	BoardMenuActionMoveUp,
 	BoardMenuActionMoveLeft,
 	BoardMenuActionMoveRight,
-	BoardMenuActionEdit,
 	BoardMenuActionDelete,
+	BoardMenuActionRename,
 } from "@ui-board";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
@@ -317,14 +317,14 @@ describe("BoardColumnHeader", () => {
 		});
 	});
 
-	describe("when edit button is clicked", () => {
+	describe("when rename button is clicked", () => {
 		it("should start the edit mode", () => {
 			const wrapper = setup({
 				isEditMode: false,
 				permissions: { hasDeletePermission: true },
 			});
 
-			wrapper.findComponent(BoardMenuActionEdit).trigger("click");
+			wrapper.findComponent(BoardMenuActionRename).trigger("click");
 
 			expect(mockedStartEditMode).toHaveBeenCalled();
 		});
