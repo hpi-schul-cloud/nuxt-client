@@ -12,12 +12,15 @@ import {
 	BoardMenuActionMoveUp,
 	BoardMenuActionMoveLeft,
 	BoardMenuActionMoveRight,
+	BoardMenuActionEdit,
+	BoardMenuActionDelete,
 } from "@ui-board";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
-import { computed } from "vue";
+import { computed, nextTick } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+import { BoardColumnInteractionHandler } from "@feature-board";
 
 jest.mock("@data-board");
 jest.mock("@util-board");
@@ -26,18 +29,22 @@ const mockUseBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 
 describe("BoardColumnHeader", () => {
 	const mockedUseEditMode = jest.mocked(useCourseBoardEditMode);
+	const mockedStartEditMode = jest.fn();
+	const mockedStopEditMode = jest.fn();
 
 	const setup = (
-		options?: {
+		options: {
 			permissions?: Partial<BoardPermissionChecks>;
-		},
+			isEditMode?: boolean;
+		} = {},
 		props?: object
 	) => {
-		const isEditMode = computed(() => true);
+		const isEditMode = computed(() => options.isEditMode ?? true);
+
 		mockedUseEditMode.mockReturnValue({
 			isEditMode,
-			startEditMode: jest.fn(),
-			stopEditMode: jest.fn(),
+			startEditMode: mockedStartEditMode,
+			stopEditMode: mockedStopEditMode,
 		});
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
@@ -60,6 +67,10 @@ describe("BoardColumnHeader", () => {
 		});
 		return wrapper;
 	};
+
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
 
 	describe("when component is mounted", () => {
 		it("should be found in the dom", () => {
@@ -222,6 +233,109 @@ describe("BoardColumnHeader", () => {
 					const emitted = wrapper.emitted();
 					expect(emitted["move:column-right"]).toBeDefined();
 				});
+			});
+		});
+	});
+
+	describe("when edit button is clicked", () => {
+		it("should start the edit mode", () => {
+			const wrapper = setup({
+				isEditMode: false,
+				permissions: { hasDeletePermission: true },
+			});
+
+			wrapper.findComponent(BoardMenuActionEdit).trigger("click");
+
+			expect(mockedStartEditMode).toHaveBeenCalled();
+		});
+	});
+
+	describe("when end-edit-mode event is received", () => {
+		it("should stop the edit mode", () => {
+			const wrapper = setup({
+				isEditMode: false,
+				permissions: { hasDeletePermission: true },
+			});
+
+			const interactionHandler = wrapper.findComponent(
+				BoardColumnInteractionHandler
+			);
+			interactionHandler.vm.$emit("end-edit-mode");
+
+			expect(mockedStopEditMode).toHaveBeenCalled();
+		});
+	});
+
+	describe("when move-column-keyboard-event is received", () => {
+		describe("when arrow-left-key is received", () => {
+			it("should emit move:column-left", () => {
+				const wrapper = setup({
+					isEditMode: false,
+					permissions: { hasDeletePermission: true },
+				});
+
+				const interactionHandler = wrapper.findComponent(
+					BoardColumnInteractionHandler
+				);
+				interactionHandler.vm.$emit("move:column-keyboard", {
+					code: "ArrowLeft",
+				});
+
+				const emitted = wrapper.emitted();
+				expect(emitted["move:column-left"]).toBeDefined();
+			});
+		});
+
+		describe("when arrow-right-key is received", () => {
+			it("should emit move:column-left", () => {
+				const wrapper = setup({
+					isEditMode: false,
+					permissions: { hasDeletePermission: true },
+				});
+
+				const interactionHandler = wrapper.findComponent(
+					BoardColumnInteractionHandler
+				);
+				interactionHandler.vm.$emit("move:column-keyboard", {
+					code: "ArrowRight",
+				});
+
+				const emitted = wrapper.emitted();
+				expect(emitted["move:column-right"]).toBeDefined();
+			});
+		});
+	});
+
+	describe("when delete button is clicked", () => {
+		describe("when delete is confirmed", () => {
+			it("should emit delete:column", async () => {
+				const wrapper = setup({
+					isEditMode: false,
+					permissions: { hasDeletePermission: true },
+				});
+
+				const deleteAction = wrapper.findComponent(BoardMenuActionDelete);
+				deleteAction.vm.$emit("click", true);
+				await nextTick();
+
+				const emitted = wrapper.emitted();
+				expect(emitted["delete:column"]).toBeDefined();
+			});
+		});
+
+		describe("when delete is refused", () => {
+			it("should emit delete:column", async () => {
+				const wrapper = setup({
+					isEditMode: false,
+					permissions: { hasDeletePermission: true },
+				});
+
+				const deleteAction = wrapper.findComponent(BoardMenuActionDelete);
+				deleteAction.vm.$emit("click", false);
+				await nextTick();
+
+				const emitted = wrapper.emitted();
+				expect(emitted["delete:column"]).not.toBeDefined();
 			});
 		});
 	});
