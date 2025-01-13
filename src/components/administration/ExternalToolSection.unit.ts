@@ -27,7 +27,6 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import { VCardText } from "vuetify/lib/components/index.mjs";
 import ExternalToolSection from "./ExternalToolSection.vue";
@@ -78,11 +77,7 @@ describe("ExternalToolSection", () => {
 
 		const wrapper = mount(ExternalToolSection, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 
 				provide: {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
@@ -539,7 +534,7 @@ describe("ExternalToolSection", () => {
 				);
 
 				expect(warningDialogLine.exists()).toEqual(true);
-				expect(warningDialogLine.getCurrentComponent()?.props.html).toEqual(
+				expect(warningDialogLine.text()).toEqual(
 					"components.administration.externalToolsSection.dialog.content.warning"
 				);
 			});

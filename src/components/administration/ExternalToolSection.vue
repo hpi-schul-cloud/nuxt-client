@@ -102,16 +102,13 @@
 						{{ t("common.tool.context.type.mediaShelves") }}
 						<b>({{ metadata.mediaBoard }})</b>
 					</p>
-					<RenderHTML
-						data-testid="delete-dialog-content-media-warning"
-						class="text-md mb-0"
-						:html="
+					<p data-testid="delete-dialog-content-media-warning">
+						{{
 							t(
-								'components.administration.externalToolsSection.dialog.content.warning'
+								"components.administration.externalToolsSection.dialog.content.warning"
 							)
-						"
-						component="p"
-					/>
+						}}
+					</p>
 				</v-card-text>
 				<v-card-actions>
 					<v-spacer />
@@ -160,7 +157,6 @@ import { useRouter } from "vue-router";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { RenderHTML } from "@feature-render-html";
 
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
