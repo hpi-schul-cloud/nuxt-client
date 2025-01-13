@@ -46,7 +46,12 @@
 
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { GroupResponse, GroupUserResponse, MeResponse } from "@/serverApi/v3";
+import {
+	GroupResponse,
+	GroupUserResponse,
+	MeResponse,
+	RoleName,
+} from "@/serverApi/v3";
 import type AuthModule from "@/store/auth";
 import {
 	AUTH_MODULE_KEY,
@@ -68,6 +73,9 @@ const props = defineProps({
 	},
 	courseId: {
 		type: String,
+	},
+	courseTeachers: {
+		type: Array,
 	},
 });
 
@@ -98,9 +106,27 @@ const isUserInGroup = computed(() => {
 		return false;
 	}
 
-	return selectedGroup.value.users.some(
+	const isPartOfGroup: boolean = selectedGroup.value.users.some(
 		(user: GroupUserResponse) => user.id === me.user.id
 	);
+
+	const isAdmin: boolean = me.roles.some(
+		(role) => role.name === RoleName.Administrator
+	);
+
+	if (isAdmin && !isPartOfGroup) {
+		const allCourseTeacherPartOfGroup = props.courseTeachers?.every(
+			(teacher) => {
+				return selectedGroup.value?.users.some(
+					(user) => user.firstName + " " + user.lastName === teacher
+				);
+			}
+		);
+
+		return allCourseTeacherPartOfGroup;
+	} else {
+		return isPartOfGroup;
+	}
 });
 
 const onConfirmWarning = async () => {
