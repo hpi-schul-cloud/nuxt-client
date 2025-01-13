@@ -125,6 +125,7 @@
 			v-model:is-open="isCourseSyncDialogOpen"
 			:course-id="selectedItem?.id"
 			:course-name="selectedItem?.name"
+			:course-teachers="selectedItem?.teacherNames"
 			@success="onConfirmSynchronizeCourse"
 			data-testid="start-sync-dialog"
 		/>
