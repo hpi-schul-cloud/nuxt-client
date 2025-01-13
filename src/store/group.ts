@@ -1,6 +1,5 @@
 import {
 	ClassInfoSearchListResponse,
-	ClassRequestContext,
 	ClassSortQueryType,
 	GroupApiFactory,
 	GroupApiInterface,
@@ -134,7 +133,6 @@ export default class GroupModule extends VuexModule {
 	@Action
 	async loadClassesForSchool(data?: {
 		schoolYearQuery?: SchoolYearQueryType;
-		calledFrom?: ClassRequestContext;
 	}): Promise<void> {
 		this.setLoading(true);
 		try {
@@ -144,8 +142,7 @@ export default class GroupModule extends VuexModule {
 					this.pagination.limit,
 					this.getSortOrder,
 					this.getSortBy,
-					data?.schoolYearQuery,
-					data?.calledFrom
+					data?.schoolYearQuery
 				);
 			const mappedClasses: ClassInfo[] = GroupMapper.mapToClassInfo(
 				response.data.data
