@@ -47,7 +47,7 @@
 					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 					<BoardMenuActionDelete
 						:name="title"
-						:scope="BoardMenuScope.COLUMN"
+						:scope="BoardMenuScope.BOARD"
 						@click="onDeleteBoard"
 					/>
 				</BoardMenu>

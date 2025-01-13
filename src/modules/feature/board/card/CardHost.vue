@@ -226,11 +226,11 @@ export default defineComponent({
 
 		const onMoveContentElementKeyboard = async (
 			{ payload: elementId, elementIndex }: ElementMove,
-			keyString: string
+			key: string
 		) => {
-			if (!verticalCursorKeys.includes(keyString)) return;
+			if (!verticalCursorKeys.includes(key)) return;
 
-			const delta = keyString === "ArrowUp" ? -1 : 1;
+			const delta = key === "ArrowUp" ? -1 : 1;
 
 			await cardStore.moveElementRequest(
 				props.cardId,
