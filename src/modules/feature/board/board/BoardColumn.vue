@@ -158,11 +158,9 @@ export default defineComponent({
 			() => hasCreateColumnPermission && isDragging.value === false
 		);
 
-		const isNotFirstColumn = computed(
-			() => props.columnCount > 1 && props.index !== 0
-		);
+		const isNotFirstColumn = computed(() => props.index !== 0);
 		const isNotLastColumn = computed(
-			() => props.columnCount > 1 && props.index !== props.columnCount - 1
+			() => props.index !== props.columnCount - 1
 		);
 
 		const onCreateCard = () => emit("create:card", props.column.id);

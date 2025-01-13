@@ -1,25 +1,40 @@
 <template>
 	<v-custom-empty-state
 		image="content-empty"
-		:title="$t('pages.content.empty_state.error.title').toString()"
+		:title="t('pages.content.emptyState.error.title')"
 	>
 		<template #description>
-			<RenderHTML
-				:html="$t('pages.content.empty_state.error.message').toString()"
-				component="span"
-			/>
+			<p>
+				<span class="font-weight-bold d-block mb-2">
+					{{ t("pages.content.emptyState.error.message.suggestions") }}
+				</span>
+				<span
+					v-for="suggestion in suggestionsItems"
+					:key="suggestion"
+					class="d-block"
+				>
+					{{
+						t(
+							`pages.content.emptyState.error.message.suggestions.${suggestion}`
+						)
+					}}
+				</span>
+			</p>
 		</template>
 	</v-custom-empty-state>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
-import { RenderHTML } from "@feature-render-html";
+import { useI18n } from "vue-i18n";
 
-export default {
-	components: {
-		RenderHTML,
-		vCustomEmptyState,
-	},
-};
+const suggestionsItems = [
+	"moreThanOneCharacter",
+	"correctSpelling",
+	"otherSearchTerms",
+	"generalSearchTerms",
+	"lessSearchTerms",
+];
+
+const { t } = useI18n();
 </script>

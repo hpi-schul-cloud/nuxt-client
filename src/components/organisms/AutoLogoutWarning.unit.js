@@ -9,10 +9,7 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
-
 import BaseModal from "@/components/base/BaseModal";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
-
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 
 const toast = {
@@ -38,11 +35,7 @@ describe("@/components/organisms/AutoLogoutWarning", () => {
 
 		const wrapper = mount(AutoLogoutWarning, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				components: {
 					"base-modal": BaseModal,
 				},

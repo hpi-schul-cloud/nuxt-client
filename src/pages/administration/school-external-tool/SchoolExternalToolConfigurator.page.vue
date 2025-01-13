@@ -5,11 +5,32 @@
 		max-width="short"
 		data-testid="school-external-tool-configurator-title"
 	>
-		<RenderHTML
-			:html="t('components.administration.externalToolsSection.description')"
-			component="p"
-			data-testId="tool-configuration-infotext"
-		/>
+		<div data-testId="tool-configuration-infotext">
+			<p>
+				{{
+					t(
+						"components.administration.externalToolsSection.description.firstParagraph"
+					)
+				}}
+			</p>
+			<p>
+				<i18n-t
+					keypath="components.administration.externalToolsSection.description.secondParagraph"
+					scope="global"
+				>
+					<a
+						href="https://docs.dbildungscloud.de/x/uoKqDg"
+						target="_blank"
+						rel="noopener"
+						>{{
+							t(
+								"components.administration.externalToolsSection.description.secondParagraph.link"
+							)
+						}}
+					</a>
+				</i18n-t>
+			</p>
+		</div>
 		<v-spacer class="mt-10" />
 		<external-tool-configurator
 			:templates="configurationTemplates"
@@ -53,7 +74,6 @@ import {
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchoolExternalToolConfigurationTemplate } from "@data-external-tool";
-import { RenderHTML } from "@feature-render-html";
 import { useTitle } from "@vueuse/core";
 import {
 	computed,
@@ -70,7 +90,6 @@ export default defineComponent({
 	components: {
 		ExternalToolConfigurator,
 		DefaultWireframe,
-		RenderHTML,
 	},
 	props: {
 		configId: {

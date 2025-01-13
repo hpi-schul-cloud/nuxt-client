@@ -47,7 +47,7 @@
 					<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 					<KebabMenuActionDelete
 						:name="title"
-						:scope="BoardMenuScope.COLUMN"
+						:scope="BoardMenuScope.BOARD"
 						@click="onDeleteBoard"
 					/>
 				</BoardMenu>

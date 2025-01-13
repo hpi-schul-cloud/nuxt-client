@@ -3,23 +3,67 @@
 		<v-card-title
 			data-testid="migration-warning-card-title"
 			class="card-title text-wrap"
-			>{{ $t(title) }}
+			>{{ t(title) }}
 		</v-card-title>
 		<v-card-text>
-			<RenderHTML
-				data-testid="migration-warning-card-info-text"
-				:html="
-					$t(text, {
-						gracePeriod: gracePeriodInDays,
-					}).toString()
-				"
-				component="p"
-			/>
+			<div data-testid="migration-warning-card-info-text">
+				<p>
+					{{
+						isEndWarningCard
+							? t(
+									"components.administration.adminMigrationSection.endWarningCard.text"
+								)
+							: t(
+									"components.administration.adminMigrationSection.startWarningCard.text"
+								)
+					}}
+				</p>
+				<template v-if="isEndWarningCard">
+					<p class="text-red">
+						{{
+							t(
+								"components.administration.adminMigrationSection.endWarningCard.text.warning"
+							)
+						}}
+					</p>
+					<ul>
+						<li
+							v-for="item in endWarningCardListItems"
+							:class="item.class"
+							class="ml-4 my-4"
+							:key="item.text"
+						>
+							{{ t(item.text) }}
+							<p v-if="item.warning" class="text-red mb-0">
+								{{ t(item.warning) }}
+							</p>
+						</li>
+					</ul>
+					<i18n-t
+						keypath="components.administrationSection.description.moreInformation"
+						scope="global"
+						tag="p"
+					>
+						<a
+							data-testid="end-warningcard-migration-blog-link"
+							href="https://blog.niedersachsen.cloud/umzug"
+							target="_blank"
+							rel="noopener"
+						>
+							{{
+								t(
+									"components.administrationSection.description.moreInformation.link"
+								)
+							}}
+						</a>
+					</i18n-t>
+				</template>
+			</div>
 			<v-checkbox
 				v-if="check"
 				v-model="isConfirmed"
 				:label="
-					$t(check, {
+					t(check, {
 						gracePeriod: gracePeriodInDays,
 					})
 				"
@@ -32,7 +76,7 @@
 				variant="flat"
 				@click="$emit(eventName)"
 			>
-				{{ $t(disagree) }}
+				{{ t(disagree) }}
 			</v-btn>
 			<v-btn
 				color="primary"
@@ -44,24 +88,44 @@
 					$emit(eventName);
 				"
 			>
-				{{ $t(agree) }}
+				{{ t(agree) }}
 			</v-btn>
 		</v-card-actions>
 	</v-card>
 </template>
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { computed, ComputedRef, defineComponent, Ref, ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
 
 export enum MigrationWarningCardTypeEnum {
 	START = "start",
 	END = "end",
 }
 
+const END_WARNING_CARD_LIST_ITEMS = [
+	{
+		text: "components.administration.adminMigrationSection.endWarningCard.text.list.firstElement",
+	},
+	{
+		text: "components.administration.adminMigrationSection.endWarningCard.text.list.secondElement",
+	},
+	{
+		text: "components.administration.adminMigrationSection.endWarningCard.text.list.thirdElement",
+	},
+	{
+		text: "components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement",
+		warning:
+			"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement.warning",
+	},
+	{
+		text: "components.administration.adminMigrationSection.endWarningCard.text.list.lastElement",
+		class: "text-red",
+	},
+];
+
 export default defineComponent({
 	name: "MigrationWarningCard",
-	components: { RenderHTML },
 	emits: ["start", "set", "end"],
 	props: {
 		value: {
@@ -80,11 +144,10 @@ export default defineComponent({
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const type = toRef(props, "value");
 		const isConfirmed: Ref<boolean> = ref(false);
+		const { t } = useI18n();
 
 		let title =
 			"components.administration.adminMigrationSection.startWarningCard.title";
-		let text =
-			"components.administration.adminMigrationSection.startWarningCard.text";
 		let agree =
 			"components.administration.adminMigrationSection.startWarningCard.agree";
 		let disagree =
@@ -93,11 +156,13 @@ export default defineComponent({
 			MigrationWarningCardTypeEnum.START;
 		let check: string | undefined;
 
-		if (type.value === MigrationWarningCardTypeEnum.END) {
+		const isEndWarningCard = computed(
+			() => type.value === MigrationWarningCardTypeEnum.END
+		);
+
+		if (isEndWarningCard.value) {
 			title =
 				"components.administration.adminMigrationSection.endWarningCard.title";
-			text =
-				"components.administration.adminMigrationSection.endWarningCard.text";
 			agree =
 				"components.administration.adminMigrationSection.endWarningCard.agree";
 			disagree =
@@ -120,13 +185,15 @@ export default defineComponent({
 
 		return {
 			title,
-			text,
 			agree,
 			disagree,
 			check,
 			isConfirmed,
 			eventName,
 			gracePeriodInDays,
+			t,
+			endWarningCardListItems: END_WARNING_CARD_LIST_ITEMS,
+			isEndWarningCard,
 		};
 	},
 });
