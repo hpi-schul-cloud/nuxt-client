@@ -31,7 +31,6 @@ describe("UserLoginMigrationError", () => {
 		targetSchoolNumber?: string;
 		multipleUsersFound?: boolean;
 	}) => {
-		document.body.setAttribute("data-app", "true");
 		const systemsMock: System[] = [
 			{
 				id: "sourceSystemId",
@@ -62,8 +61,6 @@ describe("UserLoginMigrationError", () => {
 					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
 				},
 				mocks: {
-					$t: (key: string, dynamic?: object): string =>
-						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
 					$theme: {
 						name: "Testcloud",
 					},
@@ -82,12 +79,10 @@ describe("UserLoginMigrationError", () => {
 			it("should show the description text", () => {
 				const { wrapper } = setup({});
 
-				const descriptionText = wrapper
-					.findComponent("[data-testId=text-description]")
-					.attributes("html");
+				const descriptionText = wrapper.find("[data-testid=text-description]");
 
-				expect(descriptionText).toEqual(
-					'pages.userMigration.error.description {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
+				expect(descriptionText.text()).toEqual(
+					"pages.userMigration.error.description.fail pages.userMigration.error.description.support.link"
 				);
 			});
 
@@ -108,12 +103,12 @@ describe("UserLoginMigrationError", () => {
 					targetSchoolNumber: "22222",
 				});
 
-				const schoolNumberMismatchText = wrapper
-					.findComponent("[data-testId=text-schoolnumber-mismatch]")
-					.attributes("html");
+				const schoolNumberMismatchText = wrapper.get(
+					"[data-testId=text-schoolnumber-mismatch]"
+				);
 
-				expect(schoolNumberMismatchText).toEqual(
-					'pages.userMigration.error.schoolNumberMismatch {"targetSystem":"targetSystem","targetSchoolNumber":"22222","sourceSchoolNumber":"11111"}'
+				expect(schoolNumberMismatchText.text()).toEqual(
+					"pages.userMigration.error.schoolNumberMismatch.information pages.userMigration.error.schoolNumberMismatch.information.schoolNumber"
 				);
 			});
 		});
@@ -123,12 +118,12 @@ describe("UserLoginMigrationError", () => {
 					multipleUsersFound: true,
 				});
 
-				const multipleUsersFoundText = wrapper
-					.findComponent("[data-testId=text-multiple-users-found]")
-					.attributes("html");
+				const multipleUsersFoundText = wrapper.get(
+					"[data-testid=text-multiple-users-found]"
+				);
 
-				expect(multipleUsersFoundText).toEqual(
-					'pages.userMigration.error.multipleUsersFound {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Fehler%20bei%20der%20Migration"}'
+				expect(multipleUsersFoundText.text()).toEqual(
+					"pages.userMigration.error.multipleUsersFound pages.userMigration.error.description.support.link"
 				);
 			});
 		});
@@ -139,12 +134,15 @@ describe("UserLoginMigrationError", () => {
 				targetSchoolNumber: "22222",
 			});
 
-			const descriptionText = wrapper
-				.findComponent("[data-testId=text-description]")
-				.attributes("html");
+			const supportLink = wrapper
+				.get("[data-testid=text-description]")
+				.find("a");
 
-			expect(descriptionText).toEqual(
-				'pages.userMigration.error.description {"targetSystem":"targetSystem","instance":"Testcloud","supportLink":"mailto:nbc-support@netz-21.de?subject=Schulnummer%20nicht%20korrekt"}'
+			expect(supportLink.text()).toEqual(
+				"pages.userMigration.error.description.support.link"
+			);
+			expect(supportLink.element.href).toEqual(
+				"mailto:nbc-support@netz-21.de?subject=Schulnummer%20nicht%20korrekt"
 			);
 		});
 	});

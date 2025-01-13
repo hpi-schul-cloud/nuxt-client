@@ -116,13 +116,21 @@
 							}}
 						</template>
 						<template #content>
-							<RenderHTML
-								:html="
+							<p>
+								{{
 									t(
-										'components.administration.adminMigrationSection.clearAutoMatchesDialog.description'
+										"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph"
 									)
-								"
-							/>
+								}}
+							</p>
+							<p>
+								{{
+									t(
+										"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph"
+									)
+								}}
+								>
+							</p>
 						</template>
 					</VCustomDialog>
 				</div>
@@ -158,52 +166,74 @@
 									/>
 								</VCardText>
 								<VCardActions>
-									<VRow align="center" justify="end">
-										<VBtn
-											v-if="isMigrationNotStarted"
-											data-testid="start_user_migration"
-											variant="flat"
-											color="primary"
-											:disabled="isLoading"
-											@click="setSchoolInUserMigration"
-										>
-											<VProgressCircular
-												v-if="isLoading"
-												:size="20"
-												indeterminate
+									<VRow align="center" justify="space-between">
+										<div class="ml-14">
+											<VSwitch
+												v-show="isNbc && isMigrationNotStarted"
+												:label="
+													t(
+														'pages.administration.migration.matchByPreferredName'
+													)
+												"
+												:disabled="isLoading"
+												:true-value="true"
+												:false-value="false"
+												v-model="matchByPreferredName"
+												data-testid="migration-preferred-name-switch"
 											/>
-											{{
-												t("pages.administration.migration.startUserMigration")
-											}}
-										</VBtn>
-										<VBtn
-											v-else-if="canPerformMigration"
-											data-testid="migration_tutorial_next"
-											:disabled="totalImportUsers === 0"
-											variant="flat"
-											color="primary"
-											@click="nextStep"
-										>
-											<VProgressCircular
-												v-if="totalImportUsers === 0 && school.inUserMigration"
-												:size="20"
-												indeterminate
-											/>
-											{{
-												totalImportUsers > 0 || school.inUserMigration === false
-													? t("pages.administration.migration.next")
-													: t("pages.administration.migration.waiting")
-											}}
-										</VBtn>
-										<VBtn
-											v-else-if="isMigrationFinished"
-											id="migration_tutorial_skip"
-											variant="flat"
-											color="primary"
-											@click="nextStep"
-										>
-											{{ t("pages.administration.migration.next") }}
-										</VBtn>
+										</div>
+										<div>
+											<VBtn
+												v-if="isMigrationNotStarted"
+												data-testid="start_user_migration"
+												variant="flat"
+												color="primary"
+												:disabled="isLoading"
+												@click="setSchoolInUserMigration"
+											>
+												<VProgressCircular
+													v-if="isLoading"
+													:size="20"
+													indeterminate
+													class="mr-1"
+												/>
+												{{
+													t("pages.administration.migration.startUserMigration")
+												}}
+											</VBtn>
+											<VBtn
+												v-else-if="canPerformMigration"
+												data-testid="migration_tutorial_next"
+												:disabled="totalImportUsers === 0"
+												variant="flat"
+												color="primary"
+												@click="nextStep"
+											>
+												<VProgressCircular
+													v-if="
+														totalImportUsers === 0 && school.inUserMigration
+													"
+													:size="20"
+													indeterminate
+													class="mr-1"
+												/>
+												{{
+													totalImportUsers > 0 ||
+													school.inUserMigration === false
+														? t("pages.administration.migration.next")
+														: t("pages.administration.migration.waiting")
+												}}
+											</VBtn>
+											<VBtn
+												v-else-if="isMigrationFinished"
+												id="migration_tutorial_skip"
+												variant="flat"
+												color="primary"
+												@click="nextStep"
+											>
+												{{ t("pages.administration.migration.next") }}
+											</VBtn>
+										</div>
 									</VRow>
 								</VCardActions>
 							</VCard>
@@ -261,23 +291,27 @@
 							>
 								<div v-if="!isLoading">
 									<VCardText>
-										<RenderHTML
-											:html="
-												t(
-													isNbc
-														? 'pages.administration.migration.summary.nbc'
-														: 'pages.administration.migration.summary',
-													{
+										<div>
+											<p
+												v-for="(
+													paragraph, index
+												) in migrationSummaryParagraphItems"
+												:key="index"
+											>
+												<span
+													v-if="paragraph.boldText"
+													class="font-weight-bold"
+												>
+													{{ paragraph.boldText }}
+												</span>
+												{{
+													t(paragraph.text, {
 														instance: theme.name,
 														source: sourceSystemName,
-														importUsersCount: totalMatched,
-														importUsersUnmatchedCount:
-															totalImportUsers - totalMatched,
-														usersUnmatchedCount: totalUnmatched,
-													}
-												)
-											"
-										/>
+													})
+												}}
+											</p>
+										</div>
 										<VRow>
 											<VCheckbox
 												v-model="isMigrationConfirm"
@@ -553,7 +587,6 @@ import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { RenderHTML } from "@feature-render-html";
 import { mdiClose } from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import {
@@ -581,6 +614,8 @@ const isMigrationConfirm: Ref<boolean> = ref(false);
 const errorTimeout: Ref<number> = ref(7500);
 
 const isLoading: Ref<boolean> = ref(false);
+
+const matchByPreferredName: Ref<boolean> = ref(false);
 
 const checkTotal: Ref<ReturnType<typeof setTimeout> | undefined> =
 	ref(undefined);
@@ -717,7 +752,9 @@ const setSchoolInUserMigration = async () => {
 	isLoading.value = true;
 
 	if (isNbc.value) {
-		await importUsersModule.populateImportUsersFromExternalSystem();
+		await importUsersModule.populateImportUsersFromExternalSystem(
+			matchByPreferredName.value
+		);
 
 		if (importUsersModule.getBusinessError) {
 			isLoading.value = false;
@@ -832,6 +869,26 @@ const clearAllAutoMatches = async () => {
 
 	isLoading.value = false;
 };
+
+const migrationSummaryParagraphItems = computed(() => [
+	{
+		text: "pages.administration.migration.summary.firstParagraph",
+	},
+	{
+		boldText: totalMatched.value,
+		text: "pages.administration.migration.summary.secondParagraph.importUsersCount",
+	},
+	{
+		boldText: totalImportUsers.value - totalMatched.value,
+		text: "pages.administration.migration.summary.thirdParagraph.importUsersUnmatchedCount",
+	},
+	{
+		boldText: isNbc.value ? undefined : totalUnmatched.value,
+		text: isNbc.value
+			? "pages.administration.migration.summary.lastParagraph.nbc"
+			: "pages.administration.migration.summary.lastParagraph.usersUnmatchedCount",
+	},
+]);
 
 watch(migrationStep, async (val) => {
 	if (val === 1 || val === 3) {

@@ -9,7 +9,6 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
 import type { ComponentProps } from "vue-component-type-helpers";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { VAutocomplete } from "vuetify/lib/components/index.mjs";
 import GroupSelectionDialog from "./GroupSelectionDialog.vue";
 
@@ -37,11 +36,7 @@ describe("GroupSelectionDialog", () => {
 
 		const wrapper = mount(GroupSelectionDialog, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props,
 		});
