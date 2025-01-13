@@ -1003,16 +1003,6 @@ export interface ClassInfoSearchListResponse {
 /**
  * 
  * @export
- * @enum {string}
- */
-export enum ClassRequestContext {
-    Course = 'course',
-    ClassOverview = 'class-overview'
-}
-
-/**
- * 
- * @export
  * @interface ClassResponse
  */
 export interface ClassResponse {
@@ -16689,11 +16679,10 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
-         * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options: any = {}): Promise<RequestArgs> => {
+        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/groups/class`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -16728,10 +16717,6 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
 
             if (type !== undefined) {
                 localVarQueryParameter['type'] = type;
-            }
-
-            if (calledFrom !== undefined) {
-                localVarQueryParameter['calledFrom'] = calledFrom;
             }
 
 
@@ -16855,12 +16840,11 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
-         * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options);
+        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -16906,12 +16890,11 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
-         * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
-            return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(axios, basePath));
+        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
+            return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -16953,12 +16936,11 @@ export interface GroupApiInterface {
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {ClassSortQueryType} [sortBy] 
      * @param {SchoolYearQueryType} [type] 
-     * @param {ClassRequestContext} [calledFrom] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApiInterface
      */
-    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse>;
+    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, options?: any): AxiosPromise<ClassInfoSearchListResponse>;
 
     /**
      * 
@@ -17000,13 +16982,12 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {ClassSortQueryType} [sortBy] 
      * @param {SchoolYearQueryType} [type] 
-     * @param {ClassRequestContext} [calledFrom] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApi
      */
-    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any) {
-        return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(this.axios, this.basePath));
+    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, options?: any) {
+        return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
