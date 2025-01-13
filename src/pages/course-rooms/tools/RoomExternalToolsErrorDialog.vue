@@ -9,15 +9,11 @@
 	>
 		<template #title>
 			<h2 class="text-h4 my-2">
-				{{ $t(getTitle, { toolName: selectedItem.name }) }}
+				{{ t(getTitle, { toolName: selectedItem.name }) }}
 			</h2>
 		</template>
 		<template #content>
-			<RenderHTML
-				:html="$t(getText, { toolName: selectedItem.name })"
-				component="p"
-				class="text-md mt-2"
-			/>
+			<p>{{ t(getText, { toolName: selectedItem.name }) }}</p>
 		</template>
 	</v-custom-dialog>
 </template>
@@ -27,8 +23,8 @@ import {
 	ExternalToolDisplayData,
 	useContextExternalToolConfigurationStatus,
 } from "@data-external-tool";
-import { RenderHTML } from "@feature-render-html";
 import { computed, ComputedRef, PropType } from "vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	selectedItem: {
@@ -50,6 +46,8 @@ const {
 	determineToolStatusTranslationKey,
 	determineNotLicensedTranslationKey,
 } = useContextExternalToolConfigurationStatus();
+
+const { t } = useI18n();
 
 const onCloseCustomDialog = () => {
 	emit("closed");

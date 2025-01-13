@@ -10,8 +10,8 @@ export default defineComponent({
 		component: { type: String, default: "div" },
 		html: { type: String, required: true },
 		config: {
-			type: String as PropType<"ck5" | "translations">,
-			default: "translations",
+			type: String as PropType<"richText">,
+			default: "richText",
 		},
 	},
 });

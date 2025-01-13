@@ -1,4 +1,3 @@
-<!-- eslint-disable prettier/prettier -->
 <template>
 	<section :class="{ inline: isInline }">
 		<v-btn

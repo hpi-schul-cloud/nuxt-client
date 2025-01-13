@@ -5,23 +5,18 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import ContentInitialState from "./ContentInitialState.vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("@/components/molecules/ContentInitialState", () => {
 	const wrapper = mount(ContentInitialState, {
 		global: {
-			plugins: [
-				createTestingI18n(),
-				createTestingVuetify(),
-				vueDompurifyHTMLPlugin,
-			],
+			plugins: [createTestingI18n(), createTestingVuetify()],
 		},
 		data: () => ({}),
 	});
 
 	it("Provides proper title", () => {
 		expect(wrapper.findComponent(vCustomEmptyState).props("title")).toBe(
-			"pages.content.init_state.title"
+			"pages.content.initState.title"
 		);
 	});
 	it("Provides message", () => {

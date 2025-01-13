@@ -207,8 +207,17 @@ export default {
 	"component.cardElement.fileElement.audioPlayer.slider": "Control deslizante",
 	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
 	"component.cardElement.fileElement.audioPlayer.speed": "Menú de velocidad",
-	"components.administration.adminMigrationSection.description":
-		'Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.<br>El proceso de migración requiere un inicio de sesión único de los estudiantes y profesores en ambos sistemas.<br><br><span class="text-red"><b>Si no desea realizar una migración en su centro educativo, <u>por favor, no inicie el proceso de migración</u>,\ncontacte con <a href="{supportLink}" data-testid ="support-link">soporte</a></b>.<br><br>Información importante sobre el proceso de migración es <a href="https://blog.niedersachsen.cloud/umzug" data-testid="migration-blog-link" target="_blank">disponible aquí<a>.',
+	"components.administration.adminMigrationSection.description.firstPart":
+		"Durante la migración se cambia el sistema de registro de alumnos y profesores a moin.schule. Los datos pertenecientes a las cuentas afectadas se conservarán.",
+	"components.administration.adminMigrationSection.description.secondPart":
+		"El proceso de migración requiere un inicio de sesión único de los estudiantes y profesores en ambos sistemas.",
+	"components.administrationSection.description.support":
+		"Si no desea realizar una migración en su centro educativo, por favor, no inicie el proceso de migración, contacte con {0}.",
+	"components.administrationSection.description.support.link": "soporte",
+	"components.administrationSection.description.moreInformation":
+		"Información importante sobre el proceso de migración es {0}.",
+	"components.administrationSection.description.moreInformation.link":
+		"disponible aquí",
 	"components.administration.adminMigrationSection.enableSyncDuringMigration.label":
 		"Permitir la sincronización con el sistema de inicio de sesión anterior para clases y cuentas durante la migración",
 	"components.administration.adminMigrationSection.endWarningCard.agree": "Sí",
@@ -217,13 +226,33 @@ export default {
 	"components.administration.adminMigrationSection.endWarningCard.disagree":
 		"Desgaje",
 	"components.administration.adminMigrationSection.endWarningCard.text":
-		'Confirme que desea completar la migración de la cuenta de usuario a moin.schule.<br><br><span class="text-red">Advertencia: Completar la migración de la cuenta de usuario tiene los siguientes efectos:</span><br><br><ul><li>Los estudiantes y profesores que cambiaron a moin.schule solo pueden registrarse a través de moin.schule.</li><br><li>La migración ya no es posible para estudiantes y profesores.</li><br><li>Los estudiantes y profesores que no han migrado aún pueden seguir matriculándose como antes.</li><br><li>Los usuarios que no han migrado también pueden iniciar sesión a través de moin.schule, pero esto crea una cuenta vacía adicional en Niedersächsische Bildungscloud.<br><span class="text-red">No es posible la transferencia automática de datos de la cuenta existente a esta nueva cuenta.</span></li><br><li><span class="text-red">Tras un periodo de espera de {gracePeriod} días, la finalización de la migración de cuentas se convierte en definitiva. A continuación, se desactiva el antiguo sistema de inicio de sesión y se eliminan las cuentas que no se hayan migrado.</span></li></ul><br><br> La información importante sobre el proceso de migración está disponible <a href="https://blog.niedersachsen.cloud/umzug" data-testid="end-warningcard-migration-blog-link" target="_blank">aquí</a>.',
+		"Confirme que desea completar la migración de la cuenta de usuario a moin.schule.",
+	"components.administration.adminMigrationSection.endWarningCard.text.warning":
+		"Advertencia: Completar la migración de la cuenta de usuario tiene los siguientes efectos:",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.firstElement":
+		"Los estudiantes y profesores que cambiaron a moin.schule solo pueden registrarse a través de moin.schule.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.secondElement":
+		"La migración ya no es posible para estudiantes y profesores.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.thirdElement":
+		"Los estudiantes y profesores que no han migrado aún pueden seguir matriculándose como antes.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement":
+		"Los usuarios que no han migrado también pueden iniciar sesión a través de moin.schule, pero esto crea una cuenta vacía adicional en Niedersächsische Bildungscloud.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement.warning":
+		"No es posible la transferencia automática de datos de la cuenta existente a esta nueva cuenta.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.lastElement":
+		"Tras un periodo de espera de {gracePeriod} días, la finalización de la migración de cuentas se convierte en definitiva. A continuación, se desactiva el antiguo sistema de inicio de sesión y se eliminan las cuentas que no se hayan migrado.",
 	"components.administration.adminMigrationSection.endWarningCard.title":
 		"¿Realmente desea completar la migración de la cuenta de usuario a moin.schule ahora?",
 	"components.administration.adminMigrationSection.headers":
 		"Migración de cuenta a moin.schule",
-	"components.administration.adminMigrationSection.infoText":
-		'Verifique que el número de escuela oficial ingresado en Niedersächsische Bildungscloud sea correcto.<br><br> Inicie la migración a moin.schule solo después de asegurarse de que el número de escuela oficial sea correcto.<br><br>No puede usar la escuela el número introducido cambia de forma independiente. Si es necesario corregir el número de la escuela, comuníquese con <a href="mailto:nbc-support{\'@\'}netz-21.de?subject=Schulnummer%20nicht%20korrekt">Soporte<a>.<br><br> <span class="text-red">El inicio de la migración confirma que el número de escuela ingresado es correcto.<span>',
+	"components.administration.adminMigrationSection.infoText.firstParagraph":
+		"Verifique que el número de escuela oficial ingresado en Niedersächsische Bildungscloud sea correcto.",
+	"components.administration.adminMigrationSection.infoText.secondParagraph":
+		"Inicie la migración a moin.schule solo después de asegurarse de que el número de escuela oficial sea correcto.",
+	"components.administration.adminMigrationSection.infoText.thirdParagraph":
+		"No puede cambiar el número de escuela ingresado de forma independiente. Si es necesario corregir el número de la escuela, comuníquese con {0}.",
+	"components.administration.adminMigrationSection.infoText.fourthParagraph":
+		"El inicio de la migración confirma que el número de escuela ingresado es correcto.",
 	"components.administration.adminMigrationSection.mandatorySwitch.label":
 		"Migración obligatoria",
 	"components.administration.adminMigrationSection.migrationActive":
@@ -240,10 +269,12 @@ export default {
 		"Si cancela ahora la ejecución del asistente de migración, se restablecerán los vínculos de cuenta realizados en la sesión actual. ¿Realmente desea cancelar el asistente ahora?",
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
 		"¿Estás seguro de que quieres cancelar la migración?",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
-		"La migración de la cuenta se completó el {date} a las {time}.<br>¡El periodo de espera tras la finalización de la migración termina finalmente el {finishDate} a las {finishTime}!",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
-		"La migración de la cuenta se completó el {date} a las {time}.<br>El periodo de espera ha expirado. ¡La migración se completó finalmente el {finishDate} a las {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph":
+		"La migración de la cuenta se completó el {date} a las {time}.",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.secondParagraph":
+		"¡El periodo de espera tras la finalización de la migración termina finalmente el {finishDate} a las {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
+		"El periodo de espera ha expirado. ¡La migración se completó finalmente el {finishDate} a las {finishTime}!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
 		"Las cuentas de estudiantes y profesores obsoletas se muestran en las listas de selección correspondientes cuando los usuarios se asignan a clases, cursos y equipos.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label":
@@ -258,8 +289,10 @@ export default {
 		"¿Realmente desea iniciar la migración de la cuenta a moin.schule ahora?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"¿Estás seguro de que quieres restablecer los accesos directos encontrados automáticamente?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
-		"El asistente de migración ha encontrado automáticamente los enlaces de las cuentas basándose en los nombres de usuario.<br><br>¿Desea restablecer ahora los enlaces encontrados automáticamente?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
+		"El asistente de migración ha encontrado automáticamente los enlaces de las cuentas basándose en los nombres de usuario.",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
+		"¿Desea restablecer ahora los enlaces encontrados automáticamente?",
 	"components.administration.externalToolsSection.action.add":
 		"Añadir Herramienta Externa",
 	"components.administration.externalToolsSection.action.delete":
@@ -268,12 +301,18 @@ export default {
 		"Editar herramienta",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Ver hoja de datos",
-	"components.administration.externalToolsSection.description":
-		'Los parámetros específicos de la escuela para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta estará disponible dentro de la escuela.<br><br>\nMás información está disponible en nuestro <a href="https://docs.dbildungscloud.de/x/uoKqDg" target=" _blank">Sección de ayuda sobre herramientas externas</a>.',
+	"components.administration.externalToolsSection.description.firstParagraph":
+		"Los parámetros específicos de la escuela para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta estará disponible dentro de la escuela.",
+	"components.administration.externalToolsSection.description.secondParagraph":
+		"Más información está disponible en nuestro {0}.",
+	"components.administration.externalToolsSection.description.secondParagraph.link":
+		"Sección de ayuda sobre herramientas externas",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"No se pudo determinar el uso de la herramienta.",
-	"components.administration.externalToolsSection.dialog.content.header":
-		"¿Está seguro de que desea eliminar la herramienta <b>{itemName}</b>? <br><br>Actualmente la herramienta se utiliza de la siguiente manera:",
+	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
+		"¿Está seguro de que desea eliminar la herramienta {0}?",
+	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+		"Actualmente la herramienta se utiliza de la siguiente manera:",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Atención: Si se retira la herramienta, ya no se podrá utilizar para esta escuela.",
 	"components.administration.externalToolsSection.dialog.title":
@@ -751,7 +790,7 @@ export default {
 	"components.organisms.AutoLogoutWarning.warning.remainingTime":
 		"menos de un minuto | un minuto | {remainingTime} minutos",
 	"components.organisms.AutoLogoutWarning.warning":
-		"Atención: te desconectarás automáticamente en <span class='error--text'>{remainingTime}</span>. Amplía ahora tu sesión dos horas.",
+		"Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
 	"components.organisms.ContentCard.report.body":
 		"Informar del contenido con el ID",
 	"components.organisms.ContentCard.report.email":
@@ -888,7 +927,7 @@ export default {
 	"feature-course-sync.GroupSelectionDialog.selection.label":
 		"Selección de grupo",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
-		"Los siguientes datos para crear un nuevo curso no están disponibles en el grupo de usuarios {groupName}:<li>Profesor</li><br/>Por favor, regístrese en moin.schule y comience la creación del curso nuevamente.",
+		"Los siguientes datos para crear un nuevo curso no están disponibles en el grupo de usuarios {groupName}: {teacher} Por favor, regístrese en moin.schule y comience la creación del curso nuevamente.",
 	"feature-course-sync.StartNewCourseSyncDialog.text":
 		"En el siguiente paso, el grupo de usuarios seleccionado se sincronizará con el curso recién creado.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
@@ -952,8 +991,21 @@ export default {
 	"mixins.typeMeta.types.image": "Imagen",
 	"mixins.typeMeta.types.video": "Vídeo",
 	"mixins.typeMeta.types.webpage": "Página web",
-	"page-class-members.classMembersInfoBox.text":
-		"<p><b>No</b> es necesario obtener una declaración de consentimiento al registrar estudiantes. El uso de Niedersächsischen Bildungscloud está regulado por la Ley de escuelas de Baja Sajonia (artículo 31, párrafo 5 de la NSchG).<br><br>Si la escuela obtiene o recibe los datos del usuario a través de un sistema externo, no es necesario realizar ningún otro paso en el proceso nube. El registro se realiza a través del sistema externo.<br><br>De lo contrario, las invitaciones para registrarse se pueden enviar mediante un enlace a través del área de administración de la nube:<br><ul><li>Envío de enlaces de registro a las direcciones de correo electrónico almacenadas (También es posible crear directamente al importar)</li><li>Imprima enlaces de registro como hojas de impresión QR, recórtelas y distribuya recibos QR a los estudiantes<li><li>Seleccione uno o más usuarios, p.e. todos los estudiantes de una clase y luego llevar a cabo la acción deseada</li><li>Alternativamente posible: cambiar al modo de edición del perfil de usuario y recuperar el enlace de registro individual directamente para enviarlo manualmente</li></ul></p>",
+	"pages.classMembers.infoBox.text.firstParagraph":
+		"No es necesario obtener una declaración de consentimiento al registrar estudiantes. El uso de Niedersächsischen Bildungscloud está regulado por la Ley de escuelas de Baja Sajonia (artículo 31, párrafo 5 de la NSchG).",
+	"pages.classMembers.infoBox.text.firstParagraph.bold": "No",
+	"pages.classMembers.infoBox.text.secondParagraph":
+		"Si la escuela obtiene o recibe los datos del usuario a través de un sistema externo, no es necesario realizar ningún otro paso en el proceso nube. El registro se realiza a través del sistema externo.",
+	"pages.classMembers.infoBox.text.thirdParagraph":
+		"De lo contrario, las invitaciones para registrarse se pueden enviar mediante un enlace a través del área de administración de la nube:",
+	"pages.classMembers.infoBox.text.listItem.first":
+		"Envío de enlaces de registro a las direcciones de correo electrónico almacenadas (También es posible crear directamente al importar)",
+	"pages.classMembers.infoBox.text.listItem.second":
+		"Imprima enlaces de registro como hojas de impresión QR, recórtelas y distribuya recibos QR a los estudiantes",
+	"pages.classMembers.infoBox.text.listItem.third":
+		"Seleccione uno o más usuarios, p.e. todos los estudiantes de una clase y luego llevar a cabo la acción deseada",
+	"pages.classMembers.infoBox.text.listItem.last":
+		"Alternativamente posible: cambiar al modo de edición del perfil de usuario y recuperar el enlace de registro individual directamente para enviarlo manualmente",
 	"page-class-members.classMembersInfoBox.title":
 		"¿Los estudiantes aún no están en la Niedersächsischen Bildungscloud?",
 	"page-class-members.systemInfoText":
@@ -971,7 +1023,7 @@ export default {
 		"Mover la clase al próximo año escolar",
 	"pages.administration.classes.delete": "Eliminar clase",
 	"pages.administration.classes.deleteDialog.content":
-		'¿Está seguro de que desea eliminar la clase "<i>{itemName}<i>"?',
+		'¿Está seguro de que desea eliminar la clase "{itemName}"?',
 	"pages.administration.classes.deleteDialog.title": "¿Eliminar clase?",
 	"pages.administration.classes.edit": "Editar clase",
 	"pages.administration.common.hint":
@@ -984,7 +1036,7 @@ export default {
 	"pages.administration.classes.header.sync": "Sincronizado con",
 	"pages.administration.courses.delete": "Eliminar curso",
 	"pages.administration.courses.deleteDialog.content":
-		'¿Realmente quieres este curso? "<i>{itemName}</i>" borrar?',
+		'¿Realmente quieres este curso? "{itemName}" borrar?',
 	"pages.administration.courses.index.add": "Agregar curso",
 	"pages.administration.courses.edit": "Editar curso",
 	"pages.administration.index.title": "Administración",
@@ -1185,10 +1237,16 @@ export default {
 	"pages.administration.migration.step5.syncReady2":
 		"Con la siguiente ejecución de sincronización, todos los datos de la {source} se transfieren a la {instance}.",
 	"pages.administration.migration.step5": "Finalizar",
-	"pages.administration.migration.summary":
-		"<p>Se realizaron las siguientes asignaciones:</p><br><p><b>{importUsersCount}</b> {source}-las cuentas de usuario tienen una cuenta de usuario {instance} asignada. Estas cuentas de usuario se migrarán a {source}.</p><p> <b>{importUsersUnmatchedCount}</b> {source}: las cuentas de usuario no tienen ninguna cuenta de usuario de {instance} asociada. </p> <p> <b>{usersUnmatchedCount}</b> A las cuentas de usuario de {instance} no se les asignó ninguna cuenta de {source}. Las cuentas de {instancia} se conservan y se pueden eliminar posteriormente a través de la página de administración (o comuníquese con el servicio de atención al usuario).</p>",
-	"pages.administration.migration.summary.nbc":
-		"<p>Se realizaron las siguientes asignaciones:</p><br><p><b>{importUsersCount}</b> {source}-las cuentas de usuario tienen una cuenta de usuario {instance} asignada. Estas cuentas de usuario se migrarán a {source}.</p><p> <b>{importUsersUnmatchedCount}</b> {source}: las cuentas de usuario no tienen ninguna cuenta de usuario de {instance} asociada. </p><p>Las cuentas de usuario de {instance} que no se han migrado a {source} se conservan y pueden migrarse en una fecha posterior o eliminarse posteriormente en administración.</p>",
+	"pages.administration.migration.summary.firstParagraph":
+		"Se realizaron las siguientes asignaciones:",
+	"pages.administration.migration.summary.secondParagraph.importUsersCount":
+		"{source}-las cuentas de usuario tienen una cuenta de usuario {instance} asignada. Estas cuentas de usuario se migrarán a {source}.",
+	"pages.administration.migration.summary.thirdParagraph.importUsersUnmatchedCount":
+		"{source}: las cuentas de usuario no tienen ninguna cuenta de usuario de {instance} asociada.",
+	"pages.administration.migration.summary.lastParagraph.usersUnmatchedCount":
+		"A las cuentas de usuario de {instance} no se les asignó ninguna cuenta de {source}. Las cuentas de {instance} se conservan y se pueden eliminar posteriormente a través de la página de administración (o comuníquese con el servicio de atención al usuario).",
+	"pages.administration.migration.summary.lastParagraph.nbc":
+		"Las cuentas de usuario de {instance} que no se han migrado a {source} se conservan y pueden migrarse en una fecha posterior o eliminarse posteriormente en administración.",
 	"pages.administration.migration.title": "Migración de cuentas de usuario",
 	"pages.administration.migration.tutorialWait":
 		"Tenga en cuenta que, una vez que se inicie el proceso de migración de la escuela, puede tardar hasta 1 hora en obtener los datos. Después de esto, podrá continuar con el siguiente paso.",
@@ -1546,21 +1604,40 @@ export default {
 	"pages.content._id.metadata.provider": "Editor",
 	"pages.content._id.metadata.updatedAt": "Última modificación el",
 	"pages.content.card.collection": "Colección",
-	"pages.content.empty_state.error.img_alt": "imagen-estado-vacío",
-	"pages.content.empty_state.error.message":
-		"<span><p>La consulta de búsqueda debe contener al menos 2 caracteres.<br>Comprueba si todas las palabras están escritas correctamente.<br>Prueba otras consultas de búsqueda.<br>Prueba con consultas más comunes.<br>Intenta usar una consulta más corta.</p></span>",
-	"pages.content.empty_state.error.subtitle": "Sugerencia:",
-	"pages.content.empty_state.error.title": "¡Vaya, no hay resultados!",
+	"pages.content.emptyState.error.message.suggestions": "Sugerencia:",
+	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
+		"La consulta de búsqueda debe contener al menos 2 caracteres.",
+	"pages.content.emptyState.error.message.suggestions.correctSpelling":
+		"Comprueba si todas las palabras están escritas correctamente.",
+	"pages.content.emptyState.error.message.suggestions.otherSearchTerms":
+		"Prueba otras consultas de búsqueda.",
+	"pages.content.emptyState.error.message.suggestions.generalSearchTerms":
+		"Prueba con consultas más comunes.",
+	"pages.content.emptyState.error.message.suggestions.lessSearchTerms":
+		"Intenta usar una consulta más corta.",
+	"pages.content.emptyState.error.title": "¡Vaya, no hay resultados!",
 	"pages.content.index.backToCourse": "Volver al curso",
 	"pages.content.index.backToOverview": "Volver a la vista general",
 	"pages.content.index.search_for": "Buscar...",
 	"pages.content.index.search_resources": "Recursos",
 	"pages.content.index.search_results": "Resultados de la búsqueda de",
 	"pages.content.index.search.placeholder": "Buscar tienda de aprendizaje",
-	"pages.content.init_state.img_alt": "Imagen de estado inicial",
-	"pages.content.init_state.message":
-		"Aquí encontrará contenidos de alta calidad adaptados a su estado.<br>Nuestro equipo está desarrollando constantemente nuevos materiales para mejorar su experiencia de aprendizaje.<br><br>Nota:<br><br>Los materiales expuestos en la Tienda de Aprendizaje no se encuentran en nuestro servidor, sino que están disponibles a través de interfaces con otros servidores (las fuentes incluyen servidores educativos individuales, WirLernenOnline, Mundo, etc.).<br>Por esta razón, nuestro equipo no tiene ninguna influencia en la disponibilidad permanente de los materiales individuales y en toda la gama de materiales ofrecidos por las fuentes individuales.<br><br>En el contexto del uso en instituciones educativas, se permite la copia de los medios en línea en medios de almacenamiento, en un dispositivo final privado o en plataformas de aprendizaje para un círculo cerrado de usuarios, si es necesario, en la medida en que esto sea necesario para la distribución y/o uso interno.<br>Una vez finalizado el trabajo con los respectivos medios de comunicación en línea, éstos deben ser eliminados de los dispositivos finales privados, de los soportes de datos y de las plataformas de aprendizaje; a más tardar cuando se abandone la institución educativa.<br>Por lo general, no se permite la publicación fundamental (por ejemplo, en Internet) de los medios de comunicación en línea o con partes de ellos de obras nuevas y/o editadas, o se requiere el consentimiento del propietario de los derechos.",
-	"pages.content.init_state.title": "¡Bienvenido a la nueva Lern-Store!",
+	"pages.content.initState.description":
+		"Aquí encontrará contenidos de alta calidad adaptados a su estado.",
+	"pages.content.initState.description.newMaterials":
+		"Nuestro equipo está desarrollando constantemente nuevos materiales para mejorar su experiencia de aprendizaje.",
+	"pages.content.initState.description.hint": "Nota:",
+	"pages.content.initState.description.hint.materials":
+		"Los materiales expuestos en la Tienda de Aprendizaje no se encuentran en nuestro servidor, sino que están disponibles a través de interfaces con otros servidores (las fuentes incluyen servidores educativos individuales, WirLernenOnline, Mundo, etc.).",
+	"pages.content.initState.description.hint.availability":
+		"Por esta razón, nuestro equipo no tiene ninguna influencia en la disponibilidad permanente de los materiales individuales y en toda la gama de materiales ofrecidos por las fuentes individuales.",
+	"pages.content.initState.description.usage":
+		"En el contexto del uso en instituciones educativas, se permite la copia de los medios en línea en medios de almacenamiento, en un dispositivo final privado o en plataformas de aprendizaje para un círculo cerrado de usuarios, si es necesario, en la medida en que esto sea necesario para la distribución y/o uso interno.",
+	"pages.content.initState.description.usage.deleteHint":
+		"Una vez finalizado el trabajo con los respectivos medios de comunicación en línea, éstos deben ser eliminados de los dispositivos finales privados, de los soportes de datos y de las plataformas de aprendizaje; a más tardar cuando se abandone la institución educativa.",
+	"pages.content.initState.description.usage.notPermitted":
+		"Por lo general, no se permite la publicación fundamental (por ejemplo, en Internet) de los medios de comunicación en línea o con partes de ellos de obras nuevas y/o editadas, o se requiere el consentimiento del propietario de los derechos.",
+	"pages.content.initState.title": "¡Bienvenido a la nueva Lern-Store!",
 	"pages.content.label.chooseACourse": "Selecciona un curso/asignatura",
 	"pages.content.label.chooseALessonTopic": "Elige un tema de la lección",
 	"pages.content.label.deselect": "Eliminar",
@@ -1699,7 +1776,7 @@ export default {
 	"pages.rooms.tools.notLicensedDialog.title":
 		"Herramienta “{toolName}” no activada",
 	"pages.rooms.tools.deleteDialog.content":
-		"¿Está seguro de que desea eliminar la herramienta '<i>{itemName}</i>' del curso?",
+		"¿Está seguro de que desea eliminar la herramienta '{itemName}' del curso?",
 	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",
 	"pages.rooms.tools.emptyState": "No hay herramientas en este curso todavía.",
 	"pages.rooms.tools.incomplete": "Configuración incompleta",
@@ -1805,15 +1882,19 @@ export default {
 		"El valor de un parámetro no sigue las reglas dadas. Por favor, ajuste el valor en consecuencia.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Ya se ha asignado una herramienta con el mismo nombre a este curso. Los nombres de las herramientas deben ser únicos dentro de un curso.",
-	"pages.tool.context.description":
-		'Después de guardar la selección, la herramienta está disponible dentro del curso.<br><br>\nEncontrará más información en nuestra <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Sección de ayuda sobre herramientas externas</a>.',
 	"pages.tool.context.displayName": "Nombre para mostrar",
 	"pages.tool.context.displayNameDescription":
 		"El nombre para mostrar de la herramienta se puede anular y debe ser único",
 	"pages.tool.context.title": "Adición de herramientas externas",
 	"pages.tool.deactivate.label": "Desactivar herramienta en la escuela",
-	"pages.tool.description":
-		'Los parámetros específicos del curso para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta está disponible dentro del curso.<br><br>\nEliminar una configuración elimina la herramienta de el curso.<br><br>\nPuede encontrar más información en nuestro <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Sección de ayuda sobre herramientas externas</a>.',
+	"pages.tool.description.firstParagraph":
+		"Los parámetros específicos del curso para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta está disponible dentro del curso.",
+	"pages.tool.description.secondParagraph":
+		"Eliminar una configuración elimina la herramienta del curso.",
+	"pages.tool.description.moreInformation":
+		"Puede encontrar más información en nuestro {0}.",
+	"pages.tool.description.moreInformation.link":
+		"Sección de ayuda sobre herramientas externas",
 	"pages.tool.select.label": "Selección de Herramientas / URL de herramienta",
 	"pages.tool.select.description":
 		"Busque herramientas o ingrese la URL de una herramienta o insértela desde el caché manualmente o con un botón",
@@ -1825,19 +1906,33 @@ export default {
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",
 	"pages.userMigration.button.skip": "Ahora no",
 	"pages.userMigration.button.startMigration": "Empieza a moverte",
-	"pages.userMigration.description.fromSource":
-		'¡Hola!<br>Actualmente, su escuela está cambiando el sistema de registro.<br>Ahora puede migrar su cuenta a {targetSystem}.<br>Después de la mudanza, solo puede registrarse aquí con {targetSystem}.<br><br > Presione "{startMigration}" e inicie sesión con su cuenta {targetSystem}.',
-	"pages.userMigration.description.fromSourceMandatory":
-		'¡Hola!<br>Actualmente, su escuela está cambiando el sistema de registro.<br>Ahora debe migrar su cuenta a {targetSystem}.<br>Después de la mudanza, solo puede registrarse aquí con {targetSystem}.<br><br > Presione "{startMigration}" e inicie sesión con su cuenta {targetSystem}.',
-	"pages.userMigration.error.description":
-		'Desafortunadamente, la transferencia de su cuenta a {targetSystem} falló.<br>Por favor, póngase en contacto con el administrador o <a href="{supportLink}">Soporte</a> directamente.',
-	"pages.userMigration.error.schoolNumberMismatch":
-		"Por favor pasa esta información: {sourceSchoolNumber}, número de escuela en {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.description.firstParagraph.hello": "¡Hola!",
+	"pages.userMigration.description.firstParagraph.changeSource":
+		"Actualmente, su escuela está cambiando el sistema de registro.",
+	"pages.userMigration.description.firstParagraph.fromSource":
+		"Ahora puede migrar su cuenta a {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.fromSourceMandatory":
+		"Ahora debe migrar su cuenta a {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.loginWith":
+		"Después de la mudanza, solo puede registrarse aquí con {targetSystem}.",
+	"pages.userMigration.description.lastParagraph":
+		'Presione "{startMigration}" e inicie sesión con su cuenta {targetSystem}.',
+	"pages.userMigration.error.description.fail":
+		"Desafortunadamente, la transferencia de su cuenta a {targetSystem} falló.",
+	"pages.userMigration.error.description.support":
+		"Por favor, póngase en contacto con el administrador o {0} directamente.",
+	"pages.userMigration.error.description.support.link": "Soporte",
 	"pages.userMigration.error.multipleUsersFound":
-		'Este Cuenta de moin.schule ya está vinculado a una cuenta en la Niedersächsische Bildungscloud y no se puede volver a utilizar para la migración.<br>Por favor, póngase en contacto con el administrador o <a href="{supportLink}">Soporte</a> directamente.',
+		"Este Cuenta de moin.schule ya está vinculado a una cuenta en la Niedersächsische Bildungscloud y no se puede volver a utilizar para la migración.",
+	"pages.userMigration.error.schoolNumberMismatch.information":
+		"Por favor pasa esta información:",
+	"pages.userMigration.error.schoolNumberMismatch.information.schoolNumber":
+		"{sourceSchoolNumber}, número de escuela en {targetSystem}: {targetSchoolNumber}.",
 	"pages.userMigration.error.title": "Error al mover la cuenta",
 	"pages.userMigration.success.description":
-		"Se completó el movimiento de su cuenta a {targetSystem}.<br>Por favor, regístrese de nuevo ahora.",
+		"Se completó el movimiento de su cuenta a {targetSystem}.",
+	"pages.userMigration.success.description.loginAgain":
+		"Por favor, regístrese de nuevo ahora.",
 	"pages.userMigration.success.login":
 		"Iniciar sesión a través de {targetSystem}",
 	"pages.userMigration.success.title":

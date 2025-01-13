@@ -205,8 +205,16 @@ export default {
 		"Audio Schieberegler für Fortschritt",
 	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
 	"component.cardElement.fileElement.audioPlayer.speed": "Geschwindigkeitsmenü",
-	"components.administration.adminMigrationSection.description":
-		'Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.<br>Der Migrationsvorgang erfordert ein einmaliges Anmelden der Schüler:innen und Lehrkräfte an beiden Systemen.<br><br><span class="text-red"><b>Falls Sie keine Migration in Ihrer Schule durchführen wollen, <u>starten Sie den Migrationsprozess nicht</u>,\nsondern wenden Sie sich bitte an den </span> <a href="{supportLink}" data-testid ="support-link">Support</a></b>.<br><br>Wichtige Informationen zum Migrationsprozess sind <a href="https://blog.niedersachsen.cloud/umzug" data-testid="migration-blog-link" target="_blank">hier</a> verfügbar.',
+	"components.administration.adminMigrationSection.description.firstPart":
+		"Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.",
+	"components.administration.adminMigrationSection.description.secondPart":
+		"Der Migrationsvorgang erfordert ein einmaliges Anmelden der Schüler:innen und Lehrkräfte an beiden Systemen.",
+	"components.administrationSection.description.support":
+		"Falls Sie keine Migration in Ihrer Schule durchführen wollen, starten Sie den Migrationsprozess nicht, sondern wenden Sie sich bitte an den {0}.",
+	"components.administrationSection.description.support.link": "Support",
+	"components.administrationSection.description.moreInformation":
+		"Wichtige Informationen zum Migrationsprozess sind {0} verfügbar.",
+	"components.administrationSection.description.moreInformation.link": "hier",
 	"components.administration.adminMigrationSection.enableSyncDuringMigration.label":
 		"Die Synchronisation mit dem bisherigen Login-System für Klassen und Accounts während der Migration erlauben",
 	"components.administration.adminMigrationSection.endWarningCard.agree": "Ok",
@@ -215,13 +223,33 @@ export default {
 	"components.administration.adminMigrationSection.endWarningCard.disagree":
 		"Abbrechen",
 	"components.administration.adminMigrationSection.endWarningCard.text":
-		'Bitte bestätigen, dass die Account-Migration zu moin.schule abgeschlossen werden soll.<br><br><span class="text-red">Achtung: Der Abschluss der Account-Migration hat folgende Auswirkungen:</span><br><br><ul><li>Zu moin.schule gewechselte Schüler:innen und Lehrkräfte können sich nur noch über moin.schule anmelden.</li><br><li>Eine Migration ist für Schüler:innen und Lehrkräfte nicht mehr möglich.</li><br><li>Nicht migrierte Schüler:innen und Lehrkräfte können sich weiterhin wie bisher anmelden.</li><br><li>Nicht migrierte Anwender können sich auch über moin.schule anmelden, erzeugen aber dadurch einen zusätzlichen, leeren Account in der Niedersächsischen Bildungscloud.<br><span class="text-red">Eine automatische Datenübernahme aus dem vorbestehenden Account in diesen neuen Account ist nicht möglich.</span></li><br><li><span class="text-red">Nach Ablauf einer Wartefrist von {gracePeriod} Tagen wird der Abschluss der Account-Migration endgültig. Im Anschluss wird das alte Anmeldesystem abgeschaltet und nicht migrierte Accounts werden gelöscht.</span></li></ul><br><br>Wichtige Informationen zum Migrationsprozess sind <a href="https://blog.niedersachsen.cloud/umzug" data-testid="end-warningcard-migration-blog-link" target="_blank">hier</a> verfügbar.',
+		"Bitte bestätigen, dass die Account-Migration zu moin.schule abgeschlossen werden soll.",
+	"components.administration.adminMigrationSection.endWarningCard.text.warning":
+		"Achtung: Der Abschluss der Account-Migration hat folgende Auswirkungen:",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.firstElement":
+		"Zu moin.schule gewechselte Schüler:innen und Lehrkräfte können sich nur noch über moin.schule anmelden.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.secondElement":
+		"Eine Migration ist für Schüler:innen und Lehrkräfte nicht mehr möglich.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.thirdElement":
+		"Nicht migrierte Schüler:innen und Lehrkräfte können sich weiterhin wie bisher anmelden.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement":
+		"Nicht migrierte Anwender können sich auch über moin.schule anmelden, erzeugen aber dadurch einen zusätzlichen, leeren Account in der Niedersächsischen Bildungscloud.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement.warning":
+		"Eine automatische Datenübernahme aus dem vorbestehenden Account in diesen neuen Account ist nicht möglich.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.lastElement":
+		"Nach Ablauf einer Wartefrist von {gracePeriod} Tagen wird der Abschluss der Account-Migration endgültig. Im Anschluss wird das alte Anmeldesystem abgeschaltet und nicht migrierte Accounts werden gelöscht.",
 	"components.administration.adminMigrationSection.endWarningCard.title":
 		"Möchten Sie die Account-Migration zu moin.schule jetzt wirklich abschließen?",
 	"components.administration.adminMigrationSection.headers":
 		"Account-Migration zu moin.schule",
-	"components.administration.adminMigrationSection.infoText":
-		'Bitte überprüfen Sie die Richtigkeit der in der Niedersächsischen Bildungscloud eingetragenen offiziellen Schulnummer.<br><br> Starten Sie die Migration zu moin.schule erst, nachdem Sie die Richtigkeit der offiziellen Schulnummer sichergestellt haben.<br><br>Sie können die eingetragene Schulnummer nicht eigenständig ändern. Falls eine Korrektur der Schulnummer erforderlich ist, kontaktieren Sie bitte den <a href="mailto:nbc-support{\'@\'}netz-21.de?subject=Schulnummer%20nicht%20korrekt">Support</a>.<br><br><span class="text-red">Mit dem Start der Migration wird die Richtigkeit der eingetragenen Schulnummer bestätigt.</span>',
+	"components.administration.adminMigrationSection.infoText.firstParagraph":
+		"Bitte überprüfen Sie die Richtigkeit der in der Niedersächsischen Bildungscloud eingetragenen offiziellen Schulnummer.",
+	"components.administration.adminMigrationSection.infoText.secondParagraph":
+		"Starten Sie die Migration zu moin.schule erst, nachdem Sie die Richtigkeit der offiziellen Schulnummer sichergestellt haben.",
+	"components.administration.adminMigrationSection.infoText.thirdParagraph":
+		" Sie können die eingetragene Schulnummer nicht eigenständig ändern. Falls eine Korrektur der Schulnummer erforderlich ist, kontaktieren Sie bitte den {0}.",
+	"components.administration.adminMigrationSection.infoText.fourthParagraph":
+		"Mit dem Start der Migration wird die Richtigkeit der eingetragenen Schulnummer bestätigt.",
 	"components.administration.adminMigrationSection.mandatorySwitch.label":
 		"Migration verpflichtend",
 	"components.administration.adminMigrationSection.migrationActive":
@@ -238,10 +266,12 @@ export default {
 		"Wenn Sie die Ausführung des Migrationsassistenten jetzt abbrechen, werden die in der aktuellen Sitzung durchgeführten Konten-Verknüpfungen zurückgesetzt. Möchten Sie die Ausführung des Assistenten jetzt wirklich abbrechen?",
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
 		"Sind Sie sich sicher, dass Sie die Migration abbrechen wollen?",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
-		"Die Account-Migration wurde am {date} um {time} Uhr abgeschlossen.<br>Die Wartefrist nach Abschluss der Migration endet endgültig am {finishDate} um {finishTime} Uhr!",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
-		"Die Account-Migration wurde am {date} um {time} Uhr abgeschlossen.<br>Die Wartefrist ist abgelaufen. Migration wurde am {finishDate} um {finishTime} Uhr endgültig beendet!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph":
+		"Die Account-Migration wurde am {date} um {time} Uhr abgeschlossen.",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.secondParagraph":
+		"Die Wartefrist nach Abschluss der Migration endet endgültig am {finishDate} um {finishTime} Uhr!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
+		"Die Wartefrist ist abgelaufen. Migration wurde am {finishDate} um {finishTime} Uhr endgültig beendet!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
 		"Veraltete Accounts der Schüler:innen und Lehrkräfte werden bei der Zuordnung der Nutzer zu Klassen, Kursen und Teams in den entsprechenden Auswahllisten angezeigt.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label":
@@ -256,8 +286,10 @@ export default {
 		"Möchten Sie die Account-Migration zu moin.schule jetzt wirklich starten?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Sind Sie sicher, dass Sie die automatisch gefundenen Verknüpfungen zurücksetzen wollen?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
-		"Der Migrationsassistent hat Konten-Verknüpfungen anhand der Nutzer-Namen automatisch gefunden.<br><br>Möchten Sie die automatisch gefundenen Verknüpfungen jetzt zurücksetzen?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
+		"Der Migrationsassistent hat Konten-Verknüpfungen anhand der Nutzer-Namen automatisch gefunden.",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
+		"Möchten Sie die automatisch gefundenen Verknüpfungen jetzt zurücksetzen?",
 	"components.administration.externalToolsSection.action.add":
 		"Externes Tool hinzufügen",
 	"components.administration.externalToolsSection.action.delete":
@@ -266,12 +298,18 @@ export default {
 		"Tool bearbeiten",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Datenblatt anzeigen",
-	"components.administration.externalToolsSection.description":
-		'Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb der Schule verfügbar.<br><br>\nWeitere Informationen sind in unserem <a href="https://docs.dbildungscloud.de/x/uoKqDg" target="_blank">Hilfebereich zu externen Tools</a> zu finden.',
+	"components.administration.externalToolsSection.description.firstParagraph":
+		"Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb der Schule verfügbar.",
+	"components.administration.externalToolsSection.description.secondParagraph":
+		"Weitere Informationen sind in unserem {0} zu finden.",
+	"components.administration.externalToolsSection.description.secondParagraph.link":
+		"Hilfebereich zu externen Tools",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
-	"components.administration.externalToolsSection.dialog.content.header":
-		"Sind Sie sich sicher, dass Sie das Tool <b>{itemName}</b> löschen wollen? </br></br>Zurzeit wird das Tool wie folgt genutzt:",
+	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
+		"Sind Sie sich sicher, dass Sie das Tool {0} löschen wollen?",
+	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+		"Zurzeit wird das Tool wie folgt genutzt:",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Achtung: Wenn das Tool entfernt wird, kann es für diese Schule nicht mehr genutzt werden.",
 	"components.administration.externalToolsSection.dialog.title":
@@ -737,7 +775,7 @@ export default {
 	"components.organisms.AutoLogoutWarning.warning.remainingTime":
 		"weniger als einer Minute | einer Minute | {remainingTime} Minuten",
 	"components.organisms.AutoLogoutWarning.warning":
-		"Achtung: Du wirst in <span class='text-error'> {remainingTime} </span> automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
+		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
 	"components.organisms.ContentCard.report.body":
 		"Melden des Inhaltes mit der ID",
 	"components.organisms.ContentCard.report.email":
@@ -866,7 +904,7 @@ export default {
 	"feature-course-sync.GroupSelectionDialog.title": "Nutzendengruppe auswählen",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Gruppen-Auswahl",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
-		"Folgende Daten zur Erstellung eines neuen Kurses sind in Nutzergruppe {groupName} nicht vorhanden:<li>Lehrkraft</li><br/>Bitte in moin.schule überprüfen und Kurs-Erstellung erneut starten.",
+		"Folgende Daten zur Erstellung eines neuen Kurses sind in Nutzergruppe {groupName} nicht vorhanden: {teacher} Bitte in moin.schule überprüfen und Kurs-Erstellung erneut starten.",
 	"feature-course-sync.StartNewCourseSyncDialog.text":
 		"Die gewählte Nutzendengruppe wird im nächsten Schritt mit dem neu erstellten Kurs synchronisiert.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
@@ -931,8 +969,21 @@ export default {
 	"mixins.typeMeta.types.image": "Bild",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Webseite",
-	"page-class-members.classMembersInfoBox.text":
-		"<p>Eine Einverständniserklärung bei der Registrierung von Schüler:innen muss <b>nicht</b> eingeholt werden. Die Nutzung der Niedersächsischen Bildungscloud ist im niedersächsischen Schulgesetz (§ 31 Abs. 5 NSchG) geregelt.<br><br>Falls die Schule die Daten der Nutzenden über ein externes System bezieht bzw. übermittelt bekommt, sind keine weiteren Schritte in der Cloud notwendig. Die Registrierung erfolgt über das externe System.<br><br>Anderenfalls können über den Verwaltungsbereich der Cloud Einladungen zur Registrierung per Link versendet werden:<br><ul><li>Versand von Registrierungslinks an die hinterlegten E-Mail-Adressen (auch direkt beim Importieren/Anlegen möglich)</li><li>Registrierungslinks als QR-Druckbogen drucken, ausschneiden und QR-Zettel an Schüler:innen verteilen</li><li>Einen oder mehrere Nutzer:innen auswählen, z.B. alle Schüler:innen einer Klasse, und dann die gewünschte Aktion durchführen</li><li>Alternativ möglich: Wechseln in den Bearbeiten-Modus des Nutzerprofils und den individuellen Registrierungslink direkt abrufen, um ihn händisch zu versenden</li></ul></p>",
+	"pages.classMembers.infoBox.text.firstParagraph":
+		"Eine Einverständniserklärung bei der Registrierung von Schüler:innen muss {0} eingeholt werden. Die Nutzung der Niedersächsischen Bildungscloud ist im niedersächsischen Schulgesetz (§ 31 Abs. 5 NSchG) geregelt.",
+	"pages.classMembers.infoBox.text.firstParagraph.bold": "nicht",
+	"pages.classMembers.infoBox.text.secondParagraph":
+		"Falls die Schule die Daten der Nutzenden über ein externes System bezieht bzw. übermittelt bekommt, sind keine weiteren Schritte in der Cloud notwendig. Die Registrierung erfolgt über das externe System.",
+	"pages.classMembers.infoBox.text.thirdParagraph":
+		"Anderenfalls können über den Verwaltungsbereich der Cloud Einladungen zur Registrierung per Link versendet werden:",
+	"pages.classMembers.infoBox.text.listItem.first":
+		"Versand von Registrierungslinks an die hinterlegten E-Mail-Adressen (auch direkt beim Importieren/Anlegen möglich)",
+	"pages.classMembers.infoBox.text.listItem.second":
+		"Registrierungslinks als QR-Druckbogen drucken, ausschneiden und QR-Zettel an Schüler:innen verteilen",
+	"pages.classMembers.infoBox.text.listItem.third":
+		"Einen oder mehrere Nutzer:innen auswählen, z.B. alle Schüler:innen einer Klasse, und dann die gewünschte Aktion durchführen",
+	"pages.classMembers.infoBox.text.listItem.last":
+		"Alternativ möglich: Wechseln in den Bearbeiten-Modus des Nutzerprofils und den individuellen Registrierungslink direkt abrufen, um ihn händisch zu versenden",
 	"page-class-members.classMembersInfoBox.title":
 		"Schüler:innen sind noch nicht in der Niedersächsischen Bildungscloud?",
 	"page-class-members.systemInfoText":
@@ -950,7 +1001,7 @@ export default {
 		"Klasse in das nächste Schuljahr versetzen",
 	"pages.administration.classes.delete": "Klasse löschen",
 	"pages.administration.classes.deleteDialog.content":
-		'Möchten Sie wirklich die Klasse "<i>{itemName}</i>" löschen?',
+		'Möchten Sie wirklich die Klasse "{itemName}" löschen?',
 	"pages.administration.classes.deleteDialog.title": "Klasse löschen?",
 	"pages.administration.classes.edit": "Klasse bearbeiten",
 	"pages.administration.common.hint":
@@ -963,7 +1014,7 @@ export default {
 	"pages.administration.classes.header.sync": "Synchronisiert mit",
 	"pages.administration.courses.delete": "Kurs löschen",
 	"pages.administration.courses.deleteDialog.content":
-		'Möchten Sie wirklich diesen Kurs "<i>{itemName}</i>" löschen?',
+		'Möchten Sie wirklich diesen Kurs "{itemName}" löschen?',
 	"pages.administration.courses.index.add": "Kurs hinzufügen",
 	"pages.administration.courses.edit": "Kurs bearbeiten",
 	"pages.administration.index.title": "Administration",
@@ -980,7 +1031,7 @@ export default {
 	"pages.administration.ldap.activate.migrateExistingUsers.error":
 		"Es ist ein Fehler aufgetreten. Der Migrations-Assistenten konnte nicht aktiviert werden. Das LDAP-System ist daher ebenfalls nicht aktiv geschaltet worden. Bitte probieren Sie es erneut. Falls das Problem bestehen bleibt, wenden Sie sich bitte an den Support",
 	"pages.administration.ldap.activate.migrateExistingUsers.info":
-		"Wenn Sie schon Nutzer manuell angelegt haben, die zukünftig über das LDAP verwaltet werden sollen, dann können Sie den Migrations-Assistenten verwenden.<br> Durch den Assistenten werden LDAP-Nutzer mit bestehenden Nutzern verknüpft. Sie können die Zuordnung anpassen und müssen sie bestätigen, bevor die Zuordnung aktiv wird. Erst danach können sich Nutzer über das LDAP anmelden. <br>Wenn das LDAP-System ohne Migrations-Assistenten aktiviert wird, werden alle Nutzer aus dem LDAP importiert. Man kann die Nutzer nicht mehr nachträglich verküpfen.",
+		"Wenn Sie schon Nutzer manuell angelegt haben, die zukünftig über das LDAP verwaltet werden sollen, dann können Sie den Migrations-Assistenten verwenden. Durch den Assistenten werden LDAP-Nutzer mit bestehenden Nutzern verknüpft. Sie können die Zuordnung anpassen und müssen sie bestätigen, bevor die Zuordnung aktiv wird. Erst danach können sich Nutzer über das LDAP anmelden. Wenn das LDAP-System ohne Migrations-Assistenten aktiviert wird, werden alle Nutzer aus dem LDAP importiert. Man kann die Nutzer nicht mehr nachträglich verküpfen.",
 	"pages.administration.ldap.activate.migrateExistingUsers.title":
 		"Bestandsnutzer migrieren",
 	"pages.administration.ldap.activate.ok": "Ok",
@@ -1155,10 +1206,16 @@ export default {
 	"pages.administration.migration.step5.syncReady2":
 		"Mit dem nächsten Sync-Lauf werden alle Daten aus dem {source} in die {instance} übernommen.",
 	"pages.administration.migration.step5": "Ende",
-	"pages.administration.migration.summary":
-		"<p>Folgende Zuordnungen wurden vorgenommen:</p><br><p><b>{importUsersCount}</b> {source}-Benutzerkonten sind einem {instance}-Benutzerkonto zugeordnet. Diese Benutzerkonten werden zu {source} migriert.</p><p><b>{importUsersUnmatchedCount}</b> {source}-Benutzerkonten sind keinem {instance}-Benutzerkonto zugeordnet.</p><p><b>{usersUnmatchedCount}</b> bereits vorhandene {instance}-Benutzerkonten sind keinem {source}-Benutzerkonto zugeordnet. Die {instance}-Benutzerkonten bleiben erhalten und können in der Verwaltung nachträglich gelöscht werden.</p>",
-	"pages.administration.migration.summary.nbc":
-		"<p>Folgende Zuordnungen wurden vorgenommen:</p><br><p><b>{importUsersCount}</b> {source}-Benutzerkonten sind einem {instance}-Benutzerkonto zugeordnet. Diese Benutzerkonten werden zu {source} migriert.</p><p><b>{importUsersUnmatchedCount}</b> {source}-Benutzerkonten sind keinem {instance}-Benutzerkonto zugeordnet.</p><p>Die {instance}-Benutzerkonten, die nicht zu {source} migriert wurden, bleiben erhalten und können zu einem späteren Zeitpunkt migriert werden oder in der Verwaltung nachträglich gelöscht werden.</p>",
+	"pages.administration.migration.summary.firstParagraph":
+		"Folgende Zuordnungen wurden vorgenommen:",
+	"pages.administration.migration.summary.secondParagraph.importUsersCount":
+		"{source}-Benutzerkonten sind einem {instance}-Benutzerkonto zugeordnet. Diese Benutzerkonten werden zu {source} migriert.",
+	"pages.administration.migration.summary.thirdParagraph.importUsersUnmatchedCount":
+		"{source}-Benutzerkonten sind keinem {instance}-Benutzerkonto zugeordnet.",
+	"pages.administration.migration.summary.lastParagraph.usersUnmatchedCount":
+		"bereits vorhandene {instance}-Benutzerkonten sind keinem {source}-Benutzerkonto zugeordnet. Die {instance}-Benutzerkonten bleiben erhalten und können in der Verwaltung nachträglich gelöscht werden.",
+	"pages.administration.migration.summary.lastParagraph.nbc":
+		"Die {instance}-Benutzerkonten, die nicht zu {source} migriert wurden, bleiben erhalten und können zu einem späteren Zeitpunkt migriert werden oder in der Verwaltung nachträglich gelöscht werden.",
 	"pages.administration.migration.title":
 		"{source}-Konten mit bestehenden {instance}-Konten verknüpfen",
 	"pages.administration.migration.tutorialWait":
@@ -1523,21 +1580,40 @@ export default {
 	"pages.content._id.metadata.provider": "Herausgeber",
 	"pages.content._id.metadata.updatedAt": "zuletzt geändert am",
 	"pages.content.card.collection": "Lernobjekt",
-	"pages.content.empty_state.error.img_alt": "empty-state-img",
-	"pages.content.empty_state.error.message":
-		"<b>Vorschlag:</b><br><br>Der Suchbegriff muss mindestens 2 Zeichen enthalten.<br>Achte darauf, dass alle Wörter richtig geschrieben sind. <br>Probiere es mit anderen Suchbegriffen.<br>Probiere es mit allgemeineren Suchbegriffen.<br>Probiere es mit weniger Suchbegriffen.<br>",
-	"pages.content.empty_state.error.subtitle": "Vorschlag:",
-	"pages.content.empty_state.error.title": "Ooops, keine Ergebnisse!",
+	"pages.content.emptyState.error.message.suggestions": "Vorschlag:",
+	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
+		"Der Suchbegriff muss mindestens 2 Zeichen enthalten.",
+	"pages.content.emptyState.error.message.suggestions.correctSpelling":
+		"Achte darauf, dass alle Wörter richtig geschrieben sind.",
+	"pages.content.emptyState.error.message.suggestions.otherSearchTerms":
+		"Probiere es mit anderen Suchbegriffen.",
+	"pages.content.emptyState.error.message.suggestions.generalSearchTerms":
+		"Probiere es mit allgemeineren Suchbegriffen.",
+	"pages.content.emptyState.error.message.suggestions.lessSearchTerms":
+		"Probiere es mit weniger Suchbegriffen.",
+	"pages.content.emptyState.error.title": "Ooops, keine Ergebnisse!",
 	"pages.content.index.backToCourse": "Zurück zum Kurs",
 	"pages.content.index.backToOverview": "Zurück zur Übersicht",
 	"pages.content.index.search_for": "Suche nach …",
 	"pages.content.index.search_resources": "Ressourcen",
 	"pages.content.index.search_results": "Suchergebnisse für",
 	"pages.content.index.search.placeholder": "Lern-Store durchsuchen",
-	"pages.content.init_state.img_alt": "Initial state Image",
-	"pages.content.init_state.message":
-		"Hier findest du hochwertige, auf dein Bundesland abgestimmte Inhalte.<br>Unser Team erschließt fortlaufend neue Materialien, um so dein Lernerlebnis weiter zu verbessern.<br><br>Hinweis:<br><br>Die im Lernstore angezeigten Materialien liegen nicht auf unserem Server, sondern werden über Schnittstellen zu anderen Servern verfügbar gemacht (Quellen sind zum Beispiel einzelne Bildungsserver, WirLernenOnline, Mundo u.a.).<br>Aus diesem Grund hat unser Team auch keinen Einfluss auf die dauerhafte Verfügbarkeit einzelner Materialien und auf das vollumfängliche Materialangebot der einzelnen Quellen.<br><br>Im Rahmen der Nutzung in Bildungseinrichtungen ist das Kopieren der Online-Medien auf Speichermedien, auf ein privates Endgerät oder auf Lernplattformen für einen geschlossenen Benutzerkreis ggf. erlaubt, soweit dies für die interne Verteilung und/oder Nutzung erforderlich ist.<br>Nach Beendigung der Arbeiten mit den jeweiligen Online-Medien sind diese von den privaten Endgeräten, Datenträgern und Lernplattformen zu löschen; spätestens beim Verlassen der Bildungseinrichtung.<br>Eine grundsätzliche Veröffentlichung (z.B. im Internet) der Online-Medien oder mit Teilen daraus neu hergestellten neuen und/oder bearbeiteten Werken ist grundsätzlich nicht zulässig, bzw. bedarf der Zustimmung des Rechtegebers.",
-	"pages.content.init_state.title": "Willkommen im Lern-Store!",
+	"pages.content.initState.description":
+		"Hier findest du hochwertige, auf dein Bundesland abgestimmte Inhalte.",
+	"pages.content.initState.description.newMaterials":
+		"Unser Team erschließt fortlaufend neue Materialien, um so dein Lernerlebnis weiter zu verbessern.",
+	"pages.content.initState.description.hint": "Hinweis:",
+	"pages.content.initState.description.hint.materials":
+		"Die im Lernstore angezeigten Materialien liegen nicht auf unserem Server, sondern werden über Schnittstellen zu anderen Servern verfügbar gemacht (Quellen sind zum Beispiel einzelne Bildungsserver, WirLernenOnline, Mundo u.a.).",
+	"pages.content.initState.description.hint.availability":
+		"Aus diesem Grund hat unser Team auch keinen Einfluss auf die dauerhafte Verfügbarkeit einzelner Materialien und auf das vollumfängliche Materialangebot der einzelnen Quellen.",
+	"pages.content.initState.description.usage":
+		"Im Rahmen der Nutzung in Bildungseinrichtungen ist das Kopieren der Online-Medien auf Speichermedien, auf ein privates Endgerät oder auf Lernplattformen für einen geschlossenen Benutzerkreis ggf. erlaubt, soweit dies für die interne Verteilung und/oder Nutzung erforderlich ist.",
+	"pages.content.initState.description.usage.deleteHint":
+		"Nach Beendigung der Arbeiten mit den jeweiligen Online-Medien sind diese von den privaten Endgeräten, Datenträgern und Lernplattformen zu löschen; spätestens beim Verlassen der Bildungseinrichtung.",
+	"pages.content.initState.description.usage.notPermitted":
+		"Eine grundsätzliche Veröffentlichung (z.B. im Internet) der Online-Medien oder mit Teilen daraus neu hergestellten neuen und/oder bearbeiteten Werken ist grundsätzlich nicht zulässig, bzw. bedarf der Zustimmung des Rechtegebers.",
+	"pages.content.initState.title": "Willkommen im Lern-Store!",
 	"pages.content.label.chooseACourse": "Wähle einen Kurs / Fach",
 	"pages.content.label.chooseALessonTopic": "Wähle ein Unterrichtsthema",
 	"pages.content.label.deselect": "Entfernen",
@@ -1679,7 +1755,7 @@ export default {
 	"pages.rooms.tools.notLicensedDialog.title":
 		"Tool „{toolName}“ nicht freigeschaltet",
 	"pages.rooms.tools.deleteDialog.content":
-		"Möchten Sie wirklich das Tool '<i>{itemName}</i>' aus dem Kurs entfernen?",
+		"Möchten Sie wirklich das Tool '{itemName}' aus dem Kurs entfernen?",
 	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",
 	"pages.rooms.tools.emptyState": "Es gibt noch keine Tools in diesem Kurs.",
 	"pages.rooms.tools.incomplete": "Konfiguration unvollständig",
@@ -1788,15 +1864,19 @@ export default {
 		"Der Wert eines Parameters folgt nicht den vorgegebenen Regeln. Bitte den Wert entsprechend anpassen.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Ein Tool mit gleichem Namen wurde bereits dem Kurs zugeordnet. Die einem Kurs zugeordneten Tools müssen eindeutige Namen haben.",
-	"pages.tool.context.description":
-		'Nach dem Speichern der Auswahl ist das Tool innerhalb des Kurses verfügbar.<br><br>\nWeitere Informationen sind in unserem <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Hilfebereich zu externen Tools</a> zu finden.',
 	"pages.tool.context.displayName": "Anzeigename",
 	"pages.tool.context.displayNameDescription":
 		"Der Anzeigename des Tools kann überschrieben werden und muss eindeutig sein",
 	"pages.tool.context.title": "Hinzufügen externer Tools",
 	"pages.tool.deactivate.label": "Tool in der Schule deaktivieren",
-	"pages.tool.description":
-		'Die kursspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb des Kurses verfügbar.<br><br>\nDurch das Löschen einer Konfiguration wird das Tool dem Kurs wieder entzogen.<br><br>\nWeitere Informationen sind in unserem <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Hilfebereich zu externen Tools</a> zu finden.',
+	"pages.tool.description.firstParagraph":
+		"Die kursspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb des Kurses verfügbar.",
+	"pages.tool.description.secondParagraph":
+		"Durch das Löschen einer Konfiguration wird das Tool dem Kurs wieder entzogen.",
+	"pages.tool.description.moreInformation":
+		"Weitere Informationen sind in unserem {0} zu finden.",
+	"pages.tool.description.moreInformation.link":
+		"Hilfebreich zu externen Tools",
 	"pages.tool.select.label": "Tool-Auswahl / Tool-URL",
 	"pages.tool.select.description":
 		"Nach Tools suchen oder eine Tool-URL eingeben bzw. aus dem Zwischenspeicher manuell oder per Knopf einfügen",
@@ -1808,19 +1888,33 @@ export default {
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.button.startMigration": "Umzug starten",
-	"pages.userMigration.description.fromSource":
-		"Hallo!<br>Deine Schule wechselt gerade das Anmeldesystem.<br>Du kannst Deinen Account jetzt zu {targetSystem} umziehen.<br>Nach dem Umzug kannst Du Dich hier nur noch mit {targetSystem} anmelden.<br><br>Drücke auf „{startMigration}“ und melde Dich mit Deinem {targetSystem}-Account an.",
-	"pages.userMigration.description.fromSourceMandatory":
-		"Hallo!<br>Deine Schule wechselt gerade das Anmeldesystem.<br>Du musst Deinen Account jetzt zu {targetSystem} umziehen.<br>Nach dem Umzug kannst Du Dich hier nur noch mit {targetSystem} anmelden.<br><br>Drücke auf „{startMigration}“ und melde Dich mit Deinem {targetSystem}-Account an.",
-	"pages.userMigration.error.description":
-		'Der Umzug Deines Accounts zu {targetSystem} ist leider fehlegeschlagen.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
-	"pages.userMigration.error.schoolNumberMismatch":
-		"Gib diese Informationen bitte weiter:<br><b>Schulnummer in der Niedersächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.description.firstParagraph.hello": "Hallo!",
+	"pages.userMigration.description.firstParagraph.changeSource":
+		"Deine Schule wechselt gerade das Anmeldesystem",
+	"pages.userMigration.description.firstParagraph.fromSource":
+		"Du kannst Deinen Account jetzt zu {targetSystem} umziehen.",
+	"pages.userMigration.description.firstParagraph.fromSourceMandatory":
+		"Du musst Deinen Account jetzt zu {targetSystem} umziehen",
+	"pages.userMigration.description.firstParagraph.loginWith":
+		"Nach dem Umzug kannst Du Dich hier nur noch mit {targetSystem} anmelden.",
+	"pages.userMigration.description.lastParagraph":
+		"Drücke auf „{startMigration}“ und melde Dich mit Deinem {targetSystem}-Account an.",
+	"pages.userMigration.error.description.fail":
+		"Der Umzug Deines Accounts zu {targetSystem} ist leider fehlgeschlagen.",
+	"pages.userMigration.error.description.support":
+		"Wende Dich bitte an den Administrator oder direkt an den {0}.",
+	"pages.userMigration.error.description.support.link": "Support",
 	"pages.userMigration.error.multipleUsersFound":
-		'Dieser moin.schule-Account ist bereits mit einem Account in der Niedersächsischen Bildungscloud verbunden und kann nicht noch einmal für die Migration verwendet werden.<br>Wende Dich bitte an den Administrator oder direkt an den <a href="{supportLink}">Support</a>. ',
+		"Dieser moin.schule-Account ist bereits mit einem Account in der Niedersächsischen Bildungscloud verbunden und kann nicht noch einmal für die Migration verwendet werden.",
+	"pages.userMigration.error.schoolNumberMismatch.information":
+		"Gib diese Informationen bitte weiter:",
+	"pages.userMigration.error.schoolNumberMismatch.information.schoolNumber":
+		"Schulnummer in der Niedersächsischen Bildungscloud: {sourceSchoolNumber}, Schulnummer in {targetSystem}: {targetSchoolNumber}.",
 	"pages.userMigration.error.title": "Umzug des Accounts fehlgeschlagen",
 	"pages.userMigration.success.description":
-		"Der Umzug Deines Accounts zu {targetSystem} ist fertig.<br>Melde Dich jetzt bitte neu an.",
+		"Der Umzug Deines Accounts zu {targetSystem} ist fertig.",
+	"pages.userMigration.success.description.loginAgain":
+		"Melde Dich jetzt bitte neu an.",
 	"pages.userMigration.success.login": "Login über {targetSystem}",
 	"pages.userMigration.success.title":
 		"Erfolgreicher Umzug deines Anmeldesystems",

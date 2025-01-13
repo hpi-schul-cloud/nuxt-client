@@ -8,7 +8,27 @@
 					role="presentation"
 					:alt="$t('components.organisms.AutoLogoutWarning.image.alt')"
 				/>
-				<RenderHTML class="sloth-text" :html="getText" component="p" />
+				<p v-if="error" class="sloth-text">
+					{{ $t("components.organisms.AutoLogoutWarning.error") }}
+				</p>
+				<p v-else class="sloth-text">
+					<i18n-t
+						keypath="components.organisms.AutoLogoutWarning.warning"
+						scope="global"
+					>
+						<span class="text-error">
+							{{
+								$t(
+									"components.organisms.AutoLogoutWarning.warning.remainingTime",
+									remainingTimeInMinutes,
+									{
+										named: { remainingTime: remainingTimeInMinutes },
+									}
+								)
+							}}
+						</span>
+					</i18n-t>
+				</p>
 			</div>
 		</template>
 		<template #footer>
@@ -23,7 +43,6 @@
 
 <script>
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { RenderHTML } from "@feature-render-html";
 
 const toast = {
 	error401: -1,
@@ -32,9 +51,6 @@ const toast = {
 };
 
 export default {
-	components: {
-		RenderHTML,
-	},
 	inject: {
 		autoLogoutModule: { from: "autoLogoutModule" },
 		notifierModule: { from: NOTIFIER_MODULE_KEY },
@@ -42,22 +58,6 @@ export default {
 	computed: {
 		remainingTimeInMinutes() {
 			return Math.max(Math.floor(this.remainingTimeInSeconds / 60), 0);
-		},
-		getText() {
-			if (this.error) {
-				return this.$t("components.organisms.AutoLogoutWarning.error");
-			} else {
-				const remainingTime = this.$t(
-					"components.organisms.AutoLogoutWarning.warning.remainingTime",
-					this.remainingTimeInMinutes,
-					{
-						remainingTime: this.remainingTimeInMinutes,
-					}
-				);
-				return this.$t("components.organisms.AutoLogoutWarning.warning", {
-					remainingTime,
-				});
-			}
 		},
 		getImage() {
 			if (this.error)

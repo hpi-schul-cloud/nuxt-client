@@ -116,13 +116,21 @@
 							}}
 						</template>
 						<template #content>
-							<RenderHTML
-								:html="
+							<p>
+								{{
 									t(
-										'components.administration.adminMigrationSection.clearAutoMatchesDialog.description'
+										"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph"
 									)
-								"
-							/>
+								}}
+							</p>
+							<p>
+								{{
+									t(
+										"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph"
+									)
+								}}
+								>
+							</p>
 						</template>
 					</VCustomDialog>
 				</div>
@@ -283,23 +291,27 @@
 							>
 								<div v-if="!isLoading">
 									<VCardText>
-										<RenderHTML
-											:html="
-												t(
-													isNbc
-														? 'pages.administration.migration.summary.nbc'
-														: 'pages.administration.migration.summary',
-													{
+										<div>
+											<p
+												v-for="(
+													paragraph, index
+												) in migrationSummaryParagraphItems"
+												:key="index"
+											>
+												<span
+													v-if="paragraph.boldText"
+													class="font-weight-bold"
+												>
+													{{ paragraph.boldText }}
+												</span>
+												{{
+													t(paragraph.text, {
 														instance: theme.name,
 														source: sourceSystemName,
-														importUsersCount: totalMatched,
-														importUsersUnmatchedCount:
-															totalImportUsers - totalMatched,
-														usersUnmatchedCount: totalUnmatched,
-													}
-												)
-											"
-										/>
+													})
+												}}
+											</p>
+										</div>
 										<VRow>
 											<VCheckbox
 												v-model="isMigrationConfirm"
@@ -575,7 +587,6 @@ import { envConfigModule, importUsersModule, schoolsModule } from "@/store";
 import { BusinessError } from "@/store/types/commons";
 import { injectStrict, THEME_KEY } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { RenderHTML } from "@feature-render-html";
 import { mdiClose } from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import {
@@ -858,6 +869,26 @@ const clearAllAutoMatches = async () => {
 
 	isLoading.value = false;
 };
+
+const migrationSummaryParagraphItems = computed(() => [
+	{
+		text: "pages.administration.migration.summary.firstParagraph",
+	},
+	{
+		boldText: totalMatched.value,
+		text: "pages.administration.migration.summary.secondParagraph.importUsersCount",
+	},
+	{
+		boldText: totalImportUsers.value - totalMatched.value,
+		text: "pages.administration.migration.summary.thirdParagraph.importUsersUnmatchedCount",
+	},
+	{
+		boldText: isNbc.value ? undefined : totalUnmatched.value,
+		text: isNbc.value
+			? "pages.administration.migration.summary.lastParagraph.nbc"
+			: "pages.administration.migration.summary.lastParagraph.usersUnmatchedCount",
+	},
+]);
 
 watch(migrationStep, async (val) => {
 	if (val === 1 || val === 3) {

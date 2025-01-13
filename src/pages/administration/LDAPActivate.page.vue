@@ -124,14 +124,9 @@
 				"
 				data-testid="migrateUsersCheckbox"
 			/>
-			<RenderHTML
-				:html="
-					$t(
-						'pages.administration.ldap.activate.migrateExistingUsers.info'
-					).toString()
-				"
-				component="p"
-			/>
+			<p>
+				{{ $t("pages.administration.ldap.activate.migrateExistingUsers.info") }}
+			</p>
 		</section>
 		<div v-if="schoolErrors" class="errors-container">
 			<info-message
@@ -206,7 +201,6 @@ import {
 	mdiChevronLeft,
 	mdiShieldAccountVariantOutline,
 } from "@icons/material";
-import { RenderHTML } from "@feature-render-html";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { SchulcloudTheme } from "@/serverApi/v3";
@@ -225,7 +219,6 @@ export default {
 		ModalBodyInfo,
 		ModalFooterConfirm,
 		InfoMessage,
-		RenderHTML,
 		DefaultWireframe,
 	},
 	data() {

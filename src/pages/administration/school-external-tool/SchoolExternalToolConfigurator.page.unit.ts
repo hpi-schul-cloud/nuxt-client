@@ -22,7 +22,6 @@ import {
 import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import SchoolExternalToolConfigurator from "./SchoolExternalToolConfigurator.page.vue";
 
@@ -65,11 +64,7 @@ describe("SchoolExternalToolConfigurator", () => {
 
 		const wrapper = mount(SchoolExternalToolConfigurator, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
