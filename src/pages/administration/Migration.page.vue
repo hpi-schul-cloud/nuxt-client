@@ -161,11 +161,7 @@
 									<VRow align="center" justify="space-between">
 										<div class="ml-14">
 											<VSwitch
-												v-show="
-													isNbc &&
-													!isMigrationFinished &&
-													totalImportUsers === 0
-												"
+												v-show="isNbc && isMigrationNotStarted"
 												:label="
 													t(
 														'pages.administration.migration.matchByPreferredName'
