@@ -135,7 +135,7 @@ onMounted(async () => {
 });
 
 watch(y, () => {
-	fixedHeaderOnMobile.value.enabled = y.value <= -64 && mdAndDown.value;
+	fixedHeaderOnMobile.value.enabled = y.value <= 0 && mdAndDown.value;
 });
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
