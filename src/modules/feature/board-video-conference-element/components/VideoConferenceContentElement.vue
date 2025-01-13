@@ -74,7 +74,6 @@
 					</VCardActions>
 				</VCard>
 			</VDialog>
-
 			<VideoConferenceConfigurationDialog
 				:is-open="isConfigurationDialogOpen"
 				:options="videoConferenceInfo.options"
@@ -88,7 +87,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, PropType, toRef } from "vue";
 import { useRoute } from "vue-router";
-
 import {
 	useBoardFocusHandler,
 	useBoardPermissions,
