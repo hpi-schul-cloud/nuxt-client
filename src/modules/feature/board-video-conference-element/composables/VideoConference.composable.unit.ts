@@ -4,7 +4,6 @@ import * as serverApi from "@/serverApi/v3/api";
 import { useVideoConference } from "./VideoConference.composable";
 import {
 	VideoConferenceInfoResponse,
-	// VideoConferenceInfoResponse,
 	VideoConferenceJoinResponse,
 	VideoConferenceScope,
 	VideoConferenceStateResponse,
