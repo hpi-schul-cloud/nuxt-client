@@ -14,13 +14,12 @@
 </template>
 
 <script setup lang="ts">
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+} from "@ui-kebab-menu";
 
 defineProps({
 	columnIndex: { type: Number, required: true },
