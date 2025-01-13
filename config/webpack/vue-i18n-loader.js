@@ -1,4 +1,4 @@
-const { generateJSON, generateJavaScript } = require("@intlify/bundle-utils");
+const { generateJavaScript } = require("@intlify/bundle-utils");
 
 const loader = function (source, sourceMap) {
 	// eslint-disable-next-line @typescript-eslint/no-this-alias
@@ -10,8 +10,7 @@ const loader = function (source, sourceMap) {
 		inSourceMap: sourceMap,
 		forceStringify: false,
 		useClassComponent: false,
-		strictMessage: false,
-		escapeHtml: false,
+		strictMessage: true, // DO NOT set this to false. We do not allow HTML in messages.
 		env: loaderContext.mode,
 		type: "plain",
 		isGlobal: false,

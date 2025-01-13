@@ -3,11 +3,10 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { shallowMount } from "@vue/test-utils";
 import ContentEmptyState from "./ContentEmptyState.vue";
 
 describe("@/components/molecules/ContentEmptyState", () => {
-	const wrapper = shallowMount(ContentEmptyState, {
+	const wrapper = mount(ContentEmptyState, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 		},
@@ -24,7 +23,7 @@ describe("@/components/molecules/ContentEmptyState", () => {
 		const vCustomEmptyStateElement = wrapper.findComponent(vCustomEmptyState);
 
 		expect(vCustomEmptyStateElement.props().title).toBe(
-			"pages.content.empty_state.error.title"
+			"pages.content.emptyState.error.title"
 		);
 	});
 
@@ -34,23 +33,22 @@ describe("@/components/molecules/ContentEmptyState", () => {
 		expect(vCustomEmptyStateElement.props().image).toBe("content-empty");
 	});
 
-	it("Provides prop message", () => {
-		const vCustomEmptyStateElement = wrapper.findComponent(vCustomEmptyState);
+	it("have a description", () => {
+		const vCustomEmptyStateElement = wrapper.getComponent(vCustomEmptyState);
+		const description = vCustomEmptyStateElement.get("p");
 
-		const renderHTMLElement =
-			vCustomEmptyStateElement.vm.$slots.description()[0];
+		const suggestionItems = [
+			"moreThanOneCharacter",
+			"correctSpelling",
+			"otherSearchTerms",
+			"generalSearchTerms",
+			"lessSearchTerms",
+		]
+			.map((key) => `pages.content.emptyState.error.message.suggestions.${key}`)
+			.join("");
 
-		expect(renderHTMLElement.props.html).toBe(
-			"pages.content.empty_state.error.message"
+		expect(description.text()).toBe(
+			`pages.content.emptyState.error.message.suggestions${suggestionItems}`
 		);
-	});
-
-	it("Provides prop component", () => {
-		const vCustomEmptyStateElement = wrapper.findComponent(vCustomEmptyState);
-
-		const renderHTMLElement =
-			vCustomEmptyStateElement.vm.$slots.description()[0];
-
-		expect(renderHTMLElement.props.component).toBe("span");
 	});
 });

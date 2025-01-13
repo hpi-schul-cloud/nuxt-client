@@ -18,7 +18,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 
 describe("AdminMigrationSection", () => {
 	let schoolsModule: jest.Mocked<SchoolsModule>;
@@ -68,11 +67,7 @@ describe("AdminMigrationSection", () => {
 
 		const wrapper = mount(AdminMigrationSection, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SCHOOLS_MODULE_KEY.valueOf()]: schoolsModule,
 					[USER_LOGIN_MIGRATION_MODULE_KEY.valueOf()]: userLoginMigrationModule,
@@ -181,11 +176,20 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
+			const infoText = wrapper.get('[data-testId="migration-info-text"]');
+			const expectedText = [
+				"firstParagraph",
+				"secondParagraph",
+				"thirdParagraph",
+				"fourthParagraph",
+			]
+				.map(
+					(text) =>
+						`components.administration.adminMigrationSection.infoText.${text}`
+				)
+				.join("");
 
-			expect(renderHtmls[1].props("html")).toStrictEqual(
-				"components.administration.adminMigrationSection.infoText"
-			);
+			expect(infoText.text()).toEqual(expectedText);
 		});
 
 		it("should display the info text activeMigration when the admin activated the migration", () => {
@@ -203,9 +207,9 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
+			const infoText = wrapper.get('[data-testId="migration-active-status"]');
 
-			expect(renderHtmls[1].props("html")).toStrictEqual(
+			expect(infoText.text()).toStrictEqual(
 				"components.administration.adminMigrationSection.migrationActive"
 			);
 		});
@@ -368,7 +372,7 @@ describe("AdminMigrationSection", () => {
 
 			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
 			const switchComponent = wrapper.findComponent({ name: "v-switch" });
-			await buttonComponent.vm.$emit("click");
+			await buttonComponent.trigger("click");
 
 			expect(buttonComponent.exists()).toBe(false);
 			expect(switchComponent.isVisible()).toBe(false);
@@ -440,7 +444,7 @@ describe("AdminMigrationSection", () => {
 
 			const buttonComponent = wrapper.findComponent({ name: "v-btn" });
 			const switchComponent = wrapper.findComponent({ name: "v-switch" });
-			await buttonComponent.vm.$emit("click");
+			await buttonComponent.trigger("click");
 
 			expect(buttonComponent.exists()).toBe(false);
 			expect(switchComponent.isVisible()).toBe(false);
@@ -460,7 +464,7 @@ describe("AdminMigrationSection", () => {
 				);
 
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
+				await buttonComponent.trigger("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
 
@@ -478,7 +482,7 @@ describe("AdminMigrationSection", () => {
 						}
 					);
 					const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-					await buttonComponent.vm.$emit("click");
+					await buttonComponent.trigger("click");
 
 					const cardComponent = wrapper.findComponent({ name: "v-card" });
 					const cardButtonAgree = cardComponent.find("[data-testId=agree-btn]");
@@ -506,7 +510,7 @@ describe("AdminMigrationSection", () => {
 					}
 				);
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
+				await buttonComponent.trigger("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
 				const cardButtonDisagree = cardComponent.find(
@@ -540,7 +544,7 @@ describe("AdminMigrationSection", () => {
 				);
 
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
+				await buttonComponent.trigger("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
 
@@ -567,7 +571,7 @@ describe("AdminMigrationSection", () => {
 				);
 
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
+				await buttonComponent.trigger("click");
 
 				const warningCards = wrapper.findAllComponents({
 					name: "migration-warning-card",
@@ -602,7 +606,7 @@ describe("AdminMigrationSection", () => {
 					}
 				);
 				const buttonComponent = wrapper.findComponent({ name: "v-btn" });
-				await buttonComponent.vm.$emit("click");
+				await buttonComponent.trigger("click");
 
 				const cardComponent = wrapper.findComponent({ name: "v-card" });
 				const cardButtonDisagree = cardComponent.find(
@@ -643,11 +647,18 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const renderHtmls = wrapper.findAllComponents({ name: "RenderHTML" });
-
-			expect(renderHtmls[2].props("html")).toContain(
-				"components.administration.adminMigrationSection.oauthMigrationFinished.text"
+			const dateParagraph = wrapper.get(
+				"[data-testid=migration-finished-timestamp]"
 			);
+
+			const expectedText = ["firstParagraph", "secondParagraph"]
+				.map(
+					(paragraph) =>
+						`components.administration.adminMigrationSection.oauthMigrationFinished.text.${paragraph}`
+				)
+				.join("");
+
+			expect(dateParagraph.text()).toBe(expectedText);
 		});
 
 		it("should show finalFinish text when migration grace period has expired", async () => {
@@ -669,12 +680,16 @@ describe("AdminMigrationSection", () => {
 				}
 			);
 
-			const renderHtml = wrapper.findComponent({ name: "RenderHTML" });
-
-			expect(renderHtml.props()).toHaveProperty("html");
-			expect(renderHtml.props("html")).toContain(
-				"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete"
+			const paragraph = wrapper.get(
+				"[data-testid=migration-finished-timestamp]"
 			);
+
+			const expectedText = [
+				"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph",
+				"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph",
+			].join("");
+
+			expect(paragraph.text()).toBe(expectedText);
 		});
 
 		it("should not exist when migration has not been completed", async () => {
