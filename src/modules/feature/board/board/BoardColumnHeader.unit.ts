@@ -14,7 +14,7 @@ import {
 	KebabMenuActionMoveRight,
 	KebabMenuActionDelete,
 	KebabMenuActionRename,
-} from "@ui-board";
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed, nextTick } from "vue";

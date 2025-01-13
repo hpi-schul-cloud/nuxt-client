@@ -17,7 +17,8 @@
 
 <script setup lang="ts">
 import { mdiTrashCanOutline } from "@icons/material";
-import { BoardMenu, KebabMenuAction, BoardMenuScope } from "@ui-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { KebabMenuAction } from "@ui-kebab-menu";
 
 defineEmits<{
 	(e: "delete:element"): void;

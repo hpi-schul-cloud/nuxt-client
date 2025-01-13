@@ -18,7 +18,7 @@ import {
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
 	KebabMenuActionRename,
-} from "@ui-board";
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed } from "vue";

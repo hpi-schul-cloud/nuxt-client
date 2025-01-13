@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { KebabMenuAction } from "@ui-board";
+import KebabMenuAction from "./KebabMenuAction.vue";
 import { mdiArrowUp } from "@icons/material";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();

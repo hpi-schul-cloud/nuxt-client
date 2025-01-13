@@ -63,13 +63,12 @@ import {
 	isPreviewPossible,
 } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+} from "@ui-kebab-menu";
 import {
 	computed,
 	defineComponent,

@@ -12,7 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import { BoardMenu, KebabMenuActionDelete, BoardMenuScope } from "@ui-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { KebabMenuActionDelete } from "@ui-kebab-menu";
 
 defineProps({
 	columnIndex: { type: Number, required: true },

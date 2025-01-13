@@ -10,12 +10,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
+import { BoardMenu } from "@ui-board";
 import {
-	BoardMenu,
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
-} from "@ui-board";
+} from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";

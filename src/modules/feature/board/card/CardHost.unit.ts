@@ -24,7 +24,7 @@ import {
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
-import { KebabMenuActionDelete } from "@ui-board";
+import { KebabMenuActionDelete } from "@ui-kebab-menu";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
 	useBoardNotifier,

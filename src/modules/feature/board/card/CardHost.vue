@@ -98,12 +98,8 @@ import {
 	useCardStore,
 } from "@data-board";
 import { mdiArrowExpand } from "@icons/material";
-import {
-	BoardMenu,
-	KebabMenuActionDelete,
-	KebabMenuActionEdit,
-	BoardMenuScope,
-} from "@ui-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { KebabMenuActionDelete, KebabMenuActionEdit } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, onMounted, ref, toRef } from "vue";

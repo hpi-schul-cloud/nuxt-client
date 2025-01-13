@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { KebabMenuActionDelete } from "@ui-board";
+import { KebabMenuActionDelete } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
 

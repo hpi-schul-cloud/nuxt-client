@@ -3,13 +3,13 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { KebabMenuActionDelete } from "@ui-board";
+import { MENU_SCOPE } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import { BoardMenuScope } from "./board-menu-scope";
+import { BoardMenuScope } from "../board/board-menu-scope";
 import KebabMenuAction from "./KebabMenuAction.vue";
-import { MENU_SCOPE } from "./injection-tokens";
+import KebabMenuActionDelete from "./KebabMenuActionDelete.vue";
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseDeleteConfirmationDialog = jest.mocked(

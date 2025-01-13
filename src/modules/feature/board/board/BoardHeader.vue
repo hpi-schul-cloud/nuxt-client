@@ -59,16 +59,15 @@
 <script setup lang="ts">
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
 	KebabMenuActionCopy,
 	KebabMenuActionDelete,
 	KebabMenuActionRename,
 	KebabMenuActionPublish,
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
-	BoardMenuScope,
-} from "@ui-board";
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";

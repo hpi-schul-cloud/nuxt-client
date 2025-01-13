@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { KebabMenuAction } from "@ui-board";
+import { KebabMenuAction } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 

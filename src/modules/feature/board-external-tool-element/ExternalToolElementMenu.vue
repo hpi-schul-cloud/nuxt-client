@@ -19,14 +19,13 @@
 
 <script setup lang="ts">
 import { mdiCogOutline } from "@icons/material";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
 	KebabMenuAction,
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+} from "@ui-kebab-menu";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 

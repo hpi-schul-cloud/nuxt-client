@@ -63,16 +63,15 @@
 
 <script setup lang="ts">
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
 	KebabMenuActionDelete,
 	KebabMenuActionRename,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 	KebabMenuActionMoveLeft,
 	KebabMenuActionMoveRight,
-	BoardMenuScope,
-} from "@ui-board";
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";

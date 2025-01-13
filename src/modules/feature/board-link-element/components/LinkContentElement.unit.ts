@@ -24,12 +24,12 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { BoardMenu } from "@ui-board";
 import {
-	BoardMenu,
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
-} from "@ui-board";
+} from "@ui-kebab-menu";
 
 jest.mock("@data-board/ContentElementState.composable");
 

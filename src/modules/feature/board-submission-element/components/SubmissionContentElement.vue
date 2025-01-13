@@ -54,13 +54,12 @@
 <script lang="ts">
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+} from "@ui-kebab-menu";
 import { defineComponent, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";

@@ -1,4 +1,4 @@
-import { KebabMenuAction, KebabMenuActionDelete } from "@ui-board";
+import { KebabMenuAction, KebabMenuActionDelete } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import {
 	createTestingI18n,

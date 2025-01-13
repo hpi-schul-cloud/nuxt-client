@@ -11,11 +11,11 @@
 <script setup lang="ts">
 import type { MessageSchema } from "@/locales/schema";
 import { mdiTrashCanOutline } from "@icons/material";
-import { KebabMenuAction } from "@ui-board";
+import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { BoardMenuScope } from "./board-menu-scope";
 import { useI18n } from "vue-i18n";
 import { PropType } from "vue";
+import KebabMenuAction from "./KebabMenuAction.vue";
 const { t } = useI18n();
 
 const props = defineProps({
