@@ -2,10 +2,10 @@
 	<vCustomDialog
 		v-model:is-open="isOpen"
 		has-buttons
-		:buttons="['close', 'next']"
+		:buttons="['cancel', 'next']"
 		:next-btn-disabled="!selectedGroup || !hasTeacher(selectedGroup)"
 		@next="onConfirm"
-		@dialog-closed="$emit('cancel')"
+		@dialog-canceled="$emit('cancel')"
 	>
 		<template #title>
 			<div class="text-h4 my-2 text-break">
