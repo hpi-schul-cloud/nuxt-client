@@ -182,7 +182,6 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
-	ClassRequestContext,
 	ClassSortBy,
 	SchoolYearQueryType,
 	SchulcloudTheme,
@@ -408,7 +407,6 @@ const onConfirmClassDeletion = async () => {
 const loadClassList = async () => {
 	await groupModule.loadClassesForSchool({
 		schoolYearQuery: schoolYearQueryType.value,
-		calledFrom: ClassRequestContext.ClassOverview,
 	});
 };
 
