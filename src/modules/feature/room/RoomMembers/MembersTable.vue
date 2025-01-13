@@ -6,6 +6,7 @@
 	>
 		<ActionMenu
 			v-if="selectedUserIds.length"
+			class="multi-action-menu"
 			:selectedIds="selectedUserIds"
 			@remove:selected="onRemoveMembers"
 			@reset:selected="onResetSelectedMembers"
