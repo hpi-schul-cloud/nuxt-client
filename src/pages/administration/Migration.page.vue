@@ -174,7 +174,7 @@
 												:disabled="isLoading"
 												:true-value="true"
 												:false-value="false"
-												:model-value="matchByPreferredName"
+												v-model="matchByPreferredName"
 												data-testid="migration-preferred-name-switch"
 											/>
 										</div>
