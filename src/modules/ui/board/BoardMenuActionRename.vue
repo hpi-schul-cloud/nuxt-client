@@ -1,15 +1,15 @@
 <template>
 	<BoardMenuAction
-		:icon="mdiArrowRight"
-		data-testid="board-menu-action-move-right"
+		:icon="mdiRenameOutline"
+		data-testid="board-menu-action-rename"
 	>
-		{{ t("components.board.action.moveRight") }}
+		{{ t("common.actions.rename") }}
 	</BoardMenuAction>
 </template>
 
 <script setup lang="ts">
 import { BoardMenuAction } from "@ui-board";
-import { mdiArrowRight } from "@icons/material";
+import { mdiRenameOutline } from "@icons/material";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 </script>
