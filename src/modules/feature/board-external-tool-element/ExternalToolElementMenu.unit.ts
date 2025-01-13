@@ -1,4 +1,4 @@
-import { BoardMenuAction, BoardMenuActionDelete } from "@ui-board";
+import { KebabMenuAction, KebabMenuActionDelete } from "@ui-board";
 import { shallowMount } from "@vue/test-utils";
 import {
 	createTestingI18n,
@@ -52,7 +52,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should have a menu option to edit", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuAction);
+			const menuItem = wrapper.findComponent(KebabMenuAction);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -60,7 +60,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should emit the edit event on click", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuAction);
+			const menuItem = wrapper.findComponent(KebabMenuAction);
 
 			menuItem.vm.$emit("click");
 
@@ -87,7 +87,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should have a menu option to delete", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -95,7 +95,7 @@ describe("ExternalToolElementMenu", () => {
 		it("should emit the delete event on click", async () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
 			await menuItem.trigger("click");
 

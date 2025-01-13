@@ -40,11 +40,11 @@
 							has-background
 							:data-testid="boardMenuTestId"
 						>
-							<BoardMenuActionEdit
+							<KebabMenuActionEdit
 								v-if="!isEditMode"
 								@click="onStartEditMode"
 							/>
-							<BoardMenuActionDelete
+							<KebabMenuActionDelete
 								:name="card.title"
 								:scope="BoardMenuScope.CARD"
 								@click="onDeleteCard"
@@ -100,8 +100,8 @@ import {
 import { mdiArrowExpand } from "@icons/material";
 import {
 	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionEdit,
+	KebabMenuActionDelete,
+	KebabMenuActionEdit,
 	BoardMenuScope,
 } from "@ui-board";
 import { useCourseBoardEditMode } from "@util-board";
@@ -126,11 +126,11 @@ export default defineComponent({
 		CardSkeleton,
 		CardTitle,
 		BoardMenu,
-		BoardMenuActionEdit,
+		KebabMenuActionEdit,
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
-		BoardMenuActionDelete,
+		KebabMenuActionDelete,
 		CardHostDetailView,
 	},
 	props: {

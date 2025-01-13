@@ -26,9 +26,9 @@ import {
 } from "@@/tests/test-utils/setup";
 import {
 	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
 } from "@ui-board";
 
 jest.mock("@data-board/ContentElementState.composable");
@@ -294,7 +294,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
@@ -307,7 +307,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
@@ -320,7 +320,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");
@@ -398,7 +398,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
@@ -409,7 +409,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
@@ -420,7 +420,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");

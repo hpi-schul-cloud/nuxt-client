@@ -30,9 +30,9 @@ import {
 } from "@@/tests/test-utils/setup";
 import {
 	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
 } from "@ui-board";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import AuthModule from "@/store/auth";
@@ -336,7 +336,7 @@ describe("VideoConferenceContentElement", () => {
 								isNotFirstElement: false,
 							});
 
-							const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 
 							expect(menuItem.exists()).toBe(false);
 						});
@@ -354,7 +354,7 @@ describe("VideoConferenceContentElement", () => {
 								isNotFirstElement: true,
 							});
 
-							const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 							await menuItem.trigger("click");
 
 							expect(wrapper.emitted()).toHaveProperty("move-up:edit");
@@ -373,7 +373,7 @@ describe("VideoConferenceContentElement", () => {
 								isNotLastElement: false,
 							});
 
-							const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 
 							expect(menuItem.exists()).toBe(false);
 						});
@@ -391,7 +391,7 @@ describe("VideoConferenceContentElement", () => {
 								isNotLastElement: true,
 							});
 
-							const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 							await menuItem.trigger("click");
 
 							expect(wrapper.emitted()).toHaveProperty("move-down:edit");
@@ -407,7 +407,7 @@ describe("VideoConferenceContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");
@@ -562,7 +562,7 @@ describe("VideoConferenceContentElement", () => {
 							isNotFirstElement: false,
 						});
 
-						const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+						const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 
 						expect(menuItem.exists()).toBe(false);
 					});
@@ -576,7 +576,7 @@ describe("VideoConferenceContentElement", () => {
 								isNotFirstElement: true,
 							});
 
-							const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 							await menuItem.trigger("click");
 
 							expect(wrapper.emitted()).toHaveProperty("move-up:edit");
@@ -592,7 +592,7 @@ describe("VideoConferenceContentElement", () => {
 								isNotLastElement: false,
 							});
 
-							const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 
 							expect(menuItem.exists()).toBe(false);
 						});
@@ -607,7 +607,7 @@ describe("VideoConferenceContentElement", () => {
 								isNotLastElement: true,
 							});
 
-							const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 							await menuItem.trigger("click");
 
 							expect(wrapper.emitted()).toHaveProperty("move-down:edit");
@@ -620,7 +620,7 @@ describe("VideoConferenceContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");

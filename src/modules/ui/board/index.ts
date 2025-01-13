@@ -1,34 +1,34 @@
 import BoardMenu from "./BoardMenu.vue";
-import BoardMenuAction from "./BoardMenuAction.vue";
-import BoardMenuActionCopy from "./BoardMenuActionCopy.vue";
-import BoardMenuActionDelete from "./BoardMenuActionDelete.vue";
-import BoardMenuActionEdit from "./BoardMenuActionEdit.vue";
-import BoardMenuActionMoveDown from "./BoardMenuActionMoveDown.vue";
-import BoardMenuActionMoveLeft from "./BoardMenuActionMoveLeft.vue";
-import BoardMenuActionMoveRight from "./BoardMenuActionMoveRight.vue";
-import BoardMenuActionMoveUp from "./BoardMenuActionMoveUp.vue";
-import BoardMenuActionPublish from "./BoardMenuActionPublish.vue";
-import BoardMenuActionRevert from "./BoardMenuActionRevert.vue";
-import BoardMenuActionShare from "./BoardMenuActionShare.vue";
-import BoardMenuActionRename from "./BoardMenuActionRename.vue";
+import KebabMenuAction from "./KebabMenuAction.vue";
+import KebabMenuActionCopy from "./KebabMenuActionCopy.vue";
+import KebabMenuActionDelete from "./KebabMenuActionDelete.vue";
+import KebabMenuActionEdit from "./KebabMenuActionEdit.vue";
+import KebabMenuActionMoveDown from "./KebabMenuActionMoveDown.vue";
+import KebabMenuActionMoveLeft from "./KebabMenuActionMoveLeft.vue";
+import KebabMenuActionMoveRight from "./KebabMenuActionMoveRight.vue";
+import KebabMenuActionMoveUp from "./KebabMenuActionMoveUp.vue";
+import KebabMenuActionPublish from "./KebabMenuActionPublish.vue";
+import KebabMenuActionRevert from "./KebabMenuActionRevert.vue";
+import KebabMenuActionShare from "./KebabMenuActionShare.vue";
+import KebabMenuActionRename from "./KebabMenuActionRename.vue";
 import BoardSectionCreationHeader from "./BoardSectionCreationHeader.vue";
 import ContentElementBar from "./content-element/ContentElementBar.vue";
 
 export { BoardMenuScope } from "./board-menu-scope";
 export {
 	BoardMenu,
-	BoardMenuAction,
-	BoardMenuActionCopy,
-	BoardMenuActionEdit,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveUp,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveLeft,
-	BoardMenuActionMoveRight,
-	BoardMenuActionPublish,
-	BoardMenuActionRevert,
-	BoardMenuActionShare,
-	BoardMenuActionRename,
+	KebabMenuAction,
+	KebabMenuActionCopy,
+	KebabMenuActionEdit,
+	KebabMenuActionDelete,
+	KebabMenuActionMoveUp,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveLeft,
+	KebabMenuActionMoveRight,
+	KebabMenuActionPublish,
+	KebabMenuActionRevert,
+	KebabMenuActionShare,
+	KebabMenuActionRename,
 	ContentElementBar,
 	BoardSectionCreationHeader,
 };

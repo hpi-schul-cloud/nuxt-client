@@ -1,14 +1,14 @@
 <template>
-	<BoardMenuAction
+	<KebabMenuAction
 		:icon="mdiEyeOutline"
 		data-testid="board-menu-action-publish"
 	>
 		{{ t("common.action.publish") }}
-	</BoardMenuAction>
+	</KebabMenuAction>
 </template>
 
 <script setup lang="ts">
-import { BoardMenuAction } from "@ui-board";
+import { KebabMenuAction } from "@ui-board";
 import { mdiEyeOutline } from "@icons/material";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();

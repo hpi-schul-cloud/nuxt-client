@@ -4,9 +4,9 @@
 		has-background
 		:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 	>
-		<BoardMenuActionMoveUp @click="onMoveUp" />
-		<BoardMenuActionMoveDown @click="onMoveDown" />
-		<BoardMenuActionDelete
+		<KebabMenuActionMoveUp @click="onMoveUp" />
+		<KebabMenuActionMoveDown @click="onMoveDown" />
+		<KebabMenuActionDelete
 			@click="onDelete"
 			:scope="BoardMenuScope.COLLABORATIVE_TEXT_EDITOR_ELEMENT"
 		/>
@@ -16,9 +16,9 @@
 <script setup lang="ts">
 import {
 	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
 	BoardMenuScope,
 } from "@ui-board";
 

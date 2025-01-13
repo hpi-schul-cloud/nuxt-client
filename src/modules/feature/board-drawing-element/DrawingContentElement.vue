@@ -19,15 +19,15 @@
 						has-background
 						:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 					>
-						<BoardMenuActionMoveUp
+						<KebabMenuActionMoveUp
 							v-if="isNotFirstElement"
 							@click="onMoveDrawingElementEditUp"
 						/>
-						<BoardMenuActionMoveDown
+						<KebabMenuActionMoveDown
 							v-if="isNotLastElement"
 							@click="onMoveDrawingElementEditDown"
 						/>
-						<BoardMenuActionDelete
+						<KebabMenuActionDelete
 							@click="onDeleteElement"
 							:scope="BoardMenuScope.DRAWING_ELEMENT"
 						/>
@@ -44,9 +44,9 @@ import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
 import {
 	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
 	BoardMenuScope,
 } from "@ui-board";
 import { computed, PropType, ref, toRef } from "vue";

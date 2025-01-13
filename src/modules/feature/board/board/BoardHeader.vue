@@ -40,12 +40,12 @@
 					:scope="BoardMenuScope.BOARD"
 					data-testid="board-menu-btn"
 				>
-					<BoardMenuActionRename @click="onStartEditMode" />
-					<BoardMenuActionCopy @click="onCopyBoard" />
-					<BoardMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
-					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-					<BoardMenuActionDelete
+					<KebabMenuActionRename @click="onStartEditMode" />
+					<KebabMenuActionCopy @click="onCopyBoard" />
+					<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
+					<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+					<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+					<KebabMenuActionDelete
 						:name="title"
 						:scope="BoardMenuScope.COLUMN"
 						@click="onDeleteBoard"
@@ -61,12 +61,12 @@ import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
 	BoardMenu,
-	BoardMenuActionCopy,
-	BoardMenuActionDelete,
-	BoardMenuActionRename,
-	BoardMenuActionPublish,
-	BoardMenuActionRevert,
-	BoardMenuActionShare,
+	KebabMenuActionCopy,
+	KebabMenuActionDelete,
+	KebabMenuActionRename,
+	KebabMenuActionPublish,
+	KebabMenuActionRevert,
+	KebabMenuActionShare,
 	BoardMenuScope,
 } from "@ui-board";
 import { useCourseBoardEditMode } from "@util-board";

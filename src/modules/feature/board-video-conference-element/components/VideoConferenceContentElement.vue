@@ -26,12 +26,12 @@
 					has-background
 					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				>
-					<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-					<BoardMenuActionMoveDown
+					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<KebabMenuActionMoveDown
 						v-if="isNotLastElement"
 						@click="onMoveDown"
 					/>
-					<BoardMenuActionDelete
+					<KebabMenuActionDelete
 						:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 						@click="onDelete"
 					/>
@@ -45,12 +45,12 @@
 					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 					has-background
 				>
-					<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-					<BoardMenuActionMoveDown
+					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<KebabMenuActionMoveDown
 						v-if="isNotLastElement"
 						@click="onMoveDown"
 					/>
-					<BoardMenuActionDelete
+					<KebabMenuActionDelete
 						:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 						@click="onDelete"
 					/>
@@ -165,9 +165,9 @@ import {
 } from "@data-board";
 import {
 	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
 	BoardMenuScope,
 } from "@ui-board";
 import {

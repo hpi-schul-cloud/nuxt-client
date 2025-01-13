@@ -4,12 +4,12 @@
 		has-background
 		:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 	>
-		<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-		<BoardMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-		<BoardMenuAction :icon="mdiCogOutline" @click="onEdit">
+		<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+		<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+		<KebabMenuAction :icon="mdiCogOutline" @click="onEdit">
 			{{ t("common.labels.settings") }}
-		</BoardMenuAction>
-		<BoardMenuActionDelete
+		</KebabMenuAction>
+		<KebabMenuActionDelete
 			:name="displayName"
 			:scope="BoardMenuScope.EXTERNAL_TOOL_ELEMENT"
 			@click="onDelete"
@@ -21,10 +21,10 @@
 import { mdiCogOutline } from "@icons/material";
 import {
 	BoardMenu,
-	BoardMenuAction,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
+	KebabMenuAction,
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
 	BoardMenuScope,
 } from "@ui-board";
 import { useI18n } from "vue-i18n";

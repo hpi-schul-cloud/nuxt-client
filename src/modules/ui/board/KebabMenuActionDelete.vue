@@ -1,17 +1,17 @@
 <template>
-	<BoardMenuAction
+	<KebabMenuAction
 		:icon="mdiTrashCanOutline"
 		data-testid="board-menu-action-delete"
 		@click="onClick"
 	>
 		{{ t("components.board.action.delete") }}
-	</BoardMenuAction>
+	</KebabMenuAction>
 </template>
 
 <script setup lang="ts">
 import type { MessageSchema } from "@/locales/schema";
 import { mdiTrashCanOutline } from "@icons/material";
-import { BoardMenuAction } from "@ui-board";
+import { KebabMenuAction } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { BoardMenuScope } from "./board-menu-scope";
 import { useI18n } from "vue-i18n";
