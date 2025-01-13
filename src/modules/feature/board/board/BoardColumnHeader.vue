@@ -121,9 +121,15 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 };
 
 const onMoveColumnKeyboard = (event: KeyboardEvent) => {
-	if (event.code === "ArrowLeft") {
+	let keyLeft = "ArrowLeft";
+	let keyRight = "ArrowRight";
+	if (props.isListBoard) {
+		keyLeft = "ArrowUp";
+		keyRight = "ArrowDown";
+	}
+	if (event.code === keyLeft) {
 		emit("move:column-left");
-	} else if (event.code === "ArrowRight") {
+	} else if (event.code === keyRight) {
 		emit("move:column-right");
 	}
 };

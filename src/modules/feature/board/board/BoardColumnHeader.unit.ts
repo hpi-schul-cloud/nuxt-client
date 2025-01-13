@@ -160,6 +160,46 @@ describe("BoardColumnHeader", () => {
 				});
 			});
 		});
+
+		describe("when move-column-keyboard-event is received", () => {
+			describe("when arrow-up-key is received", () => {
+				it("should emit move:column-left", () => {
+					const wrapper = setup(
+						{ permissions: { hasDeletePermission: true } },
+						{ isListBoard: true }
+					);
+
+					const interactionHandler = wrapper.findComponent(
+						BoardColumnInteractionHandler
+					);
+					interactionHandler.vm.$emit("move:column-keyboard", {
+						code: "ArrowUp",
+					});
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-left"]).toBeDefined();
+				});
+			});
+
+			describe("when arrow-right-key is received", () => {
+				it("should emit move:column-left", () => {
+					const wrapper = setup(
+						{ permissions: { hasDeletePermission: true } },
+						{ isListBoard: true }
+					);
+
+					const interactionHandler = wrapper.findComponent(
+						BoardColumnInteractionHandler
+					);
+					interactionHandler.vm.$emit("move:column-keyboard", {
+						code: "ArrowDown",
+					});
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-right"]).toBeDefined();
+				});
+			});
+		});
 	});
 
 	describe("when the board is of type column", () => {
@@ -235,6 +275,46 @@ describe("BoardColumnHeader", () => {
 				});
 			});
 		});
+
+		describe("when move-column-keyboard-event is received", () => {
+			describe("when arrow-left-key is received", () => {
+				it("should emit move:column-left", () => {
+					const wrapper = setup({
+						isEditMode: false,
+						permissions: { hasDeletePermission: true },
+					});
+
+					const interactionHandler = wrapper.findComponent(
+						BoardColumnInteractionHandler
+					);
+					interactionHandler.vm.$emit("move:column-keyboard", {
+						code: "ArrowLeft",
+					});
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-left"]).toBeDefined();
+				});
+			});
+
+			describe("when arrow-right-key is received", () => {
+				it("should emit move:column-left", () => {
+					const wrapper = setup({
+						isEditMode: false,
+						permissions: { hasDeletePermission: true },
+					});
+
+					const interactionHandler = wrapper.findComponent(
+						BoardColumnInteractionHandler
+					);
+					interactionHandler.vm.$emit("move:column-keyboard", {
+						code: "ArrowRight",
+					});
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-right"]).toBeDefined();
+				});
+			});
+		});
 	});
 
 	describe("when edit button is clicked", () => {
@@ -263,46 +343,6 @@ describe("BoardColumnHeader", () => {
 			interactionHandler.vm.$emit("end-edit-mode");
 
 			expect(mockedStopEditMode).toHaveBeenCalled();
-		});
-	});
-
-	describe("when move-column-keyboard-event is received", () => {
-		describe("when arrow-left-key is received", () => {
-			it("should emit move:column-left", () => {
-				const wrapper = setup({
-					isEditMode: false,
-					permissions: { hasDeletePermission: true },
-				});
-
-				const interactionHandler = wrapper.findComponent(
-					BoardColumnInteractionHandler
-				);
-				interactionHandler.vm.$emit("move:column-keyboard", {
-					code: "ArrowLeft",
-				});
-
-				const emitted = wrapper.emitted();
-				expect(emitted["move:column-left"]).toBeDefined();
-			});
-		});
-
-		describe("when arrow-right-key is received", () => {
-			it("should emit move:column-left", () => {
-				const wrapper = setup({
-					isEditMode: false,
-					permissions: { hasDeletePermission: true },
-				});
-
-				const interactionHandler = wrapper.findComponent(
-					BoardColumnInteractionHandler
-				);
-				interactionHandler.vm.$emit("move:column-keyboard", {
-					code: "ArrowRight",
-				});
-
-				const emitted = wrapper.emitted();
-				expect(emitted["move:column-right"]).toBeDefined();
-			});
 		});
 	});
 
