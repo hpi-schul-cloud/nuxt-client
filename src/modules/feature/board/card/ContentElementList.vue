@@ -160,7 +160,8 @@ const elementTypesWithTabindexZero = [
 	ContentElementType.Drawing,
 	ContentElementType.ExternalTool,
 	ContentElementType.File,
-	// ContentElementType.Link,
+	ContentElementType.Link,
+	ContentElementType.VideoConference,
 ];
 
 const tabindex = (element: AnyContentElement) =>
