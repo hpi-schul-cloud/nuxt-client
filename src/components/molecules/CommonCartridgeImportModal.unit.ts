@@ -59,10 +59,10 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 
 			const confirmBtn = wrapper.findComponent(
 				"[data-testId='dialog-confirm-btn']"
-			) as any;
+			);
 
 			expect(confirmBtn.exists()).toBe(true);
-			expect(confirmBtn.isDisabled()).toBe(true);
+			expect(confirmBtn.classes()).toContain("v-btn--disabled");
 		});
 
 		it("should contain enabled cancel button", async () => {
@@ -70,10 +70,10 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 
 			const cancelBtn = wrapper.findComponent(
 				"[data-testid='dialog-cancel-btn']"
-			) as any;
+			);
 
 			expect(cancelBtn.exists()).toBe(true);
-			expect(cancelBtn.isDisabled()).toBe(false);
+			expect(cancelBtn.classes()).not.toContain("v-btn--disabled");
 		});
 
 		it("should contain file input", () => {
@@ -81,7 +81,7 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 
 			const fileInput = wrapper.findComponent(
 				"[data-testid='dialog-file-input']"
-			) as any;
+			);
 
 			expect(fileInput.exists()).toBe(true);
 		});
@@ -99,9 +99,9 @@ describe("@/components/molecules/CommonCartridgeImportModal", () => {
 
 			const confirmBtn = wrapper.findComponent(
 				"[data-testId='dialog-confirm-btn']"
-			) as any;
+			);
 
-			expect(confirmBtn.isDisabled()).toBe(false);
+			expect(confirmBtn.classes()).not.toContain("v-btn--disabled");
 		});
 	});
 
