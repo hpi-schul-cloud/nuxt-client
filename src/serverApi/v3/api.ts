@@ -21949,12 +21949,10 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @param {string} schoolId 
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetTeachers: async (schoolId: string, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetTeachers: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerGetTeachers', 'schoolId', schoolId)
             const localVarPath = `/school/{schoolId}/teachers`
@@ -21973,14 +21971,6 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (skip !== undefined) {
-                localVarQueryParameter['skip'] = skip;
-            }
-
-            if (limit !== undefined) {
-                localVarQueryParameter['limit'] = limit;
-            }
 
 
     
@@ -22199,13 +22189,11 @@ export const SchoolApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} schoolId 
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetTeachers(schoolId: string, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolUserListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetTeachers(schoolId, skip, limit, options);
+        async schoolControllerGetTeachers(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolUserListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetTeachers(schoolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -22311,13 +22299,11 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
         /**
          * 
          * @param {string} schoolId 
-         * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetTeachers(schoolId: string, skip?: number, limit?: number, options?: any): AxiosPromise<SchoolUserListResponse> {
-            return localVarFp.schoolControllerGetTeachers(schoolId, skip, limit, options).then((request) => request(axios, basePath));
+        schoolControllerGetTeachers(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse> {
+            return localVarFp.schoolControllerGetTeachers(schoolId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -22418,13 +22404,11 @@ export interface SchoolApiInterface {
     /**
      * 
      * @param {string} schoolId 
-     * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetTeachers(schoolId: string, skip?: number, limit?: number, options?: any): AxiosPromise<SchoolUserListResponse>;
+    schoolControllerGetTeachers(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse>;
 
     /**
      * 
@@ -22537,14 +22521,12 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
     /**
      * 
      * @param {string} schoolId 
-     * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SchoolApi
      */
-    public schoolControllerGetTeachers(schoolId: string, skip?: number, limit?: number, options?: any) {
-        return SchoolApiFp(this.configuration).schoolControllerGetTeachers(schoolId, skip, limit, options).then((request) => request(this.axios, this.basePath));
+    public schoolControllerGetTeachers(schoolId: string, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetTeachers(schoolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

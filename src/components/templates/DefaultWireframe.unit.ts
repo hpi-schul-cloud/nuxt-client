@@ -8,6 +8,7 @@ import {
 } from "@@/tests/test-utils/setup";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
+import { nextTick } from "vue";
 
 describe("DefaultWireframe", () => {
 	const setup = (
@@ -44,6 +45,7 @@ describe("DefaultWireframe", () => {
 			props: {
 				fullWidth: true,
 				headline: "dummy title",
+				maxWidth: "full",
 				breadcrumbs: [
 					{
 						title: "dummy breadcrumb 1",
@@ -109,7 +111,7 @@ describe("DefaultWireframe", () => {
 
 	it("displays headline in slot", () => {
 		const wrapper = setup({
-			props: { headline: "property title", fullWidth: false },
+			props: { headline: "property title", fullWidth: false, maxWidth: "full" },
 			slots: {
 				header: [
 					"<h1>slot title</h1>",
@@ -125,7 +127,9 @@ describe("DefaultWireframe", () => {
 	});
 
 	it("should emit 'fab:clicked' after click the fab button", async () => {
-		const wrapper = setup();
+		const wrapper = setup({
+			props: { maxWidth: "nativ" },
+		});
 		await wrapper.setProps({
 			fabItems: {
 				icon: "mdi-close",
@@ -137,5 +141,22 @@ describe("DefaultWireframe", () => {
 		await fab.vm.$emit("fab:clicked");
 
 		expect(wrapper.emitted("fab:clicked")).toHaveLength(1);
+	});
+
+	describe("when 'fixedHeader' prop is set", () => {
+		it("should have 'fixed-header' class", async () => {
+			const wrapper = setup({
+				props: { maxWidth: "nativ" },
+			});
+
+			const headerBefore = wrapper.find(".wireframe-header");
+			expect(headerBefore.classes("fixed")).toBe(false);
+
+			wrapper.setProps({ fixedHeader: true });
+			await nextTick();
+
+			const headerAfter = wrapper.find(".wireframe-header");
+			expect(headerAfter.classes("fixed")).toBe(true);
+		});
 	});
 });
