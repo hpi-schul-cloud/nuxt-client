@@ -10,7 +10,6 @@ type ViewOptions = {
 	"actions-column": Options;
 	"checkbox-in-row"?: Options;
 	"actions-in-row"?: Options;
-	"show-title"?: boolean;
 };
 
 type RolePermissions = Pick<
@@ -43,7 +42,6 @@ const ROLES: RolePermissions = {
 			disabled: false,
 			hidden: false,
 		},
-		"show-title": true,
 	},
 	[RoleName.Roomadmin]: {
 		"selection-column": {
@@ -122,7 +120,6 @@ export const hasVisibleOption = (
 		| keyof ViewOptions["actions-column"]
 		| keyof ViewOptions["checkbox-in-row"]
 		| keyof ViewOptions["actions-in-row"]
-		| keyof ViewOptions["show-title"]
 ) => {
 	const sourceOption = ROLES[roleName]?.[source];
 	if (!action || typeof sourceOption === "boolean") {
