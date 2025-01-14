@@ -22,15 +22,13 @@ const mockedUseDeleteConfirmationDialog = jest.mocked(
 
 describe("CollaborativeTextEditorElementMenu", () => {
 	const getWrapper = (propsData: {
-		isFirstElement: boolean;
-		isLastElement: boolean;
+		isNotFirstElement: boolean;
+		isNotLastElement: boolean;
 		hasMultipleElements: boolean;
 		columnIndex: number;
 		rowIndex: number;
 		elementIndex: number;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
 		const askDeleteConfirmationMock = async () => await Promise.resolve(true);
 
 		setupDeleteConfirmationComposableMock({
@@ -61,8 +59,8 @@ describe("CollaborativeTextEditorElementMenu", () => {
 	const setup = () => {
 		const { wrapper } = getWrapper({
 			hasMultipleElements: true,
-			isFirstElement: false,
-			isLastElement: false,
+			isNotFirstElement: true,
+			isNotLastElement: true,
 			columnIndex: 0,
 			rowIndex: 1,
 			elementIndex: 2,
