@@ -1,34 +1,13 @@
 import BoardMenu from "./BoardMenu.vue";
-import BoardMenuAction from "./BoardMenuAction.vue";
-import BoardMenuActionCopy from "./BoardMenuActionCopy.vue";
-import BoardMenuActionDelete from "./BoardMenuActionDelete.vue";
-import BoardMenuActionEdit from "./BoardMenuActionEdit.vue";
-import BoardMenuActionMoveDown from "./BoardMenuActionMoveDown.vue";
-import BoardMenuActionMoveLeft from "./BoardMenuActionMoveLeft.vue";
-import BoardMenuActionMoveRight from "./BoardMenuActionMoveRight.vue";
-import BoardMenuActionMoveUp from "./BoardMenuActionMoveUp.vue";
-import BoardMenuActionPublish from "./BoardMenuActionPublish.vue";
-import BoardMenuActionRevert from "./BoardMenuActionRevert.vue";
-import BoardMenuActionShare from "./BoardMenuActionShare.vue";
-import BoardMenuActionRename from "./BoardMenuActionRename.vue";
+import { BoardMenuScope } from "./board-menu-scope";
 import BoardSectionCreationHeader from "./BoardSectionCreationHeader.vue";
 import ContentElementBar from "./content-element/ContentElementBar.vue";
+import { MENU_SCOPE } from "./injection-tokens";
 
-export { BoardMenuScope } from "./board-menu-scope";
 export {
+	MENU_SCOPE,
 	BoardMenu,
-	BoardMenuAction,
-	BoardMenuActionCopy,
-	BoardMenuActionEdit,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveUp,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveLeft,
-	BoardMenuActionMoveRight,
-	BoardMenuActionPublish,
-	BoardMenuActionRevert,
-	BoardMenuActionShare,
-	BoardMenuActionRename,
+	BoardMenuScope,
 	ContentElementBar,
 	BoardSectionCreationHeader,
 };

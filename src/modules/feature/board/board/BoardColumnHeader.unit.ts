@@ -8,13 +8,13 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuActionMoveLeft,
-	BoardMenuActionMoveRight,
-	BoardMenuActionDelete,
-	BoardMenuActionRename,
-} from "@ui-board";
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+	KebabMenuActionMoveLeft,
+	KebabMenuActionMoveRight,
+	KebabMenuActionDelete,
+	KebabMenuActionRename,
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed, nextTick } from "vue";
@@ -96,8 +96,8 @@ describe("BoardColumnHeader", () => {
 		it("should not show options to move left and right", async () => {
 			const wrapper = setup({}, { isListBoard: true });
 
-			const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
-			const moveRightButton = wrapper.findComponent(BoardMenuActionMoveRight);
+			const moveLeftButton = wrapper.findComponent(KebabMenuActionMoveLeft);
+			const moveRightButton = wrapper.findComponent(KebabMenuActionMoveRight);
 			expect(moveLeftButton.exists()).toBe(false);
 			expect(moveRightButton.exists()).toBe(false);
 		});
@@ -110,7 +110,7 @@ describe("BoardColumnHeader", () => {
 						{ isListBoard: true, isNotLastColumn: false }
 					);
 
-					const moveDownButton = wrapper.findComponent(BoardMenuActionMoveDown);
+					const moveDownButton = wrapper.findComponent(KebabMenuActionMoveDown);
 
 					expect(moveDownButton.exists()).toBe(false);
 				});
@@ -123,7 +123,7 @@ describe("BoardColumnHeader", () => {
 						{ isListBoard: true, isNotLastColumn: true }
 					);
 
-					const moveDownButton = wrapper.findComponent(BoardMenuActionMoveDown);
+					const moveDownButton = wrapper.findComponent(KebabMenuActionMoveDown);
 					moveDownButton.vm.$emit("click");
 
 					const emitted = wrapper.emitted();
@@ -140,7 +140,7 @@ describe("BoardColumnHeader", () => {
 						{ isListBoard: true, isNotFirstColumn: false }
 					);
 
-					const moveUpButton = wrapper.findComponent(BoardMenuActionMoveUp);
+					const moveUpButton = wrapper.findComponent(KebabMenuActionMoveUp);
 
 					expect(moveUpButton.exists()).toBe(false);
 				});
@@ -153,7 +153,7 @@ describe("BoardColumnHeader", () => {
 						{ isListBoard: true, isNotFirstColumn: true }
 					);
 
-					const moveUpButton = wrapper.findComponent(BoardMenuActionMoveUp);
+					const moveUpButton = wrapper.findComponent(KebabMenuActionMoveUp);
 					moveUpButton.vm.$emit("click");
 
 					const emitted = wrapper.emitted();
@@ -207,8 +207,8 @@ describe("BoardColumnHeader", () => {
 		it("should not show options to move up and down", async () => {
 			const wrapper = setup({}, { isListBoard: false });
 
-			const moveDownButton = wrapper.findComponent(BoardMenuActionMoveDown);
-			const moveUpButton = wrapper.findComponent(BoardMenuActionMoveUp);
+			const moveDownButton = wrapper.findComponent(KebabMenuActionMoveDown);
+			const moveUpButton = wrapper.findComponent(KebabMenuActionMoveUp);
 			expect(moveDownButton.exists()).toBe(false);
 			expect(moveUpButton.exists()).toBe(false);
 		});
@@ -221,7 +221,7 @@ describe("BoardColumnHeader", () => {
 						{ isListBoard: false, isNotFirstColumn: false }
 					);
 
-					const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
+					const moveLeftButton = wrapper.findComponent(KebabMenuActionMoveLeft);
 
 					expect(moveLeftButton.exists()).toBe(false);
 				});
@@ -234,7 +234,7 @@ describe("BoardColumnHeader", () => {
 						{ isListBoard: false, isNotFirstColumn: true }
 					);
 
-					const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
+					const moveLeftButton = wrapper.findComponent(KebabMenuActionMoveLeft);
 					moveLeftButton.vm.$emit("click");
 
 					const emitted = wrapper.emitted();
@@ -252,7 +252,7 @@ describe("BoardColumnHeader", () => {
 					);
 
 					const moveRightButton = wrapper.findComponent(
-						BoardMenuActionMoveRight
+						KebabMenuActionMoveRight
 					);
 
 					expect(moveRightButton.exists()).toBe(false);
@@ -267,7 +267,7 @@ describe("BoardColumnHeader", () => {
 					);
 
 					const moveRightButton = wrapper.findComponent(
-						BoardMenuActionMoveRight
+						KebabMenuActionMoveRight
 					);
 					moveRightButton.vm.$emit("click");
 
@@ -325,7 +325,7 @@ describe("BoardColumnHeader", () => {
 				permissions: { hasDeletePermission: true },
 			});
 
-			const action = wrapper.findComponent(BoardMenuActionRename);
+			const action = wrapper.findComponent(KebabMenuActionRename);
 			action.trigger("click");
 
 			expect(mockedStartEditMode).toHaveBeenCalled();
@@ -356,7 +356,7 @@ describe("BoardColumnHeader", () => {
 					permissions: { hasDeletePermission: true },
 				});
 
-				const deleteAction = wrapper.findComponent(BoardMenuActionDelete);
+				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
 				deleteAction.vm.$emit("click", true);
 				await nextTick();
 
@@ -372,7 +372,7 @@ describe("BoardColumnHeader", () => {
 					permissions: { hasDeletePermission: true },
 				});
 
-				const deleteAction = wrapper.findComponent(BoardMenuActionDelete);
+				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
 				deleteAction.vm.$emit("click", false);
 				await nextTick();
 

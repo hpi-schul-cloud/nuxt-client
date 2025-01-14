@@ -4,10 +4,10 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import {
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { shallowMount } from "@vue/test-utils";
 import { ref } from "vue";
@@ -77,7 +77,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should have a menu option to move element up", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+			const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -85,7 +85,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should emit the move-up event on click", async () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+			const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 
 			await menuItem.trigger("click");
 
@@ -97,7 +97,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should have a menu option to move element down", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+			const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -105,7 +105,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should emit the move-down event on click", async () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+			const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 
 			await menuItem.trigger("click");
 
@@ -117,7 +117,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should have a menu option to delete", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -125,7 +125,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should emit the delete event on click", async () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
 			await menuItem.trigger("click");
 

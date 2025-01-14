@@ -26,9 +26,9 @@
 				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				v-if="isEditMode"
 			>
-				<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-				<BoardMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<BoardMenuActionDelete
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
 					:name="fileProperties.name"
 					:scope="BoardMenuScope.FILE_ELEMENT"
 					@click="onDelete"
@@ -43,9 +43,9 @@
 			:isUploading="isUploading"
 		>
 			<BoardMenu :scope="BoardMenuScope.FILE_ELEMENT" has-background>
-				<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-				<BoardMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<BoardMenuActionDelete
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
 					:scope="BoardMenuScope.FILE_ELEMENT"
 					@click="onDelete"
 				/>
@@ -63,13 +63,12 @@ import {
 	isPreviewPossible,
 } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import {
 	computed,
 	defineComponent,
@@ -96,9 +95,9 @@ export default defineComponent({
 		FileUpload,
 		FileContent,
 		BoardMenu,
-		BoardMenuActionMoveUp,
-		BoardMenuActionMoveDown,
-		BoardMenuActionDelete,
+		KebabMenuActionMoveUp,
+		KebabMenuActionMoveDown,
+		KebabMenuActionDelete,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },

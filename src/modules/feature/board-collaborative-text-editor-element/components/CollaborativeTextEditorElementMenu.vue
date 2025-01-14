@@ -4,9 +4,9 @@
 		has-background
 		:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 	>
-		<BoardMenuActionMoveUp @click="onMoveUp" />
-		<BoardMenuActionMoveDown @click="onMoveDown" />
-		<BoardMenuActionDelete
+		<KebabMenuActionMoveUp @click="onMoveUp" />
+		<KebabMenuActionMoveDown @click="onMoveDown" />
+		<KebabMenuActionDelete
 			@click="onDelete"
 			:scope="BoardMenuScope.COLLABORATIVE_TEXT_EDITOR_ELEMENT"
 		/>
@@ -14,13 +14,12 @@
 </template>
 
 <script setup lang="ts">
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 
 defineProps({
 	columnIndex: { type: Number, required: true },

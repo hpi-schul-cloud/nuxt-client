@@ -26,12 +26,12 @@
 					has-background
 					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				>
-					<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-					<BoardMenuActionMoveDown
+					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<KebabMenuActionMoveDown
 						v-if="isNotLastElement"
 						@click="onMoveDown"
 					/>
-					<BoardMenuActionDelete
+					<KebabMenuActionDelete
 						:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 						@click="onDelete"
 					/>
@@ -45,12 +45,12 @@
 					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 					has-background
 				>
-					<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-					<BoardMenuActionMoveDown
+					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<KebabMenuActionMoveDown
 						v-if="isNotLastElement"
 						@click="onMoveDown"
 					/>
-					<BoardMenuActionDelete
+					<KebabMenuActionDelete
 						:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 						@click="onDelete"
 					/>
@@ -163,13 +163,12 @@ import {
 	useBoardPermissions,
 	useContentElementState,
 } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import {
 	computed,
 	ComputedRef,

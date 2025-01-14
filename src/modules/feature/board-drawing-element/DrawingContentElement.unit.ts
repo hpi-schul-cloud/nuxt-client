@@ -10,12 +10,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
+import { BoardMenu } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";
@@ -197,7 +197,7 @@ describe("DrawingContentElement", () => {
 					elementIndex: 2,
 				});
 
-				const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+				const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 				await menuItem.trigger("click");
 
 				expect(wrapper.emitted()).toHaveProperty("delete:element");
@@ -214,7 +214,7 @@ describe("DrawingContentElement", () => {
 						isNotFirstElement: false,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 
 					expect(menuItem.exists()).toBe(false);
 				});
@@ -232,7 +232,7 @@ describe("DrawingContentElement", () => {
 							isNotFirstElement: true,
 						});
 
-						const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+						const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 						await menuItem.trigger("click");
 
 						expect(wrapper.emitted()).toHaveProperty("move-up:edit");
@@ -251,7 +251,7 @@ describe("DrawingContentElement", () => {
 						isNotLastElement: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
@@ -270,7 +270,7 @@ describe("DrawingContentElement", () => {
 							isNotLastElement: true,
 						});
 
-						const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+						const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 						await menuItem.trigger("click");
 
 						expect(wrapper.emitted()).toHaveProperty("move-down:edit");

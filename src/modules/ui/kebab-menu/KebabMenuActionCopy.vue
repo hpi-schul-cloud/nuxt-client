@@ -1,11 +1,11 @@
 <template>
-	<BoardMenuAction :icon="mdiContentCopy" data-testid="board-menu-action-copy">
+	<KebabMenuAction :icon="mdiContentCopy" data-testid="board-menu-action-copy">
 		{{ t("common.actions.copy") }}
-	</BoardMenuAction>
+	</KebabMenuAction>
 </template>
 
 <script setup lang="ts">
-import { BoardMenuAction } from "@ui-board";
+import KebabMenuAction from "./KebabMenuAction.vue";
 import { mdiContentCopy } from "@icons/material";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();

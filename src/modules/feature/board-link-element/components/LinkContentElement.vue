@@ -24,12 +24,12 @@
 					has-background
 					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				>
-					<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-					<BoardMenuActionMoveDown
+					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<KebabMenuActionMoveDown
 						v-if="isNotLastElement"
 						@click="onMoveDown"
 					/>
-					<BoardMenuActionDelete
+					<KebabMenuActionDelete
 						:scope="BoardMenuScope.LINK_ELEMENT"
 						@click="onDelete"
 					/>
@@ -37,12 +37,12 @@
 			</LinkContentElementDisplay>
 			<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
 				><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
-					<BoardMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-					<BoardMenuActionMoveDown
+					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+					<KebabMenuActionMoveDown
 						v-if="isNotLastElement"
 						@click="onMoveDown"
 					/>
-					<BoardMenuActionDelete
+					<KebabMenuActionDelete
 						:scope="BoardMenuScope.LINK_ELEMENT"
 						@click="onDelete"
 					/>
@@ -56,13 +56,12 @@
 import { LinkElementResponse } from "@/serverApi/v3";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";

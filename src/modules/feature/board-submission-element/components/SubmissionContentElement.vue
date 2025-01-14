@@ -33,15 +33,15 @@
 					has-background
 					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				>
-					<BoardMenuActionMoveUp
+					<KebabMenuActionMoveUp
 						v-if="isNotFirstElement"
 						@click="onMoveElementUp"
 					/>
-					<BoardMenuActionMoveDown
+					<KebabMenuActionMoveDown
 						v-if="isNotLastElement"
 						@click="onMoveElementDown"
 					/>
-					<BoardMenuActionDelete
+					<KebabMenuActionDelete
 						:scope="BoardMenuScope.SUBMISSION_ELEMENT"
 						@click="onDeleteElement"
 					/>
@@ -54,13 +54,12 @@
 <script lang="ts">
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import { defineComponent, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
@@ -76,9 +75,9 @@ export default defineComponent({
 	},
 	components: {
 		BoardMenu,
-		BoardMenuActionMoveUp,
-		BoardMenuActionMoveDown,
-		BoardMenuActionDelete,
+		KebabMenuActionMoveUp,
+		KebabMenuActionMoveDown,
+		KebabMenuActionDelete,
 		SubmissionContentElementDisplay,
 		SubmissionContentElementEdit,
 	},

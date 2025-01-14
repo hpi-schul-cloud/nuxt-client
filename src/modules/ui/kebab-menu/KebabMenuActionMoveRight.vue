@@ -1,14 +1,14 @@
 <template>
-	<BoardMenuAction
+	<KebabMenuAction
 		:icon="mdiArrowRight"
 		data-testid="board-menu-action-move-right"
 	>
 		{{ t("components.board.action.moveRight") }}
-	</BoardMenuAction>
+	</KebabMenuAction>
 </template>
 
 <script setup lang="ts">
-import { BoardMenuAction } from "@ui-board";
+import KebabMenuAction from "./KebabMenuAction.vue";
 import { mdiArrowRight } from "@icons/material";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();

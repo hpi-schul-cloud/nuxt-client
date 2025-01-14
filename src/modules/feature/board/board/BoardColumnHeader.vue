@@ -24,31 +24,31 @@
 						:scope="BoardMenuScope.COLUMN"
 						:data-testid="`column-menu-btn-${index}`"
 					>
-						<BoardMenuActionRename
+						<KebabMenuActionRename
 							v-if="!isEditMode"
 							@click="onStartEditMode"
 						/>
 						<template v-if="isListBoard">
-							<BoardMenuActionMoveUp
+							<KebabMenuActionMoveUp
 								v-if="isNotFirstColumn"
 								@click="onMoveColumnUp"
 							/>
-							<BoardMenuActionMoveDown
+							<KebabMenuActionMoveDown
 								v-if="isNotLastColumn"
 								@click="onMoveColumnDown"
 							/>
 						</template>
 						<template v-else>
-							<BoardMenuActionMoveLeft
+							<KebabMenuActionMoveLeft
 								v-if="isNotFirstColumn"
 								@click="onMoveColumnLeft"
 							/>
-							<BoardMenuActionMoveRight
+							<KebabMenuActionMoveRight
 								v-if="isNotLastColumn"
 								@click="onMoveColumnRight"
 							/>
 						</template>
-						<BoardMenuActionDelete
+						<KebabMenuActionDelete
 							:name="title"
 							:scope="BoardMenuScope.COLUMN"
 							@click="onDelete"
@@ -63,16 +63,15 @@
 
 <script setup lang="ts">
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionRename,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuActionMoveLeft,
-	BoardMenuActionMoveRight,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionRename,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+	KebabMenuActionMoveLeft,
+	KebabMenuActionMoveRight,
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
