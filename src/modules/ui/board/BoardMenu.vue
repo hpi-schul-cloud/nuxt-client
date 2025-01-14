@@ -30,9 +30,8 @@
 <script setup lang="ts">
 import type { MessageSchema } from "@/locales/schema";
 import { mdiDotsVertical } from "@icons/material";
-import { computed, PropType, provide, toRef } from "vue";
+import { computed, PropType } from "vue";
 import { BoardMenuScope } from "./board-menu-scope";
-import { MENU_SCOPE } from "./injection-tokens";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
@@ -55,9 +54,6 @@ const props = defineProps({
 	},
 });
 
-const scope = toRef(props, "scope");
-provide(MENU_SCOPE, scope.value);
-
 const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 	[BoardMenuScope.BOARD]: "components.board.menu.board",
 	[BoardMenuScope.COLUMN]: "components.board.menu.column",
@@ -79,7 +75,7 @@ const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 };
 
 const boardMenuAriaLabel = computed(() => {
-	return ariaLabelForScope[scope.value];
+	return ariaLabelForScope[props.scope];
 });
 </script>
 

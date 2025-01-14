@@ -3,7 +3,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { MENU_SCOPE } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
@@ -17,14 +16,12 @@ const mockedUseDeleteConfirmationDialog = jest.mocked(
 );
 
 describe("KebabMenuActionMoveDown Component", () => {
-	const setup = (options: { scope: BoardMenuScope }) => {
+	const setup = (props: { scope: BoardMenuScope }) => {
 		const wrapper = mount(KebabMenuActionDelete, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[MENU_SCOPE as symbol]: options.scope,
-				},
 			},
+			propsData: props,
 		});
 
 		return wrapper;
