@@ -123,12 +123,9 @@ const {
 	error: launchError,
 } = useExternalToolLaunchState(() => loadCardData());
 
-const autofocus: Ref<boolean> = ref(false);
 const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
 const externalToolElement = ref<HTMLElement | null>(null);
-useBoardFocusHandler(element.value.id, externalToolElement, () => {
-	autofocus.value = true;
-});
+useBoardFocusHandler(element.value.id, externalToolElement);
 
 const getIcon: ComputedRef<string | undefined> = computed(() => {
 	if (!displayData.value?.logoUrl) {

@@ -4,8 +4,8 @@
 		has-background
 		:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 	>
-		<KebabMenuActionMoveUp @click="onMoveUp" />
-		<KebabMenuActionMoveDown @click="onMoveDown" />
+		<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+		<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 		<KebabMenuActionDelete
 			@click="onDelete"
 			:scope="BoardMenuScope.COLLABORATIVE_TEXT_EDITOR_ELEMENT"
@@ -25,6 +25,8 @@ defineProps({
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
+	isNotFirstElement: { type: Boolean, requried: false },
+	isNotLastElement: { type: Boolean, requried: false },
 });
 
 const emit = defineEmits<{

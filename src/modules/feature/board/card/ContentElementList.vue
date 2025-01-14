@@ -111,23 +111,12 @@ const onMoveElementKeyboard = (
 
 const mapToComponent = (type: string) => {
 	switch (type) {
-		case ContentElementType.RichText:
-			return RichTextContentElement;
-		case ContentElementType.Link:
-			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
-				return LinkContentElement;
-			}
-			break;
-		case ContentElementType.File:
-			return FileContentElement;
-		case ContentElementType.SubmissionContainer:
-			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
-				return SubmissionContentElement;
-			}
-			break;
-		case ContentElementType.ExternalTool:
-			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
-				return ExternalToolElement;
+		case ContentElementType.CollaborativeTextEditor:
+			if (
+				envConfigModule.getEnv
+					.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED
+			) {
+				return CollaborativeTextEditorElement;
 			}
 			break;
 		case ContentElementType.Drawing:
@@ -135,12 +124,23 @@ const mapToComponent = (type: string) => {
 				return DrawingContentElement;
 			}
 			break;
-		case ContentElementType.CollaborativeTextEditor:
-			if (
-				envConfigModule.getEnv
-					.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED
-			) {
-				return CollaborativeTextEditorElement;
+		case ContentElementType.ExternalTool:
+			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
+				return ExternalToolElement;
+			}
+			break;
+		case ContentElementType.File:
+			return FileContentElement;
+		case ContentElementType.Link:
+			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
+				return LinkContentElement;
+			}
+			break;
+		case ContentElementType.RichText:
+			return RichTextContentElement;
+		case ContentElementType.SubmissionContainer:
+			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
+				return SubmissionContentElement;
 			}
 			break;
 		case ContentElementType.VideoConference:
@@ -156,9 +156,11 @@ const mapToComponent = (type: string) => {
 };
 
 const elementTypesWithTabindexZero = [
-	ContentElementType.Link,
-	ContentElementType.File,
+	ContentElementType.CollaborativeTextEditor,
 	ContentElementType.Drawing,
+	ContentElementType.ExternalTool,
+	ContentElementType.File,
+	// ContentElementType.Link,
 ];
 
 const tabindex = (element: AnyContentElement) =>

@@ -1,55 +1,48 @@
 <template>
-	<div ref="linkContentElement">
-		<v-card
-			class="mb-4"
-			target="_blank"
-			data-testid="board-link-element"
-			:class="{ 'd-none': isHidden }"
-			:variant="outlined"
-			:ripple="false"
-			:aria-label="ariaLabel"
-			:href="sanitizedUrl"
-			:loading="isLoading ? 'primary' : false"
-			@keydown.up.down="onKeydownArrow"
-			@keydown.stop
-		>
-			<LinkContentElementDisplay
-				v-if="computedElement.content.url"
-				:url="computedElement.content.url"
-				:title="computedElement.content.title"
-				:imageUrl="computedElement.content.imageUrl"
-				:isEditMode="isEditMode"
-				><BoardMenu
+	<v-card
+		class="mb-4"
+		target="_blank"
+		data-testid="board-link-element"
+		:class="{ 'd-none': isHidden }"
+		:variant="outlined"
+		:ripple="false"
+		:aria-label="ariaLabel"
+		:href="sanitizedUrl"
+		tabindex="0"
+		ref="linkContentElement"
+		@keydown.up.down="onKeydownArrow"
+		@keydown.stop
+	>
+		<LinkContentElementDisplay
+			v-if="computedElement.content.url"
+			:url="computedElement.content.url"
+			:title="computedElement.content.title"
+			:imageUrl="computedElement.content.imageUrl"
+			:isEditMode="isEditMode"
+			><BoardMenu
+				:scope="BoardMenuScope.LINK_ELEMENT"
+				has-background
+				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+			>
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
 					:scope="BoardMenuScope.LINK_ELEMENT"
-					has-background
-					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
-				>
-					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-					<KebabMenuActionMoveDown
-						v-if="isNotLastElement"
-						@click="onMoveDown"
-					/>
-					<KebabMenuActionDelete
-						:scope="BoardMenuScope.LINK_ELEMENT"
-						@click="onDelete"
-					/>
-				</BoardMenu>
-			</LinkContentElementDisplay>
-			<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
-				><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
-					<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-					<KebabMenuActionMoveDown
-						v-if="isNotLastElement"
-						@click="onMoveDown"
-					/>
-					<KebabMenuActionDelete
-						:scope="BoardMenuScope.LINK_ELEMENT"
-						@click="onDelete"
-					/>
-				</BoardMenu>
-			</LinkContentElementCreate>
-		</v-card>
-	</div>
+					@click="onDelete"
+				/>
+			</BoardMenu>
+		</LinkContentElementDisplay>
+		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
+			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
+					:scope="BoardMenuScope.LINK_ELEMENT"
+					@click="onDelete"
+				/>
+			</BoardMenu>
+		</LinkContentElementCreate>
+	</v-card>
 </template>
 
 <script setup lang="ts">
