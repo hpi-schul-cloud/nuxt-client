@@ -2,7 +2,6 @@ import { RoleName } from "@/serverApi/v3";
 type Options = {
 	show: boolean;
 	disabled: boolean;
-	hidden: boolean;
 };
 
 type ViewOptions = {
@@ -12,7 +11,7 @@ type ViewOptions = {
 	"actions-in-row"?: Options;
 };
 
-type RolePermissions = Pick<
+type RoomRoles = Pick<
 	Record<RoleName, ViewOptions>,
 	| RoleName.Roomowner
 	| RoleName.Roomadmin
@@ -20,102 +19,86 @@ type RolePermissions = Pick<
 	| RoleName.Roomviewer
 >;
 
-const ROLES: RolePermissions = {
+const ROLES: RoomRoles = {
 	[RoleName.Roomowner]: {
 		"selection-column": {
 			show: true,
 			disabled: false,
-			hidden: false,
 		},
 		"actions-column": {
 			show: true,
 			disabled: false,
-			hidden: false,
 		},
 		"checkbox-in-row": {
 			show: true,
 			disabled: false,
-			hidden: false,
 		},
 		"actions-in-row": {
 			show: true,
 			disabled: false,
-			hidden: false,
 		},
 	},
 	[RoleName.Roomadmin]: {
 		"selection-column": {
 			show: true,
 			disabled: false,
-			hidden: false,
 		},
 		"actions-column": {
 			show: true,
 			disabled: false,
-			hidden: false,
 		},
 		"checkbox-in-row": {
 			show: true,
 			disabled: false,
-			hidden: false,
 		},
 		"actions-in-row": {
 			show: true,
 			disabled: false,
-			hidden: false,
 		},
 	},
 	[RoleName.Roomeditor]: {
 		"selection-column": {
 			show: true,
 			disabled: false,
-			hidden: false,
 		},
 		"actions-column": {
-			show: true,
+			show: false,
 			disabled: false,
-			hidden: false,
 		},
 		"checkbox-in-row": {
 			show: false,
 			disabled: false,
-			hidden: true,
 		},
 		"actions-in-row": {
 			show: false,
 			disabled: false,
-			hidden: true,
 		},
 	},
 	[RoleName.Roomviewer]: {
 		"selection-column": {
 			show: false,
 			disabled: false,
-			hidden: true,
 		},
 		"actions-column": {
 			show: false,
 			disabled: false,
-			hidden: true,
 		},
 
 		"checkbox-in-row": {
 			show: false,
 			disabled: false,
-			hidden: true,
 		},
 		"actions-in-row": {
 			show: false,
 			disabled: false,
-			hidden: true,
 		},
 	},
 };
 
 export const hasVisibleOption = (
-	roleName: keyof RolePermissions,
+	roleName: keyof RoomRoles,
 	source: keyof ViewOptions,
-	action?:
+	action:
 		| keyof ViewOptions["selection-column"]
 		| keyof ViewOptions["actions-column"]
 		| keyof ViewOptions["checkbox-in-row"]
