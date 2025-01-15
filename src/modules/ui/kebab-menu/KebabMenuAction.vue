@@ -1,8 +1,8 @@
 <template>
 	<VListItem data-testid="board-menu-action" role="menuitem">
 		<template v-slot:prepend>
-			<slot name="icon" data-testid="board-menu-action-icon">
-				<v-icon :icon="icon" data-testid="board-menu-action-icon" />
+			<slot name="icon" data-testid="kebab-menu-action-icon">
+				<v-icon :icon="icon" data-testid="kebab-menu-action-icon" />
 			</slot>
 		</template>
 		<VListItemTitle :data-testid="dataTestId">

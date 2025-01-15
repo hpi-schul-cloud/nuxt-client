@@ -1,7 +1,7 @@
 <template>
 	<KebabMenuAction
 		:icon="mdiShareVariantOutline"
-		data-testid="board-menu-action-share"
+		data-testid="kebab-menu-action-share"
 	>
 		{{ t("common.actions.shareCopy") }}
 	</KebabMenuAction>

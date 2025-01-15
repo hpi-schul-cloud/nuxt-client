@@ -1,7 +1,7 @@
 <template>
 	<KebabMenuAction
 		:icon="mdiArrowRight"
-		data-testid="board-menu-action-move-right"
+		data-testid="kebab-menu-action-move-right"
 	>
 		{{ t("components.board.action.moveRight") }}
 	</KebabMenuAction>

@@ -1,7 +1,7 @@
 <template>
 	<KebabMenuAction
 		:icon="mdiTrashCanOutline"
-		data-testid="board-menu-action-delete"
+		data-testid="kebab-menu-action-delete"
 		@click="onClick"
 	>
 		{{ t("components.board.action.delete") }}

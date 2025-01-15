@@ -1,5 +1,5 @@
 <template>
-	<KebabMenuAction :icon="mdiContentCopy" data-testid="board-menu-action-copy">
+	<KebabMenuAction :icon="mdiContentCopy" data-testid="kebab-menu-action-copy">
 		{{ t("common.actions.copy") }}
 	</KebabMenuAction>
 </template>

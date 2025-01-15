@@ -7,7 +7,7 @@
 	>
 		<KebabMenuAction
 			:icon="mdiTrashCanOutline"
-			data-testid="board-menu-action-delete"
+			data-testid="kebab-menu-action-delete"
 			@click="$emit('delete:element')"
 		>
 			{{ $t("components.board.action.deleteFromSection") }}

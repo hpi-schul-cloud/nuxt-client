@@ -1,7 +1,7 @@
 <template>
 	<KebabMenuAction
 		:icon="mdiEyeOutline"
-		data-testid="board-menu-action-publish"
+		data-testid="kebab-menu-action-publish"
 	>
 		{{ t("common.action.publish") }}
 	</KebabMenuAction>

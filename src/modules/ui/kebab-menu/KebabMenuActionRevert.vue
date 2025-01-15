@@ -1,5 +1,5 @@
 <template>
-	<KebabMenuAction :icon="mdiRestore" data-testid="board-menu-action-revert">
+	<KebabMenuAction :icon="mdiRestore" data-testid="kebab-menu-action-revert">
 		{{ t("pages.room.cards.label.revert") }}
 	</KebabMenuAction>
 </template>

@@ -1,5 +1,5 @@
 <template>
-	<KebabMenuAction :icon="mdiArrowUp" data-testid="board-menu-action-move-up">
+	<KebabMenuAction :icon="mdiArrowUp" data-testid="kebab-menu-action-move-up">
 		{{ t("components.board.action.moveUp") }}
 	</KebabMenuAction>
 </template>
