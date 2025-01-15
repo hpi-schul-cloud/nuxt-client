@@ -12,6 +12,7 @@ import BoardMenuActionMoveUp from "./BoardMenuActionMoveUp.vue";
 import BoardMenuActionPublish from "./BoardMenuActionPublish.vue";
 import BoardMenuActionRevert from "./BoardMenuActionRevert.vue";
 import BoardMenuActionShare from "./BoardMenuActionShare.vue";
+import BoardMenuActionShareLink from "./BoardMenuActionShareLink.vue";
 import BoardSectionCreationHeader from "./BoardSectionCreationHeader.vue";
 import ContentElementBar from "./content-element/ContentElementBar.vue";
 
@@ -31,6 +32,7 @@ export {
 	BoardMenuActionPublish,
 	BoardMenuActionRevert,
 	BoardMenuActionShare,
+	BoardMenuActionShareLink,
 	ContentElementBar,
 	BoardSectionCreationHeader,
 };

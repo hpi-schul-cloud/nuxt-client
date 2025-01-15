@@ -19,6 +19,7 @@
 				:ripple="false"
 				:hover="isHovered"
 				:data-testid="cardTestId"
+				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>
 				<template v-if="isLoadingCard">
 					<CardSkeleton :height="height" />
@@ -35,20 +36,24 @@
 
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu
-							v-if="hasDeletePermission"
 							:scope="BoardMenuScope.CARD"
 							has-background
 							:data-testid="boardMenuTestId"
 						>
-							<BoardMenuActionEdit
-								v-if="!isEditMode"
-								@click="onStartEditMode"
-							/>
-							<BoardMenuActionDelete
-								data-test-id="board-menu-action-delete"
-								:name="card.title"
-								@click="onDeleteCard"
-							/>
+							<template v-if="hasDeletePermission">
+								<BoardMenuActionEdit
+									v-if="!isEditMode"
+									@click="onStartEditMode"
+								/>
+							</template>
+							<BoardMenuActionShareLink @click="onCopyShareLink" />
+							<template v-if="hasDeletePermission">
+								<BoardMenuActionDelete
+									data-test-id="board-menu-action-delete"
+									:name="card.title"
+									@click="onDeleteCard"
+								/>
+							</template>
 						</BoardMenu>
 					</div>
 
@@ -106,9 +111,10 @@ import {
 	BoardMenu,
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
+	BoardMenuActionShareLink,
 	BoardMenuScope,
 } from "@ui-board";
-import { useCourseBoardEditMode } from "@util-board";
+import { useCourseBoardEditMode, useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
@@ -127,6 +133,7 @@ export default defineComponent({
 		},
 	},
 	components: {
+		BoardMenuActionShareLink,
 		CardSkeleton,
 		CardTitle,
 		BoardMenu,
@@ -248,6 +255,12 @@ export default defineComponent({
 			cardStore.addTextAfterTitle(props.cardId);
 		};
 
+		const { copyShareLink, getShareLinkId } = useShareBoardLink();
+
+		const onCopyShareLink = async () => {
+			await copyShareLink(props.cardId, BoardMenuScope.CARD);
+		};
+
 		const boardMenuClasses = computed(() => {
 			if (isFocusContained.value === true || isHovered.value === true) {
 				return "";
@@ -286,6 +299,8 @@ export default defineComponent({
 			onEnter,
 			onOpenDetailView,
 			onCloseDetailView,
+			onCopyShareLink,
+			getShareLinkId,
 			isDetailView,
 			mdiArrowExpand,
 		};
