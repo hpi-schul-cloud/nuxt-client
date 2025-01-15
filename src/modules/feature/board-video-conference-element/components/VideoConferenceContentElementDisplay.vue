@@ -90,7 +90,6 @@ import { injectStrict } from "@/utils/inject";
 import { useDisplay } from "vuetify";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useI18n } from "vue-i18n";
-import { envConfigModule } from "@/store";
 
 const emit = defineEmits(["click", "refresh"]);
 
@@ -110,6 +109,10 @@ const props = defineProps({
 		type: Boolean,
 		required: true,
 	},
+	isVideoConferenceEnabled: {
+		type: Boolean,
+		required: true,
+	},
 	title: {
 		type: String,
 		require: true,
@@ -125,12 +128,8 @@ const isSmallOrLargerListBoard = computed(
 	() => smAndUp.value && isListLayout.value
 );
 
-const isVideoConferenceEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED
-);
-
 const shouldShowNoFeatureAlert = computed(
-	() => props.canStart && !isVideoConferenceEnabled.value
+	() => props.canStart && !props.isVideoConferenceEnabled
 );
 const shouldShowInfoAlert = computed(() => !props.isRunning && !props.canStart);
 const shouldShowNoPermissionAlert = computed(
@@ -138,7 +137,7 @@ const shouldShowNoPermissionAlert = computed(
 );
 
 const alertMessage = computed(() => {
-	if (isVideoConferenceEnabled.value) {
+	if (props.isVideoConferenceEnabled) {
 		return props.hasParticipationPermission
 			? t("pages.videoConference.info.notStarted")
 			: t("pages.videoConference.info.noPermission");
@@ -148,7 +147,7 @@ const alertMessage = computed(() => {
 });
 
 const noPermissionMessage = computed(() => {
-	if (isVideoConferenceEnabled.value) {
+	if (props.isVideoConferenceEnabled) {
 		return t("pages.videoConference.info.noPermission");
 	} else {
 		return t("pages.videoConference.info.notEnabledParticipants");
@@ -156,7 +155,7 @@ const noPermissionMessage = computed(() => {
 });
 
 const onContentClick = () => {
-	if (!isVideoConferenceEnabled.value || !props.hasParticipationPermission)
+	if (!props.isVideoConferenceEnabled || !props.hasParticipationPermission)
 		return;
 
 	if (!props.isRunning && props.hasParticipationPermission && !props.canStart) {

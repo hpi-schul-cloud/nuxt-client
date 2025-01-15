@@ -6,6 +6,7 @@ import {
 } from "@/utils/inject";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
 import {
+	useBoardFeatures,
 	useBoardFocusHandler,
 	useBoardPermissions,
 	useContentElementState,
@@ -54,14 +55,16 @@ const useRouterMock = <jest.Mock>useRouter;
 const useRouteMock = <jest.Mock>useRoute;
 useRouteMock.mockReturnValue({ params: { id: "room-id" } });
 
+jest.mock("@data-board/BoardFeatures.composable");
+jest.mocked(useBoardFeatures).mockImplementation(() => {
+	return {
+		isFeatureEnabled: jest.fn().mockReturnValue(true),
+	};
+});
+
 const mockedUseContentElementState = jest.mocked(useContentElementState);
 
 let defaultElement = videoConferenceElementResponseFactory.build();
-const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-	getEnv: createMock<ConfigResponse>({
-		FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
-	}),
-});
 
 describe("VideoConferenceContentElement", () => {
 	let router: DeepMocked<Router>;
@@ -199,7 +202,6 @@ describe("VideoConferenceContentElement", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
 				},

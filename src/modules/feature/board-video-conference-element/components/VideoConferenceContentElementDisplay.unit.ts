@@ -5,45 +5,33 @@ import {
 } from "@@/tests/test-utils/setup";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import { createMock } from "@golevelup/ts-jest";
-import { ConfigResponse } from "@/serverApi/v3";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { envsFactory } from "@@/tests/test-utils";
+import { useBoardFeatures } from "@data-board";
 
-const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-	getEnv: createMock<ConfigResponse>({
-		FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
-	}),
+jest.mock("@data-board/BoardFeatures.composable");
+jest.mocked(useBoardFeatures).mockImplementation(() => {
+	return {
+		isFeatureEnabled: jest.fn().mockReturnValue(true),
+	};
 });
 
 const setupWrapper = ({
 	propsData = {},
-	envOverrides = {},
 }: {
 	propsData?: object;
-	envOverrides?: Partial<ConfigResponse>;
 } = {}) => {
-	const envs = envsFactory.build({
-		FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
-		...envOverrides,
-	});
-	envConfigModule.setEnvs(envs);
-
 	const wrapper = mount(VideoConferenceContentElementDisplay, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[BOARD_IS_LIST_LAYOUT as symbol]: false,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
 			},
 		},
 		props: {
 			isEditMode: false,
 			isRunning: false,
+			isVideoConferenceEnabled: true,
 			hasParticipationPermission: false,
 			canStart: false,
 			title: "",
@@ -70,6 +58,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				propsData: {
 					isEditMode: false,
 					isRunning: false,
+					isVideoConferenceEnabled: true,
 					hasParticipationPermission: true,
 					canStart: true,
 					title,
@@ -89,12 +78,10 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const wrapper = setupWrapper({
 					propsData: {
 						isRunning: false,
+						isVideoConferenceEnabled: false,
 						hasParticipationPermission: true,
 						canStart: true,
 						title: "video conference",
-					},
-					envOverrides: {
-						FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: false,
 					},
 				});
 
@@ -113,6 +100,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const wrapper = setupWrapper({
 					propsData: {
 						isRunning: false,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: false,
 						title: "video conference",
@@ -128,6 +116,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const wrapper = setupWrapper({
 					propsData: {
 						isRunning: false,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: false,
 						canStart: false,
 						title: "video conference",
@@ -143,6 +132,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const wrapper = setupWrapper({
 					propsData: {
 						isRunning: false,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: true,
 						title: "video conference",
@@ -159,6 +149,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const wrapper = setupWrapper({
 					propsData: {
 						isRunning: true,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: false,
 						canStart: false,
 						title: "video conference",
@@ -176,6 +167,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const wrapper = setupWrapper({
 					propsData: {
 						isRunning: true,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: true,
 						title: "video conference",
@@ -202,6 +194,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 					propsData: {
 						isEditMode: false,
 						isRunning: true,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: false,
 						title: "video conference",
@@ -219,6 +212,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 					propsData: {
 						isEditMode: false,
 						isRunning: false,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: false,
 						title: "video conference",
@@ -234,6 +228,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 					propsData: {
 						isEditMode: false,
 						isRunning: false,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: true,
 						title: "video conference",

@@ -18,6 +18,7 @@
 				v-if="computedElement.content.title"
 				:title="computedElement.content.title"
 				:has-participation-permission="hasParticipationPermission"
+				:is-video-conference-enabled="isVideoConferenceEnabled"
 				:can-start="canStart"
 				:is-running="isRunning"
 				:is-edit-mode="isEditMode"
@@ -88,6 +89,7 @@
 import { ref, computed, onMounted, PropType, toRef } from "vue";
 import { useRoute } from "vue-router";
 import {
+	useBoardFeatures,
 	useBoardFocusHandler,
 	useBoardPermissions,
 	useContentElementState,
@@ -104,6 +106,7 @@ import {
 	BoardMenuScope,
 } from "@ui-board";
 import {
+	BoardFeature,
 	VideoConferenceElementResponse,
 	VideoConferenceScope,
 } from "@/serverApi/v3";
@@ -145,6 +148,8 @@ const {
 	element.value.id
 );
 
+const { isFeatureEnabled } = useBoardFeatures();
+
 useBoardFocusHandler(element.value.id, videoConferenceElement);
 
 onMounted(fetchVideoConferenceInfo);
@@ -157,6 +162,10 @@ const route = useRoute();
 const boardId = route.params.id;
 const { isTeacher, isStudent } = useBoardPermissions();
 const { t } = useI18n();
+
+const isVideoConferenceEnabled = computed(() =>
+	isFeatureEnabled(BoardFeature.Videoconference)
+);
 
 const isHidden = computed(
 	() => !props.isEditMode && !computedElement.value.content.title
