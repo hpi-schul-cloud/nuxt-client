@@ -1,7 +1,11 @@
 import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
-import { ContentElementType, PreferredToolResponse } from "@/serverApi/v3";
+import {
+	BoardFeature,
+	ContentElementType,
+	PreferredToolResponse,
+} from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { useCardStore } from "@data-board";
+import { useBoardFeatures, useCardStore } from "@data-board";
 import {
 	mdiFormatText,
 	mdiLightbulbOnOutline,
@@ -18,6 +22,7 @@ import {
 	ElementTypeSelectionOptions,
 	useSharedElementTypeSelection,
 } from "./SharedElementTypeSelection.composable";
+import { computed } from "vue";
 
 type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 
@@ -25,6 +30,11 @@ export const useAddElementDialog = (
 	createElementRequestFn: CreateElementRequestFn,
 	cardId: string
 ) => {
+	const { isFeatureEnabled } = useBoardFeatures();
+	const isVideoConferenceEnabled = computed(() =>
+		isFeatureEnabled(BoardFeature.Videoconference)
+	);
+
 	const cardStore = useCardStore();
 
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -159,7 +169,11 @@ export const useAddElementDialog = (
 		});
 	}
 
-	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED) {
+	if (
+		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
+		isVideoConferenceEnabled.value
+		//TODO: both needed? check if BE checks env var
+	) {
 		options.push({
 			icon: mdiVideoOutline,
 			label: t(
