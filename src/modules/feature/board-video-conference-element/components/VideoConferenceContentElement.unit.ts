@@ -113,6 +113,7 @@ describe("VideoConferenceContentElement", () => {
 			columnIndex?: number;
 			rowIndex?: number;
 			elementIndex?: number;
+			isRunning?: boolean;
 			videoConferenceModuleGetter?: Partial<VideoConferenceModule>;
 		} = {
 			content: undefined,
@@ -130,6 +131,7 @@ describe("VideoConferenceContentElement", () => {
 			columnIndex = 0,
 			rowIndex = 1,
 			elementIndex = 2,
+			isRunning = false,
 			videoConferenceModuleGetter,
 		} = options;
 
@@ -156,8 +158,18 @@ describe("VideoConferenceContentElement", () => {
 		useVideoConferenceMock.fetchVideoConferenceInfo.mockImplementation(
 			jest.fn()
 		);
-
-		console.log("mock", useVideoConferenceMock);
+		useVideoConferenceMock.joinVideoConference.mockImplementation(() =>
+			Promise.resolve("url")
+		);
+		useVideoConferenceMock.videoConferenceInfo = ref({
+			state: VideoConferenceState.NOT_STARTED,
+			options: {
+				everyAttendeeJoinsMuted: false,
+				everybodyJoinsAsModerator: false,
+				moderatorMustApproveJoinRequests: true,
+			},
+		});
+		useVideoConferenceMock.isRunning = computed(() => isRunning);
 
 		const notifierModule = createModuleMocks(NotifierModule);
 		const authModule = createModuleMocks(AuthModule, {
@@ -375,33 +387,20 @@ describe("VideoConferenceContentElement", () => {
 
 				describe("and video conference is running", () => {
 					it("should call joinVideoConference", async () => {
-						const { element, videoConferenceModule, wrapper } = setupWrapper({
+						const { useVideoConferenceMock, wrapper } = setupWrapper({
 							content: videoConferenceElementContentFactory.build(),
 							isEditMode: false,
-							videoConferenceModuleGetter: {
-								getVideoConferenceInfo: {
-									state: VideoConferenceState.RUNNING,
-									options: {
-										everyAttendeeJoinsMuted: false,
-										moderatorMustApproveJoinRequests: false,
-										everybodyJoinsAsModerator: false,
-									},
-								},
-								getLoading: true,
-							},
+							isRunning: true,
 						});
 
 						const videoConferenceElementDisplay = wrapper.findComponent(
 							VideoConferenceContentElementDisplay
 						);
-						await videoConferenceElementDisplay.vm.$emit("click");
+						await videoConferenceElementDisplay.trigger("click");
 
 						expect(
-							videoConferenceModule.joinVideoConference
-						).toHaveBeenCalledWith({
-							scope: VideoConferenceScope.VideoConferenceElement,
-							scopeId: element.id,
-						});
+							useVideoConferenceMock.joinVideoConference
+						).toHaveBeenCalledTimes(1);
 					});
 				});
 			});
