@@ -1812,8 +1812,12 @@ export default {
 		"{memberName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Ausgewählte Mitglieder wirklich aus dem Raum entfernen?",
-	"pages.rooms.members.roles.editor": "Raumeditor",
-	"pages.rooms.members.roles.viewer": "Raumbetrachter",
+	"pages.rooms.members.roomPermissions.admin": "Verwalten",
+	"pages.rooms.members.roomPermissions.owner": "Besitzen",
+	"pages.rooms.members.roomPermissions.editor": "Bearbeiten",
+	"pages.rooms.members.roomPermissions.viewer": "Lesen",
+	"pages.rooms.members.tableHeader.roomPermissions": "Raumberechtigungen",
+	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":

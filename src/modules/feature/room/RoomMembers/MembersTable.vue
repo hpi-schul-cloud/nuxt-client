@@ -152,7 +152,12 @@ const tableHeader = [
 		key: "lastName",
 	},
 	{
-		title: t("common.labels.role"),
+		title: t("pages.rooms.members.tableHeader.roomPermissions"),
+		key: "displayRoleName",
+	},
+	// TODO: Add school role, info from backend needed
+	{
+		title: t("pages.rooms.members.tableHeader.schoolRole"),
 		key: "displayRoleName",
 	},
 	{ title: t("common.words.mainSchool"), key: "schoolName" },

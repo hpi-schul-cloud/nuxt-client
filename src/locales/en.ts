@@ -1781,8 +1781,12 @@ export default {
 		"Remove {memberName} from the room?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Remove selected members from the room?",
-	"pages.rooms.members.roles.editor": "Room editor",
-	"pages.rooms.members.roles.viewer": "Room viewer",
+	"pages.rooms.members.roomPermissions.admin": "Administer",
+	"pages.rooms.members.roomPermissions.owner": "Own",
+	"pages.rooms.members.roomPermissions.editor": "Edit",
+	"pages.rooms.members.roomPermissions.viewer": "Read",
+	"pages.rooms.members.tableHeader.roomPermissions": "Room Permissions",
+	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
