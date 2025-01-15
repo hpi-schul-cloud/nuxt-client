@@ -128,18 +128,8 @@ const emit = defineEmits([
 	"move-keyboard:edit",
 ]);
 
-const { modelValue, computedElement } = useContentElementState(props, {
-	autoSaveDebounce: 100,
-});
-const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
-const route = useRoute();
-const boardId = route.params.id;
 const element = toRef(props, "element");
-const { isTeacher, isStudent } = useBoardPermissions();
-const { t } = useI18n();
 const videoConferenceElement = ref(null);
-
-useBoardFocusHandler(element.value.id, videoConferenceElement);
 
 const {
 	videoConferenceInfo,
@@ -154,6 +144,19 @@ const {
 	VideoConferenceScope.VideoConferenceElement,
 	element.value.id
 );
+
+useBoardFocusHandler(element.value.id, videoConferenceElement);
+
+onMounted(fetchVideoConferenceInfo);
+
+const { modelValue, computedElement } = useContentElementState(props, {
+	autoSaveDebounce: 100,
+});
+const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+const route = useRoute();
+const boardId = route.params.id;
+const { isTeacher, isStudent } = useBoardPermissions();
+const { t } = useI18n();
 
 const isHidden = computed(
 	() => !props.isEditMode && !computedElement.value.content.title
@@ -183,8 +186,6 @@ const canStart = computed(() => isTeacher);
 const isCreating = computed(
 	() => props.isEditMode && !computedElement.value.content.title
 );
-
-onMounted(fetchVideoConferenceInfo);
 
 const onContentClick = async () => {
 	await fetchVideoConferenceInfo();

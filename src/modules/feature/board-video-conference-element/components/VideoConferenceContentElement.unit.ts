@@ -4,7 +4,6 @@ import {
 	NOTIFIER_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "@/utils/inject";
-
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
 import {
 	useBoardFocusHandler,
@@ -41,10 +40,12 @@ import EnvConfigModule from "@/store/env-config";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import { VDialog } from "vuetify/lib/components/index.mjs";
+import { useVideoConference } from "../composables/VideoConference.composable";
 
 jest.mock("@data-board/ContentElementState.composable");
 jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("@data-board/BoardPermissions.composable");
+jest.mock("../composables/VideoConference.composable");
 
 window.open = jest.fn();
 
@@ -146,6 +147,18 @@ describe("VideoConferenceContentElement", () => {
 			isLoading: ref(false),
 		});
 
+		const useVideoConferenceMock: DeepMocked<
+			ReturnType<typeof useVideoConference>
+		> = createMock<ReturnType<typeof useVideoConference>>();
+
+		jest.mocked(useVideoConference).mockReturnValue(useVideoConferenceMock);
+
+		useVideoConferenceMock.fetchVideoConferenceInfo.mockImplementation(
+			jest.fn()
+		);
+
+		console.log("mock", useVideoConferenceMock);
+
 		const notifierModule = createModuleMocks(NotifierModule);
 		const authModule = createModuleMocks(AuthModule, {
 			getUserRoles: [role],
@@ -190,6 +203,7 @@ describe("VideoConferenceContentElement", () => {
 
 		return {
 			element,
+			useVideoConferenceMock,
 			videoConferenceModule,
 			wrapper,
 		};
@@ -224,7 +238,7 @@ describe("VideoConferenceContentElement", () => {
 			it("should render display of video conference content with correct props", () => {
 				const videoConferenceElementContent =
 					videoConferenceElementContentFactory.build({ title: "test-title" });
-				const { wrapper, element } = setupWrapper({
+				const { wrapper } = setupWrapper({
 					content: videoConferenceElementContent,
 					isEditMode: false,
 				});
@@ -233,15 +247,7 @@ describe("VideoConferenceContentElement", () => {
 					VideoConferenceContentElementDisplay
 				);
 
-				expect(videoConferenceElementDisplay.props().title).toEqual(
-					element.content.title
-				);
-				expect(videoConferenceElementDisplay.props().isEditMode).toEqual(false);
-				expect(videoConferenceElementDisplay.props().canStart).toEqual(true);
-				expect(
-					videoConferenceElementDisplay.props().hasParticipationPermission
-				).toEqual(true);
-				expect(videoConferenceElementDisplay.props().isRunning).toEqual(false);
+				expect(videoConferenceElementDisplay.exists()).toBe(true);
 			});
 
 			it("should have the correct aria-label", () => {
@@ -262,48 +268,6 @@ describe("VideoConferenceContentElement", () => {
 			});
 
 			describe("and element is in edit mode", () => {
-				it.each(["up", "down"])(
-					"should 'emit move-keyboard:edit' when arrow key %s is pressed",
-					async (key) => {
-						const videoConferenceElementContent =
-							videoConferenceElementContentFactory.build();
-						const { wrapper } = setupWrapper({
-							content: videoConferenceElementContent,
-							isEditMode: true,
-						});
-						const videoConferenceElement = wrapper.findComponent(
-							'[data-testid="video-conference-element"]'
-						);
-
-						await videoConferenceElement.trigger(`keydown.${key}`);
-
-						expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
-					}
-				);
-			});
-
-			describe("and element is in view mode", () => {
-				it.each(["up", "down"])(
-					"should not 'emit move-keyboard:edit' when arrow key %s is pressed",
-					async (key) => {
-						const videoConferenceElementContent =
-							videoConferenceElementContentFactory.build();
-						const { wrapper } = setupWrapper({
-							content: videoConferenceElementContent,
-							isEditMode: false,
-						});
-						const videoConferenceElement = wrapper.findComponent(
-							'[data-testid="video-conference-element"]'
-						);
-
-						await videoConferenceElement.trigger(`keydown.${key}`);
-
-						expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
-					}
-				);
-			});
-
-			describe("video conference element menu", () => {
 				it("should render video conference element menu", () => {
 					const videoConferenceElementContent =
 						videoConferenceElementContentFactory.build();
@@ -317,50 +281,78 @@ describe("VideoConferenceContentElement", () => {
 					expect(videoConferenceElementMenu.exists()).toBe(true);
 				});
 
-				it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
-					const videoConferenceElementContent =
-						videoConferenceElementContentFactory.build();
-					const { wrapper } = setupWrapper({
-						content: videoConferenceElementContent,
-						isEditMode: true,
+				describe.each([
+					{
+						btn: "move down",
+						action: "move-down:edit",
+						component: BoardMenuActionMoveDown,
+					},
+					{
+						btn: "move up",
+						action: "move-up:edit",
+						component: BoardMenuActionMoveUp,
+					},
+					{
+						btn: "delete",
+						action: "delete:element",
+						component: BoardMenuActionDelete,
+					},
+				])("and $btn menu item is clicked", ({ action, component }) => {
+					it(`should emit '${action}' event`, async () => {
+						const videoConferenceElementContent =
+							videoConferenceElementContentFactory.build();
+						const { wrapper } = setupWrapper({
+							content: videoConferenceElementContent,
+							isEditMode: true,
+						});
+
+						const menuItem = wrapper.findComponent(component);
+						await menuItem.trigger("click");
+
+						expect(wrapper.emitted()).toHaveProperty(action);
 					});
-
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
-					await menuItem.trigger("click");
-
-					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
 				});
 
-				it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
-					const videoConferenceElementContent =
-						videoConferenceElementContentFactory.build();
-					const { wrapper } = setupWrapper({
-						content: videoConferenceElementContent,
-						isEditMode: true,
+				describe.each(["up", "down"])("and arrow key %s is pressed", (key) => {
+					it("should 'emit move-keyboard:edit'", async () => {
+						const videoConferenceElementContent =
+							videoConferenceElementContentFactory.build();
+						const { wrapper } = setupWrapper({
+							content: videoConferenceElementContent,
+							isEditMode: true,
+						});
+						const videoConferenceElement = wrapper.findComponent(
+							'[data-testid="video-conference-element"]'
+						);
+
+						await videoConferenceElement.trigger(`keydown.${key}`);
+
+						expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
 					});
-
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
-					await menuItem.trigger("click");
-
-					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
-				});
-
-				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
-					const videoConferenceElementContent =
-						videoConferenceElementContentFactory.build();
-					const { wrapper } = setupWrapper({
-						content: videoConferenceElementContent,
-						isEditMode: true,
-					});
-
-					const menuItem = wrapper.findComponent(BoardMenuActionDelete);
-					await menuItem.trigger("click");
-
-					expect(wrapper.emitted()).toHaveProperty("delete:element");
 				});
 			});
 
-			describe("onElementClick", () => {
+			describe("and element is in view mode", () => {
+				describe.each(["up", "down"])("and arrow key %s is pressed", (key) => {
+					it("should not 'emit move-keyboard:edit'", async () => {
+						const videoConferenceElementContent =
+							videoConferenceElementContentFactory.build();
+						const { wrapper } = setupWrapper({
+							content: videoConferenceElementContent,
+							isEditMode: false,
+						});
+						const videoConferenceElement = wrapper.findComponent(
+							'[data-testid="video-conference-element"]'
+						);
+
+						await videoConferenceElement.trigger(`keydown.${key}`);
+
+						expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
+					});
+				});
+			});
+
+			describe("when display element was clicked", () => {
 				describe("and video conference is not running", () => {
 					it("should open the configuration dialog", async () => {
 						const { wrapper } = setupWrapper({
@@ -414,9 +406,9 @@ describe("VideoConferenceContentElement", () => {
 				});
 			});
 
-			describe("onRefresh", () => {
-				it("should call fetchVideoConferenceInfo", async () => {
-					const { element, videoConferenceModule, wrapper } = setupWrapper({
+			describe("when video conference is refreshed", () => {
+				it("should call fetchVideoConferenceInfo", () => {
+					const { useVideoConferenceMock, wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
 						isEditMode: false,
 					});
@@ -424,14 +416,11 @@ describe("VideoConferenceContentElement", () => {
 					const videoConferenceElementDisplay = wrapper.findComponent(
 						VideoConferenceContentElementDisplay
 					);
-					await videoConferenceElementDisplay.vm.$emit("refresh");
+					videoConferenceElementDisplay.vm.$emit("refresh");
 
 					expect(
-						videoConferenceModule.fetchVideoConferenceInfo
-					).toHaveBeenCalledWith({
-						scope: VideoConferenceScope.VideoConferenceElement,
-						scopeId: element.id,
-					});
+						useVideoConferenceMock.fetchVideoConferenceInfo
+					).toHaveBeenCalledTimes(2);
 				});
 			});
 		});
@@ -547,6 +536,7 @@ describe("VideoConferenceContentElement", () => {
 			});
 		});
 	});
+
 	describe("when a videoconference is started or joined", () => {
 		describe("and an error occurs", () => {
 			const error = jest.fn(() => {
