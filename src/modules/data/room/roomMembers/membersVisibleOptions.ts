@@ -1,4 +1,4 @@
-import { RoleName } from "@/serverApi/v3";
+import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 type Options = {
 	show: boolean;
 	disabled: boolean;
@@ -19,94 +19,94 @@ type RoomRoles = Pick<
 	| RoleName.Roomviewer
 >;
 
-const ROLES: RoomRoles = {
-	[RoleName.Roomowner]: {
-		"selection-column": {
-			show: true,
-			disabled: false,
-		},
-		"actions-column": {
-			show: true,
-			disabled: false,
-		},
-		"checkbox-in-row": {
-			show: true,
-			disabled: false,
-		},
-		"actions-in-row": {
-			show: true,
-			disabled: false,
-		},
-	},
-	[RoleName.Roomadmin]: {
-		"selection-column": {
-			show: true,
-			disabled: false,
-		},
-		"actions-column": {
-			show: true,
-			disabled: false,
-		},
-		"checkbox-in-row": {
-			show: true,
-			disabled: false,
-		},
-		"actions-in-row": {
-			show: true,
-			disabled: false,
-		},
-	},
-	[RoleName.Roomeditor]: {
-		"selection-column": {
-			show: true,
-			disabled: false,
-		},
-		"actions-column": {
-			show: false,
-			disabled: false,
-		},
-		"checkbox-in-row": {
-			show: false,
-			disabled: false,
-		},
-		"actions-in-row": {
-			show: false,
-			disabled: false,
-		},
-	},
-	[RoleName.Roomviewer]: {
-		"selection-column": {
-			show: false,
-			disabled: false,
-		},
-		"actions-column": {
-			show: false,
-			disabled: false,
-		},
+interface User extends RoomMemberResponse {
+	roleName: Extract<
+		RoleName,
+		| RoleName.Roomowner
+		| RoleName.Roomadmin
+		| RoleName.Roomeditor
+		| RoleName.Roomviewer
+	>;
+	id: string;
+}
 
-		"checkbox-in-row": {
-			show: false,
-			disabled: false,
-		},
-		"actions-in-row": {
-			show: false,
-			disabled: false,
-		},
-	},
-};
+export const useRoomMemberVisibilityOptions = (currentUserId: string) => {
+	const hasVisibleOption = (
+		user: User,
+		source: keyof ViewOptions,
+		action:
+			| keyof ViewOptions["selection-column"]
+			| keyof ViewOptions["actions-column"]
+			| keyof ViewOptions["checkbox-in-row"]
+			| keyof ViewOptions["actions-in-row"]
+	) => {
+		const ROLES: RoomRoles = {
+			[RoleName.Roomowner]: {
+				"selection-column": {
+					show: true,
+					disabled: false,
+				},
+				"actions-column": {
+					show: true,
+					disabled: false,
+				},
+				"checkbox-in-row": {
+					show: true,
+					disabled: user.id === currentUserId,
+				},
+				"actions-in-row": {
+					show: true,
+					disabled: false,
+				},
+			},
+			[RoleName.Roomadmin]: {
+				"selection-column": {
+					show: true,
+					disabled: false,
+				},
+				"actions-column": {
+					show: true,
+					disabled: false,
+				},
+				"checkbox-in-row": {
+					show: true,
+					disabled: user.id === currentUserId,
+				},
+				"actions-in-row": {
+					show: true,
+					disabled: false,
+				},
+			},
+			[RoleName.Roomeditor]: {
+				"selection-column": {
+					show: true,
+					disabled: false,
+				},
+				"actions-column": {
+					show: false,
+					disabled: false,
+				},
+			},
+			[RoleName.Roomviewer]: {
+				"selection-column": {
+					show: false,
+					disabled: false,
+				},
+				"actions-column": {
+					show: false,
+					disabled: false,
+				},
+			},
+		};
 
-export const hasVisibleOption = (
-	roleName: keyof RoomRoles,
-	source: keyof ViewOptions,
-	action:
-		| keyof ViewOptions["selection-column"]
-		| keyof ViewOptions["actions-column"]
-		| keyof ViewOptions["checkbox-in-row"]
-		| keyof ViewOptions["actions-in-row"]
-) => {
-	const sourceOption = ROLES[roleName]?.[source];
-	if (!action || typeof sourceOption === "boolean") {
-		return sourceOption;
-	}
-	return sourceOption?.[action];
+		const sourceOption = ROLES[user.roleName]?.[source];
+		if (!action || typeof sourceOption === "boolean") {
+			return sourceOption;
+		}
+		return sourceOption?.[action];
+	};
+
+	return {
+		hasVisibleOption,
+	};
 };

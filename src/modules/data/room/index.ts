@@ -7,4 +7,5 @@ export { useRoomCreateState } from "./RoomCreate.state";
 export { useRoomEditState } from "./RoomEdit.state";
 
 export { useRoomMembers } from "./roomMembers/roomMembers.composable";
+export { useRoomMemberVisibilityOptions } from "./roomMembers/membersVisibleOptions";
 export type { RoomMember } from "./roomMembers/types";
