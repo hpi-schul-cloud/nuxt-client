@@ -2,19 +2,19 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/migration_successful.svg" alt="" />
 		<h1 class="pl-4 pr-4">
-			{{ $t("pages.userMigration.success.title") }}
+			{{ t("pages.userMigration.success.title") }}
 		</h1>
 		<div>
-			<RenderHTML
-				class="pa-4"
-				data-testId="text-description"
-				:html="
-					$t('pages.userMigration.success.description', {
+			<p class="ma-8" data-testid="text-description">
+				{{
+					t("pages.userMigration.success.description", {
 						targetSystem: getSystemName(targetSystem),
 					})
-				"
-				component="p"
-			/>
+				}}
+				<span class="d-block">
+					{{ t("pages.userMigration.success.description.loginAgain") }}
+				</span>
+			</p>
 			<v-btn
 				color="primary"
 				variant="flat"
@@ -22,7 +22,7 @@
 				to="/logout"
 			>
 				{{
-					$t("pages.userMigration.success.login", {
+					t("pages.userMigration.success.login", {
 						targetSystem: getSystemName(targetSystem),
 					})
 				}}
@@ -35,7 +35,6 @@
 import { defineComponent, onMounted, ref, Ref } from "vue";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
-import { RenderHTML } from "@feature-render-html";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { injectStrict, SYSTEMS_MODULE_KEY } from "@/utils/inject";
@@ -43,7 +42,6 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "UserLoginMigrationSuccess",
-	components: { RenderHTML },
 	props: {
 		targetSystem: {
 			type: String,

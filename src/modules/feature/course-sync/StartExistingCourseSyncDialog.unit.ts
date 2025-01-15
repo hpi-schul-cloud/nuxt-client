@@ -1,5 +1,5 @@
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { RoleName } from "@/serverApi/v3";
+import { MeResponse, RoleName } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import NotifierModule from "@/store/notifier";
 import { AUTH_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
@@ -28,13 +28,14 @@ describe("StartExistingCourseSyncDialog", () => {
 			isOpen: true,
 			courseId: "courseId",
 			courseName: "courseName",
-		}
+			courseTeachers: ["firstName lastName"],
+		},
+		admin?: MeResponse
 	) => {
 		const me = meResponseFactory.build();
-
 		const notifierModule = createModuleMocks(NotifierModule);
 		const authModule = createModuleMocks(AuthModule, {
-			getMe: me,
+			getMe: admin ?? me,
 		});
 
 		const wrapper = mount(StartExistingCourseSyncDialog, {
@@ -309,6 +310,110 @@ describe("StartExistingCourseSyncDialog", () => {
 						id: "otherUserId",
 						firstName: "firstname",
 						lastName: "lastname",
+						role: RoleName.Teacher,
+					},
+				],
+			});
+
+			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
+			await nextTick();
+
+			return {
+				wrapper,
+				notifierModule,
+				group,
+			};
+		};
+
+		it("should display the correct warning in the confirmation dialog", async () => {
+			const { wrapper } = await setup();
+
+			const text = wrapper.find("[data-testid=no-teacher-warning-text]");
+
+			expect(text.text()).toEqual(
+				"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userNotInGroupWarning"
+			);
+		});
+	});
+
+	describe("when the user is not part of the selected group and course teacher are part of group", () => {
+		const setup = async () => {
+			const { wrapper, notifierModule } = getWrapper(
+				{
+					isOpen: true,
+					courseId: "courseId",
+					courseName: "courseName",
+					courseTeachers: ["firstname lastname"],
+				},
+				meResponseFactory.build({
+					roles: [{ id: "0", name: RoleName.Administrator }],
+				})
+			);
+
+			const group = groupResponseFactory.build({
+				users: [
+					{
+						id: "otherUserId",
+						firstName: "firstname",
+						lastName: "lastname",
+						role: RoleName.Teacher,
+					},
+					{
+						id: "otherUserId1",
+						firstName: "firstname1",
+						lastName: "lastname1",
+						role: RoleName.Teacher,
+					},
+					{
+						id: "otherUserId2",
+						firstName: "firstname2",
+						lastName: "lastname2",
+						role: RoleName.Teacher,
+					},
+				],
+			});
+
+			wrapper.getComponent(GroupSelectionDialog).vm.$emit("confirm", group);
+			await nextTick();
+
+			return {
+				wrapper,
+				notifierModule,
+				group,
+			};
+		};
+
+		it("should display the correct warning in the confirmation dialog", async () => {
+			const { wrapper } = await setup();
+
+			const text = wrapper.find("[data-testid=no-teacher-warning-text]");
+
+			expect(text.text()).toEqual(
+				"feature-course-sync.StartExistingCourseSyncDialog.confirmation.userInGroupWarning"
+			);
+		});
+	});
+
+	describe("when the user is not part of the selected group and course teacher are not part of group", () => {
+		const setup = async () => {
+			const { wrapper, notifierModule } = getWrapper(
+				{
+					isOpen: true,
+					courseId: "courseId",
+					courseName: "courseName",
+					courseTeachers: ["Firstname Lastname", "another teacher"],
+				},
+				meResponseFactory.build({
+					roles: [{ id: "0", name: RoleName.Administrator }],
+				})
+			);
+
+			const group = groupResponseFactory.build({
+				users: [
+					{
+						id: "otherUserId",
+						firstName: "Firstname",
+						lastName: "Lastname",
 						role: RoleName.Teacher,
 					},
 				],

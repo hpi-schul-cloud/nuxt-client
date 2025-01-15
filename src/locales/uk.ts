@@ -207,8 +207,17 @@ export default {
 	"component.cardElement.fileElement.audioPlayer.slider": "повзунок",
 	"component.cardElement.fileElement.audioPlayer.speed.normal": "нормальний",
 	"component.cardElement.fileElement.audioPlayer.speed": "швидке меню",
-	"components.administration.adminMigrationSection.description":
-		'Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.<br>Процес міграції вимагає одноразового входу студентів і викладачів в обидві системи.<br><br><span class="text-red"><b>Якщо ви не хочете виконувати міграцію у вашому навчальному закладі, <u>не починайте процес міграції</u>,\nа зверніться до служби </span><a href="{supportLink}" data-testid ="support-link">підтримки</a></b>.<br><br>Важлива інформація про процес міграції <a href="https://blog.niedersachsen.cloud/umzug" data-testid="migration-blog-link" target="_blank">доступний тут<a>.',
+	"components.administration.adminMigrationSection.description.firstPart":
+		"Під час міграції система реєстрації студентів і викладачів змінена на moin.schule. Дані відповідних облікових записів буде збережено.",
+	"components.administration.adminMigrationSection.description.secondPart":
+		"Процес міграції вимагає одноразового входу студентів і викладачів в обидві системи.",
+	"components.administrationSection.description.support":
+		"Якщо ви не хочете виконувати міграцію у вашому навчальному закладі, не починайте процес міграції, а зверніться до служби {0}.",
+	"components.administrationSection.description.support.link": "підтримки",
+	"components.administrationSection.description.moreInformation":
+		"Важлива інформація про процес міграції {0}.",
+	"components.administrationSection.description.moreInformation.link":
+		"доступний тут",
 	"components.administration.adminMigrationSection.enableSyncDuringMigration.label":
 		"Дозволити синхронізацію з попередньою системою входу для класів і облікових записів під час міграції",
 	"components.administration.adminMigrationSection.endWarningCard.agree":
@@ -218,13 +227,33 @@ export default {
 	"components.administration.adminMigrationSection.endWarningCard.disagree":
 		"Переривати",
 	"components.administration.adminMigrationSection.endWarningCard.text":
-		'Будь ласка, підтвердьте, що ви хочете завершити міграцію облікового запису користувача до moin.schule.<br><br><span class="text-red">Попередження: Завершення міграції облікового запису користувача має такі наслідки:</span><br><br><ul><li>Студенти та викладачі, які перейшли на moin.schule, можуть зареєструватися лише через moin.schule.</li><br><li>Міграція більше неможлива для студентів і викладачів.</li><br><li>Студенти і вчителі, які не перейшли, можуть продовжувати реєструватися, як і раніше.</li><br><li>Користувачі, які не перейшли, також можуть зареєструватися через moin.schule, але це створює додатковий порожній обліковий запис у Niedersächsische Bildungscloud.<br><span class="text-red">Автоматичне перенесення даних із існуючого облікового запису до цього нового облікового запису неможливе.<span></li><br><li><span class="text-red">Після періоду очікування в {gracePeriod} дн. перенесення облікового запису стає остаточним. Тоді стару систему реєстрації буде вимкнено, а облікові записи, які не було перенесено, буде видалено.</span></li></ul><br><br>Доступна важлива інформація щодо процесу міграції <a href="https://blog.niedersachsen.cloud/umzug" data-testid="end-warningcard-migration-blog-link" target="_blank">тут</a>.',
+		"Будь ласка, підтвердьте, що ви хочете завершити міграцію облікового запису користувача до moin.schule.",
+	"components.administration.adminMigrationSection.endWarningCard.text.warning":
+		"Попередження: Завершення міграції облікового запису користувача має такі наслідки:",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.firstElement":
+		"Студенти та викладачі, які перейшли на moin.schule, можуть зареєструватися лише через moin.schule.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.secondElement":
+		"Міграція більше неможлива для студентів і викладачів.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.thirdElement":
+		"Студенти і вчителі, які не перейшли, можуть продовжувати реєструватися, як і раніше.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement":
+		"Користувачі, які не перейшли, також можуть зареєструватися через moin.schule, але це створює додатковий порожній обліковий запис у Niedersächsische Bildungscloud.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement.warning":
+		"Автоматичне перенесення даних із існуючого облікового запису до цього нового облікового запису неможливе.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.lastElement":
+		"Після періоду очікування в {gracePeriod} дн. перенесення облікового запису стає остаточним. Тоді стару систему реєстрації буде вимкнено, а облікові записи, які не було перенесено, буде видалено.",
 	"components.administration.adminMigrationSection.endWarningCard.title":
 		"Ви справді бажаєте зараз завершити міграцію облікового запису користувача до moin.schule?",
 	"components.administration.adminMigrationSection.headers":
 		"Міграція облікового запису в moin.schule",
-	"components.administration.adminMigrationSection.infoText":
-		'Будь ласка, переконайтеся, що офіційний номер школи, введений у Niedersächsische Bildungscloud, є правильним.<br><br>Почніть міграцію до moin.schule лише після того, як ви переконаєтеся, що офіційний номер школи правильний.<br><br>Ви не можете використовувати школу. введене число змінюється самостійно. Якщо потрібно виправити номер школи, зверніться до <a href="mailto:nbc-support{\'@\'}netz-21.de?subject=Schulnummer%20nicht%20korrekt">Служби підтримки<a>.<br><br><span class="text-red">Початок міграції підтверджує, що введений номер школи правильний.<span>',
+	"components.administration.adminMigrationSection.infoText.firstParagraph":
+		"Будь ласка, переконайтеся, що офіційний номер школи, введений у Niedersächsische Bildungscloud, є правильним.",
+	"components.administration.adminMigrationSection.infoText.secondParagraph":
+		"Почніть міграцію до moin.schule лише після того, як ви переконаєтеся, що офіційний номер школи правильний.",
+	"components.administration.adminMigrationSection.infoText.thirdParagraph":
+		"Ви не можете змінити введений номер школи самостійно. Якщо потрібно виправити номер школи, зверніться до {0}.",
+	"components.administration.adminMigrationSection.infoText.fourthParagraph":
+		"Початок міграції підтверджує, що введений номер школи правильний.",
 	"components.administration.adminMigrationSection.mandatorySwitch.label":
 		"Міграція обов'язкова",
 	"components.administration.adminMigrationSection.migrationActive":
@@ -241,10 +270,12 @@ export default {
 		"Якщо ви скасуєте запуск майстра міграції зараз, зв'язки облікових записів, зроблені в поточному сеансі, будуть скинуті. Ви дійсно хочете скасувати майстер зараз?",
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
 		"Ви впевнені, що хочете скасувати міграцію?",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
-		"Перенесення облікового запису завершено {date} о {time}.<br>Період очікування після завершення міграції нарешті закінчується {finishDate} о {finishTime}!",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
-		"Перенесення облікового запису завершено {date} о {time}.<br>Період очікування минув. Перенесення нарешті завершено {finishDate} о {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph":
+		"Перенесення облікового запису завершено {date} о {time}",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.secondParagraph":
+		"Період очікування після завершення міграції нарешті закінчується {finishDate} о {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
+		"Період очікування минув. Перенесення нарешті завершено {finishDate} о {finishTime}!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
 		"Застарілі облікові записи студентів і викладачів відображаються у відповідних списках вибору, коли користувачів призначають до класів, курсів і команд.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label":
@@ -259,8 +290,10 @@ export default {
 		"Ви справді хочете розпочати міграцію облікового запису до moin.schule зараз?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Ви впевнені, що хочете скинути автоматично знайдені ярлики?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
-		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів.<br><br>Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
+		"Асистент міграції автоматично знайшов посилання на акаунти на основі імен користувачів.",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
+		"Ви хочете скинути автоматично знайдені посилання на акаунти зараз?",
 	"components.administration.externalToolsSection.action.add":
 		"Додати зовнішній інструмент",
 	"components.administration.externalToolsSection.action.delete":
@@ -269,12 +302,18 @@ export default {
 		"інструмент редагування",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Переглянути таблицю даних",
-	"components.administration.externalToolsSection.description":
-		'Тут налаштовуються спеціальні параметри зовнішнього інструменту для школи. Після збереження конфігурації інструмент буде доступний у школі.<br><br>\nДодаткову інформацію можна знайти на нашому сайті <a href="https://docs.dbildungscloud.de/x/uoKqDg" target=" _blank">Розділ довідки щодо зовнішніх інструментів</a>.',
+	"components.administration.externalToolsSection.description.firstParagraph":
+		"Тут налаштовуються спеціальні параметри зовнішнього інструменту для школи. Після збереження конфігурації інструмент буде доступний у школі.",
+	"components.administration.externalToolsSection.description.secondParagraph":
+		"Додаткову інформацію можна знайти на нашому сайті {0}.",
+	"components.administration.externalToolsSection.description.secondParagraph.link":
+		"Розділ довідки щодо зовнішніх інструментів",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
-	"components.administration.externalToolsSection.dialog.content.header":
-		"Ви впевнені, що хочете видалити інструмент <b>{itemName}</b>? <br><br>Наразі інструмент використовується таким чином:",
+	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
+		"Ви впевнені, що хочете видалити інструмент {0}?",
+	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+		"Наразі інструмент використовується таким чином:",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Увага: якщо інструмент видалено, його більше не можна використовувати для цієї школи.",
 	"components.administration.externalToolsSection.dialog.title":
@@ -749,7 +788,7 @@ export default {
 	"components.organisms.AutoLogoutWarning.warning.remainingTime":
 		"менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
 	"components.organisms.AutoLogoutWarning.warning":
-		"Увага! Ви автоматично вийдете з системи через <span class='error--text'> {remainingTime} </span>. Тепер продовжте час сеансу до двох годин.",
+		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
 	"components.organisms.ContentCard.report.body":
 		"Повідомлення про вміст з ідентифікатором",
 	"components.organisms.ContentCard.report.email":
@@ -878,7 +917,7 @@ export default {
 		"Виберіть групу користувачів",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Вибір групи",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
-		"Наступні дані для створення нового курсу недоступні в групі користувачів {groupName}:<li>Викладач</li><br/>Перевірте moin.schule і почніть створення курсу знову.",
+		"Наступні дані для створення нового курсу недоступні в групі користувачів {groupName}: {teacher} Перевірте moin.schule і почніть створення курсу знову.",
 	"feature-course-sync.StartNewCourseSyncDialog.text":
 		"На наступному кроці вибрана група користувачів буде синхронізована з новоствореним курсом.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
@@ -943,8 +982,21 @@ export default {
 	"mixins.typeMeta.types.image": "Зображення",
 	"mixins.typeMeta.types.video": "Відео",
 	"mixins.typeMeta.types.webpage": "Веб-сайт",
-	"page-class-members.classMembersInfoBox.text":
-		"<p>Заява про згоду <b>не</b> потрібна під час реєстрації студентів. Використання Niedersächsischen Bildungscloud регулюється Законом про школи Нижньої Саксонії (розділ 31, параграф 5 NSchG).<br><br>Якщо школа отримує або отримує дані користувача через зовнішню систему, жодних подальших дій у хмара. Реєстрація відбувається через зовнішню систему.<br><br>Інакше запрошення до реєстрації можна надіслати за посиланням через область адміністрування хмари:<br><ul><li>Надіслати посилання на реєстрацію на збережені адреси електронної пошти (також можна створювати безпосередньо під час імпорту)</li><li>Друкуйте реєстраційні посилання як QR-аркуші для друку, вирізайте їх і роздавайте QR-бланки студентам</li><li>Виберіть одного або кількох користувачів, напр. усіх студентів у класі, а потім виконайте потрібну дію</li><li>Як альтернатива: перейдіть у режим редагування профілю користувача та отримайте індивідуальне реєстраційне посилання безпосередньо, щоб надіслати його вручну</li></ul></p>",
+	"pages.classMembers.infoBox.text.firstParagraph":
+		"Заява про згоду {0} потрібна під час реєстрації студентів. Використання Niedersächsischen Bildungscloud регулюється Законом про школи Нижньої Саксонії (розділ 31, параграф 5 NSchG).",
+	"pages.classMembers.infoBox.text.firstParagraph.bold": "не",
+	"pages.classMembers.infoBox.text.secondParagraph":
+		"Якщо школа отримує або отримує дані користувача через зовнішню систему, жодних подальших дій у хмара. Реєстрація відбувається через зовнішню систему.",
+	"pages.classMembers.infoBox.text.thirdParagraph":
+		"Інакше запрошення до реєстрації можна надіслати за посиланням через область адміністрування хмари:",
+	"pages.classMembers.infoBox.text.listItem.first":
+		"Надіслати посилання на реєстрацію на збережені адреси електронної пошти (також можна створювати безпосередньо під час імпорту)",
+	"pages.classMembers.infoBox.text.listItem.second":
+		"Друкуйте реєстраційні посилання як QR-аркуші для друку, вирізайте їх і роздавайте QR-бланки студентам",
+	"pages.classMembers.infoBox.text.listItem.third":
+		"Виберіть одного або кількох користувачів, напр. усіх студентів у класі, а потім виконайте потрібну дію",
+	"pages.classMembers.infoBox.text.listItem.last":
+		"Як альтернатива: перейдіть у режим редагування профілю користувача та отримайте індивідуальне реєстраційне посилання безпосередньо, щоб надіслати його вручну",
 	"page-class-members.classMembersInfoBox.title":
 		"Студенти ще не в Niedersächsischen Bildungscloud?",
 	"page-class-members.systemInfoText":
@@ -962,7 +1014,7 @@ export default {
 		"Перенести клас на наступний навчальний рік",
 	"pages.administration.classes.delete": "Видалити клас",
 	"pages.administration.classes.deleteDialog.content":
-		'Ви впевнені, що хочете видалити клас "<i>{itemName}<i>"?',
+		'Ви впевнені, що хочете видалити клас "{itemName}"?',
 	"pages.administration.classes.deleteDialog.title": "Видалити клас?",
 	"pages.administration.classes.edit": "Редагувати клас",
 	"pages.administration.common.hint":
@@ -975,7 +1027,7 @@ export default {
 	"pages.administration.classes.header.sync": "Синхронізовано з",
 	"pages.administration.courses.delete": "Видалити курс",
 	"pages.administration.courses.deleteDialog.content":
-		'Ви впевнені, що хочете видалити цей курс "<i>{itemName}</i>" ?',
+		'Ви впевнені, що хочете видалити цей курс "{itemName}" ?',
 	"pages.administration.courses.index.add": "Додати курс",
 	"pages.administration.courses.edit": "Редагувати курс",
 	"pages.administration.index.title": "Адміністрування",
@@ -992,7 +1044,7 @@ export default {
 	"pages.administration.ldap.activate.migrateExistingUsers.error":
 		"Сталася помилка. Майстер міграції не вдалося активувати. Тому система LDAP також не була активована. Будь ласка, спробуйте ще раз. Якщо проблема не зникла, зверніться до служби підтримки",
 	"pages.administration.ldap.activate.migrateExistingUsers.info":
-		"Якщо ви вже створили вручну користувачів, які в майбутньому будуть управлятися через LDAP, ви можете скористатися майстром міграції.<br>За допомогою майстра користувачі LDAP пов'язуються з існуючими користувачами. Ви можете змінити призначення і повинні підтвердити його, перш ніж воно стане активним. Тільки після цього користувачі можуть увійти в систему через LDAP.<br>Якщо система LDAP активована без помічника міграції, всі користувачі імпортуються з LDAP. Здійснити подальший зв'язок між користувачами вже неможливо.",
+		"Якщо ви вже створили вручну користувачів, які в майбутньому будуть управлятися через LDAP, ви можете скористатися майстром міграції.За допомогою майстра користувачі LDAP пов'язуються з існуючими користувачами. Ви можете змінити призначення і повинні підтвердити його, перш ніж воно стане активним. Тільки після цього користувачі можуть увійти в систему через LDAP.Якщо система LDAP активована без помічника міграції, всі користувачі імпортуються з LDAP. Здійснити подальший зв'язок між користувачами вже неможливо.",
 	"pages.administration.ldap.activate.migrateExistingUsers.title":
 		"Міграція існуючих користувачів",
 	"pages.administration.ldap.activate.ok": "Ок",
@@ -1132,6 +1184,8 @@ export default {
 		"Збереження прив'язки облікових записів...",
 	"pages.administration.migration.startUserMigration":
 		"Почніть міграцію облікових записів",
+	"pages.administration.migration.matchByPreferredName":
+		"Надайте перевагу псевдонімам для автоматичного зв’язування облікових записів",
 	"pages.administration.migration.step1": "Вступ",
 	"pages.administration.migration.step2": "Підготовка",
 	"pages.administration.migration.step3": "Зведення",
@@ -1167,10 +1221,16 @@ export default {
 	"pages.administration.migration.step5.syncReady2":
 		"При наступному запуску синхронізації всі дані з {source} передаються до {instance}.",
 	"pages.administration.migration.step5": "Завершити",
-	"pages.administration.migration.summary":
-		"<p>Було зроблено такі призначення:</p><br><p><b>{importUsersCount}</b> {source}-облікові записи користувачів мають призначений обліковий запис користувача {instance}. Ці облікові записи користувачів буде переміщено до {source}.</p><p> <b>{importUsersUnmatchedCount}</b> {source}-облікові записи користувачів не мають пов’язаного облікового запису користувача {instance}. </p> <p> <b>{usersUnmatchedCount}</b> {instance} обліковим записам користувачів не було призначено облікових записів {source}. Облікові записи {instance} зберігаються та можуть бути згодом видалені на сторінці адміністрування (або зв’язатися зі службою підтримки користувачів).</p>",
-	"pages.administration.migration.summary.nbc":
-		"<p>Було зроблено такі зіставлення:</p><br><p><b>{importUsersCount}</b> {source}-облікові записи користувачів мають призначений обліковий запис користувача {instance}. Ці облікові записи користувачів буде переміщено до {source}.</p><p><b>{importUsersUnmatchedCount}</b> {source}-облікові записи користувачів не мають пов’язаного облікового запису користувача {instance}.</p><p >Облікові записи користувачів {instance}, які не було перенесено до {source}, зберігаються та можуть бути переміщені пізніше або згодом видалені під час адміністрування.</p>",
+	"pages.administration.migration.summary.firstParagraph":
+		"Було зроблено такі призначення:",
+	"pages.administration.migration.summary.secondParagraph.importUsersCount":
+		"{source}-облікові записи користувачів мають призначений обліковий запис користувача {instance}. Ці облікові записи користувачів буде переміщено до {source}.",
+	"pages.administration.migration.summary.thirdParagraph.importUsersUnmatchedCount":
+		"{source}-облікові записи користувачів не мають пов’язаного облікового запису користувача {instance}.",
+	"pages.administration.migration.summary.lastParagraph.usersUnmatchedCount":
+		"{instance} обліковим записам користувачів не було призначено облікових записів {source}. Облікові записи {instance} зберігаються та можуть бути згодом видалені на сторінці адміністрування (або зв’язатися зі службою підтримки користувачів).",
+	"pages.administration.migration.summary.lastParagraph.nbc":
+		"Облікові записи користувачів {instance}, які не було перенесено до {source}, зберігаються та можуть бути переміщені пізніше або згодом видалені під час адміністрування.",
 	"pages.administration.migration.title":
 		"Перенести облікові записи користувачів із",
 	"pages.administration.migration.tutorialWait":
@@ -1527,21 +1587,40 @@ export default {
 	"pages.content._id.metadata.provider": "Видавець",
 	"pages.content._id.metadata.updatedAt": "Дата останнього змінення",
 	"pages.content.card.collection": "Колекція",
-	"pages.content.empty_state.error.img_alt": "пусте зображення стану",
-	"pages.content.empty_state.error.message":
-		"<span><p>Пошуковий запит має містити щонайменше 2 символи.<br>Перевірте правильність написання всіх слів.<br>Спробуйте інші пошукові запити.<br>Спробуйте більш поширені запити.<br>Спробуйте використати коротший запит.</p></span>",
-	"pages.content.empty_state.error.subtitle": "Рекомендація:",
-	"pages.content.empty_state.error.title": "Отакої, результатів немає!",
+	"pages.content.emptyState.error.message.suggestions": "Рекомендація:",
+	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
+		"Пошуковий запит має містити щонайменше 2 символи.",
+	"pages.content.emptyState.error.message.suggestions.correctSpelling":
+		"Перевірте правильність написання всіх слів.",
+	"pages.content.emptyState.error.message.suggestions.otherSearchTerms":
+		"Спробуйте інші пошукові запити.",
+	"pages.content.emptyState.error.message.suggestions.generalSearchTerms":
+		"Спробуйте більш поширені запити.",
+	"pages.content.emptyState.error.message.suggestions.lessSearchTerms":
+		"Спробуйте використати коротший запит.",
+	"pages.content.emptyState.error.title": "Отакої, результатів немає!",
 	"pages.content.index.backToCourse": "Назад до курсу",
 	"pages.content.index.backToOverview": "Назад до огляду",
 	"pages.content.index.search_for": "Пошук...",
 	"pages.content.index.search_resources": "Ресурси",
 	"pages.content.index.search_results": "Результати пошуку для",
 	"pages.content.index.search.placeholder": "Пошук у Learning store",
-	"pages.content.init_state.img_alt": "Зображення початкового стану",
-	"pages.content.init_state.message":
-		"Тут ви знайдете високоякісний вміст, адаптований до вашого суб'єкта федерації.<br>Наша команда постійно розробляє нові матеріали, щоб покращити ваш досвід навчання.<br><br>Підказка:<br><br>Матеріали, що відображаються в навчальному магазині, не зберігаються на нашому сервері, а надаються через інтерфейси на інші сервери (джерелами є, наприклад, індивідуальні освітні сервери, WirLernenOnline, Mundo і т.д.).<br>З цієї причини наша команда не впливає на постійну доступність окремих матеріалів і на весь спектр матеріалів, пропонованих окремими джерелами.<br><br>У контексті використання в навчальних закладах може бути дозволено копіювання онлайн-носіїв на носії інформації, на приватний пристрій або на навчальні платформи для закритої групи користувачів, якщо це необхідно для внутрішнього розповсюдження та/або використання.<br>Після завершення роботи з відповідними онлайн-медіа вони повинні бути видалені з приватних кінцевих пристроїв, носіїв даних та навчальних платформ; найпізніше при виході з навчального закладу.<br>Фундаментальна публікація (е.B. в Інтернеті) інтернет-змі або нових та /або відредагованих творів, нещодавно створених з їх частинами, як правило, не допускається або вимагає згоди постачальника прав.",
-	"pages.content.init_state.title": "Ласкаво просимо до Learning Store!",
+	"pages.content.initState.description":
+		"Тут ви знайдете високоякісний вміст, адаптований до вашого суб'єкта федерації.",
+	"pages.content.initState.description.newMaterials":
+		"Наша команда постійно розробляє нові матеріали, щоб покращити ваш досвід навчання.",
+	"pages.content.initState.description.hint": "Підказка:",
+	"pages.content.initState.description.hint.materials":
+		"Матеріали, що відображаються в навчальному магазині, не зберігаються на нашому сервері, а надаються через інтерфейси на інші сервери (джерелами є, наприклад, індивідуальні освітні сервери, WirLernenOnline, Mundo і т.д.).",
+	"pages.content.initState.description.hint.availability":
+		"З цієї причини наша команда не впливає на постійну доступність окремих матеріалів і на весь спектр матеріалів, пропонованих окремими джерелами.",
+	"pages.content.initState.description.usage":
+		"У контексті використання в навчальних закладах може бути дозволено копіювання онлайн-носіїв на носії інформації, на приватний пристрій або на навчальні платформи для закритої групи користувачів, якщо це необхідно для внутрішнього розповсюдження та/або використання.",
+	"pages.content.initState.description.usage.deleteHint":
+		"Після завершення роботи з відповідними онлайн-медіа вони повинні бути видалені з приватних кінцевих пристроїв, носіїв даних та навчальних платформ; найпізніше при виході з навчального закладу.",
+	"pages.content.initState.description.usage.notPermitted":
+		"Фундаментальна публікація (е.B. в Інтернеті) інтернет-змі або нових та /або відредагованих творів, нещодавно створених з їх частинами, як правило, не допускається або вимагає згоди постачальника прав.",
+	"pages.content.initState.title": "Ласкаво просимо до Learning Store!",
 	"pages.content.label.chooseACourse": "Вибрати курс/предмет",
 	"pages.content.label.chooseALessonTopic": "Вибрати тему уроку",
 	"pages.content.label.deselect": "Вилучити",
@@ -1676,7 +1755,7 @@ export default {
 	"pages.rooms.tools.notLicensedDialog.title":
 		"Інструмент “{toolName}” не активовано",
 	"pages.rooms.tools.deleteDialog.content":
-		"Ви впевнені, що хочете видалити інструмент '<i>{itemName}</i>' із курсу?",
+		"Ви впевнені, що хочете видалити інструмент '{itemName}' із курсу?",
 	"pages.rooms.tools.deleteDialog.title": "видалити інструменти?",
 	"pages.rooms.tools.emptyState": "У цьому курсі ще немає інструментів.",
 	"pages.rooms.tools.incomplete": "Конфігурація не завершена",
@@ -1779,15 +1858,19 @@ export default {
 		"Значення параметра не відповідає наведеним правилам. Відкоригуйте значення відповідно.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"Інструмент із такою ж назвою вже призначено цьому курсу. Назви інструментів мають бути унікальними в межах курсу.",
-	"pages.tool.context.description":
-		'Після збереження вибору інструмент доступний у межах курсу.<br><br>\nДля отримання додаткової інформації відвідайте наш <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Довідковий центр зовнішніх інструментів</a>.',
 	"pages.tool.context.displayName": "Відображуване ім'я",
 	"pages.tool.context.displayNameDescription":
 		"Відображуване ім’я інструменту можна замінити та має бути унікальним",
 	"pages.tool.context.title": "Додавання зовнішніх інструментів",
 	"pages.tool.deactivate.label": "Деактивуйте інструмент у школі",
-	"pages.tool.description":
-		'Тут налаштовуються специфічні для курсу параметри зовнішнього інструменту. Після збереження конфігурації інструмент стає доступним у курсі.<br><br>\nВидалення конфігурації видаляє інструмент із курс.<br><br>\nБільше інформації можна знайти в нашому <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Розділ довідки щодо зовнішніх інструментів</a>.',
+	"pages.tool.description.firstParagraph":
+		"Тут налаштовуються специфічні для курсу параметри зовнішнього інструменту. Після збереження конфігурації інструмент стає доступним у курсі.",
+	"pages.tool.description.secondParagraph":
+		"Видалення конфігурації видаляє інструмент із курсу.",
+	"pages.tool.description.moreInformation":
+		"Більше інформації можна знайти в нашому {0}.",
+	"pages.tool.description.moreInformation.link":
+		"Розділ довідки щодо зовнішніх інструментів",
 	"pages.tool.select.label": "вибір інструменту / Інструмент-URL",
 	"pages.tool.select.description":
 		"Знайдіть інструменти або введіть URL-адресу інструменту або вставте його з кешу вручну або за допомогою кнопки",
@@ -1799,19 +1882,32 @@ export default {
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",
 	"pages.userMigration.button.skip": "Не зараз",
 	"pages.userMigration.button.startMigration": "почати рухатися",
-	"pages.userMigration.description.fromSource":
-		'Привіт!<br>Ваш навчальний заклад зараз змінює систему реєстрації.<br>Тепер ви можете перенести свій обліковий запис на {targetSystem}.<br>Після переходу ви зможете зареєструватися тут лише за допомогою {targetSystem}.<br><br > Натисніть "{startMigration}" і увійдіть за допомогою свого облікового запису {targetSystem}.',
-	"pages.userMigration.description.fromSourceMandatory":
-		'Привіт!<br>Ваш навчальний заклад зараз змінює систему реєстрації.<br>Тепер ви повинні перенести свій обліковий запис на {targetSystem}.<br>Після переходу ви зможете зареєструватися тут лише за допомогою {targetSystem}.<br><br > Натисніть "{startMigration}" і увійдіть за допомогою свого облікового запису {targetSystem}.',
-	"pages.userMigration.error.description":
-		'На жаль, не вдалося перемістити ваш обліковий запис до {targetSystem}.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
-	"pages.userMigration.error.schoolNumberMismatch":
-		"Будь ласка, Передайте цю інформацію:<br><b>Номер школи в {instance}: {sourceSchoolNumber}, номер школи в {targetSystem}: {targetSchoolNumber}.</b>",
+	"pages.userMigration.description.firstParagraph.hello": "Привіт!",
+	"pages.userMigration.description.firstParagraph.changeSource":
+		"Ваш навчальний заклад зараз змінює систему реєстрації.",
+	"pages.userMigration.description.firstParagraph.fromSource":
+		"Тепер ви можете перенести свій обліковий запис на {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.fromSourceMandatory":
+		"Тепер ви повинні перенести свій обліковий запис на {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.loginWith":
+		"Після переходу ви зможете зареєструватися тут лише за допомогою {targetSystem}.",
+	"pages.userMigration.description.lastParagraph":
+		'Натисніть "{startMigration}" і увійдіть за допомогою свого облікового запису {targetSystem}.',
+	"pages.userMigration.error.description.fail":
+		"На жаль, не вдалося перемістити ваш обліковий запис до {targetSystem}.",
+	"pages.userMigration.error.description.support":
+		"Зверніться безпосередньо до адміністратора або {0}.",
+	"pages.userMigration.error.description.support.link": "служби підтримки",
 	"pages.userMigration.error.multipleUsersFound":
-		'Цей обліковий запис moin.schule вже пов\'язаний з обліковим записом у Niedersächsische Bildungscloud і не може бути використаний повторно для міграції.<br>Зверніться безпосередньо до адміністратора або <a href="{supportLink}">служби підтримки</a>.',
+		"Цей обліковий запис moin.schule вже пов'язаний з обліковим записом у Niedersächsische Bildungscloud і не може бути використаний повторно для міграції.",
+	"pages.userMigration.error.schoolNumberMismatch.information":
+		"Будь ласка, Передайте цю інформацію:",
+	"pages.userMigration.error.schoolNumberMismatch.information.schoolNumber":
+		"Номер школи в Niedersächsischen Bildungscloud: {sourceSchoolNumber}, номер школи в {targetSystem}: {targetSchoolNumber}",
 	"pages.userMigration.error.title": "Не вдалося перемістити обліковий запис",
 	"pages.userMigration.success.description":
-		"Переміщення вашого облікового запису до {targetSystem} завершено.<br>Зареєструйтеся знову.",
+		"Переміщення вашого облікового запису до {targetSystem} завершено.",
+	"pages.userMigration.success.description.loginAgain": "Зареєструйтеся знову.",
 	"pages.userMigration.success.login":
 		"Iniciar sesión a través de {targetSystem}",
 	"pages.userMigration.success.title":
@@ -1866,7 +1962,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... і 03.03.2020",
 	"feature.media-shelf.title": "Полиця для медіа",
 	"feature.media-shelf.emptyState":
-		"Наразі немає медіафайлів, доступних для використання",
+		"Наразі немає медіафайлів, доступних для використання.",
 	"feature.media-shelf.createLine": "Додайте лінію",
 	"feature.media-shelf.line.title": "лінія",
 	"feature.media-shelf.availableLine.title": "Доступні медіа",
