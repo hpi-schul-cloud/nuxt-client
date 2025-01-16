@@ -1,9 +1,4 @@
-import {
-	AUTH_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	VIDEO_CONFERENCE_MODULE_KEY,
-} from "@/utils/inject";
+import { AUTH_MODULE_KEY } from "@/utils/inject";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
 import {
 	useBoardFeatures,
@@ -12,15 +7,9 @@ import {
 	useContentElementState,
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { shallowMount } from "@vue/test-utils";
 import { computed, ref } from "vue";
-import NotifierModule from "@/store/notifier";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import {
-	ConfigResponse,
-	VideoConferenceElementContent,
-	VideoConferenceScope,
-} from "@/serverApi/v3/api";
+import { VideoConferenceElementContent } from "@/serverApi/v3/api";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
@@ -36,12 +25,10 @@ import {
 } from "@ui-board";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import AuthModule from "@/store/auth";
-import VideoConferenceModule from "@/store/video-conference";
-import EnvConfigModule from "@/store/env-config";
 import { Router, useRoute, useRouter } from "vue-router";
 import { VideoConferenceState } from "@/store/types/video-conference";
-import { VDialog } from "vuetify/lib/components/index.mjs";
 import { useVideoConference } from "../composables/VideoConference.composable";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 jest.mock("@data-board/ContentElementState.composable");
 jest.mock("@data-board/BoardFocusHandler.composable");
@@ -117,7 +104,7 @@ describe("VideoConferenceContentElement", () => {
 			rowIndex?: number;
 			elementIndex?: number;
 			isRunning?: boolean;
-			videoConferenceModuleGetter?: Partial<VideoConferenceModule>;
+			error?: Error | null;
 		} = {
 			content: undefined,
 			isEditMode: true,
@@ -135,7 +122,7 @@ describe("VideoConferenceContentElement", () => {
 			rowIndex = 1,
 			elementIndex = 2,
 			isRunning = false,
-			videoConferenceModuleGetter,
+			error = null,
 		} = options;
 
 		const element = {
@@ -162,7 +149,7 @@ describe("VideoConferenceContentElement", () => {
 			jest.fn()
 		);
 		useVideoConferenceMock.joinVideoConference.mockImplementation(() =>
-			Promise.resolve("url")
+			Promise.resolve("https://example.com")
 		);
 		useVideoConferenceMock.videoConferenceInfo = ref({
 			state: VideoConferenceState.NOT_STARTED,
@@ -174,36 +161,16 @@ describe("VideoConferenceContentElement", () => {
 		});
 		useVideoConferenceMock.isRunning = computed(() => isRunning);
 
-		const notifierModule = createModuleMocks(NotifierModule);
 		const authModule = createModuleMocks(AuthModule, {
 			getUserRoles: [role],
 		});
 
-		const videoConferenceModule = createModuleMocks(VideoConferenceModule, {
-			getVideoConferenceInfo: {
-				state: VideoConferenceState.NOT_STARTED,
-				options: {
-					everyAttendeeJoinsMuted: false,
-					moderatorMustApproveJoinRequests: false,
-					everybodyJoinsAsModerator: false,
-				},
-			},
-			getLoading: false,
-			...videoConferenceModuleGetter,
-		});
-
-		const joinVideoConferenceMock = jest
-			.fn()
-			.mockResolvedValueOnce({ url: "https://example.com" });
-		videoConferenceModule.joinVideoConference = joinVideoConferenceMock;
-
-		const wrapper = shallowMount(VideoConferenceContentElement, {
+		const wrapper = mount(VideoConferenceContentElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
-					[VIDEO_CONFERENCE_MODULE_KEY.valueOf()]: videoConferenceModule,
+					[BOARD_IS_LIST_LAYOUT as symbol]: false,
 				},
 			},
 			props: {
@@ -218,7 +185,6 @@ describe("VideoConferenceContentElement", () => {
 		return {
 			element,
 			useVideoConferenceMock,
-			videoConferenceModule,
 			wrapper,
 		};
 	};
@@ -372,16 +338,17 @@ describe("VideoConferenceContentElement", () => {
 						const { wrapper } = setupWrapper({
 							content: videoConferenceElementContentFactory.build(),
 							isEditMode: false,
+							isRunning: false,
 						});
 
 						const videoConferenceElementDisplay = wrapper.findComponent(
 							VideoConferenceContentElementDisplay
 						);
-						await videoConferenceElementDisplay.vm.$emit("click");
+						await videoConferenceElementDisplay.trigger("click");
 
-						const configurationDialog = wrapper.findComponent<typeof VDialog>(
-							'[data-testid="videoconference-config-dialog"]'
-						);
+						const configurationDialog = wrapper.findComponent({
+							name: "VideoConferenceConfigurationDialog",
+						});
 
 						expect(configurationDialog.props("modelValue")).toBe(true);
 					});
@@ -548,9 +515,6 @@ describe("VideoConferenceContentElement", () => {
 				const { wrapper } = setupWrapper({
 					content: videoConferenceElementContentFactory.build(),
 					isEditMode: false,
-					videoConferenceModuleGetter: {
-						getError: error,
-					},
 				});
 
 				const videoConferenceElement = wrapper.findComponent(
@@ -571,9 +535,6 @@ describe("VideoConferenceContentElement", () => {
 				const { wrapper } = setupWrapper({
 					content: videoConferenceElementContentFactory.build(),
 					isEditMode: false,
-					videoConferenceModuleGetter: {
-						getError: null,
-					},
 				});
 
 				const videoConferenceElement = wrapper.findComponent(

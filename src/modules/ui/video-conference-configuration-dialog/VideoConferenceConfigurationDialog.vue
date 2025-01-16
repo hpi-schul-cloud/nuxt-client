@@ -2,13 +2,13 @@
 	<VDialog
 		v-model="isOpen"
 		max-width="480"
-		data-testid="videoconference-config-dialog"
+		data-testid="video-conference-config-dialog"
 	>
 		<VCard :ripple="false">
 			<VCardTitle>
 				<h2
 					class="text-h4 my-2"
-					data-testid="videoconference-config-dialog-title"
+					data-testid="video-conference-config-dialog-title"
 				>
 					{{ t("pages.common.tools.configureVideoconferenceDialog.title") }}
 				</h2>
