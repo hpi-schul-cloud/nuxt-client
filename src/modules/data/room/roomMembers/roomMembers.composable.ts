@@ -68,9 +68,8 @@ export const useRoomMembers = (roomId: string) => {
 		schoolId: string = ownSchool.id
 	) => {
 		try {
-			const result = (
-				await schoolApi.schoolControllerGetTeachers(schoolId ?? ownSchool.id)
-			).data;
+			const result = (await schoolApi.schoolControllerGetTeachers(schoolId))
+				.data;
 
 			potentialRoomMembers.value = result.data
 				.map((user) => {
@@ -78,8 +77,8 @@ export const useRoomMembers = (roomId: string) => {
 						...user,
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
-						schoolRoleName,
-						roomRoleName: RoleName.Roomeditor,
+						schoolRoleName: RoleName.Teacher,
+						roomRoleName: RoleName.Roomadmin,
 					};
 				})
 				.filter((user) => {
