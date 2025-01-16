@@ -10,6 +10,7 @@
 		target="_blank"
 		:aria-label="ariaLabel"
 		@keydown.stop.up.down="onKeydownArrow"
+		@keyup.enter="onContentEnter"
 	>
 		<VideoConferenceContentElementDisplay
 			v-if="computedElement.content.title"
@@ -244,10 +245,9 @@ const onJoinVideoConference = async () => {
 	});
 };
 
-// was used on keyup.enter on VCard, unclear to me if it's still needed
-// const onContentEnter = async () => {
-// 	if (!props.isEditMode) {
-// 		onContentClick();
-// 	}
-// };
+const onContentEnter = async () => {
+	if (!props.isEditMode) {
+		onContentClick();
+	}
+};
 </script>
