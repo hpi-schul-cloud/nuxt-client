@@ -90,13 +90,15 @@
 
 <script setup lang="ts">
 import { envConfigModule } from "@/store";
-const REGEX_europeanEmailAdress = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+$/gm;
+const mailAddress = envConfigModule.env.SUPPORT_PROBLEM_EMAIL_ADDRESS;
+const isValidMailAddress = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+$/gm.test(
+	mailAddress
+);
 
 let supportMail = "";
 let mailtoSupportMail = "#";
 
-const mailAddress = envConfigModule.getSupportProblemEmail;
-if (REGEX_europeanEmailAdress.test(mailAddress)) {
+if (isValidMailAddress) {
 	supportMail = mailAddress;
 	mailtoSupportMail = `mailto:${supportMail}`;
 }
