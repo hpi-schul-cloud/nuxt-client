@@ -26,11 +26,15 @@ export const useRoomMembers = (roomId: string) => {
 	};
 	const currentUserId = authModule.getUser?.id ?? "";
 
-	const userRoles: Record<string, string> = {
+	const roomRole: Record<string, string> = {
 		[RoleName.Roomowner]: t("pages.rooms.members.roomPermissions.owner"),
 		[RoleName.Roomadmin]: t("pages.rooms.members.roomPermissions.admin"),
 		[RoleName.Roomeditor]: t("pages.rooms.members.roomPermissions.editor"),
 		[RoleName.Roomviewer]: t("pages.rooms.members.roomPermissionss.viewer"),
+	};
+
+	const schoolRole: Record<string, string> = {
+		[RoleName.Teacher]: t("common.labels.teacher"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -44,10 +48,11 @@ export const useRoomMembers = (roomId: string) => {
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
-					displayRoleName: userRoles[member.roleName],
+					displayRoomRole: roomRole[member.roomRoleName],
+					displaySchoolRole: schoolRole[member.schoolRoleName],
 					isSelectable: !(
 						member.userId === currentUserId ||
-						member.roleName === RoleName.Roomowner
+						member.roomRoleName === RoleName.Roomowner
 					),
 				};
 			});
@@ -59,16 +64,12 @@ export const useRoomMembers = (roomId: string) => {
 	};
 
 	const getPotentialMembers = async (
-		payload: {
-			role: RoleName;
-			schoolId?: string;
-		} = { role: RoleName.Roomeditor, schoolId: ownSchool.id }
+		schoolRoleName: RoleName,
+		schoolId: string = ownSchool.id
 	) => {
 		try {
 			const result = (
-				await schoolApi.schoolControllerGetTeachers(
-					payload.schoolId ?? ownSchool.id
-				)
+				await schoolApi.schoolControllerGetTeachers(schoolId ?? ownSchool.id)
 			).data;
 
 			potentialRoomMembers.value = result.data
@@ -77,12 +78,13 @@ export const useRoomMembers = (roomId: string) => {
 						...user,
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
-						roleName: RoleName.Roomeditor,
+						schoolRoleName,
+						roomRoleName: RoleName.Roomeditor,
 					};
 				})
 				.filter((user) => {
 					return (
-						user.roleName === payload.role &&
+						user.schoolRoleName === schoolRoleName &&
 						!roomMembers.value.some((member) => member.userId === user.id)
 					);
 				});
@@ -115,7 +117,8 @@ export const useRoomMembers = (roomId: string) => {
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
 					...member,
-					displayRoleName: userRoles[member.roleName],
+					displayRoomRole: roomRole[member.roomRoleName],
+					displaySchoolRole: schoolRole[member.schoolRoleName],
 				}))
 			);
 		} catch (error) {

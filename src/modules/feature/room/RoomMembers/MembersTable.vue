@@ -89,7 +89,12 @@ const props = defineProps({
 });
 const { askConfirmation } = useConfirmationDialog();
 const selectedUserIds = ref<string[]>([]);
-const emit = defineEmits(["remove:members", "select:members"]);
+
+const emit = defineEmits<{
+	(e: "remove:members", userIds: string[]): void;
+	(e: "select:members", userIds: string[]): void;
+}>();
+
 const { t } = useI18n();
 const search = ref("");
 const memberList = toRef(props, "members");
@@ -153,12 +158,11 @@ const tableHeader = [
 	},
 	{
 		title: t("pages.rooms.members.tableHeader.roomPermissions"),
-		key: "displayRoleName",
+		key: "displayRoomRole",
 	},
-	// TODO: Add school role, info from backend needed
 	{
 		title: t("pages.rooms.members.tableHeader.schoolRole"),
-		key: "displayRoleName",
+		key: "displaySchoolRole",
 	},
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
 	{ title: "", key: "actions", sortable: false, width: 50 },
