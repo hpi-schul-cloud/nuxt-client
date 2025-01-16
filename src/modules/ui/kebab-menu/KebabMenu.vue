@@ -25,8 +25,4 @@
 
 <script setup lang="ts">
 import { mdiDotsVertical } from "@icons/material";
-
-defineOptions({
-	inheritAttrs: false,
-});
 </script>
