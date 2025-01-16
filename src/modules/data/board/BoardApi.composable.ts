@@ -3,6 +3,7 @@ import {
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
 	BoardElementApiFactory,
+	BoardLayout,
 	BoardResponse,
 	CardResponse,
 	ColumnResponse,
@@ -241,6 +242,14 @@ export const useBoardApi = () => {
 		return boardApi.boardControllerUpdateVisibility(boardId, { isVisible });
 	};
 
+	const updateBoardLayoutCall = async (
+		boardId: string,
+		layout: BoardLayout
+	) => {
+		// TODO use real controller endpoint
+		// return boardApi.boardControllerUpdateVisibility(boardId, { isVisible });
+	};
+
 	return {
 		fetchBoardCall,
 		createColumnCall,
@@ -259,5 +268,6 @@ export const useBoardApi = () => {
 		updateElementCall,
 		createCardCall,
 		getContextInfo,
+		updateBoardLayoutCall,
 	};
 };

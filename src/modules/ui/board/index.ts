@@ -1,5 +1,6 @@
 import BoardMenu from "./BoardMenu.vue";
 import BoardMenuAction from "./BoardMenuAction.vue";
+import BoardMenuActionChangeLayout from "./BoardMenuActionChangeLayout.vue";
 import BoardMenuActionCopy from "./BoardMenuActionCopy.vue";
 import BoardMenuActionDelete from "./BoardMenuActionDelete.vue";
 import BoardMenuActionEdit from "./BoardMenuActionEdit.vue";
@@ -19,6 +20,7 @@ export { BoardMenuScope } from "./board-menu-scope";
 export {
 	BoardMenu,
 	BoardMenuAction,
+	BoardMenuActionChangeLayout,
 	BoardMenuActionCopy,
 	BoardMenuActionEdit,
 	BoardMenuActionDelete,

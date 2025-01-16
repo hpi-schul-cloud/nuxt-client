@@ -377,6 +377,7 @@ export default {
 	"components.board.action.moveLeft": "Перемістіться вліво",
 	"components.board.action.moveRight": "Перемістіться праворуч",
 	"components.board.action.moveUp": "Рухатися вгору",
+	"components.board.action.changeLayout": "Змінити вигляд",
 	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
 	"components.board.alert.info.draft": "Ця дошка невидима для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
@@ -441,6 +442,8 @@ export default {
 		"Заголовок картки {cardPosition} у колонці {columnPosition} було змінено на {newTitle} іншим користувачем.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"Інший користувач змінив вигляд панелі на {layout}.",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
@@ -523,6 +526,10 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Текст",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
 		"Відеоконференція",
+	"components.changeBoardLayoutDialog.boardLayout.singleColumn.explanation":
+		"кілька секцій розташовані одна під одною",
+	"components.changeBoardLayoutDialog.boardLayout.multiColumn.explanation":
+		"кілька секцій розташовані поруч",
 	"components.externalTools.status.deactivated": "Деактивовано",
 	"components.externalTools.status.incomplete": "Конфігурація не завершена",
 	"components.externalTools.status.latest": "Останній",

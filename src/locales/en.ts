@@ -369,6 +369,7 @@ export default {
 	"components.board.action.moveLeft": "Move left",
 	"components.board.action.moveRight": "Move right",
 	"components.board.action.moveUp": "Move up",
+	"components.board.action.changeLayout": "Change layout",
 	"components.board.alert.info.teacher":
 		"This board is visible to all course participants.",
 	"components.board.alert.info.draft":
@@ -432,6 +433,8 @@ export default {
 		"Title of card {cardPosition} in column {columnPosition} was changed to {newTitle} by another user.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"The board's view was changed to {layout} by another user.",
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
@@ -514,6 +517,10 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
 		"Video conference",
+	"components.changeBoardLayoutDialog.boardLayout.singleColumn.explanation":
+		"several sections are positioned one below the other",
+	"components.changeBoardLayoutDialog.boardLayout.multiColumn.explanation":
+		"several sections are positioned next to each other",
 	"components.externalTools.status.deactivated": "Deactivated",
 	"components.externalTools.status.incomplete": "Configuration incomplete",
 	"components.externalTools.status.latest": "Latest",

@@ -374,6 +374,7 @@ export default {
 	"components.board.action.moveLeft": "Mover a la izquierda",
 	"components.board.action.moveRight": "Mover a la derecha",
 	"components.board.action.moveUp": "Levantar",
+	"components.board.action.changeLayout": "Cambiar vista",
 	"components.board.alert.info.teacher":
 		"Este tablero es visible para todos los participantes en el curso.",
 	"components.board.alert.info.draft":
@@ -441,6 +442,8 @@ export default {
 		"El título de la tarjeta {cardPosition} en la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"Otro usuario cambió la vista del panel a {layout}.",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
@@ -524,6 +527,10 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Texto",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
 		"Videoconferencia",
+	"components.changeBoardLayoutDialog.boardLayout.singleColumn.explanation":
+		"varias secciones están colocadas una debajo de la otra",
+	"components.changeBoardLayoutDialog.boardLayout.multiColumn.explanation":
+		"varias secciones están colocadas una al lado de la otra",
 	"components.externalTools.status.deactivated": "Desactivado",
 	"components.externalTools.status.incomplete": "Configuración incompleta",
 	"components.externalTools.status.latest": "Actual",

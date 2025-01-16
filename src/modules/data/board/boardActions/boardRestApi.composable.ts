@@ -3,7 +3,11 @@ import {
 	ErrorType,
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
+import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { useSharedEditMode } from "@util-board";
+import { useI18n } from "vue-i18n";
 import { useBoardStore } from "../Board.store";
 import { useBoardApi } from "../BoardApi.composable";
 import {
@@ -13,15 +17,12 @@ import {
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
 	MoveColumnRequestPayload,
+	UpdateBoardLayoutRequestPayload,
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
 } from "./boardActionPayload";
 import * as BoardActions from "./boardActions";
-import { applicationErrorModule, courseRoomDetailsModule } from "@/store";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { useI18n } from "vue-i18n";
 
 export const useBoardRestApi = () => {
 	const boardStore = useBoardStore();
@@ -37,6 +38,7 @@ export const useBoardRestApi = () => {
 		updateColumnTitleCall,
 		updateBoardTitleCall,
 		updateBoardVisibilityCall,
+		updateBoardLayoutCall,
 	} = useBoardApi();
 
 	const { t } = useI18n();
@@ -231,6 +233,26 @@ export const useBoardRestApi = () => {
 		}
 	};
 
+	const updateBoardLayoutRequest = async (
+		payload: UpdateBoardLayoutRequestPayload
+	) => {
+		if (boardStore.board === undefined) return;
+		const { boardId, layout } = payload;
+
+		try {
+			await updateBoardLayoutCall(boardId, layout);
+			boardStore.updateBoardLayoutSuccess({
+				boardId,
+				layout,
+				isOwnAction: true,
+			});
+		} catch (error) {
+			handleError(error, {
+				404: notifyWithTemplateAndReload("notUpdated", "board"),
+			});
+		}
+	};
+
 	const notifyWithTemplateAndReload = (
 		errorType: ErrorType,
 		boardObjectType?: BoardObjectType
@@ -272,6 +294,7 @@ export const useBoardRestApi = () => {
 		updateColumnTitleRequest,
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,
+		updateBoardLayoutRequest,
 		reloadBoard,
 		reloadBoardSuccess,
 		disconnectSocketRequest,

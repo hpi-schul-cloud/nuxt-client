@@ -45,6 +45,7 @@
 					<BoardMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
 					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
 					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+					<BoardMenuActionChangeLayout @click="onChangeBoardLayout" />
 					<BoardMenuActionDelete :name="title" @click="onDeleteBoard" />
 				</BoardMenu>
 			</div>
@@ -57,6 +58,7 @@ import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
 	BoardMenu,
+	BoardMenuActionChangeLayout,
 	BoardMenuActionCopy,
 	BoardMenuActionDelete,
 	BoardMenuActionEdit,
@@ -93,6 +95,7 @@ const emit = defineEmits([
 	"update:title",
 	"update:visibility",
 	"delete:board",
+	"change-layout",
 ]);
 
 const { t } = useI18n();
@@ -159,6 +162,10 @@ const onDeleteBoard = async (confirmation: Promise<boolean>) => {
 	if (shouldDelete) {
 		emit("delete:board", props.boardId);
 	}
+};
+
+const onChangeBoardLayout = async () => {
+	emit("change-layout");
 };
 
 const emitTitle = useDebounceFn((newTitle: string) => {

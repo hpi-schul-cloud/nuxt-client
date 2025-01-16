@@ -2,6 +2,7 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue"
 import { useApplicationError } from "@/composables/application-error.composable";
 import { useCopy } from "@/composables/copy";
 import {
+	BoardLayout,
 	ConfigResponse,
 	CopyApiResponse,
 	CopyApiResponseTypeEnum,
@@ -63,8 +64,10 @@ import {
 import { mount } from "@vue/test-utils";
 import { computed, nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
+import ChangeBoardLayoutDialog from "../shared/ChangeBoardLayoutDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
+import BoardHeader from "./BoardHeader.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
 
 jest.mock("@util-board/BoardNotifier.composable");
@@ -1052,6 +1055,59 @@ describe("Board", () => {
 					},
 					mockRoomId
 				);
+			});
+		});
+	});
+
+	describe("Change board layout", () => {
+		describe("when the 'change layout' menu button is clicked", () => {
+			it("should open the change dialog", async () => {
+				const { wrapper } = setup();
+
+				const boardHeader = wrapper.findComponent(BoardHeader);
+				const changeBoardLayoutDialog = wrapper.findComponent(
+					ChangeBoardLayoutDialog
+				);
+
+				boardHeader.vm.$emit("change-layout");
+				await nextTick();
+
+				expect(changeBoardLayoutDialog.vm.isDialogOpen).toEqual(true);
+			});
+		});
+
+		describe("when the change layout dialog is confirmed", () => {
+			describe("when layout has changed", () => {
+				it("should send the update request", async () => {
+					const { wrapper, boardStore, board } = setup();
+
+					const changeBoardLayoutDialog = wrapper.findComponent(
+						ChangeBoardLayoutDialog
+					);
+
+					changeBoardLayoutDialog.vm.$emit("change-layout", BoardLayout.List);
+					await nextTick();
+
+					expect(boardStore.updateBoardLayoutRequest).toHaveBeenCalledWith({
+						boardId: board.id,
+						layout: BoardLayout.List,
+					});
+				});
+			});
+
+			describe("when the layout has not changed", () => {
+				it("should not send an update request", async () => {
+					const { wrapper, boardStore, board } = setup();
+
+					const changeBoardLayoutDialog = wrapper.findComponent(
+						ChangeBoardLayoutDialog
+					);
+
+					changeBoardLayoutDialog.vm.$emit("change-layout", board.layout);
+					await nextTick();
+
+					expect(boardStore.updateBoardLayoutRequest).not.toHaveBeenCalled();
+				});
 			});
 		});
 	});
