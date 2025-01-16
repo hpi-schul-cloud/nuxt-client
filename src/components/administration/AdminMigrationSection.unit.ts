@@ -61,6 +61,7 @@ describe("AdminMigrationSection", () => {
 
 		envConfigModule = createModuleMocks(EnvConfigModule, {
 			getAccessibilityReportEmail: "ticketsystem@niedersachsen.support",
+			getSupportProblemEmail: "ticketsystem@niedersachsen.support",
 			getEnv: {} as ConfigResponse,
 			...envConfigGetters,
 		});

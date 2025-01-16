@@ -58,7 +58,10 @@ export default {
 					rel: "noopener",
 				},
 				{
-					href: "mailto:ticketsystem@niedersachsen.support?subject=Niedersächsische%20Bildungscloud%20Anfrage",
+					href:
+						"mailto:" +
+						envConfigModule.getSupportProblemEmail +
+						"?subject=Niedersächsische%20Bildungscloud%20Anfrage",
 					text: this.$t("components.legacy.footer.contact"),
 				},
 			];

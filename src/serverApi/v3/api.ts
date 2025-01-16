@@ -1003,6 +1003,16 @@ export interface ClassInfoSearchListResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum ClassRequestContext {
+    Course = 'course',
+    ClassOverview = 'class-overview'
+}
+
+/**
+ * 
+ * @export
  * @interface ClassResponse
  */
 export interface ClassResponse {
@@ -1262,6 +1272,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     ACCESSIBILITY_REPORT_EMAIL: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    SUPPORT_PROBLEM_EMAIL_ADDRESS: string;
     /**
      * 
      * @type {boolean}
@@ -16679,10 +16695,11 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
+         * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, options: any = {}): Promise<RequestArgs> => {
+        groupControllerFindClasses: async (skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/groups/class`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -16717,6 +16734,10 @@ export const GroupApiAxiosParamCreator = function (configuration?: Configuration
 
             if (type !== undefined) {
                 localVarQueryParameter['type'] = type;
+            }
+
+            if (calledFrom !== undefined) {
+                localVarQueryParameter['calledFrom'] = calledFrom;
             }
 
 
@@ -16840,11 +16861,12 @@ export const GroupApiFp = function(configuration?: Configuration) {
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
+         * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options);
+        async groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ClassInfoSearchListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -16890,11 +16912,12 @@ export const GroupApiFactory = function (configuration?: Configuration, basePath
          * @param {'asc' | 'desc'} [sortOrder] 
          * @param {ClassSortQueryType} [sortBy] 
          * @param {SchoolYearQueryType} [type] 
+         * @param {ClassRequestContext} [calledFrom] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
-            return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(axios, basePath));
+        groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse> {
+            return localVarFp.groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -16936,11 +16959,12 @@ export interface GroupApiInterface {
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {ClassSortQueryType} [sortBy] 
      * @param {SchoolYearQueryType} [type] 
+     * @param {ClassRequestContext} [calledFrom] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApiInterface
      */
-    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, options?: any): AxiosPromise<ClassInfoSearchListResponse>;
+    groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any): AxiosPromise<ClassInfoSearchListResponse>;
 
     /**
      * 
@@ -16982,12 +17006,13 @@ export class GroupApi extends BaseAPI implements GroupApiInterface {
      * @param {'asc' | 'desc'} [sortOrder] 
      * @param {ClassSortQueryType} [sortBy] 
      * @param {SchoolYearQueryType} [type] 
+     * @param {ClassRequestContext} [calledFrom] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof GroupApi
      */
-    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, options?: any) {
-        return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, options).then((request) => request(this.axios, this.basePath));
+    public groupControllerFindClasses(skip?: number, limit?: number, sortOrder?: 'asc' | 'desc', sortBy?: ClassSortQueryType, type?: SchoolYearQueryType, calledFrom?: ClassRequestContext, options?: any) {
+        return GroupApiFp(this.configuration).groupControllerFindClasses(skip, limit, sortOrder, sortBy, type, calledFrom, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -21949,10 +21974,12 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @param {string} schoolId 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetTeachers: async (schoolId: string, options: any = {}): Promise<RequestArgs> => {
+        schoolControllerGetTeachers: async (schoolId: string, skip?: number, limit?: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'schoolId' is not null or undefined
             assertParamExists('schoolControllerGetTeachers', 'schoolId', schoolId)
             const localVarPath = `/school/{schoolId}/teachers`
@@ -21971,6 +21998,14 @@ export const SchoolApiAxiosParamCreator = function (configuration?: Configuratio
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (skip !== undefined) {
+                localVarQueryParameter['skip'] = skip;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
 
 
     
@@ -22189,11 +22224,13 @@ export const SchoolApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @param {string} schoolId 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async schoolControllerGetTeachers(schoolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolUserListResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetTeachers(schoolId, options);
+        async schoolControllerGetTeachers(schoolId: string, skip?: number, limit?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SchoolUserListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolControllerGetTeachers(schoolId, skip, limit, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -22299,11 +22336,13 @@ export const SchoolApiFactory = function (configuration?: Configuration, basePat
         /**
          * 
          * @param {string} schoolId 
+         * @param {number} [skip] Number of elements (not pages) to be skipped
+         * @param {number} [limit] Page limit, defaults to 10.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        schoolControllerGetTeachers(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse> {
-            return localVarFp.schoolControllerGetTeachers(schoolId, options).then((request) => request(axios, basePath));
+        schoolControllerGetTeachers(schoolId: string, skip?: number, limit?: number, options?: any): AxiosPromise<SchoolUserListResponse> {
+            return localVarFp.schoolControllerGetTeachers(schoolId, skip, limit, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -22404,11 +22443,13 @@ export interface SchoolApiInterface {
     /**
      * 
      * @param {string} schoolId 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SchoolApiInterface
      */
-    schoolControllerGetTeachers(schoolId: string, options?: any): AxiosPromise<SchoolUserListResponse>;
+    schoolControllerGetTeachers(schoolId: string, skip?: number, limit?: number, options?: any): AxiosPromise<SchoolUserListResponse>;
 
     /**
      * 
@@ -22521,12 +22562,14 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
     /**
      * 
      * @param {string} schoolId 
+     * @param {number} [skip] Number of elements (not pages) to be skipped
+     * @param {number} [limit] Page limit, defaults to 10.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof SchoolApi
      */
-    public schoolControllerGetTeachers(schoolId: string, options?: any) {
-        return SchoolApiFp(this.configuration).schoolControllerGetTeachers(schoolId, options).then((request) => request(this.axios, this.basePath));
+    public schoolControllerGetTeachers(schoolId: string, skip?: number, limit?: number, options?: any) {
+        return SchoolApiFp(this.configuration).schoolControllerGetTeachers(schoolId, skip, limit, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -27197,11 +27240,10 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
         /**
          * Populates import users from specific user migration populate endpoint.
          * @summary Populates import users
-         * @param {boolean} [matchByPreferredName] Should the users preferred name from the external system be used for auto-matching to existing users?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerPopulateImportUsers: async (matchByPreferredName?: boolean, options: any = {}): Promise<RequestArgs> => {
+        importUserControllerPopulateImportUsers: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/user/import/populate-import-users`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -27217,10 +27259,6 @@ export const UserImportApiAxiosParamCreator = function (configuration?: Configur
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-            if (matchByPreferredName !== undefined) {
-                localVarQueryParameter['matchByPreferredName'] = matchByPreferredName;
-            }
 
 
     
@@ -27503,12 +27541,11 @@ export const UserImportApiFp = function(configuration?: Configuration) {
         /**
          * Populates import users from specific user migration populate endpoint.
          * @summary Populates import users
-         * @param {boolean} [matchByPreferredName] Should the users preferred name from the external system be used for auto-matching to existing users?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async importUserControllerPopulateImportUsers(matchByPreferredName?: boolean, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerPopulateImportUsers(matchByPreferredName, options);
+        async importUserControllerPopulateImportUsers(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.importUserControllerPopulateImportUsers(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -27631,12 +27668,11 @@ export const UserImportApiFactory = function (configuration?: Configuration, bas
         /**
          * Populates import users from specific user migration populate endpoint.
          * @summary Populates import users
-         * @param {boolean} [matchByPreferredName] Should the users preferred name from the external system be used for auto-matching to existing users?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        importUserControllerPopulateImportUsers(matchByPreferredName?: boolean, options?: any): AxiosPromise<void> {
-            return localVarFp.importUserControllerPopulateImportUsers(matchByPreferredName, options).then((request) => request(axios, basePath));
+        importUserControllerPopulateImportUsers(options?: any): AxiosPromise<void> {
+            return localVarFp.importUserControllerPopulateImportUsers(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -27752,12 +27788,11 @@ export interface UserImportApiInterface {
     /**
      * Populates import users from specific user migration populate endpoint.
      * @summary Populates import users
-     * @param {boolean} [matchByPreferredName] Should the users preferred name from the external system be used for auto-matching to existing users?
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApiInterface
      */
-    importUserControllerPopulateImportUsers(matchByPreferredName?: boolean, options?: any): AxiosPromise<void>;
+    importUserControllerPopulateImportUsers(options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -27883,13 +27918,12 @@ export class UserImportApi extends BaseAPI implements UserImportApiInterface {
     /**
      * Populates import users from specific user migration populate endpoint.
      * @summary Populates import users
-     * @param {boolean} [matchByPreferredName] Should the users preferred name from the external system be used for auto-matching to existing users?
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserImportApi
      */
-    public importUserControllerPopulateImportUsers(matchByPreferredName?: boolean, options?: any) {
-        return UserImportApiFp(this.configuration).importUserControllerPopulateImportUsers(matchByPreferredName, options).then((request) => request(this.axios, this.basePath));
+    public importUserControllerPopulateImportUsers(options?: any) {
+        return UserImportApiFp(this.configuration).importUserControllerPopulateImportUsers(options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

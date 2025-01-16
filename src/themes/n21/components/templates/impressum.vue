@@ -22,8 +22,7 @@
 			</p>
 			<p>
 				<b>Support-Anfragen</b> richten Sie bitte direkt an
-				<base-link href="mailto:ticketsystem@niedersachsen.support"
-					>ticketsystem@niedersachsen.support</base-link
+				<base-link :href="mailtoSupportMail">{{ supportMail }}</base-link
 				>.
 			</p>
 			<h2 class="h4">Vertretungsberechtigter Geschäftsführer</h2>
@@ -89,8 +88,10 @@
 	</div>
 </template>
 
-<script>
-export default {};
+<script setup lang="ts">
+import { envConfigModule } from "@/store";
+const supportMail = envConfigModule.getSupportProblemEmail;
+const mailtoSupportMail = `mailto:${supportMail}`;
 </script>
 
 <style lang="scss" scoped>
