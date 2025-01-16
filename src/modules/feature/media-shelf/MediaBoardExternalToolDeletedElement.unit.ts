@@ -3,7 +3,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { BoardMenuAction } from "@ui-board";
+import { KebabMenuAction } from "@ui-kebab-menu";
 import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
@@ -68,7 +68,7 @@ describe("MediaBoardDeletedElement", () => {
 					.getComponent(VBtn);
 				await menuBtn.trigger("click");
 
-				const deleteAction = wrapper.findComponent(BoardMenuAction);
+				const deleteAction = wrapper.findComponent(KebabMenuAction);
 
 				expect(deleteAction.exists()).toEqual(true);
 			});
