@@ -31,10 +31,12 @@ describe("impressum.vue", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	it("does not set supportMail and mailtoSupportMail if email is invalid", () => {
-		const wrapper = setup("invalid-email");
+	describe("when environment variable is no valid email", () => {
+		it("should not use environment variable", () => {
+			const wrapper = setup("invalid-email");
 
-		expect(wrapper.vm.supportMail).toBe("");
-		expect(wrapper.vm.mailtoSupportMail).toBe("#");
+			expect(wrapper.vm.supportMail).toBe("");
+			expect(wrapper.vm.mailtoSupportMail).toBe("#");
+		});
 	});
 });
