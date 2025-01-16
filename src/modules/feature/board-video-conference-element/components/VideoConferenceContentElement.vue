@@ -6,8 +6,9 @@
 		:variant="outlined"
 		ref="videoConferenceElement"
 		:ripple="false"
-		role="button"
+		tabindex="0"
 		target="_blank"
+		link
 		:aria-label="ariaLabel"
 		@keydown.stop.up.down="onKeydownArrow"
 		@keyup.enter="onContentEnter"
