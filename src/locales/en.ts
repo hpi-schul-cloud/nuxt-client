@@ -1785,7 +1785,7 @@ export default {
 	"pages.rooms.members.roomPermissions.owner": "Own",
 	"pages.rooms.members.roomPermissions.editor": "Edit",
 	"pages.rooms.members.roomPermissions.viewer": "Read",
-	"pages.rooms.members.tableHeader.roomPermissions": "Room Permissions",
+	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",

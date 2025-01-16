@@ -1813,7 +1813,7 @@ export default {
 	"pages.rooms.members.roomPermissions.owner": "Володіти",
 	"pages.rooms.members.roomPermissions.editor": "Редагувати",
 	"pages.rooms.members.roomPermissions.viewer": "Читати",
-	"pages.rooms.members.tableHeader.roomPermissions": "Дозволи кімнати",
+	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",

@@ -157,7 +157,7 @@ const tableHeader = [
 		key: "lastName",
 	},
 	{
-		title: t("pages.rooms.members.tableHeader.roomPermissions"),
+		title: t("pages.rooms.members.tableHeader.roomRole"),
 		key: "displayRoomRole",
 	},
 	{
