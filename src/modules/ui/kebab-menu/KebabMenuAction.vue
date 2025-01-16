@@ -1,8 +1,12 @@
 <template>
-	<VListItem data-testid="board-menu-action" role="menuitem">
+	<VListItem
+		data-testid="kebab-menu-action"
+		role="menuitem"
+		:aria-label="ariaLabel"
+	>
 		<template v-slot:prepend>
-			<slot name="icon" data-testid="board-menu-action-icon">
-				<v-icon :icon="icon" data-testid="board-menu-action-icon" />
+			<slot name="icon" data-testid="kebab-menu-action-icon">
+				<v-icon :icon="icon" data-testid="kebab-menu-action-icon" />
 			</slot>
 		</template>
 		<VListItemTitle :data-testid="dataTestId">
@@ -18,5 +22,6 @@ import { IconProps } from "vuetify";
 defineProps({
 	icon: { type: String as PropType<IconProps["icon"]> },
 	dataTestId: { type: String as PropType<string | null>, default: null },
+	ariaLabel: { type: String as PropType<string | null>, default: null },
 });
 </script>

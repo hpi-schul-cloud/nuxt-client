@@ -1,144 +1,149 @@
 <template>
-	<div>
-		<VCard
-			class="mb-4"
-			data-testid="video-conference-element"
-			:class="{ 'd-none': isHidden }"
-			:variant="outlined"
-			ref="videoConferenceElement"
-			:ripple="false"
-			target="_blank"
-			:aria-label="ariaLabel"
-			@keydown.stop.up.down="onKeydownArrow"
+	<VCard
+		class="mb-4"
+		data-testid="video-conference-element"
+		:class="{ 'd-none': isHidden }"
+		:variant="outlined"
+		ref="videoConferenceElement"
+		role="button"
+		:ripple="false"
+		target="_blank"
+		:aria-label="ariaLabel"
+		@keydown.stop.up.down="onKeydownArrow"
+	>
+		<VideoConferenceContentElementDisplay
+			v-if="computedElement.content.title"
+			:title="computedElement.content.title"
+			:has-participation-permission="hasParticipationPermission"
+			:can-start="canStart"
+			:is-running="isRunning"
+			:is-edit-mode="isEditMode"
+			@click="onContentClick"
+			@refresh="onRefresh"
 		>
-			<VideoConferenceContentElementDisplay
-				v-if="computedElement.content.title"
-				:title="computedElement.content.title"
-				:has-participation-permission="hasParticipationPermission"
-				:can-start="canStart"
-				:is-running="isRunning"
-				:is-edit-mode="isEditMode"
-				@click="onContentClick"
-				@refresh="onRefresh"
+			<BoardMenu
+				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
+				has-background
+				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 			>
-				<BoardMenu
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
 					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
-					has-background
-					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
-				>
-					<BoardMenuActionMoveUp @click="onMoveUp" />
-					<BoardMenuActionMoveDown @click="onMoveDown" />
-					<BoardMenuActionDelete @click="onDelete" />
-				</BoardMenu>
-			</VideoConferenceContentElementDisplay>
-			<VideoConferenceContentElementCreate
-				v-if="isCreating"
-				@create:title="onCreateTitle"
+					@click="onDelete"
+				/>
+			</BoardMenu>
+		</VideoConferenceContentElementDisplay>
+		<VideoConferenceContentElementCreate
+			v-if="isCreating"
+			@create:title="onCreateTitle"
+		>
+			<BoardMenu
+				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
+				has-background
 			>
-				<BoardMenu
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
 					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
-					has-background
-				>
-					<BoardMenuActionMoveUp @click="onMoveUp" />
-					<BoardMenuActionMoveDown @click="onMoveDown" />
-					<BoardMenuActionDelete @click="onDelete" />
-				</BoardMenu>
-			</VideoConferenceContentElementCreate>
-			<VDialog
-				ref="vDialog"
-				v-model="isErrorDialogOpen"
-				:max-width="480"
-				data-testid="error-dialog"
-				@click:outside="onCloseErrorDialog"
-				@keydown.esc="onCloseErrorDialog"
-			>
-				<VCard :ripple="false">
-					<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
-						<h2 class="text-h4 my-2 text-break-word">
-							{{ t("error.generic") }}
-						</h2>
-					</VCardTitle>
-					<VCardActions class="action-buttons px-6">
-						<div class="button-section button-right">
-							<VBtn
-								data-testid="dialog-close"
-								variant="outlined"
-								@click="onCloseErrorDialog"
-							>
-								{{ t("common.labels.close") }}
-							</VBtn>
-						</div>
-					</VCardActions>
-				</VCard>
-			</VDialog>
+					@click="onDelete"
+				/>
+			</BoardMenu>
+		</VideoConferenceContentElementCreate>
+		<VDialog
+			ref="vDialog"
+			v-model="isErrorDialogOpen"
+			:max-width="480"
+			data-testid="error-dialog"
+			@click:outside="onCloseErrorDialog"
+			@keydown.esc="onCloseErrorDialog"
+		>
+			<VCard :ripple="false">
+				<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
+					<h2 class="text-h4 my-2 text-break-word">
+						{{ t("error.generic") }}
+					</h2>
+				</VCardTitle>
+				<VCardActions class="action-buttons px-6">
+					<div class="button-section button-right">
+						<VBtn
+							data-testid="dialog-close"
+							variant="outlined"
+							@click="onCloseErrorDialog"
+						>
+							{{ t("common.labels.close") }}
+						</VBtn>
+					</div>
+				</VCardActions>
+			</VCard>
+		</VDialog>
 
-			<VDialog
-				v-model="isConfigurationDialogOpen"
-				max-width="480"
-				data-testid="videoconference-config-dialog"
-			>
-				<VCard :ripple="false">
-					<VCardTitle>
-						<h2
-							class="text-h4 my-2"
-							data-testid="videoconference-config-dialog-title"
-						>
-							{{ t("pages.common.tools.configureVideoconferenceDialog.title") }}
-						</h2>
-					</VCardTitle>
-					<VCardText>
-						<VCheckbox
-							v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
-							data-testid="every-attendee-joins-muted"
-							:label="
-								t('pages.common.tools.configureVideoconferenceDialog.text.mute')
-							"
-							:hide-details="true"
-						/>
-						<VCheckbox
-							v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
-							data-testid="moderator-must-approve-join-requests"
-							:label="
-								t(
-									'pages.common.tools.configureVideoconferenceDialog.text.waitingRoom'
-								)
-							"
-							:hide-details="true"
-						/>
-						<VCheckbox
-							v-model="videoConferenceOptions.everybodyJoinsAsModerator"
-							data-testid="everybody-joins-as-moderator"
-							:label="
-								t(
-									'pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission'
-								)
-							"
-							:hide-details="true"
-						/>
-					</VCardText>
-					<VCardActions>
-						<VSpacer />
-						<VBtn
-							data-testid="dialog-cancel"
-							variant="text"
-							@click="onCloseConfigurationDialog"
-						>
-							{{ t("common.actions.cancel") }}
-						</VBtn>
-						<VBtn
-							data-testid="dialog-create"
-							class="px-6"
-							color="primary"
-							variant="flat"
-							@click="startVideoConference"
-						>
-							{{ t("common.actions.create") }}
-						</VBtn>
-					</VCardActions>
-				</VCard>
-			</VDialog>
-		</VCard>
-	</div>
+		<VDialog
+			v-model="isConfigurationDialogOpen"
+			max-width="480"
+			data-testid="videoconference-config-dialog"
+		>
+			<VCard :ripple="false">
+				<VCardTitle>
+					<h2
+						class="text-h4 my-2"
+						data-testid="videoconference-config-dialog-title"
+					>
+						{{ t("pages.common.tools.configureVideoconferenceDialog.title") }}
+					</h2>
+				</VCardTitle>
+				<VCardText>
+					<VCheckbox
+						v-model="videoConferenceOptions.everyAttendeeJoinsMuted"
+						data-testid="every-attendee-joins-muted"
+						:label="
+							t('pages.common.tools.configureVideoconferenceDialog.text.mute')
+						"
+						:hide-details="true"
+					/>
+					<VCheckbox
+						v-model="videoConferenceOptions.moderatorMustApproveJoinRequests"
+						data-testid="moderator-must-approve-join-requests"
+						:label="
+							t(
+								'pages.common.tools.configureVideoconferenceDialog.text.waitingRoom'
+							)
+						"
+						:hide-details="true"
+					/>
+					<VCheckbox
+						v-model="videoConferenceOptions.everybodyJoinsAsModerator"
+						data-testid="everybody-joins-as-moderator"
+						:label="
+							t(
+								'pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission'
+							)
+						"
+						:hide-details="true"
+					/>
+				</VCardText>
+				<VCardActions>
+					<VSpacer />
+					<VBtn
+						data-testid="dialog-cancel"
+						variant="text"
+						@click="onCloseConfigurationDialog"
+					>
+						{{ t("common.actions.cancel") }}
+					</VBtn>
+					<VBtn
+						data-testid="dialog-create"
+						class="px-6"
+						color="primary"
+						variant="flat"
+						@click="startVideoConference"
+					>
+						{{ t("common.actions.create") }}
+					</VBtn>
+				</VCardActions>
+			</VCard>
+		</VDialog>
+	</VCard>
 </template>
 
 <script setup lang="ts">
@@ -151,13 +156,12 @@ import {
 	useBoardPermissions,
 	useContentElementState,
 } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import {
 	computed,
 	ComputedRef,
@@ -190,6 +194,8 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	isNotFirstElement: { type: Boolean, requried: false },
+	isNotLastElement: { type: Boolean, requried: false },
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
