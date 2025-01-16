@@ -66,7 +66,7 @@
 					tag="p"
 				>
 					<a
-						href="mailto:nbc-support@netz-21.de?subject=Schulnummer%20nicht%20korrekt"
+						href="mailto:ticketsystem@niedersachsen.support?subject=Schulnummer%20nicht%20korrekt"
 					>
 						{{ t("components.administrationSection.description.support.link") }}
 					</a>

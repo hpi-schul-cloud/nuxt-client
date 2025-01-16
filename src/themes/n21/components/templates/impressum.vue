@@ -22,8 +22,8 @@
 			</p>
 			<p>
 				<b>Support-Anfragen</b> richten Sie bitte direkt an
-				<base-link href="mailto:nbc-support@netz-21.de"
-					>nbc-support@netz-21.de</base-link
+				<base-link href="mailto:ticketsystem@niedersachsen.support"
+					>ticketsystem@niedersachsen.support</base-link
 				>.
 			</p>
 			<h2 class="h4">Vertretungsberechtigter Geschäftsführer</h2>
