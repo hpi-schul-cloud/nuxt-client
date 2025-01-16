@@ -10,7 +10,7 @@ import {
 import { useBoardNotifier } from "./BoardNotifier.composable";
 import { useDragAndDrop } from "./dragAndDrop.composable";
 import {
-	EditModePermissions,
+	type EditModePermissions,
 	useCourseBoardEditMode,
 	useMediaBoardEditMode,
 	useSharedEditMode,
@@ -35,6 +35,5 @@ export {
 	useMediaBoardEditMode,
 	useDragAndDrop,
 	useInlineEditInteractionHandler,
+	EditModePermissions,
 };
-
-export { EditModePermissions };
