@@ -48,8 +48,8 @@
 	>
 		<template #[`item.actions`]="{ item, index }">
 			<v-btn
+				v-if="item.roomRoleName !== RoleName.Roomowner"
 				:data-testid="`remove-member-${index}`"
-				v-if="item.roleName !== RoleName.Roomowner"
 				size="x-small"
 				variant="text"
 				:aria-label="getRemoveAriaLabel(item)"
