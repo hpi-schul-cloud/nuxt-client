@@ -4,10 +4,10 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import {
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { shallowMount } from "@vue/test-utils";
 import { ref } from "vue";
@@ -22,15 +22,13 @@ const mockedUseDeleteConfirmationDialog = jest.mocked(
 
 describe("CollaborativeTextEditorElementMenu", () => {
 	const getWrapper = (propsData: {
-		isFirstElement: boolean;
-		isLastElement: boolean;
+		isNotFirstElement: boolean;
+		isNotLastElement: boolean;
 		hasMultipleElements: boolean;
 		columnIndex: number;
 		rowIndex: number;
 		elementIndex: number;
 	}) => {
-		document.body.setAttribute("data-app", "true");
-
 		const askDeleteConfirmationMock = async () => await Promise.resolve(true);
 
 		setupDeleteConfirmationComposableMock({
@@ -61,8 +59,8 @@ describe("CollaborativeTextEditorElementMenu", () => {
 	const setup = () => {
 		const { wrapper } = getWrapper({
 			hasMultipleElements: true,
-			isFirstElement: false,
-			isLastElement: false,
+			isNotFirstElement: true,
+			isNotLastElement: true,
 			columnIndex: 0,
 			rowIndex: 1,
 			elementIndex: 2,
@@ -77,7 +75,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should have a menu option to move element up", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+			const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -85,7 +83,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should emit the move-up event on click", async () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+			const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 
 			await menuItem.trigger("click");
 
@@ -97,7 +95,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should have a menu option to move element down", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+			const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -105,7 +103,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should emit the move-down event on click", async () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+			const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 
 			await menuItem.trigger("click");
 
@@ -117,7 +115,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should have a menu option to delete", () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -125,7 +123,7 @@ describe("CollaborativeTextEditorElementMenu", () => {
 		it("should emit the delete event on click", async () => {
 			const { wrapper } = setup();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
 			await menuItem.trigger("click");
 
