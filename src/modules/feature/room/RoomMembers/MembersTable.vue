@@ -47,15 +47,27 @@
 		@update:model-value="onSelectMembers"
 	>
 		<template #[`item.actions`]="{ item, index }">
-			<v-btn
-				:data-testid="`remove-member-${index}`"
-				v-if="item.roleName !== RoleName.Roomowner"
-				size="x-small"
-				variant="text"
-				:aria-label="getRemoveAriaLabel(item)"
-				:icon="mdiTrashCanOutline"
-				@click="onRemoveMembers([item.userId])"
-			/>
+			<!-- TODO: refactor the menus based on KebabMenuAction pattern -->
+			<KebabMenu>
+				<VListItem @click="onChangePermission(item.userId)">
+					<template #prepend>
+						<VIcon :icon="mdiAccountSwitchOutline" />
+					</template>
+					<VListItemTitle> Change Permission </VListItemTitle>
+				</VListItem>
+
+				<VListItem
+					v-if="item.roleName !== RoleName.Roomowner"
+					:data-testid="`remove-member-${index}`"
+					:aria-label="getRemoveAriaLabel(item)"
+					@click="onRemoveMembers([item.userId])"
+				>
+					<template #prepend>
+						<VIcon :icon="mdiTrashCanOutline" />
+					</template>
+					<VListItemTitle> Remove Member </VListItemTitle>
+				</VListItem>
+			</KebabMenu>
 		</template>
 	</v-data-table>
 	<ConfirmationDialog />
@@ -63,6 +75,7 @@
 
 <script setup lang="ts">
 import ActionMenu from "./ActionMenu.vue";
+import { KebabMenu } from "@ui-kebab-menu";
 import { PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import {
@@ -70,6 +83,7 @@ import {
 	mdiMenuUp,
 	mdiMagnify,
 	mdiTrashCanOutline,
+	mdiAccountSwitchOutline,
 } from "@icons/material";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import {
@@ -141,6 +155,10 @@ const getRemoveAriaLabel = (member: RoomMemberResponse) =>
 	t("pages.rooms.members.remove.ariaLabel", {
 		memberName: `${member.firstName} ${member.lastName}`,
 	});
+
+const onChangePermission = (userId: string) => {
+	console.log("Change permission for user with id: ", userId);
+};
 
 const tableHeader = [
 	{

@@ -8,9 +8,19 @@
 		ref="wireframe"
 	>
 		<template #header>
-			<h1 class="text-h3 mb-4" data-testid="room-title">
-				{{ t("pages.rooms.members.manage") }}
-			</h1>
+			<div class="d-flex align-items-center">
+				<h1 class="text-h3 mb-4" data-testid="room-title">
+					{{ t("pages.rooms.members.manage") }}
+				</h1>
+				<KebabMenu class="mx-2">
+					<VListItem>
+						<template #prepend>
+							<VIcon :icon="mdiLocationExit" />
+						</template>
+						<VListItemTitle> Leave Room </VListItemTitle>
+					</VListItem>
+				</KebabMenu>
+			</div>
 		</template>
 
 		<div class="mb-8 mt-12" data-testid="info-text">
@@ -64,10 +74,11 @@ import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 import { useRoomDetailsStore, useRoomMembers } from "@data-room";
 import { storeToRefs } from "pinia";
-import { mdiPlus } from "@icons/material";
+import { mdiPlus, mdiLocationExit } from "@icons/material";
 import { MembersTable, AddMembers } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
+import { KebabMenu } from "@ui-kebab-menu";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
