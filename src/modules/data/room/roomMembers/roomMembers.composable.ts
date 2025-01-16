@@ -30,7 +30,7 @@ export const useRoomMembers = (roomId: string) => {
 		[RoleName.Roomowner]: t("pages.rooms.members.roomPermissions.owner"),
 		[RoleName.Roomadmin]: t("pages.rooms.members.roomPermissions.admin"),
 		[RoleName.Roomeditor]: t("pages.rooms.members.roomPermissions.editor"),
-		[RoleName.Roomviewer]: t("pages.rooms.members.roomPermissionss.viewer"),
+		[RoleName.Roomviewer]: t("pages.rooms.members.roomPermissions.viewer"),
 	};
 
 	const schoolRole: Record<string, string> = {
