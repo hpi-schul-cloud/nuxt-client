@@ -149,10 +149,15 @@ const {
 );
 
 const { isFeatureEnabled } = useBoardFeatures();
+const isVideoConferenceEnabled = computed(() =>
+	isFeatureEnabled(BoardFeature.Videoconference)
+);
 
 useBoardFocusHandler(element.value.id, videoConferenceElement);
 
-onMounted(fetchVideoConferenceInfo);
+if (isVideoConferenceEnabled.value) {
+	onMounted(fetchVideoConferenceInfo);
+}
 
 const { modelValue, computedElement } = useContentElementState(props, {
 	autoSaveDebounce: 100,
@@ -162,10 +167,6 @@ const route = useRoute();
 const boardId = route.params.id;
 const { isTeacher, isStudent } = useBoardPermissions();
 const { t } = useI18n();
-
-const isVideoConferenceEnabled = computed(() =>
-	isFeatureEnabled(BoardFeature.Videoconference)
-);
 
 const isHidden = computed(
 	() => !props.isEditMode && !computedElement.value.content.title
