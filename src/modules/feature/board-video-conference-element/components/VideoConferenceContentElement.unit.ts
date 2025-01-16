@@ -17,12 +17,12 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { BoardMenu } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import AuthModule from "@/store/auth";
 import { Router, useRoute, useRouter } from "vue-router";
@@ -99,6 +99,8 @@ describe("VideoConferenceContentElement", () => {
 		options: {
 			content?: VideoConferenceElementContent;
 			isEditMode: boolean;
+			isNotFirstElement?: boolean;
+			isNotLastElement?: boolean;
 			role?: "teacher" | "student";
 			columnIndex?: number;
 			rowIndex?: number;
@@ -117,6 +119,8 @@ describe("VideoConferenceContentElement", () => {
 		const {
 			content,
 			isEditMode,
+			isNotFirstElement,
+			isNotLastElement,
 			role = "teacher",
 			columnIndex = 0,
 			rowIndex = 1,
@@ -179,6 +183,8 @@ describe("VideoConferenceContentElement", () => {
 				columnIndex,
 				rowIndex,
 				elementIndex,
+				isNotFirstElement,
+				isNotLastElement,
 			},
 		});
 
@@ -261,54 +267,92 @@ describe("VideoConferenceContentElement", () => {
 					expect(videoConferenceElementMenu.exists()).toBe(true);
 				});
 
-				// describe.each([
-				// 	{
-				// 		btn: "move down",
-				// 		action: "move-down:edit",
-				// 		component: BoardMenuActionMoveDown,
-				// 	},
-				// 	{
-				// 		btn: "move up",
-				// 		action: "move-up:edit",
-				// 		component: BoardMenuActionMoveUp,
-				// 	},
-				// 	{
-				// 		btn: "delete",
-				// 		action: "delete:element",
-				// 		component: BoardMenuActionDelete,
-				// 	},
-				// ])("and $btn menu item is clicked", ({ action, component }) => {
-				// 	it(`should emit '${action}' event`, async () => {
-				// 		const videoConferenceElementContent =
-				// 			videoConferenceElementContentFactory.build();
-				// 		const { wrapper } = setupWrapper({
-				// 			content: videoConferenceElementContent,
-				// 			isEditMode: true,
-				// 		});
+				describe("when element is first element", () => {
+					describe("when move up menu item is clicked", () => {
+						it("should emit 'move-up:edit' event", async () => {
+							const videoConferenceElementContent =
+								videoConferenceElementContentFactory.build();
+							const { wrapper } = setupWrapper({
+								content: videoConferenceElementContent,
+								isEditMode: true,
+								isNotFirstElement: false,
+							});
 
-				// 		const menuItem = wrapper.findComponent(component);
-				// 		await menuItem.trigger("click");
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 
-				// 		expect(wrapper.emitted()).toHaveProperty(action);
-				// 	});
-				// });
-
-				describe.each(["up", "down"])("and arrow key %s is pressed", (key) => {
-					it("should 'emit move-keyboard:edit'", async () => {
-						const videoConferenceElementContent =
-							videoConferenceElementContentFactory.build();
-						const { wrapper } = setupWrapper({
-							content: videoConferenceElementContent,
-							isEditMode: true,
+							expect(menuItem.exists()).toBe(false);
 						});
-						const videoConferenceElement = wrapper.findComponent(
-							'[data-testid="video-conference-element"]'
-						);
-
-						await videoConferenceElement.trigger(`keydown.${key}`);
-
-						expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
 					});
+				});
+
+				describe("when element is not first element", () => {
+					describe("when move up menu item is clicked", () => {
+						it("should emit 'move-up:edit' event", async () => {
+							const videoConferenceElementContent =
+								videoConferenceElementContentFactory.build();
+							const { wrapper } = setupWrapper({
+								content: videoConferenceElementContent,
+								isEditMode: true,
+								isNotFirstElement: true,
+							});
+
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
+							await menuItem.trigger("click");
+
+							expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+						});
+					});
+				});
+
+				describe("when element is last element", () => {
+					describe("when move down menu item is clicked", () => {
+						it("should emit 'move-down:edit' event ", async () => {
+							const videoConferenceElementContent =
+								videoConferenceElementContentFactory.build();
+							const { wrapper } = setupWrapper({
+								content: videoConferenceElementContent,
+								isEditMode: true,
+								isNotLastElement: false,
+							});
+
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
+
+							expect(menuItem.exists()).toBe(false);
+						});
+					});
+				});
+
+				describe("when element is not last element", () => {
+					describe("when move down menu item is clicked", () => {
+						it("should emit 'move-down:edit' event ", async () => {
+							const videoConferenceElementContent =
+								videoConferenceElementContentFactory.build();
+							const { wrapper } = setupWrapper({
+								content: videoConferenceElementContent,
+								isEditMode: true,
+								isNotLastElement: true,
+							});
+
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
+							await menuItem.trigger("click");
+
+							expect(wrapper.emitted()).toHaveProperty("move-down:edit");
+						});
+					});
+				});
+
+				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
+					const videoConferenceElementContent =
+						videoConferenceElementContentFactory.build();
+					const { wrapper } = setupWrapper({
+						content: videoConferenceElementContent,
+						isEditMode: true,
+					});
+
+					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
+					await menuItem.trigger("click");
+
+					expect(wrapper.emitted()).toHaveProperty("delete:element");
 				});
 			});
 
@@ -446,34 +490,72 @@ describe("VideoConferenceContentElement", () => {
 					expect(videoConferenceElementMenu.exists()).toBe(true);
 				});
 
-				// it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
-				// 	const { wrapper } = setupWrapper({
-				// 		isEditMode: true,
-				// 	});
+				describe("when element is first element", () => {
+					it("should hide 'move-up' menu item", async () => {
+						const { wrapper } = setupWrapper({
+							isEditMode: true,
+							isNotFirstElement: false,
+						});
 
-				// 	const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
-				// 	await menuItem.trigger("click");
+						const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 
-				// 	expect(wrapper.emitted()).toHaveProperty("move-down:edit");
-				// });
+						expect(menuItem.exists()).toBe(false);
+					});
+				});
 
-				// it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
-				// 	const { wrapper } = setupWrapper({
-				// 		isEditMode: true,
-				// 	});
+				describe("when element is not first element", () => {
+					describe("when move up menu item is clicked", () => {
+						it("should emit 'move-up:edit' event", async () => {
+							const { wrapper } = setupWrapper({
+								isEditMode: true,
+								isNotFirstElement: true,
+							});
 
-				// 	const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
-				// 	await menuItem.trigger("click");
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
+							await menuItem.trigger("click");
 
-				// 	expect(wrapper.emitted()).toHaveProperty("move-up:edit");
-				// });
+							expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+						});
+					});
+				});
+
+				describe("when element is last element", () => {
+					describe("when move down menu item is clicked", () => {
+						it("should emit 'move-down:edit' event", async () => {
+							const { wrapper } = setupWrapper({
+								isEditMode: true,
+								isNotLastElement: false,
+							});
+
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
+
+							expect(menuItem.exists()).toBe(false);
+						});
+					});
+				});
+
+				describe("when element is not last element", () => {
+					describe("when move down menu item is clicked", () => {
+						it("should emit 'move-down:edit' event", async () => {
+							const { wrapper } = setupWrapper({
+								isEditMode: true,
+								isNotLastElement: true,
+							});
+
+							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
+							await menuItem.trigger("click");
+
+							expect(wrapper.emitted()).toHaveProperty("move-down:edit");
+						});
+					});
+				});
 
 				// it("should emit 'delete:element' event when delete menu item is clicked", async () => {
 				// 	const { wrapper } = setupWrapper({
 				// 		isEditMode: true,
 				// 	});
 
-				// 	const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+				// 	const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 				// 	await menuItem.trigger("click");
 
 				// 	expect(wrapper.emitted()).toHaveProperty("delete:element");

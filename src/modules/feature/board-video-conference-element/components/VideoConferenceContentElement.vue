@@ -1,88 +1,90 @@
 <template>
-	<div>
-		<VCard
-			class="mb-4"
-			data-testid="video-conference-element"
-			:class="{ 'd-none': isHidden }"
-			:variant="outlined"
-			ref="videoConferenceElement"
-			:ripple="false"
-			tabindex="0"
-			target="_blank"
-			link
-			:aria-label="ariaLabel"
-			@keydown.stop.up.down="onKeydownArrow"
-			@keyup.enter="onContentEnter"
+	<VCard
+		class="mb-4"
+		data-testid="video-conference-element"
+		:class="{ 'd-none': isHidden }"
+		:variant="outlined"
+		ref="videoConferenceElement"
+		:ripple="false"
+		role="button"
+		target="_blank"
+		:aria-label="ariaLabel"
+		@keydown.stop.up.down="onKeydownArrow"
+	>
+		<VideoConferenceContentElementDisplay
+			v-if="computedElement.content.title"
+			:title="computedElement.content.title"
+			:has-participation-permission="hasParticipationPermission"
+			:is-video-conference-enabled="isVideoConferenceEnabled"
+			:can-start="canStart"
+			:is-running="isRunning"
+			:is-edit-mode="isEditMode"
+			@click="onContentClick"
+			@refresh="fetchVideoConferenceInfo"
 		>
-			<VideoConferenceContentElementDisplay
-				v-if="computedElement.content.title"
-				:title="computedElement.content.title"
-				:has-participation-permission="hasParticipationPermission"
-				:is-video-conference-enabled="isVideoConferenceEnabled"
-				:can-start="canStart"
-				:is-running="isRunning"
-				:is-edit-mode="isEditMode"
-				@click="onContentClick"
-				@refresh="fetchVideoConferenceInfo"
+			<BoardMenu
+				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
+				has-background
+				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 			>
-				<BoardMenu
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
 					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
-					has-background
-					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
-				>
-					<BoardMenuActionMoveUp @click="onMoveUp" />
-					<BoardMenuActionMoveDown @click="onMoveDown" />
-					<BoardMenuActionDelete @click="onDelete" />
-				</BoardMenu>
-			</VideoConferenceContentElementDisplay>
-			<VideoConferenceContentElementCreate
-				v-if="isCreating"
-				@create:title="onCreateTitle"
+					@click="onDelete"
+				/>
+			</BoardMenu>
+		</VideoConferenceContentElementDisplay>
+		<VideoConferenceContentElementCreate
+			v-if="isCreating"
+			@create:title="onCreateTitle"
+		>
+			<BoardMenu
+				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
+				has-background
 			>
-				<BoardMenu
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
 					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
-					has-background
-				>
-					<BoardMenuActionMoveUp @click="onMoveUp" />
-					<BoardMenuActionMoveDown @click="onMoveDown" />
-					<BoardMenuActionDelete @click="onDelete" />
-				</BoardMenu>
-			</VideoConferenceContentElementCreate>
-			<VDialog
-				ref="vDialog"
-				v-model="isErrorDialogOpen"
-				:max-width="480"
-				data-testid="error-dialog"
-				@click:outside="resetError"
-				@keydown.esc="resetError"
-			>
-				<VCard :ripple="false">
-					<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
-						<h2 class="text-h4 my-2 text-break-word">
-							{{ t("error.generic") }}
-						</h2>
-					</VCardTitle>
-					<VCardActions class="action-buttons px-6">
-						<div class="button-section button-right">
-							<VBtn
-								data-testid="dialog-close"
-								variant="outlined"
-								@click="resetError"
-							>
-								{{ t("common.labels.close") }}
-							</VBtn>
-						</div>
-					</VCardActions>
-				</VCard>
-			</VDialog>
-			<VideoConferenceConfigurationDialog
-				:is-open="isConfigurationDialogOpen"
-				:options="videoConferenceInfo.options"
-				@close="onCloseConfigurationDialog"
-				@start-video-conference="onStartVideoConference"
-			/>
-		</VCard>
-	</div>
+					@click="onDelete"
+				/>
+			</BoardMenu>
+		</VideoConferenceContentElementCreate>
+		<VDialog
+			ref="vDialog"
+			v-model="isErrorDialogOpen"
+			:max-width="480"
+			data-testid="error-dialog"
+			@click:outside="resetError"
+			@keydown.esc="resetError"
+		>
+			<VCard :ripple="false">
+				<VCardTitle data-testid="dialog-title" class="dialog-title px-6 pt-4">
+					<h2 class="text-h4 my-2 text-break-word">
+						{{ t("error.generic") }}
+					</h2>
+				</VCardTitle>
+				<VCardActions class="action-buttons px-6">
+					<div class="button-section button-right">
+						<VBtn
+							data-testid="dialog-close"
+							variant="outlined"
+							@click="resetError"
+						>
+							{{ t("common.labels.close") }}
+						</VBtn>
+					</div>
+				</VCardActions>
+			</VCard>
+		</VDialog>
+		<VideoConferenceConfigurationDialog
+			:is-open="isConfigurationDialogOpen"
+			:options="videoConferenceInfo.options"
+			@close="onCloseConfigurationDialog"
+			@start-video-conference="onStartVideoConference"
+		/>
+	</VCard>
 </template>
 
 <script setup lang="ts">
@@ -98,13 +100,12 @@ import { useI18n } from "vue-i18n";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { VideoConferenceConfigurationDialog } from "@ui-video-conference-configuration-dialog";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import {
 	BoardFeature,
 	VideoConferenceElementResponse,
@@ -120,6 +121,8 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	isNotFirstElement: { type: Boolean, requried: false },
+	isNotLastElement: { type: Boolean, requried: false },
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
@@ -241,9 +244,10 @@ const onJoinVideoConference = async () => {
 	});
 };
 
-const onContentEnter = async () => {
-	if (!props.isEditMode) {
-		onContentClick();
-	}
-};
+// was used on keyup.enter on VCard, unclear to me if it's still needed
+// const onContentEnter = async () => {
+// 	if (!props.isEditMode) {
+// 		onContentClick();
+// 	}
+// };
 </script>

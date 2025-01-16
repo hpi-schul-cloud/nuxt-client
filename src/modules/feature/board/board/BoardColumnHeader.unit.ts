@@ -8,16 +8,19 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
-	BoardMenuActionMoveColumnDown,
-	BoardMenuActionMoveColumnUp,
-	BoardMenuActionMoveLeft,
-	BoardMenuActionMoveRight,
-} from "@ui-board";
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+	KebabMenuActionMoveLeft,
+	KebabMenuActionMoveRight,
+	KebabMenuActionDelete,
+	KebabMenuActionRename,
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
-import { computed } from "vue";
+import { computed, nextTick } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+import { BoardColumnInteractionHandler } from "@feature-board";
 
 jest.mock("@data-board");
 jest.mock("@util-board");
@@ -26,18 +29,22 @@ const mockUseBoardFocusHandler = jest.mocked(useBoardFocusHandler);
 
 describe("BoardColumnHeader", () => {
 	const mockedUseEditMode = jest.mocked(useCourseBoardEditMode);
+	const mockedStartEditMode = jest.fn();
+	const mockedStopEditMode = jest.fn();
 
 	const setup = (
-		options?: {
+		options: {
 			permissions?: Partial<BoardPermissionChecks>;
-		},
+			isEditMode?: boolean;
+		} = {},
 		props?: object
 	) => {
-		const isEditMode = computed(() => true);
+		const isEditMode = computed(() => options.isEditMode ?? true);
+
 		mockedUseEditMode.mockReturnValue({
 			isEditMode,
-			startEditMode: jest.fn(),
-			stopEditMode: jest.fn(),
+			startEditMode: mockedStartEditMode,
+			stopEditMode: mockedStopEditMode,
 		});
 		mockedUserPermissions.mockReturnValue({
 			...defaultPermissions,
@@ -55,11 +62,16 @@ describe("BoardColumnHeader", () => {
 				title: "title-text",
 				titlePlaceholder: "Spalte 1",
 				columnId: "abc123",
+				isListBoard: false,
 				...props,
 			},
 		});
 		return wrapper;
 	};
+
+	afterEach(() => {
+		jest.resetAllMocks();
+	});
 
 	describe("when component is mounted", () => {
 		it("should be found in the dom", () => {
@@ -84,35 +96,109 @@ describe("BoardColumnHeader", () => {
 		it("should not show options to move left and right", async () => {
 			const wrapper = setup({}, { isListBoard: true });
 
-			const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
-			const moveRightButton = wrapper.findComponent(BoardMenuActionMoveRight);
+			const moveLeftButton = wrapper.findComponent(KebabMenuActionMoveLeft);
+			const moveRightButton = wrapper.findComponent(KebabMenuActionMoveRight);
 			expect(moveLeftButton.exists()).toBe(false);
 			expect(moveRightButton.exists()).toBe(false);
 		});
 
 		describe("when the column should be moved down", () => {
-			it("should emit move:column-down", async () => {
-				const wrapper = setup({}, { isListBoard: true });
+			describe("when the column is the last column", () => {
+				it("should hide move:column-down menut item", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: true, isNotLastColumn: false }
+					);
 
-				const moveDownButton = wrapper.findComponent(
-					BoardMenuActionMoveColumnDown
-				);
-				moveDownButton.vm.$emit("click");
+					const moveDownButton = wrapper.findComponent(KebabMenuActionMoveDown);
 
-				const emitted = wrapper.emitted();
-				expect(emitted["move:column-down"]).toBeDefined();
+					expect(moveDownButton.exists()).toBe(false);
+				});
+			});
+
+			describe("when the column is not the last column", () => {
+				it("should emit move:column-down", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: true, isNotLastColumn: true }
+					);
+
+					const moveDownButton = wrapper.findComponent(KebabMenuActionMoveDown);
+					moveDownButton.vm.$emit("click");
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-down"]).toBeDefined();
+				});
 			});
 		});
 
 		describe("when the column should be moved up", () => {
-			it("should emit move:column-up", async () => {
-				const wrapper = setup({}, { isListBoard: true });
+			describe("when the column is the first column", () => {
+				it("should hide move:column-up menu item", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: true, isNotFirstColumn: false }
+					);
 
-				const moveUpButton = wrapper.findComponent(BoardMenuActionMoveColumnUp);
-				moveUpButton.vm.$emit("click");
+					const moveUpButton = wrapper.findComponent(KebabMenuActionMoveUp);
 
-				const emitted = wrapper.emitted();
-				expect(emitted["move:column-up"]).toBeDefined();
+					expect(moveUpButton.exists()).toBe(false);
+				});
+			});
+
+			describe("when the column is not the first column", () => {
+				it("should emit move:column-up", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: true, isNotFirstColumn: true }
+					);
+
+					const moveUpButton = wrapper.findComponent(KebabMenuActionMoveUp);
+					moveUpButton.vm.$emit("click");
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-up"]).toBeDefined();
+				});
+			});
+		});
+
+		describe("when move-column-keyboard-event is received", () => {
+			describe("when arrow-up-key is received", () => {
+				it("should emit move:column-left", () => {
+					const wrapper = setup(
+						{ permissions: { hasDeletePermission: true } },
+						{ isListBoard: true }
+					);
+
+					const interactionHandler = wrapper.findComponent(
+						BoardColumnInteractionHandler
+					);
+					interactionHandler.vm.$emit("move:column-keyboard", {
+						code: "ArrowUp",
+					});
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-left"]).toBeDefined();
+				});
+			});
+
+			describe("when arrow-right-key is received", () => {
+				it("should emit move:column-left", () => {
+					const wrapper = setup(
+						{ permissions: { hasDeletePermission: true } },
+						{ isListBoard: true }
+					);
+
+					const interactionHandler = wrapper.findComponent(
+						BoardColumnInteractionHandler
+					);
+					interactionHandler.vm.$emit("move:column-keyboard", {
+						code: "ArrowDown",
+					});
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-right"]).toBeDefined();
+				});
 			});
 		});
 	});
@@ -121,35 +207,177 @@ describe("BoardColumnHeader", () => {
 		it("should not show options to move up and down", async () => {
 			const wrapper = setup({}, { isListBoard: false });
 
-			const moveDownButton = wrapper.findComponent(
-				BoardMenuActionMoveColumnDown
-			);
-			const moveUpButton = wrapper.findComponent(BoardMenuActionMoveColumnUp);
+			const moveDownButton = wrapper.findComponent(KebabMenuActionMoveDown);
+			const moveUpButton = wrapper.findComponent(KebabMenuActionMoveUp);
 			expect(moveDownButton.exists()).toBe(false);
 			expect(moveUpButton.exists()).toBe(false);
 		});
 
 		describe("when the column should be moved to the left", () => {
-			it("should emit move:column-left", async () => {
-				const wrapper = setup({}, { isListBoard: false });
+			describe("when the column is the first column", () => {
+				it("should hide move:column-left menuitem", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: false, isNotFirstColumn: false }
+					);
 
-				const moveLeftButton = wrapper.findComponent(BoardMenuActionMoveLeft);
-				moveLeftButton.vm.$emit("click");
+					const moveLeftButton = wrapper.findComponent(KebabMenuActionMoveLeft);
 
-				const emitted = wrapper.emitted();
-				expect(emitted["move:column-left"]).toBeDefined();
+					expect(moveLeftButton.exists()).toBe(false);
+				});
+			});
+
+			describe("when the column is not the first column", () => {
+				it("should emit move:column-left", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: false, isNotFirstColumn: true }
+					);
+
+					const moveLeftButton = wrapper.findComponent(KebabMenuActionMoveLeft);
+					moveLeftButton.vm.$emit("click");
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-left"]).toBeDefined();
+				});
 			});
 		});
 
 		describe("when the column should be moved to the right", () => {
-			it("should emit move:column-right", async () => {
-				const wrapper = setup({}, { isListBoard: false });
+			describe("when the column is the last column", () => {
+				it("should hide move:column-right menu item", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: false, isNotLastColumn: false }
+					);
 
-				const moveRightButton = wrapper.findComponent(BoardMenuActionMoveRight);
-				moveRightButton.vm.$emit("click");
+					const moveRightButton = wrapper.findComponent(
+						KebabMenuActionMoveRight
+					);
+
+					expect(moveRightButton.exists()).toBe(false);
+				});
+			});
+
+			describe("when the column is not the last column", () => {
+				it("should emit move:column-right", async () => {
+					const wrapper = setup(
+						{},
+						{ isListBoard: false, isNotLastColumn: true }
+					);
+
+					const moveRightButton = wrapper.findComponent(
+						KebabMenuActionMoveRight
+					);
+					moveRightButton.vm.$emit("click");
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-right"]).toBeDefined();
+				});
+			});
+		});
+
+		describe("when move-column-keyboard-event is received", () => {
+			describe("when arrow-left-key is received", () => {
+				it("should emit move:column-left", () => {
+					const wrapper = setup({
+						isEditMode: false,
+						permissions: { hasDeletePermission: true },
+					});
+
+					const interactionHandler = wrapper.findComponent(
+						BoardColumnInteractionHandler
+					);
+					interactionHandler.vm.$emit("move:column-keyboard", {
+						code: "ArrowLeft",
+					});
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-left"]).toBeDefined();
+				});
+			});
+
+			describe("when arrow-right-key is received", () => {
+				it("should emit move:column-left", () => {
+					const wrapper = setup({
+						isEditMode: false,
+						permissions: { hasDeletePermission: true },
+					});
+
+					const interactionHandler = wrapper.findComponent(
+						BoardColumnInteractionHandler
+					);
+					interactionHandler.vm.$emit("move:column-keyboard", {
+						code: "ArrowRight",
+					});
+
+					const emitted = wrapper.emitted();
+					expect(emitted["move:column-right"]).toBeDefined();
+				});
+			});
+		});
+	});
+
+	describe("when rename button is clicked", () => {
+		it("should start the edit mode", () => {
+			const wrapper = setup({
+				isEditMode: false,
+				permissions: { hasDeletePermission: true },
+			});
+
+			const action = wrapper.findComponent(KebabMenuActionRename);
+			action.trigger("click");
+
+			expect(mockedStartEditMode).toHaveBeenCalled();
+		});
+	});
+
+	describe("when end-edit-mode event is received", () => {
+		it("should stop the edit mode", () => {
+			const wrapper = setup({
+				isEditMode: false,
+				permissions: { hasDeletePermission: true },
+			});
+
+			const interactionHandler = wrapper.findComponent(
+				BoardColumnInteractionHandler
+			);
+			interactionHandler.vm.$emit("end-edit-mode");
+
+			expect(mockedStopEditMode).toHaveBeenCalled();
+		});
+	});
+
+	describe("when delete button is clicked", () => {
+		describe("when delete is confirmed", () => {
+			it("should emit delete:column", async () => {
+				const wrapper = setup({
+					isEditMode: false,
+					permissions: { hasDeletePermission: true },
+				});
+
+				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
+				deleteAction.vm.$emit("click", true);
+				await nextTick();
 
 				const emitted = wrapper.emitted();
-				expect(emitted["move:column-right"]).toBeDefined();
+				expect(emitted["delete:column"]).toBeDefined();
+			});
+		});
+
+		describe("when delete is refused", () => {
+			it("should emit delete:column", async () => {
+				const wrapper = setup({
+					isEditMode: false,
+					permissions: { hasDeletePermission: true },
+				});
+
+				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
+				deleteAction.vm.$emit("click", false);
+				await nextTick();
+
+				const emitted = wrapper.emitted();
+				expect(emitted["delete:column"]).not.toBeDefined();
 			});
 		});
 	});

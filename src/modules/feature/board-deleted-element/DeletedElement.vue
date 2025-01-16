@@ -28,12 +28,9 @@
 			"
 		>
 			{{
-				$t(
-					"components.cardElement.deletedElement.warning.externalToolElement",
-					{
-						toolName: element.content.title,
-					}
-				)
+				t("components.cardElement.deletedElement.warning.externalToolElement", {
+					toolName: element.content.title,
+				})
 			}}
 		</WarningAlert>
 	</VCard>
@@ -47,6 +44,8 @@ import { WarningAlert } from "@ui-alert";
 import { ContentElementBar } from "@ui-board";
 import { PropType, Ref, ref, toRef } from "vue";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const props = defineProps({
 	element: {
