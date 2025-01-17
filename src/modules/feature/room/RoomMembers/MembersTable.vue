@@ -51,11 +51,7 @@
 			v-if="checkVisibilityOption(currentUser, 'actions-column')"
 		>
 			<!-- TODO: refactor the menus based on KebabMenuAction pattern -->
-			<KebabMenu
-				v-if="
-					checkVisibilityOption(item as RoomMemberResponse, 'actions-in-row')
-				"
-			>
+			<KebabMenu v-if="checkVisibilityOption(item, 'actions-in-row')">
 				<VListItem @click="onChangePermission(item.userId)">
 					<template #prepend>
 						<VIcon :icon="mdiAccountSwitchOutline" />
