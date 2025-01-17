@@ -1,6 +1,7 @@
 <template>
 	<VTextField
 		v-if="scope === 'board'"
+		class="title-input"
 		hide-details="auto"
 		v-model="modelValue"
 		variant="solo"
@@ -9,7 +10,7 @@
 		:placeholder="placeholderText"
 		bg-color="transparent"
 		ref="titleInput"
-		:readonly="!isEditMode"
+		:disabled="!isEditMode"
 		:role="isEditMode ? 'input' : 'heading'"
 		:aria-level="ariaLevel"
 		:tabindex="isEditMode ? 0 : -1"
@@ -26,11 +27,11 @@
 		:rows="1"
 		auto-grow
 		flat
-		class="mx-n4 mb-n2"
+		class="title-input mx-n4 mb-n2"
 		:placeholder="placeholderText"
 		bg-color="transparent"
 		ref="titleInput"
-		:readonly="!isEditMode"
+		:disabled="!isEditMode"
 		:role="isEditMode ? 'input' : 'heading'"
 		:aria-level="ariaLevel"
 		@keydown.enter="onEnter"
@@ -96,7 +97,7 @@ export default defineComponent({
 		const titleInput = ref(null);
 
 		useInlineEditInteractionHandler(async () => {
-			setFocusOnEdit();
+			await setFocusOnEdit();
 		});
 
 		const setFocusOnEdit = async () => {
@@ -209,18 +210,6 @@ export default defineComponent({
 	overflow: hidden;
 }
 
-:deep(textarea[readonly]) {
-	cursor: pointer;
-}
-
-:deep(input[readonly]) {
-	cursor: pointer;
-}
-
-:deep(textarea[readonly])::placeholder {
-	opacity: 1;
-}
-
 :deep(input) {
 	font-size: var(--heading-3);
 	background: transparent !important;
@@ -230,5 +219,14 @@ export default defineComponent({
 	display: flex;
 	align-items: flex-start;
 	padding-top: 8px !important;
+}
+
+.title-input {
+	cursor: pointer;
+	pointer-events: unset !important;
+}
+
+.title-input :deep(.v-field--disabled) {
+	opacity: var(--v-high-emphasis-opacity);
 }
 </style>
