@@ -40,20 +40,17 @@
 							has-background
 							:data-testid="boardMenuTestId"
 						>
-							<template v-if="hasDeletePermission">
-								<BoardMenuActionEdit
-									v-if="!isEditMode"
-									@click="onStartEditMode"
-								/>
-							</template>
-							<BoardMenuActionShareLink @click="onCopyShareLink" />
-							<template v-if="hasDeletePermission">
-								<BoardMenuActionDelete
-									data-test-id="board-menu-action-delete"
-									:name="card.title"
-									@click="onDeleteCard"
-								/>
-							</template>
+							<KebabMenuActionEdit
+								v-if="hasDeletePermission && !isEditMode"
+								@click="onStartEditMode"
+							/>
+							<KebabMenuActionShareLink @click="onCopyShareLink" />
+							<KebabMenuActionDelete
+								v-if="hasDeletePermission"
+								:name="card.title"
+								:scope="BoardMenuScope.CARD"
+								@click="onDeleteCard"
+							/>
 						</BoardMenu>
 					</div>
 
@@ -95,11 +92,7 @@
 </template>
 
 <script lang="ts">
-import {
-	DragAndDropKey,
-	ElementMove,
-	verticalCursorKeys,
-} from "@/types/board/DragAndDrop";
+import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
 import {
 	useBoardFocusHandler,
@@ -107,13 +100,8 @@ import {
 	useCardStore,
 } from "@data-board";
 import { mdiArrowExpand } from "@icons/material";
-import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionEdit,
-	BoardMenuActionShareLink,
-	BoardMenuScope,
-} from "@ui-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { KebabMenuActionDelete, KebabMenuActionEdit, KebabMenuActionShareLink } from "@ui-kebab-menu";
 import { useCourseBoardEditMode, useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, onMounted, ref, toRef } from "vue";
@@ -133,16 +121,16 @@ export default defineComponent({
 		},
 	},
 	components: {
-		BoardMenuActionShareLink,
 		CardSkeleton,
 		CardTitle,
 		BoardMenu,
-		BoardMenuActionEdit,
+		KebabMenuActionEdit,
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
-		BoardMenuActionDelete,
+		KebabMenuActionDelete,
 		CardHostDetailView,
+		KebabMenuActionShareLink
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -237,11 +225,11 @@ export default defineComponent({
 
 		const onMoveContentElementKeyboard = async (
 			{ payload: elementId, elementIndex }: ElementMove,
-			keyString: DragAndDropKey
+			key: string
 		) => {
-			if (!verticalCursorKeys.includes(keyString)) return;
+			if (!verticalCursorKeys.includes(key)) return;
 
-			const delta = keyString === "ArrowUp" ? -1 : 1;
+			const delta = key === "ArrowUp" ? -1 : 1;
 
 			await cardStore.moveElementRequest(
 				props.cardId,

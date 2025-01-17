@@ -10,12 +10,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
+import { BoardMenu } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import DrawingContentElement from "./DrawingContentElement.vue";
 import InnerContent from "./InnerContent.vue";
@@ -42,6 +42,8 @@ describe("DrawingContentElement", () => {
 	const setup = (props: {
 		element: DrawingElementResponse;
 		isEditMode: boolean;
+		isNotFirstElement?: boolean;
+		isNotLastElement?: boolean;
 		columnIndex: number;
 		rowIndex: number;
 		elementIndex: number;
@@ -195,43 +197,85 @@ describe("DrawingContentElement", () => {
 					elementIndex: 2,
 				});
 
-				const menuItem = wrapper.findComponent(BoardMenuActionDelete);
-
+				const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 				await menuItem.trigger("click");
 
 				expect(wrapper.emitted()).toHaveProperty("delete:element");
 			});
 
-			it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
-				const { wrapper } = setup({
-					element: DRAWING_ELEMENT,
-					isEditMode: true,
-					columnIndex: 0,
-					rowIndex: 1,
-					elementIndex: 2,
+			describe("when element is first element", () => {
+				it("should hide 'moveUp' menu item", async () => {
+					const { wrapper } = setup({
+						element: DRAWING_ELEMENT,
+						isEditMode: true,
+						columnIndex: 0,
+						rowIndex: 1,
+						elementIndex: 2,
+						isNotFirstElement: false,
+					});
+
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
+
+					expect(menuItem.exists()).toBe(false);
 				});
-
-				const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
-
-				await menuItem.trigger("click");
-
-				expect(wrapper.emitted()).toHaveProperty("move-up:edit");
 			});
 
-			it("should emit 'move:down edit' event when move down menu item is clicked", async () => {
-				const { wrapper } = setup({
-					element: DRAWING_ELEMENT,
-					isEditMode: true,
-					columnIndex: 0,
-					rowIndex: 1,
-					elementIndex: 2,
+			describe("when element is not the first element", () => {
+				describe("when move up menu is clicked", () => {
+					it("should emit 'move-up:edit' event", async () => {
+						const { wrapper } = setup({
+							element: DRAWING_ELEMENT,
+							isEditMode: true,
+							columnIndex: 0,
+							rowIndex: 1,
+							elementIndex: 2,
+							isNotFirstElement: true,
+						});
+
+						const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
+						await menuItem.trigger("click");
+
+						expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+					});
 				});
+			});
 
-				const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+			describe("when element is last element", () => {
+				it("should hide 'moveDown' menu item", async () => {
+					const { wrapper } = setup({
+						element: DRAWING_ELEMENT,
+						isEditMode: true,
+						columnIndex: 0,
+						rowIndex: 1,
+						elementIndex: 2,
+						isNotLastElement: true,
+					});
 
-				await menuItem.trigger("click");
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
+					await menuItem.trigger("click");
 
-				expect(wrapper.emitted()).toHaveProperty("move-down:edit");
+					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
+				});
+			});
+
+			describe("when element is not last element", () => {
+				describe("when move down menu item is clicked", () => {
+					it("should emit 'move:down edit' event", async () => {
+						const { wrapper } = setup({
+							element: DRAWING_ELEMENT,
+							isEditMode: true,
+							columnIndex: 0,
+							rowIndex: 1,
+							elementIndex: 2,
+							isNotLastElement: true,
+						});
+
+						const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
+						await menuItem.trigger("click");
+
+						expect(wrapper.emitted()).toHaveProperty("move-down:edit");
+					});
+				});
 			});
 		});
 	});

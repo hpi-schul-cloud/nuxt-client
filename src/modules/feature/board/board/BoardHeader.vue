@@ -40,12 +40,16 @@
 					:scope="BoardMenuScope.BOARD"
 					data-testid="board-menu-btn"
 				>
-					<BoardMenuActionEdit @click="onStartEditMode" />
-					<BoardMenuActionCopy @click="onCopyBoard" />
-					<BoardMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
-					<BoardMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-					<BoardMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-					<BoardMenuActionDelete :name="title" @click="onDeleteBoard" />
+					<KebabMenuActionRename @click="onStartEditMode" />
+					<KebabMenuActionCopy @click="onCopyBoard" />
+					<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
+					<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+					<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+					<KebabMenuActionDelete
+						:name="title"
+						:scope="BoardMenuScope.BOARD"
+						@click="onDeleteBoard"
+					/>
 				</BoardMenu>
 			</div>
 		</div>
@@ -55,16 +59,15 @@
 <script setup lang="ts">
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionCopy,
-	BoardMenuActionDelete,
-	BoardMenuActionEdit,
-	BoardMenuActionPublish,
-	BoardMenuActionRevert,
-	BoardMenuActionShare,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionCopy,
+	KebabMenuActionDelete,
+	KebabMenuActionRename,
+	KebabMenuActionPublish,
+	KebabMenuActionRevert,
+	KebabMenuActionShare,
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { computed, onMounted, ref, toRef, watchEffect } from "vue";

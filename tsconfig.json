@@ -70,6 +70,9 @@
 			"@ui-skip-link": ["src/modules/ui/skip-link"],
 			"@ui-speed-dial-menu": ["src/modules/ui/speed-dial-menu"],
 			"@ui-qr-code": ["src/modules/ui/qr-code"],
+			"@ui-video-conference-configuration-dialog": [
+				"src/modules/ui/video-conference-configuration-dialog"
+			],
 			"@util-board": ["src/modules/util/board"],
 			"@util-validators": ["src/modules/util/validators"],
 			"@util-vue": ["src/modules/util/vue"],

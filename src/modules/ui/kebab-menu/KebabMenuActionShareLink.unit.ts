@@ -2,19 +2,18 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { BoardMenuScope } from "@ui-board";
 import { mount } from "@vue/test-utils";
-import { BoardMenuScope } from "./board-menu-scope";
-import BoardMenuActionShareLink from "./BoardMenuActionShareLink.vue";
-import { MENU_SCOPE } from "./injection-tokens";
+import KebabMenuActionShareLink from "./KebabMenuActionShareLink.vue";
 
 describe("BoardMenuActionShareLink", () => {
 	const setup = (scope: BoardMenuScope) => {
-		const wrapper = mount(BoardMenuActionShareLink, {
+		const wrapper = mount(KebabMenuActionShareLink, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[MENU_SCOPE]: scope,
-				},
+			},
+			props: {
+				scope,
 			},
 		});
 
