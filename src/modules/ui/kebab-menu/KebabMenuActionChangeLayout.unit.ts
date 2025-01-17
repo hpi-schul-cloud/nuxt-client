@@ -3,12 +3,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import BoardMenuAction from "./BoardMenuAction.vue";
-import BoardMenuActionChangeLayout from "./BoardMenuActionChangeLayout.vue";
+import KebabMenuAction from "./KebabMenuAction.vue";
+import KebabMenuActionChangeLayout from "./KebabMenuActionChangeLayout.vue";
 
 describe("BoardMenuActionChangeLayout", () => {
 	const setup = () => {
-		const wrapper = mount(BoardMenuActionChangeLayout, {
+		const wrapper = mount(KebabMenuActionChangeLayout, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -21,7 +21,7 @@ describe("BoardMenuActionChangeLayout", () => {
 		it("should render", () => {
 			const wrapper = setup();
 
-			const action = wrapper.findComponent(BoardMenuAction);
+			const action = wrapper.findComponent(KebabMenuAction);
 
 			expect(action.exists()).toBe(true);
 		});
