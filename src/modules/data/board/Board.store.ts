@@ -364,7 +364,7 @@ export const useBoardStore = defineStore("boardStore", () => {
 			: board.value.columns[columnIndex - 1].id;
 	};
 
-	const getFeatures = computed((): BoardFeature[] | [] => {
+	const getFeatures = computed(() => {
 		if (!board.value) return [];
 
 		return board.value.features;
