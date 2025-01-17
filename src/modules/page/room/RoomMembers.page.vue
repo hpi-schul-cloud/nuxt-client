@@ -111,7 +111,7 @@ const fixedHeaderOnMobile = ref({
 	positionTop: 0,
 });
 const { y } = useElementBounding(wireframe);
-const { checkPageVisibleOption } = useRoomMemberVisibilityOptions(
+const { checkVisibilityOption } = useRoomMemberVisibilityOptions(
 	currentUser.value?.userId as string
 );
 
@@ -176,7 +176,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const fabAction = computed(() => {
 	if (
-		checkPageVisibleOption(
+		checkVisibilityOption(
 			currentUser.value as RoomMemberResponse,
 			"add-member-button"
 		)

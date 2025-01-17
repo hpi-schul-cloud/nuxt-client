@@ -31,7 +31,7 @@ export const useRoomMembers = (roomId: string) => {
 		roomMembers.value.find((member) => member.userId === currentUserId)
 	);
 
-	const { checkPageVisibleOption } =
+	const { checkVisibilityOption } =
 		useRoomMemberVisibilityOptions(currentUserId);
 
 	const userRoles: Record<string, string> = {
@@ -53,7 +53,7 @@ export const useRoomMembers = (roomId: string) => {
 				return {
 					...member,
 					displayRoleName: userRoles[member.roleName],
-					isSelectable: !checkPageVisibleOption(
+					isSelectable: !checkVisibilityOption(
 						member,
 						"checkbox-in-row",
 						"disabled"

@@ -41,7 +41,7 @@
 		:items-per-page="50"
 		:mobile="null"
 		:show-select="
-			checkPageVisibleOption(
+			checkVisibilityOption(
 				currentUser as RoomMemberResponse,
 				'selection-column'
 			)
@@ -54,7 +54,7 @@
 		<template
 			#[`item.actions`]="{ item, index }"
 			v-if="
-				checkPageVisibleOption(
+				checkVisibilityOption(
 					currentUser as RoomMemberResponse,
 					'actions-column'
 				)
@@ -63,7 +63,7 @@
 			<!-- TODO: refactor the menus based on KebabMenuAction pattern -->
 			<KebabMenu
 				v-if="
-					checkPageVisibleOption(item as RoomMemberResponse, 'actions-in-row')
+					checkVisibilityOption(item as RoomMemberResponse, 'actions-in-row')
 				"
 			>
 				<VListItem @click="onChangePermission(item.userId)">
@@ -131,7 +131,7 @@ const memberList = toRef(props, "members");
 const membersFilterCount = ref(memberList.value?.length);
 
 const currentUser = toRef(props, "currentUser");
-const { checkPageVisibleOption } = useRoomMemberVisibilityOptions(
+const { checkVisibilityOption } = useRoomMemberVisibilityOptions(
 	currentUser.value?.userId as string
 );
 

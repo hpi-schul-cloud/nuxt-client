@@ -103,13 +103,13 @@ const hasVisibleOption = (
 };
 
 export const useRoomMemberVisibilityOptions = (currenUserId: string) => {
-	const checkPageVisibleOption = (
+	const checkVisibilityOption = (
 		user: RoomMemberResponse,
 		source: keyof PageViewOptions,
 		action: keyof Options = "show"
 	) => hasVisibleOption(currenUserId, user, source, action);
 
 	return {
-		checkPageVisibleOption,
+		checkVisibilityOption,
 	};
 };
