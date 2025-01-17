@@ -24,13 +24,9 @@ import {
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionEdit,
-	KebabMenuActionShareLink
-} from "@ui-kebab-menu";
 import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { KebabMenuActionDelete } from "@ui-kebab-menu";
 import {
 	useBoardNotifier,
 	useCourseBoardEditMode,

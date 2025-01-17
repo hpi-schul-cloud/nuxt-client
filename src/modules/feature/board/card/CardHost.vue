@@ -101,7 +101,11 @@ import {
 } from "@data-board";
 import { mdiArrowExpand } from "@icons/material";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
-import { KebabMenuActionDelete, KebabMenuActionEdit, KebabMenuActionShareLink } from "@ui-kebab-menu";
+import {
+	KebabMenuActionDelete,
+	KebabMenuActionEdit,
+	KebabMenuActionShareLink,
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode, useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, onMounted, ref, toRef } from "vue";
@@ -109,6 +113,7 @@ import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostDetailView from "./CardHostDetailView.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
+
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
@@ -130,7 +135,7 @@ export default defineComponent({
 		CardHostInteractionHandler,
 		KebabMenuActionDelete,
 		CardHostDetailView,
-		KebabMenuActionShareLink
+		KebabMenuActionShareLink,
 	},
 	props: {
 		height: { type: Number, required: true },
