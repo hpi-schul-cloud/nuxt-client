@@ -40,7 +40,7 @@
 		:items-per-page-options="[5, 10, 25, 50, 100]"
 		:items-per-page="50"
 		:mobile="null"
-		:show-select="checkVisibilityOption(currentUser, 'selection-column')"
+		:show-select="checkVisibility(currentUser, 'selection-column')"
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
 		@update:current-items="onUpdateFilter"
@@ -48,10 +48,10 @@
 	>
 		<template
 			#[`item.actions`]="{ item, index }"
-			v-if="checkVisibilityOption(currentUser, 'actions-column')"
+			v-if="checkVisibility(currentUser, 'actions-column')"
 		>
 			<!-- TODO: refactor the menus based on KebabMenuAction pattern -->
-			<KebabMenu v-if="checkVisibilityOption(item, 'actions-in-row')">
+			<KebabMenu v-if="checkVisibility(item, 'actions-in-row')">
 				<VListItem @click="onChangePermission(item.userId)">
 					<template #prepend>
 						<VIcon :icon="mdiAccountSwitchOutline" />
@@ -118,7 +118,7 @@ const memberList = toRef(props, "members");
 const membersFilterCount = ref(memberList.value?.length);
 
 const currentUser = toRef(props, "currentUser");
-const { checkVisibilityOption } = useRoomMemberVisibilityOptions(
+const { checkVisibility } = useRoomMemberVisibilityOptions(
 	currentUser.value?.userId as string
 );
 

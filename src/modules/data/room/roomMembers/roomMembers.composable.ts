@@ -34,8 +34,7 @@ export const useRoomMembers = (roomId: string) => {
 			) as RoomMemberResponse
 	);
 
-	const { checkVisibilityOption } =
-		useRoomMemberVisibilityOptions(currentUserId);
+	const { checkVisibility } = useRoomMemberVisibilityOptions(currentUserId);
 
 	const userRoles: Record<string, string> = {
 		[RoleName.Roomowner]: t("common.labels.teacher"),
@@ -56,11 +55,7 @@ export const useRoomMembers = (roomId: string) => {
 				return {
 					...member,
 					displayRoleName: userRoles[member.roleName],
-					isSelectable: !checkVisibilityOption(
-						member,
-						"checkbox-in-row",
-						"disabled"
-					),
+					isSelectable: !checkVisibility(member, "checkbox-in-row", "disabled"),
 				};
 			});
 			isLoading.value = false;

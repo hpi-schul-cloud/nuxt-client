@@ -110,13 +110,13 @@ export const useRoomMemberVisibilityOptions = (currenUserId: string) => {
 	 * @param action - action to check
 	 * @returns boolean
 	 */
-	const checkVisibilityOption = (
+	const checkVisibility = (
 		user: RoomMemberResponse,
 		source: keyof PageViewOptions,
 		action: keyof Options = "show"
 	) => hasVisibleOption(currenUserId, user, source, action);
 
 	return {
-		checkVisibilityOption,
+		checkVisibility,
 	};
 };

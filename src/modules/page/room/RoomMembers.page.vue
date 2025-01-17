@@ -111,7 +111,7 @@ const fixedHeaderOnMobile = ref({
 	positionTop: 0,
 });
 const { y } = useElementBounding(wireframe);
-const { checkVisibilityOption } = useRoomMemberVisibilityOptions(
+const { checkVisibility } = useRoomMemberVisibilityOptions(
 	currentUser.value?.userId as string
 );
 
@@ -175,7 +175,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const fabAction = computed(() => {
-	if (checkVisibilityOption(currentUser.value, "add-member-button")) {
+	if (checkVisibility(currentUser.value, "add-member-button")) {
 		return {
 			icon: mdiPlus,
 			title: t("pages.rooms.members.add"),
