@@ -13,7 +13,7 @@
 					{{ t("pages.rooms.members.manage") }}
 				</h1>
 				<KebabMenu class="mx-2">
-					<VListItem>
+					<VListItem @click="onLeaveRoom">
 						<template #prepend>
 							<VIcon :icon="mdiLocationExit" />
 						</template>
@@ -72,7 +72,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle, useElementBounding } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useRoomDetailsStore, useRoomMembers } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus, mdiLocationExit } from "@icons/material";
@@ -85,6 +85,7 @@ import { useRoomMemberVisibilityOptions } from "@data-room";
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter();
 const { xs, mdAndDown } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 const isMembersDialogOpen = ref(false);
@@ -140,6 +141,11 @@ const onUpdateRoleOrSchool = async (payload: {
 
 const onRemoveMembers = async (memberIds: string[]) => {
 	await removeMembers(memberIds);
+};
+
+const onLeaveRoom = async () => {
+	await removeMembers([currentUser.value.userId]);
+	router.push("/rooms");
 };
 
 onMounted(async () => {
