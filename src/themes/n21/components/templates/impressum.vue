@@ -22,7 +22,9 @@
 			</p>
 			<p>
 				<b>Support-Anfragen</b> richten Sie bitte direkt an
-				<base-link :href="mailtoSupportMail">{{ supportMail }}</base-link
+				<base-link :href="mailtoSupportMail" data-testid="support-mail">{{
+					supportMail
+				}}</base-link
 				>.
 			</p>
 			<h2 class="h4">Vertretungsberechtigter Geschäftsführer</h2>
