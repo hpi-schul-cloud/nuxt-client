@@ -18,11 +18,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { BoardMenu } from "@ui-board";
-import {
-	KebabMenuActionDelete,
-	KebabMenuActionMoveDown,
-	KebabMenuActionMoveUp,
-} from "@ui-kebab-menu";
+import { KebabMenuActionMoveDown, KebabMenuActionMoveUp } from "@ui-kebab-menu";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import AuthModule from "@/store/auth";
 import { Router, useRoute, useRouter } from "vue-router";
