@@ -517,10 +517,6 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
 		"Video conference",
-	"components.changeBoardLayoutDialog.boardLayout.singleColumn.explanation":
-		"several sections are positioned one below the other",
-	"components.changeBoardLayoutDialog.boardLayout.multiColumn.explanation":
-		"several sections are positioned next to each other",
 	"components.externalTools.status.deactivated": "Deactivated",
 	"components.externalTools.status.incomplete": "Configuration incomplete",
 	"components.externalTools.status.latest": "Latest",

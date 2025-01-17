@@ -526,10 +526,6 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Текст",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
 		"Відеоконференція",
-	"components.changeBoardLayoutDialog.boardLayout.singleColumn.explanation":
-		"кілька секцій розташовані одна під одною",
-	"components.changeBoardLayoutDialog.boardLayout.multiColumn.explanation":
-		"кілька секцій розташовані поруч",
 	"components.externalTools.status.deactivated": "Деактивовано",
 	"components.externalTools.status.incomplete": "Конфігурація не завершена",
 	"components.externalTools.status.latest": "Останній",

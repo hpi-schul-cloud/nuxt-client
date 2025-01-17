@@ -54,6 +54,7 @@ import {
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
 import {
 	extractDataAttribute,
 	useBoardNotifier,
@@ -64,7 +65,6 @@ import {
 import { mount } from "@vue/test-utils";
 import { computed, nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
-import ChangeBoardLayoutDialog from "../shared/ChangeBoardLayoutDialog.vue";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
@@ -1065,27 +1065,41 @@ describe("Board", () => {
 				const { wrapper } = setup();
 
 				const boardHeader = wrapper.findComponent(BoardHeader);
-				const changeBoardLayoutDialog = wrapper.findComponent(
-					ChangeBoardLayoutDialog
+				const boardLayoutDialog = wrapper.findComponent(
+					SelectBoardLayoutDialog
 				);
 
 				boardHeader.vm.$emit("change-layout");
 				await nextTick();
 
-				expect(changeBoardLayoutDialog.vm.isDialogOpen).toEqual(true);
+				expect(boardLayoutDialog.props("modelValue")).toEqual(true);
 			});
 		});
 
 		describe("when the change layout dialog is confirmed", () => {
 			describe("when layout has changed", () => {
+				it("should close the dialog", async () => {
+					const { wrapper } = setup();
+
+					const boardLayoutDialog = wrapper.findComponent(
+						SelectBoardLayoutDialog
+					);
+					await boardLayoutDialog.setValue(true, "modelValue");
+
+					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
+					await nextTick();
+
+					expect(boardLayoutDialog.props("modelValue")).toEqual(false);
+				});
+
 				it("should send the update request", async () => {
 					const { wrapper, boardStore, board } = setup();
 
-					const changeBoardLayoutDialog = wrapper.findComponent(
-						ChangeBoardLayoutDialog
+					const boardLayoutDialog = wrapper.findComponent(
+						SelectBoardLayoutDialog
 					);
 
-					changeBoardLayoutDialog.vm.$emit("change-layout", BoardLayout.List);
+					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
 					await nextTick();
 
 					expect(boardStore.updateBoardLayoutRequest).toHaveBeenCalledWith({
@@ -1096,14 +1110,28 @@ describe("Board", () => {
 			});
 
 			describe("when the layout has not changed", () => {
+				it("should close the dialog", async () => {
+					const { wrapper } = setup();
+
+					const boardLayoutDialog = wrapper.findComponent(
+						SelectBoardLayoutDialog
+					);
+					await boardLayoutDialog.setValue(true, "modelValue");
+
+					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
+					await nextTick();
+
+					expect(boardLayoutDialog.props("modelValue")).toEqual(false);
+				});
+
 				it("should not send an update request", async () => {
 					const { wrapper, boardStore, board } = setup();
 
-					const changeBoardLayoutDialog = wrapper.findComponent(
-						ChangeBoardLayoutDialog
+					const boardLayoutDialog = wrapper.findComponent(
+						SelectBoardLayoutDialog
 					);
 
-					changeBoardLayoutDialog.vm.$emit("change-layout", board.layout);
+					boardLayoutDialog.vm.$emit("select", board.layout);
 					await nextTick();
 
 					expect(boardStore.updateBoardLayoutRequest).not.toHaveBeenCalled();
