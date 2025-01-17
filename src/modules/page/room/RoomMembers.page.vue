@@ -40,6 +40,7 @@
 			<MembersTable
 				v-if="!isLoading"
 				:members="memberList"
+				:currentUser="currentUser"
 				:fixed-position="fixedHeaderOnMobile"
 				@remove:members="onRemoveMembers"
 			/>
@@ -79,6 +80,7 @@ import { MembersTable, AddMembers } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu } from "@ui-kebab-menu";
+import { useRoomMemberVisibilityOptions } from "@data-room";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -92,6 +94,7 @@ const {
 	potentialRoomMembers,
 	roomMembers,
 	schools,
+	currentUser,
 	addMembers,
 	fetchMembers,
 	getPotentialMembers,
@@ -108,6 +111,9 @@ const fixedHeaderOnMobile = ref({
 	positionTop: 0,
 });
 const { y } = useElementBounding(wireframe);
+const { checkPageVisibleOption } = useRoomMemberVisibilityOptions(
+	currentUser.value?.userId as string
+);
 
 useTitle(pageTitle);
 
@@ -168,12 +174,22 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	];
 });
 
-const fabAction = {
-	icon: mdiPlus,
-	title: t("pages.rooms.members.add"),
-	ariaLabel: t("pages.rooms.members.add"),
-	dataTestId: "fab-add-members",
-};
+const fabAction = computed(() => {
+	if (
+		checkPageVisibleOption(
+			currentUser.value as RoomMemberResponse,
+			"add-member-button"
+		)
+	) {
+		return {
+			icon: mdiPlus,
+			title: t("pages.rooms.members.add"),
+			ariaLabel: t("pages.rooms.members.add"),
+			dataTestId: "fab-add-members",
+		};
+	}
+	return undefined;
+});
 
 const linkAriaLabel = computed(
 	() =>

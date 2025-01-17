@@ -1,7 +1,8 @@
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
+
 type Options = {
 	show: boolean;
-	disabled: boolean;
+	disabled?: boolean;
 };
 
 type PageViewOptions = {
@@ -12,120 +13,103 @@ type PageViewOptions = {
 	"actions-in-row"?: Options;
 };
 
-export type UserRoles =
+type RoomRoles = Pick<
+	Record<RoleName, PageViewOptions>,
 	| RoleName.Roomowner
 	| RoleName.Roomadmin
 	| RoleName.Roomeditor
-	| RoleName.Roomviewer;
+	| RoleName.Roomviewer
+>;
 
-type RoomRoles = Pick<Record<RoleName, PageViewOptions>, UserRoles>;
-
-const ROLES: RoomRoles = {
-	[RoleName.Roomowner]: {
-		"selection-column": {
-			show: false,
-			disabled: false,
+const hasVisibleOption = (
+	currenUserId: string,
+	user: RoomMemberResponse,
+	source: keyof PageViewOptions,
+	action: keyof Options
+) => {
+	const ROLES: RoomRoles = {
+		[RoleName.Roomowner]: {
+			"selection-column": {
+				show: true,
+			},
+			"actions-column": {
+				show: true,
+			},
+			"add-member-button": {
+				show: true,
+			},
+			"checkbox-in-row": {
+				show: false,
+				disabled: true,
+			},
+			"actions-in-row": {
+				show: currenUserId !== user?.userId,
+				disabled: false,
+			},
 		},
-		"actions-column": {
-			show: false,
-			disabled: false,
+		[RoleName.Roomadmin]: {
+			"selection-column": {
+				show: true,
+			},
+			"actions-column": {
+				show: true,
+			},
+			"add-member-button": {
+				show: false,
+			},
+			"checkbox-in-row": {
+				show: false,
+				disabled: currenUserId === user?.userId,
+			},
+			"actions-in-row": {
+				show: currenUserId !== user?.userId,
+				disabled: false,
+			},
 		},
-		"add-member-button": {
-			show: false,
-			disabled: false,
+		[RoleName.Roomeditor]: {
+			"selection-column": {
+				show: false,
+			},
+			"actions-column": {
+				show: false,
+			},
+			"checkbox-in-row": {
+				show: false,
+				disabled: currenUserId === user?.userId,
+			},
+			"actions-in-row": {
+				show: currenUserId !== user?.userId,
+				disabled: false,
+			},
 		},
-		"checkbox-in-row": {
-			show: true,
-			disabled: false,
+		[RoleName.Roomviewer]: {
+			"selection-column": {
+				show: false,
+			},
+			"actions-column": {
+				show: false,
+			},
+			"checkbox-in-row": {
+				show: false,
+				disabled: currenUserId === user?.userId,
+			},
+			"actions-in-row": {
+				show: currenUserId !== user?.userId,
+				disabled: false,
+			},
 		},
-		"actions-in-row": {
-			show: true,
-			disabled: false,
-		},
-	},
-	[RoleName.Roomadmin]: {
-		"selection-column": {
-			show: true,
-			disabled: false,
-		},
-		"actions-column": {
-			show: true,
-			disabled: false,
-		},
-		"add-member-button": {
-			show: false,
-			disabled: false,
-		},
-		"checkbox-in-row": {
-			show: true,
-			disabled: false,
-		},
-		"actions-in-row": {
-			show: true,
-			disabled: false,
-		},
-	},
-	[RoleName.Roomeditor]: {
-		"selection-column": {
-			show: false,
-			disabled: false,
-		},
-		"actions-column": {
-			show: false,
-			disabled: false,
-		},
-		"checkbox-in-row": {
-			show: false,
-			disabled: false,
-		},
-		"actions-in-row": {
-			show: false,
-			disabled: false,
-		},
-	},
-	[RoleName.Roomviewer]: {
-		"selection-column": {
-			show: false,
-			disabled: false,
-		},
-		"actions-column": {
-			show: false,
-			disabled: false,
-		},
-		"checkbox-in-row": {
-			show: false,
-			disabled: false,
-		},
-		"actions-in-row": {
-			show: false,
-			disabled: false,
-		},
-	},
+	};
+	return ROLES[user?.roleName as keyof RoomRoles]?.[source]?.[action];
 };
 
-export const useRoomMemberVisibilityOptions = () => {
+export const useRoomMemberVisibilityOptions = (currenUserId: string) => {
 	const checkPageVisibleOption = (
-		userRole: UserRoles,
+		user: RoomMemberResponse,
 		source: keyof PageViewOptions,
-		action: keyof Options
-	) => {
-		if (!ROLES[userRole] || !ROLES[userRole][source]) {
-			return false;
-		}
-
-		return ROLES[userRole][source][action];
-	};
+		action: keyof Options = "show"
+	) => hasVisibleOption(currenUserId, user, source, action);
 
 	return {
 		checkPageVisibleOption,
 	};
 };
-
-// Usage:
-
-const { checkPageVisibleOption } = useRoomMemberVisibilityOptions();
-
-checkPageVisibleOption(RoleName.Roomowner, "selection-column", "show"); // true
-checkPageVisibleOption(RoleName.Roomowner, "selection-column", "disabled"); // false
-checkPageVisibleOption(RoleName.Roomviewer, "selection-column", "show");
-checkPageVisibleOption(RoleName.Roomviewer, "actions-in-row", "show"); // false

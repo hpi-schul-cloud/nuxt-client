@@ -40,15 +40,32 @@
 		:items-per-page-options="[5, 10, 25, 50, 100]"
 		:items-per-page="50"
 		:mobile="null"
-		:show-select="true"
+		:show-select="
+			checkPageVisibleOption(
+				currentUser as RoomMemberResponse,
+				'selection-column'
+			)
+		"
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
 		@update:current-items="onUpdateFilter"
 		@update:model-value="onSelectMembers"
 	>
-		<template #[`item.actions`]="{ item, index }">
+		<template
+			#[`item.actions`]="{ item, index }"
+			v-if="
+				checkPageVisibleOption(
+					currentUser as RoomMemberResponse,
+					'actions-column'
+				)
+			"
+		>
 			<!-- TODO: refactor the menus based on KebabMenuAction pattern -->
-			<KebabMenu>
+			<KebabMenu
+				v-if="
+					checkPageVisibleOption(item as RoomMemberResponse, 'actions-in-row')
+				"
+			>
 				<VListItem @click="onChangePermission(item.userId)">
 					<template #prepend>
 						<VIcon :icon="mdiAccountSwitchOutline" />
@@ -90,11 +107,15 @@ import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
+import { useRoomMemberVisibilityOptions } from "@data-room";
 
 const props = defineProps({
 	members: {
 		type: Array as PropType<RoomMemberResponse[]>,
 		required: true,
+	},
+	currentUser: {
+		type: Object as PropType<RoomMemberResponse> | undefined,
 	},
 	fixedPosition: {
 		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
@@ -108,6 +129,11 @@ const { t } = useI18n();
 const search = ref("");
 const memberList = toRef(props, "members");
 const membersFilterCount = ref(memberList.value?.length);
+
+const currentUser = toRef(props, "currentUser");
+const { checkPageVisibleOption } = useRoomMemberVisibilityOptions(
+	currentUser.value?.userId as string
+);
 
 const onUpdateFilter = (filteredMembers: RoomMemberResponse[]) => {
 	membersFilterCount.value =
