@@ -21,7 +21,6 @@ describe("impressum.vue", () => {
 		const wrapper = mount(Impressum, {
 			global: {
 				plugins: [createTestingI18n()],
-				stubs: ["base-link"],
 			},
 		});
 		return wrapper;
@@ -38,9 +37,7 @@ describe("impressum.vue", () => {
 			const wrapper = setup(supportMail);
 
 			const mailtoSupportMail = `mailto:${supportMail}`;
-			const supportMailLink = wrapper.findComponent(
-				"[data-testid=support-mail]"
-			);
+			const supportMailLink = wrapper.find("[data-testid=support-mail]");
 			expect(supportMailLink.attributes("href")).toBe(mailtoSupportMail);
 			expect(supportMailLink.text()).toBe(supportMail);
 		});
@@ -50,8 +47,9 @@ describe("impressum.vue", () => {
 		it("should not use environment variable", () => {
 			const wrapper = setup("invalid-email");
 
-			expect(wrapper.vm.supportMail).toBe("");
-			expect(wrapper.vm.mailtoSupportMail).toBe("#");
+			const supportMailLink = wrapper.find("[data-testid=support-mail]");
+			expect(supportMailLink.attributes("href")).toBe("#");
+			expect(supportMailLink.text()).toBe("");
 		});
 	});
 });
