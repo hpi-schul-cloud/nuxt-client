@@ -34,7 +34,6 @@ import { createApplicationError } from "@/utils/create-application-error.factory
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
-import { BoardFeature } from "@/serverApi/v3";
 
 export const useBoardStore = defineStore("boardStore", () => {
 	const cardStore = useCardStore();
