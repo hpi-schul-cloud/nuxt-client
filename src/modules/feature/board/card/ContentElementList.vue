@@ -1,150 +1,33 @@
 <template>
 	<VCardText class="mb-n4">
 		<template v-for="(element, index) in elements" :key="element.id">
-			<ContentElement
-				:index="index"
-				:elementCount="elements.length"
+			<div
 				:data-testid="`board-contentelement-${columnIndex}-${rowIndex}-${index}`"
 			>
-				<RichTextContentElement
-					v-if="isRichTextElementResponse(element)"
-					:element="element"
-					:isEditMode="isEditMode"
+				<component
+					:is="mapToComponent(element.type)"
 					:id="element.id"
-					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-					@move-down:edit="onMoveElementDown(index, element)"
-					@move-up:edit="onMoveElementUp(index, element)"
-					@delete:element="onDeleteElement"
-				/>
-				<LinkContentElement
-					v-else-if="showLinkElement(element)"
 					:element="element"
+					:column-index="columnIndex"
+					:element-index="index"
 					:isEditMode="isEditMode"
 					:isDetailView="isDetailView"
-					:id="element.id"
-					tabindex="0"
-					:column-index="columnIndex"
+					:is-not-first-element="isNotFirstElement(index)"
+					:is-not-last-element="isNotLastElement(index)"
 					:row-index="rowIndex"
-					:element-index="index"
-					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
+					:tabindex="tabindex(element)"
+					@delete:element="onDeleteElement"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
-					@delete:element="onDeleteElement"
-				/>
-				<FileContentElement
-					v-else-if="isFileElementResponse(element)"
-					:element="element"
-					:isEditMode="isEditMode"
-					:id="element.id"
-					tabindex="0"
-					:column-index="columnIndex"
-					:row-index="rowIndex"
-					:element-index="index"
 					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-					@move-down:edit="onMoveElementDown(index, element)"
-					@move-up:edit="onMoveElementUp(index, element)"
-					@delete:element="onDeleteElement"
 				/>
-				<SubmissionContentElement
-					v-else-if="showSubmissionContainerElement(element)"
-					:element="element"
-					:isEditMode="isEditMode"
-					:id="element.id"
-					:column-index="columnIndex"
-					:row-index="rowIndex"
-					:element-index="index"
-					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-					@move-down:edit="onMoveElementDown(index, element)"
-					@move-up:edit="onMoveElementUp(index, element)"
-					@delete:element="onDeleteElement"
-				/>
-				<ExternalToolElement
-					v-else-if="showExternalToolElement(element)"
-					:element="element"
-					:isEditMode="isEditMode"
-					:id="element.id"
-					:column-index="columnIndex"
-					:row-index="rowIndex"
-					:element-index="index"
-					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-					@move-down:edit="onMoveElementDown(index, element)"
-					@move-up:edit="onMoveElementUp(index, element)"
-					@delete:element="onDeleteElement"
-				/>
-				<DrawingContentElement
-					v-else-if="showDrawingElement(element)"
-					:key="element.id"
-					:element="element"
-					:isEditMode="isEditMode"
-					:isFirstElement="firstElementId === element.id"
-					:isLastElement="lastElementId === element.id"
-					:hasMultipleElements="hasMultipleElements"
-					:id="element.id"
-					tabindex="0"
-					:column-index="columnIndex"
-					:row-index="rowIndex"
-					:element-index="index"
-					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-					@move-down:edit="onMoveElementDown(index, element)"
-					@move-up:edit="onMoveElementUp(index, element)"
-					@delete:element="onDeleteElement"
-				/>
-				<VideoConferenceContentElement
-					v-else-if="showVideoConferenceElement(element)"
-					:element="element"
-					:isEditMode="isEditMode"
-					:id="element.id"
-					:column-index="columnIndex"
-					:row-index="rowIndex"
-					:element-index="index"
-					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-					@move-down:edit="onMoveElementDown(index, element)"
-					@move-up:edit="onMoveElementUp(index, element)"
-					@delete:element="onDeleteElement"
-				/>
-				<CollaborativeTextEditorElement
-					v-else-if="showCollaborativeTextEditorElement(element)"
-					:element="element"
-					:isEditMode="isEditMode"
-					:isFirstElement="firstElementId === element.id"
-					:isLastElement="lastElementId === element.id"
-					:hasMultipleElements="hasMultipleElements"
-					:id="element.id"
-					:column-index="columnIndex"
-					:row-index="rowIndex"
-					:element-index="index"
-					@move-keyboard:edit="onMoveElementKeyboard(index, element, $event)"
-					@move-down:edit="onMoveElementDown(index, element)"
-					@move-up:edit="onMoveElementUp(index, element)"
-					@delete:element="onDeleteElement"
-				/>
-				<DeletedElement
-					v-else-if="isDeletedElementResponse(element)"
-					:element="element"
-					:isEditMode="isEditMode"
-					:column-index="columnIndex"
-					:row-index="rowIndex"
-					:element-index="index"
-					@delete:element="onDeleteElement"
-				/>
-			</ContentElement>
+			</div>
 		</template>
 	</VCardText>
 </template>
 
 <script setup lang="ts">
-import {
-	CollaborativeTextEditorElementResponse,
-	ContentElementType,
-	DeletedElementResponse,
-	DrawingElementResponse,
-	ExternalToolElementResponse,
-	FileElementResponse,
-	LinkElementResponse,
-	RichTextElementResponse,
-	SubmissionContainerElementResponse,
-	VideoConferenceElementResponse,
-} from "@/serverApi/v3";
+import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
@@ -157,8 +40,7 @@ import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
-import { computed, PropType } from "vue";
-import ContentElement from "./ContentElement.vue";
+import { PropType } from "vue";
 
 const props = defineProps({
 	elements: {
@@ -196,115 +78,6 @@ const onDeleteElement = (elementId: string) => {
 	emit("delete:element", elementId);
 };
 
-const isRichTextElementResponse = (
-	element: AnyContentElement
-): element is RichTextElementResponse => {
-	return element.type === ContentElementType.RichText;
-};
-
-const isFileElementResponse = (
-	element: AnyContentElement
-): element is FileElementResponse => {
-	return element.type === ContentElementType.File;
-};
-
-const isSubmissionContainerElementResponse = (
-	element: AnyContentElement
-): element is SubmissionContainerElementResponse => {
-	return element.type === ContentElementType.SubmissionContainer;
-};
-
-const showSubmissionContainerElement = (
-	element: AnyContentElement
-): element is SubmissionContainerElementResponse => {
-	return (
-		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED &&
-		isSubmissionContainerElementResponse(element)
-	);
-};
-
-const isLinkElementResponse = (
-	element: AnyContentElement
-): element is LinkElementResponse => {
-	return element.type === ContentElementType.Link;
-};
-
-const showLinkElement = (
-	element: AnyContentElement
-): element is LinkElementResponse => {
-	return (
-		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED &&
-		isLinkElementResponse(element)
-	);
-};
-
-const isExternalToolElementResponse = (
-	element: AnyContentElement
-): element is ExternalToolElementResponse => {
-	return element.type === ContentElementType.ExternalTool;
-};
-
-const showExternalToolElement = (
-	element: AnyContentElement
-): element is ExternalToolElementResponse => {
-	return (
-		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED &&
-		isExternalToolElementResponse(element)
-	);
-};
-
-const isDrawingElementResponse = (
-	element: AnyContentElement
-): element is DrawingElementResponse => {
-	return element.type === ContentElementType.Drawing;
-};
-
-const showDrawingElement = (
-	element: AnyContentElement
-): element is DrawingElementResponse => {
-	return (
-		envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED &&
-		isDrawingElementResponse(element)
-	);
-};
-
-const isCollaborativeTextEditorResponse = (
-	element: AnyContentElement
-): element is CollaborativeTextEditorElementResponse => {
-	return element.type === ContentElementType.CollaborativeTextEditor;
-};
-
-const showCollaborativeTextEditorElement = (
-	element: AnyContentElement
-): element is CollaborativeTextEditorElementResponse => {
-	return (
-		envConfigModule.getEnv
-			.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED &&
-		isCollaborativeTextEditorResponse(element)
-	);
-};
-
-const isDeletedElementResponse = (
-	element: AnyContentElement
-): element is DeletedElementResponse => {
-	return element.type === ContentElementType.Deleted;
-};
-
-const isVideoConferenceElementResponse = (
-	element: AnyContentElement
-): element is VideoConferenceElementResponse => {
-	return element.type === ContentElementType.VideoConference;
-};
-
-const showVideoConferenceElement = (
-	element: AnyContentElement
-): element is VideoConferenceElementResponse => {
-	return (
-		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
-		isVideoConferenceElementResponse(element)
-	);
-};
-
 const onMoveElementDown = (
 	elementIndex: number,
 	element: AnyContentElement
@@ -336,14 +109,67 @@ const onMoveElementKeyboard = (
 	emit("move-keyboard:element", elementMove, event.code);
 };
 
-const hasMultipleElements = computed(() => props.elements.length > 1);
+const mapToComponent = (type: string) => {
+	switch (type) {
+		case ContentElementType.CollaborativeTextEditor:
+			if (
+				envConfigModule.getEnv
+					.FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED
+			) {
+				return CollaborativeTextEditorElement;
+			}
+			break;
+		case ContentElementType.Drawing:
+			if (envConfigModule.getEnv.FEATURE_TLDRAW_ENABLED) {
+				return DrawingContentElement;
+			}
+			break;
+		case ContentElementType.ExternalTool:
+			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED) {
+				return ExternalToolElement;
+			}
+			break;
+		case ContentElementType.File:
+			return FileContentElement;
+		case ContentElementType.Link:
+			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED) {
+				return LinkContentElement;
+			}
+			break;
+		case ContentElementType.RichText:
+			return RichTextContentElement;
+		case ContentElementType.SubmissionContainer:
+			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED) {
+				return SubmissionContentElement;
+			}
+			break;
+		case ContentElementType.VideoConference:
+			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED) {
+				return VideoConferenceContentElement;
+			}
+			break;
+		case ContentElementType.Deleted:
+			return DeletedElement;
+		default:
+			return "span";
+	}
+};
 
-const firstElementId = computed<Element["id"] | null>(() =>
-	props.elements.length > 0 ? props.elements[0].id : null
-);
+const elementTypesWithTabindexZero = [
+	ContentElementType.CollaborativeTextEditor,
+	ContentElementType.Drawing,
+	ContentElementType.ExternalTool,
+	ContentElementType.File,
+	ContentElementType.Link,
+	ContentElementType.VideoConference,
+];
 
-const lastElementId = computed<Element["id"] | null>(() => {
-	const lastElementIndex = props.elements.length - 1;
-	return props.elements.length > 0 ? props.elements[lastElementIndex].id : null;
-});
+const tabindex = (element: AnyContentElement) =>
+	elementTypesWithTabindexZero.includes(element.type) ? 0 : undefined;
+
+const isNotFirstElement = (elementIndex: number) =>
+	elementIndex !== 0 && props.elements.length > 1;
+
+const isNotLastElement = (elementIndex: number) =>
+	elementIndex !== props.elements.length - 1 && props.elements.length > 1;
 </script>

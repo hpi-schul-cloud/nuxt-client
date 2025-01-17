@@ -24,12 +24,12 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { BoardMenu } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 
 jest.mock("@data-board/ContentElementState.composable");
 
@@ -82,6 +82,8 @@ describe("LinkContentElement", () => {
 		element: LinkElementResponse;
 		isEditMode: boolean;
 		isDetailView: boolean;
+		isNotFirstElement?: boolean;
+		isNotLastElement?: boolean;
 		columnIndex: number;
 		rowIndex: number;
 		elementIndex: number;
@@ -106,7 +108,15 @@ describe("LinkContentElement", () => {
 			content?: LinkElementContent;
 			isEditMode: boolean;
 			isDetailView?: boolean;
-		} = { content: undefined, isEditMode: true, isDetailView: false }
+			isNotFirstElement?: boolean;
+			isNotLastElement?: boolean;
+		} = {
+			content: undefined,
+			isEditMode: true,
+			isDetailView: false,
+			isNotFirstElement: true,
+			isNotLastElement: true,
+		}
 	) => {
 		const element = {
 			...defaultElement,
@@ -141,6 +151,8 @@ describe("LinkContentElement", () => {
 			element,
 			isEditMode: options.isEditMode,
 			isDetailView: false,
+			isNotFirstElement: true,
+			isNotLastElement: true,
 			columnIndex: 0,
 			rowIndex: 1,
 			elementIndex: 2,
@@ -282,7 +294,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
@@ -295,7 +307,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
@@ -308,7 +320,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");
@@ -386,7 +398,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
@@ -397,7 +409,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
@@ -408,7 +420,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");

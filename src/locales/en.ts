@@ -1547,11 +1547,11 @@ export default {
 	"pages.common.tools.configureVideoconferenceDialog.title":
 		"Create video conference",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"All users participate as moderators",
+		"Moderation rights for all participants",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute":
-		"Mute participants when entering",
+		"Mute participants on entering",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Approval by the moderator before the room can be entered",
+		"Activate waiting room for participants",
 	"pages.content._id.addToTopic": "To be added to",
 	"pages.content._id.collection.selectElements":
 		"Select the items you want to add to the topic",

@@ -24,24 +24,35 @@
 						:scope="BoardMenuScope.COLUMN"
 						:data-testid="`column-menu-btn-${index}`"
 					>
-						<BoardMenuActionEdit v-if="!isEditMode" @click="onStartEditMode" />
-						<BoardMenuActionMoveLeft
-							v-if="!isListBoard"
-							@click="onMoveColumnLeft"
+						<KebabMenuActionRename
+							v-if="!isEditMode"
+							@click="onStartEditMode"
 						/>
-						<BoardMenuActionMoveRight
-							v-if="!isListBoard"
-							@click="onMoveColumnRight"
+						<template v-if="isListBoard">
+							<KebabMenuActionMoveUp
+								v-if="isNotFirstColumn"
+								@click="onMoveColumnUp"
+							/>
+							<KebabMenuActionMoveDown
+								v-if="isNotLastColumn"
+								@click="onMoveColumnDown"
+							/>
+						</template>
+						<template v-else>
+							<KebabMenuActionMoveLeft
+								v-if="isNotFirstColumn"
+								@click="onMoveColumnLeft"
+							/>
+							<KebabMenuActionMoveRight
+								v-if="isNotLastColumn"
+								@click="onMoveColumnRight"
+							/>
+						</template>
+						<KebabMenuActionDelete
+							:name="title"
+							:scope="BoardMenuScope.COLUMN"
+							@click="onDelete"
 						/>
-						<BoardMenuActionMoveColumnUp
-							v-if="isListBoard"
-							@click="onMoveColumnUp"
-						/>
-						<BoardMenuActionMoveColumnDown
-							v-if="isListBoard"
-							@click="onMoveColumnDown"
-						/>
-						<BoardMenuActionDelete :name="title" @click="onDelete" />
 					</BoardMenu>
 				</BoardAnyTitleInput>
 			</div>
@@ -52,42 +63,30 @@
 
 <script setup lang="ts">
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionEdit,
-	BoardMenuActionMoveColumnDown,
-	BoardMenuActionMoveColumnUp,
-	BoardMenuActionMoveLeft,
-	BoardMenuActionMoveRight,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionRename,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+	KebabMenuActionMoveLeft,
+	KebabMenuActionMoveRight,
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 
 const props = defineProps({
-	columnId: {
-		type: String,
-		required: true,
-	},
-	index: {
-		type: Number,
-	},
-	isListBoard: {
-		type: Boolean,
-		required: true,
-	},
-	title: {
-		type: String,
-		required: true,
-	},
-	titlePlaceholder: {
-		type: String,
-		default: "",
-	},
+	columnId: { type: String, required: true },
+	index: { type: Number },
+	isListBoard: { type: Boolean, required: true },
+	isNotFirstColumn: { type: Boolean, requried: false },
+	isNotLastColumn: { type: Boolean, requried: false },
+	title: { type: String, required: true },
+	titlePlaceholder: { type: String, default: "" },
 });
+
 const emit = defineEmits([
 	"delete:column",
 	"move:column-down",
@@ -124,17 +123,22 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 };
 
 const onMoveColumnKeyboard = (event: KeyboardEvent) => {
-	if (event.code === "ArrowLeft") {
+	let keyLeft = "ArrowLeft";
+	let keyRight = "ArrowRight";
+	if (props.isListBoard) {
+		keyLeft = "ArrowUp";
+		keyRight = "ArrowDown";
+	}
+	if (event.code === keyLeft) {
 		emit("move:column-left");
-	} else if (event.code === "ArrowRight") {
+	} else if (event.code === keyRight) {
 		emit("move:column-right");
-	} else {
-		console.log("not supported key event");
 	}
 };
 
-const emitIfNotListBoard = (event: string) => {
-	console.log("emitIfNotListBoard", emit);
+const emitIfNotListBoard = (
+	event: "move:column-left" | "move:column-right"
+) => {
 	if (!props.isListBoard) {
 		emit(event);
 	}

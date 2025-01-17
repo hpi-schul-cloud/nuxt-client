@@ -5,7 +5,7 @@ import NotifierModule from "@/store/notifier";
 import { injectStrict } from "@/utils/inject";
 import { mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useCardStore } from "@data-board";
+import { useBoardFeatures, useCardStore } from "@data-board";
 import { createMock } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
@@ -42,6 +42,13 @@ jest.mocked(useSharedLastCreatedElement).mockImplementation(() => {
 	return {
 		lastCreatedElementId: ref(undefined),
 		resetLastCreatedElementId: jest.fn(),
+	};
+});
+
+jest.mock("@data-board/BoardFeatures.composable");
+jest.mocked(useBoardFeatures).mockImplementation(() => {
+	return {
+		isFeatureEnabled: jest.fn().mockReturnValue(true),
 	};
 });
 
@@ -516,7 +523,6 @@ describe("ElementTypeSelection Composable", () => {
 
 				askType();
 
-				console.log(elementTypeOptions.value);
 				const action = elementTypeOptions.value[7].action;
 				action();
 

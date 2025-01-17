@@ -11,14 +11,23 @@ import {
 	CourseRoomsApiFactory,
 	CreateCardBodyParamsRequiredEmptyElementsEnum,
 	CreateContentElementBodyParams,
-	DrawingElementContent,
+	DrawingElementContentBody,
+	DrawingElementResponse,
+	ExternalToolContentBody,
 	ExternalToolElementContentBody,
+	ExternalToolElementResponse,
 	FileElementContentBody,
+	FileElementResponse,
+	LinkContentBody,
 	LinkElementContentBody,
+	LinkElementResponse,
 	RichTextElementContentBody,
+	RichTextElementResponse,
 	RoomApiFactory,
 	SubmissionContainerElementContentBody,
+	SubmissionContainerElementResponse,
 	VideoConferenceElementContentBody,
+	VideoConferenceElementResponse,
 } from "@/serverApi/v3";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { AnyContentElement } from "@/types/board/ContentElement";
@@ -85,54 +94,106 @@ export const useBoardApi = () => {
 	};
 
 	const generateDataProp = (element: AnyContentElement) => {
-		if (element.type === ContentElementType.RichText) {
-			return {
+		const isRichTextElement = (
+			element: AnyContentElement
+		): element is RichTextElementResponse => {
+			return element.type === ContentElementType.RichText;
+		};
+
+		if (isRichTextElement(element)) {
+			const body: RichTextElementContentBody = {
 				content: element.content,
-				type: element.type,
-			} as RichTextElementContentBody;
+				type: ContentElementType.RichText,
+			};
+			return body;
 		}
 
-		if (element.type === ContentElementType.File) {
-			return {
+		const isFileElement = (
+			element: AnyContentElement
+		): element is FileElementResponse => {
+			return element.type === ContentElementType.File;
+		};
+
+		if (isFileElement(element)) {
+			const body: FileElementContentBody = {
 				content: element.content,
 				type: ContentElementType.File,
-			} as FileElementContentBody;
+			};
+			return body;
 		}
 
-		if (element.type === ContentElementType.SubmissionContainer) {
-			return {
+		const isSubmissionContainerElement = (
+			element: AnyContentElement
+		): element is SubmissionContainerElementResponse => {
+			return element.type === ContentElementType.SubmissionContainer;
+		};
+
+		if (isSubmissionContainerElement(element)) {
+			const body: SubmissionContainerElementContentBody = {
 				content: element.content,
 				type: ContentElementType.SubmissionContainer,
-			} as SubmissionContainerElementContentBody;
+			};
+			return body;
 		}
 
-		if (element.type === ContentElementType.Link) {
-			return {
-				content: element.content,
+		const isLinkElement = (
+			element: AnyContentElement
+		): element is LinkElementResponse => {
+			return element.type === ContentElementType.Link;
+		};
+
+		if (isLinkElement(element)) {
+			const body: LinkElementContentBody = {
+				// LinkElementContent is not type equal with LinkContentBody
+				content: element.content as LinkContentBody,
 				type: ContentElementType.Link,
-			} as LinkElementContentBody;
+			};
+			return body;
 		}
 
-		if (element.type === ContentElementType.ExternalTool) {
-			return {
-				content: element.content,
+		const isExternalToolElement = (
+			element: AnyContentElement
+		): element is ExternalToolElementResponse => {
+			return element.type === ContentElementType.ExternalTool;
+		};
+
+		if (isExternalToolElement(element)) {
+			const body: ExternalToolElementContentBody = {
+				// ExternalToolElementContent is not type equal with ExternalToolContentBody
+				content: element.content as ExternalToolContentBody,
 				type: ContentElementType.ExternalTool,
-			} as ExternalToolElementContentBody;
+			};
+			return body;
 		}
 
-		if (element.type === ContentElementType.Drawing) {
-			return {
-				content: element.content as DrawingElementContent,
+		const isDrawingElement = (
+			element: AnyContentElement
+		): element is DrawingElementResponse => {
+			return element.type === ContentElementType.Drawing;
+		};
+
+		if (isDrawingElement(element)) {
+			const body: DrawingElementContentBody = {
+				content: element.content,
 				type: ContentElementType.Drawing,
 			};
+			return body;
 		}
 
-		if (element.type === ContentElementType.VideoConference) {
-			return {
+		const isVideoConferenceElement = (
+			element: AnyContentElement
+		): element is VideoConferenceElementResponse => {
+			return element.type === ContentElementType.VideoConference;
+		};
+
+		if (isVideoConferenceElement(element)) {
+			const body: VideoConferenceElementContentBody = {
 				content: element.content,
 				type: ContentElementType.VideoConference,
-			} as VideoConferenceElementContentBody;
+			};
+			return body;
 		}
+
 		throw new Error("element.type mapping is undefined for updateElementCall");
 	};
 

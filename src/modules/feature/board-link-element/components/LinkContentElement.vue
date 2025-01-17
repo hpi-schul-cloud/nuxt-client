@@ -1,56 +1,60 @@
 <template>
-	<div ref="linkContentElement">
-		<v-card
-			class="mb-4"
-			target="_blank"
-			data-testid="board-link-element"
-			:class="{ 'd-none': isHidden }"
-			:variant="outlined"
-			:ripple="false"
-			:aria-label="ariaLabel"
-			:href="sanitizedUrl"
-			:loading="isLoading ? 'primary' : false"
-			@keydown.up.down="onKeydownArrow"
-			@keydown.stop
-		>
-			<LinkContentElementDisplay
-				v-if="computedElement.content.url"
-				:url="computedElement.content.url"
-				:title="computedElement.content.title"
-				:imageUrl="computedElement.content.imageUrl"
-				:isEditMode="isEditMode"
-				><BoardMenu
+	<v-card
+		class="mb-4"
+		target="_blank"
+		data-testid="board-link-element"
+		:class="{ 'd-none': isHidden }"
+		:variant="outlined"
+		:ripple="false"
+		:aria-label="ariaLabel"
+		:href="sanitizedUrl"
+		tabindex="0"
+		ref="linkContentElement"
+		@keydown.up.down="onKeydownArrow"
+		@keydown.stop
+	>
+		<LinkContentElementDisplay
+			v-if="computedElement.content.url"
+			:url="computedElement.content.url"
+			:title="computedElement.content.title"
+			:imageUrl="computedElement.content.imageUrl"
+			:isEditMode="isEditMode"
+			><BoardMenu
+				:scope="BoardMenuScope.LINK_ELEMENT"
+				has-background
+				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+			>
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
 					:scope="BoardMenuScope.LINK_ELEMENT"
-					has-background
-					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
-				>
-					<BoardMenuActionMoveUp @click="onMoveUp" />
-					<BoardMenuActionMoveDown @click="onMoveDown" />
-					<BoardMenuActionDelete @click="onDelete" />
-				</BoardMenu>
-			</LinkContentElementDisplay>
-			<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
-				><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
-					<BoardMenuActionMoveUp @click="onMoveUp" />
-					<BoardMenuActionMoveDown @click="onMoveDown" />
-					<BoardMenuActionDelete @click="onDelete" />
-				</BoardMenu>
-			</LinkContentElementCreate>
-		</v-card>
-	</div>
+					@click="onDelete"
+				/>
+			</BoardMenu>
+		</LinkContentElementDisplay>
+		<LinkContentElementCreate v-if="isCreating" @create:url="onCreateUrl"
+			><BoardMenu :scope="BoardMenuScope.LINK_ELEMENT" has-background>
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
+					:scope="BoardMenuScope.LINK_ELEMENT"
+					@click="onDelete"
+				/>
+			</BoardMenu>
+		</LinkContentElementCreate>
+	</v-card>
 </template>
 
 <script setup lang="ts">
 import { LinkElementResponse } from "@/serverApi/v3";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
@@ -66,13 +70,15 @@ const props = defineProps({
 	},
 	isEditMode: { type: Boolean, required: true },
 	isDetailView: { type: Boolean, required: true },
+	isNotFirstElement: { type: Boolean, requried: false },
+	isNotLastElement: { type: Boolean, requried: false },
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
 });
 const emit = defineEmits<{
 	(e: "delete:element", id: string): void;
-	(e: "move-keyboard:edit", event: Event): void;
+	(e: "move-keyboard:edit", event: KeyboardEvent): void;
 	(e: "move-down:edit"): void;
 	(e: "move-up:edit"): void;
 }>();

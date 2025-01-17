@@ -1576,11 +1576,11 @@ export default {
 	"pages.common.tools.configureVideoconferenceDialog.title":
 		"Створити відеоконференцію",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Усі користувачі беруть участь як модератори",
+		"Права модерації для всіх учасників",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute":
-		"Вимкнення звуку учасників при вході",
+		"Вимкнути звук учасникам при вході",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Схвалення модератором перед входом до кімнати",
+		"Активуйте кімнату очікування для учасників",
 	"pages.content._id.addToTopic": "Для додавання в",
 	"pages.content._id.collection.selectElements":
 		"Виберіть елементи, які треба додати до теми",
