@@ -43,7 +43,7 @@ const hasVisibleOption = (
 				disabled: true,
 			},
 			"actions-in-row": {
-				show: currenUserId !== user?.userId,
+				show: false,
 				disabled: false,
 			},
 		},
