@@ -12,13 +12,13 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
-	BoardMenuActionCopy,
-	BoardMenuActionDelete,
-	BoardMenuActionEdit,
-	BoardMenuActionPublish,
-	BoardMenuActionRevert,
-	BoardMenuActionShare,
-} from "@ui-board";
+	KebabMenuActionCopy,
+	KebabMenuActionDelete,
+	KebabMenuActionPublish,
+	KebabMenuActionRevert,
+	KebabMenuActionShare,
+	KebabMenuActionRename,
+} from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
 import { computed } from "vue";
@@ -114,11 +114,12 @@ describe("BoardHeader", () => {
 			it("should enable copying", () => {
 				const { wrapper } = setup({
 					permissions: { hasEditPermission: true },
+					envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 				});
 
-				const editButton = wrapper.findComponent(BoardMenuActionEdit);
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
 
-				expect(editButton.exists()).toBe(true);
+				expect(shareButton.exists()).toBe(true);
 			});
 
 			it("should enable sharing with feature flag", () => {
@@ -127,7 +128,7 @@ describe("BoardHeader", () => {
 					envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 				});
 
-				const shareButton = wrapper.findComponent(BoardMenuActionShare);
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
 
 				expect(shareButton.exists()).toBe(true);
 			});
@@ -138,7 +139,7 @@ describe("BoardHeader", () => {
 					envs: { FEATURE_COLUMN_BOARD_SHARE: false },
 				});
 
-				const shareButton = wrapper.findComponent(BoardMenuActionShare);
+				const shareButton = wrapper.findComponent(KebabMenuActionShare);
 
 				expect(shareButton.exists()).toBe(false);
 			});
@@ -149,7 +150,7 @@ describe("BoardHeader", () => {
 		it("should call startEditMode", async () => {
 			const { startEditMode, wrapper } = setup();
 
-			const editButton = wrapper.findComponent(BoardMenuActionEdit);
+			const editButton = wrapper.findComponent(KebabMenuActionRename);
 			await editButton.trigger("click");
 
 			expect(startEditMode).toBeCalled();
@@ -233,7 +234,7 @@ describe("BoardHeader", () => {
 		it("should emit 'copy:board'", async () => {
 			const { wrapper } = setup();
 
-			const copyButton = wrapper.findComponent(BoardMenuActionCopy);
+			const copyButton = wrapper.findComponent(KebabMenuActionCopy);
 			await copyButton.trigger("click");
 
 			expect(wrapper.emitted("copy:board")).toHaveLength(1);
@@ -247,7 +248,7 @@ describe("BoardHeader", () => {
 				envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 			});
 
-			const copyButton = wrapper.findComponent(BoardMenuActionShare);
+			const copyButton = wrapper.findComponent(KebabMenuActionShare);
 			await copyButton.trigger("click");
 
 			expect(wrapper.emitted("share:board")).toHaveLength(1);
@@ -258,7 +259,7 @@ describe("BoardHeader", () => {
 		it("should emit 'revert'", async () => {
 			const { wrapper } = setup();
 
-			const revertButton = wrapper.findComponent(BoardMenuActionRevert);
+			const revertButton = wrapper.findComponent(KebabMenuActionRevert);
 			expect(revertButton.exists()).toBe(true);
 			await revertButton.trigger("click");
 
@@ -273,7 +274,7 @@ describe("BoardHeader", () => {
 		it("should emit 'delete:board'", async () => {
 			const { wrapper } = setup();
 
-			const deleteButton = wrapper.findComponent(BoardMenuActionDelete);
+			const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
 			await deleteButton.trigger("click");
 
 			expect(wrapper.emitted("delete:board")).toHaveLength(1);
@@ -300,10 +301,10 @@ describe("BoardHeader", () => {
 				{ isDraft: true }
 			);
 
-			const revertButton = wrapper.findComponent(BoardMenuActionRevert);
+			const revertButton = wrapper.findComponent(KebabMenuActionRevert);
 			expect(revertButton.exists()).toBe(false);
 
-			const publishButton = wrapper.findComponent(BoardMenuActionPublish);
+			const publishButton = wrapper.findComponent(KebabMenuActionPublish);
 			expect(publishButton.exists()).toBe(true);
 		});
 
@@ -316,7 +317,7 @@ describe("BoardHeader", () => {
 					{ isDraft: true }
 				);
 
-				const publishButton = wrapper.findComponent(BoardMenuActionPublish);
+				const publishButton = wrapper.findComponent(KebabMenuActionPublish);
 				expect(publishButton.exists()).toBe(true);
 				await publishButton.trigger("click");
 

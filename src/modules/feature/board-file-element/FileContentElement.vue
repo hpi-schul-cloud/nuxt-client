@@ -26,9 +26,13 @@
 				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				v-if="isEditMode"
 			>
-				<BoardMenuActionMoveUp @click="onMoveUp" />
-				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete :name="fileProperties.name" @click="onDelete" />
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
+					:name="fileProperties.name"
+					:scope="BoardMenuScope.FILE_ELEMENT"
+					@click="onDelete"
+				/>
 			</BoardMenu>
 		</FileContent>
 		<FileUpload
@@ -39,9 +43,12 @@
 			:isUploading="isUploading"
 		>
 			<BoardMenu :scope="BoardMenuScope.FILE_ELEMENT" has-background>
-				<BoardMenuActionMoveUp @click="onMoveUp" />
-				<BoardMenuActionMoveDown @click="onMoveDown" />
-				<BoardMenuActionDelete @click="onDelete" />
+				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+				<KebabMenuActionDelete
+					:scope="BoardMenuScope.FILE_ELEMENT"
+					@click="onDelete"
+				/>
 			</BoardMenu>
 		</FileUpload>
 	</v-card>
@@ -56,13 +63,12 @@ import {
 	isPreviewPossible,
 } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import {
 	computed,
 	defineComponent,
@@ -89,13 +95,15 @@ export default defineComponent({
 		FileUpload,
 		FileContent,
 		BoardMenu,
-		BoardMenuActionMoveUp,
-		BoardMenuActionMoveDown,
-		BoardMenuActionDelete,
+		KebabMenuActionMoveUp,
+		KebabMenuActionMoveDown,
+		KebabMenuActionDelete,
 	},
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
+		isNotFirstElement: { type: Boolean, requried: false },
+		isNotLastElement: { type: Boolean, requried: false },
 		columnIndex: { type: Number, required: true },
 		rowIndex: { type: Number, required: true },
 		elementIndex: { type: Number, required: true },
@@ -109,6 +117,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const fileContentElement = ref(null);
 		const isLoadingFileRecord = ref(true);
+
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
