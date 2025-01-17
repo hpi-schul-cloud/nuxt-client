@@ -27,8 +27,11 @@ export const useRoomMembers = (roomId: string) => {
 	};
 	const currentUserId = authModule.getUser?.id ?? "";
 
-	const currentUser = computed(() =>
-		roomMembers.value.find((member) => member.userId === currentUserId)
+	const currentUser = computed(
+		() =>
+			roomMembers.value.find(
+				(member) => member.userId === currentUserId
+			) as RoomMemberResponse
 	);
 
 	const { checkVisibilityOption } =

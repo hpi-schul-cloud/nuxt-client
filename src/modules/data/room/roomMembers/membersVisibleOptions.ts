@@ -55,7 +55,7 @@ const hasVisibleOption = (
 				show: true,
 			},
 			"add-member-button": {
-				show: false,
+				show: true,
 			},
 			"checkbox-in-row": {
 				show: false,
@@ -103,6 +103,13 @@ const hasVisibleOption = (
 };
 
 export const useRoomMemberVisibilityOptions = (currenUserId: string) => {
+	/*
+	 * Check if the current user or member in the list has the rights to see the option
+	 * @param user - user to check
+	 * @param source - source of the option
+	 * @param action - action to check
+	 * @returns boolean
+	 */
 	const checkVisibilityOption = (
 		user: RoomMemberResponse,
 		source: keyof PageViewOptions,

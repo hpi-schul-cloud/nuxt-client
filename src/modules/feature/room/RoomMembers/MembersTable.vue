@@ -40,12 +40,7 @@
 		:items-per-page-options="[5, 10, 25, 50, 100]"
 		:items-per-page="50"
 		:mobile="null"
-		:show-select="
-			checkVisibilityOption(
-				currentUser as RoomMemberResponse,
-				'selection-column'
-			)
-		"
+		:show-select="checkVisibilityOption(currentUser, 'selection-column')"
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
 		@update:current-items="onUpdateFilter"
@@ -53,12 +48,7 @@
 	>
 		<template
 			#[`item.actions`]="{ item, index }"
-			v-if="
-				checkVisibilityOption(
-					currentUser as RoomMemberResponse,
-					'actions-column'
-				)
-			"
+			v-if="checkVisibilityOption(currentUser, 'actions-column')"
 		>
 			<!-- TODO: refactor the menus based on KebabMenuAction pattern -->
 			<KebabMenu
@@ -115,7 +105,8 @@ const props = defineProps({
 		required: true,
 	},
 	currentUser: {
-		type: Object as PropType<RoomMemberResponse> | undefined,
+		type: Object as PropType<RoomMemberResponse>,
+		required: true,
 	},
 	fixedPosition: {
 		type: Object as PropType<{ enabled: boolean; positionTop: number }>,

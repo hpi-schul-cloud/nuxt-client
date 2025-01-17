@@ -175,12 +175,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const fabAction = computed(() => {
-	if (
-		checkVisibilityOption(
-			currentUser.value as RoomMemberResponse,
-			"add-member-button"
-		)
-	) {
+	if (checkVisibilityOption(currentUser.value, "add-member-button")) {
 		return {
 			icon: mdiPlus,
 			title: t("pages.rooms.members.add"),
