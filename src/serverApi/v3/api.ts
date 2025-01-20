@@ -8094,7 +8094,7 @@ export interface SchoolResponse {
      * @type {FederalStateResponse}
      * @memberof SchoolResponse
      */
-    federalState: FederalStateResponse;
+    federalState?: FederalStateResponse;
     /**
      * 
      * @type {CountyResponse}
