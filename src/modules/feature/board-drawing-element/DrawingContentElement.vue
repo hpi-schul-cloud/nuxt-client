@@ -19,9 +19,18 @@
 						has-background
 						:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 					>
-						<BoardMenuActionMoveUp @click="onMoveDrawingElementEditUp" />
-						<BoardMenuActionMoveDown @click="onMoveDrawingElementEditDown" />
-						<BoardMenuActionDelete @click="onDeleteElement" />
+						<KebabMenuActionMoveUp
+							v-if="isNotFirstElement"
+							@click="onMoveDrawingElementEditUp"
+						/>
+						<KebabMenuActionMoveDown
+							v-if="isNotLastElement"
+							@click="onMoveDrawingElementEditDown"
+						/>
+						<KebabMenuActionDelete
+							@click="onDeleteElement"
+							:scope="BoardMenuScope.DRAWING_ELEMENT"
+						/>
 					</BoardMenu>
 				</template>
 			</InnerContent>
@@ -33,13 +42,12 @@
 import { DrawingElementResponse } from "@/serverApi/v3";
 import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import InnerContent from "./InnerContent.vue";
@@ -50,6 +58,8 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	isNotFirstElement: { type: Boolean, requried: false },
+	isNotLastElement: { type: Boolean, requried: false },
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },

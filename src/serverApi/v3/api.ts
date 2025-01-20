@@ -579,6 +579,15 @@ export enum BoardExternalReferenceType {
  * @export
  * @enum {string}
  */
+export enum BoardFeature {
+    Videoconference = 'videoconference'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 export enum BoardLayout {
     Columns = 'columns',
     List = 'list',
@@ -699,6 +708,12 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     layout: string;
+    /**
+     * 
+     * @type {Array<BoardFeature>}
+     * @memberof BoardResponse
+     */
+    features: Array<BoardFeature>;
 }
 /**
  * 
@@ -8063,7 +8078,7 @@ export interface SchoolResponse {
      * @type {FederalStateResponse}
      * @memberof SchoolResponse
      */
-    federalState: FederalStateResponse;
+    federalState?: FederalStateResponse;
     /**
      * 
      * @type {CountyResponse}
