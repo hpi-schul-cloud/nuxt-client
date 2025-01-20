@@ -36,6 +36,18 @@ export const useRoomsState = () => {
 		}
 	};
 
+	const leaveRoom = async (roomId: string, userId: string) => {
+		try {
+			await roomApi.roomControllerRemoveMembers(roomId, { userIds: [userId] });
+		} catch (error) {
+			const responseError = mapAxiosErrorToResponseError(error);
+
+			throw createApplicationError(responseError.code);
+		} finally {
+			isLoading.value = false;
+		}
+	};
+
 	const isEmpty = computed(() => {
 		return rooms.value.length === 0;
 	});
@@ -46,5 +58,6 @@ export const useRoomsState = () => {
 		isEmpty,
 		fetchRooms,
 		deleteRoom,
+		leaveRoom,
 	};
 };

@@ -15,6 +15,7 @@
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
 					@room:delete="onDelete"
+					@room:leave="onLeaveRoom"
 				/>
 			</div>
 		</template>
@@ -33,6 +34,7 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardLayout } from "@/serverApi/v3";
+import { authModule } from "@/store";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomDetailsStore, useRoomsState } from "@data-room";
@@ -45,6 +47,7 @@ import {
 import {
 	ConfirmationDialog,
 	useDeleteConfirmationDialog,
+	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
@@ -57,8 +60,9 @@ const router = useRouter();
 const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
-const { deleteRoom } = useRoomsState();
+const { deleteRoom, leaveRoom } = useRoomsState();
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
+const { askConfirmation } = useConfirmationDialog();
 
 const roomDetailsStore = useRoomDetailsStore();
 const { room, roomBoards } = storeToRefs(roomDetailsStore);
@@ -174,6 +178,23 @@ const onDelete = async () => {
 			name: "rooms",
 		});
 	}
+};
+
+const onLeaveRoom = async () => {
+	const currentUserId = authModule.getUser?.id;
+	const roomId = room.value?.id;
+	if (!currentUserId || !roomId) return;
+
+	const shouldLeave = await askConfirmation({
+		message: t("pages.rooms.leaveRoom.confirmation", {
+			roomName: room.value?.name,
+		}),
+		confirmActionLangKey: "common.actions.leave",
+	});
+
+	if (!shouldLeave) return;
+	await leaveRoom(roomId, currentUserId);
+	router.push("/rooms");
 };
 
 const onCreateBoard = async (layout: BoardLayout) => {
