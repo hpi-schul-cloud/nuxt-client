@@ -27,7 +27,7 @@
 			<BoardMenu
 				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 				has-background
-				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+				:data-testid="`element-display-menu-${columnIndex}-${rowIndex}-${elementIndex}`"
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
@@ -44,6 +44,7 @@
 			<BoardMenu
 				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 				has-background
+				:data-testid="`element-create-menu-${columnIndex}-${rowIndex}-${elementIndex}`"
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
@@ -54,7 +55,7 @@
 			</BoardMenu>
 		</VideoConferenceContentElementCreate>
 		<VDialog
-			ref="vDialog"
+			ref="errorDialog"
 			v-model="isErrorDialogOpen"
 			:max-width="480"
 			data-testid="error-dialog"
