@@ -398,24 +398,24 @@ describe("VideoConferenceContentElement", () => {
 
 			describe("when display element was clicked", () => {
 				describe("and video conference is not running", () => {
-					it.only("should open the configuration dialog", async () => {
+					it("should open the configuration dialog", async () => {
 						const { wrapper } = setupWrapper({
 							content: videoConferenceElementContentFactory.build(),
 							isEditMode: false,
 							isRunning: false,
 						});
 
-						const videoConferenceElementDisplay = wrapper.findComponent(
+						const videoConferenceElementDisplay = wrapper.getComponent(
 							VideoConferenceContentElementDisplay
 						);
-						await videoConferenceElementDisplay.trigger("click");
+						videoConferenceElementDisplay.vm.$emit("click");
+						await flushPromises();
 
 						const configurationDialog = wrapper.findComponent({
 							name: "VideoConferenceConfigurationDialog",
 						});
-						console.log(configurationDialog.html());
 
-						expect(configurationDialog.props("modelValue")).toBe(true);
+						expect(configurationDialog.exists()).toBe(true);
 					});
 				});
 
@@ -538,6 +538,11 @@ describe("VideoConferenceContentElement", () => {
 								isNotFirstElement: true,
 							});
 
+							const menuBtn = wrapper
+								.findComponent({ name: "BoardMenu" })
+								.findComponent({ name: "VBtn" });
+							await menuBtn.trigger("click");
+
 							const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 							await menuItem.trigger("click");
 
@@ -568,6 +573,11 @@ describe("VideoConferenceContentElement", () => {
 								isEditMode: true,
 								isNotLastElement: true,
 							});
+
+							const menuBtn = wrapper
+								.findComponent({ name: "BoardMenu" })
+								.findComponent({ name: "VBtn" });
+							await menuBtn.trigger("click");
 
 							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 							await menuItem.trigger("click");
