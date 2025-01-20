@@ -1690,6 +1690,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: boolean;
 }
 /**
@@ -8278,29 +8284,11 @@ export enum SchoolUpdateBodyParamsFileStorageTypeEnum {
  */
 export interface SchoolUserListResponse {
     /**
-     * The items for the current page.
+     * 
      * @type {Array<SchoolUserResponse>}
      * @memberof SchoolUserListResponse
      */
     data: Array<SchoolUserResponse>;
-    /**
-     * The total amount of items.
-     * @type {number}
-     * @memberof SchoolUserListResponse
-     */
-    total: number;
-    /**
-     * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof SchoolUserListResponse
-     */
-    skip: number;
-    /**
-     * The page size of the response.
-     * @type {number}
-     * @memberof SchoolUserListResponse
-     */
-    limit: number;
 }
 /**
  * 
