@@ -1814,6 +1814,7 @@ export default {
 	"pages.rooms.infoAlert.welcome.visibility.help": "página de ayuda",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "comentarios",
 	"pages.rooms.leaveRoom.confirmation": 'Dejar la sala "{roomName}"?',
+	"pages.rooms.leaveRoom.menu": "Salir de la sala",
 	"pages.rooms.members.error.load":
 		"No se pudo cargar la lista de participantes.",
 	"pages.rooms.members.error.add": "Error al agregar participantes.",

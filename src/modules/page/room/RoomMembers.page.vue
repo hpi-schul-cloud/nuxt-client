@@ -17,7 +17,9 @@
 						<template #prepend>
 							<VIcon :icon="mdiLocationExit" />
 						</template>
-						<VListItemTitle> Leave Room </VListItemTitle>
+						<VListItemTitle>
+							{{ t("pages.rooms.leaveRoom.menu") }}
+						</VListItemTitle>
 					</VListItem>
 				</KebabMenu>
 			</div>

@@ -1793,6 +1793,7 @@ export default {
 	"pages.rooms.infoAlert.welcome.visibility.help": "Hilfeseite",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "Rückmeldungen",
 	"pages.rooms.leaveRoom.confirmation": 'Raum	"{roomName}" wirklich verlassen?',
+	"pages.rooms.leaveRoom.menu": "Raum verlassen",
 	"pages.rooms.members.error.load":
 		"Die Teilnehmenden-Liste konnte nicht geladen werden.",
 	"pages.rooms.members.error.add":

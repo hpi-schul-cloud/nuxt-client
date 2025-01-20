@@ -1765,6 +1765,7 @@ export default {
 	"pages.rooms.infoAlert.welcome.visibility.help": "help page",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "feedback",
 	"pages.rooms.leaveRoom.confirmation": 'Leave room "{roomName}"?',
+	"pages.rooms.leaveRoom.menu": "Leave room",
 	"pages.rooms.members.error.load": "The participant list could not be loaded.",
 	"pages.rooms.members.error.add": "Adding participants failed.",
 	"pages.rooms.members.error.remove": "Deleting participants failed.",
