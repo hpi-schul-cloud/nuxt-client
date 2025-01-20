@@ -17,6 +17,7 @@ export default {
 	"common.actions.logout": "Desconectar",
 	"common.actions.ok": "Aceptar",
 	"common.actions.pickColor": "Seleccione el color de fondo",
+	"common.actions.leave": "Dejar",
 	"common.actions.remove": "Eliminar",
 	"common.actions.rename": "Renombrar",
 	"common.actions.save": "Guardar",
@@ -1812,6 +1813,7 @@ export default {
 		"Las salas son actualmente visibles solo para los profesores y se seguirán desarrollando. Puede encontrar más información en nuestro {helpLink}. Agradecemos sus {feedbackLink} sobre el estado actual.",
 	"pages.rooms.infoAlert.welcome.visibility.help": "página de ayuda",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "comentarios",
+	"pages.rooms.leaveRoom.confirmation": 'Dejar la sala "{roomName}"?',
 	"pages.rooms.members.error.load":
 		"No se pudo cargar la lista de participantes.",
 	"pages.rooms.members.error.add": "Error al agregar participantes.",
