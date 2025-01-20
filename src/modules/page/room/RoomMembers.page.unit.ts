@@ -15,13 +15,15 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
 import { AddMembers, MembersTable } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { VueWrapper } from "@vue/test-utils";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -32,11 +34,15 @@ const mockUseRoomMembers = jest.mocked(useRoomMembers);
 
 jest.mock("@vueuse/integrations"); // mock focus trap from add members because we use mount
 
+jest.mock("@ui-confirmation-dialog");
+const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
+
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let mockRoomMemberCalls: DeepMocked<ReturnType<typeof useRoomMembers>>;
 	let wrapper: VueWrapper<InstanceType<typeof RoomMembersPage>>;
+	let askConfirmationMock: jest.Mock;
 
 	const routeRoomId = "room-id";
 
@@ -54,6 +60,15 @@ describe("RoomMembersPage", () => {
 
 		mockRoomMemberCalls = createMock<ReturnType<typeof useRoomMembers>>();
 		mockUseRoomMembers.mockReturnValue(mockRoomMemberCalls);
+
+		askConfirmationMock = jest.fn();
+		setupConfirmationComposableMock({
+			askConfirmationMock,
+		});
+		mockedUseRemoveConfirmationDialog.mockReturnValue({
+			askConfirmation: askConfirmationMock,
+			isDialogOpen: ref(false),
+		});
 	});
 
 	const buildRoom = () => {
@@ -70,9 +85,13 @@ describe("RoomMembersPage", () => {
 		return room;
 	};
 
-	const setup = (options?: { createRoom?: boolean }) => {
-		const { createRoom } = {
+	const setup = (options?: {
+		createRoom?: boolean;
+		currentUserRole?: RoleName;
+	}) => {
+		const { createRoom, currentUserRole } = {
 			createRoom: true,
+			currentUserRole: RoleName.Roomowner,
 
 			...options,
 		};
@@ -81,6 +100,12 @@ describe("RoomMembersPage", () => {
 
 		const members = roomMemberFactory(RoleName.Roomeditor).buildList(3);
 		mockRoomMemberCalls.roomMembers = ref(members);
+		mockRoomMemberCalls.currentUser = computed(() => {
+			return {
+				...members[0],
+				roleName: currentUserRole,
+			};
+		});
 
 		wrapper = mount(RoomMembersPage, {
 			attachTo: document.body,
@@ -180,6 +205,8 @@ describe("RoomMembersPage", () => {
 		it("should set the breadcrumbs and fab items", async () => {
 			const { wrapper, room } = setup();
 			const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
+			await nextTick();
+			await nextTick();
 
 			const expectedBreadcrumbs = buildBreadcrumbs(room!);
 
@@ -304,10 +331,14 @@ describe("RoomMembersPage", () => {
 				mockRoomMemberCalls.isLoading = ref(false);
 				const { wrapper } = setup();
 
-				const membersTable = wrapper.findComponent(MembersTable);
-				await membersTable.vm.$emit("remove:members");
+				askConfirmationMock.mockResolvedValue(true);
 
-				expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalled();
+				const membersTable = wrapper.findComponent(MembersTable);
+				await membersTable.vm.$emit("remove:members", ["1"]);
+
+				await nextTick();
+
+				expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalledWith(["1"]);
 			});
 		});
 	});
