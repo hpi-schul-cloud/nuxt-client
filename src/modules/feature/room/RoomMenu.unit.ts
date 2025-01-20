@@ -48,7 +48,7 @@ describe("@feature-room/RoomMenu", () => {
 
 			const menuItems = wrapper.findAllComponents({ name: "VListItem" });
 
-			expect(menuItems.length).toEqual(0);
+			expect(menuItems.length).toEqual(1);
 		});
 	});
 
@@ -61,7 +61,7 @@ describe("@feature-room/RoomMenu", () => {
 			await menuBtn.trigger("click");
 
 			const menuItems = wrapper.findAllComponents({ name: "VListItem" });
-			expect(menuItems.length).toEqual(2);
+			expect(menuItems.length).toEqual(3);
 
 			const editMenuItem = wrapper.findComponent(
 				"[data-testid=room-action-edit]"
@@ -87,7 +87,7 @@ describe("@feature-room/RoomMenu", () => {
 			await menuBtn.trigger("click");
 
 			const menuItems = wrapper.findAllComponents({ name: "VListItem" });
-			expect(menuItems.length).toEqual(1);
+			expect(menuItems.length).toEqual(2);
 
 			const editMenuItem = wrapper.findComponent(
 				"[data-testid=room-action-edit]"
@@ -114,7 +114,7 @@ describe("@feature-room/RoomMenu", () => {
 
 			const menuItems = wrapper.findAllComponents({ name: "VListItem" });
 
-			expect(menuItems.length).toEqual(3);
+			expect(menuItems.length).toEqual(4);
 		});
 	});
 
@@ -161,6 +161,20 @@ describe("@feature-room/RoomMenu", () => {
 				await editButton.trigger("click");
 
 				expect(wrapper.emitted("room:delete")).toHaveLength(1);
+			});
+		});
+
+		describe("and clicking on leave button", () => {
+			it("should emit 'room:leave' event", async () => {
+				const { wrapper, menuBtn } = setup();
+				await menuBtn.trigger("click");
+
+				const editButton = wrapper.getComponent(
+					"[data-testid=room-action-leave-room]"
+				);
+				await editButton.trigger("click");
+
+				expect(wrapper.emitted("room:leave")).toHaveLength(1);
 			});
 		});
 	});

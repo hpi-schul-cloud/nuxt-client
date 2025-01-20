@@ -46,7 +46,12 @@
 				{{ $t("common.actions.delete") }}
 			</VListItemTitle>
 		</VListItem>
-		<VListItem @click="() => $emit('room:leave')">
+		<VListItem
+			role="menuitem"
+			data-testid="room-action-leave-room"
+			:aria-label="$t('pages.rooms.leaveRoom.menu')"
+			@click="() => $emit('room:leave')"
+		>
 			<template #prepend>
 				<VIcon :icon="mdiLocationExit" />
 			</template>
