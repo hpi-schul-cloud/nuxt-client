@@ -882,7 +882,7 @@ describe("Board", () => {
 
 							expect(wrapperVM.isBoardVisible).toBe(false);
 							expect(router.replace).toHaveBeenCalledWith({
-								name: "rooms-id",
+								name: "room-details",
 								params: { id: mockRoomId },
 							});
 							expect(

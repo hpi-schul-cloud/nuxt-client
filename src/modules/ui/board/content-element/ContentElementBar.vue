@@ -15,7 +15,7 @@
 			v-if="$slots.display"
 			class="content-element-display"
 			:class="{
-				'content-element-display-listboard': hasRowStyle,
+				'content-element-display-list-board': hasRowStyle,
 			}"
 		>
 			<slot name="display" />
@@ -27,7 +27,7 @@
 			"
 			:class="{
 				'bg-surface-light': props.hasGreyBackground === true,
-				'content-element-bar-texts-listboard': hasRowStyle,
+				'content-element-bar-texts-list-board': hasRowStyle,
 			}"
 			class="content-element-bar-texts py-4"
 		>
@@ -44,9 +44,20 @@
 
 				<v-icon v-if="icon" :icon="icon" size="20" class="mr-2" />
 
-				<LineClamp class="content-element-title">
+				<LineClamp
+					class="content-element-title"
+					data-testid="content-element-title-slot"
+				>
 					<slot name="title" />
 				</LineClamp>
+
+				<div
+					v-if="$slots.statusInfo"
+					class="statusInfo"
+					data-testid="status-info-slot"
+				>
+					<slot name="statusInfo" />
+				</div>
 			</div>
 
 			<div
@@ -70,7 +81,7 @@
 
 <script setup lang="ts">
 import { PropType } from "vue";
-import LineClamp from "../LineClamp.vue";
+import { LineClamp } from "@ui-line-clamp";
 import { IconProps } from "vuetify";
 import { hasSlotContent } from "@util-vue";
 
@@ -112,11 +123,11 @@ const props = defineProps({
 	position: relative;
 }
 
-.content-element-bar-texts-listboard {
+.content-element-bar-texts-list-board {
 	flex: 0 0 67%;
 }
 
-.content-element-display-listboard {
+.content-element-display-list-board {
 	flex: 0 0 33%;
 }
 
@@ -140,5 +151,8 @@ const props = defineProps({
 .logo-container {
 	width: 24px;
 	height: 24px;
+}
+.statusInfo {
+	margin-left: auto;
 }
 </style>

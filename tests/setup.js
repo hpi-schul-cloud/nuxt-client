@@ -8,6 +8,26 @@ global.mount = mount;
 global.shallowMount = shallowMount;
 
 /**
+ * mock needed for useFocusTrap in combination with jsdom
+ * this resolves the error "Your focus-trap must have at least one container with at least one tabbable node in it at all times"
+ * @see https://github.com/focus-trap/tabbable?tab=readme-ov-file#testing-in-jsdom
+ */
+jest.mock("tabbable", () => {
+	const lib = jest.requireActual("tabbable");
+	return {
+		...lib,
+		tabbable: (node, options) =>
+			lib.tabbable(node, { ...options, displayCheck: "none" }),
+		focusable: (node, options) =>
+			lib.focusable(node, { ...options, displayCheck: "none" }),
+		isFocusable: (node, options) =>
+			lib.isFocusable(node, { ...options, displayCheck: "none" }),
+		isTabbable: (node, options) =>
+			lib.isTabbable(node, { ...options, displayCheck: "none" }),
+	};
+});
+
+/**
  * matchMedia is used by
  * - useBreakpoints from VueUse to distinguish breakpoints
  * - VProgressLinear from vuetify with ('forced-colors: active')

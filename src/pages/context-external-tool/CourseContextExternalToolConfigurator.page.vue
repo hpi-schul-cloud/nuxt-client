@@ -5,7 +5,25 @@
 		max-width="short"
 		data-testid="context-external-tool-configurator-title"
 	>
-		<RenderHTML :html="t('pages.tool.description')" component="p" />
+		<p>
+			{{ t("pages.tool.description.firstParagraph") }}
+		</p>
+		<p>
+			{{ t("pages.tool.description.secondParagraph") }}
+		</p>
+		<i18n-t
+			keypath="pages.tool.description.moreInformation"
+			scope="global"
+			tag="p"
+		>
+			<a
+				href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610"
+				target="_blank"
+				rel="noopener"
+			>
+				{{ t("pages.tool.description.moreInformation.link") }}
+			</a>
+		</i18n-t>
 		<v-spacer class="mt-10" />
 		<ContextExternalToolConfigurator
 			ref="contextExternalToolConfigurator"
@@ -30,7 +48,6 @@ import {
 	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
 } from "@/utils/inject";
-import { RenderHTML } from "@feature-render-html";
 import { computed, ComputedRef, onMounted, PropType, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";

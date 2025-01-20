@@ -58,6 +58,8 @@ export * from "./toolReferenceResponseFactory";
 export * from "./userDataResponseFactory";
 export * from "./userLoginMigration.factory";
 export * from "./userLoginMigrationResponse.factory";
+export * from "./videoConferenceElementContentFactory";
+export * from "./videoConferenceElementResponseFactory";
 export * from "./videoConferenceInfoFactory";
 export * from "./videoConferenceInfoResponseFactory";
 export * from "./videoConferenceJoinResponseFactory";

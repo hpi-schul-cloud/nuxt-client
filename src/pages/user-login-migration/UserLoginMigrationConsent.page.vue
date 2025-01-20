@@ -2,20 +2,35 @@
 	<div v-show="!isLoading" class="text-center mx-auto container-max-width">
 		<img src="@/assets/img/migration/move.svg" alt="" />
 		<h1 class="pl-4 pr-4">
-			{{ $t("pages.userMigration.title") }}
+			{{ t("pages.userMigration.title") }}
 		</h1>
 		<div>
-			<RenderHTML
-				class="pa-4"
-				data-testId="text-description"
-				:html="
-					$t(migrationDescription, {
-						targetSystem: getSystemName(),
-						startMigration: $t('pages.userMigration.button.startMigration'),
-					})
-				"
-				component="p"
-			/>
+			<div data-testId="text-description">
+				<p>
+					{{ t("pages.userMigration.description.firstParagraph.hello") }}
+					<span class="d-block">
+						{{
+							t("pages.userMigration.description.firstParagraph.changeSource")
+						}}
+					</span>
+					<span class="d-block">{{ t(migrationDescription) }}</span>
+					<span class="d-block">
+						{{
+							t("pages.userMigration.description.firstParagraph.loginWith", {
+								targetSystem: getSystemName(),
+							})
+						}}
+					</span>
+				</p>
+				<p>
+					{{
+						t("pages.userMigration.description.lastParagraph", {
+							targetSystem: getSystemName(),
+							startMigration: t("pages.userMigration.button.startMigration"),
+						})
+					}}
+				</p>
+			</div>
 			<div
 				v-if="userLoginMigration"
 				class="d-flex flex-wrap justify-center mt-8"
@@ -49,7 +64,6 @@
 </template>
 
 <script lang="ts">
-import { RenderHTML } from "@feature-render-html";
 import SystemsModule from "@/store/systems";
 import { System } from "@/store/types/system";
 import UserLoginMigrationModule from "@/store/user-login-migrations";
@@ -74,7 +88,6 @@ import { UserLoginMigration } from "@/store/user-login-migration";
 export default defineComponent({
 	name: "UserLoginMigrationConsent",
 	layout: "loggedOut",
-	components: { RenderHTML },
 	setup() {
 		const systemsModule: SystemsModule = injectStrict(SYSTEMS_MODULE_KEY);
 		const userLoginMigrationModule: UserLoginMigrationModule = injectStrict(
@@ -98,8 +111,8 @@ export default defineComponent({
 
 		const migrationDescription: ComputedRef<string> = computed(() => {
 			return userLoginMigration.value?.mandatorySince
-				? "pages.userMigration.description.fromSourceMandatory"
-				: "pages.userMigration.description.fromSource";
+				? "pages.userMigration.description.firstParagraph.fromSourceMandatory"
+				: "pages.userMigration.description.firstParagraph.fromSource";
 		});
 
 		const canSkipMigration: ComputedRef<boolean> = computed(() => {
@@ -120,6 +133,7 @@ export default defineComponent({
 			canSkipMigration,
 			getSystemName,
 			userLoginMigration,
+			t,
 		};
 	},
 });

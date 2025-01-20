@@ -27,7 +27,6 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { Router, useRouter } from "vue-router";
 import { VCardText } from "vuetify/lib/components/index.mjs";
 import ExternalToolSection from "./ExternalToolSection.vue";
@@ -78,11 +77,7 @@ describe("ExternalToolSection", () => {
 
 		const wrapper = mount(ExternalToolSection, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 
 				provide: {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
@@ -471,14 +466,16 @@ describe("ExternalToolSection", () => {
 				await deleteButton.trigger("click");
 
 				const cardText = wrapper.findComponent(VCardText);
-				const headerDialogLine = cardText.find(
+				const headerDialogLine = cardText.get(
 					'[data-testid="delete-dialog-content-header"]'
 				);
 
-				expect(headerDialogLine.exists()).toEqual(true);
-				expect(headerDialogLine.getCurrentComponent()?.props.html).toEqual(
-					"components.administration.externalToolsSection.dialog.content.header"
-				);
+				const expectedDialogHeaderText = [
+					"components.administration.externalToolsSection.dialog.content.header.firstParagraph",
+					"components.administration.externalToolsSection.dialog.content.header.secondParagraph",
+				].join("");
+
+				expect(headerDialogLine.text()).toEqual(expectedDialogHeaderText);
 			});
 
 			it("should display dialogs for course tools and boards", async () => {
@@ -537,7 +534,7 @@ describe("ExternalToolSection", () => {
 				);
 
 				expect(warningDialogLine.exists()).toEqual(true);
-				expect(warningDialogLine.getCurrentComponent()?.props.html).toEqual(
+				expect(warningDialogLine.text()).toEqual(
 					"components.administration.externalToolsSection.dialog.content.warning"
 				);
 			});

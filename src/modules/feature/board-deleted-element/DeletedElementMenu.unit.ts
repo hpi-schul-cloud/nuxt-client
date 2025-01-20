@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { BoardMenuActionDelete } from "@ui-board";
+import { KebabMenuActionDelete } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
 
@@ -29,7 +29,7 @@ describe("DeletedElementMenu", () => {
 		it("should have a menu option to delete", () => {
 			const { wrapper } = getWrapper();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -37,7 +37,7 @@ describe("DeletedElementMenu", () => {
 		it("should emit the delete event on click", async () => {
 			const { wrapper } = getWrapper();
 
-			const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
 			await menuItem.trigger("click");
 

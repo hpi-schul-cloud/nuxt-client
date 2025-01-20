@@ -3,8 +3,10 @@ import { nextTick } from "vue";
 import ClassMembersInfoBox from "./ClassMembersInfoBox.vue";
 import { useSystemApi } from "@data-system";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { createTestingVuetify } from "@@/tests/test-utils/setup";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 
 jest.mock("@data-system");
 
@@ -15,7 +17,7 @@ describe("ClassMembersInfoBox", () => {
 		const wrapper = mount(ClassMembersInfoBox, {
 			props,
 			global: {
-				plugins: [createTestingVuetify(), vueDompurifyHTMLPlugin],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
 					$t: (key: string, dynamic?: object): string =>
 						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : ""),
@@ -67,8 +69,20 @@ describe("ClassMembersInfoBox", () => {
 
 			const text = wrapper.find('[data-testid="class-members-info-box-text"]');
 
+			const expectedTextParagraphes = [
+				"firstParagraph",
+				"secondParagraph",
+				"thirdParagraph",
+			]
+				.map((text) => `pages.classMembers.infoBox.text.${text}`)
+				.join("");
+
+			const expectedTextListItems = ["first", "second", "third", "last"]
+				.map((text) => `pages.classMembers.infoBox.text.listItem.${text}`)
+				.join("");
+
 			expect(text.text()).toEqual(
-				"page-class-members.classMembersInfoBox.text"
+				expectedTextParagraphes + expectedTextListItems
 			);
 		});
 	});

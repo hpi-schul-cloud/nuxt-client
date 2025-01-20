@@ -169,6 +169,7 @@ export default {
 	"common.words.color.purple": "Purple",
 	"common.words.color.red": "Red",
 	"common.words.color.turquoise": "Turquoise",
+	"common.words.color.yellow": "Yellow",
 	"common.words.copiedToClipboard": "Copied to the clipboard",
 	"common.words.courseGroups": "Course Groups",
 	"common.words.courses": "Courses",
@@ -205,8 +206,17 @@ export default {
 	"component.cardElement.fileElement.audioPlayer.slider": "Audio slider",
 	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
 	"component.cardElement.fileElement.audioPlayer.speed": "Speed Menu",
-	"components.administration.adminMigrationSection.description":
-		'During the migration, the registration system for students and teachers is changed to moin.schule. The data belonging to the affected accounts will be preserved.<br>The migration process requires a one-time login of the students and teachers on both systems.<br><br><span class="text-red"><b>If you do not want to perform a migration in your school, <u>do not start the migration process</u>,\nplease contact the </span> <a href="{supportLink}" data-testid ="support-link">support</a></b>.<br><br>Important information about the migration process is <a href="https://blog.niedersachsen.cloud/umzug" data-testid="migration-blog-link" target="_blank">available here<a>.',
+	"components.administration.adminMigrationSection.description.firstPart":
+		"During the migration, the registration system for students and teachers is changed to moin.schule. The data belonging to the affected accounts will be preserved.",
+	"components.administration.adminMigrationSection.description.secondPart":
+		"The migration process requires a one-time login of the students and teachers on both systems.",
+	"components.administrationSection.description.support":
+		"If you do not want to perform a migration in your school, do not start the migration process, please contact the {0}.",
+	"components.administrationSection.description.support.link": "support",
+	"components.administrationSection.description.moreInformation":
+		"Important information about the migration process is {0}.",
+	"components.administrationSection.description.moreInformation.link":
+		"available here",
 	"components.administration.adminMigrationSection.enableSyncDuringMigration.label":
 		"Allow synchronization with the previous login system for classes and accounts during the migration",
 	"components.administration.adminMigrationSection.endWarningCard.agree": "Ok",
@@ -215,13 +225,33 @@ export default {
 	"components.administration.adminMigrationSection.endWarningCard.disagree":
 		"Abort",
 	"components.administration.adminMigrationSection.endWarningCard.text":
-		'Please confirm that you want to complete the user account migration to moin.schule.<br><br><span class="text-red">Warning: Completing the user account migration has the following effects:</span><br><br><ul><li>Students and teachers who switched to moin.schule can only register via moin.schule.</li><br><li>Migration is no longer possible for students and teachers.</li><br><li>Students and teachers who have not migrated can still log in as before.</li><br><li>Users who have not migrated can also log in via moin.schule, but this creates an additional, empty account in the Niedersächsische Bildungscloud.<br><span class="text-red">Automatic data transfer from the existing account to this new account is not possible.</span></li><br><li><span class="text-red">After a waiting period of {gracePeriod} days, the completion of the account migration becomes final. Subsequently, the old login system will be shut down and non-migrated accounts will be deleted.</span></li></ul><br><br> Important information on the migration process is available <a href="https://blog.niedersachsen.cloud/umzug" data-testid="end-warningcard-migration-blog-link" target="_blank">here</a>.',
+		"Please confirm that you want to complete the user account migration to moin.schule.",
+	"components.administration.adminMigrationSection.endWarningCard.text.warning":
+		"Warning: Completing the user account migration has the following effects:",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.firstElement":
+		"Students and teachers who switched to moin.schule can only register via moin.schule.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.secondElement":
+		"Migration is no longer possible for students and teachers.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.thirdElement":
+		"Students and teachers who have not migrated can still log in as before.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement":
+		"Users who have not migrated can also log in via moin.schule, but this creates an additional, empty account in the Niedersächsische Bildungscloud.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.fourthElement.warning":
+		"Automatic data transfer from the existing account to this new account is not possible.",
+	"components.administration.adminMigrationSection.endWarningCard.text.list.lastElement":
+		"After a waiting period of {gracePeriod} days, the completion of the account migration becomes final. Subsequently, the old login system will be shut down and non-migrated accounts will be deleted.",
 	"components.administration.adminMigrationSection.endWarningCard.title":
 		"Do you really want to complete the user account migration to moin.schule now?",
 	"components.administration.adminMigrationSection.headers":
 		"Account migration to moin.schule",
-	"components.administration.adminMigrationSection.infoText":
-		'Please check that the official school number entered in the Niedersächsische Bildungscloud is correct.<br><br> Only start the migration to moin.schule after you have ensured that the official school number is correct.<br><br> You cannot use the school number entered change independently. If the school number needs to be corrected, please contact <a href="mailto:nbc-support{\'@\'}netz-21.de?subject=Schulnummer%20nicht%20korrekt">Support<a>.<br><br><span class="text-red">The start of the migration confirms that the entered school number is correct.<span>',
+	"components.administration.adminMigrationSection.infoText.firstParagraph":
+		"Please check that the official school number entered in the Niedersächsische Bildungscloud is correct.",
+	"components.administration.adminMigrationSection.infoText.secondParagraph":
+		"Only start the migration to moin.schule after you have ensured that the official school number is correct.",
+	"components.administration.adminMigrationSection.infoText.thirdParagraph":
+		"You cannot change the school number entered independently. If the school number needs to be corrected, please contact {0}.",
+	"components.administration.adminMigrationSection.infoText.fourthParagraph":
+		"The start of the migration confirms that the entered school number is correct.",
 	"components.administration.adminMigrationSection.mandatorySwitch.label":
 		"Migration mandatory",
 	"components.administration.adminMigrationSection.migrationActive":
@@ -238,10 +268,12 @@ export default {
 		"If you cancel the execution of the migration wizard now, the account links made in the current session will be reset. Do you really want to cancel the wizard now?",
 	"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title":
 		"Are you sure you want to cancel the migration?",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.text":
-		"The account migration was completed on {date} at {time}.<br>The waiting period after completion of the migration finally ends on {finishDate} at {finishTime}!",
-	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete":
-		"The account migration was completed on {date} at {time}.<br>The waiting period has expired. Migration was finally completed on {finishDate} at {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.firstParagraph":
+		"The account migration was completed on {date} at {time}.",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.text.secondParagraph":
+		"The waiting period after completion of the migration finally ends on {finishDate} at {finishTime}!",
+	"components.administration.adminMigrationSection.oauthMigrationFinished.textComplete.secondParagraph":
+		"The waiting period has expired. Migration was finally completed on {finishDate} at {finishTime}!",
 	"components.administration.adminMigrationSection.showOutdatedUsers.description":
 		"Outdated student and teacher accounts are displayed in the corresponding selection lists when users are assigned to classes, courses and teams.",
 	"components.administration.adminMigrationSection.showOutdatedUsers.label":
@@ -256,20 +288,28 @@ export default {
 		"Do you really want to start the account migration to moin.schule now?",
 	"components.administration.adminMigrationSection.clearAutoMatchesDialog.title":
 		"Are you sure you want to remove the accounts links that are found automatically?",
-	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description":
-		"The migration assistant had automatically found account links based on the usernames.<br><br>Do you want to remove the accounts links that are found automatically now?",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.firstParagraph":
+		"The migration assistant had automatically found account links based on the usernames.",
+	"components.administration.adminMigrationSection.clearAutoMatchesDialog.description.secondParagraph":
+		"Do you want to remove the accounts links that are found automatically now?",
 	"components.administration.externalToolsSection.action.add":
 		"Add External Tool",
 	"components.administration.externalToolsSection.action.delete": "Delete Tool",
 	"components.administration.externalToolsSection.action.edit": "Edit Tool",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"View data sheet",
-	"components.administration.externalToolsSection.description":
-		'The school-specific parameters for the external tool are configured here. After saving the configuration, the tool will be available within the school.<br><br>\nFurther information is available in our <a href="https://docs.dbildungscloud.de/x/uoKqDg" target="_blank">Help section on external tools</a>.',
+	"components.administration.externalToolsSection.description.firstParagraph":
+		"The school-specific parameters for the external tool are configured here. After saving the configuration, the tool will be available within the school.",
+	"components.administration.externalToolsSection.description.secondParagraph":
+		"Further information is available in our {0}.",
+	"components.administration.externalToolsSection.description.secondParagraph.link":
+		"Help section on external tools",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"The usage of the tool could not be determined.",
-	"components.administration.externalToolsSection.dialog.content.header":
-		"Are you sure you want to delete the <b>{itemName}</b> tool? <br><br>Currently, the tool is used as follows:",
+	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
+		"Are you sure you want to delete the {0} tool?",
+	"components.administration.externalToolsSection.dialog.content.header.secondParagraph":
+		"Currently, the tool is used as follows:",
 	"components.administration.externalToolsSection.dialog.content.warning":
 		"Attention: If the tool is removed, it can no longer be used for this school.",
 	"components.administration.externalToolsSection.dialog.title":
@@ -351,6 +391,7 @@ export default {
 	"components.board.menu.fileElement": "File settings",
 	"components.board.menu.linkElement": "Link settings",
 	"components.board.menu.submissionElement": "Submission settings",
+	"components.board.menu.videoConferenceElement": "Video conference settings",
 	"components.board.menu.deletedElement": "Deleted content settings",
 	"components.board.notifications.errors.fileNameExists":
 		"A file with this name already exists.",
@@ -446,6 +487,9 @@ export default {
 	"components.cardElement.titleElement.validation.required":
 		"Please enter a title.",
 	"components.cardElement.titleElement": "Title element",
+	"components.cardElement.videoConferenceElement": "Video conference",
+	"components.cardElement.videoConferenceElement.label":
+		"Insert video conference title",
 	"components.cardElement.deletedElement": "Deleted content",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} not available. Please contact the school administrator.",
@@ -469,6 +513,8 @@ export default {
 	"components.elementTypeSelection.elements.submissionElement.subtitle":
 		"Submission",
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
+	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
+		"Video conference",
 	"components.externalTools.status.deactivated": "Deactivated",
 	"components.externalTools.status.incomplete": "Configuration incomplete",
 	"components.externalTools.status.latest": "Latest",
@@ -659,8 +705,10 @@ export default {
 		"Files under Course Files",
 	"components.molecules.shareImport.options.restrictions.infoText.etherpad":
 		"Content from Etherpads",
+	"components.molecules.shareImport.options.restrictions.infoText.whiteboard":
+		"Content from Whiteboards",
 	"components.molecules.shareImport.options.restrictions.infoText.geogebra":
-		"Geogebra IDs and",
+		"Geogebra IDs",
 	"components.molecules.shareImport.options.restrictions.infoText.courseGroups":
 		"Course groups",
 	"components.molecules.share.options.tableHeader.InfoText":
@@ -721,7 +769,7 @@ export default {
 	"components.organisms.AutoLogoutWarning.warning.remainingTime":
 		"less than one minute | one minute | {remainingTime} minutes",
 	"components.organisms.AutoLogoutWarning.warning":
-		"Attention: You will be logged out automatically in <span class='error--text'>{remainingTime}</span>. Now extend your session to two hours.",
+		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
 	"components.organisms.ContentCard.report.body":
 		"Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email":
@@ -851,7 +899,7 @@ export default {
 	"feature-course-sync.GroupSelectionDialog.title": "Select user group",
 	"feature-course-sync.GroupSelectionDialog.selection.label": "Group selection",
 	"feature-course-sync.GroupSelectionDialog.noTeacher":
-		"The following data for creating a new course is not available in the user group {groupName}:<li>Teacher</li><br/>Please check in moin.schule and start course creation again.",
+		"The following data for creating a new course is not available in the user group {groupName}: {teacher} Please check in moin.schule and start course creation again.",
 	"feature-course-sync.StartNewCourseSyncDialog.text":
 		"In the next step, the selected user group will be synchronized with the newly created course.",
 	"feature-course-sync.StartExistingCourseSyncDialog.text":
@@ -915,8 +963,21 @@ export default {
 	"mixins.typeMeta.types.image": "Image",
 	"mixins.typeMeta.types.video": "Video",
 	"mixins.typeMeta.types.webpage": "Website",
-	"page-class-members.classMembersInfoBox.text":
-		"<p>A declaration of consent does <b>not</b> need to be obtained when registering students. The use of the Niedersächsischen Bildungscloud is regulated in the Lower Saxony Schools Act (Section 31 Para. 5 NSchG).<br><br>If the school obtains or receives the user's data via an external system, no further steps are necessary in the cloud. Registration takes place via the external system.<br><br>Otherwise, invitations to register can be sent via link via the administration area of the cloud:<br><ul><li>Sending registration links to the stored email addresses (also possible to create directly when importing)</li><li>Print registration links as QR print sheets, cut them out and distribute QR slips to students</li><li>Select one or more users, e.g. all students in a class , and then carry out the desired action</li><li>Alternatively possible: Switch to edit mode of the user profile and retrieve the individual registration link directly in order to send it manually</li></ul></p>",
+	"pages.classMembers.infoBox.text.firstParagraph":
+		"A declaration of consent does {0} need to be obtained when registering students. The use of the Niedersächsischen Bildungscloud is regulated in the Lower Saxony Schools Act (Section 31 Para. 5 NSchG).",
+	"pages.classMembers.infoBox.text.firstParagraph.bold": "not",
+	"pages.classMembers.infoBox.text.secondParagraph":
+		"If the school obtains or receives the user's data via an external system, no further steps are necessary in the cloud. Registration takes place via the external system.",
+	"pages.classMembers.infoBox.text.thirdParagraph":
+		"Otherwise, invitations to register can be sent via link via the administration area of the cloud:",
+	"pages.classMembers.infoBox.text.listItem.first":
+		"Sending registration links to the stored email addresses (also possible to create directly when importing)",
+	"pages.classMembers.infoBox.text.listItem.second":
+		"Print registration links as QR print sheets, cut them out and distribute QR slips to students",
+	"pages.classMembers.infoBox.text.listItem.third":
+		"Select one or more users, e.g. all students in a class, and then carry out the desired action",
+	"pages.classMembers.infoBox.text.listItem.last":
+		"Alternatively possible: Switch to edit mode of the user profile and retrieve the individual registration link directly in order to send it manually",
 	"page-class-members.classMembersInfoBox.title":
 		"Students are not yet in the Niedersächsischen Bildungscloud?",
 	"page-class-members.systemInfoText":
@@ -934,7 +995,7 @@ export default {
 		"Move class to the next school year",
 	"pages.administration.classes.delete": "Delete class",
 	"pages.administration.classes.deleteDialog.content":
-		'Are you sure you want to delete class "<i>{itemName}<i>"?',
+		'Are you sure you want to delete class "{itemName}"?',
 	"pages.administration.classes.deleteDialog.title": "Delete class?",
 	"pages.administration.classes.edit": "Edit class",
 	"pages.administration.common.hint":
@@ -947,7 +1008,7 @@ export default {
 	"pages.administration.classes.header.sync": "Synchronized with",
 	"pages.administration.courses.delete": "Delete course",
 	"pages.administration.courses.deleteDialog.content":
-		'Do you really want this course "<i>{itemName}</i>" to delete?',
+		'Do you really want this course "{itemName}" to delete?',
 	"pages.administration.courses.index.add": "Add course",
 
 	"pages.administration.courses.edit": "Edit course",
@@ -965,7 +1026,7 @@ export default {
 	"pages.administration.ldap.activate.migrateExistingUsers.error":
 		"An error occured. The migration assistant could not be activated. The LDAP system was not activated either. Please try again. If this problem persists, please contact support.",
 	"pages.administration.ldap.activate.migrateExistingUsers.info":
-		"If you have already manually created users that are to be managed via LDAP in the future, you can use the migration wizard.<br> The wizard links LDAP users with existing users. You can adjust the linking and must confirm it before the linking becomes active. Only then can users log on via the LDAP. <br>If the LDAP system is activated without the migration wizard, all users are imported from the LDAP. It is no longer possible to subsequently link users.",
+		"If you have already manually created users that are to be managed via LDAP in the future, you can use the migration wizard. The wizard links LDAP users with existing users. You can adjust the linking and must confirm it before the linking becomes active. Only then can users log on via the LDAP. If the LDAP system is activated without the migration wizard, all users are imported from the LDAP. It is no longer possible to subsequently link users.",
 	"pages.administration.ldap.activate.migrateExistingUsers.title":
 		"Migrate existing user accounts",
 	"pages.administration.ldap.activate.ok": "Ok",
@@ -1105,6 +1166,8 @@ export default {
 		"Saving the accounts link...",
 	"pages.administration.migration.startUserMigration":
 		"Start accounts migration",
+	"pages.administration.migration.matchByPreferredName":
+		"Prefer nicknames for automatic account linking",
 	"pages.administration.migration.step1": "Introduction",
 	"pages.administration.migration.step2": "Preparation",
 	"pages.administration.migration.step3": "Summary",
@@ -1140,10 +1203,16 @@ export default {
 	"pages.administration.migration.step5.syncReady2":
 		"With the next sync run, all data from the {source} is transferred to the {instance}.",
 	"pages.administration.migration.step5": "Finish",
-	"pages.administration.migration.summary":
-		"<p>The following assignments were made:</p><br><p><b>{importUsersCount}</b> {source}-user accounts have a {instance} user account assigned. These user accounts will be migrated to {source}.</p><p> <b>{importUsersUnmatchedCount}</b> {source}-user accounts have no associated {instance} user account. </p>  <p> <b>{usersUnmatchedCount}</b> {instance} user accounts were not assigned any {source}-accounts. The {instance} accounts are retained and can be subsequently deleted via the administration page (or contact user support).</p>",
-	"pages.administration.migration.summary.nbc":
-		"<p>The following assignments were made:</p><br><p><b>{importUsersCount}</b> {source}-user accounts have a {instance} user account assigned. These user accounts will be migrated to {source}.</p><p> <b>{importUsersUnmatchedCount}</b> {source}-user accounts have no associated {instance} user account. </p>  <p>The {instance} user accounts that were not migrated to {source} are retained and can be migrated at a later date or subsequently deleted in administration.</p>",
+	"pages.administration.migration.summary.firstParagraph":
+		"The following assignments were made:",
+	"pages.administration.migration.summary.secondParagraph.importUsersCount":
+		"{source}-user accounts have a {instance} user account assigned. These user accounts will be migrated to {source}.",
+	"pages.administration.migration.summary.thirdParagraph.importUsersUnmatchedCount":
+		"{source}-user accounts have no associated {instance} user account.",
+	"pages.administration.migration.summary.lastParagraph.usersUnmatchedCount":
+		"{instance} user accounts were not assigned any {source}-accounts. The {instance} accounts are retained and can be subsequently deleted via the administration page (or contact user support).",
+	"pages.administration.migration.summary.lastParagraph.nbc":
+		"The {instance} user accounts that were not migrated to {source} are retained and can be migrated at a later date or subsequently deleted in administration.",
 	"pages.administration.migration.title": "Migrate user accounts",
 	"pages.administration.migration.tutorialWait":
 		"Please note, once the school migration process starts, it can take up to 1 hour to fetch the data. After this, you will be able to continue to the next step.",
@@ -1473,6 +1542,14 @@ export default {
 	"pages.administration.teachers.new.success": "Teacher successfully created!",
 	"pages.administration.teachers.new.title": "Add teacher",
 	"pages.administration.teachers.table.edit.ariaLabel": "Edit teacher",
+	"pages.common.tools.configureVideoconferenceDialog.title":
+		"Create video conference",
+	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
+		"Moderation rights for all participants",
+	"pages.common.tools.configureVideoconferenceDialog.text.mute":
+		"Mute participants on entering",
+	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
+		"Activate waiting room for participants",
 	"pages.content._id.addToTopic": "To be added to",
 	"pages.content._id.collection.selectElements":
 		"Select the items you want to add to the topic",
@@ -1482,21 +1559,40 @@ export default {
 	"pages.content._id.metadata.provider": "Publisher",
 	"pages.content._id.metadata.updatedAt": "Last modified on",
 	"pages.content.card.collection": "Collection",
-	"pages.content.empty_state.error.img_alt": "empty-state-image",
-	"pages.content.empty_state.error.message":
-		"<span><p>The search query should contain at least 2 characters.<br>Check if all words are spelled correctly.<br>Try out other search queries.<br>Try out more common queries.<br>Try to use a shorter query.</p></span>",
-	"pages.content.empty_state.error.subtitle": "Suggestion:",
-	"pages.content.empty_state.error.title": "Whoops, no results!",
+	"pages.content.emptyState.error.message.suggestions": "Suggestion:",
+	"pages.content.emptyState.error.message.suggestions.moreThanOneCharacter":
+		"The search query should contain at least 2 characters.",
+	"pages.content.emptyState.error.message.suggestions.correctSpelling":
+		"Check if all words are spelled correctly.",
+	"pages.content.emptyState.error.message.suggestions.otherSearchTerms":
+		"Try out other search queries.",
+	"pages.content.emptyState.error.message.suggestions.generalSearchTerms":
+		"Try out more common queries.",
+	"pages.content.emptyState.error.message.suggestions.lessSearchTerms":
+		"Try to use a shorter query.",
+	"pages.content.emptyState.error.title": "Whoops, no results!",
 	"pages.content.index.backToCourse": "Back to the Course",
 	"pages.content.index.backToOverview": "Back to Overview",
 	"pages.content.index.search_for": "Search for...",
 	"pages.content.index.search_resources": "Resources",
 	"pages.content.index.search_results": "Search results for",
 	"pages.content.index.search.placeholder": "Search Learning store",
-	"pages.content.init_state.img_alt": "Initial state Image",
-	"pages.content.init_state.message":
-		"Here you find high quality content adapted to your federal state.<br>Our team is constantly developing new materials to further improve your learning experience.<br><br>Note:<br><br>The materials displayed in the Learning Store are not located on our server, but are made available via interfaces to other servers (sources include individual educational servers, WirLernenOnline, Mundo, etc.). For this reason, our team has no influence on the permanent availability of individual materials and on the full range of materials offered by the individual sources.<br><br>In the context of use in educational institutions, copying of the online media to storage media, to a private end device or to learning platforms for a closed circle of users is permitted if necessary, insofar as this is required for internal distribution and/or use.<br>After completion of the work with the respective online media, these are to be deleted from the private end devices, data carriers and learning platforms; at the latest when leaving the educational institution.<br>A fundamental publication (e.g. on the internet) of the online media or with parts of it newly produced new and/or edited works is generally not permitted or requires the consent of the rights owner.",
-	"pages.content.init_state.title": "Welcome to the Learning Store!",
+	"pages.content.initState.description":
+		"Here you find high quality content adapted to your federal state.",
+	"pages.content.initState.description.newMaterials":
+		"Our team is constantly developing new materials to further improve your learning experience.",
+	"pages.content.initState.description.hint": "Note:",
+	"pages.content.initState.description.hint.materials":
+		"The materials displayed in the Learning Store are not located on our server, but are made available via interfaces to other servers (sources include individual educational servers, WirLernenOnline, Mundo, etc.).",
+	"pages.content.initState.description.hint.availability":
+		"For this reason, our team has no influence on the permanent availability of individual materials and on the full range of materials offered by the individual sources.",
+	"pages.content.initState.description.usage":
+		"In the context of use in educational institutions, copying of the online media to storage media, to a private end device or to learning platforms for a closed circle of users is permitted if necessary, insofar as this is required for internal distribution and/or use.",
+	"pages.content.initState.description.usage.deleteHint":
+		"After completion of the work with the respective online media, these are to be deleted from the private end devices, data carriers and learning platforms; at the latest when leaving the educational institution.",
+	"pages.content.initState.description.usage.notPermitted":
+		"A fundamental publication (e.g. on the internet) of the online media or with parts of it newly produced new and/or edited works is generally not permitted or requires the consent of the rights owner.",
+	"pages.content.initState.title": "Welcome to the Learning Store!",
 	"pages.content.label.chooseACourse": "Select a course/subject",
 	"pages.content.label.chooseALessonTopic": "Choose a lesson topic",
 	"pages.content.label.deselect": "Remove",
@@ -1539,14 +1635,6 @@ export default {
 	"pages.courseRooms.tabLabel.groups": "Groups",
 	"pages.courseRooms.tabLabel.tools": "Tools",
 	"pages.courseRooms.tabLabel.toolsOld": "Tools",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.title":
-		"Create video conference {roomName}",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"All users participate as moderators",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.mute":
-		"Mute participants when entering",
-	"pages.courseRooms.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Approval by the moderator before the room can be entered",
 	"pages.files.overview.courseFiles": "Course files",
 	"pages.files.overview.favorites": "Favourites",
 	"pages.files.overview.personalFiles": "My personal files",
@@ -1640,7 +1728,7 @@ export default {
 	"pages.rooms.tools.notLicensedDialog.title":
 		"Tool “{toolName}” not activated",
 	"pages.rooms.tools.deleteDialog.content":
-		"Are you sure you want to remove the tool '<i>{itemName}</i>' from the course?",
+		"Are you sure you want to remove the tool '{itemName}' from the course?",
 	"pages.rooms.tools.deleteDialog.title": "Remove tool?",
 	"pages.rooms.tools.emptyState": "There are no tools in this course yet.",
 	"pages.rooms.tools.incomplete": "Configuration incomplete",
@@ -1667,24 +1755,33 @@ export default {
 	"pages.roomDetails.board.defaultName": "Room Board",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.rooms.fab.title": "Create room",
+	"pages.rooms.infoAlert.welcome": "Welcome to the new Rooms!",
+	"pages.rooms.infoAlert.welcome.collaboration":
+		"Rooms will combine functions from courses and teams in the future to provide more opportunities for cross-school working.",
+	"pages.rooms.infoAlert.welcome.teamsAndCourses":
+		"Teams and courses will remain until the content can be transferred to rooms.",
+	"pages.rooms.infoAlert.welcome.visibility":
+		"Rooms are currently only visible to teachers and will be further developed. Further information can be found on our {helpLink}. We look forward to receiving {feedbackLink} on the current status.",
+	"pages.rooms.infoAlert.welcome.visibility.help": "help page",
+	"pages.rooms.infoAlert.welcome.visibility.feedback": "feedback",
 	"pages.rooms.members.error.load": "The participant list could not be loaded.",
 	"pages.rooms.members.error.add": "Adding participants failed.",
 	"pages.rooms.members.error.remove": "Deleting participants failed.",
 	"pages.rooms.members.infoText":
-		"Add participants to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
+		"Add members to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
-	"pages.rooms.members.add": "Add participants",
-	"pages.rooms.members.manage": "Room Participants",
+	"pages.rooms.members.add": "Add members",
+	"pages.rooms.members.manage": "Room members",
 	"pages.rooms.members.remove.ariaLabel": "Remove {memberName} from the room",
 	"pages.rooms.members.resetSelection.ariaLabel":
-		"Reset selected participants from the list",
+		"Reset selected members from the list",
 	"pages.rooms.members.multipleRemove.ariaLabel":
-		"Remove multiple participants from the room",
+		"Remove multiple members from the room",
 	"pages.rooms.members.remove.confirmation":
 		"Remove {memberName} from the room?",
 	"pages.rooms.members.multipleRemove.confirmation":
-		"Remove selected participants from the room?",
+		"Remove selected members from the room?",
 	"pages.rooms.members.roles.editor": "Room editor",
 	"pages.rooms.members.roles.viewer": "Room viewer",
 	"pages.rooms.title": "Rooms",
@@ -1735,15 +1832,19 @@ export default {
 		"The value of a parameter does not follow the given rules. Please adjust the value accordingly.",
 	"pages.tool.apiError.tool_with_name_exists":
 		"A tool with the same name is already assigned to this course. Tool names must be unique within a course.",
-	"pages.tool.context.description":
-		'After saving the selection, the tool is available within the course.<br><br>\nMore information can be found in our <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Help section on External Tools</a>.',
 	"pages.tool.context.displayName": "Display name",
 	"pages.tool.context.displayNameDescription":
 		"The tool display name can be overridden and must be unique",
 	"pages.tool.context.title": "Adding External Tools",
 	"pages.tool.deactivate.label": "Deactivate tool at school",
-	"pages.tool.description":
-		'The course-specific parameters for the external tool are configured here. After saving the configuration, the tool is available inside the course.<br><br>\nDeleting a configuration removes the tool from the course.<br><br>\nMore information can be found in our <a href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=246055610" target="_blank">Help section on external tools</a>.',
+	"pages.tool.description.firstParagraph":
+		"The course-specific parameters for the external tool are configured here. After saving the configuration, the tool is available inside the course.",
+	"pages.tool.description.secondParagraph":
+		"Deleting a configuration removes the tool from the course.",
+	"pages.tool.description.moreInformation":
+		"More information can be found in our {0}.",
+	"pages.tool.description.moreInformation.link":
+		"Help section on external tools",
 	"pages.tool.select.label": "Tool selection / Tool-URL",
 	"pages.tool.select.description":
 		"Type the address, or use the button to paste it from the clipboard",
@@ -1755,19 +1856,33 @@ export default {
 	"pages.userMigration.backToLogin": "Return to login page",
 	"pages.userMigration.button.skip": "Not now",
 	"pages.userMigration.button.startMigration": "Start",
-	"pages.userMigration.description.fromSource":
-		'Hello!<br>Your school is currently changing the registration system.<br>You can now migrate your account to {targetSystem}.<br>After the move, you can only register here with {targetSystem}.<br><br> Press "{startMigration}" and log in with your {targetSystem} account.',
-	"pages.userMigration.description.fromSourceMandatory":
-		'Hello!<br>Your school is currently changing the registration system.<br>You must migrate your account to {targetSystem} now.<br>After the move, you can only register here with {targetSystem}.<br><br> Press "{startMigration}" and log in with your {targetSystem} account.',
-	"pages.userMigration.error.description":
-		'Unfortunately, the move of your account to {targetSystem} failed.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
-	"pages.userMigration.error.schoolNumberMismatch":
-		"Please pass on this information:<br><b>School number in {instance}: {sourceSchoolNumber}, school number in {targetSystem}: {targetSchoolNumber}</b>.",
+	"pages.userMigration.description.firstParagraph.hello": "Hello!",
+	"pages.userMigration.description.firstParagraph.changeSource":
+		"Your school is currently changing the registration system.",
+	"pages.userMigration.description.firstParagraph.fromSource":
+		"You can now migrate your account to {targetSystem}.",
+	"pages.userMigration.description.firstParagraph.fromSourceMandatory":
+		"You must migrate your account to {targetSystem} now.",
+	"pages.userMigration.description.firstParagraph.loginWith":
+		"After the move, you can only login here with {targetSystem}.",
+	"pages.userMigration.description.lastParagraph":
+		'Press "{startMigration}" and log in with your {targetSystem} account.',
+	"pages.userMigration.error.description.fail":
+		"Unfortunately, the move of your account to {targetSystem} failed.",
+	"pages.userMigration.error.description.support":
+		"Please contact the administrator or {0} directly.",
+	"pages.userMigration.error.description.support.link": "Support",
 	"pages.userMigration.error.multipleUsersFound":
-		'This moin.schule account is already linked to an account in the Niedersächsische Bildungscloud and cannot be used again for the migration.<br>Please contact the administrator or <a href="{supportLink}">Support</a> directly.',
+		"This moin.schule account is already linked to an account in the Niedersächsische Bildungscloud and cannot be used again for the migration.",
+	"pages.userMigration.error.schoolNumberMismatch.information":
+		"Please pass on this information:",
+	"pages.userMigration.error.schoolNumberMismatch.information.schoolNumber":
+		"School number in Niedersächsischen Bildungscloud: {sourceSchoolNumber}, school number in {targetSystem}: {targetSchoolNumber}",
 	"pages.userMigration.error.title": "Account move failed",
 	"pages.userMigration.success.description":
-		"The move of your account to {targetSystem} is complete.<br>Please register again now.",
+		"The move of your account to {targetSystem} is complete.",
+	"pages.userMigration.success.description.loginAgain":
+		"Please register again now.",
 	"pages.userMigration.success.login": "Login via {targetSystem}",
 	"pages.userMigration.success.title":
 		"Successful migration of your registration system",
@@ -1777,6 +1892,10 @@ export default {
 		"The video conference hasn't started yet or you don't have permission to join it.",
 	"pages.videoConference.info.notStarted":
 		"The video conference hasn't started yet.",
+	"pages.videoConference.info.notEnabledParticipants":
+		"The element is no longer available. Please contact the teacher.",
+	"pages.videoConference.info.notEnabledTeacher":
+		"The element is no longer available. Please contact the admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
 	"error.500":
 		"There are problems in the system. We are working on fixing the issue. Please try again later.",
@@ -1818,7 +1937,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
 	"feature.media-shelf.title": "Media shelf",
 	"feature.media-shelf.emptyState":
-		"There are currently no media available for use",
+		"There are currently no media available for use.",
 	"feature.media-shelf.createLine": "Add line",
 	"feature.media-shelf.line.title": "Line",
 	"feature.media-shelf.availableLine.title": "Available media",

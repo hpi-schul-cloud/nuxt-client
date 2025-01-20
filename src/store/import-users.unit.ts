@@ -385,6 +385,58 @@ describe("import-users store actions", () => {
 			});
 		});
 
+		describe("fetchTotal", () => {
+			it("should request import users which are matched", async () => {
+				mockApi = {
+					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
+				};
+				spy.mockReturnValue(
+					mockApi as unknown as serverApi.UserImportApiInterface
+				);
+
+				await importUserModule.fetchTotal();
+
+				expect(
+					mockApi.importUserControllerFindAllImportUsers
+				).toHaveBeenCalledWith(
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					undefined,
+					0,
+					1
+				);
+				expect(
+					mockApi.importUserControllerFindAllImportUsers
+				).toHaveBeenCalledTimes(1);
+				expect(importUserModule.getTotal).toEqual(3);
+			});
+
+			it("should handle buness error", async () => {
+				const error = { statusCode: "500", message: "foo" };
+				const mockApi = {
+					importUserControllerFindAllImportUsers: jest.fn(() =>
+						Promise.reject({ ...error })
+					),
+				};
+				spy.mockReturnValue(
+					mockApi as unknown as serverApi.UserImportApiInterface
+				);
+
+				await importUserModule.fetchTotal();
+
+				expect(importUserModule.getBusinessError).toStrictEqual(error);
+				expect(
+					mockApi.importUserControllerFindAllImportUsers
+				).toHaveBeenCalledTimes(1);
+			});
+		});
+
 		describe("fetchTotalMatched", () => {
 			it("should request import users which are matched", async () => {
 				mockApi = {
@@ -642,7 +694,29 @@ describe("import-users store actions", () => {
 
 					expect(
 						mockApi.importUserControllerPopulateImportUsers
-					).toHaveBeenCalledWith();
+					).toHaveBeenCalledWith(false);
+				});
+			});
+
+			describe("when fetching the data with preferred name matching", () => {
+				const setup = () => {
+					mockApi = {
+						importUserControllerPopulateImportUsers: jest.fn(),
+					};
+
+					spy.mockReturnValue(
+						mockApi as unknown as serverApi.UserImportApiInterface
+					);
+				};
+
+				it("should call the api", async () => {
+					setup();
+
+					await importUserModule.populateImportUsersFromExternalSystem(true);
+
+					expect(
+						mockApi.importUserControllerPopulateImportUsers
+					).toHaveBeenCalledWith(true);
 				});
 			});
 

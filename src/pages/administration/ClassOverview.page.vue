@@ -140,15 +140,13 @@
 				</h2>
 			</template>
 			<template #content>
-				<RenderHTML
-					class="text-md mt-2"
-					:html="
-						t('pages.administration.classes.deleteDialog.content', {
+				<p>
+					{{
+						t("pages.administration.classes.deleteDialog.content", {
 							itemName: selectedItemName,
 						})
-					"
-					component="p"
-				/>
+					}}
+				</p>
 			</template>
 		</v-custom-dialog>
 		<end-course-sync-dialog
@@ -184,7 +182,6 @@ import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import {
-	ClassRequestContext,
 	ClassSortBy,
 	SchoolYearQueryType,
 	SchulcloudTheme,
@@ -205,7 +202,6 @@ import {
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { EndCourseSyncDialog } from "@feature-course-sync";
-import { RenderHTML } from "@feature-render-html";
 import {
 	mdiAccountGroupOutline,
 	mdiArrowUp,
@@ -411,7 +407,6 @@ const onConfirmClassDeletion = async () => {
 const loadClassList = async () => {
 	await groupModule.loadClassesForSchool({
 		schoolYearQuery: schoolYearQueryType.value,
-		calledFrom: ClassRequestContext.ClassOverview,
 	});
 };
 

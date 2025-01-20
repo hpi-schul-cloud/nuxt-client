@@ -37,7 +37,6 @@
 				class="table"
 				:items-per-page="25"
 				:items-per-page-options="[5, 10, 25, 50, 100]"
-				page-text="{0}-{1} von {2}"
 				@update:options="onUpdateOptions"
 			>
 				<template #loading>
