@@ -2,7 +2,7 @@ import { BOARD_IS_LIST_LAYOUT } from "./board-injection-tokens";
 import { useBoardNotifier } from "./BoardNotifier.composable";
 import { useDragAndDrop } from "./dragAndDrop.composable";
 import {
-	EditModePermissions,
+	type EditModePermissions,
 	useCourseBoardEditMode,
 	useMediaBoardEditMode,
 	useSharedEditMode,
@@ -21,6 +21,5 @@ export {
 	useMediaBoardEditMode,
 	useDragAndDrop,
 	useInlineEditInteractionHandler,
+	EditModePermissions,
 };
-
-export { EditModePermissions };
