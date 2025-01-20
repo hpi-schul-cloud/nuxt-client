@@ -27,6 +27,22 @@ const hasVisibleOption = (
 	source: keyof PageViewOptions,
 	action: keyof Options
 ) => {
+	const defaultOptions = {
+		"selection-column": {
+			show: false,
+		},
+		"actions-column": {
+			show: false,
+		},
+		"checkbox-in-row": {
+			show: false,
+			disabled: currenUserId === user?.userId,
+		},
+		"actions-in-row": {
+			show: currenUserId !== user?.userId,
+			disabled: false,
+		},
+	};
 	const ROLES: RoomRoles = {
 		[RoleName.Roomowner]: {
 			"selection-column": {
@@ -48,6 +64,7 @@ const hasVisibleOption = (
 			},
 		},
 		[RoleName.Roomadmin]: {
+			...defaultOptions,
 			"selection-column": {
 				show: true,
 			},
@@ -57,47 +74,9 @@ const hasVisibleOption = (
 			"add-member-button": {
 				show: true,
 			},
-			"checkbox-in-row": {
-				show: false,
-				disabled: currenUserId === user?.userId,
-			},
-			"actions-in-row": {
-				show: currenUserId !== user?.userId,
-				disabled: false,
-			},
 		},
-		[RoleName.Roomeditor]: {
-			"selection-column": {
-				show: false,
-			},
-			"actions-column": {
-				show: false,
-			},
-			"checkbox-in-row": {
-				show: false,
-				disabled: currenUserId === user?.userId,
-			},
-			"actions-in-row": {
-				show: currenUserId !== user?.userId,
-				disabled: false,
-			},
-		},
-		[RoleName.Roomviewer]: {
-			"selection-column": {
-				show: false,
-			},
-			"actions-column": {
-				show: false,
-			},
-			"checkbox-in-row": {
-				show: false,
-				disabled: currenUserId === user?.userId,
-			},
-			"actions-in-row": {
-				show: currenUserId !== user?.userId,
-				disabled: false,
-			},
-		},
+		[RoleName.Roomeditor]: defaultOptions,
+		[RoleName.Roomviewer]: defaultOptions,
 	};
 	return ROLES[user?.roleName as keyof RoomRoles]?.[source]?.[action];
 };

@@ -63,6 +63,7 @@
 			/>
 		</v-dialog>
 	</DefaultWireframe>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -81,6 +82,10 @@ import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu } from "@ui-kebab-menu";
 import { useRoomMemberVisibilityOptions } from "@data-room";
+import {
+	ConfirmationDialog,
+	useConfirmationDialog,
+} from "@ui-confirmation-dialog";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -112,6 +117,7 @@ const fixedHeaderOnMobile = ref({
 	positionTop: 0,
 });
 const { y } = useElementBounding(wireframe);
+const { askConfirmation } = useConfirmationDialog();
 const { checkVisibility } = useRoomMemberVisibilityOptions(
 	currentUser.value?.userId as string
 );
@@ -140,10 +146,40 @@ const onUpdateRoleOrSchool = async (payload: {
 };
 
 const onRemoveMembers = async (memberIds: string[]) => {
-	await removeMembers(memberIds);
+	const shouldRemove = await confirmRemoval(memberIds);
+	if (shouldRemove) {
+		await removeMembers(memberIds);
+	}
+};
+
+const confirmRemoval = async (userIds: string[]) => {
+	let message = t("pages.rooms.members.multipleRemove.confirmation");
+	if (userIds.length === 1) {
+		const member = memberList.value.find(
+			(member) => member.userId === userIds[0]
+		);
+		message = t("pages.rooms.members.remove.confirmation", {
+			memberName: `${member?.firstName} ${member?.lastName}`,
+		});
+	}
+
+	const shouldRemove = await askConfirmation({
+		message,
+		confirmActionLangKey: "common.actions.remove",
+	});
+
+	return shouldRemove;
 };
 
 const onLeaveRoom = async () => {
+	const shouldLeave = await askConfirmation({
+		message: t("pages.rooms.leaveRoom.confirmation", {
+			roomName: room.value?.name,
+		}),
+		confirmActionLangKey: "common.actions.leave",
+	});
+
+	if (!shouldLeave) return;
 	await removeMembers([currentUser.value.userId]);
 	router.push("/rooms");
 };
