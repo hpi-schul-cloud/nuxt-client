@@ -18,7 +18,8 @@
 					:isFocused="isFocusedById"
 					@update:value="onUpdateTitle"
 					@blur="onEndEditMode"
-				>
+				/>
+				<div class="ml-n4 mr-n1 mb-n2">
 					<BoardMenu
 						v-if="hasDeletePermission"
 						:scope="BoardMenuScope.COLUMN"
@@ -54,7 +55,7 @@
 							@click="onDelete"
 						/>
 					</BoardMenu>
-				</BoardAnyTitleInput>
+				</div>
 			</div>
 			<VDivider aria-hidden="true" class="border-opacity-75" />
 		</div>
