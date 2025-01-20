@@ -66,7 +66,7 @@
 					tag="p"
 				>
 					<a
-						href="mailto:{{ envConfigModule.getSupportProblemEmail }}?subject=Schulnummer%20nicht%20korrekt"
+						href="mailto:{{ envConfigModule.getContactEmail }}?subject=Schulnummer%20nicht%20korrekt"
 					>
 						{{ t("components.administrationSection.description.support.link") }}
 					</a>

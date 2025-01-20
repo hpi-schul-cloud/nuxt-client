@@ -92,7 +92,7 @@
 
 <script setup lang="ts">
 import { envConfigModule } from "@/store";
-const mailAddress = envConfigModule.env.SUPPORT_PROBLEM_EMAIL_ADDRESS;
+const mailAddress = envConfigModule.env.SC_CONTACT_EMAIL;
 const isValidMailAddress = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+$/gm.test(
 	mailAddress
 );
