@@ -60,7 +60,6 @@ export const useRoomMembers = (roomId: string) => {
 					isSelectable: !checkVisibility(member, "checkbox-in-row", "disabled"),
 					displayRoomRole: roomRole[member.roomRoleName],
 					displaySchoolRole: schoolRole[member.schoolRoleName],
-					isSelectable: !checkVisibility(member, "checkbox-in-row", "disabled"),
 				};
 			});
 			isLoading.value = false;
