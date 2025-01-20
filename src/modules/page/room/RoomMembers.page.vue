@@ -128,7 +128,7 @@ useTitle(pageTitle);
 
 const onFabClick = async () => {
 	await getSchools();
-	await getPotentialMembers({ role: RoleName.Roomeditor });
+	await getPotentialMembers(RoleName.Teacher);
 	isMembersDialogOpen.value = true;
 };
 
@@ -141,10 +141,10 @@ const onAddMembers = async (memberIds: string[]) => {
 };
 
 const onUpdateRoleOrSchool = async (payload: {
-	role: RoleName;
+	schoolRole: RoleName;
 	schoolId: string;
 }) => {
-	await getPotentialMembers(payload);
+	await getPotentialMembers(payload.schoolRole, payload.schoolId);
 };
 
 const onRemoveMembers = async (memberIds: string[]) => {

@@ -26,7 +26,6 @@ export const useRoomMembers = (roomId: string) => {
 		name: schoolsModule.getSchool.name,
 	};
 	const currentUserId = authModule.getUser?.id ?? "";
-
 	const currentUser = computed(
 		() =>
 			roomMembers.value.find(
@@ -36,11 +35,15 @@ export const useRoomMembers = (roomId: string) => {
 
 	const { checkVisibility } = useRoomMemberVisibilityOptions(currentUserId);
 
-	const userRoles: Record<string, string> = {
-		[RoleName.Roomowner]: t("common.labels.teacher"),
-		[RoleName.Roomadmin]: t("common.labels.teacher"),
-		[RoleName.Roomeditor]: t("common.labels.teacher"),
-		[RoleName.Roomviewer]: t("common.labels.teacher"),
+	const roomRole: Record<string, string> = {
+		[RoleName.Roomowner]: t("pages.rooms.members.roomPermissions.owner"),
+		[RoleName.Roomadmin]: t("pages.rooms.members.roomPermissions.admin"),
+		[RoleName.Roomeditor]: t("pages.rooms.members.roomPermissions.editor"),
+		[RoleName.Roomviewer]: t("pages.rooms.members.roomPermissions.viewer"),
+	};
+
+	const schoolRole: Record<string, string> = {
+		[RoleName.Teacher]: t("common.labels.teacher"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -54,7 +57,9 @@ export const useRoomMembers = (roomId: string) => {
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
-					displayRoleName: userRoles[member.roleName],
+					isSelectable: !checkVisibility(member, "checkbox-in-row", "disabled"),
+					displayRoomRole: roomRole[member.roomRoleName],
+					displaySchoolRole: schoolRole[member.schoolRoleName],
 					isSelectable: !checkVisibility(member, "checkbox-in-row", "disabled"),
 				};
 			});
@@ -66,17 +71,12 @@ export const useRoomMembers = (roomId: string) => {
 	};
 
 	const getPotentialMembers = async (
-		payload: {
-			role: RoleName;
-			schoolId?: string;
-		} = { role: RoleName.Roomeditor, schoolId: ownSchool.id }
+		schoolRoleName: RoleName,
+		schoolId: string = ownSchool.id
 	) => {
 		try {
-			const result = (
-				await schoolApi.schoolControllerGetTeachers(
-					payload.schoolId ?? ownSchool.id
-				)
-			).data;
+			const result = (await schoolApi.schoolControllerGetTeachers(schoolId))
+				.data;
 
 			potentialRoomMembers.value = result.data
 				.map((user) => {
@@ -84,12 +84,13 @@ export const useRoomMembers = (roomId: string) => {
 						...user,
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
-						roleName: RoleName.Roomeditor,
+						schoolRoleName: RoleName.Teacher,
+						roomRoleName: RoleName.Roomadmin,
 					};
 				})
 				.filter((user) => {
 					return (
-						user.roleName === payload.role &&
+						user.schoolRoleName === schoolRoleName &&
 						!roomMembers.value.some((member) => member.userId === user.id)
 					);
 				});
@@ -122,7 +123,8 @@ export const useRoomMembers = (roomId: string) => {
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
 					...member,
-					displayRoleName: userRoles[member.roleName],
+					displayRoomRole: roomRole[member.roomRoleName],
+					displaySchoolRole: schoolRole[member.schoolRoleName],
 				}))
 			);
 		} catch (error) {

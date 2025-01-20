@@ -231,9 +231,9 @@ describe("RoomMembersPage", () => {
 				await addMemberButton.trigger("click");
 
 				expect(mockRoomMemberCalls.getSchools).toHaveBeenCalled();
-				expect(mockRoomMemberCalls.getPotentialMembers).toHaveBeenCalledWith({
-					role: RoleName.Roomeditor,
-				});
+				expect(mockRoomMemberCalls.getPotentialMembers).toHaveBeenCalledWith(
+					RoleName.Teacher
+				);
 			});
 
 			it("should open Dialog", async () => {
@@ -303,7 +303,10 @@ describe("RoomMembersPage", () => {
 					await dialog.setValue(true);
 					const addMemberComponent = dialog.getComponent(AddMembers);
 
-					await addMemberComponent.vm.$emit("update:role");
+					await addMemberComponent.vm.$emit("update:role", {
+						schoolRole: RoleName.Teacher,
+						schoolId: "school-id",
+					});
 
 					expect(mockRoomMemberCalls.getPotentialMembers).toHaveBeenCalled();
 				});

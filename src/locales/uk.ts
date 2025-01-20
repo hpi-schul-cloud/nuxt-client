@@ -1812,8 +1812,12 @@ export default {
 		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Видалити вибраних членів із кімнати?",
-	"pages.rooms.members.roles.editor": "Редактор кімнати",
-	"pages.rooms.members.roles.viewer": "Переглядач кімнати",
+	"pages.rooms.members.roomPermissions.admin": "Керувати",
+	"pages.rooms.members.roomPermissions.owner": "Володіти",
+	"pages.rooms.members.roomPermissions.editor": "Редагувати",
+	"pages.rooms.members.roomPermissions.viewer": "Читати",
+	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
+	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

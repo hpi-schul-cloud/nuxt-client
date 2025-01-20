@@ -29,6 +29,7 @@ jest.mock("@vueuse/integrations/useFocusTrap", () => {
 		useFocusTrap: jest.fn(),
 	};
 });
+
 describe("AddMembers", () => {
 	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
 	let pauseMock: jest.Mock;
@@ -106,9 +107,7 @@ describe("AddMembers", () => {
 			it("should have proper props for autoCompleteRole component", () => {
 				const { wrapper } = setup();
 
-				const roles = [
-					{ id: RoleName.Roomeditor, name: "common.labels.teacher" },
-				];
+				const roles = [{ id: RoleName.Teacher, name: "common.labels.teacher" }];
 
 				const roleComponent = wrapper.getComponent({
 					ref: "autoCompleteRole",
@@ -144,11 +143,11 @@ describe("AddMembers", () => {
 
 			expect(wrapper.emitted("update:role")).toHaveLength(1);
 			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
-				{ role: RoleName.Roomeditor, schoolId: selectedSchool },
+				{ schoolRole: RoleName.Teacher, schoolId: selectedSchool },
 			]);
 		});
 
-		it("should set the role to room editor", async () => {
+		it("should set the role to teacher", async () => {
 			const { wrapper } = setup();
 			const schoolComponent = wrapper.getComponent({
 				ref: "autoCompleteSchool",
@@ -160,7 +159,7 @@ describe("AddMembers", () => {
 				ref: "autoCompleteRole",
 			});
 
-			expect(roleComponent.props("modelValue")).toBe(RoleName.Roomeditor);
+			expect(roleComponent.props("modelValue")).toBe(RoleName.Teacher);
 		});
 
 		it("should reset selectedUsers", async () => {
@@ -182,7 +181,7 @@ describe("AddMembers", () => {
 	describe("when userRole is changed", () => {
 		it("should emit the userRole", async () => {
 			const { wrapper, roomMembersSchools } = setup();
-			const selectedRole = RoleName.Roomeditor;
+			const selectedRole = RoleName.Teacher;
 			const roleComponent = wrapper.getComponent({
 				ref: "autoCompleteRole",
 			});
@@ -191,7 +190,7 @@ describe("AddMembers", () => {
 
 			expect(wrapper.emitted("update:role")).toHaveLength(1);
 			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
-				{ role: selectedRole, schoolId: roomMembersSchools[0].id },
+				{ schoolRole: selectedRole, schoolId: roomMembersSchools[0].id },
 			]);
 		});
 
