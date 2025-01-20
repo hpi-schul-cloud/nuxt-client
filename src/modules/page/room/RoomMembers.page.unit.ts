@@ -327,18 +327,44 @@ describe("RoomMembersPage", () => {
 				expect(membersTable.exists()).toBe(false);
 			});
 
-			it("should call remove members method on @remove:members", async () => {
-				mockRoomMemberCalls.isLoading = ref(false);
-				const { wrapper } = setup();
+			describe("remove members", () => {
+				describe("when 'MembersTable' emits 'remove:members'", () => {
+					it.each([
+						{
+							description: "single member",
+							emittedIds: [1],
+							expectedMessage: "pages.rooms.members.remove.confirmation",
+						},
+						{
+							description: "multiple members",
+							emittedIds: [1, 2],
+							expectedMessage:
+								"pages.rooms.members.multipleRemove.confirmation",
+						},
+					])(
+						"should render confirmation dialog with text for $description and call removeMembers",
+						async ({ expectedMessage, emittedIds }) => {
+							mockRoomMemberCalls.isLoading = ref(false);
+							const { wrapper } = setup();
 
-				askConfirmationMock.mockResolvedValue(true);
+							askConfirmationMock.mockResolvedValue(true);
 
-				const membersTable = wrapper.findComponent(MembersTable);
-				await membersTable.vm.$emit("remove:members", ["1"]);
+							const membersTable = wrapper.findComponent(MembersTable);
 
-				await nextTick();
+							await membersTable.vm.$emit("remove:members", emittedIds);
+							await nextTick();
 
-				expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalledWith(["1"]);
+							expect(askConfirmationMock).toHaveBeenCalledWith({
+								confirmActionLangKey: "common.actions.remove",
+								message: expectedMessage,
+							});
+
+							expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalledWith(
+								emittedIds
+							);
+						}
+					);
+				});
 			});
 		});
 	});
