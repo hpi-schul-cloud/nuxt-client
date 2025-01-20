@@ -78,7 +78,7 @@ const hasVisibleOption = (
 		[RoleName.Roomeditor]: defaultOptions,
 		[RoleName.Roomviewer]: defaultOptions,
 	};
-	return ROLES[user?.roleName as keyof RoomRoles]?.[source]?.[action];
+	return ROLES[user?.roomRoleName as keyof RoomRoles]?.[source]?.[action];
 };
 
 export const useRoomMemberVisibilityOptions = (currenUserId: string) => {
