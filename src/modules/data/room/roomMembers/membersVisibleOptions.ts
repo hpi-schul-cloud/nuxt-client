@@ -1,5 +1,7 @@
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 
+const FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED = true;
+
 type Options = {
 	show: boolean;
 	disabled?: boolean;
@@ -11,6 +13,7 @@ type PageViewOptions = {
 	"add-member-button"?: Options;
 	"checkbox-in-row"?: Options;
 	"actions-in-row"?: Options;
+	"change-role-button"?: Options;
 };
 
 type RoomRoles = Pick<
@@ -42,6 +45,9 @@ const hasVisibleOption = (
 			show: currenUserId !== user?.userId,
 			disabled: false,
 		},
+		"change-role-button": {
+			show: false,
+		},
 	};
 	const ROLES: RoomRoles = {
 		[RoleName.Roomowner]: {
@@ -62,6 +68,9 @@ const hasVisibleOption = (
 				show: false,
 				disabled: false,
 			},
+			"change-role-button": {
+				show: FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED,
+			},
 		},
 		[RoleName.Roomadmin]: {
 			...defaultOptions,
@@ -73,6 +82,9 @@ const hasVisibleOption = (
 			},
 			"add-member-button": {
 				show: true,
+			},
+			"change-role-button": {
+				show: FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED,
 			},
 		},
 		[RoleName.Roomeditor]: defaultOptions,
