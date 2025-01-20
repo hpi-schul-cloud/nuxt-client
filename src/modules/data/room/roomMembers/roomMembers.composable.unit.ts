@@ -78,7 +78,7 @@ describe("useRoomMembers", () => {
 		describe("when the user is not room owner", () => {
 			it("should fetch members and map members with role names", async () => {
 				const { fetchMembers, roomMembers } = useRoomMembers(roomId);
-				const membersMock = roomMemberFactory(RoleName.Roomeditor).buildList(3);
+				const membersMock = roomMemberFactory(RoleName.Roomadmin).buildList(3);
 
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
 					mockApiResponse({
@@ -91,7 +91,8 @@ describe("useRoomMembers", () => {
 				expect(roomMembers.value).toEqual(
 					membersMock.map((member) => ({
 						...member,
-						displayRoleName: "common.labels.teacher",
+						displayRoomRole: "pages.rooms.members.roomPermissions.admin",
+						displaySchoolRole: "common.labels.teacher",
 						isSelectable: true,
 					}))
 				);
@@ -116,7 +117,8 @@ describe("useRoomMembers", () => {
 				expect(roomMembers.value).toEqual(
 					membersMock.map((member) => ({
 						...member,
-						displayRoleName: "common.labels.teacher",
+						displayRoomRole: "pages.rooms.members.roomPermissions.owner",
+						displaySchoolRole: "common.labels.teacher",
 						isSelectable: false,
 					}))
 				);
@@ -164,14 +166,15 @@ describe("useRoomMembers", () => {
 				})
 			);
 
-			await getPotentialMembers();
+			await getPotentialMembers(RoleName.Teacher);
 
 			expect(potentialRoomMembers.value).toEqual(
 				schoolTeachersList.data.map((user) => ({
 					...user,
 					userId: user.id,
 					fullName: `${user.lastName}, ${user.firstName}`,
-					roleName: RoleName.Roomeditor,
+					roomRoleName: RoleName.Roomadmin,
+					schoolRoleName: RoleName.Teacher,
 					schoolName: "Paul-Gerhardt-Gymnasium",
 				}))
 			);
@@ -203,7 +206,7 @@ describe("useRoomMembers", () => {
 				})
 			);
 
-			await getPotentialMembers();
+			await getPotentialMembers(RoleName.Teacher);
 
 			expect(potentialRoomMembers.value).toEqual([]);
 		});
@@ -214,7 +217,7 @@ describe("useRoomMembers", () => {
 			const error = new Error("Test error");
 			schoolApiMock.schoolControllerGetTeachers.mockRejectedValue(error);
 
-			await getPotentialMembers();
+			await getPotentialMembers(RoleName.Teacher);
 
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"pages.rooms.members.error.load"
@@ -277,7 +280,8 @@ describe("useRoomMembers", () => {
 			expect(roomMembers.value).toEqual([
 				{
 					...firstPotentialMember,
-					displayRoleName: "common.labels.teacher",
+					displayRoomRole: "pages.rooms.members.roomPermissions.admin",
+					displaySchoolRole: "common.labels.teacher",
 				},
 			]);
 		});
