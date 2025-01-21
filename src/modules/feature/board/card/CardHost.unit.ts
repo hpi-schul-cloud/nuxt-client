@@ -26,7 +26,11 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
 import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { KebabMenuActionDelete } from "@ui-kebab-menu";
+import {
+	KebabMenuActionDelete,
+	KebabMenuActionEdit,
+	KebabMenuActionShareLink,
+} from "@ui-kebab-menu";
 import {
 	useBoardNotifier,
 	useCourseBoardEditMode,
@@ -221,7 +225,7 @@ describe("CardHost", () => {
 				mockedBoardPermissions.hasDeletePermission = false;
 				const { wrapper } = setup();
 
-				const deleteButton = wrapper.findComponent(BoardMenuActionEdit);
+				const deleteButton = wrapper.findComponent(KebabMenuActionEdit);
 
 				expect(deleteButton.exists()).toEqual(false);
 			});
@@ -230,7 +234,7 @@ describe("CardHost", () => {
 				mockedBoardPermissions.hasDeletePermission = false;
 				const { wrapper } = setup();
 
-				const deleteButton = wrapper.findComponent(BoardMenuActionDelete);
+				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
 
 				expect(deleteButton.exists()).toEqual(false);
 			});
@@ -243,7 +247,7 @@ describe("CardHost", () => {
 				mockedBoardPermissions.hasDeletePermission = true;
 				const { wrapper, cardId } = setup();
 
-				const shareLinkButton = wrapper.findComponent(BoardMenuActionShareLink);
+				const shareLinkButton = wrapper.findComponent(KebabMenuActionShareLink);
 
 				await shareLinkButton.trigger("click");
 
