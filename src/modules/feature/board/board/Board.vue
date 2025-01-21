@@ -33,6 +33,8 @@
 								group: 'columns',
 								delayOnTouchOnly: true,
 								delay: 300,
+								touchStartThreshold: 3, // needed for sensitive touch devices
+								fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
 								ghostClass: 'sortable-drag-ghost',
 								easing: 'cubic-bezier(1, 0, 0, 1)',
 								dragClass: 'sortable-drag-board-card',
@@ -43,8 +45,6 @@
 								preventOnFilter: false,
 								forceFallback: true,
 								bubbleScroll: true,
-								fallbackTolerance: 5,
-								touchStartThreshold: 3,
 							}"
 							@end="onDropColumn"
 						>

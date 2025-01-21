@@ -24,7 +24,10 @@
 					animation: 250,
 					bubbleScroll: true,
 					direction: 'vertical',
-					delay: isTouchDetected ? 300 : 2,
+					delayOnTouchOnly: true,
+					delay: 300,
+					touchStartThreshold: 3, // needed for sensitive touch devices
+					fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
 					disabled: !hasMovePermission,
 					dragClass: 'elevation-10',
 					dragoverBubble: false,
