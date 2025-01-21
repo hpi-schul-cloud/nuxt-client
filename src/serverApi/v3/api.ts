@@ -7682,7 +7682,13 @@ export interface RoomMemberResponse {
      * @type {string}
      * @memberof RoomMemberResponse
      */
-    roleName: string;
+    roomRoleName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomMemberResponse
+     */
+    schoolRoleName: string;
     /**
      * 
      * @type {string}
@@ -8068,7 +8074,7 @@ export interface SchoolResponse {
      * @type {FederalStateResponse}
      * @memberof SchoolResponse
      */
-    federalState: FederalStateResponse;
+    federalState?: FederalStateResponse;
     /**
      * 
      * @type {CountyResponse}
@@ -8268,29 +8274,11 @@ export enum SchoolUpdateBodyParamsFileStorageTypeEnum {
  */
 export interface SchoolUserListResponse {
     /**
-     * The items for the current page.
+     * 
      * @type {Array<SchoolUserResponse>}
      * @memberof SchoolUserListResponse
      */
     data: Array<SchoolUserResponse>;
-    /**
-     * The total amount of items.
-     * @type {number}
-     * @memberof SchoolUserListResponse
-     */
-    total: number;
-    /**
-     * The amount of items skipped from the start.
-     * @type {number}
-     * @memberof SchoolUserListResponse
-     */
-    skip: number;
-    /**
-     * The page size of the response.
-     * @type {number}
-     * @memberof SchoolUserListResponse
-     */
-    limit: number;
 }
 /**
  * 
