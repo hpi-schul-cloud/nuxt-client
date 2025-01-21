@@ -63,10 +63,8 @@ export const useRoomMemberVisibilityOptions = (
 	};
 
 	const isActionInRowVisible = (user: RoomMemberResponse) => {
-		return (
-			user.userId === currentUser?.value.userId ||
-			user.roomRoleName === RoleName.Roomowner
-		);
+		if (user.roomRoleName === RoleName.Roomowner) return false;
+		return user.userId !== currentUser?.value.userId;
 	};
 
 	const isChangeRoleButtonVisible = () => {

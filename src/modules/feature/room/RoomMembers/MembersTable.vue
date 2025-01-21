@@ -50,7 +50,10 @@
 			#[`item.actions`]="{ item, index }"
 			v-if="isActionColumnVisible()"
 		>
-			<KebabMenu v-if="!isActionInRowVisible(item)">
+			<KebabMenu
+				v-if="isActionInRowVisible(item)"
+				:data-testid="`kebab-menu-${index}`"
+			>
 				<VListItem
 					v-if="isChangeRoleButtonVisible()"
 					:data-testid="`btn-change-role-${index}`"
