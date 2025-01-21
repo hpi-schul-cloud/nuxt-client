@@ -5386,17 +5386,6 @@ export enum MediaBoardColors {
 /**
  * 
  * @export
- * @enum {string}
- */
-export enum MediaBoardLayoutType {
-    Columns = 'columns',
-    List = 'list',
-    Grid = 'grid'
-}
-
-/**
- * 
- * @export
  * @interface MediaBoardResponse
  */
 export interface MediaBoardResponse {
@@ -5420,10 +5409,10 @@ export interface MediaBoardResponse {
     timestamps: TimestampsResponse;
     /**
      * 
-     * @type {MediaBoardLayoutType}
+     * @type {BoardLayout}
      * @memberof MediaBoardResponse
      */
-    layout: MediaBoardLayoutType;
+    layout: BoardLayout;
 }
 /**
  * 
@@ -7693,13 +7682,7 @@ export interface RoomMemberResponse {
      * @type {string}
      * @memberof RoomMemberResponse
      */
-    roomRoleName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof RoomMemberResponse
-     */
-    schoolRoleName: string;
+    roleName: string;
     /**
      * 
      * @type {string}
@@ -8085,7 +8068,7 @@ export interface SchoolResponse {
      * @type {FederalStateResponse}
      * @memberof SchoolResponse
      */
-    federalState?: FederalStateResponse;
+    federalState: FederalStateResponse;
     /**
      * 
      * @type {CountyResponse}

@@ -6,7 +6,7 @@ import { mount } from "@vue/test-utils";
 import KebabMenuAction from "./KebabMenuAction.vue";
 import KebabMenuActionChangeLayout from "./KebabMenuActionChangeLayout.vue";
 
-describe("BoardMenuActionChangeLayout", () => {
+describe("KebabMenuActionChangeLayout", () => {
 	const setup = () => {
 		const wrapper = mount(KebabMenuActionChangeLayout, {
 			global: {
