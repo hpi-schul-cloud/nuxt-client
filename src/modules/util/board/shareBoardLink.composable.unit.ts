@@ -92,7 +92,7 @@ describe("useShareBoardLink", () => {
 			});
 		});
 
-		describe("when the link is copied", () => {
+		describe("when the link has failed to be copied", () => {
 			it("should show a failure message", async () => {
 				const { composable, clipboardMock } = setup();
 				clipboardMock.writeText.mockRejectedValueOnce(undefined);
