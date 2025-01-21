@@ -1,27 +1,27 @@
-import {
-	roomMemberListFactory,
-	mockApiResponse,
-	roomMemberFactory,
-	roomMemberSchoolResponseFactory,
-	schoolFactory,
-	meResponseFactory,
-} from "@@/tests/test-utils";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import * as serverApi from "@/serverApi/v3/api";
-import { initializeAxios } from "@/utils/api";
-import { AxiosInstance } from "axios";
-import { useRoomMembers } from "@data-room";
-import { useI18n } from "vue-i18n";
 import {
 	RoleName,
 	RoomMemberResponse,
 	SchoolUserListResponse,
 } from "@/serverApi/v3/api";
-import { useBoardNotifier } from "@util-board";
-import { schoolsModule, authModule } from "@/store";
-import SchoolsModule from "@/store/schools";
+import { authModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
+import SchoolsModule from "@/store/schools";
+import { initializeAxios } from "@/utils/api";
+import {
+	meResponseFactory,
+	mockApiResponse,
+	roomMemberFactory,
+	roomMemberListFactory,
+	roomMemberSchoolResponseFactory,
+	schoolFactory,
+} from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { useRoomMembers } from "@data-room";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardNotifier } from "@util-board";
+import { AxiosInstance } from "axios";
+import { useI18n } from "vue-i18n";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -159,9 +159,6 @@ describe("useRoomMembers", () => {
 						schoolName: "Paul-Gerhardt-Gymnasium",
 					},
 				],
-				total: 3,
-				skip: 0,
-				limit: 3,
 			};
 			schoolApiMock.schoolControllerGetTeachers.mockResolvedValue(
 				mockApiResponse({
@@ -202,9 +199,6 @@ describe("useRoomMembers", () => {
 						schoolName: membersMock.schoolName,
 					},
 				],
-				total: 3,
-				skip: 0,
-				limit: 3,
 			};
 			schoolApiMock.schoolControllerGetTeachers.mockResolvedValue(
 				mockApiResponse({
