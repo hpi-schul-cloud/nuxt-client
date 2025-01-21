@@ -7391,6 +7391,7 @@ export enum RoleName {
     CourseAdministrator = 'courseAdministrator',
     CourseStudent = 'courseStudent',
     CourseSubstitutionTeacher = 'courseSubstitutionTeacher',
+    GroupSubstitutionTeacher = 'groupSubstitutionTeacher',
     CourseTeacher = 'courseTeacher',
     Demo = 'demo',
     DemoStudent = 'demoStudent',
@@ -7692,7 +7693,13 @@ export interface RoomMemberResponse {
      * @type {string}
      * @memberof RoomMemberResponse
      */
-    roleName: string;
+    roomRoleName: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomMemberResponse
+     */
+    schoolRoleName: string;
     /**
      * 
      * @type {string}
@@ -8078,7 +8085,7 @@ export interface SchoolResponse {
      * @type {FederalStateResponse}
      * @memberof SchoolResponse
      */
-    federalState: FederalStateResponse;
+    federalState?: FederalStateResponse;
     /**
      * 
      * @type {CountyResponse}
