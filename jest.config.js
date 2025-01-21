@@ -53,7 +53,6 @@ const config = {
 		"<rootDir>/src/mixins/**/*.js",
 		"<rootDir>/src/plugins/**/*.(js|ts)",
 		"<rootDir>/src/store/**/*.(js|ts)",
-		"<rootDir>/src/themes/**/*.vue",
 		"<rootDir>/src/utils/**/*.(js|ts)",
 		"<rootDir>/src/composables/**/*.(js|ts)",
 		"<rootDir>/src/layouts/**/*.{js,ts,vue}",
