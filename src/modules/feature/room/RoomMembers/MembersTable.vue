@@ -48,8 +48,8 @@
 	>
 		<template #[`item.actions`]="{ item, index }">
 			<v-btn
+				v-if="item.roomRoleName !== RoleName.Roomowner"
 				:data-testid="`remove-member-${index}`"
-				v-if="item.roleName !== RoleName.Roomowner"
 				size="x-small"
 				variant="text"
 				:aria-label="getRemoveAriaLabel(item)"
@@ -89,7 +89,12 @@ const props = defineProps({
 });
 const { askConfirmation } = useConfirmationDialog();
 const selectedUserIds = ref<string[]>([]);
-const emit = defineEmits(["remove:members", "select:members"]);
+
+const emit = defineEmits<{
+	(e: "remove:members", userIds: string[]): void;
+	(e: "select:members", userIds: string[]): void;
+}>();
+
 const { t } = useI18n();
 const search = ref("");
 const memberList = toRef(props, "members");
@@ -152,8 +157,12 @@ const tableHeader = [
 		key: "lastName",
 	},
 	{
-		title: t("common.labels.role"),
-		key: "displayRoleName",
+		title: t("pages.rooms.members.tableHeader.roomRole"),
+		key: "displayRoomRole",
+	},
+	{
+		title: t("pages.rooms.members.tableHeader.schoolRole"),
+		key: "displaySchoolRole",
 	},
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
 	{ title: "", key: "actions", sortable: false, width: 50 },

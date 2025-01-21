@@ -126,6 +126,7 @@ export default {
 	"common.roleName.student": "Estudiante",
 	"common.roleName.superhero": "Administrador de Schul-Cloud",
 	"common.roleName.teacher": "Profesor",
+	"common.roleName.groupSubstitutionTeacher": "Profesor suplente",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor verifique la configuración.",
 	"common.tool.information.outdated.student":
@@ -1833,6 +1834,12 @@ export default {
 		"¿Eliminar miembros seleccionados de la sala?",
 	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
+	"pages.rooms.members.roomPermissions.admin": "Administrar",
+	"pages.rooms.members.roomPermissions.owner": "Propietario",
+	"pages.rooms.members.roomPermissions.editor": "Editar",
+	"pages.rooms.members.roomPermissions.viewer": "Leer",
+	"pages.rooms.members.tableHeader.roomRole": "Permisos de la sala",
+	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
