@@ -92,18 +92,14 @@
 
 <script setup lang="ts">
 import { envConfigModule } from "@/store";
-const mailAddress = envConfigModule.env.SC_CONTACT_EMAIL;
+const contactEmail = envConfigModule.env.SC_CONTACT_EMAIL;
+const fallbackEmail = "support@dbildungscloud.de";
 const isValidMailAddress = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+$/gm.test(
-	mailAddress
+	contactEmail
 );
 
-let supportMail = "";
-let mailtoSupportMail = "#";
-
-if (isValidMailAddress) {
-	supportMail = mailAddress;
-	mailtoSupportMail = `mailto:${supportMail}`;
-}
+const supportMail = isValidMailAddress ? contactEmail : fallbackEmail;
+const mailtoSupportMail = `mailto:${supportMail}`;
 </script>
 
 <style lang="scss" scoped>
