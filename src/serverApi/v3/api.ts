@@ -7391,6 +7391,7 @@ export enum RoleName {
     CourseAdministrator = 'courseAdministrator',
     CourseStudent = 'courseStudent',
     CourseSubstitutionTeacher = 'courseSubstitutionTeacher',
+    GroupSubstitutionTeacher = 'groupSubstitutionTeacher',
     CourseTeacher = 'courseTeacher',
     Demo = 'demo',
     DemoStudent = 'demoStudent',
