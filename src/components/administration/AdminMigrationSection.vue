@@ -1,5 +1,5 @@
 <template>
-	<div v-if="!isGracePeriodExpired" data-testId="migration-control-section">
+	<div data-testId="migration-control-section">
 		<div data-testid="text-description">
 			<p class="mb-0">
 				{{
@@ -44,7 +44,7 @@
 				</a>
 			</i18n-t>
 		</div>
-		<div v-if="isStartButtonVisible">
+		<div>
 			<InfoAlert data-testid="migration-info-text">
 				<p>
 					{{
@@ -66,7 +66,9 @@
 					tag="p"
 				>
 					<a
-						href="mailto:{{ envConfigModule.getContactEmail }}?subject=Schulnummer%20nicht%20korrekt"
+						href="`mailto:${
+						envConfigModule.getContactEmail
+						}?subject=Schulnummer%20nicht%20korrekt`"
 					>
 						{{ t("components.administrationSection.description.support.link") }}
 					</a>
