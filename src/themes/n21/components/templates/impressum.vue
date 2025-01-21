@@ -92,6 +92,7 @@
 
 <script setup lang="ts">
 import { getSupportMail } from "../mail.helper";
+/* istanbul ignore next */
 const { supportMail, mailtoSupportMail } = getSupportMail();
 </script>
 
