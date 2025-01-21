@@ -159,9 +159,6 @@ describe("useRoomMembers", () => {
 						schoolName: "Paul-Gerhardt-Gymnasium",
 					},
 				],
-				total: 3,
-				skip: 0,
-				limit: 3,
 			};
 			schoolApiMock.schoolControllerGetTeachers.mockResolvedValue(
 				mockApiResponse({
@@ -202,9 +199,6 @@ describe("useRoomMembers", () => {
 						schoolName: membersMock.schoolName,
 					},
 				],
-				total: 3,
-				skip: 0,
-				limit: 3,
 			};
 			schoolApiMock.schoolControllerGetTeachers.mockResolvedValue(
 				mockApiResponse({
