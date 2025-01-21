@@ -103,7 +103,7 @@ describe("RoomMembersPage", () => {
 		mockRoomMemberCalls.currentUser = computed(() => {
 			return {
 				...members[0],
-				roleName: currentUserRole,
+				roomRoleName: currentUserRole,
 			};
 		});
 
@@ -205,8 +205,6 @@ describe("RoomMembersPage", () => {
 		it("should set the breadcrumbs and fab items", async () => {
 			const { wrapper, room } = setup();
 			const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
-			await nextTick();
-			await nextTick();
 
 			const expectedBreadcrumbs = buildBreadcrumbs(room!);
 
