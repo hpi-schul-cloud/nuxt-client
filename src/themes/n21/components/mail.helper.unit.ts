@@ -18,8 +18,8 @@ describe("getSupportMail", () => {
 		envConfigModule.setEnvs(envs);
 	};
 
-	describe("when environment variable is no valid email", () => {
-		it("should use correct values fro contactEmail and mailtocontactEmail", () => {
+	describe("when environment variable is a valid email", () => {
+		it("should use correct values from contactEmail and mailtocontactEmail", () => {
 			const envSupportEmail = "support@example.com";
 			setupEnv(envSupportEmail);
 
