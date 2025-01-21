@@ -1,113 +1,82 @@
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
+import { ComputedRef } from "vue";
 
 const FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED = true;
 
-type Options = {
-	show: boolean;
-	disabled?: boolean;
+type VisibilityOptions = {
+	isSelectionColumnVisible: boolean;
+	isActionColumnVisible: boolean;
+	isAddMemberButtonVisible: boolean;
+	isActionInRowVisible: boolean;
+	isChangeRoleButtonVisible: boolean;
 };
 
-type PageViewOptions = {
-	"selection-column": Options;
-	"actions-column": Options;
-	"add-member-button"?: Options;
-	"checkbox-in-row"?: Options;
-	"actions-in-row"?: Options;
-	"change-role-button"?: Options;
-};
-
-type RoomRoles = Pick<
-	Record<RoleName, PageViewOptions>,
+type RoomRoles =
 	| RoleName.Roomowner
 	| RoleName.Roomadmin
 	| RoleName.Roomeditor
-	| RoleName.Roomviewer
->;
+	| RoleName.Roomviewer;
 
-const hasVisibleOption = (
-	currenUserId: string,
-	user: RoomMemberResponse,
-	source: keyof PageViewOptions,
-	action: keyof Options
-) => {
-	const defaultOptions = {
-		"selection-column": {
-			show: false,
-		},
-		"actions-column": {
-			show: false,
-		},
-		"checkbox-in-row": {
-			show: false,
-			disabled: currenUserId === user?.userId,
-		},
-		"actions-in-row": {
-			show: currenUserId !== user?.userId,
-			disabled: false,
-		},
-		"change-role-button": {
-			show: false,
-		},
-	};
-	const ROLES: RoomRoles = {
-		[RoleName.Roomowner]: {
-			"selection-column": {
-				show: true,
-			},
-			"actions-column": {
-				show: true,
-			},
-			"add-member-button": {
-				show: true,
-			},
-			"checkbox-in-row": {
-				show: false,
-				disabled: true,
-			},
-			"actions-in-row": {
-				show: false,
-				disabled: false,
-			},
-			"change-role-button": {
-				show: FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED,
-			},
-		},
-		[RoleName.Roomadmin]: {
-			...defaultOptions,
-			"selection-column": {
-				show: true,
-			},
-			"actions-column": {
-				show: true,
-			},
-			"add-member-button": {
-				show: true,
-			},
-			"change-role-button": {
-				show: FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED,
-			},
-		},
-		[RoleName.Roomeditor]: defaultOptions,
-		[RoleName.Roomviewer]: defaultOptions,
-	};
-	return ROLES[user?.roomRoleName as keyof RoomRoles]?.[source]?.[action];
+const defaultOptions: VisibilityOptions = {
+	isSelectionColumnVisible: false,
+	isActionColumnVisible: false,
+	isAddMemberButtonVisible: false,
+	isActionInRowVisible: false,
+	isChangeRoleButtonVisible: false,
 };
 
-export const useRoomMemberVisibilityOptions = (currenUserId: string) => {
-	/*
-	 * Check if the current user or member in the list has the rights to see the option
-	 * @param user - user to check
-	 * @param source - source of the option
-	 * @param action - action to check
-	 * @returns boolean
-	 */
-	const checkVisibility = (
-		user: RoomMemberResponse,
-		source: keyof PageViewOptions,
-		action: keyof Options = "show"
-	) => hasVisibleOption(currenUserId, user, source, action);
+const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
+	[RoleName.Roomowner]: {
+		isSelectionColumnVisible: true,
+		isActionColumnVisible: true,
+		isActionInRowVisible: false,
+		isAddMemberButtonVisible: true,
+		isChangeRoleButtonVisible: FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED,
+	},
+	[RoleName.Roomadmin]: {
+		isSelectionColumnVisible: true,
+		isActionColumnVisible: true,
+		isAddMemberButtonVisible: true,
+		isActionInRowVisible: true,
+		isChangeRoleButtonVisible: FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED,
+	},
+	[RoleName.Roomeditor]: defaultOptions,
+	[RoleName.Roomviewer]: defaultOptions,
+};
+
+export const useRoomMemberVisibilityOptions = (
+	currentUser: ComputedRef<RoomMemberResponse>
+) => {
+	const isSelectionColumnVisible = () =>
+		roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
+			?.isSelectionColumnVisible;
+
+	const isActionColumnVisible = () =>
+		roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
+			?.isActionColumnVisible;
+
+	const isAddMemberButtonVisible = () => {
+		return roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
+			?.isAddMemberButtonVisible;
+	};
+
+	const isActionInRowVisible = (user: RoomMemberResponse) => {
+		return (
+			user.userId === currentUser?.value.userId ||
+			user.roomRoleName === RoleName.Roomowner
+		);
+	};
+
+	const isChangeRoleButtonVisible = (user: RoomMemberResponse) => {
+		return roleConfigMap[user.roomRoleName as RoomRoles]
+			.isChangeRoleButtonVisible;
+	};
 
 	return {
-		checkVisibility,
+		isSelectionColumnVisible,
+		isActionColumnVisible,
+		isAddMemberButtonVisible,
+		isActionInRowVisible,
+		isChangeRoleButtonVisible,
 	};
 };

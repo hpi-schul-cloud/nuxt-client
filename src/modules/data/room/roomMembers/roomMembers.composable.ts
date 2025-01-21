@@ -12,7 +12,6 @@ import { useI18n } from "vue-i18n";
 import { useBoardNotifier } from "@util-board";
 import { schoolsModule } from "@/store";
 import { authModule } from "@/store/store-accessor";
-import { useRoomMemberVisibilityOptions } from "@data-room";
 
 export const useRoomMembers = (roomId: string) => {
 	const roomMembers: Ref<RoomMemberResponse[]> = ref([]);
@@ -26,14 +25,11 @@ export const useRoomMembers = (roomId: string) => {
 		name: schoolsModule.getSchool.name,
 	};
 	const currentUserId = authModule.getUser?.id ?? "";
-	const currentUser = computed(
-		() =>
-			roomMembers.value.find(
-				(member) => member.userId === currentUserId
-			) as RoomMemberResponse
-	);
-
-	const { checkVisibility } = useRoomMemberVisibilityOptions(currentUserId);
+	const currentUser = computed(() => {
+		return roomMembers.value?.find(
+			(member) => member.userId === currentUserId
+		) as RoomMemberResponse;
+	});
 
 	const roomRole: Record<string, string> = {
 		[RoleName.Roomowner]: t("pages.rooms.members.roomPermissions.owner"),
@@ -57,7 +53,10 @@ export const useRoomMembers = (roomId: string) => {
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
-					isSelectable: !checkVisibility(member, "checkbox-in-row", "disabled"),
+					isSelectable: !(
+						member.userId === currentUserId ||
+						member.roomRoleName === RoleName.Roomowner
+					),
 					displayRoomRole: roomRole[member.roomRoleName],
 					displaySchoolRole: schoolRole[member.schoolRoleName],
 				};

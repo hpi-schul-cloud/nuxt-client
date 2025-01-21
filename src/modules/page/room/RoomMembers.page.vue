@@ -120,9 +120,9 @@ const fixedHeaderOnMobile = ref({
 });
 const { y } = useElementBounding(wireframe);
 const { askConfirmation } = useConfirmationDialog();
-const { checkVisibility } = useRoomMemberVisibilityOptions(
-	currentUser.value?.userId as string
-);
+
+const { isAddMemberButtonVisible } =
+	useRoomMemberVisibilityOptions(currentUser);
 
 useTitle(pageTitle);
 
@@ -190,6 +190,7 @@ onMounted(async () => {
 	if (room.value === undefined) {
 		await fetchRoom(roomId);
 	}
+
 	await fetchMembers();
 	const header = document.querySelector(".wireframe-header") as HTMLElement;
 	fixedHeaderOnMobile.value.positionTop = header.offsetHeight + y.value;
@@ -219,15 +220,13 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const fabAction = computed(() => {
-	if (checkVisibility(currentUser.value, "add-member-button")) {
-		return {
-			icon: mdiPlus,
-			title: t("pages.rooms.members.add"),
-			ariaLabel: t("pages.rooms.members.add"),
-			dataTestId: "fab-add-members",
-		};
-	}
-	return undefined;
+	if (!isAddMemberButtonVisible()) return;
+	return {
+		icon: mdiPlus,
+		title: t("pages.rooms.members.add"),
+		ariaLabel: t("pages.rooms.members.add"),
+		dataTestId: "fab-add-members",
+	};
 });
 
 const linkAriaLabel = computed(
