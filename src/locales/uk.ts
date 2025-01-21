@@ -128,6 +128,7 @@ export default {
 	"common.roleName.student": "Учень",
 	"common.roleName.superhero": "Адміністратор Schul-Cloud",
 	"common.roleName.teacher": "Викладач",
+	"common.roleName.groupSubstitutionTeacher": "Викладач на заміну",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"Конфігурація інструмента {toolName} неоновлена або неповна. Перевірте налаштування.",
 	"common.tool.information.outdated.student":
