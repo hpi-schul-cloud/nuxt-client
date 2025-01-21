@@ -1803,6 +1803,7 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте члени",
+	"pages.rooms.members.changePermission": "Змінити дозволи",
 	"pages.rooms.members.manage": "Учасник кімнати",
 	"pages.rooms.members.remove.ariaLabel": "Видалити {memberName} з кімнати",
 	"pages.rooms.members.resetSelection.ariaLabel":

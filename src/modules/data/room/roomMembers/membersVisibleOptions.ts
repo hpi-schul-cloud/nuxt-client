@@ -47,13 +47,15 @@ const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
 export const useRoomMemberVisibilityOptions = (
 	currentUser: ComputedRef<RoomMemberResponse>
 ) => {
-	const isSelectionColumnVisible = () =>
-		roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
+	const isSelectionColumnVisible = () => {
+		return roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
 			?.isSelectionColumnVisible;
+	};
 
-	const isActionColumnVisible = () =>
-		roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
+	const isActionColumnVisible = () => {
+		return roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
 			?.isActionColumnVisible;
+	};
 
 	const isAddMemberButtonVisible = () => {
 		return roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
@@ -67,9 +69,9 @@ export const useRoomMemberVisibilityOptions = (
 		);
 	};
 
-	const isChangeRoleButtonVisible = (user: RoomMemberResponse) => {
-		return roleConfigMap[user.roomRoleName as RoomRoles]
-			.isChangeRoleButtonVisible;
+	const isChangeRoleButtonVisible = () => {
+		return roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
+			?.isChangeRoleButtonVisible;
 	};
 
 	return {

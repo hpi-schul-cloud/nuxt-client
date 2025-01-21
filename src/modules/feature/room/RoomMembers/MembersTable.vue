@@ -50,13 +50,18 @@
 			#[`item.actions`]="{ item, index }"
 			v-if="isActionColumnVisible()"
 		>
-			<!-- TODO: refactor the menus based on KebabMenuAction pattern -->
 			<KebabMenu v-if="!isActionInRowVisible(item)">
-				<VListItem @click="onChangePermission(item.userId)">
+				<VListItem
+					v-if="isChangeRoleButtonVisible()"
+					:data-testid="`btn-change-role-${index}`"
+					@click="onChangePermission(item.userId)"
+				>
 					<template #prepend>
 						<VIcon :icon="mdiAccountSwitchOutline" />
 					</template>
-					<VListItemTitle> Change Permission </VListItemTitle>
+					<VListItemTitle
+						>{{ t("pages.rooms.members.changePermission") }}
+					</VListItemTitle>
 				</VListItem>
 
 				<VListItem
@@ -68,7 +73,7 @@
 					<template #prepend>
 						<VIcon :icon="mdiTrashCanOutline" />
 					</template>
-					<VListItemTitle> Remove Member </VListItemTitle>
+					<VListItemTitle> {{ t("common.actions.remove") }} </VListItemTitle>
 				</VListItem>
 			</KebabMenu>
 		</template>
@@ -78,7 +83,7 @@
 <script setup lang="ts">
 import ActionMenu from "./ActionMenu.vue";
 import { KebabMenu } from "@ui-kebab-menu";
-import { computed, PropType, Ref, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	mdiMenuDown,
@@ -123,6 +128,7 @@ const {
 	isSelectionColumnVisible,
 	isActionColumnVisible,
 	isActionInRowVisible,
+	isChangeRoleButtonVisible,
 } = useRoomMemberVisibilityOptions(currentUser);
 
 const onUpdateFilter = (filteredMembers: RoomMemberResponse[]) => {
@@ -141,25 +147,6 @@ const onResetSelectedMembers = () => {
 const onRemoveMembers = async (userIds: string[]) => {
 	emit("remove:members", userIds);
 };
-
-// const confirmRemoval = async (userIds: string[]) => {
-// 	let message = t("pages.rooms.members.multipleRemove.confirmation");
-// 	if (userIds.length === 1) {
-// 		const member = memberList.value.find(
-// 			(member) => member.userId === userIds[0]
-// 		);
-// 		message = t("pages.rooms.members.remove.confirmation", {
-// 			memberName: `${member?.firstName} ${member?.lastName}`,
-// 		});
-// 	}
-
-// 	const shouldRemove = await askConfirmation({
-// 		message,
-// 		confirmActionLangKey: "common.actions.remove",
-// 	});
-
-// 	return shouldRemove;
-// };
 
 const getRemoveAriaLabel = (member: RoomMemberResponse) =>
 	t("pages.rooms.members.remove.ariaLabel", {
