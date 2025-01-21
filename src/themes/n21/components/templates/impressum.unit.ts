@@ -14,7 +14,7 @@ describe("impressum.vue", () => {
 
 	const setup = (mail = "") => {
 		const envs = envsFactory.build({
-			SUPPORT_PROBLEM_EMAIL_ADDRESS: mail,
+			SC_CONTACT_EMAIL: mail,
 		});
 		envConfigModule.setEnvs(envs);
 
