@@ -91,9 +91,15 @@
 </template>
 
 <script setup lang="ts">
-import { getSupportMail } from "../mail.helper";
-/* istanbul ignore next */
-const { supportMail, mailtoSupportMail } = getSupportMail();
+import { envConfigModule } from "@/store";
+const contactEmail = envConfigModule.env.SC_CONTACT_EMAIL;
+const fallbackEmail = "support@dbildungscloud.de";
+const isValidMailAddress = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+$/gm.test(
+	contactEmail
+);
+
+const supportMail = isValidMailAddress ? contactEmail : fallbackEmail;
+const mailtoSupportMail = `mailto:${supportMail}`;
 </script>
 
 <style lang="scss" scoped>
