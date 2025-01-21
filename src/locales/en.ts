@@ -125,6 +125,7 @@ export default {
 	"common.roleName.student": "Student",
 	"common.roleName.superhero": "Schul-Cloud Admin",
 	"common.roleName.teacher": "Teacher",
+	"common.roleName.groupSubstitutionTeacher": "Substitute Teacher",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings.",
 	"common.tool.information.outdated.student":
@@ -1785,8 +1786,12 @@ export default {
 		"Remove {memberName} from the room?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Remove selected members from the room?",
-	"pages.rooms.members.roles.editor": "Room editor",
-	"pages.rooms.members.roles.viewer": "Room viewer",
+	"pages.rooms.members.roomPermissions.admin": "Administer",
+	"pages.rooms.members.roomPermissions.owner": "Own",
+	"pages.rooms.members.roomPermissions.editor": "Edit",
+	"pages.rooms.members.roomPermissions.viewer": "Read",
+	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
+	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
