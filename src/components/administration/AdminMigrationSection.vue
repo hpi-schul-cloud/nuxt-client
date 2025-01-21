@@ -1,5 +1,5 @@
 <template>
-	<div data-testId="migration-control-section">
+	<div v-if="!isGracePeriodExpired" data-testId="migration-control-section">
 		<div data-testid="text-description">
 			<p class="mb-0">
 				{{
@@ -44,7 +44,7 @@
 				</a>
 			</i18n-t>
 		</div>
-		<div>
+		<div v-if="isStartButtonVisible">
 			<InfoAlert data-testid="migration-info-text">
 				<p>
 					{{
