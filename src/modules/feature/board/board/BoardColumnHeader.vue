@@ -1,13 +1,13 @@
 <template>
-	<BoardColumnInteractionHandler
-		:isEditMode="isEditMode"
-		@start-edit-mode="onStartEditMode"
-		@end-edit-mode="onEndEditMode"
-		@move:column-keyboard="onMoveColumnKeyboard"
-		:id="columnId"
-	>
-		<div class="column-header mb-4 rounded" ref="columnHeader">
-			<div class="d-flex align-center py-2 pr-4 pl-2">
+	<div class="d-flex flex-wrap mb-4 mt-2" ref="columnHeader">
+		<div class="flex-1-0">
+			<BoardColumnInteractionHandler
+				:isEditMode="isEditMode"
+				@start-edit-mode="onStartEditMode"
+				@end-edit-mode="onEndEditMode"
+				@move:column-keyboard="onMoveColumnKeyboard"
+				:id="columnId"
+			>
 				<BoardAnyTitleInput
 					:value="title.trim()"
 					:data-testid="`column-title-${index}`"
@@ -19,47 +19,44 @@
 					@update:value="onUpdateTitle"
 					@blur="onEndEditMode"
 				/>
-				<div class="ml-n4 mr-n1 mb-n2">
-					<BoardMenu
-						v-if="hasDeletePermission"
-						:scope="BoardMenuScope.COLUMN"
-						:data-testid="`column-menu-btn-${index}`"
-					>
-						<KebabMenuActionRename
-							v-if="!isEditMode"
-							@click="onStartEditMode"
-						/>
-						<template v-if="isListBoard">
-							<KebabMenuActionMoveUp
-								v-if="isNotFirstColumn"
-								@click="onMoveColumnUp"
-							/>
-							<KebabMenuActionMoveDown
-								v-if="isNotLastColumn"
-								@click="onMoveColumnDown"
-							/>
-						</template>
-						<template v-else>
-							<KebabMenuActionMoveLeft
-								v-if="isNotFirstColumn"
-								@click="onMoveColumnLeft"
-							/>
-							<KebabMenuActionMoveRight
-								v-if="isNotLastColumn"
-								@click="onMoveColumnRight"
-							/>
-						</template>
-						<KebabMenuActionDelete
-							:name="title"
-							:scope="BoardMenuScope.COLUMN"
-							@click="onDelete"
-						/>
-					</BoardMenu>
-				</div>
-			</div>
-			<VDivider aria-hidden="true" class="border-opacity-75" />
+			</BoardColumnInteractionHandler>
 		</div>
-	</BoardColumnInteractionHandler>
+		<div class="mt-2 mr-3">
+			<BoardMenu
+				v-if="hasDeletePermission"
+				:scope="BoardMenuScope.COLUMN"
+				:data-testid="`column-menu-btn-${index}`"
+			>
+				<KebabMenuActionRename v-if="!isEditMode" @click="onStartEditMode" />
+				<template v-if="isListBoard">
+					<KebabMenuActionMoveUp
+						v-if="isNotFirstColumn"
+						@click="onMoveColumnUp"
+					/>
+					<KebabMenuActionMoveDown
+						v-if="isNotLastColumn"
+						@click="onMoveColumnDown"
+					/>
+				</template>
+				<template v-else>
+					<KebabMenuActionMoveLeft
+						v-if="isNotFirstColumn"
+						@click="onMoveColumnLeft"
+					/>
+					<KebabMenuActionMoveRight
+						v-if="isNotLastColumn"
+						@click="onMoveColumnRight"
+					/>
+				</template>
+				<KebabMenuActionDelete
+					:name="title"
+					:scope="BoardMenuScope.COLUMN"
+					@click="onDelete"
+				/>
+			</BoardMenu>
+		</div>
+		<VDivider role="presentation" class="flex-1-0-100 border-opacity-75" />
+	</div>
 </template>
 
 <script setup lang="ts">
@@ -153,8 +150,3 @@ const onMoveColumnUp = () => emit("move:column-up");
 
 const onUpdateTitle = (newTitle: string) => emit("update:title", newTitle);
 </script>
-<style scoped>
-.column-header {
-	align-items: top;
-}
-</style>

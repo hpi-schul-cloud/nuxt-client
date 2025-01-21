@@ -31,6 +31,7 @@
 						@update:value="onUpdateCardTitle($event, cardId)"
 						:isFocused="isFocusedById"
 						@enter="onEnter"
+						class="mx-n4 mb-n2"
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">

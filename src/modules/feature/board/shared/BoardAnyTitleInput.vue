@@ -27,7 +27,7 @@
 		:rows="1"
 		auto-grow
 		flat
-		class="title-input mx-n4 mb-n2"
+		class="title-input"
 		:placeholder="placeholderText"
 		bg-color="transparent"
 		ref="titleInput"
@@ -38,11 +38,7 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
-	>
-		<template v-slot:append-inner>
-			<slot />
-		</template>
-	</VTextarea>
+	/>
 </template>
 
 <script lang="ts">
