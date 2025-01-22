@@ -378,6 +378,7 @@ export default {
 	"components.board.action.moveLeft": "Mover a la izquierda",
 	"components.board.action.moveRight": "Mover a la derecha",
 	"components.board.action.moveUp": "Levantar",
+	"components.board.action.changeLayout": "Cambiar vista",
 	"components.board.action.shareLink.card": "Enlace a la ficha",
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
@@ -443,6 +444,8 @@ export default {
 		"El título de la tarjeta {cardPosition} en la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"Otro usuario cambió la vista del panel a {layout}.",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
