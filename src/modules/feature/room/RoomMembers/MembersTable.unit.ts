@@ -5,12 +5,15 @@ import {
 import MembersTable from "./MembersTable.vue";
 import { nextTick, ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
-import { roomMemberFactory } from "@@/tests/test-utils";
+import { envsFactory, roomMemberFactory } from "@@/tests/test-utils";
 import { DOMWrapper, flushPromises, VueWrapper } from "@vue/test-utils";
 import { VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { RoleName } from "@/serverApi/v3";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import EnvConfigModule from "@/store/env-config";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
@@ -39,11 +42,20 @@ describe("MembersTable", () => {
 	];
 
 	const setup = (options?: { currentUserRole?: RoleName }) => {
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {
+				...envsFactory.build(),
+				FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED: true,
+			},
+		});
 		const mockMembers = roomMemberFactory(RoleName.Roomadmin).buildList(3);
 		const wrapper = mount(MembersTable, {
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
 			},
 			props: {
 				members: mockMembers,

@@ -5,6 +5,7 @@ import {
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
+	envsFactory,
 } from "@@/tests/test-utils";
 import { useRoomMembers, useRoomDetailsStore } from "@data-room";
 import {
@@ -15,7 +16,7 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { computed, nextTick, ref } from "vue";
+import { computed, ref } from "vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
@@ -24,6 +25,8 @@ import { mdiPlus } from "@icons/material";
 import { VueWrapper } from "@vue/test-utils";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -96,6 +99,13 @@ describe("RoomMembersPage", () => {
 			...options,
 		};
 
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {
+				...envsFactory.build(),
+				FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED: true,
+			},
+		});
+
 		const room = createRoom ? buildRoom() : undefined;
 
 		const members = roomMemberFactory(RoleName.Roomeditor).buildList(3);
@@ -122,6 +132,9 @@ describe("RoomMembersPage", () => {
 					createTestingI18n(),
 					createTestingVuetify(),
 				],
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
 			},
 		});
 
