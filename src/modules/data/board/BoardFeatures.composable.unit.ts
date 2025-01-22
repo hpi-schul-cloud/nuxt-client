@@ -18,17 +18,21 @@ describe("useBoardFeatures", () => {
 		return mountComposable(() => useBoardFeatures(), {});
 	};
 
-	it("should determine if a feature is enabled", () => {
-		const { isFeatureEnabled } = setup([BoardFeature.Videoconference]);
+	describe("when feature is enabled", () => {
+		it("should return true", () => {
+			const { isFeatureEnabled } = setup([BoardFeature.Videoconference]);
 
-		const result = isFeatureEnabled(BoardFeature.Videoconference);
-		expect(result).toBe(true);
+			const result = isFeatureEnabled(BoardFeature.Videoconference);
+			expect(result).toBe(true);
+		});
 	});
 
-	it("should return false when no features are present", () => {
-		const { isFeatureEnabled } = setup([]);
+	describe("when no feature is present", () => {
+		it("should return false", () => {
+			const { isFeatureEnabled } = setup([]);
 
-		const result = isFeatureEnabled(BoardFeature.Videoconference);
-		expect(result).toBe(false);
+			const result = isFeatureEnabled(BoardFeature.Videoconference);
+			expect(result).toBe(false);
+		});
 	});
 });

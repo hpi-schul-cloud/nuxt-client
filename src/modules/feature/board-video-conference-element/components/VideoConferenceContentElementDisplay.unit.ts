@@ -75,47 +75,51 @@ describe("VideoConferenceContentElementDisplay", () => {
 	});
 
 	describe("Alerts", () => {
-		describe("and the feature is disabled", () => {
-			it("should show 'not enabled for teacher' alert when for course parent", () => {
-				const wrapper = setupWrapper({
-					propsData: {
-						boardParentType: BoardContextType.Course,
-						isRunning: false,
-						isVideoConferenceEnabled: false,
-						hasParticipationPermission: true,
-						canStart: true,
-						title: "video conference",
-					},
-				});
+		describe("when the feature is disabled", () => {
+			describe("and the elements parent is a course", () => {
+				it("should show 'not enabled for teacher' alert", () => {
+					const wrapper = setupWrapper({
+						propsData: {
+							boardParentType: BoardContextType.Course,
+							isRunning: false,
+							isVideoConferenceEnabled: false,
+							hasParticipationPermission: true,
+							canStart: true,
+							title: "video conference",
+						},
+					});
 
-				const alert = wrapper.findComponent(
-					'[data-testid="vc-info-box-no-feature"]'
-				);
-				const text = alert.find("span.my-auto");
-				expect(text.text()).toEqual(
-					"pages.videoConference.info.courseParent.notEnabledTeacher"
-				);
+					const alert = wrapper.findComponent(
+						'[data-testid="vc-info-box-no-feature"]'
+					);
+					const text = alert.find("span.my-auto");
+					expect(text.text()).toEqual(
+						"pages.videoConference.info.courseParent.notEnabledTeacher"
+					);
+				});
 			});
 
-			it("should show 'not enabled for teacher' alert when for room parent", () => {
-				const wrapper = setupWrapper({
-					propsData: {
-						boardParentType: BoardContextType.Room,
-						isRunning: false,
-						isVideoConferenceEnabled: false,
-						hasParticipationPermission: true,
-						canStart: true,
-						title: "video conference",
-					},
-				});
+			describe("and the elements parent is a room", () => {
+				it("should show 'not enabled for teacher' alert", () => {
+					const wrapper = setupWrapper({
+						propsData: {
+							boardParentType: BoardContextType.Room,
+							isRunning: false,
+							isVideoConferenceEnabled: false,
+							hasParticipationPermission: true,
+							canStart: true,
+							title: "video conference",
+						},
+					});
 
-				const alert = wrapper.findComponent(
-					'[data-testid="vc-info-box-no-feature"]'
-				);
-				const text = alert.find("span.my-auto");
-				expect(text.text()).toEqual(
-					"pages.videoConference.info.roomParent.notEnabledTeacher"
-				);
+					const alert = wrapper.findComponent(
+						'[data-testid="vc-info-box-no-feature"]'
+					);
+					const text = alert.find("span.my-auto");
+					expect(text.text()).toEqual(
+						"pages.videoConference.info.roomParent.notEnabledTeacher"
+					);
+				});
 			});
 		});
 
