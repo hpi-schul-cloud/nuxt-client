@@ -125,6 +125,7 @@ export default {
 	"common.roleName.student": "Student",
 	"common.roleName.superhero": "Schul-Cloud Admin",
 	"common.roleName.teacher": "Teacher",
+	"common.roleName.groupSubstitutionTeacher": "Substitute Teacher",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings.",
 	"common.tool.information.outdated.student":
@@ -170,6 +171,9 @@ export default {
 	"common.words.color.turquoise": "Turquoise",
 	"common.words.color.yellow": "Yellow",
 	"common.words.copiedToClipboard": "Copied to the clipboard",
+	"common.words.copyLinkToClipboard.success": "Link copied to clipboard",
+	"common.words.copyLinkToClipboard.failure":
+		"Link could not be copied to clipboard",
 	"common.words.courseGroups": "Course Groups",
 	"common.words.courses": "Courses",
 	"common.words.draft": "draft",
@@ -369,6 +373,7 @@ export default {
 	"components.board.action.moveLeft": "Move left",
 	"components.board.action.moveRight": "Move right",
 	"components.board.action.moveUp": "Move up",
+	"components.board.action.shareLink.card": "Copy link to card",
 	"components.board.alert.info.teacher":
 		"This board is visible to all course participants.",
 	"components.board.alert.info.draft":
