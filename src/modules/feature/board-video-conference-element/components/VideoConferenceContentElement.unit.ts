@@ -270,7 +270,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				describe("when element is first element", () => {
-					describe("when move up menu item is clicked", () => {
+					describe("and move up menu item is clicked", () => {
 						it("should emit 'move-up:edit' event", async () => {
 							const videoConferenceElementContent =
 								videoConferenceElementContentFactory.build();
@@ -288,7 +288,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				describe("when element is not first element", () => {
-					describe("when move up menu item is clicked", () => {
+					describe("and move up menu item is clicked", () => {
 						it("should emit 'move-up:edit' event", async () => {
 							const videoConferenceElementContent =
 								videoConferenceElementContentFactory.build();
@@ -312,7 +312,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				describe("when element is last element", () => {
-					describe("when move down menu item is clicked", () => {
+					describe("and move down menu item is clicked", () => {
 						it("should emit 'move-down:edit' event ", async () => {
 							const videoConferenceElementContent =
 								videoConferenceElementContentFactory.build();
@@ -531,7 +531,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				describe("and element is not first element", () => {
-					describe("when move up menu item is clicked", () => {
+					describe("and move up menu item is clicked", () => {
 						it("should emit 'move-up:edit' event", async () => {
 							const { wrapper } = setupWrapper({
 								isEditMode: true,
@@ -552,7 +552,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				describe("and element is last element", () => {
-					describe("when move down menu item is clicked", () => {
+					describe("and move down menu item is clicked", () => {
 						it("should emit 'move-down:edit' event", async () => {
 							const { wrapper } = setupWrapper({
 								isEditMode: true,
@@ -567,7 +567,7 @@ describe("VideoConferenceContentElement", () => {
 				});
 
 				describe("and element is not last element", () => {
-					describe("when move down menu item is clicked", () => {
+					describe("and move down menu item is clicked", () => {
 						it("should emit 'move-down:edit' event", async () => {
 							const { wrapper } = setupWrapper({
 								isEditMode: true,
