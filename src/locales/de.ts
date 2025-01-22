@@ -170,6 +170,10 @@ export default {
 	"common.words.color.turquoise": "Türkis",
 	"common.words.color.yellow": "Gelb",
 	"common.words.copiedToClipboard": "In die Zwischenablage kopiert",
+	"common.words.copyLinkToClipboard.success":
+		"Link in die Zwischenablage kopiert",
+	"common.words.copyLinkToClipboard.failure":
+		"Link konnte nicht in die Zwischenablage kopiert werden",
 	"common.words.courseGroups": "Kursgruppen",
 	"common.words.courses": "Kurse",
 	"common.words.draft": "Entwurf",
@@ -372,6 +376,7 @@ export default {
 	"components.board.action.moveRight": "Nach rechts verschieben",
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.action.changeLayout": "Ansicht ändern",
+	"components.board.action.shareLink.card": "Link zur Karte kopieren",
 	"components.board.alert.info.teacher":
 		"Dieser Bereich ist sichtbar für alle Kursteilnehmenden.",
 	"components.board.alert.info.draft":

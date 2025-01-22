@@ -173,6 +173,9 @@ export default {
 	"common.words.color.turquoise": "Turquesa",
 	"common.words.color.yellow": "Amarillo",
 	"common.words.copiedToClipboard": "Copiado en el portapapeles",
+	"common.words.copyLinkToClipboard.success": "Enlace copiado al portapapeles",
+	"common.words.copyLinkToClipboard.failure":
+		"El enlace no se pudo copiar al portapapeles",
 	"common.words.courseGroups": "grupos de cursos",
 	"common.words.courses": "Cursos",
 	"common.words.draft": "borrador",
@@ -376,6 +379,7 @@ export default {
 	"components.board.action.moveRight": "Mover a la derecha",
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.changeLayout": "Cambiar vista",
+	"components.board.action.shareLink.card": "Enlace a la ficha",
 	"components.board.alert.info.teacher":
 		"Este tablero es visible para todos los participantes en el curso.",
 	"components.board.alert.info.draft":

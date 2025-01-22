@@ -12,6 +12,7 @@ import KebabMenuActionPublish from "./KebabMenuActionPublish.vue";
 import KebabMenuActionRename from "./KebabMenuActionRename.vue";
 import KebabMenuActionRevert from "./KebabMenuActionRevert.vue";
 import KebabMenuActionShare from "./KebabMenuActionShare.vue";
+import KebabMenuActionShareLink from "./KebabMenuActionShareLink.vue";
 
 export {
 	KebabMenu,
@@ -28,4 +29,5 @@ export {
 	KebabMenuActionShare,
 	KebabMenuActionRename,
 	KebabMenuActionChangeLayout,
+	KebabMenuActionShareLink,
 };

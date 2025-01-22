@@ -170,7 +170,9 @@ describe("Board", () => {
 		});
 		mockExtractDataAttribute.mockReturnValue("column-id");
 
-		route = createMock<ReturnType<typeof useRoute>>();
+		route = createMock<ReturnType<typeof useRoute>>({
+			hash: "",
+		});
 		useRouteMock.mockReturnValue(route);
 
 		router = createMock<Router>();
@@ -390,6 +392,35 @@ describe("Board", () => {
 				const { cardStore } = setup();
 
 				expect(cardStore.loadPreferredTools).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when the url has a hash", () => {
+			const setup2 = () => {
+				setup();
+
+				const elementId = "card-12345";
+				route.hash = `#${elementId}`;
+
+				const domElementMock = createMock<HTMLElement>();
+				const querySelectorSpy = jest.spyOn(document, "querySelector");
+				querySelectorSpy.mockReturnValueOnce(domElementMock);
+
+				return {
+					domElementMock,
+				};
+			};
+
+			it("should scroll to and focus the element", async () => {
+				const { domElementMock } = setup2();
+
+				await nextTick();
+
+				expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({
+					block: "start",
+					inline: "center",
+				});
+				expect(domElementMock.focus).toHaveBeenCalled();
 			});
 		});
 	});
