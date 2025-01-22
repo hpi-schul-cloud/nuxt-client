@@ -19,6 +19,7 @@
 				:ripple="false"
 				:hover="isHovered"
 				:data-testid="cardTestId"
+				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>
 				<template v-if="isLoadingCard">
 					<CardSkeleton :height="height" />
@@ -36,16 +37,17 @@
 
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu
-							v-if="hasDeletePermission"
 							:scope="BoardMenuScope.CARD"
 							has-background
 							:data-testid="boardMenuTestId"
 						>
 							<KebabMenuActionEdit
-								v-if="!isEditMode"
+								v-if="hasDeletePermission && !isEditMode"
 								@click="onStartEditMode"
 							/>
+							<KebabMenuActionShareLink @click="onCopyShareLink" />
 							<KebabMenuActionDelete
+								v-if="hasDeletePermission"
 								:name="card.title"
 								:scope="BoardMenuScope.CARD"
 								@click="onDeleteCard"
@@ -100,14 +102,19 @@ import {
 } from "@data-board";
 import { mdiArrowExpand } from "@icons/material";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
-import { KebabMenuActionDelete, KebabMenuActionEdit } from "@ui-kebab-menu";
-import { useCourseBoardEditMode } from "@util-board";
+import {
+	KebabMenuActionDelete,
+	KebabMenuActionEdit,
+	KebabMenuActionShareLink,
+} from "@ui-kebab-menu";
+import { useCourseBoardEditMode, useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostDetailView from "./CardHostDetailView.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
+
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
@@ -129,6 +136,7 @@ export default defineComponent({
 		CardHostInteractionHandler,
 		KebabMenuActionDelete,
 		CardHostDetailView,
+		KebabMenuActionShareLink,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -241,6 +249,12 @@ export default defineComponent({
 			cardStore.addTextAfterTitle(props.cardId);
 		};
 
+		const { copyShareLink, getShareLinkId } = useShareBoardLink();
+
+		const onCopyShareLink = async () => {
+			await copyShareLink(props.cardId, BoardMenuScope.CARD);
+		};
+
 		const boardMenuClasses = computed(() => {
 			if (isFocusContained.value === true || isHovered.value === true) {
 				return "";
@@ -279,6 +293,8 @@ export default defineComponent({
 			onEnter,
 			onOpenDetailView,
 			onCloseDetailView,
+			onCopyShareLink,
+			getShareLinkId,
 			isDetailView,
 			mdiArrowExpand,
 		};

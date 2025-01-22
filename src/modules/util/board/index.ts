@@ -10,6 +10,7 @@ import {
 import { extractDataAttribute } from "./extractDataAttribute.util";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 import { useSharedLastCreatedElement } from "./LastCreatedElement.composable";
+import { useShareBoardLink } from "./shareBoardLink.composable";
 
 export {
 	useBoardNotifier,
@@ -22,4 +23,5 @@ export {
 	useDragAndDrop,
 	useInlineEditInteractionHandler,
 	EditModePermissions,
+	useShareBoardLink,
 };
