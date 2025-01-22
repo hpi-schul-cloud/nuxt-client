@@ -174,6 +174,10 @@ export default {
 	"common.words.color.turquoise": "Бірюза",
 	"common.words.color.yellow": "Жовтий",
 	"common.words.copiedToClipboard": "Скопійовано в буфер обміну",
+	"common.words.copyLinkToClipboard.success":
+		"Посилання скопійовано в буфер обміну",
+	"common.words.copyLinkToClipboard.failure":
+		"Не вдалося скопіювати посилання в буфер обміну",
 	"common.words.courseGroups": "курсові групи",
 	"common.words.courses": "Мій курс",
 	"common.words.draft": "чернетка",
@@ -379,6 +383,7 @@ export default {
 	"components.board.action.moveLeft": "Перемістіться вліво",
 	"components.board.action.moveRight": "Перемістіться праворуч",
 	"components.board.action.moveUp": "Рухатися вгору",
+	"components.board.action.shareLink.card": "Скопіювати посилання на Карту",
 	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
 	"components.board.alert.info.draft": "Ця дошка невидима для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
