@@ -15,6 +15,7 @@
 	>
 		<VideoConferenceContentElementDisplay
 			v-if="computedElement.content.title"
+			:board-parent-type="boardParentType"
 			:title="computedElement.content.title"
 			:has-participation-permission="hasParticipationPermission"
 			:is-video-conference-enabled="isVideoConferenceEnabled"
@@ -98,6 +99,7 @@ import {
 	useBoardFocusHandler,
 	useBoardPermissions,
 	useContentElementState,
+	useSharedBoardPageInformation,
 } from "@data-board";
 import { useI18n } from "vue-i18n";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
@@ -161,6 +163,8 @@ const isVideoConferenceEnabled = computed(() =>
 
 useBoardFocusHandler(element.value.id, videoConferenceElement);
 
+const { contextType } = useSharedBoardPageInformation();
+
 if (isVideoConferenceEnabled.value) {
 	onMounted(fetchVideoConferenceInfo);
 }
@@ -202,6 +206,8 @@ const canStart = computed(() => isTeacher);
 const isCreating = computed(
 	() => props.isEditMode && !computedElement.value.content.title
 );
+
+const boardParentType = computed(() => contextType.value);
 
 const onContentClick = async () => {
 	await fetchVideoConferenceInfo();

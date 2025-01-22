@@ -1923,8 +1923,10 @@ export default {
 	"pages.videoConference.info.notStarted": "Відеоконференція ще не почалася.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"Елемент більше не доступний. Будь ласка, зверніться до викладача.",
-	"pages.videoConference.info.notEnabledTeacher":
-		"Елемент більше не доступний. Будь ласка, зверніться з адміністратором.",
+	"pages.videoConference.info.courseParent.notEnabledTeacher":
+		"Цей елемент більше не доступний, оскільки відеоконференції було вимкнено. Будь ласка, активуйте його в налаштуваннях курсу та/або зверніться до адміністратора школи.",
+	"pages.videoConference.info.roomParent.notEnabledTeacher":
+		"Цей елемент більше не доступний, оскільки відеоконференції в школі вимкнено. Будь ласка, зверніться до адміністратора школи.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
 	"error.500":
 		"Є проблеми в системі. Ми працюємо над усуненням проблеми. Будь ласка, спробуйте пізніше.",

@@ -8,6 +8,7 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardFeatures } from "@data-board";
+import { BoardContextType } from "@/types/board/BoardContext";
 
 jest.mock("@data-board/BoardFeatures.composable");
 jest.mocked(useBoardFeatures).mockImplementation(() => {
@@ -29,6 +30,7 @@ const setupWrapper = ({
 			},
 		},
 		props: {
+			boardParentType: BoardContextType.Course,
 			isEditMode: false,
 			isRunning: false,
 			isVideoConferenceEnabled: true,
@@ -74,9 +76,10 @@ describe("VideoConferenceContentElementDisplay", () => {
 
 	describe("Alerts", () => {
 		describe("and the feature is disabled", () => {
-			it("should show 'not enabled for teacher' alert", () => {
+			it("should show 'not enabled for teacher' alert when for course parent", () => {
 				const wrapper = setupWrapper({
 					propsData: {
+						boardParentType: BoardContextType.Course,
 						isRunning: false,
 						isVideoConferenceEnabled: false,
 						hasParticipationPermission: true,
@@ -90,7 +93,28 @@ describe("VideoConferenceContentElementDisplay", () => {
 				);
 				const text = alert.find("span.my-auto");
 				expect(text.text()).toEqual(
-					"pages.videoConference.info.notEnabledTeacher"
+					"pages.videoConference.info.courseParent.notEnabledTeacher"
+				);
+			});
+
+			it("should show 'not enabled for teacher' alert when for room parent", () => {
+				const wrapper = setupWrapper({
+					propsData: {
+						boardParentType: BoardContextType.Room,
+						isRunning: false,
+						isVideoConferenceEnabled: false,
+						hasParticipationPermission: true,
+						canStart: true,
+						title: "video conference",
+					},
+				});
+
+				const alert = wrapper.findComponent(
+					'[data-testid="vc-info-box-no-feature"]'
+				);
+				const text = alert.find("span.my-auto");
+				expect(text.text()).toEqual(
+					"pages.videoConference.info.roomParent.notEnabledTeacher"
 				);
 			});
 		});
