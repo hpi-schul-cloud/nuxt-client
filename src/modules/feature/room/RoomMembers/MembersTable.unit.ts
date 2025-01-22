@@ -321,7 +321,7 @@ describe("MembersTable", () => {
 				await removeButton.trigger("click");
 			};
 
-			it("should open confirmation dialog with remove message for single member ", async () => {
+			it("should open confirmation dialog with remove message for single member", async () => {
 				const { wrapper } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);

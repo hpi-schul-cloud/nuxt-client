@@ -12,8 +12,16 @@
 				<h1 class="text-h3 mb-4" data-testid="room-title">
 					{{ t("pages.rooms.members.manage") }}
 				</h1>
-				<KebabMenu v-if="isLeaveRoomButtonVisible()" class="mx-2">
-					<VListItem @click="onLeaveRoom">
+				<KebabMenu
+					v-if="isLeaveRoomButtonVisible()"
+					class="mx-2"
+					data-testid="room-member-menu"
+				>
+					<VListItem
+						@click="onLeaveRoom"
+						data-testid="btn-leave-room"
+						:aria-label="t('pages.rooms.leaveRoom.menu')"
+					>
 						<template #prepend>
 							<VIcon :icon="mdiLocationExit" />
 						</template>

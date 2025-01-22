@@ -190,6 +190,87 @@ describe("RoomMembersPage", () => {
 		expect(infoText.text()).toBe("pages.rooms.members.infoText");
 	});
 
+	describe("onLeaveRoom", () => {
+		describe("when user is not room owner", () => {
+			it("should not render leave room button", async () => {
+				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
+
+				const leaveRoomButton = wrapper.findComponent(
+					'[data-testid="room-member-menu"]'
+				);
+
+				expect(leaveRoomButton.exists()).toBe(false);
+			});
+		});
+
+		it("should open confirmation dialog", async () => {
+			const { wrapper } = setup({ currentUserRole: RoleName.Roomadmin });
+			askConfirmationMock.mockResolvedValue(true);
+
+			const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
+			await menuBtn.trigger("click");
+
+			const leaveMenu = wrapper.findComponent('[data-testid="btn-leave-room"]');
+			await leaveMenu.trigger("click");
+
+			expect(askConfirmationMock).toHaveBeenCalledWith({
+				confirmActionLangKey: "common.actions.leave",
+				message: "pages.rooms.leaveRoom.confirmation",
+			});
+		});
+
+		it("should call remove method after confirmation", async () => {
+			const { wrapper } = setup({ currentUserRole: RoleName.Roomadmin });
+
+			askConfirmationMock.mockResolvedValue(true);
+
+			const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
+			await menuBtn.trigger("click");
+
+			const leaveMenu = wrapper.findComponent('[data-testid="btn-leave-room"]');
+			await leaveMenu.trigger("click");
+
+			expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalledWith([
+				mockRoomMemberCalls.currentUser.value.userId,
+			]);
+		});
+
+		it("should not call remove method  when dialog is cancelled", async () => {
+			const { wrapper } = setup({ currentUserRole: RoleName.Roomadmin });
+
+			askConfirmationMock.mockResolvedValue(false);
+
+			const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
+			await menuBtn.trigger("click");
+
+			const leaveMenu = wrapper.findComponent('[data-testid="btn-leave-room"]');
+			await leaveMenu.trigger("click");
+
+			expect(mockRoomMemberCalls.removeMembers).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("visibility options", () => {
+		describe("title menu visibility", () => {
+			it.each([
+				[RoleName.Roomowner, false],
+				[RoleName.Roomadmin, true],
+				[RoleName.Roomeditor, true],
+				[RoleName.Roomviewer, true],
+			])(
+				"%s role should see the title menu",
+				async (currentUserRole, expectedVisibility) => {
+					const { wrapper } = setup({ currentUserRole });
+					const titleMenu = wrapper.findComponent(
+						'[data-testid="room-member-menu"]'
+					);
+
+					expect(titleMenu.exists()).toBe(expectedVisibility);
+				}
+			);
+		});
+	});
+
 	describe("DefaultWireframe", () => {
 		const buildBreadcrumbs = (room: RoomDetailsResponse) => {
 			return [
@@ -229,126 +310,126 @@ describe("RoomMembersPage", () => {
 				dataTestId: "fab-add-members",
 			});
 		});
+	});
 
-		describe("add members fab", () => {
-			it("should call getSchools and getPotantialMembers method", async () => {
-				const { wrapper } = setup();
-				const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
+	describe("add members fab", () => {
+		it("should call getSchools and getPotantialMembers method", async () => {
+			const { wrapper } = setup();
+			const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
 
-				const addMemberButton = wireframe
-					.getComponent("[data-testid=fab-add-members]")
-					.getComponent(VBtn);
+			const addMemberButton = wireframe
+				.getComponent("[data-testid=fab-add-members]")
+				.getComponent(VBtn);
 
-				await addMemberButton.trigger("click");
+			await addMemberButton.trigger("click");
 
-				expect(mockRoomMemberCalls.getSchools).toHaveBeenCalled();
-				expect(mockRoomMemberCalls.getPotentialMembers).toHaveBeenCalledWith(
-					RoleName.Teacher
-				);
-			});
-
-			it("should open Dialog", async () => {
-				const { wrapper } = setup();
-				const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
-				const addMemberDialogBeforeClick = wrapper
-					.getComponent(VDialog)
-					.findComponent(AddMembers);
-
-				expect(addMemberDialogBeforeClick.exists()).toBe(false);
-
-				const addMemberButton = wireframe
-					.getComponent("[data-testid=fab-add-members]")
-					.getComponent(VBtn);
-
-				await addMemberButton.trigger("click");
-
-				const addMemberDialogAfterClick = wrapper
-					.getComponent(VDialog)
-					.findComponent(AddMembers);
-
-				expect(addMemberDialogAfterClick.exists()).toBe(true);
-			});
-
-			describe("add members dialog", () => {
-				it("should set isMembersDialogOpen to false on @close", async () => {
-					const { wrapper } = setup();
-
-					const dialog = wrapper.findComponent(VDialog);
-					await dialog.setValue(true);
-					expect(dialog.props("modelValue")).toBe(true);
-
-					const addMemberComponent = dialog.findComponent(AddMembers);
-					await addMemberComponent.vm.$emit("close");
-
-					expect(dialog.props("modelValue")).toBe(false);
-				});
-
-				it("should close dialog on escape key", async () => {
-					const { wrapper } = setup();
-
-					const dialog = wrapper.getComponent(VDialog);
-					await dialog.setValue(true);
-
-					const dialogContent = dialog.getComponent(AddMembers);
-					await dialogContent.trigger("keydown.escape");
-
-					expect(dialog.props("modelValue")).toBe(false);
-				});
-
-				it("should call addMembers method on @add:members", async () => {
-					const { wrapper } = setup();
-
-					const dialog = wrapper.findComponent(VDialog);
-					await dialog.setValue(true);
-					const addMemberComponent = dialog.findComponent(AddMembers);
-
-					await addMemberComponent.vm.$emit("add:members");
-
-					expect(mockRoomMemberCalls.addMembers).toHaveBeenCalled();
-				});
-
-				it("should call getPotentialMembers method on @update:role", async () => {
-					const { wrapper } = setup();
-
-					const dialog = wrapper.getComponent(VDialog);
-					await dialog.setValue(true);
-					const addMemberComponent = dialog.getComponent(AddMembers);
-
-					await addMemberComponent.vm.$emit("update:role", {
-						schoolRole: RoleName.Teacher,
-						schoolId: "school-id",
-					});
-
-					expect(mockRoomMemberCalls.getPotentialMembers).toHaveBeenCalled();
-				});
-			});
+			expect(mockRoomMemberCalls.getSchools).toHaveBeenCalled();
+			expect(mockRoomMemberCalls.getPotentialMembers).toHaveBeenCalledWith(
+				RoleName.Teacher
+			);
 		});
 
-		describe("MembersTable", () => {
-			it("should render MembersTable if isLoading false", async () => {
-				mockRoomMemberCalls.isLoading = ref(false);
-				const { wrapper } = setup();
+		it("should open Dialog", async () => {
+			const { wrapper } = setup();
+			const wireframe = wrapper.findComponent({ name: "DefaultWireframe" });
+			const addMemberDialogBeforeClick = wrapper
+				.getComponent(VDialog)
+				.findComponent(AddMembers);
 
-				const membersTable = wrapper.findComponent(MembersTable);
-				expect(membersTable.exists()).toBe(true);
+			expect(addMemberDialogBeforeClick.exists()).toBe(false);
+
+			const addMemberButton = wireframe
+				.getComponent("[data-testid=fab-add-members]")
+				.getComponent(VBtn);
+
+			await addMemberButton.trigger("click");
+
+			const addMemberDialogAfterClick = wrapper
+				.getComponent(VDialog)
+				.findComponent(AddMembers);
+
+			expect(addMemberDialogAfterClick.exists()).toBe(true);
+		});
+	});
+
+	describe("add members dialog", () => {
+		it("should set isMembersDialogOpen to false on @close", async () => {
+			const { wrapper } = setup();
+
+			const dialog = wrapper.findComponent(VDialog);
+			await dialog.setValue(true);
+			expect(dialog.props("modelValue")).toBe(true);
+
+			const addMemberComponent = dialog.findComponent(AddMembers);
+			await addMemberComponent.vm.$emit("close");
+
+			expect(dialog.props("modelValue")).toBe(false);
+		});
+
+		it("should close dialog on escape key", async () => {
+			const { wrapper } = setup();
+
+			const dialog = wrapper.getComponent(VDialog);
+			await dialog.setValue(true);
+
+			const dialogContent = dialog.getComponent(AddMembers);
+			await dialogContent.trigger("keydown.escape");
+
+			expect(dialog.props("modelValue")).toBe(false);
+		});
+
+		it("should call addMembers method on @add:members", async () => {
+			const { wrapper } = setup();
+
+			const dialog = wrapper.findComponent(VDialog);
+			await dialog.setValue(true);
+			const addMemberComponent = dialog.findComponent(AddMembers);
+
+			await addMemberComponent.vm.$emit("add:members");
+
+			expect(mockRoomMemberCalls.addMembers).toHaveBeenCalled();
+		});
+
+		it("should call getPotentialMembers method on @update:role", async () => {
+			const { wrapper } = setup();
+
+			const dialog = wrapper.getComponent(VDialog);
+			await dialog.setValue(true);
+			const addMemberComponent = dialog.getComponent(AddMembers);
+
+			await addMemberComponent.vm.$emit("update:role", {
+				schoolRole: RoleName.Teacher,
+				schoolId: "school-id",
 			});
 
-			it("should not render MembersTable if isLoading true", async () => {
-				mockRoomMemberCalls.isLoading = ref(true);
-				const { wrapper } = setup();
+			expect(mockRoomMemberCalls.getPotentialMembers).toHaveBeenCalled();
+		});
+	});
 
-				const membersTable = wrapper.findComponent(MembersTable);
-				expect(membersTable.exists()).toBe(false);
-			});
+	describe("MembersTable", () => {
+		it("should render MembersTable if isLoading false", async () => {
+			mockRoomMemberCalls.isLoading = ref(false);
+			const { wrapper } = setup();
 
-			it("should call remove members method on @remove:members", async () => {
-				mockRoomMemberCalls.isLoading = ref(false);
-				const { wrapper } = setup();
-				const membersTable = wrapper.findComponent(MembersTable);
-				await membersTable.vm.$emit("remove:members");
+			const membersTable = wrapper.findComponent(MembersTable);
+			expect(membersTable.exists()).toBe(true);
+		});
 
-				expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalled();
-			});
+		it("should not render MembersTable if isLoading true", async () => {
+			mockRoomMemberCalls.isLoading = ref(true);
+			const { wrapper } = setup();
+
+			const membersTable = wrapper.findComponent(MembersTable);
+			expect(membersTable.exists()).toBe(false);
+		});
+
+		it("should call remove members method on @remove:members", async () => {
+			mockRoomMemberCalls.isLoading = ref(false);
+			const { wrapper } = setup();
+			const membersTable = wrapper.findComponent(MembersTable);
+			await membersTable.vm.$emit("remove:members");
+
+			expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalled();
 		});
 	});
 });
