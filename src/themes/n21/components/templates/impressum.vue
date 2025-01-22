@@ -92,14 +92,21 @@
 
 <script setup lang="ts">
 import { envConfigModule } from "@/store";
-const contactEmail = envConfigModule.env.SC_CONTACT_EMAIL;
-const fallbackEmail = "support@dbildungscloud.de";
-const isValidMailAddress = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+$/gm.test(
-	contactEmail
-);
+import { computed, ComputedRef } from "vue";
 
-const supportMail = isValidMailAddress ? contactEmail : fallbackEmail;
-const mailtoSupportMail = `mailto:${supportMail}`;
+const supportMail: ComputedRef<string> = computed(() => {
+	const email = envConfigModule.getContactEmail;
+	const isValidMailAddress = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+$/gm.test(
+		email
+	);
+	const fallbackEmail = "support@dbildungscloud.de";
+
+	return isValidMailAddress ? email : fallbackEmail;
+});
+
+const mailtoSupportMail: ComputedRef<string> = computed(() => {
+	return `mailto:${supportMail.value}`;
+});
 </script>
 
 <style lang="scss" scoped>

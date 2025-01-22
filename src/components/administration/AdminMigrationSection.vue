@@ -445,7 +445,11 @@ export default defineComponent({
 			});
 		};
 
-		const contactEmailLink = `mailto:${envConfigModule.getContactEmail}?subject=Schulnummer%20nicht%20korrekt`;
+		const contactEmailLink: ComputedRef<string> = computed(() =>
+			sanitizeUrl(
+				`mailto:${envConfigModule.getContactEmail}}?subject=Schulnummer nicht korrekt`
+			)
+		);
 
 		return {
 			userLoginMigration,
