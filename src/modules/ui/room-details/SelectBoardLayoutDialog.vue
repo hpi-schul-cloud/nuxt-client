@@ -1,5 +1,5 @@
 <template>
-	<VDialog data-testid="board-layout-dialog" width="360">
+	<VDialog v-model="isOpen" data-testid="board-layout-dialog" width="360">
 		<VCard>
 			<VCardTitle
 				class="text-h4 text-break px-6 pt-4"
@@ -16,7 +16,8 @@
 					:data-testid="item.dataTestId"
 					:icon="item.icon"
 					:label="item.label"
-					@click.stop="$emit(item.eventName)"
+					:class="{ selected: currentLayout === item.type }"
+					@click.stop="$emit('select', item.type)"
 				/>
 			</VCardText>
 			<VCardActions class="mb-2 px-6">
@@ -33,10 +34,25 @@
 </template>
 
 <script setup lang="ts">
+import { BoardLayout } from "@/serverApi/v3";
+import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
+import { ExtendedIconBtn } from "@ui-extended-icon-btn";
+import { PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import { PickerOption } from "./types";
-import { ExtendedIconBtn } from "@ui-extended-icon-btn";
-import { mdiViewAgendaOutline, mdiViewDashboardOutline } from "@icons/material";
+
+const isOpen = defineModel({
+	type: Boolean,
+	required: true,
+});
+
+defineProps({
+	currentLayout: {
+		type: String as PropType<BoardLayout>,
+	},
+});
+
+defineEmits<{ (e: "select", layout: BoardLayout): void }>();
 
 const { t } = useI18n();
 
@@ -44,14 +60,14 @@ const boardLayouts: PickerOption[] = [
 	{
 		label: t("pages.room.dialog.boardLayout.multiColumn"),
 		icon: mdiViewDashboardOutline,
-		eventName: "select:multi-column",
+		type: BoardLayout.Columns,
 		dataTestId: "dialog-add-multi-column-board",
 		ariaLabel: t("pages.room.dialog.boardLayout.multiColumn"),
 	},
 	{
 		label: t("pages.room.dialog.boardLayout.singleColumn"),
 		icon: mdiViewAgendaOutline,
-		eventName: "select:single-column",
+		type: BoardLayout.List,
 		dataTestId: "dialog-add-single-column-board",
 		ariaLabel: t("pages.room.dialog.boardLayout.singleColumn"),
 	},
@@ -66,5 +82,9 @@ const boardLayouts: PickerOption[] = [
 
 .button-max-width {
 	max-width: 100px;
+}
+
+.selected {
+	border: 1px solid rgba(var(--v-theme-on-surface));
 }
 </style>

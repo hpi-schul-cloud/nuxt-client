@@ -1,17 +1,19 @@
 import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
+import { BoardLayout } from "@/serverApi/v3";
 import { useI18n } from "vue-i18n";
 import { useBoardStore } from "../Board.store";
-import { useCardStore } from "../Card.store";
 import {
 	CreateCardSuccessPayload,
 	CreateColumnSuccessPayload,
 	DeleteColumnSuccessPayload,
 	MoveCardSuccessPayload,
 	MoveColumnSuccessPayload,
+	UpdateBoardLayoutSuccessPayload,
 	UpdateBoardTitleSuccessPayload,
 	UpdateBoardVisibilitySuccessPayload,
 	UpdateColumnTitleSuccessPayload,
 } from "../boardActions/boardActionPayload";
+import { useCardStore } from "../Card.store";
 
 import {
 	CreateElementSuccessPayload,
@@ -51,6 +53,8 @@ export const SR_I18N_KEYS_MAP = {
 		"components.board.screenReader.notification.cardTitleUpdated.success",
 	CARD_UPDATED_SUCCESS:
 		"components.board.screenReader.notification.cardUpdated.success",
+	BOARD_LAYOUT_UPDATED_SUCCESS:
+		"components.board.screenReader.notification.boardLayoutUpdated.success",
 };
 
 export const useBoardAriaNotification = () => {
@@ -276,6 +280,32 @@ export const useBoardAriaNotification = () => {
 		);
 	};
 
+	const notifyUpdateBoardLayoutSuccess = (
+		action: UpdateBoardLayoutSuccessPayload
+	): void => {
+		const { layout, isOwnAction } = action;
+		if (isOwnAction) return;
+
+		let layoutName: string;
+		switch (layout) {
+			case BoardLayout.Columns:
+				layoutName = t("pages.room.dialog.boardLayout.multiColumn");
+				break;
+			case BoardLayout.List:
+				layoutName = t("pages.room.dialog.boardLayout.singleColumn");
+				break;
+			default:
+				layoutName = t("common.labels.unknown");
+				break;
+		}
+
+		notifyOnScreenReader(
+			t(SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS, {
+				layout: layoutName,
+			})
+		);
+	};
+
 	return {
 		notifyCreateCardSuccess,
 		notifyCreateColumnSuccess,
@@ -291,5 +321,6 @@ export const useBoardAriaNotification = () => {
 		notifyUpdateElementSuccess,
 		notifyDeleteElementSuccess,
 		notifyMoveElementSuccess,
+		notifyUpdateBoardLayoutSuccess,
 	};
 };

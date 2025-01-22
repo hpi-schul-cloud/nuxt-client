@@ -1,5 +1,7 @@
 import { applicationErrorModule, envConfigModule } from "@/store";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { Board } from "@/types/board/Board";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { useSharedEditMode } from "@util-board";
 import { defineStore } from "pinia";
 import { computed, nextTick, ref } from "vue";
@@ -18,6 +20,8 @@ import {
 	MoveCardSuccessPayload,
 	MoveColumnRequestPayload,
 	MoveColumnSuccessPayload,
+	UpdateBoardLayoutRequestPayload,
+	UpdateBoardLayoutSuccessPayload,
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardTitleSuccessPayload,
 	UpdateBoardVisibilityRequestPayload,
@@ -30,8 +34,6 @@ import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useCardStore } from "./Card.store";
 import { DeleteCardSuccessPayload } from "./cardActions/cardActionPayload";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 
@@ -224,6 +226,20 @@ export const useBoardStore = defineStore("boardStore", () => {
 		board.value.isVisible = payload.isVisible;
 	};
 
+	const updateBoardLayoutRequest = async (
+		payload: UpdateBoardLayoutRequestPayload
+	): Promise<void> => {
+		await socketOrRest.updateBoardLayoutRequest(payload);
+	};
+
+	const updateBoardLayoutSuccess = (
+		payload: UpdateBoardLayoutSuccessPayload
+	): void => {
+		if (!board.value) return;
+
+		board.value.layout = payload.layout;
+	};
+
 	const moveColumnRequest = async (payload: MoveColumnRequestPayload) => {
 		await socketOrRest.moveColumnRequest({
 			targetBoardId: board.value?.id,
@@ -400,6 +416,8 @@ export const useBoardStore = defineStore("boardStore", () => {
 		updateBoardTitleSuccess,
 		updateBoardVisibilityRequest,
 		updateBoardVisibilitySuccess,
+		updateBoardLayoutRequest,
+		updateBoardLayoutSuccess,
 		fetchBoardRequest,
 		fetchBoardSuccess,
 		reloadBoard,

@@ -75,10 +75,10 @@
 
 <script setup lang="ts">
 import {
+	BoardLayout,
 	ContentElementType,
 	DeletedElementResponse,
 	MediaBoardColors,
-	MediaBoardLayoutType,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
 } from "@/serverApi/v3";
@@ -101,8 +101,8 @@ import {
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { availableMediaLineId, ElementMove } from "./data";
-import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardExternalToolDeletedElement from "./MediaBoardExternalToolDeletedElement.vue";
+import MediaBoardExternalToolElement from "./MediaBoardExternalToolElement.vue";
 import MediaBoardLineHeader from "./MediaBoardLineHeader.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
 import { MediaBoardColorMapper, useCollapsableState } from "./utils";
@@ -113,7 +113,7 @@ const props = defineProps({
 		required: true,
 	},
 	layout: {
-		type: String as PropType<MediaBoardLayoutType>,
+		type: String as PropType<BoardLayout>,
 		required: true,
 	},
 	index: {
@@ -154,9 +154,7 @@ const titlePlaceholder: ComputedRef<string> = computed(
 	() => `${t("feature.media-shelf.line.title").toString()} ${props.index + 1}`
 );
 
-const isList: Ref<boolean> = computed(
-	() => props.layout === MediaBoardLayoutType.List
-);
+const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.List);
 
 const lineBackgroundColorHex: Ref<string> = computed(() =>
 	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")

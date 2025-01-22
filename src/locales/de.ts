@@ -375,6 +375,7 @@ export default {
 	"components.board.action.moveLeft": "Nach links verschieben",
 	"components.board.action.moveRight": "Nach rechts verschieben",
 	"components.board.action.moveUp": "Nach oben verschieben",
+	"components.board.action.changeLayout": "Ansicht ändern",
 	"components.board.action.shareLink.card": "Link zur Karte kopieren",
 	"components.board.alert.info.teacher":
 		"Dieser Bereich ist sichtbar für alle Kursteilnehmenden.",
@@ -441,6 +442,8 @@ export default {
 		"Titel von Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
 	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
