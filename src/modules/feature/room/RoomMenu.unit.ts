@@ -15,6 +15,7 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canViewRoom: ref(false),
 	canEditRoom: ref(false),
 	canDeleteRoom: ref(false),
+	canLeaveRoom: ref(false),
 };
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
@@ -48,7 +49,7 @@ describe("@feature-room/RoomMenu", () => {
 
 			const menuItems = wrapper.findAllComponents({ name: "VListItem" });
 
-			expect(menuItems.length).toEqual(1);
+			expect(menuItems.length).toEqual(0);
 		});
 	});
 
@@ -61,7 +62,7 @@ describe("@feature-room/RoomMenu", () => {
 			await menuBtn.trigger("click");
 
 			const menuItems = wrapper.findAllComponents({ name: "VListItem" });
-			expect(menuItems.length).toEqual(3);
+			expect(menuItems.length).toEqual(2);
 
 			const editMenuItem = wrapper.findComponent(
 				"[data-testid=room-action-edit]"
@@ -87,7 +88,7 @@ describe("@feature-room/RoomMenu", () => {
 			await menuBtn.trigger("click");
 
 			const menuItems = wrapper.findAllComponents({ name: "VListItem" });
-			expect(menuItems.length).toEqual(2);
+			expect(menuItems.length).toEqual(1);
 
 			const editMenuItem = wrapper.findComponent(
 				"[data-testid=room-action-edit]"
@@ -114,7 +115,7 @@ describe("@feature-room/RoomMenu", () => {
 
 			const menuItems = wrapper.findAllComponents({ name: "VListItem" });
 
-			expect(menuItems.length).toEqual(4);
+			expect(menuItems.length).toEqual(3);
 		});
 	});
 
@@ -166,6 +167,7 @@ describe("@feature-room/RoomMenu", () => {
 
 		describe("and clicking on leave button", () => {
 			it("should emit 'room:leave' event", async () => {
+				roomPermissions.canLeaveRoom.value = true;
 				const { wrapper, menuBtn } = setup();
 				await menuBtn.trigger("click");
 

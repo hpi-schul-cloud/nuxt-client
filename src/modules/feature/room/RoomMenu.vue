@@ -47,6 +47,7 @@
 			</VListItemTitle>
 		</VListItem>
 		<VListItem
+			v-if="canLeaveRoom"
 			role="menuitem"
 			data-testid="room-action-leave-room"
 			:aria-label="$t('pages.rooms.leaveRoom.menu')"
@@ -77,5 +78,5 @@ import { storeToRefs } from "pinia";
 defineEmits(["room:edit", "room:manage-members", "room:delete", "room:leave"]);
 const { room } = storeToRefs(useRoomDetailsStore());
 
-const { canEditRoom, canDeleteRoom } = useRoomAuthorization(room);
+const { canEditRoom, canDeleteRoom, canLeaveRoom } = useRoomAuthorization(room);
 </script>

@@ -12,7 +12,7 @@
 				<h1 class="text-h3 mb-4" data-testid="room-title">
 					{{ t("pages.rooms.members.manage") }}
 				</h1>
-				<KebabMenu class="mx-2">
+				<KebabMenu v-if="isLeaveRoomButtonVisible()" class="mx-2">
 					<VListItem @click="onLeaveRoom">
 						<template #prepend>
 							<VIcon :icon="mdiLocationExit" />
@@ -124,7 +124,7 @@ const fixedHeaderOnMobile = ref({
 const { y } = useElementBounding(wireframe);
 const { askConfirmation } = useConfirmationDialog();
 
-const { isAddMemberButtonVisible } =
+const { isAddMemberButtonVisible, isLeaveRoomButtonVisible } =
 	useRoomMemberVisibilityOptions(currentUser);
 
 useTitle(pageTitle);

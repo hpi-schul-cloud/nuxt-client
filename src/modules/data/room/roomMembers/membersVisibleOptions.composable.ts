@@ -8,6 +8,7 @@ type VisibilityOptions = {
 	isAddMemberButtonVisible: boolean;
 	isActionInRowVisible: boolean;
 	isChangeRoleButtonVisible: boolean;
+	isLeaveRoomButtonVisible: boolean;
 };
 
 type RoomRoles =
@@ -22,6 +23,7 @@ const defaultOptions: VisibilityOptions = {
 	isAddMemberButtonVisible: false,
 	isActionInRowVisible: false,
 	isChangeRoleButtonVisible: false,
+	isLeaveRoomButtonVisible: true,
 };
 
 const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
@@ -31,6 +33,7 @@ const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
 		isActionInRowVisible: false,
 		isAddMemberButtonVisible: true,
 		isChangeRoleButtonVisible: true,
+		isLeaveRoomButtonVisible: false,
 	},
 	[RoleName.Roomadmin]: {
 		isSelectionColumnVisible: true,
@@ -38,6 +41,7 @@ const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
 		isAddMemberButtonVisible: true,
 		isActionInRowVisible: true,
 		isChangeRoleButtonVisible: true,
+		isLeaveRoomButtonVisible: true,
 	},
 	[RoleName.Roomeditor]: defaultOptions,
 	[RoleName.Roomviewer]: defaultOptions,
@@ -76,11 +80,17 @@ export const useRoomMemberVisibilityOptions = (
 		);
 	};
 
+	const isLeaveRoomButtonVisible = () => {
+		return roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
+			?.isLeaveRoomButtonVisible;
+	};
+
 	return {
 		isSelectionColumnVisible,
 		isActionColumnVisible,
 		isAddMemberButtonVisible,
 		isActionInRowVisible,
 		isChangeRoleButtonVisible,
+		isLeaveRoomButtonVisible,
 	};
 };
