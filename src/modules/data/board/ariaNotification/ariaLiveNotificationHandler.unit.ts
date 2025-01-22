@@ -253,7 +253,7 @@ describe("useBoardAriaNotification", () => {
 			);
 		});
 
-		it("should notify on boardLayoutUpdate to unkown", () => {
+		it("should notify on boardLayoutUpdate to unknown", () => {
 			const { notifyUpdateBoardLayoutSuccess } = useBoardAriaNotification();
 			const element = document.getElementById("notify-screen-reader-polite");
 			notifyUpdateBoardLayoutSuccess({
