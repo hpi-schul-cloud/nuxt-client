@@ -3,6 +3,7 @@ import {
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
 	BoardElementApiFactory,
+	BoardLayout,
 	BoardResponse,
 	CardResponse,
 	ColumnResponse,
@@ -32,7 +33,7 @@ import { BoardContextType } from "@/types/board/BoardContext";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { AxiosPromise } from "axios";
+import { AxiosPromise, AxiosResponse } from "axios";
 
 export const useBoardApi = () => {
 	const boardApi = BoardApiFactory(undefined, "/v3", $axios);
@@ -302,6 +303,13 @@ export const useBoardApi = () => {
 		return boardApi.boardControllerUpdateVisibility(boardId, { isVisible });
 	};
 
+	const updateBoardLayoutCall = async (
+		boardId: string,
+		layout: BoardLayout
+	): Promise<AxiosResponse<void>> => {
+		return boardApi.boardControllerUpdateLayout(boardId, { layout });
+	};
+
 	return {
 		fetchBoardCall,
 		createColumnCall,
@@ -320,5 +328,6 @@ export const useBoardApi = () => {
 		updateElementCall,
 		createCardCall,
 		getContextInfo,
+		updateBoardLayoutCall,
 	};
 };
