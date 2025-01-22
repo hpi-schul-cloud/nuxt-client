@@ -17,6 +17,7 @@
 		:maxlength="maxLength"
 		@keydown.enter="onEnter"
 	/>
+
 	<VTextarea
 		v-else
 		hide-details="auto"
@@ -37,6 +38,7 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
+		@focus="cursorToEnd"
 	>
 		<template v-slot:append-inner>
 			<slot />
@@ -105,6 +107,7 @@ export default defineComponent({
 
 			if (titleInput.value) {
 				(titleInput.value as VTextarea).focus();
+				cursorToEnd();
 			}
 		};
 
@@ -183,6 +186,11 @@ export default defineComponent({
 			return "";
 		});
 
+		const cursorToEnd = () => {
+			const length = (titleInput.value as VTextarea).value.length;
+			titleInput.value.setSelectionRange(length, length);
+		};
+
 		return {
 			ariaLevel,
 			modelValue,
@@ -191,6 +199,7 @@ export default defineComponent({
 			internalIsFocused,
 			titleInput,
 			placeholderText,
+			cursorToEnd,
 		};
 	},
 });
