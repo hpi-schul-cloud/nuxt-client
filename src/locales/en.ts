@@ -373,6 +373,7 @@ export default {
 	"components.board.action.moveLeft": "Move left",
 	"components.board.action.moveRight": "Move right",
 	"components.board.action.moveUp": "Move up",
+	"components.board.action.changeLayout": "Change layout",
 	"components.board.action.shareLink.card": "Copy link to card",
 	"components.board.alert.info.teacher":
 		"This board is visible to all course participants.",
@@ -437,6 +438,8 @@ export default {
 		"Title of card {cardPosition} in column {columnPosition} was changed to {newTitle} by another user.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"The board's view was changed to {layout} by another user.",
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
