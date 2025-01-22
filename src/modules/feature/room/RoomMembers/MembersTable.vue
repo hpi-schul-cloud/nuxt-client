@@ -81,6 +81,7 @@
 			</KebabMenu>
 		</template>
 	</v-data-table>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -96,7 +97,10 @@ import {
 	mdiAccountSwitchOutline,
 } from "@icons/material";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
-
+import {
+	ConfirmationDialog,
+	useConfirmationDialog,
+} from "@ui-confirmation-dialog";
 import { useRoomMemberVisibilityOptions } from "@data-room";
 
 const props = defineProps({
@@ -113,6 +117,7 @@ const props = defineProps({
 		default: () => ({ enabled: false, positionTop: 0 }),
 	},
 });
+const { askConfirmation } = useConfirmationDialog();
 const selectedUserIds = ref<string[]>([]);
 
 const emit = defineEmits<{
@@ -148,7 +153,30 @@ const onResetSelectedMembers = () => {
 };
 
 const onRemoveMembers = async (userIds: string[]) => {
-	emit("remove:members", userIds);
+	const shouldRemove = await confirmRemoval(userIds);
+	if (shouldRemove) {
+		selectedUserIds.value = selectedUserIds.value.filter(
+			(userId) => !userIds.includes(userId)
+		);
+		emit("remove:members", userIds);
+	}
+};
+
+const confirmRemoval = async (userIds: string[]) => {
+	let message = t("pages.rooms.members.multipleRemove.confirmation");
+	if (userIds.length === 1) {
+		const member = memberList.value.find(
+			(member) => member.userId === userIds[0]
+		);
+		message = t("pages.rooms.members.remove.confirmation", {
+			memberName: `${member?.firstName} ${member?.lastName}`,
+		});
+	}
+	const shouldRemove = await askConfirmation({
+		message,
+		confirmActionLangKey: "common.actions.remove",
+	});
+	return shouldRemove;
 };
 
 const getRemoveAriaLabel = (member: RoomMemberResponse) =>

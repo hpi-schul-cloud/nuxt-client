@@ -148,29 +148,7 @@ const onUpdateRoleOrSchool = async (payload: {
 };
 
 const onRemoveMembers = async (memberIds: string[]) => {
-	const shouldRemove = await confirmRemoval(memberIds);
-	if (shouldRemove) {
-		await removeMembers(memberIds);
-	}
-};
-
-const confirmRemoval = async (userIds: string[]) => {
-	let message = t("pages.rooms.members.multipleRemove.confirmation");
-	if (userIds.length === 1) {
-		const member = memberList.value.find(
-			(member) => member.userId === userIds[0]
-		);
-		message = t("pages.rooms.members.remove.confirmation", {
-			memberName: `${member?.firstName} ${member?.lastName}`,
-		});
-	}
-
-	const shouldRemove = await askConfirmation({
-		message,
-		confirmActionLangKey: "common.actions.remove",
-	});
-
-	return shouldRemove;
+	await removeMembers(memberIds);
 };
 
 const onLeaveRoom = async () => {

@@ -237,8 +237,8 @@ describe("MembersTable", () => {
 				expectedMessage: "pages.rooms.members.multipleRemove.confirmation",
 			},
 		])(
-			"should emit 'remove:members' for $description when remove button is clicked",
-			async ({ checkboxesToSelect }) => {
+			"should render confirmation dialog with text for $description when remove button is clicked",
+			async ({ checkboxesToSelect, expectedMessage }) => {
 				const { wrapper, mockMembers } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);
@@ -252,9 +252,12 @@ describe("MembersTable", () => {
 				);
 				await flushPromises();
 
-				expect(wrapper.emitted()).toHaveProperty("remove:members", [
-					[checkboxesToSelect.map((i) => mockMembers[i].userId)],
-				]);
+				expect(wrapper.emitted()).toHaveProperty("remove:members");
+
+				expect(askConfirmationMock).toHaveBeenCalledWith({
+					confirmActionLangKey: "common.actions.remove",
+					message: expectedMessage,
+				});
 			}
 		);
 
@@ -306,10 +309,21 @@ describe("MembersTable", () => {
 				await removeButton.trigger("click");
 			};
 
-			it("should call remove:members event", async () => {
-				const { wrapper, mockMembers } = setup({
-					currentUserRole: RoleName.Roomadmin,
+			it("should open confirmation dialog with remove message for single member ", async () => {
+				const { wrapper } = setup();
+
+				askConfirmationMock.mockResolvedValue(true);
+
+				await triggerMemberRemoval(2, wrapper);
+
+				expect(askConfirmationMock).toHaveBeenCalledWith({
+					confirmActionLangKey: "common.actions.remove",
+					message: "pages.rooms.members.remove.confirmation",
 				});
+			});
+
+			it("should call remove:members event after confirmation", async () => {
+				const { wrapper, mockMembers } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);
 
@@ -320,6 +334,16 @@ describe("MembersTable", () => {
 				const removeEvents = wrapper.emitted("remove:members");
 				expect(removeEvents).toHaveLength(1);
 				expect(removeEvents![0]).toEqual([[mockMembers[2].userId]]);
+			});
+
+			it("should not call remove:members event when dialog is cancelled", async () => {
+				const { wrapper } = setup();
+
+				askConfirmationMock.mockResolvedValue(false);
+
+				await triggerMemberRemoval(2, wrapper);
+
+				expect(wrapper.emitted()).not.toHaveProperty("remove:members");
 			});
 
 			describe("when members are roomowner", () => {
