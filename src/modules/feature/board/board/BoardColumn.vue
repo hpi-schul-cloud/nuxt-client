@@ -85,10 +85,8 @@ import {
 	useForceRender,
 } from "@data-board";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
-import { useTouchDetection } from "@util-device-detection";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
-
 import { Sortable } from "sortablejs-vue3";
 import { computed, defineComponent, PropType, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
@@ -155,7 +153,6 @@ export default defineComponent({
 		});
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
-		const { isTouchDetected } = useTouchDetection();
 		const showAddButton = computed(
 			() => hasCreateColumnPermission && isDragging.value === false
 		);
@@ -319,7 +316,6 @@ export default defineComponent({
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
-			isTouchDetected,
 			isNotFirstColumn,
 			isNotLastColumn,
 			sortableClasses,
