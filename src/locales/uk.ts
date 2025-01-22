@@ -383,6 +383,7 @@ export default {
 	"components.board.action.moveLeft": "Перемістіться вліво",
 	"components.board.action.moveRight": "Перемістіться праворуч",
 	"components.board.action.moveUp": "Рухатися вгору",
+	"components.board.action.changeLayout": "Змінити вигляд",
 	"components.board.action.shareLink.card": "Скопіювати посилання на Карту",
 	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
 	"components.board.alert.info.draft": "Ця дошка невидима для учасників курсу.",
@@ -448,6 +449,8 @@ export default {
 		"Заголовок картки {cardPosition} у колонці {columnPosition} було змінено на {newTitle} іншим користувачем.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"Інший користувач змінив вигляд панелі на {layout}.",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",

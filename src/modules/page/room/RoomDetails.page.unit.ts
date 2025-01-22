@@ -1,22 +1,24 @@
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import * as serverApi from "@/serverApi/v3/api";
+import { BoardLayout } from "@/serverApi/v3/api";
 import EnvConfigModule from "@/store/env-config";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
+import { useRoomAuthorization } from "@feature-room";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
-import { ref } from "vue";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { roomFactory } from "@@/tests/test-utils/factory/room";
-import { useRouter } from "vue-router";
-import { useRoomAuthorization } from "@feature-room";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
-import * as serverApi from "@/serverApi/v3/api";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -315,14 +317,10 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				const { wrapper } = setup();
 				await openDialog(wrapper);
 
-				const dialog = wrapper.getComponent({
-					name: "SelectBoardLayoutDialog",
-				});
-				const dialogContent = dialog.findComponent({
-					name: "VCard",
-				});
+				const dialog = wrapper.getComponent(SelectBoardLayoutDialog);
 
-				expect(dialogContent.exists()).toBe(true);
+				expect(dialog.isVisible()).toEqual(true);
+				expect(dialog.props("modelValue")).toEqual(true);
 			});
 
 			describe("and user selects a multi-column layout", () => {
@@ -333,7 +331,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					const selectLayoutDialog = wrapper.findComponent({
 						name: "SelectBoardLayoutDialog",
 					});
-					await selectLayoutDialog.vm.$emit("select:multi-column");
+					await selectLayoutDialog.vm.$emit("select", BoardLayout.Columns);
 
 					expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
 						room.id,
@@ -351,7 +349,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					const selectLayoutDialog = wrapper.findComponent({
 						name: "SelectBoardLayoutDialog",
 					});
-					await selectLayoutDialog.vm.$emit("select:single-column");
+					await selectLayoutDialog.vm.$emit("select", BoardLayout.List);
 
 					expect(roomDetailsStore.createBoard).toHaveBeenCalledWith(
 						room.id,
