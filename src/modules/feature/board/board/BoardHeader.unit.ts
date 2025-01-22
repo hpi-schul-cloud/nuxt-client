@@ -12,12 +12,13 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
+	KebabMenuActionChangeLayout,
 	KebabMenuActionCopy,
 	KebabMenuActionDelete,
 	KebabMenuActionPublish,
+	KebabMenuActionRename,
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
-	KebabMenuActionRename,
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
@@ -75,6 +76,10 @@ describe("BoardHeader", () => {
 		});
 		return { startEditMode: mockedStartEditMode, wrapper };
 	};
+
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
 
 	describe("when component is mounted", () => {
 		it("should be found in the dom", () => {
@@ -278,6 +283,19 @@ describe("BoardHeader", () => {
 			await deleteButton.trigger("click");
 
 			expect(wrapper.emitted("delete:board")).toHaveLength(1);
+		});
+	});
+
+	describe("when the 'change layout' menu button is clicked", () => {
+		it("should emit 'change-layout'", async () => {
+			const { wrapper } = setup();
+
+			const changeLayoutButton = wrapper.findComponent(
+				KebabMenuActionChangeLayout
+			);
+			await changeLayoutButton.trigger("click");
+
+			expect(wrapper.emitted("change-layout")).toHaveLength(1);
 		});
 	});
 
