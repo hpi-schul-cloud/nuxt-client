@@ -76,14 +76,17 @@ import { useTitle, useElementBounding } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
-import { useRoomDetailsStore, useRoomMembers } from "@data-room";
+import {
+	useRoomDetailsStore,
+	useRoomMembers,
+	useRoomMemberVisibilityOptions,
+} from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus, mdiLocationExit } from "@icons/material";
 import { MembersTable, AddMembers } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu } from "@ui-kebab-menu";
-import { useRoomMemberVisibilityOptions } from "@data-room";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
