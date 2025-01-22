@@ -41,11 +41,15 @@ describe("MembersTable", () => {
 		"",
 	];
 
-	const setup = (options?: { currentUserRole?: RoleName }) => {
+	const setup = (options?: {
+		currentUserRole?: RoleName;
+		changePermissionFlag?: boolean;
+	}) => {
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 			getEnv: {
 				...envsFactory.build(),
-				FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED: true,
+				FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED:
+					options?.changePermissionFlag ?? false,
 			},
 		});
 		const mockMembers = roomMemberFactory(RoleName.Roomadmin).buildList(3);
@@ -441,6 +445,111 @@ describe("MembersTable", () => {
 
 			const elementAfter = wrapper.find(".table-title-header");
 			expect(elementAfter.classes("fixed-position")).toBe(true);
+		});
+	});
+
+	describe("visibility options", () => {
+		describe("isActionColumnVisible", () => {
+			it.each([
+				{
+					description: "when user is roomowner",
+					currentUserRole: RoleName.Roomowner,
+					expected: true,
+				},
+				{
+					description: "when user is roomadmin",
+					currentUserRole: RoleName.Roomadmin,
+					expected: true,
+				},
+				{
+					description: "when user is roomeditor",
+					currentUserRole: RoleName.Roomeditor,
+					expected: false,
+				},
+				{
+					description: "when user is roomviewer",
+					currentUserRole: RoleName.Roomviewer,
+					expected: false,
+				},
+			])(
+				"should be $expected $description",
+				async ({ currentUserRole, expected }) => {
+					const { wrapper } = setup({ currentUserRole });
+					const dataTable = wrapper.getComponent(VDataTable);
+
+					const menu = dataTable.findComponent('[data-testid="kebab-menu-1');
+
+					expect(menu.exists()).toBe(expected);
+				}
+			);
+		});
+
+		describe("isSelectionColumnVisible", () => {
+			it.each([
+				{
+					description: "when user is roomowner",
+					currentUserRole: RoleName.Roomowner,
+					expected: true,
+				},
+				{
+					description: "when user is roomadmin",
+					currentUserRole: RoleName.Roomadmin,
+					expected: true,
+				},
+				{
+					description: "when user is roomeditor",
+					currentUserRole: RoleName.Roomeditor,
+					expected: false,
+				},
+				{
+					description: "when user is roomviewer",
+					currentUserRole: RoleName.Roomviewer,
+					expected: false,
+				},
+			])(
+				"should be $expected $description",
+				async ({ currentUserRole, expected }) => {
+					const { wrapper } = setup({ currentUserRole });
+					const dataTable = wrapper.getComponent(VDataTable);
+
+					const checkbox = dataTable.findComponent(".v-selection-control");
+
+					expect(checkbox.exists()).toBe(expected);
+				}
+			);
+		});
+
+		describe("isChangeRoleButtonVisible", () => {
+			it.each([
+				{
+					description: "when user is roomowner",
+					currentUserRole: RoleName.Roomowner,
+					expected: true,
+				},
+				{
+					description: "when user is roomadmin",
+					currentUserRole: RoleName.Roomadmin,
+					expected: true,
+				},
+			])(
+				"should be $expected $description",
+				async ({ currentUserRole, expected }) => {
+					const { wrapper } = setup({
+						currentUserRole,
+						changePermissionFlag: true,
+					});
+					const dataTable = wrapper.getComponent(VDataTable);
+
+					const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
+					await menuBtn.trigger("click");
+
+					const changeRoleButton = wrapper.findComponent(
+						'[data-testid="btn-change-role-1"]'
+					);
+
+					expect(changeRoleButton.exists()).toBe(expected);
+				}
+			);
 		});
 	});
 });
