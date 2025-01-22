@@ -8,9 +8,10 @@ import KebabMenuActionMoveLeft from "./KebabMenuActionMoveLeft.vue";
 import KebabMenuActionMoveRight from "./KebabMenuActionMoveRight.vue";
 import KebabMenuActionMoveUp from "./KebabMenuActionMoveUp.vue";
 import KebabMenuActionPublish from "./KebabMenuActionPublish.vue";
+import KebabMenuActionRename from "./KebabMenuActionRename.vue";
 import KebabMenuActionRevert from "./KebabMenuActionRevert.vue";
 import KebabMenuActionShare from "./KebabMenuActionShare.vue";
-import KebabMenuActionRename from "./KebabMenuActionRename.vue";
+import KebabMenuActionShareLink from "./KebabMenuActionShareLink.vue";
 
 export {
 	KebabMenu,
@@ -26,4 +27,5 @@ export {
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
 	KebabMenuActionRename,
+	KebabMenuActionShareLink,
 };

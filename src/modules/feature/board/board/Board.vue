@@ -284,14 +284,32 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 		boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
 };
 
-onMounted(() => {
+const scrollToNodeAndFocus = (scrollTargetId: string) => {
+	const targetElement: HTMLElement | null = document.querySelector(
+		`[data-scroll-target="${scrollTargetId}"]`
+	);
+
+	targetElement?.scrollIntoView({ block: "start", inline: "center" });
+	targetElement?.focus();
+};
+
+onMounted(async () => {
 	resetPageInformation();
 	setAlert();
 	useBoardInactivity();
-	boardStore.fetchBoardRequest({ boardId: props.boardId });
+	const boardFetchPromise = boardStore.fetchBoardRequest({
+		boardId: props.boardId,
+	});
 
 	if (hasCreateToolPermission) {
 		cardStore.loadPreferredTools(ToolContextType.BoardElement);
+	}
+
+	await boardFetchPromise;
+
+	if (route.hash) {
+		const scrollTargetId: string = route.hash.slice(1);
+		scrollToNodeAndFocus(scrollTargetId);
 	}
 });
 
