@@ -53,6 +53,7 @@
 					<KebabMenuActionCopy @click="onCopyBoard" />
 					<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
 					<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+					<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 					<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 					<KebabMenuActionDelete
 						:name="title"
@@ -76,6 +77,7 @@ import {
 	KebabMenuActionPublish,
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
+	KebabMenuActionChangeLayout,
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
@@ -105,6 +107,7 @@ const emit = defineEmits([
 	"update:title",
 	"update:visibility",
 	"delete:board",
+	"change-layout",
 ]);
 
 const { t } = useI18n();
@@ -171,6 +174,10 @@ const onDeleteBoard = async (confirmation: Promise<boolean>) => {
 	if (shouldDelete) {
 		emit("delete:board", props.boardId);
 	}
+};
+
+const onChangeBoardLayout = async () => {
+	emit("change-layout");
 };
 
 const emitTitle = useDebounceFn((newTitle: string) => {
