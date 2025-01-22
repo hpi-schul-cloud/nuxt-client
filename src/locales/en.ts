@@ -1775,7 +1775,7 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add members",
-	"pages.rooms.members.changePermission": "Add members",
+	"pages.rooms.members.changePermission": "Change permissions",
 	"pages.rooms.members.manage": "Room members",
 	"pages.rooms.members.remove.ariaLabel": "Remove {memberName} from the room",
 	"pages.rooms.members.resetSelection.ariaLabel":

@@ -1,7 +1,6 @@
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { ComputedRef } from "vue";
-
-const FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED = true;
+import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 
 type VisibilityOptions = {
 	isSelectionColumnVisible: boolean;
@@ -31,14 +30,14 @@ const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
 		isActionColumnVisible: true,
 		isActionInRowVisible: false,
 		isAddMemberButtonVisible: true,
-		isChangeRoleButtonVisible: FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED,
+		isChangeRoleButtonVisible: true,
 	},
 	[RoleName.Roomadmin]: {
 		isSelectionColumnVisible: true,
 		isActionColumnVisible: true,
 		isAddMemberButtonVisible: true,
 		isActionInRowVisible: true,
-		isChangeRoleButtonVisible: FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED,
+		isChangeRoleButtonVisible: true,
 	},
 	[RoleName.Roomeditor]: defaultOptions,
 	[RoleName.Roomviewer]: defaultOptions,
@@ -47,6 +46,9 @@ const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
 export const useRoomMemberVisibilityOptions = (
 	currentUser: ComputedRef<RoomMemberResponse>
 ) => {
+	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+	const { FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED } = envConfigModule.getEnv;
+
 	const isSelectionColumnVisible = () => {
 		return roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
 			?.isSelectionColumnVisible;
@@ -68,8 +70,10 @@ export const useRoomMemberVisibilityOptions = (
 	};
 
 	const isChangeRoleButtonVisible = () => {
-		return roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
-			?.isChangeRoleButtonVisible;
+		return (
+			roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
+				?.isChangeRoleButtonVisible && FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED
+		);
 	};
 
 	return {
