@@ -18,6 +18,7 @@
 						@copy:board="onCopyBoard"
 						@share:board="onShareBoard"
 						@delete:board="openDeleteBoardDialog(boardId)"
+						@change-layout="onUpdateBoardLayout"
 					/>
 				</template>
 				<div :class="boardClass" :style="boardStyle">
@@ -86,6 +87,11 @@
 					@copy-dialog-closed="onCopyResultModalClosed"
 				/>
 				<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.ColumnBoard" />
+				<SelectBoardLayoutDialog
+					v-model="isSelectBoardLayoutDialogOpen"
+					:current-layout="board.layout as BoardLayout"
+					@select="onSelectBoardLayout"
+				/>
 			</DefaultWireframe>
 		</template>
 	</div>
@@ -123,6 +129,7 @@ import {
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
 import {
 	BOARD_IS_LIST_LAYOUT,
 	extractDataAttribute,
@@ -139,6 +146,7 @@ import {
 	onUnmounted,
 	PropType,
 	provide,
+	ref,
 	watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
@@ -430,5 +438,24 @@ const onShareBoard = () => {
 
 const openDeleteBoardDialog = async (id: string) => {
 	boardStore.deleteBoardRequest({ boardId: id }, roomId.value);
+};
+
+const isSelectBoardLayoutDialogOpen = ref(false);
+
+const onUpdateBoardLayout = async () => {
+	if (!hasEditPermission) return;
+
+	isSelectBoardLayoutDialogOpen.value = true;
+};
+
+const onSelectBoardLayout = async (layout: BoardLayout) => {
+	isSelectBoardLayoutDialogOpen.value = false;
+
+	if (!hasEditPermission || board.value?.layout === layout) return;
+
+	boardStore.updateBoardLayoutRequest({
+		boardId: props.boardId,
+		layout,
+	});
 };
 </script>

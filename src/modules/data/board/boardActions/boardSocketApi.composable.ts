@@ -1,29 +1,29 @@
-import * as BoardActions from "./boardActions";
-import * as CardActions from "../cardActions/cardActions";
-import { useSocketConnection, useForceRender } from "@data-board";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
+import { applicationErrorModule } from "@/store";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { handle, on, PermittedStoreActions } from "@/types/board/ActionFactory";
+import { createApplicationError } from "@/utils/create-application-error.factory";
+import { useForceRender, useSocketConnection } from "@data-board";
+import { useI18n } from "vue-i18n";
+import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 import { useBoardStore } from "../Board.store";
+import * as CardActions from "../cardActions/cardActions";
 import {
 	CreateCardRequestPayload,
 	CreateColumnRequestPayload,
 	DeleteBoardRequestPayload,
 	DeleteColumnRequestPayload,
-	DisconnectSocketRequestPayload,
 	FetchBoardRequestPayload,
 	MoveCardRequestPayload,
 	MoveCardSuccessPayload,
 	MoveColumnRequestPayload,
+	UpdateBoardLayoutRequestPayload,
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardVisibilityRequestPayload,
 	UpdateColumnTitleRequestPayload,
 } from "./boardActionPayload";
-import { PermittedStoreActions, handle, on } from "@/types/board/ActionFactory";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
-import { CreateCardBodyParamsRequiredEmptyElementsEnum } from "@/serverApi/v3";
-import { applicationErrorModule } from "@/store";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { useI18n } from "vue-i18n";
+import * as BoardActions from "./boardActions";
 
 export const useBoardSocketApi = () => {
 	const boardStore = useBoardStore();
@@ -38,6 +38,7 @@ export const useBoardSocketApi = () => {
 		notifyUpdateBoardTitleSuccess,
 		notifyUpdateBoardVisibilitySuccess,
 		notifyUpdateColumnTitleSuccess,
+		notifyUpdateBoardLayoutSuccess,
 	} = useBoardAriaNotification();
 	const { t } = useI18n();
 
@@ -65,6 +66,10 @@ export const useBoardSocketApi = () => {
 				BoardActions.updateBoardVisibilitySuccess,
 				boardStore.updateBoardVisibilitySuccess
 			),
+			on(
+				BoardActions.updateBoardLayoutSuccess,
+				boardStore.updateBoardLayoutSuccess
+			),
 		];
 
 		const failureActions = [
@@ -81,6 +86,7 @@ export const useBoardSocketApi = () => {
 				BoardActions.updateBoardVisibilityFailure,
 				updateBoardVisibilityFailure
 			),
+			on(BoardActions.updateBoardLayoutFailure, updateBoardLayoutFailure),
 		];
 
 		const ariaLiveNotifications = [
@@ -96,6 +102,7 @@ export const useBoardSocketApi = () => {
 				notifyUpdateBoardVisibilitySuccess
 			),
 			on(BoardActions.updateColumnTitleSuccess, notifyUpdateColumnTitleSuccess),
+			on(BoardActions.updateBoardLayoutSuccess, notifyUpdateBoardLayoutSuccess),
 		];
 
 		handle(
@@ -183,6 +190,12 @@ export const useBoardSocketApi = () => {
 		emitOnSocket("update-board-visibility-request", payload);
 	};
 
+	const updateBoardLayoutRequest = (
+		payload: UpdateBoardLayoutRequestPayload
+	) => {
+		emitOnSocket("update-board-layout-request", payload);
+	};
+
 	const setRenderKeyAfterMoveCard = (payload: MoveCardSuccessPayload) => {
 		const { generateRenderKey } = useForceRender(payload.fromColumnId);
 		generateRenderKey();
@@ -211,6 +224,8 @@ export const useBoardSocketApi = () => {
 		notifySocketError("notUpdated", "board");
 	const updateBoardVisibilityFailure = () =>
 		notifySocketError("notUpdated", "board");
+	const updateBoardLayoutFailure = () =>
+		notifySocketError("notUpdated", "board");
 
 	return {
 		dispatch,
@@ -225,5 +240,6 @@ export const useBoardSocketApi = () => {
 		updateColumnTitleRequest,
 		updateBoardTitleRequest,
 		updateBoardVisibilityRequest,
+		updateBoardLayoutRequest,
 	};
 };
