@@ -1,3 +1,4 @@
+import { BoardLayout } from "@/serverApi/v3";
 import { Lesson } from "@/store/types/room";
 
 export type MenuItem = {
@@ -16,7 +17,7 @@ export type LessonData = Lesson & {
 export type PickerOption = {
 	icon: string;
 	label: string;
-	type: string;
+	type: BoardLayout;
 	dataTestId: string;
 	ariaLabel: string;
 };
