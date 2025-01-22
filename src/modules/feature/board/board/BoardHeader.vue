@@ -26,14 +26,23 @@
 			</div>
 		</InlineEditInteractionHandler>
 		<div class="d-flex">
-			<v-chip
-				v-if="isDraft"
-				size="small"
-				class="align-self-center"
-				data-testid="board-draft-chip"
-			>
-				{{ t("common.words.draft") }}
-			</v-chip>
+			<template v-if="isDraft">
+				<VTooltip
+					location="bottom"
+					:text="$t('components.board.draftChip.tooltip')"
+				>
+					<template v-slot:activator="{ props }">
+						<VChip
+							v-bind="props"
+							size="small"
+							class="align-self-center cursor-default"
+							data-testid="board-draft-chip"
+						>
+							{{ t("common.words.draft") }}
+						</VChip>
+					</template>
+				</VTooltip>
+			</template>
 			<div class="mx-2">
 				<BoardMenu
 					v-if="hasEditPermission"

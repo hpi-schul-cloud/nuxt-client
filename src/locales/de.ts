@@ -376,13 +376,10 @@ export default {
 	"components.board.action.moveRight": "Nach rechts verschieben",
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.action.shareLink.card": "Link zur Karte kopieren",
-	"components.board.alert.info.teacher":
-		"Dieser Bereich ist sichtbar für alle Kursteilnehmenden.",
-	"components.board.alert.info.draft":
-		"Dieser Bereich ist nicht für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neuer Abschnitt",
 	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
+	"components.board.draftChip.tooltip": "Nur für Lehrkräfte sichtbar",
 	"components.board.error.404":
 		"Fehler 404 – Bereich mit diesem Namen wurde nicht gefunden",
 	"components.board.error.403":
