@@ -18,6 +18,7 @@
 				:ripple="false"
 				:hover="isHovered"
 				:data-testid="cardTestId"
+				:data-scroll-target="getShareLinkId(cardId, BoardMenuScope.CARD)"
 			>
 				<template v-if="isLoadingCard">
 					<CardSkeleton :height="height" />
@@ -34,18 +35,19 @@
 
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu
-							v-if="hasDeletePermission"
 							:scope="BoardMenuScope.CARD"
 							has-background
 							:data-testid="boardMenuTestId"
 						>
-							<BoardMenuActionEdit
-								v-if="!isEditMode"
+							<KebabMenuActionEdit
+								v-if="hasDeletePermission && !isEditMode"
 								@click="onStartEditMode"
 							/>
-							<BoardMenuActionDelete
-								data-test-id="board-menu-action-delete"
+							<KebabMenuActionShareLink @click="onCopyShareLink" />
+							<KebabMenuActionDelete
+								v-if="hasDeletePermission"
 								:name="card.title"
+								:scope="BoardMenuScope.CARD"
 								@click="onDeleteCard"
 							/>
 						</BoardMenu>
@@ -89,11 +91,7 @@
 </template>
 
 <script lang="ts">
-import {
-	DragAndDropKey,
-	ElementMove,
-	verticalCursorKeys,
-} from "@/types/board/DragAndDrop";
+import { ElementMove, verticalCursorKeys } from "@/types/board/DragAndDrop";
 import { delay } from "@/utils/helpers";
 import {
 	useBoardFocusHandler,
@@ -101,19 +99,20 @@ import {
 	useCardStore,
 } from "@data-board";
 import { mdiArrowExpand } from "@icons/material";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionEdit,
-	BoardMenuScope,
-} from "@ui-board";
-import { useCourseBoardEditMode } from "@util-board";
+	KebabMenuActionDelete,
+	KebabMenuActionEdit,
+	KebabMenuActionShareLink,
+} from "@ui-kebab-menu";
+import { useCourseBoardEditMode, useShareBoardLink } from "@util-board";
 import { useDebounceFn, useElementHover, useElementSize } from "@vueuse/core";
 import { computed, defineComponent, onMounted, ref, toRef } from "vue";
 import { useAddElementDialog } from "../shared/AddElementDialog.composable";
 import CardAddElementMenu from "./CardAddElementMenu.vue";
 import CardHostDetailView from "./CardHostDetailView.vue";
 import CardHostInteractionHandler from "./CardHostInteractionHandler.vue";
+
 import CardSkeleton from "./CardSkeleton.vue";
 import CardTitle from "./CardTitle.vue";
 import ContentElementList from "./ContentElementList.vue";
@@ -129,12 +128,13 @@ export default defineComponent({
 		CardSkeleton,
 		CardTitle,
 		BoardMenu,
-		BoardMenuActionEdit,
+		KebabMenuActionEdit,
 		ContentElementList,
 		CardAddElementMenu,
 		CardHostInteractionHandler,
-		BoardMenuActionDelete,
+		KebabMenuActionDelete,
 		CardHostDetailView,
+		KebabMenuActionShareLink,
 	},
 	props: {
 		height: { type: Number, required: true },
@@ -229,11 +229,11 @@ export default defineComponent({
 
 		const onMoveContentElementKeyboard = async (
 			{ payload: elementId, elementIndex }: ElementMove,
-			keyString: DragAndDropKey
+			key: string
 		) => {
-			if (!verticalCursorKeys.includes(keyString)) return;
+			if (!verticalCursorKeys.includes(key)) return;
 
-			const delta = keyString === "ArrowUp" ? -1 : 1;
+			const delta = key === "ArrowUp" ? -1 : 1;
 
 			await cardStore.moveElementRequest(
 				props.cardId,
@@ -245,6 +245,12 @@ export default defineComponent({
 
 		const onEnter = () => {
 			cardStore.addTextAfterTitle(props.cardId);
+		};
+
+		const { copyShareLink, getShareLinkId } = useShareBoardLink();
+
+		const onCopyShareLink = async () => {
+			await copyShareLink(props.cardId, BoardMenuScope.CARD);
 		};
 
 		const boardMenuClasses = computed(() => {
@@ -285,6 +291,8 @@ export default defineComponent({
 			onEnter,
 			onOpenDetailView,
 			onCloseDetailView,
+			onCopyShareLink,
+			getShareLinkId,
 			isDetailView,
 			mdiArrowExpand,
 		};

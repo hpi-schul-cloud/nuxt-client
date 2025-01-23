@@ -2,13 +2,13 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { BoardMenuActionRevert } from "@ui-board";
 import { mount } from "@vue/test-utils";
-import BoardMenuAction from "./BoardMenuAction.vue";
+import KebabMenuAction from "./KebabMenuAction.vue";
+import KebabMenuActionChangeLayout from "./KebabMenuActionChangeLayout.vue";
 
-describe("BoardMenuActionRevert Component", () => {
+describe("KebabMenuActionChangeLayout", () => {
 	const setup = () => {
-		const wrapper = mount(BoardMenuActionRevert, {
+		const wrapper = mount(KebabMenuActionChangeLayout, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -20,7 +20,9 @@ describe("BoardMenuActionRevert Component", () => {
 	describe("when component is mounted", () => {
 		it("should render", () => {
 			const wrapper = setup();
-			const action = wrapper.findComponent(BoardMenuAction);
+
+			const action = wrapper.findComponent(KebabMenuAction);
+
 			expect(action.exists()).toBe(true);
 		});
 	});

@@ -1,4 +1,5 @@
 import {
+	BoardLayout,
 	BoardResponse,
 	CardResponse,
 	ColumnResponse,
@@ -128,3 +129,14 @@ export type UpdateBoardVisibilityFailurePayload =
 	UpdateBoardVisibilityRequestPayload;
 
 export type DisconnectSocketRequestPayload = Record<string, never>;
+
+export type UpdateBoardLayoutRequestPayload = {
+	boardId: string;
+	layout: BoardLayout;
+};
+export type UpdateBoardLayoutSuccessPayload = {
+	boardId: string;
+	layout: BoardLayout;
+	isOwnAction: boolean;
+};
+export type UpdateBoardLayoutFailurePayload = UpdateBoardLayoutRequestPayload;

@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { BoardMenuAction } from "@ui-board";
+import { KebabMenuAction } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import MediaBoardExternalToolElementMenu from "./MediaBoardExternalToolElementMenu.vue";
 
@@ -27,7 +27,7 @@ describe("MediaBoardExternalToolElementMenu", () => {
 		it("should have a menu option to delete", () => {
 			const { wrapper } = getWrapper();
 
-			const menuItem = wrapper.findComponent(BoardMenuAction);
+			const menuItem = wrapper.findComponent(KebabMenuAction);
 
 			expect(menuItem.exists()).toEqual(true);
 		});
@@ -35,7 +35,7 @@ describe("MediaBoardExternalToolElementMenu", () => {
 		it("should emit the delete event on click", async () => {
 			const { wrapper } = getWrapper();
 
-			const menuItem = wrapper.findComponent(BoardMenuAction);
+			const menuItem = wrapper.findComponent(KebabMenuAction);
 
 			await menuItem.trigger("click");
 

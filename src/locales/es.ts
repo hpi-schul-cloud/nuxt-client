@@ -126,6 +126,7 @@ export default {
 	"common.roleName.student": "Estudiante",
 	"common.roleName.superhero": "Administrador de Schul-Cloud",
 	"common.roleName.teacher": "Profesor",
+	"common.roleName.groupSubstitutionTeacher": "Profesor suplente",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Por favor verifique la configuración.",
 	"common.tool.information.outdated.student":
@@ -172,6 +173,9 @@ export default {
 	"common.words.color.turquoise": "Turquesa",
 	"common.words.color.yellow": "Amarillo",
 	"common.words.copiedToClipboard": "Copiado en el portapapeles",
+	"common.words.copyLinkToClipboard.success": "Enlace copiado al portapapeles",
+	"common.words.copyLinkToClipboard.failure":
+		"El enlace no se pudo copiar al portapapeles",
 	"common.words.courseGroups": "grupos de cursos",
 	"common.words.courses": "Cursos",
 	"common.words.draft": "borrador",
@@ -374,6 +378,8 @@ export default {
 	"components.board.action.moveLeft": "Mover a la izquierda",
 	"components.board.action.moveRight": "Mover a la derecha",
 	"components.board.action.moveUp": "Levantar",
+	"components.board.action.changeLayout": "Cambiar vista",
+	"components.board.action.shareLink.card": "Enlace a la ficha",
 	"components.board.alert.info.teacher":
 		"Este tablero es visible para todos los participantes en el curso.",
 	"components.board.alert.info.draft":
@@ -441,6 +447,8 @@ export default {
 		"El título de la tarjeta {cardPosition} en la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"Otro usuario cambió la vista del panel a {layout}.",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
@@ -1590,11 +1598,11 @@ export default {
 	"pages.common.tools.configureVideoconferenceDialog.title":
 		"Crear videoconferencia",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Todas las usuarias participan como moderadoras",
+		"Derechos de moderación para todos los participantes",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute":
-		"Silenciar a las participantes al entrar",
+		"Silenciar a los participantes al entrar",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Aprobación del moderador antes de poder ingresar a la sala",
+		"Activar la sala de espera para los participantes",
 	"pages.content._id.addToTopic": "Para ser añadido a",
 	"pages.content._id.collection.selectElements":
 		"Selecciona los elementos que deses añadir al tema",
@@ -1833,6 +1841,12 @@ export default {
 		"¿Eliminar miembros seleccionados de la sala?",
 	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
+	"pages.rooms.members.roomPermissions.admin": "Administrar",
+	"pages.rooms.members.roomPermissions.owner": "Propietario",
+	"pages.rooms.members.roomPermissions.editor": "Editar",
+	"pages.rooms.members.roomPermissions.viewer": "Leer",
+	"pages.rooms.members.tableHeader.roomRole": "Permisos de la sala",
+	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
@@ -1945,8 +1959,10 @@ export default {
 		"La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"El elemento ya no está disponible. Póngase en contacto con el profesor.",
-	"pages.videoConference.info.notEnabledTeacher":
-		"El elemento ya no está disponible. Póngase en contacto con el administrador.",
+	"pages.videoConference.info.courseParent.notEnabledTeacher":
+		"El elemento ya no está disponible porque se ha desactivado la videoconferencia. Por favor, actívelo en los ajustes del curso y/o contacte con el administrador de la escuela.",
+	"pages.videoConference.info.roomParent.notEnabledTeacher":
+		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",

@@ -1,4 +1,4 @@
-import { MediaBoardLayoutType } from "@/serverApi/v3";
+import { BoardLayout } from "@/serverApi/v3";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
@@ -152,7 +152,7 @@ describe("MediaShelfPage", () => {
 			const setup = () => {
 				useSharedMediaBoardStateMock.mediaBoard.value =
 					mediaBoardResponseFactory.build({
-						layout: MediaBoardLayoutType.List,
+						layout: BoardLayout.List,
 					});
 
 				const { wrapper } = getWrapper();
@@ -170,7 +170,7 @@ describe("MediaShelfPage", () => {
 
 				expect(
 					useSharedMediaBoardStateMock.updateMediaBoardLayout
-				).toHaveBeenCalledWith(MediaBoardLayoutType.Grid);
+				).toHaveBeenCalledWith(BoardLayout.Grid);
 			});
 		});
 
@@ -178,7 +178,7 @@ describe("MediaShelfPage", () => {
 			const setup = () => {
 				useSharedMediaBoardStateMock.mediaBoard.value =
 					mediaBoardResponseFactory.build({
-						layout: MediaBoardLayoutType.Grid,
+						layout: BoardLayout.Grid,
 					});
 
 				const { wrapper } = getWrapper();
@@ -196,7 +196,7 @@ describe("MediaShelfPage", () => {
 
 				expect(
 					useSharedMediaBoardStateMock.updateMediaBoardLayout
-				).toHaveBeenCalledWith(MediaBoardLayoutType.List);
+				).toHaveBeenCalledWith(BoardLayout.List);
 			});
 		});
 	});

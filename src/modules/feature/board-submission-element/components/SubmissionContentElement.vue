@@ -33,9 +33,18 @@
 					has-background
 					:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				>
-					<BoardMenuActionMoveUp @click="onMoveElementUp" />
-					<BoardMenuActionMoveDown @click="onMoveElementDown" />
-					<BoardMenuActionDelete @click="onDeleteElement" />
+					<KebabMenuActionMoveUp
+						v-if="isNotFirstElement"
+						@click="onMoveElementUp"
+					/>
+					<KebabMenuActionMoveDown
+						v-if="isNotLastElement"
+						@click="onMoveElementDown"
+					/>
+					<KebabMenuActionDelete
+						:scope="BoardMenuScope.SUBMISSION_ELEMENT"
+						@click="onDeleteElement"
+					/>
 				</BoardMenu>
 			</SubmissionContentElementEdit>
 		</div>
@@ -45,13 +54,12 @@
 <script lang="ts">
 import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 import { defineComponent, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
@@ -67,9 +75,9 @@ export default defineComponent({
 	},
 	components: {
 		BoardMenu,
-		BoardMenuActionMoveUp,
-		BoardMenuActionMoveDown,
-		BoardMenuActionDelete,
+		KebabMenuActionMoveUp,
+		KebabMenuActionMoveDown,
+		KebabMenuActionDelete,
 		SubmissionContentElementDisplay,
 		SubmissionContentElementEdit,
 	},
@@ -79,6 +87,8 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
+		isNotFirstElement: { type: Boolean, requried: false },
+		isNotLastElement: { type: Boolean, requried: false },
 		columnIndex: { type: Number, required: true },
 		rowIndex: { type: Number, required: true },
 		elementIndex: { type: Number, required: true },

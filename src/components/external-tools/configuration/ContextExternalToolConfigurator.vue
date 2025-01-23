@@ -44,7 +44,7 @@ import { computed, ComputedRef, PropType, Ref, ref } from "vue";
 const props = defineProps({
 	configId: String,
 	contextId: {
-		type: String,
+		type: [String, null],
 		required: true,
 	},
 	contextType: {

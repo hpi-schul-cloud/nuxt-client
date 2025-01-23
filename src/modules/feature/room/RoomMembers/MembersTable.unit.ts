@@ -32,7 +32,8 @@ describe("MembersTable", () => {
 	const tableHeaders = [
 		"common.labels.firstName",
 		"common.labels.lastName",
-		"common.labels.role",
+		"pages.rooms.members.tableHeader.roomRole",
+		"pages.rooms.members.tableHeader.schoolRole",
 		"common.words.mainSchool",
 		"",
 	];
@@ -333,7 +334,7 @@ describe("MembersTable", () => {
 				expect(wrapper.emitted()).not.toHaveProperty("remove:members");
 			});
 
-			describe("when members are 'roomowner'", () => {
+			describe("when members are roomowner", () => {
 				const ownerMembers = roomMemberFactory(RoleName.Roomowner)
 					.buildList(3)
 					.map((member) => ({ ...member, isSelectable: false }));

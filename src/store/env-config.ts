@@ -144,6 +144,10 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.GHOST_BASE_URL;
 	}
 
+	get getContactEmail(): string {
+		return this.env.SC_CONTACT_EMAIL;
+	}
+
 	get getAccessibilityReportEmail(): string {
 		return this.env.ACCESSIBILITY_REPORT_EMAIL;
 	}

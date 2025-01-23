@@ -1,30 +1,31 @@
 <template>
-	<BoardMenuAction
+	<KebabMenuAction
 		:icon="mdiTrashCanOutline"
-		data-testid="board-menu-action-delete"
+		data-testid="kebab-menu-action-delete"
 		@click="onClick"
 	>
-		{{ $t("components.board.action.delete") }}
-	</BoardMenuAction>
+		{{ t("components.board.action.delete") }}
+	</KebabMenuAction>
 </template>
 
 <script setup lang="ts">
 import type { MessageSchema } from "@/locales/schema";
-import { injectStrict } from "@/utils/inject";
 import { mdiTrashCanOutline } from "@icons/material";
-import { BoardMenuAction } from "@ui-board";
+import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { BoardMenuScope } from "./board-menu-scope";
-import { MENU_SCOPE } from "./injection-tokens";
+import { useI18n } from "vue-i18n";
+import { PropType } from "vue";
+import KebabMenuAction from "./KebabMenuAction.vue";
+const { t } = useI18n();
 
 const props = defineProps({
 	name: { type: String, required: false },
+	scope: { type: String as PropType<BoardMenuScope>, required: true },
 	skipDeleteConfirmation: { type: Boolean, default: () => false },
 });
 
 const emit = defineEmits(["click"]);
 
-const scope = injectStrict<BoardMenuScope>(MENU_SCOPE);
 const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 
 const languageKeyForScopeType: Record<BoardMenuScope, keyof MessageSchema> = {
@@ -50,7 +51,7 @@ const languageKeyForScopeType: Record<BoardMenuScope, keyof MessageSchema> = {
 const onClick = (): void => {
 	const promise = askDeleteConfirmation(
 		props.name,
-		languageKeyForScopeType[scope]
+		languageKeyForScopeType[props.scope]
 	);
 
 	emit("click", promise);

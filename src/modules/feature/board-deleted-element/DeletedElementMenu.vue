@@ -4,12 +4,16 @@
 		has-background
 		:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 	>
-		<BoardMenuActionDelete @click="onDelete" />
+		<KebabMenuActionDelete
+			@click="onDelete"
+			:scope="BoardMenuScope.DELETED_ELEMENT"
+		/>
 	</BoardMenu>
 </template>
 
 <script setup lang="ts">
-import { BoardMenu, BoardMenuActionDelete, BoardMenuScope } from "@ui-board";
+import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { KebabMenuActionDelete } from "@ui-kebab-menu";
 
 defineProps({
 	columnIndex: { type: Number, required: true },

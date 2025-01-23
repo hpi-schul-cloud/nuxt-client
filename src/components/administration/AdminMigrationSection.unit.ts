@@ -60,7 +60,8 @@ describe("AdminMigrationSection", () => {
 		});
 
 		envConfigModule = createModuleMocks(EnvConfigModule, {
-			getAccessibilityReportEmail: "nbc-support@netz-21.de",
+			getAccessibilityReportEmail: "ticketsystem@niedersachsen.support",
+			getContactEmail: "ticketsystem@niedersachsen.support",
 			getEnv: {} as ConfigResponse,
 			...envConfigGetters,
 		});

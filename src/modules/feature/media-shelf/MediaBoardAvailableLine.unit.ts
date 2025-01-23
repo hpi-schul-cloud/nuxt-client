@@ -1,4 +1,4 @@
-import { MediaBoardLayoutType } from "@/serverApi/v3";
+import { BoardLayout } from "@/serverApi/v3";
 import {
 	mediaAvailableLineElementResponseFactory,
 	mediaAvailableLineResponseFactory,
@@ -32,7 +32,7 @@ describe("MediaBoardAvailableLine", () => {
 	const getWrapper = (
 		props: ComponentProps<typeof MediaBoardAvailableLine> = {
 			line: mediaAvailableLineResponseFactory.build(),
-			layout: MediaBoardLayoutType.List,
+			layout: BoardLayout.List,
 		}
 	) => {
 		const wrapper = mount(MediaBoardAvailableLine, {
@@ -89,7 +89,7 @@ describe("MediaBoardAvailableLine", () => {
 
 			const { wrapper } = getWrapper({
 				line: availableMedia,
-				layout: MediaBoardLayoutType.List,
+				layout: BoardLayout.List,
 			});
 
 			const toLineId = "toLineId";
@@ -235,7 +235,7 @@ describe("MediaBoardAvailableLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
 				line: mediaAvailableLineResponseFactory.build(),
-				layout: MediaBoardLayoutType.Grid,
+				layout: BoardLayout.Grid,
 			});
 
 			return {
@@ -256,7 +256,7 @@ describe("MediaBoardAvailableLine", () => {
 		const setup = () => {
 			const { wrapper } = getWrapper({
 				line: mediaAvailableLineResponseFactory.build(),
-				layout: MediaBoardLayoutType.List,
+				layout: BoardLayout.List,
 			});
 
 			return {

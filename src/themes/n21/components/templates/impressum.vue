@@ -22,8 +22,9 @@
 			</p>
 			<p>
 				<b>Support-Anfragen</b> richten Sie bitte direkt an
-				<base-link href="mailto:nbc-support@netz-21.de"
-					>nbc-support@netz-21.de</base-link
+				<base-link :href="mailtoSupportMail" data-testid="support-mail">{{
+					supportMail
+				}}</base-link
 				>.
 			</p>
 			<h2 class="h4">Vertretungsberechtigter Geschäftsführer</h2>
@@ -89,8 +90,23 @@
 	</div>
 </template>
 
-<script>
-export default {};
+<script setup lang="ts">
+import { envConfigModule } from "@/store";
+import { computed, ComputedRef } from "vue";
+
+const supportMail: ComputedRef<string> = computed(() => {
+	const email = envConfigModule.getContactEmail;
+	const isValidMailAddress = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+$/gm.test(
+		email
+	);
+	const fallbackEmail = "support@dbildungscloud.de";
+
+	return isValidMailAddress ? email : fallbackEmail;
+});
+
+const mailtoSupportMail: ComputedRef<string> = computed(() => {
+	return `mailto:${supportMail.value}`;
+});
 </script>
 
 <style lang="scss" scoped>

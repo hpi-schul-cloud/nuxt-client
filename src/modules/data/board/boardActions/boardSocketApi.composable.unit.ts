@@ -1,7 +1,9 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { envConfigModule, applicationErrorModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
+import { applicationErrorModule, envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
+import EnvConfigModule from "@/store/env-config";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	boardResponseFactory,
 	cardResponseFactory,
@@ -20,16 +22,19 @@ import { createTestingPinia } from "@pinia/testing";
 import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
+import { Router, useRouter } from "vue-router";
+import { BoardLayout } from "../../../../serverApi/v3";
 import { DeleteCardFailurePayload } from "../cardActions/cardActionPayload";
 import * as CardActions from "../cardActions/cardActions";
 import {
 	CreateCardFailurePayload,
 	CreateColumnFailurePayload,
 	DeleteColumnFailurePayload,
-	DisconnectSocketRequestPayload,
 	MoveCardFailurePayload,
 	MoveCardRequestPayload,
 	MoveColumnFailurePayload,
+	UpdateBoardLayoutFailurePayload,
+	UpdateBoardLayoutSuccessPayload,
 	UpdateBoardTitleFailurePayload,
 	UpdateBoardVisibilityFailurePayload,
 	UpdateColumnTitleFailurePayload,
@@ -37,9 +42,6 @@ import {
 import * as BoardActions from "./boardActions";
 import { useBoardRestApi } from "./boardRestApi.composable";
 import { useBoardSocketApi } from "./boardSocketApi.composable";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { Router, useRouter } from "vue-router";
 
 jest.mock("../socket/socket");
 const mockedUseSocketConnection = jest.mocked(useSocketConnection);
@@ -274,6 +276,20 @@ describe("useBoardSocketApi", () => {
 			);
 		});
 
+		it("should call updateBoardLayoutSuccess for corresponding action", () => {
+			const boardStore = mockedPiniaStoreTyping(useBoardStore);
+			const { dispatch } = useBoardSocketApi();
+
+			const payload: UpdateBoardLayoutSuccessPayload = {
+				boardId: "cardId",
+				layout: BoardLayout.Columns,
+				isOwnAction: true,
+			};
+			dispatch(BoardActions.updateBoardLayoutSuccess(payload));
+
+			expect(boardStore.updateBoardLayoutSuccess).toHaveBeenCalledWith(payload);
+		});
+
 		describe("failure actions", () => {
 			it("should call applicationErrorModule.setError for fetchBoardFailure action", () => {
 				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
@@ -418,6 +434,22 @@ describe("useBoardSocketApi", () => {
 				};
 
 				dispatch(BoardActions.updateBoardVisibilityFailure(payload));
+
+				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
+					"notUpdated",
+					"board"
+				);
+			});
+
+			it("should call notifySocketError for updateBoardLayoutFailure action", () => {
+				const { dispatch } = useBoardSocketApi();
+
+				const payload: UpdateBoardLayoutFailurePayload = {
+					boardId: "test",
+					layout: BoardLayout.Columns,
+				};
+
+				dispatch(BoardActions.updateBoardLayoutFailure(payload));
 
 				expect(mockedErrorHandler.notifySocketError).toHaveBeenCalledWith(
 					"notUpdated",
@@ -672,6 +704,24 @@ describe("useBoardSocketApi", () => {
 				"update-board-visibility-request",
 				{ boardId: "boardId", isVisible: true }
 			);
+		});
+	});
+
+	describe("updateBoardLayoutRequest", () => {
+		it("should call action with correct parameters", () => {
+			const { updateBoardLayoutRequest } = useBoardSocketApi();
+
+			updateBoardLayoutRequest({
+				boardId: "boardId",
+				layout: BoardLayout.Columns,
+			});
+
+			expect(mockedSocketConnectionHandler.emitOnSocket).toHaveBeenCalledWith<
+				[string, UpdateBoardLayoutFailurePayload]
+			>("update-board-layout-request", {
+				boardId: "boardId",
+				layout: BoardLayout.Columns,
+			});
 		});
 	});
 });

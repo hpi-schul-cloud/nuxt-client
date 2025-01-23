@@ -1,9 +1,9 @@
 import {
+	BoardLayout,
 	MediaAvailableLineResponse,
 	MediaBoardApiFactory,
 	MediaBoardApiInterface,
 	MediaBoardColors,
-	MediaBoardLayoutType,
 	MediaBoardResponse,
 	MediaElementApiFactory,
 	MediaElementApiInterface,
@@ -41,7 +41,7 @@ export const useMediaBoardApi = () => {
 
 	const updateBoardLayout = async (
 		boardId: string,
-		layout: MediaBoardLayoutType
+		layout: BoardLayout
 	): Promise<void> => {
 		await mediaBoardApi.mediaBoardControllerSetMediaBoardLayout(boardId, {
 			layout,

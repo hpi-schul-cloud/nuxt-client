@@ -41,7 +41,7 @@ export const useSidebarItems = () => {
 			icon: mdiAccountSupervisorCircleOutline,
 			feature: "FEATURE_ROOMS_ENABLED",
 			permissions: ["ROOM_CREATE"],
-			testId: "Räume",
+			testId: "Rooms",
 		},
 		{
 			title: "global.sidebar.item.courses",

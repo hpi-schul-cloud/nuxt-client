@@ -1,11 +1,11 @@
 import * as serverApi from "@/serverApi/v3/api";
 import {
+	BoardLayout,
 	CollapsableBodyParams,
 	ColorBodyParams,
 	CreateMediaElementBodyParams,
 	LayoutBodyParams,
 	MediaBoardColors,
-	MediaBoardLayoutType,
 	MoveColumnBodyParams,
 	MoveElementBodyParams,
 	RenameBodyParams,
@@ -77,15 +77,12 @@ describe("mediaBoardApi.composable", () => {
 
 	describe("updateBoardLayout", () => {
 		it("should call the api to update the media board layout", async () => {
-			await useMediaBoardApi().updateBoardLayout(
-				"boardId",
-				MediaBoardLayoutType.List
-			);
+			await useMediaBoardApi().updateBoardLayout("boardId", BoardLayout.List);
 
 			expect(
 				mediaBoardApi.mediaBoardControllerSetMediaBoardLayout
 			).toHaveBeenCalledWith<[string, LayoutBodyParams]>("boardId", {
-				layout: MediaBoardLayoutType.List,
+				layout: BoardLayout.List,
 			});
 		});
 	});

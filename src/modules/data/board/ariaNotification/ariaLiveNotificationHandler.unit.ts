@@ -1,7 +1,5 @@
-import {
-	useBoardAriaNotification,
-	SR_I18N_KEYS_MAP,
-} from "./ariaLiveNotificationHandler";
+import { BoardLayout, ContentElementType } from "@/serverApi/v3";
+import { AnyContentElement } from "@/types/board/ContentElement";
 import {
 	cardResponseFactory,
 	columnResponseFactory,
@@ -10,8 +8,10 @@ import {
 	CreateCardSuccessPayload,
 	CreateColumnSuccessPayload,
 } from "../boardActions/boardActionPayload";
-import { ContentElementType } from "@/serverApi/v3";
-import { AnyContentElement } from "@/types/board/ContentElement";
+import {
+	SR_I18N_KEYS_MAP,
+	useBoardAriaNotification,
+} from "./ariaLiveNotificationHandler";
 
 const card = {
 	elements: [
@@ -218,6 +218,53 @@ describe("useBoardAriaNotification", () => {
 			jest.advanceTimersByTime(3000);
 			expect(element?.innerHTML).toContain(
 				SR_I18N_KEYS_MAP.BOARD_UNPUBLISHED_SUCCESS
+			);
+		});
+	});
+
+	describe("when notifying on boardLayoutUpdate", () => {
+		it("should notify on boardLayoutUpdate to columns", () => {
+			const { notifyUpdateBoardLayoutSuccess } = useBoardAriaNotification();
+			const element = document.getElementById("notify-screen-reader-polite");
+			notifyUpdateBoardLayoutSuccess({
+				boardId: "boardId",
+				layout: BoardLayout.Columns,
+				isOwnAction: false,
+			});
+
+			jest.advanceTimersByTime(3000);
+			expect(element?.innerHTML).toContain(
+				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
+			);
+		});
+
+		it("should notify on boardLayoutUpdate to list", () => {
+			const { notifyUpdateBoardLayoutSuccess } = useBoardAriaNotification();
+			const element = document.getElementById("notify-screen-reader-polite");
+			notifyUpdateBoardLayoutSuccess({
+				boardId: "boardId",
+				layout: BoardLayout.List,
+				isOwnAction: false,
+			});
+
+			jest.advanceTimersByTime(3000);
+			expect(element?.innerHTML).toContain(
+				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
+			);
+		});
+
+		it("should notify on boardLayoutUpdate to unknown", () => {
+			const { notifyUpdateBoardLayoutSuccess } = useBoardAriaNotification();
+			const element = document.getElementById("notify-screen-reader-polite");
+			notifyUpdateBoardLayoutSuccess({
+				boardId: "boardId",
+				layout: BoardLayout.Grid,
+				isOwnAction: false,
+			});
+
+			jest.advanceTimersByTime(3000);
+			expect(element?.innerHTML).toContain(
+				SR_I18N_KEYS_MAP.BOARD_LAYOUT_UPDATED_SUCCESS
 			);
 		});
 	});

@@ -101,8 +101,7 @@
 		<SelectBoardLayoutDialog
 			v-if="boardLayoutsEnabled"
 			v-model="boardLayoutDialogIsOpen"
-			@select:multi-column="onMultiColumnLayoutSelected"
-			@select:single-column="onSingleColumnLayoutSelected"
+			@select="onLayoutSelected"
 		/>
 	</default-wireframe>
 </template>
@@ -144,8 +143,8 @@ import {
 	mdiSync,
 	mdiSyncOff,
 	mdiViewDashboardOutline,
-	mdiViewListOutline,
 	mdiViewGridPlusOutline,
+	mdiViewListOutline,
 } from "@icons/material";
 import { defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
@@ -503,11 +502,8 @@ export default defineComponent({
 
 			document.title = buildPageTitle(this.roomData.title);
 		},
-		onSingleColumnLayoutSelected() {
-			this.onCreateBoard(this.roomData.roomId, BoardLayout.List);
-		},
-		onMultiColumnLayoutSelected() {
-			this.onCreateBoard(this.roomData.roomId, BoardLayout.Columns);
+		onLayoutSelected(layout) {
+			this.onCreateBoard(this.roomData.roomId, layout);
 		},
 		fabItemClickHandler(event) {
 			if (event === "board-create") {

@@ -17,7 +17,7 @@
 			>
 				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
-					{{ $t(boardMenuAriaLabel) }}
+					{{ t(boardMenuAriaLabel) }}
 				</span>
 			</VBtn>
 		</template>
@@ -30,9 +30,10 @@
 <script setup lang="ts">
 import type { MessageSchema } from "@/locales/schema";
 import { mdiDotsVertical } from "@icons/material";
-import { computed, PropType, provide, toRef } from "vue";
+import { computed, PropType } from "vue";
 import { BoardMenuScope } from "./board-menu-scope";
-import { MENU_SCOPE } from "./injection-tokens";
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const props = defineProps({
 	variant: {
@@ -52,9 +53,6 @@ const props = defineProps({
 		default: "board-menu-button",
 	},
 });
-
-const scope = toRef(props, "scope");
-provide(MENU_SCOPE, scope.value);
 
 const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 	[BoardMenuScope.BOARD]: "components.board.menu.board",
@@ -77,7 +75,7 @@ const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 };
 
 const boardMenuAriaLabel = computed(() => {
-	return ariaLabelForScope[scope.value];
+	return ariaLabelForScope[props.scope];
 });
 </script>
 

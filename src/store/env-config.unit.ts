@@ -666,6 +666,26 @@ describe("env-config module", () => {
 			);
 		});
 
+		it("getShowNewClassViewEnabled should get FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED", () => {
+			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
+			envConfigModule.env = mockEnvs;
+
+			expect(envConfigModule.getShowNewClassViewEnabled).toStrictEqual(
+				mockEnvs.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED
+			);
+		});
+
+		it("getContactEmail should get SC_CONTACT_EMAIL", () => {
+			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
+			envConfigModule.env = mockEnvs;
+
+			expect(envConfigModule.getContactEmail).toStrictEqual(
+				mockEnvs.SC_CONTACT_EMAIL
+			);
+		});
+
 		it("getAccessiblityReportEmail should get ACCESSIBILITY_REPORT_EMAIL", () => {
 			const envConfigModule = new EnvConfigModule({});
 			const mockEnvs = envsFactory.build();

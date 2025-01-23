@@ -26,13 +26,13 @@
 				<div class="mt-4" data-testid="add-participant-role">
 					<v-autocomplete
 						ref="autoCompleteRole"
-						v-model="selectedRole"
+						v-model="selectedSchoolRole"
 						auto-select-first="exact"
 						density="comfortable"
 						item-title="name"
 						item-value="id"
 						variant="underlined"
-						:items="roles"
+						:items="schoolRoles"
 						:label="t('common.labels.role')"
 						@update:model-value="onRoleChange"
 						@update:menu="onAutocompleteToggle"
@@ -101,26 +101,33 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["add:members", "close", "update:role"]);
+const emit = defineEmits<{
+	(e: "add:members", selectedUsers: string[]): void;
+	(e: "close"): void;
+	(e: "update:role", payload: { schoolRole: RoleName; schoolId: string }): void;
+}>();
+
 const { t } = useI18n();
 const schoolList = toRef(props, "schools");
 const selectedSchool = ref(schoolList.value[0].id);
 
-const roles = [{ id: RoleName.Roomeditor, name: t("common.labels.teacher") }];
+const schoolRoles = [
+	{ id: RoleName.Teacher, name: t("common.labels.teacher") },
+];
 
-const selectedRole = ref<string>(roles[0].id);
+const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
 const selectedUsers = ref<string[]>([]);
 
 const onRoleChange = () => {
 	selectedUsers.value = [];
 	emit("update:role", {
-		role: selectedRole.value,
+		schoolRole: selectedSchoolRole.value,
 		schoolId: selectedSchool.value,
 	});
 };
 
 const onSchoolChange = () => {
-	selectedRole.value = roles[0].id;
+	selectedSchoolRole.value = schoolRoles[0].id;
 	onRoleChange();
 };
 

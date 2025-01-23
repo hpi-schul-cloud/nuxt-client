@@ -1,12 +1,15 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	applicationErrorModule,
-	envConfigModule,
 	courseRoomDetailsModule,
+	envConfigModule,
 } from "@/store";
-import EnvConfigModule from "@/store/env-config";
+import ApplicationErrorModule from "@/store/application-error";
 import CourseRoomDetailsModule from "@/store/course-room-details";
+import EnvConfigModule from "@/store/env-config";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import {
 	boardResponseFactory,
 	cardSkeletonResponseFactory,
@@ -22,12 +25,10 @@ import { createTestingPinia } from "@pinia/testing";
 import { useSharedEditMode } from "@util-board";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
+import { Router, useRouter } from "vue-router";
+import { BoardLayout } from "../../../../serverApi/v3";
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
-import ApplicationErrorModule from "@/store/application-error";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
-import { Router, useRouter } from "vue-router";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 const mockedUseErrorHandler = jest.mocked(useErrorHandler);
@@ -693,6 +694,50 @@ describe("boardRestApi", () => {
 			await updateBoardVisibilityRequest({
 				boardId: "boardId",
 				isVisible: true,
+			});
+
+			expect(mockedErrorHandler.handleError).toHaveBeenCalled();
+		});
+	});
+
+	describe("updateBoardLayoutRequest", () => {
+		it("should not call updateBoardLayoutSuccess action when board value is undefined", async () => {
+			const { boardStore } = setup(false);
+			const { updateBoardLayoutRequest } = useBoardRestApi();
+
+			await updateBoardLayoutRequest({
+				boardId: "boardId",
+				layout: BoardLayout.Columns,
+			});
+
+			expect(boardStore.updateBoardLayoutSuccess).not.toHaveBeenCalled();
+		});
+
+		it("should call updateBoardLayoutSuccess action if the API call is successful", async () => {
+			const { boardStore } = setup();
+			const { updateBoardLayoutRequest } = useBoardRestApi();
+
+			await updateBoardLayoutRequest({
+				boardId: "boardId",
+				layout: BoardLayout.Columns,
+			});
+
+			expect(boardStore.updateBoardLayoutSuccess).toHaveBeenCalledWith({
+				boardId: "boardId",
+				layout: BoardLayout.Columns,
+				isOwnAction: true,
+			});
+		});
+
+		it("should call handleError if the API call fails", async () => {
+			setup();
+			const { updateBoardLayoutRequest } = useBoardRestApi();
+
+			mockedBoardApiCalls.updateBoardLayoutCall.mockRejectedValue({});
+
+			await updateBoardLayoutRequest({
+				boardId: "boardId",
+				layout: BoardLayout.Columns,
 			});
 
 			expect(mockedErrorHandler.handleError).toHaveBeenCalled();

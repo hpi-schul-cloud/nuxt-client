@@ -1,8 +1,10 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { envConfigModule, applicationErrorModule } from "@/store";
-import EnvConfigModule from "@/store/env-config";
+import { applicationErrorModule, envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
+import EnvConfigModule from "@/store/env-config";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { ColumnMove } from "@/types/board/DragAndDrop";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	boardResponseFactory,
@@ -21,14 +23,14 @@ import {
 } from "@util-board";
 import { createPinia, setActivePinia } from "pinia";
 import { computed, ref } from "vue";
+import { Router, useRoute, useRouter } from "vue-router";
+import { BoardLayout } from "../../../serverApi/v3";
 import { useBoardStore } from "./Board.store";
+import { UpdateBoardLayoutRequestPayload } from "./boardActions/boardActionPayload";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";
 import { useBoardSocketApi } from "./boardActions/boardSocketApi.composable";
-import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
-import { Router, useRoute, useRouter } from "vue-router";
-import { createApplicationError } from "@/utils/create-application-error.factory";
-import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { useCardSocketApi } from "./cardActions/cardSocketApi.composable";
 
 jest.mock("./boardActions/boardSocketApi.composable");
 const mockedUseBoardSocketApi = jest.mocked(useBoardSocketApi);
@@ -622,6 +624,36 @@ describe("BoardStore", () => {
 		});
 	});
 
+	describe("updateBoardLayoutSuccess", () => {
+		describe("when board value is undefined", () => {
+			it("should not update the board layout", () => {
+				const { boardStore } = setup({ createBoard: false });
+
+				boardStore.updateBoardLayoutSuccess({
+					boardId: "boardId",
+					layout: BoardLayout.Columns,
+					isOwnAction: true,
+				});
+
+				expect(boardStore.board).toBe(undefined);
+			});
+		});
+
+		describe("when board is defined", () => {
+			it("should update the board layout", () => {
+				const { boardStore } = setup();
+
+				boardStore.updateBoardLayoutSuccess({
+					boardId: "boardId",
+					layout: BoardLayout.List,
+					isOwnAction: true,
+				});
+
+				expect(boardStore.board?.layout).toStrictEqual(BoardLayout.List);
+			});
+		});
+	});
+
 	describe("moveColumnSuccess", () => {
 		it("should not move a column when board value is undefined", async () => {
 			const { boardStore, firstColumn } = setup({ createBoard: false });
@@ -993,6 +1025,33 @@ describe("BoardStore", () => {
 
 				expect(
 					mockedBoardRestApiActions.updateBoardVisibilityRequest
+				).toHaveBeenCalledWith(payload);
+			});
+		});
+
+		describe("@updateBoardLayoutRequest", () => {
+			const payload: UpdateBoardLayoutRequestPayload = {
+				boardId: "boardId",
+				layout: BoardLayout.Columns,
+			};
+
+			it("should call socketApi.updateBoardLayoutRequest when feature flag is set true", async () => {
+				const { boardStore } = setup({ socketFlag: true });
+
+				await boardStore.updateBoardLayoutRequest(payload);
+
+				expect(
+					mockedSocketApiActions.updateBoardLayoutRequest
+				).toHaveBeenCalledWith(payload);
+			});
+
+			it("should call restApi.updateBoardLayoutRequest when feature flag is set false", async () => {
+				const { boardStore } = setup();
+
+				await boardStore.updateBoardLayoutRequest(payload);
+
+				expect(
+					mockedBoardRestApiActions.updateBoardLayoutRequest
 				).toHaveBeenCalledWith(payload);
 			});
 		});

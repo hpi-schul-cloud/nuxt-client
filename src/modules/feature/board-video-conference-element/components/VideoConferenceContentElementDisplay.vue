@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<ContentElementBar
-			:hasGreyBackground="true"
-			:icon="mdiVideo"
+			:has-grey-background="true"
+			:icon="mdiVideoOutline"
 			:has-row-style="isSmallOrLargerListBoard"
 			data-testid="board-video-conference-element"
 			@click.stop="onContentClick"
@@ -21,7 +21,7 @@
 					>
 						<div class="d-flex flex-wrap gap-4">
 							<span class="flex-1 my-auto">
-								{{ t("pages.videoConference.info.notEnabledTeacher") }}
+								{{ notEnabledMessage }}
 							</span>
 						</div>
 					</VAlert>
@@ -70,7 +70,7 @@
 			<template #menu v-if="isEditMode">
 				<slot />
 			</template>
-			<template #logo>
+			<template #statusInfo>
 				<div
 					v-if="isRunning && hasParticipationPermission"
 					class="pulsating-dot my-auto"
@@ -83,20 +83,24 @@
 
 <script setup lang="ts">
 import image from "@/assets/img/videoConference.svg";
-import { computed, ref } from "vue";
-import { mdiVideo } from "@icons/material";
+import { computed, PropType, ref } from "vue";
+import { mdiVideoOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { injectStrict } from "@/utils/inject";
 import { useDisplay } from "vuetify";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useI18n } from "vue-i18n";
-import { envConfigModule } from "@/store";
+import { BoardContextType } from "@/types/board/BoardContext";
 
 const emit = defineEmits(["click", "refresh"]);
 
 const imageSrc = image;
 
 const props = defineProps({
+	boardParentType: {
+		type: Object as PropType<BoardContextType | undefined>,
+		required: false,
+	},
 	canStart: {
 		type: Boolean,
 		required: true,
@@ -107,6 +111,10 @@ const props = defineProps({
 	},
 	isEditMode: { type: Boolean, required: true },
 	isRunning: {
+		type: Boolean,
+		required: true,
+	},
+	isVideoConferenceEnabled: {
 		type: Boolean,
 		required: true,
 	},
@@ -125,12 +133,8 @@ const isSmallOrLargerListBoard = computed(
 	() => smAndUp.value && isListLayout.value
 );
 
-const isVideoConferenceEnabled = computed(
-	() => envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED
-);
-
 const shouldShowNoFeatureAlert = computed(
-	() => props.canStart && !isVideoConferenceEnabled.value
+	() => props.canStart && !props.isVideoConferenceEnabled
 );
 const shouldShowInfoAlert = computed(() => !props.isRunning && !props.canStart);
 const shouldShowNoPermissionAlert = computed(
@@ -138,7 +142,7 @@ const shouldShowNoPermissionAlert = computed(
 );
 
 const alertMessage = computed(() => {
-	if (isVideoConferenceEnabled.value) {
+	if (props.isVideoConferenceEnabled) {
 		return props.hasParticipationPermission
 			? t("pages.videoConference.info.notStarted")
 			: t("pages.videoConference.info.noPermission");
@@ -148,15 +152,23 @@ const alertMessage = computed(() => {
 });
 
 const noPermissionMessage = computed(() => {
-	if (isVideoConferenceEnabled.value) {
+	if (props.isVideoConferenceEnabled) {
 		return t("pages.videoConference.info.noPermission");
 	} else {
 		return t("pages.videoConference.info.notEnabledParticipants");
 	}
 });
 
+const notEnabledMessage = computed(() => {
+	if (props.boardParentType === BoardContextType.Course) {
+		return t("pages.videoConference.info.courseParent.notEnabledTeacher");
+	} else {
+		return t("pages.videoConference.info.roomParent.notEnabledTeacher");
+	}
+});
+
 const onContentClick = () => {
-	if (!isVideoConferenceEnabled.value || !props.hasParticipationPermission)
+	if (!props.isVideoConferenceEnabled || !props.hasParticipationPermission)
 		return;
 
 	if (!props.isRunning && props.hasParticipationPermission && !props.canStart) {
@@ -168,10 +180,6 @@ const onContentClick = () => {
 </script>
 
 <style lang="scss" scoped>
-a {
-	text-decoration: none;
-}
-
 .menu {
 	position: absolute;
 	right: 10px;
@@ -186,23 +194,22 @@ $pulseIconColor: #15ba97;
 	border-radius: 50%;
 	height: 20px;
 	width: 20px;
-	margin: 10px;
 	box-shadow: 0 0 0 0 $pulseIconColor;
 	transform: scale(1);
-	animation: pulse 1.5s infinite;
+	animation: pulse 1.5s 5;
 
 	@keyframes pulse {
 		0% {
+			transform: scale(1);
+			box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+		}
+		30% {
 			transform: scale(0.95);
 			box-shadow: 0 0 0 0 $pulseIconColor;
 		}
-		70% {
+		100% {
 			transform: scale(1);
 			box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
-		}
-		100% {
-			transform: scale(0.95);
-			box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
 		}
 	}
 

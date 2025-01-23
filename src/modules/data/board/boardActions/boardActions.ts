@@ -1,3 +1,4 @@
+import { createAction, props } from "@/types/board/ActionFactory";
 import {
 	CreateCardFailurePayload,
 	CreateCardRequestPayload,
@@ -22,6 +23,9 @@ import {
 	MoveColumnSuccessPayload,
 	ReloadBoardPayload,
 	ReloadBoardSuccessPayload,
+	UpdateBoardLayoutFailurePayload,
+	UpdateBoardLayoutRequestPayload,
+	UpdateBoardLayoutSuccessPayload,
 	UpdateBoardTitleFailurePayload,
 	UpdateBoardTitleRequestPayload,
 	UpdateBoardTitleSuccessPayload,
@@ -32,7 +36,6 @@ import {
 	UpdateColumnTitleRequestPayload,
 	UpdateColumnTitleSuccessPayload,
 } from "./boardActionPayload";
-import { createAction, props } from "@/types/board/ActionFactory";
 
 export const disconnectSocket = createAction(
 	"disconnect-socket",
@@ -181,4 +184,19 @@ export const updateColumnTitleSuccess = createAction(
 export const updateColumnTitleFailure = createAction(
 	"update-column-title-failure",
 	props<UpdateColumnTitleFailurePayload>()
+);
+
+export const updateBoardLayoutRequest = createAction(
+	"update-board-layout-request",
+	props<UpdateBoardLayoutRequestPayload>()
+);
+
+export const updateBoardLayoutSuccess = createAction(
+	"update-board-layout-success",
+	props<UpdateBoardLayoutSuccessPayload>()
+);
+
+export const updateBoardLayoutFailure = createAction(
+	"update-board-layout-failure",
+	props<UpdateBoardLayoutFailurePayload>()
 );

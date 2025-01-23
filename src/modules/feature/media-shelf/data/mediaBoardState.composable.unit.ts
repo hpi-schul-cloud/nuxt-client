@@ -1,5 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { MediaBoardColors, MediaBoardLayoutType } from "@/serverApi/v3";
+import { BoardLayout, MediaBoardColors } from "@/serverApi/v3";
 import {
 	mediaAvailableLineResponseFactory,
 	mediaBoardResponseFactory,
@@ -215,7 +215,7 @@ describe("mediaBoardState.composable", () => {
 			it("should not call the api", async () => {
 				const { composable } = setup();
 
-				await composable.updateMediaBoardLayout(MediaBoardLayoutType.Grid);
+				await composable.updateMediaBoardLayout(BoardLayout.Grid);
 
 				expect(mediaBoardApiMock.updateBoardLayout).not.toHaveBeenCalled();
 			});
@@ -226,7 +226,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const mediaBoardResponse = mediaBoardResponseFactory.build({
-					layout: MediaBoardLayoutType.List,
+					layout: BoardLayout.List,
 				});
 				composable.mediaBoard.value = mediaBoardResponse;
 
@@ -239,22 +239,20 @@ describe("mediaBoardState.composable", () => {
 			it("should call the api to change the layout", async () => {
 				const { composable, mediaBoardResponse } = setup();
 
-				await composable.updateMediaBoardLayout(MediaBoardLayoutType.Grid);
+				await composable.updateMediaBoardLayout(BoardLayout.Grid);
 
 				expect(mediaBoardApiMock.updateBoardLayout).toHaveBeenCalledWith(
 					mediaBoardResponse.id,
-					MediaBoardLayoutType.Grid
+					BoardLayout.Grid
 				);
 			});
 
 			it("should set the layout", async () => {
 				const { composable } = setup();
 
-				await composable.updateMediaBoardLayout(MediaBoardLayoutType.Grid);
+				await composable.updateMediaBoardLayout(BoardLayout.Grid);
 
-				expect(composable.mediaBoard.value?.layout).toEqual(
-					MediaBoardLayoutType.Grid
-				);
+				expect(composable.mediaBoard.value?.layout).toEqual(BoardLayout.Grid);
 			});
 		});
 
@@ -263,7 +261,7 @@ describe("mediaBoardState.composable", () => {
 				const composable = useMediaBoardState();
 
 				const mediaBoardResponse = mediaBoardResponseFactory.build({
-					layout: MediaBoardLayoutType.List,
+					layout: BoardLayout.List,
 				});
 				composable.mediaBoard.value = mediaBoardResponse;
 
@@ -278,7 +276,7 @@ describe("mediaBoardState.composable", () => {
 			it("should call handleAnyError", async () => {
 				const { composable } = setup();
 
-				await composable.updateMediaBoardLayout(MediaBoardLayoutType.List);
+				await composable.updateMediaBoardLayout(BoardLayout.List);
 
 				expect(useErrorHandlerMock.handleAnyError).toHaveBeenCalledWith(
 					"error",

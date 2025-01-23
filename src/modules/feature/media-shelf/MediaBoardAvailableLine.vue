@@ -65,10 +65,10 @@
 
 <script setup lang="ts">
 import {
+	BoardLayout,
 	MediaAvailableLineElementResponse,
 	MediaAvailableLineResponse,
 	MediaBoardColors,
-	MediaBoardLayoutType,
 } from "@/serverApi/v3";
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
@@ -88,7 +88,7 @@ const props = defineProps({
 		required: true,
 	},
 	layout: {
-		type: String as PropType<MediaBoardLayoutType>,
+		type: String as PropType<BoardLayout>,
 		required: true,
 	},
 });
@@ -118,9 +118,7 @@ const elements: ComputedRef<MediaAvailableLineElementResponse[]> = computed(
 	() => props.line.elements ?? []
 );
 
-const isList: Ref<boolean> = computed(
-	() => props.layout === MediaBoardLayoutType.List
-);
+const isList: Ref<boolean> = computed(() => props.layout === BoardLayout.List);
 
 const lineBackgroundColorHex: Ref<string> = computed(() =>
 	MediaBoardColorMapper.mapColorToHex(props.line.backgroundColor, "lighten5")

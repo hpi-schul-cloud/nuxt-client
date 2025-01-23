@@ -15,6 +15,7 @@ type Slots = {
 	menu?: string;
 	subtitle?: string;
 	logo?: string;
+	statusInfo?: string;
 };
 
 describe("ContentElementBar", () => {
@@ -188,6 +189,42 @@ describe("ContentElementBar", () => {
 			const titleElement = wrapper.find(".content-element-title");
 
 			expect(titleElement.text()).toContain(logo);
+		});
+	});
+
+	describe("when statusInfo slot is defined", () => {
+		it("should render statusInfo slot", () => {
+			const statusInfo = "test statusInfo slot";
+			const { wrapper } = setup(
+				{},
+				{
+					title: "title slot",
+					statusInfo,
+				}
+			);
+
+			const statusInfoElement = wrapper.find(
+				"[data-testid='status-info-slot']"
+			);
+
+			expect(statusInfoElement.text()).toBe(statusInfo);
+		});
+	});
+
+	describe("when statusInfo slot is defined", () => {
+		it("should render statusInfo slot", () => {
+			const { wrapper } = setup(
+				{},
+				{
+					title: "title slot",
+				}
+			);
+
+			const statusInfoElement = wrapper.find(
+				"[data-testid='status-info-slot']"
+			);
+
+			expect(statusInfoElement.exists()).toBe(false);
 		});
 	});
 });

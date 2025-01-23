@@ -31,6 +31,8 @@
 					:column-index="columnIndex"
 					:row-index="rowIndex"
 					:element-index="elementIndex"
+					:is-not-first-element="isNotFirstElement"
+					:is-not-last-element="isNotLastElement"
 					@move-down:element="onMoveElementDown"
 					@move-up:element="onMoveElementUp"
 					@delete:element="onDeleteElement"
@@ -89,6 +91,8 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	isNotFirstElement: { type: Boolean, requried: false },
+	isNotLastElement: { type: Boolean, requried: false },
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
@@ -119,12 +123,9 @@ const {
 	error: launchError,
 } = useExternalToolLaunchState(() => loadCardData());
 
-const autofocus: Ref<boolean> = ref(false);
 const element: Ref<ExternalToolElementResponse> = toRef(props, "element");
 const externalToolElement = ref<HTMLElement | null>(null);
-useBoardFocusHandler(element.value.id, externalToolElement, () => {
-	autofocus.value = true;
-});
+useBoardFocusHandler(element.value.id, externalToolElement);
 
 const getIcon: ComputedRef<string | undefined> = computed(() => {
 	if (!displayData.value?.logoUrl) {

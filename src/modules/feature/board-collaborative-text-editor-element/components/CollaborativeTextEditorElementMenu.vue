@@ -4,25 +4,29 @@
 		has-background
 		:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 	>
-		<BoardMenuActionMoveUp @click="onMoveUp" />
-		<BoardMenuActionMoveDown @click="onMoveDown" />
-		<BoardMenuActionDelete @click="onDelete" />
+		<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
+		<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
+		<KebabMenuActionDelete
+			@click="onDelete"
+			:scope="BoardMenuScope.COLLABORATIVE_TEXT_EDITOR_ELEMENT"
+		/>
 	</BoardMenu>
 </template>
 
 <script setup lang="ts">
+import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-	BoardMenuScope,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
 
 defineProps({
 	columnIndex: { type: Number, required: true },
 	rowIndex: { type: Number, required: true },
 	elementIndex: { type: Number, required: true },
+	isNotFirstElement: { type: Boolean, requried: false },
+	isNotLastElement: { type: Boolean, requried: false },
 });
 
 const emit = defineEmits<{

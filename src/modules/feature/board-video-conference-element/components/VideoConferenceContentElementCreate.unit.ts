@@ -4,11 +4,15 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 const setupWrapper = () => {
 	const wrapper = mount(VideoConferenceContentElementCreate, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
+			provide: {
+				[BOARD_IS_LIST_LAYOUT as symbol]: false,
+			},
 		},
 	});
 
