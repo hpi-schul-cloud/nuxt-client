@@ -30,7 +30,6 @@ const setupWrapper = ({
 			},
 		},
 		props: {
-			boardParentType: BoardContextType.Course,
 			isEditMode: false,
 			isRunning: false,
 			isVideoConferenceEnabled: true,
@@ -104,6 +103,28 @@ describe("VideoConferenceContentElementDisplay", () => {
 					const wrapper = setupWrapper({
 						propsData: {
 							boardParentType: BoardContextType.Room,
+							isRunning: false,
+							isVideoConferenceEnabled: false,
+							hasParticipationPermission: true,
+							canStart: true,
+							title: "video conference",
+						},
+					});
+
+					const alert = wrapper.findComponent(
+						'[data-testid="vc-info-box-no-feature"]'
+					);
+					const text = alert.find("span.my-auto");
+					expect(text.text()).toEqual(
+						"pages.videoConference.info.roomParent.notEnabledTeacher"
+					);
+				});
+			});
+
+			describe("and the elements parent is not handed to the component", () => {
+				it("should show 'not enabled for teacher' alert", () => {
+					const wrapper = setupWrapper({
+						propsData: {
 							isRunning: false,
 							isVideoConferenceEnabled: false,
 							hasParticipationPermission: true,

@@ -99,7 +99,7 @@ const imageSrc = image;
 const props = defineProps({
 	boardParentType: {
 		type: Object as PropType<BoardContextType | undefined>,
-		required: true,
+		required: false,
 	},
 	canStart: {
 		type: Boolean,
