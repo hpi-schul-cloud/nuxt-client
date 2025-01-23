@@ -1939,8 +1939,10 @@ export default {
 		"Die Videokonferenz wurde noch nicht gestartet.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"Das Element ist nicht mehr verfügbar. Bitte an die Lehrkraft wenden.",
-	"pages.videoConference.info.notEnabledTeacher":
-		"Das Element ist nicht mehr verfügbar. Bitte an den Admin wenden.",
+	"pages.videoConference.info.courseParent.notEnabledTeacher":
+		"Das Element ist nicht mehr verfügbar, da Videokonferenzen deaktiviert wurden. Bitte in den Kurs-Einstellungen aktivieren und/oder an den Schul-Admin wenden.",
+	"pages.videoConference.info.roomParent.notEnabledTeacher":
+		"Das Element ist nicht mehr verfügbar, da Videokonferenzen für die Schule deaktiviert wurden. Bitte an den Schul-Admin wenden.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
 	"error.500":
 		"Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",

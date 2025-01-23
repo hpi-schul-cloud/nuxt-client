@@ -1959,8 +1959,10 @@ export default {
 		"La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"El elemento ya no está disponible. Póngase en contacto con el profesor.",
-	"pages.videoConference.info.notEnabledTeacher":
-		"El elemento ya no está disponible. Póngase en contacto con el administrador.",
+	"pages.videoConference.info.courseParent.notEnabledTeacher":
+		"El elemento ya no está disponible porque se ha desactivado la videoconferencia. Por favor, actívelo en los ajustes del curso y/o contacte con el administrador de la escuela.",
+	"pages.videoConference.info.roomParent.notEnabledTeacher":
+		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",

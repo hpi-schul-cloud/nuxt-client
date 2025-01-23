@@ -15,6 +15,7 @@
 	>
 		<VideoConferenceContentElementDisplay
 			v-if="computedElement.content.title"
+			:board-parent-type="boardParentType"
 			:title="computedElement.content.title"
 			:has-participation-permission="hasParticipationPermission"
 			:is-video-conference-enabled="isVideoConferenceEnabled"
@@ -27,7 +28,7 @@
 			<BoardMenu
 				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 				has-background
-				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
+				:data-testid="`element-display-menu-${columnIndex}-${rowIndex}-${elementIndex}`"
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
@@ -44,6 +45,7 @@
 			<BoardMenu
 				:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
 				has-background
+				:data-testid="`element-create-menu-${columnIndex}-${rowIndex}-${elementIndex}`"
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
@@ -54,7 +56,7 @@
 			</BoardMenu>
 		</VideoConferenceContentElementCreate>
 		<VDialog
-			ref="vDialog"
+			ref="errorDialog"
 			v-model="isErrorDialogOpen"
 			:max-width="480"
 			data-testid="error-dialog"
@@ -97,6 +99,7 @@ import {
 	useBoardFocusHandler,
 	useBoardPermissions,
 	useContentElementState,
+	useSharedBoardPageInformation,
 } from "@data-board";
 import { useI18n } from "vue-i18n";
 import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
@@ -160,6 +163,8 @@ const isVideoConferenceEnabled = computed(() =>
 
 useBoardFocusHandler(element.value.id, videoConferenceElement);
 
+const { contextType } = useSharedBoardPageInformation();
+
 if (isVideoConferenceEnabled.value) {
 	onMounted(fetchVideoConferenceInfo);
 }
@@ -201,6 +206,8 @@ const canStart = computed(() => isTeacher);
 const isCreating = computed(
 	() => props.isEditMode && !computedElement.value.content.title
 );
+
+const boardParentType = computed(() => contextType.value);
 
 const onContentClick = async () => {
 	await fetchVideoConferenceInfo();
