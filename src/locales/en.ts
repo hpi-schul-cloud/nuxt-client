@@ -373,6 +373,7 @@ export default {
 	"components.board.action.moveLeft": "Move left",
 	"components.board.action.moveRight": "Move right",
 	"components.board.action.moveUp": "Move up",
+	"components.board.action.changeLayout": "Change layout",
 	"components.board.action.shareLink.card": "Copy link to card",
 	"components.board.alert.info.teacher":
 		"This board is visible to all course participants.",
@@ -437,6 +438,8 @@ export default {
 		"Title of card {cardPosition} in column {columnPosition} was changed to {newTitle} by another user.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"The board's view was changed to {layout} by another user.",
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
@@ -1902,8 +1905,10 @@ export default {
 		"The video conference hasn't started yet.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"The element is no longer available. Please contact the teacher.",
-	"pages.videoConference.info.notEnabledTeacher":
-		"The element is no longer available. Please contact the admin.",
+	"pages.videoConference.info.courseParent.notEnabledTeacher":
+		"The element is no longer available as video conferencing has been deactivated. Please activate it in the course settings and/or contact the school admin.",
+	"pages.videoConference.info.roomParent.notEnabledTeacher":
+		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
 	"error.500":
 		"There are problems in the system. We are working on fixing the issue. Please try again later.",

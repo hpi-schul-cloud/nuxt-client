@@ -375,6 +375,7 @@ export default {
 	"components.board.action.moveLeft": "Nach links verschieben",
 	"components.board.action.moveRight": "Nach rechts verschieben",
 	"components.board.action.moveUp": "Nach oben verschieben",
+	"components.board.action.changeLayout": "Ansicht ändern",
 	"components.board.action.shareLink.card": "Link zur Karte kopieren",
 	"components.board.alert.info.teacher":
 		"Dieser Bereich ist sichtbar für alle Kursteilnehmenden.",
@@ -441,6 +442,8 @@ export default {
 		"Titel von Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer in {newTitle} geändert.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Karte {cardPosition} in Abschnitt {columnPosition} wurde von einem anderen Benutzer aktualisiert.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"Die Ansicht des Bereichs wurde von einem anderen Benutzer zu {layout} geändert.",
 	"components.board": "Bereich",
 	"components.boardCard": "Karte",
 	"components.boardColumn": "Abschnitt",
@@ -1936,8 +1939,10 @@ export default {
 		"Die Videokonferenz wurde noch nicht gestartet.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"Das Element ist nicht mehr verfügbar. Bitte an die Lehrkraft wenden.",
-	"pages.videoConference.info.notEnabledTeacher":
-		"Das Element ist nicht mehr verfügbar. Bitte an den Admin wenden.",
+	"pages.videoConference.info.courseParent.notEnabledTeacher":
+		"Das Element ist nicht mehr verfügbar, da Videokonferenzen deaktiviert wurden. Bitte in den Kurs-Einstellungen aktivieren und/oder an den Schul-Admin wenden.",
+	"pages.videoConference.info.roomParent.notEnabledTeacher":
+		"Das Element ist nicht mehr verfügbar, da Videokonferenzen für die Schule deaktiviert wurden. Bitte an den Schul-Admin wenden.",
 	"pages.videoConference.title": "Videokonferenz BigBlueButton",
 	"error.500":
 		"Es gibt Probleme im System. Wir arbeiten daran, das Problem zu beheben. Bitte später erneut versuchen.",

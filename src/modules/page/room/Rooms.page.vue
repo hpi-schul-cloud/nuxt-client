@@ -16,9 +16,10 @@
 					>
 						<template #helpLink>
 							<a
-								href="/help/confluence/375458794"
+								href="https://docs.dbildungscloud.de/x/6gthFg"
 								target="_blank"
 								rel="noopener"
+								data-testid="rooms-help-link"
 								:aria-label="helpAriaLabel"
 							>
 								{{ t("pages.rooms.infoAlert.welcome.visibility.help") }}

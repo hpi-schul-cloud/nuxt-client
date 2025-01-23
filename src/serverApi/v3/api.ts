@@ -5462,6 +5462,7 @@ export interface MediaBoardResponse {
      * @memberof MediaBoardResponse
      */
     layout: BoardLayout;
+    layout: BoardLayout;
 }
 /**
  * 

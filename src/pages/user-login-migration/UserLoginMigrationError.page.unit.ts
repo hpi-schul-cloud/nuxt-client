@@ -46,7 +46,7 @@ describe("UserLoginMigrationError", () => {
 			getSystems: systemsMock,
 		});
 		envConfigModule = createModuleMocks(EnvConfigModule, {
-			getAccessibilityReportEmail: "nbc-support@netz-21.de",
+			getAccessibilityReportEmail: "ticketsystem@niedersachsen.support",
 		});
 		userLoginMigrationModule = createModuleMocks(UserLoginMigrationModule, {
 			getUserLoginMigration: userLoginMigrationFactory.build(),
@@ -142,7 +142,7 @@ describe("UserLoginMigrationError", () => {
 				"pages.userMigration.error.description.support.link"
 			);
 			expect(supportLink.element.href).toEqual(
-				"mailto:nbc-support@netz-21.de?subject=Schulnummer%20nicht%20korrekt"
+				"mailto:ticketsystem@niedersachsen.support?subject=Schulnummer%20nicht%20korrekt"
 			);
 		});
 	});

@@ -378,6 +378,7 @@ export default {
 	"components.board.action.moveLeft": "Mover a la izquierda",
 	"components.board.action.moveRight": "Mover a la derecha",
 	"components.board.action.moveUp": "Levantar",
+	"components.board.action.changeLayout": "Cambiar vista",
 	"components.board.action.shareLink.card": "Enlace a la ficha",
 	"components.board.alert.info.teacher":
 		"Este tablero es visible para todos los participantes en el curso.",
@@ -446,6 +447,8 @@ export default {
 		"El título de la tarjeta {cardPosition} en la columna {columnPosition} fue cambiado a {newTitle} por otro usuario.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"La tarjeta {cardPosition} de la columna {columnPosition} ha sido actualizada por otro usuario.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"Otro usuario cambió la vista del panel a {layout}.",
 	"components.board": "tablero",
 	"components.boardCard": "tarjeta",
 	"components.boardColumn": "columna",
@@ -1956,8 +1959,10 @@ export default {
 		"La videoconferencia aún no ha comenzado.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"El elemento ya no está disponible. Póngase en contacto con el profesor.",
-	"pages.videoConference.info.notEnabledTeacher":
-		"El elemento ya no está disponible. Póngase en contacto con el administrador.",
+	"pages.videoConference.info.courseParent.notEnabledTeacher":
+		"El elemento ya no está disponible porque se ha desactivado la videoconferencia. Por favor, actívelo en los ajustes del curso y/o contacte con el administrador de la escuela.",
+	"pages.videoConference.info.roomParent.notEnabledTeacher":
+		"Este elemento ya no está disponible porque se ha desactivado la videoconferencia en la escuela. Póngase en contacto con el administrador de la escuela.",
 	"pages.videoConference.title": "Videoconferencia BigBlueButton",
 	"error.500":
 		"Hay problemas en el sistema. Estamos trabajando para solucionar el problema. Vuelva a intentarlo más tarde.",
