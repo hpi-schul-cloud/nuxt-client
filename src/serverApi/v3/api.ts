@@ -1279,6 +1279,12 @@ export interface ConfigResponse {
     ACCESSIBILITY_REPORT_EMAIL: string;
     /**
      * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    SC_CONTACT_EMAIL: string;
+    /**
+     * 
      * @type {boolean}
      * @memberof ConfigResponse
      */
