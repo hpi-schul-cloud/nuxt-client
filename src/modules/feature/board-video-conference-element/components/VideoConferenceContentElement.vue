@@ -4,7 +4,7 @@
 			class="mb-4"
 			data-testid="video-conference-element"
 			:class="{ 'd-none': isHidden }"
-			variant="outlined"
+			:variant="outlined"
 			ref="videoConferenceElement"
 			:ripple="false"
 			target="_blank"
