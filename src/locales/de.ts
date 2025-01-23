@@ -1801,7 +1801,7 @@ export default {
 		"Räume sind vorerst nur für Lehrkräfte sichtbar und werden weiter ausgebaut. Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.",
 	"pages.rooms.infoAlert.welcome.visibility.help": "Hilfeseite",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "Rückmeldungen",
-	"pages.rooms.leaveRoom.confirmation": 'Raum	"{roomName}" wirklich verlassen?',
+	"pages.rooms.leaveRoom.confirmation": 'Raum "{roomName}" wirklich verlassen?',
 	"pages.rooms.leaveRoom.menu": "Raum verlassen",
 	"pages.rooms.members.error.load":
 		"Die Teilnehmenden-Liste konnte nicht geladen werden.",
