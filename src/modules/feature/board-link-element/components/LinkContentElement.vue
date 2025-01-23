@@ -5,7 +5,7 @@
 			target="_blank"
 			data-testid="board-link-element"
 			:class="{ 'd-none': isHidden }"
-			:variant="outlined"
+			variant="outlined"
 			:ripple="false"
 			:aria-label="ariaLabel"
 			:href="sanitizedUrl"

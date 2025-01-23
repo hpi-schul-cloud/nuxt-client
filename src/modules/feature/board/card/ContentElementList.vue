@@ -347,3 +347,8 @@ const lastElementId = computed<Element["id"] | null>(() => {
 	return props.elements.length > 0 ? props.elements[lastElementIndex].id : null;
 });
 </script>
+<style scoped>
+.v-card--variant-outlined {
+	border-color: rgba(var(--v-theme-on-surface), 0.12) !important;
+}
+</style>
