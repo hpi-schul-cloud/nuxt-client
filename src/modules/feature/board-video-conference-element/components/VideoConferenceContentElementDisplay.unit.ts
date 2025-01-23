@@ -8,6 +8,7 @@ import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardFeatures } from "@data-board";
+import { BoardContextType } from "@/types/board/BoardContext";
 
 jest.mock("@data-board/BoardFeatures.composable");
 jest.mocked(useBoardFeatures).mockImplementation(() => {
@@ -73,25 +74,73 @@ describe("VideoConferenceContentElementDisplay", () => {
 	});
 
 	describe("Alerts", () => {
-		describe("and the feature is disabled", () => {
-			it("should show 'not enabled for teacher' alert", () => {
-				const wrapper = setupWrapper({
-					propsData: {
-						isRunning: false,
-						isVideoConferenceEnabled: false,
-						hasParticipationPermission: true,
-						canStart: true,
-						title: "video conference",
-					},
-				});
+		describe("when the feature is disabled", () => {
+			describe("and the elements parent is a course", () => {
+				it("should show 'not enabled for teacher' alert", () => {
+					const wrapper = setupWrapper({
+						propsData: {
+							boardParentType: BoardContextType.Course,
+							isRunning: false,
+							isVideoConferenceEnabled: false,
+							hasParticipationPermission: true,
+							canStart: true,
+							title: "video conference",
+						},
+					});
 
-				const alert = wrapper.findComponent(
-					'[data-testid="vc-info-box-no-feature"]'
-				);
-				const text = alert.find("span.my-auto");
-				expect(text.text()).toEqual(
-					"pages.videoConference.info.notEnabledTeacher"
-				);
+					const alert = wrapper.findComponent(
+						'[data-testid="vc-info-box-no-feature"]'
+					);
+					const text = alert.find("span.my-auto");
+					expect(text.text()).toEqual(
+						"pages.videoConference.info.courseParent.notEnabledTeacher"
+					);
+				});
+			});
+
+			describe("and the elements parent is a room", () => {
+				it("should show 'not enabled for teacher' alert", () => {
+					const wrapper = setupWrapper({
+						propsData: {
+							boardParentType: BoardContextType.Room,
+							isRunning: false,
+							isVideoConferenceEnabled: false,
+							hasParticipationPermission: true,
+							canStart: true,
+							title: "video conference",
+						},
+					});
+
+					const alert = wrapper.findComponent(
+						'[data-testid="vc-info-box-no-feature"]'
+					);
+					const text = alert.find("span.my-auto");
+					expect(text.text()).toEqual(
+						"pages.videoConference.info.roomParent.notEnabledTeacher"
+					);
+				});
+			});
+
+			describe("and the elements parent is not handed to the component", () => {
+				it("should show 'not enabled for teacher' alert", () => {
+					const wrapper = setupWrapper({
+						propsData: {
+							isRunning: false,
+							isVideoConferenceEnabled: false,
+							hasParticipationPermission: true,
+							canStart: true,
+							title: "video conference",
+						},
+					});
+
+					const alert = wrapper.findComponent(
+						'[data-testid="vc-info-box-no-feature"]'
+					);
+					const text = alert.find("span.my-auto");
+					expect(text.text()).toEqual(
+						"pages.videoConference.info.roomParent.notEnabledTeacher"
+					);
+				});
 			});
 		});
 

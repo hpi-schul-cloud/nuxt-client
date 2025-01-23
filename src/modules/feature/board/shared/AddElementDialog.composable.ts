@@ -172,7 +172,6 @@ export const useAddElementDialog = (
 	if (
 		envConfigModule.getEnv.FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED &&
 		isVideoConferenceEnabled.value
-		//TODO: both needed? check if BE checks env var
 	) {
 		options.push({
 			icon: mdiVideoOutline,

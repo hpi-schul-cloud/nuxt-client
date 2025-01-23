@@ -13,7 +13,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { shallowMount } from "@vue/test-utils";
 import { VDialog } from "vuetify/lib/components/index.mjs";
 import RoomVideoConferenceSection from "./RoomVideoConferenceSection.vue";
 import RoomVideoConferenceCard from "@/components/rooms/RoomVideoConferenceCard.vue";
