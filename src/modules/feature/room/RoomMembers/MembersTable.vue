@@ -123,6 +123,7 @@ const selectedUserIds = ref<string[]>([]);
 const emit = defineEmits<{
 	(e: "remove:members", userIds: string[]): void;
 	(e: "select:members", userIds: string[]): void;
+	(e: "change:permission", userId: string): void;
 }>();
 
 const { t } = useI18n();
@@ -185,7 +186,7 @@ const getRemoveAriaLabel = (member: RoomMemberResponse) =>
 	});
 
 const onChangePermission = (userId: string) => {
-	console.log("Change permission for user with id: ", userId);
+	emit("change:permission", userId);
 };
 
 const tableHeader = [
