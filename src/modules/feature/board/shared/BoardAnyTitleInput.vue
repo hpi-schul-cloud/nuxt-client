@@ -38,7 +38,6 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
-		@focus="cursorToEnd"
 	>
 		<template v-slot:append-inner>
 			<slot />
@@ -104,7 +103,6 @@ export default defineComponent({
 		const setFocusOnEdit = async () => {
 			await nextTick();
 			internalIsFocused.value = true;
-
 			if (titleInput.value) {
 				(titleInput.value as VTextarea).focus();
 				cursorToEnd();
@@ -187,8 +185,10 @@ export default defineComponent({
 		});
 
 		const cursorToEnd = () => {
-			const length = (titleInput.value as VTextarea).value.length;
-			titleInput.value.setSelectionRange(length, length);
+			if (titleInput.value) {
+				const length = (titleInput.value as VTextarea).value.length;
+				(titleInput.value as VTextarea).setSelectionRange(length, length);
+			}
 		};
 
 		return {
