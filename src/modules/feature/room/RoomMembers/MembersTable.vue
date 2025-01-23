@@ -207,7 +207,12 @@ const tableHeader = [
 		key: "displaySchoolRole",
 	},
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
-	{ title: "", key: "actions", sortable: false, width: 50 },
+	{
+		title: t("pages.rooms.members.tableHeader.actions"),
+		key: "actions",
+		sortable: false,
+		width: 50,
+	},
 ];
 </script>
 

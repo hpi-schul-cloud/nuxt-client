@@ -1828,6 +1828,7 @@ export default {
 	"pages.rooms.members.roomPermissions.viewer": "Читати",
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
+	"pages.rooms.members.tableHeader.actions": "Дії",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

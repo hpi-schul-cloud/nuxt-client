@@ -1851,6 +1851,7 @@ export default {
 	"pages.rooms.members.roomPermissions.viewer": "Leer",
 	"pages.rooms.members.tableHeader.roomRole": "Permisos de la sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
+	"pages.rooms.members.tableHeader.actions": "Acciones",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

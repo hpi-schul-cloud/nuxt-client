@@ -38,7 +38,7 @@ describe("MembersTable", () => {
 		"pages.rooms.members.tableHeader.roomRole",
 		"pages.rooms.members.tableHeader.schoolRole",
 		"common.words.mainSchool",
-		"",
+		"pages.rooms.members.tableHeader.actions",
 	];
 
 	const setup = (options?: {

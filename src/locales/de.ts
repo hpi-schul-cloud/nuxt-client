@@ -1814,7 +1814,7 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
-	"pages.rooms.members.changePermission": "Berechtigungen ändern",
+	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
 	"pages.rooms.members.manage": "Raum-Mitglieder",
 	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
@@ -1831,6 +1831,7 @@ export default {
 	"pages.rooms.members.roomPermissions.viewer": "Lesen",
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
+	"pages.rooms.members.tableHeader.actions": "Aktionen",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
