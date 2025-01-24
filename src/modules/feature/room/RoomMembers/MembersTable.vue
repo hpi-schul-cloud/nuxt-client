@@ -40,22 +40,19 @@
 		:items-per-page-options="[5, 10, 25, 50, 100]"
 		:items-per-page="50"
 		:mobile="null"
-		:show-select="isSelectionColumnVisible()"
+		:show-select="isVisibleSelectionColumn"
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
 		@update:current-items="onUpdateFilter"
 		@update:model-value="onSelectMembers"
 	>
-		<template
-			#[`item.actions`]="{ item, index }"
-			v-if="isActionColumnVisible()"
-		>
+		<template #[`item.actions`]="{ item, index }" v-if="isVisibleActionColumn">
 			<KebabMenu
-				v-if="isActionInRowVisible(item)"
+				v-if="isVisibleActionInRow(item)"
 				:data-testid="`kebab-menu-${index}`"
 			>
 				<VListItem
-					v-if="isChangeRoleButtonVisible()"
+					v-if="isVisibleChangeRoleButton"
 					:data-testid="`btn-change-role-${index}`"
 					@click="onChangePermission(item.userId)"
 				>
@@ -134,10 +131,10 @@ const membersFilterCount = ref(memberList.value?.length);
 const currentUser = computed(() => props.currentUser);
 
 const {
-	isSelectionColumnVisible,
-	isActionColumnVisible,
-	isActionInRowVisible,
-	isChangeRoleButtonVisible,
+	isVisibleSelectionColumn,
+	isVisibleActionColumn,
+	isVisibleActionInRow,
+	isVisibleChangeRoleButton,
 } = useRoomMemberVisibilityOptions(currentUser);
 
 const onUpdateFilter = (filteredMembers: RoomMemberResponse[]) => {
@@ -208,7 +205,9 @@ const tableHeader = [
 	},
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
 	{
-		title: t("pages.rooms.members.tableHeader.actions"),
+		title: isVisibleActionColumn.value
+			? t("pages.rooms.members.tableHeader.actions")
+			: "",
 		key: "actions",
 		sortable: false,
 		width: 50,

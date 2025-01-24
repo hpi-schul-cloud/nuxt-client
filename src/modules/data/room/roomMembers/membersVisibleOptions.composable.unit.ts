@@ -65,70 +65,70 @@ describe("useRoomMemberVisibilityOptions", () => {
 		});
 	};
 
-	describe("isSelectionColumnVisible", () => {
+	describe("isVisibleSelectionColumn", () => {
 		it.each([
 			{ roomRoleName: RoleName.Roomowner, expected: true },
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
 			{ roomRoleName: RoleName.Roomeditor, expected: false },
 			{ roomRoleName: RoleName.Roomviewer, expected: false },
 		])("should return %p for %p", ({ roomRoleName, expected }) => {
-			const { isSelectionColumnVisible } = setup({ roomRoleName });
+			const { isVisibleSelectionColumn } = setup({ roomRoleName });
 
-			expect(isSelectionColumnVisible()).toBe(expected);
+			expect(isVisibleSelectionColumn.value).toBe(expected);
 		});
 	});
 
-	describe("isActionColumnVisible", () => {
+	describe("isVisibleActionColumn", () => {
 		it.each([
 			{ roomRoleName: RoleName.Roomowner, expected: true },
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
 			{ roomRoleName: RoleName.Roomeditor, expected: false },
 			{ roomRoleName: RoleName.Roomviewer, expected: false },
 		])("should return %p for %p", ({ roomRoleName, expected }) => {
-			const { isActionColumnVisible } = setup({ roomRoleName });
+			const { isVisibleActionColumn } = setup({ roomRoleName });
 
-			expect(isActionColumnVisible()).toBe(expected);
+			expect(isVisibleActionColumn.value).toBe(expected);
 		});
 	});
 
-	describe("isAddMemberButtonVisible", () => {
+	describe("isVisibleAddMemberButton", () => {
 		it.each([
 			{ roomRoleName: RoleName.Roomowner, expected: true },
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
 			{ roomRoleName: RoleName.Roomeditor, expected: false },
 			{ roomRoleName: RoleName.Roomviewer, expected: false },
 		])("should return %p for %p", ({ roomRoleName, expected }) => {
-			const { isAddMemberButtonVisible } = setup({ roomRoleName });
+			const { isVisibleAddMemberButton } = setup({ roomRoleName });
 
-			expect(isAddMemberButtonVisible()).toBe(expected);
+			expect(isVisibleAddMemberButton.value).toBe(expected);
 		});
 	});
 
-	describe("isActionInRowVisible", () => {
+	describe("isVisibleActionInRow", () => {
 		it.each([
 			{ roomRoleName: RoleName.Roomowner, expected: false },
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
 			{ roomRoleName: RoleName.Roomeditor, expected: true },
 			{ roomRoleName: RoleName.Roomviewer, expected: true },
 		])("should return %p for %p", ({ roomRoleName, expected }) => {
-			const { isActionInRowVisible } = setup({ roomRoleName });
+			const { isVisibleActionInRow } = setup({ roomRoleName });
 
 			const roomMember = roomMemberFactory(roomRoleName).build();
 
-			expect(isActionInRowVisible(roomMember)).toBe(expected);
+			expect(isVisibleActionInRow(roomMember)).toBe(expected);
 		});
 	});
 
-	describe("isChangeRoleButtonVisible", () => {
+	describe("isVisibleChangeRoleButton", () => {
 		it.each([
 			{ roomRoleName: RoleName.Roomowner, expected: true },
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
 			{ roomRoleName: RoleName.Roomeditor, expected: false },
 			{ roomRoleName: RoleName.Roomviewer, expected: false },
 		])("should return %p for %p", ({ roomRoleName, expected }) => {
-			const { isChangeRoleButtonVisible } = setup({ roomRoleName });
+			const { isVisibleChangeRoleButton } = setup({ roomRoleName });
 
-			expect(isChangeRoleButtonVisible()).toBe(expected);
+			expect(isVisibleChangeRoleButton.value).toBe(expected);
 		});
 
 		describe("when FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED is false", () => {
@@ -138,12 +138,12 @@ describe("useRoomMemberVisibilityOptions", () => {
 				{ roomRoleName: RoleName.Roomeditor, expected: false },
 				{ roomRoleName: RoleName.Roomviewer, expected: false },
 			])("should return %p for %p", ({ roomRoleName, expected }) => {
-				const { isChangeRoleButtonVisible } = setup({
+				const { isVisibleChangeRoleButton } = setup({
 					roomRoleName: roomRoleName,
 					changeRoleFeatureFlag: false,
 				});
 
-				expect(isChangeRoleButtonVisible()).toBe(expected);
+				expect(isVisibleChangeRoleButton.value).toBe(expected);
 			});
 		});
 	});

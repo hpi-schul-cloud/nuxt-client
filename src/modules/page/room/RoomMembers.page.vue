@@ -13,7 +13,7 @@
 					{{ t("pages.rooms.members.manage") }}
 				</h1>
 				<KebabMenu
-					v-if="isLeaveRoomButtonVisible()"
+					v-if="isVisibleLeaveRoomButton"
 					class="mx-2"
 					data-testid="room-member-menu"
 				>
@@ -132,7 +132,7 @@ const fixedHeaderOnMobile = ref({
 const { y } = useElementBounding(wireframe);
 const { askConfirmation } = useConfirmationDialog();
 
-const { isAddMemberButtonVisible, isLeaveRoomButtonVisible } =
+const { isVisibleAddMemberButton, isVisibleLeaveRoomButton } =
 	useRoomMemberVisibilityOptions(currentUser);
 
 useTitle(pageTitle);
@@ -209,7 +209,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 });
 
 const fabAction = computed(() => {
-	if (!isAddMemberButtonVisible()) return;
+	if (!isVisibleAddMemberButton.value) return;
 	return {
 		icon: mdiPlus,
 		title: t("pages.rooms.members.add"),
