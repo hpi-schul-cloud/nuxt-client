@@ -1,4 +1,4 @@
-import { Ref, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 import { RoomMember } from "./types";
 import {
 	RoleName,
@@ -25,6 +25,11 @@ export const useRoomMembers = (roomId: string) => {
 		name: schoolsModule.getSchool.name,
 	};
 	const currentUserId = authModule.getUser?.id ?? "";
+	const currentUser = computed(() => {
+		return roomMembers.value?.find(
+			(member) => member.userId === currentUserId
+		) as RoomMemberResponse;
+	});
 
 	const roomRole: Record<string, string> = {
 		[RoleName.Roomowner]: t("pages.rooms.members.roomPermissions.owner"),
@@ -48,12 +53,12 @@ export const useRoomMembers = (roomId: string) => {
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
 					...member,
-					displayRoomRole: roomRole[member.roomRoleName],
-					displaySchoolRole: schoolRole[member.schoolRoleName],
 					isSelectable: !(
 						member.userId === currentUserId ||
 						member.roomRoleName === RoleName.Roomowner
 					),
+					displayRoomRole: roomRole[member.roomRoleName],
+					displaySchoolRole: schoolRole[member.schoolRoleName],
 				};
 			});
 			isLoading.value = false;
@@ -142,6 +147,7 @@ export const useRoomMembers = (roomId: string) => {
 		getPotentialMembers,
 		getSchools,
 		removeMembers,
+		currentUser,
 		isLoading,
 		roomMembers,
 		potentialRoomMembers,

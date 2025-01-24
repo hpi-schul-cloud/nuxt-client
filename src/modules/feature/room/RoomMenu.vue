@@ -46,6 +46,20 @@
 				{{ $t("common.actions.delete") }}
 			</VListItemTitle>
 		</VListItem>
+		<VListItem
+			v-if="canLeaveRoom"
+			role="menuitem"
+			data-testid="room-action-leave-room"
+			:aria-label="$t('pages.rooms.leaveRoom.menu')"
+			@click="() => $emit('room:leave')"
+		>
+			<template #prepend>
+				<VIcon :icon="mdiLocationExit" />
+			</template>
+			<VListItemTitle>
+				{{ $t("pages.rooms.leaveRoom.menu") }}
+			</VListItemTitle>
+		</VListItem>
 	</KebabMenu>
 </template>
 
@@ -55,13 +69,14 @@ import {
 	mdiPencilOutline,
 	mdiTrashCanOutline,
 	mdiAccountGroupOutline,
+	mdiLocationExit,
 } from "@icons/material";
 import { useRoomAuthorization } from "@feature-room";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 
-defineEmits(["room:edit", "room:manage-members", "room:delete"]);
+defineEmits(["room:edit", "room:manage-members", "room:delete", "room:leave"]);
 const { room } = storeToRefs(useRoomDetailsStore());
 
-const { canEditRoom, canDeleteRoom } = useRoomAuthorization(room);
+const { canEditRoom, canDeleteRoom, canLeaveRoom } = useRoomAuthorization(room);
 </script>

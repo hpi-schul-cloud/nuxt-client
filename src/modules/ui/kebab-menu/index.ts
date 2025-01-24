@@ -13,21 +13,27 @@ import KebabMenuActionRename from "./KebabMenuActionRename.vue";
 import KebabMenuActionRevert from "./KebabMenuActionRevert.vue";
 import KebabMenuActionShare from "./KebabMenuActionShare.vue";
 import KebabMenuActionShareLink from "./KebabMenuActionShareLink.vue";
+import KebabMenuActionLeaveRoom from "./KebabMenuActionLeaveRoom.vue";
+import KebabMenuActionChangePermission from "./KebabMenuActionChangePermission.vue";
+import KebabMenuActionRemoveMember from "./KebabMenuActionRemoveMember.vue";
 
 export {
 	KebabMenu,
 	KebabMenuAction,
+	KebabMenuActionChangeLayout,
+	KebabMenuActionChangePermission,
 	KebabMenuActionCopy,
 	KebabMenuActionEdit,
 	KebabMenuActionDelete,
-	KebabMenuActionMoveUp,
+	KebabMenuActionLeaveRoom,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveLeft,
 	KebabMenuActionMoveRight,
+	KebabMenuActionMoveUp,
 	KebabMenuActionPublish,
+	KebabMenuActionRemoveMember,
+	KebabMenuActionRename,
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
-	KebabMenuActionRename,
-	KebabMenuActionChangeLayout,
 	KebabMenuActionShareLink,
 };

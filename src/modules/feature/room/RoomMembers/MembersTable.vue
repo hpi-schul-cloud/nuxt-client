@@ -40,22 +40,30 @@
 		:items-per-page-options="[5, 10, 25, 50, 100]"
 		:items-per-page="50"
 		:mobile="null"
-		:show-select="true"
+		:show-select="isVisibleSelectionColumn"
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
 		@update:current-items="onUpdateFilter"
 		@update:model-value="onSelectMembers"
 	>
-		<template #[`item.actions`]="{ item, index }">
-			<v-btn
-				v-if="item.roomRoleName !== RoleName.Roomowner"
-				:data-testid="`remove-member-${index}`"
-				size="x-small"
-				variant="text"
-				:aria-label="getRemoveAriaLabel(item)"
-				:icon="mdiTrashCanOutline"
-				@click="onRemoveMembers([item.userId])"
-			/>
+		<template #[`item.actions`]="{ item, index }" v-if="isVisibleActionColumn">
+			<KebabMenu
+				v-if="isVisibleActionInRow(item)"
+				:data-testid="`kebab-menu-${index}`"
+			>
+				<KebabMenuActionChangePermission
+					v-if="isVisibleChangeRoleButton"
+					@click="onChangePermission(item.userId)"
+					:aria-label="getChangePermissionAriaLabel(item)"
+					:test-id="`btn-change-role-${index}`"
+				/>
+				<KebabMenuActionRemoveMember
+					v-if="isVisibleRemoveMemberButton(item)"
+					:test-id="`remove-member-${index}`"
+					:aria-label="getRemoveAriaLabel(item)"
+					@click="onRemoveMembers([item.userId])"
+				/>
+			</KebabMenu>
 		</template>
 	</v-data-table>
 	<ConfirmationDialog />
@@ -63,23 +71,28 @@
 
 <script setup lang="ts">
 import ActionMenu from "./ActionMenu.vue";
-import { PropType, ref, toRef } from "vue";
-import { useI18n } from "vue-i18n";
 import {
-	mdiMenuDown,
-	mdiMenuUp,
-	mdiMagnify,
-	mdiTrashCanOutline,
-} from "@icons/material";
-import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
+	KebabMenu,
+	KebabMenuActionChangePermission,
+	KebabMenuActionRemoveMember,
+} from "@ui-kebab-menu";
+import { computed, PropType, ref, toRef } from "vue";
+import { useI18n } from "vue-i18n";
+import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
+import { RoomMemberResponse } from "@/serverApi/v3";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
+import { useRoomMemberVisibilityOptions } from "@data-room";
 
 const props = defineProps({
 	members: {
 		type: Array as PropType<RoomMemberResponse[]>,
+		required: true,
+	},
+	currentUser: {
+		type: Object as PropType<RoomMemberResponse>,
 		required: true,
 	},
 	fixedPosition: {
@@ -93,12 +106,23 @@ const selectedUserIds = ref<string[]>([]);
 const emit = defineEmits<{
 	(e: "remove:members", userIds: string[]): void;
 	(e: "select:members", userIds: string[]): void;
+	(e: "change:permission", userId: string): void;
 }>();
 
 const { t } = useI18n();
 const search = ref("");
 const memberList = toRef(props, "members");
 const membersFilterCount = ref(memberList.value?.length);
+
+const currentUser = computed(() => props.currentUser);
+
+const {
+	isVisibleActionColumn,
+	isVisibleChangeRoleButton,
+	isVisibleSelectionColumn,
+	isVisibleActionInRow,
+	isVisibleRemoveMemberButton,
+} = useRoomMemberVisibilityOptions(currentUser);
 
 const onUpdateFilter = (filteredMembers: RoomMemberResponse[]) => {
 	membersFilterCount.value =
@@ -133,12 +157,10 @@ const confirmRemoval = async (userIds: string[]) => {
 			memberName: `${member?.firstName} ${member?.lastName}`,
 		});
 	}
-
 	const shouldRemove = await askConfirmation({
 		message,
 		confirmActionLangKey: "common.actions.remove",
 	});
-
 	return shouldRemove;
 };
 
@@ -146,6 +168,15 @@ const getRemoveAriaLabel = (member: RoomMemberResponse) =>
 	t("pages.rooms.members.remove.ariaLabel", {
 		memberName: `${member.firstName} ${member.lastName}`,
 	});
+
+const getChangePermissionAriaLabel = (member: RoomMemberResponse) =>
+	t("pages.rooms.members.changePermission.ariaLabel", {
+		memberName: `${member.firstName} ${member.lastName}`,
+	});
+
+const onChangePermission = (userId: string) => {
+	emit("change:permission", userId);
+};
 
 const tableHeader = [
 	{
@@ -165,7 +196,14 @@ const tableHeader = [
 		key: "displaySchoolRole",
 	},
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
-	{ title: "", key: "actions", sortable: false, width: 50 },
+	{
+		title: isVisibleActionColumn.value
+			? t("pages.rooms.members.tableHeader.actions")
+			: "",
+		key: "actions",
+		sortable: false,
+		width: 50,
+	},
 ];
 </script>
 

@@ -8,9 +8,18 @@
 		ref="wireframe"
 	>
 		<template #header>
-			<h1 class="text-h3 mb-4" data-testid="room-title">
-				{{ t("pages.rooms.members.manage") }}
-			</h1>
+			<div class="d-flex align-items-center">
+				<h1 class="text-h3 mb-4" data-testid="room-title">
+					{{ t("pages.rooms.members.manage") }}
+				</h1>
+				<KebabMenu
+					v-if="isVisibleLeaveRoomButton"
+					class="mx-2"
+					data-testid="room-member-menu"
+				>
+					<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
+				</KebabMenu>
+			</div>
 		</template>
 
 		<div class="mb-8 mt-12" data-testid="info-text">
@@ -30,6 +39,7 @@
 			<MembersTable
 				v-if="!isLoading"
 				:members="memberList"
+				:currentUser="currentUser"
 				:fixed-position="fixedHeaderOnMobile"
 				@remove:members="onRemoveMembers"
 			/>
@@ -52,6 +62,7 @@
 			/>
 		</v-dialog>
 	</DefaultWireframe>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -61,17 +72,27 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle, useElementBounding } from "@vueuse/core";
 import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
-import { useRoomDetailsStore, useRoomMembers } from "@data-room";
+import { useRoute, useRouter } from "vue-router";
+import {
+	useRoomDetailsStore,
+	useRoomMembers,
+	useRoomMemberVisibilityOptions,
+} from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { MembersTable, AddMembers } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
+import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
+import {
+	ConfirmationDialog,
+	useConfirmationDialog,
+} from "@ui-confirmation-dialog";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter();
 const { xs, mdAndDown } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 const isMembersDialogOpen = ref(false);
@@ -81,6 +102,7 @@ const {
 	potentialRoomMembers,
 	roomMembers,
 	schools,
+	currentUser,
 	addMembers,
 	fetchMembers,
 	getPotentialMembers,
@@ -97,6 +119,10 @@ const fixedHeaderOnMobile = ref({
 	positionTop: 0,
 });
 const { y } = useElementBounding(wireframe);
+const { askConfirmation } = useConfirmationDialog();
+
+const { isVisibleAddMemberButton, isVisibleLeaveRoomButton } =
+	useRoomMemberVisibilityOptions(currentUser);
 
 useTitle(pageTitle);
 
@@ -125,10 +151,24 @@ const onRemoveMembers = async (memberIds: string[]) => {
 	await removeMembers(memberIds);
 };
 
+const onLeaveRoom = async () => {
+	const shouldLeave = await askConfirmation({
+		message: t("pages.rooms.leaveRoom.confirmation", {
+			roomName: room.value?.name,
+		}),
+		confirmActionLangKey: "common.actions.leave",
+	});
+
+	if (!shouldLeave) return;
+	await removeMembers([currentUser.value.userId]);
+	router.push("/rooms");
+};
+
 onMounted(async () => {
 	if (room.value === undefined) {
 		await fetchRoom(roomId);
 	}
+
 	await fetchMembers();
 	const header = document.querySelector(".wireframe-header") as HTMLElement;
 	fixedHeaderOnMobile.value.positionTop = header.offsetHeight + y.value;
@@ -157,12 +197,15 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	];
 });
 
-const fabAction = {
-	icon: mdiPlus,
-	title: t("pages.rooms.members.add"),
-	ariaLabel: t("pages.rooms.members.add"),
-	dataTestId: "fab-add-members",
-};
+const fabAction = computed(() => {
+	if (!isVisibleAddMemberButton.value) return;
+	return {
+		icon: mdiPlus,
+		title: t("pages.rooms.members.add"),
+		ariaLabel: t("pages.rooms.members.add"),
+		dataTestId: "fab-add-members",
+	};
+});
 
 const linkAriaLabel = computed(
 	() =>
