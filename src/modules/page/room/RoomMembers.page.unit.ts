@@ -210,7 +210,9 @@ describe("RoomMembersPage", () => {
 			const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
 			await menuBtn.trigger("click");
 
-			const leaveMenu = wrapper.findComponent('[data-testid="btn-leave-room"]');
+			const leaveMenu = wrapper.findComponent(
+				'[data-testid="kebab-menu-action-leave-room"]'
+			);
 			await leaveMenu.trigger("click");
 
 			expect(askConfirmationMock).toHaveBeenCalledWith({
@@ -227,7 +229,9 @@ describe("RoomMembersPage", () => {
 			const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
 			await menuBtn.trigger("click");
 
-			const leaveMenu = wrapper.findComponent('[data-testid="btn-leave-room"]');
+			const leaveMenu = wrapper.findComponent(
+				'[data-testid="kebab-menu-action-leave-room"]'
+			);
 			await leaveMenu.trigger("click");
 
 			expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalledWith([
@@ -243,7 +247,9 @@ describe("RoomMembersPage", () => {
 			const menuBtn = wrapper.findComponent('[data-testid="room-member-menu"]');
 			await menuBtn.trigger("click");
 
-			const leaveMenu = wrapper.findComponent('[data-testid="btn-leave-room"]');
+			const leaveMenu = wrapper.findComponent(
+				'[data-testid="kebab-menu-action-leave-room"]'
+			);
 			await leaveMenu.trigger("click");
 
 			expect(mockRoomMemberCalls.removeMembers).not.toHaveBeenCalled();

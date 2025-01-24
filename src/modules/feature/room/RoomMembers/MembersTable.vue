@@ -51,14 +51,10 @@
 				v-if="isVisibleActionInRow(item)"
 				:data-testid="`kebab-menu-${index}`"
 			>
-				<KebabMenuActionRoomChangePermission
+				<KebabMenuActionChangePermission
 					v-if="isVisibleChangeRoleButton"
 					@click="onChangePermission(item.userId)"
-					:aria-label="
-						t('pages.rooms.members.changePermission.ariaLabel', {
-							memberName: `${item.firstName} ${item.lastName}`,
-						})
-					"
+					:aria-label="getChangePermissionAriaLabel(item)"
 					:test-id="`btn-change-role-${index}`"
 				/>
 				<KebabMenuActionRemoveMember
@@ -77,7 +73,7 @@
 import ActionMenu from "./ActionMenu.vue";
 import {
 	KebabMenu,
-	KebabMenuActionRoomChangePermission,
+	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
 import { computed, PropType, ref, toRef } from "vue";
@@ -170,6 +166,11 @@ const confirmRemoval = async (userIds: string[]) => {
 
 const getRemoveAriaLabel = (member: RoomMemberResponse) =>
 	t("pages.rooms.members.remove.ariaLabel", {
+		memberName: `${member.firstName} ${member.lastName}`,
+	});
+
+const getChangePermissionAriaLabel = (member: RoomMemberResponse) =>
+	t("pages.rooms.members.changePermission.ariaLabel", {
 		memberName: `${member.firstName} ${member.lastName}`,
 	});
 

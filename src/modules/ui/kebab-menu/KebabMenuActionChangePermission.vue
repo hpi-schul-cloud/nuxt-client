@@ -1,7 +1,7 @@
 <template>
 	<KebabMenuAction
 		:icon="mdiAccountSwitchOutline"
-		:data-testid="testId"
+		data-testid="kebab-menu-action-change-permission"
 		:aria-label="t('pages.rooms.members.changePermission')"
 	>
 		{{ t("pages.rooms.members.changePermission") }}
@@ -12,12 +12,5 @@
 import KebabMenuAction from "./KebabMenuAction.vue";
 import { mdiAccountSwitchOutline } from "@icons/material";
 import { useI18n } from "vue-i18n";
-
-defineProps({
-	testId: {
-		type: String,
-		required: true,
-	},
-});
 const { t } = useI18n();
 </script>

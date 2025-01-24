@@ -1,5 +1,8 @@
 <template>
-	<KebabMenuAction :icon="mdiTrashCanOutline" :data-testid="testId">
+	<KebabMenuAction
+		:icon="mdiTrashCanOutline"
+		data-testid="kebab-menu-action-remove-member"
+	>
 		{{ t("common.actions.remove") }}
 	</KebabMenuAction>
 </template>
@@ -8,12 +11,5 @@
 import KebabMenuAction from "./KebabMenuAction.vue";
 import { mdiTrashCanOutline } from "@icons/material";
 import { useI18n } from "vue-i18n";
-
-defineProps({
-	testId: {
-		type: String,
-		required: true,
-	},
-});
 const { t } = useI18n();
 </script>

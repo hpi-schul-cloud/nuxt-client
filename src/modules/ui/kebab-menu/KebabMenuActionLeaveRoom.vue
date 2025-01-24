@@ -1,7 +1,7 @@
 <template>
 	<KebabMenuAction
 		:icon="mdiLocationExit"
-		data-testid="btn-leave-room"
+		data-testid="kebab-menu-action-leave-room"
 		:aria-label="t('pages.rooms.leaveRoom.menu')"
 	>
 		{{ t("pages.rooms.leaveRoom.menu") }}

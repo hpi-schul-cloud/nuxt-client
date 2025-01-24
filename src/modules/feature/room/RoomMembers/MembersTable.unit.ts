@@ -319,7 +319,7 @@ describe("MembersTable", () => {
 				await nextTick();
 
 				const removeButton = wrapper.findComponent(
-					`[data-testid=remove-member-${index}]`
+					`[data-testid=kebab-menu-action-remove-member]`
 				);
 
 				await removeButton.trigger("click");
@@ -543,7 +543,7 @@ describe("MembersTable", () => {
 					await menuBtn.trigger("click");
 
 					const changeRoleButton = wrapper.findComponent(
-						'[data-testid="btn-change-role-1"]'
+						'[data-testid="kebab-menu-action-change-permission"]'
 					);
 
 					expect(changeRoleButton.exists()).toBe(expected);

@@ -3,11 +3,11 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import KebabMenuActionRoomChangePermission from "./KebabMenuActionRoomChangePermission.vue";
+import KebabMenuActionChangePermission from "./KebabMenuActionChangePermission.vue";
 
-describe("KebabMenuActionRoomChangePermission", () => {
+describe("KebabMenuActionChangePermission", () => {
 	it("should render the component", async () => {
-		const wrapper = mount(KebabMenuActionRoomChangePermission, {
+		const wrapper = mount(KebabMenuActionChangePermission, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
