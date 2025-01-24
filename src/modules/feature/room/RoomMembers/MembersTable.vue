@@ -51,30 +51,17 @@
 				v-if="isVisibleActionInRow(item)"
 				:data-testid="`kebab-menu-${index}`"
 			>
-				<VListItem
+				<KebabMenuActionRoomChangePermission
 					v-if="isVisibleChangeRoleButton"
-					:data-testid="`btn-change-role-${index}`"
 					@click="onChangePermission(item.userId)"
-				>
-					<template #prepend>
-						<VIcon :icon="mdiAccountSwitchOutline" />
-					</template>
-					<VListItemTitle
-						>{{ t("pages.rooms.members.changePermission") }}
-					</VListItemTitle>
-				</VListItem>
-
-				<VListItem
-					v-if="item.roomRoleName !== RoleName.Roomowner"
-					:data-testid="`remove-member-${index}`"
-					:aria-label="getRemoveAriaLabel(item)"
+					:test-id="`btn-change-role-${index}`"
+				/>
+				<KebabMenuActionRemoveMember
+					v-if="isVisibleRemoveMemberButton(item)"
+					:test-id="`remove-member-${index}`"
+					:removeMemberAriaLabel="getRemoveAriaLabel(item)"
 					@click="onRemoveMembers([item.userId])"
-				>
-					<template #prepend>
-						<VIcon :icon="mdiTrashCanOutline" />
-					</template>
-					<VListItemTitle> {{ t("common.actions.remove") }} </VListItemTitle>
-				</VListItem>
+				/>
 			</KebabMenu>
 		</template>
 	</v-data-table>
@@ -83,17 +70,15 @@
 
 <script setup lang="ts">
 import ActionMenu from "./ActionMenu.vue";
-import { KebabMenu } from "@ui-kebab-menu";
+import {
+	KebabMenu,
+	KebabMenuActionRoomChangePermission,
+	KebabMenuActionRemoveMember,
+} from "@ui-kebab-menu";
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import {
-	mdiMenuDown,
-	mdiMenuUp,
-	mdiMagnify,
-	mdiTrashCanOutline,
-	mdiAccountSwitchOutline,
-} from "@icons/material";
-import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
+import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
+import { RoomMemberResponse } from "@/serverApi/v3";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
@@ -131,10 +116,11 @@ const membersFilterCount = ref(memberList.value?.length);
 const currentUser = computed(() => props.currentUser);
 
 const {
-	isVisibleSelectionColumn,
 	isVisibleActionColumn,
-	isVisibleActionInRow,
 	isVisibleChangeRoleButton,
+	isVisibleSelectionColumn,
+	isVisibleActionInRow,
+	isVisibleRemoveMemberButton,
 } = useRoomMemberVisibilityOptions(currentUser);
 
 const onUpdateFilter = (filteredMembers: RoomMemberResponse[]) => {

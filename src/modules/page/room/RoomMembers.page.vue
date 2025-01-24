@@ -17,18 +17,7 @@
 					class="mx-2"
 					data-testid="room-member-menu"
 				>
-					<VListItem
-						@click="onLeaveRoom"
-						data-testid="btn-leave-room"
-						:aria-label="t('pages.rooms.leaveRoom.menu')"
-					>
-						<template #prepend>
-							<VIcon :icon="mdiLocationExit" />
-						</template>
-						<VListItemTitle>
-							{{ t("pages.rooms.leaveRoom.menu") }}
-						</VListItemTitle>
-					</VListItem>
+					<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
 				</KebabMenu>
 			</div>
 		</template>
@@ -90,11 +79,11 @@ import {
 	useRoomMemberVisibilityOptions,
 } from "@data-room";
 import { storeToRefs } from "pinia";
-import { mdiPlus, mdiLocationExit } from "@icons/material";
+import { mdiPlus } from "@icons/material";
 import { MembersTable, AddMembers } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
-import { KebabMenu } from "@ui-kebab-menu";
+import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
