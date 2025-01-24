@@ -54,12 +54,17 @@
 				<KebabMenuActionRoomChangePermission
 					v-if="isVisibleChangeRoleButton"
 					@click="onChangePermission(item.userId)"
+					:aria-label="
+						t('pages.rooms.members.changePermission.ariaLabel', {
+							memberName: `${item.firstName} ${item.lastName}`,
+						})
+					"
 					:test-id="`btn-change-role-${index}`"
 				/>
 				<KebabMenuActionRemoveMember
 					v-if="isVisibleRemoveMemberButton(item)"
 					:test-id="`remove-member-${index}`"
-					:removeMemberAriaLabel="getRemoveAriaLabel(item)"
+					:aria-label="getRemoveAriaLabel(item)"
 					@click="onRemoveMembers([item.userId])"
 				/>
 			</KebabMenu>
@@ -84,6 +89,8 @@ import {
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { useRoomMemberVisibilityOptions } from "@data-room";
+import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
+import { ar } from "vuetify/lib/locale/index.mjs";
 
 const props = defineProps({
 	members: {

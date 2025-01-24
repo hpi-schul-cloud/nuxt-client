@@ -441,7 +441,6 @@ describe("MembersTable", () => {
 				},
 			});
 			await nextTick();
-			await nextTick();
 
 			const elementAfter = wrapper.find(".table-title-header");
 			expect(elementAfter.classes("fixed-position")).toBe(true);

@@ -1833,6 +1833,8 @@ export default {
 	"pages.rooms.members.label": "Participantes",
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.changePermission": "Cambiar permisos",
+	"pages.rooms.members.changePermission.ariaLabel":
+		"Cambiar el permiso para {memberName}",
 	"pages.rooms.members.manage": "Miembros de la sala",
 	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
 	"pages.rooms.members.resetSelection.ariaLabel":

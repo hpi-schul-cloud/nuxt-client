@@ -1,9 +1,5 @@
 <template>
-	<KebabMenuAction
-		:icon="mdiTrashCanOutline"
-		:data-testid="testId"
-		:aria-label="removeMemberAriaLabel"
-	>
+	<KebabMenuAction :icon="mdiTrashCanOutline" :data-testid="testId">
 		{{ t("common.actions.remove") }}
 	</KebabMenuAction>
 </template>
@@ -15,10 +11,6 @@ import { useI18n } from "vue-i18n";
 
 defineProps({
 	testId: {
-		type: String,
-		required: true,
-	},
-	removeMemberAriaLabel: {
 		type: String,
 		required: true,
 	},
