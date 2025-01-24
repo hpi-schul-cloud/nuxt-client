@@ -32,7 +32,10 @@
 								direction: 'horizontal',
 								disabled: isEditMode || !hasMovePermission,
 								group: 'columns',
-								delay: isTouchDetected ? 300 : 0,
+								delayOnTouchOnly: true,
+								delay: 300,
+								touchStartThreshold: 3, // needed for sensitive touch devices
+								fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
 								ghostClass: 'sortable-drag-ghost',
 								easing: 'cubic-bezier(1, 0, 0, 1)',
 								dragClass: 'sortable-drag-board-card',
@@ -136,7 +139,6 @@ import {
 	useBoardNotifier,
 	useSharedEditMode,
 } from "@util-board";
-import { useTouchDetection } from "@util-device-detection";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
@@ -191,7 +193,6 @@ watch(
 );
 
 useBodyScrolling();
-const { isTouchDetected } = useTouchDetection();
 
 const {
 	hasMovePermission,

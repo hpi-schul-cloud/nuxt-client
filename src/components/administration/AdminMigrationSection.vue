@@ -65,9 +65,7 @@
 					scope="global"
 					tag="p"
 				>
-					<a
-						href="mailto:nbc-support@netz-21.de?subject=Schulnummer%20nicht%20korrekt"
-					>
+					<a :href="contactEmailLink">
 						{{ t("components.administrationSection.description.support.link") }}
 					</a>
 				</i18n-t>
@@ -447,6 +445,12 @@ export default defineComponent({
 			});
 		};
 
+		const contactEmailLink: ComputedRef<string> = computed(() =>
+			sanitizeUrl(
+				`mailto:${envConfigModule.getContactEmail}}?subject=Schulnummer nicht korrekt`
+			)
+		);
+
 		return {
 			userLoginMigration,
 			onStartMigration,
@@ -478,6 +482,7 @@ export default defineComponent({
 			error,
 			getBusinessErrorTranslationKey,
 			mdiAlertCircle,
+			contactEmailLink,
 		};
 	},
 });

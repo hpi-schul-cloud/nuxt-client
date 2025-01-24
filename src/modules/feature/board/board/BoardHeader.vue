@@ -197,7 +197,7 @@ watchEffect(() => {
 @import "@/styles/settings.scss";
 
 .v-chip {
-	cursor: pointer;
+	cursor: default;
 }
 
 .input-width-calc-span {
