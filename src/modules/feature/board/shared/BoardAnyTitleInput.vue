@@ -18,6 +18,7 @@
 		:maxlength="maxLength"
 		@keydown.enter="onEnter"
 	/>
+
 	<VTextarea
 		v-else
 		hide-details="auto"
@@ -99,9 +100,9 @@ export default defineComponent({
 		const setFocusOnEdit = async () => {
 			await nextTick();
 			internalIsFocused.value = true;
-
 			if (titleInput.value) {
 				(titleInput.value as VTextarea).focus();
+				cursorToEnd();
 			}
 		};
 
@@ -180,6 +181,13 @@ export default defineComponent({
 			return "";
 		});
 
+		const cursorToEnd = () => {
+			if (titleInput.value) {
+				const length = (titleInput.value as VTextarea).value.length;
+				(titleInput.value as VTextarea).setSelectionRange(length, length);
+			}
+		};
+
 		return {
 			ariaLevel,
 			modelValue,
@@ -188,6 +196,7 @@ export default defineComponent({
 			internalIsFocused,
 			titleInput,
 			placeholderText,
+			cursorToEnd,
 		};
 	},
 });
