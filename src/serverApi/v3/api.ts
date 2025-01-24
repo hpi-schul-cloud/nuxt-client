@@ -5615,6 +5615,21 @@ export interface MessageOrigin {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum MetaDataEntityType {
+    Unknown = 'unknown',
+    External = 'external',
+    Course = 'course',
+    Board = 'board',
+    BoardCard = 'board-card',
+    Task = 'task',
+    Lesson = 'lesson'
+}
+
+/**
+ * 
+ * @export
  * @interface MetaTagExtractorResponse
  */
 export interface MetaTagExtractorResponse {
@@ -5650,10 +5665,10 @@ export interface MetaTagExtractorResponse {
     imageUrl: string;
     /**
      * 
-     * @type {string}
+     * @type {MetaDataEntityType}
      * @memberof MetaTagExtractorResponse
      */
-    type: string;
+    type: MetaDataEntityType;
     /**
      * 
      * @type {string}
@@ -5662,10 +5677,10 @@ export interface MetaTagExtractorResponse {
     parentTitle: string;
     /**
      * 
-     * @type {string}
+     * @type {MetaDataEntityType}
      * @memberof MetaTagExtractorResponse
      */
-    parentType: string;
+    parentType: MetaDataEntityType;
 }
 /**
  * 

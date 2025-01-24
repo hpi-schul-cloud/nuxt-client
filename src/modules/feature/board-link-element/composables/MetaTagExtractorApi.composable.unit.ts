@@ -1,9 +1,12 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { MetaTagExtractorResponse } from "@/serverApi/v3/api";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
+import {
+	MetaDataEntityType,
+	MetaTagExtractorResponse,
+} from "@/serverApi/v3/api";
 import { mockApiResponse, mountComposable } from "@@/tests/test-utils";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useMetaTagExtractorApi } from "./MetaTagExtractorApi.composable";
 
 describe("useMetaTagExtractorApi", () => {
 	let api: DeepMocked<serverApi.MetaTagExtractorApi>;
@@ -28,9 +31,9 @@ describe("useMetaTagExtractorApi", () => {
 						description: "",
 						imageUrl: "",
 						originalImageUrl: "",
-						type: "unknown",
+						type: MetaDataEntityType.Unknown,
 						parentTitle: "",
-						parentType: "unknown",
+						parentType: MetaDataEntityType.Unknown,
 					};
 
 					api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
@@ -72,9 +75,9 @@ describe("useMetaTagExtractorApi", () => {
 							description: "",
 							imageUrl: "",
 							originalImageUrl: "",
-							type: "board",
+							type: MetaDataEntityType.Board,
 							parentTitle: "English",
-							parentType: "course",
+							parentType: MetaDataEntityType.Course,
 						};
 
 						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
@@ -117,9 +120,9 @@ describe("useMetaTagExtractorApi", () => {
 							description: "",
 							imageUrl: "",
 							originalImageUrl: "",
-							type: "board",
+							type: MetaDataEntityType.Board,
 							parentTitle: "English",
-							parentType: "course",
+							parentType: MetaDataEntityType.Course,
 						};
 
 						api.metaTagExtractorControllerGetMetaTags.mockResolvedValue(
@@ -158,9 +161,9 @@ describe("useMetaTagExtractorApi", () => {
 					description: "",
 					imageUrl: "",
 					originalImageUrl: "",
-					type: "unknown",
+					type: MetaDataEntityType.Unknown,
 					parentTitle: "",
-					parentType: "unknown",
+					parentType: MetaDataEntityType.Unknown,
 				};
 
 				api.metaTagExtractorControllerGetMetaTags.mockRejectedValue(false);
