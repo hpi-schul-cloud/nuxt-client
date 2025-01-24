@@ -26,7 +26,7 @@ const defaultOptions: VisibilityOptions = {
 	isLeaveRoomButtonVisible: true,
 };
 
-const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
+export const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
 	[RoleName.Roomowner]: {
 		isSelectionColumnVisible: true,
 		isActionColumnVisible: true,

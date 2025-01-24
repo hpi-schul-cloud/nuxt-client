@@ -10,9 +10,39 @@ import { computed, ComputedRef } from "vue";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { roleConfigMap } from "./membersVisibleOptions.composable";
 
 jest.mock("./roomMembers.composable");
 const mockUseRoomMembers = jest.mocked(useRoomMembers);
+
+const mockOptions = () => {
+	const defaultOptions = {
+		isSelectionColumnVisible: false,
+		isActionColumnVisible: false,
+		isAddMemberButtonVisible: false,
+		isActionInRowVisible: false,
+		isChangeRoleButtonVisible: false,
+		isLeaveRoomButtonVisible: true,
+	};
+	roleConfigMap[RoleName.Roomowner] = {
+		isSelectionColumnVisible: true,
+		isActionColumnVisible: true,
+		isActionInRowVisible: false,
+		isAddMemberButtonVisible: true,
+		isChangeRoleButtonVisible: true,
+		isLeaveRoomButtonVisible: false,
+	};
+	roleConfigMap[RoleName.Roomadmin] = {
+		isSelectionColumnVisible: true,
+		isActionColumnVisible: true,
+		isAddMemberButtonVisible: true,
+		isActionInRowVisible: true,
+		isChangeRoleButtonVisible: true,
+		isLeaveRoomButtonVisible: true,
+	};
+	roleConfigMap[RoleName.Roomeditor] = defaultOptions;
+	roleConfigMap[RoleName.Roomviewer] = defaultOptions;
+};
 
 describe("useRoomMemberVisibilityOptions", () => {
 	let mockRoomMemberCalls: DeepMocked<ReturnType<typeof useRoomMembers>>;
@@ -20,6 +50,7 @@ describe("useRoomMemberVisibilityOptions", () => {
 	beforeEach(() => {
 		mockRoomMemberCalls = createMock<ReturnType<typeof useRoomMembers>>();
 		mockUseRoomMembers.mockReturnValue(mockRoomMemberCalls);
+		mockOptions();
 	});
 
 	const createCurrentUser = (
