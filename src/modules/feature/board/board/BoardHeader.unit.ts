@@ -66,6 +66,10 @@ describe("BoardHeader", () => {
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
+				stubs: {
+					VTooltip: false,
+					VOverlay: false,
+				},
 			},
 			props: {
 				title: "title-text",
@@ -308,7 +312,9 @@ describe("BoardHeader", () => {
 				{ isDraft: true }
 			);
 
-			expect(wrapper.findComponent({ name: "v-chip" }).exists()).toBe(true);
+			expect(wrapper.findComponent({ name: "BoardDraftChip" }).exists()).toBe(
+				true
+			);
 		});
 
 		it("should display 'publish' button instead of 'revert' button in menu", async () => {

@@ -7,7 +7,6 @@
 		closable
 		max-width="400"
 		min-width="200"
-		:close-label="$t('common.labels.close')"
 		border="start"
 		@update:modelValue="closeNotification"
 	>

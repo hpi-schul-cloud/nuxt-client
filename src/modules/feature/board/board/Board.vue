@@ -139,7 +139,6 @@ import {
 	useBoardNotifier,
 	useSharedEditMode,
 } from "@util-board";
-import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import {
@@ -280,7 +279,6 @@ const onUpdateBoardVisibility = async (isVisible: boolean) => {
 		boardId: props.boardId,
 		isVisible,
 	});
-	await setAlert();
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
@@ -304,7 +302,6 @@ const scrollToNodeAndFocus = (scrollTargetId: string) => {
 
 onMounted(async () => {
 	resetPageInformation();
-	setAlert();
 	useBoardInactivity();
 	const boardFetchPromise = boardStore.fetchBoardRequest({
 		boardId: props.boardId,
@@ -329,25 +326,9 @@ onUnmounted(() => {
 	resetNotifierModule();
 });
 
-const setAlert = useDebounceFn(() => {
-	if (!isTeacher) return;
-
-	if (!board.value) {
-		return;
-	}
-
-	if (!isBoardVisible.value) {
-		showCustomNotifier(t("components.board.alert.info.draft"), "info");
-	} else {
-		showCustomNotifier(t("components.board.alert.info.teacher"), "info");
-	}
-}, 150);
-
 watch(
 	() => isBoardVisible.value,
 	() => {
-		setAlert();
-
 		if (!(isBoardVisible.value || isTeacher)) {
 			router.replace({ name: "room-details", params: { id: roomId.value } });
 			applicationErrorModule.setError(
