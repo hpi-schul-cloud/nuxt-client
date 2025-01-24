@@ -5,10 +5,10 @@ import {
 } from "@/fileStorageApi/v3";
 import {
 	ConfigResponse,
-	ServerConfigApiFactory,
-	ServerConfigApiInterface,
 	LanguageType,
 	SchulcloudTheme,
+	ServerConfigApiFactory,
+	ServerConfigApiInterface,
 	Timezone,
 } from "@/serverApi/v3";
 import {
