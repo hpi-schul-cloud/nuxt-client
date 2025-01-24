@@ -27,7 +27,11 @@
 							:placeholder="t('components.cardElement.videoConferenceElement')"
 						/>
 						<div class="align-self-center pl-2">
-							<button type="submit" ref="submit">
+							<button
+								type="submit"
+								ref="submit"
+								data-testid="save-video-conference-title-button"
+							>
 								<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>
 								<span class="d-sr-only">{{ t("common.actions.save") }}</span>
 							</button>
