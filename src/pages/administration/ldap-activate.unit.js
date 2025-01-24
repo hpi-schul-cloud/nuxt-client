@@ -9,7 +9,6 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import { createStore } from "vuex";
 import { default as ldapActivate } from "./LDAPActivate.page.vue";
 import { SchulcloudTheme } from "../../serverApi/v3";
@@ -86,11 +85,7 @@ describe("ldap/activate", () => {
 
 		const wrapper = mount(ldapActivate, {
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					vueDompurifyHTMLPlugin,
-				],
+				plugins: [createTestingVuetify(), createTestingI18n()],
 				mocks: {
 					$router: { push: routerPushStub },
 					$route: route,

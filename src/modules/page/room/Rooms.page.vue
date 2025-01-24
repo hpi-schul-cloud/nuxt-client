@@ -1,8 +1,44 @@
 <template>
-	<DefaultWireframe max-width="short" :fab-items="fabAction">
+	<DefaultWireframe max-width="nativ" :fab-items="fabAction">
 		<template #header>
 			<h1 class="text-h3 mb-4">{{ t("pages.rooms.title") }}</h1>
 		</template>
+		<InfoAlert class="mb-14">
+			{{ t("pages.rooms.infoAlert.welcome") }}
+
+			<ul class="mt-1 pl-4">
+				<li>{{ t("pages.rooms.infoAlert.welcome.collaboration") }}</li>
+				<li>{{ t("pages.rooms.infoAlert.welcome.teamsAndCourses") }}</li>
+				<li>
+					<i18n-t
+						keypath="pages.rooms.infoAlert.welcome.visibility"
+						scope="global"
+					>
+						<template #helpLink>
+							<a
+								href="https://docs.dbildungscloud.de/x/6gthFg"
+								target="_blank"
+								rel="noopener"
+								data-testid="rooms-help-link"
+								:aria-label="helpAriaLabel"
+							>
+								{{ t("pages.rooms.infoAlert.welcome.visibility.help") }}
+							</a>
+						</template>
+						<template #feedbackLink>
+							<a
+								href="/help/contact"
+								target="_blank"
+								rel="noopener"
+								:aria-label="feedbackAriaLabel"
+							>
+								{{ t("pages.rooms.infoAlert.welcome.visibility.feedback") }}
+							</a>
+						</template>
+					</i18n-t>
+				</li>
+			</ul>
+		</InfoAlert>
 		<RoomGrid />
 		<ImportFlow
 			:is-active="isImportMode"
@@ -27,6 +63,7 @@ import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import { BoardExternalReferenceType } from "@/serverApi/v3";
+import { InfoAlert } from "@ui-alert";
 
 const { t } = useI18n();
 const route = useRoute();
@@ -80,4 +117,14 @@ const showImportSuccess = (newName: string) => {
 		timeout: 5000,
 	});
 };
+
+const helpAriaLabel = computed(
+	() =>
+		`${t("pages.rooms.infoAlert.welcome.visibility.help")}, ${t("common.ariaLabel.newTab")}`
+);
+
+const feedbackAriaLabel = computed(
+	() =>
+		`${t("pages.rooms.infoAlert.welcome.visibility.feedback")}, ${t("common.ariaLabel.newTab")}`
+);
 </script>

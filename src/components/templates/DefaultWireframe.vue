@@ -10,7 +10,7 @@
 			id="notify-screen-reader-assertive"
 			class="d-sr-only"
 		/>
-		<div class="wireframe-header sticky">
+		<div class="wireframe-header sticky" :class="{ fixed: fixedHeader }">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
@@ -108,6 +108,9 @@ const props = defineProps({
 		type: String as PropType<string | null>,
 		default: null,
 	},
+	fixedHeader: {
+		type: Boolean,
+	},
 });
 
 const emit = defineEmits({
@@ -184,6 +187,13 @@ const showDivider = computed(() => {
 	background-color: rgb(var(--v-theme-white));
 }
 
+.fixed {
+	position: fixed;
+	top: 64px;
+	width: 100%;
+	background-color: rgb(var(--v-theme-white));
+}
+
 @media #{map-get($display-breakpoints, 'lg-and-up')} {
 	.wireframe-fab {
 		position: relative;
@@ -208,7 +218,7 @@ $fab-wrapper-height: 80px;
 	align-items: center;
 	justify-content: flex-end;
 	height: $fab-wrapper-height;
-	margin-top: -#{$fab-wrapper-height}; // stylelint-disable-line sh-waqar/declaration-use-variable
+	margin-top: -#{$fab-wrapper-height};
 	pointer-events: none;
 
 	* {

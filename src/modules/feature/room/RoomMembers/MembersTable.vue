@@ -1,38 +1,17 @@
 <template>
 	<div
 		class="d-flex justify-space-between align-center mb-2 table-title-header"
+		:class="{ 'fixed-position': fixedPosition.enabled }"
+		:style="{ top: `${fixedPosition.positionTop}px` }"
 	>
-		<template v-if="selectedUserIds.length">
-			<div
-				class="mr-2 pa-0 pl-4 multi-action-menu"
-				data-testid="multi-action-menu"
-			>
-				<span class="d-inline-flex">
-					{{ selectedUserIds.length }}
-					{{ t("pages.administration.selected") }}
-				</span>
-				<v-btn
-					ref="removeSelectedMembers"
-					class="ml-2"
-					size="x-small"
-					variant="text"
-					:icon="mdiTrashCanOutline"
-					:aria-label="t('pages.rooms.members.multipleRemove.ariaLabel')"
-					@click="onRemoveMembers(selectedUserIds)"
-				/>
-
-				<v-btn
-					ref="resetSelectedMembers"
-					class="ml-8 mr-2"
-					size="x-small"
-					variant="text"
-					:icon="mdiClose"
-					:aria-label="t('pages.rooms.members.remove.ariaLabel')"
-					@click="onResetSelectedMembers"
-				/>
-			</div>
-		</template>
-		<v-spacer />
+		<ActionMenu
+			v-if="selectedUserIds.length"
+			class="multi-action-menu"
+			:selectedIds="selectedUserIds"
+			@remove:selected="onRemoveMembers"
+			@reset:selected="onResetSelectedMembers"
+		/>
+		<v-spacer v-else />
 		<v-text-field
 			v-model="search"
 			density="compact"
@@ -69,8 +48,8 @@
 	>
 		<template #[`item.actions`]="{ item, index }">
 			<v-btn
+				v-if="item.roomRoleName !== RoleName.Roomowner"
 				:data-testid="`remove-member-${index}`"
-				v-if="item.roleName !== RoleName.Roomowner"
 				size="x-small"
 				variant="text"
 				:aria-label="getRemoveAriaLabel(item)"
@@ -83,10 +62,10 @@
 </template>
 
 <script setup lang="ts">
+import ActionMenu from "./ActionMenu.vue";
 import { PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import {
-	mdiClose,
 	mdiMenuDown,
 	mdiMenuUp,
 	mdiMagnify,
@@ -98,18 +77,24 @@ import {
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
 
-const { askConfirmation } = useConfirmationDialog();
-
-const selectedUserIds = ref<string[]>([]);
-
 const props = defineProps({
 	members: {
 		type: Array as PropType<RoomMemberResponse[]>,
 		required: true,
 	},
+	fixedPosition: {
+		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
+		default: () => ({ enabled: false, positionTop: 0 }),
+	},
 });
+const { askConfirmation } = useConfirmationDialog();
+const selectedUserIds = ref<string[]>([]);
 
-const emit = defineEmits(["remove:members", "select:members"]);
+const emit = defineEmits<{
+	(e: "remove:members", userIds: string[]): void;
+	(e: "select:members", userIds: string[]): void;
+}>();
+
 const { t } = useI18n();
 const search = ref("");
 const memberList = toRef(props, "members");
@@ -172,8 +157,12 @@ const tableHeader = [
 		key: "lastName",
 	},
 	{
-		title: t("common.labels.role"),
-		key: "displayRoleName",
+		title: t("pages.rooms.members.tableHeader.roomRole"),
+		key: "displayRoomRole",
+	},
+	{
+		title: t("pages.rooms.members.tableHeader.schoolRole"),
+		key: "displaySchoolRole",
 	},
 	{ title: t("common.words.mainSchool"), key: "schoolName" },
 	{ title: "", key: "actions", sortable: false, width: 50 },
@@ -205,5 +194,15 @@ const tableHeader = [
 	background-color: rgba(var(--v-theme-primary), 0.12);
 	border-radius: 0.25rem;
 	min-height: 40px;
+}
+
+.fixed-position {
+	$space-left-right: calc(var(--space-base-vuetify) * 6);
+	position: fixed;
+	right: $space-left-right;
+	left: $space-left-right;
+	width: calc(100% - $space-left-right * 2);
+	z-index: 1;
+	background: rgb(var(--v-theme-white));
 }
 </style>

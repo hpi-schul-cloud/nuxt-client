@@ -55,9 +55,9 @@ describe("env-config module", () => {
 						data: mockFileEnvs,
 					});
 
-					const defaultApi = createMock<serverApi.DefaultApiInterface>();
+					const defaultApi = createMock<serverApi.ServerConfigApiInterface>();
 					jest
-						.spyOn(serverApi, "DefaultApiFactory")
+						.spyOn(serverApi, "ServerConfigApiFactory")
 						.mockReturnValue(defaultApi);
 					defaultApi.serverConfigControllerPublicConfig.mockResolvedValueOnce(
 						serverConfigresponse
@@ -160,9 +160,9 @@ describe("env-config module", () => {
 					});
 					const error = new Error("testError");
 
-					const defaultApi = createMock<serverApi.DefaultApiInterface>();
+					const defaultApi = createMock<serverApi.ServerConfigApiInterface>();
 					jest
-						.spyOn(serverApi, "DefaultApiFactory")
+						.spyOn(serverApi, "ServerConfigApiFactory")
 						.mockReturnValue(defaultApi);
 					defaultApi.serverConfigControllerPublicConfig.mockResolvedValueOnce(
 						serverConfigresponse
@@ -280,9 +280,9 @@ describe("env-config module", () => {
 					});
 					const error = new Error("testError");
 
-					const defaultApi = createMock<serverApi.DefaultApiInterface>();
+					const defaultApi = createMock<serverApi.ServerConfigApiInterface>();
 					jest
-						.spyOn(serverApi, "DefaultApiFactory")
+						.spyOn(serverApi, "ServerConfigApiFactory")
 						.mockReturnValue(defaultApi);
 					defaultApi.serverConfigControllerPublicConfig.mockRejectedValueOnce(
 						error
@@ -663,6 +663,26 @@ describe("env-config module", () => {
 
 			expect(envConfigModule.getGhostBaseUrl).toStrictEqual(
 				mockEnvs.GHOST_BASE_URL
+			);
+		});
+
+		it("getShowNewClassViewEnabled should get FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED", () => {
+			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
+			envConfigModule.env = mockEnvs;
+
+			expect(envConfigModule.getShowNewClassViewEnabled).toStrictEqual(
+				mockEnvs.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED
+			);
+		});
+
+		it("getContactEmail should get SC_CONTACT_EMAIL", () => {
+			const envConfigModule = new EnvConfigModule({});
+			const mockEnvs = envsFactory.build();
+			envConfigModule.env = mockEnvs;
+
+			expect(envConfigModule.getContactEmail).toStrictEqual(
+				mockEnvs.SC_CONTACT_EMAIL
 			);
 		});
 

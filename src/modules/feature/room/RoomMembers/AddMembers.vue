@@ -1,5 +1,5 @@
 <template>
-	<v-card>
+	<v-card ref="addMembersContent">
 		<template v-slot:prepend>
 			<div ref="textTitle" class="text-h4 mt-2">
 				{{ t("pages.rooms.members.add") }}
@@ -19,21 +19,23 @@
 						:items="schoolList"
 						:label="t('global.sidebar.item.school')"
 						@update:model-value="onSchoolChange"
+						@update:menu="onAutocompleteToggle"
 					/>
 				</div>
 
 				<div class="mt-4" data-testid="add-participant-role">
 					<v-autocomplete
 						ref="autoCompleteRole"
-						v-model="selectedRole"
+						v-model="selectedSchoolRole"
 						auto-select-first="exact"
 						density="comfortable"
 						item-title="name"
 						item-value="id"
 						variant="underlined"
-						:items="roles"
+						:items="schoolRoles"
 						:label="t('common.labels.role')"
 						@update:model-value="onRoleChange"
+						@update:menu="onAutocompleteToggle"
 					/>
 				</div>
 
@@ -50,7 +52,7 @@
 						variant="underlined"
 						:items="memberList"
 						:label="t('common.labels.name')"
-						:no-data-text="t('common.nodata')"
+						@update:menu="onAutocompleteToggle"
 					/>
 				</div>
 			</div>
@@ -86,6 +88,8 @@ import { useI18n } from "vue-i18n";
 import { PropType, ref, toRef } from "vue";
 import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
 import { RoomMember } from "@data-room";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { VAutocomplete, VCard } from "vuetify/lib/components/index.mjs";
 
 const props = defineProps({
 	memberList: {
@@ -97,26 +101,33 @@ const props = defineProps({
 	},
 });
 
-const emit = defineEmits(["add:members", "close", "update:role"]);
+const emit = defineEmits<{
+	(e: "add:members", selectedUsers: string[]): void;
+	(e: "close"): void;
+	(e: "update:role", payload: { schoolRole: RoleName; schoolId: string }): void;
+}>();
+
 const { t } = useI18n();
 const schoolList = toRef(props, "schools");
 const selectedSchool = ref(schoolList.value[0].id);
 
-const roles = [{ id: RoleName.Roomeditor, name: t("common.labels.teacher") }];
+const schoolRoles = [
+	{ id: RoleName.Teacher, name: t("common.labels.teacher") },
+];
 
-const selectedRole = ref<string>(roles[0].id);
+const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
 const selectedUsers = ref<string[]>([]);
 
 const onRoleChange = () => {
 	selectedUsers.value = [];
 	emit("update:role", {
-		role: selectedRole.value,
+		schoolRole: selectedSchoolRole.value,
 		schoolId: selectedSchool.value,
 	});
 };
 
 const onSchoolChange = () => {
-	selectedRole.value = roles[0].id;
+	selectedSchoolRole.value = schoolRoles[0].id;
 	onRoleChange();
 };
 
@@ -126,4 +137,31 @@ const onAddMembers = () => {
 };
 
 const onClose = () => emit("close");
+
+const addMembersContent = ref<VCard>();
+const { pause, unpause } = useFocusTrap(addMembersContent, {
+	immediate: true,
+});
+
+const autoCompleteSchool = ref<VAutocomplete>();
+const autoCompleteRole = ref<VAutocomplete>();
+const autoCompleteUsers = ref<VAutocomplete>();
+
+const onAutocompleteToggle = () => {
+	const autocompleteRefs = [
+		autoCompleteSchool,
+		autoCompleteRole,
+		autoCompleteUsers,
+	];
+
+	const isAnyAutocompleteOpen = autocompleteRefs.some(
+		(autocomplete) => autocomplete.value?.menu
+	);
+
+	if (isAnyAutocompleteOpen) {
+		pause();
+	} else {
+		unpause();
+	}
+};
 </script>

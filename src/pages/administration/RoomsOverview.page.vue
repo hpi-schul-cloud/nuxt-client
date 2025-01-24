@@ -110,21 +110,20 @@
 				</h2>
 			</template>
 			<template #content>
-				<RenderHTML
-					class="text-md mt-2"
-					:html="
-						t('pages.administration.courses.deleteDialog.content', {
+				<p>
+					{{
+						t("pages.administration.courses.deleteDialog.content", {
 							itemName: selectedItemName,
 						})
-					"
-					component="p"
-				/>
+					}}
+				</p>
 			</template>
 		</v-custom-dialog>
 		<StartExistingCourseSyncDialog
 			v-model:is-open="isCourseSyncDialogOpen"
 			:course-id="selectedItem?.id"
 			:course-name="selectedItem?.name"
+			:course-teachers="selectedItem?.teacherNames"
 			@success="onConfirmSynchronizeCourse"
 			data-testid="start-sync-dialog"
 		/>
@@ -181,7 +180,6 @@ import {
 	EndCourseSyncDialog,
 	StartExistingCourseSyncDialog,
 } from "@feature-course-sync";
-import { RenderHTML } from "@feature-render-html";
 import {
 	mdiPencilOutline,
 	mdiSync,

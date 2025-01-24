@@ -5,10 +5,10 @@ import {
 } from "@/fileStorageApi/v3";
 import {
 	ConfigResponse,
-	DefaultApiFactory,
-	DefaultApiInterface,
 	LanguageType,
 	SchulcloudTheme,
+	ServerConfigApiFactory,
+	ServerConfigApiInterface,
 	Timezone,
 } from "@/serverApi/v3";
 import {
@@ -144,6 +144,10 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.GHOST_BASE_URL;
 	}
 
+	get getContactEmail(): string {
+		return this.env.SC_CONTACT_EMAIL;
+	}
+
 	get getAccessibilityReportEmail(): string {
 		return this.env.ACCESSIBILITY_REPORT_EMAIL;
 	}
@@ -180,8 +184,8 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED;
 	}
 
-	private get serverApi(): DefaultApiInterface {
-		const serverApi = DefaultApiFactory(undefined, "/v3", $axios);
+	private get serverApi(): ServerConfigApiInterface {
+		const serverApi = ServerConfigApiFactory(undefined, "/v3", $axios);
 
 		return serverApi;
 	}

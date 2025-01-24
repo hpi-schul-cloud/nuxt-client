@@ -5,45 +5,34 @@ import {
 } from "@@/tests/test-utils/setup";
 import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import { createMock } from "@golevelup/ts-jest";
-import { ConfigResponse } from "@/serverApi/v3";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { envsFactory } from "@@/tests/test-utils";
+import { useBoardFeatures } from "@data-board";
+import { BoardContextType } from "@/types/board/BoardContext";
 
-const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-	getEnv: createMock<ConfigResponse>({
-		FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
-	}),
+jest.mock("@data-board/BoardFeatures.composable");
+jest.mocked(useBoardFeatures).mockImplementation(() => {
+	return {
+		isFeatureEnabled: jest.fn().mockReturnValue(true),
+	};
 });
 
 const setupWrapper = ({
 	propsData = {},
-	envOverrides = {},
 }: {
 	propsData?: object;
-	envOverrides?: Partial<ConfigResponse>;
 } = {}) => {
-	const envs = envsFactory.build({
-		FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
-		...envOverrides,
-	});
-	envConfigModule.setEnvs(envs);
-
 	const wrapper = mount(VideoConferenceContentElementDisplay, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
 				[BOARD_IS_LIST_LAYOUT as symbol]: false,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
 			},
 		},
 		props: {
 			isEditMode: false,
 			isRunning: false,
+			isVideoConferenceEnabled: true,
 			hasParticipationPermission: false,
 			canStart: false,
 			title: "",
@@ -70,6 +59,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				propsData: {
 					isEditMode: false,
 					isRunning: false,
+					isVideoConferenceEnabled: true,
 					hasParticipationPermission: true,
 					canStart: true,
 					title,
@@ -84,27 +74,73 @@ describe("VideoConferenceContentElementDisplay", () => {
 	});
 
 	describe("Alerts", () => {
-		describe("and the feature is disabled", () => {
-			it("should show 'not enabled for teacher' alert", () => {
-				const wrapper = setupWrapper({
-					propsData: {
-						isRunning: false,
-						hasParticipationPermission: true,
-						canStart: true,
-						title: "video conference",
-					},
-					envOverrides: {
-						FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: false,
-					},
-				});
+		describe("when the feature is disabled", () => {
+			describe("and the elements parent is a course", () => {
+				it("should show 'not enabled for teacher' alert", () => {
+					const wrapper = setupWrapper({
+						propsData: {
+							boardParentType: BoardContextType.Course,
+							isRunning: false,
+							isVideoConferenceEnabled: false,
+							hasParticipationPermission: true,
+							canStart: true,
+							title: "video conference",
+						},
+					});
 
-				const alert = wrapper.findComponent(
-					'[data-testid="vc-info-box-no-feature"]'
-				);
-				const text = alert.find("span.my-auto");
-				expect(text.text()).toEqual(
-					"pages.videoConference.info.notEnabledTeacher"
-				);
+					const alert = wrapper.findComponent(
+						'[data-testid="vc-info-box-no-feature"]'
+					);
+					const text = alert.find("span.my-auto");
+					expect(text.text()).toEqual(
+						"pages.videoConference.info.courseParent.notEnabledTeacher"
+					);
+				});
+			});
+
+			describe("and the elements parent is a room", () => {
+				it("should show 'not enabled for teacher' alert", () => {
+					const wrapper = setupWrapper({
+						propsData: {
+							boardParentType: BoardContextType.Room,
+							isRunning: false,
+							isVideoConferenceEnabled: false,
+							hasParticipationPermission: true,
+							canStart: true,
+							title: "video conference",
+						},
+					});
+
+					const alert = wrapper.findComponent(
+						'[data-testid="vc-info-box-no-feature"]'
+					);
+					const text = alert.find("span.my-auto");
+					expect(text.text()).toEqual(
+						"pages.videoConference.info.roomParent.notEnabledTeacher"
+					);
+				});
+			});
+
+			describe("and the elements parent is not handed to the component", () => {
+				it("should show 'not enabled for teacher' alert", () => {
+					const wrapper = setupWrapper({
+						propsData: {
+							isRunning: false,
+							isVideoConferenceEnabled: false,
+							hasParticipationPermission: true,
+							canStart: true,
+							title: "video conference",
+						},
+					});
+
+					const alert = wrapper.findComponent(
+						'[data-testid="vc-info-box-no-feature"]'
+					);
+					const text = alert.find("span.my-auto");
+					expect(text.text()).toEqual(
+						"pages.videoConference.info.roomParent.notEnabledTeacher"
+					);
+				});
 			});
 		});
 
@@ -113,6 +149,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const wrapper = setupWrapper({
 					propsData: {
 						isRunning: false,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: false,
 						title: "video conference",
@@ -128,6 +165,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const wrapper = setupWrapper({
 					propsData: {
 						isRunning: false,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: false,
 						canStart: false,
 						title: "video conference",
@@ -143,6 +181,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const wrapper = setupWrapper({
 					propsData: {
 						isRunning: false,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: true,
 						title: "video conference",
@@ -159,6 +198,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const wrapper = setupWrapper({
 					propsData: {
 						isRunning: true,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: false,
 						canStart: false,
 						title: "video conference",
@@ -176,6 +216,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const wrapper = setupWrapper({
 					propsData: {
 						isRunning: true,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: true,
 						title: "video conference",
@@ -202,6 +243,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 					propsData: {
 						isEditMode: false,
 						isRunning: true,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: false,
 						title: "video conference",
@@ -219,6 +261,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 					propsData: {
 						isEditMode: false,
 						isRunning: false,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: false,
 						title: "video conference",
@@ -234,6 +277,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 					propsData: {
 						isEditMode: false,
 						isRunning: false,
+						isVideoConferenceEnabled: true,
 						hasParticipationPermission: true,
 						canStart: true,
 						title: "video conference",

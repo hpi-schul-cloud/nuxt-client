@@ -5,13 +5,14 @@
 			:title="column.title"
 			:index="index"
 			:isListBoard="isListBoard"
+			:isNotFirstColumn="isNotFirstColumn"
+			:isNotLastColumn="isNotLastColumn"
 			@delete:column="onColumnDelete"
 			@move:column-down="onMoveColumnDown"
 			@move:column-left="onMoveColumnLeft"
 			@move:column-right="onMoveColumnRight"
 			@move:column-up="onMoveColumnUp"
 			@update:title="onUpdateTitle"
-			:class="{ 'pl-2': !isListBoard }"
 		/>
 		<div>
 			<Sortable
@@ -23,7 +24,10 @@
 					animation: 250,
 					bubbleScroll: true,
 					direction: 'vertical',
-					delay: isTouchDetected ? 300 : 2,
+					delayOnTouchOnly: true,
+					delay: 300,
+					touchStartThreshold: 3, // needed for sensitive touch devices
+					fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
 					disabled: !hasMovePermission,
 					dragClass: 'elevation-10',
 					dragoverBubble: false,
@@ -80,19 +84,11 @@ import {
 	useBoardStore,
 	useForceRender,
 } from "@data-board";
-import {
-	BOARD_HAS_MULTIPLE_COLUMNS,
-	BOARD_IS_FIRST_COLUMN,
-	BOARD_IS_LAST_COLUMN,
-	extractDataAttribute,
-	useDragAndDrop,
-} from "@util-board";
-import { useTouchDetection } from "@util-device-detection";
+import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
-
 import { Sortable } from "sortablejs-vue3";
-import { computed, defineComponent, PropType, provide, ref, toRef } from "vue";
+import { computed, defineComponent, PropType, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
@@ -157,23 +153,14 @@ export default defineComponent({
 		});
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
-		const { isTouchDetected } = useTouchDetection();
 		const showAddButton = computed(
 			() => hasCreateColumnPermission && isDragging.value === false
 		);
 
-		const hasManyColumns = computed(() => props.columnCount > 1);
-		const isFirstColumn = computed(
-			() => hasManyColumns.value && props.index === 0
+		const isNotFirstColumn = computed(() => props.index !== 0);
+		const isNotLastColumn = computed(
+			() => props.index !== props.columnCount - 1
 		);
-		const lastIndex = computed(() => props.columnCount - 1);
-		const isLastColumn = computed(
-			() => hasManyColumns.value && props.index === lastIndex.value
-		);
-
-		provide(BOARD_HAS_MULTIPLE_COLUMNS, hasManyColumns);
-		provide(BOARD_IS_FIRST_COLUMN, isFirstColumn);
-		provide(BOARD_IS_LAST_COLUMN, isLastColumn);
 
 		const onCreateCard = () => emit("create:card", props.column.id);
 
@@ -329,7 +316,8 @@ export default defineComponent({
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
-			isTouchDetected,
+			isNotFirstColumn,
+			isNotLastColumn,
 			sortableClasses,
 			onCreateCard,
 			onDeleteCard,

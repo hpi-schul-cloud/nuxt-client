@@ -404,9 +404,13 @@ export default class ImportUsersModule extends VuexModule {
 	}
 
 	@Action
-	async populateImportUsersFromExternalSystem(): Promise<void> {
+	async populateImportUsersFromExternalSystem(
+		matchByPreferredName = false
+	): Promise<void> {
 		try {
-			await this.importUserApi.importUserControllerPopulateImportUsers();
+			await this.importUserApi.importUserControllerPopulateImportUsers(
+				matchByPreferredName
+			);
 		} catch (error: unknown) {
 			const apiError: ApiResponseError | ApiValidationError =
 				mapAxiosErrorToResponseError(error);
@@ -422,6 +426,13 @@ export default class ImportUsersModule extends VuexModule {
 	async cancelMigration(): Promise<void> {
 		try {
 			await this.importUserApi.importUserControllerCancelMigration();
+			this.setUsersList({
+				data: [],
+				total: 0,
+				skip: 0,
+				limit: 0,
+			});
+			this.setTotal(0);
 		} catch (error: unknown) {
 			const apiError: ApiResponseError | ApiValidationError =
 				mapAxiosErrorToResponseError(error);

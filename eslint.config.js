@@ -31,6 +31,7 @@ module.exports = [
 			"src/serverApi/**",
 			"src/fileStorageApi/**",
 			"src/h5pEditorApi/**",
+			"src/commonCartridgeApi/**",
 		],
 	},
 	{

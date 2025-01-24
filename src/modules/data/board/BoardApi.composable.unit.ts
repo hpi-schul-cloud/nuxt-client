@@ -1,6 +1,8 @@
 import {
+	BoardLayout,
 	ContentElementType,
 	ExternalToolElementResponse,
+	LayoutBodyParams,
 } from "@/serverApi/v3";
 import * as serverApi from "@/serverApi/v3/api";
 import { CardResponse, DrawingElementResponse } from "@/serverApi/v3/api";
@@ -555,6 +557,18 @@ describe("BoardApi.composable", () => {
 				"board-id",
 				{ isVisible: true }
 			);
+		});
+	});
+
+	describe("updateBoardLayoutCall", () => {
+		it("should call boardControllerUpdateLayout api", async () => {
+			const { updateBoardLayoutCall } = useBoardApi();
+
+			await updateBoardLayoutCall("board-id", BoardLayout.List);
+
+			expect(boardApi.boardControllerUpdateLayout).toHaveBeenCalledWith<
+				[string, LayoutBodyParams]
+			>("board-id", { layout: BoardLayout.List });
 		});
 	});
 });

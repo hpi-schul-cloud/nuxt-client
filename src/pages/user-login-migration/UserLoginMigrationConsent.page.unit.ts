@@ -24,7 +24,6 @@ describe("UserLoginMigrationConsent", () => {
 	let userLoginMigrationModule: jest.Mocked<UserLoginMigrationModule>;
 
 	const setup = async (userLoginMigration?: Partial<UserLoginMigration>) => {
-		document.body.setAttribute("data-app", "true");
 		const systemsMock: System[] = [
 			{
 				id: "sourceSystemId",
@@ -82,13 +81,17 @@ describe("UserLoginMigrationConsent", () => {
 			it("should show the normal description text", async () => {
 				const { wrapper } = await setup();
 
-				const descriptionText = wrapper
-					.findComponent("[data-testId=text-description]")
-					.attributes("html");
+				const descriptionText = wrapper.get("[data-testId=text-description]");
 
-				expect(descriptionText).toEqual(
-					'pages.userMigration.description.fromSource {"targetSystem":"targetSystem","startMigration":"pages.userMigration.button.startMigration"}'
-				);
+				const expectedText = [
+					"pages.userMigration.description.firstParagraph.hello ",
+					"pages.userMigration.description.firstParagraph.changeSource",
+					"pages.userMigration.description.firstParagraph.fromSource",
+					"pages.userMigration.description.firstParagraph.loginWith",
+					"pages.userMigration.description.lastParagraph",
+				].join("");
+
+				expect(descriptionText.text()).toContain(expectedText);
 			});
 
 			it("should show the proceed migration button", async () => {
@@ -120,13 +123,17 @@ describe("UserLoginMigrationConsent", () => {
 					mandatorySince: new Date(2000, 1, 1),
 				});
 
-				const descriptionText = wrapper
-					.findComponent("[data-testId=text-description]")
-					.attributes("html");
+				const descriptionText = wrapper.get("[data-testId=text-description]");
 
-				expect(descriptionText).toEqual(
-					'pages.userMigration.description.fromSourceMandatory {"targetSystem":"targetSystem","startMigration":"pages.userMigration.button.startMigration"}'
-				);
+				const expectedText = [
+					"pages.userMigration.description.firstParagraph.hello ",
+					"pages.userMigration.description.firstParagraph.changeSource",
+					"pages.userMigration.description.firstParagraph.fromSourceMandatory",
+					"pages.userMigration.description.firstParagraph.loginWith",
+					"pages.userMigration.description.lastParagraph",
+				].join("");
+
+				expect(descriptionText.text()).toContain(expectedText);
 			});
 
 			it("should show the logout button", async () => {
