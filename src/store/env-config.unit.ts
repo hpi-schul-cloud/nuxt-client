@@ -55,9 +55,9 @@ describe("env-config module", () => {
 						data: mockFileEnvs,
 					});
 
-					const defaultApi = createMock<serverApi.DefaultApiInterface>();
+					const defaultApi = createMock<serverApi.ServerConfigApiInterface>();
 					jest
-						.spyOn(serverApi, "DefaultApiFactory")
+						.spyOn(serverApi, "ServerConfigApiFactory")
 						.mockReturnValue(defaultApi);
 					defaultApi.serverConfigControllerPublicConfig.mockResolvedValueOnce(
 						serverConfigresponse
@@ -160,9 +160,9 @@ describe("env-config module", () => {
 					});
 					const error = new Error("testError");
 
-					const defaultApi = createMock<serverApi.DefaultApiInterface>();
+					const defaultApi = createMock<serverApi.ServerConfigApiInterface>();
 					jest
-						.spyOn(serverApi, "DefaultApiFactory")
+						.spyOn(serverApi, "ServerConfigApiFactory")
 						.mockReturnValue(defaultApi);
 					defaultApi.serverConfigControllerPublicConfig.mockResolvedValueOnce(
 						serverConfigresponse
@@ -280,9 +280,9 @@ describe("env-config module", () => {
 					});
 					const error = new Error("testError");
 
-					const defaultApi = createMock<serverApi.DefaultApiInterface>();
+					const defaultApi = createMock<serverApi.ServerConfigApiInterface>();
 					jest
-						.spyOn(serverApi, "DefaultApiFactory")
+						.spyOn(serverApi, "ServerConfigApiFactory")
 						.mockReturnValue(defaultApi);
 					defaultApi.serverConfigControllerPublicConfig.mockRejectedValueOnce(
 						error
