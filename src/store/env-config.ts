@@ -5,8 +5,8 @@ import {
 } from "@/fileStorageApi/v3";
 import {
 	ConfigResponse,
-	DefaultApiFactory,
-	DefaultApiInterface,
+	ServerConfigApiFactory,
+	ServerConfigApiInterface,
 	LanguageType,
 	SchulcloudTheme,
 	Timezone,
@@ -184,8 +184,8 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.FEATURE_SHOW_NEW_CLASS_VIEW_ENABLED;
 	}
 
-	private get serverApi(): DefaultApiInterface {
-		const serverApi = DefaultApiFactory(undefined, "/v3", $axios);
+	private get serverApi(): ServerConfigApiInterface {
+		const serverApi = ServerConfigApiFactory(undefined, "/v3", $axios);
 
 		return serverApi;
 	}
