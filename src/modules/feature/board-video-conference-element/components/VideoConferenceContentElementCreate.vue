@@ -24,6 +24,7 @@
 							rows="1"
 							@keydown="onKeydown"
 							class="text"
+							data-testid="video-conference-element-title"
 							:placeholder="t('components.cardElement.videoConferenceElement')"
 						/>
 						<div class="align-self-center pl-2">
