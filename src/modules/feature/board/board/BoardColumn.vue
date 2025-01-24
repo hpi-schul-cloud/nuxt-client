@@ -13,7 +13,6 @@
 			@move:column-right="onMoveColumnRight"
 			@move:column-up="onMoveColumnUp"
 			@update:title="onUpdateTitle"
-			:class="{ 'pl-2': !isListBoard }"
 		/>
 		<div>
 			<Sortable
@@ -25,7 +24,10 @@
 					animation: 250,
 					bubbleScroll: true,
 					direction: 'vertical',
-					delay: isTouchDetected ? 300 : 2,
+					delayOnTouchOnly: true,
+					delay: 300,
+					touchStartThreshold: 3, // needed for sensitive touch devices
+					fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
 					disabled: !hasMovePermission,
 					dragClass: 'elevation-10',
 					dragoverBubble: false,
@@ -83,10 +85,8 @@ import {
 	useForceRender,
 } from "@data-board";
 import { extractDataAttribute, useDragAndDrop } from "@util-board";
-import { useTouchDetection } from "@util-device-detection";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
-
 import { Sortable } from "sortablejs-vue3";
 import { computed, defineComponent, PropType, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
@@ -153,7 +153,6 @@ export default defineComponent({
 		});
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
-		const { isTouchDetected } = useTouchDetection();
 		const showAddButton = computed(
 			() => hasCreateColumnPermission && isDragging.value === false
 		);
@@ -317,7 +316,6 @@ export default defineComponent({
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
-			isTouchDetected,
 			isNotFirstColumn,
 			isNotLastColumn,
 			sortableClasses,
