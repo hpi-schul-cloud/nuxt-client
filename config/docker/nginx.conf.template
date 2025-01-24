@@ -13,7 +13,7 @@ log_format json escape=json
   '}';
 
 server {
-    access_log /var/log/nginx/access.log ${LOG_FORMAT};
+    access_log /var/log/nginx/access.log ${NGINX_LOG_FORMAT};
     listen 4000;
     server_name  localhost;
 
