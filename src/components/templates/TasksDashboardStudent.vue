@@ -81,9 +81,9 @@
 </template>
 
 <script>
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState";
-import TasksList from "@/components/organisms/TasksList";
-import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels";
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import TasksList from "@/components/organisms/TasksList.vue";
+import vCustomDoublePanels from "@/components/molecules/vCustomDoublePanels.vue";
 
 export default {
 	components: { TasksList, vCustomDoublePanels, vCustomEmptyState },

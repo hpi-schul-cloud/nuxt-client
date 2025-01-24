@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import ModalFooter from "@/components/molecules/ModalFooter";
+import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import { defineComponent } from "vue";
 import { useUid } from "@/utils/uid";
 

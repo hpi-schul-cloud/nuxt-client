@@ -20,10 +20,10 @@
 <script>
 import BaseInputDefault, {
 	supportedTypes as defaultInputTypes,
-} from "./BaseInputDefault";
+} from "./BaseInputDefault.vue";
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
-} from "./BaseInputCheckbox";
+} from "./BaseInputCheckbox.vue";
 
 const componentDictionary = {};
 defaultInputTypes.forEach(

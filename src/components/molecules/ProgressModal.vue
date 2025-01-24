@@ -12,7 +12,7 @@
 	</base-modal>
 </template>
 <script>
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
 import BaseModal from "../base/BaseModal.vue";
 
 export default {

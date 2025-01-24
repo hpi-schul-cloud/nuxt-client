@@ -124,10 +124,10 @@
 </template>
 
 <script>
-import vRoomAvatar from "@/components/atoms/vRoomAvatar";
-import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
-import RoomModal from "@/components/molecules/RoomModal";
-import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
+import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar.vue";
+import RoomModal from "@/components/molecules/RoomModal.vue";
+import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { courseRoomListModule } from "@/store";

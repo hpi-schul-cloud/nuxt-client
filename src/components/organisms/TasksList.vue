@@ -52,8 +52,8 @@
 </template>
 
 <script>
-import TaskItemStudent from "@/components/molecules/TaskItemStudent";
-import TaskItemTeacher from "@/components/molecules/TaskItemTeacher";
+import TaskItemStudent from "@/components/molecules/TaskItemStudent.vue";
+import TaskItemTeacher from "@/components/molecules/TaskItemTeacher.vue";
 
 export default {
 	components: { TaskItemStudent, TaskItemTeacher },
