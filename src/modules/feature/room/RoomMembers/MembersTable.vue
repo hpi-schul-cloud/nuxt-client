@@ -89,8 +89,6 @@ import {
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { useRoomMemberVisibilityOptions } from "@data-room";
-import { useAriaLiveNotifier } from "@/composables/ariaLiveNotifier";
-import { ar } from "vuetify/lib/locale/index.mjs";
 
 const props = defineProps({
 	members: {
