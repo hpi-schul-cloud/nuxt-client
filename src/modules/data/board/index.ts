@@ -1,5 +1,6 @@
 import { useBoardStore } from "./Board.store";
 import * as boardActions from "./boardActions/boardActions";
+import { useBoardFeatures } from "./BoardFeatures.composable";
 import { useBoardFocusHandler } from "./BoardFocusHandler.composable";
 import { useBoardInactivity } from "./boardInactivity.composable";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
@@ -14,6 +15,7 @@ export {
 	boardActions,
 	cardActions,
 	useBoardStore,
+	useBoardFeatures,
 	useBoardFocusHandler,
 	useBoardInactivity,
 	useBoardPermissions,

@@ -22,6 +22,7 @@ export type Fab = {
 	icon: string;
 	title: string;
 	href?: string;
+	to?: string;
 	ariaLabel?: string;
 	dataTestId?: string;
 };

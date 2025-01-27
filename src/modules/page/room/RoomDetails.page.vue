@@ -23,8 +23,7 @@
 		<SelectBoardLayoutDialog
 			v-if="boardLayoutsEnabled && canCreateRoom"
 			v-model="boardLayoutDialogIsOpen"
-			@select:multi-column="onCreateBoard(BoardLayout.Columns)"
-			@select:single-column="onCreateBoard(BoardLayout.List)"
+			@select="onCreateBoard"
 		/>
 	</DefaultWireframe>
 </template>

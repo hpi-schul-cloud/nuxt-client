@@ -1,35 +1,37 @@
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-
-import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { LinkContentElement } from "@feature-board-link-element";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { shallowMount } from "@vue/test-utils";
 import {
+	ConfigResponse,
 	LinkElementContent,
-	MetaTagExtractorResponse,
 	LinkElementResponse,
 } from "@/serverApi/v3";
-import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
-import { computed, nextTick, ref } from "vue";
-import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
-import { ConfigResponse } from "@/serverApi/v3/api";
-import LinkContentElementCreate from "./LinkContentElementCreate.vue";
-import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
+import NotifierModule from "@/store/notifier";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
-import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
+
+import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { LinkContentElement } from "@feature-board-link-element";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { BoardMenu } from "@ui-board";
 import {
-	BoardMenu,
-	BoardMenuActionDelete,
-	BoardMenuActionMoveDown,
-	BoardMenuActionMoveUp,
-} from "@ui-board";
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
+import { shallowMount } from "@vue/test-utils";
+import { computed, nextTick, ref } from "vue";
+import {
+	MetaTagResult,
+	useMetaTagExtractorApi,
+} from "../composables/MetaTagExtractorApi.composable";
+import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
+import LinkContentElementCreate from "./LinkContentElementCreate.vue";
+import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 
 jest.mock("@data-board/ContentElementState.composable");
 
@@ -82,6 +84,8 @@ describe("LinkContentElement", () => {
 		element: LinkElementResponse;
 		isEditMode: boolean;
 		isDetailView: boolean;
+		isNotFirstElement?: boolean;
+		isNotLastElement?: boolean;
 		columnIndex: number;
 		rowIndex: number;
 		elementIndex: number;
@@ -106,7 +110,15 @@ describe("LinkContentElement", () => {
 			content?: LinkElementContent;
 			isEditMode: boolean;
 			isDetailView?: boolean;
-		} = { content: undefined, isEditMode: true, isDetailView: false }
+			isNotFirstElement?: boolean;
+			isNotLastElement?: boolean;
+		} = {
+			content: undefined,
+			isEditMode: true,
+			isDetailView: false,
+			isNotFirstElement: true,
+			isNotLastElement: true,
+		}
 	) => {
 		const element = {
 			...defaultElement,
@@ -141,6 +153,8 @@ describe("LinkContentElement", () => {
 			element,
 			isEditMode: options.isEditMode,
 			isDetailView: false,
+			isNotFirstElement: true,
+			isNotLastElement: true,
 			columnIndex: 0,
 			rowIndex: 1,
 			elementIndex: 2,
@@ -282,7 +296,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
@@ -295,7 +309,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
@@ -308,7 +322,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");
@@ -386,7 +400,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveDown);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-down:edit");
@@ -397,7 +411,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionMoveUp);
+					const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("move-up:edit");
@@ -408,7 +422,7 @@ describe("LinkContentElement", () => {
 						isEditMode: true,
 					});
 
-					const menuItem = wrapper.findComponent(BoardMenuActionDelete);
+					const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 					await menuItem.trigger("click");
 
 					expect(wrapper.emitted()).toHaveProperty("delete:element");
@@ -452,15 +466,12 @@ describe("LinkContentElement", () => {
 							isDetailView: false,
 						});
 						const url = "https://abc.de/my-article";
-						const fakeMetaTags: MetaTagExtractorResponse = {
+						const fakeMetaTags: MetaTagResult = {
 							url,
 							title: "my title",
 							description: "",
 							originalImageUrl: "https://abc.de/foto.png",
 							imageUrl: "https://abc.de/foto.png",
-							type: "unknown",
-							parentTitle: "",
-							parentType: "unknown",
 						};
 
 						useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(

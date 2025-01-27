@@ -24,11 +24,17 @@ import {
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
-import { BoardMenuActionDelete } from "@ui-board";
+import { BoardMenuScope } from "@ui-board";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import {
+	KebabMenuActionDelete,
+	KebabMenuActionEdit,
+	KebabMenuActionShareLink,
+} from "@ui-kebab-menu";
 import {
 	useBoardNotifier,
 	useCourseBoardEditMode,
+	useShareBoardLink,
 	useSharedEditMode,
 	useSharedLastCreatedElement,
 } from "@util-board";
@@ -43,6 +49,7 @@ const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 const mockedSharedLastCreatedElement = jest.mocked(useSharedLastCreatedElement);
 const mockedEditMode = jest.mocked(useCourseBoardEditMode);
 const mockedUseSharedEditMode = jest.mocked(useSharedEditMode);
+const mockedUseShareBoardLink = jest.mocked(useShareBoardLink);
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 const mockedBoardFocusHandler = jest.mocked(useBoardFocusHandler);
@@ -65,6 +72,7 @@ describe("CardHost", () => {
 	let mockedSharedLastCreatedElementCalls: DeepMocked<
 		ReturnType<typeof useSharedLastCreatedElement>
 	>;
+	let useShareBoardLinkMock: DeepMocked<ReturnType<typeof useShareBoardLink>>;
 
 	beforeEach(() => {
 		setupStores({ envConfigModule: EnvConfigModule });
@@ -82,6 +90,11 @@ describe("CardHost", () => {
 			setEditModeId: jest.fn(),
 			isInEditMode: computed(() => true),
 		});
+
+		useShareBoardLinkMock = createMock<ReturnType<typeof useShareBoardLink>>({
+			getShareLinkId: jest.fn().mockReturnValue("shareLinkId"),
+		});
+		mockedUseShareBoardLink.mockReturnValue(useShareBoardLinkMock);
 
 		mockedBoardFocusHandler.mockReturnValue({
 			isFocusContained: computed(() => true),
@@ -138,6 +151,8 @@ describe("CardHost", () => {
 			});
 		}
 
+		const cardId = card?.id ?? "cardId";
+
 		const wrapper = shallowMount(CardHost, {
 			global: {
 				plugins: [
@@ -154,7 +169,7 @@ describe("CardHost", () => {
 				],
 			},
 			propsData: {
-				cardId: card?.id ?? "cardId",
+				cardId,
 				height: card?.height ?? 0,
 				columnIndex: 0,
 				rowIndex: 1,
@@ -163,7 +178,10 @@ describe("CardHost", () => {
 
 		mockedPiniaStoreTyping(useCardStore);
 
-		return { wrapper };
+		return {
+			wrapper,
+			cardId,
+		};
 	};
 
 	describe("when component is mounted", () => {
@@ -203,26 +221,49 @@ describe("CardHost", () => {
 
 	describe("user permissions", () => {
 		describe("when user is not permitted to delete", () => {
-			it("should not be rendered on DOM", () => {
+			it("should not show an edit button", () => {
 				mockedBoardPermissions.hasDeletePermission = false;
 				const { wrapper } = setup();
 
-				const boardMenuComponent = wrapper.findAllComponents({
-					name: "BoardMenu",
-				});
+				const deleteButton = wrapper.findComponent(KebabMenuActionEdit);
 
-				expect(boardMenuComponent.length).toStrictEqual(0);
+				expect(deleteButton.exists()).toEqual(false);
+			});
+
+			it("should not show a delete button", () => {
+				mockedBoardPermissions.hasDeletePermission = false;
+				const { wrapper } = setup();
+
+				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
+
+				expect(deleteButton.exists()).toEqual(false);
 			});
 		});
 	});
 
 	describe("card menus", () => {
+		describe("when users clicks share link menu", () => {
+			it("should copy a share link", async () => {
+				mockedBoardPermissions.hasDeletePermission = true;
+				const { wrapper, cardId } = setup();
+
+				const shareLinkButton = wrapper.findComponent(KebabMenuActionShareLink);
+
+				await shareLinkButton.trigger("click");
+
+				expect(useShareBoardLinkMock.copyShareLink).toHaveBeenCalledWith(
+					cardId,
+					BoardMenuScope.CARD
+				);
+			});
+		});
+
 		describe("when users click delete menu", () => {
 			it("should emit 'delete:card'", async () => {
 				mockedBoardPermissions.hasDeletePermission = true;
 				const { wrapper } = setup();
 
-				const deleteButton = wrapper.findComponent(BoardMenuActionDelete);
+				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
 
 				await deleteButton.vm.$emit("click", true);
 

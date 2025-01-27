@@ -127,6 +127,7 @@ export default {
 	"common.roleName.student": "Учень",
 	"common.roleName.superhero": "Адміністратор Schul-Cloud",
 	"common.roleName.teacher": "Викладач",
+	"common.roleName.groupSubstitutionTeacher": "Викладач на заміну",
 	"common.tool.information.incomplete.outdated.schoolAndContext.teacher":
 		"Конфігурація інструмента {toolName} неоновлена або неповна. Перевірте налаштування.",
 	"common.tool.information.outdated.student":
@@ -172,6 +173,10 @@ export default {
 	"common.words.color.turquoise": "Бірюза",
 	"common.words.color.yellow": "Жовтий",
 	"common.words.copiedToClipboard": "Скопійовано в буфер обміну",
+	"common.words.copyLinkToClipboard.success":
+		"Посилання скопійовано в буфер обміну",
+	"common.words.copyLinkToClipboard.failure":
+		"Не вдалося скопіювати посилання в буфер обміну",
 	"common.words.courseGroups": "курсові групи",
 	"common.words.courses": "Мій курс",
 	"common.words.draft": "чернетка",
@@ -377,6 +382,8 @@ export default {
 	"components.board.action.moveLeft": "Перемістіться вліво",
 	"components.board.action.moveRight": "Перемістіться праворуч",
 	"components.board.action.moveUp": "Рухатися вгору",
+	"components.board.action.changeLayout": "Змінити вигляд",
+	"components.board.action.shareLink.card": "Скопіювати посилання на Карту",
 	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
 	"components.board.alert.info.draft": "Ця дошка невидима для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
@@ -441,6 +448,8 @@ export default {
 		"Заголовок картки {cardPosition} у колонці {columnPosition} було змінено на {newTitle} іншим користувачем.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Картку {cardPosition} у стовпчику {columnPosition} було оновлено іншим користувачем.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"Інший користувач змінив вигляд панелі на {layout}.",
 	"components.board": "Дошка",
 	"components.boardCard": "Картка",
 	"components.boardColumn": "Колонка",
@@ -1301,7 +1310,7 @@ export default {
 	"pages.administration.school.index.privacySettings.labels.studentVisibility":
 		"Активувати видимість учнів для вчителів",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
-		"Активувати відеоконференції для курсів і команд",
+		"Увімкнути відеоконференцію",
 	"pages.administration.school.index.privacySettings.labels.aiTutor":
 		"Активуйте репетитора ШІ в школі",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
@@ -1317,7 +1326,7 @@ export default {
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen":
 		"Якщо цю опцію не ввімкнено, вчителі бачитимуть лише ті класи та учнів, учасниками яких вони є.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
-		"Якщо у вашій школі увімкнено відеоконференцію, викладачі можуть додати інструмент для відеоконференцій до свого курсу у розділі «Інструменти», а потім запустити відеоконференцію для всіх учасників курсу. Адміністратори команд можуть активувати функцію відеоконференції у відповідній команді. Після цього керівники команд та адміністратори команд зможуть додавати та розпочинати відеоконференції для зустрічей.",
+		"Якщо у вашому навчальному закладі активовано відеоконференції, вчителі можуть розпочати відеоконференції для всіх учасників курсу в кімнатах, курсах і командах. У кімнатах і курсах відеоконференції можна додати як елемент до розділів (одноколонкових і багатоколонкових), у курсах відеоконференції можна використовувати в розділі «Інструменти», а в командах - за допомогою функції призначення.",
 	"pages.administration.school.index.privacySettings.longText.aiTutor":
 		"Якщо AI Tutor активовано у вашій школі, вчителі можуть додати AI Tutor у своїх областях.",
 	"pages.administration.school.index.privacySettings":
@@ -1573,11 +1582,11 @@ export default {
 	"pages.common.tools.configureVideoconferenceDialog.title":
 		"Створити відеоконференцію",
 	"pages.common.tools.configureVideoconferenceDialog.text.allModeratorPermission":
-		"Усі користувачі беруть участь як модератори",
+		"Права модерації для всіх учасників",
 	"pages.common.tools.configureVideoconferenceDialog.text.mute":
-		"Вимкнення звуку учасників при вході",
+		"Вимкнути звук учасникам при вході",
 	"pages.common.tools.configureVideoconferenceDialog.text.waitingRoom":
-		"Схвалення модератором перед входом до кімнати",
+		"Активуйте кімнату очікування для учасників",
 	"pages.content._id.addToTopic": "Для додавання в",
 	"pages.content._id.collection.selectElements":
 		"Виберіть елементи, які треба додати до теми",
@@ -1809,8 +1818,12 @@ export default {
 		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Видалити вибраних членів із кімнати?",
-	"pages.rooms.members.roles.editor": "Редактор кімнати",
-	"pages.rooms.members.roles.viewer": "Переглядач кімнати",
+	"pages.rooms.members.roomPermissions.admin": "Керувати",
+	"pages.rooms.members.roomPermissions.owner": "Володіти",
+	"pages.rooms.members.roomPermissions.editor": "Редагувати",
+	"pages.rooms.members.roomPermissions.viewer": "Читати",
+	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
+	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
@@ -1919,8 +1932,10 @@ export default {
 	"pages.videoConference.info.notStarted": "Відеоконференція ще не почалася.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"Елемент більше не доступний. Будь ласка, зверніться до викладача.",
-	"pages.videoConference.info.notEnabledTeacher":
-		"Елемент більше не доступний. Будь ласка, зверніться з адміністратором.",
+	"pages.videoConference.info.courseParent.notEnabledTeacher":
+		"Цей елемент більше не доступний, оскільки відеоконференції було вимкнено. Будь ласка, активуйте його в налаштуваннях курсу та/або зверніться до адміністратора школи.",
+	"pages.videoConference.info.roomParent.notEnabledTeacher":
+		"Цей елемент більше не доступний, оскільки відеоконференції в школі вимкнено. Будь ласка, зверніться до адміністратора школи.",
 	"pages.videoConference.title": "Відеоконференція BigBlueButton",
 	"error.500":
 		"Є проблеми в системі. Ми працюємо над усуненням проблеми. Будь ласка, спробуйте пізніше.",
