@@ -26,14 +26,7 @@
 			</div>
 		</InlineEditInteractionHandler>
 		<div class="d-flex">
-			<v-chip
-				v-if="isDraft"
-				size="small"
-				class="align-self-center"
-				data-testid="board-draft-chip"
-			>
-				{{ t("common.words.draft") }}
-			</v-chip>
+			<BoardDraftChip v-if="isDraft" />
 			<div class="mx-2">
 				<BoardMenu
 					v-if="hasEditPermission"
@@ -76,6 +69,7 @@ import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
+import BoardDraftChip from "./BoardDraftChip.vue";
 
 const props = defineProps({
 	boardId: {

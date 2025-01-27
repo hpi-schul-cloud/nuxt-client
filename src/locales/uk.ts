@@ -180,8 +180,8 @@ export default {
 		"Не вдалося скопіювати посилання в буфер обміну",
 	"common.words.courseGroups": "курсові групи",
 	"common.words.courses": "Мій курс",
-	"common.words.draft": "чернетка",
-	"common.words.drafts": "чернетки",
+	"common.words.draft": "Чернетка",
+	"common.words.drafts": "Чернетки",
 	"common.words.languages.de": "Німецька",
 	"common.words.languages.en": "Англійська",
 	"common.words.languages.es": "Іспанська",
@@ -385,11 +385,10 @@ export default {
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.action.changeLayout": "Змінити вигляд",
 	"components.board.action.shareLink.card": "Скопіювати посилання на Карту",
-	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
-	"components.board.alert.info.draft": "Ця дошка невидима для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
 	"components.board.column.ghost.column.placeholder": "Додати стовпець",
 	"components.board.column.ghost.list.placeholder": "Додати розділ",
+	"components.board.draftChip.tooltip": "Видно лише вчителям",
 	"components.board.error.404":
 		"Помилка 404 – Дошки з такою назвою не знайдено",
 	"components.board.error.403":

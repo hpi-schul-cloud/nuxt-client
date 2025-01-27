@@ -177,8 +177,8 @@ export default {
 		"Link could not be copied to clipboard",
 	"common.words.courseGroups": "Course Groups",
 	"common.words.courses": "Courses",
-	"common.words.draft": "draft",
-	"common.words.drafts": "drafts",
+	"common.words.draft": "Draft",
+	"common.words.drafts": "Drafts",
 	"common.words.languages.de": "German",
 	"common.words.languages.en": "English",
 	"common.words.languages.es": "Spanish",
@@ -376,13 +376,10 @@ export default {
 	"components.board.action.moveUp": "Move up",
 	"components.board.action.changeLayout": "Change layout",
 	"components.board.action.shareLink.card": "Copy link to card",
-	"components.board.alert.info.teacher":
-		"This board is visible to all course participants.",
-	"components.board.alert.info.draft":
-		"This board is not visible to course participants.",
 	"components.board.column.defaultTitle": "New column",
 	"components.board.column.ghost.column.placeholder": "Add column",
 	"components.board.column.ghost.list.placeholder": "Add section",
+	"components.board.draftChip.tooltip": "Only visible to teachers",
 	"components.board.error.404":
 		"Error 404 – Board with this name was not found",
 	"components.board.error.403":

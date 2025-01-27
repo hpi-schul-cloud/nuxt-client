@@ -179,8 +179,8 @@ export default {
 		"El enlace no se pudo copiar al portapapeles",
 	"common.words.courseGroups": "grupos de cursos",
 	"common.words.courses": "Cursos",
-	"common.words.draft": "borrador",
-	"common.words.drafts": "borradores",
+	"common.words.draft": "Borrador",
+	"common.words.drafts": "Borradores",
 	"common.words.languages.de": "Alemán",
 	"common.words.languages.en": "Inglés",
 	"common.words.languages.es": "Español",
@@ -381,13 +381,10 @@ export default {
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.changeLayout": "Cambiar vista",
 	"components.board.action.shareLink.card": "Enlace a la ficha",
-	"components.board.alert.info.teacher":
-		"Este tablero es visible para todos los participantes en el curso.",
-	"components.board.alert.info.draft":
-		"Este tablón no es visible para los participantes en el curso.",
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
+	"components.board.draftChip.tooltip": "Sólo visible para los profesores",
 	"components.board.error.404":
 		"Error 404 – No se ha encontrado ningún tablero con este nombre",
 	"components.board.error.403":
