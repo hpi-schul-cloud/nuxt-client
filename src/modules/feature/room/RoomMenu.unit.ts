@@ -15,6 +15,7 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canViewRoom: ref(false),
 	canEditRoom: ref(false),
 	canDeleteRoom: ref(false),
+	canLeaveRoom: ref(false),
 };
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
@@ -161,6 +162,21 @@ describe("@feature-room/RoomMenu", () => {
 				await editButton.trigger("click");
 
 				expect(wrapper.emitted("room:delete")).toHaveLength(1);
+			});
+		});
+
+		describe("and clicking on leave button", () => {
+			it("should emit 'room:leave' event", async () => {
+				roomPermissions.canLeaveRoom.value = true;
+				const { wrapper, menuBtn } = setup();
+				await menuBtn.trigger("click");
+
+				const editButton = wrapper.getComponent(
+					"[data-testid=room-action-leave-room]"
+				);
+				await editButton.trigger("click");
+
+				expect(wrapper.emitted("room:leave")).toHaveLength(1);
 			});
 		});
 	});
