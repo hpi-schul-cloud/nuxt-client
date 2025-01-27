@@ -1,35 +1,37 @@
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-
-import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
-import { LinkContentElement } from "@feature-board-link-element";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { shallowMount } from "@vue/test-utils";
 import {
+	ConfigResponse,
 	LinkElementContent,
-	MetaTagExtractorResponse,
 	LinkElementResponse,
 } from "@/serverApi/v3";
-import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
-import { computed, nextTick, ref } from "vue";
-import NotifierModule from "@/store/notifier";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
-import { ConfigResponse } from "@/serverApi/v3/api";
-import LinkContentElementCreate from "./LinkContentElementCreate.vue";
-import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
+import NotifierModule from "@/store/notifier";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { linkElementContentFactory } from "@@/tests/test-utils/factory/linkElementContentFactory";
-import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
+
+import { linkElementResponseFactory } from "@@/tests/test-utils/factory/linkElementResponseFactory";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { LinkContentElement } from "@feature-board-link-element";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { BoardMenu } from "@ui-board";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
+import { shallowMount } from "@vue/test-utils";
+import { computed, nextTick, ref } from "vue";
+import {
+	MetaTagResult,
+	useMetaTagExtractorApi,
+} from "../composables/MetaTagExtractorApi.composable";
+import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
+import LinkContentElementCreate from "./LinkContentElementCreate.vue";
+import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
 
 jest.mock("@data-board/ContentElementState.composable");
 
@@ -464,15 +466,12 @@ describe("LinkContentElement", () => {
 							isDetailView: false,
 						});
 						const url = "https://abc.de/my-article";
-						const fakeMetaTags: MetaTagExtractorResponse = {
+						const fakeMetaTags: MetaTagResult = {
 							url,
 							title: "my title",
 							description: "",
 							originalImageUrl: "https://abc.de/foto.png",
 							imageUrl: "https://abc.de/foto.png",
-							type: "unknown",
-							parentTitle: "",
-							parentType: "unknown",
 						};
 
 						useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(
