@@ -17,6 +17,7 @@ export default {
 	"common.actions.logout": "Desconectar",
 	"common.actions.ok": "Aceptar",
 	"common.actions.pickColor": "Seleccione el color de fondo",
+	"common.actions.leave": "Dejar",
 	"common.actions.remove": "Eliminar",
 	"common.actions.rename": "Renombrar",
 	"common.actions.save": "Guardar",
@@ -178,8 +179,8 @@ export default {
 		"El enlace no se pudo copiar al portapapeles",
 	"common.words.courseGroups": "grupos de cursos",
 	"common.words.courses": "Cursos",
-	"common.words.draft": "borrador",
-	"common.words.drafts": "borradores",
+	"common.words.draft": "Borrador",
+	"common.words.drafts": "Borradores",
 	"common.words.languages.de": "Alemán",
 	"common.words.languages.en": "Inglés",
 	"common.words.languages.es": "Español",
@@ -380,13 +381,10 @@ export default {
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.changeLayout": "Cambiar vista",
 	"components.board.action.shareLink.card": "Enlace a la ficha",
-	"components.board.alert.info.teacher":
-		"Este tablero es visible para todos los participantes en el curso.",
-	"components.board.alert.info.draft":
-		"Este tablón no es visible para los participantes en el curso.",
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
+	"components.board.draftChip.tooltip": "Sólo visible para los profesores",
 	"components.board.error.404":
 		"Error 404 – No se ha encontrado ningún tablero con este nombre",
 	"components.board.error.403":
@@ -1324,7 +1322,7 @@ export default {
 	"pages.administration.school.index.privacySettings.labels.studentVisibility":
 		"Activar la visibilidad de los estudiantes para los profesores",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
-		"Activar videoconferencias para cursos y equipos",
+		"Activar la videoconferencia",
 	"pages.administration.school.index.privacySettings.labels.aiTutor":
 		"Activar tutor de IA en la escuela",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
@@ -1340,7 +1338,7 @@ export default {
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen":
 		"Si esta opción no está activada, los profesores sólo podrán ver las clases y sus alumnos de las que son miembros.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
-		"Si la videoconferencia está habilitada en tu escuela, los profesores pueden añadir la herramienta de videoconferencia a su curso en la sección Herramientas y entonces podrán iniciar desde allí videoconferencias para todos los participantes del curso. Los administradores del equipo pueden activar la función de videoconferencia en el equipo respectivo. Los líderes de equipo y los administradores de equipo pueden añadir e iniciar videoconferencias para citas.",
+		"Si la videoconferencia está activada en su centro, los profesores pueden iniciar videoconferencias para todos los participantes del curso en aulas, cursos y equipos. En las aulas y los cursos, las videoconferencias pueden añadirse como elemento a las secciones (de una columna y de varias columnas), en los cursos las videoconferencias pueden utilizarse en «Herramientas» y en los equipos dentro de la función de cita.",
 	"pages.administration.school.index.privacySettings.longText.aiTutor":
 		"Si AI Tutor está activado en tu escuela, los profesores pueden agregar AI Tutor en sus áreas.",
 	"pages.administration.school.index.privacySettings":
@@ -1820,6 +1818,8 @@ export default {
 		"Las salas son actualmente visibles solo para los profesores y se seguirán desarrollando. Puede encontrar más información en nuestro {helpLink}. Agradecemos sus {feedbackLink} sobre el estado actual.",
 	"pages.rooms.infoAlert.welcome.visibility.help": "página de ayuda",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "comentarios",
+	"pages.rooms.leaveRoom.confirmation": 'Dejar la sala "{roomName}"?',
+	"pages.rooms.leaveRoom.menu": "Salir de la sala",
 	"pages.rooms.members.error.load":
 		"No se pudo cargar la lista de participantes.",
 	"pages.rooms.members.error.add": "Error al agregar participantes.",
@@ -1829,6 +1829,9 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Participantes",
 	"pages.rooms.members.add": "Añadir miembros",
+	"pages.rooms.members.changePermission": "Cambiar permisos",
+	"pages.rooms.members.changePermission.ariaLabel":
+		"Cambiar el permiso para {memberName}",
 	"pages.rooms.members.manage": "Miembros de la sala",
 	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
 	"pages.rooms.members.resetSelection.ariaLabel":
@@ -1847,6 +1850,7 @@ export default {
 	"pages.rooms.members.roomPermissions.viewer": "Leer",
 	"pages.rooms.members.tableHeader.roomRole": "Permisos de la sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
+	"pages.rooms.members.tableHeader.actions": "Acciones",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
