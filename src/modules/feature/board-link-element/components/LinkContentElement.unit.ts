@@ -1,5 +1,8 @@
-import { LinkElementContent, LinkElementResponse } from "@/serverApi/v3";
-import { ConfigResponse } from "@/serverApi/v3/api";
+import {
+	ConfigResponse,
+	LinkElementContent,
+	LinkElementResponse,
+} from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
