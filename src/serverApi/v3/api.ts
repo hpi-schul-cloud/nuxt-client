@@ -363,6 +363,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomDelete = 'ROOM_DELETE',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
+    RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
     RoomChangeOwner = 'ROOM_CHANGE_OWNER',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
@@ -913,6 +914,36 @@ export interface ChangeLanguageParams {
      */
     language: LanguageType;
 }
+/**
+ * 
+ * @export
+ * @interface ChangeRoomRoleBodyParams
+ */
+export interface ChangeRoomRoleBodyParams {
+    /**
+     * The IDs of the users
+     * @type {Array<string>}
+     * @memberof ChangeRoomRoleBodyParams
+     */
+    userIds: Array<string>;
+    /**
+     * The role to assign to the users. Must be a Room Role role other than ROOMOWNER.
+     * @type {string}
+     * @memberof ChangeRoomRoleBodyParams
+     */
+    roleName: ChangeRoomRoleBodyParamsRoleNameEnum;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum ChangeRoomRoleBodyParamsRoleNameEnum {
+    Roomadmin = 'roomadmin',
+    Roomeditor = 'roomeditor',
+    Roomviewer = 'roomviewer'
+}
+
 /**
  * 
  * @export
@@ -5584,6 +5615,21 @@ export interface MessageOrigin {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum MetaDataEntityType {
+    Unknown = 'unknown',
+    External = 'external',
+    Course = 'course',
+    Board = 'board',
+    BoardCard = 'board-card',
+    Task = 'task',
+    Lesson = 'lesson'
+}
+
+/**
+ * 
+ * @export
  * @interface MetaTagExtractorResponse
  */
 export interface MetaTagExtractorResponse {
@@ -5610,31 +5656,31 @@ export interface MetaTagExtractorResponse {
      * @type {string}
      * @memberof MetaTagExtractorResponse
      */
-    originalImageUrl: string;
+    originalImageUrl?: string;
     /**
      * 
      * @type {string}
      * @memberof MetaTagExtractorResponse
      */
-    imageUrl: string;
+    imageUrl?: string;
+    /**
+     * 
+     * @type {MetaDataEntityType}
+     * @memberof MetaTagExtractorResponse
+     */
+    type: MetaDataEntityType;
     /**
      * 
      * @type {string}
      * @memberof MetaTagExtractorResponse
      */
-    type: string;
+    parentTitle?: string;
     /**
      * 
-     * @type {string}
+     * @type {MetaDataEntityType}
      * @memberof MetaTagExtractorResponse
      */
-    parentTitle: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MetaTagExtractorResponse
-     */
-    parentType: string;
+    parentType?: MetaDataEntityType;
 }
 /**
  * 
@@ -6985,6 +7031,7 @@ export enum Permission {
     RoomDelete = 'ROOM_DELETE',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
+    RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
     RoomChangeOwner = 'ROOM_CHANGE_OWNER',
     SchoolChatManage = 'SCHOOL_CHAT_MANAGE',
     SchoolCreate = 'SCHOOL_CREATE',
@@ -20804,6 +20851,50 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Change the roles that members have within the room
+         * @param {string} roomId 
+         * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerChangeRolesOfMembers: async (roomId: string, changeRoomRoleBodyParams: ChangeRoomRoleBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerChangeRolesOfMembers', 'roomId', roomId)
+            // verify required parameter 'changeRoomRoleBodyParams' is not null or undefined
+            assertParamExists('roomControllerChangeRolesOfMembers', 'changeRoomRoleBodyParams', changeRoomRoleBodyParams)
+            const localVarPath = `/rooms/{roomId}/members/roles`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(changeRoomRoleBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21150,6 +21241,18 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Change the roles that members have within the room
+         * @param {string} roomId 
+         * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerChangeRolesOfMembers(roomId: string, changeRoomRoleBodyParams: ChangeRoomRoleBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerChangeRolesOfMembers(roomId, changeRoomRoleBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21262,6 +21365,17 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Change the roles that members have within the room
+         * @param {string} roomId 
+         * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerChangeRolesOfMembers(roomId: string, changeRoomRoleBodyParams: ChangeRoomRoleBodyParams, options?: any): AxiosPromise<string> {
+            return localVarFp.roomControllerChangeRolesOfMembers(roomId, changeRoomRoleBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21362,6 +21476,17 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @summary Change the roles that members have within the room
+     * @param {string} roomId 
+     * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerChangeRolesOfMembers(roomId: string, changeRoomRoleBodyParams: ChangeRoomRoleBodyParams, options?: any): AxiosPromise<string>;
 
     /**
      * 
@@ -21466,6 +21591,19 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any) {
         return RoomApiFp(this.configuration).roomControllerAddMembers(roomId, addRoomMembersBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Change the roles that members have within the room
+     * @param {string} roomId 
+     * @param {ChangeRoomRoleBodyParams} changeRoomRoleBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerChangeRolesOfMembers(roomId: string, changeRoomRoleBodyParams: ChangeRoomRoleBodyParams, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerChangeRolesOfMembers(roomId, changeRoomRoleBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
