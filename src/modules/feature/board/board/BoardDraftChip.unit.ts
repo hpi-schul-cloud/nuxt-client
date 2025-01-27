@@ -14,9 +14,9 @@ describe("@feature-board/BoardDraftChip", () => {
 		return wrapper;
 	};
 
-	it("should render chip", () => {
+	it("should render correct test", () => {
 		const wrapper = setup();
 
-		expect(wrapper.findComponent({ name: "VChip" }).exists()).toBe(true);
+		expect(wrapper.text()).toStrictEqual("common.words.draft");
 	});
 });
