@@ -5656,13 +5656,13 @@ export interface MetaTagExtractorResponse {
      * @type {string}
      * @memberof MetaTagExtractorResponse
      */
-    originalImageUrl: string;
+    originalImageUrl?: string;
     /**
      * 
      * @type {string}
      * @memberof MetaTagExtractorResponse
      */
-    imageUrl: string;
+    imageUrl?: string;
     /**
      * 
      * @type {MetaDataEntityType}
@@ -5674,13 +5674,13 @@ export interface MetaTagExtractorResponse {
      * @type {string}
      * @memberof MetaTagExtractorResponse
      */
-    parentTitle: string;
+    parentTitle?: string;
     /**
      * 
      * @type {MetaDataEntityType}
      * @memberof MetaTagExtractorResponse
      */
-    parentType: MetaDataEntityType;
+    parentType?: MetaDataEntityType;
 }
 /**
  * 

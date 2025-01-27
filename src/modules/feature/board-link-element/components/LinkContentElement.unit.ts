@@ -1,9 +1,4 @@
-import {
-	LinkElementContent,
-	LinkElementResponse,
-	MetaDataEntityType,
-	MetaTagExtractorResponse,
-} from "@/serverApi/v3";
+import { LinkElementContent, LinkElementResponse } from "@/serverApi/v3";
 import { ConfigResponse } from "@/serverApi/v3/api";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
@@ -27,7 +22,10 @@ import {
 } from "@ui-kebab-menu";
 import { shallowMount } from "@vue/test-utils";
 import { computed, nextTick, ref } from "vue";
-import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
+import {
+	MetaTagResult,
+	useMetaTagExtractorApi,
+} from "../composables/MetaTagExtractorApi.composable";
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
 import LinkContentElementCreate from "./LinkContentElementCreate.vue";
 import LinkContentElementDisplay from "./LinkContentElementDisplay.vue";
@@ -465,15 +463,12 @@ describe("LinkContentElement", () => {
 							isDetailView: false,
 						});
 						const url = "https://abc.de/my-article";
-						const fakeMetaTags: MetaTagExtractorResponse = {
+						const fakeMetaTags: MetaTagResult = {
 							url,
 							title: "my title",
 							description: "",
 							originalImageUrl: "https://abc.de/foto.png",
 							imageUrl: "https://abc.de/foto.png",
-							type: MetaDataEntityType.Unknown,
-							parentTitle: "",
-							parentType: MetaDataEntityType.Unknown,
 						};
 
 						useMetaTagExtractorApiMock.getMetaTags.mockResolvedValue(

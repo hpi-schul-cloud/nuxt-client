@@ -7,7 +7,7 @@ import { $axios } from "@/utils/api";
 import { AxiosResponse } from "axios";
 import { useI18n } from "vue-i18n";
 
-type MetaTagResult = {
+export type MetaTagResult = {
 	url: string;
 	title: string;
 	description: string;
@@ -28,7 +28,11 @@ export const useMetaTagExtractorApi = () => {
 			getSuffix(response.type, response.parentTitle),
 		];
 		const title = titleParts.join(" ").trim();
-		return { ...response, title };
+
+		return {
+			...response,
+			title,
+		};
 	};
 
 	const getPrefix = (type: MetaDataEntityType): string => {
@@ -45,17 +49,22 @@ export const useMetaTagExtractorApi = () => {
 		return prefixKey ? `${t(prefixKey)}:` : "";
 	};
 
-	const getTitle = (type: MetaDataEntityType, title: string) => {
-		if (type === MetaDataEntityType.Board && title == "") {
+	const getTitle = (type: MetaDataEntityType, title: string): string => {
+		if (type === MetaDataEntityType.Board && !title) {
 			return t("pages.room.boardCard.label.courseBoard");
 		}
+
 		return title;
 	};
 
-	const getSuffix = (type: MetaDataEntityType, parentTitle: string): string => {
-		if (type === MetaDataEntityType.Board && parentTitle !== "") {
+	const getSuffix = (
+		type: MetaDataEntityType,
+		parentTitle: string | undefined
+	): string => {
+		if (type === MetaDataEntityType.Board && parentTitle) {
 			return `(${parentTitle})`;
 		}
+
 		return "";
 	};
 
