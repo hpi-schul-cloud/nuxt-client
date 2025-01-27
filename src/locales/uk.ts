@@ -17,6 +17,7 @@ export default {
 	"common.actions.logout": "Вийти з аккаунта",
 	"common.actions.ok": "ОК",
 	"common.actions.pickColor": "Вибрати колір тла",
+	"common.actions.leave": "Залиште",
 	"common.actions.remove": "Вилучити",
 	"common.actions.rename": "перейменувати",
 	"common.actions.save": "Зберегти",
@@ -1799,6 +1800,8 @@ export default {
 		"Кімнати наразі видимі лише для вчителів і будуть далі розвиватися. Додаткову інформацію можна знайти на нашій {helpLink}. Ми будемо вдячні за ваші {feedbackLink} щодо поточного стану.",
 	"pages.rooms.infoAlert.welcome.visibility.help": "Сторінка допомоги",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "відгуки",
+	"pages.rooms.leaveRoom.confirmation": 'Дійсно залишити місце "{roomName}"?',
+	"pages.rooms.leaveRoom.menu": "Залиште кімнату",
 	"pages.rooms.members.error.load": "Не вдалося завантажити список учасників.",
 	"pages.rooms.members.error.add": "Не вдалося додати учасників.",
 	"pages.rooms.members.error.remove": "Не вдалося видалити учасників.",
@@ -1807,6 +1810,9 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте члени",
+	"pages.rooms.members.changePermission": "Змінити дозволи",
+	"pages.rooms.members.changePermission.ariaLabel":
+		"Змінити дозвіл для {memberName}",
 	"pages.rooms.members.manage": "Учасник кімнати",
 	"pages.rooms.members.remove.ariaLabel": "Видалити {memberName} з кімнати",
 	"pages.rooms.members.resetSelection.ariaLabel":
@@ -1823,6 +1829,7 @@ export default {
 	"pages.rooms.members.roomPermissions.viewer": "Читати",
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
+	"pages.rooms.members.tableHeader.actions": "Дії",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
