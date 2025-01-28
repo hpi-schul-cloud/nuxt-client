@@ -381,7 +381,7 @@ export default {
 	"components.board.action.moveRight": "Mover a la derecha",
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.changeLayout": "Cambiar vista",
-	"components.board.action.shareLink.card": "Enlace a la ficha",
+	"components.board.action.shareLink.card": "Copiar enlace a la tarjeta",
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
