@@ -21,7 +21,7 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { mount, VueWrapper } from "@vue/test-utils";
 import RoomDashboard from "./RoomDashboard.vue";
-
+import { ComponentProps } from "vue-component-type-helpers";
 import { envsFactory } from "@@/tests/test-utils";
 import { createMock } from "@golevelup/ts-jest";
 import { nextTick } from "vue";
@@ -127,7 +127,10 @@ const shareModuleMock = createModuleMocks(ShareModule, {
 });
 const notifierModuleMock = createModuleMocks(NotifierModule);
 
-const getWrapper = (props: any, options?: object) => {
+const getWrapper = (
+	props: ComponentProps<typeof RoomDashboard>,
+	options?: object
+) => {
 	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 		getCtlToolsTabEnabled: false,
 		getEnv: {} as ConfigResponse,
