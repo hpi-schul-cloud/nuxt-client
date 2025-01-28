@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
+import PrivacySettings from "@/components/organisms/administration/PrivacySettings.vue";
 import { printDate } from "@/plugins/datetime";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { toBase64 } from "@/utils/fileHelper.ts";

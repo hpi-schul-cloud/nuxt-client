@@ -175,9 +175,9 @@
 </template>
 
 <script>
-import UserHasRole from "@/components/helpers/UserHasRole";
-import AddContentButton from "@/components/lern-store/AddContentButton";
-import LernStorePlayer from "@/components/lern-store/LernStorePlayer";
+import UserHasRole from "@/components/helpers/UserHasRole.vue";
+import AddContentButton from "@/components/lern-store/AddContentButton.vue";
+import LernStorePlayer from "@/components/lern-store/LernStorePlayer.vue";
 import contentMeta from "@/mixins/contentMeta";
 import { printDateFromTimestamp } from "@/plugins/datetime";
 import { SchulcloudTheme } from "@/serverApi/v3";
@@ -194,7 +194,7 @@ import {
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
 import { mdiCalendar, mdiClose, mdiOpenInNew, mdiPound } from "@icons/material";
-import BaseLink from "../base/BaseLink";
+import BaseLink from "../base/BaseLink.vue";
 
 const DEFAULT_AUTHOR = "admin";
 

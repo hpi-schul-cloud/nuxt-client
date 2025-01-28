@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList";
+import CopyResultModalList from "@/components/copy-result-modal/CopyResultModalList.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { CopyApiResponseTypeEnum } from "@/serverApi/v3";
 import { envConfigModule } from "@/store";

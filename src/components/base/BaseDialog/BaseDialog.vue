@@ -37,8 +37,8 @@
 </template>
 
 <script>
-import BaseModal from "../BaseModal";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import BaseModal from "../BaseModal.vue";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
 
 export default {
 	components: {

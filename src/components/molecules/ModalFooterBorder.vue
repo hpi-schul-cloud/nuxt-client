@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import DefaultModalFooter from "@/components/molecules/ModalFooter";
+import DefaultModalFooter from "@/components/molecules/ModalFooter.vue";
 export default {
 	components: {
 		DefaultModalFooter,
