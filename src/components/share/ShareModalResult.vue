@@ -32,7 +32,7 @@
 					class="d-sm-flex d-none"
 					data-testid="copyAction"
 					:icon="mdiContentCopy"
-					:label="$t('components.molecules.share.result.copyClipboard')"
+					:label="$t('common.actions.shareLink')"
 					@click.stop="onCopy(shareUrl)"
 				/>
 

@@ -24,6 +24,7 @@ export default {
 	"common.actions.scrollToTop": "Прокрутити вгору",
 	"common.actions.share": "Поділіться",
 	"common.actions.shareCopy": "Поділитися копією",
+	"common.actions.shareLink": "Копіювати посилання",
 	"common.actions.update": "Оновити",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
 	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
@@ -755,7 +756,6 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Посилання дійсне тільки в межах школи",
 	"components.molecules.share.options.title": "Налаштування спільного доступу",
-	"components.molecules.share.result.copyClipboard": "Скопіювати посилання",
 	"components.molecules.share.result.mailShare": "Надіслати поштою",
 	"components.molecules.share.result.qrCodeScan": "Відскануйте QR-код",
 	"components.molecules.share.result.title": "Поділіться через",
@@ -1262,8 +1262,6 @@ export default {
 	"pages.administration.school.index.authSystems.alias": "Псевдонім",
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"Ви дійсно хочете видалити наступну систему автентифікації?",
-	"pages.administration.school.index.authSystems.copyLink":
-		"копіювати посилання",
 	"pages.administration.school.index.authSystems.delete": "Видалити {system}",
 	"pages.administration.school.index.authSystems.deleteAuthSystem":
 		"Видалити автентифікацію",
@@ -1953,7 +1951,6 @@ export default {
 	"ui-confirmation-dialog.ask-delete":
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
 	"ui-confirmation-dialog.ask-cancel-form": "Відкинути зміни?",
-	"ui-layout.topbar.pageShare.copyLink": "Скопіювати посилання",
 	"ui-layout.topbar.pageShare.printQRCode": "Роздрукуйте QR-код",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Клас(-и)",
