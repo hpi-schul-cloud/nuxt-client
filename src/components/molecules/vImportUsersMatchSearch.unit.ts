@@ -1,6 +1,12 @@
 import { importUsersModule } from "@/store";
 import ImportUsersModule from "@/store/import-users";
-import { ImportUserResponseRoleNamesEnum } from "@/serverApi/v3";
+import {
+	ImportUserResponse,
+	ImportUserResponseRoleNamesEnum,
+	UserMatchResponse,
+	UserMatchResponseMatchedByEnum,
+	UserMatchResponseRoleNamesEnum,
+} from "@/serverApi/v3";
 import { THEME_KEY } from "@/utils/inject";
 import {
 	createTestingI18n,
@@ -69,11 +75,9 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 
 	it("should set 'flagged' property true when flag-button clicked", async () => {
 		const saveFlagMock = jest.spyOn(importUsersModule, "saveFlag");
-		saveFlagMock.mockImplementation(async () => {
-			return Promise.resolve({
-				flagged: true,
-			}) as any;
-		});
+		saveFlagMock.mockReturnValue(
+			Promise.resolve({ ...testProps.editedItem, flagged: true })
+		);
 
 		const wrapper = getWrapper(testProps);
 
@@ -100,7 +104,8 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		};
 		const wrapper = getWrapper(testProps);
 		const autoCompleteElement = wrapper.findComponent(VAutocomplete);
-		await autoCompleteElement.vm.$emit("update:modelValue", payload);
+		autoCompleteElement.vm.$emit("update:modelValue", payload);
+		await nextTick();
 
 		const editedItemElement = wrapper.findAllComponents(VListItem)[1].html();
 
@@ -112,19 +117,21 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 	});
 
 	it("should saveMatch method triggered when save button clicked", async () => {
-		const match = {
+		const match: UserMatchResponse = {
 			userId: "0000d231816abba584714c9e",
 			loginName: "lehrer@schul-cloud.org",
 			firstName: "Cord",
 			lastName: "Carl",
-			roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
-			text: "Cord Carl",
+			roleNames: [UserMatchResponseRoleNamesEnum.Teacher],
 		};
 
+		const response: ImportUserResponse = {
+			...testProps.editedItem,
+			match,
+		} as ImportUserResponse;
+
 		const saveMatchMock = jest.spyOn(importUsersModule, "saveMatch");
-		saveMatchMock.mockImplementation(async () => {
-			return Promise.resolve({ ...testProps.editedItem, match }) as any;
-		});
+		saveMatchMock.mockReturnValue(Promise.resolve(response));
 
 		const wrapper = getWrapper(testProps);
 
@@ -146,7 +153,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 	});
 
 	it("should deleteMatch method triggered when delete button clicked", async () => {
-		const importUser = {
+		const importUser: ImportUserResponse = {
 			flagged: false,
 			importUserId: "123",
 			loginName: "max_mus",
@@ -160,8 +167,8 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 			loginName: "admin@schul-cloud.org",
 			firstName: "Thorsten",
 			lastName: "Test",
-			roleNames: [ImportUserResponseRoleNamesEnum.Admin],
-			matchedBy: "admin",
+			roleNames: [UserMatchResponseRoleNamesEnum.Admin],
+			matchedBy: UserMatchResponseMatchedByEnum.Admin,
 		};
 		const wrapper = getWrapper({
 			editedItem: { ...importUser, match },
@@ -169,9 +176,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		});
 
 		const deleteMatchMock = jest.spyOn(importUsersModule, "deleteMatch");
-		deleteMatchMock.mockImplementation(async () => {
-			return Promise.resolve(importUser) as any;
-		});
+		deleteMatchMock.mockReturnValue(Promise.resolve(importUser));
 		const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
 		await deleteMatchButton.trigger("click");
 		await nextTick();
@@ -187,9 +192,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		const wrapper = getWrapper(testProps);
 		const deleteMatchButton = wrapper
 			.findAllComponents(VBtn)
-			.filter(
-				(btn: any) => btn.attributes("data-testid") === "delete-match-btn"
-			)[0];
+			.filter((btn) => btn.attributes("data-testid") === "delete-match-btn")[0];
 
 		expect(deleteMatchButton.props("disabled")).toBe(true);
 	});
@@ -199,9 +202,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 
 		const saveMatchButton = wrapper
 			.findAllComponents(VBtn)
-			.filter(
-				(btn: any) => btn.attributes("data-testid") === "save-match-btn"
-			)[0];
+			.filter((btn) => btn.attributes("data-testid") === "save-match-btn")[0];
 
 		expect(saveMatchButton.props("disabled")).toBe(true);
 	});
