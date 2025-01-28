@@ -24,6 +24,7 @@ export default {
 	"common.actions.scrollToTop": "Scroll up",
 	"common.actions.share": "Share",
 	"common.actions.shareCopy": "Share copy",
+	"common.actions.shareLink": "Copy link",
 	"common.actions.update": "Update",
 	"common.ariaLabel.newTab": "opens in a new tab",
 	"common.ariaLabel.sameTab": "opens in the same tab",
@@ -733,7 +734,6 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Link only valid within the school",
 	"components.molecules.share.options.title": "Share settings",
-	"components.molecules.share.result.copyClipboard": "Copy link",
 	"components.molecules.share.result.mailShare": "Send as mail",
 	"components.molecules.share.result.qrCodeScan": "Scan QR code",
 	"components.molecules.share.result.title": "Share via",
@@ -1238,7 +1238,6 @@ export default {
 	"pages.administration.school.index.authSystems.alias": "Alias",
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"Are you sure you want to delete the following authentification system?",
-	"pages.administration.school.index.authSystems.copyLink": "Copy Link",
 	"pages.administration.school.index.authSystems.delete": "Delete {system}",
 	"pages.administration.school.index.authSystems.deleteAuthSystem":
 		"Delete Authentification",
@@ -1924,7 +1923,6 @@ export default {
 	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
 	"ui-confirmation-dialog.ask-cancel-form": "Discard changes?",
-	"ui-layout.topbar.pageShare.copyLink": "Copy link",
 	"ui-layout.topbar.pageShare.printQRCode": "Print QR Code",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",

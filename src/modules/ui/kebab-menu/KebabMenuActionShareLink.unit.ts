@@ -34,7 +34,7 @@ describe("BoardMenuActionShareLink", () => {
 		it("should show a generic share text", async () => {
 			const { wrapper } = setup(BoardMenuScope.BOARD);
 
-			expect(wrapper.text()).toBe("common.actions.share");
+			expect(wrapper.text()).toBe("common.actions.shareLink");
 		});
 	});
 });
