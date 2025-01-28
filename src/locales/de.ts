@@ -16,6 +16,7 @@ export default {
 	"common.actions.logout": "Abmelden",
 	"common.actions.ok": "OK",
 	"common.actions.pickColor": "Hintergrundfarbe auswählen",
+	"common.actions.leave": "Verlassen",
 	"common.actions.remove": "Entfernen",
 	"common.actions.rename": "Umbenennen",
 	"common.actions.save": "Speichern",
@@ -377,13 +378,10 @@ export default {
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.action.changeLayout": "Ansicht ändern",
 	"components.board.action.shareLink.card": "Link zur Karte kopieren",
-	"components.board.alert.info.teacher":
-		"Dieser Bereich ist sichtbar für alle Kursteilnehmenden.",
-	"components.board.alert.info.draft":
-		"Dieser Bereich ist nicht für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neuer Abschnitt",
 	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
+	"components.board.draftChip.tooltip": "Nur für Lehrkräfte sichtbar",
 	"components.board.error.404":
 		"Fehler 404 – Bereich mit diesem Namen wurde nicht gefunden",
 	"components.board.error.403":
@@ -1800,6 +1798,8 @@ export default {
 		"Räume sind vorerst nur für Lehrkräfte sichtbar und werden weiter ausgebaut. Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.",
 	"pages.rooms.infoAlert.welcome.visibility.help": "Hilfeseite",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "Rückmeldungen",
+	"pages.rooms.leaveRoom.confirmation": 'Raum "{roomName}" wirklich verlassen?',
+	"pages.rooms.leaveRoom.menu": "Raum verlassen",
 	"pages.rooms.members.error.load":
 		"Die Teilnehmenden-Liste konnte nicht geladen werden.",
 	"pages.rooms.members.error.add":
@@ -1811,6 +1811,9 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
+	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
+	"pages.rooms.members.changePermission.ariaLabel":
+		"Berechtigung für {memberName} ändern",
 	"pages.rooms.members.manage": "Raum-Mitglieder",
 	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
@@ -1827,6 +1830,7 @@ export default {
 	"pages.rooms.members.roomPermissions.viewer": "Lesen",
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
+	"pages.rooms.members.tableHeader.actions": "Aktionen",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
