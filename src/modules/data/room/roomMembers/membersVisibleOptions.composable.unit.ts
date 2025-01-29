@@ -10,7 +10,7 @@ import { computed, ComputedRef } from "vue";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { roleConfigMap } from "./membersVisibleOptions.composable";
+import { roleConfigMap } from "./memberVisibilityConfig";
 
 jest.mock("./roomMembers.composable");
 const mockUseRoomMembers = jest.mocked(useRoomMembers);
@@ -23,6 +23,7 @@ const mockOptions = () => {
 		isVisibleActionInRow: false,
 		isVisibleChangeRoleButton: false,
 		isVisibleLeaveRoomButton: true,
+		isVisibleAddMemberText: false,
 	};
 	roleConfigMap[RoleName.Roomowner] = {
 		isVisibleSelectionColumn: true,
@@ -31,6 +32,7 @@ const mockOptions = () => {
 		isVisibleAddMemberButton: true,
 		isVisibleChangeRoleButton: true,
 		isVisibleLeaveRoomButton: false,
+		isVisibleAddMemberText: true,
 	};
 	roleConfigMap[RoleName.Roomadmin] = {
 		isVisibleSelectionColumn: true,
@@ -39,6 +41,7 @@ const mockOptions = () => {
 		isVisibleActionInRow: true,
 		isVisibleChangeRoleButton: true,
 		isVisibleLeaveRoomButton: true,
+		isVisibleAddMemberText: true,
 	};
 	roleConfigMap[RoleName.Roomeditor] = defaultOptions;
 	roleConfigMap[RoleName.Roomviewer] = defaultOptions;
@@ -101,10 +104,13 @@ describe("useRoomMemberVisibilityOptions", () => {
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
 			{ roomRoleName: RoleName.Roomeditor, expected: false },
 			{ roomRoleName: RoleName.Roomviewer, expected: false },
-		])("should return %p for %p", ({ roomRoleName, expected }) => {
-			const { isVisibleSelectionColumn } = setup({ roomRoleName });
-			expect(isVisibleSelectionColumn.value).toBe(expected);
-		});
+		])(
+			"should return $expected for $roomRoleName",
+			({ roomRoleName, expected }) => {
+				const { isVisibleSelectionColumn } = setup({ roomRoleName });
+				expect(isVisibleSelectionColumn.value).toBe(expected);
+			}
+		);
 	});
 
 	describe("isVisibleActionColumn", () => {
@@ -113,10 +119,13 @@ describe("useRoomMemberVisibilityOptions", () => {
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
 			{ roomRoleName: RoleName.Roomeditor, expected: false },
 			{ roomRoleName: RoleName.Roomviewer, expected: false },
-		])("should return %p for %p", ({ roomRoleName, expected }) => {
-			const { isVisibleActionColumn } = setup({ roomRoleName });
-			expect(isVisibleActionColumn.value).toBe(expected);
-		});
+		])(
+			"should return $expected for $roomRoleName",
+			({ roomRoleName, expected }) => {
+				const { isVisibleActionColumn } = setup({ roomRoleName });
+				expect(isVisibleActionColumn.value).toBe(expected);
+			}
+		);
 	});
 
 	describe("isVisibleAddMemberButton", () => {
@@ -125,10 +134,13 @@ describe("useRoomMemberVisibilityOptions", () => {
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
 			{ roomRoleName: RoleName.Roomeditor, expected: false },
 			{ roomRoleName: RoleName.Roomviewer, expected: false },
-		])("should return %p for %p", ({ roomRoleName, expected }) => {
-			const { isVisibleAddMemberButton } = setup({ roomRoleName });
-			expect(isVisibleAddMemberButton.value).toBe(expected);
-		});
+		])(
+			"should return $expected for $roomRoleName",
+			({ roomRoleName, expected }) => {
+				const { isVisibleAddMemberButton } = setup({ roomRoleName });
+				expect(isVisibleAddMemberButton.value).toBe(expected);
+			}
+		);
 	});
 
 	describe("isVisibleActionInRow", () => {
@@ -137,11 +149,14 @@ describe("useRoomMemberVisibilityOptions", () => {
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
 			{ roomRoleName: RoleName.Roomeditor, expected: true },
 			{ roomRoleName: RoleName.Roomviewer, expected: true },
-		])("should return %p for %p", ({ roomRoleName, expected }) => {
-			const { isVisibleActionInRow } = setup({ roomRoleName });
-			const roomMember = roomMemberFactory(roomRoleName).build();
-			expect(isVisibleActionInRow(roomMember)).toBe(expected);
-		});
+		])(
+			"should return $expected for $roomRoleName",
+			({ roomRoleName, expected }) => {
+				const { isVisibleActionInRow } = setup({ roomRoleName });
+				const roomMember = roomMemberFactory(roomRoleName).build();
+				expect(isVisibleActionInRow(roomMember)).toBe(expected);
+			}
+		);
 	});
 
 	describe("isVisibleChangeRoleButton", () => {
@@ -150,11 +165,14 @@ describe("useRoomMemberVisibilityOptions", () => {
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
 			{ roomRoleName: RoleName.Roomeditor, expected: false },
 			{ roomRoleName: RoleName.Roomviewer, expected: false },
-		])("should return %p for %p", ({ roomRoleName, expected }) => {
-			const { isVisibleChangeRoleButton } = setup({ roomRoleName });
+		])(
+			"should return $expected for $roomRoleName",
+			({ roomRoleName, expected }) => {
+				const { isVisibleChangeRoleButton } = setup({ roomRoleName });
 
-			expect(isVisibleChangeRoleButton.value).toBe(expected);
-		});
+				expect(isVisibleChangeRoleButton.value).toBe(expected);
+			}
+		);
 
 		describe("when FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED is false", () => {
 			it.each([
@@ -162,13 +180,16 @@ describe("useRoomMemberVisibilityOptions", () => {
 				{ roomRoleName: RoleName.Roomadmin, expected: false },
 				{ roomRoleName: RoleName.Roomeditor, expected: false },
 				{ roomRoleName: RoleName.Roomviewer, expected: false },
-			])("should return %p for %p", ({ roomRoleName, expected }) => {
-				const { isVisibleChangeRoleButton } = setup({
-					roomRoleName: roomRoleName,
-					changeRoleFeatureFlag: false,
-				});
-				expect(isVisibleChangeRoleButton.value).toBe(expected);
-			});
+			])(
+				"should return $expected for $roomRoleName",
+				({ roomRoleName, expected }) => {
+					const { isVisibleChangeRoleButton } = setup({
+						roomRoleName: roomRoleName,
+						changeRoleFeatureFlag: false,
+					});
+					expect(isVisibleChangeRoleButton.value).toBe(expected);
+				}
+			);
 		});
 	});
 
@@ -178,10 +199,28 @@ describe("useRoomMemberVisibilityOptions", () => {
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
 			{ roomRoleName: RoleName.Roomeditor, expected: true },
 			{ roomRoleName: RoleName.Roomviewer, expected: true },
-		])("should return %p for %p", ({ roomRoleName, expected }) => {
-			const { isVisibleRemoveMemberButton } = setup({ roomRoleName });
-			const roomMember = roomMemberFactory(roomRoleName).build();
-			expect(isVisibleRemoveMemberButton(roomMember)).toBe(expected);
-		});
+		])(
+			"should return $expected for $roomRoleName",
+			({ roomRoleName, expected }) => {
+				const { isVisibleRemoveMemberButton } = setup({ roomRoleName });
+				const roomMember = roomMemberFactory(roomRoleName).build();
+				expect(isVisibleRemoveMemberButton(roomMember)).toBe(expected);
+			}
+		);
+	});
+
+	describe("isVisibleAddMemberText", () => {
+		it.each([
+			{ roomRoleName: RoleName.Roomowner, expected: true },
+			{ roomRoleName: RoleName.Roomadmin, expected: true },
+			{ roomRoleName: RoleName.Roomeditor, expected: false },
+			{ roomRoleName: RoleName.Roomviewer, expected: false },
+		])(
+			"should return $expected for $roomRoleName",
+			({ roomRoleName, expected }) => {
+				const { isVisibleAddMemberText } = setup({ roomRoleName });
+				expect(isVisibleAddMemberText.value).toBe(expected);
+			}
+		);
 	});
 });

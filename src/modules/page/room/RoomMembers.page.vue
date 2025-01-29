@@ -23,7 +23,11 @@
 		</template>
 
 		<div class="mb-8 mt-12" data-testid="info-text">
-			<i18n-t keypath="pages.rooms.members.infoText" scope="global">
+			<i18n-t
+				v-if="isVisibleAddMemberText"
+				keypath="pages.rooms.members.infoText"
+				scope="global"
+			>
 				<a
 					href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
 					target="_blank"
@@ -138,8 +142,11 @@ const fixedHeaderOnMobile = ref({
 const { y } = useElementBounding(wireframe);
 const { askConfirmation } = useConfirmationDialog();
 
-const { isVisibleAddMemberButton, isVisibleLeaveRoomButton } =
-	useRoomMemberVisibilityOptions(currentUser);
+const {
+	isVisibleAddMemberButton,
+	isVisibleLeaveRoomButton,
+	isVisibleAddMemberText,
+} = useRoomMemberVisibilityOptions(currentUser);
 
 useTitle(pageTitle);
 
