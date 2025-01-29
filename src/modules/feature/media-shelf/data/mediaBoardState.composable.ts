@@ -4,10 +4,10 @@ import {
 	useErrorHandler,
 } from "@/components/error-handling/ErrorHandler.composable";
 import {
+	BoardLayout,
 	DeletedElementResponse,
 	MediaAvailableLineResponse,
 	MediaBoardColors,
-	MediaBoardLayoutType,
 	MediaBoardResponse,
 	MediaExternalToolElementResponse,
 	MediaLineResponse,
@@ -69,9 +69,7 @@ const useMediaBoardState = () => {
 		isLoading.value = false;
 	};
 
-	const updateMediaBoardLayout = async (
-		layout: MediaBoardLayoutType
-	): Promise<void> => {
+	const updateMediaBoardLayout = async (layout: BoardLayout): Promise<void> => {
 		if (mediaBoard.value === undefined) {
 			return;
 		}

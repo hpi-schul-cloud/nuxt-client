@@ -17,6 +17,7 @@ export const useRoomAuthorization = (
 	const canViewRoom = ref(false);
 	const canEditRoom = ref(false);
 	const canDeleteRoom = ref(false);
+	const canLeaveRoom = ref(false);
 
 	watchEffect(() => {
 		const permissions = toValue(room)?.permissions ?? [];
@@ -28,6 +29,8 @@ export const useRoomAuthorization = (
 		canViewRoom.value = permissions.includes(Permission.RoomView);
 		canEditRoom.value = permissions.includes(Permission.RoomEdit);
 		canDeleteRoom.value = permissions.includes(Permission.RoomDelete);
+
+		canLeaveRoom.value = !permissions.includes(Permission.RoomChangeOwner);
 	});
 
 	return {
@@ -35,5 +38,6 @@ export const useRoomAuthorization = (
 		canViewRoom,
 		canEditRoom,
 		canDeleteRoom,
+		canLeaveRoom,
 	};
 };

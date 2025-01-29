@@ -5,12 +5,15 @@ import {
 import MembersTable from "./MembersTable.vue";
 import { nextTick, ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
-import { roomMemberFactory } from "@@/tests/test-utils";
+import { envsFactory, roomMemberFactory } from "@@/tests/test-utils";
 import { DOMWrapper, flushPromises, VueWrapper } from "@vue/test-utils";
 import { VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { RoleName } from "@/serverApi/v3";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import EnvConfigModule from "@/store/env-config";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
@@ -35,17 +38,36 @@ describe("MembersTable", () => {
 		"pages.rooms.members.tableHeader.roomRole",
 		"pages.rooms.members.tableHeader.schoolRole",
 		"common.words.mainSchool",
-		"",
+		"pages.rooms.members.tableHeader.actions",
 	];
 
-	const setup = () => {
-		const mockMembers = roomMemberFactory(RoleName.Roomeditor).buildList(3);
+	const setup = (options?: {
+		currentUserRole?: RoleName;
+		changePermissionFlag?: boolean;
+	}) => {
+		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
+			getEnv: {
+				...envsFactory.build(),
+				FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED:
+					options?.changePermissionFlag ?? false,
+			},
+		});
+		const mockMembers = roomMemberFactory(RoleName.Roomadmin).buildList(3);
 		const wrapper = mount(MembersTable, {
 			attachTo: document.body,
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+				},
 			},
-			props: { members: mockMembers },
+			props: {
+				members: mockMembers,
+				currentUser: {
+					...mockMembers[0],
+					roomRoleName: options?.currentUserRole || RoleName.Roomowner,
+				},
+			},
 		});
 
 		return { wrapper, mockMembers };
@@ -290,19 +312,25 @@ describe("MembersTable", () => {
 				wrapper: VueWrapper
 			) => {
 				const dataTable = wrapper.getComponent(VDataTable);
-				const removeButton = dataTable.findComponent(
-					`[data-testid=remove-member-${index}]`
+				const menuButton = dataTable.findComponent(
+					`[data-testid=kebab-menu-${index}]`
+				);
+				await menuButton.trigger("click");
+				await nextTick();
+
+				const removeButton = wrapper.findComponent(
+					`[data-testid=kebab-menu-action-remove-member]`
 				);
 
 				await removeButton.trigger("click");
 			};
 
-			it("should open confirmation dialog with remove message for single member ", async () => {
+			it("should open confirmation dialog with remove message for single member", async () => {
 				const { wrapper } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);
 
-				await triggerMemberRemoval(0, wrapper);
+				await triggerMemberRemoval(2, wrapper);
 
 				expect(askConfirmationMock).toHaveBeenCalledWith({
 					confirmActionLangKey: "common.actions.remove",
@@ -315,13 +343,13 @@ describe("MembersTable", () => {
 
 				askConfirmationMock.mockResolvedValue(true);
 
-				await triggerMemberRemoval(0, wrapper);
+				await triggerMemberRemoval(2, wrapper);
 
 				expect(wrapper.emitted()).toHaveProperty("remove:members");
 
 				const removeEvents = wrapper.emitted("remove:members");
 				expect(removeEvents).toHaveLength(1);
-				expect(removeEvents![0]).toEqual([[mockMembers[0].userId]]);
+				expect(removeEvents![0]).toEqual([[mockMembers[2].userId]]);
 			});
 
 			it("should not call remove:members event when dialog is cancelled", async () => {
@@ -329,7 +357,7 @@ describe("MembersTable", () => {
 
 				askConfirmationMock.mockResolvedValue(false);
 
-				await triggerMemberRemoval(0, wrapper);
+				await triggerMemberRemoval(2, wrapper);
 
 				expect(wrapper.emitted()).not.toHaveProperty("remove:members");
 			});
@@ -413,10 +441,114 @@ describe("MembersTable", () => {
 				},
 			});
 			await nextTick();
-			await nextTick();
 
 			const elementAfter = wrapper.find(".table-title-header");
 			expect(elementAfter.classes("fixed-position")).toBe(true);
+		});
+	});
+
+	describe("visibility options", () => {
+		describe("isActionColumnVisible", () => {
+			it.each([
+				{
+					description: "when user is roomowner",
+					currentUserRole: RoleName.Roomowner,
+					expected: true,
+				},
+				{
+					description: "when user is roomadmin",
+					currentUserRole: RoleName.Roomadmin,
+					expected: true,
+				},
+				{
+					description: "when user is roomeditor",
+					currentUserRole: RoleName.Roomeditor,
+					expected: false,
+				},
+				{
+					description: "when user is roomviewer",
+					currentUserRole: RoleName.Roomviewer,
+					expected: false,
+				},
+			])(
+				"should be $expected $description",
+				async ({ currentUserRole, expected }) => {
+					const { wrapper } = setup({ currentUserRole });
+					const dataTable = wrapper.getComponent(VDataTable);
+
+					const menu = dataTable.findComponent('[data-testid="kebab-menu-1');
+
+					expect(menu.exists()).toBe(expected);
+				}
+			);
+		});
+
+		describe("isSelectionColumnVisible", () => {
+			it.each([
+				{
+					description: "when user is roomowner",
+					currentUserRole: RoleName.Roomowner,
+					expected: true,
+				},
+				{
+					description: "when user is roomadmin",
+					currentUserRole: RoleName.Roomadmin,
+					expected: true,
+				},
+				{
+					description: "when user is roomeditor",
+					currentUserRole: RoleName.Roomeditor,
+					expected: false,
+				},
+				{
+					description: "when user is roomviewer",
+					currentUserRole: RoleName.Roomviewer,
+					expected: false,
+				},
+			])(
+				"should be $expected $description",
+				async ({ currentUserRole, expected }) => {
+					const { wrapper } = setup({ currentUserRole });
+					const dataTable = wrapper.getComponent(VDataTable);
+
+					const checkbox = dataTable.findComponent(".v-selection-control");
+
+					expect(checkbox.exists()).toBe(expected);
+				}
+			);
+		});
+
+		describe("isChangeRoleButtonVisible", () => {
+			it.each([
+				{
+					description: "when user is roomowner",
+					currentUserRole: RoleName.Roomowner,
+					expected: true,
+				},
+				{
+					description: "when user is roomadmin",
+					currentUserRole: RoleName.Roomadmin,
+					expected: true,
+				},
+			])(
+				"should be $expected $description",
+				async ({ currentUserRole, expected }) => {
+					const { wrapper } = setup({
+						currentUserRole,
+						changePermissionFlag: true,
+					});
+					const dataTable = wrapper.getComponent(VDataTable);
+
+					const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
+					await menuBtn.trigger("click");
+
+					const changeRoleButton = wrapper.findComponent(
+						'[data-testid="kebab-menu-action-change-permission"]'
+					);
+
+					expect(changeRoleButton.exists()).toBe(expected);
+				}
+			);
 		});
 	});
 });

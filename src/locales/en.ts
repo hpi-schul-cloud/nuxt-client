@@ -17,6 +17,7 @@ export default {
 	"common.actions.logout": "Logout",
 	"common.actions.ok": "OK",
 	"common.actions.pickColor": "Select background colour",
+	"common.actions.leave": "Leave",
 	"common.actions.remove": "Remove",
 	"common.actions.rename": "Rename",
 	"common.actions.save": "Save",
@@ -171,10 +172,13 @@ export default {
 	"common.words.color.turquoise": "Turquoise",
 	"common.words.color.yellow": "Yellow",
 	"common.words.copiedToClipboard": "Copied to the clipboard",
+	"common.words.copyLinkToClipboard.success": "Link copied to clipboard",
+	"common.words.copyLinkToClipboard.failure":
+		"Link could not be copied to clipboard",
 	"common.words.courseGroups": "Course Groups",
 	"common.words.courses": "Courses",
-	"common.words.draft": "draft",
-	"common.words.drafts": "drafts",
+	"common.words.draft": "Draft",
+	"common.words.drafts": "Drafts",
 	"common.words.languages.de": "German",
 	"common.words.languages.en": "English",
 	"common.words.languages.es": "Spanish",
@@ -377,13 +381,12 @@ export default {
 	"components.board.action.moveLeft": "Move left",
 	"components.board.action.moveRight": "Move right",
 	"components.board.action.moveUp": "Move up",
-	"components.board.alert.info.teacher":
-		"This board is visible to all course participants.",
-	"components.board.alert.info.draft":
-		"This board is not visible to course participants.",
+	"components.board.action.changeLayout": "Change layout",
+	"components.board.action.shareLink.card": "Copy link to card",
 	"components.board.column.defaultTitle": "New column",
 	"components.board.column.ghost.column.placeholder": "Add column",
 	"components.board.column.ghost.list.placeholder": "Add section",
+	"components.board.draftChip.tooltip": "Only visible to teachers",
 	"components.board.error.404":
 		"Error 404 – Board with this name was not found",
 	"components.board.error.403":
@@ -440,6 +443,8 @@ export default {
 		"Title of card {cardPosition} in column {columnPosition} was changed to {newTitle} by another user.",
 	"components.board.screenReader.notification.cardUpdated.success":
 		"Card {cardPosition} in column {columnPosition} was updated by another user.",
+	"components.board.screenReader.notification.boardLayoutUpdated.success":
+		"The board's view was changed to {layout} by another user.",
 	"components.board": "board",
 	"components.boardCard": "card",
 	"components.boardColumn": "column",
@@ -1287,7 +1292,7 @@ export default {
 	"pages.administration.school.index.privacySettings.labels.studentVisibility":
 		"Activate student visibility for teachers",
 	"pages.administration.school.index.privacySettings.labels.videoConference":
-		"Activate video conferencing for courses and teams",
+		"Activate video conferencing",
 	"pages.administration.school.index.privacySettings.labels.aiTutor":
 		"Activate AI tutor at school",
 	"pages.administration.school.index.privacySettings.longText.chatFunction":
@@ -1303,7 +1308,7 @@ export default {
 	"pages.administration.school.index.privacySettings.longText.studentVisibilityNiedersachsen":
 		"If this option is not enabled, teachers can only see the classes and their students in which they are members.",
 	"pages.administration.school.index.privacySettings.longText.videoConference":
-		"If video conferencing is enabled at your school, teachers can add the video conferencing tool to their course in the Tools section and then start video conferencing for all course participants from there. Team administrators can activate the video conference function in the respective team. Team leaders and team admins can then add and start video conferences for appointments.",
+		"If video conferencing is activated at your school, teachers can start video conferences for all course participants in rooms, courses and teams. In rooms and courses, video conferences can be added as an element to sections (single-column and multi-column), in courses video conferences can be used under 'Tools' and in teams within the appointment function.",
 	"pages.administration.school.index.privacySettings.longText.aiTutor":
 		"If AI Tutor is activated at your school, teachers can add the AI Tutor in their areas.",
 	"pages.administration.school.index.privacySettings": "Privacy Settings",
@@ -1771,6 +1776,8 @@ export default {
 		"Rooms are currently only visible to teachers and will be further developed. Further information can be found on our {helpLink}. We look forward to receiving {feedbackLink} on the current status.",
 	"pages.rooms.infoAlert.welcome.visibility.help": "help page",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "feedback",
+	"pages.rooms.leaveRoom.confirmation": 'Leave room "{roomName}"?',
+	"pages.rooms.leaveRoom.menu": "Leave room",
 	"pages.rooms.members.error.load": "The participant list could not be loaded.",
 	"pages.rooms.members.error.add": "Adding participants failed.",
 	"pages.rooms.members.error.remove": "Deleting participants failed.",
@@ -1779,6 +1786,9 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add members",
+	"pages.rooms.members.changePermission": "Change permissions",
+	"pages.rooms.members.changePermission.ariaLabel":
+		"Change permissions for {memberName}",
 	"pages.rooms.members.manage": "Room members",
 	"pages.rooms.members.remove.ariaLabel": "Remove {memberName} from the room",
 	"pages.rooms.members.resetSelection.ariaLabel":
@@ -1795,6 +1805,7 @@ export default {
 	"pages.rooms.members.roomPermissions.viewer": "Read",
 	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
+	"pages.rooms.members.tableHeader.actions": "Actions",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
@@ -1905,8 +1916,10 @@ export default {
 		"The video conference hasn't started yet.",
 	"pages.videoConference.info.notEnabledParticipants":
 		"The element is no longer available. Please contact the teacher.",
-	"pages.videoConference.info.notEnabledTeacher":
-		"The element is no longer available. Please contact the admin.",
+	"pages.videoConference.info.courseParent.notEnabledTeacher":
+		"The element is no longer available as video conferencing has been deactivated. Please activate it in the course settings and/or contact the school admin.",
+	"pages.videoConference.info.roomParent.notEnabledTeacher":
+		"The element is no longer available as video conferencing has been disabled for the school. Please contact the school admin.",
 	"pages.videoConference.title": "Video conference BigBlueButton",
 	"error.500":
 		"There are problems in the system. We are working on fixing the issue. Please try again later.",

@@ -2,6 +2,7 @@ import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue"
 import { useApplicationError } from "@/composables/application-error.composable";
 import { useCopy } from "@/composables/copy";
 import {
+	BoardLayout,
 	ConfigResponse,
 	CopyApiResponse,
 	CopyApiResponseTypeEnum,
@@ -53,6 +54,7 @@ import {
 } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
 import {
 	extractDataAttribute,
 	useBoardNotifier,
@@ -65,6 +67,7 @@ import { computed, nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
 import BoardColumnVue from "./BoardColumn.vue";
+import BoardHeader from "./BoardHeader.vue";
 import BoardHeaderVue from "./BoardHeader.vue";
 
 jest.mock("@util-board/BoardNotifier.composable");
@@ -167,7 +170,9 @@ describe("Board", () => {
 		});
 		mockExtractDataAttribute.mockReturnValue("column-id");
 
-		route = createMock<ReturnType<typeof useRoute>>();
+		route = createMock<ReturnType<typeof useRoute>>({
+			hash: "",
+		});
 		useRouteMock.mockReturnValue(route);
 
 		router = createMock<Router>();
@@ -389,6 +394,35 @@ describe("Board", () => {
 				expect(cardStore.loadPreferredTools).not.toHaveBeenCalled();
 			});
 		});
+
+		describe("when the url has a hash", () => {
+			const setup2 = () => {
+				setup();
+
+				const elementId = "card-12345";
+				route.hash = `#${elementId}`;
+
+				const domElementMock = createMock<HTMLElement>();
+				const querySelectorSpy = jest.spyOn(document, "querySelector");
+				querySelectorSpy.mockReturnValueOnce(domElementMock);
+
+				return {
+					domElementMock,
+				};
+			};
+
+			it("should scroll to and focus the element", async () => {
+				const { domElementMock } = setup2();
+
+				await nextTick();
+
+				expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({
+					block: "start",
+					inline: "center",
+				});
+				expect(domElementMock.focus).toHaveBeenCalled();
+			});
+		});
 	});
 
 	describe("when component is unMounted", () => {
@@ -430,90 +464,6 @@ describe("Board", () => {
 
 			expect(boardColumnComponents[0].props("columnCount")).toBe(2);
 			expect(boardColumnComponents[1].props("columnCount")).toBe(2);
-		});
-	});
-
-	describe("Info message for teacher", () => {
-		beforeEach(() => {
-			mockedBoardPermissions.isTeacher = true;
-		});
-
-		it("should call the board notifier when the user is teacher", () => {
-			jest.useFakeTimers();
-
-			setup();
-
-			jest.runAllTimers();
-
-			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalled();
-		});
-
-		it("should call the board notifier with draft info when board is not visible", () => {
-			jest.useFakeTimers();
-
-			setup({ isBoardVisible: false });
-
-			jest.runAllTimers();
-
-			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalledWith(
-				"components.board.alert.info.draft",
-				"info"
-			);
-		});
-
-		it("should call the board notifier with published info when board is visible", () => {
-			jest.useFakeTimers();
-
-			setup();
-
-			jest.runAllTimers();
-
-			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalledWith(
-				"components.board.alert.info.teacher",
-				"info"
-			);
-		});
-
-		it("should call the board notifier with published info when board becomes visible", () => {
-			jest.useFakeTimers();
-
-			const { boardStore } = setup({ isBoardVisible: false });
-			boardStore.board!.isVisible = true;
-
-			jest.runAllTimers();
-
-			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalledWith(
-				"components.board.alert.info.teacher",
-				"info"
-			);
-		});
-
-		it("should call the board notifier with draft info when board should not be visible anymore", () => {
-			jest.useFakeTimers();
-
-			const { boardStore } = setup();
-			boardStore.board!.isVisible = false;
-
-			jest.runAllTimers();
-
-			expect(mockedBoardNotifierCalls.showCustomNotifier).toHaveBeenCalledWith(
-				"components.board.alert.info.draft",
-				"info"
-			);
-		});
-
-		it("should not call the board notifier when the user is not a teacher", () => {
-			mockedBoardPermissions.isTeacher = false;
-
-			jest.useFakeTimers();
-
-			setup();
-
-			jest.runAllTimers();
-
-			expect(
-				mockedBoardNotifierCalls.showCustomNotifier
-			).not.toHaveBeenCalled();
 		});
 	});
 
@@ -1052,6 +1002,87 @@ describe("Board", () => {
 					},
 					mockRoomId
 				);
+			});
+		});
+	});
+
+	describe("Change board layout", () => {
+		describe("when the 'change layout' menu button is clicked", () => {
+			it("should open the change dialog", async () => {
+				const { wrapper } = setup();
+
+				const boardHeader = wrapper.findComponent(BoardHeader);
+				const boardLayoutDialog = wrapper.findComponent(
+					SelectBoardLayoutDialog
+				);
+
+				boardHeader.vm.$emit("change-layout");
+				await nextTick();
+
+				expect(boardLayoutDialog.props("modelValue")).toEqual(true);
+			});
+		});
+
+		describe("when the change layout dialog is confirmed", () => {
+			describe("when layout has changed", () => {
+				it("should close the dialog", async () => {
+					const { wrapper } = setup();
+
+					const boardLayoutDialog = wrapper.findComponent(
+						SelectBoardLayoutDialog
+					);
+					await boardLayoutDialog.setValue(true, "modelValue");
+
+					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
+					await nextTick();
+
+					expect(boardLayoutDialog.props("modelValue")).toEqual(false);
+				});
+
+				it("should send the update request", async () => {
+					const { wrapper, boardStore, board } = setup();
+
+					const boardLayoutDialog = wrapper.findComponent(
+						SelectBoardLayoutDialog
+					);
+
+					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
+					await nextTick();
+
+					expect(boardStore.updateBoardLayoutRequest).toHaveBeenCalledWith({
+						boardId: board.id,
+						layout: BoardLayout.List,
+					});
+				});
+			});
+
+			describe("when the layout has not changed", () => {
+				it("should close the dialog", async () => {
+					const { wrapper } = setup();
+
+					const boardLayoutDialog = wrapper.findComponent(
+						SelectBoardLayoutDialog
+					);
+					await boardLayoutDialog.setValue(true, "modelValue");
+
+					boardLayoutDialog.vm.$emit("select", BoardLayout.List);
+					await nextTick();
+
+					expect(boardLayoutDialog.props("modelValue")).toEqual(false);
+				});
+
+				it("should not send an update request", async () => {
+					const { wrapper, boardStore, board } = setup();
+
+					const boardLayoutDialog = wrapper.findComponent(
+						SelectBoardLayoutDialog
+					);
+
+					boardLayoutDialog.vm.$emit("select", board.layout);
+					await nextTick();
+
+					expect(boardStore.updateBoardLayoutRequest).not.toHaveBeenCalled();
+				});
 			});
 		});
 	});

@@ -12,12 +12,13 @@ import {
 } from "@@/tests/test-utils/setup";
 import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import {
+	KebabMenuActionChangeLayout,
 	KebabMenuActionCopy,
 	KebabMenuActionDelete,
 	KebabMenuActionPublish,
+	KebabMenuActionRename,
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
-	KebabMenuActionRename,
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
@@ -65,6 +66,10 @@ describe("BoardHeader", () => {
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
+				stubs: {
+					VTooltip: false,
+					VOverlay: false,
+				},
 			},
 			props: {
 				title: "title-text",
@@ -75,6 +80,10 @@ describe("BoardHeader", () => {
 		});
 		return { startEditMode: mockedStartEditMode, wrapper };
 	};
+
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
 
 	describe("when component is mounted", () => {
 		it("should be found in the dom", () => {
@@ -281,6 +290,19 @@ describe("BoardHeader", () => {
 		});
 	});
 
+	describe("when the 'change layout' menu button is clicked", () => {
+		it("should emit 'change-layout'", async () => {
+			const { wrapper } = setup();
+
+			const changeLayoutButton = wrapper.findComponent(
+				KebabMenuActionChangeLayout
+			);
+			await changeLayoutButton.trigger("click");
+
+			expect(wrapper.emitted("change-layout")).toHaveLength(1);
+		});
+	});
+
 	describe("when board is a draft", () => {
 		it("should display draft label", () => {
 			const { wrapper } = setup(
@@ -290,7 +312,9 @@ describe("BoardHeader", () => {
 				{ isDraft: true }
 			);
 
-			expect(wrapper.findComponent({ name: "v-chip" }).exists()).toBe(true);
+			expect(wrapper.findComponent({ name: "BoardDraftChip" }).exists()).toBe(
+				true
+			);
 		});
 
 		it("should display 'publish' button instead of 'revert' button in menu", async () => {

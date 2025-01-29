@@ -4,7 +4,7 @@ import { useBoardStore } from "@data-board";
 export const useBoardFeatures = () => {
 	const { getFeatures } = useBoardStore();
 
-	const features: BoardFeature[] = getFeatures;
+	const features = getFeatures;
 
 	const isFeatureEnabled = (feature: BoardFeature) => {
 		return features.includes(feature);

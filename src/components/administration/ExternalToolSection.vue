@@ -12,12 +12,12 @@
 			:no-data-text="t('common.nodata')"
 		>
 			<template #[`item.name`]="{ item }">
-				<span>
+				<span data-testid="external-tool-name">
 					{{ item.name }}
 				</span>
 			</template>
 			<template #[`item.statusText`]="{ item }">
-				<div class="text-no-wrap">
+				<div class="text-no-wrap" data-testid="external-tool-status">
 					<v-icon
 						v-if="item.isOutdated || item.isDeactivated"
 						color="warning"
@@ -33,12 +33,18 @@
 					</span>
 				</div>
 			</template>
+			<template #[`item.restrictToContexts`]="{ item }">
+				<span data-testid="external-tool-context-restriction">
+					{{ item.restrictToContexts }}
+				</span>
+			</template>
 			<template #[`item.actions`]="{ item }">
 				<external-tool-toolbar
 					class="text-no-wrap"
 					@edit="editTool(item)"
 					@datasheet="showDatasheet(item)"
 					@delete="openDeleteDialog(item)"
+					data-testid="external-tool-actions"
 				/>
 			</template>
 		</v-data-table>

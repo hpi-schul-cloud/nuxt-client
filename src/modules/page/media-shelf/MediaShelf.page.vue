@@ -18,7 +18,7 @@
 					icon="$shelfOutline"
 					size="x-small"
 					width="48px"
-					:value="MediaBoardLayoutType.List"
+					:value="BoardLayout.List"
 					:aria-label="$t('feature.media-shelf.layout.list')"
 					data-testid="media-board-layout-list"
 				/>
@@ -26,7 +26,7 @@
 					:icon="mdiViewGridOutline"
 					size="x-small"
 					width="48px"
-					:value="MediaBoardLayoutType.Grid"
+					:value="BoardLayout.Grid"
 					:aria-label="$t('feature.media-shelf.layout.grid')"
 					data-testid="media-board-layout-grid"
 				/>
@@ -66,7 +66,7 @@
 <script setup lang="ts">
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { MediaBoardLayoutType } from "@/serverApi/v3";
+import { BoardLayout } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { MediaBoard, useSharedMediaBoardState } from "@feature-media-shelf";
 import { mdiViewGridOutline } from "@icons/material";

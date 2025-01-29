@@ -18,6 +18,7 @@
 						@copy:board="onCopyBoard"
 						@share:board="onShareBoard"
 						@delete:board="openDeleteBoardDialog(boardId)"
+						@change-layout="onUpdateBoardLayout"
 					/>
 				</template>
 				<div :class="boardClass" :style="boardStyle">
@@ -31,7 +32,10 @@
 								direction: 'horizontal',
 								disabled: isEditMode || !hasMovePermission,
 								group: 'columns',
-								delay: isTouchDetected ? 300 : 0,
+								delayOnTouchOnly: true,
+								delay: 300,
+								touchStartThreshold: 3, // needed for sensitive touch devices
+								fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
 								ghostClass: 'sortable-drag-ghost',
 								easing: 'cubic-bezier(1, 0, 0, 1)',
 								dragClass: 'sortable-drag-board-card',
@@ -86,6 +90,11 @@
 					@copy-dialog-closed="onCopyResultModalClosed"
 				/>
 				<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.ColumnBoard" />
+				<SelectBoardLayoutDialog
+					v-model="isSelectBoardLayoutDialogOpen"
+					:current-layout="board.layout as BoardLayout"
+					@select="onSelectBoardLayout"
+				/>
 			</DefaultWireframe>
 		</template>
 	</div>
@@ -123,14 +132,13 @@ import {
 } from "@data-board";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { LightBox } from "@ui-light-box";
+import { SelectBoardLayoutDialog } from "@ui-room-details";
 import {
 	BOARD_IS_LIST_LAYOUT,
 	extractDataAttribute,
 	useBoardNotifier,
 	useSharedEditMode,
 } from "@util-board";
-import { useTouchDetection } from "@util-device-detection";
-import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
 import {
@@ -139,6 +147,7 @@ import {
 	onUnmounted,
 	PropType,
 	provide,
+	ref,
 	watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
@@ -183,7 +192,6 @@ watch(
 );
 
 useBodyScrolling();
-const { isTouchDetected } = useTouchDetection();
 
 const {
 	hasMovePermission,
@@ -271,7 +279,6 @@ const onUpdateBoardVisibility = async (isVisible: boolean) => {
 		boardId: props.boardId,
 		isVisible,
 	});
-	await setAlert();
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
@@ -284,14 +291,31 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 		boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
 };
 
-onMounted(() => {
+const scrollToNodeAndFocus = (scrollTargetId: string) => {
+	const targetElement: HTMLElement | null = document.querySelector(
+		`[data-scroll-target="${scrollTargetId}"]`
+	);
+
+	targetElement?.scrollIntoView({ block: "start", inline: "center" });
+	targetElement?.focus();
+};
+
+onMounted(async () => {
 	resetPageInformation();
-	setAlert();
 	useBoardInactivity();
-	boardStore.fetchBoardRequest({ boardId: props.boardId });
+	const boardFetchPromise = boardStore.fetchBoardRequest({
+		boardId: props.boardId,
+	});
 
 	if (hasCreateToolPermission) {
 		cardStore.loadPreferredTools(ToolContextType.BoardElement);
+	}
+
+	await boardFetchPromise;
+
+	if (route.hash) {
+		const scrollTargetId: string = route.hash.slice(1);
+		scrollToNodeAndFocus(scrollTargetId);
 	}
 });
 
@@ -302,25 +326,9 @@ onUnmounted(() => {
 	resetNotifierModule();
 });
 
-const setAlert = useDebounceFn(() => {
-	if (!isTeacher) return;
-
-	if (!board.value) {
-		return;
-	}
-
-	if (!isBoardVisible.value) {
-		showCustomNotifier(t("components.board.alert.info.draft"), "info");
-	} else {
-		showCustomNotifier(t("components.board.alert.info.teacher"), "info");
-	}
-}, 150);
-
 watch(
 	() => isBoardVisible.value,
 	() => {
-		setAlert();
-
 		if (!(isBoardVisible.value || isTeacher)) {
 			router.replace({ name: "room-details", params: { id: roomId.value } });
 			applicationErrorModule.setError(
@@ -412,5 +420,24 @@ const onShareBoard = () => {
 
 const openDeleteBoardDialog = async (id: string) => {
 	boardStore.deleteBoardRequest({ boardId: id }, roomId.value);
+};
+
+const isSelectBoardLayoutDialogOpen = ref(false);
+
+const onUpdateBoardLayout = async () => {
+	if (!hasEditPermission) return;
+
+	isSelectBoardLayoutDialogOpen.value = true;
+};
+
+const onSelectBoardLayout = async (layout: BoardLayout) => {
+	isSelectBoardLayoutDialogOpen.value = false;
+
+	if (!hasEditPermission || board.value?.layout === layout) return;
+
+	boardStore.updateBoardLayoutRequest({
+		boardId: props.boardId,
+		layout,
+	});
 };
 </script>

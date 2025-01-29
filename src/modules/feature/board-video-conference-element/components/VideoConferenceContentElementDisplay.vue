@@ -21,7 +21,7 @@
 					>
 						<div class="d-flex flex-wrap gap-4">
 							<span class="flex-1 my-auto">
-								{{ t("pages.videoConference.info.notEnabledTeacher") }}
+								{{ notEnabledMessage }}
 							</span>
 						</div>
 					</VAlert>
@@ -83,19 +83,24 @@
 
 <script setup lang="ts">
 import image from "@/assets/img/videoConference.svg";
-import { computed, ref } from "vue";
+import { computed, PropType, ref } from "vue";
 import { mdiVideoOutline } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { injectStrict } from "@/utils/inject";
 import { useDisplay } from "vuetify";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useI18n } from "vue-i18n";
+import { BoardContextType } from "@/types/board/BoardContext";
 
 const emit = defineEmits(["click", "refresh"]);
 
 const imageSrc = image;
 
 const props = defineProps({
+	boardParentType: {
+		type: Object as PropType<BoardContextType | undefined>,
+		required: false,
+	},
 	canStart: {
 		type: Boolean,
 		required: true,
@@ -151,6 +156,14 @@ const noPermissionMessage = computed(() => {
 		return t("pages.videoConference.info.noPermission");
 	} else {
 		return t("pages.videoConference.info.notEnabledParticipants");
+	}
+});
+
+const notEnabledMessage = computed(() => {
+	if (props.boardParentType === BoardContextType.Course) {
+		return t("pages.videoConference.info.courseParent.notEnabledTeacher");
+	} else {
+		return t("pages.videoConference.info.roomParent.notEnabledTeacher");
 	}
 });
 

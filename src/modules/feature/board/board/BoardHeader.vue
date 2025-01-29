@@ -26,14 +26,7 @@
 			</div>
 		</InlineEditInteractionHandler>
 		<div class="d-flex">
-			<v-chip
-				v-if="isDraft"
-				size="small"
-				class="align-self-center"
-				data-testid="board-draft-chip"
-			>
-				{{ t("common.words.draft") }}
-			</v-chip>
+			<BoardDraftChip v-if="isDraft" />
 			<div class="mx-2">
 				<BoardMenu
 					v-if="hasEditPermission"
@@ -44,6 +37,7 @@
 					<KebabMenuActionCopy @click="onCopyBoard" />
 					<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
 					<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+					<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
 					<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
 					<KebabMenuActionDelete
 						:name="title"
@@ -67,6 +61,7 @@ import {
 	KebabMenuActionPublish,
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
+	KebabMenuActionChangeLayout,
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
@@ -74,6 +69,7 @@ import { computed, onMounted, ref, toRef, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import InlineEditInteractionHandler from "../shared/InlineEditInteractionHandler.vue";
+import BoardDraftChip from "./BoardDraftChip.vue";
 
 const props = defineProps({
 	boardId: {
@@ -96,6 +92,7 @@ const emit = defineEmits([
 	"update:title",
 	"update:visibility",
 	"delete:board",
+	"change-layout",
 ]);
 
 const { t } = useI18n();
@@ -164,6 +161,10 @@ const onDeleteBoard = async (confirmation: Promise<boolean>) => {
 	}
 };
 
+const onChangeBoardLayout = async () => {
+	emit("change-layout");
+};
+
 const emitTitle = useDebounceFn((newTitle: string) => {
 	if (newTitle.length < 1) return;
 
@@ -196,7 +197,7 @@ watchEffect(() => {
 @import "@/styles/settings.scss";
 
 .v-chip {
-	cursor: pointer;
+	cursor: default;
 }
 
 .input-width-calc-span {

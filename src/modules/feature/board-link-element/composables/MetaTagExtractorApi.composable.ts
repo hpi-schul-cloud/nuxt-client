@@ -1,11 +1,13 @@
 import {
+	MetaDataEntityType,
 	MetaTagExtractorApiFactory,
 	MetaTagExtractorResponse,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
+import { AxiosResponse } from "axios";
 import { useI18n } from "vue-i18n";
 
-type MetaTagResult = {
+export type MetaTagResult = {
 	url: string;
 	title: string;
 	description: string;
@@ -26,41 +28,56 @@ export const useMetaTagExtractorApi = () => {
 			getSuffix(response.type, response.parentTitle),
 		];
 		const title = titleParts.join(" ").trim();
-		return { ...response, title };
+
+		return {
+			...response,
+			title,
+		};
 	};
 
-	const getPrefix = (type: string): string => {
-		const typeToLanguageKeyMap: Record<string, string> = {
-			course: "common.labels.course",
-			lesson: "common.words.topic",
-			task: "common.words.task",
-			board: "components.board",
+	const getPrefix = (type: MetaDataEntityType): string => {
+		const typeToLanguageKeyMap: Partial<Record<MetaDataEntityType, string>> = {
+			[MetaDataEntityType.Course]: "common.labels.course",
+			[MetaDataEntityType.Lesson]: "common.words.topic",
+			[MetaDataEntityType.Task]: "common.words.task",
+			[MetaDataEntityType.Board]: "components.board",
+			[MetaDataEntityType.BoardCard]: "components.boardCard",
 		};
 
-		const prefixKey = typeToLanguageKeyMap[type];
+		const prefixKey: string | undefined = typeToLanguageKeyMap[type];
+
 		return prefixKey ? `${t(prefixKey)}:` : "";
 	};
 
-	const getTitle = (type: string, title: string) => {
-		if (type === "board" && title == "") {
+	const getTitle = (type: MetaDataEntityType, title: string): string => {
+		if (type === MetaDataEntityType.Board && !title) {
 			return t("pages.room.boardCard.label.courseBoard");
 		}
+
 		return title;
 	};
 
-	const getSuffix = (type: string, parentTitle: string): string => {
-		if (type === "board" && parentTitle !== "") {
+	const getSuffix = (
+		type: MetaDataEntityType,
+		parentTitle: string | undefined
+	): string => {
+		if (type === MetaDataEntityType.Board && parentTitle) {
 			return `(${parentTitle})`;
 		}
+
 		return "";
 	};
 
 	const getMetaTags = async (url: string): Promise<MetaTagResult> => {
 		try {
-			const res = await metaTagApi.metaTagExtractorControllerGetMetaTags({
-				url,
-			});
-			return mapMetaTagResponse(res.data);
+			const res: AxiosResponse<MetaTagExtractorResponse> =
+				await metaTagApi.metaTagExtractorControllerGetMetaTags({
+					url,
+				});
+
+			const metaTagResult: MetaTagResult = mapMetaTagResponse(res.data);
+
+			return metaTagResult;
 		} catch (e) {
 			return {
 				url: "",
