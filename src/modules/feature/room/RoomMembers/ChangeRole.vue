@@ -17,7 +17,6 @@
 							label="Lesen"
 							:value="RoleName.Roomviewer"
 							color="primary"
-							selected
 						/>
 						<div class="ml-10 mt-n2 mb-2 text-sm">
 							Inhalte erstellen und bearbeiten

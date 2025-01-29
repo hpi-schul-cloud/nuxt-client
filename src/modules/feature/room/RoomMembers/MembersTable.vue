@@ -10,6 +10,7 @@
 			:selectedIds="selectedUserIds"
 			@remove:selected="onRemoveMembers"
 			@reset:selected="onResetSelectedMembers"
+			@change:role="onChangePermission"
 		/>
 		<v-spacer v-else />
 		<v-text-field
@@ -53,7 +54,7 @@
 			>
 				<KebabMenuActionChangePermission
 					v-if="isVisibleChangeRoleButton"
-					@click="onChangePermission(item.userId)"
+					@click="onChangePermission([item.userId])"
 					:aria-label="getChangePermissionAriaLabel(item)"
 					:test-id="`btn-change-role-${index}`"
 				/>
@@ -106,7 +107,7 @@ const selectedUserIds = ref<string[]>([]);
 const emit = defineEmits<{
 	(e: "remove:members", userIds: string[]): void;
 	(e: "select:members", userIds: string[]): void;
-	(e: "change:permission", userId: string): void;
+	(e: "change:permission", userIds: string[]): void;
 }>();
 
 const { t } = useI18n();
@@ -174,8 +175,8 @@ const getChangePermissionAriaLabel = (member: RoomMemberResponse) =>
 		memberName: `${member.firstName} ${member.lastName}`,
 	});
 
-const onChangePermission = (userId: string) => {
-	emit("change:permission", userId);
+const onChangePermission = (userIds: string[]) => {
+	emit("change:permission", userIds);
 };
 
 const tableHeader = [

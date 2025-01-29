@@ -72,7 +72,7 @@
 		>
 			<ChangeRole
 				:members="membersToChangeRole"
-				room-name="Biologie"
+				:room-name="room?.name || ''"
 				@cancel="onDialogClose"
 				@confirm="onChangeRole"
 			/>
@@ -183,11 +183,10 @@ const onLeaveRoom = async () => {
 
 const membersToChangeRole = ref<RoomMemberResponse[]>([]);
 
-const onOpenRoleDialog = (userId: string) => {
-	membersToChangeRole.value = memberList.value.filter(
-		(member) => member.userId === userId
+const onOpenRoleDialog = (userIds: string[]) => {
+	membersToChangeRole.value = memberList.value.filter((member) =>
+		userIds.includes(member.userId)
 	);
-
 	isChangeRoleDialogOpen.value = true;
 };
 
