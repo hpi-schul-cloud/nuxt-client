@@ -7,9 +7,12 @@ import { WarningAlert } from "@ui-alert";
 import { PreviewImage } from "@ui-preview-image";
 import { mount, shallowMount } from "@vue/test-utils";
 import { VImg } from "vuetify/lib/components/index.mjs";
+import { ComponentProps } from "vue-component-type-helpers";
 
 describe("PreviewImage", () => {
-	const setupWithShallowMount = (props: any) => {
+	const setupWithShallowMount = (
+		props?: ComponentProps<typeof PreviewImage>
+	) => {
 		const propsData = {
 			...props,
 			src: "https://www.example.com/image-preview.jpg",
@@ -30,7 +33,7 @@ describe("PreviewImage", () => {
 		};
 	};
 
-	const setupWithMount = (props: any) => {
+	const setupWithMount = (props?: ComponentProps<typeof PreviewImage>) => {
 		const propsData = {
 			...props,
 			src: "https://www.example.com/image-preview.jpg",
@@ -53,7 +56,7 @@ describe("PreviewImage", () => {
 	};
 
 	it("should display image with correct props", () => {
-		const { wrapper, src, alt } = setupWithShallowMount({});
+		const { wrapper, src, alt } = setupWithShallowMount();
 
 		const image = wrapper.findComponent(VImg);
 
@@ -66,7 +69,7 @@ describe("PreviewImage", () => {
 	});
 
 	it("should set max-width with correct value", async () => {
-		const { wrapper } = setupWithShallowMount({});
+		const { wrapper } = setupWithShallowMount();
 		wrapper.vm.imageRef.image = {
 			naturalWidth: "100",
 		};
@@ -79,14 +82,14 @@ describe("PreviewImage", () => {
 	});
 
 	it("should has loading spinner", () => {
-		const { wrapper } = setupWithMount({ isEditMode: false });
+		const { wrapper } = setupWithMount();
 
 		expect(wrapper.html().includes("v-progress-circular")).toBe(true);
 	});
 
 	describe("when v-img emits error", () => {
 		it("should display warning alert", async () => {
-			const { wrapper } = setupWithShallowMount({});
+			const { wrapper } = setupWithShallowMount();
 			const image = wrapper.findComponent(VImg);
 			await image.trigger("error");
 
@@ -95,7 +98,7 @@ describe("PreviewImage", () => {
 		});
 
 		it("should emit error event", async () => {
-			const { wrapper } = setupWithShallowMount({});
+			const { wrapper } = setupWithShallowMount();
 			const image = wrapper.findComponent(VImg);
 			await image.trigger("error");
 
@@ -103,7 +106,7 @@ describe("PreviewImage", () => {
 		});
 
 		it("should pass error image to v-img", async () => {
-			const { wrapper } = setupWithShallowMount({});
+			const { wrapper } = setupWithShallowMount();
 			const image = wrapper.findComponent(VImg);
 			await image.trigger("error");
 
