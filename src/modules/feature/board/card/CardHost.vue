@@ -45,7 +45,10 @@
 								v-if="hasDeletePermission && !isEditMode"
 								@click="onStartEditMode"
 							/>
-							<KebabMenuActionShareLink @click="onCopyShareLink" />
+							<KebabMenuActionShareLink
+								:scope="BoardMenuScope.CARD"
+								@click="onCopyShareLink"
+							/>
 							<KebabMenuActionDelete
 								v-if="hasDeletePermission"
 								:name="card.title"
