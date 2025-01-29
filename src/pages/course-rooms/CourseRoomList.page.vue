@@ -82,9 +82,9 @@ export default defineComponent({
 		rooms(): Array<ListItemsObject> {
 			return JSON.parse(
 				JSON.stringify(courseRoomListModule.getAllElements)
-			).filter((room: ListItemsObject | any) =>
+			).filter((room: ListItemsObject) =>
 				room.searchText
-					.toLowerCase()
+					?.toLowerCase()
 					.includes(this.$data.searchText.toLowerCase())
 			);
 		},

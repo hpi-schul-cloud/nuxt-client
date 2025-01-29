@@ -346,7 +346,7 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 					});
 					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper(["course_edit"]);
-					const wrapperData: any = wrapper.vm.$data;
+					const wrapperData = wrapper.vm.$data;
 
 					const layoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
 					expect(layoutDialog.exists()).toBe(true);
