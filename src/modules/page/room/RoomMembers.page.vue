@@ -42,6 +42,7 @@
 				:currentUser="currentUser"
 				:fixed-position="fixedHeaderOnMobile"
 				@remove:members="onRemoveMembers"
+				@change:permission="onOpenRoleDialog"
 			/>
 		</div>
 
@@ -59,6 +60,21 @@
 				@close="onDialogClose"
 				@add:members="onAddMembers"
 				@update:role="onUpdateRoleOrSchool"
+			/>
+		</v-dialog>
+
+		<v-dialog
+			v-model="isChangeRoleDialogOpen"
+			:width="xs ? 'auto' : 480"
+			data-testid="dialog-add-participants"
+			max-width="480"
+			@keydown.esc="onDialogClose"
+		>
+			<ChangeRole
+				:members="membersToChangeRole"
+				room-name="Biologie"
+				@cancel="onDialogClose"
+				@confirm="onChangeRole"
 			/>
 		</v-dialog>
 	</DefaultWireframe>
@@ -80,7 +96,7 @@ import {
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
-import { MembersTable, AddMembers } from "@feature-room";
+import { MembersTable, AddMembers, ChangeRole } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
@@ -96,6 +112,7 @@ const router = useRouter();
 const { xs, mdAndDown } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 const isMembersDialogOpen = ref(false);
+const isChangeRoleDialogOpen = ref(false);
 const roomId = route.params.id.toString();
 const {
 	isLoading,
@@ -128,12 +145,12 @@ useTitle(pageTitle);
 
 const onFabClick = async () => {
 	await getSchools();
-	await getPotentialMembers(RoleName.Teacher);
 	isMembersDialogOpen.value = true;
 };
 
 const onDialogClose = () => {
 	isMembersDialogOpen.value = false;
+	isChangeRoleDialogOpen.value = false;
 };
 
 const onAddMembers = async (memberIds: string[]) => {
@@ -162,6 +179,23 @@ const onLeaveRoom = async () => {
 	if (!shouldLeave) return;
 	await removeMembers([currentUser.value.userId]);
 	router.push("/rooms");
+};
+
+const membersToChangeRole = ref<RoomMemberResponse[]>([]);
+
+const onOpenRoleDialog = (userId: string) => {
+	membersToChangeRole.value = memberList.value.filter(
+		(member) => member.userId === userId
+	);
+
+	isChangeRoleDialogOpen.value = true;
+};
+
+const onChangeRole = async (role: string) => {
+	if (membersToChangeRole.value === null) return;
+	console.log("Change role to", role);
+	console.log("Member to change role", membersToChangeRole.value);
+	console.log("Room id", roomId);
 };
 
 onMounted(async () => {

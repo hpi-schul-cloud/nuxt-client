@@ -10,16 +10,14 @@
 			<div class="ml-6 mr-6 mt-2">
 				<div>
 					<div class="mb-4">
-						{{ memberName }} erhält die folgenden Raumberechtigungen in „{{
-							roomName
-						}}”:
+						{{ infoText }}
 					</div>
 					<v-radio-group v-model="selection" class="ml-n2">
-						<!-- @update:model-value="onRadioToggle" -->
 						<v-radio
 							label="Lesen"
 							:value="RoleName.Roomviewer"
 							color="primary"
+							selected
 						/>
 						<div class="ml-10 mt-n2 mb-2 text-sm">
 							Inhalte erstellen und bearbeiten
@@ -75,16 +73,17 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard, VRadio } from "vuetify/lib/components/index.mjs";
 
 const props = defineProps({
-	member: {
-		type: Object as PropType<RoomMemberResponse | null>,
+	members: {
+		type: Array as PropType<RoomMemberResponse[]>,
 		required: true,
+		default: () => [],
 	},
 	roomName: {
 		type: String,
@@ -93,8 +92,19 @@ const props = defineProps({
 });
 const { t } = useI18n();
 const selection = ref<string | null>(null);
-const memberToChangeRole = toRef(props, "member")?.value;
-const memberName = `${memberToChangeRole?.firstName} ${memberToChangeRole?.lastName}`;
+const memberToChangeRole = toRef(props, "members")?.value;
+
+if (memberToChangeRole.length === 1) {
+	selection.value = memberToChangeRole[0]?.roomRoleName;
+}
+
+const infoText = computed(() => {
+	if (memberToChangeRole.length === 1) {
+		const memberName = `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`;
+		return `${memberName} erhält die folgenden Raumberechtigungen in „${props.roomName}”:`;
+	}
+	return `Die ausgewählten Mitglieder erhalten die folgenden Raumberechtigungen in „${props.roomName}”:`;
+});
 
 const emit = defineEmits<{
 	(e: "confirm", selection: string): void;
