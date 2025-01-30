@@ -47,6 +47,8 @@ spec:
         runAsGroup: 1000
         fsGroup: 1000
         runAsNonRoot: true
+      os:
+        name: linux
       containers:
       - name: nuxtclient
         image: {{ NUXT_CLIENT_IMAGE }}-{{ SC_THEME }}:{{ NUXT_CLIENT_IMAGE_TAG }}
