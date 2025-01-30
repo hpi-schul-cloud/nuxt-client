@@ -256,6 +256,7 @@ const onStartVideoConference = async () => {
 	joinVideoConference().then((response: string | undefined) => {
 		if (response && windowReference) {
 			windowReference.location = response;
+			preFetchedUrl.value = response;
 		}
 	});
 	isConfigurationDialogOpen.value = false;
