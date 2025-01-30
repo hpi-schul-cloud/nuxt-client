@@ -217,7 +217,11 @@ const isCreating = computed(
 const boardParentType = computed(() => contextType.value);
 
 const onContentClick = async () => {
-	if (isRunning.value && preFetchedUrl && hasParticipationPermission.value) {
+	if (
+		isRunning.value &&
+		preFetchedUrl.value &&
+		hasParticipationPermission.value
+	) {
 		window.open(preFetchedUrl.value, "_blank");
 	} else if (!isRunning.value && canStart.value) {
 		isConfigurationDialogOpen.value = true;
