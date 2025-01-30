@@ -1828,6 +1828,17 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.members.tableHeader.actions": "Дії",
+	"pages.rooms.members.roleChange.title": "Редагувати дозволи кімнати",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} отримує такі дозволи на кімнату в “{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"Вибрані учасники отримають такі дозволи на кімнату в “{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Доступ до зон кімнати та перегляд вмісту",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Створюйте та редагуйте контент",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		"Такі самі дозволи, як і «Редагувати», а також додавати та видаляти інших учасників, змінювати їхні дозволи для кімнати та редагувати кімнату",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

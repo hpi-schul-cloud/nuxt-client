@@ -1850,6 +1850,17 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Permisos de la sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",
+	"pages.rooms.members.roleChange.title": "Editar permisos de sala",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} recibe los siguientes permisos de sala en “{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"Los miembros seleccionados recibirán los siguientes permisos de sala en “{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Accede a las áreas de la sala y visualiza el contenido",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Crear y editar contenido",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		'Los mismos permisos que "Editar", además de agregar y eliminar otros miembros, cambiar sus permisos de sala y editar la sala',
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

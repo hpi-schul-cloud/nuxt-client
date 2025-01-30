@@ -1798,6 +1798,17 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.members.tableHeader.actions": "Actions",
+	"pages.rooms.members.roleChange.title": "Edit room permissions",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} receives the following room permissions in “{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"The selected members will receive the following room permissions in “{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Access the areas in the room and view content",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Create and edit content",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		'Same permissions as "Edit", plus add and remove other members, change their room permissions and edit the room',
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

@@ -1830,6 +1830,17 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.members.tableHeader.actions": "Aktionen",
+	"pages.rooms.members.roleChange.title": "Raumberechtigungen bearbeiten",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} erhält die folgenden Raumberechtigungen in „{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"Die ausgewählten Mitglieder erhalten die folgenden Raumberechtigungen in „{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Auf die Bereiche im Raum zugreifen und Inhalte ansehen",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Inhalte erstellen und bearbeiten",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		"Gleiche Berechtigungen wie „Bearbeiten”, zusätzlich andere Mitglieder hinzufügen, entfernen, deren Raumberechtigungen ändern sowie Raum bearbeiten",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
