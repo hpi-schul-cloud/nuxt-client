@@ -21,16 +21,16 @@
 				data-testid="qr-code-copy"
 				@click="onCopy"
 			>
-				{{ $t("ui-layout.topbar.pageShare.copyLink") }}
+				{{ $t("common.actions.shareLink") }}
 			</VBtn>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { ComponentPublicInstance, ref } from "vue";
-import { mdiPrinter, mdiContentCopy } from "@icons/material";
+import { mdiContentCopy, mdiPrinter } from "@icons/material";
 import { QRCode } from "@ui-qr-code";
+import { ComponentPublicInstance, ref } from "vue";
 
 const props = defineProps({
 	url: {
