@@ -1,57 +1,33 @@
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { computed, ComputedRef } from "vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { RoomRoles, roleConfigMap } from "./memberVisibilityConfig";
 
-type VisibilityOptions = {
-	isVisibleSelectionColumn: boolean;
-	isVisibleActionColumn: boolean;
-	isVisibleAddMemberButton: boolean;
-	isVisibleActionInRow: boolean;
-	isVisibleChangeRoleButton: boolean;
-	isVisibleLeaveRoomButton: boolean;
-};
+let _instance: ReturnType<typeof useRoomMemberVisibilityOptions> | null = null;
 
-type RoomRoles =
-	| RoleName.Roomowner
-	| RoleName.Roomadmin
-	| RoleName.Roomeditor
-	| RoleName.Roomviewer;
+export const resetInstance = () => (_instance = null);
 
-const defaultOptions: VisibilityOptions = {
-	isVisibleSelectionColumn: false,
-	isVisibleActionColumn: false,
-	isVisibleAddMemberButton: false,
-	isVisibleActionInRow: false,
-	isVisibleChangeRoleButton: false,
-	isVisibleLeaveRoomButton: true,
-};
-
-export const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
-	[RoleName.Roomowner]: {
-		isVisibleSelectionColumn: true,
-		isVisibleActionColumn: true,
-		isVisibleActionInRow: false,
-		isVisibleAddMemberButton: true,
-		isVisibleChangeRoleButton: true,
-		isVisibleLeaveRoomButton: false,
-	},
-	[RoleName.Roomadmin]: {
-		isVisibleSelectionColumn: true,
-		isVisibleActionColumn: true,
-		isVisibleAddMemberButton: true,
-		isVisibleActionInRow: true,
-		isVisibleChangeRoleButton: true,
-		isVisibleLeaveRoomButton: true,
-	},
-	[RoleName.Roomeditor]: defaultOptions,
-	[RoleName.Roomviewer]: defaultOptions,
+type VisibilityOptionReturnType = {
+	isVisibleSelectionColumn: ComputedRef<boolean>;
+	isVisibleActionColumn: ComputedRef<boolean>;
+	isVisibleAddMemberButton: ComputedRef<boolean>;
+	isVisibleChangeRoleButton: ComputedRef<boolean>;
+	isVisibleLeaveRoomButton: ComputedRef<boolean>;
+	isVisiblePageInfoText: ComputedRef<boolean>;
+	isVisibleActionInRow: (user: RoomMemberResponse) => boolean;
+	isVisibleRemoveMemberButton: (user: RoomMemberResponse) => boolean;
 };
 
 export const useRoomMemberVisibilityOptions = (
 	currentUser: ComputedRef<RoomMemberResponse>
-) => {
+): VisibilityOptionReturnType => {
+	if (_instance) {
+		return _instance;
+	}
+
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED } = envConfigModule.getEnv;
+
 	const visibilityOptions = computed(
 		() => roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
 	);
@@ -79,6 +55,10 @@ export const useRoomMemberVisibilityOptions = (
 		return visibilityOptions.value?.isVisibleLeaveRoomButton;
 	});
 
+	const isVisiblePageInfoText = computed(() => {
+		return visibilityOptions.value?.isVisiblePageInfoText;
+	});
+
 	const isVisibleActionInRow = (user: RoomMemberResponse) => {
 		if (user.roomRoleName === RoleName.Roomowner) return false;
 		return user.userId !== currentUser?.value.userId;
@@ -88,13 +68,16 @@ export const useRoomMemberVisibilityOptions = (
 		return user.roomRoleName !== RoleName.Roomowner;
 	};
 
-	return {
+	_instance = {
 		isVisibleSelectionColumn,
 		isVisibleActionColumn,
 		isVisibleAddMemberButton,
 		isVisibleChangeRoleButton,
 		isVisibleLeaveRoomButton,
+		isVisiblePageInfoText,
 		isVisibleActionInRow,
 		isVisibleRemoveMemberButton,
 	};
+
+	return _instance;
 };
