@@ -14,41 +14,49 @@
 					</div>
 					<v-radio-group v-model="selection" class="ml-n2">
 						<v-radio
+							id="roleChangeViewer"
 							:label="t('pages.rooms.members.roomPermissions.viewer')"
 							:value="RoleName.Roomviewer"
 							color="primary"
 						/>
-						<div class="ml-10 mt-n2 mb-2 text-sm">
+						<label for="roleChangeViewer" class="ml-10 mt-n2 mb-2 text-sm">
 							{{ t("pages.rooms.members.roleChange.Roomviewer.subText") }}
-						</div>
+						</label>
 
 						<v-radio
+							id="roleChangeEditor"
 							:label="t('pages.rooms.members.roomPermissions.editor')"
 							:value="RoleName.Roomeditor"
 							color="primary"
 						/>
-						<div class="ml-10 mt-n2 mb-2 text-sm">
+						<label for="roleChangeEditor" class="ml-10 mt-n2 mb-2 text-sm">
 							{{ t("pages.rooms.members.roleChange.Roomeditor.subText") }}
-						</div>
+						</label>
 
 						<v-radio
+							id="roleChangeAdmin"
 							:label="t('pages.rooms.members.roomPermissions.admin')"
 							:value="RoleName.Roomadmin"
 							color="primary"
 						/>
-						<div class="ml-10 mt-n2 mb-2 text-sm">
+						<label for="roleChangeAdmin" class="ml-10 mt-n2 mb-2 text-sm">
 							{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
-						</div>
-						<div v-if="isVisibleOwnerOption">
-							<v-radio
-								label="Own"
-								:value="RoleName.Roomowner"
-								color="primary"
-							/>
-							<div class="ml-10 mt-n2 mb-2 text-sm">
-								{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
-							</div>
-						</div>
+						</label>
+
+						<v-radio
+							v-if="isVisibleOwnerOption"
+							id="roleChangeOwner"
+							label="Own"
+							:value="RoleName.Roomowner"
+							color="primary"
+						/>
+						<label
+							v-if="isVisibleOwnerOption"
+							for="roleChangeOwner"
+							class="ml-10 mt-n2 mb-2 text-sm"
+						>
+							{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
+						</label>
 					</v-radio-group>
 				</div>
 			</div>
@@ -85,7 +93,6 @@ import { useI18n } from "vue-i18n";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard, VRadio } from "vuetify/lib/components/index.mjs";
-import { useRoomMemberVisibilityOptions } from "@data-room";
 
 const props = defineProps({
 	members: {
@@ -119,6 +126,9 @@ if (memberToChangeRole.length > 1) {
 	}
 } else {
 	selection.value = memberToChangeRole[0]?.roomRoleName;
+	if (currentUser.value.roomRoleName === RoleName.Roomowner) {
+		isVisibleOwnerOption.value = true;
+	}
 }
 
 const infoText = computed(() => {
@@ -141,7 +151,7 @@ const emit = defineEmits<{
 
 const onConfirm = () => {
 	if (selection.value) {
-		emit("confirm", selection.value);
+		emit("confirm", selection.value as RoleName);
 	}
 };
 const onCancel = () => emit("cancel");
