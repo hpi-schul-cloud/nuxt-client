@@ -6,6 +6,7 @@ import {
 	SchoolApiFactory,
 	RoomMemberResponse,
 	SchoolForExternalInviteResponse,
+	ChangeRoomRoleBodyParamsRoleNameEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useI18n } from "vue-i18n";
@@ -121,7 +122,7 @@ export const useRoomMembers = (roomId: string) => {
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
 					...member,
-					displayRoomRole: roomRole[member.roomRoleName],
+					displayRoomRole: roomRole[RoleName.Roomviewer],
 					displaySchoolRole: schoolRole[member.schoolRoleName],
 				}))
 			);
@@ -141,12 +142,34 @@ export const useRoomMembers = (roomId: string) => {
 		}
 	};
 
+	const updateMembersRole = async (
+		userIds: string[],
+		roleName: ChangeRoomRoleBodyParamsRoleNameEnum
+	) => {
+		try {
+			await roomApi.roomControllerChangeRolesOfMembers(roomId, {
+				userIds,
+				roleName,
+			});
+			userIds.forEach((userId) => {
+				roomMembers.value.forEach((member) => {
+					if (member.userId === userId) {
+						member.roomRoleName = roleName;
+					}
+				});
+			});
+		} catch (error) {
+			showFailure(t("pages.rooms.members.error.updateRole"));
+		}
+	};
+
 	return {
 		addMembers,
 		fetchMembers,
 		getPotentialMembers,
 		getSchools,
 		removeMembers,
+		updateMembersRole,
 		currentUser,
 		isLoading,
 		roomMembers,
