@@ -102,7 +102,11 @@ import {
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { MembersTable, AddMembers, ChangeRole } from "@feature-room";
-import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
+import {
+	ChangeRoomRoleBodyParamsRoleNameEnum,
+	RoleName,
+	RoomMemberResponse,
+} from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import {
@@ -130,6 +134,7 @@ const {
 	getPotentialMembers,
 	getSchools,
 	removeMembers,
+	updateMembersRole,
 } = useRoomMembers(roomId);
 const memberList: Ref<RoomMemberResponse[]> = ref(roomMembers);
 const pageTitle = computed(() =>
@@ -200,9 +205,12 @@ const onOpenRoleDialog = (userIds: string[]) => {
 
 const onChangeRole = async (role: string) => {
 	if (membersToChangeRole.value === null) return;
-	console.log("Change role to", role);
-	console.log("Member to change role", membersToChangeRole.value);
-	console.log("Room id", roomId);
+	await updateMembersRole(
+		membersToChangeRole.value.map((member) => member.userId),
+		role as ChangeRoomRoleBodyParamsRoleNameEnum
+	);
+	console.log("Role changed");
+	isChangeRoleDialogOpen.value = false;
 };
 
 onMounted(async () => {
