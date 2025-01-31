@@ -45,8 +45,10 @@
 				:members="memberList"
 				:currentUser="currentUser"
 				:fixed-position="fixedHeaderOnMobile"
+				:selected-user-ids="selectedIds"
 				@remove:members="onRemoveMembers"
 				@change:permission="onOpenRoleDialog"
+				@select:members="onSelectMembers"
 			/>
 		</div>
 
@@ -98,15 +100,12 @@ import {
 	useRoomDetailsStore,
 	useRoomMembers,
 	useRoomMemberVisibilityOptions,
+	RoomMember,
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { MembersTable, AddMembers, ChangeRole } from "@feature-room";
-import {
-	ChangeRoomRoleBodyParamsRoleNameEnum,
-	RoleName,
-	RoomMemberResponse,
-} from "@/serverApi/v3";
+import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import {
@@ -129,6 +128,7 @@ const {
 	roomMembers,
 	schools,
 	currentUser,
+	selectedIds,
 	addMembers,
 	fetchMembers,
 	getPotentialMembers,
@@ -136,7 +136,7 @@ const {
 	removeMembers,
 	updateMembersRole,
 } = useRoomMembers(roomId);
-const memberList: Ref<RoomMemberResponse[]> = ref(roomMembers);
+const memberList: Ref<RoomMember[]> = ref(roomMembers);
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
@@ -177,8 +177,8 @@ const onUpdateRoleOrSchool = async (payload: {
 	await getPotentialMembers(payload.schoolRole, payload.schoolId);
 };
 
-const onRemoveMembers = async (memberIds: string[]) => {
-	await removeMembers(memberIds);
+const onRemoveMembers = async () => {
+	await removeMembers();
 };
 
 const onLeaveRoom = async () => {
@@ -190,27 +190,27 @@ const onLeaveRoom = async () => {
 	});
 
 	if (!shouldLeave) return;
-	await removeMembers([currentUser.value.userId]);
+	await removeMembers();
 	router.push("/rooms");
 };
 
-const membersToChangeRole = ref<RoomMemberResponse[]>([]);
+const membersToChangeRole = ref<RoomMember[]>([]);
 
-const onOpenRoleDialog = (userIds: string[]) => {
+const onOpenRoleDialog = () => {
 	membersToChangeRole.value = memberList.value.filter((member) =>
-		userIds.includes(member.userId)
+		selectedIds.value.includes(member.userId)
 	);
 	isChangeRoleDialogOpen.value = true;
 };
 
-const onChangeRole = async (role: string) => {
-	if (membersToChangeRole.value === null) return;
-	await updateMembersRole(
-		membersToChangeRole.value.map((member) => member.userId),
-		role as ChangeRoomRoleBodyParamsRoleNameEnum
-	);
-	console.log("Role changed");
+const onChangeRole = async (role: ChangeRoomRoleBodyParamsRoleNameEnum) => {
+	await updateMembersRole(role);
 	isChangeRoleDialogOpen.value = false;
+	selectedIds.value = [];
+};
+
+const onSelectMembers = (userIds: string[]) => {
+	selectedIds.value = userIds;
 };
 
 onMounted(async () => {

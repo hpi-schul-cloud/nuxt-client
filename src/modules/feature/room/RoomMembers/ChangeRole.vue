@@ -90,13 +90,14 @@
 <script setup lang="ts">
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
+import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName } from "@/serverApi/v3";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard, VRadio } from "vuetify/lib/components/index.mjs";
+import { RoomMember } from "@data-room";
 
 const props = defineProps({
 	members: {
-		type: Array as PropType<RoomMemberResponse[]>,
+		type: Array as PropType<RoomMember[]>,
 		required: true,
 		default: () => [],
 	},
@@ -105,7 +106,7 @@ const props = defineProps({
 		required: true,
 	},
 	currentUser: {
-		type: Object as PropType<RoomMemberResponse>,
+		type: Object as PropType<RoomMember>,
 		required: true,
 	},
 });
@@ -145,13 +146,13 @@ const infoText = computed(() => {
 });
 
 const emit = defineEmits<{
-	(e: "confirm", selection: string): void;
+	(e: "confirm", selection: ChangeRoomRoleBodyParamsRoleNameEnum): void;
 	(e: "cancel"): void;
 }>();
 
 const onConfirm = () => {
 	if (selection.value) {
-		emit("confirm", selection.value as RoleName);
+		emit("confirm", selection.value as ChangeRoomRoleBodyParamsRoleNameEnum);
 	}
 };
 const onCancel = () => emit("cancel");

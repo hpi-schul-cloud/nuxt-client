@@ -30,7 +30,7 @@
 	<v-divider role="presentation" />
 	<v-data-table
 		v-model:search="search"
-		v-model="selectedUserIds"
+		v-model="tableSelectedUserIds"
 		data-testid="participants-table"
 		hover
 		item-value="userId"
@@ -47,6 +47,7 @@
 		@update:current-items="onUpdateFilter"
 		@update:model-value="onSelectMembers"
 	>
+		<!-- @update:model-value="onSelectMembers" -->
 		<template #[`item.actions`]="{ item, index }" v-if="isVisibleActionColumn">
 			<KebabMenu
 				v-if="isVisibleActionInRow(item)"
@@ -80,29 +81,32 @@ import {
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
-import { RoomMemberResponse } from "@/serverApi/v3";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { useRoomMemberVisibilityOptions } from "@data-room";
+import { RoomMember, useRoomMemberVisibilityOptions } from "@data-room";
 
 const props = defineProps({
 	members: {
-		type: Array as PropType<RoomMemberResponse[]>,
+		type: Array as PropType<RoomMember[]>,
 		required: true,
 	},
 	currentUser: {
-		type: Object as PropType<RoomMemberResponse>,
+		type: Object as PropType<RoomMember>,
 		required: true,
 	},
 	fixedPosition: {
 		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
 		default: () => ({ enabled: false, positionTop: 0 }),
 	},
+	selectedUserIds: {
+		type: Array as PropType<string[]>,
+		default: () => [],
+	},
 });
 const { askConfirmation } = useConfirmationDialog();
-const selectedUserIds = ref<string[]>([]);
+const tableSelectedUserIds = computed(() => props.selectedUserIds);
 
 const emit = defineEmits<{
 	(e: "remove:members", userIds: string[]): void;
@@ -125,7 +129,7 @@ const {
 	isVisibleRemoveMemberButton,
 } = useRoomMemberVisibilityOptions(currentUser);
 
-const onUpdateFilter = (filteredMembers: RoomMemberResponse[]) => {
+const onUpdateFilter = (filteredMembers: RoomMember[]) => {
 	membersFilterCount.value =
 		search.value === "" ? memberList.value.length : filteredMembers.length;
 };
@@ -135,15 +139,16 @@ const onSelectMembers = (userIds: string[]) => {
 };
 
 const onResetSelectedMembers = () => {
-	selectedUserIds.value = [];
+	// selectedUserIds.value = [];
+	emit("select:members", []);
 };
 
 const onRemoveMembers = async (userIds: string[]) => {
 	const shouldRemove = await confirmRemoval(userIds);
 	if (shouldRemove) {
-		selectedUserIds.value = selectedUserIds.value.filter(
-			(userId) => !userIds.includes(userId)
-		);
+		// selectedUserIds.value = selectedUserIds.value.filter(
+		// 	(userId) => !userIds.includes(userId)
+		// );
 		emit("remove:members", userIds);
 	}
 };
@@ -165,12 +170,12 @@ const confirmRemoval = async (userIds: string[]) => {
 	return shouldRemove;
 };
 
-const getRemoveAriaLabel = (member: RoomMemberResponse) =>
+const getRemoveAriaLabel = (member: RoomMember) =>
 	t("pages.rooms.members.remove.ariaLabel", {
 		memberName: `${member.firstName} ${member.lastName}`,
 	});
 
-const getChangePermissionAriaLabel = (member: RoomMemberResponse) =>
+const getChangePermissionAriaLabel = (member: RoomMember) =>
 	t("pages.rooms.members.changePermission.ariaLabel", {
 		memberName: `${member.firstName} ${member.lastName}`,
 	});
