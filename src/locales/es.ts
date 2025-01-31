@@ -24,6 +24,7 @@ export default {
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.actions.share": "Compartir",
 	"common.actions.shareCopy": "Compartir copia",
+	"common.actions.shareLink": "Copiar enlace",
 	"common.actions.update": "Actualizar",
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
 	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
@@ -387,7 +388,7 @@ export default {
 	"components.board.action.moveRight": "Mover a la derecha",
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.changeLayout": "Cambiar vista",
-	"components.board.action.shareLink.card": "Enlace a la ficha",
+	"components.board.action.shareLink.card": "Copiar enlace a la tarjeta",
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
@@ -761,7 +762,6 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"El enlace sólo es válido dentro de la escuela",
 	"components.molecules.share.options.title": "Compartir la configuración",
-	"components.molecules.share.result.copyClipboard": "Copiar enlace",
 	"components.molecules.share.result.mailShare": "Enviar como correo",
 	"components.molecules.share.result.qrCodeScan": "Escanear código QR",
 	"components.molecules.share.result.title": "Compartir vía",
@@ -1282,7 +1282,6 @@ export default {
 	"pages.administration.school.index.authSystems.alias": "Alias",
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"¿Estás seguro de que deseas eliminar la siguiente sistema de autenticación?",
-	"pages.administration.school.index.authSystems.copyLink": "Copiar enlace",
 	"pages.administration.school.index.authSystems.delete": "Eliminar {system}",
 	"pages.administration.school.index.authSystems.deleteAuthSystem":
 		"Eliminar sistema LDAP",
@@ -1986,7 +1985,6 @@ export default {
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"ui-confirmation-dialog.ask-cancel-form": "¿Descartar cambios?",
-	"ui-layout.topbar.pageShare.copyLink": "Copiar enlace",
 	"ui-layout.topbar.pageShare.printQRCode": "Imprimir código QR",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
