@@ -3,9 +3,28 @@ import { computed, ComputedRef } from "vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { RoomRoles, roleConfigMap } from "./memberVisibilityConfig";
 
+let _instance: ReturnType<typeof useRoomMemberVisibilityOptions> | null = null;
+
+export const resetInstance = () => (_instance = null);
+
+type VisibilityOptionReturnType = {
+	isVisibleSelectionColumn: ComputedRef<boolean>;
+	isVisibleActionColumn: ComputedRef<boolean>;
+	isVisibleAddMemberButton: ComputedRef<boolean>;
+	isVisibleChangeRoleButton: ComputedRef<boolean>;
+	isVisibleLeaveRoomButton: ComputedRef<boolean>;
+	isVisiblePageInfoText: ComputedRef<boolean>;
+	isVisibleActionInRow: (user: RoomMemberResponse) => boolean;
+	isVisibleRemoveMemberButton: (user: RoomMemberResponse) => boolean;
+};
+
 export const useRoomMemberVisibilityOptions = (
 	currentUser: ComputedRef<RoomMemberResponse>
-) => {
+): VisibilityOptionReturnType => {
+	if (_instance) {
+		return _instance;
+	}
+
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED } = envConfigModule.getEnv;
 
@@ -36,8 +55,8 @@ export const useRoomMemberVisibilityOptions = (
 		return visibilityOptions.value?.isVisibleLeaveRoomButton;
 	});
 
-	const isVisibleAddMemberText = computed(() => {
-		return visibilityOptions.value?.isVisibleAddMemberText;
+	const isVisiblePageInfoText = computed(() => {
+		return visibilityOptions.value?.isVisiblePageInfoText;
 	});
 
 	const isVisibleActionInRow = (user: RoomMemberResponse) => {
@@ -49,14 +68,16 @@ export const useRoomMemberVisibilityOptions = (
 		return user.roomRoleName !== RoleName.Roomowner;
 	};
 
-	return {
+	_instance = {
 		isVisibleSelectionColumn,
 		isVisibleActionColumn,
 		isVisibleAddMemberButton,
 		isVisibleChangeRoleButton,
 		isVisibleLeaveRoomButton,
-		isVisibleAddMemberText,
+		isVisiblePageInfoText,
 		isVisibleActionInRow,
 		isVisibleRemoveMemberButton,
 	};
+
+	return _instance;
 };

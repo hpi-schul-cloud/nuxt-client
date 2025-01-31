@@ -27,6 +27,8 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { resetInstance } from "../../data/room/roomMembers/membersVisibleOptions.composable";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -92,6 +94,7 @@ describe("RoomMembersPage", () => {
 		createRoom?: boolean;
 		currentUserRole?: RoleName;
 	}) => {
+		resetInstance();
 		const { createRoom, currentUserRole } = {
 			createRoom: true,
 			currentUserRole: RoleName.Roomowner,

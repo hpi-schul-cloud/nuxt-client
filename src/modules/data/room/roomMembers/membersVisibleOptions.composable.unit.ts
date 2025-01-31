@@ -11,6 +11,7 @@ import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { roleConfigMap } from "./memberVisibilityConfig";
+import { resetInstance } from "./membersVisibleOptions.composable";
 
 jest.mock("./roomMembers.composable");
 const mockUseRoomMembers = jest.mocked(useRoomMembers);
@@ -23,7 +24,7 @@ const mockOptions = () => {
 		isVisibleActionInRow: false,
 		isVisibleChangeRoleButton: false,
 		isVisibleLeaveRoomButton: true,
-		isVisibleAddMemberText: false,
+		isVisiblePageInfoText: false,
 	};
 	roleConfigMap[RoleName.Roomowner] = {
 		isVisibleSelectionColumn: true,
@@ -32,7 +33,7 @@ const mockOptions = () => {
 		isVisibleAddMemberButton: true,
 		isVisibleChangeRoleButton: true,
 		isVisibleLeaveRoomButton: false,
-		isVisibleAddMemberText: true,
+		isVisiblePageInfoText: true,
 	};
 	roleConfigMap[RoleName.Roomadmin] = {
 		isVisibleSelectionColumn: true,
@@ -41,7 +42,7 @@ const mockOptions = () => {
 		isVisibleActionInRow: true,
 		isVisibleChangeRoleButton: true,
 		isVisibleLeaveRoomButton: true,
-		isVisibleAddMemberText: true,
+		isVisiblePageInfoText: true,
 	};
 	roleConfigMap[RoleName.Roomeditor] = defaultOptions;
 	roleConfigMap[RoleName.Roomviewer] = defaultOptions;
@@ -54,6 +55,7 @@ describe("useRoomMemberVisibilityOptions", () => {
 		mockRoomMemberCalls = createMock<ReturnType<typeof useRoomMembers>>();
 		mockUseRoomMembers.mockReturnValue(mockRoomMemberCalls);
 		mockOptions();
+		resetInstance();
 	});
 
 	const createCurrentUser = (
@@ -209,7 +211,7 @@ describe("useRoomMemberVisibilityOptions", () => {
 		);
 	});
 
-	describe("isVisibleAddMemberText", () => {
+	describe("isVisiblePageInfoText", () => {
 		it.each([
 			{ roomRoleName: RoleName.Roomowner, expected: true },
 			{ roomRoleName: RoleName.Roomadmin, expected: true },
@@ -218,8 +220,8 @@ describe("useRoomMemberVisibilityOptions", () => {
 		])(
 			"should return $expected for $roomRoleName",
 			({ roomRoleName, expected }) => {
-				const { isVisibleAddMemberText } = setup({ roomRoleName });
-				expect(isVisibleAddMemberText.value).toBe(expected);
+				const { isVisiblePageInfoText } = setup({ roomRoleName });
+				expect(isVisiblePageInfoText.value).toBe(expected);
 			}
 		);
 	});

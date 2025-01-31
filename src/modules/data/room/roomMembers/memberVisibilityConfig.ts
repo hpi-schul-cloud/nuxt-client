@@ -7,7 +7,7 @@ type VisibilityOptions = {
 	isVisibleActionInRow: boolean;
 	isVisibleChangeRoleButton: boolean;
 	isVisibleLeaveRoomButton: boolean;
-	isVisibleAddMemberText: boolean;
+	isVisiblePageInfoText: boolean;
 };
 
 export type RoomRoles =
@@ -23,7 +23,7 @@ const defaultOptions: VisibilityOptions = {
 	isVisibleActionInRow: false,
 	isVisibleChangeRoleButton: false,
 	isVisibleLeaveRoomButton: true,
-	isVisibleAddMemberText: false,
+	isVisiblePageInfoText: false,
 };
 
 export const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
@@ -34,7 +34,7 @@ export const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
 		isVisibleAddMemberButton: true,
 		isVisibleChangeRoleButton: true,
 		isVisibleLeaveRoomButton: false,
-		isVisibleAddMemberText: true,
+		isVisiblePageInfoText: true,
 	},
 	[RoleName.Roomadmin]: {
 		isVisibleSelectionColumn: true,
@@ -43,7 +43,7 @@ export const roleConfigMap: Record<RoomRoles, VisibilityOptions> = {
 		isVisibleActionInRow: true,
 		isVisibleChangeRoleButton: true,
 		isVisibleLeaveRoomButton: true,
-		isVisibleAddMemberText: true,
+		isVisiblePageInfoText: true,
 	},
 	[RoleName.Roomeditor]: defaultOptions,
 	[RoleName.Roomviewer]: defaultOptions,

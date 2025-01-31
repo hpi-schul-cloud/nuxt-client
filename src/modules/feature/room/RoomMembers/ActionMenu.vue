@@ -4,6 +4,7 @@
 			{{ selectedIds.length }}
 			{{ t("pages.administration.selected") }}
 		</span>
+
 		<v-btn
 			id="menu-activator"
 			color="primary"
@@ -37,7 +38,7 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import { mdiClose, mdiTrashCanOutline } from "@icons/material";
+import { mdiClose } from "@icons/material";
 import { useI18n } from "vue-i18n";
 
 const props = defineProps({

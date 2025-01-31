@@ -2,7 +2,7 @@
 	<v-card ref="changeRoleContent">
 		<template v-slot:prepend>
 			<div ref="textTitle" class="text-h4 mt-2">
-				Raumberechtigungen bearbeiten
+				{{ t("pages.rooms.members.roleChange.title") }}
 			</div>
 		</template>
 
@@ -14,32 +14,40 @@
 					</div>
 					<v-radio-group v-model="selection" class="ml-n2">
 						<v-radio
-							label="Lesen"
+							:label="t('pages.rooms.members.roomPermissions.viewer')"
 							:value="RoleName.Roomviewer"
 							color="primary"
 						/>
 						<div class="ml-10 mt-n2 mb-2 text-sm">
-							Inhalte erstellen und bearbeiten
+							{{ t("pages.rooms.members.roleChange.Roomviewer.subText") }}
 						</div>
 
 						<v-radio
-							label="Bearbeiten"
+							:label="t('pages.rooms.members.roomPermissions.editor')"
 							:value="RoleName.Roomeditor"
 							color="primary"
 						/>
 						<div class="ml-10 mt-n2 mb-2 text-sm">
-							Auf die Bereiche im Raum zugreifen und Inhalte ansehen
+							{{ t("pages.rooms.members.roleChange.Roomeditor.subText") }}
 						</div>
 
 						<v-radio
-							label="Verwalten"
+							:label="t('pages.rooms.members.roomPermissions.admin')"
 							:value="RoleName.Roomadmin"
 							color="primary"
 						/>
 						<div class="ml-10 mt-n2 mb-2 text-sm">
-							Gleiche Berechtigungen wie „Bearbeiten”, zusätzlich andere
-							Mitglieder hinzufügen, entfernen, deren Raumberechtigungen ändern
-							sowie Raum bearbeiten
+							{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
+						</div>
+						<div v-if="isVisibleOwnerOption">
+							<v-radio
+								label="Own"
+								:value="RoleName.Roomowner"
+								color="primary"
+							/>
+							<div class="ml-10 mt-n2 mb-2 text-sm">
+								{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
+							</div>
 						</div>
 					</v-radio-group>
 				</div>
@@ -77,6 +85,7 @@ import { useI18n } from "vue-i18n";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard, VRadio } from "vuetify/lib/components/index.mjs";
+import { useRoomMemberVisibilityOptions } from "@data-room";
 
 const props = defineProps({
 	members: {
@@ -88,21 +97,41 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
+	currentUser: {
+		type: Object as PropType<RoomMemberResponse>,
+		required: true,
+	},
 });
 const { t } = useI18n();
 const selection = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members")?.value;
+const currentUser = computed(() => props.currentUser);
 
-if (memberToChangeRole.length === 1) {
+const isVisibleOwnerOption = ref(false);
+
+if (memberToChangeRole.length > 1) {
+	const roleNamesInProp = memberToChangeRole.map(
+		(member) => member.roomRoleName
+	);
+
+	if (roleNamesInProp.every((roleName) => roleNamesInProp[0] === roleName)) {
+		selection.value = roleNamesInProp[0];
+	}
+} else {
 	selection.value = memberToChangeRole[0]?.roomRoleName;
 }
 
 const infoText = computed(() => {
 	if (memberToChangeRole.length === 1) {
 		const memberName = `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`;
-		return `${memberName} erhält die folgenden Raumberechtigungen in „${props.roomName}”:`;
+		return t("pages.rooms.members.roleChange.subTitle", {
+			memberName,
+			roomName: props.roomName,
+		});
 	}
-	return `Die ausgewählten Mitglieder erhalten die folgenden Raumberechtigungen in „${props.roomName}”:`;
+	return t("pages.rooms.members.roleChange.multipleUser.subTitle", {
+		roomName: props.roomName,
+	});
 });
 
 const emit = defineEmits<{

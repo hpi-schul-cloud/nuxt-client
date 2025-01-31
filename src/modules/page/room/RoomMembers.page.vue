@@ -24,7 +24,7 @@
 
 		<div class="mb-8 mt-12" data-testid="info-text">
 			<i18n-t
-				v-if="isVisibleAddMemberText"
+				v-if="isVisiblePageInfoText"
 				keypath="pages.rooms.members.infoText"
 				scope="global"
 			>
@@ -77,6 +77,7 @@
 			<ChangeRole
 				:members="membersToChangeRole"
 				:room-name="room?.name || ''"
+				:currentUser="currentUser"
 				@cancel="onDialogClose"
 				@confirm="onChangeRole"
 			/>
@@ -145,7 +146,7 @@ const { askConfirmation } = useConfirmationDialog();
 const {
 	isVisibleAddMemberButton,
 	isVisibleLeaveRoomButton,
-	isVisibleAddMemberText,
+	isVisiblePageInfoText,
 } = useRoomMemberVisibilityOptions(currentUser);
 
 useTitle(pageTitle);
