@@ -1,82 +1,70 @@
 <template>
 	<KebabMenu
 		class="mx-2"
-		:aria-label="$t('pages.roomDetails.ariaLabels.menu')"
+		:aria-label="t('pages.roomDetails.ariaLabels.menu')"
 		data-testid="room-menu"
 	>
-		<VListItem
+		<!-- data-testid="room-action-edit" -->
+		<KebabMenuActionEdit
 			v-if="canEditRoom"
-			role="menuitem"
-			data-testid="room-action-edit"
-			:aria-label="$t('pages.roomDetails.ariaLabels.menu.action.edit')"
 			@click="() => $emit('room:edit')"
-		>
-			<template #prepend>
-				<VIcon :icon="mdiPencilOutline" />
-			</template>
-			<VListItemTitle>
-				{{ $t("common.actions.edit") }}
-			</VListItemTitle>
-		</VListItem>
-		<VListItem
-			v-if="canEditRoom"
-			role="menuitem"
-			data-testid="room-action-manage-members"
-			:aria-label="$t('pages.rooms.members.manage')"
+			:aria-label="t('pages.roomDetails.ariaLabels.menu.action.edit')"
+		/>
+		<KebabMenuActionEditMembers
+			v-if="canAddRoomMembers"
 			@click="() => $emit('room:manage-members')"
-		>
-			<template #prepend>
-				<VIcon :icon="mdiAccountGroupOutline" />
-			</template>
-			<VListItemTitle>
-				{{ $t("pages.rooms.members.manage") }}
-			</VListItemTitle>
-		</VListItem>
-		<VListItem
+			:aria-label="t('pages.rooms.members.manage')"
+		/>
+		<KebabMenuActionDelete
 			v-if="canDeleteRoom"
-			role="menuitem"
-			data-testid="room-action-delete"
-			:aria-label="$t('pages.roomDetails.ariaLabels.menu.action.delete')"
-			@click="() => $emit('room:delete')"
-		>
-			<template #prepend>
-				<VIcon :icon="mdiTrashCanOutline" />
-			</template>
-			<VListItemTitle>
-				{{ $t("common.actions.delete") }}
-			</VListItemTitle>
-		</VListItem>
-		<VListItem
+			@click="onDeleteRoom"
+			:aria-label="t('pages.roomDetails.ariaLabels.menu.action.delete')"
+			scope-language-key="common.labels.room"
+			:name="roomName"
+		/>
+
+		<!-- data-testid="room-action-leave-room" -->
+		<KebabMenuActionLeaveRoom
 			v-if="canLeaveRoom"
-			role="menuitem"
-			data-testid="room-action-leave-room"
-			:aria-label="$t('pages.rooms.leaveRoom.menu')"
 			@click="() => $emit('room:leave')"
-		>
-			<template #prepend>
-				<VIcon :icon="mdiLocationExit" />
-			</template>
-			<VListItemTitle>
-				{{ $t("pages.rooms.leaveRoom.menu") }}
-			</VListItemTitle>
-		</VListItem>
+			:aria-label="t('pages.rooms.leaveRoom.menu')"
+		/>
 	</KebabMenu>
 </template>
 
 <script setup lang="ts">
-import { KebabMenu } from "@ui-kebab-menu";
 import {
-	mdiPencilOutline,
-	mdiTrashCanOutline,
-	mdiAccountGroupOutline,
-	mdiLocationExit,
-} from "@icons/material";
+	KebabMenu,
+	KebabMenuActionDelete,
+	KebabMenuActionEdit,
+	KebabMenuActionEditMembers,
+	KebabMenuActionLeaveRoom,
+} from "@ui-kebab-menu";
 import { useRoomAuthorization } from "@feature-room";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
 
-defineEmits(["room:edit", "room:manage-members", "room:delete", "room:leave"]);
+const { t } = useI18n();
+
+const emit = defineEmits([
+	"room:edit",
+	"room:manage-members",
+	"room:delete",
+	"room:leave",
+]);
+defineProps({
+	roomName: { type: String, required: false },
+});
 const { room } = storeToRefs(useRoomDetailsStore());
 
-const { canEditRoom, canDeleteRoom, canLeaveRoom } = useRoomAuthorization(room);
+const onDeleteRoom = async (confirmation: Promise<boolean>) => {
+	const shouldDelete = await confirmation;
+	if (shouldDelete) {
+		emit("room:delete");
+	}
+};
+
+const { canAddRoomMembers, canEditRoom, canDeleteRoom, canLeaveRoom } =
+	useRoomAuthorization(room);
 </script>
