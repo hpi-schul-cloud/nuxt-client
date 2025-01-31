@@ -307,12 +307,19 @@ export default {
 		"Editar herramienta",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Ver hoja de datos",
+	"components.administration.externalToolsSection.action.sync":
+		"Disponibilidad de actualización",
 	"components.administration.externalToolsSection.description.firstParagraph":
 		"Los parámetros específicos de la escuela para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta estará disponible dentro de la escuela.",
 	"components.administration.externalToolsSection.description.secondParagraph":
 		"Más información está disponible en nuestro {0}.",
 	"components.administration.externalToolsSection.description.secondParagraph.link":
 		"Sección de ayuda sobre herramientas externas",
+	"components.administration.externalToolsSection.vidis.title": "Medios VIDIS",
+	"components.administration.externalToolsSection.vidis.description":
+		"La disponibilidad de los medios VIDIS se actualiza automáticamente. Además, aquí se puede actualizar manualmente la disponibilidad de los medios, por ejemplo para poder utilizar los medios activados recientemente directamente en la nube de la escuela.",
+	"components.administration.externalToolsSection.vidis.notification.success":
+		"Medios VIDIS actualizados exitosamente",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"No se pudo determinar el uso de la herramienta.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
