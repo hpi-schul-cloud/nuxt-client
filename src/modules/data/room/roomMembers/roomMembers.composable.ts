@@ -83,7 +83,7 @@ export const useRoomMembers = (roomId: string) => {
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
 						schoolRoleName: RoleName.Teacher,
-						roomRoleName: RoleName.Roomadmin,
+						roomRoleName: RoleName.Roomviewer,
 					};
 				})
 				.filter((user) => {
@@ -117,11 +117,13 @@ export const useRoomMembers = (roomId: string) => {
 		);
 
 		try {
-			await roomApi.roomControllerAddMembers(roomId, { userIds });
+			const { roomRoleName } = (
+				await roomApi.roomControllerAddMembers(roomId, { userIds })
+			).data;
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
 					...member,
-					displayRoomRole: roomRole[member.roomRoleName],
+					displayRoomRole: roomRole[roomRoleName],
 					displaySchoolRole: schoolRole[member.schoolRoleName],
 				}))
 			);
