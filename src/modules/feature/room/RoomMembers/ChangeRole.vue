@@ -2,7 +2,7 @@
 	<v-card ref="changeRoleContent">
 		<template v-slot:prepend>
 			<div ref="textTitle" class="text-h4 mt-2">
-				{{ t("pages.rooms.members.roleChange.title") }}
+				{{ t("pages.rooms.members.changePermission") }}
 			</div>
 		</template>
 

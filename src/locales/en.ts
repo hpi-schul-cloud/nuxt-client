@@ -1805,7 +1805,6 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.members.tableHeader.actions": "Actions",
-	"pages.rooms.members.roleChange.title": "Edit room permissions",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberName} receives the following room permissions in “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":

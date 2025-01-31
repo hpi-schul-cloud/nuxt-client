@@ -1837,7 +1837,6 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.members.tableHeader.actions": "Aktionen",
-	"pages.rooms.members.roleChange.title": "Raumberechtigungen bearbeiten",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberName} erhält die folgenden Raumberechtigungen in „{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":

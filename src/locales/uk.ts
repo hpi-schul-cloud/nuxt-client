@@ -1835,7 +1835,6 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.members.tableHeader.actions": "Дії",
-	"pages.rooms.members.roleChange.title": "Редагувати дозволи кімнати",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberName} отримує такі дозволи на кімнату в “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
