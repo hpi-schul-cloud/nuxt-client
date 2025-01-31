@@ -10,7 +10,6 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	envsFactory,
 	meResponseFactory,
@@ -18,6 +17,7 @@ import {
 	schoolExternalToolMetadataFactory,
 	schoolToolConfigurationStatusFactory,
 } from "@@/tests/test-utils/factory";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -30,6 +30,7 @@ import { nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
 import { VCardText } from "vuetify/lib/components/index.mjs";
 import ExternalToolSection from "./ExternalToolSection.vue";
+import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 
 jest.mock("@data-external-tool");
 
@@ -801,6 +802,54 @@ describe("ExternalToolSection", () => {
 					status: "error",
 					text: "components.administration.externalToolsSection.dialog.content.metadata.error",
 				});
+			});
+		});
+	});
+
+	describe("VIDIS section", () => {
+		describe("when VIDIS is enabled", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper(
+					{},
+					{
+						FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED: true,
+					}
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should display the VIDIS section", () => {
+				const { wrapper } = setup();
+
+				const vidisSection = wrapper.findComponent(VidisMediaSyncSection);
+
+				expect(vidisSection.exists()).toEqual(true);
+			});
+		});
+
+		describe("when VIDIS is disabled", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper(
+					{},
+					{
+						FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED: false,
+					}
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should not display the VIDIS section", () => {
+				const { wrapper } = setup();
+
+				const vidisSection = wrapper.findComponent(VidisMediaSyncSection);
+
+				expect(vidisSection.exists()).toEqual(false);
 			});
 		});
 	});

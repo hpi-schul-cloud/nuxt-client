@@ -309,12 +309,19 @@ export default {
 		"інструмент редагування",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Переглянути таблицю даних",
+	"components.administration.externalToolsSection.action.sync":
+		"Доступність оновлення",
 	"components.administration.externalToolsSection.description.firstParagraph":
 		"Тут налаштовуються спеціальні параметри зовнішнього інструменту для школи. Після збереження конфігурації інструмент буде доступний у школі.",
 	"components.administration.externalToolsSection.description.secondParagraph":
 		"Додаткову інформацію можна знайти на нашому сайті {0}.",
 	"components.administration.externalToolsSection.description.secondParagraph.link":
 		"Розділ довідки щодо зовнішніх інструментів",
+	"components.administration.externalToolsSection.vidis.title": "VIDIS Медіа",
+	"components.administration.externalToolsSection.vidis.description":
+		"Доступність носіїв VIDIS оновлюється автоматично. Крім того, доступність медіафайлів можна оновити вручну, наприклад, мати можливість використовувати нещодавно активовані медіафайли безпосередньо в шкільній хмарі.",
+	"components.administration.externalToolsSection.vidis.notification.success":
+		"Медіа VIDIS успішно оновлено",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
