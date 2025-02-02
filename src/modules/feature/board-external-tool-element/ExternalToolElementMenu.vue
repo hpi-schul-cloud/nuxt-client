@@ -11,7 +11,7 @@
 		</KebabMenuAction>
 		<KebabMenuActionDelete
 			:name="displayName"
-			:scope="BoardMenuScope.EXTERNAL_TOOL_ELEMENT"
+			scope-language-key="components.cardElement.externalToolElement"
 			@click="onDelete"
 		/>
 	</BoardMenu>

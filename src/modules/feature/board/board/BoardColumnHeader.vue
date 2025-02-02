@@ -50,7 +50,7 @@
 				</template>
 				<KebabMenuActionDelete
 					:name="title"
-					:scope="BoardMenuScope.COLUMN"
+					scope-language-key="components.boardColumn"
 					@click="onDelete"
 				/>
 			</BoardMenu>
