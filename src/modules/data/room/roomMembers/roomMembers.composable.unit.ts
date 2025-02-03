@@ -263,7 +263,7 @@ describe("useRoomMembers", () => {
 				useRoomMembers(roomId);
 
 			roomApiMock.roomControllerAddMembers.mockResolvedValue(
-				mockApiResponse({})
+				mockApiResponse({ data: { roomRoleName: "roomadmin" } })
 			);
 
 			potentialRoomMembers.value = roomMemberListFactory.buildList(3);
