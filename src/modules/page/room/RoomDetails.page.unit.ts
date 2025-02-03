@@ -207,12 +207,14 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 	});
 
-	describe("and user deletes the room", () => {
-		it("should open confirmation dialog", async () => {
+	describe("when user deletes the room", () => {
+		it("should reroute to rooms overview page", async () => {
 			roomPermissions.canDeleteRoom.value = true;
+			roomPermissions.canViewRoom.value = true;
+
 			const { wrapper, router } = setup();
 
-			const menu = await wrapper.getComponent({ name: "RoomMenu" });
+			const menu = wrapper.getComponent({ name: "RoomMenu" });
 			await menu.vm.$emit("room:delete");
 
 			expect(router.push).toHaveBeenCalledWith({
