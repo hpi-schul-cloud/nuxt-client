@@ -335,6 +335,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     LessonsCreate = 'LESSONS_CREATE',
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
+    MediaSchoolLicenseAdmin = 'MEDIA_SCHOOL_LICENSE_ADMIN',
     NewsCreate = 'NEWS_CREATE',
     NewsEdit = 'NEWS_EDIT',
     NewsView = 'NEWS_VIEW',
@@ -7003,6 +7004,7 @@ export enum Permission {
     LessonsCreate = 'LESSONS_CREATE',
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
+    MediaSchoolLicenseAdmin = 'MEDIA_SCHOOL_LICENSE_ADMIN',
     NewsCreate = 'NEWS_CREATE',
     NewsEdit = 'NEWS_EDIT',
     NewsView = 'NEWS_VIEW',
@@ -22746,6 +22748,125 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerUpdateSchool(schoolId, schoolUpdateBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * SchoolLicenseApi - axios parameter creator
+ * @export
+ */
+export const SchoolLicenseApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Update media school licenses
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolLicenseControllerUpdateMediaSchoolLicenses: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/school-licenses`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SchoolLicenseApi - functional programming interface
+ * @export
+ */
+export const SchoolLicenseApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SchoolLicenseApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Update media school licenses
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolLicenseControllerUpdateMediaSchoolLicenses(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolLicenseControllerUpdateMediaSchoolLicenses(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * SchoolLicenseApi - factory interface
+ * @export
+ */
+export const SchoolLicenseApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SchoolLicenseApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Update media school licenses
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolLicenseControllerUpdateMediaSchoolLicenses(options?: any): AxiosPromise<void> {
+            return localVarFp.schoolLicenseControllerUpdateMediaSchoolLicenses(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SchoolLicenseApi - interface
+ * @export
+ * @interface SchoolLicenseApi
+ */
+export interface SchoolLicenseApiInterface {
+    /**
+     * 
+     * @summary Update media school licenses
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolLicenseApiInterface
+     */
+    schoolLicenseControllerUpdateMediaSchoolLicenses(options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * SchoolLicenseApi - object-oriented interface
+ * @export
+ * @class SchoolLicenseApi
+ * @extends {BaseAPI}
+ */
+export class SchoolLicenseApi extends BaseAPI implements SchoolLicenseApiInterface {
+    /**
+     * 
+     * @summary Update media school licenses
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolLicenseApi
+     */
+    public schoolLicenseControllerUpdateMediaSchoolLicenses(options?: any) {
+        return SchoolLicenseApiFp(this.configuration).schoolLicenseControllerUpdateMediaSchoolLicenses(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
