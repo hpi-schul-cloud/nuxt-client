@@ -263,7 +263,7 @@ describe("useRoomMembers", () => {
 				useRoomMembers(roomId);
 
 			roomApiMock.roomControllerAddMembers.mockResolvedValue(
-				mockApiResponse({ data: { roomRoleName: RoleName.Roomviewer } })
+				mockApiResponse({})
 			);
 
 			potentialRoomMembers.value = roomMemberListFactory.buildList(3);
@@ -280,7 +280,7 @@ describe("useRoomMembers", () => {
 			expect(roomMembers.value).toEqual([
 				{
 					...firstPotentialMember,
-					displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
+					displayRoomRole: "pages.rooms.members.roomPermissions.admin",
 					displaySchoolRole: "common.labels.teacher",
 				},
 			]);

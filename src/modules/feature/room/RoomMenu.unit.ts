@@ -68,9 +68,6 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user has no edit and delete permissions", () => {
 		it("should contain no menu items", async () => {
-			roomPermissions.canEditRoom.value = false;
-			roomPermissions.canDeleteRoom.value = false;
-
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
@@ -82,6 +79,7 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user only has edit permission", () => {
 		it("should contain edit and manage members menu items", async () => {
+			roomPermissions.canAddRoomMembers.value = false;
 			roomPermissions.canEditRoom.value = true;
 			roomPermissions.canDeleteRoom.value = false;
 
@@ -92,15 +90,17 @@ describe("@feature-room/RoomMenu", () => {
 				findKebabActions(wrapper);
 
 			expect(kebabActionEdit.exists()).toBe(true);
-			expect(kebabActionEditMembers.exists()).toBe(true);
+			expect(kebabActionEditMembers.exists()).toBe(false);
 			expect(kebabActionDelete.exists()).toBe(false);
 		});
 	});
 
 	describe("when user only has delete permission", () => {
 		it("should only contain delete menu item", async () => {
+			roomPermissions.canAddRoomMembers.value = false;
 			roomPermissions.canEditRoom.value = false;
 			roomPermissions.canDeleteRoom.value = true;
+
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
@@ -113,10 +113,30 @@ describe("@feature-room/RoomMenu", () => {
 		});
 	});
 
-	describe("when user has both edit and delete permissions", () => {
+	describe("when user only has add members permission", () => {
+		it("should only contain add members menu item", async () => {
+			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canEditRoom.value = false;
+			roomPermissions.canDeleteRoom.value = false;
+
+			const { wrapper, menuBtn } = setup();
+			await menuBtn.trigger("click");
+
+			const { kebabActionEdit, kebabActionEditMembers, kebabActionDelete } =
+				findKebabActions(wrapper);
+
+			expect(kebabActionEdit.exists()).toBe(false);
+			expect(kebabActionEditMembers.exists()).toBe(true);
+			expect(kebabActionDelete.exists()).toBe(false);
+		});
+	});
+
+	describe("when user has addMembers, edit and delete permissions", () => {
 		it("should show all menu items", async () => {
+			roomPermissions.canAddRoomMembers.value = true;
 			roomPermissions.canEditRoom.value = true;
 			roomPermissions.canDeleteRoom.value = true;
+
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
@@ -130,6 +150,7 @@ describe("@feature-room/RoomMenu", () => {
 	});
 
 	describe("when clicking on menu button", () => {
+		roomPermissions.canAddRoomMembers.value = false;
 		roomPermissions.canEditRoom.value = true;
 		roomPermissions.canDeleteRoom.value = true;
 
