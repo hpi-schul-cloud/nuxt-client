@@ -335,6 +335,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     LessonsCreate = 'LESSONS_CREATE',
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
+    MediaSchoolLicenseAdmin = 'MEDIA_SCHOOL_LICENSE_ADMIN',
     NewsCreate = 'NEWS_CREATE',
     NewsEdit = 'NEWS_EDIT',
     NewsView = 'NEWS_VIEW',
@@ -2627,19 +2628,6 @@ export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     Deleted = 'deleted'
 }
 
-/**
- * 
- * @export
- * @interface CreateColumnBodyParams
- */
-export interface CreateColumnBodyParams {
-    /**
-     * The title of the column.
-     * @type {Array<string>}
-     * @memberof CreateColumnBodyParams
-     */
-    titles: Array<string>;
-}
 /**
  * 
  * @export
@@ -7029,6 +7017,7 @@ export enum Permission {
     LessonsCreate = 'LESSONS_CREATE',
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
+    MediaSchoolLicenseAdmin = 'MEDIA_SCHOOL_LICENSE_ADMIN',
     NewsCreate = 'NEWS_CREATE',
     NewsEdit = 'NEWS_EDIT',
     NewsView = 'NEWS_VIEW',
@@ -12298,50 +12287,6 @@ export const BoardApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
-         * @summary Create multiple columns on a board.
-         * @param {string} boardId The id of the board.
-         * @param {CreateColumnBodyParams} createColumnBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        boardControllerCreateColumns: async (boardId: string, createColumnBodyParams: CreateColumnBodyParams, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'boardId' is not null or undefined
-            assertParamExists('boardControllerCreateColumns', 'boardId', boardId)
-            // verify required parameter 'createColumnBodyParams' is not null or undefined
-            assertParamExists('boardControllerCreateColumns', 'createColumnBodyParams', createColumnBodyParams)
-            const localVarPath = `/boards/{boardId}/columns/bulk`
-                .replace(`{${"boardId"}}`, encodeURIComponent(String(boardId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = serializeDataIfNeeded(createColumnBodyParams, localVarRequestOptions, configuration)
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary Delete a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -12631,18 +12576,6 @@ export const BoardApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Create multiple columns on a board.
-         * @param {string} boardId The id of the board.
-         * @param {CreateColumnBodyParams} createColumnBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async boardControllerCreateColumns(boardId: string, createColumnBodyParams: CreateColumnBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ColumnResponse>>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.boardControllerCreateColumns(boardId, createColumnBodyParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
          * @summary Delete a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -12752,17 +12685,6 @@ export const BoardApiFactory = function (configuration?: Configuration, basePath
         },
         /**
          * 
-         * @summary Create multiple columns on a board.
-         * @param {string} boardId The id of the board.
-         * @param {CreateColumnBodyParams} createColumnBodyParams 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        boardControllerCreateColumns(boardId: string, createColumnBodyParams: CreateColumnBodyParams, options?: any): AxiosPromise<Array<ColumnResponse>> {
-            return localVarFp.boardControllerCreateColumns(boardId, createColumnBodyParams, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary Delete a board.
          * @param {string} boardId The id of the board.
          * @param {*} [options] Override http request option.
@@ -12862,17 +12784,6 @@ export interface BoardApiInterface {
      * @memberof BoardApiInterface
      */
     boardControllerCreateColumn(boardId: string, options?: any): AxiosPromise<ColumnResponse>;
-
-    /**
-     * 
-     * @summary Create multiple columns on a board.
-     * @param {string} boardId The id of the board.
-     * @param {CreateColumnBodyParams} createColumnBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardApiInterface
-     */
-    boardControllerCreateColumns(boardId: string, createColumnBodyParams: CreateColumnBodyParams, options?: any): AxiosPromise<Array<ColumnResponse>>;
 
     /**
      * 
@@ -12980,19 +12891,6 @@ export class BoardApi extends BaseAPI implements BoardApiInterface {
      */
     public boardControllerCreateColumn(boardId: string, options?: any) {
         return BoardApiFp(this.configuration).boardControllerCreateColumn(boardId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @summary Create multiple columns on a board.
-     * @param {string} boardId The id of the board.
-     * @param {CreateColumnBodyParams} createColumnBodyParams 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof BoardApi
-     */
-    public boardControllerCreateColumns(boardId: string, createColumnBodyParams: CreateColumnBodyParams, options?: any) {
-        return BoardApiFp(this.configuration).boardControllerCreateColumns(boardId, createColumnBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -22863,6 +22761,125 @@ export class SchoolApi extends BaseAPI implements SchoolApiInterface {
      */
     public schoolControllerUpdateSchool(schoolId: string, schoolUpdateBodyParams: SchoolUpdateBodyParams, options?: any) {
         return SchoolApiFp(this.configuration).schoolControllerUpdateSchool(schoolId, schoolUpdateBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * SchoolLicenseApi - axios parameter creator
+ * @export
+ */
+export const SchoolLicenseApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Update media school licenses
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolLicenseControllerUpdateMediaSchoolLicenses: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/school-licenses`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * SchoolLicenseApi - functional programming interface
+ * @export
+ */
+export const SchoolLicenseApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SchoolLicenseApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Update media school licenses
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolLicenseControllerUpdateMediaSchoolLicenses(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolLicenseControllerUpdateMediaSchoolLicenses(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * SchoolLicenseApi - factory interface
+ * @export
+ */
+export const SchoolLicenseApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SchoolLicenseApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Update media school licenses
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolLicenseControllerUpdateMediaSchoolLicenses(options?: any): AxiosPromise<void> {
+            return localVarFp.schoolLicenseControllerUpdateMediaSchoolLicenses(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * SchoolLicenseApi - interface
+ * @export
+ * @interface SchoolLicenseApi
+ */
+export interface SchoolLicenseApiInterface {
+    /**
+     * 
+     * @summary Update media school licenses
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolLicenseApiInterface
+     */
+    schoolLicenseControllerUpdateMediaSchoolLicenses(options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * SchoolLicenseApi - object-oriented interface
+ * @export
+ * @class SchoolLicenseApi
+ * @extends {BaseAPI}
+ */
+export class SchoolLicenseApi extends BaseAPI implements SchoolLicenseApiInterface {
+    /**
+     * 
+     * @summary Update media school licenses
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolLicenseApi
+     */
+    public schoolLicenseControllerUpdateMediaSchoolLicenses(options?: any) {
+        return SchoolLicenseApiFp(this.configuration).schoolLicenseControllerUpdateMediaSchoolLicenses(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
