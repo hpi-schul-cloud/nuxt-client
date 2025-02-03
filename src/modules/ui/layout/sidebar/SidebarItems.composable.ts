@@ -33,7 +33,7 @@ export const useSidebarItems = () => {
 			title: "global.sidebar.item.overview",
 			href: "/dashboard",
 			icon: mdiViewGridOutline,
-			testId: "sidebar-overview",
+			testId: "sidebar-dashboard",
 		},
 		{
 			title: "global.sidebar.item.rooms",
