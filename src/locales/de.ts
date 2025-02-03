@@ -305,12 +305,19 @@ export default {
 		"Tool bearbeiten",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Datenblatt anzeigen",
+	"components.administration.externalToolsSection.action.sync":
+		"Verfügbarkeit aktualisieren",
 	"components.administration.externalToolsSection.description.firstParagraph":
 		"Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb der Schule verfügbar.",
 	"components.administration.externalToolsSection.description.secondParagraph":
 		"Weitere Informationen sind in unserem {0} zu finden.",
 	"components.administration.externalToolsSection.description.secondParagraph.link":
 		"Hilfebereich zu externen Tools",
+	"components.administration.externalToolsSection.vidis.title": "VIDIS-Medien",
+	"components.administration.externalToolsSection.vidis.description":
+		"Die Verfügbarkeit der VIDIS-Medien wird automatisch aktualisiert. Zusätzlich kann die Verfügbarkeit der Medien hier manuell aktualisiert werden, z.B. um kürzlich aktivierte Medien direkt in der Schulcloud nutzen zu können.",
+	"components.administration.externalToolsSection.vidis.notification.success":
+		"VIDIS-Medien erfolgreich aktualisiert",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
