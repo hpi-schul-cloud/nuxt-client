@@ -1256,37 +1256,6 @@ export interface ComponentLernstorePropsImpl {
 /**
  * 
  * @export
- * @interface ComponentNexboardPropsImpl
- */
-export interface ComponentNexboardPropsImpl {
-    /**
-     * board of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    board: string;
-    /**
-     * description of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    description: string;
-    /**
-     * title of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    title: string;
-    /**
-     * url of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    url: string;
-}
-/**
- * 
- * @export
  * @interface ComponentTextPropsImpl
  */
 export interface ComponentTextPropsImpl {
@@ -1471,12 +1440,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_NEXBOARD_COPY_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -2260,7 +2223,6 @@ export enum CopyApiResponseTypeEnum {
     LessonContentGeogebra = 'LESSON_CONTENT_GEOGEBRA',
     LessonContentGroup = 'LESSON_CONTENT_GROUP',
     LessonContentLernstore = 'LESSON_CONTENT_LERNSTORE',
-    LessonContentNexboard = 'LESSON_CONTENT_NEXBOARD',
     LessonContentTask = 'LESSON_CONTENT_TASK',
     LessonContentText = 'LESSON_CONTENT_TEXT',
     LernstoreMaterial = 'LERNSTORE_MATERIAL',
@@ -2659,6 +2621,19 @@ export interface CreateCourseBodyParams {
      * @memberof CreateCourseBodyParams
      */
     title: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateCourseResponse
+ */
+export interface CreateCourseResponse {
+    /**
+     * The id of the created course
+     * @type {string}
+     * @memberof CreateCourseResponse
+     */
+    courseId: string;
 }
 /**
  * 
@@ -4301,10 +4276,10 @@ export interface LdapAuthorizationBodyParams {
 export interface LessonContentResponse {
     /**
      * 
-     * @type {ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl | ComponentNexboardPropsImpl}
+     * @type {ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl}
      * @memberof LessonContentResponse
      */
-    content: ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl | ComponentNexboardPropsImpl;
+    content: ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl;
     /**
      * The id of the Material entity
      * @type {string}
@@ -4347,8 +4322,7 @@ export enum LessonContentResponseComponentEnum {
     GeoGebra = 'geoGebra',
     Internal = 'internal',
     Resources = 'resources',
-    Text = 'text',
-    NeXboard = 'neXboard'
+    Text = 'text'
 }
 
 /**
@@ -16091,7 +16065,7 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateCourseResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerCreateCourse(createCourseBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -16179,7 +16153,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<void> {
+        courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<CreateCourseResponse> {
             return localVarFp.courseControllerCreateCourse(createCourseBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -16260,7 +16234,7 @@ export interface CoursesApiInterface {
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
      */
-    courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<void>;
+    courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<CreateCourseResponse>;
 
     /**
      * 

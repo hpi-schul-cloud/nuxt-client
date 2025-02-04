@@ -25,9 +25,6 @@ describe("LinkContentElementCreate", () => {
 	});
 
 	const setup = () => {
-		const envs = envsFactory.build({ FEATURE_NEXBOARD_COPY_ENABLED: true });
-		envConfigModule.setEnvs(envs);
-
 		const wrapper = mount(LinkContentElementCreate, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
