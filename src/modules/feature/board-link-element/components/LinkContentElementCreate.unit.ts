@@ -1,6 +1,4 @@
-import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
