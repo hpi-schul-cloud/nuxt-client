@@ -45,9 +45,27 @@ describe("containsOpeningTagFollowedByString", () => {
 		});
 	});
 
-	describe("when < is followed by a <", () => {
+	describe("when < followed by a < with a string", () => {
+		it("should return false", () => {
+			expect(containsOpeningTagFollowedByString("< <asd ")).toBe(true);
+		});
+	});
+
+	describe("when string contains two < followed by a string", () => {
 		it("should return true", () => {
-			expect(containsOpeningTagFollowedByString("<<")).toBe(true);
+			expect(containsOpeningTagFollowedByString("<asd <asd")).toBe(true);
+		});
+	});
+
+	describe("when < is followed by a <", () => {
+		it("should return false", () => {
+			expect(containsOpeningTagFollowedByString("<<")).toBe(false);
+		});
+	});
+
+	describe("when < is followed by a <", () => {
+		it("should return false", () => {
+			expect(containsOpeningTagFollowedByString("< <")).toBe(false);
 		});
 	});
 
