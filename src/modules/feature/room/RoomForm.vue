@@ -78,6 +78,7 @@ import {
 } from "@ui-confirmation-dialog";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 import dayjs from "dayjs";
+import { containsOpeningTagFollowedByString } from "@/utils/validation";
 
 const props = defineProps({
 	room: {
@@ -144,6 +145,10 @@ const validationRules = computed(() => ({
 			maxLength: helpers.withMessage(
 				t("common.validation.tooLong"),
 				maxLength(100)
+			),
+			containsOpeningTag: helpers.withMessage(
+				t("common.validation.containsOpeningTag"),
+				(name: string) => !containsOpeningTagFollowedByString(name)
 			),
 			required: helpers.withMessage(t("common.validation.required2"), required),
 		},
