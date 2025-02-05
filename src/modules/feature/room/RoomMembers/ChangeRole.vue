@@ -42,21 +42,6 @@
 						<label for="roleChangeAdmin" class="ml-10 mt-n2 mb-2 text-sm">
 							{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
 						</label>
-
-						<v-radio
-							v-if="isVisibleOwnerOption"
-							id="roleChangeOwner"
-							:label="t('pages.rooms.members.roomPermissions.owner')"
-							:value="RoleName.Roomowner"
-							color="primary"
-						/>
-						<label
-							v-if="isVisibleOwnerOption"
-							for="roleChangeOwner"
-							class="ml-10 mt-n2 mb-2 text-sm"
-						>
-							{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
-						</label>
 					</v-radio-group>
 				</div>
 			</div>
@@ -105,17 +90,10 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
-	currentUser: {
-		type: Object as PropType<RoomMember>,
-		required: true,
-	},
 });
 const { t } = useI18n();
 const selection = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members")?.value;
-const currentUser = computed(() => props.currentUser);
-
-const isVisibleOwnerOption = ref(false);
 
 if (memberToChangeRole.length > 1) {
 	const roleNamesInProp = memberToChangeRole.map(
@@ -127,9 +105,6 @@ if (memberToChangeRole.length > 1) {
 	}
 } else {
 	selection.value = memberToChangeRole[0]?.roomRoleName;
-	if (currentUser.value.roomRoleName === RoleName.Roomowner) {
-		isVisibleOwnerOption.value = true;
-	}
 }
 
 const infoText = computed(() => {
@@ -146,15 +121,23 @@ const infoText = computed(() => {
 });
 
 const emit = defineEmits<{
-	(e: "confirm", selection: ChangeRoomRoleBodyParamsRoleNameEnum): void;
+	(
+		e: "confirm",
+		selection: ChangeRoomRoleBodyParamsRoleNameEnum,
+		id?: string
+	): void;
 	(e: "cancel"): void;
 }>();
 
 const onConfirm = () => {
-	if (selection.value) {
-		emit("confirm", selection.value as ChangeRoomRoleBodyParamsRoleNameEnum);
-	}
+	if (!selection.value) return;
+	emit(
+		"confirm",
+		selection.value as ChangeRoomRoleBodyParamsRoleNameEnum,
+		props.members.length === 1 ? memberToChangeRole[0].userId : undefined
+	);
 };
+
 const onCancel = () => emit("cancel");
 
 const changeRoleContent = ref();

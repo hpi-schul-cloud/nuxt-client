@@ -79,7 +79,6 @@
 			<ChangeRole
 				:members="membersToChangeRole"
 				:room-name="room?.name || ''"
-				:currentUser="currentUser"
 				@cancel="onDialogClose"
 				@confirm="onChangeRole"
 			/>
@@ -207,8 +206,11 @@ const onOpenRoleDialog = (ids: string[]) => {
 	isChangeRoleDialogOpen.value = true;
 };
 
-const onChangeRole = async (role: ChangeRoomRoleBodyParamsRoleNameEnum) => {
-	await updateMembersRole(role);
+const onChangeRole = async (
+	role: ChangeRoomRoleBodyParamsRoleNameEnum,
+	id?: string
+) => {
+	await updateMembersRole(role, id);
 	isChangeRoleDialogOpen.value = false;
 	selectedIds.value = [];
 };

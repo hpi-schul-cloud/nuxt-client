@@ -149,16 +149,27 @@ export const useRoomMembers = (roomId: string) => {
 	};
 
 	const updateMembersRole = async (
-		roleName: ChangeRoomRoleBodyParamsRoleNameEnum
+		roleName: ChangeRoomRoleBodyParamsRoleNameEnum,
+		id?: string
 	) => {
 		try {
 			await roomApi.roomControllerChangeRolesOfMembers(roomId, {
-				userIds: selectedIds.value,
+				userIds: id ? [id] : selectedIds.value,
 				roleName,
 			});
 
-			roomMembers.value.forEach((member) => {
-				if (selectedIds.value.includes(member.userId)) {
+			if (id) {
+				const member = roomMembers.value.find((member) => member.userId === id);
+				if (member) {
+					member.roomRoleName = roleName;
+					member.displayRoomRole = roomRole[roleName];
+				}
+				return;
+			}
+
+			selectedIds.value.forEach((id) => {
+				const member = roomMembers.value.find((member) => member.userId === id);
+				if (member) {
 					member.roomRoleName = roleName;
 					member.displayRoomRole = roomRole[roleName];
 				}
