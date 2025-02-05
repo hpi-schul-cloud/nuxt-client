@@ -132,10 +132,6 @@ describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 				"components.molecules.copyResult.label.lessonContentGroup",
 			],
 			[
-				CopyApiResponseTypeEnum.LtitoolGroup,
-				"components.molecules.copyResult.label.ltiToolsGroup",
-			],
-			[
 				CopyApiResponseTypeEnum.Metadata,
 				"components.molecules.copyResult.metadata",
 			],

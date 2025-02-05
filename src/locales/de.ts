@@ -606,7 +606,6 @@ export default {
 		"Lern-Materialien",
 	"components.molecules.copyResult.label.lessonContentGroup":
 		"Unterrichtsinhalte",
-	"components.molecules.copyResult.label.ltiToolsGroup": "LTI Tools-Gruppe",
 	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Abgaben",
 	"components.molecules.copyResult.label.text": "Text",

@@ -7,7 +7,6 @@ export const courseFactory = Factory.define<Course>(({ sequence }) => ({
 	color: "#FFFFFF",
 	schoolId: "schoolId",
 	classIds: [],
-	ltiToolIds: [],
 	substitutionIds: [],
 	teacherIds: [],
 }));
