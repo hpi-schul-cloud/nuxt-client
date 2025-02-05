@@ -2663,6 +2663,19 @@ export interface CreateCourseBodyParams {
 /**
  * 
  * @export
+ * @interface CreateCourseResponse
+ */
+export interface CreateCourseResponse {
+    /**
+     * The id of the created course
+     * @type {string}
+     * @memberof CreateCourseResponse
+     */
+    courseId: string;
+}
+/**
+ * 
+ * @export
  * @interface CreateMediaElementBodyParams
  */
 export interface CreateMediaElementBodyParams {
@@ -16104,7 +16117,7 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateCourseResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerCreateCourse(createCourseBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -16192,7 +16205,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<void> {
+        courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<CreateCourseResponse> {
             return localVarFp.courseControllerCreateCourse(createCourseBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -16273,7 +16286,7 @@ export interface CoursesApiInterface {
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
      */
-    courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<void>;
+    courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<CreateCourseResponse>;
 
     /**
      * 
