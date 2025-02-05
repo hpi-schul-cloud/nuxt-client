@@ -206,7 +206,6 @@ export default class CopyModule extends VuexModule {
 		) => {
 			if (type === CopyApiResponseTypeEnum.LessonContentEtherpad) return true;
 			if (type === CopyApiResponseTypeEnum.LessonContentGeogebra) return true;
-			if (type === CopyApiResponseTypeEnum.LessonContentNexboard) return true;
 			if (type === CopyApiResponseTypeEnum.LessonContentTask) return true;
 			if (type === CopyApiResponseTypeEnum.LessonContentText) return true;
 			if (type === CopyApiResponseTypeEnum.LessonContentLernstore) return true;

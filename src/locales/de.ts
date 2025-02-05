@@ -607,7 +607,6 @@ export default {
 	"components.molecules.copyResult.label.lessonContentGroup":
 		"Unterrichtsinhalte",
 	"components.molecules.copyResult.label.ltiToolsGroup": "LTI Tools-Gruppe",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Abgaben",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -617,10 +616,6 @@ export default {
 	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
 	"components.molecules.copyResult.label.toolElements": "Tool-Element",
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Alte neXboard-Abschnitte wurden nicht kopiert, da das Tool von unserer Plattform entfernt wird. Als Ersatz steht nun das innovative Whiteboard-Tool zur Verfügung.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -1746,7 +1741,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"Für den importierten Kurs wird automatisch ein Kursordner angelegt. Schüler:innenbezogene Daten des Originalkurses werden entfernt. Füge anschließend Schüler:innen hinzu und vergib einen Termin für den Kurs.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Achtung: Tausche im Thema enthaltene, mit Nutzerdaten befüllte Tools (z.B. neXboard, Etherpad, GeoGebra) nachträglich manuell aus, da Änderungen daran sich sonst auf den Original-Kurs auswirken! Dateien (Bilder, Videos, Audio) sowie verlinktes Material sind nicht betroffen und können unverändert bleiben.",
+		"Achtung: Tausche im Thema enthaltene, mit Nutzerdaten befüllte Tools (z.B. Etherpad, GeoGebra) nachträglich manuell aus, da Änderungen daran sich sonst auf den Original-Kurs auswirken! Dateien (Bilder, Videos, Audio) sowie verlinktes Material sind nicht betroffen und können unverändert bleiben.",
 	"pages.rooms.importCourse.step_1.text": "Info",
 	"pages.rooms.importCourse.step_2.text": "Code einfügen",
 	"pages.rooms.importCourse.step_2":

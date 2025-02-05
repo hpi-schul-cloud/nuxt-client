@@ -39,7 +39,7 @@
 				<div>
 					<p>{{ $t("components.molecules.copyResult.information") }}</p>
 				</div>
-				<copy-result-modal-list :items="filteredItems" />
+				<copy-result-modal-list :items="items" />
 			</template>
 		</template>
 	</v-custom-dialog>
@@ -86,20 +86,6 @@ export default {
 			return this.copyResultItems;
 		},
 
-		filteredItems() {
-			if (envConfigModule.getEnv.FEATURE_NEXBOARD_COPY_ENABLED) {
-				return this.copyResultItems;
-			}
-
-			return this.copyResultItems.map((item) => {
-				const filteredElements = item.elements.filter(
-					(element) =>
-						element.type !== CopyApiResponseTypeEnum.LessonContentNexboard
-				);
-				return { ...item, elements: filteredElements };
-			});
-		},
-
 		copyResultWarnings() {
 			return [
 				{
@@ -111,11 +97,6 @@ export default {
 					isShow: this.hasEtherpadElement,
 					text: this.$t("components.molecules.copyResult.etherpadCopy.info"),
 					title: this.$t("components.molecules.copyResult.label.etherpad"),
-				},
-				{
-					isShow: this.hasNexboardElement,
-					text: this.nexboardInfoText,
-					title: this.$t("components.molecules.copyResult.label.nexboard"),
 				},
 				{
 					isShow: this.hasDrawingElement,
@@ -159,12 +140,6 @@ export default {
 				)
 			);
 		},
-		hasNexboardElement() {
-			return this.hasElementOfType(
-				this.items,
-				CopyApiResponseTypeEnum.LessonContentNexboard
-			);
-		},
 		hasDrawingElement() {
 			return this.hasElementOfType(
 				this.items,
@@ -197,11 +172,6 @@ export default {
 				? this.$t("components.molecules.copyResult.fileCopy.error")
 				: "";
 			return `${courseFilesText} ${fileErrorText}`.trim();
-		},
-		nexboardInfoText() {
-			return envConfigModule.getEnv.FEATURE_NEXBOARD_COPY_ENABLED
-				? this.$t("components.molecules.copyResult.nexboardCopy.info")
-				: this.$t("components.molecules.copyResult.nexboardCopy.infoTldraw");
 		},
 		externalToolsInfoText() {
 			return envConfigModule.getEnv.FEATURE_CTL_TOOLS_COPY_ENABLED
