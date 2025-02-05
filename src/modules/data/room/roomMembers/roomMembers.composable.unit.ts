@@ -173,7 +173,6 @@ describe("useRoomMembers", () => {
 					...user,
 					userId: user.id,
 					fullName: `${user.lastName}, ${user.firstName}`,
-					roomRoleName: RoleName.Roomviewer,
 					schoolRoleName: RoleName.Teacher,
 					schoolName: "Paul-Gerhardt-Gymnasium",
 				}))
