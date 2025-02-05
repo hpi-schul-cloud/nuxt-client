@@ -8,11 +8,7 @@
 			md="4"
 			xl="3"
 		>
-			<BoardTile
-				v-if="board.isVisible || isTeacher"
-				:board="board"
-				:index="index"
-			/>
+			<BoardTile v-if="board.isVisible" :board="board" :index="index" />
 		</v-col>
 	</v-row>
 </template>
@@ -21,9 +17,6 @@
 import { RoomBoardItem } from "@/types/room/Room";
 import { PropType, toRef } from "vue";
 import BoardTile from "./BoardTile.vue";
-import { authModule } from "@/store";
-
-const isTeacher = authModule.getUserRoles.includes("teacher"); // all teachers can see draft-boards, too
 
 const props = defineProps({
 	boards: { type: Array as PropType<RoomBoardItem[]> },
