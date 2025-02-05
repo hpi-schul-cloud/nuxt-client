@@ -82,7 +82,9 @@ describe("@ui-layout/Sidebar", () => {
 		it("should filter items correctly", async () => {
 			const { wrapper } = setup([]);
 
-			expect(wrapper.find("[data-testid='Teams']").exists()).toBe(false);
+			expect(wrapper.find("[data-testid='sidebar-teams']").exists()).toBe(
+				false
+			);
 		});
 	});
 
@@ -92,7 +94,7 @@ describe("@ui-layout/Sidebar", () => {
 			await nextTick();
 			await nextTick();
 
-			expect(wrapper.find("[data-testid='Teams']").exists()).toBe(true);
+			expect(wrapper.find("[data-testid='sidebar-teams']").exists()).toBe(true);
 		});
 	});
 
@@ -113,7 +115,9 @@ describe("@ui-layout/Sidebar", () => {
 				await nextTick();
 				await nextTick();
 
-				expect(wrapper.find("[data-testid='Aufgaben']").exists()).toBe(true);
+				expect(wrapper.find("[data-testid='sidebar-tasks']").exists()).toBe(
+					true
+				);
 			});
 		});
 	});
