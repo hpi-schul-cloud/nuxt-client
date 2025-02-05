@@ -4,7 +4,6 @@
 		:aria-label="t('pages.roomDetails.ariaLabels.menu')"
 		data-testid="room-menu"
 	>
-		<!-- data-testid="room-action-edit" -->
 		<KebabMenuActionEdit
 			v-if="canEditRoom"
 			@click="() => $emit('room:edit')"
@@ -23,7 +22,6 @@
 			:name="roomName"
 		/>
 
-		<!-- data-testid="room-action-leave-room" -->
 		<KebabMenuActionLeaveRoom
 			v-if="canLeaveRoom"
 			@click="() => $emit('room:leave')"
