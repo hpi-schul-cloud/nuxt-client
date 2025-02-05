@@ -35,15 +35,18 @@ describe("@feature-room/RoomForm", () => {
 	};
 
 	describe("when room name contains < followed by a string", () => {
-		const mockRoom: RoomCreateParams = {
-			name: "Room 1",
-			color: RoomColorEnum.Magenta,
-			startDate: "",
-			endDate: "",
+		const setupRoom = () => {
+			return {
+				name: "Room 1",
+				color: RoomColorEnum.Magenta,
+				startDate: "",
+				endDate: "",
+			};
 		};
 
 		it("should show error message", async () => {
-			const { wrapper } = setup({ room: mockRoom });
+			const room = setupRoom();
+			const { wrapper } = setup({ room });
 
 			const textField = wrapper.findComponent({ name: "VTextField" });
 			const input = textField.find("input");
