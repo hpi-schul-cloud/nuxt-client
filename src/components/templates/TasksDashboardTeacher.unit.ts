@@ -1,27 +1,25 @@
+import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import TasksList from "@/components/organisms/TasksList.vue";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
+import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import { OpenTasksForTeacher } from "@/store/types/tasks";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import mocks from "@@/tests/test-utils/mockDataTasks";
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
-import TasksList from "@/components/organisms/TasksList.vue";
-import { mount } from "@vue/test-utils";
-import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
-import ShareModule from "@/store/share";
 import {
 	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import EnvConfigModule from "@/store/env-config";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import mocks from "@@/tests/test-utils/mockDataTasks";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { mount } from "@vue/test-utils";
+import TasksDashboardTeacher from "./TasksDashboardTeacher.vue";
 
 const { overDueTasksTeacher, dueDateTasksTeacher, noDueDateTasksTeacher } =
 	mocks;
@@ -37,10 +35,6 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 	let shareModuleMock: ShareModule;
 
 	const mountComponent = (attrs = {}) => {
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getCtlToolsTabEnabled: false,
-		});
-
 		const wrapper = mount(TasksDashboardTeacher, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -51,7 +45,6 @@ describe("@/components/templates/TasksDashboardTeacher", () => {
 					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 			...attrs,

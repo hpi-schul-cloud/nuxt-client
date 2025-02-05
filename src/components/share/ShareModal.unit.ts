@@ -2,14 +2,9 @@ import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
-import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
-import {
-	ENV_CONFIG_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
-	SHARE_MODULE_KEY,
-} from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY, SHARE_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -22,24 +17,23 @@ describe("@/components/share/ShareModal", () => {
 	let shareModuleMock: ShareModule;
 	let notifierModuleMock: NotifierModule;
 
-	const setup = (envConfigModuleGetter?: Partial<EnvConfigModule>) => {
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			...envConfigModuleGetter,
-		});
+	const setup = () => {
 		const wrapper = mount(ShareModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 			props: {
 				type: "courses",
 			},
 		});
-		return { wrapper };
+
+		return {
+			wrapper,
+		};
 	};
 
 	beforeEach(() => {
@@ -126,34 +120,20 @@ describe("@/components/share/ShareModal", () => {
 	});
 
 	describe("ctl tool info", () => {
-		describe("ctl tools are enabled", () => {
-			it("should have the correct title", () => {
-				const { wrapper } = setup({ getCtlToolsTabEnabled: true });
+		it("should have the correct title", () => {
+			const { wrapper } = setup();
 
-				const dialog = wrapper.findComponent(vCustomDialog);
-				const cardText = dialog.findComponent({ name: "v-card-text" });
+			const dialog = wrapper.findComponent(vCustomDialog);
+			const cardText = dialog.findComponent({ name: "v-card-text" });
 
-				const infotext = cardText.find(
-					`[data-testid="share-modal-external-tools-info"]`
-				);
+			const infotext = cardText.find(
+				`[data-testid="share-modal-external-tools-info"]`
+			);
 
-				expect(infotext.isVisible()).toBe(true);
-				expect(infotext.text()).toEqual(
-					"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
-				);
-			});
-		});
-
-		describe("when ctl tools are disabled", () => {
-			it("should have the correct title", () => {
-				const { wrapper } = setup({ getCtlToolsTabEnabled: false });
-
-				const infotext = wrapper.find(
-					`[data-testid="share-modal-external-tools-info"]`
-				);
-
-				expect(infotext.exists()).toBe(false);
-			});
+			expect(infotext.isVisible()).toBe(true);
+			expect(infotext.text()).toEqual(
+				"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
+			);
 		});
 	});
 });

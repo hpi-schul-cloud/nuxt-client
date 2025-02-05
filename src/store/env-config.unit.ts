@@ -696,16 +696,6 @@ describe("env-config module", () => {
 			);
 		});
 
-		it("getCtlToolsTabEnabled should get FEATURE_CTL_TOOLS_TAB_ENABLED", () => {
-			const envConfigModule = new EnvConfigModule({});
-			const mockEnvs = envsFactory.build();
-			envConfigModule.env = mockEnvs;
-
-			expect(envConfigModule.getCtlToolsTabEnabled).toStrictEqual(
-				mockEnvs.FEATURE_CTL_TOOLS_TAB_ENABLED
-			);
-		});
-
 		it("getShowOutdatedUsers should get FEATURE_SHOW_OUTDATED_USERS", () => {
 			const envConfigModule = new EnvConfigModule({});
 			envConfigModule.env = envsFactory.build();
@@ -722,16 +712,6 @@ describe("env-config module", () => {
 
 			expect(envConfigModule.getEnableLdapSyncDuringMigration).toStrictEqual(
 				mockEnvs.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION
-			);
-		});
-
-		it("getLtiToolsTabEnabled should get FEATURE_LTI_TOOLS_TAB_ENABLED", () => {
-			const envConfigModule = new EnvConfigModule({});
-			const mockEnvs = envsFactory.build();
-			envConfigModule.env = mockEnvs;
-
-			expect(envConfigModule.getLtiToolsTabEnabled).toStrictEqual(
-				mockEnvs.FEATURE_LTI_TOOLS_TAB_ENABLED
 			);
 		});
 

@@ -10,29 +10,29 @@ import { envConfigModule } from "@/store";
 import AuthModule from "@/store/auth";
 import CommonCartridgeExportModule from "@/store/common-cartridge-export";
 import CopyModule from "@/store/copy";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import { initializeAxios } from "@/utils/api";
 import {
 	AUTH_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
-	NOTIFIER_MODULE_KEY,
 	COURSE_ROOM_DETAILS_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject/injection-keys";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { envsFactory, meResponseFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-jest";
+import { createTestingPinia } from "@pinia/testing";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
@@ -40,7 +40,6 @@ import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
-import { createTestingPinia } from "@pinia/testing";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -127,10 +126,6 @@ const getWrapper = (
 	permissionData = mockPermissionsCourseTeacher,
 	roleName = "teacher"
 ) => {
-	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-		getCtlToolsTabEnabled: false,
-	});
-
 	notifierModule = createModuleMocks(NotifierModule);
 	copyModule = createModuleMocks(CopyModule, {
 		copy: jest.fn(),
@@ -196,7 +191,6 @@ const getWrapper = (
 				loadingStateModule: loadingStateModuleMock,
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				[SHARE_MODULE_KEY.valueOf()]: shareModule,
-				[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				[COMMON_CARTRIDGE_EXPORT_MODULE_KEY.valueOf()]: downloadModule,
 				[COURSE_ROOM_DETAILS_MODULE_KEY.valueOf()]: courseRoomDetailsModule,
 				[AUTH_MODULE_KEY.valueOf()]: authModule,
@@ -606,54 +600,8 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 	});
 
 	describe("tabs", () => {
-		describe("when feature flag is enabled", () => {
+		describe("when clicking in the tools tab", () => {
 			const setup = () => {
-				const envs = envsFactory.build({
-					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				});
-				envConfigModule.setEnvs(envs);
-
-				const wrapper = getWrapper();
-
-				return { wrapper };
-			};
-
-			it("should find tools(new)-tab", () => {
-				const { wrapper } = setup();
-
-				const tabTitle = wrapper.find('[data-testid="tools-tab"]');
-
-				expect(tabTitle.text()).toEqual("pages.courseRooms.tabLabel.tools");
-			});
-		});
-
-		describe("when feature flag is disabled", () => {
-			const setup = () => {
-				const envs = envsFactory.build({
-					FEATURE_CTL_TOOLS_TAB_ENABLED: false,
-				});
-				envConfigModule.setEnvs(envs);
-
-				const wrapper = getWrapper();
-
-				return { wrapper };
-			};
-
-			it("should not find tools(new)-tab", () => {
-				const { wrapper } = setup();
-				const tabTitle = wrapper.find('[data-testid="tools-tab"]');
-
-				expect(tabTitle.exists()).toEqual(false);
-			});
-		});
-
-		describe("when Tools(new) tab is active", () => {
-			const setup = () => {
-				const envs = envsFactory.build({
-					FEATURE_CTL_TOOLS_TAB_ENABLED: true,
-				});
-				envConfigModule.setEnvs(envs);
-
 				const wrapper = getWrapper();
 
 				return { wrapper };

@@ -152,20 +152,12 @@ export default class EnvConfigModule extends VuexModule {
 		return this.env.ACCESSIBILITY_REPORT_EMAIL;
 	}
 
-	get getCtlToolsTabEnabled(): boolean {
-		return this.env.FEATURE_CTL_TOOLS_TAB_ENABLED;
-	}
-
 	get getShowOutdatedUsers(): boolean {
 		return this.env.FEATURE_SHOW_OUTDATED_USERS;
 	}
 
 	get getEnableLdapSyncDuringMigration(): boolean {
 		return this.env.FEATURE_ENABLE_LDAP_SYNC_DURING_MIGRATION;
-	}
-
-	get getLtiToolsTabEnabled(): boolean {
-		return this.env.FEATURE_LTI_TOOLS_TAB_ENABLED;
 	}
 
 	get getCtlToolsCopyEnabled(): boolean {

@@ -35,7 +35,6 @@ export type Course = {
 	classIds: string[];
 	teacherIds: string[];
 	substitutionIds: string[];
-	ltiToolIds: string[];
 	color: string;
 	features?: CourseFeatures[];
 };
