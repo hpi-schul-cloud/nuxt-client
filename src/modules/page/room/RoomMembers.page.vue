@@ -158,6 +158,7 @@ useTitle(pageTitle);
 
 const onFabClick = async () => {
 	await getSchools();
+	await getPotentialMembers(RoleName.Teacher);
 	isMembersDialogOpen.value = true;
 };
 
@@ -196,10 +197,13 @@ const onLeaveRoom = async () => {
 
 const membersToChangeRole = ref<RoomMember[]>([]);
 
-const onOpenRoleDialog = () => {
-	membersToChangeRole.value = memberList.value.filter((member) =>
-		selectedIds.value.includes(member.userId)
-	);
+const onOpenRoleDialog = (ids: string[]) => {
+	membersToChangeRole.value =
+		ids.length === 1
+			? memberList.value.filter((member) => member.userId === ids[0])
+			: memberList.value.filter((member) =>
+					selectedIds.value.includes(member.userId)
+				);
 	isChangeRoleDialogOpen.value = true;
 };
 

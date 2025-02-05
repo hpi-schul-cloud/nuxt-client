@@ -46,7 +46,7 @@
 						<v-radio
 							v-if="isVisibleOwnerOption"
 							id="roleChangeOwner"
-							label="Own"
+							:label="t('pages.rooms.members.roomPermissions.owner')"
 							:value="RoleName.Roomowner"
 							color="primary"
 						/>
