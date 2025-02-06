@@ -47,7 +47,6 @@
 		@update:current-items="onUpdateFilter"
 		@update:model-value="onSelectMembers"
 	>
-		<!-- @update:model-value="onSelectMembers" -->
 		<template #[`item.actions`]="{ item, index }" v-if="isVisibleActionColumn">
 			<KebabMenu
 				v-if="isVisibleActionInRow(item)"
@@ -139,18 +138,12 @@ const onSelectMembers = (userIds: string[]) => {
 };
 
 const onResetSelectedMembers = () => {
-	// selectedUserIds.value = [];
 	emit("select:members", []);
 };
 
 const onRemoveMembers = async (userIds: string[]) => {
 	const shouldRemove = await confirmRemoval(userIds);
-	if (shouldRemove) {
-		// selectedUserIds.value = selectedUserIds.value.filter(
-		// 	(userId) => !userIds.includes(userId)
-		// );
-		emit("remove:members", userIds);
-	}
+	if (shouldRemove) emit("remove:members", userIds);
 };
 
 const confirmRemoval = async (userIds: string[]) => {

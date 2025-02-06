@@ -12,7 +12,7 @@
 					<div class="mb-4">
 						{{ infoText }}
 					</div>
-					<v-radio-group v-model="selection" class="ml-n2">
+					<v-radio-group v-model="selectedRole" class="ml-n2">
 						<v-radio
 							id="roleChangeViewer"
 							:label="t('pages.rooms.members.roomPermissions.viewer')"
@@ -75,7 +75,10 @@
 <script setup lang="ts">
 import { computed, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName } from "@/serverApi/v3";
+import {
+	ChangeRoomRoleBodyParamsRoleNameEnum as RoleEnum,
+	RoleName,
+} from "@/serverApi/v3";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard, VRadio } from "vuetify/lib/components/index.mjs";
 import { RoomMember } from "@data-room";
@@ -92,7 +95,7 @@ const props = defineProps({
 	},
 });
 const { t } = useI18n();
-const selection = ref<string | null>(null);
+const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members")?.value;
 
 if (memberToChangeRole.length > 1) {
@@ -101,10 +104,10 @@ if (memberToChangeRole.length > 1) {
 	);
 
 	if (roleNamesInProp.every((roleName) => roleNamesInProp[0] === roleName)) {
-		selection.value = roleNamesInProp[0];
+		selectedRole.value = roleNamesInProp[0];
 	}
 } else {
-	selection.value = memberToChangeRole[0]?.roomRoleName;
+	selectedRole.value = memberToChangeRole[0]?.roomRoleName;
 }
 
 const infoText = computed(() => {
@@ -121,24 +124,22 @@ const infoText = computed(() => {
 });
 
 const emit = defineEmits<{
-	(
-		e: "confirm",
-		selection: ChangeRoomRoleBodyParamsRoleNameEnum,
-		id?: string
-	): void;
+	(e: "confirm", selectedRole: RoleEnum, id?: string): void;
 	(e: "cancel"): void;
 }>();
 
 const onConfirm = () => {
-	if (!selection.value) return;
+	if (!selectedRole.value) return;
 	emit(
 		"confirm",
-		selection.value as ChangeRoomRoleBodyParamsRoleNameEnum,
+		selectedRole.value as RoleEnum,
 		props.members.length === 1 ? memberToChangeRole[0].userId : undefined
 	);
 };
 
-const onCancel = () => emit("cancel");
+const onCancel = () => {
+	emit("cancel");
+};
 
 const changeRoleContent = ref();
 useFocusTrap(changeRoleContent, {
