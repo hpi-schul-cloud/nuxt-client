@@ -27,7 +27,7 @@
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
-					:scope="BoardMenuScope.LINK_ELEMENT"
+					scope-language-key="components.cardElement.LinkElement"
 					@click="onDelete"
 				/>
 			</BoardMenu>
@@ -37,7 +37,7 @@
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
-					:scope="BoardMenuScope.LINK_ELEMENT"
+					scope-language-key="components.cardElement.LinkElement"
 					@click="onDelete"
 				/>
 			</BoardMenu>

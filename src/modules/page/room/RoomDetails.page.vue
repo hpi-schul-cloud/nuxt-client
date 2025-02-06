@@ -12,6 +12,7 @@
 				</h1>
 				<RoomMenu
 					v-if="isMenuEnabled"
+					:roomName="room?.name"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
 					@room:delete="onDelete"
@@ -45,7 +46,6 @@ import {
 } from "@icons/material";
 import {
 	ConfirmationDialog,
-	useDeleteConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { SelectBoardLayoutDialog } from "@ui-room-details";
@@ -60,7 +60,6 @@ const { t } = useI18n();
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const { deleteRoom, leaveRoom } = useRoomsState();
-const { askDeleteConfirmation } = useDeleteConfirmationDialog();
 const { askConfirmation } = useConfirmationDialog();
 
 const roomDetailsStore = useRoomDetailsStore();
@@ -72,7 +71,7 @@ const pageTitle = computed(() =>
 );
 useTitle(pageTitle);
 
-const { canCreateRoom, canEditRoom, canDeleteRoom } =
+const { canCreateRoom, canEditRoom, canDeleteRoom, canLeaveRoom, canViewRoom } =
 	useRoomAuthorization(room);
 
 const roomTitle = computed(() => {
@@ -83,7 +82,9 @@ const boardLayoutsEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
 );
 
-const isMenuEnabled = computed(() => canEditRoom.value || canDeleteRoom.value);
+const isMenuEnabled = computed(
+	() => canLeaveRoom.value || canEditRoom.value || canViewRoom.value
+);
 const boardLayoutDialogIsOpen = ref(false);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
@@ -101,6 +102,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const fabItems = computed(() => {
 	if (!canCreateRoom.value) return undefined;
+	if (!canEditRoom.value) return undefined;
 
 	const actions = [];
 
@@ -166,17 +168,8 @@ const onManageMembers = () => {
 const onDelete = async () => {
 	if (!room.value || !canDeleteRoom.value) return;
 
-	const shouldDelete = await askDeleteConfirmation(
-		room.value.name,
-		"common.labels.room"
-	);
-
-	if (shouldDelete) {
-		await deleteRoom(room.value.id);
-		router.push({
-			name: "rooms",
-		});
-	}
+	await deleteRoom(room.value.id);
+	router.push({ name: "rooms" });
 };
 
 const onLeaveRoom = async () => {
@@ -192,7 +185,7 @@ const onLeaveRoom = async () => {
 	});
 
 	if (!shouldLeave) return;
-	await leaveRoom(roomId, currentUserId);
+	await leaveRoom(roomId);
 	router.push("/rooms");
 };
 
