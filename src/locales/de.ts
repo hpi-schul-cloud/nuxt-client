@@ -156,7 +156,7 @@ export default {
 	"common.validation.tooLong":
 		"Der eingegebene Text überschreitet die Maximallänge",
 	"common.validation.containsOpeningTag":
-		"Weiterer Text darf nicht direkt auf ein Kleiner-als-Zeichen folgen. Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
+		"Bitte Leerzeichen nach Kleiner-als-Zeichen einfügen.",
 	"common.words.and": "und",
 	"common.words.classes": "Klassen",
 	"common.words.color": "Farbe",
