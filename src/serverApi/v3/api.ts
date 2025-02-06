@@ -1256,37 +1256,6 @@ export interface ComponentLernstorePropsImpl {
 /**
  * 
  * @export
- * @interface ComponentNexboardPropsImpl
- */
-export interface ComponentNexboardPropsImpl {
-    /**
-     * board of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    board: string;
-    /**
-     * description of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    description: string;
-    /**
-     * title of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    title: string;
-    /**
-     * url of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    url: string;
-}
-/**
- * 
- * @export
  * @interface ComponentTextPropsImpl
  */
 export interface ComponentTextPropsImpl {
@@ -1471,12 +1440,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_NEXBOARD_COPY_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -2260,7 +2223,6 @@ export enum CopyApiResponseTypeEnum {
     LessonContentGeogebra = 'LESSON_CONTENT_GEOGEBRA',
     LessonContentGroup = 'LESSON_CONTENT_GROUP',
     LessonContentLernstore = 'LESSON_CONTENT_LERNSTORE',
-    LessonContentNexboard = 'LESSON_CONTENT_NEXBOARD',
     LessonContentTask = 'LESSON_CONTENT_TASK',
     LessonContentText = 'LESSON_CONTENT_TEXT',
     LernstoreMaterial = 'LERNSTORE_MATERIAL',
@@ -4314,10 +4276,10 @@ export interface LdapAuthorizationBodyParams {
 export interface LessonContentResponse {
     /**
      * 
-     * @type {ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl | ComponentNexboardPropsImpl}
+     * @type {ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl}
      * @memberof LessonContentResponse
      */
-    content: ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl | ComponentNexboardPropsImpl;
+    content: ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl;
     /**
      * The id of the Material entity
      * @type {string}
@@ -4360,8 +4322,7 @@ export enum LessonContentResponseComponentEnum {
     GeoGebra = 'geoGebra',
     Internal = 'internal',
     Resources = 'resources',
-    Text = 'text',
-    NeXboard = 'neXboard'
+    Text = 'text'
 }
 
 /**
