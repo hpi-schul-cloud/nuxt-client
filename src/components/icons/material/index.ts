@@ -1,6 +1,7 @@
 /* eslint-disable schulcloud/material-icon-imports */
 import {
 	mdiAccountBoxOutline,
+	mdiAccountEditOutline,
 	mdiAccountCircleOutline,
 	mdiAccountGroupOutline,
 	mdiAccountOffOutline,
@@ -149,6 +150,7 @@ import {
 
 export {
 	mdiAccountBoxOutline,
+	mdiAccountEditOutline,
 	mdiAccountCircleOutline,
 	mdiAccountGroupOutline,
 	mdiAccountOffOutline,

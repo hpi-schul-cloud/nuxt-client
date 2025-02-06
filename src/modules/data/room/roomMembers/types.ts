@@ -1,5 +1,8 @@
 import { RoomMemberResponse } from "@/serverApi/v3";
 
 export type RoomMember = RoomMemberResponse & {
-	fullName: string;
+	isSelectable?: boolean;
+	fullName?: string;
+	displayRoomRole: string;
+	displaySchoolRole: string;
 };
