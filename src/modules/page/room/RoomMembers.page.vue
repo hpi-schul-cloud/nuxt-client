@@ -41,7 +41,7 @@
 
 		<div class="mb-12">
 			<MembersTable
-				v-if="!isLoading"
+				v-if="!isLoading && currentUser"
 				:members="memberList"
 				:currentUser="currentUser"
 				:fixed-position="fixedHeaderOnMobile"

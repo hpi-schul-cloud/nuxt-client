@@ -11,7 +11,7 @@
 			class="ml-4"
 			density="comfortable"
 		>
-			Actions
+			{{ t("pages.rooms.members.tableHeader.actions") }}
 		</v-btn>
 
 		<v-menu activator="#menu-activator">

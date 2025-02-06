@@ -1,10 +1,14 @@
-import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
+import { RoleName } from "@/serverApi/v3";
 import {
 	envsFactory,
 	mountComposable,
 	roomMemberFactory,
 } from "@@/tests/test-utils";
-import { useRoomMemberVisibilityOptions, useRoomMembers } from "@data-room";
+import {
+	RoomMember,
+	useRoomMemberVisibilityOptions,
+	useRoomMembers,
+} from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { computed, ComputedRef } from "vue";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
@@ -60,7 +64,7 @@ describe("useRoomMemberVisibilityOptions", () => {
 
 	const createCurrentUser = (
 		roomRoleName: RoleName
-	): ComputedRef<RoomMemberResponse> => {
+	): ComputedRef<RoomMember> => {
 		return computed(() => ({
 			firstName: "first-name",
 			lastName: "last-name",
@@ -68,6 +72,8 @@ describe("useRoomMemberVisibilityOptions", () => {
 			schoolRoleName: "school-role-name",
 			schoolName: "school-name",
 			userId: "user-id",
+			displayRoomRole: "display-room-role",
+			displaySchoolRole: "display-school-role",
 		}));
 	};
 

@@ -2,6 +2,7 @@ import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { computed, ComputedRef } from "vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { RoomRoles, roleConfigMap } from "./memberVisibilityConfig";
+import { RoomMember } from "./types";
 
 let _instance: ReturnType<typeof useRoomMemberVisibilityOptions> | null = null;
 
@@ -19,7 +20,7 @@ type VisibilityOptionReturnType = {
 };
 
 export const useRoomMemberVisibilityOptions = (
-	currentUser: ComputedRef<RoomMemberResponse>
+	currentUser: ComputedRef<RoomMember>
 ): VisibilityOptionReturnType => {
 	if (_instance) {
 		return _instance;
