@@ -5,16 +5,19 @@
 			{{ t("pages.administration.selected") }}
 		</span>
 
-		<v-btn
-			id="menu-activator"
-			color="primary"
-			class="ml-4"
-			density="comfortable"
-		>
-			{{ t("pages.rooms.members.tableHeader.actions") }}
-		</v-btn>
+		<v-menu>
+			<template v-slot:activator="{ props }">
+				<v-btn
+					v-bind="props"
+					color="primary"
+					class="ml-4"
+					density="comfortable"
+					data-testid="action-menu-button"
+				>
+					{{ t("pages.rooms.members.tableHeader.actions") }}
+				</v-btn>
+			</template>
 
-		<v-menu activator="#menu-activator">
 			<v-list>
 				<KebabMenuActionChangePermission @click="onRoleChange" />
 				<KebabMenuActionRemoveMember @click="onRemove" />
