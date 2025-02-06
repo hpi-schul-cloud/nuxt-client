@@ -16,7 +16,6 @@ import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { useRoomMembers } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { resetInstance } from "../../../data/room/roomMembers/membersVisibleOptions.composable";
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
@@ -39,7 +38,6 @@ describe("MembersTable", () => {
 		});
 		mockRoomMemberCalls = createMock<ReturnType<typeof useRoomMembers>>();
 		mockUseRoomMembers.mockReturnValue(mockRoomMemberCalls);
-		resetInstance();
 	});
 
 	const tableHeaders = [

@@ -15,7 +15,6 @@ import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { roleConfigMap } from "./memberVisibilityConfig";
-import { resetInstance } from "./membersVisibleOptions.composable";
 
 jest.mock("./roomMembers.composable");
 const mockUseRoomMembers = jest.mocked(useRoomMembers);
@@ -59,7 +58,6 @@ describe("useRoomMemberVisibilityOptions", () => {
 		mockRoomMemberCalls = createMock<ReturnType<typeof useRoomMembers>>();
 		mockUseRoomMembers.mockReturnValue(mockRoomMemberCalls);
 		mockOptions();
-		resetInstance();
 	});
 
 	const createCurrentUser = (

@@ -4,10 +4,6 @@ import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { RoomRoles, roleConfigMap } from "./memberVisibilityConfig";
 import { RoomMember } from "./types";
 
-let _instance: ReturnType<typeof useRoomMemberVisibilityOptions> | null = null;
-
-export const resetInstance = () => (_instance = null);
-
 type VisibilityOptionReturnType = {
 	isVisibleSelectionColumn: ComputedRef<boolean>;
 	isVisibleActionColumn: ComputedRef<boolean>;
@@ -22,10 +18,6 @@ type VisibilityOptionReturnType = {
 export const useRoomMemberVisibilityOptions = (
 	currentUser: ComputedRef<RoomMember>
 ): VisibilityOptionReturnType => {
-	if (_instance) {
-		return _instance;
-	}
-
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED } = envConfigModule.getEnv;
 
@@ -69,7 +61,7 @@ export const useRoomMemberVisibilityOptions = (
 		return user.roomRoleName !== RoleName.Roomowner;
 	};
 
-	_instance = {
+	return {
 		isVisibleSelectionColumn,
 		isVisibleActionColumn,
 		isVisibleAddMemberButton,
@@ -79,6 +71,4 @@ export const useRoomMemberVisibilityOptions = (
 		isVisibleActionInRow,
 		isVisibleRemoveMemberButton,
 	};
-
-	return _instance;
 };

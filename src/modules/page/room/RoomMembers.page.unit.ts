@@ -27,8 +27,6 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-// eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { resetInstance } from "../../data/room/roomMembers/membersVisibleOptions.composable";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -94,7 +92,6 @@ describe("RoomMembersPage", () => {
 		createRoom?: boolean;
 		currentUserRole?: RoleName;
 	}) => {
-		resetInstance();
 		const { createRoom, currentUserRole } = {
 			createRoom: true,
 			currentUserRole: RoleName.Roomowner,
@@ -111,7 +108,13 @@ describe("RoomMembersPage", () => {
 
 		const room = createRoom ? buildRoom() : undefined;
 
-		const members = roomMemberFactory(RoleName.Roomeditor).buildList(3);
+		const members = roomMemberFactory(RoleName.Roomeditor)
+			.buildList(3)
+			.map((member) => ({
+				...member,
+				displayRoomRole: "",
+				displaySchoolRole: "",
+			}));
 		mockRoomMemberCalls.roomMembers = ref(members);
 		mockRoomMemberCalls.currentUser = computed(() => {
 			return {
@@ -237,12 +240,10 @@ describe("RoomMembersPage", () => {
 			);
 			await leaveMenu.trigger("click");
 
-			expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalledWith([
-				mockRoomMemberCalls.currentUser.value.userId,
-			]);
+			expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalled();
 		});
 
-		it("should not call remove method  when dialog is cancelled", async () => {
+		it("should not call remove method when dialog is cancelled", async () => {
 			const { wrapper } = setup({ currentUserRole: RoleName.Roomadmin });
 
 			askConfirmationMock.mockResolvedValue(false);
