@@ -37,9 +37,7 @@ export const useRoomAuthorization = (
 			Permission.RoomMembersRemove
 		);
 		canChangeOwner.value = permissions.includes(Permission.RoomChangeOwner);
-		canLeaveRoom.value =
-			!permissions.includes(Permission.RoomChangeOwner) &&
-			authModule.getUserRoles.includes(Roles.Teacher);
+		canLeaveRoom.value = permissions.includes(Permission.RoomLeave);
 	});
 
 	return {
