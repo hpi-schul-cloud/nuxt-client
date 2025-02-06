@@ -185,7 +185,7 @@ const onLeaveRoom = async () => {
 	});
 
 	if (!shouldLeave) return;
-	await leaveRoom(roomId, currentUserId);
+	await leaveRoom(roomId);
 	router.push("/rooms");
 };
 

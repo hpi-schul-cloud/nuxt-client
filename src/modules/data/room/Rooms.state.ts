@@ -36,10 +36,10 @@ export const useRoomsState = () => {
 		}
 	};
 
-	const leaveRoom = async (roomId: string, userId: string) => {
+	const leaveRoom = async (roomId: string) => {
 		isLoading.value = true;
 		try {
-			await roomApi.roomControllerRemoveMembers(roomId, { userIds: [userId] });
+			await roomApi.roomControllerLeaveRoom(roomId);
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
