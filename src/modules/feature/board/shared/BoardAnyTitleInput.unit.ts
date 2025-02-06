@@ -140,4 +140,75 @@ describe("BoardAnyTitleTitleInput", () => {
 			expect(wrapper.vm.modelValue).toBe(newValue);
 		});
 	});
+
+	describe("when a value containing a < directly followed by a string is entered", () => {
+		describe("when scope is board", () => {
+			it("should display error message", async () => {
+				setup({ isEditMode: true, scope: "board" });
+
+				const textAreaComponent = wrapper.findComponent({ name: "VTextField" });
+				await textAreaComponent.setValue("<abc123");
+
+				expect(wrapper.text()).toContain(
+					"common.validation.containsOpeningTag"
+				);
+			});
+
+			it("should not emit update:value", async () => {
+				setup({ isEditMode: true, scope: "board" });
+
+				const textAreaComponent = wrapper.findComponent({ name: "VTextField" });
+				await textAreaComponent.setValue("<abc123");
+				const emitted = wrapper.emitted();
+
+				expect(emitted["update:value"]).toBeUndefined();
+			});
+		});
+
+		describe("when scope is card", () => {
+			it("should display error message", async () => {
+				setup({ isEditMode: true, scope: "card" });
+
+				const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+				await textAreaComponent.setValue("<abc123");
+
+				expect(wrapper.text()).toContain(
+					"common.validation.containsOpeningTag"
+				);
+			});
+
+			it("should not emit update:value", async () => {
+				setup({ isEditMode: true, scope: "card" });
+
+				const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+				await textAreaComponent.setValue("<abc123");
+				const emitted = wrapper.emitted();
+
+				expect(emitted["update:value"]).toBeUndefined();
+			});
+		});
+
+		describe("when scope is column", () => {
+			it("should display error message", async () => {
+				setup({ isEditMode: true, scope: "column" });
+
+				const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+				await textAreaComponent.setValue("<abc123");
+
+				expect(wrapper.text()).toContain(
+					"common.validation.containsOpeningTag"
+				);
+			});
+
+			it("should not emit update:value", async () => {
+				setup({ isEditMode: true, scope: "column" });
+
+				const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
+				await textAreaComponent.setValue("<abc123");
+				const emitted = wrapper.emitted();
+
+				expect(emitted["update:value"]).toBeUndefined();
+			});
+		});
+	});
 });

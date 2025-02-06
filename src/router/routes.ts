@@ -15,7 +15,7 @@ import {
 	REGEX_H5P_ID,
 	REGEX_ID,
 	REGEX_UUID,
-} from "@/utils/validationUtil";
+} from "@/utils/validation";
 import { isDefined } from "@vueuse/core";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
