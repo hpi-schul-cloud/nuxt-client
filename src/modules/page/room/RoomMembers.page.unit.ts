@@ -16,11 +16,11 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
-import { AddMembers, MembersTable } from "@feature-room";
+import { AddMembers, ChangeRole, MembersTable } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { VueWrapper } from "@vue/test-utils";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -257,6 +257,40 @@ describe("RoomMembersPage", () => {
 			await leaveMenu.trigger("click");
 
 			expect(mockRoomMemberCalls.removeMembers).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("onRemoveMembers", () => {
+		it("should call 'removeMembers' method", () => {
+			mockRoomMemberCalls.isLoading = ref(false);
+			const { wrapper } = setup();
+
+			const membersTable = wrapper.findComponent(MembersTable);
+			membersTable.vm.$emit("remove:members");
+			expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalled();
+		});
+	});
+
+	describe("onChangeRole", () => {
+		it("should call 'updateMembersRole' method", async () => {
+			mockRoomMemberCalls.isLoading = ref(false);
+			const { wrapper, members } = setup();
+			await nextTick();
+
+			const membersTable = wrapper.findComponent(MembersTable);
+			membersTable.vm.$emit("change:permission", [members[1].userId]);
+			await nextTick();
+
+			const changeRoleDialog = wrapper.findComponent(ChangeRole);
+			changeRoleDialog.vm.$emit(
+				"confirm",
+				RoleName.Roomeditor,
+				members[1].userId
+			);
+			expect(mockRoomMemberCalls.updateMembersRole).toHaveBeenCalledWith(
+				RoleName.Roomeditor,
+				members[1].userId
+			);
 		});
 	});
 
