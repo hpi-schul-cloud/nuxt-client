@@ -94,8 +94,6 @@ export default {
 					return this.$t("components.molecules.copyResult.label.etherpad");
 				case CopyApiResponseTypeEnum.LessonContentText:
 					return this.$t("components.molecules.copyResult.label.text");
-				case CopyApiResponseTypeEnum.LessonContentNexboard:
-					return this.$t("components.molecules.copyResult.label.nexboard");
 				case CopyApiResponseTypeEnum.LessonContentLernstore:
 					return this.$t("common.words.lernstore");
 				case CopyApiResponseTypeEnum.LessonContentTask:
