@@ -159,5 +159,6 @@ useFocusTrap(changeRoleContent, {
 <style scoped>
 .radio-label {
 	font-size: 14px;
+	line-height: var(--line-height-lg);
 }
 </style>
