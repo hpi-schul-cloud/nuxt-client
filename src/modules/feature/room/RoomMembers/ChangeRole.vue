@@ -19,10 +19,7 @@
 							:value="RoleName.Roomviewer"
 							color="primary"
 						/>
-						<label
-							for="roleChangeViewer"
-							class="ml-10 mt-n2 mb-2 text-grey radio-label"
-						>
+						<label for="roleChangeViewer" class="ml-10 mt-n2 mb-2 radio-label">
 							{{ t("pages.rooms.members.roleChange.Roomviewer.subText") }}
 						</label>
 
@@ -32,10 +29,7 @@
 							:value="RoleName.Roomeditor"
 							color="primary"
 						/>
-						<label
-							for="roleChangeEditor"
-							class="ml-10 mt-n2 mb-2 text-grey radio-label"
-						>
+						<label for="roleChangeEditor" class="ml-10 mt-n2 mb-2 radio-label">
 							{{ t("pages.rooms.members.roleChange.Roomeditor.subText") }}
 						</label>
 
@@ -45,10 +39,7 @@
 							:value="RoleName.Roomadmin"
 							color="primary"
 						/>
-						<label
-							for="roleChangeAdmin"
-							class="ml-10 mt-n2 mb-2 text-grey radio-label"
-						>
+						<label for="roleChangeAdmin" class="ml-10 mt-n2 mb-2 radio-label">
 							{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
 						</label>
 					</v-radio-group>
@@ -156,9 +147,10 @@ useFocusTrap(changeRoleContent, {
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .radio-label {
 	font-size: 14px;
 	line-height: var(--line-height-lg);
+	opacity: var(--v-medium-emphasis-opacity);
 }
 </style>
