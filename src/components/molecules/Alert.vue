@@ -10,7 +10,7 @@
 		border="start"
 		@update:modelValue="closeNotification"
 	>
-		<div class="alert-text mr-2">
+		<div class="alert-text mr-2" data-testId="alert-text">
 			{{ text }}
 		</div>
 	</v-alert>
