@@ -12,6 +12,7 @@
 					color="primary"
 					class="ml-4"
 					density="comfortable"
+					elevation="0"
 					data-testid="action-menu-button"
 				>
 					{{ t("pages.rooms.members.tableHeader.actions") }}
