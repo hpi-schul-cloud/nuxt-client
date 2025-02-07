@@ -612,7 +612,6 @@ export default {
 	"components.molecules.copyResult.label.lernstoreMaterialGroup":
 		"навчальні матеріали",
 	"components.molecules.copyResult.label.lessonContentGroup": "зміст уроку",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "підпорядкування",
 	"components.molecules.copyResult.label.text": "Текст",
 	"components.molecules.copyResult.label.tldraw": "Дошка",
@@ -623,10 +622,6 @@ export default {
 	"components.molecules.copyResult.label.toolElements":
 		"Інструментальний елемент",
 	"components.molecules.copyResult.metadata": "Загальна інформація",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Старі розділи neXboard не були скопійовані, оскільки інструмент видаляється з нашої платформи. Як заміна, інноваційний інструмент для роботи з дошкою tldraw тепер доступний у колонці дошки.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -1746,7 +1741,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"Папка курсу створюється для імпортованого курсу автоматично. Дані про учнів із вихідного курсу буде видалено. Потім додайте студентів та запишіть їх на курс.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Увага: замініть інструменти даними користувача, які згодом буде включено в тему, вручну (наприклад, neXboard, Etherpad, GeoGebra), інакше зміни вплинуть на вихідний курс! Файлів (зображення, відео, аудіо) та пов’язаних матеріалів це не стосується і вони можуть залишатися без змін.",
+		"Увага: замініть інструменти даними користувача, які згодом буде включено в тему, вручну (наприклад, Etherpad, GeoGebra), інакше зміни вплинуть на вихідний курс! Файлів (зображення, відео, аудіо) та пов’язаних матеріалів це не стосується і вони можуть залишатися без змін.",
 	"pages.rooms.importCourse.step_1.text": "Інформація",
 	"pages.rooms.importCourse.step_2.text": "Вставити код",
 	"pages.rooms.importCourse.step_2":

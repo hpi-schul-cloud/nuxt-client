@@ -600,7 +600,6 @@ export default {
 	"components.molecules.copyResult.label.lernstoreMaterialGroup":
 		"Learning materials",
 	"components.molecules.copyResult.label.lessonContentGroup": "Lesson contents",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Submissions",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -610,10 +609,6 @@ export default {
 	"components.molecules.copyResult.label.userGroup": "User Group",
 	"components.molecules.copyResult.label.toolElements": "Tool Element",
 	"components.molecules.copyResult.metadata": "General Information",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"Content is not copied for data protection reasons and must be added again.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Old neXboard sections have not been copied as the tool is being removed from our platform. As a replacement, the innovative whiteboard tool tldraw is now available in the column board.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -1716,7 +1711,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"A course folder is automatically created for the imported course. Student-related data from the original course will be removed. Then add students and make an appointment for the course.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Attention: Manually replace tools with user data which are included in the topic subsequently (e.g. neXboard, Etherpad, GeoGebra), because changes to this will otherwise affect the original course! Files (images, videos, audio) and linked material are not affected and can remain unchanged.",
+		"Attention: Manually replace tools with user data which are included in the topic subsequently (e.g. Etherpad, GeoGebra), because changes to this will otherwise affect the original course! Files (images, videos, audio) and linked material are not affected and can remain unchanged.",
 	"pages.rooms.importCourse.step_1.text": "Info",
 	"pages.rooms.importCourse.step_2.text": "Paste the code",
 	"pages.rooms.importCourse.step_2":

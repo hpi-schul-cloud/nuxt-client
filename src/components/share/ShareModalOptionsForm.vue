@@ -1,14 +1,14 @@
 <template>
 	<v-checkbox
 		v-model="shareOptions.isSchoolInternal"
-		data-testid="isSchoolInternal"
+		data-testId="isSchoolInternal"
 		:label="t('components.molecules.share.options.schoolInternally')"
 		:hide-details="true"
 		density="comfortable"
 	/>
 	<v-checkbox
 		v-model="shareOptions.hasExpiryDate"
-		data-testid="hasExpiryDate"
+		data-testId="hasExpiryDate"
 		:label="t('components.molecules.share.options.expiresInDays')"
 		:hide-details="true"
 		density="comfortable"

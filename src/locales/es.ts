@@ -613,7 +613,6 @@ export default {
 		"Materiales de aprendizaje",
 	"components.molecules.copyResult.label.lessonContentGroup":
 		"Contenidos de la lección",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Envíos",
 	"components.molecules.copyResult.label.text": "Texto",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -624,10 +623,6 @@ export default {
 	"components.molecules.copyResult.label.toolElements":
 		"Elemento de herramienta",
 	"components.molecules.copyResult.metadata": "Información general",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Las antiguas secciones de neXboard no se han copiado, ya que la herramienta se está retirando de nuestra plataforma. Como reemplazo, la innovadora herramienta de pizarra digital tldraw está ahora disponible en el tablero de columnas.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -1763,7 +1758,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"Se crea automáticamente una carpeta de curso para el curso importado. Se eliminarán los datos de los estudiantes del curso original. A continuación, añade estudiantes y programa el horario del curso.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Atención: reemplaza manualmente las herramientas con datos de usuario que se incluyen en el tema posteriormente (por ejemplo, nexBoard, Etherpad, GeoGebra), ya que los cambios en esto afectarán al curso original. Los archivos (imágenes, vídeos y audios) y el material vinculado no se ven afectados y pueden permanecer sin cambios.",
+		"Atención: reemplaza manualmente las herramientas con datos de usuario que se incluyen en el tema posteriormente (por ejemplo, Etherpad, GeoGebra), ya que los cambios en esto afectarán al curso original. Los archivos (imágenes, vídeos y audios) y el material vinculado no se ven afectados y pueden permanecer sin cambios.",
 	"pages.rooms.importCourse.step_1.text": "Información",
 	"pages.rooms.importCourse.step_2.text": "Pega el código",
 	"pages.rooms.importCourse.step_2":

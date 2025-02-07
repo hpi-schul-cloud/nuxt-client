@@ -20,10 +20,6 @@ const mockEtherpadItem = {
 	title: "Etherpad Element Title",
 	type: CopyApiResponseTypeEnum.LessonContentEtherpad,
 };
-const mockNexboardItem = {
-	title: "Nexboard Element Title",
-	type: CopyApiResponseTypeEnum.LessonContentNexboard,
-};
 const mockCourseGroupItem = {
 	title: "CourseGroup Group Example",
 	type: CopyApiResponseTypeEnum.CoursegroupGroup,
@@ -37,7 +33,6 @@ const mockLessonResultItems = (
 	elements = [
 		mockGeoGebraItem,
 		mockEtherpadItem,
-		mockNexboardItem,
 		mockCourseGroupItem,
 		mockFileItem,
 	]
@@ -271,18 +266,12 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 				"components.molecules.copyResult.label.etherpad",
 				CopyApiResponseTypeEnum.LessonContentEtherpad,
 			],
-			[
-				"components.molecules.copyResult.label.nexboard",
-				CopyApiResponseTypeEnum.LessonContentNexboard,
-			],
 			["common.words.courseGroups", CopyApiResponseTypeEnum.CoursegroupGroup],
 			[
 				"components.molecules.copyResult.label.files",
 				CopyApiResponseTypeEnum.File,
 			],
 		])("should render if there is a %s item", (title, type) => {
-			const envs = envsFactory.build({ FEATURE_NEXBOARD_COPY_ENABLED: true });
-			envConfigModule.setEnvs(envs);
 			const copyResultItems = mockLessonResultItems();
 			copyResultItems[0].elements = [
 				{
@@ -315,7 +304,6 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 							elements: [
 								mockGeoGebraItem,
 								mockEtherpadItem,
-								mockNexboardItem,
 								mockCourseGroupItem,
 								mockFileItem,
 							],
@@ -364,7 +352,6 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 							elements: [
 								mockGeoGebraItem,
 								mockEtherpadItem,
-								mockNexboardItem,
 								mockCourseGroupItem,
 								mockFileItem,
 							],
