@@ -9,12 +9,11 @@ import ShareModule from "@/store/share";
 import TasksModule from "@/store/tasks";
 import {
 	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { meResponseFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -64,10 +63,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	let wrapper: VueWrapper;
 
 	const mountComponent = (options = {}) => {
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getCtlToolsTabEnabled: false,
-		});
-
 		return mount(TasksDashboardMain, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
@@ -79,7 +74,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
 					authModule: authModuleMock,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 				mocks: {
 					$router,
