@@ -35,6 +35,7 @@
 					:error="showError()"
 					:hint="selectionHint"
 					persistent-hint
+					data-testId="import-destination-select"
 				/>
 			</div>
 		</template>
