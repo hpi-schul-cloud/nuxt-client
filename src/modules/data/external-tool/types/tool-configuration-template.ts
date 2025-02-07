@@ -1,3 +1,4 @@
+import { ExternalToolMediumResponse } from "@/serverApi/v3";
 import { ToolParameter } from "@/store/external-tool";
 
 export interface ExternalToolConfigurationTemplate {
@@ -10,6 +11,8 @@ export interface ExternalToolConfigurationTemplate {
 	logoUrl?: string;
 
 	parameters: ToolParameter[];
+
+	medium?: ExternalToolMediumResponse;
 }
 
 export interface SchoolExternalToolConfigurationTemplate
