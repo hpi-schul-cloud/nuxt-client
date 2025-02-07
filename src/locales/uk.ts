@@ -612,8 +612,6 @@ export default {
 	"components.molecules.copyResult.label.lernstoreMaterialGroup":
 		"навчальні матеріали",
 	"components.molecules.copyResult.label.lessonContentGroup": "зміст уроку",
-	"components.molecules.copyResult.label.ltiToolsGroup":
-		"Група інструментів LTI",
 	"components.molecules.copyResult.label.submissions": "підпорядкування",
 	"components.molecules.copyResult.label.text": "Текст",
 	"components.molecules.copyResult.label.tldraw": "Дошка",
