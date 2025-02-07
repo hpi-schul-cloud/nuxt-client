@@ -34,6 +34,7 @@ export class SchoolExternalToolMapper {
 					ExternalToolMapper.mapToToolParameter(parameter)
 			),
 			isDeactivated: false,
+			medium: response.medium,
 		};
 
 		return mapped;
