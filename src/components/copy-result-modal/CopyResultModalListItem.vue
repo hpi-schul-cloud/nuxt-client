@@ -102,8 +102,6 @@ export default {
 					return this.$t(
 						"components.molecules.copyResult.label.lessonContentGroup"
 					);
-				case CopyApiResponseTypeEnum.LtitoolGroup:
-					return this.$t("components.molecules.copyResult.label.ltiToolsGroup");
 				case CopyApiResponseTypeEnum.Metadata:
 					return this.$t("components.molecules.copyResult.metadata");
 				case CopyApiResponseTypeEnum.SubmissionGroup:

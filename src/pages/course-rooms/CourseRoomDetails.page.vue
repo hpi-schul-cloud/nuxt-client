@@ -236,9 +236,6 @@ export default defineComponent({
 			return this.currentTab?.component;
 		},
 		tabItems() {
-			const ctlToolsTabEnabled = envConfigModule.getCtlToolsTabEnabled;
-			const ltiToolsTabEnabled = envConfigModule.getLtiToolsTabEnabled;
-
 			const tabs = [
 				{
 					name: "learn-content",
@@ -250,34 +247,22 @@ export default defineComponent({
 				},
 			];
 
-			if (ctlToolsTabEnabled) {
-				const ctlToolFabItems = {
-					icon: mdiPlus,
-					title: this.$t("common.actions.add"),
-					ariaLabel: this.$t("common.actions.add"),
-					dataTestId: "add-tool-button",
-					href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
-				};
+			const ctlToolFabItems = {
+				icon: mdiPlus,
+				title: this.$t("common.actions.add"),
+				ariaLabel: this.$t("common.actions.add"),
+				dataTestId: "add-tool-button",
+				href: `/tools/context/tool-configuration?contextId=${this.courseId}&contextType=course`,
+			};
 
-				tabs.push({
-					name: "tools",
-					label: this.$t("pages.courseRooms.tabLabel.tools"),
-					icon: mdiPuzzleOutline,
-					dataTestId: "tools-tab",
-					component: RoomExternalToolsOverview,
-					fabItems: this.canEditTools ? ctlToolFabItems : undefined,
-				});
-			}
-
-			if (ltiToolsTabEnabled) {
-				tabs.push({
-					name: "old-tools",
-					label: this.$t("pages.courseRooms.tabLabel.toolsOld"),
-					icon: mdiPuzzleOutline,
-					dataTestId: "old-tools-tab",
-					href: `/courses/${this.roomData.roomId}/?activeTab=tools`,
-				});
-			}
+			tabs.push({
+				name: "tools",
+				label: this.$t("pages.courseRooms.tabLabel.tools"),
+				icon: mdiPuzzleOutline,
+				dataTestId: "tools-tab",
+				component: RoomExternalToolsOverview,
+				fabItems: this.canEditTools ? ctlToolFabItems : undefined,
+			});
 
 			tabs.push({
 				name: "groups",

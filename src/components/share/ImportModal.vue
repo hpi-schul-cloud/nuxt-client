@@ -117,7 +117,6 @@
 
 <script setup>
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { mdiInformation } from "@icons/material";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -130,7 +129,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const nameInput = ref(undefined);
 
 const rules = reactive({
@@ -150,10 +148,7 @@ const onConfirm = () => {
 const onCancel = () => emit("cancel");
 
 const showCtlToolsInfo = computed(() => {
-	return (
-		envConfigModule.getCtlToolsTabEnabled &&
-		(props.parentType === "courses" || props.parentType === "columnBoard")
-	);
+	return props.parentType === "courses" || props.parentType === "columnBoard";
 });
 
 const showAlertInfo = computed(() => {
