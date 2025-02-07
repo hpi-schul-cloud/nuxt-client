@@ -3,7 +3,6 @@ import {
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
-import { ComponentProps } from "vue-component-type-helpers";
 import BoardGrid from "./BoardGrid.vue";
 import { roomBoardTileListFactory } from "@@/tests/test-utils";
 import BoardTile from "./BoardTile.vue";
