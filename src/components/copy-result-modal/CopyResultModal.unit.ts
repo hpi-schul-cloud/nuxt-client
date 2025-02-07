@@ -146,11 +146,10 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			);
 		});
 
-		describe("when there is no failed file and CTL_TOOLS_COPY & CTL_TOOLS_TAB_ENABLED feature flag is enabled", () => {
+		describe("when there is no failed file and CTL_TOOLS_COPY feature flag is enabled", () => {
 			describe("when the item has element of type external tool", () => {
 				const setup = () => {
 					const envs = envsFactory.build({
-						FEATURE_CTL_TOOLS_TAB_ENABLED: true,
 						FEATURE_CTL_TOOLS_COPY_ENABLED: true,
 					});
 					envConfigModule.setEnvs(envs);
@@ -186,7 +185,6 @@ describe("@/components/copy-result-modal/CopyResultModal", () => {
 			describe("when there is an item of type ExternalToolElement", () => {
 				const setup = () => {
 					const envs = envsFactory.build({
-						FEATURE_CTL_TOOLS_TAB_ENABLED: true,
 						FEATURE_CTL_TOOLS_COPY_ENABLED: true,
 					});
 					envConfigModule.setEnvs(envs);

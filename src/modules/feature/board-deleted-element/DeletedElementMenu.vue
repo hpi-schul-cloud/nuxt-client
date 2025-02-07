@@ -6,7 +6,7 @@
 	>
 		<KebabMenuActionDelete
 			@click="onDelete"
-			:scope="BoardMenuScope.DELETED_ELEMENT"
+			scope-language-key="components.cardElement.deletedElement"
 		/>
 	</BoardMenu>
 </template>

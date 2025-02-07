@@ -13,7 +13,7 @@
 					{{ t("pages.rooms.members.manage") }}
 				</h1>
 				<KebabMenu
-					v-if="isVisibleLeaveRoomButton"
+					v-if="canLeaveRoom"
 					class="mx-2"
 					data-testid="room-member-menu"
 				>
@@ -103,8 +103,14 @@ import {
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
-import { MembersTable, AddMembers, ChangeRole } from "@feature-room";
+import {
+	MembersTable,
+	AddMembers,
+	ChangeRole,
+	useRoomAuthorization,
+} from "@feature-room";
 import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName } from "@/serverApi/v3";
+
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import {
@@ -147,11 +153,10 @@ const fixedHeaderOnMobile = ref({
 const { y } = useElementBounding(wireframe);
 const { askConfirmation } = useConfirmationDialog();
 
-const {
-	isVisibleAddMemberButton,
-	isVisibleLeaveRoomButton,
-	isVisiblePageInfoText,
-} = useRoomMemberVisibilityOptions(currentUser);
+const { canLeaveRoom } = useRoomAuthorization(room);
+
+const { isVisibleAddMemberButton, isVisiblePageInfoText } =
+	useRoomMemberVisibilityOptions(currentUser);
 
 useTitle(pageTitle);
 

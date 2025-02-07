@@ -606,7 +606,6 @@ export default {
 		"Lern-Materialien",
 	"components.molecules.copyResult.label.lessonContentGroup":
 		"Unterrichtsinhalte",
-	"components.molecules.copyResult.label.ltiToolsGroup": "LTI Tools-Gruppe",
 	"components.molecules.copyResult.label.submissions": "Abgaben",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -1913,6 +1912,9 @@ export default {
 		"Beim Einfügen des Textes aus dem Zwischenspeicher ist ein Fehler aufgetreten. Bitte fügen Sie den Text manuell ein.",
 	"pages.tool.settings": "Einstellungen",
 	"pages.tool.title": "Konfiguration externer Tools",
+	"pages.tool.medium": "Externes Medium",
+	"pages.tool.medium.mediumId": "Medium-Id",
+	"pages.tool.medium.mediumSourceId": "Medienkatalog-Id",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.button.startMigration": "Umzug starten",

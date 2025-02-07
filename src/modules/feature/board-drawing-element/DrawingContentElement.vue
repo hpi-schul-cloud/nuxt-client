@@ -29,7 +29,7 @@
 						/>
 						<KebabMenuActionDelete
 							@click="onDeleteElement"
-							:scope="BoardMenuScope.DRAWING_ELEMENT"
+							scope-language-key="components.cardElement.drawingElement"
 						/>
 					</BoardMenu>
 				</template>

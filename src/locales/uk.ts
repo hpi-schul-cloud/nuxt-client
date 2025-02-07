@@ -612,8 +612,6 @@ export default {
 	"components.molecules.copyResult.label.lernstoreMaterialGroup":
 		"навчальні матеріали",
 	"components.molecules.copyResult.label.lessonContentGroup": "зміст уроку",
-	"components.molecules.copyResult.label.ltiToolsGroup":
-		"Група інструментів LTI",
 	"components.molecules.copyResult.label.submissions": "підпорядкування",
 	"components.molecules.copyResult.label.text": "Текст",
 	"components.molecules.copyResult.label.tldraw": "Дошка",
@@ -1908,6 +1906,9 @@ export default {
 	"pages.tool.select.nodata": "Інструмент відсутній",
 	"pages.tool.settings": "Параметри",
 	"pages.tool.title": "Конфігурація зовнішніх інструментів",
+	"pages.tool.medium": "Зовнішнє середовище",
+	"pages.tool.medium.mediumId": "Середній",
+	"pages.tool.medium.mediumSourceId": "Ідентифікатор медіа каталогу",
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",
 	"pages.userMigration.button.skip": "Не зараз",
 	"pages.userMigration.button.startMigration": "почати рухатися",

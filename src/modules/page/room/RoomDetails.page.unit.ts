@@ -2,7 +2,11 @@ import * as serverApi from "@/serverApi/v3/api";
 import { BoardLayout } from "@/serverApi/v3/api";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { envsFactory, mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import {
+	envsFactory,
+	meResponseFactory,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
@@ -19,6 +23,8 @@ import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { authModule } from "@/store";
+import AuthModule from "@/store/auth";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -30,11 +36,14 @@ jest.mock("@data-room/Rooms.state");
 
 jest.mock("@feature-room/roomAuthorization.composable");
 const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
+	canAddRoomMembers: ref(false),
+	canChangeOwner: ref(false),
 	canCreateRoom: ref(false),
 	canViewRoom: ref(false),
 	canEditRoom: ref(false),
 	canDeleteRoom: ref(false),
-	canLeaveRoom: ref(false),
+	canLeaveRoom: ref(true),
+	canRemoveRoomMembers: ref(false),
 };
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
@@ -43,6 +52,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	beforeEach(() => {
 		setupStores({
+			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
 		});
 
@@ -52,6 +62,9 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			rooms: ref([]),
 		});
 		jest.mocked(useRoomsState).mockReturnValue(useRoomsStateMock);
+
+		const mockMe = meResponseFactory.build();
+		authModule.setMe(mockMe);
 	});
 
 	afterEach(() => {
@@ -179,16 +192,33 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 		});
 
-		describe("and user does not have permission to edit nor to delete room", () => {
+		describe("and user does not have permission to edit, leave nor to delete room", () => {
 			it("should not render kebab menu", () => {
 				roomPermissions.canEditRoom.value = false;
 				roomPermissions.canDeleteRoom.value = false;
+				roomPermissions.canLeaveRoom.value = false;
 
 				const { wrapper } = setup();
 
 				const menu = wrapper.findComponent({ name: "RoomMenu" });
 
 				expect(menu.exists()).toBe(false);
+			});
+		});
+	});
+
+	describe("when user deletes the room", () => {
+		it("should reroute to rooms overview page", async () => {
+			roomPermissions.canDeleteRoom.value = true;
+			roomPermissions.canViewRoom.value = true;
+
+			const { wrapper, router } = setup();
+
+			const menu = wrapper.getComponent({ name: "RoomMenu" });
+			await menu.vm.$emit("room:delete");
+
+			expect(router.push).toHaveBeenCalledWith({
+				name: "rooms",
 			});
 		});
 	});
@@ -227,38 +257,6 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(router.push).toHaveBeenCalledWith({
 					name: "room-members",
 					params: { id: room.id },
-				});
-			});
-		});
-
-		describe("and user clicks on delete room", () => {
-			it("should open confirmation dialog", async () => {
-				const { wrapper } = setup();
-
-				const menu = wrapper.getComponent({ name: "RoomMenu" });
-				await menu.vm.$emit("room:delete");
-
-				const confirmBtn = wrapper.findComponent(
-					"[data-testid='dialog-confirm']"
-				);
-
-				expect(confirmBtn.exists()).toBe(true);
-			});
-
-			describe("and user confirms deletion", () => {
-				it("should delete room", async () => {
-					const { wrapper, useRoomsStateMock } = setup();
-
-					const menu = wrapper.getComponent({ name: "RoomMenu" });
-					await menu.vm.$emit("room:delete");
-
-					const confirmBtn = wrapper.findComponent(
-						"[data-testid='dialog-confirm']"
-					);
-
-					await confirmBtn.trigger("click");
-
-					expect(useRoomsStateMock.deleteRoom).toHaveBeenCalled();
 				});
 			});
 		});

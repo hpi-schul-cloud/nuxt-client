@@ -47,6 +47,7 @@
 				/>
 			</template>
 		</v-autocomplete>
+		<slot name="aboveSettings" :selectedTemplate="selectedTemplate" />
 		<h2
 			v-if="
 				displaySettingsTitle &&

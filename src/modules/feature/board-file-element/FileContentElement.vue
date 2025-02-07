@@ -30,7 +30,7 @@
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
 					:name="fileProperties.name"
-					:scope="BoardMenuScope.FILE_ELEMENT"
+					scope="components.cardElement.fileElement"
 					@click="onDelete"
 				/>
 			</BoardMenu>
@@ -46,7 +46,7 @@
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
-					:scope="BoardMenuScope.FILE_ELEMENT"
+					scope-language-key="components.cardElement.fileElement"
 					@click="onDelete"
 				/>
 			</BoardMenu>

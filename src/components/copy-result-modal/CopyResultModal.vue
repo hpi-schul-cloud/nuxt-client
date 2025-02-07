@@ -109,9 +109,7 @@ export default {
 					title: this.$t("components.molecules.copyResult.label.files"),
 				},
 				{
-					isShow:
-						this.isFeatureCtlToolsEnabled &&
-						(this.hasExternalTool || this.hasExternalToolElement),
+					isShow: this.hasExternalTool || this.hasExternalToolElement,
 					text: this.externalToolsInfoText,
 					title: this.$t("components.molecules.copyResult.label.externalTools"),
 				},
@@ -154,9 +152,6 @@ export default {
 				this.items,
 				CopyApiResponseTypeEnum.CoursegroupGroup
 			);
-		},
-		isFeatureCtlToolsEnabled() {
-			return envConfigModule.getCtlToolsTabEnabled;
 		},
 		hasErrors() {
 			return this.items.length > 0;

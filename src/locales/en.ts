@@ -600,7 +600,6 @@ export default {
 	"components.molecules.copyResult.label.lernstoreMaterialGroup":
 		"Learning materials",
 	"components.molecules.copyResult.label.lessonContentGroup": "Lesson contents",
-	"components.molecules.copyResult.label.ltiToolsGroup": "LTI Tools Group",
 	"components.molecules.copyResult.label.submissions": "Submissions",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -1879,6 +1878,9 @@ export default {
 		"An error had occurred when pasting the text from the clipboard. Please paste the text manually.",
 	"pages.tool.settings": "Settings",
 	"pages.tool.title": "External Tools Configuration",
+	"pages.tool.medium": "External medium",
+	"pages.tool.medium.mediumId": "Medium Id",
+	"pages.tool.medium.mediumSourceId": "Media catalog Id",
 	"pages.userMigration.backToLogin": "Return to login page",
 	"pages.userMigration.button.skip": "Not now",
 	"pages.userMigration.button.startMigration": "Start",

@@ -613,8 +613,6 @@ export default {
 		"Materiales de aprendizaje",
 	"components.molecules.copyResult.label.lessonContentGroup":
 		"Contenidos de la lección",
-	"components.molecules.copyResult.label.ltiToolsGroup":
-		"Grupo de herramientas LTI",
 	"components.molecules.copyResult.label.submissions": "Envíos",
 	"components.molecules.copyResult.label.text": "Texto",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -1932,6 +1930,9 @@ export default {
 		"Se ha producido un error al pegar el texto desde el portapapeles. Por favor, pegue el texto manualmente.",
 	"pages.tool.settings": "Configuración",
 	"pages.tool.title": "Configuración de herramientas externas",
+	"pages.tool.medium": "Medio externo",
+	"pages.tool.medium.mediumId": "ID medio",
+	"pages.tool.medium.mediumSourceId": "ID de catálogo de medios",
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",
 	"pages.userMigration.button.skip": "Ahora no",
 	"pages.userMigration.button.startMigration": "Empieza a moverte",
