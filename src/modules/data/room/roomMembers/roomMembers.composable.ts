@@ -15,7 +15,7 @@ import { authModule } from "@/store/store-accessor";
 
 export const useRoomMembers = (roomId: string) => {
 	const roomMembers: Ref<RoomMemberResponse[]> = ref([]);
-	const potentialRoomMembers: Ref<RoomMember[]> = ref([]);
+	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName">[]> = ref([]);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const isLoading = ref(false);
 	const { t } = useI18n();
@@ -83,7 +83,6 @@ export const useRoomMembers = (roomId: string) => {
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
 						schoolRoleName: RoleName.Teacher,
-						roomRoleName: RoleName.Roomadmin,
 					};
 				})
 				.filter((user) => {
@@ -117,11 +116,14 @@ export const useRoomMembers = (roomId: string) => {
 		);
 
 		try {
-			await roomApi.roomControllerAddMembers(roomId, { userIds });
+			const { roomRoleName } = (
+				await roomApi.roomControllerAddMembers(roomId, { userIds })
+			).data;
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
 					...member,
-					displayRoomRole: roomRole[member.roomRoleName],
+					roomRoleName,
+					displayRoomRole: roomRole[roomRoleName],
 					displaySchoolRole: schoolRole[member.schoolRoleName],
 				}))
 			);
