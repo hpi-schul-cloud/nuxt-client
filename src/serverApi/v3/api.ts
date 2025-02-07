@@ -7824,6 +7824,12 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
      * @memberof SchoolExternalToolConfigurationTemplateResponse
      */
     parameters: Array<CustomParameterResponse>;
+    /**
+     * Medium of the external tool
+     * @type {ExternalToolMediumResponse}
+     * @memberof SchoolExternalToolConfigurationTemplateResponse
+     */
+    medium?: ExternalToolMediumResponse;
 }
 /**
  * 
