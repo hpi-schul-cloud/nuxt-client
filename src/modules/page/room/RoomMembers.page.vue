@@ -80,11 +80,10 @@ import {
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
-import { MembersTable, AddMembers } from "@feature-room";
+import { MembersTable, AddMembers, useRoomAuthorization } from "@feature-room";
 import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
-import { useRoomAuthorization } from "@feature-room";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
