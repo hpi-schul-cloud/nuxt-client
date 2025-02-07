@@ -20,7 +20,7 @@ import { computed, ref } from "vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
-import { AddMembers, MembersTable } from "@feature-room";
+import { AddMembers, MembersTable, useRoomAuthorization } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { VueWrapper } from "@vue/test-utils";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -39,6 +39,19 @@ jest.mock("@vueuse/integrations"); // mock focus trap from add members because w
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
+
+jest.mock("@feature-room/roomAuthorization.composable");
+const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
+	canAddRoomMembers: ref(false),
+	canCreateRoom: ref(false),
+	canChangeOwner: ref(false),
+	canViewRoom: ref(false),
+	canEditRoom: ref(false),
+	canDeleteRoom: ref(false),
+	canLeaveRoom: ref(false),
+	canRemoveRoomMembers: ref(false),
+};
+(useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
@@ -204,6 +217,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should open confirmation dialog", async () => {
+			roomPermissions.canLeaveRoom.value = true;
 			const { wrapper } = setup({ currentUserRole: RoleName.Roomadmin });
 			askConfirmationMock.mockResolvedValue(true);
 
@@ -266,6 +280,7 @@ describe("RoomMembersPage", () => {
 			])(
 				"%s role should see the title menu",
 				async (currentUserRole, expectedVisibility) => {
+					roomPermissions.canLeaveRoom.value = expectedVisibility;
 					const { wrapper } = setup({ currentUserRole });
 					const titleMenu = wrapper.findComponent(
 						'[data-testid="room-member-menu"]'
