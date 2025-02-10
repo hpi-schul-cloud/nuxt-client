@@ -110,7 +110,6 @@ import {
 	useRoomAuthorization,
 } from "@feature-room";
 import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName } from "@/serverApi/v3";
-
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import {
@@ -152,9 +151,7 @@ const fixedHeaderOnMobile = ref({
 });
 const { y } = useElementBounding(wireframe);
 const { askConfirmation } = useConfirmationDialog();
-
 const { canLeaveRoom } = useRoomAuthorization(room);
-
 const { isVisibleAddMemberButton, isVisiblePageInfoText } =
 	useRoomMemberVisibilityOptions(currentUser);
 
