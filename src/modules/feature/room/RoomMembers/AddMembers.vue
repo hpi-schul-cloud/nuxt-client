@@ -93,7 +93,7 @@ import { VAutocomplete, VCard } from "vuetify/lib/components/index.mjs";
 
 const props = defineProps({
 	memberList: {
-		type: Array as PropType<RoomMember[]>,
+		type: Array as PropType<Omit<RoomMember, "roomRoleName">[]>,
 	},
 	schools: {
 		type: Array as PropType<SchoolForExternalInviteResponse[]>,

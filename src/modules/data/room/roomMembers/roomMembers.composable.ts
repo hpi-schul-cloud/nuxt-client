@@ -6,6 +6,7 @@ import {
 	SchoolApiFactory,
 	RoomMemberResponse,
 	SchoolForExternalInviteResponse,
+	ChangeRoomRoleBodyParamsRoleNameEnum,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useI18n } from "vue-i18n";
@@ -14,8 +15,9 @@ import { schoolsModule } from "@/store";
 import { authModule } from "@/store/store-accessor";
 
 export const useRoomMembers = (roomId: string) => {
-	const roomMembers: Ref<RoomMemberResponse[]> = ref([]);
+	const roomMembers: Ref<RoomMember[]> = ref([]);
 	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName">[]> = ref([]);
+
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
 	const isLoading = ref(false);
 	const { t } = useI18n();
@@ -28,8 +30,9 @@ export const useRoomMembers = (roomId: string) => {
 	const currentUser = computed(() => {
 		return roomMembers.value?.find(
 			(member) => member.userId === currentUserId
-		) as RoomMemberResponse;
+		) as RoomMember;
 	});
+	const selectedIds = ref<string[]>([]);
 
 	const roomRole: Record<string, string> = {
 		[RoleName.Roomowner]: t("pages.rooms.members.roomPermissions.owner"),
@@ -83,6 +86,8 @@ export const useRoomMembers = (roomId: string) => {
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
 						schoolRoleName: RoleName.Teacher,
+						displayRoomRole: roomRole[RoleName.Roomadmin],
+						displaySchoolRole: schoolRole[RoleName.Teacher],
 					};
 				})
 				.filter((user) => {
@@ -132,14 +137,48 @@ export const useRoomMembers = (roomId: string) => {
 		}
 	};
 
-	const removeMembers = async (userIds: string[]) => {
+	const removeMembers = async () => {
 		try {
-			await roomApi.roomControllerRemoveMembers(roomId, { userIds });
+			await roomApi.roomControllerRemoveMembers(roomId, {
+				userIds: selectedIds.value,
+			});
 			roomMembers.value = roomMembers.value.filter(
-				(member) => !userIds.includes(member.userId)
+				(member) => !selectedIds.value.includes(member.userId)
 			);
+			selectedIds.value = [];
 		} catch (error) {
 			showFailure(t("pages.rooms.members.error.remove"));
+		}
+	};
+
+	const updateMembersRole = async (
+		roleName: ChangeRoomRoleBodyParamsRoleNameEnum,
+		id?: string
+	) => {
+		try {
+			await roomApi.roomControllerChangeRolesOfMembers(roomId, {
+				userIds: id ? [id] : selectedIds.value,
+				roleName,
+			});
+
+			if (id) {
+				const member = roomMembers.value.find((member) => member.userId === id);
+				if (member) {
+					member.roomRoleName = roleName;
+					member.displayRoomRole = roomRole[roleName];
+				}
+				return;
+			}
+
+			selectedIds.value.forEach((id) => {
+				const member = roomMembers.value.find((member) => member.userId === id);
+				if (member) {
+					member.roomRoleName = roleName;
+					member.displayRoomRole = roomRole[roleName];
+				}
+			});
+		} catch (error) {
+			showFailure(t("pages.rooms.members.error.updateRole"));
 		}
 	};
 
@@ -149,10 +188,12 @@ export const useRoomMembers = (roomId: string) => {
 		getPotentialMembers,
 		getSchools,
 		removeMembers,
+		updateMembersRole,
 		currentUser,
 		isLoading,
 		roomMembers,
 		potentialRoomMembers,
+		selectedIds,
 		schools,
 	};
 };

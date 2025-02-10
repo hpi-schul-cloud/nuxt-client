@@ -5,6 +5,7 @@ import BoardGrid from "./BoardGrid.vue";
 import MembersTable from "./RoomMembers/MembersTable.vue";
 import AddMembers from "./RoomMembers/AddMembers.vue";
 import { useRoomAuthorization } from "./roomAuthorization.composable";
+import ChangeRole from "./RoomMembers/ChangeRole.vue";
 
 export {
 	RoomGrid,
@@ -13,5 +14,6 @@ export {
 	BoardGrid,
 	MembersTable,
 	AddMembers,
+	ChangeRole,
 	useRoomAuthorization,
 };

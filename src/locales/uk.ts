@@ -1808,6 +1808,7 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте члени",
+	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberName}",
 	"pages.rooms.members.changePermission": "Змінити дозволи",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Змінити дозвіл для {memberName}",
@@ -1828,6 +1829,16 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.members.tableHeader.actions": "Дії",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} надаються наступні повноваження в приміщенні “{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"Вибрані учасники отримають такі дозволи на кімнату в “{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Доступ до зон кімнати та перегляд вмісту",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Створюйте та редагуйте контент",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		"Такі самі дозволи, як і «Редагувати», а також додавати та видаляти інших учасників, змінювати їхні дозволи для кімнати та редагувати кімнату",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
