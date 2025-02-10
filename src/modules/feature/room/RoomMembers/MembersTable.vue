@@ -51,17 +51,18 @@
 			<KebabMenu
 				v-if="isVisibleActionInRow(item)"
 				:data-testid="`kebab-menu-${index}`"
+				:aria-label="getAriaLabel(item)"
 			>
 				<KebabMenuActionChangePermission
 					v-if="isVisibleChangeRoleButton"
 					@click="onChangePermission([item.userId])"
-					:aria-label="getChangePermissionAriaLabel(item)"
+					:aria-label="getAriaLabel(item, 'changeRole')"
 					:test-id="`btn-change-role-${index}`"
 				/>
 				<KebabMenuActionRemoveMember
 					v-if="isVisibleRemoveMemberButton(item)"
 					:test-id="`remove-member-${index}`"
-					:aria-label="getRemoveAriaLabel(item)"
+					:aria-label="getAriaLabel(item, 'remove')"
 					@click="onRemoveMembers([item.userId])"
 				/>
 			</KebabMenu>
@@ -163,15 +164,25 @@ const confirmRemoval = async (userIds: string[]) => {
 	return shouldRemove;
 };
 
-const getRemoveAriaLabel = (member: RoomMember) =>
-	t("pages.rooms.members.remove.ariaLabel", {
-		memberName: `${member.firstName} ${member.lastName}`,
+const getAriaLabel = (
+	member: RoomMember,
+	actionFor?: "remove" | "changeRole"
+) => {
+	const memberName = `${member.firstName} ${member.lastName}`;
+	if (actionFor === "changeRole") {
+		return t("pages.rooms.members.changePermission.ariaLabel", {
+			memberName,
+		});
+	}
+	if (actionFor === "remove") {
+		return t("pages.rooms.members.remove.ariaLabel", {
+			memberName,
+		});
+	}
+	return t("pages.rooms.members.actionMenu.ariaLabel", {
+		memberName,
 	});
-
-const getChangePermissionAriaLabel = (member: RoomMember) =>
-	t("pages.rooms.members.changePermission.ariaLabel", {
-		memberName: `${member.firstName} ${member.lastName}`,
-	});
+};
 
 const onChangePermission = (userIds: string[]) => {
 	emit("change:permission", userIds);

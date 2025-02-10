@@ -1808,6 +1808,7 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте члени",
+	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberName}",
 	"pages.rooms.members.changePermission": "Змінити дозволи",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Змінити дозвіл для {memberName}",

@@ -281,7 +281,7 @@ describe("useRoomMembers", () => {
 			expect(roomMembers.value).toEqual([
 				{
 					...firstPotentialMember,
-					displayRoomRole: "pages.rooms.members.roomPermissions.viewer",
+					displayRoomRole: "pages.rooms.members.roomPermissions.admin",
 					displaySchoolRole: "common.labels.teacher",
 				},
 			]);

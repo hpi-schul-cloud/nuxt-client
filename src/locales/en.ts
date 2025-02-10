@@ -1779,6 +1779,7 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add members",
+	"pages.rooms.members.actionMenu.ariaLabel": "Action menu for {memberName}",
 	"pages.rooms.members.changePermission": "Change permissions",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Change permissions for {memberName}",
