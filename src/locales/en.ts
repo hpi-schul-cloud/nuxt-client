@@ -157,7 +157,7 @@ export default {
 	"common.validation.tooLong":
 		"The text you entered exceeds the maximum length",
 	"common.validation.containsOpeningTag":
-		"Further text must not directly follow a less-than sign. Please insert a space after the less-than sign.",
+		"Please insert a space after the less-than sign.",
 	"common.words.and": "and",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",

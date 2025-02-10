@@ -159,7 +159,7 @@ export default {
 	"common.validation.tooLong":
 		"Введений текст перевищує максимально дозволену довжину",
 	"common.validation.containsOpeningTag":
-		"Подальший текст не повинен безпосередньо слідувати за знаком «менше». Будь ласка, вставте пробіл після знаку менше.",
+		"Будь ласка, вставте пробіл після знаку менше.",
 	"common.words.and": "і",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",
