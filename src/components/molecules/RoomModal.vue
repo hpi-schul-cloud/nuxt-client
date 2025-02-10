@@ -16,6 +16,7 @@
 					:label="$t('pages.rooms.roomModal.courseGroupTitle')"
 					@blur="onBlur"
 					@keyup.enter="onEnterInput"
+					:rules="[validateTextField]"
 				/>
 			</div>
 		</template>
@@ -32,10 +33,11 @@
 		</template>
 	</vCustomDialog>
 </template>
-<script>
+<script lang="ts">
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { courseRoomListModule } from "@/store";
+import { containsOpeningTagFollowedByString } from "@/utils/validation";
 import { mdiKeyboardReturn, mdiPencilOutline } from "@icons/material";
 import { defineComponent } from "vue";
 
@@ -90,6 +92,14 @@ export default defineComponent({
 		},
 		async onEnterInput() {
 			await this.updateCourseGroupName();
+		},
+		validateTextField(value: string) {
+			const errorMessage = this.$t("common.validation.containsOpeningTag");
+			const fieldIsValid = true;
+
+			if (containsOpeningTagFollowedByString(value)) return errorMessage;
+
+			return fieldIsValid;
 		},
 	},
 });
