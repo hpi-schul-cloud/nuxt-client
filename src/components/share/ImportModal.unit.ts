@@ -97,6 +97,21 @@ describe("@components/share/ImportModal", () => {
 		expect(emitted).toBeUndefined();
 	});
 
+	describe("when room name contains < followed by a string", () => {
+		it("should show validation error", async () => {
+			const { wrapper } = setup();
+
+			const nameInput = wrapper.findComponent({
+				ref: "nameInputText",
+			});
+			await nameInput.find("input").setValue("TestParentName<test");
+
+			expect(nameInput.text()).toContain(
+				"common.validation.containsOpeningTag"
+			);
+		});
+	});
+
 	describe("ctl tools info", () => {
 		describe("when ctl tools are enabled", () => {
 			it("should show ctl tool info", () => {
