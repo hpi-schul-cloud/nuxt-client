@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<form v-bind="$attrs" @submit.prevent="save">
-			<title-input
+			<VTextField
 				v-model="data.title"
 				:focus="true"
 				:placeholder="
@@ -12,6 +12,7 @@
 				:required="true"
 				data-testid="news_title"
 				:label="$t('components.organisms.FormNews.input.title.label')"
+				:rules="[validateTextField]"
 			/>
 			<transition name="fade">
 				<div v-if="data.title">
@@ -89,18 +90,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
-import { fromInputDateTime, createInputDateTime } from "@/plugins/datetime";
+import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
 import { newsModule, notifierModule } from "@/store";
-import TitleInput from "./TitleInput.vue";
-import FormActions from "./FormActions.vue";
-import { mdiAlert, mdiClose, mdiCheck, mdiDelete } from "@icons/material";
+import { containsOpeningTagFollowedByString } from "@/utils/validation";
 import { CkEditor } from "@feature-editor";
+import { mdiAlert, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
+import { defineComponent } from "vue";
+import FormActions from "./FormActions.vue";
 
 export default defineComponent({
 	inheritAttrs: false,
 	components: {
-		TitleInput,
 		FormActions,
 		CkEditor,
 	},
@@ -165,13 +165,20 @@ export default defineComponent({
 				: this.$t(
 						"components.organisms.FormNews.errors.missing_title"
 					).toString();
+
+			const titleOpeningTag =
+				this.validateTextField(this.data.title) === true
+					? undefined
+					: this.$t("common.validation.containsOpeningTag").toString();
+
 			const content = this.data.content
 				? undefined
 				: this.$t(
 						"components.organisms.FormNews.errors.missing_content"
 					).toString();
+
 			return {
-				title,
+				title: title || titleOpeningTag,
 				content,
 			};
 		},
@@ -257,6 +264,14 @@ export default defineComponent({
 		dialogConfirm(confirmDialogProps: Record<string, unknown>) {
 			this.confirmDialogProps = confirmDialogProps;
 			this.isConfirmDialogActive = true;
+		},
+		validateTextField(value: string) {
+			const errorMessage = this.$t("common.validation.containsOpeningTag");
+			const fieldIsValid = true;
+
+			if (containsOpeningTagFollowedByString(value)) return errorMessage;
+
+			return fieldIsValid;
 		},
 	},
 });
