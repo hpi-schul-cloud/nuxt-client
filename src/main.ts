@@ -126,7 +126,8 @@ app.use(VueDOMPurifyHTML, {
 	try {
 		await authModule.login();
 	} catch (error) {
-		console.error("probably not logged in?", error);
+		// TODO improve exception handling, best case test if its a 401, if not log the unknown error
+		console.info("probably not logged in", error);
 	}
 
 	// creation of i18n relies on envConfigModule authModule
