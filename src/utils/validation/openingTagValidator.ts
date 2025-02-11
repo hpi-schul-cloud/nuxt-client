@@ -1,13 +1,13 @@
+import { useI18n } from "vue-i18n";
+
 export class OpeningTagValidator {
 	static containsOpeningTagFollowedByString(input: string): boolean {
 		const regex = /<\S+(?<!<)/;
 		return regex.test(input);
 	}
 
-	static getValidationMessage(
-		input: string,
-		t: (key: string) => string
-	): string | boolean {
+	static getValidationMessage(input: string): string | boolean {
+		const { t } = useI18n();
 		const errorMessage = t("common.validation.containsOpeningTag");
 		const fieldIsValid = true;
 
