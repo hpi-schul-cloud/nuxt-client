@@ -34,7 +34,6 @@ import themeConfig from "@/theme.config";
 import { htmlConfig } from "@feature-render-html";
 import axios from "axios";
 import { createPinia } from "pinia";
-import Cookies from "universal-cookie";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 
