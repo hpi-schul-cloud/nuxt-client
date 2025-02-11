@@ -149,7 +149,7 @@ import { printDate } from "@/plugins/datetime";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { toBase64 } from "@/utils/fileHelper.ts";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
-import { containsOpeningTagFollowedByString } from "@/utils/validation";
+import { OpeningTagValidator } from "@/utils/validation";
 
 export default {
 	components: {
@@ -295,12 +295,7 @@ export default {
 			schoolsModule.update({ id: this.localSchool.id, props: updatedSchool });
 		},
 		validateTextField(value: string) {
-			const errorMessage = this.$t("common.validation.containsOpeningTag");
-			const fieldIsValid = true;
-
-			if (containsOpeningTagFollowedByString(value)) return errorMessage;
-
-			return fieldIsValid;
+			return OpeningTagValidator.getValidationMessage(value, this.$t);
 		},
 	},
 };

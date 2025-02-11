@@ -92,7 +92,7 @@
 <script lang="ts">
 import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
 import { newsModule, notifierModule } from "@/store";
-import { containsOpeningTagFollowedByString } from "@/utils/validation";
+import { OpeningTagValidator } from "@/utils/validation";
 import { CkEditor } from "@feature-editor";
 import { mdiAlert, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
 import { defineComponent } from "vue";
@@ -266,12 +266,7 @@ export default defineComponent({
 			this.isConfirmDialogActive = true;
 		},
 		validateTextField(value: string) {
-			const errorMessage = this.$t("common.validation.containsOpeningTag");
-			const fieldIsValid = true;
-
-			if (containsOpeningTagFollowedByString(value)) return errorMessage;
-
-			return fieldIsValid;
+			return OpeningTagValidator.getValidationMessage(value, this.$t);
 		},
 	},
 });

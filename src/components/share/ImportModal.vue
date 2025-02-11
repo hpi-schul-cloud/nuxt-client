@@ -119,7 +119,7 @@
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { containsOpeningTagFollowedByString } from "@/utils/validation";
+import { OpeningTagValidator } from "@/utils/validation";
 import { mdiInformation } from "@icons/material";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -138,12 +138,7 @@ const nameInput = ref(undefined);
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
 	containsOpeningTag: (value: string) => {
-		const errorMessage = t("common.validation.containsOpeningTag");
-		const fieldIsValid = true;
-
-		if (containsOpeningTagFollowedByString(value)) return errorMessage;
-
-		return fieldIsValid;
+		return OpeningTagValidator.getValidationMessage(value, t);
 	},
 });
 

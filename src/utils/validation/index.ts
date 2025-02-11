@@ -1,2 +1,2 @@
+export * from "./openingTagValidator";
 export * from "./validationUtil";
-export { containsOpeningTagFollowedByString } from "./containsOpeningTag";

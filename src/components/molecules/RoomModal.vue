@@ -37,7 +37,7 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { courseRoomListModule } from "@/store";
-import { containsOpeningTagFollowedByString } from "@/utils/validation";
+import { OpeningTagValidator } from "@/utils/validation";
 import { mdiKeyboardReturn, mdiPencilOutline } from "@icons/material";
 import { defineComponent } from "vue";
 
@@ -94,12 +94,7 @@ export default defineComponent({
 			await this.updateCourseGroupName();
 		},
 		validateTextField(value: string) {
-			const errorMessage = this.$t("common.validation.containsOpeningTag");
-			const fieldIsValid = true;
-
-			if (containsOpeningTagFollowedByString(value)) return errorMessage;
-
-			return fieldIsValid;
+			return OpeningTagValidator.getValidationMessage(value, this.$t);
 		},
 	},
 });
