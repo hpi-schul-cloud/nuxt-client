@@ -259,7 +259,7 @@ describe("RoomMembersPage", () => {
 			);
 			await leaveMenu.trigger("click");
 
-			expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalled();
+			expect(mockRoomMemberCalls.leaveRoom).toHaveBeenCalled();
 		});
 
 		it("should not call remove method when dialog is cancelled", async () => {
