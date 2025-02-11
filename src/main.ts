@@ -34,7 +34,6 @@ import themeConfig from "@/theme.config";
 import { htmlConfig } from "@feature-render-html";
 import axios from "axios";
 import { createPinia } from "pinia";
-import Cookies from "universal-cookie";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 
@@ -123,20 +122,11 @@ app.use(VueDOMPurifyHTML, {
 
 	await envConfigModule.loadConfiguration();
 
-	const cookies = new Cookies();
-	const jwt = cookies.get("jwt");
-
-	if (jwt) {
-		axios.defaults.headers.common["Authorization"] = "Bearer " + jwt;
-		// NUXT_REMOVAL TODO
-		// catch invalid jwt error and
-		// const loginUrl = getLoginUrlWithRedirect(<current location>);
-		// authModule.logout(loginUrl);
-		try {
-			await authModule.login(jwt);
-		} catch (e) {
-			console.error("### JWT invalid: ", e);
-		}
+	try {
+		await authModule.login();
+	} catch (error) {
+		// TODO improve exception handling, best case test if its a 401, if not log the unknown error
+		console.info("probably not logged in", error);
 	}
 
 	// creation of i18n relies on envConfigModule authModule
