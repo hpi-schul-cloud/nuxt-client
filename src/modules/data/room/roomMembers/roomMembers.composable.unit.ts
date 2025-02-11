@@ -315,7 +315,7 @@ describe("useRoomMembers", () => {
 
 			selectedIds.value = [membersMock[1].userId];
 
-			await removeMembers();
+			await removeMembers(selectedIds.value);
 
 			expect(roomApiMock.roomControllerRemoveMembers).toHaveBeenCalledWith(
 				roomId,
@@ -333,7 +333,7 @@ describe("useRoomMembers", () => {
 			const error = new Error("Test error");
 			roomApiMock.roomControllerRemoveMembers.mockRejectedValue(error);
 
-			await removeMembers();
+			await removeMembers(["id"]);
 
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"pages.rooms.members.error.remove"

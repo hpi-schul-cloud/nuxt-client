@@ -137,18 +137,28 @@ export const useRoomMembers = (roomId: string) => {
 		}
 	};
 
-	const removeMembers = async (userIds: string[] = []) => {
+	const removeMembers = async (userIds: string[]) => {
 		try {
-			if (userIds.length === 0) {
-				userIds = selectedIds.value;
-			}
-			await roomApi.roomControllerRemoveMembers(roomId, { userIds });
+			await roomApi.roomControllerRemoveMembers(roomId, {
+				userIds,
+			});
 			roomMembers.value = roomMembers.value.filter(
 				(member) => !userIds.includes(member.userId)
 			);
 			selectedIds.value = [];
 		} catch {
 			showFailure(t("pages.rooms.members.error.remove"));
+		}
+	};
+
+	const leaveRoom = async () => {
+		isLoading.value = true;
+		try {
+			await roomApi.roomControllerLeaveRoom(roomId);
+		} catch {
+			showFailure(t("pages.rooms.members.error.remove"));
+		} finally {
+			isLoading.value = false;
 		}
 	};
 
@@ -188,6 +198,7 @@ export const useRoomMembers = (roomId: string) => {
 		fetchMembers,
 		getPotentialMembers,
 		getSchools,
+		leaveRoom,
 		removeMembers,
 		updateMembersRole,
 		currentUser,
