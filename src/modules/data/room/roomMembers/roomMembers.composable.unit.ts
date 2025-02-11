@@ -303,8 +303,7 @@ describe("useRoomMembers", () => {
 
 	describe("removeMembers", () => {
 		it("should remove a members from the room", async () => {
-			const { removeMembers, roomMembers, selectedIds } =
-				useRoomMembers(roomId);
+			const { removeMembers, roomMembers } = useRoomMembers(roomId);
 
 			roomApiMock.roomControllerRemoveMembers.mockResolvedValue(
 				mockApiResponse({})
@@ -313,9 +312,7 @@ describe("useRoomMembers", () => {
 			const membersMock = roomMemberFactory(RoleName.Roomeditor).buildList(3);
 			roomMembers.value = membersMock;
 
-			selectedIds.value = [membersMock[1].userId];
-
-			await removeMembers(selectedIds.value);
+			await removeMembers([membersMock[1].userId]);
 
 			expect(roomApiMock.roomControllerRemoveMembers).toHaveBeenCalledWith(
 				roomId,
@@ -334,6 +331,33 @@ describe("useRoomMembers", () => {
 			roomApiMock.roomControllerRemoveMembers.mockRejectedValue(error);
 
 			await removeMembers(["id"]);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"pages.rooms.members.error.remove"
+			);
+		});
+	});
+
+	describe("leaveRoom", () => {
+		it("should call the leaveRoom api", async () => {
+			const { leaveRoom } = useRoomMembers(roomId);
+
+			roomApiMock.roomControllerLeaveRoom.mockResolvedValue(
+				mockApiResponse({})
+			);
+
+			await leaveRoom();
+
+			expect(roomApiMock.roomControllerLeaveRoom).toHaveBeenCalledWith(roomId);
+		});
+
+		it("should throw an error if the API call fails", async () => {
+			const { leaveRoom } = useRoomMembers(roomId);
+
+			const error = new Error("Test error");
+			roomApiMock.roomControllerLeaveRoom.mockRejectedValue(error);
+
+			await leaveRoom();
 
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"pages.rooms.members.error.remove"
