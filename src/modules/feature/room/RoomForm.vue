@@ -67,7 +67,7 @@
 <script setup lang="ts">
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
-import { OpeningTagValidator } from "@/utils/validation";
+import { containsOpeningTagFollowedByString } from "@/utils/validation";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
@@ -148,8 +148,7 @@ const validationRules = computed(() => ({
 			),
 			containsOpeningTag: helpers.withMessage(
 				t("common.validation.containsOpeningTag"),
-				(name: string) =>
-					!OpeningTagValidator.containsOpeningTagFollowedByString(name)
+				(name: string) => !containsOpeningTagFollowedByString(name)
 			),
 			required: helpers.withMessage(t("common.validation.required2"), required),
 		},

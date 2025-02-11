@@ -118,7 +118,7 @@
 
 <script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { OpeningTagValidator } from "@/utils/validation";
+import { useOpeningTagValidator } from "@/utils/validation";
 import { mdiInformation } from "@icons/material";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -132,11 +132,12 @@ const props = defineProps({
 
 const { t } = useI18n();
 const nameInput = ref(undefined);
+const { validate } = useOpeningTagValidator();
 
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
 	containsOpeningTag: (value: string) => {
-		return OpeningTagValidator.validate(value);
+		return validate(value);
 	},
 });
 

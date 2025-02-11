@@ -14,7 +14,7 @@
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSyncedSchool"
 					data-testid="school-name"
-					:rules="[validateTextField]"
+					:rules="[validate]"
 				/>
 			</v-col>
 		</v-row>
@@ -149,9 +149,16 @@ import { printDate } from "@/plugins/datetime";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { toBase64 } from "@/utils/fileHelper.ts";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
-import { OpeningTagValidator } from "@/utils/validation";
+import { useOpeningTagValidator } from "@/utils/validation";
 
 export default {
+	setup() {
+		const { validate } = useOpeningTagValidator();
+
+		return {
+			validate,
+		};
+	},
 	components: {
 		PrivacySettings,
 	},
@@ -293,9 +300,6 @@ export default {
 				this.logoFile.length > 0 ? this.logoFile[0].name : "";
 
 			schoolsModule.update({ id: this.localSchool.id, props: updatedSchool });
-		},
-		validateTextField(value: string) {
-			return OpeningTagValidator.validate(value);
 		},
 	},
 };

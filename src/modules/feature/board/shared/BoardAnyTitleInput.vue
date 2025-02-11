@@ -49,7 +49,7 @@
 </template>
 
 <script lang="ts">
-import { OpeningTagValidator } from "@/utils/validation";
+import { containsOpeningTagFollowedByString } from "@/utils/validation";
 import { useInlineEditInteractionHandler } from "@util-board";
 import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers } from "@vuelidate/validators";
@@ -167,8 +167,7 @@ export default defineComponent({
 			modelValue: {
 				containsOpeningTag: helpers.withMessage(
 					t("common.validation.containsOpeningTag"),
-					(name: string) =>
-						!OpeningTagValidator.containsOpeningTagFollowedByString(name)
+					(name: string) => !containsOpeningTagFollowedByString(name)
 				),
 			},
 		}));

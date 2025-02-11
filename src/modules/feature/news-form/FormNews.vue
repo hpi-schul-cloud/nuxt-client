@@ -12,7 +12,7 @@
 				:required="true"
 				data-testid="news_title"
 				:label="$t('components.organisms.FormNews.input.title.label')"
-				:rules="[validateTextField]"
+				:rules="[validate]"
 			/>
 			<transition name="fade">
 				<div v-if="data.title">
@@ -92,13 +92,20 @@
 <script lang="ts">
 import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
 import { newsModule, notifierModule } from "@/store";
-import { OpeningTagValidator } from "@/utils/validation";
+import { useOpeningTagValidator } from "@/utils/validation/openingTagValidator";
 import { CkEditor } from "@feature-editor";
 import { mdiAlert, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
 import { defineComponent } from "vue";
 import FormActions from "./FormActions.vue";
 
 export default defineComponent({
+	setup() {
+		const { validate } = useOpeningTagValidator();
+
+		return {
+			validate,
+		};
+	},
 	inheritAttrs: false,
 	components: {
 		FormActions,
@@ -167,7 +174,7 @@ export default defineComponent({
 					).toString();
 
 			const titleOpeningTag =
-				this.validateTextField(this.data.title) === true
+				this.validate(this.data.title) === true
 					? undefined
 					: this.$t("common.validation.containsOpeningTag").toString();
 
@@ -264,9 +271,6 @@ export default defineComponent({
 		dialogConfirm(confirmDialogProps: Record<string, unknown>) {
 			this.confirmDialogProps = confirmDialogProps;
 			this.isConfirmDialogActive = true;
-		},
-		validateTextField(value: string) {
-			return OpeningTagValidator.validate(value);
 		},
 	},
 });

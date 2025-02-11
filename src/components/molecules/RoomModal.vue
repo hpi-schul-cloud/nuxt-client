@@ -16,7 +16,7 @@
 					:label="$t('pages.rooms.roomModal.courseGroupTitle')"
 					@blur="onBlur"
 					@keyup.enter="onEnterInput"
-					:rules="[validateTextField]"
+					:rules="[validate]"
 				/>
 			</div>
 		</template>
@@ -37,11 +37,18 @@
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { courseRoomListModule } from "@/store";
-import { OpeningTagValidator } from "@/utils/validation";
+import { useOpeningTagValidator } from "@/utils/validation";
 import { mdiKeyboardReturn, mdiPencilOutline } from "@icons/material";
 import { defineComponent } from "vue";
 
 export default defineComponent({
+	setup() {
+		const { validate } = useOpeningTagValidator();
+
+		return {
+			validate,
+		};
+	},
 	components: {
 		vCustomDialog,
 		RoomAvatarIterator,
@@ -92,9 +99,6 @@ export default defineComponent({
 		},
 		async onEnterInput() {
 			await this.updateCourseGroupName();
-		},
-		validateTextField(value: string) {
-			return OpeningTagValidator.validate(value);
 		},
 	},
 });
