@@ -48,8 +48,6 @@ const avatarAriaLabel = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/utils/multiline-ellipsis.scss";
-
 a.room-link {
 	display: block;
 	text-decoration: none;
@@ -77,10 +75,7 @@ a.room-link {
 }
 
 .room-title {
-	@include excerpt(
-		$font-size: calc(var(--space-base-vuetify) * 4),
-		$line-height: var(--line-height-lg),
-		$lines-to-show: 3
-	);
+	line-height: var(--line-height-lg);
+	overflow-wrap: break-word;
 }
 </style>

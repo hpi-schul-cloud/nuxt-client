@@ -33,7 +33,7 @@
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
-					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
+					scope-language-key="components.cardElement.videoConferenceElement"
 					@click="onDelete"
 				/>
 			</BoardMenu>
@@ -50,7 +50,7 @@
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
-					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
+					scope-language-key="components.cardElement.videoConferenceElement"
 					@click="onDelete"
 				/>
 			</BoardMenu>

@@ -602,8 +602,6 @@ export default {
 	"components.molecules.copyResult.label.lernstoreMaterialGroup":
 		"Learning materials",
 	"components.molecules.copyResult.label.lessonContentGroup": "Lesson contents",
-	"components.molecules.copyResult.label.ltiToolsGroup": "LTI Tools Group",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Submissions",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -613,10 +611,6 @@ export default {
 	"components.molecules.copyResult.label.userGroup": "User Group",
 	"components.molecules.copyResult.label.toolElements": "Tool Element",
 	"components.molecules.copyResult.metadata": "General Information",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"Content is not copied for data protection reasons and must be added again.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Old neXboard sections have not been copied as the tool is being removed from our platform. As a replacement, the innovative whiteboard tool tldraw is now available in the column board.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -1719,7 +1713,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"A course folder is automatically created for the imported course. Student-related data from the original course will be removed. Then add students and make an appointment for the course.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Attention: Manually replace tools with user data which are included in the topic subsequently (e.g. neXboard, Etherpad, GeoGebra), because changes to this will otherwise affect the original course! Files (images, videos, audio) and linked material are not affected and can remain unchanged.",
+		"Attention: Manually replace tools with user data which are included in the topic subsequently (e.g. Etherpad, GeoGebra), because changes to this will otherwise affect the original course! Files (images, videos, audio) and linked material are not affected and can remain unchanged.",
 	"pages.rooms.importCourse.step_1.text": "Info",
 	"pages.rooms.importCourse.step_2.text": "Paste the code",
 	"pages.rooms.importCourse.step_2":
@@ -1787,6 +1781,7 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add members",
+	"pages.rooms.members.actionMenu.ariaLabel": "Action menu for {memberName}",
 	"pages.rooms.members.changePermission": "Change permissions",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Change permissions for {memberName}",
@@ -1807,6 +1802,16 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.members.tableHeader.actions": "Actions",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} receives the following permissions in the room “{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"The selected members will receive the following room permissions in “{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Access the areas in the room and view content",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Create and edit content",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		'Same permissions as "Edit", plus add and remove other members, change their room permissions and edit the room',
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
@@ -1876,6 +1881,9 @@ export default {
 		"An error had occurred when pasting the text from the clipboard. Please paste the text manually.",
 	"pages.tool.settings": "Settings",
 	"pages.tool.title": "External Tools Configuration",
+	"pages.tool.medium": "External medium",
+	"pages.tool.medium.mediumId": "Medium Id",
+	"pages.tool.medium.mediumSourceId": "Media catalog Id",
 	"pages.userMigration.backToLogin": "Return to login page",
 	"pages.userMigration.button.skip": "Not now",
 	"pages.userMigration.button.startMigration": "Start",

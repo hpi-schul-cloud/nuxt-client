@@ -614,9 +614,6 @@ export default {
 	"components.molecules.copyResult.label.lernstoreMaterialGroup":
 		"навчальні матеріали",
 	"components.molecules.copyResult.label.lessonContentGroup": "зміст уроку",
-	"components.molecules.copyResult.label.ltiToolsGroup":
-		"Група інструментів LTI",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "підпорядкування",
 	"components.molecules.copyResult.label.text": "Текст",
 	"components.molecules.copyResult.label.tldraw": "Дошка",
@@ -627,10 +624,6 @@ export default {
 	"components.molecules.copyResult.label.toolElements":
 		"Інструментальний елемент",
 	"components.molecules.copyResult.metadata": "Загальна інформація",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Старі розділи neXboard не були скопійовані, оскільки інструмент видаляється з нашої платформи. Як заміна, інноваційний інструмент для роботи з дошкою tldraw тепер доступний у колонці дошки.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -1750,7 +1743,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"Папка курсу створюється для імпортованого курсу автоматично. Дані про учнів із вихідного курсу буде видалено. Потім додайте студентів та запишіть їх на курс.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Увага: замініть інструменти даними користувача, які згодом буде включено в тему, вручну (наприклад, neXboard, Etherpad, GeoGebra), інакше зміни вплинуть на вихідний курс! Файлів (зображення, відео, аудіо) та пов’язаних матеріалів це не стосується і вони можуть залишатися без змін.",
+		"Увага: замініть інструменти даними користувача, які згодом буде включено в тему, вручну (наприклад, Etherpad, GeoGebra), інакше зміни вплинуть на вихідний курс! Файлів (зображення, відео, аудіо) та пов’язаних матеріалів це не стосується і вони можуть залишатися без змін.",
 	"pages.rooms.importCourse.step_1.text": "Інформація",
 	"pages.rooms.importCourse.step_2.text": "Вставити код",
 	"pages.rooms.importCourse.step_2":
@@ -1817,6 +1810,7 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте члени",
+	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberName}",
 	"pages.rooms.members.changePermission": "Змінити дозволи",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Змінити дозвіл для {memberName}",
@@ -1837,6 +1831,16 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.members.tableHeader.actions": "Дії",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} надаються наступні повноваження в приміщенні “{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"Вибрані учасники отримають такі дозволи на кімнату в “{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Доступ до зон кімнати та перегляд вмісту",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Створюйте та редагуйте контент",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		"Такі самі дозволи, як і «Редагувати», а також додавати та видаляти інших учасників, змінювати їхні дозволи для кімнати та редагувати кімнату",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
@@ -1905,6 +1909,9 @@ export default {
 	"pages.tool.select.nodata": "Інструмент відсутній",
 	"pages.tool.settings": "Параметри",
 	"pages.tool.title": "Конфігурація зовнішніх інструментів",
+	"pages.tool.medium": "Зовнішнє середовище",
+	"pages.tool.medium.mediumId": "Середній",
+	"pages.tool.medium.mediumSourceId": "Ідентифікатор медіа каталогу",
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",
 	"pages.userMigration.button.skip": "Не зараз",
 	"pages.userMigration.button.startMigration": "почати рухатися",

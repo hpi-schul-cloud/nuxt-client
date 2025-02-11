@@ -6,11 +6,12 @@ import { mount } from "@vue/test-utils";
 import KebabMenu from "./KebabMenu.vue";
 
 describe("@ui-kebab-menu", () => {
-	const setup = () => {
+	const setup = (options = {}) => {
 		const wrapper = mount(KebabMenu, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
+			...options,
 		});
 
 		return wrapper;
@@ -21,6 +22,48 @@ describe("@ui-kebab-menu", () => {
 			const wrapper = setup();
 
 			expect(wrapper.exists()).toBe(true);
+		});
+	});
+
+	describe("when component contains menu items", () => {
+		describe("when menu contains nothing", () => {
+			it("should be hidden", () => {
+				const wrapper = setup();
+
+				expect(wrapper.isVisible()).toBe(false);
+			});
+		});
+
+		describe("when menu contains comment", () => {
+			it("should be visible", () => {
+				const commentNode = document.createComment("My comments");
+				const wrapper = setup({ slots: { default: commentNode } });
+
+				expect(wrapper.isVisible()).toBe(true);
+			});
+		});
+
+		describe("when menu contains html fragment", () => {
+			describe("when fragment is empty", () => {
+				it("should be visible", () => {
+					const fragmentNode = document.createDocumentFragment();
+					const wrapper = setup({ slots: { default: fragmentNode } });
+
+					expect(wrapper.isVisible()).toBe(true);
+				});
+			});
+
+			describe("when fragment contains text node", () => {
+				it("should be visible", () => {
+					const fragmentNode = document.createDocumentFragment();
+					const divNode = document.createElement("div");
+					divNode.textContent = "Hello World";
+					fragmentNode.appendChild(divNode);
+					const wrapper = setup({ slots: { default: fragmentNode } });
+
+					expect(wrapper.isVisible()).toBe(true);
+				});
+			});
 		});
 	});
 });

@@ -615,9 +615,6 @@ export default {
 		"Materiales de aprendizaje",
 	"components.molecules.copyResult.label.lessonContentGroup":
 		"Contenidos de la lección",
-	"components.molecules.copyResult.label.ltiToolsGroup":
-		"Grupo de herramientas LTI",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Envíos",
 	"components.molecules.copyResult.label.text": "Texto",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -628,10 +625,6 @@ export default {
 	"components.molecules.copyResult.label.toolElements":
 		"Elemento de herramienta",
 	"components.molecules.copyResult.metadata": "Información general",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Las antiguas secciones de neXboard no se han copiado, ya que la herramienta se está retirando de nuestra plataforma. Como reemplazo, la innovadora herramienta de pizarra digital tldraw está ahora disponible en el tablero de columnas.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -1767,7 +1760,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"Se crea automáticamente una carpeta de curso para el curso importado. Se eliminarán los datos de los estudiantes del curso original. A continuación, añade estudiantes y programa el horario del curso.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Atención: reemplaza manualmente las herramientas con datos de usuario que se incluyen en el tema posteriormente (por ejemplo, nexBoard, Etherpad, GeoGebra), ya que los cambios en esto afectarán al curso original. Los archivos (imágenes, vídeos y audios) y el material vinculado no se ven afectados y pueden permanecer sin cambios.",
+		"Atención: reemplaza manualmente las herramientas con datos de usuario que se incluyen en el tema posteriormente (por ejemplo, Etherpad, GeoGebra), ya que los cambios en esto afectarán al curso original. Los archivos (imágenes, vídeos y audios) y el material vinculado no se ven afectados y pueden permanecer sin cambios.",
 	"pages.rooms.importCourse.step_1.text": "Información",
 	"pages.rooms.importCourse.step_2.text": "Pega el código",
 	"pages.rooms.importCourse.step_2":
@@ -1837,6 +1830,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Participantes",
 	"pages.rooms.members.add": "Añadir miembros",
+	"pages.rooms.members.actionMenu.ariaLabel":
+		"Menú de acciones para {memberName}",
 	"pages.rooms.members.changePermission": "Cambiar permisos",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Cambiar el permiso para {memberName}",
@@ -1859,6 +1854,16 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Permisos de la sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} recibe los siguientes permisos de sala en “{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"Los miembros seleccionados recibirán los siguientes permisos de sala en “{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Accede a las áreas de la sala y visualiza el contenido",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Crear y editar contenido",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		'Los mismos permisos que "Editar", además de agregar y eliminar otros miembros, cambiar sus permisos de sala y editar la sala',
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
@@ -1929,6 +1934,9 @@ export default {
 		"Se ha producido un error al pegar el texto desde el portapapeles. Por favor, pegue el texto manualmente.",
 	"pages.tool.settings": "Configuración",
 	"pages.tool.title": "Configuración de herramientas externas",
+	"pages.tool.medium": "Medio externo",
+	"pages.tool.medium.mediumId": "ID medio",
+	"pages.tool.medium.mediumSourceId": "ID de catálogo de medios",
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",
 	"pages.userMigration.button.skip": "Ahora no",
 	"pages.userMigration.button.startMigration": "Empieza a moverte",

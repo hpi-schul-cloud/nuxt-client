@@ -13,6 +13,9 @@ export const useRoomAuthorization = (
 ) => {
 	const authModule = injectStrict(AUTH_MODULE_KEY);
 
+	const canAddRoomMembers = ref(false);
+	const canRemoveRoomMembers = ref(false);
+	const canChangeOwner = ref(false);
 	const canCreateRoom = ref(false);
 	const canViewRoom = ref(false);
 	const canEditRoom = ref(false);
@@ -29,15 +32,22 @@ export const useRoomAuthorization = (
 		canViewRoom.value = permissions.includes(Permission.RoomView);
 		canEditRoom.value = permissions.includes(Permission.RoomEdit);
 		canDeleteRoom.value = permissions.includes(Permission.RoomDelete);
-
-		canLeaveRoom.value = !permissions.includes(Permission.RoomChangeOwner);
+		canAddRoomMembers.value = permissions.includes(Permission.RoomMembersAdd);
+		canRemoveRoomMembers.value = permissions.includes(
+			Permission.RoomMembersRemove
+		);
+		canChangeOwner.value = permissions.includes(Permission.RoomChangeOwner);
+		canLeaveRoom.value = permissions.includes(Permission.RoomLeave);
 	});
 
 	return {
+		canAddRoomMembers,
+		canChangeOwner,
 		canCreateRoom,
 		canViewRoom,
 		canEditRoom,
 		canDeleteRoom,
 		canLeaveRoom,
+		canRemoveRoomMembers,
 	};
 };

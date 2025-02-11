@@ -608,8 +608,6 @@ export default {
 		"Lern-Materialien",
 	"components.molecules.copyResult.label.lessonContentGroup":
 		"Unterrichtsinhalte",
-	"components.molecules.copyResult.label.ltiToolsGroup": "LTI Tools-Gruppe",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Abgaben",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -619,10 +617,6 @@ export default {
 	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
 	"components.molecules.copyResult.label.toolElements": "Tool-Element",
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Alte neXboard-Abschnitte wurden nicht kopiert, da das Tool von unserer Plattform entfernt wird. Als Ersatz steht nun das innovative Whiteboard-Tool zur Verfügung.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -1748,7 +1742,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"Für den importierten Kurs wird automatisch ein Kursordner angelegt. Schüler:innenbezogene Daten des Originalkurses werden entfernt. Füge anschließend Schüler:innen hinzu und vergib einen Termin für den Kurs.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Achtung: Tausche im Thema enthaltene, mit Nutzerdaten befüllte Tools (z.B. neXboard, Etherpad, GeoGebra) nachträglich manuell aus, da Änderungen daran sich sonst auf den Original-Kurs auswirken! Dateien (Bilder, Videos, Audio) sowie verlinktes Material sind nicht betroffen und können unverändert bleiben.",
+		"Achtung: Tausche im Thema enthaltene, mit Nutzerdaten befüllte Tools (z.B. Etherpad, GeoGebra) nachträglich manuell aus, da Änderungen daran sich sonst auf den Original-Kurs auswirken! Dateien (Bilder, Videos, Audio) sowie verlinktes Material sind nicht betroffen und können unverändert bleiben.",
 	"pages.rooms.importCourse.step_1.text": "Info",
 	"pages.rooms.importCourse.step_2.text": "Code einfügen",
 	"pages.rooms.importCourse.step_2":
@@ -1819,6 +1813,7 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
+	"pages.rooms.members.actionMenu.ariaLabel": "Aktionsmenü für {memberName}",
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Berechtigung für {memberName} ändern",
@@ -1839,6 +1834,16 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.members.tableHeader.actions": "Aktionen",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} erhält die folgenden Berechtigungen im Raum „{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"Die ausgewählten Mitglieder erhalten die folgenden Berechtigungen im Raum „{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Auf die Bereiche im Raum zugreifen und Inhalte ansehen",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Inhalte erstellen und bearbeiten",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		"Gleiche Berechtigungen wie „Bearbeiten”, zusätzlich andere Mitglieder hinzufügen, entfernen, deren Raumberechtigungen ändern sowie Raum bearbeiten",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
@@ -1910,6 +1915,9 @@ export default {
 		"Beim Einfügen des Textes aus dem Zwischenspeicher ist ein Fehler aufgetreten. Bitte fügen Sie den Text manuell ein.",
 	"pages.tool.settings": "Einstellungen",
 	"pages.tool.title": "Konfiguration externer Tools",
+	"pages.tool.medium": "Externes Medium",
+	"pages.tool.medium.mediumId": "Medium-Id",
+	"pages.tool.medium.mediumSourceId": "Medienkatalog-Id",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.button.startMigration": "Umzug starten",

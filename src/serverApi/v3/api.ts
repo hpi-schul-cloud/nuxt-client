@@ -362,6 +362,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoomEdit = 'ROOM_EDIT',
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
+    RoomLeave = 'ROOM_LEAVE',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -1256,37 +1257,6 @@ export interface ComponentLernstorePropsImpl {
 /**
  * 
  * @export
- * @interface ComponentNexboardPropsImpl
- */
-export interface ComponentNexboardPropsImpl {
-    /**
-     * board of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    board: string;
-    /**
-     * description of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    description: string;
-    /**
-     * title of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    title: string;
-    /**
-     * url of a Nexboard component
-     * @type {string}
-     * @memberof ComponentNexboardPropsImpl
-     */
-    url: string;
-}
-/**
- * 
- * @export
  * @interface ComponentTextPropsImpl
  */
 export interface ComponentTextPropsImpl {
@@ -1327,18 +1297,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     MIGRATION_END_GRACE_PERIOD_MS: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_CTL_TOOLS_TAB_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_LTI_TOOLS_TAB_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -1471,12 +1429,6 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof ConfigResponse
-     */
-    FEATURE_NEXBOARD_COPY_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -2260,13 +2212,11 @@ export enum CopyApiResponseTypeEnum {
     LessonContentGeogebra = 'LESSON_CONTENT_GEOGEBRA',
     LessonContentGroup = 'LESSON_CONTENT_GROUP',
     LessonContentLernstore = 'LESSON_CONTENT_LERNSTORE',
-    LessonContentNexboard = 'LESSON_CONTENT_NEXBOARD',
     LessonContentTask = 'LESSON_CONTENT_TASK',
     LessonContentText = 'LESSON_CONTENT_TEXT',
     LernstoreMaterial = 'LERNSTORE_MATERIAL',
     LernstoreMaterialGroup = 'LERNSTORE_MATERIAL_GROUP',
     LinkElement = 'LINK_ELEMENT',
-    LtitoolGroup = 'LTITOOL_GROUP',
     MediaBoard = 'MEDIA_BOARD',
     MediaLine = 'MEDIA_LINE',
     MediaExternalToolElement = 'MEDIA_EXTERNAL_TOOL_ELEMENT',
@@ -2659,6 +2609,19 @@ export interface CreateCourseBodyParams {
      * @memberof CreateCourseBodyParams
      */
     title: string;
+}
+/**
+ * 
+ * @export
+ * @interface CreateCourseResponse
+ */
+export interface CreateCourseResponse {
+    /**
+     * The id of the created course
+     * @type {string}
+     * @memberof CreateCourseResponse
+     */
+    courseId: string;
 }
 /**
  * 
@@ -4301,10 +4264,10 @@ export interface LdapAuthorizationBodyParams {
 export interface LessonContentResponse {
     /**
      * 
-     * @type {ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl | ComponentNexboardPropsImpl}
+     * @type {ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl}
      * @memberof LessonContentResponse
      */
-    content: ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl | ComponentNexboardPropsImpl;
+    content: ComponentTextPropsImpl | ComponentEtherpadPropsImpl | ComponentGeogebraPropsImpl | ComponentInternalPropsImpl | ComponentLernstorePropsImpl;
     /**
      * The id of the Material entity
      * @type {string}
@@ -4347,8 +4310,7 @@ export enum LessonContentResponseComponentEnum {
     GeoGebra = 'geoGebra',
     Internal = 'internal',
     Resources = 'resources',
-    Text = 'text',
-    NeXboard = 'neXboard'
+    Text = 'text'
 }
 
 /**
@@ -5955,31 +5917,6 @@ export enum NewsTargetModel {
 /**
  * 
  * @export
- * @interface OAuthTokenDto
- */
-export interface OAuthTokenDto {
-    /**
-     * 
-     * @type {string}
-     * @memberof OAuthTokenDto
-     */
-    idToken: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OAuthTokenDto
-     */
-    refreshToken: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof OAuthTokenDto
-     */
-    accessToken: string;
-}
-/**
- * 
- * @export
  * @interface Oauth2AuthorizationBodyParams
  */
 export interface Oauth2AuthorizationBodyParams {
@@ -7031,6 +6968,7 @@ export enum Permission {
     RoomEdit = 'ROOM_EDIT',
     RoomView = 'ROOM_VIEW',
     RoomDelete = 'ROOM_DELETE',
+    RoomLeave = 'ROOM_LEAVE',
     RoomMembersAdd = 'ROOM_MEMBERS_ADD',
     RoomMembersRemove = 'ROOM_MEMBERS_REMOVE',
     RoomMembersChangeRole = 'ROOM_MEMBERS_CHANGE_ROLE',
@@ -7772,6 +7710,19 @@ export interface RoomMemberResponse {
 /**
  * 
  * @export
+ * @interface RoomRoleResponse
+ */
+export interface RoomRoleResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomRoleResponse
+     */
+    roomRoleName: string;
+}
+/**
+ * 
+ * @export
  * @interface SchoolExistsResponse
  */
 export interface SchoolExistsResponse {
@@ -7850,6 +7801,12 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
      * @memberof SchoolExternalToolConfigurationTemplateResponse
      */
     parameters: Array<CustomParameterResponse>;
+    /**
+     * Medium of the external tool
+     * @type {ExternalToolMediumResponse}
+     * @memberof SchoolExternalToolConfigurationTemplateResponse
+     */
+    medium?: ExternalToolMediumResponse;
 }
 /**
  * 
@@ -16091,7 +16048,7 @@ export const CoursesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateCourseResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.courseControllerCreateCourse(createCourseBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -16179,7 +16136,7 @@ export const CoursesApiFactory = function (configuration?: Configuration, basePa
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<void> {
+        courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<CreateCourseResponse> {
             return localVarFp.courseControllerCreateCourse(createCourseBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -16260,7 +16217,7 @@ export interface CoursesApiInterface {
      * @throws {RequiredError}
      * @memberof CoursesApiInterface
      */
-    courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<void>;
+    courseControllerCreateCourse(createCourseBodyParams: CreateCourseBodyParams, options?: any): AxiosPromise<CreateCourseResponse>;
 
     /**
      * 
@@ -21133,6 +21090,44 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Leaving a room
+         * @param {string} roomId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerLeaveRoom: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerLeaveRoom', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/leave`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Remove members from a room
          * @param {string} roomId 
          * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
@@ -21237,7 +21232,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomRoleResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerAddMembers(roomId, addRoomMembersBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -21322,6 +21317,17 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Leaving a room
+         * @param {string} roomId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerLeaveRoom(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerLeaveRoom(roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Remove members from a room
          * @param {string} roomId 
          * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
@@ -21362,7 +21368,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any): AxiosPromise<string> {
+        roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any): AxiosPromise<RoomRoleResponse> {
             return localVarFp.roomControllerAddMembers(roomId, addRoomMembersBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -21439,6 +21445,16 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Leaving a room
+         * @param {string} roomId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerLeaveRoom(roomId: string, options?: any): AxiosPromise<string> {
+            return localVarFp.roomControllerLeaveRoom(roomId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Remove members from a room
          * @param {string} roomId 
          * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
@@ -21477,7 +21493,7 @@ export interface RoomApiInterface {
      * @throws {RequiredError}
      * @memberof RoomApiInterface
      */
-    roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any): AxiosPromise<string>;
+    roomControllerAddMembers(roomId: string, addRoomMembersBodyParams: AddRoomMembersBodyParams, options?: any): AxiosPromise<RoomRoleResponse>;
 
     /**
      * 
@@ -21550,6 +21566,16 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerGetRooms(skip?: number, limit?: number, options?: any): AxiosPromise<RoomListResponse>;
+
+    /**
+     * 
+     * @summary Leaving a room
+     * @param {string} roomId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerLeaveRoom(roomId: string, options?: any): AxiosPromise<string>;
 
     /**
      * 
@@ -21683,6 +21709,18 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
 
     /**
      * 
+     * @summary Leaving a room
+     * @param {string} roomId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerLeaveRoom(roomId: string, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerLeaveRoom(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Remove members from a room
      * @param {string} roomId 
      * @param {RemoveRoomMembersBodyParams} removeRoomMembersBodyParams 
@@ -21705,204 +21743,6 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerUpdateRoom(roomId: string, updateRoomBodyParams: UpdateRoomBodyParams, options?: any) {
         return RoomApiFp(this.configuration).roomControllerUpdateRoom(roomId, updateRoomBodyParams, options).then((request) => request(this.axios, this.basePath));
-    }
-}
-
-
-/**
- * SSOApi - axios parameter creator
- * @export
- */
-export const SSOApiAxiosParamCreator = function (configuration?: Configuration) {
-    return {
-        /**
-         * 
-         * @param {string} oauthClientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        oauthSSOControllerGetHydraOauthToken: async (oauthClientId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'oauthClientId' is not null or undefined
-            assertParamExists('oauthSSOControllerGetHydraOauthToken', 'oauthClientId', oauthClientId)
-            const localVarPath = `/sso/hydra/{oauthClientId}`
-                .replace(`{${"oauthClientId"}}`, encodeURIComponent(String(oauthClientId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @param {string} oauthClientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        oauthSSOControllerRequestAuthToken: async (oauthClientId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'oauthClientId' is not null or undefined
-            assertParamExists('oauthSSOControllerRequestAuthToken', 'oauthClientId', oauthClientId)
-            const localVarPath = `/sso/auth/{oauthClientId}`
-                .replace(`{${"oauthClientId"}}`, encodeURIComponent(String(oauthClientId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
-    }
-};
-
-/**
- * SSOApi - functional programming interface
- * @export
- */
-export const SSOApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = SSOApiAxiosParamCreator(configuration)
-    return {
-        /**
-         * 
-         * @param {string} oauthClientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async oauthSSOControllerGetHydraOauthToken(oauthClientId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OAuthTokenDto>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerGetHydraOauthToken(oauthClientId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {string} oauthClientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async oauthSSOControllerRequestAuthToken(oauthClientId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.oauthSSOControllerRequestAuthToken(oauthClientId, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-    }
-};
-
-/**
- * SSOApi - factory interface
- * @export
- */
-export const SSOApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = SSOApiFp(configuration)
-    return {
-        /**
-         * 
-         * @param {string} oauthClientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        oauthSSOControllerGetHydraOauthToken(oauthClientId: string, options?: any): AxiosPromise<OAuthTokenDto> {
-            return localVarFp.oauthSSOControllerGetHydraOauthToken(oauthClientId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @param {string} oauthClientId 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        oauthSSOControllerRequestAuthToken(oauthClientId: string, options?: any): AxiosPromise<object> {
-            return localVarFp.oauthSSOControllerRequestAuthToken(oauthClientId, options).then((request) => request(axios, basePath));
-        },
-    };
-};
-
-/**
- * SSOApi - interface
- * @export
- * @interface SSOApi
- */
-export interface SSOApiInterface {
-    /**
-     * 
-     * @param {string} oauthClientId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SSOApiInterface
-     */
-    oauthSSOControllerGetHydraOauthToken(oauthClientId: string, options?: any): AxiosPromise<OAuthTokenDto>;
-
-    /**
-     * 
-     * @param {string} oauthClientId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SSOApiInterface
-     */
-    oauthSSOControllerRequestAuthToken(oauthClientId: string, options?: any): AxiosPromise<object>;
-
-}
-
-/**
- * SSOApi - object-oriented interface
- * @export
- * @class SSOApi
- * @extends {BaseAPI}
- */
-export class SSOApi extends BaseAPI implements SSOApiInterface {
-    /**
-     * 
-     * @param {string} oauthClientId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SSOApi
-     */
-    public oauthSSOControllerGetHydraOauthToken(oauthClientId: string, options?: any) {
-        return SSOApiFp(this.configuration).oauthSSOControllerGetHydraOauthToken(oauthClientId, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {string} oauthClientId 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof SSOApi
-     */
-    public oauthSSOControllerRequestAuthToken(oauthClientId: string, options?: any) {
-        return SSOApiFp(this.configuration).oauthSSOControllerRequestAuthToken(oauthClientId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 

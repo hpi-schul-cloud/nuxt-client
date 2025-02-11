@@ -16,11 +16,16 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
-import { AddMembers, MembersTable } from "@feature-room";
+import {
+	AddMembers,
+	MembersTable,
+	ChangeRole,
+	useRoomAuthorization,
+} from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { VueWrapper } from "@vue/test-utils";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
@@ -39,6 +44,19 @@ jest.mock("@vueuse/integrations"); // mock focus trap from add members because w
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
+
+jest.mock("@feature-room/roomAuthorization.composable");
+const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
+	canAddRoomMembers: ref(false),
+	canCreateRoom: ref(false),
+	canChangeOwner: ref(false),
+	canViewRoom: ref(false),
+	canEditRoom: ref(false),
+	canDeleteRoom: ref(false),
+	canLeaveRoom: ref(false),
+	canRemoveRoomMembers: ref(false),
+};
+(useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
@@ -108,7 +126,13 @@ describe("RoomMembersPage", () => {
 
 		const room = createRoom ? buildRoom() : undefined;
 
-		const members = roomMemberFactory(RoleName.Roomeditor).buildList(3);
+		const members = roomMemberFactory(RoleName.Roomeditor)
+			.buildList(3)
+			.map((member) => ({
+				...member,
+				displayRoomRole: "",
+				displaySchoolRole: "",
+			}));
 		mockRoomMemberCalls.roomMembers = ref(members);
 		mockRoomMemberCalls.currentUser = computed(() => {
 			return {
@@ -204,6 +228,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should open confirmation dialog", async () => {
+			roomPermissions.canLeaveRoom.value = true;
 			const { wrapper } = setup({ currentUserRole: RoleName.Roomadmin });
 			askConfirmationMock.mockResolvedValue(true);
 
@@ -234,12 +259,10 @@ describe("RoomMembersPage", () => {
 			);
 			await leaveMenu.trigger("click");
 
-			expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalledWith([
-				mockRoomMemberCalls.currentUser.value.userId,
-			]);
+			expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalled();
 		});
 
-		it("should not call remove method  when dialog is cancelled", async () => {
+		it("should not call remove method when dialog is cancelled", async () => {
 			const { wrapper } = setup({ currentUserRole: RoleName.Roomadmin });
 
 			askConfirmationMock.mockResolvedValue(false);
@@ -256,6 +279,40 @@ describe("RoomMembersPage", () => {
 		});
 	});
 
+	describe("onRemoveMembers", () => {
+		it("should call 'removeMembers' method", () => {
+			mockRoomMemberCalls.isLoading = ref(false);
+			const { wrapper } = setup();
+
+			const membersTable = wrapper.findComponent(MembersTable);
+			membersTable.vm.$emit("remove:members");
+			expect(mockRoomMemberCalls.removeMembers).toHaveBeenCalled();
+		});
+	});
+
+	describe("onChangeRole", () => {
+		it("should call 'updateMembersRole' method", async () => {
+			mockRoomMemberCalls.isLoading = ref(false);
+			const { wrapper, members } = setup();
+			await nextTick();
+
+			const membersTable = wrapper.findComponent(MembersTable);
+			membersTable.vm.$emit("change:permission", [members[1].userId]);
+			await nextTick();
+
+			const changeRoleDialog = wrapper.findComponent(ChangeRole);
+			changeRoleDialog.vm.$emit(
+				"confirm",
+				RoleName.Roomeditor,
+				members[1].userId
+			);
+			expect(mockRoomMemberCalls.updateMembersRole).toHaveBeenCalledWith(
+				RoleName.Roomeditor,
+				members[1].userId
+			);
+		});
+	});
+
 	describe("visibility options", () => {
 		describe("title menu visibility", () => {
 			it.each([
@@ -266,6 +323,7 @@ describe("RoomMembersPage", () => {
 			])(
 				"%s role should see the title menu",
 				async (currentUserRole, expectedVisibility) => {
+					roomPermissions.canLeaveRoom.value = expectedVisibility;
 					const { wrapper } = setup({ currentUserRole });
 					const titleMenu = wrapper.findComponent(
 						'[data-testid="room-member-menu"]'

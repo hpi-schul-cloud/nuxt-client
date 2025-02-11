@@ -53,6 +53,7 @@
 								v-if="hasDeletePermission"
 								:name="card.title"
 								:scope="BoardMenuScope.CARD"
+								scope-language-key="components.boardCard"
 								@click="onDeleteCard"
 							/>
 						</BoardMenu>
