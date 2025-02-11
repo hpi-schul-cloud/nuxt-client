@@ -14,7 +14,7 @@
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSyncedSchool"
 					data-testid="school-name"
-					:rules="[validate]"
+					:rules="[containsOpeningTag]"
 				/>
 			</v-col>
 		</v-row>
@@ -153,10 +153,10 @@ import { useOpeningTagValidator } from "@/utils/validation";
 
 export default {
 	setup() {
-		const { validate } = useOpeningTagValidator();
+		const { containsOpeningTag } = useOpeningTagValidator();
 
 		return {
-			validate,
+			containsOpeningTag,
 		};
 	},
 	components: {

@@ -16,7 +16,7 @@
 					:label="$t('pages.rooms.roomModal.courseGroupTitle')"
 					@blur="onBlur"
 					@keyup.enter="onEnterInput"
-					:rules="[validate]"
+					:rules="[containsOpeningTag]"
 				/>
 			</div>
 		</template>
@@ -43,10 +43,10 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
 	setup() {
-		const { validate } = useOpeningTagValidator();
+		const { containsOpeningTag } = useOpeningTagValidator();
 
 		return {
-			validate,
+			containsOpeningTag,
 		};
 	},
 	components: {

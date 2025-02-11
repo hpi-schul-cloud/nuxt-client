@@ -132,12 +132,12 @@ const props = defineProps({
 
 const { t } = useI18n();
 const nameInput = ref(undefined);
-const { validate } = useOpeningTagValidator();
+const { containsOpeningTag } = useOpeningTagValidator();
 
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
 	containsOpeningTag: (value: string) => {
-		return validate(value);
+		return containsOpeningTag(value);
 	},
 });
 

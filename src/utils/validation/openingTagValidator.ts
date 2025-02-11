@@ -9,7 +9,7 @@ export const containsOpeningTagFollowedByString = (input: string) => {
 export const useOpeningTagValidator = () => {
 	const { t } = useI18n();
 
-	const validate = (input: string): string | true => {
+	const containsOpeningTag = (input: string): string | true => {
 		const errorMessage = t("common.validation.containsOpeningTag");
 		const fieldIsValid = true;
 
@@ -19,6 +19,6 @@ export const useOpeningTagValidator = () => {
 	};
 
 	return {
-		validate,
+		containsOpeningTag,
 	};
 };
