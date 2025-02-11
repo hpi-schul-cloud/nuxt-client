@@ -16,6 +16,7 @@
 					:label="$t('pages.rooms.roomModal.courseGroupTitle')"
 					@blur="onBlur"
 					@keyup.enter="onEnterInput"
+					:rules="[containsOpeningTag]"
 				/>
 			</div>
 		</template>
@@ -32,14 +33,22 @@
 		</template>
 	</vCustomDialog>
 </template>
-<script>
+<script lang="ts">
 import RoomAvatarIterator from "@/components/organisms/RoomAvatarIterator.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { courseRoomListModule } from "@/store";
+import { useOpeningTagValidator } from "@/utils/validation";
 import { mdiKeyboardReturn, mdiPencilOutline } from "@icons/material";
 import { defineComponent } from "vue";
 
 export default defineComponent({
+	setup() {
+		const { containsOpeningTag } = useOpeningTagValidator();
+
+		return {
+			containsOpeningTag,
+		};
+	},
 	components: {
 		vCustomDialog,
 		RoomAvatarIterator,

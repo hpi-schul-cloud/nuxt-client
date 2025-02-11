@@ -235,6 +235,21 @@ describe("RoomModal", () => {
 				expect(emitted && emitted[0][0]).toEqual(roomItem);
 			});
 		});
+
+		describe("when room name contains < followed by a string", () => {
+			it("should show validation error", async () => {
+				const { wrapper } = getWrapper({ isOpen: true });
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+
+				await input.setValue("<abc123");
+
+				expect(textField.text()).toContain(
+					"common.validation.containsOpeningTag"
+				);
+			});
+		});
 	});
 
 	describe("when vCustomDialog emits dialog-closed", () => {

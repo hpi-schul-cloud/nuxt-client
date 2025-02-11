@@ -158,6 +158,8 @@ export default {
 	"common.validation.required2": "Este es un campo obligatorio.",
 	"common.validation.tooLong":
 		"The text you entered exceeds the maximum length",
+	"common.validation.containsOpeningTag":
+		"Inserte un espacio después del signo menos-que.",
 	"common.words.and": "y",
 	"common.words.classes": "Clases",
 	"common.words.color": "Color",
