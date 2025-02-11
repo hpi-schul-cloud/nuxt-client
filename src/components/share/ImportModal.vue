@@ -136,7 +136,7 @@ const nameInput = ref(undefined);
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
 	containsOpeningTag: (value: string) => {
-		return OpeningTagValidator.getValidationMessage(value, t);
+		return OpeningTagValidator.validate(value);
 	},
 });
 

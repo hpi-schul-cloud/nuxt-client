@@ -124,20 +124,17 @@ describe("OpeningTagValidator", () => {
 	describe("getValidationMessage", () => {
 		describe("when the string contains < followed by a string", () => {
 			it("should return error message when < is followed directly by a string", () => {
-				expect(
-					OpeningTagValidator.getValidationMessage("Hello <world", (key) => key)
-				).toBe("common.validation.containsOpeningTag");
+				expect(OpeningTagValidator.validate("Hello <world")).toBe(
+					"common.validation.containsOpeningTag"
+				);
 			});
 		});
 
 		describe("when the string does not contain < followed by a string", () => {
 			it("should return true when the string does not contain < followed by a string", () => {
-				expect(
-					OpeningTagValidator.getValidationMessage(
-						"No special character here",
-						(key) => key
-					)
-				).toBe(true);
+				expect(OpeningTagValidator.validate("No special character here")).toBe(
+					true
+				);
 			});
 		});
 	});

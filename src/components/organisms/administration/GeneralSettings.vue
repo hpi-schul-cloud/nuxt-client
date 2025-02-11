@@ -295,7 +295,7 @@ export default {
 			schoolsModule.update({ id: this.localSchool.id, props: updatedSchool });
 		},
 		validateTextField(value: string) {
-			return OpeningTagValidator.getValidationMessage(value, this.$t);
+			return OpeningTagValidator.validate(value);
 		},
 	},
 };

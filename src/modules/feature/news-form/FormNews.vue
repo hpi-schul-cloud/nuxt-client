@@ -266,7 +266,7 @@ export default defineComponent({
 			this.isConfirmDialogActive = true;
 		},
 		validateTextField(value: string) {
-			return OpeningTagValidator.getValidationMessage(value, this.$t);
+			return OpeningTagValidator.validate(value);
 		},
 	},
 });

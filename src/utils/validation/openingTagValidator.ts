@@ -6,7 +6,7 @@ export class OpeningTagValidator {
 		return regex.test(input);
 	}
 
-	static getValidationMessage(input: string): string | boolean {
+	static validate(input: string): string | true {
 		const { t } = useI18n();
 		const errorMessage = t("common.validation.containsOpeningTag");
 		const fieldIsValid = true;

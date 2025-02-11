@@ -94,7 +94,7 @@ export default defineComponent({
 			await this.updateCourseGroupName();
 		},
 		validateTextField(value: string) {
-			return OpeningTagValidator.getValidationMessage(value, this.$t);
+			return OpeningTagValidator.validate(value);
 		},
 	},
 });
