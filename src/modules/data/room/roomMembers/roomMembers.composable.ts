@@ -65,7 +65,7 @@ export const useRoomMembers = (roomId: string) => {
 				};
 			});
 			isLoading.value = false;
-		} catch (error) {
+		} catch {
 			showFailure(t("pages.rooms.members.error.load"));
 			isLoading.value = false;
 		}
@@ -96,7 +96,7 @@ export const useRoomMembers = (roomId: string) => {
 						!roomMembers.value.some((member) => member.userId === user.id)
 					);
 				});
-		} catch (error) {
+		} catch {
 			showFailure(t("pages.rooms.members.error.load"));
 		}
 	};
@@ -132,22 +132,33 @@ export const useRoomMembers = (roomId: string) => {
 					displaySchoolRole: schoolRole[member.schoolRoleName],
 				}))
 			);
-		} catch (error) {
+		} catch {
 			showFailure(t("pages.rooms.members.error.add"));
 		}
 	};
 
-	const removeMembers = async () => {
+	const removeMembers = async (userIds: string[]) => {
 		try {
 			await roomApi.roomControllerRemoveMembers(roomId, {
-				userIds: selectedIds.value,
+				userIds,
 			});
 			roomMembers.value = roomMembers.value.filter(
-				(member) => !selectedIds.value.includes(member.userId)
+				(member) => !userIds.includes(member.userId)
 			);
 			selectedIds.value = [];
-		} catch (error) {
+		} catch {
 			showFailure(t("pages.rooms.members.error.remove"));
+		}
+	};
+
+	const leaveRoom = async () => {
+		isLoading.value = true;
+		try {
+			await roomApi.roomControllerLeaveRoom(roomId);
+		} catch {
+			showFailure(t("pages.rooms.members.error.remove"));
+		} finally {
+			isLoading.value = false;
 		}
 	};
 
@@ -177,7 +188,7 @@ export const useRoomMembers = (roomId: string) => {
 					member.displayRoomRole = roomRole[roleName];
 				}
 			});
-		} catch (error) {
+		} catch {
 			showFailure(t("pages.rooms.members.error.updateRole"));
 		}
 	};
@@ -187,6 +198,7 @@ export const useRoomMembers = (roomId: string) => {
 		fetchMembers,
 		getPotentialMembers,
 		getSchools,
+		leaveRoom,
 		removeMembers,
 		updateMembersRole,
 		currentUser,

@@ -137,6 +137,7 @@ const {
 	fetchMembers,
 	getPotentialMembers,
 	getSchools,
+	leaveRoom,
 	removeMembers,
 	updateMembersRole,
 } = useRoomMembers(roomId);
@@ -179,8 +180,8 @@ const onUpdateRoleOrSchool = async (payload: {
 	await getPotentialMembers(payload.schoolRole, payload.schoolId);
 };
 
-const onRemoveMembers = async () => {
-	await removeMembers();
+const onRemoveMembers = async (userIds: string[]) => {
+	await removeMembers(userIds);
 };
 
 const onLeaveRoom = async () => {
@@ -192,7 +193,7 @@ const onLeaveRoom = async () => {
 	});
 
 	if (!shouldLeave) return;
-	await removeMembers();
+	await leaveRoom();
 	router.push("/rooms");
 };
 
