@@ -17,7 +17,6 @@ import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import {
 	COPY_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 	LOADING_STATE_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
@@ -51,10 +50,6 @@ describe("@components/share/ImportFlow", () => {
 	};
 
 	const setup = (attrs = {}) => {
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			getCtlToolsTabEnabled: false,
-		});
-
 		const wrapper = mount(ImportFlow, {
 			global: {
 				plugins: [
@@ -66,7 +61,6 @@ describe("@components/share/ImportFlow", () => {
 					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					[LOADING_STATE_MODULE_KEY]: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 			props: {

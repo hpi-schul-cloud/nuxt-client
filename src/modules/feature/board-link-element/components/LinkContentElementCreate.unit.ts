@@ -1,6 +1,4 @@
-import { envConfigModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
-import { envsFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -25,9 +23,6 @@ describe("LinkContentElementCreate", () => {
 	});
 
 	const setup = () => {
-		const envs = envsFactory.build({ FEATURE_NEXBOARD_COPY_ENABLED: true });
-		envConfigModule.setEnvs(envs);
-
 		const wrapper = mount(LinkContentElementCreate, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});

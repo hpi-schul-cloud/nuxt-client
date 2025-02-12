@@ -42,7 +42,7 @@
 						@click="onMoveElementDown"
 					/>
 					<KebabMenuActionDelete
-						:scope="BoardMenuScope.SUBMISSION_ELEMENT"
+						scope-language-key="components.cardElement.submissionElement"
 						@click="onDeleteElement"
 					/>
 				</BoardMenu>

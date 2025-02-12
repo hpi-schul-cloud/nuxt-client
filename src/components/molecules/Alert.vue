@@ -7,11 +7,10 @@
 		closable
 		max-width="400"
 		min-width="200"
-		:close-label="$t('common.labels.close')"
 		border="start"
 		@update:modelValue="closeNotification"
 	>
-		<div class="alert-text mr-2">
+		<div class="alert-text mr-2" data-testId="alert-text">
 			{{ text }}
 		</div>
 	</v-alert>

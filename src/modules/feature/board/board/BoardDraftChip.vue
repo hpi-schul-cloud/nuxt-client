@@ -1,0 +1,14 @@
+<template>
+	<VTooltip location="bottom" :text="$t('components.board.draftChip.tooltip')">
+		<template v-slot:activator="{ props }">
+			<VChip
+				v-bind="props"
+				size="small"
+				class="align-self-center cursor-default"
+				data-testid="board-draft-chip"
+			>
+				{{ $t("common.words.draft") }}
+			</VChip>
+		</template>
+	</VTooltip>
+</template>

@@ -33,7 +33,7 @@
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
-					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
+					scope-language-key="components.cardElement.videoConferenceElement"
 					@click="onDelete"
 				/>
 			</BoardMenu>
@@ -50,7 +50,7 @@
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
-					:scope="BoardMenuScope.VIDEO_CONFERENCE_ELEMENT"
+					scope-language-key="components.cardElement.videoConferenceElement"
 					@click="onDelete"
 				/>
 			</BoardMenu>
@@ -165,8 +165,15 @@ useBoardFocusHandler(element.value.id, videoConferenceElement);
 
 const { contextType } = useSharedBoardPageInformation();
 
+const preFetchedUrl = ref<string | undefined>(undefined);
+
 if (isVideoConferenceEnabled.value) {
-	onMounted(fetchVideoConferenceInfo);
+	onMounted(async () => {
+		await fetchVideoConferenceInfo();
+		if (isRunning.value) {
+			preFetchedUrl.value = await joinVideoConference();
+		}
+	});
 }
 
 const { modelValue, computedElement } = useContentElementState(props, {
@@ -210,12 +217,17 @@ const isCreating = computed(
 const boardParentType = computed(() => contextType.value);
 
 const onContentClick = async () => {
-	await fetchVideoConferenceInfo();
-	if (isRunning.value && hasParticipationPermission.value) {
-		await onJoinVideoConference();
+	if (
+		isRunning.value &&
+		preFetchedUrl.value &&
+		hasParticipationPermission.value
+	) {
+		window.open(preFetchedUrl.value, "_blank");
 	} else if (!isRunning.value && canStart.value) {
 		isConfigurationDialogOpen.value = true;
 	}
+
+	await fetchVideoConferenceInfo();
 };
 
 const onCloseConfigurationDialog = () =>
@@ -234,23 +246,20 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 };
 const onStartVideoConference = async () => {
 	const logoutUrl: URL = new URL(`/boards/${boardId}`, window.location.origin);
+	const windowReference = window.open();
+
 	await startVideoConference(
 		videoConferenceInfo.value.options,
 		logoutUrl.toString()
 	);
 
-	await onJoinVideoConference();
-	isConfigurationDialogOpen.value = false;
-};
-
-const onJoinVideoConference = async () => {
-	const windowReference = window.open();
-
 	joinVideoConference().then((response: string | undefined) => {
 		if (response && windowReference) {
 			windowReference.location = response;
+			preFetchedUrl.value = response;
 		}
 	});
+	isConfigurationDialogOpen.value = false;
 };
 
 const onContentEnter = async () => {

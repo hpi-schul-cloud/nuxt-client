@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="mb-4">
 		<p class="mb-6">
 			{{ t("components.administration.externalToolsSection.info") }}
 		</p>
@@ -12,12 +12,12 @@
 			:no-data-text="t('common.nodata')"
 		>
 			<template #[`item.name`]="{ item }">
-				<span>
+				<span data-testid="external-tool-name">
 					{{ item.name }}
 				</span>
 			</template>
 			<template #[`item.statusText`]="{ item }">
-				<div class="text-no-wrap">
+				<div class="text-no-wrap" data-testid="external-tool-status">
 					<v-icon
 						v-if="item.isOutdated || item.isDeactivated"
 						color="warning"
@@ -33,24 +33,32 @@
 					</span>
 				</div>
 			</template>
+			<template #[`item.restrictToContexts`]="{ item }">
+				<span data-testid="external-tool-context-restriction">
+					{{ item.restrictToContexts }}
+				</span>
+			</template>
 			<template #[`item.actions`]="{ item }">
 				<external-tool-toolbar
 					class="text-no-wrap"
 					@edit="editTool(item)"
 					@datasheet="showDatasheet(item)"
 					@delete="openDeleteDialog(item)"
+					data-testid="external-tool-actions"
 				/>
 			</template>
 		</v-data-table>
-		<v-btn
-			class="mt-8 mb-4 button-save float-right"
-			color="primary"
-			variant="flat"
-			data-testid="add-external-tool-button"
-			:to="{ name: 'administration-tool-config-overview' }"
-		>
-			{{ t("components.administration.externalToolsSection.action.add") }}
-		</v-btn>
+		<div class="d-flex mt-8" data-testid="external-tool-section-table-actions">
+			<VSpacer />
+			<VBtn
+				color="primary"
+				variant="flat"
+				data-testid="add-external-tool-button"
+				:to="{ name: 'administration-tool-config-overview' }"
+			>
+				{{ t("components.administration.externalToolsSection.action.add") }}
+			</VBtn>
+		</div>
 
 		<v-dialog
 			v-if="metadata"
@@ -133,21 +141,23 @@
 			</v-card>
 		</v-dialog>
 	</div>
+	<VidisMediaSyncSection v-if="isVidisEnabled" />
 </template>
 
 <script setup lang="ts">
 import { ToolApiAxiosParamCreator } from "@/serverApi/v3";
 import { RequestArgs } from "@/serverApi/v3/base";
 import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
 import { DataTableHeader } from "@/store/types/data-table-header";
 import {
 	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
-	ENV_CONFIG_MODULE_KEY,
 } from "@/utils/inject";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
@@ -157,6 +167,7 @@ import { useRouter } from "vue-router";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import ExternalToolToolbar from "./ExternalToolToolbar.vue";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
+import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 
 const schoolExternalToolsModule: SchoolExternalToolsModule = injectStrict(
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY
@@ -259,6 +270,10 @@ const isMediaBoardUsageVisible: ComputedRef<boolean> = computed(() => {
 		metadata.value.mediaBoard > 0 ||
 		envConfigModule.getEnv.FEATURE_MEDIA_SHELF_ENABLED;
 	return isVisible;
+});
+
+const isVidisEnabled: ComputedRef<boolean> = computed(() => {
+	return envConfigModule.getEnv.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED;
 });
 </script>
 

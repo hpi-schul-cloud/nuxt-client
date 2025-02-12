@@ -18,9 +18,7 @@
 					icon
 					variant="text"
 					@click="copyLoginLink(0)"
-					:aria-label="
-						$t('pages.administration.school.index.authSystems.copyLink')
-					"
+					:aria-label="$t('common.actions.shareLink')"
 				>
 					<v-icon>
 						{{ getCopyStatus(0) ? iconMdiCheckCircle : iconMdiContentCopy }}
@@ -67,11 +65,7 @@
 										icon
 										variant="text"
 										@click="copyLoginLink(system.id)"
-										:aria-label="
-											$t(
-												'pages.administration.school.index.authSystems.copyLink'
-											)
-										"
+										:aria-label="$t('common.actions.shareLink')"
 									>
 										<v-icon
 											>{{

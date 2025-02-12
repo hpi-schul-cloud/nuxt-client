@@ -16,6 +16,7 @@ export default {
 	"common.actions.logout": "Abmelden",
 	"common.actions.ok": "OK",
 	"common.actions.pickColor": "Hintergrundfarbe auswählen",
+	"common.actions.leave": "Verlassen",
 	"common.actions.remove": "Entfernen",
 	"common.actions.rename": "Umbenennen",
 	"common.actions.save": "Speichern",
@@ -23,6 +24,7 @@ export default {
 	"common.actions.share": "Teilen",
 	"common.actions.export": "Exportieren",
 	"common.actions.shareCopy": "Kopie teilen",
+	"common.actions.shareLink": "Link kopieren",
 	"common.actions.update": "Aktualisieren",
 	"common.ariaLabel.newTab": "öffnet in einem neuen Tab",
 	"common.ariaLabel.sameTab": "öffnet im selben Tab",
@@ -303,12 +305,19 @@ export default {
 		"Tool bearbeiten",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Datenblatt anzeigen",
+	"components.administration.externalToolsSection.action.sync":
+		"Verfügbarkeit aktualisieren",
 	"components.administration.externalToolsSection.description.firstParagraph":
 		"Die schulspezifischen Parameter für das externe Tool werden hier konfiguriert. Nach dem Speichern der Konfiguration ist das Tool innerhalb der Schule verfügbar.",
 	"components.administration.externalToolsSection.description.secondParagraph":
 		"Weitere Informationen sind in unserem {0} zu finden.",
 	"components.administration.externalToolsSection.description.secondParagraph.link":
 		"Hilfebereich zu externen Tools",
+	"components.administration.externalToolsSection.vidis.title": "VIDIS-Medien",
+	"components.administration.externalToolsSection.vidis.description":
+		"Die Verfügbarkeit der VIDIS-Medien wird automatisch aktualisiert. Zusätzlich kann die Verfügbarkeit der Medien hier manuell aktualisiert werden, z.B. um kürzlich aktivierte Medien direkt in der Schulcloud nutzen zu können.",
+	"components.administration.externalToolsSection.vidis.notification.success":
+		"VIDIS-Medien erfolgreich aktualisiert",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
@@ -377,13 +386,10 @@ export default {
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.action.changeLayout": "Ansicht ändern",
 	"components.board.action.shareLink.card": "Link zur Karte kopieren",
-	"components.board.alert.info.teacher":
-		"Dieser Bereich ist sichtbar für alle Kursteilnehmenden.",
-	"components.board.alert.info.draft":
-		"Dieser Bereich ist nicht für die Kursteilnehmenden sichtbar.",
 	"components.board.column.defaultTitle": "Neuer Abschnitt",
 	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
+	"components.board.draftChip.tooltip": "Nur für Lehrkräfte sichtbar",
 	"components.board.error.404":
 		"Fehler 404 – Bereich mit diesem Namen wurde nicht gefunden",
 	"components.board.error.403":
@@ -600,8 +606,6 @@ export default {
 		"Lern-Materialien",
 	"components.molecules.copyResult.label.lessonContentGroup":
 		"Unterrichtsinhalte",
-	"components.molecules.copyResult.label.ltiToolsGroup": "LTI Tools-Gruppe",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Abgaben",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -611,10 +615,6 @@ export default {
 	"components.molecules.copyResult.label.userGroup": "Benutzergruppe",
 	"components.molecules.copyResult.label.toolElements": "Tool-Element",
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Alte neXboard-Abschnitte wurden nicht kopiert, da das Tool von unserer Plattform entfernt wird. Als Ersatz steht nun das innovative Whiteboard-Tool zur Verfügung.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -749,7 +749,6 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Link nur schulintern gültig",
 	"components.molecules.share.options.title": "Teilen-Einstellungen",
-	"components.molecules.share.result.copyClipboard": "Link kopieren",
 	"components.molecules.share.result.mailShare": "Als Mail versenden",
 	"components.molecules.share.result.qrCodeScan": "QR-Code scannen",
 	"components.molecules.share.result.title": "Teilen über",
@@ -1248,7 +1247,6 @@ export default {
 	"pages.administration.school.index.authSystems.alias": "Alias",
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"Sind Sie sich sicher, dass Sie folgendes Authentifizierungs-System löschen wollen?",
-	"pages.administration.school.index.authSystems.copyLink": "Link kopieren",
 	"pages.administration.school.index.authSystems.delete": "{system} löschen",
 	"pages.administration.school.index.authSystems.deleteAuthSystem":
 		"Authentifizierung löschen",
@@ -1742,7 +1740,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"Für den importierten Kurs wird automatisch ein Kursordner angelegt. Schüler:innenbezogene Daten des Originalkurses werden entfernt. Füge anschließend Schüler:innen hinzu und vergib einen Termin für den Kurs.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Achtung: Tausche im Thema enthaltene, mit Nutzerdaten befüllte Tools (z.B. neXboard, Etherpad, GeoGebra) nachträglich manuell aus, da Änderungen daran sich sonst auf den Original-Kurs auswirken! Dateien (Bilder, Videos, Audio) sowie verlinktes Material sind nicht betroffen und können unverändert bleiben.",
+		"Achtung: Tausche im Thema enthaltene, mit Nutzerdaten befüllte Tools (z.B. Etherpad, GeoGebra) nachträglich manuell aus, da Änderungen daran sich sonst auf den Original-Kurs auswirken! Dateien (Bilder, Videos, Audio) sowie verlinktes Material sind nicht betroffen und können unverändert bleiben.",
 	"pages.rooms.importCourse.step_1.text": "Info",
 	"pages.rooms.importCourse.step_2.text": "Code einfügen",
 	"pages.rooms.importCourse.step_2":
@@ -1800,6 +1798,8 @@ export default {
 		"Räume sind vorerst nur für Lehrkräfte sichtbar und werden weiter ausgebaut. Weitere Information gibt es auf unserer {helpLink}. Wir freuen uns über {feedbackLink} zum aktuellen Stand.",
 	"pages.rooms.infoAlert.welcome.visibility.help": "Hilfeseite",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "Rückmeldungen",
+	"pages.rooms.leaveRoom.confirmation": 'Raum "{roomName}" wirklich verlassen?',
+	"pages.rooms.leaveRoom.menu": "Raum verlassen",
 	"pages.rooms.members.error.load":
 		"Die Teilnehmenden-Liste konnte nicht geladen werden.",
 	"pages.rooms.members.error.add":
@@ -1811,6 +1811,10 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
+	"pages.rooms.members.actionMenu.ariaLabel": "Aktionsmenü für {memberName}",
+	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
+	"pages.rooms.members.changePermission.ariaLabel":
+		"Berechtigung für {memberName} ändern",
 	"pages.rooms.members.manage": "Raum-Mitglieder",
 	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
@@ -1827,6 +1831,17 @@ export default {
 	"pages.rooms.members.roomPermissions.viewer": "Lesen",
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
+	"pages.rooms.members.tableHeader.actions": "Aktionen",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} erhält die folgenden Berechtigungen im Raum „{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"Die ausgewählten Mitglieder erhalten die folgenden Berechtigungen im Raum „{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Auf die Bereiche im Raum zugreifen und Inhalte ansehen",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Inhalte erstellen und bearbeiten",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		"Gleiche Berechtigungen wie „Bearbeiten”, zusätzlich andere Mitglieder hinzufügen, entfernen, deren Raumberechtigungen ändern sowie Raum bearbeiten",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
@@ -1898,6 +1913,9 @@ export default {
 		"Beim Einfügen des Textes aus dem Zwischenspeicher ist ein Fehler aufgetreten. Bitte fügen Sie den Text manuell ein.",
 	"pages.tool.settings": "Einstellungen",
 	"pages.tool.title": "Konfiguration externer Tools",
+	"pages.tool.medium": "Externes Medium",
+	"pages.tool.medium.mediumId": "Medium-Id",
+	"pages.tool.medium.mediumSourceId": "Medienkatalog-Id",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.button.startMigration": "Umzug starten",
@@ -1953,7 +1971,6 @@ export default {
 	"tldraw.error.ws.4404": "Whiteboard mit diesem Namen wurde nicht gefunden",
 	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
 	"ui-confirmation-dialog.ask-cancel-form": "Änderungen verwerfen?",
-	"ui-layout.topbar.pageShare.copyLink": "Link kopieren",
 	"ui-layout.topbar.pageShare.printQRCode": "QR-Code drucken",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",

@@ -40,6 +40,21 @@
 			@cancel="onCancel"
 			@save="onSave"
 		>
+			<template #aboveSettings="{ selectedTemplate }">
+				<div v-if="selectedTemplate && selectedTemplate.medium" class="mb-10">
+					<h2 class="text-h4">
+						{{ $t("pages.tool.medium") }}
+					</h2>
+					<p>
+						{{ $t("pages.tool.medium.mediumId") }}:
+						{{ selectedTemplate.medium.mediumId }}
+					</p>
+					<p>
+						{{ $t("pages.tool.medium.mediumSourceId") }}:
+						{{ selectedTemplate.medium.mediaSourceId }}
+					</p>
+				</div>
+			</template>
 			<template #aboveParameters="{ selectedTemplate }">
 				<v-checkbox
 					v-if="selectedTemplate"
