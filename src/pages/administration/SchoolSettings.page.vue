@@ -229,7 +229,7 @@ export default defineComponent({
 		const openedPanels: ComputedRef<string[]> = computed(() =>
 			route.query.openPanels ? route.query.openPanels.toString().split(",") : []
 		);
-		const systems: ComputedRef<any[]> = computed(
+		const systems: ComputedRef<string[]> = computed(
 			() => schoolsModule.getSystems
 		);
 		const isLoading: ComputedRef<boolean> = computed(
