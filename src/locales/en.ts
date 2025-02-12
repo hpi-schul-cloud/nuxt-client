@@ -1780,9 +1780,9 @@ export default {
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.actionMenu.ariaLabel": "Action menu for {memberName}",
-	"pages.rooms.members.changePermission": "Change permissions",
+	"pages.rooms.members.changePermission": "Change room permissions",
 	"pages.rooms.members.changePermission.ariaLabel":
-		"Change permissions for {memberName}",
+		"Change room permissions for {memberName}",
 	"pages.rooms.members.manage": "Room members",
 	"pages.rooms.members.remove.ariaLabel": "Remove {memberName} from the room",
 	"pages.rooms.members.resetSelection.ariaLabel":

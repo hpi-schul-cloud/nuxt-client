@@ -1814,7 +1814,7 @@ export default {
 	"pages.rooms.members.actionMenu.ariaLabel": "Aktionsmenü für {memberName}",
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
 	"pages.rooms.members.changePermission.ariaLabel":
-		"Berechtigung für {memberName} ändern",
+		"Raumberechtigungen für {memberName} ändern",
 	"pages.rooms.members.manage": "Raum-Mitglieder",
 	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":

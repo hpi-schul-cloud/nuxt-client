@@ -1830,9 +1830,9 @@ export default {
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Menú de acciones para {memberName}",
-	"pages.rooms.members.changePermission": "Cambiar permisos",
+	"pages.rooms.members.changePermission": "Autorizaciones de cambio de sala",
 	"pages.rooms.members.changePermission.ariaLabel":
-		"Cambiar el permiso para {memberName}",
+		"Cambiar autorizaciones de sala para {memberName}",
 	"pages.rooms.members.manage": "Miembros de la sala",
 	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
 	"pages.rooms.members.resetSelection.ariaLabel":
@@ -1849,19 +1849,19 @@ export default {
 	"pages.rooms.members.roomPermissions.owner": "Propietario",
 	"pages.rooms.members.roomPermissions.editor": "Editar",
 	"pages.rooms.members.roomPermissions.viewer": "Leer",
-	"pages.rooms.members.tableHeader.roomRole": "Permisos de la sala",
+	"pages.rooms.members.tableHeader.roomRole": "Autorizaciones de sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",
 	"pages.rooms.members.roleChange.subTitle":
-		"{memberName} recibe los siguientes permisos de sala en “{roomName}”:",
+		"{memberName} recibe las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
-		"Los miembros seleccionados recibirán los siguientes permisos de sala en “{roomName}”:",
+		"Los miembros seleccionados reciben las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.Roomviewer.subText":
 		"Accede a las áreas de la sala y visualiza el contenido",
 	"pages.rooms.members.roleChange.Roomeditor.subText":
 		"Crear y editar contenido",
 	"pages.rooms.members.roleChange.Roomadmin.subText":
-		'Los mismos permisos que "Editar", además de agregar y eliminar otros miembros, cambiar sus permisos de sala y editar la sala',
+		'Las mismas autorizaciones que en "Editar", además de añadir y eliminar otros miembros, cambiar sus autorizaciones de sala y editar salas.',
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
