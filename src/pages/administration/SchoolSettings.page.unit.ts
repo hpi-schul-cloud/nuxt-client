@@ -49,7 +49,7 @@ describe("SchoolSettingsPage", () => {
 			"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Brandenburg_Wappen.svg/354px-Brandenburg_Wappen.svg.png",
 	};
 
-	const mockSystems: any[] = [{ _id: "123", type: "itslearning" }];
+	const mockSystems = [{ _id: "123", type: "itslearning" }];
 
 	const setup = (
 		envConfigGetters: Partial<EnvConfigModule> = {

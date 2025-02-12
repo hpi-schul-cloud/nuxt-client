@@ -16,8 +16,6 @@ const defaultProps = {
 };
 
 describe("BoardAnyTitleTitleInput", () => {
-	let wrapper: VueWrapper<any>;
-
 	const setup = (props: {
 		isEditMode: boolean;
 		scope: "card" | "column" | "board";
@@ -27,7 +25,7 @@ describe("BoardAnyTitleTitleInput", () => {
 	}) => {
 		document.body.setAttribute("data-app", "true");
 
-		wrapper = mount(BoardAnyTitleInput, {
+		const wrapper = mount(BoardAnyTitleInput, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -42,23 +40,29 @@ describe("BoardAnyTitleTitleInput", () => {
 				CARD_HOST_INTERACTION_EVENT: undefined,
 			},
 		});
+
+		return { wrapper };
 	};
 
 	describe("when component is mounted", () => {
 		it("should be found in dom", () => {
-			setup({ isEditMode: false, scope: "card" });
+			const { wrapper } = setup({ isEditMode: false, scope: "card" });
 			expect(wrapper).toBeDefined();
 		});
 
 		it("should forward maxLength prop to VTextarea", () => {
-			setup({ isEditMode: false, scope: "board", maxLength: 10 });
+			const { wrapper } = setup({
+				isEditMode: false,
+				scope: "board",
+				maxLength: 10,
+			});
 			const inputs = wrapper.findAll("input");
 			const maxLength = inputs[0].element.getAttribute("maxlength");
 			expect(maxLength).toBe("10");
 		});
 
 		it("should emit if value changes", async () => {
-			setup({ isEditMode: true, scope: "card" });
+			const { wrapper } = setup({ isEditMode: true, scope: "card" });
 			const newValue = "new title";
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 			await textAreaComponent.setValue("new title");
@@ -72,7 +76,7 @@ describe("BoardAnyTitleTitleInput", () => {
 		});
 
 		it("should emit enter on hitting 'enter' key in card title", async () => {
-			setup({ isEditMode: true, scope: "card" });
+			const { wrapper } = setup({ isEditMode: true, scope: "card" });
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 			textAreaComponent.vm.$emit(
 				"keydown",
@@ -86,7 +90,7 @@ describe("BoardAnyTitleTitleInput", () => {
 		});
 
 		it("should emit enter on hitting 'enter' key in column title", async () => {
-			setup({ isEditMode: true, scope: "column" });
+			const { wrapper } = setup({ isEditMode: true, scope: "column" });
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 			textAreaComponent.vm.$emit(
 				"keydown",
@@ -100,7 +104,7 @@ describe("BoardAnyTitleTitleInput", () => {
 		});
 
 		it("should emit enter on hitting 'enter' key in board title", async () => {
-			setup({ isEditMode: true, scope: "board" });
+			const { wrapper } = setup({ isEditMode: true, scope: "board" });
 			const textFieldComponent = wrapper.findComponent({ name: "VTextField" });
 			textFieldComponent.vm.$emit(
 				"keydown",
@@ -114,25 +118,25 @@ describe("BoardAnyTitleTitleInput", () => {
 		});
 
 		it("should display VTextField when scope is board", () => {
-			setup({ isEditMode: true, scope: "board" });
+			const { wrapper } = setup({ isEditMode: true, scope: "board" });
 			const textFieldComponent = wrapper.findComponent({ name: "VTextField" });
 			expect(textFieldComponent.exists()).toBe(true);
 		});
 
 		it("should display VTextarea when scope is card", () => {
-			setup({ isEditMode: true, scope: "card" });
+			const { wrapper } = setup({ isEditMode: true, scope: "card" });
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 			expect(textAreaComponent.exists()).toBe(true);
 		});
 
 		it("should display VTextarea when scope is column", () => {
-			setup({ isEditMode: true, scope: "column" });
+			const { wrapper } = setup({ isEditMode: true, scope: "column" });
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 			expect(textAreaComponent.exists()).toBe(true);
 		});
 
 		it("updates modalValue when prop value changes", async () => {
-			setup({ isEditMode: true, scope: "card" });
+			const { wrapper } = setup({ isEditMode: true, scope: "card" });
 			const newValue = "new title";
 			await wrapper.setProps({ value: newValue });
 			await wrapper.vm.$nextTick();
