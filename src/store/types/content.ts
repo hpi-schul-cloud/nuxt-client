@@ -12,7 +12,6 @@ export type Resource = {
 	aspects: string[];
 	commentCount: number | null;
 	content: object;
-	createdAt: any;
 	createdBy: object;
 	downloadUrl: string | null;
 	iconURL: string | null;
@@ -21,7 +20,6 @@ export type Resource = {
 	mediatype: string;
 	metadataset: string;
 	mimetype: string;
-	modifiedAt: any;
 	modifiedBy: object;
 	name: string;
 	owner: object;
