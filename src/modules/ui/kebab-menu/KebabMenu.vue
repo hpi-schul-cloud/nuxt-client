@@ -21,9 +21,7 @@
 				<VIcon>{{ mdiDotsVertical }}</VIcon>
 			</VBtn>
 		</template>
-		<VList role="menu">
-			<slot />
-		</VList>
+		<KebabMenuList> <slot /> </KebabMenuList>
 	</VMenu>
 </template>
 
@@ -31,6 +29,7 @@
 import type { Slot, VNode } from "vue";
 import { Comment, Fragment } from "vue";
 import { mdiDotsVertical } from "@icons/material";
+import { KebabMenuList } from "@ui-kebab-menu";
 
 const isVnodeEmpty = (vnodes: Array<VNode>) => {
 	return vnodes.every((node: VNode) => {
