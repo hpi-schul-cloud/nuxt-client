@@ -96,6 +96,7 @@ import TitleInput from "./TitleInput.vue";
 import FormActions from "./FormActions.vue";
 import { mdiAlert, mdiClose, mdiCheck, mdiDelete } from "@icons/material";
 import { CkEditor } from "@feature-editor";
+import dayjs from "dayjs";
 
 export default defineComponent({
 	inheritAttrs: false,
@@ -153,11 +154,12 @@ export default defineComponent({
 			if (!this.data.date.date || !this.data.date.time) {
 				return undefined;
 			}
-			const dateTimeCombined: any = fromInputDateTime(
+			const dateTimeCombined: typeof dayjs = fromInputDateTime(
 				this.data.date.date,
 				this.data.date.time
 			);
-			return dateTimeCombined.toISOString();
+			const dateTimeCombinedString = dateTimeCombined as unknown as Date;
+			return dateTimeCombinedString.toISOString();
 		},
 		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
