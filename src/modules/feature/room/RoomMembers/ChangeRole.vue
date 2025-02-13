@@ -12,7 +12,7 @@
 					<div class="mb-4">
 						{{ infoText }}
 					</div>
-					<v-radio-group v-model="selectedRole" class="ml-n2">
+					<v-radio-group v-model="selectedRole" hide-details class="ml-n2">
 						<v-radio
 							id="roleChangeViewer"
 							:label="t('pages.rooms.members.roomPermissions.viewer')"
@@ -57,6 +57,20 @@
 							}}
 						</label>
 					</v-radio-group>
+
+					<v-alert
+						dense
+						type="warning"
+						:icon="mdiAlert"
+						class="ml-8"
+						v-if="selectedRole === RoleName.Roomowner"
+					>
+						<span class="alert-text">
+							Diese Raumberechtigung wird an das ausgewählte Mitglied
+							übertragen. Cord Carl verliert die Berechtigung „Besitzen” und
+							erhält die Berechtigung „Verwalten”.
+						</span>
+					</v-alert>
 				</div>
 			</div>
 		</template>
@@ -96,6 +110,7 @@ import {
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard, VRadio } from "vuetify/lib/components/index.mjs";
 import { RoomMember } from "@data-room";
+import { mdiAlert } from "@icons/material";
 
 const props = defineProps({
 	members: {
@@ -166,5 +181,10 @@ useFocusTrap(changeRoleContent, {
 	font-size: 14px;
 	line-height: var(--line-height-lg);
 	opacity: var(--v-medium-emphasis-opacity);
+}
+
+.alert-text {
+	color: rgba(var(--v-theme-on-background)) !important;
+	line-height: var(--line-height-lg) !important;
 }
 </style>
