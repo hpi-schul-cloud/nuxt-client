@@ -7,7 +7,7 @@ import {
 } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
 
-let receivedRequests: any[] = [];
+let receivedRequests: { path: string }[] = [];
 let getRequestReturn: any = {};
 
 const axiosInitializer = (error?: boolean) => {
