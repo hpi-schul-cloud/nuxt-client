@@ -1862,6 +1862,10 @@ export default {
 		"Crear y editar contenido",
 	"pages.rooms.members.roleChange.Roomadmin.subText":
 		'Los mismos permisos que "Editar", además de agregar y eliminar otros miembros, cambiar sus permisos de sala y editar la sala',
+	"pages.rooms.members.roleChange.Roomowner.subText":
+		"Las mismas autorizaciones que «Administrar», más suprimir la habitación",
+	"pages.rooms.members.roleChange.Roomowner.subText.warning":
+		"Achtung: Kann nur eine Person im Raum erhalten!",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

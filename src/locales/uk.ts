@@ -1839,6 +1839,10 @@ export default {
 		"Створюйте та редагуйте контент",
 	"pages.rooms.members.roleChange.Roomadmin.subText":
 		"Такі самі дозволи, як і «Редагувати», а також додавати та видаляти інших учасників, змінювати їхні дозволи для кімнати та редагувати кімнату",
+	"pages.rooms.members.roleChange.Roomowner.subText":
+		"Ті самі повноваження, що й «Керування», плюс видалення кімнати",
+	"pages.rooms.members.roleChange.Roomowner.subText.warning":
+		"Увага: Тільки одна людина в кімнаті може отримати ці повноваження!",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
