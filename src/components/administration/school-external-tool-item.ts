@@ -1,3 +1,5 @@
+import { SchoolExternalToolMediumResponse } from "@/serverApi/v3";
+
 export class SchoolExternalToolItem {
 	id: string;
 
@@ -13,6 +15,8 @@ export class SchoolExternalToolItem {
 
 	restrictToContexts: string;
 
+	medium?: SchoolExternalToolMediumResponse;
+
 	constructor(props: SchoolExternalToolItem) {
 		this.id = props.id;
 		this.externalToolId = props.externalToolId;
@@ -21,5 +25,6 @@ export class SchoolExternalToolItem {
 		this.isOutdated = props.isOutdated;
 		this.isDeactivated = props.isDeactivated;
 		this.restrictToContexts = props.restrictToContexts;
+		this.medium = props.medium;
 	}
 }

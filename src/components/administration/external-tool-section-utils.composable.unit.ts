@@ -3,16 +3,16 @@ import {
 	SchoolExternalToolSearchListResponse,
 	ToolContextType,
 } from "@/serverApi/v3";
+import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { DataTableHeader } from "@/store/types/data-table-header";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { DataTableHeader } from "@/types/vuetify";
 import {
 	schoolExternalToolFactory,
 	schoolExternalToolResponseFactory,
 } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalTool } from "@/store/external-tool";
 
 describe("useSchoolExternalToolUtils", () => {
 	const setup = (schoolExternalTool: SchoolExternalTool) => {
