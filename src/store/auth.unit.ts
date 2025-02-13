@@ -1,5 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { LanguageType, MeSystemResponse } from "@/serverApi/v3/api";
+import { LanguageType } from "@/serverApi/v3/api";
 import { envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -251,17 +251,17 @@ describe("auth store module", () => {
 		describe("loginSystem", () => {
 			it("should system info of the user", () => {
 				const authModule = new AuthModule({});
-				const mockedSystem: MeSystemResponse = {
+				const mockedSystem = {
 					id: "test-system-id",
 					name: "test system",
 					hasEndSessionEndpoint: false,
 				};
 				const mockMe = meResponseFactory.build({
-					system: mockedSystem,
+					systemId: mockedSystem.id,
 				});
 				authModule.setMe(mockMe);
 
-				expect(authModule.loginSystem).toStrictEqual(mockedSystem);
+				expect(authModule.loginSystem).toStrictEqual(mockedSystem.id);
 			});
 		});
 	});
