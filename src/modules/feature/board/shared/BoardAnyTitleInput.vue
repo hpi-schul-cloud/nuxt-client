@@ -139,15 +139,6 @@ export default defineComponent({
 		});
 
 		watch(
-			() => props.value,
-			async (newVal, oldVal) => {
-				if (newVal !== oldVal) {
-					modelValue.value = newVal;
-				}
-			}
-		);
-
-		watch(
 			() => props.isEditMode,
 			async (newVal, oldVal) => {
 				if (
