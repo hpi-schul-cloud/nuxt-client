@@ -42,6 +42,20 @@
 						<label for="roleChangeAdmin" class="ml-10 mt-n2 mb-2 radio-label">
 							{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
 						</label>
+
+						<v-radio
+							id="roleChangeOwner"
+							:label="t('pages.rooms.members.roomPermissions.owner')"
+							:value="RoleName.Roomowner"
+							color="primary"
+						/>
+						<label for="roleChangeOwner" class="ml-10 mt-n2 mb-2 radio-label">
+							{{ t("pages.rooms.members.roleChange.Roomowner.subText") }}
+							<br />
+							{{
+								t("pages.rooms.members.roleChange.Roomowner.subText.warning")
+							}}
+						</label>
 					</v-radio-group>
 				</div>
 			</div>
