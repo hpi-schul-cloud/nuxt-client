@@ -10,7 +10,6 @@ export type Query = {
 export type Resource = {
 	access: string[];
 	aspects: string[];
-	collection: any;
 	commentCount: number | null;
 	content: object;
 	createdAt: any;

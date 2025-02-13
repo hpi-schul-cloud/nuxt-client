@@ -17,7 +17,6 @@ let requestPath: string;
 const mockResource: Resource = {
 	access: [],
 	aspects: [],
-	collection: null,
 	commentCount: null,
 	content: {},
 	createdAt: null,
