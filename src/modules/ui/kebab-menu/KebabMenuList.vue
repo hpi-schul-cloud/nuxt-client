@@ -12,6 +12,6 @@ const kebabMenuList = ref<VList>();
 onMounted(() => {
 	setTimeout(() => {
 		kebabMenuList.value?.focus("first");
-	}, 10);
+	}, 20);
 });
 </script>
