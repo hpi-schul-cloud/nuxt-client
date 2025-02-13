@@ -26,9 +26,7 @@ export type Resource = {
 	parent: object;
 	preview: object;
 	properties: ResourceProperties;
-	rating: any;
 	ref: object;
-	remote: any;
 	repositoryType: string;
 	size: string;
 	title: string;
