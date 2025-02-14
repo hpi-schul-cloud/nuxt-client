@@ -253,8 +253,8 @@ describe("auth store module", () => {
 				const authModule = new AuthModule({});
 				const mockedSystem = {
 					id: "test-system-id",
-					name: "test system",
-					hasEndSessionEndpoint: false,
+					displayName: "test-system",
+					hasEndSessionEndpoint: true,
 				};
 				const mockMe = meResponseFactory.build({
 					systemId: mockedSystem.id,
