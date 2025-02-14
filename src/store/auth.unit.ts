@@ -12,7 +12,6 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
-import { System } from "@data-system";
 
 jest.useFakeTimers();
 
