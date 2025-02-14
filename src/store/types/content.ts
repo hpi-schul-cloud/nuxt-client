@@ -100,7 +100,6 @@ export type Elements = {
 };
 
 export type Lesson = {
-	contents: any[];
 	courseId: string;
 	createdAt: string;
 	date: string;

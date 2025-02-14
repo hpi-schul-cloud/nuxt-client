@@ -59,7 +59,6 @@ const mockLessons: { data: Lessons } = {
 		skip: 0,
 		data: [
 			{
-				contents: [],
 				courseId: "",
 				createdAt: "",
 				date: "",
