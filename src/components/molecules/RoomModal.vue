@@ -16,7 +16,7 @@
 					:label="$t('pages.rooms.roomModal.courseGroupTitle')"
 					@blur="onBlur"
 					@keyup.enter="onEnterInput"
-					:rules="[containsOpeningTag]"
+					:rules="[validateOnOpeningTag]"
 				/>
 			</div>
 		</template>
@@ -43,10 +43,10 @@ import { defineComponent } from "vue";
 
 export default defineComponent({
 	setup() {
-		const { containsOpeningTag } = useOpeningTagValidator();
+		const { validateOnOpeningTag } = useOpeningTagValidator();
 
 		return {
-			containsOpeningTag,
+			validateOnOpeningTag,
 		};
 	},
 	components: {
@@ -92,7 +92,7 @@ export default defineComponent({
 	},
 	methods: {
 		async updateCourseGroupName() {
-			if (this.containsOpeningTag(this.data.title) === true) {
+			if (this.validateOnOpeningTag(this.data.title) === true) {
 				await courseRoomListModule.update(this.data);
 			}
 		},

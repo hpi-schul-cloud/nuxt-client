@@ -108,7 +108,7 @@
 					ref="nameInputText"
 					v-model="newName"
 					:label="t(`components.molecules.import.${parentType}.label`)"
-					:rules="[rules.required, rules.containsOpeningTag]"
+					:rules="[rules.required, rules.validateOnOpeningTag]"
 					data-testid="import-modal-name-input"
 				/>
 			</div>
@@ -132,12 +132,12 @@ const props = defineProps({
 
 const { t } = useI18n();
 const nameInput = ref(undefined);
-const { containsOpeningTag } = useOpeningTagValidator();
+const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const rules = reactive({
 	required: (value: string) => !!value || t("common.validation.required"),
-	containsOpeningTag: (value: string) => {
-		return containsOpeningTag(value);
+	validateOnOpeningTag: (value: string) => {
+		return validateOnOpeningTag(value);
 	},
 });
 
@@ -149,7 +149,7 @@ const newName = computed({
 const isTitleValid = computed(() => {
 	return (
 		rules.required(newName.value) === true &&
-		rules.containsOpeningTag(newName.value) === true
+		rules.validateOnOpeningTag(newName.value) === true
 	);
 });
 

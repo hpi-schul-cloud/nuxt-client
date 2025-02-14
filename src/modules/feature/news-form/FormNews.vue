@@ -12,7 +12,7 @@
 				:required="true"
 				data-testid="news_title"
 				:label="$t('components.organisms.FormNews.input.title.label')"
-				:rules="[containsOpeningTag]"
+				:rules="[validateOnOpeningTag]"
 			/>
 			<transition name="fade">
 				<div v-if="data.title">
@@ -100,10 +100,10 @@ import FormActions from "./FormActions.vue";
 
 export default defineComponent({
 	setup() {
-		const { containsOpeningTag } = useOpeningTagValidator();
+		const { validateOnOpeningTag } = useOpeningTagValidator();
 
 		return {
-			containsOpeningTag,
+			validateOnOpeningTag,
 		};
 	},
 	inheritAttrs: false,
@@ -174,7 +174,7 @@ export default defineComponent({
 					).toString();
 
 			const titleOpeningTag =
-				this.containsOpeningTag(this.data.title) === true
+				this.validateOnOpeningTag(this.data.title) === true
 					? undefined
 					: this.$t("common.validation.containsOpeningTag").toString();
 

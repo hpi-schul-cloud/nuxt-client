@@ -88,22 +88,22 @@ describe("OpeningTagValidator", () => {
 		});
 	});
 
-	describe("getValidationMessage", () => {
+	describe("validateOnOpeningTag", () => {
 		const setup = () => {
-			const { containsOpeningTag } = mountComposable(useOpeningTagValidator, {
+			const { validateOnOpeningTag } = mountComposable(useOpeningTagValidator, {
 				global: {
 					plugins: [createTestingI18n()],
 				},
 			});
 
-			return { containsOpeningTag };
+			return { validateOnOpeningTag };
 		};
 
 		describe("when the string contains < followed by a string", () => {
 			it("should return error message when < is followed directly by a string", () => {
-				const { containsOpeningTag } = setup();
+				const { validateOnOpeningTag } = setup();
 
-				expect(containsOpeningTag("Hello <world")).toBe(
+				expect(validateOnOpeningTag("Hello <world")).toBe(
 					"common.validation.containsOpeningTag"
 				);
 			});
@@ -111,9 +111,9 @@ describe("OpeningTagValidator", () => {
 
 		describe("when the string does not contain < followed by a string", () => {
 			it("should return true when the string does not contain < followed by a string", () => {
-				const { containsOpeningTag } = setup();
+				const { validateOnOpeningTag } = setup();
 
-				expect(containsOpeningTag("No special character here")).toBe(true);
+				expect(validateOnOpeningTag("No special character here")).toBe(true);
 			});
 		});
 	});
