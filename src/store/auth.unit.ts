@@ -12,6 +12,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { AxiosError, AxiosInstance } from "axios";
 import AuthModule from "./auth";
 import EnvConfigModule from "./env-config";
+import { System } from "@data-system";
 
 jest.useFakeTimers();
 
@@ -251,10 +252,10 @@ describe("auth store module", () => {
 		describe("loginSystem", () => {
 			it("should system info of the user", () => {
 				const authModule = new AuthModule({});
-				const mockedSystem = {
+				const mockedSystem: System = {
 					id: "test-system-id",
 					displayName: "test-system",
-					hasEndSessionEndpoint: true,
+					hasEndSessionEndpoint: false,
 				};
 				const mockMe = meResponseFactory.build({
 					systemId: mockedSystem.id,
