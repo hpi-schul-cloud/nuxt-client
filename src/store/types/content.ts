@@ -10,10 +10,8 @@ export type Query = {
 export type Resource = {
 	access: string[];
 	aspects: string[];
-	collection: any;
 	commentCount: number | null;
 	content: object;
-	createdAt: any;
 	createdBy: object;
 	downloadUrl: string | null;
 	iconURL: string | null;
@@ -22,20 +20,18 @@ export type Resource = {
 	mediatype: string;
 	metadataset: string;
 	mimetype: string;
-	modifiedAt: any;
 	modifiedBy: object;
 	name: string;
 	owner: object;
 	parent: object;
 	preview: object;
 	properties: ResourceProperties;
-	rating: any;
-	ref: object;
-	remote: any;
+	ref: { id?: string };
 	repositoryType: string;
 	size: string;
 	title: string;
 	type: string;
+	stateSelected?: boolean;
 };
 
 export type ResourceProperties = {
@@ -96,7 +92,7 @@ export type Resources = {
 };
 
 export type Elements = {
-	data: any[];
+	data: Resource[];
 	limit: number;
 	skip: number;
 	total: number;
@@ -104,12 +100,10 @@ export type Elements = {
 };
 
 export type Lesson = {
-	contents: any[];
 	courseId: string;
 	createdAt: string;
 	date: string;
 	hidden: boolean;
-	isCopyFrom: any;
 	materialIds: string[];
 	name: string;
 	position: number;
