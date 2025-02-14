@@ -9,6 +9,7 @@
 		@dialog-confirmed="onConfirm"
 		@dialog-canceled="onCancel"
 		data-testid="import-modal"
+		:confirm-btn-disabled="!isTitleValid"
 	>
 		<template #title>
 			<div ref="textTitle" class="text-h4 my-2">
@@ -107,7 +108,7 @@
 					ref="nameInputText"
 					v-model="newName"
 					:label="t(`components.molecules.import.${parentType}.label`)"
-					:rules="[rules.required]"
+					:rules="[rules.required, rules.validateOnOpeningTag]"
 					data-testid="import-modal-name-input"
 				/>
 			</div>
@@ -115,8 +116,9 @@
 	</v-custom-dialog>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import VCustomDialog from "@/components/organisms/vCustomDialog.vue";
+import { useOpeningTagValidator } from "@/utils/validation";
 import { mdiInformation } from "@icons/material";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -130,9 +132,13 @@ const props = defineProps({
 
 const { t } = useI18n();
 const nameInput = ref(undefined);
+const { validateOnOpeningTag } = useOpeningTagValidator();
 
 const rules = reactive({
-	required: (value) => !!value || t("common.validation.required"),
+	required: (value: string) => !!value || t("common.validation.required"),
+	validateOnOpeningTag: (value: string) => {
+		return validateOnOpeningTag(value);
+	},
 });
 
 const newName = computed({
@@ -140,8 +146,15 @@ const newName = computed({
 	set: (value) => (nameInput.value = value),
 });
 
+const isTitleValid = computed(() => {
+	return (
+		rules.required(newName.value) === true &&
+		rules.validateOnOpeningTag(newName.value) === true
+	);
+});
+
 const onConfirm = () => {
-	if (rules.required(newName.value) === true) {
+	if (isTitleValid.value) {
 		emit("import", newName.value);
 	}
 };

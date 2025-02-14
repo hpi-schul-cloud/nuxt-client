@@ -34,6 +34,29 @@ describe("@feature-room/RoomForm", () => {
 		return { wrapper };
 	};
 
+	describe("when room name contains < followed by a string", () => {
+		const setupRoom = () => {
+			return {
+				name: "Room 1",
+				color: RoomColorEnum.Magenta,
+				startDate: "",
+				endDate: "",
+			};
+		};
+
+		it("should show error message", async () => {
+			const room = setupRoom();
+			const { wrapper } = setup({ room });
+
+			const textField = wrapper.findComponent({ name: "VTextField" });
+			const input = textField.find("input");
+
+			await input.setValue("<abc");
+
+			expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
+		});
+	});
+
 	describe("when save button is clicked", () => {
 		describe("when room data is invalid", () => {
 			it("should not emit 'save' event", async () => {

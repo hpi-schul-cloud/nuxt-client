@@ -14,6 +14,7 @@
 					:readonly="!hasSchoolEditPermission"
 					:disabled="isSyncedSchool"
 					data-testid="school-name"
+					:rules="[validateOnOpeningTag]"
 				/>
 			</v-col>
 		</v-row>
@@ -142,14 +143,22 @@
 	</v-form>
 </template>
 
-<script>
+<script lang="ts">
 import PrivacySettings from "@/components/organisms/administration/PrivacySettings";
 import { printDate } from "@/plugins/datetime";
 import { authModule, envConfigModule, schoolsModule } from "@/store";
 import { toBase64 } from "@/utils/fileHelper.ts";
 import { mapSchoolFeatureObjectToArray } from "@/utils/school-features";
+import { useOpeningTagValidator } from "@/utils/validation";
 
 export default {
+	setup() {
+		const { validateOnOpeningTag } = useOpeningTagValidator();
+
+		return {
+			validateOnOpeningTag,
+		};
+	},
 	components: {
 		PrivacySettings,
 	},
