@@ -44,6 +44,8 @@ export const useSchoolLicenseStore = defineStore("schoolLicenseStore", () => {
 
 	return {
 		isLoading,
+		mediaSchoolLicenses,
+		getLicenseIdentifier,
 		fetchMediaSchoolLicenses,
 		isLicensed,
 	};
