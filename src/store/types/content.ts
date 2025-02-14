@@ -104,7 +104,6 @@ export type Lesson = {
 	createdAt: string;
 	date: string;
 	hidden: boolean;
-	isCopyFrom: any;
 	materialIds: string[];
 	name: string;
 	position: number;

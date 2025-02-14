@@ -63,7 +63,6 @@ const mockLessons: { data: Lessons } = {
 				createdAt: "",
 				date: "",
 				hidden: false,
-				isCopyFrom: {},
 				materialIds: [],
 				name: "",
 				position: 0,
