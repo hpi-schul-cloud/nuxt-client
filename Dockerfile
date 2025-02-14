@@ -4,7 +4,7 @@ FROM docker.io/node:22 AS build-stage
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 COPY babel.config.js eslint.config.js LICENSE.md .prettierrc.js tsconfig.json tsconfig.build.json .prettierignore ./
 COPY lib/eslint-plugin-schulcloud ./lib/eslint-plugin-schulcloud
@@ -12,7 +12,7 @@ COPY public ./public
 COPY src ./src
 COPY config/webpack ./config/webpack
 ARG SC_THEME=default
-ENV SC_THEME ${SC_THEME}
+ENV SC_THEME=${SC_THEME}
 RUN NODE_ENV=production npm run build
 
 COPY .git ./.git
