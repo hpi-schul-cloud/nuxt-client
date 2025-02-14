@@ -33,6 +33,43 @@
 					</span>
 				</div>
 			</template>
+			<template #[`item.medium`]="{ item }">
+				<div
+					v-if="item.medium"
+					class="text-no-wrap"
+					data-testid="external-tool-medium"
+				>
+					<VProgressCircular v-if="isLicensesLoading" />
+					<VIcon
+						v-else-if="
+							isLicensed(item.medium.mediumId, item.medium.mediaSourceId)
+						"
+						start
+						color="success"
+						:aria-label="
+							t(
+								'components.administration.externalToolsSection.table.ariaLabel.mediumAvailable'
+							)
+						"
+					>
+						{{ mdiCheckCircle }}
+					</VIcon>
+					<VIcon
+						v-else
+						start
+						color="warning"
+						:aria-label="
+							t(
+								'components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable'
+							)
+						"
+					>
+						{{ mdiAlert }}
+					</VIcon>
+					<span>{{ item.medium.mediaSourceName || "" }}</span>
+				</div>
+				<span v-else data-testid="external-tool-medium"> - </span>
+			</template>
 			<template #[`item.restrictToContexts`]="{ item }">
 				<span data-testid="external-tool-context-restriction">
 					{{ item.restrictToContexts }}
@@ -151,7 +188,7 @@ import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { DataTableHeader } from "@/store/types/data-table-header";
+import { DataTableHeader } from "@/types/vuetify";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -160,6 +197,7 @@ import {
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
+import { useSchoolLicenseStore } from "@data-license";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
 import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -178,17 +216,22 @@ const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 
 const router = useRouter();
 
+const schoolLicenseStore = useSchoolLicenseStore();
+
 onMounted(async () => {
 	if (authModule.getSchool) {
-		await schoolExternalToolsModule.loadSchoolExternalTools(
-			authModule.getSchool.id
-		);
+		schoolExternalToolsModule.loadSchoolExternalTools(authModule.getSchool.id);
+
+		schoolLicenseStore.fetchMediaSchoolLicenses();
 	}
 });
 
 const { t } = useI18n();
 
-const { getHeaders, getItems } = useExternalToolsSectionUtils(t);
+const { getHeaders, getItems } = useExternalToolsSectionUtils(
+	t,
+	envConfigModule.getEnv.FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED
+);
 const { fetchSchoolExternalToolUsage, metadata } = useSchoolExternalToolUsage();
 
 const headers: DataTableHeader[] = getHeaders;
@@ -274,6 +317,14 @@ const isMediaBoardUsageVisible: ComputedRef<boolean> = computed(() => {
 
 const isVidisEnabled: ComputedRef<boolean> = computed(() => {
 	return envConfigModule.getEnv.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED;
+});
+
+const isLicensed = (mediumId: string, mediaSourceId?: string): boolean => {
+	return schoolLicenseStore.isLicensed(mediumId, mediaSourceId);
+};
+
+const isLicensesLoading: ComputedRef<boolean> = computed(() => {
+	return schoolLicenseStore.isLoading;
 });
 </script>
 

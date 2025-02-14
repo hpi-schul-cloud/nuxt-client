@@ -83,6 +83,7 @@ export class SchoolExternalToolMapper {
 			),
 			isDeactivated: response.isDeactivated,
 			restrictToContexts: response.restrictToContexts,
+			medium: response.medium,
 		};
 
 		return mapped;
