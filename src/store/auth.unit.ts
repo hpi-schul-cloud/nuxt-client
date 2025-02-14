@@ -252,17 +252,13 @@ describe("auth store module", () => {
 		describe("loginSystem", () => {
 			it("should system info of the user", () => {
 				const authModule = new AuthModule({});
-				const mockedSystem: System = {
-					id: "test-system-id",
-					displayName: "test-system",
-					hasEndSessionEndpoint: false,
-				};
+
 				const mockMe = meResponseFactory.build({
-					systemId: mockedSystem.id,
+					systemId: "test-system-id",
 				});
 				authModule.setMe(mockMe);
 
-				expect(authModule.loginSystem).toStrictEqual(mockedSystem.id);
+				expect(authModule.loginSystem).toStrictEqual("test-system-id");
 			});
 		});
 	});

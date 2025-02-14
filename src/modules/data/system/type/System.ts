@@ -3,5 +3,5 @@ export interface System {
 
 	displayName: string;
 
-	hasEndSessionEndpoint?: boolean;
+	hasEndSessionEndpoint: boolean;
 }
