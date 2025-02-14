@@ -92,7 +92,7 @@ export default defineComponent({
 	},
 	methods: {
 		async updateCourseGroupName() {
-			if (!this.containsOpeningTag(this.data.title)) {
+			if (this.containsOpeningTag(this.data.title) === true) {
 				await courseRoomListModule.update(this.data);
 			}
 		},
