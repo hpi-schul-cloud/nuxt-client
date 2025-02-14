@@ -12,37 +12,80 @@
 					<div class="mb-4">
 						{{ infoText }}
 					</div>
-					<v-radio-group v-model="selectedRole" class="ml-n2">
-						<v-radio
-							id="roleChangeViewer"
-							:label="t('pages.rooms.members.roomPermissions.viewer')"
-							:value="RoleName.Roomviewer"
-							color="primary"
-						/>
-						<label for="roleChangeViewer" class="ml-10 mt-n2 mb-2 radio-label">
-							{{ t("pages.rooms.members.roleChange.Roomviewer.subText") }}
-						</label>
+					<div v-if="isHandOverMode">
+						<v-alert> handover mode </v-alert>
+					</div>
+					<div v-else>
+						<v-radio-group v-model="selectedRole" hide-details class="ml-n2">
+							<v-radio
+								id="roleChangeViewer"
+								:label="t('pages.rooms.members.roomPermissions.viewer')"
+								:value="RoleName.Roomviewer"
+								color="primary"
+							/>
+							<label
+								for="roleChangeViewer"
+								class="ml-10 mt-n2 mb-2 radio-label"
+							>
+								{{ t("pages.rooms.members.roleChange.Roomviewer.subText") }}
+							</label>
 
-						<v-radio
-							id="roleChangeEditor"
-							:label="t('pages.rooms.members.roomPermissions.editor')"
-							:value="RoleName.Roomeditor"
-							color="primary"
-						/>
-						<label for="roleChangeEditor" class="ml-10 mt-n2 mb-2 radio-label">
-							{{ t("pages.rooms.members.roleChange.Roomeditor.subText") }}
-						</label>
+							<v-radio
+								id="roleChangeEditor"
+								:label="t('pages.rooms.members.roomPermissions.editor')"
+								:value="RoleName.Roomeditor"
+								color="primary"
+							/>
+							<label
+								for="roleChangeEditor"
+								class="ml-10 mt-n2 mb-2 radio-label"
+							>
+								{{ t("pages.rooms.members.roleChange.Roomeditor.subText") }}
+							</label>
 
-						<v-radio
-							id="roleChangeAdmin"
-							:label="t('pages.rooms.members.roomPermissions.admin')"
-							:value="RoleName.Roomadmin"
-							color="primary"
-						/>
-						<label for="roleChangeAdmin" class="ml-10 mt-n2 mb-2 radio-label">
-							{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
-						</label>
-					</v-radio-group>
+							<v-radio
+								id="roleChangeAdmin"
+								:label="t('pages.rooms.members.roomPermissions.admin')"
+								:value="RoleName.Roomadmin"
+								color="primary"
+							/>
+							<label for="roleChangeAdmin" class="ml-10 mt-n2 mb-2 radio-label">
+								{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
+							</label>
+
+							<v-radio
+								v-if="isChangeRoleOptionVisible"
+								id="roleChangeOwner"
+								:label="t('pages.rooms.members.roomPermissions.owner')"
+								:value="RoleName.Roomowner"
+								color="primary"
+							/>
+							<label
+								v-if="isChangeRoleOptionVisible"
+								for="roleChangeOwner"
+								class="ml-10 mt-n2 mb-2 radio-label"
+							>
+								{{ t("pages.rooms.members.roleChange.Roomowner.subText") }}
+								<br />
+								{{
+									t("pages.rooms.members.roleChange.Roomowner.subText.warning")
+								}}
+							</label>
+						</v-radio-group>
+						<v-alert
+							dense
+							type="warning"
+							:icon="mdiAlert"
+							class="ml-8"
+							v-if="selectedRole === RoleName.Roomowner"
+						>
+							<span class="alert-text">
+								Diese Raumberechtigung wird an das ausgewählte Mitglied
+								übertragen. Cord Carl verliert die Berechtigung „Besitzen” und
+								erhält die Berechtigung „Verwalten”.
+							</span>
+						</v-alert>
+					</div>
 				</div>
 			</div>
 		</template>
@@ -82,6 +125,7 @@ import {
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard, VRadio } from "vuetify/lib/components/index.mjs";
 import { RoomMember } from "@data-room";
+import { mdiAlert } from "@icons/material";
 
 const props = defineProps({
 	members: {
@@ -93,10 +137,21 @@ const props = defineProps({
 		type: String,
 		required: true,
 	},
+	currentUser: {
+		type: Object as PropType<RoomMember>,
+		required: true,
+	},
 });
 const { t } = useI18n();
 const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members")?.value;
+const isChangeRoleOptionVisible = computed(() => {
+	return (
+		props.currentUser?.roomRoleName === RoleName.Roomowner &&
+		memberToChangeRole.length === 1
+	);
+});
+const isHandOverMode = ref(false);
 
 if (memberToChangeRole.length > 1) {
 	const roleNamesInProp = memberToChangeRole.map(
@@ -130,6 +185,10 @@ const emit = defineEmits<{
 
 const onConfirm = () => {
 	if (!selectedRole.value) return;
+	if (selectedRole.value === RoleName.Roomowner) {
+		isHandOverMode.value = true;
+		return;
+	}
 	emit(
 		"confirm",
 		selectedRole.value as RoleEnum,
@@ -152,5 +211,10 @@ useFocusTrap(changeRoleContent, {
 	font-size: 14px;
 	line-height: var(--line-height-lg);
 	opacity: var(--v-medium-emphasis-opacity);
+}
+
+.alert-text {
+	color: rgba(var(--v-theme-on-background)) !important;
+	line-height: var(--line-height-lg) !important;
 }
 </style>

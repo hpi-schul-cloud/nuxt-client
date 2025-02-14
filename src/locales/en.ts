@@ -1810,6 +1810,10 @@ export default {
 		"Create and edit content",
 	"pages.rooms.members.roleChange.Roomadmin.subText":
 		'Same permissions as "Edit", plus add and remove other members, change their room permissions and edit the room',
+	"pages.rooms.members.roleChange.Roomowner.subText":
+		"Same authorizations as “ Administer”, additionally delete room",
+	"pages.rooms.members.roleChange.Roomowner.subText.warning":
+		"Attention: Only one person in the room can receive this authorization!",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

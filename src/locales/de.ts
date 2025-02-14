@@ -1842,6 +1842,10 @@ export default {
 		"Inhalte erstellen und bearbeiten",
 	"pages.rooms.members.roleChange.Roomadmin.subText":
 		"Gleiche Berechtigungen wie „Bearbeiten”, zusätzlich andere Mitglieder hinzufügen, entfernen, deren Raumberechtigungen ändern sowie Raum bearbeiten",
+	"pages.rooms.members.roleChange.Roomowner.subText":
+		"Gleiche Berechtigungen wie „Verwalten”, zusätzlich Raum löschen",
+	"pages.rooms.members.roleChange.Roomowner.subText.warning":
+		"Achtung: Kann nur eine Person im Raum erhalten!",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":

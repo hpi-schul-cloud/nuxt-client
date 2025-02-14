@@ -79,6 +79,7 @@
 			<ChangeRole
 				:members="membersToChangeRole"
 				:room-name="room?.name || ''"
+				:current-user="currentUser"
 				@cancel="onDialogClose"
 				@confirm="onChangeRole"
 			/>

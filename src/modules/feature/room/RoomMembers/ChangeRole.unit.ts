@@ -34,7 +34,7 @@ describe("ChangeRole.vue", () => {
 			expect(wrapper.text()).toContain("pages.rooms.members.changePermission");
 
 			const radioButtons = wrapper.findAllComponents({ name: "v-radio" });
-			expect(radioButtons.length).toBe(3);
+			expect(radioButtons.length).toBe(4);
 
 			const cancelButton = wrapper.find(
 				"[data-testid='change-role-cancel-btn']"
