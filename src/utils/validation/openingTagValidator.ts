@@ -1,7 +1,7 @@
 import { useI18n } from "vue-i18n";
 
 export const containsOpeningTagFollowedByString = (input: string) => {
-	const regex = /<\S+(?<!<)/;
+	const regex = /<[^<\s]+/;
 
 	return regex.test(input);
 };
