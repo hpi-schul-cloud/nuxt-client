@@ -26,11 +26,12 @@ export type Resource = {
 	parent: object;
 	preview: object;
 	properties: ResourceProperties;
-	ref: object;
+	ref: { id?: string };
 	repositoryType: string;
 	size: string;
 	title: string;
 	type: string;
+	stateSelected?: boolean;
 };
 
 export type ResourceProperties = {
@@ -91,7 +92,7 @@ export type Resources = {
 };
 
 export type Elements = {
-	data: any[];
+	data: Resource[];
 	limit: number;
 	skip: number;
 	total: number;
