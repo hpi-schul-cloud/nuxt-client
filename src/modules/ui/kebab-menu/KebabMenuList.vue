@@ -1,17 +1,19 @@
 <template>
-	<VList role="menu" ref="kebabMenuList">
+	<VList role="menu" ref="menuList">
 		<slot />
 	</VList>
 </template>
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { VList } from "vuetify/lib/components/index.mjs";
+import type { VList } from "vuetify/lib/components/index.mjs";
 
-const kebabMenuList = ref<VList>();
+const menuList = ref<VList>();
 
 onMounted(() => {
+	// without this timeout focus will not work as ref is not yet available
+	// safari needs a longer timeout than other browsers
 	setTimeout(() => {
-		kebabMenuList.value?.focus("first");
+		menuList.value?.focus("first");
 	}, 20);
 });
 </script>
