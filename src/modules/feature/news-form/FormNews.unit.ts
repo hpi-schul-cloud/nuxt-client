@@ -1,16 +1,17 @@
-import { mount } from "@vue/test-utils";
-import FormNews from "./FormNews.vue";
+import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { notifierModule } from "@/store";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
-import { DATETIME_FORMAT } from "@/plugins/datetime";
-import dayjs from "dayjs";
-import setupStores from "@@/tests/test-utils/setupStores";
-import { createStore } from "vuex";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { mount } from "@vue/test-utils";
+import dayjs from "dayjs";
+import { nextTick } from "vue";
+import { createStore } from "vuex";
+import FormNews from "./FormNews.vue";
 
 const testDate = dayjs("2022-07-05T09:00:00.000Z");
 
@@ -142,6 +143,18 @@ describe("FormNews", () => {
 
 			const emitted = wrapper.emitted();
 			expect(emitted["save"]).toBeUndefined();
+		});
+	});
+
+	describe("when title contains < sign directly followed by a string", () => {
+		it("shows contain error hint", async () => {
+			const { wrapper } = setup(testNews);
+
+			const textField = wrapper.findComponent({ name: "VTextField" });
+			await textField.setValue("<abc123");
+			await nextTick();
+
+			expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
 		});
 	});
 });

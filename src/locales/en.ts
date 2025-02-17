@@ -156,6 +156,8 @@ export default {
 	"common.validation.required2": "This is a mandatory field.",
 	"common.validation.tooLong":
 		"The text you entered exceeds the maximum length",
+	"common.validation.containsOpeningTag":
+		"Please insert a space after the less-than sign.",
 	"common.words.and": "and",
 	"common.words.classes": "Classes",
 	"common.words.color": "Color",
