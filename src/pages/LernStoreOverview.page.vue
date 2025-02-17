@@ -91,22 +91,22 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref } from "vue";
-import { useDebounceFn, watchDebounced } from "@vueuse/core";
-import { mdiChevronLeft, mdiMagnify, mdiClose } from "@icons/material";
+import ContentCard from "@/components/lern-store/ContentCard.vue";
+import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter.vue";
+import ContentEmptyState from "@/components/lern-store/ContentEmptyState.vue";
+import ContentInitialState from "@/components/lern-store/ContentInitialState.vue";
+import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
+import themeConfig from "@/theme.config";
 import {
 	CONTENT_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import ContentCard from "@/components/lern-store/ContentCard.vue";
-import ContentEmptyState from "@/components/lern-store/ContentEmptyState.vue";
-import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
-import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter.vue";
-import ContentInitialState from "@/components/lern-store/ContentInitialState.vue";
+import { mdiChevronLeft, mdiClose, mdiMagnify } from "@icons/material";
+import { useDebounceFn, watchDebounced } from "@vueuse/core";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import themeConfig from "@/theme.config";
 import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
@@ -138,11 +138,24 @@ onMounted(() => {
 const isInline = computed(() => !!route.query.inline);
 const resources = computed(() => contentModule.getResourcesGetter);
 const loading = computed(() => contentModule.getLoading);
-const reachedTotal = computed(
-	() =>
+const reachedTotal = computed(() => {
+	console.log("total", resources.value.total);
+	console.log("total !== 0", resources.value.total !== 0);
+	console.log("length", resources.value.data.length);
+	console.log(
+		"length >= total",
+		resources.value.data.length >= resources.value.total
+	);
+	console.log(
+		"reachedTotal",
+		resources.value.total !== 0 &&
+			resources.value.data.length >= resources.value.total
+	);
+	return (
 		resources.value.total !== 0 &&
 		resources.value.data.length >= resources.value.total
-);
+	);
+});
 
 const onInput = async () => {
 	await searchContent();
