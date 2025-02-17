@@ -103,7 +103,7 @@ export default class ContentModule extends VuexModule {
 			}
 		}
 		this.selected = this.elements.data.filter(
-			(el: any) => el.stateSelected === true
+			(el) => el.stateSelected === true
 		).length;
 	}
 

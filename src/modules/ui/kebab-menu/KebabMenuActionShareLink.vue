@@ -22,6 +22,6 @@ const actionNameTranslationKeyMap: Partial<
 };
 
 const actionName = computed(() => {
-	return actionNameTranslationKeyMap[props.scope] ?? "common.actions.share";
+	return actionNameTranslationKeyMap[props.scope] ?? "common.actions.shareLink";
 });
 </script>

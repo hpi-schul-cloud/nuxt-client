@@ -127,7 +127,6 @@ import ShareModalOptionsForm from "@/components/share/ShareModalOptionsForm.vue"
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
-	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
@@ -146,7 +145,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const notifier = injectStrict(NOTIFIER_MODULE_KEY);
 const shareModule = injectStrict(SHARE_MODULE_KEY);
 const isOpen = computed({
@@ -206,10 +204,7 @@ const onCopy = () => {
 };
 
 const showCtlToolsInfo = computed(() => {
-	return (
-		envConfigModule.getCtlToolsTabEnabled &&
-		(props.type === "courses" || props.type === "columnBoard")
-	);
+	return props.type === "courses" || props.type === "columnBoard";
 });
 
 const showAlertInfo = computed(() => {

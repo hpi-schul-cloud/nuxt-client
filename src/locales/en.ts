@@ -17,12 +17,14 @@ export default {
 	"common.actions.logout": "Logout",
 	"common.actions.ok": "OK",
 	"common.actions.pickColor": "Select background colour",
+	"common.actions.leave": "Leave",
 	"common.actions.remove": "Remove",
 	"common.actions.rename": "Rename",
 	"common.actions.save": "Save",
 	"common.actions.scrollToTop": "Scroll up",
 	"common.actions.share": "Share",
 	"common.actions.shareCopy": "Share copy",
+	"common.actions.shareLink": "Copy link",
 	"common.actions.update": "Update",
 	"common.ariaLabel.newTab": "opens in a new tab",
 	"common.ariaLabel.sameTab": "opens in the same tab",
@@ -176,8 +178,8 @@ export default {
 		"Link could not be copied to clipboard",
 	"common.words.courseGroups": "Course Groups",
 	"common.words.courses": "Courses",
-	"common.words.draft": "draft",
-	"common.words.drafts": "drafts",
+	"common.words.draft": "Draft",
+	"common.words.drafts": "Drafts",
 	"common.words.languages.de": "German",
 	"common.words.languages.en": "English",
 	"common.words.languages.es": "Spanish",
@@ -301,12 +303,19 @@ export default {
 	"components.administration.externalToolsSection.action.edit": "Edit Tool",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"View data sheet",
+	"components.administration.externalToolsSection.action.sync":
+		"Update availability",
 	"components.administration.externalToolsSection.description.firstParagraph":
 		"The school-specific parameters for the external tool are configured here. After saving the configuration, the tool will be available within the school.",
 	"components.administration.externalToolsSection.description.secondParagraph":
 		"Further information is available in our {0}.",
 	"components.administration.externalToolsSection.description.secondParagraph.link":
 		"Help section on external tools",
+	"components.administration.externalToolsSection.vidis.title": "VIDIS-Media",
+	"components.administration.externalToolsSection.vidis.description":
+		"The availability of VIDIS media is updated automatically. In addition, the availability of the media can be updated manually here, e.g. to be able to use recently activated media directly in the school cloud.",
+	"components.administration.externalToolsSection.vidis.notification.success":
+		"VIDIS media updated successfully",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"The usage of the tool could not be determined.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
@@ -375,13 +384,10 @@ export default {
 	"components.board.action.moveUp": "Move up",
 	"components.board.action.changeLayout": "Change layout",
 	"components.board.action.shareLink.card": "Copy link to card",
-	"components.board.alert.info.teacher":
-		"This board is visible to all course participants.",
-	"components.board.alert.info.draft":
-		"This board is not visible to course participants.",
 	"components.board.column.defaultTitle": "New column",
 	"components.board.column.ghost.column.placeholder": "Add column",
 	"components.board.column.ghost.list.placeholder": "Add section",
+	"components.board.draftChip.tooltip": "Only visible to teachers",
 	"components.board.error.404":
 		"Error 404 – Board with this name was not found",
 	"components.board.error.403":
@@ -594,8 +600,6 @@ export default {
 	"components.molecules.copyResult.label.lernstoreMaterialGroup":
 		"Learning materials",
 	"components.molecules.copyResult.label.lessonContentGroup": "Lesson contents",
-	"components.molecules.copyResult.label.ltiToolsGroup": "LTI Tools Group",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Submissions",
 	"components.molecules.copyResult.label.text": "Text",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -605,10 +609,6 @@ export default {
 	"components.molecules.copyResult.label.userGroup": "User Group",
 	"components.molecules.copyResult.label.toolElements": "Tool Element",
 	"components.molecules.copyResult.metadata": "General Information",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"Content is not copied for data protection reasons and must be added again.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Old neXboard sections have not been copied as the tool is being removed from our platform. As a replacement, the innovative whiteboard tool tldraw is now available in the column board.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -735,7 +735,6 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Link only valid within the school",
 	"components.molecules.share.options.title": "Share settings",
-	"components.molecules.share.result.copyClipboard": "Copy link",
 	"components.molecules.share.result.mailShare": "Send as mail",
 	"components.molecules.share.result.qrCodeScan": "Scan QR code",
 	"components.molecules.share.result.title": "Share via",
@@ -1240,7 +1239,6 @@ export default {
 	"pages.administration.school.index.authSystems.alias": "Alias",
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"Are you sure you want to delete the following authentification system?",
-	"pages.administration.school.index.authSystems.copyLink": "Copy Link",
 	"pages.administration.school.index.authSystems.delete": "Delete {system}",
 	"pages.administration.school.index.authSystems.deleteAuthSystem":
 		"Delete Authentification",
@@ -1713,7 +1711,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"A course folder is automatically created for the imported course. Student-related data from the original course will be removed. Then add students and make an appointment for the course.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Attention: Manually replace tools with user data which are included in the topic subsequently (e.g. neXboard, Etherpad, GeoGebra), because changes to this will otherwise affect the original course! Files (images, videos, audio) and linked material are not affected and can remain unchanged.",
+		"Attention: Manually replace tools with user data which are included in the topic subsequently (e.g. Etherpad, GeoGebra), because changes to this will otherwise affect the original course! Files (images, videos, audio) and linked material are not affected and can remain unchanged.",
 	"pages.rooms.importCourse.step_1.text": "Info",
 	"pages.rooms.importCourse.step_2.text": "Paste the code",
 	"pages.rooms.importCourse.step_2":
@@ -1771,6 +1769,8 @@ export default {
 		"Rooms are currently only visible to teachers and will be further developed. Further information can be found on our {helpLink}. We look forward to receiving {feedbackLink} on the current status.",
 	"pages.rooms.infoAlert.welcome.visibility.help": "help page",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "feedback",
+	"pages.rooms.leaveRoom.confirmation": 'Leave room "{roomName}"?',
+	"pages.rooms.leaveRoom.menu": "Leave room",
 	"pages.rooms.members.error.load": "The participant list could not be loaded.",
 	"pages.rooms.members.error.add": "Adding participants failed.",
 	"pages.rooms.members.error.remove": "Deleting participants failed.",
@@ -1779,6 +1779,10 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add members",
+	"pages.rooms.members.actionMenu.ariaLabel": "Action menu for {memberName}",
+	"pages.rooms.members.changePermission": "Change permissions",
+	"pages.rooms.members.changePermission.ariaLabel":
+		"Change permissions for {memberName}",
 	"pages.rooms.members.manage": "Room members",
 	"pages.rooms.members.remove.ariaLabel": "Remove {memberName} from the room",
 	"pages.rooms.members.resetSelection.ariaLabel":
@@ -1795,6 +1799,17 @@ export default {
 	"pages.rooms.members.roomPermissions.viewer": "Read",
 	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
+	"pages.rooms.members.tableHeader.actions": "Actions",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} receives the following permissions in the room “{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"The selected members will receive the following room permissions in “{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Access the areas in the room and view content",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Create and edit content",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		'Same permissions as "Edit", plus add and remove other members, change their room permissions and edit the room',
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":
@@ -1864,6 +1879,9 @@ export default {
 		"An error had occurred when pasting the text from the clipboard. Please paste the text manually.",
 	"pages.tool.settings": "Settings",
 	"pages.tool.title": "External Tools Configuration",
+	"pages.tool.medium": "External medium",
+	"pages.tool.medium.mediumId": "Medium Id",
+	"pages.tool.medium.mediumSourceId": "Media catalog Id",
 	"pages.userMigration.backToLogin": "Return to login page",
 	"pages.userMigration.button.skip": "Not now",
 	"pages.userMigration.button.startMigration": "Start",
@@ -1920,7 +1938,6 @@ export default {
 	"tldraw.error.ws.4404": "Whiteboard with this name was not found",
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
 	"ui-confirmation-dialog.ask-cancel-form": "Discard changes?",
-	"ui-layout.topbar.pageShare.copyLink": "Copy link",
 	"ui-layout.topbar.pageShare.printQRCode": "Print QR Code",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",

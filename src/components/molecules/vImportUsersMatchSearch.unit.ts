@@ -75,9 +75,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 
 	it("should set 'flagged' property true when flag-button clicked", async () => {
 		const saveFlagMock = jest.spyOn(importUsersModule, "saveFlag");
-		saveFlagMock.mockReturnValue(
-			Promise.resolve({ ...testProps.editedItem, flagged: true })
-		);
+		saveFlagMock.mockResolvedValue({ ...testProps.editedItem, flagged: true });
 
 		const wrapper = getWrapper(testProps);
 
@@ -89,8 +87,8 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		await nextTick();
 		await nextTick();
 
+		expect(wrapper.emitted()["saved-flag"]).toHaveLength(1);
 		expect(flagButtonElement.element.innerHTML).toContain(mdiFlag);
-		expect(wrapper.vm.flagged).toBe(true);
 	});
 
 	it("should set 'selectedItem' property when autoComplete element is selected ", async () => {
@@ -112,8 +110,6 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		expect(editedItemElement).toContain(payload.firstName);
 		expect(editedItemElement).toContain(payload.lastName);
 		expect(editedItemElement).toContain("common.roleName.teacher");
-
-		expect(wrapper.vm.canSave).toStrictEqual(true);
 	});
 
 	it("should saveMatch method triggered when save button clicked", async () => {
@@ -125,23 +121,17 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 			roleNames: [UserMatchResponseRoleNamesEnum.Teacher],
 		};
 
-		const response: ImportUserResponse = {
-			...testProps.editedItem,
-			match,
-		} as ImportUserResponse;
-
 		const saveMatchMock = jest.spyOn(importUsersModule, "saveMatch");
-		saveMatchMock.mockReturnValue(Promise.resolve(response));
+		saveMatchMock.mockResolvedValue({ ...testProps.editedItem, match });
 
 		const wrapper = getWrapper(testProps);
 
 		const autoCompleteElement = wrapper.findComponent(VAutocomplete);
-		await autoCompleteElement.vm.$emit("update:modelValue", match);
+		autoCompleteElement.vm.$emit("update:modelValue", match);
 		await nextTick();
 
 		const saveMatchButton = wrapper.find("[data-testid=save-match-btn]");
 		await saveMatchButton.trigger("click");
-		await nextTick();
 
 		expect(saveMatchMock).toHaveBeenCalledTimes(1);
 		expect(saveMatchMock).toHaveBeenCalledWith({
@@ -149,6 +139,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 			userId: match.userId,
 		});
 		await nextTick();
+
 		expect(wrapper.emitted()["saved-match"]).toBeTruthy();
 	});
 
@@ -162,7 +153,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 			roleNames: [ImportUserResponseRoleNamesEnum.Student],
 			classNames: ["6a"],
 		};
-		const match = {
+		const match: UserMatchResponse = {
 			userId: "0000d213816abba584714c0a",
 			loginName: "admin@schul-cloud.org",
 			firstName: "Thorsten",
@@ -176,7 +167,9 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 		});
 
 		const deleteMatchMock = jest.spyOn(importUsersModule, "deleteMatch");
-		deleteMatchMock.mockReturnValue(Promise.resolve(importUser));
+		deleteMatchMock.mockImplementation(async () => {
+			return Promise.resolve(importUser);
+		});
 		const deleteMatchButton = wrapper.find("[data-testid=delete-match-btn]");
 		await deleteMatchButton.trigger("click");
 		await nextTick();
@@ -293,6 +286,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				);
 			});
 		});
+
 		describe("when the external role is 'Lehr' (Teacher)", () => {
 			const setup = () => {
 				const adminTestProps = {
@@ -332,6 +326,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				);
 			});
 		});
+
 		describe("when the external role is 'Leit' (Management)", () => {
 			const setup = () => {
 				const adminTestProps = {
@@ -371,6 +366,7 @@ describe("@/components/molecules/vImportUsersMatchSearch", () => {
 				);
 			});
 		});
+
 		describe("when the external role is 'OrgAdmin' (Admin)", () => {
 			const setup = () => {
 				const adminTestProps = {

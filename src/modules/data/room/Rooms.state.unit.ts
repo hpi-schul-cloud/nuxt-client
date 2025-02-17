@@ -113,6 +113,29 @@ describe("useRoomsState", () => {
 		});
 	});
 
+	describe("leaveRoom", () => {
+		it("should call leaveRoom api", async () => {
+			const { leaveRoom, isLoading } = useRoomsState();
+			const roomId = "room-id";
+
+			await leaveRoom(roomId);
+			expect(roomApiMock.roomControllerLeaveRoom).toHaveBeenCalledWith(roomId);
+			expect(isLoading.value).toBe(false);
+		});
+
+		it("should throw an error when leaving room fails", async () => {
+			const { leaveRoom, isLoading } = useRoomsState();
+			const roomId = "room-id";
+
+			roomApiMock.roomControllerLeaveRoom.mockRejectedValue({
+				code: 404,
+			});
+
+			await expect(leaveRoom(roomId)).rejects.toThrow();
+			expect(isLoading.value).toBe(false);
+		});
+	});
+
 	describe("isEmpty", () => {
 		it("should return true when there are no rooms", () => {
 			const { isEmpty, rooms } = useRoomsState();

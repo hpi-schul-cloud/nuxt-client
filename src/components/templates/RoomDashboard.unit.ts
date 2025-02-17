@@ -1,12 +1,9 @@
-import {
-	ConfigResponse,
-	ShareTokenBodyParamsParentTypeEnum,
-} from "@/serverApi/v3";
-import { envConfigModule, courseRoomDetailsModule } from "@/store";
+import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3";
+import { courseRoomDetailsModule, envConfigModule } from "@/store";
 import CopyModule, { CopyParamsTypeEnum } from "@/store/copy";
+import CourseRoomDetailsModule from "@/store/course-room-details";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
-import CourseRoomDetailsModule from "@/store/course-room-details";
 import ShareModule from "@/store/share";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -19,14 +16,14 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { mount, VueWrapper } from "@vue/test-utils";
-import RoomDashboard from "./RoomDashboard.vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { envsFactory } from "@@/tests/test-utils";
 import { createMock } from "@golevelup/ts-jest";
+import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
 import { Router, useRouter } from "vue-router";
 import { VCard } from "vuetify/lib/components/index.mjs";
+import RoomDashboard from "./RoomDashboard.vue";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -132,8 +129,7 @@ const getWrapper = (
 	options?: object
 ) => {
 	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-		getCtlToolsTabEnabled: false,
-		getEnv: {} as ConfigResponse,
+		getEnv: envsFactory.build(),
 	});
 
 	const router = createMock<Router>();

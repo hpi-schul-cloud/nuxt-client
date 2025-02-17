@@ -17,12 +17,14 @@ export default {
 	"common.actions.logout": "Desconectar",
 	"common.actions.ok": "Aceptar",
 	"common.actions.pickColor": "Seleccione el color de fondo",
+	"common.actions.leave": "Dejar",
 	"common.actions.remove": "Eliminar",
 	"common.actions.rename": "Renombrar",
 	"common.actions.save": "Guardar",
 	"common.actions.scrollToTop": "Desplazarse hacia arriba",
 	"common.actions.share": "Compartir",
 	"common.actions.shareCopy": "Compartir copia",
+	"common.actions.shareLink": "Copiar enlace",
 	"common.actions.update": "Actualizar",
 	"common.ariaLabel.newTab": "se abre en una nueva pestaña",
 	"common.ariaLabel.sameTab": "se abre en la misma pestaña",
@@ -178,8 +180,8 @@ export default {
 		"El enlace no se pudo copiar al portapapeles",
 	"common.words.courseGroups": "grupos de cursos",
 	"common.words.courses": "Cursos",
-	"common.words.draft": "borrador",
-	"common.words.drafts": "borradores",
+	"common.words.draft": "Borrador",
+	"common.words.drafts": "Borradores",
 	"common.words.languages.de": "Alemán",
 	"common.words.languages.en": "Inglés",
 	"common.words.languages.es": "Español",
@@ -305,12 +307,19 @@ export default {
 		"Editar herramienta",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Ver hoja de datos",
+	"components.administration.externalToolsSection.action.sync":
+		"Disponibilidad de actualización",
 	"components.administration.externalToolsSection.description.firstParagraph":
 		"Los parámetros específicos de la escuela para la herramienta externa se configuran aquí. Después de guardar la configuración, la herramienta estará disponible dentro de la escuela.",
 	"components.administration.externalToolsSection.description.secondParagraph":
 		"Más información está disponible en nuestro {0}.",
 	"components.administration.externalToolsSection.description.secondParagraph.link":
 		"Sección de ayuda sobre herramientas externas",
+	"components.administration.externalToolsSection.vidis.title": "Medios VIDIS",
+	"components.administration.externalToolsSection.vidis.description":
+		"La disponibilidad de los medios VIDIS se actualiza automáticamente. Además, aquí se puede actualizar manualmente la disponibilidad de los medios, por ejemplo para poder utilizar los medios activados recientemente directamente en la nube de la escuela.",
+	"components.administration.externalToolsSection.vidis.notification.success":
+		"Medios VIDIS actualizados exitosamente",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"No se pudo determinar el uso de la herramienta.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
@@ -379,14 +388,11 @@ export default {
 	"components.board.action.moveRight": "Mover a la derecha",
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.changeLayout": "Cambiar vista",
-	"components.board.action.shareLink.card": "Enlace a la ficha",
-	"components.board.alert.info.teacher":
-		"Este tablero es visible para todos los participantes en el curso.",
-	"components.board.alert.info.draft":
-		"Este tablón no es visible para los participantes en el curso.",
+	"components.board.action.shareLink.card": "Copiar enlace a la tarjeta",
 	"components.board.column.defaultTitle": "Nueva columna",
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
+	"components.board.draftChip.tooltip": "Sólo visible para los profesores",
 	"components.board.error.404":
 		"Error 404 – No se ha encontrado ningún tablero con este nombre",
 	"components.board.error.403":
@@ -607,9 +613,6 @@ export default {
 		"Materiales de aprendizaje",
 	"components.molecules.copyResult.label.lessonContentGroup":
 		"Contenidos de la lección",
-	"components.molecules.copyResult.label.ltiToolsGroup":
-		"Grupo de herramientas LTI",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "Envíos",
 	"components.molecules.copyResult.label.text": "Texto",
 	"components.molecules.copyResult.label.tldraw": "Whiteboard",
@@ -620,10 +623,6 @@ export default {
 	"components.molecules.copyResult.label.toolElements":
 		"Elemento de herramienta",
 	"components.molecules.copyResult.metadata": "Información general",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Las antiguas secciones de neXboard no se han copiado, ya que la herramienta se está retirando de nuestra plataforma. Como reemplazo, la innovadora herramienta de pizarra digital tldraw está ahora disponible en el tablero de columnas.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -756,7 +755,6 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"El enlace sólo es válido dentro de la escuela",
 	"components.molecules.share.options.title": "Compartir la configuración",
-	"components.molecules.share.result.copyClipboard": "Copiar enlace",
 	"components.molecules.share.result.mailShare": "Enviar como correo",
 	"components.molecules.share.result.qrCodeScan": "Escanear código QR",
 	"components.molecules.share.result.title": "Compartir vía",
@@ -1277,7 +1275,6 @@ export default {
 	"pages.administration.school.index.authSystems.alias": "Alias",
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"¿Estás seguro de que deseas eliminar la siguiente sistema de autenticación?",
-	"pages.administration.school.index.authSystems.copyLink": "Copiar enlace",
 	"pages.administration.school.index.authSystems.delete": "Eliminar {system}",
 	"pages.administration.school.index.authSystems.deleteAuthSystem":
 		"Eliminar sistema LDAP",
@@ -1761,7 +1758,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"Se crea automáticamente una carpeta de curso para el curso importado. Se eliminarán los datos de los estudiantes del curso original. A continuación, añade estudiantes y programa el horario del curso.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Atención: reemplaza manualmente las herramientas con datos de usuario que se incluyen en el tema posteriormente (por ejemplo, nexBoard, Etherpad, GeoGebra), ya que los cambios en esto afectarán al curso original. Los archivos (imágenes, vídeos y audios) y el material vinculado no se ven afectados y pueden permanecer sin cambios.",
+		"Atención: reemplaza manualmente las herramientas con datos de usuario que se incluyen en el tema posteriormente (por ejemplo, Etherpad, GeoGebra), ya que los cambios en esto afectarán al curso original. Los archivos (imágenes, vídeos y audios) y el material vinculado no se ven afectados y pueden permanecer sin cambios.",
 	"pages.rooms.importCourse.step_1.text": "Información",
 	"pages.rooms.importCourse.step_2.text": "Pega el código",
 	"pages.rooms.importCourse.step_2":
@@ -1820,6 +1817,8 @@ export default {
 		"Las salas son actualmente visibles solo para los profesores y se seguirán desarrollando. Puede encontrar más información en nuestro {helpLink}. Agradecemos sus {feedbackLink} sobre el estado actual.",
 	"pages.rooms.infoAlert.welcome.visibility.help": "página de ayuda",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "comentarios",
+	"pages.rooms.leaveRoom.confirmation": 'Dejar la sala "{roomName}"?',
+	"pages.rooms.leaveRoom.menu": "Salir de la sala",
 	"pages.rooms.members.error.load":
 		"No se pudo cargar la lista de participantes.",
 	"pages.rooms.members.error.add": "Error al agregar participantes.",
@@ -1829,6 +1828,11 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Participantes",
 	"pages.rooms.members.add": "Añadir miembros",
+	"pages.rooms.members.actionMenu.ariaLabel":
+		"Menú de acciones para {memberName}",
+	"pages.rooms.members.changePermission": "Cambiar permisos",
+	"pages.rooms.members.changePermission.ariaLabel":
+		"Cambiar el permiso para {memberName}",
 	"pages.rooms.members.manage": "Miembros de la sala",
 	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
 	"pages.rooms.members.resetSelection.ariaLabel":
@@ -1847,6 +1851,17 @@ export default {
 	"pages.rooms.members.roomPermissions.viewer": "Leer",
 	"pages.rooms.members.tableHeader.roomRole": "Permisos de la sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
+	"pages.rooms.members.tableHeader.actions": "Acciones",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} recibe los siguientes permisos de sala en “{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"Los miembros seleccionados recibirán los siguientes permisos de sala en “{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Accede a las áreas de la sala y visualiza el contenido",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Crear y editar contenido",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		'Los mismos permisos que "Editar", además de agregar y eliminar otros miembros, cambiar sus permisos de sala y editar la sala',
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
@@ -1917,6 +1932,9 @@ export default {
 		"Se ha producido un error al pegar el texto desde el portapapeles. Por favor, pegue el texto manualmente.",
 	"pages.tool.settings": "Configuración",
 	"pages.tool.title": "Configuración de herramientas externas",
+	"pages.tool.medium": "Medio externo",
+	"pages.tool.medium.mediumId": "ID medio",
+	"pages.tool.medium.mediumSourceId": "ID de catálogo de medios",
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",
 	"pages.userMigration.button.skip": "Ahora no",
 	"pages.userMigration.button.startMigration": "Empieza a moverte",
@@ -1975,7 +1993,6 @@ export default {
 	"tldraw.error.ws.4404": "No se ha encontrado la pizarra con este nombre",
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"ui-confirmation-dialog.ask-cancel-form": "¿Descartar cambios?",
-	"ui-layout.topbar.pageShare.copyLink": "Copiar enlace",
 	"ui-layout.topbar.pageShare.printQRCode": "Imprimir código QR",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",

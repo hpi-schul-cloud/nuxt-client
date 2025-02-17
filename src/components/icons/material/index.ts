@@ -1,6 +1,7 @@
 /* eslint-disable schulcloud/material-icon-imports */
 import {
 	mdiAccountBoxOutline,
+	mdiAccountEditOutline,
 	mdiAccountCircleOutline,
 	mdiAccountGroupOutline,
 	mdiAccountOffOutline,
@@ -88,6 +89,7 @@ import {
 	mdiKeyboardReturn,
 	mdiLightbulbOnOutline,
 	mdiLink,
+	mdiLocationExit,
 	mdiLock,
 	mdiLockOutline,
 	mdiLogin,
@@ -148,6 +150,7 @@ import {
 
 export {
 	mdiAccountBoxOutline,
+	mdiAccountEditOutline,
 	mdiAccountCircleOutline,
 	mdiAccountGroupOutline,
 	mdiAccountOffOutline,
@@ -233,6 +236,7 @@ export {
 	mdiImport,
 	mdiInformation,
 	mdiKeyboardReturn,
+	mdiLocationExit,
 	mdiLightbulbOnOutline,
 	mdiLink,
 	mdiLock,

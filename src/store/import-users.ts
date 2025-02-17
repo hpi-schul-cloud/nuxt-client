@@ -238,10 +238,10 @@ export default class ImportUsersModule extends VuexModule {
 				);
 			this.setImportUsersList(response.data);
 		} catch (error: unknown) {
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
@@ -259,10 +259,10 @@ export default class ImportUsersModule extends VuexModule {
 				);
 			this.setUsersList(response.data);
 		} catch (error: unknown) {
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
@@ -287,10 +287,10 @@ export default class ImportUsersModule extends VuexModule {
 				flagged: !payload.flagged,
 			});
 
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
@@ -309,10 +309,10 @@ export default class ImportUsersModule extends VuexModule {
 			);
 			return response.data;
 		} catch (error: unknown) {
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
@@ -327,10 +327,10 @@ export default class ImportUsersModule extends VuexModule {
 			this.deleteMatchMutation(importUserId);
 			return response.data;
 		} catch (error: unknown) {
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
@@ -356,10 +356,10 @@ export default class ImportUsersModule extends VuexModule {
 				);
 			this.setTotal(response.data.total);
 		} catch (error: unknown) {
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
@@ -385,10 +385,10 @@ export default class ImportUsersModule extends VuexModule {
 				);
 			this.setTotalMatched(response.data.total);
 		} catch (error: unknown) {
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
@@ -406,10 +406,10 @@ export default class ImportUsersModule extends VuexModule {
 				);
 			this.setTotalUnmatched(response.data.total);
 		} catch (error: unknown) {
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
@@ -421,10 +421,10 @@ export default class ImportUsersModule extends VuexModule {
 		try {
 			await this.importUserApi.importUserControllerSaveAllUsersMatches();
 		} catch (error: unknown) {
-			const apiError: ApiResponseError | ApiValidationError =
-				mapAxiosErrorToResponseError(error);
+			const apiError = mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});

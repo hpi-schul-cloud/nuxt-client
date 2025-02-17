@@ -16,10 +16,6 @@ const mockItem: CopyResultItem = {
 			title: "Geogebra Element Title",
 			type: CopyApiResponseTypeEnum.LessonContentGeogebra,
 		},
-		{
-			title: "Nexboard Element Title",
-			type: CopyApiResponseTypeEnum.LessonContentNexboard,
-		},
 	],
 
 	url: "/courses/courseId/topics/elementId/edit?returnUrl=rooms/courseId",
@@ -60,10 +56,6 @@ describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 			"components.molecules.copyResult.label.geogebra"
 		);
 		expect(elementTitles[0]).toContain("Geogebra Element Title");
-		expect(elementTitles[1]).toContain(
-			"components.molecules.copyResult.label.nexboard"
-		);
-		expect(elementTitles[1]).toContain("Nexboard Element Title");
 	});
 
 	it("should render the correct link", () => {
@@ -119,10 +111,6 @@ describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 				"components.molecules.copyResult.label.text",
 			],
 			[
-				CopyApiResponseTypeEnum.LessonContentNexboard,
-				"components.molecules.copyResult.label.nexboard",
-			],
-			[
 				CopyApiResponseTypeEnum.LessonContentLernstore,
 				"common.words.lernstore",
 			],
@@ -130,10 +118,6 @@ describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 			[
 				CopyApiResponseTypeEnum.LessonContentGroup,
 				"components.molecules.copyResult.label.lessonContentGroup",
-			],
-			[
-				CopyApiResponseTypeEnum.LtitoolGroup,
-				"components.molecules.copyResult.label.ltiToolsGroup",
 			],
 			[
 				CopyApiResponseTypeEnum.Metadata,

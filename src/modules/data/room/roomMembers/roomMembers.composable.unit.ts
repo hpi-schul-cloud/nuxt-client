@@ -1,8 +1,8 @@
 import * as serverApi from "@/serverApi/v3/api";
 import {
 	RoleName,
-	RoomMemberResponse,
 	SchoolUserListResponse,
+	ChangeRoomRoleBodyParamsRoleNameEnum,
 } from "@/serverApi/v3/api";
 import { authModule, schoolsModule } from "@/store";
 import AuthModule from "@/store/auth";
@@ -17,7 +17,7 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useRoomMembers } from "@data-room";
+import { RoomMember, useRoomMembers } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { AxiosInstance } from "axios";
@@ -173,9 +173,10 @@ describe("useRoomMembers", () => {
 					...user,
 					userId: user.id,
 					fullName: `${user.lastName}, ${user.firstName}`,
-					roomRoleName: RoleName.Roomadmin,
 					schoolRoleName: RoleName.Teacher,
 					schoolName: "Paul-Gerhardt-Gymnasium",
+					displayRoomRole: "pages.rooms.members.roomPermissions.admin",
+					displaySchoolRole: "common.labels.teacher",
 				}))
 			);
 		});
@@ -184,7 +185,7 @@ describe("useRoomMembers", () => {
 			const { getPotentialMembers, potentialRoomMembers, roomMembers } =
 				useRoomMembers(roomId);
 
-			const membersMock: RoomMemberResponse = roomMemberFactory(
+			const membersMock: RoomMember = roomMemberFactory(
 				RoleName.Roomeditor
 			).build();
 
@@ -263,7 +264,7 @@ describe("useRoomMembers", () => {
 				useRoomMembers(roomId);
 
 			roomApiMock.roomControllerAddMembers.mockResolvedValue(
-				mockApiResponse({})
+				mockApiResponse({ data: { roomRoleName: "roomadmin" } })
 			);
 
 			potentialRoomMembers.value = roomMemberListFactory.buildList(3);
@@ -311,18 +312,16 @@ describe("useRoomMembers", () => {
 			const membersMock = roomMemberFactory(RoleName.Roomeditor).buildList(3);
 			roomMembers.value = membersMock;
 
-			const firstMember = membersMock[0];
-
-			await removeMembers([firstMember.userId]);
+			await removeMembers([membersMock[1].userId]);
 
 			expect(roomApiMock.roomControllerRemoveMembers).toHaveBeenCalledWith(
 				roomId,
 				{
-					userIds: [firstMember.userId],
+					userIds: [membersMock[1].userId],
 				}
 			);
 
-			expect(roomMembers.value).not.toContainEqual(firstMember);
+			expect(roomMembers.value).not.toContainEqual(membersMock[1]);
 		});
 
 		it("should throw an error if the API call fails", async () => {
@@ -335,6 +334,104 @@ describe("useRoomMembers", () => {
 
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"pages.rooms.members.error.remove"
+			);
+		});
+	});
+
+	describe("leaveRoom", () => {
+		it("should call the leaveRoom api", async () => {
+			const { leaveRoom } = useRoomMembers(roomId);
+
+			roomApiMock.roomControllerLeaveRoom.mockResolvedValue(
+				mockApiResponse({})
+			);
+
+			await leaveRoom();
+
+			expect(roomApiMock.roomControllerLeaveRoom).toHaveBeenCalledWith(roomId);
+		});
+
+		it("should throw an error if the API call fails", async () => {
+			const { leaveRoom } = useRoomMembers(roomId);
+
+			const error = new Error("Test error");
+			roomApiMock.roomControllerLeaveRoom.mockRejectedValue(error);
+
+			await leaveRoom();
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"pages.rooms.members.error.remove"
+			);
+		});
+	});
+
+	describe("updateMembersRole", () => {
+		it("should update the role of a member", async () => {
+			const { updateMembersRole, roomMembers, selectedIds } =
+				useRoomMembers(roomId);
+
+			roomApiMock.roomControllerChangeRolesOfMembers.mockResolvedValue(
+				mockApiResponse({})
+			);
+
+			const membersMock = roomMemberFactory(RoleName.Roomviewer).buildList(3);
+			roomMembers.value = membersMock;
+
+			selectedIds.value = [membersMock[1].userId];
+
+			await updateMembersRole(ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin);
+
+			expect(
+				roomApiMock.roomControllerChangeRolesOfMembers
+			).toHaveBeenCalledWith(roomId, {
+				userIds: [membersMock[1].userId],
+				roleName: RoleName.Roomadmin,
+			});
+
+			expect(roomMembers.value[1].roomRoleName).toBe(RoleName.Roomadmin);
+			expect(roomMembers.value[1].displayRoomRole).toBe(
+				"pages.rooms.members.roomPermissions.admin"
+			);
+		});
+
+		it("should update the role of a member with 'id' parameter", async () => {
+			const { updateMembersRole, roomMembers } = useRoomMembers(roomId);
+
+			roomApiMock.roomControllerChangeRolesOfMembers.mockResolvedValue(
+				mockApiResponse({})
+			);
+
+			const membersMock = roomMemberFactory(RoleName.Roomviewer).buildList(3);
+			roomMembers.value = membersMock;
+
+			await updateMembersRole(
+				ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin,
+				membersMock[1].userId
+			);
+
+			expect(
+				roomApiMock.roomControllerChangeRolesOfMembers
+			).toHaveBeenCalledWith(roomId, {
+				userIds: [membersMock[1].userId],
+				roleName: RoleName.Roomadmin,
+			});
+
+			expect(roomMembers.value[1].roomRoleName).toBe(RoleName.Roomadmin);
+			expect(roomMembers.value[1].displayRoomRole).toBe(
+				"pages.rooms.members.roomPermissions.admin"
+			);
+		});
+
+		it("should throw an error if the API call fails", async () => {
+			const { updateMembersRole } = useRoomMembers(roomId);
+
+			const error = new Error("Test error");
+			roomApiMock.roomControllerChangeRolesOfMembers.mockRejectedValue(error);
+
+			await updateMembersRole(ChangeRoomRoleBodyParamsRoleNameEnum.Roomadmin);
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"pages.rooms.members.error.updateRole"
 			);
 		});
 	});

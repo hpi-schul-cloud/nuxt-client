@@ -16,7 +16,7 @@ import EnvConfigModule from "./env-config";
 jest.useFakeTimers();
 
 describe("auth store module", () => {
-	let consoleErrorSpy: any;
+	let consoleErrorSpy: jest.SpyInstance;
 	let meApi: DeepMocked<serverApi.MeApiInterface>;
 
 	beforeAll(() => {

@@ -10,4 +10,6 @@ export const schoolExternalToolConfigurationTemplate =
 		logoUrl: "logoUrl",
 		parameters: [],
 		isDeactivated: false,
+		mediumId: "mediumId",
+		mediaSourceId: "mediumSourceId",
 	}));

@@ -17,12 +17,14 @@ export default {
 	"common.actions.logout": "Вийти з аккаунта",
 	"common.actions.ok": "ОК",
 	"common.actions.pickColor": "Вибрати колір тла",
+	"common.actions.leave": "Залиште",
 	"common.actions.remove": "Вилучити",
 	"common.actions.rename": "перейменувати",
 	"common.actions.save": "Зберегти",
 	"common.actions.scrollToTop": "Прокрутити вгору",
 	"common.actions.share": "Поділіться",
 	"common.actions.shareCopy": "Поділитися копією",
+	"common.actions.shareLink": "Копіювати посилання",
 	"common.actions.update": "Оновити",
 	"common.ariaLabel.newTab": "відкривається в новій вкладці",
 	"common.ariaLabel.sameTab": "відкривається в тій же вкладці",
@@ -179,8 +181,8 @@ export default {
 		"Не вдалося скопіювати посилання в буфер обміну",
 	"common.words.courseGroups": "курсові групи",
 	"common.words.courses": "Мій курс",
-	"common.words.draft": "чернетка",
-	"common.words.drafts": "чернетки",
+	"common.words.draft": "Чернетка",
+	"common.words.drafts": "Чернетки",
 	"common.words.languages.de": "Німецька",
 	"common.words.languages.en": "Англійська",
 	"common.words.languages.es": "Іспанська",
@@ -307,12 +309,19 @@ export default {
 		"інструмент редагування",
 	"components.administration.externalToolsSection.action.showDatasheet":
 		"Переглянути таблицю даних",
+	"components.administration.externalToolsSection.action.sync":
+		"Доступність оновлення",
 	"components.administration.externalToolsSection.description.firstParagraph":
 		"Тут налаштовуються спеціальні параметри зовнішнього інструменту для школи. Після збереження конфігурації інструмент буде доступний у школі.",
 	"components.administration.externalToolsSection.description.secondParagraph":
 		"Додаткову інформацію можна знайти на нашому сайті {0}.",
 	"components.administration.externalToolsSection.description.secondParagraph.link":
 		"Розділ довідки щодо зовнішніх інструментів",
+	"components.administration.externalToolsSection.vidis.title": "VIDIS Медіа",
+	"components.administration.externalToolsSection.vidis.description":
+		"Доступність носіїв VIDIS оновлюється автоматично. Крім того, доступність медіафайлів можна оновити вручну, наприклад, мати можливість використовувати нещодавно активовані медіафайли безпосередньо в шкільній хмарі.",
+	"components.administration.externalToolsSection.vidis.notification.success":
+		"Медіа VIDIS успішно оновлено",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
@@ -384,11 +393,10 @@ export default {
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.action.changeLayout": "Змінити вигляд",
 	"components.board.action.shareLink.card": "Скопіювати посилання на Карту",
-	"components.board.alert.info.teacher": "Цю дошку бачать усі учасники курсу.",
-	"components.board.alert.info.draft": "Ця дошка невидима для учасників курсу.",
 	"components.board.column.defaultTitle": "Нова колонка",
 	"components.board.column.ghost.column.placeholder": "Додати стовпець",
 	"components.board.column.ghost.list.placeholder": "Додати розділ",
+	"components.board.draftChip.tooltip": "Видно лише вчителям",
 	"components.board.error.404":
 		"Помилка 404 – Дошки з такою назвою не знайдено",
 	"components.board.error.403":
@@ -604,9 +612,6 @@ export default {
 	"components.molecules.copyResult.label.lernstoreMaterialGroup":
 		"навчальні матеріали",
 	"components.molecules.copyResult.label.lessonContentGroup": "зміст уроку",
-	"components.molecules.copyResult.label.ltiToolsGroup":
-		"Група інструментів LTI",
-	"components.molecules.copyResult.label.nexboard": "NeXboard",
 	"components.molecules.copyResult.label.submissions": "підпорядкування",
 	"components.molecules.copyResult.label.text": "Текст",
 	"components.molecules.copyResult.label.tldraw": "Дошка",
@@ -617,10 +622,6 @@ export default {
 	"components.molecules.copyResult.label.toolElements":
 		"Інструментальний елемент",
 	"components.molecules.copyResult.metadata": "Загальна інформація",
-	"components.molecules.copyResult.nexboardCopy.info":
-		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
-	"components.molecules.copyResult.nexboardCopy.infoTldraw":
-		"Старі розділи neXboard не були скопійовані, оскільки інструмент видаляється з нашої платформи. Як заміна, інноваційний інструмент для роботи з дошкою tldraw тепер доступний у колонці дошки.",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
 	"components.molecules.copyResult.successfullyCopied":
@@ -755,7 +756,6 @@ export default {
 	"components.molecules.share.options.schoolInternally":
 		"Посилання дійсне тільки в межах школи",
 	"components.molecules.share.options.title": "Налаштування спільного доступу",
-	"components.molecules.share.result.copyClipboard": "Скопіювати посилання",
 	"components.molecules.share.result.mailShare": "Надіслати поштою",
 	"components.molecules.share.result.qrCodeScan": "Відскануйте QR-код",
 	"components.molecules.share.result.title": "Поділіться через",
@@ -1262,8 +1262,6 @@ export default {
 	"pages.administration.school.index.authSystems.alias": "Псевдонім",
 	"pages.administration.school.index.authSystems.confirmDeleteText":
 		"Ви дійсно хочете видалити наступну систему автентифікації?",
-	"pages.administration.school.index.authSystems.copyLink":
-		"копіювати посилання",
 	"pages.administration.school.index.authSystems.delete": "Видалити {system}",
 	"pages.administration.school.index.authSystems.deleteAuthSystem":
 		"Видалити автентифікацію",
@@ -1743,7 +1741,7 @@ export default {
 	"pages.rooms.importCourse.step_1.info_1":
 		"Папка курсу створюється для імпортованого курсу автоматично. Дані про учнів із вихідного курсу буде видалено. Потім додайте студентів та запишіть їх на курс.",
 	"pages.rooms.importCourse.step_1.info_2":
-		"Увага: замініть інструменти даними користувача, які згодом буде включено в тему, вручну (наприклад, neXboard, Etherpad, GeoGebra), інакше зміни вплинуть на вихідний курс! Файлів (зображення, відео, аудіо) та пов’язаних матеріалів це не стосується і вони можуть залишатися без змін.",
+		"Увага: замініть інструменти даними користувача, які згодом буде включено в тему, вручну (наприклад, Etherpad, GeoGebra), інакше зміни вплинуть на вихідний курс! Файлів (зображення, відео, аудіо) та пов’язаних матеріалів це не стосується і вони можуть залишатися без змін.",
 	"pages.rooms.importCourse.step_1.text": "Інформація",
 	"pages.rooms.importCourse.step_2.text": "Вставити код",
 	"pages.rooms.importCourse.step_2":
@@ -1800,6 +1798,8 @@ export default {
 		"Кімнати наразі видимі лише для вчителів і будуть далі розвиватися. Додаткову інформацію можна знайти на нашій {helpLink}. Ми будемо вдячні за ваші {feedbackLink} щодо поточного стану.",
 	"pages.rooms.infoAlert.welcome.visibility.help": "Сторінка допомоги",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "відгуки",
+	"pages.rooms.leaveRoom.confirmation": 'Дійсно залишити місце "{roomName}"?',
+	"pages.rooms.leaveRoom.menu": "Залиште кімнату",
 	"pages.rooms.members.error.load": "Не вдалося завантажити список учасників.",
 	"pages.rooms.members.error.add": "Не вдалося додати учасників.",
 	"pages.rooms.members.error.remove": "Не вдалося видалити учасників.",
@@ -1808,6 +1808,10 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте члени",
+	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberName}",
+	"pages.rooms.members.changePermission": "Змінити дозволи",
+	"pages.rooms.members.changePermission.ariaLabel":
+		"Змінити дозвіл для {memberName}",
 	"pages.rooms.members.manage": "Учасник кімнати",
 	"pages.rooms.members.remove.ariaLabel": "Видалити {memberName} з кімнати",
 	"pages.rooms.members.resetSelection.ariaLabel":
@@ -1824,6 +1828,17 @@ export default {
 	"pages.rooms.members.roomPermissions.viewer": "Читати",
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
+	"pages.rooms.members.tableHeader.actions": "Дії",
+	"pages.rooms.members.roleChange.subTitle":
+		"{memberName} надаються наступні повноваження в приміщенні “{roomName}”:",
+	"pages.rooms.members.roleChange.multipleUser.subTitle":
+		"Вибрані учасники отримають такі дозволи на кімнату в “{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.subText":
+		"Доступ до зон кімнати та перегляд вмісту",
+	"pages.rooms.members.roleChange.Roomeditor.subText":
+		"Створюйте та редагуйте контент",
+	"pages.rooms.members.roleChange.Roomadmin.subText":
+		"Такі самі дозволи, як і «Редагувати», а також додавати та видаляти інших учасників, змінювати їхні дозволи для кімнати та редагувати кімнату",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
@@ -1892,6 +1907,9 @@ export default {
 	"pages.tool.select.nodata": "Інструмент відсутній",
 	"pages.tool.settings": "Параметри",
 	"pages.tool.title": "Конфігурація зовнішніх інструментів",
+	"pages.tool.medium": "Зовнішнє середовище",
+	"pages.tool.medium.mediumId": "Середній",
+	"pages.tool.medium.mediumSourceId": "Ідентифікатор медіа каталогу",
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",
 	"pages.userMigration.button.skip": "Не зараз",
 	"pages.userMigration.button.startMigration": "почати рухатися",
@@ -1947,7 +1965,6 @@ export default {
 	"ui-confirmation-dialog.ask-delete":
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
 	"ui-confirmation-dialog.ask-cancel-form": "Відкинути зміни?",
-	"ui-layout.topbar.pageShare.copyLink": "Скопіювати посилання",
 	"ui-layout.topbar.pageShare.printQRCode": "Роздрукуйте QR-код",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Клас(-и)",

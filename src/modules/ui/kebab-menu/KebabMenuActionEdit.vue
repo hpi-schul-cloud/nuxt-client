@@ -3,7 +3,7 @@
 		:icon="mdiPencilOutline"
 		data-testid="kebab-menu-action-edit"
 	>
-		{{ t("common.actions.edit") }}
+		{{ text ?? t("common.actions.edit") }}
 	</KebabMenuAction>
 </template>
 
@@ -12,4 +12,7 @@ import KebabMenuAction from "./KebabMenuAction.vue";
 import { mdiPencilOutline } from "@icons/material";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
+defineProps({
+	text: { type: String, required: false },
+});
 </script>

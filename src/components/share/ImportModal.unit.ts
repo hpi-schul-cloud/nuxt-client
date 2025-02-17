@@ -1,7 +1,4 @@
 import ImportModal from "@/components/share/ImportModal.vue";
-import EnvConfigModule from "@/store/env-config";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -9,18 +6,10 @@ import {
 import { mount } from "@vue/test-utils";
 
 describe("@components/share/ImportModal", () => {
-	const setup = (envConfigModuleGetter?: Partial<EnvConfigModule>) => {
-		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
-			...envConfigModuleGetter,
-		});
-
+	const setup = () => {
 		const wrapper = mount(ImportModal, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-				},
-				stubs: ["RenderHTML"],
 			},
 			props: {
 				isOpen: true,
@@ -98,88 +87,44 @@ describe("@components/share/ImportModal", () => {
 	});
 
 	describe("ctl tools info", () => {
-		describe("when ctl tools are enabled", () => {
-			it("should show ctl tool info", () => {
-				const { wrapper } = setup({ getCtlToolsTabEnabled: true });
+		it("should show ctl tool info", () => {
+			const { wrapper } = setup();
 
-				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
-				const cardText = dialog.findComponent({ name: "v-card-text" });
+			const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+			const cardText = dialog.findComponent({ name: "v-card-text" });
 
-				const infoText = cardText.get(
-					`[data-testid="import-modal-external-tools-info"]`
-				);
+			const infoText = cardText.get(
+				`[data-testid="import-modal-external-tools-info"]`
+			);
 
-				expect(infoText.isVisible()).toBe(true);
-			});
-
-			it("should set the right key for ctl tools", () => {
-				const { wrapper } = setup({ getCtlToolsTabEnabled: true });
-
-				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
-				const cardText = dialog.findComponent({ name: "v-card-text" });
-
-				const infoText = cardText.get(
-					`[data-testid="import-modal-external-tools-info"]`
-				);
-
-				expect(infoText.text()).toEqual(
-					"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
-				);
-			});
-			it("should also show course file info", () => {
-				const { wrapper } = setup({ getCtlToolsTabEnabled: true });
-
-				const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
-				const cardText = dialog.findComponent({ name: "v-card-text" });
-
-				const infoText = cardText.find(
-					`[data-testid="import-modal-coursefiles-info"]`
-				);
-
-				expect(infoText.exists()).toBe(true);
-			});
+			expect(infoText.isVisible()).toBe(true);
 		});
-		describe("show ctl tool info is disabled", () => {
-			describe("when ctl is disabled", () => {
-				it("should not show ctl tool info", () => {
-					const { wrapper } = setup({ getCtlToolsTabEnabled: false });
 
-					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
-					const cardText = dialog.findComponent({ name: "v-card-text" });
+		it("should set the right key for ctl tools", () => {
+			const { wrapper } = setup();
 
-					const infoText = cardText.find(
-						`[data-testid="import-modal-external-tools-info"]`
-					);
-					expect(infoText.exists()).toBe(false);
-				});
+			const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+			const cardText = dialog.findComponent({ name: "v-card-text" });
 
-				it("should show course file info", () => {
-					const { wrapper } = setup({ getCtlToolsTabEnabled: false });
+			const infoText = cardText.get(
+				`[data-testid="import-modal-external-tools-info"]`
+			);
 
-					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
-					const cardText = dialog.findComponent({ name: "v-card-text" });
+			expect(infoText.text()).toEqual(
+				"components.molecules.shareImport.options.ctlTools.infoText.unavailable"
+			);
+		});
+		it("should also show course file info", () => {
+			const { wrapper } = setup();
 
-					const infoText = cardText.find(
-						`[data-testid="import-modal-coursefiles-info"]`
-					);
-					expect(infoText.isVisible()).toBe(true);
-				});
+			const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
+			const cardText = dialog.findComponent({ name: "v-card-text" });
 
-				it("should set the right key for course files", () => {
-					const { wrapper } = setup({ getCtlToolsTabEnabled: false });
+			const infoText = cardText.find(
+				`[data-testid="import-modal-coursefiles-info"]`
+			);
 
-					const dialog = wrapper.findComponent({ name: "v-custom-dialog" });
-					const cardText = dialog.findComponent({ name: "v-card-text" });
-
-					const infoText = cardText.find(
-						`[data-testid="import-modal-coursefiles-info"]`
-					);
-
-					expect(infoText.element.innerHTML).toEqual(
-						"components.molecules.shareImport.options.restrictions.infoText.courseFiles"
-					);
-				});
-			});
+			expect(infoText.exists()).toBe(true);
 		});
 	});
 });

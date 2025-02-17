@@ -1,5 +1,5 @@
 import { initializeAxios } from "@/utils/api";
-import { AxiosInstance } from "axios";
+import { AxiosHeaders, AxiosInstance, AxiosResponse } from "axios";
 import TermsOfUseModule from "./terms-of-use";
 import {
 	ConsentVersion,
@@ -7,10 +7,18 @@ import {
 } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
 
-let receivedRequests: any[] = [];
-let getRequestReturn: any = {};
+let receivedRequests: { path: string }[] = [];
+const mockApiResponse: AxiosResponse = {
+	data: {},
+	status: 200,
+	statusText: "OK",
+	headers: new AxiosHeaders(),
+	config: {
+		headers: new AxiosHeaders(),
+	},
+};
 
-const axiosInitializer = (error?: boolean) => {
+const axiosInitializer = (axiosResponse: AxiosResponse, error?: boolean) => {
 	initializeAxios({
 		get: async (path: string) => {
 			if (error) {
@@ -18,64 +26,59 @@ const axiosInitializer = (error?: boolean) => {
 			}
 
 			receivedRequests.push({ path });
-			return getRequestReturn;
+			return axiosResponse;
 		},
 		post: async (path: string) => {
 			if (error) {
 				throw new Error("expected error");
 			}
 			receivedRequests.push({ path });
-			return getRequestReturn;
+			return axiosResponse;
 		},
 		delete: async (path: string) => {
 			if (error) {
 				throw new Error("expected error");
 			}
 			receivedRequests.push({ path });
-			return getRequestReturn;
+			return axiosResponse;
 		},
 	} as AxiosInstance);
 };
-
-axiosInitializer();
 
 describe("terms of use module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
 			receivedRequests = [];
-			getRequestReturn = {};
 		});
 
 		describe("fetchTermsOfUse", () => {
 			it("should call backend and set correct state", async () => {
 				const termsOfUseModule = new TermsOfUseModule({});
 
-				getRequestReturn = {
-					data: {
-						data: [
-							{
-								_id: "123",
-								schoolId: "schoolid",
-								title: "sometitle",
-								consentText: "",
-								publishedAt: "somedate",
-								createdAt: "somedate",
-								updatedAt: "somedate",
-								consentTypes: ["termsOfUse"],
-								consentData: {
-									_id: "999",
-									schoolId: "333",
-									createdAt: "someotherdate",
-									updatedAt: "someotherdate",
-									fileType: "pdf",
-									fileName: "somefilename",
-									data: "data:application/pdf;base64,SOMEFILEDATA",
-								},
+				mockApiResponse.data = {
+					data: [
+						{
+							_id: "123",
+							schoolId: "schoolid",
+							title: "sometitle",
+							consentText: "",
+							publishedAt: "somedate",
+							createdAt: "somedate",
+							updatedAt: "somedate",
+							consentTypes: ["termsOfUse"],
+							consentData: {
+								_id: "999",
+								schoolId: "333",
+								createdAt: "someotherdate",
+								updatedAt: "someotherdate",
+								fileType: "pdf",
+								fileName: "somefilename",
+								data: "data:application/pdf;base64,SOMEFILEDATA",
 							},
-						],
-					},
+						},
+					],
 				};
-
+				axiosInitializer(mockApiResponse);
 				const setTermsOfUseSpy = jest.spyOn(termsOfUseModule, "setTermsOfUse");
 				const setStatusSpy = jest.spyOn(termsOfUseModule, "setStatus");
 
@@ -86,9 +89,9 @@ describe("terms of use module", () => {
 				expect(setStatusSpy).toHaveBeenCalledWith("pending");
 				expect(setStatusSpy).toHaveBeenCalledWith("completed");
 				expect(setTermsOfUseSpy).toHaveBeenCalledWith(
-					getRequestReturn.data.data[0]
+					mockApiResponse.data.data[0]
 				);
-				expect(termsOfUseModule.termsOfUse).toBe(getRequestReturn.data.data[0]);
+				expect(termsOfUseModule.termsOfUse).toBe(mockApiResponse.data.data[0]);
 			});
 		});
 
@@ -124,21 +127,18 @@ describe("terms of use module", () => {
 					publishedAt: "currentDate",
 					consentData: "data:application/pdf;base64,SOMENEWFILEDATA",
 				};
-
-				getRequestReturn = {
-					data: {
-						_id: "321",
-						schoolId: "333",
-						title: "somenewtitle",
-						consentText: "",
-						publishedAt: "currentDate",
-						consentTypes: ["termsOfUse"],
-						consentData: {
-							data: "data:application/pdf;base64,SOMENEWFILEDATA",
-						},
+				mockApiResponse.data = {
+					_id: "321",
+					schoolId: "333",
+					title: "somenewtitle",
+					consentText: "",
+					publishedAt: "currentDate",
+					consentTypes: ["termsOfUse"],
+					consentData: {
+						data: "data:application/pdf;base64,SOMENEWFILEDATA",
 					},
 				};
-
+				axiosInitializer(mockApiResponse);
 				const setTermsOfUseSpy = jest.spyOn(termsOfUseModule, "setTermsOfUse");
 				const setStatusSpy = jest.spyOn(termsOfUseModule, "setStatus");
 
@@ -149,8 +149,8 @@ describe("terms of use module", () => {
 				expect(receivedRequests[1].path).toBe("/v1/consentVersions/123");
 				expect(setStatusSpy).toHaveBeenCalledWith("pending");
 				expect(setStatusSpy).toHaveBeenCalledWith("completed");
-				expect(setTermsOfUseSpy).toHaveBeenCalledWith(getRequestReturn.data);
-				expect(termsOfUseModule.termsOfUse).toBe(getRequestReturn.data);
+				expect(setTermsOfUseSpy).toHaveBeenCalledWith(mockApiResponse.data);
+				expect(termsOfUseModule.termsOfUse).toBe(mockApiResponse.data);
 			});
 		});
 
@@ -177,7 +177,7 @@ describe("terms of use module", () => {
 						data: "data:application/pdf;base64,SOMEFILEDATA",
 					},
 				};
-
+				axiosInitializer(mockApiResponse);
 				const setTermsOfUseSpy = jest.spyOn(termsOfUseModule, "setTermsOfUse");
 				const setStatusSpy = jest.spyOn(termsOfUseModule, "setStatus");
 
@@ -192,7 +192,7 @@ describe("terms of use module", () => {
 			});
 
 			it("should catch error and set correct state", async () => {
-				axiosInitializer(true);
+				axiosInitializer(mockApiResponse, true);
 				const termsOfUseModule = new TermsOfUseModule({});
 
 				const termsToSet: ConsentVersion = {
@@ -226,6 +226,8 @@ describe("terms of use module", () => {
 	describe("mutations", () => {
 		describe("setTermsOfUse", () => {
 			it("should set terms of use", () => {
+				axiosInitializer(mockApiResponse);
+
 				const termsOfUseModule = new TermsOfUseModule({});
 
 				const termsToSet: ConsentVersion = {
@@ -256,6 +258,7 @@ describe("terms of use module", () => {
 
 		describe("setStatus", () => {
 			it("should set status", () => {
+				axiosInitializer(mockApiResponse);
 				const termsOfUseModule = new TermsOfUseModule({});
 
 				const statusToSet = "completed";
@@ -268,6 +271,8 @@ describe("terms of use module", () => {
 
 		describe("setBusinessError", () => {
 			it("should set businessError", () => {
+				axiosInitializer(mockApiResponse);
+
 				const termsOfUseModule = new TermsOfUseModule({});
 
 				const businessErrorToSet = {
@@ -282,6 +287,7 @@ describe("terms of use module", () => {
 			});
 
 			it("should reset businessError", () => {
+				axiosInitializer(mockApiResponse);
 				const termsOfUseModule = new TermsOfUseModule({});
 
 				termsOfUseModule.businessError = {
@@ -300,6 +306,7 @@ describe("terms of use module", () => {
 	describe("getters", () => {
 		describe("getTermsOfUse", () => {
 			it("should return terms of use state", () => {
+				axiosInitializer(mockApiResponse);
 				const termsOfUseModule = new TermsOfUseModule({});
 
 				const termsToSet: ConsentVersion = {
@@ -329,6 +336,8 @@ describe("terms of use module", () => {
 
 		describe("getStatus", () => {
 			it("should return the status state", () => {
+				axiosInitializer(mockApiResponse);
+
 				const termsOfUseModule = new TermsOfUseModule({});
 
 				const statusToSet = "completed";
@@ -340,6 +349,8 @@ describe("terms of use module", () => {
 
 		describe("getBusinessError", () => {
 			it("should return business error", () => {
+				axiosInitializer(mockApiResponse);
+
 				const termsOfUseModule = new TermsOfUseModule({});
 
 				const businessErrorToSet: BusinessError = {
