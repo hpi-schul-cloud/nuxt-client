@@ -119,7 +119,7 @@ describe("useSchoolExternalToolUtils", () => {
 	});
 
 	describe("mediumSortFn", () => {
-		describe("when a is undefined", () => {
+		describe("when mediaSourceName a is undefined", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
 					mediumId: "a",
@@ -147,7 +147,7 @@ describe("useSchoolExternalToolUtils", () => {
 			});
 		});
 
-		describe("when b is undefined", () => {
+		describe("when mediaSourceName b is undefined", () => {
 			const setup2 = () => {
 				const a: SchoolExternalToolMediumResponse = {
 					mediumId: "a",
@@ -170,6 +170,52 @@ describe("useSchoolExternalToolUtils", () => {
 				const { mediumSortFn, a, b } = setup2();
 
 				const result = mediumSortFn(a, b);
+
+				expect(result).toEqual(-1);
+			});
+		});
+
+		describe("when a is undefined", () => {
+			const setup2 = () => {
+				const b: SchoolExternalToolMediumResponse = {
+					mediumId: "b",
+				};
+
+				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+
+				return {
+					mediumSortFn,
+					b,
+				};
+			};
+
+			it("should return 1", () => {
+				const { mediumSortFn, b } = setup2();
+
+				const result = mediumSortFn(undefined, b);
+
+				expect(result).toEqual(1);
+			});
+		});
+
+		describe("when b is undefined", () => {
+			const setup2 = () => {
+				const a: SchoolExternalToolMediumResponse = {
+					mediumId: "a",
+				};
+
+				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+
+				return {
+					mediumSortFn,
+					a,
+				};
+			};
+
+			it("should return -1", () => {
+				const { mediumSortFn, a } = setup2();
+
+				const result = mediumSortFn(a, undefined);
 
 				expect(result).toEqual(-1);
 			});

@@ -44,8 +44,10 @@ export function useExternalToolsSectionUtils(
 		a?: SchoolExternalToolMediumResponse,
 		b?: SchoolExternalToolMediumResponse
 	): number => {
-		if (a?.mediaSourceName === undefined) return 1;
-		if (b?.mediaSourceName === undefined) return -1;
+		if (a === undefined) return 1;
+		if (b === undefined) return -1;
+		if (a.mediaSourceName === undefined) return 1;
+		if (b.mediaSourceName === undefined) return -1;
 		return a.mediaSourceName.localeCompare(b.mediaSourceName);
 	};
 
