@@ -1,22 +1,25 @@
 <template>
 	<v-card ref="changeRoleContent">
 		<template v-slot:prepend>
-			<div ref="textTitle" class="text-h4 mt-2">
-				{{ t("pages.rooms.members.changePermission") }}
-			</div>
+			<span ref="textTitle" class="text-h4 mt-2 dialog-title">
+				{{ dialogTitle }}
+			</span>
 		</template>
 
 		<template v-slot:default>
 			<div class="ml-6 mr-6 mt-2">
 				<div>
-					<div class="mb-4">
+					<div v-if="!isHandOverMode" class="mb-4">
 						{{ infoText }}
 					</div>
-					<div v-if="isHandOverMode">
-						<v-alert> handover mode </v-alert>
-					</div>
-					<div v-else>
-						<v-radio-group v-model="selectedRole" hide-details class="ml-n2">
+
+					<div>
+						<v-radio-group
+							v-if="!isHandOverMode"
+							v-model="selectedRole"
+							hide-details
+							class="ml-n2"
+						>
 							<v-radio
 								id="roleChangeViewer"
 								:label="t('pages.rooms.members.roomPermissions.viewer')"
@@ -73,16 +76,23 @@
 							</label>
 						</v-radio-group>
 						<v-alert
+							v-if="selectedRole === RoleName.Roomowner"
 							dense
 							type="warning"
 							:icon="mdiAlert"
-							class="ml-8"
-							v-if="selectedRole === RoleName.Roomowner"
+							class="mb-2"
+							:class="isHandOverMode ? 'ml-0' : 'ml-8'"
 						>
-							<span class="alert-text">
+							<span class="alert-text" v-if="!isHandOverMode">
 								Diese Raumberechtigung wird an das ausgewählte Mitglied
 								übertragen. Cord Carl verliert die Berechtigung „Besitzen” und
 								erhält die Berechtigung „Verwalten”.
+							</span>
+
+							<span v-else class="alert-text">
+								Bei Übertragung dieser Raumberechtigung an ein anderes Mitglied
+								verliert Cord Carl das Recht, den Raum zu löschen. Diese Aktion
+								kann von Cord Carl nicht rückgängig gemacht werden.
 							</span>
 						</v-alert>
 					</div>
@@ -94,7 +104,6 @@
 			<v-spacer />
 			<div class="mr-4 mb-3">
 				<v-btn
-					ref="cancelButton"
 					class="ms-auto mr-2"
 					color="primary"
 					:text="t('common.actions.cancel')"
@@ -102,13 +111,22 @@
 					@click="onCancel"
 				/>
 				<v-btn
-					ref="addButton"
+					v-if="!isHandOverMode"
 					class="ms-auto"
 					color="primary"
 					variant="flat"
 					:text="t('common.actions.confirm')"
 					data-testid="change-role-confirm-btn"
 					@click="onConfirm"
+				/>
+				<v-btn
+					v-else
+					class="ms-auto"
+					color="primary"
+					variant="flat"
+					text="Übertragen"
+					data-testid="change-owner-confirm-btn"
+					@click="onChangeOwner"
 				/>
 			</div>
 		</template>
@@ -152,6 +170,11 @@ const isChangeRoleOptionVisible = computed(() => {
 	);
 });
 const isHandOverMode = ref(false);
+const dialogTitle = computed(() =>
+	isHandOverMode.value
+		? "Raumberechtigung „Besitzen” wirklich übertragen?"
+		: t("pages.rooms.members.changePermission")
+);
 
 if (memberToChangeRole.length > 1) {
 	const roleNamesInProp = memberToChangeRole.map(
@@ -180,6 +203,7 @@ const infoText = computed(() => {
 
 const emit = defineEmits<{
 	(e: "confirm", selectedRole: RoleEnum, id?: string): void;
+	(e: "change-room-owner", id: string): void;
 	(e: "cancel"): void;
 }>();
 
@@ -196,6 +220,10 @@ const onConfirm = () => {
 	);
 };
 
+const onChangeOwner = () => {
+	emit("change-room-owner", memberToChangeRole[0].userId);
+};
+
 const onCancel = () => {
 	emit("cancel");
 };
@@ -207,6 +235,10 @@ useFocusTrap(changeRoleContent, {
 </script>
 
 <style lang="scss" scoped>
+.dialog-title {
+	max-width: 480px;
+	white-space: normal;
+}
 .radio-label {
 	font-size: 14px;
 	line-height: var(--line-height-lg);
