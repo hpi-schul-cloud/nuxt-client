@@ -73,7 +73,7 @@
 									/>
 								</template>
 								<template #empty>
-									<div v-if="!reachedTotal" class="content__no_results">
+									<div v-if="empty" class="content__no_results">
 										<content-empty-state />
 									</div>
 								</template>
@@ -138,24 +138,12 @@ onMounted(() => {
 const isInline = computed(() => !!route.query.inline);
 const resources = computed(() => contentModule.getResourcesGetter);
 const loading = computed(() => contentModule.getLoading);
-const reachedTotal = computed(() => {
-	console.log("total", resources.value.total);
-	console.log("total !== 0", resources.value.total !== 0);
-	console.log("length", resources.value.data.length);
-	console.log(
-		"length >= total",
-		resources.value.data.length >= resources.value.total
-	);
-	console.log(
-		"reachedTotal",
-		resources.value.total !== 0 &&
-			resources.value.data.length >= resources.value.total
-	);
-	return (
+const reachedTotal = computed(
+	() =>
 		resources.value.total !== 0 &&
 		resources.value.data.length >= resources.value.total
-	);
-});
+);
+const empty = computed(() => resources.value.data.length === 0);
 
 const onInput = async () => {
 	await searchContent();
