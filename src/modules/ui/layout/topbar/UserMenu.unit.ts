@@ -8,23 +8,26 @@ import { envsFactory } from "@@/tests/test-utils";
 import { AUTH_MODULE_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
-import { LanguageType, MeSystemResponse } from "@/serverApi/v3";
+import { LanguageType } from "@/serverApi/v3";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import UserMenu from "./UserMenu.vue";
+import { System, useSystemApi } from "@data-system";
+import { DeepMocked, createMock } from "@golevelup/ts-jest";
 
 jest.mock("@data-system");
 
 describe("@ui-layout/UserMenu", () => {
+	let useSystemApiMock: DeepMocked<ReturnType<typeof useSystemApi>>;
 	const setupWrapper = (
 		isExternalFeatureEnabled = false,
-		mockedSystem?: MeSystemResponse
+		mockedSystem?: System
 	) => {
 		const authModule = createModuleMocks(AuthModule, {
 			getLocale: "de",
 			logout: jest.fn(),
 			externalLogout: jest.fn(),
-			get loginSystem(): MeSystemResponse | undefined {
-				return mockedSystem;
+			get loginSystem(): string | undefined {
+				return mockedSystem?.id;
 			},
 		});
 
@@ -34,6 +37,12 @@ describe("@ui-layout/UserMenu", () => {
 				FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: isExternalFeatureEnabled,
 			}),
 		});
+
+		useSystemApiMock = createMock<ReturnType<typeof useSystemApi>>();
+
+		jest.mocked(useSystemApi).mockReturnValue(useSystemApiMock);
+
+		useSystemApiMock.getSystem.mockResolvedValue(mockedSystem);
 
 		const wrapper = mount(UserMenu, {
 			global: {
@@ -95,9 +104,9 @@ describe("@ui-layout/UserMenu", () => {
 	describe("external logout", () => {
 		describe("when feature flag is enabled and end session endpoint is available for the system", () => {
 			const setup = () => {
-				const mockedSystem: MeSystemResponse = {
+				const mockedSystem: System = {
 					id: "testId",
-					name: "Test System",
+					displayName: "Test System",
 					hasEndSessionEndpoint: true,
 				};
 
@@ -118,7 +127,7 @@ describe("@ui-layout/UserMenu", () => {
 
 				expect(externalLogoutBtn.exists()).toBe(true);
 				expect(externalLogoutBtn.text()).toEqual(
-					`common.labels.logout Bildungscloud & ${mockedSystem.name}`
+					`common.labels.logout Bildungscloud & ${mockedSystem.displayName}`
 				);
 			});
 
@@ -153,9 +162,9 @@ describe("@ui-layout/UserMenu", () => {
 
 		describe("when feature flag is disabled", () => {
 			const setup = () => {
-				const mockedSystem: MeSystemResponse = {
+				const mockedSystem: System = {
 					id: "testId",
-					name: "Test System",
+					displayName: "Test System",
 					hasEndSessionEndpoint: true,
 				};
 
@@ -192,9 +201,9 @@ describe("@ui-layout/UserMenu", () => {
 
 		describe("when end session endpoint is not available for the systeme", () => {
 			const setup = () => {
-				const mockedSystem: MeSystemResponse = {
+				const mockedSystem: System = {
 					id: "testId",
-					name: "Test System",
+					displayName: "Test System",
 					hasEndSessionEndpoint: false,
 				};
 
