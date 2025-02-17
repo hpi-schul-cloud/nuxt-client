@@ -1,9 +1,10 @@
-import { AxiosInstance } from "axios";
+import { AxiosError, AxiosHeaders, AxiosInstance } from "axios";
 import * as serverApi from "../serverApi/v3/api";
 import { initializeAxios } from "../utils/api";
 import CourseRoomListModule from "./course-room-list";
 import { AlertPayload } from "./types/alert-payload";
-import { RoomsData } from "./types/rooms";
+import { DroppedObject, RoomsData } from "./types/rooms";
+import { ApiResponseError } from "./types/commons";
 
 let receivedRequests: any[] = [];
 const getRequestReturn: any = {};
@@ -27,7 +28,35 @@ const axiosInitializer = () => {
 	} as AxiosInstance);
 };
 
-const mockData = {
+const badRequestError = new AxiosError<
+	ApiResponseError | serverApi.ApiValidationError
+>("Bad Request", "ERR_BAD_REQUEST", undefined, null, {
+	status: 400,
+	statusText: "Bad Request",
+	headers: {},
+	config: {
+		headers: new AxiosHeaders(),
+	},
+	data: {
+		code: 400,
+		type: "BAD_REQUEST",
+		title: "Bad Request",
+		message: "Bad Request",
+	},
+});
+
+const businessError = {
+	statusCode: 400,
+	message: "Bad Request",
+	error: {
+		code: 400,
+		type: "BAD_REQUEST",
+		title: "Bad Request",
+		message: "Bad Request",
+	},
+};
+
+const mockData: serverApi.DashboardResponse = {
 	id: "id_1",
 	gridElements: [
 		{
@@ -37,6 +66,10 @@ const mockData = {
 			displayColor: "#f23f76",
 			xPosition: 6,
 			yPosition: 1,
+			groupId: "",
+			groupElements: [],
+			copyingSince: "",
+			isSynchronized: false,
 		},
 		{
 			id: "456",
@@ -45,6 +78,10 @@ const mockData = {
 			displayColor: "#ffffff",
 			xPosition: 5,
 			yPosition: 2,
+			groupId: "",
+			groupElements: [],
+			copyingSince: "",
+			isSynchronized: false,
 		},
 		{
 			id: "789",
@@ -73,6 +110,9 @@ const mockData = {
 			],
 			xPosition: 3,
 			yPosition: 3,
+			groupId: "",
+			copyingSince: "",
+			isSynchronized: false,
 		},
 	],
 };
@@ -134,7 +174,18 @@ describe("rooms module", () => {
 				const payload = {
 					from: { x: 1, y: 1 },
 					to: { x: 2, y: 2 },
-					item: {},
+					item: {
+						id: "123",
+						title: "Math 1a",
+						shortTitle: "Ma",
+						displayColor: "#f23f76",
+						xPosition: 6,
+						yPosition: 1,
+						isSynchronized: false,
+						groupId: "",
+						groupElements: [],
+						copyingSince: "",
+					},
 				};
 				const expectedParam = {
 					from: { x: 1, y: 1 },
@@ -205,10 +256,9 @@ describe("rooms module", () => {
 			});
 
 			it("handle error", async () => {
-				const error = { status: 418, statusText: "I'm a teapot" };
 				const mockApi = {
 					dashboardControllerPatchGroup: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(badRequestError)
 					),
 				};
 				jest
@@ -230,7 +280,9 @@ describe("rooms module", () => {
 				await courseRoomListModule.update(roomsData);
 
 				expect(courseRoomListModule.getLoading).toBe(false);
-				expect(courseRoomListModule.getError).toStrictEqual({ ...error });
+				expect(courseRoomListModule.getBusinessError).toStrictEqual(
+					businessError
+				);
 				expect(mockApi.dashboardControllerPatchGroup).toHaveBeenLastCalledWith(
 					roomsData.id,
 					roomsData.xPosition,
@@ -261,10 +313,9 @@ describe("rooms module", () => {
 			});
 
 			it("handle error", (done) => {
-				const error = { status: 418, statusText: "I'm not a teapot" };
 				const mockApi = {
 					courseControllerFindForUser: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(badRequestError)
 					),
 				};
 				jest
@@ -274,7 +325,9 @@ describe("rooms module", () => {
 
 				courseRoomListModule.fetchAllElements().then(() => {
 					expect(courseRoomListModule.getLoading).toBe(false);
-					expect(courseRoomListModule.getError).toStrictEqual({ ...error });
+					expect(courseRoomListModule.getBusinessError).toStrictEqual(
+						businessError
+					);
 					done();
 				});
 
@@ -324,7 +377,7 @@ describe("rooms module", () => {
 		describe("setRoomData", () => {
 			it("should set the room data", () => {
 				const courseRoomListModule = new CourseRoomListModule({});
-				const roomsDataToBeChanged = [
+				const roomsDataToBeChanged: serverApi.DashboardGridElementResponse[] = [
 					{
 						id: "someId",
 						title: "exampletitle",
@@ -332,6 +385,10 @@ describe("rooms module", () => {
 						displayColor: "#f23f76",
 						xPosition: 2,
 						yPosition: 5,
+						groupId: "",
+						groupElements: [],
+						copyingSince: "",
+						isSynchronized: false,
 					},
 				];
 
@@ -344,12 +401,16 @@ describe("rooms module", () => {
 						xPosition: 2,
 						yPosition: 5,
 						to: "/rooms/someId",
+						groupId: "",
+						groupElements: [],
+						copyingSince: "",
+						isSynchronized: false,
 					},
 				];
 				expect(courseRoomListModule.getRoomsData).not.toStrictEqual(
 					roomsDataToBeChanged
 				);
-				courseRoomListModule.setRoomData(roomsDataToBeChanged as any);
+				courseRoomListModule.setRoomData(roomsDataToBeChanged);
 				expect(courseRoomListModule.roomsData).toStrictEqual(expectedData);
 			});
 		});
@@ -378,7 +439,7 @@ describe("rooms module", () => {
 			it("should set error", () => {
 				const courseRoomListModule = new CourseRoomListModule({});
 				const errorData = { message: "some error" };
-				expect(courseRoomListModule.getError).not.toBe(errorData);
+				expect(courseRoomListModule.getBusinessError).not.toBe(errorData);
 				courseRoomListModule.setError(errorData);
 				expect(courseRoomListModule.error).toBe(errorData);
 			});
@@ -387,7 +448,7 @@ describe("rooms module", () => {
 		describe("setPosition", () => {
 			it("should re-position the state", () => {
 				const courseRoomListModule = new CourseRoomListModule({});
-				const draggedObject = {
+				const draggedObject: DroppedObject = {
 					from: { x: 6, y: 1 },
 					item: {
 						id: "123",
@@ -396,6 +457,10 @@ describe("rooms module", () => {
 						displayColor: "#f23f76",
 						xPosition: 6,
 						yPosition: 1,
+						isSynchronized: false,
+						groupId: "",
+						groupElements: [],
+						copyingSince: "",
 					},
 					to: { x: 5, y: 2 },
 				};
@@ -407,8 +472,12 @@ describe("rooms module", () => {
 					xPosition: 5,
 					yPosition: 2,
 					to: "/rooms/123",
+					groupId: "",
+					groupElements: [],
+					copyingSince: "",
+					isSynchronized: false,
 				};
-				courseRoomListModule.setRoomData(mockData.gridElements as any);
+				courseRoomListModule.setRoomData(mockData.gridElements);
 				courseRoomListModule.setPosition(draggedObject);
 				expect(courseRoomListModule.roomsData[0]).toStrictEqual(expectedObject);
 			});
