@@ -42,9 +42,12 @@
 					<VProgressCircular v-if="isLicensesLoading" />
 					<VIcon
 						v-else-if="
-							item.medium.mediaSourceLicenseType ===
-								MediaSourceLicenseType.UserLicense ||
-							isLicensed(item.medium.mediumId, item.medium.mediaSourceId)
+							item.medium.mediaSourceLicenseType !==
+								MediaSourceLicenseType.SchoolLicense ||
+							isLicensedToSchool(
+								item.medium.mediumId,
+								item.medium.mediaSourceId
+							)
 						"
 						start
 						color="success"
@@ -324,7 +327,10 @@ const isVidisEnabled: ComputedRef<boolean> = computed(() => {
 	return envConfigModule.getEnv.FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED;
 });
 
-const isLicensed = (mediumId: string, mediaSourceId?: string): boolean => {
+const isLicensedToSchool = (
+	mediumId: string,
+	mediaSourceId?: string
+): boolean => {
 	return schoolLicenseStore.isLicensed(mediumId, mediaSourceId);
 };
 
