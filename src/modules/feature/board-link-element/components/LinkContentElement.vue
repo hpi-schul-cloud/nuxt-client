@@ -1,6 +1,6 @@
 <template>
 	<v-card
-		class="mb-4"
+		class="mb-4 board-card"
 		target="_blank"
 		data-testid="board-link-element"
 		:class="{ 'd-none': isHidden }"
