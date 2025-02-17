@@ -1,4 +1,4 @@
-import { ConfigResponse } from "@/serverApi/v3";
+import { ConfigResponse, MediaSourceLicenseType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
@@ -164,6 +164,7 @@ describe("ExternalToolSection", () => {
 					mediumId: "tool1",
 					mediaSourceId: "licensedSource",
 					mediaSourceName: "Medium Source Name",
+					mediaSourceLicenseType: MediaSourceLicenseType.SchoolLicense,
 				},
 			});
 
@@ -188,6 +189,7 @@ describe("ExternalToolSection", () => {
 								mediumId: "tool2",
 								mediaSourceId: "notLicensedSource",
 								mediaSourceName: undefined,
+								mediaSourceLicenseType: MediaSourceLicenseType.SchoolLicense,
 							},
 						},
 						{
