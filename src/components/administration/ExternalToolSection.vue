@@ -42,6 +42,8 @@
 					<VProgressCircular v-if="isLicensesLoading" />
 					<VIcon
 						v-else-if="
+							item.medium.mediaSourceLicenseType ===
+								MediaSourceLicenseType.UserLicense ||
 							isLicensed(item.medium.mediumId, item.medium.mediaSourceId)
 						"
 						start
@@ -182,7 +184,10 @@
 </template>
 
 <script setup lang="ts">
-import { ToolApiAxiosParamCreator } from "@/serverApi/v3";
+import {
+	MediaSourceLicenseType,
+	ToolApiAxiosParamCreator,
+} from "@/serverApi/v3";
 import { RequestArgs } from "@/serverApi/v3/base";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";

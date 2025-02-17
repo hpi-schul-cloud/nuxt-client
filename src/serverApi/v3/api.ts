@@ -5560,6 +5560,16 @@ export interface MediaSchoolLicenseResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum MediaSourceLicenseType {
+    UserLicense = 'user-license',
+    SchoolLicense = 'school-license'
+}
+
+/**
+ * 
+ * @export
  * @interface Message
  */
 export interface Message {
@@ -7882,6 +7892,12 @@ export interface SchoolExternalToolMediumResponse {
      * @memberof SchoolExternalToolMediumResponse
      */
     mediaSourceName?: string;
+    /**
+     * License type of the media source
+     * @type {MediaSourceLicenseType}
+     * @memberof SchoolExternalToolMediumResponse
+     */
+    mediaSourceLicenseType?: MediaSourceLicenseType;
 }
 /**
  * 
