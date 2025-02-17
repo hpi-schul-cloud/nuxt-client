@@ -4,7 +4,6 @@ import {
 	MeApiInterface,
 	MeResponse,
 	MeSchoolResponse,
-	MeSystemResponse,
 	MeUserResponse,
 	UserApiFactory,
 	UserApiInterface,
@@ -132,8 +131,8 @@ export default class AuthModule extends VuexModule {
 		return this.loggedIn;
 	}
 
-	get loginSystem(): MeSystemResponse | undefined {
-		return this.me?.system;
+	get loginSystem(): string | undefined {
+		return this.me?.systemId;
 	}
 
 	@Action
