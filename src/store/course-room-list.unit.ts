@@ -1,32 +1,9 @@
-import { AxiosError, AxiosHeaders, AxiosInstance } from "axios";
+import { AxiosError, AxiosHeaders } from "axios";
 import * as serverApi from "../serverApi/v3/api";
-import { initializeAxios } from "../utils/api";
 import CourseRoomListModule from "./course-room-list";
 import { AlertPayload } from "./types/alert-payload";
 import { DroppedObject, RoomsData } from "./types/rooms";
 import { ApiResponseError } from "./types/commons";
-
-let receivedRequests: any[] = [];
-const getRequestReturn: any = {};
-
-const axiosInitializer = () => {
-	initializeAxios({
-		get: async (path: string, data?: object) => {
-			receivedRequests.push({ path });
-			receivedRequests.push({ data });
-			return getRequestReturn;
-		},
-		post: async (path: string) => {
-			receivedRequests.push({ path });
-			return getRequestReturn;
-		},
-		patch: async (path: string, params: object) => {
-			receivedRequests.push({ path });
-			receivedRequests.push({ params });
-			return getRequestReturn;
-		},
-	} as AxiosInstance);
-};
 
 const badRequestError = new AxiosError<
 	ApiResponseError | serverApi.ApiValidationError
@@ -117,14 +94,8 @@ const mockData: serverApi.DashboardResponse = {
 	],
 };
 
-axiosInitializer();
-
 describe("rooms module", () => {
 	describe("actions", () => {
-		beforeEach(() => {
-			receivedRequests = [];
-		});
-
 		describe("fetch", () => {
 			it("should call backend and sets state correctly", async () => {
 				const mockApi = {
@@ -590,22 +561,30 @@ describe("rooms module", () => {
 		describe("getRoomsData", () => {
 			it("should return rooms state", () => {
 				const courseRoomListModule = new CourseRoomListModule({});
-				const itemsToBeSet = [
+				const itemsToBeSet: serverApi.DashboardGridElementResponse[] = [
 					{
 						id: "123",
 						title: "Mathe",
 						shortTitle: "Ma",
 						displayColor: "#54616e",
-						startDate: "2019-12-07T23:00:00.000Z",
-						untilDate: "2020-12-16T23:00:00.000Z",
+						xPosition: 0,
+						yPosition: 0,
+						groupId: "",
+						groupElements: [],
+						copyingSince: "",
+						isSynchronized: false,
 					},
 					{
 						id: "234",
 						title: "History",
 						shortTitle: "Hi",
 						displayColor: "#EF6C00",
-						startDate: "2015-07-31T22:00:00.000Z",
-						untilDate: "2018-07-30T22:00:00.000Z",
+						yPosition: 0,
+						groupId: "",
+						groupElements: [],
+						copyingSince: "",
+						isSynchronized: false,
+						xPosition: 0,
 					},
 				];
 
@@ -615,22 +594,30 @@ describe("rooms module", () => {
 						title: "Mathe",
 						shortTitle: "Ma",
 						displayColor: "#54616e",
-						startDate: "2019-12-07T23:00:00.000Z",
-						untilDate: "2020-12-16T23:00:00.000Z",
 						to: "/rooms/123",
+						xPosition: 0,
+						yPosition: 0,
+						groupId: "",
+						groupElements: [],
+						copyingSince: "",
+						isSynchronized: false,
 					},
 					{
 						id: "234",
 						title: "History",
 						shortTitle: "Hi",
 						displayColor: "#EF6C00",
-						startDate: "2015-07-31T22:00:00.000Z",
-						untilDate: "2018-07-30T22:00:00.000Z",
 						to: "/rooms/234",
+						xPosition: 0,
+						yPosition: 0,
+						groupId: "",
+						groupElements: [],
+						copyingSince: "",
+						isSynchronized: false,
 					},
 				];
 
-				courseRoomListModule.setRoomData(itemsToBeSet as any);
+				courseRoomListModule.setRoomData(itemsToBeSet);
 				expect(courseRoomListModule.getRoomsData).toStrictEqual(expectedData);
 			});
 		});
@@ -801,23 +788,31 @@ describe("rooms module", () => {
 						title: "Mathe",
 						shortTitle: "Ma",
 						displayColor: "#54616e",
-						startDate: "2019-12-07T23:00:00.000Z",
-						untilDate: "2020-12-16T23:00:00.000Z",
+						xPosition: 0,
+						yPosition: 0,
+						groupId: "",
+						groupElements: [],
+						copyingSince: "",
+						isSynchronized: false,
 					},
 					{
 						id: "234",
 						title: "History",
 						shortTitle: "Hi",
 						displayColor: "#EF6C00",
-						startDate: "2015-07-31T22:00:00.000Z",
-						untilDate: "2018-07-30T22:00:00.000Z",
+						xPosition: 0,
+						yPosition: 0,
+						groupId: "",
+						groupElements: [],
+						copyingSince: "",
+						isSynchronized: false,
 					},
 				];
 
 				const courseRoomListModule = new CourseRoomListModule({});
 
 				expect(courseRoomListModule.hasCurrentRooms).toStrictEqual(false);
-				courseRoomListModule.setRoomData(itemsToBeSet as any);
+				courseRoomListModule.setRoomData(itemsToBeSet);
 				expect(courseRoomListModule.hasCurrentRooms).toStrictEqual(true);
 			});
 		});
