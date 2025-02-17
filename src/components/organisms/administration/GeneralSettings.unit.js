@@ -299,4 +299,15 @@ describe("GeneralSettings", () => {
 			expect(updateSpy).toHaveBeenCalled();
 		});
 	});
+
+	describe("when title contains < sign directly followed by a string", () => {
+		it("should contain validation error", async () => {
+			const wrapper = getWrapper();
+
+			const title = wrapper.find('[data-testid="school-name"]').find("input");
+			await title.setValue("<abc123");
+
+			expect(wrapper.text()).toContain("common.validation.containsOpeningTag");
+		});
+	});
 });
