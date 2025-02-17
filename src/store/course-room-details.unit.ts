@@ -9,10 +9,11 @@ import { initializeAxios } from "@/utils/api";
 import { meResponseFactory } from "@@/tests/test-utils";
 import { courseFactory } from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { AxiosError, AxiosInstance, AxiosPromise } from "axios";
+import { AxiosError, AxiosHeaders, AxiosInstance, AxiosPromise } from "axios";
 import CourseRoomDetailsModule from "./course-room-details";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
+import { ApiResponseError, ApiValidationError } from "./types/commons";
 
 let receivedRequests: any[] = [];
 let getRequestReturn: any = {};
@@ -41,6 +42,38 @@ const axiosInitializer = () => {
 };
 
 axiosInitializer();
+
+const badRequestError = new AxiosError<ApiResponseError | ApiValidationError>(
+	"Bad Request",
+	"ERR_BAD_REQUEST",
+	undefined,
+	null,
+	{
+		status: 400,
+		statusText: "Bad Request",
+		headers: {},
+		config: {
+			headers: new AxiosHeaders(),
+		},
+		data: {
+			code: 400,
+			type: "BAD_REQUEST",
+			title: "Bad Request",
+			message: "Bad Request",
+		},
+	}
+);
+
+const businessError = {
+	statusCode: 400,
+	message: "Bad Request",
+	error: {
+		code: 400,
+		type: "BAD_REQUEST",
+		title: "Bad Request",
+		message: "Bad Request",
+	},
+};
 
 describe("course-room module", () => {
 	beforeEach(() => {
@@ -219,9 +252,10 @@ describe("course-room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi = {
-					lessonControllerDelete: jest.fn(() => Promise.reject({ ...error })),
+					lessonControllerDelete: jest.fn(() =>
+						Promise.reject(badRequestError)
+					),
 				};
 				const spy = jest
 					.spyOn(serverApi, "LessonApiFactory")
@@ -231,7 +265,9 @@ describe("course-room module", () => {
 
 				await courseRoomDetailsModule.deleteLesson("id");
 
-				expect(courseRoomDetailsModule.businessError).toStrictEqual(error);
+				expect(courseRoomDetailsModule.businessError).toStrictEqual(
+					businessError
+				);
 
 				spy.mockRestore();
 			});
@@ -257,9 +293,8 @@ describe("course-room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi = {
-					taskControllerDelete: jest.fn(() => Promise.reject({ ...error })),
+					taskControllerDelete: jest.fn(() => Promise.reject(badRequestError)),
 				};
 				const spy = jest
 					.spyOn(serverApi, "TaskApiFactory")
@@ -269,7 +304,9 @@ describe("course-room module", () => {
 
 				await courseRoomDetailsModule.deleteTask("id");
 
-				expect(courseRoomDetailsModule.businessError).toStrictEqual(error);
+				expect(courseRoomDetailsModule.businessError).toStrictEqual(
+					businessError
+				);
 
 				spy.mockRestore();
 			});
@@ -323,9 +360,10 @@ describe("course-room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi = {
-					boardControllerCreateBoard: jest.fn().mockRejectedValue(error),
+					boardControllerCreateBoard: jest
+						.fn()
+						.mockRejectedValue(badRequestError),
 				};
 				const spy = jest
 					.spyOn(serverApi, "BoardApiFactory")
@@ -341,7 +379,9 @@ describe("course-room module", () => {
 				};
 				await courseRoomDetailsModule.createBoard(params);
 
-				expect(courseRoomDetailsModule.businessError).toStrictEqual(error);
+				expect(courseRoomDetailsModule.businessError).toStrictEqual(
+					businessError
+				);
 
 				spy.mockRestore();
 			});
@@ -367,9 +407,10 @@ describe("course-room module", () => {
 			});
 
 			it("should catch error in catch block", async () => {
-				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi = {
-					boardControllerDeleteBoard: jest.fn().mockRejectedValue(error),
+					boardControllerDeleteBoard: jest
+						.fn()
+						.mockRejectedValue(badRequestError),
 				};
 				const spy = jest
 					.spyOn(serverApi, "BoardApiFactory")
@@ -379,7 +420,9 @@ describe("course-room module", () => {
 
 				await courseRoomDetailsModule.deleteBoard("id");
 
-				expect(courseRoomDetailsModule.businessError).toStrictEqual(error);
+				expect(courseRoomDetailsModule.businessError).toStrictEqual(
+					businessError
+				);
 
 				spy.mockRestore();
 			});
@@ -412,12 +455,12 @@ describe("course-room module", () => {
 
 				spy.mockRestore();
 			});
+
 			it("should catch error in catch block", async () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const error = { statusCode: 418, message: "I'm a teapot" };
 				const mockApi: CommonCartridgeApiInterface = {
 					commonCartridgeControllerExportCourse: jest.fn(() =>
-						Promise.reject(error)
+						Promise.reject(badRequestError)
 					),
 				};
 				const spy = jest
@@ -431,7 +474,9 @@ describe("course-room module", () => {
 					columnBoards: [],
 				});
 
-				expect(courseRoomDetailsModule.businessError).toStrictEqual(error);
+				expect(courseRoomDetailsModule.businessError).toStrictEqual(
+					businessError
+				);
 
 				spy.mockRestore();
 			});
@@ -499,9 +544,7 @@ describe("course-room module", () => {
 				})();
 				const mockApi = {
 					taskControllerFinish: () => {
-						throw {
-							response: { status: 404, statusText: "friendly error" },
-						};
+						throw badRequestError;
 					},
 				};
 				jest
@@ -527,10 +570,10 @@ describe("course-room module", () => {
 				expect(finishTaskSpy).toHaveBeenCalled();
 				expect(setBusinessErrorSpy).toHaveBeenCalled();
 				expect(courseRoomDetailsModule.businessError.statusCode).toStrictEqual(
-					404
+					400
 				);
 				expect(courseRoomDetailsModule.businessError.message).toStrictEqual(
-					"friendly error"
+					"Bad Request"
 				);
 			});
 		});
