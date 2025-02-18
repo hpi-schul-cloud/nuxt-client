@@ -16,6 +16,9 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
+		:error-messages="
+			v$.modelValue.$errors.map((e: ErrorObject) => unref(e.$message))
+		"
 		@keydown.enter="onEnter"
 	/>
 
@@ -39,11 +42,17 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
+		:error-messages="
+			v$.modelValue.$errors.map((e: ErrorObject) => unref(e.$message))
+		"
 	/>
 </template>
 
 <script lang="ts">
+import { containsOpeningTagFollowedByString } from "@/utils/validation";
 import { useInlineEditInteractionHandler } from "@util-board";
+import { ErrorObject, useVuelidate } from "@vuelidate/core";
+import { helpers } from "@vuelidate/validators";
 import {
 	computed,
 	defineComponent,
@@ -51,6 +60,7 @@ import {
 	onMounted,
 	PropType,
 	ref,
+	unref,
 	watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
@@ -107,7 +117,9 @@ export default defineComponent({
 		};
 
 		watch(modelValue, (newValue) => {
-			if (newValue !== props.value) {
+			const inputIsValid = v$.value.modelValue.$errors.length === 0;
+
+			if (newValue !== props.value && inputIsValid) {
 				emit("update:value", newValue);
 			}
 		});
@@ -127,15 +139,6 @@ export default defineComponent({
 		});
 
 		watch(
-			() => props.value,
-			async (newVal, oldVal) => {
-				if (newVal !== oldVal) {
-					modelValue.value = newVal;
-				}
-			}
-		);
-
-		watch(
 			() => props.isEditMode,
 			async (newVal, oldVal) => {
 				if (
@@ -149,6 +152,21 @@ export default defineComponent({
 					await setFocusOnEdit();
 				}
 			}
+		);
+
+		const validationRules = computed(() => ({
+			modelValue: {
+				containsOpeningTag: helpers.withMessage(
+					t("common.validation.containsOpeningTag"),
+					(name: string) => !containsOpeningTagFollowedByString(name)
+				),
+			},
+		}));
+
+		const v$ = useVuelidate(
+			validationRules,
+			{ modelValue },
+			{ $lazy: true, $autoDirty: true }
 		);
 
 		const hasValue = computed<boolean>(
@@ -197,6 +215,8 @@ export default defineComponent({
 			titleInput,
 			placeholderText,
 			cursorToEnd,
+			v$,
+			unref,
 		};
 	},
 });
@@ -229,6 +249,7 @@ export default defineComponent({
 .title-input {
 	cursor: pointer;
 	pointer-events: unset !important;
+	min-width: 280px;
 }
 
 .title-input :deep(.v-field--disabled) {
