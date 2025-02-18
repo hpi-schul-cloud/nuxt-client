@@ -444,6 +444,7 @@ export default class ImportUsersModule extends VuexModule {
 				mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
@@ -466,6 +467,7 @@ export default class ImportUsersModule extends VuexModule {
 				mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});
@@ -481,6 +483,7 @@ export default class ImportUsersModule extends VuexModule {
 				mapAxiosErrorToResponseError(error);
 
 			this.setBusinessError({
+				error: apiError,
 				statusCode: apiError.code,
 				message: apiError.message,
 			});

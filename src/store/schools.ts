@@ -136,7 +136,7 @@ export default class SchoolsModule extends VuexModule {
 		return this.school.federalState;
 	}
 
-	get getSystems(): any[] {
+	get getSystems(): SchoolSystemResponse[] {
 		return this.systems;
 	}
 
