@@ -1,6 +1,6 @@
 <template>
-	<VDialog v-model="isOpen" data-testid="board-layout-dialog" width="360">
-		<VCard>
+	<VDialog v-model="isOpen" width="360">
+		<VCard data-testid="board-layout-dialog">
 			<VCardTitle
 				class="text-h4 text-break px-6 pt-4"
 				data-testid="board-layout-dialog-title"
