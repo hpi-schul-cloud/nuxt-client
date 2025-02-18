@@ -623,13 +623,15 @@ describe("course-room module", () => {
 		describe("setRoomData", () => {
 			it("should set the room data", () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const expectedData = {
-					id: "123",
-					courseName: "Sample Course",
+				const expectedData: serverApi.SingleColumnBoardResponse = {
+					roomId: "123",
+					title: "Sample Course",
 					displayColor: "black",
+					isArchived: false,
+					isSynchronized: false,
 					elements: [
 						{
-							type: "task",
+							type: serverApi.BoardElementResponseTypeEnum.Task,
 							content: {
 								courseName: "Mathe",
 								id: "59cce1d381297026d02cdc4b",
@@ -642,6 +644,7 @@ describe("course-room module", () => {
 									graded: 0,
 									isDraft: false,
 									isSubstitutionTeacher: false,
+									isFinished: false,
 								},
 								availableDate: "2017-09-20T11:00:00.000Z",
 								dueDate: "2300-09-28T13:00:00.000Z",
@@ -655,7 +658,7 @@ describe("course-room module", () => {
 				expect(courseRoomDetailsModule.getRoomData).not.toStrictEqual(
 					expectedData
 				);
-				courseRoomDetailsModule.setRoomData(expectedData as any);
+				courseRoomDetailsModule.setRoomData(expectedData);
 				expect(courseRoomDetailsModule.roomData).toStrictEqual(expectedData);
 			});
 		});
@@ -755,13 +758,13 @@ describe("course-room module", () => {
 		describe("getRoomsData", () => {
 			it("should return rooms state", () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const expectedData = {
-					id: "123",
-					courseName: "Sample Course",
+				const expectedData: serverApi.SingleColumnBoardResponse = {
+					roomId: "123",
+					title: "Sample Course",
 					displayColor: "black",
 					elements: [
 						{
-							type: "task",
+							type: serverApi.BoardElementResponseTypeEnum.Task,
 							content: {
 								courseName: "Mathe",
 								id: "59cce1d381297026d02cdc4b",
@@ -774,6 +777,7 @@ describe("course-room module", () => {
 									graded: 0,
 									isDraft: false,
 									isSubstitutionTeacher: false,
+									isFinished: false,
 								},
 								availableDate: "2017-09-20T11:00:00.000Z",
 								dueDate: "2300-09-28T13:00:00.000Z",
@@ -782,9 +786,11 @@ describe("course-room module", () => {
 							},
 						},
 					],
+					isArchived: false,
+					isSynchronized: false,
 				};
 
-				courseRoomDetailsModule.setRoomData(expectedData as any);
+				courseRoomDetailsModule.setRoomData(expectedData);
 				expect(courseRoomDetailsModule.getRoomData).toStrictEqual(expectedData);
 			});
 		});
@@ -812,13 +818,13 @@ describe("course-room module", () => {
 		describe("roomIsEmpty", () => {
 			it("should return false if there are any elements in the room", () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const testData = {
-					id: "123",
-					courseName: "Sample Course",
+				const testData: serverApi.SingleColumnBoardResponse = {
+					roomId: "123",
+					title: "Sample Course",
 					displayColor: "black",
 					elements: [
 						{
-							type: "task",
+							type: serverApi.BoardElementResponseTypeEnum.Task,
 							content: {
 								courseName: "Mathe",
 								id: "59cce1d381297026d02cdc4b",
@@ -831,6 +837,7 @@ describe("course-room module", () => {
 									graded: 0,
 									isDraft: false,
 									isSubstitutionTeacher: false,
+									isFinished: false,
 								},
 								availableDate: "2017-09-20T11:00:00.000Z",
 								dueDate: "2300-09-28T13:00:00.000Z",
@@ -839,20 +846,24 @@ describe("course-room module", () => {
 							},
 						},
 					],
+					isArchived: false,
+					isSynchronized: false,
 				};
-				courseRoomDetailsModule.setRoomData(testData as any);
+				courseRoomDetailsModule.setRoomData(testData);
 				const result = courseRoomDetailsModule.roomIsEmpty;
 				expect(result).toStrictEqual(false);
 			});
 			it("should return true if there are no elements in the room", () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const testData = {
-					id: "123",
-					courseName: "Sample Course",
+				const testData: serverApi.SingleColumnBoardResponse = {
+					roomId: "123",
+					title: "Sample Course",
 					displayColor: "black",
 					elements: [],
+					isArchived: false,
+					isSynchronized: false,
 				};
-				courseRoomDetailsModule.setRoomData(testData as any);
+				courseRoomDetailsModule.setRoomData(testData);
 				const result = courseRoomDetailsModule.roomIsEmpty;
 				expect(result).toStrictEqual(true);
 			});
