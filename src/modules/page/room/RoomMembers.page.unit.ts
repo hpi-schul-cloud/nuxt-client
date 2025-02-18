@@ -140,6 +140,7 @@ describe("RoomMembersPage", () => {
 				roomRoleName: currentUserRole,
 			};
 		});
+		mockRoomMemberCalls.selectedIds = ref([members[1].userId]);
 
 		wrapper = mount(RoomMembersPage, {
 			attachTo: document.body,

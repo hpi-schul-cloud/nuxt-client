@@ -72,7 +72,7 @@
 		<v-dialog
 			v-model="isChangeRoleDialogOpen"
 			:width="xs ? 'auto' : 480"
-			data-testid="dialog-add-participants"
+			data-testid="dialog-change-role-participants"
 			max-width="480"
 			@keydown.esc="onDialogClose"
 		>
