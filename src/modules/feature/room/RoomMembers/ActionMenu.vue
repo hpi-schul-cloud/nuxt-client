@@ -53,6 +53,10 @@ const props = defineProps({
 		type: Array<string>,
 		required: true,
 	},
+	isVisibleChangeRoleButton: {
+		type: Boolean,
+		default: false,
+	},
 });
 const { t } = useI18n();
 const emit = defineEmits<{
