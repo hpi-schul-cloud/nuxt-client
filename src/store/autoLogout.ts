@@ -95,7 +95,7 @@ const extendSession = async (
 	showWarningOnRemainingSeconds: number,
 	setActive: SetActive,
 	defaultRemainingTimeInSeconds: number,
-	setToastValue: any
+	setToastValue: (value: number) => void
 ) => {
 	if (jwtTimerDisabled()) {
 		return Promise.resolve();
