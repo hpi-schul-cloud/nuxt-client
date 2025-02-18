@@ -158,6 +158,8 @@ export default {
 	"common.validation.required2": "Це обов'язкове поле.",
 	"common.validation.tooLong":
 		"Введений текст перевищує максимально дозволену довжину",
+	"common.validation.containsOpeningTag":
+		"Будь ласка, вставте пробіл після знаку менше.",
 	"common.words.and": "і",
 	"common.words.classes": "класи",
 	"common.words.color": "Колір",

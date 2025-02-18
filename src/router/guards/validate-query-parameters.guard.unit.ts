@@ -2,7 +2,7 @@ import { applicationErrorModule } from "@/store";
 import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 import { validateQueryParameters } from "@/router/guards/validate-query-parameters.guard";
-import { isMongoId } from "@/utils/validationUtil";
+import { isMongoId } from "@/utils/validation";
 import Mock = jest.Mock;
 
 jest.mock("@/store", () => ({
