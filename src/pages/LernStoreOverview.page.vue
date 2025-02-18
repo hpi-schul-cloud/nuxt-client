@@ -143,7 +143,11 @@ const reachedTotal = computed(
 		resources.value.total !== 0 &&
 		resources.value.data.length >= resources.value.total
 );
-const empty = computed(() => resources.value.data.length === 0);
+const empty = computed(() => {
+	console.log("total", resources.value.total);
+	console.log("data.length", resources.value.data.length);
+	return resources.value.data.length === 0;
+});
 
 const onInput = async () => {
 	await searchContent();
