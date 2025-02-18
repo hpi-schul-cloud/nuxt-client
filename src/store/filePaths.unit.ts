@@ -3,6 +3,7 @@ import { envsFactory } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "./env-config";
 import FilePathsModule from "./filePaths";
+import { SpecificFiles, GlobalFiles } from "./types/filePaths";
 
 const specificFiles = {
 	accessibilityStatement:
@@ -31,16 +32,20 @@ const globalFiles = {
 };
 
 const mockSetSpecificFiles = (payload: string) =>
-	Object.entries(specificFiles).reduce((obj: any, [key, value]) => {
-		obj[key] = String(new URL(value, payload));
-		return obj;
-	}, {});
+	Object.fromEntries(
+		Object.entries(specificFiles).map(([key, value]) => [
+			key,
+			String(new URL(value, payload)),
+		])
+	) as SpecificFiles;
 
 const mockSetGloablFiles = (payload: string) =>
-	Object.entries(globalFiles).reduce((obj: any, [key, value]) => {
-		obj[key] = String(new URL(`global/${value}`, payload));
-		return obj;
-	}, {});
+	Object.fromEntries(
+		Object.entries(globalFiles).map(([key, value]) => [
+			key,
+			String(new URL(`global/${value}`, payload)),
+		])
+	) as GlobalFiles;
 
 describe("filePaths module", () => {
 	describe("actions", () => {
