@@ -26,7 +26,7 @@ const setCookie = (cname: string, cvalue: string, exdays: number) => {
 	stateFactory: true,
 })
 export default class AuthModule extends VuexModule {
-	accessToken: string | null = "";
+	loggedIn = false;
 	payload = null;
 	me?: MeResponse;
 	publicPages: string[] = ["index", "login", "signup", "impressum"];
@@ -59,8 +59,8 @@ export default class AuthModule extends VuexModule {
 	}
 
 	@Mutation
-	setAccessToken(payload: string): void {
-		this.accessToken = payload;
+	setLoggedIn(payload: boolean): void {
+		this.loggedIn = payload;
 	}
 
 	@Mutation
@@ -70,7 +70,7 @@ export default class AuthModule extends VuexModule {
 
 	@Mutation
 	clearAuthData(): void {
-		this.accessToken = null;
+		this.loggedIn = false;
 		this.me = undefined;
 	}
 
@@ -114,18 +114,10 @@ export default class AuthModule extends VuexModule {
 		return this.me?.school;
 	}
 
-	get getAccessToken(): string | null {
-		return this.accessToken;
-	}
-
 	get getUserRoles(): string[] {
 		const roleNames = this.me?.roles.map((r) => r.name.toLowerCase());
 
 		return roleNames ?? [];
-	}
-
-	get getAuthenticated(): string | boolean {
-		return this.accessToken || false;
 	}
 
 	// TODO - why are we using toLowerCase() on permissions here?
@@ -136,7 +128,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	get isLoggedIn(): boolean {
-		return !!this.accessToken;
+		return this.loggedIn;
 	}
 
 	get loginSystem(): string | undefined {
@@ -144,7 +136,7 @@ export default class AuthModule extends VuexModule {
 	}
 
 	@Action
-	async login(jwt: string) {
+	async login() {
 		const { data } = await this.meApi.meControllerMe();
 
 		this.setMe(data);
@@ -161,7 +153,7 @@ export default class AuthModule extends VuexModule {
 			this.addUserPermission("TEAMS_ENABLED");
 		}
 
-		this.setAccessToken(jwt);
+		this.setLoggedIn(true);
 	}
 
 	@Action
