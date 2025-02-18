@@ -10,7 +10,6 @@ import {
 } from "./types/content";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "./env-config";
-import { ref } from "vue";
 
 const ESPath = "/v1/edu-sharing";
 const lessonsPath = "/v3/lessons/course";

@@ -77,7 +77,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 	it("Should display due date label if task has dueDate", () => {
 		const wrapper = getWrapper({ task: tasks[0] });
 
-		const convertedDueDate = dateTimeFromUTC((tasks[0] as Task).dueDate);
+		const convertedDueDate = dateTimeFromUTC(tasks[0].dueDate);
 		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
 		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
@@ -147,7 +147,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 
 		wrapper.vm.$vuetify.display.xs = true;
 
-		const convertedDueDate = dateFromUTC((tasks[0] as Task).dueDate);
+		const convertedDueDate = dateFromUTC(tasks[0].dueDate);
 		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
 		expect(wrapper.vm.dueDateLabel).toBe(expectedDueDateLabel);
