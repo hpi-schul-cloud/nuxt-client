@@ -13,7 +13,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { createMock } from "@golevelup/ts-jest";
-import { mount, MountingOptions } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import TaskItemStudent from "./TaskItemStudent.vue";
 import { Task } from "@/store/types/tasks";
 import { ComponentProps } from "vue-component-type-helpers";
@@ -29,10 +29,7 @@ const mockRouter = {
 	push: jest.fn(),
 };
 
-const getWrapper = (
-	props: ComponentProps<typeof TaskItemStudent>,
-	options?: MountingOptions<typeof TaskItemStudent>
-) => {
+const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) => {
 	return mount(TaskItemStudent, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -43,7 +40,6 @@ const getWrapper = (
 			},
 		},
 		props,
-		...options,
 		mocks: {
 			$router: mockRouter,
 		},
