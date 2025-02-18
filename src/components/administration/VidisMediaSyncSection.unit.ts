@@ -1,5 +1,6 @@
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { axiosErrorFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -8,6 +9,7 @@ import {
 import { useSchoolLicenseApi } from "@data-license";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
+import { HttpStatusCode } from "../../store/types/http-status-code.enum";
 import VidisMediaSyncSection from "./VidisMediaSyncSection.vue";
 
 jest.mock("@data-license");
@@ -74,6 +76,34 @@ describe("VidisMediaSyncSection", () => {
 				expect(notifierModule.show).toHaveBeenCalledWith({
 					status: "success",
 					text: "components.administration.externalToolsSection.vidis.notification.success",
+				});
+			});
+		});
+
+		describe("when the request fails with a timeout", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper();
+
+				useSchoolLicenseApiMock.updateSchoolLicenses.mockRejectedValueOnce(
+					axiosErrorFactory
+						.withStatusCode(HttpStatusCode.RequestTimeout)
+						.build()
+				);
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show a failure notification", async () => {
+				const { wrapper } = setup();
+
+				const button = wrapper.find('[data-testid="sync-vidis-media-button"]');
+				await button.trigger("click");
+
+				expect(notifierModule.show).toHaveBeenCalledWith({
+					status: "info",
+					text: "components.administration.externalToolsSection.vidis.notification.timeout",
 				});
 			});
 		});
