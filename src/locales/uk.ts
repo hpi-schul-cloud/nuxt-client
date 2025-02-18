@@ -1835,16 +1835,20 @@ export default {
 		"{memberName} надаються наступні повноваження в приміщенні “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
 		"Вибрані учасники отримають такі дозволи на кімнату в “{roomName}”:",
-	"pages.rooms.members.roleChange.Roomviewer.subText":
+	"pages.rooms.members.roleChange.Roomviewer.label":
 		"Доступ до зон кімнати та перегляд вмісту",
-	"pages.rooms.members.roleChange.Roomeditor.subText":
+	"pages.rooms.members.roleChange.Roomeditor.label":
 		"Створюйте та редагуйте контент",
-	"pages.rooms.members.roleChange.Roomadmin.subText":
+	"pages.rooms.members.roleChange.Roomadmin.label":
 		"Такі самі дозволи, як і «Редагувати», а також додавати та видаляти інших учасників, змінювати їхні дозволи для кімнати та редагувати кімнату",
-	"pages.rooms.members.roleChange.Roomowner.subText":
+	"pages.rooms.members.roleChange.Roomowner.label":
 		"Ті самі повноваження, що й «Керування», плюс видалення кімнати",
-	"pages.rooms.members.roleChange.Roomowner.subText.warning":
+	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Увага: Тільки одна людина в кімнаті може отримати ці повноваження!",
+	"pages.rooms.members.handOverAlert.label":
+		"Права на цю кімнату передаються вибраному користувачеві. {currentUser} втрачає повноваження «Власник» і отримує повноваження «Адміністратор».",
+	"pages.rooms.members.handOverAlert.confirm.label":
+		"Якщо права на кімнату передаються іншому користувачеві, {currentUser} втрачає право видаляти кімнату. Ця дія може бути скасована тільки {member}.",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

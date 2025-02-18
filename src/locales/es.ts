@@ -1858,16 +1858,19 @@ export default {
 		"{memberName} recibe los siguientes permisos de sala en “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
 		"Los miembros seleccionados recibirán los siguientes permisos de sala en “{roomName}”:",
-	"pages.rooms.members.roleChange.Roomviewer.subText":
+	"pages.rooms.members.roleChange.Roomviewer.label":
 		"Accede a las áreas de la sala y visualiza el contenido",
-	"pages.rooms.members.roleChange.Roomeditor.subText":
-		"Crear y editar contenido",
-	"pages.rooms.members.roleChange.Roomadmin.subText":
+	"pages.rooms.members.roleChange.Roomeditor.label": "Crear y editar contenido",
+	"pages.rooms.members.roleChange.Roomadmin.label":
 		'Los mismos permisos que "Editar", además de agregar y eliminar otros miembros, cambiar sus permisos de sala y editar la sala',
-	"pages.rooms.members.roleChange.Roomowner.subText":
+	"pages.rooms.members.roleChange.Roomowner.label":
 		"Las mismas autorizaciones que «Administrar», más suprimir la habitación",
-	"pages.rooms.members.roleChange.Roomowner.subText.warning":
-		"Achtung: Kann nur eine Person im Raum erhalten!",
+	"pages.rooms.members.roleChange.Roomowner.label.subText":
+		"Atención: ¡Solo una persona en la sala puede recibir esto!",
+	"pages.rooms.members.handOverAlert.label":
+		"Esta autorización de sala se transfiere al miembro seleccionado. {currentUser} pierde la autorización «Propio» y recibe la autorización «Administrar».",
+	"pages.rooms.members.handOverAlert.confirm.label":
+		"Al transferir esta autorización de sala a otro miembro, {actualUser} pierde el derecho a cerrar la sala. Esta acción sólo puede ser ejecutada por {member}.",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

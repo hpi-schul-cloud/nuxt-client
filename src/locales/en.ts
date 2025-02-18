@@ -1806,16 +1806,19 @@ export default {
 		"{memberName} receives the following permissions in the room “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
 		"The selected members will receive the following room permissions in “{roomName}”:",
-	"pages.rooms.members.roleChange.Roomviewer.subText":
+	"pages.rooms.members.roleChange.Roomviewer.label":
 		"Access the areas in the room and view content",
-	"pages.rooms.members.roleChange.Roomeditor.subText":
-		"Create and edit content",
-	"pages.rooms.members.roleChange.Roomadmin.subText":
+	"pages.rooms.members.roleChange.Roomeditor.label": "Create and edit content",
+	"pages.rooms.members.roleChange.Roomadmin.label":
 		'Same permissions as "Edit", plus add and remove other members, change their room permissions and edit the room',
-	"pages.rooms.members.roleChange.Roomowner.subText":
+	"pages.rooms.members.roleChange.Roomowner.label":
 		"Same authorizations as “ Administer”, additionally delete room",
-	"pages.rooms.members.roleChange.Roomowner.subText.warning":
+	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Attention: Only one person in the room can receive this authorization!",
+	"pages.rooms.members.handOverAlert.label":
+		"This room authorization is transferred to the selected member. {currentUser} loses the “Own” authorization and receives the “Administer” authorization.",
+	"pages.rooms.members.handOverAlert.confirm.label":
+		"If this room authorization is transferred to another member, {currentUser} loses the right to delete the room. This action can only be undone by {member}.",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

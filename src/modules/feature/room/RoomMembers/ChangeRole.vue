@@ -12,7 +12,6 @@
 					<div v-if="!isHandOverMode" class="mb-4">
 						{{ infoText }}
 					</div>
-
 					<div>
 						<v-radio-group
 							v-if="!isHandOverMode"
@@ -30,7 +29,7 @@
 								for="roleChangeViewer"
 								class="ml-10 mt-n2 mb-2 radio-label"
 							>
-								{{ t("pages.rooms.members.roleChange.Roomviewer.subText") }}
+								{{ t("pages.rooms.members.roleChange.Roomviewer.label") }}
 							</label>
 
 							<v-radio
@@ -43,7 +42,7 @@
 								for="roleChangeEditor"
 								class="ml-10 mt-n2 mb-2 radio-label"
 							>
-								{{ t("pages.rooms.members.roleChange.Roomeditor.subText") }}
+								{{ t("pages.rooms.members.roleChange.Roomeditor.label") }}
 							</label>
 
 							<v-radio
@@ -53,7 +52,7 @@
 								color="primary"
 							/>
 							<label for="roleChangeAdmin" class="ml-10 mt-n2 mb-2 radio-label">
-								{{ t("pages.rooms.members.roleChange.Roomadmin.subText") }}
+								{{ t("pages.rooms.members.roleChange.Roomadmin.label") }}
 							</label>
 
 							<v-radio
@@ -68,10 +67,10 @@
 								for="roleChangeOwner"
 								class="ml-10 mt-n2 mb-2 radio-label"
 							>
-								{{ t("pages.rooms.members.roleChange.Roomowner.subText") }}
+								{{ t("pages.rooms.members.roleChange.Roomowner.label") }}
 								<br />
 								{{
-									t("pages.rooms.members.roleChange.Roomowner.subText.warning")
+									t("pages.rooms.members.roleChange.Roomowner.label.subText")
 								}}
 							</label>
 						</v-radio-group>
@@ -83,16 +82,8 @@
 							class="mb-2"
 							:class="isHandOverMode ? 'ml-0' : 'ml-8'"
 						>
-							<span class="alert-text" v-if="!isHandOverMode">
-								Diese Raumberechtigung wird an das ausgewählte Mitglied
-								übertragen. Cord Carl verliert die Berechtigung „Besitzen” und
-								erhält die Berechtigung „Verwalten”.
-							</span>
-
-							<span v-else class="alert-text">
-								Bei Übertragung dieser Raumberechtigung an ein anderes Mitglied
-								verliert Cord Carl das Recht, den Raum zu löschen. Diese Aktion
-								kann von Cord Carl nicht rückgängig gemacht werden.
+							<span class="alert-text">
+								{{ alertText }}
 							</span>
 						</v-alert>
 					</div>
@@ -199,6 +190,19 @@ const infoText = computed(() => {
 	return t("pages.rooms.members.roleChange.multipleUser.subTitle", {
 		roomName: props.roomName,
 	});
+});
+
+const alertText = computed(() => {
+	const currentUser = `${props.currentUser?.firstName} ${props.currentUser?.lastName}`;
+	const member = `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`;
+	return isHandOverMode.value
+		? t("pages.rooms.members.handOverAlert.confirm.label", {
+				currentUser,
+				member,
+			})
+		: t("pages.rooms.members.handOverAlert.label", {
+				currentUser,
+			});
 });
 
 const emit = defineEmits<{
