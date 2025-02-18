@@ -252,7 +252,10 @@ export default class CourseRoomDetailsModule extends VuexModule {
 	}
 
 	@Action
-	async finishTask(payload: object | any): Promise<void> {
+	async finishTask(payload: {
+		itemId: string;
+		action: "finish" | "restore";
+	}): Promise<void> {
 		this.resetBusinessError();
 		try {
 			if (payload.action === "finish") {
