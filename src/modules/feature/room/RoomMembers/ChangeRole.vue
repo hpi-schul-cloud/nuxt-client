@@ -8,85 +8,75 @@
 
 		<template v-slot:default>
 			<div class="ml-6 mr-6 mt-2">
+				<div v-if="!isHandOverMode" class="mb-4">
+					{{ infoText }}
+				</div>
 				<div>
-					<div v-if="!isHandOverMode" class="mb-4">
-						{{ infoText }}
-					</div>
-					<div>
-						<v-radio-group
-							v-if="!isHandOverMode"
-							v-model="selectedRole"
-							hide-details
-							class="ml-n2"
+					<v-radio-group
+						v-if="!isHandOverMode"
+						v-model="selectedRole"
+						hide-details
+						class="ml-n2"
+					>
+						<v-radio
+							id="roleChangeViewer"
+							:label="t('pages.rooms.members.roomPermissions.viewer')"
+							:value="RoleName.Roomviewer"
+							color="primary"
+						/>
+						<label for="roleChangeViewer" class="ml-10 mt-n2 mb-2 radio-label">
+							{{ t("pages.rooms.members.roleChange.Roomviewer.label") }}
+						</label>
+
+						<v-radio
+							id="roleChangeEditor"
+							:label="t('pages.rooms.members.roomPermissions.editor')"
+							:value="RoleName.Roomeditor"
+							color="primary"
+						/>
+						<label for="roleChangeEditor" class="ml-10 mt-n2 mb-2 radio-label">
+							{{ t("pages.rooms.members.roleChange.Roomeditor.label") }}
+						</label>
+
+						<v-radio
+							id="roleChangeAdmin"
+							:label="t('pages.rooms.members.roomPermissions.admin')"
+							:value="RoleName.Roomadmin"
+							color="primary"
+						/>
+						<label for="roleChangeAdmin" class="ml-10 mt-n2 mb-2 radio-label">
+							{{ t("pages.rooms.members.roleChange.Roomadmin.label") }}
+						</label>
+
+						<v-radio
+							v-if="isChangeRoleOptionVisible"
+							id="roleChangeOwner"
+							:label="t('pages.rooms.members.roomPermissions.owner')"
+							:value="RoleName.Roomowner"
+							color="primary"
+						/>
+						<label
+							v-if="isChangeRoleOptionVisible"
+							for="roleChangeOwner"
+							class="ml-10 mt-n2 mb-2 radio-label"
 						>
-							<v-radio
-								id="roleChangeViewer"
-								:label="t('pages.rooms.members.roomPermissions.viewer')"
-								:value="RoleName.Roomviewer"
-								color="primary"
-							/>
-							<label
-								for="roleChangeViewer"
-								class="ml-10 mt-n2 mb-2 radio-label"
-							>
-								{{ t("pages.rooms.members.roleChange.Roomviewer.label") }}
-							</label>
-
-							<v-radio
-								id="roleChangeEditor"
-								:label="t('pages.rooms.members.roomPermissions.editor')"
-								:value="RoleName.Roomeditor"
-								color="primary"
-							/>
-							<label
-								for="roleChangeEditor"
-								class="ml-10 mt-n2 mb-2 radio-label"
-							>
-								{{ t("pages.rooms.members.roleChange.Roomeditor.label") }}
-							</label>
-
-							<v-radio
-								id="roleChangeAdmin"
-								:label="t('pages.rooms.members.roomPermissions.admin')"
-								:value="RoleName.Roomadmin"
-								color="primary"
-							/>
-							<label for="roleChangeAdmin" class="ml-10 mt-n2 mb-2 radio-label">
-								{{ t("pages.rooms.members.roleChange.Roomadmin.label") }}
-							</label>
-
-							<v-radio
-								v-if="isChangeRoleOptionVisible"
-								id="roleChangeOwner"
-								:label="t('pages.rooms.members.roomPermissions.owner')"
-								:value="RoleName.Roomowner"
-								color="primary"
-							/>
-							<label
-								v-if="isChangeRoleOptionVisible"
-								for="roleChangeOwner"
-								class="ml-10 mt-n2 mb-2 radio-label"
-							>
-								{{ t("pages.rooms.members.roleChange.Roomowner.label") }}
-								<br />
-								{{
-									t("pages.rooms.members.roleChange.Roomowner.label.subText")
-								}}
-							</label>
-						</v-radio-group>
-						<v-alert
-							v-if="selectedRole === RoleName.Roomowner"
-							dense
-							type="warning"
-							:icon="mdiAlert"
-							class="mb-2"
-							:class="isHandOverMode ? 'ml-0' : 'ml-8'"
-						>
-							<span class="alert-text">
-								{{ alertText }}
-							</span>
-						</v-alert>
-					</div>
+							{{ t("pages.rooms.members.roleChange.Roomowner.label") }}
+							<br />
+							{{ t("pages.rooms.members.roleChange.Roomowner.label.subText") }}
+						</label>
+					</v-radio-group>
+					<v-alert
+						v-if="selectedRole === RoleName.Roomowner"
+						dense
+						class="mb-2"
+						:class="isHandOverMode ? 'ml-0' : 'ml-8'"
+						:icon="mdiAlert"
+						type="warning"
+					>
+						<span class="alert-text">
+							{{ alertText }}
+						</span>
+					</v-alert>
 				</div>
 			</div>
 		</template>
@@ -119,6 +109,7 @@
 					data-testid="change-owner-confirm-btn"
 					@click="onChangeOwner"
 				/>
+				<!-- TODO: i18n keys for text-->
 			</div>
 		</template>
 	</v-card>
@@ -248,7 +239,6 @@ useFocusTrap(changeRoleContent, {
 	line-height: var(--line-height-lg);
 	opacity: var(--v-medium-emphasis-opacity);
 }
-
 .alert-text {
 	color: rgba(var(--v-theme-on-background)) !important;
 	line-height: var(--line-height-lg) !important;
