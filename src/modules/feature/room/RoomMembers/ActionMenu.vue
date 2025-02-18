@@ -20,7 +20,10 @@
 			</template>
 
 			<v-list>
-				<KebabMenuActionChangePermission @click="onRoleChange" />
+				<KebabMenuActionChangePermission
+					v-if="isVisibleChangeRoleButton"
+					@click="onRoleChange"
+				/>
 				<KebabMenuActionRemoveMember @click="onRemove" />
 			</v-list>
 		</v-menu>
