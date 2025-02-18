@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { mount, VueWrapper } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import BoardAnyTitleInput from "./BoardAnyTitleInput.vue";
 
 jest.mock("@util-board");
@@ -78,12 +78,8 @@ describe("BoardAnyTitleTitleInput", () => {
 		it("should emit enter on hitting 'enter' key in card title", async () => {
 			const { wrapper } = setup({ isEditMode: true, scope: "card" });
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-			textAreaComponent.vm.$emit(
-				"keydown",
-				new KeyboardEvent("keydown", {
-					key: "Enter",
-				})
-			);
+			await textAreaComponent.trigger("keydown.enter");
+
 			const emitted = wrapper.emitted();
 
 			expect(emitted["enter"]).toHaveLength(1);
@@ -92,12 +88,8 @@ describe("BoardAnyTitleTitleInput", () => {
 		it("should emit enter on hitting 'enter' key in column title", async () => {
 			const { wrapper } = setup({ isEditMode: true, scope: "column" });
 			const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
-			textAreaComponent.vm.$emit(
-				"keydown",
-				new KeyboardEvent("keydown", {
-					key: "Enter",
-				})
-			);
+			await textAreaComponent.trigger("keydown.enter");
+
 			const emitted = wrapper.emitted();
 
 			expect(emitted["enter"]).toHaveLength(1);
@@ -106,12 +98,8 @@ describe("BoardAnyTitleTitleInput", () => {
 		it("should emit enter on hitting 'enter' key in board title", async () => {
 			const { wrapper } = setup({ isEditMode: true, scope: "board" });
 			const textFieldComponent = wrapper.findComponent({ name: "VTextField" });
-			textFieldComponent.vm.$emit(
-				"keydown",
-				new KeyboardEvent("keydown", {
-					key: "Enter",
-				})
-			);
+			await textFieldComponent.trigger("keydown.enter");
+
 			const emitted = wrapper.emitted();
 
 			expect(emitted["enter"]).toHaveLength(1);
@@ -148,7 +136,7 @@ describe("BoardAnyTitleTitleInput", () => {
 	describe("when a value containing a < directly followed by a string is entered", () => {
 		describe("when scope is board", () => {
 			it("should display error message", async () => {
-				setup({ isEditMode: true, scope: "board" });
+				const { wrapper } = setup({ isEditMode: true, scope: "board" });
 
 				const textAreaComponent = wrapper.findComponent({ name: "VTextField" });
 				await textAreaComponent.setValue("<abc123");
@@ -159,7 +147,7 @@ describe("BoardAnyTitleTitleInput", () => {
 			});
 
 			it("should not emit update:value", async () => {
-				setup({ isEditMode: true, scope: "board" });
+				const { wrapper } = setup({ isEditMode: true, scope: "board" });
 
 				const textAreaComponent = wrapper.findComponent({ name: "VTextField" });
 				await textAreaComponent.setValue("<abc123");
@@ -171,7 +159,7 @@ describe("BoardAnyTitleTitleInput", () => {
 
 		describe("when scope is card", () => {
 			it("should display error message", async () => {
-				setup({ isEditMode: true, scope: "card" });
+				const { wrapper } = setup({ isEditMode: true, scope: "card" });
 
 				const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 				await textAreaComponent.setValue("<abc123");
@@ -182,7 +170,7 @@ describe("BoardAnyTitleTitleInput", () => {
 			});
 
 			it("should not emit update:value", async () => {
-				setup({ isEditMode: true, scope: "card" });
+				const { wrapper } = setup({ isEditMode: true, scope: "card" });
 
 				const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 				await textAreaComponent.setValue("<abc123");
@@ -194,7 +182,7 @@ describe("BoardAnyTitleTitleInput", () => {
 
 		describe("when scope is column", () => {
 			it("should display error message", async () => {
-				setup({ isEditMode: true, scope: "column" });
+				const { wrapper } = setup({ isEditMode: true, scope: "column" });
 
 				const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 				await textAreaComponent.setValue("<abc123");
@@ -205,7 +193,7 @@ describe("BoardAnyTitleTitleInput", () => {
 			});
 
 			it("should not emit update:value", async () => {
-				setup({ isEditMode: true, scope: "column" });
+				const { wrapper } = setup({ isEditMode: true, scope: "column" });
 
 				const textAreaComponent = wrapper.findComponent({ name: "VTextarea" });
 				await textAreaComponent.setValue("<abc123");
