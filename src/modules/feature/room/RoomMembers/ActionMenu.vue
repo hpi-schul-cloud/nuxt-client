@@ -20,7 +20,10 @@
 			</template>
 
 			<KebabMenuList>
-				<KebabMenuActionChangePermission @click="onRoleChange" />
+				<KebabMenuActionChangePermission
+					v-if="isVisibleChangeRoleButton"
+					@click="onRoleChange"
+				/>
 				<KebabMenuActionRemoveMember @click="onRemove" />
 			</KebabMenuList>
 		</VMenu>
@@ -50,6 +53,10 @@ const props = defineProps({
 	selectedIds: {
 		type: Array<string>,
 		required: true,
+	},
+	isVisibleChangeRoleButton: {
+		type: Boolean,
+		default: false,
 	},
 });
 const { t } = useI18n();

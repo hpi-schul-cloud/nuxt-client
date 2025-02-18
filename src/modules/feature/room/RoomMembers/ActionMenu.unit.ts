@@ -9,13 +9,14 @@ import {
 } from "@ui-kebab-menu";
 
 describe("ActionMenu", () => {
-	const setup = (selectedIds: string[] = ["test-id#1", "test-id#2"]) => {
+	const setup = (isVisibleChangeRoleButton = false) => {
 		const wrapper = mount(ActionMenu, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
 			props: {
-				selectedIds,
+				selectedIds: ["test-id#1", "test-id#2"],
+				isVisibleChangeRoleButton,
 			},
 		});
 
@@ -45,18 +46,32 @@ describe("ActionMenu", () => {
 		expect(emitted![0][0]).toStrictEqual(["test-id#1", "test-id#2"]);
 	});
 
-	it("should emit 'change:role' event when 'Change Role' menu button is clicked", async () => {
-		const { wrapper } = setup();
-		const menuButton = wrapper.find('[data-testid="action-menu-button"]');
-		await menuButton.trigger("click");
-		const removeMenuItem = wrapper.findComponent(
-			KebabMenuActionChangePermission
-		);
-		await removeMenuItem.trigger("click");
+	describe("when user is allowed to change room roles", () => {
+		it("should emit 'change:role' event when 'Change Role' menu button is clicked", async () => {
+			const { wrapper } = setup(true);
+			const menuButton = wrapper.find('[data-testid="action-menu-button"]');
+			await menuButton.trigger("click");
+			const changePermissionMenuItem = wrapper.getComponent(
+				KebabMenuActionChangePermission
+			);
+			await changePermissionMenuItem.trigger("click");
 
-		const emitted = wrapper.emitted("change:role");
-		expect(wrapper.emitted()).toHaveProperty("change:role");
-		expect(emitted![0][0]).toStrictEqual(["test-id#1", "test-id#2"]);
+			const emitted = wrapper.emitted("change:role");
+			expect(wrapper.emitted()).toHaveProperty("change:role");
+			expect(emitted![0][0]).toStrictEqual(["test-id#1", "test-id#2"]);
+		});
+	});
+
+	describe("when user is not allowed to change room roles", () => {
+		it("should emit 'change:role' event when 'Change Role' menu button is clicked", async () => {
+			const { wrapper } = setup(false);
+			const menuButton = wrapper.find('[data-testid="action-menu-button"]');
+			await menuButton.trigger("click");
+			const changePermssionMenuItem = wrapper.findComponent(
+				KebabMenuActionChangePermission
+			);
+			expect(changePermssionMenuItem.exists()).toBe(false);
+		});
 	});
 
 	it("should emit 'reset:selected' event when 'Reset' button is clicked", async () => {
