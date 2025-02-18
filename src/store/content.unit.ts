@@ -421,10 +421,6 @@ describe("content module", () => {
 				skip: 0,
 				data: [
 					{ ...mockResource, ref: { id: "mockId" }, stateSelected: false },
-					// {
-					// 	ref: { id: "mockId" },
-					// 	stateSelected: false,
-					// },
 				],
 				pagination: undefined,
 			};

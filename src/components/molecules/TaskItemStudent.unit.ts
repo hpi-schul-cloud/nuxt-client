@@ -42,7 +42,6 @@ const getWrapper = (
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 			},
 		},
-		// @ts-expect-error todo: fix types
 		props,
 		...options,
 		mocks: {
