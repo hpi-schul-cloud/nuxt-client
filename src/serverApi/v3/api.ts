@@ -5181,10 +5181,10 @@ export interface MeResponse {
     account: MeAccountResponse;
     /**
      * 
-     * @type {MeSystemResponse}
+     * @type {string}
      * @memberof MeResponse
      */
-    system?: MeSystemResponse;
+    systemId?: string;
 }
 /**
  * 
@@ -5248,31 +5248,6 @@ export interface MeSchoolResponse {
      * @memberof MeSchoolResponse
      */
     logo: MeSchoolLogoResponse;
-}
-/**
- * 
- * @export
- * @interface MeSystemResponse
- */
-export interface MeSystemResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof MeSystemResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof MeSystemResponse
-     */
-    name?: string;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof MeSystemResponse
-     */
-    hasEndSessionEndpoint: boolean;
 }
 /**
  * 
