@@ -1,12 +1,16 @@
 <template>
 	<div
-		class="d-flex justify-space-between align-center mb-2 table-title-header"
-		:class="{ 'fixed-position': fixedPosition.enabled }"
+		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
+		:class="{
+			'fixed-position': fixedPosition.enabled,
+			'flex-column': isExtraSmallDisplay,
+		}"
 		:style="{ top: `${fixedPosition.positionTop}px` }"
 	>
 		<ActionMenu
 			v-if="selectedUserIds.length"
 			class="multi-action-menu"
+			:class="{ 'order-2': isExtraSmallDisplay }"
 			:selectedIds="selectedUserIds"
 			:isVisibleChangeRoleButton="isVisibleChangeRoleButton"
 			@remove:selected="onRemoveMembers"
@@ -23,6 +27,7 @@
 			mobile-breakpoint="sm"
 			single-line
 			variant="solo-filled"
+			:class="{ 'order-1 w-100 mt-1': isExtraSmallDisplay }"
 			:label="t('common.labels.search')"
 			:prepend-inner-icon="mdiMagnify"
 		/>
@@ -87,6 +92,7 @@ import {
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { RoomMember, useRoomMemberVisibilityOptions } from "@data-room";
+import { useDisplay } from "vuetify/lib/framework.mjs";
 
 const props = defineProps({
 	members: {
@@ -116,6 +122,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const { xs: isExtraSmallDisplay } = useDisplay();
 const search = ref("");
 const memberList = toRef(props, "members");
 const membersFilterCount = ref(memberList.value?.length);
