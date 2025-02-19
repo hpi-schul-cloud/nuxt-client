@@ -15,7 +15,6 @@ import {
 import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import TaskItemStudent from "./TaskItemStudent.vue";
-import { Task } from "@/store/types/tasks";
 import { ComponentProps } from "vue-component-type-helpers";
 
 const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
