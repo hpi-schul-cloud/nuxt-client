@@ -7,19 +7,12 @@ import {
 } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
 
-type ReceivedRequests = [
-	{
-		path: string;
-	},
-];
-type Data = {
-	data: { data: [ConsentVersion] };
+let receivedRequests: { path: string }[] = [];
+let getRequestReturn:
+	| { data: { data: ConsentVersion[] } }
+	| { data: ConsentVersion } = {
+	data: { data: [] },
 };
-type Data2 = {
-	data: ConsentVersion;
-};
-let receivedRequests: ReceivedRequests;
-let getRequestReturn: Data | Data2 | Error | undefined;
 
 const axiosInitializer = (error?: boolean) => {
 	initializeAxios({
@@ -28,21 +21,24 @@ const axiosInitializer = (error?: boolean) => {
 				throw new Error("expected error");
 			}
 
-			receivedRequests = [{ path }];
+			receivedRequests.push({ path });
+			console.log("getRequestReturn", getRequestReturn);
 			return getRequestReturn;
 		},
 		post: async (path: string) => {
 			if (error) {
 				throw new Error("expected error");
 			}
-			receivedRequests = [{ path }];
+			receivedRequests.push({ path });
+			console.log("getRequestReturn", getRequestReturn);
 			return getRequestReturn;
 		},
 		delete: async (path: string) => {
 			if (error) {
 				throw new Error("expected error");
 			}
-			receivedRequests = [{ path }];
+			receivedRequests.push({ path });
+			console.log("getRequestReturn", getRequestReturn);
 			return getRequestReturn;
 		},
 	} as AxiosInstance);
@@ -53,8 +49,10 @@ axiosInitializer();
 describe("privacy policy module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
-			receivedRequests = [{ path: "" }];
-			getRequestReturn = undefined;
+			receivedRequests = [];
+			getRequestReturn = {
+				data: { data: [] },
+			};
 		});
 
 		describe("fetchPrivacyPolicy", () => {
@@ -147,14 +145,16 @@ describe("privacy policy module", () => {
 						consentText: "",
 						publishedAt: "currentDate",
 						consentTypes: ["privacy"],
+						createdAt: "someotherdate",
+						updatedAt: "someotherdate",
 						consentData: {
 							_id: "999",
 							schoolId: "333",
-							createdAt: "someotherdate",
-							updatedAt: "someotherdate",
 							fileType: "pdf",
 							fileName: "somefilename",
-							data: "data:application/pdf;base64,SOMEFILEDATA",
+							createdAt: "someotherdate",
+							updatedAt: "someotherdate",
+							data: "data:application/pdf;base64,SOMENEWFILEDATA",
 						},
 					},
 				};
