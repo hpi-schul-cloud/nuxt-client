@@ -1811,9 +1811,9 @@ export default {
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberName}",
-	"pages.rooms.members.changePermission": "Змінити дозволи",
+	"pages.rooms.members.changePermission": "Змінити дозволи кімнат",
 	"pages.rooms.members.changePermission.ariaLabel":
-		"Змінити дозвіл для {memberName}",
+		"Змінити дозвіл кімнат для {memberName}",
 	"pages.rooms.members.manage": "Учасник кімнати",
 	"pages.rooms.members.remove.ariaLabel": "Видалити {memberName} з кімнати",
 	"pages.rooms.members.resetSelection.ariaLabel":
