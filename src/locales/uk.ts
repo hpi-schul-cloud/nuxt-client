@@ -1845,6 +1845,7 @@ export default {
 		"Ті самі повноваження, що й «Керування», плюс видалення кімнати",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Увага: Тільки одна людина в кімнаті може отримати ці повноваження!",
+	"pages.rooms.members.roleChange.handOverBtn.text": "Передача власності",
 	"pages.rooms.members.handOverAlert.label":
 		"Права на цю кімнату передаються вибраному користувачеві. {currentUser} втрачає повноваження «Власник» і отримує повноваження «Адміністратор».",
 	"pages.rooms.members.handOverAlert.confirm.label":

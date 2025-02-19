@@ -105,11 +105,10 @@
 					class="ms-auto"
 					color="primary"
 					variant="flat"
-					text="Übertragen"
+					:text="t('pages.rooms.members.roleChange.handOverBtn.text')"
 					data-testid="change-owner-confirm-btn"
 					@click="onChangeOwner"
 				/>
-				<!-- TODO: i18n keys for text-->
 			</div>
 		</template>
 	</v-card>

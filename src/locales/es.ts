@@ -1867,6 +1867,7 @@ export default {
 		"Las mismas autorizaciones que «Administrar», más suprimir la habitación",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Atención: ¡Solo una persona en la sala puede recibir esto!",
+	"pages.rooms.members.roleChange.handOverBtn.text": "Transferir propiedad",
 	"pages.rooms.members.handOverAlert.label":
 		"Esta autorización de sala se transfiere al miembro seleccionado. {currentUser} pierde la autorización «Propio» y recibe la autorización «Administrar».",
 	"pages.rooms.members.handOverAlert.confirm.label":

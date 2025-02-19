@@ -1848,8 +1848,9 @@ export default {
 		"Gleiche Berechtigungen wie „Verwalten”, zusätzlich Raum löschen",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Achtung: Kann nur eine Person im Raum erhalten!",
+	"pages.rooms.members.roleChange.handOverBtn.text": "Übertragen",
 	"pages.rooms.members.handOverAlert.label":
-		"Diese Raumberechtigung wird an das ausgewählte Mitglied	übertragen. {currentUser} verliert die Berechtigung „Besitzen” und erhält die Berechtigung „Verwalten”.",
+		"Diese Raumberechtigung wird an das ausgewählte Mitglied übertragen. {currentUser} verliert die Berechtigung „Besitzen” und erhält die Berechtigung „Verwalten”.",
 	"pages.rooms.members.handOverAlert.confirm.label":
 		"Bei Übertragung dieser Raumberechtigung an ein anderes Mitglied verliert {currentUser} das Recht, den Raum zu löschen. Diese Aktion kann nur von {member} rückgängig gemacht werden.",
 	"pages.rooms.title": "Räume",
