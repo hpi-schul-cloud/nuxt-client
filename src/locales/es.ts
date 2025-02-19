@@ -1865,6 +1865,8 @@ export default {
 		'Los mismos permisos que "Editar", además de agregar y eliminar otros miembros, cambiar sus permisos de sala y editar la sala',
 	"pages.rooms.members.roleChange.Roomowner.label":
 		"Las mismas autorizaciones que «Administrar», más suprimir la habitación",
+	"pages.rooms.members.roleChange.dialogTitle.handOver":
+		"¿El permiso de habitación realmente se transfiere como “propiedad”?",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Atención: ¡Solo una persona en la sala puede recibir esto!",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Transferir propiedad",

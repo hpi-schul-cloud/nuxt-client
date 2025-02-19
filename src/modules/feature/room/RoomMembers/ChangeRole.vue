@@ -153,7 +153,7 @@ const isChangeRoleOptionVisible = computed(() => {
 const isHandOverMode = ref(false);
 const dialogTitle = computed(() =>
 	isHandOverMode.value
-		? "Raumberechtigung „Besitzen” wirklich übertragen?"
+		? t("pages.rooms.members.roleChange.dialogTitle.handOver")
 		: t("pages.rooms.members.changePermission")
 );
 
@@ -230,7 +230,7 @@ useFocusTrap(changeRoleContent, {
 
 <style lang="scss" scoped>
 .dialog-title {
-	max-width: 480px;
+	max-width: 460px;
 	white-space: normal;
 }
 .radio-label {

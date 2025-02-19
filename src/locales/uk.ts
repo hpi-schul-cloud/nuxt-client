@@ -1843,6 +1843,8 @@ export default {
 		"Такі самі дозволи, як і «Редагувати», а також додавати та видаляти інших учасників, змінювати їхні дозволи для кімнати та редагувати кімнату",
 	"pages.rooms.members.roleChange.Roomowner.label":
 		"Ті самі повноваження, що й «Керування», плюс видалення кімнати",
+	"pages.rooms.members.roleChange.dialogTitle.handOver":
+		"Дозвіл на кімнату «Власність» дійсно передано?",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Увага: Тільки одна людина в кімнаті може отримати ці повноваження!",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Передача власності",

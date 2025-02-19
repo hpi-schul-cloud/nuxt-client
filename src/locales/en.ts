@@ -1815,6 +1815,8 @@ export default {
 		"Same authorizations as “ Administer”, additionally delete room",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Attention: Only one person in the room can receive this authorization!",
+	"pages.rooms.members.roleChange.dialogTitle.handOver":
+		"Room permission “Ownership” really transferred?",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Transfer ownership",
 	"pages.rooms.members.handOverAlert.label":
 		"This room authorization is transferred to the selected member. {currentUser} loses the “Own” authorization and receives the “Administer” authorization.",
