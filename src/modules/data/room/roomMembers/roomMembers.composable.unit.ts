@@ -226,6 +226,28 @@ describe("useRoomMembers", () => {
 		});
 	});
 
+	describe("currentUser", () => {
+		it("should set the currentUser", async () => {
+			const mockMe = meResponseFactory.build();
+			const membersMock = roomMemberFactory(RoleName.Roomviewer).buildList(3);
+			authModule.setMe({
+				...mockMe,
+				user: { ...mockMe.user, id: membersMock[1].userId },
+			});
+			membersMock[1].roomRoleName = RoleName.Roomowner;
+			roomApiMock.roomControllerGetMembers.mockResolvedValue(
+				mockApiResponse({
+					data: { data: membersMock },
+				})
+			);
+
+			const { roomMembers, currentUser } = useRoomMembers(roomId);
+			roomMembers.value = membersMock;
+
+			expect(currentUser.value).toEqual(membersMock[1]);
+		});
+	});
+
 	describe("getSchools", () => {
 		it("should get schools", async () => {
 			const { getSchools, schools } = useRoomMembers(roomId);
