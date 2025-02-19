@@ -7,8 +7,19 @@ import {
 } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
 
-let receivedRequests: any[] = [];
-let getRequestReturn: any = {};
+type ReceivedRequests = [
+	{
+		path: string;
+	},
+];
+type Data = {
+	data: { data: [ConsentVersion] };
+};
+type Data2 = {
+	data: ConsentVersion;
+};
+let receivedRequests: ReceivedRequests;
+let getRequestReturn: Data | Data2 | Error | undefined;
 
 const axiosInitializer = (error?: boolean) => {
 	initializeAxios({
@@ -17,21 +28,21 @@ const axiosInitializer = (error?: boolean) => {
 				throw new Error("expected error");
 			}
 
-			receivedRequests.push({ path });
+			receivedRequests = [{ path }];
 			return getRequestReturn;
 		},
 		post: async (path: string) => {
 			if (error) {
 				throw new Error("expected error");
 			}
-			receivedRequests.push({ path });
+			receivedRequests = [{ path }];
 			return getRequestReturn;
 		},
 		delete: async (path: string) => {
 			if (error) {
 				throw new Error("expected error");
 			}
-			receivedRequests.push({ path });
+			receivedRequests = [{ path }];
 			return getRequestReturn;
 		},
 	} as AxiosInstance);
@@ -42,8 +53,8 @@ axiosInitializer();
 describe("privacy policy module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
-			receivedRequests = [];
-			getRequestReturn = {};
+			receivedRequests = [{ path: "" }];
+			getRequestReturn = undefined;
 		});
 
 		describe("fetchPrivacyPolicy", () => {
@@ -137,7 +148,13 @@ describe("privacy policy module", () => {
 						publishedAt: "currentDate",
 						consentTypes: ["privacy"],
 						consentData: {
-							data: "data:application/pdf;base64,SOMENEWFILEDATA",
+							_id: "999",
+							schoolId: "333",
+							createdAt: "someotherdate",
+							updatedAt: "someotherdate",
+							fileType: "pdf",
+							fileName: "somefilename",
+							data: "data:application/pdf;base64,SOMEFILEDATA",
 						},
 					},
 				};
