@@ -15,27 +15,34 @@ import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
 import { ApiResponseError, ApiValidationError } from "./types/commons";
 
-let receivedRequests: any[] = [];
-let getRequestReturn: any = {};
+type ReceivedRequests = [
+	{
+		path: string;
+	},
+	{
+		params: object | undefined;
+	},
+];
+
+let receivedRequests: ReceivedRequests;
+let getRequestReturn: Promise<{ data: Course } | AxiosError> | undefined;
 
 const axiosInitializer = () => {
 	initializeAxios({
 		get: async (path: string, params: object) => {
-			receivedRequests.push({ path });
-			receivedRequests.push({ params });
+			receivedRequests = [{ path }, { params }];
 			return getRequestReturn;
 		},
 		post: async (path: string) => {
-			receivedRequests.push({ path });
+			receivedRequests = [{ path }, { params: undefined }];
 			return getRequestReturn;
 		},
 		patch: async (path: string, params: object) => {
-			receivedRequests.push({ path });
-			receivedRequests.push({ params });
+			receivedRequests = [{ path }, { params }];
 			return getRequestReturn;
 		},
 		delete: async (path: string) => {
-			receivedRequests.push({ path });
+			receivedRequests = [{ path }, { params: undefined }];
 			return getRequestReturn;
 		},
 	} as AxiosInstance);
@@ -81,7 +88,7 @@ describe("course-room module", () => {
 			authModule: AuthModule,
 			applicationErrorModule: ApplicationErrorModule,
 		});
-		receivedRequests = [];
+		receivedRequests = [{ path: "" }, { params: {} }];
 		getRequestReturn = undefined;
 	});
 
@@ -492,8 +499,7 @@ describe("course-room module", () => {
 				(() => {
 					initializeAxios({
 						get: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
+							receivedRequests = [{ path }, { params }];
 							return {
 								data: {
 									archived: ["firstId"],
@@ -532,8 +538,7 @@ describe("course-room module", () => {
 				(() => {
 					initializeAxios({
 						get: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
+							receivedRequests = [{ path }, { params }];
 							return {
 								data: {
 									archived: ["firstId"],
@@ -588,8 +593,8 @@ describe("course-room module", () => {
 				(() => {
 					initializeAxios({
 						get: async (path: string, params: object) => {
-							receivedRequests.push({ path });
-							receivedRequests.push({ params });
+							receivedRequests = [{ path }, { params }];
+
 							return {
 								data: {
 									userId: ["testScopedPermission"],
