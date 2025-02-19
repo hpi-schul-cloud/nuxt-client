@@ -118,7 +118,7 @@ watch(
 
 const emit = defineEmits<{
 	(e: "remove:members", userIds: string[]): void;
-	(e: "select:members", userIds: string[] | unknown): void;
+	(e: "select:members", userIds: string[]): void;
 	(e: "change:permission", userIds: string[]): void;
 }>();
 
@@ -142,7 +142,7 @@ const onUpdateFilter = (filteredMembers: RoomMember[]) => {
 		search.value === "" ? memberList.value.length : filteredMembers.length;
 };
 
-const onSelectMembers = (userIds: string[] | unknown) => {
+const onSelectMembers = (userIds: string[]) => {
 	emit("select:members", userIds);
 };
 
