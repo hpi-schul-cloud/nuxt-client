@@ -22,7 +22,6 @@ const axiosInitializer = (error?: boolean) => {
 			}
 
 			receivedRequests.push({ path });
-			console.log("getRequestReturn", getRequestReturn);
 			return getRequestReturn;
 		},
 		post: async (path: string) => {
@@ -30,7 +29,6 @@ const axiosInitializer = (error?: boolean) => {
 				throw new Error("expected error");
 			}
 			receivedRequests.push({ path });
-			console.log("getRequestReturn", getRequestReturn);
 			return getRequestReturn;
 		},
 		delete: async (path: string) => {
@@ -38,7 +36,6 @@ const axiosInitializer = (error?: boolean) => {
 				throw new Error("expected error");
 			}
 			receivedRequests.push({ path });
-			console.log("getRequestReturn", getRequestReturn);
 			return getRequestReturn;
 		},
 	} as AxiosInstance);
