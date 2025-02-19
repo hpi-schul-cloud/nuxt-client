@@ -7,30 +7,11 @@ metadata:
   labels:
     app: nuxtclient
 data:
-  # general
   TZ: "Europe/Berlin"
   SC_THEME: "{{ SC_THEME }}"
-{% for name, data in configuration_all.items() %}
-  {% if data.nuxtclient is defined and data.nuxtclient == true %}
-    {% if data.config_name is defined and data.config_name in hostvars[inventory_hostname] %}
-      {% if data.var_name is defined %}
-  {{ data.var_name }}: "{{ hostvars[inventory_hostname][data.config_name] }}"
-      {% else %}
-  {{ name }}: "{{ hostvars[inventory_hostname][data.config_name] }}"
-      {% endif %}
-    {% elif name in hostvars[inventory_hostname] %}
-      {% if data.var_name is defined %}
-  {{ data.var_name }}: "{{ hostvars[inventory_hostname][name] }}"
-      {% else %}
-  {{ name }}: "{{ hostvars[inventory_hostname][name] }}"
-      {% endif %}
-    {% elif data.value is defined %}
-      {% if data.var_name is defined %}
-  {{ data.var_name }}: "{{ data.value }}"
-      {% else %}
-  {{ name }}: "{{ data.value }}"
-      {% endif %}
-    {% endif %}
-  {% endif %}
-{% endfor %}
-
+  NO_COLOR: "true"
+  PUBLIC_BACKEND_URL: "https://{{ DOMAIN }}/api"
+  LEGACY_CLIENT_URL: "http://client-svc:3100"
+  H5P_FRAME_SRC_URLS: "{{ H5P_FRAME_SRC_URLS }}"
+  H5P_IMG_SRC_URLS: "{{ H5P_PROXY_PREFIX }}{{ DOMAIN }}"
+  H5P_SCRIPT_SRC_URLS: "https://{{ DOMAIN }}/api/v3/h5p-editor/h5pstatics/editor/scripts/"
