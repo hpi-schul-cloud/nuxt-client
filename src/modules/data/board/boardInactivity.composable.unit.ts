@@ -6,7 +6,6 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	boardResponseFactory,
 	envsFactory,
-	mockedPiniaStoreTyping,
 	mountComposable,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
@@ -46,8 +45,6 @@ const mockUseSharedLastCreatedElement = jest.mocked(
 );
 
 let mockBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
-let boardStore: ReturnType<typeof useBoardStore>;
-let cardStore: ReturnType<typeof useCardStore>;
 let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 let mockedSocketConnectionHandler: DeepMocked<
 	ReturnType<typeof useSocketConnection>
@@ -84,17 +81,23 @@ describe("pageInactivity.composable", () => {
 	useRouterMock.mockReturnValue(router);
 
 	const setup = (timer = 0) => {
-		boardStore = mockedPiniaStoreTyping(useBoardStore);
-		cardStore = mockedPiniaStoreTyping(useCardStore) as any;
+		const boardStore = useBoardStore();
+		const cardStore = useCardStore();
 		boardStore.board = boardResponseFactory.build();
 		cardStore.cards = {};
-		return mountComposable(() => useBoardInactivity(timer), {
-			global: {
-				provide: {
-					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
+
+		const useBoardInactivityComposable = mountComposable(
+			() => useBoardInactivity(timer),
+			{
+				global: {
+					provide: {
+						[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
+					},
 				},
-			},
-		});
+			}
+		);
+
+		return { useBoardInactivityComposable, boardStore, cardStore };
 	};
 
 	describe("usePageInactivity", () => {
@@ -102,12 +105,12 @@ describe("pageInactivity.composable", () => {
 			jest.clearAllMocks();
 		});
 		it("should call the store functions when isTimeoutReached value true", async () => {
-			const useBoardInactivity = setup();
+			const { useBoardInactivityComposable, boardStore, cardStore } = setup();
 			connectionOptions.isTimeoutReached = true;
-			useBoardInactivity.visibility.value = "hidden";
+			useBoardInactivityComposable.visibility.value = "hidden";
 			await nextTick();
 
-			useBoardInactivity.visibility.value = "visible";
+			useBoardInactivityComposable.visibility.value = "visible";
 			await nextTick();
 
 			expect(boardStore.reloadBoard).toHaveBeenCalled();
@@ -115,12 +118,13 @@ describe("pageInactivity.composable", () => {
 		});
 
 		it("should not call the store functions when isTimeoutReached value false", async () => {
-			const useBoardInactivity = setup(3000);
+			const { useBoardInactivityComposable, boardStore, cardStore } =
+				setup(3000);
 			connectionOptions.isTimeoutReached = false;
-			useBoardInactivity.visibility.value = "hidden";
+			useBoardInactivityComposable.visibility.value = "hidden";
 			await nextTick();
 
-			useBoardInactivity.visibility.value = "visible";
+			useBoardInactivityComposable.visibility.value = "visible";
 			await nextTick();
 
 			expect(boardStore.reloadBoard).not.toHaveBeenCalled();

@@ -95,7 +95,7 @@ export default class SchoolsModule extends VuexModule {
 			schoolYears: [],
 		},
 	};
-	systems: any[] = [];
+	systems: SchoolSystemResponse[] = [];
 	loading = false;
 	error: null | ApplicationError = null;
 
@@ -136,7 +136,7 @@ export default class SchoolsModule extends VuexModule {
 		return this.school.federalState;
 	}
 
-	get getSystems(): any[] {
+	get getSystems(): SchoolSystemResponse[] {
 		return this.systems;
 	}
 
@@ -161,9 +161,9 @@ export default class SchoolsModule extends VuexModule {
 				system.type === "tsp-school" ||
 				system.type === "oauth" ||
 				(system.type === "ldap" &&
-					(system.ldapConfig.provider === "iserv-idm" ||
-						system.ldapConfig.provider === "univention" ||
-						system.ldapConfig.provider === "general"))
+					(system.ldapConfig?.provider === "iserv-idm" ||
+						system.ldapConfig?.provider === "univention" ||
+						system.ldapConfig?.provider === "general"))
 		);
 	}
 

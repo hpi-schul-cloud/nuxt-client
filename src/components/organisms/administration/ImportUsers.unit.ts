@@ -56,8 +56,8 @@ const mockImportUsers: ImportUserListResponse = {
 	],
 };
 
-const mockData = {
-	MatchedBy: { Admin: "admin", Auto: "auto", None: "none" },
+const mockData: ImportUsersInstance["$data"] = {
+	MatchedBy,
 	defaultItem: {
 		firstName: "",
 		lastName: "",
@@ -78,21 +78,26 @@ const mockData = {
 	mdiFlagOutline: "mdiFlagOutline",
 	mdiPencilOutline: "mdiPencilOutline",
 	roles: [
-		{ text: "Schüler/-in", value: "student" },
-		{ text: "Lehrer/-in", value: "teacher" },
-		{ text: "Administrator", value: "admin" },
+		{ text: "Schüler/-in", value: ImportUserResponseRoleNamesEnum.Student },
+		{ text: "Lehrer/-in", value: ImportUserResponseRoleNamesEnum.Teacher },
+		{ text: "Administrator", value: ImportUserResponseRoleNamesEnum.Admin },
 	],
-	search: "",
 	searchClasses: "",
 	searchFirstName: "",
 	searchFlagged: false,
 	searchLastName: "",
 	searchLoginName: "",
 	searchMatchedBy: [],
-	searchRole: "",
+	searchRole: null,
+	mdiAlertCircle: "",
+	options: {
+		itemsPerPage: 25,
+	},
 };
 
-const getWrapper = (data?: object, options?: object) => {
+type ImportUsersInstance = InstanceType<typeof ImportUsers>;
+
+const getWrapper = (data?: ImportUsersInstance["$data"], options?: object) => {
 	return mount(ImportUsers, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -102,7 +107,11 @@ const getWrapper = (data?: object, options?: object) => {
 				},
 			},
 		},
-		data: () => data,
+		data() {
+			return {
+				...data,
+			};
+		},
 		...options,
 	});
 };
@@ -320,22 +329,24 @@ describe("@/components/molecules/importUsers", () => {
 	});
 
 	describe("should sort by column", () => {
-		let getDataFromApiSpy: any;
-		let wrapper: any;
-		beforeEach(async () => {
-			getDataFromApiSpy = jest.fn();
-			wrapper = getWrapper(mockData);
+		const getDataFromApiSpy = jest.fn();
+
+		const setup = (mockData: ImportUsersInstance["$data"]) => {
+			const wrapper = getWrapper(mockData);
 			wrapper.vm.getDataFromApi = getDataFromApiSpy;
 			wrapper.vm.school.inMaintenance = true;
 			wrapper.vm.school.inUserMigration = true;
-			await nextTick();
-		});
+
+			return { wrapper };
+		};
 
 		afterEach(() => {
 			getDataFromApiSpy.mockClear();
 		});
 
 		it("should sort by first name", async () => {
+			const { wrapper } = setup(mockData);
+
 			const sortFirstNameElement = wrapper.find(
 				'[data-testid="head-first-name"]'
 			);
@@ -351,6 +362,8 @@ describe("@/components/molecules/importUsers", () => {
 		});
 
 		it("should sort by last name", async () => {
+			const { wrapper } = setup(mockData);
+
 			const sortLastNameElement = wrapper.find(
 				'[data-testid="head-last-name"]'
 			);
