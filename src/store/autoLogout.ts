@@ -60,9 +60,9 @@ const updateRemainingTime = (setRemainingTimeInSeconds: any) => {
 	return setInterval(
 		async () => {
 			try {
-				const res: any = await accountsModule.getTTL();
-				if (res && res.ttl && Number.isInteger(res.ttl) && res.ttl > 0) {
-					setRemainingTimeInSeconds(res.ttl);
+				const ttl = await accountsModule.getTTL();
+				if (ttl > 0) {
+					setRemainingTimeInSeconds(ttl);
 				} else {
 					console.error("Update remaining session time failed!");
 				}
