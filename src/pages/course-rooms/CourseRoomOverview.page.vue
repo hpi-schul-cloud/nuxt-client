@@ -160,7 +160,6 @@ export default defineComponent({
 	},
 	inject: {
 		notifierModule: { from: NOTIFIER_MODULE_KEY },
-		mq: "mq",
 	},
 	layout: "defaultVuetify",
 	data() {
@@ -233,36 +232,32 @@ export default defineComponent({
 		},
 	},
 	async created() {
-		await courseRoomListModule.fetch(); // TODO: this method will receive a string parameter (Eg, mobile | tablet | desktop)
+		await courseRoomListModule.fetch();
 		await courseRoomListModule.fetchAllElements();
-		this.getDeviceDims();
+
+		this.dimensions = this.getDeviceDims();
+		this.setRowCount();
+
 		if (this.hasRoomsBeingCopied) {
 			this.initCoursePolling(new Date());
 		}
 	},
 	methods: {
 		getDeviceDims() {
-			this.device = this.mq.current;
-			switch (this.device) {
-				case "tablet":
-				case "tabletPortrait":
-					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "4em";
-					break;
-				case "desktop":
-				case "large":
-					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "5em";
-					this.allowDragging = true;
-					break;
-				case "mobile":
-					this.dimensions.colCount = 4;
-					this.dimensions.cellWidth = "3.7em";
-					break;
-				default:
-					this.dimensions.colCount = 6;
-					break;
-			}
+			const { xs, sm, mdAndUp } = this.$vuetify.display;
+
+			if (xs) return { ...this.dimensions, colCount: 4, cellWidth: "3.7em" };
+			if (sm) return { ...this.dimensions, colCount: 4, cellWidth: "4em" };
+			if (mdAndUp)
+				return {
+					...this.dimensions,
+					colCount: 4,
+					cellWidth: "5em",
+					allowDragging: true,
+				};
+			return { ...this.dimensions, colCount: 6 };
+		},
+		setRowCount() {
 			const lastItem = courseRoomListModule.getRoomsData.reduce(
 				(prev, current) => {
 					return prev.yPosition > current.yPosition ? prev : current;
