@@ -10,10 +10,10 @@ import type { VList } from "vuetify/lib/components/index.mjs";
 const menuList = ref<VList>();
 
 onMounted(() => {
-	// without this timeout focus will not work as ref is not yet available
-	// safari needs a longer timeout than other browsers
+	// Without this timeout, focus wouldn't work, as the ref is not yet available.
+	// Safari, especially with VoiceOver, needs a longer timeout than other browsers.
 	setTimeout(() => {
 		menuList.value?.focus("first");
-	}, 20);
+	}, 30);
 });
 </script>
