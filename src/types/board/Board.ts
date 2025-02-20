@@ -1,4 +1,4 @@
-import {
+import type {
 	BoardResponse as Board,
 	BoardColumnBoardResponse as BoardColumnBoard,
 	BoardElementResponse as BoardElement,
