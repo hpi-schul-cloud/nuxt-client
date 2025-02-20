@@ -324,6 +324,8 @@ export default {
 		"Доступність носіїв VIDIS оновлюється автоматично. Крім того, доступність медіафайлів можна оновити вручну, наприклад, мати можливість використовувати нещодавно активовані медіафайли безпосередньо в шкільній хмарі.",
 	"components.administration.externalToolsSection.vidis.notification.success":
 		"Медіа VIDIS успішно оновлено",
+	"components.administration.externalToolsSection.vidis.notification.timeout":
+		"Оновлення VIDIS Media триває на задньому плані. Будь ласка, будьте терплячі на мить.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
