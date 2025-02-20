@@ -120,6 +120,10 @@ const activateTransition = ref(false);
 const searchQueryResult = ref("");
 const queryOptions = ref({ $limit: 12, $skip: 0 });
 
+let doneCallbackFunction:
+	| ((status: "ok" | "empty" | "loading" | "error") => void)
+	| undefined = undefined;
+
 onMounted(() => {
 	const pageTitle = isInline.value
 		? t("pages.content.page.window.title", {
@@ -150,6 +154,13 @@ const empty = computed(() => {
 const onInput = async () => {
 	await searchContent();
 	activateTransition.value = true;
+
+	// We need to call the "done" callback function here in order to "reset"
+	// the infinite scroll component. Otherwise, the infinite scroll component
+	// will not trigger the "load" event again.
+	if (doneCallbackFunction) {
+		doneCallbackFunction("ok");
+	}
 };
 
 const searchContent = useDebounceFn(async () => {
@@ -170,6 +181,9 @@ const onLoad = async ({
 	side: "start" | "end" | "both";
 	done: (status: "ok" | "empty" | "loading" | "error") => void;
 }) => {
+	// Save the done callback function for later use.
+	doneCallbackFunction = done;
+
 	if (reachedTotal.value) {
 		done("empty");
 		return;
