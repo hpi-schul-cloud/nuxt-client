@@ -79,7 +79,7 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import { computed, PropType, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import {
@@ -107,7 +107,14 @@ const props = defineProps({
 	},
 });
 const { askConfirmation } = useConfirmationDialog();
-const tableSelectedUserIds = computed(() => props.selectedUserIds);
+const tableSelectedUserIds = ref<string[]>([]);
+
+watch(
+	() => props.selectedUserIds,
+	(newVal: string[]) => {
+		tableSelectedUserIds.value = newVal;
+	}
+);
 
 const emit = defineEmits<{
 	(e: "remove:members", userIds: string[]): void;
@@ -155,7 +162,7 @@ const confirmRemoval = async (userIds: string[]) => {
 			(member) => member.userId === userIds[0]
 		);
 		message = t("pages.rooms.members.remove.confirmation", {
-			memberName: `${member?.firstName} ${member?.lastName}`,
+			memberFullName: `${member?.firstName} ${member?.lastName}`,
 		});
 	}
 	const shouldRemove = await askConfirmation({
@@ -169,19 +176,19 @@ const getAriaLabel = (
 	member: RoomMember,
 	actionFor?: "remove" | "changeRole"
 ) => {
-	const memberName = `${member.firstName} ${member.lastName}`;
+	const memberFullName = `${member.firstName} ${member.lastName}`;
 	if (actionFor === "changeRole") {
 		return t("pages.rooms.members.changePermission.ariaLabel", {
-			memberName,
+			memberFullName,
 		});
 	}
 	if (actionFor === "remove") {
 		return t("pages.rooms.members.remove.ariaLabel", {
-			memberName,
+			memberFullName,
 		});
 	}
 	return t("pages.rooms.members.actionMenu.ariaLabel", {
-		memberName,
+		memberFullName,
 	});
 };
 
