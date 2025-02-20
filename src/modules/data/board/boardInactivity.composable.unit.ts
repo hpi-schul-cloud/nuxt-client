@@ -6,7 +6,6 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	boardResponseFactory,
 	envsFactory,
-	mockedPiniaStoreTyping,
 	mountComposable,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";

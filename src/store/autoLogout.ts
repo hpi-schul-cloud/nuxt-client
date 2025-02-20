@@ -64,6 +64,7 @@ const updateRemainingTime = (
 	return setInterval(
 		async () => {
 			try {
+				// eslint-disable-next-line @typescript-eslint/no-explicit-any
 				const res: any = await accountsModule.getTTL();
 				if (res && res.ttl && Number.isInteger(res.ttl) && res.ttl > 0) {
 					// TODO: this block is unreachable. accountsModule.getTTL() does not return a value
