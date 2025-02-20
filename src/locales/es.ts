@@ -323,7 +323,7 @@ export default {
 	"components.administration.externalToolsSection.vidis.notification.success":
 		"Medios VIDIS actualizados exitosamente",
 	"components.administration.externalToolsSection.vidis.notification.timeout":
-		"La actualización de los medios VIDIS continúa en segundo plano. Por favor, sea paciente por un momento.",
+		"La actualización de los medios de VIDIS continúa en segundo plano. Por favor, tenga paciencia un momento.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"No se pudo determinar el uso de la herramienta.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
