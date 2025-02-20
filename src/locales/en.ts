@@ -1776,23 +1776,26 @@ export default {
 	"pages.rooms.members.error.load": "The participant list could not be loaded.",
 	"pages.rooms.members.error.add": "Adding participants failed.",
 	"pages.rooms.members.error.remove": "Deleting participants failed.",
+	"pages.rooms.members.error.updateRole": "Updating the role failed.",
 	"pages.rooms.members.infoText":
 		"Add members to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add members",
-	"pages.rooms.members.actionMenu.ariaLabel": "Action menu for {memberName}",
+	"pages.rooms.members.actionMenu.ariaLabel":
+		"Action menu for {memberFullName}",
 	"pages.rooms.members.changePermission": "Change permissions",
 	"pages.rooms.members.changePermission.ariaLabel":
-		"Change permissions for {memberName}",
+		"Change permissions for {memberFullName}",
 	"pages.rooms.members.manage": "Room members",
-	"pages.rooms.members.remove.ariaLabel": "Remove {memberName} from the room",
+	"pages.rooms.members.remove.ariaLabel":
+		"Remove {memberFullName} from the room",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Reset selected members from the list",
 	"pages.rooms.members.multipleRemove.ariaLabel":
 		"Remove multiple members from the room",
 	"pages.rooms.members.remove.confirmation":
-		"Remove {memberName} from the room?",
+		"Remove {memberFullName} from the room?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Remove selected members from the room?",
 	"pages.rooms.members.roomPermissions.admin": "Administer",
@@ -1803,25 +1806,29 @@ export default {
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.members.tableHeader.actions": "Actions",
 	"pages.rooms.members.roleChange.subTitle":
-		"{memberName} receives the following permissions in the room “{roomName}”:",
+		"{memberFullName} receives the following permissions in the room “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
 		"The selected members will receive the following room permissions in “{roomName}”:",
 	"pages.rooms.members.roleChange.Roomviewer.label":
-		"Access the areas in the room and view content",
+		"Access the boards in the room and view content",
 	"pages.rooms.members.roleChange.Roomeditor.label": "Create and edit content",
 	"pages.rooms.members.roleChange.Roomadmin.label":
 		'Same permissions as "Edit", plus add and remove other members, change their room permissions and edit the room',
 	"pages.rooms.members.roleChange.Roomowner.label":
-		"Same authorizations as “ Administer”, additionally delete room",
+		"Same permissions as “ Administer”, additionally delete room",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
-		"Attention: Only one person in the room can receive this authorization!",
+		"Attention: Only one person in the room can receive this permission!",
 	"pages.rooms.members.roleChange.dialogTitle.handOver":
 		"Room permission “Ownership” really transferred?",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Transfer ownership",
 	"pages.rooms.members.handOverAlert.label":
-		"This room authorization is transferred to the selected member. {currentUser} loses the “Own” authorization and receives the “Administer” authorization.",
+		"This room permissions are transferred to {memberFullName}.",
+	"pages.rooms.members.handOverAlert.label.subText":
+		"{currentUserFullName} loses the “Own” permissions and receives the “Administer” permission.",
 	"pages.rooms.members.handOverAlert.confirm.label":
-		"If this room authorization is transferred to another member, {currentUser} loses the right to delete the room. This action can only be undone by {member}.",
+		"If this permission is transferred to {memberFullName}, {currentUserFullName} loses the right to delete the room.",
+	"pages.rooms.members.handOverAlert.confirm.label.subText":
+		"This action can only be undone by {memberFullName}.",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

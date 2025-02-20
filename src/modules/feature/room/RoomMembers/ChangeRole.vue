@@ -74,7 +74,42 @@
 						type="warning"
 					>
 						<span class="alert-text">
-							{{ alertText }}
+							<template v-if="!isHandOverMode">
+								<i18n-t
+									keypath="pages.rooms.members.handOverAlert.label"
+									scope="global"
+								>
+									<template #memberFullName>{{ memberFullName }}</template>
+								</i18n-t>
+								<br />
+								<span>
+									{{
+										t("pages.rooms.members.handOverAlert.label.subText", {
+											currentUserFullName,
+										})
+									}}
+								</span>
+							</template>
+							<template v-else>
+								<i18n-t
+									keypath="pages.rooms.members.handOverAlert.confirm.label"
+									scope="global"
+								>
+									<template #currentUserFullName>
+										{{ currentUserFullName }}
+									</template>
+									<template #memberFullName>{{ memberFullName }}</template>
+								</i18n-t>
+								<br />
+								<span>
+									{{
+										t(
+											"pages.rooms.members.handOverAlert.confirm.label.subText",
+											{ memberFullName }
+										)
+									}}
+								</span>
+							</template>
 						</span>
 					</v-alert>
 				</div>
@@ -169,30 +204,24 @@ if (memberToChangeRole.length > 1) {
 	selectedRole.value = memberToChangeRole[0]?.roomRoleName;
 }
 
+const currentUserFullName = computed(() => {
+	return `${props.currentUser?.firstName} ${props.currentUser?.lastName}`;
+});
+
+const memberFullName = computed(() => {
+	return `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`;
+});
+
 const infoText = computed(() => {
 	if (memberToChangeRole.length === 1) {
-		const memberName = `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`;
 		return t("pages.rooms.members.roleChange.subTitle", {
-			memberName,
+			memberFullName: memberFullName.value,
 			roomName: props.roomName,
 		});
 	}
 	return t("pages.rooms.members.roleChange.multipleUser.subTitle", {
 		roomName: props.roomName,
 	});
-});
-
-const alertText = computed(() => {
-	const currentUser = `${props.currentUser?.firstName} ${props.currentUser?.lastName}`;
-	const member = `${memberToChangeRole[0]?.firstName} ${memberToChangeRole[0]?.lastName}`;
-	return isHandOverMode.value
-		? t("pages.rooms.members.handOverAlert.confirm.label", {
-				currentUser,
-				member,
-			})
-		: t("pages.rooms.members.handOverAlert.label", {
-				currentUser,
-			});
 });
 
 const emit = defineEmits<{

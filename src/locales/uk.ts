@@ -1805,23 +1805,24 @@ export default {
 	"pages.rooms.members.error.load": "Не вдалося завантажити список учасників.",
 	"pages.rooms.members.error.add": "Не вдалося додати учасників.",
 	"pages.rooms.members.error.remove": "Не вдалося видалити учасників.",
+	"pages.rooms.members.error.updateRole": "Оновлення ролі не вдалося.",
 	"pages.rooms.members.infoText":
 		"Додайте члени до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте члени",
-	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberName}",
+	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberFullName}",
 	"pages.rooms.members.changePermission": "Змінити дозволи",
 	"pages.rooms.members.changePermission.ariaLabel":
-		"Змінити дозвіл для {memberName}",
+		"Змінити дозвіл для {memberFullName}",
 	"pages.rooms.members.manage": "Учасник кімнати",
-	"pages.rooms.members.remove.ariaLabel": "Видалити {memberName} з кімнати",
+	"pages.rooms.members.remove.ariaLabel": "Видалити {memberFullName} з кімнати",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Скинути вибраних членів зі списку",
 	"pages.rooms.members.multipleRemove.ariaLabel":
 		"Видалити кількох членів із кімнати",
 	"pages.rooms.members.remove.confirmation":
-		"{memberName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
+		"{memberFullName} буде видалено з цієї кімнати. Ви впевнені, що хочете видалити?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Видалити вибраних членів із кімнати?",
 	"pages.rooms.members.roomPermissions.admin": "Керувати",
@@ -1832,7 +1833,7 @@ export default {
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.members.tableHeader.actions": "Дії",
 	"pages.rooms.members.roleChange.subTitle":
-		"{memberName} надаються наступні повноваження в приміщенні “{roomName}”:",
+		"{memberFullName} надаються наступні повноваження в приміщенні “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
 		"Вибрані учасники отримають такі дозволи на кімнату в “{roomName}”:",
 	"pages.rooms.members.roleChange.Roomviewer.label":
@@ -1849,9 +1850,13 @@ export default {
 		"Увага: Тільки одна людина в кімнаті може отримати ці повноваження!",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Передача власності",
 	"pages.rooms.members.handOverAlert.label":
-		"Права на цю кімнату передаються вибраному користувачеві. {currentUser} втрачає повноваження «Власник» і отримує повноваження «Адміністратор».",
+		"Дозволи цієї кімнати передаються {memberFullName}.",
+	"pages.rooms.members.handOverAlert.label.subText":
+		"{currentUserFullName} втрачає права «Власник» і отримує права «Адміністратор».",
 	"pages.rooms.members.handOverAlert.confirm.label":
-		"Якщо права на кімнату передаються іншому користувачеві, {currentUser} втрачає право видаляти кімнату. Ця дія може бути скасована тільки {member}.",
+		"Якщо цей дозвіл буде передано {memberFullName}, {currentUserFullName} втратить право видаляти кімнату.",
+	"pages.rooms.members.handOverAlert.confirm.label.subText":
+		"Ця дія може бути скасована лише {memberFullName}.",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

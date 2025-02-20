@@ -1808,23 +1808,26 @@ export default {
 		"Hinzufügen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.members.error.remove":
 		"Löschen von Teilnehmenden fehlgeschlagen.",
+	"pages.rooms.members.error.updateRole":
+		"Die Aktualisierung der Rolle ist fehlgeschlagen.",
 	"pages.rooms.members.infoText":
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
-	"pages.rooms.members.actionMenu.ariaLabel": "Aktionsmenü für {memberName}",
+	"pages.rooms.members.actionMenu.ariaLabel":
+		"Aktionsmenü für {memberFullName}",
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
 	"pages.rooms.members.changePermission.ariaLabel":
-		"Berechtigung für {memberName} ändern",
+		"Berechtigung für {memberFullName} ändern",
 	"pages.rooms.members.manage": "Raum-Mitglieder",
-	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
+	"pages.rooms.members.remove.ariaLabel": "{memberFullName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Ausgewählte Mitglieder aus der Liste zurücksetzen",
 	"pages.rooms.members.multipleRemove.ariaLabel":
 		"Mehrere Mitglieder aus dem Raum entfernen",
 	"pages.rooms.members.remove.confirmation":
-		"{memberName} wirklich aus dem Raum entfernen?",
+		"{memberFullName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Ausgewählte Mitglieder wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.roomPermissions.admin": "Verwalten",
@@ -1835,7 +1838,7 @@ export default {
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.members.tableHeader.actions": "Aktionen",
 	"pages.rooms.members.roleChange.subTitle":
-		"{memberName} erhält die folgenden Berechtigungen im Raum „{roomName}”:",
+		"{memberFullName} erhält die folgenden Berechtigungen im Raum „{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
 		"Die ausgewählten Mitglieder erhalten die folgenden Berechtigungen im Raum „{roomName}”:",
 	"pages.rooms.members.roleChange.Roomviewer.label":
@@ -1852,9 +1855,13 @@ export default {
 		"Raumberechtigung „Besitzen” wirklich übertragen?",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Übertragen",
 	"pages.rooms.members.handOverAlert.label":
-		"Diese Raumberechtigung wird an das ausgewählte Mitglied übertragen. {currentUser} verliert die Berechtigung „Besitzen” und erhält die Berechtigung „Verwalten”.",
+		"Diese Raumberechtigung wird an {memberFullName} übertragen.",
+	"pages.rooms.members.handOverAlert.label.subText":
+		"{currentUserFullName} verliert die Berechtigung „Besitzen” und erhält die Berechtigung „Verwalten”.",
 	"pages.rooms.members.handOverAlert.confirm.label":
-		"Bei Übertragung dieser Raumberechtigung an ein anderes Mitglied verliert {currentUser} das Recht, den Raum zu löschen. Diese Aktion kann nur von {member} rückgängig gemacht werden.",
+		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {currentUserFullName} das Recht, den Raum zu löschen.",
+	"pages.rooms.members.handOverAlert.confirm.label.subText":
+		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
