@@ -102,37 +102,70 @@ describe("RoomModal", () => {
 		});
 
 		describe("when enter is pressed", () => {
-			const setup = async () => {
-				const { wrapper } = getWrapper({ isOpen: true });
+			describe("when title is valid", () => {
+				const setup = async () => {
+					const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(courseRoomListModule, "update");
-				const titleInput = wrapper
-					.findComponent({ name: "v-text-field" })
-					.find("input");
+					const storeRoomUpdateMock = jest.spyOn(
+						courseRoomListModule,
+						"update"
+					);
+					const titleInput = wrapper
+						.findComponent({ name: "v-text-field" })
+						.find("input");
 
-				const newTitle = "changed title";
-				await titleInput.setValue(newTitle);
+					const newTitle = "changed title";
+					await titleInput.setValue(newTitle);
 
-				await titleInput.trigger("keyup.enter");
-				await wrapper.vm.$nextTick();
+					await titleInput.trigger("keyup.enter");
+					await wrapper.vm.$nextTick();
 
-				return { storeRoomUpdateMock, newTitle, wrapper };
-			};
-
-			it("should change name on enter", async () => {
-				const { storeRoomUpdateMock, newTitle } = await setup();
-
-				const expectedGroupData = {
-					id: "",
-					title: newTitle,
-					shortTitle: "",
-					displayColor: "",
-					xPosition: -1,
-					yPosition: -1,
+					return { storeRoomUpdateMock, newTitle, wrapper };
 				};
 
-				expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
-				expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
+				it("should change name on enter", async () => {
+					const { storeRoomUpdateMock, newTitle } = await setup();
+
+					const expectedGroupData = {
+						id: "",
+						title: newTitle,
+						shortTitle: "",
+						displayColor: "",
+						xPosition: -1,
+						yPosition: -1,
+					};
+
+					expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
+					expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
+				});
+			});
+
+			describe("when title is not valid", () => {
+				const setup = async () => {
+					const { wrapper } = getWrapper({ isOpen: true });
+
+					const storeRoomUpdateMock = jest.spyOn(
+						courseRoomListModule,
+						"update"
+					);
+					const titleInput = wrapper
+						.findComponent({ name: "v-text-field" })
+						.find("input");
+
+					const newTitle = "<changed title";
+					await titleInput.setValue(newTitle);
+
+					await titleInput.trigger("keyup.enter");
+					await wrapper.vm.$nextTick();
+
+					return { storeRoomUpdateMock };
+				};
+
+				it("should not change name", async () => {
+					const { storeRoomUpdateMock } = await setup();
+
+					expect(storeRoomUpdateMock).not.toHaveBeenCalled();
+				});
 			});
 		});
 
@@ -178,35 +211,67 @@ describe("RoomModal", () => {
 		});
 
 		describe("when course group name input emits blur", () => {
-			const setup = async () => {
-				const { wrapper } = getWrapper({ isOpen: true });
+			describe("when title is valid", () => {
+				const setup = async () => {
+					const { wrapper } = getWrapper({ isOpen: true });
 
-				const storeRoomUpdateMock = jest.spyOn(courseRoomListModule, "update");
-				const titleInput = wrapper
-					.findComponent({ name: "v-text-field" })
-					.find("input");
-				const newTitle = "changed title";
-				await titleInput.setValue(newTitle);
+					const storeRoomUpdateMock = jest.spyOn(
+						courseRoomListModule,
+						"update"
+					);
+					const titleInput = wrapper
+						.findComponent({ name: "v-text-field" })
+						.find("input");
+					const newTitle = "changed title";
+					await titleInput.setValue(newTitle);
 
-				await titleInput.trigger("blur");
-				await wrapper.vm.$nextTick();
+					await titleInput.trigger("blur");
+					await wrapper.vm.$nextTick();
 
-				return { storeRoomUpdateMock, newTitle, wrapper };
-			};
-
-			it("should change name on blur", async () => {
-				const { storeRoomUpdateMock, newTitle } = await setup();
-				const expectedGroupData = {
-					id: "",
-					title: newTitle,
-					shortTitle: "",
-					displayColor: "",
-					xPosition: -1,
-					yPosition: -1,
+					return { storeRoomUpdateMock, newTitle, wrapper };
 				};
 
-				expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
-				expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
+				it("should change name on blur", async () => {
+					const { storeRoomUpdateMock, newTitle } = await setup();
+					const expectedGroupData = {
+						id: "",
+						title: newTitle,
+						shortTitle: "",
+						displayColor: "",
+						xPosition: -1,
+						yPosition: -1,
+					};
+
+					expect(storeRoomUpdateMock).toHaveBeenCalledTimes(1);
+					expect(storeRoomUpdateMock).toHaveBeenCalledWith(expectedGroupData);
+				});
+			});
+
+			describe("when title is not valid", () => {
+				const setup = async () => {
+					const { wrapper } = getWrapper({ isOpen: true });
+
+					const storeRoomUpdateMock = jest.spyOn(
+						courseRoomListModule,
+						"update"
+					);
+					const titleInput = wrapper
+						.findComponent({ name: "v-text-field" })
+						.find("input");
+					const newTitle = "<changed title";
+					await titleInput.setValue(newTitle);
+
+					await titleInput.trigger("blur");
+					await wrapper.vm.$nextTick();
+
+					return { storeRoomUpdateMock, wrapper };
+				};
+
+				it("should change name on blur", async () => {
+					const { storeRoomUpdateMock } = await setup();
+
+					expect(storeRoomUpdateMock).not.toHaveBeenCalled();
+				});
 			});
 		});
 
@@ -233,6 +298,21 @@ describe("RoomModal", () => {
 				const emitted = wrapper.emitted("drag-from-group");
 				expect(emitted).toHaveLength(1);
 				expect(emitted && emitted[0][0]).toEqual(roomItem);
+			});
+		});
+
+		describe("when room name contains < followed by a string", () => {
+			it("should show validation error", async () => {
+				const { wrapper } = getWrapper({ isOpen: true });
+
+				const textField = wrapper.findComponent({ name: "v-text-field" });
+				const input = textField.find("input");
+
+				await input.setValue("<abc123");
+
+				expect(textField.text()).toContain(
+					"common.validation.containsOpeningTag"
+				);
 			});
 		});
 	});

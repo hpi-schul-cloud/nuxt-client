@@ -38,7 +38,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ComputedRef, PropType, toRef } from "vue";
+import {
+	computed,
+	ComputedRef,
+	PropType,
+	toRef,
+	ref,
+	Ref,
+	onMounted,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import LanguageMenu from "./LanguageMenu.vue";
 import { MeUserResponse } from "@/serverApi/v3";
@@ -47,6 +55,7 @@ import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 } from "@/utils/inject";
+import { System, useSystemApi } from "@data-system";
 
 const props = defineProps({
 	user: {
@@ -62,6 +71,7 @@ const props = defineProps({
 const { t } = useI18n();
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const { getSystem } = useSystemApi();
 
 const userRole = computed(() => {
 	return t(`common.roleName.${toRef(props.roleNames).value[0]}`).toString();
@@ -71,13 +81,24 @@ const initials = computed(() => {
 	return props.user.firstName.slice(0, 1) + props.user.lastName.slice(0, 1);
 });
 
+const system: Ref<System | undefined> = ref();
+
 const isExternalLogoutAllowed: ComputedRef<boolean> = computed(
 	() =>
 		envConfigModule.getEnv.FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED &&
-		!!authModule.loginSystem?.hasEndSessionEndpoint
+		!!authModule.loginSystem &&
+		!!system.value?.hasEndSessionEndpoint
 );
 
-const systemName: string = authModule.loginSystem?.name ?? "System";
+const systemName: ComputedRef<string> = computed(() => {
+	return system.value?.displayName ?? "";
+});
+
+onMounted(async () => {
+	if (authModule.loginSystem) {
+		system.value = await getSystem(authModule.loginSystem);
+	}
+});
 
 const logout = () => {
 	authModule.logout();

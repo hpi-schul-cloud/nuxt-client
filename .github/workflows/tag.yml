@@ -56,3 +56,17 @@ jobs:
           pull: true
           tags: ${{ steps.docker_meta_img_hub.outputs.tags }}
           labels: ${{ steps.docker_meta_img_hub.outputs.labels }}
+
+  create_release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: generate sbom via dependency-graph
+        run: gh api repos/${{ github.repository }}/dependency-graph/sbom > dependencies.sbom.json
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dependencies.sbom.json

@@ -1,5 +1,5 @@
 import * as serverApi from "@/serverApi/v3/api";
-import { LanguageType, MeSystemResponse } from "@/serverApi/v3/api";
+import { LanguageType } from "@/serverApi/v3/api";
 import { envConfigModule } from "@/store";
 import { initializeAxios } from "@/utils/api";
 import {
@@ -57,18 +57,6 @@ describe("auth store module", () => {
 			});
 		});
 
-		describe("setAccessToken", () => {
-			it("should set the accessToken state", () => {
-				const authModule = new AuthModule({});
-				const tokenMock = "tokenMock";
-				expect(authModule.getAccessToken).not.toBe(tokenMock);
-
-				authModule.setAccessToken(tokenMock);
-
-				expect(authModule.getAccessToken).toBe(tokenMock);
-			});
-		});
-
 		describe("addUserPermission", () => {
 			it("should add the permission to the me state", () => {
 				const authModule = new AuthModule({});
@@ -87,12 +75,12 @@ describe("auth store module", () => {
 				const authModule = new AuthModule({});
 				const mockMe = meResponseFactory.build();
 				authModule.setMe(mockMe);
-				authModule.setAccessToken("test-access-token");
+				authModule.setLoggedIn(true);
 
 				authModule.clearAuthData();
 
 				expect(authModule.getMe).toBeUndefined();
-				expect(authModule.getAccessToken).toBe(null);
+				expect(authModule.isLoggedIn).toBe(false);
 			});
 		});
 
@@ -128,7 +116,7 @@ describe("auth store module", () => {
 					statusCode: "418",
 					message: "I'm a teapot",
 				};
-				const defaultbusinessErrorMock = {
+				const defaultBusinessErrorMock = {
 					statusCode: "",
 					message: "",
 				};
@@ -138,10 +126,10 @@ describe("auth store module", () => {
 				authModule.resetBusinessError();
 
 				expect(authModule.businessError.statusCode).toBe(
-					defaultbusinessErrorMock.statusCode
+					defaultBusinessErrorMock.statusCode
 				);
 				expect(authModule.businessError.message).toBe(
-					defaultbusinessErrorMock.message
+					defaultBusinessErrorMock.message
 				);
 			});
 		});
@@ -228,21 +216,11 @@ describe("auth store module", () => {
 			});
 		});
 
-		describe("getAuthenticated", () => {
-			it("should return true if accessToken is set", () => {
-				const authModule = new AuthModule({});
-				expect(authModule.getAuthenticated).toBe(false);
-				authModule.setAccessToken("test-access-token");
-
-				expect(authModule.getAuthenticated).toStrictEqual("test-access-token");
-			});
-		});
-
 		describe("isLoggedIn", () => {
 			it("should return true if accessToken is set", () => {
 				const authModule = new AuthModule({});
 				expect(authModule.isLoggedIn).toBe(false);
-				authModule.setAccessToken("test-access-token");
+				authModule.setLoggedIn(true);
 
 				expect(authModule.isLoggedIn).toBe(true);
 			});
@@ -251,17 +229,13 @@ describe("auth store module", () => {
 		describe("loginSystem", () => {
 			it("should system info of the user", () => {
 				const authModule = new AuthModule({});
-				const mockedSystem: MeSystemResponse = {
-					id: "test-system-id",
-					name: "test system",
-					hasEndSessionEndpoint: false,
-				};
+
 				const mockMe = meResponseFactory.build({
-					system: mockedSystem,
+					systemId: "test-system-id",
 				});
 				authModule.setMe(mockMe);
 
-				expect(authModule.loginSystem).toStrictEqual(mockedSystem);
+				expect(authModule.loginSystem).toStrictEqual("test-system-id");
 			});
 		});
 	});
@@ -290,7 +264,7 @@ describe("auth store module", () => {
 				);
 				const authModule = new AuthModule({});
 
-				await authModule.login("sample-jwt");
+				await authModule.login();
 
 				expect(authModule.getLocale).toStrictEqual(languageMock);
 				expect(authModule.getUserPermissions).toStrictEqual([
@@ -298,21 +272,6 @@ describe("auth store module", () => {
 					"teams_enabled",
 				]);
 				expect(authModule.getUser?.id).toStrictEqual("test-id");
-			});
-
-			it("should set the access token", async () => {
-				const mockMe = meResponseFactory.build();
-				const mockReturnValue = {
-					data: mockMe,
-				};
-				meApi.meControllerMe.mockResolvedValueOnce(
-					mockApiResponse(mockReturnValue)
-				);
-				const authModule = new AuthModule({});
-
-				await authModule.login("sample-jwt");
-
-				expect(authModule.getAccessToken).toStrictEqual("sample-jwt");
 			});
 		});
 

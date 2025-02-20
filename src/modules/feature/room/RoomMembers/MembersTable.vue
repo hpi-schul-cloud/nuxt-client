@@ -8,6 +8,7 @@
 			v-if="selectedUserIds.length"
 			class="multi-action-menu"
 			:selectedIds="selectedUserIds"
+			:isVisibleChangeRoleButton="isVisibleChangeRoleButton"
 			@remove:selected="onRemoveMembers"
 			@reset:selected="onResetSelectedMembers"
 			@change:role="onChangePermission"

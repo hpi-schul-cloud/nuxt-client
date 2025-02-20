@@ -1,9 +1,9 @@
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import * as serverApi from "@/serverApi/v3/api";
 import { PublicSystemResponse, SystemsApiInterface } from "@/serverApi/v3/api";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mockApiResponse } from "@@/tests/test-utils";
 import { useSystemApi } from "@data-system";
-import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 
 jest.mock("@/components/error-handling/ErrorHandler.composable");
 
@@ -58,6 +58,7 @@ describe("SystemApi.composable", () => {
 				expect(result).toEqual({
 					id: system.id,
 					displayName: system.displayName,
+					hasEndSessionEndpoint: false,
 				});
 			});
 		});

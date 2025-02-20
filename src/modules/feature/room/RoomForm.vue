@@ -65,19 +65,20 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, unref } from "vue";
-import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
-import { DatePicker } from "@ui-date-time-picker";
-import { ErrorObject, useVuelidate } from "@vuelidate/core";
-import { helpers, required, maxLength } from "@vuelidate/validators";
-import { useI18n } from "vue-i18n";
+import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { RoomCreateParams, RoomUpdateParams } from "@/types/room/Room";
+import { containsOpeningTagFollowedByString } from "@/utils/validation";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { DATETIME_FORMAT } from "@/plugins/datetime";
+import { DatePicker } from "@ui-date-time-picker";
+import { ErrorObject, useVuelidate } from "@vuelidate/core";
+import { helpers, maxLength, required } from "@vuelidate/validators";
 import dayjs from "dayjs";
+import { computed, PropType, unref } from "vue";
+import { useI18n } from "vue-i18n";
+import RoomColorPicker from "./RoomColorPicker/RoomColorPicker.vue";
 
 const props = defineProps({
 	room: {
@@ -144,6 +145,10 @@ const validationRules = computed(() => ({
 			maxLength: helpers.withMessage(
 				t("common.validation.tooLong"),
 				maxLength(100)
+			),
+			containsOpeningTag: helpers.withMessage(
+				t("common.validation.containsOpeningTag"),
+				(name: string) => !containsOpeningTagFollowedByString(name)
 			),
 			required: helpers.withMessage(t("common.validation.required2"), required),
 		},

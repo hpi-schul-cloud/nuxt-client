@@ -38,6 +38,7 @@ describe("ClassMembersInfoBox", () => {
 		useSystemApiMock.getSystem.mockResolvedValue({
 			id: "systemId",
 			displayName: "asdf",
+			hasEndSessionEndpoint: false,
 		});
 	});
 

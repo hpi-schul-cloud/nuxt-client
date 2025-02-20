@@ -16,6 +16,7 @@ export const useSystemApi = () => {
 			const system: System = {
 				id: response.data.id,
 				displayName: response.data.displayName ?? "",
+				hasEndSessionEndpoint: !!response.data.oauthConfig?.endSessionEndpoint,
 			};
 
 			return system;
