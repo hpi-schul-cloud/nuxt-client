@@ -348,6 +348,12 @@ export default {
 		"статус",
 	"components.administration.externalToolsSection.table.header.restrictedTo":
 		"Обмежено",
+	"components.administration.externalToolsSection.table.header.medium":
+		"Джерело ЗМІ",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable":
+		"Зовнішнє середовище активовано",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable":
+		"Зовнішнє середовище деактивовано",
 	"components.administration.provisioningOptions.class.description":
 		"Активуйте цю опцію, якщо класи мають бути синхронізовані в {instance}.",
 	"components.administration.provisioningOptions.class.label":
