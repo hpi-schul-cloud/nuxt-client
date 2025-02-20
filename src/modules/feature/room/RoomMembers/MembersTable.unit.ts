@@ -14,8 +14,10 @@ import { RoleName } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { useRoomMembers } from "@data-room";
+import { RoomMember, useRoomMembers } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import ActionMenu from "./ActionMenu.vue";
+import { KebabMenuActionRemoveMember } from "@ui-kebab-menu";
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
@@ -26,6 +28,7 @@ const mockUseRoomMembers = jest.mocked(useRoomMembers);
 describe("MembersTable", () => {
 	let askConfirmationMock: jest.Mock;
 	let mockRoomMemberCalls: DeepMocked<ReturnType<typeof useRoomMembers>>;
+	let mockMembers: RoomMember[];
 
 	beforeEach(() => {
 		askConfirmationMock = jest.fn();
@@ -38,6 +41,8 @@ describe("MembersTable", () => {
 		});
 		mockRoomMemberCalls = createMock<ReturnType<typeof useRoomMembers>>();
 		mockUseRoomMembers.mockReturnValue(mockRoomMemberCalls);
+
+		mockMembers = roomMemberFactory(RoleName.Roomadmin).buildList(3);
 	});
 
 	const tableHeaders = [
@@ -49,24 +54,38 @@ describe("MembersTable", () => {
 		"pages.rooms.members.tableHeader.actions",
 	];
 
-	const mockMembers = roomMemberFactory(RoleName.Roomadmin).buildList(3);
-
 	const setup = (
-		options: {
-			currentUserRole?: RoleName;
-			changePermissionFlag?: boolean;
-			selectedUserIds?: string[];
+		options?: Partial<{
+			currentUserRole: RoleName;
+			changePermissionFlag: boolean;
+			selectedUserIds: string[];
+			windowWidth: number;
+		}>
+	) => {
+		const {
+			currentUserRole,
+			changePermissionFlag,
+			selectedUserIds,
+			windowWidth,
 		} = {
 			currentUserRole: RoleName.Roomadmin,
 			changePermissionFlag: true,
 			selectedUserIds: [],
-		}
-	) => {
+			windowWidth: 1280,
+
+			...options,
+		};
+
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: windowWidth,
+		});
+
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 			getEnv: {
 				...envsFactory.build(),
-				FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED:
-					options?.changePermissionFlag ?? false,
+				FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED: changePermissionFlag,
 			},
 		});
 
@@ -82,13 +101,13 @@ describe("MembersTable", () => {
 				members: mockMembers,
 				currentUser: {
 					...mockMembers[0],
-					roomRoleName: options?.currentUserRole || RoleName.Roomowner,
+					roomRoleName: currentUserRole,
 				},
-				selectedUserIds: options.selectedUserIds,
+				selectedUserIds: selectedUserIds,
 			},
 		});
 
-		return { wrapper, mockMembers };
+		return { wrapper };
 	};
 
 	// index 0 is the header checkbox
@@ -121,8 +140,24 @@ describe("MembersTable", () => {
 		expect(wrapper.exists()).toBe(true);
 	});
 
+	it("should have column style for extra small display sizes", async () => {
+		const { wrapper } = setup({ windowWidth: 599 });
+
+		const dataTable = wrapper.get(".table-title-header");
+
+		expect(dataTable.classes()).toContain("flex-column");
+	});
+
+	it("should not have column style when display size is over 599px", async () => {
+		const { wrapper } = setup({ windowWidth: 800 });
+
+		const dataTable = wrapper.get(".table-title-header");
+
+		expect(dataTable.classes()).not.toContain("flex-column");
+	});
+
 	it("should render data table", () => {
-		const { wrapper, mockMembers } = setup();
+		const { wrapper } = setup();
 
 		const dataTable = wrapper.getComponent(VDataTable);
 
@@ -135,7 +170,7 @@ describe("MembersTable", () => {
 	});
 
 	it("should render checkboxes", async () => {
-		const { wrapper, mockMembers } = setup();
+		const { wrapper } = setup();
 
 		const dataTable = wrapper.findComponent(VDataTable);
 		const checkboxes = dataTable.findAll("input[type='checkbox']");
@@ -144,198 +179,159 @@ describe("MembersTable", () => {
 	});
 
 	describe("when selecting members", () => {
-		const selectedUserIds = [mockMembers[0].userId];
 		it("should select all members when header checkbox is clicked", async () => {
-			const { wrapper } = setup({
-				currentUserRole: RoleName.Roomowner,
-				selectedUserIds: mockMembers.map((m) => m.userId),
-			});
+			const { wrapper } = setup();
 
 			const { checkboxes } = await selectCheckboxes([0], wrapper);
 			const checkedIndices = getCheckedIndices(checkboxes);
-
 			const expectedIndices = [0, 1, 2, 3];
 
 			expect(checkedIndices).toEqual(expectedIndices);
 		});
 
-		it("should emit select:members", async () => {
-			const { wrapper, mockMembers } = setup();
-
-			await selectCheckboxes([1], wrapper);
-
-			const selectEvents = wrapper.emitted("select:members");
-			expect(selectEvents).toHaveLength(1);
-			expect(selectEvents![0]).toEqual([[mockMembers[0].userId]]);
-		});
-
-		it("should render the multi action menu", async () => {
-			const { wrapper } = setup({ selectedUserIds });
-
-			await selectCheckboxes([1], wrapper);
-
-			const multiActionMenu = wrapper.find("[data-testid=multi-action-menu]");
-
-			expect(multiActionMenu.exists()).toBe(true);
-		});
-
-		it("should render ActionMenu component", async () => {
+		it("should select single member", async () => {
 			const { wrapper } = setup();
 
-			const actionMenuBefore = wrapper.findComponent({ name: "ActionMenu" });
-			expect(actionMenuBefore.exists()).toBe(false);
-
-			await wrapper.setProps({ selectedUserIds });
-			await selectCheckboxes([1], wrapper);
-
-			const actionMenuAfter = wrapper.findComponent({ name: "ActionMenu" });
-
-			expect(actionMenuAfter.exists()).toBe(true);
-		});
-
-		it("should reset member selection when clicking reset button on ActionMenu", async () => {
-			const { wrapper } = setup();
-
-			askConfirmationMock.mockResolvedValue(false);
-
-			await wrapper.setProps({ selectedUserIds });
-			await selectCheckboxes([0], wrapper);
-
-			const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
-			actionMenu.vm.$emit("reset:selected");
-			await wrapper.setProps({ selectedUserIds: [] });
-			await flushPromises();
-
-			const checkboxes = wrapper
-				.getComponent(VDataTable)
-				.findAll("input[type='checkbox']");
-
+			const { checkboxes } = await selectCheckboxes([1], wrapper);
 			const checkedIndices = getCheckedIndices(checkboxes);
+			const expectedIndices = [1];
 
-			expect(checkedIndices).toEqual([]);
+			expect(checkedIndices).toEqual(expectedIndices);
 		});
 
-		it.each([
-			{
-				description: "one member",
-				checkboxesToSelect: [1],
-				selectedUserIds: [mockMembers[0].userId],
-			},
-			{
-				description: "multiple members",
-				checkboxesToSelect: [1, 2],
-				selectedUserIds: [mockMembers[0].userId, mockMembers[1].userId],
-			},
-		])(
-			"should render number of selected users in multi action menu, when $description selected",
-			async ({ checkboxesToSelect, selectedUserIds }) => {
+		describe("action menu", () => {
+			it("should render action menu", async () => {
+				const { wrapper } = setup();
+				await selectCheckboxes([0], wrapper);
+
+				const actionMenuAfter = wrapper.findComponent(ActionMenu);
+
+				expect(actionMenuAfter.exists()).toBe(true);
+			});
+
+			it("should reset member selection when reset event is emitted", async () => {
+				const { wrapper } = setup({
+					selectedUserIds: [mockMembers[0].userId, mockMembers[2].userId],
+				});
+
+				const actionMenu = wrapper.findComponent(ActionMenu);
+				actionMenu.vm.$emit("reset:selected");
+
+				await nextTick();
+
+				const checkboxes = wrapper
+					.getComponent(VDataTable)
+					.findAll("input[type='checkbox']");
+
+				const checkedIndices = getCheckedIndices(checkboxes);
+
+				expect(checkedIndices).toEqual([]);
+			});
+
+			it("should emit change:permissions when change:role event is emitted", async () => {
+				const selectedUserIds = [mockMembers[0].userId, mockMembers[2].userId];
 				const { wrapper } = setup({ selectedUserIds });
 
-				await selectCheckboxes(checkboxesToSelect, wrapper);
+				const actionMenu = wrapper.findComponent(ActionMenu);
+				actionMenu.vm.$emit("change:role", selectedUserIds);
 
-				const multiActionMenuText = wrapper.get(".selected-count");
+				await nextTick();
 
-				expect(multiActionMenuText.text()).toBe(
-					`${checkboxesToSelect.length} pages.administration.selected`
-				);
-			}
-		);
+				const changePermissionsEvent = wrapper.emitted("change:permission");
+				expect(changePermissionsEvent).toHaveLength(1);
+				expect(changePermissionsEvent![0]).toEqual([selectedUserIds]);
+			});
 
-		it("should emit remove:members when selected members remove button is clicked on Action Menu", async () => {
-			const { wrapper, mockMembers } = setup({ selectedUserIds });
-
-			askConfirmationMock.mockResolvedValue(true);
-
-			await selectCheckboxes([1], wrapper);
-
-			const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
-			actionMenu.vm.$emit("remove:selected", [mockMembers[0].userId]);
-			await flushPromises();
-
-			const removeEvents = wrapper.emitted("remove:members");
-			expect(removeEvents).toHaveLength(1);
-			expect(removeEvents![0]).toEqual([[mockMembers[0].userId]]);
-		});
-
-		it("should not emit remove:members event when remove was cancled", async () => {
-			const { wrapper } = setup({ selectedUserIds });
-
-			askConfirmationMock.mockResolvedValue(false);
-
-			await selectCheckboxes([1], wrapper);
-
-			const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
-			actionMenu.vm.$emit("reset:selected");
-			await flushPromises();
-
-			expect(wrapper.emitted()).not.toHaveProperty("remove:members");
-		});
-
-		it.each([
-			{
-				description: "single member",
-				checkboxesToSelect: [1],
-				expectedMessage: "pages.rooms.members.remove.confirmation",
-			},
-			{
-				description: "multiple members",
-				checkboxesToSelect: [1, 2],
-				expectedMessage: "pages.rooms.members.multipleRemove.confirmation",
-			},
-		])(
-			"should render confirmation dialog with text for $description when remove button is clicked",
-			async ({ checkboxesToSelect, expectedMessage }) => {
-				const { wrapper, mockMembers } = setup({ selectedUserIds });
+			it("should emit remove:members when selected members remove:selected event emitted", async () => {
+				const selectedUserIds = [mockMembers[0].userId, mockMembers[2].userId];
+				const { wrapper } = setup({ selectedUserIds });
 
 				askConfirmationMock.mockResolvedValue(true);
 
-				await selectCheckboxes(checkboxesToSelect, wrapper);
-
-				const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
-				actionMenu.vm.$emit(
-					"remove:selected",
-					checkboxesToSelect.map((i) => mockMembers[i].userId)
-				);
+				const actionMenu = wrapper.findComponent(ActionMenu);
+				actionMenu.vm.$emit("remove:selected", selectedUserIds);
 				await flushPromises();
 
-				expect(wrapper.emitted()).toHaveProperty("remove:members");
-
-				expect(askConfirmationMock).toHaveBeenCalledWith({
-					confirmActionLangKey: "common.actions.remove",
-					message: expectedMessage,
-				});
-			}
-		);
-
-		it("should keep selection if confirmation dialog is canceled", async () => {
-			const { wrapper } = setup({
-				selectedUserIds: [mockMembers[1].userId],
+				const removeEvents = wrapper.emitted("remove:members");
+				expect(removeEvents).toHaveLength(1);
+				expect(removeEvents![0]).toEqual([selectedUserIds]);
 			});
 
-			askConfirmationMock.mockResolvedValue(false);
+			it("should not emit remove:members event when remove was cancled", async () => {
+				const selectedUserIds = [mockMembers[0].userId, mockMembers[2].userId];
+				const { wrapper } = setup({ selectedUserIds });
 
-			await selectCheckboxes([1], wrapper);
+				askConfirmationMock.mockResolvedValue(false);
 
-			const actionMenu = wrapper.findComponent({ name: "ActionMenu" });
-			actionMenu.vm.$emit("remove:selected", [mockMembers[1].userId]);
-			await flushPromises();
+				const actionMenu = wrapper.findComponent(ActionMenu);
+				actionMenu.vm.$emit("reset:selected", selectedUserIds);
+				await flushPromises();
 
-			const checkboxes = wrapper
-				.getComponent(VDataTable)
-				.findAll("input[type='checkbox']");
+				expect(wrapper.emitted()).not.toHaveProperty("remove:members");
+			});
 
-			const checkedIndices = getCheckedIndices(checkboxes);
+			it.each([
+				{
+					description: "single member",
+					selectedUserIndices: [0],
+					expectedMessage: "pages.rooms.members.remove.confirmation",
+				},
+				{
+					description: "multiple members",
+					selectedUserIndices: [0, 1],
+					expectedMessage: "pages.rooms.members.multipleRemove.confirmation",
+				},
+			])(
+				"should render confirmation dialog with text for $description when remove:selected event is emitted",
+				async ({ selectedUserIndices, expectedMessage }) => {
+					const selectedUserIds = selectedUserIndices.map(
+						(index) => mockMembers[index].userId
+					);
+					const { wrapper } = setup({ selectedUserIds });
 
-			expect(checkedIndices.length).toBeGreaterThan(0);
+					askConfirmationMock.mockResolvedValue(true);
+
+					const actionMenu = wrapper.findComponent(ActionMenu);
+					actionMenu.vm.$emit("remove:selected", selectedUserIds);
+					await flushPromises();
+
+					expect(wrapper.emitted()).toHaveProperty("remove:members");
+
+					expect(askConfirmationMock).toHaveBeenCalledWith({
+						confirmActionLangKey: "common.actions.remove",
+						message: expectedMessage,
+					});
+				}
+			);
+
+			it("should keep selection if confirmation dialog is canceled", async () => {
+				const { wrapper } = setup({
+					selectedUserIds: [mockMembers[1].userId],
+				});
+
+				askConfirmationMock.mockResolvedValue(false);
+
+				const actionMenu = wrapper.findComponent(ActionMenu);
+				actionMenu.vm.$emit("remove:selected", [mockMembers[1].userId]);
+				await flushPromises();
+
+				const checkboxes = wrapper
+					.getComponent(VDataTable)
+					.findAll("input[type='checkbox']");
+
+				const checkedIndices = getCheckedIndices(checkboxes);
+
+				expect(checkedIndices.length).toBeGreaterThan(0);
+			});
 		});
 	});
 
 	describe("when no members are selected", () => {
-		it("should not render multi action menu when no members are selected", async () => {
+		it("should not render action menu when no members are selected", async () => {
 			const { wrapper } = setup();
-			const multiActionMenu = wrapper.find("[data-testid=multi-action-menu]");
+			const actionMenu = wrapper.findComponent(ActionMenu);
 
-			expect(multiActionMenu.exists()).toBe(false);
+			expect(actionMenu.exists()).toBe(false);
 		});
 
 		describe("when the remove button in the user row is clicked", () => {
@@ -350,9 +346,7 @@ describe("MembersTable", () => {
 				await menuButton.trigger("click");
 				await nextTick();
 
-				const removeButton = wrapper.findComponent(
-					`[data-testid=kebab-menu-action-remove-member]`
-				);
+				const removeButton = wrapper.findComponent(KebabMenuActionRemoveMember);
 
 				await removeButton.trigger("click");
 			};
@@ -371,7 +365,7 @@ describe("MembersTable", () => {
 			});
 
 			it("should call remove:members event after confirmation", async () => {
-				const { wrapper, mockMembers } = setup();
+				const { wrapper } = setup();
 
 				askConfirmationMock.mockResolvedValue(true);
 
@@ -395,19 +389,18 @@ describe("MembersTable", () => {
 			});
 
 			describe("when members are roomowner", () => {
-				const ownerMembers = roomMemberFactory(RoleName.Roomowner)
-					.buildList(3)
-					.map((member) => ({ ...member, isSelectable: false }));
+				beforeEach(() => {
+					mockMembers = roomMemberFactory(RoleName.Roomowner)
+						.buildList(3)
+						.map((member) => ({ ...member, isSelectable: false }));
+				});
 
 				it("should not render remove button for room owner", async () => {
 					const { wrapper } = setup();
 
-					wrapper.setProps({ members: ownerMembers });
-					await nextTick();
-
 					const dataTable = wrapper.getComponent(VDataTable);
 					const removeButton = dataTable.findComponent(
-						"[data-testid=remove-member-0]"
+						KebabMenuActionRemoveMember
 					);
 
 					expect(removeButton.exists()).toBe(false);
@@ -415,9 +408,6 @@ describe("MembersTable", () => {
 
 				it("members should not be selectable", async () => {
 					const { wrapper } = setup();
-
-					wrapper.setProps({ members: ownerMembers });
-					await nextTick();
 
 					const dataTable = wrapper.getComponent(VDataTable);
 
@@ -442,7 +432,7 @@ describe("MembersTable", () => {
 		});
 
 		it("should filter the members based on the search value", async () => {
-			const { wrapper, mockMembers } = setup();
+			const { wrapper } = setup();
 
 			const search = wrapper.getComponent(VTextField);
 			const searchValue = mockMembers[0].firstName;

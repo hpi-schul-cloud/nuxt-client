@@ -17,6 +17,7 @@ import KebabMenuActionShareLink from "./KebabMenuActionShareLink.vue";
 import KebabMenuActionLeaveRoom from "./KebabMenuActionLeaveRoom.vue";
 import KebabMenuActionChangePermission from "./KebabMenuActionChangePermission.vue";
 import KebabMenuActionRemoveMember from "./KebabMenuActionRemoveMember.vue";
+import KebabMenuList from "./KebabMenuList.vue";
 
 export {
 	KebabMenu,
@@ -38,4 +39,5 @@ export {
 	KebabMenuActionRevert,
 	KebabMenuActionShare,
 	KebabMenuActionShareLink,
+	KebabMenuList,
 };

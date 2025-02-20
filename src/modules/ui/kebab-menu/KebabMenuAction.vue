@@ -5,9 +5,7 @@
 		:aria-label="ariaLabel"
 	>
 		<template v-slot:prepend>
-			<slot name="icon" data-testid="kebab-menu-action-icon">
-				<v-icon :icon="icon" data-testid="kebab-menu-action-icon" />
-			</slot>
+			<VIcon :icon="icon" data-testid="kebab-menu-action-icon" />
 		</template>
 		<VListItemTitle :data-testid="dataTestId">
 			<slot />
