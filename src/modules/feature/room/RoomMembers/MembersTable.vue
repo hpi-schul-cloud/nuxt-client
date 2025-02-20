@@ -36,7 +36,7 @@
 	<v-divider role="presentation" />
 	<v-data-table
 		v-model:search="search"
-		v-model="tableSelectedUserIds"
+		v-model="selectedUserIds"
 		data-testid="participants-table"
 		hover
 		item-value="userId"
@@ -51,7 +51,6 @@
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
 		@update:current-items="onUpdateFilter"
-		@update:model-value="onSelectMembers"
 	>
 		<template #[`item.actions`]="{ item, index }" v-if="isVisibleActionColumn">
 			<KebabMenu
@@ -63,11 +62,9 @@
 					v-if="isVisibleChangeRoleButton"
 					@click="onChangePermission([item.userId])"
 					:aria-label="getAriaLabel(item, 'changeRole')"
-					:test-id="`btn-change-role-${index}`"
 				/>
 				<KebabMenuActionRemoveMember
 					v-if="isVisibleRemoveMemberButton(item)"
-					:test-id="`remove-member-${index}`"
 					:aria-label="getAriaLabel(item, 'remove')"
 					@click="onRemoveMembers([item.userId])"
 				/>
@@ -84,7 +81,7 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import { computed, PropType, ref, toRef } from "vue";
+import { computed, ModelRef, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import {
@@ -107,17 +104,17 @@ const props = defineProps({
 		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
 		default: () => ({ enabled: false, positionTop: 0 }),
 	},
-	selectedUserIds: {
-		type: Array as PropType<string[]>,
-		default: () => [],
-	},
 });
+
+const selectedUserIds: ModelRef<string[]> = defineModel("selectedUserIds", {
+	type: Array<string>,
+	required: true,
+});
+
 const { askConfirmation } = useConfirmationDialog();
-const tableSelectedUserIds = computed(() => props.selectedUserIds);
 
 const emit = defineEmits<{
 	(e: "remove:members", userIds: string[]): void;
-	(e: "select:members", userIds: string[]): void;
 	(e: "change:permission", userIds: string[]): void;
 }>();
 
@@ -142,12 +139,8 @@ const onUpdateFilter = (filteredMembers: RoomMember[]) => {
 		search.value === "" ? memberList.value.length : filteredMembers.length;
 };
 
-const onSelectMembers = (userIds: string[]) => {
-	emit("select:members", userIds);
-};
-
 const onResetSelectedMembers = () => {
-	emit("select:members", []);
+	selectedUserIds.value = [];
 };
 
 const onRemoveMembers = async (userIds: string[]) => {

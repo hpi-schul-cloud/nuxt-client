@@ -42,13 +42,12 @@
 		<div class="mb-12">
 			<MembersTable
 				v-if="!isLoading && currentUser"
+				v-model:selected-user-ids="selectedIds"
 				:members="memberList"
 				:currentUser="currentUser"
 				:fixed-position="fixedHeaderOnMobile"
-				:selected-user-ids="selectedIds"
 				@remove:members="onRemoveMembers"
 				@change:permission="onOpenRoleDialog"
-				@select:members="onSelectMembers"
 			/>
 		</div>
 
@@ -216,10 +215,6 @@ const onChangeRole = async (
 	await updateMembersRole(role, id);
 	isChangeRoleDialogOpen.value = false;
 	selectedIds.value = [];
-};
-
-const onSelectMembers = (userIds: string[]) => {
-	selectedIds.value = userIds;
 };
 
 onMounted(async () => {
