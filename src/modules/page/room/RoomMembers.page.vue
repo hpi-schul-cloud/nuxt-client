@@ -228,6 +228,7 @@ const onSelectMembers = (userIds: string[]) => {
 const onChangeOwner = async (id: string) => {
 	await changeRoomOwner(id);
 	isChangeRoleDialogOpen.value = false;
+	selectedIds.value = [];
 };
 
 onMounted(async () => {
