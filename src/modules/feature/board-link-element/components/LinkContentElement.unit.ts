@@ -105,7 +105,7 @@ describe("LinkContentElement", () => {
 		return { wrapper };
 	};
 
-	const setup = (
+	const setupWrapper = (
 		options: {
 			content?: LinkElementContent;
 			isEditMode: boolean;
@@ -169,7 +169,7 @@ describe("LinkContentElement", () => {
 	describe("when link element is displayed", () => {
 		describe("when content url is undefined", () => {
 			it("should not render display of link content", () => {
-				const { wrapper } = setup({
+				const { wrapper } = setupWrapper({
 					isEditMode: true,
 				});
 
@@ -181,7 +181,7 @@ describe("LinkContentElement", () => {
 			});
 
 			it("should not render link element menu", () => {
-				const { wrapper } = setup({
+				const { wrapper } = setupWrapper({
 					isEditMode: false,
 				});
 
@@ -191,7 +191,7 @@ describe("LinkContentElement", () => {
 			});
 
 			it("should not have an aria-label", () => {
-				const { wrapper } = setup({
+				const { wrapper } = setupWrapper({
 					isEditMode: true,
 				});
 
@@ -204,7 +204,7 @@ describe("LinkContentElement", () => {
 		describe("when content url is defined", () => {
 			it("should render display of link content with correct props", () => {
 				const linkElementContent = linkElementContentFactory.build();
-				const { wrapper, element } = setup({
+				const { wrapper, element } = setupWrapper({
 					content: linkElementContent,
 					isEditMode: true,
 				});
@@ -220,7 +220,7 @@ describe("LinkContentElement", () => {
 
 			it("should have the correct aria-label", () => {
 				const linkElementContent = linkElementContentFactory.build();
-				const { wrapper, element } = setup({
+				const { wrapper, element } = setupWrapper({
 					content: linkElementContent,
 					isEditMode: true,
 				});
@@ -239,7 +239,7 @@ describe("LinkContentElement", () => {
 					"should 'emit move-keyboard:edit' when arrow key %s is pressed",
 					async (key) => {
 						const linkElementContent = linkElementContentFactory.build();
-						const { wrapper } = setup({
+						const { wrapper } = setupWrapper({
 							content: linkElementContent,
 							isEditMode: true,
 						});
@@ -260,7 +260,7 @@ describe("LinkContentElement", () => {
 					"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in view mode",
 					async (key) => {
 						const linkElementContent = linkElementContentFactory.build();
-						const { wrapper } = setup({
+						const { wrapper } = setupWrapper({
 							content: linkElementContent,
 							isEditMode: false,
 						});
@@ -279,7 +279,7 @@ describe("LinkContentElement", () => {
 			describe("link element menu", () => {
 				it("should render link element menu", () => {
 					const linkElementContent = linkElementContentFactory.build();
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: linkElementContent,
 						isEditMode: true,
 					});
@@ -291,7 +291,7 @@ describe("LinkContentElement", () => {
 
 				it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
 					const linkElementContent = linkElementContentFactory.build();
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: linkElementContent,
 						isEditMode: true,
 					});
@@ -304,7 +304,7 @@ describe("LinkContentElement", () => {
 
 				it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
 					const linkElementContent = linkElementContentFactory.build();
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: linkElementContent,
 						isEditMode: true,
 					});
@@ -317,7 +317,7 @@ describe("LinkContentElement", () => {
 
 				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
 					const linkElementContent = linkElementContentFactory.build();
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: linkElementContent,
 						isEditMode: true,
 					});
@@ -328,13 +328,83 @@ describe("LinkContentElement", () => {
 					expect(wrapper.emitted()).toHaveProperty("delete:element");
 				});
 			});
+
+			describe("when the link references a different page", () => {
+				const setup = () => {
+					const url = new URL("https://dbildungscloud.test/path");
+					const linkElementContent = linkElementContentFactory.build({
+						url: url.toString(),
+					});
+					Object.defineProperty(window, "location", {
+						get: () =>
+							createMock<Location>({
+								host: url.host,
+								pathname: "/otherPath",
+							}),
+					});
+
+					const { wrapper } = setupWrapper({
+						content: linkElementContent,
+						isEditMode: false,
+					});
+
+					return {
+						wrapper,
+					};
+				};
+
+				it("should open in a new tab", () => {
+					const { wrapper } = setup();
+
+					const linkElement = wrapper.findComponent(
+						'[data-testid="board-link-element"]'
+					);
+
+					expect(linkElement.attributes("target")).toEqual("_blank");
+				});
+			});
+
+			describe("when the link references the same page", () => {
+				const setup = () => {
+					const url = new URL("https://dbildungscloud.test/path");
+					const linkElementContent = linkElementContentFactory.build({
+						url: url.toString(),
+					});
+					Object.defineProperty(window, "location", {
+						get: () =>
+							createMock<Location>({
+								host: url.host,
+								pathname: url.pathname,
+							}),
+					});
+
+					const { wrapper } = setupWrapper({
+						content: linkElementContent,
+						isEditMode: false,
+					});
+
+					return {
+						wrapper,
+					};
+				};
+
+				it("should open in the same tab", () => {
+					const { wrapper } = setup();
+
+					const linkElement = wrapper.findComponent(
+						'[data-testid="board-link-element"]'
+					);
+
+					expect(linkElement.attributes("target")).toEqual("_self");
+				});
+			});
 		});
 	});
 
 	describe("when link element is being created", () => {
 		describe("when element is in view mode", () => {
 			it("should hide link element in view mode when no url was entered", () => {
-				const { wrapper } = setup({
+				const { wrapper } = setupWrapper({
 					isEditMode: false,
 				});
 
@@ -346,7 +416,7 @@ describe("LinkContentElement", () => {
 			});
 
 			it("should not render link element menu in view mode", () => {
-				const { wrapper } = setup({
+				const { wrapper } = setupWrapper({
 					isEditMode: false,
 				});
 
@@ -358,7 +428,7 @@ describe("LinkContentElement", () => {
 
 		describe("when element is in edit mode", () => {
 			it("should render LinkContentElementCreate component when in editmode", () => {
-				const { wrapper } = setup({ isEditMode: true });
+				const { wrapper } = setupWrapper({ isEditMode: true });
 
 				const linkCreateComponent = wrapper.findComponent(
 					LinkContentElementCreate
@@ -370,7 +440,7 @@ describe("LinkContentElement", () => {
 			it.each(["up", "down"])(
 				"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in edit mode",
 				async (key) => {
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
 
@@ -386,7 +456,7 @@ describe("LinkContentElement", () => {
 
 			describe("link element menu", () => {
 				it("should render link element menu", () => {
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
 
@@ -396,7 +466,7 @@ describe("LinkContentElement", () => {
 				});
 
 				it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
 
@@ -407,7 +477,7 @@ describe("LinkContentElement", () => {
 				});
 
 				it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
 
@@ -418,7 +488,7 @@ describe("LinkContentElement", () => {
 				});
 
 				it("should emit 'delete:element' event when delete menu item is clicked", async () => {
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						isEditMode: true,
 					});
 
@@ -432,7 +502,10 @@ describe("LinkContentElement", () => {
 
 		describe("onCreateUrl", () => {
 			it("should request meta tags for the given url", async () => {
-				const { wrapper } = setup({ isEditMode: true, isDetailView: false });
+				const { wrapper } = setupWrapper({
+					isEditMode: true,
+					isDetailView: false,
+				});
 
 				const component = wrapper.getComponent(LinkContentElementCreate);
 				component.vm.$emit(
@@ -445,7 +518,10 @@ describe("LinkContentElement", () => {
 
 			describe("when no protocol was provided", () => {
 				it("should add https-protocol", async () => {
-					const { wrapper } = setup({ isEditMode: true, isDetailView: false });
+					const { wrapper } = setupWrapper({
+						isEditMode: true,
+						isDetailView: false,
+					});
 					const url = "abc.de/my-article";
 
 					const component = wrapper.getComponent(LinkContentElementCreate);
@@ -461,7 +537,7 @@ describe("LinkContentElement", () => {
 			describe("when url was provided", () => {
 				describe("when imageUrl was in metaTags", () => {
 					it("should create a preview image", async () => {
-						const { wrapper } = setup({
+						const { wrapper } = setupWrapper({
 							isEditMode: true,
 							isDetailView: false,
 						});
@@ -493,7 +569,7 @@ describe("LinkContentElement", () => {
 				it("should sanitize the url", async () => {
 					const VALID_UNSANITIZED_URL =
 						"&#104;&#116;&#116;&#112;&#115;&#0000058//&#101;&#120;&#97;&#109;&#112;&#108;&#101;&#46;&#99;&#111;&#109;";
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: linkElementContentFactory.build({
 							url: VALID_UNSANITIZED_URL,
 						}),
@@ -508,7 +584,7 @@ describe("LinkContentElement", () => {
 				it("should sanitize a javascript-url", async () => {
 					const INVALID_UNSANITIZED_URL =
 						"javascript" + ":" + "alert(document.domain)";
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: linkElementContentFactory.build({
 							url: INVALID_UNSANITIZED_URL,
 						}),
@@ -522,7 +598,7 @@ describe("LinkContentElement", () => {
 
 				it("should display the hostname ", async () => {
 					const INVALID_UNSANITIZED_URL = "https://de.wikipedia.org/dachs";
-					const { wrapper } = setup({
+					const { wrapper } = setupWrapper({
 						content: linkElementContentFactory.build({
 							url: INVALID_UNSANITIZED_URL,
 						}),

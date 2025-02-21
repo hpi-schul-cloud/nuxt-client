@@ -1,7 +1,7 @@
 <template>
 	<v-card
 		class="mb-4"
-		target="_blank"
+		:target="target"
 		data-testid="board-link-element"
 		:class="{ 'd-none': isHidden }"
 		:variant="outlined"
@@ -55,7 +55,7 @@ import {
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
-import { computed, PropType, ref, toRef } from "vue";
+import { computed, ComputedRef, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
 import { usePreviewGenerator } from "../composables/PreviewGenerator.composable";
@@ -104,6 +104,21 @@ const sanitizedUrl = computed(() =>
 	props.element.content.url ? sanitizeUrl(props.element.content.url) : ""
 );
 
+const target: ComputedRef<string> = computed(() => {
+	if (props.element.content.url) {
+		const url = new URL(sanitizedUrl.value);
+
+		if (
+			url.host === window.location.host &&
+			url.pathname === window.location.pathname
+		) {
+			return "_self";
+		}
+	}
+
+	return "_blank";
+});
+
 const isCreating = computed(
 	() => props.isEditMode && !computedElement.value.content.url
 );
@@ -123,9 +138,11 @@ const onCreateUrl = async (originalUrl: string) => {
 		const validUrl = ensureProtocolIncluded(originalUrl);
 		const { url, title, description, originalImageUrl } =
 			await getMetaTags(validUrl);
+
 		modelValue.value.url = url;
 		modelValue.value.title = title;
 		modelValue.value.description = description;
+
 		if (originalImageUrl) {
 			modelValue.value.imageUrl = await createPreviewImage(originalImageUrl);
 		}
