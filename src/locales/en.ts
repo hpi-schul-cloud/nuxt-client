@@ -318,6 +318,8 @@ export default {
 		"The availability of VIDIS media is updated automatically. In addition, the availability of the media can be updated manually here, e.g. to be able to use recently activated media directly in the school cloud.",
 	"components.administration.externalToolsSection.vidis.notification.success":
 		"VIDIS media updated successfully",
+	"components.administration.externalToolsSection.vidis.notification.timeout":
+		"The update of the VIDIS media continues in the background. Please be patient for a moment.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"The usage of the tool could not be determined.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
