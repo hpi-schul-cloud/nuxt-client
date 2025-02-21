@@ -160,7 +160,7 @@ import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue
 import SchoolTermsOfUse from "@/components/organisms/administration/SchoolTerms.vue";
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { SchulcloudTheme } from "@/serverApi/v3";
+import { SchoolSystemResponse, SchulcloudTheme } from "@/serverApi/v3";
 import { ApplicationError } from "@/store/types/application-error";
 import { School } from "@/store/types/schools";
 import {
@@ -229,7 +229,7 @@ export default defineComponent({
 		const openedPanels: ComputedRef<string[]> = computed(() =>
 			route.query.openPanels ? route.query.openPanels.toString().split(",") : []
 		);
-		const systems: ComputedRef<any[]> = computed(
+		const systems: ComputedRef<SchoolSystemResponse[]> = computed(
 			() => schoolsModule.getSystems
 		);
 		const isLoading: ComputedRef<boolean> = computed(

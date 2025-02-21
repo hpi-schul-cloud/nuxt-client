@@ -9,6 +9,7 @@ import { AxiosInstance } from "axios";
 import { initializeAxios } from "@/utils/api";
 
 type FunctionPropertyNames<T> = {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	[K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
 }[keyof T] &
 	string;

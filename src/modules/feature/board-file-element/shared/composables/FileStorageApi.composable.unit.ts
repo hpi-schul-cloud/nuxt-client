@@ -120,11 +120,11 @@ describe("FileStorageApi Composable", () => {
 					parentId,
 					parentType,
 				});
-				const response = createMock<AxiosResponse<FileRecordListResponse, any>>(
-					{
-						data: { data: [fileRecordResponse] },
-					}
-				);
+				const response = createMock<
+					AxiosResponse<FileRecordListResponse, unknown>
+				>({
+					data: { data: [fileRecordResponse] },
+				});
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				jest.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
@@ -262,9 +262,11 @@ describe("FileStorageApi Composable", () => {
 					parentId,
 					parentType,
 				});
-				const response = createMock<AxiosResponse<FileRecordResponse, any>>({
-					data: fileRecordResponse,
-				});
+				const response = createMock<AxiosResponse<FileRecordResponse, unknown>>(
+					{
+						data: fileRecordResponse,
+					}
+				);
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				jest.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
@@ -365,9 +367,11 @@ describe("FileStorageApi Composable", () => {
 					parentType,
 					name: fileName,
 				});
-				const response = createMock<AxiosResponse<FileRecordResponse, any>>({
-					data: fileRecordResponse,
-				});
+				const response = createMock<AxiosResponse<FileRecordResponse, unknown>>(
+					{
+						data: fileRecordResponse,
+					}
+				);
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				jest.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
@@ -465,9 +469,11 @@ describe("FileStorageApi Composable", () => {
 					fileName: "new-file-name.txt",
 				};
 
-				const response = createMock<AxiosResponse<FileRecordResponse, any>>({
-					data: fileRecordResponse,
-				});
+				const response = createMock<AxiosResponse<FileRecordResponse, unknown>>(
+					{
+						data: fileRecordResponse,
+					}
+				);
 
 				const fileApi = createMock<serverApi.FileApiInterface>();
 				jest.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);

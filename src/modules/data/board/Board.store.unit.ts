@@ -236,8 +236,8 @@ describe("BoardStore", () => {
 		it("should return undefined when columnIndex is undefined", () => {
 			const { boardStore } = setup();
 
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			const columnId = boardStore.getColumnId(undefined as any);
+			//@ts-expect-error - Testing edge case of impossible undefined value
+			const columnId = boardStore.getColumnId(undefined);
 
 			expect(columnId).toBeUndefined();
 		});

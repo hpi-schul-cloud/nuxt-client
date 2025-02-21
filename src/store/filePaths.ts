@@ -4,7 +4,7 @@ import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError } from "./types/commons";
 import { GlobalFiles, SpecificFiles } from "./types/filePaths";
 
-const specificFiles = {
+const specificFiles: SpecificFiles = {
 	accessibilityStatement:
 		"Willkommensordner/Barrierefreiheit/Barrierefreiheitserklaerung.pdf",
 	privacy:
@@ -17,7 +17,7 @@ const specificFiles = {
 const termsOfUseThr = "Willkommensordner/Datenschutz/Nutzungsordnung.pdf";
 const privacyThr = "Onlineeinwilligung/Datenschutzhinweise.pdf";
 
-const globalFiles = {
+const globalFiles: GlobalFiles = {
 	BeschreibungDerSchulCloud: "Dokumente/Beschreibung-der-HPI-Schul-Cloud.pdf",
 	TechnischerBericht2019:
 		"Dokumente/Die-HPI-Schul-Cloud_Roll-Out-einer-Cloud-Architektur-für-Schulen-in-Deutschland.pdf",
@@ -66,24 +66,22 @@ export default class FilePathsModule extends VuexModule {
 
 	@Mutation
 	setSpecificFiles(payload: string) {
-		this.specificFiles = Object.entries(specificFiles).reduce(
-			(obj: any, [key, value]) => {
-				obj[key] = String(new URL(value, payload));
-				return obj;
-			},
-			{}
-		);
+		this.specificFiles = Object.fromEntries(
+			Object.entries(specificFiles).map(([key, value]) => [
+				key,
+				String(new URL(value, payload)),
+			])
+		) as SpecificFiles;
 	}
 
 	@Mutation
 	setGlobalFiles(payload: string) {
-		this.globalFiles = Object.entries(globalFiles).reduce(
-			(obj: any, [key, value]) => {
-				obj[key] = String(new URL(`global/${value}`, payload));
-				return obj;
-			},
-			{}
-		);
+		this.globalFiles = Object.fromEntries(
+			Object.entries(globalFiles).map(([key, value]) => [
+				key,
+				String(new URL(`global/${value}`, payload)),
+			])
+		) as GlobalFiles;
 	}
 
 	@Mutation

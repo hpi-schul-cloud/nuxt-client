@@ -55,7 +55,7 @@ describe("CollaborativeTextEditorApi Composable", () => {
 					serverApi.CollaborativeTextEditorParentType.ContentElement;
 
 				const response = createMock<
-					AxiosResponse<serverApi.CollaborativeTextEditorResponse, any>
+					AxiosResponse<serverApi.CollaborativeTextEditorResponse, unknown>
 				>({
 					data: { url: `${parentType}/${parentId}` },
 				});

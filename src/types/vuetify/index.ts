@@ -2,9 +2,9 @@ type SelectItemKey =
 	| boolean
 	| string
 	| (string | number)[]
-	| ((item: Record<string, any>, fallback?: any) => any);
+	| ((item: Record<string, unknown>, fallback?: unknown) => unknown);
 
-export type DataTableCompareFunction<T = any> = (a: T, b: T) => number;
+export type DataTableCompareFunction<T = unknown> = (a: T, b: T) => number;
 export type DataTableHeader = {
 	key: string;
 	value?: SelectItemKey;
