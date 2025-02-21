@@ -15,12 +15,8 @@
 
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 import { Configuration } from '../configuration';
-// Some imports not used depending on template conditions
-// @ts-ignore
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
-// @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-// @ts-ignore
 import { FilesStorageConfigResponse } from '../models';
 /**
  * FileConfigApi - axios parameter creator
