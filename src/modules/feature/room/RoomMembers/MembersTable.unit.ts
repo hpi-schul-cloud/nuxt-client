@@ -209,6 +209,28 @@ describe("MembersTable", () => {
 				expect(actionMenuAfter.exists()).toBe(true);
 			});
 
+			it("should have flex order 2 for extra small display sizes", async () => {
+				const { wrapper } = setup({
+					selectedUserIds: [mockMembers[0].userId],
+					windowWidth: 599,
+				});
+
+				const actionMenu = wrapper.findComponent(ActionMenu);
+
+				expect(actionMenu.classes()).toContain("order-2");
+			});
+
+			it("should not have flex order 2 display sizes greater than 599px", async () => {
+				const { wrapper } = setup({
+					selectedUserIds: [mockMembers[0].userId],
+					windowWidth: 800,
+				});
+
+				const actionMenu = wrapper.findComponent(ActionMenu);
+
+				expect(actionMenu.classes()).not.toContain("order-2");
+			});
+
 			it("should reset member selection when reset event is emitted", async () => {
 				const { wrapper } = setup({
 					selectedUserIds: [mockMembers[0].userId, mockMembers[2].userId],
@@ -322,6 +344,7 @@ describe("MembersTable", () => {
 				const checkedIndices = getCheckedIndices(checkboxes);
 
 				expect(checkedIndices.length).toBeGreaterThan(0);
+				expect(checkedIndices).toEqual([2]);
 			});
 		});
 	});
@@ -409,13 +432,12 @@ describe("MembersTable", () => {
 				it("members should not be selectable", async () => {
 					const { wrapper } = setup();
 
-					const dataTable = wrapper.getComponent(VDataTable);
+					const checkboxes = wrapper
+						.getComponent(VDataTable)
+						.findAll("input[type='checkbox']");
+					const checkedIndices = getCheckedIndices(checkboxes);
 
-					const checkboxes = dataTable.findAllComponents({
-						name: "VSelectionControl",
-					});
-
-					expect(checkboxes[1].vm.disabled).toBe(true);
+					expect(checkedIndices).toEqual([]);
 				});
 			});
 		});
@@ -429,6 +451,26 @@ describe("MembersTable", () => {
 
 			expect(search.props("label")).toEqual("common.labels.search");
 			expect(search.props("prependInnerIcon")).toEqual(mdiMagnify);
+		});
+
+		it("should render search component with flex order 1 for extra small display sizes", async () => {
+			const { wrapper } = setup({
+				windowWidth: 599,
+			});
+
+			const search = wrapper.findComponent(VTextField);
+
+			expect(search.classes()).toContain("order-1");
+		});
+
+		it("should not render search component with flex order 1 for display sizes greater than 599px", async () => {
+			const { wrapper } = setup({
+				windowWidth: 800,
+			});
+
+			const search = wrapper.findComponent(VTextField);
+
+			expect(search.classes()).not.toContain("order-1");
 		});
 
 		it("should filter the members based on the search value", async () => {
@@ -494,9 +536,9 @@ describe("MembersTable", () => {
 				},
 			])(
 				"should be $expected $description",
-				async ({ currentUserRole, expected }) => {
+				({ currentUserRole, expected }) => {
 					const { wrapper } = setup({ currentUserRole });
-					await nextTick();
+
 					const dataTable = wrapper.getComponent(VDataTable);
 
 					const menu = dataTable.findComponent('[data-testid="kebab-menu-1');
