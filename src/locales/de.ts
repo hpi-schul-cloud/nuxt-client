@@ -345,6 +345,12 @@ export default {
 		"Status",
 	"components.administration.externalToolsSection.table.header.restrictedTo":
 		"Eingeschränkt auf",
+	"components.administration.externalToolsSection.table.header.medium":
+		"Medienquelle",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable":
+		"externes Medium aktiviert",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable":
+		"externes Medium deaktiviert",
 	"components.administration.provisioningOptions.class.description":
 		"Aktivieren sie diese Option, wenn Klassen in die {instance} synchronisiert werden sollen.",
 	"components.administration.provisioningOptions.class.label":

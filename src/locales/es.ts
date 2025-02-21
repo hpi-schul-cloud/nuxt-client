@@ -348,6 +348,12 @@ export default {
 		"Estado",
 	"components.administration.externalToolsSection.table.header.restrictedTo":
 		"Restringido a",
+	"components.administration.externalToolsSection.table.header.medium":
+		"Fuente de medios",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable":
+		"Medio externo activado",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable":
+		"Medio externo desactivado",
 	"components.administration.provisioningOptions.class.description":
 		"Active esta opción si las clases deben sincronizarse en la {instance}.",
 	"components.administration.provisioningOptions.class.label":
