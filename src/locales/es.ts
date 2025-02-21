@@ -1873,7 +1873,7 @@ export default {
 		"Atención: ¡Solo una persona en la sala puede recibir esto!",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Transferir propiedad",
 	"pages.rooms.members.handOverAlert.label":
-		"Los permisos de esta sala se transfieren a {memberFullName}.",
+		"Los permisos de esta sala se están transfiriendo a {memberFullName}.",
 	"pages.rooms.members.handOverAlert.label.subText":
 		"{currentUserFullName} pierde los permisos «Propietario» y recibe el permiso «Administrar».",
 	"pages.rooms.members.handOverAlert.confirm.label":

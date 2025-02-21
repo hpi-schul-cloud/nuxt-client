@@ -1822,7 +1822,7 @@ export default {
 		"Room permission “Ownership” really transferred?",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Transfer ownership",
 	"pages.rooms.members.handOverAlert.label":
-		"This room permissions are transferred to {memberFullName}.",
+		"This room's permissions are being transferred to {memberFullName}.",
 	"pages.rooms.members.handOverAlert.label.subText":
 		"{currentUserFullName} loses the “Own” permissions and receives the “Administer” permission.",
 	"pages.rooms.members.handOverAlert.confirm.label":
