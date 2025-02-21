@@ -25,6 +25,8 @@
 
 <script setup lang="ts">
 import NotifierModule from "@/store/notifier";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useSchoolLicenseApi } from "@data-license";
 import { ref } from "vue";
@@ -48,11 +50,22 @@ const updateVidisLicenses = async () => {
 				"components.administration.externalToolsSection.vidis.notification.success"
 			),
 		});
-	} catch (e) {
-		notifierModule.show({
-			status: "error",
-			text: t("common.notification.error"),
-		});
+	} catch (errorResponse: unknown) {
+		const apiError = mapAxiosErrorToResponseError(errorResponse);
+
+		if (apiError.code === HttpStatusCode.RequestTimeout) {
+			notifierModule.show({
+				status: "info",
+				text: t(
+					"components.administration.externalToolsSection.vidis.notification.timeout"
+				),
+			});
+		} else {
+			notifierModule.show({
+				status: "error",
+				text: t("common.notification.error"),
+			});
+		}
 	}
 
 	isLoading.value = false;

@@ -320,6 +320,8 @@ export default {
 		"Die Verfügbarkeit der VIDIS-Medien wird automatisch aktualisiert. Zusätzlich kann die Verfügbarkeit der Medien hier manuell aktualisiert werden, z.B. um kürzlich aktivierte Medien direkt in der Schulcloud nutzen zu können.",
 	"components.administration.externalToolsSection.vidis.notification.success":
 		"VIDIS-Medien erfolgreich aktualisiert",
+	"components.administration.externalToolsSection.vidis.notification.timeout":
+		"Die Aktualisierung der VIDIS-Medien läuft im Hintergrund weiter. Bitte gedulden Sie sich noch einen Moment.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
@@ -343,6 +345,12 @@ export default {
 		"Status",
 	"components.administration.externalToolsSection.table.header.restrictedTo":
 		"Eingeschränkt auf",
+	"components.administration.externalToolsSection.table.header.medium":
+		"Medienquelle",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable":
+		"externes Medium aktiviert",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable":
+		"externes Medium deaktiviert",
 	"components.administration.provisioningOptions.class.description":
 		"Aktivieren sie diese Option, wenn Klassen in die {instance} synchronisiert werden sollen.",
 	"components.administration.provisioningOptions.class.label":
