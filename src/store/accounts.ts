@@ -42,7 +42,7 @@ export default class AccountsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			const response: AxiosResponse<JwtTimerResponse> = await $axios.post(
+			const response: AxiosResponse<JwtTimerResponse> = await $axios.get(
 				"/v1/accounts/jwtTimer"
 			);
 			const ttl = response.data.ttl;
