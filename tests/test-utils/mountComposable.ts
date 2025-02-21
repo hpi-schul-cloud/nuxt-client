@@ -14,6 +14,7 @@ export const mountComposable = <T>(
 	});
 
 	const wrapper = mount(TestComponent, options);
+	// Todo: Fix this
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-ignore
 	return wrapper.vm.result;
