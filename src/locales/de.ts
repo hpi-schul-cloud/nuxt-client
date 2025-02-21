@@ -1809,7 +1809,7 @@ export default {
 	"pages.rooms.members.error.remove":
 		"Löschen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.members.error.updateRole":
-		"Die Aktualisierung der Rolle ist fehlgeschlagen.",
+		"Die Aktualisierung der Raumberechtigung ist fehlgeschlagen.",
 	"pages.rooms.members.infoText":
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
