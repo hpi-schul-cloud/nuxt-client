@@ -478,17 +478,20 @@ describe("useRoomMembers", () => {
 		it("should swap the ownership in the state", async () => {
 			const { changeRoomOwner, roomMembers } = useRoomMembers(roomId);
 
-			const membersMock = roomMemberFactory(RoleName.Roomviewer).buildList(3);
-			membersMock[0].roomRoleName = RoleName.Roomowner;
-			roomMembers.value = membersMock;
+			const roomViewers = roomMemberFactory(RoleName.Roomviewer).buildList(3);
+			const roomOwner = roomMemberFactory(RoleName.Roomowner).build();
+			const futureRoomOwner = roomViewers.pop();
+			if (futureRoomOwner) {
+				roomMembers.value = [roomOwner, futureRoomOwner, ...roomViewers];
+			}
 
-			expect(roomMembers.value[0].roomRoleName).toBe(RoleName.Roomowner);
-			expect(roomMembers.value[1].roomRoleName).toBe(RoleName.Roomviewer);
+			expect(roomOwner.roomRoleName).toBe(RoleName.Roomowner);
+			expect(futureRoomOwner?.roomRoleName).toBe(RoleName.Roomviewer);
 
-			await changeRoomOwner(membersMock[1].userId);
+			await changeRoomOwner(futureRoomOwner?.userId ?? "");
 
-			expect(roomMembers.value[0].roomRoleName).toBe(RoleName.Roomadmin);
-			expect(roomMembers.value[1].roomRoleName).toBe(RoleName.Roomowner);
+			expect(roomOwner.roomRoleName).toBe(RoleName.Roomadmin);
+			expect(futureRoomOwner?.roomRoleName).toBe(RoleName.Roomowner);
 		});
 
 		it("should throw an error if the API call fails", async () => {

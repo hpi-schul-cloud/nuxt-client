@@ -82,7 +82,7 @@ describe("ChangeRole.vue", () => {
 				const radioGroup = wrapper.findComponent({
 					name: "v-radio-group",
 				});
-				radioGroup.vm.$emit("update:modelValue", RoleName.Roomowner);
+				radioGroup.setValue(RoleName.Roomowner);
 				await nextTick();
 
 				const alertElementAfter = wrapper.findComponent({ name: "v-alert" });
@@ -99,7 +99,7 @@ describe("ChangeRole.vue", () => {
 					const radioGroup = wrapper.findComponent({
 						name: "v-radio-group",
 					});
-					radioGroup.vm.$emit("update:modelValue", RoleName.Roomowner);
+					radioGroup.setValue(RoleName.Roomowner);
 					await nextTick();
 
 					const confirmButton = wrapper.find(
@@ -117,7 +117,7 @@ describe("ChangeRole.vue", () => {
 					const radioGroup = wrapper.findComponent({
 						name: "v-radio-group",
 					});
-					radioGroup.vm.$emit("update:modelValue", RoleName.Roomowner);
+					radioGroup.setValue(RoleName.Roomowner);
 					await nextTick();
 
 					const confirmButton = wrapper.find(
@@ -202,7 +202,7 @@ describe("ChangeRole.vue", () => {
 			const radioGroup = wrapper.findComponent({
 				name: "v-radio-group",
 			});
-			radioGroup.vm.$emit("update:modelValue", RoleName.Roomowner);
+			radioGroup.setValue(RoleName.Roomowner);
 			await nextTick();
 
 			const confirmButton = wrapper.find(
