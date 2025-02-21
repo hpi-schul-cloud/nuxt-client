@@ -6780,6 +6780,19 @@ export interface ParentConsentResponse {
 /**
  * 
  * @export
+ * @interface PassOwnershipBodyParams
+ */
+export interface PassOwnershipBodyParams {
+    /**
+     * The IDs of the users
+     * @type {string}
+     * @memberof PassOwnershipBodyParams
+     */
+    userId: string;
+}
+/**
+ * 
+ * @export
  * @interface PatchGroupParams
  */
 export interface PatchGroupParams {
@@ -20926,6 +20939,50 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+         * @param {string} roomId 
+         * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerChangeRoomOwner: async (roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerChangeRoomOwner', 'roomId', roomId)
+            // verify required parameter 'passOwnershipBodyParams' is not null or undefined
+            assertParamExists('roomControllerChangeRoomOwner', 'passOwnershipBodyParams', passOwnershipBodyParams)
+            const localVarPath = `/rooms/{roomId}/members/pass-ownership`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(passOwnershipBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21322,6 +21379,18 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+         * @param {string} roomId 
+         * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21456,6 +21525,17 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+         * @param {string} roomId 
+         * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): AxiosPromise<string> {
+            return localVarFp.roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21577,6 +21657,17 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerChangeRolesOfMembers(roomId: string, changeRoomRoleBodyParams: ChangeRoomRoleBodyParams, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+     * @param {string} roomId 
+     * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): AxiosPromise<string>;
 
     /**
      * 
@@ -21704,6 +21795,19 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerChangeRolesOfMembers(roomId: string, changeRoomRoleBodyParams: ChangeRoomRoleBodyParams, options?: any) {
         return RoomApiFp(this.configuration).roomControllerChangeRolesOfMembers(roomId, changeRoomRoleBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+     * @param {string} roomId 
+     * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
