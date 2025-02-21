@@ -12,8 +12,7 @@
 				@dblclick.stop.prevent="() => {}"
 				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
-				size="small"
-				style="height: 36px; width: 36px"
+				size="36"
 			>
 				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">
@@ -21,9 +20,9 @@
 				</span>
 			</VBtn>
 		</template>
-		<VList role="menu">
+		<KebabMenuList>
 			<slot :scope="scope" />
-		</VList>
+		</KebabMenuList>
 	</VMenu>
 </template>
 
@@ -33,6 +32,8 @@ import { mdiDotsVertical } from "@icons/material";
 import { computed, PropType } from "vue";
 import { BoardMenuScope } from "./board-menu-scope";
 import { useI18n } from "vue-i18n";
+import { KebabMenuList } from "@ui-kebab-menu";
+
 const { t } = useI18n();
 
 const props = defineProps({

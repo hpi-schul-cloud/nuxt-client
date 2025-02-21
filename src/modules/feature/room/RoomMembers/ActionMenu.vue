@@ -1,13 +1,13 @@
 <template>
-	<div class="mr-2 pa-0 pl-4" data-testid="multi-action-menu">
-		<span class="d-inline-flex selected-count">
+	<div class="pa-0 pl-4" data-testid="multi-action-menu">
+		<span class="d-inline-flex selected-count text-no-wrap">
 			{{ selectedIds.length }}
 			{{ t("pages.administration.selected") }}
 		</span>
 
-		<v-menu>
+		<VMenu>
 			<template v-slot:activator="{ props }">
-				<v-btn
+				<VBtn
 					v-bind="props"
 					color="primary"
 					class="ml-4"
@@ -16,19 +16,19 @@
 					data-testid="action-menu-button"
 				>
 					{{ t("pages.rooms.members.tableHeader.actions") }}
-				</v-btn>
+				</VBtn>
 			</template>
 
-			<v-list>
+			<KebabMenuList>
 				<KebabMenuActionChangePermission
 					v-if="isVisibleChangeRoleButton"
 					@click="onRoleChange"
 				/>
 				<KebabMenuActionRemoveMember @click="onRemove" />
-			</v-list>
-		</v-menu>
+			</KebabMenuList>
+		</VMenu>
 
-		<v-btn
+		<VBtn
 			ref="resetSelectedMembers"
 			class="ml-2 mr-2"
 			size="x-small"
@@ -44,6 +44,7 @@
 import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
+	KebabMenuList,
 } from "@ui-kebab-menu";
 import { mdiClose } from "@icons/material";
 import { useI18n } from "vue-i18n";

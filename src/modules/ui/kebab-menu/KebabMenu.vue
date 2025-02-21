@@ -10,20 +10,16 @@
 				v-bind.attr="$attrs"
 				variant="text"
 				:ripple="false"
-				icon
+				:icon="mdiDotsVertical"
 				size="36"
 				@click.stop.prevent
 				@dblclick.stop.prevent
 				@keydown.enter.stop
 				@keydown.space.stop
 				@keydown.left.right.up.down.stop
-			>
-				<VIcon>{{ mdiDotsVertical }}</VIcon>
-			</VBtn>
+			/>
 		</template>
-		<VList role="menu">
-			<slot />
-		</VList>
+		<KebabMenuList> <slot /> </KebabMenuList>
 	</VMenu>
 </template>
 
@@ -31,6 +27,7 @@
 import type { Slot, VNode } from "vue";
 import { Comment, Fragment } from "vue";
 import { mdiDotsVertical } from "@icons/material";
+import { KebabMenuList } from "@ui-kebab-menu";
 
 const isVnodeEmpty = (vnodes: Array<VNode>) => {
 	return vnodes.every((node: VNode) => {
