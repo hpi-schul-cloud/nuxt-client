@@ -17,7 +17,10 @@ import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { RoomMember, useRoomMembers } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import ActionMenu from "./ActionMenu.vue";
-import { KebabMenuActionRemoveMember } from "@ui-kebab-menu";
+import {
+	KebabMenuActionChangePermission,
+	KebabMenuActionRemoveMember,
+} from "@ui-kebab-menu";
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
@@ -583,21 +586,10 @@ describe("MembersTable", () => {
 			);
 		});
 
-		describe("isChangeRoleButtonVisible", () => {
-			it.each([
-				{
-					description: "when user is roomowner",
-					currentUserRole: RoleName.Roomowner,
-					expected: true,
-				},
-				{
-					description: "when user is roomadmin",
-					currentUserRole: RoleName.Roomadmin,
-					expected: true,
-				},
-			])(
-				"should be $expected $description",
-				async ({ currentUserRole, expected }) => {
+		describe("change role button", () => {
+			it.each([RoleName.Roomowner, RoleName.Roomadmin])(
+				"should be visible when user is %s",
+				async (currentUserRole) => {
 					const { wrapper } = setup({
 						currentUserRole,
 						changePermissionFlag: true,
@@ -608,12 +600,29 @@ describe("MembersTable", () => {
 					await menuBtn.trigger("click");
 
 					const changeRoleButton = wrapper.findComponent(
-						'[data-testid="kebab-menu-action-change-permission"]'
+						KebabMenuActionChangePermission
 					);
 
-					expect(changeRoleButton.exists()).toBe(expected);
+					expect(changeRoleButton.exists()).toBe(true);
 				}
 			);
+
+			it("should not be visible when feature flag for changePermission is disabled", async () => {
+				const { wrapper } = setup({
+					currentUserRole: RoleName.Roomadmin,
+					changePermissionFlag: false,
+				});
+				const dataTable = wrapper.getComponent(VDataTable);
+
+				const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
+				await menuBtn.trigger("click");
+
+				const changeRoleButton = wrapper.findComponent(
+					KebabMenuActionChangePermission
+				);
+
+				expect(changeRoleButton.exists()).toBe(false);
+			});
 		});
 	});
 });
