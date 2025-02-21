@@ -196,27 +196,29 @@ export const useRoomMembers = (roomId: string) => {
 	const changeRoomOwner = async (userId: string) => {
 		try {
 			await roomApi.roomControllerChangeRoomOwner(roomId, { userId });
-			swapOwnershipInState(userId);
+			setRoomOwner(userId);
 		} catch {
 			showFailure(t("pages.rooms.members.error.updateRole"));
 		}
 	};
 
-	const swapOwnershipInState = (userId: string) => {
+	const setRoomOwner = async (userId: string) => {
 		const currentOwner = roomMembers.value.find(
 			(member) => member.roomRoleName === RoleName.Roomowner
 		);
 		const memberToBeOwner = roomMembers.value.find(
 			(member) => member.userId === userId
 		);
+		if (!currentOwner || !memberToBeOwner) return;
 
-		memberToBeOwner!.roomRoleName = RoleName.Roomowner;
-		memberToBeOwner!.displayRoomRole = roomRole[RoleName.Roomowner];
-		memberToBeOwner!.isSelectable = false;
+		updateMemberRole(memberToBeOwner, RoleName.Roomowner);
+		updateMemberRole(currentOwner, RoleName.Roomadmin);
+	};
 
-		currentOwner!.roomRoleName = RoleName.Roomadmin;
-		currentOwner!.displayRoomRole = roomRole[RoleName.Roomadmin];
-		currentOwner!.isSelectable = false;
+	const updateMemberRole = (member: RoomMember, roleName: RoleName) => {
+		member.roomRoleName = roleName;
+		member.displayRoomRole = roomRole[roleName];
+		member.isSelectable = false;
 	};
 
 	return {

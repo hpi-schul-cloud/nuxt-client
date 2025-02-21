@@ -1826,7 +1826,7 @@ export default {
 	"pages.rooms.members.error.add": "Error al agregar participantes.",
 	"pages.rooms.members.error.remove": "Error al eliminar participantes.",
 	"pages.rooms.members.error.updateRole":
-		"Error al cambiar el permiso de la sala.",
+		"El cambio de autorizaciones en la sala ha fallado.",
 	"pages.rooms.members.infoText":
 		"Añadir miembros a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "más información",

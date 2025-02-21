@@ -8,12 +8,12 @@
 
 		<template v-slot:default>
 			<div class="ml-6 mr-6 mt-2">
-				<div v-if="!isHandOverMode" class="mb-4">
+				<div v-if="!isOwnerHandOverMode" class="mb-4">
 					{{ infoText }}
 				</div>
 				<div>
 					<v-radio-group
-						v-if="!isHandOverMode"
+						v-if="!isOwnerHandOverMode"
 						v-model="selectedRole"
 						hide-details
 						class="ml-n2"
@@ -33,6 +33,7 @@
 							:label="t('pages.rooms.members.roomPermissions.editor')"
 							:value="RoleName.Roomeditor"
 							color="primary"
+							:aria-label="`${t('pages.rooms.members.roomPermissions.editor')} &nbsp; ${t('pages.rooms.members.roleChange.Roomeditor.label')}`"
 						/>
 						<label for="roleChangeEditor" class="ml-10 mt-n2 mb-2 radio-label">
 							{{ t("pages.rooms.members.roleChange.Roomeditor.label") }}
@@ -65,30 +66,26 @@
 							{{ t("pages.rooms.members.roleChange.Roomowner.label.subText") }}
 						</label>
 					</v-radio-group>
-					<v-alert
+
+					<WarningAlert
 						v-if="selectedRole === RoleName.Roomowner"
-						dense
-						class="mb-2"
-						:class="isHandOverMode ? 'ml-0' : 'ml-8'"
-						:icon="mdiAlert"
-						type="warning"
+						:class="isOwnerHandOverMode ? 'ml-0' : 'ml-8'"
 					>
 						<span class="alert-text">
-							<template v-if="!isHandOverMode">
+							<template v-if="!isOwnerHandOverMode">
 								<i18n-t
 									keypath="pages.rooms.members.handOverAlert.label"
 									scope="global"
 								>
 									<template #memberFullName>{{ memberFullName }}</template>
 								</i18n-t>
-								<br />
-								<span>
+								<p class="mb-0">
 									{{
 										t("pages.rooms.members.handOverAlert.label.subText", {
 											currentUserFullName,
 										})
 									}}
-								</span>
+								</p>
 							</template>
 							<template v-else>
 								<i18n-t
@@ -100,18 +97,17 @@
 									</template>
 									<template #memberFullName>{{ memberFullName }}</template>
 								</i18n-t>
-								<br />
-								<span>
+								<p class="mb-0">
 									{{
 										t(
 											"pages.rooms.members.handOverAlert.confirm.label.subText",
 											{ memberFullName }
 										)
 									}}
-								</span>
+								</p>
 							</template>
 						</span>
-					</v-alert>
+					</WarningAlert>
 				</div>
 			</div>
 		</template>
@@ -127,7 +123,7 @@
 					@click="onCancel"
 				/>
 				<v-btn
-					v-if="!isHandOverMode"
+					v-if="!isOwnerHandOverMode"
 					class="ms-auto"
 					color="primary"
 					variant="flat"
@@ -159,7 +155,7 @@ import {
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard, VRadio } from "vuetify/lib/components/index.mjs";
 import { RoomMember } from "@data-room";
-import { mdiAlert } from "@icons/material";
+import { WarningAlert } from "@ui-alert";
 
 const props = defineProps({
 	members: {
@@ -185,9 +181,9 @@ const isChangeRoleOptionVisible = computed(() => {
 		memberToChangeRole.length === 1
 	);
 });
-const isHandOverMode = ref(false);
+const isOwnerHandOverMode = ref(false);
 const dialogTitle = computed(() =>
-	isHandOverMode.value
+	isOwnerHandOverMode.value
 		? t("pages.rooms.members.roleChange.dialogTitle.handOver")
 		: t("pages.rooms.members.changePermission")
 );
@@ -233,7 +229,7 @@ const emit = defineEmits<{
 const onConfirm = () => {
 	if (!selectedRole.value) return;
 	if (selectedRole.value === RoleName.Roomowner) {
-		isHandOverMode.value = true;
+		isOwnerHandOverMode.value = true;
 		return;
 	}
 	emit(
@@ -268,7 +264,6 @@ useFocusTrap(changeRoleContent, {
 	opacity: var(--v-medium-emphasis-opacity);
 }
 .alert-text {
-	color: rgba(var(--v-theme-on-background)) !important;
-	line-height: var(--line-height-lg) !important;
+	line-height: var(--line-height-lg);
 }
 </style>
