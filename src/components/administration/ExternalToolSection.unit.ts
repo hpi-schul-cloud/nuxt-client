@@ -1,4 +1,4 @@
-import { ConfigResponse } from "@/serverApi/v3";
+import { ConfigResponse, MediaSourceLicenseType } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import EnvConfigModule from "@/store/env-config";
 import { SchoolExternalToolMetadata } from "@/store/external-tool";
@@ -10,6 +10,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SCHOOL_EXTERNAL_TOOLS_MODULE_KEY,
 } from "@/utils/inject";
+import { mockedPiniaStoreTyping, MockedStore } from "@@/tests/test-utils";
 import {
 	envsFactory,
 	meResponseFactory,
@@ -23,9 +24,12 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { useSchoolExternalToolUsage } from "@data-external-tool";
+import { useSchoolLicenseStore } from "@data-license";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mdiAlert, mdiCheckCircle } from "@icons/material";
+import { createTestingPinia } from "@pinia/testing";
 import { mount } from "@vue/test-utils";
+import { setActivePinia } from "pinia";
 import { nextTick, ref } from "vue";
 import { Router, useRouter } from "vue-router";
 import { VCardText } from "vuetify/lib/components/index.mjs";
@@ -43,6 +47,13 @@ describe("ExternalToolSection", () => {
 	let useSchoolExternalToolUsageMock: DeepMocked<
 		ReturnType<typeof useSchoolExternalToolUsage>
 	>;
+	let schoolLicenseStore: MockedStore<typeof useSchoolLicenseStore>;
+
+	beforeAll(() => {
+		setActivePinia(createTestingPinia());
+
+		schoolLicenseStore = mockedPiniaStoreTyping(useSchoolLicenseStore);
+	});
 
 	const createDatasheetButtonIndex = 1;
 
@@ -79,7 +90,6 @@ describe("ExternalToolSection", () => {
 		const wrapper = mount(ExternalToolSection, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-
 				provide: {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
@@ -88,7 +98,6 @@ describe("ExternalToolSection", () => {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 			},
-
 			stubs: {
 				VIcon: true,
 			},
@@ -130,6 +139,12 @@ describe("ExternalToolSection", () => {
 					schoolExternalToolsModule.loadSchoolExternalTools
 				).toHaveBeenCalledWith("schoolId");
 			});
+
+			it("should load the school licenses", () => {
+				getWrapper();
+
+				expect(schoolLicenseStore.fetchMediaSchoolLicenses).toHaveBeenCalled();
+			});
 		});
 	});
 
@@ -145,35 +160,56 @@ describe("ExternalToolSection", () => {
 				name: firstToolName,
 				status: schoolToolConfigurationStatusFactory.build(),
 				isDeactivated: false,
+				medium: {
+					mediumId: "tool1",
+					mediaSourceId: "licensedSource",
+					mediaSourceName: "Medium Source Name",
+					mediaSourceLicenseType: MediaSourceLicenseType.SchoolLicense,
+				},
 			});
 
-			const { wrapper, schoolExternalToolsModule } = getWrapper({
-				getSchoolExternalTools: [
-					schoolExternalTool,
-					{
-						id: "testId2",
-						toolId: "toolId",
-						schoolId: "schoolId",
-						parameters: [],
-						name: secondToolName,
-						status: schoolToolConfigurationStatusFactory.build({
-							isOutdatedOnScopeSchool: true,
-						}),
-						isDeactivated: false,
-					},
-					{
-						id: "testId3",
-						toolId: "toolId",
-						schoolId: "schoolId",
-						parameters: [],
-						name: "Test3",
-						status: schoolToolConfigurationStatusFactory.build({
-							isGloballyDeactivated: true,
-						}),
-						isDeactivated: true,
-					},
-				],
-			});
+			schoolLicenseStore.isLicensed.mockReturnValueOnce(true);
+			schoolLicenseStore.isLicensed.mockReturnValue(false);
+
+			const { wrapper, schoolExternalToolsModule } = getWrapper(
+				{
+					getSchoolExternalTools: [
+						schoolExternalTool,
+						{
+							id: "testId2",
+							toolId: "toolId",
+							schoolId: "schoolId",
+							parameters: [],
+							name: secondToolName,
+							status: schoolToolConfigurationStatusFactory.build({
+								isOutdatedOnScopeSchool: true,
+							}),
+							isDeactivated: false,
+							medium: {
+								mediumId: "tool2",
+								mediaSourceId: "notLicensedSource",
+								mediaSourceName: undefined,
+								mediaSourceLicenseType: MediaSourceLicenseType.SchoolLicense,
+							},
+						},
+						{
+							id: "testId3",
+							toolId: "toolId",
+							schoolId: "schoolId",
+							parameters: [],
+							name: "Test3",
+							status: schoolToolConfigurationStatusFactory.build({
+								isGloballyDeactivated: true,
+							}),
+							isDeactivated: true,
+							medium: undefined,
+						},
+					],
+				},
+				{
+					FEATURE_SCHULCONNEX_MEDIA_LICENSE_ENABLED: true,
+				}
+			);
 
 			const windowMock = createMock<Window>();
 			jest.spyOn(window, "open").mockImplementation(() => windowMock);
@@ -204,9 +240,12 @@ describe("ExternalToolSection", () => {
 					"components.administration.externalToolsSection.table.header.status"
 				);
 				expect(vueWrapperArray[2].find("span").text()).toEqual(
+					"components.administration.externalToolsSection.table.header.medium"
+				);
+				expect(vueWrapperArray[3].find("span").text()).toEqual(
 					"components.administration.externalToolsSection.table.header.restrictedTo"
 				);
-				expect(vueWrapperArray[3].find("span").text()).toEqual("");
+				expect(vueWrapperArray[4].find("span").text()).toEqual("");
 			});
 		});
 
@@ -235,22 +274,39 @@ describe("ExternalToolSection", () => {
 				const secondRow = tableRows[1].findAll("td");
 				const thirdRow = tableRows[2].findAll("td");
 
-				expect(true).toBeTruthy();
+				expect(firstRow[1].html()).toContain(mdiCheckCircle);
 				expect(firstRow[1].find("span").text()).toEqual(
 					"components.externalTools.status.latest"
 				);
-				expect(firstRow[1].html()).toContain(mdiCheckCircle);
-				expect(secondRow[1].find("span").text()).toEqual(
-					"components.externalTools.status.outdated"
-				);
+
 				expect(secondRow[1].html()).toContain(mdiAlert);
 				expect(secondRow[1].find("span").text()).toEqual(
 					"components.externalTools.status.outdated"
 				);
+
 				expect(thirdRow[1].html()).toContain(mdiAlert);
 				expect(thirdRow[1].find("span").text()).toEqual(
 					"components.externalTools.status.deactivated"
 				);
+			});
+
+			it("medium status should be rendered in the datatable", () => {
+				const { wrapper } = setupItems();
+
+				const tableRows = wrapper.find("tbody").findAll("tr");
+
+				const firstRow = tableRows[0].findAll("td");
+				const secondRow = tableRows[1].findAll("td");
+				const thirdRow = tableRows[2].findAll("td");
+
+				expect(firstRow[2].html()).toContain(mdiCheckCircle);
+				expect(firstRow[2].find("span").text()).toEqual("Medium Source Name");
+
+				expect(secondRow[2].html()).toContain(mdiAlert);
+				expect(secondRow[2].find("span").text()).toEqual("");
+
+				expect(thirdRow[2].html()).not.toContain("v-icon");
+				expect(thirdRow[2].find("span").text()).toEqual("-");
 			});
 
 			describe("when actions buttons are rendered", () => {
