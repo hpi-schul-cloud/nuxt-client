@@ -51,6 +51,7 @@
 						"
 						start
 						color="success"
+						aria-hidden="false"
 						:aria-label="
 							t(
 								'components.administration.externalToolsSection.table.ariaLabel.mediumAvailable'
@@ -63,6 +64,7 @@
 						v-else
 						start
 						color="warning"
+						aria-hidden="false"
 						:aria-label="
 							t(
 								'components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable'
