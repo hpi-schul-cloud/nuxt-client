@@ -59,7 +59,7 @@ export default class AccountsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			$axios.post("/v1/accounts/jwtTimer");
+			await $axios.post("/v1/accounts/jwtTimer");
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);
