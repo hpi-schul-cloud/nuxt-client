@@ -324,6 +324,8 @@ export default {
 		"Доступність носіїв VIDIS оновлюється автоматично. Крім того, доступність медіафайлів можна оновити вручну, наприклад, мати можливість використовувати нещодавно активовані медіафайли безпосередньо в шкільній хмарі.",
 	"components.administration.externalToolsSection.vidis.notification.success":
 		"Медіа VIDIS успішно оновлено",
+	"components.administration.externalToolsSection.vidis.notification.timeout":
+		"Оновлення VIDIS Media триває на задньому плані. Будь ласка, будьте терплячі на мить.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Неможливо визначити використання інструменту.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
@@ -348,6 +350,12 @@ export default {
 		"статус",
 	"components.administration.externalToolsSection.table.header.restrictedTo":
 		"Обмежено",
+	"components.administration.externalToolsSection.table.header.medium":
+		"Джерело ЗМІ",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable":
+		"Зовнішнє середовище активовано",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable":
+		"Зовнішнє середовище деактивовано",
 	"components.administration.provisioningOptions.class.description":
 		"Активуйте цю опцію, якщо класи мають бути синхронізовані в {instance}.",
 	"components.administration.provisioningOptions.class.label":

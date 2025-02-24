@@ -1,8 +1,23 @@
 import { AxiosError, AxiosHeaders } from "axios";
-import { Factory } from "fishery";
+import { DeepPartial, Factory } from "fishery";
 import { apiResponseErrorFactory } from "./apiResponseErrorFactory";
 
-export const axiosErrorFactory = Factory.define<AxiosError>(({ sequence }) => ({
+class AxiosErrorFactory extends Factory<AxiosError> {
+	withStatusCode(statusCode: number): this {
+		const params: DeepPartial<AxiosError> = {
+			response: {
+				data: {
+					code: statusCode,
+				},
+				status: statusCode,
+			},
+		};
+
+		return this.params(params);
+	}
+}
+
+export const axiosErrorFactory = AxiosErrorFactory.define(({ sequence }) => ({
 	isAxiosError: true,
 	response: {
 		data: apiResponseErrorFactory.build(),
