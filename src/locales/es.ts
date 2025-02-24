@@ -1842,7 +1842,8 @@ export default {
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Menú de acciones para {memberFullName}",
-	"pages.rooms.members.changePermission": "Cambiar las autorizaciones en la sala",
+	"pages.rooms.members.changePermission":
+		"Cambiar las autorizaciones en la sala",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Cambiar autorizaciones de sala para {memberFullName}",
 	"pages.rooms.members.manage": "Miembros de la sala",
@@ -1877,16 +1878,16 @@ export default {
 	"pages.rooms.members.roleChange.Roomowner.label":
 		"Las mismas autorizaciones que «Administrar», además de eliminar la sala",
 	"pages.rooms.members.roleChange.dialogTitle.handOver":
-		"¿El permiso de habitación realmente se transfiere como “propiedad”?",
+		"¿Realmente se transfieren las autorizaciones de “Propietario” de salas?",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Atención: ¡Solo una persona en la sala puede recibir esto!",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Transferir propiedad",
 	"pages.rooms.members.handOverAlert.label":
-		"Los permisos de esta sala se están transfiriendo a {memberFullName}.",
+		"Esta autorización de sala se transfiere a {memberFullName}.",
 	"pages.rooms.members.handOverAlert.label.subText":
-		"{currentUserFullName} pierde los permisos «Propietario» y recibe el permiso «Administrar».",
+		"{currentUserFullName} pierde la autorización «Propietario» y gana la autorización «Administrar».",
 	"pages.rooms.members.handOverAlert.confirm.label":
-		"Si este permiso se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
+		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
 	"pages.rooms.title": "Salas",
