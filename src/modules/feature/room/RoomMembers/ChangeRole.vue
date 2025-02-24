@@ -8,71 +8,44 @@
 
 		<template v-slot:default>
 			<div class="ml-6 mr-6 mt-2">
-				<div v-if="!isOwnerHandOverMode" class="mb-4">
+				<div v-if="!isOwnershipHandoverMode" class="mb-4">
 					{{ infoText }}
 				</div>
 				<div>
 					<v-radio-group
-						v-if="!isOwnerHandOverMode"
+						v-if="!isOwnershipHandoverMode"
 						v-model="selectedRole"
 						hide-details
 						class="ml-n2"
 					>
 						<v-radio
-							id="roleChangeViewer"
-							:label="t('pages.rooms.members.roomPermissions.viewer')"
-							:value="RoleName.Roomviewer"
+							v-for="option in radioOptions"
+							:key="option.role"
+							:value="option.role"
 							color="primary"
-						/>
-						<label for="roleChangeViewer" class="ml-10 mt-n2 mb-2 radio-label">
-							{{ t("pages.rooms.members.roleChange.Roomviewer.label") }}
-						</label>
-
-						<v-radio
-							id="roleChangeEditor"
-							:label="t('pages.rooms.members.roomPermissions.editor')"
-							:value="RoleName.Roomeditor"
-							color="primary"
-							:aria-label="`${t('pages.rooms.members.roomPermissions.editor')} &nbsp; ${t('pages.rooms.members.roleChange.Roomeditor.label')}`"
-						/>
-						<label for="roleChangeEditor" class="ml-10 mt-n2 mb-2 radio-label">
-							{{ t("pages.rooms.members.roleChange.Roomeditor.label") }}
-						</label>
-
-						<v-radio
-							id="roleChangeAdmin"
-							:label="t('pages.rooms.members.roomPermissions.admin')"
-							:value="RoleName.Roomadmin"
-							color="primary"
-						/>
-						<label for="roleChangeAdmin" class="ml-10 mt-n2 mb-2 radio-label">
-							{{ t("pages.rooms.members.roleChange.Roomadmin.label") }}
-						</label>
-
-						<v-radio
-							v-if="isChangeRoleOptionVisible"
-							id="roleChangeOwner"
-							:label="t('pages.rooms.members.roomPermissions.owner')"
-							:value="RoleName.Roomowner"
-							color="primary"
-						/>
-						<label
-							v-if="isChangeRoleOptionVisible"
-							for="roleChangeOwner"
-							class="ml-10 mt-n2 mb-2 radio-label"
+							class="align-start mb-2"
 						>
-							{{ t("pages.rooms.members.roleChange.Roomowner.label") }}
-							<br />
-							{{ t("pages.rooms.members.roleChange.Roomowner.label.subText") }}
-						</label>
+							<template #label>
+								<div class="d-flex flex-column mt-2">
+									{{ option.labelHeader }}
+									<span
+										v-for="labelDescription in option.labelDescriptions"
+										:key="labelDescription"
+										class="radio-label"
+									>
+										{{ t(labelDescription) }}
+									</span>
+								</div>
+							</template>
+						</v-radio>
 					</v-radio-group>
 
 					<WarningAlert
 						v-if="selectedRole === RoleName.Roomowner"
-						:class="isOwnerHandOverMode ? 'ml-0' : 'ml-8'"
+						:class="isOwnershipHandoverMode ? 'ml-0' : 'ml-8'"
 					>
 						<span class="alert-text">
-							<template v-if="!isOwnerHandOverMode">
+							<template v-if="!isOwnershipHandoverMode">
 								<i18n-t
 									keypath="pages.rooms.members.handOverAlert.label"
 									scope="global"
@@ -123,7 +96,7 @@
 					@click="onCancel"
 				/>
 				<v-btn
-					v-if="!isOwnerHandOverMode"
+					v-if="!isOwnershipHandoverMode"
 					class="ms-auto"
 					color="primary"
 					variant="flat"
@@ -181,9 +154,9 @@ const isChangeRoleOptionVisible = computed(() => {
 		memberToChangeRole.length === 1
 	);
 });
-const isOwnerHandOverMode = ref(false);
+const isOwnershipHandoverMode = ref(false);
 const dialogTitle = computed(() =>
-	isOwnerHandOverMode.value
+	isOwnershipHandoverMode.value
 		? t("pages.rooms.members.roleChange.dialogTitle.handOver")
 		: t("pages.rooms.members.changePermission")
 );
@@ -229,7 +202,7 @@ const emit = defineEmits<{
 const onConfirm = () => {
 	if (!selectedRole.value) return;
 	if (selectedRole.value === RoleName.Roomowner) {
-		isOwnerHandOverMode.value = true;
+		isOwnershipHandoverMode.value = true;
 		return;
 	}
 	emit(
@@ -246,6 +219,39 @@ const onChangeOwner = () => {
 const onCancel = () => {
 	emit("cancel");
 };
+
+const radioOptions = computed(() => {
+	const baseRoles = [
+		{
+			role: RoleName.Roomviewer,
+			labelHeader: t("pages.rooms.members.roomPermissions.viewer"),
+			labelDescriptions: ["pages.rooms.members.roleChange.Roomviewer.label"],
+		},
+		{
+			role: RoleName.Roomeditor,
+			labelHeader: t("pages.rooms.members.roomPermissions.editor"),
+			labelDescriptions: ["pages.rooms.members.roleChange.Roomeditor.label"],
+		},
+		{
+			role: RoleName.Roomadmin,
+			labelHeader: t("pages.rooms.members.roomPermissions.admin"),
+			labelDescriptions: ["pages.rooms.members.roleChange.Roomadmin.label"],
+		},
+	];
+
+	if (isChangeRoleOptionVisible.value) {
+		baseRoles.push({
+			role: RoleName.Roomowner,
+			labelHeader: t("pages.rooms.members.roomPermissions.owner"),
+			labelDescriptions: [
+				"pages.rooms.members.roleChange.Roomowner.label",
+				"pages.rooms.members.roleChange.Roomowner.label.subText",
+			],
+		});
+	}
+
+	return baseRoles;
+});
 
 const changeRoleContent = ref();
 useFocusTrap(changeRoleContent, {

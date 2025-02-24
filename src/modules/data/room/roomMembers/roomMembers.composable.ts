@@ -209,7 +209,10 @@ export const useRoomMembers = (roomId: string) => {
 		const memberToBeOwner = roomMembers.value.find(
 			(member) => member.userId === userId
 		);
-		if (!currentOwner || !memberToBeOwner) return;
+		if (!currentOwner || !memberToBeOwner) {
+			showFailure(t("pages.rooms.members.error.updateRole"));
+			return;
+		}
 
 		updateMemberRole(memberToBeOwner, RoleName.Roomowner);
 		updateMemberRole(currentOwner, RoleName.Roomadmin);

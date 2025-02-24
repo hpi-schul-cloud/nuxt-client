@@ -494,6 +494,24 @@ describe("useRoomMembers", () => {
 			expect(futureRoomOwner?.roomRoleName).toBe(RoleName.Roomowner);
 		});
 
+		it('should show an error if the "currentOwner" or "memberToBeOwner" is not found', async () => {
+			const { changeRoomOwner } = useRoomMembers(roomId);
+
+			const membersMock = roomMemberFactory(RoleName.Roomviewer).buildList(3);
+			const futureRoomOwner = membersMock.pop();
+			if (futureRoomOwner) {
+				roomApiMock.roomControllerChangeRoomOwner.mockResolvedValue(
+					mockApiResponse({})
+				);
+			}
+
+			await changeRoomOwner(futureRoomOwner?.userId ?? "");
+
+			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+				"pages.rooms.members.error.updateRole"
+			);
+		});
+
 		it("should throw an error if the API call fails", async () => {
 			const { changeRoomOwner } = useRoomMembers(roomId);
 
