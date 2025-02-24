@@ -148,7 +148,7 @@ const props = defineProps({
 const { t } = useI18n();
 const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members")?.value;
-const isChangeRoleOptionVisible = computed(() => {
+const isChangeOwnershipOptionVisible = computed(() => {
 	return (
 		props.currentUser?.roomRoleName === RoleName.Roomowner &&
 		memberToChangeRole.length === 1
@@ -239,7 +239,7 @@ const radioOptions = computed(() => {
 		},
 	];
 
-	if (isChangeRoleOptionVisible.value) {
+	if (isChangeOwnershipOptionVisible.value) {
 		baseRoles.push({
 			role: RoleName.Roomowner,
 			labelHeader: t("pages.rooms.members.roomPermissions.owner"),
