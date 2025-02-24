@@ -62,6 +62,7 @@ import {
 	getMediatype,
 	getID,
 } from "@/utils/helpers";
+import { $axios } from "@/utils/api";
 
 let slowAPICall;
 
@@ -121,10 +122,10 @@ export default {
 		url() {
 			if (getMediatype(this.resource) === "file-h5p") {
 				let baseUrlH5p = "";
-				if (this.$axios.defaults.baseURL.includes("/api")) {
-					baseUrlH5p = this.$axios.defaults.baseURL.slice(0, -4);
+				if ($axios.defaults.baseURL.includes("/api")) {
+					baseUrlH5p = $axios.defaults.baseURL.slice(0, -4);
 				} else {
-					baseUrlH5p = this.$axios.defaults.baseURL;
+					baseUrlH5p = $axios.defaults.baseURL;
 				}
 				return (
 					baseUrlH5p +
@@ -153,7 +154,7 @@ export default {
 					if (getMediatype(element) === "file-h5p") {
 						const elementID = getID(element);
 						if (elementID !== null) {
-							const baseUrlH5p = this.$axios.defaults.baseURL.slice(0, -4);
+							const baseUrlH5p = $axios.defaults.baseURL.slice(0, -4);
 							elementUrl = `${baseUrlH5p}/content/${elementID}`;
 						} else {
 							elementUrl = null;
@@ -185,7 +186,7 @@ export default {
 				let url = element.url;
 				if (element.merlinReference) {
 					const requestUrl = `/v1/edu-sharing-merlinToken/?merlinReference=${element.merlinReference}`;
-					url = (await this.$axios.get(requestUrl)).data || element.url;
+					url = (await $axios.get(requestUrl)).data || element.url;
 				}
 				return {
 					title: element.title,
