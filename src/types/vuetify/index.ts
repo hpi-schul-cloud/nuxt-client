@@ -4,8 +4,8 @@ type SelectItemKey =
 	| (string | number)[]
 	| ((item: Record<string, unknown>, fallback?: unknown) => unknown);
 
-export type DataTableCompareFunction<T = never> = (a: T, b: T) => number;
-export type DataTableHeader<T = never> = {
+export type DataTableCompareFunction<T> = (a: T, b: T) => number;
+export type DataTableHeader<T> = {
 	key: string;
 	value?: SelectItemKey;
 	title: string;
