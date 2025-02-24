@@ -78,8 +78,10 @@
 			<ChangeRole
 				:members="membersToChangeRole"
 				:room-name="room?.name || ''"
+				:current-user="currentUser"
 				@cancel="onDialogClose"
 				@confirm="onChangeRole"
+				@change-room-owner="onChangeOwner"
 			/>
 		</v-dialog>
 	</DefaultWireframe>
@@ -133,6 +135,7 @@ const {
 	currentUser,
 	selectedIds,
 	addMembers,
+	changeRoomOwner,
 	fetchMembers,
 	getPotentialMembers,
 	getSchools,
@@ -213,6 +216,12 @@ const onChangeRole = async (
 	id?: string
 ) => {
 	await updateMembersRole(role, id);
+	isChangeRoleDialogOpen.value = false;
+	selectedIds.value = [];
+};
+
+const onChangeOwner = async (id: string) => {
+	await changeRoomOwner(id);
 	isChangeRoleDialogOpen.value = false;
 	selectedIds.value = [];
 };

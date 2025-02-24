@@ -195,6 +195,7 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
 import { mdiCalendar, mdiClose, mdiOpenInNew, mdiPound } from "@icons/material";
 import BaseLink from "../base/BaseLink";
+import { $axios } from "@/utils/api";
 
 const DEFAULT_AUTHOR = "admin";
 
@@ -319,7 +320,7 @@ export default {
 	methods: {
 		async goToMerlinContent(merlinReference) {
 			const requestUrl = `/v1/edu-sharing-merlinToken/?merlinReference=${merlinReference}`;
-			const url = (await this.$axios.get(requestUrl)).data;
+			const url = (await $axios.get(requestUrl)).data;
 			window.open(url, "_blank");
 		},
 		isNotStudent(roles) {

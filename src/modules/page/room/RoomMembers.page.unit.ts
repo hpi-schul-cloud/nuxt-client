@@ -314,6 +314,24 @@ describe("RoomMembersPage", () => {
 		});
 	});
 
+	describe("onChangeOwner", () => {
+		it("should call 'updateOwner' method", async () => {
+			mockRoomMemberCalls.isLoading = ref(false);
+			const { wrapper, members } = setup();
+			await nextTick();
+
+			const membersTable = wrapper.findComponent(MembersTable);
+			membersTable.vm.$emit("change:permission", [members[1].userId]);
+			await nextTick();
+
+			const changeRoleDialog = wrapper.findComponent(ChangeRole);
+			changeRoleDialog.vm.$emit("change-room-owner", members[1].userId);
+			expect(mockRoomMemberCalls.changeRoomOwner).toHaveBeenCalledWith(
+				members[1].userId
+			);
+		});
+	});
+
 	describe("visibility options", () => {
 		describe("title menu visibility", () => {
 			it.each([
