@@ -1842,9 +1842,10 @@ export default {
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Menú de acciones para {memberFullName}",
-	"pages.rooms.members.changePermission": "Cambiar permisos",
+	"pages.rooms.members.changePermission":
+		"Cambiar las autorizaciones en la sala",
 	"pages.rooms.members.changePermission.ariaLabel":
-		"Cambiar el permiso para {memberFullName}",
+		"Cambiar autorizaciones de sala para {memberFullName}",
 	"pages.rooms.members.manage": "Miembros de la sala",
 	"pages.rooms.members.remove.ariaLabel":
 		"Eliminar {memberFullName} de la sala",
@@ -1862,31 +1863,31 @@ export default {
 	"pages.rooms.members.roomPermissions.owner": "Propietario",
 	"pages.rooms.members.roomPermissions.editor": "Editar",
 	"pages.rooms.members.roomPermissions.viewer": "Leer",
-	"pages.rooms.members.tableHeader.roomRole": "Permisos de la sala",
+	"pages.rooms.members.tableHeader.roomRole": "Autorizaciones de sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",
 	"pages.rooms.members.roleChange.subTitle":
-		"{memberFullName} recibe los siguientes permisos de sala en “{roomName}”:",
+		"{memberFullName} recibe las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
-		"Los miembros seleccionados recibirán los siguientes permisos de sala en “{roomName}”:",
+		"Los miembros seleccionados reciben las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.Roomviewer.label":
 		"Accede a los tableros de la sala y visualiza el contenido",
 	"pages.rooms.members.roleChange.Roomeditor.label": "Crear y editar contenido",
 	"pages.rooms.members.roleChange.Roomadmin.label":
-		'Los mismos permisos que "Editar", además de agregar y eliminar otros miembros, cambiar sus permisos de sala y editar la sala',
+		'Las mismas autorizaciones que en "Editar", además de añadir y eliminar otros miembros, cambiar sus autorizaciones de sala y editar salas.',
 	"pages.rooms.members.roleChange.Roomowner.label":
 		"Las mismas autorizaciones que «Administrar», además de eliminar la sala",
 	"pages.rooms.members.roleChange.dialogTitle.handOver":
-		"¿El permiso de habitación realmente se transfiere como “propiedad”?",
+		"¿Realmente se transfieren las autorizaciones de “Propietario” de salas?",
 	"pages.rooms.members.roleChange.Roomowner.label.subText":
 		"Atención: ¡Solo una persona en la sala puede recibir esto!",
 	"pages.rooms.members.roleChange.handOverBtn.text": "Transferir propiedad",
 	"pages.rooms.members.handOverAlert.label":
-		"Los permisos de esta sala se están transfiriendo a {memberFullName}.",
+		"Esta autorización de sala se transfiere a {memberFullName}.",
 	"pages.rooms.members.handOverAlert.label.subText":
-		"{currentUserFullName} pierde los permisos «Propietario» y recibe el permiso «Administrar».",
+		"{currentUserFullName} pierde la autorización «Propietario» y gana la autorización «Administrar».",
 	"pages.rooms.members.handOverAlert.confirm.label":
-		"Si este permiso se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
+		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
 	"pages.rooms.title": "Salas",

@@ -1793,9 +1793,9 @@ export default {
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Action menu for {memberFullName}",
-	"pages.rooms.members.changePermission": "Change permissions",
+	"pages.rooms.members.changePermission": "Change room permissions",
 	"pages.rooms.members.changePermission.ariaLabel":
-		"Change permissions for {memberFullName}",
+		"Change room permissions for {memberFullName}",
 	"pages.rooms.members.manage": "Room members",
 	"pages.rooms.members.remove.ariaLabel":
 		"Remove {memberFullName} from the room",
