@@ -15,6 +15,8 @@ import {
 import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import TaskItemStudent from "./TaskItemStudent.vue";
+import { ComponentProps } from "vue-component-type-helpers";
+
 const { tasks, openTasksWithoutDueDate, openTasksWithDueDate, invalidTasks } =
 	mocks;
 
@@ -26,7 +28,7 @@ const mockRouter = {
 	push: jest.fn(),
 };
 
-const getWrapper = (props: object, options?: object) => {
+const getWrapper = (props: ComponentProps<typeof TaskItemStudent>) => {
 	return mount(TaskItemStudent, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
@@ -37,7 +39,6 @@ const getWrapper = (props: object, options?: object) => {
 			},
 		},
 		props,
-		...options,
 		mocks: {
 			$router: mockRouter,
 		},
@@ -51,7 +52,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 		notifierModuleMock = createModuleMocks(NotifierModule);
 	});
 
-	it("Should direct user to legacy task details page", () => {
+	it("Should direct user to legacy task details page", async () => {
 		Object.defineProperty(window, "location", {
 			set: jest.fn(),
 			get: () => createMock<Location>(),
@@ -60,7 +61,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 
 		const wrapper = getWrapper({ task: tasks[0] });
 		const taskCard = wrapper.findComponent({ name: "v-list-item" });
-		taskCard.trigger("click");
+		await taskCard.trigger("click");
 
 		expect(locationSpy).toHaveBeenCalledWith(`/homework/${tasks[0].id}`);
 	});
@@ -75,7 +76,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 	it("Should display due date label if task has dueDate", () => {
 		const wrapper = getWrapper({ task: tasks[0] });
 
-		const convertedDueDate = dateTimeFromUTC((tasks[0] as any).dueDate);
+		const convertedDueDate = dateTimeFromUTC(tasks[0].dueDate);
 		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
 		const dueDateLabel = wrapper.find("[data-test-id='dueDateLabel']");
@@ -145,7 +146,7 @@ describe("@/components/molecules/TaskItemStudent", () => {
 
 		wrapper.vm.$vuetify.display.xs = true;
 
-		const convertedDueDate = dateFromUTC((tasks[0] as any).dueDate);
+		const convertedDueDate = dateFromUTC(tasks[0].dueDate);
 		const expectedDueDateLabel = `pages.tasks.labels.due ${convertedDueDate}`;
 
 		expect(wrapper.vm.dueDateLabel).toBe(expectedDueDateLabel);

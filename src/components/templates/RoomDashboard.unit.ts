@@ -10,14 +10,14 @@ import {
 	NOTIFIER_MODULE_KEY,
 	SHARE_MODULE_KEY,
 } from "@/utils/inject";
-
-import { envsFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
+import { ComponentProps } from "vue-component-type-helpers";
+import { envsFactory } from "@@/tests/test-utils";
 import { createMock } from "@golevelup/ts-jest";
 import { mount, VueWrapper } from "@vue/test-utils";
 import { nextTick } from "vue";
@@ -124,7 +124,10 @@ const shareModuleMock = createModuleMocks(ShareModule, {
 });
 const notifierModuleMock = createModuleMocks(NotifierModule);
 
-const getWrapper = (props: any, options?: object) => {
+const getWrapper = (
+	props: ComponentProps<typeof RoomDashboard>,
+	options?: object
+) => {
 	const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 		getEnv: envsFactory.build(),
 	});

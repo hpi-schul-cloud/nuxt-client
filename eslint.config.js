@@ -51,7 +51,7 @@ module.exports = [
 				"error",
 				{ allowInterfaces: "with-single-extends" },
 			],
-			"@typescript-eslint/no-explicit-any": "warn",
+			"@typescript-eslint/no-explicit-any": "error",
 			"@typescript-eslint/no-inferrable-types": "error",
 			"@typescript-eslint/no-require-imports": "warn",
 			"@typescript-eslint/no-restricted-imports": [

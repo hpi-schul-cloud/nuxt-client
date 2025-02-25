@@ -1,6 +1,8 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { envConfigModule, accountsModule } from "@/store";
 
+type SetRemainingTimeInSeconds = (remainingTime: number) => void;
+type SetActive = (active: boolean, error: boolean) => void;
 // feature for jwt timer reset is disabled in dev environments.
 // we should probably check the feature flag directly?
 const jwtTimerDisabled = () => {
@@ -12,10 +14,10 @@ let retry = 0;
 let totalRetry = 0;
 const decRstIntervallSec = 20;
 const updateIntervallMin = 2;
-let decrementer: any = null;
-let polling: any = null;
+let decrementer: ReturnType<typeof setTimeout>;
+let polling: ReturnType<typeof setTimeout>;
 
-let lastUpdated: any = null;
+let lastUpdated: number;
 
 const toast = {
 	error401: -1,
@@ -23,12 +25,12 @@ const toast = {
 	success: 1,
 };
 
-const decrementRemainingTime: any = (
-	remainingTimeInSeconds: any,
-	setRemainingTimeInSeconds: any,
-	active: any,
-	showWarningOnRemainingSeconds: any,
-	setActive: any
+const decrementRemainingTime = (
+	remainingTimeInSeconds: number,
+	setRemainingTimeInSeconds: SetRemainingTimeInSeconds,
+	active: boolean,
+	showWarningOnRemainingSeconds: number,
+	setActive: SetActive
 ) => {
 	return setTimeout(() => {
 		if (remainingTimeInSeconds >= 60) {
@@ -53,16 +55,18 @@ const decrementRemainingTime: any = (
 	}, 1000 * decRstIntervallSec);
 };
 
-const updateRemainingTime = (setRemainingTimeInSeconds: any) => {
+const updateRemainingTime = (
+	setRemainingTimeInSeconds: SetRemainingTimeInSeconds
+) => {
 	if (jwtTimerDisabled()) {
 		return;
 	}
 	return setInterval(
 		async () => {
 			try {
-				const res: any = await accountsModule.getTTL();
-				if (res && res.ttl && Number.isInteger(res.ttl) && res.ttl > 0) {
-					setRemainingTimeInSeconds(res.ttl);
+				const ttl = await accountsModule.getTTL();
+				if (ttl > 0) {
+					setRemainingTimeInSeconds(ttl);
 				} else {
 					console.error("Update remaining session time failed!");
 				}
@@ -84,13 +88,13 @@ const updateRemainingTime = (setRemainingTimeInSeconds: any) => {
 };
 
 const extendSession = async (
-	remainingTimeInSeconds: any,
-	setRemainingTimeInSeconds: any,
-	active: any,
-	showWarningOnRemainingSeconds: any,
-	setActive: any,
-	defaultRemainingTimeInSeconds: any,
-	setToastValue: any
+	remainingTimeInSeconds: number,
+	setRemainingTimeInSeconds: SetRemainingTimeInSeconds,
+	active: boolean,
+	showWarningOnRemainingSeconds: number,
+	setActive: SetActive,
+	defaultRemainingTimeInSeconds: number,
+	setToastValue: (value: number) => void
 ) => {
 	if (jwtTimerDisabled()) {
 		return Promise.resolve();
@@ -231,7 +235,10 @@ export default class AutoLogoutModule extends VuexModule {
 			}
 			if (!polling) {
 				lastUpdated = Date.now();
-				polling = updateRemainingTime(this.setRemainingTimeInSeconds);
+				const newPolling = updateRemainingTime(this.setRemainingTimeInSeconds);
+				if (newPolling !== undefined) {
+					polling = newPolling;
+				}
 			}
 		} catch (error) {
 			console.error(error);

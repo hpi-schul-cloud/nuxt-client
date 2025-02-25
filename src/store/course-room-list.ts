@@ -7,7 +7,7 @@ import {
 	DashboardApiInterface,
 	DashboardGridElementResponse,
 } from "../serverApi/v3/api";
-import { $axios } from "../utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "../utils/api";
 
 import { currentDate, fromUTC } from "@/plugins/datetime";
 import { BusinessError } from "./types/commons";
@@ -119,7 +119,7 @@ export default class CourseRoomListModule extends VuexModule {
 	}
 
 	@Mutation
-	setPosition(droppedComponent: DroppedObject | any): void {
+	setPosition(droppedComponent: DroppedObject): void {
 		const { to } = droppedComponent;
 		const itemToBeChanged = this.roomsData.find(
 			(item) => item.id == droppedComponent.item.id
@@ -226,8 +226,14 @@ export default class CourseRoomListModule extends VuexModule {
 			this.setRoomDataId(data.id || "");
 			this.setRoomData(data.gridElements || []);
 			if (indicateLoading) this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
+			});
 			if (indicateLoading) this.setLoading(false);
 		}
 	}
@@ -250,8 +256,14 @@ export default class CourseRoomListModule extends VuexModule {
 			this.setPosition(payload);
 			this.setRoomData(response.data.gridElements);
 			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
+			});
 			this.setLoading(false);
 		}
 	}
@@ -278,8 +290,14 @@ export default class CourseRoomListModule extends VuexModule {
 			};
 			this.setRoomData(roomsData);
 			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
+			});
 			this.setLoading(false);
 		}
 	}
@@ -292,8 +310,14 @@ export default class CourseRoomListModule extends VuexModule {
 			const tempData = this.roomsData.filter((item) => item.id !== id);
 			this.setRoomData(tempData);
 			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
+			});
 			this.setLoading(false);
 		}
 	}
@@ -309,8 +333,14 @@ export default class CourseRoomListModule extends VuexModule {
 
 			this.setAllElements(data.data);
 			this.setLoading(false);
-		} catch (error: any) {
-			this.setError(error);
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
+			this.setBusinessError({
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
+			});
 			this.setLoading(false);
 		}
 	}
@@ -328,11 +358,13 @@ export default class CourseRoomListModule extends VuexModule {
 				})
 			).data;
 			this.setImportedCourseId(importedCourseResponse.id || undefined);
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
 			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
 		}
 	}

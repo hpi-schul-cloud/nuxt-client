@@ -279,7 +279,7 @@ import {
 	mdiFlagOutline,
 	mdiPencilOutline,
 } from "@icons/material";
-import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch";
+import vImportUsersMatchSearch from "@/components/molecules/vImportUsersMatchSearch.vue";
 import {
 	ImportUserResponseRoleNamesEnum,
 	SchulcloudTheme,

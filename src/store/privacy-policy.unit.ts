@@ -7,8 +7,12 @@ import {
 } from "@/store/types/consent-version";
 import { BusinessError } from "@/store/types/commons";
 
-let receivedRequests: any[] = [];
-let getRequestReturn: any = {};
+let receivedRequests: { path: string }[] = [];
+let getRequestReturn:
+	| { data: { data: ConsentVersion[] } }
+	| { data: ConsentVersion } = {
+	data: { data: [] },
+};
 
 const axiosInitializer = (error?: boolean) => {
 	initializeAxios({
@@ -43,7 +47,9 @@ describe("privacy policy module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
 			receivedRequests = [];
-			getRequestReturn = {};
+			getRequestReturn = {
+				data: { data: [] },
+			};
 		});
 
 		describe("fetchPrivacyPolicy", () => {
@@ -136,7 +142,15 @@ describe("privacy policy module", () => {
 						consentText: "",
 						publishedAt: "currentDate",
 						consentTypes: ["privacy"],
+						createdAt: "someotherdate",
+						updatedAt: "someotherdate",
 						consentData: {
+							_id: "999",
+							schoolId: "333",
+							fileType: "pdf",
+							fileName: "somefilename",
+							createdAt: "someotherdate",
+							updatedAt: "someotherdate",
 							data: "data:application/pdf;base64,SOMENEWFILEDATA",
 						},
 					},

@@ -1,6 +1,11 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { $axios } from "../utils/api";
 import { BusinessError, Status } from "./types/commons";
+import { AxiosResponse } from "axios";
+
+type JwtTimerResponse = {
+	ttl: number;
+};
 
 @Module({
 	name: "accountsModule",
@@ -33,14 +38,19 @@ export default class AccountsModule extends VuexModule {
 	}
 
 	@Action
-	async getTTL(): Promise<void> {
+	async getTTL(): Promise<number> {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			$axios.post("/v1/accounts/jwtTimer");
+			const response: AxiosResponse<JwtTimerResponse> = await $axios.get(
+				"/v1/accounts/jwtTimer"
+			);
+			const ttl = response.data.ttl;
 			this.setStatus("completed");
+			return ttl ?? 0;
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);
+			throw error;
 		}
 	}
 
@@ -49,10 +59,11 @@ export default class AccountsModule extends VuexModule {
 		try {
 			this.resetBusinessError();
 			this.setStatus("pending");
-			$axios.post("/v1/accounts/jwtTimer");
+			await $axios.post("/v1/accounts/jwtTimer");
 			this.setStatus("completed");
 		} catch (error) {
 			this.setBusinessError(error as BusinessError);
+			throw error;
 		}
 	}
 }

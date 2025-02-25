@@ -11,7 +11,7 @@ export function useExternalToolsSectionUtils(
 	t: (key: string) => string = () => "",
 	mediaLicenseEnabled = false
 ) {
-	const getHeaders: DataTableHeader[] = [
+	const getHeaders: DataTableHeader<SchoolExternalToolMediumResponse>[] = [
 		{
 			title: t("common.labels.name"),
 			value: "name",
