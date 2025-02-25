@@ -15,34 +15,19 @@
 
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 import { Configuration } from '../configuration';
-// Some imports not used depending on template conditions
-// @ts-ignore
 import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObject, setBearerAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from '../common';
-// @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-// @ts-ignore
 import { ApiValidationError } from '../models';
-// @ts-ignore
 import { CopyFileListResponse } from '../models';
-// @ts-ignore
 import { CopyFileParams } from '../models';
-// @ts-ignore
 import { CopyFilesOfParentParams } from '../models';
-// @ts-ignore
 import { FileRecordListResponse } from '../models';
-// @ts-ignore
 import { FileRecordParentType } from '../models';
-// @ts-ignore
 import { FileRecordResponse } from '../models';
-// @ts-ignore
 import { FileUrlParams } from '../models';
-// @ts-ignore
 import { PreviewOutputMimeTypes } from '../models';
-// @ts-ignore
 import { PreviewWidth } from '../models';
-// @ts-ignore
 import { RenameFileParams } from '../models';
-// @ts-ignore
 import { StorageLocation } from '../models';
 /**
  * FileApi - axios parameter creator
