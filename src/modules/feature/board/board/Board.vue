@@ -297,12 +297,8 @@ const scrollToNodeAndFocus = (scrollTargetId: string) => {
 	);
 
 	if (targetElement) {
-		targetElement.scrollIntoView({ block: "start", inline: "center" });
-
-		const { contentEditable } = targetElement;
-		targetElement.contentEditable = "true";
+		targetElement.scrollIntoView({ block: "center", inline: "center" });
 		targetElement.focus();
-		targetElement.contentEditable = contentEditable;
 	}
 };
 
