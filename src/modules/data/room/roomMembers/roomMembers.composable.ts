@@ -193,8 +193,40 @@ export const useRoomMembers = (roomId: string) => {
 		}
 	};
 
+	const changeRoomOwner = async (userId: string) => {
+		try {
+			await roomApi.roomControllerChangeRoomOwner(roomId, { userId });
+			setRoomOwner(userId);
+		} catch {
+			showFailure(t("pages.rooms.members.error.updateRole"));
+		}
+	};
+
+	const setRoomOwner = async (userId: string) => {
+		const currentOwner = roomMembers.value.find(
+			(member) => member.roomRoleName === RoleName.Roomowner
+		);
+		const memberToBeOwner = roomMembers.value.find(
+			(member) => member.userId === userId
+		);
+		if (!currentOwner || !memberToBeOwner) {
+			showFailure(t("pages.rooms.members.error.updateRole"));
+			return;
+		}
+
+		updateMemberRole(memberToBeOwner, RoleName.Roomowner);
+		updateMemberRole(currentOwner, RoleName.Roomadmin);
+	};
+
+	const updateMemberRole = (member: RoomMember, roleName: RoleName) => {
+		member.roomRoleName = roleName;
+		member.displayRoomRole = roomRole[roleName];
+		member.isSelectable = false;
+	};
+
 	return {
 		addMembers,
+		changeRoomOwner,
 		fetchMembers,
 		getPotentialMembers,
 		getSchools,

@@ -320,6 +320,8 @@ export default {
 		"Die Verfügbarkeit der VIDIS-Medien wird automatisch aktualisiert. Zusätzlich kann die Verfügbarkeit der Medien hier manuell aktualisiert werden, z.B. um kürzlich aktivierte Medien direkt in der Schulcloud nutzen zu können.",
 	"components.administration.externalToolsSection.vidis.notification.success":
 		"VIDIS-Medien erfolgreich aktualisiert",
+	"components.administration.externalToolsSection.vidis.notification.timeout":
+		"Die Aktualisierung der VIDIS-Medien läuft im Hintergrund weiter. Bitte gedulden Sie sich noch einen Moment.",
 	"components.administration.externalToolsSection.dialog.content.metadata.error":
 		"Die Verwendung des Tools konnte nicht ermittelt werden.",
 	"components.administration.externalToolsSection.dialog.content.header.firstParagraph":
@@ -343,6 +345,12 @@ export default {
 		"Status",
 	"components.administration.externalToolsSection.table.header.restrictedTo":
 		"Eingeschränkt auf",
+	"components.administration.externalToolsSection.table.header.medium":
+		"Medienquelle",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable":
+		"externes Medium aktiviert",
+	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable":
+		"externes Medium deaktiviert",
 	"components.administration.provisioningOptions.class.description":
 		"Aktivieren sie diese Option, wenn Klassen in die {instance} synchronisiert werden sollen.",
 	"components.administration.provisioningOptions.class.label":
@@ -1808,23 +1816,26 @@ export default {
 		"Hinzufügen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.members.error.remove":
 		"Löschen von Teilnehmenden fehlgeschlagen.",
+	"pages.rooms.members.error.updateRole":
+		"Die Änderung der Raumberechtigung ist fehlgeschlagen.",
 	"pages.rooms.members.infoText":
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
-	"pages.rooms.members.actionMenu.ariaLabel": "Aktionsmenü für {memberName}",
+	"pages.rooms.members.actionMenu.ariaLabel":
+		"Aktionsmenü für {memberFullName}",
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
 	"pages.rooms.members.changePermission.ariaLabel":
-		"Berechtigung für {memberName} ändern",
+		"Raumberechtigungen für {memberFullName} ändern",
 	"pages.rooms.members.manage": "Raum-Mitglieder",
-	"pages.rooms.members.remove.ariaLabel": "{memberName} aus Raum entfernen",
+	"pages.rooms.members.remove.ariaLabel": "{memberFullName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Ausgewählte Mitglieder aus der Liste zurücksetzen",
 	"pages.rooms.members.multipleRemove.ariaLabel":
 		"Mehrere Mitglieder aus dem Raum entfernen",
 	"pages.rooms.members.remove.confirmation":
-		"{memberName} wirklich aus dem Raum entfernen?",
+		"{memberFullName} wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"Ausgewählte Mitglieder wirklich aus dem Raum entfernen?",
 	"pages.rooms.members.roomPermissions.admin": "Verwalten",
@@ -1835,15 +1846,30 @@ export default {
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.members.tableHeader.actions": "Aktionen",
 	"pages.rooms.members.roleChange.subTitle":
-		"{memberName} erhält die folgenden Berechtigungen im Raum „{roomName}”:",
+		"{memberFullName} erhält die folgenden Berechtigungen im Raum „{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
 		"Die ausgewählten Mitglieder erhalten die folgenden Berechtigungen im Raum „{roomName}”:",
-	"pages.rooms.members.roleChange.Roomviewer.subText":
+	"pages.rooms.members.roleChange.Roomviewer.label":
 		"Auf die Bereiche im Raum zugreifen und Inhalte ansehen",
-	"pages.rooms.members.roleChange.Roomeditor.subText":
+	"pages.rooms.members.roleChange.Roomeditor.label":
 		"Inhalte erstellen und bearbeiten",
-	"pages.rooms.members.roleChange.Roomadmin.subText":
+	"pages.rooms.members.roleChange.Roomadmin.label":
 		"Gleiche Berechtigungen wie „Bearbeiten”, zusätzlich andere Mitglieder hinzufügen, entfernen, deren Raumberechtigungen ändern sowie Raum bearbeiten",
+	"pages.rooms.members.roleChange.Roomowner.label":
+		"Gleiche Berechtigungen wie „Verwalten”, zusätzlich Raum löschen",
+	"pages.rooms.members.roleChange.Roomowner.label.subText":
+		"Achtung: Kann nur eine Person im Raum erhalten!",
+	"pages.rooms.members.roleChange.dialogTitle.handOver":
+		"Raumberechtigung „Besitzen” wirklich übertragen?",
+	"pages.rooms.members.roleChange.handOverBtn.text": "Übertragen",
+	"pages.rooms.members.handOverAlert.label":
+		"Diese Raumberechtigung wird an {memberFullName} übertragen.",
+	"pages.rooms.members.handOverAlert.label.subText":
+		"{currentUserFullName} verliert die Berechtigung „Besitzen” und erhält die Berechtigung „Verwalten”.",
+	"pages.rooms.members.handOverAlert.confirm.label":
+		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {currentUserFullName} das Recht, den Raum zu löschen.",
+	"pages.rooms.members.handOverAlert.confirm.label.subText":
+		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
