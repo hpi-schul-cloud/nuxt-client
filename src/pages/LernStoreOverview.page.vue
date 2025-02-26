@@ -45,42 +45,51 @@
 				</div>
 				<transition name="fade">
 					<div class="content__container" v-if="true">
-						<template v-if="searchQuery.length > 1">
-							<p v-show="resources.data.length !== 0" class="content__total">
-								{{ resources.total }}
-								{{ $t("pages.content.index.search_results") }} "{{
-									searchQueryResult
-								}}"
-							</p>
-							<v-infinite-scroll width="100%" :items="resources" @load="onLoad">
-								<lern-store-grid
-									column-width="14rem"
-									data-testid="lernStoreCardsContainer"
-								>
-									<content-card
-										v-for="resource of resources.data"
-										:key="resource.properties['ccm:replicationsourceuuid'][0]"
-										class="card"
-										:inline="isInline"
-										:resource="resource"
-									/>
-								</lern-store-grid>
-								<template #loading>
-									<v-progress-circular
-										indeterminate
-										size="115"
-										class="align-self-center mt-4"
-									/>
-								</template>
-								<template #empty>
-									<div v-if="empty" class="content__no_results">
-										<content-empty-state />
-									</div>
-								</template>
-							</v-infinite-scroll>
-						</template>
-						<span v-if="!loading" class="content__container_child">
+						<span class="content__container_child">
+							<!-- initial state, empty search -->
 							<content-initial-state v-if="searchQuery.length === 0" />
+							<!-- search query not empty and there are no results -->
+							<div
+								v-else-if="!resources.data.length && !loading"
+								class="content__no_results"
+							>
+								<content-empty-state />
+							</div>
+							<!-- search query not empty and there are results -->
+							<template v-if="searchQuery.length > 1">
+								<p v-show="resources.data.length !== 0" class="content__total">
+									{{ resources.total }}
+									{{ $t("pages.content.index.search_results") }} "{{
+										searchQueryResult
+									}}"
+								</p>
+								<v-infinite-scroll
+									empty-text=""
+									width="100%"
+									:items="resources"
+									@load="onLoad"
+								>
+									<lern-store-grid
+										column-width="14rem"
+										data-testid="lernStoreCardsContainer"
+									>
+										<content-card
+											v-for="resource of resources.data"
+											:key="resource.properties['ccm:replicationsourceuuid'][0]"
+											class="card"
+											:inline="isInline"
+											:resource="resource"
+										/>
+									</lern-store-grid>
+									<template #loading>
+										<v-progress-circular
+											indeterminate
+											size="115"
+											class="align-self-center mt-4"
+										/>
+									</template>
+								</v-infinite-scroll>
+							</template>
 						</span>
 					</div>
 				</transition>
@@ -147,9 +156,6 @@ const reachedTotal = computed(
 		resources.value.total !== 0 &&
 		resources.value.data.length >= resources.value.total
 );
-const empty = computed(() => {
-	return resources.value.total === 0;
-});
 
 const onInput = async () => {
 	await searchContent();
@@ -159,7 +165,11 @@ const onInput = async () => {
 	// the infinite scroll component. Otherwise, the infinite scroll component
 	// will not trigger the "load" event again.
 	if (doneCallbackFunction) {
-		doneCallbackFunction("ok");
+		if (!resources.value.data.length) {
+			doneCallbackFunction("empty");
+		} else {
+			doneCallbackFunction("ok");
+		}
 	}
 };
 
