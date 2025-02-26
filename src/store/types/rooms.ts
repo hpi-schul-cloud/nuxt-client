@@ -1,3 +1,5 @@
+import { DashboardGridElementResponse } from "@/serverApi/v3";
+
 export type RoomsData = {
 	id: string;
 	title: string;
@@ -18,7 +20,7 @@ export type DroppedObject = {
 		x: number;
 		y: number;
 	};
-	item: object;
+	item: DashboardGridElementResponse;
 };
 
 export type ListItemsObject = {

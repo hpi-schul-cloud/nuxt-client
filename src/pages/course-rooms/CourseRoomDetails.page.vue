@@ -107,13 +107,13 @@
 </template>
 
 <script>
-import CopyResultModal from "@/components/copy-result-modal/CopyResultModal";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 import { RoomDotMenu, SelectBoardLayoutDialog } from "@ui-room-details";
 import ShareModal from "@/components/share/ShareModal.vue";
 import commonCartridgeExportModal from "@/components/molecules/CommonCartridgeExportModal.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import DefaultWireframe from "@/components/templates/DefaultWireframe";
-import RoomDashboard from "@/components/templates/RoomDashboard";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import RoomDashboard from "@/components/templates/RoomDashboard.vue";
 import { useCopy } from "@/composables/copy";
 import { useLoadingState } from "@/composables/loadingState";
 import {

@@ -1,12 +1,16 @@
 <template>
 	<div
-		class="d-flex justify-space-between align-center mb-2 table-title-header"
-		:class="{ 'fixed-position': fixedPosition.enabled }"
+		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
+		:class="{
+			'fixed-position': fixedPosition.enabled,
+			'flex-column': isExtraSmallDisplay,
+		}"
 		:style="{ top: `${fixedPosition.positionTop}px` }"
 	>
 		<ActionMenu
 			v-if="selectedUserIds.length"
 			class="multi-action-menu"
+			:class="{ 'order-2': isExtraSmallDisplay }"
 			:selectedIds="selectedUserIds"
 			:isVisibleChangeRoleButton="isVisibleChangeRoleButton"
 			@remove:selected="onRemoveMembers"
@@ -23,6 +27,7 @@
 			mobile-breakpoint="sm"
 			single-line
 			variant="solo-filled"
+			:class="{ 'order-1 w-100 mt-1': isExtraSmallDisplay }"
 			:label="t('common.labels.search')"
 			:prepend-inner-icon="mdiMagnify"
 		/>
@@ -31,7 +36,7 @@
 	<v-divider role="presentation" />
 	<v-data-table
 		v-model:search="search"
-		v-model="tableSelectedUserIds"
+		v-model="selectedUserIds"
 		data-testid="participants-table"
 		hover
 		item-value="userId"
@@ -46,7 +51,6 @@
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
 		@update:current-items="onUpdateFilter"
-		@update:model-value="onSelectMembers"
 	>
 		<template #[`item.actions`]="{ item, index }" v-if="isVisibleActionColumn">
 			<KebabMenu
@@ -58,11 +62,9 @@
 					v-if="isVisibleChangeRoleButton"
 					@click="onChangePermission([item.userId])"
 					:aria-label="getAriaLabel(item, 'changeRole')"
-					:test-id="`btn-change-role-${index}`"
 				/>
 				<KebabMenuActionRemoveMember
 					v-if="isVisibleRemoveMemberButton(item)"
-					:test-id="`remove-member-${index}`"
 					:aria-label="getAriaLabel(item, 'remove')"
 					@click="onRemoveMembers([item.userId])"
 				/>
@@ -79,7 +81,7 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import { computed, PropType, ref, toRef } from "vue";
+import { computed, ModelRef, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import {
@@ -87,6 +89,7 @@ import {
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { RoomMember, useRoomMemberVisibilityOptions } from "@data-room";
+import { useDisplay } from "vuetify/lib/framework.mjs";
 
 const props = defineProps({
 	members: {
@@ -101,21 +104,22 @@ const props = defineProps({
 		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
 		default: () => ({ enabled: false, positionTop: 0 }),
 	},
-	selectedUserIds: {
-		type: Array as PropType<string[]>,
-		default: () => [],
-	},
 });
+
+const selectedUserIds: ModelRef<string[]> = defineModel("selectedUserIds", {
+	type: Array<string>,
+	required: true,
+});
+
 const { askConfirmation } = useConfirmationDialog();
-const tableSelectedUserIds = computed(() => props.selectedUserIds);
 
 const emit = defineEmits<{
 	(e: "remove:members", userIds: string[]): void;
-	(e: "select:members", userIds: string[]): void;
 	(e: "change:permission", userIds: string[]): void;
 }>();
 
 const { t } = useI18n();
+const { xs: isExtraSmallDisplay } = useDisplay();
 const search = ref("");
 const memberList = toRef(props, "members");
 const membersFilterCount = ref(memberList.value?.length);
@@ -135,12 +139,8 @@ const onUpdateFilter = (filteredMembers: RoomMember[]) => {
 		search.value === "" ? memberList.value.length : filteredMembers.length;
 };
 
-const onSelectMembers = (userIds: string[]) => {
-	emit("select:members", userIds);
-};
-
 const onResetSelectedMembers = () => {
-	emit("select:members", []);
+	selectedUserIds.value = [];
 };
 
 const onRemoveMembers = async (userIds: string[]) => {
@@ -155,7 +155,7 @@ const confirmRemoval = async (userIds: string[]) => {
 			(member) => member.userId === userIds[0]
 		);
 		message = t("pages.rooms.members.remove.confirmation", {
-			memberName: `${member?.firstName} ${member?.lastName}`,
+			memberFullName: `${member?.firstName} ${member?.lastName}`,
 		});
 	}
 	const shouldRemove = await askConfirmation({
@@ -169,19 +169,19 @@ const getAriaLabel = (
 	member: RoomMember,
 	actionFor?: "remove" | "changeRole"
 ) => {
-	const memberName = `${member.firstName} ${member.lastName}`;
+	const memberFullName = `${member.firstName} ${member.lastName}`;
 	if (actionFor === "changeRole") {
 		return t("pages.rooms.members.changePermission.ariaLabel", {
-			memberName,
+			memberFullName,
 		});
 	}
 	if (actionFor === "remove") {
 		return t("pages.rooms.members.remove.ariaLabel", {
-			memberName,
+			memberFullName,
 		});
 	}
 	return t("pages.rooms.members.actionMenu.ariaLabel", {
-		memberName,
+		memberFullName,
 	});
 };
 

@@ -7,12 +7,15 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { RoomMember } from "@data-room";
+import { nextTick } from "vue";
 
 describe("ChangeRole.vue", () => {
 	const members = [
-		roomMemberFactory(RoleName.Roomviewer).build(),
 		roomMemberFactory(RoleName.Roomadmin).build(),
+		roomMemberFactory(RoleName.Roomviewer).build(),
 	];
+
+	const currentUser = roomMemberFactory(RoleName.Roomowner).build();
 
 	const roomName = "Test Room";
 
@@ -24,6 +27,7 @@ describe("ChangeRole.vue", () => {
 			props: {
 				members: options?.members || members,
 				roomName,
+				currentUser,
 			},
 		});
 	};
@@ -59,6 +63,77 @@ describe("ChangeRole.vue", () => {
 				"pages.rooms.members.roleChange.multipleUser.subTitle"
 			);
 			expect(wrapper.text()).toContain("pages.rooms.members.changePermission");
+		});
+
+		describe("when the current user is the owner and only one member selected", () => {
+			it("should render the 'Own' option", () => {
+				const wrapper = setup({ members: [members[0]] });
+
+				const radioButtons = wrapper.findAllComponents({ name: "v-radio" });
+				expect(radioButtons.length).toBe(4);
+			});
+
+			it("should render 'Alert' component", async () => {
+				const wrapper = setup({ members: [members[0]] });
+
+				const alertElementBefore = wrapper.findComponent({ name: "v-alert" });
+				expect(alertElementBefore.exists()).toBe(false);
+
+				const radioGroup = wrapper.findComponent({
+					name: "v-radio-group",
+				});
+				radioGroup.setValue(RoleName.Roomowner);
+				await nextTick();
+
+				const alertElementAfter = wrapper.findComponent({ name: "v-alert" });
+				expect(alertElementAfter.exists()).toBe(true);
+				expect(alertElementAfter.text()).toContain(
+					"pages.rooms.members.handOverAlert.label"
+				);
+			});
+
+			describe("when the confirm button clicked", () => {
+				it("should not render the radio buttons", async () => {
+					const wrapper = setup({ members: [members[0]] });
+
+					const radioGroup = wrapper.findComponent({
+						name: "v-radio-group",
+					});
+					radioGroup.setValue(RoleName.Roomowner);
+					await nextTick();
+
+					const confirmButton = wrapper.find(
+						"[data-testid='change-role-confirm-btn']"
+					);
+					await confirmButton.trigger("click");
+
+					const radioButtons = wrapper.findAllComponents({ name: "v-radio" });
+					expect(radioButtons.length).toBe(0);
+				});
+
+				it("should show the confirmation alert and 'Handover' button", async () => {
+					const wrapper = setup({ members: [members[0]] });
+
+					const radioGroup = wrapper.findComponent({
+						name: "v-radio-group",
+					});
+					radioGroup.setValue(RoleName.Roomowner);
+					await nextTick();
+
+					const confirmButton = wrapper.find(
+						"[data-testid='change-role-confirm-btn']"
+					);
+					await confirmButton.trigger("click");
+
+					const alertElementAfter = wrapper.findComponent({
+						name: "v-alert",
+					});
+					expect(alertElementAfter.exists()).toBe(true);
+					expect(alertElementAfter.text()).toContain(
+						"pages.rooms.members.handOverAlert.confirm.label"
+					);
+				});
+			});
 		});
 	});
 
@@ -109,7 +184,7 @@ describe("ChangeRole.vue", () => {
 		});
 
 		it("should emit 'confirm' event when confirm button is clicked", async () => {
-			const wrapper = setup({ members: [members[0]] });
+			const wrapper = setup({ members: [members[1]] });
 			await wrapper
 				.find("[data-testid='change-role-confirm-btn']")
 				.trigger("click");
@@ -119,6 +194,32 @@ describe("ChangeRole.vue", () => {
 				RoleName.Roomviewer,
 				members[0].userId,
 			]);
+		});
+
+		it("should emit 'change-room-owner' when the Handover button is clicked", async () => {
+			const wrapper = setup({ members: [members[0]] });
+
+			const radioGroup = wrapper.findComponent({
+				name: "v-radio-group",
+			});
+			radioGroup.setValue(RoleName.Roomowner);
+			await nextTick();
+
+			const confirmButton = wrapper.find(
+				"[data-testid='change-role-confirm-btn']"
+			);
+			await confirmButton.trigger("click");
+
+			const handOverButton = wrapper.find(
+				"[data-testid='change-owner-confirm-btn']"
+			);
+
+			expect(handOverButton.exists()).toBe(true);
+			await handOverButton.trigger("click");
+
+			const emitted = wrapper.emitted();
+			expect(emitted).toHaveProperty("change-room-owner");
+			expect(emitted["change-room-owner"][0]).toEqual([members[0].userId]);
 		});
 	});
 });
