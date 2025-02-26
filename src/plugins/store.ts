@@ -17,7 +17,7 @@ import users from "@/store/users";
 // first initialized. This is vital to using static modules because the
 // modules don't know the root store when they are loaded. Initializing them
 // when the root store is created allows them to be hooked up properly.
-const initializer = (store: Store<any>) => initializeStores(store);
+const initializer = (store: Store<unknown>) => initializeStores(store);
 
 // Export the root store. You can add mutations & actions here as well.
 // Note that this is a standard Vuex store, not a vuex-module-decorator one.

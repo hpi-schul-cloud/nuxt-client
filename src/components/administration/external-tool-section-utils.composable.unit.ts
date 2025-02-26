@@ -1,25 +1,26 @@
 import {
+	SchoolExternalToolMediumResponse,
 	SchoolExternalToolResponse,
 	SchoolExternalToolSearchListResponse,
 	ToolContextType,
 } from "@/serverApi/v3";
+import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { DataTableHeader } from "@/store/types/data-table-header";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { DataTableHeader } from "@/types/vuetify";
 import {
 	schoolExternalToolFactory,
 	schoolExternalToolResponseFactory,
 } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { useExternalToolsSectionUtils } from "./external-tool-section-utils.composable";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { SchoolExternalTool } from "@/store/external-tool";
 
 describe("useSchoolExternalToolUtils", () => {
 	const setup = (schoolExternalTool: SchoolExternalTool) => {
 		const expectedTranslation = "translated";
 		const tMock = jest.fn().mockReturnValue(expectedTranslation);
 
-		const { getHeaders, getItems } = useExternalToolsSectionUtils(tMock);
+		const { getHeaders, getItems } = useExternalToolsSectionUtils(tMock, true);
 
 		const schoolExternalToolsModule = createModuleMocks(
 			SchoolExternalToolsModule,
@@ -60,9 +61,7 @@ describe("useSchoolExternalToolUtils", () => {
 			const { tool } = setupTool();
 			const { getHeaders } = setup(tool);
 
-			const headers: DataTableHeader[] = getHeaders;
-
-			expect(Array.isArray(headers)).toBeTruthy();
+			expect(Array.isArray(getHeaders)).toBeTruthy();
 		});
 
 		describe("when translate the headers", () => {
@@ -96,21 +95,155 @@ describe("useSchoolExternalToolUtils", () => {
 			const { tool } = setupTool();
 			const { getHeaders, expectedTranslation } = setup(tool);
 
-			const headers: DataTableHeader[] = getHeaders;
+			expect(getHeaders[0].title).toEqual(expectedTranslation);
+			expect(getHeaders[0].value).toEqual("name");
 
-			expect(headers[0].title).toEqual(expectedTranslation);
-			expect(headers[0].value).toEqual("name");
+			expect(getHeaders[1].title).toEqual(expectedTranslation);
+			expect(getHeaders[1].value).toEqual("statusText");
 
-			expect(headers[1].title).toEqual(expectedTranslation);
-			expect(headers[1].value).toEqual("statusText");
+			expect(getHeaders[2].title).toEqual(expectedTranslation);
+			expect(getHeaders[2].value).toEqual("medium");
 
-			expect(headers[2].title).toEqual(expectedTranslation);
-			expect(headers[2].value).toEqual("restrictToContexts");
+			expect(getHeaders[3].title).toEqual(expectedTranslation);
+			expect(getHeaders[3].value).toEqual("restrictToContexts");
 
-			expect(headers[3].title).toEqual("");
-			expect(headers[3].value).toEqual("actions");
-			expect(headers[3].sortable).toBe(false);
-			expect(headers[3].align).toEqual("end");
+			expect(getHeaders[4].title).toEqual("");
+			expect(getHeaders[4].value).toEqual("actions");
+			expect(getHeaders[4].sortable).toBe(false);
+			expect(getHeaders[4].align).toEqual("end");
+		});
+	});
+
+	describe("mediumSortFn", () => {
+		describe("when mediaSourceName a is undefined", () => {
+			const setup2 = () => {
+				const a: SchoolExternalToolMediumResponse = {
+					mediumId: "a",
+				};
+				const b: SchoolExternalToolMediumResponse = {
+					mediumId: "b",
+					mediaSourceName: "b",
+				};
+
+				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+
+				return {
+					mediumSortFn,
+					a,
+					b,
+				};
+			};
+
+			it("should return 1", () => {
+				const { mediumSortFn, a, b } = setup2();
+
+				const result = mediumSortFn(a, b);
+
+				expect(result).toEqual(1);
+			});
+		});
+
+		describe("when mediaSourceName b is undefined", () => {
+			const setup2 = () => {
+				const a: SchoolExternalToolMediumResponse = {
+					mediumId: "a",
+					mediaSourceName: "a",
+				};
+				const b: SchoolExternalToolMediumResponse = {
+					mediumId: "b",
+				};
+
+				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+
+				return {
+					mediumSortFn,
+					a,
+					b,
+				};
+			};
+
+			it("should return -1", () => {
+				const { mediumSortFn, a, b } = setup2();
+
+				const result = mediumSortFn(a, b);
+
+				expect(result).toEqual(-1);
+			});
+		});
+
+		describe("when a is undefined", () => {
+			const setup2 = () => {
+				const b: SchoolExternalToolMediumResponse = {
+					mediumId: "b",
+				};
+
+				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+
+				return {
+					mediumSortFn,
+					b,
+				};
+			};
+
+			it("should return 1", () => {
+				const { mediumSortFn, b } = setup2();
+
+				const result = mediumSortFn(undefined, b);
+
+				expect(result).toEqual(1);
+			});
+		});
+
+		describe("when b is undefined", () => {
+			const setup2 = () => {
+				const a: SchoolExternalToolMediumResponse = {
+					mediumId: "a",
+				};
+
+				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+
+				return {
+					mediumSortFn,
+					a,
+				};
+			};
+
+			it("should return -1", () => {
+				const { mediumSortFn, a } = setup2();
+
+				const result = mediumSortFn(a, undefined);
+
+				expect(result).toEqual(-1);
+			});
+		});
+
+		describe("when a is before b", () => {
+			const setup2 = () => {
+				const a: SchoolExternalToolMediumResponse = {
+					mediumId: "a",
+					mediaSourceName: "a",
+				};
+				const b: SchoolExternalToolMediumResponse = {
+					mediumId: "b",
+					mediaSourceName: "b",
+				};
+
+				const { mediumSortFn } = useExternalToolsSectionUtils(jest.fn(), true);
+
+				return {
+					mediumSortFn,
+					a,
+					b,
+				};
+			};
+
+			it("should return -1", () => {
+				const { mediumSortFn, a, b } = setup2();
+
+				const result = mediumSortFn(a, b);
+
+				expect(result).toEqual(-1);
+			});
 		});
 	});
 

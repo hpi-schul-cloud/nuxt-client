@@ -42,13 +42,12 @@
 		<div class="mb-12">
 			<MembersTable
 				v-if="!isLoading && currentUser"
+				v-model:selected-user-ids="selectedIds"
 				:members="memberList"
 				:currentUser="currentUser"
 				:fixed-position="fixedHeaderOnMobile"
-				:selected-user-ids="selectedIds"
 				@remove:members="onRemoveMembers"
 				@change:permission="onOpenRoleDialog"
-				@select:members="onSelectMembers"
 			/>
 		</div>
 
@@ -72,15 +71,17 @@
 		<v-dialog
 			v-model="isChangeRoleDialogOpen"
 			:width="xs ? 'auto' : 480"
-			data-testid="dialog-add-participants"
+			data-testid="dialog-change-role-participants"
 			max-width="480"
 			@keydown.esc="onDialogClose"
 		>
 			<ChangeRole
 				:members="membersToChangeRole"
 				:room-name="room?.name || ''"
+				:current-user="currentUser"
 				@cancel="onDialogClose"
 				@confirm="onChangeRole"
+				@change-room-owner="onChangeOwner"
 			/>
 		</v-dialog>
 	</DefaultWireframe>
@@ -134,6 +135,7 @@ const {
 	currentUser,
 	selectedIds,
 	addMembers,
+	changeRoomOwner,
 	fetchMembers,
 	getPotentialMembers,
 	getSchools,
@@ -218,8 +220,10 @@ const onChangeRole = async (
 	selectedIds.value = [];
 };
 
-const onSelectMembers = (userIds: string[]) => {
-	selectedIds.value = userIds;
+const onChangeOwner = async (id: string) => {
+	await changeRoomOwner(id);
+	isChangeRoleDialogOpen.value = false;
+	selectedIds.value = [];
 };
 
 onMounted(async () => {

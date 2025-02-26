@@ -156,7 +156,13 @@
 </template>
 
 <script setup lang="ts">
-import { BoardElementResponseTypeEnum } from "@/serverApi/v3/api";
+import {
+	BoardColumnBoard,
+	BoardElement,
+	BoardElementType,
+	BoardLesson,
+	BoardTask,
+} from "@/types/course-room/CourseRoom";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	injectStrict,
@@ -223,27 +229,27 @@ watch(
 		allTasks.value = [];
 		allColumnBoards.value = [];
 
-		newValue.forEach((element: any) => {
-			if (element.type === BoardElementResponseTypeEnum.Lesson) {
+		newValue.forEach((element: BoardElement) => {
+			if (element.type === BoardElementType.Lesson) {
 				allTopics.value.push({
 					isSelected: true,
-					title: element.content.name,
+					title: (element.content as BoardLesson).name,
 					id: element.content.id,
 				});
 			}
 
-			if (element.type === BoardElementResponseTypeEnum.Task) {
+			if (element.type === BoardElementType.Task) {
 				allTasks.value.push({
 					isSelected: true,
-					title: element.content.name,
+					title: (element.content as BoardTask).name,
 					id: element.content.id,
 				});
 			}
 
-			if (element.type === BoardElementResponseTypeEnum.ColumnBoard) {
+			if (element.type === BoardElementType.ColumnBoard) {
 				allColumnBoards.value.push({
 					isSelected: true,
-					title: element.content.title,
+					title: (element.content as BoardColumnBoard).title,
 					id: element.content.id,
 				});
 			}

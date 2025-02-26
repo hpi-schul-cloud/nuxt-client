@@ -1,13 +1,17 @@
+import {
+	SchoolExternalToolMediumResponse,
+	ToolContextType,
+} from "@/serverApi/v3";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { DataTableHeader } from "@/store/types/data-table-header";
+import { DataTableHeader } from "@/types/vuetify";
 import { SchoolExternalToolItem } from "./school-external-tool-item";
-import { ToolContextType } from "@/serverApi/v3";
 
 export function useExternalToolsSectionUtils(
-	t: (key: string) => string = () => ""
+	t: (key: string) => string = () => "",
+	mediaLicenseEnabled = false
 ) {
-	const getHeaders: DataTableHeader[] = [
+	const getHeaders: DataTableHeader<SchoolExternalToolMediumResponse>[] = [
 		{
 			title: t("common.labels.name"),
 			value: "name",
@@ -35,6 +39,28 @@ export function useExternalToolsSectionUtils(
 			key: "actions",
 		},
 	];
+
+	const mediumSortFn = (
+		a?: SchoolExternalToolMediumResponse,
+		b?: SchoolExternalToolMediumResponse
+	): number => {
+		if (a === undefined) return 1;
+		if (b === undefined) return -1;
+		if (a.mediaSourceName === undefined) return 1;
+		if (b.mediaSourceName === undefined) return -1;
+		return a.mediaSourceName.localeCompare(b.mediaSourceName);
+	};
+
+	if (mediaLicenseEnabled) {
+		getHeaders.splice(2, 0, {
+			title: t(
+				"components.administration.externalToolsSection.table.header.medium"
+			),
+			value: "medium",
+			key: "medium",
+			sort: mediumSortFn,
+		});
+	}
 
 	const getItems = (
 		schoolExternalToolsModule: SchoolExternalToolsModule
@@ -73,6 +99,7 @@ export function useExternalToolsSectionUtils(
 				isOutdated: tool.status.isOutdatedOnScopeSchool,
 				isDeactivated: tool.isDeactivated || tool.status.isGloballyDeactivated,
 				restrictToContexts: contextRestrictionTranslations,
+				medium: tool.medium,
 			};
 		});
 	};
@@ -80,5 +107,6 @@ export function useExternalToolsSectionUtils(
 	return {
 		getHeaders,
 		getItems,
+		mediumSortFn,
 	};
 }

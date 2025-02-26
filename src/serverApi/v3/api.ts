@@ -5483,6 +5483,66 @@ export interface MediaLineResponse {
 /**
  * 
  * @export
+ * @interface MediaSchoolLicenseListResponse
+ */
+export interface MediaSchoolLicenseListResponse {
+    /**
+     * 
+     * @type {Array<MediaSchoolLicenseResponse>}
+     * @memberof MediaSchoolLicenseListResponse
+     */
+    data: Array<MediaSchoolLicenseResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface MediaSchoolLicenseResponse
+ */
+export interface MediaSchoolLicenseResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaSchoolLicenseResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaSchoolLicenseResponse
+     */
+    schoolId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaSchoolLicenseResponse
+     */
+    mediumId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaSchoolLicenseResponse
+     */
+    mediaSourceId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof MediaSchoolLicenseResponse
+     */
+    mediaSourceName?: string;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum MediaSourceLicenseType {
+    UserLicense = 'user-license',
+    SchoolLicense = 'school-license'
+}
+
+/**
+ * 
+ * @export
  * @interface Message
  */
 export interface Message {
@@ -6718,6 +6778,19 @@ export interface ParentConsentResponse {
 /**
  * 
  * @export
+ * @interface PassOwnershipBodyParams
+ */
+export interface PassOwnershipBodyParams {
+    /**
+     * The IDs of the users
+     * @type {string}
+     * @memberof PassOwnershipBodyParams
+     */
+    userId: string;
+}
+/**
+ * 
+ * @export
  * @interface PatchGroupParams
  */
 export interface PatchGroupParams {
@@ -7784,6 +7857,37 @@ export interface SchoolExternalToolConfigurationTemplateResponse {
 /**
  * 
  * @export
+ * @interface SchoolExternalToolMediumResponse
+ */
+export interface SchoolExternalToolMediumResponse {
+    /**
+     * Id of the medium
+     * @type {string}
+     * @memberof SchoolExternalToolMediumResponse
+     */
+    mediumId: string;
+    /**
+     * The id of the media source
+     * @type {string}
+     * @memberof SchoolExternalToolMediumResponse
+     */
+    mediaSourceId?: string;
+    /**
+     * Name of the media source
+     * @type {string}
+     * @memberof SchoolExternalToolMediumResponse
+     */
+    mediaSourceName?: string;
+    /**
+     * License type of the media source
+     * @type {MediaSourceLicenseType}
+     * @memberof SchoolExternalToolMediumResponse
+     */
+    mediaSourceLicenseType?: MediaSourceLicenseType;
+}
+/**
+ * 
+ * @export
  * @interface SchoolExternalToolMetadataResponse
  */
 export interface SchoolExternalToolMetadataResponse {
@@ -7879,6 +7983,12 @@ export interface SchoolExternalToolResponse {
      * @memberof SchoolExternalToolResponse
      */
     restrictToContexts?: Array<ToolContextType>;
+    /**
+     * 
+     * @type {SchoolExternalToolMediumResponse}
+     * @memberof SchoolExternalToolResponse
+     */
+    medium?: SchoolExternalToolMediumResponse;
 }
 /**
  * 
@@ -20827,6 +20937,50 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+         * @param {string} roomId 
+         * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerChangeRoomOwner: async (roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerChangeRoomOwner', 'roomId', roomId)
+            // verify required parameter 'passOwnershipBodyParams' is not null or undefined
+            assertParamExists('roomControllerChangeRoomOwner', 'passOwnershipBodyParams', passOwnershipBodyParams)
+            const localVarPath = `/rooms/{roomId}/members/pass-ownership`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(passOwnershipBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21223,6 +21377,18 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+         * @param {string} roomId 
+         * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21357,6 +21523,17 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+         * @param {string} roomId 
+         * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): AxiosPromise<string> {
+            return localVarFp.roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21478,6 +21655,17 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerChangeRolesOfMembers(roomId: string, changeRoomRoleBodyParams: ChangeRoomRoleBodyParams, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
+     * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+     * @param {string} roomId 
+     * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): AxiosPromise<string>;
 
     /**
      * 
@@ -21605,6 +21793,19 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerChangeRolesOfMembers(roomId: string, changeRoomRoleBodyParams: ChangeRoomRoleBodyParams, options?: any) {
         return RoomApiFp(this.configuration).roomControllerChangeRolesOfMembers(roomId, changeRoomRoleBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+     * @param {string} roomId 
+     * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -22573,6 +22774,40 @@ export const SchoolLicenseApiAxiosParamCreator = function (configuration?: Confi
     return {
         /**
          * 
+         * @summary Get all active media licenses for a school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolLicenseControllerGetMediaSchoolLicensesForSchool: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/school-licenses`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Update media school licenses
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22617,6 +22852,16 @@ export const SchoolLicenseApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Get all active media licenses for a school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async schoolLicenseControllerGetMediaSchoolLicensesForSchool(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaSchoolLicenseListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.schoolLicenseControllerGetMediaSchoolLicensesForSchool(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Update media school licenses
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22637,6 +22882,15 @@ export const SchoolLicenseApiFactory = function (configuration?: Configuration, 
     return {
         /**
          * 
+         * @summary Get all active media licenses for a school
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        schoolLicenseControllerGetMediaSchoolLicensesForSchool(options?: any): AxiosPromise<MediaSchoolLicenseListResponse> {
+            return localVarFp.schoolLicenseControllerGetMediaSchoolLicensesForSchool(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Update media school licenses
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22655,6 +22909,15 @@ export const SchoolLicenseApiFactory = function (configuration?: Configuration, 
 export interface SchoolLicenseApiInterface {
     /**
      * 
+     * @summary Get all active media licenses for a school
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolLicenseApiInterface
+     */
+    schoolLicenseControllerGetMediaSchoolLicensesForSchool(options?: any): AxiosPromise<MediaSchoolLicenseListResponse>;
+
+    /**
+     * 
      * @summary Update media school licenses
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -22671,6 +22934,17 @@ export interface SchoolLicenseApiInterface {
  * @extends {BaseAPI}
  */
 export class SchoolLicenseApi extends BaseAPI implements SchoolLicenseApiInterface {
+    /**
+     * 
+     * @summary Get all active media licenses for a school
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SchoolLicenseApi
+     */
+    public schoolLicenseControllerGetMediaSchoolLicensesForSchool(options?: any) {
+        return SchoolLicenseApiFp(this.configuration).schoolLicenseControllerGetMediaSchoolLicensesForSchool(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Update media school licenses

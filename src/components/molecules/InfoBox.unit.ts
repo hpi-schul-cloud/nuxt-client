@@ -4,10 +4,13 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mount } from "@vue/test-utils";
 import InfoBox from "./InfoBox.vue";
+import { VNode } from "vue";
+
+type MountingSlots = Record<string, string | (() => VNode[])>;
 
 describe("@/components/molecules/InfoBox", () => {
 	describe("when active is true", () => {
-		const setup = (slots: any) => {
+		const setup = (slots: MountingSlots) => {
 			const wrapper = mount(InfoBox, {
 				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				props: {
@@ -44,7 +47,7 @@ describe("@/components/molecules/InfoBox", () => {
 	});
 
 	describe("when active is false", () => {
-		const setup = (slots: any) => {
+		const setup = (slots: MountingSlots) => {
 			const wrapper = mount(InfoBox, {
 				global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 				props: {
