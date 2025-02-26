@@ -1,17 +1,36 @@
 import {
 	Permission,
+	RoleName,
 	ImportUserResponseRoleNamesEnum as Roles,
 } from "@/serverApi/v3";
-import { RoomDetails } from "@/types/room/Room";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { ComputedRef, MaybeRefOrGetter, ref, toValue, watchEffect } from "vue";
+import { useRoomDetailsStore } from "@data-room";
+import { storeToRefs } from "pinia";
+import { authModule } from "@/store";
+import { computed, ref, toValue, watchEffect } from "vue";
 
-export const useRoomAuthorization = (
-	room:
-		| ComputedRef<RoomDetails | undefined>
-		| MaybeRefOrGetter<RoomDetails | undefined>
-) => {
-	const authModule = injectStrict(AUTH_MODULE_KEY);
+const detectRole = (permissions: Permission[]) => {
+	if (permissions.includes(Permission.RoomChangeOwner)) {
+		return RoleName.Roomowner;
+	}
+	if (
+		permissions.includes(Permission.RoomMembersChangeRole) &&
+		!permissions.includes(Permission.RoomDelete)
+	) {
+		return RoleName.Roomadmin;
+	}
+	if (
+		permissions.includes(Permission.RoomEdit) &&
+		permissions.includes(Permission.RoomView) &&
+		!permissions.includes(Permission.RoomMembersChangeRole)
+	) {
+		return RoleName.Roomeditor;
+	}
+
+	return RoleName.Roomviewer;
+};
+
+export const useRoomAuthorization = () => {
+	const { room } = storeToRefs(useRoomDetailsStore());
 
 	const canAddRoomMembers = ref(false);
 	const canRemoveRoomMembers = ref(false);
@@ -21,12 +40,16 @@ export const useRoomAuthorization = (
 	const canEditRoom = ref(false);
 	const canDeleteRoom = ref(false);
 	const canLeaveRoom = ref(false);
+	const canEditRoomBoard = ref(false);
+	const currentUserRole = ref<RoleName | unknown>();
 
 	watchEffect(() => {
 		const permissions = toValue(room)?.permissions ?? [];
 
+		currentUserRole.value = detectRole(permissions);
+
 		canCreateRoom.value =
-			authModule.getUserPermissions.includes(
+			authModule?.getUserPermissions.includes(
 				Permission.RoomCreate.toLowerCase()
 			) && authModule.getUserRoles.includes(Roles.Teacher);
 		canViewRoom.value = permissions.includes(Permission.RoomView);
@@ -38,6 +61,7 @@ export const useRoomAuthorization = (
 		);
 		canChangeOwner.value = permissions.includes(Permission.RoomChangeOwner);
 		canLeaveRoom.value = permissions.includes(Permission.RoomLeave);
+		canEditRoomBoard.value = permissions.includes(Permission.RoomChangeOwner); // TODO: Change this to the correct permission
 	});
 
 	return {
@@ -49,5 +73,7 @@ export const useRoomAuthorization = (
 		canDeleteRoom,
 		canLeaveRoom,
 		canRemoveRoomMembers,
+		currentUserRole,
+		canEditRoomBoard,
 	};
 };

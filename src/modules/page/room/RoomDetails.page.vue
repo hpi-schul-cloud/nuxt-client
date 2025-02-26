@@ -72,7 +72,7 @@ const pageTitle = computed(() =>
 useTitle(pageTitle);
 
 const { canCreateRoom, canEditRoom, canDeleteRoom, canLeaveRoom, canViewRoom } =
-	useRoomAuthorization(room);
+	useRoomAuthorization();
 
 const roomTitle = computed(() => {
 	return room.value ? room.value.name : t("pages.roomDetails.title");

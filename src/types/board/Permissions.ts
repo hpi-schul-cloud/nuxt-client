@@ -1,3 +1,5 @@
+import { ref, Ref } from "vue";
+
 export type BoardPermissionChecks = {
 	hasMovePermission: boolean;
 	hasCreateCardPermission: boolean;
@@ -7,6 +9,7 @@ export type BoardPermissionChecks = {
 	hasDeletePermission: boolean;
 	isTeacher: boolean;
 	isStudent: boolean;
+	canEditRoomBoard: Ref<boolean>;
 };
 
 export const defaultPermissions: BoardPermissionChecks = {
@@ -18,4 +21,5 @@ export const defaultPermissions: BoardPermissionChecks = {
 	hasEditPermission: true,
 	isTeacher: true,
 	isStudent: false,
+	canEditRoomBoard: ref(true),
 };
