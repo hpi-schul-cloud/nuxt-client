@@ -544,20 +544,6 @@ describe("schools module", () => {
 		});
 
 		describe("getIsSynced", () => {
-			it("should return correct sync status for iserv-idm schools", () => {
-				const schoolsModule = new SchoolsModule({});
-				const systems = [
-					schoolSystemResponseFactory.build({
-						id: "id_1",
-						type: "ldap",
-						ldapConfig: {
-							provider: "iserv-idm",
-						},
-					}),
-				];
-				schoolsModule.setSystems(systems);
-				expect(schoolsModule.schoolIsSynced).toStrictEqual(true);
-			});
 			it("should return correct sync status for univention schools", () => {
 				const schoolsModule = new SchoolsModule({});
 				const systems = [

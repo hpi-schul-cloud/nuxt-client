@@ -19,8 +19,8 @@ const generateProps = () => ({
 		schoolSystemResponseFactory.build({
 			id: "2",
 			type: "ldap",
-			ldapConfig: { provider: "iserv-idm" },
-			oauthConfig: { provider: "iserv-idm" },
+			ldapConfig: { provider: "mock-idm" },
+			oauthConfig: { provider: "mock-idm" },
 		}), // deletable: false, editable: false
 		schoolSystemResponseFactory.build({
 			id: "3",
@@ -215,7 +215,7 @@ describe("AuthSystems", () => {
 				tableCell[2].find(searchStrings.editSystemButton).exists()
 			).toStrictEqual(false);
 
-			// { _id: "2", type: "ldap", ldapConfig: { provider: "iserv-idm" } }, // deletable: false, editable: false
+			// { _id: "2", type: "ldap", ldapConfig: { provider: "mock-idm" } }, // deletable: false, editable: false
 			expect(
 				tableCell[5].find(searchStrings.deleteSystemButton).exists()
 			).toStrictEqual(false);

@@ -161,8 +161,7 @@ export default class SchoolsModule extends VuexModule {
 				system.type === "tsp-school" ||
 				system.type === "oauth" ||
 				(system.type === "ldap" &&
-					(system.ldapConfig?.provider === "iserv-idm" ||
-						system.ldapConfig?.provider === "univention" ||
+					(system.ldapConfig?.provider === "univention" ||
 						system.ldapConfig?.provider === "general"))
 		);
 	}
