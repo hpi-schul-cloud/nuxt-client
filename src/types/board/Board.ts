@@ -1,4 +1,4 @@
-import {
+import type {
 	BoardResponse as Board,
 	ColumnResponse as BoardColumn,
 	CardSkeletonResponse as BoardSkeletonCard,

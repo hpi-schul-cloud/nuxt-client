@@ -13,18 +13,28 @@ describe("accounts module", () => {
 	describe("actions", () => {
 		beforeEach(() => {
 			initializeAxios({
+				get: async (path: string) => {
+					requestPath = path;
+					return { data: { ttl: 100 } };
+				},
 				post: async (path: string) => {
 					requestPath = path;
 				},
 			} as AxiosInstance);
 		});
 
-		it("getTTL action should make a post request to the right path", async () => {
+		it("getTTL action should make a get request to the right path", async () => {
 			const accountsModule = new AccountsModule({});
 
 			expect(requestPath).toBe("");
 			await accountsModule.getTTL();
 			expect(requestPath).toBe(URL);
+		});
+		it("getTTL action should return a number", async () => {
+			const accountsModule = new AccountsModule({});
+
+			const response = await accountsModule.getTTL();
+			expect(response).toBe(100);
 		});
 		it("getTTL should call resetBusinessError and setStatus mutations", async () => {
 			const accountsModule = new AccountsModule({});

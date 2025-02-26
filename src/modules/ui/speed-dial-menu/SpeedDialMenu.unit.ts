@@ -6,7 +6,7 @@ import { VBtn } from "vuetify/lib/components/index.mjs";
 import SpeedDialMenu from "./SpeedDialMenu.vue";
 import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 
-const componentWithFlatSlots = defineComponent({
+const componentWithFlatSlots: DefineComponent = defineComponent({
 	components: {
 		SpeedDialMenu,
 		SpeedDialMenuAction,
@@ -31,7 +31,7 @@ const componentWithFlatSlots = defineComponent({
 	},
 });
 
-const componentWithIteratedSlots = defineComponent({
+const componentWithIteratedSlots: DefineComponent = defineComponent({
 	components: {
 		SpeedDialMenu,
 		SpeedDialMenuAction,
@@ -67,11 +67,7 @@ const componentWithIteratedSlots = defineComponent({
 });
 
 describe("SpeedDialMenu", () => {
-	const setup = ({
-		component,
-	}: {
-		component: DefineComponent<any, any, any>;
-	}) => {
+	const setup = ({ component }: { component: DefineComponent }) => {
 		const slot = "TestSlot";
 		const wrapper = mount(component, {
 			global: {
@@ -86,8 +82,8 @@ describe("SpeedDialMenu", () => {
 	};
 
 	const toggleMenu = async (wrapper: VueWrapper) => {
-		const menu = await wrapper.findComponent(SpeedDialMenu);
-		const menuButton = await menu.findComponent(VBtn);
+		const menu = wrapper.findComponent(SpeedDialMenu);
+		const menuButton = menu.findComponent(VBtn);
 		await menuButton.trigger("click");
 		await nextTick();
 	};
@@ -98,7 +94,7 @@ describe("SpeedDialMenu", () => {
 	])("should render with $type", async ({ component }) => {
 		const { wrapper } = setup({ component });
 
-		const result = await wrapper.findComponent(SpeedDialMenu);
+		const result = wrapper.findComponent(SpeedDialMenu);
 		expect(result).toBeTruthy();
 	});
 
@@ -114,15 +110,13 @@ describe("SpeedDialMenu", () => {
 			// --- Open
 			await toggleMenu(wrapper);
 
-			const actionsAfterOpen =
-				await wrapper.findAllComponents(SpeedDialMenuAction);
+			const actionsAfterOpen = wrapper.findAllComponents(SpeedDialMenuAction);
 			expect(actionsAfterOpen).toHaveLength(3);
 
 			// --- Close
 			await toggleMenu(wrapper);
 
-			const actionsAfterClose =
-				await wrapper.findAllComponents(SpeedDialMenuAction);
+			const actionsAfterClose = wrapper.findAllComponents(SpeedDialMenuAction);
 			expect(actionsAfterClose).toHaveLength(0);
 		}
 	);
@@ -139,8 +133,7 @@ describe("SpeedDialMenu", () => {
 			// --- Open
 			await toggleMenu(wrapper);
 
-			const actionsAfterOpen =
-				await wrapper.findAllComponents(SpeedDialMenuAction);
+			const actionsAfterOpen = wrapper.findAllComponents(SpeedDialMenuAction);
 
 			actionsAfterOpen.forEach((action, index) => {
 				expect(action.props("speedDialIndex")).toEqual(index);
@@ -157,8 +150,8 @@ describe("SpeedDialMenu", () => {
 			jest.useFakeTimers();
 			const { wrapper } = setup({ component });
 
-			const menu = await wrapper.findComponent(SpeedDialMenu);
-			const menuButton = await menu.findComponent(VBtn);
+			const menu = wrapper.findComponent(SpeedDialMenu);
+			const menuButton = menu.findComponent(VBtn);
 
 			expect(menuButton.text()).toEqual("DefaultSlotLabel");
 		}

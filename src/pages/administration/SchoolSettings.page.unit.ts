@@ -13,6 +13,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { nextTick, reactive } from "vue";
+import { SchoolSystemResponse } from "@/serverApi/v3";
 jest.mock("vue-router");
 
 const useRouteMock = <jest.Mock<Partial<RouteLocationNormalizedLoaded>>>(
@@ -49,7 +50,9 @@ describe("SchoolSettingsPage", () => {
 			"https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Brandenburg_Wappen.svg/354px-Brandenburg_Wappen.svg.png",
 	};
 
-	const mockSystems: any[] = [{ _id: "123", type: "itslearning" }];
+	const mockSystems: SchoolSystemResponse[] = [
+		{ id: "123", type: "itslearning" },
+	];
 
 	const setup = (
 		envConfigGetters: Partial<EnvConfigModule> = {
