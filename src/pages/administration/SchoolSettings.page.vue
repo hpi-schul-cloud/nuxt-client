@@ -153,7 +153,6 @@
 <script lang="ts">
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
 import ExternalToolsSection from "@/components/administration/ExternalToolSection.vue";
-import { mdiAlertCircle, mdiMinus, mdiPlus } from "@icons/material";
 import AuthSystems from "@/components/organisms/administration/AuthSystems.vue";
 import GeneralSettings from "@/components/organisms/administration/GeneralSettings.vue";
 import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue";
@@ -169,6 +168,7 @@ import {
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { mdiAlertCircle, mdiMinus, mdiPlus } from "@icons/material";
 import { useTitle } from "@vueuse/core";
 import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
@@ -239,11 +239,15 @@ export default defineComponent({
 			() => schoolsModule.getError
 		);
 		const isFeatureOauthMigrationEnabled: ComputedRef<boolean | undefined> =
-			computed(() => envConfigModule.getFeatureSchoolSanisUserMigrationEnabled);
+			computed(
+				() => envConfigModule.getEnv.FEATURE_USER_LOGIN_MIGRATION_ENABLED
+			);
 		const isFeatureSchoolPolicyEnabled: ComputedRef<boolean | undefined> =
-			computed(() => envConfigModule.getSchoolPolicyEnabled);
+			computed(() => envConfigModule.getEnv.FEATURE_SCHOOL_POLICY_ENABLED_NEW);
 		const isFeatureSchoolTermsOfUseEnabled: ComputedRef<boolean | undefined> =
-			computed(() => envConfigModule.getSchoolTermsOfUseEnabled);
+			computed(
+				() => envConfigModule.getEnv.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED
+			);
 		const instituteTitle: ComputedRef<string> = computed(() => {
 			switch (envConfigModule.getTheme) {
 				case SchulcloudTheme.N21:
