@@ -24,7 +24,7 @@
 				</div>
 			</v-alert>
 			<v-alert type="info" class="mb-12">
-				<div class="alert-text">
+				<div class="alert-text" data-testid="institute-title">
 					{{ $t("pages.administration.school.index.info", { instituteTitle }) }}
 				</div>
 			</v-alert>
@@ -249,7 +249,7 @@ export default defineComponent({
 				() => envConfigModule.getEnv.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED
 			);
 		const instituteTitle: ComputedRef<string> = computed(() => {
-			switch (envConfigModule.getTheme) {
+			switch (envConfigModule.getEnv.SC_THEME) {
 				case SchulcloudTheme.N21:
 					return "Landesinitiative n-21: Schulen in Niedersachsen online e.V.";
 				case SchulcloudTheme.Thr:
