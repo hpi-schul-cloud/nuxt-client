@@ -33,13 +33,13 @@ import {
 import setupStores from "@@/tests/test-utils/setupStores";
 import { createMock } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
-import { SelectBoardLayoutDialog } from "@ui-room-details";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
 import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
+import { nextTick } from "vue";
 
 jest.mock("./tools/RoomExternalToolsOverview.vue");
 
@@ -340,18 +340,20 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 					});
 					envConfigModule.setEnvs(envs);
 					const wrapper = getWrapper(["course_edit"]);
-					const wrapperData: any = wrapper.vm.$data;
 
-					const layoutDialog = wrapper.findComponent(SelectBoardLayoutDialog);
-					expect(layoutDialog.exists()).toBe(true);
+					const layoutDialog = wrapper.findComponent(
+						"[data-testid=board-layout-dialog]"
+					);
+					expect(layoutDialog.exists()).toBe(false);
 
-					expect(wrapperData.boardLayoutDialogIsOpen).toBe(false);
-
-					// open menu
 					const defaultWireframe = wrapper.findComponent(DefaultWireframe);
 					defaultWireframe.vm.$emit("onFabItemClick", "board-type-dialog-open");
+					await nextTick();
 
-					expect(wrapperData.boardLayoutDialogIsOpen).toBe(true);
+					const openLayoutDialog = wrapper.findComponent(
+						"[data-testid=board-layout-dialog]"
+					);
+					expect(openLayoutDialog.exists()).toBe(true);
 				});
 			});
 		});

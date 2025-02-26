@@ -14,7 +14,7 @@ export type FabAction = {
 	class?: string;
 	testId?: string;
 	ariaLabel?: string;
-	customEvent?: any;
+	customEvent?: string;
 };
 
 export type Fab = {

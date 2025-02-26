@@ -2,7 +2,6 @@
 	<WarningAlert v-if="isError">
 		{{ $t("components.cardElement.fileElement.previewError") }}
 	</WarningAlert>
-
 	<v-img
 		ref="imageRef"
 		class="image mx-auto"

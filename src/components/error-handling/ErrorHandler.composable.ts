@@ -7,7 +7,8 @@ export type ErrorType =
 	| "notCreated"
 	| "notLoaded"
 	| "notUpdated"
-	| "notDeleted";
+	| "notDeleted"
+	| "notMoved";
 
 export type BoardObjectType =
 	| "board"
@@ -22,8 +23,12 @@ export type ApiErrorHandler = (
 	error?: ApiResponseError | ApiValidationError
 ) => Promise<void> | void;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ApiErrorHandlerFactory = (...args: any[]) => ApiErrorHandler;
+export type ApiErrorHandlerFactory = (
+	errorType: ErrorType,
+	boardObjectType?: BoardObjectType,
+	status?: ErrorStatus,
+	timeout?: number
+) => ApiErrorHandler;
 
 export type ErrorMap = Record<number, ApiErrorHandler>;
 

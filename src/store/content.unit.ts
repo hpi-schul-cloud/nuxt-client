@@ -2,6 +2,7 @@ import ContentModule from "./content";
 import { initializeAxios } from "../utils/api";
 import { AxiosInstance } from "axios";
 import {
+	Elements,
 	Lessons,
 	Resource,
 	ResourceProperties,
@@ -17,10 +18,8 @@ let requestPath: string;
 const mockResource: Resource = {
 	access: [],
 	aspects: [],
-	collection: null,
 	commentCount: null,
 	content: {},
-	createdAt: null,
 	createdBy: {},
 	downloadUrl: "",
 	iconURL: "",
@@ -29,16 +28,13 @@ const mockResource: Resource = {
 	mediatype: "",
 	metadataset: "",
 	mimetype: "",
-	modifiedAt: null,
 	modifiedBy: {},
 	name: "mockResource",
 	owner: {},
 	parent: {},
 	preview: {},
 	properties: {} as ResourceProperties,
-	rating: null,
 	ref: {},
-	remote: null,
 	repositoryType: "",
 	size: "",
 	title: "",
@@ -62,12 +58,10 @@ const mockLessons: { data: Lessons } = {
 		skip: 0,
 		data: [
 			{
-				contents: [],
 				courseId: "",
 				createdAt: "",
 				date: "",
 				hidden: false,
-				isCopyFrom: {},
 				materialIds: [],
 				name: "",
 				position: 0,
@@ -420,15 +414,12 @@ describe("content module", () => {
 	describe("mutations", () => {
 		it("setSelectedElements should set stateSelected value when the id matches", () => {
 			const contentModule = new ContentModule({});
-			const mockElements = {
+			const mockElements: Elements = {
 				total: 0,
 				limit: 0,
 				skip: 0,
 				data: [
-					{
-						ref: { id: "mockId" },
-						stateSelected: false,
-					},
+					{ ...mockResource, ref: { id: "mockId" }, stateSelected: false },
 				],
 				pagination: undefined,
 			};
@@ -445,14 +436,17 @@ describe("content module", () => {
 				skip: 0,
 				data: [
 					{
+						...mockResource,
 						ref: { id: "" },
 						stateSelected: false,
 					},
 					{
+						...mockResource,
 						ref: { id: "" },
 						stateSelected: true,
 					},
 					{
+						...mockResource,
 						ref: { id: "" },
 						stateSelected: true,
 					},
@@ -495,6 +489,7 @@ describe("content module", () => {
 				skip: 0,
 				data: [
 					{
+						...mockResource,
 						name: "mockElement",
 					},
 				],
@@ -515,6 +510,7 @@ describe("content module", () => {
 				skip: 0,
 				data: [
 					{
+						...mockResource,
 						name: "mockElement",
 					},
 				],
@@ -546,6 +542,7 @@ describe("content module", () => {
 				skip: 0,
 				data: [
 					{
+						...mockResource,
 						name: "mockElement",
 					},
 				],
@@ -643,6 +640,7 @@ describe("content module", () => {
 				skip: 0,
 				data: [
 					{
+						...mockResource,
 						name: "mockElement",
 					},
 				],

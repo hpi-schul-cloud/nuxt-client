@@ -69,7 +69,7 @@ export let commonCartridgeExportModule: CommonCartridgeExportModule;
 export let commonCartridgeImportModule: CommonCartridgeImportModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
-export function initializeStores(store: Store<any>): void {
+export function initializeStores(store: Store<unknown>): void {
 	accountsModule = getModule(AccountsModule, store);
 	applicationErrorModule = getModule(ApplicationErrorModule, store);
 	authModule = getModule(AuthModule, store);
