@@ -161,6 +161,8 @@ const onInput = async () => {
 	await searchContent();
 	activateTransition.value = true;
 
+	queryOptions.value.$skip = 0;
+
 	// We need to call the "done" callback function here in order to "reset"
 	// the infinite scroll component. Otherwise, the infinite scroll component
 	// will not trigger the "load" event again.
