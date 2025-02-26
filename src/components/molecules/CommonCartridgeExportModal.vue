@@ -162,7 +162,7 @@ import {
 	BoardElementType,
 	BoardLesson,
 	BoardTask,
-} from "@/types/board/Board";
+} from "@/types/course-room/CourseRoom";
 import {
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
 	injectStrict,
