@@ -62,6 +62,8 @@ describe("LinkContentElement", () => {
 	>;
 
 	beforeEach(() => {
+		useBoardFocusHandlerMock =
+			createMock<ReturnType<typeof useBoardFocusHandler>>();
 		useMetaTagExtractorApiMock =
 			createMock<ReturnType<typeof useMetaTagExtractorApi>>();
 		usePreviewGeneratorMock =
