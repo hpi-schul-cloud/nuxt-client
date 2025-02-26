@@ -20,6 +20,8 @@ export enum MatchedBy {
 	None = "none",
 }
 
+type SortOrder = "asc" | "desc" | undefined;
+
 @Module({
 	name: "importUsersModule",
 	namespaced: true,
@@ -46,7 +48,7 @@ export default class ImportUsersModule extends VuexModule {
 	private limit = 25;
 	private skip = 0;
 	private sortBy = "";
-	private sortOrder: "asc" | "desc" | undefined = "asc";
+	private sortOrder: SortOrder = "asc";
 	private total = 0;
 	private totalMatched = 0;
 
@@ -136,7 +138,7 @@ export default class ImportUsersModule extends VuexModule {
 	}
 
 	@Mutation
-	setSortOrder(sortOrder: "asc" | "desc" | undefined): void {
+	setSortOrder(sortOrder: SortOrder): void {
 		this.sortOrder = sortOrder;
 	}
 
