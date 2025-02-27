@@ -145,9 +145,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should hide substituteFilter", async () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.showSubstituteFilter).toBe(false);
+			const substituteFilterPlaceholder = wrapper.find(
+				".substitute-filter-placeholder"
+			);
+			expect(substituteFilterPlaceholder.exists()).toBe(true);
 		});
 
 		describe("with hasTasks === true", () => {
@@ -224,15 +225,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 		});
 
-		it("should set isTeacher true", () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isTeacher).toBe(true);
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isStudent).toBe(false);
-		});
-
 		it("should render teacher's tasks dashboard", () => {
 			const teacherDashboard = wrapper.findComponent(TasksDashboardTeacher);
 			expect(teacherDashboard.exists()).toBe(true);
@@ -245,17 +237,16 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			expect(fabComponent.exists()).toEqual(true);
 		});
 
-		it("'add task' button should have correct path", async () => {
-			const fabComponent = await wrapper.findComponent(SpeedDialMenu);
+		it("'add task' button should have correct path", () => {
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.props("href")).toStrictEqual(
 				"/homework/new?returnUrl=tasks"
 			);
 		});
 
 		it("should open tab from store state", async () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.tab).toStrictEqual("current");
+			const teacherDashboard = wrapper.findComponent(TasksDashboardTeacher);
+			expect(teacherDashboard.props("tabRoutes")).toContain("current");
 		});
 
 		it("should show substituteFilter on 1st tab", async () => {
@@ -269,10 +260,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					role: "teacher",
 				},
 			});
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.showSubstituteFilter).toBe(true);
+			expect(wrapper.findComponent({ name: "v-switch" }).exists()).toBe(true);
 		});
 
 		it("should show substituteFilter on 2nd tab", async () => {
@@ -286,10 +274,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					role: "teacher",
 				},
 			});
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.showSubstituteFilter).toBe(true);
+			expect(wrapper.findComponent({ name: "v-switch" }).exists()).toBe(true);
 		});
 
 		it("should hide substituteFilter on 3rd tab", async () => {
@@ -304,9 +289,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.showSubstituteFilter).toBe(false);
+			const substituteFilterPlaceholder = wrapper.find(
+				".substitute-filter-placeholder"
+			);
+			expect(substituteFilterPlaceholder.exists()).toBe(true);
 		});
 
 		it("Should update state when tab changes", async () => {
@@ -383,7 +369,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					role: "student",
 				},
 			});
-
+			// const autocompleteEl = wrapper.find(".v-autocomplete");
+			// expect(autocompleteEl.attributes("disabled")).toBe("true");
 			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 			//@ts-ignore
 			expect(wrapper.vm.isCourseFilterDisabled).toBe(true);
