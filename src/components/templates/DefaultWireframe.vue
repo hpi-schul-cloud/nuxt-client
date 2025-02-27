@@ -22,7 +22,7 @@
 				<slot name="fab">
 					<speed-dial-menu
 						class="wireframe-fab"
-						:direction="isBelowLarge ? 'top' : 'bottom'"
+						:direction="lgAndDown ? 'top' : 'bottom'"
 						:orientation="'right'"
 						:icon="fabItems.icon"
 						:href="fabItems.href"
@@ -71,9 +71,9 @@
 <script setup lang="ts">
 import { Breadcrumbs } from "@ui-breadcrumbs";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
-import { useVuetifyBreakpoints } from "@util-device-detection";
 import { computed, PropType, useSlots } from "vue";
 import { Fab, Breadcrumb } from "./default-wireframe.types";
+import { useDisplay } from "vuetify";
 
 const props = defineProps({
 	breadcrumbs: {
@@ -127,7 +127,7 @@ defineOptions({
 });
 const slots = useSlots();
 
-const isBelowLarge = useVuetifyBreakpoints().smallerOrEqual("lg");
+const { lgAndDown } = useDisplay();
 
 const showDivider = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);
