@@ -61,7 +61,7 @@ export const useRoomAuthorization = () => {
 		);
 		canChangeOwner.value = permissions.includes(Permission.RoomChangeOwner);
 		canLeaveRoom.value = permissions.includes(Permission.RoomLeave);
-		canEditRoomBoard.value = permissions.includes(Permission.RoomChangeOwner); // TODO: Change this to the correct permission
+		canEditRoomBoard.value = permissions.includes(Permission.RoomEdit);
 	});
 
 	return {
