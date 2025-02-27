@@ -112,32 +112,32 @@ onMounted(() => setTimeout(calculateWidth, 100));
 const boardTitle = ref("");
 
 const onStartEditMode = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	startEditMode();
 };
 
 const onEndEditMode = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	stopEditMode();
 };
 
 const onCopyBoard = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	emit("copy:board");
 };
 
 const onShareBoard = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	emit("share:board");
 };
 
 const onPublishBoard = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	emit("update:visibility", true);
 };
 
 const onUnpublishBoard = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	emit("update:visibility", false);
 };
 

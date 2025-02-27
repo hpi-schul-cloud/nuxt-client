@@ -65,6 +65,7 @@
 				</template>
 			</Sortable>
 			<BoardAddCardButton
+				v-if="hasCreateCardPermission"
 				@add-card="onCreateCard"
 				:data-testid="`column-${index}-add-card-btn`"
 				:style="{ visibility: !showAddButton ? 'hidden' : 'visible' }"
@@ -128,8 +129,12 @@ export default defineComponent({
 		const boardStore = useBoardStore();
 		const reactiveIndex = toRef(props, "index");
 		const colWidth = ref<number>(400);
-		const { hasMovePermission, hasCreateColumnPermission } =
-			useBoardPermissions();
+		const {
+			hasMovePermission,
+			hasCreateColumnPermission,
+			canEditRoomBoard,
+			hasCreateCardPermission,
+		} = useBoardPermissions();
 
 		const columnClasses = computed(() => {
 			const classes = ["column-drag-handle", "bg-white"];
@@ -154,7 +159,7 @@ export default defineComponent({
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 		const showAddButton = computed(
-			() => hasCreateColumnPermission && isDragging.value === false
+			() => hasCreateColumnPermission.value && isDragging.value === false
 		);
 
 		const isNotFirstColumn = computed(() => props.index !== 0);
@@ -211,6 +216,7 @@ export default defineComponent({
 			keyString: DragAndDropKey
 		) => {
 			if (cardId === undefined) return;
+			if (!canEditRoomBoard.value) return;
 
 			const fromColumnId = props.column.id;
 			const fromColumnIndex = boardStore.getColumnIndex(fromColumnId);
@@ -309,10 +315,12 @@ export default defineComponent({
 		const renderKey = computed(() => getRenderKey());
 
 		return {
+			canEditRoomBoard,
 			cardDropPlaceholderOptions,
 			columnClasses,
 			columnStyle,
 			colWidth,
+			hasCreateCardPermission,
 			hasCreateColumnPermission,
 			hasMovePermission,
 			isDragging,
