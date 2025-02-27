@@ -1,25 +1,25 @@
 import { ref, Ref } from "vue";
 
 export type BoardPermissionChecks = {
-	hasMovePermission: boolean;
-	hasCreateCardPermission: boolean;
-	hasCreateColumnPermission: boolean;
-	hasCreateToolPermission: boolean;
-	hasEditPermission: boolean;
-	hasDeletePermission: boolean;
-	isTeacher: boolean;
-	isStudent: boolean;
+	hasMovePermission: Ref<boolean>;
+	hasCreateCardPermission: Ref<boolean>;
+	hasCreateColumnPermission: Ref<boolean>;
+	hasCreateToolPermission: Ref<boolean>;
+	hasEditPermission: Ref<boolean>;
+	hasDeletePermission: Ref<boolean>;
+	isTeacher: Ref<boolean>;
+	isStudent: Ref<boolean>;
 	canEditRoomBoard: Ref<boolean>;
 };
 
 export const defaultPermissions: BoardPermissionChecks = {
-	hasMovePermission: true,
-	hasCreateCardPermission: true,
-	hasCreateColumnPermission: true,
-	hasCreateToolPermission: true,
-	hasDeletePermission: true,
-	hasEditPermission: true,
-	isTeacher: true,
-	isStudent: false,
+	hasMovePermission: ref(true),
+	hasCreateCardPermission: ref(true),
+	hasCreateColumnPermission: ref(true),
+	hasCreateToolPermission: ref(true),
+	hasDeletePermission: ref(true),
+	hasEditPermission: ref(true),
+	isTeacher: ref(true),
+	isStudent: ref(false),
 	canEditRoomBoard: ref(true),
 };

@@ -13,30 +13,44 @@ const boardPermissions = (): BoardPermissionChecks => {
 
 	const { contextType, roomId } = useSharedBoardPageInformation();
 	const canEditBoard = ref(true);
+	const hasMovePermission = ref(permissions.includes("course_create"));
+	const hasCreateCardPermission = ref(permissions.includes("course_create"));
+	const hasCreateColumnPermission = ref(permissions.includes("course_create"));
+	const hasCreateToolPermission = ref(
+		permissions.includes("context_tool_admin")
+	);
+	const hasEditPermission = ref(permissions.includes("course_edit"));
+	const hasDeletePermission = ref(permissions.includes("course_remove"));
+	const isTeacher = ref(userRoles.includes("teacher"));
+	const isStudent = ref(userRoles.includes("student"));
 
 	watch(
 		() => contextType.value,
 		async () => {
+			const { fetchRoom, resetState } = useRoomDetailsStore();
 			if (contextType.value === BoardContextType.Room && roomId.value) {
-				const { fetchRoom } = useRoomDetailsStore();
 				await fetchRoom(roomId?.value);
 				const { currentUserRole, canEditRoomBoard } = useRoomAuthorization();
 				console.log("canEditBoard :", canEditRoomBoard.value);
 				console.log("currentUserRole :", currentUserRole.value);
 				canEditBoard.value = canEditRoomBoard.value;
+				hasMovePermission.value = canEditRoomBoard.value;
+				hasCreateCardPermission.value = canEditRoomBoard.value;
+			} else {
+				resetState();
 			}
 		}
 	);
 
 	return {
-		hasMovePermission: permissions.includes("course_create"),
-		hasCreateCardPermission: permissions.includes("course_create"),
-		hasCreateColumnPermission: permissions.includes("course_create"),
-		hasCreateToolPermission: permissions.includes("context_tool_admin"),
-		hasEditPermission: permissions.includes("course_edit"),
-		hasDeletePermission: permissions.includes("course_remove"),
-		isTeacher: userRoles.includes("teacher"),
-		isStudent: userRoles.includes("student"),
+		hasMovePermission,
+		hasCreateCardPermission,
+		hasCreateColumnPermission,
+		hasCreateToolPermission,
+		hasEditPermission,
+		hasDeletePermission,
+		isTeacher,
+		isStudent,
 		canEditRoomBoard: canEditBoard,
 	};
 };
