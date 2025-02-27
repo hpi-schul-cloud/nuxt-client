@@ -30,9 +30,8 @@ const boardPermissions = (): BoardPermissionChecks => {
 			const { fetchRoom, resetState } = useRoomDetailsStore();
 			if (contextType.value === BoardContextType.Room && roomId.value) {
 				await fetchRoom(roomId?.value);
-				const { currentUserRole, canEditRoomBoard } = useRoomAuthorization();
-				console.log("canEditBoard :", canEditRoomBoard.value);
-				console.log("currentUserRole :", currentUserRole.value);
+				const { canEditRoomBoard } = useRoomAuthorization();
+
 				canEditBoard.value = canEditRoomBoard.value;
 				hasMovePermission.value = canEditRoomBoard.value;
 				hasCreateCardPermission.value = canEditRoomBoard.value;

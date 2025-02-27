@@ -1,33 +1,11 @@
 import {
 	Permission,
-	RoleName,
 	ImportUserResponseRoleNamesEnum as Roles,
 } from "@/serverApi/v3";
 import { useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { authModule } from "@/store";
-import { computed, ref, toValue, watchEffect } from "vue";
-
-const detectRole = (permissions: Permission[]) => {
-	if (permissions.includes(Permission.RoomChangeOwner)) {
-		return RoleName.Roomowner;
-	}
-	if (
-		permissions.includes(Permission.RoomMembersChangeRole) &&
-		!permissions.includes(Permission.RoomDelete)
-	) {
-		return RoleName.Roomadmin;
-	}
-	if (
-		permissions.includes(Permission.RoomEdit) &&
-		permissions.includes(Permission.RoomView) &&
-		!permissions.includes(Permission.RoomMembersChangeRole)
-	) {
-		return RoleName.Roomeditor;
-	}
-
-	return RoleName.Roomviewer;
-};
+import { ref, toValue, watchEffect } from "vue";
 
 export const useRoomAuthorization = () => {
 	const { room } = storeToRefs(useRoomDetailsStore());
@@ -40,13 +18,9 @@ export const useRoomAuthorization = () => {
 	const canEditRoom = ref(false);
 	const canDeleteRoom = ref(false);
 	const canLeaveRoom = ref(false);
-	const canEditRoomBoard = ref(false);
-	const currentUserRole = ref<RoleName | unknown>();
 
 	watchEffect(() => {
 		const permissions = toValue(room)?.permissions ?? [];
-
-		currentUserRole.value = detectRole(permissions);
 
 		canCreateRoom.value =
 			authModule?.getUserPermissions.includes(
@@ -61,7 +35,6 @@ export const useRoomAuthorization = () => {
 		);
 		canChangeOwner.value = permissions.includes(Permission.RoomChangeOwner);
 		canLeaveRoom.value = permissions.includes(Permission.RoomLeave);
-		canEditRoomBoard.value = permissions.includes(Permission.RoomEdit);
 	});
 
 	return {
@@ -73,7 +46,6 @@ export const useRoomAuthorization = () => {
 		canDeleteRoom,
 		canLeaveRoom,
 		canRemoveRoomMembers,
-		currentUserRole,
-		canEditRoomBoard,
+		canEditRoomBoard: canEditRoom,
 	};
 };
