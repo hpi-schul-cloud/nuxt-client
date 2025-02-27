@@ -10,23 +10,13 @@ import {
 import { createMock } from "@golevelup/ts-jest";
 import { useDragAndDrop } from "@util-board";
 import { mount } from "@vue/test-utils";
-import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import { availableMediaLineId, ElementCreate } from "./data";
 import MediaBoardAvailableLine from "./MediaBoardAvailableLine.vue";
 import MediaBoardLineMenu from "./MediaBoardLineMenu.vue";
-
-jest.mock("@vueuse/core", () => {
-	return {
-		...jest.requireActual("@vueuse/core"),
-		useMediaQuery: jest.fn(),
-	};
-});
-
-jest.mocked(useMediaQuery).mockReturnValue(ref(true));
 
 describe("MediaBoardAvailableLine", () => {
 	const getWrapper = (
