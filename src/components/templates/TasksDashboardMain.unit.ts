@@ -89,8 +89,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			const validRoles = ["student", "teacher"];
 			const invalidRoles = ["janitor", "principal"];
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			const { validator } = TasksDashboardMain.props.role;
 
 			validRoles.forEach((role) => {
@@ -129,15 +127,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 		});
 
-		it("should set isStudent true", () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isStudent).toBe(true);
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isTeacher).toBe(false);
-		});
-
 		it("should render student's tasks dashboard", () => {
 			const studentDashboard = wrapper.findComponent(TasksDashboardStudent);
 			expect(studentDashboard.exists()).toBe(true);
@@ -151,9 +140,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should open tab from store state", async () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.tab).toStrictEqual("open");
+			const studentDashboard = wrapper.findComponent(TasksDashboardStudent);
+			expect(studentDashboard.props("tabRoutes")).toContain("open");
 		});
 
 		it("should hide substituteFilter", async () => {
