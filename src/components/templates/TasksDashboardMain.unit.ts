@@ -140,9 +140,8 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should open tab from store state", async () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.tab).toStrictEqual("open");
+			const studentDashboard = wrapper.findComponent(TasksDashboardStudent);
+			expect(studentDashboard.props("tabRoutes")).toContain("open");
 		});
 
 		it("should hide substituteFilter", async () => {
