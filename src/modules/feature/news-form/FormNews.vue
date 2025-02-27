@@ -95,8 +95,10 @@ import { newsModule, notifierModule } from "@/store";
 import { useOpeningTagValidator } from "@/utils/validation/openingTagValidator";
 import { CkEditor } from "@feature-editor";
 import { mdiAlert, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
-import { defineComponent } from "vue";
+import { defineComponent, PropType } from "vue";
 import FormActions from "./FormActions.vue";
+import { News } from "@/store/types/news";
+import { Dayjs } from "dayjs";
 
 export default defineComponent({
 	setup() {
@@ -113,7 +115,7 @@ export default defineComponent({
 	},
 	props: {
 		news: {
-			type: Object,
+			type: Object as PropType<News>,
 			default: () => ({
 				title: "",
 				content: "",
@@ -160,11 +162,12 @@ export default defineComponent({
 			if (!this.data.date.date || !this.data.date.time) {
 				return undefined;
 			}
-			const dateTimeCombined: any = fromInputDateTime(
+			const dateTimeCombined = fromInputDateTime(
 				this.data.date.date,
 				this.data.date.time
 			);
-			return dateTimeCombined.toISOString();
+			const dateTimeCombinedString = dateTimeCombined as unknown as Dayjs;
+			return dateTimeCombinedString.toISOString();
 		},
 		errors(): { title: string | undefined; content: string | undefined } {
 			const title = this.data.title
@@ -227,7 +230,7 @@ export default defineComponent({
 			}
 			this.$emit("save", { ...this.data, displayAt: this.displayAt });
 		},
-		updateFromParent({ title, content, displayAt }: any) {
+		updateFromParent({ title, content, displayAt }: News) {
 			this.data.title = title;
 			this.data.content = content;
 			if (displayAt) {

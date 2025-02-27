@@ -13,27 +13,15 @@ import { AxiosInstance } from "axios";
  * @returns
  */
 jest.mock("axios");
-initializeAxios({
-	// get: () => {
-	// 	return { data: [] };
-	// },
-} as AxiosInstance);
+initializeAxios({} as AxiosInstance);
 
 describe("finished task store", () => {
 	describe("actions", () => {
-		const setup = (taskApiMock: any) => {
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const spy = jest
-				.spyOn(serverApi, "TaskApiFactory")
-				.mockReturnValue(taskApiMock as unknown as serverApi.TaskApiInterface);
-			const finishedTasksModule = new FinishedTasksModule({});
-
-			return { taskApiMock, finishedTasksModule };
-		};
-
 		describe("fetchFinishedTasks", () => {
 			it("should request an initial list of tasks", (done) => {
-				const { taskApiMock, finishedTasksModule } = setup({
+				const finishedTasksModule = new FinishedTasksModule({});
+				const spy = jest.spyOn(serverApi, "TaskApiFactory");
+				const taskApiMock = {
 					taskControllerFindAllFinished: jest.fn(() => ({
 						data: {
 							data: [{ mockTask: "mock task value" }],
@@ -42,7 +30,11 @@ describe("finished task store", () => {
 							limit: 50,
 						},
 					})),
-				});
+				};
+
+				spy.mockReturnValue(
+					taskApiMock as unknown as serverApi.TaskApiInterface
+				);
 
 				finishedTasksModule.fetchFinishedTasks().then(() => {
 					expect(finishedTasksModule.getTasks).toStrictEqual([
