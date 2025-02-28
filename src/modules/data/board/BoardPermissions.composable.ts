@@ -12,7 +12,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 	const userRoles = authModule?.getUserRoles || [];
 
 	const { contextType, roomId } = useSharedBoardPageInformation();
-	const canEditBoard = ref(true);
+	const canEditBoard = ref(false);
 	const hasMovePermission = ref(permissions.includes("course_create"));
 	const hasCreateCardPermission = ref(permissions.includes("course_create"));
 	const hasCreateColumnPermission = ref(permissions.includes("course_create"));
@@ -36,6 +36,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 				hasMovePermission.value = canEditRoomBoard.value;
 				hasCreateCardPermission.value = canEditRoomBoard.value;
 			} else {
+				canEditBoard.value = true;
 				resetState();
 			}
 		}
@@ -54,7 +55,4 @@ const boardPermissions = (): BoardPermissionChecks => {
 	};
 };
 
-/**
- * Shares user permissions (/me)
- */
 export const useBoardPermissions = createSharedComposable(boardPermissions);
