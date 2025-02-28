@@ -70,7 +70,7 @@ export const useBoardRestApi = () => {
 		try {
 			const board = await fetchBoardCall(payload.boardId);
 			boardStore.fetchBoardSuccess(board);
-		} catch (error) {
+		} catch {
 			applicationErrorModule.setError(
 				createApplicationError(
 					HttpStatusCode.NotFound,

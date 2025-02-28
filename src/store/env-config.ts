@@ -216,7 +216,7 @@ export default class EnvConfigModule extends VuexModule {
 			filePathsModule.init();
 
 			this.setStatus("completed");
-		} catch (error: unknown) {
+		} catch {
 			const applicationError = createApplicationError(
 				HttpStatusCode.GatewayTimeout
 			);
