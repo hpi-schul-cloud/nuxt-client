@@ -16,9 +16,7 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
-		:error-messages="
-			v$.modelValue.$errors.map((e: ErrorObject) => unref(e.$message))
-		"
+		:error-messages="errorMessages"
 		@keydown.enter="onEnter"
 	/>
 
@@ -42,9 +40,7 @@
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
-		:error-messages="
-			v$.modelValue.$errors.map((e: ErrorObject) => unref(e.$message))
-		"
+		:error-messages="errorMessages"
 	/>
 </template>
 
@@ -169,6 +165,10 @@ export default defineComponent({
 			{ $lazy: true, $autoDirty: true }
 		);
 
+		const errorMessages = computed(() =>
+			v$.value.modelValue.$errors.map((e: ErrorObject) => unref(e.$message))
+		);
+
 		const hasValue = computed<boolean>(
 			() => props.value !== "" && !!props.value
 		);
@@ -215,8 +215,7 @@ export default defineComponent({
 			titleInput,
 			placeholderText,
 			cursorToEnd,
-			v$,
-			unref,
+			errorMessages,
 		};
 	},
 });
