@@ -59,7 +59,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
 	let shareModuleMock: ShareModule;
-	let authModuleMock: AuthModule;
 	let wrapper: VueWrapper;
 
 	const mountComponent = (options = {}) => {
@@ -73,7 +72,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-					authModule: authModuleMock,
 				},
 				mocks: {
 					$router,

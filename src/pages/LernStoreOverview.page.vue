@@ -45,42 +45,51 @@
 				</div>
 				<transition name="fade">
 					<div class="content__container" v-if="true">
-						<template v-if="searchQuery.length > 1">
-							<p v-show="resources.data.length !== 0" class="content__total">
-								{{ resources.total }}
-								{{ $t("pages.content.index.search_results") }} "{{
-									searchQueryResult
-								}}"
-							</p>
-							<v-infinite-scroll width="100%" :items="resources" @load="onLoad">
-								<lern-store-grid
-									column-width="14rem"
-									data-testid="lernStoreCardsContainer"
-								>
-									<content-card
-										v-for="resource of resources.data"
-										:key="resource.properties['ccm:replicationsourceuuid'][0]"
-										class="card"
-										:inline="isInline"
-										:resource="resource"
-									/>
-								</lern-store-grid>
-								<template #loading>
-									<v-progress-circular
-										indeterminate
-										size="115"
-										class="align-self-center mt-4"
-									/>
-								</template>
-								<template #empty>
-									<div v-if="!reachedTotal" class="content__no_results">
-										<content-empty-state />
-									</div>
-								</template>
-							</v-infinite-scroll>
-						</template>
-						<span v-if="!loading" class="content__container_child">
+						<span class="content__container_child">
+							<!-- initial state, empty search -->
 							<content-initial-state v-if="searchQuery.length === 0" />
+							<!-- search query not empty and there are no results -->
+							<div
+								v-else-if="!resources.data.length && !loading"
+								class="content__no_results"
+							>
+								<content-empty-state />
+							</div>
+							<!-- search query not empty and there are results -->
+							<template v-if="searchQuery.length > 1">
+								<p v-show="resources.data.length !== 0" class="content__total">
+									{{ resources.total }}
+									{{ $t("pages.content.index.search_results") }} "{{
+										searchQueryResult
+									}}"
+								</p>
+								<v-infinite-scroll
+									empty-text=""
+									width="100%"
+									:items="resources"
+									@load="onLoad"
+								>
+									<lern-store-grid
+										column-width="14rem"
+										data-testid="lernStoreCardsContainer"
+									>
+										<content-card
+											v-for="resource of resources.data"
+											:key="resource.properties['ccm:replicationsourceuuid'][0]"
+											class="card"
+											:inline="isInline"
+											:resource="resource"
+										/>
+									</lern-store-grid>
+									<template #loading>
+										<v-progress-circular
+											indeterminate
+											size="115"
+											class="align-self-center mt-4"
+										/>
+									</template>
+								</v-infinite-scroll>
+							</template>
 						</span>
 					</div>
 				</transition>
@@ -91,22 +100,22 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, computed, ref } from "vue";
-import { useDebounceFn, watchDebounced } from "@vueuse/core";
-import { mdiChevronLeft, mdiMagnify, mdiClose } from "@icons/material";
+import ContentCard from "@/components/lern-store/ContentCard.vue";
+import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter.vue";
+import ContentEmptyState from "@/components/lern-store/ContentEmptyState.vue";
+import ContentInitialState from "@/components/lern-store/ContentInitialState.vue";
+import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
+import themeConfig from "@/theme.config";
 import {
 	CONTENT_MODULE_KEY,
 	NOTIFIER_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import ContentCard from "@/components/lern-store/ContentCard.vue";
-import ContentEmptyState from "@/components/lern-store/ContentEmptyState.vue";
-import LernStoreGrid from "@/components/lern-store/LernStoreGrid.vue";
-import ContentEduSharingFooter from "@/components/lern-store/ContentEduSharingFooter.vue";
-import ContentInitialState from "@/components/lern-store/ContentInitialState.vue";
+import { mdiChevronLeft, mdiClose, mdiMagnify } from "@icons/material";
+import { useDebounceFn, watchDebounced } from "@vueuse/core";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import themeConfig from "@/theme.config";
 import { useRoute, useRouter } from "vue-router";
 
 const { t } = useI18n();
@@ -119,6 +128,10 @@ const searchQuery = ref("");
 const activateTransition = ref(false);
 const searchQueryResult = ref("");
 const queryOptions = ref({ $limit: 12, $skip: 0 });
+
+let doneCallbackFunction:
+	| ((status: "ok" | "empty" | "loading" | "error") => void)
+	| undefined = undefined;
 
 onMounted(() => {
 	const pageTitle = isInline.value
@@ -147,6 +160,19 @@ const reachedTotal = computed(
 const onInput = async () => {
 	await searchContent();
 	activateTransition.value = true;
+
+	queryOptions.value.$skip = 0;
+
+	// We need to call the "done" callback function here in order to "reset"
+	// the infinite scroll component. Otherwise, the infinite scroll component
+	// will not trigger the "load" event again.
+	if (doneCallbackFunction) {
+		if (!resources.value.data.length) {
+			doneCallbackFunction("empty");
+		} else {
+			doneCallbackFunction("ok");
+		}
+	}
 };
 
 const searchContent = useDebounceFn(async () => {
@@ -167,6 +193,9 @@ const onLoad = async ({
 	side: "start" | "end" | "both";
 	done: (status: "ok" | "empty" | "loading" | "error") => void;
 }) => {
+	// Save the done callback function for later use.
+	doneCallbackFunction = done;
+
 	if (reachedTotal.value) {
 		done("empty");
 		return;

@@ -1,6 +1,4 @@
-import CopyModule from "@/store/copy";
 import FinishedTasksModule from "@/store/finished-tasks";
-import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import TasksModule from "@/store/tasks";
 import { OpenTasksForStudent } from "@/store/types/tasks";
@@ -10,7 +8,7 @@ import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import TasksList from "@/components/organisms/TasksList.vue";
 import TasksDashboardStudent from "@/components/templates/TasksDashboardStudent.vue";
 import { shallowMount } from "@vue/test-utils";
-import { COPY_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -20,9 +18,7 @@ const { overDueTasks, openTasksWithoutDueDate, openTasksWithDueDate } = mocks;
 
 describe("@/components/templates/TasksDashboardStudent", () => {
 	let tasksModuleMock: TasksModule;
-	let copyModuleMock: CopyModule;
 	let finishedTasksModuleMock: FinishedTasksModule;
-	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
 
 	const mountComponent = (options = {}) => {
@@ -31,9 +27,7 @@ describe("@/components/templates/TasksDashboardStudent", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					tasksModule: tasksModuleMock,
-					[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 					finishedTasksModule: finishedTasksModuleMock,
-					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				},
 			},
