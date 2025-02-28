@@ -280,8 +280,9 @@ export const useBoardRestApi = () => {
 	};
 
 	// this unused function is added to make sure that the same name is used in both socketApi and restApi
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	const disconnectSocketRequest = (): void => {};
+	const disconnectSocketRequest = (): void => {
+		return;
+	};
 
 	return {
 		fetchBoardRequest,
