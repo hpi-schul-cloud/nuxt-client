@@ -1,19 +1,25 @@
-import SchoolSettings from "./SchoolSettings.page.vue";
+import { useApplicationError } from "@/composables/application-error.composable";
+import {
+	ConfigResponse,
+	SchoolSystemResponse,
+	SchulcloudTheme,
+} from "@/serverApi/v3";
 import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { shallowMount } from "@vue/test-utils";
 import { FederalState } from "@/store/types/schools";
-import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import { ENV_CONFIG_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { useApplicationError } from "@/composables/application-error.composable";
-import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
+import { envsFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { shallowMount } from "@vue/test-utils";
 import { nextTick, reactive } from "vue";
-import { SchoolSystemResponse } from "@/serverApi/v3";
+import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
+import SchoolSettings from "./SchoolSettings.page.vue";
+
 jest.mock("vue-router");
 
 const useRouteMock = <jest.Mock<Partial<RouteLocationNormalizedLoaded>>>(
@@ -55,10 +61,11 @@ describe("SchoolSettingsPage", () => {
 	];
 
 	const setup = (
-		envConfigGetters: Partial<EnvConfigModule> = {
-			getFeatureSchoolSanisUserMigrationEnabled: true,
-			getSchoolPolicyEnabled: true,
-			getSchoolTermsOfUseEnabled: true,
+		envConfig: Partial<ConfigResponse> = {
+			FEATURE_USER_LOGIN_MIGRATION_ENABLED: true,
+			FEATURE_SCHOOL_POLICY_ENABLED_NEW: true,
+			FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: true,
+			SC_THEME: SchulcloudTheme.Default,
 		},
 		schoolGetters: Partial<SchoolsModule> = {}
 	) => {
@@ -76,7 +83,7 @@ describe("SchoolSettingsPage", () => {
 		});
 
 		envConfigModule = createModuleMocks(EnvConfigModule, {
-			...envConfigGetters,
+			getEnv: envsFactory.build(envConfig),
 		});
 
 		useRouteMock.mockImplementation(() =>
@@ -107,7 +114,7 @@ describe("SchoolSettingsPage", () => {
 	describe("when feature school policy is disabled", () => {
 		it("should not render privacy policy expansion panel", () => {
 			const { wrapper } = setup({
-				getSchoolPolicyEnabled: false,
+				FEATURE_SCHOOL_POLICY_ENABLED_NEW: false,
 			});
 
 			expect(wrapper.find('[data-testid="policy-panel"]').exists()).toBe(false);
@@ -125,7 +132,7 @@ describe("SchoolSettingsPage", () => {
 	describe("when feature school terms of use is disabled", () => {
 		it("should not render terms of use expansion panel", () => {
 			const { wrapper } = setup({
-				getSchoolTermsOfUseEnabled: false,
+				FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: false,
 			});
 
 			expect(wrapper.find('[data-testid="terms-panel"]').exists()).toBe(false);
@@ -145,12 +152,60 @@ describe("SchoolSettingsPage", () => {
 	describe("when feature admin migration is disabled", () => {
 		it("should not render admin migration expansion panel", () => {
 			const { wrapper } = setup({
-				getFeatureSchoolSanisUserMigrationEnabled: false,
+				FEATURE_USER_LOGIN_MIGRATION_ENABLED: false,
 			});
 
 			expect(wrapper.find('[data-testid="migration-panel"]').exists()).toBe(
 				false
 			);
+		});
+	});
+
+	describe("institute title", () => {
+		describe("when the theme is default", () => {
+			it("should render default title", () => {
+				const { wrapper } = setup({
+					SC_THEME: SchulcloudTheme.Default,
+				});
+
+				expect(wrapper.vm.instituteTitle).toEqual("Dataport");
+			});
+		});
+
+		describe("when the theme is brb", () => {
+			it("should render brb title", () => {
+				const { wrapper } = setup({
+					SC_THEME: SchulcloudTheme.Brb,
+				});
+
+				expect(wrapper.vm.instituteTitle).toEqual(
+					"Ministerium für Bildung, Jugend und Sport des Landes Brandenburg"
+				);
+			});
+		});
+
+		describe("when the theme is thr", () => {
+			it("should render thr title", () => {
+				const { wrapper } = setup({
+					SC_THEME: SchulcloudTheme.Thr,
+				});
+
+				expect(wrapper.vm.instituteTitle).toEqual(
+					"Thüringer Institut für Lehrerfortbildung, Lehrplanentwicklung und Medien"
+				);
+			});
+		});
+
+		describe("when the theme is n21", () => {
+			it("should render n21 title", () => {
+				const { wrapper } = setup({
+					SC_THEME: SchulcloudTheme.N21,
+				});
+
+				expect(wrapper.vm.instituteTitle).toEqual(
+					"Landesinitiative n-21: Schulen in Niedersachsen online e.V."
+				);
+			});
 		});
 	});
 
