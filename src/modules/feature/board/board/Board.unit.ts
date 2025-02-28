@@ -469,7 +469,7 @@ describe("Board", () => {
 
 	describe("BoardColumnGhost component", () => {
 		describe("when user has create column permission", () => {
-			it("should not be rendered on DOM", () => {
+			it("should be rendered on DOM", () => {
 				mockedBoardPermissions.hasCreateColumnPermission = ref(true);
 
 				const { wrapper } = setup();
@@ -478,13 +478,41 @@ describe("Board", () => {
 					name: "BoardColumnGhost",
 				});
 
-				expect(ghostColumnComponent.vm).toBeDefined();
+				expect(ghostColumnComponent.exists()).toBe(true);
+			});
+		});
+
+		describe("when user has 'canEditRoomBoard' permission", () => {
+			it("should not be rendered on DOM", () => {
+				mockedBoardPermissions.canEditRoomBoard = ref(true);
+
+				const { wrapper } = setup();
+
+				const ghostColumnComponent = wrapper.findComponent({
+					name: "BoardColumnGhost",
+				});
+
+				expect(ghostColumnComponent.exists()).toBe(true);
 			});
 		});
 
 		describe("when user doesn't have create column permission", () => {
 			it("should not be rendered on DOM", () => {
 				mockedBoardPermissions.hasCreateColumnPermission = ref(false);
+
+				const { wrapper } = setup();
+
+				const ghostColumnComponent = wrapper.findComponent({
+					name: "BoardColumnGhost",
+				});
+
+				expect(ghostColumnComponent.exists()).toBe(false);
+			});
+		});
+
+		describe("when user doesn't have 'canEditRoomBoard' permission", () => {
+			it("should not be rendered on DOM", () => {
+				mockedBoardPermissions.canEditRoomBoard = ref(false);
 
 				const { wrapper } = setup();
 
