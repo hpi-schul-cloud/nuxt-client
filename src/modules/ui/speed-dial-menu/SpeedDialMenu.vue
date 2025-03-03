@@ -54,7 +54,6 @@
 
 <script lang="ts" setup>
 import { mdiClose } from "@icons/material";
-import { useVuetifyBreakpoints } from "@util-device-detection";
 import { OnClickOutside } from "@vueuse/components";
 import { useWindowScroll, watchThrottled } from "@vueuse/core";
 import { computed, provide, ref, toRef, useSlots, VNode } from "vue";
@@ -63,6 +62,7 @@ import {
 	INJECT_SPEED_DIAL_DIRECTION,
 	INJECT_SPEED_DIAL_ORIENTATION,
 } from "./injection-tokens";
+import { useDisplay } from "vuetify";
 
 const props = withDefaults(
 	defineProps<{
@@ -94,7 +94,7 @@ const actions = computed(() => {
 const isMenu = computed(() => actions.value.length > 0);
 const isMenuOpen = ref(false);
 
-const isBelowLarge = useVuetifyBreakpoints().smallerOrEqual("lg");
+const { mdAndDown } = useDisplay();
 const { y: scrollOffsetY } = useWindowScroll();
 
 const isForceCollapseOnMobileScroll = ref(false);
@@ -102,7 +102,7 @@ const isForceCollapseOnMobileScroll = ref(false);
 watchThrottled(
 	scrollOffsetY,
 	(newVal, oldVal) => {
-		if (!isBelowLarge.value) {
+		if (!mdAndDown.value) {
 			isForceCollapseOnMobileScroll.value = false;
 			return;
 		}
