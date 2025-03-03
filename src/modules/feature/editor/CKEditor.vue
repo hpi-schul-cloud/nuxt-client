@@ -77,9 +77,13 @@ export default defineComponent({
 		const ck = ref(null);
 		const modelValue = useVModel(props, "value", emit);
 		const editor = computed(() => {
-			return props.type === "classic"
-				? CustomCKEditor.ClassicEditor
-				: CustomCKEditor.BalloonEditor;
+			if (props.type === "classic") {
+				return CustomCKEditor.ClassicEditor;
+			} else if (props.type === "inline") {
+				return CustomCKEditor.InlineEditor;
+			} else {
+				return CustomCKEditor.BalloonEditor;
+			}
 		});
 
 		const charCount = ref(0);
