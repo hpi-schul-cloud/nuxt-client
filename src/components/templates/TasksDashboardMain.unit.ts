@@ -340,7 +340,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 		});
 
-		it("should disable filter when active tab contains empty list and no course is selected", () => {
+		it("should not display filter when active tab contains empty list and no course is selected", () => {
 			tasksModuleMock = createModuleMocks(TasksModule, {
 				getStatus: "completed",
 				getOpenTasksForStudent: {
@@ -367,11 +367,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					role: "student",
 				},
 			});
-			// const autocompleteEl = wrapper.find(".v-autocomplete");
-			// expect(autocompleteEl.attributes("disabled")).toBe("true");
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isCourseFilterDisabled).toBe(true);
+
+			const autoComplete = wrapper.findComponent({ name: "v-autocomplete" });
+
+			expect(autoComplete.exists()).toBe(false);
 		});
 
 		it("should enable filter when active tab is not empty and no course is selected", () => {
@@ -386,7 +385,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					submitted: [],
 					graded: [],
 				},
-				hasTasks: false,
+				hasTasks: true,
 				getActiveTab: "completed",
 
 				// make tab 2 report as not empty
@@ -402,9 +401,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isCourseFilterDisabled).toBe(false);
+			const autoComplete = wrapper.findComponent({ name: "v-autocomplete" });
+
+			expect(autoComplete.exists()).toBe(true);
+			expect(autoComplete.classes()).not.toContain("v-input--disabled");
 		});
 	});
 
