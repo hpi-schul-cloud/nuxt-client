@@ -100,7 +100,7 @@ module.exports = [
 					],
 				},
 			],
-			"@typescript-eslint/no-unused-vars": "warn",
+			"@typescript-eslint/no-unused-vars": "error",
 			"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
 			"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",
 			"no-empty": "error",
