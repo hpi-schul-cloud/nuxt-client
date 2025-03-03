@@ -33,7 +33,7 @@
 		"maska": "^2.1.10",
 		"mobile-drag-drop": "^3.0.0-rc.0",
 		"object-hash": "^3.0.0",
-		"pinia": "^3.0.0",
+		"pinia": "^2.1.7",
 		"socket.io-client": "^4.7.5",
 		"sortablejs": "^1.15.2",
 		"sortablejs-vue3": "^1.2.11",
