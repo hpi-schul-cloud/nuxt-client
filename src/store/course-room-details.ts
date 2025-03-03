@@ -324,8 +324,9 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		const apiError = mapAxiosErrorToResponseError(error);
 
 		const errorCode = apiError.code;
-		if (errorCode && handledApplicationErrors.includes(errorCode))
+		if (errorCode && handledApplicationErrors.includes(errorCode)) {
 			applicationErrorModule.setError(createApplicationError(errorCode));
+		}
 	}
 
 	@Mutation
