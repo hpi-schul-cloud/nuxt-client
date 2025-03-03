@@ -94,7 +94,7 @@ const actions = computed(() => {
 const isMenu = computed(() => actions.value.length > 0);
 const isMenuOpen = ref(false);
 
-const { lgAndDown } = useDisplay();
+const { mdAndDown } = useDisplay();
 const { y: scrollOffsetY } = useWindowScroll();
 
 const isForceCollapseOnMobileScroll = ref(false);
@@ -102,7 +102,7 @@ const isForceCollapseOnMobileScroll = ref(false);
 watchThrottled(
 	scrollOffsetY,
 	(newVal, oldVal) => {
-		if (!lgAndDown.value) {
+		if (!mdAndDown.value) {
 			isForceCollapseOnMobileScroll.value = false;
 			return;
 		}

@@ -22,7 +22,7 @@
 				<slot name="fab">
 					<speed-dial-menu
 						class="wireframe-fab"
-						:direction="lgAndDown ? 'top' : 'bottom'"
+						:direction="mdAndDown ? 'top' : 'bottom'"
 						:orientation="'right'"
 						:icon="fabItems.icon"
 						:href="fabItems.href"
@@ -127,7 +127,7 @@ defineOptions({
 });
 const slots = useSlots();
 
-const { lgAndDown } = useDisplay();
+const { mdAndDown } = useDisplay();
 
 const showDivider = computed(() => {
 	return !props.hideBorder && !!(props.headline || slots.header);
