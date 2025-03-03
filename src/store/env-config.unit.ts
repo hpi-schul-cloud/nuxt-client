@@ -528,15 +528,6 @@ describe("env-config module", () => {
 			});
 		});
 
-		it("getFeatureSchoolSanisUserMigrationEnabled should get FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED", () => {
-			const envConfigModule = new EnvConfigModule({});
-			envConfigModule.env.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED = true;
-
-			expect(envConfigModule.getFeatureSchoolSanisUserMigrationEnabled).toBe(
-				true
-			);
-		});
-
 		it("getTheme should get SC_THEME", () => {
 			const envConfigModule = new EnvConfigModule({});
 			envConfigModule.env = envsFactory.build();
@@ -623,26 +614,6 @@ describe("env-config module", () => {
 
 			expect(envConfigModule.getNewSchoolAdminPageAsDefault).toStrictEqual(
 				mockEnvs.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED
-			);
-		});
-
-		it("getSchoolPolicyEnabled should get FEATURE_SCHOOL_POLICY_ENABLED_NEW", () => {
-			const envConfigModule = new EnvConfigModule({});
-			const mockEnvs = envsFactory.build();
-			envConfigModule.env = mockEnvs;
-
-			expect(envConfigModule.getSchoolPolicyEnabled).toStrictEqual(
-				mockEnvs.FEATURE_SCHOOL_POLICY_ENABLED_NEW
-			);
-		});
-
-		it("getFeatureSchoolTermsOfUseEnabled should get FEATURE_SCHOOL_TERMS_OF_USE_ENABLED", () => {
-			const envConfigModule = new EnvConfigModule({});
-			const mockEnvs = envsFactory.build();
-			envConfigModule.env = mockEnvs;
-
-			expect(envConfigModule.getSchoolTermsOfUseEnabled).toStrictEqual(
-				mockEnvs.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED
 			);
 		});
 
