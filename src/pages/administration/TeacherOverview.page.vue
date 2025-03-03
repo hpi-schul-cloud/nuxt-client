@@ -324,8 +324,8 @@ export default {
 		schoolIsExternallyManaged() {
 			return schoolsModule.schoolIsExternallyManaged;
 		},
-		getFeatureSchoolSanisUserMigrationEnabled() {
-			return envConfigModule.getFeatureSchoolSanisUserMigrationEnabled;
+		getFeatureUserLoginMigrationEnabled() {
+			return envConfigModule.getEnv.FEATURE_USER_LOGIN_MIGRATION_ENABLED;
 		},
 		env() {
 			return envConfigModule.getEnv;
@@ -387,7 +387,7 @@ export default {
 				);
 			}
 
-			if (!this.getFeatureSchoolSanisUserMigrationEnabled) {
+			if (!this.getFeatureUserLoginMigrationEnabled) {
 				editedColumns = editedColumns
 					.filter((col) => col.field !== "lastLoginSystemChange")
 					.filter((col) => col.field !== "outdatedSince");

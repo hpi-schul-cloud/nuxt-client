@@ -88,10 +88,6 @@ export default class EnvConfigModule extends VuexModule {
 		);
 	}
 
-	get getFeatureSchoolSanisUserMigrationEnabled(): boolean {
-		return this.env.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED;
-	}
-
 	get getTheme(): SchulcloudTheme {
 		return this.env.SC_THEME;
 	}
@@ -126,14 +122,6 @@ export default class EnvConfigModule extends VuexModule {
 
 	get getNewSchoolAdminPageAsDefault(): boolean {
 		return this.env.FEATURE_NEW_SCHOOL_ADMINISTRATION_PAGE_AS_DEFAULT_ENABLED;
-	}
-
-	get getSchoolPolicyEnabled(): boolean {
-		return this.env.FEATURE_SCHOOL_POLICY_ENABLED_NEW;
-	}
-
-	get getSchoolTermsOfUseEnabled(): boolean {
-		return this.env.FEATURE_SCHOOL_TERMS_OF_USE_ENABLED;
 	}
 
 	get getAvailableLanguages(): LanguageType[] {
