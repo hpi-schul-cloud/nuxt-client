@@ -2,7 +2,7 @@
 	<v-custom-dialog
 		:is-open="isOpen"
 		:size="425"
-		@dialog-closed="cancel"
+		@dialog-canceled="cancel"
 		has-buttons
 		confirm-btn-title-key="pages.administration.school.index.schoolPolicy.replace"
 		:confirm-btn-icon="mdiFileReplaceOutline"
@@ -29,7 +29,6 @@
 					ref="input-file"
 					class="input-file mb-2"
 					data-testid="input-file"
-					v-model="files"
 					density="compact"
 					accept="application/pdf"
 					truncate-length="30"
@@ -44,6 +43,7 @@
 					:persistent-hint="true"
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
 					@blur="onBlur"
+					@update:modelValue="onFileChange"
 				>
 					<template v-slot:append-inner>
 						<v-icon
@@ -61,19 +61,19 @@
 
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
+import { currentDate } from "@/plugins/datetime";
+import { CreateConsentVersionPayload } from "@/store/types/consent-version";
+import { School } from "@/store/types/schools";
+import { toBase64 } from "@/utils/fileHelper";
 import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { useI18n } from "vue-i18n";
 import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
-import { School } from "@/store/types/schools";
-import { currentDate } from "@/plugins/datetime";
-import { toBase64 } from "@/utils/fileHelper";
-import { CreateConsentVersionPayload } from "@/store/types/consent-version";
+import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SchoolPolicyFormDialog",
@@ -113,6 +113,14 @@ export default defineComponent({
 				t(
 					"pages.administration.school.index.schoolPolicy.validation.fileTooBig"
 				),
+		};
+
+		const onFileChange = (_files: File[] | File) => {
+			if (Array.isArray(_files)) {
+				files.value = _files;
+			} else {
+				files.value = [_files];
+			}
 		};
 
 		const onBlur = () => {
@@ -156,11 +164,11 @@ export default defineComponent({
 
 		return {
 			t,
-			files,
 			rules,
 			cancel,
 			submit,
 			onBlur,
+			onFileChange,
 			isValid,
 			isTouched,
 			policyForm,
