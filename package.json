@@ -17,7 +17,7 @@
 		"generate-client:common-cartridge": "openapi-generator-cli generate -c ./openapitools.json --generator-key common-cartridge-api"
 	},
 	"dependencies": {
-		"@braintree/sanitize-url": "^6.0.4",
+		"@braintree/sanitize-url": "^7.1.1",
 		"@ckeditor/ckeditor5-vue": "^5.1.0",
 		"@hpi-schul-cloud/ckeditor": "^1.2.0",
 		"@lumieducation/h5p-webcomponents": "^9.2.2",
