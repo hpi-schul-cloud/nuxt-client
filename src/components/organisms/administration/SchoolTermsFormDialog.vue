@@ -2,7 +2,7 @@
 	<v-custom-dialog
 		:is-open="isOpen"
 		:size="425"
-		@dialog-closed="cancel"
+		@dialog-canceled="cancel"
 		has-buttons
 		confirm-btn-title-key="pages.administration.school.index.termsOfUse.replace"
 		:confirm-btn-icon="mdiFileReplaceOutline"
@@ -29,7 +29,6 @@
 					ref="input-file"
 					class="input-file mb-2"
 					data-testid="input-file"
-					v-model="files"
 					:multiple="false"
 					density="compact"
 					accept="application/pdf"
@@ -43,6 +42,7 @@
 					:persistent-hint="true"
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
 					@blur="onBlur"
+					@update:modelValue="onFileChange"
 				>
 					<template v-slot:append-inner>
 						<v-icon
@@ -116,6 +116,14 @@ export default defineComponent({
 			isFormTouched.value = true;
 		};
 
+		const onFileChange = (_files: File[] | File) => {
+			if (Array.isArray(_files)) {
+				files.value = _files;
+			} else {
+				files.value = [_files];
+			}
+		};
+
 		const resetForm = () => {
 			termsForm.value = [];
 			isFormValid.value = false;
@@ -153,11 +161,11 @@ export default defineComponent({
 
 		return {
 			t,
-			files,
 			rules: validationRules,
 			cancel,
 			submit,
 			onBlur,
+			onFileChange,
 			isValid: isFormValid,
 			isTouched: isFormTouched,
 			termsForm,
