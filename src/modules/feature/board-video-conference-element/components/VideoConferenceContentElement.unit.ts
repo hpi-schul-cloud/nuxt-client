@@ -77,13 +77,13 @@ describe("VideoConferenceContentElement", () => {
 		useBoardPermissionsMock = createMock<
 			ReturnType<typeof useBoardPermissions>
 		>({
-			isTeacher: true,
-			hasMovePermission: false,
-			hasCreateCardPermission: false,
-			hasCreateColumnPermission: false,
-			hasEditPermission: false,
-			hasDeletePermission: false,
-			isStudent: false,
+			isTeacher: ref(true),
+			hasMovePermission: ref(false),
+			hasCreateCardPermission: ref(false),
+			hasCreateColumnPermission: ref(false),
+			hasEditPermission: ref(false),
+			hasDeletePermission: ref(false),
+			isStudent: ref(false),
 		});
 
 		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);

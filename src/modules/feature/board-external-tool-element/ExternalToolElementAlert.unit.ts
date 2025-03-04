@@ -95,7 +95,7 @@ describe("ExternalToolElementAlert", () => {
 					message: "Loading error",
 				};
 
-				useBoardPermissionsMock.isTeacher = true;
+				useBoardPermissionsMock.isTeacher.value = true;
 
 				const { wrapper } = getWrapper({ error });
 
@@ -123,7 +123,7 @@ describe("ExternalToolElementAlert", () => {
 					message: "Loading error",
 				};
 
-				useBoardPermissionsMock.isTeacher = false;
+				useBoardPermissionsMock.isTeacher.value = false;
 
 				const { wrapper } = getWrapper({ error });
 
@@ -148,7 +148,7 @@ describe("ExternalToolElementAlert", () => {
 	describe("when the tool is outdated on scope school", () => {
 		describe("when the user is a teacher", () => {
 			const setup = () => {
-				useBoardPermissionsMock.isTeacher = true;
+				useBoardPermissionsMock.isTeacher.value = true;
 
 				const { wrapper } = getWrapper(
 					{
@@ -178,7 +178,7 @@ describe("ExternalToolElementAlert", () => {
 
 		describe("when the user is a student", () => {
 			const setup = () => {
-				useBoardPermissionsMock.isTeacher = false;
+				useBoardPermissionsMock.isTeacher.value = false;
 
 				const { wrapper } = getWrapper(
 					{
@@ -210,7 +210,7 @@ describe("ExternalToolElementAlert", () => {
 	describe("when the tool is outdated on scope context", () => {
 		describe("when the user is a teacher", () => {
 			const setup = () => {
-				useBoardPermissionsMock.isTeacher = true;
+				useBoardPermissionsMock.isTeacher.value = true;
 
 				const { wrapper } = getWrapper(
 					{
@@ -240,7 +240,7 @@ describe("ExternalToolElementAlert", () => {
 
 		describe("when the user is a student", () => {
 			const setup = () => {
-				useBoardPermissionsMock.isTeacher = false;
+				useBoardPermissionsMock.isTeacher.value = false;
 
 				const { wrapper } = getWrapper(
 					{
@@ -272,7 +272,7 @@ describe("ExternalToolElementAlert", () => {
 	describe("when the tool is outdated on scope school and context", () => {
 		describe("when the user is a teacher", () => {
 			const setup = () => {
-				useBoardPermissionsMock.isTeacher = true;
+				useBoardPermissionsMock.isTeacher.value = true;
 
 				const { wrapper } = getWrapper(
 					{
@@ -303,7 +303,7 @@ describe("ExternalToolElementAlert", () => {
 
 		describe("when the user is a student", () => {
 			const setup = () => {
-				useBoardPermissionsMock.isTeacher = false;
+				useBoardPermissionsMock.isTeacher.value = false;
 
 				const { wrapper } = getWrapper(
 					{
@@ -335,7 +335,7 @@ describe("ExternalToolElementAlert", () => {
 
 	describe("when the tool is deactivated", () => {
 		it("should display a user friendly message", () => {
-			useBoardPermissionsMock.isTeacher = true;
+			useBoardPermissionsMock.isTeacher.value = true;
 
 			const { wrapper } = getWrapper(
 				{
@@ -357,7 +357,7 @@ describe("ExternalToolElementAlert", () => {
 
 	describe("when the tool is not licensed", () => {
 		it("should display a user friendly message", () => {
-			useBoardPermissionsMock.isTeacher = true;
+			useBoardPermissionsMock.isTeacher.value = true;
 
 			const { wrapper } = getWrapper(
 				{
@@ -380,7 +380,7 @@ describe("ExternalToolElementAlert", () => {
 	describe("when the tool is incomplete on scope context", () => {
 		describe("when the user is a teacher", () => {
 			const setup = () => {
-				useBoardPermissionsMock.isTeacher = true;
+				useBoardPermissionsMock.isTeacher.value = true;
 
 				const { wrapper } = getWrapper(
 					{
@@ -410,7 +410,7 @@ describe("ExternalToolElementAlert", () => {
 
 		describe("when the user is a student", () => {
 			const setup = () => {
-				useBoardPermissionsMock.isTeacher = false;
+				useBoardPermissionsMock.isTeacher.value = false;
 
 				const { wrapper } = getWrapper(
 					{
@@ -442,7 +442,7 @@ describe("ExternalToolElementAlert", () => {
 	describe("when the tool is incomplete operational", () => {
 		describe("when the user is a teacher", () => {
 			const setup = () => {
-				useBoardPermissionsMock.isTeacher = true;
+				useBoardPermissionsMock.isTeacher.value = true;
 
 				const { wrapper } = getWrapper(
 					{
@@ -472,7 +472,7 @@ describe("ExternalToolElementAlert", () => {
 
 		describe("when the user is a student", () => {
 			const setup = () => {
-				useBoardPermissionsMock.isTeacher = false;
+				useBoardPermissionsMock.isTeacher.value = false;
 
 				const { wrapper } = getWrapper(
 					{

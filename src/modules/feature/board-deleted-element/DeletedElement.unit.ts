@@ -7,7 +7,7 @@ import { useBoardFocusHandler, useBoardPermissions } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { WarningAlert } from "@ui-alert";
 import { mount } from "@vue/test-utils";
-import { nextTick } from "vue";
+import { nextTick, ref } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import DeletedElement from "./DeletedElement.vue";
 import DeletedElementMenu from "./DeletedElementMenu.vue";
@@ -27,7 +27,7 @@ describe("DeletedElement", () => {
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
 		useBoardPermissionsMock = createMock<
 			ReturnType<typeof useBoardPermissions>
-		>({ isTeacher: true });
+		>({ isTeacher: ref(true) });
 
 		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 		jest.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
@@ -64,7 +64,7 @@ describe("DeletedElement", () => {
 
 	describe("when the user is not a teacher", () => {
 		const setup = () => {
-			useBoardPermissionsMock.isTeacher = false;
+			useBoardPermissionsMock.isTeacher.value = false;
 
 			const { wrapper } = getWrapper({
 				element: deletedElementResponseFactory.build(),

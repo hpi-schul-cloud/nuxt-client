@@ -17,7 +17,7 @@ import {
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
-import { computed, nextTick } from "vue";
+import { computed, nextTick, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
 import { BoardColumnInteractionHandler } from "@feature-board";
@@ -166,7 +166,7 @@ describe("BoardColumnHeader", () => {
 			describe("when arrow-up-key is received", () => {
 				it("should emit move:column-left", () => {
 					const wrapper = setup(
-						{ permissions: { hasDeletePermission: true } },
+						{ permissions: { hasDeletePermission: ref(true) } },
 						{ isListBoard: true }
 					);
 
@@ -185,7 +185,7 @@ describe("BoardColumnHeader", () => {
 			describe("when arrow-right-key is received", () => {
 				it("should emit move:column-left", () => {
 					const wrapper = setup(
-						{ permissions: { hasDeletePermission: true } },
+						{ permissions: { hasDeletePermission: ref(true) } },
 						{ isListBoard: true }
 					);
 
@@ -282,7 +282,7 @@ describe("BoardColumnHeader", () => {
 				it("should emit move:column-left", () => {
 					const wrapper = setup({
 						isEditMode: false,
-						permissions: { hasDeletePermission: true },
+						permissions: { hasDeletePermission: ref(true) },
 					});
 
 					const interactionHandler = wrapper.findComponent(
@@ -301,7 +301,7 @@ describe("BoardColumnHeader", () => {
 				it("should emit move:column-left", () => {
 					const wrapper = setup({
 						isEditMode: false,
-						permissions: { hasDeletePermission: true },
+						permissions: { hasDeletePermission: ref(true) },
 					});
 
 					const interactionHandler = wrapper.findComponent(
@@ -322,7 +322,7 @@ describe("BoardColumnHeader", () => {
 		it("should start the edit mode", () => {
 			const wrapper = setup({
 				isEditMode: false,
-				permissions: { hasDeletePermission: true },
+				permissions: { hasDeletePermission: ref(true) },
 			});
 
 			const action = wrapper.findComponent(KebabMenuActionRename);
@@ -336,7 +336,7 @@ describe("BoardColumnHeader", () => {
 		it("should stop the edit mode", () => {
 			const wrapper = setup({
 				isEditMode: false,
-				permissions: { hasDeletePermission: true },
+				permissions: { hasDeletePermission: ref(true) },
 			});
 
 			const interactionHandler = wrapper.findComponent(
@@ -353,7 +353,7 @@ describe("BoardColumnHeader", () => {
 			it("should emit delete:column", async () => {
 				const wrapper = setup({
 					isEditMode: false,
-					permissions: { hasDeletePermission: true },
+					permissions: { hasDeletePermission: ref(true) },
 				});
 
 				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
@@ -369,7 +369,7 @@ describe("BoardColumnHeader", () => {
 			it("should emit delete:column", async () => {
 				const wrapper = setup({
 					isEditMode: false,
-					permissions: { hasDeletePermission: true },
+					permissions: { hasDeletePermission: ref(true) },
 				});
 
 				const deleteAction = wrapper.findComponent(KebabMenuActionDelete);
@@ -386,7 +386,7 @@ describe("BoardColumnHeader", () => {
 		describe("when user is not permitted to delete a column", () => {
 			it("should not be rendered on DOM", () => {
 				const wrapper = setup({
-					permissions: { hasDeletePermission: false },
+					permissions: { hasDeletePermission: ref(false) },
 				});
 
 				const boardMenuComponent = wrapper.findAllComponents({

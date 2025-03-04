@@ -3,14 +3,14 @@ import { createSharedComposable } from "@vueuse/core";
 import { computed, ComputedRef, ref, Ref } from "vue";
 
 export type EditModePermissions = {
-	hasEditPermission: boolean;
+	hasEditPermission: Ref<boolean>;
 };
 
 export const useCourseBoardEditMode = (id: string) =>
 	useEditMode(id, useBoardPermissions());
 
 export const useMediaBoardEditMode = (id: string) =>
-	useEditMode(id, { hasEditPermission: true });
+	useEditMode(id, { hasEditPermission: ref(true) });
 
 /**
  * Handles EditMode for a specific card.
@@ -19,12 +19,12 @@ export const useMediaBoardEditMode = (id: string) =>
  */
 const useEditMode = (
 	id: string,
-	permissions: EditModePermissions = { hasEditPermission: true }
+	permissions: EditModePermissions = { hasEditPermission: ref(true) }
 ) => {
 	const { editModeId, setEditModeId } = useSharedEditMode();
 
 	const isEditMode: ComputedRef<boolean> = computed(() => {
-		if (!permissions.hasEditPermission) {
+		if (!permissions.hasEditPermission.value) {
 			return false;
 		}
 
@@ -32,7 +32,7 @@ const useEditMode = (
 	});
 
 	const startEditMode = (): void => {
-		if (!permissions.hasEditPermission) {
+		if (!permissions.hasEditPermission.value) {
 			return;
 		}
 

@@ -4,13 +4,14 @@ import {
 	useCourseBoardEditMode,
 	useMediaBoardEditMode,
 } from "./editMode.composable";
+import { ref, Ref } from "vue";
 
 jest.mock("@data-board");
 const mockedUseBoardPermissions = jest.mocked(useBoardPermissions);
 
 describe("editMode.composable", () => {
 	describe("when using edit mode for course boards", () => {
-		const setup = (hasEditPermission: boolean) => {
+		const setup = (hasEditPermission: Ref<boolean>) => {
 			mockedUseBoardPermissions.mockReturnValue({
 				hasEditPermission,
 			} as BoardPermissionChecks);
@@ -19,7 +20,7 @@ describe("editMode.composable", () => {
 		};
 
 		it("should set edit mode with permissions", () => {
-			const { isEditMode, startEditMode, stopEditMode } = setup(true);
+			const { isEditMode, startEditMode, stopEditMode } = setup(ref(true));
 			expect(isEditMode.value).toBe(false);
 			startEditMode();
 			expect(isEditMode.value).toBe(true);
@@ -28,7 +29,7 @@ describe("editMode.composable", () => {
 		});
 
 		it("should not set edit mode without permissions ", () => {
-			const { isEditMode, startEditMode, stopEditMode } = setup(false);
+			const { isEditMode, startEditMode, stopEditMode } = setup(ref(false));
 
 			expect(isEditMode.value).toBe(false);
 			startEditMode();

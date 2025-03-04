@@ -379,7 +379,7 @@ describe("Board", () => {
 
 		describe("when the user has tool create permissions", () => {
 			it("should call cardStore loadPreferredTools action", () => {
-				mockedBoardPermissions.hasCreateToolPermission = true;
+				mockedBoardPermissions.hasCreateToolPermission = ref(true);
 				const { cardStore } = setup();
 
 				expect(cardStore.loadPreferredTools).toHaveBeenCalled();
@@ -388,7 +388,7 @@ describe("Board", () => {
 
 		describe("when the user does not have tool create permissions", () => {
 			it("should call cardStore loadPreferredTools action", () => {
-				mockedBoardPermissions.hasCreateToolPermission = false;
+				mockedBoardPermissions.hasCreateToolPermission = ref(false);
 				const { cardStore } = setup();
 
 				expect(cardStore.loadPreferredTools).not.toHaveBeenCalled();
@@ -469,8 +469,8 @@ describe("Board", () => {
 
 	describe("BoardColumnGhost component", () => {
 		describe("when user has create column permission", () => {
-			it("should not be rendered on DOM", () => {
-				mockedBoardPermissions.hasCreateColumnPermission = true;
+			it("should be rendered on DOM", () => {
+				mockedBoardPermissions.hasCreateColumnPermission = ref(true);
 
 				const { wrapper } = setup();
 
@@ -478,13 +478,41 @@ describe("Board", () => {
 					name: "BoardColumnGhost",
 				});
 
-				expect(ghostColumnComponent.vm).toBeDefined();
+				expect(ghostColumnComponent.exists()).toBe(true);
+			});
+		});
+
+		describe("when user has 'canEditRoomBoard' permission", () => {
+			it("should not be rendered on DOM", () => {
+				mockedBoardPermissions.canEditRoomBoard = ref(true);
+
+				const { wrapper } = setup();
+
+				const ghostColumnComponent = wrapper.findComponent({
+					name: "BoardColumnGhost",
+				});
+
+				expect(ghostColumnComponent.exists()).toBe(true);
 			});
 		});
 
 		describe("when user doesn't have create column permission", () => {
 			it("should not be rendered on DOM", () => {
-				mockedBoardPermissions.hasCreateColumnPermission = false;
+				mockedBoardPermissions.hasCreateColumnPermission = ref(false);
+
+				const { wrapper } = setup();
+
+				const ghostColumnComponent = wrapper.findComponent({
+					name: "BoardColumnGhost",
+				});
+
+				expect(ghostColumnComponent.exists()).toBe(false);
+			});
+		});
+
+		describe("when user doesn't have 'canEditRoomBoard' permission", () => {
+			it("should not be rendered on DOM", () => {
+				mockedBoardPermissions.canEditRoomBoard = ref(false);
 
 				const { wrapper } = setup();
 
@@ -518,7 +546,7 @@ describe("Board", () => {
 	describe("user permissions", () => {
 		describe("when user is not permitted to move", () => {
 			it("should set drag-disabled", () => {
-				mockedBoardPermissions.hasMovePermission = false;
+				mockedBoardPermissions.hasMovePermission = ref(false);
 				const { wrapper } = setup();
 
 				const dndContainer = wrapper.findComponent({ name: "Sortable" });
@@ -529,7 +557,7 @@ describe("Board", () => {
 		describe("@onCreateCard", () => {
 			describe("when user is permitted to create card", () => {
 				it("should call the createCard method", () => {
-					mockedBoardPermissions.hasCreateCardPermission = true;
+					mockedBoardPermissions.hasCreateCardPermission = ref(true);
 					const { wrapper, boardStore } = setup();
 
 					const columnComponent = wrapper.findComponent({
@@ -543,7 +571,7 @@ describe("Board", () => {
 
 			describe("when user is not permitted to create card", () => {
 				it("should not call the createCard method", () => {
-					mockedBoardPermissions.hasCreateCardPermission = false;
+					mockedBoardPermissions.hasCreateCardPermission = ref(false);
 					const { wrapper, boardStore } = setup();
 
 					const columnComponent = wrapper.findComponent({
@@ -560,7 +588,7 @@ describe("Board", () => {
 		describe("@onCreateColumn", () => {
 			describe("when user is permitted to create a column", () => {
 				it("should call createColumn method", () => {
-					mockedBoardPermissions.hasCreateColumnPermission = true;
+					mockedBoardPermissions.hasCreateColumnPermission = ref(true);
 					const { wrapper, boardStore } = setup();
 
 					const ghostColumnComponent = wrapper.findComponent({
@@ -576,7 +604,7 @@ describe("Board", () => {
 		describe("@onDeleteCard", () => {
 			describe("when user is permitted to delete a card", () => {
 				it("should call deleteCard method", () => {
-					mockedBoardPermissions.hasCreateCardPermission = true;
+					mockedBoardPermissions.hasCreateCardPermission = ref(true);
 					const { wrapper, cardStore } = setup();
 
 					const columnComponent = wrapper.findComponent({
@@ -591,7 +619,7 @@ describe("Board", () => {
 
 			describe("when user is not permitted to delete a card", () => {
 				it("should not call deleteCard method", () => {
-					mockedBoardPermissions.hasCreateCardPermission = false;
+					mockedBoardPermissions.hasCreateCardPermission = ref(false);
 					const { wrapper, cardStore } = setup();
 
 					const columnComponent = wrapper.findComponent({
@@ -607,7 +635,7 @@ describe("Board", () => {
 		describe("@onDeleteColumn", () => {
 			describe("when user is permitted to delete a column", () => {
 				it("should call deleteColumn method", () => {
-					mockedBoardPermissions.hasDeletePermission = true;
+					mockedBoardPermissions.hasDeletePermission = ref(true);
 					const { wrapper, boardStore } = setup();
 
 					const columnComponent = wrapper.findComponent({
@@ -622,7 +650,7 @@ describe("Board", () => {
 
 			describe("when user is not permitted to delete a column", () => {
 				it("should not call deleteColumn method", () => {
-					mockedBoardPermissions.hasDeletePermission = false;
+					mockedBoardPermissions.hasDeletePermission = ref(false);
 					const { wrapper, boardStore } = setup();
 
 					const columnComponent = wrapper.findComponent({
@@ -638,7 +666,7 @@ describe("Board", () => {
 		describe("@onDropColumn", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
-					mockedBoardPermissions.hasMovePermission = true;
+					mockedBoardPermissions.hasMovePermission = ref(true);
 					const { wrapper, boardStore } = setup({ numberOfColumns: 2 });
 
 					const containerComponent = wrapper.findAllComponents({
@@ -659,7 +687,7 @@ describe("Board", () => {
 
 			describe("when user is not permitted to move a column", () => {
 				it("should not call moveColumn method", () => {
-					mockedBoardPermissions.hasMovePermission = false;
+					mockedBoardPermissions.hasMovePermission = ref(false);
 					const { wrapper, boardStore } = setup({ numberOfColumns: 2 });
 
 					const containerComponent = wrapper.findAllComponents({
@@ -675,7 +703,7 @@ describe("Board", () => {
 		describe("@onMoveColumnBackward", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
-					mockedBoardPermissions.hasMovePermission = true;
+					mockedBoardPermissions.hasMovePermission = ref(true);
 					const { wrapper, boardStore } = setup({ numberOfColumns: 2 });
 
 					const boardColumnComponent = wrapper.findAllComponents({
@@ -689,7 +717,7 @@ describe("Board", () => {
 
 			describe("when user is not permitted to move a column", () => {
 				it("should not call moveColumn method", () => {
-					mockedBoardPermissions.hasMovePermission = false;
+					mockedBoardPermissions.hasMovePermission = ref(false);
 					const { wrapper, boardStore } = setup({ numberOfColumns: 2 });
 
 					const boardColumnComponent = wrapper.findAllComponents({
@@ -705,7 +733,7 @@ describe("Board", () => {
 		describe("@onMoveColumnForward", () => {
 			describe("when user is permitted to move a column", () => {
 				it("should call moveColumn method", () => {
-					mockedBoardPermissions.hasMovePermission = true;
+					mockedBoardPermissions.hasMovePermission = ref(true);
 					const { wrapper, boardStore } = setup({ numberOfColumns: 2 });
 
 					const boardColumnComponent = wrapper.findComponent({
@@ -719,7 +747,7 @@ describe("Board", () => {
 
 			describe("when user is not permitted to move a column", () => {
 				it("should not call moveColumn method", () => {
-					mockedBoardPermissions.hasMovePermission = false;
+					mockedBoardPermissions.hasMovePermission = ref(false);
 					const { wrapper, boardStore } = setup({ numberOfColumns: 2 });
 
 					const boardColumnComponent = wrapper.findComponent({
@@ -735,7 +763,7 @@ describe("Board", () => {
 		describe("@onUpdateBoardTitle", () => {
 			describe("when user is permitted to edit", () => {
 				it("should call updateBoardTitle method", () => {
-					mockedBoardPermissions.hasEditPermission = true;
+					mockedBoardPermissions.hasEditPermission = ref(true);
 					const { wrapper, boardStore } = setup();
 
 					const headearComponent = wrapper.findComponent({
@@ -749,7 +777,7 @@ describe("Board", () => {
 
 			describe("when user is not permitted to edit", () => {
 				it("should not call updateBoardTitle method", () => {
-					mockedBoardPermissions.hasEditPermission = false;
+					mockedBoardPermissions.hasEditPermission = ref(false);
 					const { wrapper, boardStore } = setup();
 
 					const headearComponent = wrapper.findComponent({
@@ -765,7 +793,7 @@ describe("Board", () => {
 		describe("@onUpdateColumnTitle", () => {
 			describe("when user is permitted to edit", () => {
 				it("should call updateColumnTitle method", () => {
-					mockedBoardPermissions.hasEditPermission = true;
+					mockedBoardPermissions.hasEditPermission = ref(true);
 					const { wrapper, boardStore } = setup();
 
 					const columnComponent = wrapper.findComponent({
@@ -779,7 +807,7 @@ describe("Board", () => {
 
 			describe("when user is not permitted to edit", () => {
 				it("should not call updateColumnTitle method", () => {
-					mockedBoardPermissions.hasEditPermission = false;
+					mockedBoardPermissions.hasEditPermission = ref(false);
 					const { wrapper, boardStore } = setup();
 
 					const columnComponent = wrapper.findComponent({
@@ -823,7 +851,7 @@ describe("Board", () => {
 						it("should call 'createApplicationError' method", async () => {
 							const mockRoomId =
 								mockedUseSharedBoardPageInformation().roomId.value;
-							mockedBoardPermissions.isTeacher = false;
+							mockedBoardPermissions.isTeacher = ref(false);
 							const { boardStore, wrapperVM } = setup();
 							expect(wrapperVM.isBoardVisible).toBe(true);
 
@@ -850,7 +878,7 @@ describe("Board", () => {
 
 					describe("when the user is a teacher", () => {
 						it("should not call 'createApplicationError' method", async () => {
-							mockedBoardPermissions.isTeacher = true;
+							mockedBoardPermissions.isTeacher = ref(true);
 							const { boardStore, wrapperVM } = setup();
 							expect(wrapperVM.isBoardVisible).toBe(true);
 
@@ -869,7 +897,7 @@ describe("Board", () => {
 				describe("when board is published mode", () => {
 					describe("when the user is not a teacher", () => {
 						it("should not call 'createApplicationError' method", async () => {
-							mockedBoardPermissions.isTeacher = false;
+							mockedBoardPermissions.isTeacher = ref(false);
 							const { boardStore, wrapperVM } = setup();
 							expect(wrapperVM.isBoardVisible).toBe(true);
 
@@ -886,7 +914,7 @@ describe("Board", () => {
 
 					describe("when the user is a teacher", () => {
 						it("should not call 'createApplicationError' method", async () => {
-							mockedBoardPermissions.isTeacher = true;
+							mockedBoardPermissions.isTeacher = ref(true);
 							const { boardStore, wrapperVM } = setup();
 							expect(wrapperVM.isBoardVisible).toBe(true);
 
@@ -971,7 +999,7 @@ describe("Board", () => {
 			});
 
 			it("should call openDeleteBoardDialog method when board should be deleted", async () => {
-				mockedBoardPermissions.hasDeletePermission = true;
+				mockedBoardPermissions.hasDeletePermission = ref(true);
 				const { wrapper, board, wrapperVM } = setup();
 
 				wrapperVM.openDeleteBoardDialog = openDeleteBoardDialogMock;
@@ -986,7 +1014,7 @@ describe("Board", () => {
 			});
 
 			it("should call deleteBoard method to delete board and redirect to rooms board page", async () => {
-				mockedBoardPermissions.hasDeletePermission = true;
+				mockedBoardPermissions.hasDeletePermission = ref(true);
 				const mockRoomId = mockedUseSharedBoardPageInformation().roomId.value;
 
 				const { wrapper, board, boardStore } = setup();

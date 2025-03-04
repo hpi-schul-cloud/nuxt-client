@@ -75,11 +75,13 @@ export default defineComponent({
 		);
 
 		const isToolIncompleteOperational: ComputedRef<boolean> = computed(
-			() => props.toolStatus.isIncompleteOperationalOnScopeContext && isTeacher
+			() =>
+				props.toolStatus.isIncompleteOperationalOnScopeContext &&
+				isTeacher.value
 		);
 
 		const errorMessage: ComputedRef<string> = computed(() =>
-			isTeacher
+			isTeacher.value
 				? "feature-board-external-tool-element.alert.error.teacher"
 				: "feature-board-external-tool-element.alert.error.student"
 		);

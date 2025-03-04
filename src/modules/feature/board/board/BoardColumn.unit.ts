@@ -29,7 +29,7 @@ import {
 	useSharedLastCreatedElement,
 } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
 
 const { isDragging, dragEnd } = useDragAndDrop();
@@ -224,7 +224,7 @@ describe("BoardColumn", () => {
 		describe("when user is not permitted to move a column", () => {
 			it("should set drag-disabled", () => {
 				const { wrapper } = setup({
-					permissions: { hasMovePermission: false },
+					permissions: { hasMovePermission: ref(false) },
 				});
 
 				const dndContainer = wrapper.findComponent({ name: "Sortable" });
@@ -235,7 +235,7 @@ describe("BoardColumn", () => {
 		describe("when user is not permitted to create a card", () => {
 			it("addCardComponent should not be visible", () => {
 				const { wrapper } = setup({
-					permissions: { hasCreateColumnPermission: false },
+					permissions: { hasCreateColumnPermission: ref(false) },
 				});
 
 				const addCardComponent = wrapper.findComponent({

@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<CardHostInteractionHandler
-			:isEditMode="isEditMode"
+			:isEditMode="isEditMode && canEditRoomBoard"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
 			@move:card-keyboard="onMoveCardKeyboard"
@@ -26,7 +26,7 @@
 				</template>
 				<template v-if="card">
 					<CardTitle
-						:isEditMode="isEditMode"
+						:isEditMode="isEditMode && canEditRoomBoard"
 						:value="card.title"
 						scope="card"
 						@update:value="onUpdateCardTitle($event, cardId)"
@@ -37,6 +37,7 @@
 
 					<div class="board-menu" :class="boardMenuClasses">
 						<BoardMenu
+							v-if="canEditRoomBoard"
 							:scope="BoardMenuScope.CARD"
 							has-background
 							:data-testid="boardMenuTestId"
@@ -62,7 +63,7 @@
 					<div :class="{ 'mt-n2': hasCardTitle }">
 						<ContentElementList
 							:elements="card.elements"
-							:isEditMode="isEditMode"
+							:isEditMode="isEditMode && canEditRoomBoard"
 							:isDetailView="isDetailView"
 							:row-index="rowIndex"
 							:column-index="columnIndex"
@@ -71,7 +72,10 @@
 							@move-up:element="onMoveContentElementUp"
 							@move-keyboard:element="onMoveContentElementKeyboard"
 						/>
-						<CardAddElementMenu @add-element="onAddElement" v-if="isEditMode" />
+						<CardAddElementMenu
+							@add-element="onAddElement"
+							v-if="isEditMode && canEditRoomBoard"
+						/>
 					</div>
 				</template>
 			</VCard>
@@ -178,7 +182,7 @@ export default defineComponent({
 		const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
 			cardId.value
 		);
-		const { hasDeletePermission } = useBoardPermissions();
+		const { hasDeletePermission, canEditRoomBoard } = useBoardPermissions();
 
 		const { askType } = useAddElementDialog(
 			cardStore.createElementRequest,
@@ -275,6 +279,7 @@ export default defineComponent({
 		return {
 			boardMenuClasses,
 			card,
+			canEditRoomBoard,
 			hasDeletePermission,
 			hasCardTitle,
 			isLoadingCard,
