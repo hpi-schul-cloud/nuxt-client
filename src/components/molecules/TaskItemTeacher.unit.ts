@@ -356,6 +356,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 				await menuBtn.trigger("click");
 
 				const hover = wrapper.findComponent(VHover);
+				// console.log only with custom logger
 				console.log(hover.vm.$props);
 
 				expect(
