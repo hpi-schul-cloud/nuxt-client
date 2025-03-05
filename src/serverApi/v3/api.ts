@@ -1554,7 +1554,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: boolean;
+    FEATURE_USER_LOGIN_MIGRATION_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -1695,10 +1695,10 @@ export interface ConfigResponse {
     FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED: boolean;
     /**
      * 
-     * @type {object}
+     * @type {string}
      * @memberof ConfigResponse
      */
-    LICENSE_SUMMARY_URL: object;
+    LICENSE_SUMMARY_URL?: string;
 }
 /**
  * 
@@ -9041,6 +9041,7 @@ export enum SystemType {
     TspBase = 'tsp-base',
     TspSchool = 'tsp-school',
     Local = 'local',
+    Iserv = 'iserv',
     Lernsax = 'lernsax',
     Itslearning = 'itslearning',
     Moodle = 'moodle'
