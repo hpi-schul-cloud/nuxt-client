@@ -401,12 +401,11 @@ export default defineComponent({
 			return subject;
 		};
 
-		const supportLink: ComputedRef<string> = computed(() =>
-			sanitizeUrl(
+		const supportLink: ComputedRef<string> = computed(
+			() =>
 				`mailto:${
 					envConfigModule.getAccessibilityReportEmail
 				}?subject=${getSubject()}`
-			)
 		);
 
 		const globalFeatureEnableLdapSyncDuringMigration: ComputedRef<boolean> =
