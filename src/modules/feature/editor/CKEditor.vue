@@ -185,6 +185,11 @@ export default defineComponent({
 				},
 				language: locale.value,
 				placeholder: props.placeholder,
+				ui: {
+					viewportOffset: {
+						top: 220,
+					},
+				},
 			};
 		});
 
