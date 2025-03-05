@@ -1,26 +1,31 @@
 const js = require("@eslint/js");
 const pluginVue = require("eslint-plugin-vue");
-const vueTsEslintConfig = require("@vue/eslint-config-typescript");
+const {
+	defineConfigWithVueTs,
+	vueTsConfigs,
+	configureVueProject,
+} = require("@vue/eslint-config-typescript");
 const schulcloud = require("./lib/eslint-plugin-schulcloud");
 const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommended");
 const globals = require("globals");
 
-module.exports = [
+configureVueProject({
+	scriptLangs: [
+		"ts",
+
+		// [!DISCOURAGED]
+		// Include 'js' to allow plain `<script>` or `<script setup>` blocks.
+		// This might result-in false positive or negatives in some rules for `.vue` files.
+		// Note you also need to configure `allowJs: true` and `checkJs: true`
+		// in corresponding `tsconfig.json` files.
+		"js",
+	],
+});
+
+module.exports = defineConfigWithVueTs([
 	...pluginVue.configs["flat/essential"],
 	js.configs.recommended,
-	...vueTsEslintConfig({
-		extends: ["recommended"],
-		supportedScriptLangs: {
-			ts: true,
-
-			// [!DISCOURAGED]
-			// Set to `true` to allow plain `<script>` or `<script setup>` blocks.
-			// This might result-in false positive or negatives in some rules for `.vue` files.
-			// Note you also need to configure `allowJs: true` and `checkJs: true`
-			// in corresponding `tsconfig.json` files.
-			js: true,
-		},
-	}),
+	vueTsConfigs.recommended,
 	eslintPluginPrettierRecommended,
 
 	{
@@ -140,4 +145,4 @@ module.exports = [
 			},
 		},
 	},
-];
+]);
