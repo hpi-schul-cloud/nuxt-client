@@ -10,10 +10,9 @@ import {
 } from "@@/tests/test-utils/setup";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
-import { useMediaQuery } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { ComponentProps } from "vue-component-type-helpers";
 import {
 	ElementCreate,
@@ -28,14 +27,6 @@ import MediaBoardLine from "./MediaBoardLine.vue";
 import MediaBoardLineGhost from "./MediaBoardLineGhost.vue";
 
 jest.mock("./data/mediaBoardState.composable");
-jest.mock("@vueuse/core", () => {
-	return {
-		...jest.requireActual("@vueuse/core"),
-		useMediaQuery: jest.fn(),
-	};
-});
-
-jest.mocked(useMediaQuery).mockReturnValue(ref(true));
 
 describe("MediaBoard", () => {
 	let useSharedMediaBoardStateMock: DeepMocked<
