@@ -4,7 +4,7 @@
 			v-model="modelValue"
 			:autofocus="autofocus"
 			:placeholder="$t('components.cardElement.richTextElement.placeholder')"
-			type="balloon"
+			type="inline"
 			mode="simple"
 			@update:value="onUpdateValue"
 			@focus="onFocus"
