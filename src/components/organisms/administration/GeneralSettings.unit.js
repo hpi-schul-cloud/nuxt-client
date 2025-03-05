@@ -58,7 +58,7 @@ const syncedSystem = [
 		_id: "0000d186816abba584714c90",
 		type: "ldap",
 		ldapConfig: {
-			provider: "iserv-idm",
+			provider: "general",
 		},
 	},
 ];
