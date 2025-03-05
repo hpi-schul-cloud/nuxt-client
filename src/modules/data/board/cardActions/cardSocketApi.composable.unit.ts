@@ -23,7 +23,6 @@ import {
 	DeleteCardFailurePayload,
 	DeleteCardRequestPayload,
 	DeleteElementFailurePayload,
-	DisconnectSocketRequestPayload,
 	FetchCardFailurePayload,
 	MoveElementFailurePayload,
 	UpdateCardHeightFailurePayload,

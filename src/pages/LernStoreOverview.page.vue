@@ -178,7 +178,7 @@ const onInput = async () => {
 const searchContent = useDebounceFn(async () => {
 	try {
 		await contentModule.getResources(searchQuery.value);
-	} catch (error) {
+	} catch {
 		notifierModule.show({
 			text: t("pages.content.notification.lernstoreNotAvailable"),
 			status: "error",
@@ -226,7 +226,7 @@ const addContent = async () => {
 
 	try {
 		await contentModule.addResources(query);
-	} catch (error) {
+	} catch {
 		notifierModule.show({
 			text: t("pages.content.notification.lernstoreNotAvailable"),
 			status: "error",

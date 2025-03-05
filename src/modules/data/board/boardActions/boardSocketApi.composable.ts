@@ -163,7 +163,7 @@ export const useBoardSocketApi = () => {
 				payload.toColumnIndex = boardStore.getColumnIndex(payload.toColumnId);
 			}
 			emitOnSocket("move-card-request", payload);
-		} catch (err) {
+		} catch {
 			moveCardFailure();
 		}
 	};

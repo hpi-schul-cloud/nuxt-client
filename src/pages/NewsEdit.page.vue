@@ -89,7 +89,7 @@ const onSave = async (newsToPatch: Partial<PatchNewsPayload>) => {
 		showNotifier("success", "patch");
 
 		await router.push({ path: `/news/${news.value?.id}` });
-	} catch (e) {
+	} catch {
 		showNotifier("error", "patch");
 	}
 };
@@ -105,7 +105,7 @@ const onDelete = async () => {
 		showNotifier("success", "remove");
 
 		router.push({ path: "/news" });
-	} catch (e) {
+	} catch {
 		showNotifier("error", "remove");
 	}
 };

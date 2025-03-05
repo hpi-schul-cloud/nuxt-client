@@ -68,7 +68,7 @@ export default {
 						path: `/news/${this.createdNews.id}`,
 					});
 				}
-			} catch (e) {
+			} catch {
 				notifierModule.show({
 					text: this.$t("components.organisms.FormNews.errors.create"),
 					status: "error",

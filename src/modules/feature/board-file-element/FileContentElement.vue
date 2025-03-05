@@ -189,7 +189,7 @@ export default defineComponent({
 			try {
 				await upload(file, element.value.id, FileRecordParentType.BOARDNODES);
 				element.value.content.caption = " ";
-			} catch (error) {
+			} catch {
 				emit("delete:element", element.value.id);
 			}
 		};

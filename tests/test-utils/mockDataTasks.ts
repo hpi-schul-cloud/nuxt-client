@@ -1,5 +1,3 @@
-/* eslint-disable max-lines */
-
 import { Task, TaskStatus } from "@/store/types/tasks";
 
 /*

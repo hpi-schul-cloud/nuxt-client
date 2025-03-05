@@ -14,7 +14,6 @@ import {
 	UpdateCardTitleRequestPayload,
 	UpdateElementRequestPayload,
 } from "./cardActionPayload";
-import { DisconnectSocketRequestPayload } from "../boardActions/boardActionPayload";
 import { useDebounceFn } from "@vueuse/core";
 import { useBoardAriaNotification } from "../ariaNotification/ariaLiveNotificationHandler";
 

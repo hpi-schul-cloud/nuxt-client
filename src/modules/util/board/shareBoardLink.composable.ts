@@ -26,7 +26,7 @@ export const useShareBoardLink = () => {
 				text: t("common.words.copyLinkToClipboard.success"),
 				autoClose: true,
 			});
-		} catch (error) {
+		} catch {
 			notifierModule.show({
 				status: "error",
 				text: t("common.words.copyLinkToClipboard.failure"),

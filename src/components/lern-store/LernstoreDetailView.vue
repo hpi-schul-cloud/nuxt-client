@@ -41,7 +41,6 @@
 		<div ref="sidebar" class="sidebar elevation-6">
 			<div class="content-container">
 				<div class="actions" />
-				<!--eslint-disable-next-line vuetify/no-deprecated-classes -->
 				<div class="title">
 					<span>
 						{{ resource.title || resource.name }}
@@ -175,8 +174,8 @@
 </template>
 
 <script>
-import UserHasRole from "@/components/helpers/UserHasRole";
-import AddContentButton from "@/components/lern-store/AddContentButton";
+import UserHasRole from "@/components/helpers/UserHasRole.vue";
+import AddContentButton from "@/components/lern-store/AddContentButton.vue";
 import LernStorePlayer from "@/components/lern-store/LernStorePlayer";
 import contentMeta from "@/mixins/contentMeta";
 import { printDateFromTimestamp } from "@/plugins/datetime";
@@ -194,7 +193,7 @@ import {
 import { buildPageTitle } from "@/utils/pageTitle";
 import { RenderHTML } from "@feature-render-html";
 import { mdiCalendar, mdiClose, mdiOpenInNew, mdiPound } from "@icons/material";
-import BaseLink from "../base/BaseLink";
+import BaseLink from "@/components/base/BaseLink.vue";
 import { $axios } from "@/utils/api";
 
 const DEFAULT_AUTHOR = "admin";

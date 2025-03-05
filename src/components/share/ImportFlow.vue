@@ -180,7 +180,7 @@ async function startImport(name: string) {
 		} else {
 			openModal("result");
 		}
-	} catch (error: unknown) {
+	} catch {
 		showFailureBackend(newName.value);
 	}
 }

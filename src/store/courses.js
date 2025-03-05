@@ -32,7 +32,7 @@ const coursesModule = mergeDeep(base, {
 					status: "success",
 					timeout: 5000,
 				});
-			} catch (err) {
+			} catch {
 				notifierModule.show({
 					text: unsuccesfullDeleteNotification,
 					status: "error",

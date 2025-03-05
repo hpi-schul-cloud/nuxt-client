@@ -85,7 +85,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 			} else {
 				openResultModal();
 			}
-		} catch (error) {
+		} catch {
 			markBackgroundCopyProcess(copyParams);
 			showTimeout();
 		} finally {

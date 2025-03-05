@@ -514,7 +514,7 @@ export default {
 					status: "success",
 					timeout: 5000,
 				});
-			} catch (error) {
+			} catch {
 				notifierModule.show({
 					text: this.$t("pages.administration.sendMail.error", rowIds.length),
 					status: "error",
@@ -538,7 +538,7 @@ export default {
 						timeout: 5000,
 					});
 				}
-			} catch (error) {
+			} catch {
 				notifierModule.show({
 					text: this.$t("pages.administration.printQr.error", rowIds.length),
 					status: "error",
@@ -559,7 +559,7 @@ export default {
 						timeout: 5000,
 					});
 					this.find();
-				} catch (error) {
+				} catch {
 					notifierModule.show({
 						text: this.$t("pages.administration.remove.error"),
 						status: "error",

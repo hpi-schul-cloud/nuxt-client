@@ -37,7 +37,7 @@ import { createPinia } from "pinia";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 
-// TODO solve without vue-mq dependency
+// TODO - solve within https://ticketsystem.dbildungscloud.de/browse/BC-8013
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { Vue3Mq } from "vue3-mq";

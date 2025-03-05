@@ -78,7 +78,7 @@ const onConfirm = async () => {
 		});
 
 		emit("success");
-	} catch (errorResponse) {
+	} catch {
 		notifierModule.show({
 			text: t("common.notification.error"),
 			status: "error",

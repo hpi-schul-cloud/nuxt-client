@@ -78,7 +78,7 @@ export const useMetaTagExtractorApi = () => {
 			const metaTagResult: MetaTagResult = mapMetaTagResponse(res.data);
 
 			return metaTagResult;
-		} catch (e) {
+		} catch {
 			return {
 				url: "",
 				title: "",

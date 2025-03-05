@@ -92,7 +92,7 @@
 				<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.ColumnBoard" />
 				<SelectBoardLayoutDialog
 					v-model="isSelectBoardLayoutDialogOpen"
-					:current-layout="board.layout as BoardLayout"
+					:current-layout="board.layout"
 					@select="onSelectBoardLayout"
 				/>
 			</DefaultWireframe>
@@ -164,7 +164,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { resetNotifierModule, showCustomNotifier } = useBoardNotifier();
+const { resetNotifierModule } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();

@@ -1,10 +1,6 @@
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import {
-	checkRoomsFeature,
-	Multiguard,
-	validateQueryParameters,
-} from "@/router/guards";
+import { checkRoomsFeature, validateQueryParameters } from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
@@ -245,19 +241,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
-		beforeEnter: Multiguard([
-			checkRoomsFeature,
-			createPermissionGuard(["room_create"]),
-		]),
+		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
 		name: "rooms",
 	},
 	{
 		path: `/rooms/new`,
 		component: async () => (await import("@page-room")).RoomCreatePage,
-		beforeEnter: Multiguard([
-			checkRoomsFeature,
-			createPermissionGuard(["room_create"]),
-		]),
+		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
 		name: "rooms-new",
 	},
 	{
@@ -268,19 +258,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/rooms/:id(${REGEX_ID})/edit`,
 		component: async () => (await import("@page-room")).RoomEditPage,
-		beforeEnter: Multiguard([
-			checkRoomsFeature,
-			createPermissionGuard(["room_create"]),
-		]),
+		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
 		name: "room-edit",
 	},
 	{
 		path: `/rooms/:id(${REGEX_ID})/members`,
 		component: async () => (await import("@page-room")).RoomMembersPage,
-		beforeEnter: Multiguard([
-			checkRoomsFeature,
-			createPermissionGuard(["room_create"]),
-		]),
+		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
 		name: "room-members",
 	},
 	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
@@ -330,13 +314,13 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 				"@/pages/context-external-tool/CourseContextExternalToolConfigurator.page.vue"
 			),
 		name: "context-external-tool-configuration",
-		beforeEnter: Multiguard([
+		beforeEnter: [
 			createPermissionGuard(["context_tool_admin"]),
 			validateQueryParameters({
 				contextId: isMongoId,
 				contextType: isEnum(ToolContextType),
 			}),
-		]),
+		],
 		children: [
 			{
 				path: ":configId",
@@ -357,7 +341,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		path: `/h5p/player/:id(${REGEX_H5P_ID})`,
 		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
 		name: "h5pPlayer",
-		//beforeEnter: createPermissionGuard(["H5P"]),
 	},
 	{
 		path: `/h5p/editor/:id(${REGEX_H5P_ID})?`,

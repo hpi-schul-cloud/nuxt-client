@@ -7,13 +7,17 @@ import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
 import { initializeAxios } from "@/utils/api";
 import { meResponseFactory } from "@@/tests/test-utils";
-import { courseFactory } from "@@/tests/test-utils/factory";
+import {
+	apiResponseErrorFactory,
+	axiosErrorFactory,
+	businessErrorFactory,
+	courseFactory,
+} from "@@/tests/test-utils/factory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { AxiosError, AxiosHeaders, AxiosInstance, AxiosPromise } from "axios";
+import { AxiosError, AxiosInstance, AxiosPromise } from "axios";
 import CourseRoomDetailsModule from "./course-room-details";
 import { HttpStatusCode } from "./types/http-status-code.enum";
 import { Course } from "./types/room";
-import { ApiResponseError, ApiValidationError } from "./types/commons";
 
 type ReceivedRequests = [
 	{
@@ -50,37 +54,25 @@ const axiosInitializer = () => {
 
 axiosInitializer();
 
-const badRequestError = new AxiosError<ApiResponseError | ApiValidationError>(
-	"Bad Request",
-	"ERR_BAD_REQUEST",
-	undefined,
-	null,
-	{
-		status: 400,
-		statusText: "Bad Request",
-		headers: {},
-		config: {
-			headers: new AxiosHeaders(),
-		},
-		data: {
+const badRequestError = axiosErrorFactory.build({
+	response: {
+		data: apiResponseErrorFactory.build({
+			message: "BAD_REQUEST",
 			code: 400,
-			type: "BAD_REQUEST",
-			title: "Bad Request",
-			message: "Bad Request",
-		},
-	}
-);
+		}),
+	},
+});
 
-const businessError = {
-	statusCode: 400,
-	message: "Bad Request",
+const businessError = businessErrorFactory.build({
 	error: {
 		code: 400,
-		type: "BAD_REQUEST",
-		title: "Bad Request",
-		message: "Bad Request",
+		type: "ApiResponseError",
+		title: "ApiResponseError # 1",
+		message: "BAD_REQUEST",
 	},
-};
+	message: "BAD_REQUEST",
+	statusCode: 400,
+});
 
 describe("course-room module", () => {
 	beforeEach(() => {
@@ -578,7 +570,7 @@ describe("course-room module", () => {
 					400
 				);
 				expect(courseRoomDetailsModule.businessError.message).toStrictEqual(
-					"Bad Request"
+					"BAD_REQUEST"
 				);
 			});
 		});
@@ -694,13 +686,26 @@ describe("course-room module", () => {
 				HttpStatusCode.NotFound,
 				HttpStatusCode.RequestTimeout,
 				HttpStatusCode.InternalServerError,
-			])("should create an application-error for http-error(%p)", (code) => {
-				const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
-				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
-				const errorData = { response: { data: { code } } };
-				courseRoomDetailsModule.setError(errorData);
-				expect(setErrorSpy).toHaveBeenCalled();
-			});
+			])(
+				"should create an application-error for http-error(%p)",
+				async (code) => {
+					const setErrorSpy = jest.spyOn(applicationErrorModule, "setError");
+					const courseRoomDetailsModule = new CourseRoomDetailsModule({});
+
+					const errorData = axiosErrorFactory.build({
+						response: {
+							data: apiResponseErrorFactory.build({
+								message: "FORBIDDEN",
+								code,
+							}),
+						},
+					});
+
+					courseRoomDetailsModule.setError(errorData);
+
+					expect(setErrorSpy).toHaveBeenCalled();
+				}
+			);
 		});
 
 		describe("setBusinessError", () => {

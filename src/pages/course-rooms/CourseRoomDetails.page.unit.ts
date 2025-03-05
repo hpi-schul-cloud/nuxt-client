@@ -15,7 +15,6 @@ import EnvConfigModule from "@/store/env-config";
 import LoadingStateModule from "@/store/loading-state";
 import NotifierModule from "@/store/notifier";
 import ShareModule from "@/store/share";
-import { initializeAxios } from "@/utils/api";
 import {
 	AUTH_MODULE_KEY,
 	COMMON_CARTRIDGE_EXPORT_MODULE_KEY,
@@ -35,7 +34,6 @@ import { createMock } from "@golevelup/ts-jest";
 import { createTestingPinia } from "@pinia/testing";
 import { SpeedDialMenu, SpeedDialMenuAction } from "@ui-speed-dial-menu";
 import { mount } from "@vue/test-utils";
-import { AxiosInstance } from "axios";
 import { VBtn } from "vuetify/lib/components/index.mjs";
 import CourseRoomDetailsPage from "./CourseRoomDetails.page.vue";
 import RoomExternalToolsOverview from "./tools/RoomExternalToolsOverview.vue";
@@ -213,13 +211,6 @@ describe("@/pages/CourseRoomDetails.page.vue", () => {
 		loadingStateModuleMock = createModuleMocks(LoadingStateModule, {
 			getIsOpen: false,
 		});
-
-		initializeAxios({
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			get: async (path) => {
-				return { data: [] };
-			},
-		} as AxiosInstance);
 	});
 
 	afterEach(() => {

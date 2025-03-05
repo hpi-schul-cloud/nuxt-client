@@ -29,7 +29,7 @@ export const useSubmissionContentElementState = (
 
 			submissions.value = mapTeacherSubmission(submissionsResponse);
 			studentSubmission.value = mapStudentSubmission(submissionsResponse);
-		} catch (error) {
+		} catch {
 			notifyWithTemplate("notLoaded", "boardElement")();
 		} finally {
 			loading.value = false;
@@ -40,7 +40,7 @@ export const useSubmissionContentElementState = (
 		try {
 			const response = await createSubmissionItemCall(id, completed);
 			submissionsResponse.submissionItemsResponse.push(response);
-		} catch (error) {
+		} catch {
 			notifyWithTemplate("notCreated", "boardElement")();
 		}
 	};
@@ -56,7 +56,7 @@ export const useSubmissionContentElementState = (
 				completed
 			);
 			submissionsResponse.submissionItemsResponse[0].completed = completed;
-		} catch (error) {
+		} catch {
 			notifyWithTemplate("notUpdated", "boardElement")();
 		}
 	};
