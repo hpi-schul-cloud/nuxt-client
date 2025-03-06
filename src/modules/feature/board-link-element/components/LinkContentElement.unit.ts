@@ -61,6 +61,12 @@ describe("LinkContentElement", () => {
 		ReturnType<typeof usePreviewGenerator>
 	>;
 
+	beforeAll(() => {
+		Object.defineProperty(URL, "canParse", {
+			value: jest.fn().mockReturnValue(true),
+		});
+	});
+
 	beforeEach(() => {
 		useBoardFocusHandlerMock =
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
