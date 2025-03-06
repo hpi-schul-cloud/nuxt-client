@@ -1,7 +1,6 @@
 <template>
 	<div
-		class="d-flex w-100 justify-center button-background pb-4 pt-2 text-center sticky"
-		style="height: 4rem"
+		class="d-flex w-100 justify-center button-background pb-2 pt-2 text-center sticky"
 		ref="sticky"
 	>
 		<VBtn
