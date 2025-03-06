@@ -122,6 +122,7 @@ export default defineComponent({
 			policyForm.value = [];
 			isValid.value = false;
 			isTouched.value = false;
+			file.value = null;
 		};
 
 		const cancel = () => {

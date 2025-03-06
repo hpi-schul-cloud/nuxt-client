@@ -119,6 +119,7 @@ export default defineComponent({
 			termsForm.value = [];
 			isFormValid.value = false;
 			isFormTouched.value = false;
+			file.value = null;
 		};
 
 		const cancel = () => {
