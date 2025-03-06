@@ -21,6 +21,8 @@ import {
 } from "@@/tests/test-utils/setup";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 
+jest.mock("vue-router");
+
 const getWrapper = (device = "desktop") => {
 	return mount(CourseRoomList, {
 		global: {
@@ -113,12 +115,7 @@ describe("@/pages/CourseRoomListPage", () => {
 				isArchived: true,
 				to: "/rooms/123",
 			};
-			// tslint ignored because it gives
-			// "Property 'items' does not exist on type 'Vue'" error
-			// TODO: better solution should be found
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			expect(wrapper.vm.rooms[0]).toStrictEqual(expectedItem);
 		});
 	});
@@ -130,28 +127,21 @@ describe("@/pages/CourseRoomListPage", () => {
 			return { wrapper };
 		};
 
-		describe("when data is not empty", () => {
+		describe("and data is not empty", () => {
 			it("should search elements on list", async () => {
 				const { wrapper } = setup();
-				await nextTick();
 
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(4);
+
 				wrapper.vm.searchText = "math";
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(1);
+
 				wrapper.vm.searchText = "";
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(4);
+
 				wrapper.vm.searchText = "15";
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
 				expect(wrapper.vm.rooms.length).toEqual(1);
-				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-				// @ts-ignore
+
 				expect(wrapper.vm.rooms[0]).toEqual({
 					id: "234",
 					title: "History",
