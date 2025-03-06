@@ -1,37 +1,32 @@
-import { AxiosError, AxiosHeaders } from "axios";
 import * as serverApi from "../serverApi/v3/api";
 import CourseRoomListModule from "./course-room-list";
 import { AlertPayload } from "./types/alert-payload";
 import { DroppedObject, RoomsData } from "./types/rooms";
-import { ApiResponseError } from "./types/commons";
+import {
+	axiosErrorFactory,
+	apiResponseErrorFactory,
+	businessErrorFactory,
+} from "@@/tests/test-utils";
 
-const badRequestError = new AxiosError<
-	ApiResponseError | serverApi.ApiValidationError
->("Bad Request", "ERR_BAD_REQUEST", undefined, null, {
-	status: 400,
-	statusText: "Bad Request",
-	headers: {},
-	config: {
-		headers: new AxiosHeaders(),
-	},
-	data: {
-		code: 400,
-		type: "BAD_REQUEST",
-		title: "Bad Request",
-		message: "Bad Request",
+const badRequestError = axiosErrorFactory.build({
+	response: {
+		data: apiResponseErrorFactory.build({
+			message: "BAD_REQUEST",
+			code: 400,
+		}),
 	},
 });
 
-const businessError = {
-	statusCode: 400,
-	message: "Bad Request",
+const businessError = businessErrorFactory.build({
 	error: {
 		code: 400,
-		type: "BAD_REQUEST",
-		title: "Bad Request",
-		message: "Bad Request",
+		type: "ApiResponseError",
+		title: "ApiResponseError # 1",
+		message: "BAD_REQUEST",
 	},
-};
+	message: "BAD_REQUEST",
+	statusCode: 400,
+});
 
 const mockData: serverApi.DashboardResponse = {
 	id: "id_1",

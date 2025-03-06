@@ -140,4 +140,10 @@ module.exports = [
 			},
 		},
 	},
+	{
+		files: ["src/components/icons/material/index.ts"],
+		rules: {
+			"schulcloud/material-icon-imports": "off",
+		},
+	},
 ];

@@ -321,11 +321,12 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			return;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		const errorCode = error.response?.data.code;
-		if (errorCode && handledApplicationErrors.includes(errorCode))
+		const apiError = mapAxiosErrorToResponseError(error);
+
+		const errorCode = apiError.code;
+		if (errorCode && handledApplicationErrors.includes(errorCode)) {
 			applicationErrorModule.setError(createApplicationError(errorCode));
+		}
 	}
 
 	@Mutation
