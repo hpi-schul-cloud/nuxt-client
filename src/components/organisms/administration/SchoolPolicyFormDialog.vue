@@ -26,6 +26,7 @@
 					</div>
 				</v-alert>
 				<v-file-input
+					v-model="file"
 					ref="input-file"
 					class="input-file mb-2"
 					data-testid="input-file"
@@ -41,9 +42,8 @@
 						t('pages.administration.school.index.schoolPolicy.hints.uploadFile')
 					"
 					:persistent-hint="true"
-					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
+					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
 					@blur="onBlur"
-					@update:modelValue="onFileChange"
 				>
 					<template v-slot:append-inner>
 						<v-icon
@@ -96,31 +96,22 @@ export default defineComponent({
 		const policyForm: Ref<File[]> = ref([]);
 		const isValid: Ref<boolean> = ref(false);
 		const isTouched: Ref<boolean> = ref(false);
-		const files: Ref<File[]> = ref([]);
+		const file: Ref<File | null> = ref(null);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
+		const maxFileUploadSizeInKb = 4194304;
 		const rules = {
-			required: (value: File[]) =>
-				!(value.length === 0) || t("common.validation.required"),
-			mustBePdf: (value: File[]) =>
-				!(value.length === 0) ||
-				value[0].type === "application/pdf" ||
+			required: (value: File | null) =>
+				!!value || t("common.validation.required"),
+			mustBePdf: (value: File | null) =>
+				value?.type === "application/pdf" ||
 				t("pages.administration.school.index.schoolPolicy.validation.notPdf"),
-			maxSize: (bytes: number) => (value: File[]) =>
-				!(value.length === 0) ||
-				value[0].size <= bytes ||
+			maxSize: (value: File | null) =>
+				(!!value && value.size <= maxFileUploadSizeInKb) ||
 				t(
 					"pages.administration.school.index.schoolPolicy.validation.fileTooBig"
 				),
-		};
-
-		const onFileChange = (_files: File[] | File) => {
-			if (Array.isArray(_files)) {
-				files.value = _files;
-			} else {
-				files.value = [_files];
-			}
 		};
 
 		const onBlur = () => {
@@ -139,14 +130,14 @@ export default defineComponent({
 		};
 
 		const submit = async () => {
-			if (isValid.value) {
+			if (isValid.value && file.value) {
 				const newConsentVersion: CreateConsentVersionPayload = {
 					schoolId: school.value.id,
 					title: t("pages.administration.school.index.schoolPolicy.fileName"),
 					consentText: "",
 					consentTypes: ["privacy"],
 					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(files.value[0])) as string,
+					consentData: (await toBase64(file.value)) as string,
 				};
 
 				emit("close");
@@ -168,13 +159,13 @@ export default defineComponent({
 			cancel,
 			submit,
 			onBlur,
-			onFileChange,
 			isValid,
 			isTouched,
 			policyForm,
 			school,
 			mdiAlert,
 			mdiFileReplaceOutline,
+			file,
 		};
 	},
 });
