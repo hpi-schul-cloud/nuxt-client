@@ -56,8 +56,9 @@
 		</div>
 		<v-container
 			:fluid="maxWidth !== 'nativ'"
-			class="main-content"
 			:class="{
+				'main-content-without-padding-bottom': withoutPaddingBottom,
+				'main-content': !withoutPaddingBottom,
 				'container-short-width': maxWidth === 'short',
 				'container-full-width': maxWidth === 'full',
 				'overflow-x-auto': allowOverflowX,
@@ -111,6 +112,9 @@ const props = defineProps({
 	fixedHeader: {
 		type: Boolean,
 	},
+	withoutPaddingBottom: {
+		type: Boolean,
+	},
 });
 
 const emit = defineEmits({
@@ -156,6 +160,11 @@ const showDivider = computed(() => {
 
 .main-content {
 	padding: 0 var(--space-lg) var(--space-lg) var(--space-lg);
+	margin-top: var(--space-xl);
+}
+
+.main-content-without-padding-bottom {
+	padding: 0 var(--space-lg);
 	margin-top: var(--space-xl);
 }
 

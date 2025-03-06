@@ -6,6 +6,7 @@
 				:breadcrumbs="breadcrumbs"
 				max-width="full"
 				hide-border
+				without-padding-bottom
 			>
 				<template #header>
 					<BoardHeader
