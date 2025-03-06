@@ -124,10 +124,10 @@
 </template>
 
 <script>
-import vRoomAvatar from "@/components/atoms/vRoomAvatar";
-import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar";
-import RoomModal from "@/components/molecules/RoomModal";
-import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar";
+import vRoomAvatar from "@/components/atoms/vRoomAvatar.vue";
+import vRoomEmptyAvatar from "@/components/atoms/vRoomEmptyAvatar.vue";
+import RoomModal from "@/components/molecules/RoomModal.vue";
+import vRoomGroupAvatar from "@/components/molecules/vRoomGroupAvatar.vue";
 import ImportFlow from "@/components/share/ImportFlow.vue";
 import RoomWrapper from "@/components/templates/RoomWrapper.vue";
 import { courseRoomListModule } from "@/store";
@@ -248,13 +248,14 @@ export default defineComponent({
 
 			if (xs) return { ...this.dimensions, colCount: 4, cellWidth: "3.7em" };
 			if (sm) return { ...this.dimensions, colCount: 4, cellWidth: "4em" };
-			if (mdAndUp)
+			if (mdAndUp) {
+				this.allowDragging = true;
 				return {
 					...this.dimensions,
 					colCount: 4,
 					cellWidth: "5em",
-					allowDragging: true,
 				};
+			}
 			return { ...this.dimensions, colCount: 6 };
 		},
 		setRowCount() {
