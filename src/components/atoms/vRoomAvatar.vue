@@ -17,23 +17,30 @@
 			:model-value="!!badgeIcon"
 			:icon="badgeIcon"
 		>
-			<v-avatar
-				:color="avatarColor"
-				:class="avatarClass"
-				:aria-label="avatarAriaLabel"
-				:rounded="condenseLayout ? 0 : 'lg'"
+			<VBtn
 				:size="size"
-				:tabindex="condenseLayout ? '-1' : '0'"
-				@click="onClick"
-				@dragenter.prevent.stop="dragEnter"
-				@keypress.enter="onClick"
-				role="button"
-				data-testid="course-icon"
+				color="transparent"
+				variant="flat"
+				class="rounded-lg"
+				:ripple="false"
 			>
-				<span :class="avatarTextClass" data-testid="course-short-title">
-					{{ item.shortTitle }}
-				</span>
-			</v-avatar>
+				<v-avatar
+					:color="avatarColor"
+					:class="avatarClass"
+					:aria-label="avatarAriaLabel"
+					:rounded="condenseLayout ? 0 : 'lg'"
+					:size="size"
+					:tabindex="condenseLayout ? '-1' : '0'"
+					@click="onClick"
+					@dragenter.prevent.stop="dragEnter"
+					@keypress.enter="onClick"
+					data-testid="course-icon"
+				>
+					<span :class="avatarTextClass" data-testid="course-short-title">
+						{{ item.shortTitle }}
+					</span>
+				</v-avatar>
+			</VBtn>
 		</v-badge>
 		<div
 			v-if="!condenseLayout"
@@ -86,7 +93,7 @@ const badgeIcon = computed(() => {
 		return mdiSync;
 	}
 
-	return null;
+	return undefined;
 });
 
 const stillBeingCopied = computed(() => props.item.copyingSince !== undefined);
