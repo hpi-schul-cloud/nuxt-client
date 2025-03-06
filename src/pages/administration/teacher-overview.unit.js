@@ -148,8 +148,7 @@ describe("teachers/index", () => {
 	});
 
 	const mockUiState = {
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		get: (key, identifier) => {
+		get: (key) => {
 			const state = {
 				pagination: {},
 				sorting: {},
@@ -157,8 +156,8 @@ describe("teachers/index", () => {
 			};
 			return state[key];
 		},
-		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		set: (key, identifier) => ({}),
+
+		set: () => ({}),
 	};
 
 	const setup = () => {
@@ -370,7 +369,7 @@ describe("teachers/index", () => {
 	it("should display the columns behind the migration feature flag", () => {
 		const envBuild = envsFactory.build({
 			...envs,
-			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: true,
+			FEATURE_USER_LOGIN_MIGRATION_ENABLED: true,
 		});
 		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
@@ -378,9 +377,9 @@ describe("teachers/index", () => {
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
 
-		expect(
-			envConfigModule.getEnv.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED
-		).toBe(true);
+		expect(envConfigModule.getEnv.FEATURE_USER_LOGIN_MIGRATION_ENABLED).toBe(
+			true
+		);
 		expect(column1.exists()).toBe(true);
 		expect(column2.exists()).toBe(true);
 	});
@@ -388,7 +387,7 @@ describe("teachers/index", () => {
 	it("should not display the columns behind the migration feature flag", () => {
 		const envBuild = envsFactory.build({
 			...envs,
-			FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: false,
+			FEATURE_USER_LOGIN_MIGRATION_ENABLED: false,
 		});
 		envConfigModule.setEnvs(envBuild);
 		const { wrapper } = setup();
@@ -396,9 +395,9 @@ describe("teachers/index", () => {
 		const column1 = wrapper.find(`[data-testid="lastLoginSystemChange"]`);
 		const column2 = wrapper.find(`[data-testid="outdatedSince"]`);
 
-		expect(
-			envConfigModule.getEnv.FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED
-		).toBe(false);
+		expect(envConfigModule.getEnv.FEATURE_USER_LOGIN_MIGRATION_ENABLED).toBe(
+			false
+		);
 		expect(column1.exists()).toBe(false);
 		expect(column2.exists()).toBe(false);
 	});

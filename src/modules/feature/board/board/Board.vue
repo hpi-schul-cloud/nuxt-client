@@ -92,7 +92,7 @@
 				<ShareModal :type="ShareTokenBodyParamsParentTypeEnum.ColumnBoard" />
 				<SelectBoardLayoutDialog
 					v-model="isSelectBoardLayoutDialogOpen"
-					:current-layout="board.layout as BoardLayout"
+					:current-layout="board.layout"
 					@select="onSelectBoardLayout"
 				/>
 			</DefaultWireframe>
@@ -164,7 +164,7 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
-const { resetNotifierModule, showCustomNotifier } = useBoardNotifier();
+const { resetNotifierModule } = useBoardNotifier();
 const { editModeId } = useSharedEditMode();
 const isEditMode = computed(() => editModeId.value !== undefined);
 const boardStore = useBoardStore();
@@ -296,8 +296,17 @@ const scrollToNodeAndFocus = (scrollTargetId: string) => {
 		`[data-scroll-target="${scrollTargetId}"]`
 	);
 
-	targetElement?.scrollIntoView({ block: "start", inline: "center" });
-	targetElement?.focus();
+	if (targetElement) {
+		targetElement.scrollIntoView({ block: "center", inline: "center" });
+		targetElement.focus();
+	}
+};
+
+const focusNodeFromHash = () => {
+	if (route.hash) {
+		const scrollTargetId: string = route.hash.slice(1);
+		scrollToNodeAndFocus(scrollTargetId);
+	}
 };
 
 onMounted(async () => {
@@ -313,10 +322,7 @@ onMounted(async () => {
 
 	await boardFetchPromise;
 
-	if (route.hash) {
-		const scrollTargetId: string = route.hash.slice(1);
-		scrollToNodeAndFocus(scrollTargetId);
-	}
+	focusNodeFromHash();
 });
 
 onUnmounted(() => {
@@ -325,6 +331,12 @@ onUnmounted(() => {
 	cardStore.resetState();
 	resetNotifierModule();
 });
+
+watch(
+	() => route,
+	() => focusNodeFromHash(),
+	{ deep: true }
+);
 
 watch(
 	() => isBoardVisible.value,

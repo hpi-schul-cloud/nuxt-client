@@ -5,9 +5,12 @@ import {
 	UserMatchResponseRoleNamesEnum,
 } from "@/serverApi/v3/api";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
-import { mapAxiosErrorToResponseError } from "@/utils/api";
-import { axiosErrorFactory } from "@@/tests/test-utils";
 import { BusinessError } from "./types/commons";
+import {
+	axiosErrorFactory,
+	apiResponseErrorFactory,
+	businessErrorFactory,
+} from "@@/tests/test-utils";
 
 const mockResponse = {
 	data: {
@@ -18,31 +21,97 @@ const mockResponse = {
 	},
 };
 
+const userListTestData = {
+	total: 2,
+	skip: 0,
+	limit: 2,
+	data: [
+		{
+			classNames: [],
+			firstName: "Samuel",
+			lastName: "Vimes",
+			flagged: false,
+			importUserId: "extern.1234",
+			loginName: "samuel.vimes",
+			roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
+			match: {
+				firstName: "Samuel",
+				lastName: "Vimes",
+				loginName: "samuel.vimes@test.org",
+				roleNames: [UserMatchResponseRoleNamesEnum.Teacher],
+				userId: "1234",
+				matchedBy: UserMatchResponseMatchedByEnum.Auto,
+			},
+		},
+		{
+			classNames: [],
+			firstName: "Nobby",
+			lastName: "Nobbes",
+			flagged: false,
+			importUserId: "extern.5678",
+			loginName: "samuel.vimes",
+			roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
+			match: {
+				firstName: "Samuel",
+				lastName: "Vimes",
+				loginName: "samuel.vimes@test.org",
+				roleNames: [UserMatchResponseRoleNamesEnum.Teacher],
+				userId: "5678",
+				matchedBy: UserMatchResponseMatchedByEnum.Auto,
+			},
+		},
+	],
+};
+
+const badRequestError = axiosErrorFactory.build({
+	response: {
+		data: apiResponseErrorFactory.build({
+			message: "BAD_REQUEST",
+			code: 400,
+		}),
+	},
+});
+
+const businessError = businessErrorFactory.build({
+	error: {
+		code: 400,
+		type: "ApiResponseError",
+		title: "ApiResponseError # 1",
+		message: "BAD_REQUEST",
+	},
+	message: "BAD_REQUEST",
+	statusCode: 400,
+});
+
 describe("import-users store actions", () => {
-	let importUserModule: ImportUsersModule;
-	let spy: jest.SpyInstance;
-	let mockApi: any;
+	const setup = () => {
+		const importUserModule = new ImportUsersModule({});
+		const spy = jest.spyOn(serverApi, "UserImportApiFactory");
 
-	beforeAll(() => {
-		spy = jest.spyOn(serverApi, "UserImportApiFactory");
-	});
+		const mockApi = {
+			importUserControllerFindAllUnmatchedUsers: jest.fn(() => mockResponse),
+			importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
+			importUserControllerRemoveMatch: jest.fn(() => mockResponse),
+			importUserControllerSetMatch: jest.fn(() => mockResponse),
+			importUserControllerUpdateFlag: jest.fn(() => mockResponse),
+			importUserControllerPopulateImportUsers: jest.fn(),
+			importUserControllerCancelMigration: jest.fn(),
+			importUserControllerClearAllAutoMatches: jest.fn(),
+		};
 
-	beforeEach(() => {
-		spy.mockReset();
-		importUserModule = new ImportUsersModule({});
-	});
+		importUserModule.setImportUsersList(userListTestData);
+
+		spy.mockReturnValue(mockApi as unknown as serverApi.UserImportApiInterface);
+
+		return { importUserModule, spy, mockApi };
+	};
+
 	describe("actions", () => {
 		describe("fetchAllUsers", () => {
 			it("should request a list of unmatched users", async () => {
-				mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(
-						() => mockResponse
-					),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				const { importUserModule, mockApi } = setup();
 				await importUserModule.fetchAllUsers();
+
 				expect(importUserModule.getUserList.data).toStrictEqual([
 					{
 						mockKey: "mock value",
@@ -58,16 +127,11 @@ describe("import-users store actions", () => {
 			});
 
 			it("should request list of unmatched users with filter", async () => {
-				mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(
-						() => mockResponse
-					),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				const { importUserModule, mockApi } = setup();
+
 				importUserModule.setUserSearch("john");
 				await importUserModule.fetchAllUsers();
+
 				expect(importUserModule.getUserList.data).toStrictEqual([
 					{
 						mockKey: "mock value",
@@ -83,17 +147,12 @@ describe("import-users store actions", () => {
 			});
 
 			it("should request list of unmatched users with pagination", async () => {
-				mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(
-						() => mockResponse
-					),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				const { importUserModule, mockApi } = setup();
+
 				importUserModule.setUsersSkip(10);
 				importUserModule.setUsersLimit(5);
 				await importUserModule.fetchAllUsers();
+
 				expect(importUserModule.getUserList.data).toStrictEqual([
 					{
 						mockKey: "mock value",
@@ -109,10 +168,11 @@ describe("import-users store actions", () => {
 			});
 
 			it("should handle business errors", async () => {
-				const error = { statusCode: "500", message: "foo" };
+				const { importUserModule, spy } = setup();
+
 				const mockApi = {
 					importUserControllerFindAllUnmatchedUsers: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(badRequestError)
 					),
 				};
 				spy.mockReturnValue(
@@ -121,7 +181,7 @@ describe("import-users store actions", () => {
 
 				await importUserModule.fetchAllUsers();
 
-				expect(importUserModule.getBusinessError).toStrictEqual(error);
+				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
 				expect(
 					mockApi.importUserControllerFindAllUnmatchedUsers
 				).toHaveBeenCalledTimes(1);
@@ -130,15 +190,10 @@ describe("import-users store actions", () => {
 
 		describe("fetchTotalUnmatched", () => {
 			it("should request list a unmatched users", async () => {
-				mockApi = {
-					importUserControllerFindAllUnmatchedUsers: jest.fn(
-						() => mockResponse
-					),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				const { importUserModule, mockApi } = setup();
+
 				await importUserModule.fetchTotalUnmatched();
+
 				expect(
 					mockApi.importUserControllerFindAllUnmatchedUsers
 				).toHaveBeenCalledWith(undefined, 0, 1);
@@ -148,11 +203,11 @@ describe("import-users store actions", () => {
 				expect(importUserModule.getTotalUnmatched).toEqual(3);
 			});
 
-			it("should handle buness error", async () => {
-				const error = { statusCode: "500", message: "foo" };
+			it("should handle business error", async () => {
+				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerFindAllUnmatchedUsers: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(badRequestError)
 					),
 				};
 				spy.mockReturnValue(
@@ -161,7 +216,7 @@ describe("import-users store actions", () => {
 
 				await importUserModule.fetchTotalUnmatched();
 
-				expect(importUserModule.getBusinessError).toStrictEqual(error);
+				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
 				expect(
 					mockApi.importUserControllerFindAllUnmatchedUsers
 				).toHaveBeenCalledTimes(1);
@@ -170,12 +225,7 @@ describe("import-users store actions", () => {
 
 		describe("fetchAllImportUsers", () => {
 			it("should request a list of import users", async () => {
-				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				const { importUserModule, mockApi } = setup();
 
 				await importUserModule.fetchAllImportUsers();
 
@@ -205,13 +255,8 @@ describe("import-users store actions", () => {
 				);
 			});
 
-			it("featch importusers with filters", async () => {
-				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+			it("fetch importusers with filters", async () => {
+				const { importUserModule, mockApi } = setup();
 
 				importUserModule.setFirstName("john");
 				importUserModule.setLastName("doe");
@@ -252,13 +297,8 @@ describe("import-users store actions", () => {
 				);
 			});
 
-			it("featch importusers with sorting by firstName", async () => {
-				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+			it("fetch importusers with sorting by firstName", async () => {
+				const { importUserModule, mockApi } = setup();
 
 				importUserModule.setSortBy("firstName");
 				await importUserModule.fetchAllImportUsers();
@@ -289,13 +329,8 @@ describe("import-users store actions", () => {
 				);
 			});
 
-			it("featch importusers with sorting by lastName desc", async () => {
-				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+			it("fetch importusers with sorting by lastName desc", async () => {
+				const { importUserModule, mockApi } = setup();
 
 				importUserModule.setSortBy("lastName");
 				importUserModule.setSortOrder("desc");
@@ -327,13 +362,8 @@ describe("import-users store actions", () => {
 				);
 			});
 
-			it("featch importusers with pagination", async () => {
-				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+			it("fetch importusers with pagination", async () => {
+				const { importUserModule, mockApi } = setup();
 
 				importUserModule.setSkip(7);
 				importUserModule.setLimit(11);
@@ -365,11 +395,11 @@ describe("import-users store actions", () => {
 				);
 			});
 
-			it("should handle buness error", async () => {
-				const error = { statusCode: "500", message: "foo" };
+			it("should handle business error", async () => {
+				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerFindAllImportUsers: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(badRequestError)
 					),
 				};
 				spy.mockReturnValue(
@@ -378,7 +408,7 @@ describe("import-users store actions", () => {
 
 				await importUserModule.fetchAllImportUsers();
 
-				expect(importUserModule.getBusinessError).toStrictEqual(error);
+				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
 				expect(
 					mockApi.importUserControllerFindAllImportUsers
 				).toHaveBeenCalledTimes(1);
@@ -387,12 +417,7 @@ describe("import-users store actions", () => {
 
 		describe("fetchTotal", () => {
 			it("should request import users which are matched", async () => {
-				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				const { importUserModule, mockApi } = setup();
 
 				await importUserModule.fetchTotal();
 
@@ -417,11 +442,11 @@ describe("import-users store actions", () => {
 				expect(importUserModule.getTotal).toEqual(3);
 			});
 
-			it("should handle buness error", async () => {
-				const error = { statusCode: "500", message: "foo" };
+			it("should handle business error", async () => {
+				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerFindAllImportUsers: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(badRequestError)
 					),
 				};
 				spy.mockReturnValue(
@@ -430,7 +455,7 @@ describe("import-users store actions", () => {
 
 				await importUserModule.fetchTotal();
 
-				expect(importUserModule.getBusinessError).toStrictEqual(error);
+				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
 				expect(
 					mockApi.importUserControllerFindAllImportUsers
 				).toHaveBeenCalledTimes(1);
@@ -439,12 +464,7 @@ describe("import-users store actions", () => {
 
 		describe("fetchTotalMatched", () => {
 			it("should request import users which are matched", async () => {
-				mockApi = {
-					importUserControllerFindAllImportUsers: jest.fn(() => mockResponse),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				const { importUserModule, mockApi } = setup();
 
 				await importUserModule.fetchTotalMatched();
 
@@ -469,11 +489,11 @@ describe("import-users store actions", () => {
 				expect(importUserModule.getTotalMatched).toEqual(3);
 			});
 
-			it("should handle buness error", async () => {
-				const error = { statusCode: "500", message: "foo" };
+			it("should handle business error", async () => {
+				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerFindAllImportUsers: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(badRequestError)
 					),
 				};
 				spy.mockReturnValue(
@@ -482,7 +502,7 @@ describe("import-users store actions", () => {
 
 				await importUserModule.fetchTotalMatched();
 
-				expect(importUserModule.getBusinessError).toStrictEqual(error);
+				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
 				expect(
 					mockApi.importUserControllerFindAllImportUsers
 				).toHaveBeenCalledTimes(1);
@@ -491,12 +511,7 @@ describe("import-users store actions", () => {
 
 		describe("deleteMatch", () => {
 			it("should call removeMatch and return new importUser record without match", async () => {
-				mockApi = {
-					importUserControllerRemoveMatch: jest.fn(() => mockResponse),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				const { importUserModule, mockApi } = setup();
 
 				const importUserId = "abc";
 				await importUserModule.deleteMatch(importUserId);
@@ -509,11 +524,11 @@ describe("import-users store actions", () => {
 				);
 			});
 
-			it("should handle buness error", async () => {
-				const error = { statusCode: "500", message: "foo" };
+			it("should handle business error", async () => {
+				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerRemoveMatch: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(badRequestError)
 					),
 				};
 				spy.mockReturnValue(
@@ -523,7 +538,7 @@ describe("import-users store actions", () => {
 				const importUserId = "abc";
 				await importUserModule.deleteMatch(importUserId);
 
-				expect(importUserModule.getBusinessError).toStrictEqual(error);
+				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
 				expect(mockApi.importUserControllerRemoveMatch).toHaveBeenCalledTimes(
 					1
 				);
@@ -532,12 +547,7 @@ describe("import-users store actions", () => {
 
 		describe("saveMatch", () => {
 			it("should call SetMatch with payload and return importUser record with match", async () => {
-				mockApi = {
-					importUserControllerSetMatch: jest.fn(() => mockResponse),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				const { importUserModule, mockApi } = setup();
 
 				const importUserId = "abc";
 				const userId = "abc";
@@ -549,11 +559,12 @@ describe("import-users store actions", () => {
 				);
 				expect(mockApi.importUserControllerSetMatch).toHaveBeenCalledTimes(1);
 			});
+
 			it("should handle error", async () => {
-				const error = { statusCode: "500", message: "foo" };
+				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerSetMatch: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(badRequestError)
 					),
 				};
 				spy.mockReturnValue(
@@ -564,19 +575,14 @@ describe("import-users store actions", () => {
 				const userId = "abc";
 				await importUserModule.saveMatch({ importUserId, userId });
 
-				expect(importUserModule.getBusinessError).toStrictEqual(error);
+				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
 				expect(mockApi.importUserControllerSetMatch).toHaveBeenCalledTimes(1);
 			});
 		});
 
-		describe("saveFlag", function () {
+		describe("saveFlag", () => {
 			it("should  call UpdateFlag with flag=true and return importUser with flag=true", async () => {
-				mockApi = {
-					importUserControllerUpdateFlag: jest.fn(() => mockResponse),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				const { importUserModule, mockApi } = setup();
 
 				const importUserId = "abc";
 				await importUserModule.saveFlag({ importUserId, flagged: true });
@@ -587,13 +593,9 @@ describe("import-users store actions", () => {
 				);
 				expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledTimes(1);
 			});
+
 			it("should call UpdateFlag with flag=false and return importUser with flag=false", async () => {
-				mockApi = {
-					importUserControllerUpdateFlag: jest.fn(() => mockResponse),
-				};
-				spy.mockReturnValue(
-					mockApi as unknown as serverApi.UserImportApiInterface
-				);
+				const { importUserModule, mockApi } = setup();
 
 				const importUserId = "abc";
 				await importUserModule.saveFlag({ importUserId, flagged: false });
@@ -606,9 +608,7 @@ describe("import-users store actions", () => {
 			});
 
 			it("should update the state", async () => {
-				mockApi = {
-					importUserControllerUpdateFlag: jest.fn(() => mockResponse),
-				};
+				const { importUserModule, spy, mockApi } = setup();
 				spy.mockReturnValue(
 					mockApi as unknown as serverApi.UserImportApiInterface
 				);
@@ -647,6 +647,7 @@ describe("import-users store actions", () => {
 					}
 				);
 				expect(changedUser?.flagged).toBe(false);
+
 				await importUserModule.saveFlag({ importUserId, flagged: true });
 				changedUser = importUserModule.getImportUserList.data.find(
 					(importUser) => {
@@ -657,10 +658,10 @@ describe("import-users store actions", () => {
 			});
 
 			it("should handle business error", async () => {
-				const error = { statusCode: "500", message: "foo" };
+				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerUpdateFlag: jest.fn(() =>
-						Promise.reject({ ...error })
+						Promise.reject(badRequestError)
 					),
 				};
 				spy.mockReturnValue(
@@ -670,25 +671,15 @@ describe("import-users store actions", () => {
 				const importUserId = "abc";
 				await importUserModule.saveFlag({ importUserId, flagged: false });
 
-				expect(importUserModule.getBusinessError).toStrictEqual(error);
+				expect(importUserModule.getBusinessError).toStrictEqual(businessError);
 				expect(mockApi.importUserControllerUpdateFlag).toHaveBeenCalledTimes(1);
 			});
 		});
 
 		describe("populateImportUsersFromExternalSystem", () => {
 			describe("when fetching the data", () => {
-				const setup = () => {
-					mockApi = {
-						importUserControllerPopulateImportUsers: jest.fn(),
-					};
-
-					spy.mockReturnValue(
-						mockApi as unknown as serverApi.UserImportApiInterface
-					);
-				};
-
 				it("should call the api", async () => {
-					setup();
+					const { importUserModule, mockApi } = setup();
 
 					await importUserModule.populateImportUsersFromExternalSystem();
 
@@ -699,18 +690,8 @@ describe("import-users store actions", () => {
 			});
 
 			describe("when fetching the data with preferred name matching", () => {
-				const setup = () => {
-					mockApi = {
-						importUserControllerPopulateImportUsers: jest.fn(),
-					};
-
-					spy.mockReturnValue(
-						mockApi as unknown as serverApi.UserImportApiInterface
-					);
-				};
-
 				it("should call the api", async () => {
-					setup();
+					const { importUserModule, mockApi } = setup();
 
 					await importUserModule.populateImportUsersFromExternalSystem(true);
 
@@ -721,52 +702,30 @@ describe("import-users store actions", () => {
 			});
 
 			describe("when an error occurs", () => {
-				const setup = () => {
-					const error = axiosErrorFactory.build();
-					const apiError = mapAxiosErrorToResponseError(error);
-					mockApi = {
+				it("should set a business error", async () => {
+					const { importUserModule, spy } = setup();
+					const mockApi = {
 						importUserControllerPopulateImportUsers: jest.fn(() =>
-							Promise.reject(error)
+							Promise.reject(badRequestError)
 						),
 					};
-
 					spy.mockReturnValue(
 						mockApi as unknown as serverApi.UserImportApiInterface
 					);
 
-					return {
-						error,
-						apiError,
-					};
-				};
-
-				it("should set a business error", async () => {
-					const { apiError } = setup();
-
 					await importUserModule.populateImportUsersFromExternalSystem();
 
-					expect(importUserModule.getBusinessError).toEqual<BusinessError>({
-						statusCode: apiError.code,
-						message: apiError.message,
-					});
+					expect(importUserModule.getBusinessError).toEqual<BusinessError>(
+						businessError
+					);
 				});
 			});
 		});
 
 		describe("cancelMigration", () => {
 			describe("when action is called", () => {
-				const setup = () => {
-					mockApi = {
-						importUserControllerCancelMigration: jest.fn(),
-					};
-
-					spy.mockReturnValue(
-						mockApi as unknown as serverApi.UserImportApiInterface
-					);
-				};
-
 				it("should call the api", async () => {
-					setup();
+					const { importUserModule, mockApi } = setup();
 
 					await importUserModule.cancelMigration();
 
@@ -777,12 +736,11 @@ describe("import-users store actions", () => {
 			});
 
 			describe("when an error occurs", () => {
-				const setup = () => {
-					const error = axiosErrorFactory.build();
-					const apiError = mapAxiosErrorToResponseError(error);
-					mockApi = {
+				it("should set a business error", async () => {
+					const { importUserModule, spy } = setup();
+					const mockApi = {
 						importUserControllerCancelMigration: jest.fn(() =>
-							Promise.reject(error)
+							Promise.reject(badRequestError)
 						),
 					};
 
@@ -790,39 +748,19 @@ describe("import-users store actions", () => {
 						mockApi as unknown as serverApi.UserImportApiInterface
 					);
 
-					return {
-						error,
-						apiError,
-					};
-				};
-
-				it("should set a business error", async () => {
-					const { apiError } = setup();
-
 					await importUserModule.cancelMigration();
 
-					expect(importUserModule.getBusinessError).toEqual<BusinessError>({
-						statusCode: apiError.code,
-						message: apiError.message,
-					});
+					expect(importUserModule.getBusinessError).toEqual<BusinessError>(
+						businessError
+					);
 				});
 			});
 		});
 
 		describe("clearAllAutoMatches", () => {
 			describe("when action is called", () => {
-				const setup = () => {
-					mockApi = {
-						importUserControllerClearAllAutoMatches: jest.fn(),
-					};
-
-					spy.mockReturnValue(
-						mockApi as unknown as serverApi.UserImportApiInterface
-					);
-				};
-
 				it("should call the api", async () => {
-					setup();
+					const { importUserModule, mockApi } = setup();
 
 					await importUserModule.clearAllAutoMatches();
 
@@ -833,12 +771,12 @@ describe("import-users store actions", () => {
 			});
 
 			describe("when an error occurs", () => {
-				const setup = () => {
-					const error = axiosErrorFactory.build();
-					const apiError = mapAxiosErrorToResponseError(error);
-					mockApi = {
+				it("should set a business error", async () => {
+					const { importUserModule, spy } = setup();
+
+					const mockApi = {
 						importUserControllerClearAllAutoMatches: jest.fn(() =>
-							Promise.reject(error)
+							Promise.reject(badRequestError)
 						),
 					};
 
@@ -846,75 +784,20 @@ describe("import-users store actions", () => {
 						mockApi as unknown as serverApi.UserImportApiInterface
 					);
 
-					return {
-						error,
-						apiError,
-					};
-				};
-
-				it("should set a business error", async () => {
-					const { apiError } = setup();
-
 					await importUserModule.clearAllAutoMatches();
 
-					expect(importUserModule.getBusinessError).toEqual<BusinessError>({
-						statusCode: apiError.code,
-						message: apiError.message,
-					});
+					expect(importUserModule.getBusinessError).toEqual<BusinessError>(
+						businessError
+					);
 				});
 			});
 		});
 	});
 
 	describe("mutations", () => {
-		const testData = {
-			total: 2,
-			skip: 0,
-			limit: 2,
-			data: [
-				{
-					classNames: [],
-					firstName: "Samuel",
-					lastName: "Vimes",
-					flagged: false,
-					importUserId: "extern.1234",
-					loginName: "samuel.vimes",
-					roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
-					match: {
-						firstName: "Samuel",
-						lastName: "Vimes",
-						loginName: "samuel.vimes@test.org",
-						roleNames: [UserMatchResponseRoleNamesEnum.Teacher],
-						userId: "1234",
-						matchedBy: UserMatchResponseMatchedByEnum.Auto,
-					},
-				},
-				{
-					classNames: [],
-					firstName: "Nobby",
-					lastName: "Nobbes",
-					flagged: false,
-					importUserId: "extern.5678",
-					loginName: "samuel.vimes",
-					roleNames: [ImportUserResponseRoleNamesEnum.Teacher],
-					match: {
-						firstName: "Samuel",
-						lastName: "Vimes",
-						loginName: "samuel.vimes@test.org",
-						roleNames: [UserMatchResponseRoleNamesEnum.Teacher],
-						userId: "5678",
-						matchedBy: UserMatchResponseMatchedByEnum.Auto,
-					},
-				},
-			],
-		};
-
-		beforeEach(() => {
-			importUserModule.setImportUsersList(testData);
-		});
-
 		describe("deleteMatchMutation", () => {
 			it("should delete match and return new reference", () => {
+				const { importUserModule } = setup();
 				const expected = {
 					...importUserModule.getImportUserList.data[0],
 				};
@@ -933,6 +816,7 @@ describe("import-users store actions", () => {
 			});
 
 			it("should not do anything if user ID does not exist", () => {
+				const { importUserModule } = setup();
 				const expected = {
 					...importUserModule.getImportUserList.data[0],
 				};
@@ -944,8 +828,10 @@ describe("import-users store actions", () => {
 				expect(oldList == importUserModule.getImportUserList).toBe(true);
 			});
 		});
+
 		describe("setUserFlagged", () => {
 			it("should not do anything if user ID does not exist", () => {
+				const { importUserModule } = setup();
 				const expected = {
 					...importUserModule.getImportUserList.data[0],
 					flagged: true,
@@ -972,6 +858,7 @@ describe("import-users store actions", () => {
 			});
 
 			it("should not do anything if user ID does not exist", () => {
+				const { importUserModule } = setup();
 				const oldList = importUserModule.getImportUserList;
 
 				importUserModule.setUserFlagged({

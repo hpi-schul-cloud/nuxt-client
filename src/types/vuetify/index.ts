@@ -2,10 +2,10 @@ type SelectItemKey =
 	| boolean
 	| string
 	| (string | number)[]
-	| ((item: Record<string, any>, fallback?: any) => any);
+	| ((item: Record<string, unknown>, fallback?: unknown) => unknown);
 
-export type DataTableCompareFunction<T = any> = (a: T, b: T) => number;
-export type DataTableHeader = {
+export type DataTableCompareFunction<T> = (a: T, b: T) => number;
+export type DataTableHeader<T> = {
 	key: string;
 	value?: SelectItemKey;
 	title: string;
@@ -17,5 +17,5 @@ export type DataTableHeader = {
 	minWidth?: string;
 	maxWidth?: string;
 	sortable?: boolean;
-	sort?: DataTableCompareFunction;
+	sort?: DataTableCompareFunction<T>;
 };

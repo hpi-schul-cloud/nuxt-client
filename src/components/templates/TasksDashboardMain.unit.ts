@@ -59,7 +59,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 	let loadingStateModuleMock: LoadingStateModule;
 	let notifierModuleMock: NotifierModule;
 	let shareModuleMock: ShareModule;
-	let authModuleMock: AuthModule;
 	let wrapper: VueWrapper;
 
 	const mountComponent = (options = {}) => {
@@ -73,7 +72,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					loadingStateModule: loadingStateModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 					[SHARE_MODULE_KEY.valueOf()]: shareModuleMock,
-					authModule: authModuleMock,
 				},
 				mocks: {
 					$router,
@@ -89,8 +87,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			const validRoles = ["student", "teacher"];
 			const invalidRoles = ["janitor", "principal"];
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			// @ts-ignore
 			const { validator } = TasksDashboardMain.props.role;
 
 			validRoles.forEach((role) => {
@@ -129,15 +125,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 		});
 
-		it("should set isStudent true", () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isStudent).toBe(true);
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isTeacher).toBe(false);
-		});
-
 		it("should render student's tasks dashboard", () => {
 			const studentDashboard = wrapper.findComponent(TasksDashboardStudent);
 			expect(studentDashboard.exists()).toBe(true);
@@ -151,15 +138,15 @@ describe("@/components/templates/TasksDashboardMain", () => {
 		});
 
 		it("should open tab from store state", async () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.tab).toStrictEqual("open");
+			const studentDashboard = wrapper.findComponent(TasksDashboardStudent);
+			expect(studentDashboard.props("tabRoutes")).toContain("open");
 		});
 
 		it("should hide substituteFilter", async () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.showSubstituteFilter).toBe(false);
+			const substituteFilterPlaceholder = wrapper.find(
+				".substitute-filter-placeholder"
+			);
+			expect(substituteFilterPlaceholder.exists()).toBe(true);
 		});
 
 		describe("with hasTasks === true", () => {
@@ -236,15 +223,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 		});
 
-		it("should set isTeacher true", () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isTeacher).toBe(true);
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isStudent).toBe(false);
-		});
-
 		it("should render teacher's tasks dashboard", () => {
 			const teacherDashboard = wrapper.findComponent(TasksDashboardTeacher);
 			expect(teacherDashboard.exists()).toBe(true);
@@ -257,17 +235,16 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			expect(fabComponent.exists()).toEqual(true);
 		});
 
-		it("'add task' button should have correct path", async () => {
-			const fabComponent = await wrapper.findComponent(SpeedDialMenu);
+		it("'add task' button should have correct path", () => {
+			const fabComponent = wrapper.findComponent(SpeedDialMenu);
 			expect(fabComponent.props("href")).toStrictEqual(
 				"/homework/new?returnUrl=tasks"
 			);
 		});
 
 		it("should open tab from store state", async () => {
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.tab).toStrictEqual("current");
+			const teacherDashboard = wrapper.findComponent(TasksDashboardTeacher);
+			expect(teacherDashboard.props("tabRoutes")).toContain("current");
 		});
 
 		it("should show substituteFilter on 1st tab", async () => {
@@ -281,10 +258,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					role: "teacher",
 				},
 			});
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.showSubstituteFilter).toBe(true);
+			expect(wrapper.findComponent({ name: "v-switch" }).exists()).toBe(true);
 		});
 
 		it("should show substituteFilter on 2nd tab", async () => {
@@ -298,10 +272,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					role: "teacher",
 				},
 			});
-
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.showSubstituteFilter).toBe(true);
+			expect(wrapper.findComponent({ name: "v-switch" }).exists()).toBe(true);
 		});
 
 		it("should hide substituteFilter on 3rd tab", async () => {
@@ -316,9 +287,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.showSubstituteFilter).toBe(false);
+			const substituteFilterPlaceholder = wrapper.find(
+				".substitute-filter-placeholder"
+			);
+			expect(substituteFilterPlaceholder.exists()).toBe(true);
 		});
 
 		it("Should update state when tab changes", async () => {
@@ -368,7 +340,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			});
 		});
 
-		it("should disable filter when active tab contains empty list and no course is selected", () => {
+		it("should not display filter when active tab contains empty list and no course is selected", () => {
 			tasksModuleMock = createModuleMocks(TasksModule, {
 				getStatus: "completed",
 				getOpenTasksForStudent: {
@@ -396,9 +368,9 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isCourseFilterDisabled).toBe(true);
+			const autoComplete = wrapper.findComponent({ name: "v-autocomplete" });
+
+			expect(autoComplete.exists()).toBe(false);
 		});
 
 		it("should enable filter when active tab is not empty and no course is selected", () => {
@@ -413,7 +385,7 @@ describe("@/components/templates/TasksDashboardMain", () => {
 					submitted: [],
 					graded: [],
 				},
-				hasTasks: false,
+				hasTasks: true,
 				getActiveTab: "completed",
 
 				// make tab 2 report as not empty
@@ -429,9 +401,10 @@ describe("@/components/templates/TasksDashboardMain", () => {
 				},
 			});
 
-			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-			//@ts-ignore
-			expect(wrapper.vm.isCourseFilterDisabled).toBe(false);
+			const autoComplete = wrapper.findComponent({ name: "v-autocomplete" });
+
+			expect(autoComplete.exists()).toBe(true);
+			expect(autoComplete.classes()).not.toContain("v-input--disabled");
 		});
 	});
 

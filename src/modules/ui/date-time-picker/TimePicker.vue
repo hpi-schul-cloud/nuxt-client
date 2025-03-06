@@ -17,9 +17,9 @@
 
 <script setup lang="ts">
 import { computedAsync, useDebounceFn } from "@vueuse/core";
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, unref, watchEffect } from "vue";
 import { useI18n } from "vue-i18n";
-import { useVuelidate } from "@vuelidate/core";
+import { ErrorObject, useVuelidate } from "@vuelidate/core";
 import { helpers, requiredIf } from "@vuelidate/validators";
 import { timeInputMask as vTimeInputMask } from "@util-input-masks";
 import { isValidTimeFormat } from "@util-validators";
@@ -56,12 +56,12 @@ const rules = computed(() => ({
 const v$ = useVuelidate(rules, { timeValue }, { $lazy: true });
 
 const errorMessages = computedAsync(async () => {
-	return await getErrorMessages(v$.value.timeValue);
+	return await getErrorMessages(v$.value.timeValue.$errors);
 }, null);
 
-const getErrorMessages = useDebounceFn((validationModel: any) => {
-	const messages = validationModel.$errors.map((e: any) => {
-		return e.$message;
+const getErrorMessages = useDebounceFn((errors: ErrorObject[] | undefined) => {
+	const messages = errors?.map((e: ErrorObject) => {
+		return unref(e.$message);
 	});
 	return messages;
 }, 700);

@@ -6,7 +6,6 @@ import {
 } from "@/serverApi/v3";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { DataTableHeader } from "@/types/vuetify";
 import {
 	schoolExternalToolFactory,
 	schoolExternalToolResponseFactory,
@@ -61,9 +60,7 @@ describe("useSchoolExternalToolUtils", () => {
 			const { tool } = setupTool();
 			const { getHeaders } = setup(tool);
 
-			const headers: DataTableHeader[] = getHeaders;
-
-			expect(Array.isArray(headers)).toBeTruthy();
+			expect(Array.isArray(getHeaders)).toBeTruthy();
 		});
 
 		describe("when translate the headers", () => {
@@ -97,24 +94,22 @@ describe("useSchoolExternalToolUtils", () => {
 			const { tool } = setupTool();
 			const { getHeaders, expectedTranslation } = setup(tool);
 
-			const headers: DataTableHeader[] = getHeaders;
+			expect(getHeaders[0].title).toEqual(expectedTranslation);
+			expect(getHeaders[0].value).toEqual("name");
 
-			expect(headers[0].title).toEqual(expectedTranslation);
-			expect(headers[0].value).toEqual("name");
+			expect(getHeaders[1].title).toEqual(expectedTranslation);
+			expect(getHeaders[1].value).toEqual("statusText");
 
-			expect(headers[1].title).toEqual(expectedTranslation);
-			expect(headers[1].value).toEqual("statusText");
+			expect(getHeaders[2].title).toEqual(expectedTranslation);
+			expect(getHeaders[2].value).toEqual("medium");
 
-			expect(headers[2].title).toEqual(expectedTranslation);
-			expect(headers[2].value).toEqual("medium");
+			expect(getHeaders[3].title).toEqual(expectedTranslation);
+			expect(getHeaders[3].value).toEqual("restrictToContexts");
 
-			expect(headers[3].title).toEqual(expectedTranslation);
-			expect(headers[3].value).toEqual("restrictToContexts");
-
-			expect(headers[4].title).toEqual("");
-			expect(headers[4].value).toEqual("actions");
-			expect(headers[4].sortable).toBe(false);
-			expect(headers[4].align).toEqual("end");
+			expect(getHeaders[4].title).toEqual("");
+			expect(getHeaders[4].value).toEqual("actions");
+			expect(getHeaders[4].sortable).toBe(false);
+			expect(getHeaders[4].align).toEqual("end");
 		});
 	});
 

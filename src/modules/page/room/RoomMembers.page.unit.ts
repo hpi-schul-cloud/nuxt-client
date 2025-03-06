@@ -140,6 +140,7 @@ describe("RoomMembersPage", () => {
 				roomRoleName: currentUserRole,
 			};
 		});
+		mockRoomMemberCalls.selectedIds = ref([members[1].userId]);
 
 		wrapper = mount(RoomMembersPage, {
 			attachTo: document.body,
@@ -313,6 +314,24 @@ describe("RoomMembersPage", () => {
 		});
 	});
 
+	describe("onChangeOwner", () => {
+		it("should call 'updateOwner' method", async () => {
+			mockRoomMemberCalls.isLoading = ref(false);
+			const { wrapper, members } = setup();
+			await nextTick();
+
+			const membersTable = wrapper.findComponent(MembersTable);
+			membersTable.vm.$emit("change:permission", [members[1].userId]);
+			await nextTick();
+
+			const changeRoleDialog = wrapper.findComponent(ChangeRole);
+			changeRoleDialog.vm.$emit("change-room-owner", members[1].userId);
+			expect(mockRoomMemberCalls.changeRoomOwner).toHaveBeenCalledWith(
+				members[1].userId
+			);
+		});
+	});
+
 	describe("visibility options", () => {
 		describe("title menu visibility", () => {
 			it.each([
@@ -467,6 +486,81 @@ describe("RoomMembersPage", () => {
 			});
 
 			expect(mockRoomMemberCalls.getPotentialMembers).toHaveBeenCalled();
+		});
+	});
+
+	describe("change role dialog", () => {
+		it("should close dialog on @cancel", async () => {
+			const { wrapper } = setup();
+
+			const changeRoleDialog = wrapper.findAllComponents(VDialog)[1];
+			await changeRoleDialog.setValue(true);
+			expect(changeRoleDialog.props("modelValue")).toBe(true);
+
+			const addMemberComponent = changeRoleDialog.findComponent(ChangeRole);
+			await addMemberComponent.vm.$emit("cancel");
+
+			expect(changeRoleDialog.props("modelValue")).toBe(false);
+		});
+
+		it("should close dialog on escape key", async () => {
+			const { wrapper } = setup();
+
+			const changeRoleDialog = wrapper.findAllComponents(VDialog)[1];
+			await changeRoleDialog.setValue(true);
+
+			const dialogContent = changeRoleDialog.getComponent(ChangeRole);
+			await dialogContent.trigger("keydown.escape");
+
+			expect(changeRoleDialog.props("modelValue")).toBe(false);
+		});
+
+		describe("on @confirm", () => {
+			it("should call updateMembersRole method", async () => {
+				const { wrapper, members } = setup();
+
+				const changeRoleDialog = wrapper.findAllComponents(VDialog)[1];
+				await changeRoleDialog.setValue(true);
+
+				const changeRoleComponent = changeRoleDialog.findComponent(ChangeRole);
+				const selectedId = [members[1].userId];
+
+				await changeRoleComponent.vm.$emit(
+					"confirm",
+					RoleName.Roomeditor,
+					selectedId
+				);
+
+				expect(mockRoomMemberCalls.updateMembersRole).toHaveBeenCalledWith(
+					RoleName.Roomeditor,
+					selectedId
+				);
+			});
+
+			it("should clear selected members", async () => {
+				const { wrapper } = setup();
+
+				const changeRoleDialog = wrapper.findAllComponents(VDialog)[1];
+				await changeRoleDialog.setValue(true);
+
+				const changeRoleComponent = changeRoleDialog.findComponent(ChangeRole);
+				await changeRoleComponent.vm.$emit("confirm");
+
+				expect(mockRoomMemberCalls.selectedIds.value).toEqual([]);
+			});
+
+			it("should close dialog", async () => {
+				const { wrapper } = setup();
+
+				const changeRoleDialog = wrapper.findAllComponents(VDialog)[1];
+				await changeRoleDialog.setValue(true);
+
+				const changeRoleComponent = changeRoleDialog.findComponent(ChangeRole);
+				await changeRoleComponent.vm.$emit("confirm");
+				await nextTick();
+
+				expect(changeRoleDialog.props("modelValue")).toBe(false);
+			});
 		});
 	});
 

@@ -30,7 +30,7 @@
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
 					:name="fileProperties.name"
-					scope="components.cardElement.fileElement"
+					scope-language-key="components.cardElement.fileElement"
 					@click="onDelete"
 				/>
 			</BoardMenu>
@@ -189,7 +189,7 @@ export default defineComponent({
 			try {
 				await upload(file, element.value.id, FileRecordParentType.BOARDNODES);
 				element.value.content.caption = " ";
-			} catch (error) {
+			} catch {
 				emit("delete:element", element.value.id);
 			}
 		};

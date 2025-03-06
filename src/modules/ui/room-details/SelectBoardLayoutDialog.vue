@@ -1,6 +1,6 @@
 <template>
-	<VDialog v-model="isOpen" data-testid="board-layout-dialog" width="360">
-		<VCard>
+	<VDialog v-model="isOpen" width="360">
+		<VCard data-testid="board-layout-dialog">
 			<VCardTitle
 				class="text-h4 text-break px-6 pt-4"
 				data-testid="board-layout-dialog-title"
@@ -48,7 +48,8 @@ const isOpen = defineModel({
 
 defineProps({
 	currentLayout: {
-		type: String as PropType<BoardLayout>,
+		// TODO - Fix BoardLayout typing, BoardResponse used in Board.vue uses string
+		type: String as PropType<BoardLayout | string>,
 	},
 });
 

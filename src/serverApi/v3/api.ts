@@ -1249,10 +1249,10 @@ export interface ComponentInternalPropsImpl {
 export interface ComponentLernstorePropsImpl {
     /**
      * resources of a Lernstore component
-     * @type {Array<string>}
+     * @type {Array<LernstoreResources>}
      * @memberof ComponentLernstorePropsImpl
      */
-    resources: Array<string>;
+    resources: Array<LernstoreResources>;
 }
 /**
  * 
@@ -1554,7 +1554,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: boolean;
+    FEATURE_USER_LOGIN_MIGRATION_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -1693,6 +1693,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    LICENSE_SUMMARY_URL?: string;
 }
 /**
  * 
@@ -4259,6 +4265,43 @@ export interface LdapAuthorizationBodyParams {
 /**
  * 
  * @export
+ * @interface LernstoreResources
+ */
+export interface LernstoreResources {
+    /**
+     * client
+     * @type {string}
+     * @memberof LernstoreResources
+     */
+    client: string;
+    /**
+     * description
+     * @type {string}
+     * @memberof LernstoreResources
+     */
+    description: string;
+    /**
+     * merlinReference
+     * @type {string}
+     * @memberof LernstoreResources
+     */
+    merlinReference?: string;
+    /**
+     * title
+     * @type {string}
+     * @memberof LernstoreResources
+     */
+    title: string;
+    /**
+     * url
+     * @type {string}
+     * @memberof LernstoreResources
+     */
+    url?: string;
+}
+/**
+ * 
+ * @export
  * @interface LessonContentResponse
  */
 export interface LessonContentResponse {
@@ -6776,6 +6819,19 @@ export interface ParentConsentResponse {
      * @memberof ParentConsentResponse
      */
     _id: string;
+}
+/**
+ * 
+ * @export
+ * @interface PassOwnershipBodyParams
+ */
+export interface PassOwnershipBodyParams {
+    /**
+     * The ID of the user
+     * @type {string}
+     * @memberof PassOwnershipBodyParams
+     */
+    userId: string;
 }
 /**
  * 
@@ -20926,6 +20982,50 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+         * @param {string} roomId 
+         * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerChangeRoomOwner: async (roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerChangeRoomOwner', 'roomId', roomId)
+            // verify required parameter 'passOwnershipBodyParams' is not null or undefined
+            assertParamExists('roomControllerChangeRoomOwner', 'passOwnershipBodyParams', passOwnershipBodyParams)
+            const localVarPath = `/rooms/{roomId}/members/pass-ownership`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(passOwnershipBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21120,7 +21220,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21322,6 +21422,18 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+         * @param {string} roomId 
+         * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21379,7 +21491,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21456,6 +21568,17 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+         * @param {string} roomId 
+         * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): AxiosPromise<string> {
+            return localVarFp.roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Create a new room
          * @param {CreateRoomBodyParams} createRoomBodyParams 
          * @param {*} [options] Override http request option.
@@ -21508,7 +21631,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21580,6 +21703,17 @@ export interface RoomApiInterface {
 
     /**
      * 
+     * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+     * @param {string} roomId 
+     * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any): AxiosPromise<string>;
+
+    /**
+     * 
      * @summary Create a new room
      * @param {CreateRoomBodyParams} createRoomBodyParams 
      * @param {*} [options] Override http request option.
@@ -21632,7 +21766,7 @@ export interface RoomApiInterface {
      * 
      * @summary Get a list of rooms.
      * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {number} [limit] Page limit, defaults to 1000.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -21708,6 +21842,19 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
 
     /**
      * 
+     * @summary Passes the ownership of the room to another user. Can only be used if you are the owner, and you will loose the ownership and become a roomadmin instead.
+     * @param {string} roomId 
+     * @param {PassOwnershipBodyParams} passOwnershipBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerChangeRoomOwner(roomId: string, passOwnershipBodyParams: PassOwnershipBodyParams, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerChangeRoomOwner(roomId, passOwnershipBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Create a new room
      * @param {CreateRoomBodyParams} createRoomBodyParams 
      * @param {*} [options] Override http request option.
@@ -21770,7 +21917,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      * 
      * @summary Get a list of rooms.
      * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {number} [limit] Page limit, defaults to 1000.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi

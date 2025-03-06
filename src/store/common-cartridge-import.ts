@@ -54,7 +54,7 @@ export default class CommonCartridgeImportModule extends VuexModule {
 		try {
 			await this.coursesApi.courseControllerImportCourse(file);
 			this.setIsSuccess(true);
-		} catch (error) {
+		} catch {
 			this.setIsSuccess(false);
 		}
 	}

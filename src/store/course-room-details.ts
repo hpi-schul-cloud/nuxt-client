@@ -13,7 +13,7 @@ import {
 	TaskApiInterface,
 } from "@/serverApi/v3";
 import { applicationErrorModule } from "@/store";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { Action, Module, Mutation, VuexModule } from "vuex-module-decorators";
 import { BusinessError } from "./types/commons";
@@ -127,12 +127,15 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			);
 			await this.fetchContent(this.roomData.roomId);
 			this.setLoading(false);
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
 			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
+
 			this.setLoading(false);
 		}
 	}
@@ -142,11 +145,13 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		this.resetBusinessError();
 		try {
 			await this.lessonApi.lessonControllerDelete(lessonId);
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
 			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
 		}
 	}
@@ -156,11 +161,13 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		this.resetBusinessError();
 		try {
 			await this.taskApi.taskControllerDelete(taskId);
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
 			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
 		}
 	}
@@ -170,11 +177,13 @@ export default class CourseRoomDetailsModule extends VuexModule {
 		this.resetBusinessError();
 		try {
 			await this.boardApi.boardControllerDeleteBoard(boardId);
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
 			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
 		}
 	}
@@ -188,11 +197,13 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			const { data } = await this.boardApi.boardControllerCreateBoard(prams);
 
 			return data;
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
 			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
 		}
 	}
@@ -229,17 +240,22 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			}-${new Date().toISOString()}.imscc`;
 			link.click();
 			URL.revokeObjectURL(link.href);
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
 			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
 		}
 	}
 
 	@Action
-	async finishTask(payload: object | any): Promise<void> {
+	async finishTask(payload: {
+		itemId: string;
+		action: "finish" | "restore";
+	}): Promise<void> {
 		this.resetBusinessError();
 		try {
 			if (payload.action === "finish") {
@@ -248,11 +264,13 @@ export default class CourseRoomDetailsModule extends VuexModule {
 				await this.taskApi.taskControllerRestore(payload.itemId);
 			}
 			await this.fetchContent(this.roomData.roomId);
-		} catch (error: any) {
+		} catch (error: unknown) {
+			const apiError = mapAxiosErrorToResponseError(error);
+
 			this.setBusinessError({
-				statusCode: error?.response?.status,
-				message: error?.response?.statusText,
-				...error,
+				error: apiError,
+				statusCode: apiError.code,
+				message: apiError.message,
 			});
 		}
 	}
@@ -303,11 +321,12 @@ export default class CourseRoomDetailsModule extends VuexModule {
 			return;
 		}
 
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore
-		const errorCode = error.response?.data.code;
-		if (errorCode && handledApplicationErrors.includes(errorCode))
+		const apiError = mapAxiosErrorToResponseError(error);
+
+		const errorCode = apiError.code;
+		if (errorCode && handledApplicationErrors.includes(errorCode)) {
 			applicationErrorModule.setError(createApplicationError(errorCode));
+		}
 	}
 
 	@Mutation

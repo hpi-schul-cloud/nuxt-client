@@ -417,7 +417,7 @@ describe("Board", () => {
 				await nextTick();
 
 				expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({
-					block: "start",
+					block: "center",
 					inline: "center",
 				});
 				expect(domElementMock.focus).toHaveBeenCalled();

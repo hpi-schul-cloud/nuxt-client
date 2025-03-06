@@ -1833,24 +1833,28 @@ export default {
 		"No se pudo cargar la lista de participantes.",
 	"pages.rooms.members.error.add": "Error al agregar participantes.",
 	"pages.rooms.members.error.remove": "Error al eliminar participantes.",
+	"pages.rooms.members.error.updateRole":
+		"El cambio de autorizaciones en la sala ha fallado.",
 	"pages.rooms.members.infoText":
 		"Añadir miembros a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Participantes",
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.actionMenu.ariaLabel":
-		"Menú de acciones para {memberName}",
-	"pages.rooms.members.changePermission": "Cambiar permisos",
+		"Menú de acciones para {memberFullName}",
+	"pages.rooms.members.changePermission":
+		"Cambiar las autorizaciones en la sala",
 	"pages.rooms.members.changePermission.ariaLabel":
-		"Cambiar el permiso para {memberName}",
+		"Cambiar autorizaciones de sala para {memberFullName}",
 	"pages.rooms.members.manage": "Miembros de la sala",
-	"pages.rooms.members.remove.ariaLabel": "Eliminar {memberName} de la sala",
+	"pages.rooms.members.remove.ariaLabel":
+		"Eliminar {memberFullName} de la sala",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Restablecer las miembros seleccionados de la lista",
 	"pages.rooms.members.multipleRemove.ariaLabel":
 		"Eliminar varios miembros de la sala",
 	"pages.rooms.members.remove.confirmation":
-		"¿Eliminar {memberName} de la sala?",
+		"¿Eliminar {memberFullName} de la sala?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"¿Eliminar miembros seleccionados de la sala?",
 	"pages.rooms.members.roles.editor": "Editor de salas",
@@ -1859,19 +1863,33 @@ export default {
 	"pages.rooms.members.roomPermissions.owner": "Propietario",
 	"pages.rooms.members.roomPermissions.editor": "Editar",
 	"pages.rooms.members.roomPermissions.viewer": "Leer",
-	"pages.rooms.members.tableHeader.roomRole": "Permisos de la sala",
+	"pages.rooms.members.tableHeader.roomRole": "Autorizaciones de sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",
 	"pages.rooms.members.roleChange.subTitle":
-		"{memberName} recibe los siguientes permisos de sala en “{roomName}”:",
+		"{memberFullName} recibe las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
-		"Los miembros seleccionados recibirán los siguientes permisos de sala en “{roomName}”:",
-	"pages.rooms.members.roleChange.Roomviewer.subText":
-		"Accede a las áreas de la sala y visualiza el contenido",
-	"pages.rooms.members.roleChange.Roomeditor.subText":
-		"Crear y editar contenido",
-	"pages.rooms.members.roleChange.Roomadmin.subText":
-		'Los mismos permisos que "Editar", además de agregar y eliminar otros miembros, cambiar sus permisos de sala y editar la sala',
+		"Los miembros seleccionados reciben las siguientes autorizaciones en la sala “{roomName}”:",
+	"pages.rooms.members.roleChange.Roomviewer.label":
+		"Accede a los tableros de la sala y visualiza el contenido",
+	"pages.rooms.members.roleChange.Roomeditor.label": "Crear y editar contenido",
+	"pages.rooms.members.roleChange.Roomadmin.label":
+		'Las mismas autorizaciones que en "Editar", además de añadir y eliminar otros miembros, cambiar sus autorizaciones de sala y editar salas.',
+	"pages.rooms.members.roleChange.Roomowner.label":
+		"Las mismas autorizaciones que «Administrar», además de eliminar la sala",
+	"pages.rooms.members.roleChange.dialogTitle.handOver":
+		"¿Realmente se transfieren las autorizaciones de “Propietario” de salas?",
+	"pages.rooms.members.roleChange.Roomowner.label.subText":
+		"Atención: ¡Solo una persona en la sala puede recibir esto!",
+	"pages.rooms.members.roleChange.handOverBtn.text": "Transferir propiedad",
+	"pages.rooms.members.handOverAlert.label":
+		"Esta autorización de sala se transfiere a {memberFullName}.",
+	"pages.rooms.members.handOverAlert.label.subText":
+		"{currentUserFullName} pierde la autorización «Propietario» y gana la autorización «Administrar».",
+	"pages.rooms.members.handOverAlert.confirm.label":
+		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
+	"pages.rooms.members.handOverAlert.confirm.label.subText":
+		"Esta acción sólo puede ser deshecha por {memberFullName}.",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
