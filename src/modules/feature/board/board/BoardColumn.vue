@@ -356,7 +356,7 @@ export default defineComponent({
 </style>
 <style>
 .expanded-column {
-	min-height: 75vh;
+	min-height: 68vh;
 }
 .draggable,
 .sortable-drag-board-card {
@@ -364,7 +364,7 @@ export default defineComponent({
 }
 .scrollable-column {
 	overflow: auto;
-	max-height: 75vh;
+	max-height: 68vh;
 }
 
 /* width */
