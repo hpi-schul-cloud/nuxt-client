@@ -5,7 +5,7 @@ export function useExternalToolUrlInsertion() {
 		try {
 			new URL(text);
 			return true;
-		} catch (err) {
+		} catch {
 			return false;
 		}
 	};
