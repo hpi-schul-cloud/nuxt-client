@@ -1,12 +1,18 @@
-// logger.test.js
-import Logger from "./logger"; // Passen Sie den Pfad entsprechend an
+/* eslint-disable no-console */
+import Logger from "./logger";
 
 describe("Logger", () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
-		jest.spyOn(console, "log").mockImplementation(() => {});
-		jest.spyOn(console, "warn").mockImplementation(() => {});
-		jest.spyOn(console, "error").mockImplementation(() => {});
+		jest.spyOn(console, "log").mockImplementation(() => {
+			// Intentionally left empty
+		});
+		jest.spyOn(console, "warn").mockImplementation(() => {
+			// Intentionally left empty
+		});
+		jest.spyOn(console, "error").mockImplementation(() => {
+			// Intentionally left empty
+		});
 	});
 
 	afterEach(() => {
