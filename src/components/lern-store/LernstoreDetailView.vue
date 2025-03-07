@@ -229,7 +229,6 @@ export default {
 			},
 		};
 	},
-	inject: ["mq"],
 	computed: {
 		author() {
 			return getAuthor(this.resource.properties);
@@ -238,9 +237,7 @@ export default {
 			return this.resource.preview.url;
 		},
 		closeButtonStyleSelector() {
-			return (
-				this.mq.current === "tabletPortrait" || this.mq.current === "mobile"
-			);
+			return this.$vuetify.display.xs;
 		},
 		collectionLink() {
 			let relation = getMetadataAttribute(
