@@ -52,9 +52,7 @@ export const useRoomPermissionsStore = defineStore(
 		const currentUserId = computed(() => authModule.getMe?.user.id);
 		const { room } = storeToRefs(useRoomDetailsStore());
 
-		if (!room.value) return;
-
-		const permissions = computed(() => room.value?.permissions ?? []);
+		const permissions = computed(() => room?.value?.permissions ?? []);
 		const currentUserRole = computed(() => detectRole(permissions.value));
 
 		canCreateRoom.value =
