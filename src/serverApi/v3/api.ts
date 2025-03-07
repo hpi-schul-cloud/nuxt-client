@@ -1249,10 +1249,10 @@ export interface ComponentInternalPropsImpl {
 export interface ComponentLernstorePropsImpl {
     /**
      * resources of a Lernstore component
-     * @type {Array<string>}
+     * @type {Array<LernstoreResources>}
      * @memberof ComponentLernstorePropsImpl
      */
-    resources: Array<string>;
+    resources: Array<LernstoreResources>;
 }
 /**
  * 
@@ -1554,7 +1554,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_SCHOOL_SANIS_USER_MIGRATION_ENABLED: boolean;
+    FEATURE_USER_LOGIN_MIGRATION_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
@@ -1693,6 +1693,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    LICENSE_SUMMARY_URL?: string;
 }
 /**
  * 
@@ -4259,6 +4265,43 @@ export interface LdapAuthorizationBodyParams {
 /**
  * 
  * @export
+ * @interface LernstoreResources
+ */
+export interface LernstoreResources {
+    /**
+     * client
+     * @type {string}
+     * @memberof LernstoreResources
+     */
+    client: string;
+    /**
+     * description
+     * @type {string}
+     * @memberof LernstoreResources
+     */
+    description: string;
+    /**
+     * merlinReference
+     * @type {string}
+     * @memberof LernstoreResources
+     */
+    merlinReference?: string;
+    /**
+     * title
+     * @type {string}
+     * @memberof LernstoreResources
+     */
+    title: string;
+    /**
+     * url
+     * @type {string}
+     * @memberof LernstoreResources
+     */
+    url?: string;
+}
+/**
+ * 
+ * @export
  * @interface LessonContentResponse
  */
 export interface LessonContentResponse {
@@ -6784,7 +6827,7 @@ export interface ParentConsentResponse {
  */
 export interface PassOwnershipBodyParams {
     /**
-     * The IDs of the users
+     * The ID of the user
      * @type {string}
      * @memberof PassOwnershipBodyParams
      */
@@ -21177,7 +21220,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
          * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21448,7 +21491,7 @@ export const RoomApiFp = function(configuration?: Configuration) {
          * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21588,7 +21631,7 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
          * 
          * @summary Get a list of rooms.
          * @param {number} [skip] Number of elements (not pages) to be skipped
-         * @param {number} [limit] Page limit, defaults to 10.
+         * @param {number} [limit] Page limit, defaults to 1000.
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -21723,7 +21766,7 @@ export interface RoomApiInterface {
      * 
      * @summary Get a list of rooms.
      * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {number} [limit] Page limit, defaults to 1000.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
@@ -21874,7 +21917,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      * 
      * @summary Get a list of rooms.
      * @param {number} [skip] Number of elements (not pages) to be skipped
-     * @param {number} [limit] Page limit, defaults to 10.
+     * @param {number} [limit] Page limit, defaults to 1000.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApi

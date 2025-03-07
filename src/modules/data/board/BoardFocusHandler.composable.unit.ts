@@ -72,11 +72,17 @@ describe("BoardFocusHandler composable", () => {
 	});
 
 	it("should set focusable values", async () => {
-		target.value?.focus();
-		const { isFocusWithin, isFocusContained } = mountComposable(() =>
+		const { isFocused, isFocusWithin, isFocusContained } = mountComposable(() =>
 			useBoardFocusHandler(columnId, target)
 		);
 
+		expect(isFocused.value).toBe(false);
+		expect(isFocusWithin.value).toBe(false);
+		expect(isFocusContained.value).toBe(false);
+
+		target.value.focus();
+
+		expect(isFocused.value).toBe(true);
 		expect(isFocusWithin.value).toBe(true);
 		expect(isFocusContained.value).toBe(true);
 	});

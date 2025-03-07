@@ -6,7 +6,6 @@ import {
 } from "@/serverApi/v3";
 import { SchoolExternalTool } from "@/store/external-tool";
 import SchoolExternalToolsModule from "@/store/school-external-tools";
-import { DataTableHeader } from "@/types/vuetify";
 import {
 	schoolExternalToolFactory,
 	schoolExternalToolResponseFactory,

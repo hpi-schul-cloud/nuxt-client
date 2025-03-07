@@ -2,7 +2,7 @@
 	<v-custom-dialog
 		:is-open="isOpen"
 		:size="425"
-		@dialog-closed="cancel"
+		@dialog-canceled="cancel"
 		has-buttons
 		confirm-btn-title-key="pages.administration.school.index.schoolPolicy.replace"
 		:confirm-btn-icon="mdiFileReplaceOutline"
@@ -26,10 +26,10 @@
 					</div>
 				</v-alert>
 				<v-file-input
+					v-model="file"
 					ref="input-file"
 					class="input-file mb-2"
 					data-testid="input-file"
-					v-model="files"
 					density="compact"
 					accept="application/pdf"
 					truncate-length="30"
@@ -42,7 +42,7 @@
 						t('pages.administration.school.index.schoolPolicy.hints.uploadFile')
 					"
 					:persistent-hint="true"
-					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
+					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
 					@blur="onBlur"
 				>
 					<template v-slot:append-inner>
@@ -61,19 +61,19 @@
 
 <script lang="ts">
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
-import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
+import { currentDate } from "@/plugins/datetime";
+import { CreateConsentVersionPayload } from "@/store/types/consent-version";
+import { School } from "@/store/types/schools";
+import { toBase64 } from "@/utils/fileHelper";
 import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 	PRIVACY_POLICY_MODULE_KEY,
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
-import { useI18n } from "vue-i18n";
 import { mdiAlert, mdiFileReplaceOutline } from "@icons/material";
-import { School } from "@/store/types/schools";
-import { currentDate } from "@/plugins/datetime";
-import { toBase64 } from "@/utils/fileHelper";
-import { CreateConsentVersionPayload } from "@/store/types/consent-version";
+import { computed, ComputedRef, defineComponent, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "SchoolPolicyFormDialog",
@@ -96,20 +96,19 @@ export default defineComponent({
 		const policyForm: Ref<File[]> = ref([]);
 		const isValid: Ref<boolean> = ref(false);
 		const isTouched: Ref<boolean> = ref(false);
-		const files: Ref<File[]> = ref([]);
+		const file: Ref<File | null> = ref(null);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
+		const maxFileUploadSizeInKb = 4194304;
 		const rules = {
-			required: (value: File[]) =>
-				!(value.length === 0) || t("common.validation.required"),
-			mustBePdf: (value: File[]) =>
-				!(value.length === 0) ||
-				value[0].type === "application/pdf" ||
+			required: (value: File | null) =>
+				!!value || t("common.validation.required"),
+			mustBePdf: (value: File | null) =>
+				value?.type === "application/pdf" ||
 				t("pages.administration.school.index.schoolPolicy.validation.notPdf"),
-			maxSize: (bytes: number) => (value: File[]) =>
-				!(value.length === 0) ||
-				value[0].size <= bytes ||
+			maxSize: (value: File | null) =>
+				(!!value && value.size <= maxFileUploadSizeInKb) ||
 				t(
 					"pages.administration.school.index.schoolPolicy.validation.fileTooBig"
 				),
@@ -123,6 +122,7 @@ export default defineComponent({
 			policyForm.value = [];
 			isValid.value = false;
 			isTouched.value = false;
+			file.value = null;
 		};
 
 		const cancel = () => {
@@ -131,14 +131,14 @@ export default defineComponent({
 		};
 
 		const submit = async () => {
-			if (isValid.value) {
+			if (isValid.value && file.value) {
 				const newConsentVersion: CreateConsentVersionPayload = {
 					schoolId: school.value.id,
 					title: t("pages.administration.school.index.schoolPolicy.fileName"),
 					consentText: "",
 					consentTypes: ["privacy"],
 					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(files.value[0])) as string,
+					consentData: (await toBase64(file.value)) as string,
 				};
 
 				emit("close");
@@ -156,7 +156,6 @@ export default defineComponent({
 
 		return {
 			t,
-			files,
 			rules,
 			cancel,
 			submit,
@@ -167,6 +166,7 @@ export default defineComponent({
 			school,
 			mdiAlert,
 			mdiFileReplaceOutline,
+			file,
 		};
 	},
 });

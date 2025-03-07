@@ -2,7 +2,7 @@
 	<v-custom-dialog
 		:is-open="isOpen"
 		:size="425"
-		@dialog-closed="cancel"
+		@dialog-canceled="cancel"
 		has-buttons
 		confirm-btn-title-key="pages.administration.school.index.termsOfUse.replace"
 		:confirm-btn-icon="mdiFileReplaceOutline"
@@ -26,10 +26,10 @@
 					</div>
 				</v-alert>
 				<v-file-input
+					v-model="file"
 					ref="input-file"
 					class="input-file mb-2"
 					data-testid="input-file"
-					v-model="files"
 					:multiple="false"
 					density="compact"
 					accept="application/pdf"
@@ -41,7 +41,7 @@
 						t('pages.administration.school.index.termsOfUse.hints.uploadFile')
 					"
 					:persistent-hint="true"
-					:rules="[rules.required, rules.mustBePdf, rules.maxSize(4194304)]"
+					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
 					@blur="onBlur"
 				>
 					<template v-slot:append-inner>
@@ -95,20 +95,19 @@ export default defineComponent({
 		const termsForm: Ref<File[]> = ref([]);
 		const isFormValid: Ref<boolean> = ref(false);
 		const isFormTouched: Ref<boolean> = ref(false);
-		const files: Ref<File[]> = ref([]);
+		const file: Ref<File | null> = ref(null);
 
 		const school: ComputedRef<School> = computed(() => schoolsModule.getSchool);
 
+		const maxFileUploadSizeInKb = 4194304;
 		const validationRules = {
-			required: (value: File[]) =>
-				!(value.length === 0) || t("common.validation.required"),
-			mustBePdf: (value: File[]) =>
-				!(value.length === 0) ||
-				value[0].type === "application/pdf" ||
+			required: (value: File | null) =>
+				!!value || t("common.validation.required"),
+			mustBePdf: (value: File | null) =>
+				value?.type === "application/pdf" ||
 				t("pages.administration.school.index.termsOfUse.validation.notPdf"),
-			maxSize: (bytes: number) => (value: File[]) =>
-				!(value.length === 0) ||
-				value[0].size <= bytes ||
+			maxSize: (value: File | null) =>
+				(!!value && value.size <= maxFileUploadSizeInKb) ||
 				t("pages.administration.school.index.termsOfUse.validation.fileTooBig"),
 		};
 
@@ -120,6 +119,7 @@ export default defineComponent({
 			termsForm.value = [];
 			isFormValid.value = false;
 			isFormTouched.value = false;
+			file.value = null;
 		};
 
 		const cancel = () => {
@@ -128,14 +128,14 @@ export default defineComponent({
 		};
 
 		const submit = async () => {
-			if (isFormValid.value) {
+			if (isFormValid.value && file.value) {
 				const newConsentVersion: CreateConsentVersionPayload = {
 					schoolId: school.value.id,
 					title: t("pages.administration.school.index.termsOfUse.fileName"),
 					consentText: "",
 					consentTypes: ["termsOfUse"],
 					publishedAt: currentDate().toString(),
-					consentData: (await toBase64(files.value[0])) as string,
+					consentData: (await toBase64(file.value)) as string,
 				};
 
 				emit("close");
@@ -153,7 +153,6 @@ export default defineComponent({
 
 		return {
 			t,
-			files,
 			rules: validationRules,
 			cancel,
 			submit,
@@ -164,6 +163,7 @@ export default defineComponent({
 			school,
 			mdiAlert,
 			mdiFileReplaceOutline,
+			file,
 		};
 	},
 });
