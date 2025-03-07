@@ -267,7 +267,7 @@ export default defineComponent({
 				// Clears the previous collection elements before rendering the new ones
 				contentModule.clearElements();
 				await contentModule.getElements(this.query);
-			} catch (error) {
+			} catch {
 				notifierModule.show({
 					text: this.$t("pages.content.notification.lernstoreNotAvailable"),
 					status: "error",

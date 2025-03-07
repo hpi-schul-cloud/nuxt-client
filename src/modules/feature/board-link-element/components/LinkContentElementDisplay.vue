@@ -58,7 +58,7 @@ const hostname: ComputedRef<string> = computed(() => {
 	try {
 		const urlObject = new URL(props.url);
 		return urlObject.hostname;
-	} catch (e) {
+	} catch {
 		return "";
 	}
 });
