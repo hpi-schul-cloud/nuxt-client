@@ -1,11 +1,11 @@
 import { authModule } from "@/store";
 import { BoardPermissionChecks } from "@/types/board/Permissions";
-import { createSharedComposable } from "@vueuse/core";
 import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { ref, watch } from "vue";
 import { useRoomDetailsStore } from "@data-room";
 import { BoardContextType } from "@/types/board/BoardContext";
 import { useRoomAuthorization } from "@feature-room";
+import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 
 const boardPermissions = (): BoardPermissionChecks => {
 	const permissions = authModule?.getUserPermissions || [];
@@ -55,4 +55,5 @@ const boardPermissions = (): BoardPermissionChecks => {
 	};
 };
 
-export const useBoardPermissions = createSharedComposable(boardPermissions);
+export const useBoardPermissions =
+	createTestableSharedComposable(boardPermissions);
