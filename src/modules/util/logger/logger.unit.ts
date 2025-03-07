@@ -24,39 +24,47 @@ describe("Logger", () => {
 			process.env.NODE_ENV = "development";
 		});
 
-		it("should log info messages", () => {
+		it("should log info messages with optionalParams", () => {
 			const message = "This is an info message";
-			Logger.info(message);
+			const optionalParams = ["additional", "info"];
+			Logger.info(message, ...optionalParams);
 			expect(console.log).toHaveBeenCalledWith(
 				expect.stringContaining("[INFO]"),
-				message
+				message,
+				...optionalParams
 			);
 		});
 
-		it("should log warn messages", () => {
+		it("should log warn messages with optionalParams", () => {
 			const message = "This is a warning message";
-			Logger.warn(message);
+			const optionalParams = ["additional", "warning"];
+			Logger.warn(message, ...optionalParams);
 			expect(console.warn).toHaveBeenCalledWith(
 				expect.stringContaining("[WARN]"),
-				message
+				message,
+				...optionalParams
 			);
 		});
 
-		it("should log error messages", () => {
+		it("should log error messages with optionalParams", () => {
 			const message = "This is an error message";
-			Logger.error(message);
+			const optionalParams = ["additional", "error"];
+			Logger.error(message, ...optionalParams);
 			expect(console.error).toHaveBeenCalledWith(
 				expect.stringContaining("[ERROR]"),
-				message
+				message,
+				...optionalParams
 			);
 		});
 
-		it("should log messages with log method", () => {
+		it("should log messages with log method and optionalParams", () => {
 			const message = "This is a log message";
-			Logger.log(message);
+			const optionalParams = ["additional", "log"];
+			Logger.log(message, ...optionalParams);
 			expect(console.log).toHaveBeenCalledWith(
 				expect.stringContaining("[LOG]"),
-				message
+				message,
+				...optionalParams
 			);
 		});
 	});
@@ -66,27 +74,29 @@ describe("Logger", () => {
 			process.env.NODE_ENV = "production";
 		});
 
-		it("should not log info messages", () => {
-			Logger.info("This should not be logged");
+		it("should not log info messages with optionalParams", () => {
+			Logger.info("This should not be logged", "additional", "info");
 			expect(console.log).not.toHaveBeenCalled();
 		});
 
-		it("should not log warn messages", () => {
-			Logger.warn("This should not be logged");
+		it("should not log warn messages with optionalParams", () => {
+			Logger.warn("This should not be logged", "additional", "warning");
 			expect(console.warn).not.toHaveBeenCalled();
 		});
 
-		it("should log error messages", () => {
+		it("should log error messages with optionalParams", () => {
 			const message = "This is an error message";
-			Logger.error(message);
+			const optionalParams = ["additional", "error"];
+			Logger.error(message, ...optionalParams);
 			expect(console.error).toHaveBeenCalledWith(
 				expect.stringContaining("[ERROR]"),
-				message
+				message,
+				...optionalParams
 			);
 		});
 
-		it("should not log messages with log method", () => {
-			Logger.log("This should not be logged");
+		it("should not log messages with log method and optionalParams", () => {
+			Logger.log("This should not be logged", "additional", "log");
 			expect(console.log).not.toHaveBeenCalled();
 		});
 	});
