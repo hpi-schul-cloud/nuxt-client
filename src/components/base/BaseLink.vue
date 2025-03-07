@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { Logger } from "@util-logger";
+
 export default {
 	inheritAttrs: false,
 	props: {
@@ -109,14 +111,14 @@ export default {
 					!this.allowInsecure &&
 					!/^(https:|mailto:|tel:|\/)/.test(this.href)
 				) {
-					return console.warn(
+					return Logger.warn(
 						`Insecure href <base-link>: ${this.href}.\nWhen linking to external sites, always prefer https URLs. If this site does not offer SSL, explicitly add the allow-insecure attribute on <base-link>.`
 					);
 				}
 			} else {
 				// Check for insufficient props.
 				if (!this.name && !this.to) {
-					return console.warn(
+					return Logger.warn(
 						`Invalid props <base-link>:\n\n${JSON.stringify(
 							this.$props,
 							null,

@@ -21,6 +21,7 @@
 
 <script>
 import { mdiCheck } from "@icons/material";
+import { Logger } from "@util-logger";
 
 export default {
 	components: {},
@@ -37,7 +38,7 @@ export default {
 			validator: function (value) {
 				const isValid = value.length <= 7;
 				if (!isValid) {
-					console.error("You shoudn't use more than 7 steps.");
+					Logger.error("You shoudn't use more than 7 steps.");
 				}
 				return isValid;
 			},

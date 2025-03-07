@@ -2,7 +2,7 @@
 const isProduction = process.env.NODE_ENV === "production";
 
 class Logger {
-	static info(message: unknown[], ...optionalParams: unknown[]) {
+	static info(message: unknown, ...optionalParams: unknown[]) {
 		if (!isProduction) {
 			console.log(
 				`[INFO] ${new Date().toISOString()} -`,
@@ -12,7 +12,7 @@ class Logger {
 		}
 	}
 
-	static warn(message: unknown[], ...optionalParams: unknown[]) {
+	static warn(message: unknown, ...optionalParams: unknown[]) {
 		if (!isProduction) {
 			console.warn(
 				`[WARN] ${new Date().toISOString()} -`,
@@ -22,12 +22,22 @@ class Logger {
 		}
 	}
 
-	static error(message: unknown[], ...optionalParams: unknown[]) {
+	static error(message: unknown, ...optionalParams: unknown[]) {
 		console.error(
 			`[ERROR] ${new Date().toISOString()} -`,
 			message,
 			...optionalParams
 		);
+	}
+
+	static log(message: unknown, ...optionalParams: unknown[]) {
+		if (!isProduction) {
+			console.log(
+				`[LOG] ${new Date().toISOString()} -`,
+				message,
+				...optionalParams
+			);
+		}
 	}
 }
 

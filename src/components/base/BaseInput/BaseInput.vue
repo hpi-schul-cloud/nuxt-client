@@ -24,6 +24,7 @@ import BaseInputDefault, {
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
 } from "./BaseInputCheckbox";
+import { Logger } from "@util-logger";
 
 const componentDictionary = {};
 defaultInputTypes.forEach(
@@ -85,7 +86,7 @@ export default {
 	},
 	created() {
 		if (!componentDictionary[this.type]) {
-			console.error(
+			Logger.error(
 				`invalid prop type ${this.type}:\n` +
 					`$attrs ${JSON.stringify(this.$attrs)}`
 			);
