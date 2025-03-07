@@ -10,6 +10,7 @@ import { RoomDetails } from "@/types/room/Room";
 import { mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
 import { ref } from "vue";
 import { useRoomDetailsStore } from "./RoomDetails.store";
+import { roomMemberFactory } from "@@/tests/test-utils/factory/room/roomMembersFactory";
 
 jest.mock("@/utils/inject");
 const mockedInjectStrict = jest.mocked(injectStrict);
@@ -20,9 +21,9 @@ export type PiniaStore<T extends (...args: any) => any> = Omit<
 >;
 
 interface PermissionKeywords {
-	create: boolean;
-	edit: boolean;
-	view: boolean;
+	create?: boolean;
+	edit?: boolean;
+	view?: boolean;
 }
 
 function createRoomPermissionsArray(permissionKeywords: PermissionKeywords) {
@@ -39,12 +40,12 @@ let roomDetailsStore: ReturnType<typeof useRoomDetailsStore>;
 describe("useRoomPermissionsStore", () => {
 	const setup = ({
 		userRoles,
-		userPermissions,
-		roomPermissions,
+		userPermissions = [],
+		roomPermissions = [],
 	}: {
 		userRoles: RoleName[];
-		userPermissions: Permission[];
-		roomPermissions: Permission[];
+		userPermissions?: Permission[];
+		roomPermissions?: Permission[];
 	}) => {
 		setActivePinia(createPinia());
 		roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
@@ -79,9 +80,24 @@ describe("useRoomPermissionsStore", () => {
 		return { store };
 	};
 
+	describe("when the user is roomowner or roomadmin", () => {
+		it("should be allowed to create rooms", async () => {
+			const { store } = setup({
+				userRoles: [RoleName.Teacher],
+				userPermissions: createRoomPermissionsArray({
+					create: true,
+					edit: true,
+					view: true,
+				}),
+				roomPermissions: [Permission.RoomView],
+			});
+			expect(store.canCreateRoom).toBe(true);
+		});
+	});
+
 	describe("manageMembersVisibility", () => {
-		describe("when the user is roomowner or roomadmin", () => {
-			it("should ...", async () => {
+		describe("when the user is roomowner or roomadmin and feature is enabled", () => {
+			const setupManageMembersVisibility = () => {
 				const { store } = setup({
 					userRoles: [RoleName.Teacher],
 					userPermissions: createRoomPermissionsArray({
@@ -89,11 +105,55 @@ describe("useRoomPermissionsStore", () => {
 						edit: true,
 						view: true,
 					}),
-					roomPermissions: [Permission.RoomView],
+					roomPermissions: [
+						Permission.RoomView,
+						Permission.RoomMembersChangeRole,
+					],
 				});
-				store.manageMembersVisibility;
-				expect(store.canViewRoom).toBe(true);
-				expect(store.canCreateRoom).toBe(true);
+				return { store };
+			};
+			it("should show changeRoleButton", async () => {
+				const { store } = setupManageMembersVisibility();
+
+				const { isVisibleChangeRoleButton } = store.manageMembersVisibility;
+
+				expect(isVisibleChangeRoleButton).toBe(true);
+			});
+
+			describe("when the user is roomowner", () => {
+				it("should not show the action menu for rows", async () => {
+					const { store } = setupManageMembersVisibility();
+
+					const { isVisibleActionInRow } = store.manageMembersVisibility;
+					const user = roomMemberFactory(RoleName.Roomowner).build();
+
+					expect(isVisibleActionInRow(user)).toBe(false);
+				});
+			});
+
+			describe("when the user is roomadmin", () => {
+				it("should show the action menu for rows", async () => {
+					const { store } = setupManageMembersVisibility();
+
+					const { isVisibleActionInRow } = store.manageMembersVisibility;
+					const user = roomMemberFactory(RoleName.Roomadmin).build();
+
+					expect(isVisibleActionInRow(user)).toBe(true);
+				});
+			});
+		});
+
+		describe("when the user is roomeditor", () => {
+			it("should show removeMemberButton", () => {
+				const { store } = setup({
+					userRoles: [RoleName.Teacher],
+					roomPermissions: [Permission.RoomView, Permission.RoomEdit],
+				});
+
+				const { isVisibleRemoveMemberButton } = store.manageMembersVisibility;
+				const user = roomMemberFactory(RoleName.Roomeditor).build();
+
+				expect(isVisibleRemoveMemberButton(user)).toBe(true);
 			});
 		});
 	});
