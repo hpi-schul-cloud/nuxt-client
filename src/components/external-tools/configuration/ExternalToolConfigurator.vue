@@ -336,7 +336,7 @@ const pasteFromClipboard = async () => {
 		await nextTick();
 
 		updateSearchInput(text);
-	} catch (err) {
+	} catch {
 		notifierModule.show({
 			text: t("pages.tool.select.clipboard.error"),
 			status: "error",

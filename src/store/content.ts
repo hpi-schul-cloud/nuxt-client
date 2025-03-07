@@ -350,7 +350,7 @@ export default class ContentModule extends VuexModule {
 				payload.material
 			);
 			this.setNotificationModal("successModal");
-		} catch (error) {
+		} catch {
 			this.setNotificationModal("errorModal");
 		}
 	}
