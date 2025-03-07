@@ -1,5 +1,5 @@
 import { useRoomPermissionsStore } from "./roomPermissions.store";
-import { createPinia, defineStore, setActivePinia } from "pinia";
+import { createPinia, setActivePinia } from "pinia";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -14,11 +14,6 @@ import { roomMemberFactory } from "@@/tests/test-utils/factory/room/roomMembersF
 
 jest.mock("@/utils/inject");
 const mockedInjectStrict = jest.mocked(injectStrict);
-
-export type PiniaStore<T extends (...args: any) => any> = Omit<
-	ReturnType<T>,
-	keyof ReturnType<typeof defineStore>
->;
 
 interface PermissionKeywords {
 	create?: boolean;
