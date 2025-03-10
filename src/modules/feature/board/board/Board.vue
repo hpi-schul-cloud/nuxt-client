@@ -6,6 +6,7 @@
 				:breadcrumbs="breadcrumbs"
 				max-width="full"
 				hide-border
+				allow-overflow-x
 				main-without-padding-bottom
 			>
 				<template #header>

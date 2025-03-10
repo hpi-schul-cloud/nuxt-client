@@ -345,7 +345,8 @@ export default defineComponent({
 }
 
 .multi-column-board-column {
-	max-height: calc(100vh - 64px - 92.75px);
+	/* Subtracted are the heights of schulcloud-header, board-header and scrollbar. */
+	max-height: calc(100vh - 64px - 92.75px - 10px);
 	width: 400px;
 }
 
@@ -373,5 +374,11 @@ export default defineComponent({
 /* Handle on hover */
 .scrollable-column::-webkit-scrollbar-thumb:hover {
 	background: rgba(var(--v-theme-on-surface), 0.8) !important;
+}
+
+@supports not selector(::-webkit-scrollbar) {
+	.scrollable-column {
+		scrollbar-width: thin;
+	}
 }
 </style>

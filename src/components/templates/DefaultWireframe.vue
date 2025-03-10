@@ -61,7 +61,7 @@
 				'pb-0': mainWithoutPaddingBottom,
 				'container-short-width': maxWidth === 'short',
 				'container-full-width': maxWidth === 'full',
-				'overflow-x-auto': allowOverflowX,
+				'main-overflow': allowOverflowX,
 			}"
 		>
 			<slot />
@@ -161,6 +161,11 @@ const showDivider = computed(() => {
 .main-content {
 	padding: 0 var(--space-lg) var(--space-lg) var(--space-lg);
 	margin-top: var(--space-xl);
+}
+
+.main-overflow {
+	overflow-x: auto;
+	scrollbar-width: thin;
 }
 
 .container-short-width {
