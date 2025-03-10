@@ -156,8 +156,7 @@ const titleClasses = computed(() => {
 
 const isDragging = ref(false);
 
-const onClick = (e: any) => {
-	console.log(e, props.item.href);
+const onClick = () => {
 	if (!props.condenseLayout && stillBeingCopied.value === false) {
 		if (props.item.to) {
 			router.push({
