@@ -205,14 +205,6 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		expect(avatarComponents).toHaveLength(6);
 	});
 
-	it("should display 2 avatars component in 'mobile' device", async () => {
-		const wrapper = getWrapper();
-		await nextTick();
-		await nextTick();
-		const avatarComponents = wrapper.findAll(".room-avatar");
-		expect(avatarComponents).toHaveLength(6);
-	});
-
 	it("should display 1 group-avatar component", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
@@ -276,19 +268,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		).toStrictEqual("vRoomEmptyAvatar");
 	});
 
-	it("should set the column count '4' if the device is 'mobile'", async () => {
-		const wrapper = getWrapper();
-		await nextTick();
-		expect(wrapper.vm.dimensions.colCount).toBe(4);
-	});
-
-	it("should set the column count '4' if the device is 'tablet'", async () => {
-		const wrapper = getWrapper();
-		await nextTick();
-		expect(wrapper.vm.dimensions.colCount).toBe(4);
-	});
-
-	it("should set the column count '4' if the device is 'desktop'", async () => {
+	it("should set the column count 4", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
 		expect(wrapper.vm.dimensions.colCount).toBe(4);
