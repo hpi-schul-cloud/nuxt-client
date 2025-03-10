@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex align-items-center">
 		<InlineEditInteractionHandler
-			:isEditMode="isEditMode"
+			:isEditMode="isEditMode && canEditRoomBoard"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
 			@keydown.enter="onStartEditMode"
@@ -15,7 +15,7 @@
 					scope="board"
 					:value="boardTitle"
 					data-testid="board-title"
-					:isEditMode="isEditMode"
+					:isEditMode="isEditMode && canEditRoomBoard"
 					:isFocused="isFocusedById"
 					:maxLength="100"
 					:style="{ width: `${fieldWidth}px` }"
@@ -29,7 +29,7 @@
 			<BoardDraftChip v-if="isDraft" />
 			<div class="mx-2">
 				<BoardMenu
-					v-if="hasEditPermission"
+					v-if="hasEditPermission && canEditRoomBoard"
 					:scope="BoardMenuScope.BOARD"
 					data-testid="board-menu-btn"
 				>
@@ -102,7 +102,7 @@ const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
 );
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
-const { hasEditPermission } = useBoardPermissions();
+const { hasEditPermission, canEditRoomBoard } = useBoardPermissions();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref(0);
@@ -112,32 +112,32 @@ onMounted(() => setTimeout(calculateWidth, 100));
 const boardTitle = ref("");
 
 const onStartEditMode = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	startEditMode();
 };
 
 const onEndEditMode = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	stopEditMode();
 };
 
 const onCopyBoard = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	emit("copy:board");
 };
 
 const onShareBoard = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	emit("share:board");
 };
 
 const onPublishBoard = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	emit("update:visibility", true);
 };
 
 const onUnpublishBoard = () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 	emit("update:visibility", false);
 };
 

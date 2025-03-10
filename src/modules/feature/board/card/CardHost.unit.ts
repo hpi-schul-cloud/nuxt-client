@@ -222,7 +222,7 @@ describe("CardHost", () => {
 	describe("user permissions", () => {
 		describe("when user is not permitted to delete", () => {
 			it("should not show an edit button", () => {
-				mockedBoardPermissions.hasDeletePermission = false;
+				mockedBoardPermissions.hasDeletePermission.value = false;
 				const { wrapper } = setup();
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionEdit);
@@ -231,7 +231,7 @@ describe("CardHost", () => {
 			});
 
 			it("should not show a delete button", () => {
-				mockedBoardPermissions.hasDeletePermission = false;
+				mockedBoardPermissions.hasDeletePermission.value = false;
 				const { wrapper } = setup();
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
@@ -244,7 +244,7 @@ describe("CardHost", () => {
 	describe("card menus", () => {
 		describe("when users clicks share link menu", () => {
 			it("should copy a share link", async () => {
-				mockedBoardPermissions.hasDeletePermission = true;
+				mockedBoardPermissions.hasDeletePermission.value = true;
 				const { wrapper, cardId } = setup();
 
 				const shareLinkButton = wrapper.findComponent(KebabMenuActionShareLink);
@@ -260,7 +260,7 @@ describe("CardHost", () => {
 
 		describe("when users click delete menu", () => {
 			it("should emit 'delete:card'", async () => {
-				mockedBoardPermissions.hasDeletePermission = true;
+				mockedBoardPermissions.hasDeletePermission.value = true;
 				const { wrapper } = setup();
 
 				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
