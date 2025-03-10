@@ -1,10 +1,5 @@
 <template>
-	<div
-		:style="columnStyle"
-		:class="columnClasses"
-		:key="renderKey"
-		class="d-flex flex-column"
-	>
+	<div :class="columnClasses" :key="renderKey" class="d-flex flex-column">
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
@@ -144,17 +139,6 @@ export default defineComponent({
 				classes.push("px-4", "multi-column-board-column");
 			}
 			return classes;
-		});
-
-		const columnStyle = computed(() => {
-			if (props.isListBoard) {
-				return;
-			}
-			const columnLayout = {
-				"min-width": `${colWidth.value}px`,
-				"max-width": `${colWidth.value}px`,
-			};
-			return columnLayout;
 		});
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
@@ -316,7 +300,6 @@ export default defineComponent({
 		return {
 			cardDropPlaceholderOptions,
 			columnClasses,
-			columnStyle,
 			colWidth,
 			hasCreateColumnPermission,
 			hasMovePermission,
@@ -367,6 +350,7 @@ export default defineComponent({
 
 .multi-column-board-column {
 	max-height: calc(100vh - 64px - 92.75px);
+	width: 400px;
 }
 
 /* width */
