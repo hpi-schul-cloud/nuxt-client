@@ -278,9 +278,6 @@ export default defineComponent({
 			const classes = [];
 			if (!props.isListBoard) {
 				classes.push("scrollable-column");
-				if (isDragging.value) {
-					classes.push("expanded-column");
-				}
 			}
 			return classes;
 		});
