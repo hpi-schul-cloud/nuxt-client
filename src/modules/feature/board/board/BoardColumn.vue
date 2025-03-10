@@ -1,5 +1,10 @@
 <template>
-	<div :style="columnStyle" :class="columnClasses" :key="renderKey">
+	<div
+		:style="columnStyle"
+		:class="columnClasses"
+		:key="renderKey"
+		class="d-flex flex-column"
+	>
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
@@ -14,7 +19,7 @@
 			@move:column-up="onMoveColumnUp"
 			@update:title="onUpdateTitle"
 		/>
-		<div>
+		<div class="h-100 overflow-y-auto">
 			<Sortable
 				:list="column.cards"
 				item-key="cardId"
@@ -136,7 +141,7 @@ export default defineComponent({
 			if (props.isListBoard) {
 				classes.push("d-flex", "flex-column", "align-stretch");
 			} else {
-				classes.push("px-4");
+				classes.push("px-4", "multi-column-board-column");
 			}
 			return classes;
 		});
@@ -355,16 +360,13 @@ export default defineComponent({
 }
 </style>
 <style>
-.expanded-column {
-	min-height: 68vh;
-}
 .draggable,
 .sortable-drag-board-card {
 	opacity: 1;
 }
-.scrollable-column {
-	overflow: auto;
-	max-height: 68vh;
+
+.multi-column-board-column {
+	max-height: calc(100vh - 64px - 92.75px);
 }
 
 /* width */
