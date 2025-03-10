@@ -55,8 +55,8 @@
 			<v-divider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
 		<v-container
-			class="main-content"
 			:fluid="maxWidth !== 'nativ'"
+			class="main-content"
 			:class="{
 				'pb-0': mainWithoutPaddingBottom,
 				'container-short-width': maxWidth === 'short',
