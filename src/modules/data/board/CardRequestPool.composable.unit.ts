@@ -1,19 +1,11 @@
 import { BoardCardApiInterface } from "@/serverApi/v3";
 import { useSharedCardRequestPool } from "./CardRequestPool.composable";
 import * as serverApi from "@/serverApi/v3/api";
-import * as axios from "axios";
-import { initializeAxios } from "@/utils/api";
-
-jest.mock("axios");
 
 let mockReturnData: { data: { data: { id: string }[] } };
 const cardsApiFactoryMock = {
 	cardControllerGetCards: jest.fn().mockImplementation(() => mockReturnData),
 };
-initializeAxios({
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	request: async (path: string) => mockReturnData,
-} as axios.AxiosInstance);
 
 const setup = (...cardIds: string[]) => {
 	const returnedCards = cardIds.map((id) => ({ id }));

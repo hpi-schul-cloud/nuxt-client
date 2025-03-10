@@ -93,7 +93,7 @@ export default defineComponent({
 							},
 						})
 					);
-				} catch (err) {
+				} catch {
 					notifierModule.show({
 						text: t("common.validation.invalid"),
 						status: "error",

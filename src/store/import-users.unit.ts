@@ -5,8 +5,12 @@ import {
 	UserMatchResponseRoleNamesEnum,
 } from "@/serverApi/v3/api";
 import ImportUsersModule, { MatchedBy } from "@/store/import-users";
-import { ApiResponseError, BusinessError } from "./types/commons";
-import { AxiosError, AxiosHeaders } from "axios";
+import { BusinessError } from "./types/commons";
+import {
+	axiosErrorFactory,
+	apiResponseErrorFactory,
+	businessErrorFactory,
+} from "@@/tests/test-utils";
 
 const mockResponse = {
 	data: {
@@ -59,33 +63,25 @@ const userListTestData = {
 	],
 };
 
-const badRequestError = new AxiosError<
-	ApiResponseError | serverApi.ApiValidationError
->("Bad Request", "ERR_BAD_REQUEST", undefined, null, {
-	status: 400,
-	statusText: "Bad Request",
-	headers: {},
-	config: {
-		headers: new AxiosHeaders(),
-	},
-	data: {
-		code: 400,
-		type: "BAD_REQUEST",
-		title: "Bad Request",
-		message: "Bad Request",
+const badRequestError = axiosErrorFactory.build({
+	response: {
+		data: apiResponseErrorFactory.build({
+			message: "BAD_REQUEST",
+			code: 400,
+		}),
 	},
 });
 
-const businessError = {
-	statusCode: 400,
-	message: "Bad Request",
+const businessError = businessErrorFactory.build({
 	error: {
 		code: 400,
-		type: "BAD_REQUEST",
-		title: "Bad Request",
-		message: "Bad Request",
+		type: "ApiResponseError",
+		title: "ApiResponseError # 1",
+		message: "BAD_REQUEST",
 	},
-};
+	message: "BAD_REQUEST",
+	statusCode: 400,
+});
 
 describe("import-users store actions", () => {
 	const setup = () => {
@@ -207,7 +203,7 @@ describe("import-users store actions", () => {
 				expect(importUserModule.getTotalUnmatched).toEqual(3);
 			});
 
-			it("should handle buness error", async () => {
+			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerFindAllUnmatchedUsers: jest.fn(() =>
@@ -399,7 +395,7 @@ describe("import-users store actions", () => {
 				);
 			});
 
-			it("should handle buness error", async () => {
+			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerFindAllImportUsers: jest.fn(() =>
@@ -446,7 +442,7 @@ describe("import-users store actions", () => {
 				expect(importUserModule.getTotal).toEqual(3);
 			});
 
-			it("should handle buness error", async () => {
+			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerFindAllImportUsers: jest.fn(() =>
@@ -493,7 +489,7 @@ describe("import-users store actions", () => {
 				expect(importUserModule.getTotalMatched).toEqual(3);
 			});
 
-			it("should handle buness error", async () => {
+			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerFindAllImportUsers: jest.fn(() =>
@@ -528,7 +524,7 @@ describe("import-users store actions", () => {
 				);
 			});
 
-			it("should handle buness error", async () => {
+			it("should handle business error", async () => {
 				const { importUserModule, spy } = setup();
 				const mockApi = {
 					importUserControllerRemoveMatch: jest.fn(() =>
