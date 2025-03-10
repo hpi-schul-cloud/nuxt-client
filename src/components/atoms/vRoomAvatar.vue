@@ -26,6 +26,7 @@
 				:ripple="false"
 				:disabled="condenseLayout"
 				@click="onClick"
+				@keypress.enter="onClick"
 				@dragenter.prevent.stop="dragEnter"
 			>
 				<v-avatar
@@ -155,7 +156,8 @@ const titleClasses = computed(() => {
 
 const isDragging = ref(false);
 
-const onClick = () => {
+const onClick = (e: any) => {
+	console.log(e, props.item.href);
 	if (!props.condenseLayout && stillBeingCopied.value === false) {
 		if (props.item.to) {
 			router.push({

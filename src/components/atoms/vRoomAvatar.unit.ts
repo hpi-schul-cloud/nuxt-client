@@ -122,7 +122,7 @@ describe("vRoomAvatar", () => {
 		});
 
 		const { wrapper } = setup();
-		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
+		const avatarComponent = wrapper.findComponent({ name: "VBtn" });
 
 		await avatarComponent.trigger("keypress.enter");
 
