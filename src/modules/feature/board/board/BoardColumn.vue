@@ -14,7 +14,7 @@
 			@move:column-up="onMoveColumnUp"
 			@update:title="onUpdateTitle"
 		/>
-		<div class="h-100 overflow-y-auto">
+		<div class="h-100 overflow-y-auto" :class="scrollableClasses">
 			<Sortable
 				:list="column.cards"
 				item-key="cardId"
@@ -39,7 +39,6 @@
 					ghostClass: sortableGhostClasses,
 					scroll: true,
 				}"
-				:class="sortableClasses"
 				@start="onDragStart"
 				@end="onDragEnd"
 			>
@@ -274,7 +273,7 @@ export default defineComponent({
 			return props.column.cards[index];
 		};
 
-		const sortableClasses = computed(() => {
+		const scrollableClasses = computed(() => {
 			const classes = [];
 			if (!props.isListBoard) {
 				classes.push("scrollable-column");
@@ -303,7 +302,7 @@ export default defineComponent({
 			isDragging,
 			isNotFirstColumn,
 			isNotLastColumn,
-			sortableClasses,
+			scrollableClasses,
 			onCreateCard,
 			onDeleteCard,
 			onColumnDelete,
