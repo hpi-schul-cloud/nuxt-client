@@ -19,21 +19,19 @@
 		>
 			<VBtn
 				:size="size"
-				color="transparent"
+				:color="avatarColor"
 				variant="flat"
 				class="rounded-lg"
+				:class="avatarClass"
 				:ripple="false"
+				:disabled="condenseLayout"
+				@click="onClick"
+				@dragenter.prevent.stop="dragEnter"
 			>
 				<v-avatar
-					:color="avatarColor"
-					:class="avatarClass"
 					:aria-label="avatarAriaLabel"
 					:rounded="condenseLayout ? 0 : 'lg'"
 					:size="size"
-					:tabindex="condenseLayout ? '-1' : '0'"
-					@click="onClick"
-					@dragenter.prevent.stop="dragEnter"
-					@keypress.enter="onClick"
 					data-testid="course-icon"
 				>
 					<span :class="avatarTextClass" data-testid="course-short-title">

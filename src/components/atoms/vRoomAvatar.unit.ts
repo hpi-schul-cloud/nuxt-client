@@ -91,7 +91,7 @@ describe("vRoomAvatar", () => {
 
 	it("should display the correct color and size", async () => {
 		const { wrapper } = setup();
-		const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
+		const avatarComponent = wrapper.findComponent({ name: "VBtn" });
 
 		expect(avatarComponent.props().color).toStrictEqual("#ffffff");
 		expect(avatarComponent.props().size).toStrictEqual("4em");
@@ -249,7 +249,7 @@ describe("vRoomAvatar", () => {
 		it("should display avatar in grey", () => {
 			const { wrapper } = setup(longRunningCourseProps);
 
-			const avatarComponent = wrapper.findComponent({ name: "VAvatar" });
+			const avatarComponent = wrapper.findComponent({ name: "VBtn" });
 
 			expect(avatarComponent.attributes().class.split(" ")).toContain(
 				"grey-lighten-2"
