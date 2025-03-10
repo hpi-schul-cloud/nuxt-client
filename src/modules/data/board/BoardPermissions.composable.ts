@@ -29,7 +29,7 @@ const boardPermissions = (): BoardPermissionChecks => {
 		async () => {
 			const { fetchRoom, resetState } = useRoomDetailsStore();
 			if (contextType.value === BoardContextType.Room && roomId.value) {
-				await fetchRoom(roomId?.value);
+				await fetchRoom(roomId.value);
 				const { canEditRoomBoard } = useRoomAuthorization();
 
 				canEditBoard.value = canEditRoomBoard.value;

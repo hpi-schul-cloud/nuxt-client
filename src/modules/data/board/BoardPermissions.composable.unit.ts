@@ -29,6 +29,7 @@ describe("BoardPermissions.composable", () => {
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
 	});
+
 	const setup = (
 		options?: Partial<{
 			userRoles: Roles[];
@@ -64,7 +65,7 @@ describe("BoardPermissions.composable", () => {
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 		const roomAuthorizationStore = mockedPiniaStoreTyping(useRoomAuthorization);
 
-		return { roomDetailsStore, roomAuthorizationStore, contextTypeRef };
+		return { roomDetailsStore, roomAuthorizationStore, contextTypeRef, roomId };
 	};
 
 	afterEach(() => {
@@ -82,6 +83,8 @@ describe("BoardPermissions.composable", () => {
 			hasDeletePermission,
 			hasCreateToolPermission,
 			hasEditPermission,
+			isTeacher,
+			isStudent,
 		} = useBoardPermissions();
 
 		expect(canEditRoomBoard.value).toBe(false);
@@ -91,6 +94,8 @@ describe("BoardPermissions.composable", () => {
 		expect(hasDeletePermission.value).toBe(false);
 		expect(hasCreateToolPermission.value).toBe(false);
 		expect(hasEditPermission.value).toBe(false);
+		expect(isTeacher.value).toBe(false);
+		expect(isStudent.value).toBe(false);
 	});
 
 	describe("when contextType changes", () => {
@@ -129,13 +134,13 @@ describe("BoardPermissions.composable", () => {
 
 		describe("when contextType is Room", () => {
 			it("should call fetchRoom", async () => {
-				const { roomDetailsStore, contextTypeRef } = setup();
+				const { roomDetailsStore, contextTypeRef, roomId } = setup();
 				useBoardPermissions();
 
 				contextTypeRef.value = BoardContextType.Room;
 				await nextTick();
 
-				expect(roomDetailsStore.fetchRoom).toHaveBeenCalled();
+				expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith(roomId);
 			});
 
 			it("should set permissions", async () => {
