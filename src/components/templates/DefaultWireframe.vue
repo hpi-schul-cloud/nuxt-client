@@ -55,10 +55,10 @@
 			<v-divider v-if="showDivider" class="mx-n6" role="presentation" />
 		</div>
 		<v-container
+			class="main-content"
 			:fluid="maxWidth !== 'nativ'"
 			:class="{
-				'main-content-without-padding-bottom': withoutPaddingBottom,
-				'main-content': !withoutPaddingBottom,
+				'pb-0': mainWithoutPaddingBottom,
 				'container-short-width': maxWidth === 'short',
 				'container-full-width': maxWidth === 'full',
 				'overflow-x-auto': allowOverflowX,
@@ -112,7 +112,7 @@ const props = defineProps({
 	fixedHeader: {
 		type: Boolean,
 	},
-	withoutPaddingBottom: {
+	mainWithoutPaddingBottom: {
 		type: Boolean,
 	},
 });
@@ -160,11 +160,6 @@ const showDivider = computed(() => {
 
 .main-content {
 	padding: 0 var(--space-lg) var(--space-lg) var(--space-lg);
-	margin-top: var(--space-xl);
-}
-
-.main-content-without-padding-bottom {
-	padding: 0 var(--space-lg);
 	margin-top: var(--space-xl);
 }
 
