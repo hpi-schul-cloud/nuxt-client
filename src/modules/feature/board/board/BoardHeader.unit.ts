@@ -22,7 +22,7 @@ import {
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
 import { shallowMount } from "@vue/test-utils";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardHeader from "./BoardHeader.vue";
 
@@ -96,7 +96,7 @@ describe("BoardHeader", () => {
 		describe("when user is not permitted to edit the board", () => {
 			it("should not find the BoardMenu in the DOM", () => {
 				const { wrapper } = setup({
-					permissions: { hasEditPermission: false },
+					permissions: { hasEditPermission: ref(false) },
 				});
 
 				const boardMenuComponent = wrapper.findAllComponents({
@@ -110,7 +110,7 @@ describe("BoardHeader", () => {
 		describe("when user is permitted to edit the board", () => {
 			it("should find the BoardMenu in the DOM", () => {
 				const { wrapper } = setup({
-					permissions: { hasEditPermission: true },
+					permissions: { hasEditPermission: ref(true) },
 				});
 
 				const boardMenuComponent = wrapper.findAllComponents({
@@ -122,7 +122,7 @@ describe("BoardHeader", () => {
 
 			it("should enable copying", () => {
 				const { wrapper } = setup({
-					permissions: { hasEditPermission: true },
+					permissions: { hasEditPermission: ref(true) },
 					envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 				});
 
@@ -133,7 +133,7 @@ describe("BoardHeader", () => {
 
 			it("should enable sharing with feature flag", () => {
 				const { wrapper } = setup({
-					permissions: { hasEditPermission: true },
+					permissions: { hasEditPermission: ref(true) },
 					envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 				});
 
@@ -144,7 +144,7 @@ describe("BoardHeader", () => {
 
 			it("should disable sharing with feature flag", () => {
 				const { wrapper } = setup({
-					permissions: { hasEditPermission: true },
+					permissions: { hasEditPermission: ref(true) },
 					envs: { FEATURE_COLUMN_BOARD_SHARE: false },
 				});
 
@@ -253,7 +253,7 @@ describe("BoardHeader", () => {
 	describe("when the 'share' menu button is clicked", () => {
 		it("should emit 'share:board'", async () => {
 			const { wrapper } = setup({
-				permissions: { hasEditPermission: true },
+				permissions: { hasEditPermission: ref(true) },
 				envs: { FEATURE_COLUMN_BOARD_SHARE: true },
 			});
 
@@ -307,7 +307,7 @@ describe("BoardHeader", () => {
 		it("should display draft label", () => {
 			const { wrapper } = setup(
 				{
-					permissions: { hasEditPermission: true },
+					permissions: { hasEditPermission: ref(true) },
 				},
 				{ isDraft: true }
 			);
@@ -320,7 +320,7 @@ describe("BoardHeader", () => {
 		it("should display 'publish' button instead of 'revert' button in menu", async () => {
 			const { wrapper } = setup(
 				{
-					permissions: { hasEditPermission: true },
+					permissions: { hasEditPermission: ref(true) },
 				},
 				{ isDraft: true }
 			);
@@ -336,7 +336,7 @@ describe("BoardHeader", () => {
 			it("should emit 'publish", async () => {
 				const { wrapper } = setup(
 					{
-						permissions: { hasEditPermission: true },
+						permissions: { hasEditPermission: ref(true) },
 					},
 					{ isDraft: true }
 				);

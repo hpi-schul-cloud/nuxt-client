@@ -25,6 +25,7 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canDeleteRoom: ref(false),
 	canLeaveRoom: ref(false),
 	canRemoveRoomMembers: ref(false),
+	canEditRoomBoard: ref(false),
 };
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
