@@ -58,10 +58,9 @@
 			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
 			:class="{
-				'pb-0': mainWithoutPaddingBottom,
+				'pa-0': mainWithoutPadding,
 				'container-short-width': maxWidth === 'short',
 				'container-full-width': maxWidth === 'full',
-				'main-overflow': allowOverflowX,
 			}"
 		>
 			<slot />
@@ -97,11 +96,6 @@ const props = defineProps({
 		required: false,
 		default: null,
 	},
-	allowOverflowX: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
 	hideBorder: {
 		type: Boolean,
 	},
@@ -112,7 +106,7 @@ const props = defineProps({
 	fixedHeader: {
 		type: Boolean,
 	},
-	mainWithoutPaddingBottom: {
+	mainWithoutPadding: {
 		type: Boolean,
 	},
 });
@@ -161,11 +155,6 @@ const showDivider = computed(() => {
 .main-content {
 	padding: 0 var(--space-lg) var(--space-lg) var(--space-lg);
 	margin-top: var(--space-xl);
-}
-
-.main-overflow {
-	overflow-x: auto;
-	scrollbar-width: thin;
 }
 
 .container-short-width {

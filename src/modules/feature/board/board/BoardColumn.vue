@@ -350,30 +350,29 @@ export default defineComponent({
 	width: 400px;
 }
 
-/* width */
-.scrollable-column::-webkit-scrollbar {
-	width: 6px;
-}
+@supports selector(::-webkit-scrollbar) {
+	.scrollable-column::-webkit-scrollbar {
+		width: 6px;
+	}
 
-/* Track */
-.scrollable-column::-webkit-scrollbar-track {
-	background: white;
-	border: none;
-}
+	.scrollable-column::-webkit-scrollbar-track {
+		background: white;
+		border: none;
+	}
 
-/* Handle */
-.scrollable-column::-webkit-scrollbar-thumb {
-	background-color: transparent;
-	border-radius: 5px;
-}
-.column-drag-handle:hover .scrollable-column::-webkit-scrollbar-thumb {
-	background-color: rgba(var(--v-theme-on-surface), 0.6);
-	border-radius: 5px;
-}
+	.scrollable-column::-webkit-scrollbar-thumb {
+		background-color: transparent;
+		border-radius: 5px;
+	}
 
-/* Handle on hover */
-.scrollable-column::-webkit-scrollbar-thumb:hover {
-	background: rgba(var(--v-theme-on-surface), 0.8) !important;
+	.column-drag-handle:hover .scrollable-column::-webkit-scrollbar-thumb {
+		background-color: rgba(var(--v-theme-on-surface), 0.6);
+		border-radius: 5px;
+	}
+
+	.scrollable-column::-webkit-scrollbar-thumb:hover {
+		background: rgba(var(--v-theme-on-surface), 0.8) !important;
+	}
 }
 
 @supports not selector(::-webkit-scrollbar) {

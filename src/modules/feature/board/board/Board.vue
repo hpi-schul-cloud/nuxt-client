@@ -6,8 +6,7 @@
 				:breadcrumbs="breadcrumbs"
 				max-width="full"
 				hide-border
-				allow-overflow-x
-				main-without-padding-bottom
+				main-without-padding
 			>
 				<template #header>
 					<BoardHeader
@@ -23,7 +22,8 @@
 						@change-layout="onUpdateBoardLayout"
 					/>
 				</template>
-				<div :class="boardClass" :style="boardStyle">
+				<div :class="boardClasses" :style="boardStyle">
+					<!-- TODO: div entfernen -->
 					<div>
 						<Sortable
 							:list="board.columns"
@@ -379,16 +379,17 @@ const copyResultModalItems = computed(
 
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 
-const boardClass = computed(() => {
-	const classes = ["d-flex", "flex-shrink-1"];
+const boardClasses = computed(() => {
+	const classes = ["d-flex", "flex-shrink-1", "board"];
 	if (isListBoard.value) {
 		classes.push("flex-column", "mx-auto", "my-0");
 	} else {
-		classes.push("flex-row");
+		classes.push("flex-row", "column-board", "scrollbar");
 	}
 	return classes;
 });
 
+// TODO: Integrate into boardClasses
 const boardStyle = computed(() => {
 	if (!isListBoard.value) {
 		return;
@@ -455,3 +456,44 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 	});
 };
 </script>
+
+<style lang="scss" scoped>
+.board {
+	padding: 0 var(--space-lg);
+}
+
+.column-board {
+	overflow-x: auto;
+}
+
+@supports selector(::-webkit-scrollbar) {
+	.scrollbar::-webkit-scrollbar {
+		height: 6px;
+	}
+
+	.scrollbar::-webkit-scrollbar-track {
+		background: white;
+		border: none;
+	}
+
+	.scrollbar::-webkit-scrollbar-thumb {
+		background-color: transparent;
+		border-radius: 5px;
+	}
+
+	.board:hover .scrollbar::-webkit-scrollbar-thumb {
+		background-color: rgba(var(--v-theme-on-surface), 0.6);
+		border-radius: 5px;
+	}
+
+	.scrollbar::-webkit-scrollbar-thumb:hover {
+		background: rgba(var(--v-theme-on-surface), 0.8) !important;
+	}
+}
+
+@supports not selector(::-webkit-scrollbar) {
+	.scrollbar {
+		scrollbar-width: thin;
+	}
+}
+</style>
