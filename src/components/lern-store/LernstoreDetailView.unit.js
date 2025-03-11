@@ -17,9 +17,6 @@ describe("@/components/molecules/LernstoreDetailView", () => {
 	const wrapper = shallowMount(LernstoreDetailView, {
 		props: { ...testProps },
 		global: {
-			provide: {
-				mq: "mockMode",
-			},
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			mocks: {
 				$route: {
