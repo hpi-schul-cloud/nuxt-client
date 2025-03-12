@@ -4,11 +4,10 @@ export type Logger = {
 	warn: (message: unknown, ...optionalParams: unknown[]) => void;
 	error: (message: unknown, ...optionalParams: unknown[]) => void;
 	log: (message: unknown, ...optionalParams: unknown[]) => void;
-}
-
+};
 
 const logger: Logger = {
-	info: (message: unknown, ...optionalParams: unknown[]) {
+	info: (message: unknown, ...optionalParams: unknown[]) => {
 		if (process.env.NODE_ENV !== "production") {
 			console.log(
 				`[INFO] ${new Date().toISOString()} -`,
@@ -18,7 +17,7 @@ const logger: Logger = {
 		}
 	},
 
-	warn: (message: unknown, ...optionalParams: unknown[]) {
+	warn: (message: unknown, ...optionalParams: unknown[]) => {
 		if (process.env.NODE_ENV !== "production") {
 			console.warn(
 				`[WARN] ${new Date().toISOString()} -`,
@@ -28,7 +27,7 @@ const logger: Logger = {
 		}
 	},
 
-	error: (message: unknown, ...optionalParams: unknown[]) {
+	error: (message: unknown, ...optionalParams: unknown[]) => {
 		console.error(
 			`[ERROR] ${new Date().toISOString()} -`,
 			message,
@@ -36,7 +35,7 @@ const logger: Logger = {
 		);
 	},
 
-	log: (message: unknown, ...optionalParams: unknown[]) {
+	log: (message: unknown, ...optionalParams: unknown[]) => {
 		if (process.env.NODE_ENV !== "production") {
 			console.log(
 				`[LOG] ${new Date().toISOString()} -`,
@@ -44,7 +43,7 @@ const logger: Logger = {
 				...optionalParams
 			);
 		}
-	}
-}
+	},
+};
 
 export { logger };
