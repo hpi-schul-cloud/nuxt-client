@@ -7,7 +7,7 @@ COPY package.json package-lock.json ./
 
 # Write the .npmrc file only if the GitHub token is provided
 # A token is always required to access GitHub's npm registry
-RUN --mount=type=secret,id=github_token \
+RUN --mount=type=secret,id=GIT_AUTH_TOKEN \
     if [ -f /run/secrets/GIT_AUTH_TOKEN ]; then \
         echo "//npm.pkg.github.com/:_authToken=$(cat /run/secrets/GIT_AUTH_TOKEN)" > ~/.npmrc; \
     fi && \
