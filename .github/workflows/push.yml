@@ -67,7 +67,8 @@ jobs:
         with:
           build-args: |
             SC_THEME=${{ matrix.tenants }}
-            GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}
+          secrets: |
+            'github_token=${{ secrets.GITHUB_TOKEN }}'
           context: .
           file: ./Dockerfile
           platforms: linux/amd64
