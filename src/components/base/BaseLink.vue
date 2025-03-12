@@ -97,15 +97,6 @@ export default {
 			if (process.env.NODE_ENV === "production") return;
 
 			if (this.href) {
-				// Check for non-external URL in href.
-				/*
-				// currently used for the legacy fallback. Therefore disabled
-				if (!/^\w+:/.test(this.href)) {
-					return console.warn(
-						`Invalid href <base-link>: ${this.href}.\nIf you're trying to link to a local URL, provide at least a name or to`
-					);
-				}
-				*/
 				// Check for insecure URL in href.
 				if (
 					!this.allowInsecure &&

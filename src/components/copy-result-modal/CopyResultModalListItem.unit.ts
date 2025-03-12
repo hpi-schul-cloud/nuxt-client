@@ -39,7 +39,6 @@ describe("@/components/copy-result-modal/CopyResultModalListItem", () => {
 
 	it("should render the element with the correct element title", () => {
 		const wrapper = createWrapper({ item: mockItem });
-		// console.log(wrapper.html())
 		const elementTitle = wrapper.find("ul > li").text();
 
 		expect(elementTitle).toContain(
