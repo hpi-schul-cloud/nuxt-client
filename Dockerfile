@@ -4,7 +4,15 @@ FROM docker.io/node:22 AS build-stage
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+
+# Write the .npmrc file only if the GitHub token is provided
+# A token is always required to access GitHub's npm registry
+RUN --mount=type=secret,id=GIT_AUTH_TOKEN \
+    if [ -f /run/secrets/GIT_AUTH_TOKEN ]; then \
+        echo "//npm.pkg.github.com/:_authToken=$(cat /run/secrets/GIT_AUTH_TOKEN)" > ~/.npmrc; \
+    fi && \
+    npm ci --ignore-scripts && \
+    rm -f ~/.npmrc
 
 COPY babel.config.js eslint.config.js LICENSE.md .prettierrc.js tsconfig.json tsconfig.build.json .prettierignore ./
 COPY lib/eslint-plugin-schulcloud ./lib/eslint-plugin-schulcloud
