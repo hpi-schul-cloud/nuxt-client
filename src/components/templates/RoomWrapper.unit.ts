@@ -28,11 +28,6 @@ const getWrapper = (
 	return mount(RoomWrapper, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
-			provide: {
-				mq: () => ({
-					current: "desktop",
-				}),
-			},
 			stubs: {
 				StartNewCourseSyncDialog: true,
 				CommonCartridgeImportModal: true,

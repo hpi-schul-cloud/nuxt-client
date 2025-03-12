@@ -48,8 +48,7 @@ const isOpen = defineModel({
 
 defineProps({
 	currentLayout: {
-		// TODO - Fix BoardLayout typing, BoardResponse used in Board.vue uses string
-		type: String as PropType<BoardLayout | string>,
+		type: String as PropType<BoardLayout>,
 	},
 });
 

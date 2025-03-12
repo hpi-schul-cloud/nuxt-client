@@ -3,7 +3,7 @@ import { envConfigModule } from "@/store";
 import ApplicationErrorModule from "@/store/application-error";
 import EnvConfigModule from "@/store/env-config";
 import FilePathsModule from "@/store/filePaths";
-import { APPLICATION_ERROR_KEY } from "@/utils/inject";
+import { APPLICATION_ERROR_KEY, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { envsFactory } from "@@/tests/test-utils";
 import {
@@ -55,7 +55,7 @@ describe("loggedOutLayout", () => {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[APPLICATION_ERROR_KEY.valueOf()]: applicationErrorModuleMock,
-					mq: () => "desktop",
+					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
 				stubs: ["base-link"],
 			},

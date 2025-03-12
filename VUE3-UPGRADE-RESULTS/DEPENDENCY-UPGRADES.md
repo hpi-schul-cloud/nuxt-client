@@ -58,7 +58,7 @@ npm i vue-dndrop@next
 
 _Note: should be replaced by `vue-draggable` (based on sortable.js) because of re-rendering issues_
 
-### Vue3-MQ
+### Vue3-MQ - DONE
 
 `$mq` has to be replaced by injection
 

@@ -29,10 +29,10 @@ const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const route = useRoute();
 
 const roomDetailsStore = useRoomDetailsStore();
-const { isLoading, roomVariant, room } = storeToRefs(roomDetailsStore);
+const { isLoading, roomVariant } = storeToRefs(roomDetailsStore);
 const { deactivateRoom, fetchRoom, resetState } = roomDetailsStore;
 
-const { canCreateRoom } = useRoomAuthorization(room);
+const { canCreateRoom } = useRoomAuthorization();
 
 const canAccessRoom = computed(() => {
 	return envConfigModule.getEnv.FEATURE_ROOMS_ENABLED && canCreateRoom.value;
