@@ -73,7 +73,7 @@
 					</Sortable>
 					<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
 						<BoardColumnGhost
-							v-if="hasCreateColumnPermission"
+							v-if="hasCreateColumnPermission && canEditRoomBoard"
 							@create:column="onCreateColumn"
 							:isListBoard="isListBoard"
 						/>
@@ -200,31 +200,32 @@ const {
 	hasDeletePermission,
 	hasEditPermission,
 	isTeacher,
+	canEditRoomBoard,
 } = useBoardPermissions();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
 
 const onCreateCard = async (columnId: string) => {
-	if (hasCreateCardPermission) boardStore.createCardRequest({ columnId });
+	if (hasCreateCardPermission.value) boardStore.createCardRequest({ columnId });
 };
 
 const onCreateColumn = async () => {
-	if (hasCreateCardPermission)
+	if (hasCreateCardPermission.value)
 		boardStore.createColumnRequest({ boardId: props.boardId });
 };
 
 const onDeleteCard = async (cardId: string) => {
-	if (hasCreateCardPermission) {
+	if (hasCreateCardPermission.value) {
 		cardStore.deleteCardRequest({ cardId });
 	}
 };
 
 const onDeleteColumn = async (columnId: string) => {
-	if (hasDeletePermission) boardStore.deleteColumnRequest({ columnId });
+	if (hasDeletePermission.value) boardStore.deleteColumnRequest({ columnId });
 };
 
 const onDropColumn = async (columnPayload: SortableEvent) => {
-	if (!hasMovePermission) return;
+	if (!hasMovePermission.value) return;
 
 	const columnId = extractDataAttribute(columnPayload.item, "columnId");
 	if (
@@ -242,7 +243,7 @@ const onDropColumn = async (columnPayload: SortableEvent) => {
 };
 
 const onMoveColumnBackward = async (columnIndex: number, columnId: string) => {
-	if (!hasMovePermission) return;
+	if (!hasMovePermission.value) return;
 	if (columnIndex === 0) return;
 
 	const columnMove: ColumnMove = {
@@ -255,7 +256,7 @@ const onMoveColumnBackward = async (columnIndex: number, columnId: string) => {
 };
 
 const onMoveColumnForward = async (columnIndex: number, columnId: string) => {
-	if (!hasMovePermission) return;
+	if (!hasMovePermission.value) return;
 	if (board.value && columnIndex === board.value.columns.length - 1) return;
 
 	const columnMove: ColumnMove = {
@@ -272,7 +273,7 @@ const onReloadBoard = async () => {
 };
 
 const onUpdateBoardVisibility = async (isVisible: boolean) => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 
 	boardStore.updateBoardVisibilityRequest({
 		boardId: props.boardId,
@@ -281,12 +282,12 @@ const onUpdateBoardVisibility = async (isVisible: boolean) => {
 };
 
 const onUpdateColumnTitle = async (columnId: string, newTitle: string) => {
-	if (hasEditPermission)
+	if (hasEditPermission.value)
 		boardStore.updateColumnTitleRequest({ columnId, newTitle });
 };
 
 const onUpdateBoardTitle = async (newTitle: string) => {
-	if (hasEditPermission)
+	if (hasEditPermission.value)
 		boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
 };
 
@@ -315,7 +316,7 @@ onMounted(async () => {
 		boardId: props.boardId,
 	});
 
-	if (hasCreateToolPermission) {
+	if (hasCreateToolPermission.value) {
 		cardStore.loadPreferredTools(ToolContextType.BoardElement);
 	}
 
@@ -340,7 +341,7 @@ watch(
 watch(
 	() => isBoardVisible.value,
 	() => {
-		if (!(isBoardVisible.value || isTeacher)) {
+		if (!(isBoardVisible.value || isTeacher.value)) {
 			router.replace({ name: "room-details", params: { id: roomId.value } });
 			applicationErrorModule.setError(
 				createApplicationError(
@@ -436,7 +437,7 @@ const openDeleteBoardDialog = async (id: string) => {
 const isSelectBoardLayoutDialogOpen = ref(false);
 
 const onUpdateBoardLayout = async () => {
-	if (!hasEditPermission) return;
+	if (!hasEditPermission.value) return;
 
 	isSelectBoardLayoutDialogOpen.value = true;
 };
@@ -444,7 +445,7 @@ const onUpdateBoardLayout = async () => {
 const onSelectBoardLayout = async (layout: BoardLayout) => {
 	isSelectBoardLayoutDialogOpen.value = false;
 
-	if (!hasEditPermission || board.value?.layout === layout) return;
+	if (!hasEditPermission.value || board.value?.layout === layout) return;
 
 	boardStore.updateBoardLayoutRequest({
 		boardId: props.boardId,

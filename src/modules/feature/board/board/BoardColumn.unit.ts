@@ -28,8 +28,7 @@ import {
 	useDragAndDrop,
 	useSharedLastCreatedElement,
 } from "@util-board";
-import { shallowMount } from "@vue/test-utils";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
 
 const { isDragging, dragEnd } = useDragAndDrop();
@@ -88,7 +87,7 @@ describe("BoardColumn", () => {
 			...options?.permissions,
 		});
 
-		const wrapper = shallowMount(BoardColumnVue, {
+		const wrapper = mount(BoardColumnVue, {
 			global: {
 				plugins: [
 					createTestingI18n(),
@@ -110,7 +109,7 @@ describe("BoardColumn", () => {
 
 		const store = mockedPiniaStoreTyping(useBoardStore);
 
-		return { wrapper, store };
+		return { wrapper, store, cards, column };
 	};
 
 	describe("when component is mounted", () => {
@@ -183,6 +182,36 @@ describe("BoardColumn", () => {
 				expect(store.moveCardRequest).not.toHaveBeenCalled();
 			});
 		});
+
+		describe("when a card is moved by keyboard", () => {
+			describe("when ArrowDown key is pressed for first card", () => {
+				it("should call 'moveCardRequest' method", async () => {
+					const { wrapper, store } = setup({ cardsCount: 3 });
+
+					const cardHostComponents = wrapper.findAllComponents({
+						name: "CardHost",
+					});
+					const firstCard = cardHostComponents.at(0);
+					firstCard!.vm.$emit("move:card-keyboard", "ArrowDown");
+
+					expect(store.moveCardRequest).toHaveBeenCalled();
+				});
+			});
+
+			describe("when ArrowDown key is pressed for last card", () => {
+				it("should call 'moveCardRequest' method", async () => {
+					const { wrapper, store } = setup({ cardsCount: 3 });
+
+					const cardHostComponents = wrapper.findAllComponents({
+						name: "CardHost",
+					});
+					const lastCard = cardHostComponents.at(-1);
+					lastCard!.vm.$emit("move:card-keyboard", "ArrowDown");
+
+					expect(store.moveCardRequest).not.toHaveBeenCalled();
+				});
+			});
+		});
 	});
 
 	describe("when a card is started dragging", () => {
@@ -224,7 +253,7 @@ describe("BoardColumn", () => {
 		describe("when user is not permitted to move a column", () => {
 			it("should set drag-disabled", () => {
 				const { wrapper } = setup({
-					permissions: { hasMovePermission: false },
+					permissions: { hasMovePermission: ref(false) },
 				});
 
 				const dndContainer = wrapper.findComponent({ name: "Sortable" });
@@ -235,14 +264,14 @@ describe("BoardColumn", () => {
 		describe("when user is not permitted to create a card", () => {
 			it("addCardComponent should not be visible", () => {
 				const { wrapper } = setup({
-					permissions: { hasCreateColumnPermission: false },
+					permissions: { hasCreateColumnPermission: ref(false) },
 				});
 
-				const addCardComponent = wrapper.findComponent({
+				const addCardComponent = wrapper.getComponent({
 					name: "BoardAddCardButton",
 				});
 
-				expect(addCardComponent.attributes("style")).toStrictEqual(
+				expect(addCardComponent.attributes("style")).toContain(
 					"visibility: hidden;"
 				);
 			});

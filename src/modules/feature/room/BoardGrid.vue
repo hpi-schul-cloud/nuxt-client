@@ -20,14 +20,10 @@
 <script setup lang="ts">
 import { RoomBoardItem } from "@/types/room/Room";
 import { PropType, toRef } from "vue";
-import { storeToRefs } from "pinia";
 import { useRoomAuthorization } from "@feature-room";
-import { useRoomDetailsStore } from "@data-room";
 import BoardTile from "./BoardTile.vue";
 
-const { room } = storeToRefs(useRoomDetailsStore());
-
-const { canEditRoom } = useRoomAuthorization(room);
+const { canEditRoom } = useRoomAuthorization();
 
 const props = defineProps({
 	boards: { type: Array as PropType<RoomBoardItem[]> },

@@ -707,10 +707,10 @@ export interface BoardResponse {
     isVisible: boolean;
     /**
      * 
-     * @type {string}
+     * @type {BoardLayout}
      * @memberof BoardResponse
      */
-    layout: string;
+    layout: BoardLayout;
     /**
      * 
      * @type {Array<BoardFeature>}

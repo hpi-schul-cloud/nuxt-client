@@ -154,7 +154,7 @@ const fixedHeaderOnMobile = ref({
 });
 const { y } = useElementBounding(wireframe);
 const { askConfirmation } = useConfirmationDialog();
-const { canLeaveRoom } = useRoomAuthorization(room);
+const { canLeaveRoom } = useRoomAuthorization();
 const { isVisibleAddMemberButton, isVisiblePageInfoText } =
 	useRoomMemberVisibilityOptions(currentUser);
 

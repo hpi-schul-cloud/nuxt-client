@@ -17,31 +17,30 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from "vue";
+import { useDisplay } from "vuetify";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import Alert from "./Alert.vue";
 import { AlertPayload } from "@/store/types/alert-payload";
-import { computed, inject } from "vue";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-
-const mq: { current: string } | undefined = inject("mq");
-if (mq === undefined) {
-	throw new Error("mq is undefined");
-}
+const { xs } = useDisplay();
 
 const isMobile = computed(() => {
-	return mq.current === "mobile";
+	return xs.value;
 });
-
-const notifierItems: AlertPayload[] = notifierModule.getNotifierItems;
-
-const onRemoveNotification = (notification: AlertPayload) => {
-	notifierModule.removeNotifier(notification);
-};
 
 const transition = computed(() => {
 	return isMobile.value ? "scale-transition" : "scroll-x-reverse-transition";
 });
+
+const notifierItems = computed(() => {
+	return notifierModule.getNotifierItems;
+});
+
+const onRemoveNotification = (notification: AlertPayload) => {
+	notifierModule.removeNotifier(notification);
+};
 </script>
 
 <style lang="scss" scoped>

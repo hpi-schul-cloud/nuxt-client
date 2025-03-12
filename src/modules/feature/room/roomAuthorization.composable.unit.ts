@@ -1,23 +1,32 @@
 import {
+	ImportUserResponseRoleNamesEnum,
 	Permission,
 	ImportUserResponseRoleNamesEnum as Roles,
 } from "@/serverApi/v3";
-import AuthModule from "@/store/auth";
 import { RoomDetails } from "@/types/room/Room";
-import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { mountComposable } from "@@/tests/test-utils";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { mockAuthModule } from "@@/tests/test-utils/mockAuthModule";
+import { useRoomDetailsStore } from "@data-room";
+import { createTestingPinia } from "@pinia/testing";
+import { setActivePinia } from "pinia";
 import { ref } from "vue";
 import { useRoomAuthorization } from "./roomAuthorization.composable";
 
 type setupParams = {
-	userRoles?: Roles[];
+	userRoles?: ImportUserResponseRoleNamesEnum[];
 	userPermissions?: Permission[];
 	roomPermissions?: Permission[];
 };
 
+let roomDetailsStore: ReturnType<typeof useRoomDetailsStore>;
+
 describe("roomAuthorization", () => {
+	beforeEach(() => {
+		setActivePinia(createTestingPinia());
+		roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
+	});
+
 	const genericSetup = ({
 		userRoles = [],
 		userPermissions = [],
@@ -26,13 +35,11 @@ describe("roomAuthorization", () => {
 		const room = ref<RoomDetails>(
 			roomFactory.build({ permissions: roomPermissions })
 		);
-		const authModuleMock = createModuleMocks(AuthModule, {
-			getUserRoles: userRoles,
-			getUserPermissions: userPermissions,
-		});
-		return mountComposable(() => useRoomAuthorization(room), {
-			global: { provide: { [AUTH_MODULE_KEY]: authModuleMock } },
-		});
+		roomDetailsStore.room = room.value;
+
+		mockAuthModule(userRoles, userPermissions);
+
+		return useRoomAuthorization();
 	};
 
 	describe("canCreateRoom", () => {

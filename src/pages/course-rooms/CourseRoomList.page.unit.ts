@@ -23,23 +23,20 @@ import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 
 jest.mock("vue-router");
 
-const getWrapper = (device = "desktop") => {
+const getWrapper = () => {
 	return mount(CourseRoomList, {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				mq: { current: device },
+				[LOADING_STATE_MODULE_KEY.valueOf()]:
+					createModuleMocks(LoadingStateModule),
+				[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
+				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]:
+					createModuleMocks(CourseRoomListModule),
+				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
+					CommonCartridgeImportModule
+				),
 			},
-		},
-		provide: {
-			[LOADING_STATE_MODULE_KEY.valueOf()]:
-				createModuleMocks(LoadingStateModule),
-			[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
-			[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]:
-				createModuleMocks(CourseRoomListModule),
-			[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
-				CommonCartridgeImportModule
-			),
 		},
 	});
 };
@@ -83,6 +80,12 @@ const mockData = [
 ];
 
 describe("@/pages/CourseRoomListPage", () => {
+	const setup = () => {
+		const wrapper = getWrapper();
+
+		return { wrapper };
+	};
+
 	beforeEach(() => {
 		setupStores({
 			courseRoomListModule: CourseRoomListModule,
@@ -93,12 +96,6 @@ describe("@/pages/CourseRoomListPage", () => {
 	});
 
 	describe("when data is not loaded yet", () => {
-		const setup = () => {
-			const wrapper = getWrapper();
-
-			return { wrapper };
-		};
-
 		it("should fetch data", async () => {
 			const { wrapper } = setup();
 			await nextTick();
@@ -121,12 +118,6 @@ describe("@/pages/CourseRoomListPage", () => {
 	});
 
 	describe("when data is loaded", () => {
-		const setup = () => {
-			const wrapper = getWrapper();
-
-			return { wrapper };
-		};
-
 		describe("and data is not empty", () => {
 			it("should search elements on list", async () => {
 				const { wrapper } = setup();

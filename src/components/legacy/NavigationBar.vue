@@ -59,10 +59,6 @@ export default {
 			default: () => [],
 			required: false,
 		},
-		buttons: {
-			type: Boolean,
-			required: false,
-		},
 	},
 	data() {
 		return {
