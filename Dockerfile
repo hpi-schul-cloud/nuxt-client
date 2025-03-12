@@ -3,6 +3,14 @@ FROM docker.io/node:22 AS build-stage
 
 WORKDIR /app
 
+ARG GITHUB_TOKEN=""
+
+# Write the .npmrc file only if GITHUB_TOKEN is provided
+# you always need a token to access githubs npm registry
+RUN if [ -n "$GITHUB_TOKEN" ]; then \
+      echo "//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}" > ~/.npmrc; \
+    fi
+
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
 
