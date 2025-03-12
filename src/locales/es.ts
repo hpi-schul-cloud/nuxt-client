@@ -138,7 +138,7 @@ export default {
 	"common.tool.information.deactivated.teacher":
 		"La herramienta {toolName} está deshabilitada. Por favor comuníquese con el administrador de la escuela.",
 	"common.tool.information.notLicensed.student":
-		"Tool {toolName} no está autorizado. Póngase en contacto con su maestro o instructor de curso.",
+		"La herramienta {toolName} no está autorizado. Por favor contacta a tu profesor o instructor del curso.",
 	"common.tool.information.notLicensed.teacher":
 		"Tool {toolName} no está autorizado. Póngase en contacto con el administrador de la escuela.",
 	"common.tool.information.outdated.teacher":
