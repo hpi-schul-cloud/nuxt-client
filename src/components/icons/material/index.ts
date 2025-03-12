@@ -1,4 +1,3 @@
-/* eslint-disable schulcloud/material-icon-imports */
 import {
 	mdiAccountBoxOutline,
 	mdiAccountEditOutline,

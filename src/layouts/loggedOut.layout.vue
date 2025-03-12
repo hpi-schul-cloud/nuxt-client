@@ -1,11 +1,7 @@
 <template>
 	<div class="page">
 		<div class="topbar" data-testid="logged-out-top-bar">
-			<navigation-bar
-				:buttons="true"
-				:img="require('@/assets/img/logo/logo-image-mono.svg')"
-				:links="navbarItems"
-			/>
+			<navigation-bar :img="Logo" :links="navbarItems" />
 		</div>
 		<div :class="isMobile ? 'small-wrapper' : 'wrapper'">
 			<slot />
@@ -15,51 +11,43 @@
 	</div>
 </template>
 
-<script>
-import NavigationBar from "@/components/legacy/NavigationBar";
+<script setup lang="ts">
+import NavigationBar from "@/components/legacy/NavigationBar.vue";
 import TheFooter from "@/components/legacy/TheFooter.vue";
-import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting";
-import { envConfigModule } from "@/store";
+import ApplicationErrorRouting from "@/components/molecules/ApplicationErrorRouting.vue";
+import Logo from "@/assets/img/logo/logo-image-mono.svg";
+import { injectStrict, ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { computed } from "vue";
+import { useI18n } from "vue-i18n";
+import { useDisplay } from "vuetify";
 
-export default {
-	name: "LoggedOutLayout",
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const { t } = useI18n();
+const { xs } = useDisplay();
 
-	components: {
-		ApplicationErrorRouting,
-		NavigationBar,
-		TheFooter,
+const ghostBaseUrl = computed(() => envConfigModule.getEnv.GHOST_BASE_URL);
+
+const navbarItems = computed(() => [
+	{
+		title: t("global.topbar.loggedOut.actions.steps"),
+		href: `${ghostBaseUrl.value}/erste-schritte/`,
+		target: "_blank",
 	},
-
-	inject: { mq: "mq" },
-
-	computed: {
-		ghostBaseUrl() {
-			return envConfigModule.getEnv.GHOST_BASE_URL;
-		},
-		navbarItems() {
-			return [
-				{
-					title: this.$t("global.topbar.loggedOut.actions.steps"),
-					href: `${this.ghostBaseUrl}/erste-schritte/`,
-					target: "_blank",
-				},
-				{
-					title: this.$t("global.topbar.loggedOut.actions.blog"),
-					href: `${this.ghostBaseUrl}/`,
-					target: "_blank",
-				},
-				{
-					title: this.$t("global.topbar.loggedOut.actions.faq"),
-					href: `${this.ghostBaseUrl}/faqs/`,
-					target: "_blank",
-				},
-			];
-		},
-		isMobile() {
-			return this.mq.current === "mobile";
-		},
+	{
+		title: t("global.topbar.loggedOut.actions.blog"),
+		href: `${ghostBaseUrl.value}/`,
+		target: "_blank",
 	},
-};
+	{
+		title: t("global.topbar.loggedOut.actions.faq"),
+		href: `${ghostBaseUrl.value}/faqs/`,
+		target: "_blank",
+	},
+]);
+
+const isMobile = computed(() => {
+	return xs.value;
+});
 </script>
 
 <style lang="scss" scoped>

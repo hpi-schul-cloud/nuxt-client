@@ -2,16 +2,13 @@ import {
 	Permission,
 	ImportUserResponseRoleNamesEnum as Roles,
 } from "@/serverApi/v3";
-import { RoomDetails } from "@/types/room/Room";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
-import { ComputedRef, MaybeRefOrGetter, ref, toValue, watchEffect } from "vue";
+import { useRoomDetailsStore } from "@data-room";
+import { storeToRefs } from "pinia";
+import { authModule } from "@/store";
+import { ref, toValue, watchEffect } from "vue";
 
-export const useRoomAuthorization = (
-	room:
-		| ComputedRef<RoomDetails | undefined>
-		| MaybeRefOrGetter<RoomDetails | undefined>
-) => {
-	const authModule = injectStrict(AUTH_MODULE_KEY);
+export const useRoomAuthorization = () => {
+	const { room } = storeToRefs(useRoomDetailsStore());
 
 	const canAddRoomMembers = ref(false);
 	const canRemoveRoomMembers = ref(false);
@@ -26,7 +23,7 @@ export const useRoomAuthorization = (
 		const permissions = toValue(room)?.permissions ?? [];
 
 		canCreateRoom.value =
-			authModule.getUserPermissions.includes(
+			authModule?.getUserPermissions.includes(
 				Permission.RoomCreate.toLowerCase()
 			) && authModule.getUserRoles.includes(Roles.Teacher);
 		canViewRoom.value = permissions.includes(Permission.RoomView);
@@ -49,5 +46,6 @@ export const useRoomAuthorization = (
 		canDeleteRoom,
 		canLeaveRoom,
 		canRemoveRoomMembers,
+		canEditRoomBoard: canEditRoom,
 	};
 };

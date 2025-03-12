@@ -203,13 +203,13 @@ const hasParticipationPermission = computed(
 
 const canJoin = computed(
 	() =>
-		(isStudent || isTeacher) &&
+		(isStudent.value || isTeacher.value) &&
 		(!authModule.getUserRoles.includes("expert") ||
 			authModule.getUserRoles.length > 1 ||
 			isWaitingRoomActive.value)
 );
 
-const canStart = computed(() => isTeacher);
+const canStart = computed(() => isTeacher.value);
 const isCreating = computed(
 	() => props.isEditMode && !computedElement.value.content.title
 );

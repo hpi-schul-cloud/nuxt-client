@@ -37,10 +37,6 @@ import { createPinia } from "pinia";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 
-// TODO solve without vue-mq dependency
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { Vue3Mq } from "vue3-mq";
 import App from "./App.vue";
 import { handleApplicationError } from "./plugins/application-error-handler";
 import { createI18n } from "./plugins/i18n";
@@ -88,17 +84,6 @@ mountBaseComponents(app);
 app.config.errorHandler = handleApplicationError;
 
 app.config.globalProperties.$theme = themeConfig;
-
-app.use(Vue3Mq, {
-	breakpoints: {
-		mobile: 0,
-		tabletPortrait: 750,
-		tablet: 770,
-		desktop: 991,
-		large: 1200,
-	},
-	defaultBreakpoint: "mobile",
-});
 
 app.mixin({
 	computed: {

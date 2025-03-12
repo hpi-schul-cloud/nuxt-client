@@ -27,7 +27,7 @@ export const isValidUrl: FormValidatorFn<string> = (errMsg) => (value) => {
 		if (/(^-)|(--)|(-$)/.test(urlObject.hostname)) {
 			throw new Error("IDN hyphen rules violated");
 		}
-	} catch (e) {
+	} catch {
 		return errMsg;
 	}
 	return true;

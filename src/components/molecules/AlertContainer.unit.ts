@@ -10,11 +10,7 @@ import AlertContainer from "./AlertContainer.vue";
 import Alert from "./Alert.vue";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 
-const getWrapper = (
-	device = "desktop",
-	items: AlertPayload[] = [],
-	options?: object
-) => {
+const getWrapper = (items: AlertPayload[] = [], options?: object) => {
 	const notifierModule = createModuleMocks(NotifierModule, {
 		getNotifierItems: items,
 	});
@@ -23,7 +19,6 @@ const getWrapper = (
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				mq: { current: device },
 				[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 			},
 		},
@@ -41,52 +36,67 @@ describe("AlertContainer", () => {
 		expect(alertComponent.exists()).toBe(false);
 	});
 
-	it("should hand over notification to Alert", () => {
-		const data: AlertPayload = {
+	it("should display Alert with correct data", () => {
+		const alertPayload: AlertPayload = {
 			text: "hello world",
-			status: "success",
+			status: "info",
 			autoClose: true,
 			timeout: 5000,
 		};
+		const { wrapper } = getWrapper([alertPayload]);
 
-		const { wrapper } = getWrapper("desktop", [data]);
-
-		const notificationData = wrapper.findComponent(Alert).props("notification");
-		expect(notificationData).toEqual(data);
+		const alert = wrapper.findComponent(Alert);
+		expect(alert.text()).toEqual(alertPayload.text);
+		expect(alert.classes()).toContain(`bg-${alertPayload.status}`);
 	});
 
 	it("should be able to render list", () => {
-		const dataOne: AlertPayload = {
-			text: "hello world",
-			status: "success",
-			autoClose: true,
-			timeout: 5000,
-		};
+		const data: AlertPayload[] = [
+			{
+				text: "hello world",
+				status: "success",
+				autoClose: true,
+				timeout: 5000,
+			},
+			{
+				text: "hello bar",
+				status: "success",
+				autoClose: true,
+				timeout: 5000,
+			},
+		];
 
-		const dataTwo: AlertPayload = {
-			text: "hello bar",
-			status: "success",
-			autoClose: true,
-			timeout: 5000,
-		};
-
-		const { wrapper } = getWrapper("desktop", [dataOne, dataTwo]);
+		const { wrapper } = getWrapper(data);
 
 		const notificationData = wrapper.findAllComponents(Alert);
 		expect(notificationData.length).toEqual(2);
 	});
 
 	it("should set mobile position-class as default", () => {
-		const { wrapper } = getWrapper("mobile");
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: 560,
+		});
+		window.dispatchEvent(new Event("resize"));
+
+		const { wrapper } = getWrapper();
 
 		const result = wrapper.find(".alert-wrapper-mobile");
-		expect(result.element).toBeTruthy();
+		expect(result.exists()).toBe(true);
 	});
 
 	it("should set desktop position-class as default", async () => {
-		const { wrapper } = getWrapper("desktop");
+		Object.defineProperty(window, "innerWidth", {
+			writable: true,
+			configurable: true,
+			value: 750,
+		});
+		window.dispatchEvent(new Event("resize"));
 
-		const result = wrapper.get(".alert-wrapper");
-		expect(result.element).toBeTruthy();
+		const { wrapper } = getWrapper();
+
+		const result = wrapper.find(".alert-wrapper");
+		expect(result.exists()).toBe(true);
 	});
 });

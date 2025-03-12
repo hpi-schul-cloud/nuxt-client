@@ -74,21 +74,8 @@ describe("VideoConferenceContentElement", () => {
 
 		useBoardFocusHandlerMock =
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
-		useBoardPermissionsMock = createMock<
-			ReturnType<typeof useBoardPermissions>
-		>({
-			isTeacher: true,
-			hasMovePermission: false,
-			hasCreateCardPermission: false,
-			hasCreateColumnPermission: false,
-			hasEditPermission: false,
-			hasDeletePermission: false,
-			isStudent: false,
-		});
-
 		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
 
-		jest.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
 		defaultElement = videoConferenceElementResponseFactory.build();
 	});
 
@@ -170,6 +157,15 @@ describe("VideoConferenceContentElement", () => {
 		const authModule = createModuleMocks(AuthModule, {
 			getUserRoles: [role],
 		});
+
+		useBoardPermissionsMock = createMock<
+			ReturnType<typeof useBoardPermissions>
+		>({
+			isTeacher: ref(role === "teacher"),
+			isStudent: ref(role === "student"),
+		});
+
+		jest.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
 
 		const wrapper = mount(VideoConferenceContentElement, {
 			global: {
@@ -253,6 +249,70 @@ describe("VideoConferenceContentElement", () => {
 				expect(videoConferenceElement.attributes("aria-label")).toEqual(
 					"components.cardElement.videoConferenceElement, common.ariaLabel.newTab"
 				);
+			});
+
+			describe("when user is a teacher", () => {
+				it("should have the permission to join the conference", async () => {
+					const { wrapper } = setupWrapper({
+						content: videoConferenceElementContentFactory.build(),
+						isEditMode: false,
+						role: "teacher",
+					});
+
+					const videoConferenceElement = wrapper.getComponent(
+						VideoConferenceContentElementDisplay
+					);
+
+					expect(
+						videoConferenceElement.props("hasParticipationPermission")
+					).toEqual(true);
+				});
+
+				it("should have the permission to start the conference", async () => {
+					const { wrapper } = setupWrapper({
+						content: videoConferenceElementContentFactory.build(),
+						isEditMode: false,
+						role: "teacher",
+					});
+
+					const videoConferenceElement = wrapper.getComponent(
+						VideoConferenceContentElementDisplay
+					);
+
+					expect(videoConferenceElement.props("canStart")).toEqual(true);
+				});
+			});
+
+			describe("when the user is a student", () => {
+				it("should have the permission to join the conference", async () => {
+					const { wrapper } = setupWrapper({
+						content: videoConferenceElementContentFactory.build(),
+						isEditMode: false,
+						role: "student",
+					});
+
+					const videoConferenceElement = wrapper.getComponent(
+						VideoConferenceContentElementDisplay
+					);
+
+					expect(
+						videoConferenceElement.props("hasParticipationPermission")
+					).toEqual(true);
+				});
+
+				it("should not have the permission to start the conference", async () => {
+					const { wrapper } = setupWrapper({
+						content: videoConferenceElementContentFactory.build(),
+						isEditMode: false,
+						role: "student",
+					});
+
+					const videoConferenceElement = wrapper.getComponent(
+						VideoConferenceContentElementDisplay
+					);
+
+					expect(videoConferenceElement.props("canStart")).toEqual(false);
+				});
 			});
 
 			describe("and element is in edit mode", () => {

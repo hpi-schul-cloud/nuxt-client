@@ -39,8 +39,6 @@ import {
 	KebabMenuActionLeaveRoom,
 } from "@ui-kebab-menu";
 import { useRoomAuthorization } from "@feature-room";
-import { useRoomDetailsStore } from "@data-room";
-import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -54,7 +52,6 @@ const emit = defineEmits([
 defineProps({
 	roomName: { type: String, required: false },
 });
-const { room } = storeToRefs(useRoomDetailsStore());
 
 const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 	const shouldDelete = await confirmation;
@@ -64,5 +61,5 @@ const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 };
 
 const { canAddRoomMembers, canEditRoom, canDeleteRoom, canLeaveRoom } =
-	useRoomAuthorization(room);
+	useRoomAuthorization();
 </script>
