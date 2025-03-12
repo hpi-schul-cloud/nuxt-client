@@ -1,7 +1,14 @@
 /* eslint-disable no-console */
+export type Logger = {
+	info: (message: unknown, ...optionalParams: unknown[]) => void;
+	warn: (message: unknown, ...optionalParams: unknown[]) => void;
+	error: (message: unknown, ...optionalParams: unknown[]) => void;
+	log: (message: unknown, ...optionalParams: unknown[]) => void;
+}
 
-class Logger {
-	static info(message: unknown, ...optionalParams: unknown[]) {
+
+const logger: Logger = {
+	info: (message: unknown, ...optionalParams: unknown[]) {
 		if (process.env.NODE_ENV !== "production") {
 			console.log(
 				`[INFO] ${new Date().toISOString()} -`,
@@ -9,9 +16,9 @@ class Logger {
 				...optionalParams
 			);
 		}
-	}
+	},
 
-	static warn(message: unknown, ...optionalParams: unknown[]) {
+	warn: (message: unknown, ...optionalParams: unknown[]) {
 		if (process.env.NODE_ENV !== "production") {
 			console.warn(
 				`[WARN] ${new Date().toISOString()} -`,
@@ -19,17 +26,17 @@ class Logger {
 				...optionalParams
 			);
 		}
-	}
+	},
 
-	static error(message: unknown, ...optionalParams: unknown[]) {
+	error: (message: unknown, ...optionalParams: unknown[]) {
 		console.error(
 			`[ERROR] ${new Date().toISOString()} -`,
 			message,
 			...optionalParams
 		);
-	}
+	},
 
-	static log(message: unknown, ...optionalParams: unknown[]) {
+	log: (message: unknown, ...optionalParams: unknown[]) {
 		if (process.env.NODE_ENV !== "production") {
 			console.log(
 				`[LOG] ${new Date().toISOString()} -`,
@@ -40,4 +47,4 @@ class Logger {
 	}
 }
 
-export default Logger;
+export { logger };
