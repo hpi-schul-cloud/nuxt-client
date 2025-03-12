@@ -477,17 +477,12 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 	}
 
 	.scrollbar::-webkit-scrollbar-thumb {
-		background-color: transparent;
-		border-radius: 5px;
-	}
-
-	.board:hover .scrollbar::-webkit-scrollbar-thumb {
 		background-color: rgba(var(--v-theme-on-surface), 0.6);
 		border-radius: 5px;
 	}
 
 	.scrollbar::-webkit-scrollbar-thumb:hover {
-		background: rgba(var(--v-theme-on-surface), 0.8) !important;
+		background: rgba(var(--v-theme-on-surface), 0.8);
 	}
 }
 
