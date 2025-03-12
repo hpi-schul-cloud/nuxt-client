@@ -378,6 +378,11 @@ export default defineComponent({
 @supports not selector(::-webkit-scrollbar) {
 	.scrollable-column {
 		scrollbar-width: thin;
+		scrollbar-color: transparent transparent;
+	}
+
+	.column-drag-handle:hover .scrollable-column {
+		scrollbar-color: initial;
 	}
 }
 </style>
