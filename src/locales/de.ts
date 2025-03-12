@@ -94,11 +94,11 @@ export default {
 	"common.labels.visible": "Sichtbar",
 	"common.loading.text": "Daten werden geladen...",
 	"common.medium.alert.deactivated": "Medium ist deaktiviert.",
-	"common.medium.alert.notLicensed": "Medium ist nicht freigeschaltet.",
+	"common.medium.alert.notLicensed": "Medium ist nicht freigegeben.",
 	"common.medium.alert.incomplete":
 		"Konfiguration des Mediums nicht aktuell oder unvollständig.",
 	"common.medium.chip.deactivated": "Deaktiviert",
-	"common.medium.chip.notLicensed": "Nicht freigeschaltet",
+	"common.medium.chip.notLicensed": "Nicht freigegeben",
 	"common.medium.chip.incomplete": "Konfiguration unvollständig",
 	"common.medium.chip.noLongerAvailable": "Nicht mehr verfügbar",
 	"common.medium.information.admin": "Bitte Einstellungen überprüfen.",
@@ -136,9 +136,9 @@ export default {
 	"common.tool.information.deactivated.teacher":
 		"Tool {toolName} ist deaktiviert. Bitte an Schuladministrator:in wenden.",
 	"common.tool.information.notLicensed.student":
-		"Tool {toolName} ist nicht freigeschaltet. Bitte an Lehrkraft oder Kursleiter:in wenden.",
+		"Tool {toolName} ist nicht freigegeben. Bitte an Lehrkraft oder Kursleiter:in wenden.",
 	"common.tool.information.notLicensed.teacher":
-		"Tool {toolName} ist nicht freigeschaltet. Bitte an Schuladministrator:in wenden.",
+		"Tool {toolName} ist nicht freigegeben. Bitte an Schuladministrator:in wenden.",
 	"common.tool.information.outdated.teacher":
 		"Konfiguration des Tools {toolName} nicht aktuell oder unvollständig. Bitte Einstellungen überprüfen.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -346,11 +346,11 @@ export default {
 	"components.administration.externalToolsSection.table.header.restrictedTo":
 		"Eingeschränkt auf",
 	"components.administration.externalToolsSection.table.header.medium":
-		"Medienquelle",
+		"Medienverwaltung",
 	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable":
-		"externes Medium aktiviert",
+		"Externes Medium freigegeben",
 	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable":
-		"externes Medium deaktiviert",
+		"Externes Medium nicht freigegeben",
 	"components.administration.provisioningOptions.class.description":
 		"Aktivieren sie diese Option, wenn Klassen in die {instance} synchronisiert werden sollen.",
 	"components.administration.provisioningOptions.class.label":
@@ -1770,7 +1770,7 @@ export default {
 	"pages.rooms.tools.deactivated": "Deaktiviert",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deaktiviert",
 	"pages.rooms.tools.notLicensedDialog.title":
-		"Tool „{toolName}“ nicht freigeschaltet",
+		"Tool „{toolName}“ nicht freigegeben",
 	"pages.rooms.tools.deleteDialog.content":
 		"Möchten Sie wirklich das Tool '{itemName}' aus dem Kurs entfernen?",
 	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",
@@ -1943,7 +1943,7 @@ export default {
 	"pages.tool.title": "Konfiguration externer Tools",
 	"pages.tool.medium": "Externes Medium",
 	"pages.tool.medium.mediumId": "Medium-Id",
-	"pages.tool.medium.mediumSourceId": "Medienkatalog-Id",
+	"pages.tool.medium.mediumSourceId": "Medienverwaltung",
 	"pages.userMigration.backToLogin": "Zurück zur Anmeldeseite",
 	"pages.userMigration.button.skip": "Nicht jetzt",
 	"pages.userMigration.button.startMigration": "Umzug starten",

@@ -94,11 +94,11 @@ export default {
 	"common.labels.visible": "Видимий",
 	"common.loading.text": "Дані завантажуються...",
 	"common.medium.alert.deactivated": "Медіа вимкнено.",
-	"common.medium.alert.notLicensed": "Медіа не активовано.",
+	"common.medium.alert.notLicensed": "Середній не уповноважений.",
 	"common.medium.alert.incomplete":
 		"Конфігурація носія не актуальна або не завершена.",
 	"common.medium.chip.deactivated": "Вимкнено",
-	"common.medium.chip.notLicensed": "Не активовано",
+	"common.medium.chip.notLicensed": "Не дозволений",
 	"common.medium.chip.incomplete": "Конфігурація не завершена",
 	"common.medium.chip.noLongerAvailable": "Більше не доступний",
 	"common.medium.information.admin": "Перевірте налаштування.",
@@ -139,9 +139,9 @@ export default {
 	"common.tool.information.deactivated.teacher":
 		"Інструмент {toolName} вимкнено. Будь ласка, зверніться до адміністратора школи.",
 	"common.tool.information.notLicensed.student":
-		"Інструмент {toolName} не активовано. Будь ласка, зверніться до свого вчителя або викладача курсу.",
+		"Інструмент {toolName} не уповноважений. Зверніться до свого вчителя або інструктора з курсу.",
 	"common.tool.information.notLicensed.teacher":
-		"Інструмент {toolName} не активовано. Будь ласка, зверніться до адміністратора школи.",
+		"Інструмент {toolName} не уповноважений. Зверніться до адміністратора школи.",
 	"common.tool.information.outdated.teacher":
 		"Конфігурація інструменту {toolName} застаріла або неповна. Перевірте налаштування та зверніться до адміністратора школи.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -351,11 +351,11 @@ export default {
 	"components.administration.externalToolsSection.table.header.restrictedTo":
 		"Обмежено",
 	"components.administration.externalToolsSection.table.header.medium":
-		"Джерело ЗМІ",
+		"Управління ЗМІ",
 	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable":
-		"Зовнішнє середовище активовано",
+		"Зовнішній носій уповноважений",
 	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable":
-		"Зовнішнє середовище деактивовано",
+		"Зовнішній носій не уповноважений",
 	"components.administration.provisioningOptions.class.description":
 		"Активуйте цю опцію, якщо класи мають бути синхронізовані в {instance}.",
 	"components.administration.provisioningOptions.class.label":
@@ -1768,9 +1768,9 @@ export default {
 	"pages.rooms.roomModal.courseGroupTitle": "назва групи курсу",
 	"pages.rooms.tools.deactivated": "Інструмент вимкнено",
 	"pages.rooms.tools.deactivatedDialog.title":
-		"Інструмент „{toolName}“ вимкнено",
+		"Інструмент “{toolName}“ вимкнено",
 	"pages.rooms.tools.notLicensedDialog.title":
-		"Інструмент “{toolName}” не активовано",
+		"Інструмент “{toolName}“ Не уповноважений",
 	"pages.rooms.tools.deleteDialog.content":
 		"Ви впевнені, що хочете видалити інструмент '{itemName}' із курсу?",
 	"pages.rooms.tools.deleteDialog.title": "видалити інструменти?",
@@ -1935,7 +1935,7 @@ export default {
 	"pages.tool.title": "Конфігурація зовнішніх інструментів",
 	"pages.tool.medium": "Зовнішнє середовище",
 	"pages.tool.medium.mediumId": "Середній",
-	"pages.tool.medium.mediumSourceId": "Ідентифікатор медіа каталогу",
+	"pages.tool.medium.mediumSourceId": "Управління ЗМІ",
 	"pages.userMigration.backToLogin": "Повернутися на сторінку входу",
 	"pages.userMigration.button.skip": "Не зараз",
 	"pages.userMigration.button.startMigration": "почати рухатися",
