@@ -21,7 +21,7 @@ import InfoModalFullWidth from "@/components/molecules/InfoModalFullWidth";
 import { mapGetters } from "vuex";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { mdiEmailCheckOutline, mdiEmailRemoveOutline } from "@icons/material";
-import { Logger } from "@util-logger";
+import { logger } from "@util-logger";
 
 export default {
 	components: {
@@ -93,7 +93,7 @@ export default {
 				this.keyword = this.data[0].keyword;
 				this.activated = this.data[0].success;
 			} catch (e) {
-				Logger.error(e);
+				logger.error(e);
 			}
 			this.showModal = true;
 		},

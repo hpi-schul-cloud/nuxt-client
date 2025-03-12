@@ -13,7 +13,7 @@ import { mount } from "@vue/test-utils";
 import { VBtn, VHover, VListItem } from "vuetify/lib/components/index.mjs";
 import TaskItemMenu from "./TaskItemMenu.vue";
 import TaskItemTeacher from "./TaskItemTeacher.vue";
-import { Logger } from "@util-logger";
+import { logger } from "@util-logger";
 
 const {
 	tasksTeacher,
@@ -358,7 +358,7 @@ describe("@/components/molecules/TaskItemTeacher", () => {
 
 				const hover = wrapper.findComponent(VHover);
 
-				Logger.log(hover.vm.$props);
+				logger.log(hover.vm.$props);
 
 				expect(
 					wrapper.findComponent(`[data-testid="task-edit"]`).isVisible()

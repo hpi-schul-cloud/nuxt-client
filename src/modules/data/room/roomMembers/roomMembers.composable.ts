@@ -13,7 +13,7 @@ import { useI18n } from "vue-i18n";
 import { useBoardNotifier } from "@util-board";
 import { schoolsModule } from "@/store";
 import { authModule } from "@/store/store-accessor";
-import { Logger } from "@util-logger";
+import { logger } from "@util-logger";
 
 export const useRoomMembers = (roomId: string) => {
 	const roomMembers: Ref<RoomMember[]> = ref([]);
@@ -112,7 +112,7 @@ export const useRoomMembers = (roomId: string) => {
 			);
 			schools.value.unshift(ownSchool);
 		} catch (error) {
-			Logger.error(error);
+			logger.error(error);
 		}
 	};
 

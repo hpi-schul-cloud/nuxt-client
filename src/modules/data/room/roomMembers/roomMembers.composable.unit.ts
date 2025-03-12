@@ -20,7 +20,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomMember, useRoomMembers } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
-import { Logger } from "@util-logger";
+import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
 import { useI18n } from "vue-i18n";
 
@@ -44,7 +44,7 @@ describe("useRoomMembers", () => {
 		roomApiMock = createMock<serverApi.RoomApiInterface>();
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
-		consoleErrorSpy = jest.spyOn(Logger, "error").mockImplementation();
+		consoleErrorSpy = jest.spyOn(logger, "error").mockImplementation();
 
 		jest.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		jest.spyOn(serverApi, "SchoolApiFactory").mockReturnValue(schoolApiMock);

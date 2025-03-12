@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
-import Logger from "./logger";
+import { logger } from "./logger";
 
-describe("Logger", () => {
+describe("logger", () => {
 	beforeEach(() => {
 		jest.resetAllMocks();
 		jest.spyOn(console, "log").mockImplementation(() => {
@@ -27,7 +27,7 @@ describe("Logger", () => {
 		it("should log info messages with optionalParams", () => {
 			const message = "This is an info message";
 			const optionalParams = ["additional", "info"];
-			Logger.info(message, ...optionalParams);
+			logger.info(message, ...optionalParams);
 			expect(console.log).toHaveBeenCalledWith(
 				expect.stringContaining("[INFO]"),
 				message,
@@ -38,7 +38,7 @@ describe("Logger", () => {
 		it("should log warn messages with optionalParams", () => {
 			const message = "This is a warning message";
 			const optionalParams = ["additional", "warning"];
-			Logger.warn(message, ...optionalParams);
+			logger.warn(message, ...optionalParams);
 			expect(console.warn).toHaveBeenCalledWith(
 				expect.stringContaining("[WARN]"),
 				message,
@@ -49,7 +49,7 @@ describe("Logger", () => {
 		it("should log error messages with optionalParams", () => {
 			const message = "This is an error message";
 			const optionalParams = ["additional", "error"];
-			Logger.error(message, ...optionalParams);
+			logger.error(message, ...optionalParams);
 			expect(console.error).toHaveBeenCalledWith(
 				expect.stringContaining("[ERROR]"),
 				message,
@@ -60,7 +60,7 @@ describe("Logger", () => {
 		it("should log messages with log method and optionalParams", () => {
 			const message = "This is a log message";
 			const optionalParams = ["additional", "log"];
-			Logger.log(message, ...optionalParams);
+			logger.log(message, ...optionalParams);
 			expect(console.log).toHaveBeenCalledWith(
 				expect.stringContaining("[LOG]"),
 				message,
@@ -75,19 +75,19 @@ describe("Logger", () => {
 		});
 
 		it("should not log info messages with optionalParams", () => {
-			Logger.info("This should not be logged", "additional", "info");
+			logger.info("This should not be logged", "additional", "info");
 			expect(console.log).not.toHaveBeenCalled();
 		});
 
 		it("should not log warn messages with optionalParams", () => {
-			Logger.warn("This should not be logged", "additional", "warning");
+			logger.warn("This should not be logged", "additional", "warning");
 			expect(console.warn).not.toHaveBeenCalled();
 		});
 
 		it("should log error messages with optionalParams", () => {
 			const message = "This is an error message";
 			const optionalParams = ["additional", "error"];
-			Logger.error(message, ...optionalParams);
+			logger.error(message, ...optionalParams);
 			expect(console.error).toHaveBeenCalledWith(
 				expect.stringContaining("[ERROR]"),
 				message,
@@ -96,7 +96,7 @@ describe("Logger", () => {
 		});
 
 		it("should not log messages with log method and optionalParams", () => {
-			Logger.log("This should not be logged", "additional", "log");
+			logger.log("This should not be logged", "additional", "log");
 			expect(console.log).not.toHaveBeenCalled();
 		});
 	});

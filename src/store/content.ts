@@ -13,7 +13,7 @@ import {
 	ResourceProperties,
 	Resources,
 } from "./types/content";
-import { Logger } from "@util-logger";
+import { logger } from "@util-logger";
 
 const initialState = () => ({
 	resources: {
@@ -273,7 +273,7 @@ export default class ContentModule extends VuexModule {
 
 			this.setResources({ hash: queryHash, result: res.data });
 		} catch (e) {
-			Logger.error(e);
+			logger.error(e);
 		} finally {
 			this.decLoading();
 		}
@@ -289,7 +289,7 @@ export default class ContentModule extends VuexModule {
 
 			this.addResourcesMutation(res.data);
 		} catch (e) {
-			Logger.error("Error: ", e);
+			logger.error("Error: ", e);
 		} finally {
 			this.decLoading();
 		}
@@ -312,7 +312,7 @@ export default class ContentModule extends VuexModule {
 
 			this.setElements({ hash: queryHash, result: res.data });
 		} catch (e) {
-			Logger.error(e);
+			logger.error(e);
 		} finally {
 			this.decLoading();
 		}
@@ -327,7 +327,7 @@ export default class ContentModule extends VuexModule {
 			});
 			this.addElementsMutation(res.data);
 		} catch (e) {
-			Logger.error("Error: ", e);
+			logger.error("Error: ", e);
 		} finally {
 			this.decLoading();
 		}

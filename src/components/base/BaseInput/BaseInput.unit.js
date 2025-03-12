@@ -4,7 +4,7 @@ import {
 	createTestingVuetify,
 	createTestingI18n,
 } from "@@/tests/test-utils/setup";
-import { Logger } from "@util-logger";
+import { logger } from "@util-logger";
 
 function createWrapper(props = {}) {
 	return mount(BaseInput, {
@@ -62,10 +62,10 @@ describe("@/components/base/BaseInput", () => {
 	});
 
 	it("writes an error to the console on unsupported types", () => {
-		jest.spyOn(Logger, "error");
+		jest.spyOn(logger, "error");
 		createWrapper({
 			type: "unsupported",
 		});
-		expect(Logger.error).toHaveBeenCalled();
+		expect(logger.error).toHaveBeenCalled();
 	});
 });

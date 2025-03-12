@@ -6,7 +6,7 @@ import { useBoardNotifier } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { useTimeoutFn } from "@vueuse/shared";
 import { ref } from "vue";
-import { Logger } from "@util-logger";
+import { logger } from "@util-logger";
 
 const isInitialConnection = ref(true);
 let instance: Socket | null = null;
@@ -33,7 +33,7 @@ export const useSocketConnection = (
 		});
 
 		instance.on("connect", async function () {
-			Logger.log("connected");
+			logger.log("connected");
 			if (isInitialConnection.value) return;
 			if (timeoutFn.isPending?.value) {
 				timeoutFn.stop();
@@ -49,7 +49,7 @@ export const useSocketConnection = (
 		});
 
 		instance.on("disconnect", () => {
-			Logger.log("disconnected");
+			logger.log("disconnected");
 			isInitialConnection.value = false;
 			timeoutFn = useTimeoutFn(() => {
 				showFailure(t("error.4500"));

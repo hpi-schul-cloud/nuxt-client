@@ -1,6 +1,6 @@
 import { reactive } from "vue";
 import { $axios } from "@/utils/api";
-import { Logger } from "@util-logger";
+import { logger } from "@util-logger";
 
 export default function (endpoint) {
 	const baseUrl = "/v1/" + endpoint;
@@ -136,7 +136,7 @@ export default function (endpoint) {
 					(e) => e._id === item._id || item.id
 				);
 				if (index === -1) {
-					Logger.error(
+					logger.error(
 						"patchSingleItem error: No element in state.list found."
 					);
 				}
@@ -148,7 +148,7 @@ export default function (endpoint) {
 			remove(state, id) {
 				const index = state.list.findIndex((e) => e._id === id);
 				if (index === -1) {
-					Logger.warn(`Can't remove item with id "${id}" (Not found)`);
+					logger.warn(`Can't remove item with id "${id}" (Not found)`);
 					return;
 				}
 				state.list.splice(index, 1);
