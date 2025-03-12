@@ -67,6 +67,25 @@ describe("logger", () => {
 				...optionalParams
 			);
 		});
+
+		// Neue Tests für verschiedene Nachrichtentypen und optionale Parameter
+		it("should log info messages with different types of messages", () => {
+			const message = { text: "This is an object message" };
+			logger.info(message);
+			expect(console.log).toHaveBeenCalledWith(
+				expect.stringContaining("[INFO]"),
+				message
+			);
+		});
+
+		it("should log warn messages with different types of messages", () => {
+			const message = { text: "This is an object message" };
+			logger.warn(message);
+			expect(console.warn).toHaveBeenCalledWith(
+				expect.stringContaining("[WARN]"),
+				message
+			);
+		});
 	});
 
 	describe("in production environment", () => {
@@ -98,6 +117,19 @@ describe("logger", () => {
 		it("should not log messages with log method and optionalParams", () => {
 			logger.log("This should not be logged", "additional", "log");
 			expect(console.log).not.toHaveBeenCalled();
+		});
+
+		// Neue Tests für verschiedene Nachrichtentypen und optionale Parameter
+		it("should not log info messages with different types of messages", () => {
+			const message = { text: "This is an object message" };
+			logger.info(message);
+			expect(console.log).not.toHaveBeenCalled();
+		});
+
+		it("should not log warn messages with different types of messages", () => {
+			const message = { text: "This is an object message" };
+			logger.warn(message);
+			expect(console.warn).not.toHaveBeenCalled();
 		});
 	});
 });
