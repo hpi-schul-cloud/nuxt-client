@@ -23,57 +23,54 @@
 					/>
 				</template>
 				<div :class="boardClasses" :style="boardStyle">
-					<!-- TODO: div entfernen -->
-					<div>
-						<Sortable
-							:list="board.columns"
-							item-key="id"
-							:class="boardColumnClass"
-							tag="div"
-							:options="{
-								direction: 'horizontal',
-								disabled: isEditMode || !hasMovePermission,
-								group: 'columns',
-								delayOnTouchOnly: true,
-								delay: 300,
-								touchStartThreshold: 3, // needed for sensitive touch devices
-								fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
-								ghostClass: 'sortable-drag-ghost',
-								easing: 'cubic-bezier(1, 0, 0, 1)',
-								dragClass: 'sortable-drag-board-card',
-								dragoverBubble: true,
-								animation: 250,
-								scroll: true,
-								filter: '.v-card',
-								preventOnFilter: false,
-								forceFallback: true,
-								bubbleScroll: true,
-							}"
-							@end="onDropColumn"
-						>
-							<template #item="{ element, index }">
-								<BoardColumn
-									:data-column-id="element.id"
-									:column="element"
-									:index="index"
-									:key="element.id"
-									:columnCount="board.columns.length"
-									:class="{ 'my-0': isListBoard }"
-									:isListBoard="isListBoard"
-									:data-testid="`board-column-${index}`"
-									@reload:board="onReloadBoard"
-									@create:card="onCreateCard"
-									@delete:card="onDeleteCard"
-									@delete:column="onDeleteColumn"
-									@update:column-title="onUpdateColumnTitle(element.id, $event)"
-									@move:column-down="onMoveColumnForward(index, element.id)"
-									@move:column-left="onMoveColumnBackward(index, element.id)"
-									@move:column-right="onMoveColumnForward(index, element.id)"
-									@move:column-up="onMoveColumnBackward(index, element.id)"
-								/>
-							</template>
-						</Sortable>
-					</div>
+					<Sortable
+						:list="board.columns"
+						item-key="id"
+						:class="boardColumnClass"
+						tag="div"
+						:options="{
+							direction: 'horizontal',
+							disabled: isEditMode || !hasMovePermission,
+							group: 'columns',
+							delayOnTouchOnly: true,
+							delay: 300,
+							touchStartThreshold: 3, // needed for sensitive touch devices
+							fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
+							ghostClass: 'sortable-drag-ghost',
+							easing: 'cubic-bezier(1, 0, 0, 1)',
+							dragClass: 'sortable-drag-board-card',
+							dragoverBubble: true,
+							animation: 250,
+							scroll: true,
+							filter: '.v-card',
+							preventOnFilter: false,
+							forceFallback: true,
+							bubbleScroll: true,
+						}"
+						@end="onDropColumn"
+					>
+						<template #item="{ element, index }">
+							<BoardColumn
+								:data-column-id="element.id"
+								:column="element"
+								:index="index"
+								:key="element.id"
+								:columnCount="board.columns.length"
+								:class="{ 'my-0': isListBoard }"
+								:isListBoard="isListBoard"
+								:data-testid="`board-column-${index}`"
+								@reload:board="onReloadBoard"
+								@create:card="onCreateCard"
+								@delete:card="onDeleteCard"
+								@delete:column="onDeleteColumn"
+								@update:column-title="onUpdateColumnTitle(element.id, $event)"
+								@move:column-down="onMoveColumnForward(index, element.id)"
+								@move:column-left="onMoveColumnBackward(index, element.id)"
+								@move:column-right="onMoveColumnForward(index, element.id)"
+								@move:column-up="onMoveColumnBackward(index, element.id)"
+							/>
+						</template>
+					</Sortable>
 					<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
 						<BoardColumnGhost
 							v-if="hasCreateColumnPermission"
@@ -389,7 +386,6 @@ const boardClasses = computed(() => {
 	return classes;
 });
 
-// TODO: Integrate into boardClasses
 const boardStyle = computed(() => {
 	if (!isListBoard.value) {
 		return;
