@@ -34,10 +34,10 @@ export interface FileUrlParams {
     fileName: string;
     /**
      * 
-     * @type {string}
+     * @type {object}
      * @memberof FileUrlParams
      */
-    headers: string;
+    headers?: object;
 }
 
 
