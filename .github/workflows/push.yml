@@ -67,6 +67,7 @@ jobs:
         with:
           build-args: |
             SC_THEME=${{ matrix.tenants }}
+          # this is only needed when using the github registry
           secrets: |
             GIT_AUTH_TOKEN=${{ github.token }}
           context: .
