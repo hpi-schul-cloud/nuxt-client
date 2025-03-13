@@ -21,6 +21,8 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 // @ts-ignore
+import { CommonCartridgeImportBodyParams } from '../models';
+// @ts-ignore
 import { CourseExportBodyParams } from '../models';
 /**
  * CommonCartridgeApi - axios parameter creator
@@ -56,6 +58,10 @@ export const CommonCartridgeApiAxiosParamCreator = function (configuration?: Con
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
             if (version !== undefined) {
                 localVarQueryParameter['version'] = version;
             }
@@ -68,6 +74,46 @@ export const CommonCartridgeApiAxiosParamCreator = function (configuration?: Con
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
             localVarRequestOptions.data = serializeDataIfNeeded(courseExportBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Imports a course from a Common Cartridge file.
+         * @param {CommonCartridgeImportBodyParams} commonCartridgeImportBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        commonCartridgeControllerImportCourse: async (commonCartridgeImportBodyParams: CommonCartridgeImportBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'commonCartridgeImportBodyParams' is not null or undefined
+            assertParamExists('commonCartridgeControllerImportCourse', 'commonCartridgeImportBodyParams', commonCartridgeImportBodyParams)
+            const localVarPath = `/common-cartridge/import`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/octet-stream';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(commonCartridgeImportBodyParams, localVarRequestOptions, configuration)
 
             return {
                 url: toPathString(localVarUrlObj),
@@ -96,6 +142,17 @@ export const CommonCartridgeApiFp = function(configuration?: Configuration) {
             const localVarAxiosArgs = await localVarAxiosParamCreator.commonCartridgeControllerExportCourse(courseId, version, courseExportBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
+        /**
+         * 
+         * @summary Imports a course from a Common Cartridge file.
+         * @param {CommonCartridgeImportBodyParams} commonCartridgeImportBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async commonCartridgeControllerImportCourse(commonCartridgeImportBodyParams: CommonCartridgeImportBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.commonCartridgeControllerImportCourse(commonCartridgeImportBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
     }
 };
 
@@ -117,6 +174,16 @@ export const CommonCartridgeApiFactory = function (configuration?: Configuration
         commonCartridgeControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any): AxiosPromise<void> {
             return localVarFp.commonCartridgeControllerExportCourse(courseId, version, courseExportBodyParams, options).then((request) => request(axios, basePath));
         },
+        /**
+         * 
+         * @summary Imports a course from a Common Cartridge file.
+         * @param {CommonCartridgeImportBodyParams} commonCartridgeImportBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        commonCartridgeControllerImportCourse(commonCartridgeImportBodyParams: CommonCartridgeImportBodyParams, options?: any): AxiosPromise<void> {
+            return localVarFp.commonCartridgeControllerImportCourse(commonCartridgeImportBodyParams, options).then((request) => request(axios, basePath));
+        },
     };
 };
 
@@ -136,6 +203,16 @@ export interface CommonCartridgeApiInterface {
      * @memberof CommonCartridgeApiInterface
      */
     commonCartridgeControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Imports a course from a Common Cartridge file.
+     * @param {CommonCartridgeImportBodyParams} commonCartridgeImportBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CommonCartridgeApiInterface
+     */
+    commonCartridgeControllerImportCourse(commonCartridgeImportBodyParams: CommonCartridgeImportBodyParams, options?: any): AxiosPromise<void>;
 
 }
 
@@ -157,5 +234,17 @@ export class CommonCartridgeApi extends BaseAPI implements CommonCartridgeApiInt
      */
     public commonCartridgeControllerExportCourse(courseId: string, version: '1.0.0' | '1.1.0' | '1.2.0' | '1.3.0' | '1.4.0', courseExportBodyParams: CourseExportBodyParams, options?: any) {
         return CommonCartridgeApiFp(this.configuration).commonCartridgeControllerExportCourse(courseId, version, courseExportBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Imports a course from a Common Cartridge file.
+     * @param {CommonCartridgeImportBodyParams} commonCartridgeImportBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CommonCartridgeApi
+     */
+    public commonCartridgeControllerImportCourse(commonCartridgeImportBodyParams: CommonCartridgeImportBodyParams, options?: any) {
+        return CommonCartridgeApiFp(this.configuration).commonCartridgeControllerImportCourse(commonCartridgeImportBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 }
