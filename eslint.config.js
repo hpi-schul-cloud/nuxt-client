@@ -154,7 +154,7 @@ module.exports = defineConfigWithVueTs([
 		},
 	},
 	{
-		files: ["*.ts"],
+		files: ["**/*.{ts,vue}"],
 		rules: {
 			"@typescript-eslint/no-require-imports": "error",
 		},
