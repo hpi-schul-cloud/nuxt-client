@@ -62,7 +62,7 @@ module.exports = defineConfigWithVueTs([
 			"@typescript-eslint/no-inferrable-types": "error",
 			"@typescript-eslint/no-require-imports": "off",
 			"@typescript-eslint/no-restricted-imports": [
-				"warn",
+				"error",
 				{
 					patterns: [
 						{
