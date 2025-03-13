@@ -44,6 +44,7 @@ module.exports = defineConfigWithVueTs([
 			ecmaVersion: "latest",
 			globals: {
 				...globals.node,
+				NodeJS: "readonly",
 			},
 		},
 		plugins: {
