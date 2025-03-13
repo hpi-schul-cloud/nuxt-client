@@ -8,7 +8,7 @@
 		/>
 		<div
 			:style="{ 'min-width': colWidth + 'px' }"
-			class="column-drag-handle grow-transition"
+			class="grow-transition"
 			:class="{ 'mr-4 sortable-container': !isListBoard }"
 		>
 			<Sortable
