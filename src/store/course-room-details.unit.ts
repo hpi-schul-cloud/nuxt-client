@@ -434,6 +434,9 @@ describe("course-room module", () => {
 					commonCartridgeControllerExportCourse: jest.fn(
 						() => Promise.resolve() as unknown as AxiosPromise<void>
 					),
+					commonCartridgeControllerImportCourse: jest.fn(
+						() => Promise.resolve() as unknown as AxiosPromise<void>
+					),
 				};
 				const spy = jest
 					.spyOn(commonCartridgeApi, "CommonCartridgeApiFactory")
@@ -459,6 +462,9 @@ describe("course-room module", () => {
 				const courseRoomDetailsModule = new CourseRoomDetailsModule({});
 				const mockApi: CommonCartridgeApiInterface = {
 					commonCartridgeControllerExportCourse: jest.fn(() =>
+						Promise.reject(badRequestError)
+					),
+					commonCartridgeControllerImportCourse: jest.fn(() =>
 						Promise.reject(badRequestError)
 					),
 				};
