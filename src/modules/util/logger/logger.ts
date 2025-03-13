@@ -8,23 +8,19 @@ export type Logger = {
 
 const logger: Logger = {
 	info: (message: unknown, ...optionalParams: unknown[]) => {
-		if (process.env.NODE_ENV !== "production") {
-			console.log(
-				`[INFO] ${new Date().toISOString()} -`,
-				message,
-				...optionalParams
-			);
-		}
+		console.log(
+			`[INFO] ${new Date().toISOString()} -`,
+			message,
+			...optionalParams
+		);
 	},
 
 	warn: (message: unknown, ...optionalParams: unknown[]) => {
-		if (process.env.NODE_ENV !== "production") {
-			console.warn(
-				`[WARN] ${new Date().toISOString()} -`,
-				message,
-				...optionalParams
-			);
-		}
+		console.warn(
+			`[WARN] ${new Date().toISOString()} -`,
+			message,
+			...optionalParams
+		);
 	},
 
 	error: (message: unknown, ...optionalParams: unknown[]) => {
@@ -36,13 +32,11 @@ const logger: Logger = {
 	},
 
 	log: (message: unknown, ...optionalParams: unknown[]) => {
-		if (process.env.NODE_ENV !== "production") {
-			console.log(
-				`[LOG] ${new Date().toISOString()} -`,
-				message,
-				...optionalParams
-			);
-		}
+		console.log(
+			`[LOG] ${new Date().toISOString()} -`,
+			message,
+			...optionalParams
+		);
 	},
 };
 
