@@ -102,7 +102,7 @@ const fileStorageApi = () => {
 			const fileUrlParams: FileUrlParams = {
 				url: imageUrl,
 				fileName,
-				headers: `User-Agent: Embed Request User Agent`,
+				headers: { "User-Agent": "Embed Request User Agent" },
 			};
 			const response = await fileApi.uploadFromUrl(
 				schoolId,
