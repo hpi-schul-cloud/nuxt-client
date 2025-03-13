@@ -39,6 +39,9 @@
 					ghostClass: sortableGhostClasses,
 					scroll: true,
 				}"
+				:class="{
+					'expanded-column': isDragging,
+				}"
 				@start="onDragStart"
 				@end="onDragEnd"
 			>
@@ -356,6 +359,14 @@ export default defineComponent({
 	/* Subtracted are the heights of schulcloud-header, board-header and scrollbar. */
 	height: calc(100vh - 64px - 92.75px - 10px);
 	width: 400px;
+}
+
+.expanded-column {
+	/* Subtracted is the height of the add-button. */
+	min-height: calc(100% - 64px);
+	/* "overflow: hidden" is set here to prevent margin collapsing, which destroys the layout.
+	See: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_model/Mastering_margin_collapsing and https://stackoverflow.com/a/19719427/11854580 */
+	overflow: hidden;
 }
 
 @supports selector(::-webkit-scrollbar) {
