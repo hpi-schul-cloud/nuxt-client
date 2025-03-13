@@ -340,19 +340,20 @@ export default defineComponent({
 .sortable-drag-ghost .v-card {
 	opacity: 0.6;
 }
+
 .column-layout {
 	width: 346px; /* size of the card - column has 400px width and some paddings and margins */
 }
-</style>
-<style scoped>
-.elevate-transition {
-	transition: box-shadow 150ms all;
-}
-</style>
-<style>
+
 .draggable,
 .sortable-drag-board-card {
 	opacity: 1;
+}
+</style>
+
+<style scoped>
+.elevate-transition {
+	transition: box-shadow 150ms all;
 }
 
 .multi-column-board-column {
