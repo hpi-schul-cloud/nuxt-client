@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { logger } from "@util-logger";
+
 export default {
 	inheritAttrs: false,
 	props: {
@@ -95,28 +97,19 @@ export default {
 			if (process.env.NODE_ENV === "production") return;
 
 			if (this.href) {
-				// Check for non-external URL in href.
-				/*
-				// currently used for the legacy fallback. Therefore disabled
-				if (!/^\w+:/.test(this.href)) {
-					return console.warn(
-						`Invalid href <base-link>: ${this.href}.\nIf you're trying to link to a local URL, provide at least a name or to`
-					);
-				}
-				*/
 				// Check for insecure URL in href.
 				if (
 					!this.allowInsecure &&
 					!/^(https:|mailto:|tel:|\/)/.test(this.href)
 				) {
-					return console.warn(
+					return logger.warn(
 						`Insecure href <base-link>: ${this.href}.\nWhen linking to external sites, always prefer https URLs. If this site does not offer SSL, explicitly add the allow-insecure attribute on <base-link>.`
 					);
 				}
 			} else {
 				// Check for insufficient props.
 				if (!this.name && !this.to) {
-					return console.warn(
+					return logger.warn(
 						`Invalid props <base-link>:\n\n${JSON.stringify(
 							this.$props,
 							null,
