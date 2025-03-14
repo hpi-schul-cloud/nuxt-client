@@ -1791,6 +1791,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add members",
+	"pages.rooms.members.add.infoText":
+		"Multiple people can only be added in one step if they belong to the same school and school role.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Action menu for {memberFullName}",
 	"pages.rooms.members.changePermission": "Change room permissions",

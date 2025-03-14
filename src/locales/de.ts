@@ -1823,6 +1823,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
+	"pages.rooms.members.add.infoText":
+		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Aktionsmenü für {memberFullName}",
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",

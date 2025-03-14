@@ -1,13 +1,13 @@
 <template>
 	<v-card ref="changeRoleContent">
-		<template v-slot:prepend>
-			<span ref="textTitle" class="text-h4 mt-2 dialog-title">
+		<template v-slot:title>
+			<h2 ref="textTitle" class="text-h4 mt-2 dialog-title">
 				{{ dialogTitle }}
-			</span>
+			</h2>
 		</template>
 
-		<template v-slot:default>
-			<div class="ml-6 mr-6 mt-2">
+		<template v-slot:text>
+			<div class="mt-2">
 				<div v-if="!isOwnershipHandoverMode" class="mb-4">
 					{{ infoText }}
 				</div>

@@ -1,60 +1,61 @@
 <template>
 	<v-card ref="addMembersContent">
-		<template v-slot:prepend>
-			<div ref="textTitle" class="text-h4 mt-2">
+		<template v-slot:title>
+			<h2 class="text-h4 mt-2">
 				{{ t("pages.rooms.members.add") }}
-			</div>
+			</h2>
 		</template>
 
-		<template v-slot:default>
-			<div class="ml-6 mr-6">
-				<div class="mt-3" data-testid="add-participant-school">
-					<v-autocomplete
-						ref="autoCompleteSchool"
-						v-model="selectedSchool"
-						density="comfortable"
-						item-title="name"
-						item-value="id"
-						variant="underlined"
-						:items="schoolList"
-						:label="t('global.sidebar.item.school')"
-						@update:model-value="onSchoolChange"
-						@update:menu="onAutocompleteToggle"
-					/>
-				</div>
+		<template v-slot:text>
+			<InfoAlert>{{ t("pages.rooms.members.add.infoText") }}</InfoAlert>
+			<div class="mt-8" data-testid="add-participant-school">
+				<v-autocomplete
+					ref="autoCompleteSchool"
+					v-model="selectedSchool"
+					density="comfortable"
+					item-title="name"
+					item-value="id"
+					variant="underlined"
+					:items="schoolList"
+					:label="t('global.sidebar.item.school')"
+					:disabled="isAutocompleteDisabled"
+					@update:model-value="onSchoolChange"
+					@update:menu="onAutocompleteToggle"
+				/>
+			</div>
 
-				<div class="mt-4" data-testid="add-participant-role">
-					<v-autocomplete
-						ref="autoCompleteRole"
-						v-model="selectedSchoolRole"
-						auto-select-first="exact"
-						density="comfortable"
-						item-title="name"
-						item-value="id"
-						variant="underlined"
-						:items="schoolRoles"
-						:label="t('common.labels.role')"
-						@update:model-value="onRoleChange"
-						@update:menu="onAutocompleteToggle"
-					/>
-				</div>
+			<div class="mt-4" data-testid="add-participant-role">
+				<v-autocomplete
+					ref="autoCompleteRole"
+					v-model="selectedSchoolRole"
+					auto-select-first="exact"
+					density="comfortable"
+					item-title="name"
+					item-value="id"
+					variant="underlined"
+					:items="schoolRoles"
+					:label="t('pages.rooms.members.tableHeader.schoolRole')"
+					:disabled="isAutocompleteDisabled"
+					@update:model-value="onRoleChange"
+					@update:menu="onAutocompleteToggle"
+				/>
+			</div>
 
-				<div class="mt-4" data-testid="add-participant-name">
-					<v-autocomplete
-						ref="autoCompleteUsers"
-						v-model="selectedUsers"
-						chips
-						clear-on-select
-						closable-chips
-						item-value="userId"
-						item-title="fullName"
-						multiple
-						variant="underlined"
-						:items="memberList"
-						:label="t('common.labels.name')"
-						@update:menu="onAutocompleteToggle"
-					/>
-				</div>
+			<div class="mt-4" data-testid="add-participant-name">
+				<v-autocomplete
+					ref="autoCompleteUsers"
+					v-model="selectedUsers"
+					chips
+					clear-on-select
+					closable-chips
+					item-value="userId"
+					item-title="fullName"
+					multiple
+					variant="underlined"
+					:items="memberList"
+					:label="t('common.labels.name')"
+					@update:menu="onAutocompleteToggle"
+				/>
 			</div>
 		</template>
 
@@ -85,11 +86,12 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { PropType, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef } from "vue";
 import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
 import { RoomMember } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VAutocomplete, VCard } from "vuetify/lib/components/index.mjs";
+import { InfoAlert } from "@ui-alert";
 
 const props = defineProps({
 	memberList: {
@@ -164,4 +166,6 @@ const onAutocompleteToggle = () => {
 		unpause();
 	}
 };
+
+const isAutocompleteDisabled = computed(() => selectedUsers.value.length > 0);
 </script>
