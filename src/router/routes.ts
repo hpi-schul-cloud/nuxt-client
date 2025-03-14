@@ -362,7 +362,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: `/open-source-licences`,
-		component: async () => await import("@/pages/Sbom.page.vue"),
+		component: async () => await import("@/pages/LicenceList.page.vue"),
 		name: "open-source-licences",
 	},
 	{

@@ -161,6 +161,11 @@ export const useSidebarItems = () => {
 			rel: "noopener",
 			testId: "sidebar-privacypolicy",
 		},
+		{
+			to: "/open-source-licences",
+			title: "List of licenses",
+			testId: "_____",
+		},
 	]);
 
 	const systemLinks: SidebarSingleItem[] = [
