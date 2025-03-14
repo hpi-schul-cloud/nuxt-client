@@ -1,9 +1,13 @@
+.gitignore
+.npmignore
+.openapi-generator-ignore
 api.ts
 api/file-api.ts
 api/file-config-api.ts
 base.ts
 common.ts
 configuration.ts
+git_push.sh
 index.ts
 models/api-validation-error.ts
 models/copy-file-list-response.ts
