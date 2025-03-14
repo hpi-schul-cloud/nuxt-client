@@ -62,7 +62,7 @@ const onAddColumn = () => emit("create:column");
 const ghostColumnClasses = computed(() => {
 	const classes = ["d-flex", "flex-row", "flex-shrink-1"];
 	if (!props.isListBoard) {
-		classes.push("column-container", "ml-n4", "pl-2");
+		classes.push("h-100", "ml-n4", "pl-2");
 	} else {
 		classes.push("list-container");
 	}
@@ -83,18 +83,10 @@ const title = computed(() =>
 	transition: min-width 200ms;
 }
 
-/* Subtracted is the height of the column-header. */
+/* The height is set here to extend the droppable area of the ghost-column. */
+/* Subtracted is the height of the ghost-column-header. */
 .sortable-container {
 	height: calc(100% - 77px);
-}
-
-/**
- * This rule extends the droppable area of columns.
- * Without this rule cards have to be placed closely below the last card in a column to be added.
-*/
-.column-container {
-	height: 100%;
-	padding-bottom: 50px;
 }
 
 .list-container {
