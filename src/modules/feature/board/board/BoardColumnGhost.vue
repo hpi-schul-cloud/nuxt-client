@@ -1,5 +1,5 @@
 <template>
-	<div ref="ghostColumnRef" :class="{ 'pl-4 pr-6': !isListBoard }">
+	<div ref="ghostColumnRef" :class="{ 'h-100 pl-4 pr-6': !isListBoard }">
 		<BoardSectionCreationHeader
 			:label="title"
 			:isColumnActive="isColumnHovered"
@@ -8,8 +8,8 @@
 		/>
 		<div
 			:style="{ 'min-width': colWidth + 'px' }"
-			class="column-drag-handle grow-transition"
-			:class="{ 'mr-4': !isListBoard }"
+			class="grow-transition"
+			:class="{ 'mr-4 sortable-container': !isListBoard }"
 		>
 			<Sortable
 				:list="[]"
@@ -30,7 +30,7 @@
 					forceFallback: true,
 					bubbleScroll: true,
 				}"
-				:class="ghostColumnStyle"
+				:class="ghostColumnClasses"
 			/>
 		</div>
 	</div>
@@ -59,10 +59,10 @@ const colWidth = computed<number>(() =>
 
 const onAddColumn = () => emit("create:column");
 
-const ghostColumnStyle = computed(() => {
+const ghostColumnClasses = computed(() => {
 	const classes = ["d-flex", "flex-row", "flex-shrink-1"];
 	if (!props.isListBoard) {
-		classes.push("column-container", "ml-n4", "pl-2");
+		classes.push("h-100", "ml-n4", "pl-2");
 	} else {
 		classes.push("list-container");
 	}
@@ -83,24 +83,16 @@ const title = computed(() =>
 	transition: min-width 200ms;
 }
 
-/**
- * This rule extends the droppable area of columns.
- * Without this rule cards have to be placed closely below the last card in a column to be added.
-*/
-.column-container {
-	min-height: 70vh;
-	height: 100%;
-	padding-bottom: 50px;
+/* The height is set here to extend the droppable area of the ghost-column. */
+/* Subtracted is the height of the ghost-column-header. */
+.sortable-container {
+	height: calc(100% - 77px);
 }
 
 .list-container {
 	min-height: 8rem;
 	height: 100%;
 	padding-bottom: 50px;
-}
-
-.expanded-column {
-	min-height: 75vh;
 }
 </style>
 

@@ -58,9 +58,9 @@
 			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
 			:class="{
+				'pa-0': mainWithoutPadding,
 				'container-short-width': maxWidth === 'short',
 				'container-full-width': maxWidth === 'full',
-				'overflow-x-auto': allowOverflowX,
 			}"
 		>
 			<slot />
@@ -96,11 +96,6 @@ const props = defineProps({
 		required: false,
 		default: null,
 	},
-	allowOverflowX: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
 	hideBorder: {
 		type: Boolean,
 	},
@@ -109,6 +104,9 @@ const props = defineProps({
 		default: null,
 	},
 	fixedHeader: {
+		type: Boolean,
+	},
+	mainWithoutPadding: {
 		type: Boolean,
 	},
 });
