@@ -42,6 +42,7 @@ const vueRoutes = [
 	`^/media-shelf/?$`,
 	`^/news/new/?$`,
 	`^/news/${mongoId}/edit/?$`,
+	`^/open-source-licences/?$`,
 	`^/poc-files/?$`,
 	`^/rooms/?$`,
 	`^/rooms/new/?$`,
