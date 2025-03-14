@@ -454,7 +454,7 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 };
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 .board {
 	padding: 0 var(--space-lg);
 }
