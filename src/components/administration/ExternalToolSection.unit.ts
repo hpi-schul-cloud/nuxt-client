@@ -303,7 +303,9 @@ describe("ExternalToolSection", () => {
 				expect(firstRow[2].find("span").text()).toEqual("Medium Source Name");
 
 				expect(secondRow[2].html()).toContain(mdiAlert);
-				expect(secondRow[2].find("span").text()).toEqual("");
+				expect(secondRow[2].find("span").text()).toEqual(
+					"pages.tool.medium.noMediaSource"
+				);
 
 				expect(thirdRow[2].html()).not.toContain("v-icon");
 				expect(thirdRow[2].find("span").text()).toEqual("-");
