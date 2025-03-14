@@ -102,10 +102,6 @@ const title = computed(() =>
 	height: 100%;
 	padding-bottom: 50px;
 }
-
-.expanded-column {
-	min-height: 75vh;
-}
 </style>
 
 <style>
