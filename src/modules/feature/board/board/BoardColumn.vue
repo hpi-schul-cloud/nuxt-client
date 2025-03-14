@@ -40,7 +40,7 @@
 					scroll: true,
 				}"
 				:class="{
-					'expanded-column': isDragging,
+					'expanded-sortable': isDragging,
 				}"
 				@start="onDragStart"
 				@end="onDragEnd"
@@ -285,7 +285,7 @@ export default defineComponent({
 		const scrollableClasses = computed(() => {
 			const classes = [];
 			if (!props.isListBoard) {
-				classes.push("scrollable-column");
+				classes.push("scrollable");
 			}
 			return classes;
 		});
@@ -362,7 +362,7 @@ export default defineComponent({
 	width: 400px;
 }
 
-.expanded-column {
+.expanded-sortable {
 	/* Subtracted is the height of the add-button. */
 	min-height: calc(100% - 64px);
 	/* "overflow: hidden" is set here to prevent margin collapsing, which destroys the layout.
@@ -371,37 +371,37 @@ export default defineComponent({
 }
 
 @supports selector(::-webkit-scrollbar) {
-	.scrollable-column::-webkit-scrollbar {
+	.scrollable::-webkit-scrollbar {
 		width: 6px;
 	}
 
-	.scrollable-column::-webkit-scrollbar-track {
+	.scrollable::-webkit-scrollbar-track {
 		background: white;
 		border: none;
 	}
 
-	.scrollable-column::-webkit-scrollbar-thumb {
+	.scrollable::-webkit-scrollbar-thumb {
 		background-color: transparent;
 		border-radius: 5px;
 	}
 
-	.column-drag-handle:hover .scrollable-column::-webkit-scrollbar-thumb {
+	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb {
 		background-color: rgba(var(--v-theme-on-surface), 0.6);
 		border-radius: 5px;
 	}
 
-	.scrollable-column::-webkit-scrollbar-thumb:hover {
+	.scrollable::-webkit-scrollbar-thumb:hover {
 		background: rgba(var(--v-theme-on-surface), 0.8) !important;
 	}
 }
 
 @supports not selector(::-webkit-scrollbar) {
-	.scrollable-column {
+	.scrollable {
 		scrollbar-width: thin;
 		scrollbar-color: transparent transparent;
 	}
 
-	.column-drag-handle:hover .scrollable-column {
+	.column-drag-handle:hover .scrollable {
 		scrollbar-color: initial;
 	}
 }
