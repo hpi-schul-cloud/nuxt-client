@@ -361,9 +361,9 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "media-shelf",
 	},
 	{
-		path: `/licences`,
+		path: `/open-source-licences`,
 		component: async () => await import("@/pages/Sbom.page.vue"),
-		name: "licences",
+		name: "open-source-licences",
 	},
 	{
 		path: "/",
