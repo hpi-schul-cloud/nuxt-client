@@ -24,7 +24,7 @@ import {
 import { createPinia, setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
-import { BoardLayout } from "../../../serverApi/v3";
+import { BoardLayout } from "@/serverApi/v3/api";
 import { useBoardStore } from "./Board.store";
 import { UpdateBoardLayoutRequestPayload } from "./boardActions/boardActionPayload";
 import { useBoardRestApi } from "./boardActions/boardRestApi.composable";

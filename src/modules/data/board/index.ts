@@ -11,6 +11,7 @@ import { useContentElementState } from "./ContentElementState.composable";
 import { useForceRender } from "./fixSamePositionDnD.composable";
 import { useSocketConnection } from "./socket/socket";
 
+export * from "./cardActions/cardActionPayload";
 export {
 	boardActions,
 	cardActions,

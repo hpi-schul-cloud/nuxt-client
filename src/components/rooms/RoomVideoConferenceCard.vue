@@ -47,6 +47,9 @@
 </template>
 
 <script lang="ts">
+import noPermissionImg from "@/assets/img/bbb/no_permission.png";
+import availableImg from "@/assets/img/bbb/available.png";
+import notStartedImg from "@/assets/img/bbb/not_started.png";
 import { mdiReload } from "@icons/material";
 import { computed, ComputedRef, defineComponent } from "vue";
 import RoomBaseCard from "./RoomBaseCard.vue";
@@ -86,12 +89,12 @@ export default defineComponent({
 
 		const logoUrl: ComputedRef<string> = computed(() => {
 			if (!props.hasPermission) {
-				return require("@/assets/img/bbb/no_permission.png");
+				return noPermissionImg;
 			} else if (props.isRunning) {
-				return require("@/assets/img/bbb/available.png");
+				return availableImg;
 			}
 
-			return require("@/assets/img/bbb/not_started.png");
+			return notStartedImg;
 		});
 
 		return {

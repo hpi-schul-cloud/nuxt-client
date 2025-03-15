@@ -23,7 +23,7 @@ import { useBoardNotifier, useSharedLastCreatedElement } from "@util-board";
 import { setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
 import { Router, useRouter } from "vue-router";
-import { BoardLayout } from "../../../../serverApi/v3";
+import { BoardLayout } from "@/serverApi/v3/api";
 import { DeleteCardFailurePayload } from "../cardActions/cardActionPayload";
 import * as CardActions from "../cardActions/cardActions";
 import {

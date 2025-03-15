@@ -1,5 +1,5 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
+import { CreateElementRequestPayload } from "@data-board";
 import {
 	ContentElementType,
 	PreferredToolResponse,

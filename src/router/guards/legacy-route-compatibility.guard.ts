@@ -3,7 +3,7 @@ import {
 	NavigationGuardNext,
 	RouteLocationNormalized,
 } from "vue-router";
-const { isLegacyClient } = require("../legacy-client-route.js");
+import { isLegacyClient } from "../legacy-client-route.js";
 
 export const legacyCompatibilityGuard: NavigationGuard = (
 	to: RouteLocationNormalized,

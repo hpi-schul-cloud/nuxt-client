@@ -1,4 +1,4 @@
-import { CreateElementRequestPayload } from "@/modules/data/board/cardActions/cardActionPayload";
+import type { CreateElementRequestPayload } from "@data-board";
 import {
 	BoardFeature,
 	ContentElementType,

@@ -26,7 +26,7 @@ import { useSharedEditMode } from "@util-board";
 import { setActivePinia } from "pinia";
 import { computed, ref } from "vue";
 import { Router, useRouter } from "vue-router";
-import { BoardLayout } from "../../../../serverApi/v3";
+import { BoardLayout } from "@/serverApi/v3/api";
 import { useBoardApi } from "../BoardApi.composable";
 import { useBoardRestApi } from "./boardRestApi.composable";
 
