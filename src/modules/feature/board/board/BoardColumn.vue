@@ -390,8 +390,8 @@ export default defineComponent({
 		border-radius: 5px;
 	}
 
-	.scrollable::-webkit-scrollbar-thumb:hover {
-		background: rgba(var(--v-theme-on-surface), 0.8) !important;
+	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb:hover {
+		background: rgba(var(--v-theme-on-surface), 0.8);
 	}
 }
 
