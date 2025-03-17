@@ -139,7 +139,7 @@ const showDivider = computed(() => {
 }
 
 .wireframe-container {
-	height: calc(100vh - 64px);
+	height: calc(100vh - var(--appbar-height));
 }
 
 .wireframe-header {
@@ -180,14 +180,14 @@ const showDivider = computed(() => {
 
 .sticky {
 	position: sticky;
-	top: 64px;
+	top: var(--appbar-height);
 	z-index: var(--layer-sticky-header);
 	background-color: rgb(var(--v-theme-white));
 }
 
 .fixed {
 	position: fixed;
-	top: 64px;
+	top: var(--appbar-height);
 	width: 100%;
 	background-color: rgb(var(--v-theme-white));
 }
