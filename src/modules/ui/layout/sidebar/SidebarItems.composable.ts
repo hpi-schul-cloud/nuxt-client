@@ -163,8 +163,8 @@ export const useSidebarItems = () => {
 		},
 		{
 			to: "/open-source-licences",
-			title: "List of licenses",
-			testId: "_____",
+			title: "Licenses",
+			testId: "sidebar-licenses",
 		},
 	]);
 

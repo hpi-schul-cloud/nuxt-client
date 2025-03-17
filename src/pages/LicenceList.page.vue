@@ -1,10 +1,10 @@
 <template>
-	<default-wireframe headline="Open Source Licence List" max-width="short">
+	<default-wireframe headline="Open Source License List" max-width="short">
 		<div
 			class="d-flex align-center justify-space-between px-4 pl-12"
 			style="max-width: 100%"
 		>
-			<div>Licence Name</div>
+			<div>License Name</div>
 			<v-spacer />
 
 			<div>Component Count</div>
@@ -33,7 +33,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL as string;
 // const { t } = useI18n(); TODO: use i18n
 
-type LicenceData = {
+type LicenseData = {
 	[key: string]: {
 		components: string[];
 		licenseText: string;
@@ -48,7 +48,7 @@ type TreeViewItem = {
 };
 
 const loading = ref<boolean>(false);
-const response = ref<LicenceData>({});
+const response = ref<LicenseData>({});
 const licenseNames = ref<string[]>([]);
 const licenseList = ref<TreeViewItem[]>([]);
 
@@ -77,7 +77,7 @@ const onExpand = async (args: unknown): Promise<void> => {
 	});
 };
 
-const fetchLicenseData = async () => {
+const fetchlicenseData = async () => {
 	try {
 		response.value = (await axios.get(licensesUrl)).data;
 		licenseNames.value = Object.keys(response.value);
@@ -100,6 +100,6 @@ const fetchLicenseData = async () => {
 };
 
 onMounted(async () => {
-	fetchLicenseData();
+	fetchlicenseData();
 });
 </script>
