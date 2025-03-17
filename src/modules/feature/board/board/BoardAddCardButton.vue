@@ -1,6 +1,6 @@
 <template>
 	<div
-		class="d-flex w-100 justify-center button-background pb-4 pt-2 text-center sticky"
+		class="d-flex justify-center button-background pb-4 pt-2 sticky"
 		ref="sticky"
 	>
 		<VBtn
@@ -54,6 +54,5 @@ const isEditMode = computed(() => editModeId.value !== undefined);
 		rgba(255, 255, 255, 1) 50%,
 		rgba(255, 255, 255, 0) 100%
 	);
-	width: 380px;
 }
 </style>
