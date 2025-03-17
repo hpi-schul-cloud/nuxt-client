@@ -10,7 +10,7 @@
 			:aria-label="t('pages.roomDetails.ariaLabels.menu.action.edit')"
 		/>
 		<KebabMenuActionEditMembers
-			v-if="canAddRoomMembers"
+			v-if="canViewRoom"
 			@click="() => $emit('room:manage-members')"
 			:aria-label="t('pages.rooms.members.manage')"
 		/>
@@ -23,7 +23,7 @@
 		/>
 
 		<KebabMenuActionLeaveRoom
-			v-if="canLeaveRoom"
+			:disabled="!canLeaveRoom"
 			@click="() => $emit('room:leave')"
 			:aria-label="t('pages.rooms.leaveRoom.menu')"
 		/>
@@ -60,6 +60,6 @@ const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 	}
 };
 
-const { canAddRoomMembers, canEditRoom, canDeleteRoom, canLeaveRoom } =
+const { canEditRoom, canDeleteRoom, canLeaveRoom, canViewRoom } =
 	useRoomAuthorization();
 </script>

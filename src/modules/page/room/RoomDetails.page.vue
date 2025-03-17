@@ -11,7 +11,6 @@
 					{{ roomTitle }}
 				</h1>
 				<RoomMenu
-					v-if="isMenuEnabled"
 					:roomName="room?.name"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
@@ -82,9 +81,6 @@ const boardLayoutsEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
 );
 
-const isMenuEnabled = computed(
-	() => canLeaveRoom.value || canEditRoom.value || canViewRoom.value
-);
 const boardLayoutDialogIsOpen = ref(false);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
