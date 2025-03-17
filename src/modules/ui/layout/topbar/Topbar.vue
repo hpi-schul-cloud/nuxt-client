@@ -124,11 +124,14 @@ const hasLogo = computed(() => {
 	return !!school.value?.logo?.url;
 });
 
-const appBarHeight = parseInt(
-	window
+const appBarHeight = computed(() => {
+	const height = window
 		.getComputedStyle(document.documentElement)
-		.getPropertyValue("--appbar-height")
-);
+		.getPropertyValue("--appbar-height");
+	const heightWithoutUnit = parseInt(height);
+
+	return heightWithoutUnit;
+});
 </script>
 
 <style scoped>
