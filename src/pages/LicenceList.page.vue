@@ -1,9 +1,18 @@
 <template>
-	<default-wireframe headline="Open Source Licences" max-width="short">
+	<default-wireframe headline="Open Source Licence List" max-width="short">
+		<div
+			class="d-flex align-center justify-space-between px-4 pl-12"
+			style="max-width: 100%"
+		>
+			<div>Licence Name</div>
+			<v-spacer />
+
+			<div>Component Count</div>
+		</div>
 		<VTreeview
 			:items="licenseList"
 			:open-on-click="true"
-			:load-children="onOpen"
+			:load-children="onExpand"
 			:loading-icon="'$loading'"
 		>
 			<template #append="{ item }">
@@ -19,8 +28,10 @@ import { envConfigModule } from "@/store";
 import axios from "axios";
 import { VTreeview } from "vuetify/labs/VTreeview";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+// import { useI18n } from "vue-i18n";
 
 const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL as string;
+// const { t } = useI18n(); TODO: use i18n
 
 type LicenceData = {
 	[key: string]: {
@@ -41,24 +52,21 @@ const response = ref<LicenceData>({});
 const licenseNames = ref<string[]>([]);
 const licenseList = ref<TreeViewItem[]>([]);
 
-const onOpen = async (payload: TreeViewItem) => {
+const onExpand = async (args: unknown): Promise<void> => {
+	const payload = args as TreeViewItem;
 	loading.value = true;
-	await new Promise((resolve) => {
-		const item = licenseList.value.find(
-			(license) => license.title === payload.title
-		);
-		if (item?.title !== payload.title) return;
-		if (item.children && item.children.length > 0) return;
 
-		item.children = response.value[payload.title].components?.map(
-			(component) => {
-				return {
-					id: component,
-					title: component,
-				};
-			}
-		);
-		return resolve(true);
+	const item = licenseList.value.find(
+		(license) => license.title === payload.title
+	);
+	if (item?.title !== payload.title) return;
+	if (item.children && item.children.length > 0) return;
+
+	item.children = response.value[payload.title].components?.map((component) => {
+		return {
+			id: component,
+			title: component,
+		};
 	});
 
 	await new Promise((resolve) => {
@@ -69,9 +77,14 @@ const onOpen = async (payload: TreeViewItem) => {
 	});
 };
 
-onMounted(async () => {
-	response.value = await axios.get(licensesUrl).then((res) => res.data);
-	licenseNames.value = Object.keys(response.value);
+const fetchLicenseData = async () => {
+	try {
+		response.value = (await axios.get(licensesUrl)).data;
+		licenseNames.value = Object.keys(response.value);
+	} catch {
+		// eslint-disable-next-line no-console
+		console.error("Failed to fetch license data");
+	}
 
 	if (response.value && licenseNames.value.length > 0) {
 		let i = 0;
@@ -84,5 +97,9 @@ onMounted(async () => {
 			});
 		});
 	}
+};
+
+onMounted(async () => {
+	fetchLicenseData();
 });
 </script>
