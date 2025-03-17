@@ -362,7 +362,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	},
 	{
 		path: "/licenses",
-		component: async () => await import("@/pages/LicenceList.page.vue"),
+		component: async () => await import("@/pages/LicenseList.page.vue"),
 		name: "licenses",
 		meta: {
 			isPublic: true,
