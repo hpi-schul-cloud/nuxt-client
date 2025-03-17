@@ -162,7 +162,7 @@ export const useSidebarItems = () => {
 			testId: "sidebar-privacypolicy",
 		},
 		{
-			to: "/open-source-licences",
+			to: "/licenses",
 			title: "Licenses",
 			testId: "sidebar-licenses",
 		},

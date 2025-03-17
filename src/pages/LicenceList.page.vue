@@ -1,37 +1,38 @@
 <template>
-	<default-wireframe headline="Open Source License List" max-width="short">
-		<div
-			class="d-flex align-center justify-space-between px-4 pl-12"
-			style="max-width: 100%"
-		>
-			<div>License Name</div>
-			<v-spacer />
+	<div class="d-flex justify-center">
+		<div class="license-list">
+			<h1 class="text-h3 d-flex justify-center">Open Source License List</h1>
 
-			<div>Component Count</div>
+			<div v-if="licenseNames.length > 0" class="d-flex px-4 pl-12">
+				<div>License Name</div>
+				<v-spacer />
+				<div>Component Count</div>
+			</div>
+			<div>
+				<VTreeview
+					:items="licenseList"
+					:open-on-click="true"
+					:load-children="onExpand"
+				>
+					<template #append="{ item }">
+						<span class="ml-4">{{ item.count }}</span>
+					</template>
+				</VTreeview>
+			</div>
 		</div>
-		<VTreeview
-			:items="licenseList"
-			:open-on-click="true"
-			:load-children="onExpand"
-			:loading-icon="'$loading'"
-		>
-			<template #append="{ item }">
-				<span>{{ item.count }}</span>
-			</template>
-		</VTreeview>
-	</default-wireframe>
+	</div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { envConfigModule } from "@/store";
+import { envConfigModule, notifierModule } from "@/store";
 import axios from "axios";
 import { VTreeview } from "vuetify/labs/VTreeview";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-// import { useI18n } from "vue-i18n";
+import { useI18n } from "vue-i18n";
 
-const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL as string;
-// const { t } = useI18n(); TODO: use i18n
+const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
+
+const { t } = useI18n();
 
 type LicenseData = {
 	[key: string]: {
@@ -47,14 +48,12 @@ type TreeViewItem = {
 	count?: number;
 };
 
-const loading = ref<boolean>(false);
 const response = ref<LicenseData>({});
 const licenseNames = ref<string[]>([]);
 const licenseList = ref<TreeViewItem[]>([]);
 
-const onExpand = async (args: unknown): Promise<void> => {
+const onExpand = async (args: unknown) => {
 	const payload = args as TreeViewItem;
-	loading.value = true;
 
 	const item = licenseList.value.find(
 		(license) => license.title === payload.title
@@ -68,22 +67,17 @@ const onExpand = async (args: unknown): Promise<void> => {
 			title: component,
 		};
 	});
-
-	await new Promise((resolve) => {
-		setTimeout(() => {
-			loading.value = false;
-			return resolve(true);
-		}, 0);
-	});
 };
 
-const fetchlicenseData = async () => {
+const fetchLicenseData = async () => {
 	try {
-		response.value = (await axios.get(licensesUrl)).data;
+		response.value = (await axios.get(licensesUrl as string)).data;
 		licenseNames.value = Object.keys(response.value);
 	} catch {
-		// eslint-disable-next-line no-console
-		console.error("Failed to fetch license data");
+		notifierModule.show({
+			text: t("error.load"),
+			status: "error",
+		});
 	}
 
 	if (response.value && licenseNames.value.length > 0) {
@@ -100,6 +94,12 @@ const fetchlicenseData = async () => {
 };
 
 onMounted(async () => {
-	fetchlicenseData();
+	fetchLicenseData();
 });
 </script>
+
+<style lang="scss" scoped>
+.license-list {
+	max-width: 720px;
+}
+</style>
