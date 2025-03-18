@@ -1,5 +1,6 @@
 import { Module, VuexModule, Mutation, Action } from "vuex-module-decorators";
 import { envConfigModule, accountsModule } from "@/store";
+import { logger } from "@util-logger";
 
 type SetRemainingTimeInSeconds = (remainingTime: number) => void;
 type SetActive = (active: boolean, error: boolean) => void;
@@ -68,18 +69,18 @@ const updateRemainingTime = (
 				if (ttl > 0) {
 					setRemainingTimeInSeconds(ttl);
 				} else {
-					console.error("Update remaining session time failed!");
+					logger.error("Update remaining session time failed!");
 				}
 			} catch (error) {
 				// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 				// @ts-ignore
 				if (error.response && error.response.status === 405) {
-					console.warn(
+					logger.warn(
 						"Synchronization of remaining session time will be disabled until the next reload of the page. Reason: missing configuration in server"
 					);
 					clearInterval(polling);
 				} else {
-					console.error("Update remaining session time failed!");
+					logger.error("Update remaining session time failed!");
 				}
 			}
 		},
@@ -241,7 +242,7 @@ export default class AutoLogoutModule extends VuexModule {
 				}
 			}
 		} catch (error) {
-			console.error(error);
+			logger.error(error);
 		}
 	}
 
@@ -261,7 +262,7 @@ export default class AutoLogoutModule extends VuexModule {
 				this.setToastValue.bind(this)
 			);
 		} catch (error) {
-			console.error(error);
+			logger.error(error);
 		}
 	}
 }

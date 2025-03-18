@@ -1,6 +1,7 @@
 import { ApiResponseError, ApiValidationError } from "@/store/types/commons";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { useBoardNotifier } from "@util-board";
+import { logger } from "@util-logger";
 import { useI18n } from "vue-i18n";
 
 export type ErrorType =
@@ -85,7 +86,7 @@ export const useErrorHandler = () => {
 		if (handlerFunction) {
 			handlerFunction(responseError);
 		} else {
-			console.error(error);
+			logger.error(error);
 		}
 	};
 
