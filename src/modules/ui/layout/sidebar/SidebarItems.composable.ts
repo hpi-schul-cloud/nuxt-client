@@ -164,6 +164,8 @@ export const useSidebarItems = () => {
 		{
 			to: "/licenses",
 			title: "Licenses",
+			feature: "LICENSE_SUMMARY_URL",
+			featureValue: `${envConfigModule.getEnv.LICENSE_SUMMARY_URL}`,
 			testId: "sidebar-licenses",
 		},
 	]);
