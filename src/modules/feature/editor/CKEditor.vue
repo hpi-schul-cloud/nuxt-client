@@ -118,66 +118,6 @@ export default defineComponent({
 					defaultProtocol: "//",
 					addTargetToExternalLinks: true,
 				},
-				highlight: {
-					options: [
-						{
-							model: "dullPinkMarker",
-							class: "marker-dull-pink",
-							title: t("components.editor.highlight.dullPink"),
-							color: "var(--ck-highlight-marker-dull-pink)",
-							type: "marker",
-						},
-						{
-							model: "pinkMarker",
-							class: "marker-pink",
-							title: "Pink marker",
-							color: "var(--ck-highlight-marker-pink)",
-							type: "marker",
-						},
-						{
-							model: "dullYellowMarker",
-							class: "marker-dull-yellow",
-							title: t("components.editor.highlight.dullYellow"),
-							color: "var(--ck-highlight-marker-dull-yellow)",
-							type: "marker",
-						},
-						{
-							model: "yellowMarker",
-							class: "marker-yellow",
-							title: "Yellow marker",
-							color: "var(--ck-highlight-marker-yellow)",
-							type: "marker",
-						},
-						{
-							model: "dullBlueMarker",
-							class: "marker-dull-blue",
-							title: t("components.editor.highlight.dullBlue"),
-							color: "var(--ck-highlight-marker-dull-blue)",
-							type: "marker",
-						},
-						{
-							model: "blueMarker",
-							class: "marker-blue",
-							title: "Blue marker",
-							color: "var(--ck-highlight-marker-blue)",
-							type: "marker",
-						},
-						{
-							model: "dullGreenMarker",
-							class: "marker-dull-green",
-							title: t("components.editor.highlight.dullGreen"),
-							color: "var(--ck-highlight-marker-dull-green)",
-							type: "marker",
-						},
-						{
-							model: "greenMarker",
-							class: "marker-green",
-							title: "Green marker",
-							color: "var(--ck-highlight-marker-green)",
-							type: "marker",
-						},
-					],
-				},
 				wordCount: {
 					onUpdate: (stats) => {
 						charCount.value = stats.characters;
@@ -244,26 +184,7 @@ export default defineComponent({
 <style lang="scss">
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
-:root {
-	--ck-highlight-marker-dull-blue: hsl(203, 64%, 86%);
-	--ck-highlight-marker-dull-green: hsl(91, 27%, 85%);
-	--ck-highlight-marker-dull-pink: hsl(341, 57%, 88%);
-	--ck-highlight-marker-dull-yellow: hsl(28, 67%, 86%);
-}
-
 .ck-content {
-	.marker-dull-pink {
-		background-color: var(--ck-highlight-marker-dull-pink);
-	}
-	.marker-dull-yellow {
-		background-color: var(--ck-highlight-marker-dull-yellow);
-	}
-	.marker-dull-blue {
-		background-color: var(--ck-highlight-marker-dull-blue);
-	}
-	.marker-dull-green {
-		background-color: var(--ck-highlight-marker-dull-green);
-	}
 	ul,
 	ol {
 		padding-left: revert;
