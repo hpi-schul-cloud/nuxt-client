@@ -1,5 +1,8 @@
 <template>
-	<div ref="ghostColumnRef" :class="{ 'h-100 pl-4 pr-6': !isListBoard }">
+	<div
+		ref="ghostColumnRef"
+		:class="{ 'h-100 pl-4 pr-6 d-flex flex-column': !isListBoard }"
+	>
 		<BoardSectionCreationHeader
 			:label="title"
 			:isColumnActive="isColumnHovered"
@@ -9,7 +12,7 @@
 		<div
 			:style="{ 'min-width': colWidth + 'px' }"
 			class="grow-transition"
-			:class="{ 'mr-4 sortable-container': !isListBoard }"
+			:class="{ 'mr-4 flex-grow-1': !isListBoard }"
 		>
 			<Sortable
 				:list="[]"
@@ -81,12 +84,6 @@ const title = computed(() =>
 <style scoped>
 .grow-transition {
 	transition: min-width 200ms;
-}
-
-/* The height is set here to extend the droppable area of the ghost-column. */
-/* Subtracted is the height of the ghost-column-header. */
-.sortable-container {
-	height: calc(100% - 77px);
 }
 
 .list-container {
