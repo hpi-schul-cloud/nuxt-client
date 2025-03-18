@@ -9,6 +9,7 @@
 			@add-column="onAddColumn"
 			data-testid="add-column"
 		/>
+		<!-- flex-grow-1 is set to expand the area where cards can be dragged in. -->
 		<div
 			:style="{ 'min-width': colWidth + 'px' }"
 			class="grow-transition"
