@@ -357,7 +357,7 @@ export default defineComponent({
 }
 
 .multi-column-board-column {
-	/* Subtracted are the heights of schulcloud-header, board-header and scrollbar. */
+	/* Subtracted are the heights of topbar, board-header and scrollbar. */
 	height: calc(100vh - var(--topbar-height) - 92.75px - 10px);
 	width: 400px;
 }
