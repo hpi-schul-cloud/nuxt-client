@@ -124,6 +124,7 @@ describe("Board", () => {
 	let route: DeepMocked<ReturnType<typeof useRoute>>;
 	let mockedCreateApplicationErrorCalls: ReturnType<typeof useApplicationError>;
 	const setErrorMock = jest.fn();
+	const hash = "";
 
 	beforeEach(() => {
 		mockedBoardNotifierCalls =
@@ -171,7 +172,7 @@ describe("Board", () => {
 		mockExtractDataAttribute.mockReturnValue("column-id");
 
 		route = createMock<ReturnType<typeof useRoute>>({
-			hash: "",
+			hash,
 		});
 		useRouteMock.mockReturnValue(route);
 
@@ -397,14 +398,18 @@ describe("Board", () => {
 
 		describe("when the url has a hash", () => {
 			const setup2 = () => {
-				setup();
-
-				const elementId = "card-12345";
-				route.hash = `#${elementId}`;
+				Object.defineProperty(window, "location", {
+					get: () =>
+						createMock<Location>({
+							hash: "#card-12345",
+						}),
+				});
 
 				const domElementMock = createMock<HTMLElement>();
 				const querySelectorSpy = jest.spyOn(document, "querySelector");
 				querySelectorSpy.mockReturnValueOnce(domElementMock);
+
+				setup();
 
 				return {
 					domElementMock,
