@@ -357,8 +357,11 @@ export default defineComponent({
 }
 
 .multi-column-board-column {
-	/* Subtracted are the heights of topbar, board-header and scrollbar. */
-	height: calc(100vh - var(--topbar-height) - 92.75px - 10px);
+	/* The last subtracted height of 10x is the height of the scrollbar. */
+	height: calc(
+		100vh - var(--topbar-height) - var(--breadcrumbs-height) -
+			var(--board-header-height) - 10px
+	);
 	width: 400px;
 }
 

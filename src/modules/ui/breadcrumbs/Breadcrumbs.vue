@@ -35,6 +35,7 @@ defineProps({
 <style lang="scss" scoped>
 .custom-breadcrumb {
 	display: inline-flex;
+	height: var(--breadcrumbs-height);
 	font-size: 14px;
 }
 </style>

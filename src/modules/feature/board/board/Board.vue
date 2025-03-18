@@ -13,7 +13,6 @@
 						:boardId="board.id"
 						:title="board.title"
 						:isDraft="!isBoardVisible"
-						class="mb-1"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
@@ -453,6 +452,12 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 	});
 };
 </script>
+
+<style>
+:root {
+	--board-header-height: 66px;
+}
+</style>
 
 <style scoped>
 .board {

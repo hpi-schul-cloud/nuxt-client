@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex align-items-center">
+	<div class="d-flex align-items-center board-header">
 		<InlineEditInteractionHandler
 			:isEditMode="isEditMode && canEditRoomBoard"
 			@start-edit-mode="onStartEditMode"
@@ -195,6 +195,10 @@ watchEffect(() => {
 
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
+
+.board-header {
+	height: var(--board-header-height);
+}
 
 .v-chip {
 	cursor: default;
