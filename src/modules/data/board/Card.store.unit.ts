@@ -1,5 +1,4 @@
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
-import { CreateElementRequestPayload } from "@data-board";
 import {
 	ContentElementType,
 	PreferredToolResponse,
@@ -18,7 +17,11 @@ import {
 import { cardResponseFactory } from "@@/tests/test-utils/factory/cardResponseFactory";
 import { drawingElementResponseFactory } from "@@/tests/test-utils/factory/drawingElementResponseFactory";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useCardStore, useSocketConnection } from "@data-board";
+import {
+	CreateElementRequestPayload,
+	useCardStore,
+	useSocketConnection,
+} from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import {
 	useBoardNotifier,
