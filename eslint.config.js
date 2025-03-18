@@ -106,7 +106,7 @@ module.exports = defineConfigWithVueTs([
 				},
 			],
 			"@typescript-eslint/no-unused-vars": "warn",
-			"no-console": process.env.NODE_ENV === "production" ? "off" : "warn",
+			"no-console": process.env.NODE_ENV === "production" ? "off" : "error",
 			"no-debugger": process.env.NODE_ENV === "production" ? "off" : "warn",
 			"no-empty": "error",
 			"no-irregular-whitespace": "error",

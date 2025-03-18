@@ -71,6 +71,7 @@ import {
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
+import { logger } from "@util-logger";
 
 export const app = createApp(App);
 
@@ -111,7 +112,7 @@ app.use(VueDOMPurifyHTML, {
 		await authModule.login();
 	} catch (error) {
 		// TODO improve exception handling, best case test if its a 401, if not log the unknown error
-		console.info("probably not logged in", error);
+		logger.info("probably not logged in", error);
 	}
 
 	// creation of i18n relies on envConfigModule authModule

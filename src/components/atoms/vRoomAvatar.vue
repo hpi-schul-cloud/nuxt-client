@@ -21,8 +21,8 @@
 				:size="size"
 				:color="avatarColor"
 				variant="flat"
-				class="rounded-lg"
 				:class="avatarClass"
+				:rounded="condenseLayout ? 0 : 'lg'"
 				:ripple="false"
 				:disabled="condenseLayout"
 				@click="onClick"
@@ -31,7 +31,6 @@
 			>
 				<v-avatar
 					:aria-label="avatarAriaLabel"
-					:rounded="condenseLayout ? 0 : 'lg'"
 					:size="size"
 					data-testid="course-icon"
 				>
