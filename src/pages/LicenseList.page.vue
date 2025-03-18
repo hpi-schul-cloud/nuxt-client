@@ -1,12 +1,14 @@
 <template>
 	<div class="d-flex justify-center">
 		<div class="license-list">
-			<h1 class="text-h3 d-flex justify-center">Open Source License List</h1>
+			<h1 class="text-h3 d-flex justify-center">
+				{{ t("pages.licanseList.title") }}
+			</h1>
 
 			<div v-if="licenseNames.length > 0" class="d-flex px-4 pl-7">
-				<div>License Name</div>
+				<div>{{ t("pages.licanseList.name") }}</div>
 				<v-spacer />
-				<div>Component Count</div>
+				<div>{{ t("pages.licanseList.componentCount") }}</div>
 			</div>
 			<div>
 				<VTreeview

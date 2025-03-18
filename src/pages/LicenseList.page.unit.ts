@@ -73,4 +73,13 @@ describe("LicenseList Page", () => {
 		expect(JSON.stringify(treeViewComponent.vm.items)).toContain("MIT-License");
 		expect(JSON.stringify(treeViewComponent.vm.items)).toContain("Apache-2.0");
 	});
+
+	it("should show error notification on error", async () => {
+		mockAxios.get.mockRejectedValueOnce(new Error("Error"));
+
+		setup();
+		await nextTick();
+
+		expect(notifierModule.show).toHaveBeenCalled();
+	});
 });
