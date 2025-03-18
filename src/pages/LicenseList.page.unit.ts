@@ -1,4 +1,3 @@
-import { shallowMount } from "@vue/test-utils";
 import LicenseListPage from "./LicenseList.page.vue";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
@@ -39,7 +38,7 @@ describe("LicenseList Page", () => {
 			getEnv: { ...envs },
 		});
 
-		const wrapper = shallowMount(LicenseListPage, {
+		const wrapper = mount(LicenseListPage, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 				provide: {
@@ -55,6 +54,7 @@ describe("LicenseList Page", () => {
 	it("should render the component", () => {
 		const { wrapper } = setup();
 		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.text()).toContain("pages.licenseList.title");
 	});
 
 	it("should call the license summary url", () => {

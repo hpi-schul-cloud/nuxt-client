@@ -2,13 +2,13 @@
 	<div class="d-flex justify-center">
 		<div class="license-list">
 			<h1 class="text-h3 d-flex justify-center">
-				{{ t("pages.licanseList.title") }}
+				{{ t("pages.licenseList.title") }}
 			</h1>
 
 			<div v-if="licenseNames.length > 0" class="d-flex px-4 pl-7">
-				<div>{{ t("pages.licanseList.name") }}</div>
+				<div>{{ t("pages.licenseList.name") }}</div>
 				<v-spacer />
-				<div>{{ t("pages.licanseList.componentCount") }}</div>
+				<div>{{ t("pages.licenseList.componentCount") }}</div>
 			</div>
 			<div>
 				<VTreeview
@@ -16,6 +16,10 @@
 					:open-on-click="true"
 					:load-children="onExpand"
 				>
+					<template #title="{ title }">
+						<span>{{ title }}</span>
+					</template>
+
 					<template #append="{ item }">
 						<span class="ml-4">{{ item.count }}</span>
 					</template>
