@@ -24,6 +24,7 @@
 							:value="option.role"
 							color="primary"
 							class="align-start mb-2"
+							:data-testid="option.dataTestid"
 						>
 							<template #label>
 								<div class="d-flex flex-column mt-2">
@@ -226,16 +227,19 @@ const radioOptions = computed(() => {
 			role: RoleName.Roomviewer,
 			labelHeader: t("pages.rooms.members.roomPermissions.viewer"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomviewer.label"],
+			dataTestid: "change-role-option-viewer",
 		},
 		{
 			role: RoleName.Roomeditor,
 			labelHeader: t("pages.rooms.members.roomPermissions.editor"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomeditor.label"],
+			dataTestid: "change-role-option-editor",
 		},
 		{
 			role: RoleName.Roomadmin,
 			labelHeader: t("pages.rooms.members.roomPermissions.admin"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomadmin.label"],
+			dataTestid: "change-role-option-admin",
 		},
 	];
 
@@ -247,6 +251,7 @@ const radioOptions = computed(() => {
 				"pages.rooms.members.roleChange.Roomowner.label",
 				"pages.rooms.members.roleChange.Roomowner.label.subText",
 			],
+			dataTestid: "change-role-option-owner",
 		});
 	}
 
