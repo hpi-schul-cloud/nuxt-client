@@ -45,7 +45,6 @@ module.exports = defineConfigWithVueTs([
 			globals: {
 				...globals.node,
 				...globals.browser,
-				...globals.jest,
 				NodeJS: true,
 			},
 		},
@@ -138,7 +137,12 @@ module.exports = defineConfigWithVueTs([
 		},
 	},
 	{
-		files: ["**/*.unit.{j,t}s?(x)", "tests/**"],
+		files: [
+			"**/*.unit.{j,t}s?(x)",
+			"tests/**",
+			"**/test-utils/**",
+			"__mocks__/**",
+		],
 		languageOptions: {
 			globals: {
 				...globals.jest,
