@@ -72,7 +72,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const { t, locale } = useI18n();
+		const { locale } = useI18n();
 
 		const ck = ref(null);
 		const modelValue = useVModel(props, "value", emit);

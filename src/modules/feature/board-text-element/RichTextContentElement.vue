@@ -132,10 +132,6 @@ export default defineComponent({
 			line-height: var(--line-height-lg);
 			margin-bottom: var(--space-xs);
 		}
-
-		ul {
-			list-style-type: circle;
-		}
 	}
 }
 </style>
