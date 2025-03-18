@@ -23,7 +23,7 @@
 		/>
 
 		<KebabMenuActionLeaveRoom
-			:disabled="!canLeaveRoom"
+			v-if="canLeaveRoom"
 			@click="() => $emit('room:leave')"
 			:aria-label="t('pages.rooms.leaveRoom.menu')"
 		/>
