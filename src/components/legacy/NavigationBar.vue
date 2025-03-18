@@ -126,10 +126,10 @@ export default {
 	}
 
 	@include breakpoint(desktop) {
-		height: var(--topbar-height);
+		height: var(--legacy-topbar-height);
 
 		> a > img {
-			height: var(--topbar-height);
+			height: var(--legacy-topbar-height);
 		}
 	}
 }

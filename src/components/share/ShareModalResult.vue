@@ -123,7 +123,7 @@ const onShowQrCode = () => {
 }
 
 .button-max-width {
-	max-width: calc(var(--topbar-height) * 2);
+	max-width: calc(var(--legacy-topbar-height) * 2);
 }
 
 .button-alignment-top {

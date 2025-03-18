@@ -127,7 +127,7 @@ const hasLogo = computed(() => {
 const appBarHeight = computed(() => {
 	const height = window
 		.getComputedStyle(document.documentElement)
-		.getPropertyValue("--appbar-height");
+		.getPropertyValue("--topbar-height");
 	const heightWithoutUnit = parseInt(height);
 
 	return heightWithoutUnit;
