@@ -17,7 +17,7 @@
 					:load-children="onExpand"
 				>
 					<template #title="{ title }">
-						<span>{{ title }}</span>
+						<span data-testid="license-title">{{ title }}</span>
 					</template>
 
 					<template #append="{ item }">

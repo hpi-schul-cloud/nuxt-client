@@ -10,6 +10,7 @@ import { envsFactory } from "@@/tests/test-utils";
 import axios from "axios";
 import NotifierModule from "@/store/notifier";
 import { nextTick } from "vue";
+import { flushPromises } from "@vue/test-utils";
 
 jest.mock("axios");
 const mockAxios = jest.mocked(axios);
@@ -51,10 +52,15 @@ describe("LicenseList Page", () => {
 		return { wrapper };
 	};
 
-	it("should render the component", () => {
+	it("should render the component", async () => {
 		const { wrapper } = setup();
+		await flushPromises();
 		expect(wrapper.exists()).toBe(true);
 		expect(wrapper.text()).toContain("pages.licenseList.title");
+		expect(wrapper.text()).toContain("pages.licenseList.name");
+		expect(wrapper.text()).toContain("pages.licenseList.componentCount");
+		expect(wrapper.text()).toContain("MIT-License");
+		expect(wrapper.text()).toContain("Apache-2.0");
 	});
 
 	it("should call the license summary url", () => {
@@ -62,24 +68,27 @@ describe("LicenseList Page", () => {
 		expect(mockAxios.get).toHaveBeenCalledWith(envs.LICENSE_SUMMARY_URL);
 	});
 
-	it("should pass the response to component", async () => {
-		const { wrapper } = setup();
-		await nextTick();
-
-		const treeViewComponent = wrapper.findComponent({ name: "VTreeview" });
-
-		expect(treeViewComponent.exists()).toBe(true);
-		expect(treeViewComponent.vm.items).toHaveLength(2);
-		expect(JSON.stringify(treeViewComponent.vm.items)).toContain("MIT-License");
-		expect(JSON.stringify(treeViewComponent.vm.items)).toContain("Apache-2.0");
-	});
-
 	it("should show error notification on error", async () => {
 		mockAxios.get.mockRejectedValueOnce(new Error("Error"));
-
 		setup();
 		await nextTick();
 
 		expect(notifierModule.show).toHaveBeenCalled();
+	});
+
+	describe("when the license item is clicked", () => {
+		it("should show the component list", async () => {
+			const { wrapper } = setup();
+			await flushPromises();
+
+			expect(wrapper.text()).not.toContain("ComponentA");
+			expect(wrapper.text()).not.toContain("ComponentB");
+
+			const licenseItemTitle = wrapper.find('[data-testid="license-title"]');
+			await licenseItemTitle.trigger("click");
+			await nextTick();
+			expect(wrapper.text()).toContain("ComponentA");
+			expect(wrapper.text()).toContain("ComponentB");
+		});
 	});
 });
