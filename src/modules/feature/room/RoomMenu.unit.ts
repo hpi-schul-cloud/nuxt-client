@@ -11,7 +11,7 @@ import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionEdit,
-	KebabMenuActionEditMembers,
+	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,
 } from "@ui-kebab-menu";
 
@@ -52,8 +52,8 @@ describe("@feature-room/RoomMenu", () => {
 	const findKebabActions = (wrapper: VueWrapper) => {
 		const kebabActionDelete = wrapper.findComponent(KebabMenuActionDelete);
 		const kebabActionEdit = wrapper.findComponent(KebabMenuActionEdit);
-		const kebabActionEditMembers = wrapper.findComponent(
-			KebabMenuActionEditMembers
+		const kebabActionRoomMembers = wrapper.findComponent(
+			KebabMenuActionRoomMembers
 		);
 		const kebabActionLeaveRoom = wrapper.findComponent(
 			KebabMenuActionLeaveRoom
@@ -61,7 +61,7 @@ describe("@feature-room/RoomMenu", () => {
 
 		return {
 			kebabActionEdit,
-			kebabActionEditMembers,
+			kebabActionRoomMembers,
 			kebabActionDelete,
 			kebabActionLeaveRoom,
 		};
@@ -80,78 +80,78 @@ describe("@feature-room/RoomMenu", () => {
 
 	describe("when user only has edit permission", () => {
 		it("should contain edit and manage members menu items", async () => {
-			roomPermissions.canAddRoomMembers.value = false;
+			roomPermissions.canViewRoom.value = false;
 			roomPermissions.canEditRoom.value = true;
 			roomPermissions.canDeleteRoom.value = false;
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
-			const { kebabActionEdit, kebabActionEditMembers, kebabActionDelete } =
+			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete } =
 				findKebabActions(wrapper);
 
 			expect(kebabActionEdit.exists()).toBe(true);
-			expect(kebabActionEditMembers.exists()).toBe(false);
+			expect(kebabActionRoomMembers.exists()).toBe(false);
 			expect(kebabActionDelete.exists()).toBe(false);
 		});
 	});
 
 	describe("when user only has delete permission", () => {
 		it("should only contain delete menu item", async () => {
-			roomPermissions.canAddRoomMembers.value = false;
+			roomPermissions.canViewRoom.value = false;
 			roomPermissions.canEditRoom.value = false;
 			roomPermissions.canDeleteRoom.value = true;
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
-			const { kebabActionEdit, kebabActionEditMembers, kebabActionDelete } =
+			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete } =
 				findKebabActions(wrapper);
 
 			expect(kebabActionEdit.exists()).toBe(false);
-			expect(kebabActionEditMembers.exists()).toBe(false);
+			expect(kebabActionRoomMembers.exists()).toBe(false);
 			expect(kebabActionDelete.exists()).toBe(true);
 		});
 	});
 
-	describe("when user only has add members permission", () => {
+	describe("when user only has view members permission", () => {
 		it("should only contain add members menu item", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canViewRoom.value = true;
 			roomPermissions.canEditRoom.value = false;
 			roomPermissions.canDeleteRoom.value = false;
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
-			const { kebabActionEdit, kebabActionEditMembers, kebabActionDelete } =
+			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete } =
 				findKebabActions(wrapper);
 
 			expect(kebabActionEdit.exists()).toBe(false);
-			expect(kebabActionEditMembers.exists()).toBe(true);
+			expect(kebabActionRoomMembers.exists()).toBe(true);
 			expect(kebabActionDelete.exists()).toBe(false);
 		});
 	});
 
-	describe("when user has addMembers, edit and delete permissions", () => {
+	describe("when user has view room, edit and delete permissions", () => {
 		it("should show all menu items", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
+			roomPermissions.canViewRoom.value = true;
 			roomPermissions.canEditRoom.value = true;
 			roomPermissions.canDeleteRoom.value = true;
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
 
-			const { kebabActionEdit, kebabActionEditMembers, kebabActionDelete } =
+			const { kebabActionEdit, kebabActionRoomMembers, kebabActionDelete } =
 				findKebabActions(wrapper);
 
 			expect(kebabActionEdit.exists()).toBe(true);
-			expect(kebabActionEditMembers.exists()).toBe(true);
+			expect(kebabActionRoomMembers.exists()).toBe(true);
 			expect(kebabActionDelete.exists()).toBe(true);
 		});
 	});
 
 	describe("when clicking on menu button", () => {
-		roomPermissions.canAddRoomMembers.value = false;
+		roomPermissions.canViewRoom.value = true;
 		roomPermissions.canEditRoom.value = true;
 		roomPermissions.canDeleteRoom.value = true;
 
@@ -172,8 +172,8 @@ describe("@feature-room/RoomMenu", () => {
 				const { wrapper, menuBtn } = setup();
 				await menuBtn.trigger("click");
 
-				const { kebabActionEditMembers } = findKebabActions(wrapper);
-				await kebabActionEditMembers.trigger("click");
+				const { kebabActionRoomMembers } = findKebabActions(wrapper);
+				await kebabActionRoomMembers.trigger("click");
 
 				expect(wrapper.emitted("room:manage-members")).toHaveLength(1);
 			});
