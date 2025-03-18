@@ -44,8 +44,9 @@ module.exports = defineConfigWithVueTs([
 			ecmaVersion: "latest",
 			globals: {
 				...globals.node,
+				...globals.browser,
+				...globals.jest,
 				NodeJS: true,
-				Clipboard: true,
 			},
 		},
 		plugins: {
