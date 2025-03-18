@@ -3,7 +3,7 @@
 		<div class="license-list">
 			<h1 class="text-h3 d-flex justify-center">Open Source License List</h1>
 
-			<div v-if="licenseNames.length > 0" class="d-flex px-4 pl-12">
+			<div v-if="licenseNames.length > 0" class="d-flex px-4 pl-7">
 				<div>License Name</div>
 				<v-spacer />
 				<div>Component Count</div>
@@ -25,11 +25,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { envConfigModule, notifierModule } from "@/store";
 import axios from "axios";
 import { VTreeview } from "vuetify/labs/VTreeview";
 import { useI18n } from "vue-i18n";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	NOTIFIER_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 
+const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
 
 const { t } = useI18n();
