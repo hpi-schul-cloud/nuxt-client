@@ -67,10 +67,9 @@
 				</template>
 			</Sortable>
 			<BoardAddCardButton
-				v-if="hasCreateCardPermission"
+				v-if="hasCreateCardPermission && !isDragging"
 				@add-card="onCreateCard"
 				:data-testid="`column-${index}-add-card-btn`"
-				:style="{ visibility: !showAddButton ? 'hidden' : 'visible' }"
 			/>
 		</div>
 	</div>
@@ -366,8 +365,7 @@ export default defineComponent({
 }
 
 .expanded-sortable {
-	/* Subtracted is the height of the add-button. */
-	min-height: calc(100% - 72px);
+	min-height: 100%;
 	/* "overflow: hidden" is set here to prevent margin collapsing, which destroys the layout.
 	See: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_model/Mastering_margin_collapsing and https://stackoverflow.com/a/19719427/11854580 */
 	overflow: hidden;
