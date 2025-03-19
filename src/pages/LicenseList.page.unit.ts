@@ -31,7 +31,6 @@ describe("LicenseList Page", () => {
 	const envs = envsFactory.build({
 		LICENSE_SUMMARY_URL: "https://license-summary-url",
 	});
-
 	const notifierModule = createModuleMocks(NotifierModule);
 
 	const setup = () => {
@@ -55,12 +54,17 @@ describe("LicenseList Page", () => {
 	it("should render the component", async () => {
 		const { wrapper } = setup();
 		await flushPromises();
+
 		expect(wrapper.exists()).toBe(true);
-		expect(wrapper.text()).toContain("pages.licenseList.title");
-		expect(wrapper.text()).toContain("pages.licenseList.name");
-		expect(wrapper.text()).toContain("pages.licenseList.componentCount");
-		expect(wrapper.text()).toContain("MIT-License");
-		expect(wrapper.text()).toContain("Apache-2.0");
+		[
+			"MIT-License",
+			"Apache-2.0",
+			"pages.licenseList.title",
+			"pages.licenseList.name",
+			"pages.licenseList.componentCount",
+		].forEach((license) => {
+			expect(wrapper.text()).toContain(license);
+		});
 	});
 
 	it("should call the license summary url", () => {
@@ -68,16 +72,16 @@ describe("LicenseList Page", () => {
 		expect(mockAxios.get).toHaveBeenCalledWith(envs.LICENSE_SUMMARY_URL);
 	});
 
-	it("should show error notification on error", async () => {
+	it("should display error notification on error", async () => {
 		mockAxios.get.mockRejectedValueOnce(new Error("Error"));
 		setup();
-		await nextTick();
+		await flushPromises();
 
 		expect(notifierModule.show).toHaveBeenCalled();
 	});
 
 	describe("when the license item is clicked", () => {
-		it("should show the component list", async () => {
+		it("should display the component list", async () => {
 			const { wrapper } = setup();
 			await flushPromises();
 

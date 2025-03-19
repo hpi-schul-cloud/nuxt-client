@@ -10,21 +10,20 @@
 				<v-spacer />
 				<div>{{ t("pages.licenseList.componentCount") }}</div>
 			</div>
-			<div>
-				<VTreeview
-					:items="licenseList"
-					:open-on-click="true"
-					:load-children="onExpand"
-				>
-					<template #title="{ title }">
-						<span data-testid="license-title">{{ title }}</span>
-					</template>
 
-					<template #append="{ item }">
-						<span class="ml-4">{{ item.count }}</span>
-					</template>
-				</VTreeview>
-			</div>
+			<VTreeview
+				:items="licenseList"
+				:open-on-click="true"
+				:load-children="onExpand"
+			>
+				<template #title="{ title }">
+					<span data-testid="license-title">{{ title }}</span>
+				</template>
+
+				<template #append="{ item }">
+					<span class="ml-4">{{ item.count }}</span>
+				</template>
+			</VTreeview>
 		</div>
 	</div>
 </template>
@@ -42,8 +41,6 @@ import {
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
-const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
-
 const { t } = useI18n();
 
 type LicenseData = {
@@ -56,7 +53,7 @@ type LicenseData = {
 type TreeViewItem = {
 	id: number;
 	title: string;
-	children?: { id: string; title: string }[];
+	children?: { id: number; title: string }[];
 	count?: number;
 };
 
@@ -73,9 +70,10 @@ const onExpand = async (args: unknown) => {
 	if (item?.title !== payload.title) return;
 	if (item.children && item.children.length > 0) return;
 
+	let i = 0;
 	item.children = response.value[payload.title].components?.map((component) => {
 		return {
-			id: component,
+			id: i++,
 			title: component,
 		};
 	});
@@ -83,6 +81,9 @@ const onExpand = async (args: unknown) => {
 
 const fetchLicenseData = async () => {
 	try {
+		const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
+		if (!licensesUrl) throw new Error("License summary URL is not	defined");
+
 		response.value = (await axios.get(licensesUrl as string)).data;
 		licenseNames.value = Object.keys(response.value);
 	} catch {
