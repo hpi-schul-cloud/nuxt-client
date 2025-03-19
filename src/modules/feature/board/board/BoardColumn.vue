@@ -14,7 +14,7 @@
 			@move:column-up="onMoveColumnUp"
 			@update:title="onUpdateTitle"
 		/>
-		<div class="h-100 overflow-y-auto" :class="scrollableClasses">
+		<div class="h-100 overflow-y-auto pt-3" :class="scrollableClasses">
 			<Sortable
 				:list="column.cards"
 				item-key="cardId"
@@ -49,7 +49,7 @@
 					<CardHost
 						v-if="element"
 						:data-card-id="element.cardId"
-						class="draggable my-3"
+						class="draggable mb-3"
 						:class="{
 							'drag-disabled': !hasMovePermission,
 							'mx-2': !isListBoard,
@@ -366,9 +366,6 @@ export default defineComponent({
 
 .expanded-sortable {
 	min-height: 100%;
-	/* "overflow: hidden" is set here to prevent margin collapsing, which destroys the layout.
-	See: https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_box_model/Mastering_margin_collapsing and https://stackoverflow.com/a/19719427/11854580 */
-	overflow: hidden;
 }
 
 @supports selector(::-webkit-scrollbar) {
