@@ -958,6 +958,7 @@ export default {
 	"global.sidebar.item.teacher": "Teachers",
 	"global.sidebar.item.teams": "Teams",
 	"global.sidebar.item.training": "Advanced trainings",
+	"global.sidebar.item.licenses": "Licenses",
 	"global.skipLink.mainContent": "Skip to main content",
 	"global.topbar.actions.alerts": "Status alert",
 	"global.topbar.actions.qrCode": "Share page link via QR-Code",

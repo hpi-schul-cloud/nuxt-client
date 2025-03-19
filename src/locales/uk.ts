@@ -979,6 +979,7 @@ export default {
 	"global.sidebar.item.teacher": "Викладачі",
 	"global.sidebar.item.teams": "Команди",
 	"global.sidebar.item.training": "Поглиблене навчання",
+	"global.sidebar.item.licenses": "Ліцензії",
 	"global.skipLink.mainContent": "Перейти до основного вмісту",
 	"global.topbar.actions.alerts": "Сповіщення про стан",
 	"global.topbar.actions.qrCode": "Поділіться QR-кодом веб-сторінки",
