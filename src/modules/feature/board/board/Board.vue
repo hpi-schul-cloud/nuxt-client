@@ -135,6 +135,7 @@ import {
 	BOARD_IS_LIST_LAYOUT,
 	extractDataAttribute,
 	useBoardNotifier,
+	useElementFocus,
 	useSharedEditMode,
 } from "@util-board";
 import { SortableEvent } from "sortablejs";
@@ -290,23 +291,7 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 		boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
 };
 
-const scrollToNodeAndFocus = (scrollTargetId: string) => {
-	const targetElement: HTMLElement | null = document.querySelector(
-		`[data-scroll-target="${scrollTargetId}"]`
-	);
-
-	if (targetElement) {
-		targetElement.scrollIntoView({ block: "center", inline: "center" });
-		targetElement.focus();
-	}
-};
-
-const focusNodeFromHash = () => {
-	if (route.hash) {
-		const scrollTargetId: string = route.hash.slice(1);
-		scrollToNodeAndFocus(scrollTargetId);
-	}
-};
+const { focusNodeFromHash } = useElementFocus();
 
 onMounted(async () => {
 	resetPageInformation();
@@ -332,9 +317,8 @@ onUnmounted(() => {
 });
 
 watch(
-	() => route,
-	() => focusNodeFromHash(),
-	{ deep: true }
+	() => route.hash,
+	() => focusNodeFromHash()
 );
 
 watch(
