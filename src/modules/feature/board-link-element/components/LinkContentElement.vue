@@ -12,6 +12,7 @@
 		ref="linkContentElement"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
+		@click="onClick"
 	>
 		<LinkContentElementDisplay
 			v-if="computedElement.content.url"
@@ -55,6 +56,7 @@ import {
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
+import { useElementFocus } from "@util-board";
 import { computed, ComputedRef, PropType, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMetaTagExtractorApi } from "../composables/MetaTagExtractorApi.composable";
@@ -174,6 +176,13 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 	const shouldDelete = await confirmation;
 	if (shouldDelete) {
 		emit("delete:element", element.value.id);
+	}
+};
+
+const { focusNodeFromHash } = useElementFocus();
+const onClick = () => {
+	if (sanitizedUrl.value === window.location.href) {
+		focusNodeFromHash();
 	}
 };
 </script>
