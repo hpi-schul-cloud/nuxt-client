@@ -453,12 +453,6 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 };
 </script>
 
-<style>
-:root {
-	--board-header-height: 66px;
-}
-</style>
-
 <style scoped>
 .board {
 	padding: 0 var(--space-lg);
