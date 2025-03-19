@@ -19,6 +19,7 @@
 					:items="schoolList"
 					:label="t('global.sidebar.item.school')"
 					:disabled="isAutocompleteDisabled"
+					:aria-disabled="isAutocompleteDisabled"
 					@update:model-value="onSchoolChange"
 					@update:menu="onAutocompleteToggle"
 				/>
@@ -36,6 +37,7 @@
 					:items="schoolRoles"
 					:label="t('pages.rooms.members.tableHeader.schoolRole')"
 					:disabled="isAutocompleteDisabled"
+					:aria-disabled="isAutocompleteDisabled"
 					@update:model-value="onRoleChange"
 					@update:menu="onAutocompleteToggle"
 				/>

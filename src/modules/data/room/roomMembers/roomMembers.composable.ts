@@ -96,7 +96,8 @@ export const useRoomMembers = (roomId: string) => {
 						user.schoolRoleName === schoolRoleName &&
 						!roomMembers.value.some((member) => member.userId === user.id)
 					);
-				});
+				})
+				.sort((a, b) => a.fullName.localeCompare(b.fullName));
 		} catch {
 			showFailure(t("pages.rooms.members.error.load"));
 		}
