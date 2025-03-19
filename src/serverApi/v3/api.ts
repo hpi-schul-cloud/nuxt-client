@@ -358,6 +358,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoleCreate = 'ROLE_CREATE',
     RoleEdit = 'ROLE_EDIT',
     RoleView = 'ROLE_VIEW',
+    RoomContentEdit = 'ROOM_CONTENT_EDIT',
     RoomCreate = 'ROOM_CREATE',
     RoomEdit = 'ROOM_EDIT',
     RoomView = 'ROOM_VIEW',
@@ -456,13 +457,13 @@ export interface AuthorizedReponse {
  */
 export interface BasicToolConfigParams {
     /**
-     * 
-     * @type {string}
+     * Configuration type of the tool.
+     * @type {ToolConfigType}
      * @memberof BasicToolConfigParams
      */
-    type: string;
+    type: ToolConfigType;
     /**
-     * 
+     * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
      * @type {string}
      * @memberof BasicToolConfigParams
      */
@@ -707,10 +708,10 @@ export interface BoardResponse {
     isVisible: boolean;
     /**
      * 
-     * @type {string}
+     * @type {BoardLayout}
      * @memberof BoardResponse
      */
-    layout: string;
+    layout: BoardLayout;
     /**
      * 
      * @type {Array<BoardFeature>}
@@ -2026,19 +2027,19 @@ export interface ContextExternalToolConfigurationTemplateResponse {
  */
 export interface ContextExternalToolCountPerContextResponse {
     /**
-     * 
+     * Amount of usages in courses
      * @type {number}
      * @memberof ContextExternalToolCountPerContextResponse
      */
     course: number;
     /**
-     * 
+     * Amount of usages in boards
      * @type {number}
      * @memberof ContextExternalToolCountPerContextResponse
      */
     boardElement: number;
     /**
-     * 
+     * Amount of usages in media boards
      * @type {number}
      * @memberof ContextExternalToolCountPerContextResponse
      */
@@ -2791,72 +2792,107 @@ export interface CustomParameterEntryResponse {
  */
 export interface CustomParameterPostParams {
     /**
-     * 
+     * Technical name of the parameter that is send to the tool provider.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     name: string;
     /**
-     * 
+     * Display name that is shown in the user interface.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     displayName: string;
     /**
-     * 
+     * Additional description of the parameter in the user interface.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     description?: string;
     /**
-     * 
+     * Pre-fill value for the parameter. Required for global parameters.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     defaultValue?: string;
     /**
-     * 
+     * Regular expression to limit user input for this field.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     regex?: string;
     /**
-     * 
+     * A description for the regex.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     regexComment?: string;
     /**
-     * 
+     * Scope where the parameter has to be configured.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
-    scope: string;
+    scope: CustomParameterPostParamsScopeEnum;
     /**
-     * 
+     * Location where the parameter is transmitted in the HTTP request to the tool provider.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
-    location: string;
+    location: CustomParameterPostParamsLocationEnum;
     /**
-     * 
+     * Input field type. Auto parameters have to be global and cannot have a defaultValue.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
-    type: string;
+    type: CustomParameterPostParamsTypeEnum;
     /**
-     * 
+     * If true, the parameter does not have to be filled out during configuration.
      * @type {boolean}
      * @memberof CustomParameterPostParams
      */
     isOptional: boolean;
     /**
-     * 
+     * If true, the parameter value is not copied to other contexts.
      * @type {boolean}
      * @memberof CustomParameterPostParams
      */
     isProtected: boolean;
 }
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CustomParameterPostParamsScopeEnum {
+    Global = 'global',
+    School = 'school',
+    Context = 'context'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CustomParameterPostParamsLocationEnum {
+    Path = 'path',
+    Body = 'body',
+    Query = 'query'
+}
+/**
+    * @export
+    * @enum {string}
+    */
+export enum CustomParameterPostParamsTypeEnum {
+    String = 'string',
+    Number = 'number',
+    Boolean = 'boolean',
+    AutoContextid = 'auto_contextid',
+    AutoContextname = 'auto_contextname',
+    AutoSchoolid = 'auto_schoolid',
+    AutoSchoolnumber = 'auto_schoolnumber',
+    AutoMediumid = 'auto_mediumid',
+    AutoGroupExternaluuid = 'auto_group_externaluuid'
+}
+
 /**
  * 
  * @export
@@ -2864,67 +2900,67 @@ export interface CustomParameterPostParams {
  */
 export interface CustomParameterResponse {
     /**
-     * 
+     * Technical name of the parameter that is send to the tool provider.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     name: string;
     /**
-     * 
+     * Display name that is shown in the user interface.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     displayName: string;
     /**
-     * 
+     * Additional description of the parameter in the user interface.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     description?: string;
     /**
-     * 
+     * Pre-fill value for the parameter. Required for global parameters.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     defaultValue?: string;
     /**
-     * 
+     * Regular expression to limit user input for this field.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     regex?: string;
     /**
-     * 
+     * A description for the regex.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     regexComment?: string;
     /**
-     * 
+     * Scope where the parameter has to be configured.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     scope: CustomParameterResponseScopeEnum;
     /**
-     * 
+     * Location where the parameter is transmitted in the HTTP request to the tool provider.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     location: CustomParameterResponseLocationEnum;
     /**
-     * 
+     * Input field type. Auto parameters have to be global and cannot have a defaultValue.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     type: CustomParameterResponseTypeEnum;
     /**
-     * 
+     * If true, the parameter does not have to be filled out during configuration.
      * @type {boolean}
      * @memberof CustomParameterResponse
      */
     isOptional: boolean;
     /**
-     * 
+     * If true, the parameter value is not copied to other contexts.
      * @type {boolean}
      * @memberof CustomParameterResponse
      */
@@ -3453,6 +3489,56 @@ export interface ExternalToolElementResponse {
 /**
  * 
  * @export
+ * @interface ExternalToolImportResultListResponse
+ */
+export interface ExternalToolImportResultListResponse {
+    /**
+     * List of operation results for the provided external tools
+     * @type {Array<ExternalToolImportResultResponse>}
+     * @memberof ExternalToolImportResultListResponse
+     */
+    results: Array<ExternalToolImportResultResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolImportResultResponse
+ */
+export interface ExternalToolImportResultResponse {
+    /**
+     * Name of the external tool
+     * @type {string}
+     * @memberof ExternalToolImportResultResponse
+     */
+    toolName: string;
+    /**
+     * Medium id of the external tool
+     * @type {string}
+     * @memberof ExternalToolImportResultResponse
+     */
+    mediumId: string;
+    /**
+     * Medium source of the external tool
+     * @type {string}
+     * @memberof ExternalToolImportResultResponse
+     */
+    mediumSourceId: string;
+    /**
+     * ObjectId of the created external tool
+     * @type {string}
+     * @memberof ExternalToolImportResultResponse
+     */
+    toolId: string;
+    /**
+     * Status message of the error that occurred
+     * @type {string}
+     * @memberof ExternalToolImportResultResponse
+     */
+    error: string;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolMediumParams
  */
 export interface ExternalToolMediumParams {
@@ -3507,13 +3593,13 @@ export interface ExternalToolMediumResponse {
  */
 export interface ExternalToolMetadataResponse {
     /**
-     * 
+     * Amount of usages of the tool in schools
      * @type {number}
      * @memberof ExternalToolMetadataResponse
      */
     schoolExternalToolCount: number;
     /**
-     * 
+     * Amount of usages of the tool in contexts
      * @type {ContextExternalToolCountPerContextResponse}
      * @memberof ExternalToolMetadataResponse
      */
@@ -4949,43 +5035,43 @@ export interface Lti11DeepLinkParamsRaw {
  */
 export interface Lti11ToolConfigCreateParams {
     /**
-     * 
+     * Configuration type of the tool.
      * @type {ToolConfigType}
      * @memberof Lti11ToolConfigCreateParams
      */
     type: ToolConfigType;
     /**
-     * 
+     * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
      * @type {string}
      * @memberof Lti11ToolConfigCreateParams
      */
     baseUrl: string;
     /**
-     * 
+     * LTI 1.1 encryption key.
      * @type {string}
      * @memberof Lti11ToolConfigCreateParams
      */
     key: string;
     /**
-     * 
+     * LTI 1.1 encryption secret.
      * @type {string}
      * @memberof Lti11ToolConfigCreateParams
      */
     secret: string;
     /**
-     * 
+     * LTI 1.1 message type.
      * @type {LtiMessageType}
      * @memberof Lti11ToolConfigCreateParams
      */
     lti_message_type: LtiMessageType;
     /**
-     * 
+     * Describes the amount of personal information that the tool provider gets.
      * @type {LtiPrivacyPermission}
      * @memberof Lti11ToolConfigCreateParams
      */
     privacy_permission: LtiPrivacyPermission;
     /**
-     * 
+     * LTI 1.1 requested language.
      * @type {string}
      * @memberof Lti11ToolConfigCreateParams
      */
@@ -4998,43 +5084,43 @@ export interface Lti11ToolConfigCreateParams {
  */
 export interface Lti11ToolConfigUpdateParams {
     /**
-     * 
+     * Configuration type of the tool.
      * @type {ToolConfigType}
      * @memberof Lti11ToolConfigUpdateParams
      */
     type: ToolConfigType;
     /**
-     * 
+     * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
      * @type {string}
      * @memberof Lti11ToolConfigUpdateParams
      */
     baseUrl: string;
     /**
-     * 
+     * LTI 1.1 encryption key.
      * @type {string}
      * @memberof Lti11ToolConfigUpdateParams
      */
     key: string;
     /**
-     * 
+     * LTI 1.1 encryption secret.
      * @type {string}
      * @memberof Lti11ToolConfigUpdateParams
      */
     secret?: string;
     /**
-     * 
+     * LTI 1.1 message type.
      * @type {LtiMessageType}
      * @memberof Lti11ToolConfigUpdateParams
      */
     lti_message_type: LtiMessageType;
     /**
-     * 
+     * Describes the amount of personal information that the tool provider gets.
      * @type {LtiPrivacyPermission}
      * @memberof Lti11ToolConfigUpdateParams
      */
     privacy_permission: LtiPrivacyPermission;
     /**
-     * 
+     * LTI 1.1 requested language.
      * @type {string}
      * @memberof Lti11ToolConfigUpdateParams
      */
@@ -6049,59 +6135,59 @@ export interface Oauth2MigrationParams {
  */
 export interface Oauth2ToolConfigCreateParams {
     /**
-     * 
-     * @type {string}
+     * Configuration type of the tool.
+     * @type {ToolConfigType}
      * @memberof Oauth2ToolConfigCreateParams
      */
-    type: string;
+    type: ToolConfigType;
     /**
-     * 
+     * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
      * @type {string}
      * @memberof Oauth2ToolConfigCreateParams
      */
     baseUrl: string;
     /**
-     * 
+     * OAuth2 client id.
      * @type {string}
      * @memberof Oauth2ToolConfigCreateParams
      */
     clientId: string;
     /**
-     * 
+     * OAuth2 client secret.
      * @type {string}
      * @memberof Oauth2ToolConfigCreateParams
      */
     clientSecret: string;
     /**
-     * 
+     * If true, skips the users consent request before launching the tool for the first time.
      * @type {boolean}
      * @memberof Oauth2ToolConfigCreateParams
      */
     skipConsent: boolean;
     /**
-     * 
+     * OAuth2 frontchannel logout uri.
      * @type {string}
      * @memberof Oauth2ToolConfigCreateParams
      */
     frontchannelLogoutUri?: string;
     /**
-     * 
+     * OAuth2 scopes.
      * @type {string}
      * @memberof Oauth2ToolConfigCreateParams
      */
     scope?: string;
     /**
-     * 
+     * Allowed OAuth2 redirect uris.
      * @type {Array<string>}
      * @memberof Oauth2ToolConfigCreateParams
      */
     redirectUris: Array<string>;
     /**
-     * 
-     * @type {string}
+     * OAuth2 token endpoint method
+     * @type {TokenEndpointAuthMethod}
      * @memberof Oauth2ToolConfigCreateParams
      */
-    tokenEndpointAuthMethod: string;
+    tokenEndpointAuthMethod: TokenEndpointAuthMethod;
 }
 /**
  * 
@@ -6110,59 +6196,59 @@ export interface Oauth2ToolConfigCreateParams {
  */
 export interface Oauth2ToolConfigUpdateParams {
     /**
-     * 
-     * @type {string}
+     * Configuration type of the tool.
+     * @type {ToolConfigType}
      * @memberof Oauth2ToolConfigUpdateParams
      */
-    type: string;
+    type: ToolConfigType;
     /**
-     * 
+     * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
      * @type {string}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     baseUrl: string;
     /**
-     * 
+     * OAuth2 client id.
      * @type {string}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     clientId: string;
     /**
-     * 
+     * OAuth2 client secret.
      * @type {string}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     clientSecret?: string;
     /**
-     * 
+     * If true, skips the users consent request before launching the tool for the first time.
      * @type {boolean}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     skipConsent: boolean;
     /**
-     * 
+     * OAuth2 frontchannel logout uri.
      * @type {string}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     frontchannelLogoutUri?: string;
     /**
-     * 
+     * OAuth2 scopes.
      * @type {string}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     scope?: string;
     /**
-     * 
+     * Allowed OAuth2 redirect uris.
      * @type {Array<string>}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     redirectUris: Array<string>;
     /**
-     * 
-     * @type {string}
+     * OAuth2 token endpoint method
+     * @type {TokenEndpointAuthMethod}
      * @memberof Oauth2ToolConfigUpdateParams
      */
-    tokenEndpointAuthMethod: string;
+    tokenEndpointAuthMethod: TokenEndpointAuthMethod;
 }
 /**
  * 
@@ -7055,6 +7141,7 @@ export enum Permission {
     RoleCreate = 'ROLE_CREATE',
     RoleEdit = 'ROLE_EDIT',
     RoleView = 'ROLE_VIEW',
+    RoomContentEdit = 'ROOM_CONTENT_EDIT',
     RoomCreate = 'ROOM_CREATE',
     RoomEdit = 'ROOM_EDIT',
     RoomView = 'ROOM_VIEW',
@@ -9339,6 +9426,17 @@ export interface TimestampsResponse {
  */
 export enum Timezone {
     EuropeBerlin = 'Europe/Berlin'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum TokenEndpointAuthMethod {
+    ClientSecretPost = 'client_secret_post',
+    ClientSecretBasic = 'client_secret_basic',
+    PrivateKeyJwt = 'private_key_jwt'
 }
 
 /**
@@ -26228,7 +26326,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
+        async toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolImportResultListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerImportExternalTools(externalToolBulkCreateParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -26572,7 +26670,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolResponse> {
+        toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolImportResultListResponse> {
             return localVarFp.toolControllerImportExternalTools(externalToolBulkCreateParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26903,7 +27001,7 @@ export interface ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolResponse>;
+    toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolImportResultListResponse>;
 
     /**
      * 
