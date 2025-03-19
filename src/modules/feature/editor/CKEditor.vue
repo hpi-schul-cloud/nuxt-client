@@ -159,7 +159,9 @@ export default defineComponent({
 					],
 				},
 				fontBackgroundColor: {
+					// Using the following colors from the vuetify color palette:
 					// light-green-lighten-4, green-lighten-4, cyan-lighten-4, blue-lighten-4, indigo-lighten-4, purple-lighten-4, pink-lighten-4, deep-orange-lighten-4, amber-lighten-4
+					// Some colors are translated by CKEditor itself
 					colors: [
 						{ color: "#DCEDC8", label: "Light green" },
 						{ color: "#C8E6C9", label: "Green" },
