@@ -1,4 +1,4 @@
-import { CopyApiResponseTypeEnum } from "../../../serverApi/v3";
+import { CopyApiResponseTypeEnum } from "@/serverApi/v3/api";
 
 export interface CopyResultItemElement {
 	type: CopyApiResponseTypeEnum;
