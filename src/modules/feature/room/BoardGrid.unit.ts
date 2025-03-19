@@ -45,9 +45,9 @@ describe("@feature-room/BoardGrid", () => {
 		return { wrapper };
 	};
 
-	describe("when current user has ROOM_EDIT permission", () => {
+	describe("when current user has ROOM_CONTENT_EDIT permission", () => {
 		it("should show boards in draft mode", () => {
-			roomPermissions.canEditRoom.value = true;
+			roomPermissions.canEditRoomContent.value = true;
 			const { wrapper } = setup();
 
 			const boardTiles = wrapper.findAllComponents(BoardTile);
@@ -56,9 +56,9 @@ describe("@feature-room/BoardGrid", () => {
 		});
 	});
 
-	describe("when current user does not have ROOM_EDIT permission", () => {
+	describe("when current user does not have ROOM_CONTENT_EDIT permission", () => {
 		it("should not show boards in draft mode", () => {
-			roomPermissions.canEditRoom.value = false;
+			roomPermissions.canEditRoomContent.value = false;
 			const { wrapper } = setup();
 
 			const boardTiles = wrapper.findAllComponents(BoardTile);
