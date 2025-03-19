@@ -70,7 +70,8 @@ const pageTitle = computed(() =>
 );
 useTitle(pageTitle);
 
-const { canCreateRoom, canEditRoom, canDeleteRoom } = useRoomAuthorization();
+const { canCreateRoom, canDeleteRoom, canEditRoomBoard } =
+	useRoomAuthorization();
 
 const roomTitle = computed(() => {
 	return room.value ? room.value.name : t("pages.roomDetails.title");
@@ -97,7 +98,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const fabItems = computed(() => {
 	if (!canCreateRoom.value) return undefined;
-	if (!canEditRoom.value) return undefined;
+	if (!canEditRoomBoard.value) return undefined;
 
 	const actions = [];
 
@@ -185,7 +186,7 @@ const onLeaveRoom = async () => {
 };
 
 const onCreateBoard = async (layout: BoardLayout) => {
-	if (!room.value || !canEditRoom.value) return;
+	if (!room.value || !canEditRoomBoard.value) return;
 
 	const boardId = await createBoard(
 		room.value.id,

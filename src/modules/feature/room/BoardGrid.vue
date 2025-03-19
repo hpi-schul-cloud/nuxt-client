@@ -9,7 +9,7 @@
 			xl="3"
 		>
 			<BoardTile
-				v-if="board.isVisible || canEditRoom"
+				v-if="board.isVisible || canEditRoomBoard"
 				:board="board"
 				:index="index"
 			/>
@@ -23,7 +23,7 @@ import { PropType, toRef } from "vue";
 import { useRoomAuthorization } from "@feature-room";
 import BoardTile from "./BoardTile.vue";
 
-const { canEditRoom } = useRoomAuthorization();
+const { canEditRoomBoard } = useRoomAuthorization();
 
 const props = defineProps({
 	boards: { type: Array as PropType<RoomBoardItem[]> },

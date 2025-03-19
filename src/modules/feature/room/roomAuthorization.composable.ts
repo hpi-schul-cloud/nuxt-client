@@ -16,6 +16,7 @@ export const useRoomAuthorization = () => {
 	const canCreateRoom = ref(false);
 	const canViewRoom = ref(false);
 	const canEditRoom = ref(false);
+	const canEditRoomBoard = ref(false);
 	const canDeleteRoom = ref(false);
 	const canLeaveRoom = ref(false);
 
@@ -28,6 +29,7 @@ export const useRoomAuthorization = () => {
 			) && authModule.getUserRoles.includes(Roles.Teacher);
 		canViewRoom.value = permissions.includes(Permission.RoomView);
 		canEditRoom.value = permissions.includes(Permission.RoomEdit);
+		canEditRoomBoard.value = permissions.includes(Permission.RoomContentEdit);
 		canDeleteRoom.value = permissions.includes(Permission.RoomDelete);
 		canAddRoomMembers.value = permissions.includes(Permission.RoomMembersAdd);
 		canRemoveRoomMembers.value = permissions.includes(
@@ -46,6 +48,6 @@ export const useRoomAuthorization = () => {
 		canDeleteRoom,
 		canLeaveRoom,
 		canRemoveRoomMembers,
-		canEditRoomBoard: canEditRoom,
+		canEditRoomBoard,
 	};
 };
