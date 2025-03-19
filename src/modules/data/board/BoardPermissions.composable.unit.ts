@@ -1,4 +1,4 @@
-import { useSharedBoardPageInformation } from "@/modules/data/board/BoardPageInformation.composable";
+import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import {
 	Permission,
 	ImportUserResponseRoleNamesEnum as Roles,

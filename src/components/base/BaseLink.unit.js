@@ -1,5 +1,6 @@
 import BaseLink from "./BaseLink";
 import { RouterLinkStub } from "@vue/test-utils";
+import { logger } from "@util-logger";
 
 describe("@/components/base/BaseLink", () => {
 	const createWrapper = (options = {}) => {
@@ -85,24 +86,24 @@ describe("@/components/base/BaseLink", () => {
 
 	it("log warning for insecure external urls", () => {
 		// use .mockImplementation() to prevent output to console
-		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
+		const loggerWarn = jest.spyOn(logger, "warn").mockImplementation();
 		createWrapper({
 			props: {
 				href: "http://dbildungscloud.de",
 			},
 		});
-		expect(consoleWarn).toHaveBeenCalledWith(
+		expect(loggerWarn).toHaveBeenCalledWith(
 			expect.stringContaining("Insecure href")
 		);
 	});
 
 	it("log warning for invalid props", () => {
 		// use .mockImplementation() to prevent output to console
-		const consoleWarn = jest.spyOn(console, "warn").mockImplementation();
+		const loggerWarn = jest.spyOn(logger, "warn").mockImplementation();
 
 		createWrapper();
 
-		expect(consoleWarn).toHaveBeenCalledWith(
+		expect(loggerWarn).toHaveBeenCalledWith(
 			expect.stringContaining("Invalid props")
 		);
 	});

@@ -94,11 +94,11 @@ export default {
 	"common.labels.visible": "Visible",
 	"common.loading.text": "Data is loading...",
 	"common.medium.alert.deactivated": "Media is disabled.",
-	"common.medium.alert.notLicensed": "Medium is not activated.",
+	"common.medium.alert.notLicensed": "Medium is not authorized.",
 	"common.medium.alert.incomplete":
 		"Configuration of medium not current or incomplete.",
 	"common.medium.chip.deactivated": "Disabled",
-	"common.medium.chip.notLicensed": "Not activated",
+	"common.medium.chip.notLicensed": "Not authorized",
 	"common.medium.chip.incomplete": "Configuration incomplete",
 	"common.medium.chip.noLongerAvailable": "No longer available",
 	"common.medium.information.admin": "Please check settings.",
@@ -137,9 +137,9 @@ export default {
 	"common.tool.information.deactivated.teacher":
 		"Tool {toolName} is disabled. Please contact the school administrator.",
 	"common.tool.information.notLicensed.student":
-		"Tool {toolName} is not activated. Please contact your teacher or course instructor.",
+		"Tool {toolName} is not authorized. Please contact your teacher or course instructor.",
 	"common.tool.information.notLicensed.teacher":
-		"Tool {toolName} is not activated. Please contact the school administrator.",
+		"Tool {toolName} is not authorized. Please contact the school administrator.",
 	"common.tool.information.outdated.teacher":
 		"Configuration of the tool {toolName} is not up to date or incomplete. Please check settings and contact your school administrator.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -344,11 +344,11 @@ export default {
 	"components.administration.externalToolsSection.table.header.restrictedTo":
 		"Restricted to",
 	"components.administration.externalToolsSection.table.header.medium":
-		"Media source",
+		"Media management",
 	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable":
-		"External medium activated",
+		"External medium authorized",
 	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable":
-		"External medium deactivated",
+		"External medium not authorized",
 	"components.administration.provisioningOptions.class.description":
 		"Activate this option if classes should be synchronized into the {instance}.",
 	"components.administration.provisioningOptions.class.label":
@@ -1741,7 +1741,7 @@ export default {
 	"pages.rooms.tools.deactivated": "Tool deactivated",
 	"pages.rooms.tools.deactivatedDialog.title": "Tool „{toolName}“ deactivated",
 	"pages.rooms.tools.notLicensedDialog.title":
-		"Tool “{toolName}” not activated",
+		"Tool '{toolName}' not authorized",
 	"pages.rooms.tools.deleteDialog.content":
 		"Are you sure you want to remove the tool '{itemName}' from the course?",
 	"pages.rooms.tools.deleteDialog.title": "Remove tool?",
@@ -1910,6 +1910,7 @@ export default {
 	"pages.tool.medium": "External medium",
 	"pages.tool.medium.mediumId": "Medium Id",
 	"pages.tool.medium.mediumSourceId": "Media catalog Id",
+	"pages.tool.medium.noMediaSource": "Without media catalog",
 	"pages.userMigration.backToLogin": "Return to login page",
 	"pages.userMigration.button.skip": "Not now",
 	"pages.userMigration.button.startMigration": "Start",
