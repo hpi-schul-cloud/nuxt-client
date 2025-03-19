@@ -11,27 +11,9 @@ import vueDompurifyHTMLPlugin from "vue-dompurify-html";
 import RichTextContentElementComponent from "./RichTextContentElement.vue";
 import RichTextContentElementDisplayComponent from "./RichTextContentElementDisplay.vue";
 import RichTextContentElementEditComponent from "./RichTextContentElementEdit.vue";
+import { nextTick } from "vue";
 
-jest.mock("@data-board", () => {
-	return {
-		useBoardFocusHandler: jest.fn(),
-		useContentElementState: jest.fn(() => ({ modelValue: {} })),
-		useDeleteConfirmationDialog: jest.fn(),
-	};
-});
-jest.mock("@ui-confirmation-dialog", () => {
-	return {
-		useDeleteConfirmationDialog: jest.fn(),
-	};
-});
-
-jest.mock("@util-board", () => {
-	return {
-		useInlineEditInteractionHandler: jest.fn(),
-	};
-});
-
-const TEST_ELEMENT: RichTextElementResponse = {
+const mockElement: RichTextElementResponse = {
 	id: "test-id",
 	type: ContentElementType.RichText,
 	content: {
@@ -43,6 +25,28 @@ const TEST_ELEMENT: RichTextElementResponse = {
 		lastUpdatedAt: new Date().toISOString(),
 	},
 };
+
+jest.mock("@data-board", () => {
+	return {
+		useBoardFocusHandler: jest.fn(),
+		useContentElementState: jest.fn().mockImplementation(() => ({
+			modelValue: mockElement.content,
+		})),
+		useDeleteConfirmationDialog: jest.fn(),
+	};
+});
+
+jest.mock("@ui-confirmation-dialog", () => {
+	return {
+		useDeleteConfirmationDialog: jest.fn(),
+	};
+});
+
+jest.mock("@util-board", () => {
+	return {
+		useInlineEditInteractionHandler: jest.fn(),
+	};
+});
 
 describe("RichTextContentElement", () => {
 	const notifierModule = createModuleMocks(NotifierModule);
@@ -69,44 +73,52 @@ describe("RichTextContentElement", () => {
 		return { wrapper };
 	};
 
-	describe("when component is mounted", () => {
-		it("should render display if isEditMode is false", () => {
+	describe("when element is in display mode", () => {
+		it("should render RichTextContentElementDisplay", () => {
 			const { wrapper } = setup({
-				element: TEST_ELEMENT,
+				element: mockElement,
 				isEditMode: false,
 			});
-			expect(
-				wrapper.findComponent(RichTextContentElementDisplayComponent).exists()
-			).toBe(true);
-		});
 
-		it("should render edit if isEditMode is true", () => {
-			const { wrapper } = setup({
-				element: TEST_ELEMENT,
-				isEditMode: true,
-			});
-			expect(
-				wrapper.findComponent(RichTextContentElementEditComponent).exists()
-			).toBe(true);
+			const displayComponent = wrapper.findComponent(
+				RichTextContentElementDisplayComponent
+			);
+			expect(displayComponent.exists()).toBe(true);
 		});
+	});
 
-		it("should call deleteElement when it receives delete:element event from edit component", async () => {
+	describe("when element is in edit mode", () => {
+		it("should render RichTextContentElementEdit ", () => {
 			const { wrapper } = setup({
-				element: TEST_ELEMENT,
+				element: mockElement,
 				isEditMode: true,
 			});
 
-			const richTextContentElementEditComponent = wrapper.findComponent(
+			const editComponent = wrapper.findComponent(
 				RichTextContentElementEditComponent
 			);
-			richTextContentElementEditComponent.vm.$emit("delete:element");
-			await wrapper.vm.$nextTick();
-			const emitted = wrapper.emitted("delete:element");
+			expect(editComponent.exists()).toBe(true);
+		});
 
-			if (emitted) {
-				expect(emitted).toHaveLength(1);
-				expect(emitted[0][0]).toStrictEqual("test-id");
-			}
+		describe("and delete:element event is emitted from RichTextContentElementEdit component", () => {
+			it("should emit 'delete:element' with correct value", async () => {
+				const { wrapper } = setup({
+					element: mockElement,
+					isEditMode: true,
+				});
+
+				const richTextContentElementEditComponent = wrapper.findComponent(
+					RichTextContentElementEditComponent
+				);
+				richTextContentElementEditComponent.vm.$emit("delete:element");
+				await nextTick();
+				const emitted = wrapper.emitted("delete:element");
+
+				if (emitted) {
+					expect(emitted).toHaveLength(1);
+					expect(emitted[0][0]).toStrictEqual("test-id");
+				}
+			});
 		});
 	});
 });
