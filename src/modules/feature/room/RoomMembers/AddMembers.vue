@@ -15,7 +15,6 @@
 					density="comfortable"
 					item-title="name"
 					item-value="id"
-					variant="underlined"
 					:items="schoolList"
 					:label="t('global.sidebar.item.school')"
 					:disabled="isAutocompleteDisabled"
@@ -33,7 +32,6 @@
 					density="comfortable"
 					item-title="name"
 					item-value="id"
-					variant="underlined"
 					:items="schoolRoles"
 					:label="t('pages.rooms.members.tableHeader.schoolRole')"
 					:disabled="isAutocompleteDisabled"
@@ -53,7 +51,6 @@
 					item-value="userId"
 					item-title="fullName"
 					multiple
-					variant="underlined"
 					:items="memberList"
 					:label="t('common.labels.name')"
 					@update:menu="onAutocompleteToggle"
