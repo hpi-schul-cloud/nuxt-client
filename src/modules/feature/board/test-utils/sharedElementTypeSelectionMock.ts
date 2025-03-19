@@ -1,4 +1,3 @@
-import { Jest as jest } from "@jest/environment";
 import { Ref, ref } from "vue";
 import { useSharedElementTypeSelection } from "../shared/SharedElementTypeSelection.composable";
 

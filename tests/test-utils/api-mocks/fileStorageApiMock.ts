@@ -1,6 +1,5 @@
 import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { useFileStorageApi } from "@feature-board-file-element";
-import { Jest as jest } from "@jest/environment";
 import { ref } from "vue";
 
 interface Props {

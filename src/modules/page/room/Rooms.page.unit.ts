@@ -23,7 +23,7 @@ import { mdiPlus } from "@icons/material";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { RoomGrid } from "@feature-room";
 import ImportFlow from "@/components/share/ImportFlow.vue";
-import InfoAlert from "@/modules/ui/alert/InfoAlert.vue";
+import { InfoAlert } from "@ui-alert";
 
 jest.mock("vue-router");
 const useRouteMock = useRoute as jest.Mock;

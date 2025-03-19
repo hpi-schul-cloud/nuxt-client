@@ -44,6 +44,8 @@ module.exports = defineConfigWithVueTs([
 			ecmaVersion: "latest",
 			globals: {
 				...globals.node,
+				...globals.browser,
+				NodeJS: true,
 			},
 		},
 		plugins: {
@@ -58,9 +60,9 @@ module.exports = defineConfigWithVueTs([
 			],
 			"@typescript-eslint/no-explicit-any": "error",
 			"@typescript-eslint/no-inferrable-types": "error",
-			"@typescript-eslint/no-require-imports": "warn",
+			"@typescript-eslint/no-require-imports": "off",
 			"@typescript-eslint/no-restricted-imports": [
-				"warn",
+				"error",
 				{
 					patterns: [
 						{
@@ -135,7 +137,12 @@ module.exports = defineConfigWithVueTs([
 		},
 	},
 	{
-		files: ["**/*.unit.{j,t}s?(x)", "tests/**"],
+		files: [
+			"**/*.unit.{j,t}s?(x)",
+			"tests/**",
+			"**/test-utils/**",
+			"__mocks__/**",
+		],
 		languageOptions: {
 			globals: {
 				...globals.jest,
@@ -149,6 +156,12 @@ module.exports = defineConfigWithVueTs([
 		files: ["src/components/icons/material/index.ts"],
 		rules: {
 			"schulcloud/material-icon-imports": "off",
+		},
+	},
+	{
+		files: ["**/*.{ts,vue}"],
+		rules: {
+			"@typescript-eslint/no-require-imports": "error",
 		},
 	},
 ]);

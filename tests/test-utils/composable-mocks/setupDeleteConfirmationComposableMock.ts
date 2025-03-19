@@ -1,4 +1,3 @@
-import { Jest as jest } from "@jest/environment";
 import { ref } from "vue";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 
