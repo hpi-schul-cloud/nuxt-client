@@ -1857,7 +1857,6 @@ export default {
 		"¿Eliminar {memberFullName} de la sala?",
 	"pages.rooms.members.multipleRemove.confirmation":
 		"¿Eliminar miembros seleccionados de la sala?",
-	"pages.rooms.members.roles.editor": "Editor de salas",
 	"pages.rooms.members.roles.viewer": "Visor de salas",
 	"pages.rooms.members.roomPermissions.admin": "Administrar",
 	"pages.rooms.members.roomPermissions.owner": "Propietario",
