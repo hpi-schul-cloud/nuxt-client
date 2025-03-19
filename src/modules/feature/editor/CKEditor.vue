@@ -72,7 +72,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const { locale } = useI18n();
+		const { t, locale } = useI18n();
 
 		const ck = ref(null);
 		const modelValue = useVModel(props, "value", emit);
@@ -129,6 +129,43 @@ export default defineComponent({
 					viewportOffset: {
 						top: 220,
 					},
+				},
+				fontColor: {
+					// lime-darken-4, green-darken-2, cyan-darken-3, blue-darken-2, indigo, deep-purple, purple, pink-darken-1, red-darken-2
+					colors: [
+						{
+							color: "#827717",
+							label: t("components.editor.fontColor.oliveGreen"),
+						},
+						{ color: "#388E3C", label: "Green" },
+						{ color: "#00838F", label: "Turquoise" },
+						{ color: "#1976D2", label: "Blue" },
+						{
+							color: "#3F51B5",
+							label: t("components.editor.fontColor.indigo"),
+						},
+						{
+							color: "#673AB7",
+							label: t("components.editor.fontColor.deepPurple"),
+						},
+						{ color: "#9C27B0", label: "Purple" },
+						{ color: "#D81B60", label: t("components.editor.fontColor.pink") },
+						{ color: "#D32F2F", label: "Red" },
+					],
+				},
+				fontBackgroundColor: {
+					// light-green-lighten-4, green-lighten-4, cyan-lighten-4, blue-lighten-4, indigo-lighten-4, purple-lighten-4, pink-lighten-4, deep-orange-lighten-4, amber-lighten-4
+					colors: [
+						{ color: "#DCEDC8", label: "Light green" },
+						{ color: "#C8E6C9", label: "Green" },
+						{ color: "#B2EBF2", label: "Cyan" },
+						{ color: "#BBDEFB", label: "Blue" },
+						{ color: "#C5CAE9", label: "Indigo" },
+						{ color: "#E1BEE7", label: "Purple" },
+						{ color: "#F8BBD0", label: "Pink" },
+						{ color: "#FFCCBC", label: "Orange" },
+						{ color: "#FFECB3", label: "Amber" },
+					],
 				},
 			};
 		});

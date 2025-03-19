@@ -522,10 +522,10 @@ export default {
 		"The date and time are in the past.",
 	"components.dateTimePicker.messages.dateRequired":
 		"Time cannot be entered without a date.",
-	"components.editor.highlight.dullBlue": "Blue marker (dull)",
-	"components.editor.highlight.dullGreen": "Green marker (dull)",
-	"components.editor.highlight.dullPink": "Pink marker (dull)",
-	"components.editor.highlight.dullYellow": "Yellow marker (dull)",
+	"components.editor.fontColor.oliveGreen": "Olive Green",
+	"components.editor.fontColor.indigo": "Indigo",
+	"components.editor.fontColor.deepPurple": "Deep Purple",
+	"components.editor.fontColor.pink": "Pink",
 	"components.elementTypeSelection.dialog.title": "Add element",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"External tools",

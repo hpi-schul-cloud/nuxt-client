@@ -527,10 +527,10 @@ export default {
 		"Datum und Uhrzeit liegen in der Vergangenheit.",
 	"components.dateTimePicker.messages.dateRequired":
 		"Uhrzeitangabe ohne Datum nicht möglich.",
-	"components.editor.highlight.dullBlue": "Blauer Marker (matt)",
-	"components.editor.highlight.dullGreen": "Grüner Marker (matt)",
-	"components.editor.highlight.dullPink": "Pinker Marker (matt)",
-	"components.editor.highlight.dullYellow": "Gelber Marker (matt)",
+	"components.editor.fontColor.oliveGreen": "Olivgrün",
+	"components.editor.fontColor.indigo": "Indigo",
+	"components.editor.fontColor.deepPurple": "Tiefviolett",
+	"components.editor.fontColor.pink": "Rosa",
 	"components.elementTypeSelection.dialog.title": "Element hinzufügen",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Externe Tools",

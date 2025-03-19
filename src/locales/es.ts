@@ -532,10 +532,10 @@ export default {
 		"La fecha y la hora están en el pasado.",
 	"components.dateTimePicker.messages.dateRequired":
 		"Sin fecha no es posible especificar la hora.",
-	"components.editor.highlight.dullBlue": "Marcador azul (mate)",
-	"components.editor.highlight.dullGreen": "Marcador verde (mate)",
-	"components.editor.highlight.dullPink": "Marcador rosa (mate)",
-	"components.editor.highlight.dullYellow": "Marcador amarillo (mate)",
+	"components.editor.fontColor.oliveGreen": "Verde Oliva",
+	"components.editor.fontColor.indigo": "Índigo",
+	"components.editor.fontColor.deepPurple": "Púrpura Intenso",
+	"components.editor.fontColor.pink": "Rosa",
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",

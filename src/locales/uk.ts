@@ -534,10 +534,10 @@ export default {
 	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
 	"components.dateTimePicker.messages.dateRequired":
 		"Без дати неможливо вказати час.",
-	"components.editor.highlight.dullBlue": "Синій маркер (матові)",
-	"components.editor.highlight.dullGreen": "Зелений маркер (матові)",
-	"components.editor.highlight.dullPink": "Рожевий маркер (матові)",
-	"components.editor.highlight.dullYellow": "Жовтий маркер (матові)",
+	"components.editor.fontColor.oliveGreen": "Оливковий",
+	"components.editor.fontColor.indigo": "Індиго",
+	"components.editor.fontColor.deepPurple": "Темно-фіолетовий",
+	"components.editor.fontColor.pink": "Рожевий",
 	"components.elementTypeSelection.dialog.title": "Додати елемент",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Зовнішні інструменти",
