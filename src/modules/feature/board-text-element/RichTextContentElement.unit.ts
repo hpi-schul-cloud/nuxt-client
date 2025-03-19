@@ -52,7 +52,6 @@ describe("RichTextContentElement", () => {
 		isEditMode: boolean;
 	}) => {
 		const wrapper = mount(RichTextContentElementComponent, {
-			propsData: props,
 			global: {
 				plugins: [
 					createTestingVuetify(),
@@ -64,6 +63,7 @@ describe("RichTextContentElement", () => {
 					RichTextContentElementEdit: true,
 				},
 			},
+			props,
 		});
 
 		return { wrapper };
