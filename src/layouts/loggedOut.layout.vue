@@ -79,7 +79,7 @@ const isMobile = computed(() => {
 
 .wrapper {
 	grid-area: content;
-	min-height: calc(100vh - var(--topbar-height));
+	min-height: calc(100vh - var(--legacy-topbar-height));
 	padding-right: calc(15 * var(--border-width));
 	padding-left: calc(15 * var(--border-width));
 	margin: var(--space-lg) auto;
