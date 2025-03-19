@@ -249,6 +249,9 @@ export default defineComponent({
 	--ck-highlight-marker-dull-green: hsl(91, 27%, 85%);
 	--ck-highlight-marker-dull-pink: hsl(341, 57%, 88%);
 	--ck-highlight-marker-dull-yellow: hsl(28, 67%, 86%);
+
+	// z-index must be less than z-index of the headers to prevent that the toolbar is shown in front of the headers when scrolling.
+	--ck-z-modal: 15;
 }
 
 .ck-content {
