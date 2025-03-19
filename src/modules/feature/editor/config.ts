@@ -8,6 +8,7 @@ const boardToolbarSimple = [
 	"link",
 	"bulletedList",
 	"numberedList",
+	"insertTable",
 	"removeFormat",
 ];
 
