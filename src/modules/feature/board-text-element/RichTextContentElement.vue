@@ -136,6 +136,12 @@ export default defineComponent({
 		ul {
 			list-style-type: circle;
 		}
+
+		.table {
+			display: block;
+			overflow-x: auto;
+			overflow-y: hidden;
+		}
 	}
 }
 </style>
