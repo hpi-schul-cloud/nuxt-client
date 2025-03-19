@@ -94,11 +94,11 @@ export default {
 	"common.labels.visible": "Visible",
 	"common.loading.text": "Los datos se están cargando...",
 	"common.medium.alert.deactivated": "Los medios están deshabilitados.",
-	"common.medium.alert.notLicensed": "El medio no está activado.",
+	"common.medium.alert.notLicensed": "El medio no está autorizado.",
 	"common.medium.alert.incomplete":
 		"La configuración del medio no actual o incompleta.",
 	"common.medium.chip.deactivated": "Desactivado",
-	"common.medium.chip.notLicensed": "No esta activado",
+	"common.medium.chip.notLicensed": "No autorizado",
 	"common.medium.chip.incomplete": "Configuración incompleta",
 	"common.medium.chip.noLongerAvailable": "Ya no está disponible",
 	"common.medium.information.admin": "Por favor verifique la configuración.",
@@ -138,9 +138,9 @@ export default {
 	"common.tool.information.deactivated.teacher":
 		"La herramienta {toolName} está deshabilitada. Por favor comuníquese con el administrador de la escuela.",
 	"common.tool.information.notLicensed.student":
-		"La herramienta {toolName} no está activada. Por favor contacta a tu profesor o instructor del curso.",
+		"La herramienta {toolName} no está autorizado. Por favor contacta a tu profesor o instructor del curso.",
 	"common.tool.information.notLicensed.teacher":
-		"La herramienta {toolName} no está activada. Por favor comuníquese con el administrador de la escuela.",
+		"La herramienta {toolName} no está autorizado. Por favor contacta con el administrador de la escuela.",
 	"common.tool.information.outdated.teacher":
 		"La configuración de la herramienta {toolName} no está actualizada o está incompleta. Verifique la configuración y comuníquese con el administrador de su escuela.",
 	"common.tool.information.outdatedOnSchool.teacher":
@@ -349,11 +349,11 @@ export default {
 	"components.administration.externalToolsSection.table.header.restrictedTo":
 		"Restringido a",
 	"components.administration.externalToolsSection.table.header.medium":
-		"Fuente de medios",
+		"Gestión de medios",
 	"components.administration.externalToolsSection.table.ariaLabel.mediumAvailable":
-		"Medio externo activado",
+		"Medio externo autorizado",
 	"components.administration.externalToolsSection.table.ariaLabel.mediumUnavailable":
-		"Medio externo desactivado",
+		"Medio externo no autorizado",
 	"components.administration.provisioningOptions.class.description":
 		"Active esta opción si las clases deben sincronizarse en la {instance}.",
 	"components.administration.provisioningOptions.class.label":
@@ -1787,9 +1787,9 @@ export default {
 	"pages.rooms.roomModal.courseGroupTitle": "Título del grupo del curso",
 	"pages.rooms.tools.deactivated": "Herramienta desactivada",
 	"pages.rooms.tools.deactivatedDialog.title":
-		"Herramienta {toolName}“ desactivada",
+		"Herramienta “{toolName}“ desactivada",
 	"pages.rooms.tools.notLicensedDialog.title":
-		"Herramienta “{toolName}” no activada",
+		"Herramienta “{toolName}“ no autorizada",
 	"pages.rooms.tools.deleteDialog.content":
 		"¿Está seguro de que desea eliminar la herramienta '{itemName}' del curso?",
 	"pages.rooms.tools.deleteDialog.title": "quitar herramientas?",
@@ -1963,6 +1963,7 @@ export default {
 	"pages.tool.medium": "Medio externo",
 	"pages.tool.medium.mediumId": "ID medio",
 	"pages.tool.medium.mediumSourceId": "ID de catálogo de medios",
+	"pages.tool.medium.noMediaSource": "Sin catálogo de medios",
 	"pages.userMigration.backToLogin": "Volver a la página de inicio de sesión",
 	"pages.userMigration.button.skip": "Ahora no",
 	"pages.userMigration.button.startMigration": "Empieza a moverte",

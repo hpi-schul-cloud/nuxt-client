@@ -73,7 +73,12 @@
 					>
 						{{ mdiAlert }}
 					</VIcon>
-					<span>{{ item.medium.mediaSourceName || "" }}</span>
+					<span>
+						{{
+							item.medium.mediaSourceName ||
+							$t("pages.tool.medium.noMediaSource")
+						}}
+					</span>
 				</div>
 				<span v-else data-testid="external-tool-medium"> - </span>
 			</template>

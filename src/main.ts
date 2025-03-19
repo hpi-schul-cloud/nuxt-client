@@ -37,10 +37,6 @@ import { createPinia } from "pinia";
 import { createApp } from "vue";
 import VueDOMPurifyHTML from "vue-dompurify-html";
 
-// TODO - solve within https://ticketsystem.dbildungscloud.de/browse/BC-8013
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { Vue3Mq } from "vue3-mq";
 import App from "./App.vue";
 import { handleApplicationError } from "./plugins/application-error-handler";
 import { createI18n } from "./plugins/i18n";
@@ -75,6 +71,7 @@ import {
 	USER_LOGIN_MIGRATION_MODULE_KEY,
 	VIDEO_CONFERENCE_MODULE_KEY,
 } from "./utils/inject";
+import { logger } from "@util-logger";
 
 export const app = createApp(App);
 
@@ -88,17 +85,6 @@ mountBaseComponents(app);
 app.config.errorHandler = handleApplicationError;
 
 app.config.globalProperties.$theme = themeConfig;
-
-app.use(Vue3Mq, {
-	breakpoints: {
-		mobile: 0,
-		tabletPortrait: 750,
-		tablet: 770,
-		desktop: 991,
-		large: 1200,
-	},
-	defaultBreakpoint: "mobile",
-});
 
 app.mixin({
 	computed: {
@@ -126,7 +112,7 @@ app.use(VueDOMPurifyHTML, {
 		await authModule.login();
 	} catch (error) {
 		// TODO improve exception handling, best case test if its a 401, if not log the unknown error
-		console.info("probably not logged in", error);
+		logger.info("probably not logged in", error);
 	}
 
 	// creation of i18n relies on envConfigModule authModule

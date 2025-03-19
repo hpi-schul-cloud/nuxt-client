@@ -17,27 +17,15 @@
 /**
  * 
  * @export
- * @interface FileUrlParams
+ * @interface CommonCartridgeImportBodyParams
  */
-export interface FileUrlParams {
+export interface CommonCartridgeImportBodyParams {
     /**
-     * 
-     * @type {string}
-     * @memberof FileUrlParams
+     * The Common Cartridge file to import.
+     * @type {any}
+     * @memberof CommonCartridgeImportBodyParams
      */
-    url: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof FileUrlParams
-     */
-    fileName: string;
-    /**
-     * 
-     * @type {object}
-     * @memberof FileUrlParams
-     */
-    headers?: object;
+    file: any;
 }
 
 

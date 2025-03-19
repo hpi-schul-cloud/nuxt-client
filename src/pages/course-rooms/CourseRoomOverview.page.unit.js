@@ -25,6 +25,8 @@ import {
 } from "@@/tests/test-utils/setup";
 import { nextTick } from "vue";
 
+jest.mock("vue-router");
+
 const mockRoomStoreData = [
 	{
 		id: "1",
@@ -123,7 +125,7 @@ const defaultMocks = {
 	$router: { replace: jest.fn() },
 };
 
-const getWrapper = (device = "desktop", options = {}) => {
+const getWrapper = () => {
 	copyModuleMock = createModuleMocks(CopyModule, {
 		getIsResultModalOpen: false,
 	});
@@ -137,7 +139,6 @@ const getWrapper = (device = "desktop", options = {}) => {
 		global: {
 			plugins: [createTestingVuetify(), createTestingI18n()],
 			provide: {
-				mq: { current: device },
 				[COPY_MODULE_KEY.valueOf()]: copyModuleMock,
 				loadingStateModule: loadingStateModuleMock,
 				[NOTIFIER_MODULE_KEY]: notifierModuleMock,
@@ -145,23 +146,11 @@ const getWrapper = (device = "desktop", options = {}) => {
 				[COMMON_CARTRIDGE_IMPORT_MODULE_KEY.valueOf()]: createModuleMocks(
 					CommonCartridgeImportModule
 				),
+				[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: courseRoomListModuleMock,
+				[LOADING_STATE_MODULE_KEY.valueOf()]: loadingStateModuleMock,
 			},
 			mocks: defaultMocks,
 		},
-		mocks: defaultMocks,
-		provide: {
-			copyModule: copyModuleMock,
-			loadingStateModule: loadingStateModuleMock,
-			[NOTIFIER_MODULE_KEY]: notifierModuleMock,
-			[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
-			[LOADING_STATE_MODULE_KEY.valueOf()]: loadingStateModuleMock,
-			[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
-			[COURSE_ROOM_LIST_MODULE_KEY.valueOf()]: courseRoomListModuleMock,
-		},
-		props: {
-			role: "student",
-		},
-		...options,
 	});
 };
 
@@ -210,14 +199,6 @@ describe("@/pages/CourseRoomOverview.page", () => {
 
 	it("should display 6 avatars component", async () => {
 		const wrapper = getWrapper();
-		await nextTick();
-		await nextTick();
-		const avatarComponents = wrapper.findAll(".room-avatar");
-		expect(avatarComponents).toHaveLength(6);
-	});
-
-	it("should display 2 avatars component in 'mobile' device", async () => {
-		const wrapper = getWrapper("mobile");
 		await nextTick();
 		await nextTick();
 		const avatarComponents = wrapper.findAll(".room-avatar");
@@ -287,19 +268,7 @@ describe("@/pages/CourseRoomOverview.page", () => {
 		).toStrictEqual("vRoomEmptyAvatar");
 	});
 
-	it("should set the column count '4' if the device is 'mobile'", async () => {
-		const wrapper = getWrapper("mobile");
-		await nextTick();
-		expect(wrapper.vm.dimensions.colCount).toBe(4);
-	});
-
-	it("should set the column count '4' if the device is 'tablet'", async () => {
-		const wrapper = getWrapper("tablet");
-		await nextTick();
-		expect(wrapper.vm.dimensions.colCount).toBe(4);
-	});
-
-	it("should set the column count '4' if the device is 'desktop'", async () => {
+	it("should set the column count 4", async () => {
 		const wrapper = getWrapper();
 		await nextTick();
 		expect(wrapper.vm.dimensions.colCount).toBe(4);

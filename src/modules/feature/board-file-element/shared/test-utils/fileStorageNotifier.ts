@@ -1,4 +1,3 @@
-import { Jest as jest } from "@jest/environment";
 import { useFileStorageNotifier } from "../composables/FileStorageNotifications.composable";
 
 interface Props {
