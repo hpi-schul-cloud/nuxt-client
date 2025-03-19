@@ -131,25 +131,30 @@ export default defineComponent({
 					},
 				},
 				fontColor: {
+					// Using the following colors from the vuetify color palette:
 					// lime-darken-4, green-darken-2, cyan-darken-3, blue-darken-2, indigo, deep-purple, purple, pink-darken-1, red-darken-2
+					// Some colors are translated by CKEditor itself
 					colors: [
 						{
 							color: "#827717",
-							label: t("components.editor.fontColor.oliveGreen"),
+							label: t("components.editor.fonts.colors.oliveGreen"),
 						},
 						{ color: "#388E3C", label: "Green" },
 						{ color: "#00838F", label: "Turquoise" },
 						{ color: "#1976D2", label: "Blue" },
 						{
 							color: "#3F51B5",
-							label: t("components.editor.fontColor.indigo"),
+							label: t("components.editor.fonts.colors.indigo"),
 						},
 						{
 							color: "#673AB7",
-							label: t("components.editor.fontColor.deepPurple"),
+							label: t("components.editor.fonts.colors.darkPurple"),
 						},
 						{ color: "#9C27B0", label: "Purple" },
-						{ color: "#D81B60", label: t("components.editor.fontColor.pink") },
+						{
+							color: "#D81B60",
+							label: t("components.editor.fonts.colors.pink"),
+						},
 						{ color: "#D32F2F", label: "Red" },
 					],
 				},
@@ -158,13 +163,25 @@ export default defineComponent({
 					colors: [
 						{ color: "#DCEDC8", label: "Light green" },
 						{ color: "#C8E6C9", label: "Green" },
-						{ color: "#B2EBF2", label: "Cyan" },
+						{ color: "#B2EBF2", label: "Turquoise" },
 						{ color: "#BBDEFB", label: "Blue" },
-						{ color: "#C5CAE9", label: "Indigo" },
-						{ color: "#E1BEE7", label: "Purple" },
-						{ color: "#F8BBD0", label: "Pink" },
+						{
+							color: "#C5CAE9",
+							label: t("components.editor.fonts.colors.indigo"),
+						},
+						{
+							color: "#E1BEE7",
+							label: t("components.editor.fonts.colors.darkPurple"),
+						},
+						{
+							color: "#F8BBD0",
+							label: t("components.editor.fonts.colors.pink"),
+						},
 						{ color: "#FFCCBC", label: "Orange" },
-						{ color: "#FFECB3", label: "Amber" },
+						{
+							color: "#FFECB3",
+							label: "Yellow",
+						},
 					],
 				},
 			};
