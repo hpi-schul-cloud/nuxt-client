@@ -19,7 +19,7 @@
 				/>
 			</div>
 		</template>
-		<BoardGrid :boards="roomBoards" />
+		<BoardGrid :boards="visibleBoards" />
 		<ConfirmationDialog />
 		<SelectBoardLayoutDialog
 			v-if="boardLayoutsEnabled && canCreateRoom"
@@ -72,6 +72,12 @@ useTitle(pageTitle);
 
 const { canCreateRoom, canDeleteRoom, canEditRoomContent } =
 	useRoomAuthorization();
+
+const visibleBoards = computed(() =>
+	roomBoards.value?.filter(
+		(board) => board.isVisible || canEditRoomContent.value
+	)
+);
 
 const roomTitle = computed(() => {
 	return room.value ? room.value.name : t("pages.roomDetails.title");
