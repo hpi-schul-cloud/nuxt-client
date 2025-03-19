@@ -267,13 +267,11 @@ describe("BoardColumn", () => {
 					permissions: { hasCreateColumnPermission: ref(false) },
 				});
 
-				const addCardComponent = wrapper.getComponent({
+				const addCardComponent = wrapper.findComponent({
 					name: "BoardAddCardButton",
 				});
 
-				expect(addCardComponent.attributes("style")).toContain(
-					"visibility: hidden;"
-				);
+				expect(addCardComponent.exists()).toBe(false);
 			});
 		});
 	});

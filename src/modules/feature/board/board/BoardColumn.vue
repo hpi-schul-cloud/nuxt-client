@@ -67,7 +67,7 @@
 				</template>
 			</Sortable>
 			<BoardAddCardButton
-				v-if="hasCreateCardPermission && !isDragging"
+				v-if="showAddButton"
 				@add-card="onCreateCard"
 				:data-testid="`column-${index}-add-card-btn`"
 			/>
