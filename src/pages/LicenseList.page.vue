@@ -82,7 +82,7 @@ const onExpand = async (args: unknown) => {
 const fetchLicenseData = async () => {
 	try {
 		const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
-		if (!licensesUrl) throw new Error("License summary URL is not	defined");
+		if (!licensesUrl) throw new Error("License summary URL is not defined");
 
 		response.value = (await axios.get(licensesUrl as string)).data;
 		licenseNames.value = Object.keys(response.value);
