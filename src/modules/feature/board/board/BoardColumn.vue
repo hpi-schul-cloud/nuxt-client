@@ -1,5 +1,5 @@
 <template>
-	<div :style="columnStyle" :class="columnClasses" :key="renderKey">
+	<div :class="columnClasses" :key="renderKey" class="d-flex flex-column">
 		<BoardColumnHeader
 			:columnId="column.id"
 			:title="column.title"
@@ -14,7 +14,7 @@
 			@move:column-up="onMoveColumnUp"
 			@update:title="onUpdateTitle"
 		/>
-		<div>
+		<div class="h-100 overflow-y-auto pt-3" :class="scrollableClasses">
 			<Sortable
 				:list="column.cards"
 				item-key="cardId"
@@ -39,7 +39,9 @@
 					ghostClass: sortableGhostClasses,
 					scroll: true,
 				}"
-				:class="sortableClasses"
+				:class="{
+					'expanded-sortable': isDragging,
+				}"
 				@start="onDragStart"
 				@end="onDragEnd"
 			>
@@ -47,7 +49,7 @@
 					<CardHost
 						v-if="element"
 						:data-card-id="element.cardId"
-						class="draggable my-3"
+						class="draggable mb-3"
 						:class="{
 							'drag-disabled': !hasMovePermission,
 							'mx-2': !isListBoard,
@@ -65,10 +67,9 @@
 				</template>
 			</Sortable>
 			<BoardAddCardButton
-				v-if="hasCreateCardPermission"
+				v-if="showAddButton"
 				@add-card="onCreateCard"
 				:data-testid="`column-${index}-add-card-btn`"
-				:style="{ visibility: !showAddButton ? 'hidden' : 'visible' }"
 			/>
 		</div>
 	</div>
@@ -141,20 +142,9 @@ export default defineComponent({
 			if (props.isListBoard) {
 				classes.push("d-flex", "flex-column", "align-stretch");
 			} else {
-				classes.push("px-4");
+				classes.push("px-4", "multi-column-board-column");
 			}
 			return classes;
-		});
-
-		const columnStyle = computed(() => {
-			if (props.isListBoard) {
-				return;
-			}
-			const columnLayout = {
-				"min-width": `${colWidth.value}px`,
-				"max-width": `${colWidth.value}px`,
-			};
-			return columnLayout;
 		});
 
 		const { isDragging, dragStart, dragEnd } = useDragAndDrop();
@@ -291,13 +281,10 @@ export default defineComponent({
 			return props.column.cards[index];
 		};
 
-		const sortableClasses = computed(() => {
+		const scrollableClasses = computed(() => {
 			const classes = [];
 			if (!props.isListBoard) {
-				classes.push("scrollable-column");
-				if (isDragging.value) {
-					classes.push("expanded-column");
-				}
+				classes.push("scrollable");
 			}
 			return classes;
 		});
@@ -317,7 +304,6 @@ export default defineComponent({
 		return {
 			cardDropPlaceholderOptions,
 			columnClasses,
-			columnStyle,
 			colWidth,
 			hasCreateCardPermission,
 			hasCreateColumnPermission,
@@ -325,7 +311,7 @@ export default defineComponent({
 			isDragging,
 			isNotFirstColumn,
 			isNotLastColumn,
-			sortableClasses,
+			scrollableClasses,
 			onCreateCard,
 			onDeleteCard,
 			onColumnDelete,
@@ -352,51 +338,68 @@ export default defineComponent({
 .sortable-drag-ghost .v-card {
 	opacity: 0.6;
 }
+
 .column-layout {
 	width: 346px; /* size of the card - column has 400px width and some paddings and margins */
 }
-</style>
-<style scoped>
-.elevate-transition {
-	transition: box-shadow 150ms all;
-}
-</style>
-<style>
-.expanded-column {
-	min-height: 75vh;
-}
+
 .draggable,
 .sortable-drag-board-card {
 	opacity: 1;
 }
-.scrollable-column {
-	overflow: auto;
-	max-height: 75vh;
+</style>
+
+<style scoped>
+.elevate-transition {
+	transition: box-shadow 150ms all;
 }
 
-/* width */
-.scrollable-column::-webkit-scrollbar {
-	width: 6px;
+.multi-column-board-column {
+	/* The last subtracted height of 10x is the height of the scrollbar. */
+	height: calc(
+		100vh - var(--topbar-height) - var(--breadcrumbs-height) -
+			var(--board-header-height) - 10px
+	);
+	width: 400px;
 }
 
-/* Track */
-.scrollable-column::-webkit-scrollbar-track {
-	background: white;
-	border: none;
+.expanded-sortable {
+	min-height: 100%;
 }
 
-/* Handle */
-.scrollable-column::-webkit-scrollbar-thumb {
-	background-color: transparent;
-	border-radius: 5px;
-}
-.column-drag-handle:hover .scrollable-column::-webkit-scrollbar-thumb {
-	background-color: rgba(var(--v-theme-on-surface), 0.6);
-	border-radius: 5px;
+@supports selector(::-webkit-scrollbar) {
+	.scrollable::-webkit-scrollbar {
+		width: 6px;
+	}
+
+	.scrollable::-webkit-scrollbar-track {
+		background: white;
+		border: none;
+	}
+
+	.scrollable::-webkit-scrollbar-thumb {
+		background-color: transparent;
+		border-radius: 5px;
+	}
+
+	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb {
+		background-color: rgba(var(--v-theme-on-surface), 0.6);
+		border-radius: 5px;
+	}
+
+	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb:hover {
+		background: rgba(var(--v-theme-on-surface), 0.8);
+	}
 }
 
-/* Handle on hover */
-.scrollable-column::-webkit-scrollbar-thumb:hover {
-	background: rgba(var(--v-theme-on-surface), 0.8) !important;
+@supports not selector(::-webkit-scrollbar) {
+	.scrollable {
+		scrollbar-width: thin;
+		scrollbar-color: transparent transparent;
+	}
+
+	.column-drag-handle:hover .scrollable {
+		scrollbar-color: initial;
+	}
 }
 </style>

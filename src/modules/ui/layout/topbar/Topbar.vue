@@ -1,5 +1,5 @@
 <template>
-	<VAppBar flat>
+	<VAppBar flat :height="appBarHeight">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
 		<template v-slot:prepend>
 			<VAppBarNavIcon
@@ -122,6 +122,15 @@ const roleNames = computed(() => {
 
 const hasLogo = computed(() => {
 	return !!school.value?.logo?.url;
+});
+
+const appBarHeight = computed(() => {
+	const height = window
+		.getComputedStyle(document.documentElement)
+		.getPropertyValue("--topbar-height");
+	const heightWithoutUnit = parseInt(height);
+
+	return heightWithoutUnit;
 });
 </script>
 

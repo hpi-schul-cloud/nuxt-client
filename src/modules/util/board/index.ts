@@ -7,6 +7,7 @@ import {
 	useMediaBoardEditMode,
 	useSharedEditMode,
 } from "./editMode.composable";
+import { useElementFocus } from "./elementFocus.composable";
 import { extractDataAttribute } from "./extractDataAttribute.util";
 import { useInlineEditInteractionHandler } from "./InlineEditInteractionHandler.composable";
 import { useSharedLastCreatedElement } from "./LastCreatedElement.composable";
@@ -24,4 +25,5 @@ export {
 	useInlineEditInteractionHandler,
 	EditModePermissions,
 	useShareBoardLink,
+	useElementFocus,
 };

@@ -58,9 +58,9 @@
 			:fluid="maxWidth !== 'nativ'"
 			class="main-content"
 			:class="{
+				'pa-0': mainWithoutPadding,
 				'container-short-width': maxWidth === 'short',
 				'container-full-width': maxWidth === 'full',
-				'overflow-x-auto': allowOverflowX,
 			}"
 		>
 			<slot />
@@ -96,11 +96,6 @@ const props = defineProps({
 		required: false,
 		default: null,
 	},
-	allowOverflowX: {
-		type: Boolean,
-		required: false,
-		default: false,
-	},
 	hideBorder: {
 		type: Boolean,
 	},
@@ -109,6 +104,9 @@ const props = defineProps({
 		default: null,
 	},
 	fixedHeader: {
+		type: Boolean,
+	},
+	mainWithoutPadding: {
 		type: Boolean,
 	},
 });
@@ -141,7 +139,7 @@ const showDivider = computed(() => {
 }
 
 .wireframe-container {
-	height: calc(100vh - 64px);
+	height: calc(100vh - var(--topbar-height));
 }
 
 .wireframe-header {
@@ -182,14 +180,14 @@ const showDivider = computed(() => {
 
 .sticky {
 	position: sticky;
-	top: 64px;
+	top: var(--topbar-height);
 	z-index: var(--layer-sticky-header);
 	background-color: rgb(var(--v-theme-white));
 }
 
 .fixed {
 	position: fixed;
-	top: 64px;
+	top: var(--topbar-height);
 	width: 100%;
 	background-color: rgb(var(--v-theme-white));
 }
