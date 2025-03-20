@@ -1,4 +1,3 @@
-import { Jest as jest } from "@jest/environment";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { ref } from "vue";
 
