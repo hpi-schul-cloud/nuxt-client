@@ -141,6 +141,7 @@ export default defineComponent({
 			display: block;
 			overflow-x: auto;
 			overflow-y: hidden;
+			padding-right: 1px;
 		}
 	}
 }
