@@ -4,11 +4,12 @@ import { createTestableSharedComposable } from "@/utils/create-shared-composable
 import { storeToRefs } from "pinia";
 import { ref, toValue, watchEffect } from "vue";
 import { useBoardStore } from "./Board.store";
+import { Permission, RoleName } from "@/serverApi/v3";
 
 const boardPermissions = (): BoardPermissionChecks => {
 	const userRoles = authModule?.getUserRoles || [];
-	const isTeacher = ref(userRoles.includes("teacher"));
-	const isStudent = ref(userRoles.includes("student"));
+	const isTeacher = ref(userRoles.includes(RoleName.Teacher));
+	const isStudent = ref(userRoles.includes(RoleName.Student));
 
 	const { board } = storeToRefs(useBoardStore());
 
@@ -20,18 +21,20 @@ const boardPermissions = (): BoardPermissionChecks => {
 	const hasDeletePermission = ref(false);
 
 	watchEffect(() => {
-		const boardPermissions = (toValue(board)?.permissions ?? []).map((p) =>
-			p.toLowerCase()
-		);
+		const boardPermissions = toValue(board)?.permissions ?? [];
 		const schoolRolePermissions = authModule?.getUserPermissions || [];
 		const permissions = [...boardPermissions, ...schoolRolePermissions];
 
-		hasMovePermission.value = permissions.includes("board_edit");
-		hasCreateCardPermission.value = permissions.includes("board_edit");
-		hasCreateColumnPermission.value = permissions.includes("board_edit");
-		hasCreateToolPermission.value = permissions.includes("context_tool_admin");
-		hasEditPermission.value = permissions.includes("board_edit");
-		hasDeletePermission.value = permissions.includes("board_edit");
+		hasMovePermission.value = permissions.includes(Permission.BoardEdit);
+		hasCreateCardPermission.value = permissions.includes(Permission.BoardEdit);
+		hasCreateColumnPermission.value = permissions.includes(
+			Permission.BoardEdit
+		);
+		hasCreateToolPermission.value = permissions.includes(
+			Permission.ContextToolAdmin
+		);
+		hasEditPermission.value = permissions.includes(Permission.BoardEdit);
+		hasDeletePermission.value = permissions.includes(Permission.BoardEdit);
 	});
 
 	return {
