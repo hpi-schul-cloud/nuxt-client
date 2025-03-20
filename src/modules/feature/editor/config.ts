@@ -67,6 +67,7 @@ const boardPlugins = [
 	"Paragraph",
 	"RemoveFormat",
 	"SpecialCharacters",
+	"SpecialCharactersEssentials",
 	"Strikethrough",
 	"Subscript",
 	"Superscript",
