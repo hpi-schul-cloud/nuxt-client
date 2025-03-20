@@ -6,7 +6,6 @@ import { ref, toValue, watchEffect } from "vue";
 import { useBoardStore } from "./Board.store";
 
 const boardPermissions = (): BoardPermissionChecks => {
-	// TODO: really needed? remove - if not
 	const userRoles = authModule?.getUserRoles || [];
 	const isTeacher = ref(userRoles.includes("teacher"));
 	const isStudent = ref(userRoles.includes("student"));
@@ -33,9 +32,6 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasCreateToolPermission.value = permissions.includes("context_tool_admin");
 		hasEditPermission.value = permissions.includes("board_edit");
 		hasDeletePermission.value = permissions.includes("board_edit");
-
-		// if course ??? needed?
-		// resetState();
 	});
 
 	return {
