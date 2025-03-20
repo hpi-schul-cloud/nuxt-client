@@ -5,7 +5,7 @@
 			:autofocus="autofocus"
 			:placeholder="$t('components.cardElement.richTextElement.placeholder')"
 			type="inline"
-			mode="simple"
+			mode="regular"
 			@update:value="onUpdateValue"
 			@focus="onFocus"
 			@blur="onBlur"
