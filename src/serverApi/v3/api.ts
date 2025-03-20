@@ -264,6 +264,8 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     AdminEdit = 'ADMIN_EDIT',
     AdminView = 'ADMIN_VIEW',
     BaseView = 'BASE_VIEW',
+    BoardView = 'BOARD_VIEW',
+    BoardEdit = 'BOARD_EDIT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -336,6 +338,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
     MediaSchoolLicenseAdmin = 'MEDIA_SCHOOL_LICENSE_ADMIN',
+    MediaSourceAdmin = 'MEDIA_SOURCE_ADMIN',
     NewsCreate = 'NEWS_CREATE',
     NewsEdit = 'NEWS_EDIT',
     NewsView = 'NEWS_VIEW',
@@ -718,6 +721,12 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     features: Array<BoardFeature>;
+    /**
+     * 
+     * @type {Array<Permission>}
+     * @memberof BoardResponse
+     */
+    permissions: Array<Permission>;
 }
 /**
  * 
@@ -3560,6 +3569,12 @@ export interface ExternalToolMediumParams {
      * @memberof ExternalToolMediumParams
      */
     mediaSourceId?: string;
+    /**
+     * The date the medium was last modified
+     * @type {string}
+     * @memberof ExternalToolMediumParams
+     */
+    modifiedAt?: string;
 }
 /**
  * 
@@ -3585,25 +3600,12 @@ export interface ExternalToolMediumResponse {
      * @memberof ExternalToolMediumResponse
      */
     mediaSourceId?: string;
-}
-/**
- * 
- * @export
- * @interface ExternalToolMetadataResponse
- */
-export interface ExternalToolMetadataResponse {
     /**
-     * Amount of usages of the tool in schools
-     * @type {number}
-     * @memberof ExternalToolMetadataResponse
+     * The last modified date of the medium
+     * @type {string}
+     * @memberof ExternalToolMediumResponse
      */
-    schoolExternalToolCount: number;
-    /**
-     * Amount of usages of the tool in contexts
-     * @type {ContextExternalToolCountPerContextResponse}
-     * @memberof ExternalToolMetadataResponse
-     */
-    contextExternalToolCountPerContext: ContextExternalToolCountPerContextResponse;
+    modifiedAt?: string;
 }
 /**
  * 
@@ -3829,6 +3831,25 @@ export interface ExternalToolUpdateParams {
      * @memberof ExternalToolUpdateParams
      */
     iconName?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolUtilizationResponse
+ */
+export interface ExternalToolUtilizationResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof ExternalToolUtilizationResponse
+     */
+    schoolExternalToolCount: number;
+    /**
+     * 
+     * @type {ContextExternalToolCountPerContextResponse}
+     * @memberof ExternalToolUtilizationResponse
+     */
+    contextExternalToolCountPerContext: ContextExternalToolCountPerContextResponse;
 }
 /**
  * 
@@ -5666,11 +5687,108 @@ export interface MediaSchoolLicenseResponse {
  * @export
  * @enum {string}
  */
+export enum MediaSourceDataFormat {
+    Bildungslogin = 'BILDUNGSLOGIN',
+    Vidis = 'VIDIS'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 export enum MediaSourceLicenseType {
     UserLicense = 'user-license',
     SchoolLicense = 'school-license'
 }
 
+/**
+ * 
+ * @export
+ * @interface MediaSourceListResponse
+ */
+export interface MediaSourceListResponse {
+    /**
+     * 
+     * @type {Array<MediaSourceResponse>}
+     * @memberof MediaSourceListResponse
+     */
+    responses: Array<MediaSourceResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface MediaSourceResponse
+ */
+export interface MediaSourceResponse {
+    /**
+     * Id of the media source
+     * @type {string}
+     * @memberof MediaSourceResponse
+     */
+    id: string;
+    /**
+     * External Id of the media source
+     * @type {string}
+     * @memberof MediaSourceResponse
+     */
+    sourceId: string;
+    /**
+     * Name of the media source
+     * @type {string}
+     * @memberof MediaSourceResponse
+     */
+    name?: string;
+    /**
+     * Format of the media source data
+     * @type {MediaSourceDataFormat}
+     * @memberof MediaSourceResponse
+     */
+    format?: MediaSourceDataFormat;
+}
+/**
+ * 
+ * @export
+ * @interface MediumMetadataResponse
+ */
+export interface MediumMetadataResponse {
+    /**
+     * The Name
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    name: string;
+    /**
+     * The Description
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    description?: string;
+    /**
+     * The Publisher
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    publisher?: string;
+    /**
+     * The Logo URL
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    logoUrl?: string;
+    /**
+     * The Preview Logo URL
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    previewLogoUrl?: string;
+    /**
+     * The last Modified Date
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    modifiedAt?: string;
+}
 /**
  * 
  * @export
@@ -7047,6 +7165,8 @@ export enum Permission {
     AdminEdit = 'ADMIN_EDIT',
     AdminView = 'ADMIN_VIEW',
     BaseView = 'BASE_VIEW',
+    BoardView = 'BOARD_VIEW',
+    BoardEdit = 'BOARD_EDIT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -7119,6 +7239,7 @@ export enum Permission {
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
     MediaSchoolLicenseAdmin = 'MEDIA_SCHOOL_LICENSE_ADMIN',
+    MediaSourceAdmin = 'MEDIA_SOURCE_ADMIN',
     NewsCreate = 'NEWS_CREATE',
     NewsEdit = 'NEWS_EDIT',
     NewsView = 'NEWS_VIEW',
@@ -19080,6 +19201,260 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
 
 
 /**
+ * MediaSourceApi - axios parameter creator
+ * @export
+ */
+export const MediaSourceApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get a list of all media sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaSourceControllerGetMediaSourceList: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/media-sources`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MediaSourceApi - functional programming interface
+ * @export
+ */
+export const MediaSourceApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MediaSourceApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of all media sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaSourceControllerGetMediaSourceList(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaSourceListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaSourceControllerGetMediaSourceList(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MediaSourceApi - factory interface
+ * @export
+ */
+export const MediaSourceApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MediaSourceApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of all media sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaSourceControllerGetMediaSourceList(options?: any): AxiosPromise<MediaSourceListResponse> {
+            return localVarFp.mediaSourceControllerGetMediaSourceList(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MediaSourceApi - interface
+ * @export
+ * @interface MediaSourceApi
+ */
+export interface MediaSourceApiInterface {
+    /**
+     * 
+     * @summary Get a list of all media sources
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaSourceApiInterface
+     */
+    mediaSourceControllerGetMediaSourceList(options?: any): AxiosPromise<MediaSourceListResponse>;
+
+}
+
+/**
+ * MediaSourceApi - object-oriented interface
+ * @export
+ * @class MediaSourceApi
+ * @extends {BaseAPI}
+ */
+export class MediaSourceApi extends BaseAPI implements MediaSourceApiInterface {
+    /**
+     * 
+     * @summary Get a list of all media sources
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaSourceApi
+     */
+    public mediaSourceControllerGetMediaSourceList(options?: any) {
+        return MediaSourceApiFp(this.configuration).mediaSourceControllerGetMediaSourceList(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * MediumMetadataApi - axios parameter creator
+ * @export
+ */
+export const MediumMetadataApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Returns configuration metadata for media source of a medium
+         * @param {string} mediumId The id of the medium.
+         * @param {string} mediaSourceId The id of the media source.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediumMetadataControllerGetMediumMetadata: async (mediumId: string, mediaSourceId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mediumId' is not null or undefined
+            assertParamExists('mediumMetadataControllerGetMediumMetadata', 'mediumId', mediumId)
+            // verify required parameter 'mediaSourceId' is not null or undefined
+            assertParamExists('mediumMetadataControllerGetMediumMetadata', 'mediaSourceId', mediaSourceId)
+            const localVarPath = `/medium-metadata/medium/{mediumId}/media-source/{mediaSourceId}`
+                .replace(`{${"mediumId"}}`, encodeURIComponent(String(mediumId)))
+                .replace(`{${"mediaSourceId"}}`, encodeURIComponent(String(mediaSourceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MediumMetadataApi - functional programming interface
+ * @export
+ */
+export const MediumMetadataApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MediumMetadataApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns configuration metadata for media source of a medium
+         * @param {string} mediumId The id of the medium.
+         * @param {string} mediaSourceId The id of the media source.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediumMetadataResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediumMetadataControllerGetMediumMetadata(mediumId, mediaSourceId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MediumMetadataApi - factory interface
+ * @export
+ */
+export const MediumMetadataApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MediumMetadataApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns configuration metadata for media source of a medium
+         * @param {string} mediumId The id of the medium.
+         * @param {string} mediaSourceId The id of the media source.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any): AxiosPromise<MediumMetadataResponse> {
+            return localVarFp.mediumMetadataControllerGetMediumMetadata(mediumId, mediaSourceId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MediumMetadataApi - interface
+ * @export
+ * @interface MediumMetadataApi
+ */
+export interface MediumMetadataApiInterface {
+    /**
+     * 
+     * @summary Returns configuration metadata for media source of a medium
+     * @param {string} mediumId The id of the medium.
+     * @param {string} mediaSourceId The id of the media source.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediumMetadataApiInterface
+     */
+    mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any): AxiosPromise<MediumMetadataResponse>;
+
+}
+
+/**
+ * MediumMetadataApi - object-oriented interface
+ * @export
+ * @class MediumMetadataApi
+ * @extends {BaseAPI}
+ */
+export class MediumMetadataApi extends BaseAPI implements MediumMetadataApiInterface {
+    /**
+     * 
+     * @summary Returns configuration metadata for media source of a medium
+     * @param {string} mediumId The id of the medium.
+     * @param {string} mediaSourceId The id of the media source.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediumMetadataApi
+     */
+    public mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any) {
+        return MediumMetadataApiFp(this.configuration).mediumMetadataControllerGetMediumMetadata(mediumId, mediaSourceId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * MetaTagExtractorApi - axios parameter creator
  * @export
  */
@@ -25544,14 +25919,14 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Gets the metadata of an external tool.
+         * @summary Gets the utilization of an external tool.
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetMetaDataForExternalTool: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolControllerGetUtilizationForExternalTool: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'externalToolId' is not null or undefined
-            assertParamExists('toolControllerGetMetaDataForExternalTool', 'externalToolId', externalToolId)
+            assertParamExists('toolControllerGetUtilizationForExternalTool', 'externalToolId', externalToolId)
             const localVarPath = `/tools/external-tools/{externalToolId}/metadata`
                 .replace(`{${"externalToolId"}}`, encodeURIComponent(String(externalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -25945,7 +26320,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Gets the metadata of an school external tool.
+         * @summary Gets the utilization of an school external tool.
          * @param {string} schoolExternalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -26310,13 +26685,13 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Gets the metadata of an external tool.
+         * @summary Gets the utilization of an external tool.
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolMetadataResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetMetaDataForExternalTool(externalToolId, options);
+        async toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolUtilizationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetUtilizationForExternalTool(externalToolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -26423,7 +26798,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Gets the metadata of an school external tool.
+         * @summary Gets the utilization of an school external tool.
          * @param {string} schoolExternalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -26655,13 +27030,13 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Gets the metadata of an external tool.
+         * @summary Gets the utilization of an external tool.
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolMetadataResponse> {
-            return localVarFp.toolControllerGetMetaDataForExternalTool(externalToolId, options).then((request) => request(axios, basePath));
+        toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolUtilizationResponse> {
+            return localVarFp.toolControllerGetUtilizationForExternalTool(externalToolId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -26758,7 +27133,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Gets the metadata of an school external tool.
+         * @summary Gets the utilization of an school external tool.
          * @param {string} schoolExternalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -26985,13 +27360,13 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @summary Gets the metadata of an external tool.
+     * @summary Gets the utilization of an external tool.
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolMetadataResponse>;
+    toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolUtilizationResponse>;
 
     /**
      * 
@@ -27088,7 +27463,7 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @summary Gets the metadata of an school external tool.
+     * @summary Gets the utilization of an school external tool.
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -27349,14 +27724,14 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @summary Gets the metadata of an external tool.
+     * @summary Gets the utilization of an external tool.
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any) {
-        return ToolApiFp(this.configuration).toolControllerGetMetaDataForExternalTool(externalToolId, options).then((request) => request(this.axios, this.basePath));
+    public toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerGetUtilizationForExternalTool(externalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -27472,7 +27847,7 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @summary Gets the metadata of an school external tool.
+     * @summary Gets the utilization of an school external tool.
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
