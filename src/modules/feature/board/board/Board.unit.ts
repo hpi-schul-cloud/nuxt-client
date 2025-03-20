@@ -482,9 +482,9 @@ describe("Board", () => {
 			});
 		});
 
-		describe("when user has 'canEditRoomBoard' permission", () => {
+		describe("when user has edit permission", () => {
 			it("should not be rendered on DOM", () => {
-				mockedBoardPermissions.canEditRoomBoard = ref(true);
+				mockedBoardPermissions.hasEditPermission = ref(true);
 
 				const { wrapper } = setup();
 
@@ -510,9 +510,9 @@ describe("Board", () => {
 			});
 		});
 
-		describe("when user doesn't have 'canEditRoomBoard' permission", () => {
+		describe("when user doesn't have edit permission", () => {
 			it("should not be rendered on DOM", () => {
-				mockedBoardPermissions.canEditRoomBoard = ref(false);
+				mockedBoardPermissions.hasEditPermission = ref(false);
 
 				const { wrapper } = setup();
 

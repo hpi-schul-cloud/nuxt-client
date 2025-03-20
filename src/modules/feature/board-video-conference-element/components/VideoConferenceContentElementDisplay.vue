@@ -98,7 +98,7 @@ const imageSrc = image;
 
 const props = defineProps({
 	boardParentType: {
-		type: Object as PropType<BoardContextType | undefined>,
+		type: String as PropType<BoardContextType | undefined>,
 		required: false,
 	},
 	canStart: {

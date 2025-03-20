@@ -1,46 +1,42 @@
 import { authModule } from "@/store";
 import { BoardPermissionChecks } from "@/types/board/Permissions";
-import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
-import { ref, watch } from "vue";
-import { useRoomDetailsStore } from "@data-room";
-import { BoardContextType } from "@/types/board/BoardContext";
-import { useRoomAuthorization } from "@feature-room";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
+import { storeToRefs } from "pinia";
+import { ref, toValue, watchEffect } from "vue";
+import { useBoardStore } from "./Board.store";
 
 const boardPermissions = (): BoardPermissionChecks => {
-	const permissions = authModule?.getUserPermissions || [];
+	// TODO: really needed? remove - if not
 	const userRoles = authModule?.getUserRoles || [];
-
-	const { contextType, roomId } = useSharedBoardPageInformation();
-	const canEditBoard = ref(false);
-	const hasMovePermission = ref(permissions.includes("course_create"));
-	const hasCreateCardPermission = ref(permissions.includes("course_create"));
-	const hasCreateColumnPermission = ref(permissions.includes("course_create"));
-	const hasCreateToolPermission = ref(
-		permissions.includes("context_tool_admin")
-	);
-	const hasEditPermission = ref(permissions.includes("course_edit"));
-	const hasDeletePermission = ref(permissions.includes("course_remove"));
 	const isTeacher = ref(userRoles.includes("teacher"));
 	const isStudent = ref(userRoles.includes("student"));
 
-	watch(
-		() => contextType.value,
-		async () => {
-			const { fetchRoom, resetState } = useRoomDetailsStore();
-			if (contextType.value === BoardContextType.Room && roomId.value) {
-				await fetchRoom(roomId.value);
-				const { canEditRoomContent } = useRoomAuthorization();
+	const { board } = storeToRefs(useBoardStore());
 
-				canEditBoard.value = canEditRoomContent.value;
-				hasMovePermission.value = canEditRoomContent.value;
-				hasCreateCardPermission.value = canEditRoomContent.value;
-			} else {
-				canEditBoard.value = true;
-				resetState();
-			}
-		}
-	);
+	const hasMovePermission = ref(false);
+	const hasCreateCardPermission = ref(false);
+	const hasCreateColumnPermission = ref(false);
+	const hasCreateToolPermission = ref(false);
+	const hasEditPermission = ref(false);
+	const hasDeletePermission = ref(false);
+
+	watchEffect(() => {
+		const boardPermissions = (toValue(board)?.permissions ?? []).map((p) =>
+			p.toLowerCase()
+		);
+		const schoolRolePermissions = authModule?.getUserPermissions || [];
+		const permissions = [...boardPermissions, ...schoolRolePermissions];
+
+		hasMovePermission.value = permissions.includes("board_edit");
+		hasCreateCardPermission.value = permissions.includes("board_edit");
+		hasCreateColumnPermission.value = permissions.includes("board_edit");
+		hasCreateToolPermission.value = permissions.includes("context_tool_admin");
+		hasEditPermission.value = permissions.includes("board_edit");
+		hasDeletePermission.value = permissions.includes("board_edit");
+
+		// if course ??? needed?
+		// resetState();
+	});
 
 	return {
 		hasMovePermission,
@@ -51,7 +47,6 @@ const boardPermissions = (): BoardPermissionChecks => {
 		hasDeletePermission,
 		isTeacher,
 		isStudent,
-		canEditRoomBoard: canEditBoard,
 	};
 };
 
