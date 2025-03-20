@@ -209,7 +209,8 @@ const canJoin = computed(
 			isWaitingRoomActive.value)
 );
 
-const canStart = computed(() => isTeacher.value);
+const { hasEditPermission } = useBoardPermissions();
+const canStart = computed(() => hasEditPermission.value);
 const isCreating = computed(
 	() => props.isEditMode && !computedElement.value.content.title
 );
