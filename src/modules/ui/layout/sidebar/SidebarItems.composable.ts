@@ -161,6 +161,13 @@ export const useSidebarItems = () => {
 			rel: "noopener",
 			testId: "sidebar-privacypolicy",
 		},
+		{
+			to: "/licenses",
+			title: "global.sidebar.item.licenses",
+			feature: "LICENSE_SUMMARY_URL",
+			featureValue: `${envConfigModule.getEnv.LICENSE_SUMMARY_URL}`,
+			testId: "sidebar-licenses",
+		},
 	]);
 
 	const systemLinks: SidebarSingleItem[] = [
