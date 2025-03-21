@@ -227,12 +227,12 @@ export const useCardStore = defineStore("cardStore", () => {
 
 		const previousElement = elements[elementIndex - 1];
 		const { setEditModeId } = useSharedEditMode();
+		setEditModeId(cardId);
 
 		if (previousElement.type === ContentElementType.RichText) {
 			return getPreviousElementId(previousElement.id, cardId);
 		}
 
-		setEditModeId(cardId);
 		return previousElement.id;
 	};
 
