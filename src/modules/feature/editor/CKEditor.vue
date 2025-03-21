@@ -15,7 +15,7 @@
 <script>
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import CKEditor from "@ckeditor/ckeditor5-vue";
-import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
+import { BalloonEditor, ClassicEditor } from "@hpi-schul-cloud/ckeditor";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
@@ -79,9 +79,7 @@ export default defineComponent({
 		const ck = ref(null);
 		const modelValue = useVModel(props, "value", emit);
 		const editor = computed(() => {
-			return props.type === "classic"
-				? CustomCKEditor.ClassicEditor
-				: CustomCKEditor.BalloonEditor;
+			return props.type === "classic" ? ClassicEditor : BalloonEditor;
 		});
 
 		const charCount = ref(0);
@@ -218,7 +216,6 @@ export default defineComponent({
 			ck,
 			editor,
 			modelValue,
-			CustomCKEditor,
 			config,
 			charCount,
 			handleBlur,
