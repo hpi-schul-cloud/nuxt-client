@@ -182,7 +182,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and user has permission to edit or delete room", () => {
 			it("should render kebab menu", () => {
-				roomPermissions.canEditRoom.value = true;
+				roomPermissions.canEditRoomContent.value = true;
 				roomPermissions.canDeleteRoom.value = false;
 
 				const { wrapper } = setup();
@@ -194,16 +194,17 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and user does not have permission to edit, leave nor to delete room", () => {
-			it("should not render kebab menu", () => {
-				roomPermissions.canEditRoom.value = false;
+			it("should render kebab menu", () => {
+				roomPermissions.canEditRoomContent.value = false;
 				roomPermissions.canDeleteRoom.value = false;
 				roomPermissions.canLeaveRoom.value = false;
+				roomPermissions.canViewRoom.value = true;
 
 				const { wrapper } = setup();
 
 				const menu = wrapper.findComponent({ name: "RoomMenu" });
 
-				expect(menu.exists()).toBe(false);
+				expect(menu.exists()).toBe(true);
 			});
 		});
 	});
@@ -226,7 +227,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when using the menu", () => {
 		beforeEach(() => {
-			roomPermissions.canEditRoom.value = true;
+			roomPermissions.canEditRoomContent.value = true;
 			roomPermissions.canDeleteRoom.value = true;
 		});
 
@@ -362,7 +363,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		describe("and only column board is enabled", () => {
 			beforeEach(() => {
 				roomPermissions.canCreateRoom.value = true;
-				roomPermissions.canEditRoom.value = true;
+				roomPermissions.canEditRoomContent.value = true;
 			});
 
 			it("should not render dialog", () => {
