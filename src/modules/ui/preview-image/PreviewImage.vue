@@ -6,6 +6,7 @@
 		ref="imageRef"
 		class="image mx-auto"
 		loading="lazy"
+		data-testid="image-fullscreen-view"
 		:src="imageSrc"
 		:alt="alt"
 		:cover="cover"
