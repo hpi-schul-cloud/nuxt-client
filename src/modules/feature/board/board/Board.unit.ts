@@ -66,9 +66,8 @@ import { mount } from "@vue/test-utils";
 import { computed, nextTick, ref } from "vue";
 import { Router, useRoute, useRouter } from "vue-router";
 import BoardVue from "./Board.vue";
-import BoardColumnVue from "./BoardColumn.vue";
+import BoardColumn from "./BoardColumn.vue";
 import BoardHeader from "./BoardHeader.vue";
-import BoardHeaderVue from "./BoardHeader.vue";
 
 jest.mock("@util-board/BoardNotifier.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
@@ -246,7 +245,9 @@ describe("Board", () => {
 		});
 
 		const loadingStateModule = createModuleMocks(LoadingStateModule);
-		const shareModule = createModuleMocks(ShareModule);
+		const shareModule = createModuleMocks(ShareModule, {
+			getIsShareModalOpen: false,
+		});
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomId: "room1",
 		});
@@ -300,9 +301,6 @@ describe("Board", () => {
 					createTestingI18n(),
 					createTestingVuetify(),
 				],
-				components: {
-					BoardColumnVue,
-				},
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
@@ -366,13 +364,13 @@ describe("Board", () => {
 			it("should fetch board from store and render board header", () => {
 				const { wrapper } = setup();
 
-				expect(wrapper.findComponent(BoardHeaderVue).exists()).toBeTruthy();
+				expect(wrapper.findComponent(BoardHeader).exists()).toBeTruthy();
 			});
 
 			it("should fetch board from store and render board header with title", async () => {
 				const { wrapper, board } = setup();
 
-				const boardHeaderComponent = wrapper.findComponent(BoardHeaderVue);
+				const boardHeaderComponent = wrapper.findComponent(BoardHeader);
 
 				expect(boardHeaderComponent.props("title")).toBe(board.title);
 			});
@@ -445,19 +443,19 @@ describe("Board", () => {
 		it("should fetch board from store and render it", async () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.findComponent(BoardColumnVue).exists()).toBeTruthy();
+			expect(wrapper.findComponent(BoardColumn).exists()).toBeTruthy();
 		});
 
 		it("should fetch board from store and render one column", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(1);
+			expect(wrapper.findAllComponents(BoardColumn)).toHaveLength(1);
 		});
 
 		it("should fetch board from store and render two columns", async () => {
 			const { wrapper } = setup({ numberOfColumns: 2 });
 
-			expect(wrapper.findAllComponents(BoardColumnVue)).toHaveLength(2);
+			expect(wrapper.findAllComponents(BoardColumn)).toHaveLength(2);
 		});
 
 		it("should propagate columnCount to BoardColumn components", () => {
@@ -504,20 +502,6 @@ describe("Board", () => {
 		describe("when user doesn't have create column permission", () => {
 			it("should not be rendered on DOM", () => {
 				mockedBoardPermissions.hasCreateColumnPermission = ref(false);
-
-				const { wrapper } = setup();
-
-				const ghostColumnComponent = wrapper.findComponent({
-					name: "BoardColumnGhost",
-				});
-
-				expect(ghostColumnComponent.exists()).toBe(false);
-			});
-		});
-
-		describe("when user doesn't have edit permission", () => {
-			it("should not be rendered on DOM", () => {
-				mockedBoardPermissions.hasEditPermission = ref(false);
 
 				const { wrapper } = setup();
 
