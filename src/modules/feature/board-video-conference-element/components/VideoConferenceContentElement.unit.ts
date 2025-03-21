@@ -29,7 +29,7 @@ import { Router, useRoute, useRouter } from "vue-router";
 import { VideoConferenceState } from "@/store/types/video-conference";
 import { useVideoConference } from "../composables/VideoConference.composable";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
-import { flushPromises } from "@vue/test-utils";
+import { flushPromises, VueWrapper } from "@vue/test-utils";
 
 jest.mock("@data-board/ContentElementState.composable");
 jest.mock("@data-board/BoardFocusHandler.composable");
@@ -63,6 +63,7 @@ describe("VideoConferenceContentElement", () => {
 	let useBoardPermissionsMock: DeepMocked<
 		ReturnType<typeof useBoardPermissions>
 	>;
+	let wrapper: VueWrapper; // needs to be global in order get unmounted for working focustrap during tests
 
 	beforeEach(() => {
 		route = createMock<ReturnType<typeof useRoute>>();
@@ -81,6 +82,7 @@ describe("VideoConferenceContentElement", () => {
 
 	afterEach(() => {
 		jest.clearAllMocks();
+		wrapper.unmount();
 	});
 
 	const setupWrapper = (
@@ -161,13 +163,14 @@ describe("VideoConferenceContentElement", () => {
 		useBoardPermissionsMock = createMock<
 			ReturnType<typeof useBoardPermissions>
 		>({
+			hasEditPermission: ref(role === "teacher"),
 			isTeacher: ref(role === "teacher"),
 			isStudent: ref(role === "student"),
 		});
 
 		jest.mocked(useBoardPermissions).mockReturnValue(useBoardPermissionsMock);
 
-		const wrapper = mount(VideoConferenceContentElement, {
+		wrapper = mount(VideoConferenceContentElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 				provide: {
@@ -599,14 +602,15 @@ describe("VideoConferenceContentElement", () => {
 							});
 
 							const menuBtn = wrapper
-								.findComponent({ name: "BoardMenu" })
-								.findComponent({ name: "VBtn" });
+								.getComponent({ name: "BoardMenu" })
+								.getComponent({ name: "VBtn" });
 							await menuBtn.trigger("click");
 
-							const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
+							const menuItem = wrapper.getComponent(KebabMenuActionMoveUp);
 							await menuItem.trigger("click");
-
-							expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+							const emitted = wrapper.emitted();
+							console.log("emitted", emitted);
+							expect(emitted).toHaveProperty("move-up:edit");
 						});
 					});
 				});
@@ -635,11 +639,11 @@ describe("VideoConferenceContentElement", () => {
 							});
 
 							const menuBtn = wrapper
-								.findComponent({ name: "BoardMenu" })
-								.findComponent({ name: "VBtn" });
+								.getComponent({ name: "BoardMenu" })
+								.getComponent({ name: "VBtn" });
 							await menuBtn.trigger("click");
 
-							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
+							const menuItem = wrapper.getComponent(KebabMenuActionMoveDown);
 							await menuItem.trigger("click");
 
 							expect(wrapper.emitted()).toHaveProperty("move-down:edit");
