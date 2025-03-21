@@ -126,6 +126,34 @@ describe("useRoomMembers", () => {
 			});
 		});
 
+		describe("when the user has school role administrator and teacher", () => {
+			it("should map the school role to teacher", async () => {
+				const { fetchMembers, roomMembers } = useRoomMembers(roomId);
+				const membersMock = roomMemberFactory(RoleName.Roomadmin).buildList(1);
+				membersMock[0].schoolRoleNames = [
+					RoleName.Administrator,
+					RoleName.Teacher,
+				];
+
+				roomApiMock.roomControllerGetMembers.mockResolvedValue(
+					mockApiResponse({
+						data: { data: membersMock },
+					})
+				);
+
+				await fetchMembers();
+
+				expect(roomMembers.value).toEqual(
+					membersMock.map((member) => ({
+						...member,
+						displayRoomRole: "pages.rooms.members.roomPermissions.admin",
+						displaySchoolRole: "common.labels.teacher",
+						isSelectable: true,
+					}))
+				);
+			});
+		});
+
 		it("should throw an error if the API call fails", async () => {
 			const { fetchMembers } = useRoomMembers(roomId);
 
