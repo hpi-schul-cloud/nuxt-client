@@ -75,4 +75,8 @@ export default defineComponent({
 .cursor-text {
 	cursor: text;
 }
+
+.ck.ck-toolbar {
+	max-width: 246px;
+}
 </style>
