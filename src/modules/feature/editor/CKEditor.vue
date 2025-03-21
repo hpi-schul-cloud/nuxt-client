@@ -31,9 +31,8 @@ import {
 	newsPlugins,
 	newsToolbar,
 } from "./config";
-import "katex/dist/katex.min.css";
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-window.katex = require("katex");
+import katex from "katex";
+window.katex = katex;
 
 export default defineComponent({
 	name: "CkEditor",
@@ -233,6 +232,7 @@ export default defineComponent({
 
 <style lang="scss">
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
+@import "katex/dist/katex.min.css";
 
 .ck-content {
 	ul,
