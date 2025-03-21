@@ -31,6 +31,9 @@ import {
 	newsPlugins,
 	newsToolbar,
 } from "./config";
+import "katex/dist/katex.min.css";
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+window.katex = require("katex");
 
 export default defineComponent({
 	name: "CkEditor",
