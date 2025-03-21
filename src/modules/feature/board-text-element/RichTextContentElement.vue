@@ -123,6 +123,13 @@ const onKeyUp = () => ensurePoliteNotifications();
 		ul {
 			list-style-type: circle;
 		}
+
+		.table {
+			display: block;
+			overflow-x: auto;
+			overflow-y: hidden;
+			padding-right: 1px;
+		}
 	}
 }
 </style>
