@@ -1,5 +1,5 @@
 <template>
-	<v-dialog fullscreen v-model="isLightBoxOpen">
+	<v-dialog fullscreen v-model="isLightBoxOpen" data-testid="light-box">
 		<v-toolbar>
 			<v-btn
 				:aria-label="t('common.labels.close')"
