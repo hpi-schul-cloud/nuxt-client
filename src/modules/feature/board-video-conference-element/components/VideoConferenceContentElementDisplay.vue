@@ -8,60 +8,22 @@
 			@click.stop="onContentClick"
 		>
 			<template #display>
-				<div
+				<InfoAlert
 					v-if="shouldShowNoFeatureAlert"
-					class="mt-2"
-					data-testid="vc-info-box-show-no-feature"
+					data-testid="vc-info-box-no-feature"
 				>
-					<VAlert
-						density="compact"
-						class="ma-0"
-						type="info"
-						data-testid="vc-info-box-no-feature"
-					>
-						<div class="d-flex flex-wrap gap-4">
-							<span class="flex-1 my-auto">
-								{{ notEnabledMessage }}
-							</span>
-						</div>
-					</VAlert>
-				</div>
-				<div
-					v-if="shouldShowInfoAlert"
-					class="mt-2"
-					data-testid="vc-info-box-show"
-				>
-					<VAlert
-						density="compact"
-						class="ma-0"
-						type="info"
-						data-testid="vc-info-box"
-					>
-						<div class="d-flex flex-wrap gap-4">
-							<span class="flex-1 my-auto">
-								{{ alertMessage }}
-							</span>
-						</div>
-					</VAlert>
-				</div>
-				<div
+					{{ notEnabledMessage }}
+				</InfoAlert>
+
+				<InfoAlert v-if="shouldShowInfoAlert" data-testid="vc-info-box-show">
+					{{ alertMessage }}
+				</InfoAlert>
+				<InfoAlert
 					v-if="shouldShowNoPermissionAlert"
-					class="mt-2"
-					data-testid="vc-info-box-show-no-permission"
+					data-testid="vc-info-box-no-permission"
 				>
-					<VAlert
-						density="compact"
-						class="ma-0"
-						type="info"
-						data-testid="vc-info-box-no-permission"
-					>
-						<div class="d-flex flex-wrap gap-4">
-							<span class="flex-1 my-auto">
-								{{ noPermissionMessage }}
-							</span>
-						</div>
-					</VAlert>
-				</div>
+					{{ noPermissionMessage }}
+				</InfoAlert>
 				<VImg :src="imageSrc" alt="" cover />
 			</template>
 			<template #title>
@@ -91,6 +53,7 @@ import { useDisplay } from "vuetify";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useI18n } from "vue-i18n";
 import { BoardContextType } from "@/types/board/BoardContext";
+import { InfoAlert } from "@ui-alert";
 
 const emit = defineEmits(["click", "refresh"]);
 
