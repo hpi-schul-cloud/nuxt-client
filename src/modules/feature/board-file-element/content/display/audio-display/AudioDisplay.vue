@@ -2,7 +2,11 @@
 	<ContentElementBar class="audio-player bg-grey-darken-3">
 		<template #element>
 			<div class="d-flex flex-nowrap pb-0 pl-2 pr-1 fill-height align-center">
-				<audio ref="audio" loading="lazy" />
+				<audio
+					ref="audio"
+					loading="lazy"
+					data-testid="audio-thumbnail-in-card"
+				/>
 				<v-btn
 					v-if="playing"
 					:aria-label="
