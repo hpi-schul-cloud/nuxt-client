@@ -1,4 +1,4 @@
-import { RoleName, RoomMemberResponse } from "@/serverApi/v3";
+import { RoomMemberResponse } from "@/serverApi/v3";
 
 export type RoomMember = RoomMemberResponse & {
 	isSelectable?: boolean;
