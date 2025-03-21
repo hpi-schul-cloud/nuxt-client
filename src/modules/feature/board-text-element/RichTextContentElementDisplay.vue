@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import renderMathInElement from "katex/dist/contrib/auto-render.js";
+import renderMathInElement from "katex/contrib/auto-render.js";
 import { RenderHTML } from "@feature-render-html";
 
 defineProps({
