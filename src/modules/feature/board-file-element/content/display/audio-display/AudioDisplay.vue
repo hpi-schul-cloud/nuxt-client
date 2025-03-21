@@ -1,12 +1,11 @@
 <template>
 	<ContentElementBar class="audio-player bg-grey-darken-3">
 		<template #element>
-			<div class="d-flex flex-nowrap pb-0 pl-2 pr-1 fill-height align-center">
-				<audio
-					ref="audio"
-					loading="lazy"
-					data-testid="audio-thumbnail-in-card"
-				/>
+			<div
+				class="d-flex flex-nowrap pb-0 pl-2 pr-1 fill-height align-center"
+				data-testid="audio-thumbnail-in-card"
+			>
+				<audio ref="audio" loading="lazy" />
 				<v-btn
 					v-if="playing"
 					:aria-label="
