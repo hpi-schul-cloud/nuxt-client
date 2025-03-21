@@ -191,10 +191,11 @@ export const useCardStore = defineStore("cardStore", () => {
 		}
 
 		const index = card.elements.findIndex((e) => e.id === payload.elementId);
-
 		if (index !== undefined && index > -1) {
 			card.elements.splice(index, 1);
 		}
+
+		setEditModeId(payload.cardId);
 	};
 
 	const updateElementRequest = socketOrRest.updateElementRequest;
@@ -226,12 +227,12 @@ export const useCardStore = defineStore("cardStore", () => {
 
 		const previousElement = elements[elementIndex - 1];
 		const { setEditModeId } = useSharedEditMode();
-		setEditModeId(cardId);
 
 		if (previousElement.type === ContentElementType.RichText) {
 			return getPreviousElementId(previousElement.id, cardId);
 		}
 
+		setEditModeId(cardId);
 		return previousElement.id;
 	};
 
