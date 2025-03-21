@@ -6,6 +6,7 @@
 				style="min-height: 52px"
 				tabindex="0"
 				role="button"
+				data-testid="image-thumbnail-in-card"
 				@click="openLightBox"
 				@keydown.enter.space="openLightBox"
 			>
