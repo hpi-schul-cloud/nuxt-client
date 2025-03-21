@@ -77,16 +77,17 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	});
 
 	const setup = (
-		{
-			undefinedRoom,
-			envs,
-			roomBoards,
-		}: {
-			undefinedRoom?: boolean;
-			envs?: Partial<serverApi.ConfigResponse>;
-			roomBoards?: RoomBoardItem[];
-		} = { undefinedRoom: false, roomBoards: [] }
+		options?: Partial<{
+			undefinedRoom: boolean;
+			envs: Partial<serverApi.ConfigResponse>;
+			roomBoards: RoomBoardItem[];
+		}>
 	) => {
+		const { undefinedRoom, envs, roomBoards } = {
+			undefinedRoom: false,
+			roomBoards: [],
+			...options,
+		};
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: envsFactory.build({
 				FEATURE_BOARD_LAYOUT_ENABLED: true,
