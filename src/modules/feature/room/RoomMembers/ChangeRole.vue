@@ -1,13 +1,13 @@
 <template>
 	<v-card ref="changeRoleContent">
-		<template v-slot:prepend>
-			<span ref="textTitle" class="text-h4 mt-2 dialog-title">
+		<template v-slot:title>
+			<h2 ref="textTitle" class="text-h4 mt-2 dialog-title">
 				{{ dialogTitle }}
-			</span>
+			</h2>
 		</template>
 
-		<template v-slot:default>
-			<div class="ml-6 mr-6 mt-2">
+		<template v-slot:text>
+			<div class="mt-2">
 				<div v-if="!isOwnershipHandoverMode" class="mb-4">
 					{{ infoText }}
 				</div>
@@ -24,6 +24,7 @@
 							:value="option.role"
 							color="primary"
 							class="align-start mb-2"
+							:data-testid="option.dataTestid"
 						>
 							<template #label>
 								<div class="d-flex flex-column mt-2">
@@ -226,16 +227,19 @@ const radioOptions = computed(() => {
 			role: RoleName.Roomviewer,
 			labelHeader: t("pages.rooms.members.roomPermissions.viewer"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomviewer.label"],
+			dataTestid: "change-role-option-viewer",
 		},
 		{
 			role: RoleName.Roomeditor,
 			labelHeader: t("pages.rooms.members.roomPermissions.editor"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomeditor.label"],
+			dataTestid: "change-role-option-editor",
 		},
 		{
 			role: RoleName.Roomadmin,
 			labelHeader: t("pages.rooms.members.roomPermissions.admin"),
 			labelDescriptions: ["pages.rooms.members.roleChange.Roomadmin.label"],
+			dataTestid: "change-role-option-admin",
 		},
 	];
 
@@ -247,6 +251,7 @@ const radioOptions = computed(() => {
 				"pages.rooms.members.roleChange.Roomowner.label",
 				"pages.rooms.members.roleChange.Roomowner.label.subText",
 			],
+			dataTestid: "change-role-option-owner",
 		});
 	}
 

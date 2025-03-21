@@ -7,7 +7,10 @@ import {
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
-import { roomFactory } from "@@/tests/test-utils/factory/room";
+import {
+	roomBoardTileListFactory,
+	roomFactory,
+} from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -25,6 +28,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
+import { RoomBoardItem } from "@/types/room/Room";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -44,7 +48,7 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canDeleteRoom: ref(false),
 	canLeaveRoom: ref(true),
 	canRemoveRoomMembers: ref(false),
-	canEditRoomBoard: ref(false),
+	canEditRoomContent: ref(false),
 };
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
@@ -73,14 +77,17 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	});
 
 	const setup = (
-		{
-			undefinedRoom,
-			envs,
-		}: {
-			undefinedRoom?: boolean;
-			envs?: Partial<serverApi.ConfigResponse>;
-		} = { undefinedRoom: false }
+		options?: Partial<{
+			undefinedRoom: boolean;
+			envs: Partial<serverApi.ConfigResponse>;
+			roomBoards: RoomBoardItem[];
+		}>
 	) => {
+		const { undefinedRoom, envs, roomBoards } = {
+			undefinedRoom: false,
+			roomBoards: [],
+			...options,
+		};
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: envsFactory.build({
 				FEATURE_BOARD_LAYOUT_ENABLED: true,
@@ -89,7 +96,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			}),
 		});
 
-		const room = roomFactory.build();
+		const room = roomFactory.build({});
 
 		const wrapper = mount(RoomDetailsPage, {
 			global: {
@@ -102,7 +109,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 								isLoading: false,
 								room: undefinedRoom ? undefined : room,
 								roomVariant: RoomVariant.ROOM,
-								roomBoards: [],
+								roomBoards,
 							},
 						},
 					}),
@@ -182,7 +189,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and user has permission to edit or delete room", () => {
 			it("should render kebab menu", () => {
-				roomPermissions.canEditRoom.value = true;
+				roomPermissions.canEditRoomContent.value = true;
 				roomPermissions.canDeleteRoom.value = false;
 
 				const { wrapper } = setup();
@@ -194,16 +201,17 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and user does not have permission to edit, leave nor to delete room", () => {
-			it("should not render kebab menu", () => {
-				roomPermissions.canEditRoom.value = false;
+			it("should render kebab menu", () => {
+				roomPermissions.canEditRoomContent.value = false;
 				roomPermissions.canDeleteRoom.value = false;
 				roomPermissions.canLeaveRoom.value = false;
+				roomPermissions.canViewRoom.value = true;
 
 				const { wrapper } = setup();
 
 				const menu = wrapper.findComponent({ name: "RoomMenu" });
 
-				expect(menu.exists()).toBe(false);
+				expect(menu.exists()).toBe(true);
 			});
 		});
 	});
@@ -226,7 +234,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when using the menu", () => {
 		beforeEach(() => {
-			roomPermissions.canEditRoom.value = true;
+			roomPermissions.canEditRoomContent.value = true;
 			roomPermissions.canDeleteRoom.value = true;
 		});
 
@@ -362,7 +370,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		describe("and only column board is enabled", () => {
 			beforeEach(() => {
 				roomPermissions.canCreateRoom.value = true;
-				roomPermissions.canEditRoom.value = true;
+				roomPermissions.canEditRoomContent.value = true;
 			});
 
 			it("should not render dialog", () => {
@@ -411,6 +419,46 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					serverApi.BoardLayout.Columns,
 					"pages.roomDetails.board.defaultName"
 				);
+			});
+		});
+	});
+
+	describe("when some boards are in draft mode", () => {
+		const setupWithBoards = (totalCount = 3, inDraftMode = 1) => {
+			const visibleCount = totalCount - inDraftMode;
+			const visibleBoards = roomBoardTileListFactory.buildList(visibleCount);
+			const draftBoards = roomBoardTileListFactory.buildList(inDraftMode, {
+				isVisible: false,
+			});
+			const roomBoards = [...visibleBoards, ...draftBoards];
+			const { wrapper } = setup({ roomBoards });
+			return {
+				wrapper,
+				visibleCount,
+				draftCount: draftBoards.length,
+				totalCount,
+			};
+		};
+
+		describe("when user canEditRoomContent", () => {
+			it("should render board tiles in draft mode", () => {
+				roomPermissions.canEditRoomContent.value = true;
+				const { wrapper, totalCount } = setupWithBoards();
+
+				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
+
+				expect(boardTiles.length).toStrictEqual(totalCount);
+			});
+		});
+
+		describe("when user can not edit room content", () => {
+			it("should not render board tiles in draft mode", () => {
+				roomPermissions.canEditRoomContent.value = false;
+				const { wrapper, visibleCount } = setupWithBoards();
+
+				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
+
+				expect(boardTiles.length).toStrictEqual(visibleCount);
 			});
 		});
 	});

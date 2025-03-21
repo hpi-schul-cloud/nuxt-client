@@ -15,8 +15,11 @@ const defaultOptions = ref<VideoConferenceOptions>({
 });
 
 describe("VideoConferenceConfigurationDialog", () => {
+	let wrapper: VueWrapper<
+		InstanceType<typeof VideoConferenceConfigurationDialog>
+	>;
 	const setup = (props: { isOpen: boolean }) => {
-		const wrapper: VueWrapper = mount(VideoConferenceConfigurationDialog, {
+		wrapper = mount(VideoConferenceConfigurationDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
@@ -29,6 +32,10 @@ describe("VideoConferenceConfigurationDialog", () => {
 
 		return wrapper;
 	};
+
+	afterEach(() => {
+		wrapper.unmount(); // otherwise tests break when running all tests, necessary due focus trap
+	});
 
 	describe("when component is mounted", () => {
 		it("should render in the DOM", () => {

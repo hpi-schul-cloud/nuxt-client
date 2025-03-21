@@ -9,8 +9,8 @@
 			@click="() => $emit('room:edit')"
 			:aria-label="t('pages.roomDetails.ariaLabels.menu.action.edit')"
 		/>
-		<KebabMenuActionEditMembers
-			v-if="canAddRoomMembers"
+		<KebabMenuActionRoomMembers
+			v-if="canViewRoom"
 			@click="() => $emit('room:manage-members')"
 			:aria-label="t('pages.rooms.members.manage')"
 		/>
@@ -35,7 +35,7 @@ import {
 	KebabMenu,
 	KebabMenuActionDelete,
 	KebabMenuActionEdit,
-	KebabMenuActionEditMembers,
+	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,
 } from "@ui-kebab-menu";
 import { useRoomAuthorization } from "@feature-room";
@@ -60,6 +60,6 @@ const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 	}
 };
 
-const { canAddRoomMembers, canEditRoom, canDeleteRoom, canLeaveRoom } =
+const { canEditRoom, canDeleteRoom, canLeaveRoom, canViewRoom } =
 	useRoomAuthorization();
 </script>

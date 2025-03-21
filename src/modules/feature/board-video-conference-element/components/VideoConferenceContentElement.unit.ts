@@ -161,6 +161,7 @@ describe("VideoConferenceContentElement", () => {
 		useBoardPermissionsMock = createMock<
 			ReturnType<typeof useBoardPermissions>
 		>({
+			hasEditPermission: ref(role === "teacher"),
 			isTeacher: ref(role === "teacher"),
 			isStudent: ref(role === "student"),
 		});
@@ -174,6 +175,7 @@ describe("VideoConferenceContentElement", () => {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 					[BOARD_IS_LIST_LAYOUT as symbol]: false,
 				},
+				stubs: { VideoConferenceConfigurationDialog: true },
 			},
 			props: {
 				element,
@@ -251,7 +253,7 @@ describe("VideoConferenceContentElement", () => {
 				);
 			});
 
-			describe("when user is a teacher", () => {
+			describe("when user has edit board permission", () => {
 				it("should have the permission to join the conference", async () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
@@ -281,9 +283,22 @@ describe("VideoConferenceContentElement", () => {
 
 					expect(videoConferenceElement.props("canStart")).toEqual(true);
 				});
+
+				it("should have tabindex of 0", () => {
+					const { wrapper } = setupWrapper({
+						content: videoConferenceElementContentFactory.build(),
+						isEditMode: false,
+						role: "teacher",
+					});
+					const videoConferenceElement = wrapper.findComponent(
+						'[data-testid="video-conference-element"]'
+					);
+
+					expect(videoConferenceElement.attributes("tabindex")).toEqual("0");
+				});
 			});
 
-			describe("when the user is a student", () => {
+			describe("when the user has not edit board permissions", () => {
 				it("should have the permission to join the conference", async () => {
 					const { wrapper } = setupWrapper({
 						content: videoConferenceElementContentFactory.build(),
@@ -312,6 +327,36 @@ describe("VideoConferenceContentElement", () => {
 					);
 
 					expect(videoConferenceElement.props("canStart")).toEqual(false);
+				});
+
+				it("should have undefined tabindex if conference has not started", () => {
+					const { wrapper } = setupWrapper({
+						content: videoConferenceElementContentFactory.build(),
+						isEditMode: false,
+						role: "student",
+						isRunning: false,
+					});
+					const videoConferenceElement = wrapper.findComponent(
+						'[data-testid="video-conference-element"]'
+					);
+
+					expect(videoConferenceElement.attributes("tabindex")).toEqual(
+						undefined
+					);
+				});
+
+				it("should have tabindex of 0 if conference has started", () => {
+					const { wrapper } = setupWrapper({
+						content: videoConferenceElementContentFactory.build(),
+						isEditMode: false,
+						role: "student",
+						isRunning: true,
+					});
+					const videoConferenceElement = wrapper.findComponent(
+						'[data-testid="video-conference-element"]'
+					);
+
+					expect(videoConferenceElement.attributes("tabindex")).toEqual("0");
 				});
 			});
 
@@ -599,14 +644,14 @@ describe("VideoConferenceContentElement", () => {
 							});
 
 							const menuBtn = wrapper
-								.findComponent({ name: "BoardMenu" })
-								.findComponent({ name: "VBtn" });
+								.getComponent({ name: "BoardMenu" })
+								.getComponent({ name: "VBtn" });
 							await menuBtn.trigger("click");
 
-							const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
+							const menuItem = wrapper.getComponent(KebabMenuActionMoveUp);
 							await menuItem.trigger("click");
-
-							expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+							const emitted = wrapper.emitted();
+							expect(emitted).toHaveProperty("move-up:edit");
 						});
 					});
 				});
@@ -635,11 +680,11 @@ describe("VideoConferenceContentElement", () => {
 							});
 
 							const menuBtn = wrapper
-								.findComponent({ name: "BoardMenu" })
-								.findComponent({ name: "VBtn" });
+								.getComponent({ name: "BoardMenu" })
+								.getComponent({ name: "VBtn" });
 							await menuBtn.trigger("click");
 
-							const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
+							const menuItem = wrapper.getComponent(KebabMenuActionMoveDown);
 							await menuItem.trigger("click");
 
 							expect(wrapper.emitted()).toHaveProperty("move-down:edit");

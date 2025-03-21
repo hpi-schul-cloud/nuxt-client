@@ -91,8 +91,8 @@ describe("VideoConferenceContentElementDisplay", () => {
 					const alert = wrapper.findComponent(
 						'[data-testid="vc-info-box-no-feature"]'
 					);
-					const text = alert.find("span.my-auto");
-					expect(text.text()).toEqual(
+
+					expect(alert.text()).toEqual(
 						"pages.videoConference.info.courseParent.notEnabledTeacher"
 					);
 				});
@@ -114,8 +114,8 @@ describe("VideoConferenceContentElementDisplay", () => {
 					const alert = wrapper.findComponent(
 						'[data-testid="vc-info-box-no-feature"]'
 					);
-					const text = alert.find("span.my-auto");
-					expect(text.text()).toEqual(
+
+					expect(alert.text()).toEqual(
 						"pages.videoConference.info.roomParent.notEnabledTeacher"
 					);
 				});
@@ -136,8 +136,8 @@ describe("VideoConferenceContentElementDisplay", () => {
 					const alert = wrapper.findComponent(
 						'[data-testid="vc-info-box-no-feature"]'
 					);
-					const text = alert.find("span.my-auto");
-					expect(text.text()).toEqual(
+
+					expect(alert.text()).toEqual(
 						"pages.videoConference.info.roomParent.notEnabledTeacher"
 					);
 				});
@@ -156,9 +156,8 @@ describe("VideoConferenceContentElementDisplay", () => {
 					},
 				});
 
-				const alert = wrapper.findComponent('[data-testid="vc-info-box"]');
-				const text = alert.find("span.my-auto");
-				expect(text.text()).toEqual("pages.videoConference.info.notStarted");
+				const alert = wrapper.findComponent('[data-testid="vc-info-box-show"]');
+				expect(alert.text()).toEqual("pages.videoConference.info.notStarted");
 			});
 
 			it("should show 'no permission' alert for a user with no participation permission", () => {
@@ -172,9 +171,8 @@ describe("VideoConferenceContentElementDisplay", () => {
 					},
 				});
 
-				const alert = wrapper.findComponent('[data-testid="vc-info-box"]');
-				const text = alert.find("span.my-auto");
-				expect(text.text()).toEqual("pages.videoConference.info.noPermission");
+				const alert = wrapper.findComponent('[data-testid="vc-info-box-show"]');
+				expect(alert.text()).toEqual("pages.videoConference.info.noPermission");
 			});
 
 			it("should not display any alert when the user is a teacher", () => {
@@ -208,8 +206,7 @@ describe("VideoConferenceContentElementDisplay", () => {
 				const alert = wrapper.findComponent(
 					'[data-testid="vc-info-box-no-permission"]'
 				);
-				const text = alert.find("span.my-auto");
-				expect(text.text()).toEqual("pages.videoConference.info.noPermission");
+				expect(alert.text()).toEqual("pages.videoConference.info.noPermission");
 			});
 
 			it("should display a pulsating dot when the user has permission", () => {

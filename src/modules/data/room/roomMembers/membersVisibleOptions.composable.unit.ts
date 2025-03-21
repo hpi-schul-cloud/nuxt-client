@@ -67,7 +67,7 @@ describe("useRoomMemberVisibilityOptions", () => {
 			firstName: "first-name",
 			lastName: "last-name",
 			roomRoleName,
-			schoolRoleName: "school-role-name",
+			schoolRoleNames: [RoleName.Teacher],
 			schoolName: "school-name",
 			userId: "user-id",
 			displayRoomRole: "display-room-role",

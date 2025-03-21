@@ -14,7 +14,7 @@ export default (i18n: ReturnType<typeof createI18n>) =>
 		},
 		defaults: {
 			VAlert: { variant: "tonal" },
-			VAutocomplete: { color: "primary" },
+			VAutocomplete: { color: "primary", variant: "underlined" },
 			VCheckbox: { color: "primary" },
 			VFileInput: { variant: "underlined", color: "primary" },
 			VSelect: { variant: "underlined", color: "primary" },

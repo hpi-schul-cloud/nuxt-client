@@ -11,7 +11,6 @@
 					{{ roomTitle }}
 				</h1>
 				<RoomMenu
-					v-if="isMenuEnabled"
 					:roomName="room?.name"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
@@ -20,7 +19,7 @@
 				/>
 			</div>
 		</template>
-		<BoardGrid :boards="roomBoards" />
+		<BoardGrid :boards="visibleBoards" />
 		<ConfirmationDialog />
 		<SelectBoardLayoutDialog
 			v-if="boardLayoutsEnabled && canCreateRoom"
@@ -71,8 +70,14 @@ const pageTitle = computed(() =>
 );
 useTitle(pageTitle);
 
-const { canCreateRoom, canEditRoom, canDeleteRoom, canLeaveRoom, canViewRoom } =
+const { canCreateRoom, canDeleteRoom, canEditRoomContent } =
 	useRoomAuthorization();
+
+const visibleBoards = computed(() =>
+	roomBoards.value?.filter(
+		(board) => board.isVisible || canEditRoomContent.value
+	)
+);
 
 const roomTitle = computed(() => {
 	return room.value ? room.value.name : t("pages.roomDetails.title");
@@ -82,9 +87,6 @@ const boardLayoutsEnabled = computed(
 	() => envConfigModule.getEnv.FEATURE_BOARD_LAYOUT_ENABLED
 );
 
-const isMenuEnabled = computed(
-	() => canLeaveRoom.value || canEditRoom.value || canViewRoom.value
-);
 const boardLayoutDialogIsOpen = ref(false);
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
@@ -102,7 +104,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const fabItems = computed(() => {
 	if (!canCreateRoom.value) return undefined;
-	if (!canEditRoom.value) return undefined;
+	if (!canEditRoomContent.value) return undefined;
 
 	const actions = [];
 
@@ -190,7 +192,7 @@ const onLeaveRoom = async () => {
 };
 
 const onCreateBoard = async (layout: BoardLayout) => {
-	if (!room.value || !canEditRoom.value) return;
+	if (!room.value || !canEditRoomContent.value) return;
 
 	const boardId = await createBoard(
 		room.value.id,

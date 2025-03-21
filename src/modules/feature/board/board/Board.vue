@@ -72,7 +72,7 @@
 					</Sortable>
 					<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
 						<BoardColumnGhost
-							v-if="hasCreateColumnPermission && canEditRoomBoard"
+							v-if="hasCreateColumnPermission"
 							@create:column="onCreateColumn"
 							:isListBoard="isListBoard"
 						/>
@@ -200,7 +200,6 @@ const {
 	hasDeletePermission,
 	hasEditPermission,
 	isTeacher,
-	canEditRoomBoard,
 } = useBoardPermissions();
 
 const isBoardVisible = computed(() => board.value?.isVisible);

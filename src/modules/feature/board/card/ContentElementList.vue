@@ -15,7 +15,7 @@
 					:is-not-first-element="isNotFirstElement(index)"
 					:is-not-last-element="isNotLastElement(index)"
 					:row-index="rowIndex"
-					:tabindex="tabindex(element)"
+					v-bind="getTabIndex(element)"
 					@delete:element="onDeleteElement"
 					@move-down:edit="onMoveElementDown(index, element)"
 					@move-up:edit="onMoveElementUp(index, element)"
@@ -161,11 +161,14 @@ const elementTypesWithTabindexZero = [
 	ContentElementType.ExternalTool,
 	ContentElementType.File,
 	ContentElementType.Link,
-	ContentElementType.VideoConference,
 ];
 
-const tabindex = (element: AnyContentElement) =>
-	elementTypesWithTabindexZero.includes(element.type) ? 0 : undefined;
+const getTabIndex = (element: AnyContentElement) => {
+	const tabindex = elementTypesWithTabindexZero.includes(element.type)
+		? 0
+		: undefined;
+	return tabindex !== undefined ? { tabindex } : undefined;
+};
 
 const isNotFirstElement = (elementIndex: number) =>
 	elementIndex !== 0 && props.elements.length > 1;
