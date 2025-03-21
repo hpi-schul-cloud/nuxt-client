@@ -245,9 +245,7 @@ describe("Board", () => {
 		});
 
 		const loadingStateModule = createModuleMocks(LoadingStateModule);
-		const shareModule = createModuleMocks(ShareModule, {
-			getIsShareModalOpen: false,
-		});
+		const shareModule = createModuleMocks(ShareModule);
 		const courseRoomDetailsModule = createModuleMocks(CourseRoomDetailsModule, {
 			getRoomId: "room1",
 		});
@@ -311,6 +309,7 @@ describe("Board", () => {
 					[SCHOOL_EXTERNAL_TOOLS_MODULE_KEY.valueOf()]:
 						schoolExternalToolsModule,
 				},
+				stubs: { ShareModal: true },
 			},
 			propsData: { boardId: board.id },
 		});
