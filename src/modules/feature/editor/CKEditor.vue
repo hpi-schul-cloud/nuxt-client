@@ -77,9 +77,13 @@ export default defineComponent({
 		const ck = ref(null);
 		const modelValue = useVModel(props, "value", emit);
 		const editor = computed(() => {
-			return props.type === "classic"
-				? CustomCKEditor.ClassicEditor
-				: CustomCKEditor.BalloonEditor;
+			if (props.type === "classic") {
+				return CustomCKEditor.ClassicEditor;
+			} else if (props.type === "inline") {
+				return CustomCKEditor.InlineEditor;
+			} else {
+				return CustomCKEditor.BalloonEditor;
+			}
 		});
 
 		const charCount = ref(0);
@@ -181,6 +185,11 @@ export default defineComponent({
 				},
 				language: locale.value,
 				placeholder: props.placeholder,
+				ui: {
+					viewportOffset: {
+						top: 220,
+					},
+				},
 			};
 		});
 
@@ -240,6 +249,9 @@ export default defineComponent({
 	--ck-highlight-marker-dull-green: hsl(91, 27%, 85%);
 	--ck-highlight-marker-dull-pink: hsl(341, 57%, 88%);
 	--ck-highlight-marker-dull-yellow: hsl(28, 67%, 86%);
+
+	// z-index must be less than z-index of the headers to prevent that the toolbar is shown in front of the headers when scrolling.
+	--ck-z-modal: 15;
 }
 
 .ck-content {
