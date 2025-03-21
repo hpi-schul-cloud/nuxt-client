@@ -25,6 +25,7 @@
 				<PreviewImage
 					:src="lightBoxOptions.previewUrl"
 					:alt="lightBoxOptions.alt"
+					data-testid="image-fullscreen-view"
 				/>
 			</v-col>
 		</v-row>
