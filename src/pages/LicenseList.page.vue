@@ -70,13 +70,14 @@ const onExpand = async (args: unknown) => {
 	if (item?.title !== payload.title) return;
 	if (item.children && item.children.length > 0) return;
 
-	let i = 0;
-	item.children = response.value[payload.title].components?.map((component) => {
-		return {
-			id: i++,
-			title: component,
-		};
-	});
+	item.children = response.value[payload.title].components?.map(
+		(component, index) => {
+			return {
+				id: index,
+				title: component,
+			};
+		}
+	);
 };
 
 const fetchLicenseData = async () => {
@@ -94,10 +95,9 @@ const fetchLicenseData = async () => {
 	}
 
 	if (response.value && licenseNames.value.length > 0) {
-		let i = 0;
-		licenseNames.value.forEach((license) => {
+		licenseNames.value.forEach((license, index) => {
 			licenseList.value.push({
-				id: i++,
+				id: index,
 				title: license,
 				count: response.value[license].components.length,
 				children: [],
