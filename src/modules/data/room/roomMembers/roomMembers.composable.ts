@@ -42,8 +42,9 @@ export const useRoomMembers = (roomId: string) => {
 		[RoleName.Roomviewer]: t("pages.rooms.members.roomPermissions.viewer"),
 	};
 
-	const schoolRole: Record<string, string> = {
+	const schoolRoleMap: Record<string, string> = {
 		[RoleName.Teacher]: t("common.labels.teacher"),
+		[RoleName.Student]: t("common.labels.student"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -62,13 +63,22 @@ export const useRoomMembers = (roomId: string) => {
 						member.roomRoleName === RoleName.Roomowner
 					),
 					displayRoomRole: roomRole[member.roomRoleName],
-					displaySchoolRole: schoolRole[member.schoolRoleName],
+					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 				};
 			});
 			isLoading.value = false;
 		} catch {
 			showFailure(t("pages.rooms.members.error.load"));
 			isLoading.value = false;
+		}
+	};
+
+	const getSchoolRoleName = (schoolRoleNames: RoleName[]) => {
+		const isAdmin = schoolRoleNames.includes(RoleName.Administrator);
+		if (isAdmin) {
+			return schoolRoleMap[RoleName.Teacher];
+		} else {
+			return schoolRoleMap[schoolRoleNames[0]];
 		}
 	};
 
@@ -86,14 +96,14 @@ export const useRoomMembers = (roomId: string) => {
 						...user,
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
-						schoolRoleName: RoleName.Teacher,
+						schoolRoleNames: [RoleName.Teacher],
 						displayRoomRole: roomRole[RoleName.Roomadmin],
-						displaySchoolRole: schoolRole[RoleName.Teacher],
+						displaySchoolRole: schoolRoleMap[RoleName.Teacher],
 					};
 				})
 				.filter((user) => {
 					return (
-						user.schoolRoleName === schoolRoleName &&
+						user.schoolRoleNames.includes(schoolRoleName) &&
 						!roomMembers.value.some((member) => member.userId === user.id)
 					);
 				})
@@ -129,9 +139,9 @@ export const useRoomMembers = (roomId: string) => {
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
 					...member,
-					roomRoleName,
+					roomRoleName: roomRoleName as RoleName,
 					displayRoomRole: roomRole[roomRoleName],
-					displaySchoolRole: schoolRole[member.schoolRoleName],
+					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 				}))
 			);
 		} catch {
@@ -177,7 +187,7 @@ export const useRoomMembers = (roomId: string) => {
 			if (id) {
 				const member = roomMembers.value.find((member) => member.userId === id);
 				if (member) {
-					member.roomRoleName = roleName;
+					member.roomRoleName = roleName as unknown as RoleName;
 					member.displayRoomRole = roomRole[roleName];
 				}
 				return;
@@ -186,7 +196,7 @@ export const useRoomMembers = (roomId: string) => {
 			selectedIds.value.forEach((id) => {
 				const member = roomMembers.value.find((member) => member.userId === id);
 				if (member) {
-					member.roomRoleName = roleName;
+					member.roomRoleName = roleName as unknown as RoleName;
 					member.displayRoomRole = roomRole[roleName];
 				}
 			});

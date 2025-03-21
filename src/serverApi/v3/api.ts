@@ -7983,16 +7983,16 @@ export interface RoomMemberResponse {
     lastName: string;
     /**
      * 
-     * @type {string}
+     * @type {RoleName}
      * @memberof RoomMemberResponse
      */
-    roomRoleName: string;
+    roomRoleName: RoleName;
     /**
      * 
-     * @type {string}
+     * @type {Array<RoleName>}
      * @memberof RoomMemberResponse
      */
-    schoolRoleName: string;
+    schoolRoleNames: Array<RoleName>;
     /**
      * 
      * @type {string}

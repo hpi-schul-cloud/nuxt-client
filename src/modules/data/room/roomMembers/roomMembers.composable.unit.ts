@@ -174,7 +174,7 @@ describe("useRoomMembers", () => {
 					...user,
 					userId: user.id,
 					fullName: `${user.lastName}, ${user.firstName}`,
-					schoolRoleName: RoleName.Teacher,
+					schoolRoleNames: [RoleName.Teacher],
 					schoolName: "Paul-Gerhardt-Gymnasium",
 					displayRoomRole: "pages.rooms.members.roomPermissions.admin",
 					displaySchoolRole: "common.labels.teacher",
@@ -287,7 +287,7 @@ describe("useRoomMembers", () => {
 				useRoomMembers(roomId);
 
 			roomApiMock.roomControllerAddMembers.mockResolvedValue(
-				mockApiResponse({ data: { roomRoleName: "roomadmin" } })
+				mockApiResponse({ data: { roomRoleName: RoleName.Roomadmin } })
 			);
 
 			potentialRoomMembers.value = roomMemberListFactory.buildList(3);
