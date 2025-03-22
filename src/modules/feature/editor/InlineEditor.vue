@@ -233,6 +233,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import "@/styles/settings.scss";
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
 :root {
@@ -273,7 +274,9 @@ export default defineComponent({
 	box-shadow: none !important;
 }
 
-.ck.ck-toolbar:not(.ck-dropdown__panel) {
-	min-width: 450px;
+@media #{map-get($display-breakpoints, "sm-and-up")} {
+	.ck.ck-toolbar:not(.ck-dropdown__panel) {
+		min-width: 450px;
+	}
 }
 </style>
