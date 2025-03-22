@@ -56,7 +56,7 @@ export default defineComponent({
 		},
 		type: {
 			type: String,
-			validator: (value) => ["classic", "balloon"].includes(value),
+			validator: (value) => ["classic", "balloon", "inline"].includes(value),
 			default: "classic",
 		},
 		mode: {
