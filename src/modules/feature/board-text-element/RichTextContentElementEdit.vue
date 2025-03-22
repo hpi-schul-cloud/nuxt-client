@@ -1,6 +1,6 @@
 <template>
 	<div class="cursor-text">
-		<ck-editor
+		<InlineEditor
 			v-model="modelValue"
 			:autofocus="autofocus"
 			:placeholder="$t('components.cardElement.richTextElement.placeholder')"
@@ -14,13 +14,13 @@
 	</div>
 </template>
 <script lang="ts">
-import { CkEditor } from "@feature-editor";
+import { InlineEditor } from "@feature-editor";
 import { useEventListener } from "@vueuse/core";
 import { defineComponent, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
-	components: { CkEditor },
+	components: { InlineEditor },
 	props: {
 		value: {
 			type: String,
@@ -74,5 +74,9 @@ export default defineComponent({
 <style scoped>
 .cursor-text {
 	cursor: text;
+}
+
+.ck.ck-toolbar {
+	min-width: 450px;
 }
 </style>
