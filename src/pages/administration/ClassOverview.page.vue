@@ -39,6 +39,31 @@
 			@update:itemsPerPage="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
+			<template #[`item.name`]="{ item }">
+				<span data-testid="class-table-name">
+					{{ item.name }}
+				</span>
+			</template>
+			<template #[`item.synchronizedCourses`]="{ item }">
+				<span data-testid="class-table-synced-courses">
+					{{ item.synchronizedCourses }}
+				</span>
+			</template>
+			<template #[`item.externalSourceName`]="{ item }">
+				<span data-testid="class-table-source">
+					{{ item.externalSourceName }}
+				</span>
+			</template>
+			<template #[`item.teacherNames`]="{ item }">
+				<span data-testid="class-table-teachers">
+					{{ item.teacherNames }}
+				</span>
+			</template>
+			<template #[`item.studentCount`]="{ item }">
+				<span data-testid="class-table-student-count">
+					{{ item.studentCount }}
+				</span>
+			</template>
 			<template #[`item.actions`]="{ item }">
 				<template v-if="showClassAction(item)">
 					<v-btn
@@ -107,7 +132,6 @@
 					>
 						<v-icon>{{ mdiAccountGroupOutline }}</v-icon>
 					</v-btn>
-
 					<v-btn
 						v-if="item.synchronizedCourses && item.synchronizedCourses.length"
 						:title="t('feature-course-sync.EndCourseSyncDialog.title')"

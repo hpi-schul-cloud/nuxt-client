@@ -36,6 +36,26 @@
 			@update:itemsPerPage="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
+			<template #[`item.name`]="{ item }">
+				<span data-testid="admin-rooms-table-name">
+					{{ item.name }}
+				</span>
+			</template>
+			<template #[`item.syncedGroup`]="{ item }">
+				<span data-testid="admin-rooms-table-synced-group">
+					{{ item.syncedGroup }}
+				</span>
+			</template>
+			<template #[`item.classNames`]="{ item }">
+				<span data-testid="admin-rooms-table-class-names">
+					{{ item.classNames }}
+				</span>
+			</template>
+			<template #[`item.teacherNames`]="{ item }">
+				<span data-testid="admin-rooms-table-teacher-names">
+					{{ item.teacherNames }}
+				</span>
+			</template>
 			<template #[`item.actions`]="{ item }">
 				<template v-if="showRoomAction(item)">
 					<v-btn
