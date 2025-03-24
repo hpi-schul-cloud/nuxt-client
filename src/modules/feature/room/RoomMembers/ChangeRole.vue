@@ -276,5 +276,6 @@ useFocusTrap(changeRoleContent, {
 }
 .alert-text {
 	line-height: var(--line-height-lg);
+	letter-spacing: normal;
 }
 </style>
