@@ -1,9 +1,9 @@
 <template>
 	<DefaultWireframe ref="main" max-width="full">
 		<div class="ml-1 d-flex">
-			<h3 aria-level="1" class="mt-0 me-auto" data-testid="page-title">
+			<h1 aria-level="1" class="text-h3 mt-0 me-auto" data-testid="page-title">
 				{{ $t("feature.media-shelf.title") }}
-			</h3>
+			</h1>
 			<VBtnToggle
 				v-if="mediaBoard && !isEmptyState"
 				variant="outlined"

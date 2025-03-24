@@ -2,10 +2,10 @@ import {
 	ContextExternalToolConfigurationStatusResponse,
 	CustomParameterEntryParam,
 	CustomParameterEntryResponse,
-	CustomParameterResponseLocationEnum,
-	CustomParameterResponseScopeEnum,
-	CustomParameterResponseTypeEnum,
-	ToolLaunchRequestResponseMethodEnum,
+	CustomParameterLocationParams,
+	CustomParameterScopeTypeParams,
+	CustomParameterTypeParams,
+	LaunchRequestMethod,
 } from "@/serverApi/v3";
 import { ToolLaunchRequestMethodEnum } from "@/store/external-tool";
 import { ContextExternalToolConfigurationStatus } from "@data-external-tool";
@@ -15,50 +15,47 @@ import { ToolParameterScope } from "../tool-parameter-scope.enum";
 import { ToolParameterType } from "../tool-parameter.enum";
 
 export const ToolParamLocationMapping: Record<
-	CustomParameterResponseLocationEnum,
+	CustomParameterLocationParams,
 	ToolParameterLocation
 > = {
-	[CustomParameterResponseLocationEnum.Path]: ToolParameterLocation.PATH,
-	[CustomParameterResponseLocationEnum.Query]: ToolParameterLocation.QUERY,
-	[CustomParameterResponseLocationEnum.Body]: ToolParameterLocation.BODY,
+	[CustomParameterLocationParams.Path]: ToolParameterLocation.PATH,
+	[CustomParameterLocationParams.Query]: ToolParameterLocation.QUERY,
+	[CustomParameterLocationParams.Body]: ToolParameterLocation.BODY,
 };
 
 export const ToolParamTypeMapping: Record<
-	CustomParameterResponseTypeEnum,
+	CustomParameterTypeParams,
 	ToolParameterType
 > = {
-	[CustomParameterResponseTypeEnum.String]: ToolParameterType.String,
-	[CustomParameterResponseTypeEnum.Boolean]: ToolParameterType.Boolean,
-	[CustomParameterResponseTypeEnum.Number]: ToolParameterType.Number,
-	[CustomParameterResponseTypeEnum.AutoContextid]:
-		ToolParameterType.AutoContextid,
-	[CustomParameterResponseTypeEnum.AutoContextname]:
+	[CustomParameterTypeParams.String]: ToolParameterType.String,
+	[CustomParameterTypeParams.Boolean]: ToolParameterType.Boolean,
+	[CustomParameterTypeParams.Number]: ToolParameterType.Number,
+	[CustomParameterTypeParams.AutoContextid]: ToolParameterType.AutoContextid,
+	[CustomParameterTypeParams.AutoContextname]:
 		ToolParameterType.AutoContextname,
-	[CustomParameterResponseTypeEnum.AutoSchoolid]:
-		ToolParameterType.AutoSchoolid,
-	[CustomParameterResponseTypeEnum.AutoSchoolnumber]:
+	[CustomParameterTypeParams.AutoSchoolid]: ToolParameterType.AutoSchoolid,
+	[CustomParameterTypeParams.AutoSchoolnumber]:
 		ToolParameterType.AutoSchoolnumber,
-	[CustomParameterResponseTypeEnum.AutoMediumid]:
-		ToolParameterType.AutoMediumid,
-	[CustomParameterResponseTypeEnum.AutoGroupExternaluuid]:
+	[CustomParameterTypeParams.AutoMediumid]: ToolParameterType.AutoMediumid,
+	[CustomParameterTypeParams.AutoGroupExternaluuid]:
 		ToolParameterType.AutoGroupExternaluuid,
 };
 
 export const ToolParamScopeMapping: Record<
-	CustomParameterResponseScopeEnum,
+	CustomParameterScopeTypeParams,
 	ToolParameterScope
 > = {
-	[CustomParameterResponseScopeEnum.Context]: ToolParameterScope.Context,
-	[CustomParameterResponseScopeEnum.Global]: ToolParameterScope.Global,
-	[CustomParameterResponseScopeEnum.School]: ToolParameterScope.School,
+	[CustomParameterScopeTypeParams.Context]: ToolParameterScope.Context,
+	[CustomParameterScopeTypeParams.Global]: ToolParameterScope.Global,
+	[CustomParameterScopeTypeParams.School]: ToolParameterScope.School,
 };
 
 export const ToolLaunchRequestMethodMapping: Record<
-	ToolLaunchRequestResponseMethodEnum,
+	LaunchRequestMethod,
 	ToolLaunchRequestMethodEnum
 > = {
-	[ToolLaunchRequestResponseMethodEnum.Get]: ToolLaunchRequestMethodEnum.Get,
-	[ToolLaunchRequestResponseMethodEnum.Post]: ToolLaunchRequestMethodEnum.Post,
+	[LaunchRequestMethod.Get]: ToolLaunchRequestMethodEnum.Get,
+	[LaunchRequestMethod.Post]: ToolLaunchRequestMethodEnum.Post,
 };
 
 export class CommonToolMapper {
