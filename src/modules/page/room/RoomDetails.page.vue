@@ -26,7 +26,7 @@
 			v-model="boardLayoutDialogIsOpen"
 			@select="onCreateBoard"
 		/>
-		<LeaveRoomOwnerDialog v-model="isLeaveRoomOwnerDialogOpen" />
+		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	</DefaultWireframe>
 </template>
 
@@ -50,7 +50,7 @@ import {
 } from "@ui-confirmation-dialog";
 import {
 	SelectBoardLayoutDialog,
-	LeaveRoomOwnerDialog,
+	LeaveRoomProhibitedDialog,
 } from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
@@ -69,7 +69,7 @@ const roomDetailsStore = useRoomDetailsStore();
 const { room, roomBoards } = storeToRefs(roomDetailsStore);
 const { createBoard } = roomDetailsStore;
 
-const isLeaveRoomOwnerDialogOpen = ref(false);
+const isLeaveRoomProhibitedDialogOpen = ref(false);
 
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.roomDetails.title")}`)
@@ -182,7 +182,7 @@ const onDelete = async () => {
 
 const onLeaveRoom = async () => {
 	if (!canLeaveRoom.value) {
-		isLeaveRoomOwnerDialogOpen.value = true;
+		isLeaveRoomProhibitedDialogOpen.value = true;
 		return;
 	}
 

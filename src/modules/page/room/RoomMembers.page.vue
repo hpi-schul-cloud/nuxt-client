@@ -82,7 +82,7 @@
 		</v-dialog>
 	</DefaultWireframe>
 	<ConfirmationDialog />
-	<LeaveRoomOwnerDialog v-model="isLeaveRoomOwnerDialogOpen" />
+	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 </template>
 
 <script setup lang="ts">
@@ -114,7 +114,7 @@ import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { LeaveRoomOwnerDialog } from "@ui-room-details";
+import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -124,7 +124,7 @@ const { xs, mdAndDown } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 const isMembersDialogOpen = ref(false);
 const isChangeRoleDialogOpen = ref(false);
-const isLeaveRoomOwnerDialogOpen = ref(false);
+const isLeaveRoomProhibitedDialogOpen = ref(false);
 const roomId = route.params.id.toString();
 const {
 	isLoading,
@@ -187,7 +187,7 @@ const onRemoveMembers = async (userIds: string[]) => {
 
 const onLeaveRoom = async () => {
 	if (!canLeaveRoom.value) {
-		isLeaveRoomOwnerDialogOpen.value = true;
+		isLeaveRoomProhibitedDialogOpen.value = true;
 		return;
 	}
 	const shouldLeave = await askConfirmation({

@@ -5,14 +5,14 @@ import {
 import ConfirmationDialog from "./ConfirmationDialog.vue";
 import { VCard, VDialog } from "vuetify/lib/components/index.mjs";
 import { VueWrapper } from "@vue/test-utils";
-import { LeaveRoomOwnerDialog } from "@ui-room-details";
+import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { WarningAlert } from "@ui-alert";
 
 describe("ConfirmationDialog", () => {
 	let wrapper: VueWrapper<InstanceType<typeof ConfirmationDialog>>;
 
 	const setup = () => {
-		wrapper = mount(LeaveRoomOwnerDialog, {
+		wrapper = mount(LeaveRoomProhibitedDialog, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},

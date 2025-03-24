@@ -24,7 +24,7 @@ import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	SelectBoardLayoutDialog,
-	LeaveRoomOwnerDialog,
+	LeaveRoomProhibitedDialog,
 } from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { ref } from "vue";
@@ -131,7 +131,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						},
 					}),
 				],
-				stubs: { LeaveRoomOwnerDialog: true },
+				stubs: { LeaveRoomProhibitedDialog: true },
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
@@ -312,18 +312,19 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			});
 
 			describe("when user has not the permission to leave the room", () => {
-				it("should open leave room owner dialog", async () => {
+				it("should open leave room prohibited dialog", async () => {
 					roomPermissions.canLeaveRoom.value = false;
 
 					const { wrapper } = setup();
 
 					const menu = wrapper.getComponent(RoomMenu);
 					await menu.vm.$emit("room:leave");
-					const leaveRoomOwnerDialog =
-						wrapper.getComponent(LeaveRoomOwnerDialog);
+					const leaveRoomProhibitedDialog = wrapper.getComponent(
+						LeaveRoomProhibitedDialog
+					);
 
-					expect(leaveRoomOwnerDialog.isVisible()).toBe(true);
-					expect(leaveRoomOwnerDialog.props("modelValue")).toEqual(true);
+					expect(leaveRoomProhibitedDialog.isVisible()).toBe(true);
+					expect(leaveRoomProhibitedDialog.props("modelValue")).toEqual(true);
 				});
 			});
 		});

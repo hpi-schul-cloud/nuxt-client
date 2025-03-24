@@ -32,7 +32,7 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { LeaveRoomOwnerDialog } from "@ui-room-details";
+import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 
 jest.mock("vue-router");
@@ -166,6 +166,7 @@ describe("RoomMembersPage", () => {
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
+				stubs: { LeaveRoomProhibitedDialog: true },
 			},
 		});
 
@@ -297,7 +298,7 @@ describe("RoomMembersPage", () => {
 				expect(leaveRoomButton.exists()).toBe(true);
 			});
 
-			it("should open leave room owner dialog", async () => {
+			it("should open leave room prohibited dialog", async () => {
 				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
 
 				const menuBtn = wrapper.findComponent(
@@ -308,11 +309,12 @@ describe("RoomMembersPage", () => {
 				const leaveMenuItem = wrapper.findComponent(KebabMenuActionLeaveRoom);
 				await leaveMenuItem.trigger("click");
 
-				const leaveRoomOwnerDialog =
-					wrapper.findComponent(LeaveRoomOwnerDialog);
+				const leaveRoomProhibitedDialogDialog = wrapper.findComponent(
+					LeaveRoomProhibitedDialog
+				);
 
-				expect(leaveRoomOwnerDialog.isVisible()).toBe(true);
-				expect(leaveRoomOwnerDialog.props("modelValue")).toBe(true);
+				expect(leaveRoomProhibitedDialogDialog.isVisible()).toBe(true);
+				expect(leaveRoomProhibitedDialogDialog.props("modelValue")).toBe(true);
 			});
 
 			it("should not call leaveRoom", async () => {

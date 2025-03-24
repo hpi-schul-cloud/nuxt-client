@@ -2,10 +2,10 @@ import RoomBoardCard from "./RoomBoardCard.vue";
 import RoomLessonCard from "./RoomLessonCard.vue";
 import RoomDotMenu from "./RoomDotMenu.vue";
 import SelectBoardLayoutDialog from "./SelectBoardLayoutDialog.vue";
-import LeaveRoomOwnerDialog from "./LeaveRoomOwnerDialog.vue";
+import LeaveRoomProhibitedDialog from "./LeaveRoomProhibitedDialog.vue";
 
 export {
-	LeaveRoomOwnerDialog,
+	LeaveRoomProhibitedDialog,
 	RoomBoardCard,
 	RoomLessonCard,
 	RoomDotMenu,
