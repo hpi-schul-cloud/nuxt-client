@@ -22,7 +22,6 @@ import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
 import { useMediaQuery, useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
-import { useI18n } from "vue-i18n";
 import { useEditorConfig } from "./EditorConfig.composable";
 
 const props = defineProps({
@@ -61,15 +60,11 @@ const emit = defineEmits([
 
 const Editor = CKEditor.component;
 
-const { t, locale } = useI18n();
 const {
-	boardHeadings,
+	generalConfig,
+	compactHeadings,
 	boardPlugins,
-	boardToolbarRegular,
-	boardToolbarSimple,
-	newsHeadings,
-	newsPlugins,
-	newsToolbar,
+	inlineEditorToolbarItems,
 } = useEditorConfig();
 
 const ck = ref(null);
@@ -77,102 +72,19 @@ const modelValue = useVModel(props, "value", emit);
 
 const charCount = ref(0);
 
-const toolbarItems = {
-	simple: boardToolbarSimple,
-	regular: boardToolbarRegular,
-	news: newsToolbar,
-};
-
-const plugins = {
-	simple: boardPlugins,
-	regular: boardPlugins,
-	news: newsPlugins,
-};
-
-const headings = {
-	simple: boardHeadings,
-	regular: boardHeadings,
-	news: newsHeadings,
-};
-
 const config = computed(() => {
 	return {
+		...generalConfig,
 		toolbar: {
-			items: toolbarItems[props.mode],
+			items: inlineEditorToolbarItems,
 			shouldNotGroupWhenFull: showFullToolbar.value,
 		},
-		plugins: plugins[props.mode],
-		heading: headings[props.mode],
-		link: {
-			defaultProtocol: "//",
-			addTargetToExternalLinks: true,
-		},
-		wordCount: {
-			onUpdate: (stats) => {
-				charCount.value = stats.characters;
-			},
-		},
-		language: locale.value,
+		plugins: boardPlugins,
+		heading: compactHeadings,
 		placeholder: props.placeholder,
-		fontColor: {
-			// Using the following colors from the vuetify color palette:
-			// lime-darken-4, green-darken-2, cyan-darken-3, blue-darken-2, indigo, deep-purple, purple, pink-darken-1, red-darken-2
-			// Some colors are translated by CKEditor itself
-			colors: [
-				{
-					color: "#827717",
-					label: t("components.editor.fonts.colors.oliveGreen"),
-				},
-				{ color: "#388E3C", label: "Green" },
-				{ color: "#00838F", label: "Turquoise" },
-				{ color: "#1976D2", label: "Blue" },
-				{
-					color: "#3F51B5",
-					label: t("components.editor.fonts.colors.indigo"),
-				},
-				{
-					color: "#673AB7",
-					label: t("components.editor.fonts.colors.darkPurple"),
-				},
-				{ color: "#9C27B0", label: "Purple" },
-				{
-					color: "#D81B60",
-					label: t("components.editor.fonts.colors.pink"),
-				},
-				{ color: "#D32F2F", label: "Red" },
-			],
-		},
-		fontBackgroundColor: {
-			// Using the following colors from the vuetify color palette:
-			// light-green-lighten-4, green-lighten-4, cyan-lighten-4, blue-lighten-4, indigo-lighten-4, purple-lighten-4, pink-lighten-4, deep-orange-lighten-4, amber-lighten-4
-			// Some colors are translated by CKEditor itself
-			colors: [
-				{ color: "#DCEDC8", label: "Light green" },
-				{ color: "#C8E6C9", label: "Green" },
-				{ color: "#B2EBF2", label: "Turquoise" },
-				{ color: "#BBDEFB", label: "Blue" },
-				{
-					color: "#C5CAE9",
-					label: t("components.editor.fonts.colors.indigo"),
-				},
-				{
-					color: "#E1BEE7",
-					label: t("components.editor.fonts.colors.darkPurple"),
-				},
-				{
-					color: "#F8BBD0",
-					label: t("components.editor.fonts.colors.pink"),
-				},
-				{ color: "#FFCCBC", label: "Orange" },
-				{
-					color: "#FFECB3",
-					label: "Yellow",
-				},
-			],
-		},
 		ui: {
 			viewportOffset: {
-				top: 220,
+				top: props.viewportOffsetTop,
 			},
 		},
 	};
@@ -213,28 +125,11 @@ const showFullToolbar = computed(() => {
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
 
 :root {
-	--ck-highlight-marker-dull-blue: hsl(203, 64%, 86%);
-	--ck-highlight-marker-dull-green: hsl(91, 27%, 85%);
-	--ck-highlight-marker-dull-pink: hsl(341, 57%, 88%);
-	--ck-highlight-marker-dull-yellow: hsl(28, 67%, 86%);
-
 	// z-index must be less than z-index of the headers to prevent that the toolbar is shown in front of the headers when scrolling.
 	--ck-z-modal: 15;
 }
 
 .ck-content {
-	.marker-dull-pink {
-		background-color: var(--ck-highlight-marker-dull-pink);
-	}
-	.marker-dull-yellow {
-		background-color: var(--ck-highlight-marker-dull-yellow);
-	}
-	.marker-dull-blue {
-		background-color: var(--ck-highlight-marker-dull-blue);
-	}
-	.marker-dull-green {
-		background-color: var(--ck-highlight-marker-dull-green);
-	}
 	ul,
 	ol {
 		padding-left: revert;
@@ -251,8 +146,8 @@ const showFullToolbar = computed(() => {
 }
 
 @media #{map-get($display-breakpoints, "sm-and-up")} {
-	.ck.ck-toolbar:not(.ck-dropdown__panel) {
-		min-width: 450px;
+	.ck.ck-toolbar_floating {
+		min-width: 460px;
 	}
 }
 
