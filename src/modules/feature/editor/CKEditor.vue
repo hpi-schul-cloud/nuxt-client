@@ -22,15 +22,7 @@ import "@hpi-schul-cloud/ckeditor/build/translations/uk";
 import { useMediaQuery, useVModel } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import {
-	boardHeadings,
-	boardPlugins,
-	boardToolbarRegular,
-	boardToolbarSimple,
-	newsHeadings,
-	newsPlugins,
-	newsToolbar,
-} from "./config";
+import { useEditorConfig } from "./editorConfig.composable";
 
 export default defineComponent({
 	name: "CkEditor",
@@ -72,7 +64,17 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const { t, locale } = useI18n();
+		const { locale } = useI18n();
+		const {
+			boardHeadings,
+			boardPlugins,
+			boardToolbarRegular,
+			boardToolbarSimple,
+			newsHeadings,
+			newsPlugins,
+			newsToolbar,
+			highlights,
+		} = useEditorConfig();
 
 		const ck = ref(null);
 		const modelValue = useVModel(props, "value", emit);
@@ -119,64 +121,7 @@ export default defineComponent({
 					addTargetToExternalLinks: true,
 				},
 				highlight: {
-					options: [
-						{
-							model: "dullPinkMarker",
-							class: "marker-dull-pink",
-							title: t("components.editor.highlight.dullPink"),
-							color: "var(--ck-highlight-marker-dull-pink)",
-							type: "marker",
-						},
-						{
-							model: "pinkMarker",
-							class: "marker-pink",
-							title: "Pink marker",
-							color: "var(--ck-highlight-marker-pink)",
-							type: "marker",
-						},
-						{
-							model: "dullYellowMarker",
-							class: "marker-dull-yellow",
-							title: t("components.editor.highlight.dullYellow"),
-							color: "var(--ck-highlight-marker-dull-yellow)",
-							type: "marker",
-						},
-						{
-							model: "yellowMarker",
-							class: "marker-yellow",
-							title: "Yellow marker",
-							color: "var(--ck-highlight-marker-yellow)",
-							type: "marker",
-						},
-						{
-							model: "dullBlueMarker",
-							class: "marker-dull-blue",
-							title: t("components.editor.highlight.dullBlue"),
-							color: "var(--ck-highlight-marker-dull-blue)",
-							type: "marker",
-						},
-						{
-							model: "blueMarker",
-							class: "marker-blue",
-							title: "Blue marker",
-							color: "var(--ck-highlight-marker-blue)",
-							type: "marker",
-						},
-						{
-							model: "dullGreenMarker",
-							class: "marker-dull-green",
-							title: t("components.editor.highlight.dullGreen"),
-							color: "var(--ck-highlight-marker-dull-green)",
-							type: "marker",
-						},
-						{
-							model: "greenMarker",
-							class: "marker-green",
-							title: "Green marker",
-							color: "var(--ck-highlight-marker-green)",
-							type: "marker",
-						},
-					],
+					options: highlights,
 				},
 				wordCount: {
 					onUpdate: (stats) => {
