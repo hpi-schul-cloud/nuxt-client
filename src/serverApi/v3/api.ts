@@ -7295,61 +7295,6 @@ export interface RenameBodyParams {
 /**
  * 
  * @export
- * @interface ResolvedUserResponse
- */
-export interface ResolvedUserResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    firstName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    lastName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ResolvedUserResponse
-     */
-    roles: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ResolvedUserResponse
-     */
-    permissions: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    schoolId: string;
-}
-/**
- * 
- * @export
  * @interface RichText
  */
 export interface RichText {
@@ -27468,39 +27413,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userControllerMe: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/user/me`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -27519,15 +27431,6 @@ export const UserApiFp = function(configuration?: Configuration) {
          */
         async userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessfulResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerChangeLanguage(changeLanguageParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async userControllerMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResolvedUserResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerMe(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -27549,14 +27452,6 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
         userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): AxiosPromise<SuccessfulResponse> {
             return localVarFp.userControllerChangeLanguage(changeLanguageParams, options).then((request) => request(axios, basePath));
         },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userControllerMe(options?: any): AxiosPromise<ResolvedUserResponse> {
-            return localVarFp.userControllerMe(options).then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -27574,14 +27469,6 @@ export interface UserApiInterface {
      * @memberof UserApiInterface
      */
     userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): AxiosPromise<SuccessfulResponse>;
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserApiInterface
-     */
-    userControllerMe(options?: any): AxiosPromise<ResolvedUserResponse>;
 
 }
 
@@ -27601,16 +27488,6 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      */
     public userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any) {
         return UserApiFp(this.configuration).userControllerChangeLanguage(changeLanguageParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserApi
-     */
-    public userControllerMe(options?: any) {
-        return UserApiFp(this.configuration).userControllerMe(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
