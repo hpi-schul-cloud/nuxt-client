@@ -71,6 +71,10 @@ export default defineComponent({
 			type: String,
 			default: "board",
 		},
+		viewportOffsetTop: {
+			type: Number,
+			default: 0,
+		},
 	},
 	setup(props, { emit }) {
 		const { t, locale } = useI18n();
@@ -179,7 +183,7 @@ export default defineComponent({
 				placeholder: props.placeholder,
 				ui: {
 					viewportOffset: {
-						top: 220,
+						top: props.viewportOffsetTop,
 					},
 				},
 			};
