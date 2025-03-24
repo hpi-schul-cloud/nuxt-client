@@ -2788,6 +2788,17 @@ export interface CustomParameterEntryResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum CustomParameterLocationParams {
+    Path = 'path',
+    Body = 'body',
+    Query = 'query'
+}
+
+/**
+ * 
+ * @export
  * @interface CustomParameterPostParams
  */
 export interface CustomParameterPostParams {
@@ -2829,22 +2840,22 @@ export interface CustomParameterPostParams {
     regexComment?: string;
     /**
      * Scope where the parameter has to be configured.
-     * @type {string}
+     * @type {CustomParameterScopeTypeParams}
      * @memberof CustomParameterPostParams
      */
-    scope: CustomParameterPostParamsScopeEnum;
+    scope: CustomParameterScopeTypeParams;
     /**
      * Location where the parameter is transmitted in the HTTP request to the tool provider.
-     * @type {string}
+     * @type {CustomParameterLocationParams}
      * @memberof CustomParameterPostParams
      */
-    location: CustomParameterPostParamsLocationEnum;
+    location: CustomParameterLocationParams;
     /**
      * Input field type. Auto parameters have to be global and cannot have a defaultValue.
-     * @type {string}
+     * @type {CustomParameterTypeParams}
      * @memberof CustomParameterPostParams
      */
-    type: CustomParameterPostParamsTypeEnum;
+    type: CustomParameterTypeParams;
     /**
      * If true, the parameter does not have to be filled out during configuration.
      * @type {boolean}
@@ -2858,41 +2869,6 @@ export interface CustomParameterPostParams {
      */
     isProtected: boolean;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterPostParamsScopeEnum {
-    Global = 'global',
-    School = 'school',
-    Context = 'context'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterPostParamsLocationEnum {
-    Path = 'path',
-    Body = 'body',
-    Query = 'query'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterPostParamsTypeEnum {
-    String = 'string',
-    Number = 'number',
-    Boolean = 'boolean',
-    AutoContextid = 'auto_contextid',
-    AutoContextname = 'auto_contextname',
-    AutoSchoolid = 'auto_schoolid',
-    AutoSchoolnumber = 'auto_schoolnumber',
-    AutoMediumid = 'auto_mediumid',
-    AutoGroupExternaluuid = 'auto_group_externaluuid'
-}
-
 /**
  * 
  * @export
@@ -2937,22 +2913,22 @@ export interface CustomParameterResponse {
     regexComment?: string;
     /**
      * Scope where the parameter has to be configured.
-     * @type {string}
+     * @type {CustomParameterScopeTypeParams}
      * @memberof CustomParameterResponse
      */
-    scope: CustomParameterResponseScopeEnum;
+    scope: CustomParameterScopeTypeParams;
     /**
      * Location where the parameter is transmitted in the HTTP request to the tool provider.
-     * @type {string}
+     * @type {CustomParameterLocationParams}
      * @memberof CustomParameterResponse
      */
-    location: CustomParameterResponseLocationEnum;
+    location: CustomParameterLocationParams;
     /**
      * Input field type. Auto parameters have to be global and cannot have a defaultValue.
-     * @type {string}
+     * @type {CustomParameterTypeParams}
      * @memberof CustomParameterResponse
      */
-    type: CustomParameterResponseTypeEnum;
+    type: CustomParameterTypeParams;
     /**
      * If true, the parameter does not have to be filled out during configuration.
      * @type {boolean}
@@ -2966,30 +2942,23 @@ export interface CustomParameterResponse {
      */
     isProtected: boolean;
 }
-
 /**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterResponseScopeEnum {
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum CustomParameterScopeTypeParams {
     Global = 'global',
     School = 'school',
     Context = 'context'
 }
+
 /**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterResponseLocationEnum {
-    Path = 'path',
-    Body = 'body',
-    Query = 'query'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterResponseTypeEnum {
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum CustomParameterTypeParams {
     String = 'string',
     Number = 'number',
     Boolean = 'boolean',
@@ -4302,6 +4271,16 @@ export enum LanguageType {
     En = 'en',
     Es = 'es',
     Uk = 'uk'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum LaunchRequestMethod {
+    Get = 'GET',
+    Post = 'POST'
 }
 
 /**
@@ -9536,10 +9515,10 @@ export interface ToolContextTypesListResponse {
 export interface ToolLaunchRequestResponse {
     /**
      * The Launch Request method (GET or POST)
-     * @type {string}
+     * @type {LaunchRequestMethod}
      * @memberof ToolLaunchRequestResponse
      */
-    method: ToolLaunchRequestResponseMethodEnum;
+    method: LaunchRequestMethod;
     /**
      * The URL for the Tool Launch Request
      * @type {string}
@@ -9565,16 +9544,6 @@ export interface ToolLaunchRequestResponse {
      */
     launchType: LaunchType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ToolLaunchRequestResponseMethodEnum {
-    Get = 'GET',
-    Post = 'POST'
-}
-
 /**
  * 
  * @export
