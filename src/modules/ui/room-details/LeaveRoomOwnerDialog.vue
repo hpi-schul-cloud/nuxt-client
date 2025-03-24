@@ -13,11 +13,9 @@
 					</h2>
 				</template>
 				<template #text>
-					<span class="warning-text">
-						<WarningAlert>
-							{{ t("pages.rooms.leaveRoom.RoomOwner.warning") }}
-						</WarningAlert>
-					</span>
+					<WarningAlert class="warning-text">
+						{{ t("pages.rooms.leaveRoom.RoomOwner.warning") }}
+					</WarningAlert>
 				</template>
 				<template #actions>
 					<VSpacer />
