@@ -6,6 +6,7 @@
 			ref="videoRef"
 			class="video"
 			loading="lazy"
+			data-testid="video-thumbnail-in-card"
 			:src="src"
 			:aria-label="name"
 			v-on:error="onError"
