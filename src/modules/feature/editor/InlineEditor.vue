@@ -283,4 +283,8 @@ export default defineComponent({
 		min-width: 450px;
 	}
 }
+
+.ck-math-tex {
+	font-size: large;
+}
 </style>
