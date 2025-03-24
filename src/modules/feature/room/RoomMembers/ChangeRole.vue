@@ -7,82 +7,79 @@
 		</template>
 
 		<template v-slot:text>
-			<div class="mt-2">
-				<div v-if="!isOwnershipHandoverMode" class="mb-4">
-					{{ infoText }}
-				</div>
-				<div>
-					<v-radio-group
-						v-if="!isOwnershipHandoverMode"
-						v-model="selectedRole"
-						hide-details
-						class="ml-n2"
+			<div v-if="!isOwnershipHandoverMode" class="mb-4">
+				{{ infoText }}
+			</div>
+			<div>
+				<v-radio-group
+					v-if="!isOwnershipHandoverMode"
+					v-model="selectedRole"
+					hide-details
+					class="ml-n2"
+				>
+					<v-radio
+						v-for="option in radioOptions"
+						:key="option.role"
+						:value="option.role"
+						color="primary"
+						class="align-start mb-2"
+						:data-testid="option.dataTestid"
 					>
-						<v-radio
-							v-for="option in radioOptions"
-							:key="option.role"
-							:value="option.role"
-							color="primary"
-							class="align-start mb-2"
-							:data-testid="option.dataTestid"
-						>
-							<template #label>
-								<div class="d-flex flex-column mt-2">
-									{{ option.labelHeader }}
-									<span
-										v-for="labelDescription in option.labelDescriptions"
-										:key="labelDescription"
-										class="radio-label"
-									>
-										{{ t(labelDescription) }}
-									</span>
-								</div>
-							</template>
-						</v-radio>
-					</v-radio-group>
+						<template #label>
+							<div class="d-flex flex-column mt-2">
+								{{ option.labelHeader }}
+								<span
+									v-for="labelDescription in option.labelDescriptions"
+									:key="labelDescription"
+									class="radio-label"
+								>
+									{{ t(labelDescription) }}
+								</span>
+							</div>
+						</template>
+					</v-radio>
+				</v-radio-group>
 
-					<WarningAlert
-						v-if="selectedRole === RoleName.Roomowner"
-						:class="isOwnershipHandoverMode ? 'ml-0' : 'ml-8'"
-					>
-						<span class="alert-text">
-							<template v-if="!isOwnershipHandoverMode">
-								<i18n-t
-									keypath="pages.rooms.members.handOverAlert.label"
-									scope="global"
-								>
-									<template #memberFullName>{{ memberFullName }}</template>
-								</i18n-t>
-								<p class="mb-0">
-									{{
-										t("pages.rooms.members.handOverAlert.label.subText", {
-											currentUserFullName,
-										})
-									}}
-								</p>
-							</template>
-							<template v-else>
-								<i18n-t
-									keypath="pages.rooms.members.handOverAlert.confirm.label"
-									scope="global"
-								>
-									<template #currentUserFullName>
-										{{ currentUserFullName }}
-									</template>
-									<template #memberFullName>{{ memberFullName }}</template>
-								</i18n-t>
-								<p class="mb-0">
-									{{
-										t(
-											"pages.rooms.members.handOverAlert.confirm.label.subText",
-											{ memberFullName }
-										)
-									}}
-								</p>
-							</template>
-						</span>
-					</WarningAlert>
-				</div>
+				<WarningAlert
+					v-if="selectedRole === RoleName.Roomowner"
+					:class="isOwnershipHandoverMode ? 'ml-0' : 'ml-8'"
+				>
+					<span class="alert-text">
+						<template v-if="!isOwnershipHandoverMode">
+							<i18n-t
+								keypath="pages.rooms.members.handOverAlert.label"
+								scope="global"
+							>
+								<template #memberFullName>{{ memberFullName }}</template>
+							</i18n-t>
+							<p class="mb-0">
+								{{
+									t("pages.rooms.members.handOverAlert.label.subText", {
+										currentUserFullName,
+									})
+								}}
+							</p>
+						</template>
+						<template v-else>
+							<i18n-t
+								keypath="pages.rooms.members.handOverAlert.confirm.label"
+								scope="global"
+							>
+								<template #currentUserFullName>
+									{{ currentUserFullName }}
+								</template>
+								<template #memberFullName>{{ memberFullName }}</template>
+							</i18n-t>
+							<p class="mb-0">
+								{{
+									t("pages.rooms.members.handOverAlert.confirm.label.subText", {
+										memberFullName,
+									})
+								}}
+							</p>
+						</template>
+					</span>
+				</WarningAlert>
 			</div>
 		</template>
 
