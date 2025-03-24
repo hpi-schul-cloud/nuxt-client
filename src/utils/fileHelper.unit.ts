@@ -25,6 +25,7 @@ describe("@/utils/fileHelper", () => {
 				...document.createElement("a"),
 				href: "",
 				download: "",
+				dataset: { testid: "" },
 				click: jest.fn(),
 			};
 			const createElementSpy = jest
