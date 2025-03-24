@@ -1,16 +1,16 @@
 import {
+	CustomParameterLocationParams,
 	CustomParameterResponse,
-	CustomParameterResponseLocationEnum,
-	CustomParameterResponseScopeEnum,
-	CustomParameterResponseTypeEnum,
+	CustomParameterScopeTypeParams,
+	CustomParameterTypeParams,
 } from "@/serverApi/v3";
 import { Factory } from "fishery";
 
 export const customParameterResponseFactory =
 	Factory.define<CustomParameterResponse>(({ sequence }) => ({
-		scope: CustomParameterResponseScopeEnum.Context,
-		type: CustomParameterResponseTypeEnum.String,
-		location: CustomParameterResponseLocationEnum.Body,
+		scope: CustomParameterScopeTypeParams.Context,
+		type: CustomParameterTypeParams.String,
+		location: CustomParameterLocationParams.Body,
 		name: `CustomParameter${sequence}`,
 		isOptional: false,
 		isProtected: false,
