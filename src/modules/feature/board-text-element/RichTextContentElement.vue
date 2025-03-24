@@ -145,6 +145,10 @@ export default defineComponent({
 			overflow-y: hidden;
 			padding-right: 1px;
 		}
+
+		.math-tex {
+			font-size: large;
+		}
 	}
 }
 </style>
