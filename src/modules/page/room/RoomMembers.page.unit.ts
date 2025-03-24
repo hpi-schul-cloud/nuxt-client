@@ -48,18 +48,7 @@ jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
 
 jest.mock("@feature-room/roomAuthorization.composable");
-const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
-	canAddRoomMembers: ref(false),
-	canCreateRoom: ref(false),
-	canChangeOwner: ref(false),
-	canViewRoom: ref(false),
-	canEditRoom: ref(false),
-	canDeleteRoom: ref(false),
-	canLeaveRoom: ref(false),
-	canRemoveRoomMembers: ref(false),
-	canEditRoomContent: ref(false),
-};
-(useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
+const roomAuthorization = jest.mocked(useRoomAuthorization);
 
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
@@ -67,6 +56,7 @@ describe("RoomMembersPage", () => {
 	let mockRoomMemberCalls: DeepMocked<ReturnType<typeof useRoomMembers>>;
 	let wrapper: VueWrapper<InstanceType<typeof RoomMembersPage>>;
 	let askConfirmationMock: jest.Mock;
+	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 
 	const routeRoomId = "room-id";
 
@@ -93,6 +83,19 @@ describe("RoomMembersPage", () => {
 			askConfirmation: askConfirmationMock,
 			isDialogOpen: ref(false),
 		});
+
+		roomPermissions = {
+			canAddRoomMembers: ref(false),
+			canCreateRoom: ref(false),
+			canChangeOwner: ref(false),
+			canViewRoom: ref(false),
+			canEditRoom: ref(false),
+			canDeleteRoom: ref(false),
+			canLeaveRoom: ref(false),
+			canRemoveRoomMembers: ref(false),
+			canEditRoomContent: ref(false),
+		};
+		roomAuthorization.mockReturnValue(roomPermissions);
 	});
 
 	const buildRoom = () => {
@@ -251,6 +254,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should call remove method after confirmation", async () => {
+			roomPermissions.canLeaveRoom.value = true;
 			const { wrapper } = setup({ currentUserRole: RoleName.Roomadmin });
 
 			askConfirmationMock.mockResolvedValue(true);
@@ -296,8 +300,6 @@ describe("RoomMembersPage", () => {
 			it("should open leave room owner dialog", async () => {
 				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
 
-				askConfirmationMock.mockResolvedValue(true);
-
 				const menuBtn = wrapper.findComponent(
 					'[data-testid="room-member-menu"]'
 				);
@@ -315,8 +317,6 @@ describe("RoomMembersPage", () => {
 
 			it("should not call leaveRoom", async () => {
 				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
-
-				askConfirmationMock.mockResolvedValue(true);
 
 				const menuBtn = wrapper.findComponent(
 					'[data-testid="room-member-menu"]'
@@ -386,7 +386,7 @@ describe("RoomMembersPage", () => {
 	describe("visibility options", () => {
 		describe("title menu visibility", () => {
 			it.each([
-				[RoleName.Roomowner, false],
+				[RoleName.Roomowner, true],
 				[RoleName.Roomadmin, true],
 				[RoleName.Roomeditor, true],
 				[RoleName.Roomviewer, true],

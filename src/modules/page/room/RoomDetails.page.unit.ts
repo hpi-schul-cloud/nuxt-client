@@ -44,24 +44,14 @@ jest.mock("vue-router", () => ({
 jest.mock("@data-room/Rooms.state");
 
 jest.mock("@feature-room/roomAuthorization.composable");
-const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
-	canAddRoomMembers: ref(false),
-	canChangeOwner: ref(false),
-	canCreateRoom: ref(false),
-	canViewRoom: ref(false),
-	canEditRoom: ref(false),
-	canDeleteRoom: ref(false),
-	canLeaveRoom: ref(true),
-	canRemoveRoomMembers: ref(false),
-	canEditRoomContent: ref(false),
-};
-(useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
+const roomAuthorization = jest.mocked(useRoomAuthorization);
 
 jest.mock("@ui-confirmation-dialog");
 jest.mocked(useConfirmationDialog);
 
 describe("@pages/RoomsDetails.page.vue", () => {
 	let useRoomsStateMock: DeepMocked<ReturnType<typeof useRoomsState>>;
+	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 	let askConfirmationMock: jest.Mock;
 
 	beforeEach(() => {
@@ -84,6 +74,19 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		setupConfirmationComposableMock({
 			askConfirmationMock,
 		});
+
+		roomPermissions = {
+			canAddRoomMembers: ref(false),
+			canChangeOwner: ref(false),
+			canCreateRoom: ref(false),
+			canViewRoom: ref(false),
+			canEditRoom: ref(false),
+			canDeleteRoom: ref(false),
+			canLeaveRoom: ref(true),
+			canRemoveRoomMembers: ref(false),
+			canEditRoomContent: ref(false),
+		};
+		roomAuthorization.mockReturnValue(roomPermissions);
 	});
 
 	afterEach(() => {
@@ -349,6 +352,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		describe("and multiple board layouts are enabled", () => {
 			beforeEach(() => {
 				roomPermissions.canCreateRoom.value = true;
+				roomPermissions.canEditRoomContent.value = true;
 			});
 
 			const openDialog = async (wrapper: VueWrapper) => {
