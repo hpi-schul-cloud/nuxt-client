@@ -111,8 +111,4 @@ export default defineComponent({
 .cursor-text {
 	cursor: text;
 }
-
-.ck.ck-toolbar {
-	min-width: 450px;
-}
 </style>
