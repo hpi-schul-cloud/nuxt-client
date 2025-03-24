@@ -66,7 +66,7 @@ export default defineComponent({
 		},
 	},
 	setup(props, { emit }) {
-		const { locale } = useI18n();
+		const { t, locale } = useI18n();
 		const {
 			boardHeadings,
 			boardPlugins,
@@ -75,7 +75,6 @@ export default defineComponent({
 			newsHeadings,
 			newsPlugins,
 			newsToolbar,
-			highlights,
 		} = useEditorConfig();
 
 		const ck = ref(null);
@@ -116,9 +115,6 @@ export default defineComponent({
 					defaultProtocol: "//",
 					addTargetToExternalLinks: true,
 				},
-				highlight: {
-					options: highlights,
-				},
 				wordCount: {
 					onUpdate: (stats) => {
 						charCount.value = stats.characters;
@@ -126,10 +122,6 @@ export default defineComponent({
 				},
 				language: locale.value,
 				placeholder: props.placeholder,
-				ui: {
-					viewportOffset: {
-						top: 220,
-					},
 				fontColor: {
 					// Using the following colors from the vuetify color palette:
 					// lime-darken-4, green-darken-2, cyan-darken-3, blue-darken-2, indigo, deep-purple, purple, pink-darken-1, red-darken-2
@@ -185,6 +177,11 @@ export default defineComponent({
 							label: "Yellow",
 						},
 					],
+				},
+				ui: {
+					viewportOffset: {
+						top: 220,
+					},
 				},
 			};
 		});

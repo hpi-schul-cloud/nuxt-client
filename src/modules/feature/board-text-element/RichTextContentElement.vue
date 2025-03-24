@@ -10,6 +10,7 @@
 			class="rich_text"
 			:autofocus="autofocus"
 			:value="modelValue.text"
+			:columnIndex="columnIndex"
 			@update:value="onUpdateElement"
 			@delete:element="onDeleteElement"
 			@blur="onBlur"
@@ -35,6 +36,7 @@ const props = defineProps({
 		type: Boolean,
 		required: true,
 	},
+	columnIndex: { type: Number, required: true },
 });
 
 const emit = defineEmits(["delete:element"]);
@@ -129,6 +131,10 @@ const onKeyUp = () => ensurePoliteNotifications();
 			overflow-x: auto;
 			overflow-y: hidden;
 			padding-right: 1px;
+		}
+
+		.math-tex {
+			font-size: large;
 		}
 	}
 }

@@ -23,7 +23,7 @@ import "@hpi-schul-cloud/ckeditor/build/translations/uk";
 import { useMediaQuery, useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useEditorConfig } from "./editorConfig.composable";
+import { useEditorConfig } from "./EditorConfig.composable";
 
 const props = defineProps({
 	value: {
@@ -44,6 +44,10 @@ const props = defineProps({
 	autofocus: {
 		type: Boolean,
 	},
+	viewportOffsetTop: {
+		type: Number,
+		default: 0,
+	},
 });
 
 const emit = defineEmits([
@@ -57,7 +61,7 @@ const emit = defineEmits([
 
 const Editor = CKEditor.component;
 
-const { locale } = useI18n();
+const { t, locale } = useI18n();
 const {
 	boardHeadings,
 	boardPlugins,
@@ -66,11 +70,7 @@ const {
 	newsHeadings,
 	newsPlugins,
 	newsToolbar,
-	highlights,
 } = useEditorConfig();
-
-// eslint-disable-next-line no-console
-console.log("boardHeadings", boardHeadings);
 
 const ck = ref(null);
 const modelValue = useVModel(props, "value", emit);
@@ -107,9 +107,6 @@ const config = computed(() => {
 			defaultProtocol: "//",
 			addTargetToExternalLinks: true,
 		},
-		highlight: {
-			options: highlights,
-		},
 		wordCount: {
 			onUpdate: (stats) => {
 				charCount.value = stats.characters;
@@ -117,6 +114,62 @@ const config = computed(() => {
 		},
 		language: locale.value,
 		placeholder: props.placeholder,
+		fontColor: {
+			// Using the following colors from the vuetify color palette:
+			// lime-darken-4, green-darken-2, cyan-darken-3, blue-darken-2, indigo, deep-purple, purple, pink-darken-1, red-darken-2
+			// Some colors are translated by CKEditor itself
+			colors: [
+				{
+					color: "#827717",
+					label: t("components.editor.fonts.colors.oliveGreen"),
+				},
+				{ color: "#388E3C", label: "Green" },
+				{ color: "#00838F", label: "Turquoise" },
+				{ color: "#1976D2", label: "Blue" },
+				{
+					color: "#3F51B5",
+					label: t("components.editor.fonts.colors.indigo"),
+				},
+				{
+					color: "#673AB7",
+					label: t("components.editor.fonts.colors.darkPurple"),
+				},
+				{ color: "#9C27B0", label: "Purple" },
+				{
+					color: "#D81B60",
+					label: t("components.editor.fonts.colors.pink"),
+				},
+				{ color: "#D32F2F", label: "Red" },
+			],
+		},
+		fontBackgroundColor: {
+			// Using the following colors from the vuetify color palette:
+			// light-green-lighten-4, green-lighten-4, cyan-lighten-4, blue-lighten-4, indigo-lighten-4, purple-lighten-4, pink-lighten-4, deep-orange-lighten-4, amber-lighten-4
+			// Some colors are translated by CKEditor itself
+			colors: [
+				{ color: "#DCEDC8", label: "Light green" },
+				{ color: "#C8E6C9", label: "Green" },
+				{ color: "#B2EBF2", label: "Turquoise" },
+				{ color: "#BBDEFB", label: "Blue" },
+				{
+					color: "#C5CAE9",
+					label: t("components.editor.fonts.colors.indigo"),
+				},
+				{
+					color: "#E1BEE7",
+					label: t("components.editor.fonts.colors.darkPurple"),
+				},
+				{
+					color: "#F8BBD0",
+					label: t("components.editor.fonts.colors.pink"),
+				},
+				{ color: "#FFCCBC", label: "Orange" },
+				{
+					color: "#FFECB3",
+					label: "Yellow",
+				},
+			],
+		},
 		ui: {
 			viewportOffset: {
 				top: 220,
@@ -201,5 +254,9 @@ const showFullToolbar = computed(() => {
 	.ck.ck-toolbar:not(.ck-dropdown__panel) {
 		min-width: 450px;
 	}
+}
+
+.ck-math-tex {
+	font-size: large;
 }
 </style>

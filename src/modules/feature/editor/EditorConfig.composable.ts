@@ -8,7 +8,7 @@ export const useEditorConfig = () => {
 		"|",
 		"bold",
 		"italic",
-		"highlight",
+		"fontBackgroundColor",
 		"|",
 		"link",
 		"bulletedList",
@@ -25,8 +25,8 @@ export const useEditorConfig = () => {
 		"bold",
 		"italic",
 		"strikethrough",
-		"highlight",
-		"code",
+		"fontColor",
+		"fontBackgroundColor",
 		"superscript",
 		"subscript",
 		"|",
@@ -36,7 +36,6 @@ export const useEditorConfig = () => {
 		"math",
 		"horizontalLine",
 		"|",
-		"blockQuote",
 		"insertTable",
 		"specialCharacters",
 		"removeFormat",
@@ -61,12 +60,11 @@ export const useEditorConfig = () => {
 
 	const boardPlugins = [
 		"Autoformat",
-		"BlockQuote",
 		"Bold",
-		"Code",
 		"Essentials",
+		"FontBackgroundColor",
+		"FontColor",
 		"Heading",
-		"Highlight",
 		"HorizontalLine",
 		"Italic",
 		"Link",
@@ -75,6 +73,7 @@ export const useEditorConfig = () => {
 		"Paragraph",
 		"RemoveFormat",
 		"SpecialCharacters",
+		"SpecialCharactersEssentials",
 		"Strikethrough",
 		"Subscript",
 		"Superscript",
@@ -147,65 +146,6 @@ export const useEditorConfig = () => {
 		],
 	};
 
-	const highlights = [
-		{
-			model: "dullPinkMarker",
-			class: "marker-dull-pink",
-			title: t("components.editor.highlight.dullPink"),
-			color: "var(--ck-highlight-marker-dull-pink)",
-			type: "marker",
-		},
-		{
-			model: "pinkMarker",
-			class: "marker-pink",
-			title: "Pink marker",
-			color: "var(--ck-highlight-marker-pink)",
-			type: "marker",
-		},
-		{
-			model: "dullYellowMarker",
-			class: "marker-dull-yellow",
-			title: t("components.editor.highlight.dullYellow"),
-			color: "var(--ck-highlight-marker-dull-yellow)",
-			type: "marker",
-		},
-		{
-			model: "yellowMarker",
-			class: "marker-yellow",
-			title: "Yellow marker",
-			color: "var(--ck-highlight-marker-yellow)",
-			type: "marker",
-		},
-		{
-			model: "dullBlueMarker",
-			class: "marker-dull-blue",
-			title: t("components.editor.highlight.dullBlue"),
-			color: "var(--ck-highlight-marker-dull-blue)",
-			type: "marker",
-		},
-		{
-			model: "blueMarker",
-			class: "marker-blue",
-			title: "Blue marker",
-			color: "var(--ck-highlight-marker-blue)",
-			type: "marker",
-		},
-		{
-			model: "dullGreenMarker",
-			class: "marker-dull-green",
-			title: t("components.editor.highlight.dullGreen"),
-			color: "var(--ck-highlight-marker-dull-green)",
-			type: "marker",
-		},
-		{
-			model: "greenMarker",
-			class: "marker-green",
-			title: "Green marker",
-			color: "var(--ck-highlight-marker-green)",
-			type: "marker",
-		},
-	];
-
 	return {
 		boardToolbarSimple,
 		boardToolbarRegular,
@@ -214,6 +154,5 @@ export const useEditorConfig = () => {
 		newsPlugins,
 		boardHeadings,
 		newsHeadings,
-		highlights,
 	};
 };
