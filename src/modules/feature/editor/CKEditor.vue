@@ -15,14 +15,16 @@
 <script>
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import CKEditor from "@ckeditor/ckeditor5-vue";
-import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
+import { BalloonEditor, ClassicEditor } from "@hpi-schul-cloud/ckeditor";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
 import { useMediaQuery, useVModel } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useEditorConfig } from "./editorConfig.composable";
+import { useEditorConfig } from "./EditorConfig.composable";
+import katex from "katex";
+window.katex = katex;
 
 export default defineComponent({
 	name: "CkEditor",
@@ -79,13 +81,7 @@ export default defineComponent({
 		const ck = ref(null);
 		const modelValue = useVModel(props, "value", emit);
 		const editor = computed(() => {
-			if (props.type === "classic") {
-				return CustomCKEditor.ClassicEditor;
-			} else if (props.type === "inline") {
-				return CustomCKEditor.InlineEditor;
-			} else {
-				return CustomCKEditor.BalloonEditor;
-			}
+			return props.type === "classic" ? ClassicEditor : BalloonEditor;
 		});
 
 		const charCount = ref(0);
@@ -134,6 +130,61 @@ export default defineComponent({
 					viewportOffset: {
 						top: 220,
 					},
+				fontColor: {
+					// Using the following colors from the vuetify color palette:
+					// lime-darken-4, green-darken-2, cyan-darken-3, blue-darken-2, indigo, deep-purple, purple, pink-darken-1, red-darken-2
+					// Some colors are translated by CKEditor itself
+					colors: [
+						{
+							color: "#827717",
+							label: t("components.editor.fonts.colors.oliveGreen"),
+						},
+						{ color: "#388E3C", label: "Green" },
+						{ color: "#00838F", label: "Turquoise" },
+						{ color: "#1976D2", label: "Blue" },
+						{
+							color: "#3F51B5",
+							label: t("components.editor.fonts.colors.indigo"),
+						},
+						{
+							color: "#673AB7",
+							label: t("components.editor.fonts.colors.darkPurple"),
+						},
+						{ color: "#9C27B0", label: "Purple" },
+						{
+							color: "#D81B60",
+							label: t("components.editor.fonts.colors.pink"),
+						},
+						{ color: "#D32F2F", label: "Red" },
+					],
+				},
+				fontBackgroundColor: {
+					// Using the following colors from the vuetify color palette:
+					// light-green-lighten-4, green-lighten-4, cyan-lighten-4, blue-lighten-4, indigo-lighten-4, purple-lighten-4, pink-lighten-4, deep-orange-lighten-4, amber-lighten-4
+					// Some colors are translated by CKEditor itself
+					colors: [
+						{ color: "#DCEDC8", label: "Light green" },
+						{ color: "#C8E6C9", label: "Green" },
+						{ color: "#B2EBF2", label: "Turquoise" },
+						{ color: "#BBDEFB", label: "Blue" },
+						{
+							color: "#C5CAE9",
+							label: t("components.editor.fonts.colors.indigo"),
+						},
+						{
+							color: "#E1BEE7",
+							label: t("components.editor.fonts.colors.darkPurple"),
+						},
+						{
+							color: "#F8BBD0",
+							label: t("components.editor.fonts.colors.pink"),
+						},
+						{ color: "#FFCCBC", label: "Orange" },
+						{
+							color: "#FFECB3",
+							label: "Yellow",
+						},
+					],
 				},
 			};
 		});
@@ -174,7 +225,6 @@ export default defineComponent({
 			ck,
 			editor,
 			modelValue,
-			CustomCKEditor,
 			config,
 			charCount,
 			handleBlur,
@@ -188,30 +238,9 @@ export default defineComponent({
 
 <style lang="scss">
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
-
-:root {
-	--ck-highlight-marker-dull-blue: hsl(203, 64%, 86%);
-	--ck-highlight-marker-dull-green: hsl(91, 27%, 85%);
-	--ck-highlight-marker-dull-pink: hsl(341, 57%, 88%);
-	--ck-highlight-marker-dull-yellow: hsl(28, 67%, 86%);
-
-	// z-index must be less than z-index of the headers to prevent that the toolbar is shown in front of the headers when scrolling.
-	--ck-z-modal: 15;
-}
+@import "katex/dist/katex.min.css";
 
 .ck-content {
-	.marker-dull-pink {
-		background-color: var(--ck-highlight-marker-dull-pink);
-	}
-	.marker-dull-yellow {
-		background-color: var(--ck-highlight-marker-dull-yellow);
-	}
-	.marker-dull-blue {
-		background-color: var(--ck-highlight-marker-dull-blue);
-	}
-	.marker-dull-green {
-		background-color: var(--ck-highlight-marker-dull-green);
-	}
 	ul,
 	ol {
 		padding-left: revert;
