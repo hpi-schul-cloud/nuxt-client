@@ -26,6 +26,7 @@
 			v-model="boardLayoutDialogIsOpen"
 			@select="onCreateBoard"
 		/>
+		<LeaveRoomOwnerDialog v-model="isLeaveRoomOwnerDialogOpen" />
 	</DefaultWireframe>
 </template>
 
@@ -47,7 +48,10 @@ import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { SelectBoardLayoutDialog } from "@ui-room-details";
+import {
+	SelectBoardLayoutDialog,
+	LeaveRoomOwnerDialog,
+} from "@ui-room-details";
 import { useTitle } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { computed, ComputedRef, ref } from "vue";
@@ -65,12 +69,14 @@ const roomDetailsStore = useRoomDetailsStore();
 const { room, roomBoards } = storeToRefs(roomDetailsStore);
 const { createBoard } = roomDetailsStore;
 
+const isLeaveRoomOwnerDialogOpen = ref(false);
+
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.roomDetails.title")}`)
 );
 useTitle(pageTitle);
 
-const { canCreateRoom, canDeleteRoom, canEditRoomContent } =
+const { canCreateRoom, canDeleteRoom, canEditRoomContent, canLeaveRoom } =
 	useRoomAuthorization();
 
 const visibleBoards = computed(() =>
@@ -175,6 +181,11 @@ const onDelete = async () => {
 };
 
 const onLeaveRoom = async () => {
+	if (!canLeaveRoom.value) {
+		isLeaveRoomOwnerDialogOpen.value = true;
+		return;
+	}
+
 	const currentUserId = authModule.getUser?.id;
 	const roomId = room.value?.id;
 	if (!currentUserId || !roomId) return;

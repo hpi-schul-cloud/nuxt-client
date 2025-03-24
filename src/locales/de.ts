@@ -1809,6 +1809,8 @@ export default {
 	"pages.rooms.infoAlert.welcome.visibility.help": "Hilfeseite",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "Rückmeldungen",
 	"pages.rooms.leaveRoom.confirmation": 'Raum "{roomName}" wirklich verlassen?',
+	"pages.rooms.leaveRoom.RoomOwner.warning":
+		'Bevor der Raum verlassen werden kann, muss die Raumberechtigung "Besitzen" an ein anderes Raummitglied übertragen werden. Dies kann in der Raum-Mitglieder-Verwaltung erfolgen.',
 	"pages.rooms.leaveRoom.menu": "Raum verlassen",
 	"pages.rooms.members.error.load":
 		"Die Teilnehmenden-Liste konnte nicht geladen werden.",

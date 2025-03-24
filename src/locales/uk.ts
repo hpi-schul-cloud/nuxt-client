@@ -1809,6 +1809,8 @@ export default {
 	"pages.rooms.infoAlert.welcome.visibility.help": "Сторінка допомоги",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "відгуки",
 	"pages.rooms.leaveRoom.confirmation": 'Дійсно залишити місце "{roomName}"?',
+	"pages.rooms.leaveRoom.RoomOwner.warning":
+		"Перш ніж залишити кімнату, дозвіл на володіння кімнатою має бути передано іншому учаснику кімнати. Це можна зробити в управлінні учасниками кімнати.",
 	"pages.rooms.leaveRoom.menu": "Залиште кімнату",
 	"pages.rooms.members.error.load": "Не вдалося завантажити список учасників.",
 	"pages.rooms.members.error.add": "Не вдалося додати учасників.",

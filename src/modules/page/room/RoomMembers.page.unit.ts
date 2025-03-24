@@ -32,6 +32,8 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { LeaveRoomOwnerDialog } from "@ui-room-details";
+import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -218,14 +220,14 @@ describe("RoomMembersPage", () => {
 
 	describe("onLeaveRoom", () => {
 		describe("when user is not room owner", () => {
-			it("should not render leave room button", async () => {
+			it("should render leave room button", async () => {
 				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
 
 				const leaveRoomButton = wrapper.findComponent(
 					'[data-testid="room-member-menu"]'
 				);
 
-				expect(leaveRoomButton.exists()).toBe(false);
+				expect(leaveRoomButton.exists()).toBe(true);
 			});
 		});
 
@@ -278,6 +280,54 @@ describe("RoomMembersPage", () => {
 			await leaveMenu.trigger("click");
 
 			expect(mockRoomMemberCalls.removeMembers).not.toHaveBeenCalled();
+		});
+
+		describe("when user is room owner", () => {
+			it("should render leave room button", async () => {
+				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
+
+				const leaveRoomButton = wrapper.findComponent(
+					'[data-testid="room-member-menu"]'
+				);
+
+				expect(leaveRoomButton.exists()).toBe(true);
+			});
+
+			it("should open leave room owner dialog", async () => {
+				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
+
+				askConfirmationMock.mockResolvedValue(true);
+
+				const menuBtn = wrapper.findComponent(
+					'[data-testid="room-member-menu"]'
+				);
+				await menuBtn.trigger("click");
+
+				const leaveMenuItem = wrapper.findComponent(KebabMenuActionLeaveRoom);
+				await leaveMenuItem.trigger("click");
+
+				const leaveRoomOwnerDialog =
+					wrapper.findComponent(LeaveRoomOwnerDialog);
+
+				expect(leaveRoomOwnerDialog.isVisible()).toBe(true);
+				expect(leaveRoomOwnerDialog.props("modelValue")).toBe(true);
+			});
+
+			it("should not call leaveRoom", async () => {
+				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
+
+				askConfirmationMock.mockResolvedValue(true);
+
+				const menuBtn = wrapper.findComponent(
+					'[data-testid="room-member-menu"]'
+				);
+				await menuBtn.trigger("click");
+
+				const leaveMenuItem = wrapper.findComponent(KebabMenuActionLeaveRoom);
+				await leaveMenuItem.trigger("click");
+
+				expect(mockRoomMemberCalls.leaveRoom).not.toHaveBeenCalled();
+			});
 		});
 	});
 

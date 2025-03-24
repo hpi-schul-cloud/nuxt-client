@@ -84,16 +84,14 @@ describe("@feature-room/RoomMenu", () => {
 		};
 	};
 
-	describe("when user has no permissions", () => {
-		it("should no render menu", async () => {
-			const { menuBtn } = setup();
+	it("should render menu", async () => {
+		const { menuBtn } = setup();
 
-			expect(menuBtn.exists()).toBe(false);
-		});
+		expect(menuBtn.exists()).toBe(true);
 	});
 
 	describe("when user only has edit permission", () => {
-		it("should contain edit menu items", async () => {
+		it("should contain edit menu and leave items", async () => {
 			roomPermissions.canEditRoom.value = true;
 
 			const { wrapper, menuBtn } = setup();
@@ -109,12 +107,12 @@ describe("@feature-room/RoomMenu", () => {
 			expect(kebabActionEdit.exists()).toBe(true);
 			expect(kebabActionRoomMembers.exists()).toBe(false);
 			expect(kebabActionDelete.exists()).toBe(false);
-			expect(kebabActionLeaveRoom.exists()).toBe(false);
+			expect(kebabActionLeaveRoom.exists()).toBe(true);
 		});
 	});
 
 	describe("when user only has delete permission", () => {
-		it("should only contain delete menu item", async () => {
+		it("should only contain delete and leave menu items", async () => {
 			roomPermissions.canDeleteRoom.value = true;
 
 			const { wrapper, menuBtn } = setup();
@@ -130,12 +128,12 @@ describe("@feature-room/RoomMenu", () => {
 			expect(kebabActionDelete.exists()).toBe(true);
 			expect(kebabActionEdit.exists()).toBe(false);
 			expect(kebabActionRoomMembers.exists()).toBe(false);
-			expect(kebabActionLeaveRoom.exists()).toBe(false);
+			expect(kebabActionLeaveRoom.exists()).toBe(true);
 		});
 	});
 
 	describe("when user only has view members permission", () => {
-		it("should only contain room members menu item", async () => {
+		it("should contain room members and leave menu item", async () => {
 			roomPermissions.canViewRoom.value = true;
 
 			const { wrapper, menuBtn } = setup();
@@ -151,7 +149,7 @@ describe("@feature-room/RoomMenu", () => {
 			expect(kebabActionRoomMembers.exists()).toBe(true);
 			expect(kebabActionEdit.exists()).toBe(false);
 			expect(kebabActionDelete.exists()).toBe(false);
-			expect(kebabActionLeaveRoom.exists()).toBe(false);
+			expect(kebabActionLeaveRoom.exists()).toBe(true);
 		});
 	});
 
@@ -160,7 +158,6 @@ describe("@feature-room/RoomMenu", () => {
 			roomPermissions.canViewRoom.value = true;
 			roomPermissions.canEditRoom.value = true;
 			roomPermissions.canDeleteRoom.value = true;
-			roomPermissions.canLeaveRoom.value = true;
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");

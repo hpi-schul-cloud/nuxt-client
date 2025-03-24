@@ -18,17 +18,22 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { useRoomAuthorization } from "@feature-room";
+import { RoomMenu, useRoomAuthorization } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
-import { SelectBoardLayoutDialog } from "@ui-room-details";
+import {
+	SelectBoardLayoutDialog,
+	LeaveRoomOwnerDialog,
+} from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
 import { RoomBoardItem } from "@/types/room/Room";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -52,8 +57,12 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 };
 (useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
 
+jest.mock("@ui-confirmation-dialog");
+jest.mocked(useConfirmationDialog);
+
 describe("@pages/RoomsDetails.page.vue", () => {
 	let useRoomsStateMock: DeepMocked<ReturnType<typeof useRoomsState>>;
+	let askConfirmationMock: jest.Mock;
 
 	beforeEach(() => {
 		setupStores({
@@ -70,6 +79,11 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		const mockMe = meResponseFactory.build();
 		authModule.setMe(mockMe);
+
+		askConfirmationMock = jest.fn();
+		setupConfirmationComposableMock({
+			askConfirmationMock,
+		});
 	});
 
 	afterEach(() => {
@@ -114,6 +128,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 						},
 					}),
 				],
+				stubs: { LeaveRoomOwnerDialog: true },
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
@@ -266,6 +281,46 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				expect(router.push).toHaveBeenCalledWith({
 					name: "room-members",
 					params: { id: room.id },
+				});
+			});
+		});
+
+		describe("when a user clicks on leave room", () => {
+			describe("when user has permission to leave room", () => {
+				it("should call leaveRoom when dialog confirmed", async () => {
+					askConfirmationMock.mockResolvedValue(true);
+					const { wrapper, useRoomsStateMock } = setup();
+
+					const menu = wrapper.getComponent(RoomMenu);
+					await menu.vm.$emit("room:leave");
+
+					expect(useRoomsStateMock.leaveRoom).toHaveBeenCalled();
+				});
+
+				it("should not call leaveRoom when dialog canceled", async () => {
+					askConfirmationMock.mockResolvedValue(false);
+					const { wrapper, useRoomsStateMock } = setup();
+
+					const menu = wrapper.getComponent(RoomMenu);
+					await menu.vm.$emit("room:leave");
+
+					expect(useRoomsStateMock.leaveRoom).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when user has not the permission to leave the room", () => {
+				it("should open leave room owner dialog", async () => {
+					roomPermissions.canLeaveRoom.value = false;
+
+					const { wrapper } = setup();
+
+					const menu = wrapper.getComponent(RoomMenu);
+					await menu.vm.$emit("room:leave");
+					const leaveRoomOwnerDialog =
+						wrapper.getComponent(LeaveRoomOwnerDialog);
+
+					expect(leaveRoomOwnerDialog.isVisible()).toBe(true);
+					expect(leaveRoomOwnerDialog.props("modelValue")).toEqual(true);
 				});
 			});
 		});
