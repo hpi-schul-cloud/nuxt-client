@@ -1,5 +1,9 @@
 <template>
-	<div class="d-flex flex-wrap mb-4 mt-2" ref="columnHeader">
+	<div
+		id="boardColumnHeader"
+		class="d-flex flex-wrap mb-4 mt-2"
+		ref="columnHeader"
+	>
 		<div class="flex-1-0">
 			<BoardColumnInteractionHandler
 				:isEditMode="isEditMode && canEditRoomBoard"

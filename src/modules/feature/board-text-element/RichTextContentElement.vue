@@ -10,6 +10,7 @@
 			class="rich_text"
 			:autofocus="autofocus"
 			:value="modelValue.text"
+			:columnIndex="columnIndex"
 			@update:value="onUpdateElement"
 			@delete:element="onDeleteElement"
 			@blur="onBlur"
@@ -38,6 +39,7 @@ export default defineComponent({
 			required: true,
 		},
 		isEditMode: { type: Boolean, required: true },
+		columnIndex: { type: Number, required: true },
 	},
 	emits: ["delete:element"],
 	setup(props, { emit }) {

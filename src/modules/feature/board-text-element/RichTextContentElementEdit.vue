@@ -32,36 +32,60 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
+		columnIndex: {
+			type: Number,
+			required: true,
+		},
 	},
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = ref("");
 
 		const isListBoard = inject(BOARD_IS_LIST_LAYOUT, ref(false));
+
 		const ckeditorViewportOffsetTop = computed(() => {
-			const topbarHeight = window
-				.getComputedStyle(document.documentElement)
-				.getPropertyValue("--topbar-height");
+			const documentStyle = window.getComputedStyle(document.documentElement);
 
-			const breadcrumbsHeight = window
-				.getComputedStyle(document.documentElement)
-				.getPropertyValue("--breadcrumbs-height");
+			const topbarHeight = documentStyle.getPropertyValue("--topbar-height");
+			const breadcrumbsHeight = documentStyle.getPropertyValue(
+				"--breadcrumbs-height"
+			);
+			const boardHeaderHeight = documentStyle.getPropertyValue(
+				"--board-header-height"
+			);
 
-			const boardHeaderHeight = window
-				.getComputedStyle(document.documentElement)
-				.getPropertyValue("--board-header-height");
-
-			const staticOffsetTop =
+			const staticOffset =
 				parseInt(topbarHeight) +
 				parseInt(breadcrumbsHeight) +
 				parseInt(boardHeaderHeight);
 
-			// TODO: Get this value from CSS.
-			const columnHeaderHeight = 76;
+			let offset = 0;
 
-			return isListBoard.value
-				? staticOffsetTop
-				: staticOffsetTop + columnHeaderHeight;
+			if (isListBoard.value) {
+				offset = staticOffset;
+			} else {
+				const currentColumnHeader = document.querySelector<HTMLElement>(
+					`.multi-column-board-column:nth-child(${props.columnIndex + 1}) #boardColumnHeader`
+				);
+
+				if (!currentColumnHeader) {
+					throw new Error(
+						`Could not find column header for column index ${props.columnIndex}`
+					);
+				}
+
+				const height = currentColumnHeader.offsetHeight;
+
+				const columnHeaderStyle = window.getComputedStyle(currentColumnHeader);
+				const marginTop = columnHeaderStyle.getPropertyValue("margin-top");
+				const marginBottom =
+					columnHeaderStyle.getPropertyValue("margin-bottom");
+
+				offset =
+					staticOffset + height + parseInt(marginTop) + parseInt(marginBottom);
+			}
+
+			return offset;
 		});
 
 		onMounted(() => {
