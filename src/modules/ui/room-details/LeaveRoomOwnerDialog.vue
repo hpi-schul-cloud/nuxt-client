@@ -13,9 +13,11 @@
 					</h2>
 				</template>
 				<template #text>
-					<WarningAlert>
-						{{ t("pages.rooms.leaveRoom.RoomOwner.warning") }}
-					</WarningAlert>
+					<span class="warning-text">
+						<WarningAlert>
+							{{ t("pages.rooms.leaveRoom.RoomOwner.warning") }}
+						</WarningAlert>
+					</span>
 				</template>
 				<template #actions>
 					<VSpacer />
@@ -48,3 +50,8 @@ const isOpen = defineModel({
 	required: true,
 });
 </script>
+<style lang="scss" scoped>
+.warning-text {
+	font-size: 16px;
+}
+</style>
