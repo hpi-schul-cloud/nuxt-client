@@ -8,7 +8,7 @@
 		<UseFocusTrap>
 			<VCard>
 				<template #title>
-					<h2 class="text-h4 mt-2">
+					<h2 class="text-h4 mt-2" data-testid="dialog-title">
 						{{ t("pages.rooms.leaveRoom.menu") }}
 					</h2>
 				</template>
@@ -21,7 +21,7 @@
 					<VSpacer />
 					<div class="mr-4 mb-3">
 						<VBtn
-							data-testid="dialog-confirm"
+							data-testid="dialog-close"
 							class="px-6"
 							variant="outlined"
 							:text="t('common.labels.close')"
