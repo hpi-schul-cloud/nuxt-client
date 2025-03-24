@@ -38,9 +38,31 @@ export default defineComponent({
 		const modelValue = ref("");
 
 		const isListBoard = inject(BOARD_IS_LIST_LAYOUT, ref(false));
-		const ckeditorViewportOffsetTop = computed(() =>
-			isListBoard.value ? 152 : 220
-		);
+		const ckeditorViewportOffsetTop = computed(() => {
+			const topbarHeight = window
+				.getComputedStyle(document.documentElement)
+				.getPropertyValue("--topbar-height");
+
+			const breadcrumbsHeight = window
+				.getComputedStyle(document.documentElement)
+				.getPropertyValue("--breadcrumbs-height");
+
+			const boardHeaderHeight = window
+				.getComputedStyle(document.documentElement)
+				.getPropertyValue("--board-header-height");
+
+			const staticOffsetTop =
+				parseInt(topbarHeight) +
+				parseInt(breadcrumbsHeight) +
+				parseInt(boardHeaderHeight);
+
+			// TODO: Get this value from CSS.
+			const columnHeaderHeight = 76;
+
+			return isListBoard.value
+				? staticOffsetTop
+				: staticOffsetTop + columnHeaderHeight;
+		});
 
 		onMounted(() => {
 			if (props.value !== undefined) {
