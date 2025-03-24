@@ -186,6 +186,11 @@ export const useCardStore = defineStore("cardStore", () => {
 				payload.elementId,
 				payload.cardId
 			);
+
+			if (previousId === payload.cardId) {
+				setEditModeId(payload.cardId);
+			}
+
 			if (!previousId) return;
 			forceFocus(previousId);
 		}
@@ -194,8 +199,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		if (index !== undefined && index > -1) {
 			card.elements.splice(index, 1);
 		}
-
-		setEditModeId(payload.cardId);
 	};
 
 	const updateElementRequest = socketOrRest.updateElementRequest;
@@ -228,6 +231,10 @@ export const useCardStore = defineStore("cardStore", () => {
 		const previousElement = elements[elementIndex - 1];
 		const { setEditModeId } = useSharedEditMode();
 		setEditModeId(cardId);
+
+		if (elementIndex <= 0) {
+			return cardId;
+		}
 
 		if (previousElement.type === ContentElementType.RichText) {
 			return getPreviousElementId(previousElement.id, cardId);
