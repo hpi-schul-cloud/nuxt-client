@@ -2,14 +2,21 @@ import InlineEditInteractionHandler from "./InlineEditInteractionHandler.vue";
 import { createTestingVuetify } from "@@/tests/test-utils/setup";
 
 describe("InlineEditInteractionHandler", () => {
-	const setup = () => {
-		document.body.setAttribute("data-app", "true");
+	const setup = (
+		options?: Partial<{
+			isEditMode: boolean;
+		}>
+	) => {
+		const { isEditMode } = {
+			isEditMode: false,
+			...options,
+		};
 
 		const wrapper = mount(InlineEditInteractionHandler, {
 			global: {
 				plugins: [createTestingVuetify()],
 			},
-			propsData: { isEditMode: false },
+			props: { isEditMode },
 		});
 
 		return { wrapper };
@@ -25,11 +32,9 @@ describe("InlineEditInteractionHandler", () => {
 	});
 
 	describe("when clicked outside", () => {
-		it("should emit 'end-edit-mode'", async () => {
+		it("should emit 'end-edit-mode'", () => {
 			const event = document.createEvent("MouseEvent");
-			const { wrapper } = setup();
-			wrapper.setProps({ isEditMode: true });
-			await wrapper.vm.$nextTick();
+			const { wrapper } = setup({ isEditMode: true });
 
 			const outsideHandler = wrapper.findComponent({ name: "OnClickOutside" });
 			outsideHandler.vm.$emit("trigger", event);
@@ -39,7 +44,7 @@ describe("InlineEditInteractionHandler", () => {
 		});
 
 		describe("when clicked element is in allowedTarget", () => {
-			it("should not emit 'end-edit-mode' if the target is LinkElement", async () => {
+			it("should not emit 'end-edit-mode' if the target is LinkElement", () => {
 				const event = document.createEvent("MouseEvent");
 				const linkElement = document.createElement("a");
 				linkElement.setAttribute("href", "https://www.test.url");
@@ -53,9 +58,7 @@ describe("InlineEditInteractionHandler", () => {
 					writable: false,
 				});
 
-				const { wrapper } = setup();
-				wrapper.setProps({ isEditMode: true });
-				await wrapper.vm.$nextTick();
+				const { wrapper } = setup({ isEditMode: true });
 
 				const outsideHandler = wrapper.findComponent({
 					name: "OnClickOutside",
@@ -66,7 +69,7 @@ describe("InlineEditInteractionHandler", () => {
 				expect(emitted["end-edit-mode"]).toBeUndefined();
 			});
 
-			it("should not emit 'end-edit-mode' if the target is DatePicker", async () => {
+			it("should not emit 'end-edit-mode' if the target is DatePicker", () => {
 				const event = document.createEvent("MouseEvent");
 				const datePickerElement = document.createElement("div");
 				datePickerElement.classList.add("v-date-picker");
@@ -76,9 +79,7 @@ describe("InlineEditInteractionHandler", () => {
 					writable: false,
 				});
 
-				const { wrapper } = setup();
-				wrapper.setProps({ isEditMode: true });
-				await wrapper.vm.$nextTick();
+				const { wrapper } = setup({ isEditMode: true });
 
 				const outsideHandler = wrapper.findComponent({
 					name: "OnClickOutside",
@@ -89,7 +90,7 @@ describe("InlineEditInteractionHandler", () => {
 				expect(emitted["end-edit-mode"]).toBeUndefined();
 			});
 
-			it("should not emit 'end-edit-mode' if the target is ListItem", async () => {
+			it("should not emit 'end-edit-mode' if the target is ListItem", () => {
 				const event = document.createEvent("MouseEvent");
 				const listItemElement = document.createElement("div");
 				listItemElement.classList.add("v-list-item");
@@ -99,9 +100,7 @@ describe("InlineEditInteractionHandler", () => {
 					writable: false,
 				});
 
-				const { wrapper } = setup();
-				wrapper.setProps({ isEditMode: true });
-				await wrapper.vm.$nextTick();
+				const { wrapper } = setup({ isEditMode: true });
 
 				const outsideHandler = wrapper.findComponent({
 					name: "OnClickOutside",
@@ -125,10 +124,8 @@ describe("InlineEditInteractionHandler", () => {
 		});
 
 		describe("when 'esc' keystoke", () => {
-			it("should emit 'end-edit-mode'", async () => {
-				const { wrapper } = setup();
-				wrapper.setProps({ isEditMode: true });
-				await wrapper.vm.$nextTick();
+			it("should emit 'end-edit-mode'", () => {
+				const { wrapper } = setup({ isEditMode: true });
 
 				const divElement = wrapper.find('[data-testid="event-handle"]');
 				divElement.trigger("keydown.escape");
