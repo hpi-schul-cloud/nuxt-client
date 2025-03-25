@@ -10,13 +10,20 @@ import {
 import { shallowMount } from "@vue/test-utils";
 import { ComponentProps } from "vue-component-type-helpers";
 import CardHostDetailView from "./CardHostDetailView.vue";
+import { useBoardPermissions } from "@data-board";
+import { defaultPermissions } from "@/types/board/Permissions";
 
 const CARD_WITH_ELEMENTS: CardResponse = cardResponseFactory.build({
 	elements: [fileElementResponseFactory.build()],
 });
 
+jest.mock("@data-board/BoardPermissions.composable");
+const boardPermissions = jest.mocked(useBoardPermissions);
+
 describe("CardHostDetailView", () => {
 	const setup = (props: ComponentProps<typeof CardHostDetailView>) => {
+		boardPermissions.mockReturnValue(defaultPermissions);
+
 		const wrapper = shallowMount(CardHostDetailView, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
