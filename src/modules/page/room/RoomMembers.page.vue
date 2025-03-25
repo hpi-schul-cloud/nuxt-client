@@ -12,11 +12,7 @@
 				<h1 class="text-h3 mb-4" data-testid="room-title">
 					{{ t("pages.rooms.members.manage") }}
 				</h1>
-				<KebabMenu
-					v-if="canLeaveRoom"
-					class="mx-2"
-					data-testid="room-member-menu"
-				>
+				<KebabMenu class="mx-2" data-testid="room-member-menu">
 					<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
 				</KebabMenu>
 			</div>
@@ -86,6 +82,7 @@
 		</v-dialog>
 	</DefaultWireframe>
 	<ConfirmationDialog />
+	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 </template>
 
 <script setup lang="ts">
@@ -117,6 +114,7 @@ import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
+import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -126,6 +124,7 @@ const { xs, mdAndDown } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 const isMembersDialogOpen = ref(false);
 const isChangeRoleDialogOpen = ref(false);
+const isLeaveRoomProhibitedDialogOpen = ref(false);
 const roomId = route.params.id.toString();
 const {
 	isLoading,
@@ -187,6 +186,10 @@ const onRemoveMembers = async (userIds: string[]) => {
 };
 
 const onLeaveRoom = async () => {
+	if (!canLeaveRoom.value) {
+		isLeaveRoomProhibitedDialogOpen.value = true;
+		return;
+	}
 	const shouldLeave = await askConfirmation({
 		message: t("pages.rooms.leaveRoom.confirmation", {
 			roomName: room.value?.name,
