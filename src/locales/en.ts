@@ -1784,6 +1784,8 @@ export default {
 	"pages.rooms.infoAlert.welcome.visibility.help": "help page",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "feedback",
 	"pages.rooms.leaveRoom.confirmation": 'Leave room "{roomName}"?',
+	"pages.rooms.leaveRoom.RoomOwner.warning":
+		"Before the room can be left, the room ownership permission must be transferred to another room member. This can be done in the room member management.",
 	"pages.rooms.leaveRoom.menu": "Leave room",
 	"pages.rooms.members.error.load": "The participant list could not be loaded.",
 	"pages.rooms.members.error.add": "Adding participants failed.",
@@ -1795,6 +1797,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add members",
+	"pages.rooms.members.add.infoText":
+		"Multiple people can only be added in one step if they belong to the same school and school role.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Action menu for {memberFullName}",
 	"pages.rooms.members.changePermission": "Change room permissions",

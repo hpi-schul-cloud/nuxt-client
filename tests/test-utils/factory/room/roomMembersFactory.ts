@@ -4,14 +4,14 @@ import { RoomMember } from "@data-room";
 
 export const roomMemberFactory = (
 	roomRoleName = RoleName.Roomowner,
-	schoolRoleName = RoleName.Teacher
+	schoolRoleNames = [RoleName.Teacher]
 ) =>
 	Factory.define<RoomMember>(({ sequence }) => ({
 		userId: `member${sequence}`,
 		firstName: `firstName${sequence}`,
 		lastName: `lastName${sequence}`,
 		roomRoleName,
-		schoolRoleName,
+		schoolRoleNames,
 		schoolName: "Paul-Gerhardt-Gymnasium",
 		displayRoomRole: `displayRoomRole${sequence}`,
 		displaySchoolRole: `displaySchoolRole${sequence}`,
@@ -25,7 +25,7 @@ export const roomMemberListFactory = Factory.define<RoomMember>(
 		lastName: `lastName${sequence}`,
 		fullName: `lastName${sequence}, firstName${sequence}`,
 		roomRoleName: RoleName.Roomadmin,
-		schoolRoleName: RoleName.Teacher,
+		schoolRoleNames: [RoleName.Teacher],
 		schoolName: "Paul-Gerhardt-Gymnasium",
 		displayRoomRole: `displayRoomRole${sequence}`,
 		displaySchoolRole: `displaySchoolRole${sequence}`,

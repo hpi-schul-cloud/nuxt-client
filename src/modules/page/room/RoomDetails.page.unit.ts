@@ -7,7 +7,10 @@ import {
 	meResponseFactory,
 	mockedPiniaStoreTyping,
 } from "@@/tests/test-utils";
-import { roomFactory } from "@@/tests/test-utils/factory/room";
+import {
+	roomBoardTileListFactory,
+	roomFactory,
+} from "@@/tests/test-utils/factory/room";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
@@ -15,16 +18,22 @@ import {
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { useRoomAuthorization } from "@feature-room";
+import { RoomMenu, useRoomAuthorization } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";
-import { SelectBoardLayoutDialog } from "@ui-room-details";
+import {
+	SelectBoardLayoutDialog,
+	LeaveRoomProhibitedDialog,
+} from "@ui-room-details";
 import { flushPromises, VueWrapper } from "@vue/test-utils";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { authModule } from "@/store";
 import AuthModule from "@/store/auth";
+import { RoomBoardItem } from "@/types/room/Room";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -35,21 +44,15 @@ jest.mock("vue-router", () => ({
 jest.mock("@data-room/Rooms.state");
 
 jest.mock("@feature-room/roomAuthorization.composable");
-const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
-	canAddRoomMembers: ref(false),
-	canChangeOwner: ref(false),
-	canCreateRoom: ref(false),
-	canViewRoom: ref(false),
-	canEditRoom: ref(false),
-	canDeleteRoom: ref(false),
-	canLeaveRoom: ref(true),
-	canRemoveRoomMembers: ref(false),
-	canEditRoomBoard: ref(false),
-};
-(useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
+const roomAuthorization = jest.mocked(useRoomAuthorization);
+
+jest.mock("@ui-confirmation-dialog");
+jest.mocked(useConfirmationDialog);
 
 describe("@pages/RoomsDetails.page.vue", () => {
 	let useRoomsStateMock: DeepMocked<ReturnType<typeof useRoomsState>>;
+	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
+	let askConfirmationMock: jest.Mock;
 
 	beforeEach(() => {
 		setupStores({
@@ -66,6 +69,24 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		const mockMe = meResponseFactory.build();
 		authModule.setMe(mockMe);
+
+		askConfirmationMock = jest.fn();
+		setupConfirmationComposableMock({
+			askConfirmationMock,
+		});
+
+		roomPermissions = {
+			canAddRoomMembers: ref(false),
+			canChangeOwner: ref(false),
+			canCreateRoom: ref(false),
+			canViewRoom: ref(false),
+			canEditRoom: ref(false),
+			canDeleteRoom: ref(false),
+			canLeaveRoom: ref(true),
+			canRemoveRoomMembers: ref(false),
+			canEditRoomContent: ref(false),
+		};
+		roomAuthorization.mockReturnValue(roomPermissions);
 	});
 
 	afterEach(() => {
@@ -73,14 +94,17 @@ describe("@pages/RoomsDetails.page.vue", () => {
 	});
 
 	const setup = (
-		{
-			undefinedRoom,
-			envs,
-		}: {
-			undefinedRoom?: boolean;
-			envs?: Partial<serverApi.ConfigResponse>;
-		} = { undefinedRoom: false }
+		options?: Partial<{
+			undefinedRoom: boolean;
+			envs: Partial<serverApi.ConfigResponse>;
+			roomBoards: RoomBoardItem[];
+		}>
 	) => {
+		const { undefinedRoom, envs, roomBoards } = {
+			undefinedRoom: false,
+			roomBoards: [],
+			...options,
+		};
 		const envConfigModule = createModuleMocks(EnvConfigModule, {
 			getEnv: envsFactory.build({
 				FEATURE_BOARD_LAYOUT_ENABLED: true,
@@ -89,7 +113,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 			}),
 		});
 
-		const room = roomFactory.build();
+		const room = roomFactory.build({});
 
 		const wrapper = mount(RoomDetailsPage, {
 			global: {
@@ -102,11 +126,12 @@ describe("@pages/RoomsDetails.page.vue", () => {
 								isLoading: false,
 								room: undefinedRoom ? undefined : room,
 								roomVariant: RoomVariant.ROOM,
-								roomBoards: [],
+								roomBoards,
 							},
 						},
 					}),
 				],
+				stubs: { LeaveRoomProhibitedDialog: true },
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
 				},
@@ -182,7 +207,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 		describe("and user has permission to edit or delete room", () => {
 			it("should render kebab menu", () => {
-				roomPermissions.canEditRoom.value = true;
+				roomPermissions.canEditRoomContent.value = true;
 				roomPermissions.canDeleteRoom.value = false;
 
 				const { wrapper } = setup();
@@ -194,16 +219,17 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		});
 
 		describe("and user does not have permission to edit, leave nor to delete room", () => {
-			it("should not render kebab menu", () => {
-				roomPermissions.canEditRoom.value = false;
+			it("should render kebab menu", () => {
+				roomPermissions.canEditRoomContent.value = false;
 				roomPermissions.canDeleteRoom.value = false;
 				roomPermissions.canLeaveRoom.value = false;
+				roomPermissions.canViewRoom.value = true;
 
 				const { wrapper } = setup();
 
 				const menu = wrapper.findComponent({ name: "RoomMenu" });
 
-				expect(menu.exists()).toBe(false);
+				expect(menu.exists()).toBe(true);
 			});
 		});
 	});
@@ -226,7 +252,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 
 	describe("when using the menu", () => {
 		beforeEach(() => {
-			roomPermissions.canEditRoom.value = true;
+			roomPermissions.canEditRoomContent.value = true;
 			roomPermissions.canDeleteRoom.value = true;
 		});
 
@@ -261,6 +287,47 @@ describe("@pages/RoomsDetails.page.vue", () => {
 				});
 			});
 		});
+
+		describe("when a user clicks on leave room", () => {
+			describe("when user has permission to leave room", () => {
+				it("should call leaveRoom when dialog confirmed", async () => {
+					askConfirmationMock.mockResolvedValue(true);
+					const { wrapper, useRoomsStateMock } = setup();
+
+					const menu = wrapper.getComponent(RoomMenu);
+					await menu.vm.$emit("room:leave");
+
+					expect(useRoomsStateMock.leaveRoom).toHaveBeenCalled();
+				});
+
+				it("should not call leaveRoom when dialog canceled", async () => {
+					askConfirmationMock.mockResolvedValue(false);
+					const { wrapper, useRoomsStateMock } = setup();
+
+					const menu = wrapper.getComponent(RoomMenu);
+					await menu.vm.$emit("room:leave");
+
+					expect(useRoomsStateMock.leaveRoom).not.toHaveBeenCalled();
+				});
+			});
+
+			describe("when user has not the permission to leave the room", () => {
+				it("should open leave room prohibited dialog", async () => {
+					roomPermissions.canLeaveRoom.value = false;
+
+					const { wrapper } = setup();
+
+					const menu = wrapper.getComponent(RoomMenu);
+					await menu.vm.$emit("room:leave");
+					const leaveRoomProhibitedDialog = wrapper.getComponent(
+						LeaveRoomProhibitedDialog
+					);
+
+					expect(leaveRoomProhibitedDialog.isVisible()).toBe(true);
+					expect(leaveRoomProhibitedDialog.props("modelValue")).toEqual(true);
+				});
+			});
+		});
 	});
 
 	describe("when user wants to create a board", () => {
@@ -286,6 +353,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		describe("and multiple board layouts are enabled", () => {
 			beforeEach(() => {
 				roomPermissions.canCreateRoom.value = true;
+				roomPermissions.canEditRoomContent.value = true;
 			});
 
 			const openDialog = async (wrapper: VueWrapper) => {
@@ -362,7 +430,7 @@ describe("@pages/RoomsDetails.page.vue", () => {
 		describe("and only column board is enabled", () => {
 			beforeEach(() => {
 				roomPermissions.canCreateRoom.value = true;
-				roomPermissions.canEditRoom.value = true;
+				roomPermissions.canEditRoomContent.value = true;
 			});
 
 			it("should not render dialog", () => {
@@ -411,6 +479,46 @@ describe("@pages/RoomsDetails.page.vue", () => {
 					serverApi.BoardLayout.Columns,
 					"pages.roomDetails.board.defaultName"
 				);
+			});
+		});
+	});
+
+	describe("when some boards are in draft mode", () => {
+		const setupWithBoards = (totalCount = 3, inDraftMode = 1) => {
+			const visibleCount = totalCount - inDraftMode;
+			const visibleBoards = roomBoardTileListFactory.buildList(visibleCount);
+			const draftBoards = roomBoardTileListFactory.buildList(inDraftMode, {
+				isVisible: false,
+			});
+			const roomBoards = [...visibleBoards, ...draftBoards];
+			const { wrapper } = setup({ roomBoards });
+			return {
+				wrapper,
+				visibleCount,
+				draftCount: draftBoards.length,
+				totalCount,
+			};
+		};
+
+		describe("when user canEditRoomContent", () => {
+			it("should render board tiles in draft mode", () => {
+				roomPermissions.canEditRoomContent.value = true;
+				const { wrapper, totalCount } = setupWithBoards();
+
+				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
+
+				expect(boardTiles.length).toStrictEqual(totalCount);
+			});
+		});
+
+		describe("when user can not edit room content", () => {
+			it("should not render board tiles in draft mode", () => {
+				roomPermissions.canEditRoomContent.value = false;
+				const { wrapper, visibleCount } = setupWithBoards();
+
+				const boardTiles = wrapper.findAllComponents({ name: "BoardTile" });
+
+				expect(boardTiles.length).toStrictEqual(visibleCount);
 			});
 		});
 	});
