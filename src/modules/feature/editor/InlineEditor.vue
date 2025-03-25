@@ -2,7 +2,7 @@
 	<Editor
 		ref="ck"
 		v-model="modelValue"
-		:editor="CustomCKEditor.InlineEditor"
+		:editor="InlineEditor"
 		:config="config"
 		data-testid="ckeditor"
 		:disabled="disabled"
@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import CKEditor from "@ckeditor/ckeditor5-vue";
-import CustomCKEditor from "@hpi-schul-cloud/ckeditor";
+import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
