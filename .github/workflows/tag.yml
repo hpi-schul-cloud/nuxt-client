@@ -17,6 +17,8 @@ jobs:
         tenants: [default, brb, n21, thr]
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Docker meta Service Name
         id: docker_meta_img_hub
