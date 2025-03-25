@@ -1,30 +1,32 @@
 <template>
 	<div class="d-flex align-items-center board-header">
-		<InlineEditInteractionHandler
-			:isEditMode="isEditMode && canEditRoomBoard"
-			@start-edit-mode="onStartEditMode"
-			@end-edit-mode="onEndEditMode"
-			@keydown.enter="onStartEditMode"
-			tabindex="0"
-			:id="boardId"
-		>
-			<div ref="boardHeader">
-				<BoardAnyTitleInput
-					class="ml-n4"
-					ref="boardHeader"
-					scope="board"
-					:value="boardTitle"
-					data-testid="board-title"
-					:isEditMode="isEditMode && canEditRoomBoard"
-					:isFocused="isFocusedById"
-					:maxLength="100"
-					:style="{ width: `${fieldWidth}px` }"
-					@update:value="updateBoardTitle"
-					@blur="onBoardTitleBlur"
-				/>
-				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
-			</div>
-		</InlineEditInteractionHandler>
+		<div class="board-header--item">
+			<InlineEditInteractionHandler
+				:isEditMode="isEditMode && canEditRoomBoard"
+				@start-edit-mode="onStartEditMode"
+				@end-edit-mode="onEndEditMode"
+				@keydown.enter="onStartEditMode"
+				tabindex="0"
+				:id="boardId"
+			>
+				<div ref="boardHeader">
+					<BoardAnyTitleInput
+						class="ml-n4 board-header--input"
+						ref="boardHeader"
+						scope="board"
+						:value="boardTitle"
+						data-testid="board-title"
+						:isEditMode="isEditMode && canEditRoomBoard"
+						:isFocused="isFocusedById"
+						:maxLength="100"
+						:style="{ width: `${fieldWidth + 1}px` }"
+						@update:value="updateBoardTitle"
+						@blur="onBoardTitleBlur"
+					/>
+					<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
+				</div>
+			</InlineEditInteractionHandler>
+		</div>
 		<div class="d-flex">
 			<BoardDraftChip v-if="isDraft" />
 			<div class="mx-2">
@@ -213,5 +215,13 @@ watchEffect(() => {
 	font-size: var(--heading-3);
 	font-family: var(--font-accent);
 	letter-spacing: $field-letter-spacing;
+}
+
+.board-header--item {
+	overflow: hidden;
+}
+
+.board-header--input {
+	max-width: calc(100% + 1.5rem);
 }
 </style>
