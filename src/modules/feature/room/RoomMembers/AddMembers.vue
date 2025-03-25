@@ -165,3 +165,9 @@ const onAutocompleteToggle = () => {
 	}
 };
 </script>
+<style lang="scss" scoped>
+// show focus indicator for chips on safari
+:deep(.v-chip) {
+	overflow: unset !important;
+}
+</style>
