@@ -336,6 +336,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
     MediaSchoolLicenseAdmin = 'MEDIA_SCHOOL_LICENSE_ADMIN',
+    MediaSourceAdmin = 'MEDIA_SOURCE_ADMIN',
     NewsCreate = 'NEWS_CREATE',
     NewsEdit = 'NEWS_EDIT',
     NewsView = 'NEWS_VIEW',
@@ -456,13 +457,13 @@ export interface AuthorizedReponse {
  */
 export interface BasicToolConfigParams {
     /**
-     * 
-     * @type {string}
+     * Configuration type of the tool.
+     * @type {ToolConfigType}
      * @memberof BasicToolConfigParams
      */
-    type: string;
+    type: ToolConfigType;
     /**
-     * 
+     * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
      * @type {string}
      * @memberof BasicToolConfigParams
      */
@@ -707,10 +708,10 @@ export interface BoardResponse {
     isVisible: boolean;
     /**
      * 
-     * @type {string}
+     * @type {BoardLayout}
      * @memberof BoardResponse
      */
-    layout: string;
+    layout: BoardLayout;
     /**
      * 
      * @type {Array<BoardFeature>}
@@ -2026,19 +2027,19 @@ export interface ContextExternalToolConfigurationTemplateResponse {
  */
 export interface ContextExternalToolCountPerContextResponse {
     /**
-     * 
+     * Amount of usages in courses
      * @type {number}
      * @memberof ContextExternalToolCountPerContextResponse
      */
     course: number;
     /**
-     * 
+     * Amount of usages in boards
      * @type {number}
      * @memberof ContextExternalToolCountPerContextResponse
      */
     boardElement: number;
     /**
-     * 
+     * Amount of usages in media boards
      * @type {number}
      * @memberof ContextExternalToolCountPerContextResponse
      */
@@ -2787,71 +2788,82 @@ export interface CustomParameterEntryResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum CustomParameterLocationParams {
+    Path = 'path',
+    Body = 'body',
+    Query = 'query'
+}
+
+/**
+ * 
+ * @export
  * @interface CustomParameterPostParams
  */
 export interface CustomParameterPostParams {
     /**
-     * 
+     * Technical name of the parameter that is send to the tool provider.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     name: string;
     /**
-     * 
+     * Display name that is shown in the user interface.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     displayName: string;
     /**
-     * 
+     * Additional description of the parameter in the user interface.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     description?: string;
     /**
-     * 
+     * Pre-fill value for the parameter. Required for global parameters.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     defaultValue?: string;
     /**
-     * 
+     * Regular expression to limit user input for this field.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     regex?: string;
     /**
-     * 
+     * A description for the regex.
      * @type {string}
      * @memberof CustomParameterPostParams
      */
     regexComment?: string;
     /**
-     * 
-     * @type {string}
+     * Scope where the parameter has to be configured.
+     * @type {CustomParameterScopeTypeParams}
      * @memberof CustomParameterPostParams
      */
-    scope: string;
+    scope: CustomParameterScopeTypeParams;
     /**
-     * 
-     * @type {string}
+     * Location where the parameter is transmitted in the HTTP request to the tool provider.
+     * @type {CustomParameterLocationParams}
      * @memberof CustomParameterPostParams
      */
-    location: string;
+    location: CustomParameterLocationParams;
     /**
-     * 
-     * @type {string}
+     * Input field type. Auto parameters have to be global and cannot have a defaultValue.
+     * @type {CustomParameterTypeParams}
      * @memberof CustomParameterPostParams
      */
-    type: string;
+    type: CustomParameterTypeParams;
     /**
-     * 
+     * If true, the parameter does not have to be filled out during configuration.
      * @type {boolean}
      * @memberof CustomParameterPostParams
      */
     isOptional: boolean;
     /**
-     * 
+     * If true, the parameter value is not copied to other contexts.
      * @type {boolean}
      * @memberof CustomParameterPostParams
      */
@@ -2864,96 +2876,89 @@ export interface CustomParameterPostParams {
  */
 export interface CustomParameterResponse {
     /**
-     * 
+     * Technical name of the parameter that is send to the tool provider.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     name: string;
     /**
-     * 
+     * Display name that is shown in the user interface.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     displayName: string;
     /**
-     * 
+     * Additional description of the parameter in the user interface.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     description?: string;
     /**
-     * 
+     * Pre-fill value for the parameter. Required for global parameters.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     defaultValue?: string;
     /**
-     * 
+     * Regular expression to limit user input for this field.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     regex?: string;
     /**
-     * 
+     * A description for the regex.
      * @type {string}
      * @memberof CustomParameterResponse
      */
     regexComment?: string;
     /**
-     * 
-     * @type {string}
+     * Scope where the parameter has to be configured.
+     * @type {CustomParameterScopeTypeParams}
      * @memberof CustomParameterResponse
      */
-    scope: CustomParameterResponseScopeEnum;
+    scope: CustomParameterScopeTypeParams;
     /**
-     * 
-     * @type {string}
+     * Location where the parameter is transmitted in the HTTP request to the tool provider.
+     * @type {CustomParameterLocationParams}
      * @memberof CustomParameterResponse
      */
-    location: CustomParameterResponseLocationEnum;
+    location: CustomParameterLocationParams;
     /**
-     * 
-     * @type {string}
+     * Input field type. Auto parameters have to be global and cannot have a defaultValue.
+     * @type {CustomParameterTypeParams}
      * @memberof CustomParameterResponse
      */
-    type: CustomParameterResponseTypeEnum;
+    type: CustomParameterTypeParams;
     /**
-     * 
+     * If true, the parameter does not have to be filled out during configuration.
      * @type {boolean}
      * @memberof CustomParameterResponse
      */
     isOptional: boolean;
     /**
-     * 
+     * If true, the parameter value is not copied to other contexts.
      * @type {boolean}
      * @memberof CustomParameterResponse
      */
     isProtected: boolean;
 }
-
 /**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterResponseScopeEnum {
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum CustomParameterScopeTypeParams {
     Global = 'global',
     School = 'school',
     Context = 'context'
 }
+
 /**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterResponseLocationEnum {
-    Path = 'path',
-    Body = 'body',
-    Query = 'query'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterResponseTypeEnum {
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum CustomParameterTypeParams {
     String = 'string',
     Number = 'number',
     Boolean = 'boolean',
@@ -3453,6 +3458,56 @@ export interface ExternalToolElementResponse {
 /**
  * 
  * @export
+ * @interface ExternalToolImportResultListResponse
+ */
+export interface ExternalToolImportResultListResponse {
+    /**
+     * List of operation results for the provided external tools
+     * @type {Array<ExternalToolImportResultResponse>}
+     * @memberof ExternalToolImportResultListResponse
+     */
+    results: Array<ExternalToolImportResultResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolImportResultResponse
+ */
+export interface ExternalToolImportResultResponse {
+    /**
+     * Name of the external tool
+     * @type {string}
+     * @memberof ExternalToolImportResultResponse
+     */
+    toolName: string;
+    /**
+     * Medium id of the external tool
+     * @type {string}
+     * @memberof ExternalToolImportResultResponse
+     */
+    mediumId: string;
+    /**
+     * Medium source of the external tool
+     * @type {string}
+     * @memberof ExternalToolImportResultResponse
+     */
+    mediumSourceId: string;
+    /**
+     * ObjectId of the created external tool
+     * @type {string}
+     * @memberof ExternalToolImportResultResponse
+     */
+    toolId: string;
+    /**
+     * Status message of the error that occurred
+     * @type {string}
+     * @memberof ExternalToolImportResultResponse
+     */
+    error: string;
+}
+/**
+ * 
+ * @export
  * @interface ExternalToolMediumParams
  */
 export interface ExternalToolMediumParams {
@@ -3474,6 +3529,12 @@ export interface ExternalToolMediumParams {
      * @memberof ExternalToolMediumParams
      */
     mediaSourceId?: string;
+    /**
+     * The date the medium was last modified
+     * @type {string}
+     * @memberof ExternalToolMediumParams
+     */
+    modifiedAt?: string;
 }
 /**
  * 
@@ -3499,25 +3560,12 @@ export interface ExternalToolMediumResponse {
      * @memberof ExternalToolMediumResponse
      */
     mediaSourceId?: string;
-}
-/**
- * 
- * @export
- * @interface ExternalToolMetadataResponse
- */
-export interface ExternalToolMetadataResponse {
     /**
-     * 
-     * @type {number}
-     * @memberof ExternalToolMetadataResponse
+     * The last modified date of the medium
+     * @type {string}
+     * @memberof ExternalToolMediumResponse
      */
-    schoolExternalToolCount: number;
-    /**
-     * 
-     * @type {ContextExternalToolCountPerContextResponse}
-     * @memberof ExternalToolMetadataResponse
-     */
-    contextExternalToolCountPerContext: ContextExternalToolCountPerContextResponse;
+    modifiedAt?: string;
 }
 /**
  * 
@@ -3743,6 +3791,25 @@ export interface ExternalToolUpdateParams {
      * @memberof ExternalToolUpdateParams
      */
     iconName?: string;
+}
+/**
+ * 
+ * @export
+ * @interface ExternalToolUtilizationResponse
+ */
+export interface ExternalToolUtilizationResponse {
+    /**
+     * 
+     * @type {number}
+     * @memberof ExternalToolUtilizationResponse
+     */
+    schoolExternalToolCount: number;
+    /**
+     * 
+     * @type {ContextExternalToolCountPerContextResponse}
+     * @memberof ExternalToolUtilizationResponse
+     */
+    contextExternalToolCountPerContext: ContextExternalToolCountPerContextResponse;
 }
 /**
  * 
@@ -4204,6 +4271,16 @@ export enum LanguageType {
     En = 'en',
     Es = 'es',
     Uk = 'uk'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum LaunchRequestMethod {
+    Get = 'GET',
+    Post = 'POST'
 }
 
 /**
@@ -4949,43 +5026,43 @@ export interface Lti11DeepLinkParamsRaw {
  */
 export interface Lti11ToolConfigCreateParams {
     /**
-     * 
+     * Configuration type of the tool.
      * @type {ToolConfigType}
      * @memberof Lti11ToolConfigCreateParams
      */
     type: ToolConfigType;
     /**
-     * 
+     * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
      * @type {string}
      * @memberof Lti11ToolConfigCreateParams
      */
     baseUrl: string;
     /**
-     * 
+     * LTI 1.1 encryption key.
      * @type {string}
      * @memberof Lti11ToolConfigCreateParams
      */
     key: string;
     /**
-     * 
+     * LTI 1.1 encryption secret.
      * @type {string}
      * @memberof Lti11ToolConfigCreateParams
      */
     secret: string;
     /**
-     * 
+     * LTI 1.1 message type.
      * @type {LtiMessageType}
      * @memberof Lti11ToolConfigCreateParams
      */
     lti_message_type: LtiMessageType;
     /**
-     * 
+     * Describes the amount of personal information that the tool provider gets.
      * @type {LtiPrivacyPermission}
      * @memberof Lti11ToolConfigCreateParams
      */
     privacy_permission: LtiPrivacyPermission;
     /**
-     * 
+     * LTI 1.1 requested language.
      * @type {string}
      * @memberof Lti11ToolConfigCreateParams
      */
@@ -4998,43 +5075,43 @@ export interface Lti11ToolConfigCreateParams {
  */
 export interface Lti11ToolConfigUpdateParams {
     /**
-     * 
+     * Configuration type of the tool.
      * @type {ToolConfigType}
      * @memberof Lti11ToolConfigUpdateParams
      */
     type: ToolConfigType;
     /**
-     * 
+     * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
      * @type {string}
      * @memberof Lti11ToolConfigUpdateParams
      */
     baseUrl: string;
     /**
-     * 
+     * LTI 1.1 encryption key.
      * @type {string}
      * @memberof Lti11ToolConfigUpdateParams
      */
     key: string;
     /**
-     * 
+     * LTI 1.1 encryption secret.
      * @type {string}
      * @memberof Lti11ToolConfigUpdateParams
      */
     secret?: string;
     /**
-     * 
+     * LTI 1.1 message type.
      * @type {LtiMessageType}
      * @memberof Lti11ToolConfigUpdateParams
      */
     lti_message_type: LtiMessageType;
     /**
-     * 
+     * Describes the amount of personal information that the tool provider gets.
      * @type {LtiPrivacyPermission}
      * @memberof Lti11ToolConfigUpdateParams
      */
     privacy_permission: LtiPrivacyPermission;
     /**
-     * 
+     * LTI 1.1 requested language.
      * @type {string}
      * @memberof Lti11ToolConfigUpdateParams
      */
@@ -5580,11 +5657,108 @@ export interface MediaSchoolLicenseResponse {
  * @export
  * @enum {string}
  */
+export enum MediaSourceDataFormat {
+    Bildungslogin = 'BILDUNGSLOGIN',
+    Vidis = 'VIDIS'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 export enum MediaSourceLicenseType {
     UserLicense = 'user-license',
     SchoolLicense = 'school-license'
 }
 
+/**
+ * 
+ * @export
+ * @interface MediaSourceListResponse
+ */
+export interface MediaSourceListResponse {
+    /**
+     * 
+     * @type {Array<MediaSourceResponse>}
+     * @memberof MediaSourceListResponse
+     */
+    responses: Array<MediaSourceResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface MediaSourceResponse
+ */
+export interface MediaSourceResponse {
+    /**
+     * Id of the media source
+     * @type {string}
+     * @memberof MediaSourceResponse
+     */
+    id: string;
+    /**
+     * External Id of the media source
+     * @type {string}
+     * @memberof MediaSourceResponse
+     */
+    sourceId: string;
+    /**
+     * Name of the media source
+     * @type {string}
+     * @memberof MediaSourceResponse
+     */
+    name?: string;
+    /**
+     * Format of the media source data
+     * @type {MediaSourceDataFormat}
+     * @memberof MediaSourceResponse
+     */
+    format?: MediaSourceDataFormat;
+}
+/**
+ * 
+ * @export
+ * @interface MediumMetadataResponse
+ */
+export interface MediumMetadataResponse {
+    /**
+     * The Name
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    name: string;
+    /**
+     * The Description
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    description?: string;
+    /**
+     * The Publisher
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    publisher?: string;
+    /**
+     * The Logo URL
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    logoUrl?: string;
+    /**
+     * The Preview Logo URL
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    previewLogoUrl?: string;
+    /**
+     * The last Modified Date
+     * @type {string}
+     * @memberof MediumMetadataResponse
+     */
+    modifiedAt?: string;
+}
 /**
  * 
  * @export
@@ -6049,59 +6223,59 @@ export interface Oauth2MigrationParams {
  */
 export interface Oauth2ToolConfigCreateParams {
     /**
-     * 
-     * @type {string}
+     * Configuration type of the tool.
+     * @type {ToolConfigType}
      * @memberof Oauth2ToolConfigCreateParams
      */
-    type: string;
+    type: ToolConfigType;
     /**
-     * 
+     * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
      * @type {string}
      * @memberof Oauth2ToolConfigCreateParams
      */
     baseUrl: string;
     /**
-     * 
+     * OAuth2 client id.
      * @type {string}
      * @memberof Oauth2ToolConfigCreateParams
      */
     clientId: string;
     /**
-     * 
+     * OAuth2 client secret.
      * @type {string}
      * @memberof Oauth2ToolConfigCreateParams
      */
     clientSecret: string;
     /**
-     * 
+     * If true, skips the users consent request before launching the tool for the first time.
      * @type {boolean}
      * @memberof Oauth2ToolConfigCreateParams
      */
     skipConsent: boolean;
     /**
-     * 
+     * OAuth2 frontchannel logout uri.
      * @type {string}
      * @memberof Oauth2ToolConfigCreateParams
      */
     frontchannelLogoutUri?: string;
     /**
-     * 
+     * OAuth2 scopes.
      * @type {string}
      * @memberof Oauth2ToolConfigCreateParams
      */
     scope?: string;
     /**
-     * 
+     * Allowed OAuth2 redirect uris.
      * @type {Array<string>}
      * @memberof Oauth2ToolConfigCreateParams
      */
     redirectUris: Array<string>;
     /**
-     * 
-     * @type {string}
+     * OAuth2 token endpoint method
+     * @type {TokenEndpointAuthMethod}
      * @memberof Oauth2ToolConfigCreateParams
      */
-    tokenEndpointAuthMethod: string;
+    tokenEndpointAuthMethod: TokenEndpointAuthMethod;
 }
 /**
  * 
@@ -6110,59 +6284,59 @@ export interface Oauth2ToolConfigCreateParams {
  */
 export interface Oauth2ToolConfigUpdateParams {
     /**
-     * 
-     * @type {string}
+     * Configuration type of the tool.
+     * @type {ToolConfigType}
      * @memberof Oauth2ToolConfigUpdateParams
      */
-    type: string;
+    type: ToolConfigType;
     /**
-     * 
+     * Defines the target URL that is launched. Can be automatically filled with parameter values when using : in-front of the parameter name. Must be HTTPS.
      * @type {string}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     baseUrl: string;
     /**
-     * 
+     * OAuth2 client id.
      * @type {string}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     clientId: string;
     /**
-     * 
+     * OAuth2 client secret.
      * @type {string}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     clientSecret?: string;
     /**
-     * 
+     * If true, skips the users consent request before launching the tool for the first time.
      * @type {boolean}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     skipConsent: boolean;
     /**
-     * 
+     * OAuth2 frontchannel logout uri.
      * @type {string}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     frontchannelLogoutUri?: string;
     /**
-     * 
+     * OAuth2 scopes.
      * @type {string}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     scope?: string;
     /**
-     * 
+     * Allowed OAuth2 redirect uris.
      * @type {Array<string>}
      * @memberof Oauth2ToolConfigUpdateParams
      */
     redirectUris: Array<string>;
     /**
-     * 
-     * @type {string}
+     * OAuth2 token endpoint method
+     * @type {TokenEndpointAuthMethod}
      * @memberof Oauth2ToolConfigUpdateParams
      */
-    tokenEndpointAuthMethod: string;
+    tokenEndpointAuthMethod: TokenEndpointAuthMethod;
 }
 /**
  * 
@@ -7033,6 +7207,7 @@ export enum Permission {
     LessonsView = 'LESSONS_VIEW',
     LinkCreate = 'LINK_CREATE',
     MediaSchoolLicenseAdmin = 'MEDIA_SCHOOL_LICENSE_ADMIN',
+    MediaSourceAdmin = 'MEDIA_SOURCE_ADMIN',
     NewsCreate = 'NEWS_CREATE',
     NewsEdit = 'NEWS_EDIT',
     NewsView = 'NEWS_VIEW',
@@ -7291,61 +7466,6 @@ export interface RenameBodyParams {
      * @memberof RenameBodyParams
      */
     title: string;
-}
-/**
- * 
- * @export
- * @interface ResolvedUserResponse
- */
-export interface ResolvedUserResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    firstName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    lastName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ResolvedUserResponse
-     */
-    roles: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ResolvedUserResponse
-     */
-    permissions: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    schoolId: string;
 }
 /**
  * 
@@ -9346,6 +9466,17 @@ export enum Timezone {
  * @export
  * @enum {string}
  */
+export enum TokenEndpointAuthMethod {
+    ClientSecretPost = 'client_secret_post',
+    ClientSecretBasic = 'client_secret_basic',
+    PrivateKeyJwt = 'private_key_jwt'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
 export enum ToolConfigType {
     Basic = 'basic',
     Oauth2 = 'oauth2',
@@ -9384,10 +9515,10 @@ export interface ToolContextTypesListResponse {
 export interface ToolLaunchRequestResponse {
     /**
      * The Launch Request method (GET or POST)
-     * @type {string}
+     * @type {LaunchRequestMethod}
      * @memberof ToolLaunchRequestResponse
      */
-    method: ToolLaunchRequestResponseMethodEnum;
+    method: LaunchRequestMethod;
     /**
      * The URL for the Tool Launch Request
      * @type {string}
@@ -9413,16 +9544,6 @@ export interface ToolLaunchRequestResponse {
      */
     launchType: LaunchType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ToolLaunchRequestResponseMethodEnum {
-    Get = 'GET',
-    Post = 'POST'
-}
-
 /**
  * 
  * @export
@@ -18982,6 +19103,260 @@ export class MediaLineApi extends BaseAPI implements MediaLineApiInterface {
 
 
 /**
+ * MediaSourceApi - axios parameter creator
+ * @export
+ */
+export const MediaSourceApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Get a list of all media sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaSourceControllerGetMediaSourceList: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/media-sources`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MediaSourceApi - functional programming interface
+ * @export
+ */
+export const MediaSourceApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MediaSourceApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of all media sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediaSourceControllerGetMediaSourceList(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediaSourceListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediaSourceControllerGetMediaSourceList(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MediaSourceApi - factory interface
+ * @export
+ */
+export const MediaSourceApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MediaSourceApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Get a list of all media sources
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediaSourceControllerGetMediaSourceList(options?: any): AxiosPromise<MediaSourceListResponse> {
+            return localVarFp.mediaSourceControllerGetMediaSourceList(options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MediaSourceApi - interface
+ * @export
+ * @interface MediaSourceApi
+ */
+export interface MediaSourceApiInterface {
+    /**
+     * 
+     * @summary Get a list of all media sources
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaSourceApiInterface
+     */
+    mediaSourceControllerGetMediaSourceList(options?: any): AxiosPromise<MediaSourceListResponse>;
+
+}
+
+/**
+ * MediaSourceApi - object-oriented interface
+ * @export
+ * @class MediaSourceApi
+ * @extends {BaseAPI}
+ */
+export class MediaSourceApi extends BaseAPI implements MediaSourceApiInterface {
+    /**
+     * 
+     * @summary Get a list of all media sources
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediaSourceApi
+     */
+    public mediaSourceControllerGetMediaSourceList(options?: any) {
+        return MediaSourceApiFp(this.configuration).mediaSourceControllerGetMediaSourceList(options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * MediumMetadataApi - axios parameter creator
+ * @export
+ */
+export const MediumMetadataApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Returns configuration metadata for media source of a medium
+         * @param {string} mediumId The id of the medium.
+         * @param {string} mediaSourceId The id of the media source.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediumMetadataControllerGetMediumMetadata: async (mediumId: string, mediaSourceId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'mediumId' is not null or undefined
+            assertParamExists('mediumMetadataControllerGetMediumMetadata', 'mediumId', mediumId)
+            // verify required parameter 'mediaSourceId' is not null or undefined
+            assertParamExists('mediumMetadataControllerGetMediumMetadata', 'mediaSourceId', mediaSourceId)
+            const localVarPath = `/medium-metadata/medium/{mediumId}/media-source/{mediaSourceId}`
+                .replace(`{${"mediumId"}}`, encodeURIComponent(String(mediumId)))
+                .replace(`{${"mediaSourceId"}}`, encodeURIComponent(String(mediaSourceId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * MediumMetadataApi - functional programming interface
+ * @export
+ */
+export const MediumMetadataApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = MediumMetadataApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns configuration metadata for media source of a medium
+         * @param {string} mediumId The id of the medium.
+         * @param {string} mediaSourceId The id of the media source.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<MediumMetadataResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.mediumMetadataControllerGetMediumMetadata(mediumId, mediaSourceId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * MediumMetadataApi - factory interface
+ * @export
+ */
+export const MediumMetadataApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = MediumMetadataApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Returns configuration metadata for media source of a medium
+         * @param {string} mediumId The id of the medium.
+         * @param {string} mediaSourceId The id of the media source.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any): AxiosPromise<MediumMetadataResponse> {
+            return localVarFp.mediumMetadataControllerGetMediumMetadata(mediumId, mediaSourceId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * MediumMetadataApi - interface
+ * @export
+ * @interface MediumMetadataApi
+ */
+export interface MediumMetadataApiInterface {
+    /**
+     * 
+     * @summary Returns configuration metadata for media source of a medium
+     * @param {string} mediumId The id of the medium.
+     * @param {string} mediaSourceId The id of the media source.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediumMetadataApiInterface
+     */
+    mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any): AxiosPromise<MediumMetadataResponse>;
+
+}
+
+/**
+ * MediumMetadataApi - object-oriented interface
+ * @export
+ * @class MediumMetadataApi
+ * @extends {BaseAPI}
+ */
+export class MediumMetadataApi extends BaseAPI implements MediumMetadataApiInterface {
+    /**
+     * 
+     * @summary Returns configuration metadata for media source of a medium
+     * @param {string} mediumId The id of the medium.
+     * @param {string} mediaSourceId The id of the media source.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof MediumMetadataApi
+     */
+    public mediumMetadataControllerGetMediumMetadata(mediumId: string, mediaSourceId: string, options?: any) {
+        return MediumMetadataApiFp(this.configuration).mediumMetadataControllerGetMediumMetadata(mediumId, mediaSourceId, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
  * MetaTagExtractorApi - axios parameter creator
  * @export
  */
@@ -25446,14 +25821,14 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Gets the metadata of an external tool.
+         * @summary Gets the utilization of an external tool.
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetMetaDataForExternalTool: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
+        toolControllerGetUtilizationForExternalTool: async (externalToolId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'externalToolId' is not null or undefined
-            assertParamExists('toolControllerGetMetaDataForExternalTool', 'externalToolId', externalToolId)
+            assertParamExists('toolControllerGetUtilizationForExternalTool', 'externalToolId', externalToolId)
             const localVarPath = `/tools/external-tools/{externalToolId}/metadata`
                 .replace(`{${"externalToolId"}}`, encodeURIComponent(String(externalToolId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -25847,7 +26222,7 @@ export const ToolApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Gets the metadata of an school external tool.
+         * @summary Gets the utilization of an school external tool.
          * @param {string} schoolExternalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -26212,13 +26587,13 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Gets the metadata of an external tool.
+         * @summary Gets the utilization of an external tool.
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolMetadataResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetMetaDataForExternalTool(externalToolId, options);
+        async toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolUtilizationResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerGetUtilizationForExternalTool(externalToolId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -26228,7 +26603,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolResponse>> {
+        async toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolImportResultListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.toolControllerImportExternalTools(externalToolBulkCreateParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -26325,7 +26700,7 @@ export const ToolApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Gets the metadata of an school external tool.
+         * @summary Gets the utilization of an school external tool.
          * @param {string} schoolExternalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -26557,13 +26932,13 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Gets the metadata of an external tool.
+         * @summary Gets the utilization of an external tool.
          * @param {string} externalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolMetadataResponse> {
-            return localVarFp.toolControllerGetMetaDataForExternalTool(externalToolId, options).then((request) => request(axios, basePath));
+        toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolUtilizationResponse> {
+            return localVarFp.toolControllerGetUtilizationForExternalTool(externalToolId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -26572,7 +26947,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolResponse> {
+        toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolImportResultListResponse> {
             return localVarFp.toolControllerImportExternalTools(externalToolBulkCreateParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -26660,7 +27035,7 @@ export const ToolApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Gets the metadata of an school external tool.
+         * @summary Gets the utilization of an school external tool.
          * @param {string} schoolExternalToolId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -26887,13 +27262,13 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @summary Gets the metadata of an external tool.
+     * @summary Gets the utilization of an external tool.
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolMetadataResponse>;
+    toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any): AxiosPromise<ExternalToolUtilizationResponse>;
 
     /**
      * 
@@ -26903,7 +27278,7 @@ export interface ToolApiInterface {
      * @throws {RequiredError}
      * @memberof ToolApiInterface
      */
-    toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolResponse>;
+    toolControllerImportExternalTools(externalToolBulkCreateParams: ExternalToolBulkCreateParams, options?: any): AxiosPromise<ExternalToolImportResultListResponse>;
 
     /**
      * 
@@ -26990,7 +27365,7 @@ export interface ToolApiInterface {
 
     /**
      * 
-     * @summary Gets the metadata of an school external tool.
+     * @summary Gets the utilization of an school external tool.
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -27251,14 +27626,14 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @summary Gets the metadata of an external tool.
+     * @summary Gets the utilization of an external tool.
      * @param {string} externalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ToolApi
      */
-    public toolControllerGetMetaDataForExternalTool(externalToolId: string, options?: any) {
-        return ToolApiFp(this.configuration).toolControllerGetMetaDataForExternalTool(externalToolId, options).then((request) => request(this.axios, this.basePath));
+    public toolControllerGetUtilizationForExternalTool(externalToolId: string, options?: any) {
+        return ToolApiFp(this.configuration).toolControllerGetUtilizationForExternalTool(externalToolId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -27374,7 +27749,7 @@ export class ToolApi extends BaseAPI implements ToolApiInterface {
 
     /**
      * 
-     * @summary Gets the metadata of an school external tool.
+     * @summary Gets the utilization of an school external tool.
      * @param {string} schoolExternalToolId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -27468,39 +27843,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userControllerMe: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/user/me`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -27519,15 +27861,6 @@ export const UserApiFp = function(configuration?: Configuration) {
          */
         async userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessfulResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerChangeLanguage(changeLanguageParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async userControllerMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResolvedUserResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerMe(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -27549,14 +27882,6 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
         userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): AxiosPromise<SuccessfulResponse> {
             return localVarFp.userControllerChangeLanguage(changeLanguageParams, options).then((request) => request(axios, basePath));
         },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userControllerMe(options?: any): AxiosPromise<ResolvedUserResponse> {
-            return localVarFp.userControllerMe(options).then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -27574,14 +27899,6 @@ export interface UserApiInterface {
      * @memberof UserApiInterface
      */
     userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): AxiosPromise<SuccessfulResponse>;
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserApiInterface
-     */
-    userControllerMe(options?: any): AxiosPromise<ResolvedUserResponse>;
 
 }
 
@@ -27601,16 +27918,6 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      */
     public userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any) {
         return UserApiFp(this.configuration).userControllerChangeLanguage(changeLanguageParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserApi
-     */
-    public userControllerMe(options?: any) {
-        return UserApiFp(this.configuration).userControllerMe(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
