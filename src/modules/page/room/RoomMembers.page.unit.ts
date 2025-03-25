@@ -32,6 +32,8 @@ import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { LeaveRoomProhibitedDialog } from "@ui-room-details";
+import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -46,18 +48,7 @@ jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
 
 jest.mock("@feature-room/roomAuthorization.composable");
-const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
-	canAddRoomMembers: ref(false),
-	canCreateRoom: ref(false),
-	canChangeOwner: ref(false),
-	canViewRoom: ref(false),
-	canEditRoom: ref(false),
-	canDeleteRoom: ref(false),
-	canLeaveRoom: ref(false),
-	canRemoveRoomMembers: ref(false),
-	canEditRoomBoard: ref(false),
-};
-(useRoomAuthorization as jest.Mock).mockReturnValue(roomPermissions);
+const roomAuthorization = jest.mocked(useRoomAuthorization);
 
 describe("RoomMembersPage", () => {
 	let router: DeepMocked<Router>;
@@ -65,6 +56,7 @@ describe("RoomMembersPage", () => {
 	let mockRoomMemberCalls: DeepMocked<ReturnType<typeof useRoomMembers>>;
 	let wrapper: VueWrapper<InstanceType<typeof RoomMembersPage>>;
 	let askConfirmationMock: jest.Mock;
+	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
 
 	const routeRoomId = "room-id";
 
@@ -91,6 +83,19 @@ describe("RoomMembersPage", () => {
 			askConfirmation: askConfirmationMock,
 			isDialogOpen: ref(false),
 		});
+
+		roomPermissions = {
+			canAddRoomMembers: ref(false),
+			canCreateRoom: ref(false),
+			canChangeOwner: ref(false),
+			canViewRoom: ref(false),
+			canEditRoom: ref(false),
+			canDeleteRoom: ref(false),
+			canLeaveRoom: ref(false),
+			canRemoveRoomMembers: ref(false),
+			canEditRoomContent: ref(false),
+		};
+		roomAuthorization.mockReturnValue(roomPermissions);
 	});
 
 	const buildRoom = () => {
@@ -161,6 +166,7 @@ describe("RoomMembersPage", () => {
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
+				stubs: { LeaveRoomProhibitedDialog: true },
 			},
 		});
 
@@ -218,14 +224,14 @@ describe("RoomMembersPage", () => {
 
 	describe("onLeaveRoom", () => {
 		describe("when user is not room owner", () => {
-			it("should not render leave room button", async () => {
+			it("should render leave room button", async () => {
 				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
 
 				const leaveRoomButton = wrapper.findComponent(
 					'[data-testid="room-member-menu"]'
 				);
 
-				expect(leaveRoomButton.exists()).toBe(false);
+				expect(leaveRoomButton.exists()).toBe(true);
 			});
 		});
 
@@ -249,6 +255,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should call remove method after confirmation", async () => {
+			roomPermissions.canLeaveRoom.value = true;
 			const { wrapper } = setup({ currentUserRole: RoleName.Roomadmin });
 
 			askConfirmationMock.mockResolvedValue(true);
@@ -278,6 +285,51 @@ describe("RoomMembersPage", () => {
 			await leaveMenu.trigger("click");
 
 			expect(mockRoomMemberCalls.removeMembers).not.toHaveBeenCalled();
+		});
+
+		describe("when user is room owner", () => {
+			it("should render leave room button", async () => {
+				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
+
+				const leaveRoomButton = wrapper.findComponent(
+					'[data-testid="room-member-menu"]'
+				);
+
+				expect(leaveRoomButton.exists()).toBe(true);
+			});
+
+			it("should open leave room prohibited dialog", async () => {
+				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
+
+				const menuBtn = wrapper.findComponent(
+					'[data-testid="room-member-menu"]'
+				);
+				await menuBtn.trigger("click");
+
+				const leaveMenuItem = wrapper.findComponent(KebabMenuActionLeaveRoom);
+				await leaveMenuItem.trigger("click");
+
+				const leaveRoomProhibitedDialogDialog = wrapper.findComponent(
+					LeaveRoomProhibitedDialog
+				);
+
+				expect(leaveRoomProhibitedDialogDialog.isVisible()).toBe(true);
+				expect(leaveRoomProhibitedDialogDialog.props("modelValue")).toBe(true);
+			});
+
+			it("should not call leaveRoom", async () => {
+				const { wrapper } = setup({ currentUserRole: RoleName.Roomowner });
+
+				const menuBtn = wrapper.findComponent(
+					'[data-testid="room-member-menu"]'
+				);
+				await menuBtn.trigger("click");
+
+				const leaveMenuItem = wrapper.findComponent(KebabMenuActionLeaveRoom);
+				await leaveMenuItem.trigger("click");
+
+				expect(mockRoomMemberCalls.leaveRoom).not.toHaveBeenCalled();
+			});
 		});
 	});
 
@@ -336,7 +388,7 @@ describe("RoomMembersPage", () => {
 	describe("visibility options", () => {
 		describe("title menu visibility", () => {
 			it.each([
-				[RoleName.Roomowner, false],
+				[RoleName.Roomowner, true],
 				[RoleName.Roomadmin, true],
 				[RoleName.Roomeditor, true],
 				[RoleName.Roomviewer, true],

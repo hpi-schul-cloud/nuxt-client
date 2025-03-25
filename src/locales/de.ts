@@ -527,10 +527,10 @@ export default {
 		"Datum und Uhrzeit liegen in der Vergangenheit.",
 	"components.dateTimePicker.messages.dateRequired":
 		"Uhrzeitangabe ohne Datum nicht möglich.",
-	"components.editor.highlight.dullBlue": "Blauer Marker (matt)",
-	"components.editor.highlight.dullGreen": "Grüner Marker (matt)",
-	"components.editor.highlight.dullPink": "Pinker Marker (matt)",
-	"components.editor.highlight.dullYellow": "Gelber Marker (matt)",
+	"components.editor.fonts.colors.oliveGreen": "Olivgrün",
+	"components.editor.fonts.colors.indigo": "Indigo",
+	"components.editor.fonts.colors.darkPurple": "Dunkelviolett",
+	"components.editor.fonts.colors.pink": "Rosa",
 	"components.elementTypeSelection.dialog.title": "Element hinzufügen",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Externe Tools",
@@ -1809,6 +1809,8 @@ export default {
 	"pages.rooms.infoAlert.welcome.visibility.help": "Hilfeseite",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "Rückmeldungen",
 	"pages.rooms.leaveRoom.confirmation": 'Raum "{roomName}" wirklich verlassen?',
+	"pages.rooms.leaveRoom.RoomOwner.warning":
+		'Bevor der Raum verlassen werden kann, muss die Raumberechtigung "Besitzen" an ein anderes Raummitglied übertragen werden. Dies kann in der Raum-Mitglieder-Verwaltung erfolgen.',
 	"pages.rooms.leaveRoom.menu": "Raum verlassen",
 	"pages.rooms.members.error.load":
 		"Die Teilnehmenden-Liste konnte nicht geladen werden.",
@@ -1823,6 +1825,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
 	"pages.rooms.members.label": "Teilnehmende",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
+	"pages.rooms.members.add.infoText":
+		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Aktionsmenü für {memberFullName}",
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",

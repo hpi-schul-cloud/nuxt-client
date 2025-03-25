@@ -532,10 +532,10 @@ export default {
 		"La fecha y la hora están en el pasado.",
 	"components.dateTimePicker.messages.dateRequired":
 		"Sin fecha no es posible especificar la hora.",
-	"components.editor.highlight.dullBlue": "Marcador azul (mate)",
-	"components.editor.highlight.dullGreen": "Marcador verde (mate)",
-	"components.editor.highlight.dullPink": "Marcador rosa (mate)",
-	"components.editor.highlight.dullYellow": "Marcador amarillo (mate)",
+	"components.editor.fonts.colors.oliveGreen": "Verde Oliva",
+	"components.editor.fonts.colors.indigo": "Índigo",
+	"components.editor.fonts.colors.darkPurple": "Púrpura Oscuro",
+	"components.editor.fonts.colors.pink": "Rosa",
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
@@ -1828,6 +1828,8 @@ export default {
 	"pages.rooms.infoAlert.welcome.visibility.help": "página de ayuda",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "comentarios",
 	"pages.rooms.leaveRoom.confirmation": 'Dejar la sala "{roomName}"?',
+	"pages.rooms.leaveRoom.RoomOwner.warning":
+		"Antes de que se pueda abandonar la sala, la autorización de propiedad de la sala debe transferirse a otro miembro de la sala. Esto se puede hacer en la gestión de miembros de la sala.",
 	"pages.rooms.leaveRoom.menu": "Salir de la sala",
 	"pages.rooms.members.error.load":
 		"No se pudo cargar la lista de participantes.",
@@ -1840,6 +1842,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Participantes",
 	"pages.rooms.members.add": "Añadir miembros",
+	"pages.rooms.members.add.infoText":
+		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Menú de acciones para {memberFullName}",
 	"pages.rooms.members.changePermission":
