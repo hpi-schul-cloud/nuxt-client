@@ -46,7 +46,10 @@
 			</template>
 			<template #[`item.synchronizedCourses`]="{ item }">
 				<span data-testid="class-table-synced-courses">
-					{{ item.synchronizedCourses?.join(", ") || "" }}
+					{{
+						item.synchronizedCourses?.map((course) => course.name).join(", ") ||
+						""
+					}}
 				</span>
 			</template>
 			<template #[`item.externalSourceName`]="{ item }">
