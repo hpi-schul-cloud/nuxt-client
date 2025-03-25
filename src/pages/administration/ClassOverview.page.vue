@@ -46,7 +46,7 @@
 			</template>
 			<template #[`item.synchronizedCourses`]="{ item }">
 				<span data-testid="class-table-synced-courses">
-					{{ item.synchronizedCourses }}
+					{{ item.synchronizedCourses?.join(", ") || "" }}
 				</span>
 			</template>
 			<template #[`item.externalSourceName`]="{ item }">
@@ -56,7 +56,7 @@
 			</template>
 			<template #[`item.teacherNames`]="{ item }">
 				<span data-testid="class-table-teachers">
-					{{ item.teacherNames }}
+					{{ item.teacherNames?.join(", ") || "" }}
 				</span>
 			</template>
 			<template #[`item.studentCount`]="{ item }">

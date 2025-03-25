@@ -48,12 +48,12 @@
 			</template>
 			<template #[`item.classNames`]="{ item }">
 				<span data-testid="admin-rooms-table-class-names">
-					{{ item.classNames }}
+					{{ item.classNames?.join(", ") || "" }}
 				</span>
 			</template>
 			<template #[`item.teacherNames`]="{ item }">
 				<span data-testid="admin-rooms-table-teacher-names">
-					{{ item.teacherNames }}
+					{{ item.teacherNames?.join(", ") || "" }}
 				</span>
 			</template>
 			<template #[`item.actions`]="{ item }">
