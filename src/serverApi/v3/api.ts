@@ -2797,6 +2797,17 @@ export interface CustomParameterEntryResponse {
 /**
  * 
  * @export
+ * @enum {string}
+ */
+export enum CustomParameterLocationParams {
+    Path = 'path',
+    Body = 'body',
+    Query = 'query'
+}
+
+/**
+ * 
+ * @export
  * @interface CustomParameterPostParams
  */
 export interface CustomParameterPostParams {
@@ -2838,22 +2849,22 @@ export interface CustomParameterPostParams {
     regexComment?: string;
     /**
      * Scope where the parameter has to be configured.
-     * @type {string}
+     * @type {CustomParameterScopeTypeParams}
      * @memberof CustomParameterPostParams
      */
-    scope: CustomParameterPostParamsScopeEnum;
+    scope: CustomParameterScopeTypeParams;
     /**
      * Location where the parameter is transmitted in the HTTP request to the tool provider.
-     * @type {string}
+     * @type {CustomParameterLocationParams}
      * @memberof CustomParameterPostParams
      */
-    location: CustomParameterPostParamsLocationEnum;
+    location: CustomParameterLocationParams;
     /**
      * Input field type. Auto parameters have to be global and cannot have a defaultValue.
-     * @type {string}
+     * @type {CustomParameterTypeParams}
      * @memberof CustomParameterPostParams
      */
-    type: CustomParameterPostParamsTypeEnum;
+    type: CustomParameterTypeParams;
     /**
      * If true, the parameter does not have to be filled out during configuration.
      * @type {boolean}
@@ -2867,41 +2878,6 @@ export interface CustomParameterPostParams {
      */
     isProtected: boolean;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterPostParamsScopeEnum {
-    Global = 'global',
-    School = 'school',
-    Context = 'context'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterPostParamsLocationEnum {
-    Path = 'path',
-    Body = 'body',
-    Query = 'query'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterPostParamsTypeEnum {
-    String = 'string',
-    Number = 'number',
-    Boolean = 'boolean',
-    AutoContextid = 'auto_contextid',
-    AutoContextname = 'auto_contextname',
-    AutoSchoolid = 'auto_schoolid',
-    AutoSchoolnumber = 'auto_schoolnumber',
-    AutoMediumid = 'auto_mediumid',
-    AutoGroupExternaluuid = 'auto_group_externaluuid'
-}
-
 /**
  * 
  * @export
@@ -2946,22 +2922,22 @@ export interface CustomParameterResponse {
     regexComment?: string;
     /**
      * Scope where the parameter has to be configured.
-     * @type {string}
+     * @type {CustomParameterScopeTypeParams}
      * @memberof CustomParameterResponse
      */
-    scope: CustomParameterResponseScopeEnum;
+    scope: CustomParameterScopeTypeParams;
     /**
      * Location where the parameter is transmitted in the HTTP request to the tool provider.
-     * @type {string}
+     * @type {CustomParameterLocationParams}
      * @memberof CustomParameterResponse
      */
-    location: CustomParameterResponseLocationEnum;
+    location: CustomParameterLocationParams;
     /**
      * Input field type. Auto parameters have to be global and cannot have a defaultValue.
-     * @type {string}
+     * @type {CustomParameterTypeParams}
      * @memberof CustomParameterResponse
      */
-    type: CustomParameterResponseTypeEnum;
+    type: CustomParameterTypeParams;
     /**
      * If true, the parameter does not have to be filled out during configuration.
      * @type {boolean}
@@ -2975,30 +2951,23 @@ export interface CustomParameterResponse {
      */
     isProtected: boolean;
 }
-
 /**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterResponseScopeEnum {
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum CustomParameterScopeTypeParams {
     Global = 'global',
     School = 'school',
     Context = 'context'
 }
+
 /**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterResponseLocationEnum {
-    Path = 'path',
-    Body = 'body',
-    Query = 'query'
-}
-/**
-    * @export
-    * @enum {string}
-    */
-export enum CustomParameterResponseTypeEnum {
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum CustomParameterTypeParams {
     String = 'string',
     Number = 'number',
     Boolean = 'boolean',
@@ -4311,6 +4280,16 @@ export enum LanguageType {
     En = 'en',
     Es = 'es',
     Uk = 'uk'
+}
+
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum LaunchRequestMethod {
+    Get = 'GET',
+    Post = 'POST'
 }
 
 /**
@@ -7503,61 +7482,6 @@ export interface RenameBodyParams {
 /**
  * 
  * @export
- * @interface ResolvedUserResponse
- */
-export interface ResolvedUserResponse {
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    firstName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    lastName: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    id: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    createdAt: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    updatedAt: string;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ResolvedUserResponse
-     */
-    roles: Array<string>;
-    /**
-     * 
-     * @type {Array<string>}
-     * @memberof ResolvedUserResponse
-     */
-    permissions: Array<string>;
-    /**
-     * 
-     * @type {string}
-     * @memberof ResolvedUserResponse
-     */
-    schoolId: string;
-}
-/**
- * 
- * @export
  * @interface RichText
  */
 export interface RichText {
@@ -9603,10 +9527,10 @@ export interface ToolContextTypesListResponse {
 export interface ToolLaunchRequestResponse {
     /**
      * The Launch Request method (GET or POST)
-     * @type {string}
+     * @type {LaunchRequestMethod}
      * @memberof ToolLaunchRequestResponse
      */
-    method: ToolLaunchRequestResponseMethodEnum;
+    method: LaunchRequestMethod;
     /**
      * The URL for the Tool Launch Request
      * @type {string}
@@ -9632,16 +9556,6 @@ export interface ToolLaunchRequestResponse {
      */
     launchType: LaunchType;
 }
-
-/**
-    * @export
-    * @enum {string}
-    */
-export enum ToolLaunchRequestResponseMethodEnum {
-    Get = 'GET',
-    Post = 'POST'
-}
-
 /**
  * 
  * @export
@@ -27941,39 +27855,6 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userControllerMe: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/user/me`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            // authentication bearer required
-            // http bearer authentication required
-            await setBearerAuthToObject(localVarHeaderParameter, configuration)
-
-
-    
-            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: toPathString(localVarUrlObj),
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
@@ -27992,15 +27873,6 @@ export const UserApiFp = function(configuration?: Configuration) {
          */
         async userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SuccessfulResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerChangeLanguage(changeLanguageParams, options);
-            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
-        },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async userControllerMe(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ResolvedUserResponse>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.userControllerMe(options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
     }
@@ -28022,14 +27894,6 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
         userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): AxiosPromise<SuccessfulResponse> {
             return localVarFp.userControllerChangeLanguage(changeLanguageParams, options).then((request) => request(axios, basePath));
         },
-        /**
-         * 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userControllerMe(options?: any): AxiosPromise<ResolvedUserResponse> {
-            return localVarFp.userControllerMe(options).then((request) => request(axios, basePath));
-        },
     };
 };
 
@@ -28047,14 +27911,6 @@ export interface UserApiInterface {
      * @memberof UserApiInterface
      */
     userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any): AxiosPromise<SuccessfulResponse>;
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserApiInterface
-     */
-    userControllerMe(options?: any): AxiosPromise<ResolvedUserResponse>;
 
 }
 
@@ -28074,16 +27930,6 @@ export class UserApi extends BaseAPI implements UserApiInterface {
      */
     public userControllerChangeLanguage(changeLanguageParams: ChangeLanguageParams, options?: any) {
         return UserApiFp(this.configuration).userControllerChangeLanguage(changeLanguageParams, options).then((request) => request(this.axios, this.basePath));
-    }
-
-    /**
-     * 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof UserApi
-     */
-    public userControllerMe(options?: any) {
-        return UserApiFp(this.configuration).userControllerMe(options).then((request) => request(this.axios, this.basePath));
     }
 }
 
