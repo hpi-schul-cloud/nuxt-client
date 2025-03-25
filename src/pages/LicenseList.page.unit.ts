@@ -1,27 +1,31 @@
-import LicenseListPage from "./LicenseList.page.vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import EnvConfigModule from "@/store/env-config";
+import NotifierModule from "@/store/notifier";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { envsFactory } from "@@/tests/test-utils";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { envsFactory } from "@@/tests/test-utils";
-import axios from "axios";
-import NotifierModule from "@/store/notifier";
-import { nextTick } from "vue";
 import { flushPromises } from "@vue/test-utils";
+import axios from "axios";
+import { nextTick } from "vue";
+import {
+	VExpansionPanelText,
+	VExpansionPanelTitle,
+} from "vuetify/lib/components/index.mjs";
+import LicenseListPage from "./LicenseList.page.vue";
 
 jest.mock("axios");
 const mockAxios = jest.mocked(axios);
 mockAxios.get.mockResolvedValue({
 	data: {
 		"MIT-License": {
-			components: ["ComponentA", "ComponentB"],
+			components: ["ComponentA@2.0.0", "ComponentB@1.2.3"],
 			licenseText: "MIT License Text",
 		},
 		"Apache-2.0": {
-			components: ["ComponentC"],
+			components: ["ComponentC@1.0.0"],
 			licenseText: "Apache License Text",
 		},
 	},
@@ -56,15 +60,11 @@ describe("LicenseList Page", () => {
 		await flushPromises();
 
 		expect(wrapper.exists()).toBe(true);
-		[
-			"MIT-License",
-			"Apache-2.0",
-			"pages.licenseList.title",
-			"pages.licenseList.name",
-			"pages.licenseList.componentCount",
-		].forEach((license) => {
-			expect(wrapper.text()).toContain(license);
-		});
+		["MIT-License", "Apache-2.0", "pages.licenseList.title"].forEach(
+			(license) => {
+				expect(wrapper.text()).toContain(license);
+			}
+		);
 	});
 
 	it("should call the license summary url", () => {
@@ -85,14 +85,21 @@ describe("LicenseList Page", () => {
 			const { wrapper } = setup();
 			await flushPromises();
 
-			expect(wrapper.text()).not.toContain("ComponentA");
-			expect(wrapper.text()).not.toContain("ComponentB");
+			const panelTitles = wrapper.findAllComponents(VExpansionPanelTitle);
+			const panelTexts = wrapper.findAllComponents(VExpansionPanelText);
+			expect(panelTitles).toHaveLength(2);
+			const [panelTitle1, panelTitle2] = panelTitles;
+			const [panelText1, panelText2] = panelTexts;
 
-			const licenseItemTitle = wrapper.find('[data-testid="license-title"]');
-			await licenseItemTitle.trigger("click");
+			await panelTitle1.trigger("click");
 			await nextTick();
-			expect(wrapper.text()).toContain("ComponentA");
-			expect(wrapper.text()).toContain("ComponentB");
+			expect(panelText1.text()).toContain("MIT License Text");
+			expect(panelText1.text()).not.toContain("Apache License Text");
+
+			await panelTitle2.trigger("click");
+			await nextTick();
+			expect(panelText2.text()).not.toContain("MIT License Text");
+			expect(panelText2.text()).toContain("Apache License Text");
 		});
 	});
 });

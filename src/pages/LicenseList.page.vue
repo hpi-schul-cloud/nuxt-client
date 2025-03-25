@@ -1,37 +1,41 @@
 <template>
-	<div class="d-flex justify-center">
-		<div class="license-list">
+	<v-container class="align-center d-flex justify-center w-100">
+		<div class="license-list w-100">
 			<h1 class="text-h3 d-flex justify-center">
 				{{ t("pages.licenseList.title") }}
 			</h1>
 
-			<div v-if="licenseNames.length > 0" class="d-flex px-4 pl-7">
-				<div>{{ t("pages.licenseList.name") }}</div>
-				<v-spacer />
-				<div>{{ t("pages.licenseList.componentCount") }}</div>
-			</div>
-
-			<VTreeview
-				:items="licenseList"
-				:open-on-click="true"
-				:load-children="onExpand"
+			<v-expansion-panels
+				variant="accordion"
+				class="w-100"
+				v-for="[name, item] in Object.entries(response)"
+				:key="name"
 			>
-				<template #title="{ title }">
-					<span data-testid="license-title">{{ title }}</span>
-				</template>
-
-				<template #append="{ item }">
-					<span class="ml-4">{{ item.count }}</span>
-				</template>
-			</VTreeview>
+				<v-expansion-panel class="w-100">
+					<v-expansion-panel-title>{{ name }}</v-expansion-panel-title>
+					<v-expansion-panel-text>
+						<p style="white-space: pre-line">{{ item.licenseText }}</p>
+						<div class="ga-2">
+							{{ item.components.join(",") }}
+							<v-chip
+								label
+								v-for="componentName in item.components"
+								:key="componentName"
+								class="ma-1"
+							>
+								{{ componentName }}
+							</v-chip>
+						</div>
+					</v-expansion-panel-text>
+				</v-expansion-panel>
+			</v-expansion-panels>
 		</div>
-	</div>
+	</v-container>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import axios from "axios";
-import { VTreeview } from "vuetify/labs/VTreeview";
 import { useI18n } from "vue-i18n";
 import {
 	ENV_CONFIG_MODULE_KEY,
@@ -43,41 +47,27 @@ const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { t } = useI18n();
 
-type LicenseData = {
-	[key: string]: {
-		components: string[];
-		licenseText: string;
-	};
+type LicenseDetails = {
+	components: string[];
+	licenseText: string;
 };
-
-type TreeViewItem = {
-	id: number;
-	title: string;
-	children?: { id: number; title: string }[];
-	count?: number;
-};
+type LicenseData = Record<string, LicenseDetails>;
 
 const response = ref<LicenseData>({});
-const licenseNames = ref<string[]>([]);
-const licenseList = ref<TreeViewItem[]>([]);
 
-const onExpand = async (args: unknown) => {
-	const payload = args as TreeViewItem;
+const removeVersionNumbers = (data: LicenseData): LicenseData => {
+	const result: LicenseData = {};
+	for (const [licenseName, licenseDetails] of Object.entries(data)) {
+		const components = licenseDetails.components.map((component) => {
+			return component.replace(/@[\d.]+$/, "");
+		});
 
-	const item = licenseList.value.find(
-		(license) => license.title === payload.title
-	);
-	if (item?.title !== payload.title) return;
-	if (item.children && item.children.length > 0) return;
-
-	item.children = response.value[payload.title].components?.map(
-		(component, index) => {
-			return {
-				id: index,
-				title: component,
-			};
-		}
-	);
+		result[licenseName] = {
+			components: [...new Set(components)],
+			licenseText: licenseDetails.licenseText,
+		};
+	}
+	return result;
 };
 
 const fetchLicenseData = async () => {
@@ -85,23 +75,14 @@ const fetchLicenseData = async () => {
 		const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
 		if (!licensesUrl) throw new Error("License summary URL is not defined");
 
-		response.value = (await axios.get(licensesUrl as string)).data;
-		licenseNames.value = Object.keys(response.value);
+		// response.value = removeVersionNumbers(getFakeList());
+		response.value = removeVersionNumbers(
+			(await axios.get(licensesUrl as string)).data
+		);
 	} catch {
 		notifierModule.show({
 			text: t("error.load"),
 			status: "error",
-		});
-	}
-
-	if (response.value && licenseNames.value.length > 0) {
-		licenseNames.value.forEach((license, index) => {
-			licenseList.value.push({
-				id: index,
-				title: license,
-				count: response.value[license].components.length,
-				children: [],
-			});
 		});
 	}
 };
