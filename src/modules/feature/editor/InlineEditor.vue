@@ -5,8 +5,6 @@
 		:editor="InlineEditor"
 		:config="config"
 		data-testid="ckeditor"
-		:disabled="disabled"
-		class="palla"
 		@blur="handleBlur"
 		@focus="handleFocus"
 		@ready="handleReady"
@@ -14,13 +12,12 @@
 </template>
 
 <script setup lang="ts">
-import { DeviceMediaQuery } from "@/types/enum/device-media-query.enum";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
 import "@hpi-schul-cloud/ckeditor/build/translations/en";
 import "@hpi-schul-cloud/ckeditor/build/translations/es";
 import "@hpi-schul-cloud/ckeditor/build/translations/uk";
-import { useMediaQuery, useVModel } from "@vueuse/core";
+import { useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
 import { useEditorConfig } from "./EditorConfig.composable";
 
@@ -32,13 +29,6 @@ const props = defineProps({
 	placeholder: {
 		type: String,
 		default: "",
-	},
-	mode: {
-		type: String,
-		default: "regular",
-	},
-	disabled: {
-		type: Boolean,
 	},
 	autofocus: {
 		type: Boolean,
@@ -65,19 +55,17 @@ const {
 	compactHeadings,
 	boardPlugins,
 	inlineEditorToolbarItems,
-} = useEditorConfig();
+	handleDelete,
+} = useEditorConfig(emit);
 
 const ck = ref(null);
 const modelValue = useVModel(props, "value", emit);
-
-const charCount = ref(0);
 
 const config = computed(() => {
 	return {
 		...generalConfig,
 		toolbar: {
 			items: inlineEditorToolbarItems,
-			shouldNotGroupWhenFull: showFullToolbar.value,
 		},
 		plugins: boardPlugins,
 		heading: compactHeadings,
@@ -92,11 +80,6 @@ const config = computed(() => {
 
 const handleFocus = () => emit("focus");
 const handleBlur = () => emit("blur");
-const handleDelete = () => {
-	if (charCount.value === 0) {
-		emit("keyboard:delete");
-	}
-};
 
 const handleReady = (editor) => {
 	emit("ready");
@@ -113,11 +96,6 @@ const handleReady = (editor) => {
 		}
 	});
 };
-
-const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
-const showFullToolbar = computed(() => {
-	return props.mode === "simple" && !isMobile.value;
-});
 </script>
 
 <style lang="scss">

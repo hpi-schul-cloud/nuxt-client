@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export const useEditorConfig = () => {
+export const useEditorConfig = (emit) => {
 	const { t, locale } = useI18n();
 
 	const charCount = ref(0);
@@ -222,6 +222,12 @@ export const useEditorConfig = () => {
 		fontBackgroundColor: fontBackgroundColors,
 	};
 
+	const handleDelete = () => {
+		if (charCount.value === 0) {
+			emit("keyboard:delete");
+		}
+	};
+
 	return {
 		newsPlugins,
 		boardPlugins,
@@ -231,5 +237,6 @@ export const useEditorConfig = () => {
 		compactHeadings,
 		prominentHeadings,
 		generalConfig,
+		handleDelete,
 	};
 };
