@@ -75,7 +75,6 @@ const fetchLicenseData = async () => {
 		const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
 		if (!licensesUrl) throw new Error("License summary URL is not defined");
 
-		// response.value = removeVersionNumbers(getFakeList());
 		response.value = removeVersionNumbers(
 			(await axios.get(licensesUrl as string)).data
 		);
