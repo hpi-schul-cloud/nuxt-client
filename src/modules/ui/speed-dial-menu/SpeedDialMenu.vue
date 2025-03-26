@@ -76,8 +76,8 @@ const props = withDefaults(defineProps<Props>(), {
 	icon: "",
 	href: "",
 	to: "",
-	direction: "",
-	orientation: "",
+	direction: "bottom",
+	orientation: "right",
 });
 
 const emit = defineEmits(["fab:clicked"]);
