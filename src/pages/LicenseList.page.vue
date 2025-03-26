@@ -6,13 +6,20 @@
 			</h1>
 
 			<v-expansion-panels
-				variant="accordion"
-				class="w-100"
+				multiple
+				class="pb-9 w-100"
 				v-for="[name, item] in Object.entries(response)"
 				:key="name"
 			>
 				<v-expansion-panel class="w-100">
-					<v-expansion-panel-title>{{ name }}</v-expansion-panel-title>
+					<v-expansion-panel-title>
+						<div class="text-h4">{{ name }}</div>
+						<template v-slot:actions="{ expanded }">
+							<div class="v-expansion-panel-header__icon">
+								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
+							</div>
+						</template>
+					</v-expansion-panel-title>
 					<v-expansion-panel-text>
 						<p style="white-space: pre-line">{{ item.licenseText }}</p>
 						<div class="ga-2">
@@ -41,6 +48,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
+import { mdiMinus, mdiPlus } from "@icons/material";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
