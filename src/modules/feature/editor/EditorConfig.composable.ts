@@ -1,7 +1,7 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-export const useEditorConfig = (emit) => {
+export const useEditorConfig = () => {
 	const { t, locale } = useI18n();
 
 	const charCount = ref(0);
@@ -149,10 +149,10 @@ export const useEditorConfig = (emit) => {
 		],
 	};
 
+	// Using the following colors from the vuetify color palette:
+	// lime-darken-4, green-darken-2, cyan-darken-3, blue-darken-2, indigo, deep-purple, purple, pink-darken-1, red-darken-2
+	// Some colors are translated by CKEditor itself
 	const fontColors = {
-		// Using the following colors from the vuetify color palette:
-		// lime-darken-4, green-darken-2, cyan-darken-3, blue-darken-2, indigo, deep-purple, purple, pink-darken-1, red-darken-2
-		// Some colors are translated by CKEditor itself
 		colors: [
 			{
 				color: "#827717",
@@ -178,10 +178,10 @@ export const useEditorConfig = (emit) => {
 		],
 	};
 
+	// Using the following colors from the vuetify color palette:
+	// light-green-lighten-4, green-lighten-4, cyan-lighten-4, blue-lighten-4, indigo-lighten-4, purple-lighten-4, pink-lighten-4, deep-orange-lighten-4, amber-lighten-4
+	// Some colors are translated by CKEditor itself
 	const fontBackgroundColors = {
-		// Using the following colors from the vuetify color palette:
-		// light-green-lighten-4, green-lighten-4, cyan-lighten-4, blue-lighten-4, indigo-lighten-4, purple-lighten-4, pink-lighten-4, deep-orange-lighten-4, amber-lighten-4
-		// Some colors are translated by CKEditor itself
 		colors: [
 			{ color: "#DCEDC8", label: "Light green" },
 			{ color: "#C8E6C9", label: "Green" },
@@ -214,19 +214,17 @@ export const useEditorConfig = (emit) => {
 			addTargetToExternalLinks: true,
 		},
 		wordCount: {
-			onUpdate: (stats) => {
-				charCount.value = stats.characters;
+			onUpdate: (data: { words: NumberConstructor; characters: number }) => {
+				charCount.value = data.characters;
 			},
 		},
 		fontColor: fontColors,
 		fontBackgroundColor: fontBackgroundColors,
 	};
 
-	const handleDelete = () => {
-		if (charCount.value === 0) {
-			emit("keyboard:delete");
-		}
-	};
+	const editorIsEmpty = computed(() => {
+		return charCount.value === 0;
+	});
 
 	return {
 		newsPlugins,
@@ -237,6 +235,6 @@ export const useEditorConfig = (emit) => {
 		compactHeadings,
 		prominentHeadings,
 		generalConfig,
-		handleDelete,
+		editorIsEmpty,
 	};
 };

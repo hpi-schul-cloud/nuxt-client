@@ -1,6 +1,5 @@
 <template>
 	<Editor
-		ref="ck"
 		v-model="modelValue"
 		:editor="InlineEditor"
 		:config="config"
@@ -12,14 +11,12 @@
 </template>
 
 <script setup lang="ts">
+import { useVModel } from "@vueuse/core";
+import { computed } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
-import "@hpi-schul-cloud/ckeditor/build/translations/en";
-import "@hpi-schul-cloud/ckeditor/build/translations/es";
-import "@hpi-schul-cloud/ckeditor/build/translations/uk";
-import { useVModel } from "@vueuse/core";
-import { computed, ref } from "vue";
 import { useEditorConfig } from "./EditorConfig.composable";
+import { logger } from "@util-logger";
 
 const props = defineProps({
 	value: {
@@ -55,10 +52,9 @@ const {
 	compactHeadings,
 	boardPlugins,
 	inlineEditorToolbarItems,
-	handleDelete,
-} = useEditorConfig(emit);
+	editorIsEmpty,
+} = useEditorConfig();
 
-const ck = ref(null);
 const modelValue = useVModel(props, "value", emit);
 
 const config = computed(() => {
@@ -80,6 +76,11 @@ const config = computed(() => {
 
 const handleFocus = () => emit("focus");
 const handleBlur = () => emit("blur");
+const handleDelete = () => {
+	if (editorIsEmpty.value) {
+		emit("keyboard:delete");
+	}
+};
 
 const handleReady = (editor) => {
 	emit("ready");
@@ -92,6 +93,7 @@ const handleReady = (editor) => {
 	// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
 	editor.editing.view.document.on("keydown", (evt, data) => {
 		if (data.domEvent.key === "Backspace" || data.domEvent.key === "Delete") {
+			logger.log("handleDelete");
 			handleDelete();
 		}
 	});
