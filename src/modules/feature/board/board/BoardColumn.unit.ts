@@ -28,10 +28,10 @@ import {
 	useDragAndDrop,
 	useSharedLastCreatedElement,
 } from "@util-board";
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import BoardColumnVue from "./BoardColumn.vue";
 
-const { isDragging, dragEnd } = useDragAndDrop();
+const { isDragging, dragStart, dragEnd } = useDragAndDrop();
 
 jest.mock("@data-board/BoardPermissions.composable");
 const mockedUserPermissions = jest.mocked(useBoardPermissions);
@@ -247,6 +247,18 @@ describe("BoardColumn", () => {
 				expect(isDragging.value).toBe(false);
 			});
 		});
+
+		it("addCardButton should not be visible", async () => {
+			const { wrapper } = setup();
+
+			dragStart();
+			await nextTick();
+			const addCardButton = wrapper.findComponent({
+				name: "BoardAddCardButton",
+			});
+
+			expect(addCardButton.exists()).toBe(false);
+		});
 	});
 
 	describe("user permissions", () => {
@@ -262,18 +274,16 @@ describe("BoardColumn", () => {
 		});
 
 		describe("when user is not permitted to create a card", () => {
-			it("addCardComponent should not be visible", () => {
+			it("addCardButton should not be visible", () => {
 				const { wrapper } = setup({
 					permissions: { hasCreateColumnPermission: ref(false) },
 				});
 
-				const addCardComponent = wrapper.getComponent({
+				const addCardButton = wrapper.findComponent({
 					name: "BoardAddCardButton",
 				});
 
-				expect(addCardComponent.attributes("style")).toContain(
-					"visibility: hidden;"
-				);
+				expect(addCardButton.exists()).toBe(false);
 			});
 		});
 	});

@@ -534,10 +534,10 @@ export default {
 	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
 	"components.dateTimePicker.messages.dateRequired":
 		"Без дати неможливо вказати час.",
-	"components.editor.highlight.dullBlue": "Синій маркер (матові)",
-	"components.editor.highlight.dullGreen": "Зелений маркер (матові)",
-	"components.editor.highlight.dullPink": "Рожевий маркер (матові)",
-	"components.editor.highlight.dullYellow": "Жовтий маркер (матові)",
+	"components.editor.fonts.colors.oliveGreen": "Оливковий",
+	"components.editor.fonts.colors.indigo": "Індиго",
+	"components.editor.fonts.colors.darkPurple": "Темно-фіолетовий",
+	"components.editor.fonts.colors.pink": "Рожевий",
 	"components.elementTypeSelection.dialog.title": "Додати елемент",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Зовнішні інструменти",
@@ -1809,6 +1809,8 @@ export default {
 	"pages.rooms.infoAlert.welcome.visibility.help": "Сторінка допомоги",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "відгуки",
 	"pages.rooms.leaveRoom.confirmation": 'Дійсно залишити місце "{roomName}"?',
+	"pages.rooms.leaveRoom.RoomOwner.warning":
+		"Перш ніж залишити кімнату, дозвіл на володіння кімнатою має бути передано іншому учаснику кімнати. Це можна зробити в управлінні учасниками кімнати.",
 	"pages.rooms.leaveRoom.menu": "Залиште кімнату",
 	"pages.rooms.members.error.load": "Не вдалося завантажити список учасників.",
 	"pages.rooms.members.error.add": "Не вдалося додати учасників.",
@@ -1819,6 +1821,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
 	"pages.rooms.members.label": "Учасники",
 	"pages.rooms.members.add": "Додайте члени",
+	"pages.rooms.members.add.infoText":
+		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
 	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberFullName}",
 	"pages.rooms.members.changePermission": "Змінити дозволи кімнат",
 	"pages.rooms.members.changePermission.ariaLabel":

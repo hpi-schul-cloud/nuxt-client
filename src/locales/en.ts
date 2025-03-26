@@ -522,10 +522,10 @@ export default {
 		"The date and time are in the past.",
 	"components.dateTimePicker.messages.dateRequired":
 		"Time cannot be entered without a date.",
-	"components.editor.highlight.dullBlue": "Blue marker (dull)",
-	"components.editor.highlight.dullGreen": "Green marker (dull)",
-	"components.editor.highlight.dullPink": "Pink marker (dull)",
-	"components.editor.highlight.dullYellow": "Yellow marker (dull)",
+	"components.editor.fonts.colors.oliveGreen": "Olive Green",
+	"components.editor.fonts.colors.indigo": "Indigo",
+	"components.editor.fonts.colors.darkPurple": "Dark Purple",
+	"components.editor.fonts.colors.pink": "Pink",
 	"components.elementTypeSelection.dialog.title": "Add element",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"External tools",
@@ -1780,6 +1780,8 @@ export default {
 	"pages.rooms.infoAlert.welcome.visibility.help": "help page",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "feedback",
 	"pages.rooms.leaveRoom.confirmation": 'Leave room "{roomName}"?',
+	"pages.rooms.leaveRoom.RoomOwner.warning":
+		"Before the room can be left, the room ownership permission must be transferred to another room member. This can be done in the room member management.",
 	"pages.rooms.leaveRoom.menu": "Leave room",
 	"pages.rooms.members.error.load": "The participant list could not be loaded.",
 	"pages.rooms.members.error.add": "Adding participants failed.",
@@ -1791,6 +1793,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "more information",
 	"pages.rooms.members.label": "Participants",
 	"pages.rooms.members.add": "Add members",
+	"pages.rooms.members.add.infoText":
+		"Multiple people can only be added in one step if they belong to the same school and school role.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Action menu for {memberFullName}",
 	"pages.rooms.members.changePermission": "Change room permissions",

@@ -1,7 +1,7 @@
 <template>
-	<div class="d-flex align-items-center">
+	<div class="d-flex align-items-center board-header">
 		<InlineEditInteractionHandler
-			:isEditMode="isEditMode && canEditRoomBoard"
+			:isEditMode="isEditMode"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
 			@keydown.enter="onStartEditMode"
@@ -15,7 +15,7 @@
 					scope="board"
 					:value="boardTitle"
 					data-testid="board-title"
-					:isEditMode="isEditMode && canEditRoomBoard"
+					:isEditMode="isEditMode"
 					:isFocused="isFocusedById"
 					:maxLength="100"
 					:style="{ width: `${fieldWidth}px` }"
@@ -29,7 +29,7 @@
 			<BoardDraftChip v-if="isDraft" />
 			<div class="mx-2">
 				<BoardMenu
-					v-if="hasEditPermission && canEditRoomBoard"
+					v-if="hasEditPermission"
 					:scope="BoardMenuScope.BOARD"
 					data-testid="board-menu-btn"
 				>
@@ -102,7 +102,7 @@ const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
 );
 const boardHeader = ref<HTMLDivElement | null>(null);
 const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
-const { hasEditPermission, canEditRoomBoard } = useBoardPermissions();
+const { hasEditPermission } = useBoardPermissions();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
 const fieldWidth = ref(0);
@@ -195,6 +195,10 @@ watchEffect(() => {
 
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
+
+.board-header {
+	height: var(--board-header-height);
+}
 
 .v-chip {
 	cursor: default;

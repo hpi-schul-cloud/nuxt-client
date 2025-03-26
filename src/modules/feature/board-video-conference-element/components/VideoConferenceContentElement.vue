@@ -1,12 +1,12 @@
 <template>
 	<VCard
-		class="mb-4"
+		class="mb-4 video-conference-element"
 		data-testid="video-conference-element"
 		:class="{ 'd-none': isHidden }"
 		:variant="outlined"
 		ref="videoConferenceElement"
 		:ripple="false"
-		tabindex="0"
+		:tabindex="tabIndex"
 		target="_blank"
 		link
 		:aria-label="ariaLabel"
@@ -209,7 +209,8 @@ const canJoin = computed(
 			isWaitingRoomActive.value)
 );
 
-const canStart = computed(() => isTeacher.value);
+const { hasEditPermission } = useBoardPermissions();
+const canStart = computed(() => hasEditPermission.value);
 const isCreating = computed(
 	() => props.isEditMode && !computedElement.value.content.title
 );
@@ -267,4 +268,16 @@ const onContentEnter = async () => {
 		onContentClick();
 	}
 };
+
+const tabIndex = computed(() => {
+	return !isCreating.value && (canStart.value || isRunning.value)
+		? 0
+		: undefined;
+});
 </script>
+
+<style scoped lang="scss">
+.video-conference-element:focus {
+	outline-offset: 2px;
+}
+</style>

@@ -374,7 +374,7 @@ describe("LinkContentElement", () => {
 
 			describe("when the link references the same page", () => {
 				const setup = () => {
-					const url = new URL("https://dbildungscloud.test/path");
+					const url = new URL("https://dbildungscloud.test/path#card-12345");
 					const linkElementContent = linkElementContentFactory.build({
 						url: url.toString(),
 					});
@@ -383,8 +383,14 @@ describe("LinkContentElement", () => {
 							createMock<Location>({
 								host: url.host,
 								pathname: url.pathname,
+								hash: url.hash,
+								href: url.href,
 							}),
 					});
+
+					const domElementMock = createMock<HTMLElement>();
+					const querySelectorSpy = jest.spyOn(document, "querySelector");
+					querySelectorSpy.mockReturnValue(domElementMock);
 
 					const { wrapper } = setupWrapper({
 						content: linkElementContent,
@@ -393,6 +399,7 @@ describe("LinkContentElement", () => {
 
 					return {
 						wrapper,
+						domElementMock,
 					};
 				};
 
@@ -404,6 +411,22 @@ describe("LinkContentElement", () => {
 					);
 
 					expect(linkElement.attributes("target")).toEqual("_self");
+				});
+
+				it("should scroll to and focus the element", async () => {
+					const { wrapper, domElementMock } = setup();
+
+					const linkElement = wrapper.findComponent(
+						'[data-testid="board-link-element"]'
+					);
+
+					await linkElement.trigger("click");
+
+					expect(domElementMock.scrollIntoView).toHaveBeenCalledWith({
+						block: "center",
+						inline: "center",
+					});
+					expect(domElementMock.focus).toHaveBeenCalled();
 				});
 			});
 		});

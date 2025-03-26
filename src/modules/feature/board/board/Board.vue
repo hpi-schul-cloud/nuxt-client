@@ -6,13 +6,13 @@
 				:breadcrumbs="breadcrumbs"
 				max-width="full"
 				hide-border
+				main-without-padding
 			>
 				<template #header>
 					<BoardHeader
 						:boardId="board.id"
 						:title="board.title"
 						:isDraft="!isBoardVisible"
-						class="mb-1"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
@@ -21,60 +21,58 @@
 						@change-layout="onUpdateBoardLayout"
 					/>
 				</template>
-				<div :class="boardClass" :style="boardStyle">
-					<div>
-						<Sortable
-							:list="board.columns"
-							item-key="id"
-							:class="boardColumnClass"
-							tag="div"
-							:options="{
-								direction: 'horizontal',
-								disabled: isEditMode || !hasMovePermission,
-								group: 'columns',
-								delayOnTouchOnly: true,
-								delay: 300,
-								touchStartThreshold: 3, // needed for sensitive touch devices
-								fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
-								ghostClass: 'sortable-drag-ghost',
-								easing: 'cubic-bezier(1, 0, 0, 1)',
-								dragClass: 'sortable-drag-board-card',
-								dragoverBubble: true,
-								animation: 250,
-								scroll: true,
-								filter: '.v-card',
-								preventOnFilter: false,
-								forceFallback: true,
-								bubbleScroll: true,
-							}"
-							@end="onDropColumn"
-						>
-							<template #item="{ element, index }">
-								<BoardColumn
-									:data-column-id="element.id"
-									:column="element"
-									:index="index"
-									:key="element.id"
-									:columnCount="board.columns.length"
-									:class="{ 'my-0': isListBoard }"
-									:isListBoard="isListBoard"
-									:data-testid="`board-column-${index}`"
-									@reload:board="onReloadBoard"
-									@create:card="onCreateCard"
-									@delete:card="onDeleteCard"
-									@delete:column="onDeleteColumn"
-									@update:column-title="onUpdateColumnTitle(element.id, $event)"
-									@move:column-down="onMoveColumnForward(index, element.id)"
-									@move:column-left="onMoveColumnBackward(index, element.id)"
-									@move:column-right="onMoveColumnForward(index, element.id)"
-									@move:column-up="onMoveColumnBackward(index, element.id)"
-								/>
-							</template>
-						</Sortable>
-					</div>
+				<div :class="boardClasses" :style="boardStyle">
+					<Sortable
+						:list="board.columns"
+						item-key="id"
+						:class="boardColumnClass"
+						tag="div"
+						:options="{
+							direction: 'horizontal',
+							disabled: isEditMode || !hasMovePermission,
+							group: 'columns',
+							delayOnTouchOnly: true,
+							delay: 300,
+							touchStartThreshold: 3, // needed for sensitive touch devices
+							fallbackTolerance: 3, // specifies how far the mouse should move before it's considered a drag
+							ghostClass: 'sortable-drag-ghost',
+							easing: 'cubic-bezier(1, 0, 0, 1)',
+							dragClass: 'sortable-drag-board-card',
+							dragoverBubble: true,
+							animation: 250,
+							scroll: true,
+							filter: '.v-card',
+							preventOnFilter: false,
+							forceFallback: true,
+							bubbleScroll: true,
+						}"
+						@end="onDropColumn"
+					>
+						<template #item="{ element, index }">
+							<BoardColumn
+								:data-column-id="element.id"
+								:column="element"
+								:index="index"
+								:key="element.id"
+								:columnCount="board.columns.length"
+								:class="{ 'my-0': isListBoard }"
+								:isListBoard="isListBoard"
+								:data-testid="`board-column-${index}`"
+								@reload:board="onReloadBoard"
+								@create:card="onCreateCard"
+								@delete:card="onDeleteCard"
+								@delete:column="onDeleteColumn"
+								@update:column-title="onUpdateColumnTitle(element.id, $event)"
+								@move:column-down="onMoveColumnForward(index, element.id)"
+								@move:column-left="onMoveColumnBackward(index, element.id)"
+								@move:column-right="onMoveColumnForward(index, element.id)"
+								@move:column-up="onMoveColumnBackward(index, element.id)"
+							/>
+						</template>
+					</Sortable>
 					<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
 						<BoardColumnGhost
-							v-if="hasCreateColumnPermission && canEditRoomBoard"
+							v-if="hasCreateColumnPermission"
 							@create:column="onCreateColumn"
 							:isListBoard="isListBoard"
 						/>
@@ -137,6 +135,7 @@ import {
 	BOARD_IS_LIST_LAYOUT,
 	extractDataAttribute,
 	useBoardNotifier,
+	useElementFocus,
 	useSharedEditMode,
 } from "@util-board";
 import { SortableEvent } from "sortablejs";
@@ -201,7 +200,6 @@ const {
 	hasDeletePermission,
 	hasEditPermission,
 	isTeacher,
-	canEditRoomBoard,
 } = useBoardPermissions();
 
 const isBoardVisible = computed(() => board.value?.isVisible);
@@ -292,23 +290,7 @@ const onUpdateBoardTitle = async (newTitle: string) => {
 		boardStore.updateBoardTitleRequest({ boardId: props.boardId, newTitle });
 };
 
-const scrollToNodeAndFocus = (scrollTargetId: string) => {
-	const targetElement: HTMLElement | null = document.querySelector(
-		`[data-scroll-target="${scrollTargetId}"]`
-	);
-
-	if (targetElement) {
-		targetElement.scrollIntoView({ block: "center", inline: "center" });
-		targetElement.focus();
-	}
-};
-
-const focusNodeFromHash = () => {
-	if (route.hash) {
-		const scrollTargetId: string = route.hash.slice(1);
-		scrollToNodeAndFocus(scrollTargetId);
-	}
-};
+const { focusNodeFromHash } = useElementFocus();
 
 onMounted(async () => {
 	resetPageInformation();
@@ -334,9 +316,8 @@ onUnmounted(() => {
 });
 
 watch(
-	() => route,
-	() => focusNodeFromHash(),
-	{ deep: true }
+	() => route.hash,
+	() => focusNodeFromHash()
 );
 
 watch(
@@ -378,12 +359,12 @@ const copyResultModalItems = computed(
 
 const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
 
-const boardClass = computed(() => {
-	const classes = ["d-flex", "flex-shrink-1"];
+const boardClasses = computed(() => {
+	const classes = ["d-flex", "flex-shrink-1", "board"];
 	if (isListBoard.value) {
 		classes.push("flex-column", "mx-auto", "my-0");
 	} else {
-		classes.push("flex-row");
+		classes.push("flex-row", "column-board", "scrollbar");
 	}
 	return classes;
 });
@@ -454,3 +435,39 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 	});
 };
 </script>
+
+<style scoped>
+.board {
+	padding: 0 var(--space-lg);
+}
+
+.column-board {
+	overflow-x: auto;
+}
+
+@supports selector(::-webkit-scrollbar) {
+	.scrollbar::-webkit-scrollbar {
+		height: 6px;
+	}
+
+	.scrollbar::-webkit-scrollbar-track {
+		background: white;
+		border: none;
+	}
+
+	.scrollbar::-webkit-scrollbar-thumb {
+		background-color: rgba(var(--v-theme-on-surface), 0.6);
+		border-radius: 5px;
+	}
+
+	.scrollbar::-webkit-scrollbar-thumb:hover {
+		background: rgba(var(--v-theme-on-surface), 0.8);
+	}
+}
+
+@supports not selector(::-webkit-scrollbar) {
+	.scrollbar {
+		scrollbar-width: thin;
+	}
+}
+</style>

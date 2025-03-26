@@ -1,17 +1,27 @@
-import { useSharedBoardPageInformation } from "@/modules/data/board/BoardPageInformation.composable";
 import {
+	BoardLayout,
 	Permission,
 	ImportUserResponseRoleNamesEnum as Roles,
 } from "@/serverApi/v3";
 import { BoardContextType } from "@/types/board/BoardContext";
-import { mockedPiniaStoreTyping, roomFactory } from "@@/tests/test-utils";
+import {
+	boardResponseFactory,
+	envsFactory,
+	mockedPiniaStoreTyping,
+} from "@@/tests/test-utils";
 import { mockAuthModule } from "@@/tests/test-utils/mockAuthModule";
-import { useRoomDetailsStore } from "@data-room";
-import { useRoomAuthorization } from "@feature-room";
 import { createTestingPinia } from "@pinia/testing";
 import { setActivePinia } from "pinia";
-import { computed, nextTick, ref } from "vue";
+import { computed, ref } from "vue";
+import { useBoardStore } from "./Board.store";
+import { useSharedBoardPageInformation } from "./BoardPageInformation.composable";
 import { useBoardPermissions } from "./BoardPermissions.composable";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
+import EnvConfigModule from "@/store/env-config";
+import setupStores from "@@/tests/test-utils/setupStores";
+import { envConfigModule } from "@/store";
+import { useI18n } from "vue-i18n";
 
 jest.mock("@data-board/BoardPageInformation.composable");
 const mockedUseSharedBoardPageInformation = jest.mocked(
@@ -25,9 +35,29 @@ jest.mock<typeof import("@/utils/create-shared-composable")>(
 	})
 );
 
+jest.mock("vue-i18n", () => {
+	return {
+		...jest.requireActual("vue-i18n"),
+		useI18n: jest.fn().mockReturnValue({
+			t: jest.fn().mockImplementation((key: string) => key),
+			n: jest.fn().mockImplementation((key: string) => key),
+		}),
+	};
+});
+
+jest.mocked(useI18n());
+
+jest.mock("@/components/error-handling/ErrorHandler.composable");
+const mockedUseErrorHandler = jest.mocked(useErrorHandler);
+
 describe("BoardPermissions.composable", () => {
+	let mockedErrorHandler: DeepMocked<ReturnType<typeof useErrorHandler>>;
+
 	beforeEach(() => {
 		setActivePinia(createTestingPinia());
+
+		mockedErrorHandler = createMock<ReturnType<typeof useErrorHandler>>();
+		mockedUseErrorHandler.mockReturnValue(mockedErrorHandler);
 	});
 
 	const setup = (
@@ -62,10 +92,26 @@ describe("BoardPermissions.composable", () => {
 			resetPageInformation: jest.fn(),
 		});
 
-		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
-		const roomAuthorizationStore = mockedPiniaStoreTyping(useRoomAuthorization);
+		setupStores({ envConfigModule: EnvConfigModule });
 
-		return { roomDetailsStore, roomAuthorizationStore, contextTypeRef, roomId };
+		const env = envsFactory.build({
+			FEATURE_COLUMN_BOARD_SOCKET_ENABLED: false,
+		});
+
+		envConfigModule.setEnvs(env);
+
+		const boardStore = mockedPiniaStoreTyping(useBoardStore);
+		const board = boardResponseFactory.build({
+			id: "board-id",
+			title: "board-title",
+			isVisible: true,
+			layout: BoardLayout.Columns,
+			features: [],
+			permissions: [],
+		});
+		boardStore.board = board;
+
+		return { boardStore, contextTypeRef, roomId };
 	};
 
 	afterEach(() => {
@@ -76,7 +122,6 @@ describe("BoardPermissions.composable", () => {
 		setup({ userRoles: [], userPermissions: [] });
 
 		const {
-			canEditRoomBoard,
 			hasMovePermission,
 			hasCreateCardPermission,
 			hasCreateColumnPermission,
@@ -87,7 +132,6 @@ describe("BoardPermissions.composable", () => {
 			isStudent,
 		} = useBoardPermissions();
 
-		expect(canEditRoomBoard.value).toBe(false);
 		expect(hasMovePermission.value).toBe(false);
 		expect(hasCreateCardPermission.value).toBe(false);
 		expect(hasCreateColumnPermission.value).toBe(false);
@@ -96,76 +140,5 @@ describe("BoardPermissions.composable", () => {
 		expect(hasEditPermission.value).toBe(false);
 		expect(isTeacher.value).toBe(false);
 		expect(isStudent.value).toBe(false);
-	});
-
-	describe("when contextType changes", () => {
-		describe("when contextType is not Room", () => {
-			it("should not call fetchRoom", async () => {
-				const { roomDetailsStore, contextTypeRef } = setup();
-				const { hasMovePermission } = useBoardPermissions();
-
-				contextTypeRef.value = BoardContextType.Course;
-				await nextTick();
-
-				expect(hasMovePermission.value).toBe(true);
-				expect(roomDetailsStore.fetchRoom).not.toHaveBeenCalled();
-			});
-
-			it("should reset state", async () => {
-				const { roomDetailsStore, contextTypeRef } = setup();
-				useBoardPermissions();
-
-				contextTypeRef.value = BoardContextType.Course;
-				await nextTick();
-
-				expect(roomDetailsStore.resetState).toHaveBeenCalled();
-			});
-
-			it("should set edit board permissions", async () => {
-				const { contextTypeRef } = setup();
-				const { canEditRoomBoard } = useBoardPermissions();
-
-				contextTypeRef.value = BoardContextType.Course;
-				await nextTick();
-
-				expect(canEditRoomBoard.value).toBe(true);
-			});
-		});
-
-		describe("when contextType is Room", () => {
-			it("should call fetchRoom", async () => {
-				const { roomDetailsStore, contextTypeRef, roomId } = setup();
-				useBoardPermissions();
-
-				contextTypeRef.value = BoardContextType.Room;
-				await nextTick();
-
-				expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith(roomId);
-			});
-
-			it("should set permissions", async () => {
-				const { roomDetailsStore, contextTypeRef } = setup({
-					userRoles: [],
-					userPermissions: [],
-				});
-				roomDetailsStore.room = roomFactory.build({
-					permissions: [Permission.RoomEdit],
-				});
-
-				const { hasMovePermission, hasCreateCardPermission, canEditRoomBoard } =
-					useBoardPermissions();
-
-				expect(hasMovePermission.value).toBe(false);
-				expect(hasCreateCardPermission.value).toBe(false);
-				expect(canEditRoomBoard.value).toBe(false);
-
-				contextTypeRef.value = BoardContextType.Room;
-				await nextTick();
-
-				expect(hasMovePermission.value).toBe(true);
-				expect(hasCreateCardPermission.value).toBe(true);
-				expect(canEditRoomBoard.value).toBe(true);
-			});
-		});
 	});
 });

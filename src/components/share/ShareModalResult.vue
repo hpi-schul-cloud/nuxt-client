@@ -115,18 +115,3 @@ const onShowQrCode = () => {
 	isShowQrCode.value = true;
 };
 </script>
-
-<style lang="scss" scoped>
-.subtitle {
-	overflow-wrap: break-word;
-	white-space: normal;
-}
-
-.button-max-width {
-	max-width: calc(var(--topbar-height) * 2);
-}
-
-.button-alignment-top {
-	align-items: start;
-}
-</style>
