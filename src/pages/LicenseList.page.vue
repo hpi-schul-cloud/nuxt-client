@@ -5,19 +5,15 @@
 				{{ t("pages.licenseList.title") }}
 			</h1>
 
-			<v-expansion-panels
-				multiple
-				class="pb-9 w-100"
-				v-for="[name, item] in Object.entries(response)"
-				:key="name"
-			>
-				<v-expansion-panel class="w-100">
+			<v-expansion-panels multiple class="w-100 pb-9">
+				<v-expansion-panel
+					v-for="[name, item] in Object.entries(response)"
+					:key="name"
+				>
 					<v-expansion-panel-title>
 						<div class="text-h4">{{ name }}</div>
 						<template v-slot:actions="{ expanded }">
-							<div class="v-expansion-panel-header__icon">
-								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
-							</div>
+							<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text>
