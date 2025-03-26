@@ -221,7 +221,7 @@ watchEffect(() => {
 	overflow: hidden;
 }
 
-.board-header--input {
+.input {
 	max-width: calc(100% + 1.5rem);
 }
 </style>
