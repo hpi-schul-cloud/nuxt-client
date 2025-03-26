@@ -16,7 +16,6 @@
 					<v-expansion-panel-text>
 						<p style="white-space: pre-line">{{ item.licenseText }}</p>
 						<div class="ga-2">
-							{{ item.components.join(",") }}
 							<v-chip
 								label
 								v-for="componentName in item.components"
