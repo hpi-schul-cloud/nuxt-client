@@ -52,18 +52,17 @@ export default defineComponent({
 		};
 
 		const isAllowedTarget = (event: MouseEvent): boolean => {
-			if (
-				!(event.target instanceof HTMLElement) &&
-				!(event.target instanceof SVGElement)
-			)
+			const target = event.target as HTMLElement | SVGElement;
+			if (!(target instanceof HTMLElement) && !(target instanceof SVGElement))
 				return true;
 
-			return (
-				event.target &&
-				[isListItem, isDatePicker, isFileElementLink].every(
-					(fn) => !fn(event.target as HTMLElement | SVGElement)
-				)
-			);
+			const disallowedConditions = [
+				isListItem,
+				isDatePicker,
+				isFileElementLink,
+			];
+
+			return target && disallowedConditions.every((fn) => !fn(target));
 		};
 
 		const onClickOutside = (event: MouseEvent) => {
