@@ -26,6 +26,7 @@ defineOptions({
 defineProps({
 	icon: {
 		type: String,
+		default: "",
 	},
 	color: {
 		type: String,
