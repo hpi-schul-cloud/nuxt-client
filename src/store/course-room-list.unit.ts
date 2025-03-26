@@ -677,7 +677,7 @@ describe("rooms module", () => {
 		});
 
 		describe("getAllElements", () => {
-			it("should return rooms-list AllElements", () => {
+			it("should return courses-list AllElements", () => {
 				const courseRoomListModule = new CourseRoomListModule({});
 				const itemsToBeSet = [
 					{
