@@ -145,12 +145,14 @@ const props = defineProps({
 	},
 	configuration: {
 		type: Object as PropType<ConfigurationTypes>,
+		default: null,
 	},
 	isPreferredTool: {
 		type: Boolean,
 	},
 	error: {
 		type: Object as PropType<BusinessError>,
+		default: null,
 	},
 	loading: {
 		type: Boolean,

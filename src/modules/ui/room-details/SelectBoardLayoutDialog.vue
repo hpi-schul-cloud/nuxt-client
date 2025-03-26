@@ -49,6 +49,7 @@ const isOpen = defineModel({
 defineProps({
 	currentLayout: {
 		type: String as PropType<BoardLayout>,
+		default: "",
 	},
 });
 

@@ -109,6 +109,7 @@ export default defineComponent({
 	props: {
 		configId: {
 			type: String,
+			default: "",
 		},
 	},
 	setup(props) {

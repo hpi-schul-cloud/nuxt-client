@@ -74,18 +74,20 @@ import {
 	INJECT_SPEED_DIAL_ORIENTATION,
 } from "./injection-tokens";
 
-const props = withDefaults(
-	defineProps<{
-		icon: string;
-		dataTestId?: string;
-		speedDialIndex?: number;
-		href?: string;
-		to?: string;
-	}>(),
-	{
-		speedDialIndex: 0,
-	}
-);
+interface Props {
+	icon: string;
+	dataTestId?: string;
+	speedDialIndex?: number;
+	href?: string;
+	to?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+	dataTestId: "",
+	href: "",
+	to: "",
+	speedDialIndex: 0,
+});
 
 const emit = defineEmits<{
 	(event: "click"): void;
