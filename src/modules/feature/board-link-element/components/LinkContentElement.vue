@@ -18,8 +18,8 @@
 			v-if="computedElement.content.url"
 			:url="computedElement.content.url"
 			:title="computedElement.content.title"
-			:imageUrl="computedElement.content.imageUrl"
-			:isEditMode="isEditMode"
+			:image-url="computedElement.content.imageUrl"
+			:is-edit-mode="isEditMode"
 			><BoardMenu
 				:scope="BoardMenuScope.LINK_ELEMENT"
 				has-background

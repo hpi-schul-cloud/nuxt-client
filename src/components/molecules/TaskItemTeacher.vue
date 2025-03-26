@@ -13,7 +13,7 @@
 			@keydown.tab.shift="handleFocus(false)"
 		>
 			<!-- item avatar -->
-			<template v-slot:prepend>
+			<template #prepend>
 				<v-avatar>
 					<v-icon
 						class="fill"

@@ -86,7 +86,7 @@
 		</v-list-item>
 	</KebabMenu>
 	<v-custom-dialog
-		v-model:isOpen="confirmDeleteDialogIsOpen"
+		v-model:is-open="confirmDeleteDialogIsOpen"
 		:size="375"
 		has-buttons
 		confirm-btn-title-key="common.actions.delete"

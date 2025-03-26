@@ -32,8 +32,8 @@
 			data-testid="admin-rooms-table"
 			class="elevation-1"
 			:no-data-text="t('common.nodata')"
-			@update:sortBy="onUpdateSortBy"
-			@update:itemsPerPage="onUpdateItemsPerPage"
+			@update:sort-by="onUpdateSortBy"
+			@update:items-per-page="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
 			<template #[`item.actions`]="{ item }">

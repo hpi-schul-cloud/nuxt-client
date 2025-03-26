@@ -16,7 +16,7 @@
 		:max-width="imageWidth"
 		:max-height="maxHeight"
 	>
-		<template v-slot:placeholder>
+		<template #placeholder>
 			<v-row class="fill-height ma-0" align="center" justify="center">
 				<VProgressCircular color="primary" indeterminate :size="36" />
 			</v-row>

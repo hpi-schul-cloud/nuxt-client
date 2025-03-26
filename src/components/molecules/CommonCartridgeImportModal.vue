@@ -40,8 +40,8 @@
 						type="submit"
 						variant="flat"
 						color="primary"
-						v-bind:disabled="importButtonDisabled"
-						v-on:click="onConfirm"
+						:disabled="importButtonDisabled"
+						@click="onConfirm"
 						data-testid="dialog-confirm-btn"
 					>
 						{{ $t("pages.rooms.ccImportCourse.confirm") }}

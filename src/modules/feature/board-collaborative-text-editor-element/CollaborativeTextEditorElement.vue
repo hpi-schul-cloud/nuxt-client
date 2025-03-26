@@ -14,7 +14,7 @@
 		@keydown.stop
 	>
 		<ContentElementBar
-			:hasGreyBackground="true"
+			:has-grey-background="true"
 			:has-row-style="isSmallOrLargerListBoard"
 			:icon="mdiTextBoxEditOutline"
 		>

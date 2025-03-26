@@ -1,6 +1,6 @@
 <template>
 	<v-menu max-height="120px" min-width="150px" location="bottom center">
-		<template v-slot:activator="{ props }">
+		<template #activator="{ props }">
 			<v-btn
 				data-testid="speed-menu-play-speed"
 				v-bind="props"

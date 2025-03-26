@@ -7,8 +7,8 @@
 				:label="dateInputLabel"
 				:aria-label="dateInputAriaLabel"
 				:data-testid="dateInputTestId"
-				:minDate="minDate"
-				:maxDate="maxDate"
+				:min-date="minDate"
+				:max-date="maxDate"
 				@update:date="onDateUpdate"
 				@error="onError('date')"
 			/>

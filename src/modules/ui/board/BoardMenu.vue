@@ -1,6 +1,6 @@
 <template>
 	<VMenu location="bottom end" min-width="250">
-		<template v-slot:activator="{ props }">
+		<template #activator="{ props }">
 			<VBtn
 				:variant="variant"
 				:data-testid="dataTestid"

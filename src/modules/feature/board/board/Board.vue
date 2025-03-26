@@ -10,9 +10,9 @@
 			>
 				<template #header>
 					<BoardHeader
-						:boardId="board.id"
+						:board-id="board.id"
 						:title="board.title"
-						:isDraft="!isBoardVisible"
+						:is-draft="!isBoardVisible"
 						@update:visibility="onUpdateBoardVisibility"
 						@update:title="onUpdateBoardTitle"
 						@copy:board="onCopyBoard"
@@ -54,9 +54,9 @@
 								:column="element"
 								:index="index"
 								:key="element.id"
-								:columnCount="board.columns.length"
+								:column-count="board.columns.length"
 								:class="{ 'my-0': isListBoard }"
-								:isListBoard="isListBoard"
+								:is-list-board="isListBoard"
 								:data-testid="`board-column-${index}`"
 								@reload:board="onReloadBoard"
 								@create:card="onCreateCard"
@@ -74,7 +74,7 @@
 						<BoardColumnGhost
 							v-if="hasCreateColumnPermission"
 							@create:column="onCreateColumn"
-							:isListBoard="isListBoard"
+							:is-list-board="isListBoard"
 						/>
 					</div>
 				</div>

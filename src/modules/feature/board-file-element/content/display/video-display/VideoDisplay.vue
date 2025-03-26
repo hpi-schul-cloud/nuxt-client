@@ -9,7 +9,7 @@
 			data-testid="video-thumbnail-in-card"
 			:src="src"
 			:aria-label="name"
-			v-on:error="onError"
+			@error="onError"
 		/>
 		<ContentElementBar class="menu">
 			<template v-if="showMenu" #menu><slot /></template>

@@ -13,20 +13,20 @@
 		<div>
 			<SubmissionContentElementDisplay
 				v-if="!isEditMode"
-				:dueDate="modelValue.dueDate"
+				:due-date="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:studentSubmission="studentSubmission"
-				:isOverdue="isOverdue"
+				:student-submission="studentSubmission"
+				:is-overdue="isOverdue"
 				@update:completed="onUpdateCompleted"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
-				:dueDate="modelValue.dueDate"
+				:due-date="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:isOverdue="isOverdue"
-				@update:dueDate="($event) => (modelValue.dueDate = $event)"
+				:is-overdue="isOverdue"
+				@update:due-date="($event) => (modelValue.dueDate = $event)"
 			>
 				<BoardMenu
 					:scope="BoardMenuScope.SUBMISSION_ELEMENT"

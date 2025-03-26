@@ -17,7 +17,7 @@
 			:disabled="isInEditMode"
 			:loading="loading"
 			data-testId="configuration-select"
-			@update:modelValue="onChangeSelection"
+			@update:model-value="onChangeSelection"
 			@update:search="updateSearchInput"
 			:hide-no-data="hideNoData"
 			:custom-filter="
@@ -47,7 +47,7 @@
 				/>
 			</template>
 		</v-autocomplete>
-		<slot name="aboveSettings" :selectedTemplate="selectedTemplate" />
+		<slot name="aboveSettings" :selected-template="selectedTemplate" />
 		<h2
 			v-if="
 				displaySettingsTitle &&
@@ -58,7 +58,7 @@
 		>
 			{{ $t("pages.tool.settings") }}
 		</h2>
-		<slot name="aboveParameters" :selectedTemplate="selectedTemplate" />
+		<slot name="aboveParameters" :selected-template="selectedTemplate" />
 		<external-tool-config-settings
 			v-if="hasSelectedTemplateParameters"
 			:template="selectedTemplate"

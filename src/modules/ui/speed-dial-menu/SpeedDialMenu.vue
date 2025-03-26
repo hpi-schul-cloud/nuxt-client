@@ -27,7 +27,7 @@
 				ref="outlet"
 			>
 				<template v-for="(actionNode, i) in actions" :key="i">
-					<component :is="actionNode" :speedDialIndex="i" />
+					<component :is="actionNode" :speed-dial-index="i" />
 				</template>
 			</div>
 		</div>

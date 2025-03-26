@@ -21,7 +21,7 @@
 			</VListItemTitle>
 		</VListItem>
 		<VListGroup>
-			<template v-slot:activator="{ props }">
+			<template #activator="{ props }">
 				<VListItem
 					v-bind="props"
 					:prepend-icon="mdiPalette"

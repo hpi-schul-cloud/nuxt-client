@@ -7,8 +7,8 @@
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"
-			:isEditMode="isEditMode"
-			:isFocused="isFocused"
+			:is-edit-mode="isEditMode"
+			:is-focused="isFocused"
 			@update:value="onUpdateValue"
 			@enter="onEnter"
 			data-testid="card-title"

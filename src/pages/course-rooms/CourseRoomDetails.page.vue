@@ -3,7 +3,7 @@
 		ref="main"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
-		@onFabItemClick="fabItemClickHandler"
+		@on-fab-item-click="fabItemClickHandler"
 		max-width="short"
 	>
 		<template #header>
@@ -73,7 +73,7 @@
 			:is="getCurrentComponent"
 			:room-data-object="roomData"
 			:role="dashBoardRole"
-			:roomId="courseId"
+			:room-id="courseId"
 			@copy-board-element="onCopyBoardElement"
 			data-testid="room-content"
 		/>

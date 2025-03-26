@@ -1,7 +1,7 @@
 <template>
 	<VAppBar flat :height="appBarHeight">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
-		<template v-slot:prepend>
+		<template #prepend>
 			<VAppBarNavIcon
 				v-if="!sidebarExpanded"
 				:icon="mdiMenu"

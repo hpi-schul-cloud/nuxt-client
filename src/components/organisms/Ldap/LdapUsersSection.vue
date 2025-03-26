@@ -9,7 +9,7 @@
 
 		<base-input
 			data-testid="ldapDataUsersUserPath"
-			:modelValue="modelValue.userPath"
+			:model-value="modelValue.userPath"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.title')"
@@ -18,7 +18,7 @@
 			:validation-model="v$.modelValue.userPath"
 			:validation-messages="userPathValidationMessage"
 			datatest-id="ldapDataUsersUserPath"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, userPath: $event })
 			"
 		>
@@ -31,14 +31,14 @@
 		</p>
 		<base-input
 			data-testid="ldapDataUsersFirstName"
-			:modelValue="modelValue.firstName"
+			:model-value="modelValue.firstName"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.firstname')"
 			:validation-model="v$.modelValue.firstName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFirstName"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, firstName: $event })
 			"
 		>
@@ -48,14 +48,14 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersFamilyName"
-			:modelValue="modelValue.familyName"
+			:model-value="modelValue.familyName"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.lastname')"
 			:validation-model="v$.modelValue.familyName"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersFamilyName"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, familyName: $event })
 			"
 		>
@@ -65,14 +65,14 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersEmail"
-			:modelValue="modelValue.email"
+			:model-value="modelValue.email"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.path.email')"
 			:validation-model="v$.modelValue.email"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersEmail"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, email: $event })
 			"
 		>
@@ -82,7 +82,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersUid"
-			:modelValue="modelValue.uid"
+			:model-value="modelValue.uid"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.uid.title')"
@@ -90,7 +90,7 @@
 			:validation-model="v$.modelValue.uid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUid"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, uid: $event })
 			"
 		>
@@ -100,7 +100,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataUsersUuid"
-			:modelValue="modelValue.uuid"
+			:model-value="modelValue.uuid"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.users.uuid.title')"
@@ -108,7 +108,7 @@
 			:validation-model="v$.modelValue.uuid"
 			:validation-messages="usersValidationMessage"
 			datatest-id="ldapDataUsersUuid"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, uuid: $event })
 			"
 		>

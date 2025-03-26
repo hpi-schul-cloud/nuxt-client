@@ -2,7 +2,7 @@
 	<external-tool-configurator
 		:templates="availableTools"
 		:configuration="configuration"
-		:isPreferredTool="isPreferredTool"
+		:is-preferred-tool="isPreferredTool"
 		:error="apiError"
 		:loading="loading"
 		:display-settings-title="displaySettingsTitle"

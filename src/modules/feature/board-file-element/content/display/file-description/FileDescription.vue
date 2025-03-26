@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<ContentElementBar
-			:hasGreyBackground="!isEditMode"
+			:has-grey-background="!isEditMode"
 			:icon="mdiFileDocumentOutline"
 		>
 			<template #title v-if="showTitle">

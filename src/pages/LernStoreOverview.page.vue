@@ -27,7 +27,7 @@
 							@update:model-value="onInput"
 							data-testid="learningstore-search-input"
 						>
-							<template v-slot:append-inner>
+							<template #append-inner>
 								<v-btn
 									v-if="searchQuery"
 									:icon="mdiClose"

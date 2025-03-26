@@ -32,7 +32,7 @@
 			hide-header
 			show-adjacent-months
 			elevation="6"
-			@update:modelValue="closeAndEmit"
+			@update:model-value="closeAndEmit"
 		/>
 	</v-menu>
 </template>

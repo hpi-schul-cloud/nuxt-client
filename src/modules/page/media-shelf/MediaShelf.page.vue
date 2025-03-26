@@ -49,7 +49,7 @@
 				image="media-shelf-empty-state"
 				:title="$t('feature.media-shelf.emptyState')"
 				class="mt-16"
-				imgHeight="273px"
+				img-height="273px"
 				data-testid="empty-state"
 			/>
 		</template>

@@ -7,7 +7,7 @@
 			:max-width="tooltipWidth"
 			v-if="isOverflowingLongText"
 		>
-			<template v-slot:activator="{ props }">
+			<template #activator="{ props }">
 				<div v-bind="props" class="text-truncate">
 					<slot />
 				</div>

@@ -18,7 +18,7 @@
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="admin-school-toggle-student-visibility"
-					@update:modelValue="
+					@update:model-value="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'teacher.STUDENT_LIST')
 					"
@@ -51,7 +51,7 @@
 					"
 					class="ml-1 mt-0"
 					data-testid="admin-school-toggle-learning-store"
-					@update:modelValue="
+					@update:model-value="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
 					"
@@ -83,7 +83,7 @@
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_chat"
-					@update:modelValue="
+					@update:model-value="
 						($event) => $emit('update-feature-settings', $event, 'rocketChat')
 					"
 				/>
@@ -113,7 +113,7 @@
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_video_conference"
-					@update:modelValue="
+					@update:model-value="
 						($event) =>
 							$emit('update-feature-settings', $event, 'videoconference')
 					"
@@ -144,7 +144,7 @@
 					:true-icon="mdiCheck"
 					class="ml-1 mt-0"
 					data-testid="toggle_ai_tutor"
-					@update:modelValue="
+					@update:model-value="
 						($event) => $emit('update-feature-settings', $event, 'aiTutor')
 					"
 				/>

@@ -4,7 +4,7 @@
 		role="menuitem"
 		:aria-label="ariaLabel"
 	>
-		<template v-slot:prepend>
+		<template #prepend>
 			<VIcon :icon="icon" data-testid="kebab-menu-action-icon" />
 		</template>
 		<VListItemTitle :data-testid="dataTestId">

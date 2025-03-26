@@ -1,6 +1,6 @@
 <template>
 	<BoardColumnInteractionHandler
-		:isEditMode="isEditMode"
+		:is-edit-mode="isEditMode"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 	>
@@ -10,10 +10,10 @@
 					data-testid="media-line-title"
 					:value="title"
 					scope="column"
-					:isEditMode="isEditMode"
+					:is-edit-mode="isEditMode"
 					:placeholder="titlePlaceholder"
 					class="w-100"
-					:isFocused="isFocusedById"
+					:is-focused="isFocusedById"
 					@update:value="onUpdateTitle"
 				/>
 				<slot name="menu" />

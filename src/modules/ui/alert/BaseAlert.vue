@@ -3,7 +3,7 @@
 		:color="color"
 		:icon="icon"
 		:closable="showCloseIcon"
-		:closeIcon="showCloseIcon ? closeIcon : null"
+		:close-icon="showCloseIcon ? closeIcon : null"
 		class="mb-0"
 	>
 		<div class="alert-text" v-if="$slots.default">

@@ -16,7 +16,7 @@
 						:alt="alternativeText"
 						:cover="false"
 						@error="onImageError"
-						:maxHeight="336"
+						:max-height="336"
 					/>
 				</div>
 			</div>

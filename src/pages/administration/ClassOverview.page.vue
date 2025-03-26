@@ -35,8 +35,8 @@
 			data-testid="admin-class-table"
 			class="elevation-1"
 			:no-data-text="t('common.nodata')"
-			@update:sortBy="onUpdateSortBy"
-			@update:itemsPerPage="onUpdateItemsPerPage"
+			@update:sort-by="onUpdateSortBy"
+			@update:items-per-page="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
 			<template #[`item.actions`]="{ item }">
@@ -129,7 +129,7 @@
 			max-width="360"
 			data-testid="delete-dialog"
 			has-buttons
-			confirmBtnTitleKey="common.actions.delete"
+			confirm-btn-title-key="common.actions.delete"
 			:buttons="['cancel', 'confirm']"
 			@dialog-closed="onCancelClassDeletion"
 			@dialog-confirmed="onConfirmClassDeletion"

@@ -4,7 +4,7 @@
 		min-width="250"
 		v-if="hasSlotContent($slots.default)"
 	>
-		<template v-slot:activator="{ props }">
+		<template #activator="{ props }">
 			<VBtn
 				v-bind="props"
 				v-bind.attr="$attrs"

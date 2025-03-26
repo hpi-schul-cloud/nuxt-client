@@ -16,7 +16,7 @@
 			:alerts="alerts"
 			:is-edit-mode="isEditMode"
 			@fetch:file="onFetchFile"
-			@update:alternativeText="onUpdateAlternativeText"
+			@update:alternative-text="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
 			@add:alert="onAddAlert"
 		>
@@ -37,10 +37,10 @@
 		</FileContent>
 		<FileUpload
 			v-else
-			:elementId="element.id"
-			:isEditMode="isEditMode"
+			:element-id="element.id"
+			:is-edit-mode="isEditMode"
 			@upload:file="onUploadFile"
-			:isUploading="isUploading"
+			:is-uploading="isUploading"
 		>
 			<BoardMenu :scope="BoardMenuScope.FILE_ELEMENT" has-background>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
