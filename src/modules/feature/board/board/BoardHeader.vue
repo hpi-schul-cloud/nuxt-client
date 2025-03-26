@@ -217,7 +217,7 @@ watchEffect(() => {
 	letter-spacing: $field-letter-spacing;
 }
 
-.board-header--item {
+.input-container {
 	overflow: hidden;
 }
 
