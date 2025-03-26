@@ -1,5 +1,5 @@
 <template>
-	<Editor
+	<CKEditor.component
 		v-model="modelValue"
 		:editor="InlineEditor"
 		:config="config"
@@ -14,6 +14,7 @@
 import { useVModel } from "@vueuse/core";
 import { computed } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue";
+import { Editor } from "@ckeditor/ckeditor5-core";
 import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
 import { useEditorConfig } from "./EditorConfig.composable";
 import { logger } from "@util-logger";
@@ -44,8 +45,6 @@ const emit = defineEmits([
 	"keyboard",
 	"keyboard:delete",
 ]);
-
-const Editor = CKEditor.component;
 
 const {
 	generalConfig,
@@ -82,7 +81,7 @@ const handleDelete = () => {
 	}
 };
 
-const handleReady = (editor) => {
+const handleReady = (editor: Editor) => {
 	emit("ready");
 
 	if (props.autofocus) {
