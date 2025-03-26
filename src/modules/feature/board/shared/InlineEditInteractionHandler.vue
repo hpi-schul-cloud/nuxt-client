@@ -37,7 +37,7 @@ export default defineComponent({
 			return !!target.closest(".v-date-picker");
 		};
 
-		const isLinkElement = (target: HTMLElement | SVGElement): boolean => {
+		const isFileElementLink = (target: HTMLElement | SVGElement): boolean => {
 			const linkTestId = target
 				.closest("a")
 				?.attributes.getNamedItem("data-testid")?.value;
@@ -60,7 +60,7 @@ export default defineComponent({
 
 			return (
 				event.target &&
-				[isListItem, isDatePicker, isLinkElement].every(
+				[isListItem, isDatePicker, isFileElementLink].every(
 					(fn) => !fn(event.target as HTMLElement | SVGElement)
 				)
 			);
