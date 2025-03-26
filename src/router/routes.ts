@@ -267,13 +267,6 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
 		name: "room-members",
 	},
-	// TODO BC-7877 This redirect should be removed. Currently this route is used by the legacy client (and dof_app_deploy).
-	// So we have to replace the reference there by "course-room-list" path.
-	{
-		path: "/rooms-list",
-		redirect: { name: "course-room-list" },
-		name: "rooms-list",
-	},
 	{
 		path: "/rooms/courses-list",
 		component: () => import("@/pages/course-rooms/CourseRoomList.page.vue"),
