@@ -23,7 +23,7 @@ configureVueProject({
 });
 
 module.exports = defineConfigWithVueTs([
-	...pluginVue.configs["flat/essential"],
+	...pluginVue.configs["flat/strongly-recommended"],
 	js.configs.recommended,
 	vueTsConfigs.recommended,
 	eslintPluginPrettierRecommended,
