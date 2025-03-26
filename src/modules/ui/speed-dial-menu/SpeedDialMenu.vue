@@ -64,16 +64,21 @@ import {
 } from "./injection-tokens";
 import { useDisplay } from "vuetify";
 
-const props = withDefaults(
-	defineProps<{
-		icon?: string;
-		href?: string;
-		to?: string;
-		direction?: "top" | "bottom";
-		orientation?: "left" | "right";
-	}>(),
-	{ direction: "bottom", orientation: "left" }
-);
+interface Props {
+	icon?: string;
+	href?: string;
+	to?: string;
+	direction?: "top" | "bottom";
+	orientation?: "left" | "right";
+}
+
+const props = withDefaults(defineProps<Props>(), {
+	icon: "",
+	href: "",
+	to: "",
+	direction: "",
+	orientation: "",
+});
 
 const emit = defineEmits(["fab:clicked"]);
 
