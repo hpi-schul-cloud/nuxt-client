@@ -4,9 +4,7 @@
 			<h1 class="text-h3 d-flex justify-center">
 				{{ t("pages.licenseList.title") }}
 			</h1>
-			<v-alert type="info" class="mb-4">
-				{{ t("pages.licenseList.introduction") }}
-			</v-alert>
+			<p>{{ t("pages.licenseList.introduction") }}</p>
 
 			<v-expansion-panels multiple class="w-100 pb-9">
 				<v-expansion-panel
@@ -21,7 +19,9 @@
 					</v-expansion-panel-title>
 					<v-expansion-panel-text>
 						<p style="white-space: pre-line">{{ item.licenseText }}</p>
-						<p>{{ t("pages.licenseList.packageIntroduction") }}</p>
+						<div class="text-h5">
+							{{ t("pages.licenseList.packageIntroduction") }}
+						</div>
 						<div class="ga-2">
 							<v-chip
 								label
