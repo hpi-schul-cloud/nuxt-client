@@ -17,7 +17,25 @@ import CKEditor from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
 import { useEditorConfig } from "./EditorConfig.composable";
-import { logger } from "@util-logger";
+
+type CKEditorKeystrokeInfo = {
+	keyCode: number;
+	keystroke: number;
+	domEvent: KeyboardEvent;
+	domTarget: HTMLElement;
+	altKey: boolean;
+	ctrlKey: boolean;
+	metaKey: boolean;
+	shiftKey: boolean;
+	view: unknown;
+	document: unknown;
+};
+
+type CKEditorEventInfo = {
+	name: string;
+	source: unknown;
+	stop?: () => void;
+};
 
 const props = defineProps({
 	value: {
@@ -90,12 +108,14 @@ const handleReady = (editor: Editor) => {
 
 	// attach additional event listener not provided by vue wrapper itself
 	// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
-	editor.editing.view.document.on("keydown", (evt, data) => {
-		if (data.domEvent.key === "Backspace" || data.domEvent.key === "Delete") {
-			logger.log("handleDelete");
-			handleDelete();
+	editor.editing.view.document.on(
+		"keydown",
+		(evt: CKEditorEventInfo, data: CKEditorKeystrokeInfo) => {
+			if (data.domEvent.key === "Backspace" || data.domEvent.key === "Delete") {
+				handleDelete();
+			}
 		}
-	});
+	);
 };
 </script>
 
