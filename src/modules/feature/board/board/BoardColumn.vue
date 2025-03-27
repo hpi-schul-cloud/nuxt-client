@@ -94,6 +94,7 @@ import { computed, defineComponent, PropType, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
+import { getScrollbarWidth } from "@/utils/scrollbarWidth";
 
 export default defineComponent({
 	name: "BoardColumn",
@@ -301,6 +302,8 @@ export default defineComponent({
 		const { getRenderKey } = useForceRender(columnId);
 		const renderKey = computed(() => getRenderKey());
 
+		const scrollbarWidth = computed(() => getScrollbarWidth() + "px");
+
 		return {
 			cardDropPlaceholderOptions,
 			columnClasses,
@@ -329,6 +332,7 @@ export default defineComponent({
 			renderKey,
 			showAddButton,
 			sortableGhostClasses,
+			scrollbarWidth,
 		};
 	},
 });
@@ -357,7 +361,7 @@ export default defineComponent({
 .multi-column-board-column {
 	height: calc(
 		100vh - var(--topbar-height) - var(--breadcrumbs-height) -
-			var(--board-header-height) - var(--scrollbar-width)
+			var(--board-header-height) - v-bind(scrollbarWidth)
 	);
 	width: 400px;
 }

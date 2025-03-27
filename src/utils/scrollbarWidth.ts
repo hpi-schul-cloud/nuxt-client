@@ -1,13 +1,5 @@
-export function setScrollbarWidthAsCssVar() {
-	const scrollbarWidth = getScrollbarWidth();
-	document.documentElement.style.setProperty(
-		"--scrollbar-width",
-		`${scrollbarWidth}px`
-	);
-}
-
 // Taken from https://stackoverflow.com/a/13382873/11854580
-function getScrollbarWidth() {
+export function getScrollbarWidth() {
 	// Creating invisible container
 	const outer = document.createElement("div");
 	outer.style.visibility = "hidden";
