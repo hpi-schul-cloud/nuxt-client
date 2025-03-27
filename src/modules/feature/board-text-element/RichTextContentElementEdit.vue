@@ -17,9 +17,8 @@
 
 <script lang="ts">
 import { InlineEditor } from "@feature-editor";
-import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useEventListener } from "@vueuse/core";
-import { computed, defineComponent, inject, onMounted, ref, watch } from "vue";
+import { defineComponent, inject, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
@@ -41,53 +40,10 @@ export default defineComponent({
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = ref("");
-
-		const isListBoard = inject(BOARD_IS_LIST_LAYOUT, ref(false));
-
-		const ckeditorViewportOffsetTop = computed(() => {
-			const documentStyle = window.getComputedStyle(document.documentElement);
-
-			const topbarHeight = documentStyle.getPropertyValue("--topbar-height");
-			const breadcrumbsHeight = documentStyle.getPropertyValue(
-				"--breadcrumbs-height"
-			);
-			const boardHeaderHeight = documentStyle.getPropertyValue(
-				"--board-header-height"
-			);
-
-			const staticOffset =
-				parseInt(topbarHeight) +
-				parseInt(breadcrumbsHeight) +
-				parseInt(boardHeaderHeight);
-
-			let offset = 0;
-
-			if (isListBoard.value) {
-				offset = staticOffset;
-			} else {
-				const currentColumnHeader = document.querySelector<HTMLElement>(
-					`.multi-column-board-column:nth-child(${props.columnIndex + 1}) #boardColumnHeader`
-				);
-
-				if (!currentColumnHeader) {
-					throw new Error(
-						`Could not find column header for column index ${props.columnIndex}`
-					);
-				}
-
-				const height = currentColumnHeader.offsetHeight;
-
-				const columnHeaderStyle = window.getComputedStyle(currentColumnHeader);
-				const marginTop = columnHeaderStyle.getPropertyValue("margin-top");
-				const marginBottom =
-					columnHeaderStyle.getPropertyValue("margin-bottom");
-
-				offset =
-					staticOffset + height + parseInt(marginTop) + parseInt(marginBottom);
-			}
-
-			return offset;
-		});
+		const ckeditorViewportOffsetTop = inject(
+			"ckeditorViewportOffsetTop",
+			ref(0)
+		);
 
 		onMounted(() => {
 			if (props.value !== undefined) {
