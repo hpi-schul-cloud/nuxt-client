@@ -72,16 +72,7 @@ describe("LicenseList Page", () => {
 		expect(mockAxios.get).toHaveBeenCalledWith(envs.LICENSE_SUMMARY_URL);
 	});
 
-	it("should use fallback url, if license url does not work", async () => {
-		mockAxios.get.mockRejectedValueOnce(new Error("Error"));
-		setup();
-		await flushPromises();
-
-		expect(mockAxios.get).toHaveBeenCalled();
-	});
-
-	it("should display error notification on error for original url and fallback url", async () => {
-		mockAxios.get.mockRejectedValueOnce(new Error("Error"));
+	it("should display error notification on error", async () => {
 		mockAxios.get.mockRejectedValueOnce(new Error("Error"));
 		setup();
 		await flushPromises();

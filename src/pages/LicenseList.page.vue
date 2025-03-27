@@ -78,27 +78,18 @@ const removeVersionNumbers = (data: LicenseData): LicenseData => {
 };
 
 const fetchLicenseData = async () => {
-	const licenseSummaryUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
-	if (!licenseSummaryUrl) throw new Error("License summary URL is not defined");
-
 	try {
+		const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
+		if (!licensesUrl) throw new Error("License summary URL is not defined");
+
 		licenseData.value = removeVersionNumbers(
-			await fetchWithFallback(licenseSummaryUrl)
+			(await axios.get(licensesUrl as string)).data
 		);
 	} catch {
 		notifierModule.show({
 			text: t("error.load"),
 			status: "error",
 		});
-	}
-};
-
-const fetchWithFallback = async (url: string) => {
-	try {
-		return (await axios.get(url)).data;
-	} catch {
-		const fixedVersionUrl = url.replace(/\/\d+\.\d+\.\d+\//, "/33.5.0/");
-		return (await axios.get(fixedVersionUrl)).data;
 	}
 };
 
