@@ -1,12 +1,32 @@
+import { Editor } from "@ckeditor/ckeditor5-core";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
+
+type CKEditorKeystrokeInfo = {
+	keyCode: number;
+	keystroke: number;
+	domEvent: KeyboardEvent;
+	domTarget: HTMLElement;
+	altKey: boolean;
+	ctrlKey: boolean;
+	metaKey: boolean;
+	shiftKey: boolean;
+	view: unknown;
+	document: unknown;
+};
+
+type CKEditorEventInfo = {
+	name: string;
+	source: unknown;
+	stop?: () => void;
+};
 
 export const useEditorConfig = () => {
 	const { t, locale } = useI18n();
 
 	const charCount = ref(0);
 
-	const newsPlugins = [
+	const corePlugins = [
 		"Autoformat",
 		"Bold",
 		"Essentials",
@@ -20,7 +40,7 @@ export const useEditorConfig = () => {
 		"Strikethrough",
 	];
 
-	const boardPlugins = [
+	const extendedPlugins = [
 		"Autoformat",
 		"Bold",
 		"Essentials",
@@ -214,7 +234,7 @@ export const useEditorConfig = () => {
 			addTargetToExternalLinks: true,
 		},
 		wordCount: {
-			onUpdate: (data: { words: NumberConstructor; characters: number }) => {
+			onUpdate: (data: { words: number; characters: number }) => {
 				charCount.value = data.characters;
 			},
 		},
@@ -226,9 +246,25 @@ export const useEditorConfig = () => {
 		return charCount.value === 0;
 	});
 
+	const attachKeyDownHandler = (editor: Editor, callback: () => void) => {
+		// attach additional event listener not provided by vue wrapper itself
+		// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
+		editor.editing.view.document.on(
+			"keydown",
+			(evt: CKEditorEventInfo, data: CKEditorKeystrokeInfo) => {
+				if (
+					data.domEvent.key === "Backspace" ||
+					data.domEvent.key === "Delete"
+				) {
+					callback();
+				}
+			}
+		);
+	};
+
 	return {
-		newsPlugins,
-		boardPlugins,
+		corePlugins,
+		extendedPlugins,
 		balloonEditorToolbarItems,
 		inlineEditorToolbarItems,
 		classicEditorToolbarItems,
@@ -236,5 +272,6 @@ export const useEditorConfig = () => {
 		prominentHeadings,
 		generalConfig,
 		editorIsEmpty,
+		attachKeyDownHandler,
 	};
 };

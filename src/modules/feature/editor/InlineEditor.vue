@@ -18,25 +18,6 @@ import { Editor } from "@ckeditor/ckeditor5-core";
 import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
 import { useEditorConfig } from "./EditorConfig.composable";
 
-type CKEditorKeystrokeInfo = {
-	keyCode: number;
-	keystroke: number;
-	domEvent: KeyboardEvent;
-	domTarget: HTMLElement;
-	altKey: boolean;
-	ctrlKey: boolean;
-	metaKey: boolean;
-	shiftKey: boolean;
-	view: unknown;
-	document: unknown;
-};
-
-type CKEditorEventInfo = {
-	name: string;
-	source: unknown;
-	stop?: () => void;
-};
-
 const props = defineProps({
 	value: {
 		type: String,
@@ -65,11 +46,12 @@ const emit = defineEmits([
 ]);
 
 const {
+	extendedPlugins,
 	generalConfig,
-	compactHeadings,
-	boardPlugins,
 	inlineEditorToolbarItems,
+	compactHeadings,
 	editorIsEmpty,
+	attachKeyDownHandler,
 } = useEditorConfig();
 
 const modelValue = useVModel(props, "value", emit);
@@ -80,7 +62,7 @@ const config = computed(() => {
 		toolbar: {
 			items: inlineEditorToolbarItems,
 		},
-		plugins: boardPlugins,
+		plugins: extendedPlugins,
 		heading: compactHeadings,
 		placeholder: props.placeholder,
 		ui: {
@@ -106,16 +88,7 @@ const handleReady = (editor: Editor) => {
 		editor.editing.view.focus();
 	}
 
-	// attach additional event listener not provided by vue wrapper itself
-	// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
-	editor.editing.view.document.on(
-		"keydown",
-		(evt: CKEditorEventInfo, data: CKEditorKeystrokeInfo) => {
-			if (data.domEvent.key === "Backspace" || data.domEvent.key === "Delete") {
-				handleDelete();
-			}
-		}
-	);
+	attachKeyDownHandler(editor, handleDelete);
 };
 </script>
 
