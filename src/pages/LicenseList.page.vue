@@ -19,9 +19,9 @@
 					</v-expansion-panel-title>
 					<v-expansion-panel-text>
 						<p style="white-space: pre-line">{{ item.licenseText }}</p>
-						<div class="text-h5">
+						<p class="font-weight-bold">
 							{{ t("pages.licenseList.packageIntroduction") }}
-						</div>
+						</p>
 						<div class="ga-2">
 							<v-chip
 								label
