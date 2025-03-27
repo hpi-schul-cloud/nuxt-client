@@ -4,29 +4,19 @@
 		:aria-label="t('pages.roomDetails.ariaLabels.menu')"
 		data-testid="room-menu"
 	>
-		<KebabMenuActionEdit
-			v-if="canEditRoom"
-			@click="() => $emit('room:edit')"
-			:aria-label="t('pages.roomDetails.ariaLabels.menu.action.edit')"
-		/>
-		<KebabMenuActionEditMembers
-			v-if="canAddRoomMembers"
+		<KebabMenuActionEdit v-if="canEditRoom" @click="() => $emit('room:edit')" />
+		<KebabMenuActionRoomMembers
+			v-if="canViewRoom"
 			@click="() => $emit('room:manage-members')"
-			:aria-label="t('pages.rooms.members.manage')"
 		/>
 		<KebabMenuActionDelete
 			v-if="canDeleteRoom"
 			@click="onDeleteRoom"
-			:aria-label="t('pages.roomDetails.ariaLabels.menu.action.delete')"
 			scope-language-key="common.labels.room"
 			:name="roomName"
 		/>
 
-		<KebabMenuActionLeaveRoom
-			v-if="canLeaveRoom"
-			@click="() => $emit('room:leave')"
-			:aria-label="t('pages.rooms.leaveRoom.menu')"
-		/>
+		<KebabMenuActionLeaveRoom @click="() => $emit('room:leave')" />
 	</KebabMenu>
 </template>
 
@@ -35,7 +25,7 @@ import {
 	KebabMenu,
 	KebabMenuActionDelete,
 	KebabMenuActionEdit,
-	KebabMenuActionEditMembers,
+	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,
 } from "@ui-kebab-menu";
 import { useRoomAuthorization } from "@feature-room";
@@ -60,6 +50,5 @@ const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 	}
 };
 
-const { canAddRoomMembers, canEditRoom, canDeleteRoom, canLeaveRoom } =
-	useRoomAuthorization();
+const { canEditRoom, canDeleteRoom, canViewRoom } = useRoomAuthorization();
 </script>

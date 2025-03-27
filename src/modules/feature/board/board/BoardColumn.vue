@@ -168,9 +168,9 @@ export default defineComponent({
 
 		const colWidth = ref<number>(400);
 		const {
+			hasEditPermission,
 			hasMovePermission,
 			hasCreateColumnPermission,
-			canEditRoomBoard,
 			hasCreateCardPermission,
 		} = useBoardPermissions();
 
@@ -243,7 +243,7 @@ export default defineComponent({
 			keyString: DragAndDropKey
 		) => {
 			if (cardId === undefined) return;
-			if (!canEditRoomBoard.value) return;
+			if (!hasEditPermission.value) return;
 
 			const fromColumnId = props.column.id;
 			const fromColumnIndex = boardStore.getColumnIndex(fromColumnId);
@@ -339,7 +339,6 @@ export default defineComponent({
 		const renderKey = computed(() => getRenderKey());
 
 		return {
-			canEditRoomBoard,
 			cardDropPlaceholderOptions,
 			ckeditorViewportOffsetTop,
 			columnClasses,

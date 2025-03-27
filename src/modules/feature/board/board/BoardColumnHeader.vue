@@ -6,7 +6,7 @@
 	>
 		<div class="flex-1-0">
 			<BoardColumnInteractionHandler
-				:isEditMode="isEditMode && canEditRoomBoard"
+				:isEditMode="isEditMode"
 				@start-edit-mode="onStartEditMode"
 				@end-edit-mode="onEndEditMode"
 				@move:column-keyboard="onMoveColumnKeyboard"
@@ -16,7 +16,7 @@
 					:value="title.trim()"
 					:data-testid="`column-title-${index}`"
 					scope="column"
-					:isEditMode="isEditMode && canEditRoomBoard"
+					:isEditMode="isEditMode"
 					:placeholder="titlePlaceholder"
 					class="w-100"
 					:isFocused="isFocusedById"
@@ -27,7 +27,7 @@
 		</div>
 		<div class="mt-2 mr-3">
 			<BoardMenu
-				v-if="hasDeletePermission && canEditRoomBoard"
+				v-if="hasDeletePermission"
 				:scope="BoardMenuScope.COLUMN"
 				:data-testid="`column-menu-btn-${index}`"
 			>
@@ -99,8 +99,7 @@ const emit = defineEmits([
 ]);
 
 const columnId = toRef(props, "columnId");
-const { hasEditPermission, hasDeletePermission, canEditRoomBoard } =
-	useBoardPermissions();
+const { hasEditPermission, hasDeletePermission } = useBoardPermissions();
 const { isEditMode, startEditMode, stopEditMode } = useCourseBoardEditMode(
 	columnId.value
 );
