@@ -42,11 +42,11 @@ const { t } = useI18n();
 const board = toRef(props, "board");
 
 const isListBoard = computed(() => {
-	return board.value?.layout === BoardLayout.List;
+	return board.value.layout === BoardLayout.List;
 });
 
 const isDraft = computed(() => {
-	return board.value?.isVisible === false;
+	return board.value.isVisible === false;
 });
 
 const subtitleIcon = computed(() => {

@@ -264,6 +264,8 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     AdminEdit = 'ADMIN_EDIT',
     AdminView = 'ADMIN_VIEW',
     BaseView = 'BASE_VIEW',
+    BoardView = 'BOARD_VIEW',
+    BoardEdit = 'BOARD_EDIT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -359,6 +361,7 @@ export enum AuthorizationContextParamsRequiredPermissionsEnum {
     RoleCreate = 'ROLE_CREATE',
     RoleEdit = 'ROLE_EDIT',
     RoleView = 'ROLE_VIEW',
+    RoomContentEdit = 'ROOM_CONTENT_EDIT',
     RoomCreate = 'ROOM_CREATE',
     RoomEdit = 'ROOM_EDIT',
     RoomView = 'ROOM_VIEW',
@@ -718,6 +721,12 @@ export interface BoardResponse {
      * @memberof BoardResponse
      */
     features: Array<BoardFeature>;
+    /**
+     * 
+     * @type {Array<Permission>}
+     * @memberof BoardResponse
+     */
+    permissions: Array<Permission>;
 }
 /**
  * 
@@ -7135,6 +7144,8 @@ export enum Permission {
     AdminEdit = 'ADMIN_EDIT',
     AdminView = 'ADMIN_VIEW',
     BaseView = 'BASE_VIEW',
+    BoardView = 'BOARD_VIEW',
+    BoardEdit = 'BOARD_EDIT',
     CalendarCreate = 'CALENDAR_CREATE',
     CalendarEdit = 'CALENDAR_EDIT',
     CalendarView = 'CALENDAR_VIEW',
@@ -7230,6 +7241,7 @@ export enum Permission {
     RoleCreate = 'ROLE_CREATE',
     RoleEdit = 'ROLE_EDIT',
     RoleView = 'ROLE_VIEW',
+    RoomContentEdit = 'ROOM_CONTENT_EDIT',
     RoomCreate = 'ROOM_CREATE',
     RoomEdit = 'ROOM_EDIT',
     RoomView = 'ROOM_VIEW',
@@ -7895,16 +7907,16 @@ export interface RoomMemberResponse {
     lastName: string;
     /**
      * 
-     * @type {string}
+     * @type {RoleName}
      * @memberof RoomMemberResponse
      */
-    roomRoleName: string;
+    roomRoleName: RoleName;
     /**
      * 
-     * @type {string}
+     * @type {Array<RoleName>}
      * @memberof RoomMemberResponse
      */
-    schoolRoleName: string;
+    schoolRoleNames: Array<RoleName>;
     /**
      * 
      * @type {string}
