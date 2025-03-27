@@ -728,7 +728,6 @@ describe("CardStore", () => {
 					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
 						cardStore.cards[cardId].elements[3].id
 					);
-					expect(setEditModeId).toHaveBeenCalled();
 					expect(setEditModeId).toHaveBeenCalledWith(cardId);
 				});
 			});

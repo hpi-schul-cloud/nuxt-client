@@ -123,7 +123,7 @@ describe("InlineEditInteractionHandler", () => {
 			});
 		});
 
-		describe("when 'esc' keystoke", () => {
+		describe("when 'esc' keystroke", () => {
 			it("should emit 'end-edit-mode'", () => {
 				const { wrapper } = setup({ isEditMode: true });
 

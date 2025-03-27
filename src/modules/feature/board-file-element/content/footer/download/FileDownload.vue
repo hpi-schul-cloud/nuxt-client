@@ -16,7 +16,6 @@
 <script setup lang="ts">
 import { downloadFile } from "@/utils/fileHelper";
 import { mdiTrayArrowDown } from "@icons/material";
-import { ref } from "vue";
 
 const props = defineProps({
 	fileName: { type: String, required: true },
@@ -24,10 +23,10 @@ const props = defineProps({
 	url: { type: String, required: true },
 });
 
-const testId = ref("board-file-element-edit-menu-download");
+const testId = "board-file-element-edit-menu-download";
 
 const onDownload = async () => {
-	downloadFile(props.url, props.fileName, testId.value);
+	downloadFile(props.url, props.fileName, testId);
 };
 </script>
 
