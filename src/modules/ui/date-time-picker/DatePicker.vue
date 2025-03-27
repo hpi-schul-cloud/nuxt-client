@@ -54,12 +54,12 @@ defineOptions({
 });
 
 const props = defineProps({
-	date: { type: String }, // ISO 8601 string
+	date: { type: String, default: undefined }, // ISO 8601 string
 	label: { type: String, default: "" },
 	ariaLabel: { type: String, default: "" },
 	required: { type: Boolean },
-	minDate: { type: String },
-	maxDate: { type: String },
+	minDate: { type: String, default: undefined },
+	maxDate: { type: String, default: undefined },
 	errors: { type: Array as PropType<ErrorObject[]>, default: () => [] },
 });
 const emit = defineEmits(["update:date", "error"]);
