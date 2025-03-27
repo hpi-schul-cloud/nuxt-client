@@ -1689,8 +1689,10 @@ export default {
 	"pages.h5p.api.success.save": "Вміст успішно збережено.",
 	"pages.impressum.title": "Вихідні дані",
 	"pages.licenseList.title": "Список ліцензій на відкритий код",
-	"pages.licenseList.name": "Назва ліцензії",
-	"pages.licenseList.componentCount": "рахувати",
+	"pages.licenseList.introduction":
+		"Ліцензії на програмне забезпечення для використаних пакетів наведені нижче.",
+	"pages.licenseList.packageIntroduction":
+		"Пакунки, що використовуються за цією ліцензією:",
 	"pages.news.edit.title.default": "Редагувати статтю",
 	"pages.news.edit.title": "Редагувати {title}",
 	"pages.news.index.new": "Додати новини",

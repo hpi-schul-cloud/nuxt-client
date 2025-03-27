@@ -1659,8 +1659,9 @@ export default {
 	"pages.h5p.api.success.save": "Content was successfully saved.",
 	"pages.impressum.title": "Imprint",
 	"pages.licenseList.title": "Open Source License List",
-	"pages.licenseList.name": "License Name",
-	"pages.licenseList.componentCount": "Count",
+	"pages.licenseList.introduction":
+		"The software licences for the packages used are listed below.",
+	"pages.licenseList.packageIntroduction": "Packages used under this licence:",
 	"pages.news.edit.title.default": "Edit article",
 	"pages.news.edit.title": "Edit {title}",
 	"pages.news.index.new": "Add news",

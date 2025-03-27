@@ -1705,8 +1705,10 @@ export default {
 	"pages.h5p.api.success.save": "El contenido se ha guardado correctamente.",
 	"pages.impressum.title": "Impresión",
 	"pages.licenseList.title": "Lista de licencias de código abierto",
-	"pages.licenseList.name": "Nombre de la licencia",
-	"pages.licenseList.componentCount": "Contar",
+	"pages.licenseList.introduction":
+		"A continuación se indican las licencias de software de los paquetes utilizados.",
+	"pages.licenseList.packageIntroduction":
+		"Paquetes utilizados bajo esta licencia:",
 	"pages.news.edit.title.default": "Editar artículo",
 	"pages.news.edit.title": "Editar {title}",
 	"pages.news.index.new": "Añadir noticias",
