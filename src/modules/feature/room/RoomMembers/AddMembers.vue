@@ -95,6 +95,7 @@ import { InfoAlert } from "@ui-alert";
 const props = defineProps({
 	memberList: {
 		type: Array as PropType<Omit<RoomMember, "roomRoleName">[]>,
+		default: undefined,
 	},
 	schools: {
 		type: Array as PropType<SchoolForExternalInviteResponse[]>,
