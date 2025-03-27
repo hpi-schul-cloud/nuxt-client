@@ -368,15 +368,6 @@ export default defineComponent({
 }
 
 @supports selector(::-webkit-scrollbar) {
-	.scrollable::-webkit-scrollbar {
-		width: 6px;
-	}
-
-	.scrollable::-webkit-scrollbar-track {
-		background: white;
-		border: none;
-	}
-
 	.scrollable::-webkit-scrollbar-thumb {
 		background-color: transparent;
 		border-radius: 5px;
@@ -394,7 +385,6 @@ export default defineComponent({
 
 @supports not selector(::-webkit-scrollbar) {
 	.scrollable {
-		scrollbar-width: thin;
 		scrollbar-color: transparent transparent;
 	}
 
