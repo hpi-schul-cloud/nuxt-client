@@ -8,7 +8,7 @@
 
 			<v-expansion-panels multiple class="w-100 pb-9">
 				<v-expansion-panel
-					v-for="[name, item] in Object.entries(response)"
+					v-for="[name, item] in Object.entries(licenseData)"
 					:key="name"
 				>
 					<v-expansion-panel-title>
@@ -60,7 +60,7 @@ type LicenseDetails = {
 };
 type LicenseData = Record<string, LicenseDetails>;
 
-const response = ref<LicenseData>({});
+const licenseData = ref<LicenseData>({});
 
 const removeVersionNumbers = (data: LicenseData): LicenseData => {
 	const result: LicenseData = {};
@@ -78,18 +78,27 @@ const removeVersionNumbers = (data: LicenseData): LicenseData => {
 };
 
 const fetchLicenseData = async () => {
-	try {
-		const licensesUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
-		if (!licensesUrl) throw new Error("License summary URL is not defined");
+	const licenseSummaryUrl = envConfigModule.getEnv.LICENSE_SUMMARY_URL;
+	if (!licenseSummaryUrl) throw new Error("License summary URL is not defined");
 
-		response.value = removeVersionNumbers(
-			(await axios.get(licensesUrl as string)).data
+	try {
+		licenseData.value = removeVersionNumbers(
+			await fetchWithFallback(licenseSummaryUrl)
 		);
 	} catch {
 		notifierModule.show({
 			text: t("error.load"),
 			status: "error",
 		});
+	}
+};
+
+const fetchWithFallback = async (url: string) => {
+	try {
+		return (await axios.get(url)).data;
+	} catch {
+		const fixedVersionUrl = url.replace(/\/\d+\.\d+\.\d+\//, "/33.5.0/");
+		return (await axios.get(fixedVersionUrl)).data;
 	}
 };
 
