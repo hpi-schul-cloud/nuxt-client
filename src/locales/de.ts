@@ -1684,8 +1684,10 @@ export default {
 	"pages.h5p.api.success.save": "Inhalt wurde erfolgreich gespeichert.",
 	"pages.impressum.title": "Impressum",
 	"pages.licenseList.title": "Open-Source-Lizenzliste",
-	"pages.licenseList.name": "Lizenzname",
-	"pages.licenseList.componentCount": "Anzahl",
+	"pages.licenseList.introduction":
+		"Im Folgenden sind die Softwarelizenzen der verwendeten Pakete aufgeführt.",
+	"pages.licenseList.packageIntroduction":
+		"Unter dieser Lizenz verwendete Pakete:",
 	"pages.news.edit.title.default": "Artikel bearbeiten",
 	"pages.news.edit.title": "{title} bearbeiten",
 	"pages.news.index.new": "Neuigkeit hinzufügen",
