@@ -19,9 +19,6 @@ import CKEditor from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { ClassicEditor } from "@hpi-schul-cloud/ckeditor";
 import { useEditorConfig } from "./EditorConfig.composable";
-import katex from "katex";
-
-window.katex = katex;
 
 const props = defineProps({
 	value: {
@@ -94,7 +91,6 @@ const handleReady = (editor: Editor) => {
 
 <style lang="scss">
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
-@import "katex/dist/katex.min.css";
 
 .ck-content {
 	ul,
