@@ -66,14 +66,15 @@ export default defineComponent({
 	},
 	setup(props, { emit }) {
 		const {
-			boardPlugins,
-			newsPlugins,
+			corePlugins,
+			extendedPlugins,
 			inlineEditorToolbarItems,
 			balloonEditorToolbarItems,
 			classicEditorToolbarItems,
 			compactHeadings,
 			prominentHeadings,
 			generalConfig,
+			attachKeyDownHandler,
 		} = useEditorConfig();
 
 		const ck = ref(null);
@@ -91,9 +92,9 @@ export default defineComponent({
 		};
 
 		const plugins = {
-			simple: boardPlugins,
-			regular: boardPlugins,
-			news: newsPlugins,
+			simple: corePlugins,
+			regular: corePlugins,
+			news: extendedPlugins,
 		};
 
 		const headings = {
@@ -130,16 +131,7 @@ export default defineComponent({
 				editor.editing.view.focus();
 			}
 
-			// attach additional event listener not provided by vue wrapper itself
-			// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
-			editor.editing.view.document.on("keydown", (evt, data) => {
-				if (
-					data.domEvent.key === "Backspace" ||
-					data.domEvent.key === "Delete"
-				) {
-					handleDelete();
-				}
-			});
+			attachKeyDownHandler(editor, handleDelete);
 		};
 
 		const isMobile = useMediaQuery(DeviceMediaQuery.Mobile);
