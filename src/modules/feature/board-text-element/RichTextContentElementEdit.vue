@@ -1,11 +1,12 @@
 <template>
 	<div class="cursor-text">
-		<ck-editor
+		<InlineEditor
 			v-model="modelValue"
 			:autofocus="autofocus"
 			:placeholder="$t('components.cardElement.richTextElement.placeholder')"
-			type="balloon"
-			mode="simple"
+			type="inline"
+			mode="regular"
+			:viewport-offset-top="ckeditorViewportOffsetTop"
 			@update:value="onUpdateValue"
 			@focus="onFocus"
 			@blur="onBlur"
@@ -13,14 +14,15 @@
 		/>
 	</div>
 </template>
+
 <script lang="ts">
-import { CkEditor } from "@feature-editor";
+import { InlineEditor } from "@feature-editor";
 import { useEventListener } from "@vueuse/core";
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { defineComponent, inject, onMounted, ref, watch } from "vue";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
-	components: { CkEditor },
+	components: { InlineEditor },
 	props: {
 		value: {
 			type: String,
@@ -30,10 +32,18 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
+		columnIndex: {
+			type: Number,
+			required: true,
+		},
 	},
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = ref("");
+		const ckeditorViewportOffsetTop = inject(
+			"ckeditorViewportOffsetTop",
+			ref(0)
+		);
 
 		onMounted(() => {
 			if (props.value !== undefined) {
@@ -67,7 +77,14 @@ export default defineComponent({
 
 		const onDelete = () => emit("delete:element");
 
-		return { modelValue, onFocus, onDelete, onBlur, onUpdateValue };
+		return {
+			modelValue,
+			ckeditorViewportOffsetTop,
+			onFocus,
+			onDelete,
+			onBlur,
+			onUpdateValue,
+		};
 	},
 });
 </script>
