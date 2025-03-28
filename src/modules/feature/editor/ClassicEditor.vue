@@ -52,7 +52,7 @@ const {
 	prominentHeadings,
 	generalConfig,
 	editorIsEmpty,
-	attachKeyDownHandler,
+	attachDeletionHandler,
 } = useEditorConfig();
 
 const ck = ref(null);
@@ -72,11 +72,7 @@ const config = computed(() => {
 
 const handleFocus = () => emit("focus");
 const handleBlur = () => emit("blur");
-const handleDelete = () => {
-	if (editorIsEmpty.value) {
-		emit("keyboard:delete");
-	}
-};
+const handleDelete = () => emit("keyboard:delete");
 
 const handleReady = (editor: Editor) => {
 	emit("ready");
@@ -85,7 +81,7 @@ const handleReady = (editor: Editor) => {
 		editor.editing.view.focus();
 	}
 
-	attachKeyDownHandler(editor, handleDelete);
+	attachDeletionHandler(editor, handleDelete);
 };
 </script>
 
