@@ -417,6 +417,8 @@ export default {
 		"Configuración de la herramienta externa",
 	"components.board.menu.mediaExternalToolElement": "Configuraciones medias",
 	"components.board.menu.fileElement": "Configuración del archivo",
+	"components.board.menu.folderElement":
+		"Configuración de la carpeta de archivos",
 	"components.board.menu.linkElement": "Configuración del enlace",
 	"components.board.menu.submissionElement": "Configuración del envío",
 	"components.board.menu.videoConferenceElement":
@@ -502,6 +504,7 @@ export default {
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
 	"components.cardElement.fileElement.virusDetected":
 		"Se ha bloqueado el archivo debido a un virus sospechoso.",
+	"components.cardElement.folderElement.untitled": "Carpeta sin título",
 	"components.cardElement.LinkElement": "Enlace",
 	"components.cardElement.LinkElement.label": "Inserte la dirección del enlace",
 	"components.cardElement.notification.visibleAndEditable":
@@ -540,6 +543,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
+	"components.elementTypeSelection.elements.folderElement.subtitle":
+		"Carpeta de archivos",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
 		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Enlace",
