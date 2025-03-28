@@ -227,26 +227,28 @@ export const useEditorConfig = () => {
 		],
 	};
 
-	const generalConfig = {
-		language: locale.value,
-		link: {
-			defaultProtocol: "//",
-			addTargetToExternalLinks: true,
-		},
-		wordCount: {
-			onUpdate: (data: { words: number; characters: number }) => {
-				charCount.value = data.characters;
+	const generalConfig = computed(() => {
+		return {
+			language: locale.value,
+			link: {
+				defaultProtocol: "//",
+				addTargetToExternalLinks: true,
 			},
-		},
-		fontColor: fontColors,
-		fontBackgroundColor: fontBackgroundColors,
-	};
+			wordCount: {
+				onUpdate: (data: { words: number; characters: number }) => {
+					charCount.value = data.characters;
+				},
+			},
+			fontColor: fontColors,
+			fontBackgroundColor: fontBackgroundColors,
+		};
+	});
 
 	const editorIsEmpty = computed(() => {
 		return charCount.value === 0;
 	});
 
-	const attachKeyDownHandler = (editor: Editor, callback: () => void) => {
+	const attachDeletionHandler = (editor: Editor, onDelete: () => void) => {
 		// attach additional event listener not provided by vue wrapper itself
 		// for more infos on editor instance, see https://ckeditor.com/docs/ckeditor5/latest/api/module_core_editor_editor-Editor.html
 		editor.editing.view.document.on(
@@ -256,7 +258,9 @@ export const useEditorConfig = () => {
 					data.domEvent.key === "Backspace" ||
 					data.domEvent.key === "Delete"
 				) {
-					callback();
+					if (editorIsEmpty.value) {
+						onDelete();
+					}
 				}
 			}
 		);
@@ -272,6 +276,6 @@ export const useEditorConfig = () => {
 		prominentHeadings,
 		generalConfig,
 		editorIsEmpty,
-		attachKeyDownHandler,
+		attachDeletionHandler,
 	};
 };
