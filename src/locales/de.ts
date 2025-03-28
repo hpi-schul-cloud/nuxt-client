@@ -965,6 +965,7 @@ export default {
 	"global.sidebar.item.teacher": "Lehrkräfte",
 	"global.sidebar.item.teams": "Teams",
 	"global.sidebar.item.training": "Fortbildungen",
+	"global.sidebar.item.licenses": "Lizenzen",
 	"global.skipLink.mainContent": "Zum Hauptinhalt wechseln",
 	"global.topbar.actions.alerts": "Status-Warnung",
 	"global.topbar.actions.qrCode": "Seitenlink per QR-Code teilen",
@@ -1682,6 +1683,11 @@ export default {
 	"pages.files.overview.teamFiles": "Team-Dateien",
 	"pages.h5p.api.success.save": "Inhalt wurde erfolgreich gespeichert.",
 	"pages.impressum.title": "Impressum",
+	"pages.licenseList.title": "Open-Source-Lizenzliste",
+	"pages.licenseList.introduction":
+		"Im Folgenden sind die Softwarelizenzen der verwendeten Pakete aufgeführt.",
+	"pages.licenseList.packageIntroduction":
+		"Unter dieser Lizenz verwendete Pakete:",
 	"pages.news.edit.title.default": "Artikel bearbeiten",
 	"pages.news.edit.title": "{title} bearbeiten",
 	"pages.news.index.new": "Neuigkeit hinzufügen",
