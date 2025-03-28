@@ -355,10 +355,9 @@ export default defineComponent({
 }
 
 .multi-column-board-column {
-	/* The last subtracted height of 10x is the height of the scrollbar. */
 	height: calc(
 		100vh - var(--topbar-height) - var(--breadcrumbs-height) -
-			var(--board-header-height) - 10px
+			var(--board-header-height) - var(--scrollbar-width)
 	);
 	width: 400px;
 }
@@ -368,23 +367,12 @@ export default defineComponent({
 }
 
 @supports selector(::-webkit-scrollbar) {
-	.scrollable::-webkit-scrollbar {
-		width: 6px;
-	}
-
-	.scrollable::-webkit-scrollbar-track {
-		background: white;
-		border: none;
-	}
-
 	.scrollable::-webkit-scrollbar-thumb {
 		background-color: transparent;
-		border-radius: 5px;
 	}
 
 	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb {
 		background-color: rgba(var(--v-theme-on-surface), 0.6);
-		border-radius: 5px;
 	}
 
 	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb:hover {
@@ -394,7 +382,6 @@ export default defineComponent({
 
 @supports not selector(::-webkit-scrollbar) {
 	.scrollable {
-		scrollbar-width: thin;
 		scrollbar-color: transparent transparent;
 	}
 
