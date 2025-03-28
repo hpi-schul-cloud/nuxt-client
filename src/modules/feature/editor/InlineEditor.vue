@@ -1,5 +1,6 @@
 <template>
 	<CKEditor.component
+		ref="ck"
 		v-model="modelValue"
 		:editor="InlineEditor"
 		:config="config"
@@ -12,7 +13,7 @@
 
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
@@ -54,6 +55,7 @@ const {
 } = useEditorConfig();
 
 const modelValue = useVModel(props, "value", emit);
+const ck = ref(null);
 
 const config = computed(() => {
 	return {
