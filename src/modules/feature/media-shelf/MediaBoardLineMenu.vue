@@ -76,6 +76,7 @@ defineProps({
 	lineId: {
 		type: String,
 		required: false,
+		default: undefined,
 	},
 });
 
