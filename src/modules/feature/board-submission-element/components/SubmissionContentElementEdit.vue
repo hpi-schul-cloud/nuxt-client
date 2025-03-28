@@ -41,6 +41,7 @@ export default defineComponent({
 	props: {
 		dueDate: {
 			type: String,
+			default: undefined,
 		},
 		submissions: {
 			type: Array as PropType<Array<TeacherSubmission>>,
