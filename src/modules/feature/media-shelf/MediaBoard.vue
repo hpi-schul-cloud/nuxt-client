@@ -137,15 +137,27 @@ const onLineDragEnd = async (event: SortableEvent) => {
 	overflow: auto hidden;
 }
 
-.scrollable-line::-webkit-scrollbar-thumb {
-	background-color: transparent;
+@supports selector(::-webkit-scrollbar) {
+	.scrollable-line::-webkit-scrollbar-thumb {
+		background-color: transparent;
+	}
+
+	.line-drag-handle:hover .scrollable-line::-webkit-scrollbar-thumb {
+		background-color: rgba(var(--v-theme-on-surface), 0.6);
+	}
+
+	.line-drag-handle:hover .scrollable-line::-webkit-scrollbar-thumb:hover {
+		background: rgba(var(--v-theme-on-surface), 0.8);
+	}
 }
 
-.line-drag-handle:hover .scrollable-line::-webkit-scrollbar-thumb {
-	background-color: rgba(var(--v-theme-on-surface), 0.6);
-}
+@supports not selector(::-webkit-scrollbar) {
+	.scrollable-line {
+		scrollbar-color: transparent transparent;
+	}
 
-.line-drag-handle:hover .scrollable-line::-webkit-scrollbar-thumb:hover {
-	background: rgba(var(--v-theme-on-surface), 0.8);
+	.line-drag-handle:hover .scrollable-line {
+		scrollbar-color: initial;
+	}
 }
 </style>
