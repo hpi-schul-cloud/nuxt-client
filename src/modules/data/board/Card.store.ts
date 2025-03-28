@@ -186,15 +186,16 @@ export const useCardStore = defineStore("cardStore", () => {
 				payload.elementId,
 				payload.cardId
 			);
+
 			if (!previousId) return;
 			forceFocus(previousId);
 		}
 
 		const index = card.elements.findIndex((e) => e.id === payload.elementId);
-
 		if (index !== undefined && index > -1) {
 			card.elements.splice(index, 1);
 		}
+		setEditModeId(payload.cardId);
 	};
 
 	const updateElementRequest = socketOrRest.updateElementRequest;

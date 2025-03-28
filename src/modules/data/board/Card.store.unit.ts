@@ -707,7 +707,7 @@ describe("CardStore", () => {
 					});
 
 					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(cardId);
-					expect(setEditModeId).not.toHaveBeenCalled();
+					expect(setEditModeId).toHaveBeenCalledWith(cardId);
 				});
 			});
 
@@ -728,7 +728,7 @@ describe("CardStore", () => {
 					expect(mockedBoardFocusCalls.forceFocus).toHaveBeenCalledWith(
 						cardStore.cards[cardId].elements[3].id
 					);
-					expect(setEditModeId).toHaveBeenCalled();
+					expect(setEditModeId).toHaveBeenCalledWith(cardId);
 				});
 			});
 
