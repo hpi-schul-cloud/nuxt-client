@@ -369,12 +369,10 @@ export default defineComponent({
 @supports selector(::-webkit-scrollbar) {
 	.scrollable::-webkit-scrollbar-thumb {
 		background-color: transparent;
-		border-radius: 5px;
 	}
 
 	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb {
 		background-color: rgba(var(--v-theme-on-surface), 0.6);
-		border-radius: 5px;
 	}
 
 	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb:hover {
