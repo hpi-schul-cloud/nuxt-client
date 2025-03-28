@@ -18,7 +18,7 @@ import { PropType } from "vue";
 import { IconProps } from "vuetify";
 
 defineProps({
-	icon: { type: String as PropType<IconProps["icon"]> },
+	icon: { type: String as PropType<IconProps["icon"]>, default: undefined },
 	dataTestId: { type: String as PropType<string | null>, default: null },
 	ariaLabel: { type: String as PropType<string | null>, default: null },
 });
