@@ -28,11 +28,11 @@ import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	name: { type: String, required: true },
-	caption: { type: String, required: false, default: "" },
+	caption: { type: String, required: false, default: undefined },
 	showTitle: { type: Boolean, required: true },
 	showMenu: { type: Boolean, required: true },
 	isEditMode: { type: Boolean, required: true },
-	src: { type: String, required: false, default: "" },
+	src: { type: String, required: false, default: undefined },
 });
 
 const { t } = useI18n();

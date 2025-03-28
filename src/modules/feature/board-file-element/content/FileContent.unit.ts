@@ -522,7 +522,6 @@ describe("FileContent", () => {
 			it("should be undefined when not a pdf file", () => {
 				const { wrapper } = setup();
 				const props = wrapper.findComponent(FileDescription).attributes();
-
 				expect(props.src).toBe(undefined);
 			});
 
