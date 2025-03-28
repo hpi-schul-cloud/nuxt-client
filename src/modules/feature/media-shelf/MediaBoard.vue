@@ -137,10 +137,6 @@ const onLineDragEnd = async (event: SortableEvent) => {
 	overflow: auto hidden;
 }
 
-.scrollable-line::-webkit-scrollbar-track {
-	background: transparent;
-}
-
 .scrollable-line::-webkit-scrollbar-thumb {
 	background-color: transparent;
 }
