@@ -138,10 +138,6 @@ const showDivider = computed(() => {
 	margin-bottom: var(--space-md);
 }
 
-.wireframe-container {
-	height: calc(100vh - var(--topbar-height));
-}
-
 .wireframe-header {
 	padding: 0 var(--space-lg);
 	display: flex;
