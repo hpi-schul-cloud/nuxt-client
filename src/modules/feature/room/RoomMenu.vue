@@ -40,7 +40,7 @@ const emit = defineEmits([
 	"room:leave",
 ]);
 defineProps({
-	roomName: { type: String, required: false },
+	roomName: { type: String, required: false, default: undefined },
 });
 
 const onDeleteRoom = async (confirmation: Promise<boolean>) => {
