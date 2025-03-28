@@ -37,6 +37,14 @@ export default defineComponent({
 			return !!target.closest(".v-date-picker");
 		};
 
+		const isFileElementLink = (target: HTMLElement | SVGElement): boolean => {
+			const linkTestId = target
+				.closest("a")
+				?.attributes.getNamedItem("data-testid")?.value;
+
+			return linkTestId === "board-file-element-edit-menu-download";
+		};
+
 		const isListItem = (target: HTMLElement | SVGElement): boolean => {
 			if (target instanceof SVGElement) return false;
 
@@ -44,13 +52,17 @@ export default defineComponent({
 		};
 
 		const isAllowedTarget = (event: MouseEvent): boolean => {
-			if (
-				!(event.target instanceof HTMLElement) &&
-				!(event.target instanceof SVGElement)
-			)
+			const target = event.target as HTMLElement | SVGElement;
+			if (!(target instanceof HTMLElement) && !(target instanceof SVGElement))
 				return true;
 
-			return !isListItem(event.target) && !isDatePicker(event.target);
+			const disallowedConditions = [
+				isListItem,
+				isDatePicker,
+				isFileElementLink,
+			];
+
+			return target && disallowedConditions.every((fn) => !fn(target));
 		};
 
 		const onClickOutside = (event: MouseEvent) => {
