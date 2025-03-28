@@ -5,7 +5,6 @@
 		:editor="ClassicEditor"
 		:config="config"
 		data-testid="ckeditor"
-		:disabled="disabled"
 		@blur="handleBlur"
 		@focus="handleFocus"
 		@ready="handleReady"
@@ -32,11 +31,8 @@ const props = defineProps({
 	autofocus: {
 		type: Boolean,
 	},
-	viewportOffsetTop: {
-		type: Number,
-		default: 0,
-	},
 });
+
 const emit = defineEmits([
 	"ready",
 	"focus",
@@ -51,7 +47,6 @@ const {
 	classicEditorToolbarItems,
 	prominentHeadings,
 	generalConfig,
-	editorIsEmpty,
 	attachDeletionHandler,
 } = useEditorConfig();
 
