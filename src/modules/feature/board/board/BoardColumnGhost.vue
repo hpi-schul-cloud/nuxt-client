@@ -5,7 +5,7 @@
 	>
 		<BoardSectionCreationHeader
 			:label="title"
-			:isColumnActive="isColumnHovered"
+			:is-column-active="isColumnHovered"
 			@add-column="onAddColumn"
 			data-testid="add-column"
 		/>

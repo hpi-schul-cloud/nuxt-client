@@ -11,15 +11,15 @@
 		</div>
 		<SubmissionItemStudentDisplay
 			v-if="isStudent"
-			:studentSubmission="studentSubmission"
-			:isOverdue="isOverdue"
+			:student-submission="studentSubmission"
+			:is-overdue="isOverdue"
 			:loading="loading"
 			@update:completed="updateCompleted"
 		/>
 		<SubmissionItemsTeacherDisplay
 			v-if="isTeacher"
 			:submissions="submissions"
-			:isOverdue="isOverdue"
+			:is-overdue="isOverdue"
 			:loading="loading"
 		/>
 	</div>

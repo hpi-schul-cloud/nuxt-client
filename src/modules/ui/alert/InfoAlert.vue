@@ -2,8 +2,8 @@
 	<BaseAlert
 		color="info"
 		:icon="mdiInformation"
-		:closeIcon="mdiClose"
-		:showCloseIcon="showCloseIcon"
+		:close-icon="mdiClose"
+		:show-close-icon="showCloseIcon"
 	>
 		<slot />
 	</BaseAlert>

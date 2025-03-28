@@ -37,17 +37,17 @@
 				<v-card-text>
 					<div class="detail-view-size pt-lg-8 pt-md-4 pt-1 mx-auto">
 						<CardTitle
-							:isEditMode="isEditMode"
+							:is-edit-mode="isEditMode"
 							:value="card.title"
 							scope="card"
 							@update:value="onUpdateCardTitle"
-							:isFocused="true"
+							:is-focused="true"
 							@enter="onEnterTitle"
 						/>
 						<ContentElementList
 							:elements="card.elements"
-							:isEditMode="isEditMode"
-							:isDetailView="true"
+							:is-edit-mode="isEditMode"
+							:is-detail-view="true"
 							:row-index="rowIndex"
 							:column-index="columnIndex"
 							@delete:element="onDeleteElement"

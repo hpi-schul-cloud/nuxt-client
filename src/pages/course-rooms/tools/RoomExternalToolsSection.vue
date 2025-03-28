@@ -24,7 +24,7 @@
 		<v-custom-dialog
 			:is-open="isDeleteDialogOpen"
 			:has-buttons="true"
-			confirmBtnTitleKey="common.actions.remove"
+			confirm-btn-title-key="common.actions.remove"
 			:buttons="['cancel', 'confirm']"
 			max-width="360"
 			data-testId="delete-dialog"

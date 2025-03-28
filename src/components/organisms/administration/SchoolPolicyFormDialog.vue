@@ -45,7 +45,7 @@
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
 					@blur="onBlur"
 				>
-					<template v-slot:append-inner>
+					<template #append-inner>
 						<v-icon
 							v-if="!isValid && isTouched"
 							color="rgba(var(--v-theme-error))"

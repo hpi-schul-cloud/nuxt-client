@@ -41,7 +41,7 @@
 			</template>
 		</ContentElementBar>
 		<ExternalToolElementAlert
-			:toolDisplayName="toolDisplayName"
+			:tool-display-name="toolDisplayName"
 			:error="displayError || launchError"
 			:tool-status="toolConfigurationStatus"
 			data-testid="board-external-tool-element-alert"

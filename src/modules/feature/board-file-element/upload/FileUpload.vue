@@ -16,7 +16,7 @@
 			<FilePicker
 				v-else
 				@update:file="onFileSelect"
-				v-model:isFilePickerOpen="isFilePickerOpen"
+				v-model:is-file-picker-open="isFilePickerOpen"
 			/>
 		</template>
 

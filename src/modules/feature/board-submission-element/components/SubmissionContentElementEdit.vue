@@ -9,14 +9,14 @@
 
 		<date-time-picker
 			class="mt-1 mx-4"
-			:dateTime="dueDate"
+			:date-time="dueDate"
 			:date-input-label="t('common.labels.date')"
 			:time-input-label="t('common.labels.time')"
 			@update:date-time="onDateTimeInput"
 		/>
 		<SubmissionItemsTeacherDisplay
 			:submissions="submissions"
-			:isOverdue="isOverdue"
+			:is-overdue="isOverdue"
 			:loading="loading"
 		/>
 	</div>
@@ -41,6 +41,7 @@ export default defineComponent({
 	props: {
 		dueDate: {
 			type: String,
+			default: undefined,
 		},
 		submissions: {
 			type: Array as PropType<Array<TeacherSubmission>>,

@@ -1,6 +1,6 @@
 <template>
 	<v-menu>
-		<template v-slot:activator="{ props }">
+		<template #activator="{ props }">
 			<v-btn v-bind="props" variant="flat">
 				<v-icon class="filter-icon mr-2" :icon="mdiTune" />
 				<span data-testid="filter-title">{{ filterTitle }}</span>
@@ -27,7 +27,7 @@
 	/>
 
 	<FilterDialog
-		:isOpen="dialogOpen"
+		:is-open="dialogOpen"
 		@dialog-closed="onCloseDialog"
 		@remove:filter="onRemoveFilter"
 	>

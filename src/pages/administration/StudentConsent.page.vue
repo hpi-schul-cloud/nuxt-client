@@ -56,12 +56,12 @@
 						<base-input
 							:error="birthdayWarning && !slotProps.data ? inputError : null"
 							class="date base-input"
-							:modelValue="inputDateFromDeUTC(slotProps.data)"
+							:model-value="inputDateFromDeUTC(slotProps.data)"
 							type="date"
 							label=""
 							data-testid="birthday-input"
 							:birth-date="true"
-							@update:modelValue="
+							@update:model-value="
 								inputDate({
 									id: tableData[slotProps.rowindex]._id,
 									birthDate: inputDateFormat($event),
@@ -71,12 +71,12 @@
 					</template>
 					<template #datacolumn-password="slotProps">
 						<base-input
-							:modelValue="slotProps.data"
+							:model-value="slotProps.data"
 							type="text"
 							label=""
 							data-testid="password-input"
 							class="base-input"
-							@update:modelValue="
+							@update:model-value="
 								inputPass({
 									id: tableData[slotProps.rowindex]._id,
 									pass: $event,

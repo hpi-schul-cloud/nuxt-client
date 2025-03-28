@@ -1,12 +1,12 @@
 <template>
 	<v-card ref="addMembersContent">
-		<template v-slot:title>
+		<template #title>
 			<h2 class="text-h4 mt-2">
 				{{ t("pages.rooms.members.add") }}
 			</h2>
 		</template>
 
-		<template v-slot:text>
+		<template #text>
 			<InfoAlert>{{ t("pages.rooms.members.add.infoText") }}</InfoAlert>
 			<div class="mt-8" data-testid="add-participant-school">
 				<v-autocomplete
@@ -58,7 +58,7 @@
 			</div>
 		</template>
 
-		<template v-slot:actions>
+		<template #actions>
 			<v-spacer />
 			<div class="mr-4 mb-3">
 				<v-btn
@@ -95,6 +95,7 @@ import { InfoAlert } from "@ui-alert";
 const props = defineProps({
 	memberList: {
 		type: Array as PropType<Omit<RoomMember, "roomRoleName">[]>,
+		default: undefined,
 	},
 	schools: {
 		type: Array as PropType<SchoolForExternalInviteResponse[]>,

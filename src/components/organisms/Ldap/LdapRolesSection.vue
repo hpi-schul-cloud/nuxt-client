@@ -13,7 +13,7 @@
 				inline
 				name="group"
 				:model-value="groupOption"
-				@update:modelValue="
+				@update:model-value="
 					$emit('update:modelValue', { ...modelValue, groupOption: $event })
 				"
 			>
@@ -36,7 +36,7 @@
 			</p>
 		</div>
 		<base-input
-			:modelValue="modelValue.member"
+			:model-value="modelValue.member"
 			:disabled="groupOption === 'group'"
 			type="text"
 			:label="$t('pages.administration.ldapEdit.roles.labels.member')"
@@ -46,7 +46,7 @@
 			:validation-model="v$.modelValue.member"
 			:validation-messages="memberValidationMessages"
 			data-testid="ldapDataRolesMember"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, member: $event })
 			"
 		>
@@ -55,7 +55,7 @@
 			</template>
 		</base-input>
 		<base-input
-			:modelValue="modelValue.student"
+			:model-value="modelValue.student"
 			type="text"
 			v-bind="$attrs"
 			:label="$t('pages.administration.ldapEdit.roles.labels.student')"
@@ -66,7 +66,7 @@
 			:validation-model="v$.modelValue.student"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesStudent"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, student: $event })
 			"
 		>
@@ -75,7 +75,7 @@
 			</template>
 		</base-input>
 		<base-input
-			:modelValue="modelValue.teacher"
+			:model-value="modelValue.teacher"
 			type="text"
 			:label="$t('pages.administration.ldapEdit.roles.labels.teacher')"
 			:placeholder="
@@ -85,7 +85,7 @@
 			:validation-model="v$.modelValue.teacher"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesTeacher"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, teacher: $event })
 			"
 		>
@@ -94,7 +94,7 @@
 			</template>
 		</base-input>
 		<base-input
-			:modelValue="modelValue.admin"
+			:model-value="modelValue.admin"
 			type="text"
 			:label="$t('pages.administration.ldapEdit.roles.labels.admin')"
 			:placeholder="$t('pages.administration.ldapEdit.roles.placeholder.admin')"
@@ -102,7 +102,7 @@
 			:validation-model="v$.modelValue.admin"
 			:validation-messages="rolesValidationMessages"
 			data-testid="ldapDataRolesAdmin"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, admin: $event })
 			"
 		>
@@ -111,13 +111,13 @@
 			</template>
 		</base-input>
 		<base-input
-			:modelValue="modelValue.user"
+			:model-value="modelValue.user"
 			type="text"
 			:label="$t('pages.administration.ldapEdit.roles.labels.user')"
 			:placeholder="$t('pages.administration.ldapEdit.roles.placeholder.user')"
 			:info="$t('pages.administration.ldapEdit.roles.info.user')"
 			data-testid="ldapDataRolesUser"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, user: $event })
 			"
 		>

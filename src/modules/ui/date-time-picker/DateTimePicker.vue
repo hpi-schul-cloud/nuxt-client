@@ -7,8 +7,8 @@
 				:label="dateInputLabel"
 				:aria-label="dateInputAriaLabel"
 				:data-testid="dateInputTestId"
-				:minDate="minDate"
-				:maxDate="maxDate"
+				:min-date="minDate"
+				:max-date="maxDate"
 				@update:date="onDateUpdate"
 				@error="onError('date')"
 			/>
@@ -38,14 +38,14 @@ import DatePicker from "./DatePicker.vue";
 import TimePicker from "./TimePicker.vue";
 
 const props = defineProps({
-	dateTime: { type: String },
+	dateTime: { type: String, default: undefined },
 	dateInputLabel: { type: String, default: "" },
 	dateInputAriaLabel: { type: String, default: "" },
 	dateInputTestId: { type: String, default: "date-input" },
 	timeInputLabel: { type: String, default: "" },
 	timeInputAriaLabel: { type: String, default: "" },
-	minDate: { type: String },
-	maxDate: { type: String },
+	minDate: { type: String, default: undefined },
+	maxDate: { type: String, default: undefined },
 });
 const { t } = useI18n();
 

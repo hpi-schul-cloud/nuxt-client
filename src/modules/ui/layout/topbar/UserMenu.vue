@@ -1,6 +1,6 @@
 <template>
 	<VMenu :width="isExternalLogoutAllowed ? 'auto' : '215'">
-		<template v-slot:activator="{ props }">
+		<template #activator="{ props }">
 			<VBtn
 				v-bind="props"
 				v-bind.attr="$attrs"

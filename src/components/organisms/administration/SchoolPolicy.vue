@@ -28,7 +28,7 @@
 				:class="{ 'item-no-action': !privacyPolicy }"
 				:ripple="privacyPolicy !== null"
 			>
-				<template v-slot:prepend>
+				<template #prepend>
 					<v-icon>$file_pdf_outline</v-icon>
 				</template>
 				<v-list-item-title class="text-body-1 mb-2">
@@ -50,7 +50,7 @@
 						}}
 					</template>
 				</v-list-item-subtitle>
-				<template v-slot:append>
+				<template #append>
 					<v-list-item-action
 						v-if="hasSchoolEditPermission"
 						data-testid="edit-button"
@@ -88,7 +88,7 @@
 				data-testid="form-dialog"
 			/>
 			<v-custom-dialog
-				v-model:isOpen="isDeletePolicyDialogOpen"
+				v-model:is-open="isDeletePolicyDialogOpen"
 				:size="430"
 				has-buttons
 				confirm-btn-title-key="common.actions.delete"

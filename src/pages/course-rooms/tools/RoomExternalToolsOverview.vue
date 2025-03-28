@@ -10,7 +10,7 @@
 				image="tools-empty-state"
 				:title="t('pages.rooms.tools.emptyState')"
 				class="mt-16"
-				imgHeight="200px"
+				img-height="200px"
 			/>
 		</div>
 		<v-alert

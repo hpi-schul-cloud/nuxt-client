@@ -1,7 +1,7 @@
 <template>
 	<div class="d-flex align-items-center board-header">
 		<InlineEditInteractionHandler
-			:isEditMode="isEditMode"
+			:is-edit-mode="isEditMode"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
 			@keydown.enter="onStartEditMode"
@@ -15,9 +15,9 @@
 					scope="board"
 					:value="boardTitle"
 					data-testid="board-title"
-					:isEditMode="isEditMode"
-					:isFocused="isFocusedById"
-					:maxLength="100"
+					:is-edit-mode="isEditMode"
+					:is-focused="isFocusedById"
+					:max-length="100"
 					:style="{ width: `${fieldWidth}px` }"
 					@update:value="updateBoardTitle"
 					@blur="onBoardTitleBlur"

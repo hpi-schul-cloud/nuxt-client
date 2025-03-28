@@ -23,8 +23,8 @@
 				:name="`headcolumn-${columns[index].field.replace(/\./g, '-')}`"
 				:label="column.label"
 				:sortable="column.sortable"
-				:sortBy="sortBy"
-				:sortOrder="sortOrder"
+				:sort-by="sortBy"
+				:sort-order="sortOrder"
 			>
 				<span v-if="column.infobox">
 					<span class="info-slot">

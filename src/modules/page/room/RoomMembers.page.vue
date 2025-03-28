@@ -40,7 +40,7 @@
 				v-if="!isLoading && currentUser"
 				v-model:selected-user-ids="selectedIds"
 				:members="memberList"
-				:currentUser="currentUser"
+				:current-user="currentUser"
 				:fixed-position="fixedHeaderOnMobile"
 				@remove:members="onRemoveMembers"
 				@change:permission="onOpenRoleDialog"
@@ -56,7 +56,7 @@
 			@keydown.esc="onDialogClose"
 		>
 			<AddMembers
-				:memberList="potentialRoomMembers"
+				:member-list="potentialRoomMembers"
 				:schools="schools"
 				@close="onDialogClose"
 				@add:members="onAddMembers"

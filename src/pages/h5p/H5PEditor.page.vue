@@ -17,9 +17,9 @@
 				<H5PEditorComponent
 					ref="editorRef"
 					class="editor"
-					:contentId="contentId"
-					:parentType="parentType"
-					:parentId="parentId"
+					:content-id="contentId"
+					:parent-type="parentType"
+					:parent-id="parentId"
 					@load-error="loadError"
 				/>
 				<v-btn role="button" class="save-button" color="primary" @click="save">

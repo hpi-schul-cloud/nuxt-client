@@ -54,7 +54,9 @@
 								v-if="isEmptyGroup(rowIndex, colIndex)"
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
-								@dropEmptyAvatar="setDropElement({ x: colIndex, y: rowIndex })"
+								@drop-empty-avatar="
+									setDropElement({ x: colIndex, y: rowIndex })
+								"
 								data-avatar-type="vRoomEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 							/>
@@ -67,9 +69,9 @@
 								:device="device"
 								:draggable="allowDragging"
 								@clicked="openDialog(getDataObject(rowIndex, colIndex).groupId)"
-								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-								@dragendGroupAvatar="onDragend"
-								@dropGroupAvatar="
+								@start-drag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+								@dragend-group-avatar="onDragend"
+								@drop-group-avatar="
 									addGroupElements({ x: colIndex, y: rowIndex })
 								"
 								data-avatar-type="vRoomGroupAvatar"
@@ -83,9 +85,9 @@
 								:size="dimensions.cellWidth"
 								:show-badge="true"
 								:draggable="allowDragging"
-								@startDrag="onStartDrag($event, { x: colIndex, y: rowIndex })"
-								@dragendAvatar="onDragend"
-								@dropAvatar="setGroupElements({ x: colIndex, y: rowIndex })"
+								@start-drag="onStartDrag($event, { x: colIndex, y: rowIndex })"
+								@dragend-avatar="onDragend"
+								@drop-avatar="setGroupElements({ x: colIndex, y: rowIndex })"
 								data-avatar-type="vRoomAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 							/>
@@ -95,7 +97,9 @@
 								:ref="(el) => setElementRef(rowIndex, colIndex, el)"
 								:size="dimensions.cellWidth"
 								:show-outline="dragging"
-								@dropEmptyAvatar="setDropElement({ x: colIndex, y: rowIndex })"
+								@drop-empty-avatar="
+									setDropElement({ x: colIndex, y: rowIndex })
+								"
 								data-avatar-type="vRoomEmptyAvatar"
 								:data-test-position="`${rowIndex}-${colIndex}`"
 							/>
@@ -106,7 +110,7 @@
 		</template>
 	</room-wrapper>
 	<room-modal
-		v-model:isOpen="groupDialog.isOpen"
+		v-model:is-open="groupDialog.isOpen"
 		aria-describedby="folder open"
 		:group-data="groupDialog.groupData"
 		:avatar-size="dimensions.cellWidth"

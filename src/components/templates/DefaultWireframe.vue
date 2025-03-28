@@ -38,7 +38,7 @@
 								:key="index"
 							>
 								<speed-dial-menu-action
-									:dataTestId="action.dataTestId"
+									:data-test-id="action.dataTestId"
 									:icon="action.icon"
 									:href="action.href"
 									:to="action.to"

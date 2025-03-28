@@ -96,10 +96,12 @@ export default defineComponent({
 		targetSchoolNumber: {
 			type: String,
 			required: false,
+			default: "",
 		},
 		sourceSchoolNumber: {
 			type: String,
 			required: false,
+			default: "",
 		},
 		multipleUsersFound: {
 			type: Boolean,

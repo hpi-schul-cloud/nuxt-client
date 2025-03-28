@@ -12,7 +12,7 @@
 		@keydown.stop
 	>
 		<div class="drawing-element-content">
-			<InnerContent :docName="element.id">
+			<InnerContent :doc-name="element.id">
 				<template v-if="isEditMode">
 					<BoardMenu
 						:scope="BoardMenuScope.DRAWING_ELEMENT"

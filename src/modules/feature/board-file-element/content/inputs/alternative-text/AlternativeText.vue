@@ -19,6 +19,7 @@ export default defineComponent({
 		alternativeText: {
 			type: String,
 			required: false,
+			default: undefined,
 		},
 		isEditMode: { type: Boolean, required: true },
 	},

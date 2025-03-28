@@ -13,7 +13,7 @@
 		</p>
 		<base-input
 			data-testid="ldapDataClassesPath"
-			:modelValue="classPathValue"
+			:model-value="classPathValue"
 			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
@@ -23,7 +23,7 @@
 			:validation-model="v$.modelValue.classPath"
 			:validation-messages="classPathValidationMessage"
 			datatest-id="ldapDataClassesclassPath"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, classPath: $event })
 			"
 		>
@@ -36,7 +36,7 @@
 		</p>
 		<base-input
 			data-testid="ldapDataClassesNameAttribute"
-			:modelValue="modelValue.nameAttribute"
+			:model-value="modelValue.nameAttribute"
 			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
@@ -44,7 +44,7 @@
 			:validation-model="v$.modelValue.nameAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesNameAttribute"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, nameAttribute: $event })
 			"
 		>
@@ -54,7 +54,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataClassesNameparticipantAttribute"
-			:modelValue="modelValue.participantAttribute"
+			:model-value="modelValue.participantAttribute"
 			:disabled="checked === false"
 			type="text"
 			class="mt--xl"
@@ -62,7 +62,7 @@
 			:validation-model="v$.modelValue.participantAttribute"
 			:validation-messages="classesValidationMessage"
 			datatest-id="ldapDataClassesParticipantsAttribute"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', {
 					...modelValue,
 					participantAttribute: $event,

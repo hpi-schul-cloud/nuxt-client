@@ -1,12 +1,12 @@
 <template>
 	<div :class="columnClasses" :key="renderKey" class="d-flex flex-column">
 		<BoardColumnHeader
-			:columnId="column.id"
+			:column-id="column.id"
 			:title="column.title"
 			:index="index"
-			:isListBoard="isListBoard"
-			:isNotFirstColumn="isNotFirstColumn"
-			:isNotLastColumn="isNotLastColumn"
+			:is-list-board="isListBoard"
+			:is-not-first-column="isNotFirstColumn"
+			:is-not-last-column="isNotLastColumn"
 			@delete:column="onColumnDelete"
 			@move:column-down="onMoveColumnDown"
 			@move:column-left="onMoveColumnLeft"

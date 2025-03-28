@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<CardHostInteractionHandler
-			:isEditMode="isEditMode"
+			:is-edit-mode="isEditMode"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
 			@move:card-keyboard="onMoveCardKeyboard"
@@ -26,11 +26,11 @@
 				</template>
 				<template v-if="card">
 					<CardTitle
-						:isEditMode="isEditMode"
+						:is-edit-mode="isEditMode"
 						:value="card.title"
 						scope="card"
 						@update:value="onUpdateCardTitle($event, cardId)"
-						:isFocused="isFocusedById"
+						:is-focused="isFocusedById"
 						@enter="onEnter"
 						class="mx-n4 mb-n2"
 					/>
@@ -63,8 +63,8 @@
 					<div :class="{ 'mt-n2': hasCardTitle }">
 						<ContentElementList
 							:elements="card.elements"
-							:isEditMode="isEditMode"
-							:isDetailView="isDetailView"
+							:is-edit-mode="isEditMode"
+							:is-detail-view="isDetailView"
 							:row-index="rowIndex"
 							:column-index="columnIndex"
 							@delete:element="onDeleteElement"
@@ -81,9 +81,9 @@
 		<CardHostDetailView
 			v-if="card"
 			:card="card"
-			:isOpen="isDetailView"
-			:rowIndex="rowIndex"
-			:columnIndex="columnIndex"
+			:is-open="isDetailView"
+			:row-index="rowIndex"
+			:column-index="columnIndex"
 			@delete:element="onDeleteElement"
 			@move-down:element="onMoveContentElementDown"
 			@move-up:element="onMoveContentElementUp"

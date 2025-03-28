@@ -1,6 +1,6 @@
 <template>
 	<InlineEditInteractionHandler
-		:isEditMode="isEditMode"
+		:is-edit-mode="isEditMode"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 		@keydown.enter="onKeydownEnter"

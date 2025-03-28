@@ -35,7 +35,7 @@
 						"feature-course-sync.StartExistingCourseSyncDialog.confirmation.text",
 						{
 							groupName: selectedGroup?.name || "",
-							courseName: courseName || "",
+							courseName: courseName,
 						}
 					)
 				}}
@@ -70,12 +70,15 @@ const { t } = useI18n();
 const props = defineProps({
 	courseName: {
 		type: String,
+		default: "",
 	},
 	courseId: {
 		type: String,
+		default: undefined,
 	},
 	courseTeachers: {
 		type: Array,
+		default: undefined,
 	},
 });
 

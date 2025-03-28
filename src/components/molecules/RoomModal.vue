@@ -28,7 +28,7 @@
 				:col-count="4"
 				:max-items="-1"
 				:can-draggable="draggable"
-				@startDrag="$emit('drag-from-group', $event)"
+				@start-drag="$emit('drag-from-group', $event)"
 			/>
 		</template>
 	</vCustomDialog>
