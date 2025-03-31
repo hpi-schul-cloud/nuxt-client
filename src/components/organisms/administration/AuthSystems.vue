@@ -48,11 +48,12 @@
 				</thead>
 				<tbody>
 					<tr v-for="system in systems" :key="system.id">
-						<td>{{ system.alias }}</td>
-						<td>{{ system.type }}</td>
+						<td data-testid="system-table-alias">{{ system.alias }}</td>
+						<td data-testid="system-table-type">{{ system.type }}</td>
 						<td v-if="customLoginLinkEnabled">
 							<v-text-field
 								v-if="isLoginSystem(system)"
+								data-testid="system-table-login-link"
 								:id="`school-login-link-${system.id}`"
 								:model-value="generateLoginLink(system)"
 								class="school-login-link"
@@ -84,6 +85,7 @@
 								class="edit-system-btn"
 								icon
 								variant="text"
+								data-testid="system-table-button-edit"
 								:to="redirectTo(system)"
 								:aria-label="ariaLabels(system).edit"
 							>
@@ -94,6 +96,7 @@
 								class="delete-system-btn"
 								icon
 								variant="text"
+								data-testid="system-table-button-delete"
 								:aria-label="ariaLabels(system).delete"
 								@click.stop="openConfirmDeleteDialog(system.id)"
 							>
