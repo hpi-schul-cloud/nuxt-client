@@ -20,6 +20,7 @@
 		"typeRoots": ["./node_modules/@types", "./types"],
 		"paths": {
 			"@data-board": ["src/modules/data/board"],
+			"@data-editor": ["src/modules/data/editor"],
 			"@data-external-tool": ["src/modules/data/external-tool"],
 			"@data-group": ["src/modules/data/group"],
 			"@data-system": ["src/modules/data/system"],

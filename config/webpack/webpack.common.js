@@ -116,6 +116,7 @@ module.exports = {
 		alias: {
 			"@": path.resolve(__src),
 			"@data-board": path.resolve(__src, "modules/data/board"),
+			"@data-editor": path.resolve(__src, "modules/data/editor"),
 			"@data-external-tool": getDir("src/modules/data/external-tool"),
 			"@data-group": getDir("src/modules/data/group"),
 			"@data-system": getDir("src/modules/data/system"),
