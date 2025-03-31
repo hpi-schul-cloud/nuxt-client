@@ -7,12 +7,14 @@ import {
 	advancedPlugins,
 	basicFormattingToolbar,
 	advancedFormattingToolbar,
-	basicFormattingMediaToolbar,
+	mediaFormattingToolbar,
 	compactHeadings,
 	prominentHeadings,
 	fontColors,
 	fontBackgroundColors,
 } from "./config";
+import { injectStrict } from "@/utils/inject/inject-strict";
+import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject/injection-keys";
 
 type CKEditorKeystrokeInfo = {
 	keyCode: number;
@@ -33,15 +35,30 @@ type CKEditorEventInfo = {
 	stop?: () => void;
 };
 
+interface GeneralConfig {
+	language: string;
+	link: {
+		defaultProtocol: string;
+		addTargetToExternalLinks: boolean;
+	};
+	wordCount: {
+		onUpdate: (data: { words: number; characters: number }) => void;
+	};
+	fontColor: ReturnType<typeof fontColors>;
+	fontBackgroundColor: ReturnType<typeof fontBackgroundColors>;
+}
+
 export const useEditorConfig = () => {
 	const { t, locale } = useI18n();
+	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
+	const DEFAULT_PROTOCOL = "//";
 
 	const charCount = ref(0);
 
-	const generalConfig = reactive({
-		language: locale.value, // or fallback language
+	const generalConfig = reactive<GeneralConfig>({
+		language: locale.value || envConfigModule.getFallbackLanguage,
 		link: {
-			defaultProtocol: "//",
+			defaultProtocol: DEFAULT_PROTOCOL,
 			addTargetToExternalLinks: true,
 		},
 		wordCount: {
@@ -80,7 +97,7 @@ export const useEditorConfig = () => {
 		advancedPlugins,
 		basicFormattingToolbar,
 		advancedFormattingToolbar,
-		basicFormattingMediaToolbar,
+		mediaFormattingToolbar,
 		compactHeadings,
 		prominentHeadings,
 		generalConfig,

@@ -85,7 +85,7 @@ export const advancedFormattingToolbar: ToolbarItem[] = [
 	"removeFormat",
 ];
 
-export const basicFormattingMediaToolbar: ToolbarItem[] = [
+export const mediaFormattingToolbar: ToolbarItem[] = [
 	"undo",
 	"redo",
 	"|",

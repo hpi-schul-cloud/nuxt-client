@@ -41,7 +41,6 @@ const emit = defineEmits([
 	"focus",
 	"update:value",
 	"blur",
-	"keyboard",
 	"keyboard:delete",
 ]);
 

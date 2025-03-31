@@ -38,13 +38,12 @@ const emit = defineEmits([
 	"focus",
 	"update:value",
 	"blur",
-	"keyboard",
 	"keyboard:delete",
 ]);
 
 const {
 	corePlugins,
-	basicFormattingMediaToolbar,
+	mediaFormattingToolbar,
 	prominentHeadings,
 	generalConfig,
 	registerDeletionHandler,
@@ -57,7 +56,7 @@ const config = computed(() => {
 	return {
 		...generalConfig,
 		toolbar: {
-			items: basicFormattingMediaToolbar,
+			items: mediaFormattingToolbar,
 		},
 		plugins: corePlugins,
 		heading: prominentHeadings,
