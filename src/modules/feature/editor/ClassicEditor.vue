@@ -44,10 +44,10 @@ const emit = defineEmits([
 
 const {
 	corePlugins,
-	classicEditorToolbarItems,
+	basicFormattingMediaToolbar,
 	prominentHeadings,
 	generalConfig,
-	attachDeletionHandler,
+	registerDeletionHandler,
 } = useEditorConfig();
 
 const ck = ref(null);
@@ -57,7 +57,7 @@ const config = computed(() => {
 	return {
 		...generalConfig,
 		toolbar: {
-			items: classicEditorToolbarItems,
+			items: basicFormattingMediaToolbar,
 		},
 		plugins: corePlugins,
 		heading: prominentHeadings,
@@ -76,7 +76,7 @@ const handleReady = (editor: Editor) => {
 		editor.editing.view.focus();
 	}
 
-	attachDeletionHandler(editor, handleDelete);
+	registerDeletionHandler(editor, handleDelete);
 };
 </script>
 

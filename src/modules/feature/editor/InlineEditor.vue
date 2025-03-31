@@ -49,9 +49,9 @@ const emit = defineEmits([
 const {
 	advancedPlugins,
 	generalConfig,
-	inlineEditorToolbarItems,
+	advancedFormattingToolbar,
 	compactHeadings,
-	attachDeletionHandler,
+	registerDeletionHandler,
 } = useEditorConfig();
 
 const modelValue = useVModel(props, "value", emit);
@@ -61,7 +61,7 @@ const config = computed(() => {
 	return {
 		...generalConfig,
 		toolbar: {
-			items: inlineEditorToolbarItems,
+			items: advancedFormattingToolbar,
 		},
 		plugins: advancedPlugins,
 		heading: compactHeadings,
@@ -85,7 +85,7 @@ const handleReady = (editor: Editor) => {
 		editor.editing.view.focus();
 	}
 
-	attachDeletionHandler(editor, handleDelete);
+	registerDeletionHandler(editor, handleDelete);
 };
 </script>
 

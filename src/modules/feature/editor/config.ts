@@ -47,7 +47,7 @@ export const advancedPlugins: PluginName[] = [
 	"WordCount",
 ];
 
-export const balloonEditorToolbarItems: ToolbarItem[] = [
+export const basicFormattingToolbar: ToolbarItem[] = [
 	"heading",
 	"|",
 	"bold",
@@ -60,7 +60,7 @@ export const balloonEditorToolbarItems: ToolbarItem[] = [
 	"removeFormat",
 ];
 
-export const inlineEditorToolbarItems: ToolbarItem[] = [
+export const advancedFormattingToolbar: ToolbarItem[] = [
 	"undo",
 	"redo",
 	"|",
@@ -85,7 +85,7 @@ export const inlineEditorToolbarItems: ToolbarItem[] = [
 	"removeFormat",
 ];
 
-export const classicEditorToolbarItems: ToolbarItem[] = [
+export const basicFormattingMediaToolbar: ToolbarItem[] = [
 	"undo",
 	"redo",
 	"|",

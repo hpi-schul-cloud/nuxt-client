@@ -5,9 +5,9 @@ import { useI18n } from "vue-i18n";
 import {
 	corePlugins,
 	advancedPlugins,
-	balloonEditorToolbarItems,
-	inlineEditorToolbarItems,
-	classicEditorToolbarItems,
+	basicFormattingToolbar,
+	advancedFormattingToolbar,
+	basicFormattingMediaToolbar,
 	compactHeadings,
 	prominentHeadings,
 	fontColors,
@@ -69,7 +69,7 @@ export const useEditorConfig = () => {
 		}
 	};
 
-	const attachDeletionHandler = (editor: Editor, onDelete: () => void) => {
+	const registerDeletionHandler = (editor: Editor, onDelete: () => void) => {
 		editor.editing.view.document.on("keydown", (evt, data) =>
 			deletionHandler(evt, data, onDelete)
 		);
@@ -78,13 +78,13 @@ export const useEditorConfig = () => {
 	return {
 		corePlugins,
 		advancedPlugins,
-		balloonEditorToolbarItems,
-		inlineEditorToolbarItems,
-		classicEditorToolbarItems,
+		basicFormattingToolbar,
+		advancedFormattingToolbar,
+		basicFormattingMediaToolbar,
 		compactHeadings,
 		prominentHeadings,
 		generalConfig,
 		editorIsEmpty,
-		attachDeletionHandler,
+		registerDeletionHandler,
 	};
 };
