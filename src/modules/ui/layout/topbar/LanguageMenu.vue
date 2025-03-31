@@ -15,8 +15,8 @@
 		</template>
 		<v-list-item
 			v-for="item in availableLanguages"
-			role="menuitem"
 			:key="item.language"
+			role="menuitem"
 			:prepend-icon="item.icon"
 			:data-testid="`available-language-${item.language}`"
 			:aria-label="item.translatedName"

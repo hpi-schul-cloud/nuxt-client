@@ -214,6 +214,9 @@ export default {
 		vCustomEmptyState,
 		ShareModal,
 	},
+	inject: {
+		shareModule: { from: SHARE_MODULE_KEY },
+	},
 	props: {
 		roomDataObject: {
 			type: Object,
@@ -223,9 +226,6 @@ export default {
 		role: { type: String, required: true },
 	},
 	emits: ["copy-board-element"],
-	inject: {
-		shareModule: { from: SHARE_MODULE_KEY },
-	},
 	data() {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,

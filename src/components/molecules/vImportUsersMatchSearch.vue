@@ -115,12 +115,12 @@
 						</VListItem>
 						<VAutocomplete
 							v-model="selectedItem"
+							v-model:search="searchUser"
 							class="px-4 mt-2"
 							item-value="userId"
 							:item-title="(user) => `${user.firstName} ${user.lastName}`"
 							:items="entries"
 							:loading="loading"
-							v-model:search="searchUser"
 							hide-no-data
 							hide-selected
 							:prepend-inner-icon="mdiAccountSearch"

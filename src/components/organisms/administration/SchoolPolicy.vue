@@ -24,9 +24,9 @@
 				lines="two"
 				class="mb-6"
 				data-testid="policy-item"
-				@click="downloadPolicy"
 				:class="{ 'item-no-action': !privacyPolicy }"
 				:ripple="privacyPolicy !== null"
+				@click="downloadPolicy"
 			>
 				<template #prepend>
 					<v-icon>$file_pdf_outline</v-icon>
@@ -84,8 +84,8 @@
 			<school-policy-form-dialog
 				v-if="hasSchoolEditPermission"
 				:is-open="isSchoolPolicyFormDialogOpen"
-				@close="closeDialog"
 				data-testid="form-dialog"
+				@close="closeDialog"
 			/>
 			<v-custom-dialog
 				v-model:is-open="isDeletePolicyDialogOpen"
@@ -93,8 +93,8 @@
 				has-buttons
 				confirm-btn-title-key="common.actions.delete"
 				:confirm-btn-icon="mdiTrashCanOutline"
-				@dialog-confirmed="deleteFile"
 				data-testid="delete-dialog"
+				@dialog-confirmed="deleteFile"
 			>
 				<template #title>
 					<h4 class="text-h4 mt-0">

@@ -14,9 +14,9 @@
 					:aria-label="$t('pages.rooms.roomModal.courseGroupTitle')"
 					:placeholder="$t('pages.rooms.roomModal.courseGroupTitle')"
 					:label="$t('pages.rooms.roomModal.courseGroupTitle')"
+					:rules="[validateOnOpeningTag]"
 					@blur="onBlur"
 					@keyup.enter="onEnterInput"
-					:rules="[validateOnOpeningTag]"
 				/>
 			</div>
 		</template>
@@ -42,13 +42,6 @@ import { mdiKeyboardReturn, mdiPencilOutline } from "@icons/material";
 import { defineComponent } from "vue";
 
 export default defineComponent({
-	setup() {
-		const { validateOnOpeningTag } = useOpeningTagValidator();
-
-		return {
-			validateOnOpeningTag,
-		};
-	},
 	components: {
 		vCustomDialog,
 		RoomAvatarIterator,
@@ -71,6 +64,13 @@ export default defineComponent({
 		},
 	},
 	emits: ["update:isOpen", "drag-from-group"],
+	setup() {
+		const { validateOnOpeningTag } = useOpeningTagValidator();
+
+		return {
+			validateOnOpeningTag,
+		};
+	},
 	data() {
 		return {
 			mdiPencilOutline,

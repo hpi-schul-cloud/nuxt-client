@@ -11,9 +11,9 @@
 		<v-list>
 			<v-list-item v-for="(item, index) in filterMenuItems" :key="index">
 				<v-list-item-title
-					@click="onFilterClick(item.value as FilterOptionsType)"
 					class="menu-text"
 					hover
+					@click="onFilterClick(item.value as FilterOptionsType)"
 				>
 					<span class="filter-menu-item">{{ item.label }}</span>
 				</v-list-item-title>

@@ -24,9 +24,9 @@
 						</p>
 						<div class="ga-2">
 							<v-chip
-								label
 								v-for="componentName in item.components"
 								:key="componentName"
+								label
 								class="ma-1"
 							>
 								{{ componentName }}

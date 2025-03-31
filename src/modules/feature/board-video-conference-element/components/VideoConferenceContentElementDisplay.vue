@@ -29,7 +29,7 @@
 			<template #title>
 				{{ title }}
 			</template>
-			<template #menu v-if="isEditMode">
+			<template v-if="isEditMode" #menu>
 				<slot />
 			</template>
 			<template #statusInfo>

@@ -5,9 +5,9 @@
 			<VAppBarNavIcon
 				v-if="!sidebarExpanded"
 				:icon="mdiMenu"
-				@click="() => $emit('sidebar-toggled')"
 				size="default"
 				data-test-id="sidebar-toggle"
+				@click="() => $emit('sidebar-toggled')"
 			/>
 		</template>
 		<VSpacer />

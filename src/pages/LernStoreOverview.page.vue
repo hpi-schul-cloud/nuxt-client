@@ -24,8 +24,8 @@
 									: 'first-search__searchbar'
 							"
 							:placeholder="$t('pages.content.index.search.placeholder')"
-							@update:model-value="onInput"
 							data-testid="learningstore-search-input"
+							@update:model-value="onInput"
 						>
 							<template #append-inner>
 								<v-btn
@@ -44,7 +44,7 @@
 					</div>
 				</div>
 				<transition name="fade">
-					<div class="content__container" v-if="true">
+					<div v-if="true" class="content__container">
 						<span class="content__container_child">
 							<!-- initial state, empty search -->
 							<content-initial-state v-if="searchQuery.length === 0" />

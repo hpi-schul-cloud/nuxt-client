@@ -11,10 +11,10 @@
 		:alt="alt"
 		:cover="cover"
 		:aspect-ratio="aspectRatio"
-		@load="setWidth"
-		@error="setError"
 		:max-width="imageWidth"
 		:max-height="maxHeight"
+		@load="setWidth"
+		@error="setError"
 	>
 		<template #placeholder>
 			<v-row class="fill-height ma-0" align="center" justify="center">
@@ -31,6 +31,7 @@ import { WarningAlert } from "@ui-alert";
 
 export default defineComponent({
 	name: "PreviewImage",
+	components: { WarningAlert },
 	props: {
 		alt: { type: String, required: true },
 		src: { type: String, required: true },
@@ -39,7 +40,6 @@ export default defineComponent({
 		position: { type: String, required: false, default: undefined },
 		maxHeight: { type: Number, required: false, default: undefined },
 	},
-	components: { WarningAlert },
 	emits: ["error"],
 	setup(props, { emit }) {
 		const isError = ref(false);

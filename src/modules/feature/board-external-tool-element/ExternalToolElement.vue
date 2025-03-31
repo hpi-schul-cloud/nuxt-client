@@ -1,11 +1,11 @@
 <template>
 	<v-card
 		v-show="showTool || isEditMode"
+		ref="externalToolElement"
 		class="mb-4"
 		:data-testid="`board-external-tool-element-${toolDisplayName}`"
 		elevation="0"
 		variant="outlined"
-		ref="externalToolElement"
 		:ripple="false"
 		tabindex="0"
 		role="button"
@@ -17,7 +17,7 @@
 		@click="onClickElement"
 	>
 		<ContentElementBar :has-grey-background="true" :icon="getIcon">
-			<template #logo v-if="displayData && displayData.logoUrl">
+			<template v-if="displayData && displayData.logoUrl" #logo>
 				<v-img height="100%" class="mx-auto" :src="displayData.logoUrl" />
 			</template>
 			<template #title>
@@ -50,9 +50,9 @@
 			:is-open="isConfigurationDialogOpen"
 			:context-id="element.id"
 			:config-id="element.content.contextExternalToolId"
+			data-testid="board-external-tool-element-configuration-dialog"
 			@close="onConfigurationDialogClose"
 			@save="onConfigurationDialogSave"
-			data-testid="board-external-tool-element-configuration-dialog"
 		/>
 	</v-card>
 </template>

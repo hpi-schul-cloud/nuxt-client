@@ -3,16 +3,16 @@
 		class="mr-2"
 		:date="dateSelection.$gte"
 		:label="t('utils.adminFilter.date.label.from')"
-		@update:date="onUpdateDate($event, '$gte')"
 		data-testid="date-picker-from"
+		@update:date="onUpdateDate($event, '$gte')"
 	/>
 
 	<date-picker
 		class="mr-2"
 		:date="dateSelection.$lte"
 		:label="t('utils.adminFilter.date.label.until')"
-		@update:date="onUpdateDate($event, '$lte')"
 		data-testid="date-picker-until"
+		@update:date="onUpdateDate($event, '$lte')"
 	/>
 
 	<FilterActionButtons

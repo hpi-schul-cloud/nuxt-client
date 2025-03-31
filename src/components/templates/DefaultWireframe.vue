@@ -1,13 +1,13 @@
 <template>
 	<div class="wireframe-container">
 		<div
-			aria-live="polite"
 			id="notify-screen-reader-polite"
+			aria-live="polite"
 			class="d-sr-only"
 		/>
 		<div
-			aria-live="assertive"
 			id="notify-screen-reader-assertive"
+			aria-live="assertive"
 			class="d-sr-only"
 		/>
 		<div class="wireframe-header sticky" :class="{ fixed: fixedHeader }">

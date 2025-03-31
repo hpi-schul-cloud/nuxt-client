@@ -6,7 +6,7 @@
 		:close-icon="showCloseIcon ? closeIcon : undefined"
 		class="mb-0"
 	>
-		<div class="alert-text" v-if="$slots.default">
+		<div v-if="$slots.default" class="alert-text">
 			<slot />
 		</div>
 	</v-alert>

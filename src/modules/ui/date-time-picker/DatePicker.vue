@@ -8,14 +8,14 @@
 			<v-text-field
 				v-bind="menuProps"
 				v-bind.attr="$attrs"
-				v-model="dateString"
 				ref="inputField"
+				v-model="dateString"
+				v-date-input-mask
 				:append-inner-icon="mdiCalendar"
 				:label="label"
 				:aria-label="ariaLabel"
 				:placeholder="t('common.placeholder.dateformat')"
 				:error-messages="errorMessages"
-				v-date-input-mask
 				@update:model-value="validate"
 				@keydown.space="showDateDialog = true"
 				@keydown.prevent.enter="showDateDialog = true"

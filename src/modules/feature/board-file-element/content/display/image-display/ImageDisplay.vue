@@ -15,8 +15,8 @@
 						:src="previewSrc"
 						:alt="alternativeText"
 						:cover="false"
-						@error="onImageError"
 						:max-height="336"
+						@error="onImageError"
 					/>
 				</div>
 			</div>
@@ -38,6 +38,10 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	name: "ImageDisplay",
+	components: {
+		ContentElementBar,
+		PreviewImage,
+	},
 	props: {
 		src: { type: String, required: true },
 		previewSrc: { type: String, required: true },
@@ -45,10 +49,6 @@ export default defineComponent({
 		isEditMode: { type: Boolean, required: true },
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		showMenu: { type: Boolean, required: true },
-	},
-	components: {
-		ContentElementBar,
-		PreviewImage,
 	},
 	setup(props) {
 		const { t } = useI18n();

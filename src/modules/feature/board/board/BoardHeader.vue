@@ -1,17 +1,17 @@
 <template>
 	<div class="d-flex align-items-center board-header">
 		<InlineEditInteractionHandler
+			:id="boardId"
 			:is-edit-mode="isEditMode"
+			tabindex="0"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
 			@keydown.enter="onStartEditMode"
-			tabindex="0"
-			:id="boardId"
 		>
 			<div ref="boardHeader">
 				<BoardAnyTitleInput
-					class="ml-n4"
 					ref="boardHeader"
+					class="ml-n4"
 					scope="board"
 					:value="boardTitle"
 					data-testid="board-title"

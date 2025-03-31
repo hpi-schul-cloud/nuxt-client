@@ -1,11 +1,11 @@
 <template>
 	<DefaultWireframe
+		ref="wireframe"
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
 		:fixed-header="fixedHeaderOnMobile.enabled"
 		@fab:clicked="onFabClick"
-		ref="wireframe"
 	>
 		<template #header>
 			<div class="d-flex align-items-center">

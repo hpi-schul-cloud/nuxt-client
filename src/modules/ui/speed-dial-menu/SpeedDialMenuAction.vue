@@ -17,9 +17,9 @@
 					size="small"
 					:href="href"
 					:to="to"
-					@click="onClick"
 					role="menuitem"
 					:data-testid="dataTestId"
+					@click="onClick"
 				>
 					<v-icon>{{ props.icon }}</v-icon>
 					<span class="d-sr-only"> <slot /> </span>
@@ -42,8 +42,8 @@
 					aria-hidden="true"
 					:href="href"
 					:to="to"
-					@click="onClick"
 					:data-testid="dataTestId"
+					@click="onClick"
 					><slot />
 				</v-btn>
 				<v-btn
@@ -53,8 +53,8 @@
 					size="small"
 					:href="href"
 					:to="to"
-					@click="onClick"
 					role="menuitem"
+					@click="onClick"
 				>
 					<v-icon>{{ props.icon }}</v-icon>
 					<span class="d-sr-only"> <slot /></span>

@@ -1,12 +1,12 @@
 <template>
-	<div class="d-flex flex-wrap mb-4 mt-2" ref="columnHeader">
+	<div ref="columnHeader" class="d-flex flex-wrap mb-4 mt-2">
 		<div class="flex-1-0">
 			<BoardColumnInteractionHandler
+				:id="columnId"
 				:is-edit-mode="isEditMode"
 				@start-edit-mode="onStartEditMode"
 				@end-edit-mode="onEndEditMode"
 				@move:column-keyboard="onMoveColumnKeyboard"
-				:id="columnId"
 			>
 				<BoardAnyTitleInput
 					:value="title.trim()"

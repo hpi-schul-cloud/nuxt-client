@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<base-modal class="modal" v-model:active="showModal">
+		<base-modal v-model:active="showModal" class="modal">
 			<template #header>
 				{{ $t("components.molecules.AddContentModal") }}
 			</template>

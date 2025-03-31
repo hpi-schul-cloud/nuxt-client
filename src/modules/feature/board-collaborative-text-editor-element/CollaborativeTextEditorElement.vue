@@ -1,14 +1,14 @@
 <template>
 	<v-card
+		ref="collaborativeTextEditorElement"
 		class="text-editor-card mb-4"
 		data-testid="collaborative-text-editor-element"
 		variant="outlined"
-		ref="collaborativeTextEditorElement"
 		:ripple="false"
 		tabindex="0"
-		@keydown.up.down="onKeydownArrow"
 		role="button"
 		:aria-label="ariaLabel"
+		@keydown.up.down="onKeydownArrow"
 		@click="redirectToEditorUrl"
 		@keydown.enter.space="redirectToEditorUrl"
 		@keydown.stop

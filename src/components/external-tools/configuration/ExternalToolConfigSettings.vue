@@ -2,8 +2,8 @@
 	<div>
 		<div v-for="(param, index) in template.parameters" :key="param.name">
 			<external-tool-config-parameter
-				:parameter="template.parameters[index]"
 				v-model="modelValue[index]"
+				:parameter="template.parameters[index]"
 			/>
 		</div>
 	</div>

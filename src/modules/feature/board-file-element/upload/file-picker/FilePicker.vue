@@ -1,11 +1,11 @@
 <template>
 	<v-file-input
-		density="compact"
 		ref="inputRef"
-		@update:model-value="onFileChange"
+		density="compact"
 		:prepend-icon="mdiTrayArrowUp"
 		:placeholder="$t('feature-board-file-element.placeholder.uploadFile')"
 		:hide-details="true"
+		@update:model-value="onFileChange"
 	/>
 </template>
 

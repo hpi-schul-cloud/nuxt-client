@@ -4,7 +4,7 @@
 			:has-grey-background="!isEditMode"
 			:icon="mdiFileDocumentOutline"
 		>
-			<template #title v-if="showTitle">
+			<template v-if="showTitle" #title>
 				<a v-if="src" :href="src" target="_blank" :aria-label="ariaLabel">
 					{{ name }}
 				</a>
@@ -13,7 +13,7 @@
 			<template v-if="showMenu" #menu>
 				<slot />
 			</template>
-			<template #subtitle v-if="caption && !isEditMode">
+			<template v-if="caption && !isEditMode" #subtitle>
 				{{ caption }}
 			</template>
 		</ContentElementBar>

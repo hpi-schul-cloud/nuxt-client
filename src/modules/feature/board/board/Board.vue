@@ -50,10 +50,10 @@
 					>
 						<template #item="{ element, index }">
 							<BoardColumn
+								:key="element.id"
 								:data-column-id="element.id"
 								:column="element"
 								:index="index"
-								:key="element.id"
 								:column-count="board.columns.length"
 								:class="{ 'my-0': isListBoard }"
 								:is-list-board="isListBoard"
@@ -73,8 +73,8 @@
 					<div :class="{ 'mx-auto mt-9 w-100': isListBoard }">
 						<BoardColumnGhost
 							v-if="hasCreateColumnPermission"
-							@create:column="onCreateColumn"
 							:is-list-board="isListBoard"
+							@create:column="onCreateColumn"
 						/>
 					</div>
 				</div>

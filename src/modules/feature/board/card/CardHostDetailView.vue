@@ -40,8 +40,8 @@
 							:is-edit-mode="isEditMode"
 							:value="card.title"
 							scope="card"
-							@update:value="onUpdateCardTitle"
 							:is-focused="true"
+							@update:value="onUpdateCardTitle"
 							@enter="onEnterTitle"
 						/>
 						<ContentElementList

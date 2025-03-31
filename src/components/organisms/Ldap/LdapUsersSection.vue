@@ -133,9 +133,6 @@ import {
 } from "@icons/material";
 
 export default defineComponent({
-	setup() {
-		return { v$: useVuelidate() };
-	},
 	props: {
 		modelValue: {
 			type: Object,
@@ -148,6 +145,9 @@ export default defineComponent({
 		},
 	},
 	emits: ["update:modelValue", "update:errors"],
+	setup() {
+		return { v$: useVuelidate() };
+	},
 	data() {
 		return {
 			mdiAccountBoxOutline,

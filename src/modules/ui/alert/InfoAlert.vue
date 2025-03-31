@@ -17,14 +17,14 @@ import BaseAlert from "./BaseAlert.vue";
 export default defineComponent({
 	name: "InfoAlert",
 	components: { BaseAlert },
-	setup() {
-		return { mdiInformation, mdiClose };
-	},
 	props: {
 		showCloseIcon: {
 			type: Boolean,
 			default: false,
 		},
+	},
+	setup() {
+		return { mdiInformation, mdiClose };
 	},
 });
 </script>

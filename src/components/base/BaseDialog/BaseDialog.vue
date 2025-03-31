@@ -18,8 +18,8 @@
 				<v-btn
 					variant="text"
 					data-testid="btn-dialog-cancel"
-					@click="cancel"
 					class="mr-3"
+					@click="cancel"
 				>
 					{{ cancelText }}
 				</v-btn>

@@ -1,11 +1,11 @@
 <template>
 	<v-card
+		ref="submissionContentElement"
 		class="mb-4"
 		data-testid="board-submission-element"
 		dense
 		elevation="0"
 		variant="outlined"
-		ref="submissionContentElement"
 		:ripple="false"
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
@@ -68,11 +68,6 @@ import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 
 export default defineComponent({
 	name: "SubmissionContentElement",
-	computed: {
-		BoardMenuScope() {
-			return BoardMenuScope;
-		},
-	},
 	components: {
 		BoardMenu,
 		KebabMenuActionMoveUp,
@@ -151,6 +146,11 @@ export default defineComponent({
 			onUpdateCompleted,
 			t,
 		};
+	},
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
 	},
 });
 </script>

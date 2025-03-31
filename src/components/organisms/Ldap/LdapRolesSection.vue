@@ -141,11 +141,6 @@ import {
 } from "@icons/material";
 
 export default defineComponent({
-	setup() {
-		const v$ = useVuelidate();
-
-		return { v$ };
-	},
 	props: {
 		modelValue: {
 			type: Object,
@@ -158,6 +153,11 @@ export default defineComponent({
 		},
 	},
 	emits: ["update:modelValue", "update:errors", "update:inputs"],
+	setup() {
+		const v$ = useVuelidate();
+
+		return { v$ };
+	},
 	data() {
 		return {
 			mdiAccountOffOutline,

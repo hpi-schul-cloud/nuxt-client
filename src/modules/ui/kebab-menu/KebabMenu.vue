@@ -1,8 +1,8 @@
 <template>
 	<VMenu
+		v-if="hasSlotContent($slots.default)"
 		location="bottom end"
 		min-width="250"
-		v-if="hasSlotContent($slots.default)"
 	>
 		<template #activator="{ props }">
 			<VBtn

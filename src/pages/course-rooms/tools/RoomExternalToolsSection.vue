@@ -2,16 +2,16 @@
 	<div>
 		<room-external-tool-card
 			v-for="(tool, index) in tools"
-			size="360"
 			:key="index"
+			size="360"
 			class="mb-4"
 			:tool="tool"
 			:can-edit="canEdit"
+			:data-testid="`external-tool-card-${tool.name}`"
 			@delete="onOpenDeleteDialog"
 			@edit="onEditTool"
 			@error="onError"
 			@refresh="$emit('refresh')"
-			:data-testid="`external-tool-card-${tool.name}`"
 		/>
 
 		<RoomExternalToolsErrorDialog

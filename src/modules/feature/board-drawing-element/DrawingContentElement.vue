@@ -1,9 +1,9 @@
 <template>
 	<v-card
+		ref="drawingElement"
 		class="mb-4"
 		data-testid="drawing-element"
 		variant="outlined"
-		ref="drawingElement"
 		:ripple="false"
 		:href="sanitizedUrl"
 		target="_blank"
@@ -28,8 +28,8 @@
 							@click="onMoveDrawingElementEditDown"
 						/>
 						<KebabMenuActionDelete
-							@click="onDeleteElement"
 							scope-language-key="components.cardElement.drawingElement"
+							@click="onDeleteElement"
 						/>
 					</BoardMenu>
 				</template>

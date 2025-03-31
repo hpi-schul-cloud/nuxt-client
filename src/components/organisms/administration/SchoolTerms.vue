@@ -24,9 +24,9 @@
 				lines="two"
 				class="mb-6"
 				data-testid="terms-item"
-				@click="downloadTerms"
 				:class="{ 'item-no-action': !termsOfUse }"
 				:ripple="termsOfUse !== null"
+				@click="downloadTerms"
 			>
 				<template #prepend>
 					<v-icon>$file_pdf_outline</v-icon>
@@ -80,8 +80,8 @@
 			<school-terms-form-dialog
 				v-if="hasSchoolEditPermission"
 				:is-open="isSchoolTermsFormDialogOpen"
-				@close="closeDialog"
 				data-testid="form-dialog"
+				@close="closeDialog"
 			/>
 			<v-custom-dialog
 				v-model:is-open="isDeleteTermsDialogOpen"
@@ -89,8 +89,8 @@
 				has-buttons
 				confirm-btn-title-key="common.actions.delete"
 				:confirm-btn-icon="mdiTrashCanOutline"
-				@dialog-confirmed="deleteFile"
 				data-testid="delete-dialog"
+				@dialog-confirmed="deleteFile"
 			>
 				<template #title>
 					<h4 class="text-h4 mt-0">

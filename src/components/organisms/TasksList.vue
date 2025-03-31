@@ -15,7 +15,7 @@
 				:type="'list-item-avatar-two-line'"
 			/>
 		</template>
-		<template v-for="(task, index) of tasks" :key="index" v-else>
+		<template v-for="(task, index) of tasks" v-else :key="index">
 			<template v-if="userRole === 'student'">
 				<task-item-student
 					v-if="isLastTaskItem(index)"
@@ -57,6 +57,7 @@ import TaskItemTeacher from "@/components/molecules/TaskItemTeacher.vue";
 
 export default {
 	components: { TaskItemStudent, TaskItemTeacher },
+	inject: ["tasksModule", "finishedTasksModule"],
 	props: {
 		tasks: {
 			type: Array,
@@ -85,7 +86,6 @@ export default {
 		},
 	},
 	emits: ["copy-task", "share-task"],
-	inject: ["tasksModule", "finishedTasksModule"],
 	computed: {
 		currentTaskStatus() {
 			return this.tasksModule.getStatus;

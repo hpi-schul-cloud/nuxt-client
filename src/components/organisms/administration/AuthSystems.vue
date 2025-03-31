@@ -17,8 +17,8 @@
 				<v-btn
 					icon
 					variant="text"
-					@click="copyLoginLink(0)"
 					:aria-label="$t('common.actions.shareLink')"
+					@click="copyLoginLink(0)"
 				>
 					<v-icon>
 						{{ getCopyStatus(0) ? iconMdiCheckCircle : iconMdiContentCopy }}
@@ -64,8 +64,8 @@
 									<v-btn
 										icon
 										variant="text"
-										@click="copyLoginLink(system.id)"
 										:aria-label="$t('common.actions.shareLink')"
+										@click="copyLoginLink(system.id)"
 									>
 										<v-icon
 											>{{

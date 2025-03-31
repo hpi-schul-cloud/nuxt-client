@@ -19,10 +19,10 @@ describe("usePreviewGenerator", () => {
 		let composable: ReturnType<typeof usePreviewGenerator> | undefined;
 
 		const TestComponent = defineComponent({
-			template: "<div/>",
 			setup() {
 				composable = usePreviewGenerator(elementId);
 			},
+			template: "<div/>",
 		});
 
 		const wrapper = mount(TestComponent, {});

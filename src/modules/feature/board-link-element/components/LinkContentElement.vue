@@ -1,5 +1,6 @@
 <template>
 	<v-card
+		ref="linkContentElement"
 		class="mb-4"
 		:target="target"
 		data-testid="board-link-element"
@@ -9,7 +10,6 @@
 		:aria-label="ariaLabel"
 		:href="sanitizedUrl"
 		tabindex="0"
-		ref="linkContentElement"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		@click="onClick"

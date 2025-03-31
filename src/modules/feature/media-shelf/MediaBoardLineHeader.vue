@@ -4,7 +4,7 @@
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 	>
-		<div class="line-header rounded" tabindex="0" ref="lineHeader">
+		<div ref="lineHeader" class="line-header rounded" tabindex="0">
 			<div class="d-flex align-center py-2 px-4">
 				<BoardAnyTitleInput
 					data-testid="media-line-title"

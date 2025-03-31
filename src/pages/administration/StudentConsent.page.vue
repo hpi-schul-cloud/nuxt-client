@@ -44,11 +44,11 @@
 				{{ $t("pages.administration.students.consent.steps.complete.info") }}
 
 				<backend-data-table
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
 					:data="tableData"
 					track-by="_id"
-					v-model:sort-by="sortBy"
-					v-model:sort-order="sortOrder"
 					data-testid="consent_table_1"
 					@update:sort="onUpdateSort"
 				>
@@ -116,12 +116,12 @@
 					{{ $t("pages.administration.students.consent.steps.register.info") }}
 				</p>
 				<backend-data-table
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
 					:data="tableData"
 					track-by="id"
 					:paginated="false"
-					v-model:sort-by="sortBy"
-					v-model:sort-order="sortOrder"
 					data-testid="consent_table_2"
 					@update:sort="onUpdateSort"
 				>
@@ -188,12 +188,12 @@
 				</h4>
 				{{ $t("pages.administration.students.consent.steps.download.info") }}
 				<backend-data-table
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
 					:data="tableData"
 					track-by="_id"
 					:paginated="false"
-					v-model:sort-by="sortBy"
-					v-model:sort-order="sortOrder"
 					data-testid="consent_table_3"
 					@update:sort="onUpdateSort"
 				>

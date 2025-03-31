@@ -7,6 +7,7 @@
 			@move:card-keyboard="onMoveCardKeyboard"
 		>
 			<VCard
+				:id="cardId"
 				ref="cardHost"
 				:height="isLoadingCard ? height : 'auto'"
 				class="card-host"
@@ -15,7 +16,6 @@
 				tabindex="0"
 				min-height="120px"
 				:elevation="isEditMode ? 6 : isHovered ? 4 : 2"
-				:id="cardId"
 				:ripple="false"
 				:hover="isHovered"
 				:data-testid="cardTestId"
@@ -29,10 +29,10 @@
 						:is-edit-mode="isEditMode"
 						:value="card.title"
 						scope="card"
-						@update:value="onUpdateCardTitle($event, cardId)"
 						:is-focused="isFocusedById"
-						@enter="onEnter"
 						class="mx-n4 mb-n2"
+						@update:value="onUpdateCardTitle($event, cardId)"
+						@enter="onEnter"
 					/>
 
 					<div class="board-menu" :class="boardMenuClasses">
@@ -72,7 +72,7 @@
 							@move-up:element="onMoveContentElementUp"
 							@move-keyboard:element="onMoveContentElementKeyboard"
 						/>
-						<CardAddElementMenu @add-element="onAddElement" v-if="isEditMode" />
+						<CardAddElementMenu v-if="isEditMode" @add-element="onAddElement" />
 					</div>
 				</template>
 			</VCard>
@@ -126,11 +126,6 @@ import ContentElementList from "./ContentElementList.vue";
 
 export default defineComponent({
 	name: "CardHost",
-	computed: {
-		BoardMenuScope() {
-			return BoardMenuScope;
-		},
-	},
 	components: {
 		CardSkeleton,
 		CardTitle,
@@ -304,6 +299,11 @@ export default defineComponent({
 			isDetailView,
 			mdiArrowExpand,
 		};
+	},
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
 	},
 });
 </script>

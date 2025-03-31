@@ -11,9 +11,9 @@
 		/>
 		<KebabMenuActionDelete
 			v-if="canDeleteRoom"
-			@click="onDeleteRoom"
 			scope-language-key="common.labels.room"
 			:name="roomName"
+			@click="onDeleteRoom"
 		/>
 
 		<KebabMenuActionLeaveRoom @click="() => $emit('room:leave')" />

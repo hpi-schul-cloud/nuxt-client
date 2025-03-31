@@ -11,6 +11,11 @@ const componentWithFlatSlots: DefineComponent = defineComponent({
 		SpeedDialMenu,
 		SpeedDialMenuAction,
 	},
+	setup() {
+		return {
+			mdiClose,
+		};
+	},
 	template: `
   <template>
     <SpeedDialMenu :icon="mdiClose">
@@ -24,17 +29,24 @@ const componentWithFlatSlots: DefineComponent = defineComponent({
     <button id="clickOutside">Test</button>
   </template>
   `,
-	setup() {
-		return {
-			mdiClose,
-		};
-	},
 });
 
 const componentWithIteratedSlots: DefineComponent = defineComponent({
 	components: {
 		SpeedDialMenu,
 		SpeedDialMenuAction,
+	},
+	setup() {
+		const actions = [
+			{ label: "Action1", icon: mdiClose, href: "example.com" },
+			{ label: "Action2", icon: mdiClose, to: "example.com" },
+			{ label: "Action3", icon: mdiClose },
+		];
+
+		return {
+			actions,
+			mdiClose,
+		};
 	},
 	template: `
   <template>
@@ -52,18 +64,6 @@ const componentWithIteratedSlots: DefineComponent = defineComponent({
     <button id="clickOutside">Test</button>
   </template>
   `,
-	setup() {
-		const actions = [
-			{ label: "Action1", icon: mdiClose, href: "example.com" },
-			{ label: "Action2", icon: mdiClose, to: "example.com" },
-			{ label: "Action3", icon: mdiClose },
-		];
-
-		return {
-			actions,
-			mdiClose,
-		};
-	},
 });
 
 describe("SpeedDialMenu", () => {

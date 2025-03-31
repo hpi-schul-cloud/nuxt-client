@@ -1,17 +1,17 @@
 <template>
 	<VCardTitle
+		v-if="isEditMode || value !== ''"
 		class="d-block text-break-word pt-0 pb-2"
 		:class="{ 'pointer-events-none': !isEditMode }"
-		v-if="isEditMode || value !== ''"
 	>
 		<BoardAnyTitleInput
 			scope="card"
 			:value="modelValue"
 			:is-edit-mode="isEditMode"
 			:is-focused="isFocused"
+			data-testid="card-title"
 			@update:value="onUpdateValue"
 			@enter="onEnter"
-			data-testid="card-title"
 		/>
 	</VCardTitle>
 </template>

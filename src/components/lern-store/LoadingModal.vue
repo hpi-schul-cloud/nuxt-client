@@ -36,7 +36,6 @@ export default defineComponent({
 		ModalBodyInfo,
 		BaseModal,
 	},
-	emits: ["update:active"],
 	props: {
 		color: {
 			type: String,
@@ -55,6 +54,7 @@ export default defineComponent({
 			default: "common.actions.cancel",
 		},
 	},
+	emits: ["update:active"],
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};

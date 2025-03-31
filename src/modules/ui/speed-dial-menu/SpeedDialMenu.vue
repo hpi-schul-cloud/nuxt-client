@@ -22,9 +22,9 @@
 			</v-btn>
 			<div
 				v-if="isMenuOpen"
+				ref="outlet"
 				class="position-absolute overflow-visible"
 				:class="classes"
-				ref="outlet"
 			>
 				<template v-for="(actionNode, i) in actions" :key="i">
 					<component :is="actionNode" :speed-dial-index="i" />

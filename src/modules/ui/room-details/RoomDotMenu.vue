@@ -8,10 +8,10 @@
 			v-for="(item, i) in menuItems"
 			:key="i"
 			:data-testid="item.dataTestId || ''"
-			@click="onClick(item)"
 			density="comfortable"
 			class="dotmenu-action"
 			role="menuitem"
+			@click="onClick(item)"
 		>
 			<v-list-item-title>
 				<v-icon :icon="item.icon" class="dotmenu-action-icon" />

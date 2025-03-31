@@ -1,5 +1,5 @@
 <template>
-	<div :class="columnClasses" :key="renderKey" class="d-flex flex-column">
+	<div :key="renderKey" :class="columnClasses" class="d-flex flex-column">
 		<BoardColumnHeader
 			:column-id="column.id"
 			:title="column.title"
@@ -68,8 +68,8 @@
 			</Sortable>
 			<BoardAddCardButton
 				v-if="showAddButton"
-				@add-card="onCreateCard"
 				:data-testid="`column-${index}-add-card-btn`"
+				@add-card="onCreateCard"
 			/>
 		</div>
 	</div>

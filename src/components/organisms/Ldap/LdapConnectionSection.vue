@@ -100,9 +100,6 @@ import {
 } from "@icons/material";
 
 export default defineComponent({
-	setup() {
-		return { v$: useVuelidate() };
-	},
 	props: {
 		modelValue: {
 			type: Object,
@@ -115,6 +112,9 @@ export default defineComponent({
 		},
 	},
 	emits: ["update:modelValue", "update:errors", "update:inputs"],
+	setup() {
+		return { v$: useVuelidate() };
+	},
 	data() {
 		return {
 			mdiAccountCircleOutline,

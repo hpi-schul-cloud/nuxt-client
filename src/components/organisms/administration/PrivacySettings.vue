@@ -51,11 +51,11 @@
 					"
 					class="ml-1 mt-0"
 					data-testid="admin-school-toggle-learning-store"
+					:true-icon="mdiCheck"
 					@update:model-value="
 						($event) =>
 							$emit('update-privacy-settings', $event, 'student.LERNSTORE_VIEW')
 					"
-					:true-icon="mdiCheck"
 				/>
 				<p class="switch-hint">
 					{{
