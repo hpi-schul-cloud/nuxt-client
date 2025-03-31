@@ -1,6 +1,6 @@
 <template>
 	<div class="d-flex align-items-center board-header">
-		<div class="board-header--item">
+		<div class="input-container">
 			<InlineEditInteractionHandler
 				:isEditMode="isEditMode && canEditRoomBoard"
 				@start-edit-mode="onStartEditMode"
@@ -11,7 +11,7 @@
 			>
 				<div ref="boardHeader">
 					<BoardAnyTitleInput
-						class="ml-n4 board-header--input"
+						class="ml-n4"
 						ref="boardHeader"
 						scope="board"
 						:value="boardTitle"
@@ -221,7 +221,7 @@ watchEffect(() => {
 	overflow: hidden;
 }
 
-.input {
+.v-input {
 	max-width: calc(100% + 1.5rem);
 }
 </style>
