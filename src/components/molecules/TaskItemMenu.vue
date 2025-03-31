@@ -110,7 +110,7 @@
 </template>
 
 <script>
-import vCustomDialog from "@/components/organisms/vCustomDialog";
+import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import { envConfigModule, finishedTasksModule } from "@/store";
 import { CopyParamsTypeEnum } from "@/store/copy";
 import {
@@ -125,7 +125,6 @@ import { defineComponent } from "vue";
 import { KebabMenu } from "@ui-kebab-menu";
 
 export default defineComponent({
-	emits: ["toggledMenu", "focusChanged", "copyTask", "shareTask"],
 	components: { vCustomDialog, KebabMenu },
 	props: {
 		taskId: {
@@ -154,6 +153,7 @@ export default defineComponent({
 			validator: (role) => ["student", "teacher"].includes(role),
 		},
 	},
+	emits: ["copy-task", "share-task", "toggled-menu", "focus-changed"],
 	inject: ["tasksModule"],
 	data() {
 		return {

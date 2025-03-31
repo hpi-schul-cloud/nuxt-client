@@ -82,6 +82,7 @@ export default {
 			default: () => ({}),
 		},
 	},
+	emits: ["update:active"],
 	data() {
 		return {};
 	},

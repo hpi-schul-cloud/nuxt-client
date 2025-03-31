@@ -147,6 +147,7 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
+	emits: ["update:modelValue", "update:errors"],
 	data() {
 		return {
 			mdiAccountBoxOutline,

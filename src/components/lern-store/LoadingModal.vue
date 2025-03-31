@@ -26,15 +26,17 @@
 		</template>
 	</base-modal>
 </template>
+
 <script>
-import BaseModal from "../base/BaseModal";
-import ModalBodyInfo from "@/components/molecules/ModalBodyInfo";
+import BaseModal from "../base/BaseModal.vue";
+import ModalBodyInfo from "@/components/molecules/ModalBodyInfo.vue";
 import { defineComponent } from "vue";
 export default defineComponent({
 	components: {
 		ModalBodyInfo,
 		BaseModal,
 	},
+	emits: ["update:active"],
 	props: {
 		color: {
 			type: String,

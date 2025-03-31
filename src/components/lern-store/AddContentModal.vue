@@ -1,9 +1,9 @@
 <template>
 	<div>
 		<base-modal class="modal" v-model:active="showModal">
-			<template #header>{{
-				$t("components.molecules.AddContentModal")
-			}}</template>
+			<template #header>
+				{{ $t("components.molecules.AddContentModal") }}
+			</template>
 			<template #body>
 				<div class="content-modal__body">
 					<v-select
@@ -53,10 +53,10 @@
 </template>
 
 <script>
-import ModalFooter from "@/components/molecules/ModalFooter";
+import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import { contentModule } from "@/store";
 import { mapGetters } from "vuex";
-import BaseModal from "../base/BaseModal";
+import BaseModal from "../base/BaseModal.vue";
 
 export default {
 	components: {
@@ -78,6 +78,7 @@ export default {
 			default: "",
 		},
 	},
+	emits: ["update:show-copy-modal", "close"],
 	data() {
 		return {
 			selectedCourse: undefined,

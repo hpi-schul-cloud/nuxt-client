@@ -73,6 +73,8 @@ defineProps({
 	},
 });
 
+defineEmits(["sidebar-toggled"]);
+
 const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
 const authModule = injectStrict(AUTH_MODULE_KEY);
 

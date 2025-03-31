@@ -81,6 +81,7 @@ export default {
 			type: Boolean,
 		},
 	},
+	emits: ["clicked", "startDrag", "dropGroupAvatar", "dragendGroupAvatar"],
 	data() {
 		return {
 			hovered: false,

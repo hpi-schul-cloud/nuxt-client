@@ -53,7 +53,10 @@ defineProps({
 	},
 });
 
-defineEmits<{ (e: "select", layout: BoardLayout): void }>();
+defineEmits<{
+	(e: "update:modelValue", value: boolean): void;
+	(e: "select", layout: BoardLayout): void;
+}>();
 
 const { t } = useI18n();
 

@@ -55,6 +55,7 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
+	emits: ["update:active"],
 	computed: {
 		isDialogOpen: {
 			get() {

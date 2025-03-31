@@ -151,6 +151,7 @@ export default defineComponent({
 		birthDate: { type: Boolean },
 		validationError: { type: String, default: "" },
 	},
+	emits: ["update:modelValue", "blur", "focus"],
 	data() {
 		return {
 			mdiAlert,

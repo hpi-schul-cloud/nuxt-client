@@ -201,6 +201,13 @@ export default {
 			type: Boolean,
 		},
 	},
+	emits: [
+		"update:current-page",
+		"update:rows-per-page",
+		"update:selection",
+		"update:sort",
+		"update:selectedRowIds",
+	],
 	data() {
 		return {
 			editFilterActive: false,

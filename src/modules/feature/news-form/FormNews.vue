@@ -126,6 +126,7 @@ export default defineComponent({
 			}),
 		},
 	},
+	emits: ["update:news", "save", "delete", "cancel"],
 	data(): {
 		data: {
 			title: string;

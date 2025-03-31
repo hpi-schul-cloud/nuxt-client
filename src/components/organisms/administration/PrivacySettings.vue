@@ -177,6 +177,8 @@ const props = defineProps({
 	},
 });
 
+defineEmits(["update-privacy-settings", "update-feature-settings"]);
+
 const toggleStudentLernstoreViewEnabled = computed(
 	() =>
 		envConfigModule.getEnv.FEATURE_ADMIN_TOGGLE_STUDENT_LERNSTORE_VIEW_ENABLED

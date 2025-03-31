@@ -74,6 +74,7 @@ export default {
 			default: 0,
 		},
 	},
+	emits: ["update:current-page", "update:per-page"],
 	data() {
 		return {
 			mdiChevronLeft,

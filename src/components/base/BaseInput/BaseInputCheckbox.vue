@@ -55,6 +55,7 @@ export default {
 		labelHidden: Boolean,
 		showUndefinedState: Boolean,
 	},
+	emits: ["update:modelValue", "blur", "focus"],
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};

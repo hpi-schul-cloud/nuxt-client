@@ -273,6 +273,12 @@ export default {
 			type: Boolean,
 		},
 	},
+	emits: [
+		"update:current-page-selection-state",
+		"update:sort",
+		"update:sort-by",
+		"update:sort-order",
+	],
 	data() {
 		return {
 			infoBoxActive: false,

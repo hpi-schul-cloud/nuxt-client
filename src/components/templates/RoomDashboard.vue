@@ -222,6 +222,7 @@ export default {
 		},
 		role: { type: String, required: true },
 	},
+	emits: ["copy-board-element"],
 	inject: {
 		shareModule: { from: SHARE_MODULE_KEY },
 	},

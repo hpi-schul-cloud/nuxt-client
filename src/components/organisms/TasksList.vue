@@ -84,6 +84,7 @@ export default {
 			required: false,
 		},
 	},
+	emits: ["copy-task", "share-task"],
 	inject: ["tasksModule", "finishedTasksModule"],
 	computed: {
 		currentTaskStatus() {

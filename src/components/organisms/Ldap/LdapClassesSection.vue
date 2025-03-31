@@ -102,6 +102,7 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
+	emits: ["update:modelValue", "update:errors", "update:inputs"],
 	data() {
 		return {
 			checked: false,

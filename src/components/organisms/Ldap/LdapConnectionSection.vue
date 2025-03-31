@@ -81,6 +81,7 @@
 		</base-input>
 	</div>
 </template>
+
 <script>
 import { envConfigModule } from "@/store";
 import { required } from "@vuelidate/validators";
@@ -113,6 +114,7 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
+	emits: ["update:modelValue", "update:errors", "update:inputs"],
 	data() {
 		return {
 			mdiAccountCircleOutline,

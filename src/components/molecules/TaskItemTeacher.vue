@@ -158,6 +158,7 @@ export default {
 			},
 		},
 	},
+	emits: ["copy-task", "share-task"],
 	data() {
 		return {
 			isMenuActive: false,
