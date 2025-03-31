@@ -4,7 +4,7 @@ import { useI18n } from "vue-i18n";
 
 import {
 	corePlugins,
-	extendedPlugins,
+	advancedPlugins,
 	balloonEditorToolbarItems,
 	inlineEditorToolbarItems,
 	classicEditorToolbarItems,
@@ -77,7 +77,7 @@ export const useEditorConfig = () => {
 
 	return {
 		corePlugins,
-		extendedPlugins,
+		advancedPlugins,
 		balloonEditorToolbarItems,
 		inlineEditorToolbarItems,
 		classicEditorToolbarItems,

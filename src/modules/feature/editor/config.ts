@@ -18,8 +18,6 @@ export const corePlugins: PluginName[] = [
 	"Bold",
 	"Essentials",
 	"Heading",
-	"Image",
-	"ImageInsertViaUrl",
 	"Italic",
 	"List",
 	"Paragraph",
@@ -27,23 +25,21 @@ export const corePlugins: PluginName[] = [
 	"Strikethrough",
 ];
 
-export const extendedPlugins: PluginName[] = [
-	"Autoformat",
-	"Bold",
-	"Essentials",
+export const corePluginsWithImage: PluginName[] = [
+	...corePlugins,
+	"Image",
+	"ImageInsertViaUrl",
+];
+
+export const advancedPlugins: PluginName[] = [
+	...corePlugins,
 	"FontBackgroundColor",
 	"FontColor",
-	"Heading",
 	"HorizontalLine",
-	"Italic",
 	"Link",
-	"List",
 	"Math",
-	"Paragraph",
-	"RemoveFormat",
 	"SpecialCharacters",
 	"SpecialCharactersEssentials",
-	"Strikethrough",
 	"Subscript",
 	"Superscript",
 	"Table",

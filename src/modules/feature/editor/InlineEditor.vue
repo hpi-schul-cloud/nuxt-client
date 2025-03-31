@@ -47,7 +47,7 @@ const emit = defineEmits([
 ]);
 
 const {
-	extendedPlugins,
+	advancedPlugins,
 	generalConfig,
 	inlineEditorToolbarItems,
 	compactHeadings,
@@ -63,7 +63,7 @@ const config = computed(() => {
 		toolbar: {
 			items: inlineEditorToolbarItems,
 		},
-		plugins: extendedPlugins,
+		plugins: advancedPlugins,
 		heading: compactHeadings,
 		placeholder: props.placeholder,
 		ui: {
