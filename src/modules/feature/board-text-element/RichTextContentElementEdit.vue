@@ -6,7 +6,7 @@
 			:placeholder="$t('components.cardElement.richTextElement.placeholder')"
 			type="inline"
 			mode="regular"
-			:viewport-offset-top="ckeditorViewportOffsetTop()"
+			:viewport-offset-top="offsetTop"
 			@update:value="onUpdateValue"
 			@focus="onFocus"
 			@blur="onBlur"
@@ -19,7 +19,7 @@
 import { InlineEditor } from "@feature-editor";
 import { useEventListener } from "@vueuse/core";
 import { defineComponent, onMounted, ref, watch } from "vue";
-import { ckeditorViewportOffsetTop } from "@data-editor";
+import { useViewportOffsetTop } from "@ui-layout";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
@@ -37,6 +37,8 @@ export default defineComponent({
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = ref("");
+
+		const { offsetTop } = useViewportOffsetTop();
 
 		onMounted(() => {
 			if (props.value !== undefined) {
@@ -72,7 +74,7 @@ export default defineComponent({
 
 		return {
 			modelValue,
-			ckeditorViewportOffsetTop,
+			offsetTop,
 			onFocus,
 			onDelete,
 			onBlur,
