@@ -4,9 +4,9 @@
 		transition="scale-transition"
 		:close-on-content-click="false"
 	>
-		<template #activator="{ props }">
+		<template #activator="{ props: menuProps }">
 			<v-text-field
-				v-bind="props"
+				v-bind="menuProps"
 				v-bind.attr="$attrs"
 				v-model="dateString"
 				ref="inputField"

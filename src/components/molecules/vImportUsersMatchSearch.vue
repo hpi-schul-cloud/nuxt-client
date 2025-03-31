@@ -136,8 +136,8 @@
 							variant="solo"
 							rounded
 						>
-							<template #item="{ item, props }">
-								<VListItem style="max-width: 450px" v-bind="props">
+							<template #item="{ item, props: itemProps }">
+								<VListItem style="max-width: 450px" v-bind="itemProps">
 									<VListItemSubtitle>
 										{{ mapRoleNames(item.raw.roleNames) }}
 									</VListItemSubtitle>

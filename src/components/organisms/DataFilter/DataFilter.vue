@@ -1,7 +1,7 @@
 <template>
 	<v-menu>
-		<template #activator="{ props }">
-			<v-btn v-bind="props" variant="flat">
+		<template #activator="{ props: menuProps }">
+			<v-btn v-bind="menuProps" variant="flat">
 				<v-icon class="filter-icon mr-2" :icon="mdiTune" />
 				<span data-testid="filter-title">{{ filterTitle }}</span>
 				<v-icon class="filter-icon" :icon="mdiMenuDown" />

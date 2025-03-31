@@ -13,7 +13,7 @@
 				>
 					<v-expansion-panel-title>
 						<div class="text-h4">{{ name }}</div>
-						<template v-slot:actions="{ expanded }">
+						<template #actions="{ expanded }">
 							<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 						</template>
 					</v-expansion-panel-title>

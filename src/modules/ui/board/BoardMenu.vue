@@ -1,10 +1,10 @@
 <template>
 	<VMenu location="bottom end" min-width="250">
-		<template #activator="{ props }">
+		<template #activator="{ props: menuProps }">
 			<VBtn
+				v-bind="menuProps"
 				:variant="variant"
 				:data-testid="dataTestid"
-				v-bind="props"
 				:ripple="false"
 				:class="{ 'bg-white': hasBackground }"
 				icon

@@ -45,7 +45,7 @@
 				@start="onDragStart"
 				@end="onDragEnd"
 			>
-				<template #item="{ element, index }">
+				<template #item="{ element, index: elementIndex }">
 					<CardHost
 						v-if="element"
 						:data-card-id="element.cardId"
@@ -56,10 +56,10 @@
 						}"
 						:card-id="element.cardId"
 						:height="element.height"
-						:row-index="index"
+						:row-index="elementIndex"
 						:column-index="reactiveIndex"
 						@move:card-keyboard="
-							onMoveCardKeyboard(index, element.cardId, $event)
+							onMoveCardKeyboard(elementIndex, element.cardId, $event)
 						"
 						@delete:card="onDeleteCard"
 						@reload:board="onReloadBoard"

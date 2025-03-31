@@ -39,9 +39,9 @@
 					data-testid="configuration-selected-item"
 				/>
 			</template>
-			<template #item="{ item, props }">
+			<template #item="{ item, props: itemProps }">
 				<external-tool-selection-row
-					v-bind="props"
+					v-bind="itemProps"
 					data-testId="configuration-select-item"
 					:item="item.raw"
 				/>

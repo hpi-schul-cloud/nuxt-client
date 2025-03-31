@@ -6,9 +6,9 @@
 		</span>
 
 		<VMenu>
-			<template #activator="{ props }">
+			<template #activator="{ props: menuProps }">
 				<VBtn
-					v-bind="props"
+					v-bind="menuProps"
 					color="primary"
 					class="ml-4"
 					density="comfortable"

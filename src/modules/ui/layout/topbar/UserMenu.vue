@@ -1,8 +1,8 @@
 <template>
 	<VMenu :width="isExternalLogoutAllowed ? 'auto' : '215'">
-		<template #activator="{ props }">
+		<template #activator="{ props: menuProps }">
 			<VBtn
-				v-bind="props"
+				v-bind="menuProps"
 				v-bind.attr="$attrs"
 				icon
 				data-testid="user-menu-btn"
