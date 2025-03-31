@@ -357,7 +357,7 @@ export default defineComponent({
 .multi-column-board-column {
 	height: calc(
 		100vh - var(--topbar-height) - var(--breadcrumbs-height) -
-			var(--board-header-height) - var(--scrollbar-width)
+			var(--board-header-height) - var(--computed-scrollbar-width)
 	);
 	width: 400px;
 }

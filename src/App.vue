@@ -12,12 +12,12 @@ import { computed } from "vue";
 import { injectStrict, AUTH_MODULE_KEY } from "@/utils/inject";
 import { useRoute } from "vue-router";
 import { availableLayouts, isLayout } from "./layouts";
-import { setScrollbarWidthAsCssVar } from "./utils/scrollbarWidth";
+import { setComputedScrollbarWidthAsCssVar } from "./utils/scrollbarWidth";
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const route = useRoute();
 
-setScrollbarWidthAsCssVar();
+setComputedScrollbarWidthAsCssVar();
 
 const layout = computed(() => {
 	let layoutName = (route.meta.layout as string) || Layouts.LOGGED_IN;
