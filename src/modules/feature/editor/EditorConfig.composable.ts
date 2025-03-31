@@ -1,5 +1,5 @@
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { computed, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 type CKEditorKeystrokeInfo = {
@@ -227,21 +227,19 @@ export const useEditorConfig = () => {
 		],
 	};
 
-	const generalConfig = computed(() => {
-		return {
-			language: locale.value,
-			link: {
-				defaultProtocol: "//",
-				addTargetToExternalLinks: true,
+	const generalConfig = reactive({
+		language: locale.value,
+		link: {
+			defaultProtocol: "//",
+			addTargetToExternalLinks: true,
+		},
+		wordCount: {
+			onUpdate: (data: { words: number; characters: number }) => {
+				charCount.value = data.characters;
 			},
-			wordCount: {
-				onUpdate: (data: { words: number; characters: number }) => {
-					charCount.value = data.characters;
-				},
-			},
-			fontColor: fontColors,
-			fontBackgroundColor: fontBackgroundColors,
-		};
+		},
+		fontColor: fontColors,
+		fontBackgroundColor: fontBackgroundColors,
 	});
 
 	const editorIsEmpty = computed(() => {
