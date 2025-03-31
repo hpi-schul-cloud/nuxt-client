@@ -18,6 +18,11 @@ import CKEditor from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { ClassicEditor } from "@hpi-schul-cloud/ckeditor";
 import { useEditorConfig } from "./EditorConfig.composable";
+import {
+	corePlugins,
+	mediaFormattingToolbar,
+	prominentHeadings,
+} from "./config";
 
 const props = defineProps({
 	value: {
@@ -41,13 +46,7 @@ const emit = defineEmits([
 	"keyboard:delete",
 ]);
 
-const {
-	corePlugins,
-	mediaFormattingToolbar,
-	prominentHeadings,
-	generalConfig,
-	registerDeletionHandler,
-} = useEditorConfig();
+const { generalConfig, registerDeletionHandler } = useEditorConfig();
 
 const ck = ref(null);
 const modelValue = useVModel(props, "value", emit);
