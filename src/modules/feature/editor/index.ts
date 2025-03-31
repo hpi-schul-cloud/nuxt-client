@@ -1,5 +1,5 @@
-import CkEditor from "./CKEditor.vue";
-import InlineEditor from "./InlineEditor.vue";
+import BalloonEditor from "./BalloonEditor.vue";
 import ClassicEditor from "./ClassicEditor.vue";
+import InlineEditor from "./InlineEditor.vue";
 
-export { CkEditor, InlineEditor, ClassicEditor };
+export { BalloonEditor, ClassicEditor, InlineEditor };
