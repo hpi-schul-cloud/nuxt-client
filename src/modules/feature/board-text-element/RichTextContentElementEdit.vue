@@ -33,10 +33,6 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		columnIndex: {
-			type: Number,
-			required: true,
-		},
 	},
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {

@@ -7,14 +7,12 @@ import {
 } from "@@/tests/test-utils/setup";
 
 describe("RichTextContentElementEdit", () => {
-	const setup = (options: { value: string; autofocus: boolean }) => {
+	const setup = (props: { value: string; autofocus: boolean }) => {
 		const wrapper = mount(RichTextContentElementEdit, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
 			},
-			props: {
-				...options,
-			},
+			props,
 		});
 
 		return { wrapper };
@@ -29,7 +27,7 @@ describe("RichTextContentElementEdit", () => {
 
 		it("should pass props to ck-editor component", async () => {
 			const { wrapper } = setup({ value: "test value", autofocus: true });
-			const ckEditorComponent = wrapper.findComponent({ name: "ck-editor" });
+			const ckEditorComponent = wrapper.findComponent({ name: "InlineEditor" });
 			await nextTick();
 			const ckEditorValue = ckEditorComponent.findComponent({
 				name: "ckeditor",
@@ -39,7 +37,7 @@ describe("RichTextContentElementEdit", () => {
 
 		it("should emit delete:element on CK editor keyboard delete event", async () => {
 			const { wrapper } = setup({ value: "test value", autofocus: true });
-			const ckEditor = wrapper.findComponent({ name: "ck-editor" });
+			const ckEditor = wrapper.findComponent({ name: "InlineEditor" });
 			ckEditor.vm.$emit("keyboard:delete");
 
 			const emitted = wrapper.emitted();
