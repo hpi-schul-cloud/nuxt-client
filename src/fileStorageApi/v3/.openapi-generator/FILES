@@ -1,7 +1,7 @@
 .gitignore
 .npmignore
-.openapi-generator-ignore
 api.ts
+api/admin-api.ts
 api/file-api.ts
 api/file-config-api.ts
 base.ts
@@ -14,6 +14,7 @@ models/copy-file-list-response.ts
 models/copy-file-params.ts
 models/copy-file-response.ts
 models/copy-files-of-parent-params.ts
+models/delete-by-storage-location-response.ts
 models/file-record-list-response.ts
 models/file-record-params.ts
 models/file-record-parent-type.ts

@@ -25,6 +25,7 @@ describe("@/utils/fileHelper", () => {
 				...document.createElement("a"),
 				href: "",
 				download: "",
+				dataset: { testid: "" },
 				click: jest.fn(),
 			};
 			const createElementSpy = jest
@@ -39,12 +40,13 @@ describe("@/utils/fileHelper", () => {
 		it("should download the file", () => {
 			const { url, fileName, link, createElementSpy } = setup();
 
-			downloadFile(url, fileName);
+			downloadFile(url, fileName, "a-test-id");
 
 			expect(createElementSpy).toBeCalledWith("a");
 			expect(link.href).toEqual(url);
 			expect(link.download).toEqual(fileName);
 			expect(link.hidden).toBe(true);
+			expect(link.dataset.testid).toEqual("a-test-id");
 			expect(document.body.appendChild).toBeCalledWith(link);
 			expect(link.click).toHaveBeenCalledTimes(1);
 			expect(document.body.removeChild).toBeCalledWith(link);

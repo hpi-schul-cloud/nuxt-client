@@ -1,13 +1,13 @@
-import { Factory } from "fishery";
 import {
+	LaunchRequestMethod,
 	LaunchType,
 	ToolLaunchRequestResponse,
-	ToolLaunchRequestResponseMethodEnum,
 } from "@/serverApi/v3";
+import { Factory } from "fishery";
 
 export const toolLaunchRequestResponseFactory =
 	Factory.define<ToolLaunchRequestResponse>(() => ({
-		method: ToolLaunchRequestResponseMethodEnum.Get,
+		method: LaunchRequestMethod.Get,
 		payload: '{ "key": "value" }',
 		url: "https://example.com/tool-launch",
 		launchType: LaunchType.Basic,

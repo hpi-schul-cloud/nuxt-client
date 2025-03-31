@@ -532,10 +532,10 @@ export default {
 		"La fecha y la hora están en el pasado.",
 	"components.dateTimePicker.messages.dateRequired":
 		"Sin fecha no es posible especificar la hora.",
-	"components.editor.highlight.dullBlue": "Marcador azul (mate)",
-	"components.editor.highlight.dullGreen": "Marcador verde (mate)",
-	"components.editor.highlight.dullPink": "Marcador rosa (mate)",
-	"components.editor.highlight.dullYellow": "Marcador amarillo (mate)",
+	"components.editor.fonts.colors.oliveGreen": "Verde Oliva",
+	"components.editor.fonts.colors.indigo": "Índigo",
+	"components.editor.fonts.colors.darkPurple": "Púrpura Oscuro",
+	"components.editor.fonts.colors.pink": "Rosa",
 	"components.elementTypeSelection.dialog.title": "Añadir elemento",
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
@@ -986,6 +986,7 @@ export default {
 	"global.sidebar.item.teacher": "Profesores",
 	"global.sidebar.item.teams": "Equipos",
 	"global.sidebar.item.training": "Formaciones avanzadas",
+	"global.sidebar.item.licenses": "Licencias",
 	"global.skipLink.mainContent": "Saltar al contenido principal",
 	"global.topbar.actions.alerts": "Alerta de estado",
 	"global.topbar.actions.qrCode": "Compartir el código QR de la página",
@@ -1703,6 +1704,11 @@ export default {
 	"pages.files.overview.teamFiles": "Archivos de equipo",
 	"pages.h5p.api.success.save": "El contenido se ha guardado correctamente.",
 	"pages.impressum.title": "Impresión",
+	"pages.licenseList.title": "Lista de licencias de código abierto",
+	"pages.licenseList.introduction":
+		"A continuación se indican las licencias de software de los paquetes utilizados.",
+	"pages.licenseList.packageIntroduction":
+		"Paquetes utilizados bajo esta licencia:",
 	"pages.news.edit.title.default": "Editar artículo",
 	"pages.news.edit.title": "Editar {title}",
 	"pages.news.index.new": "Añadir noticias",
@@ -1828,6 +1834,8 @@ export default {
 	"pages.rooms.infoAlert.welcome.visibility.help": "página de ayuda",
 	"pages.rooms.infoAlert.welcome.visibility.feedback": "comentarios",
 	"pages.rooms.leaveRoom.confirmation": 'Dejar la sala "{roomName}"?',
+	"pages.rooms.leaveRoom.RoomOwner.warning":
+		"Antes de que se pueda abandonar la sala, la autorización de propiedad de la sala debe transferirse a otro miembro de la sala. Esto se puede hacer en la gestión de miembros de la sala.",
 	"pages.rooms.leaveRoom.menu": "Salir de la sala",
 	"pages.rooms.members.error.load":
 		"No se pudo cargar la lista de participantes.",
@@ -1840,6 +1848,8 @@ export default {
 	"pages.rooms.members.infoText.moreInformation": "más información",
 	"pages.rooms.members.label": "Participantes",
 	"pages.rooms.members.add": "Añadir miembros",
+	"pages.rooms.members.add.infoText":
+		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Menú de acciones para {memberFullName}",
 	"pages.rooms.members.changePermission":
