@@ -45,11 +45,11 @@ const props = defineProps({
 	},
 	title: {
 		type: String,
-		require: true,
+		required: true,
 	},
 	imageUrl: {
 		type: String,
-		required: false,
+		default: undefined,
 	},
 	isEditMode: { type: Boolean, required: true },
 });

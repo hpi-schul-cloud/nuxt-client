@@ -32,6 +32,7 @@ import { useI18n } from "vue-i18n";
 const props = defineProps({
 	selectedDate: {
 		type: Object as PropType<DateSelection>,
+		default: undefined,
 	},
 });
 

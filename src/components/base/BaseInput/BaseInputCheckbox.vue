@@ -47,6 +47,7 @@ export default {
 		},
 		color: {
 			type: String,
+			default: undefined,
 		},
 		label: {
 			type: String,
