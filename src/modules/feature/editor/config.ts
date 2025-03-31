@@ -1,4 +1,19 @@
-export const corePlugins = [
+type ToolbarItem = string;
+type PluginName = string;
+
+interface HeadingOption {
+	model: string;
+	view?: string;
+	title: string;
+	class: string;
+}
+
+interface FontColor {
+	color: string;
+	label: string;
+}
+
+export const corePlugins: PluginName[] = [
 	"Autoformat",
 	"Bold",
 	"Essentials",
@@ -12,7 +27,7 @@ export const corePlugins = [
 	"Strikethrough",
 ];
 
-export const extendedPlugins = [
+export const extendedPlugins: PluginName[] = [
 	"Autoformat",
 	"Bold",
 	"Essentials",
@@ -36,7 +51,7 @@ export const extendedPlugins = [
 	"WordCount",
 ];
 
-export const balloonEditorToolbarItems = [
+export const balloonEditorToolbarItems: ToolbarItem[] = [
 	"heading",
 	"|",
 	"bold",
@@ -49,7 +64,7 @@ export const balloonEditorToolbarItems = [
 	"removeFormat",
 ];
 
-export const inlineEditorToolbarItems = [
+export const inlineEditorToolbarItems: ToolbarItem[] = [
 	"undo",
 	"redo",
 	"|",
@@ -74,7 +89,7 @@ export const inlineEditorToolbarItems = [
 	"removeFormat",
 ];
 
-export const classicEditorToolbarItems = [
+export const classicEditorToolbarItems: ToolbarItem[] = [
 	"undo",
 	"redo",
 	"|",
@@ -91,7 +106,7 @@ export const classicEditorToolbarItems = [
 	"insertImage",
 ];
 
-export const compactHeadings = {
+export const compactHeadings: { options: HeadingOption[] } = {
 	options: [
 		{
 			model: "paragraph",
@@ -113,7 +128,7 @@ export const compactHeadings = {
 	],
 };
 
-export const prominentHeadings = {
+export const prominentHeadings: { options: HeadingOption[] } = {
 	options: [
 		{
 			model: "paragraph",
@@ -141,7 +156,9 @@ export const prominentHeadings = {
 	],
 };
 
-export const fontColors = (t: (key: string) => string) => ({
+export const fontColors = (
+	t: (key: string) => string
+): { colors: FontColor[] } => ({
 	colors: [
 		{ color: "#827717", label: t("components.editor.fonts.colors.oliveGreen") },
 		{ color: "#388E3C", label: "Green" },
@@ -155,7 +172,9 @@ export const fontColors = (t: (key: string) => string) => ({
 	],
 });
 
-export const fontBackgroundColors = (t: (key: string) => string) => ({
+export const fontBackgroundColors = (
+	t: (key: string) => string
+): { colors: FontColor[] } => ({
 	colors: [
 		{ color: "#DCEDC8", label: "Light green" },
 		{ color: "#C8E6C9", label: "Green" },
