@@ -53,12 +53,14 @@ export default defineComponent({
 		},
 		logoUrl: {
 			type: String,
+			default: undefined,
 		},
 		openInNewTab: {
 			type: Boolean,
 		},
 		testId: {
 			type: String,
+			required: true,
 		},
 	},
 	setup(props, { emit }) {

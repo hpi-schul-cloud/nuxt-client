@@ -77,7 +77,7 @@ import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 
 const props = defineProps({
 	columnId: { type: String, required: true },
-	index: { type: Number },
+	index: { type: Number, required: true },
 	isListBoard: { type: Boolean, required: true },
 	isNotFirstColumn: { type: Boolean, requried: false },
 	isNotLastColumn: { type: Boolean, requried: false },

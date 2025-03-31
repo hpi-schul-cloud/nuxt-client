@@ -63,6 +63,7 @@ export default defineComponent({
 		},
 		dueDate: {
 			type: String,
+			default: null,
 		},
 	},
 	emits: ["update:completed"],
