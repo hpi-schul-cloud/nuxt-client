@@ -979,6 +979,7 @@ export default {
 	"global.sidebar.item.teacher": "Викладачі",
 	"global.sidebar.item.teams": "Команди",
 	"global.sidebar.item.training": "Поглиблене навчання",
+	"global.sidebar.item.licenses": "Ліцензії",
 	"global.skipLink.mainContent": "Перейти до основного вмісту",
 	"global.topbar.actions.alerts": "Сповіщення про стан",
 	"global.topbar.actions.qrCode": "Поділіться QR-кодом веб-сторінки",
@@ -1687,6 +1688,11 @@ export default {
 	"pages.files.overview.teamFiles": "Командні файли",
 	"pages.h5p.api.success.save": "Вміст успішно збережено.",
 	"pages.impressum.title": "Вихідні дані",
+	"pages.licenseList.title": "Список ліцензій на відкритий код",
+	"pages.licenseList.introduction":
+		"Ліцензії на програмне забезпечення для використаних пакетів наведені нижче.",
+	"pages.licenseList.packageIntroduction":
+		"Пакунки, що використовуються за цією ліцензією:",
 	"pages.news.edit.title.default": "Редагувати статтю",
 	"pages.news.edit.title": "Редагувати {title}",
 	"pages.news.index.new": "Додати новини",

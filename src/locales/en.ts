@@ -958,6 +958,7 @@ export default {
 	"global.sidebar.item.teacher": "Teachers",
 	"global.sidebar.item.teams": "Teams",
 	"global.sidebar.item.training": "Advanced trainings",
+	"global.sidebar.item.licenses": "Licenses",
 	"global.skipLink.mainContent": "Skip to main content",
 	"global.topbar.actions.alerts": "Status alert",
 	"global.topbar.actions.qrCode": "Share page link via QR-Code",
@@ -1657,6 +1658,10 @@ export default {
 	"pages.files.overview.teamFiles": "Team files",
 	"pages.h5p.api.success.save": "Content was successfully saved.",
 	"pages.impressum.title": "Imprint",
+	"pages.licenseList.title": "Open Source License List",
+	"pages.licenseList.introduction":
+		"The software licences for the packages used are listed below.",
+	"pages.licenseList.packageIntroduction": "Packages used under this licence:",
 	"pages.news.edit.title.default": "Edit article",
 	"pages.news.edit.title": "Edit {title}",
 	"pages.news.index.new": "Add news",
