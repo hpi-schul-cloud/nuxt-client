@@ -4,9 +4,7 @@
 			v-model="modelValue"
 			:autofocus="autofocus"
 			:placeholder="$t('components.cardElement.richTextElement.placeholder')"
-			type="inline"
-			mode="regular"
-			:viewport-offset-top="ckeditorViewportOffsetTop"
+			:viewport-offset-top="offsetTop"
 			@update:value="onUpdateValue"
 			@focus="onFocus"
 			@blur="onBlur"
@@ -18,7 +16,8 @@
 <script lang="ts">
 import { InlineEditor } from "@feature-editor";
 import { useEventListener } from "@vueuse/core";
-import { defineComponent, inject, onMounted, ref, watch } from "vue";
+import { defineComponent, onMounted, ref, watch } from "vue";
+import { useViewportOffsetTop } from "@ui-layout";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
@@ -32,18 +31,12 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		columnIndex: {
-			type: Number,
-			required: true,
-		},
 	},
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = ref("");
-		const ckeditorViewportOffsetTop = inject(
-			"ckeditorViewportOffsetTop",
-			ref(0)
-		);
+
+		const { offsetTop } = useViewportOffsetTop();
 
 		onMounted(() => {
 			if (props.value !== undefined) {
@@ -80,7 +73,7 @@ export default defineComponent({
 
 		return {
 			modelValue,
-			ckeditorViewportOffsetTop,
+			offsetTop,
 			onFocus,
 			onDelete,
 			onBlur,
@@ -89,6 +82,7 @@ export default defineComponent({
 	},
 });
 </script>
+
 <style scoped>
 .cursor-text {
 	cursor: text;

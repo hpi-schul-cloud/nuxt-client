@@ -1,5 +1,6 @@
 <template>
-	<CKEditor.component
+	<CKEditorVue
+		ref="ck"
 		v-model="modelValue"
 		:editor="InlineEditor"
 		:config="config"
@@ -12,11 +13,18 @@
 
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
 import { useEditorConfig } from "./EditorConfig.composable";
+import {
+	advancedPlugins,
+	advancedFormattingToolbar,
+	compactHeadings,
+} from "./config";
+import katex from "katex";
+window.katex = katex;
 
 const props = defineProps({
 	value: {
@@ -41,27 +49,22 @@ const emit = defineEmits([
 	"focus",
 	"update:value",
 	"blur",
-	"keyboard",
 	"keyboard:delete",
 ]);
 
-const {
-	extendedPlugins,
-	generalConfig,
-	inlineEditorToolbarItems,
-	compactHeadings,
-	attachDeletionHandler,
-} = useEditorConfig();
+const CKEditorVue = CKEditor.component;
+const { generalConfig, registerDeletionHandler } = useEditorConfig();
 
 const modelValue = useVModel(props, "value", emit);
+const ck = ref(null);
 
 const config = computed(() => {
 	return {
 		...generalConfig,
 		toolbar: {
-			items: inlineEditorToolbarItems,
+			items: advancedFormattingToolbar,
 		},
-		plugins: extendedPlugins,
+		plugins: advancedPlugins,
 		heading: compactHeadings,
 		placeholder: props.placeholder,
 		ui: {
@@ -83,13 +86,14 @@ const handleReady = (editor: Editor) => {
 		editor.editing.view.focus();
 	}
 
-	attachDeletionHandler(editor, handleDelete);
+	registerDeletionHandler(editor, handleDelete);
 };
 </script>
 
 <style lang="scss">
 @import "@/styles/settings.scss";
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
+@import "katex/dist/katex.min.css";
 
 :root {
 	// z-index must be less than z-index of the headers to prevent that the toolbar is shown in front of the headers when scrolling.

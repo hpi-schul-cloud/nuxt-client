@@ -2,7 +2,7 @@
 	<CKEditor.component
 		ref="ck"
 		v-model="modelValue"
-		:editor="ClassicEditor"
+		:editor="BalloonEditor"
 		:config="config"
 		data-testid="ckeditor"
 		@blur="handleBlur"
@@ -16,11 +16,11 @@ import { useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { ClassicEditor } from "@hpi-schul-cloud/ckeditor";
+import { BalloonEditor } from "@hpi-schul-cloud/ckeditor";
 import { useEditorConfig } from "./EditorConfig.composable";
 import {
 	corePlugins,
-	mediaFormattingToolbar,
+	basicFormattingToolbar,
 	prominentHeadings,
 } from "./config";
 
@@ -36,8 +36,11 @@ const props = defineProps({
 	autofocus: {
 		type: Boolean,
 	},
+	viewportOffsetTop: {
+		type: Number,
+		default: 0,
+	},
 });
-
 const emit = defineEmits([
 	"ready",
 	"focus",
@@ -55,7 +58,7 @@ const config = computed(() => {
 	return {
 		...generalConfig,
 		toolbar: {
-			items: mediaFormattingToolbar,
+			items: basicFormattingToolbar,
 		},
 		plugins: corePlugins,
 		heading: prominentHeadings,

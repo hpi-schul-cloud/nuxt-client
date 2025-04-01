@@ -22,8 +22,6 @@
 						:placeholder="
 							$t('components.organisms.FormNews.editor.placeholder')
 						"
-						type="classic"
-						mode="news"
 						@update:value="onUpdateValue"
 					/>
 

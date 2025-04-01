@@ -90,7 +90,7 @@ import { extractDataAttribute, useDragAndDrop } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
 import { SortableEvent } from "sortablejs";
 import { Sortable } from "sortablejs-vue3";
-import { computed, defineComponent, PropType, provide, ref, toRef } from "vue";
+import { computed, defineComponent, PropType, ref, toRef } from "vue";
 import CardHost from "../card/CardHost.vue";
 import BoardAddCardButton from "./BoardAddCardButton.vue";
 import BoardColumnHeader from "./BoardColumnHeader.vue";
@@ -129,42 +129,6 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const boardStore = useBoardStore();
 		const reactiveIndex = toRef(props, "index");
-
-		const ckeditorViewportOffsetTop = computed(() => {
-			const documentStyle = window.getComputedStyle(document.documentElement);
-
-			const topbarHeight = documentStyle.getPropertyValue("--topbar-height");
-			const breadcrumbsHeight = documentStyle.getPropertyValue(
-				"--breadcrumbs-height"
-			);
-			const boardHeaderHeight = documentStyle.getPropertyValue(
-				"--board-header-height"
-			);
-
-			const staticOffset =
-				parseInt(topbarHeight) +
-				parseInt(breadcrumbsHeight) +
-				parseInt(boardHeaderHeight);
-
-			const currentColumnHeader = document.getElementById("boardColumnHeader");
-
-			if (!currentColumnHeader) {
-				return staticOffset;
-			}
-
-			const height = currentColumnHeader.offsetHeight;
-
-			const columnHeaderStyle = window.getComputedStyle(currentColumnHeader);
-			const marginTop = columnHeaderStyle.getPropertyValue("margin-top");
-			const marginBottom = columnHeaderStyle.getPropertyValue("margin-bottom");
-
-			const offset =
-				staticOffset + height + parseInt(marginTop) + parseInt(marginBottom);
-
-			return offset;
-		});
-
-		provide("ckeditorViewportOffsetTop", ckeditorViewportOffsetTop);
 
 		const colWidth = ref<number>(400);
 		const {
@@ -340,7 +304,6 @@ export default defineComponent({
 
 		return {
 			cardDropPlaceholderOptions,
-			ckeditorViewportOffsetTop,
 			columnClasses,
 			colWidth,
 			hasCreateCardPermission,
