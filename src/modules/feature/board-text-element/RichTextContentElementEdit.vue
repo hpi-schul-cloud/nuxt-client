@@ -42,6 +42,9 @@ export default defineComponent({
 			if (props.value !== undefined) {
 				modelValue.value = props.value;
 			}
+			document.querySelectorAll(".ck-balloon-panel").forEach((element) => {
+				element.setAttribute("data-testid", "ck-inline-toolbar");
+			});
 		});
 
 		watch(modelValue, (newValue) => {
@@ -57,7 +60,6 @@ export default defineComponent({
 				document.getElementsByClassName("ck-balloon-panel");
 
 			for (const element of ckBalloonPanelElements) {
-				element.setAttribute("data-testid", "ck-inline-toolbar");
 				useEventListener(element, "click", (event: PointerEvent) => {
 					event.stopPropagation();
 				});
