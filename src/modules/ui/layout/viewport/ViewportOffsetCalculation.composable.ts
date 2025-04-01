@@ -16,7 +16,9 @@ function calculateViewportOffsetTop(): number {
 		parseInt(breadcrumbsHeight) +
 		parseInt(boardHeaderHeight);
 
-	const currentColumnHeader = document.getElementById("boardColumnHeader");
+	const currentColumnHeader = document.getElementsByClassName(
+		"board-column-header"
+	)[0] as HTMLElement;
 
 	if (!currentColumnHeader) {
 		return staticOffsetTop;

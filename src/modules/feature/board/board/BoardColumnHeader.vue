@@ -1,7 +1,6 @@
 <template>
 	<div
-		id="boardColumnHeader"
-		class="d-flex flex-wrap mb-4 mt-2"
+		class="board-column-header d-flex flex-wrap mb-4 mt-2"
 		ref="columnHeader"
 	>
 		<div class="flex-1-0">
