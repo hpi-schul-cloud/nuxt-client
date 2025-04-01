@@ -6,6 +6,7 @@ import { VBtn } from "vuetify/lib/components/index.mjs";
 import SpeedDialMenu from "./SpeedDialMenu.vue";
 import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 
+// eslint-disable-next-line vue/one-component-per-file
 const componentWithFlatSlots: DefineComponent = defineComponent({
 	components: {
 		SpeedDialMenu,
@@ -31,6 +32,7 @@ const componentWithFlatSlots: DefineComponent = defineComponent({
   `,
 });
 
+// eslint-disable-next-line vue/one-component-per-file
 const componentWithIteratedSlots: DefineComponent = defineComponent({
 	components: {
 		SpeedDialMenu,
