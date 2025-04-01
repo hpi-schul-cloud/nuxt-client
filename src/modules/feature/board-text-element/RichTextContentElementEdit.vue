@@ -4,8 +4,6 @@
 			v-model="modelValue"
 			:autofocus="autofocus"
 			:placeholder="$t('components.cardElement.richTextElement.placeholder')"
-			type="inline"
-			mode="regular"
 			:viewport-offset-top="offsetTop"
 			@update:value="onUpdateValue"
 			@focus="onFocus"
@@ -83,6 +81,7 @@ export default defineComponent({
 	},
 });
 </script>
+
 <style scoped>
 .cursor-text {
 	cursor: text;

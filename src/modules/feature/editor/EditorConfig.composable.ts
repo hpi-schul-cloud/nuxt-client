@@ -1,7 +1,6 @@
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { computed, reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
-
 import { fontColors, fontBackgroundColors } from "./config";
 import { injectStrict } from "@/utils/inject/inject-strict";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject/injection-keys";

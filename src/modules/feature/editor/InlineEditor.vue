@@ -23,6 +23,8 @@ import {
 	advancedFormattingToolbar,
 	compactHeadings,
 } from "./config";
+import katex from "katex";
+window.katex = katex;
 
 const props = defineProps({
 	value: {
@@ -91,6 +93,7 @@ const handleReady = (editor: Editor) => {
 <style lang="scss">
 @import "@/styles/settings.scss";
 @import "@hpi-schul-cloud/ckeditor/build/ckeditor.css";
+@import "katex/dist/katex.min.css";
 
 :root {
 	// z-index must be less than z-index of the headers to prevent that the toolbar is shown in front of the headers when scrolling.
