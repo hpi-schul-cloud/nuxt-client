@@ -354,6 +354,14 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		name: "media-shelf",
 	},
 	{
+		path: "/licenses",
+		component: async () => await import("@/pages/LicenseList.page.vue"),
+		name: "licenses",
+		meta: {
+			isPublic: true,
+		},
+	},
+	{
 		path: "/",
 		component: () => import("@/pages/Home.page.vue"),
 		name: "home",
