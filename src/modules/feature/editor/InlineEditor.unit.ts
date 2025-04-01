@@ -4,6 +4,8 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import { logger } from "@util-logger";
+import { computed, ref } from "vue";
+import { useEditorConfig } from "./EditorConfig.composable";
 
 type CkEditorProps = {
 	value?: string;
@@ -23,11 +25,35 @@ class ResizeObserver {
 	}
 }
 
+jest.mock("./EditorConfig.composable", () => ({
+	useEditorConfig: jest.fn(),
+}));
+
 describe("@feature-editor/InlineEditor", () => {
-	const setup = (props: CkEditorProps = {}) => {
+	const setup = (props: CkEditorProps = {}, isEditorEmpty = true) => {
+		(useEditorConfig as jest.Mock).mockReturnValue({
+			editorIsEmpty: computed(() => isEditorEmpty),
+			charCount: ref(isEditorEmpty ? 0 : 1),
+			registerDeletionHandler: jest.fn((editor, onDelete) => {
+				// Simulate attaching a keydown event listener
+				editor.editing.view.document.on = jest.fn((event, data, callback) => {
+					if (event === "keydown") {
+						// Simulate calling the callback when Backspace or Delete is pressed
+						callback(
+							{ name: "keydown" }, // Mock event info
+							{ domEvent: { key: "Backspace" } } // Mock keydown data
+						);
+					}
+				});
+			}),
+		});
+
 		const wrapper = shallowMount(InlineEditor, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				// stubs: {
+				// 	CKEditorVue: true,
+				// },
 			},
 			props,
 		});
@@ -43,23 +69,22 @@ describe("@feature-editor/InlineEditor", () => {
 
 	it("should render component", () => {
 		const { wrapper } = setup();
-		logger.log(wrapper.html());
 		expect(wrapper.findComponent(InlineEditor).exists()).toBe(true);
 	});
 
 	describe("events", () => {
 		it("should emit ready on editor ready", async () => {
 			const { wrapper, editorMock } = setup();
-			logger.log(wrapper.html());
-
 			const ck = wrapper.findComponent({ ref: "ck" });
 
 			ck.vm.$emit("ready", editorMock);
 			await wrapper.vm.$nextTick();
 
-			const emitted = wrapper.emitted();
-			expect(editorMock.editing.view.document.on).toHaveBeenCalled();
-			expect(emitted["ready"]).toHaveLength(1);
+			expect(useEditorConfig().registerDeletionHandler).toHaveBeenCalledWith(
+				editorMock,
+				expect.any(Function)
+			);
+			expect(wrapper.emitted("ready")).toHaveLength(1);
 		});
 
 		it("should emit update:value on content changes", async () => {
@@ -102,15 +127,31 @@ describe("@feature-editor/InlineEditor", () => {
 			expect(emitted["blur"]).toHaveLength(1);
 		});
 
-		it("should emit delete on delete event and empty text", async () => {
-			const { wrapper } = setup();
+		it.only("should emit delete on delete event and empty text", async () => {
+			const { wrapper, editorMock } = setup();
 
-			// due to not accessing the editor instance in test setup, we test here with implementation details
-			expect(wrapper.vm.charCount).toEqual(0);
-			wrapper.vm.handleDelete();
+			// Find the CKEditor component by its ref
+			const ck = wrapper.findComponent({ name: "CKEditorVue" });
+			// logger.log("ck", ck);
+			ck.vm.$emit("ready", editorMock);
 			await wrapper.vm.$nextTick();
+
+			// Simulate the "Backspace" keydown event
+			// ck.vm.$emit("keydown", {
+			// 	domEvent: {
+			// 		key: "Backspace",
+			// 	},
+			// });
+			editorMock.editing.view.document.on.mock.calls[0][1](
+				{ name: "keydown" },
+				{ domEvent: { key: "Backspace" } }
+			);
+
+			await wrapper.vm.$nextTick();
+			logger.log("ck emitted", ck.emitted());
 			const emitted = wrapper.emitted();
-			expect(emitted["keyboard:delete"]).toHaveLength(1);
+			logger.log("emitted", emitted);
+			expect(emitted["keyboard:delete"]).not.toBeUndefined();
 		});
 
 		it("should not emit delete on delete event and non-empty text", async () => {

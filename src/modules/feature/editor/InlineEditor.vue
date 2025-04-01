@@ -1,5 +1,5 @@
 <template>
-	<CKEditor.component
+	<CKEditorVue
 		ref="ck"
 		v-model="modelValue"
 		:editor="InlineEditor"
@@ -50,6 +50,7 @@ const emit = defineEmits([
 	"keyboard:delete",
 ]);
 
+const CKEditorVue = CKEditor.component;
 const { generalConfig, registerDeletionHandler } = useEditorConfig();
 
 const modelValue = useVModel(props, "value", emit);
