@@ -1,16 +1,16 @@
 <template>
-	<div class="cursor-text">
-		<InlineEditor
-			v-model="modelValue"
-			:autofocus="autofocus"
-			:placeholder="$t('components.cardElement.richTextElement.placeholder')"
-			:viewport-offset-top="offsetTop"
-			@update:value="onUpdateValue"
-			@focus="onFocus"
-			@blur="onBlur"
-			@keyboard:delete="onDelete"
-		/>
-	</div>
+	<InlineEditor
+		v-model="modelValue"
+		:autofocus="autofocus"
+		:placeholder="$t('components.cardElement.richTextElement.placeholder')"
+		data-testid="pampelmuse"
+		class="cursor-text"
+		:viewport-offset-top="offsetTop"
+		@update:value="onUpdateValue"
+		@focus="onFocus"
+		@blur="onBlur"
+		@keyboard:delete="onDelete"
+	/>
 </template>
 
 <script lang="ts">
@@ -84,9 +84,3 @@ export default defineComponent({
 	},
 });
 </script>
-
-<style scoped>
-.cursor-text {
-	cursor: text;
-}
-</style>

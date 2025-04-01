@@ -2,7 +2,6 @@
 	<RenderHTML
 		v-if="value !== undefined && value !== ''"
 		class="ck-content pb-2"
-		data-testid="ck-content-text"
 		:html="value"
 	/>
 </template>

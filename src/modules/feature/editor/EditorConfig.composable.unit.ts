@@ -5,7 +5,6 @@ import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { logger } from "@util-logger";
 
 describe("useEditorConfig", () => {
 	const setup = () => {

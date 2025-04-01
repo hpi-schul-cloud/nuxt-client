@@ -3,6 +3,7 @@
 		<RichTextContentElementDisplay
 			v-if="!isEditMode"
 			class="rich_text"
+			:data-testid="`rich-text-display-${columnIndex}-${elementIndex}`"
 			:value="element.content.text"
 		/>
 		<RichTextContentElementEdit
@@ -10,7 +11,7 @@
 			class="rich_text"
 			:autofocus="autofocus"
 			:value="modelValue.text"
-			:columnIndex="columnIndex"
+			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
 			@update:value="onUpdateElement"
 			@delete:element="onDeleteElement"
 			@blur="onBlur"
@@ -37,6 +38,7 @@ const props = defineProps({
 		required: true,
 	},
 	columnIndex: { type: Number, required: true },
+	elementIndex: { type: Number, required: true },
 });
 
 const emit = defineEmits(["delete:element"]);
