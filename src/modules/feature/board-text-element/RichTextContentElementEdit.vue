@@ -64,6 +64,7 @@ export default defineComponent({
 				document.getElementsByClassName("ck-balloon-panel");
 
 			for (const element of ckBalloonPanelElements) {
+				element.setAttribute("data-testid", "ck-inline-toolbar");
 				useEventListener(element, "click", (event: PointerEvent) => {
 					event.stopPropagation();
 				});
