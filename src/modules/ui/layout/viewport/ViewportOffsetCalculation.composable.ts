@@ -1,4 +1,6 @@
-export function ckeditorViewportOffsetTop(): number {
+import { computed } from "vue";
+
+function calculateViewportOffsetTop(): number {
 	const documentStyle = window.getComputedStyle(document.documentElement);
 
 	const topbarHeight = documentStyle.getPropertyValue("--topbar-height");
@@ -9,15 +11,17 @@ export function ckeditorViewportOffsetTop(): number {
 		"--board-header-height"
 	);
 
-	const staticOffset =
+	const staticOffsetTop =
 		parseInt(topbarHeight) +
 		parseInt(breadcrumbsHeight) +
 		parseInt(boardHeaderHeight);
 
-	const currentColumnHeader = document.getElementById("boardColumnHeader");
+	const currentColumnHeader = document.getElementsByClassName(
+		"board-column-header"
+	)[0] as HTMLElement;
 
 	if (!currentColumnHeader) {
-		return staticOffset;
+		return staticOffsetTop;
 	}
 
 	const height = currentColumnHeader.offsetHeight;
@@ -26,8 +30,16 @@ export function ckeditorViewportOffsetTop(): number {
 	const marginTop = columnHeaderStyle.getPropertyValue("margin-top");
 	const marginBottom = columnHeaderStyle.getPropertyValue("margin-bottom");
 
-	const offset =
-		staticOffset + height + parseInt(marginTop) + parseInt(marginBottom);
+	const offsetTop =
+		staticOffsetTop + height + parseInt(marginTop) + parseInt(marginBottom);
 
-	return offset;
+	return offsetTop;
 }
+
+export const useViewportOffsetTop = () => {
+	const offsetTop = computed(() => calculateViewportOffsetTop());
+
+	return {
+		offsetTop,
+	};
+};

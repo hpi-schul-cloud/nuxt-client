@@ -18,6 +18,11 @@ import CKEditor from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { ClassicEditor } from "@hpi-schul-cloud/ckeditor";
 import { useEditorConfig } from "./EditorConfig.composable";
+import {
+	corePlugins,
+	mediaFormattingToolbar,
+	prominentHeadings,
+} from "./config";
 
 const props = defineProps({
 	value: {
@@ -38,17 +43,10 @@ const emit = defineEmits([
 	"focus",
 	"update:value",
 	"blur",
-	"keyboard",
 	"keyboard:delete",
 ]);
 
-const {
-	corePlugins,
-	classicEditorToolbarItems,
-	prominentHeadings,
-	generalConfig,
-	attachDeletionHandler,
-} = useEditorConfig();
+const { generalConfig, registerDeletionHandler } = useEditorConfig();
 
 const ck = ref(null);
 const modelValue = useVModel(props, "value", emit);
@@ -57,7 +55,7 @@ const config = computed(() => {
 	return {
 		...generalConfig,
 		toolbar: {
-			items: classicEditorToolbarItems,
+			items: mediaFormattingToolbar,
 		},
 		plugins: corePlugins,
 		heading: prominentHeadings,
@@ -76,7 +74,7 @@ const handleReady = (editor: Editor) => {
 		editor.editing.view.focus();
 	}
 
-	attachDeletionHandler(editor, handleDelete);
+	registerDeletionHandler(editor, handleDelete);
 };
 </script>
 

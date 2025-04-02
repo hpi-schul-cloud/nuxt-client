@@ -1,25 +1,23 @@
 <template>
-	<div class="cursor-text">
-		<InlineEditor
-			v-model="modelValue"
-			:autofocus="autofocus"
-			:placeholder="$t('components.cardElement.richTextElement.placeholder')"
-			type="inline"
-			mode="regular"
-			:viewport-offset-top="ckeditorViewportOffsetTop()"
-			@update:value="onUpdateValue"
-			@focus="onFocus"
-			@blur="onBlur"
-			@keyboard:delete="onDelete"
-		/>
-	</div>
+	<InlineEditor
+		v-model="modelValue"
+		:autofocus="autofocus"
+		:placeholder="$t('components.cardElement.richTextElement.placeholder')"
+		:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
+		class="cursor-text"
+		:viewport-offset-top="offsetTop"
+		@update:value="onUpdateValue"
+		@focus="onFocus"
+		@blur="onBlur"
+		@keyboard:delete="onDelete"
+	/>
 </template>
 
 <script lang="ts">
 import { InlineEditor } from "@feature-editor";
 import { useEventListener } from "@vueuse/core";
 import { defineComponent, onMounted, ref, watch } from "vue";
-import { ckeditorViewportOffsetTop } from "@data-editor";
+import { useViewportOffsetTop } from "@ui-layout";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
@@ -33,10 +31,14 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
+		columnIndex: { type: Number, required: true },
+		elementIndex: { type: Number, required: true },
 	},
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = ref("");
+
+		const { offsetTop } = useViewportOffsetTop();
 
 		onMounted(() => {
 			if (props.value !== undefined) {
@@ -61,6 +63,13 @@ export default defineComponent({
 					event.stopPropagation();
 				});
 			}
+
+			document.querySelectorAll(".ck-toolbar_floating").forEach((element) => {
+				element.setAttribute(
+					"data-testid",
+					`ck-inline-toolbar-${props.columnIndex}-${props.elementIndex}`
+				);
+			});
 		};
 
 		const onBlur = () => {
@@ -72,7 +81,7 @@ export default defineComponent({
 
 		return {
 			modelValue,
-			ckeditorViewportOffsetTop,
+			offsetTop,
 			onFocus,
 			onDelete,
 			onBlur,
@@ -81,8 +90,3 @@ export default defineComponent({
 	},
 });
 </script>
-<style scoped>
-.cursor-text {
-	cursor: text;
-}
-</style>

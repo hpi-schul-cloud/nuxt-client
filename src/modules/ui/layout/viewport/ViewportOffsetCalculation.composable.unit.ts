@@ -1,4 +1,4 @@
-import { ckeditorViewportOffsetTop } from "./ViewportOffsetCalculation.composable";
+import { useViewportOffsetTop } from "./ViewportOffsetCalculation.composable";
 
 describe("ViewportOffsetCalculation.composable", () => {
 	beforeEach(() => {
@@ -50,12 +50,12 @@ describe("ViewportOffsetCalculation.composable", () => {
 	});
 
 	it("should calculate the correct viewport offset when boardColumnHeader exists", async () => {
-		const result = ckeditorViewportOffsetTop();
+		const result = useViewportOffsetTop();
 
 		// Expected calculation:
-		// staticOffset = 50 (topbar) + 30 (breadcrumbs) + 40 (board header) = 120
-		// offset = staticOffset + 60 (header height) + 10 (margin-top) + 15 (margin-bottom) = 205
-		expect(result).toBe(205);
+		// staticOffsetTop = 50 (topbar) + 30 (breadcrumbs) + 40 (board header) = 120
+		// offsetTop = staticOffsetTop + 60 (header height) + 10 (margin-top) + 15 (margin-bottom) = 205
+		expect(result.offsetTop.value).toBe(205);
 	});
 
 	it("should calculate the correct viewport offset when boardColumnHeader does not exist", async () => {
@@ -64,10 +64,10 @@ describe("ViewportOffsetCalculation.composable", () => {
 			element.remove();
 		}
 
-		const result = ckeditorViewportOffsetTop();
+		const result = useViewportOffsetTop();
 
 		// Expected calculation:
-		// staticOffset = 50 (topbar) + 30 (breadcrumbs) + 40 (board header) = 120
-		expect(result).toBe(120);
+		// staticOffsetTop = 50 (topbar) + 30 (breadcrumbs) + 40 (board header) = 120
+		expect(result.offsetTop.value).toBe(120);
 	});
 });
