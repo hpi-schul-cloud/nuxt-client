@@ -12,19 +12,42 @@ import dayjs from "dayjs";
 import { nextTick } from "vue";
 import { createStore } from "vuex";
 import FormNews from "./FormNews.vue";
+import { News } from "@/store/types/news";
 
 const testDate = dayjs("2022-07-05T09:00:00.000Z");
 
-type News = {
+type NewsPayload = {
 	title: string;
 	content: string;
-	displayAt?: string;
+	displayAt: string;
+	date: { date: string; time: string };
 };
 
-const testNews: News = {
+const testNewsPayload: NewsPayload = {
 	title: "Hi",
 	content: "lalaland",
 	displayAt: `${testDate.toISOString()}`,
+	date: {
+		date: "2022-07-05",
+		time: "11:00",
+	},
+};
+
+const testNews: News = {
+	...testNewsPayload,
+	id: "",
+	createdAt: "",
+	creator: {
+		id: "",
+		firstName: "",
+		lastName: "",
+	},
+	school: {
+		id: "",
+		name: "",
+	},
+	targetId: "",
+	targetModel: "",
 };
 
 const $store = createStore({
@@ -57,7 +80,11 @@ describe("FormNews", () => {
 					$route,
 					$store,
 				},
-				stubs: ["base-input", "base-dialog"],
+				stubs: {
+					"base-input": true,
+					"base-dialog": true,
+					ClassicEditor: true,
+				},
 			},
 			props: {
 				news,
@@ -98,13 +125,11 @@ describe("FormNews", () => {
 		it("emits save event on submit with correct payload", async () => {
 			const { wrapper } = setup({ ...testNews });
 
-			wrapper.find("form").trigger("submit");
-			await wrapper.vm.$nextTick();
+			await wrapper.find("form").trigger("submit");
 
 			expect(wrapper.emitted()).toHaveProperty("save");
-
-			const saveEventPayload = wrapper.emitted("save")?.at(0)?.[0];
-			expect(saveEventPayload).toMatchObject(testNews);
+			expect(wrapper.emitted().save).toHaveLength(1);
+			expect(wrapper.emitted().save[0]).toEqual([testNewsPayload]);
 		});
 
 		it("shows validation error on empty title", async () => {
