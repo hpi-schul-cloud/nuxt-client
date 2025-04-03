@@ -3,7 +3,6 @@
 		v-model="modelValue"
 		:autofocus="autofocus"
 		:placeholder="$t('components.cardElement.richTextElement.placeholder')"
-		:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
 		class="cursor-text"
 		:viewport-offset-top="offsetTop"
 		@update:value="onUpdateValue"
@@ -31,8 +30,6 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
-		columnIndex: { type: Number, required: true },
-		elementIndex: { type: Number, required: true },
 	},
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
@@ -63,13 +60,6 @@ export default defineComponent({
 					event.stopPropagation();
 				});
 			}
-
-			document.querySelectorAll(".ck-toolbar_floating").forEach((element) => {
-				element.setAttribute(
-					"data-testid",
-					`ck-inline-toolbar-${props.columnIndex}-${props.elementIndex}`
-				);
-			});
 		};
 
 		const onBlur = () => {

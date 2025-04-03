@@ -20,7 +20,7 @@ describe("ViewportOffsetCalculation.composable", () => {
 				} as CSSStyleDeclaration;
 			}
 
-			if (element.id === "boardColumnHeader") {
+			if (element.classList.contains("board-column-header")) {
 				return {
 					getPropertyValue: (property: string) => {
 						switch (property) {
@@ -39,7 +39,7 @@ describe("ViewportOffsetCalculation.composable", () => {
 		});
 
 		const mockColumnHeader = document.createElement("div");
-		mockColumnHeader.id = "boardColumnHeader";
+		mockColumnHeader.classList.add("board-column-header");
 		Object.defineProperty(mockColumnHeader, "offsetHeight", { value: 60 });
 		document.body.appendChild(mockColumnHeader);
 	});
@@ -49,7 +49,7 @@ describe("ViewportOffsetCalculation.composable", () => {
 		document.body.innerHTML = "";
 	});
 
-	it("should calculate the correct viewport offset when boardColumnHeader exists", async () => {
+	it("should calculate the correct viewport offset when board-column-header class exists", async () => {
 		const result = useViewportOffsetTop();
 
 		// Expected calculation:
@@ -58,8 +58,8 @@ describe("ViewportOffsetCalculation.composable", () => {
 		expect(result.offsetTop.value).toBe(205);
 	});
 
-	it("should calculate the correct viewport offset when boardColumnHeader does not exist", async () => {
-		const element = document.getElementById("boardColumnHeader");
+	it("should calculate the correct viewport offset when board-column-header class does not exist", async () => {
+		const element = document.getElementsByClassName("board-column-header")[0];
 		if (element) {
 			element.remove();
 		}
