@@ -64,7 +64,7 @@ export default defineComponent({
 				});
 			}
 
-			document.querySelectorAll(".ck-toolbar_floating").forEach((element) => {
+			document.querySelectorAll(".ck-balloon-panel").forEach((element) => {
 				element.setAttribute(
 					"data-testid",
 					`ck-inline-toolbar-${props.columnIndex}-${props.elementIndex}`
