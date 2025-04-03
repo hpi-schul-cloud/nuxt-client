@@ -19,8 +19,6 @@ describe("RichTextContentElementEdit", () => {
 			props: {
 				value: "test value",
 				autofocus,
-				columnIndex: 0,
-				elementIndex: 0,
 			},
 		});
 
