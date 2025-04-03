@@ -44,6 +44,7 @@ import store from "./plugins/store";
 import createVuetify from "./plugins/vuetify";
 import router from "./router";
 import { initializeAxios } from "./utils/api";
+import CkeditorPlugin from "@ckeditor/ckeditor5-vue";
 
 import {
 	APPLICATION_ERROR_KEY,
@@ -97,6 +98,8 @@ app.mixin({
 app.use(VueDOMPurifyHTML, {
 	namedConfigurations: htmlConfig,
 });
+
+app.use(CkeditorPlugin);
 
 (async () => {
 	const runtimeConfigJson = await axios.get(

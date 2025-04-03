@@ -1,5 +1,5 @@
 <template>
-	<CKEditor.component
+	<ckeditor
 		ref="ck"
 		v-model="modelValue"
 		:editor="BalloonEditor"
@@ -14,7 +14,6 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
-import CKEditor from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { BalloonEditor } from "@hpi-schul-cloud/ckeditor";
 import { useEditorConfig } from "./EditorConfig.composable";

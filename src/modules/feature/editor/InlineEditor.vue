@@ -1,5 +1,5 @@
 <template>
-	<CKEditorVue
+	<ckeditor
 		ref="ck"
 		v-model="modelValue"
 		:editor="InlineEditor"
@@ -14,7 +14,6 @@
 <script setup lang="ts">
 import { useVModel } from "@vueuse/core";
 import { computed, ref } from "vue";
-import CKEditor from "@ckeditor/ckeditor5-vue";
 import { Editor } from "@ckeditor/ckeditor5-core";
 import { InlineEditor } from "@hpi-schul-cloud/ckeditor";
 import { useEditorConfig } from "./EditorConfig.composable";
@@ -52,7 +51,6 @@ const emit = defineEmits([
 	"keyboard:delete",
 ]);
 
-const CKEditorVue = CKEditor.component;
 const { generalConfig, registerDeletionHandler } = useEditorConfig();
 
 const modelValue = useVModel(props, "value", emit);
