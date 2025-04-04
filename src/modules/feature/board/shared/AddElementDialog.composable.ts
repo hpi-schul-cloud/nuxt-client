@@ -1,12 +1,13 @@
-import type { CreateElementRequestPayload } from "@data-board";
 import {
 	BoardFeature,
 	ContentElementType,
 	PreferredToolResponse,
 } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import type { CreateElementRequestPayload } from "@data-board";
 import { useBoardFeatures, useCardStore } from "@data-board";
 import {
+	mdiFolderOpenOutline,
 	mdiFormatText,
 	mdiLightbulbOnOutline,
 	mdiLink,
@@ -17,12 +18,12 @@ import {
 	mdiVideoOutline,
 } from "@icons/material";
 import { useBoardNotifier } from "@util-board";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	ElementTypeSelectionOptions,
 	useSharedElementTypeSelection,
 } from "./SharedElementTypeSelection.composable";
-import { computed } from "vue";
 
 type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 
@@ -180,6 +181,17 @@ export const useAddElementDialog = (
 			),
 			action: () => onElementClick(ContentElementType.VideoConference),
 			testId: "create-element-video-conference",
+		});
+	}
+
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
+		options.push({
+			icon: mdiFolderOpenOutline,
+			label: t(
+				"components.elementTypeSelection.elements.folderElement.subtitle"
+			),
+			action: () => onElementClick(ContentElementType.FileFolder),
+			testId: "create-element-file-folder",
 		});
 	}
 

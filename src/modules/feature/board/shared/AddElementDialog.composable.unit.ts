@@ -60,6 +60,7 @@ mockedInjectStrict.mockImplementation(() => {
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: false,
 			FEATURE_TLDRAW_ENABLED: false,
 			FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: false,
+			FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
 		},
 	};
 });
@@ -299,6 +300,7 @@ describe("ElementTypeSelection Composable", () => {
 				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
 				FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
+				FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
 			}
 		) => {
 			const cardId = "cardId";
@@ -541,6 +543,35 @@ describe("ElementTypeSelection Composable", () => {
 				askType();
 
 				const action = elementTypeOptions.value[7].action;
+				action();
+
+				expect(closeDialogMock).toHaveBeenCalledTimes(1);
+			});
+		});
+		describe("when the FileFolderElement action is called", () => {
+			it("should call add element function with right argument", async () => {
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+				const action = elementTypeOptions.value[8].action;
+				action();
+
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toHaveBeenCalledWith({
+					type: ContentElementType.FileFolder,
+					cardId,
+				});
+			});
+
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				const action = elementTypeOptions.value[8].action;
 				action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);

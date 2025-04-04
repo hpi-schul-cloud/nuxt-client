@@ -421,6 +421,7 @@ export default {
 		"Налаштування зовнішнього інструменту",
 	"components.board.menu.mediaExternalToolElement": "Середні налаштування",
 	"components.board.menu.fileElement": "Налаштування файлу",
+	"components.board.menu.folderElement": "Налаштування папки файлів",
 	"components.board.menu.linkElement": "Налаштування посилання",
 	"components.board.menu.submissionElement": "Налаштування Подання",
 	"components.board.menu.videoConferenceElement":
@@ -506,6 +507,8 @@ export default {
 		"Формат відео не підтримується цим браузером / операційною системою.",
 	"components.cardElement.fileElement.virusDetected":
 		"Файл було заблоковано через підозру на вірус.",
+	"components.cardElement.folderElement": "Папка з файлами",
+	"components.cardElement.folderElement.untitled": "Папка без назви",
 	"components.cardElement.LinkElement": "Посилання",
 	"components.cardElement.LinkElement.label": "Вставити адресу посилання",
 	"components.cardElement.notification.visibleAndEditable":
@@ -542,6 +545,9 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Зовнішні інструменти",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Файл",
+	"components.elementTypeSelection.elements.folderElement": "Папка з файлами",
+	"components.elementTypeSelection.elements.folderElement.subtitle":
+		"Папка з файлами",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
 		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Посилання",

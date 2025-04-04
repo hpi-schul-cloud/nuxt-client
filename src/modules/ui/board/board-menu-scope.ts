@@ -6,6 +6,7 @@ export enum BoardMenuScope {
 	DRAWING_ELEMENT = "drawingElement",
 	EXTERNAL_TOOL_ELEMENT = "externalToolElement",
 	FILE_ELEMENT = "fileElement",
+	FOLDER_ELEMENT = "folderElement",
 	LINK_ELEMENT = "linkElement",
 	SUBMISSION_ELEMENT = "submissionElement",
 	DELETED_ELEMENT = "deletedElement",

@@ -410,6 +410,7 @@ export default {
 	"components.board.menu.externalToolElement": "External tool settings",
 	"components.board.menu.mediaExternalToolElement": "Medium settings",
 	"components.board.menu.fileElement": "File settings",
+	"components.board.menu.folderElement": "File folder settings",
 	"components.board.menu.linkElement": "Link settings",
 	"components.board.menu.submissionElement": "Submission settings",
 	"components.board.menu.videoConferenceElement": "Video conference settings",
@@ -493,6 +494,8 @@ export default {
 		"The video format is not supported by this browser/operating system.",
 	"components.cardElement.fileElement.virusDetected":
 		"File has been locked due to a suspected virus.",
+	"components.cardElement.folderElement": "File folder",
+	"components.cardElement.folderElement.untitled": "Untitled folder",
 	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Insert link address",
 	"components.cardElement.notification.visibleAndEditable":
@@ -530,6 +533,9 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"External tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "File",
+	"components.elementTypeSelection.elements.folderElement": "File folder",
+	"components.elementTypeSelection.elements.folderElement.subtitle":
+		"File folder",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
 		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",

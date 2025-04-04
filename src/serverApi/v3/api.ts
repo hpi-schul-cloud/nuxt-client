@@ -877,10 +877,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -1498,6 +1498,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_COURSE_SHARE: boolean;
     /**
      * 
@@ -1908,6 +1914,7 @@ export enum ContentElementType {
     ExternalTool = 'externalTool',
     CollaborativeTextEditor = 'collaborativeTextEditor',
     VideoConference = 'videoConference',
+    FileFolder = 'fileFolder',
     Deleted = 'deleted'
 }
 
@@ -2220,6 +2227,7 @@ export enum CopyApiResponseTypeEnum {
     ExternalToolElement = 'EXTERNAL_TOOL_ELEMENT',
     File = 'FILE',
     FileElement = 'FILE_ELEMENT',
+    FileFolderElement = 'FILE_FOLDER_ELEMENT',
     DrawingElement = 'DRAWING_ELEMENT',
     FileGroup = 'FILE_GROUP',
     Leaf = 'LEAF',
@@ -2591,6 +2599,7 @@ export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     ExternalTool = 'externalTool',
     CollaborativeTextEditor = 'collaborativeTextEditor',
     VideoConference = 'videoConference',
+    FileFolder = 'fileFolder',
     Deleted = 'deleted'
 }
 
@@ -3942,6 +3951,82 @@ export interface FileElementResponse {
      * 
      * @type {TimestampsResponse}
      * @memberof FileElementResponse
+     */
+    timestamps: TimestampsResponse;
+}
+/**
+ * 
+ * @export
+ * @interface FileFolderContentBody
+ */
+export interface FileFolderContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof FileFolderContentBody
+     */
+    title: string;
+}
+/**
+ * 
+ * @export
+ * @interface FileFolderElementContent
+ */
+export interface FileFolderElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof FileFolderElementContent
+     */
+    title: string;
+}
+/**
+ * 
+ * @export
+ * @interface FileFolderElementContentBody
+ */
+export interface FileFolderElementContentBody {
+    /**
+     * the type of the updated element
+     * @type {ContentElementType}
+     * @memberof FileFolderElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {FileFolderContentBody}
+     * @memberof FileFolderElementContentBody
+     */
+    content: FileFolderContentBody;
+}
+/**
+ * 
+ * @export
+ * @interface FileFolderElementResponse
+ */
+export interface FileFolderElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof FileFolderElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof FileFolderElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {FileFolderElementContent}
+     * @memberof FileFolderElementResponse
+     */
+    content: FileFolderElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof FileFolderElementResponse
      */
     timestamps: TimestampsResponse;
 }
@@ -9651,10 +9736,10 @@ export interface UpdateBoardTitleParams {
 export interface UpdateElementContentBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody}
+     * @type {FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody | FileFolderElementContentBody}
      * @memberof UpdateElementContentBodyParams
      */
-    data: FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody;
+    data: FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody | FileFolderElementContentBody;
 }
 /**
  * 
@@ -14426,7 +14511,7 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse>> {
+        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14490,7 +14575,7 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse> {
+        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse> {
             return localVarFp.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -14553,7 +14638,7 @@ export interface BoardElementApiInterface {
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse>;
+    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse>;
 
 }
 
