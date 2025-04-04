@@ -19,7 +19,23 @@
 			:loading-text="$t('common.loading.text')"
 			:no-data-text="$t('common.nodata')"
 			data-testid="class-members-table"
-		/>
+		>
+			<template #[`item.firstName`]="{ item }">
+				<span data-testid="class-members-table-firstname">
+					{{ item.firstName }}
+				</span>
+			</template>
+			<template #[`item.lastName`]="{ item }">
+				<span data-testid="class-members-table-lastname">
+					{{ item.lastName }}
+				</span>
+			</template>
+			<template #[`item.roleName`]="{ item }">
+				<span data-testid="class-members-table-role">
+					{{ item.roleName }}
+				</span>
+			</template>
+		</v-data-table>
 		<ClassMembersInfoBox class="mt-5" :system-id="externalSystemId" />
 	</DefaultWireframe>
 </template>
