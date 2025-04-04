@@ -5,8 +5,8 @@
 		auto-grow
 		v-model="modelValue"
 		:persistent-hint="true"
-		:hint="$t('components.cardElement.fileElement.altDescription')"
-		:label="$t('components.cardElement.fileElement.alternativeText')"
+		:hint="$t('components.cardElement.audioRecordElement.altDescription')"
+		:label="$t('components.cardElement.audioRecordElement.alternativeText')"
 	/>
 </template>
 

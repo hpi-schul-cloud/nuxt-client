@@ -2,22 +2,22 @@
 	<div>
 		<button @click="startRecording">Start Recording</button>
 		<button
-			@click="pauseRecording"
 			v-if="state === RecordingStateEnum.RECORDING"
+			@click="pauseRecording"
 		>
 			Pause Recording
 		</button>
-		<button @click="resumeRecording" v-if="state === RecordingStateEnum.PAUSED">
+		<button v-if="state === RecordingStateEnum.PAUSED" @click="resumeRecording">
 			Resume Recording
 		</button>
-		<button @click="stopRecording" v-if="state !== RecordingStateEnum.INACTIVE">
+		<button v-if="state !== RecordingStateEnum.INACTIVE" @click="stopRecording">
 			Stop Recording
 		</button>
 	</div>
 </template>
 
 <script setup>
-import { RecordingStateEnum, useAudioRecorder } from "../../composables";
+import { RecordingStateEnum, useAudioRecorder } from "../../../composables";
 
 const { mediaRecorder, chunks, state, start, stop, pause, resume } =
 	useAudioRecorder();

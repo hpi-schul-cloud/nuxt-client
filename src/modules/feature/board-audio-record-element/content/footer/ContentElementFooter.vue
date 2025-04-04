@@ -1,16 +1,16 @@
 <template>
 	<v-card-actions class="py-2 px-4">
 		<AudioRecordAttributes
-			:fileSize="fileProperties.size"
-			:fileName="fileProperties.name"
+			:fileSize="audioRecordProperties.size"
+			:fileName="audioRecordProperties.name"
 		/>
 
 		<v-spacer />
 
 		<AudioRecordDownload
-			:fileName="fileProperties.name"
-			:isDownloadAllowed="fileProperties.isDownloadAllowed"
-			:url="fileProperties.url"
+			:fileName="audioRecordProperties.name"
+			:isDownloadAllowed="audioRecordProperties.isDownloadAllowed"
+			:url="audioRecordProperties.url"
 		/>
 	</v-card-actions>
 </template>
@@ -28,7 +28,7 @@ export default defineComponent({
 		AudioRecordDownload,
 	},
 	props: {
-		fileProperties: {
+		audioRecordProperties: {
 			type: Object as PropType<AudioRecordProperties>,
 			required: true,
 		},

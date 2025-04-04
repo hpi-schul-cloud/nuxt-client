@@ -12,7 +12,7 @@
 			}"
 		>
 			<AudioRecordDisplay
-				:file-properties="audioRecordProperties"
+				:audio-record-properties="audioRecordProperties"
 				:is-edit-mode="isEditMode"
 				:show-menu="isMenuShownOnFileDisplay"
 				@add:alert="onAddAlert"
@@ -25,8 +25,8 @@
 			:class="{ 'audio-record-information': hasRowStyle }"
 		>
 			<AudioRecordDescription
-				:name="AudioRecordProperties.name"
-				:caption="AudioRecordProperties.element.content.caption"
+				:name="audioRecordProperties.name"
+				:caption="audioRecordProperties.element.content.caption"
 				:show-title="showTitle"
 				:show-menu="!isMenuShownOnFileDisplay"
 				:is-edit-mode="isEditMode"
@@ -35,23 +35,19 @@
 				<slot />
 			</AudioRecordDescription>
 			<FileInputs
-				:file-properties="AudioRecordProperties"
+				:audio-record-properties="audioRecordProperties"
 				:is-edit-mode="isEditMode"
 				@update:alternativeText="onUpdateText"
 				@update:caption="onUpdateCaption"
 			/>
-			<ContentElementFooter :fileProperties="audioRecordProperties" />
+			<ContentElementFooter :audio-record-properties="audioRecordProperties" />
 			<FileAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
-import {
-	isAudioMimeType,
-	isPdfMimeType,
-	isVideoMimeType,
-} from "@/utils/fileHelper";
+import { isAudioMimeType } from "@/utils/fileHelper";
 import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useDebounceFn } from "@vueuse/core";
@@ -95,29 +91,16 @@ const onAddAlert = (alert: AudioRecordAlert) => {
 	emit("add:alert", alert);
 };
 
-const hasVideoMimeType = computed(() => {
-	return isVideoMimeType(props.audioRecordProperties.mimeType);
-});
-
-const hasPdfMimeType = computed(() =>
-	isPdfMimeType(props.audioRecordProperties.mimeType)
-);
-
 const hasAudioMimeType = computed(() => {
 	return isAudioMimeType(props.audioRecordProperties.mimeType);
 });
 
 const fileDescriptionSrc = computed(() => {
-	return hasPdfMimeType.value ? props.audioRecordProperties.url : undefined;
+	return hasAudioMimeType.value ? props.audioRecordProperties.url : undefined;
 });
 
 const showTitle = computed(() => {
-	return (
-		hasPdfMimeType.value ||
-		(!props.audioRecordProperties.previewUrl &&
-			!hasVideoMimeType.value &&
-			!hasAudioMimeType.value)
-	);
+	return hasAudioMimeType.value;
 });
 
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
@@ -128,22 +111,14 @@ const isSmallOrLargerListBoard = computed(() => {
 });
 
 const hasRowStyle = computed(
-	() =>
-		isSmallOrLargerListBoard.value &&
-		hasPdfMimeType.value &&
-		props.audioRecordProperties.previewUrl
+	() => isSmallOrLargerListBoard.value && props.audioRecordProperties.previewUrl
 );
 
 const isMenuShownOnFileDisplay = computed(() => {
 	const isFileDisplayRendered =
-		!!props.audioRecordProperties.previewUrl ||
-		hasVideoMimeType.value ||
-		hasAudioMimeType.value;
+		!!props.audioRecordProperties.previewUrl || hasAudioMimeType.value;
 
-	const isPdfOnSmallOrLargerListBoard =
-		isSmallOrLargerListBoard.value && hasPdfMimeType.value;
-
-	return isFileDisplayRendered && !isPdfOnSmallOrLargerListBoard;
+	return isFileDisplayRendered;
 });
 </script>
 

@@ -11,8 +11,8 @@
 		@keydown.stop
 	>
 		<AudioRecordContent
-			v-if="fileProperties && isUploading !== true"
-			:file-properties="fileProperties"
+			v-if="audioRecordProperties && isUploading !== true"
+			:audio-record-properties="audioRecordProperties"
 			:alerts="alerts"
 			:is-edit-mode="isEditMode"
 			@fetch:file="onFetchFile"
@@ -21,7 +21,7 @@
 			@add:alert="onAddAlert"
 		>
 			<BoardMenu
-				:scope="BoardMenuScope.FILE_ELEMENT"
+				:scope="BoardMenuScope.AUDIO_RECORD_ELEMENT"
 				has-background
 				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
 				v-if="isEditMode"
@@ -29,7 +29,7 @@
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
-					:name="fileProperties.name"
+					:name="audioRecordProperties.name"
 					scope-language-key="components.cardElement.audioRecordElement"
 					@click="onDelete"
 				/>
@@ -82,15 +82,10 @@ import { AudioRecordElementResponse } from "../../../serverApi/v3";
 import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import { AudioRecordAlert } from "./shared/types/AudioRecordAlert.enum";
-import AudioRecorder from "./audio-record/audio-recorder/AudioRecorder.vue";
+import AudioRecorder from "./content/display/audio-display/AudioRecorder.vue";
 
 export default defineComponent({
 	name: "AudioRecordElement",
-	computed: {
-		BoardMenuScope() {
-			return BoardMenuScope;
-		},
-	},
 	components: {
 		AudioRecorder,
 		AudioRecordContent,
@@ -135,7 +130,7 @@ export default defineComponent({
 			return fileRecord.value?.isUploading;
 		});
 
-		const fileProperties = computed(() => {
+		const audioRecordProperties = computed(() => {
 			if (fileRecord.value === undefined) {
 				return;
 			}
@@ -225,7 +220,7 @@ export default defineComponent({
 
 		return {
 			audioRecordContentElement,
-			fileProperties,
+			audioRecordProperties,
 			fileRecord,
 			hasFileRecord,
 			isOutlined,
@@ -242,6 +237,11 @@ export default defineComponent({
 			onMoveUp,
 			onMoveDown,
 		};
+	},
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
 	},
 });
 </script>
