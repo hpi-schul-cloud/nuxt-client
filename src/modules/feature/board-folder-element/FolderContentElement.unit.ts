@@ -6,7 +6,12 @@ import {
 } from "@@/tests/test-utils/setup";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
-import { mount } from "@vue/test-utils";
+import {
+	KebabMenuActionDelete,
+	KebabMenuActionMoveDown,
+	KebabMenuActionMoveUp,
+} from "@ui-kebab-menu";
+import { flushPromises, mount } from "@vue/test-utils";
 import FolderContentElement from "./FolderContentElement.vue";
 
 jest.mock("@data-board", () => ({
@@ -40,8 +45,8 @@ describe("FolderContentElement", () => {
 				isNotFirstElement: options.isNotFirstElement ?? false,
 				isNotLastElement: options.isNotLastElement ?? false,
 				columnIndex: 0,
-				rowIndex: 0,
-				elementIndex: 0,
+				rowIndex: 1,
+				elementIndex: 2,
 			},
 		});
 
@@ -95,29 +100,106 @@ describe("FolderContentElement", () => {
 			const menu = wrapper.findComponent(BoardMenu);
 			expect(menu.exists()).toBe(false);
 		});
+
+		it.each(["up", "down"])(
+			"should not 'emit move-keyboard:edit' when arrow key %s is pressed and element is in view mode",
+			async (key) => {
+				const { wrapper } = setupWrapper({
+					isEditMode: false,
+				});
+
+				const folderElemet = wrapper.findComponent(
+					'[data-testid="board-folder-element"]'
+				);
+
+				await folderElemet.trigger(`keydown.${key}`);
+
+				expect(wrapper.emitted()).not.toHaveProperty("move-keyboard:edit");
+			}
+		);
 	});
 
 	describe("when element is in edit mode", () => {
-		it("should render folder element menu", () => {
-			const { wrapper } = setupWrapper({
-				isEditMode: true,
+		describe("folder element menu", () => {
+			it("should render folder element menu", () => {
+				const { wrapper } = setupWrapper({
+					isEditMode: true,
+				});
+
+				const menu = wrapper.findComponent(BoardMenu);
+				expect(menu.exists()).toBe(true);
+				expect(menu.props("scope")).toBe(BoardMenuScope.FOLDER_ELEMENT);
 			});
 
-			const menu = wrapper.findComponent(BoardMenu);
-			expect(menu.exists()).toBe(true);
-			expect(menu.props("scope")).toBe(BoardMenuScope.FOLDER_ELEMENT);
-		});
+			it("should emit 'move-down:edit' event when move down menu item is clicked", async () => {
+				const { wrapper } = setupWrapper({
+					isEditMode: true,
+					isNotLastElement: true,
+				});
 
-		it("should handle keyboard navigation", async () => {
-			const { wrapper } = setupWrapper({
-				isEditMode: true,
+				const menuButton = wrapper
+					.findComponent({ name: "BoardMenu" })
+					.findComponent({ name: "VBtn" });
+				await menuButton.trigger("click");
+
+				const menuItem = wrapper.findComponent(KebabMenuActionMoveDown);
+				await menuItem.trigger("click");
+
+				expect(wrapper.emitted()).toHaveProperty("move-down:edit");
 			});
 
-			await wrapper.trigger("keydown.up");
-			expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
+			it("should emit 'move-up:edit' event when move up menu item is clicked", async () => {
+				const { wrapper } = setupWrapper({
+					isEditMode: true,
+					isNotFirstElement: true,
+				});
 
-			await wrapper.trigger("keydown.down");
-			expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(2);
+				const menuButton = wrapper
+					.findComponent({ name: "BoardMenu" })
+					.findComponent({ name: "VBtn" });
+				await menuButton.trigger("click");
+
+				const menuItem = wrapper.findComponent(KebabMenuActionMoveUp);
+				await menuItem.trigger("click");
+
+				expect(wrapper.emitted()).toHaveProperty("move-up:edit");
+			});
+
+			it("should emit 'delete:element' event when delete menu item is clicked", async () => {
+				const { wrapper } = setupWrapper({
+					isEditMode: true,
+				});
+
+				const menuButton = wrapper
+					.findComponent({ name: "BoardMenu" })
+					.findComponent({ name: "VBtn" });
+				await menuButton.trigger("click");
+
+				const menuItem = wrapper.findComponent(KebabMenuActionDelete);
+				menuItem.vm.$emit("click", Promise.resolve(true));
+				await flushPromises();
+
+				expect(wrapper.emitted()).toHaveProperty("delete:element");
+			});
 		});
+
+		it.each(["up", "down"])(
+			"should 'emit move-keyboard:edit' when arrow key %s is pressed",
+			async (key) => {
+				const { wrapper } = setupWrapper({
+					isEditMode: true,
+					isNotFirstElement: true,
+					isNotLastElement: true,
+				});
+
+				const linkElement = wrapper.findComponent(
+					'[data-testid="board-folder-element"]'
+				);
+
+				await linkElement.trigger(`keydown.${key}`);
+
+				expect(wrapper.emitted()).toHaveProperty("move-keyboard:edit");
+			}
+		);
 	});
 });
