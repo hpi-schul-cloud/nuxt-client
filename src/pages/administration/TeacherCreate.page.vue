@@ -57,6 +57,11 @@ export default {
 			],
 		};
 	},
+	mounted() {
+		document.title = buildPageTitle(
+			this.$t("pages.administration.teachers.new.title")
+		);
+	},
 	methods: {
 		createTeacher(teacherData) {
 			this.error = false;
@@ -84,11 +89,6 @@ export default {
 					this.error = true;
 				});
 		},
-	},
-	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.administration.teachers.new.title")
-		);
 	},
 };
 </script>

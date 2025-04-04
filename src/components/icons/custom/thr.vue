@@ -5,7 +5,7 @@
 		viewBox="0 0 160 160"
 	>
 		<defs>
-			<filter x="-5.3%" y="-4.7%" width="110.7%" height="110.7%" id="a">
+			<filter id="a" x="-5.3%" y="-4.7%" width="110.7%" height="110.7%">
 				<feOffset dy="1" in="SourceAlpha" />
 				<feGaussianBlur stdDeviation="2.5" />
 				<feColorMatrix

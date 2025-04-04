@@ -1,10 +1,10 @@
 <template>
 	<VCard
+		ref="videoConferenceElement"
 		class="mb-4 video-conference-element"
 		data-testid="video-conference-element"
 		:class="{ 'd-none': isHidden }"
 		:variant="outlined"
-		ref="videoConferenceElement"
 		:ripple="false"
 		:tabindex="tabIndex"
 		target="_blank"

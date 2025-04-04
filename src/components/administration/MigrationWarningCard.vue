@@ -29,9 +29,9 @@
 					<ul>
 						<li
 							v-for="item in endWarningCardListItems"
+							:key="item.text"
 							:class="item.class"
 							class="ml-4 my-4"
-							:key="item.text"
 						>
 							{{ t(item.text) }}
 							<p v-if="item.warning" class="text-red mb-0">
@@ -126,7 +126,6 @@ const END_WARNING_CARD_LIST_ITEMS = [
 
 export default defineComponent({
 	name: "MigrationWarningCard",
-	emits: ["start", "set", "end"],
 	props: {
 		value: {
 			type: String,
@@ -140,6 +139,7 @@ export default defineComponent({
 			},
 		},
 	},
+	emits: ["start", "set", "end"],
 	setup(props) {
 		const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 		const type = toRef(props, "value");

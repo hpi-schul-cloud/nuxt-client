@@ -6,10 +6,16 @@ import { VBtn } from "vuetify/lib/components/index.mjs";
 import SpeedDialMenu from "./SpeedDialMenu.vue";
 import SpeedDialMenuAction from "./SpeedDialMenuAction.vue";
 
+// eslint-disable-next-line vue/one-component-per-file
 const componentWithFlatSlots: DefineComponent = defineComponent({
 	components: {
 		SpeedDialMenu,
 		SpeedDialMenuAction,
+	},
+	setup() {
+		return {
+			mdiClose,
+		};
 	},
 	template: `
   <template>
@@ -24,17 +30,25 @@ const componentWithFlatSlots: DefineComponent = defineComponent({
     <button id="clickOutside">Test</button>
   </template>
   `,
-	setup() {
-		return {
-			mdiClose,
-		};
-	},
 });
 
+// eslint-disable-next-line vue/one-component-per-file
 const componentWithIteratedSlots: DefineComponent = defineComponent({
 	components: {
 		SpeedDialMenu,
 		SpeedDialMenuAction,
+	},
+	setup() {
+		const actions = [
+			{ label: "Action1", icon: mdiClose, href: "example.com" },
+			{ label: "Action2", icon: mdiClose, to: "example.com" },
+			{ label: "Action3", icon: mdiClose },
+		];
+
+		return {
+			actions,
+			mdiClose,
+		};
 	},
 	template: `
   <template>
@@ -52,18 +66,6 @@ const componentWithIteratedSlots: DefineComponent = defineComponent({
     <button id="clickOutside">Test</button>
   </template>
   `,
-	setup() {
-		const actions = [
-			{ label: "Action1", icon: mdiClose, href: "example.com" },
-			{ label: "Action2", icon: mdiClose, to: "example.com" },
-			{ label: "Action3", icon: mdiClose },
-		];
-
-		return {
-			actions,
-			mdiClose,
-		};
-	},
 });
 
 describe("SpeedDialMenu", () => {

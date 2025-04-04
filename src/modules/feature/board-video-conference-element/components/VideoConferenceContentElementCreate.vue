@@ -12,7 +12,7 @@
 		</div>
 		<div class="text-list-board">
 			<VCardText>
-				<VForm @submit.prevent.stop="onSubmit" ref="form" validate-on="submit">
+				<VForm ref="form" validate-on="submit" @submit.prevent.stop="onSubmit">
 					<div class="d-flex flex-row">
 						<VTextarea
 							v-model="title"
@@ -22,15 +22,15 @@
 							:autofocus="true"
 							:auto-grow="true"
 							rows="1"
-							@keydown="onKeydown"
 							class="text"
 							data-testid="video-conference-element-title"
 							:placeholder="t('components.cardElement.videoConferenceElement')"
+							@keydown="onKeydown"
 						/>
 						<div class="align-self-center pl-2">
 							<button
-								type="submit"
 								ref="submit"
+								type="submit"
 								data-testid="save-video-conference-title-button"
 							>
 								<VIcon aria-hidden="true"> {{ mdiCheck }}</VIcon>

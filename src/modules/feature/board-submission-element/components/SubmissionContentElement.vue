@@ -1,11 +1,11 @@
 <template>
 	<v-card
+		ref="submissionContentElement"
 		class="mb-4"
 		data-testid="board-submission-element"
 		dense
 		elevation="0"
 		variant="outlined"
-		ref="submissionContentElement"
 		:ripple="false"
 		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
@@ -13,20 +13,20 @@
 		<div>
 			<SubmissionContentElementDisplay
 				v-if="!isEditMode"
-				:dueDate="modelValue.dueDate"
+				:due-date="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:studentSubmission="studentSubmission"
-				:isOverdue="isOverdue"
+				:student-submission="studentSubmission"
+				:is-overdue="isOverdue"
 				@update:completed="onUpdateCompleted"
 			/>
 			<SubmissionContentElementEdit
 				v-if="isEditMode"
-				:dueDate="modelValue.dueDate"
+				:due-date="modelValue.dueDate"
 				:loading="loading"
 				:submissions="submissions"
-				:isOverdue="isOverdue"
-				@update:dueDate="($event) => (modelValue.dueDate = $event)"
+				:is-overdue="isOverdue"
+				@update:due-date="($event) => (modelValue.dueDate = $event)"
 			>
 				<BoardMenu
 					:scope="BoardMenuScope.SUBMISSION_ELEMENT"
@@ -68,11 +68,6 @@ import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 
 export default defineComponent({
 	name: "SubmissionContentElement",
-	computed: {
-		BoardMenuScope() {
-			return BoardMenuScope;
-		},
-	},
 	components: {
 		BoardMenu,
 		KebabMenuActionMoveUp,
@@ -151,6 +146,11 @@ export default defineComponent({
 			onUpdateCompleted,
 			t,
 		};
+	},
+	computed: {
+		BoardMenuScope() {
+			return BoardMenuScope;
+		},
 	},
 });
 </script>

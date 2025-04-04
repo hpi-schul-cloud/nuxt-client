@@ -1,13 +1,13 @@
 <template>
 	<VAppBar flat :height="appBarHeight">
 		<CloudLogo v-if="!sidebarExpanded" class="mt-1" />
-		<template v-slot:prepend>
+		<template #prepend>
 			<VAppBarNavIcon
 				v-if="!sidebarExpanded"
 				:icon="mdiMenu"
-				@click="() => $emit('sidebar-toggled')"
 				size="default"
 				data-test-id="sidebar-toggle"
+				@click="() => $emit('sidebar-toggled')"
 			/>
 		</template>
 		<VSpacer />
@@ -72,6 +72,8 @@ defineProps({
 		required: true,
 	},
 });
+
+defineEmits(["sidebar-toggled"]);
 
 const statusAlertsModule = injectStrict(STATUS_ALERTS_MODULE_KEY);
 const authModule = injectStrict(AUTH_MODULE_KEY);

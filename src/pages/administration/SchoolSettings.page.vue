@@ -35,7 +35,7 @@
 						<div class="text-h4">
 							{{ $t("pages.administration.school.index.generalSettings") }}
 						</div>
-						<template v-slot:actions="{ expanded }">
+						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
@@ -55,7 +55,7 @@
 						<div class="text-h4">
 							{{ $t("common.words.privacyPolicy") }}
 						</div>
-						<template v-slot:actions="{ expanded }">
+						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
@@ -75,7 +75,7 @@
 						<div class="text-h4">
 							{{ $t("common.words.termsOfUse") }}
 						</div>
-						<template v-slot:actions="{ expanded }">
+						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
@@ -97,7 +97,7 @@
 								$t("components.administration.adminMigrationSection.headers")
 							}}
 						</div>
-						<template v-slot:actions="{ expanded }">
+						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
@@ -113,7 +113,7 @@
 						<div class="text-h4">
 							{{ $t("pages.administration.school.index.authSystems.title") }}
 						</div>
-						<template v-slot:actions="{ expanded }">
+						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>
@@ -135,7 +135,7 @@
 						<div class="text-h4">
 							{{ $t("components.administration.externalToolsSection.header") }}
 						</div>
-						<template v-slot:actions="{ expanded }">
+						<template #actions="{ expanded }">
 							<div class="v-expansion-panel-header__icon">
 								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 							</div>

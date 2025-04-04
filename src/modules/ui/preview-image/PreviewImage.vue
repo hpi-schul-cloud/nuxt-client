@@ -11,12 +11,12 @@
 		:alt="alt"
 		:cover="cover"
 		:aspect-ratio="aspectRatio"
-		@load="setWidth"
-		@error="setError"
 		:max-width="imageWidth"
 		:max-height="maxHeight"
+		@load="setWidth"
+		@error="setError"
 	>
-		<template v-slot:placeholder>
+		<template #placeholder>
 			<v-row class="fill-height ma-0" align="center" justify="center">
 				<VProgressCircular color="primary" indeterminate :size="36" />
 			</v-row>
@@ -31,15 +31,15 @@ import { WarningAlert } from "@ui-alert";
 
 export default defineComponent({
 	name: "PreviewImage",
+	components: { WarningAlert },
 	props: {
 		alt: { type: String, required: true },
 		src: { type: String, required: true },
 		cover: { type: Boolean, required: false, default: false },
-		aspectRatio: { type: Number, required: false },
-		position: { type: String, required: false },
-		maxHeight: { type: Number, required: false },
+		aspectRatio: { type: Number, required: false, default: undefined },
+		position: { type: String, required: false, default: undefined },
+		maxHeight: { type: Number, required: false, default: undefined },
 	},
-	components: { WarningAlert },
 	emits: ["error"],
 	setup(props, { emit }) {
 		const isError = ref(false);
