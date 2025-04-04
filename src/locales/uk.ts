@@ -507,6 +507,7 @@ export default {
 		"Формат відео не підтримується цим браузером / операційною системою.",
 	"components.cardElement.fileElement.virusDetected":
 		"Файл було заблоковано через підозру на вірус.",
+	"components.cardElement.folderElement": "Папка з файлами",
 	"components.cardElement.folderElement.untitled": "Папка без назви",
 	"components.cardElement.LinkElement": "Посилання",
 	"components.cardElement.LinkElement.label": "Вставити адресу посилання",

@@ -494,6 +494,7 @@ export default {
 		"The video format is not supported by this browser/operating system.",
 	"components.cardElement.fileElement.virusDetected":
 		"File has been locked due to a suspected virus.",
+	"components.cardElement.folderElement": "File folder",
 	"components.cardElement.folderElement.untitled": "Untitled folder",
 	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Insert link address",

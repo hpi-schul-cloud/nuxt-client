@@ -504,6 +504,7 @@ export default {
 		"El formato de vídeo no es compatible con este navegador / sistema operativo.",
 	"components.cardElement.fileElement.virusDetected":
 		"Se ha bloqueado el archivo debido a un virus sospechoso.",
+	"components.cardElement.folderElement": "Carpeta de archivos",
 	"components.cardElement.folderElement.untitled": "Carpeta sin título",
 	"components.cardElement.LinkElement": "Enlace",
 	"components.cardElement.LinkElement.label": "Inserte la dirección del enlace",
