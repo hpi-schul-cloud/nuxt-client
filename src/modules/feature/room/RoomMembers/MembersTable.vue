@@ -71,7 +71,7 @@
 						selectable: item.isSelectable ?? true,
 					})
 				"
-				:disabled="!item.isSelectable"
+				:disabled="item.isSelectable === false"
 				:aria-label="`${item.firstName}  ${item.lastName}`"
 				@click="
 					toggleSelect({
