@@ -14,6 +14,7 @@
 
 
 
+export * from './api/admin-api';
 export * from './api/file-api';
 export * from './api/file-config-api';
 
