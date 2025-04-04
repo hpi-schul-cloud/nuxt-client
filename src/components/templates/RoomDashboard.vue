@@ -10,7 +10,7 @@
 				:force-fallback="true"
 				ghost-class="opacity-0"
 				class="elements"
-				@update:modelValue="onSort"
+				@update:model-value="onSort"
 				@start="dragInProgress = true"
 				@end="endDragging"
 			>
@@ -166,7 +166,7 @@
 		<share-modal type="lessons" />
 		<share-modal type="tasks" />
 		<v-custom-dialog
-			v-model:isOpen="itemDelete.isOpen"
+			v-model:is-open="itemDelete.isOpen"
 			data-testid="delete-dialog-item"
 			:size="375"
 			has-buttons
@@ -214,6 +214,9 @@ export default {
 		vCustomEmptyState,
 		ShareModal,
 	},
+	inject: {
+		shareModule: { from: SHARE_MODULE_KEY },
+	},
 	props: {
 		roomDataObject: {
 			type: Object,
@@ -222,9 +225,7 @@ export default {
 		},
 		role: { type: String, required: true },
 	},
-	inject: {
-		shareModule: { from: SHARE_MODULE_KEY },
-	},
+	emits: ["copy-board-element"],
 	data() {
 		return {
 			cardTypes: BoardElementResponseTypeEnum,

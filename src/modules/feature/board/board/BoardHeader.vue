@@ -1,23 +1,23 @@
 <template>
 	<div class="d-flex align-items-center board-header">
 		<InlineEditInteractionHandler
-			:isEditMode="isEditMode"
+			:id="boardId"
+			:is-edit-mode="isEditMode"
+			tabindex="0"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
 			@keydown.enter="onStartEditMode"
-			tabindex="0"
-			:id="boardId"
 		>
 			<div ref="boardHeader">
 				<BoardAnyTitleInput
-					class="ml-n4"
 					ref="boardHeader"
+					class="ml-n4"
 					scope="board"
 					:value="boardTitle"
 					data-testid="board-title"
-					:isEditMode="isEditMode"
-					:isFocused="isFocusedById"
-					:maxLength="100"
+					:is-edit-mode="isEditMode"
+					:is-focused="isFocusedById"
+					:max-length="100"
 					:style="{ width: `${fieldWidth}px` }"
 					@update:value="updateBoardTitle"
 					@blur="onBoardTitleBlur"

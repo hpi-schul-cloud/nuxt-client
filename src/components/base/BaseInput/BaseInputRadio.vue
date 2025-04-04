@@ -48,6 +48,7 @@ export default {
 			},
 		},
 	},
+	emits: ["update:modelValue", "blur", "focus"],
 	data() {
 		// This solely exists to appear in the coverage report
 		return {};

@@ -39,14 +39,6 @@ export default defineComponent({
 	components: {
 		ckeditor: CKEditor.component,
 	},
-	emits: [
-		"ready",
-		"focus",
-		"update:value",
-		"blur",
-		"keyboard",
-		"keyboard:delete",
-	],
 	props: {
 		value: {
 			type: String,
@@ -73,6 +65,14 @@ export default defineComponent({
 			type: Boolean,
 		},
 	},
+	emits: [
+		"ready",
+		"focus",
+		"update:value",
+		"blur",
+		"keyboard",
+		"keyboard:delete",
+	],
 	setup(props, { emit }) {
 		const { t, locale } = useI18n();
 

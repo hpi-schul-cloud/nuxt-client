@@ -83,7 +83,7 @@
 							{{ $t("pages.content._id.collection.selectElements") }}
 						</h4>
 						<transition name="fade">
-							<div class="content__container" v-if="true">
+							<div v-if="true" class="content__container">
 								<lern-store-grid
 									v-if="elements.data && elements.data.length"
 									column-width="14rem"

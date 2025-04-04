@@ -4,7 +4,7 @@
 		role="menuitem"
 		:aria-label="ariaLabel"
 	>
-		<template v-slot:prepend>
+		<template #prepend>
 			<VIcon :icon="icon" data-testid="kebab-menu-action-icon" />
 		</template>
 		<VListItemTitle :data-testid="dataTestId">
@@ -18,7 +18,7 @@ import { PropType } from "vue";
 import { IconProps } from "vuetify";
 
 defineProps({
-	icon: { type: String as PropType<IconProps["icon"]> },
+	icon: { type: String as PropType<IconProps["icon"]>, default: undefined },
 	dataTestId: { type: String as PropType<string | null>, default: null },
 	ariaLabel: { type: String as PropType<string | null>, default: null },
 });

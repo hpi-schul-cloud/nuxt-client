@@ -33,23 +33,23 @@
 			</base-input>
 
 			<DataFilter
-				@update:filter="onUpdateFilter"
 				filter-for="teacher"
 				:class-names="classNameList"
+				@update:filter="onUpdateFilter"
 			/>
 
 			<backend-data-table
+				v-model:current-page="page"
+				v-model:rows-per-page="limit"
+				v-model:selected-row-ids="tableSelection"
+				v-model:selection-type="tableSelectionType"
 				:actions="filteredActions"
 				:columns="filteredColumns"
-				v-model:current-page="page"
 				:data="teachers"
 				:paginated="true"
 				:total="pagination.total"
-				v-model:rows-per-page="limit"
 				:rows-selectable="true"
 				track-by="_id"
-				v-model:selected-row-ids="tableSelection"
-				v-model:selection-type="tableSelectionType"
 				:sort-by="sortBy"
 				:sort-order="sortOrder"
 				data-testid="teachers_table"
@@ -454,6 +454,11 @@ export default {
 		this.find();
 		this.getClassNameList();
 	},
+	mounted() {
+		document.title = buildPageTitle(
+			this.$t("pages.administration.teachers.index.title")
+		);
+	},
 	methods: {
 		find() {
 			const query = {
@@ -657,11 +662,6 @@ export default {
 				[]
 			);
 		},
-	},
-	mounted() {
-		document.title = buildPageTitle(
-			this.$t("pages.administration.teachers.index.title")
-		);
 	},
 };
 </script>

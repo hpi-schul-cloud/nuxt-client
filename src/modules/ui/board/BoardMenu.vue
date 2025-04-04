@@ -1,18 +1,18 @@
 <template>
 	<VMenu location="bottom end" min-width="250">
-		<template v-slot:activator="{ props }">
+		<template #activator="{ props: menuProps }">
 			<VBtn
+				v-bind="menuProps"
 				:variant="variant"
 				:data-testid="dataTestid"
-				v-bind="props"
 				:ripple="false"
 				:class="{ 'bg-white': hasBackground }"
 				icon
+				size="36"
 				@click.stop.prevent="() => {}"
 				@dblclick.stop.prevent="() => {}"
 				@keydown.enter.stop
 				@keydown.left.right.up.down.stop="() => {}"
-				size="36"
 			>
 				<VIcon data-testid="board-menu-icon">{{ mdiDotsVertical }}</VIcon>
 				<span data-testid="board-menu-screen-reader-only" class="d-sr-only">

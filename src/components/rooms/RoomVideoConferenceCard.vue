@@ -32,9 +32,9 @@
 							class="my-auto"
 							variant="outlined"
 							:disabled="isRefreshing"
-							@click.stop="refreshVideoConferenceStatus"
 							data-testId="refresh-btn"
 							:aria-label="t('pages.videoConference.action.refresh')"
+							@click.stop="refreshVideoConferenceStatus"
 						>
 							<v-icon size="small" class="mr-1">{{ mdiReload }}</v-icon>
 							{{ t("pages.videoConference.action.refresh") }}
@@ -57,7 +57,6 @@ import { useI18n } from "vue-i18n";
 
 export default defineComponent({
 	components: { RoomBaseCard },
-	emits: ["click", "refresh"],
 	props: {
 		isRunning: {
 			type: Boolean,
@@ -76,6 +75,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
+	emits: ["click", "refresh"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 

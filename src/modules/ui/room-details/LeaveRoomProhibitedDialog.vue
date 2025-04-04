@@ -40,6 +40,8 @@ import { useDisplay } from "vuetify";
 import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 import { WarningAlert } from "@ui-alert";
 
+defineEmits(["update:modelValue"]);
+
 const { xs } = useDisplay();
 const { t } = useI18n();
 
@@ -48,6 +50,7 @@ const isOpen = defineModel({
 	required: true,
 });
 </script>
+
 <style lang="scss" scoped>
 .warning-text {
 	font-size: 16px;

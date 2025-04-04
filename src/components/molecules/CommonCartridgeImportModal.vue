@@ -3,9 +3,9 @@
 		ref="commonCartridgeImportModal"
 		v-model="isOpen"
 		:max-width="props.maxWidth"
+		data-testid="common-cartridge-import-modal"
 		@click:outside="onCancel()"
 		@keydown.esc="onCancel()"
-		data-testid="common-cartridge-import-modal"
 	>
 		<v-card :ripple="false">
 			<v-card-title>
@@ -40,9 +40,9 @@
 						type="submit"
 						variant="flat"
 						color="primary"
-						v-bind:disabled="importButtonDisabled"
-						v-on:click="onConfirm"
+						:disabled="importButtonDisabled"
 						data-testid="dialog-confirm-btn"
+						@click="onConfirm"
 					>
 						{{ $t("pages.rooms.ccImportCourse.confirm") }}
 					</v-btn>

@@ -1,15 +1,15 @@
 <template>
 	<v-card-actions class="py-2 px-4">
 		<FileAttributes
-			:fileSize="fileProperties.size"
-			:fileName="fileProperties.name"
+			:file-size="fileProperties.size"
+			:file-name="fileProperties.name"
 		/>
 
 		<v-spacer />
 
 		<FileDownload
-			:fileName="fileProperties.name"
-			:isDownloadAllowed="fileProperties.isDownloadAllowed"
+			:file-name="fileProperties.name"
+			:is-download-allowed="fileProperties.isDownloadAllowed"
 			:url="fileProperties.url"
 		/>
 	</v-card-actions>

@@ -3,8 +3,8 @@
 		ref="main"
 		:fab-items="getCurrentFabItems"
 		:breadcrumbs="breadcrumbs"
-		@onFabItemClick="fabItemClickHandler"
 		max-width="short"
+		@on-fab-item-click="fabItemClickHandler"
 	>
 		<template #header>
 			<div class="d-flex mt-3">
@@ -69,13 +69,13 @@
 			</div>
 		</template>
 		<component
-			v-if="getCurrentComponent"
 			:is="getCurrentComponent"
+			v-if="getCurrentComponent"
 			:room-data-object="roomData"
 			:role="dashBoardRole"
-			:roomId="courseId"
-			@copy-board-element="onCopyBoardElement"
+			:room-id="courseId"
 			data-testid="room-content"
+			@copy-board-element="onCopyBoardElement"
 		/>
 		<share-modal type="courses" />
 		<copy-result-modal
@@ -160,25 +160,6 @@ import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 
 export default defineComponent({
-	setup() {
-		const { t } = useI18n();
-		const { isLoadingDialogOpen } = useLoadingState(
-			t("components.molecules.copyResult.title.loading")
-		);
-
-		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } =
-			useCopy(isLoadingDialogOpen);
-
-		const { roomVariant } = storeToRefs(useRoomDetailsStore());
-
-		return {
-			mdiPlus,
-			copy,
-			backgroundCopyProcesses,
-			isCopyProcessInBackground,
-			roomVariant,
-		};
-	},
 	components: {
 		StartExistingCourseSyncDialog,
 		EndCourseSyncDialog,
@@ -197,6 +178,25 @@ export default defineComponent({
 		commonCartridgeExportModule: { from: COMMON_CARTRIDGE_EXPORT_MODULE_KEY },
 		courseRoomDetailsModule: { from: COURSE_ROOM_DETAILS_MODULE_KEY },
 		authModule: { from: AUTH_MODULE_KEY },
+	},
+	setup() {
+		const { t } = useI18n();
+		const { isLoadingDialogOpen } = useLoadingState(
+			t("components.molecules.copyResult.title.loading")
+		);
+
+		const { copy, backgroundCopyProcesses, isCopyProcessInBackground } =
+			useCopy(isLoadingDialogOpen);
+
+		const { roomVariant } = storeToRefs(useRoomDetailsStore());
+
+		return {
+			mdiPlus,
+			copy,
+			backgroundCopyProcesses,
+			isCopyProcessInBackground,
+			roomVariant,
+		};
 	},
 	data() {
 		return {
@@ -460,6 +460,15 @@ export default defineComponent({
 			return this.copyModule.getIsResultModalOpen;
 		},
 	},
+	watch: {
+		tabIndex(newIndex) {
+			if (newIndex >= 0 && newIndex < this.tabItems.length) {
+				this.$router.push({
+					query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
+				});
+			}
+		},
+	},
 	async created() {
 		await this.initialize(this.courseId, this.$route.query?.tab);
 	},
@@ -564,15 +573,6 @@ export default defineComponent({
 			};
 			const board = await this.courseRoomDetailsModule.createBoard(params);
 			await this.$router.push(`/boards/${board.id}`);
-		},
-	},
-	watch: {
-		tabIndex(newIndex) {
-			if (newIndex >= 0 && newIndex < this.tabItems.length) {
-				this.$router.push({
-					query: { ...this.$route.query, tab: this.tabItems[newIndex].name },
-				});
-			}
 		},
 	},
 });

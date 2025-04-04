@@ -31,6 +31,7 @@ export default defineComponent({
 	props: {
 		contentId: {
 			type: String,
+			default: undefined,
 		},
 	},
 	emits: ["load-error"],

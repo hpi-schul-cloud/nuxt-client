@@ -10,8 +10,8 @@
 		<VExpansionPanels v-else v-model="panel" class="rounded-0 rounded-b-sm">
 			<VExpansionPanel elevation="0">
 				<VExpansionPanelTitle
-					@dblclick.stop="() => {}"
 					class="pl-4 pr-4 rounded-te-0 rounded-ts-0"
+					@dblclick.stop="() => {}"
 				>
 					<v-chip
 						v-if="!isOverdue"
@@ -106,6 +106,7 @@ type StatusFilter = "all" | Status;
 
 export default defineComponent({
 	name: "SubmissionItemsTeacherDisplay",
+	components: { VExpansionPanelTitle },
 	props: {
 		loading: {
 			type: Boolean,
@@ -216,7 +217,6 @@ export default defineComponent({
 			getTabIndex,
 		};
 	},
-	components: { VExpansionPanelTitle },
 });
 </script>
 <style lang="scss" scoped>
