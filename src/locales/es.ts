@@ -543,6 +543,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Herramientas externas",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Archivo",
+	"components.elementTypeSelection.elements.folderElement":
+		"Carpeta de archivos",
 	"components.elementTypeSelection.elements.folderElement.subtitle":
 		"Carpeta de archivos",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":

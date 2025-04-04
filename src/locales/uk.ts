@@ -544,6 +544,7 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Зовнішні інструменти",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Файл",
+	"components.elementTypeSelection.elements.folderElement": "Папка з файлами",
 	"components.elementTypeSelection.elements.folderElement.subtitle":
 		"Папка з файлами",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":

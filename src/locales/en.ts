@@ -532,6 +532,7 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"External tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "File",
+	"components.elementTypeSelection.elements.folderElement": "File folder",
 	"components.elementTypeSelection.elements.folderElement.subtitle":
 		"File folder",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
