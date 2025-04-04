@@ -126,7 +126,7 @@ describe("@feature-editor/BalloonEditor", () => {
 		see CKEditor5 doc: https://ckeditor.com/docs/ckeditor5/latest/getting-started/installation/self-hosted/vuejs-v3.html#jest-testing
 		
 		Update of ckeditor to 42.x and above is currently not possible because the
-		@isaul32/ckeditor5-math package doen't support ckeditor new installation methods
+		@isaul32/ckeditor5-math package doesn't support ckeditor new installation methods
 		required by ckeditor 42.x and above.
 		see GitHub issue: https://github.com/isaul32/ckeditor5-math/issues/147
 		*/
