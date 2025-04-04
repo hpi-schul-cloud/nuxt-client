@@ -71,8 +71,8 @@ const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 	[BoardMenuScope.DELETED_ELEMENT]: "components.board.menu.deletedElement",
 	[BoardMenuScope.MEDIA_EXTERNAL_TOOL_ELEMENT]:
 		"components.board.menu.mediaExternalToolElement",
-	[BoardMenuScope.VIDEO_CONFERENCE_ELEMENT]:
-		"components.board.menu.videoConferenceElement",
+	[BoardMenuScope.AUDIO_RECORD_ELEMENT]:
+		"components.board.menu.audioRecordElement",
 };
 
 const boardMenuAriaLabel = computed(() => {
