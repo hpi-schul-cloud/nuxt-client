@@ -10,6 +10,7 @@ import {
 	mdiFormatText,
 	mdiLightbulbOnOutline,
 	mdiLink,
+	mdiMicrophone,
 	mdiPresentation,
 	mdiPuzzleOutline,
 	mdiTextBoxEditOutline,
@@ -180,6 +181,17 @@ export const useAddElementDialog = (
 			),
 			action: () => onElementClick(ContentElementType.VideoConference),
 			testId: "create-element-video-conference",
+		});
+	}
+
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_AUDIO_RECORDING_ENABLED) {
+		options.push({
+			icon: mdiMicrophone,
+			label: t(
+				"components.elementTypeSelection.elements.audioRecordElement.subtitle"
+			),
+			action: () => onElementClick(ContentElementType.AudioRecord),
+			testId: "create-element-audio-record-container",
 		});
 	}
 

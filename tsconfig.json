@@ -26,7 +26,9 @@
 			"@data-provisioning-options": ["src/modules/data/provisioning-options"],
 			"@data-room": ["src/modules/data/room"],
 			"@data-license": ["src/modules/data/license"],
-			"@feature-board-audio-element": ["src/modules/feature/board-audio-element"],
+			"@feature-board-audio-record-element": [
+				"src/modules/feature/board-audio-record-element"
+			],
 			"@feature-board-file-element": ["src/modules/feature/board-file-element"],
 			"@feature-board-submission-element": [
 				"src/modules/feature/board-submission-element"

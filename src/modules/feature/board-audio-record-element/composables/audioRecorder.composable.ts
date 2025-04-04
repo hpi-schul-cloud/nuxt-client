@@ -8,7 +8,7 @@ export enum RecordingStateEnum {
 
 export const useAudioRecorder = () => {
 	const mediaRecorder: Ref<MediaRecorder | undefined> = ref();
-	let chunks: Ref<Blob[]> = ref([]);
+	const chunks: Ref<Blob[]> = ref([]);
 
 	const isSupportedByBrowser = (): boolean => {
 		return !!navigator?.mediaDevices?.getUserMedia;

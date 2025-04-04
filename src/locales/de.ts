@@ -214,6 +214,13 @@ export default {
 		"Audio Schieberegler für Fortschritt",
 	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
 	"component.cardElement.fileElement.audioPlayer.speed": "Geschwindigkeitsmenü",
+	"component.cardElement.audioRecordElement.audioPlayer.pause": "Anhalten",
+	"component.cardElement.audioRecordElement.audioPlayer.play": "Abspielen",
+	"component.cardElement.audioRecordElement.audioPlayer.slider":
+		"Audio Schieberegler für Fortschritt",
+	"component.cardElement.audioRecordElement.audioPlayer.speed.normal": "Normal",
+	"component.cardElement.audioRecordElement.audioPlayer.speed":
+		"Geschwindigkeitsmenü",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -413,6 +420,7 @@ export default {
 	"components.board.menu.externalToolElement": "Externes-Tool-Einstellungen",
 	"components.board.menu.mediaExternalToolElement": "Medium-Einstellungen",
 	"components.board.menu.fileElement": "Datei-Einstellungen",
+	"components.board.menu.audioRecordElement": "Medium-Einstellungen",
 	"components.board.menu.linkElement": "Link-Einstellungen",
 	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
 	"components.board.menu.videoConferenceElement":
@@ -474,6 +482,30 @@ export default {
 		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.externalToolElement": "Externes Tool",
 	"components.cardElement.mediaExternalToolElement": "Medium",
+	"components.cardElement.audioRecordElement": "Datei",
+	"components.cardElement.audioRecordElement.altDescription":
+		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
+	"components.cardElement.audioRecordElement.alternativeText": "Alternativtext",
+	"components.cardElement.audioRecordElement.audioFormatError":
+		"Das Audioformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
+	"components.cardElement.audioRecordElement.awaitingScan":
+		"Vorschau wird nach erfolgreicher Virenprüfung angezeigt. Aktuell wird die Datei gescannt.",
+	"components.cardElement.audioRecordElement.caption": "Beschreibung",
+	"components.cardElement.audioRecordElement.emptyAlt":
+		"Hier ist ein Bild mit folgendem Namen",
+	"components.cardElement.audioRecordElement.pdfAlt": "Vorschaubild für ",
+	"components.cardElement.audioRecordElement.previewError":
+		"Laden der Vorschau fehlgeschlagen.",
+	"components.cardElement.audioRecordElement.reloadStatus":
+		"Status aktualisieren",
+	"components.cardElement.audioRecordElement.scanError":
+		"Fehler bei der Virenprüfung. Vorschau kann nicht erstellt werden. Datei bitte erneut hochladen.",
+	"components.cardElement.audioRecordElement.scanWontCheck":
+		"Aufgrund der Größe kann keine Vorschau generiert werden.",
+	"components.cardElement.audioRecordElement.videoFormatError":
+		"Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
+	"components.cardElement.audioRecordElement.virusDetected":
+		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
 	"components.cardElement.fileElement": "Datei",
 	"components.cardElement.fileElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
@@ -535,6 +567,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
+	"components.elementTypeSelection.elements.audioRecordElement.subtitle":
+		"Audio Aufnahme",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
 		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",

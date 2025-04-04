@@ -124,8 +124,8 @@ module.exports = {
 			),
 			"@data-room": getDir("src/modules/data/room"),
 			"@data-license": getDir("src/modules/data/license"),
-			"@feature-board-audio-element": getDir(
-				"src/modules/feature/board-audio-element"
+			"@feature-board-audio-record-element": getDir(
+				"src/modules/feature/board-audio-record-element"
 			),
 			"@feature-board-file-element": getDir(
 				"src/modules/feature/board-file-element"
