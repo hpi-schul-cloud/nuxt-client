@@ -1843,6 +1843,7 @@ export default {
 	"pages.rooms.members.error.remove": "Error al eliminar participantes.",
 	"pages.rooms.members.error.updateRole":
 		"El cambio de autorizaciones en la sala ha fallado.",
+	"pages.rooms.members.filter": "Filtrar lista por término",
 	"pages.rooms.members.infoText":
 		"Añadir miembros a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "más información",
@@ -1852,6 +1853,8 @@ export default {
 		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Menú de acciones para {memberFullName}",
+	"pages.rooms.members.actionMenu.selectedMembers":
+		"Menú de acciones para {count} participantes seleccionados",
 	"pages.rooms.members.changePermission":
 		"Cambiar las autorizaciones en la sala",
 	"pages.rooms.members.changePermission.ariaLabel":
@@ -1873,6 +1876,10 @@ export default {
 	"pages.rooms.members.roomPermissions.owner": "Propietario",
 	"pages.rooms.members.roomPermissions.editor": "Editar",
 	"pages.rooms.members.roomPermissions.viewer": "Leer",
+	"pages.rooms.members.select.all":
+		"Seleccionar a todos los participantes de la sala",
+	"pages.rooms.members.select.none":
+		"Deseleccionar a todos los participantes de la sala",
 	"pages.rooms.members.tableHeader.roomRole": "Autorizaciones de sala",
 	"pages.rooms.members.tableHeader.schoolRole": "Rol en la escuela",
 	"pages.rooms.members.tableHeader.actions": "Acciones",

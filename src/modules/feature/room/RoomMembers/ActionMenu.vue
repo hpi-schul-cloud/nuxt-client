@@ -14,6 +14,11 @@
 					density="comfortable"
 					elevation="0"
 					data-testid="action-menu-button"
+					:aria-label="
+						t('pages.rooms.members.actionMenu.selectedMembers', {
+							count: selectedIds.length,
+						})
+					"
 				>
 					{{ t("pages.rooms.members.tableHeader.actions") }}
 				</VBtn>

@@ -30,6 +30,7 @@
 			:class="{ 'order-1 w-100 mt-1': isExtraSmallDisplay }"
 			:label="t('common.labels.search')"
 			:prepend-inner-icon="mdiMagnify"
+			:aria-label="t('pages.rooms.members.filter')"
 		/>
 	</div>
 
@@ -52,6 +53,38 @@
 		:sort-desc-icon="mdiMenuUp"
 		@update:current-items="onUpdateFilter"
 	>
+		<template
+			#[`header.data-table-select`]="{ someSelected, allSelected, selectAll }"
+		>
+			<VCheckboxBtn
+				:model-value="allSelected"
+				:indeterminate="someSelected && !allSelected"
+				:aria-label="
+					allSelected
+						? t('pages.rooms.members.select.none')
+						: t('pages.rooms.members.select.all')
+				"
+				@click="selectAll(!allSelected)"
+			/>
+		</template>
+		<template #[`item.data-table-select`]="{ item, isSelected, toggleSelect }">
+			<VCheckboxBtn
+				:model-value="
+					isSelected({
+						value: item.userId,
+						selectable: item.isSelectable ?? true,
+					})
+				"
+				:disabled="!item.isSelectable"
+				:aria-label="`${item.firstName}  ${item.lastName}`"
+				@click="
+					toggleSelect({
+						value: item.userId,
+						selectable: item.isSelectable ?? true,
+					})
+				"
+			/>
+		</template>
 		<template v-if="isVisibleActionColumn" #[`item.actions`]="{ item, index }">
 			<KebabMenu
 				v-if="isVisibleActionInRow(item)"
