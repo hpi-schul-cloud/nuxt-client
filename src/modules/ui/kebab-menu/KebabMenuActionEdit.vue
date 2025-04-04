@@ -13,6 +13,6 @@ import { mdiPencilOutline } from "@icons/material";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 defineProps({
-	text: { type: String, required: false, default: "" },
+	text: { type: String, required: false, default: undefined },
 });
 </script>
