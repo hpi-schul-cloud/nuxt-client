@@ -554,7 +554,6 @@ describe("ElementTypeSelection Composable", () => {
 				const { askType } = useAddElementDialog(addElementMock, cardId);
 
 				askType();
-				console.log(elementTypeOptions);
 				const action = elementTypeOptions.value[8].action;
 				action();
 
