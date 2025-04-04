@@ -1,15 +1,15 @@
 <template>
 	<div>
 		<video
+			ref="videoRef"
 			controls
 			controlsList="nodownload"
-			ref="videoRef"
 			class="video"
 			loading="lazy"
 			data-testid="video-thumbnail-in-card"
 			:src="src"
 			:aria-label="name"
-			v-on:error="onError"
+			@error="onError"
 		/>
 		<ContentElementBar class="menu">
 			<template v-if="showMenu" #menu><slot /></template>
@@ -24,12 +24,12 @@ import { FileAlert } from "../../../shared/types/FileAlert.enum";
 
 export default defineComponent({
 	name: "VideoDisplay",
+	components: { ContentElementBar },
 	props: {
 		src: { type: String, required: true },
 		name: { type: String, required: true },
 		showMenu: { type: Boolean, required: true },
 	},
-	components: { ContentElementBar },
 	emits: ["error"],
 	setup(props, { emit }) {
 		const onError = () => {

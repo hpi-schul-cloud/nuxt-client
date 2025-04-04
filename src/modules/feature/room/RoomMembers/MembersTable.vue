@@ -11,8 +11,8 @@
 			v-if="selectedUserIds.length"
 			class="multi-action-menu"
 			:class="{ 'order-2': isExtraSmallDisplay }"
-			:selectedIds="selectedUserIds"
-			:isVisibleChangeRoleButton="isVisibleChangeRoleButton"
+			:selected-ids="selectedUserIds"
+			:is-visible-change-role-button="isVisibleChangeRoleButton"
 			@remove:selected="onRemoveMembers"
 			@reset:selected="onResetSelectedMembers"
 			@change:role="onChangePermission"
@@ -52,7 +52,7 @@
 		:sort-desc-icon="mdiMenuUp"
 		@update:current-items="onUpdateFilter"
 	>
-		<template #[`item.actions`]="{ item, index }" v-if="isVisibleActionColumn">
+		<template v-if="isVisibleActionColumn" #[`item.actions`]="{ item, index }">
 			<KebabMenu
 				v-if="isVisibleActionInRow(item)"
 				:data-testid="`kebab-menu-${index}`"
@@ -60,8 +60,8 @@
 			>
 				<KebabMenuActionChangePermission
 					v-if="isVisibleChangeRoleButton"
-					@click="onChangePermission([item.userId])"
 					:aria-label="getAriaLabel(item, 'changeRole')"
+					@click="onChangePermission([item.userId])"
 				/>
 				<KebabMenuActionRemoveMember
 					v-if="isVisibleRemoveMemberButton(item)"

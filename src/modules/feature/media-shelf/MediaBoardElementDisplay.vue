@@ -72,6 +72,7 @@ import { MediaElementDisplay } from "./data";
 defineProps({
 	element: {
 		type: Object as PropType<MediaElementDisplay>,
+		default: undefined,
 	},
 	isUnavailable: {
 		type: Boolean,

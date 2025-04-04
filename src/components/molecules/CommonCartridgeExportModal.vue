@@ -3,9 +3,9 @@
 		ref="exportDialog"
 		v-model="isExportModalOpen"
 		:max-width="560"
+		data-testid="export-dialog"
 		@click:outside="onCloseDialog"
 		@keydown.esc="onCloseDialog"
-		data-testid="export-dialog"
 	>
 		<v-card :ripple="false">
 			<v-card-title>
@@ -18,14 +18,14 @@
 					<div class="">
 						<v-radio-group v-model="radios">
 							<v-radio
-								:label="$t('pages.room.modal.course.export.version1.1')"
 								id="1.1.0"
+								:label="$t('pages.room.modal.course.export.version1.1')"
 								value="1.1.0"
 								color="primary"
 							/>
 							<v-radio
-								:label="$t('pages.room.modal.course.export.version1.3')"
 								id="1.3.0"
+								:label="$t('pages.room.modal.course.export.version1.3')"
 								value="1.3.0"
 								color="primary"
 							/>
@@ -46,56 +46,56 @@
 					</div>
 					<v-container class="pt-0">
 						<v-checkbox
-							class="check-options"
 							v-model="allTasksSelected"
+							class="check-options"
 							data-testid="all-tasks-checkbox"
 							:indeterminate="someTasksSelected"
 							:disabled="allTasks.length === 0"
-							@click="toggleAllTasks"
 							:label="$t('pages.room.modal.course.export.options.tasks')"
 							density="compact"
+							@click="toggleAllTasks"
 						/>
 						<v-checkbox
-							class="check-options ml-8"
 							v-for="item in allTasks"
-							v-model="item.isSelected"
 							:key="item.id"
+							v-model="item.isSelected"
+							class="check-options ml-8"
 							:label="item.title"
 							density="compact"
 						/>
 						<v-checkbox
-							class="check-options"
 							v-model="allTopicsSelected"
+							class="check-options"
 							data-testid="all-topics-checkbox"
 							:indeterminate="someTopicsSelected"
 							:disabled="allTopics.length === 0"
-							@click="toggleAllTopics"
 							:label="$t('pages.room.modal.course.export.options.topics')"
 							density="compact"
+							@click="toggleAllTopics"
 						/>
 						<v-checkbox
-							class="check-options ml-8"
 							v-for="item in allTopics"
-							v-model="item.isSelected"
 							:key="item.id"
+							v-model="item.isSelected"
+							class="check-options ml-8"
 							:label="item.title"
 							density="compact"
 						/>
 						<v-checkbox
-							class="check-options"
 							v-model="allColumnBoardsSelected"
+							class="check-options"
 							data-testid="all-column-boards-checkbox"
 							:indeterminate="someColumnBoardsSelected"
 							:disabled="allColumnBoards.length === 0"
-							@click="toggleAllColumnBoards"
 							:label="$t('pages.room.modal.course.export.options.columnBoards')"
 							density="compact"
+							@click="toggleAllColumnBoards"
 						/>
 						<v-checkbox
-							class="check-options ml-8"
 							v-for="item in allColumnBoards"
-							v-model="item.isSelected"
 							:key="item.id"
+							v-model="item.isSelected"
+							class="check-options ml-8"
 							:label="item.title"
 							density="compact"
 						/>
@@ -143,9 +143,9 @@
 					<v-btn
 						v-if="step === 1"
 						data-testid="dialog-export-btn"
-						@click="onExport"
 						color="primary"
 						variant="flat"
+						@click="onExport"
 					>
 						{{ $t("common.actions.export") }}
 					</v-btn>

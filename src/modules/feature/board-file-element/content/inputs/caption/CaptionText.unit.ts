@@ -2,7 +2,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { mount, shallowMount } from "@vue/test-utils";
+import { mount } from "@vue/test-utils";
 import { nextTick } from "vue";
 import CaptionText from "./CaptionText.vue";
 
@@ -11,7 +11,7 @@ describe("CaptionText", () => {
 		const caption = "test text";
 
 		const wrapper = mount(CaptionText, {
-			props: { text: caption },
+			props: { text: caption, isEditMode: true },
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
 		});
 
@@ -21,24 +21,8 @@ describe("CaptionText", () => {
 		};
 	};
 
-	const shallowMountSetup = () => {
-		const caption = "test text";
-
-		const wrapper = shallowMount(CaptionText, {
-			props: { caption },
-			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
-			},
-		});
-
-		return {
-			wrapper,
-			caption,
-		};
-	};
-
 	it("should be found in dom", () => {
-		const { wrapper } = shallowMountSetup();
+		const { wrapper } = mountSetup();
 
 		const fileContentElement = wrapper.findComponent(CaptionText);
 
@@ -58,12 +42,14 @@ describe("CaptionText", () => {
 	});
 
 	it("should have a label translation", () => {
-		const { wrapper } = shallowMountSetup();
+		const { wrapper } = mountSetup();
 
-		const textarea = wrapper.find("v-textarea-stub");
+		const textarea = wrapper.findComponent({ name: "v-textarea" });
 
-		const label = textarea.attributes("label");
+		const label = textarea.find("label");
 
-		expect(label).toBe("components.cardElement.fileElement.caption");
+		expect(label.text()).toContain(
+			"components.cardElement.fileElement.caption"
+		);
 	});
 });

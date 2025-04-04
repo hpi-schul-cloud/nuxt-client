@@ -20,10 +20,10 @@
 <script>
 import BaseInputDefault, {
 	supportedTypes as defaultInputTypes,
-} from "./BaseInputDefault";
+} from "./BaseInputDefault.vue";
 import BaseInputCheckbox, {
 	supportedTypes as checkboxInputTypes,
-} from "./BaseInputCheckbox";
+} from "./BaseInputCheckbox.vue";
 import { logger } from "@util-logger";
 
 const componentDictionary = {};
@@ -61,6 +61,7 @@ export default {
 			default: () => [],
 		},
 	},
+	emits: ["update:modelValue", "blur", "focus"],
 	data() {
 		return {
 			validationObject: null,
@@ -107,7 +108,6 @@ export default {
 			}
 
 			this.$emit("update:modelValue", event);
-			// this.$emit("input", event);
 		},
 		handleBlur(event) {
 			if (this.validationModel) {

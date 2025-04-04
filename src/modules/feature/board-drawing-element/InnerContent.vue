@@ -1,6 +1,6 @@
 <template>
 	<ContentElementBar
-		:hasGreyBackground="true"
+		:has-grey-background="true"
 		:icon="mdiPresentation"
 		:has-row-style="isSmallOrLargerListBoard"
 	>

@@ -93,6 +93,22 @@ import { useI18n } from "vue-i18n";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 
 export default defineComponent({
+	components: { vCustomEmptyState, TasksList, vCustomDoublePanels, ShareModal },
+	inject: {
+		tasksModule: "tasksModule",
+		finishedTasksModule: "finishedTasksModule",
+		shareModule: { from: SHARE_MODULE_KEY },
+	},
+	props: {
+		emptyState: {
+			type: Object,
+			required: true,
+		},
+		tabRoutes: {
+			type: Array,
+			required: true,
+		},
+	},
 	setup() {
 		const { t } = useI18n();
 		const { isLoadingDialogOpen } = useLoadingState(
@@ -104,22 +120,6 @@ export default defineComponent({
 		return {
 			copy,
 		};
-	},
-	components: { vCustomEmptyState, TasksList, vCustomDoublePanels, ShareModal },
-	props: {
-		emptyState: {
-			type: Object,
-			required: true,
-		},
-		tabRoutes: {
-			type: Array,
-			required: true,
-		},
-	},
-	inject: {
-		tasksModule: "tasksModule",
-		finishedTasksModule: "finishedTasksModule",
-		shareModule: { from: SHARE_MODULE_KEY },
 	},
 	computed: {
 		openTasks() {
