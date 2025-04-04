@@ -184,16 +184,16 @@ export const useAddElementDialog = (
 		});
 	}
 
-	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_AUDIO_RECORDING_ENABLED) {
-		options.push({
-			icon: mdiMicrophone,
-			label: t(
-				"components.elementTypeSelection.elements.audioRecordElement.subtitle"
-			),
-			action: () => onElementClick(ContentElementType.AudioRecord),
-			testId: "create-element-audio-record-container",
-		});
-	}
+	//if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_AUDIO_RECORDING_ENABLED) {
+	options.push({
+		icon: mdiMicrophone,
+		label: t(
+			"components.elementTypeSelection.elements.audioRecordElement.subtitle"
+		),
+		action: () => onElementClick(ContentElementType.AudioRecord),
+		testId: "create-element-audio-record-container",
+	});
+	//}
 
 	const askType = () => {
 		elementTypeOptions.value = options;
