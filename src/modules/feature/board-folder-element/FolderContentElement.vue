@@ -39,21 +39,20 @@
 </template>
 
 <script setup lang="ts">
-import { FileFolderElementResponse } from "@/serverApi/v3";
+import { FileFolderElement } from "@/types/board/ContentElement";
 import { useBoardFocusHandler } from "@data-board";
-import { BoardMenu, BoardMenuScope } from "@ui-board";
+import { mdiFolderOpenOutline } from "@icons/material";
+import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
-import { mdiFolderOpenOutline } from "@icons/material";
-import { ContentElementBar } from "@ui-board";
 import { PropType, ref, toRef } from "vue";
 
 const props = defineProps({
 	element: {
-		type: Object as PropType<FileFolderElementResponse>,
+		type: Object as PropType<FileFolderElement>,
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },

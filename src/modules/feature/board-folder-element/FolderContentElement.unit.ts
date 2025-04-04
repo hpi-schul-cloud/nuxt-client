@@ -1,4 +1,5 @@
-import { ContentElementType, FileFolderElementResponse } from "@/serverApi/v3";
+import { ContentElementType } from "@/serverApi/v3";
+import { FileFolderElement } from "@/types/board/ContentElement";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -13,7 +14,7 @@ jest.mock("@data-board", () => ({
 }));
 
 describe("FolderContentElement", () => {
-	const mockElement: FileFolderElementResponse = {
+	const mockElement: FileFolderElement = {
 		id: "123",
 		type: ContentElementType.FileFolder,
 		content: {
@@ -29,7 +30,7 @@ describe("FolderContentElement", () => {
 		isEditMode?: boolean;
 		isNotFirstElement?: boolean;
 		isNotLastElement?: boolean;
-		element?: FileFolderElementResponse;
+		element?: FileFolderElement;
 	}) => {
 		const wrapper = mount(FolderContentElement, {
 			global: { plugins: [createTestingVuetify(), createTestingI18n()] },
