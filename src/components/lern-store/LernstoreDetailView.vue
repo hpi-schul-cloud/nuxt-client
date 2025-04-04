@@ -313,6 +313,17 @@ export default {
 	unmounted() {
 		window.removeEventListener("resize", this.handleResize);
 	},
+	mounted() {
+		const pageTitle = this.isInline
+			? {
+					title: this.$t("pages.content.page.window.title", {
+						instance: this.$theme.name,
+					}),
+				}
+			: { title: this.$t("common.words.lernstore") };
+
+		document.title = buildPageTitle(pageTitle);
+	},
 	methods: {
 		async goToMerlinContent(merlinReference) {
 			const requestUrl = `/v1/edu-sharing-merlinToken/?merlinReference=${merlinReference}`;
@@ -335,17 +346,6 @@ export default {
 				window.close();
 			}
 		},
-	},
-	mounted() {
-		const pageTitle = this.isInline
-			? {
-					title: this.$t("pages.content.page.window.title", {
-						instance: this.$theme.name,
-					}),
-				}
-			: { title: this.$t("common.words.lernstore") };
-
-		document.title = buildPageTitle(pageTitle);
 	},
 };
 </script>

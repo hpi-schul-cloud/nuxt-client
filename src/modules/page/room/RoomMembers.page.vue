@@ -1,11 +1,11 @@
 <template>
 	<DefaultWireframe
+		ref="wireframe"
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
 		:fixed-header="fixedHeaderOnMobile.enabled"
 		@fab:clicked="onFabClick"
-		ref="wireframe"
 	>
 		<template #header>
 			<div class="d-flex align-items-center">
@@ -40,7 +40,7 @@
 				v-if="!isLoading && currentUser"
 				v-model:selected-user-ids="selectedIds"
 				:members="memberList"
-				:currentUser="currentUser"
+				:current-user="currentUser"
 				:fixed-position="fixedHeaderOnMobile"
 				@remove:members="onRemoveMembers"
 				@change:permission="onOpenRoleDialog"
@@ -56,7 +56,7 @@
 			@keydown.esc="onDialogClose"
 		>
 			<AddMembers
-				:memberList="potentialRoomMembers"
+				:member-list="potentialRoomMembers"
 				:schools="schools"
 				@close="onDialogClose"
 				@add:members="onAddMembers"

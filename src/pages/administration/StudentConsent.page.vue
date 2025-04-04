@@ -44,11 +44,11 @@
 				{{ $t("pages.administration.students.consent.steps.complete.info") }}
 
 				<backend-data-table
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
 					:data="tableData"
 					track-by="_id"
-					v-model:sort-by="sortBy"
-					v-model:sort-order="sortOrder"
 					data-testid="consent_table_1"
 					@update:sort="onUpdateSort"
 				>
@@ -56,12 +56,12 @@
 						<base-input
 							:error="birthdayWarning && !slotProps.data ? inputError : null"
 							class="date base-input"
-							:modelValue="inputDateFromDeUTC(slotProps.data)"
+							:model-value="inputDateFromDeUTC(slotProps.data)"
 							type="date"
 							label=""
 							data-testid="birthday-input"
 							:birth-date="true"
-							@update:modelValue="
+							@update:model-value="
 								inputDate({
 									id: tableData[slotProps.rowindex]._id,
 									birthDate: inputDateFormat($event),
@@ -71,12 +71,12 @@
 					</template>
 					<template #datacolumn-password="slotProps">
 						<base-input
-							:modelValue="slotProps.data"
+							:model-value="slotProps.data"
 							type="text"
 							label=""
 							data-testid="password-input"
 							class="base-input"
-							@update:modelValue="
+							@update:model-value="
 								inputPass({
 									id: tableData[slotProps.rowindex]._id,
 									pass: $event,
@@ -116,12 +116,12 @@
 					{{ $t("pages.administration.students.consent.steps.register.info") }}
 				</p>
 				<backend-data-table
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
 					:data="tableData"
 					track-by="id"
 					:paginated="false"
-					v-model:sort-by="sortBy"
-					v-model:sort-order="sortOrder"
 					data-testid="consent_table_2"
 					@update:sort="onUpdateSort"
 				>
@@ -188,12 +188,12 @@
 				</h4>
 				{{ $t("pages.administration.students.consent.steps.download.info") }}
 				<backend-data-table
+					v-model:sort-by="sortBy"
+					v-model:sort-order="sortOrder"
 					:columns="tableColumns"
 					:data="tableData"
 					track-by="_id"
 					:paginated="false"
-					v-model:sort-by="sortBy"
-					v-model:sort-order="sortOrder"
 					data-testid="consent_table_3"
 					@update:sort="onUpdateSort"
 				>

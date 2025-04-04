@@ -8,7 +8,7 @@
 		max-width="400"
 		min-width="200"
 		border="start"
-		@update:modelValue="closeNotification"
+		@update:model-value="closeNotification"
 	>
 		<div class="alert-text mr-2" data-testId="alert-text">
 			{{ text }}

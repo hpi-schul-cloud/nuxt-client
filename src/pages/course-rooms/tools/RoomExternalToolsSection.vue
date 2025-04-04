@@ -2,16 +2,16 @@
 	<div>
 		<room-external-tool-card
 			v-for="(tool, index) in tools"
-			size="360"
 			:key="index"
+			size="360"
 			class="mb-4"
 			:tool="tool"
 			:can-edit="canEdit"
+			:data-testid="`external-tool-card-${tool.name}`"
 			@delete="onOpenDeleteDialog"
 			@edit="onEditTool"
 			@error="onError"
 			@refresh="$emit('refresh')"
-			:data-testid="`external-tool-card-${tool.name}`"
 		/>
 
 		<RoomExternalToolsErrorDialog
@@ -24,7 +24,7 @@
 		<v-custom-dialog
 			:is-open="isDeleteDialogOpen"
 			:has-buttons="true"
-			confirmBtnTitleKey="common.actions.remove"
+			confirm-btn-title-key="common.actions.remove"
 			:buttons="['cancel', 'confirm']"
 			max-width="360"
 			data-testId="delete-dialog"

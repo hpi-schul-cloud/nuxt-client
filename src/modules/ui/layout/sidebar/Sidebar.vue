@@ -5,9 +5,9 @@
 				<VBtn
 					class="ml-1"
 					:icon="mdiMenuOpen"
-					@click="() => $emit('update:modelValue', false)"
 					size="default"
 					flat
+					@click="() => $emit('update:modelValue', false)"
 				/>
 				<CloudLogo class="mt-1" />
 			</div>
@@ -54,6 +54,8 @@ import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
 import { mdiMenuOpen } from "@icons/material";
+
+defineEmits(["update:modelValue"]);
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);

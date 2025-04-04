@@ -1,6 +1,6 @@
 <template>
 	<VTooltip location="bottom" :text="$t('components.board.draftChip.tooltip')">
-		<template v-slot:activator="{ props }">
+		<template #activator="{ props }">
 			<VChip
 				v-bind="props"
 				size="small"

@@ -1,24 +1,24 @@
 <template>
 	<div
-		class="board-column-header d-flex flex-wrap mb-4 mt-2"
 		ref="columnHeader"
+		class="board-column-header d-flex flex-wrap mb-4 mt-2"
 	>
 		<div class="flex-1-0">
 			<BoardColumnInteractionHandler
-				:isEditMode="isEditMode"
+				:id="columnId"
+				:is-edit-mode="isEditMode"
 				@start-edit-mode="onStartEditMode"
 				@end-edit-mode="onEndEditMode"
 				@move:column-keyboard="onMoveColumnKeyboard"
-				:id="columnId"
 			>
 				<BoardAnyTitleInput
 					:value="title.trim()"
 					:data-testid="`column-title-${index}`"
 					scope="column"
-					:isEditMode="isEditMode"
+					:is-edit-mode="isEditMode"
 					:placeholder="titlePlaceholder"
 					class="w-100"
-					:isFocused="isFocusedById"
+					:is-focused="isFocusedById"
 					@update:value="onUpdateTitle"
 					@blur="onEndEditMode"
 				/>
@@ -80,7 +80,7 @@ import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 
 const props = defineProps({
 	columnId: { type: String, required: true },
-	index: { type: Number },
+	index: { type: Number, required: true },
 	isListBoard: { type: Boolean, required: true },
 	isNotFirstColumn: { type: Boolean, requried: false },
 	isNotLastColumn: { type: Boolean, requried: false },

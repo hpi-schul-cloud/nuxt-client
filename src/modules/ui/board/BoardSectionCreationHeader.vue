@@ -1,5 +1,5 @@
 <template>
-	<div class="mb-4" ref="headerRef">
+	<div ref="headerRef" class="mb-4">
 		<div class="d-flex flex-column justify-space-between align-stretch pt-4">
 			<VBtn
 				variant="text"

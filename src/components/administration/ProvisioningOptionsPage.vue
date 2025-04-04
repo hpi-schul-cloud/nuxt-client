@@ -8,11 +8,11 @@
 			<div class="d-flex flex-column ga-9">
 				<div>
 					<VCheckboxBtn
+						v-model="provisioningOptions.class"
 						color="primary"
 						:label="
 							$t('components.administration.provisioningOptions.class.label')
 						"
-						v-model="provisioningOptions.class"
 						data-testid="checkbox-option-class"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
@@ -29,11 +29,11 @@
 
 				<div>
 					<VCheckboxBtn
+						v-model="provisioningOptions.course"
 						color="primary"
 						:label="
 							$t('components.administration.provisioningOptions.course.label')
 						"
-						v-model="provisioningOptions.course"
 						data-testid="checkbox-option-course"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
@@ -50,13 +50,13 @@
 
 				<div>
 					<VCheckboxBtn
+						v-model="provisioningOptions.others"
 						color="primary"
 						:label="
 							$t(
 								'components.administration.provisioningOptions.otherGroups.label'
 							)
 						"
-						v-model="provisioningOptions.others"
 						data-testid="checkbox-option-others"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
@@ -73,13 +73,13 @@
 
 				<div v-if="isMediaLicensingEnabled">
 					<VCheckboxBtn
+						v-model="provisioningOptions.schoolExternalTools"
 						color="primary"
 						:label="
 							$t(
 								'components.administration.provisioningOptions.schoolExternalTools.label'
 							)
 						"
-						v-model="provisioningOptions.schoolExternalTools"
 						data-testid="checkbox-option-school-external-tools"
 					/>
 					<div class="ml-10 text-body-2 text-medium-emphasis">
@@ -111,8 +111,8 @@
 				data-testid="provisioning-options-save-button"
 				color="primary"
 				variant="flat"
-				@click="onSaveButtonClick"
 				:disabled="isLoading"
+				@click="onSaveButtonClick"
 			>
 				{{ t("common.actions.save") }}
 			</v-btn>

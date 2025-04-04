@@ -99,18 +99,11 @@ import { News } from "@/store/types/news";
 import { Dayjs } from "dayjs";
 
 export default defineComponent({
-	setup() {
-		const { validateOnOpeningTag } = useOpeningTagValidator();
-
-		return {
-			validateOnOpeningTag,
-		};
-	},
-	inheritAttrs: false,
 	components: {
 		FormActions,
 		ClassicEditor,
 	},
+	inheritAttrs: false,
 	props: {
 		news: {
 			type: Object as PropType<News>,
@@ -123,6 +116,14 @@ export default defineComponent({
 				},
 			}),
 		},
+	},
+	emits: ["update:news", "save", "delete", "cancel"],
+	setup() {
+		const { validateOnOpeningTag } = useOpeningTagValidator();
+
+		return {
+			validateOnOpeningTag,
+		};
 	},
 	data(): {
 		data: {

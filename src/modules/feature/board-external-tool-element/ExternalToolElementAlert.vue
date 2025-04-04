@@ -52,6 +52,7 @@ export default defineComponent({
 		},
 		error: {
 			type: Object as PropType<BusinessError>,
+			default: undefined,
 		},
 		toolStatus: {
 			type: Object as PropType<ContextExternalToolConfigurationStatus>,

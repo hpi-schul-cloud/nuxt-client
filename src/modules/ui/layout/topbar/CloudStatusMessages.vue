@@ -8,7 +8,7 @@
 	>
 		<template v-for="(item, index) in statusAlerts" :key="index">
 			<VListItem :data-test-id="`alert-item-${index}`" class="alert-item">
-				<template v-slot:prepend>
+				<template #prepend>
 					<VIcon :color="getIcon(item.status).color" class="item-icon">
 						{{ getIcon(item.status).icon }}
 					</VIcon>

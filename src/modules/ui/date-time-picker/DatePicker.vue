@@ -4,18 +4,18 @@
 		transition="scale-transition"
 		:close-on-content-click="false"
 	>
-		<template #activator="{ props }">
+		<template #activator="{ props: menuProps }">
 			<v-text-field
-				v-bind="props"
+				v-bind="menuProps"
 				v-bind.attr="$attrs"
-				v-model="dateString"
 				ref="inputField"
+				v-model="dateString"
+				v-date-input-mask
 				:append-inner-icon="mdiCalendar"
 				:label="label"
 				:aria-label="ariaLabel"
 				:placeholder="t('common.placeholder.dateformat')"
 				:error-messages="errorMessages"
-				v-date-input-mask
 				@update:model-value="validate"
 				@keydown.space="showDateDialog = true"
 				@keydown.prevent.enter="showDateDialog = true"
@@ -32,7 +32,7 @@
 			hide-header
 			show-adjacent-months
 			elevation="6"
-			@update:modelValue="closeAndEmit"
+			@update:model-value="closeAndEmit"
 		/>
 	</v-menu>
 </template>
@@ -54,12 +54,12 @@ defineOptions({
 });
 
 const props = defineProps({
-	date: { type: String }, // ISO 8601 string
+	date: { type: String, default: undefined }, // ISO 8601 string
 	label: { type: String, default: "" },
 	ariaLabel: { type: String, default: "" },
 	required: { type: Boolean },
-	minDate: { type: String },
-	maxDate: { type: String },
+	minDate: { type: String, default: undefined },
+	maxDate: { type: String, default: undefined },
 	errors: { type: Array as PropType<ErrorObject[]>, default: () => [] },
 });
 const emit = defineEmits(["update:date", "error"]);

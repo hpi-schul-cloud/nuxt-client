@@ -2,8 +2,8 @@
 	<DefaultWireframe
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
-		:fabItems="fabItems"
-		@onFabItemClick="fabItemClickHandler"
+		:fab-items="fabItems"
+		@on-fab-item-click="fabItemClickHandler"
 	>
 		<template #header>
 			<div class="d-flex align-items-center">
@@ -11,7 +11,7 @@
 					{{ roomTitle }}
 				</h1>
 				<RoomMenu
-					:roomName="room?.name"
+					:room-name="room?.name"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
 					@room:delete="onDelete"

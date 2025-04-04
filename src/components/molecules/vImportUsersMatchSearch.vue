@@ -115,12 +115,12 @@
 						</VListItem>
 						<VAutocomplete
 							v-model="selectedItem"
+							v-model:search="searchUser"
 							class="px-4 mt-2"
 							item-value="userId"
 							:item-title="(user) => `${user.firstName} ${user.lastName}`"
 							:items="entries"
 							:loading="loading"
-							v-model:search="searchUser"
 							hide-no-data
 							hide-selected
 							:prepend-inner-icon="mdiAccountSearch"
@@ -136,8 +136,8 @@
 							variant="solo"
 							rounded
 						>
-							<template #item="{ item, props }">
-								<VListItem style="max-width: 450px" v-bind="props">
+							<template #item="{ item, props: itemProps }">
+								<VListItem style="max-width: 450px" v-bind="itemProps">
 									<VListItemSubtitle>
 										{{ mapRoleNames(item.raw.roleNames) }}
 									</VListItemSubtitle>
