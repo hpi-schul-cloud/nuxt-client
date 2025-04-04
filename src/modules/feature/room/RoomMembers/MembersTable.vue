@@ -59,11 +59,7 @@
 			<VCheckboxBtn
 				:model-value="allSelected"
 				:indeterminate="someSelected && !allSelected"
-				:aria-label="
-					allSelected
-						? t('pages.rooms.members.select.none')
-						: t('pages.rooms.members.select.all')
-				"
+				:aria-label="t('pages.rooms.members.select.all')"
 				@click="selectAll(!allSelected)"
 			/>
 		</template>

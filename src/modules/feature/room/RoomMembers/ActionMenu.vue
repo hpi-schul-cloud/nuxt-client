@@ -39,7 +39,7 @@
 			size="x-small"
 			variant="text"
 			:icon="mdiClose"
-			:aria-label="t('pages.rooms.members.remove.ariaLabel')"
+			:aria-label="t('pages.rooms.members.select.none')"
 			@click="onReset"
 		/>
 	</div>
