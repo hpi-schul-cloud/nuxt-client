@@ -60,7 +60,7 @@
 		"@types/jest": "^29.5.12",
 		"@types/katex": "^0.16.7",
 		"@types/lodash": "^4.17.0",
-		"@types/object-hash": "^2.2.1",
+		"@types/object-hash": "^3.0.6",
 		"@types/sortablejs": "^1.15.7",
 		"@types/webpack-env": "^1.18.5",
 		"@vue/eslint-config-typescript": "^14.4.0",
