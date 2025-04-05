@@ -43,11 +43,11 @@ import { computed, ComputedRef, PropType, Ref, ref } from "vue";
 
 const props = defineProps({
 	configId: {
-		type: String,
-		default: "",
+		type: [String, null],
+		default: null,
 	},
 	contextId: {
-		type: [String, null],
+		type: String,
 		required: true,
 	},
 	contextType: {

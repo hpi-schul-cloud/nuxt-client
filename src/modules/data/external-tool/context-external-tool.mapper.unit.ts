@@ -56,7 +56,7 @@ describe("ContextExternalToolMapper", () => {
 				};
 			};
 
-			it("should map the tool name to display name", () => {
+			it("should not set a display name", () => {
 				const { template, contextId, contextType } = setup();
 
 				const result =
@@ -69,7 +69,7 @@ describe("ContextExternalToolMapper", () => {
 
 				expect(result).toEqual(
 					expect.objectContaining<Partial<ContextExternalToolSave>>({
-						displayName: template.name,
+						displayName: undefined,
 					})
 				);
 			});

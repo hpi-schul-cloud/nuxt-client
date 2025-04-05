@@ -60,7 +60,7 @@
 		</h2>
 		<slot name="aboveParameters" :selected-template="selectedTemplate" />
 		<external-tool-config-settings
-			v-if="hasSelectedTemplateParameters"
+			v-if="selectedTemplate && hasSelectedTemplateParameters"
 			v-model="parameterConfiguration"
 			:template="selectedTemplate"
 			data-testid="configuration-field"
@@ -99,7 +99,7 @@
 	</div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends ExternalToolConfigurationTemplate">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import {
@@ -119,7 +119,6 @@ import {
 	computed,
 	ComputedRef,
 	nextTick,
-	PropType,
 	Ref,
 	ref,
 	toRef,
@@ -138,39 +137,19 @@ const { t } = useI18n();
 
 const slots = useSlots();
 
-const props = defineProps({
-	templates: {
-		type: Array as PropType<Array<ExternalToolConfigurationTemplate>>,
-		required: true,
-	},
-	configuration: {
-		type: Object as PropType<ConfigurationTypes>,
-		default: null,
-	},
-	isPreferredTool: {
-		type: Boolean,
-	},
-	error: {
-		type: Object as PropType<BusinessError>,
-		default: null,
-	},
-	loading: {
-		type: Boolean,
-	},
-	displaySettingsTitle: {
-		type: Boolean,
-		default: true,
-	},
-});
+const { displaySettingsTitle = true, ...props } = defineProps<{
+	templates: T[];
+	configuration?: ConfigurationTypes;
+	isPreferredTool?: boolean;
+	error?: BusinessError;
+	loading?: boolean;
+	displaySettingsTitle?: boolean;
+}>();
 
 const emit = defineEmits<{
 	(e: "cancel"): void;
-	(
-		e: "save",
-		template: ExternalToolConfigurationTemplate | undefined,
-		values: ToolParameterEntry[]
-	): void;
-	(e: "change", value: ExternalToolConfigurationTemplate | undefined): void;
+	(e: "save", template: T, values: ToolParameterEntry[]): void;
+	(e: "change", value: T | undefined): void;
 }>();
 
 const { getBusinessErrorTranslationKey } = useExternalToolMappings();
@@ -182,10 +161,7 @@ const {
 	extractQueryParameters,
 } = useExternalToolUrlInsertion();
 
-const configurationTemplates: Ref<ExternalToolConfigurationTemplate[]> = toRef(
-	props,
-	"templates"
-);
+const configurationTemplates: Ref<T[]> = toRef(props, "templates");
 
 const loadedConfiguration: Ref<ConfigurationTypes | undefined> = toRef(
 	props,
@@ -210,8 +186,7 @@ const hasSelectedTemplateParameters: ComputedRef<boolean> = computed(
 		)
 );
 
-const selectedTemplate: Ref<ExternalToolConfigurationTemplate | undefined> =
-	ref();
+const selectedTemplate: Ref<T | undefined> = ref();
 
 const parametersValid: ComputedRef<boolean> = computed(
 	() => !!selectedTemplate.value
@@ -237,9 +212,7 @@ const onSave = async () => {
 	}
 };
 
-const mapValidParameterEntries = (
-	template: ExternalToolConfigurationTemplate
-) => {
+const mapValidParameterEntries = (template: T) => {
 	const parameterEntries: ToolParameterEntry[] = template.parameters
 		.map(
 			(parameter: ToolParameter, index: number): ToolParameterEntry => ({
@@ -356,10 +329,7 @@ watch(loadedConfiguration, (newConfig) => {
 	}
 });
 
-const filterToolNameOrUrl = (
-	query: string,
-	item: ExternalToolConfigurationTemplate | undefined
-): boolean => {
+const filterToolNameOrUrl = (query: string, item: T | undefined): boolean => {
 	if (!item) {
 		return false;
 	}
