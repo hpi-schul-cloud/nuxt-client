@@ -10,7 +10,7 @@
 				{{ t("pages.administration.classes.index.title") }}
 			</h1>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs class="tabs-max-width" grow v-model="activeTab">
+				<v-tabs v-model="activeTab" class="tabs-max-width" grow>
 					<v-tab value="next" data-testid="admin-class-next-year-tab">
 						<span>{{ nextYear }}</span>
 					</v-tab>
@@ -24,9 +24,9 @@
 			</div>
 		</template>
 		<v-data-table-server
+			v-model:items-per-page="pagination.limit"
 			:headers="headers"
 			:items="classes"
-			v-model:items-per-page="pagination.limit"
 			:items-length="pagination.total"
 			:page="page"
 			:items-per-page-text="footerProps.itemsPerPageText"
@@ -35,8 +35,8 @@
 			data-testid="admin-class-table"
 			class="elevation-1"
 			:no-data-text="t('common.nodata')"
-			@update:sortBy="onUpdateSortBy"
-			@update:itemsPerPage="onUpdateItemsPerPage"
+			@update:sort-by="onUpdateSortBy"
+			@update:items-per-page="onUpdateItemsPerPage"
 			@update:page="onUpdateCurrentPage"
 		>
 			<template #[`item.name`]="{ item }">
@@ -99,9 +99,9 @@
 						data-testid="class-table-delete-btn"
 						variant="outlined"
 						size="small"
-						@click="onClickDeleteIcon(item)"
 						class="mx-1 px-1"
 						min-width="0"
+						@click="onClickDeleteIcon(item)"
 					>
 						<v-icon>{{ mdiTrashCanOutline }}</v-icon>
 					</v-btn>
@@ -156,7 +156,7 @@
 			max-width="360"
 			data-testid="delete-dialog"
 			has-buttons
-			confirmBtnTitleKey="common.actions.delete"
+			confirm-btn-title-key="common.actions.delete"
 			:buttons="['cancel', 'confirm']"
 			@dialog-closed="onCancelClassDeletion"
 			@dialog-confirmed="onConfirmClassDeletion"

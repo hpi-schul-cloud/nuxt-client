@@ -24,11 +24,11 @@
 				lines="two"
 				class="mb-6"
 				data-testid="terms-item"
-				@click="downloadTerms"
 				:class="{ 'item-no-action': !termsOfUse }"
 				:ripple="termsOfUse !== null"
+				@click="downloadTerms"
 			>
-				<template v-slot:prepend>
+				<template #prepend>
 					<v-icon>$file_pdf_outline</v-icon>
 				</template>
 				<v-list-item-title class="text-body-1 mb-2">
@@ -48,7 +48,7 @@
 						}}
 					</template>
 				</v-list-item-subtitle>
-				<template v-slot:append>
+				<template #append>
 					<v-list-item-action
 						v-if="hasSchoolEditPermission"
 						data-testid="edit-button"
@@ -80,17 +80,17 @@
 			<school-terms-form-dialog
 				v-if="hasSchoolEditPermission"
 				:is-open="isSchoolTermsFormDialogOpen"
-				@close="closeDialog"
 				data-testid="form-dialog"
+				@close="closeDialog"
 			/>
 			<v-custom-dialog
-				v-model:isOpen="isDeleteTermsDialogOpen"
+				v-model:is-open="isDeleteTermsDialogOpen"
 				:size="430"
 				has-buttons
 				confirm-btn-title-key="common.actions.delete"
 				:confirm-btn-icon="mdiTrashCanOutline"
-				@dialog-confirmed="deleteFile"
 				data-testid="delete-dialog"
+				@dialog-confirmed="deleteFile"
 			>
 				<template #title>
 					<h4 class="text-h4 mt-0">

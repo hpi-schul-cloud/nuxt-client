@@ -7,10 +7,10 @@ describe(useTouchDetection.name, () => {
 		let composable: ReturnType<typeof useTouchDetection> | undefined;
 
 		const TestComponent = defineComponent({
-			template: "<div/>",
 			setup() {
 				composable = useTouchDetection();
 			},
+			template: "<div/>",
 		});
 
 		const wrapper = mount(TestComponent, {

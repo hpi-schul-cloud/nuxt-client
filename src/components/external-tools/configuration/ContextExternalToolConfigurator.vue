@@ -2,7 +2,7 @@
 	<external-tool-configurator
 		:templates="availableTools"
 		:configuration="configuration"
-		:isPreferredTool="isPreferredTool"
+		:is-preferred-tool="isPreferredTool"
 		:error="apiError"
 		:loading="loading"
 		:display-settings-title="displaySettingsTitle"
@@ -42,7 +42,10 @@ import {
 import { computed, ComputedRef, PropType, Ref, ref } from "vue";
 
 const props = defineProps({
-	configId: String,
+	configId: {
+		type: String,
+		default: "",
+	},
 	contextId: {
 		type: [String, null],
 		required: true,

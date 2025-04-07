@@ -2,11 +2,11 @@
 	<v-custom-dialog
 		:is-open="isOpen"
 		:size="425"
-		@dialog-canceled="cancel"
 		has-buttons
 		confirm-btn-title-key="pages.administration.school.index.schoolPolicy.replace"
 		:confirm-btn-icon="mdiFileReplaceOutline"
 		:confirm-btn-disabled="!isValid"
+		@dialog-canceled="cancel"
 		@dialog-confirmed="submit"
 	>
 		<template #title>
@@ -26,8 +26,8 @@
 					</div>
 				</v-alert>
 				<v-file-input
-					v-model="file"
 					ref="input-file"
+					v-model="file"
 					class="input-file mb-2"
 					data-testid="input-file"
 					density="compact"
@@ -45,7 +45,7 @@
 					:rules="[rules.required, rules.mustBePdf, rules.maxSize]"
 					@blur="onBlur"
 				>
-					<template v-slot:append-inner>
+					<template #append-inner>
 						<v-icon
 							v-if="!isValid && isTouched"
 							color="rgba(var(--v-theme-error))"
@@ -80,13 +80,13 @@ export default defineComponent({
 	components: {
 		vCustomDialog,
 	},
-	emits: ["close"],
 	props: {
 		isOpen: {
 			type: Boolean,
 			required: true,
 		},
 	},
+	emits: ["close"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 		const privacyPolicyModule = injectStrict(PRIVACY_POLICY_MODULE_KEY);

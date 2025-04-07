@@ -1,12 +1,12 @@
 <template>
-	<div :class="columnClasses" :key="renderKey" class="d-flex flex-column">
+	<div :key="renderKey" :class="columnClasses" class="d-flex flex-column">
 		<BoardColumnHeader
-			:columnId="column.id"
+			:column-id="column.id"
 			:title="column.title"
 			:index="index"
-			:isListBoard="isListBoard"
-			:isNotFirstColumn="isNotFirstColumn"
-			:isNotLastColumn="isNotLastColumn"
+			:is-list-board="isListBoard"
+			:is-not-first-column="isNotFirstColumn"
+			:is-not-last-column="isNotLastColumn"
 			@delete:column="onColumnDelete"
 			@move:column-down="onMoveColumnDown"
 			@move:column-left="onMoveColumnLeft"
@@ -45,7 +45,7 @@
 				@start="onDragStart"
 				@end="onDragEnd"
 			>
-				<template #item="{ element, index }">
+				<template #item="{ element, index: elementIndex }">
 					<CardHost
 						v-if="element"
 						:data-card-id="element.cardId"
@@ -56,10 +56,10 @@
 						}"
 						:card-id="element.cardId"
 						:height="element.height"
-						:row-index="index"
+						:row-index="elementIndex"
 						:column-index="reactiveIndex"
 						@move:card-keyboard="
-							onMoveCardKeyboard(index, element.cardId, $event)
+							onMoveCardKeyboard(elementIndex, element.cardId, $event)
 						"
 						@delete:card="onDeleteCard"
 						@reload:board="onReloadBoard"
@@ -68,8 +68,8 @@
 			</Sortable>
 			<BoardAddCardButton
 				v-if="showAddButton"
-				@add-card="onCreateCard"
 				:data-testid="`column-${index}-add-card-btn`"
+				@add-card="onCreateCard"
 			/>
 		</div>
 	</div>
@@ -129,6 +129,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const boardStore = useBoardStore();
 		const reactiveIndex = toRef(props, "index");
+
 		const colWidth = ref<number>(400);
 		const {
 			hasEditPermission,

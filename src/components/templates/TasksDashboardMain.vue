@@ -70,8 +70,8 @@
 				:aria-label="$t('pages.tasks.labels.filter')"
 				:no-data-text="$t('pages.tasks.labels.noCoursesAvailable')"
 				:disabled="isCourseFilterDisabled"
-				@update:model-value="setCourseFilters"
 				class="mb-4"
+				@update:model-value="setCourseFilters"
 			/>
 			<div v-else class="course-filter-placeholder" />
 			<tasks-dashboard-student
@@ -125,6 +125,12 @@ export default {
 		TasksDashboardTeacher,
 		CopyResultModal,
 	},
+	inject: {
+		tasksModule: "tasksModule",
+		copyModule: { from: COPY_MODULE_KEY },
+		finishedTasksModule: "finishedTasksModule",
+		loadingStateModule: "loadingStateModule",
+	},
 	props: {
 		role: {
 			type: String,
@@ -137,12 +143,6 @@ export default {
 			mdiPlus,
 			mdiCheck,
 		};
-	},
-	inject: {
-		tasksModule: "tasksModule",
-		copyModule: { from: COPY_MODULE_KEY },
-		finishedTasksModule: "finishedTasksModule",
-		loadingStateModule: "loadingStateModule",
 	},
 	computed: {
 		hasTasks() {

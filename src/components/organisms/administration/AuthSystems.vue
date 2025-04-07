@@ -17,8 +17,8 @@
 				<v-btn
 					icon
 					variant="text"
-					@click="copyLoginLink(0)"
 					:aria-label="$t('common.actions.shareLink')"
+					@click="copyLoginLink(0)"
 				>
 					<v-icon>
 						{{ getCopyStatus(0) ? iconMdiCheckCircle : iconMdiContentCopy }}
@@ -65,8 +65,8 @@
 									<v-btn
 										icon
 										variant="text"
-										@click="copyLoginLink(system.id)"
 										:aria-label="$t('common.actions.shareLink')"
+										@click="copyLoginLink(system.id)"
 									>
 										<v-icon
 											>{{
@@ -117,7 +117,7 @@
 			{{ $t("pages.administration.school.index.authSystems.addLdap") }}
 		</v-btn>
 		<v-custom-dialog
-			v-model:isOpen="confirmDeleteDialog.isOpen"
+			v-model:is-open="confirmDeleteDialog.isOpen"
 			class="custom-dialog"
 			:size="375"
 			has-buttons
