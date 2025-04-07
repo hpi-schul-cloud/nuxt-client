@@ -25,7 +25,6 @@ const boardPermissions = (): BoardPermissionChecks => {
 		const schoolRolePermissions = authModule?.getUserPermissions || [];
 		// boardPermissions are upper case, schoolRolePermissions are lower case
 		const permissions = [...boardPermissions, ...schoolRolePermissions];
-		console.log(permissions);
 
 		hasMovePermission.value = permissions.includes(Permission.BoardEdit);
 		hasCreateCardPermission.value = permissions.includes(Permission.BoardEdit);
