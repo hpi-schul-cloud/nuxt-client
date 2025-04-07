@@ -1,6 +1,17 @@
 declare module "@hpi-schul-cloud/ckeditor" {
 	import { Editor } from "@ckeditor/ckeditor5-core";
 
-	export class BalloonEditor extends Editor {}
-	export class ClassicEditor extends Editor {}
+	interface CKEditorConstructor {
+		create(...args: unknown[]): Promise<unknown>;
+	}
+
+	export class BalloonEditor extends Editor implements CKEditorConstructor {
+		static create(...args: unknown[]): Promise<BalloonEditor>;
+	}
+	export class ClassicEditor extends Editor implements CKEditorConstructor {
+		static create(...args: unknown[]): Promise<ClassicEditor>;
+	}
+	export class InlineEditor extends Editor implements CKEditorConstructor {
+		static create(...args: unknown[]): Promise<InlineEditor>;
+	}
 }
