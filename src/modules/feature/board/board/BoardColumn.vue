@@ -129,6 +129,7 @@ export default defineComponent({
 	setup(props, { emit }) {
 		const boardStore = useBoardStore();
 		const reactiveIndex = toRef(props, "index");
+
 		const colWidth = ref<number>(400);
 		const {
 			hasEditPermission,
