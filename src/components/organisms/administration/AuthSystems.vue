@@ -53,8 +53,8 @@
 						<td v-if="customLoginLinkEnabled">
 							<v-text-field
 								v-if="isLoginSystem(system)"
-								data-testid="system-table-login-link"
 								:id="`school-login-link-${system.id}`"
+								data-testid="system-table-login-link"
 								:model-value="generateLoginLink(system)"
 								class="school-login-link"
 								:color="getCopyStatus(system.id) ? 'success' : 'primary'"
