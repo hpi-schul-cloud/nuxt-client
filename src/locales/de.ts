@@ -1826,7 +1826,7 @@ export default {
 		"Löschen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.members.error.updateRole":
 		"Die Änderung der Raumberechtigung ist fehlgeschlagen.",
-	"pages.rooms.members.filter": "Liste nach Begriff filtern",
+	"pages.rooms.members.filter": "Tabelle durchsuchen/filtern",
 	"pages.rooms.members.infoText":
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",

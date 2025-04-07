@@ -1843,7 +1843,7 @@ export default {
 	"pages.rooms.members.error.remove": "Error al eliminar participantes.",
 	"pages.rooms.members.error.updateRole":
 		"El cambio de autorizaciones en la sala ha fallado.",
-	"pages.rooms.members.filter": "Filtrar lista por término",
+	"pages.rooms.members.filter": "Tabla de búsqueda/filtro",
 	"pages.rooms.members.infoText":
 		"Añadir miembros a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "más información",

@@ -1793,7 +1793,7 @@ export default {
 	"pages.rooms.members.error.remove": "Deleting participants failed.",
 	"pages.rooms.members.error.updateRole":
 		"The change of the room permission has failed.",
-	"pages.rooms.members.filter": "Filter list by term",
+	"pages.rooms.members.filter": "Search/filter table",
 	"pages.rooms.members.infoText":
 		"Add members to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "more information",

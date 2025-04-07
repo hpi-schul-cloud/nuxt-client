@@ -1822,7 +1822,7 @@ export default {
 	"pages.rooms.members.error.add": "Не вдалося додати учасників.",
 	"pages.rooms.members.error.remove": "Не вдалося видалити учасників.",
 	"pages.rooms.members.error.updateRole": "Не вдалося змінити дозвіл кімнати.",
-	"pages.rooms.members.filter": "Відфільтрувати список за терміном",
+	"pages.rooms.members.filter": "Таблиця пошуку/фільтрації",
 	"pages.rooms.members.infoText":
 		"Додайте члени до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
