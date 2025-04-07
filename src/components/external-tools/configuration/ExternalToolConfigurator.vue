@@ -319,16 +319,6 @@ const pasteFromClipboard = async () => {
 	}
 };
 
-if (loadedConfiguration.value) {
-	populateEditMode(loadedConfiguration.value);
-}
-
-watch(loadedConfiguration, (newConfig) => {
-	if (newConfig) {
-		populateEditMode(newConfig);
-	}
-});
-
 const filterToolNameOrUrl = (query: string, item: T | undefined): boolean => {
 	if (!item) {
 		return false;
@@ -341,9 +331,23 @@ const filterToolNameOrUrl = (query: string, item: T | undefined): boolean => {
 	return isMatchItemName || isMatchItemUrl;
 };
 
-watch(configurationTemplates, () => {
-	if (props.isPreferredTool) {
-		selectedTemplate.value = props.templates[0];
-	}
-});
+watch(
+	loadedConfiguration,
+	(newConfig) => {
+		if (newConfig) {
+			populateEditMode(newConfig);
+		}
+	},
+	{ immediate: true }
+);
+
+watch(
+	configurationTemplates,
+	() => {
+		if (props.isPreferredTool && props.templates.length > 0) {
+			selectedTemplate.value = props.templates[0];
+		}
+	},
+	{ immediate: true }
+);
 </script>

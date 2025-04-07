@@ -1,10 +1,10 @@
-import type { CreateElementRequestPayload } from "@data-board";
 import {
 	BoardFeature,
 	ContentElementType,
 	PreferredToolResponse,
 } from "@/serverApi/v3";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import type { CreateElementRequestPayload } from "@data-board";
 import { useBoardFeatures, useCardStore } from "@data-board";
 import {
 	mdiFormatText,
@@ -17,12 +17,12 @@ import {
 	mdiVideoOutline,
 } from "@icons/material";
 import { useBoardNotifier } from "@util-board";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	ElementTypeSelectionOptions,
 	useSharedElementTypeSelection,
 } from "./SharedElementTypeSelection.composable";
-import { computed } from "vue";
 
 type CreateElementRequestFn = (payload: CreateElementRequestPayload) => void;
 
@@ -43,8 +43,6 @@ export const useAddElementDialog = (
 
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
-
-	const preferredTools = cardStore.getPreferredTools();
 
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
@@ -152,9 +150,9 @@ export const useAddElementDialog = (
 
 	if (
 		envConfigModule.getEnv.FEATURE_PREFERRED_CTL_TOOLS_ENABLED &&
-		preferredTools
+		cardStore.preferredTools
 	) {
-		preferredTools.forEach((tool: PreferredToolResponse) => {
+		cardStore.preferredTools.forEach((tool: PreferredToolResponse) => {
 			if (!tool.iconName) {
 				tool.iconName = "mdiPuzzleOutline";
 			}

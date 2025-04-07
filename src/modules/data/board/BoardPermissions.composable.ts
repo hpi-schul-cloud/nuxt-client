@@ -1,15 +1,15 @@
+import { Permission, RoleName } from "@/serverApi/v3";
 import { authModule } from "@/store";
 import { BoardPermissionChecks } from "@/types/board/Permissions";
 import { createTestableSharedComposable } from "@/utils/create-shared-composable";
 import { storeToRefs } from "pinia";
-import { ref, toValue, watchEffect } from "vue";
+import { Ref, ref, toValue, watchEffect } from "vue";
 import { useBoardStore } from "./Board.store";
-import { Permission, RoleName } from "@/serverApi/v3";
 
 const boardPermissions = (): BoardPermissionChecks => {
-	const userRoles = authModule?.getUserRoles || [];
-	const isTeacher = ref(userRoles.includes(RoleName.Teacher));
-	const isStudent = ref(userRoles.includes(RoleName.Student));
+	const userRoles: string[] = authModule?.getUserRoles || [];
+	const isTeacher: Ref<boolean> = ref(userRoles.includes(RoleName.Teacher));
+	const isStudent: Ref<boolean> = ref(userRoles.includes(RoleName.Student));
 
 	const { board } = storeToRefs(useBoardStore());
 
@@ -23,15 +23,18 @@ const boardPermissions = (): BoardPermissionChecks => {
 	watchEffect(() => {
 		const boardPermissions = toValue(board)?.permissions ?? [];
 		const schoolRolePermissions = authModule?.getUserPermissions || [];
+		// boardPermissions are upper case, schoolRolePermissions are lower case
 		const permissions = [...boardPermissions, ...schoolRolePermissions];
+		console.log(permissions);
 
 		hasMovePermission.value = permissions.includes(Permission.BoardEdit);
 		hasCreateCardPermission.value = permissions.includes(Permission.BoardEdit);
 		hasCreateColumnPermission.value = permissions.includes(
 			Permission.BoardEdit
 		);
+		// TODO fix lower case permissions
 		hasCreateToolPermission.value = permissions.includes(
-			Permission.ContextToolAdmin
+			Permission.ContextToolAdmin.toLowerCase()
 		);
 		hasEditPermission.value = permissions.includes(Permission.BoardEdit);
 		hasDeletePermission.value = permissions.includes(Permission.BoardEdit);

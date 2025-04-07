@@ -861,12 +861,4 @@ describe("CardStore", () => {
 			).toHaveBeenCalledWith(payload, preferredTool);
 		});
 	});
-
-	describe("getPreferredTools", () => {
-		it("should return preferred tools", () => {
-			const { cardStore, preferredTools } = setup();
-
-			expect(cardStore.getPreferredTools()).toEqual(preferredTools);
-		});
-	});
 });
