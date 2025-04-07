@@ -1,5 +1,8 @@
 <template>
-	<div ref="columnHeader" class="d-flex flex-wrap mb-4 mt-2">
+	<div
+		ref="columnHeader"
+		class="board-column-header d-flex flex-wrap mb-4 mt-2"
+	>
 		<div class="flex-1-0">
 			<BoardColumnInteractionHandler
 				:id="columnId"
