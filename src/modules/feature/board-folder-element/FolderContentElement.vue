@@ -1,10 +1,10 @@
 <template>
 	<v-card
+		ref="folderContentElement"
 		class="mb-4"
 		data-testid="board-folder-element"
 		elevation="0"
 		variant="outlined"
-		ref="folderContentElement"
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
 		@keydown.up.down="onKeydownArrow"
@@ -17,7 +17,7 @@
 					$t("components.cardElement.folderElement.untitled")
 				}}
 			</template>
-			<template #menu v-if="isEditMode">
+			<template v-if="isEditMode" #menu>
 				<BoardMenu
 					:scope="BoardMenuScope.FOLDER_ELEMENT"
 					has-background
