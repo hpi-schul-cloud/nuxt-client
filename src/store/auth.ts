@@ -120,7 +120,7 @@ export default class AuthModule extends VuexModule {
 		return roleNames ?? [];
 	}
 
-	// TODO - why are we using toLowerCase() on permissions here?
+	// TODO - fix all occurrences of lower case permissions, since Permission enum is upper case
 	get getUserPermissions(): string[] {
 		const permissions = this.me?.permissions.map((p) => p.toLowerCase());
 
