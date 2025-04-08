@@ -266,6 +266,9 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: async () => (await import("@page-room")).RoomMembersPage,
 		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
 		name: "room-members",
+		props: (route: RouteLocationNormalized) => ({
+			tab: route.query.tab,
+		}),
 	},
 	{
 		path: "/rooms/courses-list",

@@ -16,38 +16,29 @@
 					<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
 				</KebabMenu>
 			</div>
+
+			<VTabs v-if="featureActivated" v-model="activeTab" align-tabs="center">
+				<VTab
+					v-for="tabItem in tabs"
+					:key="tabItem.value"
+					:prepend-icon="tabItem.icon"
+					:text="tabItem.title"
+					:value="tabItem.value"
+				/>
+			</VTabs>
 		</template>
 
-		<div class="mb-8 mt-12" data-testid="info-text">
-			<i18n-t
-				v-if="isVisiblePageInfoText"
-				keypath="pages.rooms.members.infoText"
-				scope="global"
+		<VTabsWindow v-model="activeTab" class="mt-12">
+			<VTabsWindowItem
+				v-for="tabItem in tabs"
+				:key="tabItem.value"
+				:value="tabItem.value"
 			>
-				<a
-					href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
-					target="_blank"
-					rel="noopener"
-					:ariaLabel="linkAriaLabel"
-				>
-					{{ t("pages.rooms.members.infoText.moreInformation") }}
-				</a>
-			</i18n-t>
-		</div>
+				<component :is="tabItem.component" />
+			</VTabsWindowItem>
+		</VTabsWindow>
 
-		<div class="mb-12">
-			<MembersTable
-				v-if="!isLoading && currentUser"
-				v-model:selected-user-ids="selectedIds"
-				:members="memberList"
-				:current-user="currentUser"
-				:fixed-position="fixedHeaderOnMobile"
-				@remove:members="onRemoveMembers"
-				@change:permission="onOpenRoleDialog"
-			/>
-		</div>
-
-		<v-dialog
+		<VDialog
 			v-model="isMembersDialogOpen"
 			:width="xs ? 'auto' : 480"
 			data-testid="dialog-add-participants"
@@ -62,26 +53,8 @@
 				@add:members="onAddMembers"
 				@update:role="onUpdateRoleOrSchool"
 			/>
-		</v-dialog>
-
-		<v-dialog
-			v-model="isChangeRoleDialogOpen"
-			:width="xs ? 'auto' : 480"
-			data-testid="dialog-change-role-participants"
-			max-width="480"
-			@keydown.esc="onDialogClose"
-		>
-			<ChangeRole
-				:members="membersToChangeRole"
-				:room-name="room?.name || ''"
-				:current-user="currentUser"
-				@cancel="onDialogClose"
-				@confirm="onChangeRole"
-				@change-room-owner="onChangeOwner"
-			/>
-		</v-dialog>
+		</VDialog>
 	</DefaultWireframe>
-	<ConfirmationDialog />
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 </template>
 
@@ -90,7 +63,15 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle, useElementBounding } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
+import {
+	computed,
+	ComputedRef,
+	onMounted,
+	PropType,
+	Ref,
+	ref,
+	watch,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import {
@@ -100,20 +81,23 @@ import {
 	RoomMember,
 } from "@data-room";
 import { storeToRefs } from "pinia";
-import { mdiPlus } from "@icons/material";
 import {
-	MembersTable,
+	mdiPlus,
+	mdiAccountMultipleOutline,
+	mdiLink,
+	mdiAccountQuestionOutline,
+} from "@icons/material";
+import {
 	AddMembers,
-	ChangeRole,
 	useRoomAuthorization,
+	Confirmations,
+	Invitations,
+	Members,
 } from "@feature-room";
 import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
-import {
-	ConfirmationDialog,
-	useConfirmationDialog,
-} from "@ui-confirmation-dialog";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 
 const { fetchRoom } = useRoomDetailsStore();
@@ -122,6 +106,7 @@ const route = useRoute();
 const router = useRouter();
 const { xs, mdAndDown } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
+
 const isMembersDialogOpen = ref(false);
 const isChangeRoleDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
@@ -154,10 +139,54 @@ const fixedHeaderOnMobile = ref({
 const { y } = useElementBounding(wireframe);
 const { askConfirmation } = useConfirmationDialog();
 const { canLeaveRoom } = useRoomAuthorization();
-const { isVisibleAddMemberButton, isVisiblePageInfoText } =
+const { isVisibleAddMemberButton } =
 	useRoomMemberVisibilityOptions(currentUser);
 
 useTitle(pageTitle);
+
+type Tab = "members" | "invitations" | "confirmations"; // TODO: change to enum
+const props = defineProps({
+	tab: {
+		type: String as PropType<Tab>,
+		default: "members",
+	},
+});
+
+const featureActivated = ref(true); // TODO: replace with feature flag
+
+const activeTab = computed({
+	get() {
+		return props.tab;
+	},
+	set: async (newTab: string) => {
+		if (featureActivated.value) {
+			await router.replace({
+				query: { ...route.query, tab: newTab },
+			});
+		}
+	},
+});
+
+const tabs = [
+	{
+		title: "Mitglieder",
+		value: "members",
+		icon: mdiAccountMultipleOutline,
+		component: Members,
+	},
+	{
+		title: "Invitations",
+		value: "invitations",
+		icon: mdiLink,
+		component: Invitations,
+	},
+	{
+		title: "Confirmations",
+		value: "confirmations",
+		icon: mdiAccountQuestionOutline,
+		component: Confirmations,
+	},
+];
 
 const onFabClick = async () => {
 	await getSchools();
@@ -230,6 +259,7 @@ const onChangeOwner = async (id: string) => {
 };
 
 onMounted(async () => {
+	activeTab.value = props.tab ?? "members";
 	if (room.value === undefined) {
 		await fetchRoom(roomId);
 	}
@@ -264,16 +294,15 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const fabAction = computed(() => {
 	if (!isVisibleAddMemberButton.value) return;
-	return {
-		icon: mdiPlus,
-		title: t("pages.rooms.members.add"),
-		ariaLabel: t("pages.rooms.members.add"),
-		dataTestId: "fab-add-members",
-	};
-});
 
-const linkAriaLabel = computed(
-	() =>
-		`${t("pages.rooms.members.infoText.moreInformation")}, ${t("common.ariaLabel.newTab")}`
-);
+	if (activeTab.value === "members") {
+		return {
+			icon: mdiPlus,
+			title: t("pages.rooms.members.add"),
+			ariaLabel: t("pages.rooms.members.add"),
+			dataTestId: "fab-add-members",
+		};
+	}
+	return undefined;
+});
 </script>
