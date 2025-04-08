@@ -65,8 +65,8 @@
 					.join('-')}`"
 				variant="text"
 				color="primary"
-				@click.stop="action.action"
 				:data-testid="action.dataTestId"
+				@click.stop="action.action"
 			>
 				{{ action.name }}
 			</v-btn>

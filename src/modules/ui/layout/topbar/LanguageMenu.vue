@@ -1,6 +1,6 @@
 <template>
 	<v-list-group value="languages" density="compact" role="menuitem">
-		<template v-slot:activator="{ props }">
+		<template #activator="{ props }">
 			<v-list-item
 				v-bind="props"
 				v-bind.attr="$attrs"
@@ -15,14 +15,14 @@
 		</template>
 		<v-list-item
 			v-for="item in availableLanguages"
-			role="menuitem"
 			:key="item.language"
+			role="menuitem"
 			:prepend-icon="item.icon"
 			:data-testid="`available-language-${item.language}`"
 			:aria-label="item.translatedName"
 			@click="changeLanguage(item)"
 		>
-			<template v-slot:prepend>
+			<template #prepend>
 				<v-icon :icon="item.icon" />
 			</template>
 			<v-list-item-title>{{ item.longName }}</v-list-item-title>

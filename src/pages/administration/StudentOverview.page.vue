@@ -33,32 +33,32 @@
 			</base-input>
 
 			<DataFilter
-				@update:filter="onUpdateFilter"
 				filter-for="student"
 				:class-names="classNameList"
+				@update:filter="onUpdateFilter"
 			/>
 
 			<backend-data-table
+				v-model:current-page="page"
+				v-model:rows-per-page="limit"
+				v-model:selected-row-ids="tableSelection"
+				v-model:selection-type="tableSelectionType"
 				:actions="filteredActions"
 				:columns="filteredColumns"
-				v-model:current-page="page"
 				:data="students"
 				:paginated="true"
-				v-model:rows-per-page="limit"
 				:rows-selectable="true"
 				:total="pagination.total"
 				track-by="_id"
-				v-model:selected-row-ids="tableSelection"
-				v-model:selection-type="tableSelectionType"
 				:sort-by="sortBy"
 				:sort-order="sortOrder"
 				:show-external-text="schoolIsExternallyManaged"
 				data-testid="students_table"
+				:rows-per-page="limit"
+				:current-page="page"
 				@update:sort="onUpdateSort"
 				@update:current-page="onUpdateCurrentPage"
 				@update:rows-per-page="onUpdateRowsPerPage"
-				:rows-per-page="limit"
-				:current-page="page"
 			>
 				<template #datacolumn-birthday="{ data }">
 					<span class="text-content">{{ printDate(data) }}</span>

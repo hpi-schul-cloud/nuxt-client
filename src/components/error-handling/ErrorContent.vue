@@ -39,7 +39,7 @@ export default defineComponent({
 	name: "ErrorContent",
 	components: { PermissionErrorSvg, NotFoundSvg },
 	props: {
-		errorText: String,
+		errorText: { type: String, default: "" },
 		statusCode: {
 			type: Number,
 			default: HttpStatusCode.InternalServerError,

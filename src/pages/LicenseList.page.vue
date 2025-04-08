@@ -13,7 +13,7 @@
 				>
 					<v-expansion-panel-title>
 						<div class="text-h4">{{ name }}</div>
-						<template v-slot:actions="{ expanded }">
+						<template #actions="{ expanded }">
 							<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
 						</template>
 					</v-expansion-panel-title>
@@ -24,9 +24,9 @@
 						</p>
 						<div class="ga-2">
 							<v-chip
-								label
 								v-for="componentName in item.components"
 								:key="componentName"
+								label
 								class="ma-1"
 							>
 								{{ componentName }}

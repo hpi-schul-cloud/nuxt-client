@@ -11,8 +11,8 @@
 					{{ $t("feature.media-shelf.availableLine.title") }}
 				</span>
 				<MediaBoardLineMenu
-					:color="line.backgroundColor"
 					v-model:collapsed="collapsed"
+					:color="line.backgroundColor"
 					@update:color="$emit('update:line-background-color', $event)"
 				/>
 			</div>

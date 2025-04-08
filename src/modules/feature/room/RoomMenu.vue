@@ -11,9 +11,9 @@
 		/>
 		<KebabMenuActionDelete
 			v-if="canDeleteRoom"
-			@click="onDeleteRoom"
 			scope-language-key="common.labels.room"
 			:name="roomName"
+			@click="onDeleteRoom"
 		/>
 
 		<KebabMenuActionLeaveRoom @click="() => $emit('room:leave')" />
@@ -40,7 +40,7 @@ const emit = defineEmits([
 	"room:leave",
 ]);
 defineProps({
-	roomName: { type: String, required: false },
+	roomName: { type: String, required: false, default: undefined },
 });
 
 const onDeleteRoom = async (confirmation: Promise<boolean>) => {

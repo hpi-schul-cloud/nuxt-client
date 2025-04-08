@@ -1,4 +1,53 @@
-const boardToolbarSimple = [
+type ToolbarItem = string;
+type PluginName = string;
+
+interface HeadingOption {
+	model: string;
+	view?: string;
+	title: string;
+	class: string;
+}
+
+interface FontColor {
+	color: string;
+	label: string;
+}
+
+export const corePlugins: PluginName[] = [
+	"Autoformat",
+	"Bold",
+	"Essentials",
+	"Heading",
+	"Italic",
+	"List",
+	"Paragraph",
+	"RemoveFormat",
+	"Strikethrough",
+];
+
+export const corePluginsWithImage: PluginName[] = [
+	...corePlugins,
+	"Image",
+	"ImageInsertViaUrl",
+];
+
+export const advancedPlugins: PluginName[] = [
+	...corePlugins,
+	"FontBackgroundColor",
+	"FontColor",
+	"HorizontalLine",
+	"Link",
+	"Math",
+	"SpecialCharacters",
+	"SpecialCharactersEssentials",
+	"Subscript",
+	"Superscript",
+	"Table",
+	"TableToolbar",
+	"WordCount",
+];
+
+export const basicFormattingToolbar: ToolbarItem[] = [
 	"heading",
 	"|",
 	"bold",
@@ -11,7 +60,7 @@ const boardToolbarSimple = [
 	"removeFormat",
 ];
 
-const boardToolbarRegular = [
+export const advancedFormattingToolbar: ToolbarItem[] = [
 	"undo",
 	"redo",
 	"|",
@@ -36,7 +85,7 @@ const boardToolbarRegular = [
 	"removeFormat",
 ];
 
-const newsToolbar = [
+export const mediaFormattingToolbar: ToolbarItem[] = [
 	"undo",
 	"redo",
 	"|",
@@ -53,45 +102,7 @@ const newsToolbar = [
 	"insertImage",
 ];
 
-const boardPlugins = [
-	"Autoformat",
-	"Bold",
-	"Essentials",
-	"FontBackgroundColor",
-	"FontColor",
-	"Heading",
-	"HorizontalLine",
-	"Italic",
-	"Link",
-	"List",
-	"Math",
-	"Paragraph",
-	"RemoveFormat",
-	"SpecialCharacters",
-	"SpecialCharactersEssentials",
-	"Strikethrough",
-	"Subscript",
-	"Superscript",
-	"Table",
-	"TableToolbar",
-	"WordCount",
-];
-
-const newsPlugins = [
-	"Autoformat",
-	"Bold",
-	"Essentials",
-	"Heading",
-	"Image",
-	"ImageInsertViaUrl",
-	"Italic",
-	"List",
-	"Paragraph",
-	"RemoveFormat",
-	"Strikethrough",
-];
-
-const boardHeadings = {
+export const compactHeadings: { options: HeadingOption[] } = {
 	options: [
 		{
 			model: "paragraph",
@@ -113,7 +124,7 @@ const boardHeadings = {
 	],
 };
 
-const newsHeadings = {
+export const prominentHeadings: { options: HeadingOption[] } = {
 	options: [
 		{
 			model: "paragraph",
@@ -141,12 +152,34 @@ const newsHeadings = {
 	],
 };
 
-export {
-	boardToolbarSimple,
-	boardToolbarRegular,
-	newsToolbar,
-	boardPlugins,
-	newsPlugins,
-	boardHeadings,
-	newsHeadings,
-};
+export const fontColors = (
+	t: (key: string) => string
+): { colors: FontColor[] } => ({
+	colors: [
+		{ color: "#827717", label: t("components.editor.fonts.colors.oliveGreen") },
+		{ color: "#388E3C", label: "Green" },
+		{ color: "#00838F", label: "Turquoise" },
+		{ color: "#1976D2", label: "Blue" },
+		{ color: "#3F51B5", label: t("components.editor.fonts.colors.indigo") },
+		{ color: "#673AB7", label: t("components.editor.fonts.colors.darkPurple") },
+		{ color: "#9C27B0", label: "Purple" },
+		{ color: "#D81B60", label: t("components.editor.fonts.colors.pink") },
+		{ color: "#D32F2F", label: "Red" },
+	],
+});
+
+export const fontBackgroundColors = (
+	t: (key: string) => string
+): { colors: FontColor[] } => ({
+	colors: [
+		{ color: "#DCEDC8", label: "Light green" },
+		{ color: "#C8E6C9", label: "Green" },
+		{ color: "#B2EBF2", label: "Turquoise" },
+		{ color: "#BBDEFB", label: "Blue" },
+		{ color: "#C5CAE9", label: t("components.editor.fonts.colors.indigo") },
+		{ color: "#E1BEE7", label: t("components.editor.fonts.colors.darkPurple") },
+		{ color: "#F8BBD0", label: t("components.editor.fonts.colors.pink") },
+		{ color: "#FFCCBC", label: "Orange" },
+		{ color: "#FFECB3", label: "Yellow" },
+	],
+});

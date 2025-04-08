@@ -146,16 +146,16 @@
 	</div>
 
 	<migration-warning-card
-		value="start"
 		v-if="isStartWarningVisible"
+		value="start"
 		data-testid="migration-start-warning-card"
 		@start="onToggleShowStartWarning"
 		@set="onStartMigration()"
 	/>
 
 	<migration-warning-card
-		value="end"
 		v-if="isEndWarningVisible"
+		value="end"
 		data-testid="migration-end-warning-card"
 		@end="onToggleShowEndWarning"
 		@set="onCloseMigration()"
@@ -193,13 +193,13 @@
 
 	<v-switch
 		v-if="!isGracePeriodExpired && globalFeatureEnableLdapSyncDuringMigration"
+		v-model="school.featureObject.enableLdapSyncDuringMigration"
 		:label="
 			t(
 				'components.administration.adminMigrationSection.enableSyncDuringMigration.label'
 			)
 		"
 		:disabled="!isMigrationActive"
-		v-model="school.featureObject.enableLdapSyncDuringMigration"
 		class="ml-1"
 		:true-icon="mdiCheck"
 		data-testid="enable-sync-during-migration-switch"
@@ -232,12 +232,12 @@
 
 	<v-switch
 		v-if="globalFeatureShowOutdatedUsers"
+		v-model="school.featureObject.showOutdatedUsers"
 		:label="
 			t(
 				'components.administration.adminMigrationSection.showOutdatedUsers.label'
 			)
 		"
-		v-model="school.featureObject.showOutdatedUsers"
 		class="ml-1"
 		:true-icon="mdiCheck"
 		data-testid="show-outdated-users-switch"

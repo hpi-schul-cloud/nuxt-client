@@ -6,27 +6,27 @@
 		:icon="collapsed ? mdiChevronDown : mdiChevronUp"
 		size="small"
 		style="height: 36px; width: 36px"
-		@click="collapsed = !collapsed"
 		data-testid="collapse-line-btn"
+		@click="collapsed = !collapsed"
 	/>
 	<KebabMenu data-testid="line-menu-btn">
 		<VListItem
 			v-if="lineId"
-			@click="$emit('rename-title', lineId)"
 			:prepend-icon="mdiRenameOutline"
 			data-testid="action-update-line-title"
+			@click="$emit('rename-title', lineId)"
 		>
 			<VListItemTitle>
 				<span>{{ $t("common.actions.rename") }}</span>
 			</VListItemTitle>
 		</VListItem>
 		<VListGroup>
-			<template v-slot:activator="{ props }">
+			<template #activator="{ props }">
 				<VListItem
 					v-bind="props"
 					:prepend-icon="mdiPalette"
-					@click.stop.prevent="() => {}"
 					data-testid="color-picker-btn"
+					@click.stop.prevent="() => {}"
 				>
 					<VListItemTitle>
 						<span>{{ $t("common.actions.pickColor") }}</span>
@@ -41,16 +41,16 @@
 				:model-value="colorValue"
 				:swatches="swatches"
 				class="ma-2"
-				@update:model-value="onUpdateColor"
 				show-swatches
 				data-testid="line-color-picker"
+				@update:model-value="onUpdateColor"
 			/>
 		</VListGroup>
 		<VListItem
 			v-if="lineId"
-			@click="$emit('delete:line', lineId)"
 			:prepend-icon="mdiTrashCanOutline"
 			data-testid="action-delete-line"
+			@click="$emit('delete:line', lineId)"
 		>
 			<VListItemTitle>
 				<span>{{ $t("common.actions.delete") }}</span>
@@ -76,6 +76,7 @@ defineProps({
 	lineId: {
 		type: String,
 		required: false,
+		default: undefined,
 	},
 });
 

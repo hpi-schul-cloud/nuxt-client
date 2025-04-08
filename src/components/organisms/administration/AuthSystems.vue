@@ -17,8 +17,8 @@
 				<v-btn
 					icon
 					variant="text"
-					@click="copyLoginLink(0)"
 					:aria-label="$t('common.actions.shareLink')"
+					@click="copyLoginLink(0)"
 				>
 					<v-icon>
 						{{ getCopyStatus(0) ? iconMdiCheckCircle : iconMdiContentCopy }}
@@ -48,12 +48,13 @@
 				</thead>
 				<tbody>
 					<tr v-for="system in systems" :key="system.id">
-						<td>{{ system.alias }}</td>
-						<td>{{ system.type }}</td>
+						<td data-testid="system-table-alias">{{ system.alias }}</td>
+						<td data-testid="system-table-type">{{ system.type }}</td>
 						<td v-if="customLoginLinkEnabled">
 							<v-text-field
 								v-if="isLoginSystem(system)"
 								:id="`school-login-link-${system.id}`"
+								data-testid="system-table-login-link"
 								:model-value="generateLoginLink(system)"
 								class="school-login-link"
 								:color="getCopyStatus(system.id) ? 'success' : 'primary'"
@@ -64,8 +65,8 @@
 									<v-btn
 										icon
 										variant="text"
-										@click="copyLoginLink(system.id)"
 										:aria-label="$t('common.actions.shareLink')"
+										@click="copyLoginLink(system.id)"
 									>
 										<v-icon
 											>{{
@@ -84,6 +85,7 @@
 								class="edit-system-btn"
 								icon
 								variant="text"
+								data-testid="system-table-button-edit"
 								:to="redirectTo(system)"
 								:aria-label="ariaLabels(system).edit"
 							>
@@ -94,6 +96,7 @@
 								class="delete-system-btn"
 								icon
 								variant="text"
+								data-testid="system-table-button-delete"
 								:aria-label="ariaLabels(system).delete"
 								@click.stop="openConfirmDeleteDialog(system.id)"
 							>
@@ -114,7 +117,7 @@
 			{{ $t("pages.administration.school.index.authSystems.addLdap") }}
 		</v-btn>
 		<v-custom-dialog
-			v-model:isOpen="confirmDeleteDialog.isOpen"
+			v-model:is-open="confirmDeleteDialog.isOpen"
 			class="custom-dialog"
 			:size="375"
 			has-buttons

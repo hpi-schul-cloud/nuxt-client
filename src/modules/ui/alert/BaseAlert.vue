@@ -3,10 +3,10 @@
 		:color="color"
 		:icon="icon"
 		:closable="showCloseIcon"
-		:closeIcon="showCloseIcon ? closeIcon : null"
+		:close-icon="showCloseIcon ? closeIcon : undefined"
 		class="mb-0"
 	>
-		<div class="alert-text" v-if="$slots.default">
+		<div v-if="$slots.default" class="alert-text">
 			<slot />
 		</div>
 	</v-alert>
@@ -21,9 +21,13 @@ export default defineComponent({
 	props: {
 		color: {
 			type: String as PropType<"success" | "error" | "warning" | "info">,
+			default: undefined,
 		},
-		icon: { type: String as PropType<IconProps["icon"]> },
-		closeIcon: { type: String as PropType<IconProps["icon"]> },
+		icon: { type: String as PropType<IconProps["icon"]>, default: undefined },
+		closeIcon: {
+			type: String as PropType<IconProps["icon"]>,
+			default: undefined,
+		},
 		showCloseIcon: {
 			type: Boolean,
 			default: false,

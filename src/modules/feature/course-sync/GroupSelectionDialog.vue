@@ -18,13 +18,13 @@
 				{{ description }}
 			</p>
 			<VAutocomplete
+				v-model="selectedGroup"
+				v-model:search="searchGroupName"
 				:label="$t('feature-course-sync.GroupSelectionDialog.selection.label')"
 				:no-data-text="$t('common.nodata')"
 				item-title="name"
 				item-value="id"
 				:items="groups"
-				v-model="selectedGroup"
-				v-model:search="searchGroupName"
 				:loading="isLoading"
 				return-object
 				hide-selected
