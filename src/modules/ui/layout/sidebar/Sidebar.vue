@@ -1,5 +1,5 @@
 <template>
-	<VNavigationDrawer>
+	<VNavigationDrawer class="sidebar">
 		<VList open-strategy="multiple">
 			<div class="d-flex align-center">
 				<VBtn
@@ -117,3 +117,29 @@ const metaItems = computed(
 );
 const pageItems = computed(() => getItemsForUser(pageLinks.value));
 </script>
+
+<style>
+@supports selector(::-webkit-scrollbar) {
+	.v-navigation-drawer__content::-webkit-scrollbar-thumb {
+		background-color: transparent;
+	}
+
+	.v-navigation-drawer__content:hover::-webkit-scrollbar-thumb {
+		background-color: rgba(var(--v-theme-on-surface), 0.6);
+	}
+
+	.v-navigation-drawer__content::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(var(--v-theme-on-surface), 0.8);
+	}
+}
+
+@supports not selector(::-webkit-scrollbar) {
+	.v-navigation-drawer__content {
+		scrollbar-color: transparent transparent;
+	}
+
+	.v-navigation-drawer__content:hover {
+		scrollbar-color: initial;
+	}
+}
+</style>
