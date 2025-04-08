@@ -1826,6 +1826,7 @@ export default {
 		"Löschen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.members.error.updateRole":
 		"Die Änderung der Raumberechtigung ist fehlgeschlagen.",
+	"pages.rooms.members.filter": "Tabelle durchsuchen/filtern",
 	"pages.rooms.members.infoText":
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
@@ -1835,6 +1836,8 @@ export default {
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Aktionsmenü für {memberFullName}",
+	"pages.rooms.members.actionMenu.selectedMembers":
+		"Aktionsmenü für {count} ausgewählte Mitglieder",
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Raumberechtigungen für {memberFullName} ändern",
@@ -1852,6 +1855,8 @@ export default {
 	"pages.rooms.members.roomPermissions.owner": "Besitzen",
 	"pages.rooms.members.roomPermissions.editor": "Bearbeiten",
 	"pages.rooms.members.roomPermissions.viewer": "Lesen",
+	"pages.rooms.members.select.all": "Alle Raummitglieder auswählen",
+	"pages.rooms.members.select.none": "Alle Raummitglieder abwählen",
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.members.tableHeader.actions": "Aktionen",

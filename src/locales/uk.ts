@@ -1822,6 +1822,7 @@ export default {
 	"pages.rooms.members.error.add": "Не вдалося додати учасників.",
 	"pages.rooms.members.error.remove": "Не вдалося видалити учасників.",
 	"pages.rooms.members.error.updateRole": "Не вдалося змінити дозвіл кімнати.",
+	"pages.rooms.members.filter": "Таблиця пошуку/фільтрації",
 	"pages.rooms.members.infoText":
 		"Додайте члени до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
@@ -1830,6 +1831,8 @@ export default {
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
 	"pages.rooms.members.actionMenu.ariaLabel": "Меню дій для {memberFullName}",
+	"pages.rooms.members.actionMenu.selectedMembers":
+		"Меню дій для {count} вибраних учасників",
 	"pages.rooms.members.changePermission": "Змінити дозволи кімнат",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Змінити дозвіл кімнат для {memberFullName}",
@@ -1847,6 +1850,9 @@ export default {
 	"pages.rooms.members.roomPermissions.owner": "Володіти",
 	"pages.rooms.members.roomPermissions.editor": "Редагувати",
 	"pages.rooms.members.roomPermissions.viewer": "Читати",
+	"pages.rooms.members.select.all": "Виберіть усіх учасників кімнати",
+	"pages.rooms.members.select.none":
+		"Видалити всіх учасників кімнати з відбору",
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.members.tableHeader.actions": "Дії",
