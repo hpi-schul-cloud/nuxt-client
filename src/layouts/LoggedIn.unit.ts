@@ -19,10 +19,9 @@ import { mount } from "@vue/test-utils";
 import { h, nextTick } from "vue";
 import { VApp } from "vuetify/lib/components/index.mjs";
 import LoggedInLayout from "./LoggedIn.layout.vue";
-import { Topbar } from "@ui-layout";
+import { Topbar, Sidebar } from "@ui-layout";
 import { createTestingPinia } from "@pinia/testing";
 import { SkipLink } from "@ui-skip-link";
-import { Sidebar } from "@ui-layout";
 import StatusAlertsModule from "@/store/status-alerts";
 
 jest.mock("vue-router", () => ({
