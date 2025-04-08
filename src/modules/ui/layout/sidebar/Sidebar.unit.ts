@@ -103,7 +103,7 @@ describe("@ui-layout/Sidebar", () => {
 	});
 
 	describe("when sidebar toggle was clicked", () => {
-		it("should emit update:modelValue", async () => {
+		it("should hide sidebar", async () => {
 			const { wrapper } = setup();
 			const toggleBtn = wrapper.getComponent(
 				"[data-testid='sidebar-toggle-close']"
