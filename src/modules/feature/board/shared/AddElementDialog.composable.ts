@@ -45,8 +45,6 @@ export const useAddElementDialog = (
 	const { isDialogOpen, closeDialog, elementTypeOptions } =
 		useSharedElementTypeSelection();
 
-	const preferredTools = cardStore.getPreferredTools();
-
 	const onElementClick = async (elementType: ContentElementType) => {
 		closeDialog();
 
@@ -153,9 +151,9 @@ export const useAddElementDialog = (
 
 	if (
 		envConfigModule.getEnv.FEATURE_PREFERRED_CTL_TOOLS_ENABLED &&
-		preferredTools
+		cardStore.preferredTools
 	) {
-		preferredTools.forEach((tool: PreferredToolResponse) => {
+		cardStore.preferredTools.forEach((tool: PreferredToolResponse) => {
 			if (!tool.iconName) {
 				tool.iconName = "mdiPuzzleOutline";
 			}

@@ -319,7 +319,7 @@ describe("ElementTypeSelection Composable", () => {
 				},
 			];
 
-			cardStore.getPreferredTools.mockReturnValue(preferredTools);
+			cardStore.preferredTools = preferredTools;
 
 			const showCustomNotifierMock = jest.fn();
 			const mockedBoardNotifierCalls = createMock<
