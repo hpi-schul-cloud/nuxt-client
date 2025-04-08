@@ -371,12 +371,12 @@ export default defineComponent({
 		background-color: transparent;
 	}
 
-	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb {
+	.scrollable:hover::-webkit-scrollbar-thumb {
 		background-color: rgba(var(--v-theme-on-surface), 0.6);
 	}
 
-	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb:hover {
-		background: rgba(var(--v-theme-on-surface), 0.8);
+	.scrollable::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(var(--v-theme-on-surface), 0.8);
 	}
 }
 
@@ -385,7 +385,7 @@ export default defineComponent({
 		scrollbar-color: transparent transparent;
 	}
 
-	.column-drag-handle:hover .scrollable {
+	.scrollable:hover {
 		scrollbar-color: initial;
 	}
 }

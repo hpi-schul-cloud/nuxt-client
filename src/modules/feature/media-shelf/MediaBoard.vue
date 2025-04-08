@@ -142,12 +142,12 @@ const onLineDragEnd = async (event: SortableEvent) => {
 		background-color: transparent;
 	}
 
-	.line-drag-handle:hover .scrollable-line::-webkit-scrollbar-thumb {
+	.scrollable-line:hover::-webkit-scrollbar-thumb {
 		background-color: rgba(var(--v-theme-on-surface), 0.6);
 	}
 
-	.line-drag-handle:hover .scrollable-line::-webkit-scrollbar-thumb:hover {
-		background: rgba(var(--v-theme-on-surface), 0.8);
+	.scrollable-line::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(var(--v-theme-on-surface), 0.8);
 	}
 }
 
@@ -156,7 +156,7 @@ const onLineDragEnd = async (event: SortableEvent) => {
 		scrollbar-color: transparent transparent;
 	}
 
-	.line-drag-handle:hover .scrollable-line {
+	.scrollable-line:hover {
 		scrollbar-color: initial;
 	}
 }
