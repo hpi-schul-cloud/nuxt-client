@@ -6,6 +6,9 @@ import MembersTable from "./RoomMembers/MembersTable.vue";
 import AddMembers from "./RoomMembers/AddMembers.vue";
 import { useRoomAuthorization } from "./roomAuthorization.composable";
 import ChangeRole from "./RoomMembers/ChangeRole.vue";
+import Members from "./RoomMembers/Members.vue";
+import Invitations from "./RoomMembers/Invitations.vue";
+import Confirmations from "./RoomMembers/Confirmations.vue";
 
 export {
 	RoomGrid,
@@ -16,4 +19,7 @@ export {
 	AddMembers,
 	ChangeRole,
 	useRoomAuthorization,
+	Members,
+	Invitations,
+	Confirmations,
 };

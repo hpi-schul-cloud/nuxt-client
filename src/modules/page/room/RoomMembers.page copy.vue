@@ -16,49 +16,71 @@
 					<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
 				</KebabMenu>
 			</div>
-			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
-				<v-tabs v-model="tab" class="tabs-max-width" grow>
-					<v-tab :value="tabs[0].value"> {{ tabs[0].label }} </v-tab>
-					<v-tab :value="tabs[1].value"> {{ tabs[1].label }} </v-tab>
-					<v-tab :value="tabs[2].value"> {{ tabs[2].label }} </v-tab>
-				</v-tabs>
-			</div>
 		</template>
 
-		<div class="mt-12">
-			<v-tabs-window v-model="tab" class="mb-8">
-				<v-tabs-window-item :value="tabs[0].value">
-					<Members />
-				</v-tabs-window-item>
-
-				<v-tabs-window-item :value="tabs[1].value">
-					<Invitations />
-				</v-tabs-window-item>
-
-				<v-tabs-window-item :value="tabs[2].value">
-					<Confirmations />
-				</v-tabs-window-item>
-			</v-tabs-window>
+		<div class="mb-8 mt-12" data-testid="info-text">
+			<i18n-t
+				v-if="isVisiblePageInfoText"
+				keypath="pages.rooms.members.infoText"
+				scope="global"
+			>
+				<a
+					href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
+					target="_blank"
+					rel="noopener"
+					:ariaLabel="linkAriaLabel"
+				>
+					{{ t("pages.rooms.members.infoText.moreInformation") }}
+				</a>
+			</i18n-t>
 		</div>
+
+		<div class="mb-12">
+			<MembersTable
+				v-if="!isLoading && currentUser"
+				v-model:selected-user-ids="selectedIds"
+				:members="memberList"
+				:currentUser="currentUser"
+				:fixed-position="fixedHeaderOnMobile"
+				@remove:members="onRemoveMembers"
+				@change:permission="onOpenRoleDialog"
+			/>
+		</div>
+
+		<v-dialog
+			v-model="isMembersDialogOpen"
+			:width="xs ? 'auto' : 480"
+			data-testid="dialog-add-participants"
+			max-width="480"
+			persistent
+			@keydown.esc="onDialogClose"
+		>
+			<AddMembers
+				:memberList="potentialRoomMembers"
+				:schools="schools"
+				@close="onDialogClose"
+				@add:members="onAddMembers"
+				@update:role="onUpdateRoleOrSchool"
+			/>
+		</v-dialog>
+
+		<v-dialog
+			v-model="isChangeRoleDialogOpen"
+			:width="xs ? 'auto' : 480"
+			data-testid="dialog-change-role-participants"
+			max-width="480"
+			@keydown.esc="onDialogClose"
+		>
+			<ChangeRole
+				:members="membersToChangeRole"
+				:room-name="room?.name || ''"
+				:current-user="currentUser"
+				@cancel="onDialogClose"
+				@confirm="onChangeRole"
+				@change-room-owner="onChangeOwner"
+			/>
+		</v-dialog>
 	</DefaultWireframe>
-
-	<v-dialog
-		v-model="isMembersDialogOpen"
-		:width="xs ? 'auto' : 480"
-		data-testid="dialog-add-participants"
-		max-width="480"
-		persistent
-		@keydown.esc="onDialogClose"
-	>
-		<AddMembers
-			:memberList="potentialRoomMembers"
-			:schools="schools"
-			@close="onDialogClose"
-			@add:members="onAddMembers"
-			@update:role="onUpdateRoleOrSchool"
-		/>
-	</v-dialog>
-
 	<ConfirmationDialog />
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 </template>
@@ -80,13 +102,12 @@ import {
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import {
+	MembersTable,
 	AddMembers,
+	ChangeRole,
 	useRoomAuthorization,
-	Members,
-	Invitations,
-	Confirmations,
 } from "@feature-room";
-import { RoleName } from "@/serverApi/v3";
+import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import {
@@ -95,63 +116,33 @@ import {
 } from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 
-const tabs = [
-	{
-		value: "members",
-		label: "Members",
-	},
-	{
-		value: "invitations",
-		label: "Invitations",
-	},
-	{
-		value: "confirmations",
-		label: "Confirmations",
-	},
-];
-
-const route = useRoute();
-const router = useRouter();
-const tab = ref("members");
-
-watch(
-	() => route.query.tab,
-	(newTab) => {
-		if (newTab) {
-			tab.value = newTab as string;
-		}
-	},
-	{ immediate: true }
-);
-
-watch(tab, (newTab) => {
-	if (newTab !== "") {
-		router.push({ query: { tab: tab.value } });
-	}
-});
-
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
+const route = useRoute();
+const router = useRouter();
 const { xs, mdAndDown } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 const isMembersDialogOpen = ref(false);
-
+const isChangeRoleDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 const roomId = route.params.id.toString();
 const {
+	isLoading,
 	potentialRoomMembers,
+	roomMembers,
 	schools,
 	currentUser,
+	selectedIds,
 	addMembers,
+	changeRoomOwner,
 	fetchMembers,
 	getPotentialMembers,
 	getSchools,
 	leaveRoom,
+	removeMembers,
+	updateMembersRole,
 } = useRoomMembers(roomId);
-
-const { isVisibleAddMemberButton, isVisiblePageInfoText } =
-	useRoomMemberVisibilityOptions(currentUser);
-
+const memberList: Ref<RoomMember[]> = ref(roomMembers);
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
@@ -160,9 +151,11 @@ const fixedHeaderOnMobile = ref({
 	enabled: false,
 	positionTop: 0,
 });
-const { y } = useElementBounding(wireframe); // TODO: investigate usage of this
+const { y } = useElementBounding(wireframe);
 const { askConfirmation } = useConfirmationDialog();
 const { canLeaveRoom } = useRoomAuthorization();
+const { isVisibleAddMemberButton, isVisiblePageInfoText } =
+	useRoomMemberVisibilityOptions(currentUser);
 
 useTitle(pageTitle);
 
@@ -174,6 +167,7 @@ const onFabClick = async () => {
 
 const onDialogClose = () => {
 	isMembersDialogOpen.value = false;
+	isChangeRoleDialogOpen.value = false;
 };
 
 const onAddMembers = async (memberIds: string[]) => {
@@ -185,6 +179,10 @@ const onUpdateRoleOrSchool = async (payload: {
 	schoolId: string;
 }) => {
 	await getPotentialMembers(payload.schoolRole, payload.schoolId);
+};
+
+const onRemoveMembers = async (userIds: string[]) => {
+	await removeMembers(userIds);
 };
 
 const onLeaveRoom = async () => {
@@ -204,20 +202,46 @@ const onLeaveRoom = async () => {
 	router.push("/rooms");
 };
 
+const membersToChangeRole = ref<RoomMember[]>([]);
+
+const onOpenRoleDialog = (ids: string[]) => {
+	membersToChangeRole.value =
+		ids.length === 1
+			? memberList.value.filter((member) => member.userId === ids[0])
+			: memberList.value.filter((member) =>
+					selectedIds.value.includes(member.userId)
+				);
+	isChangeRoleDialogOpen.value = true;
+};
+
+const onChangeRole = async (
+	role: ChangeRoomRoleBodyParamsRoleNameEnum,
+	id?: string
+) => {
+	await updateMembersRole(role, id);
+	isChangeRoleDialogOpen.value = false;
+	selectedIds.value = [];
+};
+
+const onChangeOwner = async (id: string) => {
+	await changeRoomOwner(id);
+	isChangeRoleDialogOpen.value = false;
+	selectedIds.value = [];
+};
+
 onMounted(async () => {
 	if (room.value === undefined) {
 		await fetchRoom(roomId);
 	}
 
 	await fetchMembers();
-
-	// const header = document.querySelector(".wireframe-header") as HTMLElement;
-	// fixedHeaderOnMobile.value.positionTop = header.offsetHeight + y.value;
+	const header = document.querySelector(".wireframe-header") as HTMLElement;
+	fixedHeaderOnMobile.value.positionTop = header.offsetHeight + y.value;
 });
 
-// watch(y, () => {
-// 	fixedHeaderOnMobile.value.enabled = y.value <= 0 && mdAndDown.value;
-// });
+watch(y, () => {
+	fixedHeaderOnMobile.value.enabled = y.value <= 0 && mdAndDown.value;
+});
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 	if (room === undefined) return [];
@@ -247,14 +271,9 @@ const fabAction = computed(() => {
 		dataTestId: "fab-add-members",
 	};
 });
+
+const linkAriaLabel = computed(
+	() =>
+		`${t("pages.rooms.members.infoText.moreInformation")}, ${t("common.ariaLabel.newTab")}`
+);
 </script>
-
-<style lang="scss" scoped>
-@import "@/styles/settings.scss";
-
-@media #{map-get($display-breakpoints, 'md-and-up')} {
-	.tabs-max-width {
-		max-width: var(--size-content-width-max);
-	}
-}
-</style>
