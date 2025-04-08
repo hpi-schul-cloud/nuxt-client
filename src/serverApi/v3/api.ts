@@ -180,6 +180,56 @@ export interface ApiValidationError {
 /**
  * 
  * @export
+ * @interface AudioRecordElementContent
+ */
+export interface AudioRecordElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof AudioRecordElementContent
+     */
+    caption: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AudioRecordElementContent
+     */
+    alternativeText: string;
+}
+/**
+ * 
+ * @export
+ * @interface AudioRecordElementResponse
+ */
+export interface AudioRecordElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof AudioRecordElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof AudioRecordElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {AudioRecordElementContent}
+     * @memberof AudioRecordElementResponse
+     */
+    content: AudioRecordElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof AudioRecordElementResponse
+     */
+    timestamps: TimestampsResponse;
+}
+/**
+ * 
+ * @export
  * @interface AuthorizationBodyParams
  */
 export interface AuthorizationBodyParams {
@@ -1705,6 +1755,12 @@ export interface ConfigResponse {
     FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED: boolean;
     /**
      * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
+    FEATURE_COLUMN_BOARD_AUDIO_RECORDING_ENABLED: boolean;
+    /**
+     * 
      * @type {string}
      * @memberof ConfigResponse
      */
@@ -1908,7 +1964,8 @@ export enum ContentElementType {
     ExternalTool = 'externalTool',
     CollaborativeTextEditor = 'collaborativeTextEditor',
     VideoConference = 'videoConference',
-    Deleted = 'deleted'
+    Deleted = 'deleted',
+    AudioRecord = 'audioRecord'
 }
 
 /**
@@ -2591,7 +2648,8 @@ export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     ExternalTool = 'externalTool',
     CollaborativeTextEditor = 'collaborativeTextEditor',
     VideoConference = 'videoConference',
-    Deleted = 'deleted'
+    Deleted = 'deleted',
+    AudioRecord = 'audioRecord'
 }
 
 /**
@@ -9651,10 +9709,10 @@ export interface UpdateBoardTitleParams {
 export interface UpdateElementContentBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody}
+     * @type {AudioRecordElementContentBody | FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody}
      * @memberof UpdateElementContentBodyParams
      */
-    data: FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody;
+    data: AudioRecordElementContentBody | FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody;
 }
 /**
  * 
@@ -13454,7 +13512,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AudioRecordElementResponse | ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -13534,7 +13592,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<AudioRecordElementResponse | ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -13608,7 +13666,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<AudioRecordElementResponse | ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse>;
 
     /**
      * 
@@ -14426,7 +14484,7 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse>> {
+        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<AudioRecordElementResponse | ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14490,7 +14548,7 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse> {
+        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<AudioRecordElementResponse | ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse> {
             return localVarFp.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -14553,7 +14611,7 @@ export interface BoardElementApiInterface {
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse>;
+    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<AudioRecordElementResponse | ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse>;
 
 }
 
