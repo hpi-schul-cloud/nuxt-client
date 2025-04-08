@@ -53,11 +53,10 @@
 					@update:model-value="onInputSlider"
 				/>
 				<div class="pl-2">
-					<SpeedMenu :rate="rate" @updateRate="onSpeedRateChange" />
+					<SpeedMenu :rate="rate" @update-rate="onSpeedRateChange" />
 				</div>
 			</div>
 		</template>
-		<template v-if="showMenu" #menu><slot /></template>
 	</ContentElementBar>
 </template>
 
@@ -67,11 +66,11 @@ import { mdiPause, mdiPlay, mdiPlaySpeed } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
-import { AudioRecordAlert } from "../../../shared/types/AudioRecordAlert.enum";
 import SpeedMenu from "./SpeedMenu.vue";
+import AudioRecordAlert from "./AudioRecordAlert.vue";
 
 export default defineComponent({
-	name: "AudioDisplay",
+	name: "AudioRecordPlayer",
 	components: { ContentElementBar, SpeedMenu },
 	props: {
 		src: { type: String, required: true },

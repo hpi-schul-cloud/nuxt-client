@@ -1,4 +1,4 @@
-import FileContentElement from "./FileContentElement.vue";
-import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
+import AudioRecordContentElement from "./components/AudioRecordContentElement.vue";
+import { useFileStorageApi } from "./composables/FileStorageApi.composable";
 
-export { FileContentElement, useFileStorageApi };
+export { AudioRecordContentElement, useFileStorageApi };

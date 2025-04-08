@@ -1,56 +1,34 @@
 <template>
 	<v-card
+		ref="audioRecordContentElement"
 		class="board-audio-record-element-card mb-4"
 		data-testid="board-audio-record-element"
 		elevation="0"
 		:variant="isOutlined ? 'outlined' : 'elevated'"
-		ref="audioRecordContentElement"
 		:ripple="false"
 		:tabindex="isEditMode ? 0 : undefined"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<AudioRecordContent
-			v-if="audioRecordProperties && isUploading !== true"
-			:audio-record-properties="audioRecordProperties"
-			:alerts="alerts"
-			:is-edit-mode="isEditMode"
-			@fetch:file="onFetchFile"
-			@update:alternativeText="onUpdateAlternativeText"
-			@update:caption="onUpdateCaption"
-			@add:alert="onAddAlert"
-		>
+		<div>
+			<AudioRecordElementTitle />
 			<BoardMenu
 				:scope="BoardMenuScope.AUDIO_RECORD_ELEMENT"
 				has-background
 				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
-				v-if="isEditMode"
 			>
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
-					:name="audioRecordProperties.name"
 					scope-language-key="components.cardElement.audioRecordElement"
 					@click="onDelete"
 				/>
 			</BoardMenu>
-		</AudioRecordContent>
-		<AudioRecorder
-			v-else
-			:elementId="element.id"
-			:isEditMode="isEditMode"
-			@upload:file="onUploadFile"
-			:isUploading="isUploading"
-		>
-			<BoardMenu :scope="BoardMenuScope.AUDIO_RECORD_ELEMENT" has-background>
-				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
-				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
-				<KebabMenuActionDelete
-					scope-language-key="components.cardElement.audioRecordElement"
-					@click="onDelete"
-				/>
-			</BoardMenu>
-		</AudioRecorder>
+			<AudioRecordPlayer :audio-record-properties="audioRecordProperties" />
+			<!-- <AudioRecordRecorder v-if="isEditMode">
+				
+			</AudioRecordRecorder> -->
+		</div>
 	</v-card>
 </template>
 
@@ -77,22 +55,21 @@ import {
 	toRef,
 	watch,
 } from "vue";
-import AudioRecordContent from "./content/AudioRecordContent.vue";
-import { AudioRecordElementResponse } from "../../../serverApi/v3";
-import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
-import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
-import { AudioRecordAlert } from "./shared/types/AudioRecordAlert.enum";
-import AudioRecorder from "./content/display/audio-display/AudioRecorder.vue";
 
+import { AudioRecordElementResponse } from "../../../../serverApi/v3";
+import { useFileStorageApi } from "../../board-file-element";
+import { AudioRecordAlert } from "../types/AudioRecordAlert.enum";
+import AudioRecordPlayer from "./AudioRecordPlayer.vue";
+import AudioRecordRecorder from "./AudioRecordPlayer.vue";
 export default defineComponent({
-	name: "AudioRecordElement",
+	name: "AudioRecordContentElement",
 	components: {
-		AudioRecorder,
-		AudioRecordContent,
-		BoardMenu,
-		KebabMenuActionMoveUp,
-		KebabMenuActionMoveDown,
-		KebabMenuActionDelete,
+		// AudioRecordPlayer,
+		// AudioRecordRecorder,
+		// BoardMenu,
+		// KebabMenuActionMoveUp,
+		// KebabMenuActionMoveDown,
+		// KebabMenuActionDelete,
 	},
 	props: {
 		element: {
@@ -114,7 +91,7 @@ export default defineComponent({
 	],
 	setup(props, { emit }) {
 		const audioRecordContentElement = ref(null);
-		const isLoadingFileRecord = ref(true);
+		const isLoadingFileRecord = ref(false);
 
 		const element = toRef(props, "element");
 		useBoardFocusHandler(element.value.id, audioRecordContentElement);
@@ -124,11 +101,11 @@ export default defineComponent({
 
 		const fileRecord = getFileRecord(element.value.id);
 
-		const { alerts, addAlert } = useFileAlerts(fileRecord);
+		//const { alerts, addAlert } = useFileAlerts(fileRecord);
 
-		const isUploading = computed(() => {
-			return fileRecord.value?.isUploading;
-		});
+		// const isUploading = computed(() => {
+		// 	return fileRecord.value?.isUploading;
+		// });
 
 		const audioRecordProperties = computed(() => {
 			if (fileRecord.value === undefined) {
@@ -160,7 +137,7 @@ export default defineComponent({
 		const isOutlined = computed(() => {
 			const { isEditMode } = props;
 			const isUploadingInViewMode =
-				fileRecord.value?.id !== undefined && !isEditMode && !isUploading.value;
+				fileRecord.value?.id !== undefined && !isEditMode; //&& !isUploading.value;
 
 			return isUploadingInViewMode || isEditMode;
 		});
@@ -204,9 +181,9 @@ export default defineComponent({
 			modelValue.value.caption = value;
 		};
 
-		const onAddAlert = (alert: AudioRecordAlert) => {
-			addAlert(alert);
-		};
+		// const onAddAlert = (alert: AudioRecordAlert) => {
+		// 	addAlert(alert);
+		// };
 
 		const onDelete = async (confirmation: Promise<boolean>) => {
 			const shouldDelete = await confirmation;
@@ -225,14 +202,14 @@ export default defineComponent({
 			hasFileRecord,
 			isOutlined,
 			modelValue,
-			alerts,
-			isUploading,
+			//alerts,
+			//isUploading,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,
 			onUpdateAlternativeText,
 			onUpdateCaption,
-			onAddAlert,
+			//	onAddAlert,
 			onDelete,
 			onMoveUp,
 			onMoveDown,
