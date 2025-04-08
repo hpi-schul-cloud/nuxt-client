@@ -10,9 +10,16 @@
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 	>
-		<div>
-			<AudioRecordElementTitle />
+		<AudioRecordContent
+			v-if="audioRecordProperties"
+			:audio-record-properties="audioRecordProperties"
+			:is-edit-mode="isEditMode"
+			@fetch:file="onFetchFile"
+			@update:alternative-text="onUpdateAlternativeText"
+			@update:caption="onUpdateCaption"
+		>
 			<BoardMenu
+				v-if="isEditMode"
 				:scope="BoardMenuScope.AUDIO_RECORD_ELEMENT"
 				has-background
 				:data-testid="`element-menu-button-${columnIndex}-${rowIndex}-${elementIndex}`"
@@ -20,15 +27,12 @@
 				<KebabMenuActionMoveUp v-if="isNotFirstElement" @click="onMoveUp" />
 				<KebabMenuActionMoveDown v-if="isNotLastElement" @click="onMoveDown" />
 				<KebabMenuActionDelete
+					:name="audioRecordProperties.name"
 					scope-language-key="components.cardElement.audioRecordElement"
 					@click="onDelete"
 				/>
 			</BoardMenu>
-			<AudioRecordPlayer :audio-record-properties="audioRecordProperties" />
-			<!-- <AudioRecordRecorder v-if="isEditMode">
-				
-			</AudioRecordRecorder> -->
-		</div>
+		</AudioRecordContent>
 	</v-card>
 </template>
 
@@ -59,17 +63,15 @@ import {
 import { AudioRecordElementResponse } from "../../../../serverApi/v3";
 import { useFileStorageApi } from "../../board-file-element";
 import { AudioRecordAlert } from "../types/AudioRecordAlert.enum";
-import AudioRecordPlayer from "./AudioRecordPlayer.vue";
-import AudioRecordRecorder from "./AudioRecordPlayer.vue";
+import AudioRecordContent from "./AudioRecordContent.vue";
 export default defineComponent({
 	name: "AudioRecordContentElement",
 	components: {
-		// AudioRecordPlayer,
-		// AudioRecordRecorder,
-		// BoardMenu,
-		// KebabMenuActionMoveUp,
-		// KebabMenuActionMoveDown,
-		// KebabMenuActionDelete,
+		AudioRecordContent,
+		BoardMenu,
+		KebabMenuActionMoveUp,
+		KebabMenuActionMoveDown,
+		KebabMenuActionDelete,
 	},
 	props: {
 		element: {
