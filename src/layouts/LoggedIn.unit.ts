@@ -6,6 +6,7 @@ import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	FILE_PATHS_MODULE_KEY,
+	STATUS_ALERTS_MODULE_KEY,
 	THEME_KEY,
 } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -20,13 +21,18 @@ import { VApp } from "vuetify/lib/components/index.mjs";
 import LoggedInLayout from "./LoggedIn.layout.vue";
 import { Topbar } from "@ui-layout";
 import { createTestingPinia } from "@pinia/testing";
-import setupStores from "@@/tests/test-utils/setupStores";
+import { SkipLink } from "@ui-skip-link";
+import { Sidebar } from "@ui-layout";
+import StatusAlertsModule from "@/store/status-alerts";
 
 jest.mock("vue-router", () => ({
 	useRoute: () => ({ path: "rooms/courses-list" }),
 }));
 
 const setup = () => {
+	const statusAlertsModule = createModuleMocks(StatusAlertsModule, {
+		getStatusAlerts: [],
+	});
 	const authModule = createModuleMocks(AuthModule, {
 		getUserPermissions: [],
 	});
@@ -43,10 +49,6 @@ const setup = () => {
 			termsOfUse: "",
 			analogConsent: "",
 		},
-	});
-
-	setupStores({
-		envConfigModule: EnvConfigModule,
 	});
 
 	const wrapper = mount(VApp, {
@@ -66,16 +68,15 @@ const setup = () => {
 				[THEME_KEY.valueOf()]: {
 					name: SchulcloudTheme.N21,
 				},
+				[STATUS_ALERTS_MODULE_KEY.valueOf()]: statusAlertsModule,
 			},
 			stubs: {
-				SkipLink: { template: "<div></div>" },
 				"application-error-wrapper": { template: "<div></div>" },
 				snackbar: { template: "<div></div>" },
 				"router-view": { template: "<div></div>" },
 				"loading-state-dialog": { template: "<div></div>" },
 				"keep-alive": { template: "<div></div>" },
 				autoLogoutWarning: { template: "<div></div>" },
-				topbar: { template: "<div></div>" },
 			},
 		},
 	});
@@ -111,29 +112,118 @@ describe("LoggedIn.layout.vue", () => {
 		jest.clearAllMocks();
 	});
 
-	it("should render correctly", async () => {
+	it("should render correctly", () => {
 		const { wrapper } = setup();
 
 		expect(wrapper.exists()).toBe(true);
+		expect(wrapper.findComponent({ name: "VMain" }).exists()).toBe(true);
 	});
 
-	it("should show sidebar on Desktop as default", async () => {
-		const sidebarExpanded = true;
-		const { wrapper } = setup();
-		const sidebar = wrapper.find("nav");
+	describe("SkipLink", () => {
+		it("should render link to main content", () => {
+			const { wrapper } = setup();
 
-		if (!sidebarExpanded)
-			expect(sidebar.classes()).toContain("v-navigation-drawer--active");
+			const skipLink = wrapper.findComponent(SkipLink);
+			expect(skipLink.exists()).toBe(true);
+
+			expect(skipLink.find("a[href='#main-content']").exists()).toBe(true);
+		});
 	});
 
-	it("should not show sidebar on table and smaller as default", async () => {
-		defineWindowWidth(564);
-		const sidebarExpanded = true;
-		const { wrapper } = setup();
-		const sidebar = wrapper.find("nav");
+	describe("Sidebar", () => {
+		it("should render sidebar", () => {
+			const { wrapper } = setup();
 
-		if (!sidebarExpanded)
-			expect(sidebar.classes()).not.toContain("v-navigation-drawer--active");
+			const sidebar = wrapper.findComponent(Sidebar);
+			expect(sidebar.exists()).toBe(true);
+		});
+
+		describe("when using a large screen", () => {
+			it("should show expanded sidebar", () => {
+				const { wrapper } = setup();
+
+				const sidebar = wrapper.getComponent(Sidebar);
+				const nav = sidebar.get("nav");
+
+				expect(nav.classes()).toContain("v-navigation-drawer--active");
+			});
+		});
+
+		describe("when using a small screen", () => {
+			it("should hide sidebar", () => {
+				defineWindowWidth(564);
+
+				const { wrapper } = setup();
+				const sidebar = wrapper.getComponent(Sidebar);
+				const nav = sidebar.get("nav");
+
+				expect(nav.classes()).not.toContain("v-navigation-drawer--active");
+			});
+		});
+
+		describe("when sidebar is expanded", () => {
+			describe("and sidebar toggle button is clicked", () => {
+				it("should collapse sidebar", async () => {
+					const { wrapper } = setup();
+
+					const sidebar = wrapper.getComponent(Sidebar);
+					const sidebarToggle = wrapper.getComponent(
+						"[data-testid='sidebar-toggle-close']"
+					);
+					await sidebarToggle.trigger("click");
+					const nav = sidebar.get("nav");
+
+					expect(nav.classes()).not.toContain("v-navigation-drawer--active");
+				});
+			});
+		});
+	});
+
+	describe("Topbar", () => {
+		it("should render topbar", () => {
+			const { wrapper } = setup();
+
+			const topbar = wrapper.findComponent(Topbar);
+			expect(topbar.exists()).toBe(true);
+		});
+
+		describe("when sidebar is hidden", () => {
+			it("should show sidebar toggle button in topbar", () => {
+				defineWindowWidth(564);
+				const { wrapper } = setup();
+				const sidebarToggle = wrapper.findComponent({
+					name: "VAppBarNavIcon",
+				});
+				expect(sidebarToggle.exists()).toBe(true);
+			});
+
+			it("should show logo", () => {
+				defineWindowWidth(564);
+				const { wrapper } = setup();
+
+				const topbar = wrapper.getComponent(Topbar);
+				const topbarLogo = topbar.findComponent({ name: "CloudLogo" });
+				expect(topbarLogo.exists()).toBe(true);
+			});
+
+			describe("and sidebar toggle button in topbar is clicked", () => {
+				it("should expand sidebar", async () => {
+					defineWindowWidth(564);
+					const { wrapper } = setup();
+
+					const topbar = wrapper.getComponent(Topbar);
+					topbar.vm.$emit("sidebar-toggled");
+					await nextTick();
+
+					expect(topbar.emitted("sidebar-toggled")).toHaveLength(1);
+
+					const sidebar = wrapper.getComponent(Sidebar);
+					const nav = sidebar.get("nav");
+
+					expect(nav.classes()).toContain("v-navigation-drawer--active");
+				});
+			});
+		});
 	});
 
 	it("should not have sidebar in taborder", async () => {
@@ -159,7 +249,6 @@ describe("LoggedIn.layout.vue", () => {
 		const sidebar = wrapper.find("nav");
 
 		await sidebar.trigger("click");
-		await nextTick();
 
 		expect(mockSetLocalStorage).toHaveBeenCalledWith(
 			"sidebarExpanded",

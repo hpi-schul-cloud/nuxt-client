@@ -6,7 +6,7 @@
 			:sidebar-expanded="sidebarExpanded"
 			@sidebar-toggled="onToggleSidebar"
 		/>
-		<v-main
+		<VMain
 			id="main-content"
 			:class="{ 'position-fixed w-100': !isDesktop && sidebarExpanded }"
 		>
@@ -14,7 +14,7 @@
 				<AlertContainer />
 				<router-view />
 			</application-error-wrapper>
-		</v-main>
+		</VMain>
 		<loading-state-dialog />
 		<keep-alive>
 			<autoLogoutWarning />

@@ -7,6 +7,7 @@
 					:icon="mdiMenuOpen"
 					size="default"
 					flat
+					data-testid="sidebar-toggle-close"
 					@click="sidebarExpanded = false"
 				/>
 				<CloudLogo class="mt-1" />
