@@ -62,7 +62,7 @@ const setup = (permissions?: string[]) => {
 			},
 		},
 		slots: {
-			default: h(Sidebar),
+			default: h(Sidebar, { modelValue: true }),
 		},
 	});
 
