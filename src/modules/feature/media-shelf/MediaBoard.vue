@@ -137,6 +137,16 @@ const onLineDragEnd = async (event: SortableEvent) => {
 	overflow: auto hidden;
 }
 
+@supports (scrollbar-color: auto) {
+	.scrollable-line {
+		scrollbar-color: transparent transparent;
+	}
+
+	.scrollable-line:hover {
+		scrollbar-color: initial;
+	}
+}
+
 @supports selector(::-webkit-scrollbar) {
 	.scrollable-line::-webkit-scrollbar-thumb {
 		background-color: transparent;
@@ -148,16 +158,6 @@ const onLineDragEnd = async (event: SortableEvent) => {
 
 	.scrollable-line::-webkit-scrollbar-thumb:hover {
 		background-color: rgba(var(--v-theme-on-surface), 0.8);
-	}
-}
-
-@supports not selector(::-webkit-scrollbar) {
-	.scrollable-line {
-		scrollbar-color: transparent transparent;
-	}
-
-	.scrollable-line:hover {
-		scrollbar-color: initial;
 	}
 }
 </style>

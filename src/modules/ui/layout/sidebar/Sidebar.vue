@@ -121,6 +121,16 @@ const pageItems = computed(() => getItemsForUser(pageLinks.value));
 </script>
 
 <style>
+@supports (scrollbar-color: auto) {
+	.v-navigation-drawer__content {
+		scrollbar-color: transparent transparent;
+	}
+
+	.v-navigation-drawer__content:hover {
+		scrollbar-color: initial;
+	}
+}
+
 @supports selector(::-webkit-scrollbar) {
 	.v-navigation-drawer__content::-webkit-scrollbar-thumb {
 		background-color: transparent;
@@ -132,16 +142,6 @@ const pageItems = computed(() => getItemsForUser(pageLinks.value));
 
 	.v-navigation-drawer__content::-webkit-scrollbar-thumb:hover {
 		background-color: rgba(var(--v-theme-on-surface), 0.8);
-	}
-}
-
-@supports not selector(::-webkit-scrollbar) {
-	.v-navigation-drawer__content {
-		scrollbar-color: transparent transparent;
-	}
-
-	.v-navigation-drawer__content:hover {
-		scrollbar-color: initial;
 	}
 }
 </style>

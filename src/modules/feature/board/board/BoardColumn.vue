@@ -367,6 +367,16 @@ export default defineComponent({
 	min-height: 100%;
 }
 
+@supports (scrollbar-color: auto) {
+	.scrollable {
+		scrollbar-color: transparent transparent;
+	}
+
+	.scrollable:hover {
+		scrollbar-color: initial;
+	}
+}
+
 @supports selector(::-webkit-scrollbar) {
 	.scrollable::-webkit-scrollbar-thumb {
 		background-color: transparent;
@@ -378,16 +388,6 @@ export default defineComponent({
 
 	.scrollable::-webkit-scrollbar-thumb:hover {
 		background-color: rgba(var(--v-theme-on-surface), 0.8);
-	}
-}
-
-@supports not selector(::-webkit-scrollbar) {
-	.scrollable {
-		scrollbar-color: transparent transparent;
-	}
-
-	.scrollable:hover {
-		scrollbar-color: initial;
 	}
 }
 </style>
