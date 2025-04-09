@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<SkipLink />
-		<Sidebar v-if="sidebarExpanded" v-model="sidebarExpanded" />
+		<Sidebar v-model="sidebarExpanded" />
 		<Topbar
 			:sidebar-expanded="sidebarExpanded"
 			@sidebar-toggled="onToggleSidebar"
