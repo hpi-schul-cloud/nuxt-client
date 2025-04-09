@@ -24,13 +24,7 @@
 				</VBtn>
 			</template>
 
-			<KebabMenuList>
-				<KebabMenuActionChangePermission
-					v-if="isVisibleChangeRoleButton"
-					@click="onRoleChange"
-				/>
-				<KebabMenuActionRemoveMember @click="onRemove" />
-			</KebabMenuList>
+			<slot />
 		</VMenu>
 
 		<VBtn
@@ -46,40 +40,22 @@
 </template>
 
 <script setup lang="ts">
-import {
-	KebabMenuActionChangePermission,
-	KebabMenuActionRemoveMember,
-	KebabMenuList,
-} from "@ui-kebab-menu";
 import { mdiClose } from "@icons/material";
 import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
-const props = defineProps({
+defineProps({
 	selectedIds: {
 		type: Array<string>,
 		required: true,
 	},
-	isVisibleChangeRoleButton: {
-		type: Boolean,
-		default: false,
-	},
 });
-const { t } = useI18n();
+
 const emit = defineEmits<{
-	(e: "remove:selected", selectedIds: string[]): void;
-	(e: "change:role", selectedIds: string[]): void;
 	(e: "reset:selected"): void;
 }>();
 
-const onRemove = () => {
-	emit("remove:selected", props.selectedIds);
-};
-
 const onReset = () => {
 	emit("reset:selected");
-};
-
-const onRoleChange = () => {
-	emit("change:role", props.selectedIds);
 };
 </script>

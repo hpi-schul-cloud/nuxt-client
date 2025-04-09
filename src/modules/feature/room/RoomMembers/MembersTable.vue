@@ -12,11 +12,16 @@
 			class="multi-action-menu"
 			:class="{ 'order-2': isExtraSmallDisplay }"
 			:selected-ids="selectedUserIds"
-			:is-visible-change-role-button="isVisibleChangeRoleButton"
-			@remove:selected="onRemoveMembers"
 			@reset:selected="onResetSelectedMembers"
-			@change:role="onChangePermission"
-		/>
+		>
+			<KebabMenuList>
+				<KebabMenuActionChangePermission
+					v-if="isVisibleChangeRoleButton"
+					@click="onChangePermission"
+				/>
+				<KebabMenuActionRemoveMember @click="onRemoveMembers" />
+			</KebabMenuList>
+		</ActionMenu>
 		<v-spacer v-else />
 		<v-text-field
 			v-model="search"
@@ -107,6 +112,7 @@
 import ActionMenu from "./ActionMenu.vue";
 import {
 	KebabMenu,
+	KebabMenuList,
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
