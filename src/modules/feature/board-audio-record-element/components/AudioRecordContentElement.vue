@@ -63,10 +63,14 @@ import {
 import { AudioRecordElementResponse } from "../../../../serverApi/v3";
 import { useFileStorageApi } from "../../board-file-element";
 import { AudioRecordAlert } from "../types/AudioRecordAlert.enum";
+import { useAudioRecordAlerts } from "../composables/useAudioRecordAlerts.composable";
+
 import AudioRecordContent from "./AudioRecordContent.vue";
 export default defineComponent({
 	name: "AudioRecordContentElement",
 	components: {
+		// AudioPlayer,
+		// AudioRecorder,
 		AudioRecordContent,
 		BoardMenu,
 		KebabMenuActionMoveUp,
@@ -103,11 +107,11 @@ export default defineComponent({
 
 		const fileRecord = getFileRecord(element.value.id);
 
-		//const { alerts, addAlert } = useFileAlerts(fileRecord);
+		const { alerts, addAlert } = useAudioRecordAlerts(fileRecord);
 
-		// const isUploading = computed(() => {
-		// 	return fileRecord.value?.isUploading;
-		// });
+		const isUploading = computed(() => {
+			return fileRecord.value?.isUploading;
+		});
 
 		const audioRecordProperties = computed(() => {
 			if (fileRecord.value === undefined) {
@@ -139,7 +143,7 @@ export default defineComponent({
 		const isOutlined = computed(() => {
 			const { isEditMode } = props;
 			const isUploadingInViewMode =
-				fileRecord.value?.id !== undefined && !isEditMode; //&& !isUploading.value;
+				fileRecord.value?.id !== undefined && !isEditMode && !isUploading.value;
 
 			return isUploadingInViewMode || isEditMode;
 		});
@@ -183,9 +187,9 @@ export default defineComponent({
 			modelValue.value.caption = value;
 		};
 
-		// const onAddAlert = (alert: AudioRecordAlert) => {
-		// 	addAlert(alert);
-		// };
+		const onAddAlert = (alert: AudioRecordAlert) => {
+			addAlert(alert);
+		};
 
 		const onDelete = async (confirmation: Promise<boolean>) => {
 			const shouldDelete = await confirmation;
@@ -204,14 +208,14 @@ export default defineComponent({
 			hasFileRecord,
 			isOutlined,
 			modelValue,
-			//alerts,
-			//isUploading,
+			alerts,
+			isUploading,
 			onKeydownArrow,
 			onUploadFile,
 			onFetchFile,
 			onUpdateAlternativeText,
 			onUpdateCaption,
-			//	onAddAlert,
+			onAddAlert,
 			onDelete,
 			onMoveUp,
 			onMoveDown,

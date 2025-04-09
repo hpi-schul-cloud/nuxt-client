@@ -55,7 +55,9 @@
 				</div>
 			</div>
 		</template>
-		<template v-if="showMenu" #menu><slot /></template>
+		<template v-if="showMenu" #menu>
+			<slot />
+		</template>
 	</ContentElementBar>
 </template>
 
@@ -140,13 +142,16 @@ export default defineComponent({
 	border-top-right-radius: 0.25rem;
 	border-top-left-radius: 0.25rem;
 }
+
 .audio-player:focus {
 	outline: none;
 }
+
 .duration {
 	white-space: nowrap;
 	color: white;
 }
+
 .duration-slider {
 	width: 40%;
 	max-height: 2rem;

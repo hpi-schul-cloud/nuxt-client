@@ -1,55 +1,38 @@
 <template>
-	<div
-		class="d-flex"
-		:class="{
-			'flex-row': hasRowStyle,
-			'flex-column': !hasRowStyle,
-		}"
+	<AudioRecordRecorderDisplay :is-edit-mode="true" :show-menu="true">
+		<slot />
+	</AudioRecordRecorderDisplay>
+	<AudioRecordPlayerDisplay
+		:src="audioRecordProperties.url"
+		:is-edit-mode="true"
+		:show-menu="true"
 	>
-		<div
-			:class="{
-				'w-33': hasRowStyle,
-			}"
-		>
-			<AudioRecordPlayerDisplay
-				:src="audioRecordProperties.url"
-				:is-edit-mode="true"
-				:show-menu="true"
-			>
-				<slot />
-			</AudioRecordPlayerDisplay>
-		</div>
-		<div
-			class="d-flex flex-column"
-			:class="{ 'file-information': hasRowStyle }"
-		>
-			<AudioRecordDescription
-				:name="audioRecordProperties.name"
-				:caption="audioRecordProperties.element.content.caption"
-				:show-title="true"
-				:show-menu="!isMenuShownOnFileDisplay"
-				:is-edit-mode="true"
-				:src="fileDescriptionSrc"
-			>
-				<slot />
-			</AudioRecordDescription>
-		</div>
-	</div>
+		<slot />
+	</AudioRecordPlayerDisplay>
+
+	<AudioRecordDescription
+		:name="audioRecordProperties.name"
+		:caption="audioRecordProperties.element.content.caption"
+		:show-title="true"
+		:show-menu="!isMenuShownOnFileDisplay"
+		:is-edit-mode="true"
+		:src="fileDescriptionSrc"
+	>
+		<slot />
+	</AudioRecordDescription>
 </template>
 
 <script setup lang="ts">
 import { computed, PropType, ref } from "vue";
-import FileAlerts from "./alert/FileAlerts.vue";
-import FileDisplay from "../content/display/FileDisplay.vue";
 import AudioRecordDescription from "./AudioRecordDescription.vue";
 import { useDebounceFn } from "@vueuse/core";
 import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useDisplay } from "vuetify";
-import { isAudioMimeType, isPdfMimeType } from "@/utils/fileHelper";
-import AudioRecordPlayer from "./AudioRecordPlayer.vue";
+import { isAudioMimeType } from "@/utils/fileHelper";
 import AudioRecordPlayerDisplay from "./AudioRecordPlayerDisplay.vue";
 import { AudioRecordProperties } from "../types/audio-record-properties";
+import AudioRecordRecorderDisplay from "./AudioRecordRecorderDisplay.vue";
 
 const props = defineProps({
 	audioRecordProperties: {
@@ -82,21 +65,17 @@ const onUpdateText = useDebounceFn((value: string) => {
 // 	emit("add:alert", alert);
 // };
 
-const hasPdfMimeType = computed(() =>
-	isPdfMimeType(props.audioRecordProperties.mimeType)
-);
-
 const hasAudioMimeType = computed(() => {
 	return isAudioMimeType(props.audioRecordProperties.mimeType);
 });
 
 const fileDescriptionSrc = computed(() => {
-	return hasPdfMimeType.value ? props.audioRecordProperties.url : undefined;
+	return hasAudioMimeType.value ? props.audioRecordProperties.url : undefined;
 });
 
 const showTitle = computed(() => {
 	return (
-		hasPdfMimeType.value ||
+		hasAudioMimeType.value ||
 		(!props.audioRecordProperties.previewUrl && !hasAudioMimeType.value)
 	);
 });
@@ -111,7 +90,7 @@ const isSmallOrLargerListBoard = computed(() => {
 const hasRowStyle = computed(
 	() =>
 		isSmallOrLargerListBoard.value &&
-		hasPdfMimeType.value &&
+		hasAudioMimeType.value &&
 		props.audioRecordProperties.previewUrl
 );
 
@@ -120,7 +99,7 @@ const isMenuShownOnFileDisplay = computed(() => {
 		!!props.audioRecordProperties.previewUrl || hasAudioMimeType.value;
 
 	const isPdfOnSmallOrLargerListBoard =
-		isSmallOrLargerListBoard.value && hasPdfMimeType.value;
+		isSmallOrLargerListBoard.value && hasAudioMimeType.value;
 
 	return isFileDisplayRendered && !isPdfOnSmallOrLargerListBoard;
 });

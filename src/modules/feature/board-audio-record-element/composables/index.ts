@@ -1,1 +1,1 @@
-export * from "./audioRecorder.composable";
+export * from "./useAudioRecorder.composable";

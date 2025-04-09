@@ -215,6 +215,7 @@ export default {
 	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
 	"component.cardElement.fileElement.audioPlayer.speed": "Geschwindigkeitsmenü",
 	"component.cardElement.audioRecordElement.audioPlayer.pause": "Anhalten",
+	"component.cardElement.audioRecordElement.audioPlayer.record": "Aufnehmen",
 	"component.cardElement.audioRecordElement.audioPlayer.play": "Abspielen",
 	"component.cardElement.audioRecordElement.audioPlayer.slider":
 		"Audio Schieberegler für Fortschritt",

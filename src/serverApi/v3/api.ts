@@ -180,6 +180,25 @@ export interface ApiValidationError {
 /**
  * 
  * @export
+ * @interface AudioRecordContentBody
+ */
+export interface AudioRecordContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof AudioRecordContentBody
+     */
+    caption: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof AudioRecordContentBody
+     */
+    alternativeText: string;
+}
+/**
+ * 
+ * @export
  * @interface AudioRecordElementContent
  */
 export interface AudioRecordElementContent {
@@ -195,6 +214,25 @@ export interface AudioRecordElementContent {
      * @memberof AudioRecordElementContent
      */
     alternativeText: string;
+}
+/**
+ * 
+ * @export
+ * @interface AudioRecordElementContentBody
+ */
+export interface AudioRecordElementContentBody {
+    /**
+     * the type of the updated element
+     * @type {ContentElementType}
+     * @memberof AudioRecordElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {AudioRecordContentBody}
+     * @memberof AudioRecordElementContentBody
+     */
+    content: AudioRecordContentBody;
 }
 /**
  * 

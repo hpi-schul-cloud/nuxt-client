@@ -31,6 +31,7 @@ import { ContentElementType } from "@/serverApi/v3";
 import { AnyContentElement } from "@/types/board/ContentElement";
 import { ElementMove } from "@/types/board/DragAndDrop";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { AudioRecordContentElement } from "@feature-board-audio-record-element";
 import { CollaborativeTextEditorElement } from "@feature-board-collaborative-text-editor-element";
 import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
@@ -148,6 +149,8 @@ const mapToComponent = (type: string) => {
 				return VideoConferenceContentElement;
 			}
 			break;
+		case ContentElementType.AudioRecord:
+			return AudioRecordContentElement;
 		case ContentElementType.Deleted:
 			return DeletedElement;
 		default:
@@ -161,6 +164,7 @@ const elementTypesWithTabindexZero = [
 	ContentElementType.ExternalTool,
 	ContentElementType.File,
 	ContentElementType.Link,
+	ContentElementType.AudioRecord,
 ];
 
 const getTabIndex = (element: AnyContentElement) => {

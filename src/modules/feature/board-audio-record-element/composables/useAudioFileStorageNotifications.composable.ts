@@ -6,7 +6,7 @@ import {
 } from "@/utils/inject";
 import { useI18n } from "vue-i18n";
 
-export const useFileStorageNotifier = () => {
+export const useAudioFileStorageNotifier = () => {
 	const { t, n } = useI18n();
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);

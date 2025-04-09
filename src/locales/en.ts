@@ -213,6 +213,12 @@ export default {
 	"component.cardElement.fileElement.audioPlayer.slider": "Audio slider",
 	"component.cardElement.fileElement.audioPlayer.speed.normal": "Normal",
 	"component.cardElement.fileElement.audioPlayer.speed": "Speed Menu",
+	"component.cardElement.audioRecordElement.audioPlayer.pause": "Pause",
+	"component.cardElement.audioRecordElement.audioPlayer.record": "Record",
+	"component.cardElement.audioRecordElement.audioPlayer.play": "Play",
+	"component.cardElement.audioRecordElement.audioPlayer.slider": "Audio Slider",
+	"component.cardElement.audioRecordElement.audioPlayer.speed.normal": "Normal",
+	"component.cardElement.audioRecordElement.audioPlayer.speed": "Audio speed",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"During the migration, the registration system for students and teachers is changed to moin.schule. The data belonging to the affected accounts will be preserved.",
 	"components.administration.adminMigrationSection.description.secondPart":
@@ -413,6 +419,7 @@ export default {
 	"components.board.menu.linkElement": "Link settings",
 	"components.board.menu.submissionElement": "Submission settings",
 	"components.board.menu.videoConferenceElement": "Video conference settings",
+	"components.board.menu.audioRecordElement": "Audio record settings",
 	"components.board.menu.deletedElement": "Deleted content settings",
 	"components.board.notifications.errors.fileNameExists":
 		"A file with this name already exists.",
@@ -470,6 +477,22 @@ export default {
 		"This Etherpad is visible and editable for all course participants.",
 	"components.cardElement.externalToolElement": "External tool",
 	"components.cardElement.mediaExternalToolElement": "Medium",
+	"components.cardElement.audioRecordElement": "Audio record",
+	"components.cardElement.audioRecordElement.altDescription":
+		"Alternative description",
+	"components.cardElement.audioRecordElement.alternativeText":
+		"Alternative text",
+	"components.cardElement.audioRecordElement.audioFormatError":
+		"Audio format not supported.",
+	"components.cardElement.audioRecordElement.awaitingScan": "Scanning file.",
+	"components.cardElement.audioRecordElement.caption": "Description",
+	"components.cardElement.audioRecordElement.emptyAlt": "Empty alt",
+	"components.cardElement.audioRecordElement.pdfAlt": "Preview for",
+	"components.cardElement.audioRecordElement.previewError": "Preview Error.",
+	"components.cardElement.audioRecordElement.reloadStatus": "Status update",
+	"components.cardElement.audioRecordElement.scanError": "Scan error.",
+	"components.cardElement.audioRecordElement.scanWontCheck": "File too big.",
+	"components.cardElement.audioRecordElement.virusDetected": "Virus detected.",
 	"components.cardElement.fileElement": "File",
 	"components.cardElement.fileElement.altDescription":
 		"A short description helps people who cannot see the picture.",
@@ -530,6 +553,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"External tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "File",
+	"components.elementTypeSelection.elements.audioRecordElement.subtitle":
+		"Audio Record",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
 		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",

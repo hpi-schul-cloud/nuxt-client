@@ -1,4 +1,6 @@
 import {
+	AudioRecordElementContentBody,
+	AudioRecordElementResponse,
 	BoardApiFactory,
 	BoardCardApiFactory,
 	BoardColumnApiFactory,
@@ -94,6 +96,20 @@ export const useBoardApi = () => {
 	};
 
 	const generateDataProp = (element: AnyContentElement) => {
+		const isAudioRecordElement = (
+			element: AnyContentElement
+		): element is AudioRecordElementResponse => {
+			return element.type === ContentElementType.AudioRecord;
+		};
+
+		if (isAudioRecordElement(element)) {
+			const body: AudioRecordElementContentBody = {
+				content: element.content,
+				type: ContentElementType.AudioRecord,
+			};
+			return body;
+		}
+
 		const isRichTextElement = (
 			element: AnyContentElement
 		): element is RichTextElementResponse => {

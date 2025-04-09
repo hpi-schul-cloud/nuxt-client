@@ -3,7 +3,7 @@ import { createMock } from "@golevelup/ts-jest";
 import {
 	RecordingStateEnum,
 	useAudioRecorder,
-} from "./audioRecorder.composable";
+} from "./useAudioRecorder.composable";
 
 describe("AudioRecorder", () => {
 	const setupMediaRecorder = (initialState: RecordingState = "inactive") => {

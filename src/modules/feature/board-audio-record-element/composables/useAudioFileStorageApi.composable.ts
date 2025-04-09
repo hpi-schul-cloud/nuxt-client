@@ -11,7 +11,7 @@ import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createTestableGlobaleState } from "@/utils/create-global-state";
 import { Ref, ref } from "vue";
-import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
+import { useAudioFileStorageNotifier } from "./useAudioFileStorageNotifications.composable";
 
 export enum ErrorType {
 	FILE_IS_BLOCKED = "FILE_IS_BLOCKED",
@@ -33,7 +33,7 @@ const fileStorageApi = () => {
 		showUnauthorizedError,
 		showInternalServerError,
 		showFileExistsError,
-	} = useFileStorageNotifier();
+	} = useAudioFileStorageNotifier();
 
 	const getFileRecord = (id: string) => {
 		const existingFileRecord = fileRecords.get(id);

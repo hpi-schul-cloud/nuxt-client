@@ -7,6 +7,7 @@
 					loading="lazy"
 					data-testid="audio-thumbnail-in-card"
 				/>
+
 				<v-btn
 					v-if="playing"
 					:aria-label="
@@ -57,23 +58,28 @@
 				</div>
 			</div>
 		</template>
+		<template v-if="showMenu" #menu><slot /></template>
 	</ContentElementBar>
 </template>
 
 <script lang="ts">
 import { formatSecondsToHourMinSec } from "@/utils/fileHelper";
-import { mdiPause, mdiPlay, mdiPlaySpeed } from "@icons/material";
+import {
+	mdiPause,
+	mdiPlay,
+	mdiPlaySpeed,
+	mdiMicrophone,
+} from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
+import { AudioRecordAlert } from "../types/AudioRecordAlert.enum";
 import SpeedMenu from "./SpeedMenu.vue";
-import AudioRecordAlert from "./AudioRecordAlert.vue";
 
 export default defineComponent({
-	name: "AudioRecordPlayer",
+	name: "AudioRecordRecorderDisplay",
 	components: { ContentElementBar, SpeedMenu },
 	props: {
-		src: { type: String, required: true },
 		showMenu: { type: Boolean, required: true },
 	},
 	emits: ["error"],
