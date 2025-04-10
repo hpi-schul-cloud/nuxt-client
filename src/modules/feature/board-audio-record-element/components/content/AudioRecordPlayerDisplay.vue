@@ -1,3 +1,4 @@
+<!-- eslint-disable prettier/prettier -->
 <template>
 	<ContentElementBar class="audio-player bg-grey-darken-3">
 		<template #element>
@@ -7,6 +8,19 @@
 					loading="lazy"
 					data-testid="audio-thumbnail-in-card"
 				/>
+				<v-btn
+					v-if="playing"
+					:aria-label="
+						$t('component.cardElement.fileElement.audioPlayer.pause')
+					"
+					color="transparent"
+					density="comfortable"
+					icon
+					variant="flat"
+					@click="onRecord"
+				>
+					<v-icon> {{ mdiPause }}</v-icon>
+				</v-btn>
 				<v-btn
 					v-if="playing"
 					:aria-label="
@@ -63,7 +77,12 @@
 
 <script lang="ts">
 import { formatSecondsToHourMinSec } from "@/utils/fileHelper";
-import { mdiPause, mdiPlay, mdiPlaySpeed } from "@icons/material";
+import {
+	mdiPause,
+	mdiPlay,
+	mdiPlaySpeed,
+	mdiMicrophone,
+} from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
@@ -99,6 +118,10 @@ export default defineComponent({
 			playing.value = !playing.value;
 		};
 
+		const onRecord = () => {
+			playing.value = !playing.value;
+		};
+
 		const onInputSlider = (seconds: number) => {
 			controls.currentTime.value = seconds;
 		};
@@ -131,6 +154,7 @@ export default defineComponent({
 			mdiPause,
 			mdiPlaySpeed,
 			onPlay,
+			onRecord,
 			onInputSlider,
 			durationDisplay,
 		};

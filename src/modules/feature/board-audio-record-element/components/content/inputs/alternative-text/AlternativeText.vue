@@ -1,12 +1,12 @@
 <template>
 	<v-textarea
 		v-model="modelValue"
-		data-testid="file-alttext-input"
+		data-testid="audioRecordElement-alttext-input"
 		rows="1"
 		auto-grow
 		:persistent-hint="true"
-		:hint="$t('components.cardElement.fileElement.altDescription')"
-		:label="$t('components.cardElement.fileElement.alternativeText')"
+		:hint="$t('components.cardElement.audioRecordElement.altDescription')"
+		:label="$t('components.cardElement.audioRecordElement.alternativeText')"
 	/>
 </template>
 

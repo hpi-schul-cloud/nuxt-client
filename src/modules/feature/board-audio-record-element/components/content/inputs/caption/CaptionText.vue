@@ -4,7 +4,7 @@
 		data-testid="file-caption-input"
 		rows="1"
 		auto-grow
-		:label="$t('components.cardElement.fileElement.caption')"
+		:label="$t('components.cardElement.audioRecordElement.caption')"
 		:hide-details="true"
 	/>
 </template>
