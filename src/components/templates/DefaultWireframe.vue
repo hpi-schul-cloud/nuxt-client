@@ -210,7 +210,6 @@ $fab-wrapper-height: 80px;
 	justify-content: flex-end;
 	height: $fab-wrapper-height;
 	margin-top: -#{$fab-wrapper-height}; // stylelint-disable-line sh-waqar/declaration-use-variable
-	margin-top: -#{$fab-wrapper-height};
 	pointer-events: none;
 
 	* {
