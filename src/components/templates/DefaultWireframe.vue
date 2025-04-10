@@ -10,7 +10,7 @@
 			aria-live="assertive"
 			class="d-sr-only"
 		/>
-		<div class="wireframe-header sticky" :class="{ fixed: fixedHeader }">
+		<div class="wireframe-header sticky">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
@@ -102,9 +102,6 @@ const props = defineProps({
 	dataTestid: {
 		type: String as PropType<string | null>,
 		default: null,
-	},
-	fixedHeader: {
-		type: Boolean,
 	},
 	mainWithoutPadding: {
 		type: Boolean,
@@ -212,6 +209,7 @@ $fab-wrapper-height: 80px;
 	align-items: center;
 	justify-content: flex-end;
 	height: $fab-wrapper-height;
+	margin-top: -#{$fab-wrapper-height}; // stylelint-disable-line sh-waqar/declaration-use-variable
 	margin-top: -#{$fab-wrapper-height};
 	pointer-events: none;
 

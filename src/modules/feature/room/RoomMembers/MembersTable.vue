@@ -1,11 +1,8 @@
 <template>
 	<div
 		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
-		:class="{
-			'fixed-position': fixedPosition.enabled,
-			'flex-column': isExtraSmallDisplay,
-		}"
-		:style="{ top: `${fixedPosition.positionTop}px` }"
+		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
+		:style="{ top: `${headerBottom + 1}px` }"
 	>
 		<ActionMenu
 			v-if="selectedUserIds.length"
@@ -139,6 +136,10 @@ const props = defineProps({
 		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
 		default: () => ({ enabled: false, positionTop: 0 }),
 	},
+	headerBottom: {
+		type: Number,
+		default: 0,
+	},
 });
 
 const selectedUserIds: ModelRef<string[]> = defineModel("selectedUserIds", {
@@ -154,7 +155,7 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay } = useDisplay();
+const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
 const search = ref("");
 const memberList = toRef(props, "members");
 const membersFilterCount = ref(memberList.value?.length);
@@ -280,13 +281,13 @@ const tableHeader = [
 	min-height: 40px;
 }
 
-.fixed-position {
-	$space-left-right: calc(var(--space-base-vuetify) * 6);
-	position: fixed;
-	right: $space-left-right;
-	left: $space-left-right;
-	width: calc(100% - $space-left-right * 2);
+.sticky {
+	position: sticky;
 	z-index: 1;
 	background: rgb(var(--v-theme-white));
+	$space-left-right: calc(var(--space-base-vuetify) * 6);
+	right: $space-left-right;
+	left: $space-left-right;
+	width: 100%;
 }
 </style>
