@@ -65,6 +65,7 @@ const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 	[BoardMenuScope.EXTERNAL_TOOL_ELEMENT]:
 		"components.board.menu.externalToolElement",
 	[BoardMenuScope.FILE_ELEMENT]: "components.board.menu.fileElement",
+	[BoardMenuScope.FOLDER_ELEMENT]: "components.board.menu.folderElement",
 	[BoardMenuScope.LINK_ELEMENT]: "components.board.menu.linkElement",
 	[BoardMenuScope.SUBMISSION_ELEMENT]:
 		"components.board.menu.submissionElement",

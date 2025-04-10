@@ -1,5 +1,5 @@
 <template>
-	<VNavigationDrawer class="sidebar">
+	<VNavigationDrawer v-model="sidebarExpanded" class="sidebar">
 		<VList open-strategy="multiple">
 			<div class="d-flex align-center">
 				<VBtn
@@ -7,7 +7,8 @@
 					:icon="mdiMenuOpen"
 					size="default"
 					flat
-					@click="() => $emit('update:modelValue', false)"
+					data-testid="sidebar-toggle-close"
+					@click="sidebarExpanded = false"
 				/>
 				<CloudLogo class="mt-1" />
 			</div>
@@ -55,7 +56,10 @@ import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
 import { mdiMenuOpen } from "@icons/material";
 
-defineEmits(["update:modelValue"]);
+const sidebarExpanded = defineModel({
+	type: Boolean,
+	required: true,
+});
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
