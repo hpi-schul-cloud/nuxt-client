@@ -1,5 +1,5 @@
 <template>
-	<VNavigationDrawer v-model="sidebarExpanded" class="sidebar">
+	<VNavigationDrawer v-model="sidebarExpanded">
 		<VList open-strategy="multiple">
 			<div class="d-flex align-center">
 				<VBtn
