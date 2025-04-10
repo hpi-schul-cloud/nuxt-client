@@ -14323,6 +14323,44 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 
+         * @summary Get metadata for a single content element.
+         * @param {string} contentElementId The id of the element.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        elementControllerGetElementMetadata: async (contentElementId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contentElementId' is not null or undefined
+            assertParamExists('elementControllerGetElementMetadata', 'contentElementId', contentElementId)
+            const localVarPath = `/elements/{contentElementId}/metadata`
+                .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Move a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {MoveContentElementBody} moveContentElementBody 
@@ -14482,6 +14520,17 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get metadata for a single content element.
+         * @param {string} contentElementId The id of the element.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async elementControllerGetElementMetadata(contentElementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: object; }>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerGetElementMetadata(contentElementId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Move a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {MoveContentElementBody} moveContentElementBody 
@@ -14548,6 +14597,16 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
         },
         /**
          * 
+         * @summary Get metadata for a single content element.
+         * @param {string} contentElementId The id of the element.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        elementControllerGetElementMetadata(contentElementId: string, options?: any): AxiosPromise<{ [key: string]: object; }> {
+            return localVarFp.elementControllerGetElementMetadata(contentElementId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Move a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {MoveContentElementBody} moveContentElementBody 
@@ -14607,6 +14666,16 @@ export interface BoardElementApiInterface {
      * @memberof BoardElementApiInterface
      */
     elementControllerDeleteElement(contentElementId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Get metadata for a single content element.
+     * @param {string} contentElementId The id of the element.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardElementApiInterface
+     */
+    elementControllerGetElementMetadata(contentElementId: string, options?: any): AxiosPromise<{ [key: string]: object; }>;
 
     /**
      * 
@@ -14672,6 +14741,18 @@ export class BoardElementApi extends BaseAPI implements BoardElementApiInterface
      */
     public elementControllerDeleteElement(contentElementId: string, options?: any) {
         return BoardElementApiFp(this.configuration).elementControllerDeleteElement(contentElementId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get metadata for a single content element.
+     * @param {string} contentElementId The id of the element.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardElementApi
+     */
+    public elementControllerGetElementMetadata(contentElementId: string, options?: any) {
+        return BoardElementApiFp(this.configuration).elementControllerGetElementMetadata(contentElementId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

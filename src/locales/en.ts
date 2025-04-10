@@ -2022,4 +2022,11 @@ export default {
 	"feature.media-shelf.availableLine.title": "Available media",
 	"feature.media-shelf.layout.list": "Lines",
 	"feature.media-shelf.layout.grid": "Grid",
+	"pages.folder.emptyState": "There are currently no files here.",
+	"pages.folder.fab.title": "Add file",
+	"page.folder.untitled": "Untitled folder",
+	"page.folder.titled": "Folder",
+	"pages.folder.ariaLabels.menu": "Folder menu",
+	"pages.folder.ariaLabels.menu.action.edit": "Rename folder",
+	"pages.folder.ariaLabels.menu.action.delete": "Delete folder",
 };
