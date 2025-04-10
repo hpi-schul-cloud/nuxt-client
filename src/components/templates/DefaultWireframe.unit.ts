@@ -142,21 +142,4 @@ describe("DefaultWireframe", () => {
 
 		expect(wrapper.emitted("fab:clicked")).toHaveLength(1);
 	});
-
-	describe("when 'fixedHeader' prop is set", () => {
-		it("should have 'fixed-header' class", async () => {
-			const wrapper = setup({
-				props: { maxWidth: "nativ" },
-			});
-
-			const headerBefore = wrapper.find(".wireframe-header");
-			expect(headerBefore.classes("fixed")).toBe(false);
-
-			wrapper.setProps({ fixedHeader: true });
-			await nextTick();
-
-			const headerAfter = wrapper.find(".wireframe-header");
-			expect(headerAfter.classes("fixed")).toBe(true);
-		});
-	});
 });

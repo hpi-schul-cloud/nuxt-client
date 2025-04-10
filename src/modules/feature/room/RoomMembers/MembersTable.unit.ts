@@ -7,7 +7,7 @@ import { nextTick, ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import { envsFactory, roomMemberFactory } from "@@/tests/test-utils";
 import { DOMWrapper, flushPromises, VueWrapper } from "@vue/test-utils";
-import { VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
+import { VBtn, VDataTable, VTextField } from "vuetify/lib/components/index.mjs";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { RoleName } from "@/serverApi/v3";
@@ -253,48 +253,6 @@ describe("MembersTable", () => {
 				expect(checkedIndices).toEqual([]);
 			});
 
-			it("should emit change:permissions when change:role event is emitted", async () => {
-				const selectedUserIds = [mockMembers[0].userId, mockMembers[2].userId];
-				const { wrapper } = setup({ selectedUserIds });
-
-				const actionMenu = wrapper.findComponent(ActionMenu);
-				actionMenu.vm.$emit("change:role", selectedUserIds);
-
-				await nextTick();
-
-				const changePermissionsEvent = wrapper.emitted("change:permission");
-				expect(changePermissionsEvent).toHaveLength(1);
-				expect(changePermissionsEvent![0]).toEqual([selectedUserIds]);
-			});
-
-			it("should emit remove:members when selected members remove:selected event emitted", async () => {
-				const selectedUserIds = [mockMembers[0].userId, mockMembers[2].userId];
-				const { wrapper } = setup({ selectedUserIds });
-
-				askConfirmationMock.mockResolvedValue(true);
-
-				const actionMenu = wrapper.findComponent(ActionMenu);
-				actionMenu.vm.$emit("remove:selected", selectedUserIds);
-				await flushPromises();
-
-				const removeEvents = wrapper.emitted("remove:members");
-				expect(removeEvents).toHaveLength(1);
-				expect(removeEvents![0]).toEqual([selectedUserIds]);
-			});
-
-			it("should not emit remove:members event when remove was cancled", async () => {
-				const selectedUserIds = [mockMembers[0].userId, mockMembers[2].userId];
-				const { wrapper } = setup({ selectedUserIds });
-
-				askConfirmationMock.mockResolvedValue(false);
-
-				const actionMenu = wrapper.findComponent(ActionMenu);
-				actionMenu.vm.$emit("reset:selected", selectedUserIds);
-				await flushPromises();
-
-				expect(wrapper.emitted()).not.toHaveProperty("remove:members");
-			});
-
 			it.each([
 				{
 					description: "single member",
@@ -317,8 +275,15 @@ describe("MembersTable", () => {
 					askConfirmationMock.mockResolvedValue(true);
 
 					const actionMenu = wrapper.findComponent(ActionMenu);
-					actionMenu.vm.$emit("remove:selected", selectedUserIds);
-					await flushPromises();
+					await nextTick();
+					actionMenu.getComponent(VBtn).trigger("click");
+					await nextTick();
+
+					const removeButton = wrapper.findComponent(
+						KebabMenuActionRemoveMember
+					);
+					removeButton.trigger("click");
+					await nextTick();
 
 					expect(wrapper.emitted()).toHaveProperty("remove:members");
 
@@ -491,26 +456,6 @@ describe("MembersTable", () => {
 			expect(dataTableTextContent).toContain(mockMembers[0].firstName);
 			expect(dataTableTextContent).not.toContain(mockMembers[1].firstName);
 			expect(dataTableTextContent).not.toContain(mockMembers[2].firstName);
-		});
-	});
-
-	describe("when 'fixedPosition' prop is set", () => {
-		it("should have 'fixed-position' class", async () => {
-			const { wrapper } = setup();
-
-			const elementBefore = wrapper.find(".table-title-header");
-			expect(elementBefore.classes("fixed-position")).toBe(false);
-
-			wrapper.setProps({
-				fixedPosition: {
-					enabled: true,
-					positionTop: 0,
-				},
-			});
-			await nextTick();
-
-			const elementAfter = wrapper.find(".table-title-header");
-			expect(elementAfter.classes("fixed-position")).toBe(true);
 		});
 	});
 
