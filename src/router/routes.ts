@@ -239,6 +239,15 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: createPermissionGuard(["news_edit"]),
 	},
 	{
+		path: `/folder/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-folder")).FolderPage,
+		// beforeEnter: [checkFolderFeature], @TODO add this when the feature is available
+		name: "folder-id",
+		props: (route: RouteLocationNormalized) => ({
+			folderId: route.params.id,
+		}),
+	},
+	{
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
 		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
