@@ -8,10 +8,10 @@
 		:style="{ top: `${fixedPosition.positionTop}px` }"
 	>
 		<ActionMenu
-			v-if="selectedUserIds.length"
+			v-if="selectedIds.length"
 			class="multi-action-menu"
 			:class="{ 'order-2': isExtraSmallDisplay }"
-			:selected-ids="selectedUserIds"
+			:selected-ids="selectedIds"
 			:is-visible-change-role-button="isVisibleChangeRoleButton"
 			@remove:selected="onRemoveMembers"
 			@reset:selected="onResetSelectedMembers"
@@ -37,12 +37,12 @@
 	<v-divider role="presentation" />
 	<v-data-table
 		v-model:search="search"
-		v-model="selectedUserIds"
+		v-model="selectedIds"
 		data-testid="participants-table"
 		hover
 		item-value="userId"
 		mobile-breakpoint="sm"
-		:items="memberList"
+		:items="roomMembers"
 		item-selectable="isSelectable"
 		:headers="tableHeader"
 		:items-per-page-options="[5, 10, 25, 50, 100]"
@@ -110,50 +110,43 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import { computed, ModelRef, PropType, ref, toRef } from "vue";
+import { PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { RoomMember, useRoomMemberVisibilityOptions } from "@data-room";
+import {
+	RoomMember,
+	useRoomMembersStore,
+	useRoomMemberVisibilityOptions,
+} from "@data-room";
 import { useDisplay } from "vuetify/lib/framework.mjs";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
-	members: {
-		type: Array as PropType<RoomMember[]>,
-		required: true,
-	},
-	currentUser: {
-		type: Object as PropType<RoomMember>,
-		required: true,
-	},
 	fixedPosition: {
 		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
 		default: () => ({ enabled: false, positionTop: 0 }),
 	},
 });
+const { t } = useI18n();
+const { xs: isExtraSmallDisplay } = useDisplay();
 
-const selectedUserIds: ModelRef<string[]> = defineModel("selectedUserIds", {
-	type: Array<string>,
-	required: true,
-});
+const roomMembersStore = useRoomMembersStore();
+const { currentUser, roomMembers, selectedIds } = storeToRefs(roomMembersStore);
+const { removeMembers } = roomMembersStore;
 
 const { askConfirmation } = useConfirmationDialog();
 
 const emit = defineEmits<{
-	(e: "remove:members", userIds: string[]): void;
 	(e: "change:permission", userIds: string[]): void;
 }>();
 
-const { t } = useI18n();
-const { xs: isExtraSmallDisplay } = useDisplay();
 const search = ref("");
-const memberList = toRef(props, "members");
-const membersFilterCount = ref(memberList.value?.length);
 
-const currentUser = computed(() => props.currentUser);
+const membersFilterCount = ref(roomMembers.value?.length);
 
 const {
 	isVisibleActionColumn,
@@ -165,22 +158,22 @@ const {
 
 const onUpdateFilter = (filteredMembers: RoomMember[]) => {
 	membersFilterCount.value =
-		search.value === "" ? memberList.value.length : filteredMembers.length;
+		search.value === "" ? roomMembers.value.length : filteredMembers.length;
 };
 
 const onResetSelectedMembers = () => {
-	selectedUserIds.value = [];
+	selectedIds.value = [];
 };
 
 const onRemoveMembers = async (userIds: string[]) => {
 	const shouldRemove = await confirmRemoval(userIds);
-	if (shouldRemove) emit("remove:members", userIds);
+	if (shouldRemove) await removeMembers(userIds);
 };
 
 const confirmRemoval = async (userIds: string[]) => {
 	let message = t("pages.rooms.members.multipleRemove.confirmation");
 	if (userIds.length === 1) {
-		const member = memberList.value.find(
+		const member = roomMembers.value.find(
 			(member) => member.userId === userIds[0]
 		);
 		message = t("pages.rooms.members.remove.confirmation", {

@@ -19,11 +19,7 @@
 	<div class="mb-12">
 		<MembersTable
 			v-if="!isLoading && currentUser"
-			v-model:selected-user-ids="selectedIds"
-			:members="memberList"
-			:current-user="currentUser"
 			:fixed-position="fixedHeaderOnMobile"
-			@remove:members="onRemoveMembers"
 			@change:permission="onOpenRoleDialog"
 		/>
 	</div>
@@ -44,50 +40,34 @@
 			@change-room-owner="onChangeOwner"
 		/>
 	</VDialog>
-	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
-import { buildPageTitle } from "@/utils/pageTitle";
-import { useTitle, useElementBounding } from "@vueuse/core";
-import { computed, onMounted, Ref, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
 import {
 	useRoomDetailsStore,
-	useRoomMembers,
 	useRoomMemberVisibilityOptions,
 	RoomMember,
+	useRoomMembersStore,
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import { MembersTable, ChangeRole } from "@feature-room";
 import { ChangeRoomRoleBodyParamsRoleNameEnum } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
-import { ConfirmationDialog } from "@ui-confirmation-dialog";
+import { useElementBounding } from "@vueuse/core";
 
-const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
-const route = useRoute();
 
 const { xs, mdAndDown } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
-const isMembersDialogOpen = ref(false);
 const isChangeRoleDialogOpen = ref(false);
-const roomId = route.params.id.toString();
-const {
-	isLoading,
-	roomMembers,
-	currentUser,
-	selectedIds,
-	changeRoomOwner,
-	fetchMembers,
-	removeMembers,
-	updateMembersRole,
-} = useRoomMembers(roomId);
-const memberList: Ref<RoomMember[]> = ref(roomMembers);
-const pageTitle = computed(() =>
-	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
-);
+
+const roomMembersStore = useRoomMembersStore();
+const { isLoading, selectedIds, roomMembers, currentUser } =
+	storeToRefs(roomMembersStore);
+const { updateMembersRole, changeRoomOwner } = roomMembersStore;
+
 const wireframe = ref<HTMLElement | null>(null);
 const fixedHeaderOnMobile = ref({
 	enabled: false,
@@ -96,15 +76,8 @@ const fixedHeaderOnMobile = ref({
 const { y } = useElementBounding(wireframe);
 const { isVisiblePageInfoText } = useRoomMemberVisibilityOptions(currentUser);
 
-useTitle(pageTitle);
-
 const onDialogClose = () => {
-	isMembersDialogOpen.value = false;
 	isChangeRoleDialogOpen.value = false;
-};
-
-const onRemoveMembers = async (userIds: string[]) => {
-	await removeMembers(userIds);
 };
 
 const membersToChangeRole = ref<RoomMember[]>([]);
@@ -112,8 +85,8 @@ const membersToChangeRole = ref<RoomMember[]>([]);
 const onOpenRoleDialog = (ids: string[]) => {
 	membersToChangeRole.value =
 		ids.length === 1
-			? memberList.value.filter((member) => member.userId === ids[0])
-			: memberList.value.filter((member) =>
+			? roomMembers.value.filter((member) => member.userId === ids[0])
+			: roomMembers.value.filter((member) =>
 					selectedIds.value.includes(member.userId)
 				);
 	isChangeRoleDialogOpen.value = true;
@@ -135,12 +108,6 @@ const onChangeOwner = async (id: string) => {
 };
 
 onMounted(async () => {
-	// if (room.value === undefined) {
-	// 	await fetchRoom(roomId);
-	// }
-
-	await fetchMembers(); // TODO: we don't want to fetch the room members again
-	// we might need a pinia store to properly sync the room members across components
 	const header = document.querySelector(".wireframe-header") as HTMLElement;
 	fixedHeaderOnMobile.value.positionTop = header.offsetHeight + y.value;
 });

@@ -29,12 +29,12 @@
 		</template>
 
 		<VTabsWindow v-model="activeTab" class="mt-12">
-			<VTabsWindowItem
-				v-for="tabItem in tabs"
-				:key="tabItem.value"
-				:value="tabItem.value"
-			>
-				<component :is="tabItem.component" />
+			<VTabsWindowItem :value="Tab.Members"><Members /></VTabsWindowItem>
+			<VTabsWindowItem :value="Tab.Invitations"
+				><Invitations />
+			</VTabsWindowItem>
+			<VTabsWindowItem :value="Tab.Confirmations">
+				<Confirmations />
 			</VTabsWindowItem>
 		</VTabsWindow>
 
@@ -46,16 +46,11 @@
 			persistent
 			@keydown.esc="onDialogClose"
 		>
-			<AddMembers
-				:member-list="potentialRoomMembers"
-				:schools="schools"
-				@close="onDialogClose"
-				@add:members="onAddMembers"
-				@update:role="onUpdateRoleOrSchool"
-			/>
+			<AddMembers @close="onDialogClose" />
 		</VDialog>
 	</DefaultWireframe>
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -67,8 +62,8 @@ import {
 	computed,
 	ComputedRef,
 	onMounted,
+	onUnmounted,
 	PropType,
-	Ref,
 	ref,
 	watch,
 } from "vue";
@@ -76,9 +71,8 @@ import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import {
 	useRoomDetailsStore,
-	useRoomMembers,
+	useRoomMembersStore,
 	useRoomMemberVisibilityOptions,
-	RoomMember,
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import {
@@ -94,11 +88,22 @@ import {
 	Invitations,
 	Members,
 } from "@feature-room";
-import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName } from "@/serverApi/v3";
+import { RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
-import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import {
+	useConfirmationDialog,
+	ConfirmationDialog,
+} from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
+import { Tab } from "@/types/room/RoomMembers";
+
+const props = defineProps({
+	tab: {
+		type: String as PropType<Tab>,
+		default: Tab.Members,
+	},
+});
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -108,29 +113,18 @@ const { xs, mdAndDown } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 
 const isMembersDialogOpen = ref(false);
-const isChangeRoleDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
-const roomId = route.params.id.toString();
-const {
-	isLoading,
-	potentialRoomMembers,
-	roomMembers,
-	schools,
-	currentUser,
-	selectedIds,
-	addMembers,
-	changeRoomOwner,
-	fetchMembers,
-	getPotentialMembers,
-	getSchools,
-	leaveRoom,
-	removeMembers,
-	updateMembersRole,
-} = useRoomMembers(roomId);
-const memberList: Ref<RoomMember[]> = ref(roomMembers);
+
+const roomMembersStore = useRoomMembersStore();
+const { currentUser, potentialRoomMembers } = storeToRefs(roomMembersStore);
+const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
+	roomMembersStore;
+
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
+useTitle(pageTitle);
+
 const wireframe = ref<HTMLElement | null>(null);
 const fixedHeaderOnMobile = ref({
 	enabled: false,
@@ -142,23 +136,13 @@ const { canLeaveRoom } = useRoomAuthorization();
 const { isVisibleAddMemberButton } =
 	useRoomMemberVisibilityOptions(currentUser);
 
-useTitle(pageTitle);
-
-type Tab = "members" | "invitations" | "confirmations"; // TODO: change to enum
-const props = defineProps({
-	tab: {
-		type: String as PropType<Tab>,
-		default: "members",
-	},
-});
-
 const featureActivated = ref(true); // TODO: replace with feature flag
 
-const activeTab = computed({
+const activeTab = computed<Tab>({
 	get() {
 		return props.tab;
 	},
-	set: async (newTab: string) => {
+	set: async (newTab) => {
 		if (featureActivated.value) {
 			await router.replace({
 				query: { ...route.query, tab: newTab },
@@ -167,24 +151,25 @@ const activeTab = computed({
 	},
 });
 
-const tabs = [
+const tabs: Array<{
+	title: string;
+	value: Tab;
+	icon: string;
+}> = [
 	{
-		title: "Mitglieder",
-		value: "members",
+		title: "Mitglieder", // toDo i18n
+		value: Tab.Members,
 		icon: mdiAccountMultipleOutline,
-		component: Members,
 	},
 	{
 		title: "Invitations",
-		value: "invitations",
+		value: Tab.Invitations,
 		icon: mdiLink,
-		component: Invitations,
 	},
 	{
 		title: "Confirmations",
-		value: "confirmations",
+		value: Tab.Confirmations,
 		icon: mdiAccountQuestionOutline,
-		component: Confirmations,
 	},
 ];
 
@@ -196,22 +181,6 @@ const onFabClick = async () => {
 
 const onDialogClose = () => {
 	isMembersDialogOpen.value = false;
-	isChangeRoleDialogOpen.value = false;
-};
-
-const onAddMembers = async (memberIds: string[]) => {
-	await addMembers(memberIds);
-};
-
-const onUpdateRoleOrSchool = async (payload: {
-	schoolRole: RoleName;
-	schoolId: string;
-}) => {
-	await getPotentialMembers(payload.schoolRole, payload.schoolId);
-};
-
-const onRemoveMembers = async (userIds: string[]) => {
-	await removeMembers(userIds);
 };
 
 const onLeaveRoom = async () => {
@@ -231,42 +200,23 @@ const onLeaveRoom = async () => {
 	router.push("/rooms");
 };
 
-const membersToChangeRole = ref<RoomMember[]>([]);
-
-const onOpenRoleDialog = (ids: string[]) => {
-	membersToChangeRole.value =
-		ids.length === 1
-			? memberList.value.filter((member) => member.userId === ids[0])
-			: memberList.value.filter((member) =>
-					selectedIds.value.includes(member.userId)
-				);
-	isChangeRoleDialogOpen.value = true;
-};
-
-const onChangeRole = async (
-	role: ChangeRoomRoleBodyParamsRoleNameEnum,
-	id?: string
-) => {
-	await updateMembersRole(role, id);
-	isChangeRoleDialogOpen.value = false;
-	selectedIds.value = [];
-};
-
-const onChangeOwner = async (id: string) => {
-	await changeRoomOwner(id);
-	isChangeRoleDialogOpen.value = false;
-	selectedIds.value = [];
-};
-
 onMounted(async () => {
-	activeTab.value = props.tab ?? "members";
+	activeTab.value = Object.values(Tab).includes(props.tab)
+		? props.tab
+		: Tab.Members;
 	if (room.value === undefined) {
+		const roomId = route.params.id.toString();
 		await fetchRoom(roomId);
 	}
 
 	await fetchMembers();
+
 	const header = document.querySelector(".wireframe-header") as HTMLElement;
 	fixedHeaderOnMobile.value.positionTop = header.offsetHeight + y.value;
+});
+
+onUnmounted(() => {
+	resetStore();
 });
 
 watch(y, () => {
@@ -295,7 +245,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 const fabAction = computed(() => {
 	if (!isVisibleAddMemberButton.value) return;
 
-	if (activeTab.value === "members") {
+	if (activeTab.value === Tab.Members) {
 		return {
 			icon: mdiPlus,
 			title: t("pages.rooms.members.add"),
