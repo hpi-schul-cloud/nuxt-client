@@ -7,11 +7,10 @@
 					loading="lazy"
 					data-testid="audio-thumbnail-in-card"
 				/>
-
 				<v-btn
 					v-if="playing"
 					:aria-label="
-						$t('component.cardElement.audioRecordElement.audioPlayer.pause')
+						$t('component.cardElement.fileElement.audioPlayer.pause')
 					"
 					color="transparent"
 					density="comfortable"
@@ -23,9 +22,7 @@
 				</v-btn>
 				<v-btn
 					v-else
-					:aria-label="
-						$t('component.cardElement.audioRecordElement.audioPlayer.play')
-					"
+					:aria-label="$t('component.cardElement.fileElement.audioPlayer.play')"
 					color="transparent"
 					density="comfortable"
 					icon
@@ -39,7 +36,7 @@
 				</div>
 				<v-slider
 					:aria-label="
-						$t('component.cardElement.audioRecordElement.audioPlayer.slider')
+						$t('component.cardElement.fileElement.audioPlayer.slider')
 					"
 					class="duration-slider"
 					color="white"
@@ -58,28 +55,26 @@
 				</div>
 			</div>
 		</template>
-		<template v-if="showMenu" #menu><slot /></template>
+		<template v-if="showMenu" #menu>
+			<slot />
+		</template>
 	</ContentElementBar>
 </template>
 
 <script lang="ts">
 import { formatSecondsToHourMinSec } from "@/utils/fileHelper";
-import {
-	mdiPause,
-	mdiPlay,
-	mdiPlaySpeed,
-	mdiMicrophone,
-} from "@icons/material";
+import { mdiPause, mdiPlay, mdiPlaySpeed } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
-import { AudioRecordAlert } from "../types/AudioRecordAlert.enum";
+import { AudioRecordAlert } from "../../types/AudioRecordAlert.enum";
 import SpeedMenu from "./SpeedMenu.vue";
 
 export default defineComponent({
-	name: "AudioRecordRecorderDisplay",
+	name: "AudioRecodPlayerDisplay",
 	components: { ContentElementBar, SpeedMenu },
 	props: {
+		src: { type: String, required: true },
 		showMenu: { type: Boolean, required: true },
 	},
 	emits: ["error"],
@@ -147,13 +142,16 @@ export default defineComponent({
 	border-top-right-radius: 0.25rem;
 	border-top-left-radius: 0.25rem;
 }
+
 .audio-player:focus {
 	outline: none;
 }
+
 .duration {
 	white-space: nowrap;
 	color: white;
 }
+
 .duration-slider {
 	width: 40%;
 	max-height: 2rem;

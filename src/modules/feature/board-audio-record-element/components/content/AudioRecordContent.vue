@@ -1,38 +1,63 @@
 <template>
-	<AudioRecordRecorderDisplay :is-edit-mode="true" :show-menu="true">
-		<slot />
-	</AudioRecordRecorderDisplay>
-	<AudioRecordPlayerDisplay
-		:src="audioRecordProperties.url"
-		:is-edit-mode="true"
-		:show-menu="true"
+	<div
+		class="d-flex"
+		:class="{
+			'flex-row': hasRowStyle,
+			'flex-column': !hasRowStyle,
+		}"
 	>
-		<slot />
-	</AudioRecordPlayerDisplay>
-
-	<AudioRecordDescription
-		:name="audioRecordProperties.name"
-		:caption="audioRecordProperties.element.content.caption"
-		:show-title="true"
-		:show-menu="!isMenuShownOnFileDisplay"
-		:is-edit-mode="true"
-		:src="fileDescriptionSrc"
-	>
-		<slot />
-	</AudioRecordDescription>
+		<div
+			:class="{
+				'w-33': hasRowStyle,
+			}"
+		>
+			<AudioRecordPlayerDisplay
+				:src="audioRecordProperties.url"
+				:is-edit-mode="true"
+				:show-menu="true"
+			>
+				<slot />
+			</AudioRecordPlayerDisplay>
+		</div>
+		<div
+			class="d-flex flex-column"
+			:class="{ 'file-information': hasRowStyle }"
+		>
+			<AudioRecordDescription
+				:name="audioRecordProperties.name"
+				:caption="audioRecordProperties.element.content.caption"
+				:show-title="true"
+				:show-menu="!isMenuShownOnFileDisplay"
+				:is-edit-mode="true"
+				:src="fileDescriptionSrc"
+			>
+				<slot />
+			</AudioRecordDescription>
+			<AudioRecordInputs
+				:audio-record-properties="audioRecordProperties"
+				:is-edit-mode="isEditMode"
+				@update:alternative-text="onUpdateText"
+				@update:caption="onUpdateCaption"
+			/>
+			<AudioRecordAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts">
 import { computed, PropType, ref } from "vue";
+import AudioRecordInputs from "./inputs/AudioRecordInputs.vue";
 import AudioRecordDescription from "./AudioRecordDescription.vue";
+import AudioRecordAlerts from "./AudioRecordAlert.vue";
+import AudioRecordPlayerDisplay from "./AudioRecordPlayerDisplay.vue";
+
 import { useDebounceFn } from "@vueuse/core";
 import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { useDisplay } from "vuetify";
 import { isAudioMimeType } from "@/utils/fileHelper";
-import AudioRecordPlayerDisplay from "./AudioRecordPlayerDisplay.vue";
-import { AudioRecordProperties } from "../types/audio-record-properties";
-import AudioRecordRecorderDisplay from "./AudioRecordRecorderDisplay.vue";
+import { AudioRecordProperties } from "../../types/audio-record-properties";
+import { AudioRecordAlert } from "../../types/AudioRecordAlert.enum";
 
 const props = defineProps({
 	audioRecordProperties: {
@@ -40,7 +65,7 @@ const props = defineProps({
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
-	//alerts: { type: Array as PropType<FileAlert[]>, required: true },
+	alerts: { type: Array as PropType<AudioRecordAlert[]>, required: true },
 });
 
 const emit = defineEmits([
@@ -61,9 +86,9 @@ const onUpdateText = useDebounceFn((value: string) => {
 	emit("update:alternativeText", value);
 }, 600);
 
-// const onAddAlert = (alert: FileAlert) => {
-// 	emit("add:alert", alert);
-// };
+const onAddAlert = (alert: AudioRecordAlert) => {
+	emit("add:alert", alert);
+};
 
 const hasAudioMimeType = computed(() => {
 	return isAudioMimeType(props.audioRecordProperties.mimeType);

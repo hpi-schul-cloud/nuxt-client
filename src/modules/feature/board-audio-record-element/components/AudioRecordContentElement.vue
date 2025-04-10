@@ -17,6 +17,7 @@
 			@fetch:file="onFetchFile"
 			@update:alternative-text="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
+			@add:alert="onAddAlert"
 		>
 			<BoardMenu
 				v-if="isEditMode"
@@ -65,7 +66,7 @@ import { useFileStorageApi } from "../../board-file-element";
 import { AudioRecordAlert } from "../types/AudioRecordAlert.enum";
 import { useAudioRecordAlerts } from "../composables/useAudioRecordAlerts.composable";
 
-import AudioRecordContent from "./AudioRecordContent.vue";
+import AudioRecordContent from "../components/content/AudioRecordContent.vue";
 export default defineComponent({
 	name: "AudioRecordContentElement",
 	components: {

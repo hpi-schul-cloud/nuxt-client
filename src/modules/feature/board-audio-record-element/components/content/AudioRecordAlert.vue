@@ -35,10 +35,10 @@
 import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
 import { defineComponent, PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import { AudioRecordAlert } from "../types/AudioRecordAlert.enum";
+import { AudioRecordAlert } from "../../types/AudioRecordAlert.enum";
 
 export default defineComponent({
-	name: "AudioRecordAlert",
+	name: "AudioRecordAlerts",
 	components: { InfoAlert, ErrorAlert, WarningAlert },
 	props: {
 		alerts: {
