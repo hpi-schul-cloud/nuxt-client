@@ -8,7 +8,6 @@ import {
 } from "@@/tests/test-utils/setup";
 import { ComponentMountingOptions, mount } from "@vue/test-utils";
 import DefaultWireframe from "../templates/DefaultWireframe.vue";
-import { nextTick } from "vue";
 
 describe("DefaultWireframe", () => {
 	const setup = (
