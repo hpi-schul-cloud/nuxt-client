@@ -20,53 +20,28 @@
 		<MembersTable
 			v-if="!isLoading && currentUser"
 			:fixed-position="fixedHeaderOnMobile"
-			@change:permission="onOpenRoleDialog"
 		/>
 	</div>
-
-	<VDialog
-		v-model="isChangeRoleDialogOpen"
-		:width="xs ? 'auto' : 480"
-		data-testid="dialog-change-role-participants"
-		max-width="480"
-		@keydown.esc="onDialogClose"
-	>
-		<ChangeRole
-			:members="membersToChangeRole"
-			:room-name="room?.name || ''"
-			:current-user="currentUser"
-			@cancel="onDialogClose"
-			@confirm="onChangeRole"
-			@change-room-owner="onChangeOwner"
-		/>
-	</VDialog>
 </template>
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import {
-	useRoomDetailsStore,
 	useRoomMemberVisibilityOptions,
-	RoomMember,
 	useRoomMembersStore,
 } from "@data-room";
 import { storeToRefs } from "pinia";
-import { MembersTable, ChangeRole } from "@feature-room";
-import { ChangeRoomRoleBodyParamsRoleNameEnum } from "@/serverApi/v3";
+import { MembersTable } from "@feature-room";
 import { useDisplay } from "vuetify";
 import { useElementBounding } from "@vueuse/core";
 
 const { t } = useI18n();
 
-const { xs, mdAndDown } = useDisplay();
-const { room } = storeToRefs(useRoomDetailsStore());
-const isChangeRoleDialogOpen = ref(false);
+const { mdAndDown } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
-const { isLoading, selectedIds, roomMembers, currentUser } =
-	storeToRefs(roomMembersStore);
-const { updateMembersRole, changeRoomOwner } = roomMembersStore;
+const { isLoading, currentUser } = storeToRefs(roomMembersStore);
 
 const wireframe = ref<HTMLElement | null>(null);
 const fixedHeaderOnMobile = ref({
@@ -75,37 +50,6 @@ const fixedHeaderOnMobile = ref({
 });
 const { y } = useElementBounding(wireframe);
 const { isVisiblePageInfoText } = useRoomMemberVisibilityOptions(currentUser);
-
-const onDialogClose = () => {
-	isChangeRoleDialogOpen.value = false;
-};
-
-const membersToChangeRole = ref<RoomMember[]>([]);
-
-const onOpenRoleDialog = (ids: string[]) => {
-	membersToChangeRole.value =
-		ids.length === 1
-			? roomMembers.value.filter((member) => member.userId === ids[0])
-			: roomMembers.value.filter((member) =>
-					selectedIds.value.includes(member.userId)
-				);
-	isChangeRoleDialogOpen.value = true;
-};
-
-const onChangeRole = async (
-	role: ChangeRoomRoleBodyParamsRoleNameEnum,
-	id?: string
-) => {
-	await updateMembersRole(role, id);
-	isChangeRoleDialogOpen.value = false;
-	selectedIds.value = [];
-};
-
-const onChangeOwner = async (id: string) => {
-	await changeRoomOwner(id);
-	isChangeRoleDialogOpen.value = false;
-	selectedIds.value = [];
-};
 
 onMounted(async () => {
 	const header = document.querySelector(".wireframe-header") as HTMLElement;

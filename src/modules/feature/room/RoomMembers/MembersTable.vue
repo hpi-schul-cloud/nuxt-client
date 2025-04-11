@@ -100,6 +100,15 @@
 			</KebabMenu>
 		</template>
 	</v-data-table>
+	<VDialog
+		v-model="isChangeRoleDialogOpen"
+		:width="isExtraSmallDisplay ? 'auto' : 480"
+		data-testid="dialog-change-role-participants"
+		max-width="480"
+		@keydown.esc="onDialogClose"
+	>
+		<ChangeRole :members="membersToChangeRole" @close="onDialogClose" />
+	</VDialog>
 	<ConfirmationDialog />
 </template>
 
@@ -124,13 +133,15 @@ import {
 } from "@data-room";
 import { useDisplay } from "vuetify/lib/framework.mjs";
 import { storeToRefs } from "pinia";
+import { ChangeRole } from "@feature-room";
 
-const props = defineProps({
+defineProps({
 	fixedPosition: {
 		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
 		default: () => ({ enabled: false, positionTop: 0 }),
 	},
 });
+
 const { t } = useI18n();
 const { xs: isExtraSmallDisplay } = useDisplay();
 
@@ -140,9 +151,8 @@ const { removeMembers } = roomMembersStore;
 
 const { askConfirmation } = useConfirmationDialog();
 
-const emit = defineEmits<{
-	(e: "change:permission", userIds: string[]): void;
-}>();
+const isChangeRoleDialogOpen = ref(false);
+const membersToChangeRole = ref<RoomMember[]>([]);
 
 const search = ref("");
 
@@ -155,6 +165,10 @@ const {
 	isVisibleActionInRow,
 	isVisibleRemoveMemberButton,
 } = useRoomMemberVisibilityOptions(currentUser);
+
+const onDialogClose = () => {
+	isChangeRoleDialogOpen.value = false;
+};
 
 const onUpdateFilter = (filteredMembers: RoomMember[]) => {
 	membersFilterCount.value =
@@ -187,6 +201,16 @@ const confirmRemoval = async (userIds: string[]) => {
 	return shouldRemove;
 };
 
+const onChangePermission = (userIds: string[]) => {
+	membersToChangeRole.value =
+		userIds.length === 1
+			? roomMembers.value.filter((member) => member.userId === userIds[0])
+			: roomMembers.value.filter((member) =>
+					selectedIds.value.includes(member.userId)
+				);
+	isChangeRoleDialogOpen.value = true;
+};
+
 const getAriaLabel = (
 	member: RoomMember,
 	actionFor?: "remove" | "changeRole"
@@ -205,10 +229,6 @@ const getAriaLabel = (
 	return t("pages.rooms.members.actionMenu.ariaLabel", {
 		memberFullName,
 	});
-};
-
-const onChangePermission = (userIds: string[]) => {
-	emit("change:permission", userIds);
 };
 
 const tableHeader = [
