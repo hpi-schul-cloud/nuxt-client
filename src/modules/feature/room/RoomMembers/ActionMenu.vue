@@ -24,7 +24,9 @@
 				</VBtn>
 			</template>
 
-			<slot />
+			<KebabMenuList>
+				<slot />
+			</KebabMenuList>
 		</VMenu>
 
 		<VBtn

@@ -11,15 +11,11 @@
 			:selected-ids="selectedUserIds"
 			@reset:selected="onResetSelectedMembers"
 		>
-			<KebabMenuList>
-				<KebabMenuActionChangePermission
-					v-if="isVisibleChangeRoleButton"
-					@click="onChangePermission(selectedUserIds)"
-				/>
-				<KebabMenuActionRemoveMember
-					@click="onRemoveMembers(selectedUserIds)"
-				/>
-			</KebabMenuList>
+			<KebabMenuActionChangePermission
+				v-if="isVisibleChangeRoleButton"
+				@click="onChangePermission(selectedUserIds)"
+			/>
+			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedUserIds)" />
 		</ActionMenu>
 		<v-spacer v-else />
 		<v-text-field
