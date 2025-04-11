@@ -16,38 +16,29 @@
 					<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
 				</KebabMenu>
 			</div>
+
+			<VTabs v-if="featureActivated" v-model="activeTab" align-tabs="center">
+				<VTab
+					v-for="tabItem in tabs"
+					:key="tabItem.value"
+					:prepend-icon="tabItem.icon"
+					:text="tabItem.title"
+					:value="tabItem.value"
+				/>
+			</VTabs>
 		</template>
 
-		<div class="mb-8 mt-12" data-testid="info-text">
-			<i18n-t
-				v-if="isVisiblePageInfoText"
-				keypath="pages.rooms.members.infoText"
-				scope="global"
+		<VTabsWindow v-model="activeTab" class="mt-12">
+			<VTabsWindowItem
+				v-for="tabItem in tabs"
+				:key="tabItem.value"
+				:value="tabItem.value"
 			>
-				<a
-					href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
-					target="_blank"
-					rel="noopener"
-					:ariaLabel="linkAriaLabel"
-				>
-					{{ t("pages.rooms.members.infoText.moreInformation") }}
-				</a>
-			</i18n-t>
-		</div>
+				<component :is="tabItem.component" />
+			</VTabsWindowItem>
+		</VTabsWindow>
 
-		<div class="mb-12">
-			<MembersTable
-				v-if="!isLoading && currentUser"
-				v-model:selected-user-ids="selectedIds"
-				:members="memberList"
-				:current-user="currentUser"
-				:fixed-position="fixedHeaderOnMobile"
-				@remove:members="onRemoveMembers"
-				@change:permission="onOpenRoleDialog"
-			/>
-		</div>
-
-		<v-dialog
+		<VDialog
 			v-model="isMembersDialogOpen"
 			:width="xs ? 'auto' : 480"
 			data-testid="dialog-add-participants"
@@ -55,34 +46,11 @@
 			persistent
 			@keydown.esc="onDialogClose"
 		>
-			<AddMembers
-				:member-list="potentialRoomMembers"
-				:schools="schools"
-				@close="onDialogClose"
-				@add:members="onAddMembers"
-				@update:role="onUpdateRoleOrSchool"
-			/>
-		</v-dialog>
-
-		<v-dialog
-			v-model="isChangeRoleDialogOpen"
-			:width="xs ? 'auto' : 480"
-			data-testid="dialog-change-role-participants"
-			max-width="480"
-			@keydown.esc="onDialogClose"
-		>
-			<ChangeRole
-				:members="membersToChangeRole"
-				:room-name="room?.name || ''"
-				:current-user="currentUser"
-				@cancel="onDialogClose"
-				@confirm="onChangeRole"
-				@change-room-owner="onChangeOwner"
-			/>
-		</v-dialog>
+			<AddMembers @close="onDialogClose" />
+		</VDialog>
 	</DefaultWireframe>
-	<ConfirmationDialog />
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
@@ -90,31 +58,53 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle, useElementBounding } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
+import {
+	type Component,
+	computed,
+	ComputedRef,
+	onMounted,
+	onUnmounted,
+	PropType,
+	ref,
+	watch,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import {
 	useRoomDetailsStore,
-	useRoomMembers,
+	useRoomMembersStore,
 	useRoomMemberVisibilityOptions,
-	RoomMember,
 } from "@data-room";
 import { storeToRefs } from "pinia";
-import { mdiPlus } from "@icons/material";
 import {
-	MembersTable,
+	mdiPlus,
+	mdiAccountMultipleOutline,
+	mdiLink,
+	mdiAccountQuestionOutline,
+} from "@icons/material";
+import {
 	AddMembers,
-	ChangeRole,
 	useRoomAuthorization,
+	Confirmations,
+	Invitations,
+	Members,
 } from "@feature-room";
-import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName } from "@/serverApi/v3";
+import { RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
 import {
-	ConfirmationDialog,
 	useConfirmationDialog,
+	ConfirmationDialog,
 } from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
+import { Tab } from "@/types/room/RoomMembers";
+
+const props = defineProps({
+	tab: {
+		type: String as PropType<Tab>,
+		default: Tab.Members,
+	},
+});
 
 const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
@@ -122,30 +112,20 @@ const route = useRoute();
 const router = useRouter();
 const { xs, mdAndDown } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
+
 const isMembersDialogOpen = ref(false);
-const isChangeRoleDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
-const roomId = route.params.id.toString();
-const {
-	isLoading,
-	potentialRoomMembers,
-	roomMembers,
-	schools,
-	currentUser,
-	selectedIds,
-	addMembers,
-	changeRoomOwner,
-	fetchMembers,
-	getPotentialMembers,
-	getSchools,
-	leaveRoom,
-	removeMembers,
-	updateMembersRole,
-} = useRoomMembers(roomId);
-const memberList: Ref<RoomMember[]> = ref(roomMembers);
+
+const roomMembersStore = useRoomMembersStore();
+const { currentUser } = storeToRefs(roomMembersStore);
+const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
+	roomMembersStore;
+
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
+useTitle(pageTitle);
+
 const wireframe = ref<HTMLElement | null>(null);
 const fixedHeaderOnMobile = ref({
 	enabled: false,
@@ -154,10 +134,49 @@ const fixedHeaderOnMobile = ref({
 const { y } = useElementBounding(wireframe);
 const { askConfirmation } = useConfirmationDialog();
 const { canLeaveRoom } = useRoomAuthorization();
-const { isVisibleAddMemberButton, isVisiblePageInfoText } =
+const { isVisibleAddMemberButton } =
 	useRoomMemberVisibilityOptions(currentUser);
 
-useTitle(pageTitle);
+const featureActivated = ref(true); // TODO: replace with feature flag
+
+const activeTab = computed<Tab>({
+	get() {
+		return props.tab;
+	},
+	set: async (newTab) => {
+		if (featureActivated.value) {
+			await router.replace({
+				query: { ...route.query, tab: newTab },
+			});
+		}
+	},
+});
+
+const tabs: Array<{
+	title: string;
+	value: Tab;
+	icon: string;
+	component: Component;
+}> = [
+	{
+		title: "Mitglieder", // toDo i18n
+		value: Tab.Members,
+		icon: mdiAccountMultipleOutline,
+		component: Members,
+	},
+	{
+		title: "Invitations",
+		value: Tab.Invitations,
+		icon: mdiLink,
+		component: Invitations,
+	},
+	{
+		title: "Confirmations",
+		value: Tab.Confirmations,
+		icon: mdiAccountQuestionOutline,
+		component: Confirmations,
+	},
+];
 
 const onFabClick = async () => {
 	await getSchools();
@@ -167,22 +186,6 @@ const onFabClick = async () => {
 
 const onDialogClose = () => {
 	isMembersDialogOpen.value = false;
-	isChangeRoleDialogOpen.value = false;
-};
-
-const onAddMembers = async (memberIds: string[]) => {
-	await addMembers(memberIds);
-};
-
-const onUpdateRoleOrSchool = async (payload: {
-	schoolRole: RoleName;
-	schoolId: string;
-}) => {
-	await getPotentialMembers(payload.schoolRole, payload.schoolId);
-};
-
-const onRemoveMembers = async (userIds: string[]) => {
-	await removeMembers(userIds);
 };
 
 const onLeaveRoom = async () => {
@@ -202,41 +205,23 @@ const onLeaveRoom = async () => {
 	router.push("/rooms");
 };
 
-const membersToChangeRole = ref<RoomMember[]>([]);
-
-const onOpenRoleDialog = (ids: string[]) => {
-	membersToChangeRole.value =
-		ids.length === 1
-			? memberList.value.filter((member) => member.userId === ids[0])
-			: memberList.value.filter((member) =>
-					selectedIds.value.includes(member.userId)
-				);
-	isChangeRoleDialogOpen.value = true;
-};
-
-const onChangeRole = async (
-	role: ChangeRoomRoleBodyParamsRoleNameEnum,
-	id?: string
-) => {
-	await updateMembersRole(role, id);
-	isChangeRoleDialogOpen.value = false;
-	selectedIds.value = [];
-};
-
-const onChangeOwner = async (id: string) => {
-	await changeRoomOwner(id);
-	isChangeRoleDialogOpen.value = false;
-	selectedIds.value = [];
-};
-
 onMounted(async () => {
+	activeTab.value = Object.values(Tab).includes(props.tab)
+		? props.tab
+		: Tab.Members;
 	if (room.value === undefined) {
+		const roomId = route.params.id.toString();
 		await fetchRoom(roomId);
 	}
 
 	await fetchMembers();
+
 	const header = document.querySelector(".wireframe-header") as HTMLElement;
 	fixedHeaderOnMobile.value.positionTop = header.offsetHeight + y.value;
+});
+
+onUnmounted(() => {
+	resetStore();
 });
 
 watch(y, () => {
@@ -264,16 +249,15 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 
 const fabAction = computed(() => {
 	if (!isVisibleAddMemberButton.value) return;
-	return {
-		icon: mdiPlus,
-		title: t("pages.rooms.members.add"),
-		ariaLabel: t("pages.rooms.members.add"),
-		dataTestId: "fab-add-members",
-	};
-});
 
-const linkAriaLabel = computed(
-	() =>
-		`${t("pages.rooms.members.infoText.moreInformation")}, ${t("common.ariaLabel.newTab")}`
-);
+	if (activeTab.value === Tab.Members) {
+		return {
+			icon: mdiPlus,
+			title: t("pages.rooms.members.add"),
+			ariaLabel: t("pages.rooms.members.add"),
+			dataTestId: "fab-add-members",
+		};
+	}
+	return undefined;
+});
 </script>

@@ -125,8 +125,13 @@ import {
 } from "@/serverApi/v3";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard, VRadio } from "vuetify/lib/components/index.mjs";
-import { RoomMember } from "@data-room";
+import {
+	RoomMember,
+	useRoomDetailsStore,
+	useRoomMembersStore,
+} from "@data-room";
 import { WarningAlert } from "@ui-alert";
+import { storeToRefs } from "pinia";
 
 const props = defineProps({
 	members: {
@@ -134,21 +139,25 @@ const props = defineProps({
 		required: true,
 		default: () => [],
 	},
-	roomName: {
-		type: String,
-		required: true,
-	},
-	currentUser: {
-		type: Object as PropType<RoomMember>,
-		required: true,
-	},
 });
+
+const emit = defineEmits<{
+	(e: "close"): void;
+}>();
+
 const { t } = useI18n();
+const { room } = storeToRefs(useRoomDetailsStore());
+
+const roomMembersStore = useRoomMembersStore();
+const { currentUser, selectedIds } = storeToRefs(roomMembersStore);
+const { updateMembersRole, changeRoomOwner } = roomMembersStore;
+
 const selectedRole = ref<string | null>(null);
 const memberToChangeRole = toRef(props, "members")?.value;
+
 const isChangeOwnershipOptionVisible = computed(() => {
 	return (
-		props.currentUser?.roomRoleName === RoleName.Roomowner &&
+		currentUser.value?.roomRoleName === RoleName.Roomowner &&
 		memberToChangeRole.length === 1
 	);
 });
@@ -172,7 +181,7 @@ if (memberToChangeRole.length > 1) {
 }
 
 const currentUserFullName = computed(() => {
-	return `${props.currentUser?.firstName} ${props.currentUser?.lastName}`;
+	return `${currentUser.value?.firstName} ${currentUser.value?.lastName}`;
 });
 
 const memberFullName = computed(() => {
@@ -180,22 +189,17 @@ const memberFullName = computed(() => {
 });
 
 const infoText = computed(() => {
+	const roomName = room.value?.name ?? "";
 	if (memberToChangeRole.length === 1) {
 		return t("pages.rooms.members.roleChange.subTitle", {
 			memberFullName: memberFullName.value,
-			roomName: props.roomName,
+			roomName,
 		});
 	}
 	return t("pages.rooms.members.roleChange.multipleUser.subTitle", {
-		roomName: props.roomName,
+		roomName,
 	});
 });
-
-const emit = defineEmits<{
-	(e: "confirm", selectedRole: RoleEnum, id?: string): void;
-	(e: "change-room-owner", id: string): void;
-	(e: "cancel"): void;
-}>();
 
 const onConfirm = () => {
 	if (!selectedRole.value) return;
@@ -203,19 +207,26 @@ const onConfirm = () => {
 		isOwnershipHandoverMode.value = true;
 		return;
 	}
-	emit(
-		"confirm",
+	onChangeRole(
 		selectedRole.value as RoleEnum,
 		props.members.length === 1 ? memberToChangeRole[0].userId : undefined
 	);
 };
 
-const onChangeOwner = () => {
-	emit("change-room-owner", memberToChangeRole[0].userId);
+const onChangeRole = async (role: RoleEnum, id?: string) => {
+	await updateMembersRole(role, id);
+	selectedIds.value = [];
+	emit("close");
+};
+
+const onChangeOwner = async () => {
+	await changeRoomOwner(memberToChangeRole[0].userId);
+	selectedIds.value = [];
+	emit("close");
 };
 
 const onCancel = () => {
-	emit("cancel");
+	emit("close");
 };
 
 const radioOptions = computed(() => {

@@ -15,7 +15,7 @@
 					density="comfortable"
 					item-title="name"
 					item-value="id"
-					:items="schoolList"
+					:items="schools"
 					:label="t('global.sidebar.item.school')"
 					:disabled="isAutocompleteDisabled"
 					:aria-disabled="isAutocompleteDisabled"
@@ -51,7 +51,7 @@
 					item-value="userId"
 					item-title="fullName"
 					multiple
-					:items="memberList"
+					:items="potentialRoomMembers"
 					:label="t('common.labels.name')"
 					@update:menu="onAutocompleteToggle"
 				/>
@@ -85,33 +85,25 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, PropType, ref, toRef } from "vue";
-import { RoleName, SchoolForExternalInviteResponse } from "@/serverApi/v3";
-import { RoomMember } from "@data-room";
+import { computed, ref } from "vue";
+import { RoleName } from "@/serverApi/v3";
+import { useRoomMembersStore } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VAutocomplete, VCard } from "vuetify/lib/components/index.mjs";
 import { InfoAlert } from "@ui-alert";
-
-const props = defineProps({
-	memberList: {
-		type: Array as PropType<Omit<RoomMember, "roomRoleName">[]>,
-		default: undefined,
-	},
-	schools: {
-		type: Array as PropType<SchoolForExternalInviteResponse[]>,
-		required: true,
-	},
-});
+import { storeToRefs } from "pinia";
 
 const emit = defineEmits<{
-	(e: "add:members", selectedUsers: string[]): void;
 	(e: "close"): void;
-	(e: "update:role", payload: { schoolRole: RoleName; schoolId: string }): void;
 }>();
 
 const { t } = useI18n();
-const schoolList = toRef(props, "schools");
-const selectedSchool = ref(schoolList.value[0].id);
+
+const roomMembersStore = useRoomMembersStore();
+const { potentialRoomMembers, schools } = storeToRefs(roomMembersStore);
+const { addMembers, getPotentialMembers } = roomMembersStore;
+
+const selectedSchool = ref(schools.value[0].id);
 
 const schoolRoles = [
 	{ id: RoleName.Teacher, name: t("common.labels.teacher") },
@@ -120,12 +112,9 @@ const schoolRoles = [
 const selectedSchoolRole = ref<RoleName>(schoolRoles[0].id);
 const selectedUsers = ref<string[]>([]);
 
-const onRoleChange = () => {
+const onRoleChange = async () => {
 	selectedUsers.value = [];
-	emit("update:role", {
-		schoolRole: selectedSchoolRole.value,
-		schoolId: selectedSchool.value,
-	});
+	await getPotentialMembers(selectedSchoolRole.value, selectedSchool.value);
 };
 
 const onSchoolChange = () => {
@@ -133,8 +122,8 @@ const onSchoolChange = () => {
 	onRoleChange();
 };
 
-const onAddMembers = () => {
-	emit("add:members", selectedUsers.value);
+const onAddMembers = async () => {
+	await addMembers(selectedUsers.value);
 	emit("close");
 };
 

@@ -9,3 +9,4 @@ export { useRoomEditState } from "./RoomEdit.state";
 export { useRoomMembers } from "./roomMembers/roomMembers.composable";
 export { useRoomMemberVisibilityOptions } from "./roomMembers/membersVisibleOptions.composable";
 export type { RoomMember } from "./roomMembers/types";
+export { useRoomMembersStore } from "./roomMembers/RoomMembers.store";
