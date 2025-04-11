@@ -234,7 +234,7 @@ describe("MembersTable", () => {
 				expect(actionMenu.classes()).not.toContain("order-2");
 			});
 
-			it("should reset member selection when reset event is emitted", async () => {
+			it("should reset member selection when reset button is clicked", async () => {
 				const { wrapper } = setup({
 					selectedUserIds: [mockMembers[0].userId, mockMembers[2].userId],
 				});
@@ -265,7 +265,7 @@ describe("MembersTable", () => {
 					expectedMessage: "pages.rooms.members.multipleRemove.confirmation",
 				},
 			])(
-				"should render confirmation dialog with text for $description when remove:selected event is emitted",
+				"should render confirmation dialog with text for $description when removeMember action is clicked",
 				async ({ selectedUserIndices, expectedMessage }) => {
 					const selectedUserIds = selectedUserIndices.map(
 						(index) => mockMembers[index].userId
