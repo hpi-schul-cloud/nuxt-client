@@ -7,6 +7,7 @@ import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import type { CreateElementRequestPayload } from "@data-board";
 import { useBoardFeatures, useCardStore } from "@data-board";
 import {
+	mdiFolderOpenOutline,
 	mdiFormatText,
 	mdiLightbulbOnOutline,
 	mdiLink,
@@ -178,6 +179,17 @@ export const useAddElementDialog = (
 			),
 			action: () => onElementClick(ContentElementType.VideoConference),
 			testId: "create-element-video-conference",
+		});
+	}
+
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
+		options.push({
+			icon: mdiFolderOpenOutline,
+			label: t(
+				"components.elementTypeSelection.elements.folderElement.subtitle"
+			),
+			action: () => onElementClick(ContentElementType.FileFolder),
+			testId: "create-element-file-folder",
 		});
 	}
 
