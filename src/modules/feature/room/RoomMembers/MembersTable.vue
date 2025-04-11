@@ -35,7 +35,7 @@
 	</div>
 
 	<v-divider role="presentation" />
-	{{ stickyStyle }}
+
 	<v-data-table
 		v-model:search="search"
 		v-model="selectedUserIds"
@@ -158,7 +158,7 @@ const search = ref("");
 const memberList = toRef(props, "members");
 const membersFilterCount = ref(memberList.value?.length);
 const stickyStyle = computed(() => ({
-	top: `${props.headerBottom + 1}px`,
+	top: `${props.headerBottom}px`,
 }));
 
 const currentUser = computed(() => props.currentUser);
