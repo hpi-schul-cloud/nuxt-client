@@ -14,15 +14,15 @@ import { useBoardNotifier } from "@util-board";
 import { schoolsModule } from "@/store";
 import { authModule } from "@/store/store-accessor";
 import { logger } from "@util-logger";
-import { defineStore } from "pinia";
-import { useRoute } from "vue-router";
+import { defineStore, storeToRefs } from "pinia";
+import { useRoomDetailsStore } from "@data-room";
 
 export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const { t } = useI18n();
 	const { showFailure } = useBoardNotifier();
 
-	const route = useRoute();
-	const roomId = computed(() => route.params.id.toString());
+	const { room } = storeToRefs(useRoomDetailsStore());
+	const roomId = computed(() => room.value?.id);
 
 	const roomMembers: Ref<RoomMember[]> = ref([]);
 	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName">[]> = ref([]);
@@ -56,10 +56,17 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
 
+	const getRoomId = () => {
+		if (!roomId.value) {
+			throw new Error("RoomDetailStore is not initialized");
+		}
+		return roomId.value;
+	};
+
 	const fetchMembers = async () => {
 		try {
 			isLoading.value = true;
-			const { data } = (await roomApi.roomControllerGetMembers(roomId.value))
+			const { data } = (await roomApi.roomControllerGetMembers(getRoomId()))
 				.data;
 
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
@@ -142,7 +149,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 		try {
 			const { roomRoleName } = (
-				await roomApi.roomControllerAddMembers(roomId.value, { userIds })
+				await roomApi.roomControllerAddMembers(getRoomId(), { userIds })
 			).data;
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
@@ -159,7 +166,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const removeMembers = async (userIds: string[]) => {
 		try {
-			await roomApi.roomControllerRemoveMembers(roomId.value, {
+			await roomApi.roomControllerRemoveMembers(getRoomId(), {
 				userIds,
 			});
 			roomMembers.value = roomMembers.value.filter(
@@ -174,7 +181,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const leaveRoom = async () => {
 		isLoading.value = true;
 		try {
-			await roomApi.roomControllerLeaveRoom(roomId.value);
+			await roomApi.roomControllerLeaveRoom(getRoomId());
 		} catch {
 			showFailure(t("pages.rooms.members.error.remove"));
 		} finally {
@@ -187,7 +194,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		id?: string
 	) => {
 		try {
-			await roomApi.roomControllerChangeRolesOfMembers(roomId.value, {
+			await roomApi.roomControllerChangeRolesOfMembers(getRoomId(), {
 				userIds: id ? [id] : selectedIds.value,
 				roleName,
 			});
@@ -215,7 +222,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const changeRoomOwner = async (userId: string) => {
 		try {
-			await roomApi.roomControllerChangeRoomOwner(roomId.value, { userId });
+			await roomApi.roomControllerChangeRoomOwner(getRoomId(), { userId });
 			setRoomOwner(userId);
 		} catch {
 			showFailure(t("pages.rooms.members.error.updateRole"));
