@@ -29,12 +29,12 @@
 		</template>
 
 		<VTabsWindow v-model="activeTab" class="mt-12">
-			<VTabsWindowItem :value="Tab.Members"><Members /></VTabsWindowItem>
-			<VTabsWindowItem :value="Tab.Invitations"
-				><Invitations />
-			</VTabsWindowItem>
-			<VTabsWindowItem :value="Tab.Confirmations">
-				<Confirmations />
+			<VTabsWindowItem
+				v-for="tabItem in tabs"
+				:key="tabItem.value"
+				:value="tabItem.value"
+			>
+				<component :is="tabItem.component" />
 			</VTabsWindowItem>
 		</VTabsWindow>
 
@@ -59,6 +59,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle, useElementBounding } from "@vueuse/core";
 import {
+	type Component,
 	computed,
 	ComputedRef,
 	onMounted,
@@ -116,7 +117,7 @@ const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
-const { currentUser, potentialRoomMembers } = storeToRefs(roomMembersStore);
+const { currentUser } = storeToRefs(roomMembersStore);
 const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
 	roomMembersStore;
 
@@ -155,21 +156,25 @@ const tabs: Array<{
 	title: string;
 	value: Tab;
 	icon: string;
+	component: Component;
 }> = [
 	{
 		title: "Mitglieder", // toDo i18n
 		value: Tab.Members,
 		icon: mdiAccountMultipleOutline,
+		component: Members,
 	},
 	{
 		title: "Invitations",
 		value: Tab.Invitations,
 		icon: mdiLink,
+		component: Invitations,
 	},
 	{
 		title: "Confirmations",
 		value: Tab.Confirmations,
 		icon: mdiAccountQuestionOutline,
+		component: Confirmations,
 	},
 ];
 
