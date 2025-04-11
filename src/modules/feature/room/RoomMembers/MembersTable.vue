@@ -2,7 +2,7 @@
 	<div
 		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
 		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
-		:style="{ top: `${headerBottom + 1}px` }"
+		:style="stickyStyle"
 	>
 		<ActionMenu
 			v-if="selectedUserIds.length"
@@ -35,6 +35,7 @@
 	</div>
 
 	<v-divider role="presentation" />
+	{{ stickyStyle }}
 	<v-data-table
 		v-model:search="search"
 		v-model="selectedUserIds"
@@ -107,7 +108,6 @@
 import ActionMenu from "./ActionMenu.vue";
 import {
 	KebabMenu,
-	KebabMenuList,
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
@@ -157,6 +157,9 @@ const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
 const search = ref("");
 const memberList = toRef(props, "members");
 const membersFilterCount = ref(memberList.value?.length);
+const stickyStyle = computed(() => ({
+	top: `${props.headerBottom + 1}px`,
+}));
 
 const currentUser = computed(() => props.currentUser);
 
