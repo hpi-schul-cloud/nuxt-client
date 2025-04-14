@@ -1,7 +1,10 @@
 <template>
 	<v-card-title class="pa-0 d-flex align-center" inactive>
 		<v-icon size="18" class="mr-2" :icon="mdiMicrophone" />
-		<span class="text-subtitle-1 d-inline-block text-truncate font-weight-bold">
+		<span
+			class="text-subtitle-1 d-inline-block text-truncate font-weight-bold"
+			data-testid="board-submission-element-edit-content"
+		>
 			{{ t("components.cardElement.audioRecordElement") }}
 		</span>
 	</v-card-title>

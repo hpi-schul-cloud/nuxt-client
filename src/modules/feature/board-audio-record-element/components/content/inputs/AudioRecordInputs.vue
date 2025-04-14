@@ -6,7 +6,7 @@
 			@update:caption="onUpdateCaption"
 		/>
 		<AlternativeText
-			v-if="audioRecordProperties.previewUrl"
+			v-if="audioRecordProperties.element.content.alternativeText"
 			:alternative-text="audioRecordProperties.element.content.alternativeText"
 			:is-edit-mode="isEditMode"
 			@update:alternative-text="onUpdateText"
@@ -19,8 +19,7 @@ import { PropType } from "vue";
 import { AudioRecordProperties } from "../../../types/audio-record-properties";
 import AlternativeText from "./alternative-text/AlternativeText.vue";
 import CaptionText from "./caption/CaptionText.vue";
-
-const props = defineProps({
+defineProps({
 	audioRecordProperties: {
 		type: Object as PropType<AudioRecordProperties>,
 		required: true,

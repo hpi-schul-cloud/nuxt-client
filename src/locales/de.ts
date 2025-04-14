@@ -222,6 +222,10 @@ export default {
 	"component.cardElement.audioRecordElement.audioPlayer.speed.normal": "Normal",
 	"component.cardElement.audioRecordElement.audioPlayer.speed":
 		"Geschwindigkeitsmenü",
+	"component.cardElement.audioRecordElement.audioPlayer.resumeRecording":
+		"Resume Recording",
+	"component.cardElement.audioRecordElement.audioPlayer.stopRecording":
+		"Stop Recording",
 	"components.administration.adminMigrationSection.description.firstPart":
 		"Bei der Migration wird das Anmeldesystem der Schüler:innen und Lehrkräfte zu moin.schule gewechselt. Die zu den betroffenen Accounts gehörenden Daten bleiben erhalten.",
 	"components.administration.adminMigrationSection.description.secondPart":
