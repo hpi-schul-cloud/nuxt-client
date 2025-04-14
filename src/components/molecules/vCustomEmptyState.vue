@@ -1956,7 +1956,7 @@
 				</svg>
 			</template>
 		</div>
-		<h1 class="h4 text-center mt-8" data-testid="emptyTaskMessage">
+		<h1 class="h4 text-center mt-8" data-testid="emptyFolderMessage">
 			{{ title }}
 		</h1>
 		<h2 v-if="subtitle" class="h4 text-center mt-3">{{ subtitle }}</h2>
