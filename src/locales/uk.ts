@@ -1843,6 +1843,9 @@ export default {
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Змінити дозвіл кімнат для {memberFullName}",
 	"pages.rooms.members.manage": "Учасник кімнати",
+	"pages.rooms.members.tab.members": "Учасники",
+	"pages.rooms.members.tab.invitations": "Запрошення",
+	"pages.rooms.members.tab.confirmations": "Підтвердження",
 	"pages.rooms.members.remove.ariaLabel": "Видалити {memberFullName} з кімнати",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Скинути вибраних членів зі списку",

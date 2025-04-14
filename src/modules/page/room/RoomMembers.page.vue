@@ -25,7 +25,7 @@
 						v-for="tabItem in tabs"
 						:key="tabItem.value"
 						:prepend-icon="tabItem.icon"
-						:text="tabItem.title"
+						:text="t(tabItem.title)"
 						:value="tabItem.value"
 					/>
 				</VTabs>
@@ -161,21 +161,21 @@ const tabs: Array<{
 	isVisible: boolean;
 }> = [
 	{
-		title: "Mitglieder", // toDo i18n
+		title: "pages.rooms.members.tab.members",
 		value: Tab.Members,
 		icon: mdiAccountMultipleOutline,
 		component: Members,
 		isVisible: true,
 	},
 	{
-		title: "Invitations", // toDo i18n
+		title: "pages.rooms.members.tab.invitations",
 		value: Tab.Invitations,
 		icon: mdiLink,
 		component: Invitations,
 		isVisible: FEATURE_ROOMMEMBERS_TABS_ENABLED,
 	},
 	{
-		title: "Confirmations", // toDo i18n
+		title: "pages.rooms.members.tab.confirmations",
 		value: Tab.Confirmations,
 		icon: mdiAccountQuestionOutline,
 		component: Confirmations,

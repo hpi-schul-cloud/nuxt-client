@@ -1868,6 +1868,9 @@ export default {
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Cambiar autorizaciones de sala para {memberFullName}",
 	"pages.rooms.members.manage": "Miembros de la sala",
+	"pages.rooms.members.tab.members": "Miembros",
+	"pages.rooms.members.tab.invitations": "Invitaciones",
+	"pages.rooms.members.tab.confirmations": "Confirmaciones",
 	"pages.rooms.members.remove.ariaLabel":
 		"Eliminar {memberFullName} de la sala",
 	"pages.rooms.members.resetSelection.ariaLabel":
