@@ -20,12 +20,13 @@
 <script setup lang="ts">
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { ParentNodeInfo, ParentNodeType } from "@/serverApi/v3";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useFolderState } from "@data-folder";
 import { FolderDetails, FolderMenu } from "@feature-folder";
 import { mdiPlus } from "@icons/material";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, onMounted } from "vue";
+import { computed, ComputedRef, onMounted, Ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -37,60 +38,62 @@ const props = defineProps({
 	},
 });
 
-const { breadCrumbs, fileFolderElement, fetchFileFolderElement } =
+const { parentNodeInfos, fileFolderElement, fetchFileFolderElement } =
 	useFolderState();
 
-// @TODO: Move to a outside file
-class ReferenceNodeMapper {
-	static mapNodeTypeToPathType(nodeType: string): string {
-		switch (nodeType) {
-			case "course":
-				return "courses";
-			case "room":
-				return "rooms";
-			case "board":
-				return "boards";
-			default:
-				throw new Error(`Unknown node type: ${nodeType}`);
-		}
+const mapNodeTypeToPathType = (nodeType: string): string => {
+	switch (nodeType) {
+		case ParentNodeType.Course:
+			return "courses";
+		case ParentNodeType.Room:
+			return "rooms";
+		case ParentNodeType.Board:
+			return "boards";
+		default:
+			throw new Error(`Unknown node type: ${nodeType}`);
 	}
-}
-// @TODO: Move to a composable
-const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
-	const breadCrumbItems = [];
-	if (breadCrumbs.value && breadCrumbs.value.length > 0) {
-		const firstItem = breadCrumbs.value[0];
-		if (firstItem.type === "course") {
-			breadCrumbItems.push({
-				title: t("common.words.courses"),
-				to: "/rooms/courses-overview",
-			});
-		} else if (firstItem.type === "room") {
-			breadCrumbItems.push({
-				title: t("pages.rooms.title"),
-				to: "/rooms",
-			});
-		}
+};
 
-		breadCrumbs.value.forEach((item) => {
-			breadCrumbItems.push({
-				title: item.name,
-				to: `/${ReferenceNodeMapper.mapNodeTypeToPathType(item.type)}/${item.id}`,
-			});
+const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
+	const breadcrumbItems: Breadcrumb[] = [];
+
+	if (!parentNodeInfos.value || parentNodeInfos.value.length == 0)
+		return breadcrumbItems;
+
+	const rootItem = buildRootBreadCrumbItem(parentNodeInfos);
+	if (rootItem) breadcrumbItems.push(rootItem);
+
+	parentNodeInfos.value.forEach((item) => {
+		breadcrumbItems.push({
+			title: item.name,
+			to: `/${mapNodeTypeToPathType(item.type)}/${item.id}`,
 		});
-	}
-	return breadCrumbItems;
+	});
+
+	return breadcrumbItems;
 });
+
+const buildRootBreadCrumbItem = (parentNodeInfos: Ref<ParentNodeInfo[]>) => {
+	if (!parentNodeInfos.value[0]) return;
+
+	const firstItem = parentNodeInfos.value[0];
+
+	if (firstItem.type === ParentNodeType.Course) {
+		return { title: t("common.words.courses"), to: "/rooms/courses-overview" };
+	} else if (ParentNodeType.Room) {
+		return { title: t("pages.rooms.title"), to: "/rooms" };
+	}
+};
 
 const folderName = computed(() => {
-	const folderName =
-		fileFolderElement.value && fileFolderElement.value.title
-			? fileFolderElement.value.title
-			: t("pages.folder.untitled");
-	useTitle(buildPageTitle(`${folderName} - ${t("pages.folder.title")}`));
+	const title = fileFolderElement.value?.content.title;
 
-	return folderName;
+	const name = title ? title : t("pages.folder.untitled");
+
+	return name;
 });
+
+useTitle(buildPageTitle(`${folderName.value} - ${t("pages.folder.title")}`));
 
 const fabAction = {
 	icon: mdiPlus,

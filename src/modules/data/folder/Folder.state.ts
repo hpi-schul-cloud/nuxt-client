@@ -1,31 +1,35 @@
-import { BoardElementApiFactory } from "@/serverApi/v3";
+import {
+	BoardElementApiFactory,
+	ContentElementType,
+	ParentNodeInfo,
+} from "@/serverApi/v3";
 import { FileFolderElement } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { computed, ref } from "vue";
 
-type BreadCrumbs = { id: string; name: string; type: string };
-
 export const useFolderState = () => {
 	const boardElementApi = BoardElementApiFactory(undefined, "/v3", $axios);
 
-	const fileRecords = ref<FileFolderElement[]>([]);
 	const fileFolderElement = ref<FileFolderElement | undefined>(undefined);
-	const breadCrumbs = ref<BreadCrumbs[]>([]);
+	const parentNodeInfos = ref<ParentNodeInfo[]>([]);
 	const isLoading = ref(false);
 
 	const fetchFileFolderElement = async (fileFolderElementId: string) => {
 		isLoading.value = true;
 		try {
-			const fileFolderElementMetadata = (
-				await boardElementApi.elementControllerGetElementMetadata(
+			const reponse = (
+				await boardElementApi.elementControllerGetElementWithParentHierarchy(
 					fileFolderElementId
 				)
 			).data;
 
-			fileFolderElement.value =
-				fileFolderElementMetadata.element as FileFolderElement;
-			breadCrumbs.value = fileFolderElementMetadata.path as BreadCrumbs[];
+			if (reponse.element.type !== ContentElementType.FileFolder) {
+				throw createApplicationError(404);
+			}
+
+			fileFolderElement.value = reponse.element as FileFolderElement;
+			parentNodeInfos.value = reponse.parentHierarchy;
 		} catch (error) {
 			const responseError = mapAxiosErrorToResponseError(error);
 
@@ -36,13 +40,12 @@ export const useFolderState = () => {
 	};
 
 	const isEmpty = computed(() => {
-		return fileRecords.value.length === 0;
+		return true;
 	});
 
 	return {
-		breadCrumbs,
+		parentNodeInfos,
 		fileFolderElement,
-		fileRecords,
 		isLoading,
 		isEmpty,
 		fetchFileFolderElement,
