@@ -20,6 +20,8 @@
 					v-if="FEATURE_ROOMMEMBERS_TABS_ENABLED"
 					v-model="activeTab"
 					align-tabs="center"
+					fixed-tabs
+					:class="{ 'room-members-tabs': mdAndUp }"
 				>
 					<VTab
 						v-for="tabItem in tabs"
@@ -32,7 +34,7 @@
 			</div>
 		</template>
 
-		<VTabsWindow v-model="activeTab" class="mt-12 tabs-window">
+		<VTabsWindow v-model="activeTab" class="mt-12 room-members-tabs-window">
 			<VTabsWindowItem
 				v-for="tabItem in tabs"
 				:key="tabItem.value"
@@ -118,7 +120,7 @@ const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { xs } = useDisplay();
+const { xs, mdAndUp } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 
 const isMembersDialogOpen = ref(false);
@@ -265,7 +267,12 @@ const fabAction = computed(() => {
 // the sticky search bar needs the whole window as nearest scrolling ancestor
 // if we didn't add the following line the tab window would be the nearest scrolling ancestor
 // and the search bar would be offset by a lot and overlap the table
-.tabs-window {
+.room-members-tabs-window {
 	overflow: unset;
+}
+
+// estimated width of the fab button so it doesn't overlap the tabs on smallest medium screens
+.room-members-tabs {
+	margin: 0 200px;
 }
 </style>
