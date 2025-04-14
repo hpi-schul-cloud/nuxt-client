@@ -12,14 +12,14 @@
 				<div ref="boardHeader">
 					<BoardAnyTitleInput
 						ref="boardHeader"
-						class="ml-n4"
+						class="ml-n4 input"
 						scope="board"
 						:value="boardTitle"
 						data-testid="board-title"
 						:is-edit-mode="isEditMode"
 						:is-focused="isFocusedById"
 						:max-length="100"
-						:style="{ width: `${fieldWidth + 1}px` }"
+						:style="{ width: `${fieldWidth}px` }"
 						@update:value="updateBoardTitle"
 						@blur="onBoardTitleBlur"
 					/>
@@ -181,7 +181,9 @@ const calculateWidth = () => {
 	inputWidthCalcSpan.value.innerHTML = title.replace(/\s/g, "&nbsp;");
 
 	const width = inputWidthCalcSpan.value.offsetWidth;
-	fieldWidth.value = width;
+
+	// 1px is added here to prevent the input value from being cut off with an ellipsis.
+	fieldWidth.value = width + 1;
 };
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -221,7 +223,8 @@ watchEffect(() => {
 	overflow: hidden;
 }
 
-.v-input {
-	max-width: calc(100% + 1.5rem);
+.input {
+	// The 16px compensate for the negative margin set with "ml-n4".
+	max-width: calc(100% + 16px);
 }
 </style>
