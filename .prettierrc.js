@@ -7,7 +7,7 @@ module.exports = {
 	arrowParens: "always",
 	proseWrap: "never",
 	htmlWhitespaceSensitivity: "css",
-	endOfLine: "lf",
+	endOfLine: "auto",
 	semi: true,
 	singleQuote: false,
 };

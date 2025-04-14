@@ -35,7 +35,7 @@
 import { ErrorAlert, InfoAlert, WarningAlert } from "@ui-alert";
 import { defineComponent, PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import { AudioRecordAlert } from "../../types/AudioRecordAlert.enum";
+import { AudioRecordAlert } from "./AudioRecordAlert.enum";
 
 export default defineComponent({
 	name: "AudioRecordAlerts",

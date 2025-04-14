@@ -1,6 +1,5 @@
-<!-- eslint-disable prettier/prettier -->
 <template>
-	<ContentElementBar class="audio-player bg-grey-darken-3">
+	<ContentElementBar class="audio-record-player bg-grey-darken-3">
 		<template #element>
 			<div class="d-flex flex-nowrap pb-0 pl-2 pr-1 fill-height align-center">
 				<audio
@@ -11,20 +10,7 @@
 				<v-btn
 					v-if="playing"
 					:aria-label="
-						$t('component.cardElement.fileElement.audioPlayer.pause')
-					"
-					color="transparent"
-					density="comfortable"
-					icon
-					variant="flat"
-					@click="onRecord"
-				>
-					<v-icon> {{ mdiPause }}</v-icon>
-				</v-btn>
-				<v-btn
-					v-if="playing"
-					:aria-label="
-						$t('component.cardElement.fileElement.audioPlayer.pause')
+						$t('component.cardElement.audioRecordElement.audioPlayer.pause')
 					"
 					color="transparent"
 					density="comfortable"
@@ -36,7 +22,9 @@
 				</v-btn>
 				<v-btn
 					v-else
-					:aria-label="$t('component.cardElement.fileElement.audioPlayer.play')"
+					:aria-label="
+						$t('component.cardElement.audioRecordElement.audioPlayer.play')
+					"
 					color="transparent"
 					density="comfortable"
 					icon
@@ -50,7 +38,7 @@
 				</div>
 				<v-slider
 					:aria-label="
-						$t('component.cardElement.fileElement.audioPlayer.slider')
+						$t('component.cardElement.audioRecordElement.audioPlayer.slider')
 					"
 					class="duration-slider"
 					color="white"
@@ -77,20 +65,15 @@
 
 <script lang="ts">
 import { formatSecondsToHourMinSec } from "@/utils/fileHelper";
-import {
-	mdiPause,
-	mdiPlay,
-	mdiPlaySpeed,
-	mdiMicrophone,
-} from "@icons/material";
+import { mdiPause, mdiPlay, mdiPlaySpeed } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
 import { computed, defineComponent, ref } from "vue";
-import { AudioRecordAlert } from "../../types/AudioRecordAlert.enum";
+import { AudioRecordAlert } from "../../alert/AudioRecordAlert.enum";
 import SpeedMenu from "./SpeedMenu.vue";
 
 export default defineComponent({
-	name: "AudioRecodPlayerDisplay",
+	name: "AudioRecordPlayer",
 	components: { ContentElementBar, SpeedMenu },
 	props: {
 		src: { type: String, required: true },
@@ -115,10 +98,6 @@ export default defineComponent({
 		});
 
 		const onPlay = () => {
-			playing.value = !playing.value;
-		};
-
-		const onRecord = () => {
 			playing.value = !playing.value;
 		};
 
@@ -154,7 +133,6 @@ export default defineComponent({
 			mdiPause,
 			mdiPlaySpeed,
 			onPlay,
-			onRecord,
 			onInputSlider,
 			durationDisplay,
 		};
@@ -162,12 +140,12 @@ export default defineComponent({
 });
 </script>
 <style scoped lang="scss">
-.audio-player {
+.audio-record-player {
 	border-top-right-radius: 0.25rem;
 	border-top-left-radius: 0.25rem;
 }
 
-.audio-player:focus {
+.audio-record-player:focus {
 	outline: none;
 }
 

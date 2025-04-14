@@ -1,5 +1,5 @@
 import { FileRecordResponse, PreviewStatus } from "@/fileStorageApi/v3";
-import { AudioRecordAlert } from "../types/AudioRecordAlert.enum";
+import { AudioRecordAlert } from "../components/content/alert/AudioRecordAlert.enum";
 import { computed, Ref, ref } from "vue";
 
 export const useAudioRecordAlerts = (

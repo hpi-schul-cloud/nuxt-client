@@ -1,63 +1,53 @@
 <template>
-	<div
-		class="d-flex"
-		:class="{
-			'flex-row': hasRowStyle,
-			'flex-column': !hasRowStyle,
-		}"
-	>
-		<div
-			:class="{
-				'w-33': hasRowStyle,
-			}"
-		>
-			<AudioRecordPlayerDisplay
-				:src="audioRecordProperties.url"
-				:is-edit-mode="true"
-				:show-menu="true"
-			>
-				<slot />
-			</AudioRecordPlayerDisplay>
+	<div>
+		<div class="bg-grey-lighten-4 pa-4 rounded-t">
+			<AudioRecordContentTitle />
 		</div>
-		<div
-			class="d-flex flex-column"
-			:class="{ 'file-information': hasRowStyle }"
+		<AudioRecordDisplay
+			:audio-record-properties="audioRecordProperties"
+			:src="audioRecordProperties.url"
+			:is-edit-mode="isEditMode"
+			:show-menu="isMenuShownOnFileDisplay"
+			@add:alert="onAddAlert"
 		>
-			<AudioRecordDescription
-				:name="audioRecordProperties.name"
-				:caption="audioRecordProperties.element.content.caption"
-				:show-title="true"
-				:show-menu="!isMenuShownOnFileDisplay"
-				:is-edit-mode="true"
-				:src="fileDescriptionSrc"
-			>
-				<slot />
-			</AudioRecordDescription>
-			<AudioRecordInputs
-				:audio-record-properties="audioRecordProperties"
-				:is-edit-mode="isEditMode"
-				@update:alternative-text="onUpdateText"
-				@update:caption="onUpdateCaption"
-			/>
-			<AudioRecordAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
-		</div>
+			<slot />
+		</AudioRecordDisplay>
+	</div>
+	<div>
+		<AudioRecordDescription
+			:name="audioRecordProperties.name"
+			:caption="audioRecordProperties.element.content.caption"
+			:show-title="true"
+			:show-menu="!isMenuShownOnFileDisplay"
+			:is-edit-mode="true"
+		>
+			<slot />
+		</AudioRecordDescription>
+		<AudioRecordInputs
+			:audio-record-properties="audioRecordProperties"
+			:is-edit-mode="isEditMode"
+			@update:alternative-text="onUpdateText"
+			@update:caption="onUpdateCaption"
+		/>
+		<AudioRecordAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import { computed, PropType, ref } from "vue";
+import AudioRecordAlerts from "./alert/AudioRecordAlert.vue";
+import AudioRecordContentTitle from "./AudioRecordContentTitle.vue";
+import AudioRecordDisplay from "./display/AudioRecordDisplay.vue";
+import AudioRecordDescription from "./display/description/AudioRecordDescription.vue";
 import AudioRecordInputs from "./inputs/AudioRecordInputs.vue";
-import AudioRecordDescription from "./AudioRecordDescription.vue";
-import AudioRecordAlerts from "./AudioRecordAlert.vue";
-import AudioRecordPlayerDisplay from "./AudioRecordPlayerDisplay.vue";
 
-import { useDebounceFn } from "@vueuse/core";
+import { isAudioMimeType } from "@/utils/fileHelper";
 import { injectStrict } from "@/utils/inject";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
+import { useDebounceFn } from "@vueuse/core";
 import { useDisplay } from "vuetify";
-import { isAudioMimeType } from "@/utils/fileHelper";
 import { AudioRecordProperties } from "../../types/audio-record-properties";
-import { AudioRecordAlert } from "../../types/AudioRecordAlert.enum";
+import { AudioRecordAlert } from "./alert/AudioRecordAlert.enum";
 
 const props = defineProps({
 	audioRecordProperties: {
@@ -94,30 +84,12 @@ const hasAudioMimeType = computed(() => {
 	return isAudioMimeType(props.audioRecordProperties.mimeType);
 });
 
-const fileDescriptionSrc = computed(() => {
-	return hasAudioMimeType.value ? props.audioRecordProperties.url : undefined;
-});
-
-const showTitle = computed(() => {
-	return (
-		hasAudioMimeType.value ||
-		(!props.audioRecordProperties.previewUrl && !hasAudioMimeType.value)
-	);
-});
-
 const isListLayout = ref(injectStrict(BOARD_IS_LIST_LAYOUT));
 const { smAndUp } = useDisplay();
 
 const isSmallOrLargerListBoard = computed(() => {
 	return smAndUp.value && isListLayout.value;
 });
-
-const hasRowStyle = computed(
-	() =>
-		isSmallOrLargerListBoard.value &&
-		hasAudioMimeType.value &&
-		props.audioRecordProperties.previewUrl
-);
 
 const isMenuShownOnFileDisplay = computed(() => {
 	const isFileDisplayRendered =

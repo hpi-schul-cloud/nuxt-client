@@ -146,6 +146,7 @@ import {
 	mdiViewListOutline,
 	mdiMovieRoll,
 	mdiMicrophone,
+	mdiStop,
 } from "@mdi/js";
 
 export {
@@ -296,4 +297,5 @@ export {
 	mdiViewListOutline,
 	mdiMovieRoll,
 	mdiMicrophone,
+	mdiStop,
 };

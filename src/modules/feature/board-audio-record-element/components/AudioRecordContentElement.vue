@@ -3,17 +3,90 @@
 		ref="audioRecordContentElement"
 		class="board-audio-record-element-card mb-4"
 		data-testid="board-audio-record-element"
+		dense
 		elevation="0"
-		:variant="isOutlined ? 'outlined' : 'elevated'"
+		variant="outlined"
 		:ripple="false"
-		:tabindex="isEditMode ? 0 : undefined"
+		tabindex="0"
 		@keydown.up.down="onKeydownArrow"
-		@keydown.stop
 	>
+		<div class="bg-grey-lighten-4 pa-4 rounded-t">
+			<AudioRecordContentTitle />
+		</div>
+		<div class="rounded-b border-top">
+			<v-btn
+				:aria-label="
+					$t(
+						'component.cardElement.audioRecordElement.audioPlayer.startRecording'
+					)
+				"
+				color="transparent"
+				density="comfortable"
+				icon
+				variant="flat"
+				@click="start"
+			>
+				<v-icon> {{ mdiMicrophone }}</v-icon>
+			</v-btn>
+			<v-btn
+				:aria-label="
+					$t(
+						'component.cardElement.audioRecordElement.audioPlayer.pauseRecording'
+					)
+				"
+				color="transparent"
+				density="comfortable"
+				icon
+				variant="flat"
+				@click="pause"
+			>
+				<v-icon> {{ mdiPause }}</v-icon>
+			</v-btn>
+			<v-btn
+				:aria-label="
+					$t(
+						'component.cardElement.audioRecordElement.audioPlayer.resumeRecording'
+					)
+				"
+				color="transparent"
+				density="comfortable"
+				icon
+				variant="flat"
+				@click="resume"
+			>
+				<v-icon> {{ mdiPlay }}</v-icon>
+			</v-btn>
+
+			<v-btn
+				:aria-label="
+					$t(
+						'component.cardElement.audioRecordElement.audioPlayer.stopRecording'
+					)
+				"
+				color="transparent"
+				density="comfortable"
+				icon
+				variant="flat"
+				@click="stop"
+			>
+				<v-icon> {{ mdiStop }}</v-icon>
+			</v-btn>
+			<!-- <v-slider
+				:aria-label="
+					$t('component.cardElement.audioRecordElement.audioPlayer.slider')
+				"
+				class="duration-slider"
+				color="white"
+				thumb-color="white"
+				track-color="black"
+			/> -->
+		</div>
+
 		<AudioRecordContent
 			v-if="audioRecordProperties"
 			:audio-record-properties="audioRecordProperties"
 			:is-edit-mode="isEditMode"
+			:alerts="alerts"
 			@fetch:file="onFetchFile"
 			@update:alternative-text="onUpdateAlternativeText"
 			@update:caption="onUpdateCaption"
@@ -44,6 +117,13 @@ import {
 	isDownloadAllowed,
 	isPreviewPossible,
 } from "@/utils/fileHelper";
+import {
+	mdiPause,
+	mdiPlay,
+	mdiPlaySpeed,
+	mdiMicrophone,
+	mdiStop,
+} from "@icons/material";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
@@ -63,15 +143,14 @@ import {
 
 import { AudioRecordElementResponse } from "../../../../serverApi/v3";
 import { useFileStorageApi } from "../../board-file-element";
-import { AudioRecordAlert } from "../types/AudioRecordAlert.enum";
+import { AudioRecordAlert } from "./content/alert/AudioRecordAlert.enum";
 import { useAudioRecordAlerts } from "../composables/useAudioRecordAlerts.composable";
 
-import AudioRecordContent from "../components/content/AudioRecordContent.vue";
+import AudioRecordContent from "./content/AudioRecordContent.vue";
+import { useAudioRecorder } from "../composables";
 export default defineComponent({
 	name: "AudioRecordContentElement",
 	components: {
-		// AudioPlayer,
-		// AudioRecorder,
 		AudioRecordContent,
 		BoardMenu,
 		KebabMenuActionMoveUp,
@@ -202,7 +281,17 @@ export default defineComponent({
 		const onMoveUp = () => emit("move-up:edit");
 		const onMoveDown = () => emit("move-down:edit");
 
+		// Audio Recorder
+		const { state, start, stop, pause, resume } = useAudioRecorder();
+		const audioUrl = ref("");
+
 		return {
+			audioUrl,
+			state,
+			start,
+			stop,
+			pause,
+			resume,
 			audioRecordContentElement,
 			audioRecordProperties,
 			fileRecord,
@@ -220,6 +309,11 @@ export default defineComponent({
 			onDelete,
 			onMoveUp,
 			onMoveDown,
+			mdiPlay,
+			mdiPause,
+			mdiPlaySpeed,
+			mdiMicrophone,
+			mdiStop,
 		};
 	},
 	computed: {

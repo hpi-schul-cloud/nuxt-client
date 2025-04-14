@@ -483,7 +483,7 @@ export default {
 		"Dieses Etherpad ist für alle Kursteilnehmenden sichtbar und bearbeitbar.",
 	"components.cardElement.externalToolElement": "Externes Tool",
 	"components.cardElement.mediaExternalToolElement": "Medium",
-	"components.cardElement.audioRecordElement": "Datei",
+	"components.cardElement.audioRecordElement": "Audio Record",
 	"components.cardElement.audioRecordElement.altDescription":
 		"Eine kurze Beschreibung hilft Personen, die das Bild nicht sehen können.",
 	"components.cardElement.audioRecordElement.alternativeText": "Alternativtext",
