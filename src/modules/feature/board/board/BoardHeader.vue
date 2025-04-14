@@ -9,22 +9,20 @@
 				@end-edit-mode="onEndEditMode"
 				@keydown.enter="onStartEditMode"
 			>
-				<div ref="boardHeader">
-					<BoardAnyTitleInput
-						ref="boardHeader"
-						class="ml-n4 input"
-						scope="board"
-						:value="boardTitle"
-						data-testid="board-title"
-						:is-edit-mode="isEditMode"
-						:is-focused="isFocusedById"
-						:max-length="100"
-						:style="{ width: `${fieldWidth}px` }"
-						@update:value="updateBoardTitle"
-						@blur="onBoardTitleBlur"
-					/>
-					<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
-				</div>
+				<BoardAnyTitleInput
+					ref="boardHeader"
+					class="ml-n4 input"
+					scope="board"
+					:value="boardTitle"
+					data-testid="board-title"
+					:is-edit-mode="isEditMode"
+					:is-focused="isFocusedById"
+					:max-length="100"
+					:style="{ width: `${fieldWidth}px` }"
+					@update:value="updateBoardTitle"
+					@blur="onBoardTitleBlur"
+				/>
+				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 			</InlineEditInteractionHandler>
 		</div>
 		<div class="d-flex">
