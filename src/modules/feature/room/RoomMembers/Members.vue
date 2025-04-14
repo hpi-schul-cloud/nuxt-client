@@ -19,13 +19,13 @@
 	<div class="mb-12">
 		<MembersTable
 			v-if="!isLoading && currentUser"
-			:fixed-position="fixedHeaderOnMobile"
+			:header-bottom="headerBottom"
 		/>
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	useRoomMemberVisibilityOptions,
@@ -33,32 +33,20 @@ import {
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import { MembersTable } from "@feature-room";
-import { useDisplay } from "vuetify";
-import { useElementBounding } from "@vueuse/core";
+
+defineProps({
+	headerBottom: {
+		type: Number,
+		default: 0,
+	},
+});
 
 const { t } = useI18n();
-
-const { mdAndDown } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
 const { isLoading, currentUser } = storeToRefs(roomMembersStore);
 
-const wireframe = ref<HTMLElement | null>(null);
-const fixedHeaderOnMobile = ref({
-	enabled: false,
-	positionTop: 0,
-});
-const { y } = useElementBounding(wireframe);
 const { isVisiblePageInfoText } = useRoomMemberVisibilityOptions(currentUser);
-
-onMounted(async () => {
-	const header = document.querySelector(".wireframe-header") as HTMLElement;
-	fixedHeaderOnMobile.value.positionTop = header.offsetHeight + y.value;
-});
-
-watch(y, () => {
-	fixedHeaderOnMobile.value.enabled = y.value <= 0 && mdAndDown.value;
-});
 
 const linkAriaLabel = computed(
 	() =>

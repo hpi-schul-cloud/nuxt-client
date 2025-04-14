@@ -6,31 +6,33 @@
 		@fab:clicked="onFabClick"
 	>
 		<template #header>
-			<div ref="header" class="d-flex align-items-center">
-				<h1 class="text-h3 mb-4" data-testid="room-title">
-					{{ t("pages.rooms.members.manage") }}
-				</h1>
-				<KebabMenu class="mx-2" data-testid="room-member-menu">
-					<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
-				</KebabMenu>
-			</div>
+			<div ref="header">
+				<div class="d-flex align-items-center">
+					<h1 class="text-h3 mb-4" data-testid="room-title">
+						{{ t("pages.rooms.members.manage") }}
+					</h1>
+					<KebabMenu class="mx-2" data-testid="room-member-menu">
+						<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
+					</KebabMenu>
+				</div>
 
-			<VTabs
-				v-if="FEATURE_ROOMMEMBERS_TABS_ENABLED"
-				v-model="activeTab"
-				align-tabs="center"
-			>
-				<VTab
-					v-for="tabItem in tabs"
-					:key="tabItem.value"
-					:prepend-icon="tabItem.icon"
-					:text="tabItem.title"
-					:value="tabItem.value"
-				/>
-			</VTabs>
+				<VTabs
+					v-if="FEATURE_ROOMMEMBERS_TABS_ENABLED"
+					v-model="activeTab"
+					align-tabs="center"
+				>
+					<VTab
+						v-for="tabItem in tabs"
+						:key="tabItem.value"
+						:prepend-icon="tabItem.icon"
+						:text="tabItem.title"
+						:value="tabItem.value"
+					/>
+				</VTabs>
+			</div>
 		</template>
 
-		<VTabsWindow v-model="activeTab" class="mt-12">
+		<VTabsWindow v-model="activeTab" class="mt-12 tabs-window">
 			<VTabsWindowItem
 				v-for="tabItem in tabs"
 				:key="tabItem.value"
@@ -259,3 +261,11 @@ const fabAction = computed(() => {
 	return undefined;
 });
 </script>
+<style scoped lang="scss">
+// the sticky search bar needs the whole window as nearest scrolling ancestor
+// if we didn't add the following line the tab window would be the nearest scrolling ancestor
+// and the search bar would be offset by a lot and overlap the table
+.tabs-window {
+	overflow: unset;
+}
+</style>
