@@ -3240,6 +3240,25 @@ export interface DrawingElementResponse {
 /**
  * 
  * @export
+ * @interface ElementWithParentHierarchyResponse
+ */
+export interface ElementWithParentHierarchyResponse {
+    /**
+     * The element data
+     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse}
+     * @memberof ElementWithParentHierarchyResponse
+     */
+    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
+    /**
+     * The hierarchical path of parent elements
+     * @type {Array<ParentNodeInfo>}
+     * @memberof ElementWithParentHierarchyResponse
+     */
+    parentHierarchy: Array<ParentNodeInfo>;
+}
+/**
+ * 
+ * @export
  * @interface EntityNotFoundError
  */
 export interface EntityNotFoundError {
@@ -7088,6 +7107,43 @@ export interface ParentConsentResponse {
      */
     _id: string;
 }
+/**
+ * 
+ * @export
+ * @interface ParentNodeInfo
+ */
+export interface ParentNodeInfo {
+    /**
+     * The ID of the parent node
+     * @type {string}
+     * @memberof ParentNodeInfo
+     */
+    id: string;
+    /**
+     * The type of the parent node
+     * @type {ParentNodeType}
+     * @memberof ParentNodeInfo
+     */
+    type: ParentNodeType;
+    /**
+     * The name of the parent node
+     * @type {string}
+     * @memberof ParentNodeInfo
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum ParentNodeType {
+    Course = 'course',
+    Room = 'room',
+    User = 'user',
+    Board = 'board'
+}
+
 /**
  * 
  * @export
@@ -14328,10 +14384,10 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerGetElementMetadata: async (contentElementId: string, options: any = {}): Promise<RequestArgs> => {
+        elementControllerGetElementWithParentHierarchy: async (contentElementId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'contentElementId' is not null or undefined
-            assertParamExists('elementControllerGetElementMetadata', 'contentElementId', contentElementId)
-            const localVarPath = `/elements/{contentElementId}/metadata`
+            assertParamExists('elementControllerGetElementWithParentHierarchy', 'contentElementId', contentElementId)
+            const localVarPath = `/elements/{contentElementId}`
                 .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
@@ -14525,8 +14581,8 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerGetElementMetadata(contentElementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<{ [key: string]: object; }>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerGetElementMetadata(contentElementId, options);
+        async elementControllerGetElementWithParentHierarchy(contentElementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ElementWithParentHierarchyResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerGetElementWithParentHierarchy(contentElementId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -14602,8 +14658,8 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerGetElementMetadata(contentElementId: string, options?: any): AxiosPromise<{ [key: string]: object; }> {
-            return localVarFp.elementControllerGetElementMetadata(contentElementId, options).then((request) => request(axios, basePath));
+        elementControllerGetElementWithParentHierarchy(contentElementId: string, options?: any): AxiosPromise<ElementWithParentHierarchyResponse> {
+            return localVarFp.elementControllerGetElementWithParentHierarchy(contentElementId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -14675,7 +14731,7 @@ export interface BoardElementApiInterface {
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerGetElementMetadata(contentElementId: string, options?: any): AxiosPromise<{ [key: string]: object; }>;
+    elementControllerGetElementWithParentHierarchy(contentElementId: string, options?: any): AxiosPromise<ElementWithParentHierarchyResponse>;
 
     /**
      * 
@@ -14751,8 +14807,8 @@ export class BoardElementApi extends BaseAPI implements BoardElementApiInterface
      * @throws {RequiredError}
      * @memberof BoardElementApi
      */
-    public elementControllerGetElementMetadata(contentElementId: string, options?: any) {
-        return BoardElementApiFp(this.configuration).elementControllerGetElementMetadata(contentElementId, options).then((request) => request(this.axios, this.basePath));
+    public elementControllerGetElementWithParentHierarchy(contentElementId: string, options?: any) {
+        return BoardElementApiFp(this.configuration).elementControllerGetElementWithParentHierarchy(contentElementId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
