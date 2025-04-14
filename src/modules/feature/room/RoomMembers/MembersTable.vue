@@ -27,7 +27,7 @@
 			mobile-breakpoint="sm"
 			single-line
 			variant="solo-filled"
-			:class="{ 'order-1 w-100 mt-1': isExtraSmallDisplay }"
+			:class="{ 'order-1 w-100 mt-2': isExtraSmallDisplay }"
 			:label="t('common.labels.search')"
 			:prepend-inner-icon="mdiMagnify"
 			:aria-label="t('pages.rooms.members.filter')"
