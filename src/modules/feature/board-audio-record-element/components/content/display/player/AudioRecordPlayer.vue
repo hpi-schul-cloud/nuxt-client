@@ -74,7 +74,7 @@
 				<div class="duration py-1 pl-1 pr-2 text-body-2">
 					{{ elapsedTimeDisplay }}
 				</div>
-				<div>
+				<!-- <div>
 					<v-slider
 						:aria-label="
 							$t('component.cardElement.audioRecordElement.audioPlayer.slider')
@@ -83,15 +83,13 @@
 						color="white"
 						thumb-color="white"
 						track-color="black"
-						:model-value="currentTime"
-						start="0"
-						end="duration"
-						step="durationStep"
+						:start="0"
+						:end="duration"
+						:step="durationStep"
 						:min="0"
 						:max="duration"
-						@update:model-value="onInputSlider"
 					/>
-				</div>
+				</div> -->
 				<audio
 					v-if="audioUrl"
 					ref="audio"
@@ -99,29 +97,51 @@
 					:src="audioUrl"
 					class="ml-2"
 				/>
+				<v-btn
+					v-show="state === RecordingStateEnum.INACTIVE && audioUrl"
+					class="float-right download-button"
+					icon
+					size="small"
+					variant="text"
+					@click="onUpload"
+				>
+					<v-icon>{{ mdiTrayArrowUp }}</v-icon>
+				</v-btn>
 			</div>
 		</template>
 	</ContentElementBar>
 </template>
 
 <script lang="ts">
-import { mdiPause, mdiPlay, mdiStop, mdiMicrophone } from "@icons/material";
+import {
+	mdiPause,
+	mdiPlay,
+	mdiStop,
+	mdiMicrophone,
+	mdiTrayArrowUp,
+} from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { computed, defineComponent, ref, onUnmounted } from "vue";
-import { useAudioRecorder, RecordingStateEnum } from "../../../../composables";
+import {
+	useAudioRecorder,
+	RecordingStateEnum,
+	useFileStorageApi,
+} from "../../../../composables";
 import { useMediaControls } from "@vueuse/core";
 import { formatSecondsToHourMinSec } from "../../../../../../../utils/fileHelper";
+import { FileRecordParentType } from "../../../../../../../fileStorageApi/v3";
 
 export default defineComponent({
 	name: "AudioRecordPlayer",
 	components: { ContentElementBar },
 	props: {
 		showMenu: { type: Boolean, required: true },
+		elementId: { type: String, required: true },
 	},
 	emits: ["error"],
 	setup(props, { emit }) {
-		const audio = ref();
-		const audioUrl = ref("");
+		const audio = ref<HTMLAudioElement | null>(null);
+		const audioUrl = ref<string>("");
 
 		// Use Media Controls
 		const controls = useMediaControls(audio, {
@@ -142,6 +162,8 @@ export default defineComponent({
 			pause,
 			resume,
 		} = useAudioRecorder();
+
+		const { upload } = useFileStorageApi();
 
 		const elapsedTime = ref(0);
 		let intervalId: number | null = null;
@@ -188,8 +210,16 @@ export default defineComponent({
 				audio.value.play();
 			}
 		};
-		const onInputSlider = (seconds: number) => {
-			controls.currentTime.value = seconds;
+
+		const onUpload = async () => {
+			if (audioUrl.value) {
+				const response = await fetch(audioUrl.value);
+				const blob = await response.blob();
+				const file = new File([blob], `audio-${Math.random().toString()}`, {
+					type: blob.type,
+				});
+				await upload(file, props.elementId, FileRecordParentType.BOARDNODES);
+			}
 		};
 
 		const elapsedTimeDisplay = computed(() => {
@@ -197,12 +227,7 @@ export default defineComponent({
 		});
 
 		// Moving these variables to template causes the audio not to play on iOS
-		const durationStep = 0.0000001;
-		const durationDisplay = computed(() => {
-			const durationValue = formatSecondsToHourMinSec(duration.value);
-			const currentTimeValue = formatSecondsToHourMinSec(currentTime.value);
-			return currentTimeValue + " / " + durationValue;
-		});
+
 		onUnmounted(() => {
 			if (intervalId) {
 				clearInterval(intervalId);
@@ -210,7 +235,7 @@ export default defineComponent({
 		});
 
 		return {
-			durationStep,
+			mdiTrayArrowUp,
 			duration,
 			elapsedTimeDisplay,
 			audio,
@@ -228,13 +253,13 @@ export default defineComponent({
 			onResume,
 			stopRecording,
 			play,
+			onUpload,
 			RecordingStateEnum,
 			playing,
 			currentTime,
 			volume,
 			rate,
 			onSourceError,
-			onInputSlider,
 		};
 	},
 });

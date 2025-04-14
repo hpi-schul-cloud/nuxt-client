@@ -5,6 +5,7 @@
 		</div>
 		<AudioRecordDisplay
 			:audio-record-properties="audioRecordProperties"
+			:element-id="audioRecordProperties.element.id"
 			:is-edit-mode="isEditMode"
 			:show-menu="true"
 		/>
