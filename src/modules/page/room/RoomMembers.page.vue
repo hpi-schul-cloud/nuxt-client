@@ -1,14 +1,12 @@
 <template>
 	<DefaultWireframe
-		ref="wireframe"
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
-		:fixed-header="fixedHeaderOnMobile.enabled"
 		@fab:clicked="onFabClick"
 	>
 		<template #header>
-			<div class="d-flex align-items-center">
+			<div ref="header" class="d-flex align-items-center">
 				<h1 class="text-h3 mb-4" data-testid="room-title">
 					{{ t("pages.rooms.members.manage") }}
 				</h1>
@@ -41,7 +39,7 @@
 				v-model:selected-user-ids="selectedIds"
 				:members="memberList"
 				:current-user="currentUser"
-				:fixed-position="fixedHeaderOnMobile"
+				:header-bottom="headerBottom"
 				@remove:members="onRemoveMembers"
 				@change:permission="onOpenRoleDialog"
 			/>
@@ -90,7 +88,7 @@ import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle, useElementBounding } from "@vueuse/core";
-import { computed, ComputedRef, onMounted, Ref, ref, watch } from "vue";
+import { computed, ComputedRef, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
 import {
@@ -120,7 +118,7 @@ const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { xs, mdAndDown } = useDisplay();
+const { xs } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 const isMembersDialogOpen = ref(false);
 const isChangeRoleDialogOpen = ref(false);
@@ -146,12 +144,8 @@ const memberList: Ref<RoomMember[]> = ref(roomMembers);
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
 );
-const wireframe = ref<HTMLElement | null>(null);
-const fixedHeaderOnMobile = ref({
-	enabled: false,
-	positionTop: 0,
-});
-const { y } = useElementBounding(wireframe);
+const header = ref<HTMLElement | null>(null);
+const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
 const { canLeaveRoom } = useRoomAuthorization();
 const { isVisibleAddMemberButton, isVisiblePageInfoText } =
@@ -235,12 +229,6 @@ onMounted(async () => {
 	}
 
 	await fetchMembers();
-	const header = document.querySelector(".wireframe-header") as HTMLElement;
-	fixedHeaderOnMobile.value.positionTop = header.offsetHeight + y.value;
-});
-
-watch(y, () => {
-	fixedHeaderOnMobile.value.enabled = y.value <= 0 && mdAndDown.value;
 });
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
