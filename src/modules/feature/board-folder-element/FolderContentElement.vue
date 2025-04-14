@@ -6,7 +6,7 @@
 		elevation="0"
 		variant="outlined"
 		:ripple="false"
-		:href="sanitizedUrl"
+		:to="sanitizedUrl"
 		:tabindex="isEditMode ? 0 : undefined"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
