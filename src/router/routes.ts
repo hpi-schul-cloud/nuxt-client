@@ -1,6 +1,10 @@
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import { checkRoomsFeature, validateQueryParameters } from "@/router/guards";
+import {
+	checkFolderFeature,
+	checkRoomsFeature,
+	validateQueryParameters,
+} from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
@@ -241,7 +245,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 	{
 		path: `/folder/:id(${REGEX_ID})`,
 		component: async () => (await import("@page-folder")).FolderPage,
-		// beforeEnter: [checkFolderFeature], @TODO add this when the feature is available
+		beforeEnter: [checkFolderFeature],
 		name: "folder-id",
 		props: (route: RouteLocationNormalized) => ({
 			folderId: route.params.id,
