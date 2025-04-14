@@ -1,5 +1,5 @@
 <template>
-	<p>
+	<p data-testid="info-text">
 		{{ t("pages.rooms.members.tab.invitations.infoText") }}
 	</p>
 </template>
