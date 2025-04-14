@@ -1,30 +1,28 @@
 <template>
 	<div class="d-flex align-items-center board-header">
-		<div class="input-container">
-			<InlineEditInteractionHandler
-				:id="boardId"
+		<InlineEditInteractionHandler
+			:id="boardId"
+			class="input-container"
+			:is-edit-mode="isEditMode"
+			tabindex="0"
+			@start-edit-mode="onStartEditMode"
+			@end-edit-mode="onEndEditMode"
+			@keydown.enter="onStartEditMode"
+		>
+			<BoardAnyTitleInput
+				ref="boardHeader"
+				class="ml-n4 input"
+				scope="board"
+				:value="boardTitle"
+				data-testid="board-title"
 				:is-edit-mode="isEditMode"
-				tabindex="0"
-				@start-edit-mode="onStartEditMode"
-				@end-edit-mode="onEndEditMode"
-				@keydown.enter="onStartEditMode"
-			>
-				<BoardAnyTitleInput
-					ref="boardHeader"
-					class="ml-n4 input"
-					scope="board"
-					:value="boardTitle"
-					data-testid="board-title"
-					:is-edit-mode="isEditMode"
-					:is-focused="isFocusedById"
-					:max-length="100"
-					:style="{ width: `${fieldWidth}px` }"
-					@update:value="updateBoardTitle"
-					@blur="onBoardTitleBlur"
-				/>
-				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
-			</InlineEditInteractionHandler>
-		</div>
+				:is-focused="isFocusedById"
+				:max-length="100"
+				@update:value="updateBoardTitle"
+				@blur="onBoardTitleBlur"
+			/>
+			<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
+		</InlineEditInteractionHandler>
 		<div class="d-flex">
 			<BoardDraftChip v-if="isDraft" />
 			<div class="mx-2">
@@ -105,7 +103,7 @@ const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
 const { hasEditPermission } = useBoardPermissions();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
-const fieldWidth = ref(0);
+const fieldWidth = ref("0px");
 
 onMounted(() => setTimeout(calculateWidth, 100));
 
@@ -181,7 +179,7 @@ const calculateWidth = () => {
 	const width = inputWidthCalcSpan.value.offsetWidth;
 
 	// 1px is added here to prevent the input value from being cut off with an ellipsis.
-	fieldWidth.value = width + 1;
+	fieldWidth.value = `${width + 1}px`;
 };
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -224,6 +222,7 @@ watchEffect(() => {
 .input {
 	// The 16px compensate for the negative margin set with "ml-n4".
 	max-width: calc(100% + 16px);
+	width: v-bind("fieldWidth");
 }
 
 :deep(input) {
