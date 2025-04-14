@@ -23,7 +23,7 @@ export const useAutoLogout = () => {
 		Math.max(Math.floor(remainingTimeInSeconds.value / 60), 0)
 	);
 
-	const initSession = () => {
+	const createInterval = () => {
 		if (polling) {
 			clearInterval(polling);
 		}
@@ -35,8 +35,13 @@ export const useAutoLogout = () => {
 		}, 1000);
 	};
 
+	const initSession = () => {
+		createInterval();
+	};
+
 	const extendSession = () => {
 		remainingTimeInSeconds.value = JWT_TIMEOUT_SECONDS || 30 * 2;
+		createInterval();
 		active.value = false;
 	};
 
