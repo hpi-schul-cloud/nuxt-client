@@ -13,9 +13,9 @@
 		>
 			<KebabMenuActionChangePermission
 				v-if="isVisibleChangeRoleButton"
-				@click="onChangePermission(selectedUserIds)"
+				@click="onChangePermission(selectedIds)"
 			/>
-			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedUserIds)" />
+			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
 		</ActionMenu>
 		<v-spacer v-else />
 		<v-text-field
