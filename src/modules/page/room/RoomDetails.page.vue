@@ -14,6 +14,7 @@
 					:room-name="room?.name"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
+					@room:duplicate="onDuplicate"
 					@room:delete="onDelete"
 					@room:leave="onLeaveRoom"
 				/>
@@ -27,6 +28,13 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
+		<!-- <ShareModal type="rooms" />
+		<CopyResultModal
+			:is-open="isCopyModalOpen"
+			:copy-result-items="copyResultModalItems"
+			:copy-result-root-item-type="copyResultRootItemType"
+			@copy-dialog-closed="onCopyResultModalClosed"
+		/> -->
 	</DefaultWireframe>
 </template>
 
@@ -167,6 +175,18 @@ const onManageMembers = () => {
 
 	router.push({
 		name: "room-members",
+		params: {
+			id: room.value.id,
+		},
+	});
+};
+
+const onDuplicate = () => {
+	// TODO Permission check
+	if (!room.value) return;
+
+	router.push({
+		name: "room-duplicate",
 		params: {
 			id: room.value.id,
 		},
