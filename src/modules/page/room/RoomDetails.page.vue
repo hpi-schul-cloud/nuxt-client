@@ -28,13 +28,13 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
-		<!-- <ShareModal type="rooms" />
+		<!-- <ShareModal type="rooms" /> -->
 		<CopyResultModal
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultModalClosed"
-		/> -->
+		/>
 	</DefaultWireframe>
 </template>
 
@@ -42,7 +42,7 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { BoardLayout } from "@/serverApi/v3";
-import { authModule } from "@/store";
+import { authModule, copyModule } from "@/store";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useRoomDetailsStore, useRoomsState } from "@data-room";
@@ -65,6 +65,10 @@ import { storeToRefs } from "pinia";
 import { computed, ComputedRef, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
+import { CopyParamsTypeEnum } from "@/store/copy";
+import { useCopy } from "@/composables/copy";
+import { useLoadingState } from "@/composables/loadingState";
+import CopyResultModal from "@/components/copy-result-modal/CopyResultModal.vue";
 
 const router = useRouter();
 const { t } = useI18n();
@@ -181,17 +185,33 @@ const onManageMembers = () => {
 	});
 };
 
-const onDuplicate = () => {
+// begin - Copy Feature
+const { isLoadingDialogOpen } = useLoadingState(
+	t("components.molecules.copyResult.title.loading")
+);
+const { copy } = useCopy(isLoadingDialogOpen);
+
+const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
+
+const copyResultModalItems = computed(
+	() => copyModule.getCopyResultFailedItems
+);
+
+const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
+
+const onCopyResultModalClosed = () => {
+	copyModule.reset();
+};
+
+const onDuplicate = async () => {
 	// TODO Permission check
 	if (!room.value) return;
 
-	router.push({
-		name: "room-duplicate",
-		params: {
-			id: room.value.id,
-		},
-	});
+	await copy({ id: room.value.id, type: CopyParamsTypeEnum.Room });
+	const copyId = copyModule.getCopyResult?.id;
+	router.push({ name: "room-details", params: { id: copyId } });
 };
+// end - Copz Feature
 
 const onDelete = async () => {
 	if (!room.value || !canDeleteRoom.value) return;

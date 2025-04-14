@@ -10,7 +10,7 @@
 			@click="() => $emit('room:manage-members')"
 		/>
 		<KebabMenuActionDuplicate
-			v-if="canEditRoom"
+			v-if="canDuplicateRoom"
 			@click="() => $emit('room:duplicate')"
 		/>
 		<KebabMenuActionDelete
@@ -48,7 +48,8 @@ const emit = defineEmits([
 ]);
 
 const { t } = useI18n();
-const { canEditRoom, canDeleteRoom, canViewRoom } = useRoomAuthorization();
+const { canEditRoom, canDeleteRoom, canDuplicateRoom, canViewRoom } =
+	useRoomAuthorization();
 
 const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 	const shouldDelete = await confirmation;
