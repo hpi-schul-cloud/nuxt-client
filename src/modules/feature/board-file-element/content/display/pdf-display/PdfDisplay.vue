@@ -23,6 +23,7 @@ import { PropType, defineComponent } from "vue";
 
 export default defineComponent({
 	name: "PdfDisplay",
+	components: { ContentElementBar, PreviewImage },
 	props: {
 		element: { type: Object as PropType<FileElementResponse>, required: true },
 		isEditMode: { type: Boolean, required: true },
@@ -31,7 +32,6 @@ export default defineComponent({
 		src: { type: String, required: true },
 		showMenu: { type: Boolean, required: true },
 	},
-	components: { ContentElementBar, PreviewImage },
 	setup(props) {
 		const openPdf = () => {
 			window.open(props.src, "_blank");

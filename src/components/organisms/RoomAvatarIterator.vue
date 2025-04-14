@@ -21,7 +21,7 @@
 							:size="itemSize"
 							:show-badge="true"
 							:condense-layout="condenseLayout"
-							@startDrag="$emit('startDrag', $event)"
+							@start-drag="$emit('startDrag', $event)"
 						/>
 					</v-col>
 				</v-row>

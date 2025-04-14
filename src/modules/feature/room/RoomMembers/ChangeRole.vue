@@ -1,12 +1,12 @@
 <template>
 	<v-card ref="changeRoleContent">
-		<template v-slot:title>
+		<template #title>
 			<h2 ref="textTitle" class="text-h4 mt-2 dialog-title">
 				{{ dialogTitle }}
 			</h2>
 		</template>
 
-		<template v-slot:text>
+		<template #text>
 			<div v-if="!isOwnershipHandoverMode" class="mb-4">
 				{{ infoText }}
 			</div>
@@ -83,7 +83,7 @@
 			</div>
 		</template>
 
-		<template v-slot:actions>
+		<template #actions>
 			<v-spacer />
 			<div class="mr-4 mb-3">
 				<v-btn

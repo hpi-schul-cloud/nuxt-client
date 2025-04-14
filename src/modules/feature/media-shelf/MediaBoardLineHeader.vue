@@ -1,19 +1,19 @@
 <template>
 	<BoardColumnInteractionHandler
-		:isEditMode="isEditMode"
+		:is-edit-mode="isEditMode"
 		@start-edit-mode="onStartEditMode"
 		@end-edit-mode="onEndEditMode"
 	>
-		<div class="line-header rounded" tabindex="0" ref="lineHeader">
+		<div ref="lineHeader" class="line-header rounded" tabindex="0">
 			<div class="d-flex align-center py-2 px-4">
 				<BoardAnyTitleInput
 					data-testid="media-line-title"
 					:value="title"
 					scope="column"
-					:isEditMode="isEditMode"
+					:is-edit-mode="isEditMode"
 					:placeholder="titlePlaceholder"
 					class="w-100"
-					:isFocused="isFocusedById"
+					:is-focused="isFocusedById"
 					@update:value="onUpdateTitle"
 				/>
 				<slot name="menu" />

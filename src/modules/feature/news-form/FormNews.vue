@@ -16,14 +16,12 @@
 			/>
 			<transition name="fade">
 				<div v-if="data.title">
-					<ck-editor
+					<ClassicEditor
 						v-model="data.content"
 						class="mb--md mt--xl-3"
 						:placeholder="
 							$t('components.organisms.FormNews.editor.placeholder')
 						"
-						type="classic"
-						mode="news"
 						@update:value="onUpdateValue"
 					/>
 
@@ -93,7 +91,7 @@
 import { createInputDateTime, fromInputDateTime } from "@/plugins/datetime";
 import { newsModule, notifierModule } from "@/store";
 import { useOpeningTagValidator } from "@/utils/validation/openingTagValidator";
-import { CkEditor } from "@feature-editor";
+import { ClassicEditor } from "@feature-editor";
 import { mdiAlert, mdiCheck, mdiClose, mdiDelete } from "@icons/material";
 import { defineComponent, PropType } from "vue";
 import FormActions from "./FormActions.vue";
@@ -101,18 +99,11 @@ import { News } from "@/store/types/news";
 import { Dayjs } from "dayjs";
 
 export default defineComponent({
-	setup() {
-		const { validateOnOpeningTag } = useOpeningTagValidator();
-
-		return {
-			validateOnOpeningTag,
-		};
-	},
-	inheritAttrs: false,
 	components: {
 		FormActions,
-		CkEditor,
+		ClassicEditor,
 	},
+	inheritAttrs: false,
 	props: {
 		news: {
 			type: Object as PropType<News>,
@@ -125,6 +116,14 @@ export default defineComponent({
 				},
 			}),
 		},
+	},
+	emits: ["update:news", "save", "delete", "cancel"],
+	setup() {
+		const { validateOnOpeningTag } = useOpeningTagValidator();
+
+		return {
+			validateOnOpeningTag,
+		};
 	},
 	data(): {
 		data: {

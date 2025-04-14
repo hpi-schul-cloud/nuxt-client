@@ -32,10 +32,10 @@
 			>
 				<template #item="{ element, index }">
 					<MediaBoardLine
+						:key="element.id"
 						:data-testid="'media-board-line-' + index"
 						:data-line-id="element.id"
 						:index="index"
-						:key="element.id"
 						:line="element"
 						:layout="board.layout"
 						@update:line-background-color="

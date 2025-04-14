@@ -410,6 +410,7 @@ export default {
 	"components.board.menu.externalToolElement": "External tool settings",
 	"components.board.menu.mediaExternalToolElement": "Medium settings",
 	"components.board.menu.fileElement": "File settings",
+	"components.board.menu.folderElement": "File folder settings",
 	"components.board.menu.linkElement": "Link settings",
 	"components.board.menu.submissionElement": "Submission settings",
 	"components.board.menu.videoConferenceElement": "Video conference settings",
@@ -493,6 +494,8 @@ export default {
 		"The video format is not supported by this browser/operating system.",
 	"components.cardElement.fileElement.virusDetected":
 		"File has been locked due to a suspected virus.",
+	"components.cardElement.folderElement": "File folder",
+	"components.cardElement.folderElement.untitled": "Untitled folder",
 	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Insert link address",
 	"components.cardElement.notification.visibleAndEditable":
@@ -530,6 +533,9 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"External tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "File",
+	"components.elementTypeSelection.elements.folderElement": "File folder",
+	"components.elementTypeSelection.elements.folderElement.subtitle":
+		"File folder",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
 		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
@@ -1793,6 +1799,7 @@ export default {
 	"pages.rooms.members.error.remove": "Deleting participants failed.",
 	"pages.rooms.members.error.updateRole":
 		"The change of the room permission has failed.",
+	"pages.rooms.members.filter": "Search/filter table",
 	"pages.rooms.members.infoText":
 		"Add members to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "more information",
@@ -1802,6 +1809,8 @@ export default {
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Action menu for {memberFullName}",
+	"pages.rooms.members.actionMenu.selectedMembers":
+		"Action menu for {count} selected participants",
 	"pages.rooms.members.changePermission": "Change room permissions",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Change room permissions for {memberFullName}",
@@ -1820,6 +1829,8 @@ export default {
 	"pages.rooms.members.roomPermissions.owner": "Own",
 	"pages.rooms.members.roomPermissions.editor": "Edit",
 	"pages.rooms.members.roomPermissions.viewer": "Read",
+	"pages.rooms.members.select.all": "Select all room participants",
+	"pages.rooms.members.select.none": "Deselect all room participants",
 	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.members.tableHeader.actions": "Actions",

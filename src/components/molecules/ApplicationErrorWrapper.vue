@@ -7,10 +7,10 @@
 				data-testid="error-content"
 			/>
 			<v-btn
+				ref="btn-back"
 				class="mt-4"
 				color="primary"
 				variant="flat"
-				ref="btn-back"
 				data-testid="btn-back"
 				href="/dashboard"
 			>

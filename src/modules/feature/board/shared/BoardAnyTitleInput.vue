@@ -1,15 +1,15 @@
 <template>
 	<VTextField
 		v-if="scope === 'board'"
+		ref="titleInput"
+		v-model="modelValue"
 		class="title-input"
 		hide-details="auto"
-		v-model="modelValue"
 		variant="solo"
 		density="compact"
 		flat
 		:placeholder="placeholderText"
 		bg-color="transparent"
-		ref="titleInput"
 		:disabled="!isEditMode"
 		:role="isEditMode ? 'input' : 'heading'"
 		:aria-level="ariaLevel"
@@ -22,8 +22,9 @@
 
 	<VTextarea
 		v-else
-		hide-details="auto"
+		ref="titleInput"
 		v-model="modelValue"
+		hide-details="auto"
 		variant="solo"
 		density="compact"
 		:rows="1"
@@ -32,15 +33,14 @@
 		class="title-input"
 		:placeholder="placeholderText"
 		bg-color="transparent"
-		ref="titleInput"
 		:disabled="!isEditMode"
 		:role="isEditMode ? 'input' : 'heading'"
 		:aria-level="ariaLevel"
-		@keydown.enter="onEnter"
 		:tabindex="isEditMode ? 0 : -1"
 		:autofocus="internalIsFocused"
 		:maxlength="maxLength"
 		:error-messages="errorMessages"
+		@keydown.enter="onEnter"
 	/>
 </template>
 

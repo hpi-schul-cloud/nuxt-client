@@ -127,6 +127,9 @@ module.exports = {
 			"@feature-board-file-element": getDir(
 				"src/modules/feature/board-file-element"
 			),
+			"@feature-board-folder-element": getDir(
+				"src/modules/feature/board-folder-element"
+			),
 			"@feature-board-submission-element": getDir(
 				"src/modules/feature/board-submission-element"
 			),

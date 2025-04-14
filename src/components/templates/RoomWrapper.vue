@@ -3,7 +3,7 @@
 		ref="main"
 		max-width="short"
 		:fab-items="fabItems"
-		@onFabItemClick="fabItemClickHandler"
+		@on-fab-item-click="fabItemClickHandler"
 	>
 		<template #header>
 			<slot name="header" />

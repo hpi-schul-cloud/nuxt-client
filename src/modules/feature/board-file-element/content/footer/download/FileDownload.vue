@@ -1,6 +1,5 @@
 <template>
 	<v-btn
-		@click="onDownload"
 		:aria-label="$t('components.board.action.download')"
 		:disabled="!isDownloadAllowed"
 		:data-testid="testId"
@@ -8,6 +7,7 @@
 		icon
 		size="small"
 		variant="text"
+		@click="onDownload"
 	>
 		<v-icon>{{ mdiTrayArrowDown }}</v-icon>
 	</v-btn>

@@ -41,7 +41,7 @@ describe("ContextExternalToolMapper", () => {
 			});
 		});
 
-		describe("when the display name is not provided", () => {
+		describe("when the display name is empty", () => {
 			const setup = () => {
 				const template = contextExternalToolConfigurationTemplateFactory.build({
 					name: "toolName",
@@ -56,7 +56,7 @@ describe("ContextExternalToolMapper", () => {
 				};
 			};
 
-			it("should map the tool name to display name", () => {
+			it("should not set a display name", () => {
 				const { template, contextId, contextType } = setup();
 
 				const result =
@@ -64,12 +64,13 @@ describe("ContextExternalToolMapper", () => {
 						template,
 						[],
 						contextId,
-						contextType
+						contextType,
+						""
 					);
 
 				expect(result).toEqual(
 					expect.objectContaining<Partial<ContextExternalToolSave>>({
-						displayName: template.name,
+						displayName: undefined,
 					})
 				);
 			});

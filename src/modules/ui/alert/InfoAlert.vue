@@ -2,8 +2,8 @@
 	<BaseAlert
 		color="info"
 		:icon="mdiInformation"
-		:closeIcon="mdiClose"
-		:showCloseIcon="showCloseIcon"
+		:close-icon="mdiClose"
+		:show-close-icon="showCloseIcon"
 	>
 		<slot />
 	</BaseAlert>
@@ -17,14 +17,14 @@ import BaseAlert from "./BaseAlert.vue";
 export default defineComponent({
 	name: "InfoAlert",
 	components: { BaseAlert },
-	setup() {
-		return { mdiInformation, mdiClose };
-	},
 	props: {
 		showCloseIcon: {
 			type: Boolean,
 			default: false,
 		},
+	},
+	setup() {
+		return { mdiInformation, mdiClose };
 	},
 });
 </script>

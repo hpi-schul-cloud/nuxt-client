@@ -1,6 +1,6 @@
 <template>
 	<v-list-group :value="item.title">
-		<template v-slot:activator="{ props }">
+		<template #activator="{ props }">
 			<v-list-item
 				v-bind="props"
 				color="primary"

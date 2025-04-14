@@ -2,6 +2,8 @@
 	<div>
 		<v-autocomplete
 			ref="autocompleteRef"
+			v-model="selectedTemplate"
+			v-model:search="searchString"
 			:label="$t('pages.tool.select.label')"
 			variant="underlined"
 			hide-selected
@@ -10,21 +12,19 @@
 			item-title="name"
 			item-value="id"
 			:items="configurationTemplates"
-			v-model="selectedTemplate"
-			v-model:search="searchString"
 			:no-data-text="$t('pages.tool.select.nodata')"
 			return-object
 			:disabled="isInEditMode"
 			:loading="loading"
 			data-testId="configuration-select"
-			@update:modelValue="onChangeSelection"
-			@update:search="updateSearchInput"
 			:hide-no-data="hideNoData"
 			:custom-filter="
 				(_value, query, item) => filterToolNameOrUrl(query, item?.raw)
 			"
 			persistent-hint
 			:hint="$t('pages.tool.select.description')"
+			@update:model-value="onChangeSelection"
+			@update:search="updateSearchInput"
 		>
 			<template #append>
 				<VIcon tabindex="-1" aria-hidden="true" @click="pasteFromClipboard">
@@ -39,15 +39,15 @@
 					data-testid="configuration-selected-item"
 				/>
 			</template>
-			<template #item="{ item, props }">
+			<template #item="{ item, props: itemProps }">
 				<external-tool-selection-row
-					v-bind="props"
+					v-bind="itemProps"
 					data-testId="configuration-select-item"
 					:item="item.raw"
 				/>
 			</template>
 		</v-autocomplete>
-		<slot name="aboveSettings" :selectedTemplate="selectedTemplate" />
+		<slot name="aboveSettings" :selected-template="selectedTemplate" />
 		<h2
 			v-if="
 				displaySettingsTitle &&
@@ -58,11 +58,11 @@
 		>
 			{{ $t("pages.tool.settings") }}
 		</h2>
-		<slot name="aboveParameters" :selectedTemplate="selectedTemplate" />
+		<slot name="aboveParameters" :selected-template="selectedTemplate" />
 		<external-tool-config-settings
-			v-if="hasSelectedTemplateParameters"
-			:template="selectedTemplate"
+			v-if="selectedTemplate && hasSelectedTemplateParameters"
 			v-model="parameterConfiguration"
+			:template="selectedTemplate"
 			data-testid="configuration-field"
 		/>
 		<v-spacer class="mt-10" />
@@ -78,8 +78,8 @@
 			<v-btn
 				class="mr-2"
 				variant="outlined"
-				@click="onCancel"
 				data-testId="cancel-button"
+				@click="onCancel"
 			>
 				{{ $t("common.actions.cancel") }}
 			</v-btn>
@@ -88,8 +88,8 @@
 				color="primary"
 				variant="flat"
 				:disabled="!parametersValid"
-				@click="onSave"
 				data-testId="save-button"
+				@click="onSave"
 			>
 				{{
 					isInEditMode ? $t("common.actions.update") : $t("common.actions.add")
@@ -99,7 +99,7 @@
 	</div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends ExternalToolConfigurationTemplate">
 import ExternalToolConfigSettings from "@/components/external-tools/configuration/ExternalToolConfigSettings.vue";
 import { useExternalToolMappings } from "@/composables/external-tool-mappings.composable";
 import {
@@ -119,7 +119,6 @@ import {
 	computed,
 	ComputedRef,
 	nextTick,
-	PropType,
 	Ref,
 	ref,
 	toRef,
@@ -138,37 +137,19 @@ const { t } = useI18n();
 
 const slots = useSlots();
 
-const props = defineProps({
-	templates: {
-		type: Array as PropType<Array<ExternalToolConfigurationTemplate>>,
-		required: true,
-	},
-	configuration: {
-		type: Object as PropType<ConfigurationTypes>,
-	},
-	isPreferredTool: {
-		type: Boolean,
-	},
-	error: {
-		type: Object as PropType<BusinessError>,
-	},
-	loading: {
-		type: Boolean,
-	},
-	displaySettingsTitle: {
-		type: Boolean,
-		default: true,
-	},
-});
+const { displaySettingsTitle = true, ...props } = defineProps<{
+	templates: T[];
+	configuration?: ConfigurationTypes;
+	isPreferredTool?: boolean;
+	error?: BusinessError;
+	loading?: boolean;
+	displaySettingsTitle?: boolean;
+}>();
 
 const emit = defineEmits<{
 	(e: "cancel"): void;
-	(
-		e: "save",
-		template: ExternalToolConfigurationTemplate | undefined,
-		values: ToolParameterEntry[]
-	): void;
-	(e: "change", value: ExternalToolConfigurationTemplate | undefined): void;
+	(e: "save", template: T, values: ToolParameterEntry[]): void;
+	(e: "change", value: T | undefined): void;
 }>();
 
 const { getBusinessErrorTranslationKey } = useExternalToolMappings();
@@ -180,10 +161,7 @@ const {
 	extractQueryParameters,
 } = useExternalToolUrlInsertion();
 
-const configurationTemplates: Ref<ExternalToolConfigurationTemplate[]> = toRef(
-	props,
-	"templates"
-);
+const configurationTemplates: Ref<T[]> = toRef(props, "templates");
 
 const loadedConfiguration: Ref<ConfigurationTypes | undefined> = toRef(
 	props,
@@ -208,8 +186,7 @@ const hasSelectedTemplateParameters: ComputedRef<boolean> = computed(
 		)
 );
 
-const selectedTemplate: Ref<ExternalToolConfigurationTemplate | undefined> =
-	ref();
+const selectedTemplate: Ref<T | undefined> = ref();
 
 const parametersValid: ComputedRef<boolean> = computed(
 	() => !!selectedTemplate.value
@@ -235,9 +212,7 @@ const onSave = async () => {
 	}
 };
 
-const mapValidParameterEntries = (
-	template: ExternalToolConfigurationTemplate
-) => {
+const mapValidParameterEntries = (template: T) => {
 	const parameterEntries: ToolParameterEntry[] = template.parameters
 		.map(
 			(parameter: ToolParameter, index: number): ToolParameterEntry => ({
@@ -344,20 +319,7 @@ const pasteFromClipboard = async () => {
 	}
 };
 
-if (loadedConfiguration.value) {
-	populateEditMode(loadedConfiguration.value);
-}
-
-watch(loadedConfiguration, (newConfig) => {
-	if (newConfig) {
-		populateEditMode(newConfig);
-	}
-});
-
-const filterToolNameOrUrl = (
-	query: string,
-	item: ExternalToolConfigurationTemplate | undefined
-): boolean => {
+const filterToolNameOrUrl = (query: string, item: T | undefined): boolean => {
 	if (!item) {
 		return false;
 	}
@@ -369,9 +331,23 @@ const filterToolNameOrUrl = (
 	return isMatchItemName || isMatchItemUrl;
 };
 
-watch(configurationTemplates, () => {
-	if (props.isPreferredTool) {
-		selectedTemplate.value = props.templates[0];
-	}
-});
+watch(
+	loadedConfiguration,
+	(newConfig) => {
+		if (newConfig) {
+			populateEditMode(newConfig);
+		}
+	},
+	{ immediate: true }
+);
+
+watch(
+	configurationTemplates,
+	() => {
+		if (props.isPreferredTool && props.templates.length > 0) {
+			selectedTemplate.value = props.templates[0];
+		}
+	},
+	{ immediate: true }
+);
 </script>

@@ -20,114 +20,166 @@ import { createMock } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
 import ContentElementList from "./ContentElementList.vue";
 import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
+import { FolderContentElement } from "@feature-board-folder-element";
 
 describe("ContentElementList", () => {
-	const setup = (props: {
-		elements: AnyContentElement[];
-		isEditMode: boolean;
-		isDetailView: boolean;
-	}) => {
-		document.body.setAttribute("data-app", "true");
+	describe("when feature flags are true", () => {
+		const setup = (props: {
+			elements: AnyContentElement[];
+			isEditMode: boolean;
+			isDetailView: boolean;
+		}) => {
+			document.body.setAttribute("data-app", "true");
 
-		const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
-			getEnv: createMock<ConfigResponse>({
-				FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
-				FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
-				FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
-				FEATURE_TEAMS_ENABLED: true,
-			}),
-		});
-
-		const wrapper = shallowMount(ContentElementList, {
-			global: {
-				plugins: [createTestingI18n(), createTestingVuetify()],
-				provide: {
-					[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
-				},
-			},
-			props: { ...props, rowIndex: 0, columnIndex: 0 },
-		});
-
-		return { wrapper };
-	};
-
-	describe("when component is mounted", () => {
-		it("should be found in dom", () => {
-			const { wrapper } = setup({
-				elements: [],
-				isEditMode: false,
-				isDetailView: false,
+			const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
+				getEnv: createMock<ConfigResponse>({
+					FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+					FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+					FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+					FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
+					FEATURE_TEAMS_ENABLED: true,
+				}),
 			});
-			expect(wrapper.findComponent(ContentElementList).exists()).toBe(true);
-		});
 
-		const elementComponents = [
-			{
-				elementType: ContentElementType.RichText,
-				component: RichTextContentElement,
-			},
-			{
-				elementType: ContentElementType.File,
-				component: FileContentElement,
-			},
-			{
-				elementType: ContentElementType.Link,
-				component: LinkContentElement,
-			},
-			{
-				elementType: ContentElementType.SubmissionContainer,
-				component: SubmissionContentElement,
-			},
-			{
-				elementType: ContentElementType.ExternalTool,
-				component: ExternalToolElement,
-			},
-			{
-				elementType: ContentElementType.Drawing,
-				component: DrawingContentElement,
-			},
-			{
-				elementType: ContentElementType.CollaborativeTextEditor,
-				component: CollaborativeTextEditorElement,
-			},
-			{
-				elementType: ContentElementType.Deleted,
-				component: DeletedElement,
-			},
-			{
-				elementType: ContentElementType.VideoConference,
-				component: VideoConferenceContentElement,
-			},
-		];
+			const wrapper = shallowMount(ContentElementList, {
+				global: {
+					plugins: [createTestingI18n(), createTestingVuetify()],
+					provide: {
+						[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
+					},
+				},
+				props: { ...props, rowIndex: 0, columnIndex: 0 },
+			});
 
-		it.each(elementComponents)(
-			"should render $elementType-elements",
-			({ elementType, component }) => {
+			return { wrapper };
+		};
+
+		describe("when component is mounted", () => {
+			it("should be found in dom", () => {
 				const { wrapper } = setup({
-					elements: [{ type: elementType } as AnyContentElement],
+					elements: [],
 					isEditMode: false,
 					isDetailView: false,
 				});
-				expect(wrapper.findComponent(component).exists()).toBe(true);
-			}
-		);
+				expect(wrapper.findComponent(ContentElementList).exists()).toBe(true);
+			});
 
-		it.each(elementComponents)(
-			"should propagate isEditMode to children of $elementType-elements",
-			({ elementType, component }) => {
-				const isEditModeResult = true;
+			const elementComponents = [
+				{
+					elementType: ContentElementType.RichText,
+					component: RichTextContentElement,
+				},
+				{
+					elementType: ContentElementType.File,
+					component: FileContentElement,
+				},
+				{
+					elementType: ContentElementType.Link,
+					component: LinkContentElement,
+				},
+				{
+					elementType: ContentElementType.SubmissionContainer,
+					component: SubmissionContentElement,
+				},
+				{
+					elementType: ContentElementType.ExternalTool,
+					component: ExternalToolElement,
+				},
+				{
+					elementType: ContentElementType.Drawing,
+					component: DrawingContentElement,
+				},
+				{
+					elementType: ContentElementType.CollaborativeTextEditor,
+					component: CollaborativeTextEditorElement,
+				},
+				{
+					elementType: ContentElementType.Deleted,
+					component: DeletedElement,
+				},
+				{
+					elementType: ContentElementType.VideoConference,
+					component: VideoConferenceContentElement,
+				},
+				{
+					elementType: ContentElementType.FileFolder,
+					component: FolderContentElement,
+				},
+			];
 
-				const { wrapper } = setup({
-					elements: [{ type: elementType } as AnyContentElement],
-					isEditMode: isEditModeResult,
-					isDetailView: false,
-				});
+			it.each(elementComponents)(
+				"should render $elementType-elements",
+				({ elementType, component }) => {
+					const { wrapper } = setup({
+						elements: [{ type: elementType } as AnyContentElement],
+						isEditMode: false,
+						isDetailView: false,
+					});
+					expect(wrapper.findComponent(component).exists()).toBe(true);
+				}
+			);
 
-				const childComponent = wrapper.findComponent(component);
+			it.each(elementComponents)(
+				"should propagate isEditMode to children of $elementType-elements",
+				({ elementType, component }) => {
+					const isEditModeResult = true;
 
-				expect(childComponent.exists()).toBe(true);
-				expect(childComponent.props("isEditMode")).toBe(isEditModeResult);
-			}
-		);
+					const { wrapper } = setup({
+						elements: [{ type: elementType } as AnyContentElement],
+						isEditMode: isEditModeResult,
+						isDetailView: false,
+					});
+
+					const childComponent = wrapper.findComponent(component);
+
+					expect(childComponent.exists()).toBe(true);
+					expect(childComponent.props("isEditMode")).toBe(isEditModeResult);
+				}
+			);
+		});
+	});
+
+	describe("when FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED is false", () => {
+		const setup = (props: {
+			elements: AnyContentElement[];
+			isEditMode: boolean;
+			isDetailView: boolean;
+		}) => {
+			document.body.setAttribute("data-app", "true");
+
+			const mockedEnvConfigModule = createModuleMocks(EnvConfigModule, {
+				getEnv: createMock<ConfigResponse>({
+					FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: true,
+					FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
+					FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
+					FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
+					FEATURE_TEAMS_ENABLED: true,
+				}),
+			});
+
+			const wrapper = shallowMount(ContentElementList, {
+				global: {
+					plugins: [createTestingI18n(), createTestingVuetify()],
+					provide: {
+						[ENV_CONFIG_MODULE_KEY.valueOf()]: mockedEnvConfigModule,
+					},
+				},
+				props: { ...props, rowIndex: 0, columnIndex: 0 },
+			});
+
+			return { wrapper };
+		};
+
+		it("should not render FolderContentElement", () => {
+			const { wrapper } = setup({
+				elements: [
+					{ type: ContentElementType.FileFolder } as AnyContentElement,
+				],
+				isEditMode: false,
+				isDetailView: false,
+			});
+
+			expect(wrapper.findComponent(FolderContentElement).exists()).toBe(false);
+		});
 	});
 });

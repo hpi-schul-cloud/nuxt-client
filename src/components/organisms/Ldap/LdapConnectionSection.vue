@@ -6,7 +6,7 @@
 
 		<base-input
 			data-testid="ldapDataConnectionUrl"
-			:modelValue="modelValue.url"
+			:model-value="modelValue.url"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.server.url')"
@@ -14,7 +14,7 @@
 			:info="$t('pages.administration.ldap.connection.server.info')"
 			:validation-model="v$.modelValue.url"
 			:validation-messages="urlValidationMessages"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, url: $event })
 			"
 		>
@@ -24,7 +24,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionBasisPath"
-			:modelValue="modelValue.basisPath"
+			:model-value="modelValue.basisPath"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.basis.path')"
@@ -32,7 +32,7 @@
 			:info="$t('pages.administration.ldap.connection.basis.path.info')"
 			:validation-model="v$.modelValue.basisPath"
 			:validation-messages="pathSearchValidationMessages"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, basisPath: $event })
 			"
 		>
@@ -42,7 +42,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionSearchUser"
-			:modelValue="modelValue.searchUser"
+			:model-value="modelValue.searchUser"
 			type="text"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.search.user')"
@@ -50,7 +50,7 @@
 			:info="$t('pages.administration.ldap.connection.search.user.info')"
 			:validation-model="v$.modelValue.searchUser"
 			:validation-messages="pathSearchValidationMessages"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', { ...modelValue, searchUser: $event })
 			"
 		>
@@ -60,7 +60,7 @@
 		</base-input>
 		<base-input
 			data-testid="ldapDataConnectionSearchUserPassword"
-			:modelValue="modelValue.searchUserPassword"
+			:model-value="modelValue.searchUserPassword"
 			type="password"
 			class="mt--xl"
 			:label="$t('pages.administration.ldap.connection.search.user.password')"
@@ -69,7 +69,7 @@
 			"
 			:validation-model="v$.modelValue.searchUserPassword"
 			:validation-messages="passwordValidationMessages"
-			@update:modelValue="
+			@update:model-value="
 				$emit('update:modelValue', {
 					...modelValue,
 					searchUserPassword: $event,
@@ -81,6 +81,7 @@
 		</base-input>
 	</div>
 </template>
+
 <script>
 import { envConfigModule } from "@/store";
 import { required } from "@vuelidate/validators";
@@ -99,9 +100,6 @@ import {
 } from "@icons/material";
 
 export default defineComponent({
-	setup() {
-		return { v$: useVuelidate() };
-	},
 	props: {
 		modelValue: {
 			type: Object,
@@ -112,6 +110,10 @@ export default defineComponent({
 		validate: {
 			type: Boolean,
 		},
+	},
+	emits: ["update:modelValue", "update:errors", "update:inputs"],
+	setup() {
+		return { v$: useVuelidate() };
 	},
 	data() {
 		return {

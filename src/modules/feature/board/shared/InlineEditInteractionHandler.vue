@@ -1,5 +1,5 @@
 <template>
-	<OnClickOutside @trigger="onClickOutside" :options="{ capture: false }">
+	<OnClickOutside :options="{ capture: false }" @trigger="onClickOutside">
 		<div
 			ref="event-handle"
 			data-testid="event-handle"

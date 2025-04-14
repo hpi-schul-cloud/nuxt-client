@@ -2,7 +2,7 @@
 	<div class="mx-n4 px-4">
 		<BoardSectionCreationHeader
 			data-testid="create-line-button"
-			:isColumnActive="false"
+			:is-column-active="false"
 			:label="$t('feature.media-shelf.createLine')"
 			@add-column="$emit('create:line')"
 		/>

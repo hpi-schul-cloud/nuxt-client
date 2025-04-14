@@ -1,13 +1,14 @@
 <template>
-	<VNavigationDrawer>
+	<VNavigationDrawer v-model="sidebarExpanded">
 		<VList open-strategy="multiple">
 			<div class="d-flex align-center">
 				<VBtn
 					class="ml-1"
 					:icon="mdiMenuOpen"
-					@click="() => $emit('update:modelValue', false)"
 					size="default"
 					flat
+					data-testid="sidebar-toggle-close"
+					@click="sidebarExpanded = false"
 				/>
 				<CloudLogo class="mt-1" />
 			</div>
@@ -54,6 +55,11 @@ import SidebarCategoryItem from "./SidebarCategoryItem.vue";
 import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
 import { mdiMenuOpen } from "@icons/material";
+
+const sidebarExpanded = defineModel({
+	type: Boolean,
+	required: true,
+});
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
