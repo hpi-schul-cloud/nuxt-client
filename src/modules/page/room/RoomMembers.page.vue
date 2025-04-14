@@ -17,7 +17,11 @@
 				</KebabMenu>
 			</div>
 
-			<VTabs v-if="featureActivated" v-model="activeTab" align-tabs="center">
+			<VTabs
+				v-if="FEATURE_ROOMMEMBERS_TABS_ENABLED"
+				v-model="activeTab"
+				align-tabs="center"
+			>
 				<VTab
 					v-for="tabItem in tabs"
 					:key="tabItem.value"
@@ -34,7 +38,7 @@
 				:key="tabItem.value"
 				:value="tabItem.value"
 			>
-				<component :is="tabItem.component" />
+				<component :is="tabItem.component" v-if="tabItem.isVisible" />
 			</VTabsWindowItem>
 		</VTabsWindow>
 
@@ -98,6 +102,7 @@ import {
 } from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { Tab } from "@/types/room/RoomMembers";
+import { envConfigModule } from "@/store";
 
 const props = defineProps({
 	tab: {
@@ -120,6 +125,7 @@ const roomMembersStore = useRoomMembersStore();
 const { currentUser } = storeToRefs(roomMembersStore);
 const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
 	roomMembersStore;
+const { FEATURE_ROOMMEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
 
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
@@ -137,18 +143,14 @@ const { canLeaveRoom } = useRoomAuthorization();
 const { isVisibleAddMemberButton } =
 	useRoomMemberVisibilityOptions(currentUser);
 
-const featureActivated = ref(true); // TODO: replace with feature flag
-
 const activeTab = computed<Tab>({
 	get() {
 		return props.tab;
 	},
 	set: async (newTab) => {
-		if (featureActivated.value) {
-			await router.replace({
-				query: { ...route.query, tab: newTab },
-			});
-		}
+		await router.replace({
+			query: { ...route.query, tab: newTab },
+		});
 	},
 });
 
@@ -157,24 +159,28 @@ const tabs: Array<{
 	value: Tab;
 	icon: string;
 	component: Component;
+	isVisible: boolean;
 }> = [
 	{
 		title: "Mitglieder", // toDo i18n
 		value: Tab.Members,
 		icon: mdiAccountMultipleOutline,
 		component: Members,
+		isVisible: true,
 	},
 	{
-		title: "Invitations",
+		title: "Invitations", // toDo i18n
 		value: Tab.Invitations,
 		icon: mdiLink,
 		component: Invitations,
+		isVisible: FEATURE_ROOMMEMBERS_TABS_ENABLED,
 	},
 	{
-		title: "Confirmations",
+		title: "Confirmations", // toDo i18n
 		value: Tab.Confirmations,
 		icon: mdiAccountQuestionOutline,
 		component: Confirmations,
+		isVisible: FEATURE_ROOMMEMBERS_TABS_ENABLED,
 	},
 ];
 
@@ -206,9 +212,11 @@ const onLeaveRoom = async () => {
 };
 
 onMounted(async () => {
-	activeTab.value = Object.values(Tab).includes(props.tab)
-		? props.tab
-		: Tab.Members;
+	activeTab.value =
+		FEATURE_ROOMMEMBERS_TABS_ENABLED && Object.values(Tab).includes(props.tab)
+			? props.tab
+			: Tab.Members;
+
 	if (room.value === undefined) {
 		const roomId = route.params.id.toString();
 		await fetchRoom(roomId);

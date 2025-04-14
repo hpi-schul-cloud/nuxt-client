@@ -1,4 +1,5 @@
 <template>
+	<!-- toDo i18n -->
 	<p>
 		Wird bei der Erstellung eines Einladungslinks die Option “Betreten des Raums
 		nur nach Bestätigung möglich” aktiviert, erzeugt der Klick auf den Link

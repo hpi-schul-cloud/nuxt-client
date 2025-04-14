@@ -1,4 +1,5 @@
 <template>
+	<!-- toDo i18n -->
 	<p>
 		Mit einem Einladungslink können Lernbegleitungen der eigenen Schule sowie
 		Lernbegleitungen anderer Schulen in den Raum eingeladen werden. Lernende
