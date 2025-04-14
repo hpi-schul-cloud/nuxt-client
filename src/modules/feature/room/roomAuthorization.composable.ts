@@ -11,43 +11,46 @@ export const useRoomAuthorization = () => {
 	const { room } = storeToRefs(useRoomDetailsStore());
 
 	const canAddRoomMembers = ref(false);
-	const canRemoveRoomMembers = ref(false);
 	const canChangeOwner = ref(false);
 	const canCreateRoom = ref(false);
-	const canViewRoom = ref(false);
+	const canDeleteRoom = ref(false);
+	const canDuplicateRoom = ref(false);
 	const canEditRoom = ref(false);
 	const canEditRoomContent = ref(false);
-	const canDeleteRoom = ref(false);
 	const canLeaveRoom = ref(false);
+	const canRemoveRoomMembers = ref(false);
+	const canViewRoom = ref(false);
 
 	watchEffect(() => {
 		const permissions = toValue(room)?.permissions ?? [];
 
+		canAddRoomMembers.value = permissions.includes(Permission.RoomMembersAdd);
+		canChangeOwner.value = permissions.includes(Permission.RoomChangeOwner);
 		canCreateRoom.value =
 			authModule?.getUserPermissions.includes(
 				Permission.RoomCreate.toLowerCase()
 			) && authModule.getUserRoles.includes(Roles.Teacher);
-		canViewRoom.value = permissions.includes(Permission.RoomView);
+		canDeleteRoom.value = permissions.includes(Permission.RoomDelete);
+		canDuplicateRoom.value = permissions.includes(Permission.RoomDuplicate);
 		canEditRoom.value = permissions.includes(Permission.RoomEdit);
 		canEditRoomContent.value = permissions.includes(Permission.RoomContentEdit);
-		canDeleteRoom.value = permissions.includes(Permission.RoomDelete);
-		canAddRoomMembers.value = permissions.includes(Permission.RoomMembersAdd);
+		canLeaveRoom.value = permissions.includes(Permission.RoomLeave);
 		canRemoveRoomMembers.value = permissions.includes(
 			Permission.RoomMembersRemove
 		);
-		canChangeOwner.value = permissions.includes(Permission.RoomChangeOwner);
-		canLeaveRoom.value = permissions.includes(Permission.RoomLeave);
+		canViewRoom.value = permissions.includes(Permission.RoomView);
 	});
 
 	return {
 		canAddRoomMembers,
 		canChangeOwner,
 		canCreateRoom,
-		canViewRoom,
-		canEditRoom,
 		canDeleteRoom,
+		canDuplicateRoom,
+		canEditRoom,
+		canEditRoomContent,
 		canLeaveRoom,
 		canRemoveRoomMembers,
-		canEditRoomContent,
+		canViewRoom,
 	};
 };
