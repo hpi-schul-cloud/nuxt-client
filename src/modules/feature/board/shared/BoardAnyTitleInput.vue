@@ -237,7 +237,6 @@ export default defineComponent({
 :deep(input) {
 	font-size: var(--heading-3);
 	background: transparent !important;
-	text-overflow: ellipsis;
 }
 
 :deep(.v-field__append-inner, .v-field__clearable, .v-field__prepend-inner) {

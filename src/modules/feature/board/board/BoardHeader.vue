@@ -227,4 +227,8 @@ watchEffect(() => {
 	// The 16px compensate for the negative margin set with "ml-n4".
 	max-width: calc(100% + 16px);
 }
+
+:deep(input) {
+	text-overflow: ellipsis;
+}
 </style>
