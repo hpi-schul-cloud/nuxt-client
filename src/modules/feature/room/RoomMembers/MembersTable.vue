@@ -1,22 +1,22 @@
 <template>
 	<div
 		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
-		:class="{
-			'fixed-position': fixedPosition.enabled,
-			'flex-column': isExtraSmallDisplay,
-		}"
-		:style="{ top: `${fixedPosition.positionTop}px` }"
+		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
+		:style="stickyStyle"
 	>
 		<ActionMenu
 			v-if="selectedIds.length"
 			class="multi-action-menu"
 			:class="{ 'order-2': isExtraSmallDisplay }"
 			:selected-ids="selectedIds"
-			:is-visible-change-role-button="isVisibleChangeRoleButton"
-			@remove:selected="onRemoveMembers"
 			@reset:selected="onResetSelectedMembers"
-			@change:role="onChangePermission"
-		/>
+		>
+			<KebabMenuActionChangePermission
+				v-if="isVisibleChangeRoleButton"
+				@click="onChangePermission(selectedUserIds)"
+			/>
+			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedUserIds)" />
+		</ActionMenu>
 		<v-spacer v-else />
 		<v-text-field
 			v-model="search"
@@ -35,6 +35,7 @@
 	</div>
 
 	<v-divider role="presentation" />
+
 	<v-data-table
 		v-model:search="search"
 		v-model="selectedIds"
@@ -119,7 +120,7 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import { PropType, ref } from "vue";
+import { PropType, ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import {
@@ -135,15 +136,19 @@ import { useDisplay } from "vuetify/lib/framework.mjs";
 import { storeToRefs } from "pinia";
 import { ChangeRole } from "@feature-room";
 
-defineProps({
+const props = defineProps({
 	fixedPosition: {
 		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
 		default: () => ({ enabled: false, positionTop: 0 }),
 	},
+	headerBottom: {
+		type: Number,
+		default: 0,
+	},
 });
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay } = useDisplay();
+const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
 const { currentUser, roomMembers, selectedIds } = storeToRefs(roomMembersStore);
@@ -155,6 +160,9 @@ const isChangeRoleDialogOpen = ref(false);
 const membersToChangeRole = ref<RoomMember[]>([]);
 
 const search = ref("");
+const stickyStyle = computed(() => ({
+	top: `${props.headerBottom}px`,
+}));
 
 const membersFilterCount = ref(roomMembers.value?.length);
 
@@ -287,13 +295,13 @@ const tableHeader = [
 	min-height: 40px;
 }
 
-.fixed-position {
-	$space-left-right: calc(var(--space-base-vuetify) * 6);
-	position: fixed;
-	right: $space-left-right;
-	left: $space-left-right;
-	width: calc(100% - $space-left-right * 2);
+.sticky {
+	position: sticky;
 	z-index: 1;
 	background: rgb(var(--v-theme-white));
+	$space-left-right: calc(var(--space-base-vuetify) * 6);
+	right: $space-left-right;
+	left: $space-left-right;
+	width: 100%;
 }
 </style>

@@ -1,14 +1,12 @@
 <template>
 	<DefaultWireframe
-		ref="wireframe"
 		max-width="full"
 		:breadcrumbs="breadcrumbs"
 		:fab-items="fabAction"
-		:fixed-header="fixedHeaderOnMobile.enabled"
 		@fab:clicked="onFabClick"
 	>
 		<template #header>
-			<div class="d-flex align-items-center">
+			<div ref="header" class="d-flex align-items-center">
 				<h1 class="text-h3 mb-4" data-testid="room-title">
 					{{ t("pages.rooms.members.manage") }}
 				</h1>
@@ -38,7 +36,11 @@
 				:key="tabItem.value"
 				:value="tabItem.value"
 			>
-				<component :is="tabItem.component" v-if="tabItem.isVisible" />
+				<component
+					:is="tabItem.component"
+					v-if="tabItem.isVisible"
+					:header-bottom="headerBottom"
+				/>
 			</VTabsWindowItem>
 		</VTabsWindow>
 
@@ -70,7 +72,6 @@ import {
 	onUnmounted,
 	PropType,
 	ref,
-	watch,
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -115,7 +116,7 @@ const { fetchRoom } = useRoomDetailsStore();
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-const { xs, mdAndDown } = useDisplay();
+const { xs } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 
 const isMembersDialogOpen = ref(false);
@@ -132,12 +133,8 @@ const pageTitle = computed(() =>
 );
 useTitle(pageTitle);
 
-const wireframe = ref<HTMLElement | null>(null);
-const fixedHeaderOnMobile = ref({
-	enabled: false,
-	positionTop: 0,
-});
-const { y } = useElementBounding(wireframe);
+const header = ref<HTMLElement | null>(null);
+const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
 const { canLeaveRoom } = useRoomAuthorization();
 const { isVisibleAddMemberButton } =
@@ -223,17 +220,10 @@ onMounted(async () => {
 	}
 
 	await fetchMembers();
-
-	const header = document.querySelector(".wireframe-header") as HTMLElement;
-	fixedHeaderOnMobile.value.positionTop = header.offsetHeight + y.value;
 });
 
 onUnmounted(() => {
 	resetStore();
-});
-
-watch(y, () => {
-	fixedHeaderOnMobile.value.enabled = y.value <= 0 && mdAndDown.value;
 });
 
 const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
