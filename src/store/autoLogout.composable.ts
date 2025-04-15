@@ -1,17 +1,21 @@
+import { $axios } from "@/utils/api";
 import { computed, Ref, ref } from "vue";
-import { envConfigModule } from "./store-accessor";
+import { accountsModule, envConfigModule } from "./store-accessor";
+import { MeApiFactory } from "@/serverApi/v3";
 
 export const useAutoLogout = () => {
 	const jwtTimerDisabled = computed(
 		() => process.env.NODE_ENV === "development"
 	);
 
+	const meApi = MeApiFactory(undefined, "/v3", $axios);
+
 	const remainingTimeInSeconds = ref(30 * 2); // 1 minute
 	const showWarningOnRemainingSeconds = ref(30);
 	const active = ref(false); // TODO: better naming here
 	const error = ref(false);
 	const status: Ref<"success" | "retry" | "error"> = ref("success");
-	const polling: ReturnType<typeof setInterval> | null = null;
+	let polling: ReturnType<typeof setInterval> | null = null;
 
 	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
 		envConfigModule.getEnv;
@@ -24,10 +28,9 @@ export const useAutoLogout = () => {
 	);
 
 	const createInterval = () => {
-		if (polling) {
-			clearInterval(polling);
-		}
-		setInterval(() => {
+		if (polling) clearInterval(polling);
+
+		polling = setInterval(() => {
 			remainingTimeInSeconds.value -= 1;
 			if (remainingTimeInSeconds.value <= showWarningOnRemainingSeconds.value) {
 				active.value = true;
@@ -39,19 +42,31 @@ export const useAutoLogout = () => {
 		createInterval();
 	};
 
-	const extendSession = () => {
-		remainingTimeInSeconds.value = JWT_TIMEOUT_SECONDS || 30 * 2;
-		createInterval();
-		active.value = false;
+	const extendSession = async () => {
+		try {
+			await meApi.meControllerMe();
+			const ttlCount = await accountsModule.getTTL();
+
+			if (ttlCount > 0) {
+				remainingTimeInSeconds.value = ttlCount;
+				active.value = false;
+				error.value = false;
+				status.value = "success";
+				createInterval();
+			}
+		} catch {
+			error.value = true;
+			status.value = "error";
+		}
 	};
 
 	return {
-		jwtTimerDisabled,
-		remainingTimeInSeconds,
-		remainingTimeInMinutes,
-		showWarningOnRemainingSeconds,
 		active,
 		error,
+		jwtTimerDisabled,
+		remainingTimeInMinutes,
+		remainingTimeInSeconds,
+		showWarningOnRemainingSeconds,
 		status,
 		extendSession,
 		initSession,

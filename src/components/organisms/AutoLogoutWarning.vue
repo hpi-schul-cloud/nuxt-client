@@ -41,8 +41,11 @@
 	</base-modal>
 </template>
 
-<script>
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+<script lang="ts" setup>
+import { useAutoLogout } from "@/store/autoLogout.composable";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { computed, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
 
 const toast = {
 	error401: -1,
@@ -50,83 +53,59 @@ const toast = {
 	success: 1,
 };
 
-export default {
-	inject: {
-		autoLogoutModule: { from: "autoLogoutModule" },
-		notifierModule: { from: NOTIFIER_MODULE_KEY },
-	},
-	computed: {
-		remainingTimeInMinutes() {
-			return Math.max(Math.floor(this.remainingTimeInSeconds / 60), 0);
-		},
-		getImage() {
-			if (this.error)
-				return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth_error.svg";
-			return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth.svg";
-		},
-		active: {
-			get() {
-				return this.autoLogoutModule.getActive;
-			},
-			set(value) {
-				if (!value) {
-					this.extendSession();
-				}
-			},
-		},
-		error() {
-			return this.autoLogoutModule.getError;
-		},
-		remainingTimeInSeconds() {
-			return this.autoLogoutModule.getRemainingTimeInSeconds;
-		},
-		toastValue() {
-			return this.autoLogoutModule.getToastValue;
-		},
-	},
-	watch: {
-		toastValue(value) {
-			this.showToast(value);
-		},
-	},
-	created() {
-		this.autoLogoutModule.init();
-	},
-	methods: {
-		extendSession() {
-			this.autoLogoutModule.extendSessionAction();
-		},
-		showToast(state) {
-			switch (state) {
-				case toast.success:
-					this.notifierModule.show({
-						text: this.$t("components.organisms.AutoLogoutWarning.success"),
-						status: "success",
-						timeout: 5000,
-					});
-					break;
+const { t } = useI18n();
 
-				case toast.error:
-					this.notifierModule.show({
-						text: this.$t("components.organisms.AutoLogoutWarning.error.retry"),
-						status: "error",
-						timeout: 5000,
-					});
-					break;
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+const {
+	jwtTimerDisabled,
+	remainingTimeInSeconds,
+	remainingTimeInMinutes,
+	showWarningOnRemainingSeconds,
+	active,
+	error,
+	extendSession,
+	initSession,
+} = useAutoLogout();
 
-				case toast.error401:
-					this.notifierModule.show({
-						text: this.$t("components.organisms.AutoLogoutWarning.error.401"),
-						status: "error",
-						timeout: 5000,
-					});
-					break;
+const getImage = computed(() => {
+	if (error.value)
+		return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth_error.svg";
+	return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth.svg";
+});
 
-				default:
-					break;
-			}
-		},
-	},
+onMounted(() => {
+	initSession();
+});
+
+const showToast = (state: number) => {
+	switch (state) {
+		case toast.success:
+			notifierModule.show({
+				text: t("components.organisms.AutoLogoutWarning.success"),
+				status: "success",
+				timeout: 5000,
+			});
+			break;
+
+		case toast.error:
+			notifierModule.show({
+				text: t("components.organisms.AutoLogoutWarning.error.retry"),
+				status: "error",
+				timeout: 5000,
+			});
+			break;
+
+		case toast.error401:
+			notifierModule.show({
+				text: t("components.organisms.AutoLogoutWarning.error.401"),
+				status: "error",
+				timeout: 5000,
+			});
+			break;
+
+		default:
+			break;
+	}
 };
 </script>
 
