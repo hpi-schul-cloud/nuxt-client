@@ -3,7 +3,10 @@ import {
 	ContentElementType,
 	ParentNodeInfo,
 } from "@/serverApi/v3";
-import { FileFolderElement } from "@/types/board/ContentElement";
+import {
+	AnyContentElement,
+	FileFolderElement,
+} from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
 import { computed, ref } from "vue";
@@ -18,22 +21,15 @@ export const useFolderState = () => {
 	const fetchFileFolderElement = async (fileFolderElementId: string) => {
 		isLoading.value = true;
 		try {
-			const reponse = (
+			const reponse =
 				await boardElementApi.elementControllerGetElementWithParentHierarchy(
 					fileFolderElementId
-				)
-			).data;
+				);
 
-			if (reponse.element.type !== ContentElementType.FileFolder) {
-				throw createApplicationError(404);
-			}
-
-			fileFolderElement.value = reponse.element as FileFolderElement;
-			parentNodeInfos.value = reponse.parentHierarchy;
+			fileFolderElement.value = castToFileFolderElement(reponse.data.element);
+			parentNodeInfos.value = reponse.data.parentHierarchy;
 		} catch (error) {
-			const responseError = mapAxiosErrorToResponseError(error);
-
-			throw createApplicationError(responseError.code);
+			throwApplicationError(error);
 		} finally {
 			isLoading.value = false;
 		}
@@ -50,4 +46,20 @@ export const useFolderState = () => {
 		isEmpty,
 		fetchFileFolderElement,
 	};
+};
+
+const castToFileFolderElement = (
+	element: AnyContentElement
+): FileFolderElement => {
+	if (element.type === ContentElementType.FileFolder) {
+		return element as FileFolderElement;
+	} else {
+		throw createApplicationError(404);
+	}
+};
+
+const throwApplicationError = (error: unknown): never => {
+	const responseError = mapAxiosErrorToResponseError(error);
+
+	throw createApplicationError(responseError.code);
 };
