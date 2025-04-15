@@ -38,9 +38,6 @@ const props = defineProps({
 	},
 });
 
-// Remove the destructuring of isLoading and isEmpty from useFolderState
-// const { isLoading, isEmpty } = useFolderState();
-
 onMounted(() => {
 	//fetchRooms();
 });
