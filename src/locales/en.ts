@@ -1782,6 +1782,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Edit room",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
 	"pages.roomDetails.board.defaultName": "Room Board",
+	"pages.roomDetails.duplication.loading": "Room is being duplicated...",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.infoAlert.welcome": "Welcome to the new Rooms!",

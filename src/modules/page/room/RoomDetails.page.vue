@@ -187,7 +187,7 @@ const onManageMembers = () => {
 
 // begin - Copy Feature
 const { isLoadingDialogOpen } = useLoadingState(
-	t("components.molecules.copyResult.title.loading")
+	t("pages.roomDetails.duplication.loading")
 );
 const { copy } = useCopy(isLoadingDialogOpen);
 
@@ -211,7 +211,7 @@ const onDuplicate = async () => {
 	const copyId = copyModule.getCopyResult?.id;
 	router.push({ name: "room-details", params: { id: copyId } });
 };
-// end - Copz Feature
+// end - Copy Feature
 
 const onDelete = async () => {
 	if (!room.value || !canDeleteRoom.value) return;

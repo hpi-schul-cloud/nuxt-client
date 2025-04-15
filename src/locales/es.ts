@@ -1833,6 +1833,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar sala",
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
+	"pages.roomDetails.duplication.loading": "La sala se está duplicando...",
 	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
 	"pages.rooms.fab.title": "Crear sala",
 	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
