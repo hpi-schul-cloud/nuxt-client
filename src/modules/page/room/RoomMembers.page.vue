@@ -27,7 +27,8 @@
 						v-for="tabItem in tabs"
 						:key="tabItem.value"
 						:prepend-icon="tabItem.icon"
-						:text="t(tabItem.title)"
+						:aria-label="t(tabItem.title)"
+						:text="xs ? undefined : t(tabItem.title)"
 						:value="tabItem.value"
 					/>
 				</VTabs>
