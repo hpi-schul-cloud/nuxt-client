@@ -1,13 +1,11 @@
 import { Breadcrumb } from "@/components/templates/default-wireframe.types";
-import {
-	BoardElementApiFactory,
-	ContentElementType,
-	ParentNodeInfo,
-	ParentNodeType,
-} from "@/serverApi/v3";
+import { BoardElementApiFactory } from "@/serverApi/v3";
 import {
 	AnyContentElement,
+	ContentElementType,
 	FileFolderElement,
+	ParentNodeInfo,
+	ParentNodeType,
 } from "@/types/board/ContentElement";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createApplicationError } from "@/utils/create-application-error.factory";
