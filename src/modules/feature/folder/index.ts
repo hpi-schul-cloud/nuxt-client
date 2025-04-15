@@ -1,4 +1,3 @@
-import FolderDetails from "./FolderDetails.vue";
-import FolderMenu from "./FolderMenu.vue";
+import Folder from "./Folder.vue";
 
-export { FolderDetails, FolderMenu };
+export { Folder };
