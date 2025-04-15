@@ -21,17 +21,26 @@
 
 <script setup lang="ts">
 import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
-import { useFolderState } from "@data-folder";
-//import { useFolderState } from "@data-folder";
-
-import { onMounted } from "vue";
+import { defineProps, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const { isLoading, isEmpty } = useFolderState();
 
-//const isLoading = ref(false);
-//const isEmpty = ref(true);
+// Define props for the component
+const props = defineProps({
+	isLoading: {
+		type: Boolean,
+		required: true,
+	},
+	isEmpty: {
+		type: Boolean,
+		required: true,
+	},
+});
+
+// Remove the destructuring of isLoading and isEmpty from useFolderState
+// const { isLoading, isEmpty } = useFolderState();
+
 onMounted(() => {
 	//fetchRooms();
 });

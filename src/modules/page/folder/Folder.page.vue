@@ -13,7 +13,7 @@
 				<FolderMenu :folder-name="folderName" />
 			</div>
 		</template>
-		<FolderDetails />
+		<FolderDetails :is-loading="isLoading" :is-empty="isEmpty" />
 	</DefaultWireframe>
 </template>
 
@@ -38,8 +38,13 @@ const props = defineProps({
 	},
 });
 
-const { parentNodeInfos, fileFolderElement, fetchFileFolderElement } =
-	useFolderState();
+const {
+	parentNodeInfos,
+	fileFolderElement,
+	fetchFileFolderElement,
+	isLoading,
+	isEmpty,
+} = useFolderState();
 
 const mapNodeTypeToPathType = (nodeType: string): string => {
 	switch (nodeType) {
