@@ -107,6 +107,7 @@ import {
 } from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { Tab } from "@/types/room/RoomMembers";
+import { envConfigModule } from "@/store";
 
 const props = defineProps({
 	tab: {
@@ -141,6 +142,7 @@ const { askConfirmation } = useConfirmationDialog();
 const { canLeaveRoom } = useRoomAuthorization();
 const { isVisibleAddMemberButton, isVisibleTabNavigation } =
 	useRoomMemberVisibilityOptions(currentUser);
+const { FEATURE_ROOMMEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
 
 const activeTab = computed<Tab>({
 	get() {
@@ -212,7 +214,7 @@ const onLeaveRoom = async () => {
 
 onMounted(async () => {
 	activeTab.value =
-		isVisibleTabNavigation.value && Object.values(Tab).includes(props.tab)
+		FEATURE_ROOMMEMBERS_TABS_ENABLED && Object.values(Tab).includes(props.tab)
 			? props.tab
 			: Tab.Members;
 
