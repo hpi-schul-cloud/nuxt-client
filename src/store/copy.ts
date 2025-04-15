@@ -109,11 +109,11 @@ export default class CopyModule extends VuexModule {
 				.then((response) => response.data);
 		}
 
-		if (type === CopyParamsTypeEnum.Room) {
-			copyResult = await this.roomApi
-				.roomControllerCopyRoom(id)
-				.then((response) => response.data);
-		}
+		// if (type === CopyParamsTypeEnum.Room) {
+		// 	copyResult = await this.roomApi
+		// 		.roomControllerCopyRoom(id)
+		// 		.then((response) => response.data);
+		// }
 
 		if (copyResult === undefined) {
 			throw new Error("CopyProcess unknown type: " + type);
