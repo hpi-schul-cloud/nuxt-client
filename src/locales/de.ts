@@ -633,7 +633,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Bereich erfolgreich kopiert.",
@@ -641,6 +641,8 @@ export default {
 		"Aufgabe erfolgreich kopiert.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
 		"Thema erfolgreich kopiert.",
+	"components.molecules.copyResult.room.successfullyCopied":
+		"Raum erfolgreich kopiert.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Der Kopiervorgang kann bei großen Dateien länger dauern. Die Inhalte werden in Kürze verfügbar sein.",
 	"components.molecules.copyResult.timeoutSuccess":

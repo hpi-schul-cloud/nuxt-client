@@ -641,7 +641,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Загальна інформація",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Усі елементи успішно скопійовано.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Дошка успішно скопійована.",
@@ -649,6 +649,8 @@ export default {
 		"Задачу успішно скопійовано.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
 		"Тему успішно скопійовано.",
+	"components.molecules.copyResult.room.successfullyCopied":
+		"Кімнату успішно дубльовано.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Для великих файлів процес копіювання може зайняти більше часу. Вміст буде доступний найближчим часом.",
 	"components.molecules.copyResult.timeoutSuccess":
