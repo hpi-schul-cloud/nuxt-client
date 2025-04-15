@@ -28,6 +28,7 @@ const mockOptions = () => {
 		isVisibleChangeRoleButton: false,
 		isVisibleLeaveRoomButton: true,
 		isVisiblePageInfoText: false,
+		isVisibleTabNavigation: false,
 	};
 	roleConfigMap[RoleName.Roomowner] = {
 		isVisibleSelectionColumn: true,
@@ -37,6 +38,7 @@ const mockOptions = () => {
 		isVisibleChangeRoleButton: true,
 		isVisibleLeaveRoomButton: false,
 		isVisiblePageInfoText: true,
+		isVisibleTabNavigation: true,
 	};
 	roleConfigMap[RoleName.Roomadmin] = {
 		isVisibleSelectionColumn: true,
@@ -46,6 +48,7 @@ const mockOptions = () => {
 		isVisibleChangeRoleButton: true,
 		isVisibleLeaveRoomButton: true,
 		isVisiblePageInfoText: true,
+		isVisibleTabNavigation: true,
 	};
 	roleConfigMap[RoleName.Roomeditor] = defaultOptions;
 	roleConfigMap[RoleName.Roomviewer] = defaultOptions;
@@ -81,9 +84,11 @@ describe("useRoomMemberVisibilityOptions", () => {
 		options: {
 			roomRoleName: RoleName;
 			changeRoleFeatureFlag?: boolean;
+			roomMembersTabFeatureFlag?: boolean;
 		} = {
 			roomRoleName: RoleName.Roomowner,
 			changeRoleFeatureFlag: true,
+			roomMembersTabFeatureFlag: true,
 		}
 	) => {
 		const currentUser = createCurrentUser(options?.roomRoleName);
@@ -92,6 +97,8 @@ describe("useRoomMemberVisibilityOptions", () => {
 				...defaultEnvs,
 				FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED:
 					options.changeRoleFeatureFlag ?? true,
+				FEATURE_ROOMMEMBERS_TABS_ENABLED:
+					options.roomMembersTabFeatureFlag ?? true,
 			},
 		});
 
@@ -228,5 +235,43 @@ describe("useRoomMemberVisibilityOptions", () => {
 				expect(isVisiblePageInfoText.value).toBe(expected);
 			}
 		);
+	});
+
+	describe("isVisibleTabNavigation", () => {
+		describe("when FEATURE_ROOMMEMBERS_TABS_ENABLED is true", () => {
+			it.each([
+				{ roomRoleName: RoleName.Roomowner, expected: true },
+				{ roomRoleName: RoleName.Roomadmin, expected: true },
+				{ roomRoleName: RoleName.Roomeditor, expected: false },
+				{ roomRoleName: RoleName.Roomviewer, expected: false },
+			])(
+				"should return $expected for $roomRoleName",
+				({ roomRoleName, expected }) => {
+					const { isVisibleTabNavigation } = setup({
+						roomRoleName,
+						roomMembersTabFeatureFlag: true,
+					});
+					expect(isVisibleTabNavigation.value).toBe(expected);
+				}
+			);
+		});
+
+		describe("when FEATURE_ROOMMEMBERS_TABS_ENABLED is false", () => {
+			it.each([
+				{ roomRoleName: RoleName.Roomowner, expected: false },
+				{ roomRoleName: RoleName.Roomadmin, expected: false },
+				{ roomRoleName: RoleName.Roomeditor, expected: false },
+				{ roomRoleName: RoleName.Roomviewer, expected: false },
+			])(
+				"should return $expected for $roomRoleName",
+				({ roomRoleName, expected }) => {
+					const { isVisibleTabNavigation } = setup({
+						roomRoleName,
+						roomMembersTabFeatureFlag: false,
+					});
+					expect(isVisibleTabNavigation.value).toBe(expected);
+				}
+			);
+		});
 	});
 });

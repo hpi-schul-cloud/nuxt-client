@@ -11,6 +11,7 @@ type VisibilityOptionReturnType = {
 	isVisibleChangeRoleButton: ComputedRef<boolean>;
 	isVisibleLeaveRoomButton: ComputedRef<boolean>;
 	isVisiblePageInfoText: ComputedRef<boolean>;
+	isVisibleTabNavigation: ComputedRef<boolean>;
 	isVisibleActionInRow: (user: RoomMemberResponse) => boolean;
 	isVisibleRemoveMemberButton: (user: RoomMemberResponse) => boolean;
 };
@@ -19,7 +20,10 @@ export const useRoomMemberVisibilityOptions = (
 	currentUser: ComputedRef<RoomMember>
 ): VisibilityOptionReturnType => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
-	const { FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED } = envConfigModule.getEnv;
+	const {
+		FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED,
+		FEATURE_ROOMMEMBERS_TABS_ENABLED,
+	} = envConfigModule.getEnv;
 
 	const visibilityOptions = computed(
 		() => roleConfigMap[currentUser?.value?.roomRoleName as RoomRoles]
@@ -52,6 +56,13 @@ export const useRoomMemberVisibilityOptions = (
 		return visibilityOptions.value?.isVisiblePageInfoText;
 	});
 
+	const isVisibleTabNavigation = computed(() => {
+		return (
+			visibilityOptions.value?.isVisibleTabNavigation &&
+			FEATURE_ROOMMEMBERS_TABS_ENABLED
+		);
+	});
+
 	const isVisibleActionInRow = (user: RoomMemberResponse) => {
 		if (user.roomRoleName === RoleName.Roomowner) return false;
 		return user.userId !== currentUser?.value.userId;
@@ -68,6 +79,7 @@ export const useRoomMemberVisibilityOptions = (
 		isVisibleChangeRoleButton,
 		isVisibleLeaveRoomButton,
 		isVisiblePageInfoText,
+		isVisibleTabNavigation,
 		isVisibleActionInRow,
 		isVisibleRemoveMemberButton,
 	};

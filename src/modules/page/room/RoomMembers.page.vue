@@ -17,7 +17,7 @@
 				</div>
 
 				<VTabs
-					v-if="FEATURE_ROOMMEMBERS_TABS_ENABLED"
+					v-if="isVisibleTabNavigation"
 					v-model="activeTab"
 					align-tabs="center"
 					fixed-tabs
@@ -107,7 +107,6 @@ import {
 } from "@ui-confirmation-dialog";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { Tab } from "@/types/room/RoomMembers";
-import { envConfigModule } from "@/store";
 
 const props = defineProps({
 	tab: {
@@ -130,7 +129,6 @@ const roomMembersStore = useRoomMembersStore();
 const { currentUser } = storeToRefs(roomMembersStore);
 const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
 	roomMembersStore;
-const { FEATURE_ROOMMEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
 
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
@@ -141,7 +139,7 @@ const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
 const { canLeaveRoom } = useRoomAuthorization();
-const { isVisibleAddMemberButton } =
+const { isVisibleAddMemberButton, isVisibleTabNavigation } =
 	useRoomMemberVisibilityOptions(currentUser);
 
 const activeTab = computed<Tab>({
@@ -160,28 +158,28 @@ const tabs: Array<{
 	value: Tab;
 	icon: string;
 	component: Component;
-	isVisible: boolean;
+	isVisible: ComputedRef<boolean>;
 }> = [
 	{
 		title: "pages.rooms.members.tab.members",
 		value: Tab.Members,
 		icon: mdiAccountMultipleOutline,
 		component: Members,
-		isVisible: true,
+		isVisible: computed(() => true),
 	},
 	{
 		title: "pages.rooms.members.tab.invitations",
 		value: Tab.Invitations,
 		icon: mdiLink,
 		component: Invitations,
-		isVisible: FEATURE_ROOMMEMBERS_TABS_ENABLED,
+		isVisible: isVisibleTabNavigation,
 	},
 	{
 		title: "pages.rooms.members.tab.confirmations",
 		value: Tab.Confirmations,
 		icon: mdiAccountQuestionOutline,
 		component: Confirmations,
-		isVisible: FEATURE_ROOMMEMBERS_TABS_ENABLED,
+		isVisible: isVisibleTabNavigation,
 	},
 ];
 
@@ -214,7 +212,7 @@ const onLeaveRoom = async () => {
 
 onMounted(async () => {
 	activeTab.value =
-		FEATURE_ROOMMEMBERS_TABS_ENABLED && Object.values(Tab).includes(props.tab)
+		isVisibleTabNavigation.value && Object.values(Tab).includes(props.tab)
 			? props.tab
 			: Tab.Members;
 
