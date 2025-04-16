@@ -27,7 +27,7 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 // Define props for the component
-const props = defineProps({
+defineProps({
 	isLoading: {
 		type: Boolean,
 		required: true,
