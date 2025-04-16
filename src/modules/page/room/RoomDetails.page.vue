@@ -28,13 +28,14 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
+		<DuplicationInfoDialog v-model="isDuplicationInfoDialogOpen" />
 		<!-- <ShareModal type="rooms" /> -->
-		<CopyResultModal
+		<!-- <CopyResultModal
 			:is-open="isCopyModalOpen"
 			:copy-result-items="copyResultModalItems"
 			:copy-result-root-item-type="copyResultRootItemType"
 			@copy-dialog-closed="onCopyResultModalClosed"
-		/>
+		/> -->
 	</DefaultWireframe>
 </template>
 
@@ -49,8 +50,9 @@ import {
 	useRoomDetailsStore,
 	useRoomsState,
 	useRoomAuthorization,
+	useRoomDuplication,
 } from "@data-room";
-import { BoardGrid, RoomMenu } from "@feature-room";
+import { BoardGrid, RoomMenu, DuplicationInfoDialog } from "@feature-room";
 import {
 	mdiPlus,
 	mdiViewDashboardOutline,
@@ -189,33 +191,23 @@ const onManageMembers = () => {
 	});
 };
 
-// begin - Copy Feature
-const { isLoadingDialogOpen } = useLoadingState(
-	t("pages.roomDetails.duplication.loading")
-);
-const { copy } = useCopy(isLoadingDialogOpen);
+// begin - Duplication Feature
 
-const isCopyModalOpen = computed(() => copyModule.getIsResultModalOpen);
+// const { copy } = useCopy(isLoadingDialogOpen);
 
-const copyResultModalItems = computed(
-	() => copyModule.getCopyResultFailedItems
-);
-
-const copyResultRootItemType = computed(() => copyModule.getCopyResult?.type);
-
-const onCopyResultModalClosed = () => {
-	copyModule.reset();
-};
+const { isDuplicationInfoDialogOpen, openDuplicationInfoDialog } =
+	useRoomDuplication();
 
 const onDuplicate = async () => {
 	// TODO Permission check
 	if (!room.value) return;
 
-	await copy({ id: room.value.id, type: CopyParamsTypeEnum.Room });
-	const copyId = copyModule.getCopyResult?.id;
-	router.push({ name: "room-details", params: { id: copyId } });
+	openDuplicationInfoDialog();
+	// await copy({ id: room.value.id, type: CopyParamsTypeEnum.Room });
+	// const copyId = copyModule.getCopyResult?.id;
+	// router.push({ name: "room-details", params: { id: copyId } });
 };
-// end - Copy Feature
+// end - Duplication Feature
 
 const onDelete = async () => {
 	if (!room.value || !canDeleteRoom.value) return;

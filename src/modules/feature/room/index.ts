@@ -5,6 +5,7 @@ import BoardGrid from "./BoardGrid.vue";
 import MembersTable from "./RoomMembers/MembersTable.vue";
 import AddMembers from "./RoomMembers/AddMembers.vue";
 import ChangeRole from "./RoomMembers/ChangeRole.vue";
+import DuplicationInfoDialog from "./DuplicationInfoDialog.vue";
 
 export {
 	RoomGrid,
@@ -14,4 +15,5 @@ export {
 	MembersTable,
 	AddMembers,
 	ChangeRole,
+	DuplicationInfoDialog,
 };
