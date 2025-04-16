@@ -137,10 +137,6 @@ import { storeToRefs } from "pinia";
 import { ChangeRole } from "@feature-room";
 
 const props = defineProps({
-	fixedPosition: {
-		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
-		default: () => ({ enabled: false, positionTop: 0 }),
-	},
 	headerBottom: {
 		type: Number,
 		default: 0,
