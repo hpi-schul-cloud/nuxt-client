@@ -77,6 +77,9 @@
 			"@ui-video-conference-configuration-dialog": [
 				"src/modules/ui/video-conference-configuration-dialog"
 			],
+			"@ui-empty-state": [
+				"src/modules/ui/empty-state",
+			],
 			"@util-board": ["src/modules/util/board"],
 			"@util-validators": ["src/modules/util/validators"],
 			"@util-vue": ["src/modules/util/vue"],

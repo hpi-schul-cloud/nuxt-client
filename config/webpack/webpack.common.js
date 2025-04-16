@@ -183,6 +183,7 @@ module.exports = {
 			"@ui-video-conference-configuration-dialog": getDir(
 				"src/modules/ui/video-conference-configuration-dialog"
 			),
+			"@ui-empty-state": getDir("src/modules/ui/empty-state"),
 			"@util-board": getDir("src/modules/util/board"),
 			"@util-validators": getDir("src/modules/util/validators"),
 			"@util-vue": getDir("src/modules/util/vue"),

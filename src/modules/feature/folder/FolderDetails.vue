@@ -9,20 +9,20 @@
 		</VContainer>
 	</template>
 	<template v-else-if="isEmpty">
-		<VCustomEmptyState
-			ref="folder-empty-state"
-			image="folder-empty-state"
-			:title="t('pages.folder.emptyState')"
-			class="mt-16"
-		/>
+		<EmptyState :title="t('pages.folder.emptyState')">
+			<template v-slot:media>
+				<EmptyFolderSvg />
+			</template>
+		</EmptyState>
 	</template>
 	<template v-else> Mount your component here </template>
 </template>
 
 <script setup lang="ts">
-import VCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
+import { EmptyState } from "@ui-empty-state";
 import { defineProps, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
+import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 
 const { t } = useI18n();
 
