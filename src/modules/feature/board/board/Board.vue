@@ -444,30 +444,4 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 .column-board {
 	overflow-x: auto;
 }
-
-@supports selector(::-webkit-scrollbar) {
-	.scrollbar::-webkit-scrollbar {
-		height: 6px;
-	}
-
-	.scrollbar::-webkit-scrollbar-track {
-		background: white;
-		border: none;
-	}
-
-	.scrollbar::-webkit-scrollbar-thumb {
-		background-color: rgba(var(--v-theme-on-surface), 0.6);
-		border-radius: 5px;
-	}
-
-	.scrollbar::-webkit-scrollbar-thumb:hover {
-		background: rgba(var(--v-theme-on-surface), 0.8);
-	}
-}
-
-@supports not selector(::-webkit-scrollbar) {
-	.scrollbar {
-		scrollbar-width: thin;
-	}
-}
 </style>

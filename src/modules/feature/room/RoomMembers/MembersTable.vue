@@ -1,22 +1,22 @@
 <template>
 	<div
 		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
-		:class="{
-			'fixed-position': fixedPosition.enabled,
-			'flex-column': isExtraSmallDisplay,
-		}"
-		:style="{ top: `${fixedPosition.positionTop}px` }"
+		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
+		:style="stickyStyle"
 	>
 		<ActionMenu
 			v-if="selectedUserIds.length"
 			class="multi-action-menu"
 			:class="{ 'order-2': isExtraSmallDisplay }"
 			:selected-ids="selectedUserIds"
-			:is-visible-change-role-button="isVisibleChangeRoleButton"
-			@remove:selected="onRemoveMembers"
 			@reset:selected="onResetSelectedMembers"
-			@change:role="onChangePermission"
-		/>
+		>
+			<KebabMenuActionChangePermission
+				v-if="isVisibleChangeRoleButton"
+				@click="onChangePermission(selectedUserIds)"
+			/>
+			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedUserIds)" />
+		</ActionMenu>
 		<v-spacer v-else />
 		<v-text-field
 			v-model="search"
@@ -35,6 +35,7 @@
 	</div>
 
 	<v-divider role="presentation" />
+
 	<v-data-table
 		v-model:search="search"
 		v-model="selectedUserIds"
@@ -133,6 +134,10 @@ const props = defineProps({
 		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
 		default: () => ({ enabled: false, positionTop: 0 }),
 	},
+	headerBottom: {
+		type: Number,
+		default: 0,
+	},
 });
 
 const selectedUserIds: ModelRef<string[]> = defineModel("selectedUserIds", {
@@ -148,10 +153,13 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-const { xs: isExtraSmallDisplay } = useDisplay();
+const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
 const search = ref("");
 const memberList = toRef(props, "members");
 const membersFilterCount = ref(memberList.value?.length);
+const stickyStyle = computed(() => ({
+	top: `${props.headerBottom}px`,
+}));
 
 const currentUser = computed(() => props.currentUser);
 
@@ -274,13 +282,13 @@ const tableHeader = [
 	min-height: 40px;
 }
 
-.fixed-position {
-	$space-left-right: calc(var(--space-base-vuetify) * 6);
-	position: fixed;
-	right: $space-left-right;
-	left: $space-left-right;
-	width: calc(100% - $space-left-right * 2);
+.sticky {
+	position: sticky;
 	z-index: 1;
 	background: rgb(var(--v-theme-white));
+	$space-left-right: calc(var(--space-base-vuetify) * 6);
+	right: $space-left-right;
+	left: $space-left-right;
+	width: 100%;
 }
 </style>
