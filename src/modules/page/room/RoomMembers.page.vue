@@ -96,15 +96,11 @@ import {
 	useRoomMembers,
 	useRoomMemberVisibilityOptions,
 	RoomMember,
+	useRoomAuthorization,
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
-import {
-	MembersTable,
-	AddMembers,
-	ChangeRole,
-	useRoomAuthorization,
-} from "@feature-room";
+import { MembersTable, AddMembers, ChangeRole } from "@feature-room";
 import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";

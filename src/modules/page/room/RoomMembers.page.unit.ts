@@ -7,7 +7,11 @@ import {
 	roomMemberSchoolResponseFactory,
 	envsFactory,
 } from "@@/tests/test-utils";
-import { useRoomMembers, useRoomDetailsStore } from "@data-room";
+import {
+	useRoomMembers,
+	useRoomDetailsStore,
+	useRoomAuthorization,
+} from "@data-room";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -20,12 +24,7 @@ import { computed, nextTick, ref } from "vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog } from "vuetify/lib/components/index.mjs";
-import {
-	AddMembers,
-	MembersTable,
-	ChangeRole,
-	useRoomAuthorization,
-} from "@feature-room";
+import { AddMembers, MembersTable, ChangeRole } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { VueWrapper } from "@vue/test-utils";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";

@@ -45,8 +45,12 @@ import { BoardLayout } from "@/serverApi/v3";
 import { authModule, copyModule } from "@/store";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useRoomDetailsStore, useRoomsState } from "@data-room";
-import { BoardGrid, RoomMenu, useRoomAuthorization } from "@feature-room";
+import {
+	useRoomDetailsStore,
+	useRoomsState,
+	useRoomAuthorization,
+} from "@data-room";
+import { BoardGrid, RoomMenu } from "@feature-room";
 import {
 	mdiPlus,
 	mdiViewDashboardOutline,

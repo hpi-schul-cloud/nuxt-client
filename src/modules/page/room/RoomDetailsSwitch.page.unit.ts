@@ -14,7 +14,7 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { roomFactory } from "@@/tests/test-utils/factory/room/roomFactory";
 import { Router, useRoute, useRouter } from "vue-router";
 import { createMock } from "@golevelup/ts-jest";
-import { useRoomAuthorization } from "@feature-room";
+import { useRoomAuthorization } from "@data-room";
 
 jest.mock("vue-router", () => ({
 	useRoute: jest.fn(),

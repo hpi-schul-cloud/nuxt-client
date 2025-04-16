@@ -32,7 +32,7 @@ import {
 	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,
 } from "@ui-kebab-menu";
-import { useRoomAuthorization } from "@feature-room";
+import { useRoomAuthorization } from "@data-room";
 import { useI18n } from "vue-i18n";
 
 defineProps({
