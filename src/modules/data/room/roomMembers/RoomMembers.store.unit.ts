@@ -14,7 +14,6 @@ import {
 	mockedPiniaStoreTyping,
 	roomFactory,
 	roomMemberFactory,
-	roomMemberListFactory,
 	roomMemberSchoolResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
@@ -31,7 +30,6 @@ jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
 
 jest.mock("@util-board/BoardNotifier.composable");
-jest.mock("@util-board/LastCreatedElement.composable");
 const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
 
 describe("useRoomMembers", () => {
@@ -342,8 +340,7 @@ describe("useRoomMembers", () => {
 				mockApiResponse({ data: { roomRoleName: RoleName.Roomadmin } })
 			);
 
-			roomMembersStore.potentialRoomMembers =
-				roomMemberListFactory.buildList(3);
+			roomMembersStore.potentialRoomMembers = roomMemberFactory.buildList(3);
 			const firstPotentialMember = roomMembersStore.potentialRoomMembers[0];
 
 			await roomMembersStore.addMembers([firstPotentialMember.userId]);

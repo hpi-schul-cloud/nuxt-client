@@ -4,20 +4,12 @@ import {
 	mountComposable,
 	roomMemberFactory,
 } from "@@/tests/test-utils";
-import {
-	RoomMember,
-	useRoomMemberVisibilityOptions,
-	useRoomMembers,
-} from "@data-room";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { RoomMember, useRoomMemberVisibilityOptions } from "@data-room";
 import { computed, ComputedRef } from "vue";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import EnvConfigModule from "@/store/env-config";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { roleConfigMap } from "./memberVisibilityConfig";
-
-jest.mock("./roomMembers.composable");
-const mockUseRoomMembers = jest.mocked(useRoomMembers);
 
 const mockOptions = () => {
 	const defaultOptions = {
@@ -55,11 +47,7 @@ const mockOptions = () => {
 };
 
 describe("useRoomMemberVisibilityOptions", () => {
-	let mockRoomMemberCalls: DeepMocked<ReturnType<typeof useRoomMembers>>;
-
 	beforeEach(() => {
-		mockRoomMemberCalls = createMock<ReturnType<typeof useRoomMembers>>();
-		mockUseRoomMembers.mockReturnValue(mockRoomMemberCalls);
 		mockOptions();
 	});
 

@@ -9,7 +9,7 @@ import { authModule, schoolsModule } from "@/store";
 import {
 	meResponseFactory,
 	mockedPiniaStoreTyping,
-	roomMemberListFactory,
+	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
@@ -69,7 +69,7 @@ describe("AddMembers", () => {
 	});
 
 	const setup = () => {
-		const potentialRoomMembers = roomMemberListFactory.buildList(3);
+		const potentialRoomMembers = roomMemberFactory.buildList(3);
 		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
 
 		wrapper = mount(AddMembers, {
