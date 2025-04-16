@@ -91,7 +91,7 @@ describe("Folder.vue", () => {
 		it("should show VCustomEmptyState", () => {
 			const { wrapper } = setup();
 
-			const emptyState = wrapper.findComponent({ name: "VCustomEmptyState" });
+			const emptyState = wrapper.findComponent({ name: "EmptyState" });
 			expect(emptyState.exists()).toBe(true);
 		});
 	});
