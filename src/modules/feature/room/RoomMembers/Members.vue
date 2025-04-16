@@ -1,10 +1,6 @@
 <template>
-	<div class="mb-8" data-testid="info-text">
-		<i18n-t
-			v-if="isVisiblePageInfoText"
-			keypath="pages.rooms.members.infoText"
-			scope="global"
-		>
+	<div v-if="isVisiblePageInfoText" data-testid="info-text">
+		<i18n-t keypath="pages.rooms.members.infoText" scope="global">
 			<a
 				href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
 				target="_blank"
@@ -16,7 +12,7 @@
 		</i18n-t>
 	</div>
 
-	<div class="mb-12">
+	<div class="mb-12 mt-8">
 		<MembersTable
 			v-if="!isLoading && currentUser"
 			:header-bottom="headerBottom"
@@ -45,7 +41,6 @@ const { t } = useI18n();
 
 const roomMembersStore = useRoomMembersStore();
 const { isLoading, currentUser } = storeToRefs(roomMembersStore);
-
 const { isVisiblePageInfoText } = useRoomMemberVisibilityOptions(currentUser);
 
 const linkAriaLabel = computed(
