@@ -43,6 +43,8 @@ export const useAutoLogout = () => {
 	const getTTL = async () => {
 		try {
 			const ttlCount = await accountsModule.getTTL();
+
+			log("getTTL", ttlCount);
 			if (ttlCount > remainingTimeInSeconds.value) {
 				remainingTimeInSeconds.value = ttlCount;
 				isTTLUpdated.value = true;
