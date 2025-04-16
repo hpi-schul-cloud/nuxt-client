@@ -11,6 +11,7 @@
 			scope-language-key="common.labels.room"
 			:aria-label="t('pages.folder.ariaLabels.menu.action.delete')"
 			:name="folderName"
+			@click="$emit('delete')"
 		/>
 	</KebabMenu>
 </template>

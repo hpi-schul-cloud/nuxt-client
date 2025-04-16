@@ -10,7 +10,7 @@
 				<h1 class="text-h3 mb-4" data-testid="folder-title">
 					{{ folderName }}
 				</h1>
-				<FolderMenu :folder-name="folderName" />
+				<FolderMenu :folder-name="folderName" @delete="onDelete" />
 			</div>
 		</template>
 		<FolderDetails :is-loading="isLoading" :is-empty="isEmpty" />
@@ -46,8 +46,13 @@ const fabAction = {
 };
 
 const fabClickHandler = () => {
-	// eslint-disable-next-line no-console
-	console.log("Open file picker");
+	// Handle FAB click logic here
+	console.log("FAB clicked");
+};
+
+const onDelete = () => {
+	// Handle delete logic here
+	console.log("Delete action triggered");
 };
 
 onMounted(async () => {
