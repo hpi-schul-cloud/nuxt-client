@@ -17,7 +17,7 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { RoomMember, useRoomMembers } from "@data-room";
+import { useRoomMembers } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
@@ -79,7 +79,9 @@ describe("useRoomMembers", () => {
 		describe("when the user is not room owner", () => {
 			it("should fetch members and map members with role names", async () => {
 				const { fetchMembers, roomMembers } = useRoomMembers(roomId);
-				const membersMock = roomMemberFactory(RoleName.Roomadmin).buildList(3);
+				const membersMock = roomMemberFactory.buildList(3, {
+					roomRoleName: RoleName.Roomadmin,
+				});
 
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
 					mockApiResponse({
@@ -103,7 +105,9 @@ describe("useRoomMembers", () => {
 		describe("when the user is room owner", () => {
 			it("should fetch members and map members with role names", async () => {
 				const { fetchMembers, roomMembers } = useRoomMembers(roomId);
-				const membersMock = roomMemberFactory(RoleName.Roomowner).buildList(3);
+				const membersMock = roomMemberFactory.buildList(3, {
+					roomRoleName: RoleName.Roomowner,
+				});
 
 				roomApiMock.roomControllerGetMembers.mockResolvedValue(
 					mockApiResponse({
@@ -129,7 +133,9 @@ describe("useRoomMembers", () => {
 		describe("when the user has school role administrator and teacher", () => {
 			it("should map the school role to teacher", async () => {
 				const { fetchMembers, roomMembers } = useRoomMembers(roomId);
-				const membersMock = roomMemberFactory(RoleName.Roomadmin).buildList(1);
+				const membersMock = roomMemberFactory.buildList(1, {
+					roomRoleName: RoleName.Roomadmin,
+				});
 				membersMock[0].schoolRoleNames = [
 					RoleName.Administrator,
 					RoleName.Teacher,
@@ -214,9 +220,9 @@ describe("useRoomMembers", () => {
 			const { getPotentialMembers, potentialRoomMembers, roomMembers } =
 				useRoomMembers(roomId);
 
-			const membersMock: RoomMember = roomMemberFactory(
-				RoleName.Roomeditor
-			).build();
+			const membersMock = roomMemberFactory.build({
+				roomRoleName: RoleName.Roomeditor,
+			});
 
 			roomMembers.value = [membersMock];
 
@@ -258,7 +264,9 @@ describe("useRoomMembers", () => {
 	describe("currentUser", () => {
 		it("should set the currentUser", async () => {
 			const mockMe = meResponseFactory.build();
-			const membersMock = roomMemberFactory(RoleName.Roomviewer).buildList(3);
+			const membersMock = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomviewer,
+			});
 			authModule.setMe({
 				...mockMe,
 				user: { ...mockMe.user, id: membersMock[1].userId },
@@ -360,7 +368,9 @@ describe("useRoomMembers", () => {
 				mockApiResponse({})
 			);
 
-			const membersMock = roomMemberFactory(RoleName.Roomeditor).buildList(3);
+			const membersMock = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomeditor,
+			});
 			roomMembers.value = membersMock;
 
 			await removeMembers([membersMock[1].userId]);
@@ -425,7 +435,9 @@ describe("useRoomMembers", () => {
 				mockApiResponse({})
 			);
 
-			const membersMock = roomMemberFactory(RoleName.Roomviewer).buildList(3);
+			const membersMock = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomviewer,
+			});
 			roomMembers.value = membersMock;
 
 			selectedIds.value = [membersMock[1].userId];
@@ -452,7 +464,9 @@ describe("useRoomMembers", () => {
 				mockApiResponse({})
 			);
 
-			const membersMock = roomMemberFactory(RoleName.Roomviewer).buildList(3);
+			const membersMock = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomviewer,
+			});
 			roomMembers.value = membersMock;
 
 			await updateMembersRole(
@@ -491,7 +505,9 @@ describe("useRoomMembers", () => {
 		it("should call the API", async () => {
 			const { changeRoomOwner, roomMembers } = useRoomMembers(roomId);
 
-			const membersMock = roomMemberFactory(RoleName.Roomviewer).buildList(3);
+			const membersMock = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomviewer,
+			});
 			roomMembers.value = membersMock;
 
 			await changeRoomOwner(membersMock[1].userId);
@@ -507,8 +523,12 @@ describe("useRoomMembers", () => {
 		it("should swap the ownership in the state", async () => {
 			const { changeRoomOwner, roomMembers } = useRoomMembers(roomId);
 
-			const roomViewers = roomMemberFactory(RoleName.Roomviewer).buildList(3);
-			const roomOwner = roomMemberFactory(RoleName.Roomowner).build();
+			const roomViewers = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomviewer,
+			});
+			const roomOwner = roomMemberFactory.build({
+				roomRoleName: RoleName.Roomowner,
+			});
 			const futureRoomOwner = roomViewers.pop();
 			if (futureRoomOwner) {
 				roomMembers.value = [roomOwner, futureRoomOwner, ...roomViewers];
@@ -526,7 +546,9 @@ describe("useRoomMembers", () => {
 		it('should show an error if the "currentOwner" or "memberToBeOwner" is not found', async () => {
 			const { changeRoomOwner } = useRoomMembers(roomId);
 
-			const membersMock = roomMemberFactory(RoleName.Roomviewer).buildList(3);
+			const membersMock = roomMemberFactory.buildList(3, {
+				roomRoleName: RoleName.Roomviewer,
+			});
 			const futureRoomOwner = membersMock.pop();
 			if (futureRoomOwner) {
 				roomApiMock.roomControllerChangeRoomOwner.mockResolvedValue(

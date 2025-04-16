@@ -45,7 +45,9 @@ describe("MembersTable", () => {
 		mockRoomMemberCalls = createMock<ReturnType<typeof useRoomMembers>>();
 		mockUseRoomMembers.mockReturnValue(mockRoomMemberCalls);
 
-		mockMembers = roomMemberFactory(RoleName.Roomadmin).buildList(3);
+		mockMembers = roomMemberFactory.buildList(3, {
+			roomRoleName: RoleName.Roomadmin,
+		});
 	});
 
 	const tableHeaders = [
@@ -381,8 +383,8 @@ describe("MembersTable", () => {
 
 			describe("when members are roomowner", () => {
 				beforeEach(() => {
-					mockMembers = roomMemberFactory(RoleName.Roomowner)
-						.buildList(3)
+					mockMembers = roomMemberFactory
+						.buildList(3, { roomRoleName: RoleName.Roomowner })
 						.map((member) => ({ ...member, isSelectable: false }));
 				});
 

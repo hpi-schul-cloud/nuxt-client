@@ -166,7 +166,9 @@ describe("useRoomMemberVisibilityOptions", () => {
 			"should return $expected for $roomRoleName",
 			({ roomRoleName, expected }) => {
 				const { isVisibleActionInRow } = setup({ roomRoleName });
-				const roomMember = roomMemberFactory(roomRoleName).build();
+				const roomMember = roomMemberFactory.build({
+					roomRoleName,
+				});
 				expect(isVisibleActionInRow(roomMember)).toBe(expected);
 			}
 		);
@@ -216,7 +218,9 @@ describe("useRoomMemberVisibilityOptions", () => {
 			"should return $expected for $roomRoleName",
 			({ roomRoleName, expected }) => {
 				const { isVisibleRemoveMemberButton } = setup({ roomRoleName });
-				const roomMember = roomMemberFactory(roomRoleName).build();
+				const roomMember = roomMemberFactory.build({
+					roomRoleName,
+				});
 				expect(isVisibleRemoveMemberButton(roomMember)).toBe(expected);
 			}
 		);
