@@ -3,14 +3,14 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import { shallowMount } from "@vue/test-utils";
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import CollaborativeTextEditorElementMenu from "./CollaborativeTextEditorElementMenu.vue";
 
 // Mocks
@@ -125,7 +125,8 @@ describe("CollaborativeTextEditorElementMenu", () => {
 
 			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
-			await menuItem.trigger("click");
+			menuItem.vm.$emit("click", Promise.resolve(true));
+			await nextTick();
 
 			expect(wrapper.emitted("delete:element")).toBeDefined();
 		});

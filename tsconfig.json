@@ -44,6 +44,9 @@
 			"@feature-board-video-conference-element": [
 				"src/modules/feature/board-video-conference-element"
 			],
+			"@feature-board-h5p-element": [
+				"src/modules/feature/board-h5p-element"
+			],
 			"@feature-board": ["src/modules/feature/board"],
 			"@feature-course-sync": ["src/modules/feature/course-sync"],
 			"@feature-editor": ["src/modules/feature/editor"],
