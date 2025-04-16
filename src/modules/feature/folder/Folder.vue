@@ -47,12 +47,10 @@ const fabAction = {
 
 const fabClickHandler = () => {
 	// Handle FAB click logic here
-	console.log("FAB clicked");
 };
 
 const onDelete = () => {
 	// Handle delete logic here
-	console.log("Delete action triggered");
 };
 
 onMounted(async () => {
