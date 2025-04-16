@@ -1,4 +1,3 @@
-import { $axios } from "@/utils/api";
 import { computed, Ref, ref, watch } from "vue";
 import {
 	accountsModule,
@@ -6,7 +5,6 @@ import {
 	envConfigModule,
 	notifierModule,
 } from "./store-accessor";
-import { MeApiFactory } from "@/serverApi/v3";
 import { useI18n } from "vue-i18n";
 
 export const useAutoLogout = () => {
@@ -15,8 +13,6 @@ export const useAutoLogout = () => {
 	);
 
 	const { log } = console;
-
-	const meApi = MeApiFactory(undefined, "/v3", $axios);
 
 	const { t } = useI18n();
 	const remainingTimeInSeconds = ref(30 * 2); // 1 minute
@@ -34,6 +30,10 @@ export const useAutoLogout = () => {
 
 	showWarningOnRemainingSeconds.value = JWT_SHOW_TIMEOUT_WARNING_SECONDS || 30;
 	remainingTimeInSeconds.value = JWT_TIMEOUT_SECONDS || 30 * 2;
+
+	// TODO: remove this hardcoded assignment after branch testing
+	showWarningOnRemainingSeconds.value = 30;
+	remainingTimeInSeconds.value = 30 * 2;
 
 	const remainingTimeInMinutes = computed(() =>
 		Math.max(Math.floor(remainingTimeInSeconds.value / 60), 0)
