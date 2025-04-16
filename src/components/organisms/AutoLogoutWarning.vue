@@ -45,6 +45,8 @@
 import { useAutoLogout } from "@/store/autoLogout.composable";
 import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
+import SlothSvg from "@/assets/img/logout/Sloth.svg";
+import SlothErrorSvg from "@/assets/img/logout/Sloth_error.svg";
 
 const { t } = useI18n();
 
@@ -58,9 +60,8 @@ const {
 } = useAutoLogout();
 
 const getImage = computed(() => {
-	if (errorOnExtend.value)
-		return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth_error.svg";
-	return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth.svg";
+	if (errorOnExtend.value) return SlothErrorSvg;
+	return SlothSvg;
 });
 
 onMounted(() => {
