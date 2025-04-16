@@ -33,8 +33,8 @@
 		</template>
 		<template #footer>
 			<div class="d-flex justify-center align-center mb-4">
-				<v-btn color="primary" variant="flat" @click="extendOrEndSession">
-					{{ $t("components.organisms.AutoLogoutWarning.confirm") }}
+				<v-btn color="primary" variant="flat" @click="extendSession">
+					{{ t("components.organisms.AutoLogoutWarning.confirm") }}
 				</v-btn>
 			</div>
 		</template>
@@ -47,6 +47,7 @@ import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import SlothSvg from "@/assets/img/logout/Sloth.svg";
 import SlothErrorSvg from "@/assets/img/logout/Sloth_error.svg";
+import router from "@/router";
 
 const { t } = useI18n();
 
@@ -55,7 +56,8 @@ const {
 	active,
 	errorOnExtend,
 	remainingTimeInSeconds,
-	extendOrEndSession,
+	sessionStatus,
+	extendSession,
 	initSession,
 } = useAutoLogout();
 

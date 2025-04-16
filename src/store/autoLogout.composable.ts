@@ -7,12 +7,12 @@ import {
 } from "./store-accessor";
 import { useI18n } from "vue-i18n";
 
+const { log } = console;
+
 export const useAutoLogout = () => {
 	const jwtTimerDisabled = computed(
-		() => process.env.NODE_ENV === "development"
+		() => process.env.NODE_ENV === "development" // TODO: is this really needed?
 	);
-
-	const { log } = console;
 
 	const { t } = useI18n();
 	const remainingTimeInSeconds = ref(30 * 2); // 1 minute
@@ -22,8 +22,9 @@ export const useAutoLogout = () => {
 	const sessionStatus: Ref<
 		"continued" | "shouldExtended" | "ended" | "error" | null
 	> = ref(null);
-	let polling: ReturnType<typeof setInterval> | null = null;
 	const isTTLUpdated = ref(false);
+
+	let polling: ReturnType<typeof setInterval> | null = null;
 
 	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
 		envConfigModule.getEnv;
@@ -45,9 +46,14 @@ export const useAutoLogout = () => {
 			if (ttlCount > remainingTimeInSeconds.value) {
 				remainingTimeInSeconds.value = ttlCount;
 				isTTLUpdated.value = true;
+				active.value = false;
+			} else {
+				active.value = true;
+				sessionStatus.value = "shouldExtended";
 			}
 			return ttlCount;
 		} catch {
+			sessionStatus.value = "error";
 			return -1;
 		}
 	};
@@ -60,10 +66,6 @@ export const useAutoLogout = () => {
 
 			if (remainingTimeInSeconds.value <= showWarningOnRemainingSeconds.value) {
 				await getTTL();
-				if (!isTTLUpdated.value) {
-					active.value = true;
-					sessionStatus.value = "shouldExtended";
-				}
 			}
 
 			if (remainingTimeInSeconds.value <= 0) {
@@ -79,7 +81,8 @@ export const useAutoLogout = () => {
 		log("initSession-------", remainingTimeInSeconds.value);
 	};
 
-	const extendOrEndSession = async () => {
+	const extendSession = async () => {
+		// if (jwtTimerDisabled.value) return;
 		if (sessionStatus.value === "ended") {
 			clearInterval(polling!);
 			authModule.logout();
@@ -90,6 +93,7 @@ export const useAutoLogout = () => {
 			const postTTL = await accountsModule.resetJwtTimer();
 			log("postTTL", postTTL);
 			const ttlCount = await getTTL();
+			// throw new Error("error on extend session");
 
 			if (ttlCount > 0) {
 				remainingTimeInSeconds.value = ttlCount;
@@ -101,6 +105,7 @@ export const useAutoLogout = () => {
 				createInterval();
 			}
 		} catch {
+			log("error on extend session");
 			errorOnExtend.value = true;
 			sessionStatus.value = "error";
 		}
@@ -147,11 +152,11 @@ export const useAutoLogout = () => {
 	return {
 		active,
 		errorOnExtend,
-		jwtTimerDisabled,
 		remainingTimeInMinutes,
 		remainingTimeInSeconds,
+		sessionStatus,
 		showWarningOnRemainingSeconds,
-		extendOrEndSession,
+		extendSession,
 		initSession,
 	};
 };
