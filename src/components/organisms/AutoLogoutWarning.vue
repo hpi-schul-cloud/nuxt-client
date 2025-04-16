@@ -6,10 +6,10 @@
 					:src="getImage"
 					class="sloth"
 					role="presentation"
-					:alt="$t('components.organisms.AutoLogoutWarning.image.alt')"
+					:alt="t('components.organisms.AutoLogoutWarning.image.alt')"
 				/>
-				<p v-if="error" class="sloth-text">
-					{{ $t("components.organisms.AutoLogoutWarning.error") }}
+				<p v-if="errorOnExtend" class="sloth-text">
+					{{ t("components.organisms.AutoLogoutWarning.error") }}
 				</p>
 				<p v-else class="sloth-text">
 					<i18n-t
@@ -18,7 +18,7 @@
 					>
 						<span class="text-error">
 							{{
-								$t(
+								t(
 									"components.organisms.AutoLogoutWarning.warning.remainingTime",
 									remainingTimeInMinutes,
 									{
@@ -33,7 +33,7 @@
 		</template>
 		<template #footer>
 			<div class="d-flex justify-center align-center mb-4">
-				<v-btn color="primary" variant="flat" @click="extendSession">
+				<v-btn color="primary" variant="flat" @click="extendOrEndSession">
 					{{ $t("components.organisms.AutoLogoutWarning.confirm") }}
 				</v-btn>
 			</div>
@@ -43,32 +43,22 @@
 
 <script lang="ts" setup>
 import { useAutoLogout } from "@/store/autoLogout.composable";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
-const toast = {
-	error401: -1,
-	error: 0,
-	success: 1,
-};
-
 const { t } = useI18n();
 
-const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const {
-	jwtTimerDisabled,
-	remainingTimeInSeconds,
 	remainingTimeInMinutes,
-	showWarningOnRemainingSeconds,
 	active,
-	error,
-	extendSession,
+	errorOnExtend,
+	remainingTimeInSeconds,
+	extendOrEndSession,
 	initSession,
 } = useAutoLogout();
 
 const getImage = computed(() => {
-	if (error.value)
+	if (errorOnExtend.value)
 		return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth_error.svg";
 	return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth.svg";
 });
@@ -76,37 +66,6 @@ const getImage = computed(() => {
 onMounted(() => {
 	initSession();
 });
-
-const showToast = (state: number) => {
-	switch (state) {
-		case toast.success:
-			notifierModule.show({
-				text: t("components.organisms.AutoLogoutWarning.success"),
-				status: "success",
-				timeout: 5000,
-			});
-			break;
-
-		case toast.error:
-			notifierModule.show({
-				text: t("components.organisms.AutoLogoutWarning.error.retry"),
-				status: "error",
-				timeout: 5000,
-			});
-			break;
-
-		case toast.error401:
-			notifierModule.show({
-				text: t("components.organisms.AutoLogoutWarning.error.401"),
-				status: "error",
-				timeout: 5000,
-			});
-			break;
-
-		default:
-			break;
-	}
-};
 </script>
 
 <style lang="scss" scoped>
