@@ -1,5 +1,6 @@
 import { useLoadingState } from "@/composables/loadingState";
 import { AlertPayload } from "@/store/types/alert-payload";
+import { delay } from "@/utils/helpers";
 import {
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
@@ -34,10 +35,8 @@ export const useRoomDuplication = () => {
 		closeDuplicationInfoDialog();
 		isLoadingDialogOpen.value = true;
 
-		const delay = () => new Promise((resolve) => setTimeout(resolve, 3000));
-
 		try {
-			await delay();
+			await delay(3000);
 			showSuccess();
 
 			// showFailure();
