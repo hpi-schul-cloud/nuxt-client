@@ -206,12 +206,10 @@ const confirmRemoval = async (userIds: string[]) => {
 };
 
 const onChangePermission = (userIds: string[]) => {
-	membersToChangeRole.value =
-		userIds.length === 1
-			? roomMembers.value.filter((member) => member.userId === userIds[0])
-			: roomMembers.value.filter((member) =>
-					selectedIds.value.includes(member.userId)
-				);
+	membersToChangeRole.value = roomMembers.value.filter((member) =>
+		userIds.includes(member.userId)
+	);
+
 	isChangeRoleDialogOpen.value = true;
 };
 
