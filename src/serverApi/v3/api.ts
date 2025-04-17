@@ -1702,7 +1702,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_ROOMS_DUPLICATE_ENABLED: boolean;
+    FEATURE_ROOMS_DUPLICATION_ENABLED: boolean;
     /**
      * 
      * @type {boolean}
