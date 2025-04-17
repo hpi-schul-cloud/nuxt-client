@@ -38,7 +38,7 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 		}
 
 		if (paramsType === CopyParamsTypeEnum.Course) {
-			text = t("components.molecules.copyResult.successfullyCopied");
+			text = t("components.molecules.copyResult.course.successfullyCopied");
 		}
 
 		if (paramsType === CopyParamsTypeEnum.Lesson) {

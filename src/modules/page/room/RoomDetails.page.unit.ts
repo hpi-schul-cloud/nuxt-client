@@ -17,8 +17,13 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { RoomVariant, useRoomDetailsStore, useRoomsState } from "@data-room";
-import { RoomMenu, useRoomAuthorization } from "@feature-room";
+import {
+	RoomVariant,
+	useRoomDetailsStore,
+	useRoomsState,
+	useRoomAuthorization,
+} from "@data-room";
+import { RoomMenu } from "@feature-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { RoomDetailsPage } from "@page-room";
 import { createTestingPinia } from "@pinia/testing";

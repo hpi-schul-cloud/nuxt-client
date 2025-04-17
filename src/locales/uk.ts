@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
+	"common.actions.duplicate": "Дублювати",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
@@ -640,7 +641,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Загальна інформація",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Усі елементи успішно скопійовано.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Дошка успішно скопійована.",
@@ -648,6 +649,8 @@ export default {
 		"Задачу успішно скопійовано.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
 		"Тему успішно скопійовано.",
+	"components.molecules.copyResult.room.successfullyCopied":
+		"Кімнату успішно дубльовано.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Для великих файлів процес копіювання може зайняти більше часу. Вміст буде доступний найближчим часом.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -1809,6 +1812,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
+	"pages.roomDetails.duplication.loading": "Кімната дублюється...",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.infoAlert.welcome": "Ласкаво просимо до нових Кімнат!",

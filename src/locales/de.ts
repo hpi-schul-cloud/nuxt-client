@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
+	"common.actions.duplicate": "Duplizieren",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
 	"common.actions.import": "Importieren",
@@ -632,7 +633,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Bereich erfolgreich kopiert.",
@@ -640,6 +641,8 @@ export default {
 		"Aufgabe erfolgreich kopiert.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
 		"Thema erfolgreich kopiert.",
+	"components.molecules.copyResult.room.successfullyCopied":
+		"Raum erfolgreich dupliziert.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Der Kopiervorgang kann bei großen Dateien länger dauern. Die Inhalte werden in Kürze verfügbar sein.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -1808,6 +1811,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",
+	"pages.roomDetails.duplication.loading": "Raum wird dupliziert...",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.infoAlert.welcome": "Willkommen in den neuen Räumen!",

@@ -6,7 +6,7 @@ import { VueWrapper } from "@vue/test-utils";
 import RoomMenu from "./RoomMenu.vue";
 import { RouterLink } from "vue-router";
 import { ref } from "vue";
-import { useRoomAuthorization } from "./roomAuthorization.composable";
+import { useRoomAuthorization } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionDelete,

@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
+	"common.actions.duplicate": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
 	"common.actions.finish": "Finalizar",
@@ -643,7 +644,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Información general",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Todos los elementos se copiaron con éxito.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Tablero copiado con éxito.",
@@ -651,6 +652,8 @@ export default {
 		"Tarea copiada con éxito.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
 		"Tema copiado con éxito.",
+	"components.molecules.copyResult.room.successfullyCopied":
+		"Sala duplicada con éxito.",
 	"components.molecules.copyResult.timeoutCopy":
 		"El proceso de copia puede tardar más en el caso de archivos de gran tamaño. El contenido estará disponible en breve.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -1830,6 +1833,7 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar sala",
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
+	"pages.roomDetails.duplication.loading": "La sala se está duplicando...",
 	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
 	"pages.rooms.fab.title": "Crear sala",
 	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
