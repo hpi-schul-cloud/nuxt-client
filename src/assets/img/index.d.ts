@@ -33,3 +33,12 @@ declare module "@/assets/img/bbb/not_started.png" {
 	const value: string;
 	export default value;
 }
+
+declare module "@/assets/img/logout/Sloth.svg" {
+	const value: string;
+	export default value;
+}
+declare module "@/assets/img/logout/Sloth_error.svg" {
+	const value: string;
+	export default value;
+}

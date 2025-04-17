@@ -4,7 +4,6 @@ import {
 	accountsModule,
 	applicationErrorModule,
 	authModule,
-	autoLogoutModule,
 	commonCartridgeExportModule,
 	commonCartridgeImportModule,
 	contentModule,
@@ -125,7 +124,6 @@ app.use(VueDOMPurifyHTML, {
 	app.provide("accountsModule", accountsModule);
 	app.provide(APPLICATION_ERROR_KEY.valueOf(), applicationErrorModule);
 	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
-	app.provide("autoLogoutModule", autoLogoutModule);
 	app.provide(CONTENT_MODULE_KEY, contentModule);
 	app.provide(COPY_MODULE_KEY.valueOf(), copyModule);
 	app.provide(ENV_CONFIG_MODULE_KEY.valueOf(), envConfigModule);

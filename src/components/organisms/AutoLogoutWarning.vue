@@ -6,10 +6,10 @@
 					:src="getImage"
 					class="sloth"
 					role="presentation"
-					:alt="$t('components.organisms.AutoLogoutWarning.image.alt')"
+					:alt="t('components.organisms.AutoLogoutWarning.image.alt')"
 				/>
-				<p v-if="error" class="sloth-text">
-					{{ $t("components.organisms.AutoLogoutWarning.error") }}
+				<p v-if="errorOnExtend" class="sloth-text">
+					{{ t("components.organisms.AutoLogoutWarning.error") }}
 				</p>
 				<p v-else class="sloth-text">
 					<i18n-t
@@ -18,7 +18,7 @@
 					>
 						<span class="text-error">
 							{{
-								$t(
+								t(
 									"components.organisms.AutoLogoutWarning.warning.remainingTime",
 									remainingTimeInMinutes,
 									{
@@ -33,101 +33,58 @@
 		</template>
 		<template #footer>
 			<div class="d-flex justify-center align-center mb-4">
-				<v-btn color="primary" variant="flat" @click="extendSession">
-					{{ $t("components.organisms.AutoLogoutWarning.confirm") }}
+				<v-btn color="primary" variant="flat" @click="onConfirm">
+					{{ confirmButtonText }}
 				</v-btn>
 			</div>
 		</template>
 	</base-modal>
 </template>
 
-<script>
-import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+<script lang="ts" setup>
+import { useAutoLogout } from "@/store/autoLogout.composable";
+import { computed, onMounted } from "vue";
+import { useI18n } from "vue-i18n";
+import SlothSvg from "@/assets/img/logout/Sloth.svg";
+import SlothErrorSvg from "@/assets/img/logout/Sloth_error.svg";
+import { useRouter } from "vue-router";
 
-const toast = {
-	error401: -1,
-	error: 0,
-	success: 1,
+const router = useRouter();
+
+const { t } = useI18n();
+
+const {
+	remainingTimeInMinutes,
+	active,
+	errorOnExtend,
+	remainingTimeInSeconds,
+	sessionStatus,
+	extendSession,
+	initSession,
+} = useAutoLogout();
+
+const getImage = computed(() => {
+	if (errorOnExtend.value) return SlothErrorSvg;
+	return SlothSvg;
+});
+
+const confirmButtonText = computed(() => {
+	if (errorOnExtend.value || sessionStatus.value === "ended")
+		return "Return to login page";
+	return t("components.organisms.AutoLogoutWarning.confirm");
+});
+
+const onConfirm = () => {
+	if (errorOnExtend.value || sessionStatus.value === "ended") {
+		router.push("/login");
+	} else {
+		extendSession();
+	}
 };
 
-export default {
-	inject: {
-		autoLogoutModule: { from: "autoLogoutModule" },
-		notifierModule: { from: NOTIFIER_MODULE_KEY },
-	},
-	computed: {
-		remainingTimeInMinutes() {
-			return Math.max(Math.floor(this.remainingTimeInSeconds / 60), 0);
-		},
-		getImage() {
-			if (this.error)
-				return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth_error.svg";
-			return "https://s3.hidrive.strato.com/cloud-instances/images/Sloth.svg";
-		},
-		active: {
-			get() {
-				return this.autoLogoutModule.getActive;
-			},
-			set(value) {
-				if (!value) {
-					this.extendSession();
-				}
-			},
-		},
-		error() {
-			return this.autoLogoutModule.getError;
-		},
-		remainingTimeInSeconds() {
-			return this.autoLogoutModule.getRemainingTimeInSeconds;
-		},
-		toastValue() {
-			return this.autoLogoutModule.getToastValue;
-		},
-	},
-	watch: {
-		toastValue(value) {
-			this.showToast(value);
-		},
-	},
-	created() {
-		this.autoLogoutModule.init();
-	},
-	methods: {
-		extendSession() {
-			this.autoLogoutModule.extendSessionAction();
-		},
-		showToast(state) {
-			switch (state) {
-				case toast.success:
-					this.notifierModule.show({
-						text: this.$t("components.organisms.AutoLogoutWarning.success"),
-						status: "success",
-						timeout: 5000,
-					});
-					break;
-
-				case toast.error:
-					this.notifierModule.show({
-						text: this.$t("components.organisms.AutoLogoutWarning.error.retry"),
-						status: "error",
-						timeout: 5000,
-					});
-					break;
-
-				case toast.error401:
-					this.notifierModule.show({
-						text: this.$t("components.organisms.AutoLogoutWarning.error.401"),
-						status: "error",
-						timeout: 5000,
-					});
-					break;
-
-				default:
-					break;
-			}
-		},
-	},
-};
+onMounted(() => {
+	initSession();
+});
 </script>
 
 <style lang="scss" scoped>
