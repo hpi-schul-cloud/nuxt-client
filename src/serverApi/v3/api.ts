@@ -1715,6 +1715,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     LICENSE_SUMMARY_URL?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    ROOM_MEMBER_INFO_URL: string | null;
 }
 /**
  * 

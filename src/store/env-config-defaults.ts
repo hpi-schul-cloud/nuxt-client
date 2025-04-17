@@ -77,4 +77,5 @@ export const defaultConfigEnvs: ConfigResponse = {
 	FEATURE_VIDIS_MEDIA_ACTIVATIONS_ENABLED: false,
 	FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
 	LICENSE_SUMMARY_URL: "",
+	ROOM_MEMBER_INFO_URL: "",
 };
