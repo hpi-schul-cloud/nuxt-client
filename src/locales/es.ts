@@ -2092,4 +2092,11 @@ export default {
 	"feature.media-shelf.availableLine.title": "Medios disponibles",
 	"feature.media-shelf.layout.list": "Líneas",
 	"feature.media-shelf.layout.grid": "Red",
+	"pages.folder.emptyState": "Actualmente no hay archivos aquí",
+	"pages.folder.fab.title": "Añadir archivo",
+	"pages.folder.untitled": "Carpeta sin título",
+	"pages.folder.title": "Carpeta",
+	"pages.folder.ariaLabels.menu": "Menú carpeta",
+	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",
+	"pages.folder.ariaLabels.menu.action.delete": "Borrar carpeta",
 };

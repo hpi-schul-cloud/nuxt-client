@@ -2063,4 +2063,11 @@ export default {
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
 	"feature.media-shelf.layout.list": "Zeilen",
 	"feature.media-shelf.layout.grid": "Raster",
+	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien.",
+	"pages.folder.fab.title": "Datei hinzufügen",
+	"pages.folder.untitled": "Unbenannter Ordner",
+	"pages.folder.title": "Ordner",
+	"pages.folder.ariaLabels.menu": "Ordner Menü",
+	"pages.folder.ariaLabels.menu.action.edit": "Ordner umbenennen",
+	"pages.folder.ariaLabels.menu.action.delete": "Ordner löschen",
 };
