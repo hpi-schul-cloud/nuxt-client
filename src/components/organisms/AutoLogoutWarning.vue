@@ -33,7 +33,7 @@
 		</template>
 		<template #footer>
 			<div class="d-flex justify-center align-center mb-4">
-				<v-btn color="primary" variant="flat" @click="handleConfirm">
+				<v-btn color="primary" variant="flat" @click="onConfirm">
 					{{ confirmButtonText }}
 				</v-btn>
 			</div>
@@ -74,7 +74,7 @@ const confirmButtonText = computed(() => {
 	return t("components.organisms.AutoLogoutWarning.confirm");
 });
 
-const handleConfirm = () => {
+const onConfirm = () => {
 	if (errorOnExtend.value || sessionStatus.value === "ended") {
 		router.push("/login");
 	} else {
