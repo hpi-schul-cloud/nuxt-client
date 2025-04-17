@@ -29,6 +29,7 @@
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 		<DuplicationInfoDialog
+			v-if="isRoomDuplicationFeatureEnabled"
 			v-model="isDuplicationInfoDialogOpen"
 			@duplication:cancel="cancelDuplication"
 			@duplication:confirm="confirmDuplication"
@@ -187,6 +188,7 @@ const onManageMembers = () => {
 // begin - Duplication Feature
 
 const {
+	isRoomDuplicationFeatureEnabled,
 	isDuplicationInfoDialogOpen,
 	openDuplicationInfoDialog,
 	closeDuplicationInfoDialog,

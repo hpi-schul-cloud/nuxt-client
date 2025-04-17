@@ -1,15 +1,24 @@
 import { useLoadingState } from "@/composables/loadingState";
 import { AlertPayload } from "@/store/types/alert-payload";
-import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import {
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+	NOTIFIER_MODULE_KEY,
+} from "@/utils/inject";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useRoomDuplication = () => {
 	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
+	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const { t } = useI18n();
+
 	const { isLoadingDialogOpen } = useLoadingState(
 		t("pages.roomDetails.duplication.loading")
 	);
+
+	const isRoomDuplicationFeatureEnabled =
+		envConfigModule.getEnv.FEATURE_ROOMS_DUPLICATE_ENABLED;
 
 	const isDuplicationInfoDialogOpen = ref(false);
 
@@ -66,6 +75,7 @@ export const useRoomDuplication = () => {
 	};
 
 	return {
+		isRoomDuplicationFeatureEnabled,
 		isDuplicationInfoDialogOpen,
 		openDuplicationInfoDialog,
 		closeDuplicationInfoDialog,
