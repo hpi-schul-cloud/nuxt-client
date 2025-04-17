@@ -56,7 +56,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
 
-	const checkForExistingRoomId = () => {
+	const getRoomId = () => {
 		if (!roomId.value) {
 			throw new Error("RoomDetailStore is not initialized");
 		}
@@ -66,9 +66,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const fetchMembers = async () => {
 		try {
 			isLoading.value = true;
-			const { data } = (
-				await roomApi.roomControllerGetMembers(checkForExistingRoomId())
-			).data;
+			const { data } = (await roomApi.roomControllerGetMembers(getRoomId()))
+				.data;
 
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
@@ -150,7 +149,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 		try {
 			const { roomRoleName } = (
-				await roomApi.roomControllerAddMembers(checkForExistingRoomId(), {
+				await roomApi.roomControllerAddMembers(getRoomId(), {
 					userIds,
 				})
 			).data;
@@ -169,7 +168,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const removeMembers = async (userIds: string[]) => {
 		try {
-			await roomApi.roomControllerRemoveMembers(checkForExistingRoomId(), {
+			await roomApi.roomControllerRemoveMembers(getRoomId(), {
 				userIds,
 			});
 			roomMembers.value = roomMembers.value.filter(
@@ -184,7 +183,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const leaveRoom = async () => {
 		isLoading.value = true;
 		try {
-			await roomApi.roomControllerLeaveRoom(checkForExistingRoomId());
+			await roomApi.roomControllerLeaveRoom(getRoomId());
 		} catch {
 			showFailure(t("pages.rooms.members.error.remove"));
 		} finally {
@@ -197,13 +196,10 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		id?: string
 	) => {
 		try {
-			await roomApi.roomControllerChangeRolesOfMembers(
-				checkForExistingRoomId(),
-				{
-					userIds: id ? [id] : selectedIds.value,
-					roleName,
-				}
-			);
+			await roomApi.roomControllerChangeRolesOfMembers(getRoomId(), {
+				userIds: id ? [id] : selectedIds.value,
+				roleName,
+			});
 
 			if (id) {
 				const member = roomMembers.value.find((member) => member.userId === id);
@@ -228,7 +224,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const changeRoomOwner = async (userId: string) => {
 		try {
-			await roomApi.roomControllerChangeRoomOwner(checkForExistingRoomId(), {
+			await roomApi.roomControllerChangeRoomOwner(getRoomId(), {
 				userId,
 			});
 			setRoomOwner(userId);
