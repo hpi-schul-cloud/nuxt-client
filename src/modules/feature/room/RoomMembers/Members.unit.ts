@@ -21,6 +21,7 @@ import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
 import { computed } from "vue";
+import EnvConfigModule from "@/store/env-config";
 
 jest.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = jest.mocked(useBoardNotifier);
@@ -45,6 +46,7 @@ describe("Members", () => {
 		setupStores({
 			schoolsModule: SchoolsModule,
 			authModule: AuthModule,
+			envConfigModule: EnvConfigModule,
 		});
 
 		schoolsModule.setSchool(
