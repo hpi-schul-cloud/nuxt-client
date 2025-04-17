@@ -23,7 +23,7 @@
 				scope="global"
 			>
 				<a
-					href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
+					:href="informationLink"
 					target="_blank"
 					rel="noopener"
 					:ariaLabel="linkAriaLabel"
@@ -101,6 +101,7 @@ import {
 import { storeToRefs } from "pinia";
 import { mdiPlus } from "@icons/material";
 import { MembersTable, AddMembers, ChangeRole } from "@feature-room";
+import { envConfigModule } from "@/store";
 import { ChangeRoomRoleBodyParamsRoleNameEnum, RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
@@ -259,5 +260,11 @@ const fabAction = computed(() => {
 const linkAriaLabel = computed(
 	() =>
 		`${t("pages.rooms.members.infoText.moreInformation")}, ${t("common.ariaLabel.newTab")}`
+);
+
+const informationLink = computed(() =>
+	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
+		? envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
+		: "https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
 );
 </script>
