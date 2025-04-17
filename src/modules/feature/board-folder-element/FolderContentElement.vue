@@ -6,6 +6,7 @@
 		elevation="0"
 		variant="outlined"
 		:ripple="false"
+		:to="sanitizedUrl"
 		:tabindex="isEditMode ? 0 : undefined"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
@@ -40,6 +41,7 @@
 
 <script setup lang="ts">
 import { FileFolderElement } from "@/types/board/ContentElement";
+import { sanitizeUrl } from "@braintree/sanitize-url";
 import { useBoardFocusHandler } from "@data-board";
 import { mdiFolderOpenOutline } from "@icons/material";
 import { BoardMenu, BoardMenuScope, ContentElementBar } from "@ui-board";
@@ -48,7 +50,7 @@ import {
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
-import { PropType, ref, toRef } from "vue";
+import { computed, PropType, ref, toRef } from "vue";
 
 const props = defineProps({
 	element: {
@@ -72,6 +74,8 @@ const emit = defineEmits<{
 
 const folderContentElement = ref(null);
 const element = toRef(props, "element");
+
+const sanitizedUrl = computed(() => sanitizeUrl(`/folder/${element.value.id}`));
 
 useBoardFocusHandler(element.value.id, folderContentElement);
 
