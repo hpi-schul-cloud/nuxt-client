@@ -18,7 +18,7 @@ export const useRoomDuplication = () => {
 	);
 
 	const isRoomDuplicationFeatureEnabled =
-		envConfigModule.getEnv.FEATURE_ROOMS_DUPLICATE_ENABLED;
+		envConfigModule.getEnv.FEATURE_ROOMS_DUPLICATION_ENABLED;
 
 	const isDuplicationInfoDialogOpen = ref(false);
 
