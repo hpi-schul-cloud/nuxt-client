@@ -1,13 +1,11 @@
-// import LoadingStateModule from "@/store/loading-state";
-// import { Ref, unref, watch } from "vue";
 import { useLoadingState } from "@/composables/loadingState";
-import { CopyParams } from "@/store/copy";
-import { inject, ref } from "vue";
+import { AlertPayload } from "@/store/types/alert-payload";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-// const isLoadingDialogOpen = ref(false);
-
 export const useRoomDuplication = () => {
+	const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 	const { t } = useI18n();
 	const { isLoadingDialogOpen } = useLoadingState(
 		t("pages.roomDetails.duplication.loading")
@@ -19,30 +17,58 @@ export const useRoomDuplication = () => {
 		isDuplicationInfoDialogOpen.value = true;
 	};
 
-	// const duplicate = async (duplicationData: CopyParams) => {
-	// 	isLoadingDialogOpen.value = true;
-	// 	try {
-	// 		const copyResult = await copyModule?.copy(copyParams);
-	// 		if (
-	// 			copyParams.type !== CopyParamsTypeEnum.Course &&
-	// 			copyResult?.status === CopyApiResponseStatusEnum.Success
-	// 		) {
-	// 			showSuccess(copyParams);
-	// 		} else if (copyResult?.status === CopyApiResponseStatusEnum.Failure) {
-	// 			showFailure();
-	// 		} else {
-	// 			openResultModal();
-	// 		}
-	// 	} catch {
-	// 		markBackgroundCopyProcess(copyParams);
-	// 		showTimeout();
-	// 	} finally {
-	// 		isLoadingDialogOpen.value = false;
-	// 	}
-	// };
+	const closeDuplicationInfoDialog = () => {
+		isDuplicationInfoDialogOpen.value = false;
+	};
+
+	const duplicate = async () => {
+		closeDuplicationInfoDialog();
+		isLoadingDialogOpen.value = true;
+
+		const delay = () => new Promise((resolve) => setTimeout(resolve, 3000));
+
+		try {
+			await delay();
+			showSuccess();
+
+			// showFailure();
+		} catch {
+			// markBackgroundCopyProcess(copyParams);
+			showTimeout();
+		} finally {
+			isLoadingDialogOpen.value = false;
+		}
+	};
+
+	const showSuccess = () => {
+		const notifierPayload: AlertPayload = {
+			text: t("components.molecules.copyResult.room.successfullyCopied"),
+			status: "success",
+		};
+
+		notifierModule.show(notifierPayload);
+	};
+
+	const showFailure = () => {
+		notifierModule.show({
+			text: t("components.molecules.copyResult.failedCopy"),
+			status: "error",
+			autoClose: false,
+		});
+	};
+
+	const showTimeout = () => {
+		notifierModule.show({
+			text: t("components.molecules.copyResult.timeoutCopy"),
+			status: "info",
+			autoClose: false,
+		});
+	};
 
 	return {
 		isDuplicationInfoDialogOpen,
 		openDuplicationInfoDialog,
+		closeDuplicationInfoDialog,
+		duplicate,
 	};
 };
