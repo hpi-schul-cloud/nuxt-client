@@ -1702,6 +1702,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_ROOMS_DUPLICATE_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: boolean;
     /**
      * 
