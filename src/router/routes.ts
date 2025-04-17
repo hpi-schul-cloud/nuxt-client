@@ -1,6 +1,10 @@
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import { checkRoomsFeature, validateQueryParameters } from "@/router/guards";
+import {
+	checkFolderFeature,
+	checkRoomsFeature,
+	validateQueryParameters,
+} from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
@@ -237,6 +241,15 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: () => import("@/pages/NewsEdit.page.vue"),
 		name: "news-id-edit",
 		beforeEnter: createPermissionGuard(["news_edit"]),
+	},
+	{
+		path: `/folder/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-folder")).FolderPage,
+		beforeEnter: [checkFolderFeature],
+		name: "folder-id",
+		props: (route: RouteLocationNormalized) => ({
+			folderId: route.params.id,
+		}),
 	},
 	{
 		path: `/rooms`,
