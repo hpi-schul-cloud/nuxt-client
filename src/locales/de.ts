@@ -642,7 +642,7 @@ export default {
 	"components.molecules.copyResult.lesson.successfullyCopied":
 		"Thema erfolgreich kopiert.",
 	"components.molecules.copyResult.room.successfullyCopied":
-		"Raum erfolgreich kopiert.",
+		"Raum erfolgreich dupliziert.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Der Kopiervorgang kann bei großen Dateien länger dauern. Die Inhalte werden in Kürze verfügbar sein.",
 	"components.molecules.copyResult.timeoutSuccess":

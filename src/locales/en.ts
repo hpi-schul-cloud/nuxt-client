@@ -637,7 +637,7 @@ export default {
 	"components.molecules.copyResult.lesson.successfullyCopied":
 		"Lesson successfully copied.",
 	"components.molecules.copyResult.room.successfullyCopied":
-		"Room successfully copied.",
+		"Room successfully duplicated.",
 	"components.molecules.copyResult.timeoutCopy":
 		"The copy process may take longer for large files. The content will be available shortly.",
 	"components.molecules.copyResult.timeoutSuccess":
