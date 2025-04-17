@@ -33,8 +33,8 @@
 		</template>
 		<template #footer>
 			<div class="d-flex justify-center align-center mb-4">
-				<v-btn color="primary" variant="flat" @click="extendSession">
-					{{ t("components.organisms.AutoLogoutWarning.confirm") }}
+				<v-btn color="primary" variant="flat" @click="handleConfirm">
+					{{ confirmButtonText }}
 				</v-btn>
 			</div>
 		</template>
@@ -47,7 +47,9 @@ import { computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import SlothSvg from "@/assets/img/logout/Sloth.svg";
 import SlothErrorSvg from "@/assets/img/logout/Sloth_error.svg";
-import router from "@/router";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const { t } = useI18n();
 
@@ -65,6 +67,20 @@ const getImage = computed(() => {
 	if (errorOnExtend.value) return SlothErrorSvg;
 	return SlothSvg;
 });
+
+const confirmButtonText = computed(() => {
+	if (errorOnExtend.value || sessionStatus.value === "ended")
+		return "Return to login page";
+	return t("components.organisms.AutoLogoutWarning.confirm");
+});
+
+const handleConfirm = () => {
+	if (errorOnExtend.value || sessionStatus.value === "ended") {
+		router.push("/login");
+	} else {
+		extendSession();
+	}
+};
 
 onMounted(() => {
 	initSession();

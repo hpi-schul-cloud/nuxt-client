@@ -32,10 +32,6 @@ export const useAutoLogout = () => {
 	showWarningOnRemainingSeconds.value = JWT_SHOW_TIMEOUT_WARNING_SECONDS || 30;
 	remainingTimeInSeconds.value = JWT_TIMEOUT_SECONDS || 30 * 2;
 
-	// TODO: remove this hardcoded assignment after branch testing
-	showWarningOnRemainingSeconds.value = 30;
-	remainingTimeInSeconds.value = 30 * 2;
-
 	const remainingTimeInMinutes = computed(() =>
 		Math.max(Math.floor(remainingTimeInSeconds.value / 60), 0)
 	);
@@ -84,7 +80,6 @@ export const useAutoLogout = () => {
 	};
 
 	const extendSession = async () => {
-		// if (jwtTimerDisabled.value) return;
 		if (sessionStatus.value === "ended") {
 			clearInterval(polling!);
 			authModule.logout();
@@ -92,10 +87,8 @@ export const useAutoLogout = () => {
 		}
 
 		try {
-			const postTTL = await accountsModule.resetJwtTimer();
-			log("postTTL", postTTL);
+			await accountsModule.resetJwtTimer();
 			const ttlCount = await getTTL();
-			// throw new Error("error on extend session");
 
 			if (ttlCount > 0) {
 				remainingTimeInSeconds.value = ttlCount;
@@ -107,7 +100,6 @@ export const useAutoLogout = () => {
 				createInterval();
 			}
 		} catch {
-			log("error on extend session");
 			errorOnExtend.value = true;
 			sessionStatus.value = "error";
 		}
