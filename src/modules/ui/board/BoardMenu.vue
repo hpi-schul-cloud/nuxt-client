@@ -29,10 +29,10 @@
 <script setup lang="ts">
 import type { MessageSchema } from "@/locales/schema";
 import { mdiDotsVertical } from "@icons/material";
-import { computed, PropType } from "vue";
-import { BoardMenuScope } from "./board-menu-scope";
-import { useI18n } from "vue-i18n";
 import { KebabMenuList } from "@ui-kebab-menu";
+import { computed, PropType } from "vue";
+import { useI18n } from "vue-i18n";
+import { BoardMenuScope } from "./board-menu-scope";
 
 const { t } = useI18n();
 
@@ -74,6 +74,7 @@ const ariaLabelForScope: Record<BoardMenuScope, keyof MessageSchema> = {
 		"components.board.menu.mediaExternalToolElement",
 	[BoardMenuScope.VIDEO_CONFERENCE_ELEMENT]:
 		"components.board.menu.videoConferenceElement",
+	[BoardMenuScope.H5P_ELEMENT]: "components.board.menu.h5pElement",
 };
 
 const boardMenuAriaLabel = computed(() => {

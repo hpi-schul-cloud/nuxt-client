@@ -877,10 +877,10 @@ export interface CardResponse {
     height: number;
     /**
      * 
-     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse>}
+     * @type {Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>}
      * @memberof CardResponse
      */
-    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse>;
+    elements: Array<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>;
     /**
      * 
      * @type {VisibilitySettingsResponse}
@@ -1504,6 +1504,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_COLUMN_BOARD_H5P_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_COURSE_SHARE: boolean;
     /**
      * 
@@ -1921,7 +1927,8 @@ export enum ContentElementType {
     CollaborativeTextEditor = 'collaborativeTextEditor',
     VideoConference = 'videoConference',
     FileFolder = 'fileFolder',
-    Deleted = 'deleted'
+    Deleted = 'deleted',
+    H5p = 'h5p'
 }
 
 /**
@@ -2236,6 +2243,7 @@ export enum CopyApiResponseTypeEnum {
     FileFolderElement = 'FILE_FOLDER_ELEMENT',
     DrawingElement = 'DRAWING_ELEMENT',
     FileGroup = 'FILE_GROUP',
+    H5PElement = 'H5P_ELEMENT',
     Leaf = 'LEAF',
     Lesson = 'LESSON',
     LessonContentEtherpad = 'LESSON_CONTENT_ETHERPAD',
@@ -2606,7 +2614,8 @@ export enum CreateCardBodyParamsRequiredEmptyElementsEnum {
     CollaborativeTextEditor = 'collaborativeTextEditor',
     VideoConference = 'videoConference',
     FileFolder = 'fileFolder',
-    Deleted = 'deleted'
+    Deleted = 'deleted',
+    H5p = 'h5p'
 }
 
 /**
@@ -4267,6 +4276,82 @@ export interface GroupUserResponse {
      * @memberof GroupUserResponse
      */
     role: RoleName;
+}
+/**
+ * 
+ * @export
+ * @interface H5pContentBody
+ */
+export interface H5pContentBody {
+    /**
+     * 
+     * @type {string}
+     * @memberof H5pContentBody
+     */
+    contentId?: string;
+}
+/**
+ * 
+ * @export
+ * @interface H5pElementContent
+ */
+export interface H5pElementContent {
+    /**
+     * 
+     * @type {string}
+     * @memberof H5pElementContent
+     */
+    contentId: string | null;
+}
+/**
+ * 
+ * @export
+ * @interface H5pElementContentBody
+ */
+export interface H5pElementContentBody {
+    /**
+     * the type of the updated element
+     * @type {ContentElementType}
+     * @memberof H5pElementContentBody
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {H5pContentBody}
+     * @memberof H5pElementContentBody
+     */
+    content: H5pContentBody;
+}
+/**
+ * 
+ * @export
+ * @interface H5pElementResponse
+ */
+export interface H5pElementResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof H5pElementResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {ContentElementType}
+     * @memberof H5pElementResponse
+     */
+    type: ContentElementType;
+    /**
+     * 
+     * @type {H5pElementContent}
+     * @memberof H5pElementResponse
+     */
+    content: H5pElementContent;
+    /**
+     * 
+     * @type {TimestampsResponse}
+     * @memberof H5pElementResponse
+     */
+    timestamps: TimestampsResponse;
 }
 /**
  * 
@@ -9798,10 +9883,10 @@ export interface UpdateBoardTitleParams {
 export interface UpdateElementContentBodyParams {
     /**
      * 
-     * @type {FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody | FileFolderElementContentBody}
+     * @type {FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody | FileFolderElementContentBody | H5pElementContentBody}
      * @memberof UpdateElementContentBodyParams
      */
-    data: FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody | FileFolderElementContentBody;
+    data: FileElementContentBody | LinkElementContentBody | RichTextElementContentBody | SubmissionContainerElementContentBody | ExternalToolElementContentBody | DrawingElementContentBody | VideoConferenceElementContentBody | FileFolderElementContentBody | H5pElementContentBody;
 }
 /**
  * 
@@ -13601,7 +13686,7 @@ export const BoardCardApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse>> {
+        async cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.cardControllerCreateElement(cardId, createContentElementBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -13681,7 +13766,7 @@ export const BoardCardApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse> {
+        cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse> {
             return localVarFp.cardControllerCreateElement(cardId, createContentElementBodyParams, options).then((request) => request(axios, basePath));
         },
         /**
@@ -13755,7 +13840,7 @@ export interface BoardCardApiInterface {
      * @throws {RequiredError}
      * @memberof BoardCardApiInterface
      */
-    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse>;
+    cardControllerCreateElement(cardId: string, createContentElementBodyParams: CreateContentElementBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | DeletedElementResponse | VideoConferenceElementResponse | H5pElementResponse>;
 
     /**
      * 
@@ -14622,7 +14707,7 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse>> {
+        async elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -14696,7 +14781,7 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse> {
+        elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse> {
             return localVarFp.elementControllerUpdateElement(contentElementId, updateElementContentBodyParams, options).then((request) => request(axios, basePath));
         },
     };
@@ -14769,7 +14854,7 @@ export interface BoardElementApiInterface {
      * @throws {RequiredError}
      * @memberof BoardElementApiInterface
      */
-    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse>;
+    elementControllerUpdateElement(contentElementId: string, updateElementContentBodyParams: UpdateElementContentBodyParams, options?: any): AxiosPromise<ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | VideoConferenceElementResponse | FileFolderElementResponse | H5pElementResponse>;
 
 }
 

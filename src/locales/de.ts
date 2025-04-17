@@ -418,6 +418,7 @@ export default {
 	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
 	"components.board.menu.videoConferenceElement":
 		"Videokonferenz-Einstellungen",
+	"components.board.menu.h5pElement": "Interaktives-Lernelement-Einstellungen",
 	"components.board.menu.deletedElement": "Gelöschter-Inhalt-Einstellungen",
 	"components.board.notifications.errors.fileNameExists":
 		"Es existiert bereits eine Datei mit diesem Namen.",
@@ -523,6 +524,7 @@ export default {
 	"components.cardElement.deletedElement": "Gelöschter Inhalt",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
+	"components.cardElement.h5pElement": "Interaktives Lernelement",
 	"components.datePicker.validation.format":
 		"Bitte Format DD.MM.YYYY verwenden.",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
@@ -548,6 +550,8 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
 		"Videokonferenz",
+	"components.elementTypeSelection.elements.h5pElement.subtitle":
+		"Interaktives Lernelement",
 	"components.externalTools.status.deactivated": "Deaktiviert",
 	"components.externalTools.status.incomplete": "Unvollständig",
 	"components.externalTools.status.latest": "Aktuell",

@@ -1,9 +1,10 @@
-import { KebabMenuAction, KebabMenuActionDelete } from "@ui-kebab-menu";
-import { shallowMount } from "@vue/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { KebabMenuAction, KebabMenuActionDelete } from "@ui-kebab-menu";
+import { shallowMount } from "@vue/test-utils";
+import { nextTick } from "vue";
 import ExternalToolElementMenu from "./ExternalToolElementMenu.vue";
 
 describe("ExternalToolElementMenu", () => {
@@ -57,12 +58,13 @@ describe("ExternalToolElementMenu", () => {
 			expect(menuItem.exists()).toEqual(true);
 		});
 
-		it("should emit the edit event on click", () => {
+		it("should emit the edit event on click", async () => {
 			const { wrapper } = setup();
 
 			const menuItem = wrapper.findComponent(KebabMenuAction);
 
 			menuItem.vm.$emit("click");
+			await nextTick();
 
 			expect(wrapper.emitted("edit:element")).toBeDefined();
 		});
@@ -97,7 +99,8 @@ describe("ExternalToolElementMenu", () => {
 
 			const menuItem = wrapper.findComponent(KebabMenuActionDelete);
 
-			await menuItem.trigger("click");
+			menuItem.vm.$emit("click", Promise.resolve(true));
+			await nextTick();
 
 			expect(wrapper.emitted("delete:element")).toBeDefined();
 		});

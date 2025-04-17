@@ -140,7 +140,6 @@ describe("LinkContentElement", () => {
 		mockedUseContentElementState.mockReturnValue({
 			modelValue: ref(element.content),
 			computedElement: computed(() => element),
-			isLoading: ref(false),
 		});
 
 		useMetaTagExtractorApiMock.getMetaTags.mockImplementation(
