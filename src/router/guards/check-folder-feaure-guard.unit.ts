@@ -40,7 +40,7 @@ describe("checkFolderFeature Guard", () => {
 			});
 		};
 
-		it("should call next with no arguments", () => {
+		it("should call next with correct arguments", () => {
 			setup();
 
 			const to = {} as RouteLocationNormalized;
