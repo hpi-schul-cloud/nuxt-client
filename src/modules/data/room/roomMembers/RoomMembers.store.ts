@@ -14,15 +14,21 @@ import { useBoardNotifier } from "@util-board";
 import { schoolsModule } from "@/store";
 import { authModule } from "@/store/store-accessor";
 import { logger } from "@util-logger";
+import { defineStore, storeToRefs } from "pinia";
+import { useRoomDetailsStore } from "@data-room";
 
-export const useRoomMembers = (roomId: string) => {
+export const useRoomMembersStore = defineStore("roomMembersStore", () => {
+	const { t } = useI18n();
+	const { showFailure } = useBoardNotifier();
+
+	const { room } = storeToRefs(useRoomDetailsStore());
+	const roomId = computed(() => room.value?.id);
+
 	const roomMembers: Ref<RoomMember[]> = ref([]);
 	const potentialRoomMembers: Ref<Omit<RoomMember, "roomRoleName">[]> = ref([]);
 
+	const isLoading = ref<boolean>(false);
 	const schools: Ref<SchoolForExternalInviteResponse[]> = ref([]);
-	const isLoading = ref(false);
-	const { t } = useI18n();
-	const { showFailure } = useBoardNotifier();
 	const ownSchool = {
 		id: schoolsModule.getSchool.id,
 		name: schoolsModule.getSchool.name,
@@ -50,10 +56,18 @@ export const useRoomMembers = (roomId: string) => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
 
+	const getRoomId = () => {
+		if (!roomId.value) {
+			throw new Error("RoomDetailStore is not initialized");
+		}
+		return roomId.value;
+	};
+
 	const fetchMembers = async () => {
 		try {
 			isLoading.value = true;
-			const { data } = (await roomApi.roomControllerGetMembers(roomId)).data;
+			const { data } = (await roomApi.roomControllerGetMembers(getRoomId()))
+				.data;
 
 			roomMembers.value = data.map((member: RoomMemberResponse) => {
 				return {
@@ -66,6 +80,7 @@ export const useRoomMembers = (roomId: string) => {
 					displaySchoolRole: getSchoolRoleName(member.schoolRoleNames),
 				};
 			});
+
 			isLoading.value = false;
 		} catch {
 			showFailure(t("pages.rooms.members.error.load"));
@@ -134,7 +149,9 @@ export const useRoomMembers = (roomId: string) => {
 
 		try {
 			const { roomRoleName } = (
-				await roomApi.roomControllerAddMembers(roomId, { userIds })
+				await roomApi.roomControllerAddMembers(getRoomId(), {
+					userIds,
+				})
 			).data;
 			roomMembers.value.push(
 				...newMembers.map((member) => ({
@@ -151,7 +168,7 @@ export const useRoomMembers = (roomId: string) => {
 
 	const removeMembers = async (userIds: string[]) => {
 		try {
-			await roomApi.roomControllerRemoveMembers(roomId, {
+			await roomApi.roomControllerRemoveMembers(getRoomId(), {
 				userIds,
 			});
 			roomMembers.value = roomMembers.value.filter(
@@ -166,7 +183,7 @@ export const useRoomMembers = (roomId: string) => {
 	const leaveRoom = async () => {
 		isLoading.value = true;
 		try {
-			await roomApi.roomControllerLeaveRoom(roomId);
+			await roomApi.roomControllerLeaveRoom(getRoomId());
 		} catch {
 			showFailure(t("pages.rooms.members.error.remove"));
 		} finally {
@@ -179,7 +196,7 @@ export const useRoomMembers = (roomId: string) => {
 		id?: string
 	) => {
 		try {
-			await roomApi.roomControllerChangeRolesOfMembers(roomId, {
+			await roomApi.roomControllerChangeRolesOfMembers(getRoomId(), {
 				userIds: id ? [id] : selectedIds.value,
 				roleName,
 			});
@@ -207,7 +224,9 @@ export const useRoomMembers = (roomId: string) => {
 
 	const changeRoomOwner = async (userId: string) => {
 		try {
-			await roomApi.roomControllerChangeRoomOwner(roomId, { userId });
+			await roomApi.roomControllerChangeRoomOwner(getRoomId(), {
+				userId,
+			});
 			setRoomOwner(userId);
 		} catch {
 			showFailure(t("pages.rooms.members.error.updateRole"));
@@ -236,10 +255,19 @@ export const useRoomMembers = (roomId: string) => {
 		member.isSelectable = false;
 	};
 
+	const resetStore = () => {
+		isLoading.value = false;
+		roomMembers.value = [];
+		schools.value = [];
+		potentialRoomMembers.value = [];
+		selectedIds.value = [];
+	};
+
 	return {
 		addMembers,
 		changeRoomOwner,
 		fetchMembers,
+		resetStore,
 		getPotentialMembers,
 		getSchools,
 		leaveRoom,
@@ -252,4 +280,4 @@ export const useRoomMembers = (roomId: string) => {
 		selectedIds,
 		schools,
 	};
-};
+});

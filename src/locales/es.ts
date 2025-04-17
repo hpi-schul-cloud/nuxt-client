@@ -1868,6 +1868,13 @@ export default {
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Cambiar autorizaciones de sala para {memberFullName}",
 	"pages.rooms.members.manage": "Miembros de la sala",
+	"pages.rooms.members.tab.members": "Miembros",
+	"pages.rooms.members.tab.invitations": "Invitaciones",
+	"pages.rooms.members.tab.invitations.infoText":
+		"Los profesores de tu propio centro y los de otros centros pueden ser invitados a la sala mediante un enlace de invitación. Los alumnos de otras escuelas siempre deben ser añadidos a la sala por un profesor supervisor de su escuela. Si la opción „Confirmar antes de unirse” está activada en la configuración del enlace, esto se puede hacer en la pestaña „Confirmaciones”",
+	"pages.rooms.members.tab.confirmations": "Confirmaciones",
+	"pages.rooms.members.tab.confirmations.infoText":
+		"Si al crear un enlace de invitación está activada la opción „Entrar en la sala sólo tras confirmación”, al hacer clic en el enlace se genera primero una solicitud de afiliación. Esta puede confirmarse o rechazarse aquí. Si se confirma la solicitud de afiliación, la persona recibe acceso a todos los contenidos de la sala y aparece en la lista de miembros.",
 	"pages.rooms.members.remove.ariaLabel":
 		"Eliminar {memberFullName} de la sala",
 	"pages.rooms.members.resetSelection.ariaLabel":
