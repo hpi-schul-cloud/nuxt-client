@@ -7,15 +7,16 @@
 			:audio-record-properties="audioRecordProperties"
 			:element-id="audioRecordProperties.element.id"
 			:is-edit-mode="isEditMode"
-			:show-menu="true"
+			:show-menu="isMenuShownOnFileDisplay"
 		/>
 	</div>
 	<div>
 		<AudioRecordDescription
 			:caption="audioRecordProperties.element.content.caption"
-			:show-title="true"
-			:show-menu="true"
-			:is-edit-mode="true"
+			:show-title="showTitle"
+			:show-menu="isMenuShownOnFileDisplay"
+			:is-edit-mode="isEditMode"
+			@add:alert="onAddAlert"
 		/>
 		<AudioRecordInputs
 			:audio-record-properties="audioRecordProperties"
@@ -23,25 +24,33 @@
 			@update:alternative-text="onUpdateText"
 			@update:caption="onUpdateCaption"
 		/>
+		<AudioRecordContentElementFooter
+			:audio-record-properties="audioRecordProperties"
+		/>
+		<AudioRecordAlerts :alerts="alerts" @on-status-reload="onFetchFile" />
 	</div>
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref } from "vue";
+import { computed, PropType } from "vue";
 import AudioRecordContentTitle from "./AudioRecordContentTitle.vue";
 import AudioRecordDisplay from "./display/AudioRecordDisplay.vue";
 import AudioRecordDescription from "./display/description/AudioRecordDescription.vue";
 import AudioRecordInputs from "./inputs/AudioRecordInputs.vue";
+import AudioRecordContentElementFooter from "./footer/AudioRecordContentElementFooter.vue";
 
+import { isAudioMimeType } from "@/utils/fileHelper";
 import { useDebounceFn } from "@vueuse/core";
 import { AudioRecordProperties } from "../../types/audio-record-properties";
-
-defineProps({
+import { AudioRecordAlert } from "./alert/AudioRecordAlert.enum";
+import AudioRecordAlerts from "./alert/AudioRecordAlert.vue";
+const props = defineProps({
 	audioRecordProperties: {
 		type: Object as PropType<AudioRecordProperties>,
 		required: true,
 	},
 	isEditMode: { type: Boolean, required: true },
+	alerts: { type: Array as PropType<AudioRecordAlert[]>, required: true },
 });
 
 const emit = defineEmits([
@@ -51,6 +60,15 @@ const emit = defineEmits([
 	"add:alert",
 ]);
 
+const showTitle = computed(() => {
+	return hasAudioMimeType.value;
+});
+const hasAudioMimeType = computed(() => {
+	return isAudioMimeType(props.audioRecordProperties.mimeType);
+});
+const onFetchFile = () => {
+	emit("fetch:file");
+};
 const onUpdateCaption = useDebounceFn((value: string) => {
 	emit("update:caption", value);
 }, 600);
@@ -58,6 +76,15 @@ const onUpdateCaption = useDebounceFn((value: string) => {
 const onUpdateText = useDebounceFn((value: string) => {
 	emit("update:alternativeText", value);
 }, 600);
+const onAddAlert = (alert: AudioRecordAlert) => {
+	emit("add:alert", alert);
+};
+const isMenuShownOnFileDisplay = computed(() => {
+	const isFileDisplayRendered =
+		!!props.audioRecordProperties.previewUrl || hasAudioMimeType.value;
+
+	return isFileDisplayRendered;
+});
 </script>
 
 <style lang="scss" scoped>

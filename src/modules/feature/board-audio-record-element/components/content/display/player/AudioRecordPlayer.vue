@@ -2,34 +2,13 @@
 	<ContentElementBar class="audio-player bg-grey-darken-3">
 		<template #element>
 			<div class="d-flex flex-nowrap pb-0 pl-2 pr-1 fill-height align-center">
+				<audio
+					ref="audio"
+					loading="lazy"
+					data-testid="audio-thumbnail-in-card"
+				/>
 				<v-btn
-					v-if="state === RecordingStateEnum.INACTIVE"
-					:aria-label="
-						$t('component.cardElement.audioRecordElement.audioPlayer.record')
-					"
-					color="transparent"
-					density="comfortable"
-					icon
-					variant="flat"
-					@click="onStart"
-				>
-					<v-icon>{{ mdiMicrophone }}</v-icon>
-				</v-btn>
-				<v-btn
-					v-if="state === RecordingStateEnum.INACTIVE && audioUrl"
-					:aria-label="
-						$t('component.cardElement.audioRecordElement.audioPlayer.play')
-					"
-					color="transparent"
-					density="comfortable"
-					icon
-					variant="flat"
-					@click="play"
-				>
-					<v-icon>{{ mdiPlay }}</v-icon>
-				</v-btn>
-				<v-btn
-					v-if="state === RecordingStateEnum.RECORDING"
+					v-if="playing"
 					:aria-label="
 						$t('component.cardElement.audioRecordElement.audioPlayer.pause')
 					"
@@ -37,234 +16,129 @@
 					density="comfortable"
 					icon
 					variant="flat"
-					@click="onPause"
+					@click="onPlay"
 				>
-					<v-icon>{{ mdiPause }}</v-icon>
+					<v-icon> {{ mdiPause }}</v-icon>
 				</v-btn>
 				<v-btn
-					v-if="state === RecordingStateEnum.PAUSED"
+					v-else
 					:aria-label="
-						$t(
-							'component.cardElement.audioRecordElement.audioPlayer.resumeRecording'
-						)
+						$t('component.cardElement.audioRecordElement.audioPlayer.play')
 					"
 					color="transparent"
 					density="comfortable"
 					icon
 					variant="flat"
-					@click="onResume"
+					@click="onPlay"
 				>
-					<v-icon>{{ mdiMicrophone }}</v-icon>
-				</v-btn>
-				<v-btn
-					v-if="state !== RecordingStateEnum.INACTIVE"
-					:aria-label="
-						$t(
-							'component.cardElement.audioRecordElement.audioPlayer.stopRecording'
-						)
-					"
-					color="transparent"
-					density="comfortable"
-					icon
-					variant="flat"
-					@click="stopRecording"
-				>
-					<v-icon>{{ mdiStop }}</v-icon>
+					<v-icon>{{ mdiPlay }}</v-icon>
 				</v-btn>
 				<div class="duration py-1 pl-1 pr-2 text-body-2">
-					{{ elapsedTimeDisplay }}
+					{{ durationDisplay }}
 				</div>
-				<!-- <div>
-					<v-slider
-						:aria-label="
-							$t('component.cardElement.audioRecordElement.audioPlayer.slider')
-						"
-						class="duration-slider"
-						color="white"
-						thumb-color="white"
-						track-color="black"
-						:start="0"
-						:end="duration"
-						:step="durationStep"
-						:min="0"
-						:max="duration"
-					/>
-				</div> -->
-				<audio
-					v-if="audioUrl"
-					ref="audio"
-					controls
-					:src="audioUrl"
-					class="ml-2"
+				<v-slider
+					:aria-label="
+						$t('component.cardElement.audioRecordElement.audioPlayer.slider')
+					"
+					class="duration-slider"
+					color="white"
+					thumb-color="white"
+					track-color="black"
+					:model-value="currentTime"
+					start="0"
+					end="duration"
+					step="durationStep"
+					:min="0"
+					:max="duration"
+					@update:model-value="onInputSlider"
 				/>
-				<v-btn
-					v-show="state === RecordingStateEnum.INACTIVE && audioUrl"
-					class="float-right download-button"
-					icon
-					size="small"
-					variant="text"
-					@click="onUpload"
-				>
-					<v-icon>{{ mdiTrayArrowUp }}</v-icon>
-				</v-btn>
+				<div class="pl-2">
+					<SpeedMenu :rate="rate" @update-rate="onSpeedRateChange" />
+				</div>
 			</div>
+		</template>
+		<template v-if="showMenu" #menu>
+			<slot />
 		</template>
 	</ContentElementBar>
 </template>
 
 <script lang="ts">
-import {
-	mdiPause,
-	mdiPlay,
-	mdiStop,
-	mdiMicrophone,
-	mdiTrayArrowUp,
-} from "@icons/material";
+import { mdiPause, mdiPlay, mdiPlaySpeed } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
-import { computed, defineComponent, ref, onUnmounted } from "vue";
-import {
-	useAudioRecorder,
-	RecordingStateEnum,
-	useFileStorageApi,
-} from "../../../../composables";
 import { useMediaControls } from "@vueuse/core";
+import { computed, defineComponent, ref } from "vue";
 import { formatSecondsToHourMinSec } from "../../../../../../../utils/fileHelper";
-import { FileRecordParentType } from "../../../../../../../fileStorageApi/v3";
+import AudioRecordAlert from "../../alert/AudioRecordAlert.vue";
+import SpeedMenu from "./SpeedMenu.vue";
 
 export default defineComponent({
 	name: "AudioRecordPlayer",
-	components: { ContentElementBar },
+	components: { ContentElementBar, SpeedMenu },
 	props: {
+		src: { type: String, required: true },
 		showMenu: { type: Boolean, required: true },
-		elementId: { type: String, required: true },
 	},
 	emits: ["error"],
 	setup(props, { emit }) {
-		const audio = ref<HTMLAudioElement | null>(null);
-		const audioUrl = ref<string>("");
+		const audio = ref();
+		const source = computed(() => {
+			return props.src;
+		});
 
-		// Use Media Controls
 		const controls = useMediaControls(audio, {
-			src: audioUrl,
+			src: source,
 		});
 
 		const { playing, currentTime, duration, volume, rate, onSourceError } =
 			controls;
 
-		// Audio Recorder
-		const {
-			mediaRecorder,
-			chunks,
-			state,
-			isSupportedByBrowser,
-			start,
-			stop,
-			pause,
-			resume,
-		} = useAudioRecorder();
+		onSourceError(() => {
+			emit("error", AudioRecordAlert.AUDIO_FORMAT_ERROR);
+		});
 
-		const { upload } = useFileStorageApi();
-
-		const elapsedTime = ref(0);
-		let intervalId: number | null = null;
-
-		const onStart = async () => {
-			await start();
-			elapsedTime.value = 0;
-			intervalId = window.setInterval(() => {
-				elapsedTime.value += 1;
-			}, 1000);
+		const onPlay = () => {
+			playing.value = !playing.value;
 		};
 
-		const onPause = () => {
-			pause();
-			if (intervalId) {
-				clearInterval(intervalId);
-				intervalId = null;
-			}
+		const onInputSlider = (seconds: number) => {
+			controls.currentTime.value = seconds;
 		};
 
-		const onResume = () => {
-			resume();
-			intervalId = window.setInterval(() => {
-				elapsedTime.value += 1;
-			}, 1000);
+		const onSpeedRateChange = (rate: number) => {
+			controls.rate.value = rate;
 		};
 
-		const stopRecording = async () => {
-			const blob = await stop();
-			if (blob) {
-				audioUrl.value = URL.createObjectURL(blob);
-				if (audio.value) {
-					audio.value.src = audioUrl.value;
-				}
-			}
-			if (intervalId) {
-				clearInterval(intervalId);
-				intervalId = null;
-			}
-		};
-
-		const play = () => {
-			if (audio.value) {
-				audio.value.play();
-			}
-		};
-
-		const onUpload = async () => {
-			if (audioUrl.value) {
-				const response = await fetch(audioUrl.value);
-				const blob = await response.blob();
-				const file = new File([blob], `audio-${Math.random().toString()}`, {
-					type: blob.type,
-				});
-				await upload(file, props.elementId, FileRecordParentType.BOARDNODES);
-			}
-		};
-
-		const elapsedTimeDisplay = computed(() => {
-			return formatSecondsToHourMinSec(elapsedTime.value);
+		const durationDisplay = computed(() => {
+			const durationValue = formatSecondsToHourMinSec(duration.value);
+			const currentTimeValue = formatSecondsToHourMinSec(currentTime.value);
+			return currentTimeValue + " / " + durationValue;
 		});
 
 		// Moving these variables to template causes the audio not to play on iOS
-
-		onUnmounted(() => {
-			if (intervalId) {
-				clearInterval(intervalId);
-			}
-		});
+		const durationStep = 0.0000001;
+		const volumeStep = 0.01;
 
 		return {
-			mdiTrayArrowUp,
-			duration,
-			elapsedTimeDisplay,
+			durationStep,
+			volumeStep,
 			audio,
-			audioUrl,
-			mdiPlay,
-			mdiPause,
-			mdiStop,
-			mdiMicrophone,
-			mediaRecorder,
-			chunks,
-			state,
-			isSupportedByBrowser,
-			onStart,
-			onPause,
-			onResume,
-			stopRecording,
-			play,
-			onUpload,
-			RecordingStateEnum,
 			playing,
 			currentTime,
+			duration,
 			volume,
 			rate,
-			onSourceError,
+			onSpeedRateChange,
+			mdiPlay,
+			mdiPause,
+			mdiPlaySpeed,
+			onPlay,
+			onInputSlider,
+			durationDisplay,
 		};
 	},
 });
 </script>
-
 <style scoped lang="scss">
 .audio-player {
 	border-top-right-radius: 0.25rem;

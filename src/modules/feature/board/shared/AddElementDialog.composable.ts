@@ -184,7 +184,6 @@ export const useAddElementDialog = (
 		});
 	}
 
-	//if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_AUDIO_RECORDING_ENABLED) {
 	options.push({
 		icon: mdiMicrophone,
 		label: t(
@@ -193,7 +192,6 @@ export const useAddElementDialog = (
 		action: () => onElementClick(ContentElementType.AudioRecord),
 		testId: "create-element-audio-record-container",
 	});
-	//}
 
 	const askType = () => {
 		elementTypeOptions.value = options;

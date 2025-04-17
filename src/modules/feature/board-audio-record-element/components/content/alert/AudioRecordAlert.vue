@@ -46,6 +46,7 @@ export default defineComponent({
 			required: true,
 		},
 	},
+	emits: ["on-status-reload"],
 	setup(props, { emit }) {
 		const { t } = useI18n();
 

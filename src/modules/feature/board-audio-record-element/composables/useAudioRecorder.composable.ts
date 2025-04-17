@@ -77,7 +77,7 @@ export const useAudioRecorder = () => {
 				return resolve(null);
 			}
 
-			const mimeType: string = mediaRecorder.value.mimeType;
+			const mimeType = "audio/wav";
 			mediaRecorder.value.onstop = (): void => {
 				const blob: Blob = new Blob(chunks.value, { type: mimeType });
 
@@ -138,7 +138,7 @@ export const useAudioRecorder = () => {
 	};
 
 	onUnmounted((): void => {
-		//dispose();
+		dispose();
 	});
 
 	return {

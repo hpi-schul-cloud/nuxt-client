@@ -1,21 +1,25 @@
 <template>
 	<AudioRecordPlayer
-		:element-id="elementId"
+		:src="audioRecordProperties.url"
 		:show-menu="showMenu"
 		@error="onAddAlert"
 	/>
 </template>
 
 <script setup lang="ts">
+import { PropType } from "vue";
+import { AudioRecordProperties } from "../../../types/audio-record-properties";
 import { AudioRecordAlert } from "../alert/AudioRecordAlert.enum";
 import AudioRecordPlayer from "../display/player/AudioRecordPlayer.vue";
-
-const props = defineProps({
+defineProps({
+	audioRecordProperties: {
+		type: Object as PropType<AudioRecordProperties>,
+		required: true,
+	},
 	isEditMode: { type: Boolean, required: true },
 	showMenu: { type: Boolean, required: true },
-	elementId: { type: String, required: true },
 });
-const emit = defineEmits(["audio-error", "add:alert"]);
+const emit = defineEmits(["add:alert"]);
 
 const onAddAlert = (alert: AudioRecordAlert) => {
 	emit("add:alert", alert);
