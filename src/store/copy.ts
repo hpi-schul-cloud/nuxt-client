@@ -9,8 +9,6 @@ import {
 	CopyApiResponseTypeEnum,
 	CourseRoomsApiFactory,
 	CourseRoomsApiInterface,
-	RoomApiFactory,
-	RoomApiInterface,
 	ShareTokenApiFactory,
 	ShareTokenApiInterface,
 	ShareTokenInfoResponse,
@@ -31,7 +29,6 @@ export enum CopyParamsTypeEnum {
 	Lesson = "lesson",
 	Course = "course",
 	ColumnBoard = "columnBoard",
-	Room = "room",
 }
 
 interface CopyByShareTokenPayload {
@@ -51,10 +48,6 @@ export default class CopyModule extends VuexModule {
 	private copyResultFailedItems: CopyResultItem[] = [];
 	private isResultModalOpen = false;
 	private hasDrawingChild = false;
-
-	private get roomApi(): RoomApiInterface {
-		return RoomApiFactory(undefined, "/v3", $axios);
-	}
 
 	private get roomsApi(): CourseRoomsApiInterface {
 		return CourseRoomsApiFactory(undefined, "/v3", $axios);
@@ -108,12 +101,6 @@ export default class CopyModule extends VuexModule {
 				.boardControllerCopyBoard(id)
 				.then((response) => response.data);
 		}
-
-		// if (type === CopyParamsTypeEnum.Room) {
-		// 	copyResult = await this.roomApi
-		// 		.roomControllerCopyRoom(id)
-		// 		.then((response) => response.data);
-		// }
 
 		if (copyResult === undefined) {
 			throw new Error("CopyProcess unknown type: " + type);

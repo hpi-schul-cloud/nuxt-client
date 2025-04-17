@@ -33,10 +33,6 @@ export function useCopy(isLoadingDialogOpen: Ref<boolean>) {
 		const status = "success";
 		let text = "";
 
-		if (paramsType === CopyParamsTypeEnum.Room) {
-			text = t("components.molecules.copyResult.room.successfullyCopied");
-		}
-
 		if (paramsType === CopyParamsTypeEnum.ColumnBoard) {
 			text = t("components.molecules.copyResult.board.successfullyCopied");
 		}
