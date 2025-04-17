@@ -168,7 +168,7 @@ describe("H5pElement", () => {
 			});
 		});
 
-		describe("when the element is moved down", () => {
+		describe("when the element is being deleted", () => {
 			const setup = () => {
 				const { wrapper } = getWrapper({
 					element: h5pElementResponseFactory.build({
