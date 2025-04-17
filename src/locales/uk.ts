@@ -2053,4 +2053,11 @@ export default {
 	"feature.media-shelf.availableLine.title": "Доступні медіа",
 	"feature.media-shelf.layout.list": "лінії",
 	"feature.media-shelf.layout.grid": "сітка",
+	"pages.folder.emptyState": "Наразі тут немає файлів.",
+	"pages.folder.fab.title": "Додати файл",
+	"pages.folder.untitled": "Папка без назви",
+	"pages.folder.title": "Папка",
+	"pages.folder.ariaLabels.menu": "Меню Папки",
+	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",
+	"pages.folder.ariaLabels.menu.action.delete": "Видалити папку",
 };

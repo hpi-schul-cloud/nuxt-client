@@ -123,6 +123,7 @@ module.exports = {
 				"src/modules/data/provisioning-options"
 			),
 			"@data-room": getDir("src/modules/data/room"),
+			"@data-folder": getDir("src/modules/data/folder"),
 			"@data-license": getDir("src/modules/data/license"),
 			"@feature-board-file-element": getDir(
 				"src/modules/feature/board-file-element"
@@ -161,6 +162,7 @@ module.exports = {
 			"@feature-news-form": getDir("src/modules/feature/news-form"),
 			"@feature-media-shelf": getDir("src/modules/feature/media-shelf"),
 			"@feature-room": getDir("src/modules/feature/room"),
+			"@feature-folder": getDir("src/modules/feature/folder"),
 			"@icons": getDir("src/components/icons"),
 			"@ui-alert": getDir("src/modules/ui/alert"),
 			"@ui-board": getDir("src/modules/ui/board"),
@@ -182,6 +184,7 @@ module.exports = {
 			"@ui-video-conference-configuration-dialog": getDir(
 				"src/modules/ui/video-conference-configuration-dialog"
 			),
+			"@ui-empty-state": getDir("src/modules/ui/empty-state"),
 			"@util-board": getDir("src/modules/util/board"),
 			"@util-validators": getDir("src/modules/util/validators"),
 			"@util-vue": getDir("src/modules/util/vue"),
@@ -193,6 +196,7 @@ module.exports = {
 			"@page-class-members": getDir("src/modules/page/class-members"),
 			"@page-media-shelf": getDir("src/modules/page/media-shelf"),
 			"@page-room": getDir("src/modules/page/room"),
+			"@page-folder": getDir("src/modules/page/folder"),
 		},
 		extensions: [".tsx", ".ts", ".mjs", ".js", ".jsx", ".vue", ".json"],
 		plugins: [new ThemeResolverPlugin(__base, replacements)],

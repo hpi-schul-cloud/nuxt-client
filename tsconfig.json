@@ -25,6 +25,7 @@
 			"@data-system": ["src/modules/data/system"],
 			"@data-provisioning-options": ["src/modules/data/provisioning-options"],
 			"@data-room": ["src/modules/data/room"],
+			"@data-folder": ["src/modules/data/folder"],
 			"@data-license": ["src/modules/data/license"],
 			"@feature-board-file-element": ["src/modules/feature/board-file-element"],
 			"@feature-board-submission-element": [
@@ -57,6 +58,7 @@
 			"@feature-board-folder-element": [
 				"src/modules/feature/board-folder-element"
 			],
+			"@feature-folder": ["src/modules/feature/folder"],
 			"@icons/*": ["src/components/icons/*"],
 			"@ui-alert": ["src/modules/ui/alert"],
 			"@ui-board": ["src/modules/ui/board"],
@@ -78,6 +80,7 @@
 			"@ui-video-conference-configuration-dialog": [
 				"src/modules/ui/video-conference-configuration-dialog"
 			],
+			"@ui-empty-state": ["src/modules/ui/empty-state"],
 			"@util-board": ["src/modules/util/board"],
 			"@util-validators": ["src/modules/util/validators"],
 			"@util-vue": ["src/modules/util/vue"],
@@ -89,6 +92,7 @@
 			"@page-class-members": ["src/modules/page/class-members"],
 			"@page-media-shelf": ["src/modules/page/media-shelf"],
 			"@page-room": ["src/modules/page/room"],
+			"@page-folder": ["src/modules/page/folder"],
 			"@/*": ["src/*"],
 			"@@/*": ["*"]
 		},

@@ -1,10 +1,13 @@
 import {
+	ParentNodeInfo as ApiParentNodeInfo,
 	CollaborativeTextEditorElementResponse,
+	ContentElementType,
 	DrawingElementResponse,
 	ExternalToolElementResponse,
 	FileElementResponse,
 	FileFolderElementResponse,
 	LinkElementResponse,
+	ParentNodeType,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
 	VideoConferenceElementResponse,
@@ -22,3 +25,6 @@ export type AnyContentElement =
 	| DrawingElementResponse
 	| CollaborativeTextEditorElementResponse
 	| VideoConferenceElementResponse;
+
+export type ParentNodeInfo = ApiParentNodeInfo;
+export { ContentElementType, ParentNodeType };
