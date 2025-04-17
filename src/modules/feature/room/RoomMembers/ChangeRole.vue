@@ -201,20 +201,16 @@ const infoText = computed(() => {
 	});
 });
 
-const onConfirm = () => {
+const onConfirm = async () => {
 	if (!selectedRole.value) return;
 	if (selectedRole.value === RoleName.Roomowner) {
 		isOwnershipHandoverMode.value = true;
 		return;
 	}
-	onChangeRole(
+	await updateMembersRole(
 		selectedRole.value as RoleEnum,
 		props.members.length === 1 ? memberToChangeRole[0].userId : undefined
 	);
-};
-
-const onChangeRole = async (role: RoleEnum, id?: string) => {
-	await updateMembersRole(role, id);
 	selectedIds.value = [];
 	emit("close");
 };
