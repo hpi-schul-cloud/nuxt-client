@@ -1702,7 +1702,7 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
-    FEATURE_ROOMMEMBERS_TABS_ENABLED: boolean;
+    FEATURE_ROOM_MEMBERS_TABS_ENABLED: boolean;
     /**
      * 
      * @type {boolean}

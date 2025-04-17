@@ -143,7 +143,7 @@ const { askConfirmation } = useConfirmationDialog();
 const { canLeaveRoom } = useRoomAuthorization();
 const { isVisibleAddMemberButton, isVisibleTabNavigation } =
 	useRoomMemberVisibilityOptions(currentUser);
-const { FEATURE_ROOMMEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
+const { FEATURE_ROOM_MEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
 
 const activeTab = computed<Tab>({
 	get() {
@@ -215,7 +215,7 @@ const onLeaveRoom = async () => {
 
 onMounted(async () => {
 	activeTab.value =
-		FEATURE_ROOMMEMBERS_TABS_ENABLED && Object.values(Tab).includes(props.tab)
+		FEATURE_ROOM_MEMBERS_TABS_ENABLED && Object.values(Tab).includes(props.tab)
 			? props.tab
 			: Tab.Members;
 

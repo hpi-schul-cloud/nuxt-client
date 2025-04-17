@@ -22,7 +22,7 @@ export const useRoomMemberVisibilityOptions = (
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const {
 		FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED,
-		FEATURE_ROOMMEMBERS_TABS_ENABLED,
+		FEATURE_ROOM_MEMBERS_TABS_ENABLED,
 	} = envConfigModule.getEnv;
 
 	const visibilityOptions = computed(
@@ -59,7 +59,7 @@ export const useRoomMemberVisibilityOptions = (
 	const isVisibleTabNavigation = computed(() => {
 		return (
 			visibilityOptions.value?.isVisibleTabNavigation &&
-			FEATURE_ROOMMEMBERS_TABS_ENABLED
+			FEATURE_ROOM_MEMBERS_TABS_ENABLED
 		);
 	});
 

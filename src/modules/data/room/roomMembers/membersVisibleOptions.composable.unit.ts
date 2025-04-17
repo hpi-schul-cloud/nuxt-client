@@ -85,7 +85,7 @@ describe("useRoomMemberVisibilityOptions", () => {
 				...defaultEnvs,
 				FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED:
 					options.changeRoleFeatureFlag ?? true,
-				FEATURE_ROOMMEMBERS_TABS_ENABLED:
+				FEATURE_ROOM_MEMBERS_TABS_ENABLED:
 					options.roomMembersTabFeatureFlag ?? true,
 			},
 		});
@@ -230,7 +230,7 @@ describe("useRoomMemberVisibilityOptions", () => {
 	});
 
 	describe("isVisibleTabNavigation", () => {
-		describe("when FEATURE_ROOMMEMBERS_TABS_ENABLED is true", () => {
+		describe("when FEATURE_ROOM_MEMBERS_TABS_ENABLED is true", () => {
 			it.each([
 				{ roomRoleName: RoleName.Roomowner, expected: true },
 				{ roomRoleName: RoleName.Roomadmin, expected: true },
@@ -248,7 +248,7 @@ describe("useRoomMemberVisibilityOptions", () => {
 			);
 		});
 
-		describe("when FEATURE_ROOMMEMBERS_TABS_ENABLED is false", () => {
+		describe("when FEATURE_ROOM_MEMBERS_TABS_ENABLED is false", () => {
 			it.each([
 				{ roomRoleName: RoleName.Roomowner, expected: false },
 				{ roomRoleName: RoleName.Roomadmin, expected: false },

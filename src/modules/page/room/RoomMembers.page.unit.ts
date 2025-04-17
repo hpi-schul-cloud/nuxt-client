@@ -159,7 +159,7 @@ describe("RoomMembersPage", () => {
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 			getEnv: {
 				...envsFactory.build(),
-				FEATURE_ROOMMEMBERS_TABS_ENABLED: isFeatureRoomMembersTabsEnabled,
+				FEATURE_ROOM_MEMBERS_TABS_ENABLED: isFeatureRoomMembersTabsEnabled,
 			},
 		});
 
