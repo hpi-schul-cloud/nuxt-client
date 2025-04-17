@@ -2,7 +2,7 @@
 	<div v-if="isVisiblePageInfoText" data-testid="info-text">
 		<i18n-t keypath="pages.rooms.members.infoText" scope="global">
 			<a
-				href="https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
+				:href="informationLink"
 				target="_blank"
 				rel="noopener"
 				:ariaLabel="linkAriaLabel"
@@ -29,6 +29,7 @@ import {
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import { MembersTable } from "@feature-room";
+import { envConfigModule } from "@/store";
 
 defineProps({
 	headerBottom: {
@@ -46,5 +47,11 @@ const { isVisiblePageInfoText } = useRoomMemberVisibilityOptions(currentUser);
 const linkAriaLabel = computed(
 	() =>
 		`${t("pages.rooms.members.infoText.moreInformation")}, ${t("common.ariaLabel.newTab")}`
+);
+
+const informationLink = computed(() =>
+	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
+		? envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
+		: "https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
 );
 </script>
