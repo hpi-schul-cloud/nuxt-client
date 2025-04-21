@@ -649,8 +649,6 @@ export default {
 		"Задачу успішно скопійовано.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
 		"Тему успішно скопійовано.",
-	"components.molecules.copyResult.room.successfullyCopied":
-		"Кімнату успішно дубльовано.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Для великих файлів процес копіювання може зайняти більше часу. Вміст буде доступний найближчим часом.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -915,6 +913,9 @@ export default {
 		"Дата початку повинна передувати даті закінчення.",
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
+	"data-room.duplication.alert.success": "Кімнату успішно дубльовано.",
+	"data-room.duplication.error": "Не вдалося завершити процес копіювання.",
+	"data-room.duplication.loading": "Кімната дублюється...",
 	"error.400": "400 – Неприпустимий запит",
 	"error.401": "401 – На жаль, у вас немає дозволу на перегляд цього контенту.",
 	"error.403": "403 – На жаль, у вас немає дозволу на перегляд цього контенту.",
@@ -1817,7 +1818,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Створити кімнату",
 	"pages.roomEdit.title": "Кімната редагування",
 	"pages.roomDetails.title": "Кімната",
@@ -1825,7 +1825,6 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Кімната редагування",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Видалити кімнату",
 	"pages.roomDetails.board.defaultName": "Космічна дошка",
-	"pages.roomDetails.duplication.loading": "Кімната дублюється...",
 	"pages.rooms.emptyState": "Зараз тут немає кімнат",
 	"pages.rooms.fab.title": "Створити кімнату",
 	"pages.rooms.infoAlert.welcome": "Ласкаво просимо до нових Кімнат!",

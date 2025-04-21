@@ -636,8 +636,6 @@ export default {
 		"Task successfully copied.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
 		"Lesson successfully copied.",
-	"components.molecules.copyResult.room.successfullyCopied":
-		"Room successfully duplicated.",
 	"components.molecules.copyResult.timeoutCopy":
 		"The copy process may take longer for large files. The content will be available shortly.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -893,6 +891,10 @@ export default {
 		"The start date must be before the end date.",
 	"components.timePicker.validation.format": "Please use format HH:MM",
 	"components.timePicker.validation.required": "Please enter a time.",
+	"data-room.duplication.alert.success": "Room successfully duplicated.",
+	"data-room.duplication.alert.error":
+		"The duplication process could not be completed.",
+	"data-room.duplication.loading": "Room is being duplicated...",
 	"error.400": "401 – Bad Request",
 	"error.401":
 		"401 – Unfortunately, you do not have permission to view this content.",
@@ -1787,7 +1789,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (e.g. compatible with Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Create room",
 	"pages.roomEdit.title": "Edit room",
 	"pages.roomDetails.title": "Room",
@@ -1795,7 +1796,6 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Edit room",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Delete room",
 	"pages.roomDetails.board.defaultName": "Room Board",
-	"pages.roomDetails.duplication.loading": "Room is being duplicated...",
 	"pages.rooms.emptyState": "Currently there are no rooms here.",
 	"pages.rooms.fab.title": "Create room",
 	"pages.rooms.infoAlert.welcome": "Welcome to the new Rooms!",

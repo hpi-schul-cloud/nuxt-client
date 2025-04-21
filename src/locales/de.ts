@@ -641,8 +641,6 @@ export default {
 		"Aufgabe erfolgreich kopiert.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
 		"Thema erfolgreich kopiert.",
-	"components.molecules.copyResult.room.successfullyCopied":
-		"Raum erfolgreich dupliziert.",
 	"components.molecules.copyResult.timeoutCopy":
 		"Der Kopiervorgang kann bei großen Dateien länger dauern. Die Inhalte werden in Kürze verfügbar sein.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -901,6 +899,10 @@ export default {
 		"Das Startdatum muss vor dem Enddatum liegen.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
+	"data-room.duplication.alert.success": "Raum erfolgreich dupliziert.",
+	"data-room.duplication.alert.error":
+		"Der Dupliziervorgang konnte nicht abgeschlossen werden.",
+	"data-room.duplication.loading": "Raum wird dupliziert...",
 	"error.400": "400 – Fehlerhafte Anfrage",
 	"error.401": "401 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
 	"error.403": "403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
@@ -1816,7 +1818,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Raum erstellen",
 	"pages.roomEdit.title": "Raum bearbeiten",
 	"pages.roomDetails.title": "Raum",
@@ -1824,7 +1825,6 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Raum bearbeiten",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Raum löschen",
 	"pages.roomDetails.board.defaultName": "Raum-Bereich",
-	"pages.roomDetails.duplication.loading": "Raum wird dupliziert...",
 	"pages.rooms.emptyState": "Aktuell gibt es hier noch keine Räume.",
 	"pages.rooms.fab.title": "Raum erstellen",
 	"pages.rooms.infoAlert.welcome": "Willkommen in den neuen Räumen!",

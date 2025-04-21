@@ -15,7 +15,7 @@ export const useRoomDuplication = () => {
 	const { t } = useI18n();
 
 	const { isLoadingDialogOpen } = useLoadingState(
-		t("pages.roomDetails.duplication.loading")
+		t("data-room.duplication.loading")
 	);
 
 	const isRoomDuplicationFeatureEnabled =
@@ -38,10 +38,7 @@ export const useRoomDuplication = () => {
 		try {
 			await delay(3000);
 			showSuccess();
-
-			// showFailure();
 		} catch {
-			// markBackgroundCopyProcess(copyParams);
 			showTimeout();
 		} finally {
 			isLoadingDialogOpen.value = false;
@@ -50,7 +47,7 @@ export const useRoomDuplication = () => {
 
 	const showSuccess = () => {
 		const notifierPayload: AlertPayload = {
-			text: t("components.molecules.copyResult.room.successfullyCopied"),
+			text: t("data-room.duplication.alert.success"),
 			status: "success",
 		};
 
@@ -60,7 +57,7 @@ export const useRoomDuplication = () => {
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const showFailure = () => {
 		notifierModule.show({
-			text: t("components.molecules.copyResult.failedCopy"),
+			text: t("data-room.duplication.alert.error"),
 			status: "error",
 			autoClose: false,
 		});

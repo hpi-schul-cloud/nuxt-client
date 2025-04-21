@@ -652,8 +652,6 @@ export default {
 		"Tarea copiada con éxito.",
 	"components.molecules.copyResult.lesson.successfullyCopied":
 		"Tema copiado con éxito.",
-	"components.molecules.copyResult.room.successfullyCopied":
-		"Sala duplicada con éxito.",
 	"components.molecules.copyResult.timeoutCopy":
 		"El proceso de copia puede tardar más en el caso de archivos de gran tamaño. El contenido estará disponible en breve.",
 	"components.molecules.copyResult.timeoutSuccess":
@@ -920,6 +918,10 @@ export default {
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
+	"data-room.duplication.alert.success": "Sala duplicada con éxito.",
+	"data-room.duplication.error":
+		"No se pudo completar el proceso de duplicación.",
+	"data-room.duplication.loading": "La sala se está duplicando...",
 	"error.400": "401 – Solicitud incorrecta",
 	"error.401":
 		"401 – Lamentablemente, falta la autorización para ver este contenido.",
@@ -1838,7 +1840,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Crear sala",
 	"pages.roomEdit.title": "Editar sala",
 	"pages.roomDetails.title": "Sala",
@@ -1846,7 +1847,6 @@ export default {
 	"pages.roomDetails.ariaLabels.menu.action.edit": "Editar sala",
 	"pages.roomDetails.ariaLabels.menu.action.delete": "Borrar sala",
 	"pages.roomDetails.board.defaultName": "Tablero de la sala",
-	"pages.roomDetails.duplication.loading": "La sala se está duplicando...",
 	"pages.rooms.emptyState": "Actualmente no hay salas aquí.",
 	"pages.rooms.fab.title": "Crear sala",
 	"pages.rooms.infoAlert.welcome": "¡Bienvenidos a las nuevas Salas!",
