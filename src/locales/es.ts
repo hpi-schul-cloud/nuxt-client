@@ -968,6 +968,19 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Grupo de usuarios sincronizado exitosamente",
 	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
+	"feature-room.DuplicationInfoDialog.title": "Duplicar Sala",
+	"feature-room.DuplicationInfoDialog.text.nextStep":
+		"En el siguiente paso, se creará una copia de la sala.",
+	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+		"Los siguientes contenidos no se copiarán:",
+	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+		"Miembros y permisos de la sala",
+	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+		"Contenidos de los Etherpads",
+	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+		"Contenidos de las pizarras blancas",
+	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+		"Configuraciones protegidas de herramientas externas",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD/MM/YYYY HH:mm",

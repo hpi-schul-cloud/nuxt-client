@@ -1,15 +1,41 @@
 <template>
-	<v-dialog max-width="480">
-		<v-card title="Raum duplizieren">
+	<v-dialog max-width="520">
+		<v-card :title="$t('feature-room.DuplicationInfoDialog.title')">
 			<v-card-text>
-				<p>Im nächsten Schritt wird eine Kopie des Raumes erstellt.</p>
+				<p>
+					{{ $t("feature-room.DuplicationInfoDialog.text.nextStep") }}
+				</p>
 				<InfoAlert>
-					<p>Folgende Inhalte werden nicht kopiert:</p>
+					<p>
+						{{
+							$t(
+								"feature-room.DuplicationInfoDialog.text.alert.followingContent"
+							)
+						}}
+					</p>
 					<ul>
-						<li>Raum-Mitglieder und Berechtigungen</li>
-						<li>Inhalte aus Etherpads</li>
-						<li>Inhalte aus Whiteboards</li>
-						<li>Geschützte Einstellungen externer Tools</li>
+						<li>
+							{{
+								$t(
+									"feature-room.DuplicationInfoDialog.text.alert.membersPermissions"
+								)
+							}}
+						</li>
+						<li>
+							{{ $t("feature-room.DuplicationInfoDialog.text.alert.Etherpad") }}
+						</li>
+						<li>
+							{{
+								$t("feature-room.DuplicationInfoDialog.text.alert.whiteboard")
+							}}
+						</li>
+						<li>
+							{{
+								$t(
+									"feature-room.DuplicationInfoDialog.text.alert.protectedSettings"
+								)
+							}}
+						</li>
 					</ul>
 				</InfoAlert>
 			</v-card-text>
@@ -19,7 +45,7 @@
 					{{ $t("common.actions.cancel") }}
 				</v-btn>
 				<v-btn color="primary" @click="$emit('duplication:confirm')">
-					Duplizieren
+					{{ $t("common.actions.duplicate") }}
 				</v-btn>
 			</v-card-actions>
 		</v-card>

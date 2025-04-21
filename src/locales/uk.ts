@@ -959,6 +959,19 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Групу користувачів успішно синхронізовано",
 	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
+	"feature-room.DuplicationInfoDialog.title": "Дублювати кімнату",
+	"feature-room.DuplicationInfoDialog.text.nextStep":
+		"На наступному кроці буде створено копію кімнати.",
+	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+		"Наступний вміст не буде скопійовано:",
+	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+		"Учасники кімнати та їхні дозволи",
+	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+		"Вміст із Etherpads",
+	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+		"Вміст із Whiteboards",
+	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+		"Захищені налаштування зовнішніх інструментів",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
