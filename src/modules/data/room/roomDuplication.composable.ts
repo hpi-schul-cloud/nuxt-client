@@ -57,6 +57,7 @@ export const useRoomDuplication = () => {
 		notifierModule.show(notifierPayload);
 	};
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const showFailure = () => {
 		notifierModule.show({
 			text: t("components.molecules.copyResult.failedCopy"),
