@@ -1,6 +1,9 @@
 <template>
 	<v-dialog max-width="520">
-		<v-card :title="$t('feature-room.DuplicationInfoDialog.title')">
+		<v-card
+			:title="$t('feature-room.DuplicationInfoDialog.title')"
+			data-testid="duplication-info-dialog"
+		>
 			<v-card-text>
 				<p>
 					{{ $t("feature-room.DuplicationInfoDialog.text.nextStep") }}
@@ -41,10 +44,18 @@
 			</v-card-text>
 			<v-card-actions>
 				<v-spacer />
-				<v-btn variant="text" @click="$emit('duplication:cancel')">
+				<v-btn
+					variant="text"
+					data-testid="duplication-info-dialog-cancel"
+					@click="$emit('duplication:cancel')"
+				>
 					{{ $t("common.actions.cancel") }}
 				</v-btn>
-				<v-btn color="primary" @click="$emit('duplication:confirm')">
+				<v-btn
+					color="primary"
+					data-testid="duplication-info-dialog-confirm"
+					@click="$emit('duplication:confirm')"
+				>
 					{{ $t("common.actions.duplicate") }}
 				</v-btn>
 			</v-card-actions>
