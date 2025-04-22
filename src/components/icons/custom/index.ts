@@ -8,23 +8,24 @@ import folderOpenSharedOutline from "./folder_open_shared_outline.vue";
 import folderOpenTeamsOutline from "./folder_open_teams_outline.vue";
 import folderOpenUserOutline from "./folder_open_user_outline.vue";
 import gridOutline from "./grid-outline.vue";
+import h5pOutline from "./h5p-outline.vue";
 import hourglassDisabled from "./hourglass-disabled.vue";
 import icCollection from "./ic_collection.vue";
-import icDefault from "./ic_default.vue";
 import icDefaultCircle from "./ic_default-circle.vue";
-import icImage from "./ic_image.vue";
+import icDefault from "./ic_default.vue";
 import icImageCircle from "./ic_image-circle.vue";
-import icLink from "./ic_link.vue";
+import icImage from "./ic_image.vue";
 import icLinkCircle from "./ic_link-circle.vue";
+import icLink from "./ic_link.vue";
 import icMoveTo from "./ic_move-to.vue";
-import icPdf from "./ic_pdf.vue";
 import icPdfCircle from "./ic_pdf-circle.vue";
-import icSound from "./ic_sound.vue";
+import icPdf from "./ic_pdf.vue";
 import icSoundCircle from "./ic_sound-circle.vue";
-import icVideo from "./ic_video.vue";
+import icSound from "./ic_sound.vue";
 import icVideoCircle from "./ic_video-circle.vue";
-import icWord from "./ic_word.vue";
+import icVideo from "./ic_video.vue";
 import icWordCircle from "./ic_word-circle.vue";
+import icWord from "./ic_word.vue";
 import langIconDe from "./lang-icon-de.vue";
 import langIconEn from "./lang-icon-en.vue";
 import langIconEs from "./lang-icon-es.vue";
@@ -33,11 +34,11 @@ import lernstoreOutline from "./lernstore_outline.vue";
 import n21 from "./n21.vue";
 import schoolOutline from "./school_outline.vue";
 import shelfOutline from "./shelf-outline.vue";
-import taskDone from "./task-done.vue";
 import taskDoneFilled from "./task-done-filled.vue";
+import taskDone from "./task-done.vue";
 import taskDraft from "./task-draft.vue";
-import taskMissed from "./task-missed.vue";
 import taskMissedFilled from "./task-missed-filled.vue";
+import taskMissed from "./task-missed.vue";
 import taskOpenFilled from "./task-open-filled.vue";
 import tasks from "./tasks.vue";
 import teacher from "./teacher.vue";
@@ -87,6 +88,7 @@ const customAliases: Record<string, Component> = {
 	tasks: tasks,
 	teacher: teacher,
 	thr: thr,
+	h5pOutline,
 };
 
 // const customSet: IconSet = {

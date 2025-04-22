@@ -152,6 +152,9 @@ module.exports = {
 			"@feature-board-video-conference-element": getDir(
 				"src/modules/feature/board-video-conference-element"
 			),
+			"@feature-board-h5p-element": getDir(
+				"src/modules/feature/board-h5p-element"
+			),
 			"@feature-board-deleted-element": getDir(
 				"src/modules/feature/board-deleted-element"
 			),

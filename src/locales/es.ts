@@ -424,6 +424,8 @@ export default {
 	"components.board.menu.submissionElement": "Configuración del envío",
 	"components.board.menu.videoConferenceElement":
 		"Configuración de la videoconferencia",
+	"components.board.menu.h5pElement":
+		"Configuración de elementos de aprendizaje interactivo",
 	"components.board.menu.deletedElement":
 		"Configuración de contenido eliminado",
 	"components.board.notifications.errors.fileNameExists":
@@ -530,6 +532,7 @@ export default {
 	"components.cardElement.deletedElement": "Contenido eliminado",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
+	"components.cardElement.h5pElement": "Contenido de aprendizaje interactivo",
 	"components.datePicker.validation.format":
 		"Por favor utilice el formato DD.MM.AAAA",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
@@ -557,6 +560,8 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Texto",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
 		"Videoconferencia",
+	"components.elementTypeSelection.elements.h5pElement.subtitle":
+		"Elemento de aprendizaje interactivo",
 	"components.externalTools.status.deactivated": "Desactivado",
 	"components.externalTools.status.incomplete": "Configuración incompleta",
 	"components.externalTools.status.latest": "Actual",
@@ -1885,6 +1890,13 @@ export default {
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Cambiar autorizaciones de sala para {memberFullName}",
 	"pages.rooms.members.manage": "Miembros de la sala",
+	"pages.rooms.members.tab.members": "Miembros",
+	"pages.rooms.members.tab.invitations": "Invitaciones",
+	"pages.rooms.members.tab.invitations.infoText":
+		"Los profesores de tu propio centro y los de otros centros pueden ser invitados a la sala mediante un enlace de invitación. Los alumnos de otras escuelas siempre deben ser añadidos a la sala por un profesor supervisor de su escuela. Si la opción „Confirmar antes de unirse” está activada en la configuración del enlace, esto se puede hacer en la pestaña „Confirmaciones”",
+	"pages.rooms.members.tab.confirmations": "Confirmaciones",
+	"pages.rooms.members.tab.confirmations.infoText":
+		"Si al crear un enlace de invitación está activada la opción „Entrar en la sala sólo tras confirmación”, al hacer clic en el enlace se genera primero una solicitud de afiliación. Esta puede confirmarse o rechazarse aquí. Si se confirma la solicitud de afiliación, la persona recibe acceso a todos los contenidos de la sala y aparece en la lista de miembros.",
 	"pages.rooms.members.remove.ariaLabel":
 		"Eliminar {memberFullName} de la sala",
 	"pages.rooms.members.resetSelection.ariaLabel":
