@@ -1,7 +1,7 @@
 import { computed, Ref, ref, watch } from "vue";
-import { authModule, envConfigModule, notifierModule } from "./store-accessor";
+import { authModule, envConfigModule, notifierModule } from "@/store";
 import { useI18n } from "vue-i18n";
-import { $axios } from "../utils/api";
+import { $axios } from "@/utils/api";
 
 export enum SessionStatus {
 	Continued = "continued",

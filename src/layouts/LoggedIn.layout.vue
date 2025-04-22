@@ -17,7 +17,7 @@
 		</v-main>
 		<loading-state-dialog />
 		<keep-alive>
-			<autoLogoutWarning />
+			<AutoLogoutWarning />
 		</keep-alive>
 	</div>
 </template>
@@ -26,7 +26,7 @@
 import AlertContainer from "@/components/molecules/AlertContainer.vue";
 import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
 import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
-import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
+import { AutoLogoutWarning } from "@feature-auto-logout";
 import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { useStorage } from "@vueuse/core";
