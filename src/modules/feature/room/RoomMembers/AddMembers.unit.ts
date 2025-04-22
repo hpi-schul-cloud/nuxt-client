@@ -5,23 +5,24 @@ import {
 import AddMembers from "./AddMembers.vue";
 import { RoleName } from "@/serverApi/v3";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
-import { authModule } from "@/store";
+import { authModule, schoolsModule } from "@/store";
 import {
-	roomMemberListFactory,
+	meResponseFactory,
+	mockedPiniaStoreTyping,
+	roomMemberFactory,
 	roomMemberSchoolResponseFactory,
+	schoolFactory,
 } from "@@/tests/test-utils";
 import { VueWrapper } from "@vue/test-utils";
 import { VAutocomplete } from "vuetify/lib/components/index.mjs";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
-
-jest.mock("@/store/store-accessor", () => {
-	return {
-		...jest.requireActual("@/store/store-accessor"),
-		authModule: {
-			getSchool: { id: "schoolId", name: "sample-school-name" },
-		},
-	};
-});
+import { createTestingPinia } from "@pinia/testing";
+import { useRoomMembersStore } from "@data-room";
+import { useBoardNotifier } from "@util-board";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import setupStores from "@@/tests/test-utils/setupStores";
+import SchoolsModule from "@/store/schools";
+import AuthModule from "@/store/auth";
 
 jest.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
@@ -30,10 +31,14 @@ jest.mock("@vueuse/integrations/useFocusTrap", () => {
 	};
 });
 
+jest.mock("@util-board/BoardNotifier.composable");
+const mockedUseBoardNotifier = jest.mocked(useBoardNotifier);
+
 describe("AddMembers", () => {
 	let wrapper: VueWrapper<InstanceType<typeof AddMembers>>;
 	let pauseMock: jest.Mock;
 	let unpauseMock: jest.Mock;
+	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
 		pauseMock = jest.fn();
@@ -42,29 +47,59 @@ describe("AddMembers", () => {
 			pause: pauseMock,
 			unpause: unpauseMock,
 		});
+
+		mockedBoardNotifierCalls =
+			createMock<ReturnType<typeof useBoardNotifier>>();
+		mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
+
+		setupStores({
+			schoolsModule: SchoolsModule,
+			authModule: AuthModule,
+		});
+
+		schoolsModule.setSchool(
+			schoolFactory.build({
+				id: "school-id",
+				name: "Paul-Gerhardt-Gymnasium",
+			})
+		);
+
+		const mockMe = meResponseFactory.build();
+		authModule.setMe(mockMe);
 	});
 
 	const setup = () => {
-		const potentialRoomMembers = roomMemberListFactory.buildList(3);
+		const potentialRoomMembers = roomMemberFactory.buildList(3);
 		const roomMembersSchools = roomMemberSchoolResponseFactory.buildList(3);
+
 		wrapper = mount(AddMembers, {
 			attachTo: document.body,
 			global: {
-				plugins: [createTestingVuetify(), createTestingI18n()],
+				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
+					createTestingPinia({
+						initialState: {
+							roomMembersStore: {
+								potentialRoomMembers,
+								schools: roomMembersSchools,
+							},
+						},
+					}),
+				],
 				provide: {
 					[AUTH_MODULE_KEY.valueOf()]: authModule,
 				},
 			},
-			props: {
-				memberList: potentialRoomMembers,
-				schools: roomMembersSchools,
-			},
 		});
+
+		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
 
 		return {
 			wrapper,
 			potentialRoomMembers,
 			roomMembersSchools,
+			roomMembersStore,
 		};
 	};
 
@@ -74,13 +109,9 @@ describe("AddMembers", () => {
 
 	describe("when component is mounted", () => {
 		it("should render component", () => {
-			const { wrapper, potentialRoomMembers, roomMembersSchools } = setup();
+			const { wrapper } = setup();
 
 			expect(wrapper.exists()).toBe(true);
-			expect(wrapper.props()).toEqual({
-				memberList: potentialRoomMembers,
-				schools: roomMembersSchools,
-			});
 		});
 
 		describe("Autocomplete components", () => {
@@ -104,6 +135,7 @@ describe("AddMembers", () => {
 					roomMembersSchools[0].id
 				);
 			});
+
 			it("should have proper props for autoCompleteRole component", () => {
 				const { wrapper } = setup();
 
@@ -132,8 +164,8 @@ describe("AddMembers", () => {
 	});
 
 	describe("when school is changed", () => {
-		it("should emit 'update:role'", async () => {
-			const { wrapper, roomMembersSchools } = setup();
+		it("should call getPotentialMembers", async () => {
+			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
 			const selectedSchool = roomMembersSchools[1].id;
 			const schoolComponent = wrapper.getComponent({
 				ref: "autoCompleteSchool",
@@ -141,10 +173,11 @@ describe("AddMembers", () => {
 
 			await schoolComponent.setValue(selectedSchool);
 
-			expect(wrapper.emitted("update:role")).toHaveLength(1);
-			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
-				{ schoolRole: RoleName.Teacher, schoolId: selectedSchool },
-			]);
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
+				RoleName.Teacher,
+				selectedSchool
+			);
 		});
 
 		it("should set the role to teacher", async () => {
@@ -179,8 +212,8 @@ describe("AddMembers", () => {
 	});
 
 	describe("when userRole is changed", () => {
-		it("should emit the userRole", async () => {
-			const { wrapper, roomMembersSchools } = setup();
+		it("should call getPotentialMembers", async () => {
+			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
 			const selectedRole = RoleName.Teacher;
 			const roleComponent = wrapper.getComponent({
 				ref: "autoCompleteRole",
@@ -188,10 +221,11 @@ describe("AddMembers", () => {
 
 			await roleComponent.setValue(selectedRole);
 
-			expect(wrapper.emitted("update:role")).toHaveLength(1);
-			expect(wrapper.emitted("update:role")![0]).toStrictEqual([
-				{ schoolRole: selectedRole, schoolId: roomMembersSchools[0].id },
-			]);
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
+				selectedRole,
+				roomMembersSchools[0].id
+			);
 		});
 
 		it("should reset selectedUsers", async () => {
@@ -206,7 +240,6 @@ describe("AddMembers", () => {
 
 			await roleComponent.setValue(RoleName.Roomeditor);
 
-			expect(wrapper.emitted()).toHaveProperty("update:role");
 			expect(userComponent.props("modelValue")).toEqual([]);
 		});
 	});
@@ -229,11 +262,57 @@ describe("AddMembers", () => {
 				potentialRoomMembers[1].userId,
 			]);
 		});
+
+		it("should disable autocomplete for school and role selection", async () => {
+			const { wrapper, potentialRoomMembers } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+			const roleComponent = wrapper.getComponent({
+				ref: "autoCompleteRole",
+			});
+
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
+			await userComponent.setValue([
+				potentialRoomMembers[0].userId,
+				potentialRoomMembers[1].userId,
+			]);
+
+			expect(schoolComponent.props("disabled")).toBe(true);
+			expect(roleComponent.props("disabled")).toBe(true);
+		});
+
+		it("should enable autocomplete for school and role selection when alls users are removed from selection", async () => {
+			const { wrapper, potentialRoomMembers } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+			const roleComponent = wrapper.getComponent({
+				ref: "autoCompleteRole",
+			});
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
+			await userComponent.setValue([
+				potentialRoomMembers[0].userId,
+				potentialRoomMembers[1].userId,
+			]);
+			expect(schoolComponent.props("disabled")).toBe(true);
+			expect(roleComponent.props("disabled")).toBe(true);
+
+			await userComponent.setValue([]);
+			expect(schoolComponent.props("disabled")).toBe(false);
+			expect(roleComponent.props("disabled")).toBe(false);
+		});
 	});
 
 	describe("when add button clicked", () => {
-		it("should emit the selectedUsers", async () => {
-			const { wrapper, potentialRoomMembers } = setup();
+		it("should call addMembers", async () => {
+			const { wrapper, potentialRoomMembers, roomMembersStore } = setup();
 			const userComponent = wrapper.getComponent({
 				ref: "autoCompleteUsers",
 			});
@@ -249,9 +328,8 @@ describe("AddMembers", () => {
 			});
 			await addButton.trigger("click");
 
-			expect(wrapper.emitted("add:members")).toHaveLength(1);
-			expect(wrapper.emitted("add:members")![0]).toStrictEqual([selectedUsers]);
-			expect(wrapper.emitted("close")).toHaveLength(1);
+			expect(roomMembersStore.addMembers).toHaveBeenCalledTimes(1);
+			expect(roomMembersStore.addMembers).toHaveBeenCalledWith(selectedUsers);
 		});
 
 		it("should emit 'close'", async () => {
@@ -276,7 +354,7 @@ describe("AddMembers", () => {
 	});
 
 	describe("when cancel button clicked", () => {
-		it("should emit the selectedUsers", async () => {
+		it("should emit 'close''", async () => {
 			const { wrapper } = setup();
 
 			const cancelButton = wrapper.getComponent({

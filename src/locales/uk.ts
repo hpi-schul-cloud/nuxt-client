@@ -1843,6 +1843,13 @@ export default {
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Змінити дозвіл кімнат для {memberFullName}",
 	"pages.rooms.members.manage": "Учасник кімнати",
+	"pages.rooms.members.tab.members": "Учасники",
+	"pages.rooms.members.tab.invitations": "Запрошення",
+	"pages.rooms.members.tab.invitations.infoText":
+		"Вчителі з вашої школи та вчителі з інших шкіл можуть бути запрошені до кімнати за допомогою посилання-запрошення. Учні з інших шкіл завжди повинні бути додані до кімнати вчителем-куратором з їхньої школи. Якщо в налаштуваннях посилання ввімкнено опцію „Підтвердження перед приєднанням”, це можна зробити на вкладці “Підтвердження”.",
+	"pages.rooms.members.tab.confirmations": "Підтвердження",
+	"pages.rooms.members.tab.confirmations.infoText":
+		"Якщо при створенні посилання-запрошення ввімкнено опцію „Вхід до кімнати тільки після підтвердження”, при натисканні на посилання спочатку генерується запит на членство. Тут його можна підтвердити або відхилити. Якщо запит на членство підтверджено, особа отримує доступ до всього вмісту кімнати і потрапляє до списку учасників.",
 	"pages.rooms.members.remove.ariaLabel": "Видалити {memberFullName} з кімнати",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Скинути вибраних членів зі списку",
