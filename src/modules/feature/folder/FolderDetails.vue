@@ -10,7 +10,7 @@
 	</template>
 	<template v-else-if="isEmpty">
 		<EmptyState :title="t('pages.folder.emptyState')">
-			<template v-slot:media>
+			<template #media>
 				<EmptyFolderSvg />
 			</template>
 		</EmptyState>
@@ -232,11 +232,11 @@ const formatFileSize = (size: number) => {
 	return `${localizedFileSize} ${unit}`;
 };
 
-const getKebabMenuAriaLabel = (name: string) => {
+/* const getKebabMenuAriaLabel = (name: string) => {
 	return t("pages.folder.ariaLabels.actionMenu", {
 		name,
 	});
-};
+}; */
 
 /* const onUpdateFilter = (filteredMembers: RoomMember[]) => {
 	membersFilterCount.value =
