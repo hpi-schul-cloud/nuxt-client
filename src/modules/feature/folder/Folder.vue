@@ -17,6 +17,7 @@
 			:is-loading="isLoading"
 			:is-empty="fileRecords.length === 0"
 			:file-records="fileRecords"
+			:file-upload-stats="fileUploadStats"
 		/>
 	</DefaultWireframe>
 </template>
@@ -27,7 +28,7 @@ import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { useFolderState } from "@data-folder";
 import { useFileStorageApi } from "@feature-board-file-element";
 import { mdiPlus } from "@icons/material";
-import { computed, onMounted, toRef } from "vue";
+import { computed, onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import FolderDetails from "./FolderDetails.vue";
 import FolderMenu from "./FolderMenu.vue";
@@ -55,6 +56,11 @@ const fabAction = {
 	dataTestId: "fab-add-files",
 };
 
+const fileUploadStats = ref({
+	uploaded: 0,
+	total: 0,
+});
+
 const fabClickHandler = () => {
 	const input = document.createElement("input");
 	input.type = "file";
@@ -63,9 +69,22 @@ const fabClickHandler = () => {
 		const files = (event.target as HTMLInputElement).files;
 		if (files) {
 			const fileArray = Array.from(files);
+			fileUploadStats.value.total = fileArray.length; // Set the total file count
 
 			for (const file of fileArray) {
-				upload(file, props.folderId, FileRecordParentType.BOARDNODES);
+				upload(file, props.folderId, FileRecordParentType.BOARDNODES).then(
+					() => {
+						fileUploadStats.value.uploaded += 1; // Increment the count after each successful upload
+
+						// Reset state after all files are uploaded
+						if (
+							fileUploadStats.value.uploaded === fileUploadStats.value.total
+						) {
+							fileUploadStats.value.total = 0;
+							fileUploadStats.value.uploaded = 0;
+						}
+					}
+				);
 			}
 		}
 	});

@@ -2035,4 +2035,5 @@ export default {
 	"pages.folder.ariaLabels.select.all": "Select all files",
 	"pages.folder.ariaLabels.filter": "Search/filter table",
 	"pages.folder.ariaLabels.actionMenu": "Action menu for {name}",
+	"pages.folder.uploadstats": "{uploaded} of {total} files uploaded",
 };

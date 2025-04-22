@@ -2062,4 +2062,5 @@ export default {
 	"pages.folder.ariaLabels.select.all": "Вибрати всі файли",
 	"pages.folder.ariaLabels.filter": "	Таблиця пошуку/фільтрації",
 	"pages.folder.ariaLabels.actionMenu": "Меню дій для {name}",
+	"pages.folder.uploadstats": "{uploaded} з {total} завантажених файлів",
 };

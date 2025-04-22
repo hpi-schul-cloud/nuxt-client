@@ -28,6 +28,26 @@
 				@reset:selected="onResetSelectedMembers"
 			/>
 			<v-spacer />
+			<transition name="fade">
+				<div v-if="fileUploadStats.total > 0">
+					<v-progress-circular
+						:model-value="
+							(fileUploadStats.uploaded / fileUploadStats.total) * 100
+						"
+						class="mr-2"
+						size="20"
+						width="2"
+					/>
+					<span>
+						{{
+							t("pages.folder.uploadstats", {
+								uploaded: fileUploadStats.uploaded,
+								total: fileUploadStats.total,
+							})
+						}}
+					</span>
+				</div>
+			</transition>
 			<v-text-field
 				v-model="search"
 				density="compact"
@@ -89,14 +109,14 @@
 			<template #[`item.size`]="{ item }">
 				{{ formatFileSize(item.size) }}
 			</template>
-			<template #[`item.actions`]="{ item, index }">
+			<!-- <template #[`item.actions`]="{ item, index }">
 				<KebabMenu
 					:data-testid="`kebab-menu-${index}`"
 					:aria-label="getKebabMenuAriaLabel(item.name)"
 				>
 					<KebabMenuAction />
 				</KebabMenu>
-			</template>
+			</template> -->
 		</v-data-table>
 	</template>
 </template>
@@ -115,7 +135,6 @@ import {
 	mdiMenuUp,
 } from "@icons/material";
 import { EmptyState } from "@ui-empty-state";
-import { KebabMenu } from "@ui-kebab-menu";
 import { defineProps, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify/lib/framework.mjs";
@@ -136,6 +155,13 @@ defineProps({
 	},
 	fileRecords: {
 		type: Array as PropType<FileRecordResponse[]>,
+		required: true,
+	},
+	fileUploadStats: {
+		type: Object as PropType<{
+			uploaded: number;
+			total: number;
+		}>,
 		required: true,
 	},
 });
@@ -212,5 +238,14 @@ const getKebabMenuAriaLabel = (name: string) => {
 	right: $space-left-right;
 	left: $space-left-right;
 	width: 100%;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+	transition: opacity 0.5s ease-out;
+}
+.fade-enter-from,
+.fade-leave-to {
+	opacity: 0;
 }
 </style>
