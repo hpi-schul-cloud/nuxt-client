@@ -117,9 +117,11 @@ export default defineComponent({
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
-		const { fetchFile, upload, getFileRecord } = useFileStorageApi();
+		const { fetchFile, upload, getFileRecordsByParentId } = useFileStorageApi();
 
-		const fileRecord = getFileRecord(element.value.id);
+		const fileRecord = computed(
+			() => getFileRecordsByParentId(element.value.id)[0]
+		);
 
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
 

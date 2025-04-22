@@ -7,10 +7,10 @@ import {
 	RenameFileParams,
 	StorageLocation,
 } from "@/fileStorageApi/v3";
+import { useFileRecordsStore } from "@/modules/feature/board-file-element/shared/composables/FileRecordsState";
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createTestableGlobaleState } from "@/utils/create-global-state";
-import { Ref, ref } from "vue";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
 export enum ErrorType {
@@ -26,7 +26,6 @@ export enum ErrorType {
 
 const fileStorageApi = () => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
-	const fileRecords = new Map<string, Ref<FileRecordResponse | undefined>>();
 	const {
 		showFileTooBigError,
 		showForbiddenError,
@@ -35,18 +34,8 @@ const fileStorageApi = () => {
 		showFileExistsError,
 	} = useFileStorageNotifier();
 
-	const getFileRecord = (id: string) => {
-		const existingFileRecord = fileRecords.get(id);
-		const skeletonFileRecord = ref(undefined);
-
-		if (!existingFileRecord) {
-			fileRecords.set(id, skeletonFileRecord);
-		}
-
-		const returnValue = existingFileRecord ?? skeletonFileRecord;
-
-		return returnValue;
-	};
+	const { getFileRecordsByParentId, updateFileRecords, updateFileRecord } =
+		useFileRecordsStore();
 
 	const fetchFile = async (
 		parentId: string,
@@ -61,7 +50,7 @@ const fileStorageApi = () => {
 				parentType
 			);
 
-			updateOrAddFileRecord(parentId, response.data.data[0]);
+			updateFileRecords(response.data.data);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -82,8 +71,7 @@ const fileStorageApi = () => {
 				parentType,
 				file
 			);
-
-			updateOrAddFileRecord(parentId, response.data);
+			updateFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -112,23 +100,10 @@ const fileStorageApi = () => {
 				fileUrlParams
 			);
 
-			updateOrAddFileRecord(parentId, response.data);
+			updateFileRecord(response.data);
 		} catch (error) {
 			showError(error);
 			throw error;
-		}
-	};
-
-	const updateOrAddFileRecord = (
-		parentId: string,
-		filerecord: FileRecordResponse
-	) => {
-		const existingFileRecord = fileRecords.get(parentId);
-
-		if (existingFileRecord) {
-			existingFileRecord.value = filerecord;
-		} else {
-			fileRecords.set(parentId, ref(filerecord));
 		}
 	};
 
@@ -139,7 +114,7 @@ const fileStorageApi = () => {
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
-			updateOrAddFileRecord(response.data.parentId, response.data);
+			updateFileRecord(response.data);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -178,7 +153,7 @@ const fileStorageApi = () => {
 		rename,
 		upload,
 		uploadFromUrl,
-		getFileRecord,
+		getFileRecordsByParentId,
 	};
 };
 
