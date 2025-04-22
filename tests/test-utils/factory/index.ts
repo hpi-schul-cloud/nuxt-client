@@ -71,3 +71,4 @@ export * from "./courseInfoDataResponseFactory";
 export * from "./deletedElementResponseFactory";
 export * from "./room";
 export * from "./mediaSchoolLicenseResponseFactory";
+export * from "./h5pElementResponseFactory";

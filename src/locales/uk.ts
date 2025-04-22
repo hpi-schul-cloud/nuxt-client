@@ -426,6 +426,8 @@ export default {
 	"components.board.menu.submissionElement": "Налаштування Подання",
 	"components.board.menu.videoConferenceElement":
 		"Налаштування відеоконференція",
+	"components.board.menu.h5pElement":
+		"Налаштування інтерактивних навчальних елементів",
 	"components.board.menu.deletedElement": "Видалені налаштування вмісту",
 	"components.board.notifications.errors.fileNameExists":
 		"Файл з такою назвою вже існує.",
@@ -532,6 +534,7 @@ export default {
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
+	"components.cardElement.h5pElement": "Інтерактивний зміст навчання",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
 	"components.datePicker.validation.required": "Будь ласка, введіть дату.",
 	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
@@ -556,6 +559,8 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Текст",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
 		"Відеоконференція",
+	"components.elementTypeSelection.elements.h5pElement.subtitle":
+		"Інтерактивний елемент навчання",
 	"components.externalTools.status.deactivated": "Деактивовано",
 	"components.externalTools.status.incomplete": "Конфігурація не завершена",
 	"components.externalTools.status.latest": "Останній",
