@@ -173,6 +173,7 @@ module.exports = {
 			"@ui-breadcrumbs": getDir("src/modules/ui/breadcrumbs"),
 			"@ui-chip": getDir("src/modules/ui/chip"),
 			"@ui-confirmation-dialog": getDir("src/modules/ui/confirmation-dialog"),
+			"@ui-data-table": getDir("src/modules/ui/data-table"),
 			"@ui-date-time-picker": getDir("src/modules/ui/date-time-picker"),
 			"@ui-extended-icon-btn": getDir("src/modules/ui/extended-icon-btn"),
 			"@ui-kebab-menu": getDir("src/modules/ui/kebab-menu"),

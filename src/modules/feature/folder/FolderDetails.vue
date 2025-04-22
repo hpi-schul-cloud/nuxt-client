@@ -16,50 +16,10 @@
 		</EmptyState>
 	</template>
 	<template v-else>
-		<div
-			class="d-flex justify-space-between align-center ga-2 mb-2 mt-8 table-title-header"
-			:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
-		>
-			<ActionMenu
-				v-if="selectedIds.length"
-				class="multi-action-menu"
-				:class="{ 'order-2': isExtraSmallDisplay }"
-				:selected-ids="selectedIds"
-				@reset:selected="onResetSelectedMembers"
-			/>
-			<v-spacer />
-			<FileUploadProgress :upload-progress="props.uploadProgress" />
-			<v-text-field
-				v-model="search"
-				density="compact"
-				flat
-				hide-details
-				max-width="400px"
-				mobile-breakpoint="sm"
-				single-line
-				variant="solo-filled"
-				:class="{ 'order-1 w-100 mt-1': isExtraSmallDisplay }"
-				:label="t('common.labels.search')"
-				:prepend-inner-icon="mdiMagnify"
-				:aria-label="t('pages.folder.ariaLabels.filter')"
-			/>
-		</div>
-		<v-data-table
-			v-model:search="search"
-			v-model="selectedIds"
-			data-testid="file-records-table"
-			hover
-			item-value="id"
-			mobile-breakpoint="sm"
+		<DataTable
+			:table-headers="headers"
 			:items="fileRecords"
-			item-selectable="isSelectable"
-			:headers="headers"
-			:items-per-page-options="[5, 10, 25, 50, 100]"
-			:items-per-page="50"
-			:mobile="null"
 			:show-select="true"
-			:sort-asc-icon="mdiMenuDown"
-			:sort-desc-icon="mdiMenuUp"
 		>
 			<template
 				#[`header.data-table-select`]="{ someSelected, allSelected, selectAll }"
@@ -80,35 +40,28 @@
 			<template #[`item.size`]="{ item }">
 				{{ formatFileSize(item.size) }}
 			</template>
-			<!-- <template #[`item.actions`]="{ item, index }">
-				<KebabMenu
-					:data-testid="`kebab-menu-${index}`"
-					:aria-label="getKebabMenuAriaLabel(item.name)"
-				>
-					<KebabMenuAction />
-				</KebabMenu>
-			</template> -->
-		</v-data-table>
+
+			<template #left-of-search>
+				<FileUploadProgress :upload-progress="uploadProgress" />
+			</template>
+		</DataTable>
 	</template>
 </template>
 
 <script setup lang="ts">
 import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { convertFileSize } from "@/utils/fileHelper";
-import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
+import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { defineProps, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDisplay } from "vuetify/lib/framework.mjs";
-import ActionMenu from "../room/RoomMembers/ActionMenu.vue";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
 
 const { t, n } = useI18n();
 
-// Define props for the component
-const props = defineProps({
+defineProps({
 	isLoading: {
 		type: Boolean,
 		required: true,
@@ -130,10 +83,6 @@ const props = defineProps({
 	},
 });
 
-const selectedIds = ref<string[]>([]);
-
-const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
-
 const headers = [
 	{ title: "", key: "preview" },
 	{ title: t("pages.folder.columns.name"), key: "name" },
@@ -142,13 +91,7 @@ const headers = [
 	{ title: "", key: "actions" },
 ];
 
-const search = ref("");
-
 const areUploadStatsVisible = ref(false);
-
-const onResetSelectedMembers = () => {
-	selectedIds.value = [];
-};
 
 const formatFileSize = (size: number) => {
 	const { convertedSize, unit } = convertFileSize(size);
@@ -156,17 +99,6 @@ const formatFileSize = (size: number) => {
 
 	return `${localizedFileSize} ${unit}`;
 };
-
-/* const getKebabMenuAriaLabel = (name: string) => {
-	return t("pages.folder.ariaLabels.actionMenu", {
-		name,
-	});
-}; */
-
-/* const onUpdateFilter = (filteredMembers: RoomMember[]) => {
-	membersFilterCount.value =
-		search.value === "" ? memberList.value.length : filteredMembers.length;
-};  */
 </script>
 
 <style lang="scss" scoped>
