@@ -100,6 +100,13 @@
 					cover
 					:width="24"
 				/>
+				<v-icon v-else-if="isAudioMimeType(item.mimeType)">{{
+					mdiFileMusicOutline
+				}}</v-icon>
+
+				<v-icon v-else-if="isVideoMimeType(item.mimeType)">{{
+					mdiFileVideoOutline
+				}}</v-icon>
 
 				<v-icon v-else>{{ mdiFileOutline }}</v-icon>
 			</template>
@@ -126,10 +133,14 @@ import { FileRecordResponse, PreviewWidth } from "@/fileStorageApi/v3";
 import {
 	convertDownloadToPreviewUrl,
 	convertFileSize,
+	isAudioMimeType,
 	isPreviewPossible,
+	isVideoMimeType,
 } from "@/utils/fileHelper";
 import {
+	mdiFileMusicOutline,
 	mdiFileOutline,
+	mdiFileVideoOutline,
 	mdiMagnify,
 	mdiMenuDown,
 	mdiMenuUp,
