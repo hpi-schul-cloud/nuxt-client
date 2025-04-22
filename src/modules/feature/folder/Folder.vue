@@ -25,6 +25,7 @@
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { FileRecordParentType } from "@/fileStorageApi/v3";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { useFolderState } from "@data-folder";
 import { useFileStorageApi } from "@feature-board-file-element";
 import { mdiPlus } from "@icons/material";
@@ -34,6 +35,7 @@ import FolderDetails from "./FolderDetails.vue";
 import FolderMenu from "./FolderMenu.vue";
 
 const { t } = useI18n();
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 
 const props = defineProps({
 	folderId: {
@@ -65,27 +67,31 @@ const fabClickHandler = () => {
 	const input = document.createElement("input");
 	input.type = "file";
 	input.multiple = true;
-	input.addEventListener("change", (event) => {
+	input.addEventListener("change", async (event) => {
 		const files = (event.target as HTMLInputElement).files;
 		if (files) {
 			const fileArray = Array.from(files);
-			fileUploadStats.value.total = fileArray.length; // Set the total file count
+			fileUploadStats.value.total = fileArray.length;
 
-			for (const file of fileArray) {
-				upload(file, props.folderId, FileRecordParentType.BOARDNODES).then(
-					() => {
-						fileUploadStats.value.uploaded += 1; // Increment the count after each successful upload
-
-						// Reset state after all files are uploaded
-						if (
-							fileUploadStats.value.uploaded === fileUploadStats.value.total
-						) {
-							fileUploadStats.value.total = 0;
-							fileUploadStats.value.uploaded = 0;
+			await Promise.all(
+				fileArray.map((file) =>
+					upload(file, props.folderId, FileRecordParentType.BOARDNODES).then(
+						() => {
+							fileUploadStats.value.uploaded += 1;
 						}
-					}
-				);
-			}
+					)
+				)
+			);
+
+			notifierModule.show({
+				text: t("pages.folder.upload.successfull"),
+				status: "success",
+				timeout: 5000,
+			});
+
+			// Reset state after all files are uploaded
+			fileUploadStats.value.total = 0;
+			fileUploadStats.value.uploaded = 0;
 		}
 	});
 	input.click();

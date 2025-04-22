@@ -2063,4 +2063,5 @@ export default {
 	"pages.folder.ariaLabels.filter": "	Таблиця пошуку/фільтрації",
 	"pages.folder.ariaLabels.actionMenu": "Меню дій для {name}",
 	"pages.folder.uploadstats": "{uploaded} з {total} завантажених файлів",
+	"pages.folder.upload.successfull": "Усі файли успішно завантажено",
 };

@@ -2070,4 +2070,5 @@ export default {
 	"pages.folder.ariaLabels.filter": "Tabelle durchsuchen/filtern",
 	"pages.folder.ariaLabels.actionMenu": "Aktionsmenü für {name}",
 	"pages.folder.uploadstats": "{uploaded} von {total} Dateien hochgeladen",
+	"pages.folder.upload.successfull": "Alle Dateien erfolgreich hochgeladen",
 };
