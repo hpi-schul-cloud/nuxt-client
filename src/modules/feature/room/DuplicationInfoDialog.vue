@@ -1,5 +1,5 @@
 <template>
-	<v-dialog max-width="520">
+	<v-dialog v-model="isOpen" max-width="520">
 		<v-card
 			:title="$t('feature-room.DuplicationInfoDialog.title')"
 			data-testid="duplication-info-dialog"
@@ -65,6 +65,11 @@
 
 <script setup lang="ts">
 import { InfoAlert } from "@ui-alert";
+
+const isOpen = defineModel({
+	type: Boolean,
+	required: true,
+});
 
 defineEmits(["duplication:cancel", "duplication:confirm"]);
 </script>
