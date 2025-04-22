@@ -28,28 +28,7 @@
 				@reset:selected="onResetSelectedMembers"
 			/>
 			<v-spacer />
-			<transition name="fade">
-				<div v-if="areUploadStatsVisible">
-					<v-progress-circular
-						v-if="uploadStats.uploaded < uploadStats.total"
-						indeterminate
-						class="mr-2"
-						size="20"
-						width="2"
-					/>
-					<v-icon v-else color="green" class="mr-2">
-						{{ mdiCheckCircle }}</v-icon
-					>
-					<span>
-						{{
-							t("pages.folder.uploadstats", {
-								uploaded: uploadStats.uploaded,
-								total: uploadStats.total,
-							})
-						}}
-					</span>
-				</div>
-			</transition>
+			<FileUploadProgress :upload-progress="props.uploadProgress" />
 			<v-text-field
 				v-model="search"
 				density="compact"
@@ -93,24 +72,7 @@
 				/>
 			</template>
 			<template #[`item.preview`]="{ item }">
-				<v-img
-					v-if="isPreviewPossible(item.previewStatus)"
-					:src="convertDownloadToPreviewUrl(item.url, PreviewWidth._500)"
-					:alt="item.name"
-					:aria-label="item.name"
-					:aspect-ratio="1 / 1"
-					cover
-					:width="24"
-				/>
-				<v-icon v-else-if="isAudioMimeType(item.mimeType)">{{
-					mdiFileMusicOutline
-				}}</v-icon>
-
-				<v-icon v-else-if="isVideoMimeType(item.mimeType)">{{
-					mdiFileVideoOutline
-				}}</v-icon>
-
-				<v-icon v-else>{{ mdiFileOutline }}</v-icon>
+				<FilePreview :filerecord="item" />
 			</template>
 			<template #[`item.createdAt`]="{ item }">
 				{{ new Date(item.createdAt ?? "").toLocaleDateString() }}
@@ -131,29 +93,17 @@
 </template>
 
 <script setup lang="ts">
-import { FileRecordResponse, PreviewWidth } from "@/fileStorageApi/v3";
-import {
-	convertDownloadToPreviewUrl,
-	convertFileSize,
-	isAudioMimeType,
-	isPreviewPossible,
-	isVideoMimeType,
-} from "@/utils/fileHelper";
-import {
-	mdiCheckCircle,
-	mdiFileMusicOutline,
-	mdiFileOutline,
-	mdiFileVideoOutline,
-	mdiMagnify,
-	mdiMenuDown,
-	mdiMenuUp,
-} from "@icons/material";
+import { FileRecordResponse } from "@/fileStorageApi/v3";
+import { convertFileSize } from "@/utils/fileHelper";
+import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { EmptyState } from "@ui-empty-state";
-import { defineProps, PropType, ref, watch } from "vue";
+import { defineProps, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify/lib/framework.mjs";
 import ActionMenu from "../room/RoomMembers/ActionMenu.vue";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
+import FilePreview from "./FilePreview.vue";
+import FileUploadProgress from "./FileUploadProgress.vue";
 
 const { t, n } = useI18n();
 
@@ -171,7 +121,7 @@ const props = defineProps({
 		type: Array as PropType<FileRecordResponse[]>,
 		required: true,
 	},
-	fileUploadStats: {
+	uploadProgress: {
 		type: Object as PropType<{
 			uploaded: number;
 			total: number;
@@ -195,31 +145,6 @@ const headers = [
 const search = ref("");
 
 const areUploadStatsVisible = ref(false);
-
-const uploadStats = ref({ uploaded: 0, total: 0 });
-
-watch(
-	() => props.fileUploadStats,
-	(newStats) => {
-		if (newStats.total > 0) {
-			uploadStats.value = { ...newStats };
-		}
-	},
-	{ deep: true }
-);
-
-watch(
-	() => props.fileUploadStats.total,
-	(newValue, oldValue) => {
-		if (oldValue > 0 && newValue === 0) {
-			setTimeout(() => {
-				areUploadStatsVisible.value = false;
-			}, 5000);
-		} else if (newValue > 0) {
-			areUploadStatsVisible.value = true;
-		}
-	}
-);
 
 const onResetSelectedMembers = () => {
 	selectedIds.value = [];

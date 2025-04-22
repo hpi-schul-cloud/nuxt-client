@@ -17,7 +17,7 @@
 			:is-loading="isLoading"
 			:is-empty="fileRecords.length === 0"
 			:file-records="fileRecords"
-			:file-upload-stats="fileUploadStats"
+			:upload-progress="uploadProgress"
 		/>
 	</DefaultWireframe>
 </template>
@@ -56,7 +56,7 @@ const fabAction = {
 	dataTestId: "fab-add-files",
 };
 
-const fileUploadStats = ref({
+const uploadProgress = ref({
 	uploaded: 0,
 	total: 0,
 });
@@ -69,21 +69,21 @@ const fabClickHandler = () => {
 		const files = (event.target as HTMLInputElement).files;
 		if (files) {
 			const fileArray = Array.from(files);
-			fileUploadStats.value.total = fileArray.length;
+			uploadProgress.value.total = fileArray.length;
 
 			await Promise.all(
 				fileArray.map((file) =>
 					upload(file, props.folderId, FileRecordParentType.BOARDNODES).then(
 						() => {
-							fileUploadStats.value.uploaded += 1;
+							uploadProgress.value.uploaded += 1;
 						}
 					)
 				)
 			);
 
 			// Reset state after all files are uploaded
-			fileUploadStats.value.total = 0;
-			fileUploadStats.value.uploaded = 0;
+			uploadProgress.value.total = 0;
+			uploadProgress.value.uploaded = 0;
 		}
 	});
 	input.click();
