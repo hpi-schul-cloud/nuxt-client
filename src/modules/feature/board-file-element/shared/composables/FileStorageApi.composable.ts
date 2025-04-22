@@ -7,10 +7,10 @@ import {
 	RenameFileParams,
 	StorageLocation,
 } from "@/fileStorageApi/v3";
-import { useFileRecordsStore } from "@/modules/feature/board-file-element/shared/composables/FileRecordsState";
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createTestableGlobaleState } from "@/utils/create-global-state";
+import { useFileRecordsStore } from "@data-file";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
 export enum ErrorType {
