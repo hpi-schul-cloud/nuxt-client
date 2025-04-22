@@ -17,7 +17,7 @@
 	</template>
 	<template v-else>
 		<div
-			class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
+			class="d-flex justify-space-between align-center ga-2 mb-2 mt-8 table-title-header"
 			:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
 		>
 			<ActionMenu
