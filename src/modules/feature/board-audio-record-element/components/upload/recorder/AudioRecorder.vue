@@ -71,9 +71,9 @@
 				>
 					<v-icon>{{ mdiStop }}</v-icon>
 				</v-btn>
-				<!-- <div class="duration py-1 pl-1 pr-2 text-body-2">
+				<div class="duration py-1 pl-1 pr-2 text-body-2">
 					{{ elapsedTimeDisplay }}
-				</div> -->
+				</div>
 				<audio
 					v-if="audioUrl"
 					ref="audio"
@@ -109,8 +109,9 @@ import {
 } from "@icons/material";
 import { ContentElementBar } from "@ui-board";
 import { useMediaControls } from "@vueuse/core";
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, onUnmounted, ref } from "vue";
 import { RecordingStateEnum, useAudioRecorder } from "../../../composables";
+import { formatSecondsToHourMinSec } from "../../../../../../utils/fileHelper";
 
 export default defineComponent({
 	name: "AudioRecorder",
@@ -141,16 +142,31 @@ export default defineComponent({
 			resume,
 		} = useAudioRecorder();
 
+		const elapsedTime = ref(0);
+		let intervalId: number | null = null;
+
 		const onStart = async () => {
 			await start();
+			elapsedTime.value = 0;
+			intervalId = window.setInterval(() => {
+				elapsedTime.value += 1;
+			}, 1000);
 		};
 
 		const onPause = () => {
+			if (intervalId) {
+				clearInterval(intervalId);
+				intervalId = null;
+			}
+
 			pause();
 		};
 
 		const onResume = () => {
 			resume();
+			intervalId = window.setInterval(() => {
+				elapsedTime.value += 1;
+			}, 1000);
 		};
 
 		const stopRecording = async () => {
@@ -161,6 +177,10 @@ export default defineComponent({
 					audio.value.src = audioUrl.value;
 				}
 			}
+			if (intervalId) {
+				clearInterval(intervalId);
+				intervalId = null;
+			}
 		};
 
 		const play = () => {
@@ -168,6 +188,18 @@ export default defineComponent({
 				audio.value.play();
 			}
 		};
+
+		const elapsedTimeDisplay = computed(() => {
+			return formatSecondsToHourMinSec(elapsedTime.value);
+		});
+
+		// Moving these variables to template causes the audio not to play on iOS
+
+		onUnmounted(() => {
+			if (intervalId) {
+				clearInterval(intervalId);
+			}
+		});
 
 		const onUpload = async () => {
 			if (audioUrl.value) {
@@ -205,6 +237,7 @@ export default defineComponent({
 			volume,
 			rate,
 			onSourceError,
+			elapsedTimeDisplay,
 		};
 	},
 });
