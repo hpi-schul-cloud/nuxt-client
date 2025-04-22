@@ -83,12 +83,6 @@ const fabClickHandler = () => {
 				)
 			);
 
-			notifierModule.show({
-				text: t("pages.folder.upload.successfull"),
-				status: "success",
-				timeout: 5000,
-			});
-
 			// Reset state after all files are uploaded
 			fileUploadStats.value.total = 0;
 			fileUploadStats.value.uploaded = 0;

@@ -29,20 +29,22 @@
 			/>
 			<v-spacer />
 			<transition name="fade">
-				<div v-if="fileUploadStats.total > 0">
+				<div v-if="areUploadStatsVisible">
 					<v-progress-circular
-						:model-value="
-							(fileUploadStats.uploaded / fileUploadStats.total) * 100
-						"
+						v-if="uploadStats.uploaded < uploadStats.total"
+						indeterminate
 						class="mr-2"
 						size="20"
 						width="2"
 					/>
+					<v-icon v-else color="green" class="mr-2">
+						{{ mdiCheckCircle }}</v-icon
+					>
 					<span>
 						{{
 							t("pages.folder.uploadstats", {
-								uploaded: fileUploadStats.uploaded,
-								total: fileUploadStats.total,
+								uploaded: uploadStats.uploaded,
+								total: uploadStats.total,
 							})
 						}}
 					</span>
@@ -138,6 +140,7 @@ import {
 	isVideoMimeType,
 } from "@/utils/fileHelper";
 import {
+	mdiCheckCircle,
 	mdiFileMusicOutline,
 	mdiFileOutline,
 	mdiFileVideoOutline,
@@ -146,7 +149,7 @@ import {
 	mdiMenuUp,
 } from "@icons/material";
 import { EmptyState } from "@ui-empty-state";
-import { defineProps, PropType, ref } from "vue";
+import { defineProps, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify/lib/framework.mjs";
 import ActionMenu from "../room/RoomMembers/ActionMenu.vue";
@@ -155,7 +158,7 @@ import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 const { t, n } = useI18n();
 
 // Define props for the component
-defineProps({
+const props = defineProps({
 	isLoading: {
 		type: Boolean,
 		required: true,
@@ -190,6 +193,33 @@ const headers = [
 ];
 
 const search = ref("");
+
+const areUploadStatsVisible = ref(false);
+
+const uploadStats = ref({ uploaded: 0, total: 0 });
+
+watch(
+	() => props.fileUploadStats,
+	(newStats) => {
+		if (newStats.total > 0) {
+			uploadStats.value = { ...newStats };
+		}
+	},
+	{ deep: true }
+);
+
+watch(
+	() => props.fileUploadStats.total,
+	(newValue, oldValue) => {
+		if (oldValue > 0 && newValue === 0) {
+			setTimeout(() => {
+				areUploadStatsVisible.value = false;
+			}, 5000);
+		} else if (newValue > 0) {
+			areUploadStatsVisible.value = true;
+		}
+	}
+);
 
 const onResetSelectedMembers = () => {
 	selectedIds.value = [];

@@ -2099,6 +2099,4 @@ export default {
 	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
 	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
-	"pages.folder.upload.successfull":
-		"Todos los archivos se han cargado correctamente",
 };
