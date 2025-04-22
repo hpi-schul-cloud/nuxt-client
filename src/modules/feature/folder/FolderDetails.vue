@@ -8,7 +8,7 @@
 			/>
 		</VContainer>
 	</template>
-	<template v-else-if="isEmpty">
+	<template v-else-if="isEmpty && !areUploadStatsVisible">
 		<EmptyState :title="t('pages.folder.emptyState')">
 			<template #media>
 				<EmptyFolderSvg />
