@@ -27,6 +27,7 @@
 			"@data-room": ["src/modules/data/room"],
 			"@data-folder": ["src/modules/data/folder"],
 			"@data-license": ["src/modules/data/license"],
+			"@feature-auto-logout": ["src/modules/feature/auto-logout"],
 			"@feature-board-file-element": ["src/modules/feature/board-file-element"],
 			"@feature-board-submission-element": [
 				"src/modules/feature/board-submission-element"
