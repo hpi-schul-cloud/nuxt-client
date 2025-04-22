@@ -13,14 +13,15 @@ import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
+import { FolderContentElement } from "@feature-board-folder-element";
+import { H5pElement } from "@feature-board-h5p-element";
 import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
+import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { createMock } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
 import ContentElementList from "./ContentElementList.vue";
-import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
-import { FolderContentElement } from "@feature-board-folder-element";
 
 describe("ContentElementList", () => {
 	describe("when feature flags are true", () => {
@@ -37,6 +38,7 @@ describe("ContentElementList", () => {
 					FEATURE_COLUMN_BOARD_LINK_ELEMENT_ENABLED: true,
 					FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: true,
 					FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
+					FEATURE_COLUMN_BOARD_H5P_ENABLED: true,
 					FEATURE_TEAMS_ENABLED: true,
 				}),
 			});
@@ -104,6 +106,10 @@ describe("ContentElementList", () => {
 				{
 					elementType: ContentElementType.FileFolder,
 					component: FolderContentElement,
+				},
+				{
+					elementType: ContentElementType.H5p,
+					component: H5pElement,
 				},
 			];
 

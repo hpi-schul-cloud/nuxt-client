@@ -1,21 +1,21 @@
+import { SubmissionContainerElementResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { submissionContainerElementResponseFactory } from "@@/tests/test-utils/factory/submissionContainerElementResponseFactory";
-import { createMock } from "@golevelup/ts-jest";
-import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
-import { shallowMount } from "@vue/test-utils";
-import { computed, ref, unref } from "vue";
-import SubmissionContentElement from "./SubmissionContentElement.vue";
-import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
-import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
-import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
-import { useContentElementState } from "@data-board";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { SubmissionContainerElementResponse } from "@/serverApi/v3";
+import { useContentElementState } from "@data-board";
+import { createMock } from "@golevelup/ts-jest";
+import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
+import { shallowMount } from "@vue/test-utils";
+import { computed, ref, unref } from "vue";
+import { useSubmissionContentElementState } from "../composables/SubmissionContentElementState.composable";
+import SubmissionContentElement from "./SubmissionContentElement.vue";
+import SubmissionContentElementDisplay from "./SubmissionContentElementDisplay.vue";
+import SubmissionContentElementEdit from "./SubmissionContentElementEdit.vue";
 
 jest.mock("@data-board/BoardFocusHandler.composable");
 jest.mock("@feature-board");
@@ -90,7 +90,6 @@ describe("SubmissionContentElement", () => {
 					dueDate: element.content.dueDate,
 				}),
 				computedElement: computed(() => element),
-				isLoading: ref(false),
 			});
 
 			const { wrapper } = getWrapper({
@@ -191,7 +190,6 @@ describe("SubmissionContentElement", () => {
 					dueDate: element.content.dueDate,
 				}),
 				computedElement: computed(() => element),
-				isLoading: ref(false),
 			});
 
 			const { wrapper } = getWrapper({

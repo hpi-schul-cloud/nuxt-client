@@ -193,6 +193,15 @@ export const useAddElementDialog = (
 		});
 	}
 
+	if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
+		options.push({
+			icon: "$h5pOutline",
+			label: t("components.elementTypeSelection.elements.h5pElement.subtitle"),
+			action: () => onElementClick(ContentElementType.H5p),
+			testId: "create-element-h5p",
+		});
+	}
+
 	const askType = () => {
 		elementTypeOptions.value = options;
 		isDialogOpen.value = true;

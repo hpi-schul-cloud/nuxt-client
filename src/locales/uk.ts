@@ -426,6 +426,8 @@ export default {
 	"components.board.menu.submissionElement": "Налаштування Подання",
 	"components.board.menu.videoConferenceElement":
 		"Налаштування відеоконференція",
+	"components.board.menu.h5pElement":
+		"Налаштування інтерактивних навчальних елементів",
 	"components.board.menu.deletedElement": "Видалені налаштування вмісту",
 	"components.board.notifications.errors.fileNameExists":
 		"Файл з такою назвою вже існує.",
@@ -532,6 +534,7 @@ export default {
 	"components.cardElement.deletedElement": "Видалений вміст",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Інструмент {toolName} недоступний. Будь ласка, зверніться до адміністратора школи.",
+	"components.cardElement.h5pElement": "Інтерактивний зміст навчання",
 	"components.datePicker.validation.format": "Використовуйте формат ДД.ММ.РРРР",
 	"components.datePicker.validation.required": "Будь ласка, введіть дату.",
 	"components.dateTimePicker.messages.dateInPast": "Дата і час у минулому.",
@@ -556,6 +559,8 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Текст",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
 		"Відеоконференція",
+	"components.elementTypeSelection.elements.h5pElement.subtitle":
+		"Інтерактивний елемент навчання",
 	"components.externalTools.status.deactivated": "Деактивовано",
 	"components.externalTools.status.incomplete": "Конфігурація не завершена",
 	"components.externalTools.status.latest": "Останній",
@@ -1843,6 +1848,13 @@ export default {
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Змінити дозвіл кімнат для {memberFullName}",
 	"pages.rooms.members.manage": "Учасник кімнати",
+	"pages.rooms.members.tab.members": "Учасники",
+	"pages.rooms.members.tab.invitations": "Запрошення",
+	"pages.rooms.members.tab.invitations.infoText":
+		"Вчителі з вашої школи та вчителі з інших шкіл можуть бути запрошені до кімнати за допомогою посилання-запрошення. Учні з інших шкіл завжди повинні бути додані до кімнати вчителем-куратором з їхньої школи. Якщо в налаштуваннях посилання ввімкнено опцію „Підтвердження перед приєднанням”, це можна зробити на вкладці “Підтвердження”.",
+	"pages.rooms.members.tab.confirmations": "Підтвердження",
+	"pages.rooms.members.tab.confirmations.infoText":
+		"Якщо при створенні посилання-запрошення ввімкнено опцію „Вхід до кімнати тільки після підтвердження”, при натисканні на посилання спочатку генерується запит на членство. Тут його можна підтвердити або відхилити. Якщо запит на членство підтверджено, особа отримує доступ до всього вмісту кімнати і потрапляє до списку учасників.",
 	"pages.rooms.members.remove.ariaLabel": "Видалити {memberFullName} з кімнати",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Скинути вибраних членів зі списку",
@@ -2049,4 +2061,11 @@ export default {
 	"feature.media-shelf.availableLine.title": "Доступні медіа",
 	"feature.media-shelf.layout.list": "лінії",
 	"feature.media-shelf.layout.grid": "сітка",
+	"pages.folder.emptyState": "Наразі тут немає файлів.",
+	"pages.folder.fab.title": "Додати файл",
+	"pages.folder.untitled": "Папка без назви",
+	"pages.folder.title": "Папка",
+	"pages.folder.ariaLabels.menu": "Меню Папки",
+	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",
+	"pages.folder.ariaLabels.menu.action.delete": "Видалити папку",
 };
