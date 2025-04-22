@@ -1,107 +1,140 @@
 import { computed, Ref, ref, watch } from "vue";
-import {
-	accountsModule,
-	authModule,
-	envConfigModule,
-	notifierModule,
-} from "./store-accessor";
+import { authModule, envConfigModule, notifierModule } from "./store-accessor";
 import { useI18n } from "vue-i18n";
+import { $axios } from "../utils/api";
 
-const { log } = console;
+export enum SessionStatus {
+	Continued = "continued",
+	ShouldExtended = "shouldExtended",
+	Ended = "ended",
+	Error = "error",
+	Null = "null",
+}
 
 export const useAutoLogout = () => {
-	const jwtTimerDisabled = computed(
-		() => process.env.NODE_ENV === "development" // TODO: is this really needed?
-	);
-
 	const { t } = useI18n();
-	const remainingTimeInSeconds = ref(30 * 2); // 1 minute
-	const showWarningOnRemainingSeconds = ref(30);
-	const active = ref(false); // TODO: better naming here
+	const showDialog = ref(false);
 	const errorOnExtend = ref(false);
-	const sessionStatus: Ref<
-		"continued" | "shouldExtended" | "ended" | "error" | null
-	> = ref(null);
+	const sessionStatus: Ref<SessionStatus> = ref(
+		null as unknown as SessionStatus
+	);
 	const isTTLUpdated = ref(false);
 
-	let polling: ReturnType<typeof setInterval> | null = null;
+	let remainingTimePolling: ReturnType<typeof setInterval> | null = null;
+	let ttlTimeoutPolling: ReturnType<typeof setTimeout> | null = null;
+	let retry = 0;
 
 	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
 		envConfigModule.getEnv;
 
-	showWarningOnRemainingSeconds.value = JWT_SHOW_TIMEOUT_WARNING_SECONDS || 30;
-	remainingTimeInSeconds.value = JWT_TIMEOUT_SECONDS || 30 * 2;
+	const showWarningOnRemainingSeconds = ref(
+		JWT_SHOW_TIMEOUT_WARNING_SECONDS || 45
+	);
+	const remainingTimeInSeconds = ref(JWT_TIMEOUT_SECONDS || 30 * 2);
 
 	const remainingTimeInMinutes = computed(() =>
 		Math.max(Math.floor(remainingTimeInSeconds.value / 60), 0)
 	);
 
-	const getTTL = async () => {
-		try {
-			const ttlCount = await accountsModule.getTTL();
-
-			log("getTTL", ttlCount);
-			if (ttlCount > remainingTimeInSeconds.value) {
-				remainingTimeInSeconds.value = ttlCount;
-				isTTLUpdated.value = true;
-				active.value = false;
-			} else {
-				active.value = true;
-				sessionStatus.value = "shouldExtended";
-			}
-			return ttlCount;
-		} catch {
-			sessionStatus.value = "error";
-			return -1;
+	const checkTTL = async (immediate = false) => {
+		let ttlCount = 0;
+		if (immediate) {
+			clearInterval(ttlTimeoutPolling!);
+			ttlTimeoutPolling = null;
 		}
+		if (ttlTimeoutPolling) {
+			return ttlCount;
+		}
+
+		ttlTimeoutPolling = setTimeout(
+			async () => {
+				retry++;
+				try {
+					const response = await $axios.get("/v1/accounts/jwtTimer");
+					ttlCount = response.data.ttl;
+
+					if (ttlCount > remainingTimeInSeconds.value) {
+						isTTLUpdated.value = true;
+						showDialog.value = false;
+					} else {
+						showDialog.value = true;
+					}
+					return ttlCount;
+				} catch {
+					sessionStatus.value = SessionStatus.Error;
+					return -1;
+				} finally {
+					if (ttlTimeoutPolling) {
+						clearInterval(ttlTimeoutPolling);
+						ttlTimeoutPolling = null;
+					}
+				}
+			},
+			immediate ? 0 : 2 ** retry * 1000
+		);
 	};
 
-	const createInterval = () => {
-		if (polling) clearInterval(polling);
+	const createSession = () => {
+		if (remainingTimePolling) {
+			clearInterval(remainingTimePolling);
+			remainingTimePolling = null;
+		}
+		if (ttlTimeoutPolling) {
+			clearTimeout(ttlTimeoutPolling);
+			ttlTimeoutPolling = null;
+		}
 
-		polling = setInterval(async () => {
+		showWarningOnRemainingSeconds.value = JWT_SHOW_TIMEOUT_WARNING_SECONDS;
+		remainingTimeInSeconds.value = JWT_TIMEOUT_SECONDS || 30 * 2;
+		if (showDialog.value) showDialog.value = false;
+
+		sessionStatus.value = SessionStatus.Null;
+		errorOnExtend.value = false;
+		isTTLUpdated.value = false;
+		retry = 0;
+
+		remainingTimePolling = setInterval(async () => {
 			remainingTimeInSeconds.value -= 1;
 
 			if (remainingTimeInSeconds.value <= showWarningOnRemainingSeconds.value) {
-				await getTTL();
+				sessionStatus.value = SessionStatus.Null;
+				await checkTTL();
 			}
 
 			if (remainingTimeInSeconds.value <= 0) {
-				sessionStatus.value = "ended";
-				clearInterval(polling!);
-				polling = null;
+				sessionStatus.value = SessionStatus.Ended;
+				clearInterval(remainingTimePolling!);
+				remainingTimePolling = null;
 			}
 		}, 1000);
 	};
 
-	const initSession = () => {
-		createInterval();
-		log("initSession-------", remainingTimeInSeconds.value);
-	};
-
 	const extendSession = async () => {
+		clearTimeout(ttlTimeoutPolling!);
 		if (sessionStatus.value === "ended") {
-			clearInterval(polling!);
+			clearInterval(remainingTimePolling!);
 			authModule.logout();
 			return;
 		}
 
 		try {
-			await accountsModule.resetJwtTimer();
-			const ttlCount = await getTTL();
+			await $axios.post("/v1/accounts/jwtTimer");
+			const response = await $axios.get("/v1/accounts/jwtTimer");
+			const ttlCount = response.data.ttl;
 
-			if (ttlCount > 0) {
+			if (ttlCount > remainingTimeInSeconds.value) {
 				remainingTimeInSeconds.value = ttlCount;
-				active.value = false;
+				showDialog.value = false;
 				errorOnExtend.value = false;
-				sessionStatus.value = "continued";
-				isTTLUpdated.value = false;
+				isTTLUpdated.value = true;
 
-				createInterval();
+				createSession();
+				retry = 0;
 			}
+			sessionStatus.value = SessionStatus.Continued;
 		} catch {
 			errorOnExtend.value = true;
-			sessionStatus.value = "error";
+			sessionStatus.value = SessionStatus.Error;
 		}
 	};
 
@@ -136,21 +169,20 @@ export const useAutoLogout = () => {
 		() => isTTLUpdated.value,
 		(newValue) => {
 			if (newValue) {
-				log("createInterval in watcher");
-				createInterval();
+				createSession();
 				isTTLUpdated.value = false;
 			}
 		}
 	);
 
 	return {
-		active,
+		showDialog,
 		errorOnExtend,
 		remainingTimeInMinutes,
 		remainingTimeInSeconds,
 		sessionStatus,
 		showWarningOnRemainingSeconds,
+		createSession,
 		extendSession,
-		initSession,
 	};
 };

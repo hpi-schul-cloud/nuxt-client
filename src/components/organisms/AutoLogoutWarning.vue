@@ -1,15 +1,15 @@
 <template>
-	<base-modal v-model:active="active">
+	<base-modal v-model:active="showDialog">
 		<template #body>
 			<div class="wrapper">
 				<img
-					:src="getImage"
+					:src="image"
 					class="sloth"
 					role="presentation"
 					:alt="t('components.organisms.AutoLogoutWarning.image.alt')"
 				/>
-				<p v-if="errorOnExtend" class="sloth-text">
-					{{ t("components.organisms.AutoLogoutWarning.error") }}
+				<p v-if="isSessionEnded" class="sloth-text">
+					{{ t("components.organisms.AutoLogoutWarning.error.401") }}
 				</p>
 				<p v-else class="sloth-text">
 					<i18n-t
@@ -42,8 +42,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useAutoLogout } from "@/store/autoLogout.composable";
-import { computed, onMounted } from "vue";
+import { SessionStatus, useAutoLogout } from "@/store/autoLogout.composable";
+import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import SlothSvg from "@/assets/img/logout/Sloth.svg";
 import SlothErrorSvg from "@/assets/img/logout/Sloth_error.svg";
@@ -55,36 +55,46 @@ const { t } = useI18n();
 
 const {
 	remainingTimeInMinutes,
-	active,
+	showDialog,
 	errorOnExtend,
 	remainingTimeInSeconds,
 	sessionStatus,
 	extendSession,
-	initSession,
+	createSession,
 } = useAutoLogout();
 
-const getImage = computed(() => {
+const image = computed(() => {
 	if (errorOnExtend.value) return SlothErrorSvg;
 	return SlothSvg;
 });
 
+const isSessionEnded = computed(() => {
+	return sessionStatus.value === SessionStatus.Ended;
+});
+
 const confirmButtonText = computed(() => {
-	if (errorOnExtend.value || sessionStatus.value === "ended")
-		return "Return to login page";
+	if (isSessionEnded.value) return "Return to login page";
 	return t("components.organisms.AutoLogoutWarning.confirm");
 });
 
 const onConfirm = () => {
-	if (errorOnExtend.value || sessionStatus.value === "ended") {
+	if (isSessionEnded.value) {
 		router.push("/login");
-	} else {
-		extendSession();
+		return;
 	}
+
+	extendSession();
 };
 
-onMounted(() => {
-	initSession();
-});
+watch(
+	() => router.currentRoute.value,
+	(newVal) => {
+		if (newVal) {
+			createSession();
+		}
+	},
+	{ immediate: true }
+);
 </script>
 
 <style lang="scss" scoped>
