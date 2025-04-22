@@ -70,8 +70,18 @@
 					@click="selectAll(!allSelected)"
 				/>
 			</template>
-			<template #[`item.preview`]>
-				<v-icon>{{ mdiFileOutline }}</v-icon>
+			<template #[`item.preview`]="{ item }">
+				<v-img
+					v-if="isPreviewPossible(item.previewStatus)"
+					:src="convertDownloadToPreviewUrl(item.url, PreviewWidth._500)"
+					:alt="item.name"
+					:aria-label="item.name"
+					:aspect-ratio="1 / 1"
+					cover
+					:width="24"
+				/>
+
+				<v-icon v-else>{{ mdiFileOutline }}</v-icon>
 			</template>
 			<template #[`item.createdAt`]="{ item }">
 				{{ new Date(item.createdAt ?? "").toLocaleDateString() }}
@@ -92,8 +102,12 @@
 </template>
 
 <script setup lang="ts">
-import { FileRecordResponse } from "@/fileStorageApi/v3";
-import { convertFileSize } from "@/utils/fileHelper";
+import { FileRecordResponse, PreviewWidth } from "@/fileStorageApi/v3";
+import {
+	convertDownloadToPreviewUrl,
+	convertFileSize,
+	isPreviewPossible,
+} from "@/utils/fileHelper";
 import {
 	mdiFileOutline,
 	mdiMagnify,
