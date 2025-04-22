@@ -77,7 +77,7 @@ export const useAudioRecorder = () => {
 				return resolve(null);
 			}
 
-			const mimeType = "audio/wav";
+			const mimeType = "audio/webm";
 			mediaRecorder.value.onstop = (): void => {
 				const blob: Blob = new Blob(chunks.value, { type: mimeType });
 
