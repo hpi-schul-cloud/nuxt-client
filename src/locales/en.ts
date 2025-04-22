@@ -1819,6 +1819,13 @@ export default {
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Change room permissions for {memberFullName}",
 	"pages.rooms.members.manage": "Room members",
+	"pages.rooms.members.tab.members": "Members",
+	"pages.rooms.members.tab.invitations": "Invitations",
+	"pages.rooms.members.tab.invitations.infoText":
+		"Teachers from your own school and teachers from other schools can be invited to the room using an invitation link. Students from other schools must always be added to the room by a supervising teacher from their school. If „Confirm before joining” is enabled in the link settings, this can be done in the „Confirmations” tab.",
+	"pages.rooms.members.tab.confirmations": "Confirmations",
+	"pages.rooms.members.tab.confirmations.infoText":
+		"If the option „Enter room only after confirmation” is activated when creating an invitation link, clicking on the link first generates a membership request. This can be confirmed or rejected here. If the membership request is confirmed, the person receives access to all room contents and is listed in the member list.",
 	"pages.rooms.members.remove.ariaLabel":
 		"Remove {memberFullName} from the room",
 	"pages.rooms.members.resetSelection.ariaLabel":
@@ -2026,4 +2033,11 @@ export default {
 	"feature.media-shelf.availableLine.title": "Available media",
 	"feature.media-shelf.layout.list": "Lines",
 	"feature.media-shelf.layout.grid": "Grid",
+	"pages.folder.emptyState": "There are currently no files here.",
+	"pages.folder.fab.title": "Add file",
+	"pages.folder.untitled": "Untitled folder",
+	"pages.folder.title": "Folder",
+	"pages.folder.ariaLabels.menu": "Folder menu",
+	"pages.folder.ariaLabels.menu.action.edit": "Rename folder",
+	"pages.folder.ariaLabels.menu.action.delete": "Delete folder",
 };

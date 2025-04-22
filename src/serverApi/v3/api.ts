@@ -1708,6 +1708,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_ROOM_MEMBERS_TABS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_EXTERNAL_SYSTEM_LOGOUT_ENABLED: boolean;
     /**
      * 
@@ -1721,6 +1727,12 @@ export interface ConfigResponse {
      * @memberof ConfigResponse
      */
     LICENSE_SUMMARY_URL?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ConfigResponse
+     */
+    ROOM_MEMBER_INFO_URL: string | null;
 }
 /**
  * 
@@ -3245,6 +3257,25 @@ export interface DrawingElementResponse {
      * @memberof DrawingElementResponse
      */
     content: DrawingElementContent;
+}
+/**
+ * 
+ * @export
+ * @interface ElementWithParentHierarchyResponse
+ */
+export interface ElementWithParentHierarchyResponse {
+    /**
+     * The element data
+     * @type {ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse}
+     * @memberof ElementWithParentHierarchyResponse
+     */
+    element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
+    /**
+     * The hierarchical path of parent elements
+     * @type {Array<ParentNodeInfo>}
+     * @memberof ElementWithParentHierarchyResponse
+     */
+    parentHierarchy: Array<ParentNodeInfo>;
 }
 /**
  * 
@@ -7173,6 +7204,43 @@ export interface ParentConsentResponse {
      */
     _id: string;
 }
+/**
+ * 
+ * @export
+ * @interface ParentNodeInfo
+ */
+export interface ParentNodeInfo {
+    /**
+     * The ID of the parent node
+     * @type {string}
+     * @memberof ParentNodeInfo
+     */
+    id: string;
+    /**
+     * The type of the parent node
+     * @type {ParentNodeType}
+     * @memberof ParentNodeInfo
+     */
+    type: ParentNodeType;
+    /**
+     * The name of the parent node
+     * @type {string}
+     * @memberof ParentNodeInfo
+     */
+    name: string;
+}
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum ParentNodeType {
+    Course = 'course',
+    Room = 'room',
+    User = 'user',
+    Board = 'board'
+}
+
 /**
  * 
  * @export
@@ -14408,6 +14476,44 @@ export const BoardElementApiAxiosParamCreator = function (configuration?: Config
         },
         /**
          * 
+         * @summary Get metadata for a single content element.
+         * @param {string} contentElementId The id of the element.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        elementControllerGetElementWithParentHierarchy: async (contentElementId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'contentElementId' is not null or undefined
+            assertParamExists('elementControllerGetElementWithParentHierarchy', 'contentElementId', contentElementId)
+            const localVarPath = `/elements/{contentElementId}`
+                .replace(`{${"contentElementId"}}`, encodeURIComponent(String(contentElementId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Move a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {MoveContentElementBody} moveContentElementBody 
@@ -14567,6 +14673,17 @@ export const BoardElementApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get metadata for a single content element.
+         * @param {string} contentElementId The id of the element.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async elementControllerGetElementWithParentHierarchy(contentElementId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ElementWithParentHierarchyResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.elementControllerGetElementWithParentHierarchy(contentElementId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Move a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {MoveContentElementBody} moveContentElementBody 
@@ -14633,6 +14750,16 @@ export const BoardElementApiFactory = function (configuration?: Configuration, b
         },
         /**
          * 
+         * @summary Get metadata for a single content element.
+         * @param {string} contentElementId The id of the element.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        elementControllerGetElementWithParentHierarchy(contentElementId: string, options?: any): AxiosPromise<ElementWithParentHierarchyResponse> {
+            return localVarFp.elementControllerGetElementWithParentHierarchy(contentElementId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Move a single content element.
          * @param {string} contentElementId The id of the element.
          * @param {MoveContentElementBody} moveContentElementBody 
@@ -14692,6 +14819,16 @@ export interface BoardElementApiInterface {
      * @memberof BoardElementApiInterface
      */
     elementControllerDeleteElement(contentElementId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Get metadata for a single content element.
+     * @param {string} contentElementId The id of the element.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardElementApiInterface
+     */
+    elementControllerGetElementWithParentHierarchy(contentElementId: string, options?: any): AxiosPromise<ElementWithParentHierarchyResponse>;
 
     /**
      * 
@@ -14757,6 +14894,18 @@ export class BoardElementApi extends BaseAPI implements BoardElementApiInterface
      */
     public elementControllerDeleteElement(contentElementId: string, options?: any) {
         return BoardElementApiFp(this.configuration).elementControllerDeleteElement(contentElementId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Get metadata for a single content element.
+     * @param {string} contentElementId The id of the element.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof BoardElementApi
+     */
+    public elementControllerGetElementWithParentHierarchy(contentElementId: string, options?: any) {
+        return BoardElementApiFp(this.configuration).elementControllerGetElementWithParentHierarchy(contentElementId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

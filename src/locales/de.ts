@@ -1851,6 +1851,13 @@ export default {
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Raumberechtigungen für {memberFullName} ändern",
 	"pages.rooms.members.manage": "Raum-Mitglieder",
+	"pages.rooms.members.tab.members": "Mitglieder",
+	"pages.rooms.members.tab.invitations": "Einladungslinks",
+	"pages.rooms.members.tab.invitations.infoText":
+		"Mit einem Einladungslink können Lernbegleitungen der eigenen Schule sowie Lernbegleitungen anderer Schulen in den Raum eingeladen werden. Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden. Ist in den Link-Einstellungen „Betreten des Raums nur nach Bestätigung möglich” aktiviert worden, kann diese Bestätigung im Tab Beitrittsanfragen vorgenommen werden.",
+	"pages.rooms.members.tab.confirmations": "Beitrittsanfragen",
+	"pages.rooms.members.tab.confirmations.infoText":
+		"Wird bei der Erstellung eines Einladungslinks die Option „Betreten des Raums nur nach Bestätigung möglich” aktiviert, erzeugt der Klick auf den Link zunächst eine Beitrittsanfrage. Diese kann hier bestätigt oder abgelehnt werden. Wird die Beitrittsanfrage bestätigt, erhält die Person Zugriff auf alle Rauminhalte und wird in der Mitgliederliste aufgeführt.",
 	"pages.rooms.members.remove.ariaLabel": "{memberFullName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Ausgewählte Mitglieder aus der Liste zurücksetzen",
@@ -2060,4 +2067,11 @@ export default {
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
 	"feature.media-shelf.layout.list": "Zeilen",
 	"feature.media-shelf.layout.grid": "Raster",
+	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien.",
+	"pages.folder.fab.title": "Datei hinzufügen",
+	"pages.folder.untitled": "Unbenannter Ordner",
+	"pages.folder.title": "Ordner",
+	"pages.folder.ariaLabels.menu": "Ordner Menü",
+	"pages.folder.ariaLabels.menu.action.edit": "Ordner umbenennen",
+	"pages.folder.ariaLabels.menu.action.delete": "Ordner löschen",
 };
