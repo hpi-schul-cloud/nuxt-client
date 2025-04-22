@@ -13,15 +13,21 @@
 				<FolderMenu :folder-name="folderName" @delete="onDelete" />
 			</div>
 		</template>
-		<FolderDetails :is-loading="isLoading" :is-empty="isEmpty" />
+		<FolderDetails
+			:is-loading="isLoading"
+			:is-empty="fileRecords.length === 0"
+			:file-records="fileRecords"
+		/>
 	</DefaultWireframe>
 </template>
 
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { useFolderState } from "@data-folder";
+import { useFileStorageApi } from "@feature-board-file-element";
 import { mdiPlus } from "@icons/material";
-import { onMounted } from "vue";
+import { computed, onMounted, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import FolderDetails from "./FolderDetails.vue";
 import FolderMenu from "./FolderMenu.vue";
@@ -35,8 +41,12 @@ const props = defineProps({
 	},
 });
 
-const { breadcrumbs, folderName, fetchFileFolderElement, isLoading, isEmpty } =
+const { breadcrumbs, folderName, fetchFileFolderElement, isLoading } =
 	useFolderState();
+const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
+
+const folderId = toRef(props, "folderId");
+const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
 
 const fabAction = {
 	icon: mdiPlus,
@@ -46,7 +56,20 @@ const fabAction = {
 };
 
 const fabClickHandler = () => {
-	// Handle FAB click logic here
+	const input = document.createElement("input");
+	input.type = "file";
+	input.multiple = true;
+	input.addEventListener("change", (event) => {
+		const files = (event.target as HTMLInputElement).files;
+		if (files) {
+			const fileArray = Array.from(files);
+
+			for (const file of fileArray) {
+				upload(file, props.folderId, FileRecordParentType.BOARDNODES);
+			}
+		}
+	});
+	input.click();
 };
 
 const onDelete = () => {
@@ -55,5 +78,6 @@ const onDelete = () => {
 
 onMounted(async () => {
 	await fetchFileFolderElement(props.folderId);
+	await fetchFiles(folderId.value, FileRecordParentType.BOARDNODES);
 });
 </script>

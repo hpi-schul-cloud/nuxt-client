@@ -2089,7 +2089,13 @@ export default {
 	"pages.folder.fab.title": "Añadir archivo",
 	"pages.folder.untitled": "Carpeta sin título",
 	"pages.folder.title": "Carpeta",
+	"pages.folder.columns.name": "Nombre",
+	"pages.folder.columns.createdat": "Creado el",
+	"pages.folder.columns.size": "Talla",
 	"pages.folder.ariaLabels.menu": "Menú carpeta",
 	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",
 	"pages.folder.ariaLabels.menu.action.delete": "Borrar carpeta",
+	"pages.folder.ariaLabels.select.all": "Seleccionar todos los archivos",
+	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
+	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
 };

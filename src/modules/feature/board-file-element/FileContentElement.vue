@@ -117,7 +117,8 @@ export default defineComponent({
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
-		const { fetchFile, upload, getFileRecordsByParentId } = useFileStorageApi();
+		const { fetchFiles, upload, getFileRecordsByParentId } =
+			useFileStorageApi();
 
 		const fileRecord = computed(
 			() => getFileRecordsByParentId(element.value.id)[0]
@@ -166,12 +167,12 @@ export default defineComponent({
 
 		watch(element.value, async () => {
 			isLoadingFileRecord.value = true;
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+			await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 			isLoadingFileRecord.value = false;
 		});
 
 		onMounted(async () => {
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+			await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 			isLoadingFileRecord.value = false;
 		});
 
@@ -192,7 +193,7 @@ export default defineComponent({
 		};
 
 		const onFetchFile = async (): Promise<void> => {
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+			await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 		};
 
 		const onUpdateAlternativeText = (value: string) => {

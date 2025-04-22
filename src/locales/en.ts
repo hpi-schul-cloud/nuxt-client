@@ -2026,7 +2026,13 @@ export default {
 	"pages.folder.fab.title": "Add file",
 	"pages.folder.untitled": "Untitled folder",
 	"pages.folder.title": "Folder",
+	"pages.folder.columns.name": "Name",
+	"pages.folder.columns.createdat": "Created on",
+	"pages.folder.columns.size": "Size",
 	"pages.folder.ariaLabels.menu": "Folder menu",
 	"pages.folder.ariaLabels.menu.action.edit": "Rename folder",
 	"pages.folder.ariaLabels.menu.action.delete": "Delete folder",
+	"pages.folder.ariaLabels.select.all": "Select all files",
+	"pages.folder.ariaLabels.filter": "Search/filter table",
+	"pages.folder.ariaLabels.actionMenu": "Action menu for {name}",
 };

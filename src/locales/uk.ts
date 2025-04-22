@@ -2053,7 +2053,13 @@ export default {
 	"pages.folder.fab.title": "Додати файл",
 	"pages.folder.untitled": "Папка без назви",
 	"pages.folder.title": "Папка",
+	"pages.folder.columns.name": "Ім'я",
+	"pages.folder.columns.createdat": "Створено на",
+	"pages.folder.columns.size": "Розмір",
 	"pages.folder.ariaLabels.menu": "Меню Папки",
 	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",
 	"pages.folder.ariaLabels.menu.action.delete": "Видалити папку",
+	"pages.folder.ariaLabels.select.all": "Вибрати всі файли",
+	"pages.folder.ariaLabels.filter": "	Таблиця пошуку/фільтрації",
+	"pages.folder.ariaLabels.actionMenu": "Меню дій для {name}",
 };

@@ -37,10 +37,6 @@ export const useFolderState = () => {
 		}
 	};
 
-	const isEmpty = computed(() => {
-		return true;
-	});
-
 	const folderName = computed(() => {
 		const title = fileFolderElement.value?.content.title;
 
@@ -86,7 +82,6 @@ export const useFolderState = () => {
 		fileFolderElement,
 		folderName,
 		isLoading,
-		isEmpty,
 		fetchFileFolderElement,
 	};
 };

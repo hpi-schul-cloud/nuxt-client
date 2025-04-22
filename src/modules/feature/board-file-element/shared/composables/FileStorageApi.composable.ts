@@ -37,7 +37,7 @@ const fileStorageApi = () => {
 	const { getFileRecordsByParentId, updateFileRecords, updateFileRecord } =
 		useFileRecordsStore();
 
-	const fetchFile = async (
+	const fetchFiles = async (
 		parentId: string,
 		parentType: FileRecordParentType
 	): Promise<void> => {
@@ -149,7 +149,7 @@ const fileStorageApi = () => {
 	};
 
 	return {
-		fetchFile,
+		fetchFiles,
 		rename,
 		upload,
 		uploadFromUrl,

@@ -2060,7 +2060,13 @@ export default {
 	"pages.folder.fab.title": "Datei hinzufügen",
 	"pages.folder.untitled": "Unbenannter Ordner",
 	"pages.folder.title": "Ordner",
+	"pages.folder.columns.name": "Name",
+	"pages.folder.columns.createdat": "Erstellt am",
+	"pages.folder.columns.size": "Größe",
 	"pages.folder.ariaLabels.menu": "Ordner Menü",
 	"pages.folder.ariaLabels.menu.action.edit": "Ordner umbenennen",
 	"pages.folder.ariaLabels.menu.action.delete": "Ordner löschen",
+	"pages.folder.ariaLabels.select.all": "Alle Dateien auswählen",
+	"pages.folder.ariaLabels.filter": "Tabelle durchsuchen/filtern",
+	"pages.folder.ariaLabels.actionMenu": "Aktionsmenü für {name}",
 };
