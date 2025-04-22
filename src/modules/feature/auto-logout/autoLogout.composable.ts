@@ -8,14 +8,13 @@ export enum SessionStatus {
 	ShouldExtended = "shouldExtended",
 	Ended = "ended",
 	Error = "error",
-	Null = "null",
 }
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();
 	const showDialog = ref(false);
 	const errorOnExtend = ref(false);
-	const sessionStatus: Ref<SessionStatus> = ref(
+	const sessionStatus: Ref<SessionStatus | null> = ref(
 		null as unknown as SessionStatus
 	);
 	const isTTLUpdated = ref(false);
@@ -88,7 +87,7 @@ export const useAutoLogout = () => {
 		remainingTimeInSeconds.value = JWT_TIMEOUT_SECONDS || 30 * 2;
 		if (showDialog.value) showDialog.value = false;
 
-		sessionStatus.value = SessionStatus.Null;
+		sessionStatus.value = null;
 		errorOnExtend.value = false;
 		isTTLUpdated.value = false;
 		retry = 0;
@@ -97,7 +96,7 @@ export const useAutoLogout = () => {
 			remainingTimeInSeconds.value -= 1;
 
 			if (remainingTimeInSeconds.value <= showWarningOnRemainingSeconds.value) {
-				sessionStatus.value = SessionStatus.Null;
+				sessionStatus.value = null;
 				await checkTTL();
 			}
 
@@ -111,7 +110,7 @@ export const useAutoLogout = () => {
 
 	const extendSession = async () => {
 		clearTimeout(ttlTimeoutPolling!);
-		if (sessionStatus.value === "ended") {
+		if (sessionStatus.value === SessionStatus.Ended) {
 			clearInterval(remainingTimePolling!);
 			authModule.logout();
 			return;

@@ -3,7 +3,7 @@ import AutoLogoutWarning from "./AutoLogoutWarning.vue";
 import EnvConfigModule from "@/store/env-config";
 import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
 import { ConfigResponse } from "@/serverApi/v3";
-import { SessionStatus, useAutoLogout } from "./autoLogout.composable";
+import { useAutoLogout } from "./autoLogout.composable";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -11,6 +11,7 @@ import {
 import { computed, ref } from "vue";
 import { createMock } from "@golevelup/ts-jest";
 import { Router, useRouter } from "vue-router";
+import BaseModal from "@/components/base/BaseModal.vue";
 
 jest.mock("vue-i18n", () => {
 	return {
@@ -29,6 +30,10 @@ jest.mock("vue-router", () => ({
 }));
 
 describe("AutoLogoutWarning", () => {
+	afterEach(() => {
+		jest.clearAllMocks();
+	});
+
 	const mockedUseAutoLogout = jest.mocked(useAutoLogout);
 	const router = createMock<Router>({
 		currentRoute: ref({ path: "/" }),
@@ -36,38 +41,86 @@ describe("AutoLogoutWarning", () => {
 	const useRouterMock = <jest.Mock>useRouter;
 	useRouterMock.mockReturnValue(router);
 
-	const setup = (options?: { envs?: Partial<ConfigResponse> }) => {
+	const defaultVars = {
+		showDialog: ref(false),
+		errorOnExtend: ref(false),
+		remainingTimeInMinutes: computed(() => 0),
+		remainingTimeInSeconds: ref(0),
+		showWarningOnRemainingSeconds: ref(0),
+		sessionStatus: ref(null),
+		createSession: jest.fn(),
+		extendSession: jest.fn(),
+	};
+
+	const setup = (options?: {
+		envs?: Partial<ConfigResponse>;
+		autoLogoutVariables?: Partial<typeof defaultVars>;
+	}) => {
 		options = {
 			envs: { JWT_SHOW_TIMEOUT_WARNING_SECONDS: 30, JWT_TIMEOUT_SECONDS: 60 },
+			autoLogoutVariables: { ...defaultVars },
+			...options,
 		};
 		const envConfigModuleMock = createModuleMocks(EnvConfigModule, {
 			getEnv: { ...options.envs } as ConfigResponse,
 		});
 
 		mockedUseAutoLogout.mockReturnValue({
-			showDialog: ref(false),
-			errorOnExtend: ref(false),
-			remainingTimeInMinutes: computed(() => 0),
-			remainingTimeInSeconds: ref(0),
-			showWarningOnRemainingSeconds: ref(0),
-			sessionStatus: ref("null" as unknown as SessionStatus),
-			createSession: jest.fn(),
-			extendSession: jest.fn(),
+			...defaultVars,
+			...options.autoLogoutVariables,
 		});
 
-		const wrapper = mount(AutoLogoutWarning, {
+		const wrapper = shallowMount(AutoLogoutWarning, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
+				components: {
+					"base-modal": BaseModal,
+				},
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 				},
 			},
 		});
-		return { wrapper };
+		return { wrapper, useAutoLogout: mockedUseAutoLogout() };
 	};
 
 	it("should render the component", () => {
 		const { wrapper } = setup();
+
 		expect(wrapper.exists()).toBe(true);
+	});
+
+	it("should call the createSession method on load", () => {
+		setup();
+		const mockedCreateSession = mockedUseAutoLogout().createSession;
+		expect(mockedCreateSession).toHaveBeenCalled();
+	});
+
+	describe("showDialog", () => {
+		describe("when showDialog is set true", () => {
+			it("should show the dialog", async () => {
+				const { wrapper } = setup({
+					autoLogoutVariables: {
+						showDialog: ref(true),
+					},
+				});
+
+				const dialog = wrapper.findComponent(BaseModal);
+				expect(dialog.props("active")).toBe(true);
+			});
+		});
+
+		describe("when showDialog is set false", () => {
+			it("should not show the dialog", async () => {
+				const { wrapper } = setup({
+					autoLogoutVariables: {
+						showDialog: ref(false),
+					},
+				});
+
+				const dialog = wrapper.findComponent(BaseModal);
+				expect(dialog.props("active")).toBe(false);
+			});
+		});
 	});
 });
