@@ -38,19 +38,6 @@ const props = defineProps({
 
 const areUploadStatsVisible = ref(false);
 
-watch(
-	() => props.uploadProgress.total,
-	(newValue, oldValue) => {
-		if (oldValue > 0 && newValue === 0) {
-			setTimeout(() => {
-				areUploadStatsVisible.value = false;
-			}, 5000);
-		} else if (newValue > 0) {
-			areUploadStatsVisible.value = true;
-		}
-	}
-);
-
 const localUploadProgress = ref({ uploaded: 0, total: 0 });
 
 watch(
@@ -58,6 +45,11 @@ watch(
 	(newStats) => {
 		if (newStats.total > 0) {
 			localUploadProgress.value = { ...newStats };
+			areUploadStatsVisible.value = true;
+		} else if (localUploadProgress.value.total > 0 && newStats.total === 0) {
+			setTimeout(() => {
+				areUploadStatsVisible.value = false;
+			}, 5000);
 		}
 	},
 	{ deep: true }
