@@ -12,8 +12,9 @@ import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordRespons
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { createMock } from "@golevelup/ts-jest";
 import { AxiosResponse } from "axios";
-import { setupFileStorageNotifier } from "../test-utils/fileStorageNotifier";
+import { createPinia, setActivePinia } from "pinia";
 import { ErrorType, useFileStorageApi } from "./FileStorageApi.composable";
+import { setupFileStorageNotifier } from "./test-utils/fileStorageNotifier";
 
 jest.mock("./FileStorageNotifications.composable");
 
@@ -53,11 +54,13 @@ const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 };
 
 describe("FileStorageApi Composable", () => {
-	afterEach(() => {
+	beforeEach(() => {
+		setActivePinia(createPinia());
 		jest.resetAllMocks();
 	});
 
-	describe("getFileRecord", () => {
+	describe("getFileRecords", () => {
+		//Already tested in FileRecords.state.unit.ts Here only minimal test
 		describe("when filerecords state is empty", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
@@ -72,46 +75,18 @@ describe("FileStorageApi Composable", () => {
 				};
 			};
 
-			it("should create skeleton", async () => {
+			it("should return empty array", async () => {
 				const { parentId } = setup();
-				const { getFileRecord } = useFileStorageApi();
+				const { getFileRecordsByParentId } = useFileStorageApi();
 
-				const result = await getFileRecord(parentId);
+				const result = await getFileRecordsByParentId(parentId);
 
-				expect(result.value).toEqual(undefined);
-			});
-		});
-
-		describe("when filerecord already exists", () => {
-			const setup = () => {
-				const parentId = ObjectIdMock();
-
-				const fileApi = createMock<serverApi.FileApiInterface>();
-				jest.spyOn(serverApi, "FileApiFactory").mockReturnValue(fileApi);
-
-				setupFileStorageNotifier();
-
-				const { getFileRecord } = useFileStorageApi();
-				const existingFileRecord = getFileRecord(parentId);
-
-				return {
-					parentId,
-					existingFileRecord,
-					getFileRecord,
-				};
-			};
-
-			it("should return skeleton", async () => {
-				const { parentId, existingFileRecord, getFileRecord } = setup();
-
-				const result = await getFileRecord(parentId);
-
-				expect(result).toBe(existingFileRecord);
+				expect(result).toEqual([]);
 			});
 		});
 	});
 
-	describe("fetchFile", () => {
+	describe("fetchFiles", () => {
 		describe("when file api returns list successfully", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
@@ -143,9 +118,9 @@ describe("FileStorageApi Composable", () => {
 
 			it("should call FileApiFactory.list", async () => {
 				const { parentId, parentType, fileApi } = setup();
-				const { fetchFile } = useFileStorageApi();
+				const { fetchFiles } = useFileStorageApi();
 
-				await fetchFile(parentId, parentType);
+				await fetchFiles(parentId, parentType);
 
 				expect(fileApi.list).toBeCalledWith(
 					"schoolId",
@@ -155,34 +130,16 @@ describe("FileStorageApi Composable", () => {
 				);
 			});
 
-			describe("when skeleton filerecord doesn't exist in state", () => {
-				it("should set filerecord", async () => {
-					const { parentId, parentType, response } = setup();
+			it("should set filerecord", async () => {
+				const { parentId, parentType, response } = setup();
 
-					const { fetchFile, getFileRecord } = useFileStorageApi();
+				const { fetchFiles, getFileRecordsByParentId } = useFileStorageApi();
 
-					await fetchFile(parentId, parentType);
+				await fetchFiles(parentId, parentType);
 
-					const fileRecord = getFileRecord(parentId);
+				const fileRecord = getFileRecordsByParentId(parentId);
 
-					expect(fileRecord.value).toStrictEqual(response.data.data[0]);
-				});
-			});
-
-			describe("when skeleton filerecord already exists in state", () => {
-				it("should set filerecord", async () => {
-					const { parentId, parentType, response } = setup();
-
-					const { fetchFile, getFileRecord } = useFileStorageApi();
-
-					// Call getFileRecord to create a skeleton file record
-					getFileRecord(parentId);
-
-					await fetchFile(parentId, parentType);
-
-					const fileRecord = getFileRecord(parentId);
-					expect(fileRecord.value).toStrictEqual(response.data.data[0]);
-				});
+				expect(fileRecord).toStrictEqual([response.data.data[0]]);
 			});
 		});
 
@@ -218,9 +175,9 @@ describe("FileStorageApi Composable", () => {
 				const { parentId, parentType, showUnauthorizedError, responseError } =
 					setup(ErrorType.Unauthorized);
 
-				const { fetchFile } = useFileStorageApi();
+				const { fetchFiles } = useFileStorageApi();
 
-				await expect(fetchFile(parentId, parentType)).rejects.toBe(
+				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
 					responseError
 				);
 				expect(showUnauthorizedError).toBeCalledTimes(1);
@@ -230,9 +187,9 @@ describe("FileStorageApi Composable", () => {
 				const { parentId, parentType, showForbiddenError, responseError } =
 					setup(ErrorType.Forbidden);
 
-				const { fetchFile } = useFileStorageApi();
+				const { fetchFiles } = useFileStorageApi();
 
-				await expect(fetchFile(parentId, parentType)).rejects.toBe(
+				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
 					responseError
 				);
 
@@ -242,8 +199,8 @@ describe("FileStorageApi Composable", () => {
 			it("should call showInternalServerError and pass error", async () => {
 				const { parentId, parentType, showInternalServerError, responseError } =
 					setup();
-				const { fetchFile } = useFileStorageApi();
-				await expect(fetchFile(parentId, parentType)).rejects.toBe(
+				const { fetchFiles } = useFileStorageApi();
+				await expect(fetchFiles(parentId, parentType)).rejects.toBe(
 					responseError
 				);
 
@@ -300,12 +257,12 @@ describe("FileStorageApi Composable", () => {
 
 			it("should set filerecord", async () => {
 				const { parentId, parentType, file, fileRecordResponse } = setup();
-				const { upload, getFileRecord } = useFileStorageApi();
+				const { upload, getFileRecordsByParentId } = useFileStorageApi();
 
 				await upload(file, parentId, parentType);
 
-				const fileRecord = getFileRecord(parentId);
-				expect(fileRecord.value).toStrictEqual(fileRecordResponse);
+				const fileRecord = getFileRecordsByParentId(parentId);
+				expect(fileRecord).toStrictEqual([fileRecordResponse]);
 			});
 		});
 
@@ -409,12 +366,12 @@ describe("FileStorageApi Composable", () => {
 
 			it("should set filerecord", async () => {
 				const { parentId, parentType, imageUrl, fileRecordResponse } = setup();
-				const { uploadFromUrl, getFileRecord } = useFileStorageApi();
+				const { uploadFromUrl, getFileRecordsByParentId } = useFileStorageApi();
 
 				await uploadFromUrl(imageUrl, parentId, parentType);
 
-				const fileRecord = getFileRecord(parentId);
-				expect(fileRecord.value).toStrictEqual(fileRecordResponse);
+				const fileRecord = getFileRecordsByParentId(parentId);
+				expect(fileRecord).toStrictEqual([fileRecordResponse]);
 			});
 		});
 
@@ -503,12 +460,12 @@ describe("FileStorageApi Composable", () => {
 
 			it("should set filerecord", async () => {
 				const { parentId, fileRecordResponse, renameFileParams } = setup();
-				const { rename, getFileRecord } = useFileStorageApi();
+				const { rename, getFileRecordsByParentId } = useFileStorageApi();
 
 				await rename(fileRecordResponse.id, renameFileParams);
 
-				const fileRecord = getFileRecord(parentId);
-				expect(fileRecord.value).toStrictEqual(fileRecordResponse);
+				const fileRecord = getFileRecordsByParentId(parentId);
+				expect(fileRecord).toStrictEqual([fileRecordResponse]);
 			});
 		});
 
