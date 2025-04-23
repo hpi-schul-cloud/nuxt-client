@@ -19,7 +19,11 @@
 		<div class="mt-8">
 			<DataTable
 				:table-headers="headers"
-				:items="fileRecords"
+				:items="
+					fileRecords.map((item) => ({
+						...item,
+					}))
+				"
 				:show-select="true"
 			>
 				<template #[`item.preview`]="{ item }">

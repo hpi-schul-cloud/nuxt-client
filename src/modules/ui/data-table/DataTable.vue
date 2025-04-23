@@ -62,6 +62,24 @@
 				@click="selectAll(!allSelected)"
 			/>
 		</template>
+		<template #[`item.data-table-select`]="{ item, isSelected, toggleSelect }">
+			<VCheckboxBtn
+				:model-value="
+					isSelected({
+						value: item[selectItemKey],
+						selectable: !!(item.isSelectable ?? true),
+					})
+				"
+				:disabled="item.isSelectable === false"
+				:aria-label="item[ariaLabelNameKey]"
+				@click="
+					toggleSelect({
+						value: item[selectItemKey],
+						selectable: !!(item.isSelectable ?? true),
+					})
+				"
+			/>
+		</template>
 		<template v-for="slot in Object.keys($slots)" #[slot]="scope">
 			<slot :name="slot" v-bind="scope" />
 		</template>
@@ -91,7 +109,7 @@ const props = defineProps({
 		default: () => [],
 	},
 	items: {
-		type: Array as PropType<unknown[]>,
+		type: Array as PropType<Record<string, unknown>[]>,
 		isRequired: true,
 		default: () => [],
 	},
@@ -102,6 +120,10 @@ const props = defineProps({
 	selectItemKey: {
 		type: String,
 		default: "id",
+	},
+	ariaLabelNameKey: {
+		type: String,
+		default: "name",
 	},
 });
 
