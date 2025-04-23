@@ -16,29 +16,7 @@ export const useFileRecordsStore = defineStore("fileRecords", {
 			return parentRecords ? Array.from(parentRecords.values()) : [];
 		},
 
-		addFileRecordsForParent(
-			parentId: string,
-			fileRecords: FileRecordResponse[]
-		): void {
-			const parentRecords = this.recordsByParent.get(parentId) || new Map();
-
-			fileRecords.forEach((record) => {
-				parentRecords.set(record.id, record);
-			});
-
-			this.recordsByParent.set(parentId, parentRecords);
-		},
-
-		updateFileRecord(updatedRecord: FileRecordResponse): void {
-			const { parentId, id } = updatedRecord;
-			const parentRecords = this.recordsByParent.get(parentId) || new Map();
-
-			parentRecords.set(id, { ...parentRecords.get(id), ...updatedRecord });
-
-			this.recordsByParent.set(parentId, parentRecords);
-		},
-
-		updateFileRecords(updatedRecords: FileRecordResponse[]): void {
+		upsertFileRecords(updatedRecords: FileRecordResponse[]): void {
 			updatedRecords.forEach((updatedRecord) => {
 				const { parentId, id } = updatedRecord;
 				const parentRecords = this.recordsByParent.get(parentId) || new Map();

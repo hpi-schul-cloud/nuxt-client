@@ -34,8 +34,7 @@ const fileStorageApi = () => {
 		showFileExistsError,
 	} = useFileStorageNotifier();
 
-	const { getFileRecordsByParentId, updateFileRecords, updateFileRecord } =
-		useFileRecordsStore();
+	const { getFileRecordsByParentId, upsertFileRecords } = useFileRecordsStore();
 
 	const fetchFiles = async (
 		parentId: string,
@@ -50,7 +49,7 @@ const fileStorageApi = () => {
 				parentType
 			);
 
-			updateFileRecords(response.data.data);
+			upsertFileRecords(response.data.data);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -71,7 +70,7 @@ const fileStorageApi = () => {
 				parentType,
 				file
 			);
-			updateFileRecords([response.data]);
+			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -100,7 +99,7 @@ const fileStorageApi = () => {
 				fileUrlParams
 			);
 
-			updateFileRecord(response.data);
+			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -114,7 +113,7 @@ const fileStorageApi = () => {
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
-			updateFileRecord(response.data);
+			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
 			throw error;
