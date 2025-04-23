@@ -96,14 +96,3 @@ const formatFileSize = (size: number) => {
 	return `${localizedFileSize} ${unit}`;
 };
 </script>
-
-<style lang="scss" scoped>
-.fade-enter-active,
-.fade-leave-active {
-	transition: opacity 0.5s ease-out;
-}
-.fade-enter-from,
-.fade-leave-to {
-	opacity: 0;
-}
-</style>
