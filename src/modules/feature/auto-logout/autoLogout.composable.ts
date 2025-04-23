@@ -139,21 +139,21 @@ export const useAutoLogout = () => {
 		(newValue) => {
 			if (newValue === SessionStatus.Continued) {
 				notifierModule.show({
-					text: t("components.organisms.AutoLogoutWarning.success"),
+					text: t("feature-autoLogout.message.success"),
 					status: "success",
 					timeout: 5000,
 				});
 			}
 			if (newValue === SessionStatus.Error) {
 				notifierModule.show({
-					text: t("components.organisms.AutoLogoutWarning.error"),
+					text: t("feature-autoLogout.message.error"),
 					status: "error",
 					timeout: 5000,
 				});
 			}
 			if (newValue === SessionStatus.Ended) {
 				notifierModule.show({
-					text: t("components.organisms.AutoLogoutWarning.error.401"),
+					text: t("feature-autoLogout.message.error.401"),
 					status: "error",
 					autoClose: false,
 				});

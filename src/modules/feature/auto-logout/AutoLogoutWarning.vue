@@ -6,20 +6,17 @@
 					:src="image"
 					class="sloth"
 					role="presentation"
-					:alt="t('components.organisms.AutoLogoutWarning.image.alt')"
+					:alt="t('feature-autoLogout.component.image.alt')"
 				/>
 				<p v-if="isSessionEnded" class="sloth-text">
-					{{ t("components.organisms.AutoLogoutWarning.error.401") }}
+					{{ t("feature-autoLogout.message.error.401") }}
 				</p>
 				<p v-else class="sloth-text">
-					<i18n-t
-						keypath="components.organisms.AutoLogoutWarning.warning"
-						scope="global"
-					>
+					<i18n-t keypath="feature-autoLogout.warning" scope="global">
 						<span class="text-error">
 							{{
 								t(
-									"components.organisms.AutoLogoutWarning.warning.remainingTime",
+									"feature-autoLogout.warning.remainingTime",
 									remainingTimeInMinutes,
 									{
 										named: { remainingTime: remainingTimeInMinutes },
@@ -72,8 +69,9 @@ const isSessionEnded = computed(() => {
 });
 
 const confirmButtonText = computed(() => {
-	if (isSessionEnded.value) return "Return to login page";
-	return t("components.organisms.AutoLogoutWarning.confirm");
+	if (isSessionEnded.value)
+		return t("feature-autoLogout.button.confirm.returnToLogin");
+	return t("feature-autoLogout.button.confirm");
 });
 
 const onConfirm = () => {

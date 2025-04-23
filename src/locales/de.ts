@@ -789,20 +789,6 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Abgegeben",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Lokale Dateien werden aktuell nicht unterstützt.",
-	"components.organisms.AutoLogoutWarning.confirm": "Sitzung verlängern",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"Deine Sitzung konnte nicht verlängert werden!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Faultier",
-	"components.organisms.AutoLogoutWarning.success":
-		"Sitzung erfolgreich verlängert.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"weniger als einer Minute | einer Minute | {remainingTime} Minuten",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
 	"components.organisms.ContentCard.report.body":
 		"Melden des Inhaltes mit der ID",
 	"components.organisms.ContentCard.report.email":
@@ -913,6 +899,18 @@ export default {
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description":
 		"Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
+	"feature-autoLogout.button.confirm": "Sitzung verlängern",
+	"feature-autoLogout.button.confirm.returnToLogin": "Zurück zur Anmeldeseite",
+	"feature-autoLogout.message.error.401":
+		"Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
+	"feature-autoLogout.message.error":
+		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
+	"feature-autoLogout.component.image.alt": "Faultier",
+	"feature-autoLogout.message.success": "Sitzung erfolgreich verlängert.",
+	"feature-autoLogout.warning.remainingTime":
+		"weniger als einer Minute | einer Minute | {remainingTime} Minuten",
+	"feature-autoLogout.warning":
+		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
 	"feature-board-external-tool-element.alert.error.student":
 		"Das Tool kann aktuell nicht gestartet werden. Bitte Bereich aktualisieren oder an die Lehrkraft oder Kursleiter:in wenden.",
 	"feature-board-external-tool-element.alert.error.teacher":
