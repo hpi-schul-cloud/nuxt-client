@@ -28,7 +28,10 @@ export const useAudioRecorder = () => {
 
 			try {
 				const mediaStream: MediaStream =
-					await navigator.mediaDevices.getUserMedia({ audio: true });
+					await navigator.mediaDevices.getUserMedia({
+						video: false,
+						audio: true,
+					});
 
 				mediaStream.getTracks().forEach((track: MediaStreamTrack): void => {
 					// Handles disconnect of microphone
@@ -77,9 +80,11 @@ export const useAudioRecorder = () => {
 				return resolve(null);
 			}
 
-			const mimeType = "audio/webm";
+			const mimeType: string = mediaRecorder.value.mimeType;
 			mediaRecorder.value.onstop = (): void => {
-				const blob: Blob = new Blob(chunks.value, { type: mimeType });
+				const blob: Blob = new Blob(chunks.value, {
+					type: mimeType,
+				});
 
 				dispose();
 
