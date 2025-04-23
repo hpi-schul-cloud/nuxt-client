@@ -1,7 +1,6 @@
 import { mountBaseComponents } from "@/components/base/components";
 import "@/plugins/polyfills";
 import {
-	accountsModule,
 	applicationErrorModule,
 	authModule,
 	commonCartridgeExportModule,
@@ -121,7 +120,6 @@ app.use(VueDOMPurifyHTML, {
 	app.use(router).use(store).use(vuetify).use(i18n);
 
 	// NUXT_REMOVAL get rid of store DI
-	app.provide("accountsModule", accountsModule);
 	app.provide(APPLICATION_ERROR_KEY.valueOf(), applicationErrorModule);
 	app.provide(AUTH_MODULE_KEY.valueOf(), authModule);
 	app.provide(CONTENT_MODULE_KEY, contentModule);
