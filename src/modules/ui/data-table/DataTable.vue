@@ -40,7 +40,7 @@
 		v-model="selectedIds"
 		data-testid="participants-table"
 		hover
-		item-value="userId"
+		:item-value="selectItemKey"
 		mobile-breakpoint="sm"
 		:items="items"
 		item-selectable="isSelectable"
@@ -88,6 +88,10 @@ const props = defineProps({
 	showSelect: {
 		type: Boolean,
 		default: false,
+	},
+	selectItemKey: {
+		type: String,
+		default: "id",
 	},
 });
 
