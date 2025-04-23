@@ -77,6 +77,7 @@ import {
 	onUnmounted,
 	PropType,
 	ref,
+	watchEffect,
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -124,6 +125,8 @@ const router = useRouter();
 const { xs, mdAndUp } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 
+const membersInfoText = ref("");
+
 const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
 
@@ -140,11 +143,13 @@ const { isVisibleAddMemberButton, isVisibleTabNavigation } =
 	useRoomMemberVisibilityOptions(currentUser);
 const { FEATURE_ROOM_MEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
 
-const membersInfoText = computed(() =>
-	isVisibleAddMemberButton.value
-		? t("pages.rooms.members.manage")
-		: t("pages.rooms.members.view")
-);
+watchEffect(() => {
+	if (isVisibleAddMemberButton.value !== undefined) {
+		membersInfoText.value = isVisibleAddMemberButton.value
+			? t("pages.rooms.members.manage")
+			: t("pages.rooms.members.view");
+	}
+});
 
 const pageTitle = computed(() =>
 	buildPageTitle(`${room.value?.name} - ${membersInfoText.value}`)
