@@ -7,14 +7,14 @@
 			:audio-record-properties="audioRecordProperties"
 			:element-id="audioRecordProperties.element.id"
 			:is-edit-mode="isEditMode"
-			:show-menu="isMenuShownOnFileDisplay"
+			:show-menu="isEditMode"
 		/>
 	</div>
 	<div>
 		<AudioRecordDescription
 			:caption="audioRecordProperties.element.content.caption"
 			:show-title="showTitle"
-			:show-menu="isMenuShownOnFileDisplay"
+			:show-menu="isEditMode"
 			:is-edit-mode="isEditMode"
 			@add:alert="onAddAlert"
 		/>
@@ -79,12 +79,6 @@ const onUpdateText = useDebounceFn((value: string) => {
 const onAddAlert = (alert: AudioRecordAlert) => {
 	emit("add:alert", alert);
 };
-const isMenuShownOnFileDisplay = computed(() => {
-	const isFileDisplayRendered =
-		!!props.audioRecordProperties.previewUrl || hasAudioMimeType.value;
-
-	return isFileDisplayRendered;
-});
 </script>
 
 <style lang="scss" scoped>

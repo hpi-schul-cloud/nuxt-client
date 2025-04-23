@@ -56,7 +56,7 @@ export const useAudioRecorder = () => {
 				};
 
 				mediaRecorder.value.onstop = (): void => {
-					//dispose();
+					dispose();
 				};
 
 				mediaRecorder.value.onerror = (): void => {

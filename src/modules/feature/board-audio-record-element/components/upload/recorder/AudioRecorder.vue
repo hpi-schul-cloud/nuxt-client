@@ -205,7 +205,7 @@ export default defineComponent({
 			if (audioUrl.value) {
 				const response = await fetch(audioUrl.value);
 				const blob = await response.blob();
-				const file = new File([blob], `audio`, {
+				const file = new File([blob], `${new Date().getTime()}-audio`, {
 					type: blob.type,
 				});
 				await emit("upload:file", file);
