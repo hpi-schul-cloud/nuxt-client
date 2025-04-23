@@ -2,7 +2,6 @@
 	<div
 		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
 		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
-		:style="stickyStyle"
 	>
 		<ActionMenu
 			v-if="selectedIds.length"
@@ -88,16 +87,12 @@
 
 <script setup lang="ts">
 import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
-import { computed, PropType, ref } from "vue";
+import { PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify/lib/framework.mjs";
 import ActionMenu from "./ActionMenu.vue";
 
-const props = defineProps({
-	headerBottom: {
-		type: Number,
-		default: 0,
-	},
+defineProps({
 	tableHeaders: {
 		type: Array as PropType<
 			{
@@ -133,9 +128,6 @@ const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
 const selectedIds = ref<string[]>([]);
 
 const search = ref("");
-const stickyStyle = computed(() => ({
-	top: `${props.headerBottom}px`,
-}));
 
 const onResetSelectedMembers = () => {
 	selectedIds.value = [];
