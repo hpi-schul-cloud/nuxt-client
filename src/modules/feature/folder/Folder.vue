@@ -62,22 +62,16 @@ const uploadProgress = ref({
 const isLoading = ref(false);
 
 const fabClickHandler = () => {
-	const input = document.createElement("input");
-	input.type = "file";
-	input.multiple = true;
+	const input = buildInput();
+
 	input.addEventListener("change", async (event) => {
 		const files = (event.target as HTMLInputElement).files;
+
 		if (files) {
 			const fileArray = Array.from(files);
 			uploadProgress.value.total = fileArray.length;
 
-			await Promise.all(
-				fileArray.map((file) =>
-					upload(file, props.folderId, FileRecordParent.BOARDNODES).then(() => {
-						uploadProgress.value.uploaded += 1;
-					})
-				)
-			);
+			await uploadFiles(fileArray);
 
 			// Reset state after all files are uploaded
 			uploadProgress.value.total = 0;
@@ -85,6 +79,24 @@ const fabClickHandler = () => {
 		}
 	});
 	input.click();
+};
+
+const uploadFiles = async (files: File[]) => {
+	await Promise.all(
+		files.map((file) =>
+			upload(file, props.folderId, FileRecordParent.BOARDNODES).then(() => {
+				uploadProgress.value.uploaded += 1;
+			})
+		)
+	);
+};
+
+const buildInput = (): HTMLInputElement => {
+	const input = document.createElement("input");
+	input.type = "file";
+	input.multiple = true;
+
+	return input;
 };
 
 const onDelete = () => {
