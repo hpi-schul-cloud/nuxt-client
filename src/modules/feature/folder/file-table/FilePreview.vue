@@ -15,7 +15,7 @@
 		<v-icon v-else-if="isVideoMimeType(filerecord.mimeType)">{{
 			mdiFileVideoOutline
 		}}</v-icon>
-		<v-icon v-else>{{ mdiFileOutline }}</v-icon>
+		<v-icon v-else>{{ mdiFileDocumentOutline }}</v-icon>
 	</div>
 </template>
 
@@ -28,8 +28,8 @@ import {
 	isVideoMimeType,
 } from "@/utils/fileHelper";
 import {
+	mdiFileDocumentOutline,
 	mdiFileMusicOutline,
-	mdiFileOutline,
 	mdiFileVideoOutline,
 } from "@icons/material";
 import { defineProps, PropType } from "vue";
