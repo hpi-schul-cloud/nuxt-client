@@ -45,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+import { FileRecord } from "@/types/file/File";
 import { convertFileSize } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
@@ -53,7 +54,6 @@ import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
-import { FileRecord } from "@/types/file/File";
 
 const { t, n } = useI18n();
 
@@ -98,42 +98,6 @@ const formatFileSize = (size: number) => {
 </script>
 
 <style lang="scss" scoped>
-:deep(.v-data-table-header__content) {
-	color: rgba(var(--v-theme-primary-darken-1));
-	font-weight: bold;
-}
-
-/* table header for mobile view */
-:deep(.v-data-table__td-title) {
-	font-weight: bold;
-}
-
-:deep(.v-data-table__td .v-selection-control--disabled) {
-	color: rgba(var(--v-theme-on-surface), var(--v-disabled-opacity));
-}
-
-.table-title-header {
-	min-height: 50px;
-}
-
-.multi-action-menu {
-	display: flex;
-	align-items: center;
-	background-color: rgba(var(--v-theme-primary), 0.12);
-	border-radius: 0.25rem;
-	min-height: 40px;
-}
-
-.sticky {
-	position: sticky;
-	z-index: 1;
-	background: rgb(var(--v-theme-white));
-	$space-left-right: calc(var(--space-base-vuetify) * 6);
-	right: $space-left-right;
-	left: $space-left-right;
-	width: 100%;
-}
-
 .fade-enter-active,
 .fade-leave-active {
 	transition: opacity 0.5s ease-out;

@@ -73,7 +73,6 @@ const fabClickHandler = () => {
 
 			await uploadFiles(fileArray);
 
-			// Reset state after all files are uploaded
 			uploadProgress.value.total = 0;
 			uploadProgress.value.uploaded = 0;
 		}
