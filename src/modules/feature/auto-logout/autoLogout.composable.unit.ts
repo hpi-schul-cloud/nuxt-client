@@ -5,10 +5,10 @@ import NotifierModule from "@/store/notifier";
 import AuthModule from "@/store/auth";
 import { envConfigModule } from "@/store";
 import { envsFactory, mountComposable } from "@@/tests/test-utils";
-// import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { nextTick, ref } from "vue";
-// import { $axios } from "@/utils/api";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import { flushPromises } from "@vue/test-utils";
 
 jest.mock("vue-i18n", () => ({
 	useI18n: () => ({
@@ -18,13 +18,13 @@ jest.mock("vue-i18n", () => ({
 
 const jwtTimerResponse = {
 	ttl: 60,
-	shouldRejected: false,
+	rejected: false,
 	showTimeoutValue: 30,
 	timeout: 60,
 };
 
 const mockEndpointResponse = () => {
-	if (jwtTimerResponse.shouldRejected) {
+	if (jwtTimerResponse.rejected) {
 		return Promise.reject(new Error("Endpoint not mocked"));
 	}
 	return Promise.resolve({
@@ -61,10 +61,19 @@ jest.spyOn(global, "setTimeout");
 jest.spyOn(global, "clearTimeout");
 
 describe("useAutoLogout", () => {
+	beforeEach(() => {
+		jwtTimerResponse.ttl = 60;
+		jwtTimerResponse.showTimeoutValue = 30;
+		jwtTimerResponse.timeout = 60;
+		jest.clearAllMocks();
+		jest.clearAllTimers();
+	});
+
 	afterEach(() => {
 		jest.clearAllMocks();
 		jest.clearAllTimers();
 	});
+
 	setupStores({
 		envConfigModule: EnvConfigModule,
 		notifierModule: NotifierModule,
@@ -72,12 +81,14 @@ describe("useAutoLogout", () => {
 	});
 
 	envConfigModule.setEnvs(envs);
+	const notifierModuleMock = createModuleMocks(NotifierModule);
 
 	const setup = (options?: { remainingTimeInSeconds?: number }) => {
 		const composable = mountComposable(() => useAutoLogout(), {
 			global: {
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModule,
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModuleMock,
 				},
 			},
 		});
@@ -92,109 +103,132 @@ describe("useAutoLogout", () => {
 		};
 	};
 
-	it("should return default values", () => {
-		const { showDialog, errorOnExtend, remainingTimeInMinutes } = setup();
+	describe("showDialog", () => {
+		it("should be false by default", () => {
+			const { showDialog } = setup();
 
-		expect(showDialog.value).toBe(false);
-		expect(errorOnExtend.value).toBe(false);
-		expect(remainingTimeInMinutes.value).toBe(1);
-	});
-
-	describe("checkTTL", () => {
-		beforeEach(() => {
-			jwtTimerResponse.ttl = 60;
-			jwtTimerResponse.shouldRejected = false;
-			jwtTimerResponse.showTimeoutValue = 30;
-			jwtTimerResponse.timeout = 60;
-			jest.clearAllMocks();
-			jest.clearAllTimers();
+			expect(showDialog.value).toBe(false);
 		});
 
 		describe("when the timer is below the warning time", () => {
-			it("should set the variables", async () => {
+			it("should set 'showDialog' true", async () => {
 				jwtTimerResponse.ttl = jwtTimerResponse.showTimeoutValue - 10;
-				jwtTimerResponse.shouldRejected = false;
-
 				const timeToAdvance =
 					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) *
 					1000;
-
-				const { showDialog, sessionStatus, isTTLUpdated } = setup();
+				const { showDialog } = setup();
 
 				jest.advanceTimersByTime(timeToAdvance);
 				await nextTick();
 
 				expect(showDialog.value).toBe(true);
-				expect(sessionStatus.value).toBe(null);
-				expect(isTTLUpdated.value).toBe(false);
 			});
 		});
 
-		describe("when the timer is above the warning time", () => {
-			it("should set the variables", async () => {
-				jwtTimerResponse.ttl = jwtTimerResponse.showTimeoutValue + 10;
-				jwtTimerResponse.shouldRejected = false;
+		describe("isTTLUpdated", () => {
+			it("should be false by default", () => {
+				const { isTTLUpdated } = setup();
 
-				const timeToAdvance =
-					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue - 10) *
-					1000;
-
-				const { showDialog, sessionStatus, isTTLUpdated } = setup();
-
-				jest.advanceTimersByTime(timeToAdvance);
-				await nextTick();
-
-				expect(showDialog.value).toBe(false);
-				expect(sessionStatus.value).toBe(null);
 				expect(isTTLUpdated.value).toBe(false);
 			});
-		});
-		describe("when ttlCount is above the remainingTimeInSeconds", () => {
-			it("should set the variables", async () => {
+
+			it("should be true when the session is extended", async () => {
 				jwtTimerResponse.ttl = 100;
-				jwtTimerResponse.shouldRejected = false;
 				const timeToAdvance =
 					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) *
 					1000;
-				const { showDialog, sessionStatus, isTTLUpdated } = setup();
+				const { isTTLUpdated } = setup();
 				jest.advanceTimersByTime(timeToAdvance);
 				await nextTick();
-				expect(showDialog.value).toBe(false);
-				expect(sessionStatus.value).toBe(null);
+
 				expect(isTTLUpdated.value).toBe(true);
 			});
 		});
 
-		describe("when endpoint fails", () => {
-			it("should set the variables", async () => {
+		describe("when the timer is above the warning time", () => {
+			it("should set 'showDialog' to false", async () => {
 				jwtTimerResponse.ttl = jwtTimerResponse.showTimeoutValue + 10;
-				jwtTimerResponse.shouldRejected = true;
 				const timeToAdvance =
-					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue + 10) *
+					(jwtTimerResponse.timeout - jwtTimerResponse.showTimeoutValue - 10) *
 					1000;
-
-				const { showDialog, sessionStatus, isTTLUpdated } = setup();
+				const { showDialog } = setup();
 
 				jest.advanceTimersByTime(timeToAdvance);
-				await nextTick();
+				await flushPromises();
 
 				expect(showDialog.value).toBe(false);
-				expect(sessionStatus.value).toBe(SessionStatus.Error);
-				expect(isTTLUpdated.value).toBe(false);
 			});
 		});
 	});
 
-	describe("createSession", () => {
-		it("should set the variables", () => {
-			const { showDialog, sessionStatus, isTTLUpdated, createSession } =
-				setup();
+	describe("errorOnExtend", () => {
+		it("should be false by default", () => {
+			const { errorOnExtend } = setup();
 
-			createSession();
+			expect(errorOnExtend.value).toBe(false);
+		});
 
-			expect(showDialog.value).toBe(false);
+		it("should be true when an error occurs", async () => {
+			jwtTimerResponse.rejected = true;
+			const { errorOnExtend, extendSession } = setup();
+			extendSession();
+			await flushPromises();
+
+			expect(errorOnExtend.value).toBe(true);
+		});
+	});
+
+	describe("remainingTimeInMinutes", () => {
+		it("should return the correct value", () => {
+			jwtTimerResponse.ttl = 120;
+			envConfigModule.setEnvs({
+				...envs,
+				JWT_TIMEOUT_SECONDS: jwtTimerResponse.ttl,
+			});
+			const { remainingTimeInMinutes } = setup();
+
+			expect(remainingTimeInMinutes.value).toBe(2);
+		});
+	});
+
+	describe("sessionStatus", () => {
+		it("should be null by default", () => {
+			const { sessionStatus } = setup();
+
 			expect(sessionStatus.value).toBe(null);
-			expect(isTTLUpdated.value).toBe(false);
+		});
+
+		it("should be 'Ended' when the session ends", async () => {
+			jwtTimerResponse.ttl = 120;
+			envConfigModule.setEnvs({
+				...envs,
+				JWT_TIMEOUT_SECONDS: jwtTimerResponse.ttl,
+			});
+			const { sessionStatus } = setup();
+			jest.advanceTimersByTime(jwtTimerResponse.ttl * 1000);
+			await flushPromises();
+
+			expect(sessionStatus.value).toBe(SessionStatus.Ended);
+		});
+
+		it("should be 'Error' when an error occurs", async () => {
+			jwtTimerResponse.rejected = true;
+			const { sessionStatus, extendSession } = setup();
+			extendSession();
+			await flushPromises();
+
+			expect(sessionStatus.value).toBe(SessionStatus.Error);
+		});
+
+		it("should be 'Continued' when the session is extended", async () => {
+			jwtTimerResponse.ttl = 120;
+			jwtTimerResponse.rejected = false;
+
+			const { sessionStatus, extendSession } = setup();
+			extendSession();
+			await flushPromises();
+
+			expect(sessionStatus.value).toBe(SessionStatus.Continued);
 		});
 	});
 });
