@@ -42,8 +42,7 @@ const props = defineProps({
 	},
 });
 
-const { breadcrumbs, folderName, fetchFileFolderElement, isLoading } =
-	useFolderState();
+const { breadcrumbs, folderName, fetchFileFolderElement } = useFolderState();
 const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
 
 const folderId = toRef(props, "folderId");
@@ -60,6 +59,7 @@ const uploadProgress = ref({
 	uploaded: 0,
 	total: 0,
 });
+const isLoading = ref(false);
 
 const fabClickHandler = () => {
 	const input = document.createElement("input");
@@ -94,7 +94,9 @@ const onDelete = () => {
 };
 
 onMounted(async () => {
+	isLoading.value = true;
 	await fetchFileFolderElement(props.folderId);
 	await fetchFiles(folderId.value, FileRecordParentType.BOARDNODES);
+	isLoading.value = false;
 });
 </script>
