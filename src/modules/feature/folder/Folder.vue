@@ -26,12 +26,12 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { FileRecordParentType } from "@/fileStorageApi/v3";
 import { useFolderState } from "@data-folder";
-import { useFileStorageApi } from "@feature-board-file-element";
 import { mdiPlus } from "@icons/material";
 import { computed, onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
 import FolderDetails from "./FolderDetails.vue";
 import FolderMenu from "./FolderMenu.vue";
+import { useFileStorageApi } from "@data-file";
 
 const { t } = useI18n();
 

@@ -3,7 +3,7 @@ import {
 	convertDownloadToPreviewUrl,
 	isPreviewPossible,
 } from "@/utils/fileHelper";
-import { useFileStorageApi } from "@feature-board-file-element";
+import { useFileStorageApi } from "@data-file";
 import { computed } from "vue";
 
 export const usePreviewGenerator = (elementId: string) => {

@@ -63,6 +63,7 @@ import {
 	isPreviewPossible,
 } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -80,7 +81,6 @@ import {
 } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 

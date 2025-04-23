@@ -10,7 +10,7 @@ import {
 import { authModule } from "@/store/store-accessor";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createTestableGlobaleState } from "@/utils/create-global-state";
-import { useFileRecordsStore } from "@data-file";
+import { useFileRecordsStore } from "./FileRecordsStore";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
 export enum ErrorType {
