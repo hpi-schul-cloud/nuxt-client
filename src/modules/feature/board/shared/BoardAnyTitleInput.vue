@@ -4,7 +4,7 @@
 			ref="titleInput"
 			v-model="modelValue"
 			class="title-input"
-			:class="scope == 'board' ? 'board-title-input' : 'other-title-input'"
+			:class="scope === 'board' ? 'board-title-input' : 'other-title-input'"
 			hide-details="auto"
 			variant="solo"
 			flat
@@ -22,7 +22,7 @@
 		<component
 			:is="`h${ariaLevel}`"
 			class="title-input"
-			:class="scope == 'board' ? 'board-title' : 'other-title'"
+			:class="scope === 'board' ? 'board-title' : 'other-title'"
 		>
 			{{ modelValue || placeholderText }}
 		</component>

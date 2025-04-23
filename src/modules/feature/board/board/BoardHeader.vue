@@ -7,7 +7,7 @@
 			tabindex="0"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
-			@keydown.enter="onStartEditMode"
+			@keydown.enter.prevent="onStartEditMode"
 		>
 			<BoardAnyTitleInput
 				ref="boardHeader"
