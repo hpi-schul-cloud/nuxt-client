@@ -1850,7 +1850,8 @@ export default {
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Raumberechtigungen für {memberFullName} ändern",
-	"pages.rooms.members.manage": "Raum-Mitglieder",
+	"pages.rooms.members.manage": "Mitglieder verwalten",
+	"pages.rooms.members.view": "Mitglieder ansehen",
 	"pages.rooms.members.tab.members": "Mitglieder",
 	"pages.rooms.members.tab.invitations": "Einladungslinks",
 	"pages.rooms.members.tab.invitations.infoText":

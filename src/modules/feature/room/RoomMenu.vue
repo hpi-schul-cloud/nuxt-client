@@ -7,6 +7,7 @@
 		<KebabMenuActionEdit v-if="canEditRoom" @click="() => $emit('room:edit')" />
 		<KebabMenuActionRoomMembers
 			v-if="canViewRoom"
+			:can-add-room-members="canAddRoomMembers"
 			@click="() => $emit('room:manage-members')"
 		/>
 		<KebabMenuActionDelete
@@ -50,5 +51,6 @@ const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 	}
 };
 
-const { canEditRoom, canDeleteRoom, canViewRoom } = useRoomAuthorization();
+const { canAddRoomMembers, canEditRoom, canDeleteRoom, canViewRoom } =
+	useRoomAuthorization();
 </script>

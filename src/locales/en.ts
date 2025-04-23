@@ -1818,7 +1818,8 @@ export default {
 	"pages.rooms.members.changePermission": "Change room permissions",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Change room permissions for {memberFullName}",
-	"pages.rooms.members.manage": "Room members",
+	"pages.rooms.members.manage": "Manage Members",
+	"pages.rooms.members.view": "View Members",
 	"pages.rooms.members.tab.members": "Members",
 	"pages.rooms.members.tab.invitations": "Invitations",
 	"pages.rooms.members.tab.invitations.infoText":

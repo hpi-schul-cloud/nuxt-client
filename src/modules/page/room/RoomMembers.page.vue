@@ -9,7 +9,7 @@
 			<div ref="header">
 				<div class="d-flex align-items-center">
 					<h1 class="text-h3 mb-4" data-testid="room-title">
-						{{ t("pages.rooms.members.manage") }}
+						{{ membersInfoText }}
 					</h1>
 					<KebabMenu class="mx-2" data-testid="room-member-menu">
 						<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
@@ -132,11 +132,6 @@ const { currentUser } = storeToRefs(roomMembersStore);
 const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
 	roomMembersStore;
 
-const pageTitle = computed(() =>
-	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
-);
-useTitle(pageTitle);
-
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
 const { askConfirmation } = useConfirmationDialog();
@@ -144,6 +139,17 @@ const { canLeaveRoom } = useRoomAuthorization();
 const { isVisibleAddMemberButton, isVisibleTabNavigation } =
 	useRoomMemberVisibilityOptions(currentUser);
 const { FEATURE_ROOM_MEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
+
+const membersInfoText = computed(() =>
+	isVisibleAddMemberButton.value
+		? t("pages.rooms.members.manage")
+		: t("pages.rooms.members.view")
+);
+
+const pageTitle = computed(() =>
+	buildPageTitle(`${room.value?.name} - ${membersInfoText.value}`)
+);
+useTitle(pageTitle);
 
 const activeTab = computed<Tab>({
 	get() {
@@ -244,7 +250,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 			to: `/rooms/${route.params.id}`,
 		},
 		{
-			title: t("pages.rooms.members.manage"),
+			title: membersInfoText.value,
 			disabled: true,
 		},
 	];
