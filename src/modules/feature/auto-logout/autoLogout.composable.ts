@@ -35,12 +35,9 @@ export const useAutoLogout = () => {
 		Math.max(Math.floor(remainingTimeInSeconds.value / 60), 0)
 	);
 
-	const checkTTL = async (immediate = false) => {
+	const checkTTL = async () => {
 		let ttlCount = 0;
-		if (immediate) {
-			clearInterval(ttlTimeoutPolling!);
-			ttlTimeoutPolling = null;
-		}
+
 		if (ttlTimeoutPolling) {
 			return ttlCount;
 		}
@@ -69,7 +66,7 @@ export const useAutoLogout = () => {
 					}
 				}
 			},
-			immediate ? 0 : 2 ** retry * 1000
+			2 ** retry * 1000
 		);
 	};
 
@@ -175,11 +172,12 @@ export const useAutoLogout = () => {
 	);
 
 	return {
-		showDialog,
 		errorOnExtend,
+		isTTLUpdated,
 		remainingTimeInMinutes,
 		remainingTimeInSeconds,
 		sessionStatus,
+		showDialog,
 		showWarningOnRemainingSeconds,
 		createSession,
 		extendSession,
