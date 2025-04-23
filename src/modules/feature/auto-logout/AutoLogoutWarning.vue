@@ -6,7 +6,7 @@
 					:src="image"
 					class="sloth"
 					role="presentation"
-					:alt="t('feature-autoLogout.component.image.alt')"
+					:alt="imageAltText"
 				/>
 				<p v-if="isSessionEnded" class="sloth-text">
 					{{ t("feature-autoLogout.message.error.401") }}
@@ -40,7 +40,7 @@
 
 <script lang="ts" setup>
 import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
-import { computed, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import SlothSvg from "@/assets/img/logout/Sloth.svg";
 import SlothErrorSvg from "@/assets/img/logout/Sloth_error.svg";
@@ -73,6 +73,8 @@ const confirmButtonText = computed(() => {
 		return t("feature-autoLogout.button.confirm.returnToLogin");
 	return t("feature-autoLogout.button.confirm");
 });
+
+const imageAltText = t("feature-autoLogout.component.image.alt");
 
 const onConfirm = () => {
 	if (isSessionEnded.value) {

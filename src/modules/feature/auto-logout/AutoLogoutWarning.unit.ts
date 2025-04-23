@@ -73,6 +73,7 @@ describe("AutoLogoutWarning", () => {
 		});
 
 		const wrapper = mount(AutoLogoutWarning, {
+			attachTo: document.body,
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 				components: {
@@ -108,6 +109,7 @@ describe("AutoLogoutWarning", () => {
 				});
 
 				const dialog = wrapper.findComponent(BaseModal);
+
 				expect(dialog.props("active")).toBe(true);
 			});
 		});
@@ -141,6 +143,19 @@ describe("AutoLogoutWarning", () => {
 					"feature-autoLogout.button.confirm.returnToLogin"
 				);
 			});
+
+			it("should call router.push when clicked", async () => {
+				const { wrapper } = setup({
+					autoLogoutVariables: {
+						sessionStatus: ref(SessionStatus.Ended),
+					},
+				});
+
+				const button = wrapper.findComponent({ name: "v-btn" });
+				await button.trigger("click");
+
+				expect(router.push).toHaveBeenCalledWith("/login");
+			});
 		});
 
 		describe("when sessionStatus is 'continued'", () => {
@@ -154,6 +169,19 @@ describe("AutoLogoutWarning", () => {
 
 				expect(button.exists()).toBe(true);
 				expect(button.text()).toContain("feature-autoLogout.button.confirm");
+			});
+
+			it("should call the extendSession method when clicked", async () => {
+				const { wrapper } = setup({
+					autoLogoutVariables: {
+						sessionStatus: ref(SessionStatus.Continued),
+					},
+				});
+
+				const button = wrapper.findComponent({ name: "v-btn" });
+				await button.trigger("click");
+
+				expect(mockedUseAutoLogout().extendSession).toHaveBeenCalled();
 			});
 		});
 	});
