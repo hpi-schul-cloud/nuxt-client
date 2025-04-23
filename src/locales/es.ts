@@ -2060,6 +2060,11 @@ export default {
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"ui-confirmation-dialog.ask-cancel-form": "¿Descartar cambios?",
 	"ui-layout.topbar.pageShare.printQRCode": "Imprimir código QR",
+	"ui.actionMenu.selectedRows":
+		"Menú de acciones para {count} líneas seleccionadas",
+	"ui.actionMenu.actions": "Acciones",
+	"ui.actionMenu.select.none": "Deseleccionar todas las líneas",
+	"ui.dataTable.select.all": "Seleccionar todas las líneas",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",
