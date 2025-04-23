@@ -16,35 +16,41 @@
 		</EmptyState>
 	</template>
 	<template v-else>
-		<DataTable
-			:table-headers="headers"
-			:items="fileRecords"
-			:show-select="true"
-		>
-			<template
-				#[`header.data-table-select`]="{ someSelected, allSelected, selectAll }"
+		<div class="mt-8">
+			<DataTable
+				:table-headers="headers"
+				:items="fileRecords"
+				:show-select="true"
 			>
-				<VCheckboxBtn
-					:model-value="allSelected"
-					:indeterminate="someSelected && !allSelected"
-					:aria-label="t('pages.folder.ariaLabels.select.all')"
-					@click="selectAll(!allSelected)"
-				/>
-			</template>
-			<template #[`item.preview`]="{ item }">
-				<FilePreview :filerecord="item" />
-			</template>
-			<template #[`item.createdAt`]="{ item }">
-				{{ new Date(item.createdAt ?? "").toLocaleDateString() }}
-			</template>
-			<template #[`item.size`]="{ item }">
-				{{ formatFileSize(item.size) }}
-			</template>
+				<template
+					#[`header.data-table-select`]="{
+						someSelected,
+						allSelected,
+						selectAll,
+					}"
+				>
+					<VCheckboxBtn
+						:model-value="allSelected"
+						:indeterminate="someSelected && !allSelected"
+						:aria-label="t('pages.folder.ariaLabels.select.all')"
+						@click="selectAll(!allSelected)"
+					/>
+				</template>
+				<template #[`item.preview`]="{ item }">
+					<FilePreview :filerecord="item" />
+				</template>
+				<template #[`item.createdAt`]="{ item }">
+					{{ new Date(item.createdAt ?? "").toLocaleDateString() }}
+				</template>
+				<template #[`item.size`]="{ item }">
+					{{ formatFileSize(item.size) }}
+				</template>
 
-			<template #left-of-search>
-				<FileUploadProgress :upload-progress="uploadProgress" />
-			</template>
-		</DataTable>
+				<template #left-of-search>
+					<FileUploadProgress :upload-progress="uploadProgress" />
+				</template>
+			</DataTable>
+		</div>
 	</template>
 </template>
 
