@@ -1,3 +1,5 @@
 import AutoLogoutWarning from "./AutoLogoutWarning.vue";
+import { SessionStatus } from "./types";
+import { useAutoLogout } from "./autoLogout.composable";
 
-export { AutoLogoutWarning };
+export { AutoLogoutWarning, SessionStatus, useAutoLogout };

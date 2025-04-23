@@ -8,10 +8,11 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { computed, nextTick, ref } from "vue";
+import { computed, ref } from "vue";
 import { createMock } from "@golevelup/ts-jest";
 import { Router, useRouter } from "vue-router";
 import BaseModal from "@/components/base/BaseModal.vue";
+import { SessionStatus } from "./types";
 
 jest.mock("vue-i18n", () => {
 	return {
@@ -42,13 +43,13 @@ describe("AutoLogoutWarning", () => {
 	useRouterMock.mockReturnValue(router);
 
 	const defaultVars = {
-		showDialog: ref(false),
+		showDialog: ref(true),
 		errorOnExtend: ref(false),
 		isTTLUpdated: ref(false),
 		remainingTimeInMinutes: computed(() => 0),
 		remainingTimeInSeconds: ref(0),
 		showWarningOnRemainingSeconds: ref(0),
-		sessionStatus: ref(null),
+		sessionStatus: ref<SessionStatus | null>(null),
 		createSession: jest.fn(),
 		extendSession: jest.fn(),
 	};
@@ -71,7 +72,7 @@ describe("AutoLogoutWarning", () => {
 			...options.autoLogoutVariables,
 		});
 
-		const wrapper = shallowMount(AutoLogoutWarning, {
+		const wrapper = mount(AutoLogoutWarning, {
 			global: {
 				plugins: [createTestingI18n(), createTestingVuetify()],
 				components: {
@@ -125,22 +126,34 @@ describe("AutoLogoutWarning", () => {
 		});
 	});
 
-	describe.skip("sloth image", () => {
-		describe("when errorOnExtend is true", () => {
-			it("should show the sloth image", async () => {
+	describe("confirm button", () => {
+		describe("when sessionStatus is 'ended'", () => {
+			it("should set the correct title", async () => {
 				const { wrapper } = setup({
 					autoLogoutVariables: {
-						errorOnExtend: ref(true),
-						showDialog: ref(true),
+						sessionStatus: ref(SessionStatus.Ended),
 					},
 				});
 
-				const dialog = wrapper.findComponent(BaseModal);
-				const div = wrapper.find(".sloth-text");
+				const button = wrapper.findComponent({ name: "v-btn" });
+				expect(button.exists()).toBe(true);
+				expect(button.text()).toContain(
+					"feature-autoLogout.button.confirm.returnToLogin"
+				);
+			});
+		});
+
+		describe("when sessionStatus is 'continued'", () => {
+			it("should set the correct title", async () => {
+				const { wrapper } = setup({
+					autoLogoutVariables: {
+						sessionStatus: ref(SessionStatus.Continued),
+					},
+				});
 				const button = wrapper.findComponent({ name: "v-btn" });
 
-				const slothImage = dialog.find(".sloth");
-				expect(slothImage.exists()).toBe(true);
+				expect(button.exists()).toBe(true);
+				expect(button.text()).toContain("feature-autoLogout.button.confirm");
 			});
 		});
 	});

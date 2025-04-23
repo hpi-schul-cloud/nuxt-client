@@ -2,13 +2,7 @@ import { computed, Ref, ref, watch } from "vue";
 import { authModule, envConfigModule, notifierModule } from "@/store";
 import { useI18n } from "vue-i18n";
 import { $axios } from "@/utils/api";
-
-export enum SessionStatus {
-	Continued = "continued",
-	ShouldExtended = "shouldExtended",
-	Ended = "ended",
-	Error = "error",
-}
+import { SessionStatus } from "./types";
 
 export const useAutoLogout = () => {
 	const { t } = useI18n();

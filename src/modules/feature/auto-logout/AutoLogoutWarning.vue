@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import { SessionStatus, useAutoLogout } from "./autoLogout.composable";
+import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
 import { computed, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import SlothSvg from "@/assets/img/logout/Sloth.svg";

@@ -1,5 +1,5 @@
 import EnvConfigModule from "@/store/env-config";
-import { SessionStatus, useAutoLogout } from "./autoLogout.composable";
+import { SessionStatus, useAutoLogout } from "@feature-auto-logout";
 import setupStores from "@@/tests/test-utils/setupStores";
 import NotifierModule from "@/store/notifier";
 import AuthModule from "@/store/auth";
