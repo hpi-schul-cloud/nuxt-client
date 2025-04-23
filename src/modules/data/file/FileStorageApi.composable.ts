@@ -1,13 +1,12 @@
 import {
 	FileApiFactory,
 	FileApiInterface,
-	FileRecordParentType,
-	FileRecordResponse,
 	FileUrlParams,
 	RenameFileParams,
 	StorageLocation,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
+import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { createTestableGlobaleState } from "@/utils/create-global-state";
 import { useFileRecordsStore } from "./FileRecords.state";
@@ -38,7 +37,7 @@ const fileStorageApi = () => {
 
 	const fetchFiles = async (
 		parentId: string,
-		parentType: FileRecordParentType
+		parentType: FileRecordParent
 	): Promise<void> => {
 		try {
 			const schoolId = authModule.getSchool?.id as string;
@@ -59,7 +58,7 @@ const fileStorageApi = () => {
 	const upload = async (
 		file: File,
 		parentId: string,
-		parentType: FileRecordParentType
+		parentType: FileRecordParent
 	): Promise<void> => {
 		try {
 			const schoolId = authModule.getSchool?.id as string;
@@ -80,7 +79,7 @@ const fileStorageApi = () => {
 	const uploadFromUrl = async (
 		imageUrl: string,
 		parentId: string,
-		parentType: FileRecordParentType
+		parentType: FileRecordParent
 	): Promise<void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
@@ -107,7 +106,7 @@ const fileStorageApi = () => {
 	};
 
 	const rename = async (
-		fileRecordId: FileRecordResponse["id"],
+		fileRecordId: FileRecord["id"],
 		params: RenameFileParams
 	): Promise<void> => {
 		try {

@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { FileRecordParentType } from "@/fileStorageApi/v3";
+import { FileRecordParent } from "@/types/file/File";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
@@ -73,11 +73,9 @@ const fabClickHandler = () => {
 
 			await Promise.all(
 				fileArray.map((file) =>
-					upload(file, props.folderId, FileRecordParentType.BOARDNODES).then(
-						() => {
-							uploadProgress.value.uploaded += 1;
-						}
-					)
+					upload(file, props.folderId, FileRecordParent.BOARDNODES).then(() => {
+						uploadProgress.value.uploaded += 1;
+					})
 				)
 			);
 
@@ -96,7 +94,7 @@ const onDelete = () => {
 onMounted(async () => {
 	isLoading.value = true;
 	await fetchFileFolderElement(props.folderId);
-	await fetchFiles(folderId.value, FileRecordParentType.BOARDNODES);
+	await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
 	isLoading.value = false;
 });
 </script>

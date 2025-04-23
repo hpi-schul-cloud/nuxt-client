@@ -2,7 +2,7 @@
 	<div>
 		<v-img
 			v-if="isPreviewPossible(filerecord.previewStatus)"
-			:src="convertDownloadToPreviewUrl(filerecord.url, PreviewWidth._500)"
+			:src="convertDownloadToPreviewUrl(filerecord.url, FilePreviewWidth._500)"
 			:alt="filerecord.name"
 			:aria-label="filerecord.name"
 			:aspect-ratio="1 / 1"
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { FileRecordResponse, PreviewWidth } from "@/fileStorageApi/v3";
+import { FilePreviewWidth, FileRecord } from "@/types/file/File";
 import {
 	convertDownloadToPreviewUrl,
 	isAudioMimeType,
@@ -36,7 +36,7 @@ import { defineProps, PropType } from "vue";
 
 defineProps({
 	filerecord: {
-		type: Object as PropType<FileRecordResponse>,
+		type: Object as PropType<FileRecord>,
 		required: true,
 	},
 });

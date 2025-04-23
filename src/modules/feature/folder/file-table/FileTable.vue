@@ -45,7 +45,6 @@
 </template>
 
 <script setup lang="ts">
-import { FileRecordResponse } from "@/fileStorageApi/v3";
 import { convertFileSize } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
@@ -54,6 +53,7 @@ import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
+import { FileRecord } from "@/types/file/File";
 
 const { t, n } = useI18n();
 
@@ -67,7 +67,7 @@ defineProps({
 		required: true,
 	},
 	fileRecords: {
-		type: Array as PropType<FileRecordResponse[]>,
+		type: Array as PropType<FileRecord[]>,
 		required: true,
 	},
 	uploadProgress: {
