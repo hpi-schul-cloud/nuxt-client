@@ -30,7 +30,7 @@ import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
 import { computed, onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import FileTable from "./FileTable.vue";
+import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
 
 const { t } = useI18n();
