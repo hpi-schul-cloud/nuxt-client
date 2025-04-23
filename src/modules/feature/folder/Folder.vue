@@ -15,7 +15,7 @@
 		</template>
 		<FileTable
 			:is-loading="isLoading"
-			:is-empty="fileRecords.length === 0"
+			:is-empty="isEmpty"
 			:file-records="fileRecords"
 			:upload-progress="uploadProgress"
 		/>
@@ -60,6 +60,7 @@ const uploadProgress = ref({
 	total: 0,
 });
 const isLoading = ref(false);
+const isEmpty = computed(() => fileRecords.value.length === 0);
 
 const fabClickHandler = () => {
 	const input = buildInput();
