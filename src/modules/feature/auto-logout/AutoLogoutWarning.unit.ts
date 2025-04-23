@@ -8,7 +8,7 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { computed, ref } from "vue";
+import { computed, nextTick, ref } from "vue";
 import { createMock } from "@golevelup/ts-jest";
 import { Router, useRouter } from "vue-router";
 import BaseModal from "@/components/base/BaseModal.vue";
@@ -44,6 +44,7 @@ describe("AutoLogoutWarning", () => {
 	const defaultVars = {
 		showDialog: ref(false),
 		errorOnExtend: ref(false),
+		isTTLUpdated: ref(false),
 		remainingTimeInMinutes: computed(() => 0),
 		remainingTimeInSeconds: ref(0),
 		showWarningOnRemainingSeconds: ref(0),
@@ -120,6 +121,26 @@ describe("AutoLogoutWarning", () => {
 
 				const dialog = wrapper.findComponent(BaseModal);
 				expect(dialog.props("active")).toBe(false);
+			});
+		});
+	});
+
+	describe.skip("sloth image", () => {
+		describe("when errorOnExtend is true", () => {
+			it("should show the sloth image", async () => {
+				const { wrapper } = setup({
+					autoLogoutVariables: {
+						errorOnExtend: ref(true),
+						showDialog: ref(true),
+					},
+				});
+
+				const dialog = wrapper.findComponent(BaseModal);
+				const div = wrapper.find(".sloth-text");
+				const button = wrapper.findComponent({ name: "v-btn" });
+
+				const slothImage = dialog.find(".sloth");
+				expect(slothImage.exists()).toBe(true);
 			});
 		});
 	});
