@@ -1,47 +1,32 @@
 <template>
-	<VTextField
-		v-if="scope === 'board'"
-		ref="titleInput"
-		v-model="modelValue"
-		class="title-input"
-		hide-details="auto"
-		variant="solo"
-		density="compact"
-		flat
-		:placeholder="placeholderText"
-		bg-color="transparent"
-		:disabled="!isEditMode"
-		:role="isEditMode ? 'input' : 'heading'"
-		:aria-level="ariaLevel"
-		:tabindex="isEditMode ? 0 : -1"
-		:autofocus="internalIsFocused"
-		:maxlength="maxLength"
-		:error-messages="errorMessages"
-		@keydown.enter="onEnter"
-	/>
-
-	<VTextarea
-		v-else
-		ref="titleInput"
-		v-model="modelValue"
-		hide-details="auto"
-		variant="solo"
-		density="compact"
-		:rows="1"
-		auto-grow
-		flat
-		class="title-input"
-		:placeholder="placeholderText"
-		bg-color="transparent"
-		:disabled="!isEditMode"
-		:role="isEditMode ? 'input' : 'heading'"
-		:aria-level="ariaLevel"
-		:tabindex="isEditMode ? 0 : -1"
-		:autofocus="internalIsFocused"
-		:maxlength="maxLength"
-		:error-messages="errorMessages"
-		@keydown.enter="onEnter"
-	/>
+	<template v-if="isEditMode">
+		<VTextarea
+			ref="titleInput"
+			v-model="modelValue"
+			class="title-input"
+			:class="scope == 'board' ? 'board-title-input' : 'other-title-input'"
+			hide-details="auto"
+			variant="solo"
+			flat
+			rows="1"
+			auto-grow
+			bg-color="transparent"
+			:placeholder="placeholderText"
+			:autofocus="internalIsFocused"
+			:maxlength="maxLength"
+			:error-messages="errorMessages"
+			@keydown.enter="onEnter"
+		/>
+	</template>
+	<template v-else>
+		<component
+			:is="`h${ariaLevel}`"
+			class="title-input"
+			:class="scope == 'board' ? 'board-title' : 'other-title'"
+		>
+			{{ modelValue || placeholderText }}
+		</component>
+	</template>
 </template>
 
 <script lang="ts">
@@ -196,7 +181,7 @@ export default defineComponent({
 			if (props.isEditMode) {
 				return t("components.cardElement.titleElement.placeholder").toString();
 			}
-			return "";
+			return t("components.cardElement.titleElement.placeholder").toString();
 		});
 
 		const cursorToEnd = () => {
@@ -221,37 +206,35 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-:deep(div.v-field__field) {
-	padding: 0;
-	font-family: var(--font-accent);
-}
-
-:deep(textarea) {
-	background: transparent !important;
-	opacity: 1;
-	font-size: var(--heading-5) !important;
-	overflow: hidden;
-}
-
-:deep(input) {
-	font-size: var(--heading-3);
-	background: transparent !important;
-}
-
-:deep(.v-field__append-inner, .v-field__clearable, .v-field__prepend-inner) {
-	display: flex;
-	align-items: flex-start;
-	padding-top: 8px !important;
-}
+<style scoped lang="scss">
+@import "@/styles/settings.scss";
 
 .title-input {
 	cursor: pointer;
 	pointer-events: unset !important;
 	min-width: 280px;
+
+	padding-left: 0px;
+	letter-spacing: $field-letter-spacing;
+	font-family: var(--font-accent);
+
+	&.other-title-input :deep(textarea) {
+		font-size: var(--heading-5) !important;
+		overflow: hidden;
+	}
+
+	&.board-title-input :deep(textarea) {
+		font-size: var(--heading-3) !important;
+		padding-left: 0px;
+	}
 }
 
-.title-input :deep(.v-field--disabled) {
-	opacity: var(--v-high-emphasis-opacity);
+.board-title {
+	font-size: var(--heading-3);
+	padding-top: 16px;
+}
+
+.other-title {
+	font-size: var(--heading-5);
 }
 </style>

@@ -11,7 +11,7 @@
 		>
 			<BoardAnyTitleInput
 				ref="boardHeader"
-				class="ml-n4 input"
+				class="input"
 				scope="board"
 				:value="boardTitle"
 				data-testid="board-title"
@@ -221,7 +221,7 @@ watchEffect(() => {
 
 .input {
 	// The 16px compensate for the negative margin set with "ml-n4".
-	max-width: calc(100% + 16px);
+	max-width: calc(100%);
 	width: v-bind("fieldWidth");
 }
 
