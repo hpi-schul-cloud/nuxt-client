@@ -8,7 +8,7 @@ import * as serverApi from "@/fileStorageApi/v3/api/file-api";
 import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { apiResponseErrorFactory } from "@@/tests/test-utils/factory/apiResponseErrorFactory";
 import { axiosErrorFactory } from "@@/tests/test-utils/factory/axiosErrorFactory";
-import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
+import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { ObjectIdMock } from "@@/tests/test-utils/ObjectIdMock";
 import { createMock } from "@golevelup/ts-jest";
 import { AxiosResponse } from "axios";
@@ -116,7 +116,7 @@ describe("FileStorageApi Composable", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
-				const fileRecordResponse = fileRecordResponseFactory.build({
+				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
 				});
@@ -258,7 +258,7 @@ describe("FileStorageApi Composable", () => {
 				const file = new File([""], "filename");
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
-				const fileRecordResponse = fileRecordResponseFactory.build({
+				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
 				});
@@ -362,7 +362,7 @@ describe("FileStorageApi Composable", () => {
 				const imageUrl = `https://www.example.com/${fileName}`;
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
-				const fileRecordResponse = fileRecordResponseFactory.build({
+				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
 					name: fileName,
@@ -460,7 +460,7 @@ describe("FileStorageApi Composable", () => {
 			const setup = () => {
 				const parentId = ObjectIdMock();
 				const parentType = FileRecordParentType.BOARDNODES;
-				const fileRecordResponse = fileRecordResponseFactory.build({
+				const fileRecordResponse = fileRecordFactory.build({
 					parentId,
 					parentType,
 				});

@@ -1,7 +1,7 @@
 import { FileRecordParentType, PreviewStatus } from "@/fileStorageApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import {
-	fileRecordResponseFactory,
+	fileRecordFactory,
 	setupFileStorageApiMock,
 } from "@@/tests/test-utils";
 import { mount } from "@vue/test-utils";
@@ -35,7 +35,7 @@ describe("usePreviewGenerator", () => {
 				const setup = () => {
 					const elementId = "my-custom-mocked-id";
 					const uploadFromUrlMock = jest.fn();
-					const fileRecord = fileRecordResponseFactory.build({
+					const fileRecord = fileRecordFactory.build({
 						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 					});
 					const getFileRecordMock = jest

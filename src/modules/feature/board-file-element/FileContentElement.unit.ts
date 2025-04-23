@@ -3,13 +3,14 @@ import {
 	PreviewStatus,
 	PreviewWidth,
 } from "@/fileStorageApi/v3";
+import { FileElementResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { setupFileStorageApiMock } from "@@/tests/test-utils/api-mocks/fileStorageApiMock";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
-import { fileRecordResponseFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
+import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -22,7 +23,6 @@ import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import { FileProperties } from "./shared/types/file-properties";
 import FileUpload from "./upload/FileUpload.vue";
-import { FileElementResponse } from "@/serverApi/v3";
 
 jest.mock("@data-board", () => {
 	return {
@@ -135,7 +135,7 @@ describe("FileContentElement", () => {
 				isUploading?: boolean;
 			}) => {
 				const element = fileElementResponseFactory.build();
-				const fileRecordResponse = fileRecordResponseFactory.build({
+				const fileRecordResponse = fileRecordFactory.build({
 					securityCheckStatus:
 						props?.scanStatus ?? FileRecordScanStatus.PENDING,
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
@@ -494,7 +494,7 @@ describe("FileContentElement", () => {
 				const element = fileElementResponseFactory.build();
 				document.body.setAttribute("data-app", "true");
 
-				const fileRecordResponse = fileRecordResponseFactory.build({
+				const fileRecordResponse = fileRecordFactory.build({
 					securityCheckStatus:
 						props?.scanStatus ?? FileRecordScanStatus.PENDING,
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
