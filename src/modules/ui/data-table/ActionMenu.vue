@@ -15,12 +15,12 @@
 					elevation="0"
 					data-testid="action-menu-button"
 					:aria-label="
-						t('pages.rooms.members.actionMenu.selectedMembers', {
+						t('ui.actionMenu.selectedRows', {
 							count: selectedIds.length,
 						})
 					"
 				>
-					{{ t("pages.rooms.members.tableHeader.actions") }}
+					{{ t("ui.actionMenu.actions") }}
 				</VBtn>
 			</template>
 
@@ -30,12 +30,11 @@
 		</VMenu>
 
 		<VBtn
-			ref="resetSelectedMembers"
 			class="ml-2 mr-2"
 			size="x-small"
 			variant="text"
 			:icon="mdiClose"
-			:aria-label="t('pages.rooms.members.select.none')"
+			:aria-label="t('ui.actionMenu.select.none')"
 			@click="onReset"
 		/>
 	</div>
@@ -43,8 +42,8 @@
 
 <script setup lang="ts">
 import { mdiClose } from "@icons/material";
-import { useI18n } from "vue-i18n";
 import { KebabMenuList } from "@ui-kebab-menu";
+import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 defineProps({
