@@ -22,20 +22,6 @@
 				:items="fileRecords"
 				:show-select="true"
 			>
-				<template
-					#[`header.data-table-select`]="{
-						someSelected,
-						allSelected,
-						selectAll,
-					}"
-				>
-					<VCheckboxBtn
-						:model-value="allSelected"
-						:indeterminate="someSelected && !allSelected"
-						:aria-label="t('pages.folder.ariaLabels.select.all')"
-						@click="selectAll(!allSelected)"
-					/>
-				</template>
 				<template #[`item.preview`]="{ item }">
 					<FilePreview :filerecord="item" />
 				</template>

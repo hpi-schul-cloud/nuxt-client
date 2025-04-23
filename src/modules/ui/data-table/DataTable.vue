@@ -52,6 +52,16 @@
 		:sort-asc-icon="mdiMenuDown"
 		:sort-desc-icon="mdiMenuUp"
 	>
+		<template
+			#[`header.data-table-select`]="{ someSelected, allSelected, selectAll }"
+		>
+			<VCheckboxBtn
+				:model-value="allSelected"
+				:indeterminate="someSelected && !allSelected"
+				:aria-label="t('ui.dataTable.select.all')"
+				@click="selectAll(!allSelected)"
+			/>
+		</template>
 		<template v-for="slot in Object.keys($slots)" #[slot]="scope">
 			<slot :name="slot" v-bind="scope" />
 		</template>
