@@ -5,23 +5,26 @@ import {
 import { VueWrapper } from "@vue/test-utils";
 import RoomMenu from "./RoomMenu.vue";
 import { RouterLink } from "vue-router";
-import { ref } from "vue";
-import { useRoomAuthorization } from "@data-room";
+import { computed, ref } from "vue";
+import { useRoomAuthorization, useRoomDuplication } from "@data-room";
 import { createTestingPinia } from "@pinia/testing";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionEdit,
 	KebabMenuActionRoomMembers,
 	KebabMenuActionLeaveRoom,
+	KebabMenuActionDuplicate,
 } from "@ui-kebab-menu";
 import { useDeleteConfirmationDialog } from "@ui-confirmation-dialog";
 import setupDeleteConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupDeleteConfirmationComposableMock";
 
-jest.mock("@feature-room/roomAuthorization.composable");
+jest.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = jest.mocked(useRoomAuthorization);
 
 jest.mock("@ui-confirmation-dialog");
 jest.mocked(useDeleteConfirmationDialog);
+
+jest.mock("@data-room/roomDuplication.composable");
 
 describe("@feature-room/RoomMenu", () => {
 	let roomPermissions: ReturnType<typeof useRoomAuthorization>;
@@ -35,6 +38,7 @@ describe("@feature-room/RoomMenu", () => {
 			canViewRoom: ref(false),
 			canEditRoom: ref(false),
 			canDeleteRoom: ref(false),
+			canDuplicateRoom: ref(false),
 			canLeaveRoom: ref(false),
 			canRemoveRoomMembers: ref(false),
 			canEditRoomContent: ref(false),
@@ -48,6 +52,15 @@ describe("@feature-room/RoomMenu", () => {
 	});
 
 	const setup = () => {
+		const roomDuplication = jest.mocked(useRoomDuplication);
+		roomDuplication.mockReturnValue({
+			isRoomDuplicationFeatureEnabled: computed(() => true),
+			isDuplicationInfoDialogOpen: ref(false),
+			openDuplicationInfoDialog: jest.fn(),
+			closeDuplicationInfoDialog: jest.fn(),
+			duplicate: jest.fn(),
+		});
+
 		const wrapper = mount(RoomMenu, {
 			global: {
 				plugins: [
@@ -75,11 +88,15 @@ describe("@feature-room/RoomMenu", () => {
 		const kebabActionLeaveRoom = wrapper.findComponent(
 			KebabMenuActionLeaveRoom
 		);
+		const kebabActionDuplicateRoom = wrapper.findComponent(
+			KebabMenuActionDuplicate
+		);
 
 		return {
 			kebabActionEdit,
 			kebabActionRoomMembers,
 			kebabActionDelete,
+			kebabActionDuplicateRoom,
 			kebabActionLeaveRoom,
 		};
 	};
@@ -173,6 +190,19 @@ describe("@feature-room/RoomMenu", () => {
 			expect(kebabActionRoomMembers.exists()).toBe(true);
 			expect(kebabActionDelete.exists()).toBe(true);
 			expect(kebabActionLeaveRoom.exists()).toBe(true);
+		});
+	});
+
+	describe("when user has permission to duplicate", () => {
+		it("should show duplicate menu item", async () => {
+			roomPermissions.canDuplicateRoom.value = true;
+
+			const { wrapper, menuBtn } = setup();
+			await menuBtn.trigger("click");
+
+			const { kebabActionDuplicateRoom } = findKebabActions(wrapper);
+
+			expect(kebabActionDuplicateRoom.exists()).toBe(true);
 		});
 	});
 
