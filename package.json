@@ -18,6 +18,7 @@
 	},
 	"dependencies": {
 		"@braintree/sanitize-url": "^7.1.1",
+		"@breezystack/lamejs": "^1.2.7",
 		"@ckeditor/ckeditor5-vue": "^5.1.0",
 		"@hpi-schul-cloud/ckeditor": "^2.0.0",
 		"@lumieducation/h5p-webcomponents": "^9.2.2",

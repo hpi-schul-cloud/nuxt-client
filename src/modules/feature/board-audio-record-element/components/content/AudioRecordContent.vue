@@ -8,6 +8,7 @@
 			:element-id="audioRecordProperties.element.id"
 			:is-edit-mode="isEditMode"
 			:show-menu="isEditMode"
+			@add:alert="onAddAlert"
 		/>
 	</div>
 	<div>
