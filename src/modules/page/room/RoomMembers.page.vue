@@ -35,7 +35,11 @@
 			</div>
 		</template>
 
-		<VTabsWindow v-model="activeTab" class="mt-12 room-members-tabs-window">
+		<VTabsWindow
+			v-model="activeTab"
+			class="room-members-tabs-window"
+			:class="isVisibleAddMemberButton ? 'mt-12' : ''"
+		>
 			<VTabsWindowItem
 				v-for="tabItem in tabs"
 				:key="tabItem.value"
