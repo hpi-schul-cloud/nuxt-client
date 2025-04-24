@@ -87,7 +87,7 @@ export const useAudioRecorder = () => {
 				});
 
 				dispose();
-
+				// remove convertWebmBlobToMp3 to save as webm
 				const mp3Blob = await convertWebmBlobToMp3(webmBlob);
 				resolve(mp3Blob);
 			};

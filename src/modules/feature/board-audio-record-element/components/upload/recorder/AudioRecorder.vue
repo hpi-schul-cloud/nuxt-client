@@ -205,6 +205,7 @@ export default defineComponent({
 			if (audioUrl.value) {
 				const response = await fetch(audioUrl.value);
 				const blob = await response.blob();
+				// remove mp3 exte if savin as webm
 				const file = new File([blob], `${new Date().getTime()}-audio.mp3`, {
 					type: blob.type,
 				});
