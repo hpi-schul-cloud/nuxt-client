@@ -8,9 +8,7 @@ export const useAutoLogout = () => {
 	const { t } = useI18n();
 	const showDialog = ref(false);
 	const errorOnExtend = ref(false);
-	const sessionStatus: Ref<SessionStatus | null> = ref(
-		null as unknown as SessionStatus
-	);
+	const sessionStatus: Ref<SessionStatus | null> = ref(null);
 	const isTTLUpdated = ref(false);
 
 	let remainingTimePolling: ReturnType<typeof setInterval> | null = null;
