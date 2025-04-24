@@ -31,13 +31,6 @@ jest.mock("@/store/store-accessor", () => ({
 	},
 }));
 
-jest.mock<typeof import("@/utils/create-global-state")>(
-	"@/utils/create-global-state",
-	() => ({
-		createTestableGlobaleState: (composable) => composable,
-	})
-);
-
 const setupErrorResponse = (message = "NOT_FOUND", code = 404) => {
 	const expectedPayload = apiResponseErrorFactory.build({
 		message,

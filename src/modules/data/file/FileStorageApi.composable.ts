@@ -8,7 +8,6 @@ import {
 import { authModule } from "@/store/store-accessor";
 import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createTestableGlobaleState } from "@/utils/create-global-state";
 import { useFileRecordsStore } from "./FileRecords.state";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
@@ -23,7 +22,7 @@ export enum ErrorType {
 	Forbidden = "Forbidden",
 }
 
-const fileStorageApi = () => {
+export const useFileStorageApi = () => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
 	const {
 		showFileTooBigError,
@@ -154,5 +153,3 @@ const fileStorageApi = () => {
 		getFileRecordsByParentId,
 	};
 };
-
-export const useFileStorageApi = createTestableGlobaleState(fileStorageApi);
