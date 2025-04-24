@@ -146,8 +146,8 @@ const { FEATURE_ROOM_MEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
 watchEffect(() => {
 	if (isVisibleAddMemberButton.value !== undefined) {
 		membersInfoText.value = isVisibleAddMemberButton.value
-			? t("pages.rooms.members.manage")
-			: t("pages.rooms.members.view");
+			? t("pages.rooms.members.management")
+			: t("pages.rooms.members.label");
 	}
 });
 

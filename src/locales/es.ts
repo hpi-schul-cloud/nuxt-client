@@ -1860,7 +1860,7 @@ export default {
 	"pages.rooms.members.infoText":
 		"Añadir miembros a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "más información",
-	"pages.rooms.members.label": "Participantes",
+	"pages.rooms.members.label": "Miembros",
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.add.infoText":
 		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
@@ -1873,6 +1873,7 @@ export default {
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Cambiar autorizaciones de sala para {memberFullName}",
 	"pages.rooms.members.manage": "Gestionar miembros",
+	"pages.rooms.members.management": "Administración de miembros",
 	"pages.rooms.members.view": "Ver miembros",
 	"pages.rooms.members.tab.members": "Miembros",
 	"pages.rooms.members.tab.invitations": "Invitaciones",

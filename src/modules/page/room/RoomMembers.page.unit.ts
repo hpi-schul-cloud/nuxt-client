@@ -239,7 +239,7 @@ describe("RoomMembersPage", () => {
 			});
 
 			expect(document.title).toContain(
-				`${room?.name} - pages.rooms.members.view`
+				`${room?.name} - pages.rooms.members.label`
 			);
 		});
 	});
@@ -250,7 +250,7 @@ describe("RoomMembersPage", () => {
 				isVisibleAddMemberButton: true,
 			});
 			const heading = wrapper.get("h1");
-			expect(heading.text()).toBe("pages.rooms.members.manage");
+			expect(heading.text()).toBe("pages.rooms.members.management");
 		});
 
 		it("should set the correct heading when isVisibleAddMemberButton is false", () => {
@@ -258,7 +258,7 @@ describe("RoomMembersPage", () => {
 				isVisibleAddMemberButton: false,
 			});
 			const heading = wrapper.get("h1");
-			expect(heading.text()).toBe("pages.rooms.members.view");
+			expect(heading.text()).toBe("pages.rooms.members.label");
 		});
 	});
 
@@ -379,8 +379,8 @@ describe("RoomMembersPage", () => {
 			isVisibleAddMemberButton: boolean
 		) => {
 			const membersBreadcrumb = isVisibleAddMemberButton
-				? "pages.rooms.members.manage"
-				: "pages.rooms.members.view";
+				? "pages.rooms.members.management"
+				: "pages.rooms.members.label";
 			return [
 				{
 					title: "pages.rooms.title",

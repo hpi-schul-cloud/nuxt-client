@@ -1807,7 +1807,7 @@ export default {
 	"pages.rooms.members.infoText":
 		"Add members to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "more information",
-	"pages.rooms.members.label": "Participants",
+	"pages.rooms.members.label": "Members",
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.add.infoText":
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
@@ -1819,6 +1819,7 @@ export default {
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Change room permissions for {memberFullName}",
 	"pages.rooms.members.manage": "Manage Members",
+	"pages.rooms.members.management": "Member management",
 	"pages.rooms.members.view": "View Members",
 	"pages.rooms.members.tab.members": "Members",
 	"pages.rooms.members.tab.invitations": "Invitations",
