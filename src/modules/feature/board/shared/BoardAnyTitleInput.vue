@@ -220,12 +220,12 @@ export default defineComponent({
 	font-family: var(--font-accent);
 
 	&.other-title-input :deep(textarea) {
-		font-size: var(--heading-5) !important;
-		overflow: hidden;
+		font-size: var(--heading-5);
+		line-height: var(--line-height-lg);
 	}
 
 	&.board-title-input :deep(textarea) {
-		font-size: var(--heading-3) !important;
+		font-size: var(--heading-3);
 		padding-left: 0px;
 	}
 }
@@ -237,5 +237,11 @@ export default defineComponent({
 
 .other-title {
 	font-size: var(--heading-5);
+	line-height: var(--line-height-lg);
+	margin: 0;
+	padding: 8px 16px;
+	overflow-wrap: break-word;
+	word-break: break-word;
+	white-space: normal;
 }
 </style>
