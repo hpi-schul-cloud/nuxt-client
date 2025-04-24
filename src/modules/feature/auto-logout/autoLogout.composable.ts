@@ -20,13 +20,15 @@ export const useAutoLogout = () => {
 	const { JWT_SHOW_TIMEOUT_WARNING_SECONDS, JWT_TIMEOUT_SECONDS } =
 		envConfigModule.getEnv;
 
-	const showWarningOnRemainingSeconds = ref(
-		JWT_SHOW_TIMEOUT_WARNING_SECONDS || 45
-	);
-	const remainingTimeInSeconds = ref(JWT_TIMEOUT_SECONDS || 30 * 2);
+	const defaultRemainingTime = JWT_TIMEOUT_SECONDS || 2 * 60 * 60;
+	const defaultShowWarningTime =
+		JWT_SHOW_TIMEOUT_WARNING_SECONDS || 1 * 60 * 60;
+
+	let showWarningOnRemainingSeconds = defaultShowWarningTime;
+	let remainingTimeInSeconds = defaultRemainingTime;
 
 	const remainingTimeInMinutes = computed(() =>
-		Math.max(Math.floor(remainingTimeInSeconds.value / 60), 0)
+		Math.max(Math.floor(remainingTimeInSeconds / 60), 0)
 	);
 
 	const checkTTL = async () => {
@@ -43,7 +45,7 @@ export const useAutoLogout = () => {
 					const response = await $axios.get("/v1/accounts/jwtTimer");
 					ttlCount = response.data.ttl;
 
-					if (ttlCount > remainingTimeInSeconds.value) {
+					if (ttlCount > remainingTimeInSeconds) {
 						isTTLUpdated.value = true;
 						showDialog.value = false;
 					} else {
@@ -74,24 +76,23 @@ export const useAutoLogout = () => {
 			ttlTimeoutPolling = null;
 		}
 
-		showWarningOnRemainingSeconds.value = JWT_SHOW_TIMEOUT_WARNING_SECONDS;
-		remainingTimeInSeconds.value = JWT_TIMEOUT_SECONDS || 30 * 2;
+		showWarningOnRemainingSeconds = defaultShowWarningTime;
+		remainingTimeInSeconds = defaultRemainingTime;
 		if (showDialog.value) showDialog.value = false;
-
 		sessionStatus.value = null;
 		errorOnExtend.value = false;
 		isTTLUpdated.value = false;
 		retry = 0;
 
 		remainingTimePolling = setInterval(async () => {
-			remainingTimeInSeconds.value -= 1;
+			remainingTimeInSeconds -= 1;
 
-			if (remainingTimeInSeconds.value <= showWarningOnRemainingSeconds.value) {
+			if (remainingTimeInSeconds <= showWarningOnRemainingSeconds) {
 				sessionStatus.value = null;
 				await checkTTL();
 			}
 
-			if (remainingTimeInSeconds.value <= 0) {
+			if (remainingTimeInSeconds <= 0) {
 				sessionStatus.value = SessionStatus.Ended;
 				clearInterval(remainingTimePolling!);
 				remainingTimePolling = null;
@@ -112,8 +113,8 @@ export const useAutoLogout = () => {
 			const response = await $axios.get("/v1/accounts/jwtTimer");
 			const ttlCount = response.data.ttl;
 
-			if (ttlCount > remainingTimeInSeconds.value) {
-				remainingTimeInSeconds.value = ttlCount;
+			if (ttlCount > remainingTimeInSeconds) {
+				remainingTimeInSeconds = ttlCount;
 				showDialog.value = false;
 				errorOnExtend.value = false;
 				isTTLUpdated.value = true;

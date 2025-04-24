@@ -93,9 +93,8 @@ describe("useAutoLogout", () => {
 			},
 		});
 
-		composable.remainingTimeInSeconds = ref(
-			options?.remainingTimeInSeconds ?? 0
-		);
+		composable.remainingTimeInSeconds = options?.remainingTimeInSeconds ?? 0;
+
 		composable.createSession();
 
 		return {
