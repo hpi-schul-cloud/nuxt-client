@@ -59,7 +59,7 @@ const uploadProgress = ref({
 	uploaded: 0,
 	total: 0,
 });
-const isLoading = ref(false);
+const isLoading = ref(true);
 const isEmpty = computed(() => fileRecords.value.length === 0);
 
 const fabClickHandler = () => {
@@ -92,9 +92,13 @@ const uploadFiles = async (files: File[]) => {
 };
 
 const buildInput = (): HTMLInputElement => {
-	const input = document.createElement("input");
+	const input = document.body.appendChild(
+		document.createElement("input")
+	) as HTMLInputElement;
 	input.type = "file";
 	input.multiple = true;
+	input.hidden = true;
+	input.setAttribute("data-testid", "input-folder-fileupload");
 
 	return input;
 };
@@ -104,7 +108,6 @@ const onDelete = () => {
 };
 
 onMounted(async () => {
-	isLoading.value = true;
 	await fetchFileFolderElement(props.folderId);
 	await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
 	isLoading.value = false;
