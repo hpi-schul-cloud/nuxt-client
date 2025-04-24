@@ -7,6 +7,7 @@
 			:class="scope === 'board' ? 'board-title-input' : 'other-title-input'"
 			hide-details="auto"
 			variant="solo"
+			density="compact"
 			flat
 			rows="1"
 			auto-grow
