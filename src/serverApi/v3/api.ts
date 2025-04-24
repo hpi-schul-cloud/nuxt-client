@@ -8079,6 +8079,19 @@ export interface RoomDetailsResponse {
 /**
  * 
  * @export
+ * @interface RoomInvitationLinkListResponse
+ */
+export interface RoomInvitationLinkListResponse {
+    /**
+     * The list of room invitation links
+     * @type {Array<RoomInvitationLinkResponse>}
+     * @memberof RoomInvitationLinkListResponse
+     */
+    roomInvitationLinks: Array<RoomInvitationLinkResponse>;
+}
+/**
+ * 
+ * @export
  * @interface RoomInvitationLinkResponse
  */
 export interface RoomInvitationLinkResponse {
@@ -21958,7 +21971,7 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
-         * @summary Get a list of room invitation links of a room.
+         * @summary Get the list of room invitation links of a room.
          * @param {string} roomId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -22348,12 +22361,12 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Get a list of room invitation links of a room.
+         * @summary Get the list of room invitation links of a room.
          * @param {string} roomId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomControllerGetInvitationLinks(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array>> {
+        async roomControllerGetInvitationLinks(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomInvitationLinkListResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetInvitationLinks(roomId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -22502,12 +22515,12 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
-         * @summary Get a list of room invitation links of a room.
+         * @summary Get the list of room invitation links of a room.
          * @param {string} roomId 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomControllerGetInvitationLinks(roomId: string, options?: any): AxiosPromise<Array> {
+        roomControllerGetInvitationLinks(roomId: string, options?: any): AxiosPromise<RoomInvitationLinkListResponse> {
             return localVarFp.roomControllerGetInvitationLinks(roomId, options).then((request) => request(axios, basePath));
         },
         /**
@@ -22647,13 +22660,13 @@ export interface RoomApiInterface {
 
     /**
      * 
-     * @summary Get a list of room invitation links of a room.
+     * @summary Get the list of room invitation links of a room.
      * @param {string} roomId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomApiInterface
      */
-    roomControllerGetInvitationLinks(roomId: string, options?: any): AxiosPromise<Array>;
+    roomControllerGetInvitationLinks(roomId: string, options?: any): AxiosPromise<RoomInvitationLinkListResponse>;
 
     /**
      * 
@@ -22802,7 +22815,7 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
 
     /**
      * 
-     * @summary Get a list of room invitation links of a room.
+     * @summary Get the list of room invitation links of a room.
      * @param {string} roomId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
