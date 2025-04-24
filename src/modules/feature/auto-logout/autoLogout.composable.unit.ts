@@ -6,7 +6,7 @@ import AuthModule from "@/store/auth";
 import { envConfigModule } from "@/store";
 import { envsFactory, mountComposable } from "@@/tests/test-utils";
 import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { nextTick, ref } from "vue";
+import { nextTick } from "vue";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { flushPromises } from "@vue/test-utils";
 
