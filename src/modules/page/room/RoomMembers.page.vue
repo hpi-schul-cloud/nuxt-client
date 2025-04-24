@@ -50,14 +50,16 @@
 		</VTabsWindow>
 
 		<VDialog
-			v-model="isMembersDialogOpen"
+			v-for="dialog in dialogs"
+			:key="dialog.name"
+			v-model="dialog.modelValue.value"
 			:width="xs ? 'auto' : 480"
 			data-testid="dialog-add-participants"
 			max-width="480"
 			persistent
 			@keydown.esc="onDialogClose"
 		>
-			<AddMembers @close="onDialogClose" />
+			<component :is="dialog.component" @close="onDialogClose" />
 		</VDialog>
 	</DefaultWireframe>
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
@@ -94,10 +96,11 @@ import {
 } from "@icons/material";
 import {
 	AddMembers,
-	useRoomAuthorization,
 	Confirmations,
 	Invitations,
+	InviteMembers,
 	Members,
+	useRoomAuthorization,
 } from "@feature-room";
 import { RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
@@ -126,6 +129,7 @@ const { room } = storeToRefs(useRoomDetailsStore());
 
 const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
+const isInvitationDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
 const { currentUser } = storeToRefs(roomMembersStore);
@@ -186,14 +190,35 @@ const tabs: Array<{
 	},
 ];
 
+const dialogs = [
+	{
+		name: "members",
+		component: AddMembers,
+		modelValue: isMembersDialogOpen,
+	},
+	{
+		name: "invitations",
+		component: InviteMembers,
+		modelValue: isInvitationDialogOpen,
+	},
+];
+
 const onFabClick = async () => {
-	await getSchools();
-	await getPotentialMembers(RoleName.Teacher);
-	isMembersDialogOpen.value = true;
+	if (activeTab.value === Tab.Members) {
+		await getSchools();
+		await getPotentialMembers(RoleName.Teacher);
+		isMembersDialogOpen.value = true;
+		return;
+	}
+	if (activeTab.value === Tab.Invitations) {
+		isInvitationDialogOpen.value = true;
+		return;
+	}
 };
 
 const onDialogClose = () => {
 	isMembersDialogOpen.value = false;
+	isInvitationDialogOpen.value = false;
 };
 
 const onLeaveRoom = async () => {
@@ -259,6 +284,15 @@ const fabAction = computed(() => {
 			title: t("pages.rooms.members.add"),
 			ariaLabel: t("pages.rooms.members.add"),
 			dataTestId: "fab-add-members",
+		};
+	}
+
+	if (activeTab.value === Tab.Invitations) {
+		return {
+			icon: mdiPlus,
+			title: "Create invitation link",
+			ariaLabel: t("pages.rooms.members.add"), // TODO: add translation
+			dataTestId: "fab-invite-members",
 		};
 	}
 	return undefined;

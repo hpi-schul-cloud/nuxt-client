@@ -9,17 +9,19 @@ import ChangeRole from "./RoomMembers/ChangeRole.vue";
 import Members from "./RoomMembers/Members.vue";
 import Invitations from "./RoomMembers/Invitations.vue";
 import Confirmations from "./RoomMembers/Confirmations.vue";
+import InviteMembers from "./RoomMembers/InviteMembers.vue";
 
 export {
-	RoomGrid,
-	RoomForm,
-	RoomMenu,
-	BoardGrid,
-	MembersTable,
 	AddMembers,
+	BoardGrid,
 	ChangeRole,
-	useRoomAuthorization,
-	Members,
-	Invitations,
 	Confirmations,
+	Invitations,
+	InviteMembers,
+	Members,
+	MembersTable,
+	RoomForm,
+	RoomGrid,
+	RoomMenu,
+	useRoomAuthorization,
 };
