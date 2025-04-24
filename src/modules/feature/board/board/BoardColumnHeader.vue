@@ -10,11 +10,10 @@
 					@move:column-keyboard="onMoveColumnKeyboard"
 				>
 					<BoardAnyTitleInput
-						:value="title.trim()"
+						:value="columnTitle"
 						:data-testid="`column-title-${index}`"
 						scope="column"
 						:is-edit-mode="isEditMode"
-						:placeholder="titlePlaceholder"
 						class="w-100"
 						:is-focused="isFocusedById"
 						@update:value="onUpdateTitle"
@@ -73,9 +72,10 @@ import {
 	KebabMenuActionMoveRight,
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
-import { ref, toRef } from "vue";
+import { computed, ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
+import { useI18n } from "vue-i18n";
 
 const props = defineProps({
 	columnId: { type: String, required: true },
@@ -84,7 +84,6 @@ const props = defineProps({
 	isNotFirstColumn: { type: Boolean, requried: false },
 	isNotLastColumn: { type: Boolean, requried: false },
 	title: { type: String, required: true },
-	titlePlaceholder: { type: String, default: "" },
 });
 
 const emit = defineEmits([
@@ -95,6 +94,15 @@ const emit = defineEmits([
 	"move:column-up",
 	"update:title",
 ]);
+const { t } = useI18n();
+
+const columnTitle = computed(() => {
+	const trimmedTitle = props.title.trim();
+
+	return trimmedTitle.length > 0
+		? trimmedTitle
+		: t("components.board.column.defaultTitle");
+});
 
 const columnId = toRef(props, "columnId");
 const { hasEditPermission, hasDeletePermission } = useBoardPermissions();

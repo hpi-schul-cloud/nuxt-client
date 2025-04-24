@@ -12,7 +12,7 @@
 			rows="1"
 			auto-grow
 			bg-color="transparent"
-			:placeholder="placeholderText"
+			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			:autofocus="internalIsFocused"
 			:maxlength="maxLength"
 			:error-messages="errorMessages"
@@ -25,7 +25,7 @@
 			class="title-input"
 			:class="scope === 'board' ? 'board-title' : 'other-title'"
 		>
-			{{ modelValue || placeholderText }}
+			{{ modelValue }}
 		</component>
 	</template>
 </template>
@@ -62,11 +62,6 @@ export default defineComponent({
 		scope: {
 			type: String as PropType<"card" | "column" | "board">,
 			required: true,
-		},
-		placeholder: {
-			type: String,
-			default: "",
-			required: false,
 		},
 		isFocused: {
 			type: Boolean,
@@ -175,16 +170,6 @@ export default defineComponent({
 			emit("enter");
 		};
 
-		const placeholderText = computed(() => {
-			if (props.placeholder) {
-				return props.placeholder;
-			}
-			if (props.isEditMode) {
-				return t("components.cardElement.titleElement.placeholder").toString();
-			}
-			return t("components.cardElement.titleElement.placeholder").toString();
-		});
-
 		const cursorToEnd = () => {
 			if (titleInput.value) {
 				const length = (titleInput.value as VTextarea).value.length;
@@ -193,13 +178,13 @@ export default defineComponent({
 		};
 
 		return {
+			t,
 			ariaLevel,
 			modelValue,
 			hasValue,
 			onEnter,
 			internalIsFocused,
 			titleInput,
-			placeholderText,
 			cursorToEnd,
 			errorMessages,
 		};

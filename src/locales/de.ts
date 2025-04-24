@@ -396,7 +396,7 @@ export default {
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.action.changeLayout": "Ansicht ändern",
 	"components.board.action.shareLink.card": "Link zur Karte kopieren",
-	"components.board.column.defaultTitle": "Neuer Abschnitt",
+	"components.board.column.defaultTitle": "Abschnittstitel",
 	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
 	"components.board.draftChip.tooltip": "Nur für Lehrkräfte sichtbar",
