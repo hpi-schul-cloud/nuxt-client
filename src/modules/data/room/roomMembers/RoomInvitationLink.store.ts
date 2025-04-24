@@ -1,15 +1,15 @@
-import {
-	CreateRoomInvitationLinkBodyParams,
-	RoomApiFactory,
-	RoomInvitationLinksApiFactory,
-} from "@/serverApi/v3";
+import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
 import { defineStore, storeToRefs } from "pinia";
 import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { RoomInvitationLink } from "./types";
+import {
+	CreateRoomInvitationLinkDto,
+	RoomInvitationLink,
+	UpdateRoomInvitationLinkDto,
+} from "./types";
 
 export const useRoomInvitationLinkStore = defineStore(
 	"roomInvitationLinkStore",
@@ -24,7 +24,7 @@ export const useRoomInvitationLinkStore = defineStore(
 		const isLoading = ref<boolean>(false);
 
 		const roomApi = RoomApiFactory(undefined, "/v3", $axios);
-		const api = RoomInvitationLinksApiFactory(undefined, "/v3", $axios);
+		const api = RoomInvitationLinkApiFactory(undefined, "/v3", $axios);
 
 		const getRoomId = () => {
 			if (!roomId.value) {
@@ -33,14 +33,24 @@ export const useRoomInvitationLinkStore = defineStore(
 			return roomId.value;
 		};
 
+		const initStore = async () => {
+			if (roomId.value === undefined) {
+				setTimeout(() => initStore(), 100);
+			} else {
+				await fetchLinks();
+			}
+		};
+
 		const fetchLinks = async () => {
 			try {
 				isLoading.value = true;
+
 				const response = (
 					await roomApi.roomControllerGetInvitationLinks(getRoomId())
 				).data;
-
-				roomInvitationLinks.value = response.roomInvitationLinks;
+				roomInvitationLinks.value = response.roomInvitationLinks.map((link) =>
+					"props" in link ? link.props : link
+				) as unknown as RoomInvitationLink[];
 
 				isLoading.value = false;
 			} catch {
@@ -49,9 +59,7 @@ export const useRoomInvitationLinkStore = defineStore(
 			}
 		};
 
-		const createLink = async (
-			link: Omit<CreateRoomInvitationLinkBodyParams, "roomId">
-		) => {
+		const createLink = async (link: CreateRoomInvitationLinkDto) => {
 			try {
 				const response = (
 					await api.roomInvitationLinkControllerCreateRoomInvitationLink({
@@ -66,19 +74,16 @@ export const useRoomInvitationLinkStore = defineStore(
 			}
 		};
 
-		const updateLink = async (
-			linkId: string,
-			link: Omit<CreateRoomInvitationLinkBodyParams, "roomId">
-		) => {
+		const updateLink = async (link: UpdateRoomInvitationLinkDto) => {
 			try {
 				const response = (
-					await api.roomInvitationLinkControllerUpdateLink(linkId, {
+					await api.roomInvitationLinkControllerUpdateLink(link.id, {
 						...link,
 					})
 				).data;
 
 				roomInvitationLinks.value = roomInvitationLinks.value.map((l) =>
-					l.id === linkId ? response : l
+					l.id === link.id ? response : l
 				);
 			} catch {
 				showFailure(t("pages.rooms.members.error.update")); // TODO: fix language key
@@ -112,6 +117,7 @@ export const useRoomInvitationLinkStore = defineStore(
 		};
 
 		return {
+			initStore,
 			resetStore,
 			fetchLinks,
 			createLink,

@@ -1,5 +1,4 @@
 import {
-	ParentNodeInfoResponse as ApiParentNodeInfo,
 	CollaborativeTextEditorElementResponse,
 	ContentElementType,
 	DrawingElementResponse,
@@ -26,5 +25,4 @@ export type AnyContentElement =
 	| CollaborativeTextEditorElementResponse
 	| VideoConferenceElementResponse;
 
-export type ParentNodeInfo = ApiParentNodeInfo;
 export { ContentElementType, ParentNodeType };
