@@ -18,6 +18,9 @@ import {
 	ExternalToolElementResponse,
 	FileElementContentBody,
 	FileElementResponse,
+	H5pContentBody,
+	H5pElementContentBody,
+	H5pElementResponse,
 	LinkContentBody,
 	LinkElementContentBody,
 	LinkElementResponse,
@@ -191,6 +194,22 @@ export const useBoardApi = () => {
 				content: element.content,
 				type: ContentElementType.VideoConference,
 			};
+			return body;
+		}
+
+		const isH5pElement = (
+			element: AnyContentElement
+		): element is H5pElementResponse => {
+			return element.type === ContentElementType.H5p;
+		};
+
+		if (isH5pElement(element)) {
+			const body: H5pElementContentBody = {
+				// H5pElementContent is not type equal with H5pContentBody
+				content: element.content as H5pContentBody,
+				type: ContentElementType.H5p,
+			};
+
 			return body;
 		}
 
