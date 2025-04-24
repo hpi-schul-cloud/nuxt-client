@@ -21,7 +21,7 @@ jest.mock("vue-router", () => ({
 	useRouter: jest.fn(),
 }));
 
-jest.mock("@feature-room/roomAuthorization.composable");
+jest.mock("@data-room/roomAuthorization.composable");
 const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canAddRoomMembers: ref(false),
 	canChangeOwner: ref(false),
@@ -29,6 +29,7 @@ const roomPermissions: ReturnType<typeof useRoomAuthorization> = {
 	canViewRoom: ref(false),
 	canEditRoom: ref(false),
 	canDeleteRoom: ref(false),
+	canDuplicateRoom: ref(false),
 	canLeaveRoom: ref(false),
 	canRemoveRoomMembers: ref(false),
 	canEditRoomContent: ref(false),

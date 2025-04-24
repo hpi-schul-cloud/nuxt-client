@@ -48,7 +48,7 @@ jest.mock("@vueuse/integrations"); // mock focus trap from add members because w
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
 
-jest.mock("@feature-room/roomAuthorization.composable");
+jest.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = jest.mocked(useRoomAuthorization);
 
 jest.mock("@util-board/BoardNotifier.composable");

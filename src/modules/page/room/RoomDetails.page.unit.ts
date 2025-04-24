@@ -48,7 +48,7 @@ jest.mock("vue-router", () => ({
 
 jest.mock("@data-room/Rooms.state");
 
-jest.mock("@feature-room/roomAuthorization.composable");
+jest.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = jest.mocked(useRoomAuthorization);
 
 jest.mock("@ui-confirmation-dialog");
