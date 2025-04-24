@@ -21,7 +21,7 @@
 		"@ckeditor/ckeditor5-core": "^37.1.0",
 		"@ckeditor/ckeditor5-vue": "^5.1.0",
 		"@hpi-schul-cloud/ckeditor": "^2.1.0",
-		"@lumieducation/h5p-webcomponents": "^9.2.2",
+		"@lumieducation/h5p-webcomponents": "^10.0.4",
 		"@vuelidate/core": "^2.0.3",
 		"@vuelidate/validators": "^2.0.4",
 		"@vueuse/components": "^12.7.0",
