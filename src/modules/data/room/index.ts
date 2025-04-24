@@ -11,3 +11,4 @@ export { useRoomDuplication } from "./roomDuplication.composable";
 
 export type { RoomMember } from "./roomMembers/types";
 export { useRoomMembersStore } from "./roomMembers/RoomMembers.store";
+export { useRoomInvitationLinkStore } from "./roomMembers/RoomInvitationLink.store";

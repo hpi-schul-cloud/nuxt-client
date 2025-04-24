@@ -1,4 +1,4 @@
-import { RoomMemberResponse } from "@/serverApi/v3";
+import { RoomInvitationLinkResponse, RoomMemberResponse } from "@/serverApi/v3";
 
 export type RoomMember = RoomMemberResponse & {
 	isSelectable?: boolean;
@@ -6,3 +6,5 @@ export type RoomMember = RoomMemberResponse & {
 	displayRoomRole: string;
 	displaySchoolRole: string;
 };
+
+export type RoomInvitationLink = RoomInvitationLinkResponse;
