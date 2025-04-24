@@ -1,4 +1,9 @@
-import { RoomInvitationLinkResponse, RoomMemberResponse } from "@/serverApi/v3";
+import {
+	CreateRoomInvitationLinkBodyParams,
+	RoomInvitationLinkResponse,
+	RoomMemberResponse,
+	UpdateRoomInvitationLinkBodyParams,
+} from "@/serverApi/v3";
 
 export type RoomMember = RoomMemberResponse & {
 	isSelectable?: boolean;
@@ -8,3 +13,12 @@ export type RoomMember = RoomMemberResponse & {
 };
 
 export type RoomInvitationLink = RoomInvitationLinkResponse;
+
+export type CreateRoomInvitationLinkDto = Omit<
+	CreateRoomInvitationLinkBodyParams,
+	"roomId"
+>;
+
+export type UpdateRoomInvitationLinkDto = UpdateRoomInvitationLinkBodyParams & {
+	id: string;
+};

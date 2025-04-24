@@ -2,9 +2,10 @@
 	<p data-testid="info-text">
 		{{ t("pages.rooms.members.tab.invitations.infoText") }}
 	</p>
-	<div v-for="link of roomInvitationLinks" v-bind:key="link.id">
+	<div v-for="link of roomInvitationLinks" :key="link.id">
 		<div>
-			{{ link }}<v-btn @click="onClickUpdate(link.id)">update</v-btn>
+			{{ link }} {{ link.id
+			}}<v-btn @click="onClickUpdate(link.id)">update</v-btn>
 			<v-btn @click="onClickUse(link.id)">use</v-btn>
 			<v-btn @click="onClickRemove(link.id)">remove</v-btn>
 		</div>
@@ -14,17 +15,20 @@
 <script setup lang="ts">
 import { useRoomInvitationLinkStore } from "@data-room";
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const roomInvitationLinkStore = useRoomInvitationLinkStore();
-const { fetchLinks } = roomInvitationLinkStore;
 const { roomInvitationLinks } = storeToRefs(roomInvitationLinkStore);
 
-onMounted(() => {
-	fetchLinks();
+defineProps({
+	headerBottom: {
+		type: Number,
+		default: 0,
+	},
 });
+
+roomInvitationLinkStore.initStore();
 
 const onClickAdd = () => {
 	roomInvitationLinkStore.createLink({
@@ -35,13 +39,16 @@ const onClickAdd = () => {
 		requiresConfirmation: false,
 	});
 };
+
 const onClickRemove = (linkId: string) => {
 	roomInvitationLinkStore.deleteLink(linkId);
 };
+
 const onClickUse = async (linkId: string) => {
 	const roomId = await roomInvitationLinkStore.useLink(linkId);
 	window.alert(roomId);
 };
+
 const onClickUpdate = (linkId: string) => {
 	const link = roomInvitationLinks.value.find((link) => link.id === linkId);
 	let updateCount = 0;

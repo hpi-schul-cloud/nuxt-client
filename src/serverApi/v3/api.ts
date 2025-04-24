@@ -1702,6 +1702,12 @@ export interface ConfigResponse {
      * @type {boolean}
      * @memberof ConfigResponse
      */
+    FEATURE_ROOM_INVITATION_LINKS_ENABLED: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof ConfigResponse
+     */
     FEATURE_ROOMS_CHANGE_PERMISSIONS_ENABLED: boolean;
     /**
      * 
@@ -2776,6 +2782,49 @@ export interface CreateRoomBodyParams {
 /**
  * 
  * @export
+ * @interface CreateRoomInvitationLinkBodyParams
+ */
+export interface CreateRoomInvitationLinkBodyParams {
+    /**
+     * Id of the room
+     * @type {string}
+     * @memberof CreateRoomInvitationLinkBodyParams
+     */
+    roomId: string;
+    /**
+     * Title of the link.
+     * @type {string}
+     * @memberof CreateRoomInvitationLinkBodyParams
+     */
+    title: string;
+    /**
+     * Expiration date of the invitation link
+     * @type {string}
+     * @memberof CreateRoomInvitationLinkBodyParams
+     */
+    activeUntil?: string;
+    /**
+     * Indicates if the link is restricted to teachers only
+     * @type {boolean}
+     * @memberof CreateRoomInvitationLinkBodyParams
+     */
+    isOnlyForTeachers: boolean;
+    /**
+     * Indicates if the link is restricted to the creators school
+     * @type {boolean}
+     * @memberof CreateRoomInvitationLinkBodyParams
+     */
+    restrictedToCreatorSchool: boolean;
+    /**
+     * Indicates if the link requires confirmation by room admins / room owners
+     * @type {boolean}
+     * @memberof CreateRoomInvitationLinkBodyParams
+     */
+    requiresConfirmation: boolean;
+}
+/**
+ * 
+ * @export
  * @interface CreateSubmissionItemBodyParams
  */
 export interface CreateSubmissionItemBodyParams {
@@ -3272,10 +3321,10 @@ export interface ElementWithParentHierarchyResponse {
     element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
     /**
      * The hierarchical path of parent elements
-     * @type {Array<ParentNodeInfo>}
+     * @type {Array<ParentNodeInfoResponse>}
      * @memberof ElementWithParentHierarchyResponse
      */
-    parentHierarchy: Array<ParentNodeInfo>;
+    parentHierarchy: Array<ParentNodeInfoResponse>;
 }
 /**
  * 
@@ -7207,25 +7256,25 @@ export interface ParentConsentResponse {
 /**
  * 
  * @export
- * @interface ParentNodeInfo
+ * @interface ParentNodeInfoResponse
  */
-export interface ParentNodeInfo {
+export interface ParentNodeInfoResponse {
     /**
      * The ID of the parent node
      * @type {string}
-     * @memberof ParentNodeInfo
+     * @memberof ParentNodeInfoResponse
      */
     id: string;
     /**
      * The type of the parent node
      * @type {ParentNodeType}
-     * @memberof ParentNodeInfo
+     * @memberof ParentNodeInfoResponse
      */
     type: ParentNodeType;
     /**
      * The name of the parent node
      * @type {string}
-     * @memberof ParentNodeInfo
+     * @memberof ParentNodeInfoResponse
      */
     name: string;
 }
@@ -7855,6 +7904,7 @@ export enum RoleName {
     GuestTeacher = 'guestTeacher',
     GuestStudent = 'guestStudent',
     Helpdesk = 'helpdesk',
+    Roomapplicant = 'roomapplicant',
     Roomviewer = 'roomviewer',
     Roomeditor = 'roomeditor',
     Roomadmin = 'roomadmin',
@@ -8025,6 +8075,80 @@ export interface RoomDetailsResponse {
      * @memberof RoomDetailsResponse
      */
     permissions: Array<Permission>;
+}
+/**
+ * 
+ * @export
+ * @interface RoomInvitationLinkListResponse
+ */
+export interface RoomInvitationLinkListResponse {
+    /**
+     * 
+     * @type {Array<RoomInvitationLinkResponse>}
+     * @memberof RoomInvitationLinkListResponse
+     */
+    roomInvitationLinks: Array<RoomInvitationLinkResponse>;
+}
+/**
+ * 
+ * @export
+ * @interface RoomInvitationLinkResponse
+ */
+export interface RoomInvitationLinkResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomInvitationLinkResponse
+     */
+    id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomInvitationLinkResponse
+     */
+    roomId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomInvitationLinkResponse
+     */
+    title: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomInvitationLinkResponse
+     */
+    restrictedToCreatorSchool: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomInvitationLinkResponse
+     */
+    isOnlyForTeachers: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomInvitationLinkResponse
+     */
+    activeUntil?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof RoomInvitationLinkResponse
+     */
+    requiresConfirmation: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomInvitationLinkResponse
+     */
+    creatorUserId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomInvitationLinkResponse
+     */
+    creatorSchoolId: string;
 }
 /**
  * 
@@ -9975,6 +10099,43 @@ export interface UpdateRoomBodyParams {
      * @memberof UpdateRoomBodyParams
      */
     endDate?: string;
+}
+/**
+ * 
+ * @export
+ * @interface UpdateRoomInvitationLinkBodyParams
+ */
+export interface UpdateRoomInvitationLinkBodyParams {
+    /**
+     * Title of the link.
+     * @type {string}
+     * @memberof UpdateRoomInvitationLinkBodyParams
+     */
+    title: string;
+    /**
+     * Expiration date of the invitation link
+     * @type {string}
+     * @memberof UpdateRoomInvitationLinkBodyParams
+     */
+    activeUntil?: string;
+    /**
+     * Indicates if the link is restricted to teachers only
+     * @type {boolean}
+     * @memberof UpdateRoomInvitationLinkBodyParams
+     */
+    isOnlyForTeachers?: boolean;
+    /**
+     * Indicates if the link is restricted to the creators school
+     * @type {boolean}
+     * @memberof UpdateRoomInvitationLinkBodyParams
+     */
+    restrictedToCreatorSchool?: boolean;
+    /**
+     * Indicates if the link requires confirmation by room admins / room owners
+     * @type {boolean}
+     * @memberof UpdateRoomInvitationLinkBodyParams
+     */
+    requiresConfirmation: boolean;
 }
 /**
  * 
@@ -21810,6 +21971,44 @@ export const RoomApiAxiosParamCreator = function (configuration?: Configuration)
         },
         /**
          * 
+         * @summary Get the list of room invitation links of a room.
+         * @param {string} roomId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetInvitationLinks: async (roomId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomId' is not null or undefined
+            assertParamExists('roomControllerGetInvitationLinks', 'roomId', roomId)
+            const localVarPath = `/rooms/{roomId}/room-invitation-links`
+                .replace(`{${"roomId"}}`, encodeURIComponent(String(roomId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Get a list of room members.
          * @param {string} roomId 
          * @param {*} [options] Override http request option.
@@ -22162,6 +22361,17 @@ export const RoomApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
+         * @summary Get the list of room invitation links of a room.
+         * @param {string} roomId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomControllerGetInvitationLinks(roomId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomInvitationLinkListResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomControllerGetInvitationLinks(roomId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Get a list of room members.
          * @param {string} roomId 
          * @param {*} [options] Override http request option.
@@ -22305,6 +22515,16 @@ export const RoomApiFactory = function (configuration?: Configuration, basePath?
         },
         /**
          * 
+         * @summary Get the list of room invitation links of a room.
+         * @param {string} roomId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomControllerGetInvitationLinks(roomId: string, options?: any): AxiosPromise<RoomInvitationLinkListResponse> {
+            return localVarFp.roomControllerGetInvitationLinks(roomId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Get a list of room members.
          * @param {string} roomId 
          * @param {*} [options] Override http request option.
@@ -22437,6 +22657,16 @@ export interface RoomApiInterface {
      * @memberof RoomApiInterface
      */
     roomControllerDeleteRoom(roomId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Get the list of room invitation links of a room.
+     * @param {string} roomId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApiInterface
+     */
+    roomControllerGetInvitationLinks(roomId: string, options?: any): AxiosPromise<RoomInvitationLinkListResponse>;
 
     /**
      * 
@@ -22585,6 +22815,18 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
 
     /**
      * 
+     * @summary Get the list of room invitation links of a room.
+     * @param {string} roomId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomApi
+     */
+    public roomControllerGetInvitationLinks(roomId: string, options?: any) {
+        return RoomApiFp(this.configuration).roomControllerGetInvitationLinks(roomId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
      * @summary Get a list of room members.
      * @param {string} roomId 
      * @param {*} [options] Override http request option.
@@ -22668,6 +22910,388 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
      */
     public roomControllerUpdateRoom(roomId: string, updateRoomBodyParams: UpdateRoomBodyParams, options?: any) {
         return RoomApiFp(this.configuration).roomControllerUpdateRoom(roomId, updateRoomBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
+/**
+ * RoomInvitationLinkApi - axios parameter creator
+ * @export
+ */
+export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * 
+         * @summary Create a new room invitation link
+         * @param {CreateRoomInvitationLinkBodyParams} createRoomInvitationLinkBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomInvitationLinkControllerCreateRoomInvitationLink: async (createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createRoomInvitationLinkBodyParams' is not null or undefined
+            assertParamExists('roomInvitationLinkControllerCreateRoomInvitationLink', 'createRoomInvitationLinkBodyParams', createRoomInvitationLinkBodyParams)
+            const localVarPath = `/room-invitation-links`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createRoomInvitationLinkBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Delete a room invitation link
+         * @param {string} roomInvitationLinkId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomInvitationLinkControllerDeleteLink: async (roomInvitationLinkId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomInvitationLinkId' is not null or undefined
+            assertParamExists('roomInvitationLinkControllerDeleteLink', 'roomInvitationLinkId', roomInvitationLinkId)
+            const localVarPath = `/room-invitation-links/{roomInvitationLinkId}`
+                .replace(`{${"roomInvitationLinkId"}}`, encodeURIComponent(String(roomInvitationLinkId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Update an existing room invitation link
+         * @param {string} roomInvitationLinkId 
+         * @param {UpdateRoomInvitationLinkBodyParams} updateRoomInvitationLinkBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomInvitationLinkControllerUpdateLink: async (roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomInvitationLinkId' is not null or undefined
+            assertParamExists('roomInvitationLinkControllerUpdateLink', 'roomInvitationLinkId', roomInvitationLinkId)
+            // verify required parameter 'updateRoomInvitationLinkBodyParams' is not null or undefined
+            assertParamExists('roomInvitationLinkControllerUpdateLink', 'updateRoomInvitationLinkBodyParams', updateRoomInvitationLinkBodyParams)
+            const localVarPath = `/room-invitation-links/{roomInvitationLinkId}`
+                .replace(`{${"roomInvitationLinkId"}}`, encodeURIComponent(String(roomInvitationLinkId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateRoomInvitationLinkBodyParams, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary Use a room invitation link to join a room
+         * @param {string} roomInvitationLinkId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomInvitationLinkControllerUseLink: async (roomInvitationLinkId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomInvitationLinkId' is not null or undefined
+            assertParamExists('roomInvitationLinkControllerUseLink', 'roomInvitationLinkId', roomInvitationLinkId)
+            const localVarPath = `/room-invitation-links/{roomInvitationLinkId}`
+                .replace(`{${"roomInvitationLinkId"}}`, encodeURIComponent(String(roomInvitationLinkId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * RoomInvitationLinkApi - functional programming interface
+ * @export
+ */
+export const RoomInvitationLinkApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RoomInvitationLinkApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new room invitation link
+         * @param {CreateRoomInvitationLinkBodyParams} createRoomInvitationLinkBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomInvitationLinkResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Delete a room invitation link
+         * @param {string} roomInvitationLinkId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomInvitationLinkControllerDeleteLink(roomInvitationLinkId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomInvitationLinkControllerDeleteLink(roomInvitationLinkId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Update an existing room invitation link
+         * @param {string} roomInvitationLinkId 
+         * @param {UpdateRoomInvitationLinkBodyParams} updateRoomInvitationLinkBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomInvitationLinkResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomInvitationLinkControllerUpdateLink(roomInvitationLinkId, updateRoomInvitationLinkBodyParams, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
+         * @summary Use a room invitation link to join a room
+         * @param {string} roomInvitationLinkId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomInvitationLinkControllerUseLink(roomInvitationLinkId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * RoomInvitationLinkApi - factory interface
+ * @export
+ */
+export const RoomInvitationLinkApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RoomInvitationLinkApiFp(configuration)
+    return {
+        /**
+         * 
+         * @summary Create a new room invitation link
+         * @param {CreateRoomInvitationLinkBodyParams} createRoomInvitationLinkBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: any): AxiosPromise<RoomInvitationLinkResponse> {
+            return localVarFp.roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Delete a room invitation link
+         * @param {string} roomInvitationLinkId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomInvitationLinkControllerDeleteLink(roomInvitationLinkId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.roomInvitationLinkControllerDeleteLink(roomInvitationLinkId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Update an existing room invitation link
+         * @param {string} roomInvitationLinkId 
+         * @param {UpdateRoomInvitationLinkBodyParams} updateRoomInvitationLinkBodyParams 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: any): AxiosPromise<RoomInvitationLinkResponse> {
+            return localVarFp.roomInvitationLinkControllerUpdateLink(roomInvitationLinkId, updateRoomInvitationLinkBodyParams, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary Use a room invitation link to join a room
+         * @param {string} roomInvitationLinkId 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): AxiosPromise<void> {
+            return localVarFp.roomInvitationLinkControllerUseLink(roomInvitationLinkId, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * RoomInvitationLinkApi - interface
+ * @export
+ * @interface RoomInvitationLinkApi
+ */
+export interface RoomInvitationLinkApiInterface {
+    /**
+     * 
+     * @summary Create a new room invitation link
+     * @param {CreateRoomInvitationLinkBodyParams} createRoomInvitationLinkBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomInvitationLinkApiInterface
+     */
+    roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: any): AxiosPromise<RoomInvitationLinkResponse>;
+
+    /**
+     * 
+     * @summary Delete a room invitation link
+     * @param {string} roomInvitationLinkId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomInvitationLinkApiInterface
+     */
+    roomInvitationLinkControllerDeleteLink(roomInvitationLinkId: string, options?: any): AxiosPromise<void>;
+
+    /**
+     * 
+     * @summary Update an existing room invitation link
+     * @param {string} roomInvitationLinkId 
+     * @param {UpdateRoomInvitationLinkBodyParams} updateRoomInvitationLinkBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomInvitationLinkApiInterface
+     */
+    roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: any): AxiosPromise<RoomInvitationLinkResponse>;
+
+    /**
+     * 
+     * @summary Use a room invitation link to join a room
+     * @param {string} roomInvitationLinkId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomInvitationLinkApiInterface
+     */
+    roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): AxiosPromise<void>;
+
+}
+
+/**
+ * RoomInvitationLinkApi - object-oriented interface
+ * @export
+ * @class RoomInvitationLinkApi
+ * @extends {BaseAPI}
+ */
+export class RoomInvitationLinkApi extends BaseAPI implements RoomInvitationLinkApiInterface {
+    /**
+     * 
+     * @summary Create a new room invitation link
+     * @param {CreateRoomInvitationLinkBodyParams} createRoomInvitationLinkBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomInvitationLinkApi
+     */
+    public roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: any) {
+        return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Delete a room invitation link
+     * @param {string} roomInvitationLinkId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomInvitationLinkApi
+     */
+    public roomInvitationLinkControllerDeleteLink(roomInvitationLinkId: string, options?: any) {
+        return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerDeleteLink(roomInvitationLinkId, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Update an existing room invitation link
+     * @param {string} roomInvitationLinkId 
+     * @param {UpdateRoomInvitationLinkBodyParams} updateRoomInvitationLinkBodyParams 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomInvitationLinkApi
+     */
+    public roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: any) {
+        return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerUpdateLink(roomInvitationLinkId, updateRoomInvitationLinkBodyParams, options).then((request) => request(this.axios, this.basePath));
+    }
+
+    /**
+     * 
+     * @summary Use a room invitation link to join a room
+     * @param {string} roomInvitationLinkId 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RoomInvitationLinkApi
+     */
+    public roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any) {
+        return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerUseLink(roomInvitationLinkId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
