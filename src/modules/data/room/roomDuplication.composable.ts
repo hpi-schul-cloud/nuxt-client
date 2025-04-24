@@ -6,7 +6,7 @@ import {
 	injectStrict,
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 export const useRoomDuplication = () => {
@@ -18,8 +18,9 @@ export const useRoomDuplication = () => {
 		t("data-room.duplication.loading")
 	);
 
-	const isRoomDuplicationFeatureEnabled =
-		envConfigModule.getEnv.FEATURE_ROOMS_DUPLICATION_ENABLED;
+	const isRoomDuplicationFeatureEnabled = computed(() => {
+		return envConfigModule.getEnv.FEATURE_ROOMS_DUPLICATION_ENABLED;
+	});
 
 	const isDuplicationInfoDialogOpen = ref(false);
 
