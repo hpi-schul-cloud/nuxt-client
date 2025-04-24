@@ -27,13 +27,20 @@
 				:show-select="true"
 			>
 				<template #[`item.preview`]="{ item }">
-					<FilePreview :filerecord="item" />
+					<FilePreview
+						:filerecord="item"
+						:data-testid="`file-preview-${item.name}`"
+					/>
 				</template>
 				<template #[`item.createdAt`]="{ item }">
-					{{ new Date(item.createdAt ?? "").toLocaleDateString() }}
+					<span :data-testid="`created-at-${item.name}`">{{
+						new Date(item.createdAt ?? "").toLocaleDateString()
+					}}</span>
 				</template>
 				<template #[`item.size`]="{ item }">
-					{{ formatFileSize(item.size) }}
+					<span :data-testid="`size-${item.name}`"
+						>{{ formatFileSize(item.size) }}
+					</span>
 				</template>
 
 				<template #left-of-search>

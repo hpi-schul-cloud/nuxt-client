@@ -9,7 +9,7 @@
 				width="2"
 			/>
 			<v-icon v-else color="green" class="mr-2"> {{ mdiCheckCircle }}</v-icon>
-			<span>
+			<span data-testid="upload-progress">
 				{{
 					t("pages.folder.uploadstats", {
 						uploaded: localUploadProgress.uploaded,

@@ -58,6 +58,7 @@
 				:model-value="allSelected"
 				:indeterminate="someSelected && !allSelected"
 				:aria-label="t('ui.dataTable.select.all')"
+				data-testid="select-all-checkbox"
 				@click="selectAll(!allSelected)"
 			/>
 		</template>
@@ -71,6 +72,7 @@
 				"
 				:disabled="item.isSelectable === false"
 				:aria-label="item[ariaLabelNameKey]"
+				:data-testid="`select-checkbox-${item[ariaLabelNameKey]}`"
 				@click="
 					toggleSelect({
 						value: item[selectItemKey],
