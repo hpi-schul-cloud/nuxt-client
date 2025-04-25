@@ -1,6 +1,6 @@
 <template>
 	<div class="pa-0 pl-4" data-testid="multi-action-menu">
-		<span class="d-inline-flex selected-count text-no-wrap">
+		<span class="d-inline-flex text-no-wrap">
 			{{ selectedIds.length }}
 			{{ t("pages.administration.selected") }}
 		</span>

@@ -3,7 +3,7 @@
 		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
 		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
 	>
-		<ActionMenu
+		<BatchActionMenu
 			v-if="$slots['action-menu-items'] && selectedIds.length"
 			class="multi-action-menu"
 			:class="{ 'order-2': isExtraSmallDisplay }"
@@ -11,7 +11,7 @@
 			@reset:selected="onResetSelectedMembers"
 		>
 			<slot name="action-menu-items" />
-		</ActionMenu>
+		</BatchActionMenu>
 
 		<v-spacer v-else />
 
@@ -92,7 +92,7 @@ import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
 import { PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify/lib/framework.mjs";
-import ActionMenu from "./ActionMenu.vue";
+import BatchActionMenu from "./BatchActionMenu.vue";
 
 defineProps({
 	tableHeaders: {
