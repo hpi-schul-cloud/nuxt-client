@@ -1,4 +1,5 @@
 import {
+	ParentNodeInfoResponse,
 	CollaborativeTextEditorElementResponse,
 	ContentElementType,
 	DrawingElementResponse,
@@ -24,5 +25,7 @@ export type AnyContentElement =
 	| DrawingElementResponse
 	| CollaborativeTextEditorElementResponse
 	| VideoConferenceElementResponse;
+
+export type ParentNodeInfo = ParentNodeInfoResponse;
 
 export { ContentElementType, ParentNodeType };
