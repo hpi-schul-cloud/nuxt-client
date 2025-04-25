@@ -6,9 +6,7 @@
 			class="title-input"
 			:class="scope === 'board' ? 'board-title-input' : 'other-title-input'"
 			hide-details="auto"
-			variant="solo"
-			density="compact"
-			flat
+			variant="plain"
 			rows="1"
 			auto-grow
 			bg-color="transparent"
@@ -197,7 +195,7 @@ export default defineComponent({
 
 .title-input {
 	cursor: pointer;
-	pointer-events: unset !important;
+	white-space: pre-wrap;
 	min-width: 280px;
 
 	padding-left: 0px;
@@ -211,12 +209,14 @@ export default defineComponent({
 
 	&.board-title-input :deep(textarea) {
 		font-size: var(--heading-3);
+		line-height: var(--line-height-md);
 		padding-left: 0px;
 	}
 }
 
 .board-title {
 	font-size: var(--heading-3);
+	line-height: var(--line-height-md);
 	padding-top: 16px;
 }
 
@@ -227,6 +227,5 @@ export default defineComponent({
 	padding: 8px 16px;
 	overflow-wrap: break-word;
 	word-break: break-word;
-	white-space: normal;
 }
 </style>
