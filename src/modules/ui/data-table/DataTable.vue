@@ -4,7 +4,7 @@
 		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
 	>
 		<ActionMenu
-			v-if="selectedIds.length"
+			v-if="$slots['action-menu-items'] && selectedIds.length"
 			class="multi-action-menu"
 			:class="{ 'order-2': isExtraSmallDisplay }"
 			:selected-ids="selectedIds"
