@@ -1853,7 +1853,7 @@ export default {
 	"pages.rooms.members.infoText":
 		"Додайте члени до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
-	"pages.rooms.members.label": "Учасники",
+	"pages.rooms.members.label": "Учасників",
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
@@ -1863,7 +1863,9 @@ export default {
 	"pages.rooms.members.changePermission": "Змінити дозволи кімнат",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Змінити дозвіл кімнат для {memberFullName}",
-	"pages.rooms.members.manage": "Учасник кімнати",
+	"pages.rooms.members.manage": "Керувати учасниками",
+	"pages.rooms.members.management": "Адміністрування учасників",
+	"pages.rooms.members.view": "Переглянути учасників",
 	"pages.rooms.members.tab.members": "Учасники",
 	"pages.rooms.members.tab.invitations": "Запрошення",
 	"pages.rooms.members.tab.invitations.infoText":

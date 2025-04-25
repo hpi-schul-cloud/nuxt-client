@@ -7,6 +7,7 @@
 		<KebabMenuActionEdit v-if="canEditRoom" @click="() => $emit('room:edit')" />
 		<KebabMenuActionRoomMembers
 			v-if="canViewRoom"
+			:members-info-text="membersInfoText"
 			@click="() => $emit('room:manage-members')"
 		/>
 		<KebabMenuActionDuplicate
@@ -34,6 +35,7 @@ import {
 } from "@ui-kebab-menu";
 import { useRoomAuthorization, useRoomDuplication } from "@data-room";
 import { useI18n } from "vue-i18n";
+import { computed } from "vue";
 
 defineProps({
 	roomName: { type: String, required: false, default: undefined },
@@ -48,8 +50,6 @@ const emit = defineEmits([
 ]);
 
 const { t } = useI18n();
-const { canEditRoom, canDeleteRoom, canDuplicateRoom, canViewRoom } =
-	useRoomAuthorization();
 
 const { isRoomDuplicationFeatureEnabled } = useRoomDuplication();
 
@@ -59,4 +59,18 @@ const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 		emit("room:delete");
 	}
 };
+
+const {
+	canAddRoomMembers,
+	canDuplicateRoom,
+	canEditRoom,
+	canDeleteRoom,
+	canViewRoom,
+} = useRoomAuthorization();
+
+const membersInfoText = computed(() =>
+	canAddRoomMembers.value
+		? t("pages.rooms.members.manage")
+		: t("pages.rooms.members.view")
+);
 </script>

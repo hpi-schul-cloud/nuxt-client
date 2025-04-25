@@ -150,8 +150,9 @@ describe("@feature-room/RoomMenu", () => {
 	});
 
 	describe("when user only has view members permission", () => {
-		it("should contain room members and leave menu item", async () => {
+		it("should contain room members menu item with correct membersInfoText and leave menu item", async () => {
 			roomPermissions.canViewRoom.value = true;
+			roomPermissions.canAddRoomMembers.value = false;
 
 			const { wrapper, menuBtn } = setup();
 			await menuBtn.trigger("click");
@@ -164,6 +165,9 @@ describe("@feature-room/RoomMenu", () => {
 			} = findKebabActions(wrapper);
 
 			expect(kebabActionRoomMembers.exists()).toBe(true);
+			expect(kebabActionRoomMembers.props("membersInfoText")).toBe(
+				"pages.rooms.members.view"
+			);
 			expect(kebabActionEdit.exists()).toBe(false);
 			expect(kebabActionDelete.exists()).toBe(false);
 			expect(kebabActionLeaveRoom.exists()).toBe(true);
@@ -203,6 +207,23 @@ describe("@feature-room/RoomMenu", () => {
 			const { kebabActionDuplicateRoom } = findKebabActions(wrapper);
 
 			expect(kebabActionDuplicateRoom.exists()).toBe(true);
+		});
+	});
+
+	describe("when user can add room members", () => {
+		it("should show the correct membersInfoText", async () => {
+			roomPermissions.canViewRoom.value = true;
+			roomPermissions.canAddRoomMembers.value = true;
+
+			const { wrapper, menuBtn } = setup();
+			await menuBtn.trigger("click");
+
+			const { kebabActionRoomMembers } = findKebabActions(wrapper);
+
+			expect(kebabActionRoomMembers.exists()).toBe(true);
+			expect(kebabActionRoomMembers.props("membersInfoText")).toBe(
+				"pages.rooms.members.manage"
+			);
 		});
 	});
 
