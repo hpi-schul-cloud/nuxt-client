@@ -21,10 +21,10 @@
 		/>
 	</DefaultWireframe>
 	<input
+		ref="fileInput"
 		type="file"
 		multiple
 		hidden
-		ref="fileInput"
 		data-testid="input-folder-fileupload"
 	/>
 </template>

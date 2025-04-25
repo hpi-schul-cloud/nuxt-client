@@ -319,8 +319,7 @@ describe("Folder.vue", () => {
 
 		describe("when file is selected", () => {
 			it("should call uploadFiles", async () => {
-				const { wrapper, fileStorageApiMock, parentId, file1, file2 } =
-					await setup();
+				const { fileStorageApiMock, parentId, file1, file2 } = await setup();
 
 				expect(fileStorageApiMock.upload).toHaveBeenCalledWith(
 					file1,

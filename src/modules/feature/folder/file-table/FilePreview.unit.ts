@@ -8,7 +8,7 @@ import {
 	mdiFileDocumentOutline,
 	mdiFileMusicOutline,
 	mdiFileVideoOutline,
-} from "@mdi/js";
+} from "@icons/material";
 import FilePreview from "./FilePreview.vue";
 
 describe("FilePreview", () => {
