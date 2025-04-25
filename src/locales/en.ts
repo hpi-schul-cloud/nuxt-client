@@ -1873,7 +1873,8 @@ export default {
 		"If this permission is transferred to {memberFullName}, {currentUserFullName} loses the right to delete the room.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"This action can only be undone by {memberFullName}.",
-	"pages.rooms.members.inviteMember.title": "Einladungslink erstellen",
+	"pages.rooms.members.inviteMember.firstStep.title": "Create invitation link",
+	"pages.rooms.members.inviteMember.secondStep.title": "Share invitation link",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

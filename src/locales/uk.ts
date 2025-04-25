@@ -1903,7 +1903,10 @@ export default {
 		"Якщо цей дозвіл буде передано {memberFullName}, {currentUserFullName} втратить право видаляти кімнату.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Ця дія може бути скасована лише {memberFullName}.",
-	"pages.rooms.members.inviteMember.title": "Einladungslink erstellen",
+	"pages.rooms.members.inviteMember.firstStep.title":
+		"Створити посилання для запрошення",
+	"pages.rooms.members.inviteMember.secondStep.title":
+		"Поділіться посиланням на запрошення",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
