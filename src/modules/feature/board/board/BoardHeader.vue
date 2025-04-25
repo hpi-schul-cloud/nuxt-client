@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex align-items-center board-header">
+	<div class="d-flex align-start board-header">
 		<InlineEditInteractionHandler
 			:id="boardId"
 			class="input-container"
@@ -23,27 +23,25 @@
 			/>
 			<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 		</InlineEditInteractionHandler>
-		<div class="d-flex">
+		<div class="d-flex mt-4">
 			<BoardDraftChip v-if="isDraft" />
-			<div class="mx-2">
-				<BoardMenu
-					v-if="hasEditPermission"
-					:scope="BoardMenuScope.BOARD"
-					data-testid="board-menu-btn"
-				>
-					<KebabMenuActionRename @click="onStartEditMode" />
-					<KebabMenuActionCopy @click="onCopyBoard" />
-					<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
-					<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-					<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
-					<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-					<KebabMenuActionDelete
-						:name="title"
-						scope-language-key="components.board"
-						@click="onDeleteBoard"
-					/>
-				</BoardMenu>
-			</div>
+			<BoardMenu
+				v-if="hasEditPermission"
+				:scope="BoardMenuScope.BOARD"
+				data-testid="board-menu-btn"
+			>
+				<KebabMenuActionRename @click="onStartEditMode" />
+				<KebabMenuActionCopy @click="onCopyBoard" />
+				<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
+				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
+				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+				<KebabMenuActionDelete
+					:name="title"
+					scope-language-key="components.board"
+					@click="onDeleteBoard"
+				/>
+			</BoardMenu>
 		</div>
 	</div>
 </template>
