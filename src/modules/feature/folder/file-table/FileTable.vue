@@ -28,7 +28,7 @@
 			>
 				<template #[`item.preview`]="{ item }">
 					<FilePreview
-						:filerecord="item"
+						:fileRecord="item"
 						:data-testid="`file-preview-${item.name}`"
 					/>
 				</template>
