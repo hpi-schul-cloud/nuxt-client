@@ -5,6 +5,7 @@ import {
 	ExternalToolElementResponse,
 	FileElementResponse,
 	FileFolderElementResponse,
+	H5pElementResponse,
 	LinkElementResponse,
 	ParentNodeInfoResponse as ApiParentNodeInfo,
 	ParentNodeType,
@@ -24,7 +25,8 @@ export type AnyContentElement =
 	| ExternalToolElementResponse
 	| DrawingElementResponse
 	| CollaborativeTextEditorElementResponse
-	| VideoConferenceElementResponse;
+	| VideoConferenceElementResponse
+	| H5pElementResponse;
 
 export type ParentNodeInfo = ApiParentNodeInfo;
 export { ContentElementType, ParentNodeType };
