@@ -787,6 +787,8 @@ export default {
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі.",
 	"components.molecules.share.tasks.result.linkLabel":
 		"Зв'язати копію завдання",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel":
+		"Посилання на запрошення до кімнати",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Ви впевнені, що хочете видалити завдання " {taskTitle} "?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Видалити завдання",

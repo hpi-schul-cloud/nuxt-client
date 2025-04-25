@@ -776,6 +776,8 @@ export default {
 	"components.molecules.share.tasks.options.infoText":
 		"Mit dem folgenden Link kann die Aufgabe als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.tasks.result.linkLabel": "Link Aufgabekopie",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel":
+		"Link Raum-Einladung",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Bist du dir sicher, dass du die Aufgabe "{taskTitle}" löschen möchtest?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Aufgabe löschen",

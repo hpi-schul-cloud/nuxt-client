@@ -787,6 +787,8 @@ export default {
 		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores.",
 	"components.molecules.share.tasks.result.linkLabel":
 		"Enlace a la copia de la tarea",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel":
+		"Enlace de invitación a la sala",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'¿Estás seguro de que deseas eliminar la tarea "{taskTitle}"?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Eliminar tarea",

@@ -763,6 +763,8 @@ export default {
 	"components.molecules.share.tasks.options.infoText":
 		"With the following link, the task can be imported as a copy by other teachers. Personal data will not be imported.",
 	"components.molecules.share.tasks.result.linkLabel": "Link task copy",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel":
+		"Room invitation link",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Are you sure, you want to delete task "{taskTitle}"?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Delete Task",
