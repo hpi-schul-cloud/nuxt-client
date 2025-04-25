@@ -1,18 +1,18 @@
 <template>
 	<div>
 		<v-img
-			v-if="isPreviewPossible(filerecord.previewStatus)"
-			:src="convertDownloadToPreviewUrl(filerecord.url, FilePreviewWidth._500)"
-			:alt="filerecord.name"
-			:aria-label="filerecord.name"
+			v-if="isPreviewPossible(fileRecord.previewStatus)"
+			:src="convertDownloadToPreviewUrl(fileRecord.url, FilePreviewWidth._500)"
+			:alt="fileRecord.name"
+			:aria-label="fileRecord.name"
 			:aspect-ratio="1 / 1"
 			cover
 			:width="24"
 		/>
-		<v-icon v-else-if="isAudioMimeType(filerecord.mimeType)">{{
+		<v-icon v-else-if="isAudioMimeType(fileRecord.mimeType)">{{
 			mdiFileMusicOutline
 		}}</v-icon>
-		<v-icon v-else-if="isVideoMimeType(filerecord.mimeType)">{{
+		<v-icon v-else-if="isVideoMimeType(fileRecord.mimeType)">{{
 			mdiFileVideoOutline
 		}}</v-icon>
 		<v-icon v-else>{{ mdiFileDocumentOutline }}</v-icon>
@@ -35,7 +35,7 @@ import {
 import { defineProps, PropType } from "vue";
 
 defineProps({
-	filerecord: {
+	fileRecord: {
 		type: Object as PropType<FileRecord>,
 		required: true,
 	},
