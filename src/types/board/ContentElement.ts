@@ -1,5 +1,4 @@
 import {
-	ParentNodeInfo as ApiParentNodeInfo,
 	CollaborativeTextEditorElementResponse,
 	ContentElementType,
 	DrawingElementResponse,
@@ -7,6 +6,7 @@ import {
 	FileElementResponse,
 	FileFolderElementResponse,
 	LinkElementResponse,
+	ParentNodeInfoResponse as ApiParentNodeInfo,
 	ParentNodeType,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
