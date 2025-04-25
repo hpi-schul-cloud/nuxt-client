@@ -5,12 +5,24 @@
 	<div v-for="link of roomInvitationLinks" :key="link.id">
 		<div>
 			{{ link }} {{ link.id
-			}}<v-btn @click="onClickUpdate(link.id)">update</v-btn>
-			<v-btn @click="onClickUse(link.id)">use</v-btn>
-			<v-btn @click="onClickRemove(link.id)">remove</v-btn>
+			}}<v-btn
+				@click="onClickUpdate(link.id)"
+				data-testid="update-invitation-button"
+				>update</v-btn
+			>
+			<v-btn @click="onClickUse(link.id)" data-testid="use-invitation-button"
+				>use</v-btn
+			>
+			<v-btn
+				@click="onClickRemove(link.id)"
+				data-testid="delete-invitation-button"
+				>delete</v-btn
+			>
 		</div>
 	</div>
-	<v-btn @click="onClickAdd">add random link</v-btn>
+	<v-btn @click="onClickAdd" data-testid="create-invitation-button"
+		>add random link</v-btn
+	>
 </template>
 <script setup lang="ts">
 import { useRoomInvitationLinkStore } from "@data-room";
