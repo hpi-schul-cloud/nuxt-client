@@ -54,16 +54,25 @@
 		</VTabsWindow>
 
 		<VDialog
-			v-for="dialog in dialogs"
-			:key="dialog.name"
-			v-model="dialog.modelValue.value"
+			v-model="isMembersDialogOpen"
 			:width="xs ? 'auto' : 480"
 			data-testid="dialog-add-participants"
 			max-width="480"
 			persistent
 			@keydown.esc="onDialogClose"
 		>
-			<component :is="dialog.component" @close="onDialogClose" />
+			<AddMembers @close="onDialogClose" />
+		</VDialog>
+
+		<VDialog
+			v-model="isInvitationDialogOpen"
+			:width="xs ? 'auto' : 480"
+			data-testid="dialog-add-participants"
+			max-width="480"
+			scrim
+			@keydown.esc="onDialogClose"
+		>
+			<InviteMembers @close="onDialogClose" />
 		</VDialog>
 	</DefaultWireframe>
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
