@@ -3272,10 +3272,10 @@ export interface ElementWithParentHierarchyResponse {
     element: ExternalToolElementResponse | FileElementResponse | LinkElementResponse | RichTextElementResponse | SubmissionContainerElementResponse | DrawingElementResponse | CollaborativeTextEditorElementResponse | DeletedElementResponse | VideoConferenceElementResponse | FileFolderElementResponse;
     /**
      * The hierarchical path of parent elements
-     * @type {Array<ParentNodeInfo>}
+     * @type {Array<ParentNodeInfoResponse>}
      * @memberof ElementWithParentHierarchyResponse
      */
-    parentHierarchy: Array<ParentNodeInfo>;
+    parentHierarchy: Array<ParentNodeInfoResponse>;
 }
 /**
  * 
@@ -7207,25 +7207,25 @@ export interface ParentConsentResponse {
 /**
  * 
  * @export
- * @interface ParentNodeInfo
+ * @interface ParentNodeInfoResponse
  */
-export interface ParentNodeInfo {
+export interface ParentNodeInfoResponse {
     /**
      * The ID of the parent node
      * @type {string}
-     * @memberof ParentNodeInfo
+     * @memberof ParentNodeInfoResponse
      */
     id: string;
     /**
      * The type of the parent node
      * @type {ParentNodeType}
-     * @memberof ParentNodeInfo
+     * @memberof ParentNodeInfoResponse
      */
     type: ParentNodeType;
     /**
      * The name of the parent node
      * @type {string}
-     * @memberof ParentNodeInfo
+     * @memberof ParentNodeInfoResponse
      */
     name: string;
 }
