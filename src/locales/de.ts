@@ -1839,7 +1839,7 @@ export default {
 	"pages.rooms.members.infoText":
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
-	"pages.rooms.members.label": "Teilnehmende",
+	"pages.rooms.members.label": "Mitglieder",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
@@ -1850,7 +1850,9 @@ export default {
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Raumberechtigungen für {memberFullName} ändern",
-	"pages.rooms.members.manage": "Raum-Mitglieder",
+	"pages.rooms.members.manage": "Mitglieder verwalten",
+	"pages.rooms.members.management": "Mitglieder-Verwaltung",
+	"pages.rooms.members.view": "Mitglieder ansehen",
 	"pages.rooms.members.tab.members": "Mitglieder",
 	"pages.rooms.members.tab.invitations": "Einladungslinks",
 	"pages.rooms.members.tab.invitations.infoText":
