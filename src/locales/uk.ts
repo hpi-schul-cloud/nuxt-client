@@ -919,7 +919,8 @@ export default {
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
 	"data-room.duplication.alert.success": "Кімнату успішно дубльовано.",
-	"data-room.duplication.error": "Не вдалося завершити процес копіювання.",
+	"data-room.duplication.alert.error":
+		"Не вдалося завершити процес копіювання.",
 	"data-room.duplication.loading": "Кімната дублюється...",
 	"error.400": "400 – Неприпустимий запит",
 	"error.401": "401 – На жаль, у вас немає дозволу на перегляд цього контенту.",

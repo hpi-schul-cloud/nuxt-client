@@ -924,7 +924,7 @@ export default {
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
 	"data-room.duplication.alert.success": "Sala duplicada con éxito.",
-	"data-room.duplication.error":
+	"data-room.duplication.alert.error":
 		"No se pudo completar el proceso de duplicación.",
 	"data-room.duplication.loading": "La sala se está duplicando...",
 	"error.400": "401 – Solicitud incorrecta",
