@@ -8,6 +8,7 @@ import { useBoardFocusHandler, useContentElementState } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
 import { nextTick, ref } from "vue";
+import H5pEditorFullscreenDialog from "./dialog/H5pEditorFullscreenDialog.vue";
 import H5pElement from "./H5pElement.vue";
 import H5pElementMenu from "./H5pElementMenu.vue";
 
@@ -47,6 +48,9 @@ describe("H5pElement", () => {
 		const wrapper = mount(H5pElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				stubs: {
+					H5pEditorFullscreenDialog: true,
+				},
 			},
 			props: {
 				columnIndex: 0,
@@ -65,54 +69,104 @@ describe("H5pElement", () => {
 		jest.resetAllMocks();
 	});
 
-	describe("Loading", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper({
-				element: h5pElementResponseFactory.build({
-					content: { contentId: "contentId" },
-				}),
-				isEditMode: true,
-			});
+	describe("Visibility", () => {
+		describe("when in edit mode", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: h5pElementResponseFactory.build({
+						content: { contentId: null },
+					}),
+					isEditMode: true,
+				});
 
-			return {
-				wrapper,
+				return {
+					wrapper,
+				};
 			};
-		};
 
-		it("should be false", () => {
-			const { wrapper } = setup();
-
-			const card = wrapper.getComponent({ ref: "elementCard" });
-
-			expect(card.props().loading).toEqual(false);
-		});
-	});
-
-	describe("when moving the element with arrow keys while in edit mode", () => {
-		const setup = () => {
-			const { wrapper } = getWrapper({
-				element: h5pElementResponseFactory.build({
-					content: { contentId: null },
-				}),
-				isEditMode: true,
-			});
-
-			return {
-				wrapper,
-			};
-		};
-
-		it.each(["up", "down"])(
-			"should emit 'move-keyboard:edit' when arrow key %s is pressed",
-			async (key) => {
+			it("should show the card", async () => {
 				const { wrapper } = setup();
 
 				const card = wrapper.getComponent({ ref: "elementCard" });
-				await card.trigger(`keydown.${key}`);
 
-				expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
-			}
-		);
+				expect(card.isVisible()).toEqual(true);
+			});
+		});
+
+		describe("when content is linked", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: h5pElementResponseFactory.build({
+						content: { contentId: "contentId" },
+					}),
+					isEditMode: false,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show the card", async () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.getComponent({ ref: "elementCard" });
+
+				expect(card.isVisible()).toEqual(true);
+			});
+		});
+
+		describe("when no content is linked and not in edit mode", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: h5pElementResponseFactory.build({
+						content: { contentId: null },
+					}),
+					isEditMode: false,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should hide the card", async () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.getComponent({ ref: "elementCard" });
+
+				expect(card.isVisible()).toEqual(false);
+			});
+		});
+	});
+
+	describe("Keyboard navigation", () => {
+		describe("when moving the element with arrow keys while in edit mode", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: h5pElementResponseFactory.build({
+						content: { contentId: null },
+					}),
+					isEditMode: true,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it.each(["up", "down"])(
+				"should emit 'move-keyboard:edit' when arrow key %s is pressed",
+				async (key) => {
+					const { wrapper } = setup();
+
+					const card = wrapper.getComponent({ ref: "elementCard" });
+					await card.trigger(`keydown.${key}`);
+
+					expect(wrapper.emitted("move-keyboard:edit")).toHaveLength(1);
+				}
+			);
+		});
 	});
 
 	describe("Menu", () => {
@@ -191,6 +245,92 @@ describe("H5pElement", () => {
 				await nextTick();
 
 				expect(wrapper.emitted("delete:element")).toBeDefined();
+			});
+		});
+	});
+
+	describe("Editor dialog", () => {
+		describe("when clicking the element in edit mode", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: h5pElementResponseFactory.build({
+						content: { contentId: null },
+					}),
+					isEditMode: true,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should open the editor dialog", async () => {
+				const { wrapper } = setup();
+
+				const card = wrapper.getComponent({ ref: "elementCard" });
+				const dialog = wrapper.getComponent(H5pEditorFullscreenDialog);
+
+				await card.trigger("click");
+
+				expect(dialog.props().isOpen).toEqual(true);
+			});
+		});
+
+		describe("when clicking the edit option in the menu", () => {
+			const setup = () => {
+				const { wrapper } = getWrapper({
+					element: h5pElementResponseFactory.build({
+						content: { contentId: null },
+					}),
+					isEditMode: true,
+				});
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should open the editor dialog", async () => {
+				const { wrapper } = setup();
+
+				const menu = wrapper.getComponent(H5pElementMenu);
+				const dialog = wrapper.getComponent(H5pEditorFullscreenDialog);
+
+				menu.vm.$emit("edit:element");
+				await nextTick();
+
+				expect(dialog.props().isOpen).toEqual(true);
+			});
+		});
+
+		describe("when saving a config with the editor", () => {
+			const setup = () => {
+				const contentId = "contentId";
+
+				const { wrapper } = getWrapper({
+					element: h5pElementResponseFactory.build({
+						content: { contentId: null },
+					}),
+					isEditMode: true,
+				});
+
+				return {
+					wrapper,
+					contentId,
+				};
+			};
+
+			it("should open the editor dialog", async () => {
+				const { wrapper, contentId } = setup();
+
+				const dialog = wrapper.getComponent(H5pEditorFullscreenDialog);
+
+				dialog.vm.$emit("save", contentId);
+				await nextTick();
+
+				expect(useContentElementStateMock.modelValue.value).toEqual({
+					contentId,
+				});
 			});
 		});
 	});

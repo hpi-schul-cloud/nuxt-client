@@ -8,12 +8,18 @@
 		<VCard>
 			<div class="toolbar-fixed-offset">
 				<VToolbar class="toolbar-position" color="white" elevation="2">
-					<VBtn icon @click="onDialogClose">
+					<VBtn icon @click="onDialogClose" data-testid="h5p-editor-close">
 						<VIcon>{{ mdiClose }}</VIcon>
 					</VBtn>
 					<span class="title">H5P Interaktives Lernelement</span>
 					<VSpacer />
-					<VBtn variant="flat" color="primary" class="mr-4" @click="onSave">
+					<VBtn
+						variant="flat"
+						color="primary"
+						class="mr-4"
+						@click="onSave"
+						data-testid="h5p-editor-save"
+					>
 						{{ t("common.actions.save") }}
 					</VBtn>
 				</VToolbar>
@@ -22,6 +28,7 @@
 				<H5PEditorComponent
 					v-if="isOpen"
 					ref="editorRef"
+					data-testid="h5p-editor"
 					class="editor"
 					:content-id="contentId"
 					:parent-type="parentType"

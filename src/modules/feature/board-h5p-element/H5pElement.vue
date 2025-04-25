@@ -9,7 +9,6 @@
 		:ripple="false"
 		tabindex="0"
 		role="button"
-		:loading="isLoading"
 		@keydown.up.down="onKeydownArrow"
 		@keydown.stop
 		@keyup.enter="onClickElement"
@@ -81,8 +80,6 @@ const { modelValue } = useContentElementState<H5pElementResponse>(props, {
 
 const elementCard = ref<HTMLElement | null>(null);
 useBoardFocusHandler(element.value.id, elementCard);
-
-const isLoading = computed(() => false);
 
 const hasLinkedContent = computed(() => !!modelValue.value.contentId);
 
