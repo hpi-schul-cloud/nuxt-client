@@ -45,12 +45,9 @@ export const useRoomInvitationLinkStore = defineStore(
 			try {
 				isLoading.value = true;
 
-				const response = (
-					await roomApi.roomControllerGetInvitationLinks(getRoomId())
-				).data;
-				roomInvitationLinks.value = response.roomInvitationLinks.map((link) =>
-					"props" in link ? link.props : link
-				) as unknown as RoomInvitationLink[];
+				const response =
+					await roomApi.roomControllerGetInvitationLinks(getRoomId());
+				roomInvitationLinks.value = response.data.roomInvitationLinks;
 
 				isLoading.value = false;
 			} catch {
