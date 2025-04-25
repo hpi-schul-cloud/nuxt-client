@@ -8083,7 +8083,7 @@ export interface RoomDetailsResponse {
  */
 export interface RoomInvitationLinkListResponse {
     /**
-     * The list of room invitation links
+     * 
      * @type {Array<RoomInvitationLinkResponse>}
      * @memberof RoomInvitationLinkListResponse
      */
@@ -22915,10 +22915,10 @@ export class RoomApi extends BaseAPI implements RoomApiInterface {
 
 
 /**
- * RoomInvitationLinksApi - axios parameter creator
+ * RoomInvitationLinkApi - axios parameter creator
  * @export
  */
-export const RoomInvitationLinksApiAxiosParamCreator = function (configuration?: Configuration) {
+export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -23084,11 +23084,11 @@ export const RoomInvitationLinksApiAxiosParamCreator = function (configuration?:
 };
 
 /**
- * RoomInvitationLinksApi - functional programming interface
+ * RoomInvitationLinkApi - functional programming interface
  * @export
  */
-export const RoomInvitationLinksApiFp = function(configuration?: Configuration) {
-    const localVarAxiosParamCreator = RoomInvitationLinksApiAxiosParamCreator(configuration)
+export const RoomInvitationLinkApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = RoomInvitationLinkApiAxiosParamCreator(configuration)
     return {
         /**
          * 
@@ -23139,11 +23139,11 @@ export const RoomInvitationLinksApiFp = function(configuration?: Configuration) 
 };
 
 /**
- * RoomInvitationLinksApi - factory interface
+ * RoomInvitationLinkApi - factory interface
  * @export
  */
-export const RoomInvitationLinksApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
-    const localVarFp = RoomInvitationLinksApiFp(configuration)
+export const RoomInvitationLinkApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = RoomInvitationLinkApiFp(configuration)
     return {
         /**
          * 
@@ -23190,18 +23190,18 @@ export const RoomInvitationLinksApiFactory = function (configuration?: Configura
 };
 
 /**
- * RoomInvitationLinksApi - interface
+ * RoomInvitationLinkApi - interface
  * @export
- * @interface RoomInvitationLinksApi
+ * @interface RoomInvitationLinkApi
  */
-export interface RoomInvitationLinksApiInterface {
+export interface RoomInvitationLinkApiInterface {
     /**
      * 
      * @summary Create a new room invitation link
      * @param {CreateRoomInvitationLinkBodyParams} createRoomInvitationLinkBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinksApiInterface
+     * @memberof RoomInvitationLinkApiInterface
      */
     roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: any): AxiosPromise<RoomInvitationLinkResponse>;
 
@@ -23211,7 +23211,7 @@ export interface RoomInvitationLinksApiInterface {
      * @param {string} roomInvitationLinkId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinksApiInterface
+     * @memberof RoomInvitationLinkApiInterface
      */
     roomInvitationLinkControllerDeleteLink(roomInvitationLinkId: string, options?: any): AxiosPromise<void>;
 
@@ -23222,7 +23222,7 @@ export interface RoomInvitationLinksApiInterface {
      * @param {UpdateRoomInvitationLinkBodyParams} updateRoomInvitationLinkBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinksApiInterface
+     * @memberof RoomInvitationLinkApiInterface
      */
     roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: any): AxiosPromise<RoomInvitationLinkResponse>;
 
@@ -23232,29 +23232,29 @@ export interface RoomInvitationLinksApiInterface {
      * @param {string} roomInvitationLinkId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinksApiInterface
+     * @memberof RoomInvitationLinkApiInterface
      */
     roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): AxiosPromise<void>;
 
 }
 
 /**
- * RoomInvitationLinksApi - object-oriented interface
+ * RoomInvitationLinkApi - object-oriented interface
  * @export
- * @class RoomInvitationLinksApi
+ * @class RoomInvitationLinkApi
  * @extends {BaseAPI}
  */
-export class RoomInvitationLinksApi extends BaseAPI implements RoomInvitationLinksApiInterface {
+export class RoomInvitationLinkApi extends BaseAPI implements RoomInvitationLinkApiInterface {
     /**
      * 
      * @summary Create a new room invitation link
      * @param {CreateRoomInvitationLinkBodyParams} createRoomInvitationLinkBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinksApi
+     * @memberof RoomInvitationLinkApi
      */
     public roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams: CreateRoomInvitationLinkBodyParams, options?: any) {
-        return RoomInvitationLinksApiFp(this.configuration).roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams, options).then((request) => request(this.axios, this.basePath));
+        return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerCreateRoomInvitationLink(createRoomInvitationLinkBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -23263,10 +23263,10 @@ export class RoomInvitationLinksApi extends BaseAPI implements RoomInvitationLin
      * @param {string} roomInvitationLinkId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinksApi
+     * @memberof RoomInvitationLinkApi
      */
     public roomInvitationLinkControllerDeleteLink(roomInvitationLinkId: string, options?: any) {
-        return RoomInvitationLinksApiFp(this.configuration).roomInvitationLinkControllerDeleteLink(roomInvitationLinkId, options).then((request) => request(this.axios, this.basePath));
+        return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerDeleteLink(roomInvitationLinkId, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -23276,10 +23276,10 @@ export class RoomInvitationLinksApi extends BaseAPI implements RoomInvitationLin
      * @param {UpdateRoomInvitationLinkBodyParams} updateRoomInvitationLinkBodyParams 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinksApi
+     * @memberof RoomInvitationLinkApi
      */
     public roomInvitationLinkControllerUpdateLink(roomInvitationLinkId: string, updateRoomInvitationLinkBodyParams: UpdateRoomInvitationLinkBodyParams, options?: any) {
-        return RoomInvitationLinksApiFp(this.configuration).roomInvitationLinkControllerUpdateLink(roomInvitationLinkId, updateRoomInvitationLinkBodyParams, options).then((request) => request(this.axios, this.basePath));
+        return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerUpdateLink(roomInvitationLinkId, updateRoomInvitationLinkBodyParams, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**
@@ -23288,10 +23288,10 @@ export class RoomInvitationLinksApi extends BaseAPI implements RoomInvitationLin
      * @param {string} roomInvitationLinkId 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof RoomInvitationLinksApi
+     * @memberof RoomInvitationLinkApi
      */
     public roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any) {
-        return RoomInvitationLinksApiFp(this.configuration).roomInvitationLinkControllerUseLink(roomInvitationLinkId, options).then((request) => request(this.axios, this.basePath));
+        return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerUseLink(roomInvitationLinkId, options).then((request) => request(this.axios, this.basePath));
     }
 }
 
