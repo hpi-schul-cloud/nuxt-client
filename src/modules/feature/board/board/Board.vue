@@ -7,6 +7,7 @@
 				max-width="full"
 				hide-border
 				main-without-padding
+				is-flex-container
 			>
 				<template #header>
 					<BoardHeader
@@ -443,5 +444,6 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 
 .column-board {
 	overflow-x: auto;
+	height: 100%;
 }
 </style>

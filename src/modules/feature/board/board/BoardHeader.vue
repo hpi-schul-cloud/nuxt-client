@@ -196,10 +196,6 @@ watchEffect(() => {
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
 
-.board-header {
-	height: var(--board-header-height);
-}
-
 .v-chip {
 	cursor: default;
 }
@@ -223,9 +219,5 @@ watchEffect(() => {
 	// The 16px compensate for the negative margin set with "ml-n4".
 	max-width: calc(100%);
 	width: v-bind("fieldWidth");
-}
-
-:deep(input) {
-	text-overflow: ellipsis;
 }
 </style>
