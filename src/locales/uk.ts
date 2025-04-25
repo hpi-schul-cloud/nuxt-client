@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
+	"common.actions.duplicate": "Дублювати",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
@@ -645,7 +646,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Загальна інформація",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Усі елементи успішно скопійовано.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Дошка успішно скопійована.",
@@ -917,6 +918,10 @@ export default {
 		"Дата початку повинна передувати даті закінчення.",
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
+	"data-room.duplication.alert.success": "Кімнату успішно дубльовано.",
+	"data-room.duplication.alert.error":
+		"Не вдалося завершити процес копіювання.",
+	"data-room.duplication.loading": "Кімната дублюється...",
 	"error.400": "400 – Неприпустимий запит",
 	"error.401": "401 – На жаль, у вас немає дозволу на перегляд цього контенту.",
 	"error.403": "403 – На жаль, у вас немає дозволу на перегляд цього контенту.",
@@ -961,6 +966,19 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Групу користувачів успішно синхронізовано",
 	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
+	"feature-room.DuplicationInfoDialog.title": "Дублювати кімнату",
+	"feature-room.DuplicationInfoDialog.text.nextStep":
+		"На наступному кроці буде створено копію кімнати.",
+	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+		"Наступний вміст не буде скопійовано:",
+	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+		"Учасники кімнати та їхні дозволи",
+	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+		"Вміст із Etherpads",
+	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+		"Вміст із Whiteboards",
+	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+		"Захищені налаштування зовнішніх інструментів",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -982,7 +1000,7 @@ export default {
 	"global.sidebar.item.management": "Управління",
 	"global.sidebar.item.overview": "Панель керування",
 	"global.sidebar.item.releaseNotes": "Що нового?",
-	"global.sidebar.item.rooms": "Номери",
+	"global.sidebar.item.rooms": "Кімнати",
 	"global.sidebar.item.school": "Школа",
 	"global.sidebar.item.student": "Учні",
 	"global.sidebar.item.system": "Cистема",
@@ -1806,7 +1824,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Створити кімнату",
 	"pages.roomEdit.title": "Кімната редагування",
 	"pages.roomDetails.title": "Кімната",

@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
+	"common.actions.duplicate": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
 	"common.actions.finish": "Finalizar",
@@ -648,7 +649,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Información general",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Todos los elementos se copiaron con éxito.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Tablero copiado con éxito.",
@@ -922,6 +923,10 @@ export default {
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
+	"data-room.duplication.alert.success": "Sala duplicada con éxito.",
+	"data-room.duplication.alert.error":
+		"No se pudo completar el proceso de duplicación.",
+	"data-room.duplication.loading": "La sala se está duplicando...",
 	"error.400": "401 – Solicitud incorrecta",
 	"error.401":
 		"401 – Lamentablemente, falta la autorización para ver este contenido.",
@@ -970,6 +975,19 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Grupo de usuarios sincronizado exitosamente",
 	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
+	"feature-room.DuplicationInfoDialog.title": "Duplicar Sala",
+	"feature-room.DuplicationInfoDialog.text.nextStep":
+		"En el siguiente paso, se creará una copia de la sala.",
+	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+		"Los siguientes contenidos no se copiarán:",
+	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+		"Miembros y permisos de la sala",
+	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+		"Contenidos de los Etherpads",
+	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+		"Contenidos de las pizarras blancas",
+	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+		"Configuraciones protegidas de herramientas externas",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD/MM/YYYY HH:mm",
@@ -1827,7 +1845,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Crear sala",
 	"pages.roomEdit.title": "Editar sala",
 	"pages.roomDetails.title": "Sala",

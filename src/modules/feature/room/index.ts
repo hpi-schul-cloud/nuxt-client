@@ -4,8 +4,8 @@ import RoomMenu from "./RoomMenu.vue";
 import BoardGrid from "./BoardGrid.vue";
 import MembersTable from "./RoomMembers/MembersTable.vue";
 import AddMembers from "./RoomMembers/AddMembers.vue";
-import { useRoomAuthorization } from "./roomAuthorization.composable";
 import ChangeRole from "./RoomMembers/ChangeRole.vue";
+import DuplicationInfoDialog from "./DuplicationInfoDialog.vue";
 import Members from "./RoomMembers/Members.vue";
 import Invitations from "./RoomMembers/Invitations.vue";
 import Confirmations from "./RoomMembers/Confirmations.vue";
@@ -18,7 +18,7 @@ export {
 	MembersTable,
 	AddMembers,
 	ChangeRole,
-	useRoomAuthorization,
+	DuplicationInfoDialog,
 	Members,
 	Invitations,
 	Confirmations,
