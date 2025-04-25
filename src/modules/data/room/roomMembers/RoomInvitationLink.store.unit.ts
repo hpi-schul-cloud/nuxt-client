@@ -101,6 +101,17 @@ describe("useRoomInvitationLinkStore", () => {
 		);
 	});
 
+	describe("initStore", () => {
+		it("should call fetchLinks when roomId is defined", async () => {
+			const { roomInvitationLinkStore, roomDetailsStore } = setup();
+
+			await roomInvitationLinkStore.initStore();
+			roomDetailsStore.room = roomFactory.build();
+
+			expect(roomApiMock.roomControllerGetInvitationLinks).toHaveBeenCalled();
+		});
+	});
+
 	describe("fetchLinks", () => {
 		it("should call the API to fetch the room invitation links", async () => {
 			const { roomDetailsStore, roomInvitationLinkStore } = setup();
