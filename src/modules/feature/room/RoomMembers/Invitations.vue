@@ -59,7 +59,8 @@ const onClickUpdate = (linkId: string) => {
 	const title =
 		(link?.title ?? "Test ").replace(/\s*\(update: \d+\)/, "") +
 		` (update: ${updateCount + 1})`;
-	roomInvitationLinkStore.updateLink(linkId, {
+	roomInvitationLinkStore.updateLink({
+		id: linkId,
 		title: title,
 		activeUntil: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
 		isOnlyForTeachers: Math.random() > 0.5,
