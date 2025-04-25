@@ -20,6 +20,13 @@
 			:upload-progress="uploadProgress"
 		/>
 	</DefaultWireframe>
+	<input
+		type="file"
+		multiple
+		hidden
+		ref="fileInput"
+		data-testid="input-folder-fileupload"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -47,6 +54,7 @@ const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
 
 const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
+const fileInput = ref<HTMLInputElement | null>(null);
 
 const fabAction = {
 	icon: mdiPlus,
@@ -63,44 +71,19 @@ const isLoading = ref(true);
 const isEmpty = computed(() => fileRecords.value.length === 0);
 
 const fabClickHandler = () => {
-	const input = buildInput();
-
-	input.addEventListener("change", async (event) => {
-		const files = (event.target as HTMLInputElement).files;
-
-		if (files) {
-			const fileArray = Array.from(files);
-			uploadProgress.value.total = fileArray.length;
-
-			await uploadFiles(fileArray);
-
-			uploadProgress.value.total = 0;
-			uploadProgress.value.uploaded = 0;
-		}
-	});
-	input.click();
+	if (fileInput.value) {
+		fileInput.value.click();
+	}
 };
 
 const uploadFiles = async (files: File[]) => {
 	await Promise.all(
-		files.map((file) =>
-			upload(file, props.folderId, FileRecordParent.BOARDNODES).then(() => {
-				uploadProgress.value.uploaded += 1;
-			})
-		)
+		files.map(async (file) => {
+			await upload(file, props.folderId, FileRecordParent.BOARDNODES);
+
+			uploadProgress.value.uploaded += 1;
+		})
 	);
-};
-
-const buildInput = (): HTMLInputElement => {
-	const input = document.body.appendChild(
-		document.createElement("input")
-	) as HTMLInputElement;
-	input.type = "file";
-	input.multiple = true;
-	input.hidden = true;
-	input.setAttribute("data-testid", "input-folder-fileupload");
-
-	return input;
 };
 
 const onDelete = () => {
@@ -108,6 +91,22 @@ const onDelete = () => {
 };
 
 onMounted(async () => {
+	if (fileInput.value) {
+		fileInput.value.addEventListener("change", async (event) => {
+			const files = (event.target as HTMLInputElement).files;
+
+			if (files) {
+				const fileArray = Array.from(files);
+				uploadProgress.value.total = fileArray.length;
+
+				await uploadFiles(fileArray);
+
+				uploadProgress.value.total = 0;
+				uploadProgress.value.uploaded = 0;
+			}
+		});
+	}
+
 	await fetchFileFolderElement(props.folderId);
 	await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
 	isLoading.value = false;

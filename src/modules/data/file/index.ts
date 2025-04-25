@@ -1,2 +1,2 @@
 export * from "./FileRecords.state";
-export * from "./FileStorageApi.composable";
+export { useFileStorageApi } from "./FileStorageApi.composable";

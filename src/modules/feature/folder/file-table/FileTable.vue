@@ -56,7 +56,7 @@ import { FileRecord } from "@/types/file/File";
 import { convertFileSize } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
-import { defineProps, PropType, ref } from "vue";
+import { computed, defineProps, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
@@ -64,7 +64,7 @@ import FileUploadProgress from "./FileUploadProgress.vue";
 
 const { t, n } = useI18n();
 
-defineProps({
+const props = defineProps({
 	isLoading: {
 		type: Boolean,
 		required: true,
@@ -94,7 +94,9 @@ const headers = [
 	{ title: "", key: "actions" },
 ];
 
-const areUploadStatsVisible = ref(false);
+const areUploadStatsVisible = computed(() => {
+	return props.uploadProgress.total > 0;
+});
 
 const formatFileSize = (size: number) => {
 	const { convertedSize, unit } = convertFileSize(size);

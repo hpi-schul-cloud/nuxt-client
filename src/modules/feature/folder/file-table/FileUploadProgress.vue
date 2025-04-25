@@ -52,7 +52,7 @@ watch(
 			}, 5000);
 		}
 	},
-	{ deep: true }
+	{ deep: true, immediate: true }
 );
 </script>
 
