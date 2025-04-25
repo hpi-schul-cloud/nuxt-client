@@ -7,6 +7,7 @@
 		<KebabMenuActionEdit v-if="canEditRoom" @click="() => $emit('room:edit')" />
 		<KebabMenuActionRoomMembers
 			v-if="canViewRoom"
+			:members-info-text="membersInfoText"
 			@click="() => $emit('room:manage-members')"
 		/>
 		<KebabMenuActionDelete
@@ -30,6 +31,7 @@ import {
 } from "@ui-kebab-menu";
 import { useRoomAuthorization } from "@feature-room";
 import { useI18n } from "vue-i18n";
+import { computed } from "vue";
 
 const { t } = useI18n();
 
@@ -50,5 +52,12 @@ const onDeleteRoom = async (confirmation: Promise<boolean>) => {
 	}
 };
 
-const { canEditRoom, canDeleteRoom, canViewRoom } = useRoomAuthorization();
+const { canAddRoomMembers, canEditRoom, canDeleteRoom, canViewRoom } =
+	useRoomAuthorization();
+
+const membersInfoText = computed(() =>
+	canAddRoomMembers.value
+		? t("pages.rooms.members.manage")
+		: t("pages.rooms.members.view")
+);
 </script>
