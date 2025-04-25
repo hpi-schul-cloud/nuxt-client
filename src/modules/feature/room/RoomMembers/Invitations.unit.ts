@@ -1,11 +1,34 @@
 import { createTestingI18n } from "@@/tests/test-utils/setup";
 import { Invitations } from "@feature-room";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { createTestingPinia } from "@pinia/testing";
+import { useBoardNotifier } from "@util-board";
+
+jest.mock("@util-board/BoardNotifier.composable");
+const boardNotifier = jest.mocked(useBoardNotifier);
 
 describe("Invitations", () => {
-	const setup = () => {
+	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
+	beforeEach(() => {
+		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
+		boardNotifier.mockReturnValue(boardNotifierCalls);
+	});
+
+	const setup = (roomInvitationLinks = []) => {
 		const wrapper = shallowMount(Invitations, {
 			global: {
-				plugins: [createTestingI18n()],
+				plugins: [
+					createTestingI18n(),
+					createTestingPinia({
+						initialState: {
+							roomInvitationLinkStore: {
+								isLoading: false,
+								roomInvitationLinks,
+							},
+						},
+					}),
+				],
 			},
 		});
 		return { wrapper };
