@@ -223,20 +223,43 @@ describe("RoomMembersPage", () => {
 		expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith(routeRoomId);
 	});
 
-	it("should set the page title", () => {
-		const { room } = setup();
+	describe("page title", () => {
+		it("should set correct title when isVisibleAddMemberButton is true", () => {
+			const { room } = setup({
+				isVisibleAddMemberButton: true,
+			});
 
-		expect(document.title).toContain(
-			`${room?.name} - pages.rooms.members.manage`
-		);
+			expect(document.title).toContain(
+				`${room?.name} - pages.rooms.members.manage`
+			);
+		});
+		it("should set correct title when isVisibleAddMemberButton is false", () => {
+			const { room } = setup({
+				isVisibleAddMemberButton: false,
+			});
+
+			expect(document.title).toContain(
+				`${room?.name} - pages.rooms.members.label`
+			);
+		});
 	});
 
-	it("should have the correct heading", async () => {
-		const { wrapper } = setup();
+	describe("heading", () => {
+		it("should set the correct heading when isVisibleAddMemberButton is true", () => {
+			const { wrapper } = setup({
+				isVisibleAddMemberButton: true,
+			});
+			const heading = wrapper.get("h1");
+			expect(heading.text()).toBe("pages.rooms.members.management");
+		});
 
-		const heading = wrapper.get("h1");
-
-		expect(heading.text()).toBe("pages.rooms.members.manage");
+		it("should set the correct heading when isVisibleAddMemberButton is false", () => {
+			const { wrapper } = setup({
+				isVisibleAddMemberButton: false,
+			});
+			const heading = wrapper.get("h1");
+			expect(heading.text()).toBe("pages.rooms.members.label");
+		});
 	});
 
 	describe("onLeaveRoom", () => {
@@ -351,7 +374,13 @@ describe("RoomMembersPage", () => {
 	});
 
 	describe("DefaultWireframe", () => {
-		const buildBreadcrumbs = (room: RoomDetailsResponse) => {
+		const buildBreadcrumbs = (
+			room: RoomDetailsResponse,
+			isVisibleAddMemberButton: boolean
+		) => {
+			const membersBreadcrumb = isVisibleAddMemberButton
+				? "pages.rooms.members.management"
+				: "pages.rooms.members.label";
 			return [
 				{
 					title: "pages.rooms.title",
@@ -362,7 +391,7 @@ describe("RoomMembersPage", () => {
 					to: `/rooms/${routeRoomId}`,
 				},
 				{
-					title: "pages.rooms.members.manage",
+					title: membersBreadcrumb,
 					disabled: true,
 				},
 			];
@@ -375,18 +404,37 @@ describe("RoomMembersPage", () => {
 			expect(wireframe.exists()).toBe(true);
 		});
 
-		it("should set the breadcrumbs and fab items", async () => {
-			const { wrapper, room } = setup();
+		it("should set fab items", async () => {
+			const { wrapper } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 
-			const expectedBreadcrumbs = buildBreadcrumbs(room!);
-
-			expect(wireframe.props("breadcrumbs")).toEqual(expectedBreadcrumbs);
 			expect(wireframe.props("fabItems")).toEqual({
 				icon: mdiPlus,
 				title: "pages.rooms.members.add",
 				ariaLabel: "pages.rooms.members.add",
 				dataTestId: "fab-add-members",
+			});
+		});
+
+		describe("breadcrumbs", () => {
+			it("should set correct breadcrumbs when isVisibleAddMemberButton is true", () => {
+				const { wrapper, room } = setup({
+					isVisibleAddMemberButton: true,
+				});
+				const wireframe = wrapper.findComponent(DefaultWireframe);
+				const expectedBreadcrumbs = buildBreadcrumbs(room!, true);
+
+				expect(wireframe.props("breadcrumbs")).toEqual(expectedBreadcrumbs);
+			});
+
+			it("should set correct breadcrumbs when isVisibleAddMemberButton is false", () => {
+				const { wrapper, room } = setup({
+					isVisibleAddMemberButton: false,
+				});
+				const wireframe = wrapper.findComponent(DefaultWireframe);
+				const expectedBreadcrumbs = buildBreadcrumbs(room!, false);
+
+				expect(wireframe.props("breadcrumbs")).toEqual(expectedBreadcrumbs);
 			});
 		});
 	});
