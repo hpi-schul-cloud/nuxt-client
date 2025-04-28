@@ -1905,8 +1905,24 @@ export default {
 		"Ця дія може бути скасована лише {memberFullName}.",
 	"pages.rooms.members.inviteMember.firstStep.title":
 		"Створити посилання для запрошення",
+	"pages.rooms.members.inviteMember.firstStep.subTitle":
+		"Наступним кроком буде створення посилання, за яким можна буде увійти в кімнату.",
 	"pages.rooms.members.inviteMember.secondStep.title":
 		"Поділіться посиланням на запрошення",
+	"pages.rooms.members.inviteMember.infoAlert.text":
+		"Учні з інших шкіл повинні завжди супроводжуватися в кімнату супроводжуючим з їхньої школи до кімнати.",
+	"pages.rooms.members.inviteMember.form.description.label":
+		"Опис (необов'язково)",
+	"pages.rooms.members.inviteMember.form.description.hint":
+		"Відображається в огляді посилань",
+	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
+		"Посилання дійсне лише для користувачів наступної школи",
+	"pages.rooms.members.inviteMember.form.validForStudents.label":
+		"Посилання також дійсне для студентів",
+	"pages.rooms.members.inviteMember.form.linkExpires.label":
+		"Термін дії посилання закінчується",
+	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
+		"Вхід до кімнати можливий тільки після підтвердження",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":

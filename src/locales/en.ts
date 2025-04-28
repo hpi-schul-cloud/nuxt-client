@@ -1874,7 +1874,22 @@ export default {
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"This action can only be undone by {memberFullName}.",
 	"pages.rooms.members.inviteMember.firstStep.title": "Create invitation link",
+	"pages.rooms.members.inviteMember.firstStep.subTitle":
+		"The next step is to create a link, which can be used to enter the room.",
 	"pages.rooms.members.inviteMember.secondStep.title": "Share invitation link",
+	"pages.rooms.members.inviteMember.infoAlert.text":
+		"Students from other schools must always be added to the room by a supervising learning guide from their school.",
+	"pages.rooms.members.inviteMember.form.description.label":
+		"Description (optional)",
+	"pages.rooms.members.inviteMember.form.description.hint":
+		"Is displayed in the link overview",
+	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
+		"Link only valid for users of the following school",
+	"pages.rooms.members.inviteMember.form.validForStudents.label":
+		"Link also valid for students",
+	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link expires on",
+	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
+		"Entry to the room only possible after confirmation ({0})",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

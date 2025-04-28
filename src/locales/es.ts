@@ -1933,8 +1933,24 @@ export default {
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
 	"pages.rooms.members.inviteMember.firstStep.title":
 		"Crear enlace de invitación",
+	"pages.rooms.members.inviteMember.firstStep.subTitle":
+		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",
 	"pages.rooms.members.inviteMember.secondStep.title":
 		"Compartir enlace de invitación",
+	"pages.rooms.members.inviteMember.infoAlert.text":
+		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un guía de aprendizaje supervisor de su escuela a la sala.",
+	"pages.rooms.members.inviteMember.form.description.label":
+		"Descripción (opcional)",
+	"pages.rooms.members.inviteMember.form.description.hint":
+		"Se muestra en el resumen del enlace",
+	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
+		"Enlace sólo válido para usuarios de la siguiente escuela",
+	"pages.rooms.members.inviteMember.form.validForStudents.label":
+		"Enlace válido también para estudiantes",
+	"pages.rooms.members.inviteMember.form.linkExpires.label":
+		"El enlace caduca el",
+	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
+		"La entrada a la habitación sólo es posible previa confirmación",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

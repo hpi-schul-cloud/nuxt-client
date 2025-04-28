@@ -1907,7 +1907,22 @@ export default {
 		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
 	"pages.rooms.members.inviteMember.firstStep.title":
 		"Einladungslink erstellen",
+	"pages.rooms.members.inviteMember.firstStep.subTitle":
+		"Im nächsten Schritt wird ein Link erstellt, mit dem der Raum betreten	werden kann.",
 	"pages.rooms.members.inviteMember.secondStep.title": "Einladungslink teilen",
+	"pages.rooms.members.inviteMember.infoAlert.text":
+		"Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
+	"pages.rooms.members.inviteMember.form.description.label":
+		"Beschreibung (optional)",
+	"pages.rooms.members.inviteMember.form.description.hint":
+		"Wird in der Link-Übersicht angezeigt",
+	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
+		"Link nur für Nutzende der folgenden Schule gültig",
+	"pages.rooms.members.inviteMember.form.validForStudents.label":
+		"Link auch für Lernende gültig",
+	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
+	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
+		"Betreten des Raums nur nach Bestätigung möglich",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
