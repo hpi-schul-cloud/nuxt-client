@@ -7,7 +7,6 @@ import { FileElementResponse } from "@/serverApi/v3";
 import NotifierModule from "@/store/notifier";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
 import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { setupFileStorageApiMock } from "@@/tests/test-utils/api-mocks/fileStorageApiMock";
 import { fileElementResponseFactory } from "@@/tests/test-utils/factory/fileElementResponseFactory";
 import { fileRecordFactory } from "@@/tests/test-utils/factory/filerecordResponse.factory";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
@@ -15,8 +14,10 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import * as FileStorageApi from "@data-file";
+import { createMock } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
-import { computed, nextTick, ref } from "vue";
+import { computed, nextTick } from "vue";
 import FileContentElement from "./FileContentElement.vue";
 import FileContent from "./content/FileContent.vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
@@ -31,7 +32,6 @@ jest.mock("@data-board", () => {
 	};
 });
 jest.mock("@feature-board");
-jest.mock("./shared/composables/FileStorageApi.composable");
 jest.mock("./content/alert/useFileAlerts.composable");
 
 describe("FileContentElement", () => {
@@ -70,7 +70,13 @@ describe("FileContentElement", () => {
 			const setup = () => {
 				const element = fileElementResponseFactory.build();
 
-				setupFileStorageApiMock({});
+				const fileStorageApiMock =
+					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				jest
+					.spyOn(FileStorageApi, "useFileStorageApi")
+					.mockReturnValueOnce(fileStorageApiMock);
+
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 				const { wrapper, menu } = getWrapper({
 					element,
@@ -142,12 +148,14 @@ describe("FileContentElement", () => {
 					isUploading: props?.isUploading,
 				});
 
-				const getFileRecordMock = jest.fn().mockImplementationOnce(() => {
-					return ref(fileRecordResponse);
-				});
-				const { fetchFile } = setupFileStorageApiMock({
-					getFileRecordMock,
-				});
+				const fileStorageApiMock =
+					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				jest
+					.spyOn(FileStorageApi, "useFileStorageApi")
+					.mockReturnValueOnce(fileStorageApiMock);
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
+					fileRecordResponse,
+				]);
 
 				const expectedFileProperties: FileProperties = {
 					name: fileRecordResponse.name,
@@ -173,12 +181,12 @@ describe("FileContentElement", () => {
 
 				return {
 					wrapper,
-					fetchFile,
 					fileRecordResponse,
 					element,
 					expectedFileProperties,
 					menu,
 					addAlertMock,
+					fileStorageApiMock,
 				};
 			};
 
@@ -222,16 +230,16 @@ describe("FileContentElement", () => {
 
 			describe("when file content emits fetch:file event", () => {
 				it("should call fetchFile when FileContent emits fetch:file event", async () => {
-					const { wrapper, fetchFile } = setup();
+					const { wrapper, fileStorageApiMock } = setup();
 
 					await nextTick();
 
-					expect(fetchFile).toHaveBeenCalledTimes(1);
+					expect(fileStorageApiMock.fetchFiles).toHaveBeenCalledTimes(1);
 
 					const fileContent = wrapper.findComponent(FileContent);
 					fileContent.vm.$emit("fetch:file");
 
-					expect(fetchFile).toHaveBeenCalledTimes(2);
+					expect(fileStorageApiMock.fetchFiles).toHaveBeenCalledTimes(2);
 				});
 			});
 
@@ -284,12 +292,12 @@ describe("FileContentElement", () => {
 				});
 
 				it("should call fetchFile", async () => {
-					const { fetchFile } = setup();
+					const { fileStorageApiMock } = setup();
 
 					await nextTick();
 					await nextTick();
 
-					expect(fetchFile).toHaveBeenCalledTimes(1);
+					expect(fileStorageApiMock.fetchFiles).toHaveBeenCalledTimes(1);
 				});
 
 				it("should render FileContent component", async () => {
@@ -356,7 +364,12 @@ describe("FileContentElement", () => {
 					const element = fileElementResponseFactory.build();
 					document.body.setAttribute("data-app", "true");
 
-					const { upload } = setupFileStorageApiMock({});
+					const fileStorageApiMock =
+						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					jest
+						.spyOn(FileStorageApi, "useFileStorageApi")
+						.mockReturnValueOnce(fileStorageApiMock);
+					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const elementPositionProps = {
 						isFirstElement: false,
@@ -373,7 +386,7 @@ describe("FileContentElement", () => {
 
 					return {
 						wrapper,
-						upload,
+						fileStorageApiMock,
 						element,
 						elementPositionProps,
 					};
@@ -423,7 +436,7 @@ describe("FileContentElement", () => {
 
 				describe("when FileUpload emits upload:file event", () => {
 					it("should call upload when FileUpload emits upload:file event", async () => {
-						const { wrapper, upload } = setup();
+						const { wrapper, fileStorageApiMock } = setup();
 
 						await nextTick();
 
@@ -432,7 +445,7 @@ describe("FileContentElement", () => {
 
 						await nextTick();
 
-						expect(upload).toHaveBeenCalledTimes(1);
+						expect(fileStorageApiMock.upload).toHaveBeenCalledTimes(1);
 					});
 				});
 			});
@@ -442,10 +455,13 @@ describe("FileContentElement", () => {
 					const element = fileElementResponseFactory.build();
 					document.body.setAttribute("data-app", "true");
 
-					const uploadMock = jest.fn().mockRejectedValueOnce(new Error("test"));
-					setupFileStorageApiMock({
-						uploadMock,
-					});
+					const fileStorageApiMock =
+						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					jest
+						.spyOn(FileStorageApi, "useFileStorageApi")
+						.mockReturnValueOnce(fileStorageApiMock);
+					fileStorageApiMock.upload.mockRejectedValueOnce(new Error("test"));
+					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const { wrapper } = getWrapper({
 						element,
@@ -500,12 +516,15 @@ describe("FileContentElement", () => {
 					previewStatus: props?.previewStatus ?? PreviewStatus.PREVIEW_POSSIBLE,
 					isUploading: props?.isUploading,
 				});
-				const getFileRecordMock = jest.fn().mockImplementation(() => {
-					return ref(fileRecordResponse);
-				});
-				const { fetchFile } = setupFileStorageApiMock({
-					getFileRecordMock,
-				});
+
+				const fileStorageApiMock =
+					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				jest
+					.spyOn(FileStorageApi, "useFileStorageApi")
+					.mockReturnValueOnce(fileStorageApiMock);
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
+					fileRecordResponse,
+				]);
 
 				const expectedFileProperties: FileProperties = {
 					name: fileRecordResponse.name,
@@ -531,7 +550,7 @@ describe("FileContentElement", () => {
 
 				return {
 					wrapper,
-					fetchFile,
+					fileStorageApiMock,
 					fileRecordResponse,
 					element,
 					expectedFileProperties,
@@ -597,11 +616,11 @@ describe("FileContentElement", () => {
 				});
 
 				it("should call fetchFile", async () => {
-					const { fetchFile } = setup();
+					const { fileStorageApiMock } = setup();
 
 					await nextTick();
 
-					expect(fetchFile).toHaveBeenCalledTimes(1);
+					expect(fileStorageApiMock.fetchFiles).toHaveBeenCalledTimes(1);
 				});
 
 				it("should pass correct fileProperties to FileContent", async () => {
@@ -616,18 +635,18 @@ describe("FileContentElement", () => {
 				});
 
 				it("should call fetchFile when FileContent emits fetch:file event", async () => {
-					const { wrapper, fetchFile } = setup();
+					const { wrapper, fileStorageApiMock } = setup();
 
 					await nextTick();
 
-					expect(fetchFile).toHaveBeenCalledTimes(1);
+					expect(fileStorageApiMock.fetchFiles).toHaveBeenCalledTimes(1);
 
 					const fileContent = wrapper.findComponent(FileContent);
 					fileContent.vm.$emit("fetch:file");
 
 					await nextTick();
 
-					expect(fetchFile).toHaveBeenCalledTimes(2);
+					expect(fileStorageApiMock.fetchFiles).toHaveBeenCalledTimes(2);
 				});
 
 				describe("when file is uploaded", () => {
