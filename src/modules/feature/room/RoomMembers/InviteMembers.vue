@@ -150,8 +150,6 @@ defineProps({
 	},
 });
 
-const { log } = console;
-
 const emit = defineEmits<{
 	(e: "close"): void;
 }>();
@@ -168,7 +166,6 @@ const formData = ref({
 });
 const step = ref<InvitationStep>("prepare");
 const dateObject = ref<Date>(new Date());
-const isDatePickerOpen = ref(false);
 
 const modalTitle = computed(() => {
 	return step.value === "prepare"
