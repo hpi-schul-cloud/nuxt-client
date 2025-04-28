@@ -2,10 +2,10 @@
 	<DefaultWireframe max-width="nativ" :breadcrumbs="breadcrumbs">
 		<template #header>
 			<h1 class="text-h3 mb-4" data-testid="page-title">
-				{{ t("pages.roomInvitationLink.title") }}
+				{{ t("pages.roomInvitationLinkStatus.title") }}
 			</h1>
 		</template>
-		<div v-if="true /* isLoading*/" class="w-100 text-center">
+		<div v-if="isLoading" class="w-100 text-center">
 			<VProgressCircular
 				color="primary"
 				indeterminate
@@ -13,17 +13,16 @@
 				class="my-10"
 			/>
 		</div>
-		<div v-else>
+		<div v-else class="w-100 text-center">
 			<img
 				:src="CrossedHandsBirdSvg"
 				role="presentation"
 				alt="t('pages.roomInvitationLinkStatus.image.alt')"
 			/>
-			<div class="text-centered mt-8">
+			<div class="text-h2">
 				{{ infoMessage }}
 			</div>
 		</div>
-		å
 	</DefaultWireframe>
 </template>
 
@@ -33,30 +32,33 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CrossedHandsBirdSvg from "@/assets/img/crossedHands.svg";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
+// import { RoomInvitationLinkValidationError } from "./WIPenums";
+// import { useRouter } from "vue-router";
 
 const { t } = useI18n();
 
+const infoMessage = ref("");
+const isLoading = ref(true);
+// const router = useRouter();
 /* const route = useRoute();
-const router = useRouter();
-const message = ref("");
-const loading = ref(true);
 
 const linkId = route.params.id as string; */
 // const { roomId } = invitationLinkStatusStore();
 
 const checkInvitationLinkStatus = async () => {
 	// const { status, roomId } = await invitationLinkStatusStore.useLink(linkId);
-	/* if (status === 'already_member') {
-		router.push({ name: "room-details", params: { id: roomId } });
-	} */
-	/* message.value = status; */
-	/* loading.value = false */
+
+	//determineStatus(status)
+	infoMessage.value = t("pages.roomInvitationLinkStatus.title");
+	setTimeout(() => {
+		isLoading.value = false;
+	}, 2000);
 };
 
 const pageTitle = computed(() =>
-	buildPageTitle(`${t("pages.roomInvitationLink.title")}`)
+	buildPageTitle(`${t("pages.roomInvitationLinkStatus.title")}`)
 );
 useTitle(pageTitle);
 
@@ -66,45 +68,42 @@ const breadcrumbs: Breadcrumb[] = [
 		to: "/rooms",
 	},
 	{
-		title: t("pages.roomInvitationLink.title"),
+		title: t("pages.roomInvitationLinkStatus.title"),
 		disabled: true,
 	},
 ];
 
-const infoMessage = computed(() => {
-	return t("pages.roomInvitationLinkStatus.infoMessage");
-});
-
 onMounted(() => {
 	checkInvitationLinkStatus();
 });
-
-/* const onSave = async (payload: { room: RoomCreateParams }) => {
-	try {
-		const room = await createRoom(payload.room);
-
-		router.push({ name: "room-details", params: { id: room.id } });
-	} catch (error: unknown) {
-		if (isInvalidRequestError(error)) {
-			notifierModule.show({
-				text: t("components.roomForm.validation.generalSaveError"),
-				status: "error",
-			});
-		} else {
-			throw createApplicationError((error as ApiResponseError).code);
-		}
-	}
-}; */
 
 /* const isInvalidRequestError = (error: unknown): boolean => {
 	const apiError = error as ApiResponseError;
 	return apiError.code === 400;
 }; */
 
-/* const onCancel = () => {
-	router.push({
-		name: "rooms",
-	});
+/* const determineStatus = (status: string) => {
+	switch (status) {
+		case RoomInvitationLinkValidationError.ALREADY_MEMBER:
+			router.push({ name: "rooms" });
+			break;
+		case RoomInvitationLinkValidationError.CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL:
+			infoMessage.value = t(
+				"pages.roomInvitationLinkStatus.cantInviteStudents"
+			);
+			break;
+		case RoomInvitationLinkValidationError.EXPIRED:
+			infoMessage.value = t("pages.roomInvitationLinkStatus.expired");
+			break;
+		case RoomInvitationLinkValidationError.ONLY_FOR_TEACHERS:
+			infoMessage.value = t("pages.roomInvitationLinkStatus.onlyForTeachers");
+			break;
+		case RoomInvitationLinkValidationError.RESTRICTED_TO_CREATOR_SCHOOL:
+			infoMessage.value = t(
+				"pages.roomInvitationLinkStatus.restrictedToCreator"
+			);
+			break;
+	}
 }; */
 </script>
 
