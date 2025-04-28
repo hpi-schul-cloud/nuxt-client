@@ -80,11 +80,17 @@ describe("Invitations", () => {
 	it("should handle onClick for 'Update Invitation' button", async () => {
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
 		const { wrapper, roomInvitationLinkStore } = setup(roomInvitationLinks);
+		const firstLink = roomInvitationLinks[0];
 
 		const updateButton = wrapper.get("[data-testid=update-invitation-button]");
 		await updateButton.trigger("click");
 
 		expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledTimes(1);
+		expect(roomInvitationLinkStore.updateLink).toHaveBeenCalledWith(
+			expect.objectContaining({
+				title: expect.stringContaining(firstLink.title),
+			})
+		);
 	});
 
 	it("should handle onClick for 'Use Invitation' button", async () => {
