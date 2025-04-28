@@ -52,33 +52,24 @@
 				/>
 			</VTabsWindowItem>
 		</VTabsWindow>
+		<VDialog
+			v-model="isMembersDialogOpen"
+			:width="xs ? 'auto' : 480"
+			data-testid="dialog-add-participants"
+			max-width="480"
+			persistent
+			@keydown.esc="onDialogClose"
+		>
+			<AddMembers @close="onDialogClose" />
+		</VDialog>
 	</DefaultWireframe>
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	<ConfirmationDialog />
-	<VDialog
-		v-model="isMembersDialogOpen"
-		:width="xs ? 'auto' : 480"
-		data-testid="dialog-add-participants"
-		max-width="480"
-		persistent
-		@keydown.esc="onDialogClose"
-	>
-		<AddMembers @close="onDialogClose" />
-	</VDialog>
-
-	<VDialog
+	<InviteMembersDialog
 		v-model="isInvitationDialogOpen"
-		:width="xs ? 'auto' : 480"
-		data-testid="dialog-add-participants"
-		max-width="480"
-		@keydown.esc="onDialogClose"
-	>
-		<InviteMembers
-			:school-name="currentUser.schoolName"
-			pre-defined-step="share"
-			@close="onDialogClose"
-		/>
-	</VDialog>
+		:school-name="currentUser?.schoolName"
+		@close="onDialogClose"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -115,7 +106,7 @@ import {
 	AddMembers,
 	Confirmations,
 	Invitations,
-	InviteMembers,
+	InviteMembersDialog,
 	Members,
 } from "@feature-room";
 import { RoleName } from "@/serverApi/v3";
@@ -213,19 +204,6 @@ const tabs: Array<{
 		icon: mdiAccountQuestionOutline,
 		component: Confirmations,
 		isVisible: isVisibleTabNavigation,
-	},
-];
-
-const dialogs = [
-	{
-		name: "members",
-		component: AddMembers,
-		modelValue: isMembersDialogOpen,
-	},
-	{
-		name: "invitations",
-		component: InviteMembers,
-		modelValue: isInvitationDialogOpen,
 	},
 ];
 

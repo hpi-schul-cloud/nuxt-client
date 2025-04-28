@@ -9,7 +9,7 @@ import DuplicationInfoDialog from "./DuplicationInfoDialog.vue";
 import Members from "./RoomMembers/Members.vue";
 import Invitations from "./RoomMembers/Invitations.vue";
 import Confirmations from "./RoomMembers/Confirmations.vue";
-import InviteMembers from "./RoomMembers/InviteMembers.vue";
+import InviteMembersDialog from "./RoomMembers/InviteMembersDialog.vue";
 
 export {
 	AddMembers,
@@ -18,7 +18,7 @@ export {
 	DuplicationInfoDialog,
 	Confirmations,
 	Invitations,
-	InviteMembers,
+	InviteMembersDialog,
 	Members,
 	MembersTable,
 	RoomForm,
