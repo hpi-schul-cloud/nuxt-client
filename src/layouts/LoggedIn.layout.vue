@@ -25,8 +25,8 @@
 <script setup lang="ts">
 import AlertContainer from "@/components/molecules/AlertContainer.vue";
 import ApplicationErrorWrapper from "@/components/molecules/ApplicationErrorWrapper.vue";
-import LoadingStateDialog from "@/components/molecules/LoadingStateDialog.vue";
 import autoLogoutWarning from "@/components/organisms/AutoLogoutWarning.vue";
+import { LoadingStateDialog } from "@ui-loading-state-dialog";
 import { Sidebar, Topbar } from "@ui-layout";
 import { SkipLink } from "@ui-skip-link";
 import { useStorage } from "@vueuse/core";

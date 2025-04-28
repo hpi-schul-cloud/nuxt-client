@@ -100,6 +100,7 @@ import {
 	useRoomDetailsStore,
 	useRoomMembersStore,
 	useRoomMemberVisibilityOptions,
+	useRoomAuthorization,
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import {
