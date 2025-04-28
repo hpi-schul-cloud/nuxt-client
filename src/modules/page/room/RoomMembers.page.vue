@@ -294,8 +294,8 @@ const fabAction = computed(() => {
 	if (activeTab.value === Tab.Invitations) {
 		return {
 			icon: mdiPlus,
-			title: "Create invitation link",
-			ariaLabel: t("pages.rooms.members.add"), // TODO: add translation
+			title: t("pages.rooms.members.inviteMember.firstStep.title"),
+			ariaLabel: t("pages.rooms.members.inviteMember.firstStep.title"),
 			dataTestId: "fab-invite-members",
 		};
 	}
