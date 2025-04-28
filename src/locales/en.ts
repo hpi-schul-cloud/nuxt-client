@@ -1696,6 +1696,8 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
+	"pages.roomInvitationLinkStatus.image.alt": "Bird with crossed wings",
+	"pages.roomInvitationLinkStatus.title": "Invitation link",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
 	"pages.room.boardCard.label.listBoard": "List Board",

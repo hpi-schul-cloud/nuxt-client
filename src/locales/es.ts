@@ -1746,6 +1746,8 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
+	"pages.roomInvitationLinkStatus.image.alt": "Pájaro con alas plegadas",
+	"pages.roomInvitationLinkStatus.title": "Enlace de invitación",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
 	"pages.room.boardCard.label.listBoard": "Tablero de listas",

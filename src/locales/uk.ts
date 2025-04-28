@@ -1728,6 +1728,8 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
+	"pages.roomInvitationLinkStatus.image.alt": "Птах зі складеними крилами",
+	"pages.roomInvitationLinkStatus.title": "Посилання на запрошення",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
 	"pages.room.boardCard.label.listBoard": "Список дошки оголошень",

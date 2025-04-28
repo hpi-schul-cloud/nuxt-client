@@ -45,6 +45,7 @@ const vueRoutes = [
 	`^/news/${mongoId}/edit/?$`,
 	`^/poc-files/?$`,
 	`^/folder/${mongoId}/?$`,
+	`^/room-invitation-links/${mongoId}/?$`,
 	`^/rooms/?$`,
 	`^/rooms/new/?$`,
 	`^/rooms/${mongoId}/?$`,
