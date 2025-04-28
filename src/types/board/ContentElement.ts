@@ -1,5 +1,5 @@
 import {
-	ParentNodeInfo as ApiParentNodeInfo,
+	ParentNodeInfoResponse as ApiParentNodeInfo,
 	CollaborativeTextEditorElementResponse,
 	ContentElementType,
 	DrawingElementResponse,

@@ -9,6 +9,7 @@ import {
 	useRoomDetailsStore,
 	useRoomMembersStore,
 	useRoomMemberVisibilityOptions,
+	useRoomAuthorization,
 } from "@data-room";
 import {
 	createTestingI18n,
@@ -22,13 +23,7 @@ import { computed, ref } from "vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index.mjs";
-import {
-	AddMembers,
-	Confirmations,
-	Invitations,
-	Members,
-	useRoomAuthorization,
-} from "@feature-room";
+import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
@@ -53,7 +48,7 @@ jest.mock("@vueuse/integrations"); // mock focus trap from add members because w
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
 
-jest.mock("@feature-room/roomAuthorization.composable");
+jest.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = jest.mocked(useRoomAuthorization);
 
 jest.mock("@util-board/BoardNotifier.composable");
@@ -109,6 +104,7 @@ describe("RoomMembersPage", () => {
 			canAddRoomMembers: ref(false),
 			canCreateRoom: ref(false),
 			canChangeOwner: ref(false),
+			canDuplicateRoom: ref(false),
 			canViewRoom: ref(false),
 			canEditRoom: ref(false),
 			canDeleteRoom: ref(false),
