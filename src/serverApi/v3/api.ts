@@ -12144,6 +12144,40 @@ export const AuthenticationApiAxiosParamCreator = function (configuration?: Conf
     return {
         /**
          * 
+         * @summary Checks if the JWT and the session are valid.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginControllerCheckAuthentication: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/authentication/check`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication bearer required
+            // http bearer authentication required
+            await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
@@ -12366,6 +12400,16 @@ export const AuthenticationApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary Checks if the JWT and the session are valid.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async loginControllerCheckAuthentication(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.loginControllerCheckAuthentication(options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * 
          * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
@@ -12440,6 +12484,15 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
     return {
         /**
          * 
+         * @summary Checks if the JWT and the session are valid.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        loginControllerCheckAuthentication(options?: any): AxiosPromise<void> {
+            return localVarFp.loginControllerCheckAuthentication(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary Starts the login process for users which are authenticated via LDAP
          * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
          * @param {*} [options] Override http request option.
@@ -12507,6 +12560,15 @@ export const AuthenticationApiFactory = function (configuration?: Configuration,
 export interface AuthenticationApiInterface {
     /**
      * 
+     * @summary Checks if the JWT and the session are valid.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApiInterface
+     */
+    loginControllerCheckAuthentication(options?: any): AxiosPromise<void>;
+
+    /**
+     * 
      * @summary Starts the login process for users which are authenticated via LDAP
      * @param {LdapAuthorizationBodyParams} ldapAuthorizationBodyParams 
      * @param {*} [options] Override http request option.
@@ -12572,6 +12634,17 @@ export interface AuthenticationApiInterface {
  * @extends {BaseAPI}
  */
 export class AuthenticationApi extends BaseAPI implements AuthenticationApiInterface {
+    /**
+     * 
+     * @summary Checks if the JWT and the session are valid.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AuthenticationApi
+     */
+    public loginControllerCheckAuthentication(options?: any) {
+        return AuthenticationApiFp(this.configuration).loginControllerCheckAuthentication(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * 
      * @summary Starts the login process for users which are authenticated via LDAP
