@@ -6,21 +6,21 @@
 		<div>
 			{{ link }} {{ link.id
 			}}<v-btn
-				@click="onClickUpdate(link.id)"
 				data-testid="update-invitation-button"
+				@click="onClickUpdate(link.id)"
 				>update</v-btn
 			>
-			<v-btn @click="onClickUse(link.id)" data-testid="use-invitation-button"
+			<v-btn data-testid="use-invitation-button" @click="onClickUse(link.id)"
 				>use</v-btn
 			>
 			<v-btn
-				@click="onClickRemove(link.id)"
 				data-testid="delete-invitation-button"
+				@click="onClickRemove(link.id)"
 				>delete</v-btn
 			>
 		</div>
 	</div>
-	<v-btn @click="onClickAdd" data-testid="create-invitation-button"
+	<v-btn data-testid="create-invitation-button" @click="onClickAdd"
 		>add random link</v-btn
 	>
 </template>
@@ -71,10 +71,12 @@ const onClickUpdate = (linkId: string) => {
 	const title =
 		(link?.title ?? "Test ").replace(/\s*\(update: \d+\)/, "") +
 		` (update: ${updateCount + 1})`;
+	const maxOneOur =
+		Math.ceil(Math.random() * 1000 * 3600) * (Math.ceil(Math.random()) * -1);
 	roomInvitationLinkStore.updateLink({
 		id: linkId,
 		title: title,
-		activeUntil: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
+		activeUntil: new Date(Date.now() + maxOneOur).toISOString(),
 		isOnlyForTeachers: Math.random() > 0.5,
 		restrictedToCreatorSchool: Math.random() > 0.5,
 		requiresConfirmation: Math.random() > 0.5,
