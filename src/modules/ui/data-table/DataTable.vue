@@ -37,7 +37,7 @@
 	<v-data-table
 		v-model:search="search"
 		v-model="selectedIds"
-		data-testid="participants-table"
+		data-testid="data-table"
 		hover
 		:item-value="selectItemKey"
 		mobile-breakpoint="sm"
