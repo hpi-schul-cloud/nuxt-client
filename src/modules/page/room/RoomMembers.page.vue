@@ -115,7 +115,6 @@ import {
 	Invitations,
 	InviteMembers,
 	Members,
-	useRoomAuthorization,
 } from "@feature-room";
 import { RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
