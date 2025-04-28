@@ -24,5 +24,4 @@ export {
 	RoomForm,
 	RoomGrid,
 	RoomMenu,
-	useRoomAuthorization,
 };

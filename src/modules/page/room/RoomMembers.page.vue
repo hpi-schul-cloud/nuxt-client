@@ -65,6 +65,7 @@
 	>
 		<AddMembers @close="onDialogClose" />
 	</VDialog>
+
 	<VDialog
 		v-model="isInvitationDialogOpen"
 		:width="xs ? 'auto' : 480"
@@ -74,6 +75,7 @@
 	>
 		<InviteMembers
 			:school-name="currentUser.schoolName"
+			pre-defined-step="share"
 			@close="onDialogClose"
 		/>
 	</VDialog>

@@ -136,17 +136,26 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref } from "vue";
+import { computed, ref, watchEffect } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 
-defineProps({
+enum InvitationStep {
+	PREPARE = "prepare",
+	SHARE = "share",
+}
+
+const props = defineProps({
 	schoolName: {
 		type: String,
 		required: true,
+	},
+	preDefinedStep: {
+		type: String,
+		default: "prepare",
 	},
 });
 
@@ -155,7 +164,10 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
-type InvitationStep = "prepare" | "share";
+const step = ref<string>();
+watchEffect(() => {
+	step.value = props.preDefinedStep;
+});
 
 const formData = ref({
 	description: "",
@@ -164,7 +176,7 @@ const formData = ref({
 	validUntil: "",
 	isConfirmationNeeded: false,
 });
-const step = ref<InvitationStep>("prepare");
+
 const dateObject = ref<Date>(new Date());
 
 const modalTitle = computed(() => {
@@ -177,7 +189,7 @@ const onClose = () => emit("close");
 
 const onInviteMembers = () => {
 	setTimeout(() => {
-		step.value = "share";
+		step.value = InvitationStep.SHARE;
 	}, 1000);
 };
 
