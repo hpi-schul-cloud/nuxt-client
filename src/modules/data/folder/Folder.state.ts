@@ -88,6 +88,7 @@ export const useFolderState = () => {
 		isLoading,
 		isEmpty,
 		fetchFileFolderElement,
+		parentNodeInfos,
 	};
 };
 

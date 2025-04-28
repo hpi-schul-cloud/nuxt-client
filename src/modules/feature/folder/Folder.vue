@@ -15,16 +15,22 @@
 		</template>
 		<FolderDetails :is-loading="isLoading" :is-empty="isEmpty" />
 	</DefaultWireframe>
+	<ConfirmationDialog />
 </template>
 
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import router from "@/router";
+import { useBoardApi } from "@data-board";
 import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
+import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import FolderDetails from "./FolderDetails.vue";
 import FolderMenu from "./FolderMenu.vue";
+
+const boardApi = useBoardApi();
 
 const { t } = useI18n();
 
@@ -35,8 +41,14 @@ const props = defineProps({
 	},
 });
 
-const { breadcrumbs, folderName, fetchFileFolderElement, isLoading, isEmpty } =
-	useFolderState();
+const {
+	breadcrumbs,
+	folderName,
+	fetchFileFolderElement,
+	isLoading,
+	isEmpty,
+	parentNodeInfos,
+} = useFolderState();
 
 const fabAction = {
 	icon: mdiPlus,
@@ -49,8 +61,15 @@ const fabClickHandler = () => {
 	// Handle FAB click logic here
 };
 
-const onDelete = () => {
-	// Handle delete logic here
+const onDelete = async (confirmation: Promise<boolean>) => {
+	const shouldDelete = await confirmation;
+
+	const boardId = parentNodeInfos.value[parentNodeInfos.value.length - 1].id;
+
+	if (shouldDelete) {
+		await boardApi.deleteElementCall(props.folderId);
+		router.replace(`/boards/${boardId}`);
+	}
 };
 
 onMounted(async () => {
