@@ -26,6 +26,7 @@
 		multiple
 		hidden
 		data-testid="input-folder-fileupload"
+		aria-hidden="true"
 	/>
 </template>
 
