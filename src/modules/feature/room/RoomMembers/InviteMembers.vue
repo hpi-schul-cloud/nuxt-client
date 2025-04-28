@@ -9,48 +9,64 @@
 		<template #text>
 			<template v-if="step === 'prepare'">
 				<p>
-					Im nächsten Schritt wird ein Link erstellt, mit dem der Raum betreten
-					werden kann.
+					{{ t("pages.rooms.members.inviteMember.firstStep.subTitle") }}
 				</p>
 
 				<InfoAlert>
-					Lernende anderer Schulen müssen immer durch eine aufsichtsführende
-					Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.
+					{{ t("pages.rooms.members.inviteMember.infoAlert.text") }}
 				</InfoAlert>
 
 				<div class="mt-4">
 					<v-text-field
 						v-model="formData.description"
 						class="mb-2"
-						label="Beschreibung (optional)"
-						hint="Wird in der Link-Übersicht angezeigt"
+						:label="
+							t('pages.rooms.members.inviteMember.form.description.label')
+						"
+						:hint="t('pages.rooms.members.inviteMember.form.description.hint')"
 						persistent-hint
 					/>
 
 					<v-checkbox v-model="formData.onlySchoolMembers" hide-details>
 						<template #label>
 							<div class="mt-5">
-								Link nur für Nutzende der folgenden Schule gültig [{{
-									schoolName
-								}}]
+								{{
+									t(
+										"pages.rooms.members.inviteMember.form.onlySchoolMembers.label"
+									)
+								}}
+								<br />
+								[{{ schoolName }}]
 							</div>
 						</template>
 					</v-checkbox>
 
 					<v-checkbox
 						v-model="formData.validForStudents"
-						label="Link auch für Lernende gültig"
+						:label="
+							t('pages.rooms.members.inviteMember.form.validForStudents.label')
+						"
 						hide-details
 					/>
 
 					<div class="d-flex align-center justify-start my-n4">
-						<v-checkbox label="Link läuft ab am" hide-details class="mr-2" />
+						<v-checkbox
+							:label="
+								t('pages.rooms.members.inviteMember.form.linkExpires.label')
+							"
+							hide-details
+							class="mr-2"
+						/>
 
 						<date-picker
-							class="mr-2 mt-2"
+							ref="datePicker"
+							v-model="dateObject"
 							:date="dateObject.toDateString()"
+							class="mr-2 mt-2"
 							data-testid="date-picker-until"
 							style="max-width: 120px"
+							@click="pause"
+							@update:date="unpause"
 						/>
 					</div>
 
@@ -61,8 +77,14 @@
 					>
 						<template #label>
 							<div class="mt-5">
-								Betreten des Raums nur nach Bestätigung möglich (weitere
-								Informationen)
+								<i18n-t
+									keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label"
+									scope="global"
+								>
+									<a href="#" target="_blank" rel="noopener">
+										{{ t("pages.rooms.members.infoText.moreInformation") }}
+									</a>
+								</i18n-t>
 							</div>
 						</template>
 					</v-checkbox>
@@ -128,6 +150,8 @@ defineProps({
 	},
 });
 
+const { log } = console;
+
 const emit = defineEmits<{
 	(e: "close"): void;
 }>();
@@ -144,6 +168,7 @@ const formData = ref({
 });
 const step = ref<InvitationStep>("prepare");
 const dateObject = ref<Date>(new Date());
+const isDatePickerOpen = ref(false);
 
 const modalTitle = computed(() => {
 	return step.value === "prepare"
@@ -160,7 +185,7 @@ const onInviteMembers = () => {
 };
 
 const inviteMembersContent = ref<VCard>();
-useFocusTrap(inviteMembersContent, {
+const { pause, unpause } = useFocusTrap(inviteMembersContent, {
 	immediate: true,
 });
 </script>

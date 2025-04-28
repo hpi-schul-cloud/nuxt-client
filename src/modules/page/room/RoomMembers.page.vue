@@ -70,7 +70,6 @@
 		:width="xs ? 'auto' : 480"
 		data-testid="dialog-add-participants"
 		max-width="480"
-		scrim
 		@keydown.esc="onDialogClose"
 	>
 		<InviteMembers
