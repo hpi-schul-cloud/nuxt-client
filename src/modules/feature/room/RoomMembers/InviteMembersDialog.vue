@@ -4,6 +4,7 @@
 		:width="xs ? 'auto' : 480"
 		data-testid="dialog-add-participants"
 		max-width="480"
+		persistent
 		@keydown.esc="onClose"
 	>
 		<v-card ref="inviteMembersContent">
@@ -14,7 +15,7 @@
 			</template>
 
 			<template #text>
-				<template v-if="step === 'prepare'">
+				<template v-if="step === InvitationStep.PREPARE">
 					<p>
 						{{ t("pages.rooms.members.inviteMember.firstStep.subTitle") }}
 					</p>
@@ -38,7 +39,7 @@
 
 						<v-checkbox v-model="formData.onlySchoolMembers" hide-details>
 							<template #label>
-								<div class="mt-5">
+								<div class="mt-6">
 									{{
 										t(
 											"pages.rooms.members.inviteMember.form.onlySchoolMembers.label"
@@ -62,6 +63,7 @@
 
 						<div class="d-flex align-center justify-start my-n4">
 							<v-checkbox
+								v-model="formData.validUntil"
 								:label="
 									t('pages.rooms.members.inviteMember.form.linkExpires.label')
 								"
@@ -71,8 +73,8 @@
 
 							<date-picker
 								ref="datePicker"
-								v-model="dateObject"
-								:date="dateObject.toDateString()"
+								v-model="formData.validDate"
+								:date="formData.validDate! || ''"
 								class="mr-2 mt-2"
 								data-testid="date-picker-until"
 								style="max-width: 120px"
@@ -87,7 +89,7 @@
 							class="my-n6"
 						>
 							<template #label>
-								<div class="mt-5">
+								<div class="mt-6">
 									<i18n-t
 										keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label"
 										scope="global"
@@ -111,7 +113,7 @@
 
 			<template #actions>
 				<v-spacer />
-				<div v-if="step === 'prepare'" class="mr-4 mb-3">
+				<div v-if="step === InvitationStep.PREPARE" class="mr-4 mb-3">
 					<v-btn
 						ref="cancelButton"
 						class="ms-auto mr-2"
@@ -148,7 +150,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref, watchEffect } from "vue";
+import { computed, ref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import { InfoAlert } from "@ui-alert";
@@ -185,7 +187,10 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { xs } = useDisplay();
 const step = ref<string>();
-watchEffect(() => {
+
+import { onMounted } from "vue";
+
+onMounted(() => {
 	step.value = props.preDefinedStep;
 });
 
@@ -193,19 +198,23 @@ const formData = ref({
 	description: "",
 	onlySchoolMembers: false,
 	validForStudents: false,
-	validUntil: "",
+	validUntil: false,
+	validDate: new Date(),
 	isConfirmationNeeded: false,
 });
 
-const dateObject = ref<Date>(new Date());
-
 const modalTitle = computed(() => {
-	return step.value === "prepare"
+	return step.value === InvitationStep.PREPARE
 		? t("pages.rooms.members.inviteMember.firstStep.title")
 		: t("pages.rooms.members.inviteMember.secondStep.title");
 });
 
-const onClose = () => emit("close");
+const onClose = () => {
+	emit("close");
+	setTimeout(() => {
+		step.value = InvitationStep.PREPARE;
+	}, 1000);
+};
 
 const onInviteMembers = () => {
 	setTimeout(() => {
@@ -214,8 +223,16 @@ const onInviteMembers = () => {
 };
 
 const inviteMembersContent = ref<VCard>();
-const { pause, unpause } = useFocusTrap(inviteMembersContent, {
+const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 	immediate: true,
 });
+
+watch(
+	() => isOpen.value,
+	(newValue: boolean) => {
+		if (!newValue) {
+			deactivate();
+		}
+	}
+);
 </script>
-<style lang="scss" scoped></style>

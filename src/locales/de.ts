@@ -1939,7 +1939,7 @@ export default {
 		"Link auch für Lernende gültig",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
-		"Betreten des Raums nur nach Bestätigung möglich",
+		"Betreten des Raums nur nach Bestätigung möglich ({0})",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":

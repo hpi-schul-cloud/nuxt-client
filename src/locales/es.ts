@@ -1967,7 +1967,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.linkExpires.label":
 		"El enlace caduca el",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
-		"La entrada a la habitación sólo es posible previa confirmación",
+		"La entrada a la habitación sólo es posible previa confirmación ({0})",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

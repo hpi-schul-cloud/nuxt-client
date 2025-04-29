@@ -1939,7 +1939,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.linkExpires.label":
 		"Термін дії посилання закінчується",
 	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
-		"Вхід до кімнати можливий тільки після підтвердження",
+		"Вхід до кімнати можливий тільки після підтвердження ({0})",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
