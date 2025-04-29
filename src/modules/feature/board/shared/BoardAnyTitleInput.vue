@@ -9,7 +9,7 @@
 			variant="plain"
 			rows="1"
 			auto-grow
-			bg-color="transparent"
+			density="compact"
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			:autofocus="internalIsFocused"
 			:maxlength="maxLength"
@@ -196,28 +196,30 @@ export default defineComponent({
 .title-input {
 	cursor: pointer;
 	white-space: pre-wrap;
-	min-width: 280px;
+	min-width: 100px;
 
-	padding-left: 0px;
 	letter-spacing: $field-letter-spacing;
 	font-family: var(--font-accent);
-
-	&.other-title-input :deep(textarea) {
-		font-size: var(--heading-5);
-		line-height: var(--line-height-lg);
-	}
 
 	&.board-title-input :deep(textarea) {
 		font-size: var(--heading-3);
 		line-height: var(--line-height-md);
-		padding-left: 0px;
+		padding-top: var(--space-md);
+		overflow: hidden; // prevent scrollbar in board title
+	}
+
+	&.other-title-input :deep(textarea) {
+		font-size: var(--heading-5);
+		line-height: var(--line-height-lg);
 	}
 }
 
 .board-title {
 	font-size: var(--heading-3);
 	line-height: var(--line-height-md);
-	padding-top: 16px;
+	margin-bottom: 0px;
+	overflow-wrap: break-word;
+	word-break: break-word;
 }
 
 .other-title {

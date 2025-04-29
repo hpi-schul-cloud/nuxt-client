@@ -214,7 +214,6 @@ watchEffect(() => {
 }
 
 .input {
-	// The 16px compensate for the negative margin set with "ml-n4".
 	max-width: calc(100%);
 	width: v-bind("fieldWidth");
 }
