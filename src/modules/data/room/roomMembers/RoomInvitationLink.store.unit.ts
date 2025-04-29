@@ -17,10 +17,8 @@ import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
-import {
-	CreateRoomInvitationLinkDto,
-	UpdateRoomInvitationLinkDto,
-} from "./types";
+import { UpdateRoomInvitationLinkDto } from "./types";
+import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -80,6 +78,8 @@ describe("useRoomInvitationLinkStore", () => {
 		const roomInvitationLinkStore = mockedPiniaStoreTyping(
 			useRoomInvitationLinkStore
 		);
+		roomInvitationLinkStore.roomInvitationLinks =
+			roomInvitationLinkFactory.buildList(3);
 
 		return { roomInvitationLinkStore, roomDetailsStore };
 	};
@@ -122,19 +122,28 @@ describe("useRoomInvitationLinkStore", () => {
 				roomDetailsStore.room?.id
 			);
 		});
+
+		describe("when the API call fails", () => {
+			it("should show a failure message", async () => {
+				const { roomInvitationLinkStore } = setup();
+
+				roomApiMock.roomControllerGetInvitationLinks.mockRejectedValue(
+					new Error("API error")
+				);
+
+				await roomInvitationLinkStore.fetchLinks();
+
+				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+					"pages.rooms.members.error.load"
+				);
+			});
+		});
 	});
 
 	describe("createLink", () => {
 		it("should call the API to create a room invitation link", async () => {
 			const { roomDetailsStore, roomInvitationLinkStore } = setup();
-
-			const link: CreateRoomInvitationLinkDto = {
-				title: "Test Link",
-				activeUntil: new Date("2023-12-31").toISOString(),
-				isOnlyForTeachers: true,
-				restrictedToCreatorSchool: true,
-				requiresConfirmation: true,
-			};
+			const link = roomInvitationLinkFactory.build();
 
 			await roomInvitationLinkStore.createLink(link);
 
@@ -145,20 +154,31 @@ describe("useRoomInvitationLinkStore", () => {
 				roomId: roomDetailsStore.room?.id,
 			});
 		});
+
+		describe("when the API call fails", () => {
+			it("should show a failure message", async () => {
+				const { roomInvitationLinkStore } = setup();
+				const link = roomInvitationLinkFactory.build();
+				roomInvitationLinkApiMock.roomInvitationLinkControllerCreateRoomInvitationLink.mockRejectedValue(
+					new Error("API error")
+				);
+
+				await roomInvitationLinkStore.createLink(link);
+
+				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+					"pages.rooms.members.error.create"
+				);
+			});
+		});
 	});
 
 	describe("updateLink", () => {
 		it("should call the API to update a room invitation link", async () => {
 			const { roomInvitationLinkStore } = setup();
 
-			const link: UpdateRoomInvitationLinkDto = {
-				id: "link-id",
-				title: "Updated Link",
-				activeUntil: new Date("2023-12-31").toISOString(),
-				isOnlyForTeachers: true,
-				restrictedToCreatorSchool: true,
-				requiresConfirmation: true,
-			};
+			const link: UpdateRoomInvitationLinkDto =
+				roomInvitationLinkStore.roomInvitationLinks[0];
+			link.title = "Updated Link";
 
 			await roomInvitationLinkStore.updateLink(link);
 
@@ -166,19 +186,55 @@ describe("useRoomInvitationLinkStore", () => {
 				roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink
 			).toHaveBeenCalledWith(link.id, link);
 		});
+
+		describe("when the API call fails", () => {
+			it("should show a failure message", async () => {
+				const { roomInvitationLinkStore } = setup();
+				roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink.mockRejectedValue(
+					new Error("API error")
+				);
+
+				const firstLink = roomInvitationLinkStore.roomInvitationLinks[0];
+				firstLink.title = "Updated Link";
+
+				await roomInvitationLinkStore.updateLink(firstLink);
+
+				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+					"pages.rooms.members.error.update"
+				);
+			});
+		});
 	});
 
 	describe("deleteLink", () => {
 		it("should call the API to delete a room invitation link", async () => {
 			const { roomInvitationLinkStore } = setup();
 
-			const linkId = "link-id";
+			const secondLink = roomInvitationLinkStore.roomInvitationLinks[1];
 
-			await roomInvitationLinkStore.deleteLink(linkId);
+			await roomInvitationLinkStore.deleteLink(secondLink.id);
 
 			expect(
 				roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLink
-			).toHaveBeenCalledWith(linkId);
+			).toHaveBeenCalledWith(secondLink.id);
+			expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(2);
+		});
+
+		describe("when the API call fails", () => {
+			it("should show a failure message", async () => {
+				const { roomInvitationLinkStore } = setup();
+				roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLink.mockRejectedValue(
+					new Error("API error")
+				);
+
+				const link = roomInvitationLinkStore.roomInvitationLinks[0];
+
+				await roomInvitationLinkStore.deleteLink(link.id);
+
+				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+					"pages.rooms.members.error.delete"
+				);
+			});
 		});
 	});
 
@@ -208,13 +264,31 @@ describe("useRoomInvitationLinkStore", () => {
 		it("should call the API to use a room invitation link", async () => {
 			const { roomInvitationLinkStore } = setup();
 
-			const linkId = "link-id";
+			const firstLink = roomInvitationLinkStore.roomInvitationLinks[0];
 
-			await roomInvitationLinkStore.useLink(linkId);
+			const result = await roomInvitationLinkStore.useLink(firstLink.id);
 
+			expect(result).not.toBeUndefined();
 			expect(
 				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink
-			).toHaveBeenCalledWith(linkId);
+			).toHaveBeenCalledWith(firstLink.id);
+		});
+
+		describe("when the API call fails", () => {
+			it("should show a failure message", async () => {
+				const { roomInvitationLinkStore } = setup();
+				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockRejectedValue(
+					new Error("API error")
+				);
+
+				const firstLink = roomInvitationLinkStore.roomInvitationLinks[0];
+
+				await roomInvitationLinkStore.useLink(firstLink.id);
+
+				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+					"pages.rooms.members.error.use"
+				);
+			});
 		});
 	});
 });
