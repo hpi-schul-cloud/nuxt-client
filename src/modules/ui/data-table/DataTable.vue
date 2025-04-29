@@ -29,6 +29,7 @@
 			:label="t('common.labels.search')"
 			:prepend-inner-icon="mdiMagnify"
 			:aria-label="t('pages.rooms.members.filter')"
+			data-testid="table-search"
 		/>
 	</div>
 
