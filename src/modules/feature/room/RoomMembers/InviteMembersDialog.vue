@@ -198,14 +198,16 @@ onMounted(() => {
 	step.value = props.preDefinedStep;
 });
 
-const formData = ref({
+const defaultFormData = {
 	title: "",
 	restrictedToCreatorSchool: false,
 	isAlsoForStudents: false,
 	activeUntil: false,
 	activeUntilDate: new Date(),
 	requiresConfirmation: false,
-});
+};
+
+const formData = ref({ ...defaultFormData });
 
 const isDatePickerDisabled = computed(() => {
 	return !formData.value.activeUntil;
@@ -219,7 +221,9 @@ const modalTitle = computed(() => {
 
 const onClose = () => {
 	emit("close");
+
 	setTimeout(() => {
+		formData.value = { ...defaultFormData };
 		step.value = InvitationStep.PREPARE;
 	}, 1000);
 };
