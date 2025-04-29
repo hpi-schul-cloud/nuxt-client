@@ -25,34 +25,32 @@ export const useRoomInvitationLinkStore = defineStore(
 		const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 		const api = RoomInvitationLinkApiFactory(undefined, "/v3", $axios);
 
-		const getRoomId = () => {
-			if (!room.value) {
-				throw new Error("RoomDetailStore is not initialized");
-			}
-			return room.value.id;
-		};
-
-		const initStore = async () => {
-			const isRoomDetailsStoreLoaded = room.value === undefined;
-			if (isRoomDetailsStoreLoaded) {
-				await fetchLinks();
-			} else {
-				setTimeout(() => initStore(), 100);
-			}
-		};
-
 		const fetchLinks = async () => {
+			const isRoomDetailsStoreLoaded = room.value !== undefined;
+			if (isRoomDetailsStoreLoaded) {
+				await fetchLinksInternal(room.value!.id);
+			} else {
+				setTimeout(() => fetchLinks(), 100);
+			}
+		};
+
+		const fetchLinksInternal = async (roomId: string) => {
 			try {
 				isLoading.value = true;
-
-				const response =
-					await roomApi.roomControllerGetInvitationLinks(getRoomId());
+				const response = await roomApi.roomControllerGetInvitationLinks(roomId);
 				roomInvitationLinks.value = response.data.roomInvitationLinks;
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.load"));
 			} finally {
 				isLoading.value = false;
 			}
+		};
+
+		const getRoomId = () => {
+			if (!room.value) {
+				throw new Error("RoomDetailStore is not initialized");
+			}
+			return room.value.id;
 		};
 
 		const createLink = async (link: CreateRoomInvitationLinkDto) => {
@@ -113,7 +111,6 @@ export const useRoomInvitationLinkStore = defineStore(
 		};
 
 		return {
-			initStore,
 			resetStore,
 			fetchLinks,
 			createLink,
