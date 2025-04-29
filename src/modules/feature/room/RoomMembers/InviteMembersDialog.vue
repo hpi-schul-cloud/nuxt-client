@@ -2,7 +2,7 @@
 	<VDialog
 		v-model="isOpen"
 		:width="xs ? 'auto' : 480"
-		data-testid="dialog-add-participants"
+		data-testid="dialog-invite-participants"
 		max-width="480"
 		persistent
 		@keydown.esc="onClose"
@@ -26,7 +26,7 @@
 
 					<div class="mt-4">
 						<v-text-field
-							v-model="formData.description"
+							v-model="formData.title"
 							class="mb-2"
 							:label="
 								t('pages.rooms.members.inviteMember.form.description.label')
@@ -37,7 +37,10 @@
 							persistent-hint
 						/>
 
-						<v-checkbox v-model="formData.onlySchoolMembers" hide-details>
+						<v-checkbox
+							v-model="formData.restrictedToCreatorSchool"
+							hide-details
+						>
 							<template #label>
 								<div class="mt-6">
 									{{
@@ -52,7 +55,7 @@
 						</v-checkbox>
 
 						<v-checkbox
-							v-model="formData.validForStudents"
+							v-model="formData.isOnlyForTeachers"
 							:label="
 								t(
 									'pages.rooms.members.inviteMember.form.validForStudents.label'
@@ -63,7 +66,7 @@
 
 						<div class="d-flex align-center justify-start my-n4">
 							<v-checkbox
-								v-model="formData.validUntil"
+								v-model="formData.activeUntil"
 								:label="
 									t('pages.rooms.members.inviteMember.form.linkExpires.label')
 								"
@@ -73,8 +76,8 @@
 
 							<date-picker
 								ref="datePicker"
-								v-model="formData.validDate"
-								:date="formData.validDate! || ''"
+								v-model="formData.activeUntilDate"
+								:date="(formData.activeUntilDate! || '').toString()"
 								class="mr-2 mt-2"
 								data-testid="date-picker-until"
 								style="max-width: 120px"
@@ -84,7 +87,7 @@
 						</div>
 
 						<v-checkbox
-							v-model="formData.isConfirmationNeeded"
+							v-model="formData.requiresConfirmation"
 							hide-details
 							class="my-n6"
 						>
@@ -195,12 +198,12 @@ onMounted(() => {
 });
 
 const formData = ref({
-	description: "",
-	onlySchoolMembers: false,
-	validForStudents: false,
-	validUntil: false,
-	validDate: new Date(),
-	isConfirmationNeeded: false,
+	title: "",
+	restrictedToCreatorSchool: false,
+	isOnlyForTeachers: false,
+	activeUntil: false,
+	activeUntilDate: new Date(),
+	requiresConfirmation: false,
 });
 
 const modalTitle = computed(() => {
@@ -217,6 +220,7 @@ const onClose = () => {
 };
 
 const onInviteMembers = () => {
+	// TODO: use inviteMembersStore to send the invitation
 	setTimeout(() => {
 		step.value = InvitationStep.SHARE;
 	}, 1000);
