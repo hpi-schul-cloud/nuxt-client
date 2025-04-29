@@ -34,7 +34,7 @@
 				</template>
 				<template #[`item.createdAt`]="{ item }">
 					<span :data-testid="`created-at-${item.name}`">{{
-						new Date(item.createdAt ?? "").toLocaleDateString()
+						printDateFromStringUTC(item.createdAt)
 					}}</span>
 				</template>
 				<template #[`item.size`]="{ item }">
@@ -52,6 +52,7 @@
 </template>
 
 <script setup lang="ts">
+import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
 import { convertFileSize } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
