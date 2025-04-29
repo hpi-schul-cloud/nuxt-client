@@ -55,7 +55,7 @@
 						</v-checkbox>
 
 						<v-checkbox
-							v-model="formData.isOnlyForTeachers"
+							v-model="formData.isAlsoForStudents"
 							:disabled="!formData.restrictedToCreatorSchool"
 							:label="
 								t(
@@ -80,6 +80,7 @@
 								v-model="formData.activeUntilDate"
 								:disabled="isDatePickerDisabled"
 								:date="(formData.activeUntilDate! || '').toString()"
+								:min-date="new Date().toString()"
 								class="mr-2 mt-2"
 								data-testid="date-picker-until"
 								style="max-width: 120px"
@@ -200,7 +201,7 @@ onMounted(() => {
 const formData = ref({
 	title: "",
 	restrictedToCreatorSchool: false,
-	isOnlyForTeachers: false,
+	isAlsoForStudents: false,
 	activeUntil: false,
 	activeUntilDate: new Date(),
 	requiresConfirmation: false,
@@ -236,12 +237,11 @@ const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 });
 
 watch(
-	() => formData,
-	(newValue: Ref) => {
-		if (!newValue.value.restrictedToCreatorSchool) {
-			formData.value.isOnlyForTeachers = false;
+	() => formData.value.restrictedToCreatorSchool,
+	(newValue: boolean) => {
+		if (!newValue) {
+			formData.value.isAlsoForStudents = false;
 		}
-		// TODO add further validation
 	}
 );
 

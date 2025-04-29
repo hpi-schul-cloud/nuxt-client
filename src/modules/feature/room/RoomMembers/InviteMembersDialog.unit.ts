@@ -201,4 +201,68 @@ describe("InviteMembersDialog", () => {
 			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 	});
+
+	describe("form rules", () => {
+		describe("when the first checkbox is checked", () => {
+			it("should enable the second checkbox", async () => {
+				const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+				await nextTick();
+
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+				const firstCheckbox = checkboxes[0];
+				const secondCheckbox = checkboxes[1];
+
+				await firstCheckbox.setValue(false);
+				await nextTick();
+
+				expect(secondCheckbox.props("disabled")).toBe(true);
+			});
+		});
+	});
+
+	describe("when the first checkbox is unchecked", () => {
+		it("should disable and uncheck the second checkbox", async () => {
+			const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+			await nextTick();
+
+			const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+			const firstCheckbox = checkboxes[0];
+			const secondCheckbox = checkboxes[1];
+
+			await firstCheckbox.setValue(true);
+			await secondCheckbox.setValue(true);
+			await nextTick();
+
+			expect(secondCheckbox.props("disabled")).toBe(false);
+			expect(secondCheckbox.props("modelValue")).toBe(true);
+
+			await firstCheckbox.setValue(false);
+			await nextTick();
+
+			expect(secondCheckbox.props("disabled")).toBe(true);
+			expect(secondCheckbox.props("modelValue")).toBe(false);
+		});
+	});
+
+	describe.skip("when the third checkbox is checked", () => {
+		it("should enable date picker", async () => {
+			const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+			await nextTick();
+
+			const datePickerBefore = wrapper.findComponent({ name: "DatePicker" });
+			expect(datePickerBefore.attributes("disabled")).toBeDefined();
+
+			const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+			const thirdCheckbox = checkboxes[2];
+
+			await thirdCheckbox.setValue(true);
+			await nextTick();
+			const datePicker = wrapper.findComponent(
+				'[data-testid="date-picker-until"]'
+			);
+			await nextTick();
+
+			expect(datePicker.attributes().disabled).toBe(undefined);
+		});
+	});
 });
