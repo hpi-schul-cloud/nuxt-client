@@ -19,9 +19,10 @@
 
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { useSharedBoardPageInformation } from "@data-board";
 import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import FolderDetails from "./FolderDetails.vue";
 import FolderMenu from "./FolderMenu.vue";
@@ -35,8 +36,26 @@ const props = defineProps({
 	},
 });
 
-const { breadcrumbs, folderName, fetchFileFolderElement, isLoading, isEmpty } =
-	useFolderState();
+const {
+	breadcrumbs,
+	folderName,
+	fetchFileFolderElement,
+	isLoading,
+	isEmpty,
+	parentBoardId,
+} = useFolderState();
+
+const { createPageInformation } = useSharedBoardPageInformation();
+
+watch(
+	parentBoardId,
+	(newBoardId) => {
+		if (newBoardId) {
+			createPageInformation(newBoardId);
+		}
+	},
+	{ immediate: true }
+);
 
 const fabAction = {
 	icon: mdiPlus,

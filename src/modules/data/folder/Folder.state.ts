@@ -81,10 +81,20 @@ export const useFolderState = () => {
 		}
 	};
 
+	const parentBoardId = computed(() => {
+		const boardParent = parentNodeInfos.value.find(
+			(parentNodeInfo) => parentNodeInfo.type === ParentNodeType.Board
+		);
+		const id = boardParent?.id;
+
+		return id;
+	});
+
 	return {
 		breadcrumbs,
 		fileFolderElement,
 		folderName,
+		parentBoardId,
 		isLoading,
 		isEmpty,
 		fetchFileFolderElement,
