@@ -2,10 +2,11 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import * as BoardState from "@data-board";
 import * as FolderState from "@data-folder";
 import { Folder } from "@feature-folder";
 import { createMock } from "@golevelup/ts-jest";
-import { ref } from "vue";
+import { ComputedRef, ref } from "vue";
 import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
 
 describe("Folder.vue", () => {
@@ -27,15 +28,31 @@ describe("Folder.vue", () => {
 			>({});
 			jest.spyOn(FolderState, "useFolderState").mockReturnValue(folderState);
 
+			const boardId = "board-id";
+			folderState.parentBoardId = ref(boardId) as ComputedRef<string>;
+
+			const boardState = createMock<
+				ReturnType<typeof BoardState.useSharedBoardPageInformation>
+			>({});
+			jest
+				.spyOn(BoardState, "useSharedBoardPageInformation")
+				.mockReturnValue(boardState);
+
 			const { wrapper } = setupWrapper();
 
-			return { folderState, wrapper };
+			return { folderState, boardState, boardId, wrapper };
 		};
 
 		it("should call fetchFileFolderElement with the correct folderId", async () => {
 			const { folderState } = setup();
 
 			expect(folderState.fetchFileFolderElement).toHaveBeenCalledWith("123");
+		});
+
+		it("should call createPageInformation with the correct boardId", async () => {
+			const { boardState, boardId } = setup();
+
+			expect(boardState.createPageInformation).toHaveBeenCalledWith(boardId);
 		});
 	});
 
