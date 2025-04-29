@@ -400,16 +400,35 @@ describe("RoomMembersPage", () => {
 			expect(wireframe.exists()).toBe(true);
 		});
 
-		it("should set fab items", async () => {
-			const { wrapper } = setup();
-			const wireframe = wrapper.findComponent(DefaultWireframe);
+		describe("fab items", () => {
+			it.each([
+				{
+					activeTab: Tab.Members,
+					expectedFabItems: {
+						icon: mdiPlus,
+						title: "pages.rooms.members.add",
+						ariaLabel: "pages.rooms.members.add",
+						dataTestId: "fab-add-members",
+					},
+				},
+				{
+					activeTab: Tab.Invitations,
+					expectedFabItems: {
+						icon: mdiPlus,
+						title: "pages.rooms.members.inviteMember.firstStep.title",
+						ariaLabel: "pages.rooms.members.inviteMember.firstStep.title",
+						dataTestId: "fab-invite-members",
+					},
+				},
+			])(
+				"should set correct fab items when active tab is $activeTab",
+				async ({ activeTab, expectedFabItems }) => {
+					const { wrapper } = setup({ activeTab });
+					const wireframe = wrapper.findComponent(DefaultWireframe);
 
-			expect(wireframe.props("fabItems")).toEqual({
-				icon: mdiPlus,
-				title: "pages.rooms.members.add",
-				ariaLabel: "pages.rooms.members.add",
-				dataTestId: "fab-add-members",
-			});
+					expect(wireframe.props("fabItems")).toEqual(expectedFabItems);
+				}
+			);
 		});
 
 		describe("breadcrumbs", () => {
@@ -491,6 +510,30 @@ describe("RoomMembersPage", () => {
 				.findComponent(AddMembers);
 
 			expect(addMemberDialogAfterClick.exists()).toBe(true);
+		});
+	});
+
+	describe("invite members fab", () => {
+		it("should open Dialog", async () => {
+			const { wrapper } = setup({ activeTab: Tab.Invitations });
+			const wireframe = wrapper.findComponent(DefaultWireframe);
+			const dialogBeforeClick = wrapper.findComponent({
+				name: "InviteMembersDialog",
+			});
+
+			expect(dialogBeforeClick.props("modelValue")).toBe(false);
+
+			const addMemberButton = wireframe
+				.getComponent("[data-testid=fab-invite-members]")
+				.getComponent(VBtn);
+
+			await addMemberButton.trigger("click");
+
+			const dialogAfterClick = wrapper.findComponent({
+				name: "InviteMembersDialog",
+			});
+
+			expect(dialogAfterClick.props("modelValue")).toBe(true);
 		});
 	});
 
