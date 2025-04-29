@@ -241,22 +241,12 @@ describe("useRoomInvitationLinkStore", () => {
 	describe("resetStore", () => {
 		it("should reset the store", () => {
 			const { roomInvitationLinkStore } = setup();
-			roomInvitationLinkStore.roomInvitationLinks = [
-				{
-					id: "link-id",
-					roomId: "room-id",
-					title: "Updated Link",
-					activeUntil: new Date("2023-12-31").toISOString(),
-					isOnlyForTeachers: true,
-					restrictedToCreatorSchool: true,
-					requiresConfirmation: true,
-					creatorUserId: "user-id",
-					creatorSchoolId: "school-id",
-				},
-			];
+
+			expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(3);
+
 			roomInvitationLinkStore.resetStore();
 
-			expect(roomInvitationLinkStore.roomInvitationLinks).toEqual([]);
+			expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(0);
 		});
 	});
 
