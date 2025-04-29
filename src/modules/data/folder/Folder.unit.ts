@@ -38,11 +38,17 @@ describe("useFolderState", () => {
 					content: { title: "Test Folder" },
 					type: "fileFolder",
 				};
+				const boardId = "board-id";
 				const parentNodeInfos = [
 					{
-						id: "parent-id",
+						id: boardId,
 						name: "Parent Folder",
-						type: "fileFolder",
+						type: ParentNodeType.Board,
+					},
+					{
+						id: "course-id",
+						name: "Parent Folder",
+						type: ParentNodeType.Course,
 					},
 				];
 
@@ -69,6 +75,7 @@ describe("useFolderState", () => {
 				return {
 					testId,
 					resolvePromise,
+					boardId,
 				};
 			};
 
@@ -86,6 +93,15 @@ describe("useFolderState", () => {
 				await fetchPromise;
 
 				expect(isLoading.value).toBe(false);
+			});
+
+			it("should set parentBoardId correctly", async () => {
+				const { testId, resolvePromise, boardId } = setup();
+				const { fetchFileFolderElement, parentBoardId } = useFolderState();
+				resolvePromise();
+				await fetchFileFolderElement(testId);
+
+				expect(parentBoardId.value).toEqual(boardId);
 			});
 
 			describe("element is a file folder element", () => {
