@@ -126,7 +126,7 @@
 						@click="onClose"
 					/>
 					<v-btn
-						ref="addButton"
+						ref="continueButton"
 						class="ms-auto"
 						color="primary"
 						variant="flat"

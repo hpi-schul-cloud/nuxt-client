@@ -17,7 +17,12 @@ enum InvitationStep {
 	SHARE = "share",
 }
 
+jest.useFakeTimers();
 describe("InviteMembersDialog", () => {
+	afterEach(() => {
+		jest.clearAllMocks();
+		jest.clearAllTimers();
+	});
 	const setup = (
 		props: {
 			modelValue?: boolean;
@@ -153,6 +158,47 @@ describe("InviteMembersDialog", () => {
 
 				expect(shareModalResult.exists()).toBe(true);
 			});
+		});
+
+		describe("when continue button is clicked", () => {
+			it("should switch to SHARE step", async () => {
+				const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+				await nextTick();
+				const shareModalBefore = wrapper.findComponent({
+					name: "ShareModalResult",
+				});
+				expect(shareModalBefore.exists()).toBe(false);
+
+				const nextButton = wrapper.findComponent({ ref: "continueButton" });
+				await nextButton.trigger("click");
+				jest.advanceTimersByTime(1000);
+				await nextTick();
+
+				const shareModalAfter = wrapper.findComponent({
+					name: "ShareModalResult",
+				});
+				expect(shareModalAfter.exists()).toBe(true);
+			});
+		});
+	});
+
+	describe("emits", () => {
+		it("should emit 'close' with false when cancel button is clicked", async () => {
+			const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+			await nextTick();
+			const cancelButton = wrapper.findComponent({ ref: "cancelButton" });
+			await cancelButton.trigger("click");
+
+			expect(wrapper.emitted()).toHaveProperty("close");
+		});
+
+		it("should emit 'close' with false when close button is clicked", async () => {
+			const { wrapper } = setup({ preDefinedStep: InvitationStep.SHARE });
+			await nextTick();
+			const closeButton = wrapper.findComponent({ ref: "closeButton" });
+			await closeButton.trigger("click");
+
+			expect(wrapper.emitted()).toHaveProperty("close");
 		});
 	});
 });
