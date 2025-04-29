@@ -56,6 +56,7 @@
 
 						<v-checkbox
 							v-model="formData.isOnlyForTeachers"
+							:disabled="!formData.restrictedToCreatorSchool"
 							:label="
 								t(
 									'pages.rooms.members.inviteMember.form.validForStudents.label'
@@ -77,6 +78,7 @@
 							<date-picker
 								ref="datePicker"
 								v-model="formData.activeUntilDate"
+								:disabled="isDatePickerDisabled"
 								:date="(formData.activeUntilDate! || '').toString()"
 								class="mr-2 mt-2"
 								data-testid="date-picker-until"
@@ -153,7 +155,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, Ref, ref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import { InfoAlert } from "@ui-alert";
@@ -204,6 +206,10 @@ const formData = ref({
 	requiresConfirmation: false,
 });
 
+const isDatePickerDisabled = computed(() => {
+	return !formData.value.activeUntil;
+});
+
 const modalTitle = computed(() => {
 	return step.value === InvitationStep.PREPARE
 		? t("pages.rooms.members.inviteMember.firstStep.title")
@@ -228,6 +234,16 @@ const inviteMembersContent = ref<VCard>();
 const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 	immediate: true,
 });
+
+watch(
+	() => formData,
+	(newValue: Ref) => {
+		if (!newValue.value.restrictedToCreatorSchool) {
+			formData.value.isOnlyForTeachers = false;
+		}
+		// TODO add further validation
+	}
+);
 
 watch(
 	() => isOpen.value,
