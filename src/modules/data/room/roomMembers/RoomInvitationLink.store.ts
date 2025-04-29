@@ -51,7 +51,7 @@ export const useRoomInvitationLinkStore = defineStore(
 
 				isLoading.value = false;
 			} catch {
-				showFailure(t("pages.rooms.members.error.load")); // TODO: fix language key
+				showFailure(t("pages.rooms.members.error.load"));
 				isLoading.value = false;
 			}
 		};
@@ -67,7 +67,7 @@ export const useRoomInvitationLinkStore = defineStore(
 
 				roomInvitationLinks.value.push(response);
 			} catch {
-				showFailure(t("pages.rooms.members.error.create")); // TODO: fix language key
+				showFailure(t("pages.rooms.members.error.create"));
 			}
 		};
 
@@ -83,7 +83,7 @@ export const useRoomInvitationLinkStore = defineStore(
 					l.id === link.id ? response : l
 				);
 			} catch {
-				showFailure(t("pages.rooms.members.error.update")); // TODO: fix language key
+				showFailure(t("pages.rooms.members.error.update"));
 			}
 		};
 
@@ -95,7 +95,7 @@ export const useRoomInvitationLinkStore = defineStore(
 					(link) => link.id !== linkId
 				);
 			} catch {
-				showFailure(t("pages.rooms.members.error.delete")); // TODO: fix language key
+				showFailure(t("pages.rooms.members.error.delete"));
 			}
 		};
 
@@ -104,7 +104,7 @@ export const useRoomInvitationLinkStore = defineStore(
 				const response = await api.roomInvitationLinkControllerUseLink(linkId);
 				return response.data;
 			} catch {
-				showFailure(t("pages.rooms.members.error.use")); // TODO: fix language key
+				showFailure(t("pages.rooms.members.error.use"));
 			}
 		};
 
