@@ -13,11 +13,10 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
-import { logger } from "@util-logger";
 import { AxiosInstance } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
-import { UpdateRoomInvitationLinkDto } from "./types";
+import { RoomInvitationLink, UpdateRoomInvitationLinkDto } from "./types";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 
 jest.mock("vue-i18n");
@@ -31,7 +30,6 @@ describe("useRoomInvitationLinkStore", () => {
 	let roomInvitationLinkApiMock: DeepMocked<serverApi.RoomInvitationLinkApiInterface>;
 	let schoolApiMock: DeepMocked<serverApi.SchoolApiInterface>;
 	let axiosMock: DeepMocked<AxiosInstance>;
-	let consoleErrorSpy: jest.SpyInstance;
 	let mockedBoardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
@@ -42,7 +40,6 @@ describe("useRoomInvitationLinkStore", () => {
 			createMock<serverApi.RoomInvitationLinkApiInterface>();
 		schoolApiMock = createMock<serverApi.SchoolApiInterface>();
 		axiosMock = createMock<AxiosInstance>();
-		consoleErrorSpy = jest.spyOn(logger, "error").mockImplementation();
 
 		jest.spyOn(serverApi, "RoomApiFactory").mockReturnValue(roomApiMock);
 		jest
@@ -71,71 +68,61 @@ describe("useRoomInvitationLinkStore", () => {
 		authModule.setMe(mockMe);
 	});
 
-	const setup = () => {
+	const setup = (roomInvitationLinks: RoomInvitationLink[] = []) => {
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 		roomDetailsStore.room = roomFactory.build();
 
 		const roomInvitationLinkStore = mockedPiniaStoreTyping(
 			useRoomInvitationLinkStore
 		);
-		roomInvitationLinkStore.roomInvitationLinks =
-			roomInvitationLinkFactory.buildList(3);
+		roomInvitationLinkStore.roomInvitationLinks = roomInvitationLinks;
 
 		return { roomInvitationLinkStore, roomDetailsStore };
 	};
 
 	afterEach(() => {
 		jest.clearAllMocks();
-		consoleErrorSpy.mockRestore();
-	});
-
-	it("should throw an error if the roomId is undefined", async () => {
-		const roomInvitationLinkStore = mockedPiniaStoreTyping(
-			useRoomInvitationLinkStore
-		);
-
-		await roomInvitationLinkStore.fetchLinks();
-
-		expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-			"pages.rooms.invitationlinks.error.load"
-		);
-	});
-
-	describe("initStore", () => {
-		it("should call fetchLinks when roomId is defined", async () => {
-			const { roomInvitationLinkStore, roomDetailsStore } = setup();
-
-			await roomInvitationLinkStore.initStore();
-			roomDetailsStore.room = roomFactory.build();
-
-			expect(roomApiMock.roomControllerGetInvitationLinks).toHaveBeenCalled();
-		});
 	});
 
 	describe("fetchLinks", () => {
-		it("should call the API to fetch the room invitation links", async () => {
-			const { roomDetailsStore, roomInvitationLinkStore } = setup();
-
-			await roomInvitationLinkStore.fetchLinks();
-
-			expect(roomApiMock.roomControllerGetInvitationLinks).toHaveBeenCalledWith(
-				roomDetailsStore.room?.id
-			);
-		});
-
-		describe("when the API call fails", () => {
-			it("should show a failure message", async () => {
-				const { roomInvitationLinkStore } = setup();
-
-				roomApiMock.roomControllerGetInvitationLinks.mockRejectedValue(
-					new Error("API error")
-				);
+		describe("when the roomId is defined", () => {
+			it("should call the API to fetch the room invitation links", async () => {
+				const { roomDetailsStore, roomInvitationLinkStore } = setup();
 
 				await roomInvitationLinkStore.fetchLinks();
 
-				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.invitationlinks.error.load"
-				);
+				expect(
+					roomApiMock.roomControllerGetInvitationLinks
+				).toHaveBeenCalledWith(roomDetailsStore.room?.id);
+			});
+
+			describe("when the API call fails", () => {
+				it("should show a failure message", async () => {
+					const { roomInvitationLinkStore } = setup();
+
+					roomApiMock.roomControllerGetInvitationLinks.mockRejectedValue(
+						new Error("API error")
+					);
+
+					await roomInvitationLinkStore.fetchLinks();
+
+					expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
+						"pages.rooms.invitationlinks.error.load"
+					);
+				});
+			});
+		});
+
+		describe("when the roomId is undefined", () => {
+			it("should not call the API", async () => {
+				const { roomDetailsStore, roomInvitationLinkStore } = setup();
+				roomDetailsStore.room = undefined;
+
+				await roomInvitationLinkStore.fetchLinks();
+
+				expect(
+					roomApiMock.roomControllerGetInvitationLinks
+				).not.toHaveBeenCalled();
 			});
 		});
 	});
@@ -174,27 +161,28 @@ describe("useRoomInvitationLinkStore", () => {
 
 	describe("updateLink", () => {
 		it("should call the API to update a room invitation link", async () => {
-			const { roomInvitationLinkStore } = setup();
+			const links = roomInvitationLinkFactory.buildList(3);
+			const { roomInvitationLinkStore } = setup(links);
 
-			const link: UpdateRoomInvitationLinkDto =
-				roomInvitationLinkStore.roomInvitationLinks[0];
-			link.title = "Updated Link";
+			const firstLink: UpdateRoomInvitationLinkDto = links[0];
+			firstLink.title = "Updated Link";
 
-			await roomInvitationLinkStore.updateLink(link);
+			await roomInvitationLinkStore.updateLink(firstLink);
 
 			expect(
 				roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink
-			).toHaveBeenCalledWith(link.id, link);
+			).toHaveBeenCalledWith(firstLink.id, firstLink);
 		});
 
 		describe("when the API call fails", () => {
 			it("should show a failure message", async () => {
-				const { roomInvitationLinkStore } = setup();
+				const links = roomInvitationLinkFactory.buildList(3);
+				const { roomInvitationLinkStore } = setup(links);
 				roomInvitationLinkApiMock.roomInvitationLinkControllerUpdateLink.mockRejectedValue(
 					new Error("API error")
 				);
 
-				const firstLink = roomInvitationLinkStore.roomInvitationLinks[0];
+				const firstLink = links[0];
 				firstLink.title = "Updated Link";
 
 				await roomInvitationLinkStore.updateLink(firstLink);
@@ -208,9 +196,10 @@ describe("useRoomInvitationLinkStore", () => {
 
 	describe("deleteLink", () => {
 		it("should call the API to delete a room invitation link", async () => {
-			const { roomInvitationLinkStore } = setup();
+			const links = roomInvitationLinkFactory.buildList(3);
+			const { roomInvitationLinkStore } = setup(links);
 
-			const secondLink = roomInvitationLinkStore.roomInvitationLinks[1];
+			const secondLink = links[1];
 
 			await roomInvitationLinkStore.deleteLink(secondLink.id);
 
@@ -222,14 +211,15 @@ describe("useRoomInvitationLinkStore", () => {
 
 		describe("when the API call fails", () => {
 			it("should show a failure message", async () => {
-				const { roomInvitationLinkStore } = setup();
+				const links = roomInvitationLinkFactory.buildList(3);
+				const { roomInvitationLinkStore } = setup(links);
 				roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLink.mockRejectedValue(
 					new Error("API error")
 				);
 
-				const link = roomInvitationLinkStore.roomInvitationLinks[0];
+				const firstLink = links[0];
 
-				await roomInvitationLinkStore.deleteLink(link.id);
+				await roomInvitationLinkStore.deleteLink(firstLink.id);
 
 				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 					"pages.rooms.invitationlinks.error.delete"
@@ -240,9 +230,12 @@ describe("useRoomInvitationLinkStore", () => {
 
 	describe("resetStore", () => {
 		it("should reset the store", () => {
-			const { roomInvitationLinkStore } = setup();
+			const links = roomInvitationLinkFactory.buildList(3);
+			const { roomInvitationLinkStore } = setup(links);
 
-			expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(3);
+			expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(
+				links.length
+			);
 
 			roomInvitationLinkStore.resetStore();
 
@@ -252,9 +245,10 @@ describe("useRoomInvitationLinkStore", () => {
 
 	describe("useLink", () => {
 		it("should call the API to use a room invitation link", async () => {
-			const { roomInvitationLinkStore } = setup();
+			const links = roomInvitationLinkFactory.buildList(3);
+			const { roomInvitationLinkStore } = setup(links);
 
-			const firstLink = roomInvitationLinkStore.roomInvitationLinks[0];
+			const firstLink = links[0];
 
 			const result = await roomInvitationLinkStore.useLink(firstLink.id);
 
@@ -266,12 +260,13 @@ describe("useRoomInvitationLinkStore", () => {
 
 		describe("when the API call fails", () => {
 			it("should show a failure message", async () => {
-				const { roomInvitationLinkStore } = setup();
+				const links = roomInvitationLinkFactory.buildList(3);
+				const { roomInvitationLinkStore } = setup(links);
 				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockRejectedValue(
 					new Error("API error")
 				);
 
-				const firstLink = roomInvitationLinkStore.roomInvitationLinks[0];
+				const firstLink = links[0];
 
 				await roomInvitationLinkStore.useLink(firstLink.id);
 

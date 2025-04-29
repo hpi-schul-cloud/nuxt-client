@@ -40,7 +40,7 @@ defineProps({
 	},
 });
 
-roomInvitationLinkStore.initStore();
+roomInvitationLinkStore.fetchLinks();
 
 const onClickAdd = () => {
 	roomInvitationLinkStore.createLink({
