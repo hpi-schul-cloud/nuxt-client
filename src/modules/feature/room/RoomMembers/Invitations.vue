@@ -57,8 +57,7 @@ const onClickRemove = (linkId: string) => {
 };
 
 const onClickUse = async (linkId: string) => {
-	const roomId = await roomInvitationLinkStore.useLink(linkId);
-	window.alert(roomId);
+	await roomInvitationLinkStore.useLink(linkId);
 };
 
 const onClickUpdate = (linkId: string) => {
