@@ -208,16 +208,13 @@ const tabs: Array<{
 ];
 
 const onFabClick = async () => {
-	if (activeTab.value === Tab.Members) {
-		await getSchools();
-		await getPotentialMembers(RoleName.Teacher);
-		isMembersDialogOpen.value = true;
-		return;
-	}
 	if (activeTab.value === Tab.Invitations) {
 		isInvitationDialogOpen.value = true;
 		return;
 	}
+	await getSchools();
+	await getPotentialMembers(RoleName.Teacher);
+	isMembersDialogOpen.value = true;
 };
 
 const onDialogClose = () => {

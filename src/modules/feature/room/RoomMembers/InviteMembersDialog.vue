@@ -153,7 +153,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import { InfoAlert } from "@ui-alert";
@@ -190,8 +190,6 @@ const emit = defineEmits<{
 const { t } = useI18n();
 const { xs } = useDisplay();
 const step = ref<string>();
-
-import { onMounted } from "vue";
 
 onMounted(() => {
 	step.value = props.preDefinedStep;
