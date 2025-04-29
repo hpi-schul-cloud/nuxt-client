@@ -18,7 +18,6 @@ export const useRoomInvitationLinkStore = defineStore(
 		const { showFailure } = useBoardNotifier();
 
 		const { room } = storeToRefs(useRoomDetailsStore());
-		const roomId = computed(() => room.value?.id);
 
 		const roomInvitationLinks: Ref<RoomInvitationLink[]> = ref([]);
 		const isLoading = ref<boolean>(false);
@@ -27,14 +26,14 @@ export const useRoomInvitationLinkStore = defineStore(
 		const api = RoomInvitationLinkApiFactory(undefined, "/v3", $axios);
 
 		const getRoomId = () => {
-			if (!roomId.value) {
+			if (!room.value) {
 				throw new Error("RoomDetailStore is not initialized");
 			}
-			return roomId.value;
+			return room.value.id;
 		};
 
 		const initStore = async () => {
-			if (roomId.value === undefined) {
+			if (room.value === undefined) {
 				setTimeout(() => initStore(), 100);
 			} else {
 				await fetchLinks();
