@@ -78,11 +78,6 @@ const onKeyUp = () => ensurePoliteNotifications();
 		padding: 0;
 	}
 
-	.ck.ck-editor__editable_inline h4:first-of-type,
-	.ck.ck-editor__editable_inline h5:first-of-type {
-		margin-top: var(--space-md-2);
-	}
-
 	.ck.ck-editor__editable_inline p,
 	.ck.ck-editor__editable_inline ol,
 	.ck.ck-editor__editable_inline ul {
@@ -91,6 +86,15 @@ const onKeyUp = () => ensurePoliteNotifications();
 
 	.ck.ck-editor__editable_inline > :last-child {
 		margin-bottom: var(--space-xs);
+	}
+
+	.ck-content > h4:first-child,
+	.ck-content > h5:first-child {
+		margin-top: 0;
+	}
+
+	.ck-content > p:first-child {
+		margin-top: calc(-1 * var(--space-xs-3));
 	}
 
 	.ck-content {

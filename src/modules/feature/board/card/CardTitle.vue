@@ -1,7 +1,7 @@
 <template>
 	<VCardTitle
 		v-if="isEditMode || value !== ''"
-		class="d-block text-break-word pt-0 pb-2"
+		class="d-block text-break-word pt-1 pb-0"
 		:class="{ 'pointer-events-none': !isEditMode }"
 	>
 		<BoardAnyTitleInput
