@@ -156,7 +156,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, Ref, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import { InfoAlert } from "@ui-alert";
@@ -222,6 +222,11 @@ const modalTitle = computed(() => {
 const onClose = () => {
 	emit("close");
 
+	// Assigning the step value to PREPARE causing the flickering of the dialog on close
+	// That's why we are using setTimeout to set the value after the dialog is closed
+
+	// remove this setTimeout by checking if the sharing url is link url is provided
+	// after the store is implemented
 	setTimeout(() => {
 		formData.value = { ...defaultFormData };
 		step.value = InvitationStep.PREPARE;
@@ -229,7 +234,7 @@ const onClose = () => {
 };
 
 const onInviteMembers = () => {
-	// TODO: use inviteMembersStore to send the invitation
+	// TODO use inviteMembersStore to send the invitation
 	setTimeout(() => {
 		step.value = InvitationStep.SHARE;
 	}, 1000);
