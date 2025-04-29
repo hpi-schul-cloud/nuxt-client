@@ -88,11 +88,11 @@ const props = defineProps({
 });
 
 const headers = [
-	{ title: "", key: "preview" },
+	{ key: "preview", sortable: false },
 	{ title: t("pages.folder.columns.name"), key: "name" },
 	{ title: t("pages.folder.columns.createdat"), key: "createdAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
-	{ title: "", key: "actions" },
+	{ key: "actions", sortable: false },
 ];
 
 const areUploadStatsVisible = computed(() => {
