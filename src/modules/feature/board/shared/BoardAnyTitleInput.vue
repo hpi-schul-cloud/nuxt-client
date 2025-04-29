@@ -211,13 +211,15 @@ export default defineComponent({
 	&.other-title-input :deep(textarea) {
 		font-size: var(--heading-5);
 		line-height: var(--line-height-lg);
+		padding: 8px 16px;
+		overflow: hidden;
 	}
 }
 
 .board-title {
 	font-size: var(--heading-3);
 	line-height: var(--line-height-md);
-	margin-bottom: 0px;
+	margin-bottom: 0;
 	overflow-wrap: break-word;
 	word-break: break-word;
 }
