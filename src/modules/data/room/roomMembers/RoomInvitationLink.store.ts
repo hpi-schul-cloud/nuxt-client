@@ -3,7 +3,7 @@ import { $axios } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
 import { defineStore, storeToRefs } from "pinia";
-import { computed, Ref, ref } from "vue";
+import { Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	CreateRoomInvitationLinkDto,
@@ -33,10 +33,11 @@ export const useRoomInvitationLinkStore = defineStore(
 		};
 
 		const initStore = async () => {
-			if (room.value === undefined) {
-				setTimeout(() => initStore(), 100);
-			} else {
+			const isRoomDetailsStoreLoaded = room.value === undefined;
+			if (isRoomDetailsStoreLoaded) {
 				await fetchLinks();
+			} else {
+				setTimeout(() => initStore(), 100);
 			}
 		};
 
@@ -47,10 +48,9 @@ export const useRoomInvitationLinkStore = defineStore(
 				const response =
 					await roomApi.roomControllerGetInvitationLinks(getRoomId());
 				roomInvitationLinks.value = response.data.roomInvitationLinks;
-
-				isLoading.value = false;
 			} catch {
-				showFailure(t("pages.rooms.members.error.load"));
+				showFailure(t("pages.rooms.invitationlinks.error.load"));
+			} finally {
 				isLoading.value = false;
 			}
 		};
@@ -66,7 +66,7 @@ export const useRoomInvitationLinkStore = defineStore(
 
 				roomInvitationLinks.value.push(response);
 			} catch {
-				showFailure(t("pages.rooms.members.error.create"));
+				showFailure(t("pages.rooms.invitationlinks.error.create"));
 			}
 		};
 
@@ -82,7 +82,7 @@ export const useRoomInvitationLinkStore = defineStore(
 					l.id === link.id ? response : l
 				);
 			} catch {
-				showFailure(t("pages.rooms.members.error.update"));
+				showFailure(t("pages.rooms.invitationlinks.error.update"));
 			}
 		};
 
@@ -94,7 +94,7 @@ export const useRoomInvitationLinkStore = defineStore(
 					(link) => link.id !== linkId
 				);
 			} catch {
-				showFailure(t("pages.rooms.members.error.delete"));
+				showFailure(t("pages.rooms.invitationlinks.error.delete"));
 			}
 		};
 
@@ -103,7 +103,7 @@ export const useRoomInvitationLinkStore = defineStore(
 				const response = await api.roomInvitationLinkControllerUseLink(linkId);
 				return response.data;
 			} catch {
-				showFailure(t("pages.rooms.members.error.use"));
+				showFailure(t("pages.rooms.invitationlinks.error.use"));
 			}
 		};
 
