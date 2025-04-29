@@ -97,7 +97,7 @@ describe("useRoomInvitationLinkStore", () => {
 		await roomInvitationLinkStore.fetchLinks();
 
 		expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-			"pages.rooms.members.error.load"
+			"pages.rooms.invitationlinks.error.load"
 		);
 	});
 
@@ -134,7 +134,7 @@ describe("useRoomInvitationLinkStore", () => {
 				await roomInvitationLinkStore.fetchLinks();
 
 				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.members.error.load"
+					"pages.rooms.invitationlinks.error.load"
 				);
 			});
 		});
@@ -166,7 +166,7 @@ describe("useRoomInvitationLinkStore", () => {
 				await roomInvitationLinkStore.createLink(link);
 
 				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.members.error.create"
+					"pages.rooms.invitationlinks.error.create"
 				);
 			});
 		});
@@ -200,7 +200,7 @@ describe("useRoomInvitationLinkStore", () => {
 				await roomInvitationLinkStore.updateLink(firstLink);
 
 				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.members.error.update"
+					"pages.rooms.invitationlinks.error.update"
 				);
 			});
 		});
@@ -232,7 +232,7 @@ describe("useRoomInvitationLinkStore", () => {
 				await roomInvitationLinkStore.deleteLink(link.id);
 
 				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.members.error.delete"
+					"pages.rooms.invitationlinks.error.delete"
 				);
 			});
 		});
@@ -276,7 +276,7 @@ describe("useRoomInvitationLinkStore", () => {
 				await roomInvitationLinkStore.useLink(firstLink.id);
 
 				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.members.error.use"
+					"pages.rooms.invitationlinks.error.use"
 				);
 			});
 		});
