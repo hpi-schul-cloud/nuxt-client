@@ -18,10 +18,8 @@ export const useFolderState = () => {
 
 	const fileFolderElement = ref<FileFolderElement | undefined>(undefined);
 	const parentNodeInfos = ref<ParentNodeInfo[]>([]);
-	const isLoading = ref(false);
 
 	const fetchFileFolderElement = async (fileFolderElementId: string) => {
-		isLoading.value = true;
 		try {
 			const reponse =
 				await boardElementApi.elementControllerGetElementWithParentHierarchy(
@@ -32,14 +30,8 @@ export const useFolderState = () => {
 			parentNodeInfos.value = reponse.data.parentHierarchy;
 		} catch (error) {
 			throwApplicationError(error);
-		} finally {
-			isLoading.value = false;
 		}
 	};
-
-	const isEmpty = computed(() => {
-		return true;
-	});
 
 	const folderName = computed(() => {
 		const title = fileFolderElement.value?.content.title;
@@ -95,8 +87,6 @@ export const useFolderState = () => {
 		fileFolderElement,
 		folderName,
 		parentBoardId,
-		isLoading,
-		isEmpty,
 		fetchFileFolderElement,
 	};
 };

@@ -1,11 +1,10 @@
 import { FileRecordParentType, PreviewStatus } from "@/fileStorageApi/v3";
 import { convertDownloadToPreviewUrl } from "@/utils/fileHelper";
-import {
-	fileRecordResponseFactory,
-	setupFileStorageApiMock,
-} from "@@/tests/test-utils";
+import { fileRecordFactory } from "@@/tests/test-utils";
+import * as FileStorageApi from "@data-file";
+import { createMock } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
-import { defineComponent, ref } from "vue";
+import { defineComponent } from "vue";
 import { usePreviewGenerator } from "./PreviewGenerator.composable";
 
 jest.mock("@feature-board-file-element");
@@ -34,25 +33,25 @@ describe("usePreviewGenerator", () => {
 			describe("when image can be uploaded", () => {
 				const setup = () => {
 					const elementId = "my-custom-mocked-id";
-					const uploadFromUrlMock = jest.fn();
-					const fileRecord = fileRecordResponseFactory.build({
+					const fileRecord = fileRecordFactory.build({
 						previewStatus: PreviewStatus.PREVIEW_POSSIBLE,
 					});
-					const getFileRecordMock = jest
-						.fn()
-						.mockReturnValueOnce(ref(fileRecord));
-					const { getFileRecord } = setupFileStorageApiMock({
-						uploadFromUrlMock,
-						getFileRecordMock,
-					});
+
+					const fileStorageApiMock =
+						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					jest
+						.spyOn(FileStorageApi, "useFileStorageApi")
+						.mockReturnValueOnce(fileStorageApiMock);
+					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([
+						fileRecord,
+					]);
 
 					const { wrapper, composable } = getWrapper(elementId);
 
 					return {
 						wrapper,
 						composable,
-						getFileRecord,
-						uploadFromUrlMock,
+						fileStorageApiMock,
 						elementId,
 						fileRecord,
 					};
@@ -65,12 +64,12 @@ describe("usePreviewGenerator", () => {
 				});
 
 				it("should upload the external image", async () => {
-					const { composable, uploadFromUrlMock, elementId } = setup();
+					const { composable, fileStorageApiMock, elementId } = setup();
 
 					const imageUrl = "https://test.de/my-article/image.jpg";
 					await composable?.createPreviewImage(imageUrl);
 
-					expect(uploadFromUrlMock).toHaveBeenCalledWith(
+					expect(fileStorageApiMock.uploadFromUrl).toHaveBeenCalledWith(
 						imageUrl,
 						elementId,
 						FileRecordParentType.BOARDNODES
@@ -97,19 +96,20 @@ describe("usePreviewGenerator", () => {
 					const externalImageUrl = "https://test.de/my-article/image.jpg";
 					const elementId = "my-custom-mocked-id";
 					const error = new Error("upload failed");
-					const uploadFromUrlMock = jest.fn().mockRejectedValueOnce(error);
 
-					const { getFileRecord } = setupFileStorageApiMock({
-						uploadFromUrlMock,
-					});
+					const fileStorageApiMock =
+						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					jest
+						.spyOn(FileStorageApi, "useFileStorageApi")
+						.mockReturnValueOnce(fileStorageApiMock);
+					fileStorageApiMock.uploadFromUrl.mockRejectedValueOnce(error);
 
 					const { wrapper, composable } = getWrapper(elementId);
 
 					return {
 						wrapper,
 						composable,
-						getFileRecord,
-						uploadFromUrlMock,
+						fileStorageApiMock,
 						elementId,
 						externalImageUrl,
 						error,
@@ -129,22 +129,20 @@ describe("usePreviewGenerator", () => {
 				const setup = () => {
 					const externalImageUrl = "https://test.de/my-article/image.jpg";
 					const elementId = "my-custom-mocked-id";
-					const uploadFromUrlMock = jest.fn();
-					const getFileRecordMock = jest
-						.fn()
-						.mockReturnValueOnce(ref(undefined));
-					const { getFileRecord } = setupFileStorageApiMock({
-						uploadFromUrlMock,
-						getFileRecordMock,
-					});
+
+					const fileStorageApiMock =
+						createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+					jest
+						.spyOn(FileStorageApi, "useFileStorageApi")
+						.mockReturnValueOnce(fileStorageApiMock);
+					fileStorageApiMock.getFileRecordsByParentId.mockReturnValueOnce([]);
 
 					const { wrapper, composable } = getWrapper(elementId);
 
 					return {
 						wrapper,
 						composable,
-						getFileRecord,
-						uploadFromUrlMock,
+						fileStorageApiMock,
 						elementId,
 						externalImageUrl,
 					};

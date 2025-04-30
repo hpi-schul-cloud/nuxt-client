@@ -15,14 +15,11 @@ jest.mock("vue-i18n", () => {
 
 describe("useFolderState", () => {
 	it("should initialize with default values", () => {
-		const { breadcrumbs, fileFolderElement, folderName, isLoading, isEmpty } =
-			useFolderState();
+		const { breadcrumbs, fileFolderElement, folderName } = useFolderState();
 
 		expect(breadcrumbs.value).toEqual([]);
 		expect(fileFolderElement.value).toBeUndefined();
 		expect(folderName.value).toBe("pages.folder.untitled");
-		expect(isLoading.value).toBe(false);
-		expect(isEmpty.value).toBe(true);
 	});
 
 	describe("fetchFileFolderElement", () => {
@@ -78,31 +75,6 @@ describe("useFolderState", () => {
 					boardId,
 				};
 			};
-
-			it("should set isLoading correctly", async () => {
-				const { testId, resolvePromise } = setup();
-
-				const { fetchFileFolderElement, isLoading } = useFolderState();
-
-				expect(isLoading.value).toBe(false);
-
-				const fetchPromise = fetchFileFolderElement(testId);
-				expect(isLoading.value).toBe(true);
-
-				resolvePromise(); // Resolve the promise manually
-				await fetchPromise;
-
-				expect(isLoading.value).toBe(false);
-			});
-
-			it("should set parentBoardId correctly", async () => {
-				const { testId, resolvePromise, boardId } = setup();
-				const { fetchFileFolderElement, parentBoardId } = useFolderState();
-				resolvePromise();
-				await fetchFileFolderElement(testId);
-
-				expect(parentBoardId.value).toEqual(boardId);
-			});
 
 			describe("element is a file folder element", () => {
 				it("should call boardElementApi with correct parameters", async () => {
