@@ -90,6 +90,15 @@ describe("useFolderState", () => {
 					).toHaveBeenCalledWith(testId);
 					resolvePromise(); // Resolve the promise manually
 				});
+
+				it("should set parentBoardId correctly", async () => {
+					const { testId, resolvePromise, boardId } = setup();
+					const { fetchFileFolderElement, parentBoardId } = useFolderState();
+					resolvePromise();
+					await fetchFileFolderElement(testId);
+
+					expect(parentBoardId.value).toEqual(boardId);
+				});
 			});
 
 			describe("when element is not a file folder element", () => {
