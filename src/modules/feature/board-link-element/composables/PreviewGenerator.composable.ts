@@ -3,10 +3,11 @@ import {
 	convertDownloadToPreviewUrl,
 	isPreviewPossible,
 } from "@/utils/fileHelper";
-import { useFileStorageApi } from "@feature-board-file-element";
+import { useFileStorageApi } from "@data-file";
+import { computed } from "vue";
 
 export const usePreviewGenerator = (elementId: string) => {
-	const { getFileRecord, uploadFromUrl } = useFileStorageApi();
+	const { getFileRecordsByParentId, uploadFromUrl } = useFileStorageApi();
 
 	const createPreviewImage = async (
 		externalImageUrl: string
@@ -17,7 +18,7 @@ export const usePreviewGenerator = (elementId: string) => {
 			FileRecordParentType.BOARDNODES
 		);
 
-		const fileRecord = getFileRecord(elementId);
+		const fileRecord = computed(() => getFileRecordsByParentId(elementId)[0]);
 
 		if (
 			fileRecord.value?.previewStatus &&

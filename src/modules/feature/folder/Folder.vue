@@ -13,21 +13,36 @@
 				<FolderMenu :folder-name="folderName" @delete="onDelete" />
 			</div>
 		</template>
-		<FolderDetails :is-loading="isLoading" :is-empty="isEmpty" />
+		<FileTable
+			:is-loading="isLoading"
+			:is-empty="isEmpty"
+			:file-records="fileRecords"
+			:upload-progress="uploadProgress"
+		/>
 	</DefaultWireframe>
 	<ConfirmationDialog />
+	<input
+		ref="fileInput"
+		type="file"
+		multiple
+		hidden
+		data-testid="input-folder-fileupload"
+		aria-hidden="true"
+	/>
 </template>
 
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import router from "@/router";
+import { FileRecordParent } from "@/types/file/File";
 import { useBoardApi } from "@data-board";
+import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
-import { onMounted } from "vue";
+import { computed, onMounted, ref, toRef } from "vue";
 import { useI18n } from "vue-i18n";
-import FolderDetails from "./FolderDetails.vue";
+import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
 
 const boardApi = useBoardApi();
@@ -41,14 +56,13 @@ const props = defineProps({
 	},
 });
 
-const {
-	breadcrumbs,
-	folderName,
-	fetchFileFolderElement,
-	isLoading,
-	isEmpty,
-	parentNodeInfos,
-} = useFolderState();
+const { breadcrumbs, folderName, fetchFileFolderElement, parentNodeInfos } =
+	useFolderState();
+const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
+
+const folderId = toRef(props, "folderId");
+const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
+const fileInput = ref<HTMLInputElement | null>(null);
 
 const fabAction = {
 	icon: mdiPlus,
@@ -57,8 +71,27 @@ const fabAction = {
 	dataTestId: "fab-add-files",
 };
 
+const uploadProgress = ref({
+	uploaded: 0,
+	total: 0,
+});
+const isLoading = ref(true);
+const isEmpty = computed(() => fileRecords.value.length === 0);
+
 const fabClickHandler = () => {
-	// Handle FAB click logic here
+	if (fileInput.value) {
+		fileInput.value.click();
+	}
+};
+
+const uploadFiles = async (files: File[]) => {
+	await Promise.all(
+		files.map(async (file) => {
+			await upload(file, props.folderId, FileRecordParent.BOARDNODES);
+
+			uploadProgress.value.uploaded += 1;
+		})
+	);
 };
 
 const onDelete = async (confirmation: Promise<boolean>) => {
@@ -73,6 +106,24 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 };
 
 onMounted(async () => {
+	if (fileInput.value) {
+		fileInput.value.addEventListener("change", async (event) => {
+			const files = (event.target as HTMLInputElement).files;
+
+			if (files) {
+				const fileArray = Array.from(files);
+				uploadProgress.value.total = fileArray.length;
+
+				await uploadFiles(fileArray);
+
+				uploadProgress.value.total = 0;
+				uploadProgress.value.uploaded = 0;
+			}
+		});
+	}
+
 	await fetchFileFolderElement(props.folderId);
+	await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
+	isLoading.value = false;
 });
 </script>
