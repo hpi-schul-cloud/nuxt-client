@@ -8085,6 +8085,19 @@ export interface RoomDetailsResponse {
 /**
  * 
  * @export
+ * @interface RoomInvitationLinkError
+ */
+export interface RoomInvitationLinkError {
+    /**
+     * 
+     * @type {RoomInvitationLinkValidationError}
+     * @memberof RoomInvitationLinkError
+     */
+    error: RoomInvitationLinkValidationError;
+}
+/**
+ * 
+ * @export
  * @interface RoomInvitationLinkListResponse
  */
 export interface RoomInvitationLinkListResponse {
@@ -8156,6 +8169,19 @@ export interface RoomInvitationLinkResponse {
      */
     creatorSchoolId: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum RoomInvitationLinkValidationError {
+    Expired = 'EXPIRED',
+    OnlyForTeachers = 'ONLY_FOR_TEACHERS',
+    RestrictedToCreatorSchool = 'RESTRICTED_TO_CREATOR_SCHOOL',
+    AlreadyMember = 'ALREADY_MEMBER',
+    CantInviteStudentsFromOtherSchool = 'CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL'
+}
+
 /**
  * 
  * @export
