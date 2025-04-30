@@ -1933,7 +1933,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Відображається в огляді посилань",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
-		"Посилання дійсне лише для користувачів наступної школи",
+		"Посилання дійсне лише для користувачів наступної школи:",
 	"pages.rooms.members.inviteMember.form.validForStudents.label":
 		"Посилання також дійсне для студентів",
 	"pages.rooms.members.inviteMember.form.linkExpires.label":

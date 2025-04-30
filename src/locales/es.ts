@@ -1961,7 +1961,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Se muestra en el resumen del enlace",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
-		"Enlace sólo válido para usuarios de la siguiente escuela",
+		"Enlace sólo válido para usuarios de la siguiente escuela:",
 	"pages.rooms.members.inviteMember.form.validForStudents.label":
 		"Enlace válido también para estudiantes",
 	"pages.rooms.members.inviteMember.form.linkExpires.label":

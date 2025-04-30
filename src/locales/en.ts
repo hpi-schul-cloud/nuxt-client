@@ -1901,7 +1901,7 @@ export default {
 	"pages.rooms.members.inviteMember.form.description.hint":
 		"Is displayed in the link overview",
 	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
-		"Link only valid for users of the following school",
+		"Link only valid for users of the following school:",
 	"pages.rooms.members.inviteMember.form.validForStudents.label":
 		"Link also valid for students",
 	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link expires on",

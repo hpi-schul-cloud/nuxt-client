@@ -4,7 +4,6 @@
 		:width="xs ? 'auto' : 480"
 		data-testid="dialog-invite-participants"
 		max-width="480"
-		persistent
 		@keydown.esc="onClose"
 	>
 		<v-card ref="inviteMembersContent">
@@ -24,7 +23,7 @@
 						{{ t("pages.rooms.members.inviteMember.infoAlert.text") }}
 					</InfoAlert>
 
-					<div class="mt-4">
+					<div class="mt-5">
 						<v-text-field
 							v-model="formData.title"
 							class="mb-2"
@@ -49,7 +48,7 @@
 										)
 									}}
 									<br />
-									[{{ schoolName }}]
+									{{ schoolName }}
 								</div>
 							</template>
 						</v-checkbox>
@@ -83,7 +82,7 @@
 								:min-date="new Date().toString()"
 								class="mr-2 mt-2"
 								data-testid="date-picker-until"
-								style="max-width: 120px"
+								max-width="110px"
 								@click.prevent="pause"
 								@keydown.space.enter.prevent="pause"
 								@update:date="onUpdateValidDate"
@@ -101,7 +100,11 @@
 										keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label"
 										scope="global"
 									>
-										<a href="#" target="_blank" rel="noopener">
+										<a
+											:href="moreInformationLink"
+											target="_blank"
+											rel="noopener"
+										>
 											{{ t("pages.rooms.members.infoText.moreInformation") }}
 										</a>
 									</i18n-t>
@@ -201,11 +204,11 @@ onMounted(() => {
 
 const defaultFormData = {
 	title: "",
-	restrictedToCreatorSchool: false,
+	restrictedToCreatorSchool: true,
 	isAlsoForStudents: false,
 	activeUntil: false,
 	activeUntilDate: new Date(),
-	requiresConfirmation: false,
+	requiresConfirmation: true,
 };
 
 const formData = ref({ ...defaultFormData });
@@ -268,4 +271,7 @@ watch(
 		}
 	}
 );
+
+const moreInformationLink =
+	"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=381583517";
 </script>
