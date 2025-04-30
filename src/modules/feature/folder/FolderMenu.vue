@@ -29,4 +29,6 @@ const { t } = useI18n();
 defineProps({
 	folderName: { type: String, required: false, default: undefined },
 });
+
+defineEmits(["delete"]);
 </script>
