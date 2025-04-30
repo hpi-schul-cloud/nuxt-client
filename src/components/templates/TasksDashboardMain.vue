@@ -5,7 +5,7 @@
 		:fab-items="fabItems"
 	>
 		<template #header>
-			<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
+			<h1 class="text-h3 mb-4">{{ $t("common.words.tasks") }}</h1>
 			<div v-if="showSubstituteFilter">
 				<v-switch
 					v-model="isSubstituteFilterEnabled"
@@ -18,7 +18,6 @@
 					:true-icon="mdiCheck"
 				/>
 			</div>
-			<div v-else class="substitute-filter-placeholder" />
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="tab" class="tabs-max-width" grow>
 					<v-tab :value="tabRoutes[0]">
@@ -373,10 +372,6 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
 
-.substitute-filter-placeholder {
-	min-height: 46px;
-}
-
 .content-max-width {
 	max-width: var(--size-content-width-max);
 }
@@ -408,5 +403,10 @@ export default {
 
 :deep(.v-expansion-panel::after) {
 	border: none;
+}
+
+// don´t show breadcrumb placeholder for tasks
+:deep(.breadcrumbs-placeholder) {
+	height: 0;
 }
 </style>
