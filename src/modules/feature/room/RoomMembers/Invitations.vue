@@ -25,7 +25,10 @@
 	>
 </template>
 <script setup lang="ts">
-import { useRoomInvitationLinkStore } from "@data-room";
+import {
+	useRoomInvitationLinkStore,
+	RoomInvitationLinkValidationError,
+} from "@data-room";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 
@@ -57,7 +60,15 @@ const onClickRemove = (linkId: string) => {
 };
 
 const onClickUse = async (linkId: string) => {
-	await roomInvitationLinkStore.useLink(linkId);
+	const { roomId, message } = await roomInvitationLinkStore.useLink(linkId);
+	if (roomId) {
+		window.alert("redirect to room: " + roomId);
+		return;
+	}
+
+	if (message === RoomInvitationLinkValidationError.Expired) {
+		window.alert(t("pages.rooms.invitationlinks.error.expired"));
+	}
 };
 
 const onClickUpdate = (linkId: string) => {
