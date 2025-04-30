@@ -4,17 +4,12 @@ function calculateViewportOffsetTop(): number {
 	const documentStyle = window.getComputedStyle(document.documentElement);
 
 	const topbarHeight = documentStyle.getPropertyValue("--topbar-height");
-	const breadcrumbsHeight = documentStyle.getPropertyValue(
-		"--breadcrumbs-height"
-	);
-	const boardHeaderHeight = documentStyle.getPropertyValue(
-		"--board-header-height"
-	);
 
-	const staticOffsetTop =
-		parseInt(topbarHeight) +
-		parseInt(breadcrumbsHeight) +
-		parseInt(boardHeaderHeight);
+	const wireframeHeader = document.getElementsByClassName(
+		"wireframe-header"
+	)[0] as HTMLElement;
+
+	const staticOffsetTop = parseInt(topbarHeight) + wireframeHeader.offsetHeight;
 
 	const currentColumnHeader = document.getElementsByClassName(
 		"board-column-header"
