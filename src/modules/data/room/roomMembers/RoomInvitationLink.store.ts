@@ -1,4 +1,9 @@
-import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
+import { extractErrorData } from "@util-axios-error";
+import {
+	RoomApiFactory,
+	RoomInvitationLinkApiFactory,
+	RoomInvitationLinkValidationError,
+} from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
@@ -103,8 +108,13 @@ export const useRoomInvitationLinkStore = defineStore(
 			try {
 				const response = await api.roomInvitationLinkControllerUseLink(linkId);
 				return response.data;
-			} catch {
-				showFailure(t("pages.rooms.invitationlinks.error.use"));
+			} catch (err) {
+				const { message } = extractErrorData(err);
+				if (message === RoomInvitationLinkValidationError.AlreadyMember) {
+					showFailure(t("pages.rooms.invitationlinks.error.alreadyMember"));
+				} else {
+					showFailure(t("pages.rooms.invitationlinks.error.use"));
+				}
 			}
 		};
 

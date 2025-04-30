@@ -18,6 +18,7 @@ import { createPinia, setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
 import { RoomInvitationLink, UpdateRoomInvitationLinkDto } from "./types";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
+import { createAxiosError } from "@util-axios-error";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -205,7 +206,7 @@ describe("useRoomInvitationLinkStore", () => {
 
 			expect(
 				roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLinks
-			).toHaveBeenCalledWith(secondLink.id);
+			).toHaveBeenCalledWith([secondLink.id]);
 			expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(2);
 		});
 
@@ -262,8 +263,9 @@ describe("useRoomInvitationLinkStore", () => {
 			it("should show a failure message", async () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
+				const axiosError = createAxiosError();
 				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockRejectedValue(
-					new Error("API error")
+					axiosError
 				);
 
 				const firstLink = links[0];
