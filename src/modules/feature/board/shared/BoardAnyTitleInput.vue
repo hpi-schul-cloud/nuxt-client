@@ -3,13 +3,13 @@
 		<VTextarea
 			ref="titleInput"
 			v-model="modelValue"
-			class="title-input"
+			class="title"
 			:class="scope === 'board' ? 'board-title-input' : 'other-title-input'"
 			hide-details="auto"
 			variant="plain"
+			density="compact"
 			rows="1"
 			auto-grow
-			density="compact"
 			:placeholder="t('components.cardElement.titleElement.placeholder')"
 			:autofocus="internalIsFocused"
 			:maxlength="maxLength"
@@ -19,8 +19,8 @@
 	</template>
 	<template v-else>
 		<component
-			:is="`h${ariaLevel}`"
-			class="title-input"
+			:is="`h${headingLevel}`"
+			class="title"
 			:class="scope === 'board' ? 'board-title' : 'other-title'"
 		>
 			{{ modelValue }}
@@ -152,7 +152,7 @@ export default defineComponent({
 			() => props.value !== "" && !!props.value
 		);
 
-		const ariaLevel = computed(() => {
+		const headingLevel = computed(() => {
 			switch (props.scope) {
 				case "column":
 					return 2;
@@ -177,7 +177,7 @@ export default defineComponent({
 
 		return {
 			t,
-			ariaLevel,
+			headingLevel,
 			modelValue,
 			hasValue,
 			onEnter,
@@ -193,7 +193,7 @@ export default defineComponent({
 <style scoped lang="scss">
 @import "@/styles/settings.scss";
 
-.title-input {
+.title {
 	cursor: pointer;
 	white-space: pre-wrap;
 	min-width: 100px;
