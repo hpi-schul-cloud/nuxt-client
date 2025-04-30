@@ -2,7 +2,7 @@
 	<DefaultWireframe max-width="nativ" :breadcrumbs="breadcrumbs">
 		<template #header>
 			<h1 class="text-h3 mb-4" data-testid="page-title">
-				{{ t("pages.roomInvitationLinkStatus.title") }}
+				{{ t("pages.rooms.invitationLinkStatus.title") }}
 			</h1>
 		</template>
 		<div v-if="isLoading" class="w-100 text-center">
@@ -17,7 +17,7 @@
 			<img
 				:src="CrossedHandsBirdSvg"
 				role="presentation"
-				alt="t('pages.roomInvitationLinkStatus.image.alt')"
+				alt="t('pages.rooms.invitationLinkStatus.image.alt')"
 			/>
 			<div class="text-h2">
 				{{ infoMessage }}
@@ -34,31 +34,39 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-// import { RoomInvitationLinkValidationError } from "./WIPenums";
-// import { useRouter } from "vue-router";
+// import { useRoute } from "vue-router";
+import { useRoomInvitationLinkStore } from "@data-room";
+import { RoomInvitationLinkValidationError } from "./WIP_enums";
+import { useRouter } from "vue-router";
 
 const { t } = useI18n();
 
 const infoMessage = ref("");
 const isLoading = ref(true);
-// const router = useRouter();
-/* const route = useRoute();
 
-const linkId = route.params.id as string; */
-// const { roomId } = invitationLinkStatusStore();
+const router = useRouter();
+// const route = useRoute();
+
+const roomInvitationLinkStore = useRoomInvitationLinkStore();
+const { useLink } = roomInvitationLinkStore;
+
+const linkId = "5fa2c58a2f58ccafc23288f5"; // route.params.id as string;
 
 const checkInvitationLinkStatus = async () => {
-	// const { status, roomId } = await invitationLinkStatusStore.useLink(linkId);
-
-	//determineStatus(status)
-	infoMessage.value = t("pages.roomInvitationLinkStatus.title");
-	setTimeout(() => {
-		isLoading.value = false;
-	}, 2000);
+	const message = (await useLink(linkId)) as unknown as string;
+	/*
+	if (message === "room-id") {
+		router.push({path: `/rooms/${message}`});
+		// isLoading.value = false; necessary or does vue solve that by itself???
+		return;
+	}
+	*/
+	determineStatus(message);
+	isLoading.value = false;
 };
 
 const pageTitle = computed(() =>
-	buildPageTitle(`${t("pages.roomInvitationLinkStatus.title")}`)
+	buildPageTitle(`${t("pages.rooms.invitationLinkStatus.title")}`)
 );
 useTitle(pageTitle);
 
@@ -68,7 +76,7 @@ const breadcrumbs: Breadcrumb[] = [
 		to: "/rooms",
 	},
 	{
-		title: t("pages.roomInvitationLinkStatus.title"),
+		title: t("pages.rooms.invitationLinkStatus.title"),
 		disabled: true,
 	},
 ];
@@ -77,34 +85,32 @@ onMounted(() => {
 	checkInvitationLinkStatus();
 });
 
-/* const isInvalidRequestError = (error: unknown): boolean => {
-	const apiError = error as ApiResponseError;
-	return apiError.code === 400;
-}; */
-
-/* const determineStatus = (status: string) => {
+const determineStatus = (status: string) => {
 	switch (status) {
 		case RoomInvitationLinkValidationError.ALREADY_MEMBER:
 			router.push({ name: "rooms" });
 			break;
 		case RoomInvitationLinkValidationError.CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL:
 			infoMessage.value = t(
-				"pages.roomInvitationLinkStatus.cantInviteStudents"
+				"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool"
 			);
 			break;
 		case RoomInvitationLinkValidationError.EXPIRED:
-			infoMessage.value = t("pages.roomInvitationLinkStatus.expired");
+			infoMessage.value = t("pages.rooms.invitationLinkStatus.expired");
 			break;
 		case RoomInvitationLinkValidationError.ONLY_FOR_TEACHERS:
-			infoMessage.value = t("pages.roomInvitationLinkStatus.onlyForTeachers");
+			infoMessage.value = t("pages.rooms.invitationLinkStatus.onlyForTeachers");
 			break;
 		case RoomInvitationLinkValidationError.RESTRICTED_TO_CREATOR_SCHOOL:
 			infoMessage.value = t(
-				"pages.roomInvitationLinkStatus.restrictedToCreator"
+				"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool"
 			);
 			break;
+		default:
+			infoMessage.value = t("pages.rooms.invitationLinkStatus.notFound");
+			break;
 	}
-}; */
+};
 </script>
 
 <style lang="scss" scoped>

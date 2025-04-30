@@ -311,14 +311,20 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 			boardId: route.params.id,
 		}),
 	},
-	{
-		path: `/room-invitation-links/:id(${REGEX_ID})`,
+	/* 		{
+		path: `/rooms/invitation-link/:id(${REGEX_ID})`,
 		component: async () =>
 			(await import("@page-room")).RoomInvitationLinkStatusPage,
-		name: "room-invitation-link-id",
+		name: "rooms-invitation-link-id",
 		props: (route: RouteLocationNormalized) => ({
 			invitationLinkId: route.params.id,
 		}),
+	}, */
+	{
+		path: "/rooms/invitation-link",
+		component: async () =>
+			(await import("@page-room")).RoomInvitationLinkStatusPage,
+		name: "rooms-invitation-link-id",
 	},
 	{
 		path: "/tasks",

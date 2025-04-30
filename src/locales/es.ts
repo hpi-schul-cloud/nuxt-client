@@ -1746,8 +1746,6 @@ export default {
 	"pages.news.new.create": "Crear",
 	"pages.news.new.title": "Crear noticias",
 	"pages.news.title": "Noticias",
-	"pages.roomInvitationLinkStatus.image.alt": "Pájaro con alas plegadas",
-	"pages.roomInvitationLinkStatus.title": "Enlace de invitación",
 	"pages.room.boardCard.label.columnBoard": "Tablero de columna",
 	"pages.room.boardCard.label.courseBoard": "Junta del curso",
 	"pages.room.boardCard.label.listBoard": "Tablero de listas",
@@ -1797,6 +1795,18 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Sincronizado",
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
 	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
+	"pages.rooms.invitationLinkStatus.image.alt": "Pájaro con alas plegadas",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Lamentablemente, el enlace de invitación sólo es válido para los alumnos de la escuela «XYZ»",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Lamentablemente, el enlace de invitación ya no es válido",
+	"pages.rooms.invitationLinkStatus.notFound":
+		"Lamentablemente, el enlace de invitación no existe",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Lamentablemente, el enlace de invitación sólo es válido para los usuarios de la escuela «XYZ»",
+	"pages.rooms.invitationLinkStatus.title": "Enlace de invitación",
 	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.rooms.menuItems.startSync": "Iniciar sincronización",
 	"pages.rooms.importCourse.btn.continue": "Continuar",

@@ -1696,8 +1696,6 @@ export default {
 	"pages.news.new.create": "Create",
 	"pages.news.new.title": "Create News",
 	"pages.news.title": "News",
-	"pages.roomInvitationLinkStatus.image.alt": "Bird with crossed wings",
-	"pages.roomInvitationLinkStatus.title": "Invitation link",
 	"pages.room.boardCard.label.columnBoard": "Column Board",
 	"pages.room.boardCard.label.courseBoard": "Course Board",
 	"pages.room.boardCard.label.listBoard": "List Board",
@@ -1746,6 +1744,18 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronized",
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
 	"pages.rooms.headerSection.toCourseFiles": "To the course files",
+	"pages.rooms.invitationLinkStatus.image.alt": "Bird with crossed wings",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"The invitation link is unfortunately only valid for students of the school “XYZ”",
+	"pages.rooms.invitationLinkStatus.expired":
+		"The invitation link is unfortunately no longer valid",
+	"pages.rooms.invitationLinkStatus.notFound":
+		"Unfortunately the invitation link does not exist",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"The invitation link is unfortunately only valid for teachers",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"The invitation link is unfortunately only valid for users of the school “XYZ”",
+	"pages.rooms.invitationLinkStatus.title": "Invitation link",
 	"pages.rooms.menuItems.endSync": "End synchronization",
 	"pages.rooms.menuItems.startSync": "Start synchronization",
 	"pages.rooms.importCourse.btn.continue": "Continue",

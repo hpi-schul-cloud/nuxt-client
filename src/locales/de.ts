@@ -1721,8 +1721,6 @@ export default {
 	"pages.news.new.create": "Erstellen",
 	"pages.news.new.title": "Erstelle eine Neuigkeit",
 	"pages.news.title": "Neuigkeiten",
-	"pages.roomInvitationLinkStatus.image.alt": "Vogel mit verschränkten Flügeln",
-	"pages.roomInvitationLinkStatus.title": "Einladungslink",
 	"pages.room.boardCard.label.columnBoard": "Bereich {'|'} mehrspaltig",
 	"pages.room.boardCard.label.courseBoard": "Kurs-Bereich",
 	"pages.room.boardCard.label.listBoard": "Bereich {'|'} einspaltig",
@@ -1775,6 +1773,19 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronisiert",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
 	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
+	"pages.rooms.invitationLinkStatus.image.alt":
+		"Vogel mit verschränkten Flügeln",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Der Einladungslink ist leider nur für Lernende der Schule “XYZ” gültig",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Der Einladungslink ist leider nicht mehr gültig",
+	"pages.rooms.invitationLinkStatus.notFound":
+		"Der Einladungslink existiert leider nicht",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Der Einladungslink ist leider nur für Lernbegleitungen gültig",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Der Einladungslink ist leider nur für Nutzende der Schule “XYZ” gültig",
+	"pages.rooms.invitationLinkStatus.title": "Einladungslink",
 	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.menuItems.startSync": "Synchronisation starten",
 	"pages.rooms.importCourse.btn.continue": "Weiter",

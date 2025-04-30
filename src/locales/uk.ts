@@ -1728,8 +1728,6 @@ export default {
 	"pages.news.new.create": "Створити",
 	"pages.news.new.title": "Створити новини",
 	"pages.news.title": "Новини",
-	"pages.roomInvitationLinkStatus.image.alt": "Птах зі складеними крилами",
-	"pages.roomInvitationLinkStatus.title": "Посилання на запрошення",
 	"pages.room.boardCard.label.columnBoard": "Колонна дошка",
 	"pages.room.boardCard.label.courseBoard": "Дошка оголошень",
 	"pages.room.boardCard.label.listBoard": "Список дошки оголошень",
@@ -1778,6 +1776,18 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Синхронізовано",
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
 	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
+	"pages.rooms.invitationLinkStatus.image.alt": "Птах зі складеними крилами",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Посилання на запрошення, на жаль, дійсне лише для учнів школи «XYZ»",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Посилання на запрошення, на жаль, більше не дійсне",
+	"pages.rooms.invitationLinkStatus.notFound":
+		"На жаль, посилання на запрошення не існує",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Посилання на запрошення, на жаль, дійсне лише для вчителів",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Посилання на запрошення, на жаль, дійсне лише для користувачів школи «XYZ»",
+	"pages.rooms.invitationLinkStatus.title": "Посилання на запрошення",
 	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
 	"pages.rooms.menuItems.startSync": "Почніть синхронізацію",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",
