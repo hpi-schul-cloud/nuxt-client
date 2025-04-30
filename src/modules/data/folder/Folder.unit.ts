@@ -247,11 +247,7 @@ describe("useFolderState", () => {
 
 					await fetchFileFolderElement(testId);
 
-					try {
-						const _breadcrumbs = breadcrumbs.value;
-					} catch (error) {
-						expect(error).toEqual(userError);
-					}
+					expect(() => breadcrumbs.value).toThrow(userError);
 				});
 			});
 		});
