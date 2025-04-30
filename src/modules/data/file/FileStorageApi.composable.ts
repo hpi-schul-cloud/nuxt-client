@@ -1,16 +1,14 @@
 import {
 	FileApiFactory,
 	FileApiInterface,
-	FileRecordParentType,
-	FileRecordResponse,
 	FileUrlParams,
 	RenameFileParams,
 	StorageLocation,
 } from "@/fileStorageApi/v3";
 import { authModule } from "@/store/store-accessor";
+import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
-import { createTestableGlobaleState } from "@/utils/create-global-state";
-import { Ref, ref } from "vue";
+import { useFileRecordsStore } from "./FileRecords.state";
 import { useFileStorageNotifier } from "./FileStorageNotifications.composable";
 
 export enum ErrorType {
@@ -24,9 +22,8 @@ export enum ErrorType {
 	Forbidden = "Forbidden",
 }
 
-const fileStorageApi = () => {
+export const useFileStorageApi = () => {
 	const fileApi: FileApiInterface = FileApiFactory(undefined, "/v3", $axios);
-	const fileRecords = new Map<string, Ref<FileRecordResponse | undefined>>();
 	const {
 		showFileTooBigError,
 		showForbiddenError,
@@ -35,22 +32,11 @@ const fileStorageApi = () => {
 		showFileExistsError,
 	} = useFileStorageNotifier();
 
-	const getFileRecord = (id: string) => {
-		const existingFileRecord = fileRecords.get(id);
-		const skeletonFileRecord = ref(undefined);
+	const { getFileRecordsByParentId, upsertFileRecords } = useFileRecordsStore();
 
-		if (!existingFileRecord) {
-			fileRecords.set(id, skeletonFileRecord);
-		}
-
-		const returnValue = existingFileRecord ?? skeletonFileRecord;
-
-		return returnValue;
-	};
-
-	const fetchFile = async (
+	const fetchFiles = async (
 		parentId: string,
-		parentType: FileRecordParentType
+		parentType: FileRecordParent
 	): Promise<void> => {
 		try {
 			const schoolId = authModule.getSchool?.id as string;
@@ -61,7 +47,7 @@ const fileStorageApi = () => {
 				parentType
 			);
 
-			updateOrAddFileRecord(parentId, response.data.data[0]);
+			upsertFileRecords(response.data.data);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -71,7 +57,7 @@ const fileStorageApi = () => {
 	const upload = async (
 		file: File,
 		parentId: string,
-		parentType: FileRecordParentType
+		parentType: FileRecordParent
 	): Promise<void> => {
 		try {
 			const schoolId = authModule.getSchool?.id as string;
@@ -82,8 +68,7 @@ const fileStorageApi = () => {
 				parentType,
 				file
 			);
-
-			updateOrAddFileRecord(parentId, response.data);
+			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -93,7 +78,7 @@ const fileStorageApi = () => {
 	const uploadFromUrl = async (
 		imageUrl: string,
 		parentId: string,
-		parentType: FileRecordParentType
+		parentType: FileRecordParent
 	): Promise<void> => {
 		try {
 			const { pathname } = new URL(imageUrl);
@@ -112,34 +97,21 @@ const fileStorageApi = () => {
 				fileUrlParams
 			);
 
-			updateOrAddFileRecord(parentId, response.data);
+			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
 			throw error;
 		}
 	};
 
-	const updateOrAddFileRecord = (
-		parentId: string,
-		filerecord: FileRecordResponse
-	) => {
-		const existingFileRecord = fileRecords.get(parentId);
-
-		if (existingFileRecord) {
-			existingFileRecord.value = filerecord;
-		} else {
-			fileRecords.set(parentId, ref(filerecord));
-		}
-	};
-
 	const rename = async (
-		fileRecordId: FileRecordResponse["id"],
+		fileRecordId: FileRecord["id"],
 		params: RenameFileParams
 	): Promise<void> => {
 		try {
 			const response = await fileApi.patchFilename(fileRecordId, params);
 
-			updateOrAddFileRecord(response.data.parentId, response.data);
+			upsertFileRecords([response.data]);
 		} catch (error) {
 			showError(error);
 			throw error;
@@ -174,12 +146,10 @@ const fileStorageApi = () => {
 	};
 
 	return {
-		fetchFile,
+		fetchFiles,
 		rename,
 		upload,
 		uploadFromUrl,
-		getFileRecord,
+		getFileRecordsByParentId,
 	};
 };
-
-export const useFileStorageApi = createTestableGlobaleState(fileStorageApi);
