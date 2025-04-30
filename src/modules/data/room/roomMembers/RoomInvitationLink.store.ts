@@ -1,9 +1,5 @@
 import { extractErrorData } from "@util-axios-error";
-import {
-	RoomApiFactory,
-	RoomInvitationLinkApiFactory,
-	RoomInvitationLinkValidationError,
-} from "@/serverApi/v3";
+import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
