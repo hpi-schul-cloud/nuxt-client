@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex align-start board-header mb-3">
+	<div class="d-flex align-start board-header mb-6">
 		<InlineEditInteractionHandler
 			:id="boardId"
 			class="input-container"
