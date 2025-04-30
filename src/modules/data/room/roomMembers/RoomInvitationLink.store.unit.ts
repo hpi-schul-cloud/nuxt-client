@@ -13,12 +13,13 @@ import setupStores from "@@/tests/test-utils/setupStores";
 import { useRoomDetailsStore, useRoomInvitationLinkStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
-import { AxiosInstance } from "axios";
+import { AxiosInstance, AxiosPromise } from "axios";
 import { createPinia, setActivePinia } from "pinia";
 import { useI18n } from "vue-i18n";
 import { RoomInvitationLink, UpdateRoomInvitationLinkDto } from "./types";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { createAxiosError } from "@util-axios-error";
+import { RoomIdResponse } from "@/serverApi/v3/api";
 
 jest.mock("vue-i18n");
 (useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
@@ -259,22 +260,39 @@ describe("useRoomInvitationLinkStore", () => {
 			).toHaveBeenCalledWith(firstLink.id);
 		});
 
-		describe("when the API call fails", () => {
-			it("should show a failure message", async () => {
+		describe("when the API call succeeds", () => {
+			it("should return the roomId", async () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
-				const axiosError = createAxiosError();
+				const roomId = "some-id";
+				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockResolvedValue(
+					{ data: { id: roomId } } as unknown as AxiosPromise<RoomIdResponse>
+				);
+				const firstLink = links[0];
+
+				const result = await roomInvitationLinkStore.useLink(firstLink.id);
+
+				expect(result.roomId).toBe(roomId);
+			});
+		});
+
+		describe("when the API call fails", () => {
+			it("should return the failure message", async () => {
+				const links = roomInvitationLinkFactory.buildList(3);
+				const { roomInvitationLinkStore } = setup(links);
+				const message = serverApi.RoomInvitationLinkValidationError.Expired;
+				const axiosError = createAxiosError({
+					message,
+				});
 				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockRejectedValue(
 					axiosError
 				);
 
 				const firstLink = links[0];
 
-				await roomInvitationLinkStore.useLink(firstLink.id);
+				const result = await roomInvitationLinkStore.useLink(firstLink.id);
 
-				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
-					"pages.rooms.invitationlinks.error.use"
-				);
+				expect(result.message).toBe(message);
 			});
 		});
 	});
