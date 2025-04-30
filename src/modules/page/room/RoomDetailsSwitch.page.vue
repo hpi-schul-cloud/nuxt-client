@@ -23,7 +23,7 @@ import { RoomVariant, useRoomDetailsStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { computed, onUnmounted, watch } from "vue";
 import { useRoute } from "vue-router";
-import { useRoomAuthorization } from "@feature-room";
+import { useRoomAuthorization } from "@data-room";
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const route = useRoute();

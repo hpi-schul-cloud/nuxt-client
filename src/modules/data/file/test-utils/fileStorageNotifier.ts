@@ -1,4 +1,4 @@
-import { useFileStorageNotifier } from "../composables/FileStorageNotifications.composable";
+import { useFileStorageNotifier } from "../FileStorageNotifications.composable";
 
 interface Props {
 	showFileTooBigErrorMock?: () => void;

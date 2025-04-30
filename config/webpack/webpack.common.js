@@ -115,6 +115,7 @@ module.exports = {
 	resolve: {
 		alias: {
 			"@": path.resolve(__src),
+			"@data-file": path.resolve(__src, "modules/data/file"),
 			"@data-board": path.resolve(__src, "modules/data/board"),
 			"@data-external-tool": getDir("src/modules/data/external-tool"),
 			"@data-group": getDir("src/modules/data/group"),
@@ -172,12 +173,14 @@ module.exports = {
 			"@ui-breadcrumbs": getDir("src/modules/ui/breadcrumbs"),
 			"@ui-chip": getDir("src/modules/ui/chip"),
 			"@ui-confirmation-dialog": getDir("src/modules/ui/confirmation-dialog"),
+			"@ui-data-table": getDir("src/modules/ui/data-table"),
 			"@ui-date-time-picker": getDir("src/modules/ui/date-time-picker"),
 			"@ui-extended-icon-btn": getDir("src/modules/ui/extended-icon-btn"),
 			"@ui-kebab-menu": getDir("src/modules/ui/kebab-menu"),
 			"@ui-layout": getDir("src/modules/ui/layout"),
 			"@ui-light-box": getDir("src/modules/ui/light-box"),
 			"@ui-line-clamp": getDir("src/modules/ui/line-clamp"),
+			"@ui-loading-state-dialog": getDir("src/modules/ui/loading-state-dialog"),
 			"@ui-preview-image": getDir("src/modules/ui/preview-image"),
 			"@ui-room-details": getDir("src/modules/ui/room-details"),
 			"@ui-skip-link": getDir("src/modules/ui/skip-link"),

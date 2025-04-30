@@ -63,6 +63,7 @@ import {
 	isPreviewPossible,
 } from "@/utils/fileHelper";
 import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useFileStorageApi } from "@data-file";
 import { BoardMenu, BoardMenuScope } from "@ui-board";
 import {
 	KebabMenuActionDelete,
@@ -80,7 +81,6 @@ import {
 } from "vue";
 import { useFileAlerts } from "./content/alert/useFileAlerts.composable";
 import FileContent from "./content/FileContent.vue";
-import { useFileStorageApi } from "./shared/composables/FileStorageApi.composable";
 import { FileAlert } from "./shared/types/FileAlert.enum";
 import FileUpload from "./upload/FileUpload.vue";
 
@@ -117,9 +117,12 @@ export default defineComponent({
 		useBoardFocusHandler(element.value.id, fileContentElement);
 
 		const { modelValue } = useContentElementState(props);
-		const { fetchFile, upload, getFileRecord } = useFileStorageApi();
+		const { fetchFiles, upload, getFileRecordsByParentId } =
+			useFileStorageApi();
 
-		const fileRecord = getFileRecord(element.value.id);
+		const fileRecord = computed(
+			() => getFileRecordsByParentId(element.value.id)[0]
+		);
 
 		const { alerts, addAlert } = useFileAlerts(fileRecord);
 
@@ -164,12 +167,12 @@ export default defineComponent({
 
 		watch(element.value, async () => {
 			isLoadingFileRecord.value = true;
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+			await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 			isLoadingFileRecord.value = false;
 		});
 
 		onMounted(async () => {
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+			await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 			isLoadingFileRecord.value = false;
 		});
 
@@ -190,7 +193,7 @@ export default defineComponent({
 		};
 
 		const onFetchFile = async (): Promise<void> => {
-			await fetchFile(element.value.id, FileRecordParentType.BOARDNODES);
+			await fetchFiles(element.value.id, FileRecordParentType.BOARDNODES);
 		};
 
 		const onUpdateAlternativeText = (value: string) => {
