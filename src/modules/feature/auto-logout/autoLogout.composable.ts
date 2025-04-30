@@ -1,3 +1,4 @@
+import { AlertPayload } from "@/store/types/alert-payload";
 import { computed, Ref, ref, watch } from "vue";
 import { authModule, envConfigModule, notifierModule } from "@/store";
 import { useI18n } from "vue-i18n";
@@ -19,24 +20,29 @@ export const useAutoLogout = () => {
 		envConfigModule.getEnv;
 
 	const defaultRemainingTime = JWT_TIMEOUT_SECONDS || 2 * 60 * 60;
-	const defaultShowWarningTime =
+	const DEFAULT_SHOW_WARNING_TIME =
 		JWT_SHOW_TIMEOUT_WARNING_SECONDS || 1 * 60 * 60;
 
-	let showWarningOnRemainingSeconds = defaultShowWarningTime;
 	let remainingTimeInSeconds = defaultRemainingTime;
+	let ttlCount = 0;
 
 	const remainingTimeInMinutes = computed(() =>
 		Math.max(Math.floor(remainingTimeInSeconds / 60), 0)
 	);
 
-	const checkTTL = async () => {
-		let ttlCount = 0;
-
-		if (ttlTimeoutPolling) {
-			return ttlCount;
+	const clearPollings = () => {
+		if (remainingTimePolling) {
+			clearInterval(remainingTimePolling);
+			remainingTimePolling = null;
 		}
+		if (ttlTimeoutPolling) {
+			clearTimeout(ttlTimeoutPolling);
+			ttlTimeoutPolling = null;
+		}
+	};
 
-		ttlTimeoutPolling = setTimeout(
+	const startTimeout = () => {
+		return setTimeout(
 			async () => {
 				retry++;
 				try {
@@ -55,7 +61,7 @@ export const useAutoLogout = () => {
 					return -1;
 				} finally {
 					if (ttlTimeoutPolling) {
-						clearInterval(ttlTimeoutPolling);
+						clearTimeout(ttlTimeoutPolling);
 						ttlTimeoutPolling = null;
 					}
 				}
@@ -64,17 +70,15 @@ export const useAutoLogout = () => {
 		);
 	};
 
-	const createSession = () => {
-		if (remainingTimePolling) {
-			clearInterval(remainingTimePolling);
-			remainingTimePolling = null;
-		}
-		if (ttlTimeoutPolling) {
-			clearTimeout(ttlTimeoutPolling);
-			ttlTimeoutPolling = null;
-		}
+	const checkTTL = async () => {
+		if (ttlTimeoutPolling) return ttlCount;
 
-		showWarningOnRemainingSeconds = defaultShowWarningTime;
+		ttlTimeoutPolling = startTimeout();
+	};
+
+	const createSession = () => {
+		clearPollings();
+
 		remainingTimeInSeconds = defaultRemainingTime;
 		if (showDialog.value) showDialog.value = false;
 		sessionStatus.value = null;
@@ -85,7 +89,7 @@ export const useAutoLogout = () => {
 		remainingTimePolling = setInterval(async () => {
 			remainingTimeInSeconds -= 1;
 
-			if (remainingTimeInSeconds <= showWarningOnRemainingSeconds) {
+			if (remainingTimeInSeconds <= DEFAULT_SHOW_WARNING_TIME) {
 				sessionStatus.value = null;
 				await checkTTL();
 			}
@@ -99,9 +103,9 @@ export const useAutoLogout = () => {
 	};
 
 	const extendSession = async () => {
-		clearTimeout(ttlTimeoutPolling!);
+		clearPollings();
+
 		if (sessionStatus.value === SessionStatus.Ended) {
-			clearInterval(remainingTimePolling!);
 			authModule.logout();
 			return;
 		}
@@ -111,15 +115,13 @@ export const useAutoLogout = () => {
 			const response = await $axios.get("/v1/accounts/jwtTimer");
 			const ttlCount = response.data.ttl;
 
-			if (ttlCount > remainingTimeInSeconds) {
-				remainingTimeInSeconds = ttlCount;
-				showDialog.value = false;
-				errorOnExtend.value = false;
-				isTTLUpdated.value = true;
+			remainingTimeInSeconds = ttlCount;
+			showDialog.value = false;
+			errorOnExtend.value = false;
+			isTTLUpdated.value = true;
 
-				createSession();
-				retry = 0;
-			}
+			createSession();
+			retry = 0;
 			sessionStatus.value = SessionStatus.Continued;
 		} catch {
 			errorOnExtend.value = true;
@@ -127,30 +129,29 @@ export const useAutoLogout = () => {
 		}
 	};
 
+	const notificationMap: Record<SessionStatus, AlertPayload> = {
+		[SessionStatus.Continued]: {
+			text: t("feature-autoLogout.message.success"),
+			status: "success",
+			timeout: 5000,
+		},
+		[SessionStatus.Error]: {
+			text: t("feature-autoLogout.message.error"),
+			status: "error",
+			timeout: 5000,
+		},
+		[SessionStatus.Ended]: {
+			text: t("feature-autoLogout.message.error.401"),
+			status: "error",
+			autoClose: false,
+		},
+	};
+
 	watch(
 		() => sessionStatus.value,
 		(newValue) => {
-			if (newValue === SessionStatus.Continued) {
-				notifierModule.show({
-					text: t("feature-autoLogout.message.success"),
-					status: "success",
-					timeout: 5000,
-				});
-			}
-			if (newValue === SessionStatus.Error) {
-				notifierModule.show({
-					text: t("feature-autoLogout.message.error"),
-					status: "error",
-					timeout: 5000,
-				});
-			}
-			if (newValue === SessionStatus.Ended) {
-				notifierModule.show({
-					text: t("feature-autoLogout.message.error.401"),
-					status: "error",
-					autoClose: false,
-				});
-			}
+			if (newValue === null) return;
+			notifierModule.show(notificationMap[newValue]);
 		}
 	);
 
@@ -171,7 +172,6 @@ export const useAutoLogout = () => {
 		remainingTimeInSeconds,
 		sessionStatus,
 		showDialog,
-		showWarningOnRemainingSeconds,
 		createSession,
 		extendSession,
 	};
