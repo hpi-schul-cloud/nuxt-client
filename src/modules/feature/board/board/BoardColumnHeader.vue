@@ -1,5 +1,5 @@
 <template>
-	<div ref="columnHeader" class="board-column-header mb-4 mt-2">
+	<div ref="columnHeader" class="board-column-header mb-4">
 		<div class="d-flex align-items-start">
 			<div class="flex-grow-1">
 				<BoardColumnInteractionHandler
