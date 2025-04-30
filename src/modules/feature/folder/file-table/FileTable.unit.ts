@@ -10,6 +10,7 @@ import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
 import FilePreview from "./FilePreview.vue";
 import FileTable from "./FileTable.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
+import { printDateFromStringUTC } from "@/plugins/datetime";
 
 describe("FileTable", () => {
 	const setupWrapper = (props: {
@@ -122,7 +123,7 @@ describe("FileTable", () => {
 				`[data-testid='created-at-${fileRecord.name}']`
 			);
 
-			const date = new Date(fileRecord.createdAt ?? "").toLocaleDateString();
+			const date = printDateFromStringUTC(fileRecord.createdAt);
 			expect(createdAt.text()).toContain(date);
 		});
 
