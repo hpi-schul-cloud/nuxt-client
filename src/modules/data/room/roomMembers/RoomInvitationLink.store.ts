@@ -1,4 +1,9 @@
-import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
+import { extractErrorData } from "@util-axios-error";
+import {
+	RoomApiFactory,
+	RoomInvitationLinkApiFactory,
+	RoomInvitationLinkValidationError,
+} from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
@@ -84,12 +89,15 @@ export const useRoomInvitationLinkStore = defineStore(
 			}
 		};
 
-		const deleteLink = async (linkId: string) => {
+		const deleteLinks = async (linkIds: string | string[]) => {
 			try {
-				await api.roomInvitationLinkControllerDeleteLink(linkId);
+				if (typeof linkIds === "string") {
+					linkIds = [linkIds];
+				}
+				await api.roomInvitationLinkControllerDeleteLinks(linkIds);
 
 				roomInvitationLinks.value = roomInvitationLinks.value.filter(
-					(link) => link.id !== linkId
+					(link) => !linkIds.includes(link.id)
 				);
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.delete"));
@@ -100,8 +108,13 @@ export const useRoomInvitationLinkStore = defineStore(
 			try {
 				const response = await api.roomInvitationLinkControllerUseLink(linkId);
 				return response.data;
-			} catch {
-				showFailure(t("pages.rooms.invitationlinks.error.use"));
+			} catch (err) {
+				const { message } = extractErrorData(err);
+				if (message === RoomInvitationLinkValidationError.AlreadyMember) {
+					showFailure(t("pages.rooms.invitationlinks.error.alreadyMember"));
+				} else {
+					showFailure(t("pages.rooms.invitationlinks.error.use"));
+				}
 			}
 		};
 
@@ -115,7 +128,7 @@ export const useRoomInvitationLinkStore = defineStore(
 			fetchLinks,
 			createLink,
 			updateLink,
-			deleteLink,
+			deleteLinks,
 			useLink,
 			roomInvitationLinks,
 			isLoading,

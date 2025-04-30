@@ -8085,6 +8085,19 @@ export interface RoomDetailsResponse {
 /**
  * 
  * @export
+ * @interface RoomInvitationLinkError
+ */
+export interface RoomInvitationLinkError {
+    /**
+     * 
+     * @type {RoomInvitationLinkValidationError}
+     * @memberof RoomInvitationLinkError
+     */
+    error: RoomInvitationLinkValidationError;
+}
+/**
+ * 
+ * @export
  * @interface RoomInvitationLinkListResponse
  */
 export interface RoomInvitationLinkListResponse {
@@ -8156,6 +8169,19 @@ export interface RoomInvitationLinkResponse {
      */
     creatorSchoolId: string;
 }
+/**
+ * 
+ * @export
+ * @enum {string}
+ */
+export enum RoomInvitationLinkValidationError {
+    Expired = 'EXPIRED',
+    OnlyForTeachers = 'ONLY_FOR_TEACHERS',
+    RestrictedToCreatorSchool = 'RESTRICTED_TO_CREATOR_SCHOOL',
+    AlreadyMember = 'ALREADY_MEMBER',
+    CantInviteStudentsFromOtherSchool = 'CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL'
+}
+
 /**
  * 
  * @export
@@ -22969,15 +22995,14 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
         /**
          * 
          * @summary Delete a room invitation link
-         * @param {string} roomInvitationLinkId 
+         * @param {Array<string>} roomInvitationLinkIds Array of room invitation link ids
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomInvitationLinkControllerDeleteLink: async (roomInvitationLinkId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'roomInvitationLinkId' is not null or undefined
-            assertParamExists('roomInvitationLinkControllerDeleteLink', 'roomInvitationLinkId', roomInvitationLinkId)
-            const localVarPath = `/room-invitation-links/{roomInvitationLinkId}`
-                .replace(`{${"roomInvitationLinkId"}}`, encodeURIComponent(String(roomInvitationLinkId)));
+        roomInvitationLinkControllerDeleteLinks: async (roomInvitationLinkIds: Array<string>, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'roomInvitationLinkIds' is not null or undefined
+            assertParamExists('roomInvitationLinkControllerDeleteLinks', 'roomInvitationLinkIds', roomInvitationLinkIds)
+            const localVarPath = `/room-invitation-links`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
             let baseOptions;
@@ -22992,6 +23017,10 @@ export const RoomInvitationLinkApiAxiosParamCreator = function (configuration?: 
             // authentication bearer required
             // http bearer authentication required
             await setBearerAuthToObject(localVarHeaderParameter, configuration)
+
+            if (roomInvitationLinkIds) {
+                localVarQueryParameter['roomInvitationLinkIds'] = roomInvitationLinkIds;
+            }
 
 
     
@@ -23110,12 +23139,12 @@ export const RoomInvitationLinkApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Delete a room invitation link
-         * @param {string} roomInvitationLinkId 
+         * @param {Array<string>} roomInvitationLinkIds Array of room invitation link ids
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomInvitationLinkControllerDeleteLink(roomInvitationLinkId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await localVarAxiosParamCreator.roomInvitationLinkControllerDeleteLink(roomInvitationLinkId, options);
+        async roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
         /**
@@ -23164,12 +23193,12 @@ export const RoomInvitationLinkApiFactory = function (configuration?: Configurat
         /**
          * 
          * @summary Delete a room invitation link
-         * @param {string} roomInvitationLinkId 
+         * @param {Array<string>} roomInvitationLinkIds Array of room invitation link ids
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomInvitationLinkControllerDeleteLink(roomInvitationLinkId: string, options?: any): AxiosPromise<void> {
-            return localVarFp.roomInvitationLinkControllerDeleteLink(roomInvitationLinkId, options).then((request) => request(axios, basePath));
+        roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: any): AxiosPromise<void> {
+            return localVarFp.roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -23214,12 +23243,12 @@ export interface RoomInvitationLinkApiInterface {
     /**
      * 
      * @summary Delete a room invitation link
-     * @param {string} roomInvitationLinkId 
+     * @param {Array<string>} roomInvitationLinkIds Array of room invitation link ids
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomInvitationLinkApiInterface
      */
-    roomInvitationLinkControllerDeleteLink(roomInvitationLinkId: string, options?: any): AxiosPromise<void>;
+    roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: any): AxiosPromise<void>;
 
     /**
      * 
@@ -23266,13 +23295,13 @@ export class RoomInvitationLinkApi extends BaseAPI implements RoomInvitationLink
     /**
      * 
      * @summary Delete a room invitation link
-     * @param {string} roomInvitationLinkId 
+     * @param {Array<string>} roomInvitationLinkIds Array of room invitation link ids
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RoomInvitationLinkApi
      */
-    public roomInvitationLinkControllerDeleteLink(roomInvitationLinkId: string, options?: any) {
-        return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerDeleteLink(roomInvitationLinkId, options).then((request) => request(this.axios, this.basePath));
+    public roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds: Array<string>, options?: any) {
+        return RoomInvitationLinkApiFp(this.configuration).roomInvitationLinkControllerDeleteLinks(roomInvitationLinkIds, options).then((request) => request(this.axios, this.basePath));
     }
 
     /**

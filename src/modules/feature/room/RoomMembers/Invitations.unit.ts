@@ -74,7 +74,7 @@ describe("Invitations", () => {
 		const deleteButton = wrapper.get("[data-testid=delete-invitation-button]");
 		await deleteButton.trigger("click");
 
-		expect(roomInvitationLinkStore.deleteLink).toHaveBeenCalledTimes(1);
+		expect(roomInvitationLinkStore.deleteLinks).toHaveBeenCalledTimes(1);
 	});
 
 	it("should handle onClick for 'Update Invitation' button", async () => {
