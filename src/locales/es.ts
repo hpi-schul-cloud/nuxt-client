@@ -531,7 +531,7 @@ export default {
 	"components.cardElement.deletedElement": "Contenido eliminado",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"La herramienta {toolName} no está disponible. Por favor comuníquese con el administrador de la escuela.",
-	"components.cardElement.h5pElement": "Contenido de aprendizaje interactivo",
+	"components.cardElement.h5pElement": "Elemento de aprendizaje interactivo",
 	"components.datePicker.validation.format":
 		"Por favor utilice el formato DD.MM.AAAA",
 	"components.datePicker.validation.required": "Por favor ingrese una fecha.",
