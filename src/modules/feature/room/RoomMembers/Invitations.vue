@@ -53,7 +53,7 @@ const onClickAdd = () => {
 };
 
 const onClickRemove = (linkId: string) => {
-	roomInvitationLinkStore.deleteLink(linkId);
+	roomInvitationLinkStore.deleteLinks(linkId);
 };
 
 const onClickUse = async (linkId: string) => {

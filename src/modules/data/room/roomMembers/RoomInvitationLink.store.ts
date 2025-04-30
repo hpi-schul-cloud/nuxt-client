@@ -84,12 +84,15 @@ export const useRoomInvitationLinkStore = defineStore(
 			}
 		};
 
-		const deleteLink = async (linkId: string) => {
+		const deleteLinks = async (linkIds: string | string[]) => {
 			try {
-				await api.roomInvitationLinkControllerDeleteLink(linkId);
+				if (typeof linkIds === "string") {
+					linkIds = [linkIds];
+				}
+				await api.roomInvitationLinkControllerDeleteLinks(linkIds);
 
 				roomInvitationLinks.value = roomInvitationLinks.value.filter(
-					(link) => link.id !== linkId
+					(link) => !linkIds.includes(link.id)
 				);
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.delete"));
@@ -115,7 +118,7 @@ export const useRoomInvitationLinkStore = defineStore(
 			fetchLinks,
 			createLink,
 			updateLink,
-			deleteLink,
+			deleteLinks,
 			useLink,
 			roomInvitationLinks,
 			isLoading,

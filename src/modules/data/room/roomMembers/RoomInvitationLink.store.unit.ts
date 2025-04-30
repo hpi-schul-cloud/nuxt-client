@@ -201,10 +201,10 @@ describe("useRoomInvitationLinkStore", () => {
 
 			const secondLink = links[1];
 
-			await roomInvitationLinkStore.deleteLink(secondLink.id);
+			await roomInvitationLinkStore.deleteLinks(secondLink.id);
 
 			expect(
-				roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLink
+				roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLinks
 			).toHaveBeenCalledWith(secondLink.id);
 			expect(roomInvitationLinkStore.roomInvitationLinks).toHaveLength(2);
 		});
@@ -213,13 +213,13 @@ describe("useRoomInvitationLinkStore", () => {
 			it("should show a failure message", async () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
-				roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLink.mockRejectedValue(
+				roomInvitationLinkApiMock.roomInvitationLinkControllerDeleteLinks.mockRejectedValue(
 					new Error("API error")
 				);
 
 				const firstLink = links[0];
 
-				await roomInvitationLinkStore.deleteLink(firstLink.id);
+				await roomInvitationLinkStore.deleteLinks(firstLink.id);
 
 				expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 					"pages.rooms.invitationlinks.error.delete"
