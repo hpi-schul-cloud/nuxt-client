@@ -62,11 +62,17 @@ export const useSidebarSelection = (
 
 		// Folder
 		if (route.name === "folder-id") {
+			const itemLinksToCourseOverview = item.to === "/rooms/courses-overview";
+			const itemLinksToRoomsOverview = item.to === "/rooms";
+
+			const contextOfFolderIsCourse =
+				contextType.value === BoardExternalReferenceType.Course;
+			const contextOfFolderIsRoom =
+				contextType.value === BoardExternalReferenceType.Room;
+
 			return (
-				(item.to === "/rooms/courses-overview" &&
-					contextType.value === BoardExternalReferenceType.Course) ||
-				(item.to === "/rooms" &&
-					contextType.value === BoardExternalReferenceType.Room)
+				(itemLinksToCourseOverview && contextOfFolderIsCourse) ||
+				(itemLinksToRoomsOverview && contextOfFolderIsRoom)
 			);
 		}
 
