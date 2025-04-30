@@ -89,6 +89,7 @@ import {
 	useRoomDetailsStore,
 	useRoomMembersStore,
 	useRoomMemberVisibilityOptions,
+	useRoomAuthorization,
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import {
@@ -97,13 +98,7 @@ import {
 	mdiLink,
 	mdiAccountQuestionOutline,
 } from "@icons/material";
-import {
-	AddMembers,
-	useRoomAuthorization,
-	Confirmations,
-	Invitations,
-	Members,
-} from "@feature-room";
+import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
 import { RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
