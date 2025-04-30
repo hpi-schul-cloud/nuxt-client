@@ -79,13 +79,14 @@
 								ref="datePicker"
 								v-model="formData.activeUntilDate"
 								:disabled="isDatePickerDisabled"
-								:date="(formData.activeUntilDate! || '').toString()"
+								:selected-date="(formData.activeUntilDate! || '').toString()"
 								:min-date="new Date().toString()"
 								class="mr-2 mt-2"
 								data-testid="date-picker-until"
 								style="max-width: 120px"
-								@click="pause"
-								@update:date="unpause"
+								@click.prevent="pause"
+								@keydown.space.enter.prevent="pause"
+								@update:date="onUpdateValidDate"
 							/>
 						</div>
 
@@ -218,6 +219,11 @@ const modalTitle = computed(() => {
 		? t("pages.rooms.members.inviteMember.firstStep.title")
 		: t("pages.rooms.members.inviteMember.secondStep.title");
 });
+
+const onUpdateValidDate = (date: Date) => {
+	formData.value.activeUntilDate = date;
+	unpause();
+};
 
 const onClose = () => {
 	emit("close");
