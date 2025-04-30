@@ -143,6 +143,32 @@ describe("roomAuthorization", () => {
 		});
 	});
 
+	describe("canEditRoomContent", () => {
+		describe("when the user has room content edit permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomContentEdit],
+				});
+			};
+
+			it("should be allowed to edit the room content", () => {
+				const { canEditRoomContent } = setup();
+				expect(canEditRoomContent.value).toBe(true);
+			});
+		});
+
+		describe("when the user does not have room content edit permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should not be allowed to edit the room content", () => {
+				const { canEditRoomContent } = setup();
+				expect(canEditRoomContent.value).toBe(false);
+			});
+		});
+	});
+
 	describe("canDeleteRoom", () => {
 		describe("when the user has room delete permission", () => {
 			const setup = () => {
@@ -164,6 +190,125 @@ describe("roomAuthorization", () => {
 				const { canDeleteRoom } = setup();
 				expect(canDeleteRoom.value).toBe(false);
 			});
+		});
+	});
+
+	describe("canAddRoomMembers", () => {
+		describe("when the user has room members add permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomMembersAdd],
+				});
+			};
+
+			it("should be allowed to add room members", () => {
+				const { canAddRoomMembers } = setup();
+				expect(canAddRoomMembers.value).toBe(true);
+			});
+		});
+
+		describe("when the user does not have room members add permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should not be allowed to add room members", () => {
+				const { canAddRoomMembers } = setup();
+				expect(canAddRoomMembers.value).toBe(false);
+			});
+		});
+	});
+
+	describe("canRemoveRoomMembers", () => {
+		describe("when the user has room members remove permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomMembersRemove],
+				});
+			};
+
+			it("should be allowed to remove room members", () => {
+				const { canRemoveRoomMembers } = setup();
+				expect(canRemoveRoomMembers.value).toBe(true);
+			});
+		});
+
+		describe("when the user does not have room members remove permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should not be allowed to remove room members", () => {
+				const { canRemoveRoomMembers } = setup();
+				expect(canRemoveRoomMembers.value).toBe(false);
+			});
+		});
+	});
+
+	describe("canChangeOwner", () => {
+		describe("when the user has room change owner permission", () => {
+			const setup = () => {
+				return genericSetup({
+					roomPermissions: [Permission.RoomChangeOwner],
+				});
+			};
+
+			it("should be allowed to change the room owner", () => {
+				const { canChangeOwner } = setup();
+				expect(canChangeOwner.value).toBe(true);
+			});
+		});
+
+		describe("when the user does not have room change owner permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should not be allowed to change the room owner", () => {
+				const { canChangeOwner } = setup();
+				expect(canChangeOwner.value).toBe(false);
+			});
+		});
+	});
+
+	describe("canLeaveRoom", () => {
+		describe("when the user has room leave permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [Permission.RoomLeave] });
+			};
+
+			it("should be allowed to leave the room", () => {
+				const { canLeaveRoom } = setup();
+				expect(canLeaveRoom.value).toBe(true);
+			});
+		});
+
+		describe("when the user does not have room leave permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should not be allowed to leave the room", () => {
+				const { canLeaveRoom } = setup();
+				expect(canLeaveRoom.value).toBe(false);
+			});
+		});
+	});
+
+	describe("canDuplicateRoom", () => {
+		describe("when the user has room duplicate permission", () => {
+			const setup = () => {
+				return genericSetup({ roomPermissions: [] });
+			};
+
+			it("should be allowed to duplicate the room", () => {
+				const { canDuplicateRoom } = setup();
+				expect(canDuplicateRoom.value).toBe(true);
+			});
+		});
+
+		describe("when the user does not have room duplicate permission", () => {
+			it.todo("should not be allowed to duplicate the room");
 		});
 	});
 });

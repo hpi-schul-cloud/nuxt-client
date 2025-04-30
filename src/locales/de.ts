@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
+	"common.actions.duplicate": "Duplizieren",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
 	"common.actions.import": "Importieren",
@@ -636,7 +637,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Bereich erfolgreich kopiert.",
@@ -902,6 +903,10 @@ export default {
 		"Das Startdatum muss vor dem Enddatum liegen.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
+	"data-room.duplication.alert.success": "Raum erfolgreich dupliziert.",
+	"data-room.duplication.alert.error":
+		"Der Dupliziervorgang konnte nicht abgeschlossen werden.",
+	"data-room.duplication.loading": "Raum wird dupliziert...",
 	"error.400": "400 – Fehlerhafte Anfrage",
 	"error.401": "401 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
 	"error.403": "403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
@@ -945,6 +950,19 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Nutzendengruppe erfolgreich synchronisiert",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
+	"feature-room.DuplicationInfoDialog.title": "Raum duplizieren",
+	"feature-room.DuplicationInfoDialog.text.nextStep":
+		"Im nächsten Schritt wird eine Kopie des Raumes erstellt.",
+	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+		"Folgende Inhalte werden nicht kopiert:",
+	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+		"Raum-Mitglieder und Berechtigungen",
+	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+		"Inhalte aus Etherpads",
+	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+		"Inhalte aus Whiteboards",
+	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+		"Geschützte Einstellungen externer Tools",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -1804,7 +1822,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Raum erstellen",
 	"pages.roomEdit.title": "Raum bearbeiten",
 	"pages.roomDetails.title": "Raum",
@@ -1839,7 +1856,7 @@ export default {
 	"pages.rooms.members.infoText":
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
-	"pages.rooms.members.label": "Teilnehmende",
+	"pages.rooms.members.label": "Mitglieder",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
@@ -1850,7 +1867,9 @@ export default {
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Raumberechtigungen für {memberFullName} ändern",
-	"pages.rooms.members.manage": "Raum-Mitglieder",
+	"pages.rooms.members.manage": "Mitglieder verwalten",
+	"pages.rooms.members.management": "Mitglieder-Verwaltung",
+	"pages.rooms.members.view": "Mitglieder ansehen",
 	"pages.rooms.members.tab.members": "Mitglieder",
 	"pages.rooms.members.tab.invitations": "Einladungslinks",
 	"pages.rooms.members.tab.invitations.infoText":
