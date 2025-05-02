@@ -59,17 +59,27 @@ export const useEditorConfig = () => {
 		fontBackgroundColor: fontBackgroundColors(t),
 	});
 
-	const editorIsEmpty = computed(() => {
+	const editorHasFormula = (editor: Editor) => {
+		// Überprüfe, ob es mindestens ein Kind mit der Klasse "katex" gibt
+		return editor.ui.view.editable.element?.querySelector(".katex") !== null;
+	};
+
+	const editorHasChars = () => {
 		return charCount.value === 0;
-	});
+	};
+
+	const editorIsEmpty = (editor: Editor) => {
+		return !editorHasChars && !editorHasFormula(editor);
+	};
 
 	const deletionHandler = (
 		evt: CKEditorEventInfo,
 		data: CKEditorKeystrokeInfo,
+		editor: Editor,
 		onDelete: () => void
 	) => {
 		if (data.domEvent.key === "Backspace" || data.domEvent.key === "Delete") {
-			if (editorIsEmpty.value) {
+			if (editorIsEmpty(editor)) {
 				onDelete();
 			}
 		}
@@ -77,13 +87,12 @@ export const useEditorConfig = () => {
 
 	const registerDeletionHandler = (editor: Editor, onDelete: () => void) => {
 		editor.editing.view.document.on("keydown", (evt, data) =>
-			deletionHandler(evt, data, onDelete)
+			deletionHandler(evt, data, editor, onDelete)
 		);
 	};
 
 	return {
 		generalConfig,
-		editorIsEmpty,
 		registerDeletionHandler,
 	};
 };
