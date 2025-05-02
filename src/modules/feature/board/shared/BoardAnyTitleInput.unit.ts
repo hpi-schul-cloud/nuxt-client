@@ -12,41 +12,49 @@ const defaultProps = {
 	value: "props value",
 	isEditMode: true,
 	scope: "card",
-	placeholder: "placeholder-text",
+	emptyValueFallback: "",
 	isFocused: false,
 };
 
-describe("BoardAnyTitleTitleInput", () => {
+describe("BoardAnyTitleInput", () => {
 	const setup = (props: {
 		isEditMode: boolean;
 		scope: "card" | "column" | "board";
-		placeholder?: string;
+		emptyValueFallback?: string;
 		isFocused?: boolean;
 		maxLength?: number;
 	}) => {
 		const wrapper = mount(BoardAnyTitleInput, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				provide: {
-					CARD_HOST_INTERACTION_EVENT: undefined,
-				},
 			},
 			propsData: {
 				...defaultProps,
 				...props,
-			},
-			provide: {
-				CARD_HOST_INTERACTION_EVENT: undefined,
 			},
 		});
 
 		return { wrapper };
 	};
 
-	describe("when component is mounted", () => {
-		it("should be found in dom", () => {
-			const { wrapper } = setup({ isEditMode: false, scope: "card" });
-			expect(wrapper.exists()).toBe(true);
+	it("should be found in dom", () => {
+		const { wrapper } = setup({ isEditMode: false, scope: "card" });
+		expect(wrapper.exists()).toBe(true);
+	});
+
+	describe("when component is in edit mode", () => {
+		it("should display textarea", () => {
+			const { wrapper } = setup({ isEditMode: true, scope: "board" });
+			const textAreaComponent = wrapper.findComponent(VTextarea);
+
+			expect(textAreaComponent.exists()).toBe(true);
+		});
+
+		it("should not display heading", () => {
+			const { wrapper } = setup({ isEditMode: true, scope: "board" });
+			const heading = wrapper.find("h1");
+
+			expect(heading.exists()).toBe(false);
 		});
 
 		it("should forward maxLength prop to VTextarea", () => {
@@ -61,20 +69,6 @@ describe("BoardAnyTitleTitleInput", () => {
 			const maxLength = textarea.attributes("maxlength");
 
 			expect(maxLength).toBe("10");
-		});
-
-		it("should emit if value changes", async () => {
-			const { wrapper } = setup({ isEditMode: true, scope: "card" });
-			const newValue = "new title";
-			const textAreaComponent = wrapper.findComponent(VTextarea);
-			await textAreaComponent.setValue("new title");
-			const emitted = wrapper.emitted();
-
-			if (emitted["update:value"] === undefined) {
-				throw new Error("Emitted should be defined");
-			}
-
-			expect(emitted["update:value"][0]).toContain(newValue);
 		});
 
 		it("should emit enter on hitting 'enter' key in card title", async () => {
@@ -107,24 +101,6 @@ describe("BoardAnyTitleTitleInput", () => {
 			expect(emitted["enter"]).toHaveLength(1);
 		});
 
-		it("should display VTextField when scope is board", () => {
-			const { wrapper } = setup({ isEditMode: true, scope: "board" });
-			const textFieldComponent = wrapper.findComponent(VTextarea);
-			expect(textFieldComponent.exists()).toBe(true);
-		});
-
-		it("should display VTextarea when scope is card", () => {
-			const { wrapper } = setup({ isEditMode: true, scope: "card" });
-			const textAreaComponent = wrapper.findComponent(VTextarea);
-			expect(textAreaComponent.exists()).toBe(true);
-		});
-
-		it("should display VTextarea when scope is column", () => {
-			const { wrapper } = setup({ isEditMode: true, scope: "column" });
-			const textAreaComponent = wrapper.findComponent(VTextarea);
-			expect(textAreaComponent.exists()).toBe(true);
-		});
-
 		it("updates modalValue when prop value changes", async () => {
 			const { wrapper } = setup({ isEditMode: true, scope: "card" });
 			const newValue = "new title";
@@ -132,6 +108,65 @@ describe("BoardAnyTitleTitleInput", () => {
 			await wrapper.vm.$nextTick();
 
 			expect(wrapper.vm.modelValue).toBe(newValue);
+		});
+	});
+
+	describe("when component is not in edit mode", () => {
+		it("should display h1 with board title class when scope is board", () => {
+			const { wrapper } = setup({ isEditMode: false, scope: "board" });
+			const heading = wrapper.find("h1");
+
+			expect(heading.exists()).toBe(true);
+			expect(heading.attributes("class")).toContain("board-title");
+		});
+
+		it("should display VTextarea when scope is column", () => {
+			const { wrapper } = setup({ isEditMode: false, scope: "column" });
+			const heading = wrapper.find("h2");
+
+			expect(heading.exists()).toBe(true);
+			expect(heading.attributes("class")).toContain("other-title");
+		});
+
+		it("should display h2 when scope is card", () => {
+			const { wrapper } = setup({ isEditMode: false, scope: "card" });
+			const heading = wrapper.find("h3");
+
+			expect(heading.exists()).toBe(true);
+			expect(heading.attributes("class")).toContain("other-title");
+		});
+
+		it("should display correct title when textarea value changes", async () => {
+			const { wrapper } = setup({
+				isEditMode: true,
+				scope: "board",
+			});
+			const newTitle = "New Title";
+
+			const textFieldComponent = wrapper.findComponent(VTextarea);
+			await textFieldComponent.setValue(newTitle);
+
+			await wrapper.setProps({ isEditMode: false });
+			const heading = wrapper.find("h1");
+
+			expect(heading.text()).toBe(newTitle);
+		});
+
+		it("should display fallback title when textarea value is empty", async () => {
+			const emptyValueFallback = "Fallback Title";
+			const { wrapper } = setup({
+				isEditMode: true,
+				scope: "board",
+				emptyValueFallback,
+			});
+
+			const textFieldComponent = wrapper.findComponent(VTextarea);
+			await textFieldComponent.setValue("");
+
+			await wrapper.setProps({ isEditMode: false });
+			const heading = wrapper.find("h1");
+
+			expect(heading.text()).toBe(emptyValueFallback);
 		});
 	});
 
