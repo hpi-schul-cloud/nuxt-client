@@ -31,6 +31,7 @@ interface GeneralConfig {
 		addTargetToExternalLinks: boolean;
 	};
 	wordCount: {
+		countHTML: boolean;
 		onUpdate: (data: { words: number; characters: number }) => void;
 	};
 	fontColor: ReturnType<typeof fontColors>;
@@ -51,6 +52,7 @@ export const useEditorConfig = () => {
 			addTargetToExternalLinks: true,
 		},
 		wordCount: {
+			countHTML: true,
 			onUpdate: (data: { words: number; characters: number }) => {
 				charCount.value = data.characters;
 			},
@@ -59,17 +61,15 @@ export const useEditorConfig = () => {
 		fontBackgroundColor: fontBackgroundColors(t),
 	});
 
-	const editorHasFormula = (editor: Editor) => {
-		return editor.ui.view.editable.element?.querySelector(".katex") !== null;
-	};
-
-	const editorHasChars = computed(() => {
-		return charCount.value !== 0;
-	});
-
-	const editorIsEmpty = (editor: Editor) => {
-		return !editorHasChars.value && !editorHasFormula(editor);
-	};
+	function isEditorEmpty(editor: Editor): boolean {
+		const data = (editor as Editor & { getData: () => string }).getData();
+		const tempDiv = document.createElement("div");
+		tempDiv.innerHTML = data;
+		return (
+			!tempDiv.textContent?.trim() &&
+			!tempDiv.querySelector("*:not(.math-tex):not(.katex)")
+		);
+	}
 
 	const deletionHandler = (
 		evt: CKEditorEventInfo,
@@ -78,7 +78,7 @@ export const useEditorConfig = () => {
 		onDelete: () => void
 	) => {
 		if (data.domEvent.key === "Backspace" || data.domEvent.key === "Delete") {
-			if (editorIsEmpty(editor)) {
+			if (isEditorEmpty(editor)) {
 				onDelete();
 			}
 		}
