@@ -2,7 +2,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { computed } from "vue";
 import { useEditorConfig } from "./EditorConfig.composable";
 import InlineEditor from "./InlineEditor.vue";
 
@@ -35,9 +34,6 @@ describe("@feature-editor/InlineEditor", () => {
 					defaultProtocol: "//",
 					addTargetToExternalLinks: true,
 				},
-				wordCount: {
-					onUpdate: jest.fn(),
-				},
 				fontColor: {
 					colors: [],
 				},
@@ -45,7 +41,6 @@ describe("@feature-editor/InlineEditor", () => {
 					colors: [],
 				},
 			},
-			editorIsEmpty: computed(() => isEditorEmpty),
 			registerDeletionHandler: jest.fn(),
 		};
 
