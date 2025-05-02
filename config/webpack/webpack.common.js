@@ -190,6 +190,7 @@ module.exports = {
 				"src/modules/ui/video-conference-configuration-dialog"
 			),
 			"@ui-empty-state": getDir("src/modules/ui/empty-state"),
+			"@util-axios-error": getDir("src/modules/util/axios-error"),
 			"@util-board": getDir("src/modules/util/board"),
 			"@util-validators": getDir("src/modules/util/validators"),
 			"@util-vue": getDir("src/modules/util/vue"),
