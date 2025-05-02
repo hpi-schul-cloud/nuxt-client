@@ -1,7 +1,7 @@
 import {
 	mdiAccountBoxOutline,
-	mdiAccountEditOutline,
 	mdiAccountCircleOutline,
+	mdiAccountEditOutline,
 	mdiAccountGroupOutline,
 	mdiAccountMultipleOutline,
 	mdiAccountOffOutline,
@@ -98,13 +98,17 @@ import {
 	mdiMenu,
 	mdiMenuDown,
 	mdiMenuDownOutline,
-	mdiMenuUp,
 	mdiMenuOpen,
 	mdiMenuRight,
 	mdiMenuSwapOutline,
+	mdiMenuUp,
 	mdiMenuUpOutline,
 	mdiMinus,
+	mdiMovieRoll,
 	mdiNewspaperVariantOutline,
+	mdiNumeric1Circle,
+	mdiNumeric2Circle,
+	mdiNumeric3Circle,
 	mdiOpenInNew,
 	mdiPalette,
 	mdiPause,
@@ -146,7 +150,6 @@ import {
 	mdiViewGridOutline,
 	mdiViewGridPlusOutline,
 	mdiViewListOutline,
-	mdiMovieRoll,
 } from "@mdi/js";
 
 export {
@@ -298,4 +301,7 @@ export {
 	mdiViewGridPlusOutline,
 	mdiViewListOutline,
 	mdiMovieRoll,
+	mdiNumeric1Circle,
+	mdiNumeric2Circle,
+	mdiNumeric3Circle,
 };

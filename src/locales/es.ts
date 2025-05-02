@@ -380,6 +380,33 @@ export default {
 		"¿Está seguro de que desea desactivar la sincronización de {groupTypes}?",
 	"components.administration.provisioningOptions.warning.title":
 		"Deshabilitar la sincronización",
+	"components.administration.schoolYearChangeSection.headers":
+		"Schuljahreswechsel",
+	"components.administration.schoolYearChangeSection.info":
+		"Mit Hilfe der Transferphase können Klassenzugehörigkeit und Personendaten im LDAP in Ruhe angepasst werden. Abschließend können alle Änderungen mit einem Mal in die {Instanz} übertragen werden. (mehr Infos auf der Hilfeseite)",
+
+	"components.administration.schoolYearChangeSection.title.step.one":
+		"Ende des Schuljahres",
+	"components.administration.schoolYearChangeSection.description.step.one":
+		"Die Transferphase kann zwei Wochen vor Ferienbeginn manuell gestartet werden. Ist bis zum Ferienbeginn kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
+	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
+		"Transferphase starten",
+	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
+		"Transferphase gestartet",
+	"components.administration.schoolYearChangeSection.title.step.two":
+		"Rund um die Sommerferien",
+	"components.administration.schoolYearChangeSection.description.step.two":
+		"Während der Transferphase können alle Klassen- und Personendaten in Ruhe aktualisiert werden. Login und Kennwortänderungen sind für alle bestehenden Nutzenden weiterhin möglich. Während der Transferphase können neue Kurse erstellt werden, allerdings ohne die Zuordnung von Klassen. ",
+	"components.administration.schoolYearChangeSection.step.two.button":
+		"LDAP-Daten überprüfen",
+	"components.administration.schoolYearChangeSection.title.step.three":
+		"Neues Schuljahres",
+	"components.administration.schoolYearChangeSection.description.step.three":
+		"Hier kann die Übertragung der Daten in die {Instanz} gestartet werden. Damit wird das neue Schuljahr eingeläutet.",
+	"components.administration.schoolYearChangeSection.step.three.button":
+		"Transferphase beenden",
+	"components.administration.schoolYearChangeSection.checkbox.step.three":
+		"Klassen- und Personendaten (LDAP) wurden aktualisiert und überprüft",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "en ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hora | horas",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",

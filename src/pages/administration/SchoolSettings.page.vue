@@ -86,6 +86,24 @@
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
+				<v-expansion-panel data-testid="school-year-change-panel">
+					<v-expansion-panel-title>
+						<div class="text-h4">
+							{{
+								$t("components.administration.schoolYearChangeSection.headers")
+							}}
+						</div>
+						<template #actions="{ expanded }">
+							<div class="v-expansion-panel-header__icon">
+								<v-icon :icon="expanded ? mdiMinus : mdiPlus" />
+							</div>
+						</template>
+					</v-expansion-panel-title>
+					<v-expansion-panel-text eager>
+						<school-year-change-section />
+					</v-expansion-panel-text>
+				</v-expansion-panel>
+
 				<v-expansion-panel
 					v-if="isFeatureOauthMigrationEnabled"
 					data-testid="migration-panel"
@@ -152,6 +170,7 @@
 
 <script lang="ts">
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
+import SchoolYearChangeSection from "@/components/administration/SchoolYearChangeSection.vue";
 import ExternalToolsSection from "@/components/administration/ExternalToolSection.vue";
 import AuthSystems from "@/components/organisms/administration/AuthSystems.vue";
 import GeneralSettings from "@/components/organisms/administration/GeneralSettings.vue";
@@ -179,6 +198,7 @@ export default defineComponent({
 	components: {
 		DefaultWireframe,
 		ExternalToolsSection,
+		SchoolYearChangeSection,
 		AdminMigrationSection,
 		GeneralSettings,
 		SchoolPolicy,
