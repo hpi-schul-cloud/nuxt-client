@@ -73,7 +73,7 @@ import {
 	KebabMenuActionMoveRight,
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
-import { computed, ref, toRef, watchEffect } from "vue";
+import { ref, toRef } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 import { useI18n } from "vue-i18n";
