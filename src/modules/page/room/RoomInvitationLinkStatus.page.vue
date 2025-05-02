@@ -39,6 +39,7 @@ import {
 	useRoomInvitationLinkStore,
 } from "@data-room";
 import { useRouter } from "vue-router";
+import { nextTick } from "vue";
 
 const { t } = useI18n();
 
@@ -86,7 +87,8 @@ const breadcrumbs: Breadcrumb[] = [
 	},
 ];
 
-onMounted(() => {
+onMounted(async () => {
+	await nextTick();
 	useLink();
 });
 

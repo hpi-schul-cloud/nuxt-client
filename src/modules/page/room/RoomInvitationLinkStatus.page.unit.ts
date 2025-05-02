@@ -15,12 +15,18 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import RoomInvitationLinkStatusPage from "./RoomInvitationLinkStatus.page.vue";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import NotifierModule from "@/store/notifier";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { useBoardNotifier } from "@util-board";
+import { createPinia, setActivePinia } from "pinia";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
 		push: jest.fn(),
 	}),
 }));
+
+jest.mock("@util-board/BoardNotifier.composable");
+const boardNotifier = jest.mocked(useBoardNotifier);
 
 /* jest.mock("@data-room", () => ({
 	useRoomInvitationLinkStore: jest.fn().mockReturnValue({
@@ -29,7 +35,10 @@ jest.mock("vue-router", () => ({
 })); */
 
 describe("RoomInvitationLinkStatusPage", () => {
+	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
 	beforeEach(() => {
+		setActivePinia(createPinia());
 		setupStores({
 			authModule: AuthModule,
 			envConfigModule: EnvConfigModule,
@@ -44,9 +53,15 @@ describe("RoomInvitationLinkStatusPage", () => {
 		const notifierModule = createModuleMocks(NotifierModule);
 		const invitationLink = roomInvitationLinkFactory.build();
 
+		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
+		boardNotifier.mockReturnValue(boardNotifierCalls);
+
 		const wrapper = mount(RoomInvitationLinkStatusPage, {
+			attachTo: document.body,
 			global: {
 				plugins: [
+					createTestingVuetify(),
+					createTestingI18n(),
 					createTestingPinia({
 						initialState: {
 							roomInvitationLinkStore: {
@@ -55,8 +70,6 @@ describe("RoomInvitationLinkStatusPage", () => {
 							},
 						},
 					}),
-					createTestingI18n(),
-					createTestingVuetify(),
 				],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
@@ -64,7 +77,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 			},
 
 			props: {
-				invitationLinkId: "invitation-link-id",
+				invitationLinkId: invitationLink.id,
 			},
 		});
 
