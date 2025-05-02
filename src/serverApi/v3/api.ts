@@ -8085,6 +8085,19 @@ export interface RoomDetailsResponse {
 /**
  * 
  * @export
+ * @interface RoomIdResponse
+ */
+export interface RoomIdResponse {
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomIdResponse
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
  * @interface RoomInvitationLinkError
  */
 export interface RoomInvitationLinkError {
@@ -8178,7 +8191,6 @@ export enum RoomInvitationLinkValidationError {
     Expired = 'EXPIRED',
     OnlyForTeachers = 'ONLY_FOR_TEACHERS',
     RestrictedToCreatorSchool = 'RESTRICTED_TO_CREATOR_SCHOOL',
-    AlreadyMember = 'ALREADY_MEMBER',
     CantInviteStudentsFromOtherSchool = 'CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL'
 }
 
@@ -23166,7 +23178,7 @@ export const RoomInvitationLinkApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RoomIdResponse>> {
             const localVarAxiosArgs = await localVarAxiosParamCreator.roomInvitationLinkControllerUseLink(roomInvitationLinkId, options);
             return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
         },
@@ -23218,7 +23230,7 @@ export const RoomInvitationLinkApiFactory = function (configuration?: Configurat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): AxiosPromise<void> {
+        roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): AxiosPromise<RoomIdResponse> {
             return localVarFp.roomInvitationLinkControllerUseLink(roomInvitationLinkId, options).then((request) => request(axios, basePath));
         },
     };
@@ -23269,7 +23281,7 @@ export interface RoomInvitationLinkApiInterface {
      * @throws {RequiredError}
      * @memberof RoomInvitationLinkApiInterface
      */
-    roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): AxiosPromise<void>;
+    roomInvitationLinkControllerUseLink(roomInvitationLinkId: string, options?: any): AxiosPromise<RoomIdResponse>;
 
 }
 
