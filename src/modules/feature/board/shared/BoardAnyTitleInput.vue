@@ -158,10 +158,6 @@ export default defineComponent({
 			v$.value.modelValue.$errors.map((e: ErrorObject) => unref(e.$message))
 		);
 
-		const hasValue = computed<boolean>(
-			() => props.value !== "" && !!props.value
-		);
-
 		const headingLevel = computed(() => {
 			switch (props.scope) {
 				case "column":
@@ -189,7 +185,6 @@ export default defineComponent({
 			t,
 			headingLevel,
 			modelValue,
-			hasValue,
 			onEnter,
 			internalIsFocused,
 			titleInput,
