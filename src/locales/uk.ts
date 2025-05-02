@@ -809,19 +809,6 @@ export default {
 		"Завантажені файли в межах курсу.",
 	"components.molecules.export.options.info.point2":
 		"Подання, призначені до завдання.",
-	"components.organisms.AutoLogoutWarning.confirm": "Подовжити сеанс",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Термін дії сеансу минув. Увійдіть ще раз.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"Ваш сеанс не вдалося продовжити!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Лінивець",
-	"components.organisms.AutoLogoutWarning.success": "Сеанс успішно продовжено.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
 	"components.organisms.ContentCard.report.body":
 		"Повідомлення про вміст з ідентифікатором",
 	"components.organisms.ContentCard.report.email":
@@ -935,6 +922,19 @@ export default {
 	"error.proxy.action": "Перезавантажити сторінку",
 	"error.proxy.description":
 		"У нас виникла невелика проблема з нашою інфраструктурою. Ми скоро повернемося.",
+	"feature-autoLogout.button.confirm": "Подовжити сеанс",
+	"feature-autoLogout.button.confirm.returnToLogin":
+		"Повернутися на сторінку входу",
+	"feature-autoLogout.message.error.401":
+		"Термін дії сеансу минув. Увійдіть ще раз.",
+	"feature-autoLogout.message.error":
+		"Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",
+	"feature-autoLogout.component.image.alt": "Лінивець",
+	"feature-autoLogout.message.success": "Сеанс успішно продовжено.",
+	"feature-autoLogout.warning.remainingTime":
+		"менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
+	"feature-autoLogout.warning":
+		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
 	"feature-board-external-tool-element.alert.error.student":
 		"Інструмент зараз неможливо запустити. Будь ласка, оновіть дошку або зверніться до вчителя чи інструктора курсу.",
 	"feature-board-external-tool-element.alert.error.teacher":
