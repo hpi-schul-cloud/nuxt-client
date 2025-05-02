@@ -66,7 +66,7 @@
 
 						<div class="d-flex align-center justify-start my-n4">
 							<v-checkbox
-								v-model="formData.activeUntil"
+								v-model="formData.activeUntilCheck"
 								:label="
 									t('pages.rooms.members.inviteMember.form.linkExpires.label')
 								"
@@ -76,7 +76,7 @@
 
 							<date-picker
 								ref="datePicker"
-								v-model="formData.activeUntil"
+								v-model="formData.activeUntilCheck"
 								:disabled="isDatePickerDisabled"
 								:selected-date="(formData.activeUntil! || '').toString()"
 								:min-date="new Date().toString()"
@@ -218,7 +218,7 @@ const defaultFormData = {
 const formData = ref({ ...defaultFormData });
 
 const isDatePickerDisabled = computed(() => {
-	return !formData.value.activeUntil;
+	return !formData.value.activeUntilCheck;
 });
 
 const modalTitle = computed(() => {
@@ -246,7 +246,7 @@ const onInviteMembers = async () => {
 		title: formData.value.title || "invitation link",
 		activeUntil: formData.value.activeUntilCheck
 			? formData.value.activeUntil.toString()
-			: "01.01.1900",
+			: "2900-01-01T00:00:00.000Z",
 		isOnlyForTeachers: !formData.value.isAlsoForStudents,
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
