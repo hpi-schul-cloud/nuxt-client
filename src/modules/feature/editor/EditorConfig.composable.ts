@@ -1,5 +1,5 @@
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { computed, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { fontColors, fontBackgroundColors } from "./config";
 import { injectStrict } from "@/utils/inject/inject-strict";
@@ -30,10 +30,6 @@ interface GeneralConfig {
 		defaultProtocol: string;
 		addTargetToExternalLinks: boolean;
 	};
-	wordCount: {
-		countHTML: boolean;
-		onUpdate: (data: { words: number; characters: number }) => void;
-	};
 	fontColor: ReturnType<typeof fontColors>;
 	fontBackgroundColor: ReturnType<typeof fontBackgroundColors>;
 }
@@ -43,19 +39,11 @@ export const useEditorConfig = () => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const DEFAULT_PROTOCOL = "//";
 
-	const charCount = ref(0);
-
 	const generalConfig = reactive<GeneralConfig>({
 		language: locale.value || envConfigModule.getFallbackLanguage,
 		link: {
 			defaultProtocol: DEFAULT_PROTOCOL,
 			addTargetToExternalLinks: true,
-		},
-		wordCount: {
-			countHTML: true,
-			onUpdate: (data: { words: number; characters: number }) => {
-				charCount.value = data.characters;
-			},
 		},
 		fontColor: fontColors(t),
 		fontBackgroundColor: fontBackgroundColors(t),
