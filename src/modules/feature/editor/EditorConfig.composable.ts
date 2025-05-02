@@ -60,7 +60,6 @@ export const useEditorConfig = () => {
 	});
 
 	const editorHasFormula = (editor: Editor) => {
-		console.log(editor.ui.view.editable.element?.querySelector(".katex"));
 		return editor.ui.view.editable.element?.querySelector(".katex") !== null;
 	};
 
@@ -80,10 +79,7 @@ export const useEditorConfig = () => {
 	) => {
 		if (data.domEvent.key === "Backspace" || data.domEvent.key === "Delete") {
 			if (editorIsEmpty(editor)) {
-				console.log("editor is empty");
 				onDelete();
-			} else {
-				console.log("editor is NOT empty");
 			}
 		}
 	};
