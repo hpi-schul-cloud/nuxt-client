@@ -60,15 +60,16 @@ export const useEditorConfig = () => {
 	});
 
 	const editorHasFormula = (editor: Editor) => {
+		console.log(editor.ui.view.editable.element?.querySelector(".katex"));
 		return editor.ui.view.editable.element?.querySelector(".katex") !== null;
 	};
 
-	const editorHasChars = () => {
-		return charCount.value === 0;
-	};
+	const editorHasChars = computed(() => {
+		return charCount.value !== 0;
+	});
 
 	const editorIsEmpty = (editor: Editor) => {
-		return !editorHasChars && !editorHasFormula(editor);
+		return !editorHasChars.value && !editorHasFormula(editor);
 	};
 
 	const deletionHandler = (
@@ -79,7 +80,10 @@ export const useEditorConfig = () => {
 	) => {
 		if (data.domEvent.key === "Backspace" || data.domEvent.key === "Delete") {
 			if (editorIsEmpty(editor)) {
+				console.log("editor is empty");
 				onDelete();
+			} else {
+				console.log("editor is NOT empty");
 			}
 		}
 	};
