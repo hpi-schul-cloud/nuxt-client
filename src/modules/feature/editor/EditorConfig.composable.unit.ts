@@ -99,7 +99,7 @@ describe("useEditorConfig", () => {
 				it("should call onDelete", () => {
 					const { composable, mockEditor, onDelete } = setupEditor({
 						btnKey: key,
-						editorData: "", // Simulate empty editor
+						editorData: "",
 					});
 
 					composable.registerDeletionHandler(mockEditor, onDelete);
@@ -112,7 +112,7 @@ describe("useEditorConfig", () => {
 				it("should not call onDelete if editor contains text ", () => {
 					const { composable, mockEditor, onDelete } = setupEditor({
 						btnKey: key,
-						editorData: "<p>Some content</p>", // Simulate non-empty editor
+						editorData: "<p>Some content</p>",
 					});
 
 					composable.registerDeletionHandler(mockEditor, onDelete);
@@ -122,7 +122,7 @@ describe("useEditorConfig", () => {
 				it("should not call onDelete if editor contains formula ", () => {
 					const { composable, mockEditor, onDelete } = setupEditor({
 						btnKey: key,
-						editorData: '<p><span class="math-tex"></span></p>', // Simulate non-empty editor
+						editorData: '<p><span class="math-tex"></span></p>',
 					});
 
 					composable.registerDeletionHandler(mockEditor, onDelete);
