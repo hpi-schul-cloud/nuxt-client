@@ -60,7 +60,6 @@ export const useEditorConfig = () => {
 	});
 
 	const editorHasFormula = (editor: Editor) => {
-		// Überprüfe, ob es mindestens ein Kind mit der Klasse "katex" gibt
 		return editor.ui.view.editable.element?.querySelector(".katex") !== null;
 	};
 
