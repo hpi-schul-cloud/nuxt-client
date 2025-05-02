@@ -101,7 +101,7 @@
 										scope="global"
 									>
 										<a
-											:href="moreInformationLink"
+											:href="moreInformationLink!"
 											target="_blank"
 											rel="noopener"
 										>
@@ -282,8 +282,6 @@ watch(
 );
 
 const moreInformationLink = computed(
-	() =>
-		envConfigModule.getEnv.ROOM_MEMBER_INFO_URL ||
-		"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=381583517"
+	() => envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
 );
 </script>
