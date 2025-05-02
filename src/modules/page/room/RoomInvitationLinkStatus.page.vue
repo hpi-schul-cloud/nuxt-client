@@ -34,35 +34,40 @@ import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
 import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
-// import { useRoute } from "vue-router";
-import { useRoomInvitationLinkStore } from "@data-room";
-import { RoomInvitationLinkValidationError } from "./WIP_enums";
+import {
+	RoomInvitationLinkValidationError,
+	useRoomInvitationLinkStore,
+} from "@data-room";
 import { useRouter } from "vue-router";
 
 const { t } = useI18n();
+
+const props = defineProps({
+	invitationLinkId: {
+		type: String,
+		required: true,
+	},
+});
 
 const infoMessage = ref("");
 const isLoading = ref(true);
 
 const router = useRouter();
-// const route = useRoute();
 
 const roomInvitationLinkStore = useRoomInvitationLinkStore();
-const { useLink } = roomInvitationLinkStore;
 
-const linkId = "5fa2c58a2f58ccafc23288f5"; // route.params.id as string;
+const useLink = async () => {
+	const linkResult = await roomInvitationLinkStore.useLink(
+		props.invitationLinkId
+	);
+	isLoading.value = false;
 
-const checkInvitationLinkStatus = async () => {
-	const message = (await useLink(linkId)) as unknown as string;
-	/*
-	if (message === "room-id") {
-		router.push({path: `/rooms/${message}`});
-		// isLoading.value = false; necessary or does vue solve that by itself???
+	if (linkResult.roomId !== "") {
+		router.push({ path: `/rooms/${linkResult.roomId}` });
 		return;
 	}
-	*/
-	determineStatus(message);
-	isLoading.value = false;
+
+	determineStatus(linkResult.message);
 };
 
 const pageTitle = computed(() =>
@@ -82,26 +87,23 @@ const breadcrumbs: Breadcrumb[] = [
 ];
 
 onMounted(() => {
-	checkInvitationLinkStatus();
+	useLink();
 });
 
 const determineStatus = (status: string) => {
 	switch (status) {
-		case RoomInvitationLinkValidationError.ALREADY_MEMBER:
-			router.push({ name: "rooms" });
-			break;
-		case RoomInvitationLinkValidationError.CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL:
+		case RoomInvitationLinkValidationError.CantInviteStudentsFromOtherSchool:
 			infoMessage.value = t(
 				"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool"
 			);
 			break;
-		case RoomInvitationLinkValidationError.EXPIRED:
+		case RoomInvitationLinkValidationError.Expired:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.expired");
 			break;
-		case RoomInvitationLinkValidationError.ONLY_FOR_TEACHERS:
+		case RoomInvitationLinkValidationError.OnlyForTeachers:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.onlyForTeachers");
 			break;
-		case RoomInvitationLinkValidationError.RESTRICTED_TO_CREATOR_SCHOOL:
+		case RoomInvitationLinkValidationError.RestrictedToCreatorSchool:
 			infoMessage.value = t(
 				"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool"
 			);
