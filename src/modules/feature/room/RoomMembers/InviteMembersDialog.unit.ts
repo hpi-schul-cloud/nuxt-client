@@ -8,6 +8,8 @@ import { createTestingPinia } from "@pinia/testing";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
 import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import setupStores from "@@/tests/test-utils/setupStores";
+import EnvConfigModule from "@/store/env-config";
 
 jest.mock("vue-i18n", () => {
 	return {
@@ -27,6 +29,12 @@ enum InvitationStep {
 jest.useFakeTimers();
 describe("InviteMembersDialog", () => {
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+
+	beforeAll(() => {
+		setupStores({
+			envConfigModule: EnvConfigModule,
+		});
+	});
 	beforeEach(() => {
 		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		boardNotifier.mockReturnValue(boardNotifierCalls);

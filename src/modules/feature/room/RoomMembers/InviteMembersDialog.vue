@@ -168,6 +168,7 @@ import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useDisplay } from "vuetify";
 import { useRoomInvitationLinkStore } from "@data-room";
+import { envConfigModule } from "@/store";
 
 enum InvitationStep {
 	PREPARE = "prepare",
@@ -280,6 +281,9 @@ watch(
 	}
 );
 
-const moreInformationLink =
-	"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=381583517";
+const moreInformationLink = computed(
+	() =>
+		envConfigModule.getEnv.ROOM_MEMBER_INFO_URL ||
+		"https://docs.dbildungscloud.de/pages/viewpage.action?pageId=381583517"
+);
 </script>
