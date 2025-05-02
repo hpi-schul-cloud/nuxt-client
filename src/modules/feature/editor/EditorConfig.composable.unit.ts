@@ -41,29 +41,6 @@ describe("useEditorConfig", () => {
 		expect(composable.generalConfig.language).toBe("en");
 	});
 
-	describe("when charCount is updated", () => {
-		describe("and charCount is 0", () => {
-			it("should set editorIsEmpty to true", () => {
-				const { composable } = setup();
-
-				expect(composable.editorIsEmpty.value).toBe(true);
-			});
-		});
-
-		describe("and charCount is bigger than 0", () => {
-			it("should set editorIsEmpty to false", () => {
-				const { composable } = setup();
-
-				expect(composable.editorIsEmpty.value).toBe(true);
-				composable.generalConfig.wordCount.onUpdate({
-					words: 0,
-					characters: 100,
-				});
-				expect(composable.editorIsEmpty.value).toBe(false);
-			});
-		});
-	});
-
 	it("should set localised color labels", () => {
 		const { composable } = setup();
 
@@ -82,7 +59,10 @@ describe("useEditorConfig", () => {
 	});
 
 	describe("when keydown event is triggered", () => {
-		const setupEditor = ({ btnKey }: { btnKey?: string } = {}) => {
+		const setupEditor = ({
+			btnKey,
+			editorData,
+		}: { btnKey?: string; editorData?: string } = {}) => {
 			const mockEditor = {
 				editing: {
 					view: {
@@ -100,6 +80,7 @@ describe("useEditorConfig", () => {
 						},
 					},
 				},
+				getData: jest.fn(() => editorData || ""),
 			} as unknown as Editor;
 
 			const onDelete = jest.fn();
@@ -118,6 +99,7 @@ describe("useEditorConfig", () => {
 				it("should call onDelete", () => {
 					const { composable, mockEditor, onDelete } = setupEditor({
 						btnKey: key,
+						editorData: "", // Simulate empty editor
 					});
 
 					composable.registerDeletionHandler(mockEditor, onDelete);
@@ -127,14 +109,20 @@ describe("useEditorConfig", () => {
 			});
 
 			describe("and editor is not empty", () => {
-				it("should not call onDelete", () => {
+				it("should not call onDelete if editor contains text ", () => {
 					const { composable, mockEditor, onDelete } = setupEditor({
 						btnKey: key,
+						editorData: "<p>Some content</p>", // Simulate non-empty editor
 					});
 
-					composable.generalConfig.wordCount.onUpdate({
-						words: 0,
-						characters: 100,
+					composable.registerDeletionHandler(mockEditor, onDelete);
+
+					expect(onDelete).not.toHaveBeenCalled();
+				});
+				it("should not call onDelete if editor contains formula ", () => {
+					const { composable, mockEditor, onDelete } = setupEditor({
+						btnKey: key,
+						editorData: '<p><span class="math-tex"></span></p>', // Simulate non-empty editor
 					});
 
 					composable.registerDeletionHandler(mockEditor, onDelete);
