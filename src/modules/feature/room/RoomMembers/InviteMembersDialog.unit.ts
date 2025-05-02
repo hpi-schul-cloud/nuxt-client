@@ -4,6 +4,10 @@ import {
 } from "@@/tests/test-utils/setup";
 import InviteMembersDialog from "./InviteMembersDialog.vue";
 import { nextTick } from "vue";
+import { createTestingPinia } from "@pinia/testing";
+import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
+import { useBoardNotifier } from "@util-board";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 
 jest.mock("vue-i18n", () => {
 	return {
@@ -12,6 +16,9 @@ jest.mock("vue-i18n", () => {
 	};
 });
 
+jest.mock("@util-board/BoardNotifier.composable");
+const boardNotifier = jest.mocked(useBoardNotifier);
+
 enum InvitationStep {
 	PREPARE = "prepare",
 	SHARE = "share",
@@ -19,10 +26,16 @@ enum InvitationStep {
 
 jest.useFakeTimers();
 describe("InviteMembersDialog", () => {
+	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	beforeEach(() => {
+		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
+		boardNotifier.mockReturnValue(boardNotifierCalls);
+	});
 	afterEach(() => {
 		jest.clearAllMocks();
 		jest.clearAllTimers();
 	});
+
 	const setup = (
 		props: {
 			modelValue?: boolean;
@@ -34,9 +47,21 @@ describe("InviteMembersDialog", () => {
 			preDefinedStep: InvitationStep.PREPARE,
 		}
 	) => {
+		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
 		const wrapper = mount(InviteMembersDialog, {
 			global: {
-				plugins: [createTestingI18n(), createTestingVuetify()],
+				plugins: [
+					createTestingI18n(),
+					createTestingVuetify(),
+					createTestingPinia({
+						initialState: {
+							roomInvitationLinkStore: {
+								isLoading: false,
+								roomInvitationLinks,
+							},
+						},
+					}),
+				],
 			},
 			props: {
 				...{
