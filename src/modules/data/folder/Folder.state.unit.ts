@@ -15,14 +15,11 @@ jest.mock("vue-i18n", () => {
 
 describe("useFolderState", () => {
 	it("should initialize with default values", () => {
-		const { breadcrumbs, fileFolderElement, folderName, isLoading, isEmpty } =
-			useFolderState();
+		const { breadcrumbs, fileFolderElement, folderName } = useFolderState();
 
 		expect(breadcrumbs.value).toEqual([]);
 		expect(fileFolderElement.value).toBeUndefined();
 		expect(folderName.value).toBe("pages.folder.untitled");
-		expect(isLoading.value).toBe(false);
-		expect(isEmpty.value).toBe(true);
 	});
 
 	describe("fetchFileFolderElement", () => {
@@ -71,22 +68,6 @@ describe("useFolderState", () => {
 					resolvePromise,
 				};
 			};
-
-			it("should set isLoading correctly", async () => {
-				const { testId, resolvePromise } = setup();
-
-				const { fetchFileFolderElement, isLoading } = useFolderState();
-
-				expect(isLoading.value).toBe(false);
-
-				const fetchPromise = fetchFileFolderElement(testId);
-				expect(isLoading.value).toBe(true);
-
-				resolvePromise(); // Resolve the promise manually
-				await fetchPromise;
-
-				expect(isLoading.value).toBe(false);
-			});
 
 			describe("element is a file folder element", () => {
 				it("should call boardElementApi with correct parameters", async () => {
@@ -232,6 +213,7 @@ describe("useFolderState", () => {
 					await fetchFileFolderElement(testId);
 
 					try {
+						// eslint-disable-next-line @typescript-eslint/no-unused-vars
 						const _breadcrumbs = breadcrumbs.value;
 					} catch (error) {
 						expect(error).toEqual(userError);

@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Create",
 	"common.actions.delete": "Delete",
 	"common.actions.discard": "Discard",
+	"common.actions.duplicate": "Duplicate",
 	"common.actions.export": "Export",
 	"common.actions.edit": "Edit",
 	"common.actions.finish": "Finish",
@@ -658,7 +659,7 @@ export default {
 	"components.molecules.copyResult.metadata": "General Information",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Content is not copied for data protection reasons and must be added again.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"All elements were successfully copied.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Board successfully copied.",
@@ -809,20 +810,6 @@ export default {
 		"Uploaded files within the course.",
 	"components.molecules.export.options.info.point2":
 		"Submissions assigned to a task.",
-	"components.organisms.AutoLogoutWarning.confirm": "Extend session",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Your session has already expired. Please log in again.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"Your session could not be extended!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Oops... that should not have happened! Your session could not be extended. Please try again right away.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Sloth",
-	"components.organisms.AutoLogoutWarning.success":
-		"Session successfully extended.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"less than one minute | one minute | {remainingTime} minutes",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
 	"components.organisms.ContentCard.report.body":
 		"Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email":
@@ -921,6 +908,10 @@ export default {
 		"The start date must be before the end date.",
 	"components.timePicker.validation.format": "Please use format HH:MM",
 	"components.timePicker.validation.required": "Please enter a time.",
+	"data-room.duplication.alert.success": "Room successfully duplicated.",
+	"data-room.duplication.alert.error":
+		"The duplication process could not be completed.",
+	"data-room.duplication.loading": "Room is being duplicated...",
 	"error.400": "401 – Bad Request",
 	"error.401":
 		"401 – Unfortunately, you do not have permission to view this content.",
@@ -934,6 +925,18 @@ export default {
 	"error.proxy.action": "Reload page",
 	"error.proxy.description":
 		"We have a small problem with our infrastructure. We'll be right back.",
+	"feature-autoLogout.button.confirm": "Extend session",
+	"feature-autoLogout.button.confirm.returnToLogin": "Return to login page",
+	"feature-autoLogout.message.error.401":
+		"Your session has already expired. Please log in again.",
+	"feature-autoLogout.message.error":
+		"Oops... that should not have happened! Your session could not be extended. Please try again right away.",
+	"feature-autoLogout.component.image.alt": "Sloth",
+	"feature-autoLogout.message.success": "Session successfully extended.",
+	"feature-autoLogout.warning.remainingTime":
+		"less than one minute | one minute | {remainingTime} minutes",
+	"feature-autoLogout.warning":
+		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
 	"feature-board-external-tool-element.alert.error.student":
 		"The tool configuration is out of date, so the tool cannot be started. To update, please contact the school administrator.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -966,6 +969,19 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"User group successfully synchronized",
 	"feature-course-sync.startRoomSyncDialog.title": "Start synchronization",
+	"feature-room.DuplicationInfoDialog.title": "Duplicate Room",
+	"feature-room.DuplicationInfoDialog.text.nextStep":
+		"In the next step, a copy of the room will be created.",
+	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+		"The following contents will not be copied:",
+	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+		"Room members and permissions",
+	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+		"Contents in Etherpads",
+	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+		"Contents in whiteboards",
+	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+		"Protected settings of external tools",
 	"format.date": "MM/DD/YYYY",
 	"format.dateLong": "dddd, MMMM DD. YYYY",
 	"format.dateTime": "MM/DD/YYYY HH:mm",
@@ -1802,7 +1818,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (e.g. compatible with Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Create room",
 	"pages.roomEdit.title": "Edit room",
 	"pages.roomDetails.title": "Room",
@@ -1834,7 +1849,7 @@ export default {
 	"pages.rooms.members.infoText":
 		"Add members to the room. Teachers from other schools can be added if they have activated visibility in the central directory in their profile ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "more information",
-	"pages.rooms.members.label": "Participants",
+	"pages.rooms.members.label": "Members",
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.add.infoText":
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
@@ -1845,7 +1860,9 @@ export default {
 	"pages.rooms.members.changePermission": "Change room permissions",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Change room permissions for {memberFullName}",
-	"pages.rooms.members.manage": "Room members",
+	"pages.rooms.members.manage": "Manage Members",
+	"pages.rooms.members.management": "Member management",
+	"pages.rooms.members.view": "View Members",
 	"pages.rooms.members.tab.members": "Members",
 	"pages.rooms.members.tab.invitations": "Invitations",
 	"pages.rooms.members.tab.invitations.infoText":
@@ -2026,6 +2043,10 @@ export default {
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
 	"ui-confirmation-dialog.ask-cancel-form": "Discard changes?",
 	"ui-layout.topbar.pageShare.printQRCode": "Print QR Code",
+	"ui.actionMenu.selectedRows": "Action menu for {count} selected lines",
+	"ui.actionMenu.actions": "Actions",
+	"ui.actionMenu.select.none": "Deselect all lines",
+	"ui.dataTable.select.all": "Select all lines",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent.label.missing": "User created",
@@ -2064,7 +2085,13 @@ export default {
 	"pages.folder.fab.title": "Add file",
 	"pages.folder.untitled": "Untitled folder",
 	"pages.folder.title": "Folder",
+	"pages.folder.columns.name": "Name",
+	"pages.folder.columns.createdat": "Created on",
+	"pages.folder.columns.size": "Size",
 	"pages.folder.ariaLabels.menu": "Folder menu",
 	"pages.folder.ariaLabels.menu.action.edit": "Rename folder",
 	"pages.folder.ariaLabels.menu.action.delete": "Delete folder",
+	"pages.folder.ariaLabels.filter": "Search/filter table",
+	"pages.folder.ariaLabels.actionMenu": "Action menu for {name}",
+	"pages.folder.uploadstats": "{uploaded} of {total} files uploaded",
 };
