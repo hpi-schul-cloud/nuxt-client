@@ -10,7 +10,8 @@
 					@move:column-keyboard="onMoveColumnKeyboard"
 				>
 					<BoardAnyTitleInput
-						:value="columnTitle"
+						:value="title"
+						:empty-value-fallback="t('components.board.column.defaultTitle')"
 						:data-testid="`column-title-${index}`"
 						scope="column"
 						:is-edit-mode="isEditMode"
@@ -72,7 +73,7 @@ import {
 	KebabMenuActionMoveRight,
 } from "@ui-kebab-menu";
 import { useCourseBoardEditMode } from "@util-board";
-import { computed, ref, toRef } from "vue";
+import { computed, ref, toRef, watchEffect } from "vue";
 import BoardAnyTitleInput from "../shared/BoardAnyTitleInput.vue";
 import BoardColumnInteractionHandler from "./BoardColumnInteractionHandler.vue";
 import { useI18n } from "vue-i18n";
@@ -95,14 +96,6 @@ const emit = defineEmits([
 	"update:title",
 ]);
 const { t } = useI18n();
-
-const columnTitle = computed(() => {
-	const trimmedTitle = props.title.trim();
-
-	return trimmedTitle.length > 0
-		? trimmedTitle
-		: t("components.board.column.defaultTitle");
-});
 
 const columnId = toRef(props, "columnId");
 const { hasEditPermission, hasDeletePermission } = useBoardPermissions();

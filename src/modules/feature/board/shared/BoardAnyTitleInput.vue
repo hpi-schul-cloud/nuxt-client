@@ -23,7 +23,7 @@
 			class="title"
 			:class="scope === 'board' ? 'board-title' : 'other-title'"
 		>
-			{{ modelValue }}
+			{{ modelValue.trim() ? modelValue : emptyValueFallback }}
 		</component>
 	</template>
 </template>
@@ -68,6 +68,10 @@ export default defineComponent({
 			type: Number,
 			default: null,
 		},
+		emptyValueFallback: {
+			type: String,
+			default: "",
+		},
 	},
 	emits: ["update:value", "enter"],
 	setup(props, { emit }) {
@@ -76,7 +80,7 @@ export default defineComponent({
 
 		const internalIsFocused = ref(false);
 
-		const titleInput = ref(null);
+		const titleInput = ref<VTextarea | null>(null);
 
 		useInlineEditInteractionHandler(async () => {
 			await setFocusOnEdit();
@@ -86,7 +90,7 @@ export default defineComponent({
 			await nextTick();
 			internalIsFocused.value = true;
 			if (titleInput.value) {
-				(titleInput.value as VTextarea).focus();
+				titleInput.value.focus();
 				cursorToEnd();
 			}
 		};
@@ -123,6 +127,12 @@ export default defineComponent({
 				)
 					return;
 				if (newVal && !oldVal) {
+					if (
+						modelValue.value.trim().length < 1 &&
+						props.emptyValueFallback.length > 0
+					) {
+						modelValue.value = props.emptyValueFallback;
+					}
 					await nextTick();
 					await setFocusOnEdit();
 				}
@@ -170,8 +180,8 @@ export default defineComponent({
 
 		const cursorToEnd = () => {
 			if (titleInput.value) {
-				const length = (titleInput.value as VTextarea).value.length;
-				(titleInput.value as VTextarea).setSelectionRange(length, length);
+				const length = titleInput.value.value.length;
+				titleInput.value.setSelectionRange(length, length);
 			}
 		};
 
