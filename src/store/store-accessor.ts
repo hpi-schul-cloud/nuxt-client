@@ -5,10 +5,8 @@
 // In here you import all your modules, call getModule on them to turn them
 // into the actual stores, and then re-export them.
 
-import AccountsModule from "@/store/accounts";
 import ApplicationErrorModule from "@/store/application-error";
 import AuthModule from "@/store/auth";
-import AutoLogoutModule from "@/store/autoLogout";
 import CommonCartridgeImportModule from "@/store/common-cartridge-import";
 import ContentModule from "@/store/content";
 import CopyModule from "@/store/copy";
@@ -39,10 +37,8 @@ import CommonCartridgeExportModule from "./common-cartridge-export";
 // Each store is the singleton instance of its module class
 // Use these -- they have methods for state/getters/mutations/actions
 // (result from getModule(...))
-export let accountsModule: AccountsModule;
 export let applicationErrorModule: ApplicationErrorModule;
 export let authModule: AuthModule;
-export let autoLogoutModule: AutoLogoutModule;
 export let contentModule: ContentModule;
 export let copyModule: CopyModule;
 export let envConfigModule: EnvConfigModule;
@@ -70,10 +66,8 @@ export let commonCartridgeImportModule: CommonCartridgeImportModule;
 
 // initializer plugin: sets up state/getters/mutations/actions for each store
 export function initializeStores(store: Store<unknown>): void {
-	accountsModule = getModule(AccountsModule, store);
 	applicationErrorModule = getModule(ApplicationErrorModule, store);
 	authModule = getModule(AuthModule, store);
-	autoLogoutModule = getModule(AutoLogoutModule, store);
 	contentModule = getModule(ContentModule, store);
 	copyModule = getModule(CopyModule, store);
 	envConfigModule = getModule(EnvConfigModule, store);
@@ -104,10 +98,8 @@ export function initializeStores(store: Store<unknown>): void {
 // appears as an element of the root store's state.
 // (This is required!)
 export const modules = {
-	accountsModule: AccountsModule,
 	applicationErrorModule: ApplicationErrorModule,
 	authModule: AuthModule,
-	autoLogoutModule: AutoLogoutModule,
 	contentModule: ContentModule,
 	copyModule: CopyModule,
 	envConfigModule: EnvConfigModule,
