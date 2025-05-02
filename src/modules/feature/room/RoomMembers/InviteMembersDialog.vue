@@ -76,9 +76,9 @@
 
 							<date-picker
 								ref="datePicker"
-								v-model="formData.activeUntilDate"
+								v-model="formData.activeUntil"
 								:disabled="isDatePickerDisabled"
-								:selected-date="(formData.activeUntilDate! || '').toString()"
+								:selected-date="(formData.activeUntil! || '').toString()"
 								:min-date="new Date().toString()"
 								class="mr-2 mt-2"
 								data-testid="date-picker-until"
@@ -115,7 +115,7 @@
 				</template>
 				<template v-else>
 					<ShareModalResult
-						share-url="https://www.schul.cloud/room/1234567890"
+						:share-url="sharedUrl!"
 						type="roomMemberInvitation"
 					/>
 				</template>
@@ -167,6 +167,7 @@ import { InfoAlert } from "@ui-alert";
 import { DatePicker } from "@ui-date-time-picker";
 import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useDisplay } from "vuetify";
+import { useRoomInvitationLinkStore } from "@data-room";
 
 enum InvitationStep {
 	PREPARE = "prepare",
@@ -194,9 +195,12 @@ const emit = defineEmits<{
 	(e: "update:modelValue", value: boolean): void;
 }>();
 
+const { createLink } = useRoomInvitationLinkStore();
+
 const { t } = useI18n();
 const { xs } = useDisplay();
 const step = ref<string>();
+const sharedUrl = ref<string>();
 
 onMounted(() => {
 	step.value = props.preDefinedStep;
@@ -206,8 +210,8 @@ const defaultFormData = {
 	title: "",
 	restrictedToCreatorSchool: true,
 	isAlsoForStudents: false,
-	activeUntil: false,
-	activeUntilDate: new Date(),
+	activeUntilCheck: false,
+	activeUntil: new Date(),
 	requiresConfirmation: true,
 };
 
@@ -224,29 +228,33 @@ const modalTitle = computed(() => {
 });
 
 const onUpdateValidDate = (date: Date) => {
-	formData.value.activeUntilDate = date;
+	formData.value.activeUntil = date;
 	unpause();
 };
 
 const onClose = () => {
 	emit("close");
 
-	// Assigning the step value to PREPARE causing the flickering of the dialog on close
-	// That's why we are using setTimeout to set the value after the dialog is closed
-
-	// remove this setTimeout by checking if the sharing url is link url is provided
-	// after the store is implemented
 	setTimeout(() => {
 		formData.value = { ...defaultFormData };
 		step.value = InvitationStep.PREPARE;
 	}, 1000);
 };
 
-const onInviteMembers = () => {
-	// TODO use inviteMembersStore to send the invitation
-	setTimeout(() => {
-		step.value = InvitationStep.SHARE;
-	}, 1000);
+const onInviteMembers = async () => {
+	const createLinkBodyParams = {
+		title: formData.value.title || "invitation link",
+		activeUntil: formData.value.activeUntilCheck
+			? formData.value.activeUntil.toString()
+			: "01.01.1900",
+		isOnlyForTeachers: !formData.value.isAlsoForStudents,
+		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
+		requiresConfirmation: formData.value.requiresConfirmation,
+	};
+	const linkId = await createLink(createLinkBodyParams);
+
+	sharedUrl.value = `${window.location.origin}/room-invitation-links?roomInvitationLinkId=${linkId}`;
+	step.value = InvitationStep.SHARE;
 };
 
 const inviteMembersContent = ref<VCard>();

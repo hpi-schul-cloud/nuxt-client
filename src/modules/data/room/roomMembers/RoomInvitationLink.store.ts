@@ -65,6 +65,8 @@ export const useRoomInvitationLinkStore = defineStore(
 				).data;
 
 				roomInvitationLinks.value.push(response);
+
+				return response.id;
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.create"));
 			}
