@@ -79,7 +79,6 @@
 								ref="datePicker"
 								v-model="formData.activeUntil"
 								:disabled="isDatePickerDisabled"
-								:selected-date="(formData.activeUntil! || '').toString()"
 								:min-date="new Date().toString()"
 								class="mr-2 mt-2"
 								data-testid="date-picker-until"

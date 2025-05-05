@@ -67,7 +67,7 @@
 	<ConfirmationDialog />
 	<InviteMembersDialog
 		v-model="isInvitationDialogOpen"
-		:school-name="currentUser?.schoolName"
+		:school-name="currentUser?.schoolName || ''"
 		@close="onDialogClose"
 	/>
 </template>
