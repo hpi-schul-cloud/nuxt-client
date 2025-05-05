@@ -12,6 +12,7 @@
 			:autofocus="autofocus"
 			:value="modelValue.text"
 			:data-testid="`rich-text-edit-${columnIndex}-${elementIndex}`"
+			:column-index="columnIndex"
 			@update:value="onUpdateElement"
 			@delete:element="onDeleteElement"
 			@blur="onBlur"

@@ -404,7 +404,7 @@ export default {
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.action.changeLayout": "Змінити вигляд",
 	"components.board.action.shareLink.card": "Скопіювати посилання на Карту",
-	"components.board.column.defaultTitle": "Нова колонка",
+	"components.board.column.defaultTitle": "Назва стовпця",
 	"components.board.column.ghost.column.placeholder": "Додати стовпець",
 	"components.board.column.ghost.list.placeholder": "Додати розділ",
 	"components.board.draftChip.tooltip": "Видно лише вчителям",
@@ -807,19 +807,6 @@ export default {
 		"Завантажені файли в межах курсу.",
 	"components.molecules.export.options.info.point2":
 		"Подання, призначені до завдання.",
-	"components.organisms.AutoLogoutWarning.confirm": "Подовжити сеанс",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Термін дії сеансу минув. Увійдіть ще раз.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"Ваш сеанс не вдалося продовжити!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Лінивець",
-	"components.organisms.AutoLogoutWarning.success": "Сеанс успішно продовжено.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
 	"components.organisms.ContentCard.report.body":
 		"Повідомлення про вміст з ідентифікатором",
 	"components.organisms.ContentCard.report.email":
@@ -933,6 +920,19 @@ export default {
 	"error.proxy.action": "Перезавантажити сторінку",
 	"error.proxy.description":
 		"У нас виникла невелика проблема з нашою інфраструктурою. Ми скоро повернемося.",
+	"feature-autoLogout.button.confirm": "Подовжити сеанс",
+	"feature-autoLogout.button.confirm.returnToLogin":
+		"Повернутися на сторінку входу",
+	"feature-autoLogout.message.error.401":
+		"Термін дії сеансу минув. Увійдіть ще раз.",
+	"feature-autoLogout.message.error":
+		"Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",
+	"feature-autoLogout.component.image.alt": "Лінивець",
+	"feature-autoLogout.message.success": "Сеанс успішно продовжено.",
+	"feature-autoLogout.warning.remainingTime":
+		"менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
+	"feature-autoLogout.warning":
+		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
 	"feature-board-external-tool-element.alert.error.student":
 		"Інструмент зараз неможливо запустити. Будь ласка, оновіть дошку або зверніться до вчителя чи інструктора курсу.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -2046,7 +2046,11 @@ export default {
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
 	"ui-confirmation-dialog.ask-cancel-form": "Відкинути зміни?",
 	"ui-layout.topbar.pageShare.printQRCode": "Роздрукуйте QR-код",
-	"util-validators-invalid-url": "Esta URL no es válida.",
+	"ui.actionMenu.selectedRows": "Меню дій для {count} виділених рядків",
+	"ui.actionMenu.actions": "Дії",
+	"ui.actionMenu.select.none": "Зніміть виділення з усіх рядків",
+	"ui.dataTable.select.all": "Виділити всі рядки",
+	"util-validators-invalid-url": "Ця URL-адреса є недійсною.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",
 	"utils.adminFilter.consent.label.parentsAgreementMissing": "Немає згоди учня",
@@ -2084,7 +2088,13 @@ export default {
 	"pages.folder.fab.title": "Додати файл",
 	"pages.folder.untitled": "Папка без назви",
 	"pages.folder.title": "Папка",
+	"pages.folder.columns.name": "Ім'я",
+	"pages.folder.columns.createdat": "Створено на",
+	"pages.folder.columns.size": "Розмір",
 	"pages.folder.ariaLabels.menu": "Меню Папки",
 	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",
 	"pages.folder.ariaLabels.menu.action.delete": "Видалити папку",
+	"pages.folder.ariaLabels.filter": "	Таблиця пошуку/фільтрації",
+	"pages.folder.ariaLabels.actionMenu": "Меню дій для {name}",
+	"pages.folder.uploadstats": "{uploaded} з {total} завантажених файлів",
 };

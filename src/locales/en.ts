@@ -395,7 +395,7 @@ export default {
 	"components.board.action.moveUp": "Move up",
 	"components.board.action.changeLayout": "Change layout",
 	"components.board.action.shareLink.card": "Copy link to card",
-	"components.board.column.defaultTitle": "New column",
+	"components.board.column.defaultTitle": "Column title",
 	"components.board.column.ghost.column.placeholder": "Add column",
 	"components.board.column.ghost.list.placeholder": "Add section",
 	"components.board.draftChip.tooltip": "Only visible to teachers",
@@ -783,20 +783,6 @@ export default {
 		"Uploaded files within the course.",
 	"components.molecules.export.options.info.point2":
 		"Submissions assigned to a task.",
-	"components.organisms.AutoLogoutWarning.confirm": "Extend session",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Your session has already expired. Please log in again.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"Your session could not be extended!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Oops... that should not have happened! Your session could not be extended. Please try again right away.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Sloth",
-	"components.organisms.AutoLogoutWarning.success":
-		"Session successfully extended.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"less than one minute | one minute | {remainingTime} minutes",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
 	"components.organisms.ContentCard.report.body":
 		"Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email":
@@ -912,6 +898,18 @@ export default {
 	"error.proxy.action": "Reload page",
 	"error.proxy.description":
 		"We have a small problem with our infrastructure. We'll be right back.",
+	"feature-autoLogout.button.confirm": "Extend session",
+	"feature-autoLogout.button.confirm.returnToLogin": "Return to login page",
+	"feature-autoLogout.message.error.401":
+		"Your session has already expired. Please log in again.",
+	"feature-autoLogout.message.error":
+		"Oops... that should not have happened! Your session could not be extended. Please try again right away.",
+	"feature-autoLogout.component.image.alt": "Sloth",
+	"feature-autoLogout.message.success": "Session successfully extended.",
+	"feature-autoLogout.warning.remainingTime":
+		"less than one minute | one minute | {remainingTime} minutes",
+	"feature-autoLogout.warning":
+		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
 	"feature-board-external-tool-element.alert.error.student":
 		"The tool configuration is out of date, so the tool cannot be started. To update, please contact the school administrator.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -2018,6 +2016,10 @@ export default {
 	"ui-confirmation-dialog.ask-delete": "Delete {type}{title}?",
 	"ui-confirmation-dialog.ask-cancel-form": "Discard changes?",
 	"ui-layout.topbar.pageShare.printQRCode": "Print QR Code",
+	"ui.actionMenu.selectedRows": "Action menu for {count} selected lines",
+	"ui.actionMenu.actions": "Actions",
+	"ui.actionMenu.select.none": "Deselect all lines",
+	"ui.dataTable.select.all": "Select all lines",
 	"util-validators-invalid-url": "This is not a valid URL.",
 	"utils.adminFilter.class.title": "Class(es)",
 	"utils.adminFilter.consent.label.missing": "User created",
@@ -2056,7 +2058,13 @@ export default {
 	"pages.folder.fab.title": "Add file",
 	"pages.folder.untitled": "Untitled folder",
 	"pages.folder.title": "Folder",
+	"pages.folder.columns.name": "Name",
+	"pages.folder.columns.createdat": "Created on",
+	"pages.folder.columns.size": "Size",
 	"pages.folder.ariaLabels.menu": "Folder menu",
 	"pages.folder.ariaLabels.menu.action.edit": "Rename folder",
 	"pages.folder.ariaLabels.menu.action.delete": "Delete folder",
+	"pages.folder.ariaLabels.filter": "Search/filter table",
+	"pages.folder.ariaLabels.actionMenu": "Action menu for {name}",
+	"pages.folder.uploadstats": "{uploaded} of {total} files uploaded",
 };

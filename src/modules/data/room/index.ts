@@ -9,5 +9,7 @@ export { useRoomMemberVisibilityOptions } from "./roomMembers/membersVisibleOpti
 export { useRoomAuthorization } from "./roomAuthorization.composable";
 export { useRoomDuplication } from "./roomDuplication.composable";
 
-export type { RoomMember } from "./roomMembers/types";
+export type { RoomMember, RoomInvitationLink } from "./roomMembers/types";
+export { RoomInvitationLinkValidationError } from "./roomMembers/types";
 export { useRoomMembersStore } from "./roomMembers/RoomMembers.store";
+export { useRoomInvitationLinkStore } from "./roomMembers/RoomInvitationLink.store";
