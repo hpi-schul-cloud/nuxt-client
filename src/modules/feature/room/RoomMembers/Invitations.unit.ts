@@ -96,6 +96,11 @@ describe("Invitations", () => {
 	it("should handle onClick for 'Use Invitation' button", async () => {
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
 		const { wrapper, roomInvitationLinkStore } = setup(roomInvitationLinks);
+		roomInvitationLinkStore.useLink.mockResolvedValue({
+			roomId: "roomId",
+			validationMessage: "",
+			schoolName: "",
+		});
 
 		const useButton = wrapper.get("[data-testid=use-invitation-button]");
 		await useButton.trigger("click");

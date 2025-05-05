@@ -102,6 +102,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 		const { wrapper } = await setup({
 			roomId: "room-id",
 			validationMessage: "",
+			schoolName: "",
 		});
 
 		expect(wrapper.exists()).toBe(true);
@@ -111,6 +112,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 		const { wrapper } = await setup({
 			roomId: "room-id",
 			validationMessage: "",
+			schoolName: "",
 		});
 		const wireframe = wrapper.findComponent(DefaultWireframe);
 
@@ -132,6 +134,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 		const { wrapper } = await setup({
 			roomId: "room-id",
 			validationMessage: "",
+			schoolName: "",
 		});
 		const wireframe = wrapper.findComponent(DefaultWireframe);
 
@@ -144,6 +147,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 		const { wrapper } = await setup({
 			roomId: "room-id",
 			validationMessage: "",
+			schoolName: "",
 		});
 		const pageTitle = wrapper.find("[data-testid=page-title]");
 		expect(pageTitle.text()).toContain(
@@ -156,6 +160,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 			const { router } = await setup({
 				roomId: "room-id",
 				validationMessage: "",
+				schoolName: "",
 			});
 
 			expect(router.push).toHaveBeenCalledWith({
@@ -196,6 +201,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 				const { wrapper } = await setup({
 					roomId: "",
 					validationMessage: message,
+					schoolName: "Beispielschule",
 				});
 
 				const statusMessage = wrapper.find("[data-testid=status-message]");
@@ -209,6 +215,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 			const { wrapper } = await setup({
 				roomId: "",
 				validationMessage: "",
+				schoolName: "",
 			});
 
 			const statusMessage = wrapper.find("[data-testid=status-message]");

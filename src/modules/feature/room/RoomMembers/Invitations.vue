@@ -5,23 +5,23 @@
 	<div v-for="link of roomInvitationLinks" :key="link.id">
 		<div>
 			{{ link }} {{ link.id
-			}}<v-btn
+			}}<VBtn
 				data-testid="update-invitation-button"
 				@click="onClickUpdate(link.id)"
-				>update</v-btn
+				>update</VBtn
 			>
-			<v-btn data-testid="use-invitation-button" @click="onClickUse(link.id)"
-				>use</v-btn
+			<VBtn data-testid="use-invitation-button" @click="onClickUse(link.id)"
+				>use</VBtn
 			>
-			<v-btn
+			<VBtn
 				data-testid="delete-invitation-button"
 				@click="onClickRemove(link.id)"
-				>delete</v-btn
+				>delete</VBtn
 			>
 		</div>
 	</div>
-	<v-btn data-testid="create-invitation-button" @click="onClickAdd"
-		>add random link</v-btn
+	<VBtn data-testid="create-invitation-button" @click="onClickAdd"
+		>add random link</VBtn
 	>
 </template>
 <script setup lang="ts">
