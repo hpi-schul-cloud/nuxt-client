@@ -25,8 +25,10 @@
 			"@data-system": ["src/modules/data/system"],
 			"@data-provisioning-options": ["src/modules/data/provisioning-options"],
 			"@data-room": ["src/modules/data/room"],
+			"@data-file": ["src/modules/data/file"],
 			"@data-folder": ["src/modules/data/folder"],
 			"@data-license": ["src/modules/data/license"],
+			"@feature-auto-logout": ["src/modules/feature/auto-logout"],
 			"@feature-board-file-element": ["src/modules/feature/board-file-element"],
 			"@feature-board-submission-element": [
 				"src/modules/feature/board-submission-element"
@@ -45,9 +47,7 @@
 			"@feature-board-video-conference-element": [
 				"src/modules/feature/board-video-conference-element"
 			],
-			"@feature-board-h5p-element": [
-				"src/modules/feature/board-h5p-element"
-			],
+			"@feature-board-h5p-element": ["src/modules/feature/board-h5p-element"],
 			"@feature-board": ["src/modules/feature/board"],
 			"@feature-course-sync": ["src/modules/feature/course-sync"],
 			"@feature-editor": ["src/modules/feature/editor"],
@@ -58,7 +58,9 @@
 				"src/modules/feature/board-deleted-element"
 			],
 			"@feature-room": ["src/modules/feature/room"],
-			"@feature-board-folder-element": ["src/modules/feature/board-folder-element"],
+			"@feature-board-folder-element": [
+				"src/modules/feature/board-folder-element"
+			],
 			"@feature-folder": ["src/modules/feature/folder"],
 			"@icons/*": ["src/components/icons/*"],
 			"@ui-alert": ["src/modules/ui/alert"],
@@ -66,12 +68,14 @@
 			"@ui-breadcrumbs": ["src/modules/ui/breadcrumbs"],
 			"@ui-chip": ["src/modules/ui/chip"],
 			"@ui-confirmation-dialog": ["src/modules/ui/confirmation-dialog"],
+			"@ui-data-table": ["src/modules/ui/data-table"],
 			"@ui-date-time-picker": ["src/modules/ui/date-time-picker"],
 			"@ui-extended-icon-btn": ["src/modules/ui/extended-icon-btn"],
 			"@ui-kebab-menu": ["src/modules/ui/kebab-menu"],
 			"@ui-layout": ["src/modules/ui/layout"],
 			"@ui-light-box": ["src/modules/ui/light-box"],
 			"@ui-line-clamp": ["src/modules/ui/line-clamp"],
+			"@ui-loading-state-dialog": ["src/modules/ui/loading-state-dialog"],
 			"@ui-preview-image": ["src/modules/ui/preview-image"],
 			"@ui-room-details": ["src/modules/ui/room-details"],
 			"@ui-skip-link": ["src/modules/ui/skip-link"],
@@ -80,9 +84,8 @@
 			"@ui-video-conference-configuration-dialog": [
 				"src/modules/ui/video-conference-configuration-dialog"
 			],
-			"@ui-empty-state": [
-				"src/modules/ui/empty-state",
-			],
+			"@ui-empty-state": ["src/modules/ui/empty-state"],
+			"@util-axios-error": ["src/modules/util/axios-error"],
 			"@util-board": ["src/modules/util/board"],
 			"@util-validators": ["src/modules/util/validators"],
 			"@util-vue": ["src/modules/util/vue"],

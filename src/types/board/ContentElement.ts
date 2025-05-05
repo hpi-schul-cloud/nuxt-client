@@ -7,7 +7,7 @@ import {
 	FileFolderElementResponse,
 	H5pElementResponse,
 	LinkElementResponse,
-	ParentNodeInfoResponse as ApiParentNodeInfo,
+	ParentNodeInfoResponse,
 	ParentNodeType,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
@@ -28,5 +28,6 @@ export type AnyContentElement =
 	| VideoConferenceElementResponse
 	| H5pElementResponse;
 
-export type ParentNodeInfo = ApiParentNodeInfo;
+export type ParentNodeInfo = ParentNodeInfoResponse;
+
 export { ContentElementType, ParentNodeType };

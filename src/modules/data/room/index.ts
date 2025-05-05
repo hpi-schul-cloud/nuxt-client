@@ -5,7 +5,11 @@ export { useCourseInfoApi } from "./courseInfoApi.composable";
 export { useCourseList } from "./courseList.composable";
 export { useRoomCreateState } from "./RoomCreate.state";
 export { useRoomEditState } from "./RoomEdit.state";
-
 export { useRoomMemberVisibilityOptions } from "./roomMembers/membersVisibleOptions.composable";
-export type { RoomMember } from "./roomMembers/types";
+export { useRoomAuthorization } from "./roomAuthorization.composable";
+export { useRoomDuplication } from "./roomDuplication.composable";
+
+export type { RoomMember, RoomInvitationLink } from "./roomMembers/types";
+export { RoomInvitationLinkValidationError } from "./roomMembers/types";
 export { useRoomMembersStore } from "./roomMembers/RoomMembers.store";
+export { useRoomInvitationLinkStore } from "./roomMembers/RoomInvitationLink.store";
