@@ -33,27 +33,19 @@ describe("useFolderState", () => {
 			},
 		];
 
-		const resolvePromise = jest.fn();
-		const mockPromise = new Promise((resolve) => {
-			resolvePromise.mockImplementation(() =>
-				resolve({
-					data: {
-						element: props?.element ?? folderElement,
-						parentHierarchy: props?.parentNodeInfos ?? parentNodeInfos,
-					},
-				})
-			);
-		});
-
-		boardApi.elementControllerGetElementWithParentHierarchy.mockReturnValue(
-			mockPromise as AxiosPromise
+		boardApi.elementControllerGetElementWithParentHierarchy.mockReturnValueOnce(
+			{
+				data: {
+					element: props?.element ?? folderElement,
+					parentHierarchy: props?.parentNodeInfos ?? parentNodeInfos,
+				},
+			} as unknown as AxiosPromise
 		);
 
 		jest.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
 
 		return {
 			testId,
-			resolvePromise,
 		};
 	};
 
@@ -71,11 +63,9 @@ describe("useFolderState", () => {
 		describe("when boardElementApi resolves", () => {
 			describe("element is a file folder element", () => {
 				it("should call boardElementApi with correct parameters", async () => {
-					const { testId, resolvePromise } = setup();
+					const { testId } = setup();
 
 					const { fetchFileFolderElement } = useFolderState();
-
-					resolvePromise(); // Resolve the promise manually
 
 					await fetchFileFolderElement(testId);
 
@@ -94,10 +84,9 @@ describe("useFolderState", () => {
 						content: { title: "Invalid Element" },
 						type: "invalidType",
 					};
-					const { testId, resolvePromise } = setup({
+					const { testId } = setup({
 						element: invalidElement,
 					});
-					resolvePromise();
 
 					const { fetchFileFolderElement } = useFolderState();
 
@@ -107,12 +96,10 @@ describe("useFolderState", () => {
 
 			describe("when element is a file folder element", () => {
 				it("should set fileFolderElement correctly", async () => {
-					const { testId, resolvePromise } = setup();
+					const { testId } = setup();
 
 					const { fetchFileFolderElement, fileFolderElement } =
 						useFolderState();
-
-					resolvePromise();
 
 					await fetchFileFolderElement(testId);
 
@@ -126,7 +113,7 @@ describe("useFolderState", () => {
 
 			describe("when root parent node is a course", () => {
 				it("should set breadcrumps correctly", async () => {
-					const { testId, resolvePromise } = setup({
+					const { testId } = setup({
 						parentNodeInfos: [
 							{
 								id: "course-id",
@@ -142,8 +129,6 @@ describe("useFolderState", () => {
 					});
 
 					const { fetchFileFolderElement, breadcrumbs } = useFolderState();
-
-					resolvePromise();
 
 					await fetchFileFolderElement(testId);
 
@@ -166,7 +151,7 @@ describe("useFolderState", () => {
 
 			describe("when root parent node is a room", () => {
 				it("should set breadcrumps correctly", async () => {
-					const { testId, resolvePromise } = setup({
+					const { testId } = setup({
 						parentNodeInfos: [
 							{
 								id: "room-id",
@@ -177,8 +162,6 @@ describe("useFolderState", () => {
 					});
 
 					const { fetchFileFolderElement, breadcrumbs } = useFolderState();
-
-					resolvePromise();
 
 					await fetchFileFolderElement(testId);
 
@@ -197,7 +180,7 @@ describe("useFolderState", () => {
 
 			describe("when root parent node is a user", () => {
 				it("should throw", async () => {
-					const { testId, resolvePromise } = setup({
+					const { testId } = setup({
 						parentNodeInfos: [
 							{
 								id: "user-id",
@@ -209,8 +192,6 @@ describe("useFolderState", () => {
 					const userError = new Error(`Unknown node type: user`);
 
 					const { fetchFileFolderElement, breadcrumbs } = useFolderState();
-
-					resolvePromise();
 
 					await fetchFileFolderElement(testId);
 
@@ -227,7 +208,7 @@ describe("useFolderState", () => {
 
 	describe("parent", () => {
 		it("should return the last parent node when parentNodeInfos is populated", async () => {
-			const { testId, resolvePromise } = setup({
+			const { testId } = setup({
 				parentNodeInfos: [
 					{ id: "parent-1", name: "Parent 1", type: ParentNodeType.Room },
 					{ id: "parent-2", name: "Parent 2", type: ParentNodeType.Course },
@@ -235,8 +216,6 @@ describe("useFolderState", () => {
 			});
 
 			const { fetchFileFolderElement, parent } = useFolderState();
-
-			resolvePromise();
 
 			await fetchFileFolderElement(testId);
 
@@ -248,11 +227,9 @@ describe("useFolderState", () => {
 		});
 
 		it("should return undefined when parentNodeInfos is empty", async () => {
-			const { testId, resolvePromise } = setup({ parentNodeInfos: [] });
+			const { testId } = setup({ parentNodeInfos: [] });
 
 			const { fetchFileFolderElement, parent } = useFolderState();
-
-			resolvePromise();
 
 			await fetchFileFolderElement(testId);
 
