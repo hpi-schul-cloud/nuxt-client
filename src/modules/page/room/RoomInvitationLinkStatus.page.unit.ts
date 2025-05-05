@@ -2,6 +2,7 @@ import { createTestingPinia } from "@pinia/testing";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import {
 	RoomInvitationLinkValidationError,
+	UseLinkResult,
 	useRoomInvitationLinkStore,
 } from "@data-room";
 import {
@@ -22,7 +23,6 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { createPinia, setActivePinia } from "pinia";
 import { flushPromises } from "@vue/test-utils";
-import { UseLinkResult } from "@data-room";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({

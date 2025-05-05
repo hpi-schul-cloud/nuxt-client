@@ -1742,7 +1742,7 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronized",
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
 	"pages.rooms.headerSection.toCourseFiles": "To the course files",
-	"pages.rooms.invitationLinkStatus.image.alt": "Bird with crossed wings",
+	"pages.rooms.invitationLinkStatus.bird.alt": "Bird with crossed wings",
 	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
 		"The invitation link is unfortunately only valid for students of the school “XYZ”",
 	"pages.rooms.invitationLinkStatus.expired":

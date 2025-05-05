@@ -1794,7 +1794,7 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Sincronizado",
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
 	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
-	"pages.rooms.invitationLinkStatus.image.alt": "Pájaro con alas plegadas",
+	"pages.rooms.invitationLinkStatus.bird.alt": "Pájaro con alas plegadas",
 	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
 		"Lamentablemente, el enlace de invitación sólo es válido para los alumnos de la escuela «XYZ»",
 	"pages.rooms.invitationLinkStatus.expired":

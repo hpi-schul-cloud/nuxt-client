@@ -1776,7 +1776,7 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Синхронізовано",
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
 	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
-	"pages.rooms.invitationLinkStatus.image.alt": "Птах зі складеними крилами",
+	"pages.rooms.invitationLinkStatus.bird.alt": "Птах зі складеними крилами",
 	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
 		"Посилання на запрошення, на жаль, дійсне лише для учнів школи «XYZ»",
 	"pages.rooms.invitationLinkStatus.expired":

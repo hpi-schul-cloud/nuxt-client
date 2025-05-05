@@ -1771,7 +1771,7 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronisiert",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
 	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
-	"pages.rooms.invitationLinkStatus.image.alt":
+	"pages.rooms.invitationLinkStatus.bird.alt":
 		"Vogel mit verschränkten Flügeln",
 	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
 		"Der Einladungslink ist leider nur für Lernende der Schule “XYZ” gültig",

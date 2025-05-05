@@ -17,7 +17,7 @@
 			<img
 				:src="CrossedHandsBirdSvg"
 				role="presentation"
-				alt="t('pages.rooms.invitationLinkStatus.image.alt')"
+				alt="t('pages.rooms.invitationLinkStatus.bird.alt')"
 				data-testid="bird-image"
 			/>
 			<div class="text-h2" data-testid="status-message">
@@ -33,14 +33,13 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CrossedHandsBirdSvg from "@/assets/img/crossedHands.svg";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
-import { computed, onMounted, ref } from "vue";
+import { computed, nextTick, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	RoomInvitationLinkValidationError,
 	useRoomInvitationLinkStore,
 } from "@data-room";
 import { useRouter } from "vue-router";
-import { nextTick } from "vue";
 
 const { t } = useI18n();
 
