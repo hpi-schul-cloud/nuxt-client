@@ -14,6 +14,9 @@ import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VueWrapper } from "@vue/test-utils";
 import { useRoomInvitationLinkStore } from "@data-room";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import NotifierModule from "@/store/notifier";
 
 jest.mock("vue-i18n", () => {
 	return {
@@ -79,6 +82,7 @@ describe("InviteMembersDialog", () => {
 		}
 	) => {
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
+		const notifierModule = createModuleMocks(NotifierModule);
 		wrapper = mount(InviteMembersDialog, {
 			global: {
 				plugins: [
@@ -93,6 +97,9 @@ describe("InviteMembersDialog", () => {
 						},
 					}),
 				],
+				provide: {
+					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
+				},
 			},
 			props: {
 				...{
@@ -107,7 +114,7 @@ describe("InviteMembersDialog", () => {
 		const roomInvitationLinkStore = mockedPiniaStoreTyping(
 			useRoomInvitationLinkStore
 		);
-		return { wrapper, roomInvitationLinkStore };
+		return { wrapper, roomInvitationLinkStore, notifierModule };
 	};
 
 	it("should render correctly", () => {
@@ -217,6 +224,46 @@ describe("InviteMembersDialog", () => {
 				});
 
 				expect(shareModalResult.exists()).toBe(true);
+			});
+
+			describe("when copy link button is clicked on ShareModalResult", () => {
+				it("should copy the link to clipboard", async () => {
+					const { wrapper, notifierModule } = setup({
+						preDefinedStep: InvitationStep.SHARE,
+					});
+
+					await nextTick();
+
+					const shareModalResult = wrapper.findComponent({
+						name: "ShareModalResult",
+					});
+
+					await shareModalResult.vm.$emit("copied");
+
+					expect(notifierModule.show).toHaveBeenCalledWith({
+						text: "common.words.copiedToClipboard",
+						status: "success",
+						timeout: 5000,
+					});
+				});
+			});
+
+			describe("when close button is clicked on ShareModalResult", () => {
+				it("should emit 'close'", async () => {
+					const { wrapper } = setup({
+						preDefinedStep: InvitationStep.SHARE,
+					});
+
+					await nextTick();
+
+					const shareModalResult = wrapper.findComponent({
+						name: "ShareModalResult",
+					});
+
+					await shareModalResult.vm.$emit("done");
+
+					expect(wrapper.emitted()).toHaveProperty("close");
+				});
 			});
 		});
 

@@ -113,6 +113,8 @@
 					<ShareModalResult
 						:share-url="sharedUrl!"
 						type="roomMemberInvitation"
+						@copied="onCopyLink"
+						@done="onClose"
 					/>
 				</template>
 			</template>
@@ -165,6 +167,7 @@ import ShareModalResult from "@/components/share/ShareModalResult.vue";
 import { useDisplay } from "vuetify";
 import { useRoomInvitationLinkStore } from "@data-room";
 import { envConfigModule } from "@/store";
+import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 
 enum InvitationStep {
 	PREPARE = "prepare",
@@ -192,6 +195,7 @@ const emit = defineEmits<{
 	(e: "update:modelValue", value: boolean): void;
 }>();
 
+const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { createLink } = useRoomInvitationLinkStore();
 
 const { t } = useI18n();
@@ -252,6 +256,14 @@ const onInviteMembers = async () => {
 
 	sharedUrl.value = `${window.location.origin}/room-invitation-links?roomInvitationLinkId=${linkId}`;
 	step.value = InvitationStep.SHARE;
+};
+
+const onCopyLink = () => {
+	notifierModule.show({
+		text: t("common.words.copiedToClipboard"),
+		status: "success",
+		timeout: 5000,
+	});
 };
 
 const inviteMembersContent = ref<VCard>();
