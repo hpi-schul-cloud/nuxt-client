@@ -14,74 +14,75 @@ jest.mock("vue-i18n", () => {
 });
 
 describe("useFolderState", () => {
+	const setup = (props?: {
+		element?: unknown;
+		parentNodeInfos?: ParentNodeInfo[];
+	}) => {
+		const boardApi = createMock<serverApi.BoardElementApiInterface>();
+		const testId = "test-id";
+		const folderElement = {
+			id: testId,
+			content: { title: "Test Folder" },
+			type: "fileFolder",
+		};
+		const parentNodeInfos = [
+			{
+				id: "parent-id",
+				name: "Parent Folder",
+				type: "fileFolder",
+			},
+		];
+
+		const resolvePromise = jest.fn();
+		const mockPromise = new Promise((resolve) => {
+			resolvePromise.mockImplementation(() =>
+				resolve({
+					data: {
+						element: props?.element ?? folderElement,
+						parentHierarchy: props?.parentNodeInfos ?? parentNodeInfos,
+					},
+				})
+			);
+		});
+
+		boardApi.elementControllerGetElementWithParentHierarchy.mockReturnValue(
+			mockPromise as AxiosPromise
+		);
+
+		jest.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
+
+		return {
+			testId,
+			resolvePromise,
+		};
+	};
+
 	it("should initialize with default values", () => {
-		const { breadcrumbs, fileFolderElement, folderName } = useFolderState();
+		const { breadcrumbs, fileFolderElement, folderName, parent } =
+			useFolderState();
 
 		expect(breadcrumbs.value).toEqual([]);
 		expect(fileFolderElement.value).toBeUndefined();
 		expect(folderName.value).toBe("pages.folder.untitled");
+		expect(parent.value).toBeUndefined();
 	});
 
 	describe("fetchFileFolderElement", () => {
 		describe("when boardElementApi resolves", () => {
-			const setup = (props?: {
-				element?: unknown;
-				parentNodeInfos?: ParentNodeInfo[];
-			}) => {
-				const boardApi = createMock<serverApi.BoardElementApiInterface>();
-				const testId = "test-id";
-				const folderElement = {
-					id: testId,
-					content: { title: "Test Folder" },
-					type: "fileFolder",
-				};
-				const parentNodeInfos = [
-					{
-						id: "parent-id",
-						name: "Parent Folder",
-						type: "fileFolder",
-					},
-				];
-
-				const resolvePromise = jest.fn();
-				const mockPromise = new Promise((resolve) => {
-					resolvePromise.mockImplementation(() =>
-						resolve({
-							data: {
-								element: props?.element ?? folderElement,
-								parentHierarchy: props?.parentNodeInfos ?? parentNodeInfos,
-							},
-						})
-					);
-				});
-
-				boardApi.elementControllerGetElementWithParentHierarchy.mockReturnValue(
-					mockPromise as AxiosPromise
-				);
-
-				jest
-					.spyOn(serverApi, "BoardElementApiFactory")
-					.mockReturnValue(boardApi);
-
-				return {
-					testId,
-					resolvePromise,
-				};
-			};
-
 			describe("element is a file folder element", () => {
 				it("should call boardElementApi with correct parameters", async () => {
 					const { testId, resolvePromise } = setup();
 
 					const { fetchFileFolderElement } = useFolderState();
 
-					fetchFileFolderElement(testId);
+					resolvePromise(); // Resolve the promise manually
+
+					await fetchFileFolderElement(testId);
 
 					expect(
 						serverApi.BoardElementApiFactory()
 							.elementControllerGetElementWithParentHierarchy
 					).toHaveBeenCalledWith(testId);
-					resolvePromise(); // Resolve the promise manually
 				});
 			});
 
@@ -110,6 +111,7 @@ describe("useFolderState", () => {
 
 					const { fetchFileFolderElement, fileFolderElement } =
 						useFolderState();
+
 					resolvePromise();
 
 					await fetchFileFolderElement(testId);
@@ -220,6 +222,65 @@ describe("useFolderState", () => {
 					}
 				});
 			});
+		});
+	});
+
+	describe("parent", () => {
+		it("should return the last parent node when parentNodeInfos is populated", async () => {
+			const { testId, resolvePromise } = setup({
+				parentNodeInfos: [
+					{ id: "parent-1", name: "Parent 1", type: ParentNodeType.Room },
+					{ id: "parent-2", name: "Parent 2", type: ParentNodeType.Course },
+				],
+			});
+
+			const { fetchFileFolderElement, parent } = useFolderState();
+
+			resolvePromise();
+
+			await fetchFileFolderElement(testId);
+
+			expect(parent.value).toEqual({
+				id: "parent-2",
+				name: "Parent 2",
+				type: ParentNodeType.Course,
+			});
+		});
+
+		it("should return undefined when parentNodeInfos is empty", async () => {
+			const { testId, resolvePromise } = setup({ parentNodeInfos: [] });
+
+			const { fetchFileFolderElement, parent } = useFolderState();
+
+			resolvePromise();
+
+			await fetchFileFolderElement(testId);
+
+			expect(parent.value).toBeUndefined();
+		});
+	});
+
+	describe("mapNodeTypeToPathType", () => {
+		it('should return "courses" for ParentNodeType.Course', () => {
+			const { mapNodeTypeToPathType } = useFolderState();
+			expect(mapNodeTypeToPathType(ParentNodeType.Course)).toBe("courses");
+		});
+
+		it('should return "rooms" for ParentNodeType.Room', () => {
+			const { mapNodeTypeToPathType } = useFolderState();
+			expect(mapNodeTypeToPathType(ParentNodeType.Room)).toBe("rooms");
+		});
+
+		it('should return "boards" for ParentNodeType.Board', () => {
+			const { mapNodeTypeToPathType } = useFolderState();
+			expect(mapNodeTypeToPathType(ParentNodeType.Board)).toBe("boards");
+		});
+
+		it("should throw an error for an unknown node type", () => {
+			const { mapNodeTypeToPathType } = useFolderState();
+			expect(() => mapNodeTypeToPathType("unknown")).toThrow(
+				"Unknown node type: unknown"
+			);
 		});
 	});
 });
