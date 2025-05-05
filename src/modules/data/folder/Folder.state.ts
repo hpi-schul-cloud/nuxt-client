@@ -73,21 +73,20 @@ export const useFolderState = () => {
 		}
 	};
 
-	const parentBoardId = computed(() => {
-		const boardParent = parentNodeInfos.value.find(
-			(parentNodeInfo) => parentNodeInfo.type === ParentNodeType.Board
-		);
-		const id = boardParent?.id;
+	const parent = computed(() => {
+		const indexOfDirectParent = parentNodeInfos.value.length - 1;
+		const parent = parentNodeInfos.value[indexOfDirectParent];
 
-		return id;
+		return parent;
 	});
 
 	return {
 		breadcrumbs,
 		fileFolderElement,
 		folderName,
-		parentBoardId,
 		fetchFileFolderElement,
+		parent,
+		mapNodeTypeToPathType,
 	};
 };
 

@@ -1,4 +1,9 @@
-import { RoomMemberResponse } from "@/serverApi/v3";
+import {
+	CreateRoomInvitationLinkBodyParams,
+	RoomInvitationLinkResponse,
+	RoomMemberResponse,
+	UpdateRoomInvitationLinkBodyParams,
+} from "@/serverApi/v3";
 
 export type RoomMember = RoomMemberResponse & {
 	isSelectable?: boolean;
@@ -6,3 +11,22 @@ export type RoomMember = RoomMemberResponse & {
 	displayRoomRole: string;
 	displaySchoolRole: string;
 };
+
+export type RoomInvitationLink = RoomInvitationLinkResponse;
+
+export type CreateRoomInvitationLinkDto = Omit<
+	CreateRoomInvitationLinkBodyParams,
+	"roomId"
+>;
+
+export type UpdateRoomInvitationLinkDto = UpdateRoomInvitationLinkBodyParams & {
+	id: string;
+};
+
+export type UseLinkResult = {
+	roomId: string;
+	validationMessage: string;
+	schoolName: string;
+};
+
+export { RoomInvitationLinkValidationError } from "@/serverApi/v3";

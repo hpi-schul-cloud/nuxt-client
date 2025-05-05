@@ -395,7 +395,7 @@ export default {
 	"components.board.action.moveUp": "Move up",
 	"components.board.action.changeLayout": "Change layout",
 	"components.board.action.shareLink.card": "Copy link to card",
-	"components.board.column.defaultTitle": "New column",
+	"components.board.column.defaultTitle": "Column title",
 	"components.board.column.ghost.column.placeholder": "Add column",
 	"components.board.column.ghost.list.placeholder": "Add section",
 	"components.board.draftChip.tooltip": "Only visible to teachers",
@@ -783,20 +783,6 @@ export default {
 		"Uploaded files within the course.",
 	"components.molecules.export.options.info.point2":
 		"Submissions assigned to a task.",
-	"components.organisms.AutoLogoutWarning.confirm": "Extend session",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Your session has already expired. Please log in again.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"Your session could not be extended!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Oops... that should not have happened! Your session could not be extended. Please try again right away.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Sloth",
-	"components.organisms.AutoLogoutWarning.success":
-		"Session successfully extended.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"less than one minute | one minute | {remainingTime} minutes",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
 	"components.organisms.ContentCard.report.body":
 		"Reporting the content with the ID",
 	"components.organisms.ContentCard.report.email":
@@ -912,6 +898,18 @@ export default {
 	"error.proxy.action": "Reload page",
 	"error.proxy.description":
 		"We have a small problem with our infrastructure. We'll be right back.",
+	"feature-autoLogout.button.confirm": "Extend session",
+	"feature-autoLogout.button.confirm.returnToLogin": "Return to login page",
+	"feature-autoLogout.message.error.401":
+		"Your session has already expired. Please log in again.",
+	"feature-autoLogout.message.error":
+		"Oops... that should not have happened! Your session could not be extended. Please try again right away.",
+	"feature-autoLogout.component.image.alt": "Sloth",
+	"feature-autoLogout.message.success": "Session successfully extended.",
+	"feature-autoLogout.warning.remainingTime":
+		"less than one minute | one minute | {remainingTime} minutes",
+	"feature-autoLogout.warning":
+		"Attention: You will be logged out automatically in {0}. Now extend your session to two hours.",
 	"feature-board-external-tool-element.alert.error.student":
 		"The tool configuration is out of date, so the tool cannot be started. To update, please contact the school administrator.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -1744,6 +1742,18 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronized",
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
 	"pages.rooms.headerSection.toCourseFiles": "To the course files",
+	"pages.rooms.invitationLinkStatus.bird.alt": "Bird with crossed wings",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"The invitation link is unfortunately only valid for students of the school “{schoolName}”",
+	"pages.rooms.invitationLinkStatus.expired":
+		"The invitation link is unfortunately no longer valid",
+	"pages.rooms.invitationLinkStatus.invalidLink":
+		"Unfortunately the invitation link does not exist",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"The invitation link is unfortunately only valid for teachers",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"The invitation link is unfortunately only valid for users of the school “{schoolName}”",
+	"pages.rooms.invitationLinkStatus.title": "Invitation link",
 	"pages.rooms.menuItems.endSync": "End synchronization",
 	"pages.rooms.menuItems.startSync": "Start synchronization",
 	"pages.rooms.importCourse.btn.continue": "Continue",

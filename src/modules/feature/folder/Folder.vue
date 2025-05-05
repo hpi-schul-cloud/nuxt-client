@@ -20,6 +20,7 @@
 			:upload-progress="uploadProgress"
 		/>
 	</DefaultWireframe>
+	<ConfirmationDialog />
 	<input
 		ref="fileInput"
 		type="file"
@@ -32,15 +33,20 @@
 
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import router from "@/router";
+import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
-import { useSharedBoardPageInformation } from "@data-board";
+import { useBoardApi, useSharedBoardPageInformation } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
+import { ConfirmationDialog } from "@ui-confirmation-dialog";
 import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
+
+const boardApi = useBoardApi();
 
 const { t } = useI18n();
 
@@ -51,16 +57,21 @@ const props = defineProps({
 	},
 });
 
-const { breadcrumbs, folderName, fetchFileFolderElement, parentBoardId } =
-	useFolderState();
+const {
+	breadcrumbs,
+	folderName,
+	fetchFileFolderElement,
+	parent,
+	mapNodeTypeToPathType,
+} = useFolderState();
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
 watch(
-	parentBoardId,
+	parent,
 	(newBoardId) => {
 		if (newBoardId) {
-			createPageInformation(newBoardId);
+			createPageInformation(parent.value.id);
 		}
 	},
 	{ immediate: true }
@@ -102,8 +113,27 @@ const uploadFiles = async (files: File[]) => {
 	);
 };
 
-const onDelete = () => {
-	// Handle delete logic here
+const onDelete = async (confirmation: Promise<boolean>) => {
+	const shouldDelete = await confirmation;
+
+	if (!shouldDelete) {
+		return;
+	}
+
+	const parentIsBoard = parent.value.type === ParentNodeType.Board;
+
+	if (parentIsBoard) {
+		deleteAndNavigateToBoard(folderId.value);
+	} else {
+		throw new Error("Unsupported parent type");
+	}
+};
+
+const deleteAndNavigateToBoard = async (folderId: string) => {
+	const boardPath = mapNodeTypeToPathType(parent.value.type);
+
+	await boardApi.deleteElementCall(folderId);
+	router.replace(`/${boardPath}/${parent.value.id}`);
 };
 
 onMounted(async () => {

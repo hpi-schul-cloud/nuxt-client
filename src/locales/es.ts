@@ -400,7 +400,7 @@ export default {
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.changeLayout": "Cambiar vista",
 	"components.board.action.shareLink.card": "Copiar enlace a la tarjeta",
-	"components.board.column.defaultTitle": "Nueva columna",
+	"components.board.column.defaultTitle": "Título de la columna",
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
 	"components.board.draftChip.tooltip": "Sólo visible para los profesores",
@@ -807,20 +807,6 @@ export default {
 		"Archivos subidos dentro del curso.",
 	"components.molecules.export.options.info.point2":
 		"Envíos asignados a una tarea.",
-	"components.organisms.AutoLogoutWarning.confirm": "Ampliar sesión",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Tu sesión ya ha caducado. Inicia sesión de nuevo.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"¡No se ha podido ampliar tu sesión!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Vaya... ¡Eso no debería haber sucedido! No se ha podido ampliar tu sesión. Vuelve a intentarlo de inmediato.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Perezoso",
-	"components.organisms.AutoLogoutWarning.success":
-		"Sesión ampliada correctamente.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"menos de un minuto | un minuto | {remainingTime} minutos",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
 	"components.organisms.ContentCard.report.body":
 		"Informar del contenido con el ID",
 	"components.organisms.ContentCard.report.email":
@@ -940,6 +926,19 @@ export default {
 	"error.proxy.action": "Volver a cargar la página",
 	"error.proxy.description":
 		"Tenemos un pequeño problema con nuestra infraestructura. Enseguida volvemos.",
+	"feature-autoLogout.button.confirm": "Ampliar sesión",
+	"feature-autoLogout.button.confirm.returnToLogin":
+		"Volver a la página de inicio de sesión",
+	"feature-autoLogout.message.error.401":
+		"Tu sesión ya ha caducado. Inicia sesión de nuevo.",
+	"feature-autoLogout.message.error":
+		"Vaya... ¡Eso no debería haber sucedido! No se ha podido ampliar tu sesión. Vuelve a intentarlo de inmediato.",
+	"feature-autoLogout.component.image.alt": "Perezoso",
+	"feature-autoLogout.message.success": "Sesión ampliada correctamente.",
+	"feature-autoLogout.warning.remainingTime":
+		"menos de un minuto | un minuto | {remainingTime} minutos",
+	"feature-autoLogout.warning":
+		"Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
 	"feature-board-external-tool-element.alert.error.student":
 		"La herramienta no se puede iniciar actualmente. Actualice el tablero o comuníquese con el maestro o instructor del curso.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -1795,6 +1794,18 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Sincronizado",
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
 	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
+	"pages.rooms.invitationLinkStatus.bird.alt": "Pájaro con alas plegadas",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Lamentablemente, el enlace de invitación sólo es válido para los alumnos de la escuela «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Lamentablemente, el enlace de invitación ya no es válido",
+	"pages.rooms.invitationLinkStatus.invalidLink":
+		"Lamentablemente, el enlace de invitación no existe",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Lamentablemente, el enlace de invitación sólo es válido para los usuarios de la escuela «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.title": "Enlace de invitación",
 	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.rooms.menuItems.startSync": "Iniciar sincronización",
 	"pages.rooms.importCourse.btn.continue": "Continuar",

@@ -397,7 +397,7 @@ export default {
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.action.changeLayout": "Ansicht ändern",
 	"components.board.action.shareLink.card": "Link zur Karte kopieren",
-	"components.board.column.defaultTitle": "Neuer Abschnitt",
+	"components.board.column.defaultTitle": "Abschnittstitel",
 	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
 	"components.board.draftChip.tooltip": "Nur für Lehrkräfte sichtbar",
@@ -790,20 +790,6 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Abgegeben",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Lokale Dateien werden aktuell nicht unterstützt.",
-	"components.organisms.AutoLogoutWarning.confirm": "Sitzung verlängern",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"Deine Sitzung konnte nicht verlängert werden!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Faultier",
-	"components.organisms.AutoLogoutWarning.success":
-		"Sitzung erfolgreich verlängert.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"weniger als einer Minute | einer Minute | {remainingTime} Minuten",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
 	"components.organisms.ContentCard.report.body":
 		"Melden des Inhaltes mit der ID",
 	"components.organisms.ContentCard.report.email":
@@ -918,6 +904,18 @@ export default {
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description":
 		"Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
+	"feature-autoLogout.button.confirm": "Sitzung verlängern",
+	"feature-autoLogout.button.confirm.returnToLogin": "Zurück zur Anmeldeseite",
+	"feature-autoLogout.message.error.401":
+		"Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
+	"feature-autoLogout.message.error":
+		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
+	"feature-autoLogout.component.image.alt": "Faultier",
+	"feature-autoLogout.message.success": "Sitzung erfolgreich verlängert.",
+	"feature-autoLogout.warning.remainingTime":
+		"weniger als einer Minute | einer Minute | {remainingTime} Minuten",
+	"feature-autoLogout.warning":
+		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
 	"feature-board-external-tool-element.alert.error.student":
 		"Das Tool kann aktuell nicht gestartet werden. Bitte Bereich aktualisieren oder an die Lehrkraft oder Kursleiter:in wenden.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -1773,6 +1771,19 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronisiert",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
 	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
+	"pages.rooms.invitationLinkStatus.bird.alt":
+		"Vogel mit verschränkten Flügeln",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Der Einladungslink ist leider nur für Lernende der Schule “{schoolName}” gültig",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Der Einladungslink ist leider nicht mehr gültig",
+	"pages.rooms.invitationLinkStatus.invalidLink":
+		"Der Einladungslink existiert leider nicht",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Der Einladungslink ist leider nur für Lernbegleitungen gültig",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Der Einladungslink ist leider nur für Nutzende der Schule “{schoolName}” gültig",
+	"pages.rooms.invitationLinkStatus.title": "Einladungslink",
 	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.menuItems.startSync": "Synchronisation starten",
 	"pages.rooms.importCourse.btn.continue": "Weiter",
