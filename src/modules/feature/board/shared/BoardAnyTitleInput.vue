@@ -1,47 +1,35 @@
 <template>
-	<VTextField
-		v-if="scope === 'board'"
-		ref="titleInput"
-		v-model="modelValue"
-		class="title-input"
-		hide-details="auto"
-		variant="solo"
-		density="compact"
-		flat
-		:placeholder="placeholderText"
-		bg-color="transparent"
-		:disabled="!isEditMode"
-		:role="isEditMode ? 'input' : 'heading'"
-		:aria-level="ariaLevel"
-		:tabindex="isEditMode ? 0 : -1"
-		:autofocus="internalIsFocused"
-		:maxlength="maxLength"
-		:error-messages="errorMessages"
-		@keydown.enter="onEnter"
-	/>
-
-	<VTextarea
-		v-else
-		ref="titleInput"
-		v-model="modelValue"
-		hide-details="auto"
-		variant="solo"
-		density="compact"
-		:rows="1"
-		auto-grow
-		flat
-		class="title-input"
-		:placeholder="placeholderText"
-		bg-color="transparent"
-		:disabled="!isEditMode"
-		:role="isEditMode ? 'input' : 'heading'"
-		:aria-level="ariaLevel"
-		:tabindex="isEditMode ? 0 : -1"
-		:autofocus="internalIsFocused"
-		:maxlength="maxLength"
-		:error-messages="errorMessages"
-		@keydown.enter="onEnter"
-	/>
+	<template v-if="isEditMode">
+		<VTextarea
+			ref="titleInput"
+			v-model="modelValue"
+			class="title"
+			:class="{
+				'board-title-input': scope === 'board',
+				'other-title-input': scope !== 'board',
+				'error-message-width': errorMessages.length > 0,
+			}"
+			hide-details="auto"
+			variant="plain"
+			density="compact"
+			rows="1"
+			auto-grow
+			:placeholder="t('components.cardElement.titleElement.placeholder')"
+			:autofocus="internalIsFocused"
+			:maxlength="maxLength"
+			:error-messages="errorMessages"
+			@keydown.enter="onEnter"
+		/>
+	</template>
+	<template v-else>
+		<component
+			:is="`h${headingLevel}`"
+			class="title"
+			:class="scope === 'board' ? 'board-title' : 'other-title'"
+		>
+			{{ modelValue.trim() ? modelValue : emptyValueFallback }}
+		</component>
+	</template>
 </template>
 
 <script lang="ts">
@@ -77,17 +65,16 @@ export default defineComponent({
 			type: String as PropType<"card" | "column" | "board">,
 			required: true,
 		},
-		placeholder: {
-			type: String,
-			default: "",
-			required: false,
-		},
 		isFocused: {
 			type: Boolean,
 		},
 		maxLength: {
 			type: Number,
 			default: null,
+		},
+		emptyValueFallback: {
+			type: String,
+			default: "",
 		},
 	},
 	emits: ["update:value", "enter"],
@@ -97,7 +84,7 @@ export default defineComponent({
 
 		const internalIsFocused = ref(false);
 
-		const titleInput = ref(null);
+		const titleInput = ref<VTextarea | null>(null);
 
 		useInlineEditInteractionHandler(async () => {
 			await setFocusOnEdit();
@@ -107,7 +94,7 @@ export default defineComponent({
 			await nextTick();
 			internalIsFocused.value = true;
 			if (titleInput.value) {
-				(titleInput.value as VTextarea).focus();
+				titleInput.value.focus();
 				cursorToEnd();
 			}
 		};
@@ -144,6 +131,12 @@ export default defineComponent({
 				)
 					return;
 				if (newVal && !oldVal) {
+					if (
+						modelValue.value.trim().length < 1 &&
+						props.emptyValueFallback.length > 0
+					) {
+						modelValue.value = props.emptyValueFallback;
+					}
 					await nextTick();
 					await setFocusOnEdit();
 				}
@@ -169,11 +162,7 @@ export default defineComponent({
 			v$.value.modelValue.$errors.map((e: ErrorObject) => unref(e.$message))
 		);
 
-		const hasValue = computed<boolean>(
-			() => props.value !== "" && !!props.value
-		);
-
-		const ariaLevel = computed(() => {
+		const headingLevel = computed(() => {
 			switch (props.scope) {
 				case "column":
 					return 2;
@@ -189,31 +178,20 @@ export default defineComponent({
 			emit("enter");
 		};
 
-		const placeholderText = computed(() => {
-			if (props.placeholder) {
-				return props.placeholder;
-			}
-			if (props.isEditMode) {
-				return t("components.cardElement.titleElement.placeholder").toString();
-			}
-			return "";
-		});
-
 		const cursorToEnd = () => {
 			if (titleInput.value) {
-				const length = (titleInput.value as VTextarea).value.length;
-				(titleInput.value as VTextarea).setSelectionRange(length, length);
+				const length = titleInput.value.value.length;
+				titleInput.value.setSelectionRange(length, length);
 			}
 		};
 
 		return {
-			ariaLevel,
+			t,
+			headingLevel,
 			modelValue,
-			hasValue,
 			onEnter,
 			internalIsFocused,
 			titleInput,
-			placeholderText,
 			cursorToEnd,
 			errorMessages,
 		};
@@ -221,37 +199,55 @@ export default defineComponent({
 });
 </script>
 
-<style scoped>
-:deep(div.v-field__field) {
-	padding: 0;
-	font-family: var(--font-accent);
-}
+<style scoped lang="scss">
+@import "@/styles/settings.scss";
 
-:deep(textarea) {
-	background: transparent !important;
-	opacity: 1;
-	font-size: var(--heading-5) !important;
-	overflow: hidden;
-}
-
-:deep(input) {
-	font-size: var(--heading-3);
-	background: transparent !important;
-}
-
-:deep(.v-field__append-inner, .v-field__clearable, .v-field__prepend-inner) {
-	display: flex;
-	align-items: flex-start;
-	padding-top: 8px !important;
-}
-
-.title-input {
-	cursor: pointer;
-	pointer-events: unset !important;
+.error-message-width {
 	min-width: 280px;
 }
 
-.title-input :deep(.v-field--disabled) {
-	opacity: var(--v-high-emphasis-opacity);
+.title {
+	cursor: pointer;
+	white-space: pre-wrap;
+
+	letter-spacing: $field-letter-spacing;
+	font-family: var(--font-accent);
+
+	&.board-title-input :deep(textarea) {
+		font-size: var(--heading-3);
+		line-height: var(--line-height-md);
+		padding-top: var(--space-md);
+		overflow: hidden; // prevent scrollbar in board title
+	}
+
+	&.other-title-input {
+		:deep(textarea) {
+			font-size: var(--heading-5);
+			line-height: var(--line-height-lg);
+			padding: 8px 16px;
+			overflow: hidden;
+		}
+
+		:deep(.v-input__details) {
+			padding-left: 16px;
+		}
+	}
+}
+
+.board-title {
+	font-size: var(--heading-3);
+	line-height: var(--line-height-md);
+	margin-bottom: 0;
+	overflow-wrap: break-word;
+	word-break: break-word;
+}
+
+.other-title {
+	font-size: var(--heading-5);
+	line-height: var(--line-height-lg);
+	margin: 0;
+	padding: 8px 16px;
+	overflow-wrap: break-word;
+	word-break: break-word;
 }
 </style>
