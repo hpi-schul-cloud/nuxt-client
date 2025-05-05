@@ -6,8 +6,9 @@
 	>
 		<template #header>
 			<h1 class="text-h3 mb-4">{{ $t("common.words.tasks") }}</h1>
-			<div v-if="showSubstituteFilter">
+			<div v-if="isTeacher">
 				<v-switch
+					v-if="showSubstituteFilter"
 					v-model="isSubstituteFilterEnabled"
 					:label="
 						$t('components.organisms.TasksDashboardMain.filter.substitute')
@@ -17,6 +18,7 @@
 					"
 					:true-icon="mdiCheck"
 				/>
+				<div v-else class="substitute-filter-placeholder" />
 			</div>
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="tab" class="tabs-max-width" grow>
@@ -371,6 +373,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
+
+.substitute-filter-placeholder {
+	min-height: 78px;
+}
 
 .content-max-width {
 	max-width: var(--size-content-width-max);
