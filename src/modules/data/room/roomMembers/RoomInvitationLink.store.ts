@@ -109,11 +109,11 @@ export const useRoomInvitationLinkStore = defineStore(
 			};
 			try {
 				const response = await api.roomInvitationLinkControllerUseLink(linkId);
-				console.log("useLink response", response);
 				result.roomId = response.data.id;
 			} catch (error) {
 				if (isAxiosError(error)) {
-					const { validationMessage, schoolName } = error?.response?.data ?? {};
+					const { validationMessage, schoolName } =
+						error?.response?.data.details ?? {};
 					result.validationMessage = validationMessage;
 					result.schoolName = schoolName;
 				}

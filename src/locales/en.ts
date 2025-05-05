@@ -1744,7 +1744,7 @@ export default {
 	"pages.rooms.headerSection.toCourseFiles": "To the course files",
 	"pages.rooms.invitationLinkStatus.bird.alt": "Bird with crossed wings",
 	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
-		"The invitation link is unfortunately only valid for students of the school “XYZ”",
+		"The invitation link is unfortunately only valid for students of the school “{schoolName}”",
 	"pages.rooms.invitationLinkStatus.expired":
 		"The invitation link is unfortunately no longer valid",
 	"pages.rooms.invitationLinkStatus.invalidLink":
@@ -1752,7 +1752,7 @@ export default {
 	"pages.rooms.invitationLinkStatus.onlyForTeachers":
 		"The invitation link is unfortunately only valid for teachers",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
-		"The invitation link is unfortunately only valid for users of the school “XYZ”",
+		"The invitation link is unfortunately only valid for users of the school “{schoolName}”",
 	"pages.rooms.invitationLinkStatus.title": "Invitation link",
 	"pages.rooms.menuItems.endSync": "End synchronization",
 	"pages.rooms.menuItems.startSync": "Start synchronization",

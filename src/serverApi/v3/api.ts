@@ -841,6 +841,43 @@ export interface BoardTaskStatusResponse {
 /**
  * 
  * @export
+ * @interface BusinessError
+ */
+export interface BusinessError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof BusinessError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof BusinessError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof BusinessError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof BusinessError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof BusinessError
+     */
+    details?: object;
+}
+/**
+ * 
+ * @export
  * @interface CardListResponse
  */
 export interface CardListResponse {
@@ -8127,22 +8164,10 @@ export interface RoomInvitationLinkError {
     message: string;
     /**
      * The error details.
-     * @type {object}
-     * @memberof RoomInvitationLinkError
-     */
-    details?: object;
-    /**
-     * The error code.
      * @type {RoomInvitationLinkValidationError}
      * @memberof RoomInvitationLinkError
      */
-    validationMessage: RoomInvitationLinkValidationError;
-    /**
-     * The error details.
-     * @type {string}
-     * @memberof RoomInvitationLinkError
-     */
-    schoolName?: string;
+    details?: RoomInvitationLinkValidationError;
 }
 /**
  * 

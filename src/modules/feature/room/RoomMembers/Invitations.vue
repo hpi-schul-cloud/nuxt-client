@@ -60,13 +60,14 @@ const onClickRemove = (linkId: string) => {
 };
 
 const onClickUse = async (linkId: string) => {
-	const { roomId, message } = await roomInvitationLinkStore.useLink(linkId);
+	const { roomId, validationMessage } =
+		await roomInvitationLinkStore.useLink(linkId);
 	if (roomId) {
 		window.alert("redirect to room: " + roomId);
 		return;
 	}
 
-	if (message === RoomInvitationLinkValidationError.Expired) {
+	if (validationMessage === RoomInvitationLinkValidationError.Expired) {
 		window.alert(t("pages.rooms.invitationlinks.error.expired"));
 	}
 };
@@ -81,8 +82,7 @@ const onClickUpdate = (linkId: string) => {
 	const title =
 		(link?.title ?? "Test ").replace(/\s*\(update: \d+\)/, "") +
 		` (update: ${updateCount + 1})`;
-	const maxOneOur =
-		Math.ceil(Math.random() * 1000 * 3600) * (Math.ceil(Math.random()) * -1);
+	const maxOneOur = Math.ceil((Math.random() + 1) * 1000 * 3600);
 	roomInvitationLinkStore.updateLink({
 		id: linkId,
 		title: title,

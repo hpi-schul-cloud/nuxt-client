@@ -93,10 +93,10 @@ onMounted(() => {
 const updateInfoMessage = (validationMessage: string, schoolName: string) => {
 	switch (validationMessage) {
 		case RoomInvitationLinkValidationError.CantInviteStudentsFromOtherSchool:
-			infoMessage.value =
-				t(
-					"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool"
-				) + schoolName;
+			infoMessage.value = t(
+				"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool",
+				{ schoolName }
+			);
 			break;
 		case RoomInvitationLinkValidationError.Expired:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.expired");
@@ -105,9 +105,10 @@ const updateInfoMessage = (validationMessage: string, schoolName: string) => {
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.onlyForTeachers");
 			break;
 		case RoomInvitationLinkValidationError.RestrictedToCreatorSchool:
-			infoMessage.value =
-				t("pages.rooms.invitationLinkStatus.restrictedToCreatorSchool") +
-				schoolName;
+			infoMessage.value = t(
+				"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool",
+				{ schoolName }
+			);
 			break;
 		case RoomInvitationLinkValidationError.InvalidLink:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.invalidLink");

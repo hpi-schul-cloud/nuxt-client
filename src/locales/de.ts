@@ -1774,7 +1774,7 @@ export default {
 	"pages.rooms.invitationLinkStatus.bird.alt":
 		"Vogel mit verschränkten Flügeln",
 	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
-		"Der Einladungslink ist leider nur für Lernende der Schule “XYZ” gültig",
+		"Der Einladungslink ist leider nur für Lernende der Schule “{schoolName}” gültig",
 	"pages.rooms.invitationLinkStatus.expired":
 		"Der Einladungslink ist leider nicht mehr gültig",
 	"pages.rooms.invitationLinkStatus.invalidLink":
@@ -1782,7 +1782,7 @@ export default {
 	"pages.rooms.invitationLinkStatus.onlyForTeachers":
 		"Der Einladungslink ist leider nur für Lernbegleitungen gültig",
 	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
-		"Der Einladungslink ist leider nur für Nutzende der Schule “XYZ” gültig",
+		"Der Einladungslink ist leider nur für Nutzende der Schule “{schoolName}” gültig",
 	"pages.rooms.invitationLinkStatus.title": "Einladungslink",
 	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.menuItems.startSync": "Synchronisation starten",
