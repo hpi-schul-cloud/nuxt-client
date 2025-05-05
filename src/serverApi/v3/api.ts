@@ -8191,7 +8191,8 @@ export enum RoomInvitationLinkValidationError {
     Expired = 'EXPIRED',
     OnlyForTeachers = 'ONLY_FOR_TEACHERS',
     RestrictedToCreatorSchool = 'RESTRICTED_TO_CREATOR_SCHOOL',
-    CantInviteStudentsFromOtherSchool = 'CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL'
+    CantInviteStudentsFromOtherSchool = 'CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL',
+    InvalidLink = 'INVALID_LINK'
 }
 
 /**

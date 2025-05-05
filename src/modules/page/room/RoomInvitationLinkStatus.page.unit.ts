@@ -173,6 +173,10 @@ describe("RoomInvitationLinkStatusPage", () => {
 				expectedMessage:
 					"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool",
 			},
+			{
+				message: RoomInvitationLinkValidationError.InvalidLink,
+				expectedMessage: "pages.rooms.invitationLinkStatus.invalidLink",
+			},
 		];
 
 		testCases.forEach(({ message, expectedMessage }) => {

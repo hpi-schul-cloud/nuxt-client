@@ -1781,7 +1781,7 @@ export default {
 		"Посилання на запрошення, на жаль, дійсне лише для учнів школи «XYZ»",
 	"pages.rooms.invitationLinkStatus.expired":
 		"Посилання на запрошення, на жаль, більше не дійсне",
-	"pages.rooms.invitationLinkStatus.notFound":
+	"pages.rooms.invitationLinkStatus.invalidLink":
 		"На жаль, посилання на запрошення не існує",
 	"pages.rooms.invitationLinkStatus.onlyForTeachers":
 		"Посилання на запрошення, на жаль, дійсне лише для вчителів",

@@ -109,6 +109,9 @@ const determineStatus = (status: string) => {
 				"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool"
 			);
 			break;
+		case RoomInvitationLinkValidationError.InvalidLink:
+			infoMessage.value = t("pages.rooms.invitationLinkStatus.invalidLink");
+			break;
 		default:
 			infoMessage.value = t("error.generic");
 			break;

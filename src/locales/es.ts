@@ -1799,7 +1799,7 @@ export default {
 		"Lamentablemente, el enlace de invitación sólo es válido para los alumnos de la escuela «XYZ»",
 	"pages.rooms.invitationLinkStatus.expired":
 		"Lamentablemente, el enlace de invitación ya no es válido",
-	"pages.rooms.invitationLinkStatus.notFound":
+	"pages.rooms.invitationLinkStatus.invalidLink":
 		"Lamentablemente, el enlace de invitación no existe",
 	"pages.rooms.invitationLinkStatus.onlyForTeachers":
 		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
