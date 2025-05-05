@@ -11,6 +11,7 @@ import {
 	UpdateRoomInvitationLinkDto,
 	UseLinkResult,
 } from "./types";
+import { isAxiosError } from "axios";
 
 export const useRoomInvitationLinkStore = defineStore(
 	"roomInvitationLinkStore",
@@ -101,13 +102,21 @@ export const useRoomInvitationLinkStore = defineStore(
 		};
 
 		const useLink = async (linkId: string): Promise<UseLinkResult> => {
-			const result: UseLinkResult = { roomId: "", message: "" };
+			const result: UseLinkResult = {
+				roomId: "",
+				validationMessage: "",
+				schoolName: "",
+			};
 			try {
 				const response = await api.roomInvitationLinkControllerUseLink(linkId);
+				console.log("useLink response", response);
 				result.roomId = response.data.id;
 			} catch (error) {
-				const { message } = mapAxiosErrorToResponseError(error);
-				result.message = message;
+				if (isAxiosError(error)) {
+					const { validationMessage, schoolName } = error?.response?.data ?? {};
+					result.validationMessage = validationMessage;
+					result.schoolName = schoolName;
+				}
 			}
 			return result;
 		};

@@ -8102,11 +8102,47 @@ export interface RoomIdResponse {
  */
 export interface RoomInvitationLinkError {
     /**
-     * 
+     * The response status code.
+     * @type {number}
+     * @memberof RoomInvitationLinkError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof RoomInvitationLinkError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof RoomInvitationLinkError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof RoomInvitationLinkError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof RoomInvitationLinkError
+     */
+    details?: object;
+    /**
+     * The error code.
      * @type {RoomInvitationLinkValidationError}
      * @memberof RoomInvitationLinkError
      */
-    error: RoomInvitationLinkValidationError;
+    validationMessage: RoomInvitationLinkValidationError;
+    /**
+     * The error details.
+     * @type {string}
+     * @memberof RoomInvitationLinkError
+     */
+    schoolName?: string;
 }
 /**
  * 

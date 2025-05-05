@@ -292,7 +292,7 @@ describe("useRoomInvitationLinkStore", () => {
 
 				const result = await roomInvitationLinkStore.useLink(firstLink.id);
 
-				expect(result.message).toBe(message);
+				expect(result.validationMessage).toBe(message);
 			});
 		});
 	});

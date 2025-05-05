@@ -58,17 +58,16 @@ const router = useRouter();
 const roomInvitationLinkStore = useRoomInvitationLinkStore();
 
 const useLink = async () => {
-	const linkResult = await roomInvitationLinkStore.useLink(
-		props.invitationLinkId
-	);
+	const { roomId, validationMessage, schoolName } =
+		await roomInvitationLinkStore.useLink(props.invitationLinkId);
 	isLoading.value = false;
 
-	if (linkResult.roomId !== "") {
-		router.push({ path: `/rooms/${linkResult.roomId}` });
+	if (roomId !== "") {
+		router.push({ path: `/rooms/${roomId}` });
 		return;
 	}
 
-	determineStatus(linkResult.message);
+	updateInfoMessage(validationMessage, schoolName);
 };
 
 const pageTitle = computed(() =>
@@ -91,12 +90,13 @@ onMounted(() => {
 	useLink();
 });
 
-const determineStatus = (status: string) => {
-	switch (status) {
+const updateInfoMessage = (validationMessage: string, schoolName: string) => {
+	switch (validationMessage) {
 		case RoomInvitationLinkValidationError.CantInviteStudentsFromOtherSchool:
-			infoMessage.value = t(
-				"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool"
-			);
+			infoMessage.value =
+				t(
+					"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool"
+				) + schoolName;
 			break;
 		case RoomInvitationLinkValidationError.Expired:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.expired");
@@ -105,9 +105,9 @@ const determineStatus = (status: string) => {
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.onlyForTeachers");
 			break;
 		case RoomInvitationLinkValidationError.RestrictedToCreatorSchool:
-			infoMessage.value = t(
-				"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool"
-			);
+			infoMessage.value =
+				t("pages.rooms.invitationLinkStatus.restrictedToCreatorSchool") +
+				schoolName;
 			break;
 		case RoomInvitationLinkValidationError.InvalidLink:
 			infoMessage.value = t("pages.rooms.invitationLinkStatus.invalidLink");

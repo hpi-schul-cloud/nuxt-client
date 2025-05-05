@@ -99,13 +99,19 @@ describe("RoomInvitationLinkStatusPage", () => {
 	};
 
 	it("should be found in the dom", async () => {
-		const { wrapper } = await setup({ roomId: "room-id", message: "" });
+		const { wrapper } = await setup({
+			roomId: "room-id",
+			validationMessage: "",
+		});
 
 		expect(wrapper.exists()).toBe(true);
 	});
 
 	it("should render DefaultWireframe", async () => {
-		const { wrapper } = await setup({ roomId: "room-id", message: "" });
+		const { wrapper } = await setup({
+			roomId: "room-id",
+			validationMessage: "",
+		});
 		const wireframe = wrapper.findComponent(DefaultWireframe);
 
 		expect(wireframe.exists()).toBe(true);
@@ -123,7 +129,10 @@ describe("RoomInvitationLinkStatusPage", () => {
 			},
 		];
 
-		const { wrapper } = await setup({ roomId: "room-id", message: "" });
+		const { wrapper } = await setup({
+			roomId: "room-id",
+			validationMessage: "",
+		});
 		const wireframe = wrapper.findComponent(DefaultWireframe);
 
 		expect(wireframe.props("breadcrumbs")).toEqual(
@@ -132,7 +141,10 @@ describe("RoomInvitationLinkStatusPage", () => {
 	});
 
 	it("should set the page title", async () => {
-		const { wrapper } = await setup({ roomId: "room-id", message: "" });
+		const { wrapper } = await setup({
+			roomId: "room-id",
+			validationMessage: "",
+		});
 		const pageTitle = wrapper.find("[data-testid=page-title]");
 		expect(pageTitle.text()).toContain(
 			"pages.rooms.invitationLinkStatus.title"
@@ -143,7 +155,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 		it("should call the router to navigate to the room", async () => {
 			const { router } = await setup({
 				roomId: "room-id",
-				message: "",
+				validationMessage: "",
 			});
 
 			expect(router.push).toHaveBeenCalledWith({
@@ -183,7 +195,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 			it(`should show the correct message for ${message}`, async () => {
 				const { wrapper } = await setup({
 					roomId: "",
-					message,
+					validationMessage: message,
 				});
 
 				const statusMessage = wrapper.find("[data-testid=status-message]");
@@ -196,7 +208,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 		it("should show the default message", async () => {
 			const { wrapper } = await setup({
 				roomId: "",
-				message: "",
+				validationMessage: "",
 			});
 
 			const statusMessage = wrapper.find("[data-testid=status-message]");
