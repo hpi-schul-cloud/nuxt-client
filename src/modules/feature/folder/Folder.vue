@@ -34,6 +34,7 @@
 <script setup lang="ts">
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import router from "@/router";
+import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import { useBoardApi } from "@data-board";
 import { useFileStorageApi } from "@data-file";
@@ -56,8 +57,13 @@ const props = defineProps({
 	},
 });
 
-const { breadcrumbs, folderName, fetchFileFolderElement, parentNodeInfos } =
-	useFolderState();
+const {
+	breadcrumbs,
+	folderName,
+	fetchFileFolderElement,
+	parent,
+	mapNodeTypeToPathType,
+} = useFolderState();
 const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
 
 const folderId = toRef(props, "folderId");
@@ -97,12 +103,24 @@ const uploadFiles = async (files: File[]) => {
 const onDelete = async (confirmation: Promise<boolean>) => {
 	const shouldDelete = await confirmation;
 
-	const boardId = parentNodeInfos.value[parentNodeInfos.value.length - 1].id;
-
-	if (shouldDelete) {
-		await boardApi.deleteElementCall(props.folderId);
-		router.replace(`/boards/${boardId}`);
+	if (!shouldDelete) {
+		return;
 	}
+
+	const parentIsBoard = parent.value.type === ParentNodeType.Board;
+
+	if (parentIsBoard) {
+		deleteAndNavigateToBoard(folderId.value);
+	} else {
+		throw new Error("Unsupported parent type");
+	}
+};
+
+const deleteAndNavigateToBoard = async (folderId: string) => {
+	const boardPath = mapNodeTypeToPathType(parent.value.type);
+
+	await boardApi.deleteElementCall(folderId);
+	router.replace(`/${boardPath}/${parent.value.id}`);
 };
 
 onMounted(async () => {
