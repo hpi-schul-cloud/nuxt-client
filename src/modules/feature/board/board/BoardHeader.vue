@@ -1,5 +1,5 @@
 <template>
-	<div class="d-flex align-items-center board-header">
+	<div class="d-flex align-start board-header mb-6">
 		<InlineEditInteractionHandler
 			:id="boardId"
 			class="input-container"
@@ -7,11 +7,11 @@
 			tabindex="0"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
-			@keydown.enter="onStartEditMode"
+			@keydown.enter.prevent="onStartEditMode"
 		>
 			<BoardAnyTitleInput
 				ref="boardHeader"
-				class="ml-n4 input"
+				class="input"
 				scope="board"
 				:value="boardTitle"
 				data-testid="board-title"
@@ -23,27 +23,25 @@
 			/>
 			<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 		</InlineEditInteractionHandler>
-		<div class="d-flex">
+		<div class="d-flex mt-4">
 			<BoardDraftChip v-if="isDraft" />
-			<div class="mx-2">
-				<BoardMenu
-					v-if="hasEditPermission"
-					:scope="BoardMenuScope.BOARD"
-					data-testid="board-menu-btn"
-				>
-					<KebabMenuActionRename @click="onStartEditMode" />
-					<KebabMenuActionCopy @click="onCopyBoard" />
-					<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
-					<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-					<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
-					<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-					<KebabMenuActionDelete
-						:name="title"
-						scope-language-key="components.board"
-						@click="onDeleteBoard"
-					/>
-				</BoardMenu>
-			</div>
+			<BoardMenu
+				v-if="hasEditPermission"
+				:scope="BoardMenuScope.BOARD"
+				data-testid="board-menu-btn"
+			>
+				<KebabMenuActionRename @click="onStartEditMode" />
+				<KebabMenuActionCopy @click="onCopyBoard" />
+				<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
+				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
+				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+				<KebabMenuActionDelete
+					:name="title"
+					scope-language-key="components.board"
+					@click="onDeleteBoard"
+				/>
+			</BoardMenu>
 		</div>
 	</div>
 </template>
@@ -196,10 +194,6 @@ watchEffect(() => {
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
 
-.board-header {
-	height: var(--board-header-height);
-}
-
 .v-chip {
 	cursor: default;
 }
@@ -220,12 +214,7 @@ watchEffect(() => {
 }
 
 .input {
-	// The 16px compensate for the negative margin set with "ml-n4".
-	max-width: calc(100% + 16px);
+	max-width: calc(100%);
 	width: v-bind("fieldWidth");
-}
-
-:deep(input) {
-	text-overflow: ellipsis;
 }
 </style>
