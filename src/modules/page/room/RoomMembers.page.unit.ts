@@ -27,7 +27,7 @@ import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
@@ -38,6 +38,7 @@ import { schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Tab } from "@/types/room/RoomMembers";
 import RoomMembersPage from "./RoomMembers.page.vue";
+import NotifierModule from "@/store/notifier";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -186,6 +187,7 @@ describe("RoomMembersPage", () => {
 				],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 				},
 				stubs: { LeaveRoomProhibitedDialog: true, AddMembers: true },
 			},
