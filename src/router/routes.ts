@@ -1,6 +1,10 @@
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { Layouts } from "@/layouts/types";
-import { checkRoomsFeature, validateQueryParameters } from "@/router/guards";
+import {
+	checkFolderFeature,
+	checkRoomsFeature,
+	validateQueryParameters,
+} from "@/router/guards";
 import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
@@ -239,6 +243,15 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		beforeEnter: createPermissionGuard(["news_edit"]),
 	},
 	{
+		path: `/folder/:id(${REGEX_ID})`,
+		component: async () => (await import("@page-folder")).FolderPage,
+		beforeEnter: [checkFolderFeature],
+		name: "folder-id",
+		props: (route: RouteLocationNormalized) => ({
+			folderId: route.params.id,
+		}),
+	},
+	{
 		path: `/rooms`,
 		component: async () => (await import("@page-room")).RoomsPage,
 		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
@@ -266,6 +279,9 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		component: async () => (await import("@page-room")).RoomMembersPage,
 		beforeEnter: [checkRoomsFeature, createPermissionGuard(["room_create"])],
 		name: "room-members",
+		props: (route: RouteLocationNormalized) => ({
+			tab: route.query.tab,
+		}),
 	},
 	{
 		path: "/rooms/courses-list",

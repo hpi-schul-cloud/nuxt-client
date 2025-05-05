@@ -36,6 +36,8 @@ import { DeletedElement } from "@feature-board-deleted-element";
 import { DrawingContentElement } from "@feature-board-drawing-element";
 import { ExternalToolElement } from "@feature-board-external-tool-element";
 import { FileContentElement } from "@feature-board-file-element";
+import { FolderContentElement } from "@feature-board-folder-element";
+import { H5pElement } from "@feature-board-h5p-element";
 import { LinkContentElement } from "@feature-board-link-element";
 import { SubmissionContentElement } from "@feature-board-submission-element";
 import { RichTextContentElement } from "@feature-board-text-element";
@@ -109,7 +111,7 @@ const onMoveElementKeyboard = (
 	emit("move-keyboard:element", elementMove, event.code);
 };
 
-const mapToComponent = (type: string) => {
+const mapToComponent = (type: ContentElementType) => {
 	switch (type) {
 		case ContentElementType.CollaborativeTextEditor:
 			if (
@@ -150,6 +152,16 @@ const mapToComponent = (type: string) => {
 			break;
 		case ContentElementType.Deleted:
 			return DeletedElement;
+		case ContentElementType.FileFolder:
+			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED) {
+				return FolderContentElement;
+			}
+			break;
+		case ContentElementType.H5p:
+			if (envConfigModule.getEnv.FEATURE_COLUMN_BOARD_H5P_ENABLED) {
+				return H5pElement;
+			}
+			break;
 		default:
 			return "span";
 	}
@@ -160,7 +172,9 @@ const elementTypesWithTabindexZero = [
 	ContentElementType.Drawing,
 	ContentElementType.ExternalTool,
 	ContentElementType.File,
+	ContentElementType.FileFolder,
 	ContentElementType.Link,
+	ContentElementType.H5p,
 ];
 
 const getTabIndex = (element: AnyContentElement) => {

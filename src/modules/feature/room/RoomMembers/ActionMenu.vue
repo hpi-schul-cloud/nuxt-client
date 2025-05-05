@@ -14,17 +14,18 @@
 					density="comfortable"
 					elevation="0"
 					data-testid="action-menu-button"
+					:aria-label="
+						t('pages.rooms.members.actionMenu.selectedMembers', {
+							count: selectedIds.length,
+						})
+					"
 				>
 					{{ t("pages.rooms.members.tableHeader.actions") }}
 				</VBtn>
 			</template>
 
 			<KebabMenuList>
-				<KebabMenuActionChangePermission
-					v-if="isVisibleChangeRoleButton"
-					@click="onRoleChange"
-				/>
-				<KebabMenuActionRemoveMember @click="onRemove" />
+				<slot />
 			</KebabMenuList>
 		</VMenu>
 
@@ -34,47 +35,30 @@
 			size="x-small"
 			variant="text"
 			:icon="mdiClose"
-			:aria-label="t('pages.rooms.members.remove.ariaLabel')"
+			:aria-label="t('pages.rooms.members.select.none')"
 			@click="onReset"
 		/>
 	</div>
 </template>
 
 <script setup lang="ts">
-import {
-	KebabMenuActionChangePermission,
-	KebabMenuActionRemoveMember,
-	KebabMenuList,
-} from "@ui-kebab-menu";
 import { mdiClose } from "@icons/material";
 import { useI18n } from "vue-i18n";
+import { KebabMenuList } from "@ui-kebab-menu";
+const { t } = useI18n();
 
-const props = defineProps({
+defineProps({
 	selectedIds: {
 		type: Array<string>,
 		required: true,
 	},
-	isVisibleChangeRoleButton: {
-		type: Boolean,
-		default: false,
-	},
 });
-const { t } = useI18n();
+
 const emit = defineEmits<{
-	(e: "remove:selected", selectedIds: string[]): void;
-	(e: "change:role", selectedIds: string[]): void;
 	(e: "reset:selected"): void;
 }>();
 
-const onRemove = () => {
-	emit("remove:selected", props.selectedIds);
-};
-
 const onReset = () => {
 	emit("reset:selected");
-};
-
-const onRoleChange = () => {
-	emit("change:role", props.selectedIds);
 };
 </script>

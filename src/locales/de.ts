@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
+	"common.actions.duplicate": "Duplizieren",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
 	"common.actions.import": "Importieren",
@@ -413,10 +414,12 @@ export default {
 	"components.board.menu.externalToolElement": "Externes-Tool-Einstellungen",
 	"components.board.menu.mediaExternalToolElement": "Medium-Einstellungen",
 	"components.board.menu.fileElement": "Datei-Einstellungen",
+	"components.board.menu.folderElement": "Dateiordner-Einstellungen",
 	"components.board.menu.linkElement": "Link-Einstellungen",
 	"components.board.menu.submissionElement": "Abgabe-Einstellungen",
 	"components.board.menu.videoConferenceElement":
 		"Videokonferenz-Einstellungen",
+	"components.board.menu.h5pElement": "Interaktives-Lernelement-Einstellungen",
 	"components.board.menu.deletedElement": "Gelöschter-Inhalt-Einstellungen",
 	"components.board.notifications.errors.fileNameExists":
 		"Es existiert bereits eine Datei mit diesem Namen.",
@@ -497,6 +500,8 @@ export default {
 		"Das Videoformat wird von diesem Browser / Betriebssystem nicht unterstützt.",
 	"components.cardElement.fileElement.virusDetected":
 		"Datei wurde aufgrund eines Virenverdachts gesperrt.",
+	"components.cardElement.folderElement": "Dateiordner",
+	"components.cardElement.folderElement.untitled": "Unbenannter Ordner",
 	"components.cardElement.LinkElement": "Link",
 	"components.cardElement.LinkElement.label": "Link-Adresse einfügen",
 	"components.cardElement.notification.visibleAndEditable":
@@ -520,6 +525,7 @@ export default {
 	"components.cardElement.deletedElement": "Gelöschter Inhalt",
 	"components.cardElement.deletedElement.warning.externalToolElement":
 		"Tool {toolName} nicht verfügbar. Bitte an Schuladministrator:in wenden.",
+	"components.cardElement.h5pElement": "Interaktives Lernelement",
 	"components.datePicker.validation.format":
 		"Bitte Format DD.MM.YYYY verwenden.",
 	"components.datePicker.validation.required": "Bitte Datum angeben",
@@ -535,6 +541,8 @@ export default {
 	"components.elementTypeSelection.elements.externalToolElement.subtitle":
 		"Externe Tools",
 	"components.elementTypeSelection.elements.fileElement.subtitle": "Datei",
+	"components.elementTypeSelection.elements.folderElement.subtitle":
+		"Dateiordner",
 	"components.elementTypeSelection.elements.collaborativeTextEditor.subtitle":
 		"Etherpad",
 	"components.elementTypeSelection.elements.linkElement.subtitle": "Link",
@@ -543,6 +551,8 @@ export default {
 	"components.elementTypeSelection.elements.textElement.subtitle": "Text",
 	"components.elementTypeSelection.elements.videoConferenceElement.subtitle":
 		"Videokonferenz",
+	"components.elementTypeSelection.elements.h5pElement.subtitle":
+		"Interaktives Lernelement",
 	"components.externalTools.status.deactivated": "Deaktiviert",
 	"components.externalTools.status.incomplete": "Unvollständig",
 	"components.externalTools.status.latest": "Aktuell",
@@ -627,7 +637,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Bereich erfolgreich kopiert.",
@@ -780,20 +790,6 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Abgegeben",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Lokale Dateien werden aktuell nicht unterstützt.",
-	"components.organisms.AutoLogoutWarning.confirm": "Sitzung verlängern",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"Deine Sitzung konnte nicht verlängert werden!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Faultier",
-	"components.organisms.AutoLogoutWarning.success":
-		"Sitzung erfolgreich verlängert.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"weniger als einer Minute | einer Minute | {remainingTime} Minuten",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
 	"components.organisms.ContentCard.report.body":
 		"Melden des Inhaltes mit der ID",
 	"components.organisms.ContentCard.report.email":
@@ -893,6 +889,10 @@ export default {
 		"Das Startdatum muss vor dem Enddatum liegen.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
+	"data-room.duplication.alert.success": "Raum erfolgreich dupliziert.",
+	"data-room.duplication.alert.error":
+		"Der Dupliziervorgang konnte nicht abgeschlossen werden.",
+	"data-room.duplication.loading": "Raum wird dupliziert...",
 	"error.400": "400 – Fehlerhafte Anfrage",
 	"error.401": "401 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
 	"error.403": "403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
@@ -904,6 +904,18 @@ export default {
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description":
 		"Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
+	"feature-autoLogout.button.confirm": "Sitzung verlängern",
+	"feature-autoLogout.button.confirm.returnToLogin": "Zurück zur Anmeldeseite",
+	"feature-autoLogout.message.error.401":
+		"Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
+	"feature-autoLogout.message.error":
+		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
+	"feature-autoLogout.component.image.alt": "Faultier",
+	"feature-autoLogout.message.success": "Sitzung erfolgreich verlängert.",
+	"feature-autoLogout.warning.remainingTime":
+		"weniger als einer Minute | einer Minute | {remainingTime} Minuten",
+	"feature-autoLogout.warning":
+		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
 	"feature-board-external-tool-element.alert.error.student":
 		"Das Tool kann aktuell nicht gestartet werden. Bitte Bereich aktualisieren oder an die Lehrkraft oder Kursleiter:in wenden.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -936,6 +948,19 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Nutzendengruppe erfolgreich synchronisiert",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
+	"feature-room.DuplicationInfoDialog.title": "Raum duplizieren",
+	"feature-room.DuplicationInfoDialog.text.nextStep":
+		"Im nächsten Schritt wird eine Kopie des Raumes erstellt.",
+	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+		"Folgende Inhalte werden nicht kopiert:",
+	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+		"Raum-Mitglieder und Berechtigungen",
+	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+		"Inhalte aus Etherpads",
+	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+		"Inhalte aus Whiteboards",
+	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+		"Geschützte Einstellungen externer Tools",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -1795,7 +1820,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Raum erstellen",
 	"pages.roomEdit.title": "Raum bearbeiten",
 	"pages.roomDetails.title": "Raum",
@@ -1826,19 +1850,31 @@ export default {
 		"Löschen von Teilnehmenden fehlgeschlagen.",
 	"pages.rooms.members.error.updateRole":
 		"Die Änderung der Raumberechtigung ist fehlgeschlagen.",
+	"pages.rooms.members.filter": "Tabelle durchsuchen/filtern",
 	"pages.rooms.members.infoText":
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
-	"pages.rooms.members.label": "Teilnehmende",
+	"pages.rooms.members.label": "Mitglieder",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Aktionsmenü für {memberFullName}",
+	"pages.rooms.members.actionMenu.selectedMembers":
+		"Aktionsmenü für {count} ausgewählte Mitglieder",
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Raumberechtigungen für {memberFullName} ändern",
-	"pages.rooms.members.manage": "Raum-Mitglieder",
+	"pages.rooms.members.manage": "Mitglieder verwalten",
+	"pages.rooms.members.management": "Mitglieder-Verwaltung",
+	"pages.rooms.members.view": "Mitglieder ansehen",
+	"pages.rooms.members.tab.members": "Mitglieder",
+	"pages.rooms.members.tab.invitations": "Einladungslinks",
+	"pages.rooms.members.tab.invitations.infoText":
+		"Mit einem Einladungslink können Lernbegleitungen der eigenen Schule sowie Lernbegleitungen anderer Schulen in den Raum eingeladen werden. Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden. Ist in den Link-Einstellungen „Betreten des Raums nur nach Bestätigung möglich” aktiviert worden, kann diese Bestätigung im Tab Beitrittsanfragen vorgenommen werden.",
+	"pages.rooms.members.tab.confirmations": "Beitrittsanfragen",
+	"pages.rooms.members.tab.confirmations.infoText":
+		"Wird bei der Erstellung eines Einladungslinks die Option „Betreten des Raums nur nach Bestätigung möglich” aktiviert, erzeugt der Klick auf den Link zunächst eine Beitrittsanfrage. Diese kann hier bestätigt oder abgelehnt werden. Wird die Beitrittsanfrage bestätigt, erhält die Person Zugriff auf alle Rauminhalte und wird in der Mitgliederliste aufgeführt.",
 	"pages.rooms.members.remove.ariaLabel": "{memberFullName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Ausgewählte Mitglieder aus der Liste zurücksetzen",
@@ -1852,6 +1888,8 @@ export default {
 	"pages.rooms.members.roomPermissions.owner": "Besitzen",
 	"pages.rooms.members.roomPermissions.editor": "Bearbeiten",
 	"pages.rooms.members.roomPermissions.viewer": "Lesen",
+	"pages.rooms.members.select.all": "Alle Raummitglieder auswählen",
+	"pages.rooms.members.select.none": "Alle Raummitglieder abwählen",
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.members.tableHeader.actions": "Aktionen",
@@ -2011,6 +2049,10 @@ export default {
 	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
 	"ui-confirmation-dialog.ask-cancel-form": "Änderungen verwerfen?",
 	"ui-layout.topbar.pageShare.printQRCode": "QR-Code drucken",
+	"ui.actionMenu.selectedRows": "Aktionsmenü für {count} ausgewählte Zeilen",
+	"ui.actionMenu.actions": "Aktionen",
+	"ui.actionMenu.select.none": "Alle Zeilen abwählen",
+	"ui.dataTable.select.all": "Alle Zeilen auswählen",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",
@@ -2046,4 +2088,17 @@ export default {
 	"feature.media-shelf.availableLine.title": "Verfügbare Medien",
 	"feature.media-shelf.layout.list": "Zeilen",
 	"feature.media-shelf.layout.grid": "Raster",
+	"pages.folder.emptyState": "Aktuell gibt es hier noch keine Dateien.",
+	"pages.folder.fab.title": "Datei hinzufügen",
+	"pages.folder.untitled": "Unbenannter Ordner",
+	"pages.folder.title": "Ordner",
+	"pages.folder.columns.name": "Name",
+	"pages.folder.columns.createdat": "Erstellt am",
+	"pages.folder.columns.size": "Größe",
+	"pages.folder.ariaLabels.menu": "Ordner Menü",
+	"pages.folder.ariaLabels.menu.action.edit": "Ordner umbenennen",
+	"pages.folder.ariaLabels.menu.action.delete": "Ordner löschen",
+	"pages.folder.ariaLabels.filter": "Tabelle durchsuchen/filtern",
+	"pages.folder.ariaLabels.actionMenu": "Aktionsmenü für {name}",
+	"pages.folder.uploadstats": "{uploaded} von {total} Dateien hochgeladen",
 };

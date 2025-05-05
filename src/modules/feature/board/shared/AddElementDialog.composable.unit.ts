@@ -3,7 +3,11 @@ import { ConfigResponse } from "@/serverApi/v3/api";
 import EnvConfigModule from "@/store/env-config";
 import NotifierModule from "@/store/notifier";
 import { injectStrict } from "@/utils/inject";
-import { mockedPiniaStoreTyping, ObjectIdMock } from "@@/tests/test-utils";
+import {
+	envsFactory,
+	mockedPiniaStoreTyping,
+	ObjectIdMock,
+} from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
 import { useBoardFeatures, useCardStore } from "@data-board";
 import { createMock } from "@golevelup/ts-jest";
@@ -13,8 +17,6 @@ import { setActivePinia } from "pinia";
 import { ref } from "vue";
 import { setupSharedElementTypeSelectionMock } from "../test-utils/sharedElementTypeSelectionMock";
 import { useAddElementDialog } from "./AddElementDialog.composable";
-
-setupStores({ notifierModule: NotifierModule });
 
 jest.mock("./SharedElementTypeSelection.composable");
 
@@ -55,12 +57,14 @@ jest.mocked(useBoardFeatures).mockImplementation(() => {
 // simple mock, as we only need to provide the env-config-module (the concrete value is even irrelevant for the currently implemented tests)
 mockedInjectStrict.mockImplementation(() => {
 	return {
-		getEnv: {
+		getEnv: envsFactory.build({
 			FEATURE_COLUMN_BOARD_SUBMISSIONS_ENABLED: false,
 			FEATURE_COLUMN_BOARD_EXTERNAL_TOOLS_ENABLED: false,
 			FEATURE_TLDRAW_ENABLED: false,
 			FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: false,
-		},
+			FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: false,
+			FEATURE_COLUMN_BOARD_H5P_ENABLED: false,
+		}),
 	};
 });
 
@@ -70,7 +74,12 @@ describe("ElementTypeSelection Composable", () => {
 
 		setupStores({
 			envConfigModule: EnvConfigModule,
+			notifierModule: NotifierModule,
 		});
+	});
+
+	afterEach(() => {
+		jest.clearAllMocks();
 	});
 
 	describe("onElementClick", () => {
@@ -83,19 +92,15 @@ describe("ElementTypeSelection Composable", () => {
 				const addElementMock = jest.fn();
 				const elementType = ContentElementType.RichText;
 
-				const showCustomNotifierMock = jest.fn();
-				const mockedBoardNotifierCalls = createMock<
-					ReturnType<typeof useBoardNotifier>
-				>({
-					showCustomNotifier: showCustomNotifierMock,
-				});
+				const mockedBoardNotifierCalls =
+					createMock<ReturnType<typeof useBoardNotifier>>();
 				mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 				return {
 					addElementMock,
 					elementType,
-					showCustomNotifierMock,
 					cardId,
+					mockedBoardNotifierCalls,
 				};
 			};
 
@@ -139,18 +144,14 @@ describe("ElementTypeSelection Composable", () => {
 					const addElementMock = jest.fn();
 					const elementType = ContentElementType.CollaborativeTextEditor;
 
-					const showCustomNotifierMock = jest.fn();
-					const mockedBoardNotifierCalls = createMock<
-						ReturnType<typeof useBoardNotifier>
-					>({
-						showCustomNotifier: showCustomNotifierMock,
-					});
+					const mockedBoardNotifierCalls =
+						createMock<ReturnType<typeof useBoardNotifier>>();
 					mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 					return {
 						addElementMock,
 						elementType,
-						showCustomNotifierMock,
+						mockedBoardNotifierCalls,
 						cardId,
 					};
 				};
@@ -162,7 +163,7 @@ describe("ElementTypeSelection Composable", () => {
 					const {
 						addElementMock,
 						elementType,
-						showCustomNotifierMock,
+						mockedBoardNotifierCalls,
 						cardId,
 					} = setup();
 
@@ -173,10 +174,9 @@ describe("ElementTypeSelection Composable", () => {
 
 					await onElementClick(elementType);
 
-					expect(showCustomNotifierMock).toHaveBeenCalledWith(
-						i18nKeyCollaborativeTextEditor,
-						"info"
-					);
+					expect(
+						mockedBoardNotifierCalls.showCustomNotifier
+					).toHaveBeenCalledWith(i18nKeyCollaborativeTextEditor, "info");
 				});
 			});
 
@@ -189,18 +189,14 @@ describe("ElementTypeSelection Composable", () => {
 					const addElementMock = jest.fn();
 					const elementType = ContentElementType.RichText;
 
-					const showCustomNotifierMock = jest.fn();
-					const mockedBoardNotifierCalls = createMock<
-						ReturnType<typeof useBoardNotifier>
-					>({
-						showCustomNotifier: showCustomNotifierMock,
-					});
+					const mockedBoardNotifierCalls =
+						createMock<ReturnType<typeof useBoardNotifier>>();
 					mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 					return {
 						addElementMock,
 						elementType,
-						showCustomNotifierMock,
+						mockedBoardNotifierCalls,
 						cardId,
 					};
 				};
@@ -209,7 +205,7 @@ describe("ElementTypeSelection Composable", () => {
 					const {
 						addElementMock,
 						elementType,
-						showCustomNotifierMock,
+						mockedBoardNotifierCalls,
 						cardId,
 					} = setup();
 
@@ -220,7 +216,9 @@ describe("ElementTypeSelection Composable", () => {
 
 					await onElementClick(elementType);
 
-					expect(showCustomNotifierMock).toHaveBeenCalledTimes(0);
+					expect(
+						mockedBoardNotifierCalls.showCustomNotifier
+					).toHaveBeenCalledTimes(0);
 				});
 			});
 
@@ -230,7 +228,7 @@ describe("ElementTypeSelection Composable", () => {
 						"components.cardElement.notification.visibleAndEditable";
 					const addElementMock = jest.fn();
 					const elementType = ContentElementType.Drawing;
-					const { showCustomNotifierMock, cardId } = setup();
+					const { mockedBoardNotifierCalls, cardId } = setup();
 
 					const { onElementClick } = useAddElementDialog(
 						addElementMock,
@@ -239,10 +237,9 @@ describe("ElementTypeSelection Composable", () => {
 
 					await onElementClick(elementType);
 
-					expect(showCustomNotifierMock).toHaveBeenCalledWith(
-						i18nKeyWhiteboard,
-						"info"
-					);
+					expect(
+						mockedBoardNotifierCalls.showCustomNotifier
+					).toHaveBeenCalledWith(i18nKeyWhiteboard, "info");
 				});
 			});
 		});
@@ -251,12 +248,8 @@ describe("ElementTypeSelection Composable", () => {
 				const error = new Error("Test error");
 				const addElementMock = jest.fn().mockRejectedValueOnce(error);
 
-				const showCustomNotifierMock = jest.fn();
-				const mockedBoardNotifierCalls = createMock<
-					ReturnType<typeof useBoardNotifier>
-				>({
-					showCustomNotifier: showCustomNotifierMock,
-				});
+				const mockedBoardNotifierCalls =
+					createMock<ReturnType<typeof useBoardNotifier>>();
 				mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 				setupSharedElementTypeSelectionMock();
@@ -299,6 +292,8 @@ describe("ElementTypeSelection Composable", () => {
 				FEATURE_COLUMN_BOARD_COLLABORATIVE_TEXT_EDITOR_ENABLED: true,
 				FEATURE_PREFERRED_CTL_TOOLS_ENABLED: true,
 				FEATURE_COLUMN_BOARD_VIDEOCONFERENCE_ENABLED: true,
+				FEATURE_COLUMN_BOARD_FILE_FOLDER_ENABLED: true,
+				FEATURE_COLUMN_BOARD_H5P_ENABLED: true,
 			}
 		) => {
 			const cardId = "cardId";
@@ -317,14 +312,10 @@ describe("ElementTypeSelection Composable", () => {
 				},
 			];
 
-			cardStore.getPreferredTools.mockReturnValue(preferredTools);
+			cardStore.preferredTools = preferredTools;
 
-			const showCustomNotifierMock = jest.fn();
-			const mockedBoardNotifierCalls = createMock<
-				ReturnType<typeof useBoardNotifier>
-			>({
-				showCustomNotifier: showCustomNotifierMock,
-			});
+			const mockedBoardNotifierCalls =
+				createMock<ReturnType<typeof useBoardNotifier>>();
 			mockedUseBoardNotifier.mockReturnValue(mockedBoardNotifierCalls);
 
 			mockedInjectStrict.mockImplementation(() => {
@@ -456,6 +447,7 @@ describe("ElementTypeSelection Composable", () => {
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
+
 		describe("when the DrawingElement action is called", () => {
 			it("should call drawing element function with right argument", async () => {
 				const { elementTypeOptions, addElementMock, cardId } = setup();
@@ -486,6 +478,7 @@ describe("ElementTypeSelection Composable", () => {
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
+
 		describe("when the CollaborativeTextEditorElement action is called", () => {
 			it("should call collaborative text editor element function with right argument", async () => {
 				const { elementTypeOptions, addElementMock, cardId } = setup();
@@ -516,6 +509,7 @@ describe("ElementTypeSelection Composable", () => {
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
 			});
 		});
+
 		describe("when the VideoConference action is called", () => {
 			it("should call video conference element function with right argument", async () => {
 				const { elementTypeOptions, addElementMock, cardId } = setup();
@@ -541,6 +535,66 @@ describe("ElementTypeSelection Composable", () => {
 				askType();
 
 				const action = elementTypeOptions.value[7].action;
+				action();
+
+				expect(closeDialogMock).toHaveBeenCalledTimes(1);
+			});
+		});
+
+		describe("when the FileFolderElement action is called", () => {
+			it("should call add element function with right argument", async () => {
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+				const action = elementTypeOptions.value[8].action;
+				action();
+
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toHaveBeenCalledWith({
+					type: ContentElementType.FileFolder,
+					cardId,
+				});
+			});
+
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				const action = elementTypeOptions.value[8].action;
+				action();
+
+				expect(closeDialogMock).toHaveBeenCalledTimes(1);
+			});
+		});
+
+		describe("when the H5pElement action is called", () => {
+			it("should call add element function with right argument", async () => {
+				const { elementTypeOptions, addElementMock, cardId } = setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+				const action = elementTypeOptions.value[9].action;
+				action();
+
+				expect(addElementMock).toHaveBeenCalledTimes(1);
+				expect(addElementMock).toHaveBeenCalledWith({
+					type: ContentElementType.H5p,
+					cardId,
+				});
+			});
+
+			it("should set isDialogOpen to false", async () => {
+				const { elementTypeOptions, addElementMock, closeDialogMock, cardId } =
+					setup();
+				const { askType } = useAddElementDialog(addElementMock, cardId);
+
+				askType();
+
+				const action = elementTypeOptions.value[9].action;
 				action();
 
 				expect(closeDialogMock).toHaveBeenCalledTimes(1);
