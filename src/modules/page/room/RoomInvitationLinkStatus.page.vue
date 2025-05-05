@@ -119,9 +119,3 @@ const updateInfoMessage = (validationMessage: string, schoolName: string) => {
 	}
 };
 </script>
-
-<style lang="scss" scoped>
-.text-centered {
-	text-align: center;
-}
-</style>
