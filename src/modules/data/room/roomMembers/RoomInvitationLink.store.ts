@@ -1,5 +1,5 @@
 import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
-import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
+import { $axios } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
 import { defineStore, storeToRefs } from "pinia";
