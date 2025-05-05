@@ -33,7 +33,7 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import CrossedHandsBirdSvg from "@/assets/img/crossedHands.svg";
 import { buildPageTitle } from "@/utils/pageTitle";
 import { useTitle } from "@vueuse/core";
-import { computed, nextTick, onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	RoomInvitationLinkValidationError,
@@ -51,7 +51,6 @@ const props = defineProps({
 });
 
 const infoMessage = ref("");
-const isLoading = ref(true);
 
 const router = useRouter();
 
@@ -61,7 +60,6 @@ const useLink = async () => {
 	const linkResult = await roomInvitationLinkStore.useLink(
 		props.invitationLinkId
 	);
-	isLoading.value = false;
 
 	if (linkResult.roomId !== "") {
 		router.push({ path: `/rooms/${linkResult.roomId}` });
@@ -87,8 +85,7 @@ const breadcrumbs: Breadcrumb[] = [
 	},
 ];
 
-onMounted(async () => {
-	await nextTick();
+onMounted(() => {
 	useLink();
 });
 
@@ -111,7 +108,7 @@ const determineStatus = (status: string) => {
 			);
 			break;
 		default:
-			infoMessage.value = t("pages.rooms.invitationLinkStatus.notFound");
+			infoMessage.value = t("error.generic");
 			break;
 	}
 };

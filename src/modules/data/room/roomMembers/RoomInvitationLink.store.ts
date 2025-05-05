@@ -1,5 +1,9 @@
 import { extractErrorData } from "@util-axios-error";
-import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
+import {
+	RoomApiFactory,
+	RoomInvitationLinkApiFactory,
+	RoomInvitationLinkValidationError,
+} from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
@@ -12,6 +16,7 @@ import {
 	UpdateRoomInvitationLinkDto,
 	UseLinkResult,
 } from "./types";
+import { createApplicationError } from "@/utils/create-application-error.factory";
 
 export const useRoomInvitationLinkStore = defineStore(
 	"roomInvitationLinkStore",
@@ -107,10 +112,20 @@ export const useRoomInvitationLinkStore = defineStore(
 				const response = await api.roomInvitationLinkControllerUseLink(linkId);
 				result.roomId = response.data.id;
 			} catch (err) {
-				const { message } = extractErrorData(err);
-				result.message = message;
+				result.message = extractValidationError(err);
 			}
 			return result;
+		};
+
+		const extractValidationError = (err: unknown) => {
+			const { message, statusCode } = extractErrorData(err);
+			const validationErrors: string[] = Object.values(
+				RoomInvitationLinkValidationError
+			);
+			if (validationErrors.includes(message)) {
+				return message;
+			}
+			throw createApplicationError(statusCode, "error.generic");
 		};
 
 		const resetStore = () => {
