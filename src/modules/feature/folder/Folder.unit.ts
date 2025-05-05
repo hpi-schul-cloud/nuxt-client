@@ -1,6 +1,6 @@
 import router from "@/router";
 import { FileRecordParent } from "@/types/file/File";
-import { fileRecordFactory } from "@@/tests/test-utils";
+import { fileRecordFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -187,11 +187,9 @@ describe("Folder.vue", () => {
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
 				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
-				folderStateMock.parent = ref({
-					id: "parent-id",
-					name: "Board",
-					type: "board",
-				}) as unknown as ComputedRef;
+
+				const parent = parentNodeInfoFactory.build();
+				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
@@ -231,6 +229,7 @@ describe("Folder.vue", () => {
 					folderName,
 					boardApiMock,
 					routerSpy,
+					parent,
 				};
 			};
 
@@ -241,9 +240,9 @@ describe("Folder.vue", () => {
 			});
 
 			it("should call router replace", async () => {
-				const { routerSpy } = await setup();
+				const { routerSpy, parent } = await setup();
 
-				expect(routerSpy).toHaveBeenCalledWith("/boards/parent-id");
+				expect(routerSpy).toHaveBeenCalledWith(`/boards/${parent.id}`);
 			});
 		});
 
@@ -262,11 +261,9 @@ describe("Folder.vue", () => {
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
 				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
-				folderStateMock.parent = ref({
-					id: "parent-id",
-					name: "Board",
-					type: "board",
-				}) as unknown as ComputedRef;
+				const parent = parentNodeInfoFactory.build();
+
+				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();

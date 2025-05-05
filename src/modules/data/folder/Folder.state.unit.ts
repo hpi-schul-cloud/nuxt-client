@@ -5,6 +5,10 @@ import { createMock } from "@golevelup/ts-jest";
 import { describe, expect, it } from "@jest/globals";
 import { AxiosPromise } from "axios";
 import { useFolderState } from "./Folder.state";
+import {
+	fileFolderElementResponseFactory,
+	parentNodeInfoFactory,
+} from "@@/tests/test-utils";
 
 jest.mock("vue-i18n", () => {
 	return {
@@ -19,19 +23,8 @@ describe("useFolderState", () => {
 		parentNodeInfos?: ParentNodeInfo[];
 	}) => {
 		const boardApi = createMock<serverApi.BoardElementApiInterface>();
-		const testId = "test-id";
-		const folderElement = {
-			id: testId,
-			content: { title: "Test Folder" },
-			type: "fileFolder",
-		};
-		const parentNodeInfos = [
-			{
-				id: "parent-id",
-				name: "Parent Folder",
-				type: "fileFolder",
-			},
-		];
+		const folderElement = fileFolderElementResponseFactory.build();
+		const parentNodeInfos = parentNodeInfoFactory.build();
 
 		boardApi.elementControllerGetElementWithParentHierarchy.mockReturnValueOnce(
 			{
@@ -45,7 +38,10 @@ describe("useFolderState", () => {
 		jest.spyOn(serverApi, "BoardElementApiFactory").mockReturnValue(boardApi);
 
 		return {
-			testId,
+			testId: folderElement.id,
+			title: folderElement.content.title,
+			createdAt: folderElement.timestamps.createdAt,
+			lastUpdatedAt: folderElement.timestamps.lastUpdatedAt,
 		};
 	};
 
@@ -96,7 +92,7 @@ describe("useFolderState", () => {
 
 			describe("when element is a file folder element", () => {
 				it("should set fileFolderElement correctly", async () => {
-					const { testId } = setup();
+					const { testId, title, createdAt, lastUpdatedAt } = setup();
 
 					const { fetchFileFolderElement, fileFolderElement } =
 						useFolderState();
@@ -105,8 +101,9 @@ describe("useFolderState", () => {
 
 					expect(fileFolderElement.value).toEqual({
 						id: testId,
-						content: { title: "Test Folder" },
+						content: { title },
 						type: "fileFolder",
+						timestamps: { createdAt, lastUpdatedAt },
 					});
 				});
 			});
