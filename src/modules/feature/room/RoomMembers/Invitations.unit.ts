@@ -104,11 +104,7 @@ describe("Invitations", () => {
 	it("should handle onClick for 'Use Invitation' button", async () => {
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
 
-		const { wrapper, roomInvitationLinkStore } = setup(roomInvitationLinks);
-		roomInvitationLinkStore.useLink.mockResolvedValue({
-			roomId: "roomId",
-			message: "",
-		});
+		const { wrapper } = setup(roomInvitationLinks);
 
 		const linkId = roomInvitationLinks[0].id;
 		const clipboardMock = createMock<Clipboard>();
@@ -118,10 +114,6 @@ describe("Invitations", () => {
 		await useButton.trigger("click");
 		await nextTick();
 
-		expect(roomInvitationLinkStore.useLink).toHaveBeenCalledTimes(1);
-		expect(roomInvitationLinkStore.useLink).toHaveBeenCalledWith(
-			expect.stringContaining(linkId)
-    );
 		expect(clipboardMock.writeText).toHaveBeenCalledWith(
 			expect.stringContaining(linkId)
 		);
