@@ -51,6 +51,7 @@ const props = defineProps({
 });
 
 const infoMessage = ref("");
+const isLoading = ref(true);
 
 const router = useRouter();
 
@@ -60,6 +61,7 @@ const useLink = async () => {
 	const linkResult = await roomInvitationLinkStore.useLink(
 		props.invitationLinkId
 	);
+	isLoading.value = false;
 
 	if (linkResult.roomId !== "") {
 		router.push({ path: `/rooms/${linkResult.roomId}` });
