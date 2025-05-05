@@ -100,11 +100,7 @@
 										keypath="pages.rooms.members.inviteMember.form.isConfirmationNeeded.label"
 										scope="global"
 									>
-										<a
-											:href="moreInformationLink!"
-											target="_blank"
-											rel="noopener"
-										>
+										<a :href="informationLink" target="_blank" rel="noopener">
 											{{ t("pages.rooms.members.infoText.moreInformation") }}
 										</a>
 									</i18n-t>
@@ -281,7 +277,9 @@ watch(
 	}
 );
 
-const moreInformationLink = computed(
-	() => envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
+const informationLink = computed(() =>
+	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
+		? envConfigModule.getEnv.ROOM_MEMBER_INFO_URL
+		: "https://docs.dbildungscloud.de/display/SCDOK/Teameinladung+freigeben"
 );
 </script>
