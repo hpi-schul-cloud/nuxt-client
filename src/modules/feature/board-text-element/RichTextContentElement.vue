@@ -120,14 +120,7 @@ const onKeyUp = () => ensurePoliteNotifications();
 			margin-top: var(--space-md-2);
 		}
 
-		p {
-			font-family: var(--font-primary);
-			font-weight: var(--font-weight-normal);
-			font-size: var(--text-md);
-			line-height: var(--line-height-lg);
-			margin-bottom: var(--space-xs);
-		}
-
+		p,
 		ul,
 		ol {
 			font-family: var(--font-primary);
