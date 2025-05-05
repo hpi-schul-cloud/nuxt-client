@@ -742,6 +742,8 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Посилання на копію дошки",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
+	"components.molecules.share.roomMemberInvitation.mail.body":
+		"Посилання на кімнату: ",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"Зовнішні інструменти, пов’язані з курсом або посадочними картками, не будуть скопійовані.",

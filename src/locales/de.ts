@@ -737,6 +737,8 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link Bereich-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
+	"components.molecules.share.roomMemberInvitation.mail.body":
+		"Link zum Raum: ",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"In Zielschule nicht verfügbare, externe Tools",

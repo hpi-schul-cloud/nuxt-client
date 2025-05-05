@@ -720,6 +720,8 @@ export default {
 		"Organizational Management",
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
 	"components.molecules.share.courses.mail.body": "Link to the course:",
+	"components.molecules.share.roomMemberInvitation.mail.body":
+		"Link to the Room: ",
 	"components.molecules.share.courses.mail.subject": "Course you can import",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"External tools not available in the target school",
