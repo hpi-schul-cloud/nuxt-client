@@ -1,43 +1,54 @@
-import { computed } from "vue";
+import { computed, Ref } from "vue";
 
-function calculateViewportOffsetTop(): number {
+function calculateViewportOffsetTop(
+	columnIndex: number,
+	isListLayout: Ref<boolean>
+): number {
 	const documentStyle = window.getComputedStyle(document.documentElement);
 
 	const topbarHeight = documentStyle.getPropertyValue("--topbar-height");
-	const breadcrumbsHeight = documentStyle.getPropertyValue(
-		"--breadcrumbs-height"
-	);
-	const boardHeaderHeight = documentStyle.getPropertyValue(
-		"--board-header-height"
-	);
+	const wireframeHeader =
+		document.querySelector<HTMLElement>(".wireframe-header");
 
-	const staticOffsetTop =
-		parseInt(topbarHeight) +
-		parseInt(breadcrumbsHeight) +
-		parseInt(boardHeaderHeight);
+	const topbarAndWireframeHeaderHeight =
+		parseFloat(topbarHeight) + (wireframeHeader?.offsetHeight ?? 0);
 
-	const currentColumnHeader = document.getElementsByClassName(
-		"board-column-header"
-	)[0] as HTMLElement;
-
-	if (!currentColumnHeader) {
-		return staticOffsetTop;
+	if (isListLayout.value) {
+		return topbarAndWireframeHeaderHeight;
 	}
 
-	const height = currentColumnHeader.offsetHeight;
+	const currentColumnHeader = document.querySelectorAll<HTMLElement>(
+		".board-column-header"
+	)[columnIndex];
+
+	if (!currentColumnHeader) {
+		return topbarAndWireframeHeaderHeight;
+	}
+
+	const columnHeaderHeight = currentColumnHeader.offsetHeight;
 
 	const columnHeaderStyle = window.getComputedStyle(currentColumnHeader);
-	const marginTop = columnHeaderStyle.getPropertyValue("margin-top");
-	const marginBottom = columnHeaderStyle.getPropertyValue("margin-bottom");
+	const columnHeaderMarginTop =
+		columnHeaderStyle.getPropertyValue("margin-top");
+	const columnHeaderMarginBottom =
+		columnHeaderStyle.getPropertyValue("margin-bottom");
 
 	const offsetTop =
-		staticOffsetTop + height + parseInt(marginTop) + parseInt(marginBottom);
+		topbarAndWireframeHeaderHeight +
+		columnHeaderHeight +
+		parseFloat(columnHeaderMarginTop) +
+		parseFloat(columnHeaderMarginBottom);
 
 	return offsetTop;
 }
 
-export const useViewportOffsetTop = () => {
-	const offsetTop = computed(() => calculateViewportOffsetTop());
+export const useViewportOffsetTop = (
+	columnIndex: number,
+	isListLayout: Ref<boolean>
+) => {
+	const offsetTop = computed(() =>
+		calculateViewportOffsetTop(columnIndex, isListLayout)
+	);
 
 	return {
 		offsetTop,
