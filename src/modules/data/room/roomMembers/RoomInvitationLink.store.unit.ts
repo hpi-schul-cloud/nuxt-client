@@ -277,22 +277,25 @@ describe("useRoomInvitationLinkStore", () => {
 		});
 
 		describe("when the API call fails", () => {
-			it("should return the failure message", async () => {
+			it("should return the validation error message", async () => {
 				const links = roomInvitationLinkFactory.buildList(3);
 				const { roomInvitationLinkStore } = setup(links);
-				const message = serverApi.RoomInvitationLinkValidationError.Expired;
+				const message =
+					serverApi.RoomInvitationLinkValidationError.RestrictedToCreatorSchool;
+				const schoolName = "My example School";
 				const axiosError = createAxiosError({
 					message,
+					data: { details: { validationMessage: message, schoolName } },
 				});
 				roomInvitationLinkApiMock.roomInvitationLinkControllerUseLink.mockRejectedValue(
 					axiosError
 				);
 
 				const firstLink = links[0];
-
 				const result = await roomInvitationLinkStore.useLink(firstLink.id);
 
-				expect(result.message).toBe(message);
+				expect(result.validationMessage).toBe(message);
+				expect(result.schoolName).toBe(schoolName);
 			});
 		});
 	});

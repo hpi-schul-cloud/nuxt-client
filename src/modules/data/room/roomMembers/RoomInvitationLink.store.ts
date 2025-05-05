@@ -1,4 +1,3 @@
-import { extractErrorData } from "@util-axios-error";
 import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
@@ -12,6 +11,7 @@ import {
 	UpdateRoomInvitationLinkDto,
 	UseLinkResult,
 } from "./types";
+import { isAxiosError } from "axios";
 
 export const useRoomInvitationLinkStore = defineStore(
 	"roomInvitationLinkStore",
@@ -102,13 +102,21 @@ export const useRoomInvitationLinkStore = defineStore(
 		};
 
 		const useLink = async (linkId: string): Promise<UseLinkResult> => {
-			const result: UseLinkResult = { roomId: "", message: "" };
+			const result: UseLinkResult = {
+				roomId: "",
+				validationMessage: "",
+				schoolName: "",
+			};
 			try {
 				const response = await api.roomInvitationLinkControllerUseLink(linkId);
 				result.roomId = response.data.id;
-			} catch (err) {
-				const { message } = extractErrorData(err);
-				result.message = message;
+			} catch (error) {
+				if (isAxiosError(error)) {
+					const details = error?.response?.data.details;
+					const { validationMessage, schoolName } = details;
+					result.validationMessage = validationMessage;
+					result.schoolName = schoolName;
+				}
 			}
 			return result;
 		};

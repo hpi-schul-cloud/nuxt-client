@@ -3,32 +3,35 @@
 		{{ t("pages.rooms.members.tab.invitations.infoText") }}
 	</p>
 	<div v-for="link of roomInvitationLinks" :key="link.id">
-		<div>
-			{{ link }} {{ link.id
-			}}<v-btn
-				data-testid="update-invitation-button"
-				@click="onClickUpdate(link.id)"
-				>update</v-btn
-			>
-			<v-btn data-testid="use-invitation-button" @click="onClickUse(link.id)"
-				>use</v-btn
-			>
-			<v-btn
-				data-testid="delete-invitation-button"
-				@click="onClickRemove(link.id)"
-				>delete</v-btn
-			>
+		<div class="d-flex flex-row">
+			<div>
+				<pre>{{ link }}</pre>
+			</div>
+			<div>
+				<VBtn
+					data-testid="update-invitation-button"
+					@click="onClickUpdate(link.id)"
+					>update</VBtn
+				>
+				<VBtn
+					data-testid="copy-invitation-link-button"
+					@click="onClickCopyLink(link.id)"
+					>copy link</VBtn
+				>
+				<VBtn
+					data-testid="delete-invitation-button"
+					@click="onClickRemove(link.id)"
+					>delete</VBtn
+				>
+			</div>
 		</div>
 	</div>
-	<v-btn data-testid="create-invitation-button" @click="onClickAdd"
-		>add random link</v-btn
+	<VBtn data-testid="create-invitation-button" @click="onClickAdd"
+		>add random link</VBtn
 	>
 </template>
 <script setup lang="ts">
-import {
-	useRoomInvitationLinkStore,
-	RoomInvitationLinkValidationError,
-} from "@data-room";
+import { useRoomInvitationLinkStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 
@@ -59,16 +62,13 @@ const onClickRemove = (linkId: string) => {
 	roomInvitationLinkStore.deleteLinks(linkId);
 };
 
-const onClickUse = async (linkId: string) => {
-	const { roomId, message } = await roomInvitationLinkStore.useLink(linkId);
-	if (roomId) {
-		window.alert("redirect to room: " + roomId);
-		return;
-	}
-
-	if (message === RoomInvitationLinkValidationError.Expired) {
-		window.alert(t("pages.rooms.invitationlinks.error.expired"));
-	}
+const onClickCopyLink = async (linkId: string) => {
+	const url = new URL(window.location.href);
+	url.pathname = `/rooms/invitation-link/${linkId}`;
+	url.searchParams.keys().forEach((key) => {
+		url.searchParams.delete(key);
+	});
+	navigator.clipboard.writeText(url.toString());
 };
 
 const onClickUpdate = (linkId: string) => {
@@ -81,8 +81,7 @@ const onClickUpdate = (linkId: string) => {
 	const title =
 		(link?.title ?? "Test ").replace(/\s*\(update: \d+\)/, "") +
 		` (update: ${updateCount + 1})`;
-	const maxOneOur =
-		Math.ceil(Math.random() * 1000 * 3600) * (Math.ceil(Math.random()) * -1);
+	const maxOneOur = Math.ceil((Math.random() + 1) * 1000 * 3600);
 	roomInvitationLinkStore.updateLink({
 		id: linkId,
 		title: title,
