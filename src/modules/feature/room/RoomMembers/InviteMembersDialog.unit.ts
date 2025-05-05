@@ -10,11 +10,22 @@ import { useBoardNotifier } from "@util-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import EnvConfigModule from "@/store/env-config";
+import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
+import { VueWrapper } from "@vue/test-utils";
+import { useRoomInvitationLinkStore } from "@data-room";
+import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 
 jest.mock("vue-i18n", () => {
 	return {
 		...jest.requireActual("vue-i18n"),
 		useI18n: () => ({ t: jest.fn().mockImplementation((key) => key) }),
+	};
+});
+
+jest.mock("@vueuse/integrations/useFocusTrap", () => {
+	return {
+		...jest.requireActual("@vueuse/integrations/useFocusTrap"),
+		useFocusTrap: jest.fn(),
 	};
 });
 
@@ -28,7 +39,11 @@ enum InvitationStep {
 
 jest.useFakeTimers();
 describe("InviteMembersDialog", () => {
+	let wrapper: VueWrapper<InstanceType<typeof InviteMembersDialog>>;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
+	let pauseMock: jest.Mock;
+	let unpauseMock: jest.Mock;
+	let deactivateMock: jest.Mock;
 
 	beforeAll(() => {
 		setupStores({
@@ -38,6 +53,14 @@ describe("InviteMembersDialog", () => {
 	beforeEach(() => {
 		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		boardNotifier.mockReturnValue(boardNotifierCalls);
+		pauseMock = jest.fn();
+		unpauseMock = jest.fn();
+		deactivateMock = jest.fn();
+		(useFocusTrap as jest.Mock).mockReturnValue({
+			pause: pauseMock,
+			unpause: unpauseMock,
+			deactivate: deactivateMock,
+		});
 	});
 	afterEach(() => {
 		jest.clearAllMocks();
@@ -56,7 +79,7 @@ describe("InviteMembersDialog", () => {
 		}
 	) => {
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
-		const wrapper = mount(InviteMembersDialog, {
+		wrapper = mount(InviteMembersDialog, {
 			global: {
 				plugins: [
 					createTestingI18n(),
@@ -80,7 +103,11 @@ describe("InviteMembersDialog", () => {
 				...props,
 			},
 		});
-		return { wrapper };
+
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(
+			useRoomInvitationLinkStore
+		);
+		return { wrapper, roomInvitationLinkStore };
 	};
 
 	it("should render correctly", () => {
@@ -96,7 +123,7 @@ describe("InviteMembersDialog", () => {
 	describe("steps", () => {
 		describe("when the step is PREPARE", () => {
 			it("should have the correct title", async () => {
-				const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+				const { wrapper } = setup();
 
 				await nextTick();
 
@@ -109,7 +136,7 @@ describe("InviteMembersDialog", () => {
 			});
 
 			it("should have the correct action buttons", async () => {
-				const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+				const { wrapper } = setup();
 
 				await nextTick();
 
@@ -125,7 +152,7 @@ describe("InviteMembersDialog", () => {
 			});
 
 			it("should not render the ShareModalResult component", async () => {
-				const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+				const { wrapper } = setup();
 
 				await nextTick();
 
@@ -137,7 +164,7 @@ describe("InviteMembersDialog", () => {
 			});
 
 			it("should have the correct checkbox labels", async () => {
-				const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+				const { wrapper } = setup();
 
 				await nextTick();
 
@@ -194,8 +221,10 @@ describe("InviteMembersDialog", () => {
 		});
 
 		describe("when continue button is clicked", () => {
-			it("should switch to SHARE step", async () => {
-				const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+			it("should switch to SHARE step and call createLink method", async () => {
+				const { wrapper, roomInvitationLinkStore } = setup({
+					preDefinedStep: InvitationStep.PREPARE,
+				});
 				await nextTick();
 				const shareModalBefore = wrapper.findComponent({
 					name: "ShareModalResult",
@@ -210,14 +239,27 @@ describe("InviteMembersDialog", () => {
 				const shareModalAfter = wrapper.findComponent({
 					name: "ShareModalResult",
 				});
+
+				const expectedFormValues = {
+					title: "invitation link",
+					activeUntil: "2900-01-01T00:00:00.000Z",
+					isOnlyForTeachers: true,
+					restrictedToCreatorSchool: true,
+					requiresConfirmation: true,
+				};
+
 				expect(shareModalAfter.exists()).toBe(true);
+
+				expect(roomInvitationLinkStore.createLink).toHaveBeenCalledWith(
+					expectedFormValues
+				);
 			});
 		});
 	});
 
 	describe("emits", () => {
 		it("should emit 'close' with false when cancel button is clicked", async () => {
-			const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+			const { wrapper } = setup();
 			await nextTick();
 			const cancelButton = wrapper.findComponent({ ref: "cancelButton" });
 			await cancelButton.trigger("click");
@@ -236,9 +278,23 @@ describe("InviteMembersDialog", () => {
 	});
 
 	describe("form rules", () => {
+		describe("default values of checkboxes", () => {
+			it("should have the first and fourth checkboxes checked as default", async () => {
+				const { wrapper } = setup();
+				await nextTick();
+
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+
+				expect(checkboxes[0].props("modelValue")).toBe(true);
+				expect(checkboxes[1].props("modelValue")).toBe(false);
+				expect(checkboxes[2].props("modelValue")).toBe(false);
+				expect(checkboxes[3].props("modelValue")).toBe(true);
+			});
+		});
+
 		describe("when the first checkbox is checked", () => {
 			it("should enable the second checkbox", async () => {
-				const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
+				const { wrapper } = setup();
 				await nextTick();
 
 				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
@@ -251,51 +307,55 @@ describe("InviteMembersDialog", () => {
 				expect(secondCheckbox.props("disabled")).toBe(true);
 			});
 		});
-	});
 
-	describe("when the first checkbox is unchecked", () => {
-		it("should disable and uncheck the second checkbox", async () => {
-			const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
-			await nextTick();
+		describe("when the first checkbox is unchecked", () => {
+			it("should disable and uncheck the second checkbox", async () => {
+				const { wrapper } = setup();
+				await nextTick();
 
-			const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
-			const firstCheckbox = checkboxes[0];
-			const secondCheckbox = checkboxes[1];
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+				const firstCheckbox = checkboxes[0];
+				const secondCheckbox = checkboxes[1];
 
-			await firstCheckbox.setValue(true);
-			await secondCheckbox.setValue(true);
-			await nextTick();
+				await firstCheckbox.setValue(true);
+				await secondCheckbox.setValue(true);
+				await nextTick();
 
-			expect(secondCheckbox.props("disabled")).toBe(false);
-			expect(secondCheckbox.props("modelValue")).toBe(true);
+				expect(secondCheckbox.props("disabled")).toBe(false);
+				expect(secondCheckbox.props("modelValue")).toBe(true);
 
-			await firstCheckbox.setValue(false);
-			await nextTick();
+				await firstCheckbox.setValue(false);
+				await nextTick();
 
-			expect(secondCheckbox.props("disabled")).toBe(true);
-			expect(secondCheckbox.props("modelValue")).toBe(false);
+				expect(secondCheckbox.props("disabled")).toBe(true);
+				expect(secondCheckbox.props("modelValue")).toBe(false);
+			});
 		});
-	});
 
-	describe.skip("when the third checkbox is checked", () => {
-		it("should enable date picker", async () => {
-			const { wrapper } = setup({ preDefinedStep: InvitationStep.PREPARE });
-			await nextTick();
+		describe("when the third checkbox is checked", () => {
+			it("should enable date picker", async () => {
+				const { wrapper } = setup();
+				await nextTick();
 
-			const datePickerBefore = wrapper.findComponent({ name: "DatePicker" });
-			expect(datePickerBefore.attributes("disabled")).toBeDefined();
+				const datePickerBefore = wrapper.findComponent(
+					'[data-testid="date-picker-until"]'
+				);
+				expect(datePickerBefore.classes().includes("v-input--disabled")).toBe(
+					true
+				);
 
-			const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
-			const thirdCheckbox = checkboxes[2];
+				const checkboxes = wrapper.findAllComponents({ name: "VCheckbox" });
+				const thirdCheckbox = checkboxes[2];
 
-			await thirdCheckbox.setValue(true);
-			await nextTick();
-			const datePicker = wrapper.findComponent(
-				'[data-testid="date-picker-until"]'
-			);
-			await nextTick();
+				await thirdCheckbox.setValue(true);
 
-			expect(datePicker.attributes().disabled).toBe(undefined);
+				const datePicker = wrapper.findComponent(
+					'[data-testid="date-picker-until"]'
+				);
+				await nextTick();
+
+				expect(datePicker.classes().includes("v-input--disabled")).toBe(false);
+			});
 		});
 	});
 });
