@@ -126,6 +126,7 @@ module.exports = {
 			"@data-room": getDir("src/modules/data/room"),
 			"@data-folder": getDir("src/modules/data/folder"),
 			"@data-license": getDir("src/modules/data/license"),
+			"@feature-auto-logout": getDir("src/modules/feature/auto-logout"),
 			"@feature-board-file-element": getDir(
 				"src/modules/feature/board-file-element"
 			),
@@ -190,6 +191,7 @@ module.exports = {
 				"src/modules/ui/video-conference-configuration-dialog"
 			),
 			"@ui-empty-state": getDir("src/modules/ui/empty-state"),
+			"@util-axios-error": getDir("src/modules/util/axios-error"),
 			"@util-board": getDir("src/modules/util/board"),
 			"@util-validators": getDir("src/modules/util/validators"),
 			"@util-vue": getDir("src/modules/util/vue"),
