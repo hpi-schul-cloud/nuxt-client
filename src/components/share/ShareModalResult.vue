@@ -57,7 +57,6 @@
 <script setup lang="ts">
 import { QRCode } from "@ui-qr-code";
 import { ExtendedIconBtn } from "@ui-extended-icon-btn";
-import { ShareTokenBodyParamsParentTypeEnum } from "@/serverApi/v3/api";
 import {
 	mdiContentCopy,
 	mdiEmailOutline,
@@ -75,10 +74,6 @@ const props = defineProps({
 	type: {
 		type: String,
 		required: true,
-		validator: (type) =>
-			Object.values(ShareTokenBodyParamsParentTypeEnum).includes(
-				type as ShareTokenBodyParamsParentTypeEnum
-			),
 	},
 });
 const emit = defineEmits(["copied", "done"]);
