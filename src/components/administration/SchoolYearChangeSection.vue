@@ -90,7 +90,7 @@
 					"
 					color="primary"
 					variant="outlined"
-					data-testid="-button"
+					data-testid="ldap-data-button"
 					:loading="isLoading"
 					@click="enableCheckbox()"
 				>
@@ -145,7 +145,7 @@
 					"
 					color="primary"
 					variant="flat"
-					data-testid="-button"
+					data-testid="finish-transfer-button"
 					:loading="isLoading"
 					@click="finishTransfer"
 				>

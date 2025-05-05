@@ -1,9 +1,9 @@
 export interface MaintenanceStatus {
-	currentYear: { name: string; startDate: Date; endDate: Date };
-	nextYear: { yearId: string; startDate: Date; endDate: Date };
+	currentYear: { id: string; name: string; startDate: Date; endDate: Date };
+	nextYear: { id: string; name: string; startDate: Date; endDate: Date };
 	schoolUsesLdap: boolean;
 	maintenance: {
 		active: boolean;
-		startDate: Date | null;
+		startDate?: Date;
 	};
 }
