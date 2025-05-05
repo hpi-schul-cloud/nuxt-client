@@ -35,9 +35,6 @@ describe("@feature-editor/ClassicEditor", () => {
 					defaultProtocol: "//",
 					addTargetToExternalLinks: true,
 				},
-				wordCount: {
-					onUpdate: jest.fn(),
-				},
 				fontColor: {
 					colors: [],
 				},
@@ -45,7 +42,6 @@ describe("@feature-editor/ClassicEditor", () => {
 					colors: [],
 				},
 			},
-			editorIsEmpty: computed(() => isEditorEmpty),
 			registerDeletionHandler: jest.fn(),
 		};
 
