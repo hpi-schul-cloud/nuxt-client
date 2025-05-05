@@ -1798,6 +1798,18 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Sincronizado",
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
 	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
+	"pages.rooms.invitationLinkStatus.bird.alt": "Pájaro con alas plegadas",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Lamentablemente, el enlace de invitación sólo es válido para los alumnos de la escuela «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Lamentablemente, el enlace de invitación ya no es válido",
+	"pages.rooms.invitationLinkStatus.invalidLink":
+		"Lamentablemente, el enlace de invitación no existe",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Lamentablemente, el enlace de invitación sólo es válido para los usuarios de la escuela «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.title": "Enlace de invitación",
 	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.rooms.menuItems.startSync": "Iniciar sincronización",
 	"pages.rooms.importCourse.btn.continue": "Continuar",

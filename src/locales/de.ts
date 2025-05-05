@@ -1775,6 +1775,19 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronisiert",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
 	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
+	"pages.rooms.invitationLinkStatus.bird.alt":
+		"Vogel mit verschränkten Flügeln",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Der Einladungslink ist leider nur für Lernende der Schule “{schoolName}” gültig",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Der Einladungslink ist leider nicht mehr gültig",
+	"pages.rooms.invitationLinkStatus.invalidLink":
+		"Der Einladungslink existiert leider nicht",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Der Einladungslink ist leider nur für Lernbegleitungen gültig",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Der Einladungslink ist leider nur für Nutzende der Schule “{schoolName}” gültig",
+	"pages.rooms.invitationLinkStatus.title": "Einladungslink",
 	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.menuItems.startSync": "Synchronisation starten",
 	"pages.rooms.importCourse.btn.continue": "Weiter",
