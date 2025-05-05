@@ -15,8 +15,10 @@
 <script lang="ts">
 import { InlineEditor } from "@feature-editor";
 import { useEventListener } from "@vueuse/core";
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { defineComponent, onMounted, ref, watch, computed } from "vue";
 import { useViewportOffsetTop } from "@ui-layout";
+import { injectStrict } from "@/utils/inject";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 export default defineComponent({
 	name: "RichTextContentElementEdit",
@@ -30,12 +32,20 @@ export default defineComponent({
 			type: Boolean,
 			required: true,
 		},
+		columnIndex: {
+			type: Number,
+			required: true,
+		},
 	},
 	emits: ["update:value", "delete:element", "blur"],
 	setup(props, { emit }) {
 		const modelValue = ref("");
 
-		const { offsetTop } = useViewportOffsetTop();
+		const isListLayout = injectStrict(BOARD_IS_LIST_LAYOUT);
+		const offsetTop = computed(
+			() =>
+				useViewportOffsetTop(props.columnIndex, isListLayout).offsetTop.value
+		);
 
 		onMounted(() => {
 			if (props.value !== undefined) {
