@@ -47,8 +47,9 @@
 											"pages.rooms.members.inviteMember.form.onlySchoolMembers.label"
 										)
 									}}
-									<br />
-									{{ schoolName }}
+									<span class="d-inline-block">
+										{{ schoolName }}
+									</span>
 								</div>
 							</template>
 						</v-checkbox>
@@ -76,7 +77,7 @@
 
 							<date-picker
 								ref="datePicker"
-								v-model="formData.activeUntilCheck"
+								v-model="formData.activeUntil"
 								:disabled="isDatePickerDisabled"
 								:selected-date="(formData.activeUntil! || '').toString()"
 								:min-date="new Date().toString()"
