@@ -9,6 +9,7 @@ import { useBoardNotifier } from "@util-board";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
 import { useRoomInvitationLinkStore, RoomInvitationLink } from "@data-room";
 import { roomInvitationLinkFactory } from "@@/tests/test-utils/factory/room/roomInvitationLinkFactory";
+import { nextTick } from "vue";
 
 jest.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = jest.mocked(useBoardNotifier);
@@ -100,13 +101,21 @@ describe("Invitations", () => {
 		);
 	});
 
-	it.skip("should handle onClick for 'Use Invitation' button", async () => {
+	it("should handle onClick for 'Use Invitation' button", async () => {
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
 		const { wrapper, roomInvitationLinkStore } = setup(roomInvitationLinks);
+		roomInvitationLinkStore.useLink.mockResolvedValue({
+			roomId: "roomId",
+			message: "",
+		});
 
 		const useButton = wrapper.get("[data-testid=use-invitation-button]");
 		await useButton.trigger("click");
+		await nextTick();
 
 		expect(roomInvitationLinkStore.useLink).toHaveBeenCalledTimes(1);
+		expect(roomInvitationLinkStore.useLink).toHaveBeenCalledWith(
+			expect.stringContaining(roomInvitationLinks[0].id)
+		);
 	});
 });
