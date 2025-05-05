@@ -493,7 +493,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should open Dialog", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({ activeTab: Tab.Members });
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 			const addMemberDialogBeforeClick = wrapper
 				.getComponent(VDialog)

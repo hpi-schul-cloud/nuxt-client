@@ -17,7 +17,7 @@
 					data-testid="mobilePlatformAction"
 					:icon="mdiShareVariantOutline"
 					:label="$t('common.actions.share')"
-					@click.stop="onShareMobilePlatflorm"
+					@click.stop="onShareMobilePlatform"
 				/>
 
 				<ExtendedIconBtn
@@ -96,7 +96,7 @@ const onCopy = () => {
 	emit("copied");
 };
 
-const onShareMobilePlatflorm = () => {
+const onShareMobilePlatform = () => {
 	if (navigator.share) {
 		navigator
 			.share({

@@ -254,7 +254,7 @@ const onInviteMembers = async () => {
 	};
 	const linkId = await createLink(createLinkBodyParams);
 
-	sharedUrl.value = `${window.location.origin}/room-invitation-links?roomInvitationLinkId=${linkId}`;
+	sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${linkId}`;
 	step.value = InvitationStep.SHARE;
 };
 
