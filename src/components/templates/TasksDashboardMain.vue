@@ -5,9 +5,10 @@
 		:fab-items="fabItems"
 	>
 		<template #header>
-			<h1 class="text-h3">{{ $t("common.words.tasks") }}</h1>
-			<div v-if="showSubstituteFilter">
+			<h1 class="text-h3 mb-4">{{ $t("common.words.tasks") }}</h1>
+			<div v-if="isTeacher">
 				<v-switch
+					v-if="showSubstituteFilter"
 					v-model="isSubstituteFilterEnabled"
 					:label="
 						$t('components.organisms.TasksDashboardMain.filter.substitute')
@@ -17,8 +18,8 @@
 					"
 					:true-icon="mdiCheck"
 				/>
+				<div v-else class="substitute-filter-placeholder" />
 			</div>
-			<div v-else class="substitute-filter-placeholder" />
 			<div class="mx-n6 mx-md-0 pb-0 d-flex justify-center">
 				<v-tabs v-model="tab" class="tabs-max-width" grow>
 					<v-tab :value="tabRoutes[0]">
@@ -374,7 +375,7 @@ export default {
 @import "@/styles/settings.scss";
 
 .substitute-filter-placeholder {
-	min-height: 46px;
+	min-height: 78px;
 }
 
 .content-max-width {
@@ -408,5 +409,10 @@ export default {
 
 :deep(.v-expansion-panel::after) {
 	border: none;
+}
+
+// don´t show breadcrumb placeholder for tasks
+:deep(.breadcrumbs-placeholder) {
+	height: 0;
 }
 </style>
