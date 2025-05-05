@@ -95,16 +95,16 @@ describe("Invitations", () => {
 
 	it("should handle onClick for 'Use Invitation' button", async () => {
 		const roomInvitationLinks = roomInvitationLinkFactory.buildList(3);
-		const { wrapper, roomInvitationLinkStore } = setup(roomInvitationLinks);
-		roomInvitationLinkStore.useLink.mockResolvedValue({
-			roomId: "roomId",
-			validationMessage: "",
-			schoolName: "",
-		});
+		const { wrapper } = setup(roomInvitationLinks);
+		const linkId = roomInvitationLinks[0].id;
+		const clipboardMock = createMock<Clipboard>();
+		Object.assign(navigator, { clipboard: clipboardMock });
 
-		const useButton = wrapper.get("[data-testid=use-invitation-button]");
+		const useButton = wrapper.get("[data-testid=copy-invitation-link-button]");
 		await useButton.trigger("click");
 
-		expect(roomInvitationLinkStore.useLink).toHaveBeenCalledTimes(1);
+		expect(clipboardMock.writeText).toHaveBeenCalledWith(
+			expect.stringContaining(linkId)
+		);
 	});
 });

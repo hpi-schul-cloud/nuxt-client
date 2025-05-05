@@ -112,8 +112,8 @@ export const useRoomInvitationLinkStore = defineStore(
 				result.roomId = response.data.id;
 			} catch (error) {
 				if (isAxiosError(error)) {
-					const { validationMessage, schoolName } =
-						error?.response?.data.details ?? {};
+					const details = error?.response?.data.details;
+					const { validationMessage, schoolName } = details;
 					result.validationMessage = validationMessage;
 					result.schoolName = schoolName;
 				}
