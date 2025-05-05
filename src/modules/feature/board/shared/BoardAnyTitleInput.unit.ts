@@ -181,6 +181,7 @@ describe("BoardAnyTitleInput", () => {
 				expect(wrapper.text()).toContain(
 					"common.validation.containsOpeningTag"
 				);
+				expect(textAreaComponent.classes()).toContain("error-message-width");
 			});
 
 			it("should not emit update:value", async () => {
@@ -204,6 +205,7 @@ describe("BoardAnyTitleInput", () => {
 				expect(wrapper.text()).toContain(
 					"common.validation.containsOpeningTag"
 				);
+				expect(textAreaComponent.classes()).toContain("error-message-width");
 			});
 
 			it("should not emit update:value", async () => {
@@ -227,6 +229,7 @@ describe("BoardAnyTitleInput", () => {
 				expect(wrapper.text()).toContain(
 					"common.validation.containsOpeningTag"
 				);
+				expect(textAreaComponent.classes()).toContain("error-message-width");
 			});
 
 			it("should not emit update:value", async () => {

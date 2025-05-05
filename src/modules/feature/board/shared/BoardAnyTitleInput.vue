@@ -4,7 +4,11 @@
 			ref="titleInput"
 			v-model="modelValue"
 			class="title"
-			:class="scope === 'board' ? 'board-title-input' : 'other-title-input'"
+			:class="{
+				'board-title-input': scope === 'board',
+				'other-title-input': scope !== 'board',
+				'error-message-width': errorMessages.length > 0,
+			}"
 			hide-details="auto"
 			variant="plain"
 			density="compact"
@@ -198,10 +202,13 @@ export default defineComponent({
 <style scoped lang="scss">
 @import "@/styles/settings.scss";
 
+.error-message-width {
+	min-width: 280px;
+}
+
 .title {
 	cursor: pointer;
 	white-space: pre-wrap;
-	min-width: 100px;
 
 	letter-spacing: $field-letter-spacing;
 	font-family: var(--font-accent);
@@ -213,11 +220,17 @@ export default defineComponent({
 		overflow: hidden; // prevent scrollbar in board title
 	}
 
-	&.other-title-input :deep(textarea) {
-		font-size: var(--heading-5);
-		line-height: var(--line-height-lg);
-		padding: 8px 16px;
-		overflow: hidden;
+	&.other-title-input {
+		:deep(textarea) {
+			font-size: var(--heading-5);
+			line-height: var(--line-height-lg);
+			padding: 8px 16px;
+			overflow: hidden;
+		}
+
+		:deep(.v-input__details) {
+			padding-left: 16px;
+		}
 	}
 }
 
