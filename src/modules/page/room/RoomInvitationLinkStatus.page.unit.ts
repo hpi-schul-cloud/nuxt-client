@@ -1,6 +1,9 @@
 import { createTestingPinia } from "@pinia/testing";
 import { mockedPiniaStoreTyping } from "@@/tests/test-utils";
-import { useRoomInvitationLinkStore } from "@data-room";
+import {
+	RoomInvitationLinkValidationError,
+	useRoomInvitationLinkStore,
+} from "@data-room";
 import {
 	createTestingI18n,
 	createTestingVuetify,
@@ -18,6 +21,8 @@ import NotifierModule from "@/store/notifier";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { createPinia, setActivePinia } from "pinia";
+import { flushPromises } from "@vue/test-utils";
+import { UseLinkResult } from "@data-room";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -27,12 +32,6 @@ jest.mock("vue-router", () => ({
 
 jest.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = jest.mocked(useBoardNotifier);
-
-/* jest.mock("@data-room", () => ({
-	useRoomInvitationLinkStore: jest.fn().mockReturnValue({
-		useLink: jest.fn(),
-	}),
-})); */
 
 describe("RoomInvitationLinkStatusPage", () => {
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -49,7 +48,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 		jest.clearAllMocks();
 	});
 
-	const setup = () => {
+	const setup = async (useLinkResult: UseLinkResult) => {
 		const notifierModule = createModuleMocks(NotifierModule);
 		const invitationLink = roomInvitationLinkFactory.build();
 
@@ -85,10 +84,9 @@ describe("RoomInvitationLinkStatusPage", () => {
 			useRoomInvitationLinkStore
 		);
 
-		roomInvitationLinkStore.useLink.mockResolvedValueOnce({
-			roomId: "room-id",
-			message: "",
-		});
+		roomInvitationLinkStore.useLink.mockResolvedValueOnce(useLinkResult);
+
+		await flushPromises();
 
 		return {
 			wrapper,
@@ -98,13 +96,20 @@ describe("RoomInvitationLinkStatusPage", () => {
 		};
 	};
 
-	it("should be found in the dom", () => {
-		const { wrapper } = setup();
+	it("should be found in the dom", async () => {
+		const { wrapper } = await setup({ roomId: "room-id", message: "" });
 
 		expect(wrapper.exists()).toBe(true);
 	});
 
-	describe("DefaultWireframe", () => {
+	it("should render DefaultWireframe", async () => {
+		const { wrapper } = await setup({ roomId: "room-id", message: "" });
+		const wireframe = wrapper.findComponent(DefaultWireframe);
+
+		expect(wireframe.exists()).toBe(true);
+	});
+
+	it("should set correct breadcrumbs ", async () => {
 		const roomInvitationLinkBreadcrumb = [
 			{
 				title: "pages.rooms.title",
@@ -116,19 +121,81 @@ describe("RoomInvitationLinkStatusPage", () => {
 			},
 		];
 
-		it("should render DefaultWireframe", async () => {
-			const { wrapper } = setup();
-			const wireframe = wrapper.findComponent(DefaultWireframe);
+		const { wrapper } = await setup({ roomId: "room-id", message: "" });
+		const wireframe = wrapper.findComponent(DefaultWireframe);
 
-			expect(wireframe.exists()).toBe(true);
+		expect(wireframe.props("breadcrumbs")).toEqual(
+			roomInvitationLinkBreadcrumb
+		);
+	});
+
+	it("should set the page title", async () => {
+		const { wrapper } = await setup({ roomId: "room-id", message: "" });
+		const pageTitle = wrapper.find("[data-testid=page-title]");
+		expect(pageTitle.text()).toContain(
+			"pages.rooms.invitationLinkStatus.title"
+		);
+	});
+
+	describe("when link store returns a roomId", () => {
+		it("should call the router to navigate to the room", async () => {
+			const { router } = await setup({
+				roomId: "room-id",
+				message: "",
+			});
+
+			expect(router.push).toHaveBeenCalledWith({
+				path: "/rooms/room-id",
+			});
 		});
+	});
 
-		it("should set correct breadcrumbs ", () => {
-			const { wrapper } = setup();
-			const wireframe = wrapper.findComponent(DefaultWireframe);
+	describe("when link store returns a message", () => {
+		const testCases = [
+			{
+				message:
+					RoomInvitationLinkValidationError.CantInviteStudentsFromOtherSchool,
+				expectedMessage:
+					"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool",
+			},
+			{
+				message: RoomInvitationLinkValidationError.Expired,
+				expectedMessage: "pages.rooms.invitationLinkStatus.expired",
+			},
+			{
+				message: RoomInvitationLinkValidationError.OnlyForTeachers,
+				expectedMessage: "pages.rooms.invitationLinkStatus.onlyForTeachers",
+			},
+			{
+				message: RoomInvitationLinkValidationError.RestrictedToCreatorSchool,
+				expectedMessage:
+					"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool",
+			},
+		];
 
-			expect(wireframe.props("breadcrumbs")).toEqual(
-				roomInvitationLinkBreadcrumb
+		testCases.forEach(({ message, expectedMessage }) => {
+			it(`should show the correct message for ${message}`, async () => {
+				const { wrapper } = await setup({
+					roomId: "",
+					message,
+				});
+
+				const statusMessage = wrapper.find("[data-testid=status-message]");
+				expect(statusMessage.text()).toContain(expectedMessage);
+			});
+		});
+	});
+
+	describe("when the link store return neither roomId nor message", () => {
+		it("should show the default message", async () => {
+			const { wrapper } = await setup({
+				roomId: "",
+				message: "",
+			});
+
+			const statusMessage = wrapper.find("[data-testid=status-message]");
+			expect(statusMessage.text()).toContain(
+				"pages.rooms.invitationLinkStatus.notFound"
 			);
 		});
 	});

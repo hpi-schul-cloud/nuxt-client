@@ -18,8 +18,9 @@
 				:src="CrossedHandsBirdSvg"
 				role="presentation"
 				alt="t('pages.rooms.invitationLinkStatus.image.alt')"
+				data-testid="bird-image"
 			/>
-			<div class="text-h2">
+			<div class="text-h2" data-testid="status-message">
 				{{ infoMessage }}
 			</div>
 		</div>
