@@ -305,7 +305,6 @@ export {
 	mdiViewGridOutline,
 	mdiViewGridPlusOutline,
 	mdiViewListOutline,
-	mdiMovieRoll,
 	mdiNumeric1Circle,
 	mdiNumeric2Circle,
 	mdiNumeric3Circle,

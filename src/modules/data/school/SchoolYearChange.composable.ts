@@ -5,15 +5,13 @@ import { useSchoolApi } from "./SchoolApi.composable";
 import { MaintenanceStatus } from "./types";
 
 export const useSchoolYearChange = () => {
-	const { fetchMaintenanceStatus, setMaintenance, startLDAP } = useSchoolApi();
+	const { fetchMaintenanceStatus, setMaintenance } = useSchoolApi();
 
 	const maintenanceStatus: Ref<MaintenanceStatus | undefined> = ref();
 	const isLoading: Ref<boolean> = ref(false);
 	const error: Ref<BusinessError | undefined> = ref();
 
-	const fetchSchoolYearStatus = async (
-		schoolId: string
-	): Promise<MaintenanceStatus | undefined> => {
+	const fetchSchoolYearStatus = async (schoolId: string): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 
@@ -21,11 +19,7 @@ export const useSchoolYearChange = () => {
 			const schoolYearStatus: MaintenanceStatus =
 				await fetchMaintenanceStatus(schoolId);
 
-			console.log(schoolYearStatus);
-			console.log(schoolYearStatus);
 			maintenanceStatus.value = schoolYearStatus;
-
-			return schoolYearStatus;
 		} catch (axiosError: unknown) {
 			const apiError = mapAxiosErrorToResponseError(axiosError);
 
@@ -42,7 +36,7 @@ export const useSchoolYearChange = () => {
 	const setMaintenanceMode = async (
 		schoolId: string,
 		maintenance: boolean
-	): Promise<MaintenanceStatus | undefined> => {
+	): Promise<void> => {
 		isLoading.value = true;
 		error.value = undefined;
 
@@ -53,34 +47,6 @@ export const useSchoolYearChange = () => {
 			);
 
 			maintenanceStatus.value = schoolYearStatus;
-
-			return schoolYearStatus;
-		} catch (axiosError: unknown) {
-			const apiError = mapAxiosErrorToResponseError(axiosError);
-
-			error.value = {
-				error: apiError,
-				message: apiError.message,
-				statusCode: apiError.code,
-			};
-		}
-
-		isLoading.value = false;
-	};
-
-	const useLdapStart = async (
-		schoolId: string,
-		maintenance: boolean
-	): Promise<void> => {
-		isLoading.value = true;
-		error.value = undefined;
-
-		try {
-			await startLDAP();
-
-			//maintenanceStatus.value = schoolYearStatus;
-
-			//return schoolYearStatus;
 		} catch (axiosError: unknown) {
 			const apiError = mapAxiosErrorToResponseError(axiosError);
 
@@ -100,6 +66,5 @@ export const useSchoolYearChange = () => {
 		fetchSchoolYearStatus,
 		setMaintenanceMode,
 		maintenanceStatus,
-		useLdapStart,
 	};
 };

@@ -161,6 +161,16 @@ describe("SchoolSettingsPage", () => {
 		});
 	});
 
+	describe("when render page", () => {
+		it("should show school year change panel", () => {
+			const { wrapper } = setup();
+
+			expect(
+				wrapper.find('[data-testid="school-year-change-panel"]').exists()
+			).toBe(true);
+		});
+	});
+
 	describe("institute title", () => {
 		describe("when the theme is default", () => {
 			it("should render default title", () => {

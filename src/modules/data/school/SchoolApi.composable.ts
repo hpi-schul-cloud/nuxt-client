@@ -15,13 +15,8 @@ export const useSchoolApi = () => {
 		return response.data;
 	};
 
-	const startLDAP = async () => {
-		await $axios.get(`administration/startldapschoolyear`);
-	};
-
 	return {
 		fetchMaintenanceStatus,
 		setMaintenance,
-		startLDAP,
 	};
 };
