@@ -378,9 +378,11 @@ export default {
 		"Disable synchronization",
 	"components.administration.schoolYearChangeSection.headers":
 		"Schuljahreswechsel",
-	"components.administration.schoolYearChangeSection.info":
-		"Mit Hilfe der Transferphase können Klassenzugehörigkeit und Personendaten im LDAP in Ruhe angepasst werden. Abschließend können alle Änderungen mit einem Mal in die {Instanz} übertragen werden. (mehr Infos auf der Hilfeseite)",
-
+	"components.administration.schoolYearChangeSection.info.part.one":
+		"Mit Hilfe der Transferphase können Klassenzugehörigkeit und Personendaten im LDAP in Ruhe angepasst werden. Abschließend können alle Änderungen mit einem Mal in die {instance} übertragen werden.",
+	"components.administration.schoolYearChangeSection.info.part.two":
+		" (mehr Infos auf der {0})",
+	"components.administration.schoolYearChangeSection.info.link": "Hilfeseite",
 	"components.administration.schoolYearChangeSection.title.step.one":
 		"Ende des Schuljahres",
 	"components.administration.schoolYearChangeSection.description.step.one":
@@ -393,6 +395,8 @@ export default {
 		"Rund um die Sommerferien",
 	"components.administration.schoolYearChangeSection.description.step.two":
 		"Während der Transferphase können alle Klassen- und Personendaten in Ruhe aktualisiert werden. Login und Kennwortänderungen sind für alle bestehenden Nutzenden weiterhin möglich. Während der Transferphase können neue Kurse erstellt werden, allerdings ohne die Zuordnung von Klassen. ",
+	"components.administration.schoolYearChangeSection.info.step.two":
+		"Während der Transferphase werden keine neuen Nutzenden, Klassen oder Änderungen an bestehenden Daten aus dem LDAP synchronisiert.",
 	"components.administration.schoolYearChangeSection.step.two.button":
 		"LDAP-Daten überprüfen",
 	"components.administration.schoolYearChangeSection.title.step.three":
@@ -403,6 +407,10 @@ export default {
 		"Transferphase beenden",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
 		"Klassen- und Personendaten (LDAP) wurden aktualisiert und überprüft",
+	"components.administration.schoolYearChangeSection.dialog.title":
+		"Das Schuljahr wirklich beenden?",
+	"components.administration.schoolYearChangeSection.dialog.content":
+		"Die Synchronisierung von LDAP-Stammdaten wird während der Transferphase unterbrochen. Somit werden Nutzerdaten und Klassen (sofern verwendet) nicht mehr über LDAP aktualisiert. Der Login mit bereits synchronisierten Login-Daten ist weiterhin möglich. Passwortänderungen im LDAP während des Logins werden ebenfalls berücksichtigt.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hour | hours",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",

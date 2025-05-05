@@ -1,7 +1,24 @@
 <template>
 	<div class="mb-4">
 		<p>
-			{{ t("components.administration.schoolYearChangeSection.info") }}
+			{{
+				t("components.administration.schoolYearChangeSection.info.part.one", {
+					instance,
+				})
+			}}
+			<i18n-t
+				keypath="components.administration.schoolYearChangeSection.info.part.two"
+				scope="global"
+			>
+				<a
+					data-testid="school-year-change-doc-link"
+					href="https://docs.dbildungscloud.de/pages/viewpage.action?pageId=123407337"
+					target="_blank"
+					rel="noopener"
+				>
+					{{ t("components.administration.schoolYearChangeSection.info.link") }}
+				</a>
+			</i18n-t>
 		</p>
 		<div>
 			<div class="step-title">
@@ -26,6 +43,7 @@
 				<VSpacer />
 				<VBtn
 					v-if="!schoolYearStatus?.maintenance.active"
+					class="btn"
 					:disabled="
 						!schoolYearStatus?.schoolUsesLdap ||
 						schoolYearMode !== SchoolYearModeEnum.STANDBY
@@ -44,6 +62,7 @@
 				</VBtn>
 				<VBtn
 					v-if="schoolYearStatus?.maintenance.active"
+					class="btn"
 					:disabled="!schoolYearChangeEnabled"
 					color="success"
 					variant="flat"
@@ -75,12 +94,18 @@
 					}}
 				</p>
 			</div>
+			<InfoAlert data-testid="info-alert-ldap-data">
+				{{
+					t("components.administration.schoolYearChangeSection.info.step.two")
+				}}
+			</InfoAlert>
 			<div
 				class="d-flex mt-8"
 				data-testid="school-year-change-section-table-actions"
 			>
 				<VSpacer />
 				<VBtn
+					class="btn"
 					href="/administration/startldapschoolyear"
 					target="_blank"
 					:disabled="
@@ -140,6 +165,7 @@
 				/>
 				<VSpacer />
 				<VBtn
+					class="btn"
 					:disabled="
 						!isCheckboxConfirmed || schoolYearMode === SchoolYearModeEnum.IDLE
 					"
@@ -167,14 +193,14 @@
 					<template #title>
 						{{
 							t(
-								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Title"
+								"components.administration.schoolYearChangeSection.dialog.title"
 							)
 						}}
 					</template>
 					<template #content>
 						{{
 							t(
-								"components.administration.adminMigrationSection.migrationWizardCancelDialog.Description"
+								"components.administration.schoolYearChangeSection.dialog.content"
 							)
 						}}
 					</template>
@@ -186,7 +212,11 @@
 
 <script setup lang="ts">
 import AuthModule from "@/store/auth";
-import { AUTH_MODULE_KEY, injectStrict } from "@/utils/inject";
+import {
+	AUTH_MODULE_KEY,
+	ENV_CONFIG_MODULE_KEY,
+	injectStrict,
+} from "@/utils/inject";
 import { computed, ComputedRef, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import {
@@ -203,8 +233,11 @@ import { MeSchoolResponse } from "@/serverApi/v3";
 import { Ref } from "vue/dist/vue";
 import VCustomDialog from "../organisms/vCustomDialog.vue";
 import { useErrorNotification } from "@util-error-notification";
+import EnvConfigModule from "../../store/env-config";
+import { InfoAlert } from "@ui-alert";
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
+const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
 const { fetchSchoolYearStatus, maintenanceStatus, setMaintenanceMode, error } =
 	useSchoolYearChange();
@@ -283,10 +316,16 @@ const confirmSchoolYearChange = async () => {
 const enableCheckbox = () => {
 	isCheckboxEnabled.value = true;
 };
+
+const instance = envConfigModule.getEnv.SC_TITLE;
 </script>
 
 <style lang="scss" scoped>
 .step-title {
 	font-size: 19px;
+}
+
+.btn {
+	width: 175px;
 }
 </style>
