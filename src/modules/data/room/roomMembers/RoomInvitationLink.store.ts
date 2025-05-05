@@ -1,6 +1,5 @@
-import { extractErrorData } from "@util-axios-error";
 import { RoomApiFactory, RoomInvitationLinkApiFactory } from "@/serverApi/v3";
-import { $axios } from "@/utils/api";
+import { $axios, mapAxiosErrorToResponseError } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
 import { defineStore, storeToRefs } from "pinia";
@@ -106,8 +105,8 @@ export const useRoomInvitationLinkStore = defineStore(
 			try {
 				const response = await api.roomInvitationLinkControllerUseLink(linkId);
 				result.roomId = response.data.id;
-			} catch (err) {
-				const { message } = extractErrorData(err);
+			} catch (error) {
+				const { message } = mapAxiosErrorToResponseError(error);
 				result.message = message;
 			}
 			return result;

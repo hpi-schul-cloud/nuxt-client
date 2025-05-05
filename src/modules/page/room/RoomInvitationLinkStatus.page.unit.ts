@@ -23,6 +23,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { createPinia, setActivePinia } from "pinia";
 import { flushPromises } from "@vue/test-utils";
+import { useI18n } from "vue-i18n";
 
 jest.mock("vue-router", () => ({
 	useRouter: jest.fn().mockReturnValue({
@@ -32,6 +33,9 @@ jest.mock("vue-router", () => ({
 
 jest.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = jest.mocked(useBoardNotifier);
+
+jest.mock("vue-i18n");
+(useI18n as jest.Mock).mockReturnValue({ t: (key: string) => key });
 
 describe("RoomInvitationLinkStatusPage", () => {
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
@@ -55,21 +59,25 @@ describe("RoomInvitationLinkStatusPage", () => {
 		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		boardNotifier.mockReturnValue(boardNotifierCalls);
 
+		const pinia = createTestingPinia({
+			initialState: {
+				roomInvitationLinkStore: {
+					roomInvitationLinks: [invitationLink],
+					isLoading: false,
+				},
+			},
+		});
+
+		const roomInvitationLinkStore = mockedPiniaStoreTyping(
+			useRoomInvitationLinkStore
+		);
+
+		roomInvitationLinkStore.useLink.mockResolvedValueOnce(useLinkResult);
+
 		const wrapper = mount(RoomInvitationLinkStatusPage, {
 			attachTo: document.body,
 			global: {
-				plugins: [
-					createTestingVuetify(),
-					createTestingI18n(),
-					createTestingPinia({
-						initialState: {
-							roomInvitationLinkStore: {
-								roomInvitationLinks: [invitationLink],
-								isLoading: false,
-							},
-						},
-					}),
-				],
+				plugins: [pinia, createTestingVuetify(), createTestingI18n()],
 				provide: {
 					[NOTIFIER_MODULE_KEY.valueOf()]: notifierModule,
 				},
@@ -79,12 +87,6 @@ describe("RoomInvitationLinkStatusPage", () => {
 				invitationLinkId: invitationLink.id,
 			},
 		});
-
-		const roomInvitationLinkStore = mockedPiniaStoreTyping(
-			useRoomInvitationLinkStore
-		);
-
-		roomInvitationLinkStore.useLink.mockResolvedValueOnce(useLinkResult);
 
 		await flushPromises();
 
@@ -194,9 +196,7 @@ describe("RoomInvitationLinkStatusPage", () => {
 			});
 
 			const statusMessage = wrapper.find("[data-testid=status-message]");
-			expect(statusMessage.text()).toContain(
-				"pages.rooms.invitationLinkStatus.notFound"
-			);
+			expect(statusMessage.text()).toContain("error.generic");
 		});
 	});
 });
