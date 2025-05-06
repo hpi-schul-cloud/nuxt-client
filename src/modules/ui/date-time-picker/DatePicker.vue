@@ -6,9 +6,9 @@
 	>
 		<template #activator="{ props: menuProps }">
 			<v-text-field
+				ref="inputField"
 				v-bind="menuProps"
 				v-bind.attr="$attrs"
-				ref="inputField"
 				v-model="dateString"
 				v-date-input-mask
 				:append-inner-icon="mdiCalendar"
@@ -23,17 +23,19 @@
 				@keydown.tab="showDateDialog = false"
 			/>
 		</template>
-		<v-date-picker
-			v-model="dateObject"
-			:aria-expanded="showDateDialog"
-			:min="minDate"
-			:max="maxDate"
-			color="primary"
-			hide-header
-			show-adjacent-months
-			elevation="6"
-			@update:model-value="closeAndEmit"
-		/>
+		<UseFocusTrap>
+			<v-date-picker
+				v-model="dateObject"
+				:aria-expanded="showDateDialog"
+				:min="minDate"
+				:max="maxDate"
+				color="primary"
+				hide-header
+				show-adjacent-months
+				elevation="6"
+				@update:model-value="closeAndEmit"
+			/>
+		</UseFocusTrap>
 	</v-menu>
 </template>
 
@@ -48,6 +50,7 @@ import { dateInputMask as vDateInputMask } from "@util-input-masks";
 import { isValidDateFormat } from "@util-validators";
 import { DATETIME_FORMAT } from "@/plugins/datetime";
 import { mdiCalendar } from "@icons/material";
+import { UseFocusTrap } from "@vueuse/integrations/useFocusTrap/component";
 
 defineOptions({
 	inheritAttrs: false,

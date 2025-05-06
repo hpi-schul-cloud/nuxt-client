@@ -312,6 +312,15 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
+		path: `/rooms/invitation-link/:id(${REGEX_ID})`,
+		component: async () =>
+			(await import("@page-room")).RoomInvitationLinkStatusPage,
+		name: "rooms-invitation-link-id",
+		props: (route: RouteLocationNormalized) => ({
+			invitationLinkId: route.params.id,
+		}),
+	},
+	{
 		path: "/tasks",
 		component: () => import("@/pages/tasks/TaskOverview.page.vue"),
 		name: "tasks",
