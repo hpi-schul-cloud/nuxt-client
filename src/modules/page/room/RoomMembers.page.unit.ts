@@ -488,7 +488,11 @@ describe("RoomMembersPage", () => {
 
 	describe("invite members fab", () => {
 		it("should open Dialog", async () => {
-			const { wrapper } = setup({ activeTab: Tab.Invitations });
+			roomPermissions.canAddRoomMembers.value = true;
+			const { wrapper } = setup({
+				activeTab: Tab.Invitations,
+				isFeatureRoomMembersTabsEnabled: true,
+			});
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 			const dialogBeforeClick = wrapper.findComponent({
 				name: "InviteMembersDialog",
