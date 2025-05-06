@@ -1,9 +1,9 @@
 <template>
 	<div ref="headerRef" class="mb-4">
-		<div class="d-flex flex-column justify-space-between align-stretch pt-4">
+		<div class="d-flex flex-column justify-space-between align-stretch pt-3">
 			<VBtn
 				variant="text"
-				class="d-flex flex-row justify-start mb-2"
+				class="d-flex flex-row justify-start"
 				@click="onAddColumn"
 			>
 				<VIcon>{{ mdiPlus }}</VIcon> {{ label }}
@@ -33,13 +33,3 @@ const onAddColumn = () => {
 	emit("add-column");
 };
 </script>
-
-<style scoped>
-.margin-fix {
-	margin-top: 2px;
-}
-
-.transition-divider {
-	transition: all ease-in 150ms;
-}
-</style>

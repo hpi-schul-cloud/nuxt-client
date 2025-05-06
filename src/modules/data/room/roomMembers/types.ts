@@ -25,7 +25,8 @@ export type UpdateRoomInvitationLinkDto = UpdateRoomInvitationLinkBodyParams & {
 
 export type UseLinkResult = {
 	roomId: string;
-	message: string;
+	validationMessage: string;
+	schoolName: string;
 };
 
 export { RoomInvitationLinkValidationError } from "@/serverApi/v3";

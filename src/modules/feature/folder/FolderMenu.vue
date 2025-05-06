@@ -8,10 +8,10 @@
 			:aria-label="t('pages.folder.ariaLabels.menu.action.edit')"
 		/>
 		<KebabMenuActionDelete
-			scope-language-key="common.labels.room"
 			:aria-label="t('pages.folder.ariaLabels.menu.action.delete')"
 			:name="folderName"
-			@click="$emit('delete')"
+			scope-language-key="components.cardElement.folderElement"
+			@click="(confirmationPromise) => $emit('delete', confirmationPromise)"
 		/>
 	</KebabMenu>
 </template>

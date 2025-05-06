@@ -7,6 +7,7 @@
 				max-width="full"
 				hide-border
 				main-without-padding
+				is-flex-container
 			>
 				<template #header>
 					<BoardHeader
@@ -46,6 +47,7 @@
 							forceFallback: true,
 							bubbleScroll: true,
 						}"
+						@start="onDragStart"
 						@end="onDropColumn"
 					>
 						<template #item="{ element, index }">
@@ -55,7 +57,7 @@
 								:column="element"
 								:index="index"
 								:column-count="board.columns.length"
-								:class="{ 'my-0': isListBoard }"
+								:class="{ 'my-0': isListBoard, 'user-select-none': isDragging }"
 								:is-list-board="isListBoard"
 								:data-testid="`board-column-${index}`"
 								@reload:board="onReloadBoard"
@@ -172,6 +174,7 @@ const board = computed(() => boardStore.board);
 const { createPageInformation, contextType, roomId, resetPageInformation } =
 	useSharedBoardPageInformation();
 const { createApplicationError } = useApplicationError();
+const isDragging = ref(false);
 
 watch(board, async () => {
 	await createPageInformation(props.boardId);
@@ -223,7 +226,12 @@ const onDeleteColumn = async (columnId: string) => {
 	if (hasDeletePermission.value) boardStore.deleteColumnRequest({ columnId });
 };
 
+const onDragStart = () => {
+	isDragging.value = true;
+};
+
 const onDropColumn = async (columnPayload: SortableEvent) => {
+	isDragging.value = false;
 	if (!hasMovePermission.value) return;
 
 	const columnId = extractDataAttribute(columnPayload.item, "columnId");
@@ -443,5 +451,10 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 
 .column-board {
 	overflow-x: auto;
+	height: 100%;
+}
+
+.user-select-none {
+	user-select: none;
 }
 </style>

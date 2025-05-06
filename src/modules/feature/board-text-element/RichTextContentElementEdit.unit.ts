@@ -5,12 +5,16 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 
 describe("RichTextContentElementEdit", () => {
 	const setup = ({ autofocus = true }: { autofocus: boolean }) => {
 		const wrapper = mount(RichTextContentElementEdit, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
+				provide: {
+					[BOARD_IS_LIST_LAYOUT as symbol]: false,
+				},
 
 				stubs: {
 					InlineEditor: true,
@@ -19,6 +23,7 @@ describe("RichTextContentElementEdit", () => {
 			props: {
 				value: "test value",
 				autofocus,
+				columnIndex: 0,
 			},
 		});
 

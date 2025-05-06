@@ -23,10 +23,9 @@ import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index.mjs";
 import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
-import { mdiPlus } from "@icons/material";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
@@ -37,6 +36,8 @@ import { schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Tab } from "@/types/room/RoomMembers";
 import RoomMembersPage from "./RoomMembers.page.vue";
+import NotifierModule from "@/store/notifier";
+import { mdiPlus } from "@mdi/js";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -160,6 +161,7 @@ describe("RoomMembersPage", () => {
 				],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 				},
 				stubs: { LeaveRoomProhibitedDialog: true, AddMembers: true },
 			},
@@ -368,17 +370,36 @@ describe("RoomMembersPage", () => {
 			expect(wireframe.exists()).toBe(true);
 		});
 
-		it("should set fab items", async () => {
-			roomPermissions.canAddRoomMembers.value = true;
-			const { wrapper } = setup();
-			const wireframe = wrapper.findComponent(DefaultWireframe);
+		describe("fab items", () => {
+			it.each([
+				{
+					activeTab: Tab.Members,
+					expectedFabItems: {
+						icon: mdiPlus,
+						title: "pages.rooms.members.add",
+						ariaLabel: "pages.rooms.members.add",
+						dataTestId: "fab-add-members",
+					},
+				},
+				{
+					activeTab: Tab.Invitations,
+					expectedFabItems: {
+						icon: mdiPlus,
+						title: "pages.rooms.members.inviteMember.firstStep.title",
+						ariaLabel: "pages.rooms.members.inviteMember.firstStep.title",
+						dataTestId: "fab-invite-members",
+					},
+				},
+			])(
+				"should set correct fab items when active tab is $activeTab",
+				async ({ activeTab, expectedFabItems }) => {
+					roomPermissions.canAddRoomMembers.value = true;
+					const { wrapper } = setup({ activeTab });
+					const wireframe = wrapper.findComponent(DefaultWireframe);
 
-			expect(wireframe.props("fabItems")).toEqual({
-				icon: mdiPlus,
-				title: "pages.rooms.members.add",
-				ariaLabel: "pages.rooms.members.add",
-				dataTestId: "fab-add-members",
-			});
+					expect(wireframe.props("fabItems")).toEqual(expectedFabItems);
+				}
+			);
 		});
 
 		describe("breadcrumbs", () => {
@@ -443,7 +464,7 @@ describe("RoomMembersPage", () => {
 
 		it("should open Dialog", async () => {
 			roomPermissions.canAddRoomMembers.value = true;
-			const { wrapper } = setup();
+			const { wrapper } = setup({ activeTab: Tab.Members });
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 			const addMemberDialogBeforeClick = wrapper
 				.getComponent(VDialog)
@@ -462,6 +483,30 @@ describe("RoomMembersPage", () => {
 				.findComponent(AddMembers);
 
 			expect(addMemberDialogAfterClick.exists()).toBe(true);
+		});
+	});
+
+	describe("invite members fab", () => {
+		it("should open Dialog", async () => {
+			const { wrapper } = setup({ activeTab: Tab.Invitations });
+			const wireframe = wrapper.findComponent(DefaultWireframe);
+			const dialogBeforeClick = wrapper.findComponent({
+				name: "InviteMembersDialog",
+			});
+
+			expect(dialogBeforeClick.props("modelValue")).toBe(false);
+
+			const addMemberButton = wireframe
+				.getComponent("[data-testid=fab-invite-members]")
+				.getComponent(VBtn);
+
+			await addMemberButton.trigger("click");
+
+			const dialogAfterClick = wrapper.findComponent({
+				name: "InviteMembersDialog",
+			});
+
+			expect(dialogAfterClick.props("modelValue")).toBe(true);
 		});
 	});
 

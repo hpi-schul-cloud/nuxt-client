@@ -52,7 +52,6 @@
 				/>
 			</VTabsWindowItem>
 		</VTabsWindow>
-
 		<VDialog
 			v-model="isMembersDialogOpen"
 			:width="xs ? 'auto' : 480"
@@ -66,6 +65,11 @@
 	</DefaultWireframe>
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	<ConfirmationDialog />
+	<InviteMembersDialog
+		v-model="isInvitationDialogOpen"
+		:school-name="currentUser?.schoolName || ''"
+		@close="onDialogClose"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -97,7 +101,13 @@ import {
 	mdiLink,
 	mdiAccountQuestionOutline,
 } from "@icons/material";
-import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
+import {
+	AddMembers,
+	Confirmations,
+	Invitations,
+	InviteMembersDialog,
+	Members,
+} from "@feature-room";
 import { RoleName } from "@/serverApi/v3";
 import { useDisplay } from "vuetify";
 import { KebabMenu, KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
@@ -129,6 +139,7 @@ const membersInfoText = ref("");
 
 const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
+const isInvitationDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
 const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
@@ -198,13 +209,23 @@ const tabs: Array<{
 ];
 
 const onFabClick = async () => {
-	await getSchools();
-	await getPotentialMembers(RoleName.Teacher);
-	isMembersDialogOpen.value = true;
+	switch (activeTab.value) {
+		case Tab.Invitations:
+			isInvitationDialogOpen.value = true;
+			break;
+
+		case Tab.Members:
+		default:
+			await getSchools();
+			await getPotentialMembers(RoleName.Teacher);
+			isMembersDialogOpen.value = true;
+			break;
+	}
 };
 
 const onDialogClose = () => {
 	isMembersDialogOpen.value = false;
+	isInvitationDialogOpen.value = false;
 };
 
 const onLeaveRoom = async () => {
@@ -270,6 +291,15 @@ const fabAction = computed(() => {
 			title: t("pages.rooms.members.add"),
 			ariaLabel: t("pages.rooms.members.add"),
 			dataTestId: "fab-add-members",
+		};
+	}
+
+	if (activeTab.value === Tab.Invitations) {
+		return {
+			icon: mdiPlus,
+			title: t("pages.rooms.members.inviteMember.firstStep.title"),
+			ariaLabel: t("pages.rooms.members.inviteMember.firstStep.title"),
+			dataTestId: "fab-invite-members",
 		};
 	}
 	return undefined;
