@@ -71,17 +71,20 @@ const onKeyUp = () => ensurePoliteNotifications();
 <style lang="scss" scoped>
 .rich_text {
 	font-size: 1rem;
-	padding: 0.05px; // prevent margin collapse
 }
 
 :deep() {
+	// override ck edit mode styles
 	.ck.ck-editor__editable_inline {
 		padding: 0;
 	}
 
-	.ck.ck-editor__editable_inline h4:first-of-type,
-	.ck.ck-editor__editable_inline h5:first-of-type {
-		margin-top: var(--space-md-2);
+	.ck.ck-editor__editable_inline > :last-child {
+		margin-bottom: var(--space-xs);
+	}
+
+	.ck-editor__editable {
+		margin-bottom: var(--space-md);
 	}
 
 	.ck.ck-editor__editable_inline p,
@@ -90,11 +93,14 @@ const onKeyUp = () => ensurePoliteNotifications();
 		margin-top: 0;
 	}
 
-	.ck.ck-editor__editable_inline > :last-child {
-		margin-bottom: var(--space-xs);
+	.ck.ck-editor__editable_inline h4,
+	.ck.ck-editor__editable_inline h5 {
+		margin-top: var(--space-md-2);
 	}
 
 	.ck-content {
+		overflow: hidden; // prevent margin collapse
+
 		h4 {
 			font-family: var(--font-accent);
 			font-weight: var(--font-weight-bold);
@@ -134,11 +140,24 @@ const onKeyUp = () => ensurePoliteNotifications();
 			overflow-x: auto;
 			overflow-y: hidden;
 			padding-right: 1px;
+			margin-bottom: var(--space-xs);
 		}
 
 		.math-tex {
 			font-size: large;
 		}
 	}
+}
+</style>
+
+<style>
+.v-card-text > div:first-child .ck-content h4:first-child,
+.v-card-text > div:first-child .ck-content h5:first-child {
+	margin-top: 0;
+	margin-bottom: var(--space-xs);
+}
+
+.v-card-text > div:first-child .ck-content p:first-child {
+	margin-top: calc(-1 * var(--space-xs-3));
 }
 </style>
