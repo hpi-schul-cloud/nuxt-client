@@ -33,6 +33,7 @@
 <script setup lang="ts">
 import { useRoomInvitationLinkStore } from "@data-room";
 import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -46,10 +47,12 @@ defineProps({
 	},
 });
 
-roomInvitationLinkStore.fetchLinks();
+onMounted(async () => {
+	await roomInvitationLinkStore.fetchLinks();
+});
 
-const onClickAdd = () => {
-	roomInvitationLinkStore.createLink({
+const onClickAdd = async () => {
+	await roomInvitationLinkStore.createLink({
 		title: "Test " + Math.ceil(Math.random() * 1000),
 		activeUntil: new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString(),
 		isOnlyForTeachers: false,
@@ -58,8 +61,8 @@ const onClickAdd = () => {
 	});
 };
 
-const onClickRemove = (linkId: string) => {
-	roomInvitationLinkStore.deleteLinks(linkId);
+const onClickRemove = async (linkId: string) => {
+	await roomInvitationLinkStore.deleteLinks(linkId);
 };
 
 const onClickCopyLink = async (linkId: string) => {
@@ -71,7 +74,7 @@ const onClickCopyLink = async (linkId: string) => {
 	navigator.clipboard.writeText(url.toString());
 };
 
-const onClickUpdate = (linkId: string) => {
+const onClickUpdate = async (linkId: string) => {
 	const link = roomInvitationLinks.value.find((link) => link.id === linkId);
 	let updateCount = 0;
 	const matches = link?.title.match(/\s*\(update: (\d+)\)/);
@@ -81,8 +84,10 @@ const onClickUpdate = (linkId: string) => {
 	const title =
 		(link?.title ?? "Test ").replace(/\s*\(update: \d+\)/, "") +
 		` (update: ${updateCount + 1})`;
+
 	const maxOneOur = Math.ceil((Math.random() + 1) * 1000 * 3600);
-	roomInvitationLinkStore.updateLink({
+
+	await roomInvitationLinkStore.updateLink({
 		id: linkId,
 		title: title,
 		activeUntil: new Date(Date.now() + maxOneOur).toISOString(),

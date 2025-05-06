@@ -742,6 +742,8 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Посилання на копію дошки",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
+	"components.molecules.share.roomMemberInvitation.mail.body":
+		"Посилання на кімнату: ",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"Зовнішні інструменти, пов’язані з курсом або посадочними картками, не будуть скопійовані.",
@@ -788,6 +790,8 @@ export default {
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі.",
 	"components.molecules.share.tasks.result.linkLabel":
 		"Зв'язати копію завдання",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel":
+		"Посилання на запрошення до кімнати",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Ви впевнені, що хочете видалити завдання " {taskTitle} "?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Видалити завдання",
@@ -1930,6 +1934,26 @@ export default {
 		"Якщо цей дозвіл буде передано {memberFullName}, {currentUserFullName} втратить право видаляти кімнату.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Ця дія може бути скасована лише {memberFullName}.",
+	"pages.rooms.members.inviteMember.firstStep.title":
+		"Створити посилання для запрошення",
+	"pages.rooms.members.inviteMember.firstStep.subTitle":
+		"Наступним кроком буде створення посилання, за яким можна буде увійти в кімнату.",
+	"pages.rooms.members.inviteMember.secondStep.title":
+		"Поділіться посиланням на запрошення",
+	"pages.rooms.members.inviteMember.infoAlert.text":
+		"Учні з інших шкіл повинні завжди супроводжуватися в кімнату супроводжуючим з їхньої школи до кімнати.",
+	"pages.rooms.members.inviteMember.form.description.label":
+		"Опис (необов'язково)",
+	"pages.rooms.members.inviteMember.form.description.hint":
+		"Відображається в огляді посилань",
+	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
+		"Посилання дійсне лише для користувачів наступної школи:",
+	"pages.rooms.members.inviteMember.form.validForStudents.label":
+		"Посилання також дійсне для студентів",
+	"pages.rooms.members.inviteMember.form.linkExpires.label":
+		"Термін дії посилання закінчується",
+	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
+		"Вхід до кімнати можливий тільки після підтвердження ({0})",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
