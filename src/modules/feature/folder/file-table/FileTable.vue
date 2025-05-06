@@ -121,7 +121,6 @@ const onDeleteFiles = (
 	selectedFileRecords: FileRecord[],
 	confirmationPromise: Promise<boolean>
 ) => {
-	console.log("onDeleteFiles in file table", selectedFileRecords);
 	emit("delete-files", selectedFileRecords, confirmationPromise);
 };
 </script>
