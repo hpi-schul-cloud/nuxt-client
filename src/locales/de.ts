@@ -402,7 +402,7 @@ export default {
 	"components.administration.schoolYearChangeSection.step.two.button":
 		"LDAP-Daten überprüfen",
 	"components.administration.schoolYearChangeSection.title.step.three":
-		"Neues Schuljahres",
+		"Neues Schuljahr",
 	"components.administration.schoolYearChangeSection.description.step.three":
 		"Hier kann die Übertragung der Daten in die {Instanz} gestartet werden. Damit wird das neue Schuljahr eingeläutet.",
 	"components.administration.schoolYearChangeSection.step.three.button":
