@@ -1,43 +1,43 @@
-import { createTestingPinia } from "@pinia/testing";
+import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
+import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
+import { schoolsModule } from "@/store";
+import AuthModule from "@/store/auth";
+import EnvConfigModule from "@/store/env-config";
+import NotifierModule from "@/store/notifier";
+import SchoolsModule from "@/store/schools";
+import { Tab } from "@/types/room/RoomMembers";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
+	envsFactory,
 	mockedPiniaStoreTyping,
 	roomMemberFactory,
-	envsFactory,
 	schoolFactory,
 } from "@@/tests/test-utils";
-import {
-	useRoomDetailsStore,
-	useRoomMembersStore,
-	useRoomAuthorization,
-} from "@data-room";
+import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
+import { roomFactory } from "@@/tests/test-utils/factory/room";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { Router, useRoute, useRouter } from "vue-router";
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import EnvConfigModule from "@/store/env-config";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { ref } from "vue";
-import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
-import { roomFactory } from "@@/tests/test-utils/factory/room";
-import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index.mjs";
+import {
+	useRoomAuthorization,
+	useRoomDetailsStore,
+	useRoomMembersStore,
+} from "@data-room";
 import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
+import { mdiPlus } from "@icons/material";
+import { createTestingPinia } from "@pinia/testing";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
+import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { useBoardNotifier } from "@util-board";
-import SchoolsModule from "@/store/schools";
-import AuthModule from "@/store/auth";
-import { schoolsModule } from "@/store";
-import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
-import { Tab } from "@/types/room/RoomMembers";
+import { ref } from "vue";
+import { Router, useRoute, useRouter } from "vue-router";
+import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index.mjs";
 import RoomMembersPage from "./RoomMembers.page.vue";
-import NotifierModule from "@/store/notifier";
-import { mdiPlus } from "@mdi/js";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
