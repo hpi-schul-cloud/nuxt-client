@@ -43,6 +43,14 @@
 					</span>
 				</template>
 
+				<template #action-menu-items="{ selectedIds }">
+					<KebabMenuActionDeleteFiles
+						:file-records="fileRecords"
+						:selected-ids="selectedIds"
+						@delete-files="onDeleteFiles"
+					/>
+				</template>
+
 				<template #left-of-search>
 					<FileUploadProgress :upload-progress="uploadProgress" />
 				</template>
@@ -62,6 +70,7 @@ import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
 import FilePreview from "./FilePreview.vue";
 import FileUploadProgress from "./FileUploadProgress.vue";
+import KebabMenuActionDeleteFiles from "./KebapMenuActionDeleteFiles.vue";
 
 const { t, n } = useI18n();
 
@@ -87,6 +96,8 @@ const props = defineProps({
 	},
 });
 
+const emit = defineEmits(["delete-files"]);
+
 const headers = [
 	{ key: "preview", sortable: false },
 	{ title: t("pages.folder.columns.name"), key: "name" },
@@ -104,5 +115,13 @@ const formatFileSize = (size: number) => {
 	const localizedFileSize = n(convertedSize, "fileSize");
 
 	return `${localizedFileSize} ${unit}`;
+};
+
+const onDeleteFiles = (
+	selectedFileRecords: FileRecord[],
+	confirmationPromise: Promise<boolean>
+) => {
+	console.log("onDeleteFiles in file table", selectedFileRecords);
+	emit("delete-files", selectedFileRecords, confirmationPromise);
 };
 </script>

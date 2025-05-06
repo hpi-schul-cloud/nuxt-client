@@ -2136,4 +2136,7 @@ export default {
 	"pages.folder.ariaLabels.filter": "Tabelle durchsuchen/filtern",
 	"pages.folder.ariaLabels.actionMenu": "Aktionsmenü für {name}",
 	"pages.folder.uploadstats": "{uploaded} von {total} Dateien hochgeladen",
+	"pages.folder.delete-multiple-confirmation":
+		"Alle {total} Dateien wirklich löschen?",
+	"pages.folder.delete-confirmation": "Datei {name} wirklich löschen?",
 };

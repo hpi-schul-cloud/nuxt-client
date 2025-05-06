@@ -18,6 +18,7 @@
 			:is-empty="isEmpty"
 			:file-records="fileRecords"
 			:upload-progress="uploadProgress"
+			@delete-files="onDeleteFiles"
 		/>
 	</DefaultWireframe>
 	<ConfirmationDialog />
@@ -35,7 +36,7 @@
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import router from "@/router";
 import { ParentNodeType } from "@/types/board/ContentElement";
-import { FileRecordParent } from "@/types/file/File";
+import { FileRecord, FileRecordParent } from "@/types/file/File";
 import { useBoardApi, useSharedBoardPageInformation } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
@@ -67,7 +68,8 @@ const {
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
-const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
+const { fetchFiles, upload, getFileRecordsByParentId, deleteFiles } =
+	useFileStorageApi();
 
 const folderId = toRef(props, "folderId");
 const fileRecords = computed(() => getFileRecordsByParentId(folderId.value));
@@ -117,6 +119,18 @@ const onDelete = async (confirmation: Promise<boolean>) => {
 	} else {
 		throw new Error("Unsupported parent type");
 	}
+};
+
+const onDeleteFiles = async (
+	fileRecords: FileRecord[],
+	confirmationPromise: Promise<boolean>
+) => {
+	const shouldDelete = await confirmationPromise;
+	if (!shouldDelete) {
+		return;
+	}
+
+	await deleteFiles(fileRecords);
 };
 
 const deleteAndNavigateToBoard = async (folderId: string) => {
