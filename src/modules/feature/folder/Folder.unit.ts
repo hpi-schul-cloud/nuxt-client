@@ -423,7 +423,7 @@ describe("Folder.vue", () => {
 
 	describe("when breadcrumbs are present", () => {
 		const setup = () => {
-			const folderState = createMock<
+			const folderStateMock = createMock<
 				ReturnType<typeof FolderState.useFolderState>
 			>({
 				breadcrumbs: ref([
@@ -433,7 +433,11 @@ describe("Folder.vue", () => {
 					},
 				]),
 			});
-			jest.spyOn(FolderState, "useFolderState").mockReturnValue(folderState);
+			jest
+				.spyOn(FolderState, "useFolderState")
+				.mockReturnValue(folderStateMock);
+			const parent = parentNodeInfoFactory.build();
+			folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
 			const boardState = createMock<
 				ReturnType<typeof BoardApi.useSharedBoardPageInformation>
@@ -452,7 +456,7 @@ describe("Folder.vue", () => {
 
 			const { wrapper } = setupWrapper();
 
-			return { folderState, wrapper };
+			return { wrapper };
 		};
 
 		it("should show the breadcrumbs", () => {
