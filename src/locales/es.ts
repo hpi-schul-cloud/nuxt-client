@@ -382,40 +382,41 @@ export default {
 	"components.administration.provisioningOptions.warning.title":
 		"Deshabilitar la sincronización",
 	"components.administration.schoolYearChangeSection.headers":
-		"Schuljahreswechsel",
+		"Cambio de año escolar",
 	"components.administration.schoolYearChangeSection.info.part.one":
-		"Mit Hilfe der Transferphase können Klassenzugehörigkeit und Personendaten im LDAP in Ruhe angepasst werden. Abschließend können alle Änderungen mit einem Mal in die {instance} übertragen werden.",
+		"Con la ayuda de la fase de transferencia, la membresía de clase y los datos personales en el LDAP se pueden ajustar en paz. Finalmente, todos los cambios se pueden transferir a la {instance}.",
 	"components.administration.schoolYearChangeSection.info.part.two":
-		" (mehr Infos auf der {0})",
-	"components.administration.schoolYearChangeSection.info.link": "Hilfeseite",
+		" (más información sobre el {0})",
+	"components.administration.schoolYearChangeSection.info.link":
+		"Ayuda del lado de la ayuda",
 	"components.administration.schoolYearChangeSection.title.step.one":
-		"Ende des Schuljahres",
+		"Al final del año escolar",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"Die Transferphase kann zwei Wochen vor Ferienbeginn manuell gestartet werden. Ist bis zum Ferienbeginn kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
+		"La fase de transferencia se puede comenzar manualmente dos semanas antes del inicio de las vacaciones. Si no hay ningún comienzo manual al comienzo de las vacaciones, la fase de transferencia comienza automáticamente. El inicio de la fase de transferencia no se puede deshacer.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
-		"Transferphase starten",
+		"Fase de transferencia de inicio",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
-		"Transferphase gestartet",
+		"Fase de transferencia iniciada",
 	"components.administration.schoolYearChangeSection.title.step.two":
-		"Rund um die Sommerferien",
+		"Alrededor de las vacaciones de verano",
 	"components.administration.schoolYearChangeSection.description.step.two":
-		"Während der Transferphase können alle Klassen- und Personendaten in Ruhe aktualisiert werden. Login und Kennwortänderungen sind für alle bestehenden Nutzenden weiterhin möglich. Während der Transferphase können neue Kurse erstellt werden, allerdings ohne die Zuordnung von Klassen. ",
+		"Durante la fase de transferencia, todos los datos de clase y personales se pueden actualizar en paz. El inicio de sesión y los cambios en las contraseñas aún son posibles para todos los usuarios existentes. Se pueden crear nuevos cursos durante la fase de transferencia, pero sin la asignación de clases.",
 	"components.administration.schoolYearChangeSection.info.step.two":
-		"Während der Transferphase werden keine neuen Nutzenden, Klassen oder Änderungen an bestehenden Daten aus dem LDAP synchronisiert.",
+		"Durante la fase de transferencia, no se sincronizan nuevos usuarios, clases o cambios en los datos existentes del LDAP.",
 	"components.administration.schoolYearChangeSection.step.two.button":
-		"LDAP-Daten überprüfen",
+		"Verifique los datos de LDAP",
 	"components.administration.schoolYearChangeSection.title.step.three":
-		"Neues Schuljahres",
+		"Nuevo año escolar",
 	"components.administration.schoolYearChangeSection.description.step.three":
-		"Hier kann die Übertragung der Daten in die {Instanz} gestartet werden. Damit wird das neue Schuljahr eingeläutet.",
+		"Aquí la transferencia de los datos se puede iniciar al {instance}. Esto acelera en el nuevo año escolar.",
 	"components.administration.schoolYearChangeSection.step.three.button":
-		"Transferphase beenden",
+		"Fase de transferencia final",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
-		"Klassen- und Personendaten (LDAP) wurden aktualisiert und überprüft",
+		"Los datos de clase y personales (LDAP) se han actualizado y marcado",
 	"components.administration.schoolYearChangeSection.dialog.title":
-		"Das Schuljahr wirklich beenden?",
+		"¿Realmente termina el año escolar?",
 	"components.administration.schoolYearChangeSection.dialog.content":
-		"Die Synchronisierung von LDAP-Stammdaten wird während der Transferphase unterbrochen. Somit werden Nutzerdaten und Klassen (sofern verwendet) nicht mehr über LDAP aktualisiert. Der Login mit bereits synchronisierten Login-Daten ist weiterhin möglich. Passwortänderungen im LDAP während des Logins werden ebenfalls berücksichtigt.",
+		"La sincronización de los datos maestros LDAP se interrumpe durante la fase de transferencia. Esto significa que los datos y clases del usuario (si se usan) ya no se actualizan a través de LDAP. Iniciar sesión con datos de inicio de sesión ya sincronizados aún es posible. También se tienen en cuenta los cambios de contraseña en el LDAP durante el inicio de sesión.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "en ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hora | horas",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",

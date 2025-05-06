@@ -377,40 +377,40 @@ export default {
 	"components.administration.provisioningOptions.warning.title":
 		"Disable synchronization",
 	"components.administration.schoolYearChangeSection.headers":
-		"Schuljahreswechsel",
+		"Change of school year",
 	"components.administration.schoolYearChangeSection.info.part.one":
-		"Mit Hilfe der Transferphase können Klassenzugehörigkeit und Personendaten im LDAP in Ruhe angepasst werden. Abschließend können alle Änderungen mit einem Mal in die {instance} übertragen werden.",
+		"The transfer phase allows for class membership and personal data to be adjusted in LDAP at a leisurely pace. Finally, all changes can be transferred to the {instance} at once.",
 	"components.administration.schoolYearChangeSection.info.part.two":
-		" (mehr Infos auf der {0})",
-	"components.administration.schoolYearChangeSection.info.link": "Hilfeseite",
+		" (more information on the {0})",
+	"components.administration.schoolYearChangeSection.info.link": "help page",
 	"components.administration.schoolYearChangeSection.title.step.one":
-		"Ende des Schuljahres",
+		"End of the school year",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"Die Transferphase kann zwei Wochen vor Ferienbeginn manuell gestartet werden. Ist bis zum Ferienbeginn kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
+		"The transfer phase can be started manually two weeks before the start of the holidays. If no manual start is made by the start of the holidays, the transfer phase begins automatically. The start of the transfer phase cannot be reversed.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
-		"Transferphase starten",
+		"Start transfer period",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
-		"Transferphase gestartet",
+		"Transfer phase started",
 	"components.administration.schoolYearChangeSection.title.step.two":
-		"Rund um die Sommerferien",
+		"Around the summer holidays",
 	"components.administration.schoolYearChangeSection.description.step.two":
-		"Während der Transferphase können alle Klassen- und Personendaten in Ruhe aktualisiert werden. Login und Kennwortänderungen sind für alle bestehenden Nutzenden weiterhin möglich. Während der Transferphase können neue Kurse erstellt werden, allerdings ohne die Zuordnung von Klassen. ",
+		"During the transfer phase, all class and personal data can be updated at your leisure. Login and password changes are still possible for all existing users. New courses can be created during the transfer phase, but without class assignments.",
 	"components.administration.schoolYearChangeSection.info.step.two":
-		"Während der Transferphase werden keine neuen Nutzenden, Klassen oder Änderungen an bestehenden Daten aus dem LDAP synchronisiert.",
+		"During the transfer phase, no new users, classes, or changes to existing data are synchronized from the LDAP.",
 	"components.administration.schoolYearChangeSection.step.two.button":
-		"LDAP-Daten überprüfen",
+		"Check LDAP-data",
 	"components.administration.schoolYearChangeSection.title.step.three":
-		"Neues Schuljahres",
+		"New school year",
 	"components.administration.schoolYearChangeSection.description.step.three":
-		"Hier kann die Übertragung der Daten in die {Instanz} gestartet werden. Damit wird das neue Schuljahr eingeläutet.",
+		"Here, the transfer of data to the {instance} can be initiated. This marks the beginning of the new school year.",
 	"components.administration.schoolYearChangeSection.step.three.button":
-		"Transferphase beenden",
+		"End transfer phase",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
-		"Klassen- und Personendaten (LDAP) wurden aktualisiert und überprüft",
+		"Class and personal data (LDAP) have been updated and verified.",
 	"components.administration.schoolYearChangeSection.dialog.title":
-		"Das Schuljahr wirklich beenden?",
+		"Really finish the school year?",
 	"components.administration.schoolYearChangeSection.dialog.content":
-		"Die Synchronisierung von LDAP-Stammdaten wird während der Transferphase unterbrochen. Somit werden Nutzerdaten und Klassen (sofern verwendet) nicht mehr über LDAP aktualisiert. Der Login mit bereits synchronisierten Login-Daten ist weiterhin möglich. Passwortänderungen im LDAP während des Logins werden ebenfalls berücksichtigt.",
+		"Synchronization of LDAP master data is interrupted during the transfer phase. Thus, user data and classes (if used) are no longer updated via LDAP. Login with previously synchronized login data is still possible. Password changes in LDAP during login are also taken into account.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "in ",
 	"components.atoms.VCustomChipTimeRemaining.hintHours": "hour | hours",
 	"components.atoms.VCustomChipTimeRemaining.hintHoursShort": "h",

@@ -384,40 +384,40 @@ export default {
 	"components.administration.provisioningOptions.warning.title":
 		"Вимкнути синхронізацію",
 	"components.administration.schoolYearChangeSection.headers":
-		"Schuljahreswechsel",
+		"Зміна навчального року",
 	"components.administration.schoolYearChangeSection.info.part.one":
-		"Mit Hilfe der Transferphase können Klassenzugehörigkeit und Personendaten im LDAP in Ruhe angepasst werden. Abschließend können alle Änderungen mit einem Mal in die {instance} übertragen werden.",
+		"За допомогою фази передачі, членство в класі та персональні дані в LDAP можна скорегувати в мирі. Нарешті, всі зміни можна перенести на {instance}",
 	"components.administration.schoolYearChangeSection.info.part.two":
-		" (mehr Infos auf der {0})",
-	"components.administration.schoolYearChangeSection.info.link": "Hilfeseite",
+		" (Більше інформації про {0})",
+	"components.administration.schoolYearChangeSection.info.link": "Довідка",
 	"components.administration.schoolYearChangeSection.title.step.one":
-		"Ende des Schuljahres",
+		"Наприкінці навчального року",
 	"components.administration.schoolYearChangeSection.description.step.one":
-		"Die Transferphase kann zwei Wochen vor Ferienbeginn manuell gestartet werden. Ist bis zum Ferienbeginn kein manueller Start erfolgt, beginnt die Transferphase automatisch. Der Start der Transferphase kann nicht rückgängig gemacht werden.",
+		"Фазу передачі можна розпочати вручну за два тижні до початку свята. Якщо до початку свята немає посібника, фаза передачі починається автоматично. Початок фази передачі не можна скасувати.",
 	"components.administration.schoolYearChangeSection.step.one.button.startTransfer":
-		"Transferphase starten",
+		"Почніть фазу передачі",
 	"components.administration.schoolYearChangeSection.step.one.button.transferStarted":
-		"Transferphase gestartet",
+		"Почалася фаза передачі",
 	"components.administration.schoolYearChangeSection.title.step.two":
-		"Rund um die Sommerferien",
+		"Близько літніх канікул",
 	"components.administration.schoolYearChangeSection.description.step.two":
-		"Während der Transferphase können alle Klassen- und Personendaten in Ruhe aktualisiert werden. Login und Kennwortänderungen sind für alle bestehenden Nutzenden weiterhin möglich. Während der Transferphase können neue Kurse erstellt werden, allerdings ohne die Zuordnung von Klassen. ",
+		"Під час фази передачі всі класи та персональні дані можуть бути оновлені в мирі. Вхід та зміни паролів все ще можливі для всіх існуючих користувачів. Нові курси можуть бути створені під час фази передачі, але без призначення занять.",
 	"components.administration.schoolYearChangeSection.info.step.two":
-		"Während der Transferphase werden keine neuen Nutzenden, Klassen oder Änderungen an bestehenden Daten aus dem LDAP synchronisiert.",
+		"Під час фази передачі не синхронізовані нові користувачі, класи або зміни до існуючих даних з LDAP.",
 	"components.administration.schoolYearChangeSection.step.two.button":
-		"LDAP-Daten überprüfen",
+		"Перевірте дані LDAP",
 	"components.administration.schoolYearChangeSection.title.step.three":
-		"Neues Schuljahres",
+		"Новий навчальний рік",
 	"components.administration.schoolYearChangeSection.description.step.three":
-		"Hier kann die Übertragung der Daten in die {Instanz} gestartet werden. Damit wird das neue Schuljahr eingeläutet.",
+		"Aquí la transferencia de los datos se puede iniciar al {instance}. Esto acelera en el nuevo año escolar.",
 	"components.administration.schoolYearChangeSection.step.three.button":
-		"Transferphase beenden",
+		"Кінцева фаза передачі",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":
-		"Klassen- und Personendaten (LDAP) wurden aktualisiert und überprüft",
+		"Класні та персональні дані (LDAP) були оновлені та перевірені",
 	"components.administration.schoolYearChangeSection.dialog.title":
-		"Das Schuljahr wirklich beenden?",
+		"Дійсно закінчити навчальний рік?",
 	"components.administration.schoolYearChangeSection.dialog.content":
-		"Die Synchronisierung von LDAP-Stammdaten wird während der Transferphase unterbrochen. Somit werden Nutzerdaten und Klassen (sofern verwendet) nicht mehr über LDAP aktualisiert. Der Login mit bereits synchronisierten Login-Daten ist weiterhin möglich. Passwortänderungen im LDAP während des Logins werden ebenfalls berücksichtigt.",
+		"Синхронізація головних даних LDAP переривається під час фази передачі. Це означає, що дані та класи користувачів (якщо використовуються) більше не оновлюються через LDAP. Вхід із вже синхронізованими даними входу все ще можливий. Зміни пароля в LDAP під час входу також враховуються.",
 	"components.atoms.VCustomChipTimeRemaining.hintDueTime": "в",
 	"components.atoms.VCustomChipTimeRemaining.hintHours":
 		"година | години (годин)",
