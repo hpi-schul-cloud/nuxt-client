@@ -404,7 +404,7 @@ export default {
 	"components.administration.schoolYearChangeSection.title.step.three":
 		"Neues Schuljahr",
 	"components.administration.schoolYearChangeSection.description.step.three":
-		"Hier kann die Übertragung der Daten in die {Instanz} gestartet werden. Damit wird das neue Schuljahr eingeläutet.",
+		"Hier kann die Übertragung der Daten in die {instance} gestartet werden. Damit wird das neue Schuljahr eingeläutet.",
 	"components.administration.schoolYearChangeSection.step.three.button":
 		"Transferphase beenden",
 	"components.administration.schoolYearChangeSection.checkbox.step.three":

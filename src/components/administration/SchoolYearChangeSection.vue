@@ -140,7 +140,10 @@
 				<p>
 					{{
 						t(
-							"components.administration.schoolYearChangeSection.description.step.three"
+							"components.administration.schoolYearChangeSection.description.step.three",
+							{
+								instance,
+							}
 						)
 					}}
 				</p>
