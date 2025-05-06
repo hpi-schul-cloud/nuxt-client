@@ -720,6 +720,8 @@ export default {
 		"Organizational Management",
 	"components.molecules.MintEcFooter.chapters": "Chapter overview",
 	"components.molecules.share.courses.mail.body": "Link to the course:",
+	"components.molecules.share.roomMemberInvitation.mail.body":
+		"Link to the Room: ",
 	"components.molecules.share.courses.mail.subject": "Course you can import",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"External tools not available in the target school",
@@ -764,6 +766,8 @@ export default {
 	"components.molecules.share.tasks.options.infoText":
 		"With the following link, the task can be imported as a copy by other teachers. Personal data will not be imported.",
 	"components.molecules.share.tasks.result.linkLabel": "Link task copy",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel":
+		"Room invitation link",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Are you sure, you want to delete task "{taskTitle}"?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Delete Task",
@@ -1742,6 +1746,18 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronized",
 	"pages.rooms.headerSection.menu.ariaLabel": "Course menu",
 	"pages.rooms.headerSection.toCourseFiles": "To the course files",
+	"pages.rooms.invitationLinkStatus.bird.alt": "Bird with crossed wings",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"The invitation link is unfortunately only valid for students of the school “{schoolName}”",
+	"pages.rooms.invitationLinkStatus.expired":
+		"The invitation link is unfortunately no longer valid",
+	"pages.rooms.invitationLinkStatus.invalidLink":
+		"Unfortunately the invitation link does not exist",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"The invitation link is unfortunately only valid for teachers",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"The invitation link is unfortunately only valid for users of the school “{schoolName}”",
+	"pages.rooms.invitationLinkStatus.title": "Invitation link",
 	"pages.rooms.menuItems.endSync": "End synchronization",
 	"pages.rooms.menuItems.startSync": "Start synchronization",
 	"pages.rooms.importCourse.btn.continue": "Continue",
@@ -1886,6 +1902,23 @@ export default {
 		"If this permission is transferred to {memberFullName}, {currentUserFullName} loses the right to delete the room.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"This action can only be undone by {memberFullName}.",
+	"pages.rooms.members.inviteMember.firstStep.title": "Create invitation link",
+	"pages.rooms.members.inviteMember.firstStep.subTitle":
+		"The next step is to create a link, which can be used to enter the room.",
+	"pages.rooms.members.inviteMember.secondStep.title": "Share invitation link",
+	"pages.rooms.members.inviteMember.infoAlert.text":
+		"Students from other schools must always be added to the room by a supervising learning guide from their school.",
+	"pages.rooms.members.inviteMember.form.description.label":
+		"Description (optional)",
+	"pages.rooms.members.inviteMember.form.description.hint":
+		"Is displayed in the link overview",
+	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
+		"Link only valid for users of the following school:",
+	"pages.rooms.members.inviteMember.form.validForStudents.label":
+		"Link also valid for students",
+	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link expires on",
+	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
+		"Entry to the room only possible after confirmation ({0})",
 	"pages.rooms.title": "Rooms",
 	"pages.taskCard.addElement": "Add element",
 	"pages.taskCard.deleteElement.text":

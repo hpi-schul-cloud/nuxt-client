@@ -9,17 +9,19 @@ import DuplicationInfoDialog from "./DuplicationInfoDialog.vue";
 import Members from "./RoomMembers/Members.vue";
 import Invitations from "./RoomMembers/Invitations.vue";
 import Confirmations from "./RoomMembers/Confirmations.vue";
+import InviteMembersDialog from "./RoomMembers/InviteMembersDialog.vue";
 
 export {
-	RoomGrid,
-	RoomForm,
-	RoomMenu,
-	BoardGrid,
-	MembersTable,
 	AddMembers,
+	BoardGrid,
 	ChangeRole,
 	DuplicationInfoDialog,
-	Members,
-	Invitations,
 	Confirmations,
+	Invitations,
+	InviteMembersDialog,
+	Members,
+	MembersTable,
+	RoomForm,
+	RoomGrid,
+	RoomMenu,
 };

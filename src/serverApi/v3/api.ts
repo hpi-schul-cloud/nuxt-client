@@ -841,6 +841,43 @@ export interface BoardTaskStatusResponse {
 /**
  * 
  * @export
+ * @interface BusinessError
+ */
+export interface BusinessError {
+    /**
+     * The response status code.
+     * @type {number}
+     * @memberof BusinessError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof BusinessError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof BusinessError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof BusinessError
+     */
+    message: string;
+    /**
+     * The error details.
+     * @type {object}
+     * @memberof BusinessError
+     */
+    details?: object;
+}
+/**
+ * 
+ * @export
  * @interface CardListResponse
  */
 export interface CardListResponse {
@@ -8102,11 +8139,35 @@ export interface RoomIdResponse {
  */
 export interface RoomInvitationLinkError {
     /**
-     * 
+     * The response status code.
+     * @type {number}
+     * @memberof RoomInvitationLinkError
+     */
+    code: number;
+    /**
+     * The error type.
+     * @type {string}
+     * @memberof RoomInvitationLinkError
+     */
+    type: string;
+    /**
+     * The error title.
+     * @type {string}
+     * @memberof RoomInvitationLinkError
+     */
+    title: string;
+    /**
+     * The error message.
+     * @type {string}
+     * @memberof RoomInvitationLinkError
+     */
+    message: string;
+    /**
+     * The error details.
      * @type {RoomInvitationLinkValidationError}
      * @memberof RoomInvitationLinkError
      */
-    error: RoomInvitationLinkValidationError;
+    details?: RoomInvitationLinkValidationError;
 }
 /**
  * 
@@ -8191,7 +8252,8 @@ export enum RoomInvitationLinkValidationError {
     Expired = 'EXPIRED',
     OnlyForTeachers = 'ONLY_FOR_TEACHERS',
     RestrictedToCreatorSchool = 'RESTRICTED_TO_CREATOR_SCHOOL',
-    CantInviteStudentsFromOtherSchool = 'CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL'
+    CantInviteStudentsFromOtherSchool = 'CANT_INVITE_STUDENTS_FROM_OTHER_SCHOOL',
+    InvalidLink = 'INVALID_LINK'
 }
 
 /**
