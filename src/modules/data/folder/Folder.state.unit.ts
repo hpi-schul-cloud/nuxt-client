@@ -1,14 +1,14 @@
 import * as serverApi from "@/serverApi/v3/api";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { createApplicationError } from "@/utils/create-application-error.factory";
-import { createMock } from "@golevelup/ts-jest";
-import { describe, expect, it } from "@jest/globals";
-import { AxiosPromise } from "axios";
-import { useFolderState } from "./Folder.state";
 import {
 	fileFolderElementResponseFactory,
 	parentNodeInfoFactory,
 } from "@@/tests/test-utils";
+import { createMock } from "@golevelup/ts-jest";
+import { describe, expect, it } from "@jest/globals";
+import { AxiosPromise } from "axios";
+import { useFolderState } from "./Folder.state";
 
 jest.mock("vue-i18n", () => {
 	return {
@@ -192,12 +192,7 @@ describe("useFolderState", () => {
 
 					await fetchFileFolderElement(testId);
 
-					try {
-						// eslint-disable-next-line @typescript-eslint/no-unused-vars
-						const _breadcrumbs = breadcrumbs.value;
-					} catch (error) {
-						expect(error).toEqual(userError);
-					}
+					expect(() => breadcrumbs.value).toThrow(userError);
 				});
 			});
 		});

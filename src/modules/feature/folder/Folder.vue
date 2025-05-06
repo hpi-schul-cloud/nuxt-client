@@ -36,12 +36,12 @@ import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import router from "@/router";
 import { ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
-import { useBoardApi } from "@data-board";
+import { useBoardApi, useSharedBoardPageInformation } from "@data-board";
 import { useFileStorageApi } from "@data-file";
 import { useFolderState } from "@data-folder";
 import { mdiPlus } from "@icons/material";
 import { ConfirmationDialog } from "@ui-confirmation-dialog";
-import { computed, onMounted, ref, toRef } from "vue";
+import { computed, onMounted, ref, toRef, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import FileTable from "./file-table/FileTable.vue";
 import FolderMenu from "./FolderMenu.vue";
@@ -64,6 +64,9 @@ const {
 	parent,
 	mapNodeTypeToPathType,
 } = useFolderState();
+
+const { createPageInformation } = useSharedBoardPageInformation();
+
 const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
 
 const folderId = toRef(props, "folderId");
@@ -144,4 +147,16 @@ onMounted(async () => {
 	await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
 	isLoading.value = false;
 });
+
+watch(
+	parent,
+	(newParent) => {
+		if (newParent && newParent.type === ParentNodeType.Board) {
+			createPageInformation(parent.value.id);
+		} else if (newParent && newParent.type !== ParentNodeType.Board) {
+			throw new Error("Unsupported parent type");
+		}
+	},
+	{ immediate: true }
+);
 </script>
