@@ -1,5 +1,5 @@
 <template>
-	<div v-if="isVisiblePageInfoText" data-testid="info-text">
+	<div v-if="canAddRoomMembers" data-testid="info-text">
 		<i18n-t keypath="pages.rooms.members.infoText" scope="global">
 			<a
 				:href="informationLink"
@@ -23,10 +23,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import {
-	useRoomMemberVisibilityOptions,
-	useRoomMembersStore,
-} from "@data-room";
+import { useRoomAuthorization, useRoomMembersStore } from "@data-room";
 import { storeToRefs } from "pinia";
 import { MembersTable } from "@feature-room";
 import { envConfigModule } from "@/store";
@@ -42,7 +39,7 @@ const { t } = useI18n();
 
 const roomMembersStore = useRoomMembersStore();
 const { isLoading, currentUser } = storeToRefs(roomMembersStore);
-const { isVisiblePageInfoText } = useRoomMemberVisibilityOptions(currentUser);
+const { canAddRoomMembers } = useRoomAuthorization();
 
 const linkAriaLabel = computed(
 	() =>

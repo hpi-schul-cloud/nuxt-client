@@ -56,6 +56,18 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 	const schoolApi = SchoolApiFactory(undefined, "/v3", $axios);
 
+	const isRoomOwner = (userId: string) => {
+		const member = roomMembers.value.find((member) => member.userId === userId);
+		if (!member) {
+			return false;
+		}
+		return member.roomRoleName === RoleName.Roomowner;
+	};
+
+	const isCurrentUser = (userId: string) => {
+		return userId === currentUserId;
+	};
+
 	const getRoomId = () => {
 		if (!roomId.value) {
 			throw new Error("RoomDetailStore is not initialized");
@@ -265,6 +277,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	return {
 		addMembers,
+		isRoomOwner,
+		isCurrentUser,
 		changeRoomOwner,
 		fetchMembers,
 		resetStore,

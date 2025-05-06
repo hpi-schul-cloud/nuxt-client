@@ -3,7 +3,7 @@ import {
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
 import MembersTable from "./MembersTable.vue";
-import { computed, nextTick, ref } from "vue";
+import { nextTick, Ref, ref } from "vue";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import {
 	meResponseFactory,
@@ -21,11 +21,7 @@ import {
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { RoleName } from "@/serverApi/v3";
-import {
-	RoomMember,
-	useRoomMembersStore,
-	useRoomMemberVisibilityOptions,
-} from "@data-room";
+import { RoomMember, useRoomMembersStore } from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import ActionMenu from "./ActionMenu.vue";
 import {
@@ -39,21 +35,27 @@ import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
 import { ChangeRole } from "@feature-room";
+import { useRoomAuthorization } from "@data-room";
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
 
-jest.mock("@data-room/roomMembers/membersVisibleOptions.composable");
-const useMemberVisibilityOptions = jest.mocked(useRoomMemberVisibilityOptions);
-
 jest.mock("@util-board/BoardNotifier.composable");
 const boardNotifier = jest.mocked(useBoardNotifier);
 
+jest.mock("@data-room/roomAuthorization.composable");
+const roomAuthorizationMock = jest.mocked(useRoomAuthorization);
+
+type RefPropertiesOnly<T> = {
+	[K in keyof T as T[K] extends Ref ? K : never]: boolean;
+};
+
+type RoomAuthorizationRefs = RefPropertiesOnly<
+	ReturnType<typeof useRoomAuthorization>
+>;
+
 describe("MembersTable", () => {
 	let askConfirmationMock: jest.Mock;
-	let memberVisibilityOptions: DeepMocked<
-		ReturnType<typeof useRoomMemberVisibilityOptions>
-	>;
 	let boardNotifierCalls: DeepMocked<ReturnType<typeof useBoardNotifier>>;
 
 	beforeEach(() => {
@@ -65,10 +67,6 @@ describe("MembersTable", () => {
 			askConfirmation: askConfirmationMock,
 			isDialogOpen: ref(false),
 		});
-
-		memberVisibilityOptions =
-			createMock<ReturnType<typeof useRoomMemberVisibilityOptions>>();
-		useMemberVisibilityOptions.mockReturnValue(memberVisibilityOptions);
 
 		boardNotifierCalls = createMock<ReturnType<typeof useBoardNotifier>>();
 		boardNotifier.mockReturnValue(boardNotifierCalls);
@@ -96,26 +94,16 @@ describe("MembersTable", () => {
 	];
 
 	const setup = (
-		options?: Partial<{
+		options: Partial<{
 			currentUserRole: RoleName;
 			changePermissionFlag: boolean;
 			windowWidth: number;
 			members: RoomMember[];
-			isVisibleSelectionColumn: boolean;
-			isVisibleActionColumn: boolean;
-			isVisibleChangeRoleButton: boolean;
-		}>
+			isRoomOwner: boolean;
+			isCurrentUser: boolean;
+			roomAuthorization: Partial<RoomAuthorizationRefs>;
+		}> = {}
 	) => {
-		memberVisibilityOptions.isVisibleSelectionColumn = computed(
-			() => options?.isVisibleSelectionColumn ?? true
-		);
-		memberVisibilityOptions.isVisibleActionColumn = computed(
-			() => options?.isVisibleActionColumn ?? true
-		);
-		memberVisibilityOptions.isVisibleChangeRoleButton = computed(
-			() => options?.isVisibleChangeRoleButton ?? true
-		);
-
 		const members =
 			options?.members ??
 			roomMemberFactory.buildList(3, {
@@ -123,7 +111,16 @@ describe("MembersTable", () => {
 			});
 
 		const windowWidth = options?.windowWidth ?? 1280;
-
+		const authorizationPermissions =
+			createMock<ReturnType<typeof useRoomAuthorization>>();
+		for (const [key, value] of Object.entries(
+			options.roomAuthorization ?? {}
+		)) {
+			authorizationPermissions[key as keyof RoomAuthorizationRefs] = ref(
+				value ?? false
+			);
+		}
+		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 		const currentUser = roomMemberFactory.build({});
 		const mockMe = meResponseFactory.build({
 			user: { id: currentUser.userId },
@@ -146,6 +143,8 @@ describe("MembersTable", () => {
 						initialState: {
 							roomMembersStore: {
 								roomMembers: [...members, currentUser],
+								isRoomOwner: jest.fn(),
+								isCurrentUser: jest.fn(),
 							},
 						},
 					}),
@@ -154,9 +153,13 @@ describe("MembersTable", () => {
 		});
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		roomMembersStore.isRoomOwner.mockReturnValue(options.isRoomOwner ?? false);
+		roomMembersStore.isCurrentUser.mockReturnValue(
+			options.isCurrentUser ?? false
+		);
 		const roomMembers = roomMembersStore.roomMembers;
 
-		return { wrapper, roomMembersStore, roomMembers };
+		return { wrapper, roomMembersStore, roomMembers, authorizationPermissions };
 	};
 
 	// index 0 is the header checkbox
@@ -206,7 +209,9 @@ describe("MembersTable", () => {
 	});
 
 	it("should render data table", () => {
-		const { wrapper, roomMembers } = setup();
+		const { wrapper, roomMembers } = setup({
+			roomAuthorization: { canAddRoomMembers: true },
+		});
 
 		const dataTable = wrapper.getComponent(VDataTable);
 
@@ -229,7 +234,7 @@ describe("MembersTable", () => {
 
 	it("should not render checkboxes if selection column not visible", async () => {
 		const { wrapper } = setup({
-			isVisibleSelectionColumn: false,
+			roomAuthorization: { canAddRoomMembers: false },
 		});
 
 		const dataTable = wrapper.findComponent(VDataTable);
@@ -407,11 +412,7 @@ describe("MembersTable", () => {
 		});
 
 		it("should not render remove button if it shouldn't be there", async () => {
-			memberVisibilityOptions.isVisibleRemoveMemberButton.mockReturnValue(
-				false
-			);
-
-			const { wrapper } = setup();
+			const { wrapper } = setup({ isRoomOwner: true });
 
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menuButton = dataTable.findComponent(`[data-testid=kebab-menu-1]`);
@@ -452,7 +453,7 @@ describe("MembersTable", () => {
 			});
 
 			it("should call removeMembers after confirmation", async () => {
-				const { wrapper, roomMembersStore, roomMembers } = setup();
+				const { wrapper, roomMembersStore, roomMembers } = setup({});
 
 				askConfirmationMock.mockResolvedValue(true);
 
@@ -463,7 +464,7 @@ describe("MembersTable", () => {
 			});
 
 			it("should not call removeMembers when dialog is cancelled", async () => {
-				const { wrapper, roomMembersStore } = setup();
+				const { wrapper, roomMembersStore } = setup({});
 
 				askConfirmationMock.mockResolvedValue(false);
 
@@ -532,7 +533,9 @@ describe("MembersTable", () => {
 		});
 
 		it("should not render action column when isVisibleActionColumn is false", () => {
-			const { wrapper } = setup({ isVisibleActionColumn: false });
+			const { wrapper } = setup({
+				roomAuthorization: { canAddRoomMembers: false },
+			});
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menu = dataTable.findComponent('[data-testid="kebab-menu-1');
 
@@ -540,22 +543,6 @@ describe("MembersTable", () => {
 		});
 
 		describe("change role button", () => {
-			it("should not be visible when is visibleChangeRoleButton is false", async () => {
-				const { wrapper } = setup({
-					isVisibleChangeRoleButton: false,
-				});
-				const dataTable = wrapper.getComponent(VDataTable);
-
-				const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
-				await menuBtn.trigger("click");
-
-				const changeRoleButton = wrapper.findComponent(
-					KebabMenuActionChangePermission
-				);
-
-				expect(changeRoleButton.exists()).toBe(false);
-			});
-
 			it("should be visible when is visibleChangeRoleButton is true", async () => {
 				const { wrapper } = setup();
 				const dataTable = wrapper.getComponent(VDataTable);
