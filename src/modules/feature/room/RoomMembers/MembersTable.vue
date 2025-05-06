@@ -227,7 +227,6 @@ const getAriaLabel = (
 };
 
 const tableHeader = computed(() => {
-	console.log("canAddRoomMembers.value", canAddRoomMembers.value);
 	return [
 		{
 			title: t("common.labels.firstName"),
