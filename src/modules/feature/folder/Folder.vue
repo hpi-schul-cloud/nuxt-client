@@ -67,16 +67,6 @@ const {
 
 const { createPageInformation } = useSharedBoardPageInformation();
 
-watch(
-	parent,
-	(newBoardId) => {
-		if (newBoardId) {
-			createPageInformation(parent.value.id);
-		}
-	},
-	{ immediate: true }
-);
-
 const { fetchFiles, upload, getFileRecordsByParentId } = useFileStorageApi();
 
 const folderId = toRef(props, "folderId");
@@ -157,4 +147,16 @@ onMounted(async () => {
 	await fetchFiles(folderId.value, FileRecordParent.BOARDNODES);
 	isLoading.value = false;
 });
+
+watch(
+	parent,
+	(newParent) => {
+		if (newParent && newParent.type === ParentNodeType.Board) {
+			createPageInformation(parent.value.id);
+		} else if (newParent && newParent.type !== ParentNodeType.Board) {
+			throw new Error("Unsupported parent type");
+		}
+	},
+	{ immediate: true }
+);
 </script>

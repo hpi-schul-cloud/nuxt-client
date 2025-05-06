@@ -1,5 +1,5 @@
 import router from "@/router";
-import { ParentNodeInfo } from "@/types/board/ContentElement";
+import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
 import { fileRecordFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
 import {
@@ -61,8 +61,13 @@ describe("Folder.vue", () => {
 					.spyOn(FolderState, "useFolderState")
 					.mockReturnValue(folderStateMock);
 
-				const parent = parentNodeInfoFactory.build();
+				const parent = parentNodeInfoFactory.build({
+					type: ParentNodeType.Board,
+				});
 				folderStateMock.parent = ref(parent) as ComputedRef<ParentNodeInfo>;
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
 
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
@@ -70,9 +75,6 @@ describe("Folder.vue", () => {
 				jest
 					.spyOn(BoardApi, "useSharedBoardPageInformation")
 					.mockReturnValue(boardState);
-
-				const folderName = "Test Folder" as unknown as ComputedRef<string>;
-				folderStateMock.folderName = folderName;
 
 				const fileStorageApiMock =
 					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
@@ -135,12 +137,62 @@ describe("Folder.vue", () => {
 				expect(includesFolderName).toBe(true);
 			});
 
-			it("should call createPageInformation with the correct boardId", async () => {
-				const { boardState, parent } = await setup();
+			describe("when folder is board", () => {
+				it("should call createPageInformation with the correct parentId", async () => {
+					const { boardState, parent } = await setup();
 
-				expect(boardState.createPageInformation).toHaveBeenCalledWith(
-					parent.id
-				);
+					expect(boardState.createPageInformation).toHaveBeenCalledWith(
+						parent.id
+					);
+				});
+			});
+		});
+
+		describe("when parent is not a board", () => {
+			const setup = async () => {
+				const folderStateMock =
+					createMock<ReturnType<typeof FolderState.useFolderState>>();
+				jest
+					.spyOn(FolderState, "useFolderState")
+					.mockReturnValue(folderStateMock);
+
+				const parent = parentNodeInfoFactory.build({
+					type: ParentNodeType.Course,
+				});
+				folderStateMock.parent = ref(parent) as ComputedRef<ParentNodeInfo>;
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
+
+				const boardState = createMock<
+					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+				>({});
+				jest
+					.spyOn(BoardApi, "useSharedBoardPageInformation")
+					.mockReturnValue(boardState);
+
+				const fileStorageApiMock =
+					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				jest
+					.spyOn(FileStorageApi, "useFileStorageApi")
+					.mockReturnValue(fileStorageApiMock);
+
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([]);
+
+				setupWrapper();
+
+				await nextTick();
+				await nextTick();
+				await nextTick();
+
+				return {
+					boardState,
+				};
+			};
+
+			it("should throw error", async () => {
+				const error = new Error("Unsupported parent type");
+				expect(async () => await setup()).rejects.toThrow(error);
 			});
 		});
 
@@ -286,6 +338,82 @@ describe("Folder.vue", () => {
 				const { routerSpy, parent } = await setup();
 
 				expect(routerSpy).toHaveBeenCalledWith(`/boards/${parent.id}`);
+			});
+		});
+
+		describe("when delete folder button is clicked, dialog confirmed and parent not a board", () => {
+			const setup = async () => {
+				const folderStateMock =
+					createMock<ReturnType<typeof FolderState.useFolderState>>();
+				jest
+					.spyOn(FolderState, "useFolderState")
+					.mockReturnValue(folderStateMock);
+
+				folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
+					() => "boards"
+				);
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+				const parent = parentNodeInfoFactory.build({
+					type: ParentNodeType.Course,
+				});
+				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+				const boardState = createMock<
+					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+				>({});
+				jest
+					.spyOn(BoardApi, "useSharedBoardPageInformation")
+					.mockReturnValue(boardState);
+
+				const fileStorageApiMock =
+					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				jest
+					.spyOn(FileStorageApi, "useFileStorageApi")
+					.mockReturnValue(fileStorageApiMock);
+
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([]);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
+
+				const confirmationDialogMock =
+					createMock<
+						ReturnType<typeof ConfirmationDialog.useDeleteConfirmationDialog>
+					>();
+				jest
+					.spyOn(ConfirmationDialog, "useDeleteConfirmationDialog")
+					.mockReturnValue(confirmationDialogMock);
+				confirmationDialogMock.askDeleteConfirmation.mockResolvedValue(true);
+
+				const routerSpy = jest.spyOn(router, "replace").mockImplementation();
+
+				const { wrapper } = setupWrapper();
+
+				const kebabMenu = wrapper.find("[data-testid='folder-menu']");
+				await kebabMenu.trigger("click");
+
+				const deleteButton = wrapper.findComponent(KebabMenuActionDelete);
+				await deleteButton.trigger("click");
+
+				return {
+					folderStateMock,
+					wrapper,
+					fileStorageApiMock,
+					folderName,
+					boardApiMock,
+					routerSpy,
+					parent,
+				};
+			};
+
+			it("should throw", async () => {
+				const error = new Error("Unsupported parent type");
+				expect(async () => await setup()).rejects.toThrow(error);
 			});
 		});
 
