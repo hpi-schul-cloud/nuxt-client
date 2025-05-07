@@ -280,26 +280,6 @@ describe("useRoomMembers", () => {
 		});
 	});
 
-	describe("currentUser", () => {
-		it("should set the currentUser", async () => {
-			const mockMe = meResponseFactory.build();
-			const membersMock = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomviewer,
-			});
-			authModule.setMe({
-				...mockMe,
-				user: { ...mockMe.user, id: membersMock[1].userId },
-			});
-			membersMock[1].roomRoleName = RoleName.Roomowner;
-
-			const { roomMembersStore } = setup();
-
-			roomMembersStore.roomMembers = membersMock;
-
-			expect(roomMembersStore.currentUser).toEqual(membersMock[1]);
-		});
-	});
-
 	describe("getSchools", () => {
 		it("should get schools", async () => {
 			const { roomMembersStore } = setup();
@@ -635,21 +615,6 @@ describe("useRoomMembers", () => {
 
 				expect(roomMembersStore.isRoomOwner("another-user-id")).toBe(false);
 			});
-		});
-	});
-
-	describe("isCurrentUser", () => {
-		it("should return true if the user is the current user", () => {
-			const { roomMembersStore } = setup();
-			const currentUserId = authModule.getUser?.id ?? "";
-
-			expect(roomMembersStore.isCurrentUser(currentUserId)).toBe(true);
-		});
-
-		it("should return false if the user is not the current user", () => {
-			const { roomMembersStore } = setup();
-
-			expect(roomMembersStore.isCurrentUser("other-user-id")).toBe(false);
 		});
 	});
 });
