@@ -436,7 +436,7 @@ export default {
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.changeLayout": "Cambiar vista",
 	"components.board.action.shareLink.card": "Copiar enlace a la tarjeta",
-	"components.board.column.defaultTitle": "Nueva columna",
+	"components.board.column.defaultTitle": "Título de la columna",
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
 	"components.board.draftChip.tooltip": "Sólo visible para los profesores",
@@ -779,6 +779,8 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Enlace a la copia del tablón",
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
+	"components.molecules.share.roomMemberInvitation.mail.body":
+		"Enlace a la Sala: ",
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
@@ -824,6 +826,8 @@ export default {
 		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores.",
 	"components.molecules.share.tasks.result.linkLabel":
 		"Enlace a la copia de la tarea",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel":
+		"Enlace de invitación a la sala",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'¿Estás seguro de que deseas eliminar la tarea "{taskTitle}"?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Eliminar tarea",
@@ -1830,6 +1834,18 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Sincronizado",
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
 	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
+	"pages.rooms.invitationLinkStatus.bird.alt": "Pájaro con alas plegadas",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Lamentablemente, el enlace de invitación sólo es válido para los alumnos de la escuela «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Lamentablemente, el enlace de invitación ya no es válido",
+	"pages.rooms.invitationLinkStatus.invalidLink":
+		"Lamentablemente, el enlace de invitación no existe",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Lamentablemente, el enlace de invitación sólo es válido para los usuarios de la escuela «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.title": "Enlace de invitación",
 	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.rooms.menuItems.startSync": "Iniciar sincronización",
 	"pages.rooms.importCourse.btn.continue": "Continuar",
@@ -1981,6 +1997,26 @@ export default {
 		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
+	"pages.rooms.members.inviteMember.firstStep.title":
+		"Crear enlace de invitación",
+	"pages.rooms.members.inviteMember.firstStep.subTitle":
+		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",
+	"pages.rooms.members.inviteMember.secondStep.title":
+		"Compartir enlace de invitación",
+	"pages.rooms.members.inviteMember.infoAlert.text":
+		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un guía de aprendizaje supervisor de su escuela a la sala.",
+	"pages.rooms.members.inviteMember.form.description.label":
+		"Descripción (opcional)",
+	"pages.rooms.members.inviteMember.form.description.hint":
+		"Se muestra en el resumen del enlace",
+	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
+		"Enlace sólo válido para usuarios de la siguiente escuela:",
+	"pages.rooms.members.inviteMember.form.validForStudents.label":
+		"Enlace válido también para estudiantes",
+	"pages.rooms.members.inviteMember.form.linkExpires.label":
+		"El enlace caduca el",
+	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
+		"La entrada a la habitación sólo es posible previa confirmación ({0})",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":

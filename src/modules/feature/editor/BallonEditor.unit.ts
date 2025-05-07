@@ -27,16 +27,13 @@ class ResizeObserver {
 jest.mock("./EditorConfig.composable");
 
 describe("@feature-editor/BalloonEditor", () => {
-	const setup = (props: CkEditorProps = {}, isEditorEmpty = true) => {
+	const setup = (props: CkEditorProps = {}) => {
 		const config: ReturnType<typeof useEditorConfig> = {
 			generalConfig: {
 				language: "",
 				link: {
 					defaultProtocol: "//",
 					addTargetToExternalLinks: true,
-				},
-				wordCount: {
-					onUpdate: jest.fn(),
 				},
 				fontColor: {
 					colors: [],
@@ -45,7 +42,6 @@ describe("@feature-editor/BalloonEditor", () => {
 					colors: [],
 				},
 			},
-			editorIsEmpty: computed(() => isEditorEmpty),
 			registerDeletionHandler: jest.fn(),
 		};
 

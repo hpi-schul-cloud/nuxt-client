@@ -73,11 +73,20 @@ export const useFolderState = () => {
 		}
 	};
 
+	const parent = computed(() => {
+		const indexOfDirectParent = parentNodeInfos.value.length - 1;
+		const parent = parentNodeInfos.value[indexOfDirectParent];
+
+		return parent;
+	});
+
 	return {
 		breadcrumbs,
 		fileFolderElement,
 		folderName,
 		fetchFileFolderElement,
+		parent,
+		mapNodeTypeToPathType,
 	};
 };
 

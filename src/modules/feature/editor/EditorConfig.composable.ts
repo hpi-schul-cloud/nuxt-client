@@ -1,5 +1,5 @@
 import { Editor } from "@ckeditor/ckeditor5-core";
-import { computed, reactive, ref } from "vue";
+import { reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { fontColors, fontBackgroundColors } from "./config";
 import { injectStrict } from "@/utils/inject/inject-strict";
@@ -30,9 +30,6 @@ interface GeneralConfig {
 		defaultProtocol: string;
 		addTargetToExternalLinks: boolean;
 	};
-	wordCount: {
-		onUpdate: (data: { words: number; characters: number }) => void;
-	};
 	fontColor: ReturnType<typeof fontColors>;
 	fontBackgroundColor: ReturnType<typeof fontBackgroundColors>;
 }
@@ -42,34 +39,34 @@ export const useEditorConfig = () => {
 	const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 	const DEFAULT_PROTOCOL = "//";
 
-	const charCount = ref(0);
-
 	const generalConfig = reactive<GeneralConfig>({
 		language: locale.value || envConfigModule.getFallbackLanguage,
 		link: {
 			defaultProtocol: DEFAULT_PROTOCOL,
 			addTargetToExternalLinks: true,
 		},
-		wordCount: {
-			onUpdate: (data: { words: number; characters: number }) => {
-				charCount.value = data.characters;
-			},
-		},
 		fontColor: fontColors(t),
 		fontBackgroundColor: fontBackgroundColors(t),
 	});
 
-	const editorIsEmpty = computed(() => {
-		return charCount.value === 0;
-	});
+	function isEditorEmpty(editor: Editor): boolean {
+		const data = (editor as Editor & { getData: () => string }).getData();
+		const tempDiv = document.createElement("div");
+		tempDiv.innerHTML = data;
+		return (
+			!tempDiv.textContent?.trim() &&
+			!tempDiv.querySelector("*:not(.math-tex):not(.katex)")
+		);
+	}
 
 	const deletionHandler = (
 		evt: CKEditorEventInfo,
 		data: CKEditorKeystrokeInfo,
+		editor: Editor,
 		onDelete: () => void
 	) => {
 		if (data.domEvent.key === "Backspace" || data.domEvent.key === "Delete") {
-			if (editorIsEmpty.value) {
+			if (isEditorEmpty(editor)) {
 				onDelete();
 			}
 		}
@@ -77,13 +74,12 @@ export const useEditorConfig = () => {
 
 	const registerDeletionHandler = (editor: Editor, onDelete: () => void) => {
 		editor.editing.view.document.on("keydown", (evt, data) =>
-			deletionHandler(evt, data, onDelete)
+			deletionHandler(evt, data, editor, onDelete)
 		);
 	};
 
 	return {
 		generalConfig,
-		editorIsEmpty,
 		registerDeletionHandler,
 	};
 };

@@ -11,6 +11,11 @@ declare module "@/assets/img/collaborativeEditor.svg" {
 	const value: string;
 	export default value;
 }
+
+declare module "@/assets/img/crossedHands.svg" {
+	const value: string;
+	export default value;
+}
 declare module "@/assets/img/videoConference.svg" {
 	const value: string;
 	export default value;
