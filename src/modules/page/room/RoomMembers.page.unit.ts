@@ -550,10 +550,12 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should render all tabs when isVisibleTabNavigation is true", () => {
-			const { wrapper } = setup();
+			roomPermissions.canAddRoomMembers.value = true;
+			const { wrapper } = setup({
+				isFeatureRoomMembersTabsEnabled: true,
+			});
 
 			const tabs = wrapper.findComponent(VTabs);
-
 			expect(tabs.exists()).toBe(true);
 
 			const expectedTabs = [
@@ -589,6 +591,7 @@ describe("RoomMembersPage", () => {
 		it.each(Object.values(Tab))(
 			"should default to members tab if the feature is not enabled, regardless of the active tab (%s)",
 			(activeTab) => {
+				roomPermissions.canAddRoomMembers.value = true;
 				setup({
 					isFeatureRoomMembersTabsEnabled: false,
 					activeTab,
@@ -601,6 +604,7 @@ describe("RoomMembersPage", () => {
 		);
 
 		it("should set the active tab to the one passed in props if the feature is enabled", () => {
+			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper } = setup({
 				activeTab: Tab.Invitations,
 			});
