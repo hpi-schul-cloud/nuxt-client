@@ -603,4 +603,41 @@ describe("useRoomMembers", () => {
 			);
 		});
 	});
+
+	describe("isRoomOwner", () => {
+		it("should return true if the user is the room owner", () => {
+			const { roomMembersStore } = setup();
+			const roomOwner = roomMemberFactory.build({
+				roomRoleName: RoleName.Roomowner,
+			});
+			roomMembersStore.roomMembers = [roomOwner];
+
+			expect(roomMembersStore.isRoomOwner(roomOwner.userId)).toBe(true);
+		});
+
+		it("should return false if the user is not the room owner", () => {
+			const { roomMembersStore } = setup();
+			const roomViewer = roomMemberFactory.build({
+				roomRoleName: RoleName.Roomviewer,
+			});
+			roomMembersStore.roomMembers = [roomViewer];
+
+			expect(roomMembersStore.isRoomOwner(roomViewer.userId)).toBe(false);
+		});
+	});
+
+	describe("isCurrentUser", () => {
+		it("should return true if the user is the current user", () => {
+			const { roomMembersStore } = setup();
+			const currentUserId = authModule.getUser?.id ?? "";
+
+			expect(roomMembersStore.isCurrentUser(currentUserId)).toBe(true);
+		});
+
+		it("should return false if the user is not the current user", () => {
+			const { roomMembersStore } = setup();
+
+			expect(roomMembersStore.isCurrentUser("other-user-id")).toBe(false);
+		});
+	});
 });
