@@ -226,8 +226,10 @@ describe("MembersTable", () => {
 		expect(dataTable.props("sortDescIcon")).toEqual(mdiMenuUp);
 	});
 
-	it("should render checkboxes if selection column is visible", async () => {
-		const { wrapper, roomMembers } = setup();
+	it("should render checkboxes if user can add members", async () => {
+		const { wrapper, roomMembers } = setup({
+			roomAuthorization: { canAddRoomMembers: false },
+		});
 
 		const dataTable = wrapper.findComponent(VDataTable);
 		const checkboxes = dataTable.findAll("input[type='checkbox']");
@@ -235,7 +237,7 @@ describe("MembersTable", () => {
 		expect(checkboxes.length).toEqual(roomMembers.length + 1); // all checkboxes including header checkbox
 	});
 
-	it("should not render checkboxes if selection column not visible", async () => {
+	it("should not render checkboxes if user can not add members", async () => {
 		const { wrapper } = setup({
 			roomAuthorization: { canAddRoomMembers: false },
 		});
@@ -526,16 +528,18 @@ describe("MembersTable", () => {
 		});
 	});
 
-	describe("action column visibility", () => {
-		it("should render action column when isVisibleActionColumn is true", () => {
-			const { wrapper } = setup();
+	describe("action column", () => {
+		it("should be rendered when user can add members", () => {
+			const { wrapper } = setup({
+				roomAuthorization: { canAddRoomMembers: true },
+			});
 			const dataTable = wrapper.getComponent(VDataTable);
 			const menu = dataTable.findComponent('[data-testid="kebab-menu-1');
 
 			expect(menu.exists()).toBe(true);
 		});
 
-		it("should not render action column when isVisibleActionColumn is false", () => {
+		it("should not be rendered when user can not add members", () => {
 			const { wrapper } = setup({
 				roomAuthorization: { canAddRoomMembers: false },
 			});
@@ -546,8 +550,10 @@ describe("MembersTable", () => {
 		});
 
 		describe("change role button", () => {
-			it("should be visible when is visibleChangeRoleButton is true", async () => {
-				const { wrapper } = setup();
+			it("should be rendered when user can add members", async () => {
+				const { wrapper } = setup({
+					roomAuthorization: { canAddRoomMembers: true },
+				});
 				const dataTable = wrapper.getComponent(VDataTable);
 
 				const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
@@ -561,7 +567,9 @@ describe("MembersTable", () => {
 			});
 
 			it("should open change role dialog when clicked", async () => {
-				const { wrapper } = setup();
+				const { wrapper } = setup({
+					roomAuthorization: { canAddRoomMembers: true },
+				});
 				const dataTable = wrapper.getComponent(VDataTable);
 
 				const menuBtn = dataTable.findComponent('[data-testid="kebab-menu-1');
@@ -577,6 +585,7 @@ describe("MembersTable", () => {
 			});
 		});
 	});
+
 	describe("change role dialog", () => {
 		it("should close dialog on @cancel", async () => {
 			const { wrapper } = setup();

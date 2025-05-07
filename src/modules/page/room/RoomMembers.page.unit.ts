@@ -114,8 +114,6 @@ describe("RoomMembersPage", () => {
 
 	const setup = (options?: {
 		createRoom?: boolean;
-		isVisibleAddMemberButton?: boolean;
-		isVisibleTabNavigation?: boolean;
 		isFeatureRoomMembersTabsEnabled?: boolean;
 		activeTab?: Tab;
 	}) => {
@@ -196,14 +194,14 @@ describe("RoomMembersPage", () => {
 	});
 
 	describe("page title", () => {
-		it("should set correct title when isVisibleAddMemberButton is true", () => {
+		it("should set correct title when user can add members", () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { room } = setup();
 			expect(document.title).toContain(
 				`${room?.name} - pages.rooms.members.manage`
 			);
 		});
-		it("should set correct title when isVisibleAddMemberButton is false", () => {
+		it("should set correct title when user can not add members", () => {
 			roomPermissions.canAddRoomMembers.value = false;
 			const { room } = setup();
 			expect(document.title).toContain(
@@ -213,14 +211,14 @@ describe("RoomMembersPage", () => {
 	});
 
 	describe("heading", () => {
-		it("should set the correct heading when isVisibleAddMemberButton is true", () => {
+		it("should set the correct heading when user can add members", () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper } = setup({});
 			const heading = wrapper.get("h1");
 			expect(heading.text()).toBe("pages.rooms.members.management");
 		});
 
-		it("should set the correct heading when isVisibleAddMemberButton is false", () => {
+		it("should set the correct heading when user can not add members", () => {
 			roomPermissions.canAddRoomMembers.value = false;
 			const { wrapper } = setup({});
 			const heading = wrapper.get("h1");
@@ -342,9 +340,9 @@ describe("RoomMembersPage", () => {
 	describe("DefaultWireframe", () => {
 		const buildBreadcrumbs = (
 			room: RoomDetailsResponse,
-			isVisibleAddMemberButton: boolean
+			canAddRoomMembers: boolean
 		) => {
-			const membersBreadcrumb = isVisibleAddMemberButton
+			const membersBreadcrumb = canAddRoomMembers
 				? "pages.rooms.members.management"
 				: "pages.rooms.members.label";
 			return [
@@ -403,7 +401,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		describe("breadcrumbs", () => {
-			it("should set correct breadcrumbs when isVisibleAddMemberButton is true", () => {
+			it("should set correct breadcrumbs when user can add members", () => {
 				roomPermissions.canAddRoomMembers.value = true;
 				const { wrapper, room } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
@@ -412,7 +410,7 @@ describe("RoomMembersPage", () => {
 				expect(wireframe.props("breadcrumbs")).toEqual(expectedBreadcrumbs);
 			});
 
-			it("should set correct breadcrumbs when isVisibleAddMemberButton is false", () => {
+			it("should set correct breadcrumbs when user can not add members", () => {
 				roomPermissions.canAddRoomMembers.value = false;
 				const { wrapper, room } = setup();
 				const wireframe = wrapper.findComponent(DefaultWireframe);
@@ -424,7 +422,7 @@ describe("RoomMembersPage", () => {
 	});
 
 	describe("add members fab", () => {
-		it("should render when isVisibleAddMemberButton is true", () => {
+		it("should render when user can add members", () => {
 			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
@@ -434,7 +432,7 @@ describe("RoomMembersPage", () => {
 			expect(addMemberButton.exists()).toBe(true);
 		});
 
-		it("should not render when isVisibleAddMemberButton is false", () => {
+		it("should not render when user can not add members", () => {
 			roomPermissions.canAddRoomMembers.value = false;
 			const { wrapper } = setup();
 			const wireframe = wrapper.findComponent(DefaultWireframe);
