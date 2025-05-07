@@ -35,11 +35,7 @@
 			</div>
 		</template>
 
-		<VTabsWindow
-			v-model="activeTab"
-			class="room-members-tabs-window"
-			:class="canAddRoomMembers ? 'mt-12' : ''"
-		>
+		<VTabsWindow v-model="activeTab" class="room-members-tabs-window mt-12">
 			<VTabsWindowItem
 				v-for="tabItem in tabs"
 				:key="tabItem.value"
@@ -67,7 +63,7 @@
 	<ConfirmationDialog />
 	<InviteMembersDialog
 		v-model="isInvitationDialogOpen"
-		:school-name="currentUser?.schoolName || ''"
+		:school-name="currentUserSchoolName"
 		@close="onDialogClose"
 	/>
 </template>
@@ -118,6 +114,7 @@ import {
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { Tab } from "@/types/room/RoomMembers";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
+import { authModule } from "@/store";
 
 const props = defineProps({
 	tab: {
@@ -222,6 +219,14 @@ const onFabClick = async () => {
 			break;
 	}
 };
+
+const currentUserSchoolName = computed(() => {
+	const currentUser = authModule.getUser;
+	if (!currentUser) return "";
+	const member = roomMembersStore.getMemberById(currentUser?.id);
+
+	return member?.schoolName || "";
+});
 
 const onDialogClose = () => {
 	isMembersDialogOpen.value = false;

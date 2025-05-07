@@ -103,7 +103,7 @@ describe("MembersTable", () => {
 			windowWidth: number;
 			members: RoomMember[];
 			isRoomOwner: boolean;
-			isCurrentUser: boolean;
+			currentUserId: string;
 			roomAuthorization: Partial<RoomAuthorizationRefs>;
 		}> = {}
 	) => {
@@ -126,7 +126,7 @@ describe("MembersTable", () => {
 		roomAuthorizationMock.mockReturnValue(authorizationPermissions);
 		const currentUser = roomMemberFactory.build({});
 		const mockMe = meResponseFactory.build({
-			user: { id: currentUser.userId },
+			user: { id: options.currentUserId ?? currentUser.userId },
 		});
 		authModule.setMe(mockMe);
 
@@ -147,7 +147,6 @@ describe("MembersTable", () => {
 							roomMembersStore: {
 								roomMembers: [...members, currentUser],
 								isRoomOwner: jest.fn(),
-								isCurrentUser: jest.fn(),
 							},
 						},
 					}),
@@ -157,9 +156,6 @@ describe("MembersTable", () => {
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
 		roomMembersStore.isRoomOwner.mockReturnValue(options.isRoomOwner ?? false);
-		roomMembersStore.isCurrentUser.mockReturnValue(
-			options.isCurrentUser ?? false
-		);
 		const roomMembers = roomMembersStore.roomMembers;
 
 		return { wrapper, roomMembersStore, roomMembers, authorizationPermissions };
@@ -534,7 +530,7 @@ describe("MembersTable", () => {
 				roomAuthorization: { canAddRoomMembers: true },
 			});
 			const dataTable = wrapper.getComponent(VDataTable);
-			const menu = dataTable.findComponent('[data-testid="kebab-menu-1');
+			const menu = dataTable.findComponent('[data-testid="kebab-menu-0');
 
 			expect(menu.exists()).toBe(true);
 		});
@@ -544,7 +540,23 @@ describe("MembersTable", () => {
 				roomAuthorization: { canAddRoomMembers: false },
 			});
 			const dataTable = wrapper.getComponent(VDataTable);
-			const menu = dataTable.findComponent('[data-testid="kebab-menu-1');
+			const menu = dataTable.findComponent('[data-testid="kebab-menu-0');
+
+			expect(menu.exists()).toBe(false);
+		});
+
+		it("should not be rendered when user is current user", () => {
+			const roomOwner = roomMemberFactory.build({
+				roomRoleName: RoleName.Roomowner,
+				firstName: "TheOwner",
+			});
+			const { wrapper } = setup({
+				members: [roomOwner],
+				roomAuthorization: { canAddRoomMembers: true },
+				currentUserId: roomOwner.userId,
+			});
+			const dataTable = wrapper.getComponent(VDataTable);
+			const menu = dataTable.findComponent('[data-testid="kebab-menu-0');
 
 			expect(menu.exists()).toBe(false);
 		});

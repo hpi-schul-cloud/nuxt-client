@@ -134,6 +134,7 @@ import {
 import { useDisplay } from "vuetify/lib/framework.mjs";
 import { storeToRefs } from "pinia";
 import { ChangeRole } from "@feature-room";
+import { authModule } from "@/store/store-accessor";
 const { canAddRoomMembers } = useRoomAuthorization();
 
 const props = defineProps({
@@ -147,9 +148,8 @@ const { t } = useI18n();
 const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
 
 const roomMembersStore = useRoomMembersStore();
-const { roomMembers, selectedIds } = storeToRefs(roomMembersStore); // bad: currentUser - a store should not provide other stores responsibility
-const { isRoomOwner, isCurrentUser } = roomMembersStore;
-const { removeMembers } = roomMembersStore;
+const { roomMembers, selectedIds } = storeToRefs(roomMembersStore);
+const { isRoomOwner, removeMembers } = roomMembersStore;
 
 const { askConfirmation } = useConfirmationDialog();
 
@@ -162,6 +162,9 @@ const stickyStyle = computed(() => ({
 }));
 
 const membersFilterCount = ref(roomMembers.value?.length);
+const isCurrentUser = (userId: string) => {
+	return userId === authModule.getUser?.id;
+};
 
 const onDialogClose = () => {
 	isChangeRoleDialogOpen.value = false;

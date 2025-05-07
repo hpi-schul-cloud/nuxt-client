@@ -13,10 +13,7 @@
 	</div>
 
 	<div class="mb-12 mt-8">
-		<MembersTable
-			v-if="!isLoading && currentUser"
-			:header-bottom="headerBottom"
-		/>
+		<MembersTable v-if="!isLoading" :header-bottom="headerBottom" />
 	</div>
 </template>
 
@@ -38,7 +35,7 @@ defineProps({
 const { t } = useI18n();
 
 const roomMembersStore = useRoomMembersStore();
-const { isLoading, currentUser } = storeToRefs(roomMembersStore);
+const { isLoading } = storeToRefs(roomMembersStore);
 const { canAddRoomMembers } = useRoomAuthorization();
 
 const linkAriaLabel = computed(
