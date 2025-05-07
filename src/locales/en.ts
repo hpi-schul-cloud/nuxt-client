@@ -1878,6 +1878,14 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Room Permissions",
 	"pages.rooms.members.tableHeader.schoolRole": "School Role",
 	"pages.rooms.members.tableHeader.actions": "Actions",
+	"pages.rooms.members.tableHeader.description": "Description",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"only valid within the school",
+	"pages.rooms.members.tableHeader.validForStudents": "valid for students",
+	"pages.rooms.members.tableHeader.expirationDate": "Expiration date",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Confirmation required",
+	"pages.rooms.members.tableHeader.status": "Status",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} receives the following permissions in the room “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":

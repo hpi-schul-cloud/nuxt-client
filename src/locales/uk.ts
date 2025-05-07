@@ -1909,6 +1909,14 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Дозволи кімнати",
 	"pages.rooms.members.tableHeader.schoolRole": "Роль у школі",
 	"pages.rooms.members.tableHeader.actions": "Дії",
+	"pages.rooms.members.tableHeader.description": "Опис",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"діє тільки в межах школи",
+	"pages.rooms.members.tableHeader.validForStudents": "дійсна для студентів",
+	"pages.rooms.members.tableHeader.expirationDate": "Термін дії",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Потрібне підтвердження",
+	"pages.rooms.members.tableHeader.status": "Статус",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} надаються наступні повноваження в приміщенні “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":

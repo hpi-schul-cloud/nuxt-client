@@ -1910,6 +1910,14 @@ export default {
 	"pages.rooms.members.tableHeader.roomRole": "Raumberechtigungen",
 	"pages.rooms.members.tableHeader.schoolRole": "Schulrolle",
 	"pages.rooms.members.tableHeader.actions": "Aktionen",
+	"pages.rooms.members.tableHeader.description": "Beschreibung",
+	"pages.rooms.members.tableHeader.onlyValidWithinTheSchool":
+		"nur schulintern gültig",
+	"pages.rooms.members.tableHeader.validForStudents": "für Lernende gültig",
+	"pages.rooms.members.tableHeader.expirationDate": "Ablaufdatum",
+	"pages.rooms.members.tableHeader.confirmationRequired":
+		"Bestätigung erforderlich",
+	"pages.rooms.members.tableHeader.status": "Status",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} erhält die folgenden Berechtigungen im Raum „{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":
