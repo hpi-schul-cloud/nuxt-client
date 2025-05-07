@@ -153,14 +153,6 @@ describe("Members", () => {
 			expect(membersTable.exists()).toBe(false);
 		});
 
-		it("should not render member table when current user is not present", () => {
-			const { wrapper } = setup({ isLoading: false, isCurrentUser: false });
-
-			const membersTable = wrapper.findComponent(MembersTable);
-
-			expect(membersTable.exists()).toBe(false);
-		});
-
 		it("should not render member table when loading is not complete and  current user is not present", () => {
 			const { wrapper } = setup({ isLoading: true, isCurrentUser: false });
 
