@@ -290,6 +290,7 @@ function onCloseDialog(): void {
 
 function closeDialog() {
 	emit("dialog-closed", false);
+	commonCartridgeExportModule.setIsExportModalOpen(false);
 }
 
 function resetDialog(): void {
