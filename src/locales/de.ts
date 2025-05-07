@@ -397,7 +397,7 @@ export default {
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.action.changeLayout": "Ansicht ändern",
 	"components.board.action.shareLink.card": "Link zur Karte kopieren",
-	"components.board.column.defaultTitle": "Neuer Abschnitt",
+	"components.board.column.defaultTitle": "Abschnittstitel",
 	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
 	"components.board.draftChip.tooltip": "Nur für Lehrkräfte sichtbar",
@@ -737,6 +737,8 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link Bereich-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
+	"components.molecules.share.roomMemberInvitation.mail.body":
+		"Link zum Raum: ",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"In Zielschule nicht verfügbare, externe Tools",
@@ -777,6 +779,8 @@ export default {
 	"components.molecules.share.tasks.options.infoText":
 		"Mit dem folgenden Link kann die Aufgabe als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.tasks.result.linkLabel": "Link Aufgabekopie",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel":
+		"Link Raum-Einladung",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Bist du dir sicher, dass du die Aufgabe "{taskTitle}" löschen möchtest?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Aufgabe löschen",
@@ -1771,6 +1775,19 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronisiert",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
 	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
+	"pages.rooms.invitationLinkStatus.bird.alt":
+		"Vogel mit verschränkten Flügeln",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Der Einladungslink ist leider nur für Lernende der Schule “{schoolName}” gültig",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Der Einladungslink ist leider nicht mehr gültig",
+	"pages.rooms.invitationLinkStatus.invalidLink":
+		"Der Einladungslink existiert leider nicht",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Der Einladungslink ist leider nur für Lernbegleitungen gültig",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Der Einladungslink ist leider nur für Nutzende der Schule “{schoolName}” gültig",
+	"pages.rooms.invitationLinkStatus.title": "Einladungslink",
 	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.menuItems.startSync": "Synchronisation starten",
 	"pages.rooms.importCourse.btn.continue": "Weiter",
@@ -1871,10 +1888,10 @@ export default {
 	"pages.rooms.members.tab.members": "Mitglieder",
 	"pages.rooms.members.tab.invitations": "Einladungslinks",
 	"pages.rooms.members.tab.invitations.infoText":
-		"Mit einem Einladungslink können Lernbegleitungen der eigenen Schule sowie Lernbegleitungen anderer Schulen in den Raum eingeladen werden. Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden. Ist in den Link-Einstellungen „Betreten des Raums nur nach Bestätigung möglich” aktiviert worden, kann diese Bestätigung im Tab Beitrittsanfragen vorgenommen werden.",
+		"Mit einem Einladungslink können Lernende und Lernbegleitungen der eigenen Schule sowie Lernbegleitungen anderer Schulen in den Raum eingeladen werden. Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden. Ist in den Link-Einstellungen „Betreten des Raums nur nach Bestätigung möglich” aktiviert worden, kann diese Bestätigung im Tab Beitrittsanfragen vorgenommen werden.",
 	"pages.rooms.members.tab.confirmations": "Beitrittsanfragen",
 	"pages.rooms.members.tab.confirmations.infoText":
-		"Wird bei der Erstellung eines Einladungslinks die Option „Betreten des Raums nur nach Bestätigung möglich” aktiviert, erzeugt der Klick auf den Link zunächst eine Beitrittsanfrage. Diese kann hier bestätigt oder abgelehnt werden. Wird die Beitrittsanfrage bestätigt, erhält die Person Zugriff auf alle Rauminhalte und wird in der Mitgliederliste aufgeführt.",
+		"Würde bei der Erstellung eines Einladungslinks die Option „Betreten des Raums nur nach Bestätigung möglich” aktiviert, erzeugt der Klick auf den Link zunächst eine Beitrittsanfrage. Diese kann hier bestätigt oder abgelehnt werden. Wird die Beitrittsanfrage bestätigt, erhält die Person Zugriff auf alle Rauminhalte und wird in der Mitgliederliste aufgeführt.",
 	"pages.rooms.members.remove.ariaLabel": "{memberFullName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Ausgewählte Mitglieder aus der Liste zurücksetzen",
@@ -1918,6 +1935,24 @@ export default {
 		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {currentUserFullName} das Recht, den Raum zu löschen.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
+	"pages.rooms.members.inviteMember.firstStep.title":
+		"Einladungslink erstellen",
+	"pages.rooms.members.inviteMember.firstStep.subTitle":
+		"Im nächsten Schritt wird ein Link erstellt, mit dem der Raum betreten	werden kann.",
+	"pages.rooms.members.inviteMember.secondStep.title": "Einladungslink teilen",
+	"pages.rooms.members.inviteMember.infoAlert.text":
+		"Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
+	"pages.rooms.members.inviteMember.form.description.label":
+		"Beschreibung (optional)",
+	"pages.rooms.members.inviteMember.form.description.hint":
+		"Wird in der Link-Übersicht angezeigt",
+	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
+		"Link nur für Nutzende der folgenden Schule gültig:",
+	"pages.rooms.members.inviteMember.form.validForStudents.label":
+		"Link auch für Lernende gültig",
+	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
+	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
+		"Betreten des Raums nur nach Bestätigung möglich ({0})",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
