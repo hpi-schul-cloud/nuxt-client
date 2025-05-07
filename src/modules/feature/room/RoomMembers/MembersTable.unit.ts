@@ -21,7 +21,11 @@ import {
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
 import { RoleName } from "@/serverApi/v3";
-import { RoomMember, useRoomMembersStore } from "@data-room";
+import {
+	RoomMember,
+	useRoomMembersStore,
+	useRoomAuthorization,
+} from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import ActionMenu from "./ActionMenu.vue";
 import {
@@ -35,7 +39,6 @@ import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
 import { authModule, schoolsModule } from "@/store";
 import { ChangeRole } from "@feature-room";
-import { useRoomAuthorization } from "@data-room";
 
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
