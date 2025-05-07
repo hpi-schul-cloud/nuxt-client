@@ -3,6 +3,7 @@ import ChangeRole from "./ChangeRole.vue";
 import { RoleName } from "@/serverApi/v3";
 import {
 	roomAdminFactory,
+	roomEditorFactory,
 	roomMemberFactory,
 	roomOwnerFactory,
 	roomViewerFactory,
@@ -67,9 +68,7 @@ describe("ChangeRole.vue", () => {
 			isRoomOwner: boolean;
 		}> = {}
 	) => {
-		const currentUser =
-			options?.currentUser ??
-			roomMemberFactory.build({ roomRoleName: RoleName.Roomadmin });
+		const currentUser = options?.currentUser ?? roomAdminFactory.build();
 		const membersForRoleChange = options?.membersForRoleChange ?? [];
 
 		const mockMe = meResponseFactory.build({
@@ -131,9 +130,7 @@ describe("ChangeRole.vue", () => {
 
 		it("should render correctly with single members", () => {
 			const { wrapper } = setup({
-				membersForRoleChange: [
-					roomMemberFactory.build({ roomRoleName: RoleName.Roomadmin }),
-				],
+				membersForRoleChange: [roomAdminFactory.build()],
 			});
 			expect(wrapper.text()).toContain(
 				"pages.rooms.members.roleChange.subTitle"
@@ -143,8 +140,8 @@ describe("ChangeRole.vue", () => {
 		it("renders correctly with multiple members", () => {
 			const { wrapper } = setup({
 				membersForRoleChange: [
-					roomMemberFactory.build({ roomRoleName: RoleName.Roomadmin }),
-					roomMemberFactory.build({ roomRoleName: RoleName.Roomviewer }),
+					roomAdminFactory.build(),
+					roomViewerFactory.build(),
 				],
 			});
 			expect(wrapper.text()).toContain(
@@ -157,7 +154,7 @@ describe("ChangeRole.vue", () => {
 			it("should render the 'Own' option", () => {
 				const { wrapper } = setup({
 					membersForRoleChange: [roomAdminFactory.build()],
-					currentUser: roomMemberFactory.build(roomOwnerFactory.build()),
+					currentUser: roomOwnerFactory.build(),
 					isRoomOwner: true,
 				});
 
@@ -257,9 +254,7 @@ describe("ChangeRole.vue", () => {
 		describe("when the current user is not the owner", () => {
 			it("should not render the 'Own' option", () => {
 				const { wrapper } = setup({
-					membersForRoleChange: [
-						roomMemberFactory.build({ roomRoleName: RoleName.Roomadmin }),
-					],
+					membersForRoleChange: [roomAdminFactory.build()],
 				});
 
 				const radioGroup = wrapper.getComponent(VRadioGroup);
@@ -295,9 +290,7 @@ describe("ChangeRole.vue", () => {
 		});
 
 		it("should have the common role pre-selected when multiple users with the same role are passed", () => {
-			const members = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomviewer,
-			});
+			const members = roomViewerFactory.buildList(3);
 			const { wrapper } = setup({ membersForRoleChange: members });
 			const radioGroup = wrapper.findComponent(VRadioGroup);
 
@@ -307,15 +300,9 @@ describe("ChangeRole.vue", () => {
 		it("should have no role pre-selected when multiple members with different roles are passed", () => {
 			const { wrapper } = setup({
 				membersForRoleChange: [
-					roomMemberFactory.build({
-						roomRoleName: RoleName.Roomviewer,
-					}),
-					roomMemberFactory.build({
-						roomRoleName: RoleName.Roomeditor,
-					}),
-					roomMemberFactory.build({
-						roomRoleName: RoleName.Roomadmin,
-					}),
+					roomViewerFactory.build(),
+					roomEditorFactory.build(),
+					roomAdminFactory.build(),
 				],
 			});
 
@@ -384,9 +371,7 @@ describe("ChangeRole.vue", () => {
 
 		describe("handover button", () => {
 			it("should call changeRoomOwner when button is clicked", async () => {
-				const memberForRoleChange = roomMemberFactory.build({
-					roomRoleName: RoleName.Roomadmin,
-				});
+				const memberForRoleChange = roomAdminFactory.build();
 				const { wrapper, roomMembersStore } = setup({
 					membersForRoleChange: [memberForRoleChange],
 					currentUser: roomMemberFactory.build({
@@ -415,14 +400,10 @@ describe("ChangeRole.vue", () => {
 				);
 			});
 			it("should emit 'close' event when button is clicked", async () => {
-				const memberForRoleChange = roomMemberFactory.build({
-					roomRoleName: RoleName.Roomadmin,
-				});
+				const memberForRoleChange = roomAdminFactory.build();
 				const { wrapper } = setup({
 					membersForRoleChange: [memberForRoleChange],
-					currentUser: roomMemberFactory.build({
-						roomRoleName: RoleName.Roomowner,
-					}),
+					currentUser: roomOwnerFactory.build(),
 				});
 
 				const radioGroup = wrapper.findComponent(VRadioGroup);
@@ -443,14 +424,10 @@ describe("ChangeRole.vue", () => {
 			});
 
 			it("should clear selectedIds when button is clicked", async () => {
-				const memberForRoleChange = roomMemberFactory.build({
-					roomRoleName: RoleName.Roomadmin,
-				});
+				const memberForRoleChange = roomAdminFactory.build();
 				const { wrapper, roomMembersStore } = setup({
 					membersForRoleChange: [memberForRoleChange],
-					currentUser: roomMemberFactory.build({
-						roomRoleName: RoleName.Roomowner,
-					}),
+					currentUser: roomOwnerFactory.build(),
 				});
 				const selectedIds = [memberForRoleChange.userId];
 				expect(roomMembersStore.selectedIds).toEqual(selectedIds);
