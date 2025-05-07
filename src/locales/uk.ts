@@ -1917,6 +1917,10 @@ export default {
 	"pages.rooms.members.tableHeader.confirmationRequired":
 		"Потрібне підтвердження",
 	"pages.rooms.members.tableHeader.status": "Статус",
+	"pages.rooms.members.tables.common.yes": "Так",
+	"pages.rooms.members.tables.common.no": "ні",
+	"pages.rooms.members.tables.common.expired": "прострочений",
+	"pages.rooms.members.tables.common.active": "активний",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} надаються наступні повноваження в приміщенні “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":

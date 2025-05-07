@@ -1945,6 +1945,10 @@ export default {
 	"pages.rooms.members.tableHeader.confirmationRequired":
 		"Confirmación obligatoria",
 	"pages.rooms.members.tableHeader.status": "Estado",
+	"pages.rooms.members.tables.common.yes": "sí",
+	"pages.rooms.members.tables.common.no": "no",
+	"pages.rooms.members.tables.common.expired": "caducado",
+	"pages.rooms.members.tables.common.active": "activo",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} recibe las siguientes autorizaciones en la sala “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":

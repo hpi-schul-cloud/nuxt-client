@@ -1886,6 +1886,10 @@ export default {
 	"pages.rooms.members.tableHeader.confirmationRequired":
 		"Confirmation required",
 	"pages.rooms.members.tableHeader.status": "Status",
+	"pages.rooms.members.tables.common.yes": "yes",
+	"pages.rooms.members.tables.common.no": "no",
+	"pages.rooms.members.tables.common.expired": "expired",
+	"pages.rooms.members.tables.common.active": "active",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} receives the following permissions in the room “{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":

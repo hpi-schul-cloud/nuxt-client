@@ -1918,6 +1918,10 @@ export default {
 	"pages.rooms.members.tableHeader.confirmationRequired":
 		"Bestätigung erforderlich",
 	"pages.rooms.members.tableHeader.status": "Status",
+	"pages.rooms.members.tables.common.yes": "ja",
+	"pages.rooms.members.tables.common.no": "nein",
+	"pages.rooms.members.tables.common.expired": "abgelaufen",
+	"pages.rooms.members.tables.common.active": "activ",
 	"pages.rooms.members.roleChange.subTitle":
 		"{memberFullName} erhält die folgenden Berechtigungen im Raum „{roomName}”:",
 	"pages.rooms.members.roleChange.multipleUser.subTitle":

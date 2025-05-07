@@ -3,7 +3,7 @@ import { $axios } from "@/utils/api";
 import { useRoomDetailsStore } from "@data-room";
 import { useBoardNotifier } from "@util-board";
 import { defineStore, storeToRefs } from "pinia";
-import { Ref, ref } from "vue";
+import { computed, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import {
 	CreateRoomInvitationLinkDto,
@@ -12,6 +12,7 @@ import {
 	UseLinkResult,
 } from "./types";
 import { isAxiosError } from "axios";
+import { inputDateFormat } from "@/plugins/datetime";
 
 export const useRoomInvitationLinkStore = defineStore(
 	"roomInvitationLinkStore",
@@ -128,6 +129,35 @@ export const useRoomInvitationLinkStore = defineStore(
 			roomInvitationLinks.value = [];
 		};
 
+		const commonTranslationsMap = {
+			YES: t("pages.rooms.members.tables.common.yes"),
+			NO: t("pages.rooms.members.tables.common.no"),
+			EXPIRED: t("pages.rooms.members.tables.common.expired"),
+			ACTIVE: t("pages.rooms.members.tables.common.active"),
+		};
+
+		const invitationTableData = computed(() => {
+			return roomInvitationLinks.value.map((link) => ({
+				id: link.id,
+				title: link.title,
+				validForStudents: link.isOnlyForTeachers
+					? commonTranslationsMap.NO
+					: commonTranslationsMap.YES,
+				activeUntil: inputDateFormat(link.activeUntil!),
+				status:
+					new Date(link.activeUntil!) > new Date()
+						? commonTranslationsMap.ACTIVE
+						: commonTranslationsMap.EXPIRED,
+
+				restrictedToCreatorSchool: link.restrictedToCreatorSchool
+					? commonTranslationsMap.YES
+					: commonTranslationsMap.NO,
+				requiresConfirmation: link.requiresConfirmation
+					? commonTranslationsMap.YES
+					: commonTranslationsMap.NO,
+			}));
+		});
+
 		return {
 			resetStore,
 			fetchLinks,
@@ -137,6 +167,7 @@ export const useRoomInvitationLinkStore = defineStore(
 			useLink,
 			roomInvitationLinks,
 			isLoading,
+			invitationTableData,
 		};
 	}
 );
