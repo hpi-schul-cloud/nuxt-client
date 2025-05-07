@@ -126,8 +126,8 @@ module.exports = {
 			"@data-room": getDir("src/modules/data/room"),
 			"@data-folder": getDir("src/modules/data/folder"),
 			"@data-license": getDir("src/modules/data/license"),
-      "@data-school": getDir("src/modules/data/school"),
-      "@feature-auto-logout": getDir("src/modules/feature/auto-logout"),
+			"@data-school": getDir("src/modules/data/school"),
+			"@feature-auto-logout": getDir("src/modules/feature/auto-logout"),
 			"@feature-board-file-element": getDir(
 				"src/modules/feature/board-file-element"
 			),

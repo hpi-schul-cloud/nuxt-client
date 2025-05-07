@@ -1,18 +1,18 @@
-import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useSchoolYearChange } from "./SchoolYearChange.composable";
-import { NOTIFIER_MODULE_KEY } from "../../../utils/inject";
-import { createTestingI18n } from "../../../../tests/test-utils/setup";
-import { notifierModule } from "../../../store";
-import { useSchoolApi } from "./SchoolApi.composable";
-import { BusinessError } from "../../../store/types/commons";
-import { mapAxiosErrorToResponseError } from "../../../utils/api";
+import { notifierModule } from "@/store";
+import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
+import { NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import {
 	axiosErrorFactory,
 	i18nMock,
 	mountComposable,
 	ObjectIdMock,
-} from "../../../../tests/test-utils";
+} from "@@/tests/test-utils";
+import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { ref, Ref } from "vue";
+import { useSchoolApi } from "./schoolApi.composable";
+import { useSchoolYearChange } from "./schoolYearChange.composable";
 import { MaintenanceStatus } from "./types";
 
 jest.mock("@data-school/SchoolApi.composable");

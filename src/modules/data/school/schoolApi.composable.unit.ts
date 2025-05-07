@@ -1,7 +1,7 @@
+import { initializeAxios } from "@/utils/api";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { useSchoolApi } from "./SchoolApi.composable";
 import { AxiosInstance } from "axios";
-import { initializeAxios } from "../../../utils/api";
+import { useSchoolApi } from "./schoolApi.composable";
 
 describe("SchoolExternalToolApi.composable", () => {
 	let axiosMock: DeepMocked<AxiosInstance>;

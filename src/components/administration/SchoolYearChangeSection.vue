@@ -44,10 +44,7 @@
 				<VBtn
 					v-if="!schoolYearStatus?.maintenance.active"
 					class="btn"
-					:disabled="
-						!schoolYearStatus?.schoolUsesLdap ||
-						schoolYearMode !== SchoolYearModeEnum.STANDBY
-					"
+					:disabled="schoolYearMode !== SchoolYearModeEnum.STANDBY"
 					color="primary"
 					variant="flat"
 					data-testid="start-transfer-button"
@@ -214,36 +211,57 @@
 </template>
 
 <script setup lang="ts">
+import { MeSchoolResponse } from "@/serverApi/v3";
 import AuthModule from "@/store/auth";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 	injectStrict,
 } from "@/utils/inject";
-import { computed, ComputedRef, onMounted, ref } from "vue";
-import { useI18n } from "vue-i18n";
-import {
-	mdiNumeric1Circle,
-	mdiNumeric2Circle,
-	mdiNumeric3Circle,
-} from "@icons/material";
 import {
 	MaintenanceStatus,
 	SchoolYearModeEnum,
 	useSchoolYearChange,
 } from "@data-school";
-import { MeSchoolResponse } from "@/serverApi/v3";
-import { Ref } from "vue/dist/vue";
-import VCustomDialog from "../organisms/vCustomDialog.vue";
-import { useErrorNotification } from "@util-error-notification";
-import EnvConfigModule from "../../store/env-config";
+import {
+	mdiNumeric1Circle,
+	mdiNumeric2Circle,
+	mdiNumeric3Circle,
+} from "@icons/material";
 import { InfoAlert } from "@ui-alert";
+import { useErrorNotification } from "@util-error-notification";
+import { computed, ComputedRef, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { Ref } from "vue/dist/vue";
+import EnvConfigModule from "../../store/env-config";
+import VCustomDialog from "../organisms/vCustomDialog.vue";
 
 const authModule: AuthModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule: EnvConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 
-const { fetchSchoolYearStatus, maintenanceStatus, setMaintenanceMode, error } =
-	useSchoolYearChange();
+const props = defineProps<{
+	maintenanceStatus?: {
+		currentYear: {
+			id: string;
+			name: string;
+			startDate: Date;
+			endDate: Date;
+		};
+		nextYear: {
+			id: string;
+			name: string;
+			startDate: Date;
+			endDate: Date;
+		};
+		schoolUsesLdap: boolean;
+		maintenance: {
+			active: boolean;
+			startDate?: Date;
+		};
+	};
+}>();
+
+const { setMaintenanceMode, error } = useSchoolYearChange();
 
 useErrorNotification(error);
 
@@ -251,15 +269,9 @@ const school: ComputedRef<MeSchoolResponse | undefined> = computed(() => {
 	return authModule.getSchool;
 });
 
-onMounted(async () => {
-	if (school.value?.id) {
-		await fetchSchoolYearStatus(school.value?.id);
-	}
-});
-
 const schoolYearStatus: ComputedRef<MaintenanceStatus | undefined> = computed(
 	() => {
-		return maintenanceStatus.value;
+		return props.maintenanceStatus;
 	}
 );
 
@@ -274,26 +286,26 @@ const isLoading = ref(false);
 const schoolYearMode: ComputedRef<string> = computed(() => {
 	const currentTime = new Date();
 
-	let schoolMaintananceMode = "idle";
+	let schoolMaintenanceMode = "idle";
 
 	if (schoolYearStatus.value) {
-		const maintananceModeStarts = new Date(
+		const maintenanceModeStarts = new Date(
 			schoolYearStatus.value?.currentYear.endDate
 		);
 
-		const twoWeeksFromStart = new Date(maintananceModeStarts.valueOf());
+		const twoWeeksFromStart = new Date(maintenanceModeStarts.valueOf());
 		twoWeeksFromStart.setDate(twoWeeksFromStart.getDate() - 14);
 
 		if (schoolYearStatus.value.maintenance.active) {
-			schoolMaintananceMode = "active";
-		} else if (maintananceModeStarts && twoWeeksFromStart < currentTime) {
-			schoolMaintananceMode = "standby";
+			schoolMaintenanceMode = "active";
+		} else if (maintenanceModeStarts && twoWeeksFromStart < currentTime) {
+			schoolMaintenanceMode = "standby";
 		}
 
-		return schoolMaintananceMode;
+		return schoolMaintenanceMode;
 	}
 
-	return schoolMaintananceMode;
+	return schoolMaintenanceMode;
 });
 
 const schoolYearChangeEnabled: ComputedRef<boolean> = computed(() => {

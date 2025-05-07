@@ -8,13 +8,15 @@ import EnvConfigModule from "@/store/env-config";
 import SchoolsModule from "@/store/schools";
 import { FederalState } from "@/store/types/schools";
 import { ENV_CONFIG_MODULE_KEY, SCHOOLS_MODULE_KEY } from "@/utils/inject";
-import { envsFactory } from "@@/tests/test-utils";
+import { envsFactory, maintenanceStatusFactory } from "@@/tests/test-utils";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { mockSchool } from "@@/tests/test-utils/mockObjects";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useSchoolYearChange } from "@data-school";
+import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { shallowMount } from "@vue/test-utils";
 import { nextTick, reactive } from "vue";
 import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
@@ -30,7 +32,22 @@ jest.mock<typeof import("@/utils/pageTitle")>("@/utils/pageTitle", () => ({
 	buildPageTitle: (pageTitle) => pageTitle ?? "",
 }));
 
+jest.mock("@data-school/SchoolYearChange.composable");
+
 describe("SchoolSettingsPage", () => {
+	let useSchoolYearChangeApiMock: DeepMocked<
+		ReturnType<typeof useSchoolYearChange>
+	>;
+
+	beforeEach(() => {
+		useSchoolYearChangeApiMock =
+			createMock<ReturnType<typeof useSchoolYearChange>>();
+
+		jest
+			.mocked(useSchoolYearChange)
+			.mockReturnValue(useSchoolYearChangeApiMock);
+	});
+
 	let envConfigModule: jest.Mocked<EnvConfigModule>;
 	let schoolsModule: jest.Mocked<SchoolsModule>;
 
@@ -60,7 +77,7 @@ describe("SchoolSettingsPage", () => {
 		{ id: "123", type: "itslearning" },
 	];
 
-	const setup = (
+	const getWrapper = (
 		envConfig: Partial<ConfigResponse> = {
 			FEATURE_USER_LOGIN_MIGRATION_ENABLED: true,
 			FEATURE_SCHOOL_POLICY_ENABLED_NEW: true,
@@ -103,9 +120,19 @@ describe("SchoolSettingsPage", () => {
 		return { wrapper };
 	};
 
+	describe("onMounted", () => {
+		it("should fetch maintenance status of school", () => {
+			const { wrapper } = getWrapper();
+
+			expect(
+				useSchoolYearChangeApiMock.fetchSchoolYearStatus
+			).toHaveBeenCalledWith(mockSchool.id);
+		});
+	});
+
 	describe("when feature school policy is enabled", () => {
 		it("should render privacy policy expansion panel", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper();
 
 			expect(wrapper.find('[data-testid="policy-panel"]').exists()).toBe(true);
 		});
@@ -113,7 +140,7 @@ describe("SchoolSettingsPage", () => {
 
 	describe("when feature school policy is disabled", () => {
 		it("should not render privacy policy expansion panel", () => {
-			const { wrapper } = setup({
+			const { wrapper } = getWrapper({
 				FEATURE_SCHOOL_POLICY_ENABLED_NEW: false,
 			});
 
@@ -123,7 +150,7 @@ describe("SchoolSettingsPage", () => {
 
 	describe("when feature school terms of use is enabled", () => {
 		it("should render terms of use expansion panel", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper();
 
 			expect(wrapper.find('[data-testid="terms-panel"]').exists()).toBe(true);
 		});
@@ -131,7 +158,7 @@ describe("SchoolSettingsPage", () => {
 
 	describe("when feature school terms of use is disabled", () => {
 		it("should not render terms of use expansion panel", () => {
-			const { wrapper } = setup({
+			const { wrapper } = getWrapper({
 				FEATURE_SCHOOL_TERMS_OF_USE_ENABLED: false,
 			});
 
@@ -141,7 +168,7 @@ describe("SchoolSettingsPage", () => {
 
 	describe("when feature admin migration is enabled", () => {
 		it("should render admin migration expansion panel", () => {
-			const { wrapper } = setup();
+			const { wrapper } = getWrapper();
 
 			expect(wrapper.find('[data-testid="migration-panel"]').exists()).toBe(
 				true
@@ -151,7 +178,7 @@ describe("SchoolSettingsPage", () => {
 
 	describe("when feature admin migration is disabled", () => {
 		it("should not render admin migration expansion panel", () => {
-			const { wrapper } = setup({
+			const { wrapper } = getWrapper({
 				FEATURE_USER_LOGIN_MIGRATION_ENABLED: false,
 			});
 
@@ -161,20 +188,64 @@ describe("SchoolSettingsPage", () => {
 		});
 	});
 
-	describe("when render page", () => {
-		it("should show school year change panel", () => {
-			const { wrapper } = setup();
+	describe("school year change", () => {
+		describe("when school has an active ldap", () => {
+			const setup = () => {
+				useSchoolYearChangeApiMock.maintenanceStatus.value =
+					maintenanceStatusFactory.build({ schoolUsesLdap: true });
 
-			expect(
-				wrapper.find('[data-testid="school-year-change-panel"]').exists()
-			).toBe(true);
+				const { wrapper } = getWrapper();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should show school year change panel", () => {
+				const { wrapper } = setup();
+
+				expect(
+					wrapper.find('[data-testid="school-year-change-panel"]').exists()
+				).toBe(true);
+			});
+		});
+
+		describe("when school does not have an active ldap", () => {
+			const setup = () => {
+				useSchoolYearChangeApiMock.maintenanceStatus.value =
+					maintenanceStatusFactory.build({ schoolUsesLdap: false });
+
+				const { wrapper } = getWrapper();
+
+				return {
+					wrapper,
+				};
+			};
+
+			it("should hide school year change panel", () => {
+				const { wrapper } = setup();
+
+				expect(
+					wrapper.find('[data-testid="school-year-change-panel"]').exists()
+				).toBe(false);
+			});
+		});
+
+		describe("when maintenance status is undefined", () => {
+			it("should hide school year change panel", () => {
+				const { wrapper } = getWrapper();
+
+				expect(
+					wrapper.find('[data-testid="school-year-change-panel"]').exists()
+				).toBe(false);
+			});
 		});
 	});
 
 	describe("institute title", () => {
 		describe("when the theme is default", () => {
 			it("should render default title", () => {
-				const { wrapper } = setup({
+				const { wrapper } = getWrapper({
 					SC_THEME: SchulcloudTheme.Default,
 				});
 
@@ -184,7 +255,7 @@ describe("SchoolSettingsPage", () => {
 
 		describe("when the theme is brb", () => {
 			it("should render brb title", () => {
-				const { wrapper } = setup({
+				const { wrapper } = getWrapper({
 					SC_THEME: SchulcloudTheme.Brb,
 				});
 
@@ -196,7 +267,7 @@ describe("SchoolSettingsPage", () => {
 
 		describe("when the theme is thr", () => {
 			it("should render thr title", () => {
-				const { wrapper } = setup({
+				const { wrapper } = getWrapper({
 					SC_THEME: SchulcloudTheme.Thr,
 				});
 
@@ -208,7 +279,7 @@ describe("SchoolSettingsPage", () => {
 
 		describe("when the theme is n21", () => {
 			it("should render n21 title", () => {
-				const { wrapper } = setup({
+				const { wrapper } = getWrapper({
 					SC_THEME: SchulcloudTheme.N21,
 				});
 
@@ -220,14 +291,14 @@ describe("SchoolSettingsPage", () => {
 	});
 
 	it("should compute systems correctly", () => {
-		const { wrapper } = setup();
+		const { wrapper } = getWrapper();
 
 		expect(Array.isArray(wrapper.vm.systems)).toBeTruthy();
 		expect(wrapper.vm.systems[0].type).toStrictEqual("itslearning");
 	});
 
 	it("should show skeleton while loading", () => {
-		const { wrapper } = setup(undefined, {
+		const { wrapper } = getWrapper(undefined, {
 			getLoading: true,
 		});
 
@@ -237,7 +308,7 @@ describe("SchoolSettingsPage", () => {
 	});
 
 	it("should render alert on error", () => {
-		const { wrapper } = setup(undefined, {
+		const { wrapper } = getWrapper(undefined, {
 			getError: useApplicationError().createApplicationError(500, "someKey"),
 		});
 
@@ -251,7 +322,7 @@ describe("SchoolSettingsPage", () => {
 	it("should load needed data from server", async () => {
 		const fetchSystemsSpy = jest.spyOn(schoolsModule, "fetchSystems");
 
-		setup();
+		getWrapper();
 		await nextTick();
 
 		expect(fetchSystemsSpy).toHaveBeenCalled();

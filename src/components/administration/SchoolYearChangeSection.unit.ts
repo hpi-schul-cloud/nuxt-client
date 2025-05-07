@@ -1,4 +1,5 @@
 import NotifierModule from "@/store/notifier";
+import { HttpStatusCode } from "@/store/types/http-status-code.enum";
 import {
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
@@ -14,13 +15,12 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
+import { useSchoolYearChange } from "@data-school";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
-import { HttpStatusCode } from "../../store/types/http-status-code.enum";
-import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
-import { useSchoolYearChange } from "@data-school";
 import AuthModule from "../../store/auth";
 import EnvConfigModule from "../../store/env-config";
+import SchoolYearChangeSection from "./SchoolYearChangeSection.vue";
 
 jest.mock("@data-school");
 

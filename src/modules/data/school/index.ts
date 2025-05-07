@@ -1,5 +1,5 @@
-import { useSchoolYearChange } from "./SchoolYearChange.composable";
-import { useSchoolApi } from "./SchoolApi.composable";
+import { useSchoolApi } from "./schoolApi.composable";
+import { useSchoolYearChange } from "./schoolYearChange.composable";
 
 import { MaintenanceStatus, SchoolYearModeEnum } from "./types";
 

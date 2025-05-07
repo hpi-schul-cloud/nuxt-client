@@ -1,7 +1,7 @@
+import { BusinessError } from "@/store/types/commons";
+import { mapAxiosErrorToResponseError } from "@/utils/api";
 import { ref, Ref } from "vue";
-import { BusinessError } from "../../../store/types/commons";
-import { mapAxiosErrorToResponseError } from "../../../utils/api";
-import { useSchoolApi } from "./SchoolApi.composable";
+import { useSchoolApi } from "./schoolApi.composable";
 import { MaintenanceStatus } from "./types";
 
 export const useSchoolYearChange = () => {

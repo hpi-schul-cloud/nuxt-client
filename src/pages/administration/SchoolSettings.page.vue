@@ -86,7 +86,10 @@
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
-				<v-expansion-panel data-testid="school-year-change-panel">
+				<v-expansion-panel
+					v-if="schoolUsesLdap"
+					data-testid="school-year-change-panel"
+				>
 					<v-expansion-panel-title>
 						<div class="text-h4">
 							{{
@@ -100,7 +103,9 @@
 						</template>
 					</v-expansion-panel-title>
 					<v-expansion-panel-text eager>
-						<school-year-change-section />
+						<school-year-change-section
+							:maintenanceStatus="maintenanceStatus"
+						/>
 					</v-expansion-panel-text>
 				</v-expansion-panel>
 
@@ -170,8 +175,8 @@
 
 <script lang="ts">
 import AdminMigrationSection from "@/components/administration/AdminMigrationSection.vue";
-import SchoolYearChangeSection from "@/components/administration/SchoolYearChangeSection.vue";
 import ExternalToolsSection from "@/components/administration/ExternalToolSection.vue";
+import SchoolYearChangeSection from "@/components/administration/SchoolYearChangeSection.vue";
 import AuthSystems from "@/components/organisms/administration/AuthSystems.vue";
 import GeneralSettings from "@/components/organisms/administration/GeneralSettings.vue";
 import SchoolPolicy from "@/components/organisms/administration/SchoolPolicy.vue";
@@ -187,9 +192,18 @@ import {
 	SCHOOLS_MODULE_KEY,
 } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
+import { useSchoolYearChange } from "@data-school";
 import { mdiAlertCircle, mdiMinus, mdiPlus } from "@icons/material";
 import { useTitle } from "@vueuse/core";
-import { computed, ComputedRef, defineComponent, ref, Ref, watch } from "vue";
+import {
+	computed,
+	ComputedRef,
+	defineComponent,
+	onMounted,
+	ref,
+	Ref,
+	watch,
+} from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
 
@@ -216,6 +230,7 @@ export default defineComponent({
 		);
 		const pageTitle = buildPageTitle(headline.value);
 		useTitle(pageTitle);
+		const { fetchSchoolYearStatus, maintenanceStatus } = useSchoolYearChange();
 
 		const breadcrumbs: Ref<Breadcrumb[]> = ref([
 			{
@@ -281,6 +296,16 @@ export default defineComponent({
 			}
 		});
 
+		onMounted(async () => {
+			if (school.value?.id) {
+				await fetchSchoolYearStatus(school.value.id);
+			}
+		});
+
+		const schoolUsesLdap: ComputedRef<boolean> = computed(
+			() => !!maintenanceStatus.value?.schoolUsesLdap
+		);
+
 		return {
 			headline,
 			breadcrumbs,
@@ -293,6 +318,8 @@ export default defineComponent({
 			isFeatureSchoolPolicyEnabled,
 			isFeatureSchoolTermsOfUseEnabled,
 			instituteTitle,
+			schoolUsesLdap,
+			maintenanceStatus,
 			mdiAlertCircle,
 			mdiPlus,
 			mdiMinus,
