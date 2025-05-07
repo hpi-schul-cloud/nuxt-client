@@ -94,6 +94,19 @@ const onKeyUp = () => ensurePoliteNotifications();
 		margin-bottom: var(--space-xs);
 	}
 
+	.ck .ck-widget.ck-widget_with-selection-handle > .ck-widget__type-around {
+		> .ck-widget__type-around__button_before {
+			top: 0.5rem;
+			left: 0.5rem;
+			margin-left: 0;
+		}
+
+		> .ck-widget__type-around__button_after {
+			bottom: 0.5rem;
+			right: 0.5rem;
+		}
+	}
+
 	.ck-content {
 		h4 {
 			font-family: var(--font-accent);
@@ -134,6 +147,11 @@ const onKeyUp = () => ensurePoliteNotifications();
 			overflow-x: auto;
 			overflow-y: hidden;
 			padding-right: 1px;
+		}
+
+		.ck-widget.ck-widget_with-selection-handle:hover
+			> .ck-widget__selection-handle {
+			display: none;
 		}
 
 		.math-tex {
