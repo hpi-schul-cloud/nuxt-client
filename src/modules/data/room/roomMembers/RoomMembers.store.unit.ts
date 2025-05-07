@@ -605,24 +605,36 @@ describe("useRoomMembers", () => {
 	});
 
 	describe("isRoomOwner", () => {
-		it("should return true if the user is the room owner", () => {
-			const { roomMembersStore } = setup();
-			const roomOwner = roomMemberFactory.build({
-				roomRoleName: RoleName.Roomowner,
-			});
-			roomMembersStore.roomMembers = [roomOwner];
+		describe("when the user is the room owner", () => {
+			it("should return true", () => {
+				const { roomMembersStore } = setup();
+				const roomOwner = roomMemberFactory.build({
+					roomRoleName: RoleName.Roomowner,
+				});
+				roomMembersStore.roomMembers = [roomOwner];
 
-			expect(roomMembersStore.isRoomOwner(roomOwner.userId)).toBe(true);
+				expect(roomMembersStore.isRoomOwner(roomOwner.userId)).toBe(true);
+			});
 		});
 
-		it("should return false if the user is not the room owner", () => {
-			const { roomMembersStore } = setup();
-			const roomViewer = roomMemberFactory.build({
-				roomRoleName: RoleName.Roomviewer,
-			});
-			roomMembersStore.roomMembers = [roomViewer];
+		describe("when the user is not the room owner", () => {
+			it("should return false", () => {
+				const { roomMembersStore } = setup();
+				const roomViewer = roomMemberFactory.build({
+					roomRoleName: RoleName.Roomviewer,
+				});
+				roomMembersStore.roomMembers = [roomViewer];
 
-			expect(roomMembersStore.isRoomOwner(roomViewer.userId)).toBe(false);
+				expect(roomMembersStore.isRoomOwner(roomViewer.userId)).toBe(false);
+			});
+		});
+
+		describe("when the user is not in the room", () => {
+			it("should return false", () => {
+				const { roomMembersStore } = setup();
+
+				expect(roomMembersStore.isRoomOwner("another-user-id")).toBe(false);
+			});
 		});
 	});
 
