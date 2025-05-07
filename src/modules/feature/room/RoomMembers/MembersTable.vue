@@ -84,7 +84,7 @@
 		</template>
 		<template v-if="canAddRoomMembers" #[`item.actions`]="{ item, index }">
 			<KebabMenu
-				v-if="!isRoomOwner(item.userId) && !isCurrentUser(item.userId)"
+				v-if="isNeitherRoomOwnerNorCurrentUser(item.userId)"
 				:data-testid="`kebab-menu-${index}`"
 				:aria-label="getAriaLabel(item)"
 			>
@@ -162,8 +162,10 @@ const stickyStyle = computed(() => ({
 }));
 
 const membersFilterCount = ref(roomMembers.value?.length);
-const isCurrentUser = (userId: string) => {
-	return userId === authModule.getUser?.id;
+const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
+	if (userId === authModule.getUser?.id) return false;
+	if (isRoomOwner(userId)) return false;
+	return true;
 };
 
 const onDialogClose = () => {
