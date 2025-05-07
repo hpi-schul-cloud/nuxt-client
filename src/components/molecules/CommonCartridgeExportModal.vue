@@ -284,7 +284,15 @@ const someColumnBoardsSelected = computed(() => {
 });
 
 function onCloseDialog(): void {
+	closeDialog();
+	resetDialog();
+}
+
+function closeDialog() {
 	emit("dialog-closed", false);
+}
+
+function resetDialog(): void {
 	commonCartridgeExportModule.resetExportFlow();
 	step.value = 0;
 	allTasks.value.forEach((task) => {
@@ -325,8 +333,10 @@ async function onExport(): Promise<void> {
 	commonCartridgeExportModule.setTopics(topicIds);
 	commonCartridgeExportModule.setTasks(taskIds);
 	commonCartridgeExportModule.setColumnBoards(columnBoardIds);
+
+	closeDialog();
 	await commonCartridgeExportModule.startExport();
-	onCloseDialog();
+	resetDialog();
 }
 
 function onBack(): void {
