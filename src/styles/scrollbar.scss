@@ -24,3 +24,13 @@
 		background-color: rgba(var(--v-theme-on-surface), 0.8);
 	}
 }
+
+*:focus:not(:focus-visible) {
+    outline: none
+}
+
+*:focus-visible {
+    outline-color: rgba(var(--v-theme-on-surface));
+    outline-offset: 1px;
+    outline-style: auto;
+}
