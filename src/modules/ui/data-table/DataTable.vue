@@ -2,6 +2,7 @@
 	<div
 		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
 		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
+		:style="stickyStyle"
 	>
 		<BatchActionMenu
 			v-if="$slots['action-menu-items'] && selectedIds.length"
@@ -90,12 +91,12 @@
 
 <script setup lang="ts">
 import { mdiMagnify, mdiMenuDown, mdiMenuUp } from "@icons/material";
-import { PropType, ref } from "vue";
+import { computed, PropType, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useDisplay } from "vuetify/lib/framework.mjs";
 import BatchActionMenu from "./BatchActionMenu.vue";
 
-defineProps({
+const props = defineProps({
 	tableHeaders: {
 		type: Array as PropType<
 			{
@@ -123,6 +124,10 @@ defineProps({
 		type: String,
 		default: "name",
 	},
+	headerBottom: {
+		type: Number,
+		default: 0,
+	},
 });
 
 const { t } = useI18n();
@@ -135,6 +140,10 @@ const search = ref("");
 const onResetSelectedMembers = () => {
 	selectedIds.value = [];
 };
+
+const stickyStyle = computed(() => ({
+	top: `${props.headerBottom}px`,
+}));
 </script>
 
 <style lang="scss" scoped>
