@@ -172,7 +172,7 @@ const activeTab = computed<Tab>({
 });
 
 const isVisibleTabNavigation = computed(() => {
-	return canAddRoomMembers && FEATURE_ROOM_MEMBERS_TABS_ENABLED;
+	return canAddRoomMembers.value && FEATURE_ROOM_MEMBERS_TABS_ENABLED;
 });
 
 const tabs: Array<{
@@ -213,9 +213,11 @@ const onFabClick = async () => {
 
 		case Tab.Members:
 		default:
+			console.log("Add members");
 			await getSchools();
 			await getPotentialMembers(RoleName.Teacher);
 			isMembersDialogOpen.value = true;
+			console.log("isMembersDialogOpen.value", isMembersDialogOpen.value);
 			break;
 	}
 };
