@@ -228,7 +228,7 @@ describe("MembersTable", () => {
 
 	it("should render checkboxes if user can add members", async () => {
 		const { wrapper, roomMembers } = setup({
-			roomAuthorization: { canAddRoomMembers: false },
+			roomAuthorization: { canAddRoomMembers: true },
 		});
 
 		const dataTable = wrapper.findComponent(VDataTable);
