@@ -1817,7 +1817,7 @@ export default {
 	"pages.rooms.tools.deleteDialog.content":
 		"Möchten Sie wirklich das Tool '{itemName}' aus dem Kurs entfernen?",
 	"pages.rooms.tools.deleteDialog.title": "Tool entfernen?",
-	"pages.rooms.tools.emptyState": "Es gibt noch keine Tools in diesem Kurs.",
+	"pages.rooms.tools.emptyState": "Aktuell gibt es keine Tools in diesem Kurs",
 	"pages.rooms.tools.incomplete": "Konfiguration unvollständig",
 	"pages.rooms.tools.incompleteDialog.title": "Konfiguration unvollständig",
 	"pages.rooms.tools.logo": "Tool-Logo",

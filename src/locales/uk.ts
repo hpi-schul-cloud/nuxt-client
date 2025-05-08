@@ -1822,7 +1822,7 @@ export default {
 	"pages.rooms.tools.deleteDialog.content":
 		"Ви впевнені, що хочете видалити інструмент '{itemName}' із курсу?",
 	"pages.rooms.tools.deleteDialog.title": "видалити інструменти?",
-	"pages.rooms.tools.emptyState": "У цьому курсі ще немає інструментів.",
+	"pages.rooms.tools.emptyState": "Наразі в цьому курсі немає інструментів",
 	"pages.rooms.tools.incomplete": "Конфігурація не завершена",
 	"pages.rooms.tools.incompleteDialog.title": "Конфігурація не завершена",
 	"pages.rooms.tools.logo": "Інструмент-логотип",

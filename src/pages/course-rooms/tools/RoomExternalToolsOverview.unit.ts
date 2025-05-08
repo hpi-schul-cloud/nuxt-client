@@ -25,6 +25,7 @@ import { flushPromises, shallowMount } from "@vue/test-utils";
 import { ref } from "vue";
 import RoomExternalToolsOverview from "./RoomExternalToolsOverview.vue";
 import RoomExternalToolsSection from "./RoomExternalToolsSection.vue";
+import { EmptyState } from "@ui-empty-state";
 
 jest.mock("@data-external-tool");
 
@@ -95,9 +96,7 @@ describe("RoomExternalToolOverview", () => {
 		it("should display empty state", () => {
 			const { wrapper } = setup();
 
-			expect(wrapper.findComponent({ ref: "tools-empty-state" }).exists()).toBe(
-				true
-			);
+			expect(wrapper.findComponent(EmptyState).exists()).toBe(true);
 		});
 	});
 

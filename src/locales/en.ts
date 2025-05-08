@@ -1787,7 +1787,7 @@ export default {
 	"pages.rooms.tools.deleteDialog.content":
 		"Are you sure you want to remove the tool '{itemName}' from the course?",
 	"pages.rooms.tools.deleteDialog.title": "Remove tool?",
-	"pages.rooms.tools.emptyState": "There are no tools in this course yet.",
+	"pages.rooms.tools.emptyState": "There are currently no tools in this course",
 	"pages.rooms.tools.incomplete": "Configuration incomplete",
 	"pages.rooms.tools.incompleteDialog.title": "Configuration incomplete",
 	"pages.rooms.tools.logo": "Tool-Logo",
