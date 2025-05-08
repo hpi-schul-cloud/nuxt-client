@@ -8,7 +8,7 @@
 		>
 			<template #media>
 				<div aria-hidden="true">
-					<slot name="media" aria-hidden="true" />
+					<slot name="media" />
 				</div>
 			</template>
 		</v-empty-state>

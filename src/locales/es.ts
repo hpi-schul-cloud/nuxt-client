@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
+	"common.actions.duplicate": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",
 	"common.actions.finish": "Finalizar",
@@ -399,7 +400,7 @@ export default {
 	"components.board.action.moveUp": "Levantar",
 	"components.board.action.changeLayout": "Cambiar vista",
 	"components.board.action.shareLink.card": "Copiar enlace a la tarjeta",
-	"components.board.column.defaultTitle": "Nueva columna",
+	"components.board.column.defaultTitle": "Título de la columna",
 	"components.board.column.ghost.column.placeholder": "Añadir columna",
 	"components.board.column.ghost.list.placeholder": "Añadir sección",
 	"components.board.draftChip.tooltip": "Sólo visible para los profesores",
@@ -648,7 +649,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Información general",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"El contenido no se copia por razones de protección de datos y debe agregarse nuevamente.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Todos los elementos se copiaron con éxito.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Tablero copiado con éxito.",
@@ -742,6 +743,8 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Enlace a la copia del tablón",
 	"components.molecules.share.courses.mail.body": "Enlace al curso:",
+	"components.molecules.share.roomMemberInvitation.mail.body":
+		"Enlace a la Sala: ",
 	"components.molecules.share.courses.mail.subject": "Curso de importación",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"No se copiarán herramientas externas asociadas al curso ni tarjetas de embarque.",
@@ -787,6 +790,8 @@ export default {
 		"Con el siguiente enlace, la tarea puede ser importado como copia por otros profesores.",
 	"components.molecules.share.tasks.result.linkLabel":
 		"Enlace a la copia de la tarea",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel":
+		"Enlace de invitación a la sala",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'¿Estás seguro de que deseas eliminar la tarea "{taskTitle}"?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Eliminar tarea",
@@ -806,20 +811,6 @@ export default {
 		"Archivos subidos dentro del curso.",
 	"components.molecules.export.options.info.point2":
 		"Envíos asignados a una tarea.",
-	"components.organisms.AutoLogoutWarning.confirm": "Ampliar sesión",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Tu sesión ya ha caducado. Inicia sesión de nuevo.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"¡No se ha podido ampliar tu sesión!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Vaya... ¡Eso no debería haber sucedido! No se ha podido ampliar tu sesión. Vuelve a intentarlo de inmediato.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Perezoso",
-	"components.organisms.AutoLogoutWarning.success":
-		"Sesión ampliada correctamente.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"menos de un minuto | un minuto | {remainingTime} minutos",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
 	"components.organisms.ContentCard.report.body":
 		"Informar del contenido con el ID",
 	"components.organisms.ContentCard.report.email":
@@ -922,6 +913,10 @@ export default {
 	"components.timePicker.validation.format":
 		"Por favor utilice el formato HH:MM",
 	"components.timePicker.validation.required": "Por favor ingrese un tiempo.",
+	"data-room.duplication.alert.success": "Sala duplicada con éxito.",
+	"data-room.duplication.alert.error":
+		"No se pudo completar el proceso de duplicación.",
+	"data-room.duplication.loading": "La sala se está duplicando...",
 	"error.400": "401 – Solicitud incorrecta",
 	"error.401":
 		"401 – Lamentablemente, falta la autorización para ver este contenido.",
@@ -935,6 +930,19 @@ export default {
 	"error.proxy.action": "Volver a cargar la página",
 	"error.proxy.description":
 		"Tenemos un pequeño problema con nuestra infraestructura. Enseguida volvemos.",
+	"feature-autoLogout.button.confirm": "Ampliar sesión",
+	"feature-autoLogout.button.confirm.returnToLogin":
+		"Volver a la página de inicio de sesión",
+	"feature-autoLogout.message.error.401":
+		"Tu sesión ya ha caducado. Inicia sesión de nuevo.",
+	"feature-autoLogout.message.error":
+		"Vaya... ¡Eso no debería haber sucedido! No se ha podido ampliar tu sesión. Vuelve a intentarlo de inmediato.",
+	"feature-autoLogout.component.image.alt": "Perezoso",
+	"feature-autoLogout.message.success": "Sesión ampliada correctamente.",
+	"feature-autoLogout.warning.remainingTime":
+		"menos de un minuto | un minuto | {remainingTime} minutos",
+	"feature-autoLogout.warning":
+		"Atención: te desconectarás automáticamente en {0}. Amplía ahora tu sesión dos horas.",
 	"feature-board-external-tool-element.alert.error.student":
 		"La herramienta no se puede iniciar actualmente. Actualice el tablero o comuníquese con el maestro o instructor del curso.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -970,6 +978,19 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Grupo de usuarios sincronizado exitosamente",
 	"feature-course-sync.startRoomSyncDialog.title": "Iniciar sincronización",
+	"feature-room.DuplicationInfoDialog.title": "Duplicar Sala",
+	"feature-room.DuplicationInfoDialog.text.nextStep":
+		"En el siguiente paso, se creará una copia de la sala.",
+	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+		"Los siguientes contenidos no se copiarán:",
+	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+		"Miembros y permisos de la sala",
+	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+		"Contenidos de los Etherpads",
+	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+		"Contenidos de las pizarras blancas",
+	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+		"Configuraciones protegidas de herramientas externas",
 	"format.date": "DD/MM/YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD/MM/YYYY HH:mm",
@@ -1777,6 +1798,18 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Sincronizado",
 	"pages.rooms.headerSection.menu.ariaLabel": "Menú del curso",
 	"pages.rooms.headerSection.toCourseFiles": "A los archivos del curso",
+	"pages.rooms.invitationLinkStatus.bird.alt": "Pájaro con alas plegadas",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Lamentablemente, el enlace de invitación sólo es válido para los alumnos de la escuela «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Lamentablemente, el enlace de invitación ya no es válido",
+	"pages.rooms.invitationLinkStatus.invalidLink":
+		"Lamentablemente, el enlace de invitación no existe",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Lamentablemente, el enlace de invitación sólo es válido para los profesores",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Lamentablemente, el enlace de invitación sólo es válido para los usuarios de la escuela «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.title": "Enlace de invitación",
 	"pages.rooms.menuItems.endSync": "Finalizar sincronización",
 	"pages.rooms.menuItems.startSync": "Iniciar sincronización",
 	"pages.rooms.importCourse.btn.continue": "Continuar",
@@ -1827,7 +1860,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge versión 1.1 (p. ej. compatible con Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge versión 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Crear sala",
 	"pages.roomEdit.title": "Editar sala",
 	"pages.roomDetails.title": "Sala",
@@ -1860,7 +1892,7 @@ export default {
 	"pages.rooms.members.infoText":
 		"Añadir miembros a la sala. Se pueden añadir profesores de otros centros si tienen activada la visibilidad en el directorio central en su perfil ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "más información",
-	"pages.rooms.members.label": "Participantes",
+	"pages.rooms.members.label": "Miembros",
 	"pages.rooms.members.add": "Añadir miembros",
 	"pages.rooms.members.add.infoText":
 		"Sólo se pueden añadir varias personas en un paso si pertenecen a la misma escuela y al mismo rol escolar.",
@@ -1872,7 +1904,9 @@ export default {
 		"Cambiar las autorizaciones en la sala",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Cambiar autorizaciones de sala para {memberFullName}",
-	"pages.rooms.members.manage": "Miembros de la sala",
+	"pages.rooms.members.manage": "Gestionar miembros",
+	"pages.rooms.members.management": "Administración de miembros",
+	"pages.rooms.members.view": "Ver miembros",
 	"pages.rooms.members.tab.members": "Miembros",
 	"pages.rooms.members.tab.invitations": "Invitaciones",
 	"pages.rooms.members.tab.invitations.infoText":
@@ -1927,6 +1961,26 @@ export default {
 		"Si esta autorización se transfiere a {memberFullName}, {currentUserFullName} pierde el derecho a eliminar la sala.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Esta acción sólo puede ser deshecha por {memberFullName}.",
+	"pages.rooms.members.inviteMember.firstStep.title":
+		"Crear enlace de invitación",
+	"pages.rooms.members.inviteMember.firstStep.subTitle":
+		"El siguiente paso es crear un enlace, que se puede utilizar para entrar en la sala.",
+	"pages.rooms.members.inviteMember.secondStep.title":
+		"Compartir enlace de invitación",
+	"pages.rooms.members.inviteMember.infoAlert.text":
+		"Los alumnos de otras escuelas siempre deben ser agregados a la sala por un guía de aprendizaje supervisor de su escuela a la sala.",
+	"pages.rooms.members.inviteMember.form.description.label":
+		"Descripción (opcional)",
+	"pages.rooms.members.inviteMember.form.description.hint":
+		"Se muestra en el resumen del enlace",
+	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
+		"Enlace sólo válido para usuarios de la siguiente escuela:",
+	"pages.rooms.members.inviteMember.form.validForStudents.label":
+		"Enlace válido también para estudiantes",
+	"pages.rooms.members.inviteMember.form.linkExpires.label":
+		"El enlace caduca el",
+	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
+		"La entrada a la habitación sólo es posible previa confirmación ({0})",
 	"pages.rooms.title": "Salas",
 	"pages.taskCard.addElement": "Añadir artículo",
 	"pages.taskCard.deleteElement.text":
@@ -2060,6 +2114,11 @@ export default {
 	"ui-confirmation-dialog.ask-delete": "¿Eliminar {type}{title}?",
 	"ui-confirmation-dialog.ask-cancel-form": "¿Descartar cambios?",
 	"ui-layout.topbar.pageShare.printQRCode": "Imprimir código QR",
+	"ui.actionMenu.selectedRows":
+		"Menú de acciones para {count} líneas seleccionadas",
+	"ui.actionMenu.actions": "Acciones",
+	"ui.actionMenu.select.none": "Deseleccionar todas las líneas",
+	"ui.dataTable.select.all": "Seleccionar todas las líneas",
 	"util-validators-invalid-url": "Esta URL no es válida.",
 	"utils.adminFilter.class.title": "Clase(s)",
 	"utils.adminFilter.consent.label.missing": "Usuario creado",
@@ -2101,7 +2160,13 @@ export default {
 	"pages.folder.fab.title": "Añadir archivo",
 	"pages.folder.untitled": "Carpeta sin título",
 	"pages.folder.title": "Carpeta",
+	"pages.folder.columns.name": "Nombre",
+	"pages.folder.columns.createdat": "Creado el",
+	"pages.folder.columns.size": "Talla",
 	"pages.folder.ariaLabels.menu": "Menú carpeta",
 	"pages.folder.ariaLabels.menu.action.edit": "Renombrar carpeta",
 	"pages.folder.ariaLabels.menu.action.delete": "Borrar carpeta",
+	"pages.folder.ariaLabels.filter": "Tabla de búsqueda/filtro",
+	"pages.folder.ariaLabels.actionMenu": "Menú de acciones para {name}",
+	"pages.folder.uploadstats": "{uploaded} de {total} archivos cargados",
 };

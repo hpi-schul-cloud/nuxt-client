@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
+	"common.actions.duplicate": "Дублювати",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
 	"common.actions.finish": "Закінчити",
@@ -403,7 +404,7 @@ export default {
 	"components.board.action.moveUp": "Рухатися вгору",
 	"components.board.action.changeLayout": "Змінити вигляд",
 	"components.board.action.shareLink.card": "Скопіювати посилання на Карту",
-	"components.board.column.defaultTitle": "Нова колонка",
+	"components.board.column.defaultTitle": "Назва стовпця",
 	"components.board.column.ghost.column.placeholder": "Додати стовпець",
 	"components.board.column.ghost.list.placeholder": "Додати розділ",
 	"components.board.draftChip.tooltip": "Видно лише вчителям",
@@ -645,7 +646,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Загальна інформація",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Вміст не копіюється з міркувань захисту даних і повинен бути доданий повторно.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Усі елементи успішно скопійовано.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Дошка успішно скопійована.",
@@ -741,6 +742,8 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Посилання на копію дошки",
 	"components.molecules.share.courses.mail.body": "Посилання на курс:",
+	"components.molecules.share.roomMemberInvitation.mail.body":
+		"Посилання на кімнату: ",
 	"components.molecules.share.courses.mail.subject": "Курс імпорту",
 	"components.molecules.share.courses.options.ctlTools.infoText":
 		"Зовнішні інструменти, пов’язані з курсом або посадочними картками, не будуть скопійовані.",
@@ -787,6 +790,8 @@ export default {
 		"За наступним посиланням завдання можуть імпортувати як копію інші вчителі.",
 	"components.molecules.share.tasks.result.linkLabel":
 		"Зв'язати копію завдання",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel":
+		"Посилання на запрошення до кімнати",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Ви впевнені, що хочете видалити завдання " {taskTitle} "?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Видалити завдання",
@@ -806,19 +811,6 @@ export default {
 		"Завантажені файли в межах курсу.",
 	"components.molecules.export.options.info.point2":
 		"Подання, призначені до завдання.",
-	"components.organisms.AutoLogoutWarning.confirm": "Подовжити сеанс",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Термін дії сеансу минув. Увійдіть ще раз.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"Ваш сеанс не вдалося продовжити!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Лінивець",
-	"components.organisms.AutoLogoutWarning.success": "Сеанс успішно продовжено.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
 	"components.organisms.ContentCard.report.body":
 		"Повідомлення про вміст з ідентифікатором",
 	"components.organisms.ContentCard.report.email":
@@ -917,6 +909,10 @@ export default {
 		"Дата початку повинна передувати даті закінчення.",
 	"components.timePicker.validation.format": "Використовуйте формат ГГ:ХХ",
 	"components.timePicker.validation.required": "Будь ласка, введіть час.",
+	"data-room.duplication.alert.success": "Кімнату успішно дубльовано.",
+	"data-room.duplication.alert.error":
+		"Не вдалося завершити процес копіювання.",
+	"data-room.duplication.loading": "Кімната дублюється...",
 	"error.400": "400 – Неприпустимий запит",
 	"error.401": "401 – На жаль, у вас немає дозволу на перегляд цього контенту.",
 	"error.403": "403 – На жаль, у вас немає дозволу на перегляд цього контенту.",
@@ -928,6 +924,19 @@ export default {
 	"error.proxy.action": "Перезавантажити сторінку",
 	"error.proxy.description":
 		"У нас виникла невелика проблема з нашою інфраструктурою. Ми скоро повернемося.",
+	"feature-autoLogout.button.confirm": "Подовжити сеанс",
+	"feature-autoLogout.button.confirm.returnToLogin":
+		"Повернутися на сторінку входу",
+	"feature-autoLogout.message.error.401":
+		"Термін дії сеансу минув. Увійдіть ще раз.",
+	"feature-autoLogout.message.error":
+		"Отакої... цього не мало статися! Ваш сеанс не вдалося продовжити.  Повторіть спробу.",
+	"feature-autoLogout.component.image.alt": "Лінивець",
+	"feature-autoLogout.message.success": "Сеанс успішно продовжено.",
+	"feature-autoLogout.warning.remainingTime":
+		"менше однієї хвилини | одна хвилина | {remainingTime} хвилини (хвилин)",
+	"feature-autoLogout.warning":
+		"Увага! Ви автоматично вийдете з системи через {0}. Тепер продовжте час сеансу до двох годин.",
 	"feature-board-external-tool-element.alert.error.student":
 		"Інструмент зараз неможливо запустити. Будь ласка, оновіть дошку або зверніться до вчителя чи інструктора курсу.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -961,6 +970,19 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Групу користувачів успішно синхронізовано",
 	"feature-course-sync.startRoomSyncDialog.title": "Почніть синхронізацію",
+	"feature-room.DuplicationInfoDialog.title": "Дублювати кімнату",
+	"feature-room.DuplicationInfoDialog.text.nextStep":
+		"На наступному кроці буде створено копію кімнати.",
+	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+		"Наступний вміст не буде скопійовано:",
+	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+		"Учасники кімнати та їхні дозволи",
+	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+		"Вміст із Etherpads",
+	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+		"Вміст із Whiteboards",
+	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+		"Захищені налаштування зовнішніх інструментів",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -982,7 +1004,7 @@ export default {
 	"global.sidebar.item.management": "Управління",
 	"global.sidebar.item.overview": "Панель керування",
 	"global.sidebar.item.releaseNotes": "Що нового?",
-	"global.sidebar.item.rooms": "Номери",
+	"global.sidebar.item.rooms": "Кімнати",
 	"global.sidebar.item.school": "Школа",
 	"global.sidebar.item.student": "Учні",
 	"global.sidebar.item.system": "Cистема",
@@ -1758,6 +1780,18 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Синхронізовано",
 	"pages.rooms.headerSection.menu.ariaLabel": "Меню курсу",
 	"pages.rooms.headerSection.toCourseFiles": "До файлів курсу",
+	"pages.rooms.invitationLinkStatus.bird.alt": "Птах зі складеними крилами",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Посилання на запрошення, на жаль, дійсне лише для учнів школи «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Посилання на запрошення, на жаль, більше не дійсне",
+	"pages.rooms.invitationLinkStatus.invalidLink":
+		"На жаль, посилання на запрошення не існує",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Посилання на запрошення, на жаль, дійсне лише для вчителів",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Посилання на запрошення, на жаль, дійсне лише для користувачів школи «{schoolName}»",
+	"pages.rooms.invitationLinkStatus.title": "Посилання на запрошення",
 	"pages.rooms.menuItems.endSync": "Завершити синхронізацію",
 	"pages.rooms.menuItems.startSync": "Почніть синхронізацію",
 	"pages.rooms.importCourse.btn.continue": "Продовжити",
@@ -1806,7 +1840,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Загальний картридж версії 1.1 (наприклад, сумісні з Moodle)",
 	"pages.room.modal.course.export.version1.3": "Загальний картридж версії 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Створити кімнату",
 	"pages.roomEdit.title": "Кімната редагування",
 	"pages.roomDetails.title": "Кімната",
@@ -1837,7 +1870,7 @@ export default {
 	"pages.rooms.members.infoText":
 		"Додайте члени до кімнати. Вчителі з інших шкіл можуть бути додані, якщо вони активували видимість у центральному каталозі у своєму профілі ({0}).",
 	"pages.rooms.members.infoText.moreInformation": "більше інформації",
-	"pages.rooms.members.label": "Учасники",
+	"pages.rooms.members.label": "Учасників",
 	"pages.rooms.members.add": "Додайте члени",
 	"pages.rooms.members.add.infoText":
 		"Кілька людей можуть бути додані за один крок, тільки якщо вони належать до однієї школи і виконують однакові шкільні ролі.",
@@ -1847,7 +1880,9 @@ export default {
 	"pages.rooms.members.changePermission": "Змінити дозволи кімнат",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Змінити дозвіл кімнат для {memberFullName}",
-	"pages.rooms.members.manage": "Учасник кімнати",
+	"pages.rooms.members.manage": "Керувати учасниками",
+	"pages.rooms.members.management": "Адміністрування учасників",
+	"pages.rooms.members.view": "Переглянути учасників",
 	"pages.rooms.members.tab.members": "Учасники",
 	"pages.rooms.members.tab.invitations": "Запрошення",
 	"pages.rooms.members.tab.invitations.infoText":
@@ -1899,6 +1934,26 @@ export default {
 		"Якщо цей дозвіл буде передано {memberFullName}, {currentUserFullName} втратить право видаляти кімнату.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Ця дія може бути скасована лише {memberFullName}.",
+	"pages.rooms.members.inviteMember.firstStep.title":
+		"Створити посилання для запрошення",
+	"pages.rooms.members.inviteMember.firstStep.subTitle":
+		"Наступним кроком буде створення посилання, за яким можна буде увійти в кімнату.",
+	"pages.rooms.members.inviteMember.secondStep.title":
+		"Поділіться посиланням на запрошення",
+	"pages.rooms.members.inviteMember.infoAlert.text":
+		"Учні з інших шкіл повинні завжди супроводжуватися в кімнату супроводжуючим з їхньої школи до кімнати.",
+	"pages.rooms.members.inviteMember.form.description.label":
+		"Опис (необов'язково)",
+	"pages.rooms.members.inviteMember.form.description.hint":
+		"Відображається в огляді посилань",
+	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
+		"Посилання дійсне лише для користувачів наступної школи:",
+	"pages.rooms.members.inviteMember.form.validForStudents.label":
+		"Посилання також дійсне для студентів",
+	"pages.rooms.members.inviteMember.form.linkExpires.label":
+		"Термін дії посилання закінчується",
+	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
+		"Вхід до кімнати можливий тільки після підтвердження ({0})",
 	"pages.rooms.title": "Кімнати",
 	"pages.taskCard.addElement": "Додати елемент",
 	"pages.taskCard.deleteElement.text":
@@ -2027,7 +2082,11 @@ export default {
 		"{type}{title} буде видалена. Ви впевнені, що хочете видалити?",
 	"ui-confirmation-dialog.ask-cancel-form": "Відкинути зміни?",
 	"ui-layout.topbar.pageShare.printQRCode": "Роздрукуйте QR-код",
-	"util-validators-invalid-url": "Esta URL no es válida.",
+	"ui.actionMenu.selectedRows": "Меню дій для {count} виділених рядків",
+	"ui.actionMenu.actions": "Дії",
+	"ui.actionMenu.select.none": "Зніміть виділення з усіх рядків",
+	"ui.dataTable.select.all": "Виділити всі рядки",
+	"util-validators-invalid-url": "Ця URL-адреса є недійсною.",
 	"utils.adminFilter.class.title": "Клас(-и)",
 	"utils.adminFilter.consent.label.missing": "Створено користувача",
 	"utils.adminFilter.consent.label.parentsAgreementMissing": "Немає згоди учня",
@@ -2065,7 +2124,13 @@ export default {
 	"pages.folder.fab.title": "Додати файл",
 	"pages.folder.untitled": "Папка без назви",
 	"pages.folder.title": "Папка",
+	"pages.folder.columns.name": "Ім'я",
+	"pages.folder.columns.createdat": "Створено на",
+	"pages.folder.columns.size": "Розмір",
 	"pages.folder.ariaLabels.menu": "Меню Папки",
 	"pages.folder.ariaLabels.menu.action.edit": "Перейменувати папку",
 	"pages.folder.ariaLabels.menu.action.delete": "Видалити папку",
+	"pages.folder.ariaLabels.filter": "	Таблиця пошуку/фільтрації",
+	"pages.folder.ariaLabels.actionMenu": "Меню дій для {name}",
+	"pages.folder.uploadstats": "{uploaded} з {total} завантажених файлів",
 };

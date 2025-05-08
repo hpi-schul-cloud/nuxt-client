@@ -9,6 +9,7 @@ import {
 	useRoomDetailsStore,
 	useRoomMembersStore,
 	useRoomMemberVisibilityOptions,
+	useRoomAuthorization,
 } from "@data-room";
 import {
 	createTestingI18n,
@@ -22,17 +23,11 @@ import { computed, ref } from "vue";
 import { RoleName, RoomDetailsResponse } from "@/serverApi/v3";
 import { roomFactory } from "@@/tests/test-utils/factory/room";
 import { VBtn, VDialog, VTab, VTabs } from "vuetify/lib/components/index.mjs";
-import {
-	AddMembers,
-	Confirmations,
-	Invitations,
-	Members,
-	useRoomAuthorization,
-} from "@feature-room";
+import { AddMembers, Confirmations, Invitations, Members } from "@feature-room";
 import { mdiPlus } from "@icons/material";
 import { useConfirmationDialog } from "@ui-confirmation-dialog";
 import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
-import { ENV_CONFIG_MODULE_KEY } from "@/utils/inject";
+import { ENV_CONFIG_MODULE_KEY, NOTIFIER_MODULE_KEY } from "@/utils/inject";
 import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
 import { LeaveRoomProhibitedDialog } from "@ui-room-details";
 import { KebabMenuActionLeaveRoom } from "@ui-kebab-menu";
@@ -43,6 +38,7 @@ import { schoolsModule } from "@/store";
 import DefaultWireframe from "@/components/templates/DefaultWireframe.vue";
 import { Tab } from "@/types/room/RoomMembers";
 import RoomMembersPage from "./RoomMembers.page.vue";
+import NotifierModule from "@/store/notifier";
 
 jest.mock("vue-router");
 const useRouterMock = <jest.Mock>useRouter;
@@ -53,7 +49,7 @@ jest.mock("@vueuse/integrations"); // mock focus trap from add members because w
 jest.mock("@ui-confirmation-dialog");
 const mockedUseRemoveConfirmationDialog = jest.mocked(useConfirmationDialog);
 
-jest.mock("@feature-room/roomAuthorization.composable");
+jest.mock("@data-room/roomAuthorization.composable");
 const roomAuthorization = jest.mocked(useRoomAuthorization);
 
 jest.mock("@util-board/BoardNotifier.composable");
@@ -109,6 +105,7 @@ describe("RoomMembersPage", () => {
 			canAddRoomMembers: ref(false),
 			canCreateRoom: ref(false),
 			canChangeOwner: ref(false),
+			canDuplicateRoom: ref(false),
 			canViewRoom: ref(false),
 			canEditRoom: ref(false),
 			canDeleteRoom: ref(false),
@@ -190,6 +187,7 @@ describe("RoomMembersPage", () => {
 				],
 				provide: {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
+					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 				},
 				stubs: { LeaveRoomProhibitedDialog: true, AddMembers: true },
 			},
@@ -223,20 +221,43 @@ describe("RoomMembersPage", () => {
 		expect(roomDetailsStore.fetchRoom).toHaveBeenCalledWith(routeRoomId);
 	});
 
-	it("should set the page title", () => {
-		const { room } = setup();
+	describe("page title", () => {
+		it("should set correct title when isVisibleAddMemberButton is true", () => {
+			const { room } = setup({
+				isVisibleAddMemberButton: true,
+			});
 
-		expect(document.title).toContain(
-			`${room?.name} - pages.rooms.members.manage`
-		);
+			expect(document.title).toContain(
+				`${room?.name} - pages.rooms.members.manage`
+			);
+		});
+		it("should set correct title when isVisibleAddMemberButton is false", () => {
+			const { room } = setup({
+				isVisibleAddMemberButton: false,
+			});
+
+			expect(document.title).toContain(
+				`${room?.name} - pages.rooms.members.label`
+			);
+		});
 	});
 
-	it("should have the correct heading", async () => {
-		const { wrapper } = setup();
+	describe("heading", () => {
+		it("should set the correct heading when isVisibleAddMemberButton is true", () => {
+			const { wrapper } = setup({
+				isVisibleAddMemberButton: true,
+			});
+			const heading = wrapper.get("h1");
+			expect(heading.text()).toBe("pages.rooms.members.management");
+		});
 
-		const heading = wrapper.get("h1");
-
-		expect(heading.text()).toBe("pages.rooms.members.manage");
+		it("should set the correct heading when isVisibleAddMemberButton is false", () => {
+			const { wrapper } = setup({
+				isVisibleAddMemberButton: false,
+			});
+			const heading = wrapper.get("h1");
+			expect(heading.text()).toBe("pages.rooms.members.label");
+		});
 	});
 
 	describe("onLeaveRoom", () => {
@@ -351,7 +372,13 @@ describe("RoomMembersPage", () => {
 	});
 
 	describe("DefaultWireframe", () => {
-		const buildBreadcrumbs = (room: RoomDetailsResponse) => {
+		const buildBreadcrumbs = (
+			room: RoomDetailsResponse,
+			isVisibleAddMemberButton: boolean
+		) => {
+			const membersBreadcrumb = isVisibleAddMemberButton
+				? "pages.rooms.members.management"
+				: "pages.rooms.members.label";
 			return [
 				{
 					title: "pages.rooms.title",
@@ -362,7 +389,7 @@ describe("RoomMembersPage", () => {
 					to: `/rooms/${routeRoomId}`,
 				},
 				{
-					title: "pages.rooms.members.manage",
+					title: membersBreadcrumb,
 					disabled: true,
 				},
 			];
@@ -375,18 +402,56 @@ describe("RoomMembersPage", () => {
 			expect(wireframe.exists()).toBe(true);
 		});
 
-		it("should set the breadcrumbs and fab items", async () => {
-			const { wrapper, room } = setup();
-			const wireframe = wrapper.findComponent(DefaultWireframe);
+		describe("fab items", () => {
+			it.each([
+				{
+					activeTab: Tab.Members,
+					expectedFabItems: {
+						icon: mdiPlus,
+						title: "pages.rooms.members.add",
+						ariaLabel: "pages.rooms.members.add",
+						dataTestId: "fab-add-members",
+					},
+				},
+				{
+					activeTab: Tab.Invitations,
+					expectedFabItems: {
+						icon: mdiPlus,
+						title: "pages.rooms.members.inviteMember.firstStep.title",
+						ariaLabel: "pages.rooms.members.inviteMember.firstStep.title",
+						dataTestId: "fab-invite-members",
+					},
+				},
+			])(
+				"should set correct fab items when active tab is $activeTab",
+				async ({ activeTab, expectedFabItems }) => {
+					const { wrapper } = setup({ activeTab });
+					const wireframe = wrapper.findComponent(DefaultWireframe);
 
-			const expectedBreadcrumbs = buildBreadcrumbs(room!);
+					expect(wireframe.props("fabItems")).toEqual(expectedFabItems);
+				}
+			);
+		});
 
-			expect(wireframe.props("breadcrumbs")).toEqual(expectedBreadcrumbs);
-			expect(wireframe.props("fabItems")).toEqual({
-				icon: mdiPlus,
-				title: "pages.rooms.members.add",
-				ariaLabel: "pages.rooms.members.add",
-				dataTestId: "fab-add-members",
+		describe("breadcrumbs", () => {
+			it("should set correct breadcrumbs when isVisibleAddMemberButton is true", () => {
+				const { wrapper, room } = setup({
+					isVisibleAddMemberButton: true,
+				});
+				const wireframe = wrapper.findComponent(DefaultWireframe);
+				const expectedBreadcrumbs = buildBreadcrumbs(room!, true);
+
+				expect(wireframe.props("breadcrumbs")).toEqual(expectedBreadcrumbs);
+			});
+
+			it("should set correct breadcrumbs when isVisibleAddMemberButton is false", () => {
+				const { wrapper, room } = setup({
+					isVisibleAddMemberButton: false,
+				});
+				const wireframe = wrapper.findComponent(DefaultWireframe);
+				const expectedBreadcrumbs = buildBreadcrumbs(room!, false);
+
+				expect(wireframe.props("breadcrumbs")).toEqual(expectedBreadcrumbs);
 			});
 		});
 	});
@@ -428,7 +493,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should open Dialog", async () => {
-			const { wrapper } = setup();
+			const { wrapper } = setup({ activeTab: Tab.Members });
 			const wireframe = wrapper.findComponent(DefaultWireframe);
 			const addMemberDialogBeforeClick = wrapper
 				.getComponent(VDialog)
@@ -447,6 +512,30 @@ describe("RoomMembersPage", () => {
 				.findComponent(AddMembers);
 
 			expect(addMemberDialogAfterClick.exists()).toBe(true);
+		});
+	});
+
+	describe("invite members fab", () => {
+		it("should open Dialog", async () => {
+			const { wrapper } = setup({ activeTab: Tab.Invitations });
+			const wireframe = wrapper.findComponent(DefaultWireframe);
+			const dialogBeforeClick = wrapper.findComponent({
+				name: "InviteMembersDialog",
+			});
+
+			expect(dialogBeforeClick.props("modelValue")).toBe(false);
+
+			const addMemberButton = wireframe
+				.getComponent("[data-testid=fab-invite-members]")
+				.getComponent(VBtn);
+
+			await addMemberButton.trigger("click");
+
+			const dialogAfterClick = wrapper.findComponent({
+				name: "InviteMembersDialog",
+			});
+
+			expect(dialogAfterClick.props("modelValue")).toBe(true);
 		});
 	});
 

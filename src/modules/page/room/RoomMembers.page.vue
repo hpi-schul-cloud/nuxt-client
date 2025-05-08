@@ -9,7 +9,7 @@
 			<div ref="header">
 				<div class="d-flex align-items-center">
 					<h1 class="text-h3 mb-4" data-testid="room-title">
-						{{ t("pages.rooms.members.manage") }}
+						{{ membersInfoText }}
 					</h1>
 					<KebabMenu class="mx-2" data-testid="room-member-menu">
 						<KebabMenuActionLeaveRoom @click="onLeaveRoom" />
@@ -35,7 +35,11 @@
 			</div>
 		</template>
 
-		<VTabsWindow v-model="activeTab" class="mt-12 room-members-tabs-window">
+		<VTabsWindow
+			v-model="activeTab"
+			class="room-members-tabs-window"
+			:class="isVisibleAddMemberButton ? 'mt-12' : ''"
+		>
 			<VTabsWindowItem
 				v-for="tabItem in tabs"
 				:key="tabItem.value"
@@ -48,7 +52,6 @@
 				/>
 			</VTabsWindowItem>
 		</VTabsWindow>
-
 		<VDialog
 			v-model="isMembersDialogOpen"
 			:width="xs ? 'auto' : 480"
@@ -62,6 +65,11 @@
 	</DefaultWireframe>
 	<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
 	<ConfirmationDialog />
+	<InviteMembersDialog
+		v-model="isInvitationDialogOpen"
+		:school-name="currentUser?.schoolName || ''"
+		@close="onDialogClose"
+	/>
 </template>
 
 <script setup lang="ts">
@@ -77,6 +85,7 @@ import {
 	onUnmounted,
 	PropType,
 	ref,
+	watchEffect,
 } from "vue";
 import { useI18n } from "vue-i18n";
 import { useRoute, useRouter } from "vue-router";
@@ -84,6 +93,7 @@ import {
 	useRoomDetailsStore,
 	useRoomMembersStore,
 	useRoomMemberVisibilityOptions,
+	useRoomAuthorization,
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import {
@@ -94,9 +104,9 @@ import {
 } from "@icons/material";
 import {
 	AddMembers,
-	useRoomAuthorization,
 	Confirmations,
 	Invitations,
+	InviteMembersDialog,
 	Members,
 } from "@feature-room";
 import { RoleName } from "@/serverApi/v3";
@@ -124,18 +134,16 @@ const router = useRouter();
 const { xs, mdAndUp } = useDisplay();
 const { room } = storeToRefs(useRoomDetailsStore());
 
+const membersInfoText = ref("");
+
 const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
+const isInvitationDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
 const { currentUser } = storeToRefs(roomMembersStore);
 const { fetchMembers, getPotentialMembers, getSchools, leaveRoom, resetStore } =
 	roomMembersStore;
-
-const pageTitle = computed(() =>
-	buildPageTitle(`${room.value?.name} - ${t("pages.rooms.members.manage")}`)
-);
-useTitle(pageTitle);
 
 const header = ref<HTMLElement | null>(null);
 const { bottom: headerBottom } = useElementBounding(header);
@@ -144,6 +152,19 @@ const { canLeaveRoom } = useRoomAuthorization();
 const { isVisibleAddMemberButton, isVisibleTabNavigation } =
 	useRoomMemberVisibilityOptions(currentUser);
 const { FEATURE_ROOM_MEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
+
+watchEffect(() => {
+	if (isVisibleAddMemberButton.value !== undefined) {
+		membersInfoText.value = isVisibleAddMemberButton.value
+			? t("pages.rooms.members.management")
+			: t("pages.rooms.members.label");
+	}
+});
+
+const pageTitle = computed(() =>
+	buildPageTitle(`${room.value?.name} - ${membersInfoText.value}`)
+);
+useTitle(pageTitle);
 
 const activeTab = computed<Tab>({
 	get() {
@@ -187,13 +208,23 @@ const tabs: Array<{
 ];
 
 const onFabClick = async () => {
-	await getSchools();
-	await getPotentialMembers(RoleName.Teacher);
-	isMembersDialogOpen.value = true;
+	switch (activeTab.value) {
+		case Tab.Invitations:
+			isInvitationDialogOpen.value = true;
+			break;
+
+		case Tab.Members:
+		default:
+			await getSchools();
+			await getPotentialMembers(RoleName.Teacher);
+			isMembersDialogOpen.value = true;
+			break;
+	}
 };
 
 const onDialogClose = () => {
 	isMembersDialogOpen.value = false;
+	isInvitationDialogOpen.value = false;
 };
 
 const onLeaveRoom = async () => {
@@ -244,7 +275,7 @@ const breadcrumbs: ComputedRef<Breadcrumb[]> = computed(() => {
 			to: `/rooms/${route.params.id}`,
 		},
 		{
-			title: t("pages.rooms.members.manage"),
+			title: membersInfoText.value,
 			disabled: true,
 		},
 	];
@@ -259,6 +290,15 @@ const fabAction = computed(() => {
 			title: t("pages.rooms.members.add"),
 			ariaLabel: t("pages.rooms.members.add"),
 			dataTestId: "fab-add-members",
+		};
+	}
+
+	if (activeTab.value === Tab.Invitations) {
+		return {
+			icon: mdiPlus,
+			title: t("pages.rooms.members.inviteMember.firstStep.title"),
+			ariaLabel: t("pages.rooms.members.inviteMember.firstStep.title"),
+			dataTestId: "fab-invite-members",
 		};
 	}
 	return undefined;

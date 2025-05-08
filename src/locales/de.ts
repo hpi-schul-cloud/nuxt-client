@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Erstellen",
 	"common.actions.delete": "Löschen",
 	"common.actions.discard": "Verwerfen",
+	"common.actions.duplicate": "Duplizieren",
 	"common.actions.edit": "Bearbeiten",
 	"common.actions.finish": "Beenden",
 	"common.actions.import": "Importieren",
@@ -396,7 +397,7 @@ export default {
 	"components.board.action.moveUp": "Nach oben verschieben",
 	"components.board.action.changeLayout": "Ansicht ändern",
 	"components.board.action.shareLink.card": "Link zur Karte kopieren",
-	"components.board.column.defaultTitle": "Neuer Abschnitt",
+	"components.board.column.defaultTitle": "Abschnittstitel",
 	"components.board.column.ghost.column.placeholder": "Abschnitt hinzufügen",
 	"components.board.column.ghost.list.placeholder": "Abschnitt hinzufügen",
 	"components.board.draftChip.tooltip": "Nur für Lehrkräfte sichtbar",
@@ -636,7 +637,7 @@ export default {
 	"components.molecules.copyResult.metadata": "Allgemeine Informationen",
 	"components.molecules.copyResult.tldrawCopy.info":
 		"Inhalte werden aus Datenschutzgründen nicht kopiert und müssen neu hinzugefügt werden.",
-	"components.molecules.copyResult.successfullyCopied":
+	"components.molecules.copyResult.course.successfullyCopied":
 		"Alle Elemente wurden erfolgreich kopiert.",
 	"components.molecules.copyResult.board.successfullyCopied":
 		"Bereich erfolgreich kopiert.",
@@ -736,6 +737,8 @@ export default {
 	"components.molecules.share.columnBoard.result.linkLabel":
 		"Link Bereich-Kopie",
 	"components.molecules.share.courses.mail.body": "Link zum Kurs:",
+	"components.molecules.share.roomMemberInvitation.mail.body":
+		"Link zum Raum: ",
 	"components.molecules.share.courses.mail.subject": "Kurs zum Importieren",
 	"components.molecules.shareImport.options.ctlTools.infoText.unavailable":
 		"In Zielschule nicht verfügbare, externe Tools",
@@ -776,6 +779,8 @@ export default {
 	"components.molecules.share.tasks.options.infoText":
 		"Mit dem folgenden Link kann die Aufgabe als Kopie von anderen Lehrkräften importiert werden.",
 	"components.molecules.share.tasks.result.linkLabel": "Link Aufgabekopie",
+	"components.molecules.share.roomMemberInvitation.result.linkLabel":
+		"Link Raum-Einladung",
 	"components.molecules.TaskItemMenu.confirmDelete.text":
 		'Bist du dir sicher, dass du die Aufgabe "{taskTitle}" löschen möchtest?',
 	"components.molecules.TaskItemMenu.confirmDelete.title": "Aufgabe löschen",
@@ -789,20 +794,6 @@ export default {
 	"components.molecules.TaskItemTeacher.submitted": "Abgegeben",
 	"components.molecules.TextEditor.noLocalFiles":
 		"Lokale Dateien werden aktuell nicht unterstützt.",
-	"components.organisms.AutoLogoutWarning.confirm": "Sitzung verlängern",
-	"components.organisms.AutoLogoutWarning.error.401":
-		"Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
-	"components.organisms.AutoLogoutWarning.error.retry":
-		"Deine Sitzung konnte nicht verlängert werden!",
-	"components.organisms.AutoLogoutWarning.error":
-		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
-	"components.organisms.AutoLogoutWarning.image.alt": "Faultier",
-	"components.organisms.AutoLogoutWarning.success":
-		"Sitzung erfolgreich verlängert.",
-	"components.organisms.AutoLogoutWarning.warning.remainingTime":
-		"weniger als einer Minute | einer Minute | {remainingTime} Minuten",
-	"components.organisms.AutoLogoutWarning.warning":
-		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
 	"components.organisms.ContentCard.report.body":
 		"Melden des Inhaltes mit der ID",
 	"components.organisms.ContentCard.report.email":
@@ -902,6 +893,10 @@ export default {
 		"Das Startdatum muss vor dem Enddatum liegen.",
 	"components.timePicker.validation.format": "Bitte Format HH:MM verwenden.",
 	"components.timePicker.validation.required": "Bitte Uhrzeit angeben.",
+	"data-room.duplication.alert.success": "Raum erfolgreich dupliziert.",
+	"data-room.duplication.alert.error":
+		"Der Dupliziervorgang konnte nicht abgeschlossen werden.",
+	"data-room.duplication.loading": "Raum wird dupliziert...",
 	"error.400": "400 – Fehlerhafte Anfrage",
 	"error.401": "401 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
 	"error.403": "403 – Leider fehlt die Berechtigung, diesen Inhalt zu sehen.",
@@ -913,6 +908,18 @@ export default {
 	"error.proxy.action": "Seite neu laden",
 	"error.proxy.description":
 		"Wir haben ein kleines Problem mit unserer Infrastruktur. Wir sind gleich wieder da.",
+	"feature-autoLogout.button.confirm": "Sitzung verlängern",
+	"feature-autoLogout.button.confirm.returnToLogin": "Zurück zur Anmeldeseite",
+	"feature-autoLogout.message.error.401":
+		"Deine Sitzung ist bereits abgelaufen. Bitte melde dich erneut an.",
+	"feature-autoLogout.message.error":
+		"Uups… das hätte nicht passieren dürfen! Deine Sitzung konnte nicht verlängert werden. Bitte versuche es gleich noch einmal.",
+	"feature-autoLogout.component.image.alt": "Faultier",
+	"feature-autoLogout.message.success": "Sitzung erfolgreich verlängert.",
+	"feature-autoLogout.warning.remainingTime":
+		"weniger als einer Minute | einer Minute | {remainingTime} Minuten",
+	"feature-autoLogout.warning":
+		"Achtung: Du wirst in {0} automatisch ausgeloggt. Verlängere jetzt deine Sitzung auf zwei Stunden.",
 	"feature-board-external-tool-element.alert.error.student":
 		"Das Tool kann aktuell nicht gestartet werden. Bitte Bereich aktualisieren oder an die Lehrkraft oder Kursleiter:in wenden.",
 	"feature-board-external-tool-element.alert.error.teacher":
@@ -945,6 +952,19 @@ export default {
 	"feature-course-sync.StartExistingCourseSyncDialog.success":
 		"Nutzendengruppe erfolgreich synchronisiert",
 	"feature-course-sync.startRoomSyncDialog.title": "Synchronisation starten",
+	"feature-room.DuplicationInfoDialog.title": "Raum duplizieren",
+	"feature-room.DuplicationInfoDialog.text.nextStep":
+		"Im nächsten Schritt wird eine Kopie des Raumes erstellt.",
+	"feature-room.DuplicationInfoDialog.text.alert.followingContent":
+		"Folgende Inhalte werden nicht kopiert:",
+	"feature-room.DuplicationInfoDialog.text.alert.membersPermissions":
+		"Raum-Mitglieder und Berechtigungen",
+	"feature-room.DuplicationInfoDialog.text.alert.Etherpad":
+		"Inhalte aus Etherpads",
+	"feature-room.DuplicationInfoDialog.text.alert.whiteboard":
+		"Inhalte aus Whiteboards",
+	"feature-room.DuplicationInfoDialog.text.alert.protectedSettings":
+		"Geschützte Einstellungen externer Tools",
 	"format.date": "DD.MM.YYYY",
 	"format.dateLong": "dddd, DD. MMMM YYYY",
 	"format.dateTime": "DD.MM.YYYY HH:mm",
@@ -1755,6 +1775,19 @@ export default {
 	"pages.rooms.headerSection.synchronized": "Synchronisiert",
 	"pages.rooms.headerSection.menu.ariaLabel": "Kursmenü",
 	"pages.rooms.headerSection.toCourseFiles": "Zu den Kursdateien",
+	"pages.rooms.invitationLinkStatus.bird.alt":
+		"Vogel mit verschränkten Flügeln",
+	"pages.rooms.invitationLinkStatus.cantInviteStudentsFromOtherSchool":
+		"Der Einladungslink ist leider nur für Lernende der Schule “{schoolName}” gültig",
+	"pages.rooms.invitationLinkStatus.expired":
+		"Der Einladungslink ist leider nicht mehr gültig",
+	"pages.rooms.invitationLinkStatus.invalidLink":
+		"Der Einladungslink existiert leider nicht",
+	"pages.rooms.invitationLinkStatus.onlyForTeachers":
+		"Der Einladungslink ist leider nur für Lernbegleitungen gültig",
+	"pages.rooms.invitationLinkStatus.restrictedToCreatorSchool":
+		"Der Einladungslink ist leider nur für Nutzende der Schule “{schoolName}” gültig",
+	"pages.rooms.invitationLinkStatus.title": "Einladungslink",
 	"pages.rooms.menuItems.endSync": "Synchronisation beenden",
 	"pages.rooms.menuItems.startSync": "Synchronisation starten",
 	"pages.rooms.importCourse.btn.continue": "Weiter",
@@ -1804,7 +1837,6 @@ export default {
 	"pages.room.modal.course.export.version1.1":
 		"Common Cartridge Version 1.1 (z.B. kompatibel mit Moodle)",
 	"pages.room.modal.course.export.version1.3": "Common Cartridge Version 1.3",
-	// new rooms
 	"pages.roomCreate.title": "Raum erstellen",
 	"pages.roomEdit.title": "Raum bearbeiten",
 	"pages.roomDetails.title": "Raum",
@@ -1839,7 +1871,7 @@ export default {
 	"pages.rooms.members.infoText":
 		"Füge Mitglieder zum Raum hinzu. Lehrkräfte anderer Schulen können hinzugefügt werden, wenn sie in ihrem Profil die Sichtbarkeit im zentralen Verzeichnis aktiviert haben	({0}).",
 	"pages.rooms.members.infoText.moreInformation": "weitere Informationen",
-	"pages.rooms.members.label": "Teilnehmende",
+	"pages.rooms.members.label": "Mitglieder",
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
@@ -1850,14 +1882,16 @@ export default {
 	"pages.rooms.members.changePermission": "Raumberechtigungen ändern",
 	"pages.rooms.members.changePermission.ariaLabel":
 		"Raumberechtigungen für {memberFullName} ändern",
-	"pages.rooms.members.manage": "Raum-Mitglieder",
+	"pages.rooms.members.manage": "Mitglieder verwalten",
+	"pages.rooms.members.management": "Mitglieder-Verwaltung",
+	"pages.rooms.members.view": "Mitglieder ansehen",
 	"pages.rooms.members.tab.members": "Mitglieder",
 	"pages.rooms.members.tab.invitations": "Einladungslinks",
 	"pages.rooms.members.tab.invitations.infoText":
-		"Mit einem Einladungslink können Lernbegleitungen der eigenen Schule sowie Lernbegleitungen anderer Schulen in den Raum eingeladen werden. Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden. Ist in den Link-Einstellungen „Betreten des Raums nur nach Bestätigung möglich” aktiviert worden, kann diese Bestätigung im Tab Beitrittsanfragen vorgenommen werden.",
+		"Mit einem Einladungslink können Lernende und Lernbegleitungen der eigenen Schule sowie Lernbegleitungen anderer Schulen in den Raum eingeladen werden. Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden. Ist in den Link-Einstellungen „Betreten des Raums nur nach Bestätigung möglich” aktiviert worden, kann diese Bestätigung im Tab Beitrittsanfragen vorgenommen werden.",
 	"pages.rooms.members.tab.confirmations": "Beitrittsanfragen",
 	"pages.rooms.members.tab.confirmations.infoText":
-		"Wird bei der Erstellung eines Einladungslinks die Option „Betreten des Raums nur nach Bestätigung möglich” aktiviert, erzeugt der Klick auf den Link zunächst eine Beitrittsanfrage. Diese kann hier bestätigt oder abgelehnt werden. Wird die Beitrittsanfrage bestätigt, erhält die Person Zugriff auf alle Rauminhalte und wird in der Mitgliederliste aufgeführt.",
+		"Würde bei der Erstellung eines Einladungslinks die Option „Betreten des Raums nur nach Bestätigung möglich” aktiviert, erzeugt der Klick auf den Link zunächst eine Beitrittsanfrage. Diese kann hier bestätigt oder abgelehnt werden. Wird die Beitrittsanfrage bestätigt, erhält die Person Zugriff auf alle Rauminhalte und wird in der Mitgliederliste aufgeführt.",
 	"pages.rooms.members.remove.ariaLabel": "{memberFullName} aus Raum entfernen",
 	"pages.rooms.members.resetSelection.ariaLabel":
 		"Ausgewählte Mitglieder aus der Liste zurücksetzen",
@@ -1901,6 +1935,24 @@ export default {
 		"Bei Übertragung dieser Berechtigung an {memberFullName} verliert {currentUserFullName} das Recht, den Raum zu löschen.",
 	"pages.rooms.members.handOverAlert.confirm.label.subText":
 		"Diese Aktion kann nur von {memberFullName} rückgängig gemacht werden.",
+	"pages.rooms.members.inviteMember.firstStep.title":
+		"Einladungslink erstellen",
+	"pages.rooms.members.inviteMember.firstStep.subTitle":
+		"Im nächsten Schritt wird ein Link erstellt, mit dem der Raum betreten	werden kann.",
+	"pages.rooms.members.inviteMember.secondStep.title": "Einladungslink teilen",
+	"pages.rooms.members.inviteMember.infoAlert.text":
+		"Lernende anderer Schulen müssen immer durch eine aufsichtsführende Lernbegleitung ihrer Schule zum Raum hinzugefügt werden.",
+	"pages.rooms.members.inviteMember.form.description.label":
+		"Beschreibung (optional)",
+	"pages.rooms.members.inviteMember.form.description.hint":
+		"Wird in der Link-Übersicht angezeigt",
+	"pages.rooms.members.inviteMember.form.onlySchoolMembers.label":
+		"Link nur für Nutzende der folgenden Schule gültig:",
+	"pages.rooms.members.inviteMember.form.validForStudents.label":
+		"Link auch für Lernende gültig",
+	"pages.rooms.members.inviteMember.form.linkExpires.label": "Link läuft ab am",
+	"pages.rooms.members.inviteMember.form.isConfirmationNeeded.label":
+		"Betreten des Raums nur nach Bestätigung möglich ({0})",
 	"pages.rooms.title": "Räume",
 	"pages.taskCard.addElement": "Element hinzufügen",
 	"pages.taskCard.deleteElement.text":
@@ -2032,6 +2084,10 @@ export default {
 	"ui-confirmation-dialog.ask-delete": "{type}{title} wirklich löschen?",
 	"ui-confirmation-dialog.ask-cancel-form": "Änderungen verwerfen?",
 	"ui-layout.topbar.pageShare.printQRCode": "QR-Code drucken",
+	"ui.actionMenu.selectedRows": "Aktionsmenü für {count} ausgewählte Zeilen",
+	"ui.actionMenu.actions": "Aktionen",
+	"ui.actionMenu.select.none": "Alle Zeilen abwählen",
+	"ui.dataTable.select.all": "Alle Zeilen auswählen",
 	"util-validators-invalid-url": "Dies ist keine gültige URL.",
 	"utils.adminFilter.class.title": "Klasse(n)",
 	"utils.adminFilter.consent.label.missing": "Nutzer:in angelegt",
@@ -2071,7 +2127,13 @@ export default {
 	"pages.folder.fab.title": "Datei hinzufügen",
 	"pages.folder.untitled": "Unbenannter Ordner",
 	"pages.folder.title": "Ordner",
+	"pages.folder.columns.name": "Name",
+	"pages.folder.columns.createdat": "Erstellt am",
+	"pages.folder.columns.size": "Größe",
 	"pages.folder.ariaLabels.menu": "Ordner Menü",
 	"pages.folder.ariaLabels.menu.action.edit": "Ordner umbenennen",
 	"pages.folder.ariaLabels.menu.action.delete": "Ordner löschen",
+	"pages.folder.ariaLabels.filter": "Tabelle durchsuchen/filtern",
+	"pages.folder.ariaLabels.actionMenu": "Aktionsmenü für {name}",
+	"pages.folder.uploadstats": "{uploaded} von {total} Dateien hochgeladen",
 };
