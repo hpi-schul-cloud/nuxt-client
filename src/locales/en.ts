@@ -421,6 +421,8 @@ export default {
 		"A file with this name already exists.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
 		"The file service is currently not available.",
+	"components.board.notifications.errors.fileNotDeleted":
+		"The files could not be deleted.",
 	"components.board.notifications.errors.fileToBig":
 		"The attached file exceeds the maximum permitted size of {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated":
@@ -2097,7 +2099,11 @@ export default {
 	"pages.folder.ariaLabels.menu": "Folder menu",
 	"pages.folder.ariaLabels.menu.action.edit": "Rename folder",
 	"pages.folder.ariaLabels.menu.action.delete": "Delete folder",
+	"pages.folder.ariaLabels.menu.action.file.delete": "Delete file",
 	"pages.folder.ariaLabels.filter": "Search/filter table",
 	"pages.folder.ariaLabels.actionMenu": "Action menu for {name}",
 	"pages.folder.uploadstats": "{uploaded} of {total} files uploaded",
+	"pages.folder.delete-multiple-confirmation": "Delete all {total} files?",
+	"pages.folder.delete-confirmation":
+		"Do you really want to delete file {name}?",
 };
