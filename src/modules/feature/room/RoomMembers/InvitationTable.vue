@@ -33,19 +33,10 @@ import {
 import { mdiShareVariantOutline } from "@icons/material";
 import { storeToRefs } from "pinia";
 
-const emit = defineEmits<{
-	(e: "open:shareModal", value: string): void;
-}>();
-
-enum InvitationStep {
-	PREPARE = "prepare",
-	SHARE = "share",
-}
-
 const { t } = useI18n();
 
 const roomInvitationLinkStore = useRoomInvitationLinkStore();
-const { shareDialogStep, isInvitationDialogOpen } = storeToRefs(
+const { invitationStep, isInvitationDialogOpen, sharedUrl } = storeToRefs(
 	roomInvitationLinkStore
 );
 
@@ -83,8 +74,8 @@ const tableHeaders = [
 ];
 
 const openShareModal = (itemId: string) => {
-	shareDialogStep.value = InvitationStep.SHARE;
+	invitationStep.value = "share";
+	sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${itemId}`;
 	isInvitationDialogOpen.value = true;
-	emit("open:shareModal", itemId);
 };
 </script>

@@ -14,7 +14,7 @@
 			</template>
 
 			<template #text>
-				<template v-if="step === InvitationStep.PREPARE">
+				<template v-if="invitationStep === 'prepare'">
 					<p>
 						{{ t("pages.rooms.members.inviteMember.firstStep.subTitle") }}
 					</p>
@@ -121,7 +121,7 @@
 
 			<template #actions>
 				<v-spacer />
-				<div v-if="step === InvitationStep.PREPARE" class="mr-4 mb-3">
+				<div v-if="invitationStep === 'prepare'" class="mr-4 mb-3">
 					<v-btn
 						ref="cancelButton"
 						class="ms-auto mr-2"
@@ -158,7 +158,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref, watchEffect } from "vue";
+import { computed, ref, watch } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import { InfoAlert } from "@ui-alert";
@@ -168,20 +168,12 @@ import { useDisplay } from "vuetify";
 import { useRoomInvitationLinkStore } from "@data-room";
 import { envConfigModule } from "@/store";
 import { injectStrict, NOTIFIER_MODULE_KEY } from "@/utils/inject";
+import { storeToRefs } from "pinia";
 
-enum InvitationStep {
-	PREPARE = "prepare",
-	SHARE = "share",
-}
-
-const props = defineProps({
+defineProps({
 	schoolName: {
 		type: String,
 		default: "",
-	},
-	preDefinedStep: {
-		type: String,
-		default: "prepare",
 	},
 });
 
@@ -197,15 +189,10 @@ const emit = defineEmits<{
 
 const notifierModule = injectStrict(NOTIFIER_MODULE_KEY);
 const { createLink } = useRoomInvitationLinkStore();
+const { invitationStep, sharedUrl } = storeToRefs(useRoomInvitationLinkStore());
 
 const { t } = useI18n();
 const { xs } = useDisplay();
-const step = ref<string>();
-const sharedUrl = ref<string>();
-
-onMounted(() => {
-	step.value = props.preDefinedStep;
-});
 
 const defaultFormData = {
 	title: "",
@@ -223,7 +210,7 @@ const isDatePickerDisabled = computed(() => {
 });
 
 const modalTitle = computed(() => {
-	return step.value === InvitationStep.PREPARE
+	return invitationStep.value === "prepare"
 		? t("pages.rooms.members.inviteMember.firstStep.title")
 		: t("pages.rooms.members.inviteMember.secondStep.title");
 });
@@ -238,7 +225,7 @@ const onClose = () => {
 
 	setTimeout(() => {
 		formData.value = { ...defaultFormData };
-		step.value = InvitationStep.PREPARE;
+		invitationStep.value = "prepare";
 	}, 1000);
 };
 
@@ -252,10 +239,9 @@ const onInviteMembers = async () => {
 		restrictedToCreatorSchool: formData.value.restrictedToCreatorSchool,
 		requiresConfirmation: formData.value.requiresConfirmation,
 	};
-	const linkId = await createLink(createLinkBodyParams);
+	await createLink(createLinkBodyParams);
 
-	sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${linkId}`;
-	step.value = InvitationStep.SHARE;
+	invitationStep.value = "share";
 };
 
 const onCopyLink = () => {
@@ -271,19 +257,19 @@ const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 	immediate: true,
 });
 
-watchEffect(() => {
-	if (!formData.value.restrictedToCreatorSchool) {
-		formData.value.isAlsoForStudents = false;
+watch(
+	() => formData.value.restrictedToCreatorSchool,
+	(newVal) => {
+		if (!newVal) {
+			formData.value.isAlsoForStudents = false;
+		}
 	}
+);
 
-	if (!isOpen.value) {
+watch(isOpen, (newVal) => {
+	if (!newVal) {
 		deactivate();
 	}
-
-	step.value =
-		props.preDefinedStep === InvitationStep.SHARE
-			? InvitationStep.SHARE
-			: InvitationStep.PREPARE;
 });
 
 const informationLink = computed(() =>

@@ -24,8 +24,9 @@ export const useRoomInvitationLinkStore = defineStore(
 
 		const roomInvitationLinks: Ref<RoomInvitationLink[]> = ref([]);
 		const isLoading = ref<boolean>(false);
-		const shareDialogStep = ref<string>();
 		const isInvitationDialogOpen = ref(false);
+		const invitationStep = ref<"prepare" | "share">("prepare");
+		const sharedUrl = ref<string>();
 
 		const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 		const api = RoomInvitationLinkApiFactory(undefined, "/v3", $axios);
@@ -68,8 +69,7 @@ export const useRoomInvitationLinkStore = defineStore(
 				).data;
 
 				roomInvitationLinks.value.push(response);
-
-				return response.id;
+				sharedUrl.value = `${window.location.origin}/rooms/invitation-link/${response.id}`;
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.create"));
 			}
@@ -167,11 +167,12 @@ export const useRoomInvitationLinkStore = defineStore(
 			updateLink,
 			deleteLinks,
 			useLink,
+			invitationStep,
 			isInvitationDialogOpen,
 			isLoading,
 			invitationTableData,
 			roomInvitationLinks,
-			shareDialogStep,
+			sharedUrl,
 		};
 	}
 );
