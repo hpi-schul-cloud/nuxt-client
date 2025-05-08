@@ -94,6 +94,7 @@ import {
 	useRoomMembersStore,
 	useRoomMemberVisibilityOptions,
 	useRoomAuthorization,
+	useRoomInvitationLinkStore,
 } from "@data-room";
 import { storeToRefs } from "pinia";
 import {
@@ -138,7 +139,6 @@ const membersInfoText = ref("");
 
 const isMembersDialogOpen = ref(false);
 const isLeaveRoomProhibitedDialogOpen = ref(false);
-const isInvitationDialogOpen = ref(false);
 
 const roomMembersStore = useRoomMembersStore();
 const { currentUser } = storeToRefs(roomMembersStore);
@@ -152,6 +152,8 @@ const { canLeaveRoom } = useRoomAuthorization();
 const { isVisibleAddMemberButton, isVisibleTabNavigation } =
 	useRoomMemberVisibilityOptions(currentUser);
 const { FEATURE_ROOM_MEMBERS_TABS_ENABLED } = envConfigModule.getEnv;
+
+const { isInvitationDialogOpen } = storeToRefs(useRoomInvitationLinkStore());
 
 watchEffect(() => {
 	if (isVisibleAddMemberButton.value !== undefined) {

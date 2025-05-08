@@ -23,6 +23,7 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { DataTable } from "@ui-data-table";
+import { useRoomInvitationLinkStore } from "@data-room";
 import {
 	KebabMenu,
 	KebabMenuActionShare,
@@ -30,7 +31,7 @@ import {
 	KebabMenuActionDelete,
 } from "@ui-kebab-menu";
 import { mdiShareVariantOutline } from "@icons/material";
-import { ref } from "vue";
+import { storeToRefs } from "pinia";
 
 const emit = defineEmits<{
 	(e: "open:shareModal", value: string): void;
@@ -43,8 +44,10 @@ enum InvitationStep {
 
 const { t } = useI18n();
 
-const isInvitationDialogOpen = ref(false);
-const shareDialogStep = ref<string>();
+const roomInvitationLinkStore = useRoomInvitationLinkStore();
+const { shareDialogStep, isInvitationDialogOpen } = storeToRefs(
+	roomInvitationLinkStore
+);
 
 const tableHeaders = [
 	{

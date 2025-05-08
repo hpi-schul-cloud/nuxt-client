@@ -24,6 +24,8 @@ export const useRoomInvitationLinkStore = defineStore(
 
 		const roomInvitationLinks: Ref<RoomInvitationLink[]> = ref([]);
 		const isLoading = ref<boolean>(false);
+		const shareDialogStep = ref<string>();
+		const isInvitationDialogOpen = ref(false);
 
 		const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 		const api = RoomInvitationLinkApiFactory(undefined, "/v3", $axios);
@@ -165,9 +167,11 @@ export const useRoomInvitationLinkStore = defineStore(
 			updateLink,
 			deleteLinks,
 			useLink,
-			roomInvitationLinks,
+			isInvitationDialogOpen,
 			isLoading,
 			invitationTableData,
+			roomInvitationLinks,
+			shareDialogStep,
 		};
 	}
 );
