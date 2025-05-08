@@ -331,7 +331,7 @@ describe("@ui-layout/UserMenu", () => {
 					hasEndSessionEndpoint: true,
 				};
 
-				const { wrapper } = setupWrapper(true, mockedSystem, undefined);
+				const { wrapper } = setupWrapper(true, mockedSystem);
 
 				return { wrapper };
 			};
