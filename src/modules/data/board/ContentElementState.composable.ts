@@ -17,8 +17,6 @@ export const useContentElementState = <T extends AnyContentElement>(
 
 	const computedElement: ComputedRef<T> = computed(() => _elementRef.value);
 
-	const isLoading: Ref<boolean> = ref<boolean>(false);
-
 	watchDebounced<T["content"]>(
 		modelValue.value,
 		async (modelValue: T["content"]): Promise<void> => {
@@ -42,6 +40,5 @@ export const useContentElementState = <T extends AnyContentElement>(
 		 * Contains the whole element as it is currently known in the backend
 		 */
 		computedElement,
-		isLoading,
 	};
 };

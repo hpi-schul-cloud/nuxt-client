@@ -11,6 +11,11 @@ declare module "@/assets/img/collaborativeEditor.svg" {
 	const value: string;
 	export default value;
 }
+
+declare module "@/assets/img/crossedHands.svg" {
+	const value: string;
+	export default value;
+}
 declare module "@/assets/img/videoConference.svg" {
 	const value: string;
 	export default value;
@@ -30,6 +35,15 @@ declare module "@/assets/img/bbb/available.png" {
 	export default value;
 }
 declare module "@/assets/img/bbb/not_started.png" {
+	const value: string;
+	export default value;
+}
+
+declare module "@/assets/img/logout/Sloth.svg" {
+	const value: string;
+	export default value;
+}
+declare module "@/assets/img/logout/Sloth_error.svg" {
 	const value: string;
 	export default value;
 }

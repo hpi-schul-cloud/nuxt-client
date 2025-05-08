@@ -1,5 +1,5 @@
 <template>
-	<VNavigationDrawer>
+	<VNavigationDrawer v-model="sidebarExpanded">
 		<VList open-strategy="multiple">
 			<div class="d-flex align-center">
 				<VBtn
@@ -7,7 +7,8 @@
 					:icon="mdiMenuOpen"
 					size="default"
 					flat
-					@click="() => $emit('update:modelValue', false)"
+					data-testid="sidebar-toggle-close"
+					@click="sidebarExpanded = false"
 				/>
 				<CloudLogo class="mt-1" />
 			</div>
@@ -55,7 +56,10 @@ import { SidebarGroupItem, SidebarSingleItem, SidebarItems } from "../types";
 import { useSidebarItems } from "./SidebarItems.composable";
 import { mdiMenuOpen } from "@icons/material";
 
-defineEmits(["update:modelValue"]);
+const sidebarExpanded = defineModel({
+	type: Boolean,
+	required: true,
+});
 
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -119,3 +123,29 @@ const metaItems = computed(
 );
 const pageItems = computed(() => getItemsForUser(pageLinks.value));
 </script>
+
+<style>
+@supports (scrollbar-color: auto) {
+	.v-navigation-drawer__content {
+		scrollbar-color: transparent transparent;
+	}
+
+	.v-navigation-drawer__content:hover {
+		scrollbar-color: initial;
+	}
+}
+
+@supports selector(::-webkit-scrollbar) {
+	.v-navigation-drawer__content::-webkit-scrollbar-thumb {
+		background-color: transparent;
+	}
+
+	.v-navigation-drawer__content:hover::-webkit-scrollbar-thumb {
+		background-color: rgba(var(--v-theme-on-surface), 0.6);
+	}
+
+	.v-navigation-drawer__content::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(var(--v-theme-on-surface), 0.8);
+	}
+}
+</style>

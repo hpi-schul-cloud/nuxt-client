@@ -1,22 +1,22 @@
 <template>
 	<div
 		class="d-flex justify-space-between align-center ga-2 mb-2 table-title-header"
-		:class="{
-			'fixed-position': fixedPosition.enabled,
-			'flex-column': isExtraSmallDisplay,
-		}"
-		:style="{ top: `${fixedPosition.positionTop}px` }"
+		:class="{ sticky: isMobileDevice, 'flex-column': isExtraSmallDisplay }"
+		:style="stickyStyle"
 	>
 		<ActionMenu
-			v-if="selectedUserIds.length"
+			v-if="selectedIds.length"
 			class="multi-action-menu"
 			:class="{ 'order-2': isExtraSmallDisplay }"
-			:selected-ids="selectedUserIds"
-			:is-visible-change-role-button="isVisibleChangeRoleButton"
-			@remove:selected="onRemoveMembers"
+			:selected-ids="selectedIds"
 			@reset:selected="onResetSelectedMembers"
-			@change:role="onChangePermission"
-		/>
+		>
+			<KebabMenuActionChangePermission
+				v-if="isVisibleChangeRoleButton"
+				@click="onChangePermission(selectedIds)"
+			/>
+			<KebabMenuActionRemoveMember @click="onRemoveMembers(selectedIds)" />
+		</ActionMenu>
 		<v-spacer v-else />
 		<v-text-field
 			v-model="search"
@@ -27,21 +27,23 @@
 			mobile-breakpoint="sm"
 			single-line
 			variant="solo-filled"
-			:class="{ 'order-1 w-100 mt-1': isExtraSmallDisplay }"
+			:class="{ 'order-1 w-100 mt-2': isExtraSmallDisplay }"
 			:label="t('common.labels.search')"
 			:prepend-inner-icon="mdiMagnify"
+			:aria-label="t('pages.rooms.members.filter')"
 		/>
 	</div>
 
 	<v-divider role="presentation" />
+
 	<v-data-table
 		v-model:search="search"
-		v-model="selectedUserIds"
+		v-model="selectedIds"
 		data-testid="participants-table"
 		hover
 		item-value="userId"
 		mobile-breakpoint="sm"
-		:items="memberList"
+		:items="roomMembers"
 		item-selectable="isSelectable"
 		:headers="tableHeader"
 		:items-per-page-options="[5, 10, 25, 50, 100]"
@@ -52,6 +54,34 @@
 		:sort-desc-icon="mdiMenuUp"
 		@update:current-items="onUpdateFilter"
 	>
+		<template
+			#[`header.data-table-select`]="{ someSelected, allSelected, selectAll }"
+		>
+			<VCheckboxBtn
+				:model-value="allSelected"
+				:indeterminate="someSelected && !allSelected"
+				:aria-label="t('pages.rooms.members.select.all')"
+				@click="selectAll(!allSelected)"
+			/>
+		</template>
+		<template #[`item.data-table-select`]="{ item, isSelected, toggleSelect }">
+			<VCheckboxBtn
+				:model-value="
+					isSelected({
+						value: item.userId,
+						selectable: item.isSelectable ?? true,
+					})
+				"
+				:disabled="item.isSelectable === false"
+				:aria-label="`${item.firstName}  ${item.lastName}`"
+				@click="
+					toggleSelect({
+						value: item.userId,
+						selectable: item.isSelectable ?? true,
+					})
+				"
+			/>
+		</template>
 		<template v-if="isVisibleActionColumn" #[`item.actions`]="{ item, index }">
 			<KebabMenu
 				v-if="isVisibleActionInRow(item)"
@@ -71,6 +101,15 @@
 			</KebabMenu>
 		</template>
 	</v-data-table>
+	<VDialog
+		v-model="isChangeRoleDialogOpen"
+		:width="isExtraSmallDisplay ? 'auto' : 480"
+		data-testid="dialog-change-role-participants"
+		max-width="480"
+		@keydown.esc="onDialogClose"
+	>
+		<ChangeRole :members="membersToChangeRole" @close="onDialogClose" />
+	</VDialog>
 	<ConfirmationDialog />
 </template>
 
@@ -81,50 +120,47 @@ import {
 	KebabMenuActionChangePermission,
 	KebabMenuActionRemoveMember,
 } from "@ui-kebab-menu";
-import { computed, ModelRef, PropType, ref, toRef } from "vue";
+import { ref, computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { mdiMenuDown, mdiMenuUp, mdiMagnify } from "@icons/material";
 import {
 	ConfirmationDialog,
 	useConfirmationDialog,
 } from "@ui-confirmation-dialog";
-import { RoomMember, useRoomMemberVisibilityOptions } from "@data-room";
+import {
+	RoomMember,
+	useRoomMembersStore,
+	useRoomMemberVisibilityOptions,
+} from "@data-room";
 import { useDisplay } from "vuetify/lib/framework.mjs";
+import { storeToRefs } from "pinia";
+import { ChangeRole } from "@feature-room";
 
 const props = defineProps({
-	members: {
-		type: Array as PropType<RoomMember[]>,
-		required: true,
-	},
-	currentUser: {
-		type: Object as PropType<RoomMember>,
-		required: true,
-	},
-	fixedPosition: {
-		type: Object as PropType<{ enabled: boolean; positionTop: number }>,
-		default: () => ({ enabled: false, positionTop: 0 }),
+	headerBottom: {
+		type: Number,
+		default: 0,
 	},
 });
 
-const selectedUserIds: ModelRef<string[]> = defineModel("selectedUserIds", {
-	type: Array<string>,
-	required: true,
-});
+const { t } = useI18n();
+const { xs: isExtraSmallDisplay, mdAndDown: isMobileDevice } = useDisplay();
+
+const roomMembersStore = useRoomMembersStore();
+const { currentUser, roomMembers, selectedIds } = storeToRefs(roomMembersStore);
+const { removeMembers } = roomMembersStore;
 
 const { askConfirmation } = useConfirmationDialog();
 
-const emit = defineEmits<{
-	(e: "remove:members", userIds: string[]): void;
-	(e: "change:permission", userIds: string[]): void;
-}>();
+const isChangeRoleDialogOpen = ref(false);
+const membersToChangeRole = ref<RoomMember[]>([]);
 
-const { t } = useI18n();
-const { xs: isExtraSmallDisplay } = useDisplay();
 const search = ref("");
-const memberList = toRef(props, "members");
-const membersFilterCount = ref(memberList.value?.length);
+const stickyStyle = computed(() => ({
+	top: `${props.headerBottom}px`,
+}));
 
-const currentUser = computed(() => props.currentUser);
+const membersFilterCount = ref(roomMembers.value?.length);
 
 const {
 	isVisibleActionColumn,
@@ -134,24 +170,28 @@ const {
 	isVisibleRemoveMemberButton,
 } = useRoomMemberVisibilityOptions(currentUser);
 
+const onDialogClose = () => {
+	isChangeRoleDialogOpen.value = false;
+};
+
 const onUpdateFilter = (filteredMembers: RoomMember[]) => {
 	membersFilterCount.value =
-		search.value === "" ? memberList.value.length : filteredMembers.length;
+		search.value === "" ? roomMembers.value.length : filteredMembers.length;
 };
 
 const onResetSelectedMembers = () => {
-	selectedUserIds.value = [];
+	selectedIds.value = [];
 };
 
 const onRemoveMembers = async (userIds: string[]) => {
 	const shouldRemove = await confirmRemoval(userIds);
-	if (shouldRemove) emit("remove:members", userIds);
+	if (shouldRemove) await removeMembers(userIds);
 };
 
 const confirmRemoval = async (userIds: string[]) => {
 	let message = t("pages.rooms.members.multipleRemove.confirmation");
 	if (userIds.length === 1) {
-		const member = memberList.value.find(
+		const member = roomMembers.value.find(
 			(member) => member.userId === userIds[0]
 		);
 		message = t("pages.rooms.members.remove.confirmation", {
@@ -163,6 +203,14 @@ const confirmRemoval = async (userIds: string[]) => {
 		confirmActionLangKey: "common.actions.remove",
 	});
 	return shouldRemove;
+};
+
+const onChangePermission = (userIds: string[]) => {
+	membersToChangeRole.value = roomMembers.value.filter((member) =>
+		userIds.includes(member.userId)
+	);
+
+	isChangeRoleDialogOpen.value = true;
 };
 
 const getAriaLabel = (
@@ -183,10 +231,6 @@ const getAriaLabel = (
 	return t("pages.rooms.members.actionMenu.ariaLabel", {
 		memberFullName,
 	});
-};
-
-const onChangePermission = (userIds: string[]) => {
-	emit("change:permission", userIds);
 };
 
 const tableHeader = [
@@ -245,13 +289,13 @@ const tableHeader = [
 	min-height: 40px;
 }
 
-.fixed-position {
-	$space-left-right: calc(var(--space-base-vuetify) * 6);
-	position: fixed;
-	right: $space-left-right;
-	left: $space-left-right;
-	width: calc(100% - $space-left-right * 2);
+.sticky {
+	position: sticky;
 	z-index: 1;
 	background: rgb(var(--v-theme-white));
+	$space-left-right: calc(var(--space-base-vuetify) * 6);
+	right: $space-left-right;
+	left: $space-left-right;
+	width: 100%;
 }
 </style>

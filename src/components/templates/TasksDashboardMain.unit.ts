@@ -142,13 +142,6 @@ describe("@/components/templates/TasksDashboardMain", () => {
 			expect(studentDashboard.props("tabRoutes")).toContain("open");
 		});
 
-		it("should hide substituteFilter", async () => {
-			const substituteFilterPlaceholder = wrapper.find(
-				".substitute-filter-placeholder"
-			);
-			expect(substituteFilterPlaceholder.exists()).toBe(true);
-		});
-
 		describe("with hasTasks === true", () => {
 			beforeEach(() => {
 				tasksModuleMock = createModuleMocks(TasksModule, {

@@ -1,35 +1,35 @@
+import { VideoConferenceElementContent } from "@/serverApi/v3/api";
+import AuthModule from "@/store/auth";
+import { VideoConferenceState } from "@/store/types/video-conference";
 import { AUTH_MODULE_KEY } from "@/utils/inject";
+import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
 import { videoConferenceElementResponseFactory } from "@@/tests/test-utils/factory/videoConferenceElementResponseFactory";
+import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
+import {
+	createTestingI18n,
+	createTestingVuetify,
+} from "@@/tests/test-utils/setup";
 import {
 	useBoardFeatures,
 	useBoardFocusHandler,
 	useBoardPermissions,
 	useContentElementState,
 } from "@data-board";
+import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
-import { computed, ref } from "vue";
-import { createModuleMocks } from "@@/tests/test-utils/mock-store-module";
-import { VideoConferenceElementContent } from "@/serverApi/v3/api";
-import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
-import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
-import { videoConferenceElementContentFactory } from "@@/tests/test-utils/factory/videoConferenceElementContentFactory";
-import {
-	createTestingI18n,
-	createTestingVuetify,
-} from "@@/tests/test-utils/setup";
 import { BoardMenu } from "@ui-board";
 import {
 	KebabMenuActionDelete,
 	KebabMenuActionMoveDown,
 	KebabMenuActionMoveUp,
 } from "@ui-kebab-menu";
-import { VideoConferenceContentElement } from "@feature-board-video-conference-element";
-import AuthModule from "@/store/auth";
-import { Router, useRoute, useRouter } from "vue-router";
-import { VideoConferenceState } from "@/store/types/video-conference";
-import { useVideoConference } from "../composables/VideoConference.composable";
 import { BOARD_IS_LIST_LAYOUT } from "@util-board";
 import { flushPromises } from "@vue/test-utils";
+import { computed, ref } from "vue";
+import { Router, useRoute, useRouter } from "vue-router";
+import { useVideoConference } from "../composables/VideoConference.composable";
+import VideoConferenceContentElementCreate from "./VideoConferenceContentElementCreate.vue";
+import VideoConferenceContentElementDisplay from "./VideoConferenceContentElementDisplay.vue";
 
 jest.mock("@data-board/ContentElementState.composable");
 jest.mock("@data-board/BoardFocusHandler.composable");
@@ -128,7 +128,6 @@ describe("VideoConferenceContentElement", () => {
 		mockedUseContentElementState.mockReturnValue({
 			modelValue: ref(element.content),
 			computedElement: computed(() => element),
-			isLoading: ref(false),
 		});
 
 		const useVideoConferenceMock: DeepMocked<

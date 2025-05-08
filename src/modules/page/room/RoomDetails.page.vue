@@ -14,6 +14,7 @@
 					:room-name="room?.name"
 					@room:edit="onEdit"
 					@room:manage-members="onManageMembers"
+					@room:duplicate="onDuplicate"
 					@room:delete="onDelete"
 					@room:leave="onLeaveRoom"
 				/>
@@ -27,6 +28,12 @@
 			@select="onCreateBoard"
 		/>
 		<LeaveRoomProhibitedDialog v-model="isLeaveRoomProhibitedDialogOpen" />
+		<DuplicationInfoDialog
+			v-if="isRoomDuplicationFeatureEnabled"
+			v-model="isDuplicationInfoDialogOpen"
+			@duplication:cancel="cancelDuplication"
+			@duplication:confirm="confirmDuplication"
+		/>
 	</DefaultWireframe>
 </template>
 
@@ -37,8 +44,13 @@ import { BoardLayout } from "@/serverApi/v3";
 import { authModule } from "@/store";
 import { ENV_CONFIG_MODULE_KEY, injectStrict } from "@/utils/inject";
 import { buildPageTitle } from "@/utils/pageTitle";
-import { useRoomDetailsStore, useRoomsState } from "@data-room";
-import { BoardGrid, RoomMenu, useRoomAuthorization } from "@feature-room";
+import {
+	useRoomDetailsStore,
+	useRoomsState,
+	useRoomAuthorization,
+	useRoomDuplication,
+} from "@data-room";
+import { BoardGrid, RoomMenu, DuplicationInfoDialog } from "@feature-room";
 import {
 	mdiPlus,
 	mdiViewDashboardOutline,
@@ -172,6 +184,39 @@ const onManageMembers = () => {
 		},
 	});
 };
+
+// begin - Duplication Feature
+
+const {
+	isRoomDuplicationFeatureEnabled,
+	isDuplicationInfoDialogOpen,
+	openDuplicationInfoDialog,
+	closeDuplicationInfoDialog,
+	duplicate,
+} = useRoomDuplication();
+
+const onDuplicate = async () => {
+	// TODO Permission check
+	if (!room.value) return;
+
+	openDuplicationInfoDialog();
+};
+
+const cancelDuplication = () => {
+	closeDuplicationInfoDialog();
+};
+
+const confirmDuplication = async () => {
+	await duplicate();
+
+	router.push({
+		name: "room-details",
+		params: {
+			id: room.value?.id,
+		},
+	});
+};
+// end - Duplication Feature
 
 const onDelete = async () => {
 	if (!room.value || !canDeleteRoom.value) return;

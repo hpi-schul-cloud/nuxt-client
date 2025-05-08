@@ -44,6 +44,8 @@ const vueRoutes = [
 	`^/news/new/?$`,
 	`^/news/${mongoId}/edit/?$`,
 	`^/poc-files/?$`,
+	`^/folder/${mongoId}/?$`,
+	`^/rooms/invitation-link/${mongoId}?$`,
 	`^/rooms/?$`,
 	`^/rooms/new/?$`,
 	`^/rooms/${mongoId}/?$`,
@@ -58,7 +60,7 @@ const vueRoutes = [
 	`^/tools/context/tool-configuration/${mongoId}/?$`,
 ];
 
-const isVueClient = (path) => {
+const isVueClient = (/** @type {string} */ path) => {
 	return vueRoutes.some((regex) => new RegExp(regex).exec(path));
 };
 

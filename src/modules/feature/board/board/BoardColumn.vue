@@ -356,11 +356,6 @@ export default defineComponent({
 }
 
 .multi-column-board-column {
-	/* The last subtracted height of 10x is the height of the scrollbar. */
-	height: calc(
-		100vh - var(--topbar-height) - var(--breadcrumbs-height) -
-			var(--board-header-height) - 10px
-	);
 	width: 400px;
 }
 
@@ -368,39 +363,27 @@ export default defineComponent({
 	min-height: 100%;
 }
 
-@supports selector(::-webkit-scrollbar) {
-	.scrollable::-webkit-scrollbar {
-		width: 6px;
-	}
-
-	.scrollable::-webkit-scrollbar-track {
-		background: white;
-		border: none;
-	}
-
-	.scrollable::-webkit-scrollbar-thumb {
-		background-color: transparent;
-		border-radius: 5px;
-	}
-
-	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb {
-		background-color: rgba(var(--v-theme-on-surface), 0.6);
-		border-radius: 5px;
-	}
-
-	.column-drag-handle:hover .scrollable::-webkit-scrollbar-thumb:hover {
-		background: rgba(var(--v-theme-on-surface), 0.8);
-	}
-}
-
-@supports not selector(::-webkit-scrollbar) {
+@supports (scrollbar-color: auto) {
 	.scrollable {
-		scrollbar-width: thin;
 		scrollbar-color: transparent transparent;
 	}
 
-	.column-drag-handle:hover .scrollable {
+	.scrollable:hover {
 		scrollbar-color: initial;
+	}
+}
+
+@supports selector(::-webkit-scrollbar) {
+	.scrollable::-webkit-scrollbar-thumb {
+		background-color: transparent;
+	}
+
+	.scrollable:hover::-webkit-scrollbar-thumb {
+		background-color: rgba(var(--v-theme-on-surface), 0.6);
+	}
+
+	.scrollable::-webkit-scrollbar-thumb:hover {
+		background-color: rgba(var(--v-theme-on-surface), 0.8);
 	}
 }
 </style>

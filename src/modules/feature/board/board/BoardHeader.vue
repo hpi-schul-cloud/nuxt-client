@@ -1,51 +1,47 @@
 <template>
-	<div class="d-flex align-items-center board-header">
+	<div class="d-flex align-start board-header mb-6">
 		<InlineEditInteractionHandler
 			:id="boardId"
+			class="input-container"
 			:is-edit-mode="isEditMode"
 			tabindex="0"
 			@start-edit-mode="onStartEditMode"
 			@end-edit-mode="onEndEditMode"
-			@keydown.enter="onStartEditMode"
+			@keydown.enter.prevent="onStartEditMode"
 		>
-			<div ref="boardHeader">
-				<BoardAnyTitleInput
-					ref="boardHeader"
-					class="ml-n4"
-					scope="board"
-					:value="boardTitle"
-					data-testid="board-title"
-					:is-edit-mode="isEditMode"
-					:is-focused="isFocusedById"
-					:max-length="100"
-					:style="{ width: `${fieldWidth}px` }"
-					@update:value="updateBoardTitle"
-					@blur="onBoardTitleBlur"
-				/>
-				<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
-			</div>
+			<BoardAnyTitleInput
+				ref="boardHeader"
+				class="input"
+				scope="board"
+				:value="boardTitle"
+				data-testid="board-title"
+				:is-edit-mode="isEditMode"
+				:is-focused="isFocusedById"
+				:max-length="100"
+				@update:value="updateBoardTitle"
+				@blur="onBoardTitleBlur"
+			/>
+			<span ref="inputWidthCalcSpan" class="input-width-calc-span" />
 		</InlineEditInteractionHandler>
-		<div class="d-flex">
+		<div class="d-flex mt-4">
 			<BoardDraftChip v-if="isDraft" />
-			<div class="mx-2">
-				<BoardMenu
-					v-if="hasEditPermission"
-					:scope="BoardMenuScope.BOARD"
-					data-testid="board-menu-btn"
-				>
-					<KebabMenuActionRename @click="onStartEditMode" />
-					<KebabMenuActionCopy @click="onCopyBoard" />
-					<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
-					<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
-					<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
-					<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
-					<KebabMenuActionDelete
-						:name="title"
-						scope-language-key="components.board"
-						@click="onDeleteBoard"
-					/>
-				</BoardMenu>
-			</div>
+			<BoardMenu
+				v-if="hasEditPermission"
+				:scope="BoardMenuScope.BOARD"
+				data-testid="board-menu-btn"
+			>
+				<KebabMenuActionRename @click="onStartEditMode" />
+				<KebabMenuActionCopy @click="onCopyBoard" />
+				<KebabMenuActionShare v-if="isShareEnabled" @click="onShareBoard" />
+				<KebabMenuActionPublish v-if="isDraft" @click="onPublishBoard" />
+				<KebabMenuActionChangeLayout @click="onChangeBoardLayout" />
+				<KebabMenuActionRevert v-if="!isDraft" @click="onUnpublishBoard" />
+				<KebabMenuActionDelete
+					:name="title"
+					scope-language-key="components.board"
+					@click="onDeleteBoard"
+				/>
+			</BoardMenu>
 		</div>
 	</div>
 </template>
@@ -105,7 +101,7 @@ const { isFocusedById } = useBoardFocusHandler(boardId.value, boardHeader);
 const { hasEditPermission } = useBoardPermissions();
 
 const inputWidthCalcSpan = ref<HTMLElement>();
-const fieldWidth = ref(0);
+const fieldWidth = ref("0px");
 
 onMounted(() => setTimeout(calculateWidth, 100));
 
@@ -179,7 +175,9 @@ const calculateWidth = () => {
 	inputWidthCalcSpan.value.innerHTML = title.replace(/\s/g, "&nbsp;");
 
 	const width = inputWidthCalcSpan.value.offsetWidth;
-	fieldWidth.value = width;
+
+	// 1px is added here to prevent the input value from being cut off with an ellipsis.
+	fieldWidth.value = `${width + 1}px`;
 };
 
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
@@ -196,10 +194,6 @@ watchEffect(() => {
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
 
-.board-header {
-	height: var(--board-header-height);
-}
-
 .v-chip {
 	cursor: default;
 }
@@ -213,5 +207,14 @@ watchEffect(() => {
 	font-size: var(--heading-3);
 	font-family: var(--font-accent);
 	letter-spacing: $field-letter-spacing;
+}
+
+.input-container {
+	overflow: hidden;
+}
+
+.input {
+	max-width: calc(100%);
+	width: v-bind("fieldWidth");
 }
 </style>

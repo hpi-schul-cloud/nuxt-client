@@ -1,5 +1,8 @@
 <template>
-	<div class="wireframe-container">
+	<div
+		class="wireframe-container"
+		:class="{ 'wireframe-container-flex': isFlexContainer }"
+	>
 		<div
 			id="notify-screen-reader-polite"
 			aria-live="polite"
@@ -10,7 +13,7 @@
 			aria-live="assertive"
 			class="d-sr-only"
 		/>
-		<div class="wireframe-header sticky" :class="{ fixed: fixedHeader }">
+		<div class="wireframe-header sticky">
 			<Breadcrumbs v-if="breadcrumbs.length" :breadcrumbs="breadcrumbs" />
 			<div v-else class="breadcrumbs-placeholder" />
 			<slot name="header">
@@ -61,6 +64,7 @@
 				'pa-0': mainWithoutPadding,
 				'container-short-width': maxWidth === 'short',
 				'container-full-width': maxWidth === 'full',
+				'main-content-flex': isFlexContainer,
 			}"
 		>
 			<slot />
@@ -103,11 +107,13 @@ const props = defineProps({
 		type: String as PropType<string | null>,
 		default: null,
 	},
-	fixedHeader: {
-		type: Boolean,
-	},
 	mainWithoutPadding: {
 		type: Boolean,
+	},
+	// neded if we don't want to have full page scrolling, so it's restricted to browsers viewport height
+	isFlexContainer: {
+		type: Boolean,
+		default: false,
 	},
 });
 
@@ -134,6 +140,17 @@ const showDivider = computed(() => {
 
 <style lang="scss" scoped>
 @import "@/styles/settings.scss";
+
+.wireframe-container-flex {
+	height: calc(100vh - var(--topbar-height));
+	display: flex;
+	flex-direction: column;
+}
+.main-content-flex {
+	flex: 1;
+	overflow-y: auto;
+}
+
 .wireframe-container h1:first-of-type {
 	margin-bottom: var(--space-md);
 }
