@@ -42,9 +42,18 @@
 						>{{ formatFileSize(item.size) }}
 					</span>
 				</template>
+				<template #[`item.actions`]="{ item, index }">
+					<KebabMenu :data-testid="`kebab-menu-${index}`">
+						<KebabMenuActionDownload @click="downloadSingleFile(item)" />
+					</KebabMenu>
+				</template>
 
 				<template #left-of-search>
 					<FileUploadProgress :upload-progress="uploadProgress" />
+				</template>
+
+				<template #action-menu-items>
+					<KebabMenuActionDownload @click="downloadSelectedFiles()" />
 				</template>
 			</DataTable>
 		</div>
@@ -54,9 +63,10 @@
 <script setup lang="ts">
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
-import { convertFileSize } from "@/utils/fileHelper";
+import { convertFileSize, downloadFile } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
+import { KebabMenu, KebabMenuActionDownload } from "@ui-kebab-menu";
 import { computed, defineProps, PropType } from "vue";
 import { useI18n } from "vue-i18n";
 import EmptyFolderSvg from "./EmptyFolderSvg.vue";
@@ -92,7 +102,12 @@ const headers = [
 	{ title: t("pages.folder.columns.name"), key: "name" },
 	{ title: t("pages.folder.columns.createdat"), key: "createdAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
-	{ key: "actions", sortable: false },
+	{
+		title: t("pages.rooms.members.tableHeader.actions"),
+		key: "actions",
+		sortable: false,
+		width: 50,
+	},
 ];
 
 const areUploadStatsVisible = computed(() => {
@@ -104,5 +119,15 @@ const formatFileSize = (size: number) => {
 	const localizedFileSize = n(convertedSize, "fileSize");
 
 	return `${localizedFileSize} ${unit}`;
+};
+
+const downloadSingleFile = async (fileRecord: FileRecord) => {
+	await downloadFile(fileRecord.url, fileRecord.name);
+};
+
+const downloadSelectedFiles = () => {
+	props.fileRecords.forEach(async (fileRecord) => {
+		await downloadFile(fileRecord.url, fileRecord.name);
+	});
 };
 </script>
