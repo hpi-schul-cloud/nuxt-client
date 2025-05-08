@@ -171,8 +171,6 @@
 				<TopicsEmptyStateSvg />
 			</template>
 		</EmptyState>
-		<!-- just for testing image tags with svgs vs inline svgs-->
-		<VImg src="@/assets/img/empty-state/test.svg" />
 		<share-modal type="columnBoard" />
 		<share-modal type="lessons" />
 		<share-modal type="tasks" />
