@@ -1769,8 +1769,6 @@ export default {
 	"pages.room.itemDelete.title": "Eliminar elemento",
 	"pages.room.lessonCard.label.notVisible": "aún no es visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Menú de tema",
-	"pages.room.student.emptyState":
-		"Aquí aparecen contenidos de aprendizaje como temas o tareas.",
 	"pages.room.taskCard.label.done": "Terminar",
 	"pages.room.taskCard.label.due": "Entrega",
 	"pages.room.taskCard.label.edit": "Editar",
@@ -1783,7 +1781,7 @@ export default {
 	"pages.room.taskCard.student.label.submitted": "Completado",
 	"pages.room.taskCard.teacher.label.overdue": "Expirado",
 	"pages.room.taskCard.teacher.label.submitted": "Entregado",
-	"pages.room.teacher.emptyState":
+	"pages.room.learningContent.emptyState":
 		"Actualmente no hay contenidos de aprendizaje en este curso",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
 	"pages.rooms.emptyState.title": "Actualmente no hay cursos",

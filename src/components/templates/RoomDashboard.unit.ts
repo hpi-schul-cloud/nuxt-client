@@ -224,7 +224,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 			const emptyStateComponent = wrapper.findComponent(EmptyState);
 			expect(emptyStateComponent.exists()).toBe(true);
 			expect(emptyStateComponent.props("title")).toBe(
-				"pages.room.teacher.emptyState"
+				"pages.room.learningContent.emptyState"
 			);
 		});
 
@@ -236,7 +236,7 @@ describe("@/components/templates/RoomDashboard.vue", () => {
 
 			const emptyStateComponent = wrapper.findComponent(EmptyState);
 			expect(emptyStateComponent.props("title")).toBe(
-				"pages.room.student.emptyState"
+				"pages.room.learningContent.emptyState"
 			);
 		});
 	});

@@ -1752,8 +1752,6 @@ export default {
 	"pages.room.itemDelete.title": "Видалити елемент",
 	"pages.room.lessonCard.label.notVisible": "ще не видно",
 	"pages.room.lessonCard.menu.ariaLabel": "Тематичний меню",
-	"pages.room.student.emptyState":
-		"Тут з’являється навчальний вміст, наприклад теми чи завдання.",
 	"pages.room.taskCard.label.done": "Завершити",
 	"pages.room.taskCard.label.due": "Термін",
 	"pages.room.taskCard.label.edit": "Редагувати",
@@ -1766,7 +1764,7 @@ export default {
 	"pages.room.taskCard.student.label.submitted": "Завершено",
 	"pages.room.taskCard.teacher.label.overdue": "Термін дії минув",
 	"pages.room.taskCard.teacher.label.submitted": "Надіслано",
-	"pages.room.teacher.emptyState":
+	"pages.room.learningContent.emptyState":
 		"Наразі в цьому курсі немає навчальних матеріалів",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
 	"pages.rooms.emptyState.title": "Наразі курсів немає",

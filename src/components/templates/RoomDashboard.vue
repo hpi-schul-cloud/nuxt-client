@@ -157,7 +157,7 @@
 		<EmptyState
 			v-if="roomIsEmpty"
 			data-testid="empty-state-item"
-			:title="$t(`pages.room.${role}.emptyState`)"
+			:title="$t(`pages.room.learningContent.emptyState`)"
 		>
 			<template #media>
 				<TopicsEmptyStateSvg />

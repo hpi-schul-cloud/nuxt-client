@@ -1716,8 +1716,6 @@ export default {
 	"pages.room.itemDelete.title": "Delete item",
 	"pages.room.lessonCard.label.notVisible": "not yet visible",
 	"pages.room.lessonCard.menu.ariaLabel": "Topic menu",
-	"pages.room.student.emptyState":
-		"Learning content such as topics or tasks appear here.",
 	"pages.room.taskCard.label.done": "Finish",
 	"pages.room.taskCard.label.due": "Due",
 	"pages.room.taskCard.label.edit": "Edit",
@@ -1730,7 +1728,7 @@ export default {
 	"pages.room.taskCard.student.label.submitted": "Completed",
 	"pages.room.taskCard.teacher.label.overdue": "Expired",
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
-	"pages.room.teacher.emptyState":
+	"pages.room.learningContent.emptyState":
 		"There is currently no learning content in this course",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
 	"pages.rooms.emptyState.title": "There are currently no courses",
