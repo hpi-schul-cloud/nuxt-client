@@ -18,7 +18,11 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
+import {
+	RoomMember,
+	useRoomDetailsStore,
+	useRoomMembersStore,
+} from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
@@ -71,11 +75,12 @@ describe("useRoomMembers", () => {
 		authModule.setMe(mockMe);
 	});
 
-	const setup = () => {
+	const setup = (members: RoomMember[] = []) => {
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 		roomDetailsStore.room = roomFactory.build();
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		roomMembersStore.roomMembers = members;
 
 		return { roomMembersStore, roomDetailsStore };
 	};
@@ -614,6 +619,30 @@ describe("useRoomMembers", () => {
 				const { roomMembersStore } = setup();
 
 				expect(roomMembersStore.isRoomOwner("another-user-id")).toBe(false);
+			});
+		});
+	});
+
+	describe("getMemberById", () => {
+		describe("when the member is in the room", () => {
+			it("should return the member with the given id", () => {
+				const members = roomMemberFactory.buildList(3);
+				const { roomMembersStore } = setup(members);
+				const firstMember = members.at(0);
+
+				const member = roomMembersStore.getMemberById(firstMember!.userId);
+
+				expect(member).toEqual(expect.objectContaining(firstMember));
+			});
+		});
+
+		describe("when the member is not in the room", () => {
+			it("should return undefined", () => {
+				const { roomMembersStore } = setup();
+
+				const member = roomMembersStore.getMemberById("non-existing-id");
+
+				expect(member).toBeUndefined();
 			});
 		});
 	});
