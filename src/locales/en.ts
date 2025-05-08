@@ -1842,6 +1842,7 @@ export default {
 	"pages.rooms.members.add": "Add members",
 	"pages.rooms.members.add.infoText":
 		"Multiple people can only be added in one step if they belong to the same school and school role.",
+	"pages.roooms.members.add.role.student": "Student",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Action menu for {memberFullName}",
 	"pages.rooms.members.actionMenu.selectedMembers":

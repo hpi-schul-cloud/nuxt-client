@@ -1875,6 +1875,7 @@ export default {
 	"pages.rooms.members.add": "Mitglieder hinzufügen",
 	"pages.rooms.members.add.infoText":
 		"Mehrere Personen können nur dann in einem Schritt hinzugefügt werden, wenn sie derselben Schule und Schulrolle angehören.",
+	"pages.roooms.members.add.role.student": "Lernend",
 	"pages.rooms.members.actionMenu.ariaLabel":
 		"Aktionsmenü für {memberFullName}",
 	"pages.rooms.members.actionMenu.selectedMembers":

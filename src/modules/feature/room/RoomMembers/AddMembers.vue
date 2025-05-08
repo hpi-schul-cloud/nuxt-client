@@ -106,6 +106,7 @@ const { addMembers, getPotentialMembers } = roomMembersStore;
 const selectedSchool = ref(schools.value[0].id);
 
 const schoolRoles = [
+	{ id: RoleName.Student, name: t("pages.roooms.members.add.role.student") },
 	{ id: RoleName.Teacher, name: t("common.labels.teacher") },
 ];
 
