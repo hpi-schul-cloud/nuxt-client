@@ -1667,6 +1667,7 @@ export default {
 		"Intenta usar una consulta más corta.",
 	"pages.content.emptyState.error.title": "¡Vaya, no hay resultados!",
 	"pages.content.index.backToCourse": "Volver al curso",
+	"pages.content.index.backToBoard": "Volver al tablero",
 	"pages.content.index.backToOverview": "Volver a la vista general",
 	"pages.content.index.search_for": "Buscar...",
 	"pages.content.index.search_resources": "Recursos",

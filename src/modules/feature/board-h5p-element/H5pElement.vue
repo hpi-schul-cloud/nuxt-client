@@ -35,23 +35,16 @@
 				/>
 			</template>
 		</ContentElementBar>
-		<H5pEditorFullscreenDialog
-			v-model:is-open="isDialogOpen"
-			:parent-type="H5PContentParentType.BOARD_ELEMENT"
-			:parent-id="element.id"
-			:content-id="element.content.contentId ?? undefined"
-			@save="onSave"
-		/>
 	</VCard>
 </template>
 
 <script setup lang="ts">
 import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { H5pElementResponse } from "@/serverApi/v3";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useBoardFocusHandler } from "@data-board";
 import { ContentElementBar } from "@ui-board";
 import { computed, Ref, ref, toRef } from "vue";
-import H5pEditorFullscreenDialog from "./dialog/H5pEditorFullscreenDialog.vue";
+import { useRouter } from "vue-router";
 import H5pElementMenu from "./H5pElementMenu.vue";
 
 const props = defineProps<{
@@ -71,17 +64,28 @@ const emit = defineEmits<{
 	(e: "move-keyboard:edit", event: KeyboardEvent): void;
 }>();
 
-const isDialogOpen: Ref<boolean> = ref(false);
-
 const element: Ref<H5pElementResponse> = toRef(props, "element");
-const { modelValue } = useContentElementState<H5pElementResponse>(props, {
-	autoSaveDebounce: 0,
-});
 
-const elementCard = ref<HTMLElement | null>(null);
+const elementCard: Ref<HTMLElement | null> = ref(null);
 useBoardFocusHandler(element.value.id, elementCard);
 
-const hasLinkedContent = computed(() => !!modelValue.value.contentId);
+const hasLinkedContent = computed(() => !!element.value.content.contentId);
+
+const router = useRouter();
+const editorWindow: Ref<Window | null> = ref(null);
+
+const openEditorWindow = () => {
+	const route = router.resolve({
+		name: "h5pEditor",
+		query: {
+			parentType: H5PContentParentType.BOARD_ELEMENT,
+			parentId: element.value.id,
+			contentId: element.value.content.contentId ?? undefined,
+		},
+	});
+
+	editorWindow.value = window.open(route.href, `_blank`);
+};
 
 const onKeydownArrow = (event: KeyboardEvent) => {
 	if (props.isEditMode) {
@@ -101,16 +105,12 @@ const onMoveElementUp = () => {
 const onDeleteElement = () => emit("delete:element", element.value.id);
 
 const onEdit = () => {
-	isDialogOpen.value = true;
+	openEditorWindow();
 };
 
 const onClickElement = () => {
 	if (props.isEditMode) {
-		isDialogOpen.value = true;
+		openEditorWindow();
 	}
-};
-
-const onSave = (contentId: string) => {
-	modelValue.value.contentId = contentId;
 };
 </script>

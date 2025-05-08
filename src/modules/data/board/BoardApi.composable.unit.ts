@@ -595,4 +595,16 @@ describe("BoardApi.composable", () => {
 			>("board-id", { layout: BoardLayout.List });
 		});
 	});
+
+	describe("getElementWithParentHierarchyCall", () => {
+		it("should call elementControllerGetElementWithParentHierarchy api", async () => {
+			const { getElementWithParentHierarchyCall } = useBoardApi();
+
+			await getElementWithParentHierarchyCall("element-id");
+
+			expect(
+				elementApi.elementControllerGetElementWithParentHierarchy
+			).toHaveBeenCalledWith("element-id");
+		});
+	});
 });

@@ -13,6 +13,7 @@ import {
 	CreateContentElementBodyParams,
 	DrawingElementContentBody,
 	DrawingElementResponse,
+	ElementWithParentHierarchyResponse,
 	ExternalToolContentBody,
 	ExternalToolElementContentBody,
 	ExternalToolElementResponse,
@@ -329,6 +330,14 @@ export const useBoardApi = () => {
 		return boardApi.boardControllerUpdateLayout(boardId, { layout });
 	};
 
+	const getElementWithParentHierarchyCall = async (
+		elementId: string
+	): AxiosPromise<ElementWithParentHierarchyResponse> => {
+		return await elementApi.elementControllerGetElementWithParentHierarchy(
+			elementId
+		);
+	};
+
 	return {
 		fetchBoardCall,
 		createColumnCall,
@@ -348,5 +357,6 @@ export const useBoardApi = () => {
 		createCardCall,
 		getContextInfo,
 		updateBoardLayoutCall,
+		getElementWithParentHierarchyCall,
 	};
 };

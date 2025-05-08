@@ -861,4 +861,30 @@ describe("CardStore", () => {
 			).toHaveBeenCalledWith(payload, preferredTool);
 		});
 	});
+
+	describe("disconnectSocketRequest", () => {
+		describe("when using socket connection", () => {
+			it("should call disconnectSocket", () => {
+				const { cardStore } = setup(true);
+
+				cardStore.disconnectSocketRequest();
+
+				expect(
+					mockedCardSocketApiActions.disconnectSocketRequest
+				).toHaveBeenCalled();
+			});
+		});
+
+		describe("when using rest connection", () => {
+			it("should call disconnectSocket", () => {
+				const { cardStore } = setup(true);
+
+				cardStore.disconnectSocketRequest();
+
+				expect(
+					mockedCardRestApiActions.disconnectSocketRequest
+				).toHaveBeenCalled();
+			});
+		});
+	});
 });

@@ -1,38 +1,34 @@
+import { H5PContentParentType } from "@/h5pEditorApi/v3";
 import { H5pElementResponse } from "@/serverApi/v3";
 import { h5pElementResponseFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { useBoardFocusHandler, useContentElementState } from "@data-board";
+import { useBoardFocusHandler } from "@data-board";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { mount } from "@vue/test-utils";
-import { nextTick, ref } from "vue";
-import H5pEditorFullscreenDialog from "./dialog/H5pEditorFullscreenDialog.vue";
+import { nextTick } from "vue";
+import { RouteLocationResolved, useRouter } from "vue-router";
 import H5pElement from "./H5pElement.vue";
 import H5pElementMenu from "./H5pElementMenu.vue";
 
 jest.mock("@data-board");
-jest.mock("@util-board");
+jest.mock("vue-router");
 
 describe("H5pElement", () => {
-	let useContentElementStateMock: DeepMocked<
-		ReturnType<typeof useContentElementState>
-	>;
 	let useBoardFocusHandlerMock: DeepMocked<
 		ReturnType<typeof useBoardFocusHandler>
 	>;
+	let useRouterMock: DeepMocked<ReturnType<typeof useRouter>>;
 
 	beforeEach(() => {
-		useContentElementStateMock =
-			createMock<ReturnType<typeof useContentElementState>>();
 		useBoardFocusHandlerMock =
 			createMock<ReturnType<typeof useBoardFocusHandler>>();
+		useRouterMock = createMock<ReturnType<typeof useRouter>>();
 
-		jest
-			.mocked(useContentElementState)
-			.mockReturnValue(useContentElementStateMock);
 		jest.mocked(useBoardFocusHandler).mockReturnValue(useBoardFocusHandlerMock);
+		jest.mocked(useRouter).mockReturnValue(useRouterMock);
 	});
 
 	afterEach(() => {
@@ -43,14 +39,9 @@ describe("H5pElement", () => {
 		element: H5pElementResponse;
 		isEditMode: boolean;
 	}) => {
-		useContentElementStateMock.modelValue = ref(propsData.element.content);
-
 		const wrapper = mount(H5pElement, {
 			global: {
 				plugins: [createTestingVuetify(), createTestingI18n()],
-				stubs: {
-					H5pEditorFullscreenDialog: true,
-				},
 			},
 			props: {
 				columnIndex: 0,
@@ -249,88 +240,99 @@ describe("H5pElement", () => {
 		});
 	});
 
-	describe("Editor dialog", () => {
+	describe("Editor window", () => {
 		describe("when clicking the element in edit mode", () => {
 			const setup = () => {
+				const element = h5pElementResponseFactory.build({
+					content: { contentId: null },
+				});
+
 				const { wrapper } = getWrapper({
-					element: h5pElementResponseFactory.build({
-						content: { contentId: null },
-					}),
+					element,
 					isEditMode: true,
 				});
+				const resolvedUrl = "https://test.com";
+
+				const windowMock = createMock<Window>();
+				jest.spyOn(window, "open").mockImplementation(() => windowMock);
+
+				useRouterMock.resolve.mockReturnValue(
+					createMock<RouteLocationResolved>({
+						href: resolvedUrl,
+					})
+				);
 
 				return {
 					wrapper,
+					resolvedUrl,
+					element,
 				};
 			};
 
-			it("should open the editor dialog", async () => {
-				const { wrapper } = setup();
+			it("should open the editor window", async () => {
+				const { wrapper, resolvedUrl, element } = setup();
 
 				const card = wrapper.getComponent({ ref: "elementCard" });
-				const dialog = wrapper.getComponent(H5pEditorFullscreenDialog);
 
 				await card.trigger("click");
 
-				expect(dialog.props().isOpen).toEqual(true);
+				expect(useRouterMock.resolve).toHaveBeenCalledWith({
+					name: "h5pEditor",
+					query: {
+						parentType: H5PContentParentType.BOARD_ELEMENT,
+						parentId: element.id,
+						contentId: undefined,
+					},
+				});
+				expect(window.open).toHaveBeenCalledWith(resolvedUrl, "_blank");
 			});
 		});
 
 		describe("when clicking the edit option in the menu", () => {
 			const setup = () => {
+				const element = h5pElementResponseFactory.build({
+					content: { contentId: "testId" },
+				});
+
 				const { wrapper } = getWrapper({
-					element: h5pElementResponseFactory.build({
-						content: { contentId: null },
-					}),
+					element,
 					isEditMode: true,
 				});
+				const resolvedUrl = "https://test.com";
+
+				const windowMock = createMock<Window>();
+				jest.spyOn(window, "open").mockImplementation(() => windowMock);
+
+				useRouterMock.resolve.mockReturnValue(
+					createMock<RouteLocationResolved>({
+						href: resolvedUrl,
+					})
+				);
 
 				return {
 					wrapper,
+					element,
+					resolvedUrl,
 				};
 			};
 
-			it("should open the editor dialog", async () => {
-				const { wrapper } = setup();
+			it("should open the editor window", async () => {
+				const { wrapper, element, resolvedUrl } = setup();
 
 				const menu = wrapper.getComponent(H5pElementMenu);
-				const dialog = wrapper.getComponent(H5pEditorFullscreenDialog);
 
 				menu.vm.$emit("edit:element");
 				await nextTick();
 
-				expect(dialog.props().isOpen).toEqual(true);
-			});
-		});
-
-		describe("when saving a config with the editor", () => {
-			const setup = () => {
-				const contentId = "contentId";
-
-				const { wrapper } = getWrapper({
-					element: h5pElementResponseFactory.build({
-						content: { contentId: null },
-					}),
-					isEditMode: true,
+				expect(useRouterMock.resolve).toHaveBeenCalledWith({
+					name: "h5pEditor",
+					query: {
+						parentType: H5PContentParentType.BOARD_ELEMENT,
+						parentId: element.id,
+						contentId: element.content.contentId,
+					},
 				});
-
-				return {
-					wrapper,
-					contentId,
-				};
-			};
-
-			it("should open the editor dialog", async () => {
-				const { wrapper, contentId } = setup();
-
-				const dialog = wrapper.getComponent(H5pEditorFullscreenDialog);
-
-				dialog.vm.$emit("save", contentId);
-				await nextTick();
-
-				expect(useContentElementStateMock.modelValue.value).toEqual({
-					contentId,
-				});
+				expect(window.open).toHaveBeenCalledWith(resolvedUrl, "_blank");
 			});
 		});
 	});
