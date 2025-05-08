@@ -158,7 +158,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watchEffect } from "vue";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VCard } from "vuetify/lib/components/index.mjs";
 import { InfoAlert } from "@ui-alert";
@@ -177,7 +177,7 @@ enum InvitationStep {
 const props = defineProps({
 	schoolName: {
 		type: String,
-		required: true,
+		default: "",
 	},
 	preDefinedStep: {
 		type: String,
@@ -271,23 +271,20 @@ const { pause, unpause, deactivate } = useFocusTrap(inviteMembersContent, {
 	immediate: true,
 });
 
-watch(
-	() => formData.value.restrictedToCreatorSchool,
-	(newValue: boolean) => {
-		if (!newValue) {
-			formData.value.isAlsoForStudents = false;
-		}
+watchEffect(() => {
+	if (!formData.value.restrictedToCreatorSchool) {
+		formData.value.isAlsoForStudents = false;
 	}
-);
 
-watch(
-	() => isOpen.value,
-	(newValue: boolean) => {
-		if (!newValue) {
-			deactivate();
-		}
+	if (!isOpen.value) {
+		deactivate();
 	}
-);
+
+	step.value =
+		props.preDefinedStep === InvitationStep.SHARE
+			? InvitationStep.SHARE
+			: InvitationStep.PREPARE;
+});
 
 const informationLink = computed(() =>
 	envConfigModule.getEnv.ROOM_MEMBER_INFO_URL

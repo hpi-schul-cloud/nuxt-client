@@ -1,9 +1,12 @@
 <template>
-	<!-- :items="tableData" -->
 	<DataTable :table-headers="tableHeaders" :show-select="true" v-bind="$attrs">
 		<template #[`item.actions`]="{ item }">
 			<div class="d-flex align-center">
-				<v-btn variant="text" :icon="mdiShareVariantOutline" />
+				<v-btn
+					variant="text"
+					:icon="mdiShareVariantOutline"
+					@click="openShareModal(item.id)"
+				/>
 				<KebabMenu>
 					<KebabMenuActionEdit />
 					<KebabMenuActionShare :text="t('common.actions.share')" />
@@ -27,8 +30,21 @@ import {
 	KebabMenuActionDelete,
 } from "@ui-kebab-menu";
 import { mdiShareVariantOutline } from "@icons/material";
+import { ref } from "vue";
+
+const emit = defineEmits<{
+	(e: "open:shareModal", value: string): void;
+}>();
+
+enum InvitationStep {
+	PREPARE = "prepare",
+	SHARE = "share",
+}
 
 const { t } = useI18n();
+
+const isInvitationDialogOpen = ref(false);
+const shareDialogStep = ref<string>();
 
 const tableHeaders = [
 	{
@@ -63,87 +79,9 @@ const tableHeaders = [
 	},
 ];
 
-const tableData = [
-	{
-		title: "Invitation for Math Club",
-		restrictedToCreatorSchool: true,
-		validForStudents: true,
-		activeUntil: "2023-12-31",
-		requiresConfirmation: false,
-		status: "Active",
-		actions: "Edit",
-	},
-	{
-		title: "Invitation for Science Fair",
-		restrictedToCreatorSchool: false,
-		validForStudents: true,
-		activeUntil: "2024-01-15",
-		requiresConfirmation: true,
-		status: "Pending",
-		actions: "View",
-	},
-	{
-		title: "Invitation for Art Workshop",
-		restrictedToCreatorSchool: true,
-		validForStudents: false,
-		activeUntil: "2023-11-20",
-		requiresConfirmation: true,
-		status: "Expired",
-		actions: "Delete",
-	},
-	{
-		title: "Invitation for Sports Event",
-		restrictedToCreatorSchool: false,
-		validForStudents: true,
-		activeUntil: "2024-02-10",
-		requiresConfirmation: false,
-		status: "Active",
-		actions: "Edit",
-	},
-	{
-		title: "Invitation for Music Concert",
-		restrictedToCreatorSchool: true,
-		validForStudents: true,
-		activeUntil: "2023-12-10",
-		requiresConfirmation: false,
-		status: "Active",
-		actions: "Edit",
-	},
-	{
-		title: "Invitation for Coding Bootcamp",
-		restrictedToCreatorSchool: false,
-		validForStudents: true,
-		activeUntil: "2024-03-01",
-		requiresConfirmation: true,
-		status: "Pending",
-		actions: "View",
-	},
-	{
-		title: "Invitation for Drama Club",
-		restrictedToCreatorSchool: true,
-		validForStudents: false,
-		activeUntil: "2023-11-25",
-		requiresConfirmation: true,
-		status: "Expired",
-		actions: "Delete",
-	},
-	{
-		title: "Invitation for Debate Competition",
-		restrictedToCreatorSchool: false,
-		validForStudents: true,
-		activeUntil: "2024-01-20",
-		requiresConfirmation: false,
-		status: "Active",
-		actions: "Edit",
-	},
-	{
-		title: "Invitation for Robotics Workshop",
-		restrictedToCreatorSchool: true,
-		validForStudents: true,
-		activeUntil: "2024-02-15",
-		requiresConfirmation: true,
-		status: "Pending",
-		actions: "View",
-	},
-];
+const openShareModal = (itemId: string) => {
+	shareDialogStep.value = InvitationStep.SHARE;
+	isInvitationDialogOpen.value = true;
+	emit("open:shareModal", itemId);
+};
 </script>
