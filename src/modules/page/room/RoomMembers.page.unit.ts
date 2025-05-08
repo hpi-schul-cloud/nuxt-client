@@ -95,7 +95,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		roomPermissions = {
-			canAddRoomMembers: ref(false),
+			canAddRoomMembers: ref(true),
 			canCreateRoom: ref(false),
 			canChangeOwner: ref(false),
 			canDuplicateRoom: ref(false),
@@ -161,7 +161,11 @@ describe("RoomMembersPage", () => {
 					[ENV_CONFIG_MODULE_KEY.valueOf()]: envConfigModuleMock,
 					[NOTIFIER_MODULE_KEY.valueOf()]: createModuleMocks(NotifierModule),
 				},
-				stubs: { LeaveRoomProhibitedDialog: true, AddMembers: true },
+				stubs: {
+					LeaveRoomProhibitedDialog: true,
+					AddMembers: true,
+					Members: true,
+				},
 			},
 
 			props: {
@@ -462,11 +466,12 @@ describe("RoomMembersPage", () => {
 
 		it("should open Dialog", async () => {
 			roomPermissions.canAddRoomMembers.value = true;
-			const { wrapper } = setup({ activeTab: Tab.Members });
+			const { wrapper } = setup({
+				activeTab: Tab.Members,
+				isFeatureRoomMembersTabsEnabled: true,
+			});
 			const wireframe = wrapper.findComponent(DefaultWireframe);
-			const addMemberDialogBeforeClick = wrapper
-				.getComponent(VDialog)
-				.findComponent(AddMembers);
+			const addMemberDialogBeforeClick = wrapper.findComponent(AddMembers);
 
 			expect(addMemberDialogBeforeClick.exists()).toBe(false);
 
@@ -476,9 +481,7 @@ describe("RoomMembersPage", () => {
 
 			await addMemberButton.trigger("click");
 
-			const addMemberDialogAfterClick = wrapper
-				.getComponent(VDialog)
-				.findComponent(AddMembers);
+			const addMemberDialogAfterClick = wrapper.findComponent(AddMembers);
 
 			expect(addMemberDialogAfterClick.exists()).toBe(true);
 		});
@@ -514,6 +517,7 @@ describe("RoomMembersPage", () => {
 
 	describe("add members dialog", () => {
 		it("should set isMembersDialogOpen to false on @close", async () => {
+			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper } = setup();
 
 			const dialog = wrapper.findComponent(VDialog);
@@ -527,6 +531,7 @@ describe("RoomMembersPage", () => {
 		});
 
 		it("should close dialog on escape key", async () => {
+			roomPermissions.canAddRoomMembers.value = true;
 			const { wrapper } = setup();
 
 			const dialog = wrapper.getComponent(VDialog);

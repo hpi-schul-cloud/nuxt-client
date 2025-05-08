@@ -213,11 +213,9 @@ const onFabClick = async () => {
 
 		case Tab.Members:
 		default:
-			console.log("Add members");
 			await getSchools();
 			await getPotentialMembers(RoleName.Teacher);
 			isMembersDialogOpen.value = true;
-			console.log("isMembersDialogOpen.value", isMembersDialogOpen.value);
 			break;
 	}
 };
