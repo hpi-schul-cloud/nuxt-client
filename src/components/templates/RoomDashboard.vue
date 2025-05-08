@@ -162,6 +162,17 @@
 			data-testid="empty-state-item"
 			class="mt-16"
 		/>
+		<EmptyState
+			v-if="roomIsEmpty"
+			data-testid="empty-state-item"
+			:title="emptyState.title"
+		>
+			<template #media>
+				<TopicsEmptyStateSvg />
+			</template>
+		</EmptyState>
+		<!-- just for testing image tags with svgs vs inline svgs-->
+		<VImg src="@/assets/img/empty-state/test.svg" />
 		<share-modal type="columnBoard" />
 		<share-modal type="lessons" />
 		<share-modal type="tasks" />
@@ -203,6 +214,8 @@ import { CopyParamsTypeEnum } from "@/store/copy";
 import { SHARE_MODULE_KEY } from "@/utils/inject";
 import { RoomBoardCard, RoomLessonCard } from "@ui-room-details";
 import draggable from "vuedraggable";
+import { EmptyState } from "@ui-empty-state";
+import TopicsEmptyStateSvg from "@/assets/img/empty-state/TopicsEmptyStateSvg.vue";
 
 export default {
 	components: {
@@ -212,7 +225,9 @@ export default {
 		vCustomDialog,
 		draggable,
 		vCustomEmptyState,
+		EmptyState,
 		ShareModal,
+		TopicsEmptyStateSvg,
 	},
 	inject: {
 		shareModule: { from: SHARE_MODULE_KEY },
