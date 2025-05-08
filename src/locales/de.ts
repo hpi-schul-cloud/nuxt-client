@@ -1762,10 +1762,7 @@ export default {
 	"pages.room.teacher.emptyState":
 		"Aktuell gibt es keine Lerninhalte in diesem Kurs",
 	"pages.rooms.a11y.group.text": "{title}, Ordner, {itemCount} Kurse",
-	"pages.rooms.allRooms.emptyState.title":
-		"Aktuell gibt es hier noch keine Kurse.",
-	"pages.rooms.currentRooms.emptyState.title":
-		"Aktuell gibt es hier noch keine Kurse.",
+	"pages.rooms.emptyState.title": "Aktuell gibt es keine Kurse",
 	"pages.rooms.fab.add.course": "Neuer Kurs",
 	"pages.rooms.fab.add.syncedCourse": "Neuer synchronisierter Kurs",
 	"pages.rooms.fab.ariaLabel": "Neuen Kurs erstellen",

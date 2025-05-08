@@ -190,7 +190,6 @@
 
 <script>
 import RoomTaskCard from "@/components/molecules/RoomTaskCard.vue";
-import vCustomEmptyState from "@/components/molecules/vCustomEmptyState.vue";
 import vCustomDialog from "@/components/organisms/vCustomDialog.vue";
 import ShareModal from "@/components/share/ShareModal.vue";
 import {

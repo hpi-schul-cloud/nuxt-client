@@ -1733,10 +1733,7 @@ export default {
 	"pages.room.teacher.emptyState":
 		"There is currently no learning content in this course",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
-	"pages.rooms.allRooms.emptyState.title":
-		"Currently, there are no courses here.",
-	"pages.rooms.currentRooms.emptyState.title":
-		"Currently, there are no courses here.",
+	"pages.rooms.emptyState.title": "There are currently no courses",
 	"pages.rooms.fab.add.course": "New course",
 	"pages.rooms.fab.add.syncedCourse": "New synchronized course",
 	"pages.rooms.fab.ariaLabel": "Create new course",

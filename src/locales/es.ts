@@ -1786,9 +1786,7 @@ export default {
 	"pages.room.teacher.emptyState":
 		"Actualmente no hay contenidos de aprendizaje en este curso",
 	"pages.rooms.a11y.group.text": "{title}, carpeta, {itemCount} cursos",
-	"pages.rooms.allRooms.emptyState.title": "Actualmente no hay cursos aquí.",
-	"pages.rooms.currentRooms.emptyState.title":
-		"Actualmente no hay cursos aquí.",
+	"pages.rooms.emptyState.title": "Actualmente no hay cursos",
 	"pages.rooms.fab.add.course": "Nuevo curso",
 	"pages.rooms.fab.add.syncedCourse": "Nuevo curso sincronizado",
 	"pages.rooms.fab.ariaLabel": "Crear nuevo curso",

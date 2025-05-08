@@ -1769,8 +1769,7 @@ export default {
 	"pages.room.teacher.emptyState":
 		"Наразі в цьому курсі немає навчальних матеріалів",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
-	"pages.rooms.allRooms.emptyState.title": "Наразі тут курсів немає.",
-	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",
+	"pages.rooms.emptyState.title": "Наразі курсів немає",
 	"pages.rooms.fab.add.course": "Новий курс",
 	"pages.rooms.fab.add.syncedCourse": "Новий синхронізований курс",
 	"pages.rooms.fab.ariaLabel": "Створити новий курс",
