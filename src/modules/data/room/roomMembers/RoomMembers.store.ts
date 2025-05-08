@@ -7,6 +7,7 @@ import {
 	RoomMemberResponse,
 	SchoolForExternalInviteResponse,
 	ChangeRoomRoleBodyParamsRoleNameEnum,
+	SchoolUserListResponse,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useI18n } from "vue-i18n";
@@ -49,8 +50,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 	};
 
 	const schoolRoleMap: Record<string, string> = {
+		[RoleName.Student]: t("pages.roooms.members.add.role.student"),
 		[RoleName.Teacher]: t("common.labels.teacher"),
-		[RoleName.Student]: t("common.labels.student"),
 	};
 
 	const roomApi = RoomApiFactory(undefined, "/v3", $axios);
@@ -90,7 +91,8 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 
 	const getSchoolRoleName = (schoolRoleNames: RoleName[]) => {
 		const isAdmin = schoolRoleNames.includes(RoleName.Administrator);
-		if (isAdmin) {
+		const isTeacher = schoolRoleNames.includes(RoleName.Teacher);
+		if (isAdmin || isTeacher) {
 			return schoolRoleMap[RoleName.Teacher];
 		} else {
 			return schoolRoleMap[schoolRoleNames[0]];
@@ -102,18 +104,27 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		schoolId: string = ownSchool.id
 	) => {
 		try {
-			const result = (await schoolApi.schoolControllerGetTeachers(schoolId))
-				.data;
+			let result: SchoolUserListResponse;
 
+			if (schoolRoleName === RoleName.Teacher) {
+				result = (await schoolApi.schoolControllerGetTeachers(schoolId)).data;
+			} else if (schoolRoleName === RoleName.Student) {
+				result = (await schoolApi.schoolControllerGetStudents(schoolId)).data;
+			} else {
+				throw new Error("Invalid school role name");
+			}
 			potentialRoomMembers.value = result.data
 				.map((user) => {
 					return {
 						...user,
 						userId: user.id,
 						fullName: `${user.lastName}, ${user.firstName}`,
-						schoolRoleNames: [RoleName.Teacher],
-						displayRoomRole: roomRole[RoleName.Roomadmin],
-						displaySchoolRole: schoolRoleMap[RoleName.Teacher],
+						schoolRoleNames: [schoolRoleName],
+						displayRoomRole:
+							schoolRoleName === RoleName.Teacher
+								? roomRole[RoleName.Roomadmin]
+								: roomRole[RoleName.Roomviewer],
+						displaySchoolRole: schoolRoleMap[schoolRoleName],
 					};
 				})
 				.filter((user) => {
