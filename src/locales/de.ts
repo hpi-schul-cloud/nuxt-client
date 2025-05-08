@@ -425,6 +425,8 @@ export default {
 		"Es existiert bereits eine Datei mit diesem Namen.",
 	"components.board.notifications.errors.fileServiceNotAvailable":
 		"Der Dateiservice ist derzeit nicht verfügbar.",
+	"components.board.notifications.errors.fileNotDeleted":
+		"Die Datei/en konnte/n nicht gelöscht werden.",
 	"components.board.notifications.errors.fileToBig":
 		"Die angehängte Datei überschreitet die maximal zulässige Größe von {maxFileSizeWithUnit}.",
 	"components.board.notifications.errors.notCreated":

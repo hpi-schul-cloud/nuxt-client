@@ -29,6 +29,7 @@ export const useFileStorageApi = () => {
 		showForbiddenError,
 		showUnauthorizedError,
 		showInternalServerError,
+		showFileNotDeletedError,
 		showFileExistsError,
 	} = useFileStorageNotifier();
 
@@ -129,11 +130,11 @@ export const useFileStorageApi = () => {
 	const deleteFiles = async (fileRecords: FileRecord[]): Promise<void> => {
 		try {
 			const fileRecordIds = fileRecords.map((fileRecord) => fileRecord.id);
-			await fileApi.deleteFiles({ fileRecordIds });
-
 			deleteFileRecords(fileRecords);
+			await fileApi.deleteFiles({ fileRecordIds });
 		} catch (error) {
 			showError(error);
+			showFileNotDeletedError();
 			throw error;
 		}
 	};
