@@ -41,7 +41,7 @@
 				/>
 			</div>
 
-			<WarningAlert>{{
+			<WarningAlert v-if="isStudentSelectionDisabled">{{
 				t("pages.rooms.members.add.warningText")
 			}}</WarningAlert>
 
@@ -55,6 +55,7 @@
 					item-value="userId"
 					item-title="fullName"
 					multiple
+					:disabled="isStudentSelectionDisabled"
 					:items="potentialRoomMembers"
 					:label="t('common.labels.name')"
 					@update:menu="onAutocompleteToggle"
@@ -137,6 +138,12 @@ const onClose = () => emit("close");
 const addMembersContent = ref<VCard>();
 const { pause, unpause } = useFocusTrap(addMembersContent, {
 	immediate: true,
+});
+
+const isStudentSelectionDisabled = computed(() => {
+	const isExternalSchoolSelected = selectedSchool.value !== schools.value[0].id;
+	const isStudentRoleSelected = selectedSchoolRole.value === RoleName.Student;
+	return isExternalSchoolSelected && isStudentRoleSelected;
 });
 
 const autoCompleteSchool = ref<VAutocomplete>();
