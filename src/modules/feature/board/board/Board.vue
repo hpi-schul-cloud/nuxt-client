@@ -22,7 +22,7 @@
 						@change-layout="onUpdateBoardLayout"
 					/>
 				</template>
-				<div :class="boardClasses" :style="boardStyle">
+				<div :class="boardClasses" :style="boardStyle" class="pt-4 px-6">
 					<Sortable
 						:list="board.columns"
 						item-key="id"
@@ -445,10 +445,6 @@ const onSelectBoardLayout = async (layout: BoardLayout) => {
 </script>
 
 <style scoped>
-.board {
-	padding: 0 var(--space-lg);
-}
-
 .column-board {
 	overflow-x: auto;
 	height: 100%;

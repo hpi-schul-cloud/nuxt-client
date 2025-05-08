@@ -1,5 +1,5 @@
 <template>
-	<v-breadcrumbs :items="breadcrumbs" class="custom-breadcrumb px-0 py-0">
+	<v-breadcrumbs :items="breadcrumbs" class="custom-breadcrumb px-0 pb-0 pt-1">
 		<template #divider>
 			<v-icon>{{ mdiChevronRight }}</v-icon>
 		</template>
@@ -34,8 +34,6 @@ defineProps({
 
 <style lang="scss" scoped>
 .custom-breadcrumb {
-	display: inline-flex;
-	height: var(--breadcrumbs-height);
 	font-size: 14px;
 }
 </style>
