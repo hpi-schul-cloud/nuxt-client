@@ -1767,7 +1767,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Термін дії минув",
 	"pages.room.taskCard.teacher.label.submitted": "Надіслано",
 	"pages.room.teacher.emptyState":
-		"Додавайте та сортуйте навчальний контент до курсу.",
+		"Наразі в цьому курсі немає навчальних матеріалів",
 	"pages.rooms.a11y.group.text": "{title}, папка, {itemCount} курси(-ів)",
 	"pages.rooms.allRooms.emptyState.title": "Наразі тут курсів немає.",
 	"pages.rooms.currentRooms.emptyState.title": "Наразі тут курсів немає.",

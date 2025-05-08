@@ -154,18 +154,10 @@
 				/>
 			</div>
 		</div>
-		<v-custom-empty-state
-			v-if="roomIsEmpty"
-			:image="emptyState.image"
-			:title="emptyState.title"
-			:img-height="emptyState.maxHeight"
-			data-testid="empty-state-item"
-			class="mt-16"
-		/>
 		<EmptyState
 			v-if="roomIsEmpty"
 			data-testid="empty-state-item"
-			:title="emptyState.title"
+			:title="$t(`pages.room.${role}.emptyState`)"
 		>
 			<template #media>
 				<TopicsEmptyStateSvg />
@@ -222,7 +214,6 @@ export default {
 		RoomLessonCard,
 		vCustomDialog,
 		draggable,
-		vCustomEmptyState,
 		EmptyState,
 		ShareModal,
 		TopicsEmptyStateSvg,
@@ -271,16 +262,6 @@ export default {
 			return this.isTouchDevice ? 200 : 20;
 		},
 		roomIsEmpty: () => courseRoomDetailsModule.roomIsEmpty,
-		emptyState() {
-			const image = "topics-empty-state";
-			const title = this.$t(`pages.room.${this.role}.emptyState`);
-			const maxHeight = "200px";
-			return {
-				image,
-				title,
-				maxHeight,
-			};
-		},
 		roomData() {
 			return { ...this.roomDataObject };
 		},

@@ -1731,7 +1731,7 @@ export default {
 	"pages.room.taskCard.teacher.label.overdue": "Expired",
 	"pages.room.taskCard.teacher.label.submitted": "Submitted",
 	"pages.room.teacher.emptyState":
-		"Add and sort learning content to the course.",
+		"There is currently no learning content in this course",
 	"pages.rooms.a11y.group.text": "{title}, folder, {itemCount} courses",
 	"pages.rooms.allRooms.emptyState.title":
 		"Currently, there are no courses here.",
