@@ -102,10 +102,9 @@ const now: Ref<Date> = ref(new Date());
 
 const sessionTokenExpiration: Ref<Date | undefined> = ref();
 
-const isSessionTokenExpired: ComputedRef<boolean> = computed(() =>
-	sessionTokenExpiration.value
-		? now.value >= sessionTokenExpiration.value
-		: true
+const isSessionTokenExpired: ComputedRef<boolean> = computed(
+	() =>
+		!sessionTokenExpiration.value || now.value >= sessionTokenExpiration.value
 );
 
 onMounted(async () => {
