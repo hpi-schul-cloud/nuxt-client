@@ -98,7 +98,7 @@ const props = defineProps({
 });
 
 const headers = [
-	{ key: "preview", sortable: false },
+	{ title: "", key: "preview", sortable: false },
 	{ title: t("pages.folder.columns.name"), key: "name" },
 	{ title: t("pages.folder.columns.createdat"), key: "createdAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
@@ -121,13 +121,15 @@ const formatFileSize = (size: number) => {
 	return `${localizedFileSize} ${unit}`;
 };
 
+const testId = "folder-file-table-action-menu-download";
+
 const downloadSingleFile = async (fileRecord: FileRecord) => {
-	await downloadFile(fileRecord.url, fileRecord.name);
+	await downloadFile(fileRecord.url, fileRecord.name, testId);
 };
 
 const downloadSelectedFiles = () => {
 	props.fileRecords.forEach(async (fileRecord) => {
-		await downloadFile(fileRecord.url, fileRecord.name);
+		await downloadFile(fileRecord.url, fileRecord.name, testId);
 	});
 };
 </script>
