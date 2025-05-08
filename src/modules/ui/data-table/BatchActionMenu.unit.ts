@@ -7,7 +7,7 @@ import { nextTick } from "vue";
 import BatchActionMenu from "./BatchActionMenu.vue";
 
 describe("BatchActionMenu", () => {
-	const setup = (isVisibleChangeRoleButton = false) => {
+	const setup = (canAddRoomMembers = false) => {
 		const defaultSlotElement = `<div class="test-slot">Test Slot</div>`;
 		const wrapper = mount(BatchActionMenu, {
 			global: {
@@ -15,7 +15,7 @@ describe("BatchActionMenu", () => {
 			},
 			props: {
 				selectedIds: ["test-id#1", "test-id#2"],
-				isVisibleChangeRoleButton,
+				canAddRoomMembers,
 			},
 			slots: {
 				default: defaultSlotElement,

@@ -18,7 +18,11 @@ import {
 	schoolFactory,
 } from "@@/tests/test-utils";
 import setupStores from "@@/tests/test-utils/setupStores";
-import { useRoomDetailsStore, useRoomMembersStore } from "@data-room";
+import {
+	RoomMember,
+	useRoomDetailsStore,
+	useRoomMembersStore,
+} from "@data-room";
 import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import { useBoardNotifier } from "@util-board";
 import { logger } from "@util-logger";
@@ -71,11 +75,12 @@ describe("useRoomMembers", () => {
 		authModule.setMe(mockMe);
 	});
 
-	const setup = () => {
+	const setup = (members: RoomMember[] = []) => {
 		const roomDetailsStore = mockedPiniaStoreTyping(useRoomDetailsStore);
 		roomDetailsStore.room = roomFactory.build();
 
 		const roomMembersStore = mockedPiniaStoreTyping(useRoomMembersStore);
+		roomMembersStore.roomMembers = members;
 
 		return { roomMembersStore, roomDetailsStore };
 	};
@@ -277,26 +282,6 @@ describe("useRoomMembers", () => {
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"pages.rooms.members.error.load"
 			);
-		});
-	});
-
-	describe("currentUser", () => {
-		it("should set the currentUser", async () => {
-			const mockMe = meResponseFactory.build();
-			const membersMock = roomMemberFactory.buildList(3, {
-				roomRoleName: RoleName.Roomviewer,
-			});
-			authModule.setMe({
-				...mockMe,
-				user: { ...mockMe.user, id: membersMock[1].userId },
-			});
-			membersMock[1].roomRoleName = RoleName.Roomowner;
-
-			const { roomMembersStore } = setup();
-
-			roomMembersStore.roomMembers = membersMock;
-
-			expect(roomMembersStore.currentUser).toEqual(membersMock[1]);
 		});
 	});
 
@@ -601,6 +586,64 @@ describe("useRoomMembers", () => {
 			expect(mockedBoardNotifierCalls.showFailure).toHaveBeenCalledWith(
 				"pages.rooms.members.error.updateRole"
 			);
+		});
+	});
+
+	describe("isRoomOwner", () => {
+		describe("when the user is the room owner", () => {
+			it("should return true", () => {
+				const { roomMembersStore } = setup();
+				const roomOwner = roomMemberFactory.build({
+					roomRoleName: RoleName.Roomowner,
+				});
+				roomMembersStore.roomMembers = [roomOwner];
+
+				expect(roomMembersStore.isRoomOwner(roomOwner.userId)).toBe(true);
+			});
+		});
+
+		describe("when the user is not the room owner", () => {
+			it("should return false", () => {
+				const { roomMembersStore } = setup();
+				const roomViewer = roomMemberFactory.build({
+					roomRoleName: RoleName.Roomviewer,
+				});
+				roomMembersStore.roomMembers = [roomViewer];
+
+				expect(roomMembersStore.isRoomOwner(roomViewer.userId)).toBe(false);
+			});
+		});
+
+		describe("when the user is not in the room", () => {
+			it("should return false", () => {
+				const { roomMembersStore } = setup();
+
+				expect(roomMembersStore.isRoomOwner("another-user-id")).toBe(false);
+			});
+		});
+	});
+
+	describe("getMemberById", () => {
+		describe("when the member is in the room", () => {
+			it("should return the member with the given id", () => {
+				const members = roomMemberFactory.buildList(3);
+				const { roomMembersStore } = setup(members);
+				const firstMember = members.at(0);
+
+				const member = roomMembersStore.getMemberById(firstMember!.userId);
+
+				expect(member).toEqual(expect.objectContaining(firstMember));
+			});
+		});
+
+		describe("when the member is not in the room", () => {
+			it("should return undefined", () => {
+				const { roomMembersStore } = setup();
+
+				const member = roomMembersStore.getMemberById("non-existing-id");
+
+				expect(member).toBeUndefined();
+			});
 		});
 	});
 });

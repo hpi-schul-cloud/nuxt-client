@@ -2,7 +2,6 @@ import {
 	createTestingI18n,
 	createTestingVuetify,
 } from "@@/tests/test-utils/setup";
-import { computed } from "vue";
 import { useEditorConfig } from "./EditorConfig.composable";
 import ClassicEditor from "./ClassicEditor.vue";
 
@@ -27,7 +26,7 @@ class ResizeObserver {
 jest.mock("./EditorConfig.composable");
 
 describe("@feature-editor/ClassicEditor", () => {
-	const setup = (props: CkEditorProps = {}, isEditorEmpty = true) => {
+	const setup = (props: CkEditorProps = {}) => {
 		const config: ReturnType<typeof useEditorConfig> = {
 			generalConfig: {
 				language: "",

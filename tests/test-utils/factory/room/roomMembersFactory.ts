@@ -20,3 +20,23 @@ export const roomMemberSchoolResponseFactory =
 		id: `school${sequence}`,
 		name: `schoolName${sequence}`,
 	}));
+
+export const roomOwnerFactory = roomMemberFactory.params({
+	roomRoleName: RoleName.Roomowner,
+});
+
+export const roomAdminFactory = roomMemberFactory.params({
+	roomRoleName: RoleName.Roomadmin,
+});
+
+export const roomEditorFactory = roomMemberFactory.params({
+	roomRoleName: RoleName.Roomeditor,
+});
+
+export const roomViewerFactory = roomMemberFactory.params({
+	roomRoleName: RoleName.Roomviewer,
+});
+
+export const roomApplicantFactory = roomMemberFactory.params({
+	roomRoleName: RoleName.Roomapplicant,
+});
