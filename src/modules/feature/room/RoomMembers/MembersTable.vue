@@ -163,9 +163,9 @@ const stickyStyle = computed(() => ({
 
 const membersFilterCount = ref(roomMembers.value?.length);
 const isNeitherRoomOwnerNorCurrentUser = (userId: string) => {
-	if (userId === authModule.getUser?.id) return false;
-	if (isRoomOwner(userId)) return false;
-	return true;
+	const isNotCurrentUser = userId !== authModule.getUser?.id;
+	const isNotRoomOwner = !isRoomOwner(userId);
+	return isNotCurrentUser && isNotRoomOwner;
 };
 
 const onDialogClose = () => {
