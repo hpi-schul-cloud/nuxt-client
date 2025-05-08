@@ -41,6 +41,10 @@
 				/>
 			</div>
 
+			<WarningAlert>{{
+				t("pages.rooms.members.add.warningText")
+			}}</WarningAlert>
+
 			<div class="mt-4" data-testid="add-participant-name">
 				<v-autocomplete
 					ref="autoCompleteUsers"
@@ -90,7 +94,7 @@ import { RoleName } from "@/serverApi/v3";
 import { useRoomMembersStore } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VAutocomplete, VCard } from "vuetify/lib/components/index.mjs";
-import { InfoAlert } from "@ui-alert";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 
 const emit = defineEmits<{
