@@ -22,6 +22,7 @@
 				:items="
 					fileRecords.map((item) => ({
 						...item,
+						isSelectable: isFileSelectable(item),
 					}))
 				"
 				:show-select="true"
@@ -44,7 +45,10 @@
 				</template>
 				<template #[`item.actions`]="{ item, index }">
 					<KebabMenu :data-testid="`kebab-menu-${index}`">
-						<KebabMenuActionDownload @click="downloadSingleFile(item)" />
+						<KebabMenuActionDownload
+							:disabled="!item.isSelectable"
+							@click="downloadSingleFile(item)"
+						/>
 					</KebabMenu>
 				</template>
 
@@ -61,6 +65,7 @@
 </template>
 
 <script setup lang="ts">
+import { FileRecordScanStatus } from "@/fileStorageApi/v3";
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
 import { convertFileSize, downloadFile } from "@/utils/fileHelper";
@@ -131,5 +136,12 @@ const downloadSelectedFiles = () => {
 	props.fileRecords.forEach(async (fileRecord) => {
 		await downloadFile(fileRecord.url, fileRecord.name, testId);
 	});
+};
+
+const isFileSelectable = (fileRecord: FileRecord) => {
+	const result =
+		fileRecord.securityCheckStatus !== FileRecordScanStatus.BLOCKED;
+
+	return result;
 };
 </script>
