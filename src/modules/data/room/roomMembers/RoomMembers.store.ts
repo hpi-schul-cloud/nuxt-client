@@ -7,7 +7,6 @@ import {
 	RoomMemberResponse,
 	SchoolForExternalInviteResponse,
 	ChangeRoomRoleBodyParamsRoleNameEnum,
-	SchoolUserListResponse,
 } from "@/serverApi/v3";
 import { $axios } from "@/utils/api";
 import { useI18n } from "vue-i18n";
