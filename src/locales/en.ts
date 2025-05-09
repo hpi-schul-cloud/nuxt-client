@@ -1930,8 +1930,6 @@ export default {
 	"pages.tasks.labels.planned": "Planned",
 	"pages.tasks.student.completed.emptyState.title":
 		"You currently don't have any completed tasks.",
-	"pages.tasks.student.open.emptyState.subtitle":
-		"You have completed all tasks. Enjoy your free time!",
 	"pages.tasks.student.open.emptyState.title": "There are no open tasks.",
 	"pages.tasks.student.openTasks": "Open Tasks",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",

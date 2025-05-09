@@ -36,12 +36,14 @@
 						/>
 					</template>
 				</v-custom-double-panels>
-				<EmptyState
-					v-if="openTasksForTeacherIsEmpty"
-					:title="t('pages.tasks.teacher.open.emptyState.title')"
-				>
-					<template #media> <TasksEmptyStateSvg /></template>
-				</EmptyState>
+				<VContainer>
+					<EmptyState
+						v-if="openTasksForTeacherIsEmpty"
+						:title="t('pages.tasks.teacher.open.emptyState.title')"
+					>
+						<template #media> <TasksEmptyStateSvg /></template>
+					</EmptyState>
+				</VContainer>
 			</v-window-item>
 			<v-window-item :value="tabRoutes[1]" class="padding-bottom">
 				<tasks-list
@@ -50,12 +52,14 @@
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
 				/>
-				<EmptyState
-					v-if="draftsForTeacherIsEmpty"
-					:title="t('pages.tasks.teacher.drafts.emptyState.title')"
-				>
-					<template #media> <TasksEmptyStateSvg /></template>
-				</EmptyState>
+				<VContainer>
+					<EmptyState
+						v-if="draftsForTeacherIsEmpty"
+						:title="t('pages.tasks.teacher.drafts.emptyState.title')"
+					>
+						<template #media> <TasksEmptyStateSvg /></template>
+					</EmptyState>
+				</VContainer>
 			</v-window-item>
 			<v-window-item :value="tabRoutes[2]" class="padding-bottom">
 				<tasks-list
@@ -66,12 +70,14 @@
 					@copy-task="onCopyTask"
 					@share-task="onShareTask"
 				/>
-				<EmptyState
-					v-if="finishedTasksIsEmpty"
-					:title="t('pages.tasks.finished.emptyState.title')"
-				>
-					<template #media> <TasksEmptyStateSvg /></template>
-				</EmptyState>
+				<VContainer>
+					<EmptyState
+						v-if="finishedTasksIsEmpty"
+						:title="t('pages.tasks.finished.emptyState.title')"
+					>
+						<template #media> <TasksEmptyStateSvg /></template>
+					</EmptyState>
+				</VContainer>
 			</v-window-item>
 		</v-window>
 		<share-modal type="tasks" />
@@ -106,10 +112,6 @@ export default defineComponent({
 		shareModule: { from: SHARE_MODULE_KEY },
 	},
 	props: {
-		emptyState: {
-			type: Object,
-			required: true,
-		},
 		tabRoutes: {
 			type: Array,
 			required: true,

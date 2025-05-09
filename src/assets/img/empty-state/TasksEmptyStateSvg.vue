@@ -1,5 +1,10 @@
 <template>
-	<svg height="200" viewBox="0 0 1349 663" xmlns="http://www.w3.org/2000/svg">
+	<svg
+		height="200"
+		viewBox="0 0 1349 663"
+		xmlns="http://www.w3.org/2000/svg"
+		aria-hidden="true"
+	>
 		<ellipse
 			opacity=".51"
 			cx="1179.33"

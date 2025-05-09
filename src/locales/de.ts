@@ -1963,11 +1963,9 @@ export default {
 	"pages.tasks.labels.overdue": "Verpasst",
 	"pages.tasks.labels.planned": "Geplant",
 	"pages.tasks.student.completed.emptyState.title":
-		"Du hast zur Zeit keine erledigten Aufgaben.",
-	"pages.tasks.student.open.emptyState.subtitle":
-		"Du hast alle Aufgaben erledigt. Genieße deine freie Zeit!",
+		"Du hast zur Zeit keine erledigten Aufgaben.", // todo: Discuss wording with UX
 	"pages.tasks.student.open.emptyState.title":
-		"Es gibt keine offenen Aufgaben.",
+		"Es gibt keine offenen Aufgaben.", // todo: Discuss wording with UX
 	"pages.tasks.student.openTasks": "Offene Aufgaben",
 	"pages.tasks.student.submittedTasks": "Erledigte Aufgaben",
 	"pages.tasks.student.subtitleOverDue": "Verpasste Aufgaben",

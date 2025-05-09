@@ -1966,8 +1966,6 @@ export default {
 	"pages.tasks.labels.planned": "Заплановано",
 	"pages.tasks.student.completed.emptyState.title":
 		"Наразі у вас немає виконаних завдань.",
-	"pages.tasks.student.open.emptyState.subtitle":
-		"Ви виконали всі завдання. Насолоджуйтеся вільним часом!",
 	"pages.tasks.student.open.emptyState.title": "Відкритих завдань немає.",
 	"pages.tasks.student.openTasks": "Відкриті завдання",
 	"pages.tasks.student.submittedTasks": "Виконані завдання",

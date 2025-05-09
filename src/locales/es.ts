@@ -1983,7 +1983,6 @@ export default {
 	"pages.taskCard.deleteElement.text":
 		"¿Estás seguro de que deseas eliminar este elemento?",
 	"pages.taskCard.deleteElement.title": "Eliminar elemento",
-	"pages.tasks.emptyStateOnFilter.title": "No hay tareas.", // todo: remove
 	"pages.tasks.finished.emptyState.title":
 		"Actualmente no hay tareas completadas",
 	"pages.tasks.labels.due": "Entrega",
@@ -1995,8 +1994,6 @@ export default {
 	"pages.tasks.labels.planned": "Planificada",
 	"pages.tasks.student.completed.emptyState.title":
 		"Actualmente no tiene ninguna tarea enviada.",
-	"pages.tasks.student.open.emptyState.subtitle":
-		"Has hecho todas tus tareas. ¡Disfruta de tu tiempo libre!",
 	"pages.tasks.student.open.emptyState.title": "No hay tareas abiertas.",
 	"pages.tasks.student.openTasks": "Tareas abiertas",
 	"pages.tasks.student.submittedTasks": "Completed Tasks",
