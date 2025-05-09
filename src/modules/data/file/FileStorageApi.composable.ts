@@ -130,11 +130,14 @@ export const useFileStorageApi = () => {
 	const deleteFiles = async (fileRecords: FileRecord[]): Promise<void> => {
 		try {
 			const fileRecordIds = fileRecords.map((fileRecord) => fileRecord.id);
+
 			deleteFileRecords(fileRecords);
 			await fileApi.deleteFiles({ fileRecordIds });
 		} catch (error) {
+			upsertFileRecords(fileRecords);
 			showError(error);
 			showFileNotDeletedError();
+
 			throw error;
 		}
 	};
