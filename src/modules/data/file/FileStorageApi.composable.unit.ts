@@ -500,4 +500,141 @@ describe("FileStorageApi Composable", () => {
 			});
 		});
 	});
+
+	describe("deleteFiles", () => {
+		describe("when file api deletes file successfully", () => {
+			const setup = () => {
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParentType.BOARDNODES;
+				const fileRecordResponse = fileRecordFactory.build({
+					parentId,
+					parentType,
+				});
+
+				const fetchResponse = createMock<
+					AxiosResponse<FileRecordListResponse, unknown>
+				>({
+					data: { data: [fileRecordResponse] },
+				});
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+
+				fileApi.list.mockResolvedValueOnce(fetchResponse);
+
+				const response = createMock<AxiosResponse<FileRecordResponse, unknown>>(
+					{
+						data: fileRecordResponse,
+					}
+				);
+
+				fileApi.deleteFiles.mockResolvedValue(response);
+
+				setupFileStorageNotifier();
+
+				return {
+					parentId,
+					parentType,
+					fileRecordResponse,
+					fileApi,
+				};
+			};
+
+			it("should call FileApiFactory.delete", async () => {
+				const { fileRecordResponse, fileApi } = setup();
+				const { deleteFiles } = useFileStorageApi();
+
+				await deleteFiles([fileRecordResponse]);
+
+				expect(fileApi.deleteFiles).toBeCalledWith({
+					fileRecordIds: [fileRecordResponse.id],
+				});
+			});
+
+			it("should remove filerecord", async () => {
+				const { parentId, fileRecordResponse } = setup();
+				const { deleteFiles, getFileRecordsByParentId, fetchFiles } =
+					useFileStorageApi();
+
+				await fetchFiles(
+					fileRecordResponse.parentId,
+					fileRecordResponse.parentType
+				);
+				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([
+					fileRecordResponse,
+				]);
+
+				await deleteFiles([fileRecordResponse]);
+
+				const fileRecord = getFileRecordsByParentId(parentId);
+				expect(fileRecord).toStrictEqual([]);
+			});
+		});
+
+		describe("when file api returns error", () => {
+			const setup = () => {
+				const parentId = ObjectIdMock();
+				const parentType = FileRecordParentType.BOARDNODES;
+				const fileRecordResponse = fileRecordFactory.build({
+					parentId,
+					parentType,
+				});
+				const response = createMock<
+					AxiosResponse<FileRecordListResponse, unknown>
+				>({
+					data: { data: [fileRecordResponse] },
+				});
+
+				const fileApi = createMock<serverApi.FileApiInterface>();
+				jest.spyOn(serverApi, "FileApiFactory").mockReturnValueOnce(fileApi);
+				fileApi.list.mockResolvedValueOnce(response);
+
+				const { responseError, expectedPayload } = setupErrorResponse(
+					ErrorType.FILE_NOT_FOUND
+				);
+
+				mockedMapAxiosErrorToResponseError.mockReturnValue(expectedPayload);
+				fileApi.deleteFiles.mockRejectedValue(responseError);
+
+				const { showInternalServerError, showFileNotDeletedError } =
+					setupFileStorageNotifier();
+
+				return {
+					showInternalServerError,
+					showFileNotDeletedError,
+					responseError,
+					expectedPayload,
+					fileRecordResponse,
+				};
+			};
+
+			it("should call showInternalServerError, showFileNotDeletedError, pass error and upsert filerecords", async () => {
+				const {
+					showInternalServerError,
+					showFileNotDeletedError,
+					responseError,
+					fileRecordResponse,
+				} = setup();
+				const { deleteFiles, getFileRecordsByParentId, fetchFiles } =
+					useFileStorageApi();
+
+				await fetchFiles(
+					fileRecordResponse.parentId,
+					fileRecordResponse.parentType
+				);
+
+				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([
+					fileRecordResponse,
+				]);
+
+				await expect(deleteFiles([])).rejects.toBe(responseError);
+
+				expect(showInternalServerError).toHaveBeenCalled();
+				expect(showFileNotDeletedError).toHaveBeenCalled();
+				expect(getFileRecordsByParentId(fileRecordResponse.parentId)).toEqual([
+					fileRecordResponse,
+				]);
+			});
+		});
+	});
 });

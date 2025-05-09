@@ -14,7 +14,9 @@ import * as ConfirmationDialog from "@ui-confirmation-dialog";
 import { KebabMenuActionDelete } from "@ui-kebab-menu";
 import { ComputedRef, nextTick, ref } from "vue";
 import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
+import * as DeleteFilesConfirmation from "./composables/DeleteFilesConfirmation.composable";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
+import KebabMenuActionDeleteFiles from "./file-table/KebapMenuActionDeleteFiles.vue";
 import Folder from "./Folder.vue";
 
 describe("Folder.vue", () => {
@@ -494,6 +496,180 @@ describe("Folder.vue", () => {
 				const { routerSpy } = await setup();
 
 				expect(routerSpy).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when file is checked, deleted by actions menu and confirmed", () => {
+			const setup = async () => {
+				const folderStateMock =
+					createMock<ReturnType<typeof FolderState.useFolderState>>();
+				jest
+					.spyOn(FolderState, "useFolderState")
+					.mockReturnValue(folderStateMock);
+
+				folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
+					() => "boards"
+				);
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+				const parent = parentNodeInfoFactory.build({
+					type: ParentNodeType.Board,
+				});
+				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+				const boardState = createMock<
+					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+				>({});
+				jest
+					.spyOn(BoardApi, "useSharedBoardPageInformation")
+					.mockReturnValue(boardState);
+
+				const fileStorageApiMock =
+					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				jest
+					.spyOn(FileStorageApi, "useFileStorageApi")
+					.mockReturnValue(fileStorageApiMock);
+
+				const fileRecord = fileRecordFactory.build();
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+					fileRecord,
+				]);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
+
+				const confirmationDialogMock =
+					createMock<
+						ReturnType<
+							typeof DeleteFilesConfirmation.useDeleteFilesConfirmationDialog
+						>
+					>();
+				jest
+					.spyOn(DeleteFilesConfirmation, "useDeleteFilesConfirmationDialog")
+					.mockReturnValue(confirmationDialogMock);
+				confirmationDialogMock.askDeleteFilesConfirmation.mockResolvedValue(
+					true
+				);
+
+				const { wrapper } = setupWrapper();
+
+				await nextTick();
+				await nextTick();
+				await nextTick();
+
+				const checkbox = wrapper.find(
+					`[data-testid='select-checkbox-${fileRecord.name}']`
+				);
+				await checkbox.trigger("click");
+
+				const actionMenuButton = wrapper.find(
+					`[data-testid='action-menu-button']`
+				);
+				await actionMenuButton.trigger("click");
+
+				const deleteButton = wrapper.findComponent(KebabMenuActionDeleteFiles);
+				await deleteButton.trigger("click");
+
+				return {
+					fileStorageApiMock,
+				};
+			};
+
+			it("should call deleteFiles", async () => {
+				const { fileStorageApiMock } = await setup();
+
+				expect(fileStorageApiMock.deleteFiles).toHaveBeenCalled();
+			});
+		});
+
+		describe("when file is checked, deleted by actions menu and confirmed", () => {
+			const setup = async () => {
+				const folderStateMock =
+					createMock<ReturnType<typeof FolderState.useFolderState>>();
+				jest
+					.spyOn(FolderState, "useFolderState")
+					.mockReturnValue(folderStateMock);
+
+				folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
+					() => "boards"
+				);
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+				const parent = parentNodeInfoFactory.build({
+					type: ParentNodeType.Board,
+				});
+				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+				const boardState = createMock<
+					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+				>({});
+				jest
+					.spyOn(BoardApi, "useSharedBoardPageInformation")
+					.mockReturnValue(boardState);
+
+				const fileStorageApiMock =
+					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				jest
+					.spyOn(FileStorageApi, "useFileStorageApi")
+					.mockReturnValue(fileStorageApiMock);
+
+				const fileRecord = fileRecordFactory.build();
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+					fileRecord,
+				]);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
+
+				const confirmationDialogMock =
+					createMock<
+						ReturnType<
+							typeof DeleteFilesConfirmation.useDeleteFilesConfirmationDialog
+						>
+					>();
+				jest
+					.spyOn(DeleteFilesConfirmation, "useDeleteFilesConfirmationDialog")
+					.mockReturnValue(confirmationDialogMock);
+				confirmationDialogMock.askDeleteFilesConfirmation.mockResolvedValue(
+					false
+				);
+
+				const { wrapper } = setupWrapper();
+
+				await nextTick();
+				await nextTick();
+				await nextTick();
+
+				const checkbox = wrapper.find(
+					`[data-testid='select-checkbox-${fileRecord.name}']`
+				);
+				await checkbox.trigger("click");
+
+				const actionMenuButton = wrapper.find(
+					`[data-testid='action-menu-button']`
+				);
+				await actionMenuButton.trigger("click");
+
+				const deleteButton = wrapper.findComponent(KebabMenuActionDeleteFiles);
+				await deleteButton.trigger("click");
+
+				return {
+					fileStorageApiMock,
+				};
+			};
+
+			it("should not call deleteFiles", async () => {
+				const { fileStorageApiMock } = await setup();
+
+				expect(fileStorageApiMock.deleteFiles).not.toHaveBeenCalled();
 			});
 		});
 	});

@@ -191,4 +191,34 @@ describe("FileStorageNotifier.composable", () => {
 			});
 		});
 	});
+
+	describe("when showFileNotDeletedError called", () => {
+		const setup = () => {
+			const i18nKey = "components.board.notifications.errors.fileNotDeleted";
+
+			return { i18nKey };
+		};
+
+		it("should call i18n.t with correctly props", () => {
+			const { showFileNotDeletedError } = setupMountComposable();
+			const { i18nKey } = setup();
+
+			showFileNotDeletedError();
+
+			expect(mockI18nModule.t).toBeCalledWith(i18nKey);
+		});
+
+		it("should call showFailure with correctly props", () => {
+			const { showFileNotDeletedError } = setupMountComposable();
+			const { i18nKey } = setup();
+
+			showFileNotDeletedError();
+
+			expect(notifierModule.show).toBeCalledWith({
+				status: "error",
+				text: i18nKey,
+				timeout: 5000,
+			});
+		});
+	});
 });
