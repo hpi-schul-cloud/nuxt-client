@@ -124,7 +124,7 @@ const headers = [
 	{ title: t("pages.folder.columns.createdat"), key: "createdAt" },
 	{ title: t("pages.folder.columns.size"), key: "size" },
 	{
-		title: t("pages.rooms.members.tableHeader.actions"),
+		title: t("ui.actionMenu.actions"),
 		key: "actions",
 		sortable: false,
 		width: 50,
