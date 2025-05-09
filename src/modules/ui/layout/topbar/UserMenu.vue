@@ -8,6 +8,7 @@
 				data-testid="user-menu-btn"
 				class="bg-surface-variant"
 				size="small"
+				@click="onMenuBtnClicked"
 			>
 				<span class="text-h6">{{ initials }}</span>
 			</VBtn>
@@ -24,6 +25,7 @@
 			<VListItem
 				v-if="isExternalLogoutAllowed"
 				data-testid="external-logout"
+				:disabled="isSessionTokenExpired"
 				@click="externalLogout"
 			>
 				{{ $t("common.labels.logout")
@@ -48,14 +50,15 @@ import {
 	onMounted,
 } from "vue";
 import { useI18n } from "vue-i18n";
-import LanguageMenu from "./LanguageMenu.vue";
+import { useOAuthApi } from "@data-oauth";
+import { System, useSystemApi } from "@data-system";
 import { MeUserResponse } from "@/serverApi/v3";
 import {
 	injectStrict,
 	AUTH_MODULE_KEY,
 	ENV_CONFIG_MODULE_KEY,
 } from "@/utils/inject";
-import { System, useSystemApi } from "@data-system";
+import LanguageMenu from "./LanguageMenu.vue";
 
 const props = defineProps({
 	user: {
@@ -72,6 +75,7 @@ const { t } = useI18n();
 const authModule = injectStrict(AUTH_MODULE_KEY);
 const envConfigModule = injectStrict(ENV_CONFIG_MODULE_KEY);
 const { getSystem } = useSystemApi();
+const { getSessionTokenExpiration } = useOAuthApi();
 
 const userRole = computed(() => {
 	return t(`common.roleName.${toRef(props.roleNames).value[0]}`).toString();
@@ -94,11 +98,27 @@ const systemName: ComputedRef<string> = computed(() => {
 	return system.value?.displayName ?? "";
 });
 
+const now: Ref<Date> = ref(new Date());
+
+const sessionTokenExpiration: Ref<Date | undefined> = ref();
+
+const isSessionTokenExpired: ComputedRef<boolean> = computed(
+	() =>
+		!sessionTokenExpiration.value || now.value >= sessionTokenExpiration.value
+);
+
 onMounted(async () => {
 	if (authModule.loginSystem) {
 		system.value = await getSystem(authModule.loginSystem);
 	}
+	if (isExternalLogoutAllowed.value) {
+		sessionTokenExpiration.value = await getSessionTokenExpiration();
+	}
 });
+
+const onMenuBtnClicked = () => {
+	now.value = new Date();
+};
 
 const logout = () => {
 	authModule.logout();
