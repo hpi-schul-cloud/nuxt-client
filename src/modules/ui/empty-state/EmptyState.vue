@@ -6,8 +6,7 @@
 			</div>
 		</template>
 		<template #title>
-			<!-- a11y question: should this be h2-tag? -->
-			<!-- rename data-testid to empty-state-title -->
+			<!-- rename data-testid to empty-state-title-->
 			<p class="text-h4 mt-8" data-testid="emptyTaskMessage">
 				{{ title }}
 			</p>
