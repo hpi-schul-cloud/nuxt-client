@@ -23,6 +23,7 @@ import { createMock, DeepMocked } from "@golevelup/ts-jest";
 import setupStores from "@@/tests/test-utils/setupStores";
 import SchoolsModule from "@/store/schools";
 import AuthModule from "@/store/auth";
+import { WarningAlert } from "@ui-alert";
 
 jest.mock("@vueuse/integrations/useFocusTrap", () => {
 	return {
@@ -139,7 +140,13 @@ describe("AddMembers", () => {
 			it("should have proper props for autoCompleteRole component", () => {
 				const { wrapper } = setup();
 
-				const roles = [{ id: RoleName.Teacher, name: "common.labels.teacher" }];
+				const roles = [
+					{
+						id: RoleName.Student,
+						name: "pages.roooms.members.add.role.student",
+					},
+					{ id: RoleName.Teacher, name: "common.labels.teacher" },
+				];
 
 				const roleComponent = wrapper.getComponent({
 					ref: "autoCompleteRole",
@@ -164,23 +171,7 @@ describe("AddMembers", () => {
 	});
 
 	describe("when school is changed", () => {
-		it("should call getPotentialMembers", async () => {
-			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
-			const selectedSchool = roomMembersSchools[1].id;
-			const schoolComponent = wrapper.getComponent({
-				ref: "autoCompleteSchool",
-			});
-
-			await schoolComponent.setValue(selectedSchool);
-
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
-				RoleName.Teacher,
-				selectedSchool
-			);
-		});
-
-		it("should set the role to teacher", async () => {
+		it("should set the role to student", async () => {
 			const { wrapper } = setup();
 			const schoolComponent = wrapper.getComponent({
 				ref: "autoCompleteSchool",
@@ -192,7 +183,23 @@ describe("AddMembers", () => {
 				ref: "autoCompleteRole",
 			});
 
-			expect(roleComponent.props("modelValue")).toBe(RoleName.Teacher);
+			expect(roleComponent.props("modelValue")).toBe(RoleName.Student);
+		});
+
+		it("should call getPotentialMembers for student role", async () => {
+			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
+			const selectedSchool = roomMembersSchools[1].id;
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+
+			await schoolComponent.setValue(selectedSchool);
+
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
+				RoleName.Student,
+				selectedSchool
+			);
 		});
 
 		it("should reset selectedUsers", async () => {
@@ -212,20 +219,40 @@ describe("AddMembers", () => {
 	});
 
 	describe("when userRole is changed", () => {
-		it("should call getPotentialMembers", async () => {
-			const { wrapper, roomMembersSchools, roomMembersStore } = setup();
-			const selectedRole = RoleName.Teacher;
-			const roleComponent = wrapper.getComponent({
-				ref: "autoCompleteRole",
+		describe("and the role is set to student", () => {
+			it("should call getPotentialMembers for student role", async () => {
+				const { wrapper, roomMembersSchools, roomMembersStore } = setup();
+				const selectedRole = RoleName.Student;
+				const roleComponent = wrapper.getComponent({
+					ref: "autoCompleteRole",
+				});
+
+				await roleComponent.setValue(selectedRole);
+
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
+					selectedRole,
+					roomMembersSchools[0].id
+				);
 			});
+		});
 
-			await roleComponent.setValue(selectedRole);
+		describe("and the role is set to teacher", () => {
+			it("should call getPotentialMembers for teacher role", async () => {
+				const { wrapper, roomMembersSchools, roomMembersStore } = setup();
+				const selectedRole = RoleName.Teacher;
+				const roleComponent = wrapper.getComponent({
+					ref: "autoCompleteRole",
+				});
 
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
-			expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
-				selectedRole,
-				roomMembersSchools[0].id
-			);
+				await roleComponent.setValue(selectedRole);
+
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledTimes(1);
+				expect(roomMembersStore.getPotentialMembers).toHaveBeenCalledWith(
+					selectedRole,
+					roomMembersSchools[0].id
+				);
+			});
 		});
 
 		it("should reset selectedUsers", async () => {
@@ -411,6 +438,44 @@ describe("AddMembers", () => {
 
 			schoolComponent.vm.menu = false;
 			expect(unpauseMock).not.toHaveBeenCalled();
+		});
+	});
+
+	describe("when external school and student role are set", () => {
+		it("should disable the user selection", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+			const roleComponent = wrapper.getComponent({
+				ref: "autoCompleteRole",
+			});
+
+			await schoolComponent.setValue("external-school-id");
+			await roleComponent.setValue(RoleName.Student);
+
+			const userComponent = wrapper.getComponent({
+				ref: "autoCompleteUsers",
+			});
+
+			expect(userComponent.props("disabled")).toBe(true);
+		});
+
+		it("should show warning message", async () => {
+			const { wrapper } = setup();
+			const schoolComponent = wrapper.getComponent({
+				ref: "autoCompleteSchool",
+			});
+			const roleComponent = wrapper.getComponent({
+				ref: "autoCompleteRole",
+			});
+
+			await schoolComponent.setValue("external-school-id");
+			await roleComponent.setValue(RoleName.Student);
+
+			expect(wrapper.getComponent(WarningAlert).text()).toBe(
+				"pages.rooms.members.add.warningText"
+			);
 		});
 	});
 });
