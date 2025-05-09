@@ -115,7 +115,7 @@ describe("FileStorageApi Composable", () => {
 
 				await fetchFiles(parentId, parentType);
 
-				expect(fileApi.list).toBeCalledWith(
+				expect(fileApi.list).toHaveBeenCalledWith(
 					"schoolId",
 					StorageLocation.SCHOOL,
 					parentId,
@@ -239,7 +239,7 @@ describe("FileStorageApi Composable", () => {
 
 				await upload(file, parentId, parentType);
 
-				expect(fileApi.upload).toBeCalledWith(
+				expect(fileApi.upload).toHaveBeenCalledWith(
 					"schoolId",
 					StorageLocation.SCHOOL,
 					parentId,
@@ -345,7 +345,7 @@ describe("FileStorageApi Composable", () => {
 
 				await uploadFromUrl(imageUrl, parentId, parentType);
 
-				expect(fileApi.uploadFromUrl).toBeCalledWith(
+				expect(fileApi.uploadFromUrl).toHaveBeenCalledWith(
 					"schoolId",
 					StorageLocation.SCHOOL,
 					parentId,
@@ -445,7 +445,7 @@ describe("FileStorageApi Composable", () => {
 
 				await rename(fileRecordResponse.id, renameFileParams);
 
-				expect(fileApi.patchFilename).toBeCalledWith(
+				expect(fileApi.patchFilename).toHaveBeenCalledWith(
 					fileRecordResponse.id,
 					renameFileParams
 				);
@@ -546,7 +546,7 @@ describe("FileStorageApi Composable", () => {
 
 				await deleteFiles([fileRecordResponse]);
 
-				expect(fileApi.deleteFiles).toBeCalledWith({
+				expect(fileApi.deleteFiles).toHaveBeenCalledWith({
 					fileRecordIds: [fileRecordResponse.id],
 				});
 			});

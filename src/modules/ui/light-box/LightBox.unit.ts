@@ -172,7 +172,7 @@ describe("LightBox", () => {
 					);
 					await downloadButton.trigger("click");
 
-					expect(mockedDownloadFile).toBeCalledWith(
+					expect(mockedDownloadFile).toHaveBeenCalledWith(
 						lightBoxOptions.value.downloadUrl,
 						lightBoxOptions.value.name
 					);
