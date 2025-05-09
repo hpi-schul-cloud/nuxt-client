@@ -6,6 +6,7 @@ interface Props {
 	showUnauthorizedErrorMock?: () => void;
 	showInternalServerErrorMock?: () => void;
 	showFileExistsErrorMock?: () => void;
+	showFileNotDeletedErrorMock?: () => void;
 }
 
 export const setupFileStorageNotifier = (props: Props = {}) => {
@@ -15,6 +16,7 @@ export const setupFileStorageNotifier = (props: Props = {}) => {
 		showUnauthorizedErrorMock,
 		showInternalServerErrorMock,
 		showFileExistsErrorMock,
+		showFileNotDeletedErrorMock,
 	} = props;
 
 	const mockedSelectedFile = jest.mocked(useFileStorageNotifier);
@@ -24,6 +26,7 @@ export const setupFileStorageNotifier = (props: Props = {}) => {
 	const showUnauthorizedError = showUnauthorizedErrorMock ?? jest.fn();
 	const showInternalServerError = showInternalServerErrorMock ?? jest.fn();
 	const showFileExistsError = showFileExistsErrorMock ?? jest.fn();
+	const showFileNotDeletedError = showFileNotDeletedErrorMock ?? jest.fn();
 
 	const mocks = {
 		showFileTooBigError,
@@ -31,6 +34,7 @@ export const setupFileStorageNotifier = (props: Props = {}) => {
 		showUnauthorizedError,
 		showInternalServerError,
 		showFileExistsError,
+		showFileNotDeletedError,
 	};
 
 	mockedSelectedFile.mockReturnValue(mocks);

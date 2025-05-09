@@ -25,5 +25,19 @@ export const useFileRecordsStore = defineStore("fileRecords", {
 				this.recordsByParent.set(parentId, parentRecords);
 			});
 		},
+
+		deleteFileRecords(fileRecords: FileRecord[]): void {
+			fileRecords.forEach((fileRecord) => {
+				const { parentId, id } = fileRecord;
+				const parentRecords = this.recordsByParent.get(parentId);
+
+				if (parentRecords) {
+					parentRecords.delete(id);
+					if (parentRecords.size === 0) {
+						this.recordsByParent.delete(parentId);
+					}
+				}
+			});
+		},
 	},
 });
