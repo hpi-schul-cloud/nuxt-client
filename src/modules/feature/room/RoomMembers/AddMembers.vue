@@ -41,6 +41,10 @@
 				/>
 			</div>
 
+			<WarningAlert v-if="isStudentSelectionDisabled">{{
+				t("pages.rooms.members.add.warningText")
+			}}</WarningAlert>
+
 			<div class="mt-4" data-testid="add-participant-name">
 				<v-autocomplete
 					ref="autoCompleteUsers"
@@ -51,6 +55,7 @@
 					item-value="userId"
 					item-title="fullName"
 					multiple
+					:disabled="isStudentSelectionDisabled"
 					:items="potentialRoomMembers"
 					:label="t('common.labels.name')"
 					@update:menu="onAutocompleteToggle"
@@ -90,7 +95,7 @@ import { RoleName } from "@/serverApi/v3";
 import { useRoomMembersStore } from "@data-room";
 import { useFocusTrap } from "@vueuse/integrations/useFocusTrap";
 import { VAutocomplete, VCard } from "vuetify/lib/components/index.mjs";
-import { InfoAlert } from "@ui-alert";
+import { InfoAlert, WarningAlert } from "@ui-alert";
 import { storeToRefs } from "pinia";
 
 const emit = defineEmits<{
@@ -106,6 +111,7 @@ const { addMembers, getPotentialMembers } = roomMembersStore;
 const selectedSchool = ref(schools.value[0].id);
 
 const schoolRoles = [
+	{ id: RoleName.Student, name: t("pages.roooms.members.add.role.student") },
 	{ id: RoleName.Teacher, name: t("common.labels.teacher") },
 ];
 
@@ -132,6 +138,12 @@ const onClose = () => emit("close");
 const addMembersContent = ref<VCard>();
 const { pause, unpause } = useFocusTrap(addMembersContent, {
 	immediate: true,
+});
+
+const isStudentSelectionDisabled = computed(() => {
+	const isExternalSchoolSelected = selectedSchool.value !== schools.value[0].id;
+	const isStudentRoleSelected = selectedSchoolRole.value === RoleName.Student;
+	return isExternalSchoolSelected && isStudentRoleSelected;
 });
 
 const autoCompleteSchool = ref<VAutocomplete>();
