@@ -1,6 +1,11 @@
 import router from "@/router";
 import { ParentNodeInfo, ParentNodeType } from "@/types/board/ContentElement";
 import { FileRecordParent } from "@/types/file/File";
+import {
+	convertFileSize,
+	downloadFile,
+	isDownloadAllowed,
+} from "@/utils/fileHelper";
 import { fileRecordFactory, parentNodeInfoFactory } from "@@/tests/test-utils";
 import {
 	createTestingI18n,
@@ -15,7 +20,10 @@ import { KebabMenuActionDelete } from "@ui-kebab-menu";
 import { ComputedRef, nextTick, ref } from "vue";
 import { VSkeletonLoader } from "vuetify/lib/components/index.mjs";
 import EmptyFolderSvg from "./file-table/EmptyFolderSvg.vue";
+import KebabMenuActionDownload from "./file-table/KebabMenuActionDownload.vue";
 import Folder from "./Folder.vue";
+
+jest.mock("@/utils/fileHelper");
 
 describe("Folder.vue", () => {
 	beforeEach(() => {
@@ -494,6 +502,99 @@ describe("Folder.vue", () => {
 				const { routerSpy } = await setup();
 
 				expect(routerSpy).not.toHaveBeenCalled();
+			});
+		});
+
+		describe("when file is checked and downloaded by actions menu", () => {
+			const setup = async () => {
+				const folderStateMock =
+					createMock<ReturnType<typeof FolderState.useFolderState>>();
+				jest
+					.spyOn(FolderState, "useFolderState")
+					.mockReturnValue(folderStateMock);
+
+				folderStateMock.mapNodeTypeToPathType.mockImplementationOnce(
+					() => "boards"
+				);
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
+				const parent = parentNodeInfoFactory.build({
+					type: ParentNodeType.Board,
+				});
+				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
+
+				const boardState = createMock<
+					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
+				>({});
+				jest
+					.spyOn(BoardApi, "useSharedBoardPageInformation")
+					.mockReturnValue(boardState);
+
+				const fileStorageApiMock =
+					createMock<ReturnType<typeof FileStorageApi.useFileStorageApi>>();
+				jest
+					.spyOn(FileStorageApi, "useFileStorageApi")
+					.mockReturnValue(fileStorageApiMock);
+
+				const fileRecord = fileRecordFactory.build();
+				fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([
+					fileRecord,
+				]);
+
+				const boardApiMock =
+					createMock<ReturnType<typeof BoardApi.useBoardApi>>();
+				jest.spyOn(BoardApi, "useBoardApi").mockReturnValue(boardApiMock);
+
+				const downloadFileMock = jest
+					.mocked(downloadFile)
+					.mockReturnValueOnce();
+
+				const convertFileSizeMOck = jest
+					.mocked(convertFileSize)
+					.mockImplementation((size) => ({
+						convertedSize: size,
+						unit: "MB",
+					}));
+
+				const isDownloadAllowedMock = jest
+					.mocked(isDownloadAllowed)
+					.mockReturnValueOnce(true);
+
+				const { wrapper } = setupWrapper();
+
+				await nextTick();
+				await nextTick();
+				await nextTick();
+
+				const checkbox = wrapper.find(
+					`[data-testid='select-checkbox-${fileRecord.name}']`
+				);
+				await checkbox.trigger("click");
+
+				const actionMenuButton = wrapper.find(
+					`[data-testid='action-menu-button']`
+				);
+				await actionMenuButton.trigger("click");
+
+				const downloadButton = wrapper.findComponent(KebabMenuActionDownload);
+				await downloadButton.trigger("click");
+
+				return {
+					downloadFileMock,
+					fileRecord,
+				};
+			};
+
+			it("should call downloadFile", async () => {
+				const { downloadFileMock, fileRecord } = await setup();
+
+				expect(downloadFileMock).toHaveBeenCalledWith(
+					fileRecord.url,
+					fileRecord.name
+				);
 			});
 		});
 	});
