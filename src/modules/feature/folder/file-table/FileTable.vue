@@ -81,10 +81,9 @@
 </template>
 
 <script setup lang="ts">
-import { FileRecordScanStatus } from "@/fileStorageApi/v3";
 import { printDateFromStringUTC } from "@/plugins/datetime";
 import { FileRecord } from "@/types/file/File";
-import { convertFileSize } from "@/utils/fileHelper";
+import { convertFileSize, isDownloadAllowed } from "@/utils/fileHelper";
 import { DataTable } from "@ui-data-table";
 import { EmptyState } from "@ui-empty-state";
 import { KebabMenu, KebabMenuActionDownload } from "@ui-kebab-menu";
@@ -143,8 +142,7 @@ const formatFileSize = (size: number) => {
 };
 
 const isFileSelectable = (fileRecord: FileRecord) => {
-	const result =
-		fileRecord.securityCheckStatus !== FileRecordScanStatus.BLOCKED;
+	const result = isDownloadAllowed(fileRecord.securityCheckStatus);
 
 	return result;
 };
