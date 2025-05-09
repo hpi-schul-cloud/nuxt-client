@@ -1,9 +1,12 @@
-import setupConfirmationComposableMock from "@@/tests/test-utils/composable-mocks/setupConfirmationComposableMock";
+import { fileRecordFactory } from "@@/tests/test-utils";
 import { mountComposable } from "@@/tests/test-utils/mountComposable";
 import { createTestingI18n } from "@@/tests/test-utils/setup";
+import { useConfirmationDialog } from "@ui-confirmation-dialog";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
-import { useDeleteConfirmationDialog } from "./DeleteFilesConfirmation.composable";
-jest.mock("./Confirmation.composable");
+import { useDeleteFilesConfirmationDialog } from "./DeleteFilesConfirmation.composable";
+
+jest.mock("@ui-confirmation-dialog");
 
 jest.mock("vue-i18n", () => {
 	return {
@@ -13,147 +16,192 @@ jest.mock("vue-i18n", () => {
 });
 const useI18nMock = <jest.Mock>useI18n;
 
-describe("DeleteConfirmation composable", () => {
+describe("useDeleteFilesConfirmationDialog composable", () => {
 	describe("askDeleteConfirmation", () => {
-		const setup = (isConfirmed: boolean) => {
-			const title = "title";
-			const titleString = ` "${title}"`;
-			const typeLanguageKey:
-				| "components.boardCard"
-				| "components.boardElement" = "components.boardElement";
-			const titleTranslationKey = "ui-confirmation-dialog.ask-delete";
-			const confirmActionLangKey = "common.actions.delete";
-			const data = {
-				elementId: "elementId",
-				name: "name",
-			};
-			const askConfirmationMock = jest.fn().mockResolvedValueOnce(isConfirmed);
-			const { askConfirmation } = setupConfirmationComposableMock({
-				askConfirmationMock,
-			});
-
-			const translateMock = jest
-				.fn()
-				.mockImplementation(
-					(key: string, dynamic?: object): string =>
-						key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
-				);
-			useI18nMock.mockReturnValue({
-				t: translateMock,
-			});
-
-			const { askDeleteConfirmation } = mountComposable(
-				() => useDeleteConfirmationDialog(),
-				{
-					global: { plugins: [createTestingI18n()] },
-				}
-			);
-
-			return {
-				askDeleteConfirmation,
-				askConfirmation,
-				confirmActionLangKey,
-				data,
-				translateMock,
-				typeLanguageKey,
-				title,
-				titleString,
-				titleTranslationKey,
-			};
-		};
-
 		beforeEach(() => {
 			jest.clearAllMocks();
 		});
 
-		describe("when title is defined", () => {
-			it("should call translate functions", async () => {
-				const {
-					askDeleteConfirmation,
-					translateMock,
-					typeLanguageKey,
-					title,
-					titleString,
-					titleTranslationKey,
-				} = setup(true);
+		describe("when multiple filerecords should be confirmed", () => {
+			const setup = (isConfirmed: boolean) => {
+				const fileRecord1 = fileRecordFactory.build();
+				const fileRecord2 = fileRecordFactory.build();
+				const fileRecords = [fileRecord1, fileRecord2];
 
-				await askDeleteConfirmation(title, typeLanguageKey);
+				const confirmationMock = jest.mocked(useConfirmationDialog);
 
-				expect(translateMock).toHaveBeenNthCalledWith(1, typeLanguageKey);
-				expect(translateMock).toHaveBeenNthCalledWith(2, titleTranslationKey, {
-					title: titleString,
-					type: typeLanguageKey,
-				});
-			});
+				const askConfirmation = jest.fn().mockResolvedValueOnce(isConfirmed);
+				const isDialogOpen = ref(false);
 
-			it("should call askConfirmation", async () => {
-				const {
-					askDeleteConfirmation,
+				const mocks = {
 					askConfirmation,
-					confirmActionLangKey,
-					title,
-					typeLanguageKey,
-					titleTranslationKey,
-				} = setup(true);
+					isDialogOpen,
+				};
 
-				await askDeleteConfirmation(title, typeLanguageKey);
+				confirmationMock.mockReturnValue(mocks);
 
-				expect(askConfirmation).toHaveBeenCalledWith({
-					confirmActionLangKey: expect.stringContaining(confirmActionLangKey),
-					message: expect.stringContaining(titleTranslationKey),
+				const translateMock = jest
+					.fn()
+					.mockImplementation(
+						(key: string, dynamic?: object): string =>
+							key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
+					);
+				useI18nMock.mockReturnValue({
+					t: translateMock,
+				});
+
+				const { askDeleteFilesConfirmation } = mountComposable(
+					() => useDeleteFilesConfirmationDialog(),
+					{
+						global: { plugins: [createTestingI18n()] },
+					}
+				);
+
+				return {
+					askDeleteFilesConfirmation,
+					translateMock,
+					fileRecords,
+					askConfirmation,
+				};
+			};
+
+			describe("when confirmation is true", () => {
+				it("should call translate functions", async () => {
+					const { askDeleteFilesConfirmation, translateMock, fileRecords } =
+						setup(true);
+
+					await askDeleteFilesConfirmation(fileRecords);
+
+					expect(translateMock).toHaveBeenNthCalledWith(
+						1,
+						"pages.folder.delete-multiple-confirmation",
+						{
+							total: fileRecords.length,
+						}
+					);
+				});
+
+				it("should call askConfirmation", async () => {
+					const { askDeleteFilesConfirmation, fileRecords, askConfirmation } =
+						setup(true);
+
+					await askDeleteFilesConfirmation(fileRecords);
+
+					expect(askConfirmation).toHaveBeenCalledWith({
+						confirmActionLangKey: "common.actions.delete",
+						message: expect.stringContaining(
+							"pages.folder.delete-multiple-confirmation"
+						),
+					});
+				});
+
+				it("should return result", async () => {
+					const { askDeleteFilesConfirmation, fileRecords } = setup(true);
+
+					const result = await askDeleteFilesConfirmation(fileRecords);
+
+					expect(result).toBe(true);
 				});
 			});
 
-			it("should return result", async () => {
-				const { askDeleteConfirmation, title, typeLanguageKey } = setup(true);
+			describe("when confirmation is false", () => {
+				it("should return result", async () => {
+					const { askDeleteFilesConfirmation, fileRecords } = setup(false);
 
-				const result = await askDeleteConfirmation(title, typeLanguageKey);
+					const result = await askDeleteFilesConfirmation(fileRecords);
 
-				expect(result).toBe(true);
+					expect(result).toBe(false);
+				});
 			});
 		});
 
-		describe("when title is undefined", () => {
-			it("should call translate functions", async () => {
-				const {
-					askDeleteConfirmation,
-					translateMock,
-					typeLanguageKey,
-					titleTranslationKey,
-				} = setup(true);
+		describe("when single filerecord should be confirmed and confirmation is true", () => {
+			const setup = (isConfirmed: boolean) => {
+				const fileRecord = fileRecordFactory.build();
 
-				await askDeleteConfirmation("", typeLanguageKey);
+				const confirmationMock = jest.mocked(useConfirmationDialog);
 
-				expect(translateMock).toHaveBeenNthCalledWith(1, typeLanguageKey);
-				expect(translateMock).toHaveBeenNthCalledWith(2, titleTranslationKey, {
-					title: "",
-					type: typeLanguageKey,
-				});
-			});
+				const askConfirmation = jest.fn().mockResolvedValueOnce(isConfirmed);
+				const isDialogOpen = ref(false);
 
-			it("should call askConfirmation", async () => {
-				const {
-					askDeleteConfirmation,
+				const mocks = {
 					askConfirmation,
-					confirmActionLangKey,
-					typeLanguageKey,
-					titleTranslationKey,
-				} = setup(true);
+					isDialogOpen,
+				};
 
-				await askDeleteConfirmation("", typeLanguageKey);
+				confirmationMock.mockReturnValue(mocks);
 
-				expect(askConfirmation).toHaveBeenCalledWith({
-					confirmActionLangKey: expect.stringContaining(confirmActionLangKey),
-					message: expect.stringContaining(titleTranslationKey),
+				const translateMock = jest
+					.fn()
+					.mockImplementation(
+						(key: string, dynamic?: object): string =>
+							key + (dynamic ? ` ${JSON.stringify(dynamic)}` : "")
+					);
+				useI18nMock.mockReturnValue({
+					t: translateMock,
+				});
+
+				const { askDeleteFilesConfirmation } = mountComposable(
+					() => useDeleteFilesConfirmationDialog(),
+					{
+						global: { plugins: [createTestingI18n()] },
+					}
+				);
+
+				return {
+					askDeleteFilesConfirmation,
+					translateMock,
+					fileRecord,
+					askConfirmation,
+				};
+			};
+			describe("when confirmation is true", () => {
+				it("should call translate functions", async () => {
+					const { askDeleteFilesConfirmation, translateMock, fileRecord } =
+						setup(true);
+
+					await askDeleteFilesConfirmation([fileRecord]);
+
+					expect(translateMock).toHaveBeenNthCalledWith(
+						1,
+						"pages.folder.delete-confirmation",
+						{
+							name: fileRecord.name,
+						}
+					);
+				});
+
+				it("should call askConfirmation", async () => {
+					const { askDeleteFilesConfirmation, fileRecord, askConfirmation } =
+						setup(true);
+
+					await askDeleteFilesConfirmation([fileRecord]);
+
+					expect(askConfirmation).toHaveBeenCalledWith({
+						confirmActionLangKey: "common.actions.delete",
+						message: expect.stringContaining(
+							"pages.folder.delete-confirmation"
+						),
+					});
+				});
+
+				it("should return result", async () => {
+					const { askDeleteFilesConfirmation, fileRecord } = setup(true);
+
+					const result = await askDeleteFilesConfirmation([fileRecord]);
+
+					expect(result).toBe(true);
 				});
 			});
 
-			it("should return result", async () => {
-				const { askDeleteConfirmation, typeLanguageKey } = setup(true);
+			describe("when confirmation is false", () => {
+				it("should return result", async () => {
+					const { askDeleteFilesConfirmation, fileRecord } = setup(false);
 
-				const result = await askDeleteConfirmation("", typeLanguageKey);
+					const result = await askDeleteFilesConfirmation([fileRecord]);
 
-				expect(result).toBe(true);
+					expect(result).toBe(false);
+				});
 			});
 		});
 	});
