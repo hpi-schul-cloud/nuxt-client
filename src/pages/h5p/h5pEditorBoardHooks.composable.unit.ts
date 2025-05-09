@@ -121,14 +121,13 @@ describe("useH5pEditorBoardHooks", () => {
 
 				return {
 					composable,
-					elementId,
 					element,
 					applicationErrorModule,
 				};
 			};
 
 			it("should set an error", async () => {
-				const { composable, elementId, applicationErrorModule } = setup();
+				const { composable, applicationErrorModule } = setup();
 
 				await composable.onCreate();
 
