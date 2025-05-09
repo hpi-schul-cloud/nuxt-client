@@ -148,10 +148,10 @@ export const useRoomInvitationLinkStore = defineStore(
 					? commonTranslationsMap.NO
 					: commonTranslationsMap.YES,
 				activeUntil: inputDateFormat(link.activeUntil!),
-				status:
-					new Date(link.activeUntil!) > new Date()
-						? commonTranslationsMap.ACTIVE
-						: commonTranslationsMap.EXPIRED,
+				isExpired: isExpired(link.activeUntil!),
+				status: isExpired(link.activeUntil!)
+					? commonTranslationsMap.ACTIVE
+					: commonTranslationsMap.EXPIRED,
 
 				restrictedToCreatorSchool: link.restrictedToCreatorSchool
 					? commonTranslationsMap.YES
@@ -161,6 +161,10 @@ export const useRoomInvitationLinkStore = defineStore(
 					: commonTranslationsMap.NO,
 			}));
 		});
+
+		const isExpired = (linkExpireDate: string) => {
+			return new Date(linkExpireDate) < new Date();
+		};
 
 		return {
 			resetStore,

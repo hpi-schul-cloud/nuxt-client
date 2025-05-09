@@ -157,7 +157,7 @@ const stickyStyle = computed(() => ({
 watch(
 	() => props.externalSelectedIds,
 	(newValue) => {
-		if (newValue) selectedIds.value = newValue;
+		selectedIds.value = newValue!;
 	},
 	{ immediate: true }
 );

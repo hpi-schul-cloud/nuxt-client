@@ -10,8 +10,43 @@
 		<template #[`action-menu-items`]>
 			<KebabMenuActionRemoveMember @click="onRemoveLinks(selectedIds)" />
 		</template>
+
+		<template #[`item.title`]="{ item }">
+			<span :class="{ 'text-medium-emphasis': item.isExpired }">{{
+				item.title
+			}}</span>
+		</template>
+		<template #[`item.restrictedToCreatorSchool`]="{ item }">
+			<span :class="{ 'text-medium-emphasis': item.isExpired }"
+				>{{ item.restrictedToCreatorSchool }}
+			</span>
+		</template>
+		<template #[`item.validForStudents`]="{ item }">
+			<span :class="{ 'text-medium-emphasis': item.isExpired }">{{
+				item.validForStudents
+			}}</span>
+		</template>
+		<template #[`item.activeUntil`]="{ item }">
+			<span :class="{ 'text-medium-emphasis': item.isExpired }">{{
+				item.activeUntil
+			}}</span>
+		</template>
+		<template #[`item.requiresConfirmation`]="{ item }">
+			<span :class="{ 'text-medium-emphasis': item.isExpired }">{{
+				item.requiresConfirmation
+			}}</span>
+		</template>
+		<template #[`item.status`]="{ item }">
+			<span :class="{ 'text-medium-emphasis': item.isExpired }">{{
+				item.status
+			}}</span>
+		</template>
+
 		<template #[`item.actions`]="{ item }">
-			<div class="d-flex align-center">
+			<div
+				class="d-flex align-center"
+				:class="{ 'text-medium-emphasis': item.isExpired }"
+			>
 				<v-btn
 					variant="text"
 					:icon="mdiShareVariantOutline"
@@ -141,3 +176,9 @@ const openShareModal = (itemId: string) => {
 	isInvitationDialogOpen.value = true;
 };
 </script>
+
+<!-- <style lang="scss" scoped>
+.text-medium-emphasis {
+	opacity: var(--v-medium-emphasis-opacity);
+}
+</style> -->
