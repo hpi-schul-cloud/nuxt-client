@@ -2074,7 +2074,7 @@ export default {
 	"utils.adminFilter.placeholder.date.until": "... and 03.03.2020",
 	"feature.media-shelf.title": "Media shelf",
 	"feature.media-shelf.emptyState":
-		"There are currently no media available for use.",
+		"There are currently no media available for use",
 	"feature.media-shelf.createLine": "Add line",
 	"feature.media-shelf.line.title": "Line",
 	"feature.media-shelf.availableLine.title": "Available media",
