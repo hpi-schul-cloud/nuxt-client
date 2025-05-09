@@ -1,6 +1,20 @@
-import { isEnum, isOfficialSchoolNumber } from "./validationUtil";
+import { isEnum, isMongoId, isOfficialSchoolNumber } from "./validationUtil";
 
 describe("validationUtil", () => {
+	describe("isMongoId", () => {
+		describe("when the value is a mongo id", () => {
+			it("should return true", () => {
+				expect(isMongoId("681b1666dfb0c3b8637d5a7c")).toBe(true);
+			});
+		});
+
+		describe("when the value is not a mongo id", () => {
+			it("should return false", () => {
+				expect(isMongoId("681b1666df")).toBe(false);
+			});
+		});
+	});
+
 	describe("isOfficialSchoolNumber", () => {
 		it("should return true for valid official school numbers", () => {
 			expect(isOfficialSchoolNumber("Dev-12")).toBe(true);

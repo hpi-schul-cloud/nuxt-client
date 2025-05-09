@@ -10,17 +10,18 @@
 
 <script lang="ts">
 import {
-	defineElements,
-	H5PEditorComponent,
-} from "@lumieducation/h5p-webcomponents";
-import { defineComponent, ref, watch, PropType } from "vue";
-import {
 	H5PContentParentType,
 	H5pEditorApiFactory,
+	H5PSaveResponse,
 	LanguageType,
 	PostH5PContentCreateParams,
 } from "@/h5pEditorApi/v3";
 import { $axios } from "@/utils/api";
+import {
+	defineElements,
+	H5PEditorComponent,
+} from "@lumieducation/h5p-webcomponents";
+import { defineComponent, PropType, ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 defineElements("h5p-editor");
@@ -64,7 +65,7 @@ export default defineComponent({
 		const saveContent = async (
 			contentId: string,
 			requestBody: { library: string; params: object }
-		) => {
+		): Promise<H5PSaveResponse> => {
 			const createParams: PostH5PContentCreateParams = {
 				library: requestBody.library,
 				params: requestBody.params,

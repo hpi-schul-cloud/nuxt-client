@@ -1,12 +1,13 @@
 import {
-	ParentNodeInfoResponse,
 	CollaborativeTextEditorElementResponse,
 	ContentElementType,
 	DrawingElementResponse,
 	ExternalToolElementResponse,
 	FileElementResponse,
 	FileFolderElementResponse,
+	H5pElementResponse,
 	LinkElementResponse,
+	ParentNodeInfoResponse,
 	ParentNodeType,
 	RichTextElementResponse,
 	SubmissionContainerElementResponse,
@@ -24,7 +25,8 @@ export type AnyContentElement =
 	| ExternalToolElementResponse
 	| DrawingElementResponse
 	| CollaborativeTextEditorElementResponse
-	| VideoConferenceElementResponse;
+	| VideoConferenceElementResponse
+	| H5pElementResponse;
 
 export type ParentNodeInfo = ParentNodeInfoResponse;
 

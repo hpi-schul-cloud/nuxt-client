@@ -4,10 +4,53 @@
 	"generator-cli": {
 		"version": "5.1.0",
 		"generators": {
+			"server-api": {
+				"generatorName": "typescript-axios",
+				"inputSpec": "http://localhost:3030/api/v3/docs-json/",
+				"output": "./src/serverApi/v3",
+				"skipValidateSpec": true,
+				"enablePostProcessFile": true,
+				"additionalProperties": {
+					"supportsES6": true,
+					"withInterfaces": true
+				}
+			},
 			"common-cartridge-api": {
 				"generatorName": "typescript-axios",
 				"inputSpec": "http://localhost:3350/api/v3/docs-json/",
 				"output": "./src/commonCartridgeApi/v3",
+				"skipValidateSpec": true,
+				"enablePostProcessFile": true,
+				"additionalProperties": {
+					"apiPackage": "api",
+					"enumNameSuffix": "",
+					"enumPropertyNaming": "UPPERCASE",
+					"modelPackage": "models",
+					"supportsES6": true,
+					"withInterfaces": true,
+					"withSeparateModelsAndApi": true
+				}
+			},
+			"h5p-editor-api": {
+				"generatorName": "typescript-axios",
+				"inputSpec": "http://localhost:4448/api/v3/docs-json/",
+				"output": "./src/h5pEditorApi/v3",
+				"skipValidateSpec": true,
+				"enablePostProcessFile": true,
+				"additionalProperties": {
+					"apiPackage": "api",
+					"enumNameSuffix": "",
+					"enumPropertyNaming": "UPPERCASE",
+					"modelPackage": "models",
+					"supportsES6": true,
+					"withInterfaces": true,
+					"withSeparateModelsAndApi": true
+				}
+			},
+			"file-storage-api": {
+				"generatorName": "typescript-axios",
+				"inputSpec": "http://localhost:4444/api/v3/docs-json/",
+				"output": "./src/fileStorageApi/v3",
 				"skipValidateSpec": true,
 				"enablePostProcessFile": true,
 				"additionalProperties": {

@@ -242,6 +242,10 @@ export const useCardStore = defineStore("cardStore", () => {
 		preferredTools.value = (await restApi.getPreferredTools(contextType)) || [];
 	};
 
+	const disconnectSocketRequest = () => {
+		socketOrRest.disconnectSocketRequest();
+	};
+
 	return {
 		createPreferredElement,
 		createCardSuccess,
@@ -267,5 +271,6 @@ export const useCardStore = defineStore("cardStore", () => {
 		updateCardTitleSuccess,
 		loadPreferredTools,
 		preferredTools,
+		disconnectSocketRequest,
 	};
 });

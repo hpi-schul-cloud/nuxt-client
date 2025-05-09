@@ -12,7 +12,6 @@ import {
 	isMongoId,
 	isOfficialSchoolNumber,
 	REGEX_ACTIVATION_CODE,
-	REGEX_H5P_ID,
 	REGEX_ID,
 	REGEX_UUID,
 } from "@/utils/validation";
@@ -356,12 +355,12 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
-		path: `/h5p/player/:id(${REGEX_H5P_ID})`,
+		path: `/h5p/player/:contentId(${REGEX_ID})`,
 		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
 		name: "h5pPlayer",
 	},
 	{
-		path: `/h5p/editor/:id(${REGEX_H5P_ID})?`,
+		path: `/h5p/editor/:contentId(${REGEX_ID})?`,
 		component: () => import("@/pages/h5p/H5PEditor.page.vue"),
 		name: "h5pEditor",
 		beforeEnter: validateQueryParameters({
@@ -371,6 +370,7 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		props: (to: RouteLocationNormalized) => ({
 			parentId: to.query.parentId,
 			parentType: to.query.parentType,
+			contentId: to.params.contentId || undefined,
 		}),
 	},
 	{
