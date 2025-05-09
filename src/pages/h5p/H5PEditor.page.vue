@@ -4,7 +4,7 @@
 			variant="text"
 			:ripple="false"
 			design="none"
-			class="arrow__back"
+			data-testid="editor-back-button"
 			@click="goBack"
 		>
 			<v-icon>{{ mdiChevronLeft }}</v-icon>
@@ -21,7 +21,12 @@
 					:parent-id="parentId"
 					@load-error="loadError"
 				/>
-				<v-btn class="mt-4" color="primary" @click="save">
+				<v-btn
+					class="mt-4"
+					color="primary"
+					data-testid="editor-save-button"
+					@click="save"
+				>
 					{{ t("common.actions.save") }}
 				</v-btn>
 			</div>
@@ -32,7 +37,7 @@
 <script setup lang="ts">
 import H5PEditorComponent from "@/components/h5p/H5PEditor.vue";
 import { useApplicationError } from "@/composables/application-error.composable";
-import { H5PContentParentType } from "@/h5pEditorApi/v3";
+import { H5PContentParentType, H5PSaveResponse } from "@/h5pEditorApi/v3";
 import { MessageSchema } from "@/locales/schema";
 import type ApplicationErrorModule from "@/store/application-error";
 import type NotifierModule from "@/store/notifier";
@@ -43,7 +48,7 @@ import {
 	NOTIFIER_MODULE_KEY,
 } from "@/utils/inject";
 import { mdiChevronLeft } from "@icons/material";
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, Ref, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { useH5pEditorBoardHooks } from "./h5pEditorBoardHooks.composable";
 import { H5pEditorHooks } from "./h5pEditorHooks";
@@ -51,7 +56,7 @@ import { H5pEditorHooks } from "./h5pEditorHooks";
 const props = defineProps<{
 	parentType: H5PContentParentType;
 	parentId: string;
-	contentId: string | undefined;
+	contentId?: string;
 }>();
 
 const notifierModule: NotifierModule = injectStrict(NOTIFIER_MODULE_KEY);
@@ -63,7 +68,7 @@ const { t } = useI18n();
 
 const { createApplicationError } = useApplicationError();
 
-const editorRef = ref<typeof H5PEditorComponent>();
+const editorRef: Ref<typeof H5PEditorComponent | undefined> = ref();
 
 const notifyParent = (event: CustomEvent) => {
 	window.dispatchEvent(event);
@@ -94,7 +99,7 @@ onMounted(async () => {
 const save = async () => {
 	if (editorRef.value) {
 		try {
-			const data = await editorRef.value.save();
+			const data: H5PSaveResponse = await editorRef.value.save();
 
 			if (hooks) {
 				await hooks.afterSave(data.contentId);
@@ -117,7 +122,7 @@ const save = async () => {
 			);
 		} catch {
 			notifierModule.show({
-				text: t("error.generic"),
+				text: t("common.validation.invalid"),
 				status: "error",
 				timeout: 5000,
 			});

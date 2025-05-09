@@ -77,10 +77,12 @@ const editorWindow: Ref<Window | null> = ref(null);
 const openEditorWindow = () => {
 	const route = router.resolve({
 		name: "h5pEditor",
+		params: {
+			contentId: element.value.content.contentId ?? undefined,
+		},
 		query: {
 			parentType: H5PContentParentType.BOARD_ELEMENT,
 			parentId: element.value.id,
-			contentId: element.value.content.contentId ?? undefined,
 		},
 	});
 

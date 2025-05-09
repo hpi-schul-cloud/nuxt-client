@@ -9,17 +9,13 @@ import { createPermissionGuard } from "@/router/guards/permission.guard";
 import { ToolContextType } from "@/serverApi/v3";
 import {
 	isEnum,
-	isH5pId,
 	isMongoId,
 	isOfficialSchoolNumber,
-	oneOf,
 	REGEX_ACTIVATION_CODE,
-	REGEX_H5P_ID,
 	REGEX_ID,
 	REGEX_UUID,
 } from "@/utils/validation";
 import { isDefined } from "@vueuse/core";
-import { isUndefined } from "lodash";
 import { RouteLocationNormalized, RouteRecordRaw } from "vue-router";
 
 export const routes: Readonly<RouteRecordRaw>[] = [
@@ -359,23 +355,22 @@ export const routes: Readonly<RouteRecordRaw>[] = [
 		}),
 	},
 	{
-		path: `/h5p/player/:id(${REGEX_H5P_ID})`,
+		path: `/h5p/player/:id(${REGEX_ID})`,
 		component: () => import("@/pages/h5p/H5PPlayer.page.vue"),
 		name: "h5pPlayer",
 	},
 	{
-		path: `/h5p/editor`,
+		path: `/h5p/editor/:id(${REGEX_ID})?`,
 		component: () => import("@/pages/h5p/H5PEditor.page.vue"),
 		name: "h5pEditor",
 		beforeEnter: validateQueryParameters({
 			parentType: isEnum(H5PContentParentType),
 			parentId: isMongoId,
-			contentId: oneOf(isUndefined, isH5pId),
 		}),
 		props: (to: RouteLocationNormalized) => ({
 			parentId: to.query.parentId,
 			parentType: to.query.parentType,
-			contentId: to.query.contentId,
+			contentId: to.params?.contentId,
 		}),
 	},
 	{

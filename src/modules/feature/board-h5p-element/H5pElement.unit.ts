@@ -278,10 +278,12 @@ describe("H5pElement", () => {
 
 				expect(useRouterMock.resolve).toHaveBeenCalledWith({
 					name: "h5pEditor",
+					params: {
+						contentId: undefined,
+					},
 					query: {
 						parentType: H5PContentParentType.BOARD_ELEMENT,
 						parentId: element.id,
-						contentId: undefined,
 					},
 				});
 				expect(window.open).toHaveBeenCalledWith(resolvedUrl, "_blank");
@@ -326,10 +328,12 @@ describe("H5pElement", () => {
 
 				expect(useRouterMock.resolve).toHaveBeenCalledWith({
 					name: "h5pEditor",
+					params: {
+						contentId: element.content.contentId,
+					},
 					query: {
 						parentType: H5PContentParentType.BOARD_ELEMENT,
 						parentId: element.id,
-						contentId: element.content.contentId,
 					},
 				});
 				expect(window.open).toHaveBeenCalledWith(resolvedUrl, "_blank");

@@ -1,11 +1,4 @@
-import { isUndefined } from 'lodash';
-import {
-	isEnum,
-	isH5pId,
-	isMongoId,
-	isOfficialSchoolNumber,
-	oneOf,
-} from "./validationUtil";
+import { isEnum, isMongoId, isOfficialSchoolNumber } from "./validationUtil";
 
 describe("validationUtil", () => {
 	describe("isMongoId", () => {
@@ -18,26 +11,6 @@ describe("validationUtil", () => {
 		describe("when the value is not a mongo id", () => {
 			it("should return false", () => {
 				expect(isMongoId("681b1666df")).toBe(false);
-			});
-		});
-	});
-
-	describe("isH5pId", () => {
-		describe("when the value is a mongo id", () => {
-			it("should return true", () => {
-				expect(isH5pId("681b1666dfb0c3b8637d5a7c")).toBe(true);
-			});
-		});
-
-		describe("when the value is new", () => {
-			it("should return true", () => {
-				expect(isH5pId("new")).toBe(true);
-			});
-		});
-
-		describe("when the value is not a mongo id", () => {
-			it("should return false", () => {
-				expect(isH5pId("681b1666df")).toBe(false);
 			});
 		});
 	});
@@ -91,37 +64,6 @@ describe("validationUtil", () => {
 			it("should return false", () => {
 				expect(isEnum(TestEnum)(1)).toBe(false);
 				expect(isEnum(TestEnum)("other")).toBe(false);
-			});
-		});
-	});
-
-	describe("isUndefined", () => {
-		describe("when the value is undefined", () => {
-			it("should return true", () => {
-				expect(isUndefined(undefined)).toBe(true);
-			});
-		});
-
-		describe("when the value is not undefined", () => {
-			it("should return false", () => {
-				expect(isUndefined("defined")).toBe(false);
-			});
-		});
-	});
-
-	describe("oneOf", () => {
-		describe("when one validator succeeds", () => {
-			it("should return true", () => {
-				expect(oneOf(isUndefined, isMongoId)(undefined)).toBe(true);
-				expect(oneOf(isUndefined, isMongoId)("681b1666dfb0c3b8637d5a7c")).toBe(
-					true
-				);
-			});
-		});
-
-		describe("when all validator fail", () => {
-			it("should return false", () => {
-				expect(oneOf(isUndefined, isMongoId)("invalid")).toBe(false);
 			});
 		});
 	});

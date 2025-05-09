@@ -877,7 +877,7 @@ describe("CardStore", () => {
 
 		describe("when using rest connection", () => {
 			it("should call disconnectSocket", () => {
-				const { cardStore } = setup(true);
+				const { cardStore } = setup(false);
 
 				cardStore.disconnectSocketRequest();
 

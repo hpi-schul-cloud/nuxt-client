@@ -6,9 +6,8 @@ import { createApplicationError } from "@/utils/create-application-error.factory
 import { APPLICATION_ERROR_KEY, injectStrict } from "@/utils/inject";
 import { useBoardApi, useCardStore } from "@data-board";
 import { onUnmounted, Ref, ref } from "vue";
-import { H5pEditorHooks } from "./h5pEditorHooks";
 
-export const useH5pEditorBoardHooks = (parentId: string): H5pEditorHooks => {
+export const useH5pEditorBoardHooks = (elementId: string) => {
 	const cardStore = useCardStore();
 	const boardApi = useBoardApi();
 	const element: Ref<H5pElementResponse | undefined> = ref();
@@ -24,7 +23,8 @@ export const useH5pEditorBoardHooks = (parentId: string): H5pEditorHooks => {
 	};
 
 	const onCreate = async (): Promise<void> => {
-		const response = await boardApi.getElementWithParentHierarchyCall(parentId);
+		const response =
+			await boardApi.getElementWithParentHierarchyCall(elementId);
 		const elementData: AnyContentElement = response.data.element;
 
 		if (!isH5pElement(elementData)) {
@@ -57,5 +57,6 @@ export const useH5pEditorBoardHooks = (parentId: string): H5pEditorHooks => {
 	return {
 		onCreate,
 		afterSave,
+		element,
 	};
 };
