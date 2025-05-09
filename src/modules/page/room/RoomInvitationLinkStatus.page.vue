@@ -14,11 +14,7 @@
 			/>
 		</div>
 		<div v-else class="w-100 text-center">
-			<CrossedHandsSvg
-				:svg-width="$vuetify.display.xs ? 200 : undefined"
-				fill="rgba(var(--v-theme-primary))"
-				data-testid="img-crossed-hands"
-			/>
+			<CrossedHandsSvg data-testid="img-crossed-hands" />
 			<div class="text-h2" data-testid="status-message">
 				{{ infoMessage }}
 			</div>
