@@ -13,9 +13,9 @@
 import { FileRecord } from "@/types/file/File";
 import { downloadFile } from "@/utils/fileHelper";
 import { mdiTrayArrowDown } from "@icons/material";
+import { KebabMenuAction } from "@ui-kebab-menu";
 import { computed, PropType } from "vue";
 import { useI18n } from "vue-i18n";
-import KebabMenuAction from "./KebabMenuAction.vue";
 const { t } = useI18n();
 
 const props = defineProps({
@@ -37,6 +37,9 @@ const selectedFileRecords = computed(() => {
 });
 
 const onClick = () => {
+	if (props.disabled) {
+		return;
+	}
 	selectedFileRecords.value.forEach(async (fileRecord) => {
 		downloadFile(fileRecord.url, fileRecord.name);
 	});
