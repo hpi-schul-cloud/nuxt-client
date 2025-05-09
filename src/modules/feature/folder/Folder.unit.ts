@@ -76,6 +76,7 @@ describe("Folder.vue", () => {
 
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
@@ -171,6 +172,7 @@ describe("Folder.vue", () => {
 
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
 				const boardState = createMock<
 					ReturnType<typeof BoardApi.useSharedBoardPageInformation>
@@ -211,6 +213,10 @@ describe("Folder.vue", () => {
 				jest
 					.spyOn(FolderState, "useFolderState")
 					.mockReturnValue(folderStateMock);
+
+				const folderName = "Test Folder" as unknown as ComputedRef<string>;
+				folderStateMock.folderName = folderName;
+				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
 
 				const parent = parentNodeInfoFactory.build();
 				folderStateMock.parent = ref(parent) as ComputedRef<ParentNodeInfo>;
@@ -440,8 +446,8 @@ describe("Folder.vue", () => {
 				const folderName = "Test Folder" as unknown as ComputedRef<string>;
 				folderStateMock.folderName = folderName;
 				folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
-				const parent = parentNodeInfoFactory.build();
 
+				const parent = parentNodeInfoFactory.build();
 				folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
 				const boardState = createMock<
@@ -606,6 +612,11 @@ describe("Folder.vue", () => {
 			jest
 				.spyOn(FolderState, "useFolderState")
 				.mockReturnValue(folderStateMock);
+
+			const folderName = "Test Folder" as unknown as ComputedRef<string>;
+			folderStateMock.folderName = folderName;
+			folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
 			const parent = parentNodeInfoFactory.build();
 			folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
@@ -624,6 +635,13 @@ describe("Folder.vue", () => {
 
 			const fileRecord = fileRecordFactory.build();
 			fileStorageApiMock.getFileRecordsByParentId.mockReturnValue([fileRecord]);
+
+			const convertFileSizeMOck = jest
+				.mocked(convertFileSize)
+				.mockImplementation((size) => ({
+					convertedSize: size,
+					unit: "MB",
+				}));
 
 			const { wrapper } = setupWrapper();
 
@@ -652,19 +670,21 @@ describe("Folder.vue", () => {
 
 	describe("when breadcrumbs are present", () => {
 		const setup = () => {
-			const folderStateMock = createMock<
-				ReturnType<typeof FolderState.useFolderState>
-			>({
-				breadcrumbs: ref([
-					{
-						title: "Test Folder",
-						to: "/test-folder",
-					},
-				]),
-			});
+			const folderStateMock =
+				createMock<ReturnType<typeof FolderState.useFolderState>>();
 			jest
 				.spyOn(FolderState, "useFolderState")
 				.mockReturnValue(folderStateMock);
+
+			const folderName = "Test Folder" as unknown as ComputedRef<string>;
+			folderStateMock.folderName = folderName;
+			folderStateMock.breadcrumbs = ref([
+				{
+					title: "Test Folder",
+					to: "/test-folder",
+				},
+			]) as unknown as ComputedRef;
+
 			const parent = parentNodeInfoFactory.build();
 			folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
@@ -706,6 +726,8 @@ describe("Folder.vue", () => {
 
 			const folderName = "Test Folder" as unknown as ComputedRef<string>;
 			folderStateMock.folderName = folderName;
+			folderStateMock.breadcrumbs = ref([]) as unknown as ComputedRef;
+
 			const parent = parentNodeInfoFactory.build();
 			folderStateMock.parent = ref(parent) as unknown as ComputedRef;
 
