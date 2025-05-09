@@ -109,8 +109,10 @@ const isSessionTokenExpired: ComputedRef<boolean> = computed(
 
 onMounted(async () => {
 	if (authModule.loginSystem) {
-		sessionTokenExpiration.value = await getSessionTokenExpiration();
 		system.value = await getSystem(authModule.loginSystem);
+	}
+	if (isExternalLogoutAllowed.value) {
+		sessionTokenExpiration.value = await getSessionTokenExpiration();
 	}
 });
 

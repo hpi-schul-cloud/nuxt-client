@@ -1,3 +1,4 @@
+import { HttpStatusCode } from "axios";
 import { axiosErrorFactory, mockApiResponse } from "@@/tests/test-utils";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import * as serverApi from "@/serverApi/v3/api";
@@ -61,9 +62,9 @@ describe("OAuthApi.composable", () => {
 			});
 		});
 
-		describe("when the api call fails with an error status", () => {
+		describe("when the api call fails", () => {
 			const setup = () => {
-				const error = axiosErrorFactory.withStatusCode(404).build();
+				const error = new Error();
 
 				oauthApi.oAuthControllerGetSessionTokenExpiration.mockRejectedValueOnce(
 					error
@@ -86,9 +87,36 @@ describe("OAuthApi.composable", () => {
 				await useOAuthApi().getSessionTokenExpiration();
 
 				expect(mockedUseErrorHandler.handleError).toHaveBeenCalledWith(error, {
-					404: undefined,
 					500: undefined,
 				});
+			});
+		});
+
+		describe("when the api call fails with status 404", () => {
+			const setup = () => {
+				const error = axiosErrorFactory
+					.withStatusCode(HttpStatusCode.NotFound)
+					.build();
+
+				oauthApi.oAuthControllerGetSessionTokenExpiration.mockRejectedValueOnce(
+					error
+				);
+			};
+
+			it("should return undefined", async () => {
+				setup();
+
+				const result = await useOAuthApi().getSessionTokenExpiration();
+
+				expect(result).toBeUndefined();
+			});
+
+			it("should not pass the error to the error handler", async () => {
+				setup();
+
+				await useOAuthApi().getSessionTokenExpiration();
+
+				expect(mockedUseErrorHandler.handleError).not.toHaveBeenCalled();
 			});
 		});
 	});

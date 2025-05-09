@@ -1,4 +1,4 @@
-import { AxiosResponse } from "axios";
+import { AxiosResponse, HttpStatusCode, isAxiosError } from "axios";
 import { useErrorHandler } from "@/components/error-handling/ErrorHandler.composable";
 import {
 	OAuthApiFactory,
@@ -19,10 +19,14 @@ export const useOAuthApi = () => {
 
 			return expirationDate;
 		} catch (error) {
-			handleError(error, {
-				404: undefined,
-				500: undefined,
-			});
+			if (
+				!isAxiosError(error) ||
+				error.response?.status !== HttpStatusCode.NotFound
+			) {
+				handleError(error, {
+					500: undefined,
+				});
+			}
 		}
 	};
 
