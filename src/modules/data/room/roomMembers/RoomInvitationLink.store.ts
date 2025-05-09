@@ -27,6 +27,7 @@ export const useRoomInvitationLinkStore = defineStore(
 		const isInvitationDialogOpen = ref(false);
 		const invitationStep = ref<"prepare" | "share">("prepare");
 		const sharedUrl = ref<string>();
+		const selectedIds = ref<string[]>([]);
 
 		const roomApi = RoomApiFactory(undefined, "/v3", $axios);
 		const api = RoomInvitationLinkApiFactory(undefined, "/v3", $axios);
@@ -101,6 +102,7 @@ export const useRoomInvitationLinkStore = defineStore(
 				roomInvitationLinks.value = roomInvitationLinks.value.filter(
 					(link) => !linkIds.includes(link.id)
 				);
+				selectedIds.value = [];
 			} catch {
 				showFailure(t("pages.rooms.invitationlinks.error.delete"));
 			}
@@ -172,6 +174,7 @@ export const useRoomInvitationLinkStore = defineStore(
 			isLoading,
 			invitationTableData,
 			roomInvitationLinks,
+			selectedIds,
 			sharedUrl,
 		};
 	}
