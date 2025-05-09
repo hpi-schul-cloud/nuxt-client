@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Crear",
 	"common.actions.delete": "Borrar",
 	"common.actions.discard": "Descartar",
+	"common.actions.download": "Descargar",
 	"common.actions.duplicate": "Duplicar",
 	"common.actions.export": "Exportar",
 	"common.actions.edit": "Editar",

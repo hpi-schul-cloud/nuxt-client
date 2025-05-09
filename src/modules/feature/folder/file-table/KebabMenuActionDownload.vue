@@ -5,7 +5,7 @@
 		:disabled="disabled"
 		@click="onClick"
 	>
-		{{ t("components.board.action.download") }}
+		{{ t("common.actions.download") }}
 	</KebabMenuAction>
 </template>
 

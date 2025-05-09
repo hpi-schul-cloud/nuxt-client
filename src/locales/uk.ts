@@ -9,6 +9,7 @@ export default {
 	"common.actions.create": "Створюйте",
 	"common.actions.delete": "Видалити",
 	"common.actions.discard": "Відкинути",
+	"common.actions.download": "Завантажити",
 	"common.actions.duplicate": "Дублювати",
 	"common.actions.export": "Експорт",
 	"common.actions.edit": "Редагувати",
