@@ -36,6 +36,7 @@ export * from "./groupFactory";
 export * from "./groupResponseFactory";
 export * from "./h5pElementResponseFactory";
 export * from "./ltiDeepLinkResponseFactory";
+export * from "./maintenanceStatusFactory";
 export * from "./media-board";
 export * from "./mediaSchoolLicenseResponseFactory";
 export * from "./meResponseFactory";
