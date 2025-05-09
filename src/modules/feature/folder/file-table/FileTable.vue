@@ -79,6 +79,7 @@
 					<KebabMenuActionDownload
 						:file-records="fileRecords"
 						:selected-ids="selectedIds"
+						:aria-label="t('pages.folder.ariaLabels.menu.action.file.download')"
 					/>
 				</template>
 			</DataTable>
