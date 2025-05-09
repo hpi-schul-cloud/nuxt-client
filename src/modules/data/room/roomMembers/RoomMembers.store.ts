@@ -95,7 +95,7 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		if (isAdmin || isTeacher) {
 			return schoolRoleMap[RoleName.Teacher];
 		} else {
-			return schoolRoleMap[schoolRoleNames[0]];
+			return schoolRoleMap[RoleName.Student];
 		}
 	};
 
@@ -104,15 +104,15 @@ export const useRoomMembersStore = defineStore("roomMembersStore", () => {
 		schoolId: string = ownSchool.id
 	) => {
 		try {
-			let result: SchoolUserListResponse;
+			const endpointMap = {
+				[RoleName.Teacher]: schoolApi.schoolControllerGetTeachers(schoolId),
+				[RoleName.Student]: schoolApi.schoolControllerGetStudents(schoolId),
+			};
 
-			if (schoolRoleName === RoleName.Teacher) {
-				result = (await schoolApi.schoolControllerGetTeachers(schoolId)).data;
-			} else if (schoolRoleName === RoleName.Student) {
-				result = (await schoolApi.schoolControllerGetStudents(schoolId)).data;
-			} else {
-				throw new Error("Invalid school role name");
-			}
+			const result = (
+				await endpointMap[schoolRoleName as keyof typeof endpointMap]
+			).data;
+
 			potentialRoomMembers.value = result.data
 				.map((user) => {
 					return {
